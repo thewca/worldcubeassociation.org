@@ -1097,13 +1097,13 @@ pt-BR:
       not_found: não encontrado
       #original_hash: 49a6fe4
       already_assigned: já associado a outro usário
-      #original_hash: 1b9dc9b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         não corresponde ao nosso banco de dados. Se você informou a data de
         nascimento no formato correto (AAAA-MM-DD), por favor contate a Equipe
         de Resultados usando <a href="%{dob_form_path}">este formulário</a>.
-      #original_hash: 0fbcefd
-      unique: deve ser único
+      #original_hash: 71b46b4
+      unique: 'já está em uso por "%{used_name}", com %{used_email}'
       #original_hash: 26f70ed
       dob_past: deve ser no passado
       #original_hash: f599dc5
@@ -2369,30 +2369,69 @@ pt-BR:
     board:
       #original_hash: 90fcc48
       name_html: Conselho da WCA
-      #original_hash: 7ee8e36
-      info: >-
-        (Organização da WCA, relatórios de delegados, aprovação de competições,
-        dúvidas em geral)
+      #original_hash: 3a8b1d8
+      info_html: >-
+        A World Cube Association é liderada pelo Conselho da WCA. Eles são
+        responsáveis por questões gerais e a organização da WCA como um todo.
+        Todas as competições oficiais precisam da aprovação do Conselho para
+        serem anunciadas.
     wct:
-      #original_hash: c53144e
-      info: (comunicação da WCA com a comunidade e público em geral)
+      #original_hash: 846684d
+      info_html: >-
+        A WCT é responsável por supervisionar e apoiar a comunicação da WCA com
+        a comunidade e o público em geral. Eles devem ser contatados se você tem
+        perguntas gerais sobre a WCA ou sua presença nas mídias sociais.
     wdc:
-      #original_hash: 562e197
-      info: >-
-        (assessoramento independente ao Conselho da WCA, investigações,
-        aconselhamento para assuntos pessoais importantes)
+      #original_hash: 77f119f
+      info_html: >-
+        o WDC investiga uma variedade de situações e propõe soluções, incluindo
+        punições quando necessário. Entre outros tópicos, estas situações podem
+        ser violações graves do Regulamento da WCA ou problemas na comunidade.
+        Se você passou por alguma dessas, sinta-se livre para contatar este
+        comitê.
     wrc:
-      #original_hash: 4a256f0
-      info: (manutenção do Regulamento da WCA)
+      #original_hash: fcd3526
+      info_html: >-
+        O WRC lida com os problemas relacionados à aplicação, melhoria e
+        desenvolvimento do Regulamento da WCA. Eles apoiam os Delegados da WCA
+        em qualquer tipo de matéria procedimental que ocorra em competições e
+        decidem sobre incidentes não resolvidos ou não previstos. O WRC
+        regularmente publica relatórios internos da WCA para ajudar os Delegates
+        a melhorar seu conhecimento sobre o Regulamento. Se você gostaria de
+        participar do desenvolvimento ou propor mudanças no Regulamento, você
+        pode contatar o WRC por e-mail ou pelas discussões no <a
+        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
     wrt:
-      #original_hash: 899dc9c
-      info: (resultados de competições e correções nos resultados)
+      #original_hash: 45b0c09
+      info_html: >-
+        A WRT é responsável por gerenciar as informações nos bancos de dados da
+        WCA, principalmente resultados de competições e dados dos competidores.
+        Eles postam os resultados das competições da WCA no site, após o envio
+        destes pelo Delegado da competição. Além disso, a Equipe de Resultados
+        da WCA também é responsável por fazer correções em resultados quando
+        necessário e por administrar as páginas de perfil na WCA. Isso inclui,
+        por exemplo, alterar dados dos usuários, como data de nascimento,
+        atendendo a pedidos verificados e cuidar das solicitações de fotos de
+        perfil.
     wst:
-      #original_hash: dfbf427
-      info: (manutenção do software da WCA)
+      #original_hash: 7de6222
+      info_html: >-
+        A WST é responsável pela manutenção e e gerenciamento de todo o software
+        da WCA. Eles também desenvolvem softwares novos para várias tarefas
+        dentro da WCA quando necessário. Se você tem sugestões e ideias para
+        melhoria do website ou se gostaria de informar um erro, sinta-se livre
+        para entrar em contato com eles! O website da WCA é um enorme projeto
+        "open source" no <a
+        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
+        então se vocês está interessado em ajudar a desenvolvê-lo, dê uma olhada
+        no link.
     wfc:
-      #original_hash: 674291e
-      info: (finanças da WCA)
+      #original_hash: 3ec8256
+      info_html: >-
+        O WFC é responsável por tudo relacionado às finanças da WCA. Eles
+        gerenciam as contas e recursos da WCA de acordo com uma proposta
+        aprovada de orçamento anual, a qual eles também devem apresentar
+        regularmente.
   score_tools:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
