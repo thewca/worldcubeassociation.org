@@ -2389,30 +2389,65 @@ hu:
     board:
       #original_hash: 90fcc48
       name_html: <strong>WCA Board</strong>
-      #original_hash: 7ee8e36
-      info: >-
-        (a WCA szervezet, delegált riportok, versenyek jóváhagyása, általános
-        kérdések)
+      #original_hash: 3a8b1d8
+      info_html: >-
+        A World Cube Associationt a WCA Board vezeti. Ők felelősek az általános
+        témákért és a WCA szerevezet egészéért. Minden hivatalos verseny
+        kihirdetéséhez szükség van a WCA Board jóváhagyására.
     wct:
-      #original_hash: c53144e
-      info: (a WCA kommunikációja a közösség illetve a nagyközönség felé)
+      #original_hash: 846684d
+      info_html: >-
+        A WCT felel a WCA a közösség valamit a nyilvánosság felé irányuló
+        kommunikációjáért. Őket kell megkeresni, ha kérdésed van
+        aáltalánosságban a WCA-val vagy a közösségi médiában való megjelenésével
+        kapcsolatban.
     wdc:
-      #original_hash: 562e197
-      info: >-
-        (a WCA Board független tanácsadója, önálló vizsgálatokat végez,
-        tanácsadó a fontos és személyes kérdésekben)
+      #original_hash: 77f119f
+      info_html: >-
+        A WDC vizsgálja megvizsgálja a különböző kérdéses helyzeteke és
+        megoldásokat javasol, beleértve a büntetéseket is, ha szükséges. Egyebek
+        mellett, ezek a helyzetek eredhetnek a WCA Szabályzat súlyos
+        megsértéséből vagy a közösségben felmerülő incidensekből. Ha ezek közül
+        bármelyikkel találkoznál, nyugodtan fordul ezzez a szervezethez.
     wrc:
-      #original_hash: 4a256f0
-      info: (a WCA Szabályzatért felelős)
+      #original_hash: fcd3526
+      info_html: >-
+        A WRC kezel minden olyan témakört, ami a WCA Szabályzat használatával,
+        javításával vagy fejlesztésével függ össze. Segítenek a WCA
+        delegáltaknak bármilyen versenyekkel kapcsolatos eljárásban és döntenek
+        a megoldatlan vagy kérdéses incidensekben. A WRC időszakonként belsős
+        WCA riportokat tesz közzé, hogy segítsék a WCA delegáltak Szabályzat
+        ismeretét. Ha szeretnél résztvenni a szabályzat fejlesztésében vagy
+        változtatást szeretnél javasolni, akkor keresd meg őket e-mailben vagy
+        <a href='https://github.com/thewca/wca-regulations'>GitHub</a>on.
     wrt:
-      #original_hash: 899dc9c
-      info: '(versenyeredmények, eredmények javítása)'
+      #original_hash: 45b0c09
+      info_html: >-
+        A WRT kezeli a WCA minden adatbázisát, legfőképp a versenyek eredményeit
+        és a személyes adatokat. Ők teszik közzé a WCA versenyek eredményeit a
+        WCA honlapon, miután a verseny WCA delegáltja elküldte nekik. Az
+        eredmények közzétételén kívül, a WCA Resuts Team felelős az eredmények
+        kijavításáért, ha szükség van rá és ők kezelik az összes WCA profilt is.
+        Ide tartozik az adataitoknak, mint a születési dátumnak a javítása
+        elírás esetén vagy a profilképek cseréje.
     wst:
-      #original_hash: dfbf427
-      info: (a WCA szoftverének karbantartása)
+      #original_hash: 7de6222
+      info_html: >-
+        A WST felelőse a WCA szoftvereinek a kezeléséért és karbantartásáért.
+        Ezen kívül ők fejlesztik ki az új szoftvereket is, amikor a WCA-nak
+        szüksége van rá. Ha bármilyen javaslatod van a honlap feljesztésére vagy
+        bármilyen hibát vagy bug-ot találtál, akkor nyugodtan vedd fel velük a
+        kapcsolatot. A WCA honlap egy nagy open source projekt <a
+        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>on,
+        szóval ha szeretnél segíteni a WCA fejlesztésében, akkor vess rá egy
+        pillantást.
     wfc:
-      #original_hash: 674291e
-      info: (WCA pénzügyei)
+      #original_hash: 3ec8256
+      info_html: >-
+        A WFC felelős minden pénzügyeket érintő kérdéssel kapcsolatban a WCA-n
+        belül. Ők kezelik a WCA pénzügyeit és számláit a jóváhagyott éves
+        költségvetésnek megfelelően, aminek az elkészítése szintén az ő
+        feladatuk.
   score_tools:
     #original_hash: ea9d41d
     title: WCA adatrögzítő eszközök
