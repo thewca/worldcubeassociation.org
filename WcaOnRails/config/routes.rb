@@ -165,7 +165,7 @@ Rails.application.routes.draw do
       get '/users/:wca_id' => 'api#show_user_by_wca_id'
       get '/delegates' => 'api#delegates'
       get '/persons' => "persons#index"
-      get '/persons/:wca_id' => "persons#show"
+      get '/persons/:wca_id' => "persons#show", as: :person
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
       end

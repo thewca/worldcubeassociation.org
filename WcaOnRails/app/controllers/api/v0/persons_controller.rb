@@ -29,7 +29,6 @@ class Api::V0::PersonsController < Api::V0::ApiController
   private def rank_to_json(rank)
     {
       best: rank.best,
-      best_formatted: rank.solve_time.clock_format,
       world_rank: rank.world_rank,
       continent_rank: rank.continent_rank,
       country_rank: rank.country_rank,
