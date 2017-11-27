@@ -32,8 +32,8 @@ hu:
   events:
     #original_hash: 3732390
     '222': 2x2x2 kocka
-    #original_hash: bfbe360
-    '333': Rubik-kocka
+    #original_hash: 8180137
+    '333': 3x3x3 kocka
     #original_hash: 2ee5b5a
     '444': 4x4x4 kocka
     #original_hash: b7a99fa
@@ -44,34 +44,34 @@ hu:
     '777': 7x7x7 kocka
     #original_hash: 29d5411
     333bf: 3x3x3 vakon
-    #original_hash: 31ed23f
-    333oh: 3x3x3 egy kézzel
     #original_hash: 0a5e7bf
     333fm: 3x3x3 legkevesebb mozdulat
+    #original_hash: 31ed23f
+    333oh: 3x3x3 egy kézzel
     #original_hash: be41d70
     333ft: 3x3x3 lábbal
+    #original_hash: 04f6b3e
+    clock: Clock
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
     pyram: Pyraminx
-    #original_hash: 1551a2c
-    sq1: Square-1
-    #original_hash: 23c2fdf
-    clock: Rubik-óra
     #original_hash: 64a56a2
     skewb: Skewb
+    #original_hash: 1551a2c
+    sq1: Square-1
     #original_hash: 5bae501
     444bf: 4x4x4 vakon
     #original_hash: aea5216
     555bf: 5x5x5 vakon
     #original_hash: cedbf87
     333mbf: 3x3x3 több kocka vakon
-    #original_hash: 3988358
-    magic: Rubik's Magic
+    #original_hash: e6791be
+    magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
-    #original_hash: c6ad2af
-    333mbo: 'Rubik-kocka: több kocka vakon régi formátum'
+    #original_hash: 1843dc4
+    333mbo: '3x3x3 kocka: több kocka vakon régi formátum'
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -2473,11 +2473,11 @@ hu:
     #original_hash: c72c969
     title: WCA logó
     paragraphs:
-      #original_hash: c092e13
+      #original_hash: 44cfe8d
       '1': >-
         A WCA logót Justin Eastman tervezte 2005 januárjában egy pályázat
         keretében. <br />A logó azért tetszett meg, mert használja a kocka
-        színeit, de mégsem mutatja konkrétan a Rubik-kockát/ 3x3x3 kockát.
+        színeit, de mégsem mutatja konkrétan a 3x3x3 kockát.
       #original_hash: f228da2
       '2': >-
         Három különböző verziója van a logónak: a <a
