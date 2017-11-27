@@ -32,7 +32,7 @@ zh-TW:
   events:
     #original_hash: 3732390
     '222': 2x2x2方塊
-    #original_hash: bfbe360
+    #original_hash: 8180137
     '333': 3x3x3方塊
     #original_hash: 2ee5b5a
     '444': 4x4x4方塊
@@ -44,33 +44,33 @@ zh-TW:
     '777': 7x7x7方塊
     #original_hash: 29d5411
     333bf: 3x3x3盲解
-    #original_hash: 31ed23f
-    333oh: 3x3x3單手解
     #original_hash: 0a5e7bf
     333fm: 3x3x3最少步數解
+    #original_hash: 31ed23f
+    333oh: 3x3x3單手解
     #original_hash: be41d70
     333ft: 3x3x3腳解
+    #original_hash: 04f6b3e
+    clock: Clock
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
     pyram: Pyraminx
-    #original_hash: 1551a2c
-    sq1: Square-1
-    #original_hash: 23c2fdf
-    clock: Rubik's Clock
     #original_hash: 64a56a2
     skewb: Skewb
+    #original_hash: 1551a2c
+    sq1: Square-1
     #original_hash: 5bae501
     444bf: 4x4x4盲解
     #original_hash: aea5216
     555bf: 5x5x5盲解
     #original_hash: cedbf87
     333mbf: 3x3x3多顆盲解
-    #original_hash: 3988358
-    magic: Rubik's Magic
+    #original_hash: e6791be
+    magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
-    #original_hash: c6ad2af
+    #original_hash: 1843dc4
     333mbo: 3x3x3多顆盲解(舊)
   rounds:
     '0':
@@ -762,6 +762,9 @@ zh-TW:
       invalid: 無效的電子郵件、WCA ID或密碼。
       #original_hash: 1186218
       not_found_in_database: 無效的電子郵件、WCA ID或密碼。
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        您必須確認您的電子郵件才能繼續。沒有收到確認信函嗎？前往https://www.worldcubeassociation.org/users/confirmation/new去要求一封的確認信函。
   wca:
     errors:
       messages:
@@ -999,8 +1002,8 @@ zh-TW:
       dob_incorrect_html: >-
         與WCA資料庫不相符。如果您確認您提供的日期格式(YYYY-MM-DD)是正確的，請使用<a
         href="%{dob_form_path}">此表單</a>聯絡WCA成績組。
-      #original_hash: 0fbcefd
-      unique: 必須唯一
+      #original_hash: 71b46b4
+      unique: '已經被“%{used_name}”的%{used_email}使用了'
       #original_hash: 26f70ed
       dob_past: 必須為過去
       #original_hash: f599dc5
@@ -1011,7 +1014,7 @@ zh-TW:
       senior_has_delegate: 一般代表無法將高級代表降職
       #original_hash: 48653a9
       already_have_id: '無法取得WCA ID，因為您已經有WCA ID %{wca_id}了'
-      #original_hash: 2684f33
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: '我們沒有記錄到此WCA ID的生日。請使用<a href="%{dob_form_path}">此表單</a>聯絡WCA成績組。'
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
@@ -1899,18 +1902,16 @@ zh-TW:
     #original_hash: 9ac918a
     title: 關於WCA
     mission:
-      #original_hash: e4698d4
-      title: 任務
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
-          世界方塊協會管理的比賽內容包括魯比克方塊，以及其他可轉動面的方塊，稱為魔術方塊。這些魔術方塊當中最有名的就是魯比克方塊，由匈牙利的魯比克教授發明。而當中的一些魔術方塊則被挑選為WCA官方的比賽項目。
+          世界方塊協會掌管魔術方塊比賽，這些魔術方塊是透過轉動一部分的零件來操控，通常稱為“魔術方塊”。這些魔術方塊當中最有名的就是魯比克方塊，由匈牙利的魯比克教授發明。而當中的一些魔術方塊則被挑選為WCA官方的比賽項目。
         #original_hash: 22c3593
         '2': 世界方塊協會在世界各地舉辦比賽，幫助地區性組織在各個國家舉辦比賽。
-        #original_hash: 20e0550
-        '3': 世界方塊協會的目標是<br /><strong>在公平及平等的條件下，在更多國家舉辦更多比賽讓更多人更快樂。</strong>
-        #original_hash: bee3687
-        '4': 世界方塊協會的精神是<br /> <strong>讓來自世界各地的人可以在友善的環境下一起玩樂、互相幫助、展現運動家精神。</strong>
+        #original_hash: 0902c4a
+        '3': 世界方塊協會的任務是<strong>在公平及平等的條件下，在更多國家舉辦更多比賽讓更多人更快樂</strong>。
+        #original_hash: 2b993c0
+        '4': 世界方塊協會的精神是<strong>讓來自世界各地的人可以在友善的環境下一起玩樂、互相幫助、展現運動家精神</strong>。
     structure:
       #original_hash: 9482c5d
       title: 組織
@@ -2026,26 +2027,39 @@ zh-TW:
     board:
       #original_hash: 90fcc48
       name_html: WCA董事會
-      #original_hash: 7ee8e36
-      info: (WCA組織、比賽報告、審核比賽、一般問題)
+      #original_hash: 3a8b1d8
+      info_html: 世界方塊協會由WCA董事會領導。他們負責回答一些基本問題並代表整個WCA組織。所有官方比賽必須經由WCA董事會審核成功才會公告。
     wct:
-      #original_hash: c53144e
-      info: (WCA與社群大眾的溝通橋梁)
+      #original_hash: 846684d
+      info_html: WCA傳播組負責監督和協助WCA與社群大眾溝通。如果您有任何問題關於WCA或是他們在社群媒體的表現，請聯繫此團隊。
     wdc:
-      #original_hash: 562e197
-      info: (獨立於WCA董事會的顧問，獨立調查與處理重大個人事件)
+      #original_hash: 77f119f
+      info_html: >-
+        WCA紀律委員會負責調查各種狀況並提出解決方案，包括必要的處罰。 除此之外，這些情況可能會嚴重違反WCA規則或社群紀律。
+        如果您遇到過類似情況，請隨時與本委員會聯繫。
     wrc:
-      #original_hash: 4a256f0
-      info: (維護WCA規則)
+      #original_hash: fcd3526
+      info_html: >-
+        WCA規則委員會處理所有關於WCA規則的應用、改進和發展。
+        他們協助WCA代表處理在比賽中發生的任何程序問題，幫忙決定一些尚未解決或未被規則涵蓋的事件。
+        WRC定期發布WCA內部報告，幫助所有WCA代表提高對規則的認識。 如果您想參與規則發展或者提出修改建議，您可以透過郵件與WRC聯繫或是在<a
+        href='https://github.com/thewca/wca-regulations'>GitHub</a>提出討論。
     wrt:
-      #original_hash: 899dc9c
-      info: (比賽成績、成績修正)
+      #original_hash: 45b0c09
+      info_html: >-
+        WCA成績組負責管理WCA資料庫中的所有資料，尤其是最重要的比賽成績和選手資料。
+        在WCA代表寄出WCA比賽成績以後，WRT會將比賽成績發佈到WCA網站上。除了發佈比賽成績之外，WCA成績組還負責在必要時對比賽成績進行更正，並負責管理所有WCA個人資料頁面。
+        這包括更改個人資料，例如生日、管理個人頭像等請求。
     wst:
-      #original_hash: dfbf427
-      info: (維護WCA軟體)
+      #original_hash: 7de6222
+      info_html: >-
+        WCA軟體組負責維護和管理所有WCA軟體。 他們還會在需要時為WCA的各種任務開發新軟體。
+        如果您對網站開發有進一步的建議和想法，或者您有發現問題和錯誤，請隨時與他們聯繫！ WCA網站在<a
+        href='https://github.com/thewca/worldcubeassociation.org'> GitHub
+        </a>上是一個巨大的開源專案，所以如果您有興趣幫忙開發WCA， 去那裡看看吧。
     wfc:
-      #original_hash: 674291e
-      info: (負責WCA財政)
+      #original_hash: 3ec8256
+      info_html: WCA財政委員會負責WCA內的所有財政。 他們按照獲批准的年度預算提案來管理WCA的財務和帳目，這也是他們必須定期繳交的工作。
   score_tools:
     #original_hash: ea9d41d
     title: WCA成績輸入工具
@@ -2065,10 +2079,10 @@ zh-TW:
     #original_hash: c72c969
     title: WCA標誌
     paragraphs:
-      #original_hash: c092e13
+      #original_hash: 44cfe8d
       '1': >-
         WCA標誌由Justin Eastman設計，在2005年1月的設計比賽勝出。<br
-        />我們喜歡這個標誌因為它的設計、顏色、以及它沒有特意秀出Rubik's Cube / 3x3x3方塊。
+        />我們喜歡這個標誌因為它的設計、顏色、以及它沒有特意秀出3x3x3方塊。
       #original_hash: f228da2
       '2': >-
         我們有三種版本的標誌：<a href="/files/WCAlogo_XL.jpg">JPG檔(大)</a> (46 KB, 1756 px
