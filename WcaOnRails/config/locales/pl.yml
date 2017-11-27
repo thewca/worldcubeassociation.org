@@ -32,8 +32,8 @@ pl:
   events:
     #original_hash: 3732390
     '222': Kostka 2x2x2
-    #original_hash: bfbe360
-    '333': Kostka Rubika
+    #original_hash: 8180137
+    '333': Kostka 3x3x3
     #original_hash: 2ee5b5a
     '444': Kostka 4x4x4
     #original_hash: b7a99fa
@@ -44,34 +44,34 @@ pl:
     '777': Kostka 7x7x7
     #original_hash: 29d5411
     333bf: 3x3x3 Bez patrzenia
-    #original_hash: 31ed23f
-    333oh: 3x3x3 Jedną ręką
     #original_hash: 0a5e7bf
     333fm: 3x3x3 Liczba ruchów
+    #original_hash: 31ed23f
+    333oh: 3x3x3 Jedną ręką
     #original_hash: be41d70
     333ft: 3x3x3 Stopami
+    #original_hash: 04f6b3e
+    clock: Clock
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
     pyram: Pyraminx
-    #original_hash: 1551a2c
-    sq1: Square-1
-    #original_hash: 23c2fdf
-    clock: Rubik's Clock
     #original_hash: 64a56a2
     skewb: Skewb
+    #original_hash: 1551a2c
+    sq1: Square-1
     #original_hash: 5bae501
     444bf: 4x4x4 Bez patrzenia
     #original_hash: aea5216
     555bf: 5x5x5 Bez patrzenia
     #original_hash: cedbf87
     333mbf: 3x3x3 Liczba kostek bez patrzenia
-    #original_hash: 3988358
-    magic: Rubik's Magic
+    #original_hash: e6791be
+    magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
-    #original_hash: c6ad2af
-    333mbo: 'Kostka Rubika: Liczba kostek bez patrzenia stary styl'
+    #original_hash: 1843dc4
+    333mbo: 3x3x3 Liczba kostek bez patrzenia stary styl
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -2507,11 +2507,11 @@ pl:
     #original_hash: c72c969
     title: Logo WCA
     paragraphs:
-      #original_hash: c092e13
+      #original_hash: 44cfe8d
       '1': >-
         Logo WCA zaprojektował Justin Eastman podczas konkursu w styczniu 2005
         roku.<br />Spodobał nam się jego pomysł ze względu na swój design,
-        kolorystykę i fakt, że nie ukazuje konkretnie Kostki Rubika 3x3x3.
+        kolorystykę i fakt, że nie ukazuje konkretnie Kostki 3x3x3.
       #original_hash: f228da2
       '2': >-
         Posiadamy trzy różne wersje loga: <a href="/files/WCAlogo_XL.jpg">dużą
