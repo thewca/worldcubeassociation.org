@@ -32,7 +32,7 @@ pt:
   events:
     #original_hash: 3732390
     '222': Cubo 2x2x2
-    #original_hash: bfbe360
+    #original_hash: 8180137
     '333': Cubo 3x3x3
     #original_hash: 2ee5b5a
     '444': Cubo 4x4x4
@@ -44,33 +44,33 @@ pt:
     '777': Cubo 7x7x7
     #original_hash: 29d5411
     333bf: 3x3x3 Vendado
-    #original_hash: 31ed23f
-    333oh: 3x3x3 Com Uma Mão
     #original_hash: 0a5e7bf
     333fm: 3x3x3 em Menos Movimentos
+    #original_hash: 31ed23f
+    333oh: 3x3x3 Com Uma Mão
     #original_hash: be41d70
     333ft: 3x3x3 Com os Pés
+    #original_hash: 04f6b3e
+    clock: Clock
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
     pyram: Pyraminx
-    #original_hash: 1551a2c
-    sq1: Square-1
-    #original_hash: 23c2fdf
-    clock: Rubik's Clock
     #original_hash: 64a56a2
     skewb: Skewb
+    #original_hash: 1551a2c
+    sq1: Square-1
     #original_hash: 5bae501
     444bf: 4x4x4 Vendado
     #original_hash: aea5216
     555bf: 5x5x5 Vendado
     #original_hash: cedbf87
     333mbf: 3x3x3 Vários Cubos Vendado
-    #original_hash: 3988358
-    magic: Rubik's Magic
+    #original_hash: e6791be
+    magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
-    #original_hash: c6ad2af
+    #original_hash: 1843dc4
     333mbo: 3x3x3 Vários Cubos Vendado Antigo
   rounds:
     '0':
@@ -213,19 +213,14 @@ pt:
       other: 'estes %{count} eventos'
     #original_hash: 51ef7d4
     search_site: Procurar no site
+    #original_hash: d7decf1
+    filter: Filtro
+    #original_hash: f6fdbe4
+    delete: Apagar
     #original_hash: d3f8f7b
     date_placeholder: AAAA-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'AAAA-MM-DD HH:MM'
-  delegate_statuses:
-    #original_hash: 28ec02d
-    candidate_delegate: Delegado Candidato
-    #original_hash: 12ab214
-    delegate: Delegado
-    #original_hash: d463c23
-    senior_delegate: Delegado Sénior
-    #original_hash: 660ee15
-    board_member: Membro do Conselho
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -248,6 +243,13 @@ pt:
       scopes: Âmbitos
       #original_hash: 3b0d449
       callback_urls: Callback Urls
+  helpers:
+    submit:
+      competition_medium:
+        #original_hash: dc112af
+        create: Submeter média
+        #original_hash: 4cf19ca
+        update: Atualizar média
   activerecord:
     attributes:
       user:
@@ -438,6 +440,62 @@ pt:
       vote:
         #original_hash: 153d7a5
         comment: Comentário
+      competition_medium:
+        #original_hash: 1917f4f
+        competitionId: Competição
+        #original_hash: 3deb745
+        type: Tipo
+        #original_hash: c3328c3
+        text: Texto
+        #original_hash: d051707
+        uri: Hiperligação
+        #original_hash: 1be755a
+        submitterName: Nome de quem submete
+        #original_hash: 78cdfee
+        submitterEmail: Email de quem submete
+        #original_hash: 0d31f23
+        submitterComment: Comentário de quem submete
+        #original_hash: bae7d5b
+        status: Estado
+  enums:
+    user:
+      gender:
+        #original_hash: 3f3a489
+        m: Masculino
+        #original_hash: b7c17e9
+        f: Feminino
+        #original_hash: 6e6a6f2
+        o: Outro
+      delegate_status:
+        #original_hash: 28ec02d
+        candidate_delegate: Delegado Candidato
+        #original_hash: 12ab214
+        delegate: Delegado
+        #original_hash: d463c23
+        senior_delegate: Delegado Sénior
+        #original_hash: 660ee15
+        board_member: Membro do Conselho
+    person:
+      gender:
+        #original_hash: 3f3a489
+        m: Masculino
+        #original_hash: b7c17e9
+        f: Feminino
+        #original_hash: 6e6a6f2
+        o: Outro
+    competition_medium:
+      status:
+        #original_hash: 61a0572
+        accepted: Aceite
+        #original_hash: 96f608c
+        pending: Pendente
+      type:
+        #original_hash: ee45c30
+        report: Relatório
+        #original_hash: 4360c2d
+        article: Artigo
+        #original_hash: 82dabd0
+        multimedia: Multimédia
   simple_form:
     #original_hash: 5397e05
     'yes': Sim
@@ -601,13 +659,14 @@ pt:
         wca_id: ''
         #original_hash: 8723825
         dob: A sua data de nascimento válida no formato AAAA-MM-DD
-        #original_hash: 2029dde
+        #original_hash: c6d8a97
         document: >-
           Para nos provar a sua identidade e data de nascimento, deve anexar uma
           fotografia de um documento legal (cartão de cidadão, bilhete de
           identidade, passaporte, carta de condução, ... ) onde o seu nome e
           data de nascimento sejam visíveis e entendíveis por alguém que entenda
-          inglês.
+          inglês (ou contacte um Delegado da WCA local se não tiver tal
+          documento).
       post:
         #original_hash: 53c16eb
         body: >-
@@ -707,6 +766,23 @@ pt:
       vote:
         #original_hash: da39a3e
         comment: ''
+      competition_medium:
+        #original_hash: da39a3e
+        competitionId: ''
+        #original_hash: da39a3e
+        type: ''
+        #original_hash: da39a3e
+        text: ''
+        #original_hash: da39a3e
+        uri: ''
+        #original_hash: da39a3e
+        submitterName: ''
+        #original_hash: da39a3e
+        submitterEmail: ''
+        #original_hash: da39a3e
+        submitterComment: ''
+        #original_hash: da39a3e
+        status: ''
     options:
       registration:
         status:
@@ -757,6 +833,12 @@ pt:
       invalid: 'Email, ID da WCA ou senha inválida'
       #original_hash: 1186218
       not_found_in_database: 'Email, ID da WCA ou senha inválida.'
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        Tem que confirmar o seu endereço de email antes de continuar. Não
+        recebeu um email de confirmação? Vá a
+        https://www.worldcubeassociation.org/users/confirmation/new para pedir
+        um novo.
   wca:
     errors:
       messages:
@@ -768,11 +850,11 @@ pt:
     doorkeeper:
       applications:
         help:
-          #original_hash: eb5567a
+          #original_hash: 62a0113
           scopes_html: >-
             Separe os âmbitos com espaços. Deixe em branco para usar o(s)
             âmbito(s) padrão. Veja a lista de âmbitos suportados <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">aqui</a>.
       scopes:
         #original_hash: 1920e95
@@ -803,13 +885,6 @@ pt:
         Bem-vindo! Antes de participar na sua primeira competição da WCA,
         precisamos de algumas informações adicionais. Note que a sua data de
         nascimento nunca será divulgada sem sua permissão.
-      gender:
-        #original_hash: 3f3a489
-        male: Masculino
-        #original_hash: b7c17e9
-        female: Feminino
-        #original_hash: 6e6a6f2
-        other_gender: Outro
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1031,8 +1106,8 @@ pt:
         data de nascimento no formato correto (AAAA-MM-DD), por favor contacte a
         Equipa de Resultados da WCA usando <a href="%{dob_form_path}">este
         formulário próprio</a>.
-      #original_hash: 0fbcefd
-      unique: deve ser único
+      #original_hash: 71b46b4
+      unique: 'já é utilizado por "%{used_name}" com %{used_email}'
       #original_hash: 26f70ed
       dob_past: deve ser no passado
       #original_hash: f599dc5
@@ -1043,7 +1118,7 @@ pt:
       senior_has_delegate: não pode despromover delegado sénior que tenha delegados subordinados
       #original_hash: 48653a9
       already_have_id: 'não pode solicitar um ID da WCA porque já tem o ID %{wca_id}'
-      #original_hash: 2684f33
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Não temos uma data de nascimento registrada para este ID da WCA. Por
         favor contacte a Equipa de Resultados da WCA usando <a
@@ -2106,15 +2181,13 @@ pt:
     #original_hash: 9ac918a
     title: Sobre a WCA
     mission:
-      #original_hash: e4698d4
-      title: Missão
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
-          A World Cube Association regula competicões de todos os quebra-cabeças
-          denominados "Rubik", e outros quebra-cabeças que se movimentam girando
-          os lados, também chamados "twisty puzzles". O mais famoso entre eles é
-          o "Rubik's Cube" (Cubo Mágico ou Cubo de Rubik), inventado pelo
+          A World Cube Association regula competições de quebra-cabeças
+          mecânicos que são operados por rotações de grupos de peças,
+          normalmente chamados "twisty puzzles". O mais famoso entre eles é o
+          "Rubik's Cube" (Cubo Mágico ou Cubo de Rubik), inventado pelo
           professor Rubik, da Hungria. Alguns destes quebra-cabeças foram
           definidos como eventos oficiais da WCA.
         #original_hash: 22c3593
@@ -2122,16 +2195,16 @@ pt:
           A World Cube Association organiza competições em todo o mundo, apoiada
           por organizações nacionais, responsáveis por organizar competições nos
           seus países.
-        #original_hash: 20e0550
+        #original_hash: 0902c4a
         '3': >-
-          O objetivo da World Cube Association é ter <br /><strong>mais
-          competições em mais países, com mais pessoas e mais diversão, sob
-          condições iguais e justas.</strong>
-        #original_hash: bee3687
+          A Missão da World Cube Association é ter <strong>mais competições em
+          mais países, com mais pessoas e mais diversão, sob condições iguais e
+          justas.</strong>.
+        #original_hash: 2b993c0
         '4': >-
-          O espírito da World Cube Association é que <br /><strong>pessoas de
-          todo o mundo se divirtam juntas numa atmosfera amigável, se ajudem
-          umas às outras e se comportem com espírito desportivo.</strong>
+          O Espírito da World Cube Association é que <strong>pessoas de todo o
+          mundo se divirtam juntas numa atmosfera amigável, se entreajudem e se
+          comportem com espírito desportivo.</strong>
     structure:
       #original_hash: 9482c5d
       title: Estrutura
@@ -2300,30 +2373,66 @@ pt:
     board:
       #original_hash: 90fcc48
       name_html: Conselho da WCA
-      #original_hash: 7ee8e36
-      info: >-
-        (Organização da WCA, relatórios de delegados, aprovação de competições,
-        dúvidas em geral)
+      #original_hash: 3a8b1d8
+      info_html: >-
+        A World Cube Association é conduzida pelo Conselho da WCA. É responsável
+        por informações gerais e pela organização da WCA como um todo. Todas as
+        competições oficiais necessitam de aprovação do Conselho para serem
+        anunciadas.
     wct:
-      #original_hash: c53144e
-      info: (comunicações da WCA com a comunidade e público em geral)
+      #original_hash: 846684d
+      info_html: >-
+        O WCT tem o papel de gerir e suportar as comunicações da WCA com a
+        comunidade e o público em geral. Deve ser contactado se tiver questões
+        gerais sobre a WCA ou sobre a sua presença nas redes sociais.
     wdc:
-      #original_hash: 562e197
-      info: >-
-        (assessoria independente ao Conselho da WCA, investigações,
-        aconselhamento para assuntos pessoais importantes)
+      #original_hash: 77f119f
+      info_html: >-
+        A WDC investiga uma variedade de situações e propõe soluções, incluindo
+        punições quando necessário. Entre outros tópicos, estas situações podem
+        ser violações sérias dos Regulamentos da WCA ou questões na comunidade.
+        Se teve alguma destas experiências, sinta-se à vontade para contactar
+        este comité.
     wrc:
-      #original_hash: 4a256f0
-      info: (manutenção do Regulamento da WCA)
+      #original_hash: fcd3526
+      info_html: >-
+        O WRC lida com todos os assuntos ligados à aplicação, melhoramento e
+        desenvolvimento dos Regulamentos da WCA. Suportam os Delegados da WCA em
+        qualquer tipo procedimento que aconteça em competições e decidem em
+        incidentes não resolvidos ou descobertos. O WRC publica regularmente
+        relatórios internos para auxiliar todos os Delegados da WCA e melhorar o
+        seu conhecimento dos Regulamentos. Se quiser tomar parte no
+        desenvolvimento e propor mudanças, pode contactar o WRC via email ou
+        discussões no <a
+        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
     wrt:
-      #original_hash: 899dc9c
-      info: '(resultados de competições, correção de resultados)'
+      #original_hash: 45b0c09
+      info_html: >-
+        O WRT é responsável por gerir todos os dados da base de dados da WCA,
+        mais concretamente os resultados de competições e dados pessoais.
+        Colocam resultados de competições no website da WCA, assim que o
+        Delegado da WCA os enviar. Para além disso, é também responsável por
+        fazer correções a resultados de competições quando necessário e fazem a
+        gestão das páginas de perfil de competidores da WCA. Isto inclui mudar
+        dados dos utilizadores, como datas de nascimento, após verificação
+        correta e gerir pedidos de fotos para perfil.
     wst:
-      #original_hash: dfbf427
-      info: (manutenção do software da WCA)
+      #original_hash: 7de6222
+      info_html: >-
+        O WST é responsável pela manutenção e gestão de todo o software da WCA.
+        Também desenvolvem novo software para várias tarefas na WCA quando
+        necessário. Se tem sugestões e ideias para melhorar o desenvolvimento do
+        site ou pretende reportar erros e bugs, contacte-o! O site da WCA é um
+        grande projeto de código aberto no <a
+        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
+        por isso se estiver interessado em ajudar a desenvolver para a WCA, pode
+        ver aí.
     wfc:
-      #original_hash: 674291e
-      info: (finanças da WCA)
+      #original_hash: 3ec8256
+      info_html: >-
+        O WFC é responsável por tudo o que respeita às finanças da WCA. Ele gere
+        as finanças e as contas da WCA de acordo com o orçamento anual aprovado,
+        que também é o seu trabalho, de forma regular.
   score_tools:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
@@ -2350,12 +2459,11 @@ pt:
     #original_hash: c72c969
     title: Logótipo da WCA
     paragraphs:
-      #original_hash: c092e13
+      #original_hash: 44cfe8d
       '1': >-
         O logotipo da WCA foi desenhado por Justin Eastman, num concurso em
         Janeiro de 2005.<br />Gostámos do logótipo por causa do design, das
-        cores e o facto de que não mostra especificamente um Cubo Mágico / Cubo
-        3x3x3.
+        cores e o facto de que não mostra especificamente um Cubo 3x3x3.
       #original_hash: f228da2
       '2': >-
         Temos três versões do logotipo: uma <a
@@ -2747,3 +2855,59 @@ pt:
         '6': >-
           Lidar com todas as tarefas organizativas respeitantes ao espaço (ex.
           chaves ou WiFi)
+  media:
+    common:
+      #original_hash: f9b7a97
+      view_media_page: Ver todos os média
+      #original_hash: b251e98
+      confirm_delete: Tem a certeza que quer apagar este média?
+    new:
+      #original_hash: 65cdb28
+      title: Submeter média
+      #original_hash: 35caed2
+      review_warning_html: >-
+        Todos os média serão revistos antes de serem listados na <a
+        href="/media">página global de média</a>.
+      #original_hash: 141d1d7
+      guidelines: Orientações
+      media_guidelines:
+        #original_hash: fd6984b
+        '1': >-
+          Todo o conteúdo média tem que estar relacionado com a competição
+          selecionada.
+        #original_hash: 9821119
+        '2': >-
+          Todo o conteúdo média tem que ser adequado e limpo, não podendo conter
+          qualquer material impróprio ou ofensivo.
+        #original_hash: 5114fe4
+        '3': >-
+          O conteúdo média não pode conter uma presença excessiva de patrocínios
+          ou de publicidade.
+        #original_hash: c9d797b
+        '4': Todo o conteúdo média tem que ter título descritivo e adequado.
+    edit:
+      #original_hash: 32c7cc0
+      title: Editar média
+      #original_hash: 6f161d0
+      validate_media_page: Ver média pendente
+    index:
+      #original_hash: 0c77aee
+      title: Média
+      #original_hash: df43670
+      validate_media: Validar média
+      #original_hash: 9f2158f
+      submit_media_html: Pode submeter média <a href="/media/new">aqui</a>.
+    validate:
+      #original_hash: 1e0eee6
+      title: Validar Média
+    media_table:
+      #original_hash: 879e323
+      year: Ano
+      #original_hash: 573da9c
+      location: 'País, Cidade'
+      #original_hash: bb54db5
+      accept: Aceitar
+      #original_hash: 66b69a8
+      confirm_accept: Tem a certeza que quer aceitar este média?
+      #original_hash: 5301648
+      edit: Editar
