@@ -32,7 +32,7 @@ de:
   events:
     #original_hash: 3732390
     '222': 2x2x2 Würfel
-    #original_hash: bfbe360
+    #original_hash: 8180137
     '333': Rubik's Cube
     #original_hash: 2ee5b5a
     '444': 4x4x4 Würfel
@@ -44,33 +44,33 @@ de:
     '777': 7x7x7 Würfel
     #original_hash: 29d5411
     333bf: 3x3x3 Blind
-    #original_hash: 31ed23f
-    333oh: 3x3x3 Einhändig
     #original_hash: 0a5e7bf
     333fm: 3x3x3 Fewest Moves
+    #original_hash: 31ed23f
+    333oh: 3x3x3 Einhändig
     #original_hash: be41d70
     333ft: 3x3x3 Mit Füßen
+    #original_hash: 04f6b3e
+    clock: Rubik's Clock
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
     pyram: Pyraminx
-    #original_hash: 1551a2c
-    sq1: Square-1
-    #original_hash: 23c2fdf
-    clock: Rubik's Clock
     #original_hash: 64a56a2
     skewb: Skewb
+    #original_hash: 1551a2c
+    sq1: Square-1
     #original_hash: 5bae501
     444bf: 4x4x4 Blind
     #original_hash: aea5216
     555bf: 5x5x5 Blind
     #original_hash: cedbf87
     333mbf: 3x3x3 Mehrfach Blind
-    #original_hash: 3988358
+    #original_hash: e6791be
     magic: Rubik's Magic
     #original_hash: c962425
     mmagic: Master Magic
-    #original_hash: c6ad2af
+    #original_hash: 1843dc4
     333mbo: 3x3x3 Mehrfach Blind alter Stil
   rounds:
     '0':
@@ -834,6 +834,12 @@ de:
       invalid: 'Ungültige E-Mail, WCA-ID oder Passwort.'
       #original_hash: 1186218
       not_found_in_database: 'Ungültige E-Mail, WCA-ID oder Passwort.'
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        Du musst deine E-Mail-Adresse bestätigen bevor du weitermachst. Falls du
+        keine Bestätigungsmail erhalten hast, besuche
+        https://www.worldcubeassociation.org/users/confirmation/new um eine neue
+        zu erhalten.
   wca:
     errors:
       messages:
@@ -1113,7 +1119,7 @@ de:
         dass das Datum korrekt und im richtigen Format (YYYY-MM-DD) ist,
         kontaktiere das WCA Results Team über <a href="%{dob_form_path}">dieses
         Formular</a>.
-      #original_hash: 0fbcefd
+      #original_hash: 71b46b4
       unique: muss eindeutig sein
       #original_hash: 26f70ed
       dob_past: muss in der Vergangenheit liegen
@@ -1127,7 +1133,7 @@ de:
       already_have_id: >-
         kann keine WCA-ID anfordern da Du bereits mit der WCA-ID %{wca_id}
         verknüpft bist
-      #original_hash: 2684f33
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Wir haben kein Geburtsdatum für diese WCA-ID hinterlegt. Bitte
         kontaktiere das WCA Results Team über <a href="%{dob_form_path}">dieses
@@ -2224,10 +2230,8 @@ de:
     #original_hash: 9ac918a
     title: Über die WCA
     mission:
-      #original_hash: e4698d4
-      title: Mission
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
           Die World Cube Association überwacht Wettbewerbe für alle Puzzles,
           sogenannte "Rubik's Puzzles", sowie alle anderen Puzzles die man durch
@@ -2240,12 +2244,12 @@ de:
           Die World Cube Association organisiert Wettbewerbe auf der ganzen
           Welt, unterstützt von regionalen Organisationen, die verantwortlich
           für die Organisation von Wettbewerben im jeweiligen Land sind.
-        #original_hash: 20e0550
+        #original_hash: 0902c4a
         '3': >-
           Das Ziel der World Cube Association ist es, <br /><strong>mehr
           Wettbewerbe in mehr Ländern mit mehr Menschen und mehr Spaß
           auszurichten, unter fairen und gleichen Bedingungen.</strong>
-        #original_hash: bee3687
+        #original_hash: 2b993c0
         '4': >-
           Der Geist der World Cube Association ist es, dass <br />
           <strong>Menschen aus der ganzen Welt gemeinsam in einer freundlichen
@@ -2426,30 +2430,68 @@ de:
     board:
       #original_hash: 90fcc48
       name_html: WCA Board
-      #original_hash: 7ee8e36
-      info: >-
-        (Organisation der WCA, Berichte von Delegierten, Zulassung von
-        Wettbewerben, allgemeine Anfragen)
+      #original_hash: 3a8b1d8
+      info_html: >-
+        Die World Cube Association wird vom WCA Board geführt. Dieses ist
+        verantwortlich für generelle Anfragen und die WCA Organisation als
+        solche. Alle offiziellen Wettbewerbe müssen zunächst vom WCA Board
+        bestätigt werden, bevor sie angekündigt werden.
     wct:
-      #original_hash: c53144e
-      info: (Kommunication der WCA mit der Community und der Öffentlichkeit)
+      #original_hash: 846684d
+      info_html: >-
+        Die WCT ist für die Überwachung und Unterstützung der Kommunikation der
+        WCA mit der Community und der generellen Öffentlichkeit zuständig. Sie
+        sollten bei generellen Fragen über die WCA und die Social Media
+        Auftritte kontaktiert werden.
     wdc:
-      #original_hash: 562e197
-      info: >-
-        (unabhängige Beratung des WCA Boards, unabhängige Untersuchungen,
-        Berater in wichtigen persönlichen Angelegenheiten)
+      #original_hash: 77f119f
+      info_html: >-
+        Die WDC ermittelt in unterschiedlichen Situationen und regt Lösungen an,
+        die auch Bestrafungen einschließen, falls diese nötig sind. Zu den
+        Themen gehört unter anderem die Verletzung der WCA Regeln oder Probleme
+        in der Community. Falls du von einem solchen Thema betroffen bist,
+        kontaktiere dieses Komitee.
     wrc:
-      #original_hash: 4a256f0
-      info: (Pflege der WCA-Regeln)
+      #original_hash: fcd3526
+      info_html: >-
+        Die WRC behandelt alle Angelegenheiten, die im Zusammenhang mit der
+        Anwendung, der Verbesserung und der Entwicklung der WCA Regeln stehen.
+        Sie unterstützen WCA Delegates bei prozeduralen Fragen, die bei
+        Wettbewerben auftreten und entschieden über Zwischenfälle, die nicht
+        gelöst wurden oder nicht von den Regeln abgedeckt werden. Die WRC
+        veröffentlicht zudem regelmässig WCA interne Berichte, um WCA Delegates
+        zu unterstützen und ihre Kenntnisse der Regeln zu verbessern. Wenn du
+        bei der Entwicklung von Regeln unterstützen willst oder Änderungen
+        vorschlagen willst, kontaktiere die WRC via E-Mail oder nutze <a
+        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
     wrt:
-      #original_hash: 899dc9c
-      info: (Turnierergebnisse und Korrektur von Ergebnissen)
+      #original_hash: 45b0c09
+      info_html: >-
+        Das WRT ist verantwortlich für die Verwaltung aller Daten in der
+        Datenbank der WCA, insbesondere der Ergebnisse von Wettbewerben und
+        persönlichen Daten. Sie veröffentlichen Ergebnisse von WCA Wettbewerben
+        auf der Webseite sobald der WCA Delegate diese eingereicht hat.
+        Abgesehen davon ist das WCA Results Team auch für die Korrektur von
+        Ergebnissen und Profilinformationen zuständig. Dies schließt die
+        Änderung von Namen und Geburtsdaten auf Basis verifizierter Dokumente
+        und die Verwaltung von Profilbildern ein.
     wst:
-      #original_hash: dfbf427
-      info: (Instandhaltung der Software der WCA)
+      #original_hash: 7de6222
+      info_html: >-
+        Das WST ist verantwortlich für die Wartung und Verwaltung aller Software
+        der WCA. Sie entwickeln auch neue Software für die verschiedenen
+        Aufgaben innerhalb der WCA. Falls du einen Vorschlag oder eine Idee für
+        eine Weiterentwicklung der Webseite hast oder Fehler melden willst,
+        kontaktiere sie gerne! The WCA Webseite ist ein großes Open Source
+        Projekt auf <a
+        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>.
     wfc:
-      #original_hash: 674291e
-      info: (Finanzen der WCA)
+      #original_hash: 3ec8256
+      info_html: >-
+        Das WFC ist verantwortliche für alle Angelegenheiten, die die Finanzen
+        der WCA betreffen. Sie verwalten Einkünfte und Konten der WCA in
+        Übereinstimmung mit einem jährlichen Budget, welches sie ebenso
+        regelmässig bestimmen.
   score_tools:
     #original_hash: ea9d41d
     title: WCA-Werkzeuge zur Ergebniserfassung
@@ -2476,7 +2518,7 @@ de:
     #original_hash: c72c969
     title: WCA-Logo
     paragraphs:
-      #original_hash: c092e13
+      #original_hash: 44cfe8d
       '1': >-
         Das WCA-Logo wurde von Justin Eastman im Rahmen eines Design-Wettbewerbs
         in January 2005 entworfen.<br />Uns gefiel das Logo aufgrund seines
@@ -2752,7 +2794,7 @@ de:
     paragraph4:
       #original_hash: b6dca56
       title: Abstandsregel
-      #original_hash: b2bc107
+      #original_hash: bd8f1fe
       content1: >-
         Als generelle Regel werden WCA Competitions akzeptiert, wenn sie
         mindestens 200 km oder 26 Tage von jedem anderen Competitions entfernt
@@ -2763,25 +2805,37 @@ de:
         akzeptiert werden soll. Mögliche Gründe, die eine solche Entscheidung
         beeinflussen, sind folgende:
       olist1:
-        #original_hash: 424c134
+        #original_hash: de00462
         '1': Die beiden Wettbewerbe bieten unterschiedliche Events an.
         #original_hash: f7bacc5
         '2': Die beiden Wettbewerbe finden in verschiedenen Ländern statt.
-        #original_hash: 9aa4d96
+        #original_hash: 7b2c099
         '3': >-
           In einem Radius von 200km um den Ort des Wettbewerbs herum gab es in
           den letzten 12 Monaten weniger als 13 Wettbewerbe.
-      #original_hash: ab65dfb
+      #original_hash: 9908e21
       content2: >-
         Simultane FMC Competitions dürfen nicht Teil anderer regulärer
         Wettbewerbe sein:
       olist2:
-        #original_hash: a57b541
-        '1': >-
-          Wenn ein Ort eines solchen Wettbewerbs näher als 200 km von einem
-          anderen regulären Wettbewerb entfernt ist, müssen beide Wettbewerbe
-          entweder 5 Tage auseinanderliegen oder der andere Wettbewerb darf
-          nicht Fewest Moves anbieten.
+        '1':
+          #original_hash: 6f68690
+          content1: FMC Wettbewerbe können nicht Teil eines regulären Wettbewerbs sein.
+          alist1:
+            #original_hash: 75aa0c7
+            1a: >-
+              Zeiträume, in denen beide stattfinden, dürfen sich nicht
+              überlappen.
+        '2':
+          #original_hash: 8d9c548
+          content1: >-
+            Wenn ein Standort eines solchen Wettbewerbes näher als 100 km zu
+            einem anderen regulären Wettbewerb ist, dann
+          alist1:
+            #original_hash: 8f532bb
+            2a: 'müssen beide Wettbewerbe mindestens 5 Tage auseinanderliegen, oder'
+            #original_hash: 4ed931b
+            2b: der andere Wettbewerb darf nicht FMC als Event anbieten.
     paragraph-events:
       #original_hash: b16c5f1
       title: Events ankündigen
