@@ -2738,34 +2738,49 @@ hu:
     paragraph4:
       #original_hash: b6dca56
       title: Összeférhetetlenségi elv
-      #original_hash: b2bc107
+      #original_hash: bd8f1fe
       content1: >-
-        Általános irányelv, hogy a WCA versenyeknek minden más versenytől
-        legalább 200 km és 26 nap távolságban kell lenniük egymástól. A WCA
-        Board megvizsgál minden olyan kihirdetésre szánt versenyt, ami ennek nem
-        felel meg és 200 km-en vagy 26 napon belül van egy másik versennyel. A
-        delegáltnak ilyen esetben extra információkkal kell szolgálnia, hogy
-        milyen okból kéri a verseny kihirdetését. Lehetséges érvek, amik segítik
-        egy ilyen verseny kihirdetését:
+        A WCA versenyeknek minden más versenytől legalább 100 km és 19 nap
+        távolságban kell lenniük egymástól. A WCA Board megvizsgál minden olyan
+        kihirdetésre szánt versenyt, ami ennek nem felel meg és 100 km-en vagy
+        19 napon belül van egy másik versennyel. A delegáltnak ilyen esetben
+        extra információkkal kell szolgálnia, hogy milyen okból kéri a verseny
+        kihirdetését. Lehetséges érvek, amik segítik egy ilyen verseny
+        kihirdetését:
       olist1:
-        #original_hash: 424c134
-        '1': A két versenyen különböző versenyszámok vannak.
+        #original_hash: de00462
+        '1': A két versenyen nincsenek megegyező versenyszámok.
         #original_hash: f7bacc5
         '2': A két verseny különböző országban van.
-        #original_hash: 9aa4d96
+        #original_hash: 7b2c099
         '3': >-
-          Az elmúlt 12 hónapban kevesebb, mint 13 verseny volt a verseny 200
+          Az elmúlt 12 hónapban kevesebb, mint 16 verseny volt a verseny 100
           km-es körzetében.
-      #original_hash: ab65dfb
+      #original_hash: 9908e21
       content2: >-
-        A több helyszínen zajló FMC versenyek nem lehetnek részei más
-        versenynek:
+        A több helyszínen zajló FMC versenyeken csak az FMC versenyszám kerül
+        megrendezésre egy időben, különböző helyszíneken.
       olist2:
-        #original_hash: a57b541
-        '1': >-
-          Ha bármely ilyen verseny 200 km-nél közelebb van egy normás
-          versenyhez, akkor legalább 5 napnak kell lennie a 2 verseny között és
-          a másik versenyen nem lehetséges FMC versenyszám megrendezése.
+        '1':
+          #original_hash: 6f68690
+          content1: >-
+            A több helyszínen zajló FMC versenyek nem lehetnek más, normál
+            versenynek a részei.
+          alist1:
+            #original_hash: 75aa0c7
+            1a: >-
+              Amikor mindkét típus verseny megrendezésre kerül, akkor az
+              időkereteik között nem lehet átfedés.
+        '2':
+          #original_hash: 8d9c548
+          content1: >-
+            Ha egy ilyen helyszín közelebb van egy normál versenyhez, mint 100
+            km, akkor
+          alist1:
+            #original_hash: 8f532bb
+            2a: legalább 5 nap kölünbségnek kell lennie a két verseny között vagy
+            #original_hash: 4ed931b
+            2b: a másik versenyen nem lehetséges FMC versenyszám tartása.
     paragraph-events:
       #original_hash: b16c5f1
       title: Versenyszámok kihirdetése
