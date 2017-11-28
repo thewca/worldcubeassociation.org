@@ -32,8 +32,8 @@ fr:
   events:
     #original_hash: 3732390
     '222': Cube 2x2x2
-    #original_hash: bfbe360
-    '333': Rubik's Cube
+    #original_hash: 8180137
+    '333': Cube 3x3x3
     #original_hash: 2ee5b5a
     '444': Cube 4x4x4
     #original_hash: b7a99fa
@@ -44,34 +44,34 @@ fr:
     '777': Cube 7x7x7
     #original_hash: 29d5411
     333bf: 3x3x3 à l'aveugle
-    #original_hash: 31ed23f
-    333oh: 3x3x3 à une main
     #original_hash: 0a5e7bf
     333fm: 3x3x3 résolution optimisée
+    #original_hash: 31ed23f
+    333oh: 3x3x3 à une main
     #original_hash: be41d70
     333ft: 3x3x3 avec les pieds
+    #original_hash: 04f6b3e
+    clock: Clock
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
     pyram: Pyraminx
-    #original_hash: 1551a2c
-    sq1: Square-1
-    #original_hash: 23c2fdf
-    clock: Rubik's Clock
     #original_hash: 64a56a2
     skewb: Skewb
+    #original_hash: 1551a2c
+    sq1: Square-1
     #original_hash: 5bae501
     444bf: Cube 4x4x4 à l'aveugle
     #original_hash: aea5216
     555bf: Cube 5x5x5 à l'aveugle
     #original_hash: cedbf87
     333mbf: 3x3x3 résolution multiple à l'aveugle
-    #original_hash: 3988358
-    magic: Rubik's Magic
+    #original_hash: e6791be
+    magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
-    #original_hash: c6ad2af
-    333mbo: 'Rubik''s Cube : résolution multiple à l''aveugle (à l''ancienne)'
+    #original_hash: 1843dc4
+    333mbo: '3x3x3 : résolution multiple à l''aveugle (à l''ancienne)'
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -848,6 +848,12 @@ fr:
       invalid: 'Votre email, WCA ID, ou mot de passe est invalide'
       #original_hash: 1186218
       not_found_in_database: 'Votre email, WCA ID, ou mot de passe est invalide'
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        Vous devez confirmer votre adresse email avant de continuer. Vous n'avez
+        pas reçu d'email de confirmation ? Visitez
+        https://www.worldcubeassociation.org/users/confirmation/new pour en
+        réclamer un nouveau.
   wca:
     errors:
       messages:
@@ -1129,8 +1135,8 @@ fr:
         d'avoir rentré la date au bon format (AAAA-MM-JJ) merci de contacter
         l'équipe des résultats WCA en utilisant <a href="%{dob_form_path}">ce
         formulaire dédié</a>.
-      #original_hash: 0fbcefd
-      unique: doit être unique
+      #original_hash: 71b46b4
+      unique: 'est déjà utilisé par "%{used_name}" avec l''adresse %{used_email}'
       #original_hash: 26f70ed
       dob_past: doit être dans le passé
       #original_hash: f599dc5
@@ -1141,7 +1147,7 @@ fr:
       senior_has_delegate: ne peut pas destituer un Délégué sénior qui supervise d'autres Délégués
       #original_hash: 48653a9
       already_have_id: 'impossible à réclamer car vous avez déjà l''ID WCA %{wca_id}'
-      #original_hash: 2684f33
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Nous n'avons pas de date de naissance enregistrée pour cet ID WCA. Merci
         de contacter l'équipe des résultats (WCA Results Team) via <a
@@ -2241,33 +2247,29 @@ fr:
     #original_hash: 9ac918a
     title: À propos de la WCA
     mission:
-      #original_hash: e4698d4
-      title: Mission
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
           La World Cube Association gouverne les compétitions pour tous les
-          casse-tête de type Rubik, et tous les autres casse-tête que l'on
-          manipule en tournant des faces. Le plus connu de ces casse-tête est le
-          Rubik's cube, inventé par le professeur hongrois Ernő Rubik. Une
-          sélection de ces casse-tête a été choisie comme épreuves officielles
-          de la WCA.
+          casse-têtes manipulés à travers des rotations de groupes de pièces. Le
+          plus connu de ces casse-tête est le Rubik's Cube, inventé par le
+          professeur hongrois Ernő Rubik. Une sélection de ces casse-tête a été
+          choisie comme épreuves officielles de la WCA.
         #original_hash: 22c3593
         '2': >-
           La World Cube Association organise des compétitions à travers le
           monde, et est supportée par des organisations régionales responsables
           de l'organisation des compétitions dans leur pays.
-        #original_hash: 20e0550
+        #original_hash: 0902c4a
         '3': >-
-          Le but de la World Cube Association est d'avoir<br /><strong>plus de
+          Le but de la World Cube Association est d'avoir<strong>plus de
           compétitions dans plus de pays avec plus de personnes et d'amusement,
           dans des conditions égales et équitables.</strong>
-        #original_hash: bee3687
+        #original_hash: 2b993c0
         '4': >-
-          L'esprit de la World Cube Association est que <br /> <strong>des
-          personnes venant de tout le globe puissent s'amuser ensemble dans une
-          atmosphère conviviale, s'entraider, et se comporter de manière
-          sportive.</strong>
+          L'esprit de la World Cube Association est que <strong>des personnes
+          venant de tout le globe puissent s'amuser ensemble dans une atmosphère
+          conviviale, s'entraider, et se comporter de manière sportive.</strong>
     structure:
       #original_hash: 9482c5d
       title: Structure
@@ -2441,30 +2443,73 @@ fr:
     board:
       #original_hash: 90fcc48
       name_html: WCA Board
-      #original_hash: 7ee8e36
-      info: >-
-        (Organisation de la WCA, rapports des délégués, officialisation de
-        compétitions, demande de renseignements)
+      #original_hash: 3a8b1d8
+      info_html: >-
+        La World Cube Association est dirigée par le Bureau de la WCA. Ils sont
+        responsables des demandes génériques, ainsi que de la WCA dans son
+        ensemble. Toutes les compétitions officielles ont besoin d'être
+        approuvées par le Bureau de la WCA pour être annoncées.
     wct:
-      #original_hash: c53144e
-      info: (communications de la WCA avec la communauté et le public)
+      #original_hash: 846684d
+      info_html: >-
+        La WCT est chargée de superviser et supporter les communications de la
+        WCA avec la communauté et le public en général. Elle devrait être
+        contactée si vous avez des questions générales à propos de la WCA ou de
+        sa présence sur les réseaux sociaux.
     wdc:
-      #original_hash: 562e197
-      info: >-
-        (conseil indépendant pour le bureau de la WCA, enquêtes indépendantes,
-        conseiller pour les affaires personnelles importantes)
+      #original_hash: 77f119f
+      info_html: >-
+        Le WDC enquête sur une large variété de problèmes et propose des
+        solutions, qui incluent des sanctions si cela est nécessaire. Entre
+        autres, ces problèmes peuvent être des sérieux manquements au Règlement
+        WCA ou des problèmes avec la communauté. Si vous avez vécu ou été témoin
+        d'un problème de ce type, n'hésitez pas à contacter ce comité (en
+        Anglais).
     wrc:
-      #original_hash: 4a256f0
-      info: (maintenance du Règlement WCA)
+      #original_hash: fcd3526
+      info_html: >-
+        Le WRC gèrent tous les problèmes concernant l'application,
+        l'amélioration, et de développement du Règlement WCA. Ils supportent les
+        Délégués WCA sur tout type de problèmes survenant lors de compétition,
+        et prennent les décisions concernant les incidents non résolus ou non
+        couverts par le Règlement. Le WRC publie régulièrement des reports
+        internes à la WCA pour aider tous les Délégués WCA et améliorer leur
+        connaissance du Règlement. Si vous souhaiteriez participer au
+        développement du Règlement ou proposer des changements, vous pouvez
+        contacter le WRC via email ou via les discussions sur <a
+        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
     wrt:
-      #original_hash: 899dc9c
-      info: '(résultats des compétitions, corrections de résultats)'
+      #original_hash: 45b0c09
+      info_html: >-
+        La WRT est responsable de la gestion de toutes les données dans la base
+        de données de la WCA, et particulièrement les résultats de compétitions
+        et les données des personnes. Ils annoncent les résultats des
+        compétitions WCA sur le site de la WCA, une fois que le Délégué WCA les
+        leur a envoyé. En plus d'annoncer les résultats des compétitions,
+        l'Équipe des Résultats de la WCA est aussi responsable des corrections
+        des résultats des compétitions lorsque nécessaire, ainsi que des page de
+        profil WCA. Cela inclue par exemple le changement ou la correction des
+        données d'une personne, telles que la date de naissance ou la photo de
+        profil.
     wst:
-      #original_hash: dfbf427
-      info: (maintenance des logiciels de la WCA)
+      #original_hash: 7de6222
+      info_html: >-
+        La WST est responsable de la maintenance et de la gestion de tous les
+        logiciels de la WCA. Elle développe aussi de nouveaux programmes pour
+        différentes tâches internes de la WCA lorsque nécessaire. Si vous avez
+        des suggestions ou des idées pour des améliorations du site de la WCA,
+        ou si vous souhaitez rapporter des erreurs et des bugs, n'hésitez pas à
+        les contacter ! Le site internet de la WCA est un projet open source sur
+        <a href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
+        donc si vous êtes intéressé pour aider la WCA dans ses développements,
+        allez y jeter un oeil.
     wfc:
-      #original_hash: 674291e
-      info: (finances de la WCA)
+      #original_hash: 3ec8256
+      info_html: >-
+        Le WCF est responsable de tout ce qui est en lien avec les finances de
+        la WCA. Il gère les finances et les comptes de la WCA en accord avec la
+        proposition de budget annuelle approuvée, qu'il doit également fournir
+        régulièrement.
   score_tools:
     #original_hash: ea9d41d
     title: Outils WCA pour la saisie des résultats
@@ -2491,12 +2536,12 @@ fr:
     #original_hash: c72c969
     title: Logo de la WCA
     paragraphs:
-      #original_hash: c092e13
+      #original_hash: 44cfe8d
       '1': >-
         Le logo de la WCA a été créé par Justin Eastman, dans un concours de
         logos en Janvier 2005.<br />Nous avons aimé ce logo pour son design, ses
-        couleurs, et le fait qu'il ne représentait pas spécifiquement un Rubik's
-        Cube / cube 3x3x3.
+        couleurs, et le fait qu'il ne représentait pas spécifiquement un cube
+        3x3x3.
       #original_hash: f228da2
       '2': >-
         Nous avons trois versions différentes du logo : une <a
@@ -2764,36 +2809,52 @@ fr:
     paragraph4:
       #original_hash: b6dca56
       title: Politique de proximité
-      #original_hash: b2bc107
+      #original_hash: bd8f1fe
       content1: >-
-        Comme politique générale, les compétitions WCA devraient être acceptées
-        si elles sont à au moins 200 km ou 26 jours de distance de toute autre
-        compétition. Le Bureau de la WCA portera une attention particulière aux
-        compétitions ne correspondant pas à ces critères. Un Délégué demandant
-        l'approbation d'une telle compétition doit donner des informations
-        détaillées sur pourquoi la compétition devrait tout de même être
-        acceptée. Les arguments possibles qui supporteront l'acceptation de la
-        compétition incluent :
+        Les compétitions WCA seront acceptées si elles sont à au moins 100 km ou
+        19 jours de distance de toute autre compétition. Le Bureau de la WCA
+        portera une attention particulière aux compétitions ne correspondant pas
+        à ces critères. Un Délégué demandant l'approbation d'une telle
+        compétition doit donner des informations détaillées sur pourquoi la
+        compétition devrait tout de même être acceptée. Les arguments possibles
+        qui supporteront l'acceptation de la compétition incluent :
       olist1:
-        #original_hash: 424c134
-        '1': Les deux compétitions ont des épreuves différentes.
+        #original_hash: de00462
+        '1': Les deux compétitions n'ont pas d'épreuves en commun.
         #original_hash: f7bacc5
         '2': Les deux compétitions ont lieues dans des pays différents.
-        #original_hash: 9aa4d96
+        #original_hash: 7b2c099
         '3': >-
-          Pendant les 12 derniers mois, il y a eu moins de 13 compétitions dans
-          un rayon de 200 km autour de la compétition.
-      #original_hash: ab65dfb
+          Pendant les 12 derniers mois, il y a eu moins de 16 compétitions dans
+          un rayon de 100 km autour de la compétition.
+      #original_hash: 9908e21
       content2: >-
-        Les compétitions simultanées de Fewest Moves (FMC) ne peuvent pas faire
-        partie d'une autre compétition :
+        Les "compétitions simultanées de résolution optimisée" sont des
+        compétitions WCA n'ayant comme épreuve que la résolution optimisée du
+        3x3x3, et ayant lieu simultanément à plusieurs endroits.
       olist2:
-        #original_hash: a57b541
-        '1': >-
-          Si une telle compétition est située à moins de 200 km d'une autre
-          compétition, alors les deux compétitions devraient avoir lieu avec au
-          moins 5 jours d'écart, ou l'autre compétition ne doit pas proposer de
-          Fewest Moves.
+        '1':
+          #original_hash: 6f68690
+          content1: >-
+            Les compétitions simultanées de résolution optimisée ne peuvent pas
+            faire partie d'une autre compétition.
+          alist1:
+            #original_hash: 75aa0c7
+            1a: >-
+              Les intervalles de temps pendant lesquels elles se déroulent
+              doivent être distincts.
+        '2':
+          #original_hash: 8d9c548
+          content1: >-
+            Si l'emplacement d'une telle compétition est à moins de 100 km d'une
+            autre compétition, alors
+          alist1:
+            #original_hash: 8f532bb
+            2a: 'Les deux compétitions devraient avoir 5 jours d''écart, ou'
+            #original_hash: 4ed931b
+            2b: >-
+              l'autre compétition ne doit pas proposer l'épreuve de résolution
+              optimisée.
     paragraph-events:
       #original_hash: b16c5f1
       title: Annonce des épreuves
