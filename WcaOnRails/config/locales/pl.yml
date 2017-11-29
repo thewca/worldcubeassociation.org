@@ -2257,8 +2257,8 @@ pl:
         #original_hash: 0902c4a
         '3': >-
           Misją World Cube Association jest organizacja <strong>większej liczby
-          zawodów, w większej ilości państw, z większą ilością osób i zabawy,
-          przy wzajemnej równości i uczciwości.</strong>
+          zawodów, w większej ilości państw, z większą liczbą osób oraz większą
+          ilością zabawy, przy wzajemnej równości i uczciwości.</strong>
         #original_hash: 2b993c0
         '4': >-
           W Duchu World Cube Association jest, aby <strong>ludzie z całego
@@ -2777,26 +2777,40 @@ pl:
     paragraph4:
       #original_hash: b6dca56
       title: Polityka odległości
-      #original_hash: b2bc107
-      content1: "W ogólnym przypadku, zawody WCA będą zaakceptowane, jeżeli są co najmniej 200 km lub 26 dni od jakichkolwiek innych zawodów. Zarząd WCA powinien szczególnie rozpatrywać propozycje zawodów, jeżeli mają miejsce inne zawody odległe o mniej niż 200 km oraz w przeciągu mniej niż\_26 dni. Delegat wnoszący o zaakceptowanie takowych zawodów musi przedstawić dalsze informacje, wskazujące dlaczego zawody wciąż powinny zostać zaakceptowane. Możliwe argumenty, które mogą prowadzić do akceptacji takich zawodów, obejmują:"
+      #original_hash: bd8f1fe
+      content1: "Zawody WCA będą zaakceptowane, jeżeli są co najmniej 100 km lub 19 dni od jakichkolwiek innych zawodów. Zarząd WCA powinien szczególnie rozpatrywać propozycje zawodów, jeżeli mają miejsce inne zawody odległe o mniej niż 100 km oraz w przeciągu mniej niż\_19 dni. Delegat wnoszący o zaakceptowanie takowych zawodów musi przedstawić dalsze informacje, wskazujące dlaczego zawody wciąż powinny zostać zaakceptowane. Możliwe argumenty, które mogą prowadzić do akceptacji takich zawodów, obejmują:"
       olist1:
-        #original_hash: 424c134
-        '1': Na obu zawodach rozgrywają się inne konkurencje.
+        #original_hash: de00462
+        '1': Na obu zawodach nie odbywają się wspólne konkurencje.
         #original_hash: f7bacc5
         '2': Zawody mają miejsce w innych państwach.
-        #original_hash: 9aa4d96
+        #original_hash: 7b2c099
         '3': >-
-          W przeciągu ostatnich 12 miesięcy miało miejsce mniej niż 13 zawodów w
-          promieniu 200 km od danych zawodów.
-      #original_hash: ab65dfb
-      content2: 'Równoległe zawody FMC nie mogą być częścią żadnych normalnych zawodów:'
+          W przeciągu ostatnich 12 miesięcy miało miejsce mniej niż 16 zawodów w
+          promieniu 100 km od danych zawodów.
+      #original_hash: 9908e21
+      content2: >-
+        "Równoległe zawody FM" to zawody WCA, na których jest wyłącznie
+        konkurencja FM oraz odbywają się one jednocześnie w różnych miejscach.
       olist2:
-        #original_hash: a57b541
-        '1': >-
-          Jeżeli jakakolwiej z lokalizacji tychże zawodów jest w odległości
-          mniejszej niż 200 km od innych normalnych zadowów, to powinny być
-          oddzielone o co najmniej 5 dni lub drugie z nich nie mogą mieć
-          konkurencji FM.
+        '1':
+          #original_hash: 6f68690
+          content1: >-
+            Równoległe zawody FM nie mogą być częścią żadnych normalnych
+            zawodów.
+          alist1:
+            #original_hash: 75aa0c7
+            1a: 'Ramy czasowe, w których się odbywają, nie mogą się zazębiać.'
+        '2':
+          #original_hash: 8d9c548
+          content1: >-
+            Jeżeli którakolwiek z lokalizacji takich zawodów jest bliżej niż 100
+            km od innych normalnych zawodów, wtedy
+          alist1:
+            #original_hash: 8f532bb
+            2a: 'zawody te powinny odbywać się w odstępie co najmniej 5 dni, lub'
+            #original_hash: 4ed931b
+            2b: na drugich z tych zawodów nie może być rozgrywana konkurencja FM.
     paragraph-events:
       #original_hash: b16c5f1
       title: Zapowiadanie konkurencji
