@@ -32,8 +32,8 @@ hr:
   events:
     #original_hash: 3732390
     '222': 2x2x2 kocka
-    #original_hash: bfbe360
-    '333': Rubikova kocka
+    #original_hash: 8180137
+    '333': 3x3x3 kocka
     #original_hash: 2ee5b5a
     '444': 4x4x4 kocka
     #original_hash: b7a99fa
@@ -44,34 +44,34 @@ hr:
     '777': 7x7x7 kocka
     #original_hash: 29d5411
     333bf: 3x3x3 naslijepo
-    #original_hash: 31ed23f
-    333oh: 3x3x3 jednoručno
     #original_hash: 0a5e7bf
     333fm: 3x3x3 najmanje poteza
+    #original_hash: 31ed23f
+    333oh: 3x3x3 jednoručno
     #original_hash: be41d70
     333ft: 3x3x3 s nogama
+    #original_hash: 04f6b3e
+    clock: Sat
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
     pyram: Pyraminx
-    #original_hash: 1551a2c
-    sq1: Square-1
-    #original_hash: 23c2fdf
-    clock: Rubikov sat
     #original_hash: 64a56a2
     skewb: Skewb
+    #original_hash: 1551a2c
+    sq1: Square-1
     #original_hash: 5bae501
     444bf: 4x4x4 naslijepo
     #original_hash: aea5216
     555bf: 5x5x5 naslijepo
     #original_hash: cedbf87
     333mbf: 3x3x3 višestruko naslijepo
-    #original_hash: 3988358
-    magic: Rubik's Magic
+    #original_hash: e6791be
+    magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
-    #original_hash: c6ad2af
-    333mbo: 'Rubikova kocka: višestruko naslijepo po starom stilu'
+    #original_hash: 1843dc4
+    333mbo: 3x3x3 višestruko naslijepo po starom stilu
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -844,6 +844,12 @@ hr:
       invalid: 'Netočan e-mail, WCA ID ili lozinka.'
       #original_hash: 1186218
       not_found_in_database: 'Netočan e-mail, WCA ID ili lozinka.'
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        Morate potvrditi svoju e-mail adresu prije nego nastavite. Niste dobili
+        e-mail za prihvaćanje? Idite na
+        https://www.worldcubeassociation.org/users/confirmation/new kako biste
+        ga ponovno zatražili.
   wca:
     errors:
       messages:
@@ -1110,8 +1116,8 @@ hr:
         ne podudara se s našom bazom podataka. Ukoliko ste sigurni da pišete
         točan datum u točnom formatu (YYYY-MM-DD) molimo Vas kontaktirajte WCA
         Results Team koristeći <a href="%{dob_form_path}">ovaj obrazac</a>
-      #original_hash: 0fbcefd
-      unique: mora biti unikatno
+      #original_hash: 71b46b4
+      unique: 'već koristi "%{used_name}" s %{used_email}'
       #original_hash: 26f70ed
       dob_past: mora biti u prošlosti
       #original_hash: f599dc5
@@ -1122,7 +1128,7 @@ hr:
       senior_has_delegate: ne može se degradirati Senior Delegata s podređenim delegatima
       #original_hash: 48653a9
       already_have_id: 'ne može se zatražiti WCA ID jer već imate WCA ID %{wca_id}'
-      #original_hash: 2684f33
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Nemamo zabilježen datum rođenja za ovaj WCA ID. Molimo Vas,
         kontaktirajte WCA Results Team <a href="%{dob_form_path}">kroz ovaj
@@ -2196,31 +2202,29 @@ hr:
     #original_hash: 9ac918a
     title: Više o WCA
     mission:
-      #original_hash: e4698d4
-      title: Misija
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
-          World Cube Association upravlja natjecanjima za sve mozgalice označene
-          kao Rubik mozgalice i za sve ostale mozgalice koje se rješavaju
-          okretanjem stranica, tzv. "twisty puzzles". Najpoznatija mozgalica
-          jest Rubikova kocka, izum profesora Rubika iz Mađarske. Samo su
-          određene mozgalice izabrane kao službene discipline WCA organizacije.
+          World Cube Association upravlja natjecanjima za sve mehaničke
+          slagalice kojima se upravlja okretanjem grupe dijelova, drugim
+          riječima rečeno "twisty puzzles". Najpoznatija slagalica među svima
+          jest Rubikova kocka, izum profesora Rubika iz Mađarske. Određeni dio
+          takvih slagalica je odabran kao službene discipline WCA.
         #original_hash: 22c3593
         '2': >-
           World Cube Association organizira natjecanja u čitavom svijetu,
           podržana od strane nacionalnih organizacija odgovornih za
           organiziranje natjecanja u njihovim državama.
-        #original_hash: 20e0550
+        #original_hash: 0902c4a
         '3': >-
-          Cilj World Cube Association jest imati <br /><strong>više natjecanja u
-          više država s više ljudi i s više zabave, pod pravednim i jednakim
-          uvjetima.</strong>
-        #original_hash: bee3687
+          Misija World Cube Association jest imati<strong>više natjecanja u više
+          država s više ljudi i s više zabave, pod pravednim i jednakim
+          uvjetima</strong>.
+        #original_hash: 2b993c0
         '4': >-
-          Duh World Cube Association jest <br /> <strong>da ljudi iz svih
-          zemalja svijeta imaju zabavu u prijateljskoj atmosferi, da pomažu
-          jedni drugima i da se ponašaju sportski.</strong>
+          Duh World Cube Association jest <strong>da ljudi iz svih zemalja
+          svijeta imaju zabavu u prijateljskoj atmosferi, da pomažu jedni
+          drugima i da se ponašaju sportski.</strong>
     structure:
       #original_hash: 9482c5d
       title: Struktura
@@ -2372,30 +2376,63 @@ hr:
     board:
       #original_hash: 90fcc48
       name_html: WCA Board
-      #original_hash: 7ee8e36
-      info: >-
-        (WCA Organizacija, izvještaji delegata, prihvaćanje natjecanja,
-        generalni upiti)
+      #original_hash: 3a8b1d8
+      info_html: >-
+        World Cube Association-om upravlja WCA Board (Upravni Odbor). Taj odbor
+        je odgovoran za generalne upite i za organizaciju kao takvu. Sva
+        službena natjecanja moraju biti prihvaćena od strane WCA Board-a kako bi
+        se mogla najaviti.
     wct:
-      #original_hash: c53144e
-      info: (komunikacija WCA s Communityjem i javnosti)
+      #original_hash: 846684d
+      info_html: >-
+        WCT je zadužen za nadgledanje i podršku komunikaciji WCA sa zajednicom i
+        javnosti. Njih trebate kontaktirati ukoliko imate neko pitanje o WCA ili
+        o pojavljivanju na društvenim mrežama.
     wdc:
-      #original_hash: 562e197
-      info: >-
-        (neovisan savjet WCA Board-u, neovisne istrage, savjetnik za bitna
-        osobna pitanja)
+      #original_hash: 77f119f
+      info_html: >-
+        WDC istražuje razne situacije i predlaže rješenja, uključujući kazne,
+        ukoliko je potrebno. Izuzev svih ostalih tema, takve situacije mogu biti
+        ozbiljno kršenje WCA Pravilnika ili problema sa zajednicom. Ukoliko ste
+        iskusili nešto od toga, slobodno se obratite ovom odboru.
     wrc:
-      #original_hash: 4a256f0
-      info: (održavanje WCA Pravilnika)
+      #original_hash: fcd3526
+      info_html: >-
+        WRC se bavi svim problemima koji su vezani za prijavu, poboljšanja te
+        razvoj WCA Pravilnika. Oni podržavaju WCA Delegate u bilo kojem slučaju
+        koji se može dogoditi na natjecanju i odlučuju o nerješenim i
+        nepokrivenim incidentima. WRC regularno objavljuje interne WCA
+        izvještaje kako bi pomogao WCA Delegatima u shvaćanju samog Pravilnika.
+        Ukoliko želite pridonijeti razvoju pravila ili želite predložiti
+        promjene, možete kontaktirati WRC odbor preko njihovog mail-a ili
+        rasprave na <a
+        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
     wrt:
-      #original_hash: 899dc9c
-      info: '(rezultati natjecanja, prepravke rezultata)'
+      #original_hash: 45b0c09
+      info_html: >-
+        WRT je odgovoran za menadžment svih podataka u bazi podataka WCA,
+        najbitnije rezultata natjecanja i podataka o osobama. Oni objavljuju
+        rezultate WCA natjecanja na WCA web-stranici onog trenutka kad WCA
+        Delegat natjecanja njih pošalje. Osim objavljivanja rezultata, WCA
+        Results Team je odgovoran za moguće izmjene rezultata s natjecanja i oni
+        su odgovorni za administraciju svih WCA Profila. To uključuje primjerice
+        promjenu osobnih podataka kao datuma rođenja, uz priloženi verificirani
+        zahtjev te upravljaju zahtjevima za promjenu slike profila.
     wst:
-      #original_hash: dfbf427
-      info: (održavanje softvera WCA)
+      #original_hash: 7de6222
+      info_html: >-
+        WST je odgovoran za održavanje i menadžment softvera WCA. Oni također
+        razvijaju noviji softver za razne stvari koje WCA treba. Ukoliko imate
+        prijedloga ili novih ideja za razvoj web-stranice ili želite prijaviti
+        greške, slobodno im se obratite! WCA je ogroman open-source projekt na
+        <a href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>
+        te ako ste zainteresirani, bacite pogled tamo!
     wfc:
-      #original_hash: 674291e
-      info: (financije WCA)
+      #original_hash: 3ec8256
+      info_html: >-
+        WFC je odgovoran za sve vezano uz financije WCA. Oni upravljaju svim
+        financijama i računima WCA u sukladnosti s prihvaćenim godišnjim
+        proračunom, koji im je ujedno i obaveza.
   score_tools:
     #original_hash: ea9d41d
     title: WCA alati za bilježenje rezultata
@@ -2421,11 +2458,11 @@ hr:
     #original_hash: c72c969
     title: WCA Logo
     paragraphs:
-      #original_hash: c092e13
+      #original_hash: 44cfe8d
       '1': >-
         WCA logo je dizajnirao Justin Eastman, na natjecanju za dizajn u
         siječnju 2015. <br /> Svidio nam se dizajn logo-a, boje i činjenica da
-        ne pokazuje specifično samo Rubikovu kocku / 3x3x3 kocku.
+        ne pokazuje specifično samo 3x3x3 kocku.
       #original_hash: f228da2
       '2': >-
         Imamo 3 različite verzije logo-a: <a href="/files/WCAlogo_XL.jpg">velika
@@ -2678,33 +2715,47 @@ hr:
     paragraph4:
       #original_hash: b6dca56
       title: Politika udaljenosti
-      #original_hash: b2bc107
+      #original_hash: bd8f1fe
       content1: >-
-        Kao generalna politika, WCA Natjecanja će biti prihvaćena ako su barem
-        200km ili 26 dalje od bilo kojeg drugog natjecanja. WCA Board mora
-        obratiti posebnu pozornost na ta 2 čimbenika. Delegat koji traži
-        odobrenje takvog natjecanja mora imati jako dobar razlog zašto bi se to
-        natjecanje trebalo potvrditi. Mogući argumenti koji mogu pomoći takvom
-        natjecanju da bude prihvaćeno su:
+        WCA Natjecanja će biti prihvaćena ako su barem 100km ili 19 dana dalje
+        od bilo kojeg drugog natjecanja. WCA Board mora obratiti posebnu
+        pozornost ukoliko je predloženo natjecanje koje je u krugu od 100km od
+        drugog te ukoliko je vremenska razlika između oba manja od 19 dana.
+        Delegat koji traži odobrenje takvog natjecanja mora imati jako dobar
+        razlog zašto bi se to natjecanje trebalo potvrditi. Mogući argumenti
+        koji mogu pomoći takvom natjecanju da bude prihvaćeno su:
       olist1:
-        #original_hash: 424c134
-        '1': Ova 2 natjecanja imaju različite discipline.
+        #original_hash: de00462
+        '1': Ova 2 natjecanja nemaju zajedničke discipline.
         #original_hash: f7bacc5
         '2': Ova 2 natjecanja će se održati u različitim državama.
-        #original_hash: 9aa4d96
+        #original_hash: 7b2c099
         '3': >-
-          U zadnjih 12 mjeseci, bilo je manje od 13 natjecanja na prostoru od
-          200km oko ovog natjecanja.
-      #original_hash: ab65dfb
+          U zadnjih 12 mjeseci, bilo je manje od 16 natjecanja na prostoru od
+          100km oko ovog natjecanja.
+      #original_hash: 9908e21
       content2: >-
-        FMC natjecanja (npr. FMC Europe, koja se održavaju u isto vrijeme na
-        više lokacija) ne mogu biti dio bilo kojeg drugog natjecanja:
+        "FMC istovremena natjecanja" su WCA natjecanja koja imaju samo
+        disciplinu FMC i istovremeno se održavaju na više različitih lokacija.
       olist2:
-        #original_hash: a57b541
-        '1': >-
-          Ako je bilo koja lokacija takvih natjecanja manja od 200km od bilo
-          kojeg drugog natjecanja, onda oba natjecanja moraju biti odvojena
-          barem 5 dana, ili jedno od natjecanja ne smije imati FM disciplinu.
+        '1':
+          #original_hash: 6f68690
+          content1: >-
+            FMC istovremena natjecanja ne mogu biti dio bilo kojeg drugog
+            regularnog natjecanja.
+          alist1:
+            #original_hash: 75aa0c7
+            1a: Vremenski okviri kada se oboje slavi se ne smiju preklapati.
+        '2':
+          #original_hash: 8d9c548
+          content1: >-
+            Ukoliko je lokacija takvog natjecanja manja od 100km od bilo kojeg
+            drugog regularnog natjecanja, onda
+          alist1:
+            #original_hash: 8f532bb
+            2a: 'oba natjecanja moraju imati razmak od barem 5 dana, ili'
+            #original_hash: 4ed931b
+            2b: drugo natjecanje ne smije imati FM disciplinu.
     paragraph-events:
       #original_hash: b16c5f1
       title: Najavljivanje disciplina
