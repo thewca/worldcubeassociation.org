@@ -32,8 +32,8 @@ nl:
   events:
     #original_hash: 3732390
     '222': 2x2x2 kubus
-    #original_hash: bfbe360
-    '333': Rubik's Kubus
+    #original_hash: 8180137
+    '333': 3x3x3 Kubus
     #original_hash: 2ee5b5a
     '444': 4x4x4 kubus
     #original_hash: b7a99fa
@@ -44,34 +44,34 @@ nl:
     '777': 7x7x7 kubus
     #original_hash: 29d5411
     333bf: 3x3x3 geblinddoekt
-    #original_hash: 31ed23f
-    333oh: 3x3x3 met één hand
     #original_hash: 0a5e7bf
     333fm: 3x3x3 met minste draaien
+    #original_hash: 31ed23f
+    333oh: 3x3x3 met één hand
     #original_hash: be41d70
     333ft: 3x3x3 met voeten
+    #original_hash: 04f6b3e
+    clock: Clock
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
     pyram: Pyraminx
-    #original_hash: 1551a2c
-    sq1: Square-1
-    #original_hash: 23c2fdf
-    clock: Rubik's Clock
     #original_hash: 64a56a2
     skewb: Skewb
+    #original_hash: 1551a2c
+    sq1: Square-1
     #original_hash: 5bae501
     444bf: 4x4x4 geblinddoekt
     #original_hash: aea5216
     555bf: 5x5x5 geblinddoekt
     #original_hash: cedbf87
     333mbf: 3x3x3 meervoudig geblinddoekt
-    #original_hash: 3988358
-    magic: Rubik's Magic
+    #original_hash: e6791be
+    magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
-    #original_hash: c6ad2af
-    333mbo: 'Rubik''s Cube: meervoudig geblinddoekt, oude regels'
+    #original_hash: 1843dc4
+    333mbo: '3x3x3 Cube: meervoudig geblinddoekt, oude regels'
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -213,19 +213,14 @@ nl:
       other: 'deze %{count} wedstrijdonderdelen'
     #original_hash: 51ef7d4
     search_site: Zoeken op site
+    #original_hash: d7decf1
+    filter: Filter
+    #original_hash: f6fdbe4
+    delete: Verwijderen
     #original_hash: d3f8f7b
     date_placeholder: JJJJ-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'JJJJ-MM-DD UU:MM'
-  delegate_statuses:
-    #original_hash: 28ec02d
-    candidate_delegate: Candidate Delegate
-    #original_hash: 12ab214
-    delegate: Delegate
-    #original_hash: d463c23
-    senior_delegate: Senior Delegate
-    #original_hash: 660ee15
-    board_member: Bestuurslid
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -248,6 +243,13 @@ nl:
       scopes: Scope
       #original_hash: 3b0d449
       callback_urls: Callback url's
+  helpers:
+    submit:
+      competition_medium:
+        #original_hash: dc112af
+        create: Media insturen
+        #original_hash: 4cf19ca
+        update: Media bijwerken
   activerecord:
     attributes:
       user:
@@ -436,6 +438,62 @@ nl:
       vote:
         #original_hash: 153d7a5
         comment: Opmerking
+      competition_medium:
+        #original_hash: 1917f4f
+        competitionId: Wedstrijd
+        #original_hash: 3deb745
+        type: Type
+        #original_hash: c3328c3
+        text: Tekst
+        #original_hash: d051707
+        uri: Link
+        #original_hash: 1be755a
+        submitterName: Naam van instuurder
+        #original_hash: 78cdfee
+        submitterEmail: Mail van instuurder
+        #original_hash: 0d31f23
+        submitterComment: Commentaar van instuurder
+        #original_hash: bae7d5b
+        status: Status
+  enums:
+    user:
+      gender:
+        #original_hash: 3f3a489
+        m: Mannelijk
+        #original_hash: b7c17e9
+        f: Vrouwelijk
+        #original_hash: 6e6a6f2
+        o: Anders
+      delegate_status:
+        #original_hash: 28ec02d
+        candidate_delegate: Kandidaat Delegate
+        #original_hash: 12ab214
+        delegate: Delegate
+        #original_hash: d463c23
+        senior_delegate: Senior Delegate
+        #original_hash: 660ee15
+        board_member: Bestuurslid
+    person:
+      gender:
+        #original_hash: 3f3a489
+        m: Mannelijk
+        #original_hash: b7c17e9
+        f: Vrouwelijk
+        #original_hash: 6e6a6f2
+        o: Anders
+    competition_medium:
+      status:
+        #original_hash: 61a0572
+        accepted: Geaccepteerd
+        #original_hash: 96f608c
+        pending: In bewerking
+      type:
+        #original_hash: ee45c30
+        report: Rapportage
+        #original_hash: 4360c2d
+        article: Artikel
+        #original_hash: 82dabd0
+        multimedia: Multimedia
   simple_form:
     #original_hash: 5397e05
     'yes': Ja
@@ -598,12 +656,14 @@ nl:
         wca_id: ''
         #original_hash: 8723825
         dob: Je correcte geboortedatum in het formaat jjjj-mm-dd
-        #original_hash: 2029dde
+        #original_hash: c6d8a97
         document: >-
-          Om je identiteit en je geboortedatum aan te tonen, kun je een foto 
-          opsturen van een legitimatiebewijs (identiteitskaart, rijbewijs,
+          Om je identiteit en je correcte geboortedatum aan te tonen, kun je een
+          foto  opsturen van een legitimatiebewijs (identiteitskaart, rijbewijs,
           studentenkaart, paspoort, geboortecertificaat) met je naam en
-          geboortedatum zichtbaar en begrijpbaar voor iemand die Engels spreekt.
+          geboortedatum zichtbaar en begrijpbaar voor iemand die Engels spreekt
+          (of je neemt contact op met je lokale WCA-delegate als je niet zo'n
+          document hebt).
       post:
         #original_hash: 53c16eb
         body: >-
@@ -698,6 +758,23 @@ nl:
       vote:
         #original_hash: da39a3e
         comment: ''
+      competition_medium:
+        #original_hash: da39a3e
+        competitionId: ''
+        #original_hash: da39a3e
+        type: ''
+        #original_hash: da39a3e
+        text: ''
+        #original_hash: da39a3e
+        uri: ''
+        #original_hash: da39a3e
+        submitterName: ''
+        #original_hash: da39a3e
+        submitterEmail: ''
+        #original_hash: da39a3e
+        submitterComment: ''
+        #original_hash: da39a3e
+        status: ''
     options:
       registration:
         status:
@@ -748,6 +825,12 @@ nl:
       invalid: 'Onjuist e-mailadres, WCA-id of wachtwoord.'
       #original_hash: 1186218
       not_found_in_database: 'Onjuist e-mailadres, WCA-id of wachtwoord.'
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        Je moet je emailadres bevestigen voordat je door kunt gaan. Geen
+        bevestigingsmail ontvangen? Ga naar
+        https://www.worldcubeassociation.org/users/confirmation/new om opnieuw
+        de mail te ontvangen.
   wca:
     errors:
       messages:
@@ -759,11 +842,11 @@ nl:
     doorkeeper:
       applications:
         help:
-          #original_hash: eb5567a
+          #original_hash: 62a0113
           scopes_html: >-
             Verschillende scopes met spaties scheiden. Laat leeg om de default
             scope te gebruiken. Zie <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">hier</a> voor een lijst met mogelijke scopes.
       scopes:
         #original_hash: 1920e95
@@ -794,13 +877,6 @@ nl:
         Welkom! Voor je kunt deelnemen aan je eerste WCA-wedstrijd hebben we
         aanvullende informatie nodig voor onze administratie. Let op: je
         geboortedatum wordt nooit gedeeld zonder jouw expliciete toestemming.
-      gender:
-        #original_hash: 3f3a489
-        male: Man
-        #original_hash: b7c17e9
-        female: Vrouw
-        #original_hash: 6e6a6f2
-        other_gender: Anders
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1026,8 +1102,8 @@ nl:
         de juiste datum in het juiste formaat (jjjj-mm-dd) hebt ingevoerd, neem
         dan contact op met het WCA Resultaten-team via <a
         href="%{dob_form_path}">dit formulier</a>.
-      #original_hash: 0fbcefd
-      unique: moet uniek zijn
+      #original_hash: 71b46b4
+      unique: 'is al in gebruik door %{used_name}" met %{used_email}'
       #original_hash: 26f70ed
       dob_past: moet in het verleden liggen
       #original_hash: f599dc5
@@ -1038,7 +1114,7 @@ nl:
       senior_has_delegate: kan senior delegate niet demoveren als deze nog delegates heeft
       #original_hash: 48653a9
       already_have_id: 'kan WCA-id niet claimen omdat je al een WCA-id %{wca_id} hebt'
-      #original_hash: 2684f33
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         We hebben jouw geboortedatum nog niet. Neem alsjeblieft contact op met
         het WCA-resultatenteam via <a href="%{dob_form_path}">dit formulier</a>.
@@ -1810,8 +1886,15 @@ nl:
         worden niet meegenomen in de huidige ranking per regio.
       #original_hash: a91508f
       championship_podiums: Podiumplaatsen tijdens kampioenschappen
-      #original_hash: 3746f3b
-      wc_podiums: Podiumplaatsen bij WK's
+      championship_podium_levels:
+        #original_hash: 3746f3b
+        world: Podiumplaats op WK
+        #original_hash: d248cd7
+        continental: Podiumplaats op Continentaal Kampioenschap
+        #original_hash: aa40175
+        national: Podiumplaats op Nationaal Kampioenschap
+        #original_hash: 868be55
+        greater_china: Podiumplaats op Greater China Kampioenschap
       #original_hash: c32a014
       place: Plaats
       #original_hash: ddb18c1
@@ -2104,33 +2187,30 @@ nl:
     #original_hash: 9ac918a
     title: Over WCA
     mission:
-      #original_hash: e4698d4
-      title: Missie
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
           De World Cube Association is de internationale organisatie voor
-          wedstrijden voor alle puzzels in de categorie Rubik puzzels, en alle
-          andere puzzels die gespeeld worden door het draaien van zijden,
-          zogenoemde 'twisty puzzles' (draaipuzzels). De beroemdste van deze
-          puzzels is de Rubik's Kubus, uitgevonden door professor Rubik uit
-          Hongarije. Een selectie uit deze puzzels is gekozen als officiële
-          wedstrijdonderdelen van de WCA.
+          wedstrijden voor puzzels die worden gebruikt door het draaien van
+          groepen stukjes, zogenoemde 'twisty puzzles' (draaipuzzels). De
+          beroemdste van deze puzzels is de Rubik's Kubus, uitgevonden door
+          professor Rubik uit Hongarije. Een selectie uit deze puzzels is
+          gekozen als officiële wedstrijdonderdelen van de WCA.
         #original_hash: 22c3593
         '2': >-
           De World Cube Association organiseert wedstrijden over de hele wereld,
           ondersteund door regionale organisaties die verantwoordelijk zijn voor
           het organiseren van wedstrijden in hun landen.
-        #original_hash: 20e0550
+        #original_hash: 0902c4a
         '3': >-
-          Het doel van de World Cube Association is <br /><strong>meer
-          wedstrijden in meer landen met meer mensen en meer plezier, onder
-          eerlijke en gelijke omstandigheden</strong>.
-        #original_hash: bee3687
+          De Missie van de World Cube Association is <strong>meer wedstrijden in
+          meer landen met meer mensen en meer plezier, onder eerlijke en gelijke
+          omstandigheden</strong>.
+        #original_hash: 2b993c0
         '4': >-
-          De spirit van World Cube Association is that<br /> <strong>mensen van
-          over de hele wereld samen plezier hebben in een prettige atmosfeer,
-          elkaar helpen en zich sportief gedragen</strong>.
+          De Spirit van World Cube Association is that <strong>mensen van over
+          de hele wereld samen plezier hebben in een prettige atmosfeer, elkaar
+          helpen en zich sportief gedragen</strong>.
     structure:
       #original_hash: 9482c5d
       title: Structuur
@@ -2305,30 +2385,69 @@ nl:
     board:
       #original_hash: 90fcc48
       name_html: <strong>WCA Board</strong>
-      #original_hash: 7ee8e36
-      info: >-
-        (WCA-organisatie, delegate reports, goedkeuring van competitions,
-        algemene vragen)
+      #original_hash: 3a8b1d8
+      info_html: >-
+        De World Cube Association wordt geleid door de WCA Board. Ze zijn
+        verantwoordelijk voor algemene vragen en de WCA-organisatie als geheel.
+        Alle officiële wedstrijden hebben goedkeuring nodig van WCA Board
+        voordat ze worden aangekondigd.
     wct:
-      #original_hash: c53144e
-      info: (communicatie van WCA met Community en publiek)
+      #original_hash: 846684d
+      info_html: >-
+        De WCT heeft de leiding over de communicatie van de WCA met de community
+        en het algemene publiek. Zij kunnen worden benaderd als je algemene
+        vragen hebt over de WCA of haar aanwezigheid op de sociale media.
     wdc:
-      #original_hash: 562e197
-      info: >-
-        (onafhankelijk advies aan WCA Board, onafhankelijke onderzoeken,
-        advisering voor belangrijke persoonlijke zaken)
+      #original_hash: 77f119f
+      info_html: >-
+        De WDC onderzoekt een breed scala aan zaken en stelt oplossingen voor,
+        inclusief disciplinaire maatregelen indien nodig. Dit kan o.a. bij
+        serieuze schending van de WCA-reglementen of zaken in de community. Als
+        je zoiets hebt meegemaakt, neem dan gerust met deze commissie contact
+        op.
     wrc:
-      #original_hash: 4a256f0
-      info: (onderhoud van het WCA-wedstrijdreglement)
+      #original_hash: fcd3526
+      info_html: >-
+        De WRC handelt alle incidenten af die te maken hebben met het toepassen,
+        verbeteren en ontwikkelen van het WCA-wedstrijdreglement. Zij
+        ondersteunen WCA-delegates bij alle soort incidenten bij wedstrijden en
+        besluiten over de oplossingen. De WRC publiceert regelmatig interne
+        rapportages om alle WCA-delegates te helpen en hun kennis van het
+        WCA-wedstrijdreglement te verbeteren. Als je wilt zijn betrokken bij het
+        ontwikkelen van regels of veranderingen wilt voorstellen kun je contact
+        opnemen met WRC via mail of op <a
+        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
     wrt:
-      #original_hash: 899dc9c
-      info: '(wedstrijdresultaten, correcties)'
+      #original_hash: 45b0c09
+      info_html: >-
+        De WRT is verantwoordelijk voor het beheren van de data in de databases
+        van de WCA, als belangrijkste de wedstrijdresultaten en de persoonlijke
+        gegevens. Zij laden de resultaten van de WCA-wedstrijden op de
+        WCA-website, zodra de Delegate van de wedstrijd deze resultaten heeft
+        ingestuurd. Behalve het laden van resultaten is het WCA Resultatenteam
+        ook verantwoordelijk voor het afhandelen van correcties indien nodig en
+        beheren ze de profielpagina's. Hieronder vallen o.a. het veranderen van
+        gegevens zoals geboortedata, op basis van geverifieerde verzoeken, en
+        het beheren van de profielfoto's.
     wst:
-      #original_hash: dfbf427
-      info: (onderhoud van de software van WCA)
+      #original_hash: 7de6222
+      info_html: >-
+        De WST is verantwoordelijk voor het onderhoud en het beheer van alle
+        software van de WCA. Ze ontwikkelen ook nieuwe software voor
+        verschillende taken binnen de WCA. Als je suggesties of ideeën hebt voor
+        verdere ontwikkeling van de website of als je fouten of bugs wilt
+        doorgeven, neem dan gerust contact met ze op! De WCA-website is een
+        groot open-sourceproject op <a
+        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
+        dus als je geïnteresseerd bent om te helpen met de ontwikkeling, neem
+        dan daar een kijkje.
     wfc:
-      #original_hash: 674291e
-      info: (financiën van de WCA)
+      #original_hash: 3ec8256
+      info_html: >-
+        De WFC is verantwoordelijk voor alle financiële zaken binnen de WCA. Ze
+        beheren de financiën en de rekeningen van de WCA, in lijn met een
+        goedgekeurd voorstel voor het jaarbudget, wat ook hun werk is om
+        regelmatig op te leveren.
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score tools
@@ -2355,12 +2474,11 @@ nl:
     #original_hash: c72c969
     title: WCA-logo
     paragraphs:
-      #original_hash: c092e13
+      #original_hash: 44cfe8d
       '1': >-
         Het WCA-logo is ontworpen door Justin Eastman in een ontwerpwedstrijd in
         januari 2005.<br />We vonden het logo goed vanwege het ontwerp, de
-        kleuren en het feit dat het niet specifiek een Rubik's Kubus /
-        3x3x3-kubus uitbeeldt.
+        kleuren en het feit dat het niet specifiek een 3x3x3 Kubus uitbeeldt.
       #original_hash: f228da2
       '2': >-
         We hebben drie verschillende versies van het logo: <a
@@ -2627,36 +2745,48 @@ nl:
     paragraph4:
       #original_hash: b6dca56
       title: Nabijheidsbeleid
-      #original_hash: b2bc107
+      #original_hash: bd8f1fe
       content1: >-
-        Algemeen beleid is dat wedstrijden worden geaccepteerd als je minstens
-        200km of 26 dagen van andere wedstrijden plaatsvinden. De WCA-board zal
+        Algemeen beleid is dat wedstrijden worden geaccepteerd als ze minstens
+        100km of 19 dagen van andere wedstrijden plaatsvinden. De WCA-board zal
         specifiek voorstellen voor wedstrijden beoordelen als er een andere
-        wedstrijd is op minder dan 200km afstand en met minder dan 26 dagen
+        wedstrijd is op minder dan 100km afstand en met minder dan 19 dagen
         verschil. Een WCA-delegate die zo'n wedstrijd wil laten goedkeuren, moet
         nadere informatie leveren waarom deze wedstrijd alsnog moet worden
         geaccepteerd. Mogelijke argumenten die daarbij ondersteunend kunnen
         zijn:
       olist1:
-        #original_hash: 424c134
-        '1': De twee wedstrijden hebben verschillende wedstrijdonderdelen
+        #original_hash: de00462
+        '1': De twee wedstrijden hebben geen overlappende wedstrijdonderdelen
         #original_hash: f7bacc5
         '2': De twee wedstrijden vinden plaats in andere landen.
-        #original_hash: 9aa4d96
+        #original_hash: 7b2c099
         '3': >-
-          In de laatste 12 maanden, zijn er minder dan 13 wedstrijden geweest in
-          een gebied 200km rond de wedstrijd.
-      #original_hash: ab65dfb
+          In de laatste 12 maanden, zijn er minder dan 16 wedstrijden geweest in
+          een gebied 100 km rond de wedstrijd.
+      #original_hash: 9908e21
       content2: >-
-        FMC-wedstrijden op meerdere locaties mogen geen onderdeel zijn van een
-        reguliere wedstrijd:
+        FMC-wedstrijden zijn WCA-wedstrijden die alleen het FMC onderdeel hebben
+        en op meerdere locaties tegelijk plaatsvinden.
       olist2:
-        #original_hash: a57b541
-        '1': >-
-          Als één van de locaties van zo'n wedstrijd dichter dan 200km van
-          reguliere andere wedstrijden is, dan moeten beide wedstrijden minimaal
-          5 dagen uit elkaar plaatsvinden en mag de andere wedstrijd geen
-          wedstrijdonderdeel FMC hebben.
+        '1':
+          #original_hash: 6f68690
+          content1: >-
+            FMC Simulatenous wedstrijden kunnen geen onderdeel zijn van een
+            andere reguliere wedstrijd.
+          alist1:
+            #original_hash: 75aa0c7
+            1a: Tijdsperiodes waarin beide niet mogen overlappen.
+        '2':
+          #original_hash: 8d9c548
+          content1: >-
+            Als enige lokatie van zulke wedstrijden dichterbij is dan 100 km van
+            enige andere reguliere wedstrijd, dan
+          alist1:
+            #original_hash: 8f532bb
+            2a: 'beide wedstrijden moeten minimaal 5 dagen uit elkaar liggen, of'
+            #original_hash: 4ed931b
+            2b: de andere wedstrijd mag niet het Fewest Moves onderdeel hebben.
     paragraph-events:
       #original_hash: b16c5f1
       title: Wedstrijdonderdelen aankondigen
@@ -2755,3 +2885,57 @@ nl:
         '6': >-
           Afhandelen van organisatorische zaken rond de wedstrijdlocatie (zoals
           sleutels en internettoegang)
+  media:
+    common:
+      #original_hash: f9b7a97
+      view_media_page: Media bekijken
+      #original_hash: b251e98
+      confirm_delete: Weet je zeker dat je deze media wilt verwijderen?
+    new:
+      #original_hash: 65cdb28
+      title: Media insturen
+      #original_hash: 35caed2
+      review_warning_html: >-
+        Alle media worden gereviewd voordat ze worden getoond op de <a
+        href="/media">Media pagina</a>.
+      #original_hash: 141d1d7
+      guidelines: Richtlijnen
+      media_guidelines:
+        #original_hash: fd6984b
+        '1': Alle media moeten gerelateerd zijn aan de gekozen wedstrijd.
+        #original_hash: 9821119
+        '2': >-
+          Alle media moeten waardig en schoon zijn en mogen geen ongepast of
+          bedreigend materiaal bevatten.
+        #original_hash: 5114fe4
+        '3': >-
+          De media mogen geen uitgebreide aanwezigheid hebben van sponsoren of
+          reclames.
+        #original_hash: c9d797b
+        '4': Alle media moeten gepaste en beschrijvende titels hebben.
+    edit:
+      #original_hash: 32c7cc0
+      title: Media bewerken
+      #original_hash: 6f161d0
+      validate_media_page: Openstaande media bekijken
+    index:
+      #original_hash: 0c77aee
+      title: Media
+      #original_hash: df43670
+      validate_media: Media beoordelen
+      #original_hash: 9f2158f
+      submit_media_html: Je kunt media <a href="/media/new">hier</a> insturen.
+    validate:
+      #original_hash: 1e0eee6
+      title: Media beoordelen
+    media_table:
+      #original_hash: 879e323
+      year: Jaar
+      #original_hash: 573da9c
+      location: 'Land, stad'
+      #original_hash: bb54db5
+      accept: Accepteren
+      #original_hash: 66b69a8
+      confirm_accept: Weet je zeker dat je deze Media wilt accepteren?
+      #original_hash: 5301648
+      edit: Bewerken
