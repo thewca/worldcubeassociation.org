@@ -45,7 +45,7 @@ pl:
     #original_hash: 29d5411
     333bf: 3x3x3 Bez patrzenia
     #original_hash: 0a5e7bf
-    333fm: 3x3x3 Liczba ruchów
+    333fm: 3x3x3 Najmniej ruchów
     #original_hash: 31ed23f
     333oh: 3x3x3 Jedną ręką
     #original_hash: be41d70
@@ -65,13 +65,13 @@ pl:
     #original_hash: aea5216
     555bf: 5x5x5 Bez patrzenia
     #original_hash: cedbf87
-    333mbf: 3x3x3 Liczba kostek bez patrzenia
+    333mbf: 3x3x3 Wiele kostek bez patrzenia
     #original_hash: e6791be
     magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
     #original_hash: 1843dc4
-    333mbo: 3x3x3 Liczba kostek bez patrzenia stary styl
+    333mbo: 3x3x3 Wiele kostek bez patrzenia stary styl
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -2545,7 +2545,7 @@ pl:
       title: 'Krok 1: Otwórz arkusz z wynikami'
       #original_hash: 656d70d
       content_html: >-
-        Otwórz arkusz za pomocą przycisku <em>Open...</em> lub pociągnij
+        Otwórz arkusz za pomocą przycisku <em>Open...</em> lub przeciągnij
         odpowiedni plik, upuszczając go na oknie aplikacji.
     step2:
       #original_hash: 3ad9881
