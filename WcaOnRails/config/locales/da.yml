@@ -32,8 +32,8 @@ da:
   events:
     #original_hash: 3732390
     '222': 2x2x2 Terning
-    #original_hash: bfbe360
-    '333': Rubik's Terning
+    #original_hash: 8180137
+    '333': 3x3x3 Terning
     #original_hash: 2ee5b5a
     '444': 4x4x4 Terning
     #original_hash: b7a99fa
@@ -44,34 +44,34 @@ da:
     '777': 7x7x7 Terning
     #original_hash: 29d5411
     333bf: 3x3x3 Med Bind For Øjnene
-    #original_hash: 31ed23f
-    333oh: 3x3x3 Med En Hånd
     #original_hash: 0a5e7bf
     333fm: 3x3x3 Færreste Træk
+    #original_hash: 31ed23f
+    333oh: 3x3x3 Med En Hånd
     #original_hash: be41d70
     333ft: 3x3x3 Med Fødderne
+    #original_hash: 04f6b3e
+    clock: Clock
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
     pyram: Pyraminx
-    #original_hash: 1551a2c
-    sq1: Square-1
-    #original_hash: 23c2fdf
-    clock: Rubik's Clock
     #original_hash: 64a56a2
     skewb: Skewb
+    #original_hash: 1551a2c
+    sq1: Square-1
     #original_hash: 5bae501
     444bf: 4x4x4 Med Bind For Øjnene
     #original_hash: aea5216
     555bf: 5x5x5 Med Bind For Øjnene
     #original_hash: cedbf87
     333mbf: 3x3x3 Multi-Blind
-    #original_hash: 3988358
-    magic: Rubik's Magic
+    #original_hash: e6791be
+    magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
-    #original_hash: c6ad2af
-    333mbo: 'Rubik''s Cube: Multiple blind old style'
+    #original_hash: 1843dc4
+    333mbo: 3x3x3 Multi-Blind "Old Style"
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -1094,13 +1094,13 @@ da:
       not_found: ikke fundet
       #original_hash: 49a6fe4
       already_assigned: allerede tilknyttet til en anden bruger
-      #original_hash: 1b9dc9b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         matcher ikke vores database. Hvis du er sikker på at du giver den
         rigtige dato i den rigtige format (ÅÅÅÅ-MM-DD) så kontakt WCA Resultat
         Holdet <a href="%{dob_form_path}">med denne formel</a>.
-      #original_hash: 0fbcefd
-      unique: skal være unik
+      #original_hash: 71b46b4
+      unique: 'er allerede brugt af "%{used_name}" med %{used_email}'
       #original_hash: 26f70ed
       dob_past: skal være i fortiden
       #original_hash: f599dc5
@@ -2359,30 +2359,63 @@ da:
     board:
       #original_hash: 90fcc48
       name_html: WCA Bestyrtelsen
-      #original_hash: 7ee8e36
-      info: >-
-        (WCA organisation, delegat reporter, konkurrence godkendelser, generalle
-        spørgsmål)
+      #original_hash: 3a8b1d8
+      info_html: >-
+        "The World Cube Association" er ledt af WCA bestyrelsen. De er
+        ansvarlige for generelle forespørgsler og WCA organisationens helehed.
+        Alle officielle konkurrencer skal være bekræftet af WCA bestyrelsen for
+        at blive annonceret.
     wct:
-      #original_hash: c53144e
-      info: (kommunikation af WCA med kubingmiljøet og offentligheden)
+      #original_hash: 846684d
+      info_html: >-
+        WCT er ansvarlige for at holde øje med og støtte kommunikationen fra WCA
+        med kubing samfundet og offentligheden. De burde blive kontaktet hvis
+        man har generelle spørgsmål omkring WCA eller deres medie optræden.
     wdc:
-      #original_hash: 562e197
-      info: >-
-        (uafhængig rådgiver til WCA bestyrelsen, selvstændig udforskning,
-        rådgiver af vigtige personlige problemer)
+      #original_hash: 77f119f
+      info_html: >-
+        WDC undersøger en del situationer og foreslår løsninger, også straffe
+        når det er nødvendigt. Mellem andre emner, kan nogle af dem være seriøse
+        regelbrud fra WCA regelsættet, eller problemer i kubing samfundet. Hvis
+        du nogensinde har oplevet nogle eksempler på det, så kontakt venligst
+        denne komite.
     wrc:
-      #original_hash: 4a256f0
-      info: (vedligeholdelse af WCA Reglerne)
+      #original_hash: fcd3526
+      info_html: >-
+        WRC håndtere alle problemer som handler om at forbedre WCA regelsættet.
+        De støtter WCA delegerede på alle procedure problemer, som er et sket
+        under konkurrencer. WRC sender ofte interne reporter ud til alle WCA
+        delegerede, og prøver at forbedre dere kendskab til reglerne. Hvis du
+        kunne tænke dig at deltage i regelsættets forbedring, kunne du kontakte
+        WRC via email, eller diskutere her <a
+        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
     wrt:
-      #original_hash: 899dc9c
-      info: '(konkurrence resultater, resultat rettelser)'
+      #original_hash: 45b0c09
+      info_html: >-
+        WRT er ansvarlige for at styre alt data i WCA's database, og vigtigst af
+        alt, konkurrence resultater og personlig data. De ligger resultaterne
+        fra WCA konkurrencer op på WCA's hjemmeside, når den ansvarlige WCA
+        delegerede har indsendt dem. Udover at ligge konkurrence resultater op,
+        er de også ansvarlige for at lave rettelser på konkurrence resultater
+        hvis der er behov, og de styrer alle WCA profil sider. Dette inkludere
+        at ændre bruger data, som fødselsdage efter bekræftede efterspørgsler,
+        og profil billeder.
     wst:
-      #original_hash: dfbf427
-      info: (vedligeholdelse af WCAs software)
+      #original_hash: 7de6222
+      info_html: >-
+        WST er ansvarlige for at opretholde og styre alt WCA's software. De
+        laver også ny software, for forskellige ting, som er behøvet inde i WCA.
+        Hvis du har forslag og idéer for yderligere hjemmeside forbedring eller
+        vil reportere fejl, så kontakt dem! WCA hjemmesiden er et stort åbent
+        projekt på <a
+        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>, så
+        hvis du er interesseret i at hjælpe WCA, så kig der.
     wfc:
-      #original_hash: 674291e
-      info: (WCA's finanser)
+      #original_hash: 3ec8256
+      info_html: >-
+        WFC er ansvarlige for alt hvad der har noget med finanserne inde i WCA.
+        De håndtere finanserne og WCA's kontoer, som er i overensstemmelse med
+        det normale budget foreslag, som også er deres arbejde at give normalt.
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score Taking tools
@@ -2406,11 +2439,11 @@ da:
     #original_hash: c72c969
     title: WCA Logo
     paragraphs:
-      #original_hash: c092e13
+      #original_hash: 44cfe8d
       '1': >-
         WCA logoet var designet af Justin Eastman, i en konkurrence i Januar
         2005 <br />Vi kunne lide logoet på grund af dets design, farverne, og at
-        det ikke viser en Rubik's Kube / 3x3x3 cube, men bare en cube.
+        det ikke nødvendigvis viser en 3x3x3 cube.
       #original_hash: f228da2
       '2': >-
         Vi har tre forskellelige versioner af logoet a <a
@@ -2668,34 +2701,47 @@ da:
     paragraph4:
       #original_hash: b6dca56
       title: Nærhedpolitik
-      #original_hash: b2bc107
+      #original_hash: bd8f1fe
       content1: >-
-        Som en generel politik, så bliver WCA konkurrencer accepteret hvis de er
-        mindst 200 km eller 26 dage fra en anden konkurrence. WCA Bestyrelsen
-        gennemgår grundigt en forslået konkurrence hvis der er mindre end 200 km
-        imellem den og en anden konkurrence, og der er mindre end 26 dage
-        imellem dem. En delegeret der ansøger om sådan en konkurrence skal give
-        grunde til hvorfor konkurrence skal blive accepteret. Mulige argumenter
-        der vil understøtte at konkurrence skal accepteres kan være:
+        WCA konkurrencer vil blive accepteret hvis de er mindst 100 km eller 19
+        dage fra en anden konkurrence. WCA Bestyrelsen gennemgår grundigt en
+        forslået konkurrence hvis der er mindre end 100 km imellem den og en
+        anden konkurrence, og der er mindre end 19 dage imellem dem. En
+        delegeret der ansøger om sådan en konkurrence skal give grunde til
+        hvorfor konkurrence skal blive accepteret. Mulige argumenter der vil
+        understøtte at konkurrence skal accepteres kan være:
       olist1:
-        #original_hash: 424c134
-        '1': De to konkurrencer har forskellige discipliner.
+        #original_hash: de00462
+        '1': De to konkurrencer har ikke discipliner tilfælles.
         #original_hash: f7bacc5
         '2': De to konkurrencer finder sted i to forskellige lande.
-        #original_hash: 9aa4d96
+        #original_hash: 7b2c099
         '3': >-
-          At der i de sidste 12 måneder, har været færre end 13 konkurrencer, i
-          det områder 200 km rundt om konkurrencen.
-      #original_hash: ab65dfb
+          At der i de sidste 12 måneder, har været færre end 16 konkurrencer, i
+          det område 100 km rundt om konkurrencen.
+      #original_hash: 9908e21
       content2: >-
-        FMC samtidige konkurrencer kan ikke være en del af nogen normal
-        konkurrence:
+        "FMC samtidige konkurrencer" er WCA konkurrencer som kun har FMC
+        disciplinen, og finder sted samtidigt forskellige steder.
       olist2:
-        #original_hash: a57b541
-        '1': >-
-          Hvis et af stederne til sådan en konkurrence, er tættere end 200 km
-          til en normal normal konkurrence, så skal begge konkurrencer være
-          mindst 5 dage fra hinanden, eller ikke holde FMC disciplinen.
+        '1':
+          #original_hash: 6f68690
+          content1: >-
+            FMC samtidige konkurrencer kan ikke være en del af nogen anden
+            normal konkurrence.
+          alist1:
+            #original_hash: 75aa0c7
+            1a: Tids perioder hvor begge er afholdt kan ikke overlappe.
+        '2':
+          #original_hash: 8d9c548
+          content1: >-
+            Hvis en lokation på sådan en konkurrence er tættere på end 100 km
+            til en anden normal konkurrence, så skal
+          alist1:
+            #original_hash: 8f532bb
+            2a: 'begge konkurrencer skal være mindst 5 dage fra hinanden, eller'
+            #original_hash: 4ed931b
+            2b: den anden konkurrence må ikke have FMC
     paragraph-events:
       #original_hash: b16c5f1
       title: Annoncere discipliner
