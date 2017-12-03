@@ -28,7 +28,7 @@ module MarkdownHelper
     end
   end
 
-  def md(content, target_blank: false)
+  def md(content, target_blank: false, toc: false)
     if content.nil?
       return ""
     end
@@ -47,6 +47,13 @@ module MarkdownHelper
       options[:link_attributes] = { target: "_blank" }
     end
 
-    Redcarpet::Markdown.new(WcaMarkdownRenderer.new(options), extensions).render(content).html_safe
+    output = "".html_safe
+
+    if toc
+      options[:with_toc_data] = true
+      output += Redcarpet::Markdown.new(Redcarpet::Render::HTML_TOC.new(options), extensions).render(content).html_safe
+    end
+
+    output += Redcarpet::Markdown.new(WcaMarkdownRenderer.new(options), extensions).render(content).html_safe
   end
 end

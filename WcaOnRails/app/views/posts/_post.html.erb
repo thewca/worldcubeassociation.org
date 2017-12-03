@@ -26,6 +26,8 @@
         <em><%= t 'posts.announcement_info_html', author_name: post.author.name, date_time: wca_local_time(post.created_at) %></em>
       <% end %>
     </div>
-    <%=md render_teaser ? post.body_teaser : post.body_full %>
+
+    <%= md post.body_full, toc: true if render_toc %>
+    <%= md render_teaser ? post.body_teaser : post.body_full %>
   </div>
 </div>
