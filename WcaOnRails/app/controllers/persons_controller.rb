@@ -7,7 +7,12 @@ class PersonsController < ApplicationController
       format.js do
         persons = Person.in_region(params[:region]).order(:name)
         params[:search]&.split&.each do |part|
-          persons = persons.where("MATCH(rails_persons.name) AGAINST (:name_match IN BOOLEAN MODE) OR wca_id LIKE :wca_id_part", name_match: "#{part}*", wca_id_part: "#{part}%")
+          # TODO: MySQL's fulltext search can't find rows with words less than 4 characters.
+          # See https://github.com/thewca/worldcubeassociation.org/issues/2234#issuecomment-348804926
+          ft_min_word_len = 4
+          if part.length >= ft_min_word_len
+            persons = persons.where("MATCH(rails_persons.name) AGAINST (:name_match IN BOOLEAN MODE) OR wca_id LIKE :wca_id_part", name_match: "#{part}*", wca_id_part: "#{part}%")
+          end
         end
 
         render json: {
