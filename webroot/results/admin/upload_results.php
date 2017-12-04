@@ -205,6 +205,10 @@ if($form->submitted()) {
         foreach ($round->groups as $group) {
           $groupId = property_exists($group, 'group') ? ($group->group) : false;
 
+          if(!preg_match("/^[A-Z]+$/", $groupId)) {
+            $round_errors[] = "Invalid scramble group name: ".o($groupId);
+          }
+
           // Store normal scrambles
           if(!property_exists($group, 'scrambles')) {
             $round_errors[] = "Group has no scramble data: `".o($eventId)."`:`".o($roundTypeId)."`:`".o($groupId)."`.";
