@@ -27,7 +27,6 @@
       <% end %>
     </div>
 
-    <%= md post.body_full, toc: true if render_toc %>
-    <%= md render_teaser ? post.body_teaser : post.body_full %>
+    <%= md render_teaser ? post.body_teaser : post.body_full, toc: render_toc %>
   </div>
 </div>
