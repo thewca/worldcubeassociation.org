@@ -2,12 +2,31 @@
 
 module MarkdownHelper
   class WcaMarkdownRenderer < Redcarpet::Render::HTML
+    include ApplicationHelper
+
     def table(header, body)
       t = "<table class='table'>\n"
       t += "<thead>" + header + "</thead>\n" if header
       t += "<tbody>" + body + "</tbody>\n" if body
       t += "</table>"
       t
+    end
+
+    # This is annoying. Redcarpet implements this id generation logic in C, and
+    # AFAIK doesn't provide any hook for calling this method directly from Ruby.
+    # See C code here: https://github.com/vmg/redcarpet/blob/f441dec42a5097530328b20e9d5ed1a025c600f7/ext/redcarpet/html.c#L273-L319
+    # Redcarpet issue here: https://github.com/vmg/redcarpet/issues/638.
+    def header_anchor(text)
+      Nokogiri::HTML(Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(with_toc_data: true)).render("# #{text}")).css('h1')[0]["id"]
+    end
+
+    def header(text, header_level)
+      if @options[:with_toc_data]
+        id = header_anchor(text)
+        text = anchorable(text, id)
+      end
+
+      "<h#{header_level}>#{text}</h#{header_level}>\n"
     end
 
     def postprocess(full_document)
@@ -55,5 +74,6 @@ module MarkdownHelper
     end
 
     output += Redcarpet::Markdown.new(WcaMarkdownRenderer.new(options), extensions).render(content).html_safe
+    output
   end
 end
