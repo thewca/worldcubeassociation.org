@@ -1342,16 +1342,6 @@ coffee-loader@^0.8.0:
   dependencies:
     loader-utils "^1.0.2"
 
-coffee-loader@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/coffee-loader/-/coffee-loader-0.9.0.tgz#6deabd336062ddc6d773da4dfd16367fc7107bd6"
-  dependencies:
-    loader-utils "^1.0.2"
-
-coffee-script@^1.12.8:
-  version "1.12.8"
-  resolved "https://registry.yarnpkg.com/coffee-script/-/coffee-script-1.12.8.tgz#a1fed1fefa21fb5eee6da0248454121ee26058da"
-
 color-convert@^1.3.0, color-convert@^1.8.2, color-convert@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.0.tgz#1accf97dd739b983bf994d56fec8f95853641b7a"

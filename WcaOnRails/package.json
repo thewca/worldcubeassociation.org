@@ -13,8 +13,6 @@
     "babel-preset-stage-2": "^6.24.1",
     "blueimp-load-image": "^2.17.1",
     "classnames": "^2.2.5",
-    "coffee-loader": "^0.9.0",
-    "coffee-script": "^1.12.8",
     "compression-webpack-plugin": "^1.0.1",
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^3.0.2",
