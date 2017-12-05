@@ -328,6 +328,17 @@ template "#{rails_root}/.env.production" do
 end
 
 #### phpMyAdmin
+pma_path = "#{repo_root}/webroot/results/admin/phpMyAdmin"
+bash 'install phpMyAdmin' do
+  cwd ::File.dirname("/tmp")
+  code <<-EOH
+    cd /tmp
+    wget https://files.phpmyadmin.net/phpMyAdmin/4.7.6/phpMyAdmin-4.7.6-english.tar.gz
+    tar xvf phpMyAdmin-4.7.6-english.tar.gz
+    mv phpMyAdmin-4.7.6-english #{pma_path}
+    EOH
+  not_if { ::File.exist?(pma_path) }
+end
 template "#{repo_root}/webroot/results/admin/phpMyAdmin/config.inc.php" do
   source "phpMyAdmin_config.inc.php.erb"
   variables({
