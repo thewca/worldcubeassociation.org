@@ -863,6 +863,8 @@ hr:
     doorkeeper:
       applications:
         help:
+          #original_hash: 92e00ff
+          native_redirect_uri: 'Koristi %{native_redirect_uri} ukoliko želiš dodati lokalni URI'
           #original_hash: 62a0113
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
