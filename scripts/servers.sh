@@ -161,7 +161,7 @@ new() {
   print_command_usage_and_exit() {
     echo "Usage: $0 new [--staging] [keyname]" >> /dev/stderr
     echo "For example: $0 new jfly-kaladin-arch" >> /dev/stderr
-    echo "Or, to spin up a new staging server: $0 --staging new jfly-kaladin-arch" >> /dev/stderr
+    echo "Or, to spin up a new staging server: $0 new --staging jfly-kaladin-arch" >> /dev/stderr
 
     echo "" >> /dev/stderr
     echo "Run 'aws ec2 describe-key-pairs' to see a list of valid key pairs." >> /dev/stderr
