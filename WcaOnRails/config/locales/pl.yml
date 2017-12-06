@@ -870,6 +870,10 @@ pl:
     doorkeeper:
       applications:
         help:
+          #original_hash: 92e00ff
+          native_redirect_uri: >-
+            Użyj %{native_redirect_uri} jeśli chcesz dodać localhost jako adres
+            URI
           #original_hash: 62a0113
           scopes_html: >-
             Oddziel zakresy spacjami. Pozostaw puste w celu użycia domyślnego
