@@ -41,7 +41,7 @@ RSpec.describe "Competition WCIF" do
             "id" => "333",
             "rounds" => [
               {
-                "id" => "333-1",
+                "id" => "333-r1",
                 "format" => "a",
                 "timeLimit" => {
                   "centiseconds" => 10.minutes.in_centiseconds,
@@ -57,7 +57,7 @@ RSpec.describe "Competition WCIF" do
                 },
               },
               {
-                "id" => "333-2",
+                "id" => "333-r2",
                 "format" => "a",
                 "timeLimit" => {
                   "centiseconds" => 10.minutes.in_centiseconds,
@@ -72,7 +72,7 @@ RSpec.describe "Competition WCIF" do
             "id" => "333fm",
             "rounds" => [
               {
-                "id" => "333fm-1",
+                "id" => "333fm-r1",
                 "format" => "m",
                 "timeLimit" => nil,
                 "cutoff" => nil,
@@ -84,7 +84,7 @@ RSpec.describe "Competition WCIF" do
             "id" => "333mbf",
             "rounds" => [
               {
-                "id" => "333mbf-1",
+                "id" => "333mbf-r1",
                 "format" => "3",
                 "timeLimit" => nil,
                 "cutoff" => nil,
@@ -96,7 +96,7 @@ RSpec.describe "Competition WCIF" do
             "id" => "444",
             "rounds" => [
               {
-                "id" => "444-1",
+                "id" => "444-r1",
                 "format" => "a",
                 "timeLimit" => {
                   "centiseconds" => 10.minutes.in_centiseconds,
@@ -150,7 +150,7 @@ RSpec.describe "Competition WCIF" do
         "id" => "555",
         "rounds" => [
           {
-            "id" => "555-1",
+            "id" => "555-r1",
             "format" => "3",
             "timeLimit" => {
               "centiseconds" => 3*60*100,
@@ -174,7 +174,7 @@ RSpec.describe "Competition WCIF" do
         "level" => 16,
       }
       wcif_444_event["rounds"] << {
-        "id" => "444-2",
+        "id" => "444-r2",
         "format" => "a",
         "timeLimit" => {
           "centiseconds" => 10.minutes.in_centiseconds,

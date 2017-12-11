@@ -42,7 +42,7 @@ class Round < ApplicationRecord
   end
 
   def self.parse_wcif_id(wcif_id)
-    event_id, round_number = wcif_id.split("-")
+    event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
     round_number = round_number.to_i
     { event_id: event_id, round_number: round_number }
   end
@@ -80,7 +80,7 @@ class Round < ApplicationRecord
   end
 
   def wcif_id
-    "#{event.id}-#{self.number}"
+    "#{event.id}-r#{self.number}"
   end
 
   def to_wcif
