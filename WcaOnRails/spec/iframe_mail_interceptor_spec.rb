@@ -19,7 +19,7 @@ class TestMailer < ApplicationMailer
 end
 
 RSpec.describe IframeMailInterceptor do
-  it "repleaces iframes with corresponding links" do
+  it "replaces iframes with corresponding links" do
     TestMailer.send_mail('<p><iframe src="https://www.worldcubeassociation.org"></iframe></p>').deliver_now
     body = ActionMailer::Base.deliveries.last.html_part.body.decoded
     expect(body).to include '<p><a href="https://www.worldcubeassociation.org">https://www.worldcubeassociation.org</a></p>'
