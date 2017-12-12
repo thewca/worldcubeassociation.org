@@ -19,14 +19,11 @@ variable :WCA_LIVE_SITE, :boolean, default: false
 
 # ROOT_URL is used when generating emails.
 # Trick to discover the port we're set to run on from
-# http://stackoverflow.com/a/13839447. However, Rails::Server isn't always
-# defined (during rake tasks, for instance).
-if defined? Rails::Server
-  default_root_url = "http://localhost:#{Rails::Server.new.options[:Port]}"
-elsif Rails.env.test?
+# http://stackoverflow.com/a/13839447.
+if Rails.env.test?
   default_root_url = "http://test.host"
 else
-  default_root_url = ""
+  default_root_url = "http://localhost:#{Rack::Server.new.options[:Port]}"
 end
 variable :ROOT_URL, :string, default: default_root_url
 
