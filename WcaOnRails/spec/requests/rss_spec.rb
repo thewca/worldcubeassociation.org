@@ -9,14 +9,14 @@ RSpec.describe "rss" do
     FactoryBot.create :post,
                       body: 'foo **a**',
                       title: 'bar',
-                      created_at: Time.new(2014, 3, 12, 12, 32, 42)
+                      created_at: Time.utc(2014, 3, 12, 12, 32, 42)
   end
 
   let!(:post_2) do
     FactoryBot.create :sticky_post,
                       body: '[link](http://google.de)',
                       title: 'sticky post',
-                      created_at: Time.new(2014, 3, 14, 11, 18, 0)
+                      created_at: Time.utc(2014, 3, 14, 11, 18, 0)
   end
 
   describe "posts" do

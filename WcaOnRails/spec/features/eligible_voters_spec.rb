@@ -4,7 +4,7 @@ require "rails_helper"
 require "csv"
 
 RSpec.feature "Eligible voters csv" do
-  before { Timecop.freeze(Time.new(2016, 5, 5, 10, 5, 3, "+00:00")) }
+  before { Timecop.freeze(Time.utc(2016, 5, 5, 10, 5, 3)) }
   after { Timecop.return }
 
   let!(:wrc_team_id) { Team.find_by_friendly_id("wrc") }
