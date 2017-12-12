@@ -130,7 +130,7 @@ GEM
       thor (~> 0.19.4)
       tins (~> 1.6)
     crass (1.0.3)
-    css_parser (1.5.0)
+    css_parser (1.6.0)
       addressable
     daemons (1.2.5)
     database_cleaner (1.6.2)
@@ -321,11 +321,11 @@ GEM
     powerpack (0.1.1)
     pre-commit (0.37.0)
       pluginator (~> 1.5)
-    premailer (1.10.4)
+    premailer (1.11.1)
       addressable
-      css_parser (>= 1.4.10)
+      css_parser (>= 1.6.0)
       htmlentities (>= 4.0.0)
-    premailer-rails (1.9.7)
+    premailer-rails (1.10.1)
       actionmailer (>= 3, < 6)
       premailer (~> 1.7, >= 1.7.9)
     pry (0.11.3)
