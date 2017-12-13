@@ -86,7 +86,7 @@ RSpec.feature "Competition events management" do
       end
       save
 
-      expect(round_333_1.reload.cutoff_to_s).to eq "2 attempts to get ≤ 2:00.00"
+      expect(round_333_1.reload.cutoff_to_s).to eq "2 attempts to get < 2:00.00"
     end
 
     scenario "change advancement condition to top 12 people", js: true do

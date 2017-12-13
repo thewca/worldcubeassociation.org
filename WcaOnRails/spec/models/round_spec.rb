@@ -58,22 +58,22 @@ RSpec.describe Round do
         round.update!(cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 50*100))
         expect(round.cutoff.number_of_attempts).to eq 2
         expect(round.cutoff.attempt_result).to eq 50*100
-        expect(round.cutoff_to_s).to eq "2 attempts to get ≤ 50.00"
+        expect(round.cutoff_to_s).to eq "2 attempts to get < 50.00"
       end
 
       it "1 attempt to break 43 seconds" do
         round.update!(cutoff: Cutoff.new(number_of_attempts: 1, attempt_result: 43*100))
-        expect(round.cutoff_to_s).to eq "1 attempt to get ≤ 43.00"
+        expect(round.cutoff_to_s).to eq "1 attempt to get < 43.00"
       end
 
       it "times over 1 minute" do
         round.update!(cutoff: Cutoff.new(number_of_attempts: 3, attempt_result: 63*100))
-        expect(round.cutoff_to_s).to eq "3 attempts to get ≤ 1:03.00"
+        expect(round.cutoff_to_s).to eq "3 attempts to get < 1:03.00"
       end
 
       it "fractions of a second" do
         round.update!(cutoff: Cutoff.new(number_of_attempts: 3, attempt_result: 6343))
-        expect(round.cutoff_to_s).to eq "3 attempts to get ≤ 1:03.43"
+        expect(round.cutoff_to_s).to eq "3 attempts to get < 1:03.43"
       end
     end
 
@@ -87,7 +87,7 @@ RSpec.describe Round do
 
       it "1 attempt to get 30 moves or better" do
         round.update!(cutoff: Cutoff.new(number_of_attempts: 1, attempt_result: 30))
-        expect(round.cutoff_to_s).to eq "1 attempt to get ≤ 30 moves"
+        expect(round.cutoff_to_s).to eq "1 attempt to get < 30 moves"
       end
     end
 
@@ -101,7 +101,7 @@ RSpec.describe Round do
 
       it "1 attempt to get 4 points or better" do
         round.update!(cutoff: Cutoff.new(number_of_attempts: 1, attempt_result: SolveTime.points_to_multibld_attempt(4)))
-        expect(round.cutoff_to_s).to eq "1 attempt to get ≥ 4 points"
+        expect(round.cutoff_to_s).to eq "1 attempt to get > 4 points"
       end
     end
   end
@@ -141,21 +141,21 @@ RSpec.describe Round do
         first_round, _second_round = create_rounds("333", count: 2)
 
         first_round.update!(advancement_condition: AttemptResultCondition.new(3.minutes.in_centiseconds))
-        expect(first_round.advancement_condition_to_s).to eq "Best solve ≤ 3:00.00 advances to round 2"
+        expect(first_round.advancement_condition_to_s).to eq "Best solve < 3:00.00 advances to round 2"
       end
 
       it "set to <= 35 moves" do
         first_round, _second_round = create_rounds("333fm", format_id: 'm', count: 2)
 
         first_round.update!(advancement_condition: AttemptResultCondition.new(35))
-        expect(first_round.advancement_condition_to_s).to eq "Best solve ≤ 35 moves advances to round 2"
+        expect(first_round.advancement_condition_to_s).to eq "Best solve < 35 moves advances to round 2"
       end
 
       it "set to >= 6 points" do
         first_round, _second_round = create_rounds("333mbf", format_id: '3', count: 2)
 
         first_round.update!(advancement_condition: AttemptResultCondition.new(SolveTime.points_to_multibld_attempt(6)))
-        expect(first_round.advancement_condition_to_s).to eq "Best solve ≥ 6 points advances to round 2"
+        expect(first_round.advancement_condition_to_s).to eq "Best solve > 6 points advances to round 2"
       end
     end
   end

@@ -67,11 +67,11 @@ export function attemptResultToString(attemptResult, eventId, { short } = {}) {
 
 export function matchResult(attemptResult, eventId, { short } = {}) {
   let event = events.byId[eventId];
-  let comparisonString = event.isMultipleBlindfolded ? "≥" : "≤";
+  let comparisonString = event.isMultipleBlindfolded ? ">" : "<";
   if(!short) {
     comparisonString = {
-      "≤": "less than or equal to",
-      "≥": "greater than or equal to",
+      "<": "less than",
+      ">": "greater than",
     }[comparisonString];
   }
   return `${comparisonString} ${attemptResultToString(attemptResult, eventId, { short })}`;
