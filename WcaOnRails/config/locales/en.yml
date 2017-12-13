@@ -103,20 +103,20 @@ en:
     ranking: "Top %{ranking} advance to round %{next_round_number}"
     percent: "Top %{percent}% advance to round %{next_round_number}"
     attempt_result:
-      time: "Best solve ≤ %{time} advances to round %{next_round_number}"
-      moves: "Best solve ≤ %{moves} moves advances to round %{next_round_number}"
-      points: "Best solve ≥ %{points} points advances to round %{next_round_number}"
+      time: "Best solve < %{time} advances to round %{next_round_number}"
+      moves: "Best solve < %{moves} moves advances to round %{next_round_number}"
+      points: "Best solve > %{points} points advances to round %{next_round_number}"
   #context: Words used to describe combined round cutoffs
   cutoff:
     time:
-      one: "%{count} attempt to get ≤ %{time}"
-      other: "%{count} attempts to get ≤ %{time}"
+      one: "%{count} attempt to get < %{time}"
+      other: "%{count} attempts to get < %{time}"
     moves:
-      one: "%{count} attempt to get ≤ %{moves} moves"
-      other: "%{count} attempts to get ≤ %{moves} moves"
+      one: "%{count} attempt to get < %{moves} moves"
+      other: "%{count} attempts to get < %{moves} moves"
     points:
-      one: "%{count} attempt to get ≥ %{points} points"
-      other: "%{count} attempts to get ≥ %{points} points"
+      one: "%{count} attempt to get > %{points} points"
+      other: "%{count} attempts to get > %{points} points"
   #context: Words used to describe time limits
   time_limit:
     cumulative:
