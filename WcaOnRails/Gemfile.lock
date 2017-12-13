@@ -477,7 +477,7 @@ GEM
       railties (>= 3.2)
     timecop (0.9.1)
     tins (1.15.0)
-    translighterate (0.2.0)
+    translighterate (0.2.1)
       actionview (>= 4.0, < 6.0)
     twitter_cldr (4.4.2)
       camertron-eprun
@@ -605,4 +605,4 @@ DEPENDENCIES
   webpacker
 
 BUNDLED WITH
-   1.15.4
+   1.16.0
