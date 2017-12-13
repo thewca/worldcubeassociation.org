@@ -850,6 +850,8 @@ pt-BR:
     doorkeeper:
       applications:
         help:
+          #original_hash: 92e00ff
+          native_redirect_uri: 'Use %{native_redirect_uri} if you want to add localhost URIs'
           #original_hash: 62a0113
           scopes_html: >-
             Separe os escopos com espaços. Deixe em branco para usar o escopo
@@ -2722,35 +2724,50 @@ pt-BR:
     paragraph4:
       #original_hash: b6dca56
       title: Política de proximidade
-      #original_hash: b2bc107
+      #original_hash: bd8f1fe
       content1: >-
-        De forma geral, competições da WCA serão aceitas se estiverem pelo menos
-        200 km ou 26 dias distantes de qualquer outra competição. O Conselho da
-        WCA pode analisar especificamente uma proposta de competição se houver
-        outra a menos de 200km e 26 dias de distância. Um delegado que fizer uma
+        Competições da WCA serão aceitas se estiverem pelo menos 100 km ou 19
+        dias distantes de qualquer outra competição. O Conselho da WCA pode
+        analisar especificamente uma proposta de competição se houver outra a
+        menos de 100km e 19 dias de distância. Um delegado que fizer uma
         solicitação de uma competição nestes termos deve apresentar informações
         acerca dos motivos para a competição ser aceita. Possíveis argumentos
         que embasam essa decisão incluem:
       olist1:
-        #original_hash: 424c134
-        '1': As duas competições têm eventos diferentes.
+        #original_hash: de00462
+        '1': As duas competições não tem eventos em comum.
         #original_hash: f7bacc5
         '2': As duas competições acontecem em países diferentes.
-        #original_hash: 9aa4d96
+        #original_hash: 7b2c099
         '3': >-
-          Nos últimos 12 meses, aconteceram menos de 13 competitions na área de
-          200 km ao redor da competição.
-      #original_hash: ab65dfb
+          Nos últimos 12 meses, aconteceram menos de 16 competitions na área de
+          100 km ao redor da competição.
+      #original_hash: 9908e21
       content2: >-
-        Competições simultâneas de Menos Movimentos não podem ser parte de outra
-        competição normal:
+        "Competições simultâneas de Menos Movimentos" são competições da WCA que
+        tem apenas essa modadalidade e acontecem simultaneamente em diferentes
+        locais.
       olist2:
-        #original_hash: a57b541
-        '1': >-
-          Se algum dos lugares dessas competições estiver a menos de 200 km de
-          alguma outra competição comum, então elas devem ter pelo menos 5 dias
-          de distância, ou a outra competição não pode ter o evento de Menos
-          Movimentos.
+        '1':
+          #original_hash: 6f68690
+          content1: >-
+            "Competições simultâneas de Menos Movimentos" não podem ser parte de
+            outra competição regular.
+          alist1:
+            #original_hash: 75aa0c7
+            1a: >-
+              Os períodos de tempo nos quais as competições acontecem não podem
+              se sobrepor.
+        '2':
+          #original_hash: 8d9c548
+          content1: >-
+            Se alguma localidade desta competição estiver a menos de 100 km de
+            outra competição, então
+          alist1:
+            #original_hash: 8f532bb
+            2a: 'as duas competições devem estar pelo menos 5 dias distantes, ou'
+            #original_hash: 4ed931b
+            2b: a outra competição não pode ter a modalidade Menos Movimentos.
     paragraph-events:
       #original_hash: b16c5f1
       title: Anunciando eventos
