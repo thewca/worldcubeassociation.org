@@ -304,7 +304,7 @@ class CompetitionsController < ApplicationController
                 end
                 record_strs
               end.flatten
-              "#{uniqueName} #{record_strs.join(", ")}"
+              "#{uniqueName}&lrm; #{record_strs.join(", ")}"
             end
           end
           body += "#{record_strs.join(", ")}.  \n" # Trailing spaces for markdown give us a <br>
