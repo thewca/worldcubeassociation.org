@@ -1929,12 +1929,12 @@ zh-CN:
         #original_hash: 63a2388
         name: WCA通讯组
         #original_hash: 50fd091
-        description: 改组负责世界魔方协会与魔友们以及大众之间的联系与沟通。通讯与沟通有助于实现世界魔方协会的目标，并支持友善、透明、包容、开放和响应的魔方文化。
+        description: 该组负责世界魔方协会与魔友们以及大众之间的联系与沟通。通讯与沟通有助于实现世界魔方协会的目标，并支持友善、透明、包容、开放和响应的魔方文化。
       wfc:
         #original_hash: 9cb13de
         name: WCA财务委员会
         #original_hash: 2d4807e
-        description: 改组负责管理WCA的所有财务事宜。
+        description: 该组负责管理WCA的所有财务事宜。
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA代表</strong>作为WCA成员，负责确保所有WCA比赛在WCA宗旨、规则和精神下进行。由<strong>WCA高级代表</strong>、<strong>WCA代表</strong>和<strong>WCA实习代表</strong>组成%{see_link}。WCA高级代表的额外职责是管理他负责区域的所有代表，同时也可以处理当地社群问题。新上任的代表需要经历实习期直到他们展示出应有的能力来成为一个正式WCA代表。
