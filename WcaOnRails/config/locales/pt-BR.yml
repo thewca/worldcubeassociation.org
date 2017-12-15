@@ -2742,14 +2742,14 @@ pt-BR:
         '3': >-
           Nos últimos 12 meses, aconteceram menos de 16 competitions na área de
           100 km ao redor da competição.
-      #original_hash: 9908e21
+      #original_hash: 5c5cf04
       content2: >-
         "Competições simultâneas de Menos Movimentos" são competições da WCA que
         tem apenas essa modadalidade e acontecem simultaneamente em diferentes
         locais.
       olist2:
         '1':
-          #original_hash: 6f68690
+          #original_hash: 316fd13
           content1: >-
             "Competições simultâneas de Menos Movimentos" não podem ser parte de
             outra competição regular.
@@ -2766,7 +2766,7 @@ pt-BR:
           alist1:
             #original_hash: 8f532bb
             2a: 'as duas competições devem estar pelo menos 5 dias distantes, ou'
-            #original_hash: 4ed931b
+            #original_hash: e14e11e
             2b: a outra competição não pode ter a modalidade Menos Movimentos.
     paragraph-events:
       #original_hash: b16c5f1
