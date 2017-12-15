@@ -2746,14 +2746,14 @@ pt:
         '3': >-
           Nos últimos 12 meses, existiram menos que 16 competições num raio de
           100 km do local da competição.
-      #original_hash: 9908e21
+      #original_hash: 5c5cf04
       content2: >-
-        Competições simultâneas de FMC são competições tendo exclusivamente o
-        evento de resolução em menos movimentos e que ocorrem simultaneamente em
-        diferentes locais.
+        "Competições simultâneas de Resolução 3x3 em Menos Movimentos" são
+        competições tendo exclusivamente o evento de resolução 3x3 em menos
+        movimentos e que ocorrem simultaneamente em diferentes locais.
       olist2:
         '1':
-          #original_hash: 6f68690
+          #original_hash: 316fd13
           content1: >-
             Eventos de resolução em menos movimentos simultâneas não podem fazer
             parte de qualquer outra competição.
@@ -2772,7 +2772,7 @@ pt:
             2a: >-
               ambas as competições devem estar separadas em, pelo menos, 5 dias,
               ou
-            #original_hash: 4ed931b
+            #original_hash: e14e11e
             2b: >-
               a outra competição não pode ter o evento de resolução em menos
               movimentos.
