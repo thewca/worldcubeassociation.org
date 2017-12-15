@@ -1406,7 +1406,7 @@ en:
           content1: "If any location of such competitions is closer than 100 km to any other regular competition, then"
           alist1:
             '2a': "both competitions should be at least 5 days apart, or"
-            '2b': "the other competition must not have the FM event."
+            '2b': "the other competition must not have the 3x3x3 Fewest Moves event."
     paragraph-events:
       title: "Announcing events"
       content: 'All events that are going to be held at the competition must be specified by the Delegate when requesting the competition approval. This also includes "tentative" events (i.e. events that may be held additionally depending on the competition flow). Further additions must be approved by the Board.'
