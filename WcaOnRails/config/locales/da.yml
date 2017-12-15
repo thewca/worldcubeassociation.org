@@ -45,7 +45,7 @@ da:
     #original_hash: 29d5411
     333bf: 3x3x3 Med Bind For Øjnene
     #original_hash: 0a5e7bf
-    333fm: 3x3x3 Færreste Træk
+    333fm: 3x3x3 i Færreste Træk
     #original_hash: 31ed23f
     333oh: 3x3x3 Med En Hånd
     #original_hash: be41d70
@@ -845,6 +845,8 @@ da:
     doorkeeper:
       applications:
         help:
+          #original_hash: 92e00ff
+          native_redirect_uri: 'Brug %{native_redirect_uri} hvis du vil tilføje "localhost URIs"'
           #original_hash: 62a0113
           scopes_html: >-
             Opdel scopes med mellemrum. Lad den være tom for at bruge standard
@@ -2719,16 +2721,17 @@ da:
         '3': >-
           At der i de sidste 12 måneder, har været færre end 16 konkurrencer, i
           det område 100 km rundt om konkurrencen.
-      #original_hash: 9908e21
+      #original_hash: 5c5cf04
       content2: >-
-        "FMC samtidige konkurrencer" er WCA konkurrencer som kun har FMC
-        disciplinen, og finder sted samtidigt forskellige steder.
+        "3x3x3 i Færreste Træk samtidige konkurrencer" er WCA konkurrencer som
+        kun har 3x3x3 i Færreste træk disciplinen, og finder sted samtidigt,
+        flere forskellige steder.
       olist2:
         '1':
-          #original_hash: 6f68690
+          #original_hash: 316fd13
           content1: >-
-            FMC samtidige konkurrencer kan ikke være en del af nogen anden
-            normal konkurrence.
+            3x3x3 i Færreste Træk samtidige konkurrencer, kan ikke være en del
+            af nogen anden normal konkurrence.
           alist1:
             #original_hash: 75aa0c7
             1a: Tids perioder hvor begge er afholdt kan ikke overlappe.
@@ -2740,8 +2743,10 @@ da:
           alist1:
             #original_hash: 8f532bb
             2a: 'begge konkurrencer skal være mindst 5 dage fra hinanden, eller'
-            #original_hash: 4ed931b
-            2b: den anden konkurrence må ikke have FMC
+            #original_hash: e14e11e
+            2b: >-
+              den anden konkurrence må ikke have 3x3x3 i Færreste Træk
+              disciplinen.
     paragraph-events:
       #original_hash: b16c5f1
       title: Annoncere discipliner
