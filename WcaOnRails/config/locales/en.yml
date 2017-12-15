@@ -1396,10 +1396,10 @@ en:
         '1': "The two competitions don't have events in common."
         '2': "The two competitions take place in different countries."
         '3': "In the last 12 months, there have been fewer than 16 competitions in the area 100 km around the competition."
-      content2: '"FMC simultaneous competitions" are WCA competitions having only the FMC event and taking place simultaneously in different locations.'
+      content2: '"3x3x3 Fewest Moves simultaneous competitions" are WCA competitions having only the 3x3x3 Fewest Moves event and taking place simultaneously in different locations.'
       olist2:
         '1':
-          content1: "FMC simultaneous competitions cannot be part of any other regular competition."
+          content1: "3x3x3 Fewest Moves simultaneous competitions cannot be part of any other regular competition."
           alist1:
             '1a': "Time frames when both are celebrated can’t overlap."
         '2':
