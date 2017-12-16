@@ -429,7 +429,7 @@ zh-CN:
         #original_hash: 1917f4f
         competitionId: 比赛
         #original_hash: 3deb745
-        type: null
+        type: 类型
         #original_hash: c3328c3
         text: 文字
         #original_hash: d051707
@@ -755,7 +755,9 @@ zh-CN:
       #original_hash: 1186218
       not_found_in_database: 邮件、WCA ID或密码不正确。
       #original_hash: 3f9db99
-      unconfirmed: null
+      unconfirmed: >-
+        在继续前你需要确认你的电子邮箱地址。没收到确认邮件？请访问
+        https://www.worldcubeassociation.org/users/confirmation/new 重发一封。
   wca:
     errors:
       messages:
@@ -767,7 +769,7 @@ zh-CN:
       applications:
         help:
           #original_hash: 92e00ff
-          native_redirect_uri: null
+          native_redirect_uri: '如果你要添加本地URI，请使用 %{native_redirect_uri}'
           #original_hash: 62a0113
           scopes_html: >-
             将权限用空格分开。留空将使用默认权限。
@@ -1447,7 +1449,7 @@ zh-CN:
       #original_hash: c5497bc
       events: 项目
       #original_hash: 09b819f
-      deprecated_events: null
+      deprecated_events: 该比赛有一些不再被官方承认的项目，我们无法编辑它们。
       #original_hash: 815d5c3
       locked_edit_html: '比赛已公示不能编辑。如果有需要，联系%{board}。'
       #original_hash: ce33e21
@@ -1666,13 +1668,13 @@ zh-CN:
       championship_podiums: 锦标赛领奖台
       championship_podium_levels:
         #original_hash: 3746f3b
-        world: null
+        world: 世锦赛领奖台
         #original_hash: d248cd7
-        continental: null
+        continental: 州锦赛领奖台
         #original_hash: aa40175
-        national: null
+        national: 国锦赛领奖台
         #original_hash: 868be55
-        greater_china: null
+        greater_china: 大中华锦标赛领奖台
       #original_hash: c32a014
       place: 排名
       #original_hash: ddb18c1
@@ -1929,12 +1931,12 @@ zh-CN:
         #original_hash: 63a2388
         name: WCA通讯组
         #original_hash: 50fd091
-        description: 该组负责世界魔方协会与魔友们以及大众之间的联系与沟通。通讯与沟通有助于实现世界魔方协会的目标，并支持友善、透明、包容、开放和响应的魔方文化。
+        description: 改组负责世界魔方协会与魔友们以及大众之间的联系与沟通。通讯与沟通有助于实现世界魔方协会的目标，并支持友善、透明、包容、开放和响应的魔方文化。
       wfc:
         #original_hash: 9cb13de
         name: WCA财务委员会
         #original_hash: 2d4807e
-        description: 该组负责管理WCA的所有财务事宜。
+        description: 改组负责管理WCA的所有财务事宜。
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA代表</strong>作为WCA成员，负责确保所有WCA比赛在WCA宗旨、规则和精神下进行。由<strong>WCA高级代表</strong>、<strong>WCA代表</strong>和<strong>WCA实习代表</strong>组成%{see_link}。WCA高级代表的额外职责是管理他负责区域的所有代表，同时也可以处理当地社群问题。新上任的代表需要经历实习期直到他们展示出应有的能力来成为一个正式WCA代表。
@@ -1956,48 +1958,49 @@ zh-CN:
       region: 地区
   regional_organizations:
     #original_hash: 37b8fdc
-    title: null
+    title: 区域组织
     #original_hash: ba87c07
-    content: null
+    content: WCA承认下列区域组织
     how_to:
       #original_hash: fc3af12
-      title: null
+      title: 如何成为WCA区域组织
       #original_hash: bdf57ff
-      description: null
+      description: >-
+        WCA认可世界各地的各种区域组织。WCA区域组织的目的是在相关地区组织WCA比赛并支持WCA在该地区的活动。鼓励希望组建区域组织的国家和地区在提交申请之前，为其所在地区的WCA做贡献。如需帮助组织您所在地区的WCA比赛，请联系您最近的代表。
     requirements:
       #original_hash: 1e04fd7
-      title: null
+      title: WCA区域组织要求
       list:
         #original_hash: 22a9f26
-        '1': null
+        '1': 成功在相关地区组织或协助过WCA比赛
         #original_hash: 8c5a7fe
-        '2': null
+        '2': 在相关区域所在的大洲支持过洲际WCA比赛
         #original_hash: 5913cd0
-        '3': null
+        '3': 尊重并推广WCA规则及附录中规定的宗旨
         #original_hash: 0c3576b
-        '4': null
+        '4': 遵守所有适用的WCA规则
         #original_hash: 23cda60
-        '5': null
+        '5': 接受并遵守WCA官方的决定
         #original_hash: 08c6d86
-        '6': null
+        '6': 以电子格式向WCA提交其现行规则和附则的副本
     application_instructions:
       #original_hash: 4da829b
-      title: null
+      title: 申请说明
       #original_hash: 7ae038e
-      description: null
+      description: 要申请成为区域组织，我们要求该地区向WCA董事会提交一份书面申请，包含下面列出的所有细节。
       list:
         #original_hash: 1a9d544
-        '1': null
+        '1': 区域组织的名称
         #original_hash: a9bf3f4
-        '2': null
+        '2': 官方地址及联系方式
         #original_hash: 2a029e9
-        '3': null
+        '3': 现行章程的副本，需要符合WCA规则和条例
         #original_hash: a5a2771
-        '4': null
+        '4': 主要官员名单
         #original_hash: 1186ebf
-        '5': null
+        '5': 区域组织所覆盖的地区的清晰描述
         #original_hash: 826e371
-        '6': null
+        '6': 过去和当前WCA相关活动的报告
   contact:
     #original_hash: a34b69f
     title: 联系信息
@@ -2013,7 +2016,7 @@ zh-CN:
       #original_hash: 90fcc48
       name_html: WCA董事会（WCA Board）
       #original_hash: 3a8b1d8
-      info_html: null
+      info_html: 世界魔方协会由WCA董事会领导。他们负责一般咨询和整个WCA组织。所有官方比赛都需要获得WCA董事会的批准。
     wct:
       #original_hash: 846684d
       info_html: WCA通讯组的主要职能是保持和维护世界魔方协会与魔友们以及大众之间的联系与沟通。如果你需要一般问询请联系他们。
@@ -2147,211 +2150,224 @@ zh-CN:
   relations:
     relation:
       #original_hash: 6519fe1
-      title: null
+      title: 关系
       #original_hash: 69ba020
-      find_relations: null
+      find_relations: 发现魔友间的联系
       #original_hash: 5d6056d
-      show_relation: null
+      show_relation: 显示关系
       connectives:
         #original_hash: f85194e
-        was_at: null
+        was_at: 曾参加
         #original_hash: 8c00243
-        together_with: null
+        together_with: 并撞见了
     messages:
       #original_hash: 4406a0b
-      invalid_wca_ids: null
+      invalid_wca_ids: 请提供两个不同的有效 WCA ID
   search_results:
     index:
       #original_hash: db98a68
-      competitions: null
+      competitions: 比赛
       #original_hash: b37554f
-      people: null
+      people: 选手
       #original_hash: 6db75ea
-      advanced_search: null
+      advanced_search: 高级搜索
       #original_hash: a0ca0c3
-      posts: null
+      posts: 报道
       #original_hash: 9d7ea9c
-      regulations_and_guidelines: null
+      regulations_and_guidelines: 规则和指南
       not_found:
         #original_hash: b8a7006
-        competitions: null
+        competitions: 未找到比赛相似于
         #original_hash: 99d4290
-        people: null
+        people: 未找到选手相似于
         #original_hash: c6a04aa
-        posts: null
+        posts: 未找到报道相似于
         #original_hash: 76a6bf1
-        regulations_and_guidelines: null
+        regulations_and_guidelines: 未找到规则或指南相似于
   about_regulations:
     #original_hash: 6bce1b5
-    title: null
+    title: 关于规则
     panel1:
       #original_hash: 1fa73f3
-      title: null
+      title: 规则
       #original_hash: 557095b
-      content1_html: null
+      content1_html: 所有比赛必须遵循<a href="/regulations/">WCA规则</a>。在参加第一场比赛之前，参赛者阅读这些规定是非常重要的。
       #original_hash: 4296902
-      content2_html: null
+      content2_html: WCA规则由<a href="/regulations/guidelines.html">WCA指南</a>进行补充，其中包含更多的说明和解释。
     panel2:
       #original_hash: 8ad8302
-      title: null
+      title: 翻译
       #original_hash: 7477d9b
-      content1_html: null
+      content1_html: >-
+        WCA规则不仅有英文版，而且WCA成员已经将它们翻译成好几种语言：<a
+        href="/regulations/translations/">翻译</a>。
       #original_hash: 6add7a3
-      content2_html: null
+      content2_html: <strong>重要</ strong>：尽管翻译非常有帮助，但并不是官方的。在比赛中，最终以WCA规则的英文版为准。
     panel3:
       #original_hash: 234fd4d
-      title: null
+      title: 规则 常见问题
       #original_hash: 8afba93
-      content1_html: null
+      content1_html: <a href="/faq">FAQ部分</a>回答了有关WCA规则最常见的几个问题。
     panel4:
       #original_hash: ad5f6e7
-      title: null
+      title: 组织者指南
       #original_hash: 9bbdf16
-      content1_html: null
+      content1_html: 如果您有兴趣组织比赛或已计划组织比赛，请阅读我们的<a href="/organizer-guidelines">组织者指南</a>。
       #original_hash: 5016669
-      content2_html: null
+      content2_html: 本文件包含重要信息，应由每个比赛组织者阅读。
   organizer_guidelines:
     #original_hash: 7486ac4
-    title: null
+    title: WCA比赛组织者指南
     paragraph1:
       #original_hash: e5f5329
-      title: null
+      title: 如何组织一场比赛
       #original_hash: 3dbbbee
-      content: null
+      content: >-
+        所有WCA比赛必须由WCA代表参加并监督。如果你有兴趣组织自己的比赛，请联系离您最近的WCA代表。他们将能够为您提供更多有关当地实践的信息，并可以帮助您找到合适的日期，因为他们知道在同一时间范围内是否有其他比赛计划。如果您所在地区附近没有WCA代表，请联系您所在地区的高级代表。
     paragraph2:
       #original_hash: f20dd3b
-      title: null
+      title: 预计组织比赛的费用
       #original_hash: ab53dda
-      content: null
+      content: >-
+        每个国家的预期费用差别很大，取决于场地的大小和其他条件。通过报名费收回所有的支出。但是，为了尽可能降低这些费用，强烈建议寻找赞助商。虽然WCA代表是志愿者，并且没有工作收入，组织者应考虑支付他们的旅行费用。
     paragraph3:
       #original_hash: 00d3bf8
-      title: null
+      title: 比赛公告的截止日期
       #original_hash: c61c6c9
-      content_html: null
+      content_html: >-
+        比赛至少应在比赛开始前一个月公布（见<a
+        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>指南8a4
+        ++
+        </a>）。如果有特殊的原因错过了这个截止日期，比赛也应该提前至少两周公布，由WCA董事会决定。强烈建议尽快通知WCA董事会这些原因，以避免比赛被拒绝。
     paragraph4:
       #original_hash: b6dca56
-      title: null
+      title: 临近政策
       #original_hash: bd8f1fe
-      content1: null
+      content1: >-
+        WCA比赛如果距离其他比赛至少100公里或时间间隔超过19天，它将被接受。如果有另外一场比赛的距离小于100公里，且他们之间的时间间隔少于19天，则WCA董事会应特别审查拟议的比赛。要求批准这样比赛的代表必须提供进一步的信息为什么仍然需要办这个比赛。支持此类比赛的可能的论据包括：
       olist1:
         #original_hash: de00462
-        '1': null
+        '1': 这两场比赛没有共同的项目
         #original_hash: f7bacc5
-        '2': null
+        '2': 这两场比赛在不同的国家或地区举办
         #original_hash: 7b2c099
-        '3': null
-      #original_hash: 9908e21
-      content2: null
+        '3': 在过去的12个月里，在周围100公里的范围内只有不到16场的比赛。
+      #original_hash: 5c5cf04
+      content2: “最少步联考”是只有最少步还原项目，且同时在不同地方举办的WCA比赛。
       olist2:
         '1':
-          #original_hash: 6f68690
-          content1: null
+          #original_hash: 316fd13
+          content1: 最少步联考禁止成为任何其他常规比赛的一部分
           alist1:
             #original_hash: 75aa0c7
-            1a: null
+            1a: 两者的持续时段不能重叠。
         '2':
           #original_hash: 8d9c548
-          content1: null
+          content1: 如果该比赛的任何位置比任何其他常规比赛更接近100公里，那么
           alist1:
             #original_hash: 8f532bb
-            2a: null
-            #original_hash: 4ed931b
-            2b: null
+            2a: 这两场比赛需要至少相隔5天，或者
+            #original_hash: e14e11e
+            2b: 另一场比赛不能含有最少步还原项目。
     paragraph-events:
       #original_hash: b16c5f1
-      title: null
+      title: 宣布项目
       #original_hash: b6c6d26
-      content: null
+      content: 所有在比赛中要举行的项目必须由代表在比赛申请时指定。这也包括“暂定”项目（即可能根据赛程另外举行的项目）。进一步的项目增加必须得到董事会的批准。
     paragraph5:
       #original_hash: 17d01de
-      title: null
+      title: 参赛限制
       #original_hash: 18976be
-      content_html: null
+      content_html: >-
+        每场比赛或每个项目的参赛人数可能有限（请参阅<a
+        href='https://www.worldcubeassociation.org/regulations/#Z4'>规则Z4
+        </a>）。如条例Z中的规定，比赛的代表必须得到董事会对人数限制的许可。应该根据预期参赛选手的兴趣明智地选择参赛人数限制。如果只有次要因素，参赛人数限制不应设置地过小。这一预期的限制应该在在寻找合适场地的时候就考虑到。参赛人数限制必须在WCA网站的比赛页面上明确说明。
     paragraph6:
       #original_hash: ce4c3d0
-      title: null
+      title: 处理注册
       #original_hash: cb13cd0
-      content: null
+      content: >-
+        注册必须采用先到先得的方式，这意味着最早的完整注册必须先得到处理。如果报名费用已经预付，当报名费用已经支付时，报名将被视为完成。这应该在比赛网站上的付款说明中明确说明。
     paragraph7:
       #original_hash: e4f1c62
-      title: null
+      title: 管理等候名单
       #original_hash: 81ca3f3
-      content1: null
+      content1: 一旦比赛达到人数限制，就应该打开候补名单。当某个注册并批准的选手取消注册时，可以用等待名单上的下一个选手顶替。
       #original_hash: 1b2ea79
       content2: null
       #original_hash: 37bcbd6
-      content3: null
+      content3: 如果选手没有经过正常的注册过程而是直接参加比赛，那么他们的成绩将被追溯地消除（如果设置了参赛人数限制并达到了该限制）。
     paragraph8:
       #original_hash: c8ad8e6
-      title: null
+      title: 赛前事务
       list:
         #original_hash: c8abb5e
-        '1': null
+        '1': 在宣布比赛之前，比赛的赛程需要在比赛网站上公布。该赛程可以在后续调整。
         #original_hash: e93d043
-        '2': null
+        '2': 选手应该被分成若干组，必须打印成绩单，且建议将成绩单根据分组情况分开。也建议规划每个组每个项目的打乱员，至少在第一轮。打乱员应该得靠谱。
     paragraph9:
       #original_hash: ead44f5
-      title: null
+      title: 赛间事务
       #original_hash: ee2e9c6
-      content: null
+      content: 组织者在比赛期间需要做的事情应该和WCA代表讨论。典型的事务包括（它们可以被委托给其他靠谱的人）：
       list:
         #original_hash: 03aea46
-        '1': null
+        '1': 管理注册处
         #original_hash: c4388f3
-        '2': null
+        '2': 发布公告
         #original_hash: 45c78ae
-        '3': null
+        '3': 叫号及放置成绩单
         #original_hash: 0b31986
-        '4': null
+        '4': 录入和打印结果
         #original_hash: 7ab2d4c
-        '5': null
+        '5': 寻找打乱员和裁判员
         #original_hash: 52e8316
-        '6': null
+        '6': 处理与场地有关的所有组织问题（例如钥匙或WiFi）
   media:
     common:
       #original_hash: f9b7a97
-      view_media_page: null
+      view_media_page: 查看所有媒体资料
       #original_hash: b251e98
-      confirm_delete: null
+      confirm_delete: 你确定要删除该媒体资料吗？
     new:
       #original_hash: 65cdb28
-      title: null
+      title: 提交媒体资料
       #original_hash: 35caed2
-      review_warning_html: null
+      review_warning_html: 所有媒体资料在被列入<a href="/media">所有媒体页面</a>之前都将被审核。
       #original_hash: 141d1d7
-      guidelines: null
+      guidelines: 指南
       media_guidelines:
         #original_hash: fd6984b
-        '1': null
+        '1': 所有媒体资料必须与所选比赛相关
         #original_hash: 9821119
-        '2': null
+        '2': 所有媒体内容必须合适，干净，不得含有任何不当或冒犯的材料。
         #original_hash: 5114fe4
-        '3': null
+        '3': 媒体内容不得存在大量赞助商或广告内容。
         #original_hash: c9d797b
-        '4': null
+        '4': 所有媒体内容必须有适当的描述性标题。
     edit:
       #original_hash: 32c7cc0
-      title: null
+      title: 编辑媒体资料
       #original_hash: 6f161d0
-      validate_media_page: null
+      validate_media_page: 查看所有待定媒体资料
     index:
       #original_hash: 0c77aee
-      title: null
+      title: 媒体资料
       #original_hash: df43670
-      validate_media: null
+      validate_media: 验证媒体资料
       #original_hash: 9f2158f
-      submit_media_html: null
+      submit_media_html: 您可以在<a href="/media/new">这里</a>提交媒体资料。
     validate:
       #original_hash: 1e0eee6
-      title: null
+      title: 验证媒体资料
     media_table:
       #original_hash: 879e323
-      year: null
+      year: 年份
       #original_hash: 573da9c
-      location: null
+      location: 国家或地区
       #original_hash: bb54db5
-      accept: null
+      accept: 接受
       #original_hash: 66b69a8
-      confirm_accept: null
+      confirm_accept: 你确定要接受这个媒体资料吗？
       #original_hash: 5301648
-      edit: null
+      edit: 编辑
