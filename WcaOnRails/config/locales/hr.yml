@@ -2735,16 +2735,17 @@ hr:
         '3': >-
           U zadnjih 12 mjeseci, bilo je manje od 16 natjecanja na prostoru od
           100km oko ovog natjecanja.
-      #original_hash: 9908e21
+      #original_hash: 5c5cf04
       content2: >-
-        "FMC istovremena natjecanja" su WCA natjecanja koja imaju samo
-        disciplinu FMC i istovremeno se održavaju na više različitih lokacija.
+        "3x3x3 najmanje poteza istovremena natjecanja" su WCA natjecanja koja
+        imaju samo disciplinu 3x3x3 najmanje poteza i istovremeno se održavaju
+        na više različitih lokacija.
       olist2:
         '1':
-          #original_hash: 6f68690
+          #original_hash: 316fd13
           content1: >-
-            FMC istovremena natjecanja ne mogu biti dio bilo kojeg drugog
-            regularnog natjecanja.
+            3x3x3 najmanje poteza istovremena natjecanja ne mogu biti dio bilo
+            kojeg drugog regularnog natjecanja.
           alist1:
             #original_hash: 75aa0c7
             1a: Vremenski okviri kada se oboje slavi se ne smiju preklapati.
@@ -2756,8 +2757,8 @@ hr:
           alist1:
             #original_hash: 8f532bb
             2a: 'oba natjecanja moraju imati razmak od barem 5 dana, ili'
-            #original_hash: 4ed931b
-            2b: drugo natjecanje ne smije imati FM disciplinu.
+            #original_hash: e14e11e
+            2b: drugo natjecanje ne smije imati 3x3x3 najmanje poteza disciplinu.
     paragraph-events:
       #original_hash: b16c5f1
       title: Najavljivanje disciplina
