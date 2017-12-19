@@ -136,26 +136,6 @@ zh-TW:
     ranking: '前%{ranking}名晉級第%{next_round_number}輪'
     #original_hash: 31ad77c
     percent: '前%{percent}%晉級第%{next_round_number}輪'
-    attempt_result:
-      #original_hash: 2f332eb
-      time: '最佳成績 ≤ %{time}晉級第%{next_round_number}輪'
-      #original_hash: efa4ad1
-      moves: '最佳成績 ≤ %{moves}步晉級第%{next_round_number}輪'
-      #original_hash: 29f8453
-      points: '最佳成績 ≥ %{points}分晉級第%{next_round_number}輪'
-  cutoff:
-    #original_hash: 38a40f6
-    time:
-      zero: '%{count}次還原 ≤ %{time}'
-      other: '%{count}次還原 ≤ %{time}'
-    #original_hash: 6f99fa6
-    moves:
-      zero: '%{count}次還原 ≤ %{moves}步'
-      other: '%{count}次還原 ≤ %{moves}步'
-    #original_hash: 1c7c5f1
-    points:
-      zero: '%{count}次還原 ≥ %{points}分'
-      other: '%{count}次還原 ≥ %{points}分'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e

@@ -136,31 +136,6 @@ de:
     ranking: 'Die obersten %{ranking} kommen in Runde %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Die obersten %{percent}% kommen in Runde %{next_round_number}'
-    attempt_result:
-      #original_hash: 2f332eb
-      time: 'Das beste Ergebnis ≤ %{time} um in Runde %{next_round_number} zu kommen'
-      #original_hash: efa4ad1
-      moves: 'Bestes Ergebnis ≤ %{moves} um in Runde %{next_round_number} zu kommen'
-      #original_hash: 29f8453
-      points: >-
-        Bestes Ergebnis  ≥ %{points} Punkten um in Runde  %{next_round_number}
-        zu kommen
-  cutoff:
-    #original_hash: 38a40f6
-    time:
-      zero: '%{count} Versuche um ≤ %{time} zu erreichen'
-      one: '%{count} Versuch um ≤ %{time} zu erreichen'
-      other: '%{count} Versuche um ≤ %{time} zu erreichen'
-    #original_hash: 6f99fa6
-    moves:
-      zero: '%{count} Versuche um ≤ %{moves} Züge zu erreichen'
-      one: '%{count} Versuch um ≤ %{moves} Züge zu erreichen'
-      other: '%{count} Versuche um ≤ %{moves} Züge zu erreichen'
-    #original_hash: 1c7c5f1
-    points:
-      zero: '%{count} Versuche um ≥ %{points} Punkte zu erreichen'
-      one: '%{count} Versuch um ≥ %{points} Punkte zu erreichen'
-      other: '%{count} Versuche um ≥ %{points} Punkte zu erreichen'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e

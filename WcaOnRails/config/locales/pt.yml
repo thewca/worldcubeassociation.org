@@ -136,33 +136,6 @@ pt:
     ranking: 'Top %{ranking} avança para a ronda %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Top %{percent}% avança para a ronda %{next_round_number}'
-    attempt_result:
-      #original_hash: 2f332eb
-      time: 'Melhor resolução ≤ %{time} avança para a ronda %{next_round_number}'
-      #original_hash: efa4ad1
-      moves: >-
-        Melhor resolução ≤ %{moves} movimentos avança para a ronda
-        %{next_round_number}
-      #original_hash: 29f8453
-      points: >-
-        Melhor resolução ≥ %{points} pontos avança para a ronda
-        %{next_round_number}
-  cutoff:
-    #original_hash: 38a40f6
-    time:
-      zero: '%{count} tentativas para obter ≤ %{time}'
-      one: '%{count} tentativa para obter ≤ %{time}'
-      other: '%{count} tentativas para obter ≤ %{time}'
-    #original_hash: 6f99fa6
-    moves:
-      zero: '%{count} tentativas para obter ≤ %{moves} movimentos'
-      one: '%{count} tentativa para obter ≤ %{moves} movimentos'
-      other: '%{count} tentativas para obter ≤ %{moves} movimentos'
-    #original_hash: 1c7c5f1
-    points:
-      zero: '%{count} tentativas para obter ≥ %{points} pontos'
-      one: '%{count} tentativa para obter ≥ %{points} pontos'
-      other: '%{count} tentativas para obter ≥ %{points} pontos'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e

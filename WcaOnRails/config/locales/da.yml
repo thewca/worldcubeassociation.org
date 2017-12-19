@@ -136,33 +136,6 @@ da:
     ranking: 'Top %{ranking} kommer videre til næste runde %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Top %{percent}% kommer videre til næste runde %{next_round_number}'
-    attempt_result:
-      #original_hash: 2f332eb
-      time: 'Bedste tid ≤ %{time} kommer videre til næste runde %{next_round_number}'
-      #original_hash: efa4ad1
-      moves: >-
-        Bedste resultat ≤ %{moves} træk kommer videre til næste runde
-        %{next_round_number}
-      #original_hash: 29f8453
-      points: >-
-        Bedste resultat ≥ %{points} point kommer videre til næste runde
-        %{next_round_number}
-  cutoff:
-    #original_hash: 38a40f6
-    time:
-      zero: '%{count} prøver at få ≤ %{time}'
-      one: '%{count} prøver at få ≤ %{time}'
-      other: '%{count} prøver at få ≤ %{time}'
-    #original_hash: 6f99fa6
-    moves:
-      zero: '%{count} prøver at få ≤ %{moves} moves'
-      one: '%{count} prøver at få ≤ %{moves} moves'
-      other: '%{count} prøver at få ≤ %{moves} moves'
-    #original_hash: 1c7c5f1
-    points:
-      zero: '%{count} prøver at få ≥ %{points} points'
-      one: '%{count} prøver at få ≥ %{points} points'
-      other: '%{count} prøver at få ≥ %{points} points'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
