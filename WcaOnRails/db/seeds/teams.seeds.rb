@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-Team.create(friendly_id: 'wct', rank: 1, email: "communication@worldcubeassociation.org")
-Team.create(friendly_id: 'wdc', rank: 3, email: "wdc@worldcubeassociation.org")
-Team.create(friendly_id: 'wfc', rank: 5, email: "finance@worldcubeassociation.org")
-Team.create(friendly_id: 'wrc', rank: 7, email: "wrc@worldcubeassociation.org")
-Team.create(friendly_id: 'wrt', rank: 9, email: "results@worldcubeassociation.org")
-Team.create(friendly_id: 'wst', rank: 11, email: "software@worldcubeassociation.org")
+Team.create(friendly_id: 'wct', rank: 10, email: "communication@worldcubeassociation.org")
+Team.create(friendly_id: 'wdc', rank: 20, email: "wdc@worldcubeassociation.org")
+Team.create(friendly_id: 'wec', rank: 30, email: "ethics@worldcubeassociation.org")
+Team.create(friendly_id: 'wfc', rank: 40, email: "finance@worldcubeassociation.org")
+Team.create(friendly_id: 'wqac', rank: 50, email: "quality@worldcubeassociation.org")
+Team.create(friendly_id: 'wrc', rank: 60, email: "wrc@worldcubeassociation.org")
+Team.create(friendly_id: 'wrt', rank: 70, email: "results@worldcubeassociation.org")
+Team.create(friendly_id: 'wst', rank: 80, email: "software@worldcubeassociation.org")
