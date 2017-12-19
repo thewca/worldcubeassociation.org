@@ -1209,9 +1209,18 @@ en:
       wct:
         name: "WCA Communication Team"
         description: "The WCA Communication Team (WCT) has the role to oversee and support communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
+      #context: WFC
       wfc:
         name: "WCA Financial Committee"
         description: "This team is responsible for managing the finances of the WCA"
+      #context: WEC
+      wec:
+        name: "WCA Ethics Committee"
+        description: "This committee has the role to ensure that all the procedures followed by the WCA Staff and External Staff abide by its Code of Ethics."
+      #context: WQAC
+      wqac:
+        name: "WCA Quality Assurance Committee"
+        description: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
       delegates_html: "<strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong>%{see_link}. Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates."
       see_link_html: " (see %{link})"
       members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
@@ -1277,6 +1286,10 @@ en:
       info_html: "The WST is responsible for the maintenance and management of all software of the WCA. They also develop new software for various tasks within the WCA whenever needed. If you have suggestions and ideas for further website development or if you would like to report errors and bugs, feel free to contact them! The WCA website is a huge open source project on <a href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>, so if you are interested in helping to develop for the WCA, take a look there."
     wfc:
       info_html: "The WFC is responsible for everything regarding finances within the WCA. They manage the finances and accounts of the WCA in accordance with an approved annual budget proposal, which is also their work to provide on a regular basis."
+    wec:
+      info_html: "This committee has the role to ensure that all the procedures followed by the WCA Staff and External Staff abide by its Code of Ethics."
+    wqac:
+      info_html: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
   score_tools:
     title: "WCA Score Taking tools"
     paragraphs:
