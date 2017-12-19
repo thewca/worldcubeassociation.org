@@ -136,36 +136,6 @@ ro:
     ranking: 'Primii %{ranking} avansează în runda %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Primii %{percent}% avansează în runda %{next_round_number}'
-    attempt_result:
-      #original_hash: 2f332eb
-      time: 'Cea mai bună rezolvare ≤ %{time} avansează în runda %{next_round_number}'
-      #original_hash: efa4ad1
-      moves: >-
-        Cea mai bună rezolvare ≤ %{moves} mutări avansează în runda
-        %{next_round_number}
-      #original_hash: 29f8453
-      points: >-
-        Cea mai bună rezolvare ≥ %{points} puncte avansează în runda
-        %{next_round_number}
-  cutoff:
-    #original_hash: 38a40f6
-    time:
-      zero: '%{count} încercări pentru a obține ≤ %{time}'
-      one: '%{count} încercare pentru a obține ≤ %{time}'
-      few: '%{count} încercări pentru a obține ≤ %{time}'
-      other: '%{count} încercări pentru a obține ≤ %{time}'
-    #original_hash: 6f99fa6
-    moves:
-      zero: '%{count} încercări pentru a obține ≤ %{moves} mutări'
-      one: '%{count} încercare pentru a obține ≤ %{moves} mutări'
-      few: '%{count} încercări pentru a obține ≤ %{moves} mutări'
-      other: '%{count} încercări pentru a obține ≤ %{moves} mutări'
-    #original_hash: 1c7c5f1
-    points:
-      zero: '%{count} încercări pentru a obține ≥ %{points} puncte'
-      one: '%{count} încercare pentru a obține ≥ %{points} puncte'
-      few: '%{count} încercări pentru a obține ≥ %{points} puncte'
-      other: '%{count} încercări pentru a obține ≥ %{points} puncte'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e

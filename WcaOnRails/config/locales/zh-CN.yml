@@ -136,26 +136,6 @@ zh-CN:
     ranking: '前%{ranking}名晋级%{next_round_number}轮'
     #original_hash: 31ad77c
     percent: '前%{percent}%晋级%{next_round_number}轮'
-    attempt_result:
-      #original_hash: 2f332eb
-      time: '单次成绩≤%{time}晋级%{next_round_number}轮'
-      #original_hash: efa4ad1
-      moves: '单次成绩≤ %{moves}步晋级%{next_round_number}轮'
-      #original_hash: 29f8453
-      points: '单次成绩≥%{points}分晋级%{next_round_number}轮'
-  cutoff:
-    #original_hash: 38a40f6
-    time:
-      zero: '%{count}次尝试≤%{time}'
-      other: '%{count}次尝试≤%{time}'
-    #original_hash: 6f99fa6
-    moves:
-      zero: '%{count}次尝试≤%{moves}步'
-      other: '%{count}次尝试≤%{moves}步'
-    #original_hash: 1c7c5f1
-    points:
-      zero: '%{count}次尝试≥%{points}分'
-      other: '%{count}次尝试≥%{points}分'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e

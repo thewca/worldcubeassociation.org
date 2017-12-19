@@ -139,30 +139,6 @@ nl:
     attempt_result:
       #original_hash: 2f332eb
       time: 'Beste poging <= %{time} gaan door naar ronde %{next_round_number}'
-      #original_hash: efa4ad1
-      moves: >-
-        Beste poging <= %{moves} draaien gaan door naar ronde
-        %{next_round_number}
-      #original_hash: 29f8453
-      points: >-
-        Beste poging >= %{points} punten gaan door naar ronde
-        %{next_round_number}
-  cutoff:
-    #original_hash: 38a40f6
-    time:
-      zero: 'geen pogingen voor ≤ %{time}'
-      one: 'één poging voor ≤ %{time}'
-      other: '%{count} pogingen voor ≤ %{time}'
-    #original_hash: 6f99fa6
-    moves:
-      zero: 'geen pogingen voor ≤ %{moves} draaien'
-      one: 'één poging voor ≤ %{moves} draaien'
-      other: '%{count} pogingen voor ≤ %{moves} draaien'
-    #original_hash: 1c7c5f1
-    points:
-      zero: 'geen pogingen voor ≥ %{moves} punten'
-      one: 'één poging voor ≥ %{moves} punten'
-      other: '%{count} pogingen voor ≥ %{moves} punten'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e

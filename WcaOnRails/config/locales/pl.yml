@@ -136,39 +136,6 @@ pl:
     ranking: 'Najlepsze %{ranking} osób awansuje do %{next_round_number}. rundy'
     #original_hash: 31ad77c
     percent: 'Najlepsze %{percent}% osób awansuje do %{next_round_number}. rundy'
-    attempt_result:
-      #original_hash: 2f332eb
-      time: 'Najlepszy czas ≤ %{time}  awansuje do %{next_round_number}. rundy'
-      #original_hash: efa4ad1
-      moves: >-
-        Najlepsze ułożenie ≤ %{moves} ruchów awansuje do %{next_round_number}.
-        rundy
-      #original_hash: 29f8453
-      points: >-
-        Najlepszy wynik ≥ %{points} punktów awansuje do %{next_round_number}.
-        rundy
-  cutoff:
-    #original_hash: 38a40f6
-    time:
-      zero: '%{count} prób na uzyskanie ≤ %{time}'
-      one: '%{count} próba na uzyskanie ≤ %{time}'
-      few: '%{count} próby na uzyskanie ≤ %{time}'
-      many: '%{count} prób na uzyskanie ≤ %{time}'
-      other: '%{count} próby na uzyskanie ≤ %{time}'
-    #original_hash: 6f99fa6
-    moves:
-      zero: '%{count} prób na uzyskanie ≤ %{moves} ruchów'
-      one: '%{count} próba na uzyskanie ≤ %{moves} ruchów'
-      few: '%{count} próby na uzyskanie ≤ %{moves} ruchów'
-      many: '%{count} prób na uzyskanie ≤ %{moves} ruchów'
-      other: '%{count} próby na uzyskanie ≤ %{moves} ruchów'
-    #original_hash: 1c7c5f1
-    points:
-      zero: '%{count} prób na uzyskanie ≥ %{points} punktów'
-      one: '%{count} próba na uzyskanie ≥ %{points} punktów'
-      few: '%{count} próby na uzyskanie ≥ %{points} punktów'
-      many: '%{count} prób na uzyskanie ≥ %{points} punktów'
-      other: '%{count} próby na uzyskanie ≥ %{points} punktów'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e

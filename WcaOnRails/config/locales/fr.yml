@@ -136,35 +136,6 @@ fr:
     ranking: 'Les %{ranking} premiers avancent au tour %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Le top %{percent}% avance au tour %{next_round_number}'
-    attempt_result:
-      #original_hash: 2f332eb
-      time: >-
-        Un meilleur temps ≤ %{time} permet d'avancer au tour
-        %{next_round_number}
-      #original_hash: efa4ad1
-      moves: >-
-        Un meilleur résultat ≤ %{moves} mouvements permet d'avancer au tour
-        %{next_round_number}
-      #original_hash: 29f8453
-      points: >-
-        Un meilleur résultat ≥ %{points} points permet d'avancer au tour
-        %{next_round_number}
-  cutoff:
-    #original_hash: 38a40f6
-    time:
-      zero: '%{count} essais pour obtenir un résultat ≤ %{time}'
-      one: '%{count} essai pour obtenir un résultat ≤ %{time}'
-      other: '%{count} essais pour obtenir un résultat ≤ %{time}'
-    #original_hash: 6f99fa6
-    moves:
-      zero: '%{count} essais pour obtenir un résultat ≤ %{moves} mouvements'
-      one: '%{count} essai pour obtenir un résultat ≤ %{moves} mouvements'
-      other: '%{count} essais pour obtenir un résultat ≤ %{moves} mouvements'
-    #original_hash: 1c7c5f1
-    points:
-      zero: '%{count} essais pour obtenir un résultat ≥ %{points} points'
-      one: '%{count} essai pour obtenir un résultat ≥ %{points} points'
-      other: '%{count} essais pour obtenir un résultat ≥ %{points} points'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
