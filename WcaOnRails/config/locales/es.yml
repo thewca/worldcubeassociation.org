@@ -137,30 +137,30 @@ es:
     #original_hash: 31ad77c
     percent: 'El %{percent}% más rápido pasa a la ronda %{next_round_number}'
     attempt_result:
-      #original_hash: 2f332eb
+      #original_hash: 03af49c
       time: >-
         Aquellos con mejor intento en menos de %{time} pasan a la ronda
         %{next_round_number}
-      #original_hash: efa4ad1
+      #original_hash: 0b4ae7c
       moves: >-
         Aquellos con mejor intento en menos de %{moves} movimientos pasan a la
         ronda %{next_round_number}
-      #original_hash: 29f8453
+      #original_hash: 56c0366
       points: >-
-        Aquellos con mejor intento de más de %{points} movimientos pasan a la
-        ronda %{next_round_number}
+        Aquellos con mejor intento de más de %{points} puntos pasan a la ronda
+        %{next_round_number}
   cutoff:
-    #original_hash: 38a40f6
+    #original_hash: cf458e7
     time:
       zero: '%{count} intentos para bajar de %{time}'
       one: '%{count} intento para bajar de %{time}'
       other: '%{count} intentos para bajar de %{time}'
-    #original_hash: 6f99fa6
+    #original_hash: b49d930
     moves:
       zero: '%{count} intentos para bajar de %{moves} movimientos'
       one: '%{count} intento para bajar de %{moves} movimientos'
       other: '%{count} intentos para bajar de %{moves} movimientos'
-    #original_hash: 1c7c5f1
+    #original_hash: eba1b97
     points:
       zero: '%{count} intentos para obtener al menos %{points} puntos'
       one: '%{count} intento para obtener al menos %{points} puntos'
@@ -2284,6 +2284,23 @@ es:
         name: Comité de Finanzas de la WCA
         #original_hash: 2d4807e
         description: Este equipo es el responsable de gestionar las finanzas de la WCA
+      wec:
+        #original_hash: 83bd1d0
+        name: Comité Ético de la WCA
+        #original_hash: ec2b9c3
+        description: >-
+          Este comité tiene la labor de asegurarse de que los procedimientos
+          seguidos por el personal WCA y Externo siguen su Código Ético.
+      wqac:
+        #original_hash: 8f32116
+        name: Comité de Control de Calidad de la WCA
+        #original_hash: 0171b3b
+        description: >-
+          Este comité tiene la labor de apoyar y promover mejora continua de la
+          calidad dentro de la WCA, así como la aplicación a nivel mundial de
+          estándares de calidad para asegurar una consistente alta calidad de
+          procesos, personal WCA, Organizaciones Regionales, Organizadores y
+          personal ayudante en competiciones.
       #original_hash: f2ceade
       delegates_html: >-
         Los <strong>Delegados de la WCA</strong> son miembros de la WCA que se
@@ -2466,6 +2483,19 @@ es:
         Gestionan las finanzas y cuentas de la WCA de acuerdo con un presupuesto
         anual aprobado previamente, que tambien se encargan de de generar de
         manera regular.
+    wec:
+      #original_hash: ec2b9c3
+      info_html: >-
+        Este comité tiene la labor de asegurarse de que los procedimientos
+        seguidos por el personal WCA y Externo siguen su Código Ético.
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        Este comité tiene la labor de apoyar y promover mejora continua de la
+        calidad dentro de la WCA, así como la aplicación a nivel mundial de
+        estándares de calidad para asegurar una consistente alta calidad de
+        procesos, personal WCA, Organizaciones Regionales, Organizadores y
+        personal ayudante en competiciones.
   score_tools:
     #original_hash: ea9d41d
     title: Herramientas para la captación de resultados
@@ -2791,17 +2821,17 @@ es:
         '3': >-
           En los últimos 12 meses, ha habido menos de 16 competiciones en un
           radio de 100 km alrededor de la competición.
-      #original_hash: 9908e21
+      #original_hash: 5c5cf04
       content2: >-
-        Las competiciones de Menos Movimientos simultáneas son competiciones WCA
-        que sólo tienen la prueba de Menos Movimientos y que se celebran de
-        forma simultánea en diferentes lugares.
+        Las competiciones de 3x3x3 Menos Movimientos simultáneas son
+        competiciones WCA que sólo tienen la prueba de 3x3x3 Menos Movimientos y
+        que se celebran de forma simultánea en diferentes lugares.
       olist2:
         '1':
-          #original_hash: 6f68690
+          #original_hash: 316fd13
           content1: >-
-            Las competiciones FMC simultáneas no pueden ser parte de otra
-            competición normal.
+            Las competiciones de 3x3x3 Menos Movimientos simultáneas no pueden
+            ser parte de otra competición normal.
           alist1:
             #original_hash: 75aa0c7
             1a: >-
@@ -2815,8 +2845,10 @@ es:
           alist1:
             #original_hash: 8f532bb
             2a: 'ambas competiciones deberían separarse al menos por 5 días, o'
-            #original_hash: 4ed931b
-            2b: la otra competición no debe tener la categoría de FMC.
+            #original_hash: e14e11e
+            2b: >-
+              la otra competición no debe tener la categoría de 3x3x3 Menos
+              movimientos.
     paragraph-events:
       #original_hash: b16c5f1
       title: Anunciar pruebas
