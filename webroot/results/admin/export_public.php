@@ -49,6 +49,14 @@ if( $chosenExport ){
                                LEFT JOIN Competitions on Competitions.id=championships.competition_id
                                WHERE Competitions.showAtAll=1',
     'eligible_country_iso2s_for_championship' => '*',
+    'delegates'=>'SELECT id, email, name, wca_id, delegate_status, senior_delegate_id, region
+                                     FROM users
+                                     WHERE delegate_status IS NOT NUll',
+    'competition_delegates'=>'SELECT competition_delegates.id, competition_delegates.competition_id, competition_delegates.delegate_id
+                                     FROM competition_delegates
+                                     LEFT JOIN Competitions ON Competitions.id=competition_delegates.competition_id
+                                     WHERE Competitions.showAtAll=1',
+
   ) );
 }
 

@@ -48,6 +48,8 @@ The export consists of these tables:
   Scrambles                                  Scrambles
   championships                              Championship competitions
   eligible_country_iso2s_for_championship    See explanation below
+  delegates                                  WCA delegates
+  competition_delegates                      Competitions' delegates
 
 Most of the tables should be self-explanatory, but several things merit further
 explanation.
