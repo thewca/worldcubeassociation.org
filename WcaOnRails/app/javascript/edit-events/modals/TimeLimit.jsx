@@ -7,7 +7,7 @@ import Radio from 'react-bootstrap/lib/Radio'
 import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import AttemptResultInput from './AttemptResultInput'
-import { centisecondsToString, roundIdToString, parseRoundId } from './utils'
+import { centisecondsToString, roundIdToString, parseActivityCode } from './utils'
 import ButtonActivatedModal from 'edit-events/ButtonActivatedModal'
 
 class RadioGroup extends React.Component {
@@ -96,10 +96,10 @@ class SelectRoundsButton extends React.Component {
               <ul className="list-unstyled">
                 {wcifRounds.map(wcifRound => {
                   let roundId = wcifRound.id;
-                  let { eventId } = parseRoundId(roundId);
+                  let { eventId } = parseActivityCode(roundId);
                   let event = events.byId[eventId];
                   let checked = !!selectedRoundsById[roundId];
-                  let eventAlreadySelected = this.getSelectedRoundIds().find(roundId => parseRoundId(roundId).eventId === eventId);
+                  let eventAlreadySelected = this.getSelectedRoundIds().find(roundId => parseActivityCode(roundId).eventId === eventId);
                   let disabled = !checked && eventAlreadySelected;
                   let disabledReason = disabled && `Cannot select this round because you've already selected a round with ${event.name}`;
                   return (
