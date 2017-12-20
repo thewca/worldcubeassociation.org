@@ -289,7 +289,7 @@ GEM
     multipart-post (2.0.0)
     mysql2 (0.4.10)
     nenv (0.3.0)
-    newrelic_rpm (4.6.0.338)
+    newrelic_rpm (4.7.0.339)
     nio4r (2.1.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
