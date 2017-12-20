@@ -6,8 +6,8 @@ import AttemptResultInput from './AttemptResultInput'
 import {
   pluralize,
   matchResult,
-  parseRoundId,
   roundIdToString,
+  parseActivityCode,
   attemptResultToString,
 } from './utils'
 
@@ -17,7 +17,7 @@ function roundCutoffToString(wcifRound, { short } = {}) {
     return "-";
   }
 
-  let eventId = parseRoundId(wcifRound.id).eventId;
+  let eventId = parseActivityCode(wcifRound.id).eventId;
   let matchStr = matchResult(cutoff.attemptResult, eventId, { short });
   if(short) {
     return `Best of ${cutoff.numberOfAttempts} ${matchStr}`;

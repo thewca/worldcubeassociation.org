@@ -111,13 +111,39 @@ export function centisecondsToString(centiseconds, { short } = {}) {
 }
 
 export function roundIdToString(roundId) {
-  let { eventId, roundNumber } = parseRoundId(roundId);
+  let { eventId, roundNumber } = parseActivityCode(roundId);
   let event = events.byId[eventId];
   return `${event.name}, Round ${roundNumber}`;
 }
 
-export function parseRoundId(roundId) {
-  let [eventId, roundNumber] = roundId.split("-");
-  roundNumber = parseInt(roundNumber);
-  return { eventId, roundNumber };
+// Copied from https://github.com/jfly/tnoodle/blob/c2b529e6292469c23f33b1d73839e22f041443e0/tnoodle-ui/src/WcaCompetitionJson.js#L52
+export function parseActivityCode(activityCode) {
+  let eventId, roundNumber, group;
+  let parts = activityCode.split("-");
+  eventId = parts.shift();
+
+  parts.forEach(part => {
+    let firstLetter = part[0];
+    let rest = part.substring(1);
+    if(firstLetter === "r") {
+      roundNumber = parseInt(rest, 10);
+    } else if(firstLetter === "g") {
+      group = rest;
+    } else {
+      throw new Error(`Unrecognized activity code part: ${part} of ${activityCode}`);
+    }
+  });
+  return { eventId, roundNumber, group };
+}
+
+export function buildActivityCode(activity) {
+  let activityCode = activity.eventId;
+  if(activity.roundNumber) {
+    activityCode += "-r" + activity.roundNumber;
+  }
+  if(activity.group) {
+    activityCode += "-g" + activity.group;
+  }
+
+  return activityCode;
 }

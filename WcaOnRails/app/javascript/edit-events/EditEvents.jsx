@@ -3,8 +3,8 @@ import cn from 'classnames'
 import ReactDOM from 'react-dom'
 
 import events from 'wca/events.js.erb'
-import { pluralize } from 'edit-events/modals/utils'
 import { rootRender, promiseSaveWcif } from 'edit-events'
+import { pluralize, buildActivityCode } from 'edit-events/modals/utils'
 import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from 'edit-events/modals'
 
 export default class EditEvents extends React.Component {
@@ -253,7 +253,7 @@ function addRoundToEvent(wcifEvent) {
   let event = events.byId[wcifEvent.id];
   let nextRoundNumber = wcifEvent.rounds.length + 1;
   wcifEvent.rounds.push({
-    id: `${wcifEvent.id}-${nextRoundNumber}`,
+    id: buildActivityCode({ eventId: wcifEvent.id, roundNumber: nextRoundNumber }),
     format: event.recommentedFormat().id,
     timeLimit: DEFAULT_TIME_LIMIT,
     cutoff: null,
