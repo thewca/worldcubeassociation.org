@@ -17,37 +17,92 @@ RSpec.describe "oauth api" do
     verify_access_token access_token
   end
 
-  it 'can authenticate with grant_type authorization' do
-    # Hack around the fact that we aren't allowed to use non HTTPS urls for redirect_uri.
-    oauth_app = FactoryBot.build(:oauth_application, redirect_uri: oauth_authorization_url)
-    oauth_app.save!(validate: false)
-    visit oauth_authorization_path(
-      client_id: oauth_app.uid,
-      redirect_uri: oauth_app.redirect_uri,
-      response_type: "code",
-      scope: "public email",
-    )
+  context "grant_type authorization" do
+    let(:oauth_app) { FactoryBot.create(:oauth_application, redirect_uri: "urn:ietf:wg:oauth:2.0:oob\n#{oauth_authorization_url}") }
 
-    # Pretend we're the user:
-    #  1. Log in
-    fill_in "user_login", with: user.email
-    fill_in "user_password", with: user.password
-    click_button "Sign in"
-    #  2. Authorize the application
-    click_button "Authorize"
+    it 'can authenticate with grant_type authorization' do
+      visit oauth_authorization_path(
+        client_id: oauth_app.uid,
+        redirect_uri: oauth_authorization_url,
+        response_type: "code",
+        scope: "public email",
+      )
 
-    query = Rack::Utils.parse_query(URI.parse(current_url).query)
-    authorization_code = query["code"]
+      # Pretend we're the user:
+      #  1. Log in
+      fill_in "user_login", with: user.email
+      fill_in "user_password", with: user.password
+      click_button "Sign in"
+      #  2. Authorize the application
+      click_button "Authorize"
 
-    # We've now received an authorization_code from the user, lets request an
-    # access_token.
-    post oauth_token_path, params: { grant_type: "authorization_code", client_id: oauth_app.uid, client_secret: oauth_app.secret, code: authorization_code, redirect_uri: oauth_app.redirect_uri }
-    expect(response).to be_success
-    json = JSON.parse(response.body)
-    expect(json['error']).to eq(nil)
-    access_token = json['access_token']
-    expect(access_token).to_not eq(nil)
-    verify_access_token access_token
+      query = Rack::Utils.parse_query(URI.parse(current_url).query)
+      authorization_code = query["code"]
+
+      # We've now received an authorization_code from the user, lets request an
+      # access_token.
+      post oauth_token_path, params: { grant_type: "authorization_code", client_id: oauth_app.uid, client_secret: oauth_app.secret, code: authorization_code, redirect_uri: oauth_authorization_url }
+      expect(response).to be_success
+      json = JSON.parse(response.body)
+      expect(json['error']).to eq(nil)
+      access_token = json['access_token']
+      expect(access_token).to_not eq(nil)
+      verify_access_token access_token
+    end
+
+    it "requires that redirect_uri matches" do
+      visit oauth_authorization_path(
+        client_id: oauth_app.uid,
+        redirect_uri: "http://example.com/different-url",
+        response_type: "code",
+        scope: "public email",
+      )
+
+      # Pretend we're the user:
+      #  1. Log in
+      fill_in "user_login", with: user.email
+      fill_in "user_password", with: user.password
+      click_button "Sign in"
+      #  2. Expect to see a complain about the redirect uri being incorrect
+      expect(page).to have_text "The redirect uri included is not valid."
+    end
+
+    context "with dangerously_allow_any_redirect_uri set" do
+      before(:each) do
+        oauth_app.update!(dangerously_allow_any_redirect_uri: true)
+      end
+
+      it "allows any redirect_uri" do
+        different_redirect_uri = "http://example.com/"
+        visit oauth_authorization_path(
+          client_id: oauth_app.uid,
+          redirect_uri: different_redirect_uri,
+          response_type: "code",
+          scope: "public email",
+        )
+
+        # Pretend we're the user:
+        #  1. Log in
+        fill_in "user_login", with: user.email
+        fill_in "user_password", with: user.password
+        click_button "Sign in"
+        #  2. Authorize the application
+        click_button "Authorize"
+
+        query = Rack::Utils.parse_query(URI.parse(current_url).query)
+        authorization_code = query["code"]
+
+        # We've now received an authorization_code from the user, lets request an
+        # access_token.
+        post oauth_token_path, params: { grant_type: "authorization_code", client_id: oauth_app.uid, client_secret: oauth_app.secret, code: authorization_code, redirect_uri: different_redirect_uri }
+        expect(response).to be_success
+        json = JSON.parse(response.body)
+        expect(json['error']).to eq(nil)
+        access_token = json['access_token']
+        expect(access_token).to_not eq(nil)
+        verify_access_token access_token
+      end
+    end
   end
 
   it 'can authenticate with response_type token (implicit authorization)' do

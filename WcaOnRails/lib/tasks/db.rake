@@ -86,6 +86,18 @@ namespace :db do
           LogTask.log_task "Setting all user passwords to '#{default_password}'" do
             User.update_all encrypted_password: default_encrypted_password
           end
+
+          # Create an OAuth application so people can easily play around with OAuth on staging.
+          Doorkeeper::Application.create!(
+            name: "Example Application for staging",
+            uid: "example-application-id",
+            secret: "example-secret",
+            redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
+            dangerously_allow_any_redirect_uri: true,
+            scopes: Doorkeeper.configuration.scopes.to_s,
+            owner_id: User.find_by_wca_id!("2005FLEI01").id,
+            owner_type: "User",
+          )
         end
       end
     end
