@@ -136,6 +136,26 @@ zh-TW:
     ranking: '前%{ranking}名晉級第%{next_round_number}輪'
     #original_hash: 31ad77c
     percent: '前%{percent}%晉級第%{next_round_number}輪'
+    attempt_result:
+      #original_hash: 03af49c
+      time: '最佳成績 < %{time}晉級第%{next_round_number}輪'
+      #original_hash: 0b4ae7c
+      moves: '最佳成績 < %{moves}步晉級第%{next_round_number}輪'
+      #original_hash: 56c0366
+      points: '最佳成績 > %{points}分晉級第%{next_round_number}輪'
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      zero: '%{count}次還原 < %{time}'
+      other: '%{count}次還原 < %{time}'
+    #original_hash: b49d930
+    moves:
+      zero: '%{count}次還原 < %{moves}步'
+      other: '%{count}次還原 < %{moves}步'
+    #original_hash: eba1b97
+    points:
+      zero: '%{count}次還原 > %{points}分'
+      other: '%{count}次還原 > %{points}分'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -755,6 +775,8 @@ zh-TW:
     doorkeeper:
       applications:
         help:
+          #original_hash: 92e00ff
+          native_redirect_uri: 'Use %{native_redirect_uri} if you want to add localhost URIs'
           #original_hash: 62a0113
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
@@ -794,7 +816,7 @@ zh-TW:
       #original_hash: d8fd3e4
       delegates: WCA代表
       #original_hash: 37b8fdc
-      organizations: 地區性組織
+      organizations: 區域組織
       #original_hash: d790b40
       faq: 常見問題
       #original_hash: a34b69f
@@ -1887,7 +1909,7 @@ zh-TW:
         '1': >-
           世界方塊協會掌管魔術方塊比賽，這些魔術方塊是透過轉動一部份的零件來操控，通常稱為“魔術方塊”。這些魔術方塊當中最有名的就是魯比克方塊，由匈牙利的魯比克教授發明。而當中的一些魔術方塊則被挑選為WCA官方的比賽項目。
         #original_hash: 22c3593
-        '2': 世界方塊協會在世界各地舉辦比賽，幫助地區性組織在各個國家舉辦比賽。
+        '2': 世界方塊協會在世界各地舉辦比賽，幫助區域組織在各個國家舉辦比賽。
         #original_hash: 0902c4a
         '3': 世界方塊協會的任務是<strong>在公平及平等的條件下，在更多國家舉辦更多比賽讓更多人更快樂</strong>。
         #original_hash: 2b993c0
@@ -1929,6 +1951,17 @@ zh-TW:
         name: WCA財政委員會
         #original_hash: 2d4807e
         description: 該團隊負責管理WCA的財政。
+      wec:
+        #original_hash: 83bd1d0
+        name: WCA倫理委員會
+        #original_hash: ec2b9c3
+        description: 該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範。
+      wqac:
+        #original_hash: 8f32116
+        name: WCA品質保證委員會
+        #original_hash: 0171b3b
+        description: >-
+          該委員會的職責是支持並促進WCA內部持續的品質改善，以及應用於全球的品質標準以確保一致的高品質流程、WCA員工、區域組織、比賽主辦人和工作人員。
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA代表</strong>是負責確保WCA比賽符合WCA任務、規則和精神的WCA成員。WCA將代表區別成<strong>WCA高級代表</strong>、<strong>WCA代表</strong>和<strong>WCA代表候選人</strong>%{see_link}。跟WCA代表職責不同的是，WCA高級代表需額外負責管理該地區的代表以及處理地方社群的事務。新上任的代表會先列為WCA代表候選人，並且需要證明他們能成功管理比賽之後才能升任為WCA代表。
@@ -1950,23 +1983,23 @@ zh-TW:
       region: 地區
   regional_organizations:
     #original_hash: 37b8fdc
-    title: 地區性組織
+    title: 區域組織
     #original_hash: ba87c07
-    content: WCA承認以下地區性組織：
+    content: WCA承認以下區域組織：
     how_to:
       #original_hash: fc3af12
-      title: 如何成為WCA地區性組織
+      title: 如何成為WCA區域組織
       #original_hash: bdf57ff
       description: >-
-        WCA承認世界各地的地區性組織，WCA地區性組織的目的是在各地區舉辦WCA比賽及協助WCA活動。我們鼓勵那些想要組成地區性組織的國家在提交申請之前，對該地區有所貢獻。若您想在您的所在地舉辦比賽，請聯絡您附近的WCA代表。
+        WCA承認世界各地的區域組織，WCA區域組織的目的是在各地區舉辦WCA比賽及協助WCA活動。我們鼓勵那些想要組成區域組織的國家在提交申請之前，對該地區有所貢獻。若您想在您的所在地舉辦比賽，請聯絡您附近的WCA代表。
     requirements:
       #original_hash: 1e04fd7
-      title: 成為WCA地區性組織的必要條件
+      title: 成為WCA區域組織的必要條件
       list:
         #original_hash: 22a9f26
         '1': 經常地在該地區舉辦或協助WCA比賽的組織
         #original_hash: 8c5a7fe
-        '2': 經常地在各大洲舉辦的洲際WCA比賽有所貢獻的地區性組織
+        '2': 經常地在各大洲舉辦的洲際WCA比賽有所貢獻的區域組織
         #original_hash: 5913cd0
         '3': 尊重並實施由WCA章程與規則所制定的目標
         #original_hash: 0c3576b
@@ -1979,10 +2012,10 @@ zh-TW:
       #original_hash: 4da829b
       title: 申請說明
       #original_hash: 7ae038e
-      description: 申請地區性組織之前，該地區需要提交一份完整的申請書給WCA董事會，內容包含以下所有細節。
+      description: 申請區域組織之前，該地區需要提交一份完整的申請書給WCA董事會，內容包含以下所有細節。
       list:
         #original_hash: 1a9d544
-        '1': 地區性組織的名稱
+        '1': 區域組織的名稱
         #original_hash: a9bf3f4
         '2': 官方地址與聯絡資訊
         #original_hash: 2a029e9
@@ -1990,7 +2023,7 @@ zh-TW:
         #original_hash: a5a2771
         '4': 主要幹部名單
         #original_hash: 1186ebf
-        '5': 完整描述地區性組織所涵蓋的範圍
+        '5': 完整描述區域組織所涵蓋的範圍
         #original_hash: 826e371
         '6': 一份描述過去與現有的WCA相關活動報告
   contact:
@@ -2040,6 +2073,12 @@ zh-TW:
     wfc:
       #original_hash: 3ec8256
       info_html: WCA財政委員會負責WCA內的所有財政。 他們按照獲批准的年度預算提案來管理WCA的財務和帳目，這也是他們必須定期繳交的工作。
+    wec:
+      #original_hash: ec2b9c3
+      info_html: 該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範。
+    wqac:
+      #original_hash: 0171b3b
+      info_html: 該委員會的職責是支持並促進WCA內部持續的品質改善，以及應用於全球的品質標準以確保一致的高品質流程、WCA員工、區域組織、比賽主辦人和工作人員。
   score_tools:
     #original_hash: ea9d41d
     title: WCA成績輸入工具
@@ -2257,12 +2296,12 @@ zh-TW:
         '2': 兩場比賽在不同國家舉行。
         #original_hash: 7b2c099
         '3': 在過去的12個月當中，比賽場地方圓100公里以內少於16場比賽。
-      #original_hash: 9908e21
-      content2: “多地同時的FMC比賽”為僅有FMC項目且同時在多個不同場地舉行的WCA比賽。
+      #original_hash: 5c5cf04
+      content2: “多地同時的3x3x3最少步數解比賽”為僅有3x3x3最少步數解項目且同時在多個不同場地舉行的WCA比賽。
       olist2:
         '1':
-          #original_hash: 6f68690
-          content1: 多地同時的FMC比賽不得為其他正規比賽的一部份。
+          #original_hash: 316fd13
+          content1: 多地同時的3x3x3最少步數解比賽不得為其他正規比賽的一部份。
           alist1:
             #original_hash: 75aa0c7
             1a: 兩者舉辦的時段不得重疊。
@@ -2272,8 +2311,8 @@ zh-TW:
           alist1:
             #original_hash: 8f532bb
             2a: 兩場比賽之間應至少間隔5天以上，或
-            #original_hash: 4ed931b
-            2b: 其他比賽不能有最少步項目。
+            #original_hash: e14e11e
+            2b: 其他比賽不能有3x3x3最少步數解項目。
     paragraph-events:
       #original_hash: b16c5f1
       title: 公告項目
