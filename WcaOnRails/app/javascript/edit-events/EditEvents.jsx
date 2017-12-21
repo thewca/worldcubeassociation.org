@@ -202,7 +202,7 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
       <div className="input-group">
         <select
           className="form-control input-xs"
-          name="select-round-count"
+          name="selectRoundCount"
           value={wcifEvent.rounds.length}
           onChange={e => setRoundCount(parseInt(e.target.value))}
         >

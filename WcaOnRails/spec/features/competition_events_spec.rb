@@ -16,7 +16,7 @@ RSpec.feature "Competition events management" do
     visit "/competitions/#{competition.id}/events/edit"
     within_event_panel("333") do
       click_button "Add event"
-      select("1 round", from: "select-round-count")
+      select("1 round", from: "selectRoundCount")
     end
     save
     competition.reload
@@ -97,7 +97,7 @@ RSpec.feature "Competition events management" do
 
     scenario "change advancement condition to top 12 people", js: true do
       # Add a second round of 333 so we can set an advancement condition on round 1.
-      within_event_panel("333") { select("2 rounds", from: "select-round-count") }
+      within_event_panel("333") { select("2 rounds", from: "selectRoundCount") }
 
       within_round("333", 1) { find("[name=advancementCondition]").click }
 
