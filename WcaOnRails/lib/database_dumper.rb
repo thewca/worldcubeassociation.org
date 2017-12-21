@@ -265,6 +265,7 @@ module DatabaseDumper
           time_limit
           cutoff
           advancement_condition
+          scramble_group_count
           created_at
           updated_at
         ),

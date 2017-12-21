@@ -420,8 +420,13 @@ button.saving {
 // Modified from https://stackoverflow.com/a/22920590
 .input-xs {
   height: 22px;
-  padding: 2px 0;
+  padding: 2px 5px;
   font-size: 12px;
   line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
   border-radius: 3px;
+}
+
+select.input-xs {
+  padding-left: 0;
+  padding-right: 0;
 }

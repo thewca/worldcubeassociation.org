@@ -97,6 +97,7 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
           <tr>
             <th>#</th>
             <th className="text-center">Format</th>
+            <th className="text-center">Scramble Groups</th>
             {event.canChangeTimeLimit && <th className="text-center">Time Limit</th>}
             <th className="text-center">Cutoff</th>
             <th className="text-center">To Advance</th>
@@ -113,6 +114,12 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
               rootRender();
             };
 
+            let scrambleGroupCountChanged = e => {
+              let newScrambleGroupCount = parseInt(e.target.value);
+              wcifRound.scrambleGroupCount = newScrambleGroupCount;
+              rootRender();
+            };
+
             let abbreviate = str => {
               return str.split(" ").map(word => word[0]).join("");
             };
@@ -124,6 +131,10 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
                   <select name="format" className="form-control input-xs" value={wcifRound.format} onChange={roundFormatChanged}>
                     {event.formats().map(format => <option key={format.id} value={format.id}>{abbreviate(format.name)}</option>)}
                   </select>
+                </td>
+
+                <td className="text-center">
+                  <input name="scrambleGroupCount" className="form-control input-xs" type="number" min={1} value={wcifRound.scrambleGroupCount} onChange={scrambleGroupCountChanged} />
                 </td>
 
                 {event.canChangeTimeLimit && (
@@ -260,5 +271,6 @@ function addRoundToEvent(wcifEvent) {
     advancementCondition: null,
     results: [],
     groups: [],
+    scrambleGroupCount: 1,
   });
 }
