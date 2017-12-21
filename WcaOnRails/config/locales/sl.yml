@@ -136,6 +136,35 @@ sl:
     ranking: 'Prvih %{ranking} napreduje v rundo %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Prvih %{percent}% napreduje v rundo %{next_round_number}'
+    attempt_result:
+      #original_hash: 03af49c
+      time: 'Najboljši poskus ≤ %{time} napreduje v rundo %{next_round_number}'
+      #original_hash: 0b4ae7c
+      moves: 'najboljši poskus ≤ %{moves} potez napreduje v rundo %{next_round_number}'
+      #original_hash: 56c0366
+      points: 'Najboljši poskus ≥ %{points} točk napreduje v rundo %{next_round_number}'
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      other: '%{count} poskusov za < %{time}'
+      few: '%{count} poskusi za < %{time}'
+      two: '%{count} poskusa za < %{time}'
+      one: '%{count} poskus za < %{time}'
+      zero: '%{count} poskusov za < %{time}'
+    #original_hash: b49d930
+    moves:
+      other: '%{count} poskusov za < %{moves} potez'
+      few: '%{count} poskusi za < %{moves} potez'
+      two: '%{count} poskusa za < %{moves} potez'
+      one: '%{count} poskus za < %{moves} potez'
+      zero: '%{count} poskusov za < %{moves} potez'
+    #original_hash: eba1b97
+    points:
+      other: '%{count} poskusov za > %{points} točk'
+      few: '%{count} poskusi za > %{points} točk'
+      two: '%{count} poskusa za > %{points} točk'
+      one: '%{count} poskus za > %{points} točk'
+      zero: '%{count} poskusov za > %{points} točk'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -2248,6 +2277,22 @@ sl:
         name: WCA Finančni Komite
         #original_hash: 2d4807e
         description: Ta ekipa je odgovorna za upravljanje financ WCA
+      wec:
+        #original_hash: 83bd1d0
+        name: WCA komite za etiko
+        #original_hash: ec2b9c3
+        description: >-
+          Ta komite ima vlogo zagotavljanja, da vse procedure, ki jim sledi WCA
+          ekipa in zunanja ekipa, upoštevajo Etični zakonik.
+      wqac:
+        #original_hash: 8f32116
+        name: WCA komite za zagotavljanje kakovosti
+        #original_hash: 0171b3b
+        description: >-
+          Ta komite ima vlogo podpore in promocije raznih izboljšanj kvalitete
+          znotraj WCA kakor tudi zagotavljanje konsistentnosti v kvaliteti in
+          procesih WCA ekipe, regionalnih organizacij in organizatorjev
+          tekmovanj.
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA Delegati</strong> so člani WCA, ki so odgovorni, da vsa WCA
@@ -2402,6 +2447,17 @@ sl:
       info_html: >-
         WFC je odgovoren za vse, kar se zadeva financ znotraj WCA organizacije.
         Dnevno upravljajo s financami in računi WCA skladno z letnim bugetom.
+    wec:
+      #original_hash: ec2b9c3
+      info_html: >-
+        Ta komite zagotavlja, da vse procedure, ki jim sledi WCA ekipa in
+        zunanja ekip upoštevajo Etični zakonik.
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        Ta komite ima vlogo podpore in promocije raznih izboljšanj kvalitete
+        znotraj WCA kakor tudi zagotavljanje konsistentnosti v kvaliteti in
+        procesih WCA ekipe, regionalnih organizacij in organizatorjev tekmovanj.
   score_tools:
     #original_hash: ea9d41d
     title: WCA orodja za beleženje rezultatov
@@ -2701,16 +2757,16 @@ sl:
         '2': Dve tekmovanji se nahajata v različnih državah.
         #original_hash: 7b2c099
         '3': V zadnjih 12 mesecih je bilo v območju 100 km manj kot 16 tekmovanj.
-      #original_hash: 9908e21
+      #original_hash: 5c5cf04
       content2: >-
-        "FMC simultana tekmovanja" so WCA tekmovanja, ki imajo samo FMC
-        disciplino  in potekajo hkrati na večih lokacijah.
+        "3x3x3 FMC simultana tekmovanja" so WCA tekmovanja, ki imajo samo FMC
+        disciplin  in potekajo hkrati na večih lokacijah.
       olist2:
         '1':
-          #original_hash: 6f68690
+          #original_hash: 316fd13
           content1: >-
-            Simultana FMC tekmovanja ne morejo biti del katerega koli drugega
-            tekmovanja.
+            3x3x3 Simultana FMC tekmovanja ne morejo biti del katerega koli
+            drugega tekmovanja.
           alist1:
             #original_hash: 75aa0c7
             1a: Časovni okvir obeh tekmovanj se ne sme prekrivati.
@@ -2722,8 +2778,8 @@ sl:
           alist1:
             #original_hash: 8f532bb
             2a: 'morata biti oba tekmovanja vsaj 5 dni narazen, ali'
-            #original_hash: 4ed931b
-            2b: drugo tekmovanje ne sme imeti FMC discipline.
+            #original_hash: e14e11e
+            2b: drugo tekmovanje ne sme imeti 3x3x3 FMC discipline.
     paragraph-events:
       #original_hash: b16c5f1
       title: Objavljanje disciplin
