@@ -19,7 +19,7 @@ RSpec.describe "Competition WCIF" do
   let(:delegate) { competition.delegates.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { RankingCondition.new(16) }
-  let!(:round333_1) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance) }
+  let!(:round333_1) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_group_count: 16) }
   let!(:round333_2) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 2) }
   let!(:round444_1) { FactoryBot.create(:round, competition: competition, event_id: "444", number: 1) }
   let!(:round333fm_1) { FactoryBot.create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
@@ -55,6 +55,7 @@ RSpec.describe "Competition WCIF" do
                   "type" => "ranking",
                   "level" => 16,
                 },
+                "scrambleGroupCount" => 16,
               },
               {
                 "id" => "333-r2",
@@ -65,6 +66,7 @@ RSpec.describe "Competition WCIF" do
                 },
                 "cutoff" => nil,
                 "advancementCondition" => nil,
+                "scrambleGroupCount" => 1,
               },
             ],
           },
@@ -77,6 +79,7 @@ RSpec.describe "Competition WCIF" do
                 "timeLimit" => nil,
                 "cutoff" => nil,
                 "advancementCondition" => nil,
+                "scrambleGroupCount" => 1,
               },
             ],
           },
@@ -89,6 +92,7 @@ RSpec.describe "Competition WCIF" do
                 "timeLimit" => nil,
                 "cutoff" => nil,
                 "advancementCondition" => nil,
+                "scrambleGroupCount" => 1,
               },
             ],
           },
@@ -104,6 +108,7 @@ RSpec.describe "Competition WCIF" do
                 },
                 "cutoff" => nil,
                 "advancementCondition" => nil,
+                "scrambleGroupCount" => 1,
               },
             ],
           },
@@ -158,6 +163,7 @@ RSpec.describe "Competition WCIF" do
             },
             "cutoff" => nil,
             "advancementCondition" => nil,
+            "scrambleGroupCount" => 1,
           },
         ],
       }
@@ -182,6 +188,7 @@ RSpec.describe "Competition WCIF" do
         },
         "cutoff" => nil,
         "advancementCondition" => nil,
+        "scrambleGroupCount" => 1,
       }
 
       competition.set_wcif_events!(wcif["events"])
@@ -223,6 +230,15 @@ RSpec.describe "Competition WCIF" do
 
       wcif_333mbf_event["rounds"][0]["timeLimit"] = nil
       wcif_333fm_event["rounds"][0]["timeLimit"] = nil
+
+      expect(competition.to_wcif["events"]).to eq(wcif["events"])
+    end
+
+    it "can set scrambleGroupCount" do
+      wcif_333mbf_event = wcif["events"].find { |e| e["id"] == "333mbf" }
+      wcif_333mbf_event["rounds"][0]["scrambleGroupCount"] = 32
+
+      competition.set_wcif_events!(wcif["events"])
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end

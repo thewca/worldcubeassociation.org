@@ -42,8 +42,13 @@
   }
 
   .panel-body {
-    select {
+    select[name="format"] {
       width: 100%;
+    }
+
+    input[name="scrambleGroupCount"] {
+      display: inline-block;
+      width: 50px;
     }
   }
 }

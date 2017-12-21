@@ -76,6 +76,7 @@ class Round < ApplicationRecord
       time_limit: TimeLimit.load(wcif["timeLimit"]),
       cutoff: Cutoff.load(wcif["cutoff"]),
       advancement_condition: AdvancementCondition.load(wcif["advancementCondition"]),
+      scramble_group_count: wcif["scrambleGroupCount"],
     }
   end
 
@@ -90,6 +91,7 @@ class Round < ApplicationRecord
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
+      "scrambleGroupCount" => self.scramble_group_count,
     }
   end
 
@@ -104,6 +106,7 @@ class Round < ApplicationRecord
         "advancementCondition" => AdvancementCondition.wcif_json_schema,
         "roundResults" => { "type" => "array" }, # TODO: expand on this
         "groups" => { "type" => "array" }, # TODO: expand on this
+        "scrambleGroupCount" => { "type" => "integer" },
       },
     }
   end
