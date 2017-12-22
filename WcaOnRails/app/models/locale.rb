@@ -31,10 +31,7 @@ class Locale < SimpleDelegator
   # Adapted from https://github.com/jonatanklosko/internationalize/blob/7090c90d4d8e4571025c3be4484b5f668cbb6501/client/app/services/translation-utils.service.js#L195-L221
   def decorate_with_hashes(text, node, prefix)
     node.each do |key, value|
-      if value.nil?
-        node.delete(key)
-        next
-      elsif leaf?(value)
+      if leaf?(value)
         # We want leaves to have at least "_translated", and maybe later "_hash"
         node[key] = { "_translated" => value }
       else
@@ -90,7 +87,7 @@ class Locale < SimpleDelegator
     missing_keys = []
     outdated_keys = []
     base.each do |key, value|
-      unless translation.key?(key)
+      if !translation.key?(key) || (leaf?(value) && translation[key]["_translated"].nil?)
         if leaf?(value)
           missing_keys << fully_qualified_name(context, key)
         else
