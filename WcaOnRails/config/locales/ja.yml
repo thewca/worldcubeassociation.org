@@ -137,25 +137,25 @@ ja:
     #original_hash: 31ad77c
     percent: '上位%{percent}%が%{next_round_number}回戦に進出します。'
     attempt_result:
-      #original_hash: 2f332eb
-      time: '単発記録が%{time}以下の場合%{next_round_number}回戦に進出します。'
-      #original_hash: efa4ad1
-      moves: '単発%{moves}手以下の場合%{next_round_number}回戦に進出します。'
-      #original_hash: 29f8453
-      points: '単発%{points}点以上の場合%{next_round_number}回戦に進出します。'
+      #original_hash: 03af49c
+      time: '単発記録が%{time}未満の場合%{next_round_number}回戦に進出します。'
+      #original_hash: 0b4ae7c
+      moves: '単発%{moves}手未満の場合%{next_round_number}回戦に進出します。'
+      #original_hash: 56c0366
+      points: '単発%{points}点を超える場合%{next_round_number}回戦に進出します。'
   cutoff:
-    #original_hash: 38a40f6
+    #original_hash: cf458e7
     time:
-      zero: '最初の %{count} 試技までに %{time} 以下'
-      other: '最初の %{count} 試技までに %{time} 以下'
-    #original_hash: 6f99fa6
+      zero: '最初の %{count} 試技までに %{time} 未満'
+      other: '最初の %{count} 試技までに %{time} 未満'
+    #original_hash: b49d930
     moves:
-      zero: '最初の %{count} 試技までに %{moves} 手以下'
-      other: '最初の %{count} 試技までに %{moves} 手以下'
-    #original_hash: 1c7c5f1
+      zero: '最初の %{count} 試技までに %{moves} 手未満'
+      other: '最初の %{count} 試技までに %{moves} 手未満'
+    #original_hash: eba1b97
     points:
-      zero: '最初の %{count} 試技までに %{points} ポイント以上'
-      other: '最初の %{count} 試技までに %{points} ポイント以上'
+      zero: '最初の %{count} 試技までに %{points} ポイント超'
+      other: '最初の %{count} 試技までに %{points} ポイント超'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -1995,6 +1995,18 @@ ja:
         name: WCA Financial Committee
         #original_hash: 2d4807e
         description: このチームは WCA の会計を担当します。
+      wec:
+        #original_hash: 83bd1d0
+        name: WCA Ethics Committee
+        #original_hash: ec2b9c3
+        description: この委員会は「WCA スタッフ」と「外部スタッフ」によるすべての手続きが倫理規定を遵守しているかを確かめる役割を担っています。
+      wqac:
+        #original_hash: 8f32116
+        name: WCA Quality Assurance Committee
+        #original_hash: 0171b3b
+        description: >-
+          この委員会はWCA内での永続的な品質の向上、およびプロセス・WCA
+          スタッフ・地域組織・大会運営者・大会スタッフを高い品質に保つための品質規格を世界中に適用することをサポートし促進する役割を担います。
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA 代理人</strong>は、すべての WCA 公式大会が WCA
@@ -2139,6 +2151,14 @@ ja:
     wfc:
       #original_hash: 3ec8256
       info_html: WFC は WCA の会計に関するすべてを担当します。WCA の会計を年次予算案にしたがって管理します。
+    wec:
+      #original_hash: ec2b9c3
+      info_html: この委員会は「WCA スタッフ」と「外部スタッフ」によるすべての手続きが倫理規定を遵守しているかを確かめる役割を担っています。
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        この委員会はWCA内での永続的な品質の向上、およびプロセス・WCA
+        スタッフ・地域組織・大会運営者・大会スタッフを高い品質に保つための品質規格を世界中に適用することをサポートし促進する役割を担います。
   score_tools:
     #original_hash: ea9d41d
     title: WCA 記録ツール
@@ -2411,12 +2431,12 @@ ja:
         '2': 異なる国で開催される。
         #original_hash: 7b2c099
         '3': 申請された開催地から半径 100 km の範囲で過去 12 か月の間に開催された大会数が 16 未満である。
-      #original_hash: 9908e21
-      content2: 「FMC 同時開催大会」とは、競技種目が FMC のみで複数の場所で同時に開催される WCA の大会のことを指します。
+      #original_hash: 5c5cf04
+      content2: 「3x3x3 最少手数同時開催大会」とは、競技種目が 3x3x3 最少手数のみで複数の場所で同時に開催される WCA の大会のことを指します。
       olist2:
         '1':
-          #original_hash: 6f68690
-          content1: FMC 同時開催大会は、別の大会の一部として開催することはできません。
+          #original_hash: 316fd13
+          content1: 3x3x3 最少手数同時開催大会は、別の大会の一部として開催することはできません。
           alist1:
             #original_hash: 75aa0c7
             1a: これらの大会は同時に開催できません。
@@ -2426,8 +2446,8 @@ ja:
           alist1:
             #original_hash: 8f532bb
             2a: それらの大会の間は 5 日以上空いていることが望ましい、または
-            #original_hash: 4ed931b
-            2b: FMC 同時開催大会でない方の大会では FMC 種目を開催してはならない。
+            #original_hash: e14e11e
+            2b: 3x3x3 最少手数同時開催大会でない方の大会では 3x3x3 最少手数種目を開催してはならない。
     paragraph-events:
       #original_hash: b16c5f1
       title: 競技種目の告知
