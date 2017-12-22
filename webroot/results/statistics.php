@@ -50,7 +50,7 @@ function showResults () {
   echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>There are also three separate statistics pages: <a href='misc/evolution/'>Evolution of Records</a>, <a href='misc/sum_of_ranks/'>Sum of Ranks</a>, and <a href='misc/missing_averages/'>Missing Averages</a>.</p>";
   #--- TODO: Please remove the "New" label after 18 July 2017.
   echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'><span style='color: red;border: 2px solid red;padding: 2px;border-radius: 5px;font-size: 12px;'>New</span> You can find connections between cubers (aka Six Degrees) <a href='/relations'>here</a>.</p>";
-  echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on " . wcaDate() . ".</p>";
+  echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-weight:normal'>This page is automatically updated every 24 hours. Last Update: " . wcaDate() . ".</p>";
 
   #--- Get all the list definitions.
   defineAllLists();
