@@ -914,6 +914,7 @@ class Competition < ApplicationRecord
       end_date: end_date,
       delegates: delegates,
       organizers: organizers,
+      uses_wca_registration: use_wca_registration,
     }
   end
 end
