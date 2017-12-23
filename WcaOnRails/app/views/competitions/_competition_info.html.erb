@@ -75,6 +75,11 @@
       </dd>
     </dl>
 
+    <dl class="dl-horizontal">
+      <dt><%= t 'competitions.nav.menu.competitors' %></dt>
+      <dd><%= @competition.competitors.count %></dd>
+    </dl>
+
     <% media = competition.media.accepted %>
     <% [:report, :article, :multimedia].each do |media_type| %>
       <% media_of_type = media.send(media_type).order(timestampDecided: :desc) %>
