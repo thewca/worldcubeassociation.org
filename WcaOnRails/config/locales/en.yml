@@ -1228,7 +1228,7 @@ en:
       #context: WEC
       wec:
         name: "WCA Ethics Committee"
-        description: "This committee has the role to ensure that all the procedures followed by the WCA Staff and External Staff abide by its Code of Ethics."
+        description: "This committee's role is to ensure that all the procedures followed by the WCA Staff and External Staff abide by its Code of Ethics, and to perform independent investigations if the conduct of any of these members is not compliant with said Code of Ethics. Such investigations can be requested by any Registered Speedcubers, for whom the WEC is a confidant. This committee also functions as the board of appeal if anyone involved disagrees with a decision made by the WCA Disciplinary Committee."
       #context: WQAC
       wqac:
         name: "WCA Quality Assurance Committee"
