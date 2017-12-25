@@ -132,7 +132,7 @@ GEM
     crass (1.0.3)
     css_parser (1.6.0)
       addressable
-    daemons (1.2.5)
+    daemons (1.2.6)
     database_cleaner (1.6.2)
     debug_inspector (0.0.3)
     delayed_job (4.1.3)
