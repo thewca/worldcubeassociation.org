@@ -40,7 +40,13 @@ export default {
     let onChangeAggregator = () => {
       let type = typeInput.value;
       let newAdvancementCondition = null;
-      if(type !== "") {
+      if(type == "percent") {
+        let input = inputByType[type];
+        newAdvancementCondition = {
+          type,
+          level: input ? parseInt(input.value) : 75,
+        };
+      } else if(type !== "") {
         let input = inputByType[type];
         newAdvancementCondition = {
           type,
