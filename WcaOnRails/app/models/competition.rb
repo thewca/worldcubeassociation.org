@@ -857,6 +857,7 @@ class Competition < ApplicationRecord
       "formatVersion" => "1.0",
       "id" => id,
       "name" => name,
+      "shortName" => cellName,
       "persons" => persons_wcif,
       "events" => competition_events.order(:event_id).map(&:to_wcif),
     }
