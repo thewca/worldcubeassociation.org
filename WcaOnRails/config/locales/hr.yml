@@ -136,6 +136,41 @@ hr:
     ranking: 'Najboljih %{ranking} prolazi u slijedeću rundu %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Najboljih %{percent}% prolazi u slijedeću rundu %{next_round_number}'
+    attempt_result:
+      #original_hash: 03af49c
+      time: >-
+        Najbolje rješenje < %{time} prolazi u slijedeću rundu
+        %{next_round_number}
+      #original_hash: 0b4ae7c
+      moves: >-
+        Najbolje rješenje < %{moves} prolazi u slijedeću rundu
+        %{next_round_number}
+      #original_hash: 56c0366
+      points: >-
+        Najbolje rješenje > %{points} bodova proalzi u slijedeću rundu
+        %{next_round_number}
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      zero: '%{count} pokušaja u vrijeme od < %{time}'
+      one: '%{count} pokušaj u vrijeme od < %{time}'
+      few: '%{count} pokušaja u vrijeme od < %{time}'
+      many: '%{count} pokušaja u vrijeme od < %{time}'
+      other: '%{count} pokušaja u vrijeme od < %{time}'
+    #original_hash: b49d930
+    moves:
+      zero: '%{count} pokušaja za dobiti < %{moves} poteza'
+      one: '%{count} pokušaj za dobiti < %{moves} poteza'
+      few: '%{count} pokušaja za dobiti < %{moves} poteza'
+      many: '%{count} pokušaja za dobiti < %{moves} poteza'
+      other: '%{count} pokušaja za dobiti < %{moves} poteza'
+    #original_hash: eba1b97
+    points:
+      zero: '%{count} pokušaja za dobiti  > %{points} bodova'
+      one: '%{count} pokušaj za dobiti  > %{points} bodova'
+      few: '%{count} pokušaja za dobiti  > %{points} bodova'
+      many: '%{count} pokušaja za dobiti  > %{points} bodova'
+      other: '%{count} pokušaja za dobiti  > %{points} bodova'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -2240,6 +2275,23 @@ hr:
         name: WCA Financijski Odbor
         #original_hash: 2d4807e
         description: Ovaj tim je zadužen za upravljanje financijama WCA
+      wec:
+        #original_hash: 83bd1d0
+        name: WCA Etički odbor
+        #original_hash: ec2b9c3
+        description: >-
+          Ovaj odbor ima ulogu osigurati sve da procedure od strane WCA Osoblja
+          i Eksternog Osoblja budu po etičkom kodeksu.
+      wqac:
+        #original_hash: 8f32116
+        name: WCA Povjerenstvo za kvalitetu
+        #original_hash: 0171b3b
+        description: >-
+          Ovo povjerenstvo ima ulogu u pružanju podrške i promicanju
+          kontinuiranog poboljšanja kvalitete unutar WCA, kao i primjene
+          standarda kvalitete širom svijeta kako bi se osigurala dosljedna
+          visoka kvaliteta procesa, WCA Osoblja, regionalnih organizacija,
+          organizatora natjecanja i natjecateljskog osoblja.
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA Delegati</strong> su članovi WCA koji su odgovorni da se sva
@@ -2400,6 +2452,19 @@ hr:
         WFC je odgovoran za sve vezano uz financije WCA. Oni upravljaju svim
         financijama i računima WCA u sukladnosti s prihvaćenim godišnjim
         proračunom, koji im je ujedno i obaveza.
+    wec:
+      #original_hash: ec2b9c3
+      info_html: >-
+        Odbor ima ulogu kako bi se osiguralo da svi postupci, koje slijede WCA
+        Osoblje i vanjski suradnici, poštuju etički kodeks.
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        Ovo povjerenstvo ima ulogu u pružanju podrške i promicanju kontinuiranog
+        poboljšanja kvalitete unutar WCA, kao i primjene standarda kvalitete
+        širom svijeta kako bi se osigurala dosljedna visoka kvaliteta procesa,
+        WCA Osoblja, regionalnih organizacija, organizatora natjecanja i
+        natjecateljskog osoblja.
   score_tools:
     #original_hash: ea9d41d
     title: WCA alati za bilježenje rezultata
