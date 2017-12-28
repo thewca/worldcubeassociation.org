@@ -45,7 +45,7 @@ da:
     #original_hash: 29d5411
     333bf: 3x3x3 Med Bind For Øjnene
     #original_hash: 0a5e7bf
-    333fm: 3x3x3 i Færreste Træk
+    333fm: 3x3x3 i Færrest Træk
     #original_hash: 31ed23f
     333oh: 3x3x3 Med En Hånd
     #original_hash: be41d70
@@ -136,6 +136,33 @@ da:
     ranking: 'Top %{ranking} kommer videre til næste runde %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Top %{percent}% kommer videre til næste runde %{next_round_number}'
+    attempt_result:
+      #original_hash: 03af49c
+      time: 'Bedste tid ≤ %{time} kommer videre til runde %{next_round_number}'
+      #original_hash: 0b4ae7c
+      moves: >-
+        Bedste resultat ≤ %{moves} træk kommer videre til runde
+        %{next_round_number}
+      #original_hash: 56c0366
+      points: >-
+        Bedste resultat ≥ %{points} point kommer videre til runde
+        %{next_round_number}
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      zero: '%{count} prøver at få < %{time}'
+      one: '%{count} prøver at få < %{time}'
+      other: '%{count} prøver at få < %{time}'
+    #original_hash: b49d930
+    moves:
+      zero: '%{count} prøver at få < %{moves} moves'
+      one: '%{count} prøver at få < %{moves} moves'
+      other: '%{count} prøver at få < %{moves} moves'
+    #original_hash: eba1b97
+    points:
+      zero: '%{count} prøver at få > %{points} points'
+      one: '%{count} prøver at få > %{points} points'
+      other: '%{count} prøver at få > %{points} points'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -2217,9 +2244,25 @@ da:
           ansvar, rummelighed og åbenhed.
       wfc:
         #original_hash: 9cb13de
-        name: WCA Finansiel Komiten
+        name: WCA Finansiel Komité
         #original_hash: 2d4807e
         description: Dette hold er ansvarlig for at holde styr over WCA's økonomi
+      wec:
+        #original_hash: 83bd1d0
+        name: WCA Etik Komité
+        #original_hash: ec2b9c3
+        description: >-
+          Denne komité har rollen at sikre sig, at alle procedure fulgt a WCA
+          Personalet og Eksternt Personale, overholder WCA's Etiske Regler.
+      wqac:
+        #original_hash: 8f32116
+        name: WCA Kvalitets Forsikrings Komité
+        #original_hash: 0171b3b
+        description: >-
+          Denne Komité har rollen at støtte og fremme kvalitets forbedring i
+          WCA, og at sikre verdensomspændende kvalitet hos WCA Personale,
+          Regionale Organisationer, Konkurrence Arrangører og Konkurrence
+          Personale.
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA Delegater</strong> er medlemmer af WCA som er ansvarlige for
@@ -2391,6 +2434,17 @@ da:
         WFC er ansvarlige for alt hvad der har noget med finanserne inde i WCA.
         De håndtere finanserne og WCA's kontoer, som er i overensstemmelse med
         det normale budget foreslag, som også er deres arbejde at give normalt.
+    wec:
+      #original_hash: ec2b9c3
+      info_html: >-
+        Denne komité har rollen at sikre sig, at alle procedure fulgt a WCA
+        Personalet og Eksternt Personale, overholder WCA's Etiske Regler.
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        Denne Komité har rollen at støtte og fremme kvalitets forbedring i WCA,
+        og at sikre verdensomspændende kvalitet hos WCA Personale, Regionale
+        Organisationer, Konkurrence Arrangører og Konkurrence Personale.
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score Taking tools
