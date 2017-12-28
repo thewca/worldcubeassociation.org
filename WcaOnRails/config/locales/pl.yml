@@ -45,7 +45,7 @@ pl:
     #original_hash: 29d5411
     333bf: 3x3x3 Bez patrzenia
     #original_hash: 0a5e7bf
-    333fm: 3x3x3 Najmniej ruchów
+    333fm: 3x3x3 Najmniejsza liczba ruchów
     #original_hash: 31ed23f
     333oh: 3x3x3 Jedną ręką
     #original_hash: be41d70
@@ -136,6 +136,39 @@ pl:
     ranking: 'Najlepsze %{ranking} osób awansuje do %{next_round_number}. rundy'
     #original_hash: 31ad77c
     percent: 'Najlepsze %{percent}% osób awansuje do %{next_round_number}. rundy'
+    attempt_result:
+      #original_hash: 03af49c
+      time: 'Najlepszy czas < %{time}  awansuje do %{next_round_number}. rundy'
+      #original_hash: 0b4ae7c
+      moves: >-
+        Najlepsze ułożenie < %{moves} ruchów awansuje do %{next_round_number}.
+        rundy
+      #original_hash: 56c0366
+      points: >-
+        Najlepszy wynik > %{points} punktów awansuje do %{next_round_number}.
+        rundy
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      zero: '%{count} prób na uzyskanie < %{time}'
+      one: '%{count} próba na uzyskanie < %{time}'
+      few: '%{count} próby na uzyskanie < %{time}'
+      many: '%{count} prób na uzyskanie < %{time}'
+      other: '%{count} próby na uzyskanie < %{time}'
+    #original_hash: b49d930
+    moves:
+      zero: '%{count} prób na uzyskanie < %{moves} ruchów'
+      one: '%{count} próba na uzyskanie < %{moves} ruchów'
+      few: '%{count} próby na uzyskanie < %{moves} ruchów'
+      many: '%{count} prób na uzyskanie < %{moves} ruchów'
+      other: '%{count} próby na uzyskanie < %{moves} ruchów'
+    #original_hash: eba1b97
+    points:
+      zero: '%{count} prób na uzyskanie > %{points} punktów'
+      one: '%{count} próba na uzyskanie > %{points} punktów'
+      few: '%{count} próby na uzyskanie > %{points} punktów'
+      many: '%{count} prób na uzyskanie > %{points} punktów'
+      other: '%{count} próby na uzyskanie > %{points} punktów'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -2287,6 +2320,24 @@ pl:
         name: Komitet Finansowy WCA (WFC)
         #original_hash: 2d4807e
         description: Ten zespół jest odpowiedzialny za zarządzanie finansami WCA
+      wec:
+        #original_hash: 83bd1d0
+        name: Komitet Etyczny WCA
+        #original_hash: ec2b9c3
+        description: >-
+          Ten komitet ma za zadanie dopilnować, aby wszystkie procedury
+          stosowane przez Personel WCA oraz Personel Zewnętrzny podlegały jego
+          Kodeksowi Etycznemu.
+      wqac:
+        #original_hash: 8f32116
+        name: Komitet Zapewniania Jakości WCA
+        #original_hash: 0171b3b
+        description: >-
+          Ten komitet ma za zadanie wspierać i promować ciągłe poprawianie
+          jakości w ramach WCA, jak również światowe stosowanie się do
+          standardów jakości, w celu zapewnienia spójnej wysokiej jakości
+          procesów, Personelu WCA, Organizacji Regionalnych, Organizatorów
+          Zawodów oraz Zespołów Organizacyjnych.
       #original_hash: f2ceade
       delegates_html: >-
         <strong>Delegaci WCA</strong> to członkowie WCA, którzy są
@@ -2453,6 +2504,20 @@ pl:
         WFC jest odpowiedzialny za wszystko związane z finansami w obrębie WCA.
         Zarządza on finansami oraz kontami WCA zgodnie z zatwierdzoną propozycją
         rocznego budżetu, której dostarczaniem zajmują się regularnie.
+    wec:
+      #original_hash: ec2b9c3
+      info_html: >-
+        Ten komitet ma za zadanie dopilnować, aby wszystkie procedury stosowane
+        przez Personel WCA oraz Personel Zewnętrzny podlegały jego Kodeksowi
+        Etycznemu.
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        Ten komitet ma za zadanie wspierać i promować ciągłe poprawianie jakości
+        w ramach WCA, jak również światowe stosowanie się do standardów jakości,
+        w celu zapewnienia spójnej wysokiej jakości procesów, Personelu WCA,
+        Organizacji Regionalnych, Organizatorów Zawodów oraz Zespołów
+        Organizacyjnych.
   score_tools:
     #original_hash: ea9d41d
     title: Narzędzia Operujące na Wynikach WCA
@@ -2759,16 +2824,17 @@ pl:
         '3': >-
           W przeciągu ostatnich 12 miesięcy miało miejsce mniej niż 16 zawodów w
           promieniu 100 km od danych zawodów.
-      #original_hash: 9908e21
+      #original_hash: 5c5cf04
       content2: >-
-        "Równoległe zawody FM" to zawody WCA, na których jest wyłącznie
-        konkurencja FM oraz odbywają się one jednocześnie w różnych miejscach.
+        "Równoległe zawody 3x3x3 Najmniejsza liczba ruchów" to zawody WCA, na
+        których jest wyłącznie konkurencja 3x3x3 Najmniejsza liczba ruchów oraz
+        odbywają się one jednocześnie w różnych miejscach.
       olist2:
         '1':
-          #original_hash: 6f68690
+          #original_hash: 316fd13
           content1: >-
-            Równoległe zawody FM nie mogą być częścią żadnych normalnych
-            zawodów.
+            Równoległe zawody 3x3x3 Najmniejsza liczba ruchów nie mogą być
+            częścią żadnych normalnych zawodów.
           alist1:
             #original_hash: 75aa0c7
             1a: 'Ramy czasowe, w których się odbywają, nie mogą się zazębiać.'
@@ -2780,8 +2846,10 @@ pl:
           alist1:
             #original_hash: 8f532bb
             2a: 'zawody te powinny odbywać się w odstępie co najmniej 5 dni, lub'
-            #original_hash: 4ed931b
-            2b: na drugich z tych zawodów nie może być rozgrywana konkurencja FM.
+            #original_hash: e14e11e
+            2b: >-
+              na drugich z tych zawodów nie może być rozgrywana konkurencja
+              3x3x3 Najmniejsza liczba ruchów.
     paragraph-events:
       #original_hash: b16c5f1
       title: Zapowiadanie konkurencji
