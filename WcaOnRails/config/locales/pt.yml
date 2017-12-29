@@ -136,6 +136,33 @@ pt:
     ranking: 'Top %{ranking} avança para a ronda %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Top %{percent}% avança para a ronda %{next_round_number}'
+    attempt_result:
+      #original_hash: 03af49c
+      time: 'Melhor resolução < %{time} avança para a ronda %{next_round_number}'
+      #original_hash: 0b4ae7c
+      moves: >-
+        Melhor resolução < %{moves} movimentos avança para a ronda
+        %{next_round_number}
+      #original_hash: 56c0366
+      points: >-
+        Melhor resolução > %{points} pontos avança para a ronda
+        %{next_round_number}
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      zero: '%{count} tentativas para obter < %{time}'
+      one: '%{count} tentativa para obter < %{time}'
+      other: '%{count} tentativas para obter < %{time}'
+    #original_hash: b49d930
+    moves:
+      zero: '%{count} tentativas para obter < %{moves} movimentos'
+      one: '%{count} tentativa para obter < %{moves} movimentos'
+      other: '%{count} tentativas para obter < %{moves} movimentos'
+    #original_hash: eba1b97
+    points:
+      zero: '%{count} tentativas para obter > %{points} pontos'
+      one: '%{count} tentativa para obter > %{points} pontos'
+      other: '%{count} tentativas para obter > %{points} pontos'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -2234,6 +2261,24 @@ pt:
         name: Comité Financeiro da WCA
         #original_hash: 2d4807e
         description: Esta equipa é responsável por gerir as finanças da WCA
+      wec:
+        #original_hash: 83bd1d0
+        name: Comité de Ética da WCA
+        #original_hash: ec2b9c3
+        description: >-
+          Este comité tem o papel de assegurar que todos os procedimentos
+          seguidos pelo staff da WCA e o Staff Externo seguem o seu Código de
+          Ética.
+      wqac:
+        #original_hash: 8f32116
+        name: Comité de Garantia de Qualidade da WCA
+        #original_hash: 0171b3b
+        description: >-
+          Este comité tem o papel de apoiar e promover a melhoria contínua da
+          qualidade dentro da WCA, bem como a aplicação mundial de padrões de
+          qualidade para garantir processos consistentes de alta qualidade,
+          Staff da WCA, Organizações Regionais, Organizadores de Competições e
+          Staff de Competições.
       #original_hash: f2ceade
       delegates_html: >-
         <strong>Delegados da WCA</strong> são membros da WCA que são
@@ -2408,6 +2453,19 @@ pt:
         O WFC é responsável por tudo o que respeita às finanças da WCA. Ele gere
         as finanças e as contas da WCA de acordo com o orçamento anual aprovado,
         que também é o seu trabalho, de forma regular.
+    wec:
+      #original_hash: ec2b9c3
+      info_html: >-
+        Este comité tem o papel de assegurar que todos os procedimentos seguidos
+        pelo Staff da WCA e Staff Externo seguem o seu Código de Ética.
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        Este comité tem o papel de apoiar e promover a melhoria contínua da
+        qualidade dentro da WCA, bem como a aplicação mundial de padrões de
+        qualidade para garantir processos consistentes de alta qualidade, Staff
+        da WCA, Organizações Regionais, Organizadores de Competições e Staff de
+        Competições.
   score_tools:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
