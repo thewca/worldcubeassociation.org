@@ -378,6 +378,10 @@ class User < ApplicationRecord
     team_member?('wct')
   end
 
+  def quality_assurance_committee?
+    team_member?('wqac')
+  end
+
   def team_member?(team_friendly_id)
     self.current_team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id).count > 0
   end
@@ -438,7 +442,7 @@ class User < ApplicationRecord
   end
 
   def can_view_crash_course?
-    admin? || board_member? || any_kind_of_delegate? || results_team? || wdc_team? || wrc_team? || communication_team?
+    admin? || board_member? || any_kind_of_delegate? || results_team? || wdc_team? || wrc_team? || communication_team? || quality_assurance_committee?
   end
 
   def can_create_posts?
@@ -446,7 +450,7 @@ class User < ApplicationRecord
   end
 
   def can_update_crash_course?
-    admin? || board_member? || results_team?
+    admin? || board_member? || results_team? || quality_assurance_committee?
   end
 
   def can_manage_competition?(competition)
@@ -469,7 +473,7 @@ class User < ApplicationRecord
   end
 
   def can_create_poll?
-    admin? || board_member? || wrc_team? || wdc_team?
+    admin? || board_member? || wrc_team? || wdc_team? || quality_assurance_committee?
   end
 
   def can_vote_in_poll?
@@ -478,7 +482,7 @@ class User < ApplicationRecord
 
   def can_view_delegate_report?(delegate_report)
     if delegate_report.posted?
-      any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team?
+      any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee?
     else
       delegate_report.competition.delegates.include?(self) || can_admin_results?
     end
