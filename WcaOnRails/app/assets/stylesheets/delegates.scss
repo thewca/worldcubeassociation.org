@@ -33,6 +33,10 @@ tr.candidate-delegate {
 .delegates-stats-table {
   font-size: 13px;
 
+  td {
+    white-space: normal;
+  }
+
   .board_member {
     @extend .alert-success;
   }
@@ -46,22 +50,26 @@ tr.candidate-delegate {
   }
 
   .delegate {
-    max-width: 25%;
+    width: 28%;
   }
 
-  .position,
-  .region {
+  .position {
     width: 15%;
   }
 
+  .region {
+    width: 26%;
+  }
+
   .first,
-  .last {
-    width: 12%;
+  .last,
+  .total,
+  .history {
+    width: 5%;
     text-align: center;
   }
 
-  .total {
-    width: 12%;
-    text-align: center;
+  .phone {
+    width: 11%;
   }
 }
