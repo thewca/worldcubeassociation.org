@@ -621,6 +621,7 @@ en:
         '4': "Your head, but not necessarily the full face, should be visible."
         '5': "The avatar must not include texts other than regular background texts."
         '6': "The avatar must be submitted in correct orientation."
+        '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
 
     #context: when an error occured during the edition
     errors:
