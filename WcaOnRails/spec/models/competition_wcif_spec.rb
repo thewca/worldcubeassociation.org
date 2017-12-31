@@ -9,6 +9,7 @@ RSpec.describe "Competition WCIF" do
       :with_delegate,
       id: "TestComp2014",
       name: "Test Comp 2014",
+      cellName: "Test 2014",
       start_date: "2014-02-03",
       end_date: "2014-02-05",
       external_website: "http://example.com",
@@ -35,6 +36,7 @@ RSpec.describe "Competition WCIF" do
         "formatVersion" => "1.0",
         "id" => "TestComp2014",
         "name" => "Test Comp 2014",
+        "shortName" => "Test 2014",
         "persons" => [delegate.to_wcif(competition)],
         "events" => [
           {

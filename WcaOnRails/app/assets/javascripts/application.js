@@ -27,6 +27,7 @@
 //= require moment/cs.js
 //= require moment/de.js
 //= require moment/es.js
+//= require moment/fi.js
 //= require moment/fr.js
 //= require moment/it.js
 //= require moment/ja.js

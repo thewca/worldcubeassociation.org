@@ -39,12 +39,13 @@ export default {
     let inputByType = {};
     let onChangeAggregator = () => {
       let type = typeInput.value;
+      let defaultValue = { percent: 75, ranking: 0, attemptResult: 0 }[type];
       let newAdvancementCondition = null;
       if(type !== "") {
         let input = inputByType[type];
         newAdvancementCondition = {
           type,
-          level: input ? parseInt(input.value) : 0,
+          level: input ? parseInt(input.value) : defaultValue,
         };
       }
       onChange(newAdvancementCondition);

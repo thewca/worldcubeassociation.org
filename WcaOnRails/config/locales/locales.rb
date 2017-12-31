@@ -18,6 +18,10 @@ module Locales
       "flag_id": "es",
       "name": "Español",
     },
+    "fi": {
+      "flag_id": "fi",
+      "name": "Suomi",
+    },
     "fr": {
       "flag_id": "fr",
       "name": "Français",

@@ -136,6 +136,32 @@ hu:
     ranking: 'Az első %{ranking} fő jut tovább a %{next_round_number}. fordulóba'
     #original_hash: 31ad77c
     percent: 'Az első %{percent}% jut tovább a(z) %{next_round_number}. fordulóba'
+    attempt_result:
+      #original_hash: 03af49c
+      time: >-
+        Legjobb kirakás < %{time} jut tovább a(z) %{next_round_number}.
+        fordulóba
+      #original_hash: 0b4ae7c
+      moves: >-
+        Legjobb kirakás < %{moves} fordítás jut tovább a(z)
+        %{next_round_number}. fordulóba
+      #original_hash: 56c0366
+      points: >-
+        Legjobb kirakás > %{points} pont jut tovább a(z) %{next_round_number}
+        fordulóba
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      zero: '%{count} lehetőséged van rá hogy az időd < %{time} legyen'
+      other: '%{count} lehetőséged van rá hogy az időd < %{time} legyen'
+    #original_hash: b49d930
+    moves:
+      zero: '%{count} lehetőséged van rá, hogy az eredményed < %{moves} legyen'
+      other: '%{count} lehetőséged van rá, hogy az eredményed < %{moves} legyen'
+    #original_hash: eba1b97
+    points:
+      zero: '%{count} lehetőséged van, hogy az eredményed > %{points} pont legyen'
+      other: '%{count} lehetőséged van, hogy az eredményed > %{points} pont legyen'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -823,6 +849,10 @@ hu:
     doorkeeper:
       applications:
         help:
+          #original_hash: 92e00ff
+          native_redirect_uri: >-
+            Használd a %{native_redirect_uri} linket, ha URI-t szeretnél
+            hozzáadni
           #original_hash: 62a0113
           scopes_html: >-
             Válaszd el a scope-okat szőközökkel. Hagyj üres helyet az default
@@ -2249,6 +2279,22 @@ hu:
         name: WCA Financial Committee
         #original_hash: 2d4807e
         description: Ez a szervezet felelős a WCA pénzügyeinek kezeléséért.
+      wec:
+        #original_hash: 83bd1d0
+        name: WCA Ethics Committee
+        #original_hash: ec2b9c3
+        description: >-
+          Ez a szervezet biztosítja, hogy a WCA-ban zajló folyamatok az Etikai
+          Kódexnek megfelelően zajlanak.
+      wqac:
+        #original_hash: 8f32116
+        name: WCA Quality Assurance Committee
+        #original_hash: 0171b3b
+        description: >-
+          A szervezet feladata, hogy támogassa a WCA folyamatos minőségi
+          fejlődését, biztosítsa a minőségügyi elvárások betartását világszerte
+          beleértve a folyamatokat, a WCA Staff-ot, a Nemzeti szervezeteket, a
+          szervezőket és a versenyek lebonyolítását segítő embereket.
       #original_hash: f2ceade
       delegates_html: >-
         A <strong>WCA delegáltak</strong> a WCA tagjai, akik azért felelősek,
@@ -2422,6 +2468,18 @@ hu:
         belül. Ők kezelik a WCA pénzügyeit és számláit a jóváhagyott éves
         költségvetésnek megfelelően, aminek az elkészítése szintén az ő
         feladatuk.
+    wec:
+      #original_hash: ec2b9c3
+      info_html: >-
+        Ez a szervezet felelős azért, hogy a WCA minden folyamata az Etikai
+        Kódexnek megfelelően zajlik.
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        A szervezet feladata, hogy támogassa a WCA folyamatos minőségi
+        fejlődését, biztosítsa a minőségügyi elvárások betartását világszerte
+        beleértve a folyamatokat, a WCA Staff-ot, a Nemzeti szervezeteket, a
+        szervezőket és a versenyek lebonyolítását segítő embereket.
   score_tools:
     #original_hash: ea9d41d
     title: WCA adatrögzítő eszközök
@@ -2730,15 +2788,15 @@ hu:
         '3': >-
           Az elmúlt 12 hónapban kevesebb, mint 16 verseny volt a verseny 100
           km-es körzetében.
-      #original_hash: 9908e21
+      #original_hash: 5c5cf04
       content2: >-
-        A több helyszínen zajló FMC versenyeken csak az FMC versenyszám kerül
-        megrendezésre egy időben, különböző helyszíneken.
+        A több helyszínen zajló 3x3x3 FMC versenyeken csak a 3x3x3 FMC
+        versenyszám kerül megrendezésre egy időben, különböző helyszíneken.
       olist2:
         '1':
-          #original_hash: 6f68690
+          #original_hash: 316fd13
           content1: >-
-            A több helyszínen zajló FMC versenyek nem lehetnek más, normál
+            A több helyszínen zajló 3x3x3 FMC versenyek nem lehetnek más, normál
             versenynek a részei.
           alist1:
             #original_hash: 75aa0c7
@@ -2753,8 +2811,8 @@ hu:
           alist1:
             #original_hash: 8f532bb
             2a: legalább 5 nap kölünbségnek kell lennie a két verseny között vagy
-            #original_hash: 4ed931b
-            2b: a másik versenyen nem lehetséges FMC versenyszám tartása.
+            #original_hash: e14e11e
+            2b: a másik versenyen nem lehetséges 3x3x3 FMC versenyszám tartása.
     paragraph-events:
       #original_hash: b16c5f1
       title: Versenyszámok kihirdetése
