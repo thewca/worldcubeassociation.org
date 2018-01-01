@@ -679,7 +679,7 @@ RSpec.describe RegistrationsController do
           card: {
             number: "4242424242424242",
             exp_month: 12,
-            exp_year: 2017,
+            exp_year: Date.today.year + 1,
             cvc: "314",
           },
         ).id
