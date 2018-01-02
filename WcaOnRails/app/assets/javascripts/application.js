@@ -44,6 +44,7 @@
 //= require moment/sl.js
 //= require moment/sk.js
 //= require moment/ro.js
+//= require moment/id.js
 //= require bootstrap-datetimepicker
 //= require bootstrap-table
 //= require bootstrap-table-locale-all
