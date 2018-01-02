@@ -136,6 +136,26 @@ zh-CN:
     ranking: '前%{ranking}名晋级%{next_round_number}轮'
     #original_hash: 31ad77c
     percent: '前%{percent}%晋级%{next_round_number}轮'
+    attempt_result:
+      #original_hash: 03af49c
+      time: '单次成绩<%{time}晋级%{next_round_number}轮'
+      #original_hash: 0b4ae7c
+      moves: '单次成绩<%{moves}步晋级%{next_round_number}轮'
+      #original_hash: 56c0366
+      points: '单次成绩>%{points}分晋级%{next_round_number}轮'
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      zero: '%{count}次尝试<%{time}'
+      other: '%{count}次尝试<%{time}'
+    #original_hash: b49d930
+    moves:
+      zero: '%{count}次尝试<%{moves}步'
+      other: '%{count}次尝试<%{moves}步'
+    #original_hash: eba1b97
+    points:
+      zero: '%{count}次尝试>%{points}分'
+      other: '%{count}次尝试>%{points}分'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -965,6 +985,8 @@ zh-CN:
         '5': 头像不能包含文字，除了常规的背景文字。
         #original_hash: cc5f23a
         '6': 头像必须以正常方向提交。
+        #original_hash: 1a18831
+        '7': 头像不得包含冒犯性的内容（如冒犯性的手势）
     errors:
       #original_hash: 094b763
       not_found: 未找到
@@ -1911,12 +1933,23 @@ zh-CN:
         #original_hash: 63a2388
         name: WCA通讯组
         #original_hash: 50fd091
-        description: 改组负责世界魔方协会与魔友们以及大众之间的联系与沟通。通讯与沟通有助于实现世界魔方协会的目标，并支持友善、透明、包容、开放和响应的魔方文化。
+        description: 该组负责世界魔方协会与魔友们以及大众之间的联系与沟通。通讯与沟通有助于实现世界魔方协会的目标，并支持友善、透明、包容、开放和响应的魔方文化。
       wfc:
         #original_hash: 9cb13de
         name: WCA财务委员会
         #original_hash: 2d4807e
-        description: 改组负责管理WCA的所有财务事宜。
+        description: 该组负责管理WCA的所有财务事宜。
+      wec:
+        #original_hash: 83bd1d0
+        name: WCA道德委员会
+        #original_hash: ec2b9c3
+        description: 该委员会的职责是确保WCA员工和其他工作人员遵守其职业道德。
+      wqac:
+        #original_hash: 8f32116
+        name: WCA质量保证委员会
+        #original_hash: 0171b3b
+        description: >-
+          该委员会负责支持和促进WCA内持续的质量改进，以及在全球范围内应用质量标准，以确保一致的高质量流程，WCA工作人员，区域组织，比赛组织者和工作人员。
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA代表</strong>作为WCA成员，负责确保所有WCA比赛在WCA宗旨、规则和精神下进行。由<strong>WCA高级代表</strong>、<strong>WCA代表</strong>和<strong>WCA实习代表</strong>组成%{see_link}。WCA高级代表的额外职责是管理他负责区域的所有代表，同时也可以处理当地社群问题。新上任的代表需要经历实习期直到他们展示出应有的能力来成为一个正式WCA代表。
@@ -2021,6 +2054,13 @@ zh-CN:
     wfc:
       #original_hash: 3ec8256
       info_html: WCA财务委员会负责WCA的所有财务事宜。他们依据审批通过的年度预算管理WCA的资金账户、财务收支。
+    wec:
+      #original_hash: ec2b9c3
+      info_html: 该委员会的职责是确保WCA员工和其他工作人员遵守其职业道德。
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        该委员会负责支持和促进WCA内持续的质量改进，以及在全球范围内应用质量标准，以确保一致的高质量流程，WCA工作人员，区域组织，比赛组织者和工作人员。
   score_tools:
     #original_hash: ea9d41d
     title: WCA成绩录入工具
@@ -2272,9 +2312,10 @@ zh-CN:
       #original_hash: e4f1c62
       title: 管理等候名单
       #original_hash: 81ca3f3
-      content1: 一旦比赛达到人数限制，就应该打开候补名单。当某个注册并批准的选手取消注册时，可以用等待名单上的下一个选手顶替。
+      content1: 一旦比赛达到人数限制，就应该打开候补名单。当某个注册并批准的选手取消注册时，可以用等候名单上的下一位选手顶替。
       #original_hash: 1b2ea79
-      content2: null
+      content2: >-
+        如果比赛是预付费的，可以采用如下有效的方式，即将名额提供给等候名单上的下一位选手，并指定一个付款截止时间（如48小时）。如果在指定时间内未收到付款，名额应提供给等候名单上的下一位选手。上述过程应该一直持续到所有名额都被占满为止。不允许选手绕过等候名单的特例。
       #original_hash: 37bcbd6
       content3: 如果选手没有经过正常的注册过程而是直接参加比赛，那么他们的成绩将被追溯地消除（如果设置了参赛人数限制并达到了该限制）。
     paragraph8:
