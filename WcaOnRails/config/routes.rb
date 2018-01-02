@@ -168,6 +168,7 @@ Rails.application.routes.draw do
       get '/persons/:wca_id' => "persons#show", as: :person
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
+        post '/wcif/events' => 'competitions#update_events_from_wcif', as: :update_events_from_wcif
       end
     end
   end

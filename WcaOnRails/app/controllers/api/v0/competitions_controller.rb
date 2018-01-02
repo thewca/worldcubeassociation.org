@@ -35,6 +35,28 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.to_wcif
   end
 
+  def update_events_from_wcif
+    competition = competition_from_params
+    require_can_manage!(competition)
+    wcif_events = params["_json"].map { |wcif_event| wcif_event.permit!.to_h }
+    competition.set_wcif_events!(wcif_events)
+    render json: {
+      status: "Successfully saved WCIF events",
+    }
+  rescue ActiveRecord::RecordInvalid => e
+    render status: 400, json: {
+      status: "Error while saving WCIF events",
+      error: e,
+    }
+  rescue JSON::Schema::ValidationError => e
+    render status: 400, json: {
+      status: "Error while saving WCIF events",
+      error: e.message,
+    }
+  rescue WcaExceptions::ApiException => e
+    render status: e.status, json: { error: e.to_s }
+  end
+
   private def competition_from_params(associations = {})
     id = params[:competition_id] || params[:id]
     base_model = associations.any? ? Competition.includes(associations) : Competition
