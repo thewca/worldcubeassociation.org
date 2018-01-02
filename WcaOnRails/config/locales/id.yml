@@ -976,11 +976,11 @@ id:
   users:
     update_locale:
       #original_hash: 4cde9bc
-      success: Daerah diperbarui.
+      success: Bahasa lokal diperbarui.
       #original_hash: dcc2f49
       failure: Tidak dapat memperbarui profil Anda.
       #original_hash: c29870c
-      unavailable: Daerah yang diminta tidak tersedia.
+      unavailable: Bahasa lokal yang diminta tidak tersedia.
     claim_wca_id:
       #original_hash: f28bf87
       title: Klaim ID WCA
@@ -2139,7 +2139,7 @@ id:
             3</a>. Semua puzzle harus disetujui oleh Delegate WCA. Jika Anda
             tidak yakin, harap bertanya Delegate kompetisi Anda. Agar lebih
             aman, Anda perlu membawa puzzle cadangan jika Anda tidak
-            diperbolehkan memakan puzzle tersebut.
+            diizinkan memakai puzzle tersebut.
       regulations2:
         #original_hash: 48f1234
         title: Bolehkah saya menggunakan puzzle bermagnet dalam kompetisi resmi WCA?
