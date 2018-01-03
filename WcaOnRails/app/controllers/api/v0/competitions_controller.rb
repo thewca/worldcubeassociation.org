@@ -5,7 +5,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     managed_by_user = nil
     if params[:managed_by_me].present?
       require_scope!("manage_competitions")
-      managed_by_user = current_api_user
+      managed_by_user = current_api_user || current_user
     end
 
     competitions = Competition.search(params[:q], params: params, managed_by_user: managed_by_user)
@@ -53,8 +53,6 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       status: "Error while saving WCIF events",
       error: e.message,
     }
-  rescue WcaExceptions::ApiException => e
-    render status: e.status, json: { error: e.to_s }
   end
 
   private def competition_from_params(associations = {})
@@ -73,16 +71,23 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   private def can_manage?(competition)
-    current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
+    api_user_can_manage = current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
+    api_user_can_manage || current_user&.can_manage_competition?(competition)
+  end
+
+  private def require_user!
+    raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
   end
 
   private def require_scope!(scope)
-    raise WcaExceptions::MustLogIn.new unless current_api_user
-    raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") unless doorkeeper_token.scopes.include?(scope)
+    require_user!
+    if current_api_user # If we deal with an OAuth user then check the scopes.
+      raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") unless doorkeeper_token.scopes.include?(scope)
+    end
   end
 
   def require_can_manage!(competition)
-    raise WcaExceptions::MustLogIn.new unless current_api_user
+    require_user!
     raise WcaExceptions::NotPermitted.new("Not authorized to manage competition") unless can_manage?(competition)
   end
 end

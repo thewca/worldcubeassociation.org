@@ -9,7 +9,7 @@ function getAuthenticityToken() {
 }
 
 export function promiseSaveWcif(wcif) {
-  let url = `/competitions/${wcif.id}/wcif/events`;
+  let url = `/api/v0/competitions/${wcif.id}/wcif/events`;
   let fetchOptions = {
     headers: {
       "Content-Type": "application/json",
