@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 class Api::V0::CompetitionsController < Api::V0::ApiController
+  # Enable CSRF protection if we use cookies based user instead of OAuth one.
+  protect_from_forgery if: -> { current_user.present? }, with: :exception
+
   def index
     managed_by_user = nil
     if params[:managed_by_me].present?
       require_scope!("manage_competitions")
-      managed_by_user = current_api_user
+      managed_by_user = current_api_user || current_user
     end
 
     competitions = Competition.search(params[:q], params: params, managed_by_user: managed_by_user)
@@ -35,6 +38,26 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.to_wcif
   end
 
+  def update_events_from_wcif
+    competition = competition_from_params
+    require_can_manage!(competition)
+    wcif_events = params["_json"].map { |wcif_event| wcif_event.permit!.to_h }
+    competition.set_wcif_events!(wcif_events)
+    render json: {
+      status: "Successfully saved WCIF events",
+    }
+  rescue ActiveRecord::RecordInvalid => e
+    render status: 400, json: {
+      status: "Error while saving WCIF events",
+      error: e,
+    }
+  rescue JSON::Schema::ValidationError => e
+    render status: 400, json: {
+      status: "Error while saving WCIF events",
+      error: e.message,
+    }
+  end
+
   private def competition_from_params(associations = {})
     id = params[:competition_id] || params[:id]
     base_model = associations.any? ? Competition.includes(associations) : Competition
@@ -51,16 +74,23 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   private def can_manage?(competition)
-    current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
+    api_user_can_manage = current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
+    api_user_can_manage || current_user&.can_manage_competition?(competition)
+  end
+
+  private def require_user!
+    raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
   end
 
   private def require_scope!(scope)
-    raise WcaExceptions::MustLogIn.new unless current_api_user
-    raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") unless doorkeeper_token.scopes.include?(scope)
+    require_user!
+    if current_api_user # If we deal with an OAuth user then check the scopes.
+      raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") unless doorkeeper_token.scopes.include?(scope)
+    end
   end
 
   def require_can_manage!(competition)
-    raise WcaExceptions::MustLogIn.new unless current_api_user
+    require_user!
     raise WcaExceptions::NotPermitted.new("Not authorized to manage competition") unless can_manage?(competition)
   end
 end

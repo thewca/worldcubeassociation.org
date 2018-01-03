@@ -58,8 +58,9 @@ RSpec.configure do |config|
   # Make sign_in helper available in feature specs
   config.include SessionHelper, type: :feature
 
-  # Make sign_in helper available in controller specs
-  config.include ApiSignInControllerHelper, type: :controller
+  # Make sign_in helper available in controller and request specs
+  config.include ApiSignInHelper, type: :controller
+  config.include ApiSignInHelper, type: :request
 
   config.include ApplicationHelper
 
