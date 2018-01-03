@@ -17,14 +17,19 @@ end
 # and allow all on robots.txt.
 variable :WCA_LIVE_SITE, :boolean, default: false
 
-# ROOT_URL is used when generating emails.
+# ROOT_URL is used when generating full urls (rather than relative urls).
 # Trick to discover the port we're set to run on from
 # https://stackoverflow.com/a/48069920/1739415.
 if Rails.env.test?
   default_root_url = "http://test.host"
-else
+elsif defined? Rails::Server
+  # We have to check if Rails::Server is defined, because when running the
+  # rails console under spring, Rails::Server is not defined, nor is it
+  # importable.
   port = Rails::Server::Options.new.parse!(ARGV)[:Port]
   default_root_url = "http://localhost:#{port}"
+else
+  default_root_url = ""
 end
 variable :ROOT_URL, :string, default: default_root_url
 
