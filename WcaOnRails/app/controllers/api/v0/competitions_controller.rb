@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Api::V0::CompetitionsController < Api::V0::ApiController
+  # Enable CSRF protection if we use cookies based user instead of OAuth one.
+  protect_from_forgery if: -> { current_user.present? }, with: :exception
+
   def index
     managed_by_user = nil
     if params[:managed_by_me].present?

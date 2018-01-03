@@ -6,7 +6,7 @@ RSpec.describe "API Competitions" do
   describe "PATCH #update_events_from_wcif" do
     let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
 
-    describe "website user" do
+    describe "website user (cookies based)" do
       context "when not signed in" do
         sign_out
 
@@ -283,6 +283,77 @@ RSpec.describe "API Competitions" do
           patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: { "CONTENT_TYPE" => "application/json" }
           expect(response.status).to eq 403
           expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 0
+        end
+      end
+    end
+
+    describe "CSRF" do
+      # CSRF protection is always disabled for tests, enable it for this these requests.
+      around(:each) do |example|
+        ActionController::Base.allow_forgery_protection = true
+        example.run
+        ActionController::Base.allow_forgery_protection = false
+      end
+
+      context "cookies based user" do
+        sign_in { FactoryBot.create :user }
+
+        it "prevents from CSRF attacks" do
+          headers = { "CONTENT_TYPE" => "application/json", "ACCESS_TOKEN" => "INVALID" }
+          competition_events = [
+            {
+              id: "333",
+              rounds: [
+                {
+                  id: "333-1",
+                  format: "a",
+                  timeLimit: {
+                    centiseconds: 4242,
+                    cumulativeRoundIds: [],
+                  },
+                  cutoff: nil,
+                  advancementCondition: nil,
+                  scrambleGroupCount: 1,
+                },
+              ],
+            },
+          ]
+          expect {
+            patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
+          }.to raise_exception ActionController::InvalidAuthenticityToken
+        end
+      end
+
+      context "OAuth user" do
+        let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+
+        before :each do
+          scopes.add "manage_competitions"
+          api_sign_in_as(competition.organizers.first, scopes: scopes)
+        end
+
+        it "does not use CSRF protection as we use oauth token" do
+          headers = { "CONTENT_TYPE" => "application/json", "ACCESS_TOKEN" => nil }
+          competition_events = [
+            {
+              id: "333",
+              rounds: [
+                {
+                  id: "333-1",
+                  format: "a",
+                  timeLimit: {
+                    centiseconds: 4242,
+                    cumulativeRoundIds: [],
+                  },
+                  cutoff: nil,
+                  advancementCondition: nil,
+                  scrambleGroupCount: 1,
+                },
+              ],
+            },
+          ]
+          patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
+          expect(response).to be_success
         end
       end
     end
