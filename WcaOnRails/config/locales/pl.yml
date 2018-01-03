@@ -1123,6 +1123,10 @@ pl:
           znajdujący się w tle.
         #original_hash: cc5f23a
         '6': Zdjęcie profilowe musi być wysłane w popranej orientacji.
+        #original_hash: 1a18831
+        '7': >-
+          Zdjęcie profilowe nie może zawierać żadnych obraźliwych treści (np.
+          obraźliwych gestów).
     errors:
       #original_hash: 094b763
       not_found: nie znaleziono
