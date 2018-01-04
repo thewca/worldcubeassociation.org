@@ -794,6 +794,11 @@ en:
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the entry fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check competition's information for instruction about how to pay"
+    refund_form:
+      hints:
+        refund_amount: "The amount to refund to the competitor, can be any value up to the amount already paid."
+      labels:
+        refund_amount: "Refund Amount"
     #context: on the payment form, when registering to a competition
     payment_form:
       title: "Registration fees"

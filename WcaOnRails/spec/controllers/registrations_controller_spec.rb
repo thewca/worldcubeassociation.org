@@ -673,26 +673,56 @@ RSpec.describe RegistrationsController do
       let(:competition) { FactoryBot.create(:competition, :entry_fee, :visible, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: organizer) }
 
-      it 'processes a payment then issues a refund' do
-        sign_in organizer
-        token_id = Stripe::Token.create(
-          card: {
-            number: "4242424242424242",
-            exp_month: 12,
-            exp_year: Date.today.year + 1,
-            cvc: "314",
-          },
-        ).id
-        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
-        payment = registration.reload.registration_payments.first
-        post :refund_payment, params: { id: registration.id, payment_id: payment.id }
-        expect(response).to redirect_to edit_registration_path(registration)
-        refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
-        expect(competition.base_entry_fee).to be > 0
-        expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
-        expect(refund.amount).to eq competition.base_entry_fee.cents
-        expect(flash[:success]).to eq "Payment was refunded"
-        expect(payment.reload.amount_available_for_refund).to eq 0
+      context "processes a payment" do
+        before :each do
+          sign_in organizer
+          token_id = stripe_token_id
+          post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
+          @payment = registration.reload.registration_payments.first
+        end
+
+        it 'issues a full refund' do
+          post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: competition.base_entry_fee.cents } }
+          expect(response).to redirect_to edit_registration_path(registration)
+          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+          expect(competition.base_entry_fee).to be > 0
+          expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
+          expect(refund.amount).to eq competition.base_entry_fee.cents
+          expect(flash[:success]).to eq "Payment was refunded"
+          expect(@payment.reload.amount_available_for_refund).to eq 0
+        end
+
+        it 'issues a 50% refund' do
+          refund_amount = competition.base_entry_fee.cents / 2
+          post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: refund_amount } }
+          expect(response).to redirect_to edit_registration_path(registration)
+          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+          expect(competition.base_entry_fee).to be > 0
+          expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee / 2
+          expect(refund.amount).to eq competition.base_entry_fee.cents / 2
+          expect(flash[:success]).to eq "Payment was refunded"
+          expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents / 2
+        end
+
+        it 'disallows negative refund' do
+          refund_amount = -1
+          post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: refund_amount } }
+          expect(response).to redirect_to edit_registration_path(registration)
+          expect(competition.base_entry_fee).to be > 0
+          expect(registration.outstanding_entry_fees).to eq 0
+          expect(flash[:danger]).to eq "The refund amount must be greater than zero."
+          expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
+        end
+
+        it 'disallows a refund more than the payment' do
+          refund_amount = competition.base_entry_fee.cents * 2
+          post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: refund_amount } }
+          expect(response).to redirect_to edit_registration_path(registration)
+          expect(competition.base_entry_fee).to be > 0
+          expect(registration.outstanding_entry_fees).to eq 0
+          expect(flash[:danger]).to eq "You are not allowed to refund more than the competitor has paid."
+          expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
+        end
       end
     end
   end
