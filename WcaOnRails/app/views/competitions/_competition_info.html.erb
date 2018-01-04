@@ -64,20 +64,18 @@
     <dl class="dl-horizontal">
       <dt><%= t '.information' %></dt>
       <dd><%=md competition.information %></dd>
-    </dl>
 
-    <dl class="dl-horizontal">
       <dt><%= t '.events' %></dt>
       <dd class="competition-events-list">
         <% @competition.events.each do |event| %>
           <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "top", container: "body" }, title: event.name %>
         <% end %>
       </dd>
-    </dl>
 
-    <dl class="dl-horizontal">
-      <dt><%= t 'competitions.nav.menu.competitors' %></dt>
-      <dd><%= @competition.competitors.count %></dd>
+      <% if competition.results_posted? %>
+        <dt><%= t 'competitions.nav.menu.competitors' %></dt>
+        <dd><%= @competition.competitors.count %></dd>
+      <% end %>
     </dl>
 
     <% media = competition.media.accepted %>
