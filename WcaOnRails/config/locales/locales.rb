@@ -86,5 +86,9 @@ module Locales
       "flag_id": "si",
       "name": "Slovensko",
     },
+    "id": {
+      "flag_id": "id",
+      "name": "Bahasa Indonesia",
+    },
   }.freeze
 end
