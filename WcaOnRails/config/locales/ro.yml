@@ -136,6 +136,36 @@ ro:
     ranking: 'Primii %{ranking} avansează în runda %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Primii %{percent}% avansează în runda %{next_round_number}'
+    attempt_result:
+      #original_hash: 03af49c
+      time: 'Cea mai bună rezolvare < %{time} avansează în runda %{next_round_number}'
+      #original_hash: 0b4ae7c
+      moves: >-
+        Cea mai bună rezolvare < %{moves} mutări avansează în runda
+        %{next_round_number}
+      #original_hash: 56c0366
+      points: >-
+        Cea mai bună rezolvare > %{points} puncte avansează în runda
+        %{next_round_number}
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      zero: '%{count} încercări pentru a obține < %{time}'
+      one: '%{count} încercare pentru a obține < %{time}'
+      few: '%{count} încercări pentru a obține < %{time}'
+      other: '%{count} încercări pentru a obține < %{time}'
+    #original_hash: b49d930
+    moves:
+      zero: '%{count} încercări pentru a obține < %{moves} mutări'
+      one: '%{count} încercare pentru a obține < %{moves} mutări'
+      few: '%{count} încercări pentru a obține < %{moves} mutări'
+      other: '%{count} încercări pentru a obține < %{moves} mutări'
+    #original_hash: eba1b97
+    points:
+      zero: '%{count} încercări pentru a obține > %{points} puncte'
+      one: '%{count} încercare pentru a obține > %{points} puncte'
+      few: '%{count} încercări pentru a obține > %{points} puncte'
+      other: '%{count} încercări pentru a obține > %{points} puncte'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -1083,6 +1113,10 @@ ro:
           fundal).
         #original_hash: cc5f23a
         '6': Avatarul trebuie să fie orientat corect.
+        #original_hash: 1a18831
+        '7': >-
+          Avatarul nu trebuie să aibă conținut ofensiv (de exemplu, gesturi
+          ofensive).
     errors:
       #original_hash: 094b763
       not_found: nu s-a găsit
@@ -1425,6 +1459,15 @@ ro:
     wont_pay_here: >-
       Te rugăm să verifici informațiile despre competiție pentru a afla cum poți
       plăti
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          Suma de bani returnată concurentului poate avea orice valoare, până la
+          cantitatea deja plătită
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Suma returnată
     payment_form:
       #original_hash: 4de825f
       title: Taxe de înregistrare
@@ -2269,6 +2312,24 @@ ro:
         name: Comitetul Financiar WCA
         #original_hash: 2d4807e
         description: Această echipă este responsabilă de finanțele WCA.
+      wec:
+        #original_hash: 83bd1d0
+        name: Comitetul de Etică WCA
+        #original_hash: ec2b9c3
+        description: >-
+          Acest comitet are rolul de a se asigura că toate procedurile
+          întreprinse de Stafful WCA și Stafful extern se supun Codului de
+          Etică.
+      wqac:
+        #original_hash: 8f32116
+        name: Comitetul de Asigurare a Calității WCA
+        #original_hash: 0171b3b
+        description: >-
+          Acest comitet are rolul de a susține și promova constant îmbunătățirea
+          calității în WCA, precum și aplicarea la nivel global a standardelor
+          de calitate pentru a asigura un nivel consistent de calitate al
+          proceselor, Staffului WCA, Organizațiilor Regionale, Organizatorilor
+          de Competiții și Staffului de Competiție.
       #original_hash: f2ceade
       delegates_html: >-
         <strong>Delegații WCA</strong> sunt membrii WCA care sunt responsabili
@@ -2439,6 +2500,19 @@ ro:
         WFC este responsabilă cu tot ce ține de finanțele WCA. Ei administrează
         conturile și finanțele WCA în acord cu un buget anual aprobat, care
         intră tot în responsabilitatea lor.
+    wec:
+      #original_hash: ec2b9c3
+      info_html: >-
+        Acest comitet are rolul de a se asigura că toate procedurile Staffului
+        WCA și Staffului Extern se supum Codului de Etică.
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        Acest comitet are rolul de a susține și promova constant îmbunătățirea
+        calității în WCA, precum și aplicarea la nivel global a standardelor de
+        calitate pentru a asigura un nivel consistent de calitate al proceselor,
+        Staffului WCA, Organizațiilor Regionale, Organizatorilor de Competiții
+        și Staffului de Competiție.
   score_tools:
     #original_hash: ea9d41d
     title: Instrumente de Score Taking WCA
@@ -2753,16 +2827,16 @@ ro:
         '3': >-
           În ultimele 12 luni, au fost mai puțin de 16 competiții la mai puțin
           de 100 de km de locația actualei competiții.
-      #original_hash: 9908e21
+      #original_hash: 5c5cf04
       content2: >-
-        "Competițiile simultane de FMC" sunt competiții WCA numai cu proba FMC
-        și se desfășoară în același timp în locații diferite
+        "Competițiile simultane de 3x3x3 FMC" sunt competiții WCA numai cu proba
+        3x3x3 FMC și se desfășoară în același timp în locații diferite
       olist2:
         '1':
-          #original_hash: 6f68690
+          #original_hash: 316fd13
           content1: >-
-            Competițiile simultane de FMC nu pot fi incluse în competițiile
-            obișnuite.
+            Competițiile simultane de 3x3x3 FMC nu pot fi incluse în
+            competițiile obișnuite.
           alist1:
             #original_hash: 75aa0c7
             1a: Time frames when both are celebrated can’t overlap.
@@ -2774,8 +2848,8 @@ ro:
           alist1:
             #original_hash: 8f532bb
             2a: 'trebuie să existe minim 5 zile între cele două competiții, sau'
-            #original_hash: 4ed931b
-            2b: cealaltă competițe nu poate conține proba FMC.
+            #original_hash: e14e11e
+            2b: cealaltă competițe nu poate conține proba 3x3x3 FMC.
     paragraph-events:
       #original_hash: b16c5f1
       title: Anunțarea probelor
