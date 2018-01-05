@@ -1108,6 +1108,8 @@ hr:
         '5': Avatar ne smije sadržavati nikakav tekst osim teksta u pozadini.
         #original_hash: cc5f23a
         '6': Avatar mora biti prenesen u pravilnoj orijentaciji.
+        #original_hash: 1a18831
+        '7': Avatar ne smije sadržavati uvredljiv sadržaj (npr. uvredljive geste).
     errors:
       #original_hash: 094b763
       not_found: nije pronađeno
@@ -1442,6 +1444,15 @@ hr:
     will_pay_here: Platit ćete nakon priloženja Vaše registracije
     #original_hash: b7ef562
     wont_pay_here: Molimo Vas provjerite informacije o natjecanju oko uputa kako platiti
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          Povratak novca natjecatelju može biti do bilo kojeg iznosa koji je već
+          plaćen.
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Povrati novac
     payment_form:
       #original_hash: 4de825f
       title: Kotizacije
