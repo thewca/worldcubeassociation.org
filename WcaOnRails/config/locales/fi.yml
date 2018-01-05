@@ -155,14 +155,14 @@ fi:
       other: '%{count} yritystä < %{time}'
     #original_hash: b49d930
     moves:
-      other: '%{count} yritystä < %{moves} siirtoa'
-      one: '%{count} yritys < %{moves} siirtoa'
       zero: '%{count} yritystä < %{moves} siirtoa'
+      one: '%{count} yritys < %{moves} siirtoa'
+      other: '%{count} yritystä < %{moves} siirtoa'
     #original_hash: eba1b97
     points:
-      other: '%{count} yritystä > %{points} pistettä'
-      one: '%{count} yritys > %{points} pistettä'
       zero: '%{count} yritystä > %{points} pistettä'
+      one: '%{count} yritys > %{points} pistettä'
+      other: '%{count} yritystä > %{points} pistettä'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -403,7 +403,7 @@ fi:
         #original_hash: 8c41ae8
         wca_id: Henkilö
         #original_hash: d523ebb
-        countryId: Valtio
+        countryId: Kansalaisuus
         #original_hash: ab58155
         dob: Syntymäaika
         #original_hash: 8a754c6
@@ -1087,6 +1087,10 @@ fi:
           näkyviä tekstejä.
         #original_hash: cc5f23a
         '6': Profiilikuva täytyy ladata oikein päin.
+        #original_hash: 1a18831
+        '7': >-
+          Profiilikuvassa ei saa olla hyökkäävää sisältöä (kuten tällaista
+          elekieltä).
     errors:
       #original_hash: 094b763
       not_found: ei löydetty
@@ -1411,6 +1415,15 @@ fi:
     will_pay_here: 'Maksat ne vasta, kun olet lähettänyt rekisteröitymisesi'
     #original_hash: b7ef562
     wont_pay_here: Tarkista maksamisohjeet kilpailun tiedoista
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          Kilpailijalle palautettava rahasumma, voi olla mikä tahansa summa,
+          mutta kuitenkin enintään kilpailijan jo maksama määrä.
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Palautettava rahasumma
     payment_form:
       #original_hash: 4de825f
       title: Osallistumismaksut
@@ -1419,7 +1432,7 @@ fi:
         donation: 'Valinnainen lahjoitus, joka päätyy ainoastaan järjestäjäryhmälle'
       labels:
         #original_hash: 948ec72
-        entry_fees: Pääsymaksut
+        entry_fees: Osallistumismaksu
         #original_hash: 2c09302
         donation: Lahjoitus
       alerts:
