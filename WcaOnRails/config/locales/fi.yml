@@ -1415,6 +1415,15 @@ fi:
     will_pay_here: 'Maksat ne vasta, kun olet lähettänyt rekisteröitymisesi'
     #original_hash: b7ef562
     wont_pay_here: Tarkista maksamisohjeet kilpailun tiedoista
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          Kilpailijalle palautettava rahasumma, voi olla mikä tahansa summa,
+          mutta kuitenkin enintään kilpailijan jo maksama määrä.
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Palautettava rahasumma
     payment_form:
       #original_hash: 4de825f
       title: Osallistumismaksut
