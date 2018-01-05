@@ -661,7 +661,7 @@ class Competition < ApplicationRecord
   end
 
   def upcoming?
-    start_date.nil? || start_date > Date.today
+    !results_posted? && (start_date.nil? || start_date > Date.today)
   end
 
   def city_and_country
