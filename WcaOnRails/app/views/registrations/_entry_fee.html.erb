@@ -7,11 +7,12 @@
 %>
 
 <% if @registration.entry_fee %>
+  <%= content_tag(:div, "", id: 'per-event-fees', data: { base_fee: @competition.base_entry_fee_lowest_denomination, fees: @competition.competition_events})%>
   <div class="simple_form form-horizontal">
     <div class="form-group">
       <label class="col-sm-2 control-label" for="entry_fees"><%= label %></label>
       <div class="col-sm-9">
-        <p class="form-control-static"><%= format_money(money_amount) %></p>
+        <p id="entry-fee-display" class="form-control-static"><%= format_money(money_amount) %></p>
         <% unless hint.blank? %>
           <p class="help-block"><span <%= raw(hint_context_attribute) %>><%= hint %></span></p>
         <% end %>
