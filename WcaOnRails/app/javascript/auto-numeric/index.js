@@ -31,6 +31,7 @@ function applyCurrencyMask(action, $element, currencyIsoCode) {
     // decimals. For currencies with subunits we want to show decimals.
     decimalPlaces: (entry.subunitToUnit == 1) ? 0 : 2,
     showWarnings: false,
+    modifyValueOnWheel: false,
   };
 
   let autoNumericObject = $element.data("autoNumericObject");
