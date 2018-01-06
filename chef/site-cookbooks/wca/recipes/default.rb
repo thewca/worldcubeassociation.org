@@ -176,7 +176,7 @@ end
 if node.chef_environment != "production"
   gem_package "mailcatcher"
   execute "start mailcatcher" do
-    command "mailcatcher --http-ip=0.0.0.0"
+    command "mailcatcher --no-quit --http-ip=0.0.0.0"
     not_if "pgrep -f [m]ailcatcher"
   end
 end
