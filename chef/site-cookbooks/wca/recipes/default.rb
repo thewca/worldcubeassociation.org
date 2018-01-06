@@ -173,7 +173,7 @@ logrotate_app 'delayed_job-wca' do
 end
 
 # Run mailcatcher in every environment except production.
-if rails_env != "production"
+if node.chef_environment != "production"
   gem_package "mailcatcher"
   execute "start mailcatcher" do
     command "mailcatcher --http-ip=0.0.0.0"
