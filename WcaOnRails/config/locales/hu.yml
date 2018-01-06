@@ -1106,6 +1106,8 @@ hu:
           szövegeket leszámítva.
         #original_hash: cc5f23a
         '6': A profilképet helyes orientációban kell feltölteni.
+        #original_hash: 1a18831
+        '7': A profilkép nem tartalmazhat sértő tartalmat (pl. sértő gesztus).
     errors:
       #original_hash: 094b763
       not_found: nem található
@@ -1439,6 +1441,15 @@ hu:
     will_pay_here: Itt fogod befizetni a regisztrációd elküldését követően
     #original_hash: b7ef562
     wont_pay_here: Kérlek nézd meg a versenyinformációkat a fizetés menetéről
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          A versenyzőnek visszafizetett összeg bármilyen érték lehet a
+          befizetett összegig bezárólag.
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Visszafizetendő összeg
     payment_form:
       #original_hash: 4de825f
       title: Regisztrációs díj
