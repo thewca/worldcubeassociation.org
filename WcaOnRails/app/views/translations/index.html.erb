@@ -2,10 +2,10 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <% (I18n.available_locales - [:en]).each do |locale| %>
+  <% (I18n.available_locales - [:en]).sort.each do |locale| %>
     <%
       bad_keys_by_type = @bad_i18n_keys[locale]
-      bad_keys_for_locale = bad_keys_by_type.values.flatten
+      bad_keys_for_locale = bad_keys_by_type.values.flatten(1)
       class_heading = bad_keys_for_locale.empty? ? "" : "heading-as-link"
       class_panel = bad_keys_for_locale.empty? ? "success" : "warning"
     %>
@@ -37,7 +37,7 @@
                     <ul class="list-group row locale-list-keys">
                       <% bad_keys.each do |key| %>
                         <div class="col-md-6">
-                          <li class="list-group-item"><%= key %></li>
+                          <li class="list-group-item"><%= key.join(" > ") %></li>
                         </div>
                       <% end %>
                     </ul>
