@@ -37,6 +37,7 @@ export default {
   },
   Input({ value: cutoff, onChange, autoFocus, wcifEvent, roundNumber }) {
     let wcifRound = wcifEvent.rounds[roundNumber - 1];
+    let solveCount = formats.byId[wcifRound.format].expectedSolveCount;
 
     let numberOfAttemptsInput, attemptResultInput;
     let onChangeAggregator = () => {
@@ -57,7 +58,7 @@ export default {
     return (
       <div>
         <div className="form-group">
-          <label htmlFor="cutoff-round-format-input" className="col-sm-3 control-label">Round format</label>
+          <label htmlFor="cutoff-round-format-input" className="col-sm-3 control-label">Cutoff format</label>
           <div className="col-sm-9">
             <div className="input-group">
               <select value={cutoff ? cutoff.numberOfAttempts : 0}
@@ -68,10 +69,10 @@ export default {
                       ref={c => numberOfAttemptsInput = c}
               >
                 <option value={0}>No cutoff</option>
-                <option disabled="disabled">────────</option>
-                <option value={1}>Best of 1</option>
-                <option value={2}>Best of 2</option>
-                <option value={3}>Best of 3</option>
+                {solveCount > 1 ? <option disabled="disabled">────────</option> : null}
+                {solveCount > 1 ? <option value={1}>Best of 1</option> : null}
+                {solveCount > 2 ? <option value={2}>Best of 2</option> : null}
+                {solveCount > 3 ? <option value={3}>Best of 3</option> : null}
               </select>
               <div className="input-group-addon">
                 <strong>/ {formats.byId[wcifRound.format].name}</strong>
