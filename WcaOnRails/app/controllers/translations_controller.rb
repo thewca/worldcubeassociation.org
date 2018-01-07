@@ -4,11 +4,18 @@ class TranslationsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
 
   def self.bad_i18n_keys
-    @bad_keys ||= (I18n.available_locales - [:en]).each_with_object({}) do |locale, hash|
-      ref_english = Locale.new('en')
-      missing, unused, outdated = Locale.new(locale, true).compare_to(ref_english)
-      hash[locale] = { missing: missing, unused: unused, outdated: outdated }
-    end
+    @bad_keys ||= begin
+                    english = locale_to_translation('en')
+                    (I18n.available_locales - [:en]).map do |locale|
+                      [locale, locale_to_translation(locale).compare_to(english)]
+                    end.to_h
+                  end
+  end
+
+  def self.locale_to_translation(locale)
+    locale = locale.to_s
+    filename = Rails.root.join('config', 'locales', "#{locale}.yml")
+    WcaI18n::Translation.new(locale, File.read(filename))
   end
 
   def index

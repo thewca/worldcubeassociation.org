@@ -40,6 +40,7 @@ gem 'octokit'
 gem 'stripe'
 gem 'oauth2'
 gem 'openssl'
+gem 'wca_i18n'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
