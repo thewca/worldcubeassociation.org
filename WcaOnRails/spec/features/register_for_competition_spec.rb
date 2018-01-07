@@ -82,6 +82,7 @@ RSpec.feature "Registering for a competition" do
 
   context "signed in as delegate" do
     let(:registration) { FactoryBot.create(:registration, user: user, competition: competition) }
+    let(:delegate_registration) { FactoryBot.create(:registration, :accepted, user: delegate, competition: competition) }
     before :each do
       sign_in delegate
     end
@@ -91,6 +92,19 @@ RSpec.feature "Registering for a competition" do
       fill_in "Guests", with: 1
       click_button "Update Registration"
       expect(registration.reload.guests).to eq 1
+    end
+
+    scenario "updating his own registration" do
+      expect(delegate_registration.guests).to eq 10
+
+      visit competition_register_path(competition)
+
+      expect(page).to have_text("Your registration has been accepted!")
+      fill_in "Guests", with: "2"
+      click_button "Update Registration"
+
+      expect(page).to have_text("Your registration has been accepted!")
+      expect(delegate_registration.reload.guests).to eq 2
     end
 
     scenario "deleting registration" do
