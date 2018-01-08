@@ -83,7 +83,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   describe "submit_report_nag" do
     let(:senior) { FactoryBot.create(:senior_delegate) }
     let(:delegate) { FactoryBot.create(:delegate, senior_delegate_id: senior.id) }
-    let(:competition) { FactoryBot.create(:competition, name: "Peculiar Comp 2016", delegates: [delegate]) }
+    let(:competition) { FactoryBot.create(:competition, name: "Peculiar Comp 2016", delegates: [delegate], starts: 5.days.ago, ends: 3.days.ago) }
     let(:mail) { CompetitionsMailer.submit_report_nag(competition) }
 
     it "renders the headers" do
@@ -94,8 +94,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match(/Over a week has passed since #{competition.name}/)
-      expect(mail.body.encoded).to match(/delegate report/)
+      expect(mail.body.encoded).to match(/Peculiar Comp 2016 took place 3 days ago/)
+      expect(mail.body.encoded).to match(/Delegate report/)
     end
   end
 
