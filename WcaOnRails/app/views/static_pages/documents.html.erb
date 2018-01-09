@@ -1,0 +1,14 @@
+<% provide(:title, t('documents.title')) %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <h3><%= link_to t('documents.bylaws'), "/documents/WCA Bylaws 2017-12-12.pdf" %></h3>
+
+  <h3><%= link_to t('documents.motions'), "/documents/Public Table of Contents.pdf" %></h3>
+
+  <h3><%= t('documents.minutes') %></h3>
+  <ul>
+    <li><%= link_to "WCA Board Founding Meeting - 2017-12-12", "/documents/WCA Board Meeting 2017-12-12 Public.pdf" %></li>
+  </ul>
+</div>

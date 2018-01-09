@@ -104,6 +104,7 @@ Rails.application.routes.draw do
   patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
+  get 'documents' => 'static_pages#documents'
   get 'delegates' => 'static_pages#delegates'
   get 'organizations' => 'static_pages#organizations'
   get 'contact' => 'static_pages#contact'
