@@ -70,9 +70,9 @@ export default {
               >
                 <option value={0}>No cutoff</option>
                 {solveCount > 1 ? <option disabled="disabled">────────</option> : null}
-                {solveCount > 1 ? <option value={1}>Best of 1</option> : null}
+                {solveCount > 1 && wcifRound.format !== 'a'  ? <option value={1}>Best of 1</option> : null}
                 {solveCount > 2 ? <option value={2}>Best of 2</option> : null}
-                {solveCount > 3 ? <option value={3}>Best of 3</option> : null}
+                {solveCount > 3 && wcifRound.format !== 'a' ? <option value={3}>Best of 3</option> : null}
               </select>
               <div className="input-group-addon">
                 <strong>/ {formats.byId[wcifRound.format].name}</strong>
