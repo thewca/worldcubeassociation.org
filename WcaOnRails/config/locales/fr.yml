@@ -880,6 +880,8 @@ fr:
       information: Information
       #original_hash: 9ac918a
       about: À propos de la WCA
+      # Added by @jfly to get ./spec/features/set_locale_spec.rb to pass.
+      documents: WCA Documents
       #original_hash: d8fd3e4
       delegates: Délégués WCA
       #original_hash: 37b8fdc
