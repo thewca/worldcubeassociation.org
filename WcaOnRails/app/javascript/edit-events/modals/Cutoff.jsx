@@ -37,7 +37,7 @@ export default {
   },
   Input({ value: cutoff, onChange, autoFocus, wcifEvent, roundNumber }) {
     let wcifRound = wcifEvent.rounds[roundNumber - 1];
-    let solveCount = formats.byId[wcifRound.format].expectedSolveCount;
+    let cutoffFormats = formats.byId[wcifRound.format].allowedFirstPhaseFormats;
 
     let numberOfAttemptsInput, attemptResultInput;
     let onChangeAggregator = () => {
@@ -69,10 +69,10 @@ export default {
                       ref={c => numberOfAttemptsInput = c}
               >
                 <option value={0}>No cutoff</option>
-                {solveCount > 1 ? <option disabled="disabled">────────</option> : null}
-                {solveCount > 1 && wcifRound.format !== 'a'  ? <option value={1}>Best of 1</option> : null}
-                {solveCount > 2 ? <option value={2}>Best of 2</option> : null}
-                {solveCount > 3 && wcifRound.format !== 'a' ? <option value={3}>Best of 3</option> : null}
+                {cutoffFormats.length > 0 && (<option disabled="disabled">────────</option>)}
+                {cutoffFormats.map((format, index) =>
+                  <option key={index} value={+format}>Best of {format}</option>
+                )}
               </select>
               <div className="input-group-addon">
                 <strong>/ {formats.byId[wcifRound.format].name}</strong>
