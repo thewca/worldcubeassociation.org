@@ -906,6 +906,8 @@ hr:
       information: Informacije
       #original_hash: 9ac918a
       about: Više o WCA
+      #original_hash: ed97787
+      documents: WCA Dokumenti
       #original_hash: d8fd3e4
       delegates: WCA Delegati
       #original_hash: 37b8fdc
@@ -2320,6 +2322,15 @@ hr:
       members_html: >-
         Svi natjecatelji automatski postaju <strong>članovi</strong> WCA na
         svojim prvim WCA natjecanjima.
+  documents:
+    #original_hash: 687c828
+    title: Dokumenti
+    #original_hash: 65b08c4
+    bylaws: Akti
+    #original_hash: fdceb44
+    motions: Prijedlozi
+    #original_hash: 092f99e
+    minutes: Minute
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegati
