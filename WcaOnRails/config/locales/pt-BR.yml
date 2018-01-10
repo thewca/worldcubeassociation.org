@@ -893,6 +893,8 @@ pt-BR:
       information: Informação
       #original_hash: 9ac918a
       about: Sobre a WCA
+      #original_hash: ed97787
+      documents: Documentos da WCA
       #original_hash: d8fd3e4
       delegates: Delegados da WCA
       #original_hash: 37b8fdc
@@ -2306,6 +2308,15 @@ pt-BR:
       members_html: >-
         Todos os competidores automaticamente se tornam <strong>membros</strong>
         da WCA em sua primeira competição oficial.
+  documents:
+    #original_hash: 687c828
+    title: Documentos
+    #original_hash: 65b08c4
+    bylaws: Estatuto (ByLaws)
+    #original_hash: fdceb44
+    motions: Moções
+    #original_hash: 092f99e
+    minutes: Atas
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
