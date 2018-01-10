@@ -150,7 +150,7 @@ de:
     time:
       zero: '%{count} Versuche um < %{time} zu erreichen'
       one: '%{count} Versuch um < %{time} zu erreichen'
-      other: '%{count} Versuche um ≤ %{time} zu erreichen'
+      other: '%{count} Versuche um < %{time} zu erreichen'
     #original_hash: b49d930
     moves:
       zero: '%{count} Versuche um < %{moves} Züge zu erreichen'
