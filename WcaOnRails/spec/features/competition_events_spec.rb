@@ -86,7 +86,7 @@ RSpec.feature "Competition events management" do
       within_round("333", 1) { find("[name=cutoff]").click }
 
       within_modal do
-        select "Best of 2", from: "Round format"
+        select "Best of 2", from: "Cutoff format"
         fill_in "minutes", with: "2"
         click_button "Ok"
       end
