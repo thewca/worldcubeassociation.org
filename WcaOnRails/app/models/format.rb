@@ -12,10 +12,10 @@ class Format < ApplicationRecord
   def allowed_first_phase_formats
     {
       "1" => [],
-      "2" => [ "1" ],
-      "3" => [ "1", "2" ],
-      "m" => [ "1", "2" ],
-      "a" => [ "2" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      "2" => ["1"],
+      "3" => ["1", "2"],
+      "m" => ["1", "2"],
+      "a" => ["2"], # https://www.worldcubeassociation.org/regulations/#9b1
     }[self.id]
   end
 
