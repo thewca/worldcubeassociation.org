@@ -241,6 +241,10 @@ function checkRounds () {
 
   }
 
+  // Hacky workaround for https://github.com/thewca/worldcubeassociation.org/issues/830
+  list( $prevCompetitionId, $prevEventId ) = explode('|', $prevEvent);
+  $wrongs += checkRoundNames ( $roundInfos, $prevCompetitionId, $prevEventId );
+
   #--- Tell the result.
   $date = wcaDate();
   noticeBox2(
