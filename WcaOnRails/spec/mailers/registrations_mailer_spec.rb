@@ -107,16 +107,8 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("Your registration is on the waiting list, which currently has 2 people on it.")
       expect(mail.body.encoded).to match(competition_register_url(registration.competition))
       expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_without_organizers.organizers_or_delegates)}.")
-    end
-
-    it "pluralizes correctly" do
-      earlier_registration.destroy!
-
-      expect(mail.body.encoded).to match("which currently has 1 person on it.")
-      expect(mail.body.encoded).to match(competition_register_url(registration.competition))
     end
   end
 

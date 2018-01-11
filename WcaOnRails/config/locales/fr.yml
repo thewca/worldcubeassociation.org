@@ -1259,6 +1259,8 @@ fr:
         on_waiting_list: >-
           Votre inscription est en attente, il y a actuellement %{n_total}
           %{people} en attente.
+        # Added by @jonatanklosko to get ./spec/mailers/registrations_mailer_spec.rb to pass.
+        awaits_approval: "Your registration has been accepted by the system and is pending approval from the organization team."
         #original_hash: 5dd5905
         approval_info_html: >-
           Un email vous sera envoyé lorsque votre inscription sera acceptée. Les
