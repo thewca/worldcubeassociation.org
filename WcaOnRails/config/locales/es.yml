@@ -893,6 +893,8 @@ es:
       information: Información
       #original_hash: 9ac918a
       about: Acerca de la WCA
+      #original_hash: ed97787
+      documents: Documentos WCA
       #original_hash: d8fd3e4
       delegates: Delegados de la WCA
       #original_hash: 37b8fdc
@@ -1100,6 +1102,8 @@ es:
           puedan aparecer en el fondo.
         #original_hash: cc5f23a
         '6': La foto tiene que tener la orientación correcta.
+        #original_hash: 1a18831
+        '7': La foto no debe contener contenido ofensivo (p.e. gestos ofensivos).
     errors:
       #original_hash: 094b763
       not_found: no encontrado
@@ -1261,17 +1265,19 @@ es:
         mail_subject: 'Te has registrado en %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Te acabas de registrar en %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Tu registro está en la lista de espera, que actualmente está formada
-          por %{n_total} %{people}.
-        #original_hash: 5dd5905
+        #original_hash: e771ee5
+        awaits_approval: >-
+          Tu registro ha sido aceptado por el sistema y está esperando ser
+          aprobado por el equipo organizador.
+        #original_hash: 826045f
         approval_info_html: >-
           Se te enviará un correo electrónico cuando tu registro se apruebe. Por
-          favor, ten presente que los registros no se aprueban automáticamente.
-          Para ver las condiciones de aprobación, visita la página web de la
-          competición o ponte en contacto con los organizadores. Puedes
-          comprobar el estado de tu registro %{here}.
+          favor, ten presente que los registros no se aprueban automáticamente,
+          así que sé paciente si no se te ha aprobado el registro
+          inmediatamente. Puede que haya que seguir más pasos del registro antes
+          de que se apruebe tu registro. Para ver las condiciones de aprobación,
+          visita la página web de la competición o ponte en contacto con los
+          organizadores. Puedes comprobar el estado de tu registro %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Tu registro en %{comp_name} ha sido aceptado.'
@@ -1433,6 +1439,15 @@ es:
     wont_pay_here: >-
       Por favor, consulta la información de la competición acerca de
       instrucciones sobre el pago
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          La cantidad a reembolsar al competidor, puede ser cualquier valor
+          hasta la cantidad que ya ha pagado.
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Cantidad a reembolsar
     payment_form:
       #original_hash: 4de825f
       title: Importe del registro
@@ -2220,7 +2235,7 @@ es:
           de estas competiciones en sus países.
         #original_hash: 0902c4a
         '3': >-
-          La missión de la World Cube Association es celebrar<strong>más
+          La misión de la World Cube Association es celebrar <strong>más
           competiciones en más países con más gente y más diversión en
           condiciones justas y equitativas.</strong>
         #original_hash: 2b993c0
@@ -2321,6 +2336,15 @@ es:
       members_html: >-
         Todos los competidores se convierten automáticamente en <strong>miembros
         de la WCA</strong> en su primera competición oficial.
+  documents:
+    #original_hash: 687c828
+    title: Documentos
+    #original_hash: 65b08c4
+    bylaws: Estatutos
+    #original_hash: fdceb44
+    motions: Mociones
+    #original_hash: 092f99e
+    minutes: Actas
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
