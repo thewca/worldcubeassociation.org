@@ -576,7 +576,7 @@ da:
           California).
         #original_hash: 3d99319
         information: >-
-          Information om deltagergrænsen, indgangs gebyret for deltager og
+          Information om deltagergrænsen, adgangsgebyret for deltager og
           tilskuere, og andre detaljer som er vigtige for folk der ønsker at
           deltage eller at være tilskuere.
         #original_hash: 0708400
@@ -604,11 +604,11 @@ da:
         generate_website: ''
         #original_hash: 950a7ea
         base_entry_fee_lowest_denomination: >-
-          Basis deltagergebyret for konkurrencen. Deltagergebyret vil blive vist
+          Basis adgangsgebyret for konkurrencen. Adgangsgebyret vil blive vist
           på konkurrencens informations side og tilmeldings siden hvis det
           bliver brugt.
         #original_hash: 866bc05
-        currency_code: Valuta koden for indgangs gebyrer.
+        currency_code: Valuta koden for adgangsgebyrer.
         #original_hash: da39a3e
         guests_enabled: ''
         #original_hash: da39a3e
@@ -888,6 +888,8 @@ da:
       information: Information
       #original_hash: 9ac918a
       about: Om WCA
+      #original_hash: ed97787
+      documents: WCA Dokumenter
       #original_hash: d8fd3e4
       delegates: WCA Delegerede
       #original_hash: 37b8fdc
@@ -1091,6 +1093,10 @@ da:
         '5': Din avatar må ikke indeholde tekst andet end normal baggrunds tekst.
         #original_hash: cc5f23a
         '6': Avataren skal være indsendt i den korrekte orientering.
+        #original_hash: 1a18831
+        '7': >-
+          Avataren må ikke indeholde noget offensivt (f.eks. offensive
+          håndbevægelser).
     errors:
       #original_hash: 094b763
       not_found: ikke fundet
@@ -1407,11 +1413,20 @@ da:
     #original_hash: 58b1a3c
     accepted: Din tilmelding er blevet accepteret!
     #original_hash: 70de60f
-    entry_fees_fully_paid: 'Du har betalt %{paid}, som dækker deltagergebyret.'
+    entry_fees_fully_paid: 'Du har betalt %{paid}, som dækker hele adgangsgebyret.'
     #original_hash: 2e5d1b9
     will_pay_here: Du vil betale dem her efter at du har tilmeldt dig
     #original_hash: b7ef562
     wont_pay_here: Tjek konkurrencens information for instruktion om hvordan man betaler
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          Mængden at refundere til deltageren. Det kan være hvilken som helst
+          mængde, op til den mængde der allerede er betalt.
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Refunder mængden
     payment_form:
       #original_hash: 4de825f
       title: Deltagergebyrer
@@ -2281,6 +2296,15 @@ da:
       members_html: >-
         Alle deltagere bliver automatisk <strong>medlem</strong> af WCA efter
         deres første konkurrence.
+  documents:
+    #original_hash: 687c828
+    title: Dokumenter
+    #original_hash: 65b08c4
+    bylaws: Vedtægter
+    #original_hash: fdceb44
+    motions: Forslag
+    #original_hash: 092f99e
+    minutes: Referater
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegerede
@@ -2817,7 +2841,7 @@ da:
         erstattet af den næste person på ventelisten.
       #original_hash: 1b2ea79
       content2: >-
-        Hvis konkurrencens deltagergebyr skal betales på forhånd, er det en
+        Hvis konkurrencens adgangsgebyr skal betales på forhånd, er det en
         effektiv måde at tilbyde en gratis plads til den næste deltager på
         ventelisten, og sætte en frist for hvornår deltagergebyret skal betales
         for at fuldende tilmeldingen (fx 48 timer). I tilfælde af at betalingen
