@@ -880,6 +880,8 @@ fi:
       information: Tietoja
       #original_hash: 9ac918a
       about: 'Tietoa WCA:sta'
+      #original_hash: ed97787
+      documents: WCA-asiakirjat
       #original_hash: d8fd3e4
       delegates: WCA-delegaatit
       #original_hash: 37b8fdc
@@ -1245,17 +1247,19 @@ fi:
         mail_subject: 'Olet rekisteröitynyt kilpailuun %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Rekisteröidyit juuri kilpailuun %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Rekisteröitymisesi on jonotuslistalla, jolla on tällä hetkellä
-          %{n_total} %{people}.
-        #original_hash: 5dd5905
+        #original_hash: e771ee5
+        awaits_approval: >-
+          Järjestelmä on vastaanottanut rekisteröitymisesi, joka odottaa nyt
+          järjestäjäryhmän hyväksyntää.
+        #original_hash: 826045f
         approval_info_html: >-
           Sinulle ilmoitetaan sähköpostitse, kun rekisteröitymisesi on
-          hyväksytty. Huomioithan, että rekisteröitymisiä ei hyväksytä
-          automaattisesti. Nähdäksesi hyväksymisperusteet, käy kilpailun
-          verkkosivulla tai ota yhteyttä järjestäjiin. Voit myös tarkistaa
-          rekisteröitymisesi tilan %{here}.
+          hyväksytty. Huomioi, että rekisteröitymisiä ei hyväksytä
+          automaattisesti, joten olethan kärsivällinen, jos tämä ei tapahdu
+          samantien. Rekisteröityminen saattaa vaatia useiden vaiheiden
+          seuraamista tullakseen hyväksytyksi. Nähdäksesi hyväksymisperusteet,
+          käy kilpailun verkkosivulla tai ota yhteyttä järjestäjiin. Voit myös
+          tarkistaa rekisteröitymisesi tilan %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Rekisteröitymisesi kilpailuun %{comp_name} on hyväksytty'
@@ -2281,6 +2285,15 @@ fi:
       members_html: >-
         Kaikista kilpailijoista tulee automaattisesti WCA:n
         <strong>jäseniä</strong> ensimmäisessä WCA-kilpailussaan.
+  documents:
+    #original_hash: 687c828
+    title: Asiakirjat
+    #original_hash: 65b08c4
+    bylaws: Arvot
+    #original_hash: fdceb44
+    motions: Aloitteet
+    #original_hash: 092f99e
+    minutes: Pöytäkirjat
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-delegaatit
