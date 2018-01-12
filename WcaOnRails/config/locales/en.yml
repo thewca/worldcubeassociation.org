@@ -744,7 +744,7 @@ en:
         #context: this key is one of the reasons explaining why a registration could be deleted
         causes:
           missing_info: "You did not submit all the required details"
-          incomplete: "You didn't meet the registration criteria (for example, paying the registration fee in advance)"
+          incomplete: "You didn't meet the registration criteria (for example, paying the registration fee in advance or surpassing the qualifying times for events)"
           registrations_full: "The competitor limit has been reached and there are no more spots available"
           multiple_registrations: "You registered twice or more times"
     #context: on the registrations list
