@@ -708,7 +708,7 @@ en:
         mail_subject: "You have registered for %{comp_name}"
         #context: "comp_name" contains the competition's name
         registered_html: "You just registered for %{comp_name}."
-        awaits_approval: "Your registration has been accepted by the system and is pending approval from the organization team."
+        awaits_approval: "Your registration has been received and is pending approval from the organization team."
         #context: "here" is replaced by a link to view the registration
         approval_info_html: >-
           You will be emailed when your registration is approved.
