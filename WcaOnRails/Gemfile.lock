@@ -246,7 +246,7 @@ GEM
       activerecord
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
-    kaminari-i18n (0.4.0)
+    kaminari-i18n (0.5.0)
       kaminari
       rails
     kgio (2.11.1)
@@ -291,7 +291,7 @@ GEM
     mysql2 (0.4.10)
     nenv (0.3.0)
     newrelic_rpm (4.7.1.340)
-    nio4r (2.1.0)
+    nio4r (2.2.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     notiffany (0.1.1)
