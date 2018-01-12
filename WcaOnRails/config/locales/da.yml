@@ -361,7 +361,7 @@ da:
         #original_hash: d7020f4
         remarks: Bemærkninger
         #original_hash: c305010
-        clone_tabs: Jeg vil gerne kopiere alle tabs med yderligere informationer
+        clone_tabs: Jeg vil gerne kopiere alle faner med yderligere informationer
         #original_hash: c5497bc
         competition_events: Discipliner
         #original_hash: 71c8461
@@ -943,7 +943,7 @@ da:
       #original_hash: b7ee3c4
       manage_users: Administrer brugere
       #original_hash: 12ab214
-      delegate: Delegat
+      delegate: Delegeret
       #original_hash: 2f4bd74
       panel: Panel
       #original_hash: d3a928c
@@ -1059,8 +1059,8 @@ da:
         #original_hash: 8501c74
         msg: >-
           Du kan ikke ændre dit navn, fødselsdag, køn eller land. Grund:
-          %{reason}. Kontakt dit <a href='%{delegate_url}'>delegate</a> hvis du
-          har brug for at ændre noget af det.
+          %{reason}. Kontakt din lokale <a href='%{delegate_url}'>delegerede</a>
+          hvis du har brug for at ændre noget af det.
         reason:
           #original_hash: 370ff12
           assigned: Du har et WCA ID tilknyttet
@@ -1161,15 +1161,15 @@ da:
     select_nearby_delegate:
       #original_hash: 2b11120
       select_delegate_html: >-
-        Før du kan tilknytte dit WCA ID, har vi brug for et <a
-        href='%{link_delegate}' target='_blank'>WCA delegat</a> til at bekræfte
-        din identitet. Udfyld venligst din fødselsdag og vælg det delegat du
-        tror kender dig bedst.
+        Før du kan tilknytte dit WCA ID, har vi brug for en <a
+        href='%{link_delegate}' target='_blank'>WCA delegeret</a> til at
+        bekræfte din identitet. Udfyld venligst din fødselsdag og vælg det
+        delegat du tror kender dig bedst.
       #original_hash: d69cf94
       already_assigned_html: >-
         WCA ID %{link_id} er allerede tildelt til en anden konto. Hvis du tror
-        det var en fejl så kontakt dit lokale <a href='%{link_delegate}'
-        target='_blank'>WCA delegate</a>.
+        det var en fejl så kontakt din lokale <a href='%{link_delegate}'
+        target='_blank'>WCA delegerede</a>.
       #original_hash: d26bfdc
       missing_dob_html: 'WCA ID %{link_id} har ikke en fødselsdag tilknyttet.'
       #original_hash: 5be6803
@@ -1204,9 +1204,9 @@ da:
         other: nye
       #original_hash: bc010e3
       returner:
-        zero: returners
-        one: returner
-        other: returners
+        zero: tilbagevendende
+        one: tilbagevendende
+        other: tilbagevendende
       #original_hash: b7da17a
       person:
         zero: personer
@@ -1252,25 +1252,27 @@ da:
         #original_hash: 6fb638c
         mail_subject: 'Du har registreret dig til %{comp_name}'
         #original_hash: 8374583
-        registered_html: 'Du har registreret dig til %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Din registrering er på ventelisten, som lige nu er %{n_total}
-          %{people} på den.
-        #original_hash: 5dd5905
+        registered_html: 'Du har tilmeldt dig til %{comp_name}.'
+        #original_hash: e771ee5
+        awaits_approval: >-
+          Din tilmelding er blevet accepteret af system, og venter nu på at
+          blive accepteret af konkurrencens arrangører.
+        #original_hash: 826045f
         approval_info_html: >-
-          Du vil modtage en email når din tilmelding er godkendt. Læg mærke til
-          at tilmeldinger ikke bliver accepteret automatisk. For at se
-          tilmeldings kriterierne så besøg konkurrencens hjemmeside eller
-          kontakt arrangørene. Du kan også tjekke statusen af din tilmelding
-          %{here}.
+          Du vil modtage en email når din tilmelding er blevet godkendt. Læg
+          mærke til at tilmeldinger ikke bliver accepteret automatisk, så hav
+          tålmodig, hvis den ikke er accepteret med det samme. Der er muligvis
+          flere trin, som du skal følge, før din tilmelding kan blive
+          accepteret. For at se tilmeldings kriterierne, så besøg konkurrencens
+          hjemmeside eller kontakt arrangørene. Du kan også tjekke statussen af
+          din tilmelding %{here}.
       accepted:
         #original_hash: 34515b5
-        mail_subject: 'Din registrering for %{comp_name} er blevet accepteret'
+        mail_subject: 'Din tilmelding til %{comp_name} er blevet accepteret'
         #original_hash: 24d2883
         message_html: >-
-          Din tilmelding til %{comp_name} er blevet accepteret. Som altid kan du
-          tjekke statusen af din registrering %{here}.
+          Din tilmelding til %{comp_name} er blevet accepteret. Du kan som altid
+          kan du tjekke statussen af din registrering %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'Vi ser frem til at se dig til %{comp_name}!'
       pending:
@@ -1282,18 +1284,16 @@ da:
           Mulige årsager er:
         causes:
           #original_hash: eadfc0d
-          accepted: Din tilmelding var ved en fejl accepteret
+          accepted: Din tilmelding var ved en fejl blevet accepteret
           #original_hash: 2ac6d84
           withdrawal: Du spurgte om en tilbagekaldelse
         #original_hash: 8f7358f
-        email_if_error: Hvis du tror det er en fejl så svar på denne email.
+        email_if_error: 'Hvis du tror det er en fejl, så send et svar til denne email.'
       deleted:
         #original_hash: 268e248
-        mail_subject: 'Din registrering til %{comp_name} er blevet slettet'
+        mail_subject: 'Din tilmelding til %{comp_name} er blevet slettet'
         #original_hash: f66ae63
-        message_html: >-
-          Din registrering til %{comp_name} er blevet slettet. Mulige årsager
-          er:
+        message_html: 'Din tilmelding til %{comp_name} er blevet slettet. Mulige årsager er:'
         causes:
           #original_hash: 978944c
           missing_info: Du indsendte ikke alle forlangte detaljer
@@ -1302,9 +1302,9 @@ da:
             Du mødte ikke registrerings kriterierne (for eksempel, at betale
             registrerings gebyret i forvejen)
           #original_hash: 1e225f0
-          registrations_full: Deltager begrænsningen er nået og der er ikke flere ledige pladser
+          registrations_full: Deltagerbegrænsningen er nået og der er ikke flere ledige pladser
           #original_hash: 0d4cce9
-          multiple_registrations: Du registrerede to eller flere gange
+          multiple_registrations: Du tilmeldte dig to eller flere gange
     list:
       #original_hash: 8b7631c
       title: 'Registreringer til %{comp}'
@@ -1809,7 +1809,7 @@ da:
         #original_hash: 76bfdcf
         admin_view: Administrators synsvinkel
         #original_hash: a857eb4
-        tabs: Rediger tabs
+        tabs: Rediger faner
         #original_hash: 4c9f914
         delegate_report: Delegat report
         #original_hash: b233e77
@@ -1830,7 +1830,7 @@ da:
   competition_tabs:
     headers:
       #original_hash: 2a4d562
-      tabs: Tabs
+      tabs: Faner
       #original_hash: 709a232
       name: Navn
     form_elements:
@@ -1858,7 +1858,7 @@ da:
       tabs_list_title: Rediger tabs
       #original_hash: 40f9491
       tabs_introduction_text: >-
-        Her kan du tilføje og redigere tabs som bliver vist på konkurrencens
+        Her kan du tilføje og redigere faner, som bliver vist på konkurrencens
         info side.
     edit:
       #original_hash: 5f1f5b8
@@ -2052,11 +2052,11 @@ da:
             ville hjælpe meget med at arrangere en konkurrence ordentligt.
           #original_hash: dbd72c2
           '3': >-
-            Efter det skal arrangørholdet kontakte et <a target='_blank'
+            Efter det skal arrangørholdet kontakte en <a target='_blank'
             href='https://www.worldcubeassociation.org/delegates'>WCA
-            Delegate</a> i nærheden. Opsynet af et delgat er nødvendigt for at
-            konkurrencen officielt skal anderkendes af WCA. WCA Delegaten vil
-            hjælpe med at arrangere konkurrencen succesfyldt.
+            Delegeret</a> i nærheden. Opsynet af en delegeret er nødvendigt, for
+            at konkurrencen officielt vil blive anderkendt af WCA. Den WCA
+            Delegerede vil hjælpe med at arrangere konkurrencen succesfyldt.
           #original_hash: e5f67d2
           '4': >-
             Besøg <a target='_blank'
@@ -2271,7 +2271,7 @@ da:
           Personalet og Eksternt Personale, overholder WCA's Etiske Regler.
       wqac:
         #original_hash: 8f32116
-        name: WCA Kvalitets Forsikrings Komité
+        name: WCA Kvalitet Forsikrings Komité
         #original_hash: 0171b3b
         description: >-
           Denne Komité har rollen at støtte og fremme kvalitets forbedring i
@@ -2280,16 +2280,16 @@ da:
           Personale.
       #original_hash: f2ceade
       delegates_html: >-
-        <strong>WCA Delegater</strong> er medlemmer af WCA som er ansvarlige for
-        at gøre så alle WCA konkurrencer forløber ordentligt iforhold til målet,
-        reglerne, og ånden af WCA. WCA skelner mellem <strong>WCA Senior
-        Delegater</strong>, <strong>WCA Delegater</strong> and <strong>WCA
-        Kandidat Delegater</strong>%{see_link}. Yderligere til pligterne som et
-        WCA Delegat, er et Senior Delegat ansvarlig for at styrer de Delegater i
-        deres område og kan blive kontaktet for regionale årsager. Nye Delegater
-        er først listet som WCA Kandidat Delegater og skal vise at de kan finde
-        ud af at styre konkurrencer succesfuldt før de bliver listet som WCA
-        Delegater.
+        <strong>WCA Delegerede</strong> er medlemmer af WCA som er ansvarlige
+        for at gøre så alle WCA konkurrencer forløber ordentligt iforhold til
+        målet, reglerne, og ånden af WCA. WCA skelner mellem <strong>WCA Senior
+        Delegerede</strong>, <strong>WCA Delegerede</strong> and <strong>WCA
+        Kandidat Delegerede</strong>%{see_link}. Yderligere til pligterne som en
+        WCA Delegeret, er et Senior Delegeret ansvarlig for at styrer de
+        Delegerede i deres område og kan blive kontaktet for regionale årsager.
+        Nye Delegerede bliver først vist som WCA Kandidat Delegerede, og skal
+        vise at de kan finde ud af at styre konkurrencer succesfuldt, før de
+        bliver vist som WCA Delegerede.
       #original_hash: 27d18ac
       see_link_html: ' (see %{link})'
       #original_hash: 5b01fcc
@@ -2873,7 +2873,7 @@ da:
       #original_hash: ee2e9c6
       content: >-
         Opgaverne en arrangør skal gøre under konkurrencen burde blive diskuret
-        med den WCA delegeret. De normale opgaver er (de kan blive uddelegeret
+        med den WCA delegerede. De normale opgaver er (de kan blive uddelegeret
         til andre ansvarlige folk):
       list:
         #original_hash: 03aea46
