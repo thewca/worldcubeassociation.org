@@ -15,6 +15,9 @@ env:
     - DATABASE_URL=mysql2://root:@127.0.0.1:3306/wca_test
     - RACK_ENV=test
 before_install:
+  # Workaround for https://github.com/travis-ci/travis-ci/issues/8978
+  - gem update --system
+
   - nvm install 8
   - nvm use 8
 
