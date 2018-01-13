@@ -7,7 +7,7 @@ onPage('users#edit, users#update', function() {
       candidate_delegate: true,
       delegate: true,
       senior_delegate: false,
-      board_member: false,
+      board_member: true,
     }[delegateStatus];
 
     var $seniorDelegateSelect = $('.form-group.user_senior_delegate');
