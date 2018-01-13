@@ -906,6 +906,8 @@ ro:
       information: Informații
       #original_hash: 9ac918a
       about: Despre WCA
+      #original_hash: ed97787
+      documents: Documente WCA
       #original_hash: d8fd3e4
       delegates: Delegați WCA
       #original_hash: 37b8fdc
@@ -1285,17 +1287,20 @@ ro:
         mail_subject: 'Te-ai înregistrat pentru %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Tocmai te-ai înregistrat pentru %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Înregistrarea ta se află pe lista de așteptare, ce conține %{n_total}
-          %{people}.
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: >-
+          Înregistrarea ta a fost primită și așteaptă aprobarea de la echipa de
+          organizare.
+        #original_hash: 826045f
         approval_info_html: >-
           Vei primi un e-mail când înregistrarea ta va fi aprobată. Te rugăm să
-          ții cont că înregistrările nu sunt aprobate automat. Pentru a vedea
-          criteriile de aprobare poți vizita site-ul competiției sau poți
-          contacta organizatorii. De asemenea, poți verifica stadiul
-          înregistrării tale %{here}.
+          ții cont că înregistrările nu sunt aprobate automat, așa că trebuie să
+          ai răbdare dacă nu ai fost acceptat imediat. Este posibil să existe
+          mai multe etape pe care trebuie să le parcurgi înainte ca
+          înregistrarea ta să fie acceptată.Pentru a vedea criteriile de
+          aprobare poți accesa site-ul competiției sau poți contacta
+          organizatorii. De asemenea, poți verifica stadiul înregistrării tale
+          %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Înregistrarea ta pentru %{comp_name} a fost acceptată.'
@@ -1329,10 +1334,11 @@ ro:
         causes:
           #original_hash: 978944c
           missing_info: Nu ai dat toate detaliile cerute
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Nu ai îndeplinit condițiile de înregistrare (de exemplu, plata în
-            avans a taxei de înregistrare)
+            avans a taxei de înregistrare sau atingerea timpilor de calificare
+            pentru probe)
           #original_hash: 1e225f0
           registrations_full: >-
             Numărul maxim de concurenți a fost atins și nu mai sunt locuri
@@ -2348,6 +2354,15 @@ ro:
       members_html: >-
         Toți concurenții devin automat  <strong>membrii</strong> WCA după prima
         lor competiție.
+  documents:
+    #original_hash: 687c828
+    title: Documente
+    #original_hash: 65b08c4
+    bylaws: Statute
+    #original_hash: fdceb44
+    motions: Propuneri
+    #original_hash: 092f99e
+    minutes: Procese-verbale
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegați WCA
