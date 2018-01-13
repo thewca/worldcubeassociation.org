@@ -1280,17 +1280,19 @@ hr:
         mail_subject: 'Registrirali ste se za %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Upravo ste se registrirali za %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Vaša registracija je na listi čekanja, koja upravo ima %{n_total}
-          %{people}.
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: >-
+          Vaša registracija je primljena te čeka na potvrdu organizacijskog
+          tima.
+        #original_hash: 826045f
         approval_info_html: >-
           Biti ćete obaviješteni e-mail-om kada Vam se prihvati registracija.
-          Molim Vas pripazite da registracije ne budu prihvaćene automatski. Da
-          biste vidjeli kriterij prihvaćanja, provjerite web-stranicu natjecanja
-          ili kontaktirajte organizatore. Također, možete provjeriti status Vaše
-          registracije %{here}.
+          Molim Vas uzmite u obzir da registracije ne budu prihvaćene automatski
+          te budite strpljivi ukoliko Vam registracija nije odmah prihvaćena.
+          Moguće je da postoji više koraka za registraciju prije nego se Vaša
+          registracija prihvati. Da biste vidjeli kriterij prihvaćanja,
+          provjerite web-stranicu natjecanja ili kontaktirajte organizatore.
+          Također, možete provjeriti status Vaše registracije %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Vaša registracija za %{comp_name} je prihvaćena'
@@ -1322,10 +1324,11 @@ hr:
         causes:
           #original_hash: 978944c
           missing_info: Niste priložili sve potrebne detalje
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Niste udovoljili svim kriterijima registracije (npr. plaćanje
-            kotizacije unaprijed)
+            kotizacije unaprijed ili neispunjena kvalifikacijska vremena za
+            određene discipline)
           #original_hash: 1e225f0
           registrations_full: Limit broja natjecatelja je dostignut i nema više slobodnih mjesta
           #original_hash: 0d4cce9
