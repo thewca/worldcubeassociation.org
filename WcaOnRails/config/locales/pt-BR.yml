@@ -1254,7 +1254,7 @@ pt-BR:
         mail_subject: 'Sua inscrição em %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Você se inscreveu em %{comp_name}.'
-        #original_hash: e771ee5
+        #original_hash: 13fabed
         awaits_approval: >-
           Sua inscrição foi recebida e está aguardando aprovação pela equipe de
           organização.
@@ -1299,10 +1299,11 @@ pt-BR:
         causes:
           #original_hash: 978944c
           missing_info: Você não preencheu todos as informações necessárias
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Você não preencheu os critérios para inscrição (por exemplo, pagar a
-            taxa de inscrição antecipadamente)
+            taxa de inscrição antecipadamente ou atingir os tempos de
+            qualificação para as modalidades)
           #original_hash: 1e225f0
           registrations_full: >-
             O limite de competidores foi atingido e não há mais vagas
