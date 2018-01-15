@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class StaticPagesController < ApplicationController
-  include ActionView::Helpers::AssetTagHelper
-
   def home
   end
 
