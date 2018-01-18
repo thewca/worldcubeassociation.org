@@ -720,4 +720,12 @@ RSpec.describe Competition do
       expect(Competition.managed_by(organizer1.id)).to match_array [competition]
     end
   end
+
+  describe "#serializable_hash" do
+    let(:competition) { FactoryBot.create :competition, countryId: "" }
+
+    it "sets iso2 to nil when country is missing" do
+      expect(competition.serializable_hash[:country_iso2]).to be_nil
+    end
+  end
 end
