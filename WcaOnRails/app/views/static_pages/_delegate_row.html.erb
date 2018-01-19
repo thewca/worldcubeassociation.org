@@ -18,6 +18,7 @@
       <%= render "shared/user", user: delegate %>
     <% end %>
   </td>
-  <td><%= t "delegate_statuses.#{delegate.delegate_status}" %></td>
+  # Temporary hack - to be removed once https://github.com/thewca/worldcubeassociation.org/issues/2003 is done
+  <td><%= t "delegate_statuses.#{delegate.delegate_status == "board_member" ? "Delegate" : delegate.delegate_status}" %></td>
   <td><%= delegate.region %></td>
 </tr>
