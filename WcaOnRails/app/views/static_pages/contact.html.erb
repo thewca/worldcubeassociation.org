@@ -16,14 +16,16 @@
   <p>
     <strong><%= t('contact.board.name_html') %></strong> - <%= mail_to "board@worldcubeassociation.org" %><br />
     <%= t('contact.board.info_html') %><br />
-    <%= @board_members.order(:name).map(&:name).join(", ") %>
+    <%= Team.find_by_friendly_id('board').order(:name).map(&:name).join(", ") %>
   </p>
 
   <% Team.order(:rank).each do |team| %>
     <p>
-      <strong><%= team.name %> (<%= team.acronym %>)</strong> - <%= mail_to team.email %><br />
-      <%= t("contact.#{team.friendly_id}.info_html") %><br />
-      <%= format_team_members(team) %>
+      <% if team.friendly_id != 'board' %>
+        <strong><%= team.name %> (<%= team.acronym %>)</strong> - <%= mail_to team.email %><br />
+        <%= t("contact.#{team.friendly_id}.info_html") %><br />
+        <%= format_team_members(team) %>
+      <% end %>
     </p>
   <% end %>
 </div>
