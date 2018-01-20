@@ -1,5 +1,8 @@
 onPage('users#edit, users#update', function() {
   // Hide/show senior delegate select based on what the user's role is.
+  // This is a copy of def self.delegate_status_allows_senior_delegate(delegate_status) in the user model
+  // https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/app/models/user.rb#L299-L308
+  // It is necessary to fix both files for changes to work
   $('select[name="user[delegate_status]"]').on("change", function(e) {
     var delegateStatus = this.value;
     var seniorDelegateRequired = {
@@ -7,7 +10,7 @@ onPage('users#edit, users#update', function() {
       candidate_delegate: true,
       delegate: true,
       senior_delegate: false,
-      board_member: false,
+      board_member: true,
     }[delegateStatus];
 
     var $seniorDelegateSelect = $('.form-group.user_senior_delegate');

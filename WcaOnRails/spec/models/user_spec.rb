@@ -108,7 +108,7 @@ RSpec.describe User, type: :model do
     expect(senior_delegate1).to be_invalid_with_errors(senior_delegate: ["must not be present"])
   end
 
-  it "does not allow senior delegate if board member" do
+  it "allows senior delegate if board member" do
     board_member = FactoryBot.create :user
     board_member.board_member!
 
@@ -117,7 +117,7 @@ RSpec.describe User, type: :model do
 
     expect(board_member).to be_valid
     board_member.senior_delegate = senior_delegate
-    expect(board_member).to be_invalid_with_errors(senior_delegate: ["must not be present"])
+    expect(board_member).to be_valid
   end
 
   it "does not allow senior delegate if regular user" do
