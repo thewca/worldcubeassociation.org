@@ -296,6 +296,9 @@ class User < ApplicationRecord
     end
   end
 
+  # This is a copy of def self.delegate_status_allows_senior_delegate(delegate_status) in the user model
+  # https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/app/assets/javascripts/users.js#L3-L11
+  # It is necessary to fix both files for changes to work
   def self.delegate_status_allows_senior_delegate(delegate_status)
     {
       nil => false,
