@@ -67,7 +67,6 @@ class User < ApplicationRecord
     candidate_delegate: "candidate_delegate",
     delegate: "delegate",
     senior_delegate: "senior_delegate",
-    board_member: "board_member",
   }
   has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
   belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User"
@@ -360,28 +359,36 @@ class User < ApplicationRecord
     preferred_locale || I18n.default_locale
   end
 
+  def board_member?
+    team_member?(Team::BOARD_FRIENDLY_ID)
+  end
+
   def software_team?
-    team_member?('wst')
+    team_member?(Team::WST_FRIENDLY_ID)
   end
 
   def results_team?
-    team_member?('wrt')
+    team_member?(Team::WRT_FRIENDLY_ID)
   end
 
   def wrc_team?
-    team_member?('wrc')
+    team_member?(Team::WRC_FRIENDLY_ID)
   end
 
   def wdc_team?
-    team_member?('wdc')
+    team_member?(Team::WDC_FRIENDLY_ID)
   end
 
   def communication_team?
-    team_member?('wct')
+    team_member?(Team::WCT_FRIENDLY_ID)
+  end
+
+  def ethics_committee?
+    team_member?(Team::WEC_FRIENDLY_ID)
   end
 
   def quality_assurance_committee?
-    team_member?('wqac')
+    team_member?(Team::WQAC_FRIENDLY_ID)
   end
 
   def team_member?(team_friendly_id)

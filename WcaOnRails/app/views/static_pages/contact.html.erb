@@ -16,7 +16,7 @@
   <p>
     <strong><%= t('contact.board.name_html') %></strong> - <%= mail_to "board@worldcubeassociation.org" %><br />
     <%= t('contact.board.info_html') %><br />
-    <%= Team.find_by_friendly_id('board').order(:name).map(&:name).join(", ") %>
+    <%= User.where(board_member?).order(:name).map(&:name).join(", ") %>
   </p>
 
   <% Team.order(:rank).each do |team| %>

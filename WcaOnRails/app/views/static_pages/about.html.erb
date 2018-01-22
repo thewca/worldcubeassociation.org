@@ -15,7 +15,7 @@
   <p><%= t('about.structure.board_html') %></p>
 
   <ul>
-    <% Team.find_by_friendly_id('board').order(:name).each do |board_member| %>
+    <% User.where(board_member?).order(:name).each do |board_member| %>
       <li><%= board_member.name %> - <%= board_member.region %></li>
     <% end %>
   </ul>
