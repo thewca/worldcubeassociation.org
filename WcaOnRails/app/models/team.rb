@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 class Team < ApplicationRecord
+  BOARD_FRIENDLY_ID = 'board'
+  WCT_FRIENDLY_ID = 'wct'
+  WDC_FRIENDLY_ID = 'wdc'
+  WEC_FRIENDLY_ID = 'wec'
+  WFC_FRIENDLY_ID = 'wfc'
+  WQAC_FRIENDLY_ID = 'wqac'
+  WRC_FRIENDLY_ID = 'wrc'
+  WRT_FRIENDLY_ID = 'wrt'
+  WST_FRIENDLY_ID = 'wst'
+
   has_many :team_members, dependent: :destroy
   has_many :current_members, -> { current }, class_name: "TeamMember"
 
@@ -20,16 +30,6 @@ class Team < ApplicationRecord
       end
     end
   end
-
-  BOARD_FRIENDLY_ID = 'board'
-  WCT_FRIENDLY_ID = 'wct'
-  WDC_FRIENDLY_ID = 'wdc'
-  WEC_FRIENDLY_ID = 'wec'
-  WFC_FRIENDLY_ID = 'wfc'
-  WQAC_FRIENDLY_ID = 'wqac'
-  WRC_FRIENDLY_ID = 'wrc'
-  WRT_FRIENDLY_ID = 'wrt'
-  WST_FRIENDLY_ID = 'wst'
 
   def acronym
     friendly_id.upcase
