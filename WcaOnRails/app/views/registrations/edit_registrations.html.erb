@@ -39,7 +39,9 @@
             </th>
             <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
             <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
-            <th class="paid"><%= t 'activerecord.attributes.registration.paid_entry_fees' %></th>
+            <% if @competition.using_stripe_payments? %>
+              <th class="paid"><%= t 'activerecord.attributes.registration.paid_entry_fees' %></th>
+            <% end %>
             <th></th>
 
             <!-- Extra column for .table-greedy-last-column -->
@@ -86,11 +88,13 @@
                   <%= registration.comments %>
                 </span>
               </td>
-              <td class="entry_fee">
-                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.last_payment_date %>">
-                  <%= format_money registration.paid_entry_fees %>
-                </span>
-              </td>
+              <% if @competition.using_stripe_payments? %>
+                <td class="entry_fee">
+                  <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.last_payment_date %>">
+                    <%= format_money registration.paid_entry_fees %>
+                  </span>
+                </td>
+              <% end %>
               <td>
                 <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
                   <span class="glyphicon glyphicon-envelope"></span>
