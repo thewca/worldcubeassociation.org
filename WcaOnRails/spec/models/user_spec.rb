@@ -109,8 +109,10 @@ RSpec.describe User, type: :model do
   end
 
   it "allows senior delegate if board member" do
-    board_member = FactoryBot.create :user
-    board_member.board_member!
+    board_team = Team.find_by_friendly_id('board')
+    board_member = FactoryBot.create :delegate
+
+    FactoryBot.create(:team_member, team_id: board_team.id, user_id: board_member.id, start_date: Date.today - 20)
 
     senior_delegate = FactoryBot.create :user
     senior_delegate.senior_delegate!

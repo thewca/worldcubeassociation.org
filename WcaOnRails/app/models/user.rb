@@ -24,8 +24,9 @@ class User < ApplicationRecord
 
   def self.eligible_voters
     team_leaders = TeamMember.current.where(team_leader: true).map(&:user)
-    eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate board_member))
-    (team_leaders + eligible_delegates).uniq
+    eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))
+    board_members = TeamMember.current.where(team_id: Team.find_by_friendly_id('board')).map(&:user)
+    (team_leaders + eligible_delegates + board_members).uniq
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
