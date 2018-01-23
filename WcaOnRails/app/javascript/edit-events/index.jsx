@@ -26,7 +26,7 @@ export function promiseSaveWcif(wcif) {
 let state = {};
 export function rootRender() {
   ReactDOM.render(
-    <EditEvents competitionId={state.competitionId} competitionConfirmed={state.competitionConfirmed} wcifEvents={state.wcifEvents} />,
+    <EditEvents competitionId={state.competitionId} canAddAndRemoveEvents={state.canAddAndRemoveEvents} wcifEvents={state.wcifEvents} />,
     document.getElementById('events-edit-area'),
   )
 }
@@ -37,9 +37,9 @@ function normalizeWcifEvents(wcifEvents) {
   });
 }
 
-wca.initializeEventsForm = (competitionId, competitionConfirmed, wcifEvents) => {
+wca.initializeEventsForm = (competitionId, canAddAndRemoveEvents, wcifEvents) => {
   state.competitionId = competitionId;
-  state.competitionConfirmed = competitionConfirmed;
+  state.canAddAndRemoveEvents = canAddAndRemoveEvents;
   state.wcifEvents = normalizeWcifEvents(wcifEvents);
   rootRender();
 }

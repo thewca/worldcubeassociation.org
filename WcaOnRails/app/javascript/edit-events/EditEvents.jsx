@@ -55,7 +55,7 @@ export default class EditEvents extends React.Component {
   }
 
   render() {
-    let { competitionId, competitionConfirmed, wcifEvents } = this.props;
+    let { competitionId, canAddAndRemoveEvents, wcifEvents } = this.props;
     let unsavedChanges = null;
     if(this.unsavedChanges()) {
       unsavedChanges = (
@@ -77,7 +77,7 @@ export default class EditEvents extends React.Component {
           {wcifEvents.map(wcifEvent => {
             return (
               <div key={wcifEvent.id} className="col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                <EventPanel wcifEvents={wcifEvents} wcifEvent={wcifEvent} competitionConfirmed={competitionConfirmed} />
+                <EventPanel wcifEvents={wcifEvents} wcifEvent={wcifEvent} canAddAndRemoveEvents={canAddAndRemoveEvents} />
               </div>
             );
           })}
@@ -159,7 +159,7 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
   );
 }
 
-function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
+function EventPanel({ wcifEvents, canAddAndRemoveEvents, wcifEvent }) {
   let event = events.byId[wcifEvent.id];
 
   let removeEvent = () => {
@@ -197,7 +197,7 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
 
   let roundsCountSelector = null;
   if(wcifEvent.rounds) {
-    let disableRemove = competitionConfirmed;
+    let disableRemove = !canAddAndRemoveEvents;
     roundsCountSelector = (
       <div className="input-group">
         <select
@@ -218,7 +218,7 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
           <button
             className="btn btn-danger btn-xs remove-event"
             disabled={disableRemove}
-            title={disableRemove ? `Cannot remove ${event.name} because the competition is confirmed.` : ""}
+            title={disableRemove ? `Cannot remove ${event.name} because the competition is confirmed and user is not board member.` : ""}
             onClick={removeEvent}
           >
             Remove event
@@ -227,12 +227,12 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
       </div>
     );
   } else {
-    let disableAdd = competitionConfirmed;
+    let disableAdd = !canAddAndRemoveEvents;
     roundsCountSelector = (
       <button
         className="btn btn-success btn-xs add-event"
         disabled={disableAdd}
-        title={disableAdd ? `Cannot add ${event.name} because the competition is confirmed.` : ""}
+        title={disableAdd ? `Cannot add ${event.name} because the competition is confirmed and user is not board member.` : ""}
         onClick={() => setRoundCount(0)}
       >
         Add event

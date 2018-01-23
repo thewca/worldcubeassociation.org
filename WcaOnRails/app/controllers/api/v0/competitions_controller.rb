@@ -42,7 +42,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params
     require_can_manage!(competition)
     wcif_events = params["_json"].map { |wcif_event| wcif_event.permit!.to_h }
-    competition.set_wcif_events!(wcif_events)
+    competition.set_wcif_events!(wcif_events, require_user!)
     render json: {
       status: "Successfully saved WCIF events",
     }
@@ -80,6 +80,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   private def require_user!
     raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
+    current_api_user || current_user
   end
 
   private def require_scope!(scope)

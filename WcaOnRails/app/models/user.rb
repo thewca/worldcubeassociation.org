@@ -472,6 +472,14 @@ class User < ApplicationRecord
     can_admin_results? || competition.delegates.include?(self)
   end
 
+  def can_add_and_remove_events?(competition)
+    if competition.isConfirmed?
+      can_admin_results?
+    else
+      can_admin_results? || can_manage_competition?(competition)
+    end
+  end
+
   def can_create_poll?
     admin? || board_member? || wrc_team? || wdc_team? || quality_assurance_committee?
   end
