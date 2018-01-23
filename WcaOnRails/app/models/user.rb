@@ -309,16 +309,6 @@ class User < ApplicationRecord
     }.fetch(delegate_status)
   end
 
-  validate :not_illegally_demoting_oneself
-  def not_illegally_demoting_oneself
-    about_to_lose_access = !board_member?
-    if current_user == self && about_to_lose_access
-      if delegate_status_was == "board_member"
-        errors.add(:delegate_status, I18n.t('users.errors.board_member_cannot_resign'))
-      end
-    end
-  end
-
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
     if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?

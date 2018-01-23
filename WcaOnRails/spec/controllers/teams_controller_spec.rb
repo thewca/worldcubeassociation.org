@@ -36,8 +36,8 @@ RSpec.describe TeamsController do
 
   describe 'GET #edit' do
     context 'when signed in as a team leader without rights to manage all teams' do
-      let(:team_where_is_leader) { Team.find_by_friendly_id('wrc') }
-      let(:team_where_is_not_leader) { Team.find_by_friendly_id('wst') }
+      let(:team_where_is_leader) { Team.find_by_friendly_id(Team::WRC_FRIENDLY_ID) }
+      let(:team_where_is_not_leader) { Team.find_by_friendly_id(Team::WST_FRIENDLY_ID) }
       let(:leader) do
         user = FactoryBot.create(:user)
         FactoryBot.create(:team_member, team_id: team_where_is_leader.id, user_id: user.id, team_leader: true)

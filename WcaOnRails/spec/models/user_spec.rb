@@ -500,8 +500,8 @@ RSpec.describe User, type: :model do
   end
 
   it "#teams and #current_teams return unique team names" do
-    wrc_team = Team.find_by_friendly_id('wrc')
-    wrt_team = Team.find_by_friendly_id('wrt')
+    wrc_team = Team.find_by_friendly_id(Team::WRC_FRIENDLY_ID)
+    wrt_team = Team.find_by_friendly_id(Team::WRT_FRIENDLY_ID)
     user = FactoryBot.create(:user)
 
     FactoryBot.create(:team_member, team_id: wrc_team.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
@@ -517,7 +517,7 @@ RSpec.describe User, type: :model do
     team_member = wrt_member.team_members.first
     team_member.update_attributes!(end_date: 1.day.ago)
 
-    expect(wrt_member.reload.team_member?('wrt')).to eq false
+    expect(wrt_member.reload.team_member?(Team::WRT_FRIENDLY_ID)).to eq false
   end
 
   it 'former leaders of the results team are not considered current leaders' do
@@ -526,7 +526,7 @@ RSpec.describe User, type: :model do
     team_member.update_attributes!(team_leader: true)
     team_member.update_attributes!(end_date: 1.day.ago)
 
-    expect(wrt_leader.reload.team_leader?('wrt')).to eq false
+    expect(wrt_leader.reload.team_leader?(Team::WRT_FRIENDLY_ID)).to eq false
 
     expect(wrt_leader.teams_where_is_leader.count).to eq 0
   end

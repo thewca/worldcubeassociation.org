@@ -16,7 +16,7 @@
 
   <ul>
     <% Team.find_by_friendly_id(Team::BOARD_FRIENDLY_ID).current_members.includes(:user).map(&:user).sort_by(&:name).each do |board_member| %>
-      <li><%= board_member.name %> - <%= board_member.region %></li>
+      <li><%= board_member.name %> - <%= board_member.country.name %></li>
     <% end %>
   </ul>
 

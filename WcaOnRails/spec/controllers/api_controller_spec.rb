@@ -321,10 +321,10 @@ RSpec.describe Api::V0::ApiController do
       before :each do
         user = FactoryBot.create :user
 
-        wrc_team = Team.find_by_friendly_id('wrc')
+        wrc_team = Team.find_by_friendly_id(Team::WRC_FRIENDLY_ID)
         FactoryBot.create(:team_member, team_id: wrc_team.id, user_id: user.id)
 
-        results_team = Team.find_by_friendly_id('wrt')
+        results_team = Team.find_by_friendly_id(Team::WRT_FRIENDLY_ID)
         FactoryBot.create(:team_member, team_id: results_team.id, user_id: user.id, team_leader: true)
 
         api_sign_in_as(user)
