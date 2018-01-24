@@ -28,28 +28,29 @@ class Api::V0::ApiController < ApplicationController
   def scramble_program
     render json: {
       "current" => {
-        "name" => "TNoodle-WCA-0.12.0",
+        "name" => "TNoodle-WCA-0.13.0",
         "information" => "#{root_url}regulations/scrambles/",
-        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-0.12.0.jar",
+        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-0.13.0.jar",
       },
       "allowed" => [
-        "TNoodle-WCA-0.12.0",
+        "TNoodle-WCA-0.13.0",
       ],
       "history" => [
-        "TNoodle-0.7.4",       # 2013-01-01
-        "TNoodle-0.7.5",       # 2013-02-26
-        "TNoodle-0.7.8",       # 2013-04-26
-        "TNoodle-0.7.12",      # 2013-10-01
-        "TNoodle-WCA-0.8.0",   # 2014-01-13
-        "TNoodle-WCA-0.8.1",   # 2014-01-14
-        "TNoodle-WCA-0.8.2",   # 2014-01-28
-        "TNoodle-WCA-0.8.4",   # 2014-02-10
-        "TNoodle-WCA-0.9.0",   # 2015-03-30
-        "TNoodle-WCA-0.10.0",  # 2015-06-30
-        "TNoodle-WCA-0.11.1",  # 2016-04-04
-        "TNoodle-WCA-0.11.3",  # 2016-10-17
-        "TNoodle-WCA-0.11.5",  # 2016-12-12
-        "TNoodle-WCA-0.12.0",  # 2017-09-25
+        "TNoodle-0.7.4",
+        "TNoodle-0.7.5",
+        "TNoodle-0.7.8",
+        "TNoodle-0.7.12",
+        "TNoodle-WCA-0.8.0",
+        "TNoodle-WCA-0.8.1",
+        "TNoodle-WCA-0.8.2",
+        "TNoodle-WCA-0.8.4",
+        "TNoodle-WCA-0.9.0",
+        "TNoodle-WCA-0.10.0",
+        "TNoodle-WCA-0.11.1",
+        "TNoodle-WCA-0.11.3",
+        "TNoodle-WCA-0.11.5",
+        "TNoodle-WCA-0.12.0",
+        "TNoodle-WCA-0.13.0",
       ],
     }
   end
