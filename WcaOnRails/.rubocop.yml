@@ -5,9 +5,7 @@ AllCops:
   DisplayCopNames: true
   Exclude:
     - 'node_modules/**/*'
-    - 'bin/webpack-dev-server'
-    - 'bin/webpack'
-    - 'bin/yarn'
+    - 'bin/**/*'
     - 'vendor/**/*'
 
 Bundler/OrderedGems:
@@ -177,4 +175,11 @@ Naming/PredicateName:
   Enabled: false
 
 Style/YodaCondition:
+  Enabled: false
+
+Style/FormatStringToken:
+  Enabled: false
+
+# Disabled until https://github.com/bbatsov/rubocop/issues/5333 is released.
+Layout/EmptyLinesAroundArguments:
   Enabled: false

@@ -893,6 +893,8 @@ pt:
       information: Informação
       #original_hash: 9ac918a
       about: Sobre a WCA
+      #original_hash: ed97787
+      documents: Documentos da WCA
       #original_hash: d8fd3e4
       delegates: Delegados da WCA
       #original_hash: 37b8fdc
@@ -1255,16 +1257,18 @@ pt:
         mail_subject: 'Registou-se para %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Acabou de se registar para %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          O seu registo está em lista de espera, que tem atualmente %{n_total}
-          %{people}.
-        #original_hash: 5dd5905
+        #original_hash: e771ee5
+        awaits_approval: >-
+          O seu registo foi aceite pelo sistema e está pendennte de aprovação
+          pela equipa de organização.
+        #original_hash: 826045f
         approval_info_html: >-
           Ser-lhe-á enviado um email quando o seu registo for aprovado. Note que
-          os registos não são automaticamente aprovados. Para ver os critérios
-          de aprovação, visite o site da competição ou contacte a organização.
-          Pode também verificar o estado do seu registo %{here}.
+          os registos não são automaticamente aprovados, por isso seja paciente
+          se não for aceite imediatamente. Poderá haver outras etapas de registo
+          antes que este seja aprovado. Para ver os critérios de aprovação,
+          visite o site da competição ou contacte a organização. Pode também
+          verificar o estado do seu registo %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'O seu registo para %{comp_name} foi aceite'
@@ -2309,6 +2313,15 @@ pt:
       members_html: >-
         Todos os competidores tornam-se automaticamente <strong>membros</strong>
         da WCA na sua primeira competição oficial.
+  documents:
+    #original_hash: 687c828
+    title: Documentos
+    #original_hash: 65b08c4
+    bylaws: Estatutos
+    #original_hash: fdceb44
+    motions: Moções
+    #original_hash: 092f99e
+    minutes: Minutas
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA

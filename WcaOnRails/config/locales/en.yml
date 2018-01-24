@@ -708,7 +708,7 @@ en:
         mail_subject: "You have registered for %{comp_name}"
         #context: "comp_name" contains the competition's name
         registered_html: "You just registered for %{comp_name}."
-        awaits_approval: "Your registration has been accepted by the system and is pending approval from the organization team."
+        awaits_approval: "Your registration has been received and is pending approval from the organization team."
         #context: "here" is replaced by a link to view the registration
         approval_info_html: >-
           You will be emailed when your registration is approved.
@@ -744,7 +744,7 @@ en:
         #context: this key is one of the reasons explaining why a registration could be deleted
         causes:
           missing_info: "You did not submit all the required details"
-          incomplete: "You didn't meet the registration criteria (for example, paying the registration fee in advance)"
+          incomplete: "You didn't meet the registration criteria (for example, paying the registration fee in advance or meeting the qualifying times for events)"
           registrations_full: "The competitor limit has been reached and there are no more spots available"
           multiple_registrations: "You registered twice or more times"
     #context: on the registrations list
@@ -1228,7 +1228,7 @@ en:
       #context: WEC
       wec:
         name: "WCA Ethics Committee"
-        description: "This committee has the role to ensure that all the procedures followed by the WCA Staff and External Staff abide by its Code of Ethics."
+        description: "This committee's role is to ensure that all the procedures followed by the WCA Staff and External Staff abide by its Code of Ethics, and to perform independent investigations if the conduct of any of these members is not compliant with said Code of Ethics. Such investigations can be requested by any Registered Speedcubers, for whom the WEC is a confidant. This committee also functions as the board of appeal if anyone involved disagrees with a decision made by the WCA Disciplinary Committee."
       #context: WQAC
       wqac:
         name: "WCA Quality Assurance Committee"

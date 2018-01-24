@@ -5,9 +5,7 @@
   <p><%= t('about.structure.delegates_html', see_link: "") %></p>
   <p><%= t('delegates_page.acknowledges') %></p>
 
-  <% delegate_sort_order = { region: :asc, delegate_status: :desc, name: :asc } %>
-
-  <%= render partial: "delegates_in_region_table", locals: { delegates: @board_members.order(delegate_sort_order) } %>
+  <% delegate_sort_order = { region: :asc, name: :asc } %>
 
   <% @senior_delegates.order(delegate_sort_order).each do |senior_delegate| %>
     <%= render partial: "delegates_in_region_table", locals: { delegates: [senior_delegate] + senior_delegate.subordinate_delegates.order(delegate_sort_order) } %>

@@ -74,8 +74,17 @@ function showUpdateSQL () {
           // We can replace a roundTypeId with another one if the new one will not be replaced again
           if( ! in_array( $roundTypeIdNew, array_keys( $roundTypeIds ))){ 
 
-            // Replace
+            // Replace in Results table
             $command = "UPDATE Results
+                        SET roundTypeId='$roundTypeIdNew'
+                        WHERE competitionId='$competitionId'
+                          AND eventId='$eventId'
+                          AND roundTypeId='$roundTypeIdOld'";
+            echo "$command\n";
+            dbCommand( $command );
+
+            // Replace in Scrambles table (will do nothing if scrambles for a competition are not available)
+            $command = "UPDATE Scrambles
                         SET roundTypeId='$roundTypeIdNew'
                         WHERE competitionId='$competitionId'
                           AND eventId='$eventId'

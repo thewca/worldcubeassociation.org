@@ -880,6 +880,8 @@ fi:
       information: Tietoja
       #original_hash: 9ac918a
       about: 'Tietoa WCA:sta'
+      #original_hash: ed97787
+      documents: WCA-asiakirjat
       #original_hash: d8fd3e4
       delegates: WCA-delegaatit
       #original_hash: 37b8fdc
@@ -1245,17 +1247,19 @@ fi:
         mail_subject: 'Olet rekisteröitynyt kilpailuun %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Rekisteröidyit juuri kilpailuun %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Rekisteröitymisesi on jonotuslistalla, jolla on tällä hetkellä
-          %{n_total} %{people}.
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: >-
+          Rekisteröitymisesi on vastaanotettu ja se odottaa nyt järjestäjäryhmän
+          hyväksyntää.
+        #original_hash: 826045f
         approval_info_html: >-
           Sinulle ilmoitetaan sähköpostitse, kun rekisteröitymisesi on
-          hyväksytty. Huomioithan, että rekisteröitymisiä ei hyväksytä
-          automaattisesti. Nähdäksesi hyväksymisperusteet, käy kilpailun
-          verkkosivulla tai ota yhteyttä järjestäjiin. Voit myös tarkistaa
-          rekisteröitymisesi tilan %{here}.
+          hyväksytty. Huomioi, että rekisteröitymisiä ei hyväksytä
+          automaattisesti, joten olethan kärsivällinen, jos tämä ei tapahdu
+          samantien. Rekisteröityminen saattaa vaatia useiden vaiheiden
+          seuraamista tullakseen hyväksytyksi. Nähdäksesi hyväksymisperusteet,
+          käy kilpailun verkkosivulla tai ota yhteyttä järjestäjiin. Voit myös
+          tarkistaa rekisteröitymisesi tilan %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Rekisteröitymisesi kilpailuun %{comp_name} on hyväksytty'
@@ -1289,10 +1293,11 @@ fi:
         causes:
           #original_hash: 978944c
           missing_info: Et lähettänyt kaikkia vaadittuja tietoja
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Et täyttänyt rekisteröitymisvaatimuksia (esimerkiksi
-            osallistumismaksun maksaminen etukäteen)
+            osallistumismaksun maksaminen etukäteen tai lajien
+            karsintavaatimukset)
           #original_hash: 1e225f0
           registrations_full: >-
             Osallistujarajoitus on saavutettu, eikä enempää paikkoja ole
@@ -2281,6 +2286,15 @@ fi:
       members_html: >-
         Kaikista kilpailijoista tulee automaattisesti WCA:n
         <strong>jäseniä</strong> ensimmäisessä WCA-kilpailussaan.
+  documents:
+    #original_hash: 687c828
+    title: Asiakirjat
+    #original_hash: 65b08c4
+    bylaws: Arvojärjestys
+    #original_hash: fdceb44
+    motions: Aloitteet
+    #original_hash: 092f99e
+    minutes: Pöytäkirjat
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-delegaatit
@@ -2321,13 +2335,17 @@ fi:
           Olla aktiivisesti osallisena WCA:n maanosakilpailuissa, jotka pidetään
           alueellisen järjestön maanosassa
         #original_hash: 5913cd0
-        '3': 'Kunnioittaa ja edistää WCA:n arvojen ja sääntöjen mukaisia päämääriä'
+        '3': >-
+          Kunnioittaa ja edistää WCA:n arvojärjestyksen ja sääntöjen mukaisia
+          päämääriä
         #original_hash: 0c3576b
         '4': Suostua kaikkiin asiaankuuluviin WCA-sääntöihin
         #original_hash: 23cda60
         '5': Hyväksyä ja suostua kaikkiin WCA-toimihenkilöiden päätöksiin
         #original_hash: 08c6d86
-        '6': Pitää WCA ajan tasalla järjestön nykyisistä arvoista ja säännöistä
+        '6': >-
+          Pitää WCA ajan tasalla järjestön nykyisestä arvojärjestyksestä ja
+          säännöistä
     application_instructions:
       #original_hash: 4da829b
       title: Hakemusohjeet
@@ -2342,7 +2360,9 @@ fi:
         #original_hash: a9bf3f4
         '2': Virallinen osoite ja yhteystiedot
         #original_hash: 2a029e9
-        '3': 'Kopio sen arvoista, jotka noudattavat WCA:n arvoja ja sääntöjä'
+        '3': >-
+          Kopio sen arvojärjestyksestä, joka noudattaa WCA:n arvojärjestystä ja
+          sääntöjä
         #original_hash: a5a2771
         '4': Luettelo sen pääasiallisista toimijoista
         #original_hash: 1186ebf

@@ -96,7 +96,7 @@ module CompetitionsHelper
         latitude_degrees: c.latitude_degrees,
         longitude_degrees: c.longitude_degrees,
         cityName: c.cityName,
-        marker_date: c.start_date.to_formatted_s(:long),
+        marker_date: wca_date_range(c.start_date, c.end_date),
         is_probably_over: c.is_probably_over?,
         url: competition_path(c),
       }

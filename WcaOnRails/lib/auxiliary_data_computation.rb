@@ -107,11 +107,14 @@ module AuxiliaryDataComputation
         values = personal_rank.map do |person_id, rank_data|
           # Note: continent_rank and country_rank may be not present because of a country change, in such case we default to 0.
           "('#{person_id}', '#{event_id}', #{rank_data[:best]}, #{rank_data[:world_rank]}, #{rank_data[:continent_rank] || 0}, #{rank_data[:country_rank] || 0})"
-        end.join(",\n")
-        ActiveRecord::Base.connection.execute <<-SQL
-          INSERT INTO #{table_name} (personId, eventId, best, worldRank, continentRank, countryRank) VALUES
-          #{values}
-        SQL
+        end
+        # Insert 500 rows at once to avoid running into too long query.
+        values.each_slice(500) do |values_subset|
+          ActiveRecord::Base.connection.execute <<-SQL
+            INSERT INTO #{table_name} (personId, eventId, best, worldRank, continentRank, countryRank) VALUES
+            #{values_subset.join(",\n")}
+          SQL
+        end
       end
     end
   end

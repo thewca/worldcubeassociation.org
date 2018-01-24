@@ -550,7 +550,7 @@ zh-TW:
         #original_hash: bce4589
         cityName: 比賽舉行的城市或州(如果適用)。不要包含國家名稱(例如：台北、台中或高雄)
         #original_hash: 3d99319
-        information: 關於人數上限、選手及觀眾的報名費的資訊，以及其他有興趣比賽或觀賽等相關細節。
+        information: 關於人數上限、參賽者及觀眾的報名費的資訊，以及其他有興趣比賽或觀賽等相關細節。
         #original_hash: 0708400
         delegate_ids: 本場比賽的WCA代表
         #original_hash: 517d376
@@ -592,7 +592,7 @@ zh-TW:
         #original_hash: da39a3e
         use_wca_registration: ''
         #original_hash: c0ab502
-        competitor_limit_enabled: 目前這數字僅做為發佈消息之用，並不會阻止更多選手報名比賽。我們正在開發更完整的報名流程，但這需要一些時間。
+        competitor_limit_enabled: 目前這數字僅做為發佈消息之用，並不會阻止更多參賽者報名比賽。我們正在開發更完整的報名流程，但這需要一些時間。
         #original_hash: b9bc84d
         competitor_limit: 這場比賽允許的參賽人數。
         #original_hash: 4bd7102
@@ -813,6 +813,8 @@ zh-TW:
       information: 資訊
       #original_hash: 9ac918a
       about: 關於WCA
+      #original_hash: ed97787
+      documents: WCA文件
       #original_hash: d8fd3e4
       delegates: WCA代表
       #original_hash: 37b8fdc
@@ -995,6 +997,8 @@ zh-TW:
         '5': 頭像不得有正常背景以外的文字。
         #original_hash: cc5f23a
         '6': 頭像的方向必須正確。
+        #original_hash: 1a18831
+        '7': 頭像不得含有攻擊性內容（例如：無禮的手勢）
     errors:
       #original_hash: 094b763
       not_found: 找不到
@@ -1005,7 +1009,7 @@ zh-TW:
         與WCA資料庫不相符。如果您確認您提供的日期格式(YYYY-MM-DD)是正確的，請使用<a
         href="%{dob_form_path}">此表單</a>聯絡WCA成績組。
       #original_hash: 71b46b4
-      unique: '已經被“%{used_name}”的%{used_email}使用了'
+      unique: '已經被「%{used_name}」的%{used_email}使用了'
       #original_hash: 26f70ed
       dob_past: 必須為過去
       #original_hash: f599dc5
@@ -1199,7 +1203,7 @@ zh-TW:
         #original_hash: fca3213
         with_stripe: 付款於
       #original_hash: ce53c71
-      payment_requested_on: 'Payment requested on: %{date}'
+      payment_requested_on: '報名產生於：%{date}'
       #original_hash: b25928c
       total: 總共
     new_registration:
@@ -1261,6 +1265,13 @@ zh-TW:
     will_pay_here: 您需要在提交報名以後繳交報名費
     #original_hash: b7ef562
     wont_pay_here: 請瀏覽比賽資訊以確認如何繳交報名費
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: 退還給參賽者的金額可以是任何金額，最多為他已支付的金額。
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: 退款金額
     payment_form:
       #original_hash: 4de825f
       title: 報名費
@@ -1510,7 +1521,7 @@ zh-TW:
       #original_hash: 1208df7
       create_competition: 申請比賽
       #original_hash: c02a415
-      note_clone: 若您想要複製現有的比賽資訊，請在您想要複製的比賽目錄裡點擊"複製"。
+      note_clone: 若您想要複製現有的比賽資訊，請在您想要複製的比賽目錄裡點擊「複製」。
     update_events:
       #original_hash: 00204fa
       update_success: 成功更新比賽項目。
@@ -1603,7 +1614,7 @@ zh-TW:
         #original_hash: d672995
         register: 報名
         #original_hash: 855bd26
-        competitors: 選手
+        competitors: 參賽者
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA個人頁面
@@ -1907,7 +1918,7 @@ zh-TW:
       paragraphs:
         #original_hash: 3e4f9b5
         '1': >-
-          世界方塊協會掌管魔術方塊比賽，這些魔術方塊是透過轉動一部份的零件來操控，通常稱為“魔術方塊”。這些魔術方塊當中最有名的就是魯比克方塊，由匈牙利的魯比克教授發明。而當中的一些魔術方塊則被挑選為WCA官方的比賽項目。
+          世界方塊協會掌管魔術方塊比賽，這些魔術方塊是透過轉動一部份的零件來操控，通常稱之為「魔術方塊」。這些魔術方塊當中最有名的就是魯比克方塊，由匈牙利的魯比克教授發明。而當中的一些魔術方塊則被挑選為WCA官方的比賽項目。
         #original_hash: 22c3593
         '2': 世界方塊協會在世界各地舉辦比賽，幫助區域組織在各個國家舉辦比賽。
         #original_hash: 0902c4a
@@ -1968,7 +1979,16 @@ zh-TW:
       #original_hash: 27d18ac
       see_link_html: '(參見%{link})'
       #original_hash: 5b01fcc
-      members_html: 所有選手在參加第一場WCA比賽後自動成為WCA<strong>成員</strong>。
+      members_html: 所有參賽者在參加第一場WCA比賽後自動成為WCA<strong>成員</strong>。
+  documents:
+    #original_hash: 687c828
+    title: 文件
+    #original_hash: 65b08c4
+    bylaws: 章程
+    #original_hash: fdceb44
+    motions: 提議
+    #original_hash: 092f99e
+    minutes: 會議記錄
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
@@ -2234,7 +2254,7 @@ zh-TW:
       #original_hash: 1fa73f3
       title: 規則
       #original_hash: 557095b
-      content1_html: 所有比賽應遵守<a href="/regulations/">WCA規則</a>。選手必須在參加第一場比賽之前閱讀這些規則。
+      content1_html: 所有比賽應遵守<a href="/regulations/">WCA規則</a>。參賽者必須在參加第一場比賽之前閱讀這些規則。
       #original_hash: 4296902
       content2_html: >-
         WCA規則附有<a
@@ -2268,7 +2288,7 @@ zh-TW:
       title: 如何主辦比賽
       #original_hash: 3dbbbee
       content: >-
-        所以的WCA比賽必須有WCA代表出席並監督。如果您有興趣主辦比賽，請聯絡您最近的WCA代表。他們會給您一些指導並幫助您挑選適合的日子，因為他們會知道同一段時間是否有其他比賽正在規劃中。如果您附近沒有WCA代表，請聯絡您所在地區的高級代表。
+        所有的WCA比賽必須有WCA代表出席並監督。如果您有興趣主辦比賽，請聯絡離您最近的WCA代表。他們會給您一些指導並幫助您挑選適合的日子，因為他們會知道同一段時間是否有其他比賽正在規劃中。如果您附近沒有WCA代表，請聯絡您所在地區的高級代表。
     paragraph2:
       #original_hash: f20dd3b
       title: 主辦比賽的預計開銷
@@ -2280,7 +2300,7 @@ zh-TW:
       title: 公告比賽的截止期限
       #original_hash: c61c6c9
       content_html: >-
-        比賽應在比賽日期的至少一個月前公布（參見<a
+        比賽應在比賽日期的至少一個月前公告（參見<a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>指導方針
         8a4++</a>）。如果有特殊狀況使得比賽無法如期申請，最慢可以在比賽兩周前公告，由WCA董事會決定。建議您盡早向WCA董事會告知狀況，以避免太晚申請比賽而遭拒絕。
     paragraph4:
@@ -2297,7 +2317,7 @@ zh-TW:
         #original_hash: 7b2c099
         '3': 在過去的12個月當中，比賽場地方圓100公里以內少於16場比賽。
       #original_hash: 5c5cf04
-      content2: “多地同時的3x3x3最少步數解比賽”為僅有3x3x3最少步數解項目且同時在多個不同場地舉行的WCA比賽。
+      content2: 「多地同時的3x3x3最少步數解比賽」為僅有3x3x3最少步數解項目且同時在多個不同場地舉行的WCA比賽。
       olist2:
         '1':
           #original_hash: 316fd13
@@ -2318,7 +2338,7 @@ zh-TW:
       title: 公告項目
       #original_hash: b6c6d26
       content: >-
-        代表在申請比賽時，必須具體列出所有要在比賽中舉辦的項目。上述包括“暫時”項目（例如：根據比賽流程可能會額外加開的項目）。另外新增項目必須經過WCA董事會審核。
+        代表在申請比賽時，必須具體列出所有要在比賽中舉辦的項目。上述包括「暫時」項目（例如：根據比賽流程可能會額外加開的項目）。另外新增項目必須經過WCA董事會審核。
     paragraph5:
       #original_hash: 17d01de
       title: 人數上限
@@ -2337,12 +2357,12 @@ zh-TW:
       #original_hash: e4f1c62
       title: 管理候補名單
       #original_hash: 81ca3f3
-      content1: 一旦參賽人數達到上限，候補名單將會被開放。當已報名且通過審核的選手取消其報名，其位置將會被下一位候補選手取代。
+      content1: 一旦參賽人數達到上限，候補名單將會被開放。當已報名且通過審核的參賽者取消其報名，其位置將會被下一位候補參賽者取代。
       #original_hash: 1b2ea79
       content2: >-
-        如果比賽報名費採用預付制度，則下一個候補選手會自動補位，其報名費應在截止時間前繳清才能完成報名（例如：48小時）。萬一選手沒有及時繳清或是取消報名，則該位置會再補位給下一名選手。此程序會一直持續到位置都被補滿為止，任何選手一律不得略過候補程序。
+        如果比賽報名費採用預付制度，則下一個候補參賽者會自動補位，其報名費應在截止時間前繳清才能完成報名（例如：48小時）。萬一參賽者沒有及時繳清或是取消報名，則該位置會再補位給下一名參賽者。此程序會一直持續到位置都被補滿為止，任何參賽者一律不得略過候補程序。
       #original_hash: 37bcbd6
-      content3: 如果參賽者沒有透過正規程序報名卻參加比賽，該選手成績將會被事後取消（假設有報名上限且達到上限）。
+      content3: 如果參賽者沒有透過正常程序報名卻參加比賽，該參賽者成績將會被事後取消（假設有報名上限且達到上限）。
     paragraph8:
       #original_hash: c8ad8e6
       title: 比賽之前的工作
@@ -2350,7 +2370,7 @@ zh-TW:
         #original_hash: c8abb5e
         '1': 在公告比賽之前，賽程需發布在比賽網站上。賽程隨後還可以進行調整。
         #original_hash: e93d043
-        '2': 比賽選手應被分派至若干組別，成績單應提前列印且需根據分組分類。建議您提早規劃負責每個項目每個組別的轉亂員，至少第一輪。轉亂員應值得信賴。
+        '2': 參賽者應被分派至若干組別，成績單應提前列印且需根據分組分類。建議您提早規劃負責每個項目每個組別的轉亂員，至少第一輪。轉亂員應值得信賴。
     paragraph9:
       #original_hash: ead44f5
       title: 比賽當中的工作
@@ -2360,7 +2380,7 @@ zh-TW:
         #original_hash: 03aea46
         '1': 負責報到處
         #original_hash: c4388f3
-        '2': 宣布比賽通知
+        '2': 公告比賽通知
         #original_hash: 45c78ae
         '3': 呼叫組別並發放成績單
         #original_hash: 0b31986

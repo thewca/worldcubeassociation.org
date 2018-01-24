@@ -910,7 +910,7 @@ class Competition < ApplicationRecord
       website: website,
       short_name: cellName,
       city: cityName,
-      country_iso2: country.iso2,
+      country_iso2: country&.iso2,
       start_date: start_date,
       end_date: end_date,
       delegates: delegates,

@@ -1254,17 +1254,18 @@ pt-BR:
         mail_subject: 'Sua inscrição em %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Você se inscreveu em %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Sua inscrição está na lista de pendências, que tem atualmente
-          %{n_total} %{people}.
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: >-
+          Sua inscrição foi recebida e está aguardando aprovação pela equipe de
+          organização.
+        #original_hash: 826045f
         approval_info_html: >-
           Você receberá um email quando sua inscrição for aprovada. As
-          inscrições não são aprovadas automaticamente. Para ver os critérios
-          necessários, visite o website da competição ou contate os
-          organizadores. Você pode verificar a situação de sua inscrição
-          %{here}.
+          inscrições não são aprovadas automaticamente, então seja paciente se
+          você ainda não foi aceito. Pode haver mais etapas a seguir para que
+          sua inscrição seja aprovada. Para ver os critérios necessários, visite
+          o website da competição ou contate os organizadores. Você pode
+          verificar a situação de sua inscrição %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Sua inscrição em %{comp_name} foi aprovada'
@@ -1298,10 +1299,11 @@ pt-BR:
         causes:
           #original_hash: 978944c
           missing_info: Você não preencheu todos as informações necessárias
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Você não preencheu os critérios para inscrição (por exemplo, pagar a
-            taxa de inscrição antecipadamente)
+            taxa de inscrição antecipadamente ou atingir os tempos de
+            qualificação para as modalidades)
           #original_hash: 1e225f0
           registrations_full: >-
             O limite de competidores foi atingido e não há mais vagas

@@ -915,6 +915,8 @@ pl:
       information: Informacje
       #original_hash: 9ac918a
       about: O WCA
+      #original_hash: ed97787
+      documents: Dokumenty WCA
       #original_hash: d8fd3e4
       delegates: Delegaci WCA
       #original_hash: 37b8fdc
@@ -1311,17 +1313,20 @@ pl:
         mail_subject: 'Zarejestrowałeś się na %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Właśnie zarejestrowałeś się na %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Jesteś obecnie na liście oczekujących, na której znajduje się
-          %{n_total} %{people}.
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: >-
+          Twoja rejestracja została odebrana i oczekuje na zaakceptowanie przez
+          zespół organizacyjny.
+        #original_hash: 826045f
         approval_info_html: >-
           Zostaniesz poinformowany drogą mailową, gdy twoja rejestracja zostanie
-          zaakceptowana. Rejestracje nie są akceptowane automatycznie. Aby
-          zobaczyć kryteria akceptacji odwiedź stronę zawodów lub skontaktuj się
-          z ich organizatorami. Możesz również sprawdzić status swojej
-          rejestracji %{here}.
+          zaakceptowana. Rejestracje nie są akceptowane automatycznie, więc
+          prosimy o zachowanie cierpliwości jeżeli nie zostałeś zaakceptowany
+          natychmiast. Może być więcej kroków rejestracyjnych do wykonania,
+          zanim twoja rejestracja zostanie zaakceptowana. Aby zobaczyć kryteria
+          akceptacji odwiedź stronę zawodów lub skontaktuj się z ich
+          organizatorami. Możesz również sprawdzić status swojej rejestracji
+          %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Twoja rejestracja na %{comp_name} została zaakceptowana.'
@@ -1355,10 +1360,11 @@ pl:
         causes:
           #original_hash: 978944c
           missing_info: Nie wysłałeś wszystkich wymaganych danych
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Nie spełniłeś wymagań rejestracyjnych (na przykład nie zapłaciłeś
-            wpisowego)
+            wpisowego lub nie spełniłeś limitów czasowych kwalifikujących do
+            udziału w konkurencjach))
           #original_hash: 1e225f0
           registrations_full: Limit zawodników został osiągnięty i nie ma więcej dostępnych miejsc
           #original_hash: 0d4cce9
@@ -1482,6 +1488,13 @@ pl:
     wont_pay_here: >-
       Sprawdź informacje dotyczące zawodów w celu uzyskania instrukcji o
       sposobie płatności
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: "Kwota do zwrotu zawodnikowi. Może być dowolną wartością, aż do kwoty już\_zapłaconej."
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Kwota Zwrotu
     payment_form:
       #original_hash: 4de825f
       title: Wpisowe
@@ -2360,6 +2373,15 @@ pl:
       members_html: >-
         Wszyscy zawodnicy stają się automatycznie <strong>członkami</strong> WCA
         na swoich pierwszych zawodach.
+  documents:
+    #original_hash: 687c828
+    title: Dokumenty
+    #original_hash: 65b08c4
+    bylaws: Statut
+    #original_hash: fdceb44
+    motions: Wnioski
+    #original_hash: 092f99e
+    minutes: Protokoły
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegaci WCA
