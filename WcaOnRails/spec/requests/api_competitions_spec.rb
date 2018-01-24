@@ -7,8 +7,6 @@ RSpec.describe "API Competitions" do
     let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
 
     describe "website user (cookies based)" do
-      let(:competition_events_default) {}
-
       let(:competition_events_add_event) {[
         {
           id: "333",
