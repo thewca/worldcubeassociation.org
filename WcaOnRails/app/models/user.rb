@@ -476,11 +476,7 @@ class User < ApplicationRecord
   end
 
   def can_add_and_remove_events?(competition)
-    if competition.isConfirmed?
-      can_admin_results?
-    else
-      can_admin_results? || can_manage_competition?(competition)
-    end
+    can_admin_results? || (can_manage_competition?(competition) && !competition.isConfirmed?)
   end
 
   def can_create_poll?

@@ -7,63 +7,23 @@ RSpec.describe "API Competitions" do
     let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
 
     describe "website user (cookies based)" do
-      let(:competition_events_add_event) {[
-        {
-          id: "333",
-          rounds: [
-            {
-              id: "333-1",
-              format: "a",
-              timeLimit: nil,
-              cutoff: nil,
-              advancementCondition: nil,
-              scrambleGroupCount: 1
-            },
-          ],
-        },
-        {
-          id: "222",
-          rounds: [
-            {
-              id: "222-1",
-              format: "a",
-              timeLimit: nil,
-              cutoff: nil,
-              advancementCondition: nil,
-              scrambleGroupCount: 1
-            },
-          ],
-        },
-        {
-          id: "333oh",
-          rounds: [
-            {
-              id: "333oh-1",
-              format: "a",
-              timeLimit: nil,
-              cutoff: nil,
-              advancementCondition: nil,
-              scrambleGroupCount: 1
-            },
-          ],
-        },
-      ]}
-
-      let(:competition_events_remove_event) {[
-        {
-          id: "333",
-          rounds: [
-            {
-              id: "333-1",
-              format: "a",
-              timeLimit: nil,
-              cutoff: nil,
-              advancementCondition: nil,
-              scrambleGroupCount: 1
-            },
-          ],
-        },
-      ]}
+      def create_wcif_events(event_ids)
+        event_ids.map do |event_id|
+          {
+            id: event_id,
+            rounds: [
+              {
+                id: "#{event_id}-1",
+                format: "a",
+                timeLimit: nil,
+                cutoff: nil,
+                advancementCondition: nil,
+                scrambleGroupCount: 1,
+              },
+            ],
+          }
+        end
+      end
 
       context "when not signed in" do
         sign_out
@@ -79,10 +39,9 @@ RSpec.describe "API Competitions" do
       context "when signed in as a board member" do
         sign_in { FactoryBot.create :board_member }
 
-        #Test might be redundant?
-        it "updates the competition events" do
+        it "updates the competition events of an unconfirmed competition" do
           headers = { "CONTENT_TYPE" => "application/json" }
-          patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events_remove_event.to_json, headers: headers
+          patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333)).to_json, headers: headers
           expect(response).to be_success
           expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 1
         end
@@ -128,18 +87,16 @@ RSpec.describe "API Competitions" do
 
           it "can add events" do
             headers = { "CONTENT_TYPE" => "application/json" }
-            patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events_add_event.to_json, headers: headers
+            patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333 333oh 222)).to_json, headers: headers
             expect(response).to have_http_status(200)
-            response_json = JSON.parse(response.body)
             competition.reload
             expect(competition.events.map(&:id)).to match_array %w(222 333 333oh)
           end
 
           it "can remove events" do
             headers = { "CONTENT_TYPE" => "application/json" }
-            patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events_remove_event.to_json, headers: headers
+            patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333)).to_json, headers: headers
             expect(response).to have_http_status(200)
-            response_json = JSON.parse(response.body)
             competition.reload
             expect(competition.events.map(&:id)).to match_array %w(333)
           end
@@ -200,7 +157,7 @@ RSpec.describe "API Competitions" do
 
           it "does not allow adding events" do
             headers = { "CONTENT_TYPE" => "application/json" }
-            patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events_add_event.to_json, headers: headers
+            patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333 333oh 222)).to_json, headers: headers
             expect(response).to have_http_status(422)
             response_json = JSON.parse(response.body)
             expect(response_json["error"]).to eq "Cannot add events to a confirmed competition"
@@ -208,7 +165,7 @@ RSpec.describe "API Competitions" do
 
           it "does not allow removing events" do
             headers = { "CONTENT_TYPE" => "application/json" }
-            patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events_remove_event.to_json, headers: headers
+            patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333)).to_json, headers: headers
             expect(response).to have_http_status(422)
             response_json = JSON.parse(response.body)
             expect(response_json["error"]).to eq "Cannot remove events from a confirmed competition"
@@ -218,18 +175,16 @@ RSpec.describe "API Competitions" do
         context "unconfirmed competition" do
           it "allows adding events" do
             headers = { "CONTENT_TYPE" => "application/json" }
-            patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events_add_event.to_json, headers: headers
+            patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333 333oh 222)).to_json, headers: headers
             expect(response).to have_http_status(200)
-            response_json = JSON.parse(response.body)
             competition.reload
             expect(competition.events.map(&:id)).to match_array %w(222 333 333oh)
           end
 
           it "allows removing events" do
             headers = { "CONTENT_TYPE" => "application/json" }
-            patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events_remove_event.to_json, headers: headers
+            patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333)).to_json, headers: headers
             expect(response).to have_http_status(200)
-            response_json = JSON.parse(response.body)
             competition.reload
             expect(competition.events.map(&:id)).to match_array %w(333)
           end

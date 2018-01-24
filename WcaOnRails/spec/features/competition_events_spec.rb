@@ -115,7 +115,7 @@ RSpec.feature "Competition events management" do
   end
 
   context "confirmed competition" do
-    let(:competition) { FactoryBot.create(:competition, :confirmed, event_ids: ["222"]) }
+    let(:competition) { FactoryBot.create(:competition, :confirmed, event_ids: ["222", "444"]) }
 
     scenario "delegate cannot add events", js: true do
       sign_in competition.delegates.first
@@ -142,7 +142,7 @@ RSpec.feature "Competition events management" do
       save
       competition.reload
 
-      expect(competition.events.map(&:id)).to match_array %w(222 333)
+      expect(competition.events.map(&:id)).to match_array %w(222 333 444)
     end
 
     scenario "board member can remove events", js: true do
@@ -155,7 +155,7 @@ RSpec.feature "Competition events management" do
       save
       competition.reload
 
-      expect(competition.events.map(&:id)).to match_array %w()
+      expect(competition.events.map(&:id)).to match_array %w(444)
     end
   end
 end

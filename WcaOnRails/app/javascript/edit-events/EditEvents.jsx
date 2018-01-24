@@ -218,7 +218,7 @@ function EventPanel({ wcifEvents, canAddAndRemoveEvents, wcifEvent }) {
           <button
             className="btn btn-danger btn-xs remove-event"
             disabled={disableRemove}
-            title={disableRemove ? `Cannot remove ${event.name} because the competition is confirmed and user is not board member.` : ""}
+            title={disableRemove ? `Cannot remove ${event.name} because the competition is confirmed.` : ""}
             onClick={removeEvent}
           >
             Remove event
@@ -232,7 +232,7 @@ function EventPanel({ wcifEvents, canAddAndRemoveEvents, wcifEvent }) {
       <button
         className="btn btn-success btn-xs add-event"
         disabled={disableAdd}
-        title={disableAdd ? `Cannot add ${event.name} because the competition is confirmed and user is not board member.` : ""}
+        title={disableAdd ? `Cannot add ${event.name} because the competition is confirmed.` : ""}
         onClick={() => setRoundCount(0)}
       >
         Add event
