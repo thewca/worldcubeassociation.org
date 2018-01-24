@@ -303,7 +303,6 @@ en:
         candidate_delegate: "Candidate Delegate"
         delegate: "Delegate"
         senior_delegate: "Senior Delegate"
-        board_member: "Board Member"
     person:
       gender:
         m: "Male"

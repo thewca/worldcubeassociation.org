@@ -25,7 +25,7 @@ class User < ApplicationRecord
   def self.eligible_voters
     team_leaders = TeamMember.current.where(team_leader: true).map(&:user)
     eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))
-    board_members = TeamMember.current.where(team_id: Team.find_by_friendly_id('board')).map(&:user)
+    board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
     (team_leaders + eligible_delegates + board_members).uniq
   end
 
@@ -351,43 +351,43 @@ class User < ApplicationRecord
   end
 
   def board_member?
-    team_member?(Team::BOARD_FRIENDLY_ID)
+    team_member?(Team.board)
   end
 
   def software_team?
-    team_member?(Team::WST_FRIENDLY_ID)
+    team_member?(Team.wst)
   end
 
   def results_team?
-    team_member?(Team::WRT_FRIENDLY_ID)
+    team_member?(Team.wrt)
   end
 
   def wrc_team?
-    team_member?(Team::WRC_FRIENDLY_ID)
+    team_member?(Team.wrc)
   end
 
   def wdc_team?
-    team_member?(Team::WDC_FRIENDLY_ID)
+    team_member?(Team.wdc)
   end
 
   def communication_team?
-    team_member?(Team::WCT_FRIENDLY_ID)
+    team_member?(Team.wct)
   end
 
   def ethics_committee?
-    team_member?(Team::WEC_FRIENDLY_ID)
+    team_member?(Team.wec)
   end
 
   def quality_assurance_committee?
-    team_member?(Team::WQAC_FRIENDLY_ID)
+    team_member?(Team.wqac)
   end
 
-  def team_member?(team_friendly_id)
-    self.current_team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id).count > 0
+  def team_member?(team)
+    self.current_team_members.where(team_id: team.id).count > 0
   end
 
-  def team_leader?(team_friendly_id)
-    self.current_team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id, team_leader: true).count > 0
+  def team_leader?(team)
+    self.current_team_members.where(team_id: team.id, team_leader: true).count > 0
   end
 
   def teams_where_is_leader
@@ -434,7 +434,7 @@ class User < ApplicationRecord
 
   # Returns true if the user can edit the given team.
   def can_edit_team?(team)
-    can_manage_teams? || team_leader?(team.friendly_id)
+    can_manage_teams? || team_leader?(team)
   end
 
   def can_create_competitions?

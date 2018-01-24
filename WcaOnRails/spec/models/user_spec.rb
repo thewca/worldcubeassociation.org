@@ -109,10 +109,7 @@ RSpec.describe User, type: :model do
   end
 
   it "allows senior delegate if board member" do
-    board_team = Team.find_by_friendly_id('board')
-    board_member = FactoryBot.create :delegate
-
-    FactoryBot.create(:team_member, team_id: board_team.id, user_id: board_member.id, start_date: Date.today - 20)
+    board_member = FactoryBot.create :delegate, :board_member
 
     senior_delegate = FactoryBot.create :user
     senior_delegate.senior_delegate!
@@ -500,13 +497,11 @@ RSpec.describe User, type: :model do
   end
 
   it "#teams and #current_teams return unique team names" do
-    wrc_team = Team.find_by_friendly_id(Team::WRC_FRIENDLY_ID)
-    wrt_team = Team.find_by_friendly_id(Team::WRT_FRIENDLY_ID)
     user = FactoryBot.create(:user)
 
-    FactoryBot.create(:team_member, team_id: wrc_team.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
-    FactoryBot.create(:team_member, team_id: wrt_team.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
-    FactoryBot.create(:team_member, team_id: wrt_team.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
+    FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
+    FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
+    FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
 
     expect(user.teams).to match_array [wrc_team, wrt_team]
     expect(user.current_teams).to match_array [wrt_team]
@@ -517,7 +512,7 @@ RSpec.describe User, type: :model do
     team_member = wrt_member.team_members.first
     team_member.update_attributes!(end_date: 1.day.ago)
 
-    expect(wrt_member.reload.team_member?(Team::WRT_FRIENDLY_ID)).to eq false
+    expect(wrt_member.reload.team_member?(Team.wrt)).to eq false
   end
 
   it 'former leaders of the results team are not considered current leaders' do
@@ -526,7 +521,7 @@ RSpec.describe User, type: :model do
     team_member.update_attributes!(team_leader: true)
     team_member.update_attributes!(end_date: 1.day.ago)
 
-    expect(wrt_leader.reload.team_leader?(Team::WRT_FRIENDLY_ID)).to eq false
+    expect(wrt_leader.reload.team_leader?(Team.wrt)).to eq false
 
     expect(wrt_leader.teams_where_is_leader.count).to eq 0
   end

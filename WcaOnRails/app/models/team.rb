@@ -1,16 +1,6 @@
 # frozen_string_literal: true
 
 class Team < ApplicationRecord
-  BOARD_FRIENDLY_ID = 'board'
-  WCT_FRIENDLY_ID = 'wct'
-  WDC_FRIENDLY_ID = 'wdc'
-  WEC_FRIENDLY_ID = 'wec'
-  WFC_FRIENDLY_ID = 'wfc'
-  WQAC_FRIENDLY_ID = 'wqac'
-  WRC_FRIENDLY_ID = 'wrc'
-  WRT_FRIENDLY_ID = 'wrt'
-  WST_FRIENDLY_ID = 'wst'
-
   has_many :team_members, dependent: :destroy
   has_many :current_members, -> { current }, class_name: "TeamMember"
 
@@ -29,6 +19,42 @@ class Team < ApplicationRecord
         end
       end
     end
+  end
+
+  def self.board
+    Team.find_by_friendly_id!('board')
+  end
+
+  def self.wct
+    Team.find_by_friendly_id!('wct')
+  end
+
+  def self.wdc
+    Team.find_by_friendly_id!('wdc')
+  end
+
+  def self.wec
+    Team.find_by_friendly_id!('wec')
+  end
+
+  def self.wfc
+    Team.find_by_friendly_id!('wfc')
+  end
+
+  def self.wqac
+    Team.find_by_friendly_id!('wqac')
+  end
+
+  def self.wrc
+    Team.find_by_friendly_id!('wrc')
+  end
+
+  def self.wrt
+    Team.find_by_friendly_id!('wrt')
+  end
+
+  def self.wst
+    Team.find_by_friendly_id!('wst')
   end
 
   def acronym
