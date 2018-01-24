@@ -867,17 +867,18 @@ DROP TABLE IF EXISTS `rails_persons`;
 /*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `rails_persons` AS SELECT
- 1 AS `id`,
- 1 AS `wca_id`,
- 1 AS `subId`,
- 1 AS `name`,
- 1 AS `countryId`,
- 1 AS `gender`,
- 1 AS `year`,
- 1 AS `month`,
- 1 AS `day`,
- 1 AS `comments`*/;
+/*!50001 CREATE TABLE `rails_persons` (
+  `id` tinyint NOT NULL,
+  `wca_id` tinyint NOT NULL,
+  `subId` tinyint NOT NULL,
+  `name` tinyint NOT NULL,
+  `countryId` tinyint NOT NULL,
+  `gender` tinyint NOT NULL,
+  `year` tinyint NOT NULL,
+  `month` tinyint NOT NULL,
+  `day` tinyint NOT NULL,
+  `comments` tinyint NOT NULL
+) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `registration_competition_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1080,6 +1081,7 @@ CREATE TABLE `votes` (
   KEY `index_votes_on_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50001 DROP TABLE IF EXISTS `rails_persons`*/;
 /*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -1088,6 +1090,7 @@ CREATE TABLE `votes` (
 /*!50001 SET character_set_results     = utf8 */;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `rails_persons` AS select `Persons`.`rails_id` AS `id`,`Persons`.`id` AS `wca_id`,`Persons`.`subId` AS `subId`,`Persons`.`name` AS `name`,`Persons`.`countryId` AS `countryId`,`Persons`.`gender` AS `gender`,`Persons`.`year` AS `year`,`Persons`.`month` AS `month`,`Persons`.`day` AS `day`,`Persons`.`comments` AS `comments` from `Persons` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
