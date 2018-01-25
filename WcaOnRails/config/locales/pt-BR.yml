@@ -2277,10 +2277,16 @@ pt-BR:
       wec:
         #original_hash: 83bd1d0
         name: Comitê de Ética da WCA
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
-          Esse comitê tem a função de garantir que todos os procedimentos do
-          Staff e External Staff da WCA estejam de acordo com o Código de Ética.
+          A função desse comitê é garantir que todos os procedimentos do Staff e
+          External Staff da WCA estejam de acordo com o Código de Ética, e
+          conduzir investigações independentes caso a conduta de algum desses
+          membros não estiver em conformidade com o Código. Estas investigações
+          podem ser solicitadas por qualquer Cubista Registrado, para os quais o
+          WEC é um confidente. Esse comitê também funciona como conselho de
+          recurso se algum dos envolvidos não concorda com uma decisão do Comitê
+          Disciplinar da WCA.
       wqac:
         #original_hash: 8f32116
         name: Comitê de Garantia da Qualidade da WCA
@@ -2313,8 +2319,8 @@ pt-BR:
   documents:
     #original_hash: 687c828
     title: Documentos
-    #original_hash: 65b08c4
-    bylaws: Estatuto (ByLaws)
+    #original_hash: 9855f80
+    bylaws: Estatuto (Bylaws)
     #original_hash: fdceb44
     motions: Moções
     #original_hash: 092f99e
