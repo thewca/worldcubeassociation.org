@@ -2340,11 +2340,17 @@ pl:
       wec:
         #original_hash: 83bd1d0
         name: Komitet Etyczny WCA
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
-          Ten komitet ma za zadanie dopilnować, aby wszystkie procedury
+          Zadaniem tego komitetu jest dopilnowanie, aby wszystkie procedury
           stosowane przez Personel WCA oraz Personel Zewnętrzny podlegały jego
-          Kodeksowi Etycznemu.
+          Kodeksowi Etycznemu oraz przeprowadzanie niezależnych dochodzeń,
+          jeżeli postępowanie któregokolwiek z tych członków nie jest zgodne ze
+          wspomnianym Kodeksem Etycznym. Takie dochodzenia mogą być zażądane
+          przez dowolnych Zarejestrowanych Speedcuberów, których powiernikiem
+          jest WEC. Ten komitet pełni również funkcję odwoławczą, gdy ktokolwiek
+          zaangażowany nie zgadza się z decysją podjętą przez Komitet
+          Dyscyplinarny WCA.
       wqac:
         #original_hash: 8f32116
         name: Komitet Zapewniania Jakości WCA
@@ -2376,7 +2382,7 @@ pl:
   documents:
     #original_hash: 687c828
     title: Dokumenty
-    #original_hash: 65b08c4
+    #original_hash: 9855f80
     bylaws: Statut
     #original_hash: fdceb44
     motions: Wnioski
