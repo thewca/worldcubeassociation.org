@@ -5247,9 +5247,9 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-bootstrap@^0.32.0:
-  version "0.32.0"
-  resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-0.32.0.tgz#7f656be7b0f88e4bdda819135956bad10d3f167e"
+react-bootstrap@^0.32.1:
+  version "0.32.1"
+  resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-0.32.1.tgz#60624c1b48a39d773ef6cce6421a4f33ecc166bb"
   dependencies:
     babel-runtime "^6.11.6"
     classnames "^2.2.5"
