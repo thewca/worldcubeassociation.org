@@ -1,6 +1,13 @@
 <div>
   <div class="text-center">
-    <h2><%= @person.name %></h2>
+    <h2>
+      <%= @person.name %>
+      <% if current_user.person == @person %>
+        <%= link_to [:edit, @current_user] do%>
+          <%= content_tag :i, "", :class => "fa fa-edit" %>
+        <% end %>
+      <% end %>
+    </h2>
     <!-- Handle multiple sub ids. -->
     <% if @previous_persons.any? %>
       <h4>
