@@ -33,7 +33,7 @@ de:
     #original_hash: 3732390
     '222': 2x2x2 Würfel
     #original_hash: 8180137
-    '333': Rubik's Cube
+    '333': 3x3x3 Würfel
     #original_hash: 2ee5b5a
     '444': 4x4x4 Würfel
     #original_hash: b7a99fa
@@ -51,7 +51,7 @@ de:
     #original_hash: be41d70
     333ft: 3x3x3 Mit Füßen
     #original_hash: 04f6b3e
-    clock: Rubik's Clock
+    clock: Clock
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
@@ -67,11 +67,11 @@ de:
     #original_hash: cedbf87
     333mbf: 3x3x3 Mehrfach Blind
     #original_hash: e6791be
-    magic: Rubik's Magic
+    magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
     #original_hash: 1843dc4
-    333mbo: 3x3x3 Mehrfach Blind alter Stil
+    333mbo: Mehrfach Blind alter Stil
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -1128,7 +1128,7 @@ de:
         kontaktiere das WCA Results Team über <a href="%{dob_form_path}">dieses
         Formular</a>.
       #original_hash: 71b46b4
-      unique: muss eindeutig sein
+      unique: 'wird bereits von "%{used_name}" mit %{used_email} benutzt'
       #original_hash: 26f70ed
       dob_past: muss in der Vergangenheit liegen
       #original_hash: f599dc5
@@ -1278,17 +1278,20 @@ de:
         mail_subject: 'Du hast dich für %{comp_name} registriert'
         #original_hash: 8374583
         registered_html: 'Du hast dich gerade für %{comp_name} registriert.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Deine Registrierung ist auf der Warteliste, auf der momentan
-          %{n_total} %{people} sind.
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: >-
+          Deine Registrierung wurde empfangen und erwartet eine Bestätigung
+          durch das Organisationsteam.
+        #original_hash: 826045f
         approval_info_html: >-
           Du bekommst eine E-Mail wenn deine Registrierung bestätigt wurde.
           Bitte bedenke, dass Registrierungen nicht automatisch bestätigt
-          werden. Um die Kriterien dafür zu sehen, besuche die Webseite des
-          Wettbewerbs oder kontaktiere die Organisatoren. Du kannst den Status
-          deiner Registrierung auch %{here} einsehen.
+          werden. Bitte sei daher geduldig wenn du nicht sofort eine Bestätigung
+          erhältst. Es kann sein, dass du mehrere Schritte zur Vervollständigung
+          deiner Registrierung ausführen musst. Um die Kriterien dafür zu sehen,
+          besuche die Webseite des Wettbewerbs oder kontaktiere die
+          Organisatoren. Du kannst den Status deiner Registrierung auch %{here}
+          einsehen.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Deine Registrierung für %{comp_name} wurde bestätigt.'
@@ -1324,10 +1327,11 @@ de:
         causes:
           #original_hash: 978944c
           missing_info: Du hast nicht alle benötigten Angaben gemacht
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Du hast nicht die Kriterien für die Registrierung erfüllt (zum
-            Beispiel, die Registrierungsgebühren im Voraus gezahlt).
+            Beispiel die Registrierungsgebühren im Voraus gezahlt oder
+            Qualifikationszeiten nicht erreicht).
           #original_hash: 1e225f0
           registrations_full: >-
             Das Teilnehmerlimit wurde erreicht und es sind keine Plätze mehr
@@ -2250,12 +2254,11 @@ de:
       paragraphs:
         #original_hash: 3e4f9b5
         '1': >-
-          Die World Cube Association überwacht Wettbewerbe für alle Puzzles,
-          sogenannte "Rubik's Puzzles", sowie alle anderen Puzzles die man durch
-          Drehen der Seiten löst, sogenannte 'Drehpuzzle'. Das berühmteste
-          dieser Puzzle ist der Rubik's Cube, erfunden von Professor Rubik aus
-          Ungarn. Eine Auswahl dieser Puzzles werden als offizielle Disziplinen
-          der WCA anerkannt.
+          Die World Cube Association verwaltet Wettbewerbe für mechanische
+          Puzzles, die man durch Drehen der Seiten löst, sogenannte
+          'Drehpuzzle'. Das berühmteste dieser Puzzle ist der Rubik's Cube,
+          erfunden von Professor Rubik aus Ungarn. Eine Auswahl dieser Puzzles
+          werden als offizielle Disziplinen der WCA anerkannt.
         #original_hash: 22c3593
         '2': >-
           Die World Cube Association organisiert Wettbewerbe auf der ganzen
@@ -2263,15 +2266,15 @@ de:
           für die Organisation von Wettbewerben im jeweiligen Land sind.
         #original_hash: 0902c4a
         '3': >-
-          Das Ziel der World Cube Association ist es, <br /><strong>mehr
+          Die Mission der World Cube Association ist es, <strong>mehr
           Wettbewerbe in mehr Ländern mit mehr Menschen und mehr Spaß
           auszurichten, unter fairen und gleichen Bedingungen.</strong>
         #original_hash: 2b993c0
         '4': >-
-          Der Geist der World Cube Association ist es, dass <br />
-          <strong>Menschen aus der ganzen Welt gemeinsam in einer freundlichen
-          Atmosphäre Spaß miteinander haben, sich gegenseitig helfen und
-          sportlich verhalten.</strong>
+          Der Geist der World Cube Association ist es, dass <strong>Menschen aus
+          der ganzen Welt gemeinsam in einer freundlichen Atmosphäre Spaß
+          miteinander haben, sich gegenseitig helfen und sportlich
+          verhalten.</strong>
     structure:
       #original_hash: 9482c5d
       title: Zusammensetzung
@@ -2331,7 +2334,7 @@ de:
       wec:
         #original_hash: 83bd1d0
         name: WCA Ethik Komitee
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
           Dieses Komitee hat die Aufgabe sicherzustellen, dass alle Handlungen
           von WCA Personal und externem Personal den Ethikkodex befolgen.
@@ -2370,7 +2373,7 @@ de:
   documents:
     #original_hash: 687c828
     title: Dokumente
-    #original_hash: 65b08c4
+    #original_hash: 9855f80
     bylaws: Verordnungen
     #original_hash: fdceb44
     motions: Anträge
@@ -2580,7 +2583,7 @@ de:
         Das WCA-Logo wurde von Justin Eastman im Rahmen eines Design-Wettbewerbs
         in January 2005 entworfen.<br />Uns gefiel das Logo aufgrund seines
         Designs, der Farben, und der Tatsache, dass es nicht speziell einen
-        Rubik's Cube / 3x3x3 Cube zeigt.
+        3x3x3 Cube zeigt.
       #original_hash: f228da2
       '2': >-
         Wir bieten drei verschiedene Varianten des Logos an: Eine <a
@@ -2853,27 +2856,26 @@ de:
       title: Abstandsregel
       #original_hash: bd8f1fe
       content1: >-
-        Als generelle Regel werden WCA Competitions akzeptiert, wenn sie
-        mindestens 200 km oder 26 Tage von jedem anderen Competitions entfernt
-        sind. Das WCA Board sollte einen Wettbewerb überprüfen, wenn die Distanz
-        unter 200 km und die Zeitspanne unter 26 Tagen liegt. Ein Delegierter,
-        der eine Competition anfragt, der diese Regeln nicht erfüllt, muss
-        weitere Informationen angeben, warum diese Competition trotzdem
-        akzeptiert werden soll. Mögliche Gründe, die eine solche Entscheidung
-        beeinflussen, sind folgende:
+        WCA Wettbewerbe werden genehmigt wenn sie mindestens 100 km oder 19 Tage
+        von jedem anderen Wettbewerb entfernt sind. Das WCA Board sollte einen
+        Wettbewerb überprüfen, wenn die Distanz unter 200 km und die Zeitspanne
+        unter 26 Tagen liegt. Ein Delegierter, der eine Competition anfragt, der
+        diese Regeln nicht erfüllt, muss weitere Informationen angeben, warum
+        diese Competition trotzdem akzeptiert werden soll. Mögliche Gründe, die
+        eine solche Entscheidung beeinflussen, sind folgende:
       olist1:
         #original_hash: de00462
-        '1': Die beiden Wettbewerbe bieten unterschiedliche Events an.
+        '1': Die beiden Wettbewerbe haben keine gemeinsamen Events.
         #original_hash: f7bacc5
         '2': Die beiden Wettbewerbe finden in verschiedenen Ländern statt.
         #original_hash: 7b2c099
         '3': >-
-          In einem Radius von 200km um den Ort des Wettbewerbs herum gab es in
-          den letzten 12 Monaten weniger als 13 Wettbewerbe.
+          In einem Radius von 100km um den Ort des Wettbewerbs herum gab es in
+          den letzten 12 Monaten weniger als 16 Wettbewerbe.
       #original_hash: 5c5cf04
       content2: >-
-        Simultane FMC Competitions sind WCA Wettbewerbe, die nur FMC als Event
-        haben und die simultan an verschiedenen Standorten stattfinden.
+        Simultane FMC Wettbewerbe sind Wettbewerbe, die nur die Kategorie 3x3x3
+        Fewest Moves anbieten und simultan an verschiedenen Orten stattfinden.
       olist2:
         '1':
           #original_hash: 316fd13
