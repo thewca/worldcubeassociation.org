@@ -2321,11 +2321,16 @@ ro:
       wec:
         #original_hash: 83bd1d0
         name: Comitetul de Etică WCA
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
           Acest comitet are rolul de a se asigura că toate procedurile
-          întreprinse de Stafful WCA și Stafful extern se supun Codului de
-          Etică.
+          întreprinse de Stafful WCA și Stafful extern se supun Codului de Etică
+          și de a face investigații independente dacă acțiunile întreprinse de
+          acești membri nu respectă Codul de Etică. Astfel de investigații pot
+          fi cerute de către orice speedcuberi înregistrați care se adreseză
+          Comitetului de Etică. Acesta rezolvă, de asemena, disputele apărute
+          când cineva nu este de acord cu o decizie luată de Comisia
+          Disciplinară WCA.
       wqac:
         #original_hash: 8f32116
         name: Comitetul de Asigurare a Calității WCA
@@ -2357,7 +2362,7 @@ ro:
   documents:
     #original_hash: 687c828
     title: Documente
-    #original_hash: 65b08c4
+    #original_hash: 9855f80
     bylaws: Statute
     #original_hash: fdceb44
     motions: Propuneri
