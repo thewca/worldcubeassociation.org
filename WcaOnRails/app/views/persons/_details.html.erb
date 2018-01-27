@@ -2,10 +2,8 @@
   <div class="text-center">
     <h2>
       <%= @person.name %>
-      <% if current_user.person == @person %>
-        <%= link_to [:edit, @current_user] do%>
-          <%= content_tag :i, "", :class => "fa fa-edit" %>
-        <% end %>
+      <% if @person.user && current_user&.can_edit_user?(@person.user) %>
+        <%= link_to icon("edit"), edit_user_path(@person.user) %>
       <% end %>
     </h2>
     <!-- Handle multiple sub ids. -->
