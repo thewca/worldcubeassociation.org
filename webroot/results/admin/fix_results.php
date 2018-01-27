@@ -56,7 +56,8 @@ if(!isset($_SESSION['anticsrf_key'])) {
 <p>After fixing your results, you must run these scripts to ensure that the changes are sound.</p>
 <ol>
     <li><a id="check-results" href="#" target="_blank">Check results</a></li>
-    <li><a href="/admin/do_compute_auxiliary_data" target="_blank">Compute auxiliary data</a></li>
+    <li><a id="check-rounds" href="#" target="_blank">Check rounds</a> (only needed if the round type was changed, e.g. "Final" <-> "Combined Final")</li>
+    <li><a href="/admin/do_compute_auxiliary_data" target="_blank">Compute auxiliary data</a> (only needed if best or average were affected and only once in the end when fixing multiple results)</li>
 </ol>
 
 <script>
@@ -329,6 +330,16 @@ function somethingChanged()
       show: "Show",
     };
     $('#check-results').attr("href", "check_results.php?" + $.param(params));
+  }
+  if(!lastCompetitionId) {
+    $('#check-rounds').hide();
+  } else {
+    $('#check-rounds').show();
+    var params = {
+      competitionId: lastCompetitionId,
+      show: "Show",
+    };
+    $('#check-rounds').attr("href", "check_rounds.php?" + $.param(params));
   }
 }
 
