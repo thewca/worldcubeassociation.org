@@ -28,12 +28,12 @@ class Api::V0::ApiController < ApplicationController
   def scramble_program
     render json: {
       "current" => {
-        "name" => "TNoodle-WCA-0.13.0",
+        "name" => "TNoodle-WCA-0.13.1",
         "information" => "#{root_url}regulations/scrambles/",
-        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-0.13.0.jar",
+        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-0.13.1.jar",
       },
       "allowed" => [
-        "TNoodle-WCA-0.13.0",
+        "TNoodle-WCA-0.13.1",
       ],
       "history" => [
         "TNoodle-0.7.4",
@@ -50,7 +50,7 @@ class Api::V0::ApiController < ApplicationController
         "TNoodle-WCA-0.11.3",
         "TNoodle-WCA-0.11.5",
         "TNoodle-WCA-0.12.0",
-        "TNoodle-WCA-0.13.0",
+        "TNoodle-WCA-0.13.1",
       ],
     }
   end
