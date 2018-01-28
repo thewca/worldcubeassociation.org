@@ -863,7 +863,7 @@ class Competition < ApplicationRecord
     }
   end
 
-  def set_wcif_events!(wcif_events)
+  def set_wcif_events!(wcif_events, current_user)
     events_schema = { "type" => "array", "items" => CompetitionEvent.wcif_json_schema }
     JSON::Validator.validate!(events_schema, wcif_events)
 
@@ -873,7 +873,7 @@ class Competition < ApplicationRecord
         wcif_event = wcif_events.find { |e| e["id"] == competition_event.event.id }
         event_to_be_removed = !wcif_event || !wcif_event["rounds"]
         if event_to_be_removed
-          raise WcaExceptions::BadApiParameter.new("Cannot remove events from a confirmed competition") if self.isConfirmed?
+          raise WcaExceptions::BadApiParameter.new("Cannot remove events from a confirmed competition") unless current_user.can_add_and_remove_events?(self)
           competition_event.destroy!
         end
       end
@@ -883,7 +883,7 @@ class Competition < ApplicationRecord
         event_found = competition_events.find_by_event_id(wcif_event["id"])
         event_to_be_added = wcif_event["rounds"]
         if !event_found && event_to_be_added
-          raise WcaExceptions::BadApiParameter.new("Cannot add events to a confirmed competition") if self.isConfirmed?
+          raise WcaExceptions::BadApiParameter.new("Cannot add events to a confirmed competition") unless current_user.can_add_and_remove_events?(self)
           competition_events.create!(event_id: wcif_event["id"])
         end
       end

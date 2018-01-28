@@ -126,7 +126,7 @@ RSpec.describe "Competition WCIF" do
       wcif_444_event = wcif["events"].find { |e| e["id"] == "444" }
       wcif_444_event["rounds"] = []
 
-      competition.set_wcif_events!(wcif["events"])
+      competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
       expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf 444)
@@ -136,7 +136,7 @@ RSpec.describe "Competition WCIF" do
       wcif_444_event = wcif["events"].find { |e| e["id"] == "444" }
       wcif_444_event["rounds"] = nil
 
-      competition.set_wcif_events!(wcif["events"])
+      competition.set_wcif_events!(wcif["events"], delegate)
 
       wcif["events"].reject! { |e| e["id"] == "444" }
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
@@ -146,7 +146,7 @@ RSpec.describe "Competition WCIF" do
     it "removes competition event when wcif event is missing" do
       wcif["events"].reject! { |e| e["id"] == "444" }
 
-      competition.set_wcif_events!(wcif["events"])
+      competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
       expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf)
@@ -170,7 +170,7 @@ RSpec.describe "Competition WCIF" do
         ],
       }
 
-      competition.set_wcif_events!(wcif["events"])
+      competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
@@ -193,7 +193,7 @@ RSpec.describe "Competition WCIF" do
         "scrambleGroupCount" => 1,
       }
 
-      competition.set_wcif_events!(wcif["events"])
+      competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
 
@@ -201,7 +201,7 @@ RSpec.describe "Competition WCIF" do
       # clear the advancementCondition on the first round.
       wcif_444_event["rounds"][0]["advancementCondition"] = nil
       wcif_444_event["rounds"].pop
-      competition.set_wcif_events!(wcif["events"])
+      competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
@@ -210,7 +210,7 @@ RSpec.describe "Competition WCIF" do
       wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
       wcif_333_event["rounds"][0]["format"] = '3'
 
-      competition.set_wcif_events!(wcif["events"])
+      competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
@@ -228,7 +228,7 @@ RSpec.describe "Competition WCIF" do
         "cumulativeRoundIds" => [],
       }
 
-      competition.set_wcif_events!(wcif["events"])
+      competition.set_wcif_events!(wcif["events"], delegate)
 
       wcif_333mbf_event["rounds"][0]["timeLimit"] = nil
       wcif_333fm_event["rounds"][0]["timeLimit"] = nil
@@ -240,7 +240,7 @@ RSpec.describe "Competition WCIF" do
       wcif_333mbf_event = wcif["events"].find { |e| e["id"] == "333mbf" }
       wcif_333mbf_event["rounds"][0]["scrambleGroupCount"] = 32
 
-      competition.set_wcif_events!(wcif["events"])
+      competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
