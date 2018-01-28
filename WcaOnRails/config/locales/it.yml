@@ -146,19 +146,19 @@ it:
   cutoff:
     #original_hash: cf458e7
     time:
-      other: '%{count} tentativi per fare < %{time}'
-      one: '%{count} tentativo per fare < %{time}'
       zero: '%{count} tentativi per fare < %{time}'
+      one: '%{count} tentativo per fare < %{time}'
+      other: '%{count} tentativi per fare < %{time}'
     #original_hash: b49d930
     moves:
-      other: '%{count} tentativi per fare < %{moves} mosse'
-      one: '%{count} tentativo per fare < %{moves} mosse'
       zero: '%{count} tentativi per fare < %{moves} mosse'
+      one: '%{count} tentativo per fare < %{moves} mosse'
+      other: '%{count} tentativi per fare < %{moves} mosse'
     #original_hash: eba1b97
     points:
-      other: '%{count} tentativi per fare < %{points} punti'
-      one: '%{count} tentativo per fare < %{points} punti'
       zero: '%{count} tentativi per fare < %{points} punti'
+      one: '%{count} tentativo per fare < %{points} punti'
+      other: '%{count} tentativi per fare < %{points} punti'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -2294,7 +2294,7 @@ it:
           basata su simpatia, trasparenza, inclusività, apertura e reattività.
       wfc:
         #original_hash: 9cb13de
-        name: Commissione Finanze WCA
+        name: WCA Financial Committee
         #original_hash: 2d4807e
         description: Questo team è responsabile della gestione delle finanze della WCA
       wec:
@@ -2342,7 +2342,7 @@ it:
   documents:
     #original_hash: 687c828
     title: Documenti
-    #original_hash: 65b08c4
+    #original_hash: 9855f80
     bylaws: Statuto
     #original_hash: fdceb44
     motions: Mozioni
