@@ -55,9 +55,9 @@ if(!isset($_SESSION['anticsrf_key'])) {
 
 <p>After fixing your results, you must run these scripts to ensure that the changes are sound.</p>
 <ol>
-    <li><a id="check-results" href="#" target="_blank">Check results</a></li>
+    <li><a id="check-results" href="#" target="_blank">Check results</a> (needed once for each round to fix rankings and to check for consistency)</li>
     <li><a id="check-rounds" href="#" target="_blank">Check rounds</a> (only needed if the round type was changed, e.g. "Final" &lt;-&gt; "Combined Final")</li>
-    <li><a href="/admin/do_compute_auxiliary_data" target="_blank">Compute auxiliary data</a> (only needed if best or average were affected and only once in the end when fixing multiple results)</li>
+    <li><a id="compute-aux-data" href="#" target="_blank">Compute auxiliary data</a> (only needed if best or average were affected and only once in the end when fixing multiple results)</li>
 </ol>
 
 <script>
@@ -321,25 +321,22 @@ function roundTypeIdChange(newRoundId)
 function somethingChanged()
 {
   if(!lastCompetitionId || !lastEventId) {
-    $('#check-results').hide();
+    $('#check-results').attr("href", "check_results.php");
+    $('#check-rounds').attr("href", "check_rounds.php");
+    $('#compute-aux-data').attr("href", "/admin/compute_auxiliary_data");
   } else {
-    $('#check-results').show();
     var params = {
       competitionId: lastCompetitionId,
       eventId: lastEventId,
       show: "Show",
     };
     $('#check-results').attr("href", "check_results.php?" + $.param(params));
-  }
-  if(!lastCompetitionId) {
-    $('#check-rounds').hide();
-  } else {
-    $('#check-rounds').show();
     var params = {
       competitionId: lastCompetitionId,
       show: "Show",
     };
     $('#check-rounds').attr("href", "check_rounds.php?" + $.param(params));
+    $('#compute-aux-data').attr("href", "/admin/do_compute_auxiliary_data");
   }
 }
 
