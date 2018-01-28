@@ -1257,10 +1257,10 @@ pt:
         mail_subject: 'Registou-se para %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Acabou de se registar para %{comp_name}.'
-        #original_hash: e771ee5
+        #original_hash: 13fabed
         awaits_approval: >-
-          O seu registo foi aceite pelo sistema e está pendennte de aprovação
-          pela equipa de organização.
+          O seu registo foi recebido e está pendente de aprovação pela equipa de
+          organização.
         #original_hash: 826045f
         approval_info_html: >-
           Ser-lhe-á enviado um email quando o seu registo for aprovado. Note que
@@ -1300,10 +1300,10 @@ pt:
         causes:
           #original_hash: 978944c
           missing_info: Não submeteu todos os detalhes solicitados
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
-            Não verificou os requisitos de registo (por exemplo, pagamento
-            adiantado)
+            Não cumpriu os critérios de registro (por exemplo, pagamento de
+            inscrição adiantado ou tempos mínimos de qualificação)
           #original_hash: 1e225f0
           registrations_full: >-
             O limite de competidores foi atingido e não há mais lugares
@@ -2279,11 +2279,16 @@ pt:
       wec:
         #original_hash: 83bd1d0
         name: Comité de Ética da WCA
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
           Este comité tem o papel de assegurar que todos os procedimentos
           seguidos pelo staff da WCA e o Staff Externo seguem o seu Código de
-          Ética.
+          Ética, e realizar investigações independentes se a conduta de qualquer
+          destes membros não for compatível com este Código de Ética. Tais
+          investigações podem ser solicitadas por qualquer Speedcuber Registado,
+          de quem o WEC é confidente. Este comité também funciona como um
+          conselho de apelo se alguém envolvido discordar com uma decisão tomada
+          pelo Conselho de Disciplina da WCA.
       wqac:
         #original_hash: 8f32116
         name: Comité de Garantia de Qualidade da WCA
@@ -2316,7 +2321,7 @@ pt:
   documents:
     #original_hash: 687c828
     title: Documentos
-    #original_hash: 65b08c4
+    #original_hash: 9855f80
     bylaws: Estatutos
     #original_hash: fdceb44
     motions: Moções
