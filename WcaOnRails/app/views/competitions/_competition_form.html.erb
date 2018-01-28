@@ -266,7 +266,7 @@
     <% end %>
 
     <hr>
-    <%= f.input :remarks, disabled: is_actually_confirmed %>
+    <%= f.input :remarks, disabled: is_actually_confirmed, hint: t('simple_form.hints.competition.remarks_html', link: link_to("Article Z", "https://www.worldcubeassociation.org/regulations/#article-Z-optional", target: "_blank")) %>
 
     <% if @competition.being_cloned_from&.tabs&.present? %>
       <%= f.input :being_cloned_from_id, as: :hidden %>
