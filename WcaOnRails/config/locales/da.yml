@@ -604,11 +604,11 @@ da:
         generate_website: ''
         #original_hash: 950a7ea
         base_entry_fee_lowest_denomination: >-
-          Basis adgangsgebyret for konkurrencen. Adgangsgebyret vil blive vist
+          Basis deltagergebyret for konkurrencen. Deltagergebyret vil blive vist
           på konkurrencens informations side og tilmeldings siden hvis det
           bliver brugt.
         #original_hash: 866bc05
-        currency_code: Valuta koden for adgangsgebyrer.
+        currency_code: Valuta koden for deltagergebyret.
         #original_hash: da39a3e
         guests_enabled: ''
         #original_hash: da39a3e
@@ -899,7 +899,7 @@ da:
       #original_hash: a34b69f
       contact: Kontakt Information
       #original_hash: 4fa8cc8
-      tools: Tools
+      tools: Værktøjer
       #original_hash: 83fce83
       logo: Logo
       #original_hash: db98a68
@@ -1253,10 +1253,10 @@ da:
         mail_subject: 'Du har registreret dig til %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Du har tilmeldt dig til %{comp_name}.'
-        #original_hash: e771ee5
+        #original_hash: 13fabed
         awaits_approval: >-
-          Din tilmelding er blevet accepteret af system, og venter nu på at
-          blive accepteret af konkurrencens arrangører.
+          Din tilmelding er blevet modtaget, og venter nu på at blive accepteret
+          af konkurrencens arrangører.
         #original_hash: 826045f
         approval_info_html: >-
           Du vil modtage en email når din tilmelding er blevet godkendt. Læg
@@ -1297,10 +1297,11 @@ da:
         causes:
           #original_hash: 978944c
           missing_info: Du indsendte ikke alle forlangte detaljer
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
-            Du mødte ikke registrerings kriterierne (for eksempel, at betale
-            registrerings gebyret i forvejen)
+            Du mødte ikke tilmeldingskriterierne (for eksempel, at betale
+            adgangsgebyret i forvejen, eller du mødte ikke kvalifikationstiderne
+            for disciplinerne)
           #original_hash: 1e225f0
           registrations_full: Deltagerbegrænsningen er nået og der er ikke flere ledige pladser
           #original_hash: 0d4cce9
@@ -1413,7 +1414,7 @@ da:
     #original_hash: 58b1a3c
     accepted: Din tilmelding er blevet accepteret!
     #original_hash: 70de60f
-    entry_fees_fully_paid: 'Du har betalt %{paid}, som dækker hele adgangsgebyret.'
+    entry_fees_fully_paid: 'Du har betalt %{paid}, som dækker hele deltagergebyret.'
     #original_hash: 2e5d1b9
     will_pay_here: Du vil betale dem her efter at du har tilmeldt dig
     #original_hash: b7ef562
@@ -1473,7 +1474,7 @@ da:
         hurtigst muligt!
       #original_hash: a0168ee
       in_progress: >-
-        Denne konkurrence er i gang. Kom tilbage efter %{date} for at se
+        Denne konkurrence er i gang. Kom tilbage efter den %{date} for at se
         resultaterne!
       #original_hash: 3322400
       tooltip_registered: Du er tilmeldt.
@@ -2265,13 +2266,17 @@ da:
       wec:
         #original_hash: 83bd1d0
         name: WCA Etik Komité
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
-          Denne komité har rollen at sikre sig, at alle procedure fulgt a WCA
-          Personalet og Eksternt Personale, overholder WCA's Etiske Regler.
+          Denne komité har rollen at sikre sig, at alle procedurer fulgt af WCA
+          Personalet og Eksternt Personale, overholder WCA's Etiske Regler, og
+          udføre selvstændige undersøgelser hvis adfærdren af de medlemmer ikke
+          stemmer overens med WCA's Etiske Regler. Disse slags undersøgelser kan
+          blive efterspurgt af hvilken som helst tilmeldt speedcuber, som WEC
+          har tavshedspligt over for.
       wqac:
         #original_hash: 8f32116
-        name: WCA Kvalitet Forsikrings Komité
+        name: WCA Kvalitetsforsikrings Komité
         #original_hash: 0171b3b
         description: >-
           Denne Komité har rollen at støtte og fremme kvalitets forbedring i
@@ -2299,7 +2304,7 @@ da:
   documents:
     #original_hash: 687c828
     title: Dokumenter
-    #original_hash: 65b08c4
+    #original_hash: 9855f80
     bylaws: Vedtægter
     #original_hash: fdceb44
     motions: Forslag
@@ -2471,7 +2476,7 @@ da:
         Organisationer, Konkurrence Arrangører og Konkurrence Personale.
   score_tools:
     #original_hash: ea9d41d
-    title: WCA Score Taking tools
+    title: WCA Score-Taking værktøjer
     paragraphs:
       #original_hash: ec3e0ab
       '1': >-
@@ -2734,7 +2739,7 @@ da:
       content: >-
         De forventede omkostninger varierer meget fra land til land og er
         afhængelige af mange faktorer, som lokalets størrelse og placering. At
-        få indtjent det hele via tilmeldings gebyret er muligt. Det er stadig
+        få indtjent det hele via tilmeldingsgebyret er muligt. Det er stadig
         vigtigt at sætte den så lavt som muligt, og det er forslået at finde en
         sponsor. Selvom WCA Delegerede er frivillige og ikke får løn for deres
         arbejde, burde arrangørene overveje at betale for deres tur til
@@ -2827,7 +2832,7 @@ da:
       #original_hash: cb13cd0
       content: >-
         Tilmeldinger skal blive behandlet sådan at dem der tilmelder sig først
-        for retten til at deltage, det betyder at den tidligste fuldendte
+        for retten til at deltage. Det betyder at den tidligste fuldendte
         tilmelding skal behandles først. Hvis man skal betale på forhånd, er en
         tilmelding først fuldendt når der er blevet betalt. Det skal skrives
         tydeligt på konkurrencens side hvor der er skrevet om betaling.
@@ -2841,7 +2846,7 @@ da:
         erstattet af den næste person på ventelisten.
       #original_hash: 1b2ea79
       content2: >-
-        Hvis konkurrencens adgangsgebyr skal betales på forhånd, er det en
+        Hvis konkurrencens deltagergebyret skal betales på forhånd, er det en
         effektiv måde at tilbyde en gratis plads til den næste deltager på
         ventelisten, og sætte en frist for hvornår deltagergebyret skal betales
         for at fuldende tilmeldingen (fx 48 timer). I tilfælde af at betalingen
