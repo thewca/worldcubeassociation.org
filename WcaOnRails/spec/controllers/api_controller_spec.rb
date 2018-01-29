@@ -261,7 +261,7 @@ RSpec.describe Api::V0::ApiController do
 
     context 'signed in as board member' do
       before :each do
-        api_sign_in_as(FactoryBot.create(:board_member))
+        api_sign_in_as(FactoryBot.create(:user, :board_member))
       end
 
       it 'has correct team membership' do

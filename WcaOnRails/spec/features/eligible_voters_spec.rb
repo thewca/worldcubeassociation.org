@@ -29,7 +29,7 @@ RSpec.feature "Eligible voters csv" do
     end
   }
   let!(:senior_delegate) { FactoryBot.create(:senior_delegate) }
-  let!(:board_member) { FactoryBot.create(:board_member) }
+  let!(:board_member) { FactoryBot.create(:user, :board_member) }
 
   before :each do
     sign_in board_member

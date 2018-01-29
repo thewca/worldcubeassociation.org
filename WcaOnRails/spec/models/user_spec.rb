@@ -503,8 +503,8 @@ RSpec.describe User, type: :model do
     FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
     FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
 
-    expect(user.teams).to match_array [wrc_team, wrt_team]
-    expect(user.current_teams).to match_array [wrt_team]
+    expect(user.teams).to match_array [Team.wrc, Team.wrt]
+    expect(user.current_teams).to match_array [Team.wrt]
   end
 
   it 'former members of the results team are not considered current members' do
@@ -584,7 +584,7 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for board" do
-      board_member = FactoryBot.create :board_member
+      board_member = FactoryBot.create :user, :board_member
       expect(board_member.can_view_all_users?).to eq true
     end
 
@@ -598,7 +598,7 @@ RSpec.describe User, type: :model do
     let(:user) { FactoryBot.create :user }
 
     it "returns true for board" do
-      board_member = FactoryBot.create :board_member
+      board_member = FactoryBot.create :user, :board_member
       expect(board_member.can_edit_user?(user)).to eq true
     end
 

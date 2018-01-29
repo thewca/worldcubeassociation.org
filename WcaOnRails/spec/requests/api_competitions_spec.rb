@@ -37,7 +37,7 @@ RSpec.describe "API Competitions" do
       end
 
       context "when signed in as a board member" do
-        sign_in { FactoryBot.create :board_member }
+        sign_in { FactoryBot.create :user, :board_member }
 
         it "updates the competition events of an unconfirmed competition" do
           headers = { "CONTENT_TYPE" => "application/json" }

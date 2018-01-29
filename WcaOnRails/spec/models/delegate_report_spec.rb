@@ -55,7 +55,7 @@ RSpec.describe DelegateReport do
 
   context "can_view_delegate_report?" do
     let(:other_delegate) { FactoryBot.create :delegate }
-    let(:board_member) { FactoryBot.create :board_member }
+    let(:board_member) { FactoryBot.create :user, :board_member }
 
     context "past competition" do
       let(:competition) { FactoryBot.create :competition, :with_delegate, starts: 1.week.ago }

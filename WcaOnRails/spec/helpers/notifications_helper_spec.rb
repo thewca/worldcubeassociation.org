@@ -72,7 +72,7 @@ RSpec.describe NotificationsHelper do
     end
 
     context "when signed in as a board member" do
-      let(:board_member) { FactoryBot.create :board_member }
+      let(:board_member) { FactoryBot.create :user, :board_member, :wca_id }
       let!(:unconfirmed_competition) { FactoryBot.create :competition }
       let!(:confirmed_competition) { FactoryBot.create(:competition, :confirmed) }
       let!(:visible_confirmed_competition) { FactoryBot.create(:competition, :confirmed, :visible) }
