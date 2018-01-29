@@ -245,7 +245,7 @@ RSpec.describe Api::V0::ApiController do
       get :scramble_program
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["current"]["name"]).to eq "TNoodle-WCA-0.13.0"
+      expect(json["current"]["name"]).to eq "TNoodle-WCA-0.13.1"
     end
   end
 
