@@ -21,6 +21,42 @@ class Team < ApplicationRecord
     end
   end
 
+  def self.board
+    Team.find_by_friendly_id!('board')
+  end
+
+  def self.wct
+    Team.find_by_friendly_id!('wct')
+  end
+
+  def self.wdc
+    Team.find_by_friendly_id!('wdc')
+  end
+
+  def self.wec
+    Team.find_by_friendly_id!('wec')
+  end
+
+  def self.wfc
+    Team.find_by_friendly_id!('wfc')
+  end
+
+  def self.wqac
+    Team.find_by_friendly_id!('wqac')
+  end
+
+  def self.wrc
+    Team.find_by_friendly_id!('wrc')
+  end
+
+  def self.wrt
+    Team.find_by_friendly_id!('wrt')
+  end
+
+  def self.wst
+    Team.find_by_friendly_id!('wst')
+  end
+
   def acronym
     friendly_id.upcase
   end

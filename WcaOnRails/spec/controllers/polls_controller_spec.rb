@@ -19,7 +19,7 @@ RSpec.describe PollsController do
   end
 
   context "logged in as board member" do
-    let(:board_member) { FactoryBot.create :board_member }
+    let(:board_member) { FactoryBot.create :user, :board_member }
     before :each do
       sign_in board_member
     end

@@ -29,36 +29,38 @@ FactoryBot.define do
       name "Mr. Admin"
       email "admin@worldcubeassociation.org"
       after(:create) do |user|
-        software_team = Team.find_by_friendly_id('wst')
+        software_team = Team.wst
         FactoryBot.create(:team_member, team_id: software_team.id, user_id: user.id, team_leader: true)
+      end
+    end
+
+    trait :board_member do
+      after(:create) do |user|
+        FactoryBot.create(:team_member, team_id: Team.board.id, user_id: user.id)
       end
     end
 
     trait :wrt_member do
       after(:create) do |user|
-        results_team = Team.find_by_friendly_id('wrt')
-        FactoryBot.create(:team_member, team_id: results_team.id, user_id: user.id)
+        FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id)
       end
     end
 
     trait :wdc_member do
       after(:create) do |user|
-        wdc_team = Team.find_by_friendly_id('wdc')
-        FactoryBot.create(:team_member, team_id: wdc_team.id, user_id: user.id)
+        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id)
       end
     end
 
     trait :wrc_member do
       after(:create) do |user|
-        wrc_team = Team.find_by_friendly_id('wrc')
-        FactoryBot.create(:team_member, team_id: wrc_team.id, user_id: user.id)
+        FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id)
       end
     end
 
     trait :wct_member do
       after(:create) do |user|
-        wrc_team = Team.find_by_friendly_id('wct')
-        FactoryBot.create(:team_member, team_id: wrc_team.id, user_id: user.id)
+        FactoryBot.create(:team_member, team_id: Team.wct.id, user_id: user.id)
       end
     end
 
@@ -88,10 +90,6 @@ FactoryBot.define do
 
     factory :senior_delegate, traits: [:wca_id] do
       delegate_status "senior_delegate"
-    end
-
-    factory :board_member, traits: [:wca_id] do
-      delegate_status "board_member"
     end
 
     factory :dummy_user, traits: [:wca_id] do

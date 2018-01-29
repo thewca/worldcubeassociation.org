@@ -303,7 +303,6 @@ en:
         candidate_delegate: "Candidate Delegate"
         delegate: "Delegate"
         senior_delegate: "Senior Delegate"
-        board_member: "Board Member"
     person:
       gender:
         m: "Male"
@@ -639,7 +638,6 @@ en:
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_citizenship_html: "We do not have a citizenship recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
-      board_member_cannot_resign: "You cannot resign from your role as a board member! Find another board member to fire you."
       avatar_requires_wca_id: "requires a WCA ID to be assigned"
     #context: when an action was successful
     successes:
@@ -1288,6 +1286,7 @@ en:
     #context: The %{link} variable links to the Delegates page
     questions_and_comments_html: "For website questions, comments, and suggestions, use this <a href='/contact/website'>contact form</a>. For inquiries concerning a specific area or competition, please contact your local %{link}."
     committees_and_teams_html: "<u>Committees and Teams</u>"
+    members: "Members"
     board:
       name_html: "WCA Board"
       info_html: "The World Cube Association is led by the WCA Board. They are responsible for general inquiries and the WCA organization as a whole. All official competitions need the approval of the WCA Board to be announced."

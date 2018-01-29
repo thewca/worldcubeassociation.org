@@ -15,14 +15,15 @@
   <p><%= t('about.structure.board_html') %></p>
 
   <ul>
-    <% @board_members.order(:name).each do |board_member| %>
-      <li><%= board_member.name %> - <%= board_member.region %></li>
+    <% Team.board.current_members.includes(:user).map(&:user).sort_by(&:name).each do |board_member| %>
+      <li><%= board_member.name %> - <%= board_member.country.name %></li>
     <% end %>
   </ul>
 
   <p><%= t('about.structure.committees') %>
   <ul>
     <% Team.order(:rank).each do |team| %>
+      <% next if team == Team.board %>
       <li>
         <strong><%= team.name %> (<%= team.acronym %>)</strong>: <%= format_team_members(team) %> <br />
         <%= t("about.structure.#{team.friendly_id}.description") %>

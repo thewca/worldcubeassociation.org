@@ -214,7 +214,7 @@ RSpec.describe Competition do
 
     it "does not warn board members" do
       competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 2.days.ago
-      board_member = FactoryBot.create :board_member
+      board_member = FactoryBot.create :user, :board_member
       expect(competition.user_should_post_delegate_report?(board_member)).to eq false
     end
   end

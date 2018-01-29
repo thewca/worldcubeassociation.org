@@ -24,8 +24,9 @@ class User < ApplicationRecord
 
   def self.eligible_voters
     team_leaders = TeamMember.current.where(team_leader: true).map(&:user)
-    eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate board_member))
-    (team_leaders + eligible_delegates).uniq
+    eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))
+    board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
+    (team_leaders + eligible_delegates + board_members).uniq
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
@@ -67,7 +68,6 @@ class User < ApplicationRecord
     candidate_delegate: "candidate_delegate",
     delegate: "delegate",
     senior_delegate: "senior_delegate",
-    board_member: "board_member",
   }
   has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
   belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User"
@@ -306,18 +306,7 @@ class User < ApplicationRecord
       "candidate_delegate" => true,
       "delegate" => true,
       "senior_delegate" => false,
-      "board_member" => true,
     }.fetch(delegate_status)
-  end
-
-  validate :not_illegally_demoting_oneself
-  def not_illegally_demoting_oneself
-    about_to_lose_access = !board_member?
-    if current_user == self && about_to_lose_access
-      if delegate_status_was == "board_member"
-        errors.add(:delegate_status, I18n.t('users.errors.board_member_cannot_resign'))
-      end
-    end
   end
 
   validate :avatar_requires_wca_id
@@ -361,36 +350,44 @@ class User < ApplicationRecord
     preferred_locale || I18n.default_locale
   end
 
+  def board_member?
+    team_member?(Team.board)
+  end
+
   def software_team?
-    team_member?('wst')
+    team_member?(Team.wst)
   end
 
   def results_team?
-    team_member?('wrt')
+    team_member?(Team.wrt)
   end
 
   def wrc_team?
-    team_member?('wrc')
+    team_member?(Team.wrc)
   end
 
   def wdc_team?
-    team_member?('wdc')
+    team_member?(Team.wdc)
   end
 
   def communication_team?
-    team_member?('wct')
+    team_member?(Team.wct)
+  end
+
+  def ethics_committee?
+    team_member?(Team.wec)
   end
 
   def quality_assurance_committee?
-    team_member?('wqac')
+    team_member?(Team.wqac)
   end
 
-  def team_member?(team_friendly_id)
-    self.current_team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id).count > 0
+  def team_member?(team)
+    self.current_team_members.where(team_id: team.id).count > 0
   end
 
-  def team_leader?(team_friendly_id)
-    self.current_team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id, team_leader: true).count > 0
+  def team_leader?(team)
+    self.current_team_members.where(team_id: team.id, team_leader: true).count > 0
   end
 
   def teams_where_is_leader
@@ -437,7 +434,7 @@ class User < ApplicationRecord
 
   # Returns true if the user can edit the given team.
   def can_edit_team?(team)
-    can_manage_teams? || team_leader?(team.friendly_id)
+    can_manage_teams? || team_leader?(team)
   end
 
   def can_create_competitions?

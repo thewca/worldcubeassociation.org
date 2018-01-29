@@ -4,21 +4,12 @@ class StaticPagesController < ApplicationController
   def home
   end
 
-  def about
-    @board_members = User.where(delegate_status: "board_member")
-  end
-
   def delegates
-    @board_members = User.where(delegate_status: "board_member")
     @senior_delegates = User.where(delegate_status: "senior_delegate")
     @delegates_without_senior_delegates = User.where(delegate_status: ["candidate_delegate", "delegate"], senior_delegate: nil)
   end
 
   def organizations
-  end
-
-  def contact
-    @board_members = User.where(delegate_status: "board_member")
   end
 
   def score_tools

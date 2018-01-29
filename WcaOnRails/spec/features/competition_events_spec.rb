@@ -134,7 +134,7 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "board member can add events", js: true do
-      sign_in FactoryBot.create(:board_member)
+      sign_in FactoryBot.create(:user, :board_member)
       visit "/competitions/#{competition.id}/events/edit"
       within_event_panel("333") do
         click_button "Add event"
@@ -146,7 +146,7 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "board member can remove events", js: true do
-      sign_in FactoryBot.create(:board_member)
+      sign_in FactoryBot.create(:user, :board_member)
       visit "/competitions/#{competition.id}/events/edit"
 
       within_event_panel("222") do

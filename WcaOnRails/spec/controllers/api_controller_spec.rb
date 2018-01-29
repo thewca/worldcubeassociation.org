@@ -261,15 +261,17 @@ RSpec.describe Api::V0::ApiController do
 
     context 'signed in as board member' do
       before :each do
-        api_sign_in_as(FactoryBot.create(:board_member))
+        api_sign_in_as(FactoryBot.create(:user, :board_member))
       end
 
-      it 'has correct delegate_status' do
+      it 'has correct team membership' do
         get :me
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
 
-        expect(json['me']['delegate_status']).to eq 'board_member'
+        expect(json['me']['teams']).to match_array [
+          { "friendly_id" => "board", "leader" => false },
+        ]
       end
     end
 
@@ -319,10 +321,10 @@ RSpec.describe Api::V0::ApiController do
       before :each do
         user = FactoryBot.create :user
 
-        wrc_team = Team.find_by_friendly_id('wrc')
+        wrc_team = Team.wrc
         FactoryBot.create(:team_member, team_id: wrc_team.id, user_id: user.id)
 
-        results_team = Team.find_by_friendly_id('wrt')
+        results_team = Team.wrt
         FactoryBot.create(:team_member, team_id: results_team.id, user_id: user.id, team_leader: true)
 
         api_sign_in_as(user)
