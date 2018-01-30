@@ -12,7 +12,7 @@
   <br/ >
   <h3><%= t('about.structure.title') %></h3>
 
-  <p><%= t('about.structure.board_html') %></p>
+  <p><%= t('about.structure.board.info_html') %></p>
 
   <ul>
     <% Team.board.current_members.includes(:user).map(&:user).sort_by(&:name).each do |board_member| %>
