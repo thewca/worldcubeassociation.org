@@ -1197,7 +1197,9 @@ en:
         '4': "The Spirit of the World Cube Association is that <strong>people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.</strong>"
     structure:
       title: "Structure"
-      board_html: "The World Cube Association is led by the <strong>WCA Board</strong>, consisting of the following members:"
+      board:
+        name: "WCA Board of Directors"
+        info_html: "The World Cube Association is led by the <strong>WCA Board</strong>, consisting of the following members:"
       committees: "The following committees are responsible for the operational activities of the WCA:"
       #context: WDC
       wdc:
@@ -1288,7 +1290,6 @@ en:
     committees_and_teams_html: "<u>Committees and Teams</u>"
     members: "Members"
     board:
-      name_html: "WCA Board"
       info_html: "The World Cube Association is led by the WCA Board. They are responsible for general inquiries and the WCA organization as a whole. All official competitions need the approval of the WCA Board to be announced."
     wct:
       info_html: "The WCT is in charge of overseeing and supporting communications of the WCA with the community and general public. They should be contacted if you have general questions about the WCA or their social media appearance."

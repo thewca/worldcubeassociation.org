@@ -14,7 +14,7 @@
   <h2><%= t('contact.committees_and_teams_html') %></h2>
 
   <p>
-    <strong><%= t('contact.board.name_html') %></strong> - <%= mail_to "board@worldcubeassociation.org" %><br />
+    <strong><%= t('about.structure.board.name') %></strong> - <%= mail_to "board@worldcubeassociation.org" %><br />
     <%= t('contact.board.info_html') %><br />
     <%= t('contact.members') %>: <%= Team.board.current_members.includes(:user).map { |team_member| team_member.user.name }.sort.join(", ") %>
   </p>
