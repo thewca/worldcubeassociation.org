@@ -467,8 +467,6 @@ fi:
         delegate: Delegaatti
         #original_hash: d463c23
         senior_delegate: Vastaava delegaatti
-        #original_hash: 660ee15
-        board_member: Boardin jäsen
     person:
       gender:
         #original_hash: 3f3a489
@@ -1134,10 +1132,6 @@ fi:
         Tälle WCA ID:lle ei ole tallennettu nimeä. Ota yhteyttä <a
         href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
         Results Teamiin</a> ratkaistaksesi tämän.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Et voi irtisanoutua roolistasi Boardin jäsenenä! Vain toinen Boardin
-        jäsen voi erottaa sinut.
       #original_hash: d02c03b
       avatar_requires_wca_id: 'vaatii WCA ID:n liittämistä'
     successes:
@@ -2205,10 +2199,13 @@ fi:
     structure:
       #original_hash: 9482c5d
       title: Rakenne
-      #original_hash: d855b50
-      board_html: >-
-        World Cube Associationia johtaa <strong>WCA Board </strong>, joka
-        koostuu seuraavista jäsenistä:
+      board:
+        #original_hash: abd2828
+        name: 'WCA:n johtokunta'
+        #original_hash: d855b50
+        info_html: >-
+          World Cube Associationia johtaa <strong>WCA Board </strong>, joka
+          koostuu seuraavista jäsenistä:
       #original_hash: b0c72a9
       committees: 'Seuraavat toimikunnat ovat vastuussa WCA:n operatiivisista toimista:'
       wdc:
@@ -2253,11 +2250,15 @@ fi:
       wec:
         #original_hash: 83bd1d0
         name: WCA Ethics Committee
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
-          Tämän toimikunnan rooli on varmistaa, että kaikkien WCA:n ja sen
+          Tämän toimikunnan rooli on varmistaa, että kaikki WCA:n ja sen
           ulkopuolisten toimihenkilöiden toimet pysyvät kaikkien toimikunnan
-          eettisten säädösten rajoissa.
+          eettisten säädösten rajoissa, ja tutkia yksittäisiä tapauksia, joissa
+          toimihenkilöiden käytös ei noudata näitä säädöksiä. Kuka tahansa
+          rekisteröity kilpailija, jolle WEC on uskottu, voi pyytää näitä
+          tutkimuksia. Tämä toimikunta johtaa myös valitusten käsittelyä, jos
+          joku asiaan kuuluvista ei hyväksy WCA Discplinary Committeen päätöstä.
       wqac:
         #original_hash: 8f32116
         name: WCA Quality Assurance Committee
@@ -2289,7 +2290,7 @@ fi:
   documents:
     #original_hash: 687c828
     title: Asiakirjat
-    #original_hash: 65b08c4
+    #original_hash: 9855f80
     bylaws: Arvojärjestys
     #original_hash: fdceb44
     motions: Aloitteet
@@ -2382,9 +2383,9 @@ fi:
       paikalliseen %{link}in.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Toimikunnat ja tiimit</u>
+    #original_hash: 1cb449c
+    members: Jäsenet
     board:
-      #original_hash: 90fcc48
-      name_html: WCA Board
       #original_hash: 3a8b1d8
       info_html: >-
         World Cube Associationia johtaa WCA Board. Se on yleisesti vastuussa
