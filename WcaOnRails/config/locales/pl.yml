@@ -603,9 +603,9 @@ pl:
           zawierającym protokół http(s).
         #original_hash: 9965635
         registration_open: 'Zauważ: Daty startowa i końcowa rejestracji są w czasie UTC.'
-        #original_hash: 9dfafd4
+        #original_hash: 243212f
         remarks_html: >-
-          Dodatkowe informacje, które chciałbyś przekazać zarządowi. Na przykład
+          Dodatkowe informacje, które chciałbyś przekazać Zarządowi. Na przykład
           opis przyczyn w przypadku zgłoszenia zawodów z wyprzedzeniem mniejszym
           niż cztery tygodnie, lub zgłoszenie chęci zastosowania %{link}.
           Prosimy o wypełnienie w języku angielskim!
