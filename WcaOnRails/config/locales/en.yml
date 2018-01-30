@@ -363,7 +363,7 @@ en:
         organizer_ids: "Competition organizers (they need an account to be listed here)."
         external_website: "The website of the competition. Must be a valid http(s) url."
         registration_open: "Note: Registration open and close are in UTC time"
-        remarks_html: "Some additional information you want to pass on to the board. For example, elaborate your reasons if this competition is requested less than four weeks away, or if you are requesting the application of %{link}. Please fill this out in English!"
+        remarks_html: "Some additional information you want to pass on to the Board. For example, elaborate your reasons if this competition is requested less than four weeks away, or if you are requesting the application of %{link}. Please fill this out in English!"
         clone_tabs: ""
         countryId: ""
         end_date: ""
