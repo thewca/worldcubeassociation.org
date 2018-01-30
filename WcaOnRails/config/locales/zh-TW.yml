@@ -147,14 +147,17 @@ zh-TW:
     #original_hash: cf458e7
     time:
       zero: '%{count}次還原 < %{time}'
+      one: '%{count}次還原 < %{time}'
       other: '%{count}次還原 < %{time}'
     #original_hash: b49d930
     moves:
       zero: '%{count}次還原 < %{moves}步'
+      one: '%{count}次還原 < %{moves}步'
       other: '%{count}次還原 < %{moves}步'
     #original_hash: eba1b97
     points:
       zero: '%{count}次還原 > %{points}分'
+      one: '%{count}次還原 > %{points}分'
       other: '%{count}次還原 > %{points}分'
   time_limit:
     cumulative:
@@ -196,11 +199,13 @@ zh-TW:
       invalid: 無效的
     #original_hash: 49d0140
     days:
-      zero: 1天
+      zero: 今天
+      one: 1天
       other: '%{count}天'
     #original_hash: 203e1b3
     these_events:
-      zero: 這個項目
+      zero: 無項目
+      one: 這個項目
       other: '這%{count}個項目'
     #original_hash: 51ef7d4
     search_site: 搜尋網站
@@ -458,8 +463,6 @@ zh-TW:
         delegate: 代表
         #original_hash: d463c23
         senior_delegate: 高級代表
-        #original_hash: 660ee15
-        board_member: 董事會成員
     person:
       gender:
         #original_hash: 3f3a489
@@ -770,7 +773,8 @@ zh-TW:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 至少有1個錯誤：
+          zero: 至少有0個錯誤：
+          one: 至少有1個錯誤：
           other: '至少有%{count}個錯誤：'
     doorkeeper:
       applications:
@@ -1034,8 +1038,6 @@ zh-TW:
       wca_id_no_name_html: >-
         我們沒有記錄到此WCA ID的姓名。請寄信至<a href='mailto:results@worldcubeassociation.org'
         target='_blank'>WCA成績組</a>處理。
-      #original_hash: 49083d8
-      board_member_cannot_resign: WCA董事會成員無法自行辭職！請找其他WCA董事成員解雇您。
       #original_hash: d02c03b
       avatar_requires_wca_id: 需要對應的WCA ID
     successes:
@@ -1085,14 +1087,17 @@ zh-TW:
       #original_hash: bdf1f11
       newcomer:
         zero: 新人
+        one: 新人
         other: 新人
       #original_hash: bc010e3
       returner:
         zero: 非新人
+        one: 非新人
         other: 非新人
       #original_hash: b7da17a
       person:
         zero: 人
+        one: 人
         other: 人
     flash:
       #original_hash: da7ec53
@@ -1100,14 +1105,17 @@ zh-TW:
       #original_hash: d528030
       accepted_and_mailed:
         zero: 報名成功！電子郵件通知已寄出。
+        one: 報名成功！電子郵件通知已寄出。
         other: 報名成功！電子郵件通知已寄出。
       #original_hash: 42ea8de
       rejected_and_mailed:
         zero: 報名待審核
+        one: 報名待審核
         other: 報名待審核
       #original_hash: a360b31
       deleted_and_mailed:
         zero: 取消報名
+        one: 取消報名
         other: 取消報名
       #original_hash: c3aa289
       single_deletion_and_mail: '取消報名和寄給%{mail}'
@@ -1132,11 +1140,11 @@ zh-TW:
         mail_subject: '您已經報名了%{comp_name}'
         #original_hash: 8374583
         registered_html: '您剛剛報名了%{comp_name}。'
-        #original_hash: 9238412
-        on_waiting_list: '您的報名正在等候補位，目前有%{n_total}個%{people}等候中。'
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: 我們已經收到您的報名，目前正在等待主辦團隊的審核。
+        #original_hash: 826045f
         approval_info_html: >-
-          當您的報名成功時，您會收到電子郵件。請注意報名並不是自動成功的，請至比賽網站或聯絡主辦人以了解報名的規則。您可以在%{here}檢查您的報名狀態。
+          當您的報名成功時，您會收到電子郵件。請注意報名並不是自動成功的，所以當您的報名沒有馬上成功時，請保持耐心。在您報名成功之前可能還有一些步驟需要完成，請至比賽網站或聯絡主辦人以了解報名的規則。您可以在%{here}檢查您的報名狀態。
       accepted:
         #original_hash: 34515b5
         mail_subject: '您已經成功報名%{comp_name}'
@@ -1164,8 +1172,8 @@ zh-TW:
         causes:
           #original_hash: 978944c
           missing_info: 您沒有輸入所有必填的資料。
-          #original_hash: 788f2ec
-          incomplete: 您沒有符合報名的規則(例如：預先支付報名費)
+          #original_hash: a700652
+          incomplete: 您沒有符合報名的資格(例如：預先支付報名費或達到某項目的秒數門檻)
           #original_hash: 1e225f0
           registrations_full: 比賽限制人數已經額滿且沒有其他空缺
           #original_hash: 0d4cce9
@@ -1178,6 +1186,7 @@ zh-TW:
       #original_hash: 0ab725c
       country_plural:
         zero: 1國
+        one: 1國
         other: '%{count}國'
       #original_hash: 1feee0e
       export_csv: 下載CSV檔
@@ -1349,10 +1358,12 @@ zh-TW:
       #original_hash: 680567f
       organizer_plural:
         zero: 主辦人
+        one: 主辦人
         other: 主辦人
       #original_hash: 6afa61e
       delegate:
         zero: WCA代表
+        one: WCA代表
         other: WCA代表
       #original_hash: b37456c
       contact: 聯絡
@@ -1541,7 +1552,8 @@ zh-TW:
       #original_hash: 241801a
       competitions:
         zero: 無比賽
-        other: '%{count}比賽'
+        one: 1個比賽
+        other: '%{count}個比賽'
       #original_hash: e3528ec
       label: '附近的比賽(%{days}天和%{kms}公里之內)'
       #original_hash: 3446062
@@ -1928,8 +1940,11 @@ zh-TW:
     structure:
       #original_hash: 9482c5d
       title: 組織
-      #original_hash: d855b50
-      board_html: 世界方塊協會由<strong>WCA董事會</strong>領導，包括以下成員：
+      board:
+        #original_hash: abd2828
+        name: WCA董事會
+        #original_hash: d855b50
+        info_html: 世界方塊協會由<strong>WCA董事會</strong>領導，包括以下成員：
       #original_hash: b0c72a9
       committees: 以下的委員會負責WCA的分工：
       wdc:
@@ -1965,8 +1980,9 @@ zh-TW:
       wec:
         #original_hash: 83bd1d0
         name: WCA倫理委員會
-        #original_hash: ec2b9c3
-        description: 該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範。
+        #original_hash: c304d57
+        description: >-
+          該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範，並且在這些成員的行為不符合該倫理規範的情況下進行獨立調查。這些調查可以由任何已註冊的玩家提出，前提是他們必須為WEC信任的人。如果有人不同意WCA紀律委員會做出的決定，此委員會也可以充當上訴委員會。
       wqac:
         #original_hash: 8f32116
         name: WCA品質保證委員會
@@ -1983,7 +1999,7 @@ zh-TW:
   documents:
     #original_hash: 687c828
     title: 文件
-    #original_hash: 65b08c4
+    #original_hash: 9855f80
     bylaws: 章程
     #original_hash: fdceb44
     motions: 提議
@@ -2057,9 +2073,9 @@ zh-TW:
       href='/contact/website'>聯絡表單</a>。若是詢問關於特定地區或是比賽的問題，請聯絡您當地的%{link}。
     #original_hash: 4a30d30
     committees_and_teams_html: <u>委員會和團隊<u>
+    #original_hash: 1cb449c
+    members: 成員
     board:
-      #original_hash: 90fcc48
-      name_html: WCA董事會
       #original_hash: 3a8b1d8
       info_html: 世界方塊協會由WCA董事會領導。他們負責回答一些基本問題並代表整個WCA組織。所有官方比賽必須經由WCA董事會審核成功才會公告。
     wct:
