@@ -473,8 +473,6 @@ pt-BR:
         delegate: Delegado
         #original_hash: d463c23
         senior_delegate: Delegado Senior
-        #original_hash: 660ee15
-        board_member: Membro do Conselho
     person:
       gender:
         #original_hash: 3f3a489
@@ -1140,10 +1138,6 @@ pt-BR:
         Não existe um nome registrado para esta ID da WCA. Por favor envie um
         email para a <a href='mailto:results@worldcubeassociation.org'
         target='_blank'>Equipe de Resultados da WCA</a> para resolver isto.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Você não pode remover a si mesmo de sua posição como membro do Conselho!
-        Outro membro deve fazer isto.
       #original_hash: d02c03b
       avatar_requires_wca_id: é necessário uma ID da WCA vinculada
     successes:
@@ -2225,10 +2219,13 @@ pt-BR:
     structure:
       #original_hash: 9482c5d
       title: Estrutura
-      #original_hash: d855b50
-      board_html: >-
-        A World Cube Association é conduzida pelo <strong>WCA Board (Conselho da
-        WCA)</strong>, que consiste nos seguintes membros:
+      board:
+        #original_hash: abd2828
+        name: Conselho de Diretores da WCA
+        #original_hash: d855b50
+        info_html: >-
+          A World Cube Association é conduzida pelo <strong>WCA Board (Conselho
+          da WCA)</strong>, que consiste nos seguintes membros:
       #original_hash: b0c72a9
       committees: >-
         Os seguintes comitês e equipes são responsáveis pelas atividades
@@ -2415,9 +2412,9 @@ pt-BR:
       competição específicas, por favor contate seu %{link} local.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Comitês e Equipes</u>
+    #original_hash: 1cb449c
+    members: Membros
     board:
-      #original_hash: 90fcc48
-      name_html: Conselho da WCA
       #original_hash: 3a8b1d8
       info_html: >-
         A World Cube Association é liderada pelo Conselho da WCA. Eles são
