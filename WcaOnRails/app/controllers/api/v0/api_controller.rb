@@ -129,16 +129,16 @@ class Api::V0::ApiController < ApplicationController
       {
         world_records: records_by_event(records),
         continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continentId }.transform_values!(&method(:records_by_event)),
-        national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event))
+        national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event)),
       }
     end
     render json: json
   end
 
   private def records_by_event(records)
-    records.group_by { |record| record["event_id"] }.transform_values! do |records|
-      records.group_by { |record| record["type"] }.transform_values! do |records|
-        records.map { |record| record["value"] }.min
+    records.group_by { |record| record["event_id"] }.transform_values! do |event_records|
+      event_records.group_by { |record| record["type"] }.transform_values! do |type_records|
+        type_records.map { |record| record["value"] }.min
       end
     end
   end
