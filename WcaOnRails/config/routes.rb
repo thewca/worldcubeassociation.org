@@ -170,6 +170,7 @@ Rails.application.routes.draw do
         get '/wcif' => 'competitions#show_wcif'
         patch '/wcif/events' => 'competitions#update_events_from_wcif', as: :update_events_from_wcif
       end
+      get '/records' => "api#records"
     end
   end
 end
