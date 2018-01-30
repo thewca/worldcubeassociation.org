@@ -402,8 +402,16 @@ class User < ApplicationRecord
     delegate_status.present?
   end
 
+  def senior_delegate?
+    delegate_status == "senior_delegate"
+  end
+
   def can_view_all_users?
     admin? || board_member? || results_team? || communication_team? || any_kind_of_delegate?
+  end
+
+  def can_view_senior_delegate_material?
+    admin? || board_member? || senior_delegate?
   end
 
   def can_edit_user?(user)

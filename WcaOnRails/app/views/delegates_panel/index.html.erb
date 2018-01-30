@@ -11,4 +11,10 @@
       <%= link_to "Delegates", delegates_stats_path %>
     </li>
   </ul>
+
+  <% if current_user&.can_view_senior_delegate_material? %>
+    <h1>Senior Delegates panel</h2>
+
+    <%= link_to "Senior Delegate forms", "https://docs.google.com/document/d/12oyMQTC6hBhiil8CFvYuIT-iZfLO48urap4yq0w4xkg/" %>
+  <% end %>
 </div>
