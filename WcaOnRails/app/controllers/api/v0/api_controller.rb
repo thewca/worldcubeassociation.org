@@ -112,6 +112,32 @@ class Api::V0::ApiController < ApplicationController
     paginate json: User.delegates
   end
 
+  def records
+    records = ActiveRecord::Base.connection.exec_query <<-SQL
+      SELECT 'single' type, MIN(best) value, countryId country_id, eventId event_id
+      FROM ConciseSingleResults
+      GROUP BY countryId, eventId
+      UNION ALL
+      SELECT 'average' type, MIN(average) value, countryId country_id, eventId event_id
+      FROM ConciseAverageResults
+      GROUP BY countryId, eventId
+    SQL
+    records = records.to_hash
+    render json: {
+      world_records: records_by_event(records),
+      continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continentId }.transform_values!(&method(:records_by_event)),
+      national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event))
+    }
+  end
+
+  private def records_by_event(records)
+    records.group_by { |record| record["event_id"] }.transform_values! do |records|
+      records.group_by { |record| record["type"] }.transform_values! do |records|
+        records.map { |record| record["value"] }.min
+      end
+    end
+  end
+
   # Find the user that owns the access token.
   # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
   private def current_api_user
