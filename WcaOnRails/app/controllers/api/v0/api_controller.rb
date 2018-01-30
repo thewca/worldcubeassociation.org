@@ -114,21 +114,26 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def records
-    records = ActiveRecord::Base.connection.exec_query <<-SQL
-      SELECT 'single' type, MIN(best) value, countryId country_id, eventId event_id
-      FROM ConciseSingleResults
-      GROUP BY countryId, eventId
-      UNION ALL
-      SELECT 'average' type, MIN(average) value, countryId country_id, eventId event_id
-      FROM ConciseAverageResults
-      GROUP BY countryId, eventId
-    SQL
-    records = records.to_hash
-    render json: {
-      world_records: records_by_event(records),
-      continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continentId }.transform_values!(&method(:records_by_event)),
-      national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event))
-    }
+    concise_results_date = Timestamp.find_by(name: "compute_auxiliary_data_end").date
+    cache_key = "records/#{concise_results_date.iso8601}"
+    json = Rails.cache.fetch(cache_key) do
+      records = ActiveRecord::Base.connection.exec_query <<-SQL
+        SELECT 'single' type, MIN(best) value, countryId country_id, eventId event_id
+        FROM ConciseSingleResults
+        GROUP BY countryId, eventId
+        UNION ALL
+        SELECT 'average' type, MIN(average) value, countryId country_id, eventId event_id
+        FROM ConciseAverageResults
+        GROUP BY countryId, eventId
+      SQL
+      records = records.to_hash
+      {
+        world_records: records_by_event(records),
+        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continentId }.transform_values!(&method(:records_by_event)),
+        national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event))
+      }
+    end
+    render json: json
   end
 
   private def records_by_event(records)
