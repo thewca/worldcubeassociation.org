@@ -487,8 +487,6 @@ pl:
         delegate: Delegat
         #original_hash: d463c23
         senior_delegate: Starszy Delegat
-        #original_hash: 660ee15
-        board_member: Członek Zarządu
     person:
       gender:
         #original_hash: 3f3a489
@@ -605,12 +603,12 @@ pl:
           zawierającym protokół http(s).
         #original_hash: 9965635
         registration_open: 'Zauważ: Daty startowa i końcowa rejestracji są w czasie UTC.'
-        #original_hash: 36963bc
-        remarks: >-
-          Informacje które chcesz przesłać Zarządowi. Na przykład powody, dla
-          których zawody zostały zgłoszone z mniejszym niż miesięczne
-          wyprzedzeniem, jeśli tak było w tej sytuacji. Prosimy o wypełnienie w
-          języku angielskim!
+        #original_hash: 9dfafd4
+        remarks_html: >-
+          Dodatkowe informacje, które chciałbyś przekazać zarządowi. Na przykład
+          opis przyczyn w przypadku zgłoszenia zawodów z wyprzedzeniem mniejszym
+          niż cztery tygodnie, lub zgłoszenie chęci zastosowania %{link}.
+          Prosimy o wypełnienie w języku angielskim!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -1177,10 +1175,6 @@ pl:
         się z <a href='mailto:results@worldcubeassociation.org'
         target='_blank'>Zespołem do spraw wyników</a> w celu rozwiązania tego
         problemu.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Nie możesz zrezygnować ze swojej roli jako członek zarządu! Znajdź
-        innego członka zarządu, aby cię usunął.
       #original_hash: d02c03b
       avatar_requires_wca_id: 'wymaga, aby WCA ID było przydzielone'
     successes:
@@ -2288,10 +2282,13 @@ pl:
     structure:
       #original_hash: 9482c5d
       title: Struktura
-      #original_hash: d855b50
-      board_html: >-
-        World Cube Association jest prowadzone przez <strong>Zarząd WCA (WCA
-        Board)</strong>, składający się z następujących członków:
+      board:
+        #original_hash: abd2828
+        name: Zarząd WCA
+        #original_hash: d855b50
+        info_html: >-
+          World Cube Association jest kierowane przez <strong>Zarząd
+          WCA</strong>, składający się z następujących członków:
       #original_hash: b0c72a9
       committees: 'Następujące komitety są odpowiedzialne za działalność WCA:'
       wdc:
@@ -2481,9 +2478,9 @@ pl:
       %{link}, po skontaktowaniu się z nim.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Komitety i Zespoły</u>
+    #original_hash: 1cb449c
+    members: Członkowie
     board:
-      #original_hash: 90fcc48
-      name_html: Zarząd WCA (WCA Board)
       #original_hash: 3a8b1d8
       info_html: >-
         World Cube Association jest kierowane przez Zarząd WCA. Jest on
