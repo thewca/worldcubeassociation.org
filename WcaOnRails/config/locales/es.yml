@@ -473,8 +473,6 @@ es:
         delegate: Delegado
         #original_hash: d463c23
         senior_delegate: Delegado Senior
-        #original_hash: 660ee15
-        board_member: Miembro de la Junta Directiva
     person:
       gender:
         #original_hash: 3f3a489
@@ -588,12 +586,12 @@ es:
         external_website: Sitio web de la competición. Tiene que ser una URL http(s) válida.
         #original_hash: 9965635
         registration_open: 'Nota: la apertura y cierre se registra según la hora UTC.'
-        #original_hash: 36963bc
-        remarks: >-
-          Información adicional que quieras comunicar a la Junta Directiva. Por
-          ejemplo, las razones por las que esta competición se ha solicitado
-          menos de un mes antes o los motivos por los que hay límite de
-          competidores.
+        #original_hash: 9dfafd4
+        remarks_html: >-
+          Información suplementaria que quieras enviar al Board. Por ejemplo,
+          explica tus razones si la competición solicitada es en menos de cuatro
+          semanas o si estás solicitando que se aplique %{link}. Por favor,
+          rellénalo en inglés.
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -1151,10 +1149,6 @@ es:
         Este WCA ID no tiene registrado el nombre. Por favor, escribe al <a
         href='mailto:results@worldcubeassociation.org' target='_blank'>Equipo de
         Resultados de la WCA</a> para resolver esto.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        ¡No puedes abandonar tu puesto como miembro de la Junta Directiva!
-        Tienes que buscar otro miembro de la Junta que te eche.
       #original_hash: d02c03b
       avatar_requires_wca_id: requiere que se le asigne un WCA ID
     successes:
@@ -1265,10 +1259,10 @@ es:
         mail_subject: 'Te has registrado en %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Te acabas de registrar en %{comp_name}.'
-        #original_hash: e771ee5
+        #original_hash: 13fabed
         awaits_approval: >-
-          Tu registro ha sido aceptado por el sistema y está esperando ser
-          aprobado por el equipo organizador.
+          Tu registro ha sido recibido y está esperando ser aprobado por el
+          equipo organizador.
         #original_hash: 826045f
         approval_info_html: >-
           Se te enviará un correo electrónico cuando tu registro se apruebe. Por
@@ -1311,10 +1305,11 @@ es:
         causes:
           #original_hash: 978944c
           missing_info: No suministraste todos tus detalles o lo hiciste de forma incorrecta
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
-            No has cumplido todo los requisitos del registro (por ejemplo, pagar
-            el registro por adelantado)
+            No has cumplido todo los requisitos del registro (por ejemplo no has
+            pagado el registro por adelantado o no cumples con los tiempos de
+            calificación)
           #original_hash: 1e225f0
           registrations_full: >-
             El límite de competidores se ha alcanzado y no hay más plazas
@@ -2247,10 +2242,13 @@ es:
     structure:
       #original_hash: 9482c5d
       title: Estructura
-      #original_hash: d855b50
-      board_html: >-
-        La World Cube Association está dirigida por la <strong>Junta Directiva
-        de la WCA</strong>, formada por los siguientes miembros:
+      board:
+        #original_hash: abd2828
+        name: Junta Directiva de la WCA
+        #original_hash: d855b50
+        info_html: >-
+          La Asociación Mundial del Cubo (WCA) está liderada por la
+          <strong>Junta Directiva WCA</strong>, cuyos miembros son:
       #original_hash: b0c72a9
       committees: >-
         Los siguientes comités se encargan de las actividades operacionales de
@@ -2302,10 +2300,16 @@ es:
       wec:
         #original_hash: 83bd1d0
         name: Comité Ético de la WCA
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
-          Este comité tiene la labor de asegurarse de que los procedimientos
-          seguidos por el personal WCA y Externo siguen su Código Ético.
+          El papel de este comité es asegurarse de que los procedimientos
+          seguidos por el personal WCA y Externo siguen su Código Ético, y
+          realizar investigaciones independientes si la conducta de alguno de
+          estos no es conforme con dicho Código Ético. Estas investigaciones
+          pueden ser solicitadas por cualquier cubero registrado, para quienes
+          el WEC es un confidente. Este comité también funciona como junta de
+          apelación si  cualquiera involucrado no está de acuerdo con alguna
+          decisión del Comité Disciplinario de la WCA (WDC).
       wqac:
         #original_hash: 8f32116
         name: Comité de Control de Calidad de la WCA
@@ -2339,7 +2343,7 @@ es:
   documents:
     #original_hash: 687c828
     title: Documentos
-    #original_hash: 65b08c4
+    #original_hash: 9855f80
     bylaws: Estatutos
     #original_hash: fdceb44
     motions: Mociones
@@ -2440,9 +2444,9 @@ es:
       ponte en contacto con un %{link} cercano.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Comités y Equipos</u>
+    #original_hash: 1cb449c
+    members: Miembros
     board:
-      #original_hash: 90fcc48
-      name_html: <strong>Junta Directiva de la WCA</strong>
       #original_hash: 3a8b1d8
       info_html: >-
         La organización Mundial del cubo (WCA) está liderada por la junta WCA.
