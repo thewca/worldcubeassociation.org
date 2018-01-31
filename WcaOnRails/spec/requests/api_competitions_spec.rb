@@ -227,6 +227,13 @@ RSpec.describe "API Competitions" do
                   cutoff: nil,
                   advancementCondition: nil,
                   scrambleGroupCount: 2,
+                  roundResults: [
+                    {
+                      personId: 1,
+                      ranking: 10,
+                      attempts: [{ result: 456 }, { result: 745 }, { result: 657 }, { result: 465 }, { result: 835 }]
+                    }
+                  ]
                 },
               ],
             },
@@ -236,6 +243,8 @@ RSpec.describe "API Competitions" do
           rounds = competition.reload.competition_events.find_by_event_id("333").rounds
           expect(rounds.length).to eq 1
           expect(rounds.first.scramble_group_count).to eq 2
+          expect(rounds.first.round_results.length).to eq 1
+          expect(rounds.first.round_results.first.attempts.map(&:result)).to eq [456, 745, 657, 465, 835]
         end
       end
 
@@ -248,7 +257,7 @@ RSpec.describe "API Competitions" do
           api_sign_in_as(user, scopes: scopes)
         end
 
-        it "can update events" do
+        it "can't update events" do
           competition_events = [
             {
               id: "333",
