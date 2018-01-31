@@ -5,6 +5,8 @@
     <td><%= t 'competitions.nearby_competitions.date' %></td>
     <td><%= t 'competitions.nearby_competitions.location' %></td>
     <td><%= t 'competitions.nearby_competitions.distance' %></td>
+    <td><%= t 'competitions.nearby_competitions.limit' %></td>
+    <td><%= t 'competitions.nearby_competitions.competitors' %></td>
   </tr>
   <% nearby_competitions.each do |c| %>
     <tr class="<%= @competition.dangerously_close_to?(c) ? "danger" : "warning" %>">
@@ -27,6 +29,8 @@
       <td class="text-nowrap text-right">
         <%= link_to_google_maps_dir "#{@competition.kilometers_to(c).round(2)} km", c.latitude_degrees, c.longitude_degrees, @competition.latitude_degrees, @competition.longitude_degrees %>
       </td>
+      <td><%= c.competitor_limit_enabled ? c.competitor_limit : "---" %></td>
+      <td style="text-align: center;"><%= c.competitors.count if c.is_probably_over? %></td>
     </tr>
   <% end %>
 </table>
