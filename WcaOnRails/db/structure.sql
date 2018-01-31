@@ -942,6 +942,7 @@ CREATE TABLE `rounds` (
   `cutoff` text COLLATE utf8mb4_unicode_ci,
   `advancement_condition` text COLLATE utf8mb4_unicode_ci,
   `scramble_group_count` int(11) NOT NULL DEFAULT '1',
+  `round_results` mediumtext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_rounds_on_competition_event_id_and_number` (`competition_event_id`,`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1256,4 +1257,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20171222182940'),
 ('20180104132335'),
 ('20180107142301'),
-('20180120132926');
+('20180120132926'),
+('20180201005000');

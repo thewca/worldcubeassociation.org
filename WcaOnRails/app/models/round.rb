@@ -15,6 +15,9 @@ class Round < ApplicationRecord
   serialize :advancement_condition, AdvancementCondition
   validates_associated :advancement_condition
 
+  serialize :round_results, RoundResults
+  validates_associated :round_results
+
   MAX_NUMBER = 4
   validates_numericality_of :number,
                             only_integer: true,
@@ -77,6 +80,7 @@ class Round < ApplicationRecord
       cutoff: Cutoff.load(wcif["cutoff"]),
       advancement_condition: AdvancementCondition.load(wcif["advancementCondition"]),
       scramble_group_count: wcif["scrambleGroupCount"],
+      round_results: RoundResults.load(wcif["roundResults"]),
     }
   end
 
@@ -92,6 +96,7 @@ class Round < ApplicationRecord
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
       "scrambleGroupCount" => self.scramble_group_count,
+      "roundResults" => round_results.map(&:to_wcif)
     }
   end
 
@@ -104,7 +109,7 @@ class Round < ApplicationRecord
         "timeLimit" => TimeLimit.wcif_json_schema,
         "cutoff" => Cutoff.wcif_json_schema,
         "advancementCondition" => AdvancementCondition.wcif_json_schema,
-        "roundResults" => { "type" => "array" }, # TODO: expand on this
+        "roundResults" => { "type" => "array", "items" => { "type" => RoundResult.wcif_json_schema } },
         "groups" => { "type" => "array" }, # TODO: expand on this
         "scrambleGroupCount" => { "type" => "integer" },
       },
