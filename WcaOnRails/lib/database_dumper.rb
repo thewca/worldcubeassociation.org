@@ -266,6 +266,7 @@ module DatabaseDumper
           cutoff
           advancement_condition
           scramble_group_count
+          round_results
           created_at
           updated_at
         ),

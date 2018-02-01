@@ -96,7 +96,7 @@ class Round < ApplicationRecord
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
       "scrambleGroupCount" => self.scramble_group_count,
-      "roundResults" => round_results.map(&:to_wcif)
+      "roundResults" => round_results.map(&:to_wcif),
     }
   end
 

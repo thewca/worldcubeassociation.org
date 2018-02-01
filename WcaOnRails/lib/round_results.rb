@@ -3,14 +3,9 @@
 # Serializes/deserializes an Array of RoundResult objects.
 class RoundResults
   def self.load(json)
-    if json.nil?
-      []
-    elsif json.is_a?(Array) && json.all? { |item| item.is_a?(RoundResult) }
-      json
-    else
-      json_array = json.is_a?(Array) ? json : JSON.parse(json)
-      json_array.map(&RoundResult.method(:load))
-    end
+    json_array = json.is_a?(String) ? JSON.parse(json) : json
+    json_array ||= []
+    json_array.map(&RoundResult.method(:load))
   end
 
   def self.dump(round_results)
@@ -44,21 +39,8 @@ class RoundResult
     self.to_wcif.hash
   end
 
-  def self.load(json)
-    if json.nil? || json.is_a?(self)
-      json
-    else
-      self.new.tap do |round_result|
-        json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
-        round_result.person_id = json_obj['personId']
-        round_result.ranking = json_obj['ranking']
-        round_result.attempts = json_obj['attempts'].map(&Attempt.method(:load))
-      end
-    end
-  end
-
-  def self.dump(round_result)
-    round_result ? JSON.dump(round_result.to_wcif) : nil
+  def self.load(json_obj)
+    self.new(person_id: json_obj['personId'], ranking: json_obj['ranking'], attempts: json_obj['attempts'].map(&Attempt.method(:load)))
   end
 
   def self.wcif_json_schema
@@ -78,7 +60,6 @@ class Attempt
 
   attr_accessor :result, :reconstruction
   validates :result, numericality: { only_integer: true }
-  validates :reconstruction, numericality: { only_integer: true }
 
   def initialize(result: nil, reconstruction: nil)
     self.result = result

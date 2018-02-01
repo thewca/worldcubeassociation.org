@@ -151,14 +151,14 @@ RSpec.describe "API Competitions" do
 
         it "can update events" do
           competition_events = create_wcif_events(%w(333))
-          round333_1 = competition_events[0][:rounds][0]
-          round333_1[:scrambleGroupCount] = 2
-          round333_1[:roundResults] = [
+          round333_first = competition_events[0][:rounds][0]
+          round333_first[:scrambleGroupCount] = 2
+          round333_first[:roundResults] = [
             {
               personId: 1,
               ranking: 10,
-              attempts: [{ result: 456 }, { result: 745 }, { result: 657 }, { result: 465 }, { result: 835 }]
-            }
+              attempts: [{ result: 456 }, { result: 745 }, { result: 657 }, { result: 465 }, { result: 835 }],
+            },
           ]
           patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: { "CONTENT_TYPE" => "application/json" }
           expect(response).to be_success
@@ -233,7 +233,7 @@ def create_wcif_events(event_ids)
       id: event_id,
       rounds: [
         {
-          id: "#{event_id}-1",
+          id: "#{event_id}-r1",
           format: "a",
           timeLimit: nil,
           cutoff: nil,
