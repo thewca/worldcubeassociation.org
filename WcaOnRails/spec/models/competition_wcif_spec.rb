@@ -58,7 +58,7 @@ RSpec.describe "Competition WCIF" do
                   "level" => 16,
                 },
                 "scrambleGroupCount" => 16,
-                "roundResults" => []
+                "roundResults" => [],
               },
               {
                 "id" => "333-r2",
@@ -70,7 +70,7 @@ RSpec.describe "Competition WCIF" do
                 "cutoff" => nil,
                 "advancementCondition" => nil,
                 "scrambleGroupCount" => 1,
-                "roundResults" => []
+                "roundResults" => [],
               },
             ],
           },
@@ -84,7 +84,7 @@ RSpec.describe "Competition WCIF" do
                 "cutoff" => nil,
                 "advancementCondition" => nil,
                 "scrambleGroupCount" => 1,
-                "roundResults" => []
+                "roundResults" => [],
               },
             ],
           },
@@ -98,7 +98,7 @@ RSpec.describe "Competition WCIF" do
                 "cutoff" => nil,
                 "advancementCondition" => nil,
                 "scrambleGroupCount" => 1,
-                "roundResults" => []
+                "roundResults" => [],
               },
             ],
           },
@@ -115,7 +115,7 @@ RSpec.describe "Competition WCIF" do
                 "cutoff" => nil,
                 "advancementCondition" => nil,
                 "scrambleGroupCount" => 1,
-                "roundResults" => []
+                "roundResults" => [],
               },
             ],
           },
@@ -171,7 +171,7 @@ RSpec.describe "Competition WCIF" do
             "cutoff" => nil,
             "advancementCondition" => nil,
             "scrambleGroupCount" => 1,
-            "roundResults" => []
+            "roundResults" => [],
           },
         ],
       }
@@ -197,7 +197,7 @@ RSpec.describe "Competition WCIF" do
         "cutoff" => nil,
         "advancementCondition" => nil,
         "scrambleGroupCount" => 1,
-        "roundResults" => []
+        "roundResults" => [],
       }
 
       competition.set_wcif_events!(wcif["events"], delegate)
@@ -254,15 +254,17 @@ RSpec.describe "Competition WCIF" do
 
     it "can set roundResults" do
       wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
-      wcif_333_event["rounds"][0]["roundResults"] = [{
+      wcif_333_event["rounds"][0]["roundResults"] = [
+        {
           "personId" => 1,
           "ranking" => 10,
-          "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5
-        }, {
+          "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5,
+        },
+        {
           "personId" => 2,
           "ranking" => 5,
-          "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5
-        }
+          "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5,
+        },
       ]
 
       competition.set_wcif_events!(wcif["events"], delegate)
