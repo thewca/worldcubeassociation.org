@@ -7,24 +7,6 @@ RSpec.describe "API Competitions" do
     let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
 
     describe "website user (cookies based)" do
-      def create_wcif_events(event_ids)
-        event_ids.map do |event_id|
-          {
-            id: event_id,
-            rounds: [
-              {
-                id: "#{event_id}-1",
-                format: "a",
-                timeLimit: nil,
-                cutoff: nil,
-                advancementCondition: nil,
-                scrambleGroupCount: 1,
-              },
-            ],
-          }
-        end
-      end
-
       context "when not signed in" do
         sign_out
 
@@ -55,23 +37,8 @@ RSpec.describe "API Competitions" do
           expect(ce.rounds.length).to eq 2
 
           headers = { "CONTENT_TYPE" => "application/json" }
-          competition_events = [
-            {
-              id: "333",
-              rounds: [
-                {
-                  id: "333-1",
-                  format: "invalidformat",
-                  timeLimit: {
-                    centiseconds: 4242,
-                    cumulativeRoundIds: [],
-                  },
-                  cutoff: nil,
-                  advancementCondition: nil,
-                },
-              ],
-            },
-          ]
+          competition_events = create_wcif_events(%w(333))
+          competition_events[0][:rounds][0][:format] = "invalidformat"
           patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
           expect(response).to have_http_status(400)
           response_json = JSON.parse(response.body)
@@ -118,37 +85,7 @@ RSpec.describe "API Competitions" do
 
           it "allows adding rounds to an event" do
             headers = { "CONTENT_TYPE" => "application/json" }
-            competition_events = [
-              {
-                id: "333",
-                rounds: [
-                  {
-                    id: "333-1",
-                    format: "a",
-                    timeLimit: {
-                      centiseconds: 4242,
-                      cumulativeRoundIds: [],
-                    },
-                    cutoff: nil,
-                    advancementCondition: nil,
-                    scrambleGroupCount: 1,
-                  },
-                ],
-              },
-              {
-                id: "222",
-                rounds: [
-                  {
-                    id: "222-1",
-                    format: "a",
-                    timeLimit: nil,
-                    cutoff: nil,
-                    advancementCondition: nil,
-                    scrambleGroupCount: 1,
-                  },
-                ],
-              },
-            ]
+            competition_events = create_wcif_events(%w(222 333))
             expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 0
             patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
             expect(response).to be_success
@@ -213,30 +150,15 @@ RSpec.describe "API Competitions" do
         end
 
         it "can update events" do
-          competition_events = [
+          competition_events = create_wcif_events(%w(333))
+          round333_1 = competition_events[0][:rounds][0]
+          round333_1[:scrambleGroupCount] = 2
+          round333_1[:roundResults] = [
             {
-              id: "333",
-              rounds: [
-                {
-                  id: "333-1",
-                  format: "a",
-                  timeLimit: {
-                    centiseconds: 4242,
-                    cumulativeRoundIds: [],
-                  },
-                  cutoff: nil,
-                  advancementCondition: nil,
-                  scrambleGroupCount: 2,
-                  roundResults: [
-                    {
-                      personId: 1,
-                      ranking: 10,
-                      attempts: [{ result: 456 }, { result: 745 }, { result: 657 }, { result: 465 }, { result: 835 }]
-                    }
-                  ]
-                },
-              ],
-            },
+              personId: 1,
+              ranking: 10,
+              attempts: [{ result: 456 }, { result: 745 }, { result: 657 }, { result: 465 }, { result: 835 }]
+            }
           ]
           patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: { "CONTENT_TYPE" => "application/json" }
           expect(response).to be_success
@@ -258,24 +180,7 @@ RSpec.describe "API Competitions" do
         end
 
         it "can't update events" do
-          competition_events = [
-            {
-              id: "333",
-              rounds: [
-                {
-                  id: "333-1",
-                  format: "a",
-                  timeLimit: {
-                    centiseconds: 4242,
-                    cumulativeRoundIds: [],
-                  },
-                  cutoff: nil,
-                  advancementCondition: nil,
-                  scrambleGroupCount: 2,
-                },
-              ],
-            },
-          ]
+          competition_events = create_wcif_events(%w(333))
           patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: { "CONTENT_TYPE" => "application/json" }
           expect(response.status).to eq 403
           expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 0
@@ -296,24 +201,7 @@ RSpec.describe "API Competitions" do
 
         it "prevents from CSRF attacks" do
           headers = { "CONTENT_TYPE" => "application/json", "ACCESS_TOKEN" => "INVALID" }
-          competition_events = [
-            {
-              id: "333",
-              rounds: [
-                {
-                  id: "333-1",
-                  format: "a",
-                  timeLimit: {
-                    centiseconds: 4242,
-                    cumulativeRoundIds: [],
-                  },
-                  cutoff: nil,
-                  advancementCondition: nil,
-                  scrambleGroupCount: 1,
-                },
-              ],
-            },
-          ]
+          competition_events = create_wcif_events(%w(333))
           expect {
             patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
           }.to raise_exception ActionController::InvalidAuthenticityToken
@@ -330,28 +218,29 @@ RSpec.describe "API Competitions" do
 
         it "does not use CSRF protection as we use oauth token" do
           headers = { "CONTENT_TYPE" => "application/json", "ACCESS_TOKEN" => nil }
-          competition_events = [
-            {
-              id: "333",
-              rounds: [
-                {
-                  id: "333-1",
-                  format: "a",
-                  timeLimit: {
-                    centiseconds: 4242,
-                    cumulativeRoundIds: [],
-                  },
-                  cutoff: nil,
-                  advancementCondition: nil,
-                  scrambleGroupCount: 1,
-                },
-              ],
-            },
-          ]
+          competition_events = create_wcif_events(%w(333))
           patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
           expect(response).to be_success
         end
       end
     end
+  end
+end
+
+def create_wcif_events(event_ids)
+  event_ids.map do |event_id|
+    {
+      id: event_id,
+      rounds: [
+        {
+          id: "#{event_id}-1",
+          format: "a",
+          timeLimit: nil,
+          cutoff: nil,
+          advancementCondition: nil,
+          scrambleGroupCount: 1,
+        },
+      ],
+    }
   end
 end
