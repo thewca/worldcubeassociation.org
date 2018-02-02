@@ -103,7 +103,7 @@ export function centisecondsToString(centiseconds, { short } = {}) {
   }
 
   let seconds = centiseconds / SECOND_IN_CS;
-  if(seconds > 0) {
+  if(seconds > 0 || str.length === 0) {
     str += pluralize(seconds, "second", { fixed: 2, abbreviate: short }) + " ";
   }
 
