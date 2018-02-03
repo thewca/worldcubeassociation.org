@@ -985,6 +985,8 @@ en:
       distance: "Distance"
       before: "before"
       after: "after"
+      limit: "Limit"
+      competitors: "Competitors"
     announcements: "Announcements"
     upload_results: "Upload results"
     post_announcement: "Post competition announcement"
