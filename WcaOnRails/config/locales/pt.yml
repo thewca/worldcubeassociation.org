@@ -473,8 +473,6 @@ pt:
         delegate: Delegado
         #original_hash: d463c23
         senior_delegate: Delegado Sénior
-        #original_hash: 660ee15
-        board_member: Membro do Conselho
     person:
       gender:
         #original_hash: 3f3a489
@@ -590,11 +588,12 @@ pt:
         external_website: O website da competição. Deve ser uma hiperligação http(s) válida.
         #original_hash: 9965635
         registration_open: 'Nota: Abertura e fecho do registo está no fuso horário UTC'
-        #original_hash: 36963bc
-        remarks: >-
-          Informação adicional a passar ao Conselho da WCA. Por exemplo, razões
-          pelas quais esta competição foi solicitada com menos de um mês de
-          antecedência, se aplicável. Por favor, escrever em inglês!
+        #original_hash: 243212f
+        remarks_html: >-
+          Informação adicional que queria passar para o Conselho da WCA. Por
+          exemplo, desenvolver as razões para esta competição ter sido pedida
+          com menos de quatro semanas de antecedência, ou se está a pedir a
+          aplicação de %{link}. Por favor, preencha em Inglês!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -1144,10 +1143,6 @@ pt:
         Não temos um nome registado para este ID da WCA. Por favor envie um
         email para a <a href='mailto:results@worldcubeassociation.org'
         target='_blank'>Equipa de Resultados da WCA</a> para resolver isto.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Não pode remover-se a si mesmo da sua posição como membro do Conselho!
-        Outro membro deve fazer isto.
       #original_hash: d02c03b
       avatar_requires_wca_id: necessita um ID da WCA associado
     successes:
@@ -1783,6 +1778,10 @@ pt:
       before: antes
       #original_hash: 405906c
       after: depois
+      #original_hash: 24d948e
+      limit: Limite
+      #original_hash: 855bd26
+      competitors: Competidores
     #original_hash: 06b01c4
     announcements: Anúncios
     #original_hash: 5b9523f
@@ -2225,10 +2224,13 @@ pt:
     structure:
       #original_hash: 9482c5d
       title: Estrutura
-      #original_hash: d855b50
-      board_html: >-
-        A World Cube Association é conduzida pelo <strong>Conselho da
-        WCA</strong>, que consiste nos seguintes membros:
+      board:
+        #original_hash: abd2828
+        name: Conselho da WCA
+        #original_hash: d855b50
+        info_html: >-
+          A World Cube Association é liderada pelo <strong>Conselho da
+          WCA</strong>, que é formado pelos seguintes membros:
       #original_hash: b0c72a9
       committees: >-
         Os seguintes comités e equipas são responsáveis pelas atividades
@@ -2419,9 +2421,9 @@ pt:
       competição específicas, por favor contacte o seu %{link} local.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Comités e Equipas</u>
+    #original_hash: 1cb449c
+    members: Membros
     board:
-      #original_hash: 90fcc48
-      name_html: Conselho da WCA
       #original_hash: 3a8b1d8
       info_html: >-
         A World Cube Association é conduzida pelo Conselho da WCA. É responsável
