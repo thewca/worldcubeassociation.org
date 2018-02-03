@@ -1784,6 +1784,10 @@ cs:
       before: před
       #original_hash: 405906c
       after: po
+      #original_hash: 24d948e
+      limit: Limit
+      #original_hash: 855bd26
+      competitors: Soutěžící
     #original_hash: 06b01c4
     announcements: Ohlášení
     #original_hash: 5b9523f
