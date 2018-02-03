@@ -483,8 +483,6 @@ hr:
         delegate: Delegat
         #original_hash: d463c23
         senior_delegate: Senior Delegat
-        #original_hash: 660ee15
-        board_member: Član odbora (Board Member)
     person:
       gender:
         #original_hash: 3f3a489
@@ -601,11 +599,12 @@ hr:
         registration_open: >-
           Bilješka: Registracije se otvaraja i zatvaraju u vremenu univerzalne
           vremenske zone (UTC)
-        #original_hash: 36963bc
-        remarks: >-
-          Dodatne informacije koje želite poslati Board-u. Primjerice, razlozi
-          zašto je objava natjecanja zatražena manje od mjesec dana od
-          održavanja natjecanja. Molimo Vas ispunite na engleskom jeziku!
+        #original_hash: 243212f
+        remarks_html: >-
+          Dodatne informacije koje želite proslijediti Board-u. Npr, objasnite
+          svoje razloge ako je ovo natjecanje zatraženo u roku od manje 4 tjedna
+          od održavanja, ili ako želite zatražiti aplikaciju %{link}. Molimo Vas
+          ispunite ovo na engleskom jeziku!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -1154,10 +1153,6 @@ hr:
         Nemamo zapisano ime za ovaj WCA ID. Molimo pošaljite e-mail na <a
         href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
         Results Team</a> kako bi se to riješilo.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Ne možete dati otkaz s uloge Board Member-a! Nađite drugog Board
-        Member-a da Vas otpusti.
       #original_hash: d02c03b
       avatar_requires_wca_id: zahtijeva WCA ID da bude spojen
     successes:
@@ -1807,6 +1802,10 @@ hr:
       before: prije
       #original_hash: 405906c
       after: nakon
+      #original_hash: 24d948e
+      limit: Limit
+      #original_hash: 855bd26
+      competitors: Natjecatelji
     #original_hash: 06b01c4
     announcements: Najave
     #original_hash: 5b9523f
@@ -2246,10 +2245,13 @@ hr:
     structure:
       #original_hash: 9482c5d
       title: Struktura
-      #original_hash: d855b50
-      board_html: >-
-        World Cube Association vodi <strong>WCA Board</strong, sastojući se od
-        slijedećih članova:
+      board:
+        #original_hash: abd2828
+        name: WCA Upravni odbor
+        #original_hash: d855b50
+        info_html: >-
+          World Cube Association vodi <strong>WCA Board</strong>, čiji su
+          članovi:
       #original_hash: b0c72a9
       committees: 'Slijedeći odbori su odgovorni za operacijske aktivnosti WCA:'
       wdc:
@@ -2294,10 +2296,15 @@ hr:
       wec:
         #original_hash: 83bd1d0
         name: WCA Etički odbor
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
-          Ovaj odbor ima ulogu osigurati sve da procedure od strane WCA Osoblja
-          i Eksternog Osoblja budu po etičkom kodeksu.
+          Ovaj odbor ima ulogu osigurati da sve procedure od strane WCA Osoblja
+          i Eksternog Osoblja budu po etičkom kodeksu i provedbu nezavisnih
+          istraga ukoliko se bilo koji član nije bio dosljedan rečenom Etičkom
+          kodeksu. Takve se investigacije mogu pokrenuti od bilo kojeg
+          registriranog člana, kojemu je WEC povjeren. Ovaj odbor također ima
+          funkciju kao žalbeni odbor ukoliko se netko od članova ne slaže s
+          odlukom koju je donio WCA Disciplinarni odbor.
       wqac:
         #original_hash: 8f32116
         name: WCA Povjerenstvo za kvalitetu
@@ -2328,8 +2335,8 @@ hr:
   documents:
     #original_hash: 687c828
     title: Dokumenti
-    #original_hash: 65b08c4
-    bylaws: Akti
+    #original_hash: 9855f80
+    bylaws: Aktovi WCA
     #original_hash: fdceb44
     motions: Prijedlozi
     #original_hash: 092f99e
@@ -2417,9 +2424,9 @@ hr:
       ili natjecanja, kontaktirajte lokalnog %{link}.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Odbori i Timovi</u>
+    #original_hash: 1cb449c
+    members: Članovi
     board:
-      #original_hash: 90fcc48
-      name_html: WCA Board
       #original_hash: 3a8b1d8
       info_html: >-
         World Cube Association-om upravlja WCA Board (Upravni Odbor). Taj odbor
