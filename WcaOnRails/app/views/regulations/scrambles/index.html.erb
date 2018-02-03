@@ -1,20 +1,20 @@
 <% provide(:title, 'WCA Scrambles') %>
 <div class="container">
   <h1>WCA Scrambles</h1>
-  <% latest_version = "TNoodle-WCA-0.13.1" %>
+  <% latest_version = "TNoodle-WCA-0.13.2" %>
   <% latest_jarfilename = "#{latest_version}.jar" %>
-  <p>The current official scramble program is <em><%= latest_version %></em>. It generates high-quality scramble sequences for all the events of a competition at once.</p>
+  <p>The current official scramble programs are <em><%= latest_version %></em> and <em>TNoodle-WCA-0.13.1</em>. They generate high-quality scramble sequences for all the events of a competition at once.</p>
   <center>
     <span style="font-size: 200%; line-height: 150%; padding: 0.5em;">
       Download the official scramble program:<br/>
       <strong><%= link_to latest_jarfilename, "./tnoodle/#{latest_jarfilename}" %></strong>
     </span>
     <br/>
-    Last official change: January 29, 2018
+    Last official change: February 3rd, 2018
   </center>
   <h2>Important Notes for Delegates</h2>
   <ul>
-    <li>Official competitions must always use the current version of the official scramble program.</li>
+    <li>Official competitions must always use a current version of the official scramble program (see <%= link_to "Regulation 4f", "../#4f" %>).</li>
     <li>Delegates should download TNoodle to run it on a computer. They should not use TNoodle running on a public server (for security reasons).</li>
     <li>Delegates must save all scramble sequences generated for an official competition, and send them with the results (see <%= link_to "Regulation 1c3a", "../#1c3a" %>).</li>
   </ul>
@@ -53,6 +53,7 @@
     <li><%= link_to "TNoodle-WCA-0.11.3", "./tnoodle/old/TNoodle-WCA-0.11.3.jar" %> (2016-10-17)</li>
     <li><%= link_to "TNoodle-WCA-0.11.5", "./tnoodle/old/TNoodle-WCA-0.11.5.jar" %> (2016-12-12)</li>
     <li><%= link_to "TNoodle-WCA-0.12.0", "./tnoodle/old/TNoodle-WCA-0.12.0.jar" %> (2017-09-25)</li>
-    <li><%= link_to "TNoodle-WCA-0.13.1", "./tnoodle/TNoodle-WCA-0.13.1.jar" %> (2018-01-29)</li>
+    <li><%= link_to "TNoodle-WCA-0.13.1", "./tnoodle/old/TNoodle-WCA-0.13.1.jar" %> (2018-01-29)</li>
+    <li><%= link_to "TNoodle-WCA-0.13.2", "./tnoodle/TNoodle-WCA-0.13.2.jar" %> (2018-02-01)</li>
   </ul>
 </div>
