@@ -26,7 +26,7 @@
                 <%= render "incident_tag", tag: t %>
               <% end %>
             </td>
-            <td data-tags="<%= incident.competitions %>">
+            <td data-competitions="<%= incident.competitions %>">
               <% incident.competitions.each do |c| %>
                 <%= render "competition_tag", comp: c %>
               <% end %>

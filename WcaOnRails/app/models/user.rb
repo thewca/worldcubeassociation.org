@@ -501,7 +501,7 @@ class User < ApplicationRecord
   end
 
   def can_view_incident_private_sections?(incident)
-    if incident.resolved_at
+    if incident.resolved?
       can_view_delegate_matters?
     else
       can_manage_incidents?

@@ -2,11 +2,9 @@
 
 class IncidentsController < ApplicationController
   include TagsHelper
-  before_action :set_incident, only: [:show, :edit, :update, :destroy]
 
   # Incident should have a public summary when resolved, so not everything is
   # WRC/Delegates-only.
-
   before_action -> { redirect_to_root_unless_user(:can_manage_incidents?) }, except: [
     :index,
     :show,
@@ -22,6 +20,7 @@ class IncidentsController < ApplicationController
   end
 
   def show
+    set_incident
   end
 
   def new
@@ -29,6 +28,7 @@ class IncidentsController < ApplicationController
   end
 
   def edit
+    set_incident
   end
 
   def create
@@ -51,7 +51,7 @@ class IncidentsController < ApplicationController
     when "resolved"
       updated_attrs[:resolved_at] = Time.now
     else
-      flash[:danger] = "Unrecognize action, expecting either 'sent' or 'resolved'."
+      flash[:danger] = "Unrecognized action: '#{params[:kind]}'"
       return redirect_to @incident
     end
 
@@ -67,6 +67,7 @@ class IncidentsController < ApplicationController
   end
 
   def update
+    set_incident
     if @incident.update(incident_params)
       flash[:success] = "Incident was successfully updated."
       redirect_to @incident
@@ -76,7 +77,7 @@ class IncidentsController < ApplicationController
   end
 
   def destroy
-    @incident.destroy
+    set_incident
     if @incident.destroy
       flash[:success] = "Incident was successfully destroyed."
       redirect_to incidents_url

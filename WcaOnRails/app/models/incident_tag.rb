@@ -7,5 +7,5 @@ class IncidentTag < ApplicationRecord
 
   before_validation { self.tag = self.tag.strip }
 
-  validates :tag, format: { with: /\A[-+a-zA-Z0-9]+\z/, message: "only allows English letters, numbers, hyphens, and '+'" }
+  validates :tag, format: { with: Taggable::TAG_REGEX, message: Taggable::TAG_REGEX_MESSAGE }
 end

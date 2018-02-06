@@ -21,6 +21,10 @@ class Incident < ApplicationRecord
     digest_sent_at != nil
   end
 
+  def resolved?
+    resolved_at != nil
+  end
+
   def digest_sent_at_consistent
     if digest_sent_at && !digest_worthy
       errors.add(:digest_sent_at, "can't be set if digest_worthy is false.")

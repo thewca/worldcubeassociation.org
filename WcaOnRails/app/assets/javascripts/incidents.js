@@ -24,12 +24,13 @@ wca.customIncidentsSearch = function(text) {
   }
   var tags_value = $('input#incident-tags').val();
   var filter_tags = tags_value.length > 0 ? tags_value.split(",") : [];
-  this.data = $.grep(this.options.data, function(item, i) {
+  this.data = this.options.data.filter(function(item) {
     // item[1] is the incidents' tags
     var tags = item._1_data.tags.split(",");
     var filtered = tags.filter(function (tag) {
       return filter_tags.includes(tag);
     });
+    // TODO: filter by comps on item[2]
     if (filter_tags.length > 0 && filtered.length === 0) {
       return false;
     }

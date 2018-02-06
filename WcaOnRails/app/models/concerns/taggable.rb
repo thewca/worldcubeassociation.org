@@ -8,6 +8,9 @@
 module Taggable
   extend ActiveSupport::Concern
 
+  TAG_REGEX = /\A[-+a-zA-Z0-9]+\z/
+  TAG_REGEX_MESSAGE = "only allows English letters, numbers, hyphens, and '+'"
+
   private def item_tags
     public_send("#{self.class.name.underscore}_tags")
   end
