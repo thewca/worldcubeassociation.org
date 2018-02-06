@@ -1145,7 +1145,7 @@ CREATE TABLE `votes` (
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
 /*!50001 SET character_set_client      = utf8 */;
 /*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET collation_connection      = utf8_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50001 VIEW `rails_persons` AS select `Persons`.`rails_id` AS `id`,`Persons`.`id` AS `wca_id`,`Persons`.`subId` AS `subId`,`Persons`.`name` AS `name`,`Persons`.`countryId` AS `countryId`,`Persons`.`gender` AS `gender`,`Persons`.`year` AS `year`,`Persons`.`month` AS `month`,`Persons`.`day` AS `day`,`Persons`.`comments` AS `comments` from `Persons` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
