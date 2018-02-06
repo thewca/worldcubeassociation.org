@@ -499,6 +499,7 @@ module DatabaseDumper
         copy: %w(
           id
           avatar
+          competition_notifications_enabled
           confirmed_at
           country_iso2
           created_at
@@ -545,6 +546,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "locations" => :skip_all_rows,
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "linkings" => {

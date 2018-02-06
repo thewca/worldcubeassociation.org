@@ -736,6 +736,20 @@ CREATE TABLE `linkings` (
   UNIQUE KEY `index_linkings_on_wca_id` (`wca_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `locations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `locations` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `latitude_microdegrees` int(11) DEFAULT NULL,
+  `longitude_microdegrees` int(11) DEFAULT NULL,
+  `notification_radius_km` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_access_grants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1051,6 +1065,7 @@ CREATE TABLE `users` (
   `phone_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `notes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `preferred_locale` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `competition_notifications_enabled` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1258,4 +1273,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180104132335'),
 ('20180107142301'),
 ('20180120132926'),
-('20180201005000');
+('20180201005000'),
+('20180206211650');
