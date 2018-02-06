@@ -40,7 +40,7 @@ Note: form_builder.object is the object having associated events.
           <%= f.hidden_field :event_id %>
         <% end %>
         <%= label_tag "#{events_association_name}_#{event.id}" do %>
-          <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "#{events_association_name}_#{event.id}", disabled: disabled }, "0", "1" %>
+          <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "#{events_association_name}_#{event.id}", disabled: disabled, "data-event": event.id }, "0", "1" %>
           <%= content_tag(:span, "",
                           class: "cubing-icon event-#{event.id}",
                           data: { toggle: "tooltip", placement: "top" },

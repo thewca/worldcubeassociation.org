@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register]
+  before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :entry_fee_for_selected_events]
 
   private def competition_from_params
     competition = if params[:competition_id]
@@ -280,6 +280,19 @@ class RegistrationsController < ApplicationController
 
     flash[:success] = 'Payment was refunded'
     redirect_to edit_registration_path(registration)
+  end
+
+  def entry_fee_for_selected_events
+    competition = competition_from_params
+    eventIds = params[:eventIds] ||= {}
+
+    @entry_fee_amount = competition.base_entry_fee
+    eventIds.each do |eventId|
+      @entry_fee_amount += competition.competition_events.find_by_event_id!(eventId).fee
+    end
+    render json: {
+      html: render_to_string(partial: 'entry_fee_amount'),
+    }
   end
 
   def create
