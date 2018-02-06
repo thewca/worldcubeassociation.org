@@ -23,7 +23,7 @@
             <td><%= link_to incident.title, incident %></td>
             <td data-tags="<%= incident.tags %>">
               <% incident.tags_array.each do |t| %>
-                <%= render "incident_tag", tag: t %>
+                <%= render "incident_tag", tag: t, js_search: true %>
               <% end %>
             </td>
             <td data-competitions="<%= incident.competitions %>">
@@ -43,15 +43,9 @@
   </div>
 
   <script>
-    var incidentsTable = $('.incidents-log-table');
-    incidentsTable.data("customSearch", wca.customIncidentsSearch);
-    var tagsInput = $('input#incident-tags');
-
-    $(document).ready(function () {
-      var searchInput = $('.search input');
-
+    $(function() {
       var opts = wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>);
-      wca.initIncidentsTable(opts, incidentsTable, searchInput, tagsInput);
+      wca.initIncidentsLogTable(opts, $('.incidents-log-table'), $('.search input'), $('input#incident-tags'));
     });
   </script>
 
