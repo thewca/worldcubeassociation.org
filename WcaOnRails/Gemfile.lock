@@ -86,7 +86,7 @@ GEM
     bindex (0.5.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    blocks (3.0.3)
+    blocks (3.0.4)
       call_with_params
       rails (>= 3.0.0)
     bootstrap-sass (3.3.7)
