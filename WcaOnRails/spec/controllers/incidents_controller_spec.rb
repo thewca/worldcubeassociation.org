@@ -44,6 +44,7 @@ RSpec.describe IncidentsController, type: :controller do
   let(:valid_session) { {} }
 
   describe "GET #index" do
+    #TODO: check it handles visibility
     it "returns a success response" do
       # incident = Incident.create! valid_attributes
       get :index, params: {}, session: valid_session
@@ -52,6 +53,7 @@ RSpec.describe IncidentsController, type: :controller do
   end
 
   describe "GET #show" do
+    #TODO: check it handles visibility
     it "returns a success response" do
       incident = Incident.create! valid_attributes
       get :show, params: { id: incident.to_param }, session: valid_session

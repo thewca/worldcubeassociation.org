@@ -43,24 +43,16 @@
   </div>
 
   <script>
-    $('.incidents-log-table').data("customSearch", wca.customIncidentsSearch);
-    $('.incidents-log-table').on('search.bs.table', function() {
-      // Yep, when it's filtered we need to reactivate popovers :(
-      $('[data-toggle="popover"]').popover();
-    });
+    var incidentsTable = $('.incidents-log-table');
+    incidentsTable.data("customSearch", wca.customIncidentsSearch);
+    var tagsInput = $('input#incident-tags');
 
-    var opts = wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>);
-    // It's a search filter input, so there is no point to allow user to create tags
-    delete opts["create"];
-    opts["onChange"] = function (value) {
-      // Hack to force refresh
-      if (wca.incidentsBootstrapTable) {
-        wca.incidentsBootstrapTable.searchText = " ";
-      }
-      $('.incidents-log-table').bootstrapTable('resetSearch', $('.search input').val());
-    };
-    opts["maxOptions"] = 5;
-    $('input#incident-tags').selectize(opts);
+    $(document).ready(function () {
+      var searchInput = $('.search input');
+
+      var opts = wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>);
+      wca.initIncidentsTable(opts, incidentsTable, searchInput, tagsInput);
+    });
   </script>
 
   <br>

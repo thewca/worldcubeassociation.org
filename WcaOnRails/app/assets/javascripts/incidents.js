@@ -1,5 +1,41 @@
 window.wca = window.wca || {};
 
+wca.updateUrlParams = function ($searchInput, $tagsInput) {
+    // Update params in the url.
+    var params = {
+      search: $searchInput.val(),
+      tags: $tagsInput.val(),
+    };
+    $.setUrlParams(params);
+}
+
+wca.incidentsBootstrapTable = null
+
+wca.initIncidentsTable = function (opts, $elem, $searchInput, $tagsInput) {
+  $elem.on('search.bs.table', function() {
+    // Yep, when it's filtered we need to reactivate popovers :(
+    $('[data-toggle="popover"]').popover();
+    wca.updateUrlParams($searchInput, $tagsInput);
+  });
+
+  // It's a search filter input, so there is no point to allow user to create tags
+  delete opts["create"];
+  opts["onChange"] = function (value) {
+    // Hack to force refresh
+    if (wca.incidentsBootstrapTable) {
+      wca.incidentsBootstrapTable.searchText = " ";
+    }
+    $elem.bootstrapTable('resetSearch', $searchInput.val());
+    wca.updateUrlParams($searchInput, $tagsInput);
+  };
+  opts["maxOptions"] = 5;
+  var tagsParams = $.getUrlParams().tags || "";
+  $tagsInput.val(tagsParams);
+  $tagsInput.selectize(opts);
+  var searchParams = $.getUrlParams().search || "";
+  incidentsTable.bootstrapTable('resetSearch', searchParams);
+}
+
 wca.searchIncidentsForTag = function(e, tag) {
   e.preventDefault();
   $('.search input').val("");
@@ -7,8 +43,6 @@ wca.searchIncidentsForTag = function(e, tag) {
   selectize.clear();
   selectize.addItem(tag);
 }
-
-wca.incidentsBootstrapTable = null
 
 // Can't use filterBy, as some cells have multiple value, so we have to use a custom search
 wca.customIncidentsSearch = function(text) {
