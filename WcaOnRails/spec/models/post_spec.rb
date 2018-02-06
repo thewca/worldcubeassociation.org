@@ -47,7 +47,7 @@ RSpec.describe Post do
       expect(Post.find(post.id).tags_array).to match_array %w(wdc)
 
       expect(post.update(tags: "wdc,test tag with spaces")).to eq false
-      expect(post).to be_invalid_with_errors("post_tags.tag": ["only allows English letters, numbers, and hyphens"])
+      expect(post).to be_invalid_with_errors("post_tags.tag": ["only allows English letters, numbers, hyphens, and '+'"])
 
       expect(Post.find(post.id).tags_array).to match_array %w(wdc)
     end
