@@ -40,7 +40,7 @@ function showDescription () {
 #----------------------------------------------------------------------
 
   echo "<p>In this script, a \"person\" always means a triple of id/name/countryId, and \"similar\" always means just name similarity.</p>\n\n";
-  
+
   echo "<p>I run several phases, listed below. You should always work from top to bottom, i.e. don't work on one phase before all previous phases report \"OK\".</p>\n\n";
 
   echo "<ul>\n";
@@ -50,11 +50,11 @@ function showDescription () {
   echo "<li><p>Find persons in <strong>Results</strong> whose name starts or ends with space or has double spaces.</p></li>\n";
 
   echo "<li><p>Find persons in <strong>Results</strong> who have ids but who don't appear in <strong>Persons</strong>. Can be caused by organizers telling you incorrect persons. I show similar persons from <strong>Persons</strong> and offer you to adopt their data. Can also be caused by a person really changing name or countryId, in this case please add this person to the <strong>Persons</strong> table with new subId.</p></li>\n";
-  
+
   echo "<li><p>Find persons in <strong>Results</strong> that appear more than once in the same round, event and competition. This is the most easily detected case of where an organizer should've added numbers to otherwise equal persons but didn't. Or for example when like in CaltechWinter2007, the roundTypeIds are wrong. <b>Warning:</b> Currently this is only checks the last three months, to prevent a timeout problem.</p></li>\n";
-  
+
   echo "</ul>";
-  
+
   echo "<hr />";
 }
 
@@ -79,7 +79,7 @@ function showChoices () {
 function getPersonsFromPersons () {
 #----------------------------------------------------------------------
   global $personsFromPersons;
-  
+
   $persons = dbQuery( "SELECT id, name, countryId FROM Persons" );
   foreach( $persons as $person ){
     extract( $person );
@@ -91,7 +91,7 @@ function getPersonsFromPersons () {
 function getPersonsFromResults () {
 #----------------------------------------------------------------------
   global $personsFromResults;
-  
+
   $persons = dbQuery("
     SELECT personId id, personName name, result.countryId, min(year) firstYear
     FROM Results result, Competitions competition
@@ -108,20 +108,20 @@ function getPersonsFromResults () {
 function checkSpacesInPersons () {
 #----------------------------------------------------------------------
   echo "<hr />";
-  
+
   $bads = dbQuery("
     SELECT name FROM Persons
     WHERE name like ' %'
        OR name like '% '
        OR name like '%  %'
   ");
-  
+
   #--- If all OK, say so and return.
   if( ! $bads ){
     echo "<p style='color:#6C6'><strong>OK!</strong> No person names in <strong>Persons</strong> start or end with a space or have double spaces.</p>";
     return;
   }
-  
+
   #--- Otherwise, show the errors
   echo "<p style='color:#F00'><strong>BAD!</strong> Some person names in <strong>Persons</strong> start or end with a space or have double spaces.</p>";
   tableBegin( 'results', 3 );
@@ -144,14 +144,14 @@ function checkSpacesInPersons () {
 function checkSpacesInResults () {
 #----------------------------------------------------------------------
   echo "<hr />";
-  
+
   $bads = dbQuery("
     SELECT DISTINCT personName FROM Results
     WHERE personName like ' %'
        OR personName like '% '
        OR personName like '%  %'
   ");
-  
+
   #--- If all OK, say so and return.
   if( ! $bads ){
     echo "<p style='color:#6C6'><strong>OK!</strong> No person names in <strong>Results</strong> start or end with a space or have double spaces.</p>";
@@ -183,20 +183,20 @@ function checkTooMuchInResults () {
 #----------------------------------------------------------------------
   global $personsFromPersons, $personsFromResults;
   echo "<hr />";
-  
+
   $tooMuchInResults = array();
   #--- Find all ('finished') entries in Results that don't have a match in Persons.
   foreach( array_keys( $personsFromResults ) as $personKey ){
-    if( $personsFromResults[$personKey]['id']  &&  ! isset($personsFromPersons[$personKey]) )
+    if( $personsFromResults[$personKey]['id'] && !ctype_digit($personsFromResults[$personKey]['id']) &&  ! isset($personsFromPersons[$personKey]) )
       $tooMuchInResults[] = $personKey;
   }
-  
+
   #--- If all OK, say so and return.
   if( empty($tooMuchInResults) ){
     echo "<p style='color:#6C6'><strong>OK!</strong> All persons in <strong>Results</strong> who have an id also appear in <strong>Persons</strong>.</p>";
     return;
   }
-  
+
   #--- Otherwise, show the Results troublemakers and possible matches in Persons.
   echo "<p style='color:#F00'><strong>BAD!</strong> Not all persons in <strong>Results</strong> who have an id also appear in <strong>Persons</strong>:</p>";
   tableBegin( 'results', 4 );
@@ -248,7 +248,7 @@ function checkDuplicatesInCompetition () {
     GROUP BY competitionId, personId, eventId, roundTypeId, personName, countryId
     HAVING occurances > 1
   ");
-  
+
   #--- If all OK, say so and return.
   if( ! $duplicates ){
     echo "<p style='color:#6C6'><strong>OK!</strong> There are no personId/personName/countryId/competitionId/eventId/roundTypeIdAll duplicates in <strong>Results</strong>.</p>";
@@ -282,7 +282,7 @@ function getMostSimilarPersons ( $id, $name, $countryId, $persons ) {
 #----------------------------------------------------------------------
 function getMostSimilarPersonsMax ( $id, $name, $countryId, $persons, $max ) {
 #----------------------------------------------------------------------
-  
+
   #--- Compute similarities to all persons.
   foreach( $persons as $other ) {
     extract( $other, EXTR_PREFIX_ALL, 'other' );
@@ -293,7 +293,7 @@ function getMostSimilarPersonsMax ( $id, $name, $countryId, $persons, $max ) {
     $other['countrySimilarity'] = $similarity;
     $candidates[] = $other;
   }
-  
+
   #--- Sort candidates and return up to three most promising.
   usort( $candidates, 'compareCandidates' );
   return array_slice( $candidates, 0, $max );
@@ -304,14 +304,14 @@ function compareCandidates ( $a, $b ) {
 #----------------------------------------------------------------------
   if( $a['idSimilarity'] ) return -1;
   if( $b['idSimilarity'] ) return 1;
-  
+
   if( $a['nameSimilarity'] > $b['nameSimilarity'] ) return -1;
   if( $a['nameSimilarity'] < $b['nameSimilarity'] ) return 1;
-  
+
   if( $a['countrySimilarity'] > $b['countrySimilarity'] ) return -1;
   if( $a['countrySimilarity'] < $b['countrySimilarity'] ) return 1;
-  
+
   if( $a['countryId'] ) return -1;
-  
+
   return 0;
 }
