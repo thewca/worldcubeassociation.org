@@ -17,7 +17,7 @@ function showDescription () {
 #----------------------------------------------------------------------
 
   echo "<p>The following commands were executed.</p>\n";
-  
+
   echo "<hr />\n";
 }
 
@@ -31,22 +31,34 @@ function finishUnfinishedPersons () {
     #--- Get old name and country from the case.
     $caseNr++;
     $oldNameAndCountry = getRawParamThisShouldBeAnException( "oldNameAndCountry$caseNr" );
-    
+
     #--- If empty, we've reach the end of the list and can stop.
     if( ! $oldNameAndCountry )
       break;
 
     #--- Separate old name and country, and get the action.
-    list( $oldName, $oldCountry ) = explode( '|', $oldNameAndCountry );    
+    list( $oldName, $oldCountry, $personId, $competitionId ) = explode( '|', $oldNameAndCountry );
     $action = getRawParamThisShouldBeAnException( "action$caseNr" );
+
+    $person = null;
+    if ( $personId ) {
+      $person = getInboxPerson( $personId, $competitionId );
+    }
+    if ( $person === null ) {
+      $person = array(
+        'name' => $oldName,
+        'countryId' => $countryId,
+        'competitionId'=>$competitionId,
+      );
+    }
 
     #--- If no action or 'skip' chosen, skip it.
     if( ! $action  ||  $action == 'skip' )
       continue;
-    
+
     #--- If 'new' chosen, treat the person as new.
     if( $action == 'new' ){
-      
+
       #--- First get the new name, country, and semi-id.
       $newName    = getRawParamThisShouldBeAnException( "name$caseNr" );
       $newCountry = getRawParamThisShouldBeAnException( "country$caseNr" );
@@ -54,44 +66,54 @@ function finishUnfinishedPersons () {
 
       #--- Complete the id.
       $newId = completeId( $newSemiId );
-      
+
       #--- Insert the new person into the Persons table.
-      insertPerson( $oldName, $oldCountry, $newName, $newCountry, $newId );
+      insertPerson( $person, $newName, $newCountry, $newId );
 
       #--- Adapt the Results table entries.
-      adaptResults( $oldName, $oldCountry, $newName, $newCountry, $newId );
+      adaptResults( $person, $newName, $newCountry, $newId );
     }
     #--- Otherwise adopt another personality.
     else {
-    
-      #--- Scream if error.      
+
+      #--- Scream if error.
       if( count( explode( '|', $action )) != 3 ){
         showErrorMessage( "invalid action '$action'" );
         continue;
       }
-      
+
       #--- Get the data from the other person.
       list( $newName, $newCountry, $newId ) = explode( '|', $action );
 
       #--- Adapt the Results table entries.
-      adaptResults( $oldName, $oldCountry, $newName, $newCountry, $newId );      
+      adaptResults( $person, $newName, $newCountry, $newId );
     }
-    
+
     #--- Separator after each person.
     echo "<hr>";
   }
+}
+
+function getInboxPerson( $personId, $competitionId ) {
+  $command = "
+    SELECT *
+    FROM InboxPersons
+    WHERE id=$personId AND competitionId='$competitionId'
+  ";
+  $rows = dbQuery( $command );
+  return empty($rows) ? null : $rows[0];
 }
 
 #----------------------------------------------------------------------
 function completeId ( $newSemiId ) {
 #----------------------------------------------------------------------
   global $doesPersonIdExist;
-  
+
   #--- Load all existing person ids if we haven't done that yet.
   if( ! $doesPersonIdExist )
     foreach( dbQuery( "SELECT * FROM Persons" ) as $person )
       $doesPersonIdExist[$person['id']] = true;
-  
+
   #--- Now search for the free running number to append to the semiId.
   foreach( range( 1, 99 ) as $i ){
     $newId = $newSemiId . sprintf( "%02d", $i );
@@ -122,73 +144,61 @@ function getIso2FromCountryId($countryId) {
 }
 
 #----------------------------------------------------------------------
-function insertPerson( $oldName, $oldCountry, $newName, $newCountry, $newId ) {
+function insertPerson( $person, $newName, $newCountry, $newId ) {
 #----------------------------------------------------------------------
 
   #--- Mysql-ify.
-  $oldName      = mysqlEscape( $oldName );
   $newName      = mysqlEscape( $newName );
   $newCountry   = mysqlEscape( $newCountry );
   $newId        = mysqlEscape( $newId );
+  $gender       = isset($person['gender']) ? mysqlEscape($person['gender']) : '';
+  $dob          = isset($person['dob']) ? $person['dob'] : '0000-0-0';
+  list( $year, $month, $day ) = explode( '-', $dob );
 
-  #--- Build the command.  
+  #--- Build the command.
   $command = "
     INSERT INTO Persons (id, subId, name, countryId, gender, year, month, day, comments)
-    VALUES ( '$newId', 1, '$newName', '$newCountry', '', 0, 0, 0, '' ) 
+    VALUES ( '$newId', 1, '$newName', '$newCountry', '$gender', $year, $month, $day, '' )
   ";
 
   #--- Show the command.
   echo colorize( $command );
-  
+
   #--- Execute the command.
   dbCommand( $command );
-
-  if ( $oldCountry <> $newCountry || $oldName <> $newName){
-
-    #--- Guess countries iso2
-    $newCountryIso2 = getIso2FromCountryId( $newCountry );
-    if ( $newCountryIso2 ){
-      if ( $oldCountry == $newCountry ){
-        $oldCountryIso2 = $newCountryIso2;
-      } else {
-        $oldCountryIso2 = getIso2FromCountryId( $oldCountry );
-      }
-      if ( $oldCountryIso2 ){
-        #--- Build the command.
-        $command = "
-          UPDATE InboxPersons SET name='$newName', countryId='$newCountryIso2'
-          WHERE name='$oldName' AND countryId='$oldCountryIso2'
-        ";
-        #--- Show the command.
-        echo colorize( $command );
-        #--- Execute the command.
-        dbCommand( $command );
-      }
-    }
-  }
 }
 
 #----------------------------------------------------------------------
-function adaptResults ( $oldName, $oldCountry, $newName, $newCountry, $newId ) {
+function adaptResults ( $person, $newName, $newCountry, $newId ) {
 #----------------------------------------------------------------------
 
   #--- Mysql-ify.
-  $oldName    = mysqlEscape( $oldName );
-  $oldCountry = mysqlEscape( $oldCountry );
+  $oldName    = mysqlEscape( $person['name'] );
+  $oldCountry = mysqlEscape( $person['countryId'] );
   $newName    = mysqlEscape( $newName );
   $newCountry = mysqlEscape( $newCountry );
   $newId      = mysqlEscape( $newId );
 
-  #--- Build the command.  
+  // if the person has id, he comes from InboxPersons
+  // otherwise he comes from spliting profiles
+  if ( isset($person['id']) ) {
+    $personId = mysqlEscape( $person['id'] );
+    $competitionId = mysqlEscape( $person['competitionId'] );
+    $condition = "personId='$personId' AND competitionId='$competitionId'";
+  } else {
+    $condition = "personName='$oldName' AND countryId='$oldCountry' AND personId=''";
+  }
+
+  #--- Build the command.
   $command = "
     UPDATE Results
     SET personName='$newName', countryId='$newCountry', personId='$newId'
-    WHERE personName='$oldName' AND countryId='$oldCountry' AND personId=''
+    WHERE $condition
   ";
-  
+
   #--- Show the command.
   echo colorize( $command );
-  
+
   #--- Execute the command.
   dbCommand( $command );
 }
@@ -231,7 +241,7 @@ function colorize ( $command ) {
     '$1<span style="font-weight:bold;color:#F0F">$2</span>$3',
     $command
   );
-  
+
   #--- Put in own paragraph.
   return "<p>$command</p>";
 }
