@@ -62,8 +62,8 @@ wca.initIncidentsLogTable = function(selectizeOptions, $table, $searchInput, $ta
   });
 
   // It's a search filter input, so there is no point to allow user to create tags
-  delete selectizeOptions["create"];
-  selectizeOptions["onChange"] = function (value) {
+  delete selectizeOptions.create;
+  selectizeOptions.onChange = function (value) {
     // Hack to force refresh
     if (incidentsBootstrapTable) {
       incidentsBootstrapTable.searchText = " ";
@@ -71,7 +71,7 @@ wca.initIncidentsLogTable = function(selectizeOptions, $table, $searchInput, $ta
     $table.bootstrapTable('resetSearch', $searchInput.val());
     updateUrlParams($searchInput, $tagsInput);
   };
-  selectizeOptions["maxOptions"] = 5;
+  selectizeOptions.maxOptions = 5;
   let params = loadUrlParams();
   $tagsInput.val(params.tags);
   $tagsInput.selectize(selectizeOptions);

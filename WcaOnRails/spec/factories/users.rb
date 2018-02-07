@@ -64,6 +64,12 @@ FactoryBot.define do
       end
     end
 
+    trait :wqac_member do
+      after(:create) do |user|
+        FactoryBot.create(:team_member, team_id: Team.wqac.id, user_id: user.id)
+      end
+    end
+
     trait :wca_id do
       transient do
         person { FactoryBot.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }

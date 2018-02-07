@@ -5,13 +5,13 @@ class IncidentsController < ApplicationController
 
   # Incident should have a public summary when resolved, so not everything is
   # WRC/Delegates-only.
-  before_action -> { redirect_to_root_unless_user(:can_manage_incidents?) }, except: [
+  before_action -> { authenticate_user! && redirect_to_root_unless_user(:can_manage_incidents?) }, except: [
     :index,
     :show,
   ]
 
   def index
-    base_model = Incident.includes(:competitions, :incident_tags)
+    base_model = Incident.includes(:competitions, :incident_tags).order(created_at: :desc)
     if current_user&.can_view_delegate_matters?
       @incidents = base_model.all
     else
@@ -21,6 +21,9 @@ class IncidentsController < ApplicationController
 
   def show
     set_incident
+    unless @incident.resolved?
+      redirect_to_root_unless_user(:can_view_delegate_matters?)
+    end
   end
 
   def new
@@ -99,9 +102,7 @@ class IncidentsController < ApplicationController
       :private_wrc_decision,
       :public_summary,
       :tags,
-      :resolved_at,
       :digest_worthy,
-      :digest_sent_at,
       incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy],
     )
   end
