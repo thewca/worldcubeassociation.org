@@ -136,7 +136,7 @@ Rails.application.routes.draw do
 
   get '/search' => 'search_results#index'
 
-  get '/render_markdown' => 'markdown_renderer#render_markdown'
+  post '/render_markdown' => 'markdown_renderer#render_markdown'
 
   patch '/update_locale/:locale' => 'application#update_locale', as: :update_locale
 

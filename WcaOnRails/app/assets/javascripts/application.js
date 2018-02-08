@@ -140,6 +140,7 @@ wca.removeMarkers = function(map) {
 wca.renderMarkdownRequest = function(markdownContent) {
   return wca.cancelPendingAjaxAndAjax('render_markdown', {
     url: '/render_markdown',
+    method: 'POST',
     data: {
       'markdown_content': markdownContent,
     },
