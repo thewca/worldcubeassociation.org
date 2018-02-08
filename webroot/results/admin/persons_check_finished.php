@@ -187,6 +187,8 @@ function checkTooMuchInResults () {
   $tooMuchInResults = array();
   #--- Find all ('finished') entries in Results that don't have a match in Persons.
   foreach( array_keys( $personsFromResults ) as $personKey ){
+    // if a person has an empty ID of a numeric ID, he is a newcomer
+    // when adding new results to Results table, we set the personId from InboxPersons
     if( $personsFromResults[$personKey]['id'] && !ctype_digit($personsFromResults[$personKey]['id']) &&  ! isset($personsFromPersons[$personKey]) )
       $tooMuchInResults[] = $personKey;
   }

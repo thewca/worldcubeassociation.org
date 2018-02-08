@@ -190,7 +190,7 @@ function showUnfinishedPersons () {
 
     #--- Hidden field describing the case.
     $caseNr++;
-    tableRowFull( "&nbsp;<input type='hidden' name='oldNameAndCountry$caseNr' value='$nameHtml|$countryIdHtml|$personId|$competitionId' />" );
+    tableRowFull( "&nbsp;<input type='hidden' name='oldNameAndCountryAndPersonIdAndCompId$caseNr' value='$nameHtml|$countryIdHtml|$personId|$competitionId' />" );
 
     #--- Show the person.
     # Note that we set this input to checked, but if there's a better match

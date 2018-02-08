@@ -30,14 +30,14 @@ function finishUnfinishedPersons () {
 
     #--- Get old name and country from the case.
     $caseNr++;
-    $oldNameAndCountry = getRawParamThisShouldBeAnException( "oldNameAndCountry$caseNr" );
+    $oldNameAndCountryAndPersonIdAndCompId = getRawParamThisShouldBeAnException( "oldNameAndCountryAndPersonIdAndCompId$caseNr" );
 
     #--- If empty, we've reach the end of the list and can stop.
-    if( ! $oldNameAndCountry )
+    if( ! $oldNameAndCountryAndPersonIdAndCompId )
       break;
 
     #--- Separate old name and country, and get the action.
-    list( $oldName, $oldCountry, $personId, $competitionId ) = explode( '|', $oldNameAndCountry );
+    list( $oldName, $oldCountry, $personId, $competitionId ) = explode( '|', $oldNameAndCountryAndPersonIdAndCompId );
     $action = getRawParamThisShouldBeAnException( "action$caseNr" );
 
     $person = null;
@@ -48,7 +48,7 @@ function finishUnfinishedPersons () {
       $person = array(
         'name' => $oldName,
         'countryId' => $oldCountry,
-        'competitionId'=>$competitionId,
+        'competitionId'=> $competitionId,
       );
     }
 
