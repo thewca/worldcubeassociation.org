@@ -1,5 +1,5 @@
 /*
- * Code to help 
+ * Code to help
  */
 
 function get_comp_info(obj) {
@@ -44,8 +44,12 @@ function get_comp_info(obj) {
       //Load page into table cell.
       $.ajax({
         url: $(this).attr('href'),
+        dataType: 'json',
       })
       .done( function(data) {
+        if (data.status != 'OK') {
+          alert(data.message);
+        }
         get_comp_info(0);
       });
     });

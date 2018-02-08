@@ -100,7 +100,7 @@ if($form->submitted()) {
     } else {
       $form->invalidate('json', 'Please upload a JSON file containing a competition ID.');
     }
-    
+
     // check for valid persons data structure
     if(!property_exists($competition_data, 'persons') || !is_array($competition_data->persons)) {
       $form->invalidate('json', 'Person data malformed or not present in JSON.');
@@ -116,7 +116,7 @@ if($form->submitted()) {
   // deal with uploaded data
   if($form->validate() === TRUE) {
     $compId = $submitted_data['competitionId'];
-    
+
     // store JSON in db
 
     // store person data in InboxPersons first

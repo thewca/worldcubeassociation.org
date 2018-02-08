@@ -1,13 +1,13 @@
 <?php
 /* @file
- * 
+ *
  * Just something to make including javascript files a bit cleaner.
  */
 namespace WCAClasses;
 
 class WCAScripts
 {
-    const VERSION = '201409231900';
+    const VERSION = '201802111227';
     private $scripts;
 
     public function __construct()
