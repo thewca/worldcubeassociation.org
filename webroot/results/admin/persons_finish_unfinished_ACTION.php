@@ -47,7 +47,7 @@ function finishUnfinishedPersons () {
     if ( $person === null ) {
       $person = array(
         'name' => $oldName,
-        'countryId' => $countryId,
+        'countryId' => $oldCountry,
         'competitionId'=>$competitionId,
       );
     }
