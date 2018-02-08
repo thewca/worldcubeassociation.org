@@ -5,9 +5,10 @@ include "../../includes/_framework.php";
 $compId = getNormalParam('c');
 
 // move over results
+// insert personId for newcomers
 $command = "INSERT INTO Results (pos,personId,personName,countryId,competitionId,eventId,roundTypeId,formatId,
                     value1,value2,value3,value4,value5,best,average)
-          SELECT r.pos, p.wcaId, p.name, c.id, r.competitionId, r.eventId, r.roundTypeId, r.formatId, 
+          SELECT r.pos, (CASE WHEN p.wcaId != '' THEN p.wcaId ELSE p.id END) AS personId, p.name, c.id, r.competitionId, r.eventId, r.roundTypeId, r.formatId,
             r.value1, r.value2, r.value3, r.value4, r.value5, r.best, r.average
           FROM InboxResults as r
           LEFT JOIN InboxPersons as p
