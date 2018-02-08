@@ -860,6 +860,11 @@ class Competition < ApplicationRecord
       "shortName" => cellName,
       "persons" => persons_wcif,
       "events" => competition_events.order(:event_id).map(&:to_wcif),
+      "schedule" => {
+        "startDate" => start_date.to_s,
+        "numberOfDays" => (end_date - start_date).to_i + 1,
+        # "venues" => TODO: expand on this
+      },
     }
   end
 
