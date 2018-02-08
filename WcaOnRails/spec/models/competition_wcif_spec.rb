@@ -120,6 +120,10 @@ RSpec.describe "Competition WCIF" do
             ],
           },
         ],
+        "schedule" => {
+          "startDate" => "2014-02-03",
+          "numberOfDays" => 3,
+        },
       )
     end
   end
