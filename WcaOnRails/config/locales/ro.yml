@@ -482,8 +482,6 @@ ro:
         delegate: Delegat
         #original_hash: d463c23
         senior_delegate: Delegat Senior
-        #original_hash: 660ee15
-        board_member: Membru în Board
     person:
       gender:
         #original_hash: 3f3a489
@@ -599,11 +597,12 @@ ro:
         external_website: Site-ul competiției. Trebuie să aiba un URL http sau https valid.
         #original_hash: 9965635
         registration_open: 'Notă: Orele pentru începutul și sfarșitul înregistrării sunt în UTC'
-        #original_hash: 36963bc
-        remarks: >-
-          Informații suplimentare pe care vrei să le transmiți board-ului. De
-          exemplu, motivul pentru care competiția va avea loc peste mai puțin de
-          o lună (dacă e cazul). Te rugăm să scrii în limba engleză!
+        #original_hash: 243212f
+        remarks_html: >-
+          Informații suplimentare pe care vrei sa le transmiti Boardului. De
+          exemplu, detaliază motivele pentru care această competiție va avea loc
+          în mai puțin de patru săptămâni, sau dacă ceri aplicarea %{link}. Te
+          rugăm să completezi acest formular în limba engleză!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -1165,10 +1164,6 @@ ro:
         e-mail către <a href='mailto:results@worldcubeassociation.org'
         target='_blank'>Echipa de Rezultate WCA</a> pentru a rezolva această
         problemă.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Nu te poți demisiona din funcția de membru în boardul WCA! Găsește alt
-        membru care să te concedieze.
       #original_hash: d02c03b
       avatar_requires_wca_id: necesită alocarea unui Id WCA
     successes:
@@ -1823,6 +1818,10 @@ ro:
       before: înainte de
       #original_hash: 405906c
       after: după
+      #original_hash: 24d948e
+      limit: Limită
+      #original_hash: 855bd26
+      competitors: Concurenți
     #original_hash: 06b01c4
     announcements: Anunțuri
     #original_hash: 5b9523f
@@ -2267,10 +2266,13 @@ ro:
     structure:
       #original_hash: 9482c5d
       title: Structură
-      #original_hash: d855b50
-      board_html: >-
-        World Cube Association este condusă de <strong>Boardul WCA</strong>,
-        compus din următorii membri:
+      board:
+        #original_hash: abd2828
+        name: Boardul de Directori WCA
+        #original_hash: d855b50
+        info_html: >-
+          World Cube Association este condusă de <strong>Boardul WCA</strong>,
+          având următorii membri:
       #original_hash: b0c72a9
       committees: >-
         Următoarele comitete sunt responsabile de activitățile operaționale ale
@@ -2456,9 +2458,9 @@ ro:
       %{link} din zona ta.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Comitete și Echipe</u>
+    #original_hash: 1cb449c
+    members: Membri
     board:
-      #original_hash: 90fcc48
-      name_html: <strong>Boardul WCA</strong>
       #original_hash: 3a8b1d8
       info_html: >-
         World Cube Association este coordonată de Boardul WCA. Acesta este
