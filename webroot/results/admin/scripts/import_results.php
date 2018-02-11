@@ -48,4 +48,4 @@ $wcadb_conn->boundCommand($command, array('s', &$compId));
 $command = "DELETE FROM InboxResults WHERE competitionId = ?";
 $wcadb_conn->boundCommand($command, array('s', &$compId));
 
-print "Imported Results...";
+jsonReturn();

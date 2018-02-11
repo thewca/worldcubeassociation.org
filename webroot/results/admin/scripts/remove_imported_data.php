@@ -19,4 +19,4 @@ $deleted = $wcadb_conn->boundCommand(
 //     array('s', &$compId)
 //   );
 
-print "Removal attempted.";
+jsonReturn();

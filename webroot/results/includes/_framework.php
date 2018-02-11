@@ -227,3 +227,11 @@ function getCurrentPictureFile ($personId) {
     return "/uploads/user/avatar/${personId}/${user['avatar']}";
   }
 }
+
+function jsonReturn ($status = 'OK', $message = '') {
+  echo json_encode(array(
+    'status' => $status,
+    'message' => $message,
+  ));
+  exit;
+}
