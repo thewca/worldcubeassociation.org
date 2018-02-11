@@ -3,7 +3,7 @@
 class Competition < ApplicationRecord
   self.table_name = "Competitions"
 
-  has_many :competition_events, dependent: :destroy
+  has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
   has_many :registrations, dependent: :destroy
   has_many :results, foreign_key: "competitionId"
@@ -846,9 +846,15 @@ class Competition < ApplicationRecord
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif
     managers = self.managers
-    persons_wcif = registrations.map do |r|
+    includes_associations = [
+      :events,
+      user: {
+        person: [:ranksSingle, :ranksAverage],
+      },
+    ]
+    persons_wcif = registrations.order(:id).includes(includes_associations).map.with_index(1) do |r, registrant_id|
       managers.delete(r.user)
-      r.user.to_wcif(self, r.to_wcif)
+      r.user.to_wcif(self, r.to_wcif, registrant_id)
     end
     # Note: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
@@ -859,7 +865,7 @@ class Competition < ApplicationRecord
       "name" => name,
       "shortName" => cellName,
       "persons" => persons_wcif,
-      "events" => competition_events.order(:event_id).map(&:to_wcif),
+      "events" => competition_events.map(&:to_wcif),
       "schedule" => {
         "startDate" => start_date.to_s,
         "numberOfDays" => (end_date - start_date).to_i + 1,
