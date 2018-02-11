@@ -470,8 +470,6 @@ hu:
         delegate: Delegate
         #original_hash: d463c23
         senior_delegate: Senior Delegate
-        #original_hash: 660ee15
-        board_member: Board Member
     person:
       gender:
         #original_hash: 3f3a489
@@ -590,11 +588,12 @@ hu:
         external_website: 'A verseny honlapja. Érvényes http(s) URL-lel kell, hogy rendelkezzen.'
         #original_hash: 9965635
         registration_open: 'Megjegyzés: A regisztráció UTC időzóna szerint nyit és zár'
-        #original_hash: 36963bc
-        remarks: >-
-          Extra információk, amiket tudatni szeretnél a Board-dal. Például miért
-          szeretnéd a versenyt az 1 hónapos határidőn belül kihirdetni. Kérlek,
-          hogy ezt angolul töltsd ki!
+        #original_hash: 243212f
+        remarks_html: >-
+          Olyan extra információk, amiket közölni szeretnél a Boarddal. Például
+          leírhatod, hogy miért lett kihirdetve a verseny kevesebb, mint 4
+          héttel a verseny előtt vagy ha valamilyen speciális jóváhagyásra van
+          szükséged a %{link} értelmében. Kérünk, hogy angolul töltsd ki!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -895,6 +894,8 @@ hu:
       information: Információ
       #original_hash: 9ac918a
       about: A WCA-ról
+      #original_hash: ed97787
+      documents: WCA dokumentumok
       #original_hash: d8fd3e4
       delegates: WCA delegáltak
       #original_hash: 37b8fdc
@@ -1157,10 +1158,6 @@ hu:
         Ezzeh a WCA ID-hez nincs megadva név. Kérlek, hogy ennek a megoldásához
         lépj kapcsolatba a <a href='mailto:results@worldcubeassociation.org'
         target='_blank'>WCA Results Team</a>-mel.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Nem tudsz lemondani a Board tag beosztásodról, egy másik Board tagnak
-        kell kirúgnia.
       #original_hash: d02c03b
       avatar_requires_wca_id: szükség van egy hozzárendelt WCA ID-re
     successes:
@@ -1267,14 +1264,14 @@ hu:
         mail_subject: 'Regisztráltál a(z) %{comp_name} nevű versenyre'
         #original_hash: 8374583
         registered_html: 'Regisztráltál a(z) %{comp_name} nevű versenyre.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Jelenleg a várólistán vagy, ahol összesen %{n_total} %{people}
-          található.
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: 'A regisztrációd beérkezett, a szervezők jóváhagyására vár'
+        #original_hash: 826045f
         approval_info_html: >-
           E-mailben értesítünk ha a regisztrációd el lesz fogadva. Kérlek vedd
-          figyelembe, hogy a regisztrációk elfogadása nem automatikus. A
+          figyelembe, hogy a regisztrációk elfogadása nem automatikus, így
+          kérünk legyél türelemmel, ha nem fogadják egy egyből a
+          regisztrációdat. Lehetséges, hogy a regisztráció több lépésből áll. A
           regisztrációk elfogadásának feltételeit megtalálod a verseny honlapján
           vagy vedd fel a kapcsolatot a szervezőkkel. A regisztrációd státuszát
           megnézheted %{here} is.
@@ -1313,10 +1310,11 @@ hu:
         causes:
           #original_hash: 978944c
           missing_info: Nem adtál meg minden szükséges adatot
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Nem teljesítetted a regisztráció feltételeit (például: nem fizetted
-            be a regisztrációs díjat a határidőig)
+            be a regisztrációs díjat a határidőig vagy nem érted el a
+            kvalifikációs eredményeket)
           #original_hash: 1e225f0
           registrations_full: Elértük a versenyzői limitet és nincs több szabad helyünk
           #original_hash: 0d4cce9
@@ -1795,6 +1793,10 @@ hu:
       before: előtt
       #original_hash: 405906c
       after: után
+      #original_hash: 24d948e
+      limit: Limit
+      #original_hash: 855bd26
+      competitors: Versenyzők
     #original_hash: 06b01c4
     announcements: Közlemények
     #original_hash: 5b9523f
@@ -2243,10 +2245,13 @@ hu:
     structure:
       #original_hash: 9482c5d
       title: Struktúra
-      #original_hash: d855b50
-      board_html: >-
-        A World Cube Association-t a <strong>WCA Board</strong> irányítja, amit
-        az alábbi tagok alkotnak:
+      board:
+        #original_hash: abd2828
+        name: WCA Board of Directors
+        #original_hash: d855b50
+        info_html: >-
+          A World Cube Association-t a <strong>WCA Board</strong> vezeti, amit a
+          következő tagok alkotnak:
       #original_hash: b0c72a9
       committees: 'Az alábbi bizottságok felelősek a WCA működtetéséért:'
       wdc:
@@ -2293,10 +2298,14 @@ hu:
       wec:
         #original_hash: 83bd1d0
         name: WCA Ethics Committee
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
           Ez a szervezet biztosítja, hogy a WCA-ban zajló folyamatok az Etikai
-          Kódexnek megfelelően zajlanak.
+          Kódexnek megfelelően zajlanak és független vizsgálatokat bonyolít,
+          amennyiben szükséges. Ezeket bármelyik regisztrált kockás
+          kezdeményezheti, aamit a WEC bizalmasan fog kezelni. Ez a szervezet
+          továbbá feljebbviteli tanácsként szolgál, ha bárki érintett nem ért
+          egyet a WCA Disciplinary Committee döntésével.
       wqac:
         #original_hash: 8f32116
         name: WCA Quality Assurance Committee
@@ -2324,6 +2333,15 @@ hu:
       members_html: >-
         Minden versenyző automatikusan a WCA <strong>tagjává</strong> válik az
         első versenyével.
+  documents:
+    #original_hash: 687c828
+    title: Dokumentumok
+    #original_hash: 9855f80
+    bylaws: Bylaws
+    #original_hash: fdceb44
+    motions: Motions
+    #original_hash: 092f99e
+    minutes: Minutes
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA delegáltak
@@ -2417,9 +2435,9 @@ hu:
       kérünk, hogy a helyi %{link}kal vedd fel a kapcsolatot.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Bizottságok és csoportok</u>
+    #original_hash: 1cb449c
+    members: Tagok
     board:
-      #original_hash: 90fcc48
-      name_html: <strong>WCA Board</strong>
       #original_hash: 3a8b1d8
       info_html: >-
         A World Cube Associationt a WCA Board vezeti. Ők felelősek az általános
