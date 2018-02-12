@@ -367,6 +367,8 @@ hu:
           mellett
         #original_hash: 4baf44b
         championship_type: Verseny típus
+        #original_hash: ff722f0
+        registration_requirements: A regisztráció feltételei
       registration:
         #original_hash: 3c23a67
         guests: Nézők
@@ -641,6 +643,21 @@ hu:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Kérünk, hogy minden az <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Útmutató 2c1+</a> pontjába eső követelményt tüntess
+          fel, ami érinti a regisztráció folyamatát. Miután a verseny ki lett
+          hirdetve ezt a mezőt <b>nem</b> tudod szerkeszteni és a Board
+          jóváhagyása kell hozzá, hogy megváltoztasd. <br/> Például itt tüntesd
+          fel, hogy ha a versenyzőknek nem lehet tartozása korábbi versenyekről,
+          ha a visszatérítés feltételhet kötött vagy ha a regisztráció e-mailes
+          megerősítésére van szükség a versenyzői limit elérése esetén. <br/>
+          Kérünk, hogy ezt a mezőt <b>angolul</b> mindenképp töltsd ki és
+          emellett bármely más nyelven is megteheted, amit a versenyzők
+          beszélnek. Ha WCA regisztrációt használsz, akkor a regisztrációs
+          oldalon fog megjelenni ez a mező.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1474,6 +1491,8 @@ hu:
     preferred_events_populated_html: >-
       Automatikusan kitöltöttük a preferált versenyszámaiddal, amit %{link}
       tudsz módosítani.
+    #original_hash: ee89a3e
+    registration_requirements: 'A versenyre való regisztráció feltételei:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1557,6 +1576,8 @@ hu:
       information: Információk
       #original_hash: c5497bc
       events: Versenyszámok
+      #original_hash: ff722f0
+      registration_requirements: A regisztráció feltételei
     index:
       #original_hash: db98a68
       title: Versenyek
@@ -2315,18 +2336,21 @@ hu:
           fejlődését, biztosítsa a minőségügyi elvárások betartását világszerte
           beleértve a folyamatokat, a WCA Staff-ot, a Nemzeti szervezeteket, a
           szervezőket és a versenyek lebonyolítását segítő embereket.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        A <strong>WCA delegáltak</strong> a WCA tagjai, akik azért felelősek,
-        hogy a versenyek a WCA céljainak megfelelően, eszméjét szem előtt tartva
-        legyenek levezényelve. A WCA különbséget tesz <strong>WCA szenior
-        delegáltak</strong>, <strong>WCA delegáltak</strong> és <strong>WCA
-        delegált jelöltek</strong> %{see_link} között. A WCA delegált feladatain
-        túl a WCA szenior delegált felelős a területek szerint hozzá tartozó
+        <p>A <strong>WCA delegált</strong> a WCA Motions-ben meghatározott
+        szerepkör, amit a WCA Szabályzatban is megjelenik. A delegált elsődleges
+        feladata a versenyek felügyelete a WCA nevében. A WCA delegált felelős
+        azért, hogy minden WCA verseny megfelel a WCA Mission-nek, Spirit-nek és
+        a WCA Szabályzatnak. A WCA különbséget tesz <strong>WCA szenior
+        delegáltak</strong> (Senior Delegate), <strong>WCA delegáltak</strong>
+        (Delegate) és <strong>WCA delegált jelöltek</strong> (Candidate
+        Delegate) %{see_link} között. </p> <p> A WCA delegált feladatain túl a
+        WCA szenior delegált felelős a területek szerint hozzá tartozó
         delegáltak felügyeletéért, valamint a helyi közösséggel való
-        kapcsolattartásért is. Az új delegáltak először WCA delegált
+        kapcsolattartásért is. </p> <p>Az új delegáltak először WCA delegált
         jelöltekként lesznek feltüntetve, és először sikeres versenyek
-        lebonyolításával kell bizonyítaniuk, mielőtt WCA delegáltak lesznek.
+        lebonyolításával kell bizonyítaniuk, mielőtt WCA delegáltak lesznek.</p>
       #original_hash: 27d18ac
       see_link_html: '(lásd: %{link})'
       #original_hash: 5b01fcc
@@ -2345,10 +2369,8 @@ hu:
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA delegáltak
-    #original_hash: 0a89b0f
-    acknowledges: >-
-      A WCA az alábbi tagjait ismeri el delegáltként a hivatalos WCA
-      versenyeken:
+    #original_hash: 77b819c
+    acknowledges: 'A WCA az alábbi WCA delegáltakat ismeri el:'
     table:
       #original_hash: 709a232
       name: Név
