@@ -136,6 +136,35 @@ fr:
     ranking: 'Les %{ranking} premiers avancent au tour %{next_round_number}'
     #original_hash: 31ad77c
     percent: 'Le top %{percent}% avance au tour %{next_round_number}'
+    attempt_result:
+      #original_hash: 03af49c
+      time: >-
+        Un meilleur temps < %{time} permet d'avancer au tour
+        %{next_round_number}
+      #original_hash: 0b4ae7c
+      moves: >-
+        Un meilleur résultat < %{moves} mouvements permet d'avancer au tour
+        %{next_round_number}
+      #original_hash: 56c0366
+      points: >-
+        Un meilleur résultat > %{points} points permet d'avancer au tour
+        %{next_round_number}
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      zero: '%{count} essais pour obtenir un résultat < %{time}'
+      one: '%{count} essai pour obtenir un résultat < %{time}'
+      other: '%{count} essais pour obtenir un résultat < %{time}'
+    #original_hash: b49d930
+    moves:
+      zero: '%{count} essais pour obtenir un résultat < %{moves} mouvements'
+      one: '%{count} essai pour obtenir un résultat < %{moves} mouvements'
+      other: '%{count} essais pour obtenir un résultat < %{moves} mouvements'
+    #original_hash: eba1b97
+    points:
+      zero: '%{count} essais pour obtenir un résultat > %{points} points'
+      one: '%{count} essai pour obtenir un résultat > %{points} points'
+      other: '%{count} essais pour obtenir un résultat > %{points} points'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -448,8 +477,6 @@ fr:
         delegate: Délégué
         #original_hash: d463c23
         senior_delegate: Délégué Senior
-        #original_hash: 660ee15
-        board_member: Membre du Bureau
     person:
       gender:
         #original_hash: 3f3a489
@@ -570,12 +597,13 @@ fr:
         registration_open: >-
           Note : Les dates d'ouverture et de fermeture des inscriptions sont au
           fuseau horaire UTC !
-        #original_hash: 36963bc
-        remarks: >-
+        #original_hash: 243212f
+        remarks_html: >-
           Informations complémentaires que vous souhaitez faire parvenir au
-          bureau de la WCA. Par exemple, les raisons pour lesquelles cette
-          compétition a été créé moins d'un mois à l'avance, le cas échéant.
-          Merci de remplir ces informations en Anglais !
+          bureau de la WCA. Par exemple, expliquez les raisons si cette
+          compétition est demandée moins de quatre semaines à l'avance, ou si
+          vous demandez l'utilisation de %{link}. Merci de remplir ces
+          informations en Anglais !
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -836,6 +864,10 @@ fr:
     doorkeeper:
       applications:
         help:
+          #original_hash: 92e00ff
+          native_redirect_uri: >-
+            Utilisez %{native_redirect_uri} si vous voulez ajouter des URIs
+            utilisant localhost
           #original_hash: 62a0113
           scopes_html: >-
             Scopes séparés avec des espaces. Laisser vide pour utiliser le(s)
@@ -880,7 +912,7 @@ fr:
       information: Information
       #original_hash: 9ac918a
       about: À propos de la WCA
-      # Added by @jfly to get ./spec/features/set_locale_spec.rb to pass.
+      #original_hash: ed97787
       documents: WCA Documents
       #original_hash: d8fd3e4
       delegates: Délégués WCA
@@ -1097,6 +1129,10 @@ fr:
           arrière plan.
         #original_hash: cc5f23a
         '6': La photo doit être soumise dans la bonne orientation.
+        #original_hash: 1a18831
+        '7': >-
+          La photo de profil ne doit pas contenir de contenu offensant (par
+          exemple : gestes offensant).
     errors:
       #original_hash: 094b763
       not_found: introuvable
@@ -1141,10 +1177,6 @@ fr:
         Nous n'avons pas de nom enregistré pour cet ID WCA. Merci de contacter
         la <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
         Results Team</a> (en Anglais) pour résoudre ce problème.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Vous ne pouvez pas démissioner de votre poste de membre du Board !
-        Trouvez un autre membre pour vous rétrograder.
       #original_hash: d02c03b
       avatar_requires_wca_id: requiert d'avoir un ID WCA
     successes:
@@ -1255,19 +1287,19 @@ fr:
         mail_subject: 'Vous êtes inscrit à la compétition %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Vous venez juste de vous inscrire à la compétition %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Votre inscription est en attente, il y a actuellement %{n_total}
-          %{people} en attente.
-        # Added by @jonatanklosko to get ./spec/mailers/registrations_mailer_spec.rb to pass.
-        awaits_approval: "Your registration has been accepted by the system and is pending approval from the organization team."
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: >-
+          Votre inscription a été reçue et est en attente d'approbation par
+          l'équipe d'organisation.
+        #original_hash: 826045f
         approval_info_html: >-
           Un email vous sera envoyé lorsque votre inscription sera acceptée. Les
-          inscriptions sont approuvées manuellement. Pour voir les conditions
-          d'acceptation des inscriptions, visitez le site internet de la
-          compétition ou contactez les organisateurs. Vous pouvez visualiser
-          l'état de votre inscription %{here}.
+          inscriptions sont approuvées manuellement, merci d'être patient si
+          vous n'êtes pas accepté immédiatement. Il pourrait y avoir d'autres
+          étapes à suivre pour que votre inscription soit acceptée. Pour voir
+          les conditions d'acceptation des inscriptions, visitez le site
+          internet de la compétition ou contactez les organisateurs. Vous pouvez
+          visualiser l'état de votre inscription %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Votre inscription à la compétition %{comp_name} a été acceptée'
@@ -1303,10 +1335,11 @@ fr:
         causes:
           #original_hash: 978944c
           missing_info: Vous n'avez pas indiqué tous les détails demandés
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Vous n'avez pas rempli tous les critères d'inscription (comme par
-            exemple payer les frais d'inscription)
+            exemple payer les frais d'inscription, ou passer les limites de
+            qualification pour les épreuves)
           #original_hash: 1e225f0
           registrations_full: >-
             La limite du nombre de compétiteurs a été atteinte et il n'y a plus
@@ -1432,6 +1465,15 @@ fr:
     wont_pay_here: >-
       Merci de consulter les informations de la compétition pour les
       instructions concernant le paiement des frais d'inscription
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          Le montant à rembourser au compétiteur peut être n'importe quel
+          montant inférieur ou égal au montant déjà payé.
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Montant à rembourser
     payment_form:
       #original_hash: 4de825f
       title: Frais d'inscription
@@ -1789,6 +1831,10 @@ fr:
       before: avant
       #original_hash: 405906c
       after: après
+      #original_hash: 24d948e
+      limit: Limite
+      #original_hash: 855bd26
+      competitors: Compétiteurs
     #original_hash: 06b01c4
     announcements: Annonces
     #original_hash: 5b9523f
@@ -2248,10 +2294,13 @@ fr:
     structure:
       #original_hash: 9482c5d
       title: Structure
-      #original_hash: d855b50
-      board_html: >-
-        La World Cube Association est dirigée par le <strong>WCA Board</strong>
-        (bureau de la WCA), constitué des membres suivants :
+      board:
+        #original_hash: abd2828
+        name: Bureau des Directeurs de la WCA
+        #original_hash: d855b50
+        info_html: >-
+          La World Cube Association est dirigée par le <strong>bureau de la
+          WCA</strong>, constitué des membres suivants :
       #original_hash: b0c72a9
       committees: >-
         Les comités suivants sont responsables des activités opérationnelles de
@@ -2299,20 +2348,45 @@ fr:
         name: Comité financier de la WCA
         #original_hash: 2d4807e
         description: Ce comité est responsable de la gestion des finances de la WCA
-      #original_hash: f2ceade
+      wec:
+        #original_hash: 83bd1d0
+        name: Comité Éthique de la WCA
+        #original_hash: c304d57
+        description: >-
+          Le rôle de ce comité est de s'assurer que les procédures suivies par
+          le Staff et le Staff Externe de la WCA obéissent à son Code d'Éthique,
+          et d'effectuer des enquêtes indépendantes si le comportement d'un
+          membre du Staff ou Staff externe ne respecte pas le Code d'Éthique. De
+          telles enquêtes peuvent être demandées par n'importe quel Speedcubeur
+          enregistré, pour qui le WEC est un confidant. Ce comité fonctionne
+          également comme recours si une personne impliquée est en désaccord
+          avec une décision du Comité Disciplinaire de la WCA.
+      wqac:
+        #original_hash: 8f32116
+        name: Comité d'Assurance Qualité de la WCA
+        #original_hash: 0171b3b
+        description: >-
+          Ce comité a pour rôle de supporter et promouvoir l'amélioration
+          continue de la qualité au sein de la WCA, ainsi que l'application à
+          l'échelle mondiale de standards de qualité pour s'assurer de la haute
+          qualité des processus, Staff WCA, Organisations Régionales,
+          Organisateurs de Compétitions, et Staff de compétitions.
+      #original_hash: 3d5b64b
       delegates_html: >-
-        Les <strong>Délégués WCA</strong> sont des membres de la WCA
-        responsables de s'assurer que les compétitions WCA se déroulent selon la
+        <p><strong>Délégués WCA</strong> est un rôle défini dans les statuts de
+        la WCA et décrit dans le Règlement WCA. Le devoir principal d'un Délégué
+        est de superviser les compétitions au nom de la WCA. Le Délégué WCA est
+        responsable de s'assurer que les compétitions WCA se déroulent selon la
         mission, le règlement, et l'esprit de la WCA. La WCA distingue les
         statuts suivants : <strong>Délégués WCA Senior</strong>,
         <strong>Délégués WCA</strong>, et <strong>Candidats Délégués
-        WCA</strong> %{see_link}. En plus des devoirs d'un Délégué WCA, un
+        WCA</strong> %{see_link}.</p><p>En plus des devoirs d'un Délégué WCA, un
         Délégué WCA Senior est responsable de la gestion des Délégués dans sa
         zone, et peut également être contacté par la communauté pour des
-        affaires régionales. Les nouveaux Délégués sont d'abord listés en tant
-        que Candidats Délégués WCA, et doivent montrer qu'ils sont capables de
-        gérer des compétitions avec succès avant d'être listés comme Délégués
-        WCA.
+        affaires régionales.</p><p>Les nouveaux Délégués sont d'abord listés en
+        tant que Candidats Délégués WCA, et doivent montrer qu'ils sont capables
+        de gérer des compétitions avec succès avant d'être listés comme Délégués
+        WCA.</p>
       #original_hash: 27d18ac
       see_link_html: '(voir %{link})'
       #original_hash: 5b01fcc
@@ -2320,13 +2394,20 @@ fr:
         Tous les compétiteurs deviennent automatiquement des
         <strong>membres</strong> de la WCA pendant leur première compétition
         WCA.
+  documents:
+    #original_hash: 687c828
+    title: Documents
+    #original_hash: 9855f80
+    bylaws: Statuts
+    #original_hash: fdceb44
+    motions: Motions
+    #original_hash: 092f99e
+    minutes: Compte-rendus
   delegates_page:
     #original_hash: d8fd3e4
     title: Délégués WCA
-    #original_hash: 0a89b0f
-    acknowledges: >-
-      La WCA reconnaît les membres suivant comme Délégués pour des compétitions
-      officielles de la WCA :
+    #original_hash: 77b819c
+    acknowledges: 'La WCA reconnaît les Délégués WCA suivants :'
     table:
       #original_hash: 709a232
       name: Nom
@@ -2415,9 +2496,9 @@ fr:
       compétition, merci de contacter votre %{link} local.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Comités et Équipes</u>
+    #original_hash: 1cb449c
+    members: Membres
     board:
-      #original_hash: 90fcc48
-      name_html: WCA Board
       #original_hash: 3a8b1d8
       info_html: >-
         La World Cube Association est dirigée par le Bureau de la WCA. Ils sont
@@ -2485,6 +2566,19 @@ fr:
         la WCA. Il gère les finances et les comptes de la WCA en accord avec la
         proposition de budget annuelle approuvée, qu'il doit également fournir
         régulièrement.
+    wec:
+      #original_hash: ec2b9c3
+      info_html: >-
+        Le WEC a pour rôle de s'assurer que toutes les procédures suivies par le
+        Staff et le Staff Externe de la WCA obéissent à son Code d'Éthique.
+    wqac:
+      #original_hash: 0171b3b
+      info_html: >-
+        Ce comité a pour rôle de supporter et promouvoir l'amélioration continue
+        de la qualité au sein de la WCA, ainsi que l'application à l'échelle
+        mondiale de standards de qualité pour s'assurer de la haute qualité des
+        processus, Staff WCA, Organisations Régionales, Organisateurs de
+        Compétitions, et Staff de compétitions.
   score_tools:
     #original_hash: ea9d41d
     title: Outils WCA pour la saisie des résultats
@@ -2802,17 +2896,17 @@ fr:
         '3': >-
           Pendant les 12 derniers mois, il y a eu moins de 16 compétitions dans
           un rayon de 100 km autour de la compétition.
-      #original_hash: 9908e21
+      #original_hash: 5c5cf04
       content2: >-
-        Les "compétitions simultanées de résolution optimisée" sont des
-        compétitions WCA n'ayant comme épreuve que la résolution optimisée du
-        3x3x3, et ayant lieu simultanément à plusieurs endroits.
+        Les "compétitions simultanées de 3x3x3 résolution optimisée" sont des
+        compétitions WCA n'ayant comme épreuve que le 3x3x3 résolution
+        optimisée, et ayant lieu simultanément à plusieurs endroits.
       olist2:
         '1':
-          #original_hash: 6f68690
+          #original_hash: 316fd13
           content1: >-
-            Les compétitions simultanées de résolution optimisée ne peuvent pas
-            faire partie d'une autre compétition.
+            Les compétitions simultanées de 3x3x3 résolution optimisée ne
+            peuvent pas faire partie d'une autre compétition.
           alist1:
             #original_hash: 75aa0c7
             1a: >-
@@ -2826,10 +2920,10 @@ fr:
           alist1:
             #original_hash: 8f532bb
             2a: 'Les deux compétitions devraient avoir 5 jours d''écart, ou'
-            #original_hash: 4ed931b
+            #original_hash: e14e11e
             2b: >-
-              l'autre compétition ne doit pas proposer l'épreuve de résolution
-              optimisée.
+              l'autre compétition ne doit pas proposer l'épreuve de 3x3x3
+              résolution optimisée.
     paragraph-events:
       #original_hash: b16c5f1
       title: Annonce des épreuves
