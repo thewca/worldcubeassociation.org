@@ -370,6 +370,8 @@ pt-BR:
         enable_donations: Quero habilitar doações além de coletar as taxas de inscrição
         #original_hash: 4baf44b
         championship_type: Tipo de Campeonato
+        #original_hash: ff722f0
+        registration_requirements: Requisitos para inscrição
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
@@ -643,6 +645,21 @@ pt-BR:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Por favor indique aqui alguma particularidade sobre o processo de
+          inscrição, conforme <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Orientação 2c1+</a>. Depois que a competição for
+          anunciada, esse campo não será mais editável, e você precisa de
+          aprovação do Board para modificá-lo.<br/>Por exemplo, informe aqui se
+          os competidores precisam ter um histórico de pagamentos "limpo" com
+          alguma entidade, se existe uma política de reembolso, ou se os
+          competidores terão que responder a um email de confirmação caso o
+          limite de inscritos seja atingido.<br/>Por favor preencha esse campo
+          <b>em Inglês</b> e outra(s) língua(s) que seus competidores falem; ele
+          será mostrado na página de inscrição se você estiver usando o sistema
+          de inscrição da WCA.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1458,6 +1475,8 @@ pt-BR:
     preferred_events_populated_html: >-
       Preenchemos automaticamente seus eventos favoritos, que você pode editar
       %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Requisitos para inscrição para a competição:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1543,6 +1562,8 @@ pt-BR:
       information: Informação
       #original_hash: c5497bc
       events: Eventos
+      #original_hash: ff722f0
+      registration_requirements: Requisitos para inscrição
     index:
       #original_hash: db98a68
       title: Competições
@@ -1782,6 +1803,10 @@ pt-BR:
       before: antes
       #original_hash: 405906c
       after: depois
+      #original_hash: 24d948e
+      limit: Limite
+      #original_hash: 855bd26
+      competitors: Competidores
     #original_hash: 06b01c4
     announcements: Anúncios
     #original_hash: 5b9523f
@@ -2296,19 +2321,21 @@ pt-BR:
           qualidade para garantir uma consistente alta qualidade dos processos,
           do Staff da WCA, Organizações Regionais, Organizadores e Competição e
           Staff de Competição.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>Delegados da WCA</strong> são membros da WCA que são
-        responsáveis por garantir que todas as competições da WCA aconteçam de
-        acordo com a missão, regulamento e espírito da WCA. Eles são
+        <p><strong>Delegado da WCA</strong> é uma função definida nas Moções
+        daWCA e descrita no Regulamento da WCA. A principal tarefa de um
+        Delegado é supervisionar as competições em nome da WCA. Ele é
+        responsável por garantir que todas as competições da WCA aconteçam de
+        acordo com a Missão, Espírito e Regulamento da WCA. Eles são
         diferenciados entre <strong>Delegados Sênior</strong>,
         <strong>Delegados</strong> e <strong>Delegados Candidatos
-        </strong>%{see_link}. Além das tarefas de um Delegado, um Delegado
-        Sênior é responsável por gerenciar os Delegados em sua área, e também
-        pode ser contatado pela comunidade para assuntos pertinentes à região.
-        Novos Delegados são listados inicialmente como Delegados Candidatos, e
-        devem mostrar que são capazes de conduzir competições adequadamente
-        antes de serem considerados Delegados.
+        </strong>%{see_link}.</p> <p> Além das tarefas de um Delegado, um
+        Delegado Sênior é responsável por gerenciar os Delegados em sua área, e
+        também pode ser contatado pela comunidade para assuntos pertinentes à
+        região.</p> <p>Novos Delegados são listados inicialmente como Delegados
+        Candidatos, e devem mostrar que são capazes de conduzir competições
+        adequadamente antes de serem considerados Delegados.</p>
       #original_hash: 27d18ac
       see_link_html: '(veja %{link})'
       #original_hash: 5b01fcc
@@ -2327,10 +2354,8 @@ pt-BR:
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
-    #original_hash: 0a89b0f
-    acknowledges: >-
-      A WCA reconhece os seguintes membros como delegados para competições
-      oficiais:
+    #original_hash: 77b819c
+    acknowledges: 'A WCA reconhece os seguintes Delegados:'
     table:
       #original_hash: 709a232
       name: Nome
