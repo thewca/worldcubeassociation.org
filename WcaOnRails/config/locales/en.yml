@@ -236,6 +236,7 @@ en:
         competition_events: "Events"
         enable_donations: "I want to enable donations additionally to collecting the registration fees"
         championship_type: "Championship type"
+        registration_requirements: "Registration requirements"
       #context: a registration to a competition
       registration:
         guests: "Guests"
@@ -383,6 +384,7 @@ en:
         competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
         venueAddress: ""
         championship_type: ""
+        registration_requirements: "Please indicate here any specificities about the registration process, as needed per <a href=\"https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+\" target=\"_blank\">Guideline 2c1+</a>. After the competition is announced, this field will <b>not</b> be editable anymore, and Board's approval will be needed to modify it.<br/>For example indicate here if competitors need to have a clean payment history with a specific entity, if there is some refund policy, or if they will have to answer a confirmation email in case the maximum number of registrations is reached.<br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; it will be displayed on the competition's registration page if you are using the WCA website registrations."
       website_contact:
         message: ""
         name: ""
@@ -817,6 +819,7 @@ en:
     payment_button_text: "Pay your fees with card"
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
+    registration_requirements: "Registration requirements for the competition:"
   #context: Key used when managing competitions
   competitions:
     #context: generic message
@@ -862,6 +865,7 @@ en:
       entry_fee: "Entry Fee"
       information: "Information"
       events: "Events"
+      registration_requirements: "Registration requirements"
     #context: on the competition's index page
     index:
       title: "Competitions"

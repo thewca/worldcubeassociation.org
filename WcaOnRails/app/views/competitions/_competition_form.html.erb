@@ -229,6 +229,7 @@
         </div>
       </div>
       <hr>
+      <%= f.input :registration_requirements, input_html: { class: "markdown-editor" } %>
     <% end %>
 
     <% disable_money_input = !@competition.can_edit_registration_fees? %>

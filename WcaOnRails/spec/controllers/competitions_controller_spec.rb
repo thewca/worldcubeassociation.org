@@ -354,6 +354,14 @@ RSpec.describe CompetitionsController do
         expect(CompetitionDelegate.where(competition_id: "NewId2015").map(&:id).sort).to eq cds.map(&:id).sort
         expect(CompetitionOrganizer.where(competition_id: "NewId2015").map(&:id).sort).to eq cos.map(&:id).sort
       end
+
+      it "can change registration requirements field after competition is confirmed" do
+        comp = FactoryBot.create(:competition, :confirmed)
+        new_requirements = "New requirements"
+        patch :update, params: { id: comp, competition: { registration_requirements: new_requirements } }
+        comp.reload
+        expect(comp.registration_requirements).to eq new_requirements
+      end
     end
 
     context 'when signed in as organizer' do
@@ -511,6 +519,21 @@ RSpec.describe CompetitionsController do
         patch :update, params: { id: competition, competition: { registration_open: new_open, registration_close: new_close } }
         expect(competition.reload.registration_open).to eq new_open
         expect(competition.reload.registration_close).to eq new_close
+      end
+
+      it "can change registration requirements field before competition is confirmed" do
+        new_requirements = "New requirements"
+        patch :update, params: { id: competition, competition: { registration_requirements: new_requirements } }
+        competition.reload
+        expect(competition.registration_requirements).to eq new_requirements
+      end
+
+      it "cannot change registration requirements field after competition is confirmed" do
+        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate])
+        new_requirements = "New requirements"
+        patch :update, params: { id: comp, competition: { registration_requirements: new_requirements } }
+        comp.reload
+        expect(comp.registration_requirements).to eq "Requirements"
       end
     end
 

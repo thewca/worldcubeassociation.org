@@ -81,6 +81,7 @@ class Competition < ApplicationRecord
     base_entry_fee_lowest_denomination
     currency_code
     enable_donations
+    registration_requirements
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id

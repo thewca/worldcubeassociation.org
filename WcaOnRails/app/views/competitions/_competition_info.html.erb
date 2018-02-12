@@ -65,6 +65,12 @@
       <dt><%= t '.information' %></dt>
       <dd><%=md competition.information %></dd>
 
+    <dl class="dl-horizontal">
+      <dt><%= t '.registration_requirements' %></dt>
+      <dd><%=md competition.registration_requirements %></dd>
+    </dl>
+
+    <dl class="dl-horizontal">
       <dt><%= t '.events' %></dt>
       <dd class="competition-events-list">
         <% @competition.events.each do |event| %>

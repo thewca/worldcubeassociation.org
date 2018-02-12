@@ -2,6 +2,15 @@
 
 <%= render layout: "nav" do %>
 
+  <% unless @competition.registration_requirements.blank? %>
+    <p><b><%= t('registrations.registration_requirements') %></b>
+    </p>
+    <div>
+      <%=md @competition.registration_requirements %>
+    </div>
+    <hr/>
+  <% end %>
+
   <% opens_in_days = distance_of_time_in_words_to_now(@competition.registration_open) %>
   <% closes_in_days = distance_of_time_in_words_to_now(@competition.registration_close) %>
 
