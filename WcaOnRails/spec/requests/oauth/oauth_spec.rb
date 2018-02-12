@@ -67,6 +67,48 @@ RSpec.describe "oauth api" do
       expect(page).to have_text "The redirect uri included is not valid."
     end
 
+    it 'can use refresh token' do
+      visit oauth_authorization_path(
+        client_id: oauth_app.uid,
+        redirect_uri: oauth_authorization_url,
+        response_type: "code",
+        scope: "public email",
+      )
+
+      # Pretend we're the user:
+      #  1. Log in
+      fill_in "user_login", with: user.email
+      fill_in "user_password", with: user.password
+      click_button "Sign in"
+      #  2. Authorize the application
+      click_button "Authorize"
+
+      query = Rack::Utils.parse_query(URI.parse(current_url).query)
+      authorization_code = query["code"]
+
+      # We've now received an authorization_code from the user, lets request an
+      # access_token.
+      post oauth_token_path, params: { grant_type: "authorization_code", client_id: oauth_app.uid, client_secret: oauth_app.secret, code: authorization_code, redirect_uri: oauth_authorization_url }
+      expect(response).to be_success
+      json = JSON.parse(response.body)
+      expect(json['error']).to eq(nil)
+      access_token = json['access_token']
+      expect(access_token).to_not eq(nil)
+      verify_access_token access_token
+      refresh_token = json['refresh_token']
+      expect(refresh_token).to_not eq(nil)
+
+      # Since we now have a refresh token, we should be able to get a new access
+      # token.
+      post oauth_token_path, params: { grant_type: "refresh_token", client_id: oauth_app.uid, client_secret: oauth_app.secret, redirect_uri: oauth_authorization_url, refresh_token: refresh_token }
+      expect(response).to be_success
+      json = JSON.parse(response.body)
+      expect(json['error']).to eq(nil)
+      access_token = json['access_token']
+      expect(access_token).to_not eq(nil)
+      verify_access_token access_token
+    end
+
     context "with dangerously_allow_any_redirect_uri set" do
       before(:each) do
         oauth_app.update!(dangerously_allow_any_redirect_uri: true)
