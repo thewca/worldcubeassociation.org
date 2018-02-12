@@ -8,7 +8,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
     let(:second_delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
     let(:third_delegate) { FactoryBot.create :delegate }
-    let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world greater_china), delegates: [delegate, second_delegate, third_delegate] }
+    let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world greater_china), delegates: [delegate, second_delegate, third_delegate], registration_requirements: "Some requirements" }
     let(:mail) { CompetitionsMailer.notify_board_of_confirmed_competition(delegate, competition) }
 
     it "renders" do
@@ -19,9 +19,10 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       expect(mail.subject).to eq("#{delegate.name} just confirmed #{competition.name}")
       expect(mail.body.encoded).to match("#{competition.name} is confirmed")
-      expect(mail.body.encoded).to match('This competition is marked as Greater China Championship and World Championship')
+      expect(mail.body.encoded).to match("This competition is marked as Greater China Championship and World Championship")
       expect(mail.body.encoded).to match("There is a competitor limit of 100 because \"The hall only fits 100 competitors.\"")
       expect(mail.body.encoded).to match(admin_edit_competition_url(competition))
+      expect(mail.body.encoded).to match("Some requirements")
     end
   end
 
