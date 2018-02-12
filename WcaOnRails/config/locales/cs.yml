@@ -1357,7 +1357,7 @@ cs:
       Tato osoba se registrovala s účtem. Můžete upravit její osobní informace
       %{here}.
     #original_hash: ada2e9e
-    sign_in: Přihlásit se
+    sign_in: <span>Přihlásit se</span>
     #original_hash: 5d45a00
     profile: profil
     #original_hash: 801b3e9
@@ -2291,18 +2291,20 @@ cs:
           norem kvality, které zajistí konzistentní vysokou kvalitu procesů, WCA
           staffu, regionálních organizací, organizátorů soutěží a competition
           staffu.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>Delegáti WCA</strong> jsou členi WCA, kteří jsou odpovědní za
-        dohled nad tím, aby všechny WCA soutěže probíhaly v souladu s posláním,
-        pravidly a duchem WCA. WCA rozlišuje <strong>Vyšší Delegatáty
-        WCA</strong>, <strong>Delegáty WCA</strong> a <strong>Kandidáty na
-        Delegáta WCA</strong>%{see_link}. K povinnostem Delegáta WCA a Vyššího
+        <p><strong>Delegát WCA</strong> je role definovaná ve WCA Motions a
+        blíže popsaná v Pravidlech WCA. Základní povinností delegáta je dohled
+        nad soutěží jménem WCA. Delegát WCA je dpovědný za to, aby všechny WCA
+        soutěže probíhaly v souladu s posláním, duchem a pravidly WCA. WCA
+        rozlišuje <strong>Vyšší Delegatáty WCA</strong>, <strong>Delegáty
+        WCA</strong> a <strong>Kandidáty na Delegáta
+        WCA</strong>%{see_link}.</p> <p> K povinnostem Delegáta WCA a Vyššího
         Delegáta WCA navíc patří odpovědnost za vedení Delegátů ve svých
         oblastech a také mohou být kontaktování komunitou pro regionální
-        záležitosti. Noví Delegáti se prvně označují jako Kandidáti na Delegáta
-        WCA a musí dokázat, že jsou schopni zvládnout vše ohledně vedení
-        soutěže. Teprve potom jsou hodni titulu Delegát WCA.
+        záležitosti.</p> <p>Noví Delegáti se prvně označují jako Kandidáti na
+        Delegáta WCA a musí dokázat, že jsou schopni zvládnout vše ohledně
+        vedení WCA soutěže. Teprve potom jsou hodni titulu Delegát WCA.</p>
       #original_hash: 27d18ac
       see_link_html: '(viz. %{link})'
       #original_hash: 5b01fcc
@@ -2317,12 +2319,12 @@ cs:
     #original_hash: fdceb44
     motions: Motions
     #original_hash: 092f99e
-    minutes: Minuty
+    minutes: Protokoly
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegáti
-    #original_hash: 0a89b0f
-    acknowledges: 'WCA uznává následující členy jako delegáty pro oficiální WCA soutěže:'
+    #original_hash: 77b819c
+    acknowledges: 'WCA uznává následující Delegáty WCA:'
     table:
       #original_hash: 709a232
       name: Jméno
