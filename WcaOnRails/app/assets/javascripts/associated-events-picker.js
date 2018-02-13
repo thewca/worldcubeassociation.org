@@ -16,7 +16,10 @@ $(function() {
     var $eventsSelectedCount = $eventsFormGroup.find('.associated-events-label .events-selected-count');
     $eventsSelectedCount.text(count);
 
-    var event_ids = checkedEvents.toArray().map(i => i.dataset.event)
+    var event_ids = [];
+    for (var i = 0; i < count; i++) {
+      event_ids.push(checkedEvents[i].dataset.event);
+    }
 
     wca.cancelPendingAjaxAndAjax('render_entry_fee_for_selected_events', {
       url: 'registrations/event_fee_for_selected_events',
