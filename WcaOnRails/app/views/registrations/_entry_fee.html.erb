@@ -11,12 +11,7 @@
     <div class="form-group">
       <label class="col-sm-2 control-label" for="entry_fees"><%= label %></label>
       <div class="col-sm-9">
-
-        <% if @registration.show_payment_form? %>
-          <p class="form-control-static payment-form"><%= format_money(money_amount) %></p>
-        <% else %>
-          <p class="form-control-static dynamic-entry-fee"><%= format_money(money_amount) %></p>
-        <% end %>
+        <p class="form-control-static <%= entry_fee_class %>"><%= format_money(money_amount) %></p>
         <% unless hint.blank? %>
           <p class="help-block"><span <%= raw(hint_context_attribute) %>><%= hint %></span></p>
         <% end %>

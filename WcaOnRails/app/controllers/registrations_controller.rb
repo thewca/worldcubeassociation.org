@@ -284,10 +284,10 @@ class RegistrationsController < ApplicationController
 
   def entry_fee_for_selected_events
     competition = competition_from_params
-    eventIds = params[:eventIds] ||= {}
+    event_ids = params[:event_ids] ||= {}
 
     @entry_fee_amount = competition.base_entry_fee
-    eventIds.each do |eventId|
+    event_ids.each do |eventId|
       @entry_fee_amount += competition.competition_events.find_by_event_id!(eventId).fee
     end
     render json: {

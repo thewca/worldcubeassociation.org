@@ -16,19 +16,16 @@ $(function() {
     var $eventsSelectedCount = $eventsFormGroup.find('.associated-events-label .events-selected-count');
     $eventsSelectedCount.text(count);
 
-    var eventIds = [];
-    for (var i = 0; i < count; i++) {
-      eventIds.push(checkedEvents[i].dataset.event);
-    }
+    var event_ids = checkedEvents.toArray().map(i => i.dataset.event)
 
     wca.cancelPendingAjaxAndAjax('render_entry_fee_for_selected_events', {
       url: 'registrations/event_fee_for_selected_events',
       data: {
-        'eventIds': eventIds,
+        'event_ids': event_ids,
       },
       success: function(data) {
-        $('.dynamic-entry-fee').html(data.html);
-      }
+        $('.entry-fee-total').html(data.html);
+      },
     });
   }
 
