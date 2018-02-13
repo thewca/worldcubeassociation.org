@@ -360,6 +360,8 @@ zh-TW:
         enable_donations: 我想要開啟捐款以增加報名費收入
         #original_hash: 4baf44b
         championship_type: 錦標賽種類
+        #original_hash: ff722f0
+        registration_requirements: 報名條件
       registration:
         #original_hash: 3c23a67
         guests: 訪客
@@ -562,8 +564,8 @@ zh-TW:
         external_website: 這場比賽的比賽網站。必須為有效的網址。
         #original_hash: 9965635
         registration_open: 備註：報名開始和結束時間採用UTC時間
-        #original_hash: 36963bc
-        remarks: 任何您想跟WCA董事會說明的事。例如，於比賽日期30日內才申請比賽的理由。請用英文填寫！
+        #original_hash: 243212f
+        remarks_html: '任何您想跟WCA董事會說明的事。例如，於比賽日期四週內才申請比賽的理由，或是您申請%{link}的理由。請用英文填寫！'
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -604,6 +606,11 @@ zh-TW:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          請在此處說明任何有關報名過程的特殊情況，以符合<a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">指導方針2c1+</a>。一旦比賽公告後，該段落將<b>不可</b>再編輯，並且需要董事會批准才能對其進行修改。<br/>例如，在此說明參賽者是否需要具有一定程度的良好付款歷史記錄，是否有退款政策，或者參賽者是否必須回覆確認電子郵件。.<br/>請用<b>英文</b>和您當地參賽者使用的語言填寫此欄。如果您使用WCA網站報名，它將顯示在比賽的報名頁面上。
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1303,6 +1310,8 @@ zh-TW:
     preferred_events_prompt_html: '為了加速報名流程，您可以設定喜好的參賽項目%{link}。'
     #original_hash: 67d8734
     preferred_events_populated_html: '我們自動填入您的偏好項目，您可以在%{link}編輯。'
+    #original_hash: ee89a3e
+    registration_requirements: 比賽的報名條件：
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1375,6 +1384,8 @@ zh-TW:
       information: 比賽資訊
       #original_hash: c5497bc
       events: 項目
+      #original_hash: ff722f0
+      registration_requirements: 報名條件
     index:
       #original_hash: db98a68
       title: 比賽
@@ -1584,6 +1595,10 @@ zh-TW:
       before: 之前
       #original_hash: 405906c
       after: 之後
+      #original_hash: 24d948e
+      limit: 上限
+      #original_hash: 855bd26
+      competitors: 人數
     #original_hash: 06b01c4
     announcements: 公告
     #original_hash: 5b9523f
@@ -1989,9 +2004,11 @@ zh-TW:
         #original_hash: 0171b3b
         description: >-
           該委員會的職責是支持並促進WCA內部持續的品質改善，以及應用於全球的品質標準以確保一致的高品質流程、WCA員工、區域組織、比賽主辦人和工作人員。
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>WCA代表</strong>是負責確保WCA比賽符合WCA任務、規則和精神的WCA成員。WCA將代表區別成<strong>WCA高級代表</strong>、<strong>WCA代表</strong>和<strong>WCA代表候選人</strong>%{see_link}。跟WCA代表職責不同的是，WCA高級代表需額外負責管理該地區的代表以及處理地方社群的事務。新上任的代表會先列為WCA代表候選人，並且需要證明他們能成功管理比賽之後才能升任為WCA代表。
+        <p><strong>WCA代表</strong>是WCA提案中定義的角色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的任務、精神和規則。WCA將代表區別成<strong>WCA高級代表</strong>、<strong>WCA代表</strong>和<strong>WCA代表候選人</strong>%{see_link}。</p>
+        <p>跟WCA代表職責不同的是，WCA高級代表需額外負責管理該地區的代表以及處理地方社群的事務。</p>
+        <p>新上任的代表會先列為WCA代表候選人，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為WCA代表。</p>
       #original_hash: 27d18ac
       see_link_html: '(參見%{link})'
       #original_hash: 5b01fcc
@@ -2008,8 +2025,8 @@ zh-TW:
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
-    #original_hash: 0a89b0f
-    acknowledges: WCA承認以下成員為WCA官方比賽的代表：
+    #original_hash: 77b819c
+    acknowledges: WCA承認以下WCA代表：
     table:
       #original_hash: 709a232
       name: 姓名
