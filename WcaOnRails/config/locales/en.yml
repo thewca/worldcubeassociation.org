@@ -866,6 +866,9 @@ en:
       information: "Information"
       events: "Events"
       registration_requirements: "Registration requirements"
+      #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
+      click_to_display_requirements_html: "This competition is over, click %{link_here} to display the registration requirements it used."
+      hide_requirements: "Hide registration requirements."
     #context: on the competition's index page
     index:
       title: "Competitions"
