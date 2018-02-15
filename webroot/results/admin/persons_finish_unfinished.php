@@ -103,9 +103,9 @@ function getBirthdates () {
     foreach( $persons as $person ){
       extract( $person );
       $birthdates[$id] = ($month || $day || $year)
-                         ? ($month ? sprintf("%02d",$month) : '??'  ) . '/' .
-                           ($day   ? sprintf("%02d",$day  ) : '??'  ) . '/' .
-                           ($year  ? sprintf("%02d",$year ) : '????')
+                         ? ($year  ? sprintf("%02d",$year ) : '????') . '-' .
+                           ($month ? sprintf("%02d",$month) : '??'  ) . '-' .
+                           ($day   ? sprintf("%02d",$day  ) : '??'  )
                          : 'unknown';
     }
     $birthdates[''] = 'unknown';
@@ -186,7 +186,7 @@ function showUnfinishedPersons () {
     $countryIdHtml = htmlEscape( $countryId );
     $personId = htmlEscape( $person['personId'] );
     $competitionId = htmlEscape( $person['competitionId'] );
-    $dob = empty($person['dob']) ? 'mm/dd/yyyy' : $person['dob'];
+    $dob = empty($person['dob']) ? 'yyyy-mm-dd' : $person['dob'];
 
     #--- Hidden field describing the case.
     $caseNr++;
