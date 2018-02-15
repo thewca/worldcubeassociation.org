@@ -164,6 +164,15 @@ RSpec.describe Api::V0::CompetitionsController do
       expect(json.map { |c| c["id"] }).to eq [last_feb_comp.id]
     end
 
+    it 'can query by announced_after' do
+      FactoryBot.create(:competition, :confirmed, :visible, name: "Old comp 2018", announced_at: 3.days.ago)
+      FactoryBot.create(:competition, :confirmed, :visible, name: "New comp 2018", announced_at: Time.now)
+      get :index, params: { announced_after: 2.days.ago }
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.map { |c| c["name"] }).to eq ["New comp 2018"]
+    end
+
     it 'paginates' do
       7.times do
         FactoryBot.create :competition, :confirmed, :visible

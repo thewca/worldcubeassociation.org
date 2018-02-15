@@ -836,6 +836,14 @@ class Competition < ApplicationRecord
       competitions = competitions.where("end_date <= ?", end_date)
     end
 
+    if params[:announced_after].present?
+      announced_date = Date.safe_parse(params[:announced_after])
+      if !announced_date
+        raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'")
+      end
+      competitions = competitions.where("announced_at > ?", announced_date)
+    end
+
     query&.split&.each do |part|
       like_query = %w(id name cellName cityName countryId).map { |column| column + " LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
@@ -918,6 +926,7 @@ class Competition < ApplicationRecord
       city: cityName,
       country_iso2: country&.iso2,
       start_date: start_date,
+      announced_at: announced_at,
       end_date: end_date,
       delegates: delegates,
       organizers: organizers,
