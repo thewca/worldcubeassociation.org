@@ -1249,6 +1249,7 @@ en:
     bylaws: "Bylaws"
     motions: "Motions"
     minutes: "Minutes"
+    dues: "WCA Dues System"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
