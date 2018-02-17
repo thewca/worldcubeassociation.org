@@ -6,6 +6,8 @@ sk:
     XE: Viaceré krajiny(Európa)
     #original_hash: 459f987
     XS: Viaceré krajiny(Južná Amerika)
+    #original_hash: 374ac0d
+    XM: Viaceré Krajiny (Ameriky)
     #original_hash: 918c53a
     MO: Macao
     #original_hash: 2f488ff
@@ -13,22 +15,24 @@ sk:
     #original_hash: 4e8bd04
     KR: Kórea
   continents:
+    #original_hash: 0f138c8
+    Multiple Continents: Viaceré Kontinenty
     #original_hash: 1d35114
-    AfR: Afrika
+    Africa: Afrika
     #original_hash: a173e72
-    AsR: Ázia
+    Asia: Ázia
     #original_hash: 576347e
-    ER: Európa
+    Europe: Európa
     #original_hash: 247ce5d
-    NAR: Severná Amerika
+    North America: Severná Amerika
     #original_hash: 3642950
-    OcR: Oceánia
+    Oceania: Oceánia
     #original_hash: b1ffb4c
-    SAR: Južná Amerika
+    South America: Južná Amerika
   events:
     #original_hash: 3732390
     '222': Kocka 2x2x2
-    #original_hash: bfbe360
+    #original_hash: 8180137
     '333': Kocka 3x3x3
     #original_hash: 2ee5b5a
     '444': Kocka 4x4x4
@@ -40,38 +44,38 @@ sk:
     '777': Kocka 7x7x7
     #original_hash: 29d5411
     333bf: 3x3x3 poslepiačky
-    #original_hash: 31ed23f
-    333oh: 3x3x3 Jednou rukou
     #original_hash: 0a5e7bf
     333fm: 3x3x3 Na najmenej ťahov
+    #original_hash: 31ed23f
+    333oh: 3x3x3 Jednou rukou
     #original_hash: be41d70
     333ft: 3x3x3 S nohami
+    #original_hash: 04f6b3e
+    clock: Rubik's Clock
     #original_hash: d542376
     minx: Megaminx
     #original_hash: 8216a66
     pyram: Pyraminx
-    #original_hash: 1551a2c
-    sq1: Square-1
-    #original_hash: 23c2fdf
-    clock: Rubik's Clock
     #original_hash: 64a56a2
     skewb: Skewb
+    #original_hash: 1551a2c
+    sq1: Square-1
     #original_hash: 5bae501
     444bf: 4x4x4 poslepiačky
     #original_hash: aea5216
     555bf: 5x5x5 poslepiačky
     #original_hash: cedbf87
     333mbf: 3x3x3 Viacero kociek poslepiačky
-    #original_hash: 3988358
-    magic: Rubik's Magic
+    #original_hash: e6791be
+    magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
-    #original_hash: c6ad2af
+    #original_hash: 1843dc4
     333mbo: 3x3x3 Viacero kociek poslepiačky-starý štýl
   rounds:
     '0':
       #original_hash: 4d618bb
-      name: Kvalifikácia
+      name: Kolo kvalifikácie
       #original_hash: 2ffe44e
       cellName: Kvalifikácia
     '1':
@@ -118,12 +122,54 @@ sk:
       #original_hash: e861dcf
       name: Kombinované tretie kolo
       #original_hash: 86f4b05
-      cellName: Kombinovane tretie
+      cellName: Kombinovane Tretie
     h:
       #original_hash: 4c66ad0
       name: Kombinovaná kvalifikácia
       #original_hash: 4c66ad0
       cellName: Kombinovaná kvalifikácia
+  round:
+    #original_hash: 66e902f
+    name: '%{event} Kolo %{number}'
+  advancement_condition:
+    #original_hash: 6381d11
+    ranking: 'Top %{ranking} postupuje do kola %{next_round_number}'
+    #original_hash: 31ad77c
+    percent: 'Top %{percent}% postupuje do kola %{next_round_number}'
+    attempt_result:
+      #original_hash: 03af49c
+      time: 'Najlepší solve < %{time} postupuje do kola %{next_round_number}'
+      #original_hash: 0b4ae7c
+      moves: 'Najlepší solve < %{moves} ťahov postupuje do kola %{next_round_number}'
+      #original_hash: 56c0366
+      points: 'Najlepší solve > %{points} bodov postupuje do kola %{next_round_number}'
+  cutoff:
+    #original_hash: cf458e7
+    time:
+      other: '%{count} pokusov na dostanie < %{time}'
+      few: '-'
+      one: '%{count} pokus na dostanie < %{time}'
+      zero: '-'
+    #original_hash: b49d930
+    moves:
+      other: '%{count} pokusov na dostanie < %{moves} ťahov'
+      few: '-'
+      one: '%{count} pokus na dostanie < %{moves} ťahov'
+      zero: '-'
+    #original_hash: eba1b97
+    points:
+      other: '%{count} pokusov na dostanie > %{points} bodov'
+      few: '-'
+      one: '%{count} pokus na dostanie > %{points} bodov'
+      zero: '-'
+  time_limit:
+    cumulative:
+      #original_hash: c01adfa
+      across_rounds: '%{time} pre kolá %{rounds}'
+    #original_hash: f030c3d
+    333fm: 1 hodina
+    #original_hash: 2c2abd5
+    333mbf: 10 minút na jednu kocku
   common:
     #original_hash: 2513cf0
     continent: Kontinent
@@ -134,7 +180,7 @@ sk:
     #original_hash: 77003d0
     best: Najlepší
     #original_hash: dd11868
-    single: Jeden
+    single: Single
     #original_hash: 15f86c0
     average: Priemer
     #original_hash: e7f6fc5
@@ -154,16 +200,26 @@ sk:
       invalid: neplatný
     #original_hash: 49d0140
     days:
-      other: '%{count} dní'
-      few: '-'
-      one: Jeden deň
       zero: '-'
+      one: Jeden deň
+      few: '-'
+      other: '%{count} dní'
     #original_hash: 203e1b3
     these_events:
-      zero: Nula
-      one: Jeden
-      few: Niekoľko
-      other: Iné
+      zero: '-'
+      one: tento event
+      few: '-'
+      other: 'tieto %{count} eventy'
+    #original_hash: 51ef7d4
+    search_site: Hľadať
+    #original_hash: d7decf1
+    filter: Filter
+    #original_hash: f6fdbe4
+    delete: Vymazať
+    #original_hash: d3f8f7b
+    date_placeholder: RRRR-MM-DD
+    #original_hash: 52249b5
+    datetime_placeholder: 'RRRR-MM-DD HH:MM'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -186,6 +242,13 @@ sk:
       scopes: Rozhľad
       #original_hash: 3b0d449
       callback_urls: Callback Urls
+  helpers:
+    submit:
+      competition_medium:
+        #original_hash: dc112af
+        create: Odoslať media
+        #original_hash: 4cf19ca
+        update: Upraviť
   activerecord:
     attributes:
       user:
@@ -210,7 +273,7 @@ sk:
         #original_hash: 8be3c94
         password: Heslo
         #original_hash: 19dff4d
-        current_password: Terajššie heslo
+        current_password: Aktuálne heslo
         #original_hash: 786b8af
         password_confirmation: Potvrdenie hesla
         #original_hash: ced7b30
@@ -220,7 +283,7 @@ sk:
         #original_hash: 58e0c56
         remove_avatar: Vymaž avatara
         #original_hash: 9af9099
-        results_notifications_enabled: 'Pošli mi email, keď prídu výsledky'
+        results_notifications_enabled: 'Pošli mi email, keď budú publikované výsledky.'
         #original_hash: de60ab8
         delegate_status: Status delegáta
         #original_hash: 0f21717
@@ -255,9 +318,9 @@ sk:
         #original_hash: 08767af
         venueDetails: Detaily destinácie
         #original_hash: ff99f5b
-        start_date: Začiatok
+        start_date: Dátum začiatku
         #original_hash: 89d10cd
-        end_date: Koniec
+        end_date: Dátum konca
         #original_hash: 2e8a57c
         external_website: Webová stránka
         #original_hash: 692e1f9
@@ -265,7 +328,7 @@ sk:
           Chcel by som použiť WCA stránku namiesto externej pre dodatkové
           informácie
         #original_hash: dd88e47
-        base_entry_fee_lowest_denomination: Najmenšia vstupná cena
+        base_entry_fee_lowest_denomination: Základná vstupná cena
         #original_hash: 28a6fbb
         currency_code: Kód meny
         #original_hash: 5b2fe69
@@ -278,24 +341,32 @@ sk:
         information: Informácie
         #original_hash: 87b7d5f
         use_wca_registration: Chcel by som použiť WCA stránku pre registráciu
+        #original_hash: a2dfcf8
+        competitor_limit_enabled: >-
+          Rád by som špecifikoval limit počtu súťažiacich, ktorí sa môžu
+          zúčastniť tejto súťaže.
+        #original_hash: 749f4c9
+        competitor_limit: Maximálny počet súťažiacich
+        #original_hash: 4a8b6f1
+        competitor_limit_reason: Dôvod pre limit súťažiacich
         #original_hash: 3c23a67
         guests_enabled: Hostia
         #original_hash: 089cbfd
         receive_registration_emails: 'Notifikuj ma emailom, keď sa niekto prihlási na túto súťaž'
         #original_hash: d4aeed9
-        registration_open: Registrácia otvorená
+        registration_open: Registrácia sa otvorí
         #original_hash: f8153a2
-        registration_close: Registrácia uzavretá
+        registration_close: Registrácia sa uzavrie
         #original_hash: d7020f4
         remarks: Poznámky
         #original_hash: c305010
-        clone_tabs: >-
-          Chcel by som tiež zklonovať všetky tabulátory s dodatkovými
-          informáciami
+        clone_tabs: Chcel by som tiež zklonovať všetky taby s dodatkovými informáciami
         #original_hash: c5497bc
         competition_events: Eventy
         #original_hash: 71c8461
-        enable_donations: Chcem dodatočne povoliť donaty pre nazbieranie registračných poplatokv
+        enable_donations: Chcem povoliť donaty dodatočne ku registračným poplatkom
+        #original_hash: 4baf44b
+        championship_type: Typ šampionátu
       registration:
         #original_hash: 3c23a67
         guests: Hostia
@@ -354,6 +425,10 @@ sk:
         body: Telo
         #original_hash: 6f915a2
         sticky: Lepkavý
+        #original_hash: 848eed0
+        tags: Tagy
+        #original_hash: fb4002e
+        show_on_homepage: Ukázať na domovskej stránke
       team:
         #original_hash: 709a232
         name: Meno
@@ -362,6 +437,62 @@ sk:
       vote:
         #original_hash: 153d7a5
         comment: Komentáre
+      competition_medium:
+        #original_hash: 1917f4f
+        competitionId: Súťaž
+        #original_hash: 3deb745
+        type: Typ
+        #original_hash: c3328c3
+        text: Text
+        #original_hash: d051707
+        uri: Link
+        #original_hash: 1be755a
+        submitterName: Meno zadávateľa
+        #original_hash: 78cdfee
+        submitterEmail: Email zadávateľa
+        #original_hash: 0d31f23
+        submitterComment: Komentár zadávateľa
+        #original_hash: bae7d5b
+        status: Status
+  enums:
+    user:
+      gender:
+        #original_hash: 3f3a489
+        m: Muž
+        #original_hash: b7c17e9
+        f: Žena
+        #original_hash: 6e6a6f2
+        o: Iné
+      delegate_status:
+        #original_hash: 28ec02d
+        candidate_delegate: Kandidát na Delegáta
+        #original_hash: 12ab214
+        delegate: Delegát
+        #original_hash: d463c23
+        senior_delegate: Delegát-senior
+        #original_hash: 660ee15
+        board_member: Člen Predstavenstva
+    person:
+      gender:
+        #original_hash: 3f3a489
+        m: Muž
+        #original_hash: b7c17e9
+        f: Žena
+        #original_hash: 6e6a6f2
+        o: Iné
+    competition_medium:
+      status:
+        #original_hash: 61a0572
+        accepted: Prijatý
+        #original_hash: 96f608c
+        pending: Čakajúci
+      type:
+        #original_hash: ee45c30
+        report: Nahlásiť
+        #original_hash: 4360c2d
+        article: Artikel
+        #original_hash: 82dabd0
+        multimedia: Multimedia
   simple_form:
     #original_hash: 5397e05
     'yes': Áno
@@ -381,18 +512,19 @@ sk:
       user:
         #original_hash: 87e1e6f
         dob: Napíšte váš dátum narodenia vo formáte YYYY-MM-DD
-        #original_hash: 5106479
+        #original_hash: d0bb74a
         name: >-
           Napíšte svoje celé meno správne, napríklad <strong>Stefan
           Pochmann</strong>. Nie nepresne ako <strong>s pochman</strong>.
+          Stredné mená (buď celé alebo ako iniciálky) sú voliteľné.
         #original_hash: c03b949
         email: >-
           Na vymenenie vášho emailu budeme potrebovať potvrdenie vášho nového
           emailu.
-        #original_hash: bfd11f4
+        #original_hash: 8a91e53
         pending_avatar: >-
           Po tom, ako nahráte svojho nového Avatara, budete musieť počkať,
-          pokiaľ ho schválime.
+          pokiaľ ho Výsledkový Tím WCA schváli.
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
@@ -413,8 +545,6 @@ sk:
         region: ''
         #original_hash: da39a3e
         remember_me: ''
-        #original_hash: da39a3e
-        remove_avatar: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
         #original_hash: da39a3e
@@ -442,10 +572,11 @@ sk:
         cityName: >-
           Meno mesta a štátu(ak je), kde sa súťaž bude nachádzať. Nepíšte
           krajinu(napr. Paris ALEBO San Francisco, Kalifornia)
-        #original_hash: 17c8ff8
+        #original_hash: 3d99319
         information: >-
-          Doplňujúci informačný text o súťaži(napr. Euro 2006 je otvorené
-          všetkým obyvateľom Európskych krajín a Izraelu).
+          Informácie o limite súťažiacich, vstupných poplatkoch pre súťažiacich
+          a divákov a iné detaily relevantné pre ľudí, ktorí maju záujem v
+          zúčastnení sa súťaže.
         #original_hash: 0708400
         delegate_ids: WCA delegáti pre túto súťaž.
         #original_hash: 517d376
@@ -456,11 +587,11 @@ sk:
         external_website: Webová stránka súťaže. Musí mať pravý http(s) url.
         #original_hash: 9965635
         registration_open: 'Poznámka: Otvorenie a zatvorenie súťaže sú v čase UTC.'
-        #original_hash: f688881
+        #original_hash: 36963bc
         remarks: >-
           Nejaké doplnkové informácie ktoré chcete napísať. Napríklad, dôvod,
           prečo bola táto súťaž požadovaná menej ako jeden mesiac dopredu, ak
-          použiteľné.
+          použiteľné. Vyplňte to prosím v angličtine.
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -471,13 +602,9 @@ sk:
         generate_website: ''
         #original_hash: 950a7ea
         base_entry_fee_lowest_denomination: >-
-          Základný vstupný poplatok pre súťaž. Musí to byť zdokumentované v
-          najmenších jednotkách meny(napr. centy pre USD). Vstupný poplatok bude
-          ukázaný na informačnej stránke súťaže a tiež na registračnej
-          stránke(ak je použitá). Dajte si pozor na to, že WCA ešte nemá podporu
-          pre platby. Softvérový tím na tom pracuje, a môžete kontrolovať status
-          na <a
-          href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>.
+          Základný vstupný poplatok pre súťaž. Vstupný poplatok bude ukázaný na
+          informačnej stránke súťaže a tiež na registračnej stránke(ak je
+          použitá).
         #original_hash: 866bc05
         currency_code: Kód meny pre vstupné poplatky.
         #original_hash: da39a3e
@@ -498,8 +625,21 @@ sk:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: c0ab502
+        competitor_limit_enabled: >-
+          Pre teraz je toto číslo iba pre informačné použitie a nepreventuje
+          registrácie ostatných ľudí. Pracujeme na pridávaní podpory na
+          zrýchlenie registrácie, ale vyžaduje si to inú prácu.
+        #original_hash: b9bc84d
+        competitor_limit: Počet súťažiacich povolených na túto súťaž.
+        #original_hash: 4bd7102
+        competitor_limit_reason: >-
+          Aký je dôvod na takýto limit súťažiacich? Vyplňte toto prosím v
+          angličtine.
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -516,13 +656,14 @@ sk:
         wca_id: ''
         #original_hash: 8723825
         dob: Váš správny deň narodenia vo formáte YYYY-MM-DD
-        #original_hash: 059d2ed
+        #original_hash: c6d8a97
         document: >-
           Aby ste nám dokázali svoju identitu a správny dátum narodenia, musíte
           pripojiť fotku hociakého legálneho dokumentu (ID karta, vodičský
           preukaz, šutdentská karta, pas, rodný list,...). Musí tam byť
           viditeľné meno a dátum narodenia a musí to byť pochopiteľné pre
-          Anglicky hovoriaceho človeka.
+          Anglicky hovoriaceho človeka (alebo kontaktuje miestneho Delegáta WCA
+          ak nemáte taký dokument).
       post:
         #original_hash: 53c16eb
         body: >-
@@ -533,6 +674,14 @@ sk:
         sticky: ''
         #original_hash: da39a3e
         title: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: 0e3764f
+        show_on_homepage: >-
+          Pozor! Toto nie je bezpečné pre súkromné dáta. Toto je iba na
+          prevenciu toho, aby na domácej stránke nebol chaos. Posty, ktoré nie
+          sú ukázané na domovskej stránke sú stále dostupné verejnosti cez linky
+          alebo tagy.
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
@@ -608,14 +757,27 @@ sk:
         status: ''
       team:
         #original_hash: da39a3e
-        description: ''
-        #original_hash: da39a3e
         friendly_id: ''
-        #original_hash: da39a3e
-        name: ''
       vote:
         #original_hash: da39a3e
         comment: ''
+      competition_medium:
+        #original_hash: da39a3e
+        competitionId: ''
+        #original_hash: da39a3e
+        type: ''
+        #original_hash: da39a3e
+        text: ''
+        #original_hash: da39a3e
+        uri: ''
+        #original_hash: da39a3e
+        submitterName: ''
+        #original_hash: da39a3e
+        submitterEmail: ''
+        #original_hash: da39a3e
+        submitterComment: ''
+        #original_hash: da39a3e
+        status: ''
     options:
       registration:
         status:
@@ -648,6 +810,10 @@ sk:
         dob: Správny dátum narodenia
         #original_hash: e214b8a
         document: Dokument
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: je nesprávne naformátovaný
   errors:
     messages:
       #original_hash: dc2367c
@@ -674,11 +840,11 @@ sk:
     doorkeeper:
       applications:
         help:
-          #original_hash: eb5567a
+          #original_hash: 62a0113
           scopes_html: >-
             Oddeľte polia s medzerami. Nechajte prázdne miesto pre použitie
             základného poľa (polí). Pozrite sa na <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">here</a> pre list podporovaných polí.
       scopes:
         #original_hash: 1920e95
@@ -689,6 +855,8 @@ sk:
         dob: Zprístupnite svoj dátum narodenia
         #original_hash: 17aa24f
         email: Zprístupnite svoju emailovú adresu
+        #original_hash: e0d0654
+        manage_competitions: 'Spravovať hociaké nadchádzajúce súťaže, ktoré budete organizovať'
     devise:
       #original_hash: 06184f5
       no_account: Nemáte účet?
@@ -708,13 +876,6 @@ sk:
         potrebujeme vedieť nejaké doplnkové informácie. Prosím, dajte na
         vedomie, že váš dátum narodenia nebude nikdy zverejnený bez vášho
         povolenia.
-      gender:
-        #original_hash: 3f3a489
-        male: Muž
-        #original_hash: b7c17e9
-        female: Žena
-        #original_hash: 6e6a6f2
-        other_gender: Iné
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -723,14 +884,12 @@ sk:
       about: O WCA
       #original_hash: d8fd3e4
       delegates: WCA delegáti
-      #original_hash: 0ef06c8
-      organizations: Národné organizácie
+      #original_hash: 37b8fdc
+      organizations: Regionálne Organizácie
       #original_hash: d790b40
       faq: Často pýtané otázky(FAQ)
       #original_hash: a34b69f
       contact: Kontakné infomácie
-      #original_hash: cf1d2c9
-      forum: Fórum
       #original_hash: 4fa8cc8
       tools: Prístroje
       #original_hash: 83fce83
@@ -916,8 +1075,8 @@ sk:
         nesedí v našej databáze. Ak ste si istý, že nám ponúkate správny dátum v
         správnom formáte(YYYY-MM-DD), prosím kontaktujte Výsledkový Tím WCA
         pomocou <a href="%{dob_form_path}">tejto špecializovanej formy</a>.
-      #original_hash: 0fbcefd
-      unique: musí byť originálny
+      #original_hash: 71b46b4
+      unique: 'už je použitý použivateľom "%{used_name}" s %{used_email}'
       #original_hash: 26f70ed
       dob_past: musí byť v minulosti
       #original_hash: f599dc5
@@ -928,28 +1087,26 @@ sk:
       senior_has_delegate: nemôžete degradovať skúseného delegáta ''podradenými'' delegátmi
       #original_hash: 48653a9
       already_have_id: 'nemôžete žiadať o WCA ID, pretože už máte WCA ID %{wca_id}'
-      #original_hash: eeb76a7
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
-        Nemáme zaznamenaný dátum narodenia pre toto WCA ID. Prosím, pošlite
-        email na  <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> s fotkou hocijakého legálneho
-        dokumentu (ID karta, vodičšký preukaz,...) kte su viditeľné vaše meno a
-        dátum narodenia.
+        Nemáme zaznamenaný dátum narodenia pre toto WCA ID. Prosím kontaktujte
+        Výsledkový tím WCA použitím <a href="%{dob_form_path}">tohoto
+        formuláru</a>.
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Nemáme zaznamenané vaše pohlavie pre toto WCA ID. Prosím, pošlite email
         na <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a>  pre riešenie problému.
+        Výsledkový Tím</a>  pre riešenie problému.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Nemáme zaznamenané vaše občianstvo pre toto WCA ID. Prosím, pošlite
         email na <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a>  pre riešenie problému.
+        target='_blank'>WCA Výsledkový Tím</a>  pre riešenie problému.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Nemáme zaznamenané vaše meno pre toto WCA ID. Prosím, pošlite email na
         <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a>  pre riešenie problému.
+        Výsledkový Tím</a>  pre riešenie problému.
       #original_hash: 49083d8
       board_member_cannot_resign: >-
         Nemôžeš rezignovať zo svojej pozície člena predstavenstva! Nájdi
@@ -972,7 +1129,7 @@ sk:
       #original_hash: 2b11120
       select_delegate_html: >-
         Aby sme mohli prideliť vám WCA ID, potrebujeme aby <a
-        href='%{link_delegate}' target='_blank'>WCA delegate</a> potvrdil vašu
+        href='%{link_delegate}' target='_blank'>WCA delegát</a> potvrdil vašu
         identitu. Prosím napíšte váš dátum narodenia a vyberte delegáta, ktorý
         si myslíte vás pozná najlepšie.
       #original_hash: d69cf94
@@ -985,7 +1142,7 @@ sk:
       #original_hash: 5be6803
       contact_results_team_html: >-
         Prosím kontaktujte <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a>  pre riešenie problému.
+        target='_blank'>WCA Výsledkový Tím</a>  pre riešenie problému.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} neexistuje.'
   registrations:
@@ -1009,42 +1166,42 @@ sk:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: začiatočník
+        zero: '-'
         one: začiatočník
-        few: začiatočníci
+        few: '-'
         other: začiatočníci
       #original_hash: bc010e3
       returner:
-        zero: returner
+        zero: '-'
         one: returner
-        few: returner
-        other: returners
+        few: '-'
+        other: returneri
       #original_hash: b7da17a
       person:
-        zero: osoba
+        zero: '-'
         one: osoba
-        few: osoby
+        few: '-'
         other: osoby
     flash:
       #original_hash: da7ec53
-      not_using_wca: Táto súťaž napoužíva prihlasovanie WCA
+      not_using_wca: Táto súťaž nepoužíva prihlasovanie WCA
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Registrácia bola akceptovaná! Poslali sme emailovú notifikáciu.
+        zero: '-'
         one: Registrácia bola akceptovaná! Poslali sme emailovú notifikáciu.
-        few: Registrácie boli akceptované! Poslali sme emailové notifikácie.
+        few: '-'
         other: Registrácie boli akceptované! Poslali sme emailové notifikácie.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Registrácia bola posunutá do čakacieho listu.
+        zero: '-'
         one: Registrácia bola posunutá do čakacieho listu.
-        few: Registrácie boli posunuté do čakacieho listu.
+        few: '-'
         other: Registrácie boli posunuté do čakacieho listu.
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Registrácia bola vymazaná
+        zero: '-'
         one: Registrácia bola vymazaná
-        few: Registrácie boli vymazané
+        few: '-'
         other: Registrácie boli vymazané
       #original_hash: c3aa289
       single_deletion_and_mail: 'Vymazaná registrácia a emailovali sme %{mail}'
@@ -1073,7 +1230,7 @@ sk:
         on_waiting_list: >-
           Vaša registrácia je súčasne na čakacom liste, ktorý aktuálne má
           %{n_total} %{people} na ňom.
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           Dostanete email keď sa odsúhlasí vaša registrácia. Prosím berte na
           vedomie že súťaže nie sú automaticky odsúhlasené. Keď chcete vedieť
@@ -1126,9 +1283,9 @@ sk:
       edit: Pozmeniť
       #original_hash: 0ab725c
       country_plural:
-        zero: 1 krajina
+        zero: '-'
         one: 1 krajina
-        few: '%{count} krajín'
+        few: '-'
         other: '%{count} krajín'
       #original_hash: 1feee0e
       export_csv: Export do CSV
@@ -1146,8 +1303,15 @@ sk:
       approved_registrations: Povolené registrácie
       #original_hash: bff04e8
       deleted_registrations: Vymazané registrácie
-      #original_hash: a844fcf
-      registered: Zaregistrovaný
+      #original_hash: ac5d958
+      not_paid: Nezaplatené
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Zaregistrovaný
+        #original_hash: fca3213
+        with_stripe: Zaplatené
+      #original_hash: ce53c71
+      payment_requested_on: 'Platba bola vyžiadaná dňa %{date}'
       #original_hash: b25928c
       total: Celkový
     new_registration:
@@ -1207,7 +1371,7 @@ sk:
     check_registration_information: >-
       Prosím, skontrolujte si informácie ohľadom registrácie aby ste mohli nájsť
       niečo, čo musíte spraviť napríklad zaplatiť registračný poplatok.
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
       Zaregistrovali ste sa na %{comp}. Nižšie si môžete pozrieť informácie o
       registrácii.
@@ -1349,14 +1513,20 @@ sk:
       region: Región
       #original_hash: bce0641
       search: Hľadať
-      #original_hash: a725020
-      state: Štát
+      #original_hash: 769bb19
+      state: Kedy
       #original_hash: 4e9f7a3
       present: Prebiehajúci
       #original_hash: 76eec76
       recent: Súčasný
       #original_hash: 405c12f
       past: Minulý
+      #original_hash: 081ae3f
+      custom: Pokročilý
+      #original_hash: 3f66052
+      from_date: Od
+      #original_hash: ae79ea1
+      to_date: Do
       #original_hash: 52c30f8
       past_from: 'Minulosť od roku %{year}'
       #original_hash: 7cff459
@@ -1372,6 +1542,8 @@ sk:
         recent: 'Nedávne súťaže (posledných %{count} dní)'
         #original_hash: 914742f
         upcoming: Nadchádzajúce súťaže
+        #original_hash: 8b57693
+        custom: Súťaže vo vybratom časovom úseku
       #original_hash: 6684214
       no_access: Nemáte prístup na túto stránku!
       tooltips:
@@ -1433,8 +1605,6 @@ sk:
         ukážku](mailto:some@email.com)
       #original_hash: c5497bc
       events: Eventy
-      #original_hash: ae66391
-      unoff_events: 'Eventy, ktoré už nie sú oficiálne'
       #original_hash: 815d5c3
       locked_edit_html: >-
         Táto súťaž je viditeľná a nedá sa upravovať. Ak chcete niečo pozmeniť,
@@ -1449,8 +1619,6 @@ sk:
       awaiting_confirmation_html: >-
         Vyplňte všetky políčka a kliknite na 'Potvrdiť' keď ste pripravení
         ukázať %{board} na schválenie.
-      #original_hash: 7586b02
-      submit_modify_value: Modifikovať Eventy
       #original_hash: 8966fd0
       submit_create_value: Založiť Súťaž
       #original_hash: 40b0dfd
@@ -1593,7 +1761,7 @@ sk:
         #original_hash: a857eb4
         tabs: Spravovať taby
         #original_hash: 4c9f914
-        delegate_report: Vyhlásenie delegáta
+        delegate_report: Hlásenie delegáta
         #original_hash: b233e77
         registration: Registrácia
         #original_hash: d672995
@@ -1679,10 +1847,10 @@ sk:
       title: Formulár pre zmenenie dátumu narodenia
       #original_hash: 8a4ced5
       description: >-
-        POužívajte tento formulár iba ak je dátum narodenia zaznamenaný v našej
+        Používajte tento formulár iba ak je dátum narodenia zaznamenaný v našej
         databáze rozdielny od toho reálneho.
       #original_hash: 19c17ec
-      submit: POžiadať o zmenu
+      submit: Požiadať o zmenu
     messages:
       #original_hash: 41948b9
       success: Ďakujeme vám za vašu správu. Budeme vás kontaktovať!
@@ -1715,14 +1883,14 @@ sk:
           #original_hash: b645fe1
           '1': >-
             Ak ste ešte nesúťažili, choďte na <a
-            href='/competitions'>competition</a>! WCA ID a WCA profil budú pre
-            vás vytvorené, keď budú publikované výsledky z vašej prvej súťaže.
+            href='/competitions'>Súťaže</a>! WCA ID a WCA profil budú pre vás
+            vytvorené, keď budú publikované výsledky z vašej prvej súťaže.
       '2':
         #original_hash: eb948e7
         title: Ako si nájdem WCA súťaž?
         content:
           #original_hash: d195cec
-          '1': Pozrite sa na náš list <a href='/competitions'>competitions</a>
+          '1': Pozrite sa na náš list <a href='/competitions'>súťaží</a>
       '3':
         #original_hash: af6ad12
         title: >-
@@ -1741,16 +1909,15 @@ sk:
           Aké sú požiadavky pre uchádzanie sa na WCA súťaž? Čo potrebujem vedieť
           pred uchádzaním sa o miesto na WCA sútaži?
         content:
-          #original_hash: 40aa9c0
+          #original_hash: 3bb4e11
           '1': >-
             Všeobecne, nemáme veľa požiadavok pre osobu, ktorá chce súťažiť na
             WCA súťaži. Avšak, všetci účastníci súťaže sú očakavaní s vedomím,
             že dobre rozumejú <a
             href='https://www.worldcubeassociation.org/regulations/'>WCA
-            regulations</a>. Taktiež chceme odporúčiť, aby ste si prečítali <a
-            target='_blank' href='http://www.cubingusa.com/ctutorial.php'>Cubing
-            USA's competitor tutorial</a> (tento dokument obsahuje veľa vecí pre
-            nováčikov).
+            reguláciam</a>. Ak angličtina nie je vaším hlavným jazykom a máte
+            problémy s pochopením dokumentu, prosím prečítajte si <a
+            href='https://www.worldcubeassociation.org/regulations/translations/'>Preklady</a>.
       '5':
         #original_hash: 3b657aa
         title: Ako môžem mať WCA súťaž v mojom rodnom meste?
@@ -1763,21 +1930,24 @@ sk:
           '2': >-
             WCA súťaže musia nasledovať <a target='_blank'
             href='https://www.worldcubeassociation.org/regulations/'>WCA
-            Regulations</a>. Organizačný tým nemusí vedieť doslovné znenie
+            Regulácie</a>. Organizačný tým nemusí vedieť doslovné znenie
             regulácii, avšak hlboké znalosti základov regulácii definitívne
             pomôžu s organizovaním súťaže.
           #original_hash: dbd72c2
           '3': >-
             Potom organizačný tým musí kontaktovať blízkeho <a target='_blank'
             href='https://www.worldcubeassociation.org/delegates'>WCA
-            Delegate</a>. Prítomnosť delegáta je potrebná kvôli oficiálnemu
+            Delegáta</a>. Prítomnosť delegáta je potrebná kvôli oficiálnemu
             schváleniu súťaže WCA. WCA delegát pomôže viesť organizáciu súťaže.
-          #original_hash: 809f53a
+          #original_hash: e5f67d2
           '4': >-
-            Navštívte  <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>this guide</a> pre viac
-            informácii. (Hociaký konflikt medzi informáciou na tejto stránke a
-            WCA Reguláciami je vyhratý WCA Reguláciami.)
+            Navštívte <a target='_blank'
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>Súťažné
+            Organizačné Pokyny WCA</a> a <a target='_blank'
+            href='https://www.cubingusa.com/cguide.php'>Súťažnú príručku
+            CubingUSA</a> pre viac informácii. (Možný konflikt medzi informáciou
+            na týchto doplnkových príručkách a WCA Reguláciami je dominovaný WCA
+            Reguláciami.)
       '6':
         #original_hash: 8005a61
         title: Aký účel majú WCA účty? Aký je rozdiel medzi WCA účtom a WCA profilom?
@@ -1821,8 +1991,8 @@ sk:
           '1': >-
             Potm, ako sa skončí súťaž, WCA Delegát musí dva krát skontrolovať
             všetky výsledky a osobné dáta, aby sa predišlo možným chybám. Keď sa
-            to urobí, výsledky sú odoslané do WCA Results Team (WRT), ktorý je
-            zodpovedný za uploadovanie výsledkov a spravovanie databázy. WRT
+            to urobí, výsledky sú odoslané do WCA Výsledkového Tímu (WRT), ktorý
+            je zodpovedný za uploadovanie výsledkov a spravovanie databázy. WRT
             nakoniec uploadne výsledky do WCA databázy ako to najrýchlejšie
             pôjde.
           #original_hash: b6a68ab
@@ -1839,26 +2009,24 @@ sk:
     #original_hash: 9ac918a
     title: O WCA
     mission:
-      #original_hash: e4698d4
-      title: Misia
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
-          Svetová Kocková Organizácia (WCA) organizuje súťaže pre hlavolamy ako
-          Rubikove hlavolamy a všetky iné, ktoré sú používané otáčaním strán-
-          'Otáčavé hlavolamy'. Najznámejšie z týchto hlavolamov sú Rubikove
-          kocky, vytvorené profesorom Rubikom z Maďarska. Niektoré z týchto
-          kociek boli zvolené ako oficiálne eventy WCA.
-        #original_hash: c8ecd24
+          Svetová Kocková Organizácia (WCA) organizuje súťaže pre hlavolamy,
+          ktoré sú používané otáčaním strán- 'Otáčavé hlavolamy'. Najznámejší z
+          týchto hlavolamov je Rubikova kocka, vytvorená profesorom Rubikom z
+          Maďarska. Niektoré z jeho kociek boli zvolené ako oficiálne eventy
+          WCA.
+        #original_hash: 22c3593
         '2': >-
           WCA organizuje súťaže po celom svete, podporované národnými
           organizáciami zodpovednými za organizovanie súťaží v ich krajinách.
-        #original_hash: 20e0550
+        #original_hash: 0902c4a
         '3': >-
           Cieľom WCA je mať<br /><strong>viac súťaží vo viacerých krajinách s
           veľa ľuďmi a viac zábavy pod férovými a rovnakými
           podmienkami.</strong>
-        #original_hash: bee3687
+        #original_hash: 2b993c0
         '4': >-
           V záujme WCA je <br /> <strong>aby mali ľudia zo všetkých kútov sveta
           zábavu v priateľskej atmosfére, aby si pomáhali navzájom a správali sa
@@ -1873,30 +2041,14 @@ sk:
       #original_hash: b0c72a9
       committees: 'Tieto výbory sú zodpovedné za operačné aktivity WCA:'
       wdc:
-        #original_hash: 853bffa
-        name_html: <strong>WCA Disciplinárny Výbor (WDC)</strong>
         #original_hash: 286fdf8
         description: >-
           Tento výbor pomáha Predstavenstvu WCA v špeciálnych prípadoch, ako
           údajné poškodenie WCA Regulácii, a môže byť kontaktovaný členmi WCA v
           prípade dôležitých vecí ohľadom WCA súťaží.
       wrc:
-        #original_hash: 4aa147f
-        name_html: <strong>WCA Výbor Regulácii (WRC)</strong>
         #original_hash: 13ada5b
         description: Tento výbor je zodpovedný za manažovanie WCA Regulácii.
-      results:
-        #original_hash: 3e819b8
-        name_html: <strong>WCA Výsledkový tím</strong>
-        #original_hash: 439ffae
-        description: Tento tým je zodpovedný za manažovanie všetkých výsledkov zo súťaží.
-      software:
-        #original_hash: ea7f654
-        name_html: <strong>WCA Softvérový tím</strong>
-        #original_hash: ec961e4
-        description: >-
-          Tento tím je zodpovedný za manažovanie softvéru WCA (webová stránka,
-          scrambleri, pracovné veci, adminské náradie).
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA Delegáti</strong> sú členmi WCA, ktorí sú zodpovední za
@@ -1927,11 +2079,67 @@ sk:
       role: Rola
       #original_hash: 0f21717
       region: Región
-  national_organizations:
-    #original_hash: 0ef06c8
-    title: Národní organizátori
-    #original_hash: f9a7f4d
-    content: 'WCA priznáva tieto národné organizácie:'
+  regional_organizations:
+    #original_hash: 37b8fdc
+    title: Regionálne Organizácie
+    #original_hash: ba87c07
+    content: 'WCA si je vedomá týchto regionálnych organizácii:'
+    how_to:
+      #original_hash: fc3af12
+      title: Ako sa môžem stať Regionálnou Organizáciou WCA
+      #original_hash: bdf57ff
+      description: >-
+        WCA uznáva rôzne regionálne organizácie naprieč svetom. Účel
+        regionálnych organizácii WCA je organizovanie Súťaží WCA a podporovanie
+        aktivít WCA v regiónoch. Krajiny, ktoré chcú vytvoriť regionálnu
+        organizáciu, sú vyzvané, aby pred podaním svojej žiadosti prispeli k WCA
+        vo svojej oblasti. Ak chcete pomôcť organizovať súťaž WCA vo vašom
+        okolí, prosím kontaktujte najbližšieho delegáta.
+    requirements:
+      #original_hash: 1e04fd7
+      title: Požiadavky pre Regionálne Organizácie WCA
+      list:
+        #original_hash: 22a9f26
+        '1': Aktívne organizovanie alebo podpora súťaží WCA v regióne organizácie
+        #original_hash: 8c5a7fe
+        '2': >-
+          Aktívne prispievanie do Kontinentálnych Súťaží WCA, ktoré sa konajú v
+          kontinente Regionálnej Organizácie
+        #original_hash: 5913cd0
+        '3': >-
+          Rešpektovať a operacionalizovať ciele udané ustanoveniami a
+          Reguláciami WCA
+        #original_hash: 0c3576b
+        '4': Vyhovieť Reguláciam WCA
+        #original_hash: 23cda60
+        '5': Akceptovať a vyhovieť rozhodnutiam WCA
+        #original_hash: 08c6d86
+        '6': >-
+          Uschovávať aktuálne kópie regulácii a ustanovení WCA v elektronickom
+          formáte
+    application_instructions:
+      #original_hash: 4da829b
+      title: Inštrukcie prijatia
+      #original_hash: 7ae038e
+      description: >-
+        Ak sa chcete stať Regionálnou organizáciou, tak budeme potrebovať od
+        regiónu, aby podal písanú prihlášku Predstavenstvu WCA, ktorá bude
+        obsahovať všetky detaily uvedené nižšie.
+      list:
+        #original_hash: 1a9d544
+        '1': Meno Regionálnej Organizácie
+        #original_hash: a9bf3f4
+        '2': Oficiálna adresa a kontaktné údaje
+        #original_hash: 2a029e9
+        '3': >-
+          Kópia Ustanovení, ktoré nie sú v rozpore s Ustanoveniami a Pravidlami
+          WCA.
+        #original_hash: a5a2771
+        '4': List hlavných pracovníkov
+        #original_hash: 1186ebf
+        '5': 'Presný opis oblasti, ktorá je pokrytá Regionálnou Organizáciou'
+        #original_hash: 826e371
+        '6': Záznam na minulých a prítomných aktivít spojených s WCA
   contact:
     #original_hash: a34b69f
     title: Kontaktné Informácie
@@ -1941,35 +2149,18 @@ sk:
       pozrite sa na náš %{link}!
     #original_hash: 2b023eb
     questions_and_comments_html: >-
-      Pre webové otázky, komentáre a návrhy, použite túto <a
-      href='/contact/website'>contact form</a>. Pre dotazy ohľadom špecifickej
-      oblasti alebo súťaže, kontaktujte prosím vášho lokálneho %{link}.
+      Pre webové otázky, komentáre a návrhy, použite tento <a
+      href='/contact/website'>Kontaktný formulár</a>. Pre dotazy ohľadom
+      špecifickej oblasti alebo súťaže, kontaktujte prosím vášho lokálneho
+      %{link}.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Výbory a Tímy</u>
     board:
-      #original_hash: ccad374
-      name_html: <strong>Predstavenstvo WCA</strong>
-      #original_hash: 7ee8e36
-      info: >-
-        (Organizácia WCA, správy delegátov, schvaľovanie súťaží, všeobecné
-        dotazy)
-    wdc:
-      #original_hash: 562e197
-      info: >-
-        (nestranná pomoc Predstavenstvu WCA, nezávislé vyšetrovania, kancelár
-        pre dôležité osobné veci)
-    wrc:
-      #original_hash: 4a256f0
-      info: (spravovanie Regulácí WCA)
-    results:
-      #original_hash: 899dc9c
-      info: '(výsledky súťaží, korekcia výsledkov)'
-    software:
-      #original_hash: 325ab0a
-      info: (spravovanie softvéru WCA)
+      #original_hash: 90fcc48
+      name_html: Predstavenstvo WCA
   score_tools:
     #original_hash: ea9d41d
-    title: WCA Skóre Branie náradie
+    title: WCA náradie Zaznamenávania Skóre
     paragraphs:
       #original_hash: ec3e0ab
       '1': >-
@@ -1991,7 +2182,7 @@ sk:
     #original_hash: c72c969
     title: WCA Logo
     paragraphs:
-      #original_hash: c092e13
+      #original_hash: 44cfe8d
       '1': >-
         WCA Logo bolo nadizajnované Justinom Eastmanom v dizajnovej súťaži v
         Januári 2005.<br />Logo sa nám zapáčilo kvôli jeho dizajnu, farbám a
