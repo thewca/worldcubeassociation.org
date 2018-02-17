@@ -380,6 +380,8 @@ hr:
         enable_donations: Želim omogućiti donacije dodatno uz prikupljanje kotizacija
         #original_hash: 4baf44b
         championship_type: Vrsta prvenstva
+        #original_hash: ff722f0
+        registration_requirements: Zahtjevi za registraciju
       registration:
         #original_hash: 3c23a67
         guests: Gosti
@@ -653,6 +655,21 @@ hr:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Ovdje naznačite sve specifičnosti oko procesa registracije, kao što je
+          navedeno u <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Guideline 2c1+</a>.  Nakon što je natjecanje
+          objavljeno, ovo polje <b>neće</b> biti moguće urediti i potrebna je
+          dozvola Board-a za uređivanje.<br/>Primjerice, naznačite ovdje ukoliko
+          natjecatelji moraju imati urednu povijest plaćanja, ukoliko je
+          potrebna neka politika vraćanja novca ili ukoliko moraju odgovorit na
+          e-mail za potvrđivanje dolaska, ako je doesgnut maksimalni broj
+          registracija.<br/>Molimo Vas ispunite ovo na <b>engleskom jeziku</b> i
+          na bilo kojem jeziku kojim natjecatelji govore; bit će prikazan na
+          stranici za registracije za natjecanje ukoliko koristite WCA stranicu
+          za registracije.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1481,6 +1498,8 @@ hr:
     preferred_events_populated_html: >-
       Automatski smo dodali Vašim preferiranim disciplinama, koje možete urediti
       %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Zahtjevi registracije za ovo natjecanje:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1566,6 +1585,8 @@ hr:
       information: Informacije
       #original_hash: c5497bc
       events: Eventi
+      #original_hash: ff722f0
+      registration_requirements: Zahtjevi registracije
     index:
       #original_hash: db98a68
       title: Natjecanja
@@ -2315,17 +2336,20 @@ hr:
           standarda kvalitete širom svijeta kako bi se osigurala dosljedna
           visoka kvaliteta procesa, WCA Osoblja, regionalnih organizacija,
           organizatora natjecanja i natjecateljskog osoblja.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>WCA Delegati</strong> su članovi WCA koji su odgovorni da se sva
-        WCA natjecanja održavaju po pravilima i u duhu WCA. WCA razlikuje
+        <p><strong>WCA Delegat</strong> je uloga definirana u WCA Motions-u i
+        opisana u WCA Pravilniku. Primarna dužnost delegata je nadgledanje
+        natjecanja u ime WCA. WCA Delegat je odgovoran da su sva WCA Natjecanja
+        održana u skladu s misijom, duhom i po Pravilima WCA. WCA razlikuje
         <strong>WCA Senior Delegate</strong>, <strong>WCA Delegate</strong> i
-        <strong>WCA Candidate Delegate</strong>%{see_link}. Dodatna dužnost WCA
-        Senior Delegata je odgovornost i pažnja ostalih WCA Delegata u njegovoj
-        regiji te ga se može također kontaktirati što se tiče regionalnih
-        pitanja. Novim Delegatima se prvo dodijeljuje titula WCA Candidate
-        Delegata i trebaju se dokazati da su sposobni organizirati i voditi
-        natjecanja prije nego im se dodijeli titula WCA Delegata.
+        <strong>WCA Kandidat Delegate</strong>%{see_link}.</p> <p>Uz dužnosti
+        WCA Delegata, WCA Senior Delegat je odgovoran za vođenje WCA Delegata na
+        svom području i može biti kontaktiran od strane zajednice za bilo kakve
+        regionalne upite.</p> <p>Novi Delegati su navedeni kao WCA Kandidat
+        Delegati u početku; nakon toga su obavezni pokazati vještost u
+        upravljanju WCA Natjecanjima prije nego budu promovirani u WCA
+        Delegata.</p>
       #original_hash: 27d18ac
       see_link_html: '(vidi %{link})'
       #original_hash: 5b01fcc
@@ -2341,11 +2365,13 @@ hr:
     motions: Prijedlozi
     #original_hash: 092f99e
     minutes: Minute
+    #original_hash: cdad4f1
+    dues: WCA Sistem članarine
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegati
-    #original_hash: 0a89b0f
-    acknowledges: 'WCA priznaje navedene članove kao delegate za službena WCA natjecanja:'
+    #original_hash: 77b819c
+    acknowledges: 'WCA priznaje navedene WCA Delegate:'
     table:
       #original_hash: 709a232
       name: Ime
