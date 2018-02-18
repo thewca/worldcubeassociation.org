@@ -103,9 +103,9 @@ function getBirthdates () {
     foreach( $persons as $person ){
       extract( $person );
       $birthdates[$id] = ($month || $day || $year)
-                         ? ($month ? sprintf("%02d",$month) : '??'  ) . '/' .
-                           ($day   ? sprintf("%02d",$day  ) : '??'  ) . '/' .
-                           ($year  ? sprintf("%02d",$year ) : '????')
+                         ? ($year  ? sprintf("%02d",$year ) : '????') . '-' .
+                           ($month ? sprintf("%02d",$month) : '??'  ) . '-' .
+                           ($day   ? sprintf("%02d",$day  ) : '??'  )
                          : 'unknown';
     }
     $birthdates[''] = 'unknown';
@@ -186,7 +186,7 @@ function showUnfinishedPersons () {
     $countryIdHtml = htmlEscape( $countryId );
     $personId = htmlEscape( $person['personId'] );
     $competitionId = htmlEscape( $person['competitionId'] );
-    $dob = empty($person['dob']) ? 'mm/dd/yyyy' : $person['dob'];
+    $dob = empty($person['dob']) ? 'yyyy-mm-dd' : $person['dob'];
 
     #--- Hidden field describing the case.
     $caseNr++;
@@ -214,6 +214,7 @@ function showUnfinishedPersons () {
       #--- If name and country match the unfinished persons, pre-select it.
       $checked = ($other_name==$name && $other_countryId==$countryId)
         ? "checked='checked'" : '';
+      $style = $checked ? 'background-color: red' : '';
 
       #--- Skip the unfinished person itself.
       if( $checked && !$other_id )
@@ -228,7 +229,7 @@ function showUnfinishedPersons () {
       $action = "$nameHtml|$countryHtml|$idHtml";
 
       #--- Show the other person.
-      tableRow( array(
+      tableRowStyled( $style, array(
         "<input type='radio' name='action$caseNr' value='$action' $checked />",
 #        ($other_id ? personLink( $other_id, $other_name ) : $other_name),
         visualize( $other_name ),
