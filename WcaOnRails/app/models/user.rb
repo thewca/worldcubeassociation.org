@@ -709,12 +709,13 @@ class User < ApplicationRecord
     json
   end
 
-  def to_wcif(competition, registration = nil)
+  def to_wcif(competition, registration = nil, registrant_id = nil)
     person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     {
       "name" => name,
       "wcaUserId" => id,
       "wcaId" => wca_id,
+      "registrantId" => registrant_id,
       "countryIso2" => country_iso2,
       "delegatesCompetition" => competition.delegates.include?(self),
       "organizesCompetition" => competition.organizers.include?(self),

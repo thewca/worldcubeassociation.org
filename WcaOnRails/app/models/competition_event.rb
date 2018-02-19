@@ -35,7 +35,7 @@ class CompetitionEvent < ApplicationRecord
   def to_wcif
     {
       "id" => self.event.id,
-      "rounds" => self.rounds.order(:number).map(&:to_wcif),
+      "rounds" => self.rounds.map(&:to_wcif),
     }
   end
 

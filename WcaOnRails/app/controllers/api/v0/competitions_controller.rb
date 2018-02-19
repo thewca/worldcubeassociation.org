@@ -23,14 +23,12 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def show_wcif
-    # This is all the associations we may need for the WCIF!
+    # This is all the associations we may need for the competition WCIF!
+    # Since registrations are ordered later, associations inclusion for them is done later
     includes_associations = [
-      {
-        registrations: [{ user: { person: [:ranksSingle, :ranksAverage] } },
-                        :events],
-      },
       :delegates,
       :organizers,
+      { competition_events: [rounds: :competition_event] },
     ]
     competition = competition_from_params(includes_associations)
     require_can_manage!(competition)

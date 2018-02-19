@@ -3,6 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe Api::V0::CompetitionsController do
+  def get_wcif_and_compare_persons_to(id, expected)
+    get :show_wcif, params: { competition_id: id }
+    parsed_body = JSON.parse(response.body)
+    person_arrays = parsed_body["persons"].map do |p|
+      [p["wcaUserId"], p["registrantId"]]
+    end
+    expect(person_arrays).to eq expected
+  end
+
   describe 'GET #show' do
     let(:competition) {
       FactoryBot.create(
@@ -203,6 +212,7 @@ RSpec.describe Api::V0::CompetitionsController do
       FactoryBot.create(
         :competition,
         :with_delegate,
+        :registration_open,
         id: "TestComp2014",
         name: "Test Comp 2014",
         start_date: "2014-02-03",
@@ -276,6 +286,27 @@ RSpec.describe Api::V0::CompetitionsController do
         expect(response.status).to eq 200
         parsed_body = JSON.parse(response.body)
         expect(parsed_body["id"]).to eq "TestComp2014"
+      end
+
+      it 'gets wcif with consistent competitor_id' do
+        last_registration = nil
+        user_competitor_ids = []
+        comp_id = 1
+        3.times do
+          user = FactoryBot.create(:user)
+          user_competitor_ids << [user.id, comp_id]
+          comp_id += 1
+          last_registration = FactoryBot.create(:registration, :accepted, competition: competition, user: user)
+        end
+        get_wcif_and_compare_persons_to(competition.id, user_competitor_ids + [[competition.delegates.first.id, nil]])
+
+        # Move last registration to deleted
+        last_registration.touch :deleted_at
+        # Create and register one new user
+        user = FactoryBot.create(:user)
+        last_registration = FactoryBot.create(:registration, :accepted, competition: competition, user: user)
+        user_competitor_ids << [user.id, comp_id]
+        get_wcif_and_compare_persons_to(competition.id, user_competitor_ids + [[competition.delegates.first.id, nil]])
       end
     end
   end
