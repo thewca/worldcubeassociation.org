@@ -1372,7 +1372,7 @@ cs:
       Tato osoba se registrovala s účtem. Můžete upravit její osobní informace
       %{here}.
     #original_hash: ada2e9e
-    sign_in: <span>Přihlásit se</span>
+    sign_in: Přihlásit se
     #original_hash: 5d45a00
     profile: profil
     #original_hash: 801b3e9
@@ -2339,6 +2339,8 @@ cs:
     motions: Motions
     #original_hash: 092f99e
     minutes: Protokoly
+    #original_hash: cdad4f1
+    dues: WCA Dues System
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegáti
