@@ -64,10 +64,6 @@
     <dl class="dl-horizontal">
       <dt><%= t '.information' %></dt>
       <dd><%=md competition.information %></dd>
-
-    <dl class="dl-horizontal">
-      <dt><%= t '.registration_requirements' %></dt>
-      <dd><%=md competition.registration_requirements %></dd>
     </dl>
 
     <dl class="dl-horizontal">
@@ -114,4 +110,45 @@
     <% end %>
 
   </div>
+  <div class="col-md-12">
+    <dl class="dl-horizontal">
+      <dt><%= t '.registration_requirements' %></dt>
+      <dd>
+        <% collapse = @competition.is_probably_over? %>
+        <% if collapse %>
+          <div id="show_registration_requirements">
+            <%= t('competitions.competition_info.click_to_display_requirements_html', link_here: link_to(t('common.here'))) %>
+          </div>
+          <div id="hide_registration_requirements">
+            <%= link_to(t('competitions.competition_info.hide_requirements')) %>
+          </div>
+        <% end %>
+        <div class="<%= collapse ? "collapse" : "" %>" id="registration_requirements_text">
+          <%=md competition.registration_requirements %>
+        </div>
+      </dd>
+    </dl>
+
+  </div>
 </div>
+<% if collapse %>
+  <script>
+    $(function () {
+      $("#registration_requirements_text").collapse({
+        toggle: false
+      });
+      $("#show_registration_requirements a").click(function (e) {
+        e.preventDefault();
+        $("#registration_requirements_text").collapse("show");
+        $("#show_registration_requirements").hide();
+        $("#hide_registration_requirements").show();
+      });
+      $("#hide_registration_requirements a").click(function (e) {
+        e.preventDefault();
+        $("#registration_requirements_text").collapse("hide");
+        $("#hide_registration_requirements").hide();
+        $("#show_registration_requirements").show();
+      });
+    });
+  </script>
+<% end %>
