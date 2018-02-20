@@ -267,8 +267,8 @@ pt-BR:
         country_iso2: Nacionalidade
         #original_hash: ab58155
         dob: Data de nascimento
-        #original_hash: ab58155
-        dob_verification: Data de nascimento
+        #original_hash: 7636bbc
+        dob_verification: Sua data de nascimento
         #original_hash: 8a754c6
         gender: Gênero
         #original_hash: 84add5b
@@ -2351,6 +2351,8 @@ pt-BR:
     motions: Moções
     #original_hash: 092f99e
     minutes: Atas
+    #original_hash: cdad4f1
+    dues: Sistema de Taxas da WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
