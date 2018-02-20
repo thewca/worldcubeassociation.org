@@ -185,7 +185,7 @@ en:
         login: "Email or WCA ID"
         country_iso2: "Citizenship"
         dob: "Birthdate"
-        dob_verification: "Birthdate"
+        dob_verification: "Your Birthdate"
         gender: "Gender"
         email: "Email"
         password: "Password"
