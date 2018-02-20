@@ -27,8 +27,8 @@
               <% end %>
             </td>
             <td data-competitions="<%= incident.competitions %>">
-              <% incident.competitions.each do |c| %>
-                <%= render "competition_tag", comp: c %>
+              <% incident.incident_competitions.each do |incident_competition| %>
+                <%= render "competition_tag", incident_competition: incident_competition %>
               <% end %>
             </td>
             <% if incident.resolved_at %>

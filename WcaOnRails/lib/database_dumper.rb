@@ -557,7 +557,8 @@ module DatabaseDumper
     "incident_competitions" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(id incident_id competition_id comments),
+        copy: %w(id incident_id competition_id),
+        db_default: %w(comments),
       ),
     }.freeze,
     "incident_tags" => {
