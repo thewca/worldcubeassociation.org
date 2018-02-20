@@ -303,12 +303,14 @@ $venue-map-wrapper-height: 400px;
 }
 
 .competition-info {
-  p {
-    margin: 0;
-  }
+  .compact {
+    p {
+      margin: 0;
+    }
 
-  dd p {
-    margin-bottom: 0;
+    dd p {
+      margin-bottom: 0;
+    }
   }
 
   dd.competition-events-list {
