@@ -262,7 +262,7 @@ hu:
         country_iso2: Ország
         #original_hash: ab58155
         dob: Születési dátum
-        #original_hash: ab58155
+        #original_hash: 7636bbc
         dob_verification: Születési dátum
         #original_hash: 8a754c6
         gender: Nem
@@ -2366,6 +2366,8 @@ hu:
     motions: Motions
     #original_hash: 092f99e
     minutes: Minutes
+    #original_hash: cdad4f1
+    dues: WCA Díjrendszer
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA delegáltak
