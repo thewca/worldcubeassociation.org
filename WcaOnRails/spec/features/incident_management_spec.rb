@@ -14,6 +14,13 @@ RSpec.feature "Incident Management" do
     end
 
     feature "list of incidents", js: true do
+      scenario "shows all" do
+        visit "/incidents"
+        expect(page).to have_content("First incident")
+        expect(page).to have_content("Custom title")
+        expect(page).to have_content("Second incident")
+      end
+
       scenario "filters by tag" do
         visit "/incidents?tags=b"
         page.find("#incident-tags", visible: false).has_content?("b")
@@ -36,6 +43,14 @@ RSpec.feature "Incident Management" do
         page.find("#incident-tags", visible: false).has_content?("c")
         expect(page).to have_content("Custom title")
         expect(page).to have_no_content("Second incident")
+      end
+    end
+
+    feature "create an incident" do
+      scenario "renders errors" do
+        visit new_incident_path
+        click_button "Create Incident"
+        expect(page).to have_text("Title can't be blank")
       end
     end
 
@@ -68,6 +83,15 @@ RSpec.feature "Incident Management" do
       sign_in delegate
     end
 
+    feature "shows incidents list" do
+      scenario "shows all incidents" do
+        visit "/incidents"
+        expect(page).to have_content("First incident")
+        expect(page).to have_content("Custom title")
+        expect(page).to have_content("Second incident")
+      end
+    end
+
     feature "show an incident" do
       scenario "shows all information when resolved" do
         visit incident_path(incident3)
@@ -92,6 +116,36 @@ RSpec.feature "Incident Management" do
     before(:each) do
       sign_in user
     end
+
+    feature "shows incidents list" do
+      scenario "shows only resolved incidents" do
+        visit "/incidents"
+        expect(page).to have_no_content("First incident")
+        expect(page).to have_content("Custom title")
+        expect(page).to have_content("Second incident")
+      end
+    end
+
+    feature "show an incident" do
+      scenario "shows only public information when resolved" do
+        visit incident_path(incident3)
+        expect(page).to have_content(incident3.public_summary)
+        expect(page).to have_no_content(incident3.private_description)
+        expect(page).to have_no_content(incident3.private_wrc_decision)
+      end
+    end
+  end
+
+  context "when signed out" do
+    feature "shows incidents list" do
+      scenario "shows only resolved incidents" do
+        visit "/incidents"
+        expect(page).to have_no_content("First incident")
+        expect(page).to have_content("Custom title")
+        expect(page).to have_content("Second incident")
+      end
+    end
+
     feature "show an incident" do
       scenario "shows only public information when resolved" do
         visit incident_path(incident3)
