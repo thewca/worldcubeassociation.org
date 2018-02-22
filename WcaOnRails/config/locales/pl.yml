@@ -275,8 +275,8 @@ pl:
         country_iso2: Narodowość
         #original_hash: ab58155
         dob: Data urodzenia
-        #original_hash: ab58155
-        dob_verification: Data urodzenia
+        #original_hash: 7636bbc
+        dob_verification: Twoja data urodzenia
         #original_hash: 8a754c6
         gender: Płeć
         #original_hash: 84add5b
@@ -384,6 +384,8 @@ pl:
           wpisowego podczas rejestracji
         #original_hash: 4baf44b
         championship_type: Rodzaj mistrzostw
+        #original_hash: ff722f0
+        registration_requirements: Wymagania rejestracyjne
       registration:
         #original_hash: 3c23a67
         guests: Goście
@@ -657,6 +659,21 @@ pl:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Prosimy o wskazanie tutaj wszelkich szczegółów odnośnie procesu
+          rejestracji, zgodnie z <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Guideline 2c1+</a>. Po ogłoszeniu zawodów edycja tego
+          pola <b>nie</b> będzie już możlia i wszelkie jego zmiany będa wymagały
+          zgody Zarządu. Przykładowo umieść tutaj informację, jeśli zawodnicy
+          muszą mieć czystą historię płatności z konkretnym podmiotem, jeśli
+          istnieje jakaś polityka zwrotów pieniężnych, lub jeśli będą musieli
+          odpowiedzieć na email potwierdzający w przypadku osiągnięcia limitu
+          zawodników.<br/>Prosimy o wypełnienie tego <b>w języku angielskim</b>
+          oraz jakichkolwiek innych językach używanych przez twoich zawodników.
+          Tekst ten będzie wyświetlany na stronie rejestracji, jeżeli używasz
+          systemu rejestracji WCA.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1515,6 +1532,8 @@ pl:
     preferred_events_populated_html: >-
       Automatycznie zaznaczyliśmy twoje preferowane konkurencje, które możesz
       edytować %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Wymagania rejestracyjne dla zawodów:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1602,6 +1621,14 @@ pl:
       information: Informacje
       #original_hash: c5497bc
       events: Konkurencje
+      #original_hash: ff722f0
+      registration_requirements: Wymagania rejestracyjne
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        Zawody są zakończone, kliknij %{link_here}, aby wyświetlić zastosowane
+        wymagania rejestracyjne.
+      #original_hash: ff19a74
+      hide_requirements: Ukryj wymagania rejestracyjne.
     index:
       #original_hash: db98a68
       title: Zawody
@@ -2362,18 +2389,21 @@ pl:
           standardów jakości, w celu zapewnienia spójnej wysokiej jakości
           procesów, Personelu WCA, Organizacji Regionalnych, Organizatorów
           Zawodów oraz Zespołów Organizacyjnych.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>Delegaci WCA</strong> to członkowie WCA, którzy są
-        odpowiedzialni za prawidłowy przebieg zawodów, zgodnie z opisaną
-        wcześniej misją, regulaminem i duchem WCA. WCA rozróżnia
+        <p><strong>Delegat WCA</strong> to rola zdefiniowana we Wnioskach WCA
+        oraz przedstawiona w Regulaminie WCA. Podstawowym obowiązkiem delegata
+        jest nadzorowanie zawodów w imieniu WCA. Delegat WCA jest odpowiedzialny
+        ze dopilnowanie, aby wszystkie zawody WCA były przeprowadzane zgodnie z
+        opisaną wcześniej Misją, Duchem i Regulaminem WCA. WCA rozróżnia
         <strong>Starszych Delegatów WCA</strong>, <strong>Delegatów WCA</strong>
-        oraz <strong>Kandydatów na Delegata WCA</strong> %{see_link}. Poza
-        obowiązkami Delegata WCA, Starszy Delegat WCA jest odpowiedzialny za
-        nadzór nad Delegatami na swoim obszarze. Społeczność może kontaktować
-        się z nim w regionalnych sprawach. Nowi Delegaci uzyskują początkowo
-        status Kandyda na Delegata WCA i muszą wykazać swoją zdolność pomyślnego
-        zarządzania zawodami, zanim otrzymają status Delegata WCA.
+        oraz <strong>Kandydatów na Delegata WCA</strong> %{see_link}.</p>
+        <p>Poza obowiązkami Delegata WCA, Starszy Delegat WCA jest
+        odpowiedzialny za nadzór nad Delegatami na swoim obszarze. Społeczność
+        może kontaktować się z nim w regionalnych sprawach.</p> <p>Nowi Delegaci
+        uzyskują początkowo status Kandydata na Delegata WCA, następnie muszą
+        wykazać swoją zdolność sprawnego zarządzania zawodami, zanim zostaną
+        awansowani na Delegata WCA.</p>
       #original_hash: 27d18ac
       see_link_html: '(zobacz %{link})'
       #original_hash: 5b01fcc
@@ -2389,11 +2419,13 @@ pl:
     motions: Wnioski
     #original_hash: 092f99e
     minutes: Protokoły
+    #original_hash: cdad4f1
+    dues: System Składek WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegaci WCA
-    #original_hash: 0a89b0f
-    acknowledges: 'WCA uznaje następujących członków za delegatów oficjalnych zawodów WCA:'
+    #original_hash: 77b819c
+    acknowledges: 'WCA uznaje następujących Delegatów WCA:'
     table:
       #original_hash: 709a232
       name: Imię
