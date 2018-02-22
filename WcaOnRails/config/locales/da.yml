@@ -265,8 +265,8 @@ da:
         country_iso2: Nationalitet
         #original_hash: ab58155
         dob: Fødselsdag
-        #original_hash: ab58155
-        dob_verification: Fødselsdag
+        #original_hash: 7636bbc
+        dob_verification: Din fødselsdag
         #original_hash: 8a754c6
         gender: Køn
         #original_hash: 84add5b
@@ -370,6 +370,8 @@ da:
           deltagergebyrene
         #original_hash: 4baf44b
         championship_type: Mesterskabs type
+        #original_hash: ff722f0
+        registration_requirements: Tilmeldings krav
       registration:
         #original_hash: 3c23a67
         guests: Gæster
@@ -473,8 +475,6 @@ da:
         delegate: Delegeret
         #original_hash: d463c23
         senior_delegate: Senior Delegeret
-        #original_hash: 660ee15
-        board_member: Bestyrelses Medlem
     person:
       gender:
         #original_hash: 3f3a489
@@ -589,11 +589,12 @@ da:
         external_website: Konkurrencens hjemmeside. Skal være en gyldig http(s) url.
         #original_hash: 9965635
         registration_open: 'Note: Registreringens åbningstider og lukketider er i UTC-tid'
-        #original_hash: 36963bc
-        remarks: >-
-          Ekstra information som du gerne vil give bestyrelsen. For eksempel,
-          grunde til hvorfor konkurrencen var ønsket mindre end en måned fra nu,
-          hvis det er relevant. Udfyld det her på engelsk!
+        #original_hash: 243212f
+        remarks_html: >-
+          Noget ekstra information som du vil give til Bestyrelsen. For
+          eksempel, forklar hvorfor denne konkurrence er efterspurgt mindre end
+          fire uger fra nu, eller hvis du efterspørger ansøgningen fra %{link}.
+          Udfyld det her på engelsk!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -640,6 +641,20 @@ da:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Her skal du angive hvordan tilmeldingsproceduren vil foregå. Det skal
+          du på grund af <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Retningslinjen 2c1+</a>. Efter konkurrencen er
+          offentliggjort, så kan du <b>ikke</b> ændre det uden Bestyrelsen
+          bekræftelse. <br/>For eksempel så forklar her hvis en deltager skal
+          have en "ren betalings historik", hvis der er en "pengene tilbage
+          politik", eller hvis man skal svare på en mail, for at bekræfte at man
+          faktisk kommer. <br/>Udfyld det her på engelsk</b> og hvilket som
+          helst andet sprog som dine deltagere måske taler. Det vil blive vist
+          på konkurrencens tilmeldingsside, hvis du bruger WCA's hjemmeside til
+          tilmeldinger.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1140,10 +1155,6 @@ da:
         Vi har ikke et navn tilknyttet til dette WCA ID. Email <a
         href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
         Resultat Holdet</a> for at løse det.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Du kan ikke fratræde fra din rolle som bestyrelses medlem! Find et andet
-        bestyrrelses medlem til at fyre dig.
       #original_hash: d02c03b
       avatar_requires_wca_id: har brug for et WCA ID tildelt
     successes:
@@ -1454,6 +1465,8 @@ da:
     preferred_events_populated_html: >-
       Vi opdateret det med dine foretrukne discipliner, som du kan ændre
       %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Tilmeldings kravene for konkurrencen:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1537,6 +1550,14 @@ da:
       information: Information
       #original_hash: c5497bc
       events: Discipliner
+      #original_hash: ff722f0
+      registration_requirements: Tilmeldings kravene
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        Konkurrencen er slut, klik %{link_here} for at vise tilmeldings kravene
+        der var for konkurrencen.
+      #original_hash: ff19a74
+      hide_requirements: Skjul tilmeldings kravene.
     index:
       #original_hash: db98a68
       title: Konkurrencer
@@ -1776,6 +1797,10 @@ da:
       before: Før
       #original_hash: 405906c
       after: Efter
+      #original_hash: 24d948e
+      limit: Grænse
+      #original_hash: 855bd26
+      competitors: Deltagere
     #original_hash: 06b01c4
     announcements: Annonceringer
     #original_hash: 5b9523f
@@ -2216,10 +2241,13 @@ da:
     structure:
       #original_hash: 9482c5d
       title: Strukturen
-      #original_hash: d855b50
-      board_html: >-
-        World Cube Association er anført af <strong>WCA Bestyrrelsen</strong>,
-        som består af følgende medlemmer:
+      board:
+        #original_hash: abd2828
+        name: WCA Bestyrelsen
+        #original_hash: d855b50
+        info_html: >-
+          World Cube Association bliver ledt af <strong>WCA
+          Bestyrelsen</strong>, som består af følgende medlemmer:
       #original_hash: b0c72a9
       committees: 'De følgende komitéer er ansvarlige for aktiviteterne af WCA:'
       wdc:
@@ -2283,18 +2311,22 @@ da:
           WCA, og at sikre verdensomspændende kvalitet hos WCA Personale,
           Regionale Organisationer, Konkurrence Arrangører og Konkurrence
           Personale.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>WCA Delegerede</strong> er medlemmer af WCA som er ansvarlige
-        for at gøre så alle WCA konkurrencer forløber ordentligt iforhold til
-        målet, reglerne, og ånden af WCA. WCA skelner mellem <strong>WCA Senior
-        Delegerede</strong>, <strong>WCA Delegerede</strong> and <strong>WCA
-        Kandidat Delegerede</strong>%{see_link}. Yderligere til pligterne som en
-        WCA Delegeret, er et Senior Delegeret ansvarlig for at styrer de
-        Delegerede i deres område og kan blive kontaktet for regionale årsager.
-        Nye Delegerede bliver først vist som WCA Kandidat Delegerede, og skal
-        vise at de kan finde ud af at styre konkurrencer succesfuldt, før de
-        bliver vist som WCA Delegerede.
+        <strong>WCA Delegerede</strong> har rollen som er beskrevet i WCA's
+        forslag, og beskrevet i WCA Regelsæt. Den vigtigeste pligt for en
+        delegeret er at holde øje med konkurrencer på vegne af WCA. En WCA
+        Delegeret er ansvarlig for at sikre sig at alle WCA konkurrencer
+        forløber i overensstemmelse med WCA's mål, ånd, og regelsæt. WCA skelner
+        mellem <strong>WCA Senior Delegerede</strong>, <strong>WCA
+        Delegerede</strong> og <strong>WCA Kandidat
+        Delegerede</strong>%{see_link}.</p> <p>I forlængelse til deres pligter
+        som WCA Delegerede, så er en WCA Senior Delegeret ansvarlig for at holde
+        styr over WCA Delegerede i sit område, og kan blive kontaktet, hvis der
+        er nogle regionale problemer.</p> <p>Nye Delegerede er først skrevet op
+        som WCA Kandidat Delegerede. Derefter skal de vise at de kan finde ud af
+        at holde styr over WCA konkurrencer, før at de kan blive forfremmet til
+        WCA Delegerede.</p>
       #original_hash: 27d18ac
       see_link_html: ' (see %{link})'
       #original_hash: 5b01fcc
@@ -2310,13 +2342,13 @@ da:
     motions: Forslag
     #original_hash: 092f99e
     minutes: Referater
+    #original_hash: cdad4f1
+    dues: WCA Afgiftssystemet.
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegerede
-    #original_hash: 0a89b0f
-    acknowledges: >-
-      WCA anerkender de følgende medlemmer som delegater for officielle WCA
-      konkurrencer:
+    #original_hash: 77b819c
+    acknowledges: 'WCA anerkender de følgende som delegerede:'
     table:
       #original_hash: 709a232
       name: Navn
@@ -2403,9 +2435,9 @@ da:
       et specifikt område eller konkurrence, så kontakt dit lokale %{link}.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Komitéer og Hold</u>
+    #original_hash: 1cb449c
+    members: Medlemmer
     board:
-      #original_hash: 90fcc48
-      name_html: WCA Bestyrtelsen
       #original_hash: 3a8b1d8
       info_html: >-
         "The World Cube Association" er ledt af WCA bestyrelsen. De er
