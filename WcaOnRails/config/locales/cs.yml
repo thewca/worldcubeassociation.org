@@ -227,7 +227,7 @@ cs:
       #original_hash: 0c4ea38
       your_apps: Vaše OAuth Applications
       #original_hash: 6403f2b
-      new: Nové
+      new: Nová
       #original_hash: 709a232
       name: Název
       #original_hash: f6f1389
@@ -266,8 +266,8 @@ cs:
         country_iso2: Státní příslušnost
         #original_hash: ab58155
         dob: Datum narození
-        #original_hash: ab58155
-        dob_verification: Datum narození
+        #original_hash: 7636bbc
+        dob_verification: Vaše datum narození
         #original_hash: 8a754c6
         gender: Pohlaví
         #original_hash: 84add5b
@@ -279,7 +279,7 @@ cs:
         #original_hash: 786b8af
         password_confirmation: Potvrzení hesla
         #original_hash: ced7b30
-        remember_me: Pamatovat si mě
+        remember_me: Zůstat přihlášen(a)
         #original_hash: 102efae
         pending_avatar: Nahrát nový avatar
         #original_hash: 58e0c56
@@ -345,7 +345,7 @@ cs:
         use_wca_registration: Pro registraci bych chtěl(a) použít webové stránky WCA
         #original_hash: a2dfcf8
         competitor_limit_enabled: >-
-          Chtěl(a) bych určit limit soutěžících, kteří se mohou účastnit této
+          Chtěl(a) bych určit limit soutěžících, kteří se mohou zúčastnit této
           soutěže.
         #original_hash: 749f4c9
         competitor_limit: Maximální počet soutěžícich
@@ -395,7 +395,7 @@ cs:
         name: Název
       delegate_report:
         #original_hash: 983d541
-        discussion_url: URL diskuze na Google Skupině
+        discussion_url: URL diskuze na Google Group
         #original_hash: 65a9b28
         schedule_url: URL harmonogramu
         #original_hash: 36155d4
@@ -842,7 +842,7 @@ cs:
   devise:
     failure:
       #original_hash: 1186218
-      invalid: 'Neplatný e-mail, WCA ID, nebo heslo.'
+      invalid: 'Neplatný e-mail, WCA ID nebo heslo.'
       #original_hash: 1186218
       not_found_in_database: 'Neplatný e-mail, WCA ID, nebo heslo.'
       #original_hash: 3f9db99
@@ -1567,6 +1567,12 @@ cs:
       events: Eventy
       #original_hash: ff722f0
       registration_requirements: Požadavky pro registraci
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        Tato soutěž skončila, klikněte %{link_here}, aby se zobrazily požadavky
+        pro registraci, které byly potřeba.
+      #original_hash: ff19a74
+      hide_requirements: Skrýt požadavky pro registraci.
     index:
       #original_hash: db98a68
       title: Soutěže
@@ -2696,7 +2702,7 @@ cs:
         #original_hash: c6a04aa
         posts: Nebyly nalezeny žádné příspěvky pro
         #original_hash: 76a6bf1
-        regulations_and_guidelines: 'Nebyly nalezeny žádná pravidla, ani pokyny pro'
+        regulations_and_guidelines: Nebyla nalezena žádná pravidla ani pokyny pro
   about_regulations:
     #original_hash: 6bce1b5
     title: O Pravidlech
@@ -2925,7 +2931,7 @@ cs:
       title: Odeslat Média
       #original_hash: 35caed2
       review_warning_html: >-
-        Všechna média budou zkontrolována dříve, než budou uvedena na <a
+        Všechna média budou zkontrolována předtím, než budou uvedena na <a
         href="/media">stránce všech médií</a>.
       #original_hash: 141d1d7
       guidelines: Pokyny
