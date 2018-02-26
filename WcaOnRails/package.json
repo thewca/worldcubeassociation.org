@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@rails/webpacker": "^3.2.2",
-    "autonumeric": "^4.1.0",
+    "autonumeric": "^4.2.1",
     "autoprefixer": "^8.0.0",
     "babel-core": "^6.25.0",
     "babel-loader": "7.x",
