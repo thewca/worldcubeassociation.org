@@ -378,7 +378,7 @@ GEM
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     rdoc (6.0.1)
-    recaptcha (4.6.4)
+    recaptcha (4.6.5)
       json
     redcarpet (3.4.0)
     ref (2.0.0)
