@@ -1,13 +1,13 @@
 zh-TW:
   countries:
     #original_hash: 3f8c9de
-    XA: 多個國家(亞洲)
+    XA: 多個國家（亞洲）
     #original_hash: 090f3ce
-    XE: 多個國家(歐洲)
+    XE: 多個國家（歐洲）
     #original_hash: 459f987
-    XS: 多個國家(南美洲)
+    XS: 多個國家（南美洲）
     #original_hash: 374ac0d
-    XM: 多個國家(美洲)
+    XM: 多個國家（美洲）
     #original_hash: 918c53a
     MO: 澳門
     #original_hash: 2f488ff
@@ -71,7 +71,7 @@ zh-TW:
     #original_hash: c962425
     mmagic: Master Magic
     #original_hash: 1843dc4
-    333mbo: 3x3x3多顆盲解(舊)
+    333mbo: 3x3x3多顆盲解（舊）
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -261,8 +261,8 @@ zh-TW:
         country_iso2: 國籍
         #original_hash: ab58155
         dob: 生日
-        #original_hash: ab58155
-        dob_verification: 生日確認
+        #original_hash: 7636bbc
+        dob_verification: 您的生日
         #original_hash: 8a754c6
         gender: 性別
         #original_hash: 84add5b
@@ -548,18 +548,18 @@ zh-TW:
       competition:
         #original_hash: 2c812a0
         name: >-
-          比賽的全名且必須以年份為結尾(例如：All is Well
-          2017)。字首得大寫且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白號()。
+          比賽的全名且必須以年份為結尾（例如：All is Well
+          2017）。字首得大寫且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白號()。
         #original_hash: 525fcc8
-        cellName: 供顯示方便的縮寫。如果比賽名稱已經很短，縮寫可以和比賽名稱一樣(例如：All is Well 2017)。
+        cellName: 供顯示方便的縮寫。如果比賽名稱已經很短，縮寫可以和比賽名稱一樣（例如：All is Well 2017）。
         #original_hash: bce4589
-        cityName: 比賽舉行的城市或州(如果適用)。不要包含國家名稱(例如：台北、台中或高雄)
+        cityName: 比賽舉行的城市或州（如果適用）。不要包含國家名稱（例如：台北、台中或高雄）。
         #original_hash: 3d99319
         information: 關於人數上限、參賽者及觀眾的報名費的資訊，以及其他有興趣比賽或觀賽等相關細節。
         #original_hash: 0708400
-        delegate_ids: 本場比賽的WCA代表
+        delegate_ids: 本場比賽的WCA代表。
         #original_hash: 517d376
-        organizer_ids: 比賽的主辦人(他們需要建立WCA帳號才能列在這裡)
+        organizer_ids: 比賽的主辦人（他們需要建立WCA帳號才能列在這裡）。
         #original_hash: cabe7fb
         external_website: 這場比賽的比賽網站。必須為有效的網址。
         #original_hash: 9965635
@@ -629,7 +629,7 @@ zh-TW:
         dob: 將您的生日填成YYYY-MM-DD的格式
         #original_hash: c6d8a97
         document: >-
-          為了證明您的身份和您正確的生日，您必須附件一張有您的姓名和生日的合法證件(身份證、駕照、學生證、護照等)之照片以供辨識(若您無法提供上述證件，請聯絡您當地的WCA代表)。
+          為了證明您的身份和您正確的生日，您必須附件一張有您的姓名和生日的合法證件（身份證、駕照、學生證、護照等）之照片以供辨識（若您無法提供上述證件，請聯絡您當地的WCA代表）。
       post:
         #original_hash: 53c16eb
         body: >-
@@ -649,20 +649,20 @@ zh-TW:
           still accessible to the public via permalink or through tags.
       delegate_report:
         #original_hash: 4eefb60
-        schedule_url: '公開賽程表的完整網址(例如：https://www.cubingusa.com/usnationals2016/schedule.php)'
+        schedule_url: '公開賽程表的完整網址（例如：https://www.cubingusa.com/usnationals2016/schedule.php）'
         #original_hash: 1a68719
         equipment: 這場比賽使用的大顯、計時器數量和款式。請把您沒用到的器材該行刪掉。
         #original_hash: 4658dd9
         venue: >-
-          簡述比賽的概況、燈光、交通、場地佈置(比賽區、轉亂區、等待區、成績錄入區)，如果您採用和平常比賽不一樣的配置，請描述一下是否有遇到問題(例如：噪音)並說明您怎麼解決問題的。請具體描述，不要回答不相關的內容。
+          簡述比賽的概況、燈光、交通、場地佈置（比賽區、轉亂區、等待區、成績錄入區），如果您採用和平常比賽不一樣的配置，請描述一下是否有遇到問題（例如：噪音）並說明您怎麼解決問題的。請具體描述，不要回答不相關的內容。
         #original_hash: f8de509
         organization: >-
-          簡述比賽的主辦單位以及他們如何分工的，如果您有參與其中的話，您可以提及他們過往的主辦經驗以及進步的部份、比賽當天的表現和積極度、遇到的問題(例如：賽程延誤)和怎麼解決問題的。請具體描述，不要回答不相關的內容。
+          簡述比賽的主辦單位以及他們如何分工的，如果您有參與其中的話，您可以提及他們過往的主辦經驗以及進步的部份、比賽當天的表現和積極度、遇到的問題（例如：賽程延誤）和怎麼解決問題的。請具體描述，不要回答不相關的內容。
         #original_hash: 715f020
         incidents: >-
-          任何您認為值得報告意外事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。請提及重要的事件就好，而非一般的(例如：常見的+2或是DNF)。您可以任意的請其他代表或WRC給這些事件回饋。如果您想要請WDC參與討論，確保您有清楚的請求他們。
+          任何您認為值得報告意外事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。請提及重要的事件就好，而非一般的（例如：常見的+2或是DNF）。您可以任意的請其他代表或WRC給這些事件回饋。如果您想要請WDC參與討論，確保您有清楚的請求他們。
         #original_hash: f30abdc
-        remarks: 分享任何關於比賽的事情(例如：進步/社群/這地區的未來展望)。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
+        remarks: 分享任何關於比賽的事情（例如：進步/社群/這地區的未來展望）。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
         #original_hash: da39a3e
         discussion_url: ''
       competition_tab:
@@ -853,7 +853,7 @@ zh-TW:
       #original_hash: e51c552
       records: 紀錄
       #original_hash: f3cf96e
-      persons: 選手
+      persons: 參賽者
       #original_hash: 5b72b5a
       my_results: 我的成績
       #original_hash: 2086b21
@@ -1180,7 +1180,7 @@ zh-TW:
           #original_hash: 978944c
           missing_info: 您沒有輸入所有必填的資料。
           #original_hash: a700652
-          incomplete: 您沒有符合報名的資格(例如：預先支付報名費或達到某項目的秒數門檻)
+          incomplete: 您沒有符合報名的資格（例如：預先支付報名費或達到某項目的秒數門檻）
           #original_hash: 1e225f0
           registrations_full: 比賽限制人數已經額滿且沒有其他空缺
           #original_hash: 0d4cce9
@@ -1386,6 +1386,10 @@ zh-TW:
       events: 項目
       #original_hash: ff722f0
       registration_requirements: 報名條件
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: '本次比賽已經結束，請點%{link_here}顯示報名條件。'
+      #original_hash: ff19a74
+      hide_requirements: 隱藏報名條件。
     index:
       #original_hash: db98a68
       title: 比賽
@@ -1485,7 +1489,7 @@ zh-TW:
         舉行比賽的場地。%{md} 例如：[Hsinchu National Senior High
         School](http://www.hchs.hc.edu.tw/bin/home.php?Lang=en)
       #original_hash: 2651d1a
-      venue_details_html: '場地的細節 (例如：一樓的正後方，跟隨指標走) %{md}'
+      venue_details_html: '場地的細節（例如：一樓的正後方，跟隨指標走）%{md}'
       #original_hash: b727e58
       contact_html: '可任意選擇聯絡資訊。若您未填寫，主辦人的電子郵件將會被公開。%{md} 範例：[顯示內容](mailto:some@email.com)'
       #original_hash: c5497bc
@@ -1566,7 +1570,7 @@ zh-TW:
         one: 1個比賽
         other: '%{count}個比賽'
       #original_hash: e3528ec
-      label: '附近的比賽(%{days}天和%{kms}公里之內)'
+      label: '附近的比賽（%{days}天和%{kms}公里之內）'
       #original_hash: 3446062
       label_admin: '過去%{days}天'
       #original_hash: 07a1cf0
@@ -1770,7 +1774,7 @@ zh-TW:
       #original_hash: 563d056
       important_message_html: >-
         <span
-        class="text-danger">重要</span>：請附件一個有您的姓名和生日的<u>合法證件</u>(身份證、駕照、護照等)。
+        class="text-danger">重要</span>：請附件一個有您的姓名和生日的<u>合法證件</u>（身份證、駕照、護照等）。
       #original_hash: 19c17ec
       submit: 請求更改
     messages:
@@ -1851,7 +1855,7 @@ zh-TW:
             更多資訊請參考<a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA比賽主辦人指導方針</a>和<a
             target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>CubingUSA比賽指南</a>。(其他額外的資訊若有任何與WCA規則衝突的，一律以WCA規則為優先。)
+            href='https://www.cubingusa.com/cguide.php'>CubingUSA比賽指南</a>。（其他額外的資訊若有任何與WCA規則衝突的，一律以WCA規則為優先。）
       '6':
         #original_hash: 8005a61
         title: WCA帳號的用途是什麼？WCA帳號和WCA個人頁面的差異何在？
@@ -1900,7 +1904,7 @@ zh-TW:
           '2': 取決於比賽的規模以及代表的私人時間，最少一天最多一週。請耐心等候。
           #original_hash: bf8adbe
           '3': >-
-            另外，如果您已經將您的WCA帳號與您的WCA ID綁定(見底下)，您可以在<a
+            另外，如果您已經將您的WCA帳號與您的WCA ID綁定（見底下），您可以在<a
             href='%{preferences_edit_path}'>here</a>開啟比賽的成績通知。
       regulations1:
         #original_hash: 2951eb6
@@ -2022,6 +2026,8 @@ zh-TW:
     motions: 提議
     #original_hash: 092f99e
     minutes: 會議記錄
+    #original_hash: cdad4f1
+    dues: WCA稅金制度
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
@@ -2113,7 +2119,7 @@ zh-TW:
     wrt:
       #original_hash: 45b0c09
       info_html: >-
-        WCA成績組負責管理WCA資料庫中的所有資料，尤其是最重要的比賽成績和選手資料。
+        WCA成績組負責管理WCA資料庫中的所有資料，尤其是最重要的比賽成績和參賽者資料。
         在WCA代表寄出WCA比賽成績以後，WRT會將比賽成績發佈到WCA網站上。除了發佈比賽成績之外，WCA成績組還負責在必要時對比賽成績進行更正，並負責管理所有WCA個人資料頁面。
         這包括更改個人資料，例如生日、管理個人頭像等請求。
     wst:
@@ -2147,6 +2153,12 @@ zh-TW:
       '3': >-
         最新版的WCA比賽成績單可以在<br /><a href="/files/results.xls"
         target="_blank">WCA比賽成績單</a>下載。
+      #original_hash: 24f0b3f
+      '4': >-
+        您可能還想使用<a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>幫比賽的參賽者分組，那麼你找對工具了。
+        其中主要功能包括：將選手按照成績排序、分配工作（裁判、轉亂）、決定需要多少組別、產生成績單、個人賽程和總結表。這是一個由Jonatan
+        Kłosko建立的開源項目。
   logo:
     #original_hash: c72c969
     title: WCA標誌
@@ -2264,7 +2276,7 @@ zh-TW:
       #original_hash: db98a68
       competitions: 比賽
       #original_hash: b37554f
-      people: 選手
+      people: 參賽者
       #original_hash: 6db75ea
       advanced_search: 進階搜尋
       #original_hash: a0ca0c3
@@ -2275,7 +2287,7 @@ zh-TW:
         #original_hash: b8a7006
         competitions: 未找到相符比賽
         #original_hash: 99d4290
-        people: 未找到相符選手
+        people: 未找到相符參賽者
         #original_hash: c6a04aa
         posts: 未找到相符文章
         #original_hash: 76a6bf1
