@@ -5172,9 +5172,9 @@ querystringify@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-1.0.0.tgz#6286242112c5b712fa654e526652bf6a13ff05cb"
 
-rails-erb-loader@^5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/rails-erb-loader/-/rails-erb-loader-5.2.1.tgz#399b7781b88c129bc621a8256329ed2f855398e9"
+rails-erb-loader@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/rails-erb-loader/-/rails-erb-loader-5.3.0.tgz#226bf4cbcf8170fc86e61009da3fa38aa2d1ae6b"
   dependencies:
     loader-utils "^1.1.0"
     lodash.defaults "^4.2.0"
