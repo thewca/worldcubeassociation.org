@@ -2604,6 +2604,17 @@ pl:
       '3': >-
         Najnowsza wersja arkusza wyników z zawodów WCA może zostać pobrana <a
         href="/files/results.xls" target="_blank">tutaj</a>.
+      #original_hash: 24f0b3f
+      '4': >-
+        Możesz również chcieć użyć narzędzia <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>, w celu
+        przygotowania grup zawodników. Narzędzie to ma na celu zrobienie tego za
+        ciebie. Pośród głównych funkcji znajdziesz: sortowanie zawodników na
+        podstawie rankingów, przypisywanie zadań (sędziowanie, mieszanie),
+        decydowanie ile grup algorytmów mieszających będzie potrzebnych,
+        generowanie kart wyników, rozpisek dla zawodników i podsumowań. Jest to
+        projekt stanowiący wolne oprogramowanie (Open Source) stworzony przez
+        Jonatana Kłosko.
   logo:
     #original_hash: c72c969
     title: Logo WCA
