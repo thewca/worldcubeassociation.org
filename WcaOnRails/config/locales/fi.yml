@@ -265,7 +265,7 @@ fi:
         country_iso2: Kansalaisuus
         #original_hash: ab58155
         dob: Syntymäaika
-        #original_hash: ab58155
+        #original_hash: 7636bbc
         dob_verification: Syntymäaika
         #original_hash: 8a754c6
         gender: Sukupuoli
@@ -364,6 +364,8 @@ fi:
         enable_donations: Haluan sallia lahjoitukset osallistumismaksujen keräämisen lisäksi
         #original_hash: 4baf44b
         championship_type: Alueellisen mestaruuskilpailun tyyppi
+        #original_hash: ff722f0
+        registration_requirements: Rekisteröitymisvaatimukset
       registration:
         #original_hash: 3c23a67
         guests: Vierailijat
@@ -583,11 +585,12 @@ fi:
         registration_open: >-
           Huomio: Rekisteröitymisen alkamis- ja päättymisajat ovat
           UTC-yleisaikoja
-        #original_hash: 36963bc
-        remarks: >-
-          Mahdollista lisätietoa, josta haluat ilmoittaa Boardille. Esimerkiksi
-          syy sille, että ilmoitus tehdään alle kuukausi ennen kilpailua. Täytä
-          tämä osa englanniksi!
+        #original_hash: 243212f
+        remarks_html: >-
+          Mahdollista lisätietoa, josta haluat ilmoittaa Boardille. Kerro
+          esimerkiksi syy kilpailun ilmoittamiseen alle kuukausi ennen sen
+          alkua, tai jos pyydät hakemusta valinnaisille säännöille (%{link}).
+          Täytä tämä osa englanniksi!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -633,6 +636,19 @@ fi:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Ilmoita tässä yksityiskohdat rekisteröitymisprosessista, kuten <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">ohjesääntö 2c1+</a> vaatii. Kilpailun ilmoittamisen
+          jälkeen tämä kenttä <b>ei ole</b> enää muokattavissa ilman Boardin
+          hyväksyntää.<br/>Kerro tässä esimerkiksi kilpailun mahdollisista
+          maksujen palautuskäytännöistä, jos kilpailijoilla täytyy olla puhdas
+          maksuhistoria tai jos heidän täytyy vastata vahvistussähköpostiin
+          osallistujarajoituksen täytyttyä.<br/>Täytä tämä osa
+          <b>englanniksi</b> ja muilla kilpailijoiden puhumilla kielillä; se
+          näytetään kilpailun rekisteröitymissivulla, jos käytät
+          WCA-rekisteröitymistä.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1451,6 +1467,8 @@ fi:
     preferred_events_populated_html: >-
       Täytimme tämän automaattisesti ensisijaisten lajiesi pohjalta. Voit
       muokata niitä %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Kilpailun rekisteröitymisvaatimukset:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1534,6 +1552,14 @@ fi:
       information: Tietoja
       #original_hash: c5497bc
       events: Lajit
+      #original_hash: ff722f0
+      registration_requirements: Rekisteröitymisvaatimukset
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        Tämä kilpailu on ohi, klikkaa %{link_here} näyttääksesi käytössä olleet
+        rekisteröitymisvaatimukset.
+      #original_hash: ff19a74
+      hide_requirements: Piilota rekisteröitymisvaatimukset.
     index:
       #original_hash: db98a68
       title: Kilpailut
@@ -1770,6 +1796,10 @@ fi:
       before: ennen
       #original_hash: 405906c
       after: jälkeen
+      #original_hash: 24d948e
+      limit: Raja
+      #original_hash: 855bd26
+      competitors: Kilpailijat
     #original_hash: 06b01c4
     announcements: Ilmoitukset
     #original_hash: 5b9523f
@@ -2269,9 +2299,11 @@ fi:
           varmistaakseen WCA:n prosessien, henkilökunnan, alueellisten
           järjestöjen, kilpailujen järjestäjien ja toimihenkilöiden jatkuva
           hyvälaatuisuus.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>WCA-delegaatit</strong> ovat WCA:n jäseniä, joiden vastuulla on
+        <p><strong>WCA-delegaatti</strong> on WCA-säännöissä esitelty rooli,
+        joka määritellään WCA Motionsissa. Delegaatin pääasiallinen velvollisuus
+        on valvoa kilpailuja WCA:n ohella. WCA-delegaattien vastuulla on
         varmistaa, että kaikki WCA-kilpailut sujuvat WCA:n päämäärien, sääntöjen
         ja hengen mukaan. WCA erottelee toisistaan <strong>WCA:n vastaavat
         delegaatit</strong>, <strong>WCA-delegaatit</strong> ja <strong>WCA:n
@@ -2279,8 +2311,8 @@ fi:
         vastaava delegaatti on vastuussa oman alueensa delegaattien hallinnasta,
         ja myös yhteisön jäsenet voivat ottaa häneen yhteyttä alueellisissa
         seikoissa. Uudet delegaatit nimetään aluksi delegaattikokelaiksi, ja
-        heidän tulee osoittaa kykenevänsä hallitsemaan kilpailuja onnistuneesti
-        ennen WCA-delegaatiksi nimeämistä.
+        heidän tulee osoittaa olevansa päteviä hallitsemaan kilpailuja
+        onnistuneesti ennen WCA-delegaatiksi nimeämistä.</p>
       #original_hash: 27d18ac
       see_link_html: '(ks. %{link})'
       #original_hash: 5b01fcc
@@ -2296,13 +2328,13 @@ fi:
     motions: Aloitteet
     #original_hash: 092f99e
     minutes: Pöytäkirjat
+    #original_hash: cdad4f1
+    dues: 'WCA:n vastikejärjestelmä'
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-delegaatit
-    #original_hash: 0a89b0f
-    acknowledges: >-
-      WCA tunnustaa seuraavat jäsenet delegaateiksi virallisissa
-      WCA-kilpailuissa:
+    #original_hash: 77b819c
+    acknowledges: 'WCA tunnustaa seuraavat WCA-delegaatit:'
     table:
       #original_hash: 709a232
       name: Nimi
@@ -2482,6 +2514,15 @@ fi:
         WCA:n kilpailutulostaulukon viimeisimmän version voi ladata tästä: <br
         /><a href="/files/results.xls" target="_blank">WCA competition Score
         sheet</a>.
+      #original_hash: 24f0b3f
+      '4': >-
+        Saatat haluta käyttää <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>-työkalua
+        kilpailun ryhmien valmisteluun. Sen tärkeimpiin ominaisuuksiin kuuluu
+        kilpailijoiden järjestely rankingin mukaan, tehtävien (tuomarointi,
+        sekoittaminen) osoittaminen, tarvittavien sekoitussarjojen määrän
+        päättäminen sekä tuloskorttien teko. Kyseessä on Jonatan Kłoskon luoma
+        avoimen lähdekoodin projekti.
   logo:
     #original_hash: c72c969
     title: 'WCA:n logo'
