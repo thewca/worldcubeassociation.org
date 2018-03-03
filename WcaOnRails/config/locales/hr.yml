@@ -452,6 +452,21 @@ hr:
       vote:
         #original_hash: 153d7a5
         comment: Komentar
+      incident:
+        #original_hash: 768e0c1
+        title: Naslov
+        #original_hash: cf66d44
+        private_description: Opis (privatno)
+        #original_hash: 1171d85
+        private_wrc_decision: Odluka (privatno)
+        #original_hash: 1c2ed61
+        public_summary: Zaključak (javni)
+        #original_hash: 62d6896
+        digest_worthy: Vrijedan razrade
+        #original_hash: 848eed0
+        tags: Tagovi
+        #original_hash: 861e459
+        competition_id: Dogodilo se tokom
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Natjecanje
@@ -522,6 +537,27 @@ hr:
       #original_hash: d70e9cb
       default_message: 'Molimo pogledajte probleme ispod:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: Zapamtite da je ovo javno i da trebate ispuniti na engleskom jeziku!
+        #original_hash: 67f2a1a
+        private_description: >-
+          Opis incidenta koji mogu vidjeti samo Delegati. Ispunite na engleskom
+          jeziku.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          Finalna odluka WRC-a, uključujući privatne detalje. Ispunite ovo na
+          engleskom jeziku.
+        #original_hash: 3de5729
+        public_summary: >-
+          Cjelokupni opis incidenta i njegovo rješenje, vidljivo javnosti.
+          Ispunite na engleskom jeziku.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Unesite svoj datum rođenja u formatu YYYY-MM-DD.
@@ -1232,11 +1268,11 @@ hr:
         other: first-timer(a)
       #original_hash: bc010e3
       returner:
-        other: povratnik(a)
-        many: povratnik(a)
-        few: povratnik(a)
-        one: povratnik(a)
         zero: povratnik(a)
+        one: povratnik(a)
+        few: povratnik(a)
+        many: povratnik(a)
+        other: povratnik(a)
       #original_hash: b7da17a
       person:
         zero: osoba
@@ -2738,6 +2774,11 @@ hr:
         posts: Nema pronađenih objava za
         #original_hash: 76a6bf1
         regulations_and_guidelines: Nema pronađenih Pravila i Smjernica za
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Imajte na umu da je sekcija incidenata samo moguća na engleskom jeziku.
+      Sadržaj ispod nije preveden.
   about_regulations:
     #original_hash: 6bce1b5
     title: O Pravilniku
