@@ -149,6 +149,10 @@ Rails.application.routes.draw do
     resources :forum_topics, only: [:show]
   end
 
+  resources :incidents do
+    patch '/mark_as/:kind' => 'incidents#mark_as', as: :mark_as
+  end
+
   namespace :api do
     get '/', to: redirect('/api/v0')
     namespace :v0 do

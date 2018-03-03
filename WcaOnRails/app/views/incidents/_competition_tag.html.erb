@@ -1,0 +1,14 @@
+<%
+comp = incident_competition.competition
+data_attributes = ""
+link_to_comp = link_to("Competition's page", competition_path(comp), target: "_blank", class: "hide-new-window-icon")
+if current_user&.can_view_delegate_matters?
+  link_to_report = link_to("Delegate report", delegate_report_path(comp), target: "_blank", class: "hide-new-window-icon")
+  content = "#{incident_competition.comments}<hr/>#{link_to_comp}<br/>#{link_to_report}"
+else
+  content = "#{link_to_comp}"
+end
+%>
+<span tabindex="0" class="competition-tag label label-info" data-toggle="popover" data-placement="bottom" data-trigger="focus" data-html="true" title="<%= comp.name %>" data-content="<%= content %>">
+  <%= comp.id %>
+</span>

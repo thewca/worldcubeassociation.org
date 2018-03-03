@@ -84,9 +84,9 @@ module ApplicationHelper
     content_tag :span, "", class: "wca-local-time", data: { utc_time: time.in_time_zone.utc.iso8601, locale: I18n.locale }
   end
 
-  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {})
+  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {}, greedy: true)
     data[:locale] = I18n.locale
-    table_classes = "table table-condensed table-greedy-last-column #{table_class}"
+    table_classes = "table table-condensed #{table_class}"
     if floatThead
       table_classes += " floatThead"
     end
@@ -95,6 +95,9 @@ module ApplicationHelper
     end
     if striped
       table_classes += " table-striped"
+    end
+    if greedy
+      table_classes += " table-greedy-last-column"
     end
 
     content_tag :div, class: (responsive ? "table-responsive" : "") do

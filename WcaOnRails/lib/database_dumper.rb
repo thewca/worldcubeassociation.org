@@ -548,6 +548,26 @@ module DatabaseDumper
       ),
     }.freeze,
     "locations" => :skip_all_rows,
+    "incidents" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(id title public_summary digest_worthy resolved_at digest_sent_at created_at updated_at),
+        db_default: %w(private_description private_wrc_decision),
+      ),
+    }.freeze,
+    "incident_competitions" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(id incident_id competition_id),
+        db_default: %w(comments),
+      ),
+    }.freeze,
+    "incident_tags" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(id incident_id tag),
+      ),
+    }.freeze,
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "linkings" => {

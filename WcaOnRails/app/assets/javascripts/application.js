@@ -18,6 +18,7 @@
 //= require locationpicker.jquery
 //= require selectize
 //= require selectize.do_not_clear_on_blur
+//= require selectize.tags_options
 //= require jquery.jcrop
 //= require lodash
 //= require jquery.wca-autocomplete

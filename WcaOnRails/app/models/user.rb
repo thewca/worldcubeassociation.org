@@ -450,7 +450,7 @@ class User < ApplicationRecord
   end
 
   def can_view_crash_course?
-    admin? || board_member? || any_kind_of_delegate? || results_team? || wdc_team? || wrc_team? || communication_team? || quality_assurance_committee?
+    can_view_delegate_matters? || communication_team?
   end
 
   def can_create_posts?
@@ -492,9 +492,25 @@ class User < ApplicationRecord
     admin? || results_team? || any_kind_of_delegate? || wrc_team?
   end
 
+  def can_view_delegate_matters?
+    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee?
+  end
+
+  def can_manage_incidents?
+    admin? || wrc_team?
+  end
+
+  def can_view_incident_private_sections?(incident)
+    if incident.resolved?
+      can_view_delegate_matters?
+    else
+      can_manage_incidents?
+    end
+  end
+
   def can_view_delegate_report?(delegate_report)
     if delegate_report.posted?
-      any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee?
+      can_view_delegate_matters?
     else
       delegate_report.competition.delegates.include?(self) || can_admin_results?
     end

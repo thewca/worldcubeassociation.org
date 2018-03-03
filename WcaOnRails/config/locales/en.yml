@@ -285,6 +285,15 @@ en:
       #context: a vote
       vote:
         comment: "Comment"
+      #context: an incident
+      incident:
+        title: "Title"
+        private_description: "Description (private)"
+        private_wrc_decision: "Decision (private)"
+        public_summary: "Summary (public)"
+        digest_worthy: "Digest worthy"
+        tags: "Tags"
+        competition_id: "Happened during"
       competition_medium:
         competitionId: "Competition"
         type: "Type"
@@ -331,6 +340,15 @@ en:
       default_message: "Please review the problems below:"
     #context: and a hint given about a specific field
     hints:
+      #context: for an incident
+      incident:
+        title: "Keep in mind this is public, and that you have to fill this in English!"
+        private_description: "A description of the incident which can only be viewed by Delegates. Please fill this in English."
+        private_wrc_decision: "The final WRC decision, including private details. Please fill this in English."
+        public_summary: "An overall description of the incident and its decision, to be displayed publicly. Please fill this in English."
+        digest_worthy: ""
+        tags: ""
+        competition_id: ""
       #context: for a user
       user:
         dob: "Enter your date of birth in the format YYYY-MM-DD."
@@ -1406,6 +1424,10 @@ en:
         people: "No people found for"
         posts: "No posts found for"
         regulations_and_guidelines: "No Regulations or Guidelines found for"
+  #context: Incident log
+  incidents_log:
+    #context: disclaimer displayed to inform incidents are only in English
+    i18n_disclaimer: "Please note the incidents section is only available in English, the content below is not translated."
   #context: About the regulations
   about_regulations:
     title: "About the Regulations"

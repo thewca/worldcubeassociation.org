@@ -1,0 +1,11 @@
+<div class="container">
+  <% if I18n.locale != I18n.default_locale %>
+    <%= alert :info do %>
+      <%= t 'incidents_log.i18n_disclaimer' %>
+    <% end %>
+  <% end %>
+  <% unless @incidents %>
+    <%= link_to "Back to the incidents list", incidents_path %>
+  <% end %>
+  <%= yield %>
+</div>

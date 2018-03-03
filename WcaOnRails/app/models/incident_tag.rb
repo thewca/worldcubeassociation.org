@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-class PostTag < ApplicationRecord
-  belongs_to :post
+class IncidentTag < ApplicationRecord
+  belongs_to :incident
+
+  validates_presence_of :incident
 
   before_validation { self.tag = self.tag.strip }
 
