@@ -267,8 +267,8 @@ fr:
         country_iso2: Nationalité
         #original_hash: ab58155
         dob: Date de naissance
-        #original_hash: ab58155
-        dob_verification: Date de naissance
+        #original_hash: 7636bbc
+        dob_verification: Votre date de naissance
         #original_hash: 8a754c6
         gender: Genre
         #original_hash: 84add5b
@@ -374,6 +374,8 @@ fr:
           d'inscription
         #original_hash: 4baf44b
         championship_type: Type de championnat
+        #original_hash: ff722f0
+        registration_requirements: Conditions d'inscription
       registration:
         #original_hash: 3c23a67
         guests: Accompagnateurs
@@ -444,6 +446,21 @@ fr:
       vote:
         #original_hash: 153d7a5
         comment: Commentaire
+      incident:
+        #original_hash: 768e0c1
+        title: Titre
+        #original_hash: cf66d44
+        private_description: Description (privée)
+        #original_hash: 1171d85
+        private_wrc_decision: Décision (privée)
+        #original_hash: 1c2ed61
+        public_summary: Résumé (public)
+        #original_hash: 62d6896
+        digest_worthy: Mérite d'être envoyé dans le digest
+        #original_hash: 848eed0
+        tags: Tags
+        #original_hash: 861e459
+        competition_id: Est survenu au cours de
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Compétition
@@ -514,6 +531,29 @@ fr:
       #original_hash: d70e9cb
       default_message: 'Merci de corriger les problèmes ci dessous :'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: >-
+          Rappelez-vous que ce titre est public, et que vous devez le remplir en
+          Anglais !
+        #original_hash: 67f2a1a
+        private_description: >-
+          Une description de l'incident qui ne peut être lu que par les
+          Délégués. Merci de remplir ça en Anglais.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          La décision finale du WRC, incluant les informations privées. Merci de
+          remplir ça en Anglais.
+        #original_hash: 3de5729
+        public_summary: >-
+          Une description générale de l'incident et de sa décision, qui sera
+          affichée publiquement. Merci de remplir ça en Anglais.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: >-
@@ -653,6 +693,21 @@ fr:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Merci d'indiquer ici toute spécificité concernant le processus
+          d'inscription, comme requis par la <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">recommandation 2c1+</a>. Une fois que la compétition
+          est annoncée, ce champ c'est <b>plus</b> modifiable, et l'approbation
+          du Board est nécessaire pour le modifier.<br/>Par exemple indiquez ici
+          si les compétiteurs doivent être exempt de dettes avec une entité
+          spécifique, s'il y a une politique de remboursement, ou si ils devront
+          répondre à un email de confirmation au cas où la limite de
+          compétiteurs serait atteinte.<br/>Merci de donner ces informations
+          <b>en Anglais</b> ainsi que dans les autres langues que vous jugerez
+          nécessaire ; elles seront affichées sur la page d'inscription si vous
+          utilisez le site de la WCA pour les inscriptions.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -913,7 +968,7 @@ fr:
       #original_hash: 9ac918a
       about: À propos de la WCA
       #original_hash: ed97787
-      documents: WCA Documents
+      documents: Documents de la WCA
       #original_hash: d8fd3e4
       delegates: Délégués WCA
       #original_hash: 37b8fdc
@@ -1502,6 +1557,8 @@ fr:
     preferred_events_populated_html: >-
       Nous avons pré-rempli ce champ avec vos épreuves préférées, que vous
       pouvez éditer %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Conditions d''inscription pour la compétition :'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1588,6 +1645,14 @@ fr:
       information: Information
       #original_hash: c5497bc
       events: Épreuves
+      #original_hash: ff722f0
+      registration_requirements: Conditions d'inscription
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        Cette compétition est terminée, cliquez %{link_here} pour afficher les
+        conditions d'inscription qui ont été utilisées.
+      #original_hash: ff19a74
+      hide_requirements: Cacher les conditions d'inscriptions.
     index:
       #original_hash: db98a68
       title: Compétitions
@@ -2403,6 +2468,8 @@ fr:
     motions: Motions
     #original_hash: 092f99e
     minutes: Compte-rendus
+    #original_hash: cdad4f1
+    dues: WCA Dues System
   delegates_page:
     #original_hash: d8fd3e4
     title: Délégués WCA
@@ -2601,6 +2668,17 @@ fr:
         La dernière version de la feuille de résultats de la WCA peut être
         téléchargée ici :<br /><a href="/files/results.xls"
         target="_blank">Feuille de résultats de la WCA</a>.
+      #original_hash: 24f0b3f
+      '4': >-
+        Vous pourriez également vouloir utiliser <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> pour
+        préparer les groupes de compétiteurs pour une compétition. C'est un
+        outil dont le but est de faire exactement ça pour vous. Parmi les
+        fonctionnalités il y a : grouper les compétiteurs par classement,
+        assigner des tâches (juger, mélanger), décider combien de mélanges sont
+        nécessaires, générer des feuilles de scores, des cartes individuelles,
+        et des résumés des groupes. C'est un projet Open Source créé par Jonatan
+        Kłosko.
   logo:
     #original_hash: c72c969
     title: Logo de la WCA
@@ -2783,6 +2861,11 @@ fr:
         posts: Pas d'article trouvé pour
         #original_hash: 76a6bf1
         regulations_and_guidelines: Pas de Règle ou Recommandation trouvée pour
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      La section relatives aux incidents n'est disponible qu'en Anglais, le
+      contenu ci-dessous n'est pas traduit.
   about_regulations:
     #original_hash: 6bce1b5
     title: À propos du Règlement
