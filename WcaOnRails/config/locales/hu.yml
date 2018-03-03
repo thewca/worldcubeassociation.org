@@ -439,6 +439,21 @@ hu:
       vote:
         #original_hash: 153d7a5
         comment: Megjegyzés
+      incident:
+        #original_hash: 768e0c1
+        title: Cím
+        #original_hash: cf66d44
+        private_description: Leírás (privát)
+        #original_hash: 1171d85
+        private_wrc_decision: Döntés (privát)
+        #original_hash: 1c2ed61
+        public_summary: Összefoglalás (publikus)
+        #original_hash: 62d6896
+        digest_worthy: Említésre méltó dolgok
+        #original_hash: 848eed0
+        tags: Címkék
+        #original_hash: 861e459
+        competition_id: Közben történt
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Verseny
@@ -509,6 +524,27 @@ hu:
       #original_hash: d70e9cb
       default_message: 'Kérlek nézd át a problémát alul:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: 'Tartsd észben, hogy ez publikus és kérünk, hogy angolul töltsd ki!'
+        #original_hash: 67f2a1a
+        private_description: >-
+          Az incidens leírása, amit csak a delegáltak láthatnak. Kérünk, hogy
+          angolul töltsd ki!
+        #original_hash: b766029
+        private_wrc_decision: >-
+          A WRC végleges döltése, privát részleteket is tartalmazva. Kérünk,
+          hogy angolul töltsd ki!
+        #original_hash: 3de5729
+        public_summary: >-
+          Az incidens végső döntése, ami publikusan meg lesz jelenítve. Kérünk,
+          hogy angolul töltsd ki!
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Add meg a születési dátumodat ÉÉÉÉ-HH-NN formátumban.
@@ -1578,6 +1614,12 @@ hu:
       events: Versenyszámok
       #original_hash: ff722f0
       registration_requirements: A regisztráció feltételei
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        A versenynek vége, kattints %{link_here}, hogy megjelenítsd a használt
+        regisztrációs követelményeket.
+      #original_hash: ff19a74
+      hide_requirements: Regisztrációs követelmények elrejtése.
     index:
       #original_hash: db98a68
       title: Versenyek
@@ -2554,6 +2596,15 @@ hu:
         A WCA versenyek eredményeinek rögzítésére használt minta legújabb
         verziója letölthető itt: <br /><a href="/files/results.xls"
         target="_blank">WCA competition Score sheet</a>.
+      #original_hash: 24f0b3f
+      '4': >-
+        Érdekes lehet a verseny csoportbeosztásának előkészítéséhez a <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>
+        program. Ez a program a csoportbeosztást csinálja meg. A legfontosabb
+        funkciói közé tartozik: helyezés alapján kiválogatja a versenyzőket,
+        felosztja a feladatokat (bíráskodás, keverés), eldönti hány keverésre
+        van szükség, pontkártyákat, személyi kártyákat, összefoglalókat generál.
+        Ez egy nyílt forráskódú program, amit Jonatan Kłosko készített.
   logo:
     #original_hash: c72c969
     title: WCA logó
@@ -2733,6 +2784,11 @@ hu:
         posts: 'Nem található poszt a következő kereséssel:'
         #original_hash: 76a6bf1
         regulations_and_guidelines: 'Nem található Szabályzat vagy Útmutató cikk a következő kereséssel:'
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Figyelj, hogy az incidens rész csak angolul elérhető, az alábbi tartalom
+      nincs lefordítva.
   about_regulations:
     #original_hash: 6bce1b5
     title: A Szabályzatról
