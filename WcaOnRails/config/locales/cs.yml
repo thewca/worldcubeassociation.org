@@ -443,6 +443,21 @@ cs:
       vote:
         #original_hash: 153d7a5
         comment: Komentovat
+      incident:
+        #original_hash: 768e0c1
+        title: Název
+        #original_hash: cf66d44
+        private_description: Popis (soukromý)
+        #original_hash: 1171d85
+        private_wrc_decision: Rozhodnutí (soukromé)
+        #original_hash: 1c2ed61
+        public_summary: Shrnutí (veřejné)
+        #original_hash: 62d6896
+        digest_worthy: Digest worthy
+        #original_hash: 848eed0
+        tags: Tagy
+        #original_hash: 861e459
+        competition_id: Stalo se během
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Soutěž
@@ -513,6 +528,29 @@ cs:
       #original_hash: d70e9cb
       default_message: 'Prosíme, překontrolujte níže uvedené problémy:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: >-
+          Mějte na paměti, že je toto veřejné a že je potřeba to vyplnit
+          anglicky!
+        #original_hash: 67f2a1a
+        private_description: >-
+          Popis incidentu, který mohou zobrazit pouze delegáti. Prosíme, vyplňte
+          toto pole v angličtině.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          Konečné rozhodnutí WCR obsahující osobní detaily. Prosíme, vyplňte
+          toto pole v angličtině.
+        #original_hash: 3de5729
+        public_summary: >-
+          Celkový popis incidentu a jeho závěr, který bude možno publikovat
+          veřejně Prosíme, vyplňte toto pole v angličtině.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Zadejte své datum narození ve formátu RRRR-MM-DD.
@@ -2526,6 +2564,15 @@ cs:
         Nejnovější verze WCA soutěžních Score sheetů můžete stáhnout zde: <br
         /><a href="/files/results.xls" target="_blank">WCA competition Score
         sheet</a>.
+      #original_hash: 24f0b3f
+      '4': >-
+        Možná byste mohli mít zájem použít  <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> pro
+        přípravu skupin na soutěž. Je to nástroj určený právě pro generování
+        skupin. Mezi hlavními funkcemi jsou přiřazování úkolů (judging,
+        scramblení), rozhodování o tom, kolik bude potřeba scramblů, generování
+        scorecardů, osobní kartičky a přehledy. Jedná se o Open Source projekt
+        vytvořený Jonatanem Kłoskem.
   logo:
     #original_hash: c72c969
     title: Logo WCA
@@ -2703,6 +2750,11 @@ cs:
         posts: Nebyly nalezeny žádné příspěvky pro
         #original_hash: 76a6bf1
         regulations_and_guidelines: Nebyla nalezena žádná pravidla ani pokyny pro
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Mějte na paměti, že sekce incidentů je dostupná pouze v angličtině, obsah
+      uvedený níže nebude přeložen.
   about_regulations:
     #original_hash: 6bce1b5
     title: O Pravidlech
