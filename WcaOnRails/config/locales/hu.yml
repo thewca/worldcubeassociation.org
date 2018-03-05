@@ -2408,8 +2408,12 @@ hu:
     motions: Motions
     #original_hash: 092f99e
     minutes: Minutes
+    #original_hash: 8d61184
+    policies: Szabályozások
     #original_hash: cdad4f1
     dues: WCA Díjrendszer
+    #original_hash: 7536665
+    logo: WCA Logó Használata
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA delegáltak
@@ -2625,13 +2629,11 @@ hu:
         A logo 3D verzióját a vietnámi származású Vu Minh Tan készítette el: <a
         href="/files/WCALogo3D.png">PNG verzió</a> (2.1 MB), <a
         href="/files/WCALogo3Dsmall.png">kisebb PNG verzió</a> (0.25 MB)
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Minden WCA verseny szervezője használhatja a logót a honlapokhoz,
-        ruházathoz, ajándékokhoz vagy dekorációkhoz, de kizárólag WCA
-        versenyekhez. <br /> Minden más céllal való használathoz a <a
-        href="mailto:board@worldcubeassociation.org">WCA board</a> beleegyezése
-        szükséges.
+        A WCA logó elfogadható használatát a WCA Logó Használata nevű
+        szabályozás írja le, ami a <a href="/documents">WCA Dokumentumok</a>
+        oldalán található meg.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
