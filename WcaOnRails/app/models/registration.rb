@@ -173,7 +173,7 @@ class Registration < ApplicationRecord
 
   def to_wcif
     {
-      "id" => id,
+      "wcaRegistrationId" => id,
       "eventIds" => events.map(&:id).sort,
       "status" => if accepted?
                     'accepted'
