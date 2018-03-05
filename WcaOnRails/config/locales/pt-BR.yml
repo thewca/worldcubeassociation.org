@@ -442,6 +442,21 @@ pt-BR:
       vote:
         #original_hash: 153d7a5
         comment: Comentário
+      incident:
+        #original_hash: 768e0c1
+        title: Título
+        #original_hash: cf66d44
+        private_description: Descrição (privada)
+        #original_hash: 1171d85
+        private_wrc_decision: Decisão (privada)
+        #original_hash: 1c2ed61
+        public_summary: Resumo (público)
+        #original_hash: 62d6896
+        digest_worthy: Parte da compilação?
+        #original_hash: 848eed0
+        tags: Marcadores
+        #original_hash: 861e459
+        competition_id: Aconteceu durante
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Competição
@@ -512,6 +527,29 @@ pt-BR:
       #original_hash: d70e9cb
       default_message: 'Por favor verifique os problemas abaixo:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: >-
+          Lembre-se que essa parte é pública, e que você deve preencher em
+          Inglês!
+        #original_hash: 67f2a1a
+        private_description: >-
+          Uma descrição do incidente, que pode ser vista apenas pelos Delegados.
+          Por favor preencha em Inglês.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          A decisão final do WRC, incluindo detalhes privados. Por favor
+          preencha em Inglês.
+        #original_hash: 3de5729
+        public_summary: >-
+          Uma descrição geral do incidente e sua decisão, para ser mostrada
+          publicamente. Por favor preencha em Inglês.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Informe sua data de nascimento no formato AAAA-MM-DD.
@@ -1564,6 +1602,12 @@ pt-BR:
       events: Eventos
       #original_hash: ff722f0
       registration_requirements: Requisitos para inscrição
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        Esta competição já terminou; clique %{link_here} para ver os requisitos
+        de inscrição que foram usados.
+      #original_hash: ff19a74
+      hide_requirements: Ocultar requisitos de inscrição
     index:
       #original_hash: db98a68
       title: Competições
@@ -2351,8 +2395,12 @@ pt-BR:
     motions: Moções
     #original_hash: 092f99e
     minutes: Atas
+    #original_hash: 8d61184
+    policies: Políticas
     #original_hash: cdad4f1
     dues: Sistema de Taxas da WCA
+    #original_hash: 7536665
+    logo: Uso do Logo da WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
@@ -2542,6 +2590,16 @@ pt-BR:
         A versão mais recente da Planilha de Resultados da WCA pode ser baixada
         aqui: <br /><a href="/files/results.xls" target="_blank">Planilha de
         Resultados da WCA</a>.
+      #original_hash: 24f0b3f
+      '4': >-
+        Você também pode querer usar <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> para
+        preparar os grupos para uma competição. É uma ferramenta que faz
+        justamente isso por você. Entre as principais características você
+        encontrará: ordenar os competidores por ranking, atribuir tarefas (juiz,
+        embaralhador), decidir quantos embaralhamentos são necessários, gerar
+        súmulas, cartões pessoais e resumos. É um projeto Open Source criado por
+        Jonatan Kłosko.
   logo:
     #original_hash: c72c969
     title: Logotipo da WCA
@@ -2562,13 +2620,11 @@ pt-BR:
         Versão 3D do logotipo, desenhada por Vu Mihn Tan, do Vietnã: <a
         href="/files/WCALogo3D.png">versão PNG</a> (2,1 MB), uma <a
         href="/files/WCALogo3Dsmall.png">versão PNG pequena</a> (0,25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Todas os organizadores podem usar o logotipo da WCA em seus websites,
-        roupas, brindes ou decoração, somente para competições oficiais.<br />
-        Para as demais pessoas e/ou propósitos, o uso do logotipo requer
-        aprovação pelo <a href="mailto:board@worldcubeassociation.org">Conselho
-        da WCA</a>.
+        O uso do logo da WCA é regulamentado pela Política de Uso do Logo da
+        WCA, que está disponível na página de <a href="/documents">Documentos da
+        WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: Assistente de Planilha da WCA
@@ -2719,6 +2775,11 @@ pt-BR:
         posts: Nenhum post encontrado para
         #original_hash: 76a6bf1
         regulations_and_guidelines: Nenhum Regulamento ou Orientação encontrado para
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Por favor note que a seção de incidentes somente está disponível em
+      Inglês; o conteúdo abaixo não está traduzido.
   about_regulations:
     #original_hash: 6bce1b5
     title: Sobre o Regulamento
