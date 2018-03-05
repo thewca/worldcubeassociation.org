@@ -110,10 +110,11 @@
     <% end %>
 
   </div>
-  <div class="col-md-12">
-    <dl class="dl-horizontal">
-      <dt><%= t '.registration_requirements' %></dt>
-      <dd>
+  <% unless competition.registration_requirements.blank? %>
+    <div class="col-md-12">
+      <dl class="dl-horizontal">
+        <dt><%= t '.registration_requirements' %></dt>
+        <dd>
         <% collapse = @competition.is_probably_over? %>
         <% if collapse %>
           <div id="show_registration_requirements">
@@ -126,10 +127,10 @@
         <div class="<%= collapse ? "collapse" : "" %>" id="registration_requirements_text">
           <%=md competition.registration_requirements %>
         </div>
-      </dd>
-    </dl>
-
-  </div>
+        </dd>
+      </dl>
+    </div>
+  <% end %>
 </div>
 <% if collapse %>
   <script>
