@@ -878,6 +878,14 @@ cs:
       #original_hash: a2a43b3
       size_too_big: 'je příliš velký (měl by být maximálně %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Přihlásit se
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Přihlásit se
     failure:
       #original_hash: 1186218
       invalid: 'Neplatný e-mail, WCA ID nebo heslo.'
@@ -2383,8 +2391,12 @@ cs:
     motions: Motions
     #original_hash: 092f99e
     minutes: Protokoly
+    #original_hash: 8d61184
+    policies: Policies
     #original_hash: cdad4f1
     dues: WCA Dues System
+    #original_hash: 7536665
+    logo: WCA Logo Usage
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegáti
@@ -2593,14 +2605,10 @@ cs:
         3D verzi loga WCA navrhnul Vu Minh Tan z Vietnamu: <a
         href="/files/WCALogo3D.png">PNG verze</a> (2.1 MB), <a
         href="/files/WCALogo3Dsmall.png">malá PNG verze</a> (0.25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Všichni organizátoři WCA soutěží mohou použít logo WCA na webových
-        stránkách, oblečení, dárkových předmětech nebo dekoracích pouze pro
-        oficiální soutěž WCA.<br /> Pro všechny ostatní osoby a pro jiné účely
-        účely je potřeba mít souhlas od <a
-        href="mailto:board@worldcubeassociation.org">WCA Boardu</a>, aby mohli
-        logo WCA použít.
+        Přijatelné použití loga WCA je vymezeno ve WCA Logo Usage policy
+        dostupném na <a href="/documents">stránce s WCA Dokumenty</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
