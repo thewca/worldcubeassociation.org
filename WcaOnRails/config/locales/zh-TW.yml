@@ -432,6 +432,21 @@ zh-TW:
       vote:
         #original_hash: 153d7a5
         comment: 意見
+      incident:
+        #original_hash: 768e0c1
+        title: 標題
+        #original_hash: cf66d44
+        private_description: 描述（隱藏）
+        #original_hash: 1171d85
+        private_wrc_decision: 裁決（隱藏）
+        #original_hash: 1c2ed61
+        public_summary: 總結（公開）
+        #original_hash: 62d6896
+        digest_worthy: 值得摘要
+        #original_hash: 848eed0
+        tags: 標籤
+        #original_hash: 861e459
+        competition_id: 發生於
       competition_medium:
         #original_hash: 1917f4f
         competitionId: 比賽
@@ -502,6 +517,21 @@ zh-TW:
       #original_hash: d70e9cb
       default_message: 請預覽以下問題：
     hints:
+      incident:
+        #original_hash: c54e268
+        title: 請留意以下為公開資訊，請用英文填寫！
+        #original_hash: 67f2a1a
+        private_description: 意外事件的描述，僅WCA代表能瀏覽。請用英文填寫。
+        #original_hash: b766029
+        private_wrc_decision: WRC的最終裁決，包括隱藏的資訊。請用英文填寫。
+        #original_hash: 3de5729
+        public_summary: 關於意外事件以及其裁決的完整描述，並將公開顯示。請用英文填寫。
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: 請依照YYYY-MM-DD格式輸入您的生日。
@@ -660,9 +690,9 @@ zh-TW:
           簡述比賽的主辦單位以及他們如何分工的，如果您有參與其中的話，您可以提及他們過往的主辦經驗以及進步的部份、比賽當天的表現和積極度、遇到的問題（例如：賽程延誤）和怎麼解決問題的。請具體描述，不要回答不相關的內容。
         #original_hash: 715f020
         incidents: >-
-          任何您認為值得報告意外事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。請提及重要的事件就好，而非一般的（例如：常見的+2或是DNF）。您可以任意的請其他代表或WRC給這些事件回饋。如果您想要請WDC參與討論，確保您有清楚的請求他們。
+          任何您認為值得報告意外事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。請提及重要的事件就好，而非一般的(例如：常見的+2或是DNF)。您可以任意的請其他代表或WRC給這些事件回饋。如果您想要請WDC參與討論，確保您有清楚的請求他們。
         #original_hash: f30abdc
-        remarks: 分享任何關於比賽的事情（例如：進步/社群/這地區的未來展望）。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
+        remarks: 分享任何關於比賽的事情(例如：進步/社群/這地區的未來展望)。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
         #original_hash: da39a3e
         discussion_url: ''
       competition_tab:
@@ -817,7 +847,7 @@ zh-TW:
       #original_hash: f9f512b
       welcome_back: 歡迎回來！我們需要知道您的WCA ID才能幫您建立WCA帳號。
       #original_hash: 669fb57
-      welcome: 歡迎！在您參加第一場WCA比賽之前，我們需要額外的資訊以利我們儲存資料。我們絕對不會在沒有您的許可下公開您的生日。
+      welcome: 歡迎！在您參加第一場WCA比賽之前，我們需要額外的資訊以利我們儲存資料。請注意，我們絕對不會在沒有您的許可下公開您的生日。
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2001,7 +2031,7 @@ zh-TW:
         name: WCA倫理委員會
         #original_hash: c304d57
         description: >-
-          該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範，並且在這些成員的行為不符合該倫理規範的情況下進行獨立調查。這些調查可以由任何已註冊的玩家提出，前提是他們必須為WEC信任的人。如果有人不同意WCA紀律委員會做出的決定，此委員會也可以充當上訴委員會。
+          該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範，並且在這些成員的行為不符合該倫理規範的情況下進行獨立調查。這些調查可以由任何已註冊的玩家提出，前提是他們必須為WEC信任的人。如果有人不同意WCA紀律委員會做出的裁決，此委員會也可以充當上訴委員會。
       wqac:
         #original_hash: 8f32116
         name: WCA品質保證委員會
@@ -2026,8 +2056,12 @@ zh-TW:
     motions: 提議
     #original_hash: 092f99e
     minutes: 會議記錄
+    #original_hash: 8d61184
+    policies: 政策
     #original_hash: cdad4f1
     dues: WCA稅金制度
+    #original_hash: 7536665
+    logo: WCA標誌使用
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
@@ -2064,7 +2098,7 @@ zh-TW:
         #original_hash: 0c3576b
         '4': 遵守所有WCA規則
         #original_hash: 23cda60
-        '5': 同意並遵守WCA官方的決定
+        '5': 同意並遵守WCA官方的裁決
         #original_hash: 08c6d86
         '6': 以電子文件保留一份WCA目前的章程與規則
     application_instructions:
@@ -2113,7 +2147,7 @@ zh-TW:
       #original_hash: fcd3526
       info_html: >-
         WCA規則委員會處理所有關於WCA規則的應用、改進和發展。
-        他們協助WCA代表處理在比賽中發生的任何程序問題，幫忙決定一些尚未解決或未被規則涵蓋的事件。
+        他們協助WCA代表處理在比賽中發生的任何程序問題，幫忙裁決一些尚未解決或未被規則涵蓋的事件。
         WRC定期發布WCA內部報告，幫助所有WCA代表提高對規則的認識。 如果您想參與規則發展或者提出修改建議，您可以透過郵件與WRC聯繫或是在<a
         href='https://github.com/thewca/wca-regulations'>GitHub</a>提出討論。
     wrt:
@@ -2176,11 +2210,8 @@ zh-TW:
       '3': >-
         3D版標誌，由越南的Vu Minh Tan設計：<a href="/files/WCALogo3D.png">PNG檔</a> (2.1
         MB)、<a href="/files/WCALogo3Dsmall.png">PNG檔(小)</a> (0.25 MB)。
-      #original_hash: 545fcd9
-      '4': >-
-        所有WCA比賽的主辦人可以在網站、衣服、紀念品或是裝飾品上使用WCA標誌，但是僅限於WCA官方比賽。<br
-        />其他人或其他用途若需使用WCA標誌，必須經由<a
-        href="mailto:board@worldcubeassociation.org">WCA董事會</a>審核。
+      #original_hash: e5df1bf
+      '4': WCA標誌的可使用範圍在<a href="/documents">WCA文件頁面</a>的WCA標誌使用政策中列出。
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA成績小幫手
@@ -2292,6 +2323,9 @@ zh-TW:
         posts: 未找到相符文章
         #original_hash: 76a6bf1
         regulations_and_guidelines: 未找到相符規則或指導方針
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: 請注意，意外事件部分僅提供英文版本，以下的內容並未翻譯。
   about_regulations:
     #original_hash: 6bce1b5
     title: 關於規則
