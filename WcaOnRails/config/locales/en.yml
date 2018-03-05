@@ -501,6 +501,12 @@ en:
       size_too_big: "is too big (should be at most %{file_size})"
   #context: Overriden key for sign in
   devise:
+    sessions:
+      new:
+        sign_in: "Sign in"
+    shared:
+      links:
+        sign_in: "Sign in"
     failure:
       invalid: "Invalid email, WCA ID, or password."
       not_found_in_database: "Invalid email, WCA ID, or password."
