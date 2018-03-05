@@ -46,7 +46,14 @@ Style/TrailingCommaInArguments:
   # for all parenthesized method calls with arguments.
   EnforcedStyleForMultiline: comma
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
+  # If `comma`, the cop requires a comma after the last argument, but only for
+  # parenthesized method calls where each argument is on its own line.
+  # If `consistent_comma`, the cop requires a comma after the last argument,
+  # for all parenthesized method calls with arguments.
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
   # If `comma`, the cop requires a comma after the last item in an array or
   # hash, but only when each item is on its own line.
   # If `consistent_comma`, the cop requires a comma after the last item of all
@@ -85,6 +92,9 @@ Metrics/MethodLength:
   Enabled: false
 
 Metrics/ModuleLength:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
   Enabled: false
 
 Performance/RedundantMatch:
@@ -172,6 +182,12 @@ Style/SymbolProc:
   Enabled: false
 
 Naming/PredicateName:
+  Enabled: false
+
+Naming/UncommunicativeBlockParamName:
+  Enabled: false
+
+Naming/UncommunicativeMethodParamName:
   Enabled: false
 
 Style/YodaCondition:
