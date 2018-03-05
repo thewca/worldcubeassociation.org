@@ -195,7 +195,7 @@ class User < ApplicationRecord
     if p
       cannot_be_assigned_reasons = p.cannot_be_assigned_to_user_reasons
       unless cannot_be_assigned_reasons.empty?
-        errors.add(:wca_id, cannot_be_assigned_reasons.to_sentence)
+        errors.add(:wca_id, cannot_be_assigned_reasons.xss_aware_to_sentence)
       end
     end
   end
