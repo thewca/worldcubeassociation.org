@@ -1270,7 +1270,9 @@ en:
     bylaws: "Bylaws"
     motions: "Motions"
     minutes: "Minutes"
+    policies: "Policies"
     dues: "WCA Dues System"
+    logo: "WCA Logo Usage"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
@@ -1357,8 +1359,7 @@ en:
       '1': "The WCA logo was designed by Justin Eastman, in a design contest in January 2005.<br />We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube."
       '2': 'We have three different versions of the logo: a <a href="/files/WCAlogo_XL.jpg">large version</a> (46 KB, 1756 px by 1068 px), a <a href="/files/WCAlogo.svg">vector version</a> and a <a href="/files/WCAlogo_notext.svg">vector version without text</a>.'
       '3': '3D version of the logo, designed by Vu Minh Tan from Vietnam: <a href="/files/WCALogo3D.png">PNG version</a> (2.1 MB), a <a href="/files/WCALogo3Dsmall.png">small PNG version</a> (0.25 MB).'
-      '4': 'All WCA competition organizers may use the WCA logo for websites, clothing, gifts or decorations, only for official WCA competitions.<br />
-  For all other persons and purposes using the WCA logo requires an approval by <a href="mailto:board@worldcubeassociation.org">WCA board</a>.'
+      '4': 'Acceptable usage of the WCA logo is outlined by the WCA Logo Usage policy which appears on the <a href="/documents">WCA Documents page</a>.'
   workbook_assistant:
     title: "WCA Workbook Assistant"
     download: "Download WCA Workbook Assistant"
