@@ -436,6 +436,21 @@ fi:
       vote:
         #original_hash: 153d7a5
         comment: Kommentti
+      incident:
+        #original_hash: 768e0c1
+        title: Otsikko
+        #original_hash: cf66d44
+        private_description: Kuvaus (yksityinen)
+        #original_hash: 1171d85
+        private_wrc_decision: Päätös (yksityinen)
+        #original_hash: 1c2ed61
+        public_summary: Yhteenveto (julkinen)
+        #original_hash: 62d6896
+        digest_worthy: Digest worthy
+        #original_hash: 848eed0
+        tags: Tunnisteet
+        #original_hash: 861e459
+        competition_id: Minkä aikana tapahtui
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Kilpailu
@@ -506,6 +521,27 @@ fi:
       #original_hash: d70e9cb
       default_message: 'Tarkista allaolevat ongelmat:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: 'Muista, että tämä on julkista ja että tämä tulee täyttää englanniksi!'
+        #original_hash: 67f2a1a
+        private_description: >-
+          Kuvaus tapauksesta (vain delegaattien nähtävissä). Täytäthän tämän
+          englanniksi.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          WRC:n lopullinen päätös, sisältäen yksityiset tiedot. Täytäthän tämän
+          englanniksi.
+        #original_hash: 3de5729
+        public_summary: >-
+          Kokonaiskuvaus tapauksesta ja sitä koskevasta päätöksestä (nähtävissä
+          julkisesti). Täytäthän tämän englanniksi.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Syötä syntymäpäiväsi muodossa VVVV-KK-PP.
@@ -833,6 +869,14 @@ fi:
       #original_hash: a2a43b3
       size_too_big: 'on liian suuri (pitäisi olla enintään %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Kirjaudu sisään
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Kirjaudu sisään
     failure:
       #original_hash: 1186218
       invalid: 'Sähköposti, WCA ID tai salasana ei kelpaa.'
@@ -2328,8 +2372,12 @@ fi:
     motions: Aloitteet
     #original_hash: 092f99e
     minutes: Pöytäkirjat
+    #original_hash: 8d61184
+    policies: Käytännöt
     #original_hash: cdad4f1
     dues: 'WCA:n vastikejärjestelmä'
+    #original_hash: 7536665
+    logo: WCA-logon käyttö
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-delegaatit
@@ -2543,14 +2591,10 @@ fi:
         3D-versio logosta, suunnittelijana vietnamilainen Vu Minh Tan: <a
         href="/files/WCALogo3D.png">PNG-versio</a> (2.1 Mt), <a
         href="/files/WCALogo3Dsmall.png">pieni PNG-versio</a> (0.25 Mt).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Kaikki WCA-kilpailuiden järjestäjät saavat käyttää WCA:n logoa
-        virallisten WCA-kilpailujen verkkosivuihin, vaatteihin, lahjoihin ja
-        koristeluihin.<br />Logon käyttö muihin tarkoituksiin ja muiden
-        henkilöiden toimesta vaatii <a
-        href="mailto:board@worldcubeassociation.org">WCA boardin</a>
-        hyväksynnän.
+        WCA-logon hyväksyttävää uudelleenkäyttöä koskevat käytännöt löytyvät
+        sivulta <a href="/documents">WCA-asiakirjat</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
@@ -2703,6 +2747,11 @@ fi:
         posts: Ei löydetty julkaisuja hakusanalla
         #original_hash: 76a6bf1
         regulations_and_guidelines: Ei löydetty sääntöjä eikä ohjesääntöjä hakusanalla
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Huomioithan, että poikkeustilanneosio on ainoastaan englanniksi,
+      allaolevaa sisältöä ei ole käännetty.
   about_regulations:
     #original_hash: 6bce1b5
     title: Tietoa WCA-säännöistä
