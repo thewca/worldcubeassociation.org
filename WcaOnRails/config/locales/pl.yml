@@ -456,6 +456,21 @@ pl:
       vote:
         #original_hash: 153d7a5
         comment: Komentarz
+      incident:
+        #original_hash: 768e0c1
+        title: Tytuł
+        #original_hash: cf66d44
+        private_description: Opis (prywatny)
+        #original_hash: 1171d85
+        private_wrc_decision: Decyzja (prywatna)
+        #original_hash: 1c2ed61
+        public_summary: Podsumowanie (publiczne)
+        #original_hash: 62d6896
+        digest_worthy: Warte przeglądu
+        #original_hash: 848eed0
+        tags: Tagi
+        #original_hash: 861e459
+        competition_id: Miał miejsce podczas
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Zawody
@@ -526,6 +541,29 @@ pl:
       #original_hash: d70e9cb
       default_message: 'Proszę przejrzeć problemy poniżej:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: >-
+          Pamiętaj, że jest to publiczne oraz aby wypełnić to w języku
+          angielskim!
+        #original_hash: 67f2a1a
+        private_description: >-
+          Opis incydentu widoczny jedynie dla Delegatów. Prosimy o wypełnienie w
+          języku angielskim.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          Ostateczna decyzja WRC, łącznie z prywatnymi szczegółami. Prosimy o
+          wypełnienie w języku angielskim.
+        #original_hash: 3de5729
+        public_summary: >-
+          Ogólny opis incydentu wraz z opisem, wyświetlane publicznie. Prosimy o
+          wypełnienie w języku angielskim.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Wprowadź swoją datę urodzenia w formacie RRRR-MM-DD
@@ -665,15 +703,15 @@ pl:
           rejestracji, zgodnie z <a
           href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
           target="_blank">Guideline 2c1+</a>. Po ogłoszeniu zawodów edycja tego
-          pola <b>nie</b> będzie już możlia i wszelkie jego zmiany będa wymagały
-          zgody Zarządu. Przykładowo umieść tutaj informację, jeśli zawodnicy
-          muszą mieć czystą historię płatności z konkretnym podmiotem, jeśli
-          istnieje jakaś polityka zwrotów pieniężnych, lub jeśli będą musieli
-          odpowiedzieć na email potwierdzający w przypadku osiągnięcia limitu
-          zawodników.<br/>Prosimy o wypełnienie tego <b>w języku angielskim</b>
-          oraz jakichkolwiek innych językach używanych przez twoich zawodników.
-          Tekst ten będzie wyświetlany na stronie rejestracji, jeżeli używasz
-          systemu rejestracji WCA.
+          pola <b>nie</b> będzie już możliwa i wszelkie jego zmiany będa
+          wymagały zgody Zarządu. Przykładowo umieść tutaj informację, jeśli
+          zawodnicy muszą mieć czystą historię płatności z konkretnym podmiotem,
+          jeśli istnieje jakaś polityka zwrotów pieniężnych, lub jeśli będą
+          musieli odpowiedzieć na email potwierdzający w przypadku osiągnięcia
+          limitu zawodników.<br/>Prosimy o wypełnienie tego <b>w języku
+          angielskim</b> oraz jakichkolwiek innych językach używanych przez
+          twoich zawodników. Tekst ten będzie wyświetlany na stronie
+          rejestracji, jeżeli używasz systemu rejestracji WCA.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -862,6 +900,14 @@ pl:
       #original_hash: a2a43b3
       size_too_big: 'jest zbyt duże (powinno mieć co najwyżej %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Zaloguj się
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Zaloguj się
     failure:
       #original_hash: 1186218
       invalid: 'Niepoprawny adres email, WCA ID lub hasło.'
@@ -2419,8 +2465,12 @@ pl:
     motions: Wnioski
     #original_hash: 092f99e
     minutes: Protokoły
+    #original_hash: 8d61184
+    policies: Polityki
     #original_hash: cdad4f1
     dues: System Składek WCA
+    #original_hash: 7536665
+    logo: Użycie Logo WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegaci WCA
@@ -2635,12 +2685,11 @@ pl:
         Trójwymiarową wersję loga stworzył Vu Minh Tan z Vietnamu: <a
         href="/files/WCALogo3D.png">wersja PNG</a> (2.1 MB),  <a
         href="/files/WCALogo3Dsmall.png">mała wersja PNG</a> (0.25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Wszyscy organizatorzy zawodów mogą używać loga WCA na stronach, odzieży,
-        upominkach i dekoracjach (dotyczy tylko oficjalnych zawodów WCA). <br />
-        Wykorzystanie przez inne osoby i w innych celach wymaga zgody <a
-        href="mailto:board@worldcubeassociation.org">Zarządu WCA</a>.
+        Akceptowalne użycie logo WCA jest opisane przez Zasady Użytkowania Logo
+        WCA, które znajdują się na <a href="/documents">stronie Dokumentów
+        WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
@@ -2797,6 +2846,11 @@ pl:
         posts: Nie znaleziono żadnych postów dla
         #original_hash: 76a6bf1
         regulations_and_guidelines: 'Nie znaleziono żadnych punktów Regulaminu, ani Wytycznych dla'
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Zauważ, że sekcja incydentów jest dostępna jedynie w języku angielskim,
+      zatem poniższa zawartość nie jest przetłumaczona.
   about_regulations:
     #original_hash: 6bce1b5
     title: O Regulaminie
