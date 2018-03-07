@@ -13,7 +13,7 @@ id:
     #original_hash: 2f488ff
     HK: Hong Kong
     #original_hash: 4e8bd04
-    KR: Korea Selatan
+    KR: Korea
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Beberapa Benua
@@ -75,17 +75,17 @@ id:
   rounds:
     '0':
       #original_hash: 4d618bb
-      name: Babak kualifikasi
+      name: Ronde kualifikasi
       #original_hash: 2ffe44e
       cellName: Kualifikasi
     '1':
       #original_hash: 1e725b6
-      name: Babak pertama
+      name: Ronde pertama
       #original_hash: 916a78d
       cellName: Pertama
     '2':
       #original_hash: 985c8d0
-      name: Babak kedua
+      name: Ronde kedua
       #original_hash: 2a4bcae
       cellName: Kedua
     '3':
@@ -105,12 +105,12 @@ id:
       cellName: Final Gabungan
     d:
       #original_hash: c6136b1
-      name: Babak pertama Gabungan
+      name: Ronde pertama Gabungan
       #original_hash: dffa9ea
       cellName: Pertama Gabungan
     e:
       #original_hash: 659c53f
-      name: Babak kedua Gabungan
+      name: Ronde kedua Gabungan
       #original_hash: b6e1e1c
       cellName: Kedua Gabungan
     f:
@@ -120,7 +120,7 @@ id:
       cellName: Final
     g:
       #original_hash: e861dcf
-      name: Babak ketiga Gabungan
+      name: Ronde ketiga Gabungan
       #original_hash: 86f4b05
       cellName: Ketiga Gabungan
     h:
@@ -130,32 +130,32 @@ id:
       cellName: Kualifikasi Gabungan
   round:
     #original_hash: 66e902f
-    name: '%{event} Babak %{number}'
+    name: '%{event} Ronde %{number}'
   advancement_condition:
     #original_hash: 6381d11
-    ranking: 'Ranking %{ranking} besar maju ke babak %{next_round_number}'
+    ranking: 'Ranking %{ranking} besar maju ke ronde %{next_round_number}'
     #original_hash: 31ad77c
-    percent: '%{percent}% kompetitor teratas maju ke babak %{next_round_number}'
+    percent: '%{percent}% kompetitor teratas maju ke ronde %{next_round_number}'
     attempt_result:
       #original_hash: 03af49c
       time: 'Solve terbaik < %{time} maju ke babak %{next_round_number}'
       #original_hash: 0b4ae7c
-      moves: 'Solve terbaik < %{moves} gerakan maju ke babak %{next_round_number}'
+      moves: 'Solve terbaik < %{moves} gerakan maju ke ronde %{next_round_number}'
       #original_hash: 56c0366
-      points: 'Solve terbaik > %{points} poin maju ke babak %{next_round_number}'
+      points: 'Solve terbaik > %{points} poin maju ke ronde %{next_round_number}'
   cutoff:
     #original_hash: cf458e7
     time:
-      other: '%{count} Attempt yang didapat < %{time}'
       zero: '%{count} Attempt yang didapat < %{time}'
+      other: '%{count} Attempt yang didapat < %{time}'
     #original_hash: b49d930
     moves:
-      other: '%{count} Attempt yang didapat < %{moves} gerakan'
       zero: '%{count} Attempt yang didapat < %{moves} gerakan'
+      other: '%{count} Attempt yang didapat < %{moves} gerakan'
     #original_hash: eba1b97
     points:
-      other: '%{count} Attempt yang didapat < %{points} poin'
       zero: '%{count} Attempt yang didapat < %{points} poin'
+      other: '%{count} Attempt yang didapat < %{points} poin'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -196,12 +196,12 @@ id:
       invalid: tidak valid
     #original_hash: 49d0140
     days:
-      other: '%{count} hari'
       zero: '%{count} hari'
+      other: '%{count} hari'
     #original_hash: 203e1b3
     these_events:
-      other: '%{count} cabang ini'
       zero: '%{count} cabang ini'
+      other: '%{count} cabang ini'
     #original_hash: 51ef7d4
     search_site: Situs pencarian
     #original_hash: d7decf1
@@ -256,8 +256,8 @@ id:
         country_iso2: Kewarganegaraan
         #original_hash: ab58155
         dob: Tanggal lahir
-        #original_hash: ab58155
-        dob_verification: Tanggal lahir
+        #original_hash: 7636bbc
+        dob_verification: Tanggal lahir Anda
         #original_hash: 8a754c6
         gender: Jenis kelamin
         #original_hash: 84add5b
@@ -361,6 +361,8 @@ id:
           biaya pendaftaran
         #original_hash: 4baf44b
         championship_type: Tipe kejuaraan
+        #original_hash: ff722f0
+        registration_requirements: Syarat pendaftaran
       registration:
         #original_hash: 3c23a67
         guests: Tamu
@@ -431,6 +433,21 @@ id:
       vote:
         #original_hash: 153d7a5
         comment: Komentar
+      incident:
+        #original_hash: 768e0c1
+        title: Judul
+        #original_hash: cf66d44
+        private_description: Deskripsi (privat)
+        #original_hash: 1171d85
+        private_wrc_decision: Keputusan (privat)
+        #original_hash: 1c2ed61
+        public_summary: Kesimpulan (publik)
+        #original_hash: 62d6896
+        digest_worthy: Intisari
+        #original_hash: 848eed0
+        tags: Tag
+        #original_hash: 861e459
+        competition_id: Terjadi pada saat
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Kompetisi
@@ -464,8 +481,6 @@ id:
         delegate: Delegate
         #original_hash: d463c23
         senior_delegate: Delegate Senior
-        #original_hash: 660ee15
-        board_member: Anggota Board
     person:
       gender:
         #original_hash: 3f3a489
@@ -503,6 +518,29 @@ id:
       #original_hash: d70e9cb
       default_message: 'Silakan tinjau ulang masalah di bawah:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: >-
+          Ingat bahwa hal ini bersifat publik, maka dari itu Anda harus
+          mengisinya dalam Bahasa Inggris!
+        #original_hash: 67f2a1a
+        private_description: >-
+          Deskripsi insiden yang hanya dapat dilihat oleh Delegate. Harap isi
+          dengan Bahasa Inggris.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          Keputusan akhir WRC, termasuk detail privat. Harap isi dalam Bahasa
+          Inggris.
+        #original_hash: 3de5729
+        public_summary: >-
+          Deskripsi keseluruhan dari insiden dan keputusannya untuk ditampilkan
+          secara publik. Harap isi dalam Bahasa Inggris.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Isi tanggal lahir Anda dengan format YYYY-MM-DD.
@@ -582,12 +620,12 @@ id:
         registration_open: >-
           Catatan: Waktu pendaftaran dibuka dan ditutup mengikuti standar waktu
           UTC
-        #original_hash: 36963bc
-        remarks: >-
-          Beberapa informasi tambahan yang ingin Anda berikan kepada dewan.
-          Sebagai contoh, alasan mengapa kompetisi ini diajukan kurang dari satu
-          bulan sebelum tanggal kompetisi, jika memungkinkan. Harap ditulis
-          dalam Bahasa Inggris!
+        #original_hash: 243212f
+        remarks_html: >-
+          Beberapa informasi tambahan yang ingin Anda beritahu kepada Board.
+          Sebagai contoh, uraikan alasan Anda jika kompetisi ini diajukan kurang
+          dari empat minggu sebelum tanggal kompetisi, atau jika Anda mengajukan
+          permohonan %{link}. Harap isi dalam Bahasa Inggris!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -636,6 +674,20 @@ id:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Harap tunjukkan di sini syarat terkait proses pendaftaran, yang
+          dibutuhkan sesuai dengan <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Pedoman 2c1+</a>. Setelah kompetisi diumumkan, kolom
+          ini <b>tidak</b> dapat diubah kembali, dan diperlukan persetujuan
+          Board untuk mengubahnya.<br/>Sebagai contoh tunjukkan di sini jika
+          kompetitor perlu membuat riwayat pembayaran bersih dengan entitas
+          spesifik, jika ada kebijakan pengembalian dana, atau jika kompetitor
+          perlu menjawab email konfirmasi jika batas jumlah kompetitor telah
+          tercapai.<br/>Harap diisi <b>dalam Bahasa Inggris</b> dan bahasa yang
+          dimengerti kompetitor Anda; hal ini akan ditampilkan pada halaman
+          pendaftaran kompetisi jika Anda menggunakan situs web pendaftaran WCA.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -827,6 +879,14 @@ id:
       #original_hash: a2a43b3
       size_too_big: 'terlalu besar (maksimal %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Masuk
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Masuk
     failure:
       #original_hash: 1186218
       invalid: 'Email, ID WCA, atau kata sandi tidak valid.'
@@ -843,8 +903,8 @@ id:
       messages:
         #original_hash: e88f903
         form_error:
-          other: 'Formulir mengandung %{count} galat:'
           zero: 'Formulir mengandung %{count} galat:'
+          other: 'Formulir mengandung %{count} galat:'
     doorkeeper:
       applications:
         help:
@@ -895,6 +955,8 @@ id:
       information: Informasi
       #original_hash: 9ac918a
       about: Tentang WCA
+      #original_hash: ed97787
+      documents: Dokumen WCA
       #original_hash: d8fd3e4
       delegates: Delegate WCA
       #original_hash: 37b8fdc
@@ -976,11 +1038,11 @@ id:
   users:
     update_locale:
       #original_hash: 4cde9bc
-      success: Bahasa lokal diperbarui.
+      success: Daerah diperbarui.
       #original_hash: dcc2f49
       failure: Tidak dapat memperbarui profil Anda.
       #original_hash: c29870c
-      unavailable: Bahasa lokal yang diminta tidak tersedia.
+      unavailable: Daerah yang diminta tidak tersedia.
     claim_wca_id:
       #original_hash: f28bf87
       title: Klaim ID WCA
@@ -1101,6 +1163,10 @@ id:
         '5': Avatar tidak boleh mengandung teks selain teks pada latar belakang.
         #original_hash: cc5f23a
         '6': Avatar harus dikirim dengan orientasi yang benar.
+        #original_hash: 1a18831
+        '7': >-
+          Avatar tidak boleh memuat konten yang menyinggung (contoh:
+          gerakan/isyarat yang menyinggung).
     errors:
       #original_hash: 094b763
       not_found: tidak ditemukan
@@ -1144,10 +1210,6 @@ id:
         Kami tidak memiliki catatan nama untuk ID WCA ini. Kirim email ke <a
         href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
         Results Team</a> untuk memperbaikinya.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Anda tidak dapat mengundurkan diri dari jabatan anggota Board! Cari
-        anggota Board lain untuk melepas jabatan Anda.
       #original_hash: d02c03b
       avatar_requires_wca_id: dibutuhkan penghubungan ID WCA
     successes:
@@ -1203,31 +1265,31 @@ id:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        other: pendatang baru
-        zero: pendatang baru
+        zero: orang baru
+        other: orang baru
       #original_hash: bc010e3
       returner:
-        other: orang lama
         zero: orang lama
+        other: orang lama
       #original_hash: b7da17a
       person:
-        other: orang
         zero: orang
+        other: orang
     flash:
       #original_hash: da7ec53
       not_using_wca: Kompetisi ini tidak memakai pendaftaran pada situs WCA
       #original_hash: d528030
       accepted_and_mailed:
-        other: Pendaftaran diterima! Email notifikasi telah terkirim.
         zero: Pendaftaran diterima! Email notifikasi telah terkirim.
+        other: Pendaftaran diterima! Email notifikasi telah terkirim.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        other: Pendaftaran telah dipindahkan ke daftar tunggu
         zero: Pendaftaran telah dipindahkan ke daftar tunggu
+        other: Pendaftaran telah dipindahkan ke daftar tunggu
       #original_hash: a360b31
       deleted_and_mailed:
-        other: Pendaftaran telah dihapus
         zero: Pendaftaran telah dihapus
+        other: Pendaftaran telah dihapus
       #original_hash: c3aa289
       single_deletion_and_mail: 'Pendaftaran telah dihapus dan email ke %{mail} telah terkirim'
       #original_hash: d8f067f
@@ -1251,14 +1313,16 @@ id:
         mail_subject: 'Anda telah terdaftar pada %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Anda telah mendaftar pada %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Pendaftaran Anda masih dalam daftar tunggu dan masih terdapat
-          %{n_total} %{people} di dalamnya.
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: >-
+          Pendaftaran Anda telah diterima dan menunggu untuk disetujui oleh tim
+          panitia.
+        #original_hash: 826045f
         approval_info_html: >-
           Anda akan dikirimkan email jika pendaftaran Anda telah disetujui.
-          Catat bahwa pendaftaran tidak disetujui secara otomatis. Untuk melihat
+          Catat bahwa pendaftaran tidak disetujui secara otomatis, jadi harap
+          bersabar jika belum disetujui. Bisa jadi ada tahap-tahap registrasi
+          yang perlu diikuti agar pendaftaran Anda disetujui. Untuk melihat
           kriteria persetujuan, lihat situs web kompetisi atau kontak panitia
           yang bersangkutan. Anda juga dapat melihat status pendaftaran Anda
           %{here}.
@@ -1295,10 +1359,11 @@ id:
         causes:
           #original_hash: 978944c
           missing_info: Anda tidak mengirimkan seluruh detail yang dibutuhkan
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Anda tidak memenuhi kriteria pendaftaran (sebagai contoh, tidak
-            membayar biaya registrasi)
+            membayar biaya registrasi atau tidak mencapai waktu kualifikasi pada
+            beberapa cabang)
           #original_hash: 1e225f0
           registrations_full: >-
             Batas kompetitor telah tercapai dan tidak ada tempat kosong yang
@@ -1312,8 +1377,8 @@ id:
       edit: Sunting
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} negara'
         zero: '%{count} negara'
+        other: '%{count} negara'
       #original_hash: 1feee0e
       export_csv: Ekspor dalam CSV
       #original_hash: 84add5b
@@ -1420,6 +1485,15 @@ id:
     will_pay_here: Anda akan membayar setelah mengirim pendaftaran Anda
     #original_hash: b7ef562
     wont_pay_here: Lihat informasi kompetisi untuk melihat panduan pembayaran
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          Jumlah pengembalian dana kepada kompetitor, dapat berjumlah hingga
+          nilai yang telah dibayar.
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Jumlah Pengembalian
     payment_form:
       #original_hash: 4de825f
       title: Biaya pendaftaran
@@ -1446,6 +1520,8 @@ id:
     preferred_events_populated_html: >-
       Kami telah mengisi cabang pilihan Anda secara otomatis, Anda dapat
       mengubahnya %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Syarat pendaftaran kompetisi:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1511,12 +1587,12 @@ id:
       website: Situs Web
       #original_hash: 680567f
       organizer_plural:
-        other: Panitia
         zero: Panitia
+        other: Panitia
       #original_hash: 6afa61e
       delegate:
-        other: Delegate WCA
         zero: Delegate WCA
+        other: Delegate WCA
       #original_hash: b37456c
       contact: Kontak
       #original_hash: 32946e9
@@ -1527,6 +1603,14 @@ id:
       information: Informasi
       #original_hash: c5497bc
       events: Cabang
+      #original_hash: ff722f0
+      registration_requirements: Syarat pendaftaran
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        Kompetisi ini telah berakhir, klik %{link_here} untuk menampilkan syarat
+        kompetisi yang digunakan.
+      #original_hash: ff19a74
+      hide_requirements: Sembunyikan syarat kompetisi.
     index:
       #original_hash: db98a68
       title: Kompetisi
@@ -1731,8 +1815,8 @@ id:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        other: '%{count} kompetisi'
         zero: Tidak ada kompetisi
+        other: '%{count} kompetisi'
       #original_hash: e3528ec
       label: 'Kompetisi terdekat (dalam jarak %{days} hari dan %{kms} km)'
       #original_hash: 3446062
@@ -1763,6 +1847,10 @@ id:
       before: sebelum
       #original_hash: 405906c
       after: setelah
+      #original_hash: 24d948e
+      limit: Batas
+      #original_hash: 855bd26
+      competitors: Kompetitor
     #original_hash: 06b01c4
     announcements: Pengumuman
     #original_hash: 5b9523f
@@ -1812,7 +1900,7 @@ id:
       #original_hash: ad8919a
       event: Cabang
       #original_hash: ec7b598
-      round: Babak
+      round: Ronde
       #original_hash: 709a232
       name: Nama
   competition_tabs:
@@ -1892,7 +1980,7 @@ id:
         #original_hash: 868be55
         greater_china: Podium Kejuaraan Greater China
       #original_hash: c32a014
-      place: Tempat
+      place: Peringkat
       #original_hash: ddb18c1
       medal_collection: Koleksi Medali
       #original_hash: 9e69e13
@@ -2139,7 +2227,7 @@ id:
             3</a>. Semua puzzle harus disetujui oleh Delegate WCA. Jika Anda
             tidak yakin, harap bertanya Delegate kompetisi Anda. Agar lebih
             aman, Anda perlu membawa puzzle cadangan jika Anda tidak
-            diizinkan memakai puzzle tersebut.
+            diperbolehkan memakan puzzle tersebut.
       regulations2:
         #original_hash: 48f1234
         title: Bolehkah saya menggunakan puzzle bermagnet dalam kompetisi resmi WCA?
@@ -2199,17 +2287,20 @@ id:
           kesenangan, di bawah kondisi yang adil dan setara</strong>.
         #original_hash: 2b993c0
         '4': >-
-          Semangat World Cube Association adalah membuat<strong>orang-orang di
+          Semangat World Cube Association adalah membuat <strong>orang-orang di
           seluruh dunia bersenang-senang ber sama dalam atmosfir yang penuh
           persahabatan, membantu satu sama lain dan berperilaku layaknya seorang
           olahragawan.</strong>
     structure:
       #original_hash: 9482c5d
       title: Struktur
-      #original_hash: d855b50
-      board_html: >-
-        World Cube Association dipimpin oleh <strong>Board WCA</strong> yang
-        dibawahi oleh anggota-anggota berikut:
+      board:
+        #original_hash: abd2828
+        name: Board Directors WCA
+        #original_hash: d855b50
+        info_html: >-
+          World Cube Association dipimpin oleh <strong>WCA Board</strong>, yang
+          terdiri dari anggota-anggota berikut:
       #original_hash: b0c72a9
       committees: 'Komite berikut yang bertanggung jawab dalam aktivitas operasional WCA:'
       wdc:
@@ -2256,10 +2347,16 @@ id:
       wec:
         #original_hash: 83bd1d0
         name: WCA Ethics Committee
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
-          Komite ini memiliki peranan dalam memastikan bahwa semua prosedur yang
-          diikuti Staf WCA dan Staf Luar mematuhi Kode Etik.
+          Peran komite ini adalah memastikan bahwa semua prosedur yang diikuti
+          Staf WCA dan Staf Luar mematuhi Kode Etik, dan untuk melakukan
+          investigasi secara independen jika perbuatan dari anggota tersebut ada
+          yang tidak sesuai dengan Kode Etik. Investigasi ini dapat diajukan
+          oleh Speedcuber manapun yang telah terdaftar, yang dipercaya oleh WEC.
+          Komite ini juga berfungsi sebagai dewan banding jika seseorang yang
+          terlibat tidak setuju dengan keputusan yang dibuat oleh WCA
+          Disciplinary Committee.
       wqac:
         #original_hash: 8f32116
         name: WCA Quality Assurance Committee
@@ -2270,31 +2367,47 @@ id:
           kualitas di seluruh dunia untuk memastikan konsistensi kualitas yang
           tinggi dari proses, Staf WCA, Organisasi Regional, Panitia Kompetisi,
           dan Staf Kompetisi.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>Delegate WCA</strong> adalah anggota WCA yang bertanggung jawab
-        dalam memastikan seluruh kompetisi WCA dijalankan sesuai misi, regulasi,
-        dan semangat WCA. WCA membedakan <strong>Delegate Senior WCA</strong>,
+        <p><strong>Delegate WCA</strong> adalah sebuah peran dalam Gerakan WCA
+        dan ditulis pada Regulasi WCA. Tugas utama Delegate adalah untuk
+        memantau kompetisi atas nama WCA. Delegate WCA bertanggung jawab dalam
+        memastikan seluruh kompetisi WCA dijalankan sesuai misi, regulasi, dan
+        semangat WCA. WCA membedakan <strong>Delegate Senior WCA</strong>,
         <strong>Delegate WCA</strong>, dan <strong>Kandidat Delegate
-        WCA</strong>%{see_link}. Tugas tambahan dari Delegate WCA dan Delegate
-        Senior WCA adalah bertanggung jawab dalam mengatur Delegate di dalam
-        wilayahnya dan dapat dihubungi oleh komunitas untuk keperluan regional.
-        Delegate baru tertulis sebagai Kandidat Delegate WCA dalam daftar dan
-        mereka harus menunjukkan bahwa mereka mampu dalam mengatur kompetisi
-        secara benar sebelum didaftarkan sebagai Delegate WCA.
+        WCA</strong>%{see_link}.</p> <p>Sebagai tugas tambahan Delegate WCA,
+        Delegate Senior WCA bertanggung jawab dalam mengatur Delegate WCA di
+        dalam wilayahnya dan dapat dihubungi oleh komunitas untuk keperluan
+        regional.</p> <p>Delegate baru tertulis sebagai Kandidat Delegate WCA
+        saat pertama kali muncul dalam daftar; setelah itu mereka meminta untuk
+        menunjukkan keahlian dalam mengatur Kompetisi WCA sebelum diangkat
+        sebagai Delegate WCA.</p>
       #original_hash: 27d18ac
       see_link_html: '(lihat %{link})'
       #original_hash: 5b01fcc
       members_html: >-
         Seluruh kompetitor diangkat menjadi <strong>anggota</strong> WCA secara
         otomatis dalam kompetisi WCA pertama mereka.
+  documents:
+    #original_hash: 687c828
+    title: Dokumen
+    #original_hash: 9855f80
+    bylaws: AD/ART
+    #original_hash: fdceb44
+    motions: Gerakan
+    #original_hash: 092f99e
+    minutes: Notulensi
+    #original_hash: 8d61184
+    policies: Kebijakan
+    #original_hash: cdad4f1
+    dues: Sistem Iuran WCA
+    #original_hash: 7536665
+    logo: Pemakaian Logo WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegate WCA
-    #original_hash: 0a89b0f
-    acknowledges: >-
-      WCA mengakui anggota-anggota di bawah ini sebagai Delegate dalam kompetisi
-      resmi WCA:
+    #original_hash: 77b819c
+    acknowledges: 'WCA mengakui Delegate-Delegate WCA berikut:'
     table:
       #original_hash: 709a232
       name: Nama
@@ -2376,9 +2489,9 @@ id:
       wilayah atau kompetisi secara spesifik, harap hubungi %{link} lokal Anda.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Komite dan Tim</u>
+    #original_hash: 1cb449c
+    members: Anggota
     board:
-      #original_hash: 90fcc48
-      name_html: Board WCA
       #original_hash: 3a8b1d8
       info_html: >-
         World Cube Association dipimpin oleh Board WCA. Board bertanggung jawab
@@ -2473,6 +2586,16 @@ id:
       '3': >-
         Versi terakhir Score sheet kompetisi WCA dapat diunduh di sini: <br /><a
         href="/files/results.xls" target="_blank">Score sheet kompetisi WCA</a>.
+      #original_hash: 24f0b3f
+      '4': >-
+        Anda mungkin ingin memakai <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> untuk
+        mempersiapkan grup kompetitor untuk kompetisi. Ini adalah kakas untuk
+        melakukan hal ini untuk Anda. Fitur utama yang akan Anda temukan:
+        mengurutkan kompetitor berdasarkan peringkat, memberikan tugas kepada
+        kompetitor (Judging, Scrambling), memilih berapa banyak Scramble yang
+        dibutuhkan, membuat Scorecard, Personal Card, dan kesimpulan. Ini adalah
+        proyek Open Source yang dibuat oleh Jonatan Kłosko.
   logo:
     #original_hash: c72c969
     title: Logo WCA
@@ -2494,18 +2617,16 @@ id:
         Logo versi 3D, didesain oleh Vu Minh Tan dari Vietnam: <a
         href="/files/WCALogo3D.png">versi PNG</a> (2.1 MB), a <a
         href="/files/WCALogo3Dsmall.png">versi PNG kecil</a> (0.25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Semua kompetisi WCA boleh menggunakan logo WCA untuk situs web, pakaian,
-        souvenir, atau dekorasi, hanya untuk kompetisi resmi WCA.<br /> Untuk
-        semua orang dan keperluan selain kompetisi WCA, penggunaan logo WCA
-        memerlukan persetujuan dari <a
-        href="mailto:board@worldcubeassociation.org">Board WCA</a>.
+        Pemakaian logo WCA yang diterima ditulis pada kebijakan Pemakaian Logo
+        WCA yang dapat diakses pada <a href="/documents">halaman Dokumen
+        WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
-    title: WCA Workbook Assistant
+    title: Bantuan Buku Kerja WCA
     #original_hash: a7c307f
-    download: Unduh WCA Workbook Assistant
+    download: Unduh Bantuan Buku Kerja WCA
     #original_hash: cf1b916
     last_update: Pembaruan terakhir
     #original_hash: feece00
@@ -2514,17 +2635,17 @@ id:
     header: Bagaimana memproses hasil dan Scramble sebelum mengirimkan ke WCA
     step1:
       #original_hash: c0450b1
-      title: 'Langkah 1: Buka Workbook dengan hasil kompetisi'
+      title: 'Langkah 1: Buka buku kerja dengan hasil kompetisi'
       #original_hash: 656d70d
       content_html: >-
-        Buka Workbook dengan tombol <em>Open...</em> atau dengan menarik
+        Buka buku kerja dengan tombol <em>Buka...</em> atau dengan menarik
         berkas buku kerja dan menaruhnya pada jendela aplikasi.
     step2:
       #original_hash: 3ad9881
       title: 'Langkah 2: Tambahkan Scramble TNoodle'
       #original_hash: 080acc0
       content_html: >-
-        Tambahkan Scramble TNoodle menggunakan tombol <em>Add...</em> atau
+        Tambahkan Scramble TNoodle menggunakan tombol <em>Tambah...</em> atau
         dengan cara menarik berkasi TNoodle dan menaruhnya pada jendela
         aplikasi. Pastikan Anda menggunakan berkas berformat .zip atau .json
         yang di-generate oleh TNoodle.
@@ -2537,8 +2658,8 @@ id:
       title: 'Langkah 3: Cocokkan Scramble dengan hasil'
       #original_hash: 36383b1
       content_html: >-
-        WCA Workbook Assistant menghubungkan secara otomatis antara Scramble
-        dengan babak terkait. Dalam beberapa kasus, seperti banyak berkas
+        Bantuan Buku Kerja WCA menghubungkan secara otomatis antara Scramble
+        dengan ronde terkait. Dalam beberapa kasus, seperti banyak berkas
         Scramble yang di-generate, pemilihan harus dilakukan secara manual
         karena terdapat banyak kemungkinan pilihan.
       #original_hash: e869c1e
@@ -2547,27 +2668,27 @@ id:
         <em>Scrambles</em> pada panel ikhtisar lembar.
       #original_hash: 8f4fdfd
       content3_html: >-
-        Hal yang hanya mungkin dilakukan adalah memilih satu babak dari berkas
-        Scramble untuk babak yang memiliki hasil. Jika ada situasi di mana
-        Scramble untuk satu babak di-generate sebagai Scramble untuk babak
-        terpisah pada TNoodle, Anda dapat menggunakan tombol <em>Edit
-        groups...</em> untuk menyunting grup pada berkas Scramble dan pindahkan
-        dari satu babak ke babak lainnya atau hapus.
+        Hal yang hanya mungkin dilakukan adalah memilih satu ronde dari berkas
+        Scramble untuk ronde yang memiliki hasil. Jika ada situasi di mana
+        Scramble untuk satu ronde di-generate sebagai Scramble untuk ronde
+        terpisah pada TNoodle, Anda dapat menggunakan tombol <em>Sunting
+        grup...</em> untuk menyunting grup pada berkas Scramble dan pindahkan
+        dari satu ronde ke ronde lainnya atau hapus.
       #original_hash: 94353f2
       content4_html: >-
         Pada contoh berikut, kumpulan Scramble ekstra di-generate untuk dua grup
-        pada babak pertama skewb yang seharusnya untuk satu grup.
+        pada ronde pertama skewb yang seharusnya untuk satu grup.
       #original_hash: 68c5b18
       content5_html: >-
-        Scramble untuk grup tambahan dapat ditarik dan ditaruh pada babak di
+        Scramble untuk grup tambahan dapat ditarik dan ditaruh pada ronde di
         mana asal Scramble di-generate. Hal ini menyatukan dua grup pada satu
-        babak.
+        ronde.
     step4:
       #original_hash: ed940d2
       title: 'Langkah 4: Perbaiki segala galat yang dilaporkan oleh aplikasi'
       #original_hash: df2cf58
       content_html: >-
-        Hasil diperiksa untuk mencari kesalahan masukan data. Babak yang
+        Hasil diperiksa untuk mencari kesalahan masukan data. Ronde yang
         mempunyai kesalahan akan ditandai dengan ikon merah pada panel ikhtisar
         lembar.
       #original_hash: 7fbf6b8
@@ -2576,10 +2697,10 @@ id:
         akan mengurutkan detail pada panel validasi galat di kiri-bawah.
       #original_hash: 0600502
       content3_html: >-
-        Kesalahan dapat diperbaiki dengan cara membuka Workbook pada aplikasi
-        Spreadsheet dan menyunting serta menyimpannya. Workbook yang telah
-        diperbaiki dapat dimuat kembali pada WCA Workbook Assistant dengan
-        menekan tombol <em>Refresh</em>. Hal ini hanya memuat ulang hasil
+        Kesalahan dapat diperbaiki dengan cara membuka buku kerja pada aplikasi
+        Spreadsheet dan menyunting serta menyimpannya. Buku kerja yang telah
+        diperbaiki dapat dimuat kembali pada Panduan Buku Kerja WCA dengan
+        menekan tombol <em>Segarkan</em>. Hal ini hanya memuat ulang hasil
         kecuali perubahan lain yang Anda ubah secara utuh, seperti Scramble yang
         ditambahkan.
     step5:
@@ -2588,7 +2709,7 @@ id:
       #original_hash: 5aeb5bd
       content_html: >-
         Pilih ID kompetisi dengan benar dengan cara klik tombol
-        <em>Select...</em> di samping kolom <em>Competition ID</em>.
+        <em>Pilih...</em> di samping kolom <em>ID Kompetisi</em>.
       #original_hash: 3acf7d0
       content2_html: >-
         Sebuah kotak dialog akan muncul dengan daftar kompetisi yang harus
@@ -2602,20 +2723,20 @@ id:
         Untuk memulainya, kompetisi yang muncul hanyalah kompetisi yang diadakan
         kurang dari satu minggu yang lalu atau satu minggu yang akan datang.
         Jika Anda perlu memilih kompetisi di luar jangka waktu tersebut, hapus
-        pilihan <em>Only show current competitions</em>.
+        pilihan <em>Hanya tampilkan kompetisi saat ini</em>.
     step6:
       #original_hash: 52bb1f6
       title: 'Langkah 6: Ekspor data hasil dalam bentuk JSON'
       #original_hash: 6bfee23
       content_html: >-
-        Simpan hasil dalam berkas JSON menggunakan tombol <em>Export results
+        Simpan hasil dalam berkas JSON menggunakan tombol <em>Ekspor hasil
         JSON...</em> di kanan-bawah.
     step7:
       #original_hash: 09fa37d
       title: 'Langkah 7: Kirim hasil JSON ke WCA'
       #original_hash: 9be089f
       content_html: >-
-        E-mail berkas JSON yang telah diekspor dari WCA Workbook Assistant ke
+        E-mail berkasi JSON yang telah diekspor dari Bantuan Buku Kerja WCA ke
         <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
   relations:
@@ -2655,6 +2776,11 @@ id:
         posts: Tidak ada postingan yang ditemukan untuk
         #original_hash: 76a6bf1
         regulations_and_guidelines: Tidak ada Regulasi atau Pedoman yang ditemukan untuk
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Harap dicatat bahwa bagian insiden hanya tersedia dalam Bahasa Inggris,
+      konten di bawah ini tidak diterjemahkan.
   about_regulations:
     #original_hash: 6bce1b5
     title: Tentang Regulasi
@@ -2821,7 +2947,7 @@ id:
       title: Menangani pendaftaran
       #original_hash: cb13cd0
       content: >-
-        Registrasi harus diproses dengan dasar "Siapa Cepat Dia Dapat", yang
+        Pendaftaran harus diproses dengan dasar "Siapa Cepat Dia Dapat", yang
         berarti orang yang pertama melakukan pendaftaran harus dilayani pertama
         kali. Jika biaya masuk dapat dibayar sebelum hari kompetisi, pendaftaran
         dianggap selesai jika biaya masuk sudah dibayar sebelumnya. Hal ini
@@ -2865,7 +2991,7 @@ id:
           Kompetitor harus dibagi dalam beberapa grup, Score sheet harus dicetak
           dan harus dipisah berdasarkan pembagian grup. Disarankan untuk membuat
           rencana tentang siapa yang harus menjadi Scrambler untuk setiap grup
-          pada setiap cabang, setidaknya untuk satu babak. Scrambler harus dapat
+          pada setiap cabang, setidaknya untuk satu ronde. Scrambler harus dapat
           dipercaya.
     paragraph9:
       #original_hash: ead44f5
