@@ -288,6 +288,13 @@ class Competition < ApplicationRecord
 
   after_create :create_delegate_report!
 
+  after_create :create_schedule!
+  # TODO: handle the fact that user can change competition_id!!!
+
+  def create_schedule!
+    create_competition_schedule!(start_date: start_date.to_s, number_of_days: (end_date - start_date).to_i + 1)
+  end
+
   before_validation :unpack_dates
   validate :dates_must_be_valid
 
