@@ -651,13 +651,13 @@ DROP TABLE IF EXISTS `competition_schedules`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `competition_schedules` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `competition_id` bigint(20) DEFAULT NULL,
+  `competition_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `start_date` date DEFAULT NULL,
   `number_of_days` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_competition_schedules_on_competition_id` (`competition_id`)
+  UNIQUE KEY `index_competition_schedules_on_competition_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `competition_tabs`;
