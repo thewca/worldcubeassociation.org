@@ -529,6 +529,17 @@ class Competition < ApplicationRecord
     to_radians latitude_degrees
   end
 
+  def default_timezone_id
+    if country.real?
+      ActiveSupport::TimeZone.country_zones(country.iso2).each do |zone|
+        if ScheduleVenue::VALID_TIMEZONES.include?(zone.tzinfo.name)
+          return zone.tzinfo.name
+        end
+      end
+    end
+    nil
+  end
+
   private def compute_coordinates
     unless @latitude_degrees.nil?
       self.latitude_microdegrees = @latitude_degrees * 1e6

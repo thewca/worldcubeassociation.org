@@ -1052,6 +1052,7 @@ en:
         clone: "Clone"
         orga_view: "Organizer view"
         event_view: "Manage events"
+        schedule_view: "Manage schedule"
         payment_view: "Setup payments"
         admin_view: "Admin view"
         tabs: "Manage tabs"

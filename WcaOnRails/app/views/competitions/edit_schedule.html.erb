@@ -1,0 +1,25 @@
+<% provide(:title, "Manage schedule for #{@competition.name}") %>
+<% provide(:include_gmaps, true) %>
+<%= javascript_pack_tag 'edit_schedule' %>
+
+<%= render layout: 'nav' do %>
+  <div id="edit-schedule-area"></div>
+  <script>
+    $(function() {
+      competition_info = {
+        id: <%= @competition.id.to_json.html_safe %>,
+        start_date: <%= @competition.start_date.to_json.html_safe %>,
+        end_date: <%= @competition.end_date.to_json.html_safe %>,
+        lat: <%= @competition.latitude.to_json.html_safe %>,
+        lng: <%= @competition.longitude.to_json.html_safe %>,
+        defaultTimeZoneValue: <%= @competition.default_timezone_id.to_json.html_safe %>,
+      }
+      wca.initializeScheduleForm(
+        competition_info,
+        <%= DatePickerInput.date_options_base.to_json.html_safe %>,
+        <%= @competition.competition_schedule.to_wcif.to_json.html_safe %>,
+        <%= ActiveSupport::TimeZone::MAPPING.to_json.html_safe %>,
+      );
+    });
+  </script>
+<% end %>

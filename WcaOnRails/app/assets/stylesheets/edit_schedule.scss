@@ -1,0 +1,30 @@
+#edit-schedule-area {
+  .panel-primary {
+    .collapse-indicator {
+      color: #fff;
+    }
+  }
+
+  #venues-edit-panel {
+    .venue-map {
+      height: 300px;
+    }
+    .venue-form-label {
+      @extend label;
+    }
+    .panel-venue {
+      @extend .col-xs-12, .col-md-6, .col-lg-4;
+      .new-venue-link {
+        width: 100%;
+      }
+      .venue-title {
+        padding-top: 7px;
+      }
+      .panel-body {
+        .row {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}

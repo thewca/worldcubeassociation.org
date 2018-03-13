@@ -25,7 +25,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :update_events_from_wcif, :payment_setup]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :update_events, :update_events_from_wcif, :payment_setup]
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
@@ -334,6 +334,12 @@ class CompetitionsController < ApplicationController
 
   def edit_events
     @competition = competition_from_params(includes: [:events, competition_events: { rounds: [:competition_event] }])
+  end
+
+  def edit_schedule
+    # FIXME: fix includes
+    #@competition = competition_from_params(includes: [:events, competition_events: { rounds: [:competition_event] }])
+    @competition = competition_from_params
   end
 
   def update_events
