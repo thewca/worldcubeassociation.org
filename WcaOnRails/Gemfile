@@ -44,6 +44,11 @@ gem 'stripe'
 gem 'oauth2'
 gem 'openssl'
 gem 'wca_i18n'
+# I'd love to include this through yarn, but it would bring in jquery there too,
+# which means we would have included twice. We'd better migrate our js codebase
+# to webpack before doing this.
+gem 'fullcalendar-rails'
+gem 'jquery-ui-rails'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953

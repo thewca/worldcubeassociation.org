@@ -27,15 +27,17 @@ let state = {};
 
 export function rootRender() {
   ReactDOM.render(
-    <EditSchedule competitionInfo={state.competitionInfo} pickerOptions={state.pickerOptions} scheduleWcif={state.scheduleWcif} tzMapping={state.tzMapping} />,
+    <EditSchedule competitionInfo={state.competitionInfo} pickerOptions={state.pickerOptions} scheduleWcif={state.scheduleWcif} tzMapping={state.tzMapping} eventsWcif={state.eventsWcif} enableDraggableAction={state.enableDraggableAction} />,
     document.getElementById('edit-schedule-area'),
   )
 }
 
-wca.initializeScheduleForm = (competitionInfo, pickerOptions, scheduleWcif, tzMapping) => {
+wca.initializeScheduleForm = (competitionInfo, pickerOptions, scheduleWcif, tzMapping, eventsWcif, enableDraggableAction) => {
   state.competitionInfo = competitionInfo;
   state.pickerOptions = pickerOptions;
   state.scheduleWcif = scheduleWcif;
   state.tzMapping = tzMapping;
+  state.eventsWcif = eventsWcif;
+  state.enableDraggableAction = enableDraggableAction;
   rootRender();
 }

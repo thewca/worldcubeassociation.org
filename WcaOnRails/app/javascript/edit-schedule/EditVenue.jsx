@@ -2,6 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import ReactDOM from 'react-dom'
 import { rootRender } from 'edit-schedule'
+import { newRoomId } from './EditSchedule'
 import { compose, withProps } from "recompose"
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
@@ -34,15 +35,11 @@ const MapPickerComponent = compose(
 })
 
 class EditRoom extends React.Component {
-  componentWillMount() {
-    this.setState({ ...this.props.roomWcif });
-  }
 
   // FIXME: could be part of a common base class
   handleNameChange = e => {
     // Update parent's WCIF
     this.props.roomWcif.name = e.target.value;
-    this.setState({ name: e.target.value });
     rootRender();
   }
 
@@ -63,16 +60,11 @@ class EditRoom extends React.Component {
 
 export class EditVenue extends React.Component {
 
-  componentWillMount() {
-    this.setState({ ...this.props.venueWcif });
-  }
-
   handleSinglePropertyChange = (e, propName) => {
     let partialNewState = {};
     partialNewState[propName] = e.target.value;
     // Update parent's WCIF
     this.props.venueWcif[propName] = partialNewState[propName];
-    this.setState(partialNewState);
     rootRender();
   }
 
@@ -85,7 +77,6 @@ export class EditVenue extends React.Component {
     // Update parent's WCIF
     this.props.venueWcif.latitudeMicrodegrees = newLat;
     this.props.venueWcif.longitudeMicrodegrees = newLng;
-    this.setState({ latitudeMicrodegrees: newLat, longitudeMicrodegrees: newLng });
     rootRender();
   }
 
@@ -190,6 +181,7 @@ function NewRoomElement({ newRoomAction }) {
 
 function addRoomToVenue(venueWcif) {
   venueWcif.rooms.push({
+    id: newRoomId(),
     name: "Rooms's name",
     activities: [],
   });

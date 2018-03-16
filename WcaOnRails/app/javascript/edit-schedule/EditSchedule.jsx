@@ -6,14 +6,35 @@ import { Panel, PanelGroup, Alert } from 'react-bootstrap';
 
 import { rootRender, promiseSaveWcif } from 'edit-schedule'
 import { EditVenue } from './EditVenue'
+import { SchedulesEditor } from './EditScheduleForRoom'
+
+const currentElementsIds = {
+  venue: 0,
+  room: 0,
+  activity: 0,
+};
+
+export function newVenueId() { return ++currentElementsIds.venue; }
+export function newRoomId() { return ++currentElementsIds.room; }
+export function newActivityId() { return ++currentElementsIds.activity; }
 
 export default class EditSchedule extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: true,
-      savedScheduleWcif: _.cloneDeep(this.props.scheduleWcif)
-    };
+
+  componentWillMount() {
+    this.setState({ savedScheduleWcif: _.cloneDeep(this.props.scheduleWcif) });
+    // Explore the WCIF to get the highest ids.
+    this.props.scheduleWcif.venues.forEach(function(venue, index) {
+      if (venue.id > currentElementsIds.venue) {
+        currentElementsIds.venue = venue.id;
+      }
+      venue.rooms.forEach(function(room, index) {
+        if (room.id > currentElementsIds.room) {
+          currentElementsIds.room = room.id;
+        }
+        let all_ids = room.activities.map(function (elem) { return elem.id; });
+        currentElementsIds.activity = Math.max(currentElementsIds.activity, Math.max(...all_ids));
+      });
+    });
   }
 
   save = e => {
@@ -62,7 +83,7 @@ export default class EditSchedule extends React.Component {
   }
 
   render() {
-    let { competitionInfo, pickerOptions, scheduleWcif, tzMapping } = this.props;
+    let { competitionInfo, pickerOptions, scheduleWcif, tzMapping, eventsWcif, enableDraggableAction } = this.props;
     let unsavedChanges = null;
     if(this.unsavedChanges()) {
       unsavedChanges = <Alert bsStyle="info">
@@ -149,14 +170,14 @@ export default class EditSchedule extends React.Component {
                   </div>
                 </Panel.Body>
               </Panel>
-              <Panel id="schedule-for-room-panel" bsStyle="primary" eventKey="2">
+              <Panel id="schedules-edit-panel" bsStyle="primary" eventKey="2">
                 <Panel.Heading>
                   <Panel.Title toggle>
                     Edit schedules <span className="collapse-indicator"></span>
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                TODO
+                  <SchedulesEditor scheduleWcif={scheduleWcif} eventsWcif={eventsWcif} enableDraggableAction={enableDraggableAction} />
                 </Panel.Body>
               </Panel>
             </PanelGroup>
@@ -213,6 +234,7 @@ function pad(number) {
 
 function addVenueToSchedule(competitionInfo, scheduleWcif) {
   scheduleWcif.venues.push({
+    id: newVenueId(),
     name: "Venue's name",
     latitudeMicrodegrees: competitionInfo.lat,
     longitudeMicrodegrees: competitionInfo.lng,

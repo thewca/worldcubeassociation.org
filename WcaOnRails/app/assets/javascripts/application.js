@@ -53,7 +53,9 @@
 //= require bootstrap-table-locale-all
 //= require extensions/bootstrap-table-mobile
 //= require autosize
+//= require fullcalendar
 //= require jquery_plugins
+//= require jquery-ui/widgets/draggable
 //= require jquery.slick
 //= require_self
 //= require_tree .
