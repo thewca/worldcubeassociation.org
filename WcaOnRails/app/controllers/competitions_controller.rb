@@ -338,8 +338,7 @@ class CompetitionsController < ApplicationController
 
   def edit_schedule
     # FIXME: fix includes
-    @competition = competition_from_params(includes: [competition_events: { rounds: {competition_event: [:event]} }, competition_schedule: { schedule_venues: { venue_rooms: { schedule_activities: [:children_activities] } } }])
-    #@competition = competition_from_params
+    @competition = competition_from_params(includes: [competition_events: { rounds: { competition_event: [:event] } }, competition_schedule: { schedule_venues: { venue_rooms: { schedule_activities: [:children_activities] } } }])
   end
 
   def update_events
