@@ -16,6 +16,9 @@ class ResultsSubmissionController < ApplicationController
     if params[:results].blank? || params[:message].blank?
       flash.now[:danger] = "Please make sure to fill in the message and attach the results file."
       render :edit
+    elsif File.extname(params[:results].original_filename) != ".json"
+      flash.now[:danger] = "Please attach the JSON file from the Workbook Assistant"
+      render :edit
     else
       CompetitionsMailer.results_submitted(@competition, params[:message], current_user.name, params[:results].read).deliver_now
 
