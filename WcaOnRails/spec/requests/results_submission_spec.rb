@@ -36,7 +36,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
     let(:submission_message) { "Hello, here are the results" }
     let(:file_contents) { '{ "results": "good" }' }
     let(:file) do
-      temp_file = Tempfile.new("sometmpfilename.tmp")
+      temp_file = Tempfile.new(["sometmpfilename", ".json"])
       temp_file.write(file_contents)
       temp_file.rewind
       Rack::Test::UploadedFile.new(temp_file.path, "application/json")
@@ -86,6 +86,19 @@ RSpec.describe ResultsSubmissionController, type: :request do
       it "flashes an error and doesn't send an email" do
         expect {
           post submit_results_path(comp.id), params: { competition_id: comp.id, message: submission_message }
+        }.to_not change { ActionMailer::Base.deliveries.count }
+
+        expect(flash.now[:danger]).not_to be_empty
+      end
+    end
+
+    describe "Posting results with a non-JSON file" do
+      it "flashes an error and doesn't send an email" do
+        temp_file = Tempfile.new(["results", ".notjson"])
+        non_json_file = Rack::Test::UploadedFile.new(temp_file.path)
+
+        expect {
+          post submit_results_path(comp.id), params: { competition_id: comp.id, message: submission_message, results: non_json_file }
         }.to_not change { ActionMailer::Base.deliveries.count }
 
         expect(flash.now[:danger]).not_to be_empty
