@@ -27,17 +27,18 @@ let state = {};
 
 export function rootRender() {
   ReactDOM.render(
-    <EditSchedule competitionInfo={state.competitionInfo} pickerOptions={state.pickerOptions} scheduleWcif={state.scheduleWcif} tzMapping={state.tzMapping} eventsWcif={state.eventsWcif} enableDraggableAction={state.enableDraggableAction} />,
+    // FIXME: pass a single state
+    <EditSchedule competitionInfo={state.competitionInfo} pickerOptions={state.pickerOptions} scheduleWcif={state.scheduleWcif} tzMapping={state.tzMapping} eventsWcif={state.eventsWcif} locale={state.locale} />,
     document.getElementById('edit-schedule-area'),
   )
 }
 
-wca.initializeScheduleForm = (competitionInfo, pickerOptions, scheduleWcif, tzMapping, eventsWcif, enableDraggableAction) => {
+wca.initializeScheduleForm = (competitionInfo, pickerOptions, scheduleWcif, tzMapping, eventsWcif, locale) => {
   state.competitionInfo = competitionInfo;
   state.pickerOptions = pickerOptions;
   state.scheduleWcif = scheduleWcif;
   state.tzMapping = tzMapping;
   state.eventsWcif = eventsWcif;
-  state.enableDraggableAction = enableDraggableAction;
+  state.locale = locale;
   rootRender();
 }

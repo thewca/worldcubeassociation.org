@@ -56,6 +56,7 @@
               padding-left: 2px;
               padding-right: 2px;
               text-align: center;
+              cursor: pointer;
               z-index: 3;
               &.activity-used {
                 opacity: 0.5;
@@ -66,8 +67,11 @@
       }
     }
     #schedule-editor {
-      .schedule-calendar {
-        z-index: 1;
+      #schedule-calendar {
+        &:target {
+          // Override the flashy yellow we use for targets elsewhere
+          background-color: transparent;
+        }
       }
       #drop-event-area {
         z-index: 0;
@@ -87,5 +91,19 @@
         border: 2px dashed #a94442;
       }
     }
+  }
+}
+
+#calendar-settings-popover {
+  .setting-label {
+    padding-top: 7px;
+    padding-right: 5px;
+    padding-left: 0;
+    font-size: 12px;
+    text-align: right;
+  }
+  select {
+    @extend .input-sm;
+    margin-bottom: 5px;
   }
 }

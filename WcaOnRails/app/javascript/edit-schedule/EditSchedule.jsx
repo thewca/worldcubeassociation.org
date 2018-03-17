@@ -19,7 +19,6 @@ export function newRoomId() { return ++currentElementsIds.room; }
 export function newActivityId() { return ++currentElementsIds.activity; }
 
 export default class EditSchedule extends React.Component {
-
   componentWillMount() {
     this.setState({ savedScheduleWcif: _.cloneDeep(this.props.scheduleWcif) });
     // Explore the WCIF to get the highest ids.
@@ -83,8 +82,11 @@ export default class EditSchedule extends React.Component {
   }
 
   render() {
-    let { competitionInfo, pickerOptions, scheduleWcif, tzMapping, eventsWcif, enableDraggableAction } = this.props;
+    let { competitionInfo, pickerOptions, scheduleWcif, tzMapping, eventsWcif, locale } = this.props;
     let unsavedChanges = null;
+    // FIXME: potentially adding this to the DOM messes with scrolling
+    // with one comp/one venue/one room, selecting the room and changing a calendar setting scrolls top
+    // Idea: change to a display (none/block)
     if(this.unsavedChanges()) {
       unsavedChanges = <Alert bsStyle="info">
         You have unsaved changes. Don't forget to{" "}
@@ -103,11 +105,6 @@ export default class EditSchedule extends React.Component {
       rootRender();
     };
 
-    let foo = e => {
-      e.preventDefault();
-      rootRender();
-    };
-
     let removeVenueAction = (e, index) => {
       e.preventDefault();
       if (!confirm(`Are you sure you want to remove the venue "${scheduleWcif.venues[index].name}" and all the associated rooms and schedules?`)) {
@@ -118,7 +115,7 @@ export default class EditSchedule extends React.Component {
     };
 
     let isThereAnyRoom = false;
-    _.forEach(scheduleWcif.venues, function(venue) {
+    scheduleWcif.venues.forEach(function(venue) {
       if (venue.rooms.length > 0) {
         isThereAnyRoom = true;
         return false;
@@ -177,7 +174,7 @@ export default class EditSchedule extends React.Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  <SchedulesEditor scheduleWcif={scheduleWcif} eventsWcif={eventsWcif} enableDraggableAction={enableDraggableAction} />
+                  <SchedulesEditor scheduleWcif={scheduleWcif} eventsWcif={eventsWcif} locale={locale} />
                 </Panel.Body>
               </Panel>
             </PanelGroup>

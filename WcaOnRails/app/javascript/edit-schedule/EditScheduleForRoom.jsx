@@ -4,7 +4,7 @@ import events from 'wca/events.js.erb'
 import _ from 'lodash'
 import ReactDOM from 'react-dom'
 import { parseActivityCode, roundIdToString } from 'edit-events/modals/utils'
-import { Panel, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Button, ButtonToolbar, Modal, Panel, Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
 import { rootRender } from 'edit-schedule'
 import { newActivityId } from './EditSchedule'
 
@@ -15,40 +15,38 @@ function NoRoomSelected() {
 }
 
 function activityToFcEvent(eventData) {
-  // Here we assume "eventData" is an object with at least name/activityCode
-  eventData.title = eventData.name;
+  if (eventData.hasOwnProperty("name")) {
+    eventData.title = eventData.name;
+  }
 
   // Generate a new activity id if needed
   if (!eventData.hasOwnProperty("id")) {
     eventData.id = newActivityId();
   }
   // Keep activityCode
-  if (eventData.startTime) {
+  if (eventData.hasOwnProperty("startTime")) {
     eventData.start = $.fullCalendar.moment(eventData.startTime);
   }
-  if (eventData.endTime) {
+  if (eventData.hasOwnProperty("endTime")) {
     eventData.end = $.fullCalendar.moment(eventData.endTime);
   }
   return eventData;
 };
 
 function fcEventToActivity(event) {
+  // Build a cleaned up activity from a FullCalendar event
   let activity = {
+    id: event.id,
     name: event.title,
     activityCode: event.activityCode,
   };
-  // If activity had an id (ie existed in the WCIF), then it's kept by FC
-  // If not, FC maintains an internal '_id' attribute, but does not set 'id'
-  if (event.id) {
-    activity.id = event.id;
-  }
-  if (event.start) {
+  if (event.hasOwnProperty("start")) {
     activity.startTime = event.start.format();
   }
-  if (event.end) {
+  if (event.hasOwnProperty("end")) {
     activity.endTime = event.end.format();
   }
-  if (event.childActivities) {
+  if (event.hasOwnProperty("childActivities")) {
     // Not modified by FC, put them back anyway
     activity.childActivities = event.childActivities;
   }
@@ -109,7 +107,7 @@ function RoomSelector({ scheduleWcif, selectedRoom, handleRoomChange }) {
         <label htmlFor="venue-room-selector" className="control-label col-xs-3">
           Select a room to edit its schedule:
         </label>
-        <div className="col-xs-9">
+        <div className="col-xs-8">
           <select id="venue-room-selector" className="form-control input-sm" onChange={handleRoomChange} value={selectedRoom}>
             {options}
           </select>
@@ -141,27 +139,227 @@ var isEventOverTrash = function(jsEvent) {
 
 const scheduleElementId = "#schedule-calendar";
 
-class EditScheduleForRoom extends React.Component {
+const commonActivityCodes = {
+  "other-registration": "Registration",
+  "other-breakfast": "Breakfast",
+  "other-lunch": "Lunch",
+  "other-dinner": "Dinner",
+  "other-awards": "Awards",
+  "other-misc": "Other",
+};
 
-  getEvents = () => {
-    return roomWcifFromId(this.props.scheduleWcif, this.state.selectedRoom).activities
+class AddCustomActivityModal extends React.Component {
+  // FIXME: extract to standalone file
+
+  componentWillReceiveProps(newProps) {
+    if (!this.props.show && newProps.show) {
+      // FIXME: DRY with below
+      this.setState({
+        name: "Your activity Name",
+        activityCode: "other-registration",
+      });
+    }
   }
 
   componentWillMount() {
-    this.setState({ selectedRoom: this.props.selectedRoom });
+    this.setState({
+      name: "Your activity Name",
+      activityCode: "other-registration",
+    });
   }
+
+  render () {
+    let { show, handleHideModal, handleCreateEvent, selectedTime } = this.props;
+    let timeText = "No time selected";
+    if (selectedTime.start && selectedTime.end) {
+      timeText = `On ${selectedTime.start.format("dddd, MMMM Do YYYY")}, from ${selectedTime.start.format("H:mm")} to ${selectedTime.end.format("H:mm")}.`;
+    }
+
+    let handlePropChange = (propName, e) => {
+      let newState = {};
+      newState[propName] = e.target.value;
+      this.setState(newState);
+    };
+
+    return (
+      <Modal show={show} onHide={handleHideModal} container={this}>
+        <Modal.Header closeButton>
+        <Modal.Title>Add a custom activity</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="form-horizontal row">
+          <div className="form-group">
+            <div className="control-label col-xs-3">
+              <label>Name</label>
+            </div>
+            <div className="col-xs-8">
+              <input className="form-control" type="text" id="activity_name" value={this.state.name} onChange={e => handlePropChange("name", e)}/>
+            </div>
+          </div>
+          <div className="form-group">
+            <div className="control-label col-xs-3">
+              <label>Type of activity</label>
+            </div>
+            <div className="col-xs-8">
+              <select className="form-control" id="activity_code" value={this.state.activityCode} onChange={e => handlePropChange("activityCode", e)}>
+                {Object.keys(commonActivityCodes).map(function(key) {
+                  return <option key={key} value={key}>{commonActivityCodes[key]}</option>
+                })}
+              </select>
+            </div>
+          </div>
+          <div className="form-group">
+            <div className="col-xs-10 col-xs-offset-2">
+              {timeText}
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => handleCreateEvent(this.state)} bsStyle="success">Add event</Button>
+          <Button onClick={handleHideModal}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+}
+
+const calendarOptionsInfo = {
+  slotDuration: {
+    label: "Minutes per row",
+    defaultValue: "00:30:00",
+    options: {
+      "5": "00:05:00",
+      "15": "00:15:00",
+      "20": "00:20:00",
+      "30": "00:30:00",
+    },
+  },
+  minTime: {
+    label: "Calendar starts at",
+    defaultValue: "8:00:00",
+    options: hours(),
+  },
+  maxTime: {
+    label: "Calendar ends at",
+    defaultValue: "20:00:00",
+    options: hours(),
+  },
+};
+
+const CalendarSettingsOption = ({selected, optionName, handlePropChange}) => {
+  let optionProps = calendarOptionsInfo[optionName];
+  return (
+    <div className="col-xs-12">
+      <div className="row">
+        <div className="col-xs-6 setting-label">
+          {optionProps.label}
+        </div>
+        <div className="col-xs-6">
+          <select className="form-control" value={selected} onChange={e => handlePropChange(optionName, e)}>
+            {_.map(optionProps.options, function(value, key) {
+              return (<option key={value} value={value}>{key}</option>)
+            })}
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function hours() {
+  let options = {};
+  for (var i = 0; i < 24; i++) {
+    options[i] = `${i}:00:00`;
+  }
+  return options;
+}
+
+const CalendarSettings = ({ currentSettings, handlePropChange, ...props}) => {
+// See https://github.com/react-bootstrap/react-bootstrap/issues/1345#issuecomment-142133819
+// for why we pass down ...props
+  return (
+    <Popover id="calendar-settings-popover" title="Calendar settings" {...props} >
+      <div className="row">
+        {Object.keys(calendarOptionsInfo).map(function(optionName) {
+          return (
+            <CalendarSettingsOption optionName={optionName}
+                                    key={optionName}
+                                    selected={currentSettings[optionName]}
+                                    handlePropChange={handlePropChange}
+            />
+          );
+        })}
+      </div>
+    </Popover>
+  );
+}
+
+class EditScheduleForRoom extends React.Component {
+
+  getEvents = () => {
+    // Return a deep clone, otherwise FC will add some extra attributes that
+    // will make the parent component think some changes have been made...
+    return _.cloneDeep(roomWcifFromId(this.props.scheduleWcif, this.state.selectedRoom).activities);
+  }
+
+  componentWillMount() {
+    let calendarOptions = {};
+
+    Object.keys(calendarOptionsInfo).forEach(function(optionName) {
+      calendarOptions[optionName] = calendarOptionsInfo[optionName].defaultValue;
+    });
+
+    this.setState({
+      selectedRoom: this.props.selectedRoom,
+      showModal: false,
+      selectedTime: {},
+      calendarOptions: calendarOptions,
+    });
+  }
+
+  handleCalendarOptionChange = (optionName, e) => {
+    e.preventDefault();
+    let currentOptions = this.state.calendarOptions;
+    // FIXME: check minTime/maxTime is coherent
+    currentOptions[optionName] = e.target.value;
+    $(scheduleElementId).fullCalendar("option", currentOptions);
+    this.setState({ calendarOptions: currentOptions });
+  }
+
+  handleShowModal = (start, end) => {
+    this.setState({ showModal: true, selectedTime: { start: start, end: end } });
+  }
+
+  handleHideModal = () => {
+    this.setState({ showModal: false, selectedTime: {} });
+  }
+
+  handleCreateEvent = (eventData) => {
+    let { calendarHandlers } = this.props;
+    let fcEvent = {
+      title: eventData.name,
+      activityCode: eventData.activityCode,
+      start: this.state.selectedTime.start,
+      end: this.state.selectedTime.end,
+      id: newActivityId(),
+    };
+    calendarHandlers.eventAddedToCalendar(fcEvent);
+    $(scheduleElementId).fullCalendar("renderEvent", fcEvent);
+    this.handleHideModal();
+  }
+
 
   componentWillReceiveProps(newProps) {
     this.setState({ selectedRoom: newProps.selectedRoom });
   }
 
   generateCalendar = () => {
-    let { scheduleWcif, selectedRoom, calendarHandlers } = this.props;
+    let { scheduleWcif, selectedRoom, calendarHandlers, locale } = this.props;
 
     let eventFetcher =  (start, end, timezone, callback) => {
       callback(this.getEvents());
     }
 
+    let showModal = (start, end) => this.handleShowModal(start, end);
 
     $(scheduleElementId).fullCalendar({
       // see: https://fullcalendar.io/docs/views/Custom_Views/
@@ -176,21 +374,20 @@ class EditScheduleForRoom extends React.Component {
       header: false,
       allDaySlot: false,
       defaultDate: scheduleWcif.startDate,
-      // FIXME: extract propriety
-      minTime:'08:00:00',
-      maxTime:'22:00:00',
-      //aspectRatio: '3',
-      // FIXME: toggle duration
-      slotDuration: '00:30:00',
+      locale: locale,
+      minTime: calendarOptionsInfo.minTime.defaultValue,
+      maxTime: calendarOptionsInfo.maxTime.defaultValue,
+      slotDuration: calendarOptionsInfo.slotDuration.defaultValue,
       // Without this, fullcalendar doesn't set the "end" time.
       forceEventDuration: true,
-      timeFormat: 'H:mm',
-      slotLabelFormat: 'H:mm',
       // Having only one view for edition enable us to have a "static" list of event
       // If we had more, we would need a function to fetch them everytime
       events: eventFetcher,
       editable: true,
       droppable: true,
+      dragRevertDuration: 0,
+      height: "auto",
+      snapDuration: "00:05:00",
       eventDataTransform: activityToFcEvent,
       eventResize: function( event, delta, revertFunc, jsEvent, ui, view ) {
         calendarHandlers.eventModifiedInCalendar(event);
@@ -201,13 +398,19 @@ class EditScheduleForRoom extends React.Component {
       eventDrop: function( event, delta, revertFunc, jsEvent, ui, view ) {
         calendarHandlers.eventModifiedInCalendar(event);
       },
+      eventDragStart: function( event, jsEvent, ui, view ) {
+        console.log(jsEvent);
+      },
       eventDragStop: function( event, jsEvent, ui, view ) {
         if (isEventOverTrash(jsEvent)) {
-          $(scheduleElementId).fullCalendar('removeEvents', event.id);
           calendarHandlers.eventRemovedFromCalendar(event);
+          $(scheduleElementId).fullCalendar('removeEvents', event.id);
         }
       },
-      selectable: false,
+      select: function(start, end, jsEvent, view) {
+        showModal(start, end);
+      },
+      selectable: true,
       // TODO: onclick, display format, cutoff, etcc
     });
   }
@@ -225,7 +428,20 @@ class EditScheduleForRoom extends React.Component {
   render() {
     return (
       <div id="schedule-editor" className="row">
-        <div className="col-xs-12">
+        <div className="col-xs-2">
+          <ButtonToolbar>
+            <OverlayTrigger trigger="click"
+                            rootClose
+                            placement="bottom"
+                            overlay={<CalendarSettings currentSettings={this.state.calendarOptions}
+                                                       handlePropChange={this.handleCalendarOptionChange}
+                                     />}
+            >
+              <Button><i className="fa fa-cog"></i></Button>
+            </OverlayTrigger>
+          </ButtonToolbar>
+        </div>
+        <div className="col-xs-10">
           <div id="drop-event-area" className="bg-danger text-danger text-center">
             <i className="fa fa-trash pull-left"></i>
             Drop an event here to remove it from the schedule.
@@ -233,6 +449,11 @@ class EditScheduleForRoom extends React.Component {
           </div>
         </div>
         <div className="col-xs-12" id="schedule-calendar"/>
+        <AddCustomActivityModal show={this.state.showModal}
+                                selectedTime={this.state.selectedTime}
+                                handleHideModal={this.handleHideModal}
+                                handleCreateEvent={this.handleCreateEvent}
+        />
       </div>
     );
   }
@@ -381,7 +602,8 @@ export class SchedulesEditor extends React.Component {
     // Add activity to the WCIF
     room.activities.push(fcEventToActivity(event))
     // Update the list of activityCode used
-    this.setState({ usedActivityCodeList: [...this.state.usedActivityCodeList, event.activityCode] });
+    // We rootRender to display the "Please save your changes..." message
+    this.setState({ usedActivityCodeList: [...this.state.usedActivityCodeList, event.activityCode] }, rootRender());
   }
 
   handleEventRemoved = event => {
@@ -390,19 +612,19 @@ export class SchedulesEditor extends React.Component {
     let newActivityCodeList = this.state.usedActivityCodeList;
     let activityCodeIndex = newActivityCodeList.indexOf(event.activityCode);
     if (activityCodeIndex < 0) {
-      alert("This id BAD, I couldn't find an activity code when removing event!");
+      alert("This is BAD, I couldn't find an activity code when removing event!");
     }
     newActivityCodeList.splice(activityCodeIndex, 1);
-    this.setState({ usedActivityCodeList: newActivityCodeList });
-
     // Remove activity from the list used by the ActivityPicker
     let { scheduleWcif } = this.props;
     let room = roomWcifFromId(scheduleWcif, this.state.selectedRoom);
     let activityIndex = activityIndexInArray(room.activities, event.id);
     if (activityIndex < 0) {
-      alert("This id very very BAD, I couldn't find an activity matching the removed event!");
+      alert("This is very very BAD, I couldn't find an activity matching the removed event!");
     }
     room.activities.splice(activityIndex, 1);
+    // We rootRender to display the "Please save your changes..." message
+    this.setState({ usedActivityCodeList: newActivityCodeList }, rootRender());
   }
 
   handleEventModified = event => {
@@ -410,16 +632,17 @@ export class SchedulesEditor extends React.Component {
     let room = roomWcifFromId(scheduleWcif, this.state.selectedRoom);
     let activityIndex = activityIndexInArray(room.activities, event.id);
     if (activityIndex < 0) {
-      alert("This id very very BAD, I couldn't find an activity matching the modified event!");
+      alert("This is very very BAD, I couldn't find an activity matching the modified event!");
     }
     let activity = room.activities[activityIndex];
     activity.startTime = event.start.format();
     activity.endTime = event.end.format();
+    // We rootRender to display the "Please save your changes..." message
+    rootRender();
   }
 
 
   componentDidMount() {
-    this.props.enableDraggableAction();
     $(".activity-in-picker > .activity").draggable({
       start: function(event, ui) {
         $(ui.helper).find('.tooltip').hide();
@@ -432,7 +655,7 @@ export class SchedulesEditor extends React.Component {
   }
 
   render() {
-    let { scheduleWcif, eventsWcif } = this.props;
+    let { scheduleWcif, eventsWcif, locale } = this.props;
     let rightPanelBody = <NoRoomSelected />;
     let calendarHandlers = {
       eventAddedToCalendar: this.handleEventAdded,
@@ -443,6 +666,7 @@ export class SchedulesEditor extends React.Component {
     if (this.state.selectedRoom.length > 0) {
       rightPanelBody = (
         <EditScheduleForRoom scheduleWcif={scheduleWcif}
+                             locale={locale}
                              selectedRoom={this.state.selectedRoom}
                              calendarHandlers={calendarHandlers}
         />);
