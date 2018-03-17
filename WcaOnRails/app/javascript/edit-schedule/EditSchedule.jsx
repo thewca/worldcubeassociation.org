@@ -37,14 +37,18 @@ export default class EditSchedule extends React.Component {
   }
 
   save = e => {
-    let {competitionId, scheduleWcif} = this.props;
+    let { competitionInfo, scheduleWcif } = this.props;
     let wcif = {
-      id: competitionId,
+      id: competitionInfo.id,
       schedule: scheduleWcif,
     };
 
     this.setState({ saving: true });
+    console.log("This is the WCIF that would be saved:");
     console.log(wcif);
+    this.setState({ savedScheduleWcif: _.cloneDeep(scheduleWcif), saving: false });
+    // TODO actual save
+    return;
     promiseSaveWcif(wcif).then(response => {
       return Promise.all([response, response.json()]);
     }).then(([response, json]) => {
@@ -192,7 +196,10 @@ function DatesPicker({ pickerOptions, scheduleWcif }) {
   let endDateString = `${endDate.getFullYear()}-${pad(endDate.getMonth()+1)}-${pad(endDate.getDate())}`
   return (
     <div className="row equal">
-      <div className="form-group col-md-6 col-lg-2 col-xs-12 date_picker">
+      <div className="col-xs-12">
+        Dev notes: changing these dates doesn't do anything yet.
+      </div>
+      <div className="form-group col-md-6 col-lg-3 col-xs-12 date_picker">
         <label className="control-label date_picker" htmlFor="schedule_start_date">
           Start date for your schedule
         </label>
@@ -200,7 +207,7 @@ function DatesPicker({ pickerOptions, scheduleWcif }) {
           <input className="form-control date_picker" placeholder="AAAA-MM-JJ" type="text" defaultValue={scheduleWcif.startDate} data-date-options={JSON.stringify(pickerOptions)} name="startDate" id="schedule_start_date"/>
         </div>
       </div>
-      <div className="form-group col-md-6 col-lg-2 col-xs-12 date_picker">
+      <div className="form-group col-md-6 col-lg-3 col-xs-12 date_picker">
         <label className="control-label date_picker" htmlFor="schedule_end_date">
           End date for your schedule
         </label>

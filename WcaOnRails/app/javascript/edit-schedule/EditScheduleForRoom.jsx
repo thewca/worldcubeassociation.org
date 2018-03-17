@@ -103,11 +103,11 @@ function RoomSelector({ scheduleWcif, selectedRoom, handleRoomChange }) {
   });
 
   return (
-    <div className="form-horizontal row">
-        <label htmlFor="venue-room-selector" className="control-label col-xs-3">
+    <div className="row room-selector">
+        <label htmlFor="venue-room-selector" className="control-label col-xs-12 col-md-6 col-lg-5">
           Select a room to edit its schedule:
         </label>
-        <div className="col-xs-8">
+        <div className="col-xs-12 col-md-6 col-lg-7">
           <select id="venue-room-selector" className="form-control input-sm" onChange={handleRoomChange} value={selectedRoom}>
             {options}
           </select>
@@ -388,6 +388,7 @@ class EditScheduleForRoom extends React.Component {
       dragRevertDuration: 0,
       height: "auto",
       snapDuration: "00:05:00",
+      defaultTimedEventDuration: "00:30:00",
       eventDataTransform: activityToFcEvent,
       eventResize: function( event, delta, revertFunc, jsEvent, ui, view ) {
         calendarHandlers.eventModifiedInCalendar(event);
@@ -475,8 +476,13 @@ function ActivityForAttempt({ usedActivityCodeList, activityCode, attemptNumber 
       {tooltipText}
     </Tooltip>
   );
+  let cssClasses = [
+    "activity-in-picker",
+    { "col-xs-6 col-md-4 col-lg-3" : !attemptNumber},
+    { "col-xs-12 col-md-6 col-lg-4" : attemptNumber},
+  ]
   return (
-    <div className="col-xs-3 activity-in-picker" data-activity-code={activityCode}>
+    <div className={cn(cssClasses)} data-activity-code={activityCode}>
       <OverlayTrigger placement="top" overlay={tooltip}>
         <div className={cn("activity", {"activity-used": (usedActivityCodeList.indexOf(activityCode) > -1)})}
              data-event={`{"name": "${tooltipText}", "activityCode": "${activityCode}"}`}>
@@ -536,10 +542,10 @@ function ActivityPickerLine({ eventWcif, usedActivityCodeList }) {
   return (
     <div className="col-xs-12 event-picker-line">
       <div className="row">
-        <div className="col-xs-2">
+        <div className="col-xs-12 col-md-3 col-lg-2 activity-icon">
           <span className={cn("cubing-icon", `event-${event.id}`)}></span>
         </div>
-        <div className="col-xs-10">
+        <div className="col-xs-12 col-md-9 col-lg-10">
           <div className="row">
             {eventWcif.rounds.map((value, index) => {
               return (
@@ -572,6 +578,12 @@ class ActivityPicker extends React.Component {
               <ActivityPickerLine key={value.id} eventWcif={value} usedActivityCodeList={usedActivityCodeList} />
             );
           })}
+          <div className="col-xs-12">
+            <p>
+              Want to add a custom activity such as lunch or registration?
+              Click and select a timeframe on the calendar!
+            </p>
+          </div>
         </Panel.Body>
       </Panel>
     );
@@ -604,6 +616,8 @@ export class SchedulesEditor extends React.Component {
     // Update the list of activityCode used
     // We rootRender to display the "Please save your changes..." message
     this.setState({ usedActivityCodeList: [...this.state.usedActivityCodeList, event.activityCode] }, rootRender());
+    // TODO: update default time for event if FMC or MBF
+    // either here by updateEvent, or in the "drop" fallback (to be investigated)
   }
 
   handleEventRemoved = event => {

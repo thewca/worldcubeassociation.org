@@ -33,17 +33,23 @@
       .panel-heading {
         @extend .text-center;
       }
+      .panel-body {
+        padding: 5px;
+      }
       .event-picker-line {
         .row {
           min-height: 32px;
-          .cubing-icon {
-            &::before {
-              margin-top: 2px;
+          .activity-icon {
+            padding: 0;
+            .cubing-icon {
+              &::before {
+                margin-top: 2px;
+              }
+              font-size: 22px;
             }
-            font-size: 22px;
           }
           .activity-in-picker {
-            padding: 0px;
+            padding: 0;
             .activity {
               background-color: #337ab7;
               color: #fff;
@@ -64,6 +70,11 @@
             }
           }
         }
+      }
+    }
+    .room-selector {
+      label {
+        padding-top: 7px;
       }
     }
     #schedule-editor {
