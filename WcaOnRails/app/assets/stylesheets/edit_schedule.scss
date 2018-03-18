@@ -32,7 +32,6 @@
     #activity-picker-panel {
       &.affix {
         top: 10px;
-        z-index: 9999 !important;
       }
       &.affix-bottom {
         position: absolute;
@@ -59,24 +58,6 @@
           }
           .activity-in-picker {
             padding: 0;
-            .activity {
-              background-color: #337ab7;
-              color: #fff;
-              font-weight: bold;
-              border-radius: 0.25em;
-              margin-top: 3px;
-              margin-bottom: 3px;
-              margin-left: 2px;
-              margin-right: 2px;
-              padding-left: 2px;
-              padding-right: 2px;
-              text-align: center;
-              cursor: pointer;
-              z-index: 3;
-              &.activity-used {
-                opacity: 0.5;
-              }
-            }
           }
         }
       }
@@ -125,5 +106,25 @@
   select {
     @extend .input-sm;
     margin-bottom: 5px;
+  }
+}
+
+// This needs to be here, to overcome an issue with draggable activity + overflow container
+.activity {
+  background-color: #337ab7;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 0.25em;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 3;
+  &.activity-used {
+    opacity: 0.5;
   }
 }

@@ -716,6 +716,8 @@ export class SchedulesEditor extends React.Component {
       },
       revert: false,
       helper: "clone",
+      // To get out of the overflow container
+      appendTo: "body",
       cursor: "copy",
       cursorAt: { top: 20, left: 10 }
     });
