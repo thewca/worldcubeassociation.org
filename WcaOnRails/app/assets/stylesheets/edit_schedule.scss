@@ -30,11 +30,20 @@
 
   #schedules-edit-panel {
     #activity-picker-panel {
+      &.affix {
+        top: 10px;
+        z-index: 9999 !important;
+      }
+      &.affix-bottom {
+        position: absolute;
+        bottom: auto !important;
+      }
       .panel-heading {
         @extend .text-center;
       }
       .panel-body {
         padding: 5px;
+        overflow-y: auto;
       }
       .event-picker-line {
         .row {

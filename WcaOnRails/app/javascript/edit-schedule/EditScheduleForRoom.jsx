@@ -563,8 +563,61 @@ function ActivityPickerLine({ eventWcif, usedActivityCodeList }) {
   );
 }
 
+const activityPickerElementId = "activity-picker-panel";
+
 class ActivityPicker extends React.Component {
-  //FIXME: to function, state maintained by parent
+  componentDidMount() {
+    let $pickerElem = $(`#${activityPickerElementId}`);
+    let $panelElem = $("#schedules-edit-panel");
+
+    let computeBasePickerDimension = () => {
+      // Dynamically fix the width
+      $pickerElem.width($pickerElem.parent().width());
+
+      // Dynamically set the max height for the picker panel body
+      let $bodyElem = $pickerElem.find(".panel-body");
+      // 10 is margin top we want to keep
+      let headerHeight = $pickerElem.find(".panel-heading").outerHeight();
+      let topPos = 10 + headerHeight;
+      let maxPossibleHeight = $(window).height() - topPos - 15;
+      $bodyElem.css("max-height", maxPossibleHeight);
+    };
+
+    let adjustPickerDimension = () => {
+        let visibleAvailable = $panelElem.offset().top + $panelElem.outerHeight() - $(window).scrollTop();
+        // 15 is margin bottom we want to keep
+        let headerHeight = $pickerElem.find(".panel-heading").outerHeight();
+        let topPos = 10 + headerHeight;
+        let visibleAvailableForBody = visibleAvailable - topPos - 15;
+        let $bodyElem = $pickerElem.find(".panel-body");
+        $bodyElem.css("height", visibleAvailableForBody);
+    };
+
+    let computeAffixedPickerDimension = () => {
+        computeBasePickerDimension();
+        adjustPickerDimension();
+        let $panelElemHeight = $panelElem.height();
+        $panelElem.css("min-height", $panelElemHeight);
+    };
+
+    let resetPanelDimension = () => {
+      $panelElem.css("min-height", 0);
+    };
+
+    $pickerElem.affix({
+      offset: {
+        top: function () {
+          // Dynamically compute the offset trigger, as we're in a collapsible element
+          return $pickerElem.parent().offset().top + 10;
+        },
+      },
+    });
+    $pickerElem.on('affix.bs.affix', computeAffixedPickerDimension);
+    $pickerElem.on('affix-top.bs.affix', resetPanelDimension);
+    $(window).scroll(adjustPickerDimension);
+    $(window).resize(computeBasePickerDimension);
+  }
+
   render() {
     let { scheduleWcif, eventsWcif, usedActivityCodeList } = this.props;
     return (
