@@ -81,11 +81,11 @@ export class EditVenue extends React.Component {
   }
 
   render() {
-    let { venueWcif, removeVenueAction, tzMapping } = this.props;
+    let { venueWcif, removeVenueAction, tzMapping, competitionInfo } = this.props;
 
     let addRoomAction = e => {
       e.preventDefault();
-      addRoomToVenue(venueWcif);
+      addRoomToVenue(venueWcif, competitionInfo);
       rootRender();
     };
 
@@ -179,10 +179,11 @@ function NewRoomElement({ newRoomAction }) {
   );
 }
 
-function addRoomToVenue(venueWcif) {
+function addRoomToVenue(venueWcif, competitionInfo) {
   venueWcif.rooms.push({
     id: newRoomId(),
-    name: "Rooms's name",
+    // Venue details is an optional field
+    name: competitionInfo.venueDetails.length > 0 ? competitionInfo.venueDetails : "Rooms' name",
     activities: [],
   });
 }

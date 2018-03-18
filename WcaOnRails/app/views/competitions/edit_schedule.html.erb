@@ -10,8 +10,8 @@
       //$.fullCalendar.locale("fr");
       competition_info = {
         id: <%= @competition.id.to_json.html_safe %>,
-        start_date: <%= @competition.start_date.to_json.html_safe %>,
-        end_date: <%= @competition.end_date.to_json.html_safe %>,
+        venue: <%= @competition.venue.to_json.html_safe %>,
+        venueDetails: <%= @competition.venueDetails.to_json.html_safe %>,
         lat: <%= @competition.latitude.to_json.html_safe %>,
         lng: <%= @competition.longitude.to_json.html_safe %>,
         defaultTimeZoneValue: <%= @competition.default_timezone_id.to_json.html_safe %>,

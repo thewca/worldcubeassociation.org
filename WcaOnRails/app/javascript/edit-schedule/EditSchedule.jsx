@@ -164,7 +164,7 @@ export default class EditSchedule extends React.Component {
                   <div className="row equal">
                     {scheduleWcif.venues.map((venueWcif, index) => {
                       return (
-                        <EditVenue venueWcif={venueWcif} key={index} removeVenueAction={e => removeVenueAction(e, index)} tzMapping={tzMapping} />
+                        <EditVenue venueWcif={venueWcif} key={index} removeVenueAction={e => removeVenueAction(e, index)} tzMapping={tzMapping} competitionInfo={competitionInfo} />
                       );
                     })}
                     <NewVenueElement newVenueAction={addVenueAction} />
@@ -239,7 +239,7 @@ function pad(number) {
 function addVenueToSchedule(competitionInfo, scheduleWcif) {
   scheduleWcif.venues.push({
     id: newVenueId(),
-    name: "Venue's name",
+    name: competitionInfo.venue,
     latitudeMicrodegrees: competitionInfo.lat,
     longitudeMicrodegrees: competitionInfo.lng,
     timezone: competitionInfo.defaultTimeZoneValue,
