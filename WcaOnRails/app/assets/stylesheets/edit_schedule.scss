@@ -73,6 +73,14 @@
           // Override the flashy yellow we use for targets elsewhere
           background-color: transparent;
         }
+        .fc-event {
+          &.selected-activity {
+            border: 2px solid #f00;
+          }
+          .fc-bg {
+            display: none;
+          }
+        }
       }
       #drop-event-area {
         z-index: 0;

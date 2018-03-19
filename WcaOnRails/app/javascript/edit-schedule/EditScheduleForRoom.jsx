@@ -90,6 +90,11 @@ function activityCodeListFromWcif(scheduleWcif) {
   return usedActivityCodeList;
 }
 
+function selectedActivityInCalendar() {
+  let matching = $(scheduleElementId).fullCalendar("clientEvents", function(event) { return event.selected; });
+  return matching.length > 0 ? matching[0] : null;
+}
+
 
 function RoomSelector({ scheduleWcif, selectedRoom, handleRoomChange }) {
   let options = [
@@ -361,6 +366,25 @@ class EditScheduleForRoom extends React.Component {
 
     let showModal = (start, end) => this.handleShowModal(start, end);
 
+    let singleSelectEvent = (event) => {
+      // return if the event has been updated or not
+      if (event.selected) {
+        return false;
+      }
+      let events = $(scheduleElementId).fullCalendar("clientEvents");
+      events.forEach(function(elem) {
+        if (elem.selected && (event.id != elem.id)) {
+          elem.selected = false;
+          // this function might be called while dragging/resizing,
+          // so we'd better remove the class ourselves instead of calling updateEvent!
+          $(".selected-activity").removeClass("selected-activity");
+        }
+      });
+      event.selected = true;
+      // We don't render again the element: on dragging/resizing it will be rerendered, else the caller will take care of the update.
+      return true;
+    };
+
     $(scheduleElementId).fullCalendar({
       // see: https://fullcalendar.io/docs/views/Custom_Views/
       views: {
@@ -395,12 +419,28 @@ class EditScheduleForRoom extends React.Component {
       },
       eventReceive: function(event) {
         calendarHandlers.eventAddedToCalendar(event);
+        if (singleSelectEvent(event)) {
+          $(scheduleElementId).fullCalendar("updateEvent", event);
+        }
       },
       eventDrop: function( event, delta, revertFunc, jsEvent, ui, view ) {
         calendarHandlers.eventModifiedInCalendar(event);
       },
+      eventClick: function(event, jsEvent, view) {
+        if (singleSelectEvent(event)) {
+          $(scheduleElementId).fullCalendar("updateEvent", event);
+        }
+      },
+      eventRender: function(event, element, view) {
+        if (event.selected) {
+          element.addClass("selected-activity");
+        }
+      },
       eventDragStart: function( event, jsEvent, ui, view ) {
-        console.log(jsEvent);
+        singleSelectEvent(event);
+      },
+      eventResizeStart: function(event, jsEvent, ui, view) {
+        singleSelectEvent(event);
       },
       eventDragStop: function( event, jsEvent, ui, view ) {
         if (isEventOverTrash(jsEvent)) {
@@ -720,6 +760,10 @@ export class SchedulesEditor extends React.Component {
       appendTo: "body",
       cursor: "copy",
       cursorAt: { top: 20, left: 10 }
+    });
+    $(".activity-in-picker > .activity").click(function() {
+      console.log(selectedActivityInCalendar());
+      // TODO if any selected, add to wcif and refetch
     });
   }
 
