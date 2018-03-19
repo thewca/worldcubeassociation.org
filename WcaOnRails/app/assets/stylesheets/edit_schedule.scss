@@ -74,7 +74,7 @@
           background-color: transparent;
         }
         .fc-event {
-          &.selected-activity {
+          &.selected-activity, &.fc-dragging {
             border: 2px solid #f00;
           }
           .fc-bg {
@@ -92,6 +92,11 @@
         margin-bottom: 15px;
         border-radius: 0.25em;
         border: 2px dashed #a94442;
+        &.event-on-top {
+          border-color: #f2dede;
+          color: #f2dede;
+          background-color: #a94442;
+        }
         .fa {
           font-size: 20px;
           margin-left: 15px;

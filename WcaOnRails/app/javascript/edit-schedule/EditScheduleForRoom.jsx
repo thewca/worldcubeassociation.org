@@ -329,6 +329,15 @@ const TooltipKeyboard = ({ enabled, ...props }) => (
   </Tooltip>
 );
 
+function dragOnMouseMove(jsEvent) {
+  // FIXME: id to const
+  if (isEventOverTrash(jsEvent)) {
+    $('#drop-event-area').addClass("event-on-top");
+  } else {
+    $('#drop-event-area').removeClass("event-on-top");
+  }
+}
+
 class EditScheduleForRoom extends React.Component {
 
   getEvents = () => {
@@ -347,7 +356,7 @@ class EditScheduleForRoom extends React.Component {
     this.setState({
       selectedRoom: this.props.selectedRoom,
       showModal: false,
-      keyboardEnabled: true,
+      keyboardEnabled: false,
       selectedTime: {},
       calendarOptions: calendarOptions,
     });
@@ -472,15 +481,21 @@ class EditScheduleForRoom extends React.Component {
       },
       eventDragStart: function( event, jsEvent, ui, view ) {
         singleSelectEvent(event);
+        $(window).on("mousemove", dragOnMouseMove);
       },
       eventResizeStart: function(event, jsEvent, ui, view) {
         singleSelectEvent(event);
       },
       eventDragStop: function( event, jsEvent, ui, view ) {
+        $('#drop-event-area').removeClass("event-on-top");
+        $(window).off("mousemove", dragOnMouseMove);
         if (isEventOverTrash(jsEvent)) {
           calendarHandlers.eventRemovedFromCalendar(event);
           selectLastEvent();
           $(scheduleElementId).fullCalendar('removeEvents', event.id);
+        } else {
+          // Drag stop outside the drop area makes the event render without the selected-activity class
+          $(scheduleElementId).fullCalendar("updateEvent", event);
         }
       },
       select: function(start, end, jsEvent, view) {
@@ -815,9 +830,6 @@ export class SchedulesEditor extends React.Component {
       fcEvent = activityToFcEvent(fcEvent);
       singleSelectEvent(fcEvent);
       $(scheduleElementId).fullCalendar("renderEvent", fcEvent);
-      console.log("infos:");
-      console.log(newActivity);
-      console.log(fcEvent);
       // update list of activityCode used, and rootRender to display the save message
       this.setState({ usedActivityCodeList: [...this.state.usedActivityCodeList, newActivity.activityCode] }, rootRender());
     }
