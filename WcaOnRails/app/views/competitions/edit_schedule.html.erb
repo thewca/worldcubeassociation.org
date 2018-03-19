@@ -6,8 +6,6 @@
   <div id="edit-schedule-area"></div>
   <script>
     $(function() {
-      // FIXME: For some reason, passing it as an option doesn't work...
-      //$.fullCalendar.locale("fr");
       competition_info = {
         id: <%= @competition.id.to_json.html_safe %>,
         venue: <%= @competition.venue.to_json.html_safe %>,

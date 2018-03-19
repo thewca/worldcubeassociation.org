@@ -14,6 +14,8 @@ const currentElementsIds = {
   activity: 0,
 };
 
+//TODO: think about the fact users can remove/add rounds to events...
+
 export function newVenueId() { return ++currentElementsIds.venue; }
 export function newRoomId() { return ++currentElementsIds.room; }
 export function newActivityId() { return ++currentElementsIds.activity; }

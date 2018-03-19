@@ -102,6 +102,11 @@
     }
   }
 }
+#tooltip-enable-keyboard {
+  .tooltip-inner {
+    max-width: none;
+  }
+}
 
 #calendar-settings-popover {
   .setting-label {

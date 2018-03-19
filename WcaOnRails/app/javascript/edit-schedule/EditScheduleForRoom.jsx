@@ -298,6 +298,37 @@ const CalendarSettings = ({ currentSettings, handlePropChange, ...props}) => {
   );
 }
 
+function singleSelectEvent(event) {
+  // return if the event has been updated or not
+  if (event.selected) {
+    return false;
+  }
+  let events = $(scheduleElementId).fullCalendar("clientEvents");
+  events.forEach(function(elem) {
+    if (elem.selected && (event.id != elem.id)) {
+      elem.selected = false;
+      // this function might be called while dragging/resizing,
+      // so we'd better remove the class ourselves instead of calling updateEvent!
+      $(".selected-activity").removeClass("selected-activity");
+    }
+  });
+  event.selected = true;
+  // We don't render again the element: on dragging/resizing it will be rerendered, else the caller will take care of the update.
+  return true;
+};
+
+const tooltipSettings = (
+  <Tooltip id="tooltip-calendar-settings">
+    Click to change the calendar's settings.
+  </Tooltip>
+);
+
+const TooltipKeyboard = ({ enabled, ...props }) => (
+  <Tooltip id="tooltip-enable-keyboard" {...props}>
+    Click to { enabled ? "disable" : "enable" } keyboard shortcuts
+  </Tooltip>
+);
+
 class EditScheduleForRoom extends React.Component {
 
   getEvents = () => {
@@ -316,10 +347,26 @@ class EditScheduleForRoom extends React.Component {
     this.setState({
       selectedRoom: this.props.selectedRoom,
       showModal: false,
+      keyboardEnabled: true,
       selectedTime: {},
       calendarOptions: calendarOptions,
     });
   }
+
+
+  singleSelectLastEvent = () => {
+    let room = roomWcifFromId(this.props.scheduleWcif, this.state.selectedRoom);
+    if (room) {
+      if (room.activities.length > 0) {
+        let lastActivity = room.activities[room.activities.length - 1];
+        let fcEvent = $(scheduleElementId).fullCalendar("clientEvents", lastActivity.id)[0];
+        if (singleSelectEvent(fcEvent)) {
+          $(scheduleElementId).fullCalendar("updateEvent", fcEvent);
+        }
+      }
+    }
+  }
+
 
   handleCalendarOptionChange = (optionName, e) => {
     e.preventDefault();
@@ -328,6 +375,10 @@ class EditScheduleForRoom extends React.Component {
     currentOptions[optionName] = e.target.value;
     $(scheduleElementId).fullCalendar("option", currentOptions);
     this.setState({ calendarOptions: currentOptions });
+  }
+
+  handleToggleKeyboardEnabled = () => {
+    this.setState({ keyboardEnabled: !this.state.keyboardEnabled });
   }
 
   handleShowModal = (start, end) => {
@@ -364,26 +415,9 @@ class EditScheduleForRoom extends React.Component {
       callback(this.getEvents());
     }
 
+    // 'this' is not captured in FC callbacks, to setting up aliases here
     let showModal = (start, end) => this.handleShowModal(start, end);
-
-    let singleSelectEvent = (event) => {
-      // return if the event has been updated or not
-      if (event.selected) {
-        return false;
-      }
-      let events = $(scheduleElementId).fullCalendar("clientEvents");
-      events.forEach(function(elem) {
-        if (elem.selected && (event.id != elem.id)) {
-          elem.selected = false;
-          // this function might be called while dragging/resizing,
-          // so we'd better remove the class ourselves instead of calling updateEvent!
-          $(".selected-activity").removeClass("selected-activity");
-        }
-      });
-      event.selected = true;
-      // We don't render again the element: on dragging/resizing it will be rerendered, else the caller will take care of the update.
-      return true;
-    };
+    let selectLastEvent = this.singleSelectLastEvent;
 
     $(scheduleElementId).fullCalendar({
       // see: https://fullcalendar.io/docs/views/Custom_Views/
@@ -445,6 +479,7 @@ class EditScheduleForRoom extends React.Component {
       eventDragStop: function( event, jsEvent, ui, view ) {
         if (isEventOverTrash(jsEvent)) {
           calendarHandlers.eventRemovedFromCalendar(event);
+          selectLastEvent();
           $(scheduleElementId).fullCalendar('removeEvents', event.id);
         }
       },
@@ -458,11 +493,13 @@ class EditScheduleForRoom extends React.Component {
 
   componentDidMount() {
     this.generateCalendar();
+    this.singleSelectLastEvent();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.selectedRoom != this.state.selectedRoom) {
       $(scheduleElementId).fullCalendar("refetchEvents")
+      this.singleSelectLastEvent();
     }
   }
 
@@ -478,7 +515,14 @@ class EditScheduleForRoom extends React.Component {
                                                        handlePropChange={this.handleCalendarOptionChange}
                                      />}
             >
-              <Button><i className="fa fa-cog"></i></Button>
+              <OverlayTrigger overlay={tooltipSettings} placement="top">
+                <Button><i className="fa fa-cog"></i></Button>
+              </OverlayTrigger>
+            </OverlayTrigger>
+            <OverlayTrigger overlay={<TooltipKeyboard enabled={this.state.keyboardEnabled}/>} placement="top">
+              <Button onClick={this.handleToggleKeyboardEnabled} active={this.state.keyboardEnabled}>
+                <i className="fa fa-keyboard-o"></i>
+              </Button>
             </OverlayTrigger>
           </ButtonToolbar>
         </div>
@@ -490,6 +534,7 @@ class EditScheduleForRoom extends React.Component {
           </div>
         </div>
         <div className="col-xs-12" id="schedule-calendar"/>
+        //TODO: change to "edit activity"
         <AddCustomActivityModal show={this.state.showModal}
                                 selectedTime={this.state.selectedTime}
                                 handleHideModal={this.handleHideModal}
@@ -748,6 +793,36 @@ export class SchedulesEditor extends React.Component {
     rootRender();
   }
 
+  handleClickActivityToAdd = e => {
+    let currentActivitySelected = selectedActivityInCalendar();
+    let roomSelected = roomWcifFromId(this.props.scheduleWcif, this.state.selectedRoom);
+    if (currentActivitySelected && roomSelected) {
+      let activityClickedData = $(e.target).data("event");
+      let newActivity = {
+        id: newActivityId(),
+        name: activityClickedData.name,
+        activityCode: activityClickedData.activityCode,
+      };
+      let newStart = currentActivitySelected.end.clone();
+      newActivity.startTime = newStart.format();
+      // FIXME: use default event duration
+      let newEnd = newStart.add(30, "m");
+      newActivity.endTime = newEnd.format();
+      roomSelected.activities.push(newActivity);
+      // Cloning the object here: activityToFcEvent modifies in place,
+      // and we don't want event.selected to propagate in the WCIF!
+      let fcEvent = Object.assign({}, newActivity);
+      fcEvent = activityToFcEvent(fcEvent);
+      singleSelectEvent(fcEvent);
+      $(scheduleElementId).fullCalendar("renderEvent", fcEvent);
+      console.log("infos:");
+      console.log(newActivity);
+      console.log(fcEvent);
+      // update list of activityCode used, and rootRender to display the save message
+      this.setState({ usedActivityCodeList: [...this.state.usedActivityCodeList, newActivity.activityCode] }, rootRender());
+    }
+  }
+
 
   componentDidMount() {
     $(".activity-in-picker > .activity").draggable({
@@ -761,10 +836,7 @@ export class SchedulesEditor extends React.Component {
       cursor: "copy",
       cursorAt: { top: 20, left: 10 }
     });
-    $(".activity-in-picker > .activity").click(function() {
-      console.log(selectedActivityInCalendar());
-      // TODO if any selected, add to wcif and refetch
-    });
+    $(".activity-in-picker > .activity").click(this.handleClickActivityToAdd);
   }
 
   render() {
