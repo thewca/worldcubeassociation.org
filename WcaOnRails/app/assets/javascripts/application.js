@@ -56,6 +56,7 @@
 //= require fullcalendar
 //= require fullcalendar/locale-all
 //= require jquery_plugins
+//= require jquery-ui/position
 //= require jquery-ui/widgets/draggable
 //= require jquery.slick
 //= require_self

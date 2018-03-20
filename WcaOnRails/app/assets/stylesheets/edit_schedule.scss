@@ -151,3 +151,21 @@
     opacity: 0.5;
   }
 }
+
+#schedule-menu {
+  width: 150px;
+  position: fixed;
+  top: 100px;
+  left: 100px;
+  a {
+    i {
+      margin-right: 10px;
+    }
+    padding: 3px 20px;
+  }
+  &.delete-only {
+    .edit-option {
+      display: none;
+    }
+  }
+}

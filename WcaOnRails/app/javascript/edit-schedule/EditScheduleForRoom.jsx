@@ -473,6 +473,22 @@ class EditScheduleForRoom extends React.Component {
         if (event.selected) {
           element.addClass("selected-fc-event");
         }
+        element.contextmenu(function(jsEvent) {
+          if (singleSelectEvent(event)) {
+            $(scheduleElementId).fullCalendar("updateEvent", event);
+          }
+          $("#schedule-menu").removeClass("delete-only");
+          $("#schedule-menu").hide();
+          if (jsEvent.which == 3) {
+            $("#schedule-menu").data("event", { id: event.id, activityCode: event.activityCode });
+            if (!event.activityCode.startsWith("other-")) {
+              $("#schedule-menu").addClass("delete-only");
+            }
+            $("#schedule-menu").show();
+            $("#schedule-menu").position({ my: "left top", of: jsEvent});
+            jsEvent.preventDefault();
+          }
+        });
       },
       eventDragStart: function( event, jsEvent, ui, view ) {
         singleSelectEvent(event);
@@ -513,6 +529,11 @@ class EditScheduleForRoom extends React.Component {
 
   render() {
     let { keyboardEnabled, handleKeyboardChange } = this.props;
+    let removeButtonAction = e => {
+      calendarHandlers.removeEventFromCalendar($("#schedule-menu").data("event"));
+      e.preventDefault();
+    }
+
     return (
       <div id="schedule-editor" className="row">
         <div className="col-xs-2">
@@ -543,6 +564,18 @@ class EditScheduleForRoom extends React.Component {
           </div>
         </div>
         <div className="col-xs-12" id="schedule-calendar"/>
+        <ul id="schedule-menu" className="dropdown-menu" role="menu" style={{ display:"none" }}>
+          <li className="edit-option">
+            <a href="#" role="menuitem">
+              <i className="fa fa-pencil"></i><span>Edit</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" role="menuitem" onClick={removeButtonAction}>
+              <i className="fa fa-trash text-danger"></i><span className="text-danger">Remove</span>
+            </a>
+          </li>
+        </ul>
         //TODO: change to "edit activity"
         <AddCustomActivityModal show={this.state.showModal}
                                 selectedTime={this.state.selectedTime}
@@ -944,13 +977,17 @@ export class SchedulesEditor extends React.Component {
     let toggleHandler = this.handleToggleKeyboardEnabled;
     $(window).keydown(function(event) {
       // ctrl + i
-      if (event.ctrlKey && event.which == 73) {
+      if (event.ctrlKey && !event.shiftKey && event.which == 73) {
         toggleHandler();
       }
     });
     calendarHandlers.addEventToCalendar = this.addActivityToSchedule;
     calendarHandlers.removeEventFromCalendar = this.removeActivityFromSchedule;
     calendarHandlers.eventModifiedInCalendar = this.handleEventModified;
+    $(window).click(function(event) {
+      $("#schedule-menu").hide();
+      $("#schedule-menu").removeClass("delete-only");
+    });
   }
 
   componentWillMount() {
