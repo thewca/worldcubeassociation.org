@@ -37,6 +37,11 @@
         position: absolute;
         bottom: auto !important;
       }
+      .selected-activity {
+        border: 2px solid #791f82;
+        margin-top: 1px;
+        margin-bottom: 1px;
+      }
       .panel-heading {
         @extend .text-center;
       }
@@ -74,8 +79,8 @@
           background-color: transparent;
         }
         .fc-event {
-          &.selected-activity, &.fc-dragging {
-            border: 2px solid #f00;
+          &.selected-fc-event, &.fc-dragging {
+            border: 2px solid #791f82;
           }
           .fc-bg {
             display: none;

@@ -179,7 +179,7 @@ export default class EditSchedule extends React.Component {
                     Edit schedules <span className="collapse-indicator"></span>
                   </Panel.Title>
                 </Panel.Heading>
-                <Panel.Body collapsible>
+                <Panel.Body id="schedules-edit-panel-body" collapsible>
                   <SchedulesEditor scheduleWcif={scheduleWcif} eventsWcif={eventsWcif} locale={locale} />
                 </Panel.Body>
               </Panel>

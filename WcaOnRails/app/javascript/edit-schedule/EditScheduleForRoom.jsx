@@ -1,6 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import events from 'wca/events.js.erb'
+import formats from 'wca/formats.js.erb'
 import _ from 'lodash'
 import ReactDOM from 'react-dom'
 import { parseActivityCode, roundIdToString } from 'edit-events/modals/utils'
@@ -55,9 +56,9 @@ function fcEventToActivity(event) {
 
 function roomWcifFromId(scheduleWcif, id) {
   if (id.length > 0) {
-    for (var i = 0; i < scheduleWcif.venues.length; i++) {
+    for (let i = 0; i < scheduleWcif.venues.length; i++) {
       let venue = scheduleWcif.venues[i];
-      for (var j = 0; j < venue.rooms.length; j++) {
+      for (let j = 0; j < venue.rooms.length; j++) {
         let room = venue.rooms[j];
         if (id == room.id) {
           return room;
@@ -69,7 +70,7 @@ function roomWcifFromId(scheduleWcif, id) {
 }
 
 function activityIndexInArray(activities, id) {
-  for (var i = 0; i < activities.length; i++) {
+  for (let i = 0; i < activities.length; i++) {
     if (activities[i].id == id) {
       return i;
     }
@@ -90,7 +91,7 @@ function activityCodeListFromWcif(scheduleWcif) {
   return usedActivityCodeList;
 }
 
-function selectedActivityInCalendar() {
+function selectedEventInCalendar() {
   let matching = $(scheduleElementId).fullCalendar("clientEvents", function(event) { return event.selected; });
   return matching.length > 0 ? matching[0] : null;
 }
@@ -122,7 +123,7 @@ function RoomSelector({ scheduleWcif, selectedRoom, handleRoomChange }) {
 }
 
 
-var isEventOverTrash = function(jsEvent) {
+const isEventOverTrash = function(jsEvent) {
   let trashElem = $('#drop-event-area');
 
   // Base trash position
@@ -272,7 +273,7 @@ const CalendarSettingsOption = ({selected, optionName, handlePropChange}) => {
 
 function hours() {
   let options = {};
-  for (var i = 0; i < 24; i++) {
+  for (let i = 0; i < 24; i++) {
     options[i] = `${i}:00:00`;
   }
   return options;
@@ -309,7 +310,7 @@ function singleSelectEvent(event) {
       elem.selected = false;
       // this function might be called while dragging/resizing,
       // so we'd better remove the class ourselves instead of calling updateEvent!
-      $(".selected-activity").removeClass("selected-activity");
+      $(".selected-fc-event").removeClass("selected-fc-event");
     }
   });
   event.selected = true;
@@ -338,6 +339,21 @@ function dragOnMouseMove(jsEvent) {
   }
 }
 
+function singleSelectLastEvent(scheduleWcif, selectedRoom) {
+  let room = roomWcifFromId(scheduleWcif, selectedRoom);
+  if (room) {
+    if (room.activities.length > 0) {
+      let lastActivity = room.activities[room.activities.length - 1];
+      let fcEvent = $(scheduleElementId).fullCalendar("clientEvents", lastActivity.id)[0];
+      if (singleSelectEvent(fcEvent)) {
+        $(scheduleElementId).fullCalendar("updateEvent", fcEvent);
+      }
+    }
+  }
+}
+
+const calendarHandlers = {};
+
 class EditScheduleForRoom extends React.Component {
 
   getEvents = () => {
@@ -356,24 +372,9 @@ class EditScheduleForRoom extends React.Component {
     this.setState({
       selectedRoom: this.props.selectedRoom,
       showModal: false,
-      keyboardEnabled: false,
       selectedTime: {},
       calendarOptions: calendarOptions,
     });
-  }
-
-
-  singleSelectLastEvent = () => {
-    let room = roomWcifFromId(this.props.scheduleWcif, this.state.selectedRoom);
-    if (room) {
-      if (room.activities.length > 0) {
-        let lastActivity = room.activities[room.activities.length - 1];
-        let fcEvent = $(scheduleElementId).fullCalendar("clientEvents", lastActivity.id)[0];
-        if (singleSelectEvent(fcEvent)) {
-          $(scheduleElementId).fullCalendar("updateEvent", fcEvent);
-        }
-      }
-    }
   }
 
 
@@ -386,29 +387,22 @@ class EditScheduleForRoom extends React.Component {
     this.setState({ calendarOptions: currentOptions });
   }
 
-  handleToggleKeyboardEnabled = () => {
-    this.setState({ keyboardEnabled: !this.state.keyboardEnabled });
-  }
-
   handleShowModal = (start, end) => {
-    this.setState({ showModal: true, selectedTime: { start: start, end: end } });
+    this.setState({ showModal: true, selectedTime: { start: start, end: end } }, function() {
+      $(window).off("keydown", keyboardHandlers.activityPicker);
+    });
   }
 
   handleHideModal = () => {
-    this.setState({ showModal: false, selectedTime: {} });
+    this.setState({ showModal: false, selectedTime: {} }, function() {
+      $(window).keydown(keyboardHandlers.activityPicker);
+    });
   }
 
-  handleCreateEvent = (eventData) => {
-    let { calendarHandlers } = this.props;
-    let fcEvent = {
-      title: eventData.name,
-      activityCode: eventData.activityCode,
-      start: this.state.selectedTime.start,
-      end: this.state.selectedTime.end,
-      id: newActivityId(),
-    };
-    calendarHandlers.eventAddedToCalendar(fcEvent);
-    $(scheduleElementId).fullCalendar("renderEvent", fcEvent);
+  handleCreateEvent = eventData => {
+    eventData.startTime = this.state.selectedTime.start.format();
+    eventData.endTime = this.state.selectedTime.end.format();
+    calendarHandlers.addEventToCalendar(eventData);
     this.handleHideModal();
   }
 
@@ -418,7 +412,7 @@ class EditScheduleForRoom extends React.Component {
   }
 
   generateCalendar = () => {
-    let { scheduleWcif, selectedRoom, calendarHandlers, locale } = this.props;
+    let { scheduleWcif, selectedRoom, locale } = this.props;
 
     let eventFetcher =  (start, end, timezone, callback) => {
       callback(this.getEvents());
@@ -426,7 +420,6 @@ class EditScheduleForRoom extends React.Component {
 
     // 'this' is not captured in FC callbacks, to setting up aliases here
     let showModal = (start, end) => this.handleShowModal(start, end);
-    let selectLastEvent = this.singleSelectLastEvent;
 
     $(scheduleElementId).fullCalendar({
       // see: https://fullcalendar.io/docs/views/Custom_Views/
@@ -461,7 +454,9 @@ class EditScheduleForRoom extends React.Component {
         calendarHandlers.eventModifiedInCalendar(event);
       },
       eventReceive: function(event) {
-        calendarHandlers.eventAddedToCalendar(event);
+        // Add the event to the calendar (and to the WCIF schedule, but don't
+        // render it as it's already done
+        calendarHandlers.addEventToCalendar(fcEventToActivity(event), false);
         if (singleSelectEvent(event)) {
           $(scheduleElementId).fullCalendar("updateEvent", event);
         }
@@ -476,7 +471,7 @@ class EditScheduleForRoom extends React.Component {
       },
       eventRender: function(event, element, view) {
         if (event.selected) {
-          element.addClass("selected-activity");
+          element.addClass("selected-fc-event");
         }
       },
       eventDragStart: function( event, jsEvent, ui, view ) {
@@ -490,11 +485,9 @@ class EditScheduleForRoom extends React.Component {
         $('#drop-event-area').removeClass("event-on-top");
         $(window).off("mousemove", dragOnMouseMove);
         if (isEventOverTrash(jsEvent)) {
-          calendarHandlers.eventRemovedFromCalendar(event);
-          selectLastEvent();
-          $(scheduleElementId).fullCalendar('removeEvents', event.id);
+          calendarHandlers.removeEventFromCalendar(event);
         } else {
-          // Drag stop outside the drop area makes the event render without the selected-activity class
+          // Drag stop outside the drop area makes the event render without the selected-fc-event class
           $(scheduleElementId).fullCalendar("updateEvent", event);
         }
       },
@@ -508,17 +501,18 @@ class EditScheduleForRoom extends React.Component {
 
   componentDidMount() {
     this.generateCalendar();
-    this.singleSelectLastEvent();
+    singleSelectLastEvent(this.props.scheduleWcif, this.state.selectedRoom);
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.selectedRoom != this.state.selectedRoom) {
       $(scheduleElementId).fullCalendar("refetchEvents")
-      this.singleSelectLastEvent();
+      singleSelectLastEvent(this.props.scheduleWcif, this.state.selectedRoom);
     }
   }
 
   render() {
+    let { keyboardEnabled, handleKeyboardChange } = this.props;
     return (
       <div id="schedule-editor" className="row">
         <div className="col-xs-2">
@@ -534,8 +528,8 @@ class EditScheduleForRoom extends React.Component {
                 <Button><i className="fa fa-cog"></i></Button>
               </OverlayTrigger>
             </OverlayTrigger>
-            <OverlayTrigger overlay={<TooltipKeyboard enabled={this.state.keyboardEnabled}/>} placement="top">
-              <Button onClick={this.handleToggleKeyboardEnabled} active={this.state.keyboardEnabled}>
+            <OverlayTrigger overlay={<TooltipKeyboard enabled={keyboardEnabled}/>} placement="top">
+              <Button onClick={handleKeyboardChange} active={keyboardEnabled}>
                 <i className="fa fa-keyboard-o"></i>
               </Button>
             </OverlayTrigger>
@@ -561,71 +555,99 @@ class EditScheduleForRoom extends React.Component {
 }
 
 
-function ActivityForAttempt({ usedActivityCodeList, activityCode, attemptNumber }) {
-  let { roundNumber } = parseActivityCode(activityCode);
-  let tooltipText = roundIdToString(activityCode);
-  let text = `R${roundNumber}`;
-  if (attemptNumber) {
-    tooltipText += `, Attempt ${attemptNumber}`;
-    text += `A${attemptNumber}`;
-    activityCode += `a-${attemptNumber}`;
+class ActivityForAttempt extends React.Component {
+  scrollSelectedIntoView = () => {
+    if (this.selectedElement) {
+      // Check if the selected element is visible
+      let container = $("#activity-picker-panel").find(".panel-body");
+      let containerHeight = container.height();
+      let containerTop = container.offset().top;
+      let elemPos = $(this.selectedElement).offset().top;
+      let elemHeight = $(this.selectedElement).height();
+      let scrollPos = $(window).scrollTop();
+      let visibleHeight = $(window).height();
+      if (elemPos < containerTop || elemPos > (containerTop + containerHeight)
+          || elemPos > (scrollPos + visibleHeight) || elemPos < (scrollPos - elemHeight)) {
+        // then element is not visible, scroll into it
+        this.selectedElement.scrollIntoView();
+      }
+    }
   }
 
-  let tooltip = (
-    <Tooltip id={`tooltip-${activityCode}`}>
-      {tooltipText}
-    </Tooltip>
-  );
-  let cssClasses = [
-    "activity-in-picker",
-    { "col-xs-6 col-md-4 col-lg-3" : !attemptNumber},
-    { "col-xs-12 col-md-6 col-lg-4" : attemptNumber},
-  ]
-  return (
-    <div className={cn(cssClasses)} data-activity-code={activityCode}>
-      <OverlayTrigger placement="top" overlay={tooltip}>
-        <div className={cn("activity", {"activity-used": (usedActivityCodeList.indexOf(activityCode) > -1)})}
-             data-event={`{"name": "${tooltipText}", "activityCode": "${activityCode}"}`}>
-          {text}
-        </div>
-      </OverlayTrigger>
-    </div>
-  );
+  componentDidMount() {
+    this.scrollSelectedIntoView();
+  }
+
+  componentDidUpdate() {
+    this.scrollSelectedIntoView();
+  }
+
+  render() {
+    let { usedActivityCodeList, activityCode, attemptNumber, selected } = this.props;
+    let { roundNumber } = parseActivityCode(activityCode);
+    let tooltipText = roundIdToString(activityCode);
+    let text = `R${roundNumber}`;
+    if (attemptNumber) {
+      tooltipText += `, Attempt ${attemptNumber}`;
+      text += `A${attemptNumber}`;
+      activityCode += `-a${attemptNumber}`;
+    }
+
+    let tooltip = (
+      <Tooltip id={`tooltip-${activityCode}`}>
+        {tooltipText}
+      </Tooltip>
+    );
+    let outerCssClasses = [
+      "activity-in-picker",
+      { "col-xs-6 col-md-4 col-lg-3" : !attemptNumber},
+      { "col-xs-12 col-md-6 col-lg-4" : attemptNumber},
+    ]
+    let innerCssClasses = [
+      "activity",
+      {"activity-used": (usedActivityCodeList.indexOf(activityCode) > -1)},
+      { "selected-activity" : selected},
+    ]
+
+    let refFunction = (elem) => {
+      if (selected) {
+        this.selectedElement = elem;
+      }
+    }
+    return (
+      <div className={cn(outerCssClasses)} data-activity-code={activityCode}>
+        <OverlayTrigger placement="top" overlay={tooltip}>
+          <div className={cn(innerCssClasses)}
+               ref={refFunction}
+               data-event={`{"name": "${tooltipText}", "activityCode": "${activityCode}"}`}>
+            {text}
+          </div>
+        </OverlayTrigger>
+      </div>
+    );
+  }
 }
 
-function ActivitiesForRound({ usedActivityCodeList, activityCode, format }) {
+function ActivitiesForRound({ usedActivityCodeList, round, selectedLine, selectedX, indexInRow }) {
+  let activityCode = round.id;
   let { eventId } = parseActivityCode(activityCode);
 
   let attempts = [];
   if (eventId == "333fm" || eventId == "333mbf") {
-    switch (format) {
-      case "m":
-      case "3":
-        attempts.unshift(<ActivityForAttempt activityCode={activityCode}
-                                             usedActivityCodeList={usedActivityCodeList}
-                                             key="3" attemptNumber={3}
-        />);
-        // intentional no-break
-      case "2":
-        attempts.unshift(<ActivityForAttempt activityCode={activityCode}
-                                             usedActivityCodeList={usedActivityCodeList}
-                                             key="2" attemptNumber={2}
-        />);
-        // intentional no-break
-      case "1":
-        attempts.unshift(<ActivityForAttempt activityCode={activityCode}
-                                             usedActivityCodeList={usedActivityCodeList}
-                                             key="1" attemptNumber={1}
-        />);
-        // intentional no-break
-      break;
-      default:
-      break;
+    let numberOfAttempts = formats.byId[round.format].expectedSolveCount;
+    for (let i = 0; i < numberOfAttempts; i++) {
+      attempts.push(<ActivityForAttempt activityCode={activityCode}
+                                        usedActivityCodeList={usedActivityCodeList}
+                                        key={i}
+                                        attemptNumber={i+1}
+                                        selected={selectedLine && selectedX == i}
+      />);
     }
-    attempts.push(<div key="0" className="clearfix" />);
+    attempts.push(<div key={numberOfAttempts} className="clearfix" />);
   } else {
     attempts.push(<ActivityForAttempt key="0" usedActivityCodeList={usedActivityCodeList}
                                               activityCode={activityCode}
+                                              selected={selectedLine && selectedX == indexInRow}
                                               attemptNumber={null}
                   />);
   }
@@ -636,7 +658,7 @@ function ActivitiesForRound({ usedActivityCodeList, activityCode, format }) {
   );
 }
 
-function ActivityPickerLine({ eventWcif, usedActivityCodeList }) {
+function ActivityPickerLine({ eventWcif, usedActivityCodeList, selectedLine, selectedX }) {
   let event = events.byId[eventWcif.id];
 
   return (
@@ -648,13 +670,21 @@ function ActivityPickerLine({ eventWcif, usedActivityCodeList }) {
         <div className="col-xs-12 col-md-9 col-lg-10">
           <div className="row">
             {eventWcif.rounds.map((value, index) => {
-              return (
+              let activities = (
                 <ActivitiesForRound key={value.id}
-                                    activityCode={value.id}
+                                    indexInRow={index}
+                                    round={value}
                                     usedActivityCodeList={usedActivityCodeList}
-                                    format={value.format}
+                                    selectedLine={selectedLine}
+                                    selectedX={selectedX}
                 />
               );
+              if (event.id == "333mbf" || event.id == "333fm") {
+                // For these events the selectedX spreads accross multiple rounds.
+                // This corrects the offset.
+                selectedX -= formats.byId[value.format].expectedSolveCount;
+              }
+              return activities;
             })}
           </div>
         </div>
@@ -665,11 +695,165 @@ function ActivityPickerLine({ eventWcif, usedActivityCodeList }) {
 
 const activityPickerElementId = "activity-picker-panel";
 
+const keyboardHandlers = {
+};
+
 class ActivityPicker extends React.Component {
+  constructor(props) {
+    super(props);
+    keyboardHandlers.activityPicker = e => this.keyboardHandler(e, this);
+  }
+
+  keyboardHandler = (event, reactElem) => {
+    // Only handle if the edit panel if not collapse
+    if ($("#schedules-edit-panel-body")[0].offsetParent === null) {
+      return true;
+    }
+    if (!reactElem.props.keyboardEnabled) {
+      return true;
+    }
+    let currentEventSelected = selectedEventInCalendar();
+    switch (event.which) {
+      // h
+      case 72:
+      // arrow left
+      case 37:
+        reactElem.trySetSelectedActivity("left");
+        break;
+      // j
+      case 74:
+      // arrow down
+      case 40:
+        if (event.ctrlKey) {
+          if (currentEventSelected) {
+            currentEventSelected.end.add(5, "m");
+            if (!event.shiftKey) {
+              currentEventSelected.start.add(5, "m");
+            }
+            $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected);
+          }
+        } else {
+          reactElem.trySetSelectedActivity("down");
+        }
+        break;
+      // k
+      case 75:
+      // arrow up
+      case 38:
+        if (event.ctrlKey) {
+          if (currentEventSelected) {
+            currentEventSelected.end.subtract(5, "m");
+            if (!event.shiftKey) {
+              currentEventSelected.start.subtract(5, "m");
+            }
+            $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected);
+          }
+        } else {
+          reactElem.trySetSelectedActivity("up");
+        }
+        break;
+      // l
+      case 76:
+      // arrow right
+      case 39:
+        reactElem.trySetSelectedActivity("right");
+        break;
+      // enter
+      case 13:
+        let $elemSelected = $(".selected-activity");
+        if ($elemSelected.size() == 1) {
+          calendarHandlers.addEventToCalendar($elemSelected.data("event"));
+        }
+      break;
+      // del
+      case 46:
+        if (currentEventSelected) {
+          calendarHandlers.removeEventFromCalendar(currentEventSelected);
+        }
+      break;
+      default:
+        return true;
+        break;
+    }
+    return false;
+  }
+
+  trySetSelectedActivity = (direction, ignoreKeyboard = false) => {
+    let { eventsWcif, keyboardEnabled } = this.props;
+    if ((!keyboardEnabled && !ignoreKeyboard) || eventsWcif.length == 0) {
+      return;
+    }
+    let x = this.state.selectedX;
+    let y = this.state.selectedY;
+    switch (direction) {
+      case "up":
+        y--;
+      break;
+      case "down":
+        y++;
+      break;
+      case "left":
+        x--;
+      break;
+      case "right":
+        x++;
+      break;
+      default:
+        return;
+    }
+    let fixedY = Math.max(0, Math.min(y, eventsWcif.length - 1));
+    let fixedX = 0;
+    // Loop at most through all rows, starting from selected, hoping to find one with rounds
+    // Else we just default to 0,0 and nothing will be selected
+    for (let i = 0; i < eventsWcif.length; i++) {
+      let eventRow = eventsWcif[fixedY];
+      let eventRowLength = 0;
+      let eventId = eventRow.id;
+      eventRow.rounds.forEach(function(round) {
+        if (eventId == "333fm" || eventId == "333mbf") {
+          eventRowLength += formats.byId[round.format].expectedSolveCount;
+        } else {
+          eventRowLength++;
+        }
+      });
+      if (eventRowLength != 0) {
+        fixedX = Math.max(0, Math.min(x, eventRowLength - 1));
+        break;
+      }
+      if (direction == "up") {
+        fixedY--;
+        if (fixedY < 0) {
+          return;
+        }
+      } else if (direction == "down") {
+        fixedY++;
+        if (fixedY >= eventsWcif.length) {
+          return;
+        }
+      }
+    }
+    this.setState({
+      selectedY: fixedY,
+      selectedX: fixedX,
+    });
+  }
+
+  componentWillMount() {
+    this.setState({
+      // event's row selected (from top to bottom)
+      // init to -1, as we are going to force the select of the first down
+      selectedY: -1,
+      // event's round or attempt selected (from left to right)
+      selectedX: 0,
+    }, () => this.trySetSelectedActivity("down", true));
+  }
+
   componentDidMount() {
     let $pickerElem = $(`#${activityPickerElementId}`);
     let $panelElem = $("#schedules-edit-panel");
 
+    // FIXME: these probably belongs to the parent component
+    // or at least the parent should be responsible to provide the parent identifier (schedules-edit-panel)
     let computeBasePickerDimension = () => {
       // Dynamically fix the width
       $pickerElem.width($pickerElem.parent().width());
@@ -714,12 +898,23 @@ class ActivityPicker extends React.Component {
     });
     $pickerElem.on('affix.bs.affix', computeAffixedPickerDimension);
     $pickerElem.on('affix-top.bs.affix', resetPanelDimension);
+    // TODO remove when unmounted
     $(window).scroll(adjustPickerDimension);
     $(window).resize(computeBasePickerDimension);
+    $(window).keydown(keyboardHandlers.activityPicker);
+  }
+
+  componentWillUnmount() {
+    $(window).off("keydown", keyboardHandlers.activityPicker);
   }
 
   render() {
-    let { scheduleWcif, eventsWcif, usedActivityCodeList } = this.props;
+    let { scheduleWcif, eventsWcif, usedActivityCodeList, keyboardEnabled } = this.props;
+    let { selectedX, selectedY } = this.state;
+    if (!keyboardEnabled) {
+      selectedX = -1;
+      selectedY = -1;
+    }
     return (
       <Panel id="activity-picker-panel">
         <Panel.Heading>
@@ -728,7 +923,7 @@ class ActivityPicker extends React.Component {
         <Panel.Body>
           {eventsWcif.map((value, index) => {
             return (
-              <ActivityPickerLine key={value.id} eventWcif={value} usedActivityCodeList={usedActivityCodeList} />
+              <ActivityPickerLine key={value.id} selectedLine={index == selectedY} eventWcif={value} usedActivityCodeList={usedActivityCodeList} selectedX={selectedX} />
             );
           })}
           <div className="col-xs-12">
@@ -744,10 +939,27 @@ class ActivityPicker extends React.Component {
 }
 
 export class SchedulesEditor extends React.Component {
+  constructor(props) {
+    super(props);
+    let toggleHandler = this.handleToggleKeyboardEnabled;
+    $(window).keydown(function(event) {
+      // ctrl + i
+      if (event.ctrlKey && event.which == 73) {
+        toggleHandler();
+      }
+    });
+    calendarHandlers.addEventToCalendar = this.addActivityToSchedule;
+    calendarHandlers.removeEventFromCalendar = this.removeActivityFromSchedule;
+    calendarHandlers.eventModifiedInCalendar = this.handleEventModified;
+  }
 
   componentWillMount() {
     let { scheduleWcif } = this.props;
-    this.setState({ selectedRoom: "", usedActivityCodeList: activityCodeListFromWcif(scheduleWcif) });
+    this.setState({
+      selectedRoom: "",
+      usedActivityCodeList: activityCodeListFromWcif(scheduleWcif),
+      keyboardEnabled: false,
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -757,11 +969,15 @@ export class SchedulesEditor extends React.Component {
     this.setState({ usedActivityCodeList: activityCodeListFromWcif(nextProps.scheduleWcif) });
   }
 
+  handleToggleKeyboardEnabled = () => {
+    this.setState({ keyboardEnabled: !this.state.keyboardEnabled });
+  }
+
   handleRoomChange = e => {
     this.setState({ selectedRoom: e.target.value });
   }
 
-  handleEventAdded = event => {
+  handleEventDroppedOnCalendar = event => {
     let { scheduleWcif } = this.props;
     let room = roomWcifFromId(scheduleWcif, this.state.selectedRoom);
     // Add activity to the WCIF
@@ -773,7 +989,7 @@ export class SchedulesEditor extends React.Component {
     // either here by updateEvent, or in the "drop" fallback (to be investigated)
   }
 
-  handleEventRemoved = event => {
+  removeActivityFromSchedule = event => {
 
     // Remove activityCode from the list used by the ActivityPicker
     let newActivityCodeList = this.state.usedActivityCodeList;
@@ -792,6 +1008,9 @@ export class SchedulesEditor extends React.Component {
     room.activities.splice(activityIndex, 1);
     // We rootRender to display the "Please save your changes..." message
     this.setState({ usedActivityCodeList: newActivityCodeList }, rootRender());
+
+    $(scheduleElementId).fullCalendar('removeEvents', event.id);
+    singleSelectLastEvent(scheduleWcif, this.state.selectedRoom);
   }
 
   handleEventModified = event => {
@@ -808,33 +1027,41 @@ export class SchedulesEditor extends React.Component {
     rootRender();
   }
 
-  handleClickActivityToAdd = e => {
-    let currentActivitySelected = selectedActivityInCalendar();
+  addActivityToSchedule = (activityData, renderItOnCalendar=true) => {
+    let currentEventSelected = selectedEventInCalendar();
     let roomSelected = roomWcifFromId(this.props.scheduleWcif, this.state.selectedRoom);
-    if (currentActivitySelected && roomSelected) {
-      let activityClickedData = $(e.target).data("event");
+    if (roomSelected) {
       let newActivity = {
         id: newActivityId(),
-        name: activityClickedData.name,
-        activityCode: activityClickedData.activityCode,
+        name: activityData.name,
+        activityCode: activityData.activityCode,
       };
-      let newStart = currentActivitySelected.end.clone();
-      newActivity.startTime = newStart.format();
-      // FIXME: use default event duration
-      let newEnd = newStart.add(30, "m");
-      newActivity.endTime = newEnd.format();
+      if (activityData.startTime && activityData.endTime) {
+        newActivity.startTime = activityData.startTime;
+        newActivity.endTime = activityData.endTime;
+      } else if (currentEventSelected) {
+        let newStart = currentEventSelected.end.clone();
+        newActivity.startTime = newStart.format();
+        // FIXME: use default event duration
+        let newEnd = newStart.add(30, "m");
+        newActivity.endTime = newEnd.format();
+      } else {
+        // FIXME: silent error?!
+        return;
+      }
       roomSelected.activities.push(newActivity);
-      // Cloning the object here: activityToFcEvent modifies in place,
-      // and we don't want event.selected to propagate in the WCIF!
-      let fcEvent = Object.assign({}, newActivity);
-      fcEvent = activityToFcEvent(fcEvent);
-      singleSelectEvent(fcEvent);
-      $(scheduleElementId).fullCalendar("renderEvent", fcEvent);
+      if (renderItOnCalendar) {
+        // Cloning the object here: activityToFcEvent modifies in place,
+        // and we don't want event.selected to propagate in the WCIF!
+        let fcEvent = Object.assign({}, newActivity);
+        fcEvent = activityToFcEvent(fcEvent);
+        singleSelectEvent(fcEvent);
+        $(scheduleElementId).fullCalendar("renderEvent", fcEvent);
+      }
       // update list of activityCode used, and rootRender to display the save message
       this.setState({ usedActivityCodeList: [...this.state.usedActivityCodeList, newActivity.activityCode] }, rootRender());
     }
   }
-
 
   componentDidMount() {
     $(".activity-in-picker > .activity").draggable({
@@ -848,31 +1075,27 @@ export class SchedulesEditor extends React.Component {
       cursor: "copy",
       cursorAt: { top: 20, left: 10 }
     });
-    $(".activity-in-picker > .activity").click(this.handleClickActivityToAdd);
+    $(".activity-in-picker > .activity").click(e => calendarHandlers.addEventToCalendar($(e.target).data("event")));
   }
 
   render() {
     let { scheduleWcif, eventsWcif, locale } = this.props;
     let rightPanelBody = <NoRoomSelected />;
-    let calendarHandlers = {
-      eventAddedToCalendar: this.handleEventAdded,
-      eventRemovedFromCalendar: this.handleEventRemoved,
-      eventModifiedInCalendar: this.handleEventModified,
-    };
 
     if (this.state.selectedRoom.length > 0) {
       rightPanelBody = (
         <EditScheduleForRoom scheduleWcif={scheduleWcif}
                              locale={locale}
+                             keyboardEnabled={this.state.keyboardEnabled}
+                             handleKeyboardChange={this.handleToggleKeyboardEnabled}
                              selectedRoom={this.state.selectedRoom}
-                             calendarHandlers={calendarHandlers}
         />);
     }
 
     return (
       <div className="row">
         <div className="col-xs-3">
-          <ActivityPicker scheduleWcif={scheduleWcif} eventsWcif={eventsWcif} usedActivityCodeList={this.state.usedActivityCodeList} />
+          <ActivityPicker scheduleWcif={scheduleWcif} eventsWcif={eventsWcif} usedActivityCodeList={this.state.usedActivityCodeList} keyboardEnabled={this.state.keyboardEnabled} />
         </div>
         <div className="col-xs-9">
           <Panel>
