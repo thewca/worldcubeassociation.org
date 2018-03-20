@@ -38,6 +38,10 @@ module Locales
       "flag_id": "jp",
       "name": "日本語",
     },
+    "ko": {
+      "flag_id": "kr",
+      "name": "한국어",
+    },
     "pl": {
       "flag_id": "pl",
       "name": "Polski",
