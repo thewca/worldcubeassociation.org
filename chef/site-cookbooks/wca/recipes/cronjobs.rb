@@ -18,7 +18,7 @@ unless node.chef_environment.start_with?("development")
   cron "backup" do
     minute '0'
     hour '0'
-    weekday '1'
+    weekday 'MON'
 
     path path
     mailto admin_email
@@ -70,6 +70,19 @@ unless node.chef_environment.start_with?("development")
     mailto admin_email
     user username
     command '"/home/cubing/.acme.sh"/acme.sh --cron --home "/home/cubing/.acme.sh" > /dev/null'
+  end
+end
+
+unless node.chef_environment.start_with?("development")
+  cron "clear rails cache" do
+    minute '0'
+    hour '5'
+    weekday 'TUE'
+
+    path path
+    mailto admin_email
+    user username
+    command "(cd #{repo_root}/WcaOnRails; RACK_ENV=production bin/rake tmp:cache:clear)"
   end
 end
 
