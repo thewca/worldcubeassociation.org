@@ -48,6 +48,7 @@
 //= require moment/vi.js
 //= require moment/zh-cn.js
 //= require moment/zh-tw.js
+//= require moment-timezone-with-data
 //= require bootstrap-datetimepicker
 //= require bootstrap-table
 //= require bootstrap-table-locale-all

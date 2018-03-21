@@ -60,11 +60,26 @@ class EditRoom extends React.Component {
 
 export class EditVenue extends React.Component {
 
+  convertToNewTimeZone = () => {
+    let newTZ = this.props.venueWcif.timezone;
+    this.props.venueWcif.rooms.forEach(function(room) {
+      room.activities.forEach(function(activity) {
+        // Undocumented "keepTime" parameter (see here: https://stackoverflow.com/questions/28593304/same-date-in-different-time-zone/28615654#28615654)
+        // This enables us to change the UTC offset without changing the *actual* time of the activity!
+        activity.startTime = moment(activity.startTime).tz(newTZ, true).format();
+        activity.endTime = moment(activity.endTime).tz(newTZ, true).format();
+      });
+    });
+  }
+
   handleSinglePropertyChange = (e, propName) => {
     let partialNewState = {};
     partialNewState[propName] = e.target.value;
     // Update parent's WCIF
     this.props.venueWcif[propName] = partialNewState[propName];
+    if (propName == "timezone") {
+      this.convertToNewTimeZone();
+    }
     rootRender();
   }
 

@@ -9,29 +9,32 @@ import { Button, ButtonToolbar, Modal, Panel, Tooltip, OverlayTrigger, Popover }
 import { rootRender } from 'edit-schedule'
 import { newActivityId } from './EditSchedule'
 
-//TODO: select direction calendar
-
 function NoRoomSelected() {
   return (
     <div>Please select a room to edit its schedule</div>
   );
 }
 
+const tzConverterHandlers = {
+};
+
 function activityToFcEvent(eventData) {
   if (eventData.hasOwnProperty("name")) {
     eventData.title = eventData.name;
   }
-
   // Generate a new activity id if needed
   if (!eventData.hasOwnProperty("id")) {
     eventData.id = newActivityId();
   }
-  // Keep activityCode
+  // Keep activityCode untouched
+
+  // While in FC, any time is ambiguously-zoned
+  // We'll add back the room's timezone when exporting the WCIF
   if (eventData.hasOwnProperty("startTime")) {
-    eventData.start = $.fullCalendar.moment(eventData.startTime);
+    eventData.start = tzConverterHandlers.isoStringToAmbiguousMoment(eventData.startTime);
   }
   if (eventData.hasOwnProperty("endTime")) {
-    eventData.end = $.fullCalendar.moment(eventData.endTime);
+    eventData.end = tzConverterHandlers.isoStringToAmbiguousMoment(eventData.endTime);
   }
   return eventData;
 };
@@ -44,10 +47,10 @@ function fcEventToActivity(event) {
     activityCode: event.activityCode,
   };
   if (event.hasOwnProperty("start")) {
-    activity.startTime = event.start.format();
+    activity.startTime = tzConverterHandlers.ambiguousMomentToIsoString(event.start);
   }
   if (event.hasOwnProperty("end")) {
-    activity.endTime = event.end.format();
+    activity.endTime = tzConverterHandlers.ambiguousMomentToIsoString(event.end);
   }
   if (event.hasOwnProperty("childActivities")) {
     // Not modified by FC, put them back anyway
@@ -64,6 +67,21 @@ function roomWcifFromId(scheduleWcif, id) {
         let room = venue.rooms[j];
         if (id == room.id) {
           return room;
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function venueWcifFromRoomId(scheduleWcif, id) {
+  if (id.length > 0) {
+    for (let i = 0; i < scheduleWcif.venues.length; i++) {
+      let venue = scheduleWcif.venues[i];
+      for (let j = 0; j < venue.rooms.length; j++) {
+        let room = venue.rooms[j];
+        if (id == room.id) {
+          return venue;
         }
       }
     }
@@ -452,8 +470,8 @@ class EditScheduleForRoom extends React.Component {
   }
 
   handleCreateEvent = eventData => {
-    eventData.startTime = eventData.start.format();
-    eventData.endTime = eventData.end.format();
+    eventData.startTime = tzConverterHandlers.ambiguousMomentToIsoString(eventData.start);
+    eventData.endTime = tzConverterHandlers.ambiguousMomentToIsoString(eventData.end);
     calendarHandlers.addEventToCalendar(eventData);
     this.handleHideModal();
   }
@@ -897,6 +915,7 @@ class ActivityPicker extends React.Component {
             if (possibleStart.isAfter(startDate)) {
               currentEventSelected.start.subtract(1, "d");
               currentEventSelected.end.subtract(1, "d");
+              calendarHandlers.eventModifiedInCalendar(currentEventSelected);
               $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected);
             }
           }
@@ -916,6 +935,7 @@ class ActivityPicker extends React.Component {
             if (!event.shiftKey) {
               currentEventSelected.start.add(5, "m");
             }
+            calendarHandlers.eventModifiedInCalendar(currentEventSelected);
             $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected);
           }
         } else {
@@ -936,6 +956,7 @@ class ActivityPicker extends React.Component {
             if (!event.shiftKey) {
               currentEventSelected.start.subtract(5, "m");
             }
+            calendarHandlers.eventModifiedInCalendar(currentEventSelected);
             $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected);
           }
         } else {
@@ -957,6 +978,7 @@ class ActivityPicker extends React.Component {
             if (possibleStart.isBefore(firstDayAfterCompetition)) {
               currentEventSelected.start.add(1, "d");
               currentEventSelected.end.add(1, "d");
+              calendarHandlers.eventModifiedInCalendar(currentEventSelected);
               $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected);
             }
           }
@@ -1166,6 +1188,8 @@ export class SchedulesEditor extends React.Component {
     calendarHandlers.addEventToCalendar = this.addActivityToSchedule;
     calendarHandlers.removeEventFromCalendar = this.removeActivityFromSchedule;
     calendarHandlers.eventModifiedInCalendar = this.handleEventModified;
+    tzConverterHandlers.isoStringToAmbiguousMoment = s => this.isoStringToAmbiguousMoment(this, s);
+    tzConverterHandlers.ambiguousMomentToIsoString = m => this.ambiguousMomentToIsoString(this, m);
     $(window).click(function(event) {
       let $menu = $("#schedule-menu");
       if (!$menu.hasClass("hide-element")) {
@@ -1173,6 +1197,28 @@ export class SchedulesEditor extends React.Component {
         $menu.addClass("hide-element");
       }
     });
+  }
+
+  isoStringToAmbiguousMoment = (editor, isoString) => {
+    let scheduleWcif = editor.props.scheduleWcif;
+    let venue = venueWcifFromRoomId(scheduleWcif, editor.state.selectedRoom);
+    let tz = venue.timezone;
+    // Using FC's moment because it has a custom "stripZone" feature
+    // The final FC display will be timezone-free, and the user expect a calendar
+    // in the venue's TZ.
+    // First convert the time received into the venue's timezone, then strip its value
+    let ret = $.fullCalendar.moment(isoString).tz(tz).stripZone();
+    return ret;
+  }
+
+  ambiguousMomentToIsoString = (editor, momentObject) => {
+    let scheduleWcif = editor.props.scheduleWcif;
+    let venue = venueWcifFromRoomId(scheduleWcif, editor.state.selectedRoom);
+    let tz = venue.timezone;
+    // Take the moment and "concatenate" the UTC offset of the timezone at that time
+    // momentObject is a FC (ambiguously zoned) moment, therefore format() returns a zone free string
+    let ret = moment.tz(momentObject.format(), tz).format();
+    return ret;
   }
 
   componentWillMount() {
@@ -1238,8 +1284,8 @@ export class SchedulesEditor extends React.Component {
     let activity = room.activities[activityIndex];
     activity.name = event.name;
     activity.activityCode = event.activityCode;
-    activity.startTime = event.start.format();
-    activity.endTime = event.end.format();
+    activity.startTime = tzConverterHandlers.ambiguousMomentToIsoString(event.start);
+    activity.endTime = tzConverterHandlers.ambiguousMomentToIsoString(event.end);
     // We rootRender to display the "Please save your changes..." message
     rootRender();
   }
@@ -1258,9 +1304,9 @@ export class SchedulesEditor extends React.Component {
         newActivity.endTime = activityData.endTime;
       } else if (currentEventSelected) {
         let newStart = currentEventSelected.end.clone();
-        newActivity.startTime = newStart.format();
+        newActivity.startTime = tzConverterHandlers.ambiguousMomentToIsoString(newStart);
         let newEnd = newStart.add(defaultDurationFromActivityCode(newActivity.activityCode), "m");
-        newActivity.endTime = newEnd.format();
+        newActivity.endTime = tzConverterHandlers.ambiguousMomentToIsoString(newEnd);
       } else {
         alert("bad");
         return;
