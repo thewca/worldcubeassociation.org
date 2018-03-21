@@ -194,3 +194,22 @@
     padding: 3px 20px;
   }
 }
+
+#calendar-help-popover {
+  width: 400px;
+  dl {
+    dt {
+      margin-bottom: 10px;
+      text-align: right;
+      padding-right: 0;
+      padding-left: 5px;
+      &:after {
+        content: ":";
+      }
+    }
+    dd {
+      margin-bottom: 10px;
+      padding-left: 5px;
+    }
+  }
+}

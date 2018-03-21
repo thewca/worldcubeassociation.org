@@ -195,14 +195,6 @@ class CustomActivityModal extends React.Component {
         <Modal.Body className="form-horizontal row">
           <div className="form-group">
             <div className="control-label col-xs-3">
-              <label>Name</label>
-            </div>
-            <div className="col-xs-8">
-              <input className="form-control" type="text" id="activity_name" value={this.state.name} onChange={e => handlePropChange("name", e)}/>
-            </div>
-          </div>
-          <div className="form-group">
-            <div className="control-label col-xs-3">
               <label>Type of activity</label>
             </div>
             <div className="col-xs-8">
@@ -211,6 +203,14 @@ class CustomActivityModal extends React.Component {
                   return <option key={key} value={key}>{commonActivityCodes[key]}</option>
                 })}
               </select>
+            </div>
+          </div>
+          <div className="form-group">
+            <div className="control-label col-xs-3">
+              <label>Name</label>
+            </div>
+            <div className="col-xs-8">
+              <input className="form-control" type="text" id="activity_name" value={this.state.name} onChange={e => handlePropChange("name", e)}/>
             </div>
           </div>
           <div className="form-group">
@@ -295,6 +295,33 @@ const CalendarSettings = ({ currentSettings, handlePropChange, ...props}) => {
           );
         })}
       </div>
+    </Popover>
+  );
+}
+
+const CalendarHelp = ({ ...props }) => {
+// See https://github.com/react-bootstrap/react-bootstrap/issues/1345#issuecomment-142133819
+// for why we pass down ...props
+  return (
+    <Popover id="calendar-help-popover" title="Keyboard shortcuts help" {...props} >
+      <dl className="row">
+        <dt className="col-xs-4"><i className="fa fa-keyboard-o"/> or<br/> [C] + [S] + i</dt>
+        <dd className="col-xs-8">Toggle keyboard shortcuts</dd>
+        <dt className="col-xs-4">Arrow keys</dt>
+        <dd className="col-xs-8">Change selected activity in picker</dd>
+        <dt className="col-xs-4">[Enter]</dt>
+        <dd className="col-xs-8">Add selected activity after selected event</dd>
+        <dt className="col-xs-4">[Del]</dt>
+        <dd className="col-xs-8">Remove selected event</dd>
+        <dt className="col-xs-4">[C] + up/down</dt>
+        <dd className="col-xs-8">Move selected event up/down in calendar</dd>
+        <dt className="col-xs-4">[C] + [S] + up/down</dt>
+        <dd className="col-xs-8">Shrink/Expand selected event in calendar</dd>
+        <dt className="col-xs-4">[C] + [S] + click</dt>
+        <dd className="col-xs-8">Show contextual menu for event</dd>
+      </dl>
+      <hr />
+      <b>[C]:</b> ctrl key, <b>[S]:</b> shift key
     </Popover>
   );
 }
@@ -527,9 +554,11 @@ class EditScheduleForRoom extends React.Component {
       eventDragStop: function( event, jsEvent, ui, view ) {
         $('#drop-event-area').removeClass("event-on-top");
         $(window).off("mousemove", dragOnMouseMove);
+        let removed = false;
         if (isEventOverTrash(jsEvent)) {
-          calendarHandlers.removeEventFromCalendar(event);
-        } else {
+          removed = calendarHandlers.removeEventFromCalendar(event);
+        }
+        if (!removed) {
           // Drag stop outside the drop area makes the event render without the selected-fc-event class
           $(scheduleElementId).fullCalendar("updateEvent", event);
         }
@@ -574,6 +603,13 @@ class EditScheduleForRoom extends React.Component {
       <div id="schedule-editor" className="row">
         <div className="col-xs-2">
           <ButtonToolbar>
+            <OverlayTrigger trigger="click"
+                            rootClose
+                            overlay={<CalendarHelp />}
+                            placement="bottom"
+            >
+              <Button><i className="fa fa-question-circle"></i></Button>
+            </OverlayTrigger>
             <OverlayTrigger trigger="click"
                             rootClose
                             placement="bottom"
@@ -1066,6 +1102,10 @@ export class SchedulesEditor extends React.Component {
 
   removeActivityFromSchedule = event => {
 
+    if (!confirm(`Are you sure you want to remove ${event.name}`)) {
+      return false;
+    }
+
     // Remove activityCode from the list used by the ActivityPicker
     let newActivityCodeList = this.state.usedActivityCodeList;
     let activityCodeIndex = newActivityCodeList.indexOf(event.activityCode);
@@ -1086,6 +1126,7 @@ export class SchedulesEditor extends React.Component {
 
     $(scheduleElementId).fullCalendar('removeEvents', event.id);
     singleSelectLastEvent(scheduleWcif, this.state.selectedRoom);
+    return true;
   }
 
   handleEventModified = event => {
