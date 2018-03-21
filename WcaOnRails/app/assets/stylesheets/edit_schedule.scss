@@ -178,14 +178,11 @@
   position: fixed;
   top: 100px;
   left: 100px;
-  display:block;
+  display: block;
   &.delete-only {
     .edit-option {
       display: none;
     }
-  }
-  &.hide-contextmenu {
-    display: none;
   }
   a {
     i {
@@ -216,4 +213,8 @@
 
 .panel-info > .heading-as-link:hover {
   @extend a.list-group-item-info:hover;
+}
+
+.hide-element {
+  display: none !important;
 }

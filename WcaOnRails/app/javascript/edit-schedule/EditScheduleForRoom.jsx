@@ -9,6 +9,8 @@ import { Button, ButtonToolbar, Modal, Panel, Tooltip, OverlayTrigger, Popover }
 import { rootRender } from 'edit-schedule'
 import { newActivityId } from './EditSchedule'
 
+//TODO: select direction calendar
+
 function NoRoomSelected() {
   return (
     <div>Please select a room to edit its schedule</div>
@@ -153,6 +155,17 @@ const commonActivityCodes = {
   "other-awards": "Awards",
   "other-misc": "Other",
 };
+
+
+const defaultDurationFromActivityCode = activityCode => {
+  let { eventId } = parseActivityCode(activityCode);
+  if (eventId == "333fm" || eventId == "333mbf"
+      || activityCode == "other-lunch" || activityCode == "other-awards") {
+    return 60;
+  } else {
+    return 30;
+  }
+}
 
 class CustomActivityModal extends React.Component {
   // FIXME: extract to standalone file
@@ -305,9 +318,11 @@ const CalendarHelp = ({ ...props }) => {
   return (
     <Popover id="calendar-help-popover" title="Keyboard shortcuts help" {...props} >
       <dl className="row">
-        <dt className="col-xs-4"><i className="fa fa-keyboard-o"/> or<br/> [C] + [S] + i</dt>
+        <dt className="col-xs-4"><i className="fa fa-keyboard-o"/> or<br/> [C] + i</dt>
         <dd className="col-xs-8">Toggle keyboard shortcuts</dd>
         <dt className="col-xs-4">Arrow keys</dt>
+        <dd className="col-xs-8">Change selected event in calendar</dd>
+        <dt className="col-xs-4">[S] + Arrow keys</dt>
         <dd className="col-xs-8">Change selected activity in picker</dd>
         <dt className="col-xs-4">[Enter]</dt>
         <dd className="col-xs-8">Add selected activity after selected event</dd>
@@ -409,7 +424,6 @@ class EditScheduleForRoom extends React.Component {
   handleCalendarOptionChange = (optionName, e) => {
     e.preventDefault();
     let currentOptions = this.state.calendarOptions;
-    // FIXME: check minTime/maxTime is coherent
     currentOptions[optionName] = e.target.value;
     $(scheduleElementId).fullCalendar("option", currentOptions);
     this.setState({ calendarOptions: currentOptions });
@@ -500,6 +514,10 @@ class EditScheduleForRoom extends React.Component {
         calendarHandlers.eventModifiedInCalendar(event);
       },
       eventReceive: function(event) {
+        // Fix the default duration
+        let newEnd = event.start.clone();
+        newEnd.add(defaultDurationFromActivityCode(event.activityCode), "m");
+        event.end = newEnd;
         // Add the event to the calendar (and to the WCIF schedule, but don't
         // render it as it's already done
         calendarHandlers.addEventToCalendar(fcEventToActivity(event), false);
@@ -520,12 +538,12 @@ class EditScheduleForRoom extends React.Component {
           if (!event.activityCode.startsWith("other-")) {
             $menu.addClass("delete-only");
           }
-          $menu.removeClass("hide-contextmenu");
+          $menu.removeClass("hide-element");
           $menu.position({ my: "left top", of: jsEvent});
           // avoid it being immediately hiddent by our window click listener
           jsEvent.stopPropagation();
         } else {
-          $menu.addClass("hide-contextmenu");
+          $menu.addClass("hide-element");
         }
         if (singleSelectEvent(event)) {
           $(scheduleElementId).fullCalendar("updateEvent", event);
@@ -538,7 +556,7 @@ class EditScheduleForRoom extends React.Component {
       },
       eventDragStart: function( event, jsEvent, ui, view ) {
         singleSelectEvent(event);
-        $("#schedule-menu").addClass("hide-contextmenu");
+        $("#schedule-menu").addClass("hide-element");
         $(window).on("mousemove", dragOnMouseMove);
       },
       eventResizeStart: function(event, jsEvent, ui, view) {
@@ -546,7 +564,7 @@ class EditScheduleForRoom extends React.Component {
         // We can't rerender or update here, otherwise FC internal state gets messed up
         // So we do a trick: an fc-event able to be resized receive the class 'fc-allow-mouse-resize'
         $(".fc-allow-mouse-resize").addClass("selected-fc-event");
-        $("#schedule-menu").addClass("hide-contextmenu");
+        $("#schedule-menu").addClass("hide-element");
       },
       eventResizeStop: function(event, jsEvent, ui, view) {
         $(scheduleElementId).fullCalendar("updateEvent", event);
@@ -636,7 +654,7 @@ class EditScheduleForRoom extends React.Component {
           </div>
         </div>
         <div className="col-xs-12" id="schedule-calendar"/>
-        <ul id="schedule-menu" className="dropdown-menu hide-contextmenu" role="menu">
+        <ul id="schedule-menu" className="dropdown-menu hide-element" role="menu">
           <li className="edit-option">
             <a href="#" role="menuitem" onClick={editButtonAction}>
               <i className="fa fa-pencil"></i><span>Edit</span>
@@ -1057,9 +1075,9 @@ export class SchedulesEditor extends React.Component {
     calendarHandlers.eventModifiedInCalendar = this.handleEventModified;
     $(window).click(function(event) {
       let $menu = $("#schedule-menu");
-      if (!$menu.hasClass("hide-contextmenu")) {
+      if (!$menu.hasClass("hide-element")) {
         $menu.removeClass("delete-only");
-        $menu.addClass("hide-contextmenu");
+        $menu.addClass("hide-element");
       }
     });
   }
@@ -1086,18 +1104,6 @@ export class SchedulesEditor extends React.Component {
 
   handleRoomChange = e => {
     this.setState({ selectedRoom: e.target.value });
-  }
-
-  handleEventDroppedOnCalendar = event => {
-    let { scheduleWcif } = this.props;
-    let room = roomWcifFromId(scheduleWcif, this.state.selectedRoom);
-    // Add activity to the WCIF
-    room.activities.push(fcEventToActivity(event))
-    // Update the list of activityCode used
-    // We rootRender to display the "Please save your changes..." message
-    this.setState({ usedActivityCodeList: [...this.state.usedActivityCodeList, event.activityCode] }, rootRender());
-    // TODO: update default time for event if FMC or MBF
-    // either here by updateEvent, or in the "drop" fallback (to be investigated)
   }
 
   removeActivityFromSchedule = event => {
@@ -1160,11 +1166,10 @@ export class SchedulesEditor extends React.Component {
       } else if (currentEventSelected) {
         let newStart = currentEventSelected.end.clone();
         newActivity.startTime = newStart.format();
-        // FIXME: use default event duration
-        let newEnd = newStart.add(30, "m");
+        let newEnd = newStart.add(defaultDurationFromActivityCode(newActivity.activityCode), "m");
         newActivity.endTime = newEnd.format();
       } else {
-        // FIXME: silent error?!
+        alert("bad");
         return;
       }
       roomSelected.activities.push(newActivity);

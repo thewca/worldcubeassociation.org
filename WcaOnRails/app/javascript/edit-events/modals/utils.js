@@ -118,7 +118,7 @@ export function roundIdToString(roundId) {
 
 // Copied from https://github.com/jfly/tnoodle/blob/c2b529e6292469c23f33b1d73839e22f041443e0/tnoodle-ui/src/WcaCompetitionJson.js#L52
 export function parseActivityCode(activityCode) {
-  let eventId, roundNumber, group;
+  let eventId, roundNumber, group, attempt;
   let parts = activityCode.split("-");
   eventId = parts.shift();
 
@@ -129,11 +129,13 @@ export function parseActivityCode(activityCode) {
       roundNumber = parseInt(rest, 10);
     } else if(firstLetter === "g") {
       group = rest;
+    } else if(firstLetter === "a") {
+      attempt = rest;
     } else {
       throw new Error(`Unrecognized activity code part: ${part} of ${activityCode}`);
     }
   });
-  return { eventId, roundNumber, group };
+  return { eventId, roundNumber, group, attempt };
 }
 
 export function buildActivityCode(activity) {

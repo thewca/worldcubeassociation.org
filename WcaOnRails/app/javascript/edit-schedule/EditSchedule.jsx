@@ -89,21 +89,19 @@ export default class EditSchedule extends React.Component {
 
   render() {
     let { competitionInfo, pickerOptions, scheduleWcif, tzMapping, eventsWcif, locale } = this.props;
-    let unsavedChanges = null;
-    // FIXME: potentially adding this to the DOM messes with scrolling
-    // with one comp/one venue/one room, selecting the room and changing a calendar setting scrolls top
-    // Idea: change to a display (none/block)
-    if(this.unsavedChanges()) {
-      unsavedChanges = <Alert bsStyle="info">
-        You have unsaved changes. Don't forget to{" "}
-        <button onClick={this.save}
-          disabled={this.state.saving}
-          className={cn("btn", "btn-default btn-primary", { saving: this.state.saving })}
-        >
-          save your changes!
-        </button>
-      </Alert>;
-    }
+    let unsavedChanges = (
+      <div className={cn({"hide-element": !this.unsavedChanges()})}>
+        <Alert bsStyle="info">
+          You have unsaved changes. Don't forget to{" "}
+          <button onClick={this.save}
+            disabled={this.state.saving}
+            className={cn("btn", "btn-default btn-primary", { saving: this.state.saving })}
+          >
+            save your changes!
+          </button>
+        </Alert>
+      </div>
+    );
 
     let addVenueAction = e => {
       e.preventDefault();
