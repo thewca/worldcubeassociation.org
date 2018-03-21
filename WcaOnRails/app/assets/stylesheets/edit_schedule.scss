@@ -78,9 +78,30 @@
           // Override the flashy yellow we use for targets elsewhere
           background-color: transparent;
         }
+
+        .fc-helper-container > .fc-event, .fc-event.selected-fc-event {
+          border: 2px solid #791f82;
+        }
+        .fc-time-grid-event.fc-short .fc-time span {
+        }
+
+        .fc-time-grid-event.fc-short .fc-time:before {
+        }
         .fc-event {
-          &.selected-fc-event, &.fc-dragging {
-            border: 2px solid #791f82;
+          &.fc-short > .fc-content {
+            // By default for vertically short events FC don't display the full time
+            // But we have some width to do so
+            .fc-time {
+              &:before {
+                content: "";
+              }
+              &:after {
+                content: ":\000A0";
+              }
+              span {
+                display: inline-block;
+              }
+            }
           }
           .fc-bg {
             display: none;
@@ -157,15 +178,19 @@
   position: fixed;
   top: 100px;
   left: 100px;
+  display:block;
+  &.delete-only {
+    .edit-option {
+      display: none;
+    }
+  }
+  &.hide-contextmenu {
+    display: none;
+  }
   a {
     i {
       margin-right: 10px;
     }
     padding: 3px 20px;
-  }
-  &.delete-only {
-    .edit-option {
-      display: none;
-    }
   }
 }

@@ -154,31 +154,27 @@ const commonActivityCodes = {
   "other-misc": "Other",
 };
 
-class AddCustomActivityModal extends React.Component {
+class CustomActivityModal extends React.Component {
   // FIXME: extract to standalone file
-
-  componentWillReceiveProps(newProps) {
-    if (!this.props.show && newProps.show) {
-      // FIXME: DRY with below
-      this.setState({
-        name: "Your activity Name",
-        activityCode: "other-registration",
-      });
-    }
-  }
 
   componentWillMount() {
     this.setState({
-      name: "Your activity Name",
-      activityCode: "other-registration",
+      ...this.props.eventProps
+    });
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      ...newProps.eventProps
     });
   }
 
   render () {
-    let { show, handleHideModal, handleCreateEvent, selectedTime } = this.props;
+    let { show, handleHideModal, actionDetails, eventProps } = this.props;
+    let { modalTitle, buttonText, action } = actionDetails;
     let timeText = "No time selected";
-    if (selectedTime.start && selectedTime.end) {
-      timeText = `On ${selectedTime.start.format("dddd, MMMM Do YYYY")}, from ${selectedTime.start.format("H:mm")} to ${selectedTime.end.format("H:mm")}.`;
+    if (eventProps.start && eventProps.end) {
+      timeText = `On ${eventProps.start.format("dddd, MMMM Do YYYY")}, from ${eventProps.start.format("H:mm")} to ${eventProps.end.format("H:mm")}.`;
     }
 
     let handlePropChange = (propName, e) => {
@@ -190,7 +186,7 @@ class AddCustomActivityModal extends React.Component {
     return (
       <Modal show={show} onHide={handleHideModal} container={this}>
         <Modal.Header closeButton>
-        <Modal.Title>Add a custom activity</Modal.Title>
+        <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body className="form-horizontal row">
           <div className="form-group">
@@ -220,7 +216,7 @@ class AddCustomActivityModal extends React.Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => handleCreateEvent(this.state)} bsStyle="success">Add event</Button>
+          <Button onClick={() => action(this.state)} bsStyle="success">{buttonText}</Button>
           <Button onClick={handleHideModal}>Close</Button>
         </Modal.Footer>
       </Modal>
@@ -372,7 +368,8 @@ class EditScheduleForRoom extends React.Component {
     this.setState({
       selectedRoom: this.props.selectedRoom,
       showModal: false,
-      selectedTime: {},
+      eventProps: { name: "", activityCode: "" },
+      actionDetails: { modalTitle: "", action: () => {}, buttonText: ""},
       calendarOptions: calendarOptions,
     });
   }
@@ -387,22 +384,40 @@ class EditScheduleForRoom extends React.Component {
     this.setState({ calendarOptions: currentOptions });
   }
 
-  handleShowModal = (start, end) => {
-    this.setState({ showModal: true, selectedTime: { start: start, end: end } }, function() {
+  showCreateModal = eventProps => {
+    let actionDetails = { modalTitle: "Add a custom activity", buttonText: "Add", action: this.handleCreateEvent };
+    this.handleShowModalWithAction(eventProps, actionDetails);
+  }
+
+  showEditModal = eventProps => {
+    let actionDetails = { modalTitle: "Edit activity", buttonText: "Save", action: this.handleEditEvent };
+    this.handleShowModalWithAction(eventProps, actionDetails);
+  }
+
+  handleShowModalWithAction = (eventProps, actionDetails) => {
+    this.setState({ showModal: true, eventProps: eventProps, actionDetails: actionDetails }, function() {
       $(window).off("keydown", keyboardHandlers.activityPicker);
     });
   }
 
   handleHideModal = () => {
-    this.setState({ showModal: false, selectedTime: {} }, function() {
+    this.setState({ showModal: false, eventProps: {} }, function() {
       $(window).keydown(keyboardHandlers.activityPicker);
     });
   }
 
   handleCreateEvent = eventData => {
-    eventData.startTime = this.state.selectedTime.start.format();
-    eventData.endTime = this.state.selectedTime.end.format();
+    eventData.startTime = eventData.start.format();
+    eventData.endTime = eventData.end.format();
     calendarHandlers.addEventToCalendar(eventData);
+    this.handleHideModal();
+  }
+
+  handleEditEvent = eventData => {
+    // CustomActivityModal only edit name, fix the title to enable a simple update
+    eventData.title = eventData.name;
+    calendarHandlers.eventModifiedInCalendar(eventData);
+    $(scheduleElementId).fullCalendar("updateEvent", eventData);
     this.handleHideModal();
   }
 
@@ -419,7 +434,7 @@ class EditScheduleForRoom extends React.Component {
     }
 
     // 'this' is not captured in FC callbacks, to setting up aliases here
-    let showModal = (start, end) => this.handleShowModal(start, end);
+    let showModal = eventProps => this.showCreateModal(eventProps);
 
     $(scheduleElementId).fullCalendar({
       // see: https://fullcalendar.io/docs/views/Custom_Views/
@@ -465,37 +480,45 @@ class EditScheduleForRoom extends React.Component {
         calendarHandlers.eventModifiedInCalendar(event);
       },
       eventClick: function(event, jsEvent, view) {
+        let $menu = $("#schedule-menu");
+        $menu.removeClass("delete-only");
+        // See https://github.com/fullcalendar/fullcalendar/issues/3324
+        // We can't use a context menu without running into this bug, so instead we use shift+click
+        if (jsEvent.which == 1 && jsEvent.shiftKey) {
+          $menu.data("event", event);
+          if (!event.activityCode.startsWith("other-")) {
+            $menu.addClass("delete-only");
+          }
+          $menu.removeClass("hide-contextmenu");
+          $menu.position({ my: "left top", of: jsEvent});
+          // avoid it being immediately hiddent by our window click listener
+          jsEvent.stopPropagation();
+        } else {
+          $menu.addClass("hide-contextmenu");
+        }
         if (singleSelectEvent(event)) {
           $(scheduleElementId).fullCalendar("updateEvent", event);
         }
       },
-      eventRender: function(event, element, view) {
+      eventAfterRender: function(event, element, view) {
         if (event.selected) {
           element.addClass("selected-fc-event");
         }
-        element.contextmenu(function(jsEvent) {
-          if (singleSelectEvent(event)) {
-            $(scheduleElementId).fullCalendar("updateEvent", event);
-          }
-          $("#schedule-menu").removeClass("delete-only");
-          $("#schedule-menu").hide();
-          if (jsEvent.which == 3) {
-            $("#schedule-menu").data("event", { id: event.id, activityCode: event.activityCode });
-            if (!event.activityCode.startsWith("other-")) {
-              $("#schedule-menu").addClass("delete-only");
-            }
-            $("#schedule-menu").show();
-            $("#schedule-menu").position({ my: "left top", of: jsEvent});
-            jsEvent.preventDefault();
-          }
-        });
       },
       eventDragStart: function( event, jsEvent, ui, view ) {
         singleSelectEvent(event);
+        $("#schedule-menu").addClass("hide-contextmenu");
         $(window).on("mousemove", dragOnMouseMove);
       },
       eventResizeStart: function(event, jsEvent, ui, view) {
         singleSelectEvent(event);
+        // We can't rerender or update here, otherwise FC internal state gets messed up
+        // So we do a trick: an fc-event able to be resized receive the class 'fc-allow-mouse-resize'
+        $(".fc-allow-mouse-resize").addClass("selected-fc-event");
+        $("#schedule-menu").addClass("hide-contextmenu");
+      },
+      eventResizeStop: function(event, jsEvent, ui, view) {
+        $(scheduleElementId).fullCalendar("updateEvent", event);
       },
       eventDragStop: function( event, jsEvent, ui, view ) {
         $('#drop-event-area').removeClass("event-on-top");
@@ -508,7 +531,13 @@ class EditScheduleForRoom extends React.Component {
         }
       },
       select: function(start, end, jsEvent, view) {
-        showModal(start, end);
+        let eventProps = {
+          name: "Your activity Name",
+          activityCode: "other-registration",
+          start: start,
+          end: end,
+        }
+        showModal(eventProps);
       },
       selectable: true,
       // TODO: onclick, display format, cutoff, etcc
@@ -531,6 +560,10 @@ class EditScheduleForRoom extends React.Component {
     let { keyboardEnabled, handleKeyboardChange } = this.props;
     let removeButtonAction = e => {
       calendarHandlers.removeEventFromCalendar($("#schedule-menu").data("event"));
+      e.preventDefault();
+    }
+    let editButtonAction = e => {
+      this.showEditModal($("#schedule-menu").data("event"));
       e.preventDefault();
     }
 
@@ -564,9 +597,9 @@ class EditScheduleForRoom extends React.Component {
           </div>
         </div>
         <div className="col-xs-12" id="schedule-calendar"/>
-        <ul id="schedule-menu" className="dropdown-menu" role="menu" style={{ display:"none" }}>
+        <ul id="schedule-menu" className="dropdown-menu hide-contextmenu" role="menu">
           <li className="edit-option">
-            <a href="#" role="menuitem">
+            <a href="#" role="menuitem" onClick={editButtonAction}>
               <i className="fa fa-pencil"></i><span>Edit</span>
             </a>
           </li>
@@ -576,11 +609,10 @@ class EditScheduleForRoom extends React.Component {
             </a>
           </li>
         </ul>
-        //TODO: change to "edit activity"
-        <AddCustomActivityModal show={this.state.showModal}
-                                selectedTime={this.state.selectedTime}
-                                handleHideModal={this.handleHideModal}
-                                handleCreateEvent={this.handleCreateEvent}
+        <CustomActivityModal show={this.state.showModal}
+                             eventProps={this.state.eventProps}
+                             handleHideModal={this.handleHideModal}
+                             actionDetails={this.state.actionDetails}
         />
       </div>
     );
@@ -985,8 +1017,11 @@ export class SchedulesEditor extends React.Component {
     calendarHandlers.removeEventFromCalendar = this.removeActivityFromSchedule;
     calendarHandlers.eventModifiedInCalendar = this.handleEventModified;
     $(window).click(function(event) {
-      $("#schedule-menu").hide();
-      $("#schedule-menu").removeClass("delete-only");
+      let $menu = $("#schedule-menu");
+      if (!$menu.hasClass("hide-contextmenu")) {
+        $menu.removeClass("delete-only");
+        $menu.addClass("hide-contextmenu");
+      }
     });
   }
 
@@ -1058,6 +1093,8 @@ export class SchedulesEditor extends React.Component {
       alert("This is very very BAD, I couldn't find an activity matching the modified event!");
     }
     let activity = room.activities[activityIndex];
+    activity.name = event.name;
+    activity.activityCode = event.activityCode;
     activity.startTime = event.start.format();
     activity.endTime = event.end.format();
     // We rootRender to display the "Please save your changes..." message
