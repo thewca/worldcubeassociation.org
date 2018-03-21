@@ -180,6 +180,10 @@ class CustomActivityModal extends React.Component {
     let handlePropChange = (propName, e) => {
       let newState = {};
       newState[propName] = e.target.value;
+      if (propName == "activityCode") {
+        // On change of activity code, we can update the activity name to the default
+        newState.name = commonActivityCodes[newState.activityCode];
+      }
       this.setState(newState);
     };
 
@@ -532,7 +536,7 @@ class EditScheduleForRoom extends React.Component {
       },
       select: function(start, end, jsEvent, view) {
         let eventProps = {
-          name: "Your activity Name",
+          name: commonActivityCodes["other-registration"],
           activityCode: "other-registration",
           start: start,
           end: end,
@@ -540,7 +544,6 @@ class EditScheduleForRoom extends React.Component {
         showModal(eventProps);
       },
       selectable: true,
-      // TODO: onclick, display format, cutoff, etcc
     });
   }
 
