@@ -442,3 +442,12 @@ select.input-xs {
   padding-left: 0;
   padding-right: 0;
 }
+
+.heading-as-link {
+  &:hover {
+    cursor: pointer;
+  }
+  a {
+    text-decoration: none;
+  }
+}

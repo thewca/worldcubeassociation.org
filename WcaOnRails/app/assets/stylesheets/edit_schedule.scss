@@ -213,3 +213,7 @@
     }
   }
 }
+
+.panel-info > .heading-as-link:hover {
+  @extend a.list-group-item-info:hover;
+}

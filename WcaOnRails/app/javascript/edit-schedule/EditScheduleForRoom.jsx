@@ -1150,7 +1150,7 @@ export class SchedulesEditor extends React.Component {
     let roomSelected = roomWcifFromId(this.props.scheduleWcif, this.state.selectedRoom);
     if (roomSelected) {
       let newActivity = {
-        id: newActivityId(),
+        id: activityData.id || newActivityId(),
         name: activityData.name,
         activityCode: activityData.activityCode,
       };

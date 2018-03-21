@@ -151,12 +151,12 @@ export default class EditSchedule extends React.Component {
           </div>
           <div className="col-xs-12">
             <PanelGroup accordion id="accordion-schedule" defaultActiveKey={defaultActivePanel}>
-              <Panel id="venues-edit-panel" bsStyle="primary" eventKey="1">
-                <Panel.Heading>
-                  <Panel.Title toggle>
+              <Panel id="venues-edit-panel" bsStyle="info" eventKey="1">
+                <div id="accordion-schedule-heading-1" className="panel-heading heading-as-link" aria-controls="accordion-schedule-body-1" role="button" data-toggle="collapse" data-target="#accordion-schedule-body-1" data-parent="#accordion-schedule">
+                  <Panel.Title>
                     Edit venues information <span className="collapse-indicator"></span>
                   </Panel.Title>
-                </Panel.Heading>
+                </div>
                 <Panel.Body collapsible>
                   <div className="row equal">
                     <div className="col-xs-12">
@@ -173,12 +173,12 @@ export default class EditSchedule extends React.Component {
                   </div>
                 </Panel.Body>
               </Panel>
-              <Panel id="schedules-edit-panel" bsStyle="primary" eventKey="2">
-                <Panel.Heading>
-                  <Panel.Title toggle>
+              <Panel id="schedules-edit-panel" bsStyle="info" eventKey="2">
+                <div id="accordion-schedule-heading-2" className="panel-heading heading-as-link" aria-controls="accordion-schedule-body-2" role="button" data-toggle="collapse" data-target="#accordion-schedule-body-2" data-parent="#accordion-schedule">
+                  <Panel.Title>
                     Edit schedules <span className="collapse-indicator"></span>
                   </Panel.Title>
-                </Panel.Heading>
+                </div>
                 <Panel.Body id="schedules-edit-panel-body" collapsible>
                   <SchedulesEditor scheduleWcif={scheduleWcif} eventsWcif={eventsWcif} locale={locale} />
                 </Panel.Body>
