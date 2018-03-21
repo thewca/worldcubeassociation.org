@@ -815,6 +815,52 @@ function ActivityPickerLine({ eventWcif, usedActivityCodeList, selectedLine, sel
   );
 }
 
+const trySetSelectedEvent = direction => {
+  let currentEventSelected = selectedEventInCalendar();
+  if (!currentEventSelected) {
+    return;
+  }
+  let allEvents = _.sortBy($(scheduleElementId).fullCalendar("clientEvents"), ["start", "end"]);
+  // groupBy preserve sorting
+  let allGroupedEvents = _.groupBy(allEvents, function(value) { return value.start.day(); });
+  if (direction == "up" || direction == "down") {
+    //function singleSelectEvent(event);
+    let eventsForDay = allGroupedEvents[currentEventSelected.start.day()];
+    // it must exist
+    let index = activityIndexInArray(eventsForDay, currentEventSelected.id);
+    index = (direction == "up") ? index - 1 : index + 1;
+    // because '%' can return negative numbers
+    index = ((index%eventsForDay.length) + eventsForDay.length) % eventsForDay.length;
+    currentEventSelected = eventsForDay[index];
+  } else if (direction == "right" || direction == "left") {
+    let daySelected = currentEventSelected.start.day();
+    let allDays = Object.keys(allGroupedEvents);
+    // As a day may not have event, we need to find the closest one with one event
+    // Thefore we loop through all of them in the expected order
+    if (direction == "left") {
+      allDays = _.reverse(allDays);
+    }
+    // Make sure the selected days is the first element
+    while (allDays[0] != daySelected) {
+      allDays.push(allDays.shift());
+    }
+    // Remove the current day from the selection
+    allDays.splice(0, 1);
+    // Basic for to be able to break out when found
+    for (let i = 0; i < allDays.length; i++) {
+      let eventsForDay = allGroupedEvents[allDays[i]];
+      if (eventsForDay) {
+        // if element exists in groupBy, then at least one event is there
+        currentEventSelected = eventsForDay[0];
+        break;
+      }
+    }
+  }
+  if (singleSelectEvent(currentEventSelected)) {
+    $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected)
+  }
+}
+
 const activityPickerElementId = "activity-picker-panel";
 
 const keyboardHandlers = {
@@ -827,6 +873,10 @@ class ActivityPicker extends React.Component {
   }
 
   keyboardHandler = (event, reactElem) => {
+    let startDate = $.fullCalendar.moment(reactElem.props.scheduleWcif.startDate);
+    let firstDayAfterCompetition = startDate.clone();
+    firstDayAfterCompetition.add(reactElem.props.scheduleWcif.numberOfDays + 1, "d");
+
     // Only handle if the edit panel if not collapse
     if ($("#schedules-edit-panel-body")[0].offsetParent === null) {
       return true;
@@ -840,7 +890,21 @@ class ActivityPicker extends React.Component {
       case 72:
       // arrow left
       case 37:
-        reactElem.trySetSelectedActivity("left");
+        if (event.ctrlKey) {
+          if (currentEventSelected) {
+            let possibleStart = currentEventSelected.start.clone();
+            possibleStart.subtract(1, "d");
+            if (possibleStart.isAfter(startDate)) {
+              currentEventSelected.start.subtract(1, "d");
+              currentEventSelected.end.subtract(1, "d");
+              $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected);
+            }
+          }
+        } else if (event.shiftKey) {
+          reactElem.trySetSelectedActivity("left");
+        } else {
+          trySetSelectedEvent("left");
+        }
         break;
       // j
       case 74:
@@ -855,7 +919,11 @@ class ActivityPicker extends React.Component {
             $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected);
           }
         } else {
-          reactElem.trySetSelectedActivity("down");
+          if (event.shiftKey) {
+            reactElem.trySetSelectedActivity("down");
+          } else {
+            trySetSelectedEvent("down");
+          }
         }
         break;
       // k
@@ -871,14 +939,32 @@ class ActivityPicker extends React.Component {
             $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected);
           }
         } else {
-          reactElem.trySetSelectedActivity("up");
+          if (event.shiftKey) {
+            reactElem.trySetSelectedActivity("up");
+          } else {
+            trySetSelectedEvent("up");
+          }
         }
         break;
       // l
       case 76:
       // arrow right
       case 39:
-        reactElem.trySetSelectedActivity("right");
+        if (event.ctrlKey) {
+          if (currentEventSelected) {
+            let possibleStart = currentEventSelected.start.clone();
+            possibleStart.add(1, "d");
+            if (possibleStart.isBefore(firstDayAfterCompetition)) {
+              currentEventSelected.start.add(1, "d");
+              currentEventSelected.end.add(1, "d");
+              $(scheduleElementId).fullCalendar("updateEvent", currentEventSelected);
+            }
+          }
+        } else if (event.shiftKey) {
+          reactElem.trySetSelectedActivity("right");
+        } else {
+          trySetSelectedEvent("right");
+        }
         break;
       // enter
       case 13:
