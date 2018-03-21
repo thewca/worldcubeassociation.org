@@ -328,8 +328,8 @@ const CalendarHelp = ({ ...props }) => {
         <dd className="col-xs-8">Add selected activity after selected event</dd>
         <dt className="col-xs-4">[Del]</dt>
         <dd className="col-xs-8">Remove selected event</dd>
-        <dt className="col-xs-4">[C] + up/down</dt>
-        <dd className="col-xs-8">Move selected event up/down in calendar</dd>
+        <dt className="col-xs-4">[C] + Arrow keys</dt>
+        <dd className="col-xs-8">Move selected event around in calendar</dd>
         <dt className="col-xs-4">[C] + [S] + up/down</dt>
         <dd className="col-xs-8">Shrink/Expand selected event in calendar</dd>
         <dt className="col-xs-4">[C] + [S] + click</dt>
@@ -1046,6 +1046,35 @@ class ActivityPicker extends React.Component {
     });
   }
 
+  adjustPickerDimension = () => {
+    let $pickerElem = $(`#${activityPickerElementId}`);
+    let $panelElem = $("#schedules-edit-panel");
+    let visibleAvailable = $panelElem.offset().top + $panelElem.outerHeight() - $(window).scrollTop();
+    // 15 is margin bottom we want to keep
+    let headerHeight = $pickerElem.find(".panel-heading").outerHeight();
+    let topPos = 10 + headerHeight;
+    let visibleAvailableForBody = visibleAvailable - topPos - 15;
+    let $bodyElem = $pickerElem.find(".panel-body");
+    $bodyElem.css("height", visibleAvailableForBody);
+  }
+
+  // FIXME: these probably belongs to the parent component
+  // or at least the parent should be responsible to provide the parent identifier (schedules-edit-panel)
+  computeBasePickerDimension = () => {
+    let $pickerElem = $(`#${activityPickerElementId}`);
+    // Dynamically fix the width
+    $pickerElem.width($pickerElem.parent().width());
+
+    // Dynamically set the max height for the picker panel body
+    let $bodyElem = $pickerElem.find(".panel-body");
+    // 10 is margin top we want to keep
+    let headerHeight = $pickerElem.find(".panel-heading").outerHeight();
+    let topPos = 10 + headerHeight;
+    let maxPossibleHeight = $(window).height() - topPos - 15;
+    $bodyElem.css("max-height", maxPossibleHeight);
+  };
+
+
   componentWillMount() {
     this.setState({
       // event's row selected (from top to bottom)
@@ -1060,34 +1089,10 @@ class ActivityPicker extends React.Component {
     let $pickerElem = $(`#${activityPickerElementId}`);
     let $panelElem = $("#schedules-edit-panel");
 
-    // FIXME: these probably belongs to the parent component
-    // or at least the parent should be responsible to provide the parent identifier (schedules-edit-panel)
-    let computeBasePickerDimension = () => {
-      // Dynamically fix the width
-      $pickerElem.width($pickerElem.parent().width());
-
-      // Dynamically set the max height for the picker panel body
-      let $bodyElem = $pickerElem.find(".panel-body");
-      // 10 is margin top we want to keep
-      let headerHeight = $pickerElem.find(".panel-heading").outerHeight();
-      let topPos = 10 + headerHeight;
-      let maxPossibleHeight = $(window).height() - topPos - 15;
-      $bodyElem.css("max-height", maxPossibleHeight);
-    };
-
-    let adjustPickerDimension = () => {
-        let visibleAvailable = $panelElem.offset().top + $panelElem.outerHeight() - $(window).scrollTop();
-        // 15 is margin bottom we want to keep
-        let headerHeight = $pickerElem.find(".panel-heading").outerHeight();
-        let topPos = 10 + headerHeight;
-        let visibleAvailableForBody = visibleAvailable - topPos - 15;
-        let $bodyElem = $pickerElem.find(".panel-body");
-        $bodyElem.css("height", visibleAvailableForBody);
-    };
 
     let computeAffixedPickerDimension = () => {
-        computeBasePickerDimension();
-        adjustPickerDimension();
+        this.computeBasePickerDimension();
+        this.adjustPickerDimension();
         let $panelElemHeight = $panelElem.height();
         $panelElem.css("min-height", $panelElemHeight);
     };
@@ -1106,14 +1111,16 @@ class ActivityPicker extends React.Component {
     });
     $pickerElem.on('affix.bs.affix', computeAffixedPickerDimension);
     $pickerElem.on('affix-top.bs.affix', resetPanelDimension);
-    // TODO remove when unmounted
-    $(window).scroll(adjustPickerDimension);
-    $(window).resize(computeBasePickerDimension);
+    $(window).scroll(this.adjustPickerDimension);
+    $(window).resize(this.computeBasePickerDimension);
+    // FIXME this belongs to the whole schedules editor
     $(window).keydown(keyboardHandlers.activityPicker);
   }
 
   componentWillUnmount() {
     $(window).off("keydown", keyboardHandlers.activityPicker);
+    $(window).off("resize", this.computeBasePickerDimension);
+    $(window).off("scroll", this.adjustPickerDimension);
   }
 
   render() {
