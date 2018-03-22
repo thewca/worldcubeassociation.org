@@ -1027,6 +1027,7 @@ CREATE TABLE `schedule_activities` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `holder_type` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `holder_id` bigint(20) DEFAULT NULL,
+  `wcif_id` int(11) DEFAULT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `activity_code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `start_time` datetime DEFAULT NULL,
@@ -1044,6 +1045,7 @@ DROP TABLE IF EXISTS `schedule_venues`;
 CREATE TABLE `schedule_venues` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `competition_schedule_id` bigint(20) DEFAULT NULL,
+  `wcif_id` int(11) DEFAULT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `latitude_microdegrees` int(11) DEFAULT NULL,
   `longitude_microdegrees` int(11) DEFAULT NULL,
@@ -1173,6 +1175,7 @@ DROP TABLE IF EXISTS `venue_rooms`;
 CREATE TABLE `venue_rooms` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `schedule_venue_id` bigint(20) DEFAULT NULL,
+  `wcif_id` int(11) DEFAULT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
