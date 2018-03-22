@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VenueRoom < ApplicationRecord
   belongs_to :schedule_venue
   has_one :competition_schedule, through: :schedule_venue

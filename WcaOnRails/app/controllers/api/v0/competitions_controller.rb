@@ -64,6 +64,10 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     update_from_wcif(:update_persons_wcif!)
   end
 
+  def update_schedule_from_wcif
+    update_from_wcif(:set_wcif_schedule!)
+  end
+
   private def competition_from_params(associations = {})
     id = params[:competition_id] || params[:id]
     base_model = associations.any? ? Competition.includes(associations) : Competition

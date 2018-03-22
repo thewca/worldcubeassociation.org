@@ -157,6 +157,10 @@ class Competition < ApplicationRecord
     end
   end
 
+  def number_of_days
+    (end_date - start_date).to_i + 1
+  end
+
   def with_old_id
     new_id = self.id
     self.id = id_was
@@ -946,6 +950,11 @@ class Competition < ApplicationRecord
         end
       end
     end
+  end
+
+  def set_wcif_schedule!(wcif_schedule, current_user)
+    schedule_schema = CompetitionSchedule.wcif_json_schema
+    JSON::Validator.validate!(schedule_schema, wcif_schedule)
   end
 
   def serializable_hash(options = nil)
