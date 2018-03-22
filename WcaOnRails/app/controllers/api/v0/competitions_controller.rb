@@ -36,8 +36,8 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.to_wcif
   end
 
-  def update_from_wcif(setter)
-    competition = competition_from_params
+  def update_from_wcif(setter, associations = {})
+    competition = competition_from_params(associations)
     require_can_manage!(competition)
     wcif = params["_json"].map { |partial_wcif| partial_wcif.permit!.to_h }
     competition.send(setter, wcif, require_user!)
@@ -65,7 +65,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def update_schedule_from_wcif
-    update_from_wcif(:set_wcif_schedule!)
+    includes_associations = {
+      competition_venues: {
+        venue_rooms: {
+          schedule_activities: [{ child_activities: [:holder] }, :holder],
+        },
+      },
+    }
+    update_from_wcif(:set_wcif_schedule!, includes_associations)
   end
 
   private def competition_from_params(associations = {})

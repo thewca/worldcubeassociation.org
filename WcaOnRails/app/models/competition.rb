@@ -161,6 +161,14 @@ class Competition < ApplicationRecord
     (end_date - start_date).to_i + 1
   end
 
+  def start_time
+    start_date.to_datetime
+  end
+
+  def end_time
+    (end_date + 1).to_datetime
+  end
+
   def with_old_id
     new_id = self.id
     self.id = id_was
@@ -944,8 +952,21 @@ class Competition < ApplicationRecord
   end
 
   def set_wcif_schedule!(wcif_schedule, current_user)
-    schedule_schema = CompetitionSchedule.wcif_json_schema
+    schedule_schema = { "type" => "object", "properties" => { "venues" => { "type" => "array", "items" => CompetitionVenue.wcif_json_schema } } }
     JSON::Validator.validate!(schedule_schema, wcif_schedule)
+
+    ActiveRecord::Base.transaction do
+      # TODO: sanity-check the startDate and numberOfDays?
+      new_venues = wcif_schedule["venues"].map do |venue_wcif|
+        # using this find instead of ActiveRecord's find_or_create_by avoid several queries
+        # (despite having the association included :()
+        venue = competition_venues.find { |v| v.wcif_id == venue_wcif["id"] } || competition_venues.build
+        venue.load_wcif!(venue_wcif)
+      end
+      self.competition_venues = new_venues
+    end
+
+    reload
   end
 
   def serializable_hash(options = nil)
