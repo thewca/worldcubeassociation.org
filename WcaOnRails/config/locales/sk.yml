@@ -828,6 +828,12 @@ sk:
       invalid: 'Neplatný email, WCA ID alebo heslo.'
       #original_hash: 1186218
       not_found_in_database: 'Neplatný email, WCA ID alebo heslo.'
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        Musíte potvrdiť vašu emailovú adresu predtým ako budete môcť pokračovať.
+        Nedostali ste potvrdzujúci email? Chodte na
+        https://www.worldcubeassociation.org/users/confirmation/new a požiadajte
+        si nový.
   wca:
     errors:
       messages:
@@ -840,6 +846,8 @@ sk:
     doorkeeper:
       applications:
         help:
+          #original_hash: 92e00ff
+          native_redirect_uri: 'Použite %{native_redirect_uri} ak chcete pridať localhost URI'
           #original_hash: 62a0113
           scopes_html: >-
             Oddeľte polia s medzerami. Nechajte prázdne miesto pre použitie
@@ -882,6 +890,8 @@ sk:
       information: Informácia
       #original_hash: 9ac918a
       about: O WCA
+      #original_hash: ed97787
+      documents: Dokumenty WCA
       #original_hash: d8fd3e4
       delegates: WCA delegáti
       #original_hash: 37b8fdc
@@ -920,6 +930,8 @@ sk:
       db_export: Export databázy
       #original_hash: 1fa73f3
       regulations: Pravidlá
+      #original_hash: 6bce1b5
+      about_regulations: O Reguláciach
       #original_hash: 141d1d7
       guidelines: Pokyny
       #original_hash: c4622c3
@@ -1046,8 +1058,16 @@ sk:
           assigned: máte pridelené WCA ID
           #original_hash: 1c4670f
           registered: prihlásili ste sa na súťaž
+      #original_hash: fe7122d
+      guidelines_confirmation: 'Potvrdzujem, že môj avatar spĺňa všetky pravidlá avatarov.'
+      #original_hash: d677ceb
+      confirm_guidelines: Prečítajte si pravidlá avatarov a pošlite správnu fotku.
       #original_hash: efc007a
       save: Uložiť
+      #original_hash: 58e0c56
+      remove_avatar: Vymazať avatara
+      #original_hash: 4bd25cf
+      remove_avatar_confirm: 'Ste si istý, že si chcete vymazať avatara?'
       #original_hash: 141d1d7
       guidelines: Pokyny
       avatar_guidelines:
@@ -1065,6 +1085,8 @@ sk:
         '5': Avatar nemôže obsahovať iné texty ako texty na pozadí.
         #original_hash: cc5f23a
         '6': Avatar musí byť v správnej orientácii.
+        #original_hash: 1a18831
+        '7': Avatar nesmie obsahovať ofenzívny obsah (napr. ofenzívne gestá)
     errors:
       #original_hash: 094b763
       not_found: nenájdené
@@ -1331,6 +1353,8 @@ sk:
     register: Zaregistruj sa!
     #original_hash: f484f15
     refund: Vrátenie peňazí
+    #original_hash: dc8d7d2
+    refund_confirmation: 'Ste si istí, že chcete vrátenie peňazí?'
     #original_hash: a9af643
     update: Upraviť registráciu
     #original_hash: f6fdbe4
@@ -1391,6 +1415,15 @@ sk:
     wont_pay_here: >-
       Prosím skontrolujte informácie o súťaži pre inštrukcie ohľadom spôsobu
       platby.
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          Čiastka, ktorá má byť preplatená môže byť hociktorá hodnota do
+          zaplatenej sumy.
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Hodnota vrátených peňazí
     payment_form:
       #original_hash: 4de825f
       title: Registračné poplatky
@@ -1492,10 +1525,14 @@ sk:
         other: WCA delegáti
       #original_hash: b37456c
       contact: Kontakt
+      #original_hash: 32946e9
+      competitor_limit: Limit súťažiacich
       #original_hash: a428739
       entry_fee: Vstupný poplatok
       #original_hash: 0eb5ed5
       information: Informácie
+      #original_hash: c5497bc
+      events: Eventy
     index:
       #original_hash: db98a68
       title: Súťaže
@@ -1605,6 +1642,10 @@ sk:
         ukážku](mailto:some@email.com)
       #original_hash: c5497bc
       events: Eventy
+      #original_hash: 09b819f
+      deprecated_events: >-
+        Táto súťaž má eventy, ktoré už nie sú oficiálne, nepodporujeme ich
+        upravovanie.
       #original_hash: 815d5c3
       locked_edit_html: >-
         Táto súťaž je viditeľná a nedá sa upravovať. Ak chcete niečo pozmeniť,
@@ -1638,6 +1679,8 @@ sk:
         vrátiť späť.
       #original_hash: 8ebebca
       coordinates: Koordinátori
+      #original_hash: a672984
+      add_championship: Pridať Šampionát
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -1828,9 +1871,61 @@ sk:
       podiums: Pódiá
       #original_hash: 56656a0
       no_persons_found: Žiadna osoba sa nezhoduje s danými kritériami.
+    show:
+      #original_hash: 79b6788
+      in_memoriam: In Memoriam
+      #original_hash: 4bc65e0
+      completed_solves: Počet dokončených zložení
+      #original_hash: fc78642
+      personal_records: Aktuálne osobné rekordy
+      #original_hash: e631f13
+      odd_rank_reason: >-
+        Chýbajúce hodnotenia alebo horšie hodnotenie v štáte ako v kontinente je
+        kvôli zmene krajín. Výsledky z predošlých regiónov nie sú brané do úvahy
+        pri hodnotení v regióne.
+      #original_hash: a91508f
+      championship_podiums: Pódiá na Šampionátoch
+      championship_podium_levels:
+        #original_hash: 3746f3b
+        world: Pódiá na Svetových Šampionátoch
+        #original_hash: d248cd7
+        continental: Pódiá na Kontinentálnych Šampionátoch
+        #original_hash: aa40175
+        national: Pódiá na Národných Šampionátoch
+        #original_hash: 868be55
+        greater_china: Pódiá na Čínskych Šampionátoch
+      #original_hash: c32a014
+      place: Miesto
+      #original_hash: ddb18c1
+      medal_collection: Kolekcia Medailí
+      #original_hash: 9e69e13
+      record_collection: Kolekcia Rekordov
+      medals:
+        #original_hash: c57604d
+        gold: Zlato
+        #original_hash: 8697f43
+        silver: Striebro
+        #original_hash: af31025
+        bronze: Bronz
+      #original_hash: 1917f4f
+      competition: Súťaž
+      #original_hash: 612e12d
+      results: Výsledky
+      #original_hash: e51c552
+      records: Rekordy
+      #original_hash: ab478f3
+      competitions_map: Mapa
+      #original_hash: a99cec5
+      world_records: História Svetových Rekordov
+      #original_hash: 2d36a49
+      continental_records: História Kontinentálnych Rekordov
+      #original_hash: 3ce631e
+      national_records: História Národných Rekordov
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: 'Ste si istí, že chcete vymazať tento post? Táto akcia je nevrátiteľná.'
+    #original_hash: 3dcbf6d
+    announcement_info_html: 'Ohlásil %{author_name} o %{date_time}'
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -1849,6 +1944,11 @@ sk:
       description: >-
         Používajte tento formulár iba ak je dátum narodenia zaznamenaný v našej
         databáze rozdielny od toho reálneho.
+      #original_hash: 563d056
+      important_message_html: >-
+        <span class="text-danger">DÔLEŽITÉ</span>: Pripojte obrázok <u>legálneho
+        dokumentu</u>(ID karta, Vodičský preukaz, pas,...), na ktorom je vidno
+        Vaše meno a dátum narodenia.
       #original_hash: 19c17ec
       submit: Požiadať o zmenu
     messages:
