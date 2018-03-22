@@ -3,6 +3,7 @@ class ScheduleActivity < ApplicationRecord
   has_many :children_activities, class_name: "ScheduleActivity", as: :holder
 
   validates_presence_of :name
+  validates_numericality_of :wcif_id, only_integer: true
   # TODO: activity code validation
   # TODO: we don't yet care for scramble_set_id
   validate :included_in_parent_schedule
@@ -17,5 +18,14 @@ class ScheduleActivity < ApplicationRecord
     unless start_time <= end_time
       errors.add(:end_time, "should be after start_time")
     end
+  end
+
+  def to_wcif
+    {
+      "id" => wcif_id,
+      "name" => name,
+      "activityCode" => activity_code,
+      "childActivities" => children_activities.map(&:to_wcif),
+    }
   end
 end

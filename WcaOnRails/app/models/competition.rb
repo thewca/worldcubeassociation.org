@@ -251,6 +251,7 @@ class Competition < ApplicationRecord
              'competition_delegates',
              'competition_events',
              'competition_organizers',
+             'competition_schedule',
              'media',
              'scrambles',
              'country',
@@ -371,6 +372,12 @@ class Competition < ApplicationRecord
   def delegate_report
     with_old_id do
       DelegateReport.find_by_competition_id(id)
+    end
+  end
+
+  def competition_schedule
+    with_old_id do
+      CompetitionSchedule.find_by_competition_id(id)
     end
   end
 
@@ -883,11 +890,7 @@ class Competition < ApplicationRecord
       "shortName" => cellName,
       "persons" => persons_wcif,
       "events" => competition_events.map(&:to_wcif),
-      "schedule" => {
-        "startDate" => start_date.to_s,
-        "numberOfDays" => (end_date - start_date).to_i + 1,
-        # "venues" => TODO: expand on this
-      },
+      "schedule" => competition_schedule.to_wcif,
     }
   end
 

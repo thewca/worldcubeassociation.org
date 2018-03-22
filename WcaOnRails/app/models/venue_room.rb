@@ -6,4 +6,13 @@ class VenueRoom < ApplicationRecord
   has_many :schedule_activities, as: :holder
 
   validates_presence_of :name
+  validates_numericality_of :wcif_id, only_integer: true
+
+  def to_wcif
+    {
+      "id" => wcif_id,
+      "name" => name,
+      "activities" => schedule_activities.map(&:to_wcif),
+    }
+  end
 end

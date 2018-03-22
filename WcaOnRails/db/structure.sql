@@ -1036,6 +1036,7 @@ CREATE TABLE `schedule_activities` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `index_activities_on_their_id_within_holder` (`holder_type`,`holder_id`,`wcif_id`),
   KEY `index_schedule_activities_on_holder_type_and_holder_id` (`holder_type`,`holder_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1053,6 +1054,7 @@ CREATE TABLE `schedule_venues` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `index_schedule_venues_on_competition_schedule_id_and_wcif_id` (`competition_schedule_id`,`wcif_id`),
   KEY `index_schedule_venues_on_competition_schedule_id` (`competition_schedule_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1180,6 +1182,7 @@ CREATE TABLE `venue_rooms` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `index_venue_rooms_on_schedule_venue_id_and_wcif_id` (`schedule_venue_id`,`wcif_id`),
   KEY `index_venue_rooms_on_schedule_venue_id` (`schedule_venue_id`),
   CONSTRAINT `fk_rails_e00fb3e81b` FOREIGN KEY (`schedule_venue_id`) REFERENCES `schedule_venues` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

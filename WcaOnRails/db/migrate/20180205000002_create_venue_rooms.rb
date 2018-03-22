@@ -7,5 +7,6 @@ class CreateVenueRooms < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+    add_index :venue_rooms, [:schedule_venue_id, :wcif_id], unique: true
   end
 end
