@@ -17,7 +17,7 @@ class Competition < ApplicationRecord
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
-  has_one :competition_schedule, dependent: :destroy
+  has_many :competition_venues, dependent: :destroy
   belongs_to :country, foreign_key: :countryId
   has_one :continent, foreign_key: :continentId, through: :country
   has_many :championships, dependent: :delete_all
@@ -255,7 +255,7 @@ class Competition < ApplicationRecord
              'competition_delegates',
              'competition_events',
              'competition_organizers',
-             'competition_schedule',
+             'competition_venues',
              'media',
              'scrambles',
              'country',
@@ -292,13 +292,6 @@ class Competition < ApplicationRecord
   end
 
   after_create :create_delegate_report!
-
-  after_create :create_schedule!
-  # TODO: handle the fact that user can change competition_id!!!
-
-  def create_schedule!
-    create_competition_schedule!(start_date: start_date.to_s, number_of_days: (end_date - start_date).to_i + 1)
-  end
 
   before_validation :unpack_dates
   validate :dates_must_be_valid
@@ -376,12 +369,6 @@ class Competition < ApplicationRecord
   def delegate_report
     with_old_id do
       DelegateReport.find_by_competition_id(id)
-    end
-  end
-
-  def competition_schedule
-    with_old_id do
-      CompetitionSchedule.find_by_competition_id(id)
     end
   end
 
@@ -894,7 +881,11 @@ class Competition < ApplicationRecord
       "shortName" => cellName,
       "persons" => persons_wcif,
       "events" => competition_events.map(&:to_wcif),
-      "schedule" => competition_schedule.to_wcif,
+      "schedule" => {
+        "startDate" => start_date.to_s,
+        "numberOfDays" => number_of_days,
+        "venues" => competition_venues.map(&:to_wcif),
+      },
     }
   end
 

@@ -1,5 +1,5 @@
-class ScheduleVenue < ApplicationRecord
-  belongs_to :competition_schedule
+class CompetitionVenue < ApplicationRecord
+  belongs_to :competition
   has_many :venue_rooms, dependent: :destroy
 
   VALID_TIMEZONES = ActiveSupport::TimeZone.all.map(&:tzinfo).map(&:name).freeze
