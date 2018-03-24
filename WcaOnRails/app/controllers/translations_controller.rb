@@ -58,6 +58,7 @@ class TranslationsController < ApplicationController
     "hu" => %w(2008PLAC01),
     "it" => %w(2009COLO03),
     "ja" => %w(2010TERA01),
+    "ko" => %w(2008CHOI04),
     "pl" => %w(2013KOSK01),
     "pt" => %w(2014GOME07),
     "pt-BR" => %w(2007GUIM01),
