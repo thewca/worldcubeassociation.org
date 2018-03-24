@@ -242,7 +242,8 @@ function addVenueToSchedule(competitionInfo, scheduleWcif) {
     name: competitionInfo.venue,
     latitudeMicrodegrees: competitionInfo.lat,
     longitudeMicrodegrees: competitionInfo.lng,
-    timezone: competitionInfo.defaultTimeZoneValue,
+    // There is at least one for all countries, select the first
+    timezone: competitionInfo.countryZones[0],
     rooms: [],
   });
 }

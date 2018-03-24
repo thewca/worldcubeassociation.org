@@ -529,15 +529,14 @@ class Competition < ApplicationRecord
     to_radians latitude_degrees
   end
 
-  def default_timezone_id
-    if country.real?
-      ActiveSupport::TimeZone.country_zones(country.iso2).each do |zone|
-        if ScheduleVenue::VALID_TIMEZONES.include?(zone.tzinfo.name)
-          return zone.tzinfo.name
-        end
-      end
+  def country_zones
+    begin
+      ActiveSupport::TimeZone.country_zones(country.iso2).map(&:name).sort()
+    rescue TZInfo::InvalidCountryCode
+      # This can occur for non real country *and* XK!
+      # FIXME what to provide for XA, XE, XM, XS?
+      ["Europe/London"]
     end
-    nil
   end
 
   private def compute_coordinates

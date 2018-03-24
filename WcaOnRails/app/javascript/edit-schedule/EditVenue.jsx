@@ -98,6 +98,10 @@ export class EditVenue extends React.Component {
   render() {
     let { venueWcif, removeVenueAction, tzMapping, competitionInfo } = this.props;
 
+    // We want to show country's zones in front of all others, so we remove them, then prepend them
+    let selectKeys = _.difference(Object.keys(tzMapping), competitionInfo.countryZones);
+    selectKeys = _.union(competitionInfo.countryZones.sort(), selectKeys.sort());
+
     let addRoomAction = e => {
       e.preventDefault();
       addRoomToVenue(venueWcif, competitionInfo);
@@ -156,9 +160,11 @@ export class EditVenue extends React.Component {
                   value={venueWcif.timezone}
                   onChange={e => this.handleSinglePropertyChange(e, "timezone")}
                   >
-                  {Object.keys(tzMapping).sort().map(key => {
+                  {selectKeys.map(key => {
+                    // tzMapping contains mapping between rails' "friendlier" zone names and their tzinfo value
+                    // countryZones contains either one of the friendly names, or a valid tzinfo value
                     return (
-                      <option key={key} value={tzMapping[key]}>{key}</option>
+                      <option key={key} value={tzMapping[key] || key}>{key}</option>
                     );
                   })}
                 </select>

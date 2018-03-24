@@ -12,12 +12,15 @@
         venueDetails: <%= @competition.venueDetails.to_json.html_safe %>,
         lat: <%= @competition.latitude.to_json.html_safe %>,
         lng: <%= @competition.longitude.to_json.html_safe %>,
-        defaultTimeZoneValue: <%= @competition.default_timezone_id.to_json.html_safe %>,
+        countryZones: <%= @competition.country_zones.to_json.html_safe %>,
       }
       wca.initializeScheduleForm(
         competition_info,
         <%= DatePickerInput.date_options_base.to_json.html_safe %>,
         <%= @competition.competition_schedule.to_wcif.to_json.html_safe %>,
+        // Instead of giving *all* TZInfo, use rails "meaningful" subset
+        // We'll add the "country_zones" to that, because some of our competitions
+        // use TZ not included in this subset.
         <%= ActiveSupport::TimeZone::MAPPING.to_json.html_safe %>,
         <%= @competition.competition_events.map(&:to_wcif).to_json.html_safe %>,
         <%= I18n.locale.to_json.html_safe %>
