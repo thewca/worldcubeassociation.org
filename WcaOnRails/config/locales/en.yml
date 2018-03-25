@@ -1279,6 +1279,7 @@ en:
     policies: "Policies"
     dues: "WCA Dues System"
     logo: "WCA Logo Usage"
+    proximity_policy: "WCA Competition Proximity Policy"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
