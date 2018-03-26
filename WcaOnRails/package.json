@@ -20,7 +20,7 @@
     "flag-icon-css": "^3.0.0",
     "glob": "^7.1.2",
     "js-yaml": "^3.11.0",
-    "node-sass": "^4.8.1",
+    "node-sass": "^4.8.3",
     "path-complete-extname": "^1.0.0",
     "postcss-loader": "^2.1.2",
     "postcss-smart-import": "^0.7.6",
