@@ -181,7 +181,7 @@ GEM
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.23)
-    font-awesome-sass (4.7.0)
+    font-awesome-sass (5.0.6.2)
       sass (>= 3.2)
     formatador (0.2.5)
     globalid (0.4.1)
