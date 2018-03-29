@@ -890,6 +890,14 @@ hr:
       #original_hash: a2a43b3
       size_too_big: 'je prevelika (treba biti najviše %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Prijavi se
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Prijavi se
     failure:
       #original_hash: 1186218
       invalid: 'Netočan e-mail, WCA ID ili lozinka.'
@@ -2408,8 +2416,14 @@ hr:
     motions: Prijedlozi
     #original_hash: 092f99e
     minutes: Bilješke
+    #original_hash: 8d61184
+    policies: Politike
     #original_hash: cdad4f1
     dues: WCA Sistem davanja
+    #original_hash: 7536665
+    logo: WCA Logo Usage
+    #original_hash: 920a98f
+    proximity_policy: WCA Competition Proximity Policy
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegati
@@ -2618,13 +2632,10 @@ hr:
         3D verzija logo-a, koju je dizajnirao Vu Minh Tan iz Vijetnama: <a
         href="/files/WCALogo3D.png">PNG verzija</a> (2.1 MB),  <a
         href="/files/WCALogo3Dsmall.png">mala PNG verzija</a> (0.25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Svi WCA organizatori natjecanja smiju koristiti WCA Logo za
-        web-stranice, odjeću, darove i ukrase, ali samo za WCA Natjecanja. <br
-        /> Za sve druge osobe i namjere za korištenje WCA logo-a, potrebno je
-        dopuštenje <a href="mailto:board@worldcubeassociation.org">WCA
-        Board-a</a>.
+        Dozvoljena uporaba WCA logotipa je naznačena u WCA Logo Usage politici
+        koja je dostupna na <a href="/documents">stranici WCA Dokumenata</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
