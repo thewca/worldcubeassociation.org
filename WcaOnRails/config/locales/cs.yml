@@ -2397,6 +2397,8 @@ cs:
     dues: WCA Dues System
     #original_hash: 7536665
     logo: WCA Logo Usage
+    #original_hash: 920a98f
+    proximity_policy: WCA Competition Proximity Policy
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegáti
