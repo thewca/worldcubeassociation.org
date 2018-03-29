@@ -2403,6 +2403,8 @@ id:
     dues: Sistem Iuran WCA
     #original_hash: 7536665
     logo: Pemakaian Logo WCA
+    #original_hash: 920a98f
+    proximity_policy: Kebijakan Kedekatan Kompetisi WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegate WCA
