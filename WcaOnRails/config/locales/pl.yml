@@ -2471,6 +2471,8 @@ pl:
     dues: System Składek WCA
     #original_hash: 7536665
     logo: Użycie Logo WCA
+    #original_hash: 920a98f
+    proximity_policy: Polityka Odległości Zawodów WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegaci WCA
