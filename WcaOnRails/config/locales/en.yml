@@ -1349,7 +1349,7 @@ en:
   score_tools:
     title: "WCA Score Taking tools"
     paragraphs:
-      '1': 'WCA highly recommends the use of <a href="http://cubecomps.com">Cube Comps</a> before and during a competition. Cube Comps is an online system with live scoring and many interesting features, like scorecard printing and a very efficient multi-user data entry system. Created by Luis J. Iáñez and now under Open Source.'
+      '1': 'The WCA highly recommends the use of <a href="http://cubecomps.com">Cube Comps</a> before and during a competition. Cube Comps is an online system with live scoring and many interesting features, like score sheet printing and a very efficient multi-user data entry system. Created by Luis J. Iáñez and now under Open Source.'
       '2': "Score sheets and scrambles should be processed and checked for errors using the %{workbook_link} before sending them to the WCA Results Team."
       '3': 'The latest version of the WCA competition Score sheet can be downloaded here:<br /><a href="/files/results.xls" target="_blank">WCA competition Score sheet</a>.'
       '4': >-
@@ -1357,7 +1357,7 @@ en:
         for preparing competitor groups for a competition. It's a tool that aims to do exactly this for you.
         Among the main features you will find: sorting competitors by rankings,
         assigning tasks (judging, scrambling), deciding how many scrambles are needed,
-        generating scorecards, personal cards, and summaries.
+        generating score sheets, personal sheets, and summaries.
         It's an Open Source project created by Jonatan Kłosko.
 
   logo:
