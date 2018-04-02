@@ -667,6 +667,32 @@ RSpec.describe CompetitionsController do
               "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
               "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 9.99 seconds).\n\n"
           end
+
+          it "handles ties in the podium" do
+            add_result(1, "Jeremy")
+            add_result(1, "Dan")
+            add_result(3, "Steven", dnf: true)
+
+            get :post_results, params: { id: competition, event_id: "333" }
+            post = assigns(:post)
+            expect(post.title).to eq "Dan and Jeremy win #{competition.name}, in #{competition.cityName}, #{competition.country.name_in(:en)}"
+            expect(post.body).to eq "[Dan](#{person_url('2006YOYO01')}) and [Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with an average of 9.99 seconds. " \
+              "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 9.99 seconds).\n\n"
+          end
+
+          it "handles tied third place" do
+            add_result(1, "Jeremy")
+            add_result(2, "Dan")
+            add_result(3, "Steven", dnf: true)
+            add_result(3, "John", dnf: true)
+
+            get :post_results, params: { id: competition, event_id: "333" }
+            post = assigns(:post)
+            expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.country.name_in(:en)}"
+            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with an average of 9.99 seconds. " \
+              "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
+              "[John](#{person_url('2006YOYO03')}) and [Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 9.99 seconds).\n\n"
+          end
         end
 
         context "333bf" do
