@@ -442,6 +442,21 @@ da:
       vote:
         #original_hash: 153d7a5
         comment: Kommentar
+      incident:
+        #original_hash: 768e0c1
+        title: Titel
+        #original_hash: cf66d44
+        private_description: Beskrivelse (privat)
+        #original_hash: 1171d85
+        private_wrc_decision: Beslutningen (privat)
+        #original_hash: 1c2ed61
+        public_summary: Oversigt (offentlig)
+        #original_hash: 62d6896
+        digest_worthy: Digest worthy
+        #original_hash: 848eed0
+        tags: Tags
+        #original_hash: 861e459
+        competition_id: Skete under
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Konkurrence
@@ -512,6 +527,27 @@ da:
       #original_hash: d70e9cb
       default_message: 'Gennemgå venligst problemerne nedenfor:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: 'Husk at det her er offentligt, og du skal udfylde det på engelsk!'
+        #original_hash: 67f2a1a
+        private_description: >-
+          En beskrivelse af hændelsen, som kun kan ses af delegerede. Udfyld det
+          her på engelsk.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          Den endelige beslutning af WRC. Dette indeholder private detaljer.
+          Udfyld det her på engelsk.
+        #original_hash: 3de5729
+        public_summary: >-
+          En beskrivelse af hændelsen og afgørelsen. Det vises offentligt.
+          Udfyld det her på engelsk.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Skriv din Fødselsdag in denne format ÅÅÅÅ-MM-DD
@@ -838,6 +874,14 @@ da:
       #original_hash: a2a43b3
       size_too_big: 'er for stor (burde højest være %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Log ind
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Log ind
     failure:
       #original_hash: 1186218
       invalid: 'Ugyldig email, WCA ID, eller kodeord'
@@ -872,13 +916,13 @@ da:
         #original_hash: 1920e95
         public: >-
           Adgang til dine offentlige data (navn, WCA ID, køn, statsborgerskab,
-          og profil billed)
+          og profilbillede)
         #original_hash: d4003be
-        dob: Gå ind på din fødselsdag
+        dob: Kunne se din fødselsdag
         #original_hash: 17aa24f
-        email: Gå ind på din email adresse
+        email: Kunne se din email adresse
         #original_hash: e0d0654
-        manage_competitions: Styr dine kommende konkurrencer som du arrangerer
+        manage_competitions: 'Se dine kommende konkurrencer, som du arrangerer'
     devise:
       #original_hash: 06184f5
       no_account: Ingen konto?
@@ -2342,8 +2386,14 @@ da:
     motions: Forslag
     #original_hash: 092f99e
     minutes: Referater
+    #original_hash: 8d61184
+    policies: Politikker
     #original_hash: cdad4f1
     dues: WCA Afgiftssystemet.
+    #original_hash: 7536665
+    logo: Brugen af WCA Logoet
+    #original_hash: 920a98f
+    proximity_policy: WCA Konkurrencers Nærhedspolitik
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegerede
@@ -2510,7 +2560,7 @@ da:
     #original_hash: ea9d41d
     title: WCA Score-Taking værktøjer
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         WCA forslår at bruge <a href="http://cubecomps.com">Cube Comps</a> før
         og efter en konkurrence. Cube Comps er et online system med live
@@ -2525,6 +2575,16 @@ da:
         Den nyeste version af "WCA competition Score sheet" kan blive downloadet
         her: :<br /><a href="/files/results.xls" target="_blank">WCA competition
         Score sheet</a>.
+      #original_hash: a5f2d25
+      '4': >-
+        Du har måske også lyst til at bruge <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>. Den
+        kan du bruge til at lave grupperne for deltagerene for en konkurrence.
+        Dens hovedfunktioner er at kunne: sortere deltagere efter deres rang,
+        give opgaver (som at dømme og blande), bestemme hvor mange grupper der
+        er brug for, generere score kort, personlige kort (med deltagernes
+        opgaver), og en oversigt. Det er et Open Source projekt lavet af Jonatan
+        Kłosko.
   logo:
     #original_hash: c72c969
     title: WCA Logo
@@ -2545,12 +2605,10 @@ da:
         3D version af logoet designet af Vu Minh Tan fra Vietnam: <a
         href="/files/WCALogo3D.png">PNG version</a> (2.1 MB), a <a
         href="/files/WCALogo3Dsmall.png">small PNG version</a> (0.25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Alle WCA arrangører må bruge WCA logoet for hjemmesider, tøj, gaver,
-        eller dekorationer, kun for officiell WCA konkurrencer.  <br /> For alle
-        andre personer og formål der bruger WCA logoet behøver en bekræftelse af
-        <a href="mailto:board@worldcubeassociation.org">WCA Bestyrelsen</a>.
+        Acceptabel brug af WCA logoet er beskrevet i 'WCA Logo Brugspolitikken',
+        som kan findes under <a href="/documents">WCA Dokument siden</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
@@ -2702,6 +2760,11 @@ da:
         posts: Ingen opslag fundet for
         #original_hash: 76a6bf1
         regulations_and_guidelines: Ingen Regler eller Retningslinjer fundet for
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Husk, at alle hændelser kun er tilgængelige på engelsk. Indholdet er ikke
+      oversat.
   about_regulations:
     #original_hash: 6bce1b5
     title: Om regelsættet
