@@ -225,6 +225,15 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  private def people_to_sentence(results, link:)
+    results
+      .sort_by(&:personName)
+      .map do |result|
+        link ? "[#{result.personName}](#{person_url result.personId})" : result.personName
+      end
+      .to_sentence
+  end
+
   def post_results
     if ComputeAuxiliaryData.in_progress?
       flash[:warning] = "Please wait until auxiliary data is computed."
@@ -246,23 +255,25 @@ class CompetitionsController < ApplicationController
         if top_three.empty?
           return render html: "<div class='container'><div class='alert alert-warning'>Nobody competed in event: #{event.id}</div></div>".html_safe
         else
-          first_result = top_three.first
+          results_by_place = top_three.group_by(&:pos)
+          winners = results_by_place[1]
 
-          title = "#{first_result.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.country.name}"
+          title = "#{people_to_sentence(winners, link: false)} #{winners.length > 1 ? "win" : "wins"} " \
+                  "#{comp.name}, in #{comp.cityName}, #{comp.country.name}"
 
-          body = "[#{first_result.personName}](#{person_url first_result.personId})"
-          body += " won the [#{comp.name}](#{competition_url(comp)})"
-          body += " #{pretty_print_result(first_result)}"
+          body = "#{people_to_sentence(winners, link: true)} won the [#{comp.name}](#{competition_url(comp)})" \
+                 " #{pretty_print_result(winners.first)}" # If there are more winners then their results are the same.
           body += " in the #{event.name} event" if event.id != "333"
-
-          if top_three.length > 1
-            body += ". [#{top_three.second.personName}](#{person_url top_three.second.personId}) finished second (#{pretty_print_result(top_three.second, short: true)})"
-            if top_three.length > 2
-              body += " and [#{top_three.third.personName}](#{person_url top_three.third.personId}) finished third (#{pretty_print_result(top_three.third, short: true)})"
-            end
+          body += "."
+          if results_by_place[2]
+            body += " #{people_to_sentence(results_by_place[2], link: true)} finished second (#{pretty_print_result(top_three.second, short: true)})"
+            body += results_by_place[3] ? " and" : "."
           end
-
-          body += ".\n\n"
+          if results_by_place[3]
+            body += " #{people_to_sentence(results_by_place[3], link: true)} finished third (#{pretty_print_result(top_three.third, short: true)})"
+            body += "."
+          end
+          body += "\n\n"
         end
       end
 
