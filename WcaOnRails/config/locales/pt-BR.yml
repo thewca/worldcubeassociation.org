@@ -883,6 +883,14 @@ pt-BR:
       #original_hash: a2a43b3
       size_too_big: 'é muito grande (deve ser no máximo %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Login
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Login
     failure:
       #original_hash: 1186218
       invalid: 'Email, ID da WCA ou senha inválido.'
@@ -2401,6 +2409,8 @@ pt-BR:
     dues: Sistema de Taxas da WCA
     #original_hash: 7536665
     logo: Uso do Logo da WCA
+    #original_hash: 920a98f
+    proximity_policy: Política sobre proximidade entre competições
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
@@ -2572,7 +2582,7 @@ pt-BR:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         A WCA recomenda o uso do <a href="http://cubecomps.com">Cube Comps</a>
         antes e durante uma competição. Cube Comps é um sistema online com
@@ -2590,7 +2600,7 @@ pt-BR:
         A versão mais recente da Planilha de Resultados da WCA pode ser baixada
         aqui: <br /><a href="/files/results.xls" target="_blank">Planilha de
         Resultados da WCA</a>.
-      #original_hash: 24f0b3f
+      #original_hash: a5f2d25
       '4': >-
         Você também pode querer usar <a
         href="https://jonatanklosko.github.io/groupifier">Groupifier</a> para
