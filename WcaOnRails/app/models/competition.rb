@@ -863,7 +863,7 @@ class Competition < ApplicationRecord
     ]
     persons_wcif = registrations.order(:id).includes(includes_associations).map.with_index(1) do |r, registrant_id|
       managers.delete(r.user)
-      r.user.to_wcif(self, r.to_wcif, registrant_id)
+      r.user.to_wcif(self, r, registrant_id)
     end
     # Note: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
