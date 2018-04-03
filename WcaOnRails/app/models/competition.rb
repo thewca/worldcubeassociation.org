@@ -920,6 +920,21 @@ class Competition < ApplicationRecord
     reload
   end
 
+  # Takes an array of partial Person WCIF and updates the fields that are not immutable.
+  def update_persons_wcif!(wcif_persons)
+    ActiveRecord::Base.transaction do
+      wcif_persons.each do |wcif_person|
+        # registration = registrations.joins(:user).where("users.id = ?", wcif_person["wcaUserId"]).first
+        user = User.includes(:registrations).find(wcif_person["wcaUserId"])
+        registration = user.registrations.find_by_competition_id(self.id)
+        if registration && wcif_person["roles"]
+          roles = wcif_person["roles"] - ["delegate", "organizer"] # These two are added on the fly.
+          registration.update!(roles: roles)
+        end
+      end
+    end
+  end
+
   def serializable_hash(options = nil)
     {
       class: self.class.to_s.downcase,

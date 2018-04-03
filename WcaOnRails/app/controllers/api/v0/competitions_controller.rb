@@ -56,6 +56,21 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     }
   end
 
+  def update_persons_from_wcif
+    competition = competition_from_params
+    require_can_manage!(competition)
+    wcif_persons = params["_json"].map { |wcif_person| wcif_person.permit!.to_h }
+    competition.update_persons_wcif!(wcif_persons)
+    render json: {
+      status: "Successfully saved WCIF perons",
+    }
+  rescue ActiveRecord::RecordInvalid => e
+    render status: 400, json: {
+      status: "Error while saving WCIF persons",
+      error: e,
+    }
+  end
+
   private def competition_from_params(associations = {})
     id = params[:competition_id] || params[:id]
     base_model = associations.any? ? Competition.includes(associations) : Competition
