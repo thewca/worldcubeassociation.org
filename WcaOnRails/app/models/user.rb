@@ -727,24 +727,26 @@ class User < ApplicationRecord
 
   def to_wcif(competition, registration = nil, registrant_id = nil)
     person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
+    roles = registration&.roles || []
+    roles << "delegate" if competition.delegates.include?(self)
+    roles << "organizer" if competition.organizers.include?(self)
     {
       "name" => name,
       "wcaUserId" => id,
       "wcaId" => wca_id,
       "registrantId" => registrant_id,
       "countryIso2" => country_iso2,
-      "delegatesCompetition" => competition.delegates.include?(self),
-      "organizesCompetition" => competition.organizers.include?(self),
       "gender" => gender,
       # /wcif is restricted to users who can manage the competition,
       # we can include private data
       "birthdate" => dob.to_s,
       "email" => email,
-      "registration" => registration,
+      "registration" => registration&.to_wcif,
       "avatar" => {
         "url" => avatar.url,
         "thumbUrl" => avatar.url(:thumb),
       },
+      "roles" => roles,
       "personalBests" => person_pb.map(&:to_wcif),
     }
   end
