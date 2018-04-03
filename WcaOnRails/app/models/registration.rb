@@ -15,6 +15,8 @@ class Registration < ApplicationRecord
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
 
+  serialize :roles, Array
+
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
 
   validates :user, presence: true, on: [:create]

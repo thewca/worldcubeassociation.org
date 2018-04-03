@@ -448,6 +448,7 @@ module DatabaseDumper
           guests
           updated_at
           user_id
+          roles
         ),
         db_default: %w(ip),
         fake_values: {
