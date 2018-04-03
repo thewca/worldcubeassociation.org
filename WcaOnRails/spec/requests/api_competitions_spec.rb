@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "API Competitions" do
+  let(:headers) { { "CONTENT_TYPE" => "application/json" } }
+
   describe "PATCH #update_events_from_wcif" do
     let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
 
@@ -22,7 +24,6 @@ RSpec.describe "API Competitions" do
         sign_in { FactoryBot.create :user, :board_member }
 
         it "updates the competition events of an unconfirmed competition" do
-          headers = { "CONTENT_TYPE" => "application/json" }
           patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333)).to_json, headers: headers
           expect(response).to be_success
           expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 1
@@ -35,8 +36,6 @@ RSpec.describe "API Competitions" do
 
           ce = competition.competition_events.find_by_event_id("333")
           expect(ce.rounds.length).to eq 2
-
-          headers = { "CONTENT_TYPE" => "application/json" }
           competition_events = create_wcif_events(%w(333))
           competition_events[0][:rounds][0][:format] = "invalidformat"
           patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
@@ -53,7 +52,6 @@ RSpec.describe "API Competitions" do
           end
 
           it "can add events" do
-            headers = { "CONTENT_TYPE" => "application/json" }
             patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333 333oh 222)).to_json, headers: headers
             expect(response).to have_http_status(200)
             competition.reload
@@ -61,7 +59,6 @@ RSpec.describe "API Competitions" do
           end
 
           it "can remove events" do
-            headers = { "CONTENT_TYPE" => "application/json" }
             patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333)).to_json, headers: headers
             expect(response).to have_http_status(200)
             competition.reload
@@ -84,7 +81,6 @@ RSpec.describe "API Competitions" do
           end
 
           it "allows adding rounds to an event" do
-            headers = { "CONTENT_TYPE" => "application/json" }
             competition_events = create_wcif_events(%w(222 333))
             expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 0
             patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
@@ -93,7 +89,6 @@ RSpec.describe "API Competitions" do
           end
 
           it "does not allow adding events" do
-            headers = { "CONTENT_TYPE" => "application/json" }
             patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333 333oh 222)).to_json, headers: headers
             expect(response).to have_http_status(422)
             response_json = JSON.parse(response.body)
@@ -101,7 +96,6 @@ RSpec.describe "API Competitions" do
           end
 
           it "does not allow removing events" do
-            headers = { "CONTENT_TYPE" => "application/json" }
             patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333)).to_json, headers: headers
             expect(response).to have_http_status(422)
             response_json = JSON.parse(response.body)
@@ -111,7 +105,6 @@ RSpec.describe "API Competitions" do
 
         context "unconfirmed competition" do
           it "allows adding events" do
-            headers = { "CONTENT_TYPE" => "application/json" }
             patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333 333oh 222)).to_json, headers: headers
             expect(response).to have_http_status(200)
             competition.reload
@@ -119,7 +112,6 @@ RSpec.describe "API Competitions" do
           end
 
           it "allows removing events" do
-            headers = { "CONTENT_TYPE" => "application/json" }
             patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333)).to_json, headers: headers
             expect(response).to have_http_status(200)
             competition.reload
@@ -200,7 +192,7 @@ RSpec.describe "API Competitions" do
         sign_in { FactoryBot.create :user }
 
         it "prevents from CSRF attacks" do
-          headers = { "CONTENT_TYPE" => "application/json", "ACCESS_TOKEN" => "INVALID" }
+          headers["ACCESS_TOKEN"] = "INVALID"
           competition_events = create_wcif_events(%w(333))
           expect {
             patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
@@ -217,11 +209,53 @@ RSpec.describe "API Competitions" do
         end
 
         it "does not use CSRF protection as we use oauth token" do
-          headers = { "CONTENT_TYPE" => "application/json", "ACCESS_TOKEN" => nil }
+          headers["ACCESS_TOKEN"] = nil
           competition_events = create_wcif_events(%w(333))
           patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
           expect(response).to be_success
         end
+      end
+    end
+  end
+
+  describe "PATCH #update_persons_from_wcif" do
+    let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :registration_open) }
+    let!(:registration) { FactoryBot.create(:registration, competition: competition) }
+
+    context "when not signed in" do
+      it "does not allow access" do
+        patch api_v0_competition_update_persons_from_wcif_path(competition)
+        expect(response).to have_http_status(401)
+        response_json = JSON.parse(response.body)
+        expect(response_json["error"]).to eq "Not logged in"
+      end
+    end
+
+    context "when signed in as a competition manager" do
+      before { sign_in competition.organizers.first }
+
+      it "can change roles for a person" do
+        persons = [{ wcaUserId: registration.user.id, roles: ["scrambler", "dataentry"] }]
+        patch api_v0_competition_update_persons_from_wcif_path(competition), params: persons.to_json, headers: headers
+        expect(registration.reload.roles).to eq ["scrambler", "dataentry"]
+      end
+
+      it "cannot change person immutable data" do
+        persons = [{
+          wcaUserId: registration.user.id,
+          name: "New Name",
+          wcaId: "2018NEWW01",
+          registrantId: 123,
+          countryIso2: "NEW",
+          gender: "new",
+          email: "new@email.com",
+          avatar: nil,
+          registration: nil,
+          personalBests: [],
+        }]
+        expect {
+          patch api_v0_competition_update_persons_from_wcif_path(competition), params: persons.to_json, headers: headers
+        }.to_not change { competition.reload.to_wcif["persons"] }
       end
     end
   end
