@@ -127,10 +127,10 @@ class Competition < ApplicationRecord
 
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
-  NEARBY_DISTANCE_KM_WARNING = 500
+  NEARBY_DISTANCE_KM_WARNING = 250
   NEARBY_DISTANCE_KM_DANGER = 100
   NEARBY_DISTANCE_KM_INFO = 100
-  NEARBY_DAYS_WARNING = 90
+  NEARBY_DAYS_WARNING = 180
   NEARBY_DAYS_DANGER = 19
   NEARBY_DAYS_INFO = 365
   NEARBY_INFO_COUNT = 8
