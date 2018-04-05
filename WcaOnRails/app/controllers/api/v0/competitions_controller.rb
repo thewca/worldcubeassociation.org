@@ -39,7 +39,8 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def update_from_wcif(setter, associations = {})
     competition = competition_from_params(associations)
     require_can_manage!(competition)
-    wcif = params["_json"].map { |partial_wcif| partial_wcif.permit!.to_h }
+    wcif = params.permit!.to_h
+    wcif = wcif["_json"] || wcif
     competition.send(setter, wcif, require_user!)
     render json: {
       status: "Successfully saved WCIF",

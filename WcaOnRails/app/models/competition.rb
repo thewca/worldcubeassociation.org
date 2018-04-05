@@ -952,11 +952,23 @@ class Competition < ApplicationRecord
   end
 
   def set_wcif_schedule!(wcif_schedule, current_user)
-    schedule_schema = { "type" => "object", "properties" => { "venues" => { "type" => "array", "items" => CompetitionVenue.wcif_json_schema } } }
+    schedule_schema = {
+      "type" => "object",
+      "properties" => {
+        "venues" => { "type" => "array", "items" => CompetitionVenue.wcif_json_schema },
+        "startDate" => { "type" => "string" },
+        "numberOfDays" => { "type" => "integer" },
+      },
+    }
     JSON::Validator.validate!(schedule_schema, wcif_schedule)
 
+    if wcif_schedule["startDate"] != start_date.strftime("%F")
+      raise WcaExceptions::BadApiParameter.new("Wrong start date for competition")
+    elsif wcif_schedule["numberOfDays"] != number_of_days
+      raise WcaExceptions::BadApiParameter.new("Wrong number of days for competition")
+    end
+
     ActiveRecord::Base.transaction do
-      # TODO: sanity-check the startDate and numberOfDays?
       new_venues = wcif_schedule["venues"].map do |venue_wcif|
         # using this find instead of ActiveRecord's find_or_create_by avoid several queries
         # (despite having the association included :()
