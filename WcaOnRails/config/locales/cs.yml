@@ -2562,12 +2562,12 @@ cs:
     #original_hash: ea9d41d
     title: WCA Score Taking nástroje
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         WCA doporučuje používání <a href="http://cubecomps.com">Cube Comps</a>
-        před a během soutěže. Cube Comps je jediný on-line systém, který
-        umožňuje sledovat výsledky live a nabízí mnoho zajímavých prvků, jako je
-        tisk scorecardů a velmi efektivní multi-user systém na zadávání dat.
+        před a během soutěže. Cube Comps je on-line systém, který umožňuje
+        sledovat výsledky živě a nabízí mnoho zajímavých prvků, jako je tisk
+        score sheetů a velmi efektivní multi-user systém na zadávání dat.
         Vytvořeno Luisem J. Iáñezem a nyní pod Open Source.
       #original_hash: 7438b0d
       '2': >-
@@ -2578,14 +2578,14 @@ cs:
         Nejnovější verze WCA soutěžních Score sheetů můžete stáhnout zde: <br
         /><a href="/files/results.xls" target="_blank">WCA competition Score
         sheet</a>.
-      #original_hash: 24f0b3f
+      #original_hash: a5f2d25
       '4': >-
         Možná byste mohli mít zájem použít  <a
         href="https://jonatanklosko.github.io/groupifier">Groupifier</a> pro
         přípravu skupin na soutěž. Je to nástroj určený právě pro generování
         skupin. Mezi hlavními funkcemi jsou přiřazování úkolů (judging,
-        scramblení), rozhodování o tom, kolik bude potřeba scramblů, generování
-        scorecardů, osobní kartičky a přehledy. Jedná se o Open Source projekt
+        scrambling), rozhodování o tom, kolik bude potřeba scramblů, generování
+        score sheetů, osobní sheety a přehledy. Jedná se o Open Source projekt
         vytvořený Jonatanem Kłoskem.
   logo:
     #original_hash: c72c969
