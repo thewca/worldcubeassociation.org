@@ -921,7 +921,7 @@ class Competition < ApplicationRecord
   end
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
-  def update_persons_wcif!(wcif_persons)
+  def update_persons_wcif!(wcif_persons, current_user)
     persons_schema = { "type" => "array", "items" => User.wcif_json_schema }
     puts persons_schema.inspect
     JSON::Validator.validate!(persons_schema, wcif_persons)
