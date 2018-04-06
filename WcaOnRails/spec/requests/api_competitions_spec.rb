@@ -247,10 +247,9 @@ RSpec.describe "API Competitions" do
           wcaId: "2018NEWW01",
           registrantId: 123,
           countryIso2: "NEW",
-          gender: "new",
+          gender: "f",
           email: "new@email.com",
           avatar: nil,
-          registration: nil,
           personalBests: [],
         }]
         expect {

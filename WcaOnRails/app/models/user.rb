@@ -751,6 +751,33 @@ class User < ApplicationRecord
     }
   end
 
+  def self.wcif_json_schema
+    {
+      "type" => "object",
+      "properties" => {
+        "registrantId" => { "type" => "integer" },
+        "name" => { "type" => "string" },
+        "wcaUserId" => { "type" => "integer" },
+        "wcaId" => { "type" => "string" },
+        "countryIso2" => { "type" => "string" },
+        "gender" => { "type" => "string", "enum" => %w(m f o) },
+        "birthdate" => { "type" => "string" },
+        "email" => { "type" => "string" },
+        "avatar" => {
+          "type" => ["object", "null"],
+          "properties" => {
+            "url" => { "type" => "string" },
+            "thumbUrl" => { "type" => "string" },
+          },
+        },
+        "roles" => { "type" => "array", "items" => { "type" => "string" } },
+        "registration" => Registration.wcif_json_schema,
+        "assignments" => { "type" => "object" }, # TODO: expand on this,
+        "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema },
+      },
+    }
+  end
+
   # Devise's method overriding! (the unwanted lines are commented)
   # We have the separate form for updating password and it requires current_password to be entered.
   # So we don't want to remove the password and password_confirmation if they are in the params and are blank.
