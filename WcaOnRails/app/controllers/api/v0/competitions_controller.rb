@@ -36,39 +36,32 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.to_wcif
   end
 
-  def update_events_from_wcif
+  def update_from_wcif(setter)
     competition = competition_from_params
     require_can_manage!(competition)
-    wcif_events = params["_json"].map { |wcif_event| wcif_event.permit!.to_h }
-    competition.set_wcif_events!(wcif_events, require_user!)
+    wcif = params["_json"].map { |partial_wcif| partial_wcif.permit!.to_h }
+    competition.send(setter, wcif, require_user!)
     render json: {
-      status: "Successfully saved WCIF events",
+      status: "Successfully saved WCIF",
     }
   rescue ActiveRecord::RecordInvalid => e
     render status: 400, json: {
-      status: "Error while saving WCIF events",
+      status: "Error while saving WCIF",
       error: e,
     }
   rescue JSON::Schema::ValidationError => e
     render status: 400, json: {
-      status: "Error while saving WCIF events",
+      status: "Error while saving WCIF",
       error: e.message,
     }
   end
 
+  def update_events_from_wcif
+    update_from_wcif(:set_wcif_events!)
+  end
+
   def update_persons_from_wcif
-    competition = competition_from_params
-    require_can_manage!(competition)
-    wcif_persons = params["_json"].map { |wcif_person| wcif_person.permit!.to_h }
-    competition.update_persons_wcif!(wcif_persons)
-    render json: {
-      status: "Successfully saved WCIF perons",
-    }
-  rescue ActiveRecord::RecordInvalid => e
-    render status: 400, json: {
-      status: "Error while saving WCIF persons",
-      error: e,
-    }
+    update_from_wcif(:update_persons_wcif!)
   end
 
   private def competition_from_params(associations = {})
