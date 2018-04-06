@@ -189,6 +189,19 @@ class Registration < ApplicationRecord
     }
   end
 
+  def self.wcif_json_schema
+    {
+      "type" => "object",
+      "properties" => {
+        "wcaRegistrationId" => { "type" => "integer" },
+        "eventIds" => { "type" => "array", "items" => { "type" => "string", "enum" => Event.pluck(:id) } },
+        "status" => { "type" => "string", "enum" => %w(accepted deleted pending) },
+        "guests" => { "type" => "integer" },
+        "comments" => { "type" => "string" },
+      },
+    }
+  end
+
   validate :user_can_register_for_competition
   private def user_can_register_for_competition
     if user&.cannot_register_for_competition_reasons.present?
