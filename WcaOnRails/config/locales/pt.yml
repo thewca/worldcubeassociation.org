@@ -370,6 +370,8 @@ pt:
           taxas de registo
         #original_hash: 4baf44b
         championship_type: Tipo de Campeonato
+        #original_hash: ff722f0
+        registration_requirements: Requisitos de registo
       registration:
         #original_hash: 3c23a67
         guests: Convidados
@@ -642,6 +644,21 @@ pt:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Indique aqui as especificidades sobre do processo de registo, conforme
+          necessário, de acordo com a <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Orientação 2c1+</a>. Após a competição ser anunciada,
+          este campo <b>não</b> será mais editável, e será necessária a
+          aprovação do Conselho para modificá-lo.<br/>Por exemplo, indique aqui
+          se os competidores precisam ter um histórico de pagamento limpo com um
+          entidade específica, se existir alguma política de reembolso, ou se os
+          competidores terão que responder a um e-mail de confirmação caso o
+          número máximo de inscrições seja atingido.<br/>Por favor, preencha
+          <b>em inglês</b> e qualquer outras línguas que os competidores falem;
+          será exibido na página de inscrição da competição se se estiver a usar
+          a página de registos do website da WCA.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1457,6 +1474,8 @@ pt:
     preferred_events_populated_html: >-
       Preenchemos automaticamente com os seus eventos preferidos, que podem ser
       editados %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Requisitos de registo para a competição:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1540,6 +1559,8 @@ pt:
       information: Informação
       #original_hash: c5497bc
       events: Eventos
+      #original_hash: ff722f0
+      registration_requirements: Requisitos de registo
     index:
       #original_hash: db98a68
       title: Competições
@@ -2301,19 +2322,21 @@ pt:
           qualidade para garantir processos consistentes de alta qualidade,
           Staff da WCA, Organizações Regionais, Organizadores de Competições e
           Staff de Competições.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>Delegados da WCA</strong> são membros da WCA que são
-        responsáveis por garantir que todas as competições da WCA aconteçam de
-        acordo com a missão, regulamento e espírito da WCA. Eles são
-        diferenciados entre <strong>Delegados Sénior</strong>,
-        <strong>Delegados</strong> e <strong>Delegados
-        Candidatos</strong>%{see_link}. Além das tarefas de um Delegado, um
-        Delegado Sênior é responsável por gerir os Delegados da sua área, e
-        também pode ser contactado pela comunidade para assuntos pertinentes à
-        região. Novos Delegados são listados inicialmente como Delegados
-        Candidatos, e devem mostrar que são capazes de conduzir competições
-        adequadamente antes de serem considerados Delegados.
+        <p><strong>Delegado da WCA</strong> é o papel definido nas Moções da WCA
+        e retratado nos Regulamentos da WCA. O dever principal de um Delegado é
+        o de supervisionar competições em nome da WCA. Um Delegado da WCA é
+        responsável por garantir que todas as competições da WCA decorram de
+        acordo com a Missão, Espírito e Regulamento da WCA. A WCA distingue
+        entre <strong>Delegados Sénior</strong>, <strong>Delegados</strong> e
+        <strong>Delegados Candidatos</strong>%{see_link}.</p> <p> Além das
+        tarefas de um Delegado, um Delegado Sénior é responsável por gerir os
+        Delegados da sua área, e também pode ser contactado pela comunidade para
+        assuntos pertinentes à região.</p> <p>Novos Delegados são listados
+        inicialmente como Delegados Candidatos e devem mostrar que são capazes
+        de conduzir competições adequadamente antes de serem considerados
+        Delegados.</p>
       #original_hash: 27d18ac
       see_link_html: '(ver %{link})'
       #original_hash: 5b01fcc
@@ -2329,13 +2352,13 @@ pt:
     motions: Moções
     #original_hash: 092f99e
     minutes: Minutas
+    #original_hash: cdad4f1
+    dues: Sistema de Contribuições da WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
-    #original_hash: 0a89b0f
-    acknowledges: >-
-      A WCA reconhece os seguintes membros como delegados para competições
-      oficiais:
+    #original_hash: 77b819c
+    acknowledges: 'A WCA reconhece os seguintes Delegados da WCA:'
     table:
       #original_hash: 709a232
       name: Nome
