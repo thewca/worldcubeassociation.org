@@ -923,14 +923,12 @@ class Competition < ApplicationRecord
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
   def update_persons_wcif!(wcif_persons, current_user)
     persons_schema = { "type" => "array", "items" => User.wcif_json_schema }
-    puts persons_schema.inspect
     JSON::Validator.validate!(persons_schema, wcif_persons)
 
     ActiveRecord::Base.transaction do
       wcif_persons.each do |wcif_person|
-        # registration = registrations.joins(:user).where("users.id = ?", wcif_person["wcaUserId"]).first
-        user = User.includes(:registrations).find(wcif_person["wcaUserId"])
-        registration = user.registrations.find_by_competition_id(self.id)
+        registration = registrations.find_by(user_id: wcif_person["wcaUserId"])
+        # Note: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
         if registration && wcif_person["roles"]
           roles = wcif_person["roles"] - ["delegate", "organizer"] # These two are added on the fly.
           registration.update!(roles: roles)
