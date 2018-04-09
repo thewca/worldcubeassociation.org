@@ -277,8 +277,8 @@ ru:
         country_iso2: Гражданство
         #original_hash: ab58155
         dob: День рождения
-        #original_hash: ab58155
-        dob_verification: Подтверждение дня рождения
+        #original_hash: 7636bbc
+        dob_verification: Ваш день рождения
         #original_hash: 8a754c6
         gender: Пол
         #original_hash: 84add5b
@@ -378,6 +378,8 @@ ru:
         enable_donations: Включить возможность пожертвований вместе со взносом за участие
         #original_hash: 4baf44b
         championship_type: Тип чемпионата
+        #original_hash: ff722f0
+        registration_requirements: Требования к регистрации
       registration:
         #original_hash: 3c23a67
         guests: Гости
@@ -448,6 +450,21 @@ ru:
       vote:
         #original_hash: 153d7a5
         comment: Комментарий
+      incident:
+        #original_hash: 768e0c1
+        title: Заглавие
+        #original_hash: cf66d44
+        private_description: Описание (конфиденциальное)
+        #original_hash: 1171d85
+        private_wrc_decision: Решение (конфиденциальное)
+        #original_hash: 1c2ed61
+        public_summary: Сводка
+        #original_hash: 62d6896
+        digest_worthy: Стоит включить в сборник инцидентов
+        #original_hash: 848eed0
+        tags: Тэги
+        #original_hash: 861e459
+        competition_id: Произошло во время
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Соревнование
@@ -481,8 +498,6 @@ ru:
         delegate: Делегат
         #original_hash: d463c23
         senior_delegate: Старший Делегат
-        #original_hash: 660ee15
-        board_member: Член Руководства WCA
     person:
       gender:
         #original_hash: 3f3a489
@@ -520,6 +535,29 @@ ru:
       #original_hash: d70e9cb
       default_message: 'Возникли следующие проблемы:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: >-
+          Обратите внимание, что это поле доступно всем, и что его надо
+          заполнять по-английски
+        #original_hash: 67f2a1a
+        private_description: >-
+          Описание инцидента, доступное только Делегатам. Пожалуйста, заполняйте
+          по-английски.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          Окончательное решение WRC, включая конфиденциальные детали.
+          Пожалуйста, заполняйте по-английски.
+        #original_hash: 3de5729
+        public_summary: >-
+          Описание инцидента, а также его решение, которые будут доступны всем.
+          Пожалуйста, заполняйте по-английски.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Введите ваш день рождения в формате ГГГГ-ММ-ДД.
@@ -604,11 +642,12 @@ ru:
         external_website: Сайт соревнования. Должен быть правильный http(s) URL.
         #original_hash: 9965635
         registration_open: Время открытия и закрытия регистрации указаны в часовом поясе UTC.
-        #original_hash: 36963bc
-        remarks: >-
-          Дополнительная информация, которую вы хотите передать Руководству WCA.
-          Например, почему это соревнование объявляется меньше, чем за месяц,
-          если применимо. Пожалуйста, заполняйте это поле по-английски!
+        #original_hash: 243212f
+        remarks_html: >-
+          Дополнительная информация, которую вы бы хотели передать Руководству.
+          Например, почему соревнование объявляется менее чем за 4 недели, или
+          почему вы хотите применять %{link}. Пожалуйста, заполняйте
+          по-английски!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -654,6 +693,21 @@ ru:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Пожалуйста, напишите какие-либо особенности в процессе регистрации,
+          согласно <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Дополнению 2c1+</a>. После того, как соревнование
+          объявлено, это поле будет <b>невозможно</b> редактировать, и нужно
+          будет одобрение Руководства WCA для его изменения.<br/>Например,
+          напишите, должны ли участники не иметь долгов перед какими-либо
+          организаторами, возможен ли возврат взносов, должны ли участники
+          ответить на какое-нибудь письмо, если достигнут максимальный лимит на
+          участников.<br/>Пожалуйста, заполняйте это <b>по-английски</b>, а
+          также на других языках, на которых говорят ваши участники; это будет
+          отображаться на странице регистрации, если вы используете сайт WCA для
+          регистрации.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -836,6 +890,14 @@ ru:
       #original_hash: a2a43b3
       size_too_big: 'слишком большой размер файла (может быть %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Войти
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Войти
     failure:
       #original_hash: 1186218
       invalid: 'Неправильный email, WCA ID или пароль.'
@@ -1157,10 +1219,6 @@ ru:
         Для этого WCA ID у нас в базе данных не указано имя. Пожалуйста,
         свяжитесь с <a href='mailto:results@worldcubeassociation.org'
         target='_blank'>WCA Results Team</a>.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Вы не можете уволиться с поста Руководства WCA! Найдите другого из
-        Руководства WCA, кто вас уволит.
       #original_hash: d02c03b
       avatar_requires_wca_id: требуется привязать WCA ID
     successes:
@@ -1484,6 +1542,8 @@ ru:
     preferred_events_populated_html: >-
       Мы уже отметили ваши предпочитаемые дисциплины. Вы можете отредактировать
       предпочитаемые дисциплины %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Требования к регистрации на соревнование:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1571,6 +1631,14 @@ ru:
       information: Информация
       #original_hash: c5497bc
       events: Дисциплины
+      #original_hash: ff722f0
+      registration_requirements: Требования к регистрации
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        Соревнование окончено, посмотрите %{link_here}, какие были требования к
+        регистрации.
+      #original_hash: ff19a74
+      hide_requirements: Спрятать требования к регистрации.
     index:
       #original_hash: db98a68
       title: Соревнования
@@ -1809,6 +1877,10 @@ ru:
       before: до
       #original_hash: 405906c
       after: после
+      #original_hash: 24d948e
+      limit: Лимит
+      #original_hash: 855bd26
+      competitors: Участники
     #original_hash: 06b01c4
     announcements: Объявления
     #original_hash: 5b9523f
@@ -2005,7 +2077,7 @@ ru:
     #original_hash: d790b40
     title: Часто Задаваемые Вопросы
     #original_hash: 3451241
-    contact_html: 'Если эти ответы не помогли, %{contact_us}%!'
+    contact_html: 'Если эти ответы не помогли, %{contact_us}!'
     #original_hash: 6cf2723
     contact_us: свяжитесь с нами
     #original_hash: 9100be3
@@ -2236,10 +2308,13 @@ ru:
     structure:
       #original_hash: 9482c5d
       title: Структура
-      #original_hash: d855b50
-      board_html: >-
-        WCA возглавляет <strong>Руководство WCA</strong> (WCA Board), состоящее
-        из следующих лиц:
+      board:
+        #original_hash: abd2828
+        name: Совет Директоров WCA
+        #original_hash: d855b50
+        info_html: >-
+          Всемирную Ассоциацию Кубика (WCA) возглавляет <strong>Руководство
+          WCA</strong>, состоящее из следующих участников:
       #original_hash: b0c72a9
       committees: >-
         Следующие комитеты ответственны за различную операционную деятельность
@@ -2308,17 +2383,19 @@ ru:
           качества для обеспечения постоянного высокого качества процессов,
           персонала WCA, региональных организаций, организаторов соревнований и
           персонала соревнований.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>WCA Делегаты</strong> &mdash; участники WCA, отвечающие за то,
-        чтобы соревнования проходили в соответствии с миссией, Положениями и
-        духом WCA. Существуют <strong>Старшие WCA Делегаты</strong>, <strong>WCA
-        Делегаты</strong> и <strong>WCA Кандидаты</strong>%{see_link}. Старший
-        Делегат, помимо обязанностей обычного Делегата, ещё и управляет
-        Делегатами в своём регионе, к нему сообщества также могут обращаться по
-        региональным вопросам. Новые Делегаты становятся сначала Кандидатами, им
-        нужно показать, что они способны успешно управлять соревнованиями,
-        прежде чем они станут полноценными Делегатами.
+        <p><strong>WCA Делегат</strong> &mdash; это роль, определяемая
+        дополнениями к Уставу WCA. WCA Делегат ответственен за то, чтобы все WCA
+        Соревнования проходили в соответствии с Миссией, Духом и Положениями
+        WCA. Существуют <strong>Старшие WCA Делегаты</strong>, <strong>WCA
+        Делегаты</strong> и <strong>WCA Кандидаты</strong>%{see_link}.</p>
+        <p>Старший Делегат, помимо обязанностей обычного Делегата, ещё и
+        управляет Делегатами в своём регионе, к нему сообщества также могут
+        обращаться по региональным вопросам.</p> <p>Новые Делегаты становятся
+        сначала Кандидатами, им нужно показать, что они способны успешно
+        управлять соревнованиями, прежде чем они станут полноценными
+        Делегатами.</p>
       #original_hash: 27d18ac
       see_link_html: '(см. %{link})'
       #original_hash: 5b01fcc
@@ -2328,19 +2405,25 @@ ru:
   documents:
     #original_hash: 687c828
     title: Документы
-    #original_hash: 65b08c4
+    #original_hash: 9855f80
     bylaws: Устав
     #original_hash: fdceb44
     motions: Дополнения к Уставу
     #original_hash: 092f99e
     minutes: Минуты
+    #original_hash: 8d61184
+    policies: Политики
+    #original_hash: cdad4f1
+    dues: Система сборов WCA
+    #original_hash: 7536665
+    logo: Использование Логотипа WCA
+    #original_hash: 920a98f
+    proximity_policy: Политика близких соревнований
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Делегаты
-    #original_hash: 0a89b0f
-    acknowledges: >-
-      WCA признаёт следующих участников как Делегатов для официальных WCA
-      соревнований:
+    #original_hash: 77b819c
+    acknowledges: 'WCA признаёт следующих WCA Делегатов:'
     table:
       #original_hash: 709a232
       name: Имя
@@ -2426,9 +2509,9 @@ ru:
       задавайте вашему местному %{link}у.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Комитеты и команды</u>
+    #original_hash: 1cb449c
+    members: Участники
     board:
-      #original_hash: 90fcc48
-      name_html: Руководство WCA (WCA Board)
       #original_hash: 3a8b1d8
       info_html: >-
         Всемирную ассоциацию кубика возглавляет Руководство WCA. Оно отвечает за
@@ -2459,7 +2542,7 @@ ru:
         всем Делегатам WCA и улучшить их знание Положений. Если вы хотите
         принять участие в разработке Положений или предложить изменения, вы
         можете связаться с WRC, написав им по почте или в обсуждениях на <a
-        href='https://github.com/thewca/wca-regulations'> GitHub </а>.
+        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
     wrt:
       #original_hash: 45b0c09
       info_html: >-
@@ -2507,7 +2590,7 @@ ru:
     #original_hash: ea9d41d
     title: Утилиты для ввода результатов
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         WCA очень рекомендует использовать <a href="http://cubecomps.com">Cube
         Comps</a> до и во время соревнования. Cube Comps &mdash; это онлайн
@@ -2522,6 +2605,15 @@ ru:
       '3': >-
         Последняя версия файла для ввода результатов WCA соревнований может быть
         скачана <a href="/files/results.xls" target="_blank">здесь</a>.
+      #original_hash: a5f2d25
+      '4': >-
+        Можно также использовать <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> для
+        разбивки участников на группы. Это программа может также сортировать
+        участников по их рангу, назначать судей и скрамблёров, решать, сколько
+        нужно групп, генерировать карточки участников и индивидуальные
+        расписания. Это проект с открытым исходным кодом, созданный Джонатаном
+        Куоско (Jonatan Kłosko).
   logo:
     #original_hash: c72c969
     title: Логотип WCA
@@ -2539,13 +2631,10 @@ ru:
         href="/files/WCAlogo_notext.svg">векторная версия без текста</a>.
       #original_hash: dcb1ad6
       '3': "3D версия логотипа, сделанная Ву Мин Таном (Vu Minh Tan) из Вьетнама: <a href=\"/files/WCALogo3D.png\">PNG \_версия</a> (2.1 MB), <a href=\"/files/WCALogo3Dsmall.png\">PNG версия поменьше</a> (0.25 MB)."
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Все организаторы WCA соревнований могут использовать логотип WCA для
-        сайтов, одежды, подарков или декораций, но только для официальных WCA
-        соревнований.<br /> Для всех остальных людей и целей использование
-        логотипа WCA требует разрешения <a
-        href="mailto:board@worldcubeassociation.org">Руководства WCA</a>.
+        Допустимые использования логотипа WCA изложены в TODO, которую можно
+        посмотреть на <a href="/documents">странице документов WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
@@ -2687,6 +2776,11 @@ ru:
         posts: Не найдены посты с
         #original_hash: 76a6bf1
         regulations_and_guidelines: Не найдены Положения или Дополнения с
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Обратите внимание, что инциденты доступны только на английском, их
+      содержание не переводится на другие языки.
   about_regulations:
     #original_hash: 6bce1b5
     title: О Положениях
