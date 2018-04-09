@@ -27,7 +27,7 @@
     "precss": "^3.1.2",
     "prop-types": "^15.6.1",
     "rails-erb-loader": "^5.4.1",
-    "react": "^16.3.0",
+    "react": "^16.3.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.3.0",
     "resolve-url-loader": "^2.3.0",
