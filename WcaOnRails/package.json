@@ -29,7 +29,7 @@
     "rails-erb-loader": "^5.4.1",
     "react": "^16.3.1",
     "react-bootstrap": "^0.32.1",
-    "react-dom": "^16.3.0",
+    "react-dom": "^16.3.1",
     "resolve-url-loader": "^2.3.0",
     "sass-loader": "^6.0.7",
     "simplemde": "^1.11.2",
