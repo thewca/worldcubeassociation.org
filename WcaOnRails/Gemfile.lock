@@ -322,7 +322,7 @@ GEM
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
-    pre-commit (0.37.0)
+    pre-commit (0.38.1)
       pluginator (~> 1.5)
     premailer (1.11.1)
       addressable
