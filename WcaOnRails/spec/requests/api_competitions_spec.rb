@@ -221,6 +221,7 @@ RSpec.describe "API Competitions" do
   describe "PATCH #update_persons_from_wcif" do
     let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :registration_open) }
     let!(:registration) { FactoryBot.create(:registration, competition: competition) }
+    let!(:organizer_registration) { FactoryBot.create(:registration, competition: competition, user: competition.organizers.first) }
 
     context "when not signed in" do
       it "does not allow access" do
@@ -238,6 +239,14 @@ RSpec.describe "API Competitions" do
         persons = [{ wcaUserId: registration.user.id, roles: ["scrambler", "dataentry"] }]
         patch api_v0_competition_update_persons_from_wcif_path(competition), params: persons.to_json, headers: headers
         expect(registration.reload.roles).to eq ["scrambler", "dataentry"]
+      end
+
+      it "cannot override organizer role" do
+        persons = [{ wcaUserId: organizer_registration.user.id, roles: ["scrambler"] }]
+        patch api_v0_competition_update_persons_from_wcif_path(competition), params: persons.to_json, headers: headers
+        expect(organizer_registration.reload.roles).to eq ["scrambler"]
+        person_wcif = competition.reload.to_wcif["persons"].find { |person| person["wcaUserId"] == organizer_registration.user.id }
+        expect(person_wcif["roles"]).to match_array ["scrambler", "organizer"]
       end
 
       it "cannot change person immutable data" do
