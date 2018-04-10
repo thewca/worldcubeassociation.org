@@ -46,6 +46,7 @@ class CompetitionVenue < ApplicationRecord
         "timezone" => { "type" => "string", "enum" => VALID_TIMEZONES },
         "rooms" => { "type" => "array", "items" => VenueRoom.wcif_json_schema },
       },
+      "required" => ["id", "name", "latitudeMicrodegrees", "longitudeMicrodegrees", "timezone", "rooms"],
     }
   end
 

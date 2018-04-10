@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class ScheduleActivity < ApplicationRecord
+  # See https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit#heading=h.14uuu58hnua
+  VALID_ACTIVITY_CODE_BASE = (Event.official.map(&:id) + %w(other)).freeze
+  VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc)
   belongs_to :holder, polymorphic: true
   has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
 
@@ -11,9 +14,10 @@ class ScheduleActivity < ApplicationRecord
   validates_presence_of :start_time, allow_blank: false
   validates_presence_of :end_time, allow_blank: false
   validates_presence_of :holder, allow_blank: false
-  # TODO: activity code validation
+  validates_presence_of :activity_code, allow_blank: false
   # TODO: we don't yet care for scramble_set_id
   validate :included_in_parent_schedule
+  validate :valid_activity_code
 
   def included_in_parent_schedule
     return unless errors.blank?
@@ -29,13 +33,35 @@ class ScheduleActivity < ApplicationRecord
     end
   end
 
+  def valid_activity_code
+    return unless errors.blank?
+
+    activity_id = activity_code.split('-').first
+    unless VALID_ACTIVITY_CODE_BASE.include?(activity_id)
+      errors.add(:activity_code, "should be a valid activity code")
+    end
+    if activity_id == "other"
+      other_id = activity_code.split('-').second
+      unless VALID_OTHER_ACTIVITY_CODE.include?(other_id)
+        errors.add(:activity_code, "is an invalid 'other' activity code")
+      end
+    end
+
+    if holder.has_attribute?(:activity_code)
+      holder_activity_id = holder.activity_code.split('-').first
+      unless activity_id == holder_activity_id
+        errors.add(:activity_code, "should its base activity id with parent")
+      end
+    end
+  end
+
   def to_wcif
     {
       "id" => wcif_id,
       "name" => name,
       "activityCode" => activity_code,
-      "startTime" => start_time,
-      "endTime" => end_time,
+      "startTime" => start_time.iso8601,
+      "endTime" => end_time.iso8601,
       "childActivities" => child_activities.map(&:to_wcif),
     }
   end
@@ -63,6 +89,7 @@ class ScheduleActivity < ApplicationRecord
         "endTime" => { "type" => "string" },
         "childActivities" => { "type" => "array", "items" => { "$ref" => "activity" } },
       },
+      "required" => ["id", "name", "activityCode", "startTime", "endTime", "childActivities"],
     }
   end
 

@@ -28,6 +28,7 @@ class VenueRoom < ApplicationRecord
         "name" => { "type" => "string" },
         "activities" => { "type" => "array", "items" => ScheduleActivity.wcif_json_schema },
       },
+      "required" => ["id", "name", "activities"],
     }
   end
 

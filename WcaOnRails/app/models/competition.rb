@@ -162,11 +162,13 @@ class Competition < ApplicationRecord
   end
 
   def start_time
-    start_date.to_datetime
+    # Take the easternmost offset
+    start_date.to_datetime.change({ offset: "+1400" })
   end
 
   def end_time
-    (end_date + 1).to_datetime
+    # Take the westernmost offset
+    (end_date + 1).to_datetime.change({ offset: "-1200" })
   end
 
   def with_old_id
