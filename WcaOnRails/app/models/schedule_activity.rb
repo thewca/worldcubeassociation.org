@@ -3,7 +3,7 @@
 class ScheduleActivity < ApplicationRecord
   # See https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit#heading=h.14uuu58hnua
   VALID_ACTIVITY_CODE_BASE = (Event.official.map(&:id) + %w(other)).freeze
-  VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc)
+  VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc).freeze
   belongs_to :holder, polymorphic: true
   has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
 

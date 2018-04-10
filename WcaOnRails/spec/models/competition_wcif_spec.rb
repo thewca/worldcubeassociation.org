@@ -128,8 +128,8 @@ RSpec.describe "Competition WCIF" do
             {
               "id" => 1,
               "name" => "Venue 1",
-              "latitudeMicrodegrees" => 123456,
-              "longitudeMicrodegrees" => 123456,
+              "latitudeMicrodegrees" => 123_456,
+              "longitudeMicrodegrees" => 123_456,
               "timezone" => "Europe/Paris",
               "rooms" => [
                 {
@@ -142,7 +142,7 @@ RSpec.describe "Competition WCIF" do
                       "activityCode" => "other-lunch",
                       "startTime" => "2014-02-03T12:00:00Z",
                       "endTime" => "2014-02-03T13:00:00Z",
-                      "childActivities" => []
+                      "childActivities" => [],
                     },
                     {
                       "id" => 2,
@@ -157,7 +157,7 @@ RSpec.describe "Competition WCIF" do
                           "activityCode" => "333fm-r1-g1",
                           "startTime" => "2014-02-03T10:00:00Z",
                           "endTime" => "2014-02-03T10:30:00Z",
-                          "childActivities" => []
+                          "childActivities" => [],
                         },
                         {
                           "id" => 4,
@@ -172,36 +172,36 @@ RSpec.describe "Competition WCIF" do
                               "activityCode" => "333fm-r1-g2-a1",
                               "startTime" => "2014-02-03T10:30:00Z",
                               "endTime" => "2014-02-03T11:00:00Z",
-                              "childActivities" => []
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+                              "childActivities" => [],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
             },
             {
               "id" => 2,
               "name" => "Venue 2",
-              "latitudeMicrodegrees" => 123456,
-              "longitudeMicrodegrees" => 123456,
+              "latitudeMicrodegrees" => 123_456,
+              "longitudeMicrodegrees" => 123_456,
               "timezone" => "Europe/Paris",
               "rooms" => [
                 {
                   "id" => 1,
                   "name" => "Room 1 for venue 2",
-                  "activities" => []
+                  "activities" => [],
                 },
                 {
                   "id" => 2,
                   "name" => "Room 2 for venue 2",
-                  "activities" => []
-                }
-              ]
-            }
-          ]
+                  "activities" => [],
+                },
+              ],
+            },
+          ],
         },
       )
     end
@@ -376,8 +376,8 @@ RSpec.describe "Competition WCIF" do
         first_room = first_venue["rooms"][0]
         first_activity = first_room["activities"][0]
         activity_object = competition.competition_venues.find_by(wcif_id: first_venue["id"])
-        .venue_rooms.find_by(wcif_id: first_room["id"])
-        .schedule_activities.find_by(wcif_id: first_activity["id"])
+                                     .venue_rooms.find_by(wcif_id: first_room["id"])
+                                     .schedule_activities.find_by(wcif_id: first_activity["id"])
 
         first_activity["name"] = "activity name"
         first_activity["activityCode"] = "222-r1"
@@ -397,15 +397,15 @@ RSpec.describe "Competition WCIF" do
           "id" => 44,
           "name" => "2x2 First round",
           "activityCode" => "222-r1",
-          "startTime" => competition_start_time.change({ hour: 9, min: 0, sec: 0 }).utc.iso8601,
-          "endTime" => competition_start_time.change({ hour: 9, min: 30, sec: 0 }).utc.iso8601,
+          "startTime" => competition_start_time.change(hour: 9, min: 0, sec: 0).utc.iso8601,
+          "endTime" => competition_start_time.change(hour: 9, min: 30, sec: 0).utc.iso8601,
           "childActivities" => [
             {
               "id" => 45,
               "name" => "2x2 First round group 1",
               "activityCode" => "222-r1-g1",
-              "startTime" => competition_start_time.change({ hour: 9, min: 0, sec: 0 }).utc.iso8601,
-              "endTime" => competition_start_time.change({ hour: 9, min: 15, sec: 0 }).utc.iso8601,
+              "startTime" => competition_start_time.change(hour: 9, min: 0, sec: 0).utc.iso8601,
+              "endTime" => competition_start_time.change(hour: 9, min: 15, sec: 0).utc.iso8601,
               "childActivities" => [],
             },
           ],
@@ -450,7 +450,6 @@ RSpec.describe "Competition WCIF" do
         activity["activityCode"] = "other-lunch"
         competition.reload
 
-
         # Try updating a nested activity with an invalid activity code
         # The activity is actually 333fm-r1
         activity = schedule_wcif["venues"][0]["rooms"][0]["activities"][1]
@@ -470,7 +469,7 @@ RSpec.describe "Competition WCIF" do
         # Set the start time to a timezone ahead of UTC (meaning if we transform the
         # time to UTC, the day will actually be the day before the competition).
         # It's fine because at least one timezone had entered the day of the competition.
-        activity["startTime"] = competition.start_date.to_datetime.change({ hour: 9, offset: "+0800" }).iso8601
+        activity["startTime"] = competition.start_date.to_datetime.change(hour: 9, offset: "+0800").iso8601
         competition.set_wcif_schedule!(schedule_wcif, delegate)
       end
 
@@ -479,7 +478,7 @@ RSpec.describe "Competition WCIF" do
         # Set the start time to a timezone behind UTC (meaning if we transform the
         # time to UTC, the day will actually be the day after the competition).
         # It's fine because at least one timezone is still in the last day of the competition.
-        activity["endTime"] = competition.end_date.to_datetime.change({ hour: 20, offset: "-0800" }).iso8601
+        activity["endTime"] = competition.end_date.to_datetime.change(hour: 20, offset: "-0800").iso8601
         competition.set_wcif_schedule!(schedule_wcif, delegate)
       end
 
@@ -501,8 +500,8 @@ RSpec.describe "Competition WCIF" do
         nested_activity = activity["childActivities"][0]
         # Get rid of nested-nested, to make sure we don't run into their validations
         nested_activity["childActivities"] = []
-        activity_start = DateTime.parse(activity["startTime"])
-        activity_end = DateTime.parse(activity["endTime"])
+        activity_start = Time.parse(activity["startTime"])
+        activity_end = Time.parse(activity["endTime"])
         nested_activity["startTime"] = (activity_start - 1.minute).iso8601
         expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(ActiveRecord::RecordInvalid)
         competition.reload
@@ -531,7 +530,6 @@ RSpec.describe "Competition WCIF" do
       it "Updating venue's attributes correctly updates the existing object" do
         first_venue = schedule_wcif["venues"][0]
         venue_object = competition.competition_venues.find_by(wcif_id: first_venue["id"])
-
 
         first_venue["name"] = "new name"
         first_venue["latitudeMicrodegrees"] = 0
@@ -567,7 +565,6 @@ RSpec.describe "Competition WCIF" do
       end
 
       it "Doesn't update invalid venue" do
-        original_wcif = schedule_wcif.clone
         %w(id name latitudeMicrodegrees longitudeMicrodegrees timezone rooms).each do |attr|
           save_attr = schedule_wcif["venues"][0][attr]
           schedule_wcif["venues"][0][attr] = nil
@@ -615,7 +612,6 @@ RSpec.describe "Competition WCIF" do
       end
 
       it "Doesn't update invalid room" do
-        original_wcif = schedule_wcif.clone
         %w(id name activities).each do |attr|
           save_attr = schedule_wcif["venues"][0]["rooms"][0][attr]
           schedule_wcif["venues"][0]["rooms"][0][attr] = nil
