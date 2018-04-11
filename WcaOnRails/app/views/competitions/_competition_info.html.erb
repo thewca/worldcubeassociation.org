@@ -113,6 +113,16 @@
   <% unless competition.registration_requirements.blank? %>
     <div class="col-md-12">
       <dl class="dl-horizontal">
+        <% if competition.use_wca_registration? %>
+          <dt><%= t '.registration_period.label' %></dt>
+          <dd>
+            <p>
+              <%= t('.registration_period.range_html',
+                    start_date_and_time: wca_local_time(competition.registration_open),
+                    end_date_and_time: wca_local_time(competition.registration_close)) %>
+            </p>
+          </dd>
+        <% end %>
         <dt><%= t '.registration_requirements' %></dt>
         <dd>
         <% collapse = @competition.is_probably_over? %>
