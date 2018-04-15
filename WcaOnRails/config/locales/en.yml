@@ -893,6 +893,10 @@ en:
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
       click_to_display_requirements_html: "This competition is over, click %{link_here} to display the registration requirements it used."
       hide_requirements: "Hide registration requirements."
+      #context: when displaying the registration opening/closing date
+      registration_period:
+        label: "Registration period"
+        range_html: "From %{start_date_and_time} to %{end_date_and_time}."
     #context: on the competition's index page
     index:
       title: "Competitions"
