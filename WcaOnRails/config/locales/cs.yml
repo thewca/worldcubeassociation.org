@@ -1619,6 +1619,11 @@ cs:
         pro registraci, které byly potřeba.
       #original_hash: ff19a74
       hide_requirements: Skrýt požadavky pro registraci.
+      registration_period:
+        #original_hash: 6888733
+        label: Doba na registraci
+        #original_hash: 8f8b05c
+        range_html: 'Od %{start_date_and_time} do %{end_date_and_time}.'
     index:
       #original_hash: db98a68
       title: Soutěže
