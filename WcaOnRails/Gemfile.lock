@@ -157,10 +157,10 @@ GEM
     doorkeeper (4.2.6)
       railties (>= 4.2)
     doorkeeper-i18n (4.0.0)
-    dotenv (2.2.1)
-    dotenv-rails (2.2.1)
-      dotenv (= 2.2.1)
-      railties (>= 3.2, < 5.2)
+    dotenv (2.2.2)
+    dotenv-rails (2.2.2)
+      dotenv (= 2.2.2)
+      railties (>= 3.2, < 6.0)
     easy_translate (0.5.1)
       thread
       thread_safe
