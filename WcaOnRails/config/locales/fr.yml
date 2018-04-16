@@ -897,6 +897,14 @@ fr:
       #original_hash: a2a43b3
       size_too_big: 'est trop gros (il devrait faire au plus %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Connexion
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Connexion
     failure:
       #original_hash: 1186218
       invalid: 'Votre email, WCA ID, ou mot de passe est invalide'
@@ -1653,6 +1661,11 @@ fr:
         conditions d'inscription qui ont été utilisées.
       #original_hash: ff19a74
       hide_requirements: Cacher les conditions d'inscriptions.
+      registration_period:
+        #original_hash: 6888733
+        label: Ouverture des inscriptions
+        #original_hash: 8f8b05c
+        range_html: 'Du %{start_date_and_time} au %{end_date_and_time}.'
     index:
       #original_hash: db98a68
       title: Compétitions
@@ -2468,8 +2481,14 @@ fr:
     motions: Motions
     #original_hash: 092f99e
     minutes: Compte-rendus
+    #original_hash: 8d61184
+    policies: Politiques
     #original_hash: cdad4f1
     dues: WCA Dues System
+    #original_hash: 7536665
+    logo: Utilisation du logo de la WCA
+    #original_hash: 920a98f
+    proximity_policy: Politique de proximité des compétitions WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Délégués WCA
@@ -2650,7 +2669,7 @@ fr:
     #original_hash: ea9d41d
     title: Outils WCA pour la saisie des résultats
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         La WCA recommande fortement l'utilisation de <a
         href="http://cubecomps.com">Cube Comps</a> avant et pendant la
@@ -2668,7 +2687,7 @@ fr:
         La dernière version de la feuille de résultats de la WCA peut être
         téléchargée ici :<br /><a href="/files/results.xls"
         target="_blank">Feuille de résultats de la WCA</a>.
-      #original_hash: 24f0b3f
+      #original_hash: a5f2d25
       '4': >-
         Vous pourriez également vouloir utiliser <a
         href="https://jonatanklosko.github.io/groupifier">Groupifier</a> pour
@@ -2700,14 +2719,11 @@ fr:
         Version 3D du logo, créée par Vu Minh Tan (Vietman) : <a
         href="/files/WCALogo3D.png">version PNG</a> (2.1 Mo), <a
         href="/files/WCALogo3Dsmall.png">version PNG plus petite</a> (0.25 Mo).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Tous les organisateurs de compétitions WCA peuvent utiliser le logo WCA
-        sur leurs sites, vêtements, cadeaux, ou décorations, mais seulement pour
-        les compétitions WCA officielles.<br />Pour toutes les autres personnes
-        ou dans un autre contexte, l'utilisation du logo de la WCA requiert
-        l'autorisation du <a href="mailto:board@worldcubeassociation.org">bureau
-        de la WCA</a>.
+        Les utilisations possibles du logo de la WCA sont précisées par la
+        politique d'utilisation du logo de la WCA, disponible en Anglais sur la
+        <a href="/documents">page des Documents de la WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
