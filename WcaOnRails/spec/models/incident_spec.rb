@@ -32,6 +32,6 @@ RSpec.describe Incident do
     comp2 = [FactoryBot.create(:competition), "not in the report"]
     incident = FactoryBot.create(:incident, comps: [comp, comp2])
     expect(incident.competitions.size).to eq 2
-    expect(incident.incident_competitions.map(&:comments)).to eq [comp[1], comp2[1]]
+    expect(incident.incident_competitions.map(&:comments)).to match_array [comp[1], comp2[1]]
   end
 end
