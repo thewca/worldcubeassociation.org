@@ -56,7 +56,7 @@ class TranslationsController < ApplicationController
     "fi" => %w(2017NORR01),
     "fr" => %w(2008VIRO01),
     "hu" => %w(2008PLAC01),
-    "it" => %w(2009COLO03),
+    "it" => %w(2009COLO03 2012CANT02),
     "ja" => %w(2010TERA01),
     "ko" => %w(2008CHOI04),
     "pl" => %w(2013KOSK01),
