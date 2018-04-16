@@ -1611,6 +1611,11 @@ id:
         kompetisi yang digunakan.
       #original_hash: ff19a74
       hide_requirements: Sembunyikan syarat kompetisi.
+      registration_period:
+        #original_hash: 6888733
+        label: Periode pendaftaran
+        #original_hash: 8f8b05c
+        range_html: 'Dari %{start_date_and_time} sampai %{end_date_and_time}.'
     index:
       #original_hash: db98a68
       title: Kompetisi
@@ -2573,7 +2578,7 @@ id:
     #original_hash: ea9d41d
     title: Alat Score Taking WCA
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         WCA sangat menyarankan penggunaan <a href="http://cubecomps.com">Cube
         Comps</a> sebelum dan saat kompetisi. Cube Comps adalah sistem daring
@@ -2588,7 +2593,7 @@ id:
       '3': >-
         Versi terakhir Score sheet kompetisi WCA dapat diunduh di sini: <br /><a
         href="/files/results.xls" target="_blank">Score sheet kompetisi WCA</a>.
-      #original_hash: 24f0b3f
+      #original_hash: a5f2d25
       '4': >-
         Anda mungkin ingin memakai <a
         href="https://jonatanklosko.github.io/groupifier">Groupifier</a> untuk
@@ -2596,8 +2601,8 @@ id:
         melakukan hal ini untuk Anda. Fitur utama yang akan Anda temukan:
         mengurutkan kompetitor berdasarkan peringkat, memberikan tugas kepada
         kompetitor (Judging, Scrambling), memilih berapa banyak Scramble yang
-        dibutuhkan, membuat Scorecard, Personal Card, dan kesimpulan. Ini adalah
-        proyek Open Source yang dibuat oleh Jonatan Kłosko.
+        dibutuhkan, membuat Score Sheet, Personal Sheet, dan kesimpulan. Ini
+        adalah proyek Open Source yang dibuat oleh Jonatan Kłosko.
   logo:
     #original_hash: c72c969
     title: Logo WCA
