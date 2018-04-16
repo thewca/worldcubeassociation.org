@@ -1675,6 +1675,11 @@ pl:
         wymagania rejestracyjne.
       #original_hash: ff19a74
       hide_requirements: Ukryj wymagania rejestracyjne.
+      registration_period:
+        #original_hash: 6888733
+        label: Okres rejestracyjny
+        #original_hash: 8f8b05c
+        range_html: 'Od %{start_date_and_time} do %{end_date_and_time}.'
     index:
       #original_hash: db98a68
       title: Zawody
@@ -2639,7 +2644,7 @@ pl:
     #original_hash: ea9d41d
     title: Narzędzia Operujące na Wynikach WCA
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         WCA wysoce poleca używanie <a href="http://cubecomps.com">Cube Comps</a>
         zarówno przed, jak i w trakcie zawodów. Jest to system online,
@@ -2656,7 +2661,7 @@ pl:
       '3': >-
         Najnowsza wersja arkusza wyników z zawodów WCA może zostać pobrana <a
         href="/files/results.xls" target="_blank">tutaj</a>.
-      #original_hash: 24f0b3f
+      #original_hash: a5f2d25
       '4': >-
         Możesz również chcieć użyć narzędzia <a
         href="https://jonatanklosko.github.io/groupifier">Groupifier</a>, w celu
