@@ -1459,6 +1459,11 @@ pt-BR:
     please_fix_profile_html: >-
       Para se inscrever no %{comp}, você deve corrigir os seguintes problemas
       com seu %{profile}:
+    #original_hash: f22ef22
+    registration_full: >-
+      O limite para esta competição é de %{competitor_limit} competidores e já
+      foi atingido. Se você se inscrever, ficará em uma lista de espera. Sua
+      inscrição pode não ser aprovada a não ser que alguma vaga seja liberada.
     #original_hash: 855ca9c
     can_register: 'Você pode se inscrever no %{comp} abaixo.'
     #original_hash: 4167ed7
@@ -1616,6 +1621,11 @@ pt-BR:
         de inscrição que foram usados.
       #original_hash: ff19a74
       hide_requirements: Ocultar requisitos de inscrição
+      registration_period:
+        #original_hash: 6888733
+        label: Período de inscrição
+        #original_hash: 8f8b05c
+        range_html: 'De %{start_date_and_time} a %{end_date_and_time}.'
     index:
       #original_hash: db98a68
       title: Competições
@@ -2112,11 +2122,6 @@ pt-BR:
             da WCA</a>. Se você não fala inglês e tiver problemas para entender
             o documento, por favor veja as <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>Traduções</a>.
-          #original_hash: da99893
-          '2': >-
-            Além disso, recomendamos dar uma olhada no <a target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>Tutorial do Cubing
-            USA</a>, que dá várias dicas para iniciantes.
       '5':
         #original_hash: 3b657aa
         title: Como posso ter uma competição da WCA na minha cidade?
@@ -2142,15 +2147,11 @@ pt-BR:
             para que a competição seja reconhecida oficialmente pela WCA. O
             Delegado ajudará a equipe de organização nos preparativos para a
             competição.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Visite as <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>Orientações
-            para Organizadores de Competições da WCA</a> e <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>este guia</a> para mais
-            informações. (Em caso de conflito entre a informação apresentada
-            neste recurso adicional e o Regulamento da WCA, devem ser seguidas
-            as disposições do Regulamento.)
+            para Organizadores de Competições da WCA</a> para mais informações.
       '6':
         #original_hash: 8005a61
         title: >-
