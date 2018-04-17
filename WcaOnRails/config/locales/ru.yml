@@ -1483,6 +1483,11 @@ ru:
     please_fix_profile_html: >-
       Чтобы зарегистрироваться на %{comp}, вам нужно исправить следующие ошибки
       в своём %{profile}:
+    #original_hash: f22ef22
+    registration_full: >-
+      Лимит на %{competitor_limit} участников был достигнут. Если вы
+      зарегистрируетесь, ваша регистрация попадёт в список ожидания. Её не
+      подтвердят, пока не появится свободное место.
     #original_hash: 855ca9c
     can_register: 'Вы можете зарегистрироваться на %{comp} ниже.'
     #original_hash: 4167ed7
@@ -1639,6 +1644,11 @@ ru:
         регистрации.
       #original_hash: ff19a74
       hide_requirements: Спрятать требования к регистрации.
+      registration_period:
+        #original_hash: 6888733
+        label: Период регистрации
+        #original_hash: 8f8b05c
+        range_html: 'От %{start_date_and_time} до %{end_date_and_time}'
     index:
       #original_hash: db98a68
       title: Соревнования
@@ -2131,11 +2141,6 @@ ru:
             WCA</a> (<a
             href='https://www.worldcubeassociation.org/regulations/'>оригинал на
             английском</a>).
-          #original_hash: da99893
-          '2': >-
-            Кроме того, есть более короткое <a target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>руководство</a> (на
-            английском).
       '5':
         #original_hash: 3b657aa
         title: Как мне организовать WCA соревнование в своём городе?
@@ -2159,14 +2164,10 @@ ru:
             Делегатом</a>. На официальном соревновании должен быть хотя бы один
             WCA Делегат. Делегат поможет команде организаторов сделать успешное
             соревнование.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Больше информации (на английском) можно прочитать <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>здесь</a>. (Если
-            информация на сторонних сайтах противоречит Положениям WCA,
-            Положения имеют приоритет.) Также доступно <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>Руководство
-            для организаторов соревнований WCA</a>.
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>здесь</a>.
       '6':
         #original_hash: 8005a61
         title: Для чего нужны аккаунты WCA? В чём разница между аккаунтом и профилем?
