@@ -22,7 +22,6 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.body.encoded).to match("This competition is marked as Greater China Championship and World Championship")
       expect(mail.body.encoded).to match("There is a competitor limit of 100 because \"The hall only fits 100 competitors.\"")
       expect(mail.body.encoded).to match(admin_edit_competition_url(competition))
-      expect(mail.body.encoded).to match("Some requirements")
     end
   end
 
