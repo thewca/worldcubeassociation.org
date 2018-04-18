@@ -1450,6 +1450,11 @@ fi:
     please_fix_profile_html: >-
       Rekisteröityäksesi tähän %{comp}un, sinun täytyy korjata seuraavat
       ongelmat %{profile}ssasi:
+    #original_hash: f22ef22
+    registration_full: >-
+      Tämän kilpailun osallistujarajoitus %{competitor_limit} on jo täynnä. Jos
+      rekisteröidyt, sinut laitetaan jonotuslistalle. Rekisteröitymistä ei
+      välttämättä hyväksytä, ellei paikkoja vapaudu.
     #original_hash: 855ca9c
     can_register: 'Voit rekisteröityä kilpailuun %{comp} alla.'
     #original_hash: 4167ed7
@@ -1604,6 +1609,11 @@ fi:
         rekisteröitymisvaatimukset.
       #original_hash: ff19a74
       hide_requirements: Piilota rekisteröitymisvaatimukset.
+      registration_period:
+        #original_hash: 6888733
+        label: Rekisteröitymisaika
+        #original_hash: 8f8b05c
+        range_html: 'Alkaa %{start_date_and_time}, loppuu %{end_date_and_time}.'
     index:
       #original_hash: db98a68
       title: Kilpailut
@@ -2093,11 +2103,6 @@ fi:
             href='https://www.worldcubeassociation.org/regulations/'>WCA-säännöt</a>.
             Sääntöjen suomenkielinen versio löytyy <a
             href='https://www.worldcubeassociation.org/regulations/translations/finnish/'>täältä</a>.
-          #original_hash: da99893
-          '2': >-
-            Lisäksi suosittelemme, että katsot <a target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>CubingUSA:n
-            videon</a>, joka sisältää hyviä neuvoja uusille kilpailijoille.
       '5':
         #original_hash: 3b657aa
         title: Miten voin saada WCA-kilpailun kotikaupunkiini?
@@ -2121,15 +2126,11 @@ fi:
             Delegaatin läsnäolo on välttämätöntä, jotta kilpailu voi olla
             virallinen ja WCA:n alainen. Delegaatti neuvoo ja auttaa kilpailun
             onnistuneessa järjestämisessä.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Lue <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA-kilpailun
-            järjestäjän ohjesäännöt</a> ja <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>CubingUSA:n
-            kilpailuopas</a> lisätietoja varten. (Jos näissä ulkopuolisissa
-            lähteissä on tietoja, jotka ovat ristiriidassa WCA-sääntöjen kanssa,
-            WCA-säännöt korvaavat nämä tiedot kaikissa tapauksissa.)
+            järjestäjän ohjesäännöt</a> lisätietoja varten.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2378,6 +2379,8 @@ fi:
     dues: 'WCA:n vastikejärjestelmä'
     #original_hash: 7536665
     logo: WCA-logon käyttö
+    #original_hash: 920a98f
+    proximity_policy: WCA-kilpailujen etäisyyskäytännöt
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-delegaatit
@@ -2544,7 +2547,7 @@ fi:
     #original_hash: ea9d41d
     title: 'WCA:n tulostyökalut'
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         WCA suosittelee vahvasti <a href="http://cubecomps.com">Cubecompsin</a>
         käyttöä kilpailua ennen ja sen aikana. Cubecomps on verkko-ohjelma, joka
@@ -2562,7 +2565,7 @@ fi:
         WCA:n kilpailutulostaulukon viimeisimmän version voi ladata tästä: <br
         /><a href="/files/results.xls" target="_blank">WCA competition Score
         sheet</a>.
-      #original_hash: 24f0b3f
+      #original_hash: a5f2d25
       '4': >-
         Saatat haluta käyttää <a
         href="https://jonatanklosko.github.io/groupifier">Groupifier</a>-työkalua
