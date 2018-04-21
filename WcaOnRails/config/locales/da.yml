@@ -1450,6 +1450,12 @@ da:
     please_fix_profile_html: >-
       For at tilmelde dig til %{comp}, skal du fikse de følgende problemer med
       din %{profile}:
+    #original_hash: f22ef22
+    registration_full: >-
+      Deltagergrænsen for denne konkurrence er %{competitor_limit} og den er
+      allerede blevet fyldt op. Hvis du tilmelder dig, så vil din tilmelding
+      bliver sat på ventelisten. Den bliver nok ikke godkendt, medmindre der
+      bliver nok pladser ledige.
     #original_hash: 855ca9c
     can_register: 'Du kan tilmelde dig til %{comp} nedenfor.'
     #original_hash: 4167ed7
@@ -1602,6 +1608,11 @@ da:
         der var for konkurrencen.
       #original_hash: ff19a74
       hide_requirements: Skjul tilmeldings kravene.
+      registration_period:
+        #original_hash: 6888733
+        label: Tilmeldingsperiode
+        #original_hash: 8f8b05c
+        range_html: 'Fra %{start_date_and_time} til %{end_date_and_time}.'
     index:
       #original_hash: db98a68
       title: Konkurrencer
@@ -2099,11 +2110,6 @@ da:
             Regelsættet</a>. Hvis engelsk ikke er dit første sprog og du har
             problemer med at forstå dokumentet, så læs en <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>oversættelse</a>.
-          #original_hash: da99893
-          '2': >-
-            Vi vil også foreslå at du tager et kig på <a target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>Cubing USAs deltager
-            vejledning</a>, som giver mange gode tips for nye.
       '5':
         #original_hash: 3b657aa
         title: Hvordan kan jeg få en WCA konkurrence i min hjemby?
@@ -2127,14 +2133,11 @@ da:
             Delegeret</a> i nærheden. Opsynet af en delegeret er nødvendigt, for
             at konkurrencen officielt vil blive anderkendt af WCA. Den WCA
             Delegerede vil hjælpe med at arrangere konkurrencen succesfyldt.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Besøg <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
-            Konkurrence Arrangør Retningslinjerne</a> og <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>denne guide</a> for mere
-            information. (Alle sammenstød mellem informationen vil blive
-            overtrumfet af WCA Reglerne.)
+            Konkurrence Arrangør Retningslinjerne</a> for mere information.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2389,11 +2392,13 @@ da:
     #original_hash: 8d61184
     policies: Politikker
     #original_hash: cdad4f1
-    dues: WCA Afgiftssystemet.
+    dues: WCA Afgiftssystemet
     #original_hash: 7536665
     logo: Brugen af WCA Logoet
     #original_hash: 920a98f
     proximity_policy: WCA Konkurrencers Nærhedspolitik
+    #original_hash: f484584
+    competition_name_policy: WCA Konkurrence Navngivnings Politik
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegerede
