@@ -1284,6 +1284,7 @@ en:
     dues: "WCA Dues System"
     logo: "WCA Logo Usage"
     proximity_policy: "WCA Competition Proximity Policy"
+    competition_name_policy: "WCA Competition Name Policy"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
