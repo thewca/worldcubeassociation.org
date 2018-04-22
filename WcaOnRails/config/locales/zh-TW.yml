@@ -392,7 +392,7 @@ zh-TW:
         #original_hash: 67cd406
         venue: 場地
         #original_hash: 519255a
-        organization: 主辦單位
+        organization: 主辦團隊
         #original_hash: 5e326b1
         incidents: 意外事件
         #original_hash: d7020f4
@@ -687,7 +687,7 @@ zh-TW:
           簡述比賽的概況、燈光、交通、場地佈置（比賽區、轉亂區、等待區、成績錄入區），如果您採用和平常比賽不一樣的配置，請描述一下是否有遇到問題（例如：噪音）並說明您怎麼解決問題的。請具體描述，不要回答不相關的內容。
         #original_hash: f8de509
         organization: >-
-          簡述比賽的主辦單位以及他們如何分工的，如果您有參與其中的話，您可以提及他們過往的主辦經驗以及進步的部份、比賽當天的表現和積極度、遇到的問題（例如：賽程延誤）和怎麼解決問題的。請具體描述，不要回答不相關的內容。
+          簡述比賽的主辦團隊以及他們如何分工的，如果您有參與其中的話，您可以提及他們過往的主辦經驗以及進步的部份、比賽當天的表現和積極度、遇到的問題（例如：賽程延誤）和怎麼解決問題的。請具體描述，不要回答不相關的內容。
         #original_hash: 715f020
         incidents: >-
           任何您認為值得報告意外事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。請提及重要的事件就好，而非一般的(例如：常見的+2或是DNF)。您可以任意的請其他代表或WRC給這些事件回饋。如果您想要請WDC參與討論，確保您有清楚的請求他們。
@@ -797,6 +797,14 @@ zh-TW:
       #original_hash: a2a43b3
       size_too_big: '尺寸太大(最大應為%{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: 登入
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: 登入
     failure:
       #original_hash: 1186218
       invalid: 無效的電子郵件、WCA ID或密碼。
@@ -1191,9 +1199,9 @@ zh-TW:
         see_you_soon: '我們很期待在%{comp_name}與您相會！'
       pending:
         #original_hash: e48d8bd
-        mail_subject: '您%{comp_name}的報名已經被移至等待候補中。'
+        mail_subject: '您%{comp_name}的報名已經被移至候補名單中。'
         #original_hash: 6fd0a8e
-        moved_html: '您%{comp_name}的報名已經被移至等待候補中。可能的原因為：'
+        moved_html: '您%{comp_name}的報名已經被移至候補名單中。可能的原因為：'
         causes:
           #original_hash: eadfc0d
           accepted: 您的報名發生意外
@@ -1236,7 +1244,7 @@ zh-TW:
       #original_hash: f6fdbe4
       delete: 取消
       #original_hash: 92d40dc
-      waiting_list: 等候補位
+      waiting_list: 候補名單
       #original_hash: 06f7d1a
       approved_registrations: 成功報名
       #original_hash: bff04e8
@@ -1293,6 +1301,9 @@ zh-TW:
     greeting: '嗨，%{name}！'
     #original_hash: fb34a17
     please_fix_profile_html: '您必須修改以下%{profile}問題，才能報名%{comp}：'
+    #original_hash: f22ef22
+    registration_full: >-
+      這場比賽人數上限為%{competitor_limit}且已經額滿。若您仍報名，您的報名會被放置在候補名單。您的報名不會自動審核通過，直到有名額釋出為止。
     #original_hash: 855ca9c
     can_register: '您可以在底下報名%{comp}。'
     #original_hash: 4167ed7
@@ -1323,7 +1334,7 @@ zh-TW:
       title: 報名費
       hints:
         #original_hash: bf3a39e
-        donation: 額外捐款僅限於主辦單位使用
+        donation: 額外捐款僅限於主辦團隊使用
       labels:
         #original_hash: 948ec72
         entry_fees: 入場費
@@ -1361,7 +1372,7 @@ zh-TW:
       #original_hash: 3322400
       tooltip_registered: 您已經報名了。
       #original_hash: f2d092f
-      tooltip_waiting_list: 您正在等候補位。
+      tooltip_waiting_list: 您正在候補名單中。
       #original_hash: 9ecd976
       confirmed_visible: 這場比賽已經確認且已經公開了。
       #original_hash: fa186a9
@@ -1420,6 +1431,11 @@ zh-TW:
       click_to_display_requirements_html: '本次比賽已經結束，請點%{link_here}顯示報名條件。'
       #original_hash: ff19a74
       hide_requirements: 隱藏報名條件。
+      registration_period:
+        #original_hash: 6888733
+        label: 報名時段
+        #original_hash: 8f8b05c
+        range_html: '從%{start_date_and_time}到%{end_date_and_time}'
     index:
       #original_hash: db98a68
       title: 比賽
@@ -1861,11 +1877,6 @@ zh-TW:
             基本上，參加比賽沒有太多必備條件。但是所有參賽者應熟悉<a
             href='https://www.worldcubeassociation.org/regulations/'>WCA規則</a>。如果英文不是您的母語且您看不太懂該內容，請閱讀<a
             href='https://www.worldcubeassociation.org/regulations/translations/'>翻譯</a>。
-          #original_hash: da99893
-          '2': >-
-            此外，我們建議新人在參加比賽前閱讀<a target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>Cubing USA's
-            competitor tutorial</a>，可以更了解比賽流程。
       '5':
         #original_hash: 3b657aa
         title: 我可以在家鄉辦WCA比賽嗎？
@@ -1875,17 +1886,15 @@ zh-TW:
           #original_hash: be305b8
           '2': >-
             WCA比賽必須遵守<a target='_blank'
-            href='https://www.worldcubeassociation.org/regulations/'>WCA規則</a>。雖然主辦單位不需要熟記規則，但是相當程度的理解規則對舉辦比賽絕對有幫助。
+            href='https://www.worldcubeassociation.org/regulations/'>WCA規則</a>。雖然主辦團隊不需要熟記規則，但是相當程度的理解規則對舉辦比賽絕對有幫助。
           #original_hash: dbd72c2
           '3': >-
-            接著，主辦單位必須聯絡附近的<a target='_blank'
-            href='https://www.worldcubeassociation.org/delegates'>WCA代表</a>。WCA代表須監督比賽的進行，以確保比賽受WCA官方認證。WCA代表會協助並指導主辦單位舉辦一場成功的比賽。
-          #original_hash: e5f67d2
+            接著，主辦團隊必須聯絡附近的<a target='_blank'
+            href='https://www.worldcubeassociation.org/delegates'>WCA代表</a>。WCA代表須監督比賽的進行，以確保比賽受WCA官方認證。WCA代表會協助並指導主辦團隊舉辦一場成功的比賽。
+          #original_hash: 576c3b8
           '4': >-
             更多資訊請參考<a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA比賽主辦人指導方針</a>和<a
-            target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>CubingUSA比賽指南</a>。（其他額外的資訊若有任何與WCA規則衝突的，一律以WCA規則為優先。）
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA比賽主辦人指導方針</a>。
       '6':
         #original_hash: 8005a61
         title: WCA帳號的用途是什麼？WCA帳號和WCA個人頁面的差異何在？
@@ -2062,6 +2071,10 @@ zh-TW:
     dues: WCA稅金制度
     #original_hash: 7536665
     logo: WCA標誌使用
+    #original_hash: 920a98f
+    proximity_policy: WCA鄰近比賽政策
+    #original_hash: f484584
+    competition_name_policy: WCA比賽名稱政策
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
@@ -2176,10 +2189,10 @@ zh-TW:
     #original_hash: ea9d41d
     title: WCA成績輸入工具
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         WCA高度建議您在比賽前和比賽中使用<a href="http://cubecomps.com">Cube Comps</a>。Cube
-        Comps是一個顯示及時成績線上系統，它還有其他有趣功能像是列印成績卡和非常有效率的多人成績輸入系統。由Luis J.
+        Comps是一個顯示及時成績線上系統，它還有其他有趣功能像是列印成績單和非常有效率的多人成績輸入系統。由Luis J.
         Iáñez所建立並開放原始碼。
       #original_hash: 7438b0d
       '2': '將比賽成績寄給WCA成績組之前，成績單和轉亂程式應透過%{workbook_link}運算並檢查錯誤。'
@@ -2187,7 +2200,7 @@ zh-TW:
       '3': >-
         最新版的WCA比賽成績單可以在<br /><a href="/files/results.xls"
         target="_blank">WCA比賽成績單</a>下載。
-      #original_hash: 24f0b3f
+      #original_hash: a5f2d25
       '4': >-
         您可能還想使用<a
         href="https://jonatanklosko.github.io/groupifier">Groupifier</a>幫比賽的參賽者分組，那麼你找對工具了。
@@ -2425,7 +2438,7 @@ zh-TW:
       content_html: >-
         每項比賽項目或每場比賽的人數上限（參見<a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>規則
-        Z4</a>）。主辦單位應根據預期人數明智地的選擇人數上限，不能因為次要的理由設定較小的人數上限。當您在尋找適合的場地時，應考慮預期的參加人數。人數上限必須很清楚的標示在WCA的比賽頁面。
+        Z4</a>）。主辦團隊應根據預期人數明智地的選擇人數上限，不能因為次要的理由設定較小的人數上限。當您在尋找適合的場地時，應考慮預期的參加人數。人數上限必須很清楚的標示在WCA的比賽頁面。
     paragraph6:
       #original_hash: ce4c3d0
       title: 處理報名
