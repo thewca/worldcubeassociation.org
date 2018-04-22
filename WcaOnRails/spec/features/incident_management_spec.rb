@@ -44,6 +44,15 @@ RSpec.feature "Incident Management" do
         expect(page).to have_content("Custom title")
         expect(page).to have_no_content("Second incident")
       end
+
+      scenario "shows regulation text" do
+        visit "/incidents"
+        page.find(:xpath, "//*[text()[contains(.,'1a')]]").click
+        # Unfortunately we don't have access to the Regulations json within travis,
+        # so here we check for the most unlikely to change Regulation:
+        # that a competition must include a WCA Delegate.
+        page.find(".popover").has_content?("must include a WCA Delegate")
+      end
     end
 
     feature "create an incident" do
@@ -54,7 +63,7 @@ RSpec.feature "Incident Management" do
       end
     end
 
-    feature "show an incident", js: true do
+    feature "show an incident" do
       scenario "shows all information" do
         visit incident_path(incident1)
         expect(page).to have_content("First incident")
@@ -63,16 +72,6 @@ RSpec.feature "Incident Management" do
         expect(page).to have_content(incident1.public_summary)
         expect(page).to have_content(incident1.private_description)
         expect(page).to have_content(incident1.private_wrc_decision)
-      end
-
-      scenario "shows regulation text" do
-        visit incident_path(incident2)
-        expect(page).to have_content("Second incident")
-        page.find(:xpath, "//*[text()[contains(.,'1a')]]").click
-        # Unfortunately we don't have access to the Regulations json within travis,
-        # so here we check for the most unlikely to change Regulation:
-        # that a competition must include a WCA Delegate.
-        page.find(".popover").has_content?("must include a WCA Delegate")
       end
     end
   end
