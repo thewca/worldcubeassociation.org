@@ -4,8 +4,6 @@ class CompetitionVenue < ApplicationRecord
   belongs_to :competition
   has_many :venue_rooms, dependent: :destroy
 
-  accepts_nested_attributes_for :venue_rooms, allow_destroy: true
-
   VALID_TIMEZONES = ActiveSupport::TimeZone.all.map(&:tzinfo).map(&:name).freeze
 
   validates_presence_of :name

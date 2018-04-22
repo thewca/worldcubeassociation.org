@@ -4,11 +4,11 @@ class CreateCompetitionVenues < ActiveRecord::Migration[5.1]
   def change
     create_table :competition_venues do |t|
       t.string :competition_id, null: false
-      t.integer :wcif_id
-      t.string :name
-      t.integer :latitude_microdegrees
-      t.integer :longitude_microdegrees
-      t.string :timezone_id
+      t.integer :wcif_id, null: false
+      t.string :name, null: false
+      t.integer :latitude_microdegrees, null: false
+      t.integer :longitude_microdegrees, null: false
+      t.string :timezone_id, null: false
 
       t.timestamps
     end

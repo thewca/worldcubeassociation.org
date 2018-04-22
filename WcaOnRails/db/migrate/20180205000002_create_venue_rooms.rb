@@ -3,9 +3,9 @@
 class CreateVenueRooms < ActiveRecord::Migration[5.1]
   def change
     create_table :venue_rooms do |t|
-      t.references :competition_venue
-      t.integer :wcif_id
-      t.string :name
+      t.references :competition_venue, null: false
+      t.integer :wcif_id, null: false
+      t.string :name, null: false
 
       t.timestamps
     end

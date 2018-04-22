@@ -350,6 +350,54 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "competition_venues" => {
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          competition_id
+          wcif_id
+          name
+          latitude_microdegrees
+          longitude_microdegrees
+          timezone_id
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
+    "venue_rooms" => {
+      where_clause: "JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          competition_venue_id
+          wcif_id
+          name
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
+    "schedule_activities" => {
+      # FIXME: this does not handle nested activities, which will be omitted!
+      where_clause: "JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type = \"VenueRoom\") JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          holder_type
+          holder_id
+          wcif_id
+          name
+          activity_code
+          start_time
+          end_time
+          scramble_set_id
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "completed_jobs" => :skip_all_rows,
     "delayed_jobs" => :skip_all_rows,
     "delegate_reports" => {

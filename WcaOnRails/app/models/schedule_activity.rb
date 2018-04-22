@@ -50,7 +50,7 @@ class ScheduleActivity < ApplicationRecord
     if holder.has_attribute?(:activity_code)
       holder_activity_id = holder.activity_code.split('-').first
       unless activity_id == holder_activity_id
-        errors.add(:activity_code, "should its base activity id with parent")
+        errors.add(:activity_code, "should share its base activity id with parent")
       end
     end
   end
@@ -71,7 +71,6 @@ class ScheduleActivity < ApplicationRecord
     new_child_activities = wcif["childActivities"].map do |activity_wcif|
       activity = child_activities.find { |a| a.wcif_id == activity_wcif["id"] } || child_activities.build
       activity.load_wcif!(activity_wcif)
-      activity
     end
     self.child_activities = new_child_activities
     self

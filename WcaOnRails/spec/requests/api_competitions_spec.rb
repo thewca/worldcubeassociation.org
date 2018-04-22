@@ -281,10 +281,7 @@ RSpec.describe "API Competitions" do
     end
 
     context "when signed in as not a competition manager" do
-      before :each do
-        user = FactoryBot.create(:user)
-        sign_in user
-      end
+      before(:each) { sign_in FactoryBot.create(:user) }
       it "does not allow access" do
         patch api_v0_competition_update_schedule_from_wcif_path(competition)
         expect(response).to have_http_status(403)
@@ -296,32 +293,15 @@ RSpec.describe "API Competitions" do
     context "when signed in as a competition manager" do
       before { sign_in competition.organizers.first }
 
-      let(:schedule) { competition.to_wcif["schedule"] }
-      let(:headers) { { "CONTENT_TYPE" => "application/json" } }
+      let!(:schedule) { competition.to_wcif["schedule"] }
 
       it "can set venues, rooms and activities" do
-        # Force the call to `to_wcif`
-        new_schedule = schedule
-        # Destroy everything
-        competition.competition_venues.destroy_all
-        competition.reload
-        # Reconstruct everything from the saved WCIF
-        patch api_v0_competition_update_schedule_from_wcif_path(competition), params: new_schedule.to_json, headers: headers
-        competition.reload
-        expect(competition.competition_venues.size).to eq 2
-        first_venue = competition.competition_venues.find_by(wcif_id: 1)
-        first_room = first_venue.venue_rooms.find_by(wcif_id: 1)
-        expect(first_venue.venue_rooms.size).to eq 1
-        expect(competition.competition_venues.find_by(wcif_id: 2).venue_rooms.size).to eq 2
-        # Check attributes for one venue and one room
-        # Full changes tests are done in the model spec
-        expect(first_venue.name).to eq "Venue 1"
-        expect(first_room.name).to eq "Room 1 for venue 1"
-        expect(first_room.schedule_activities.size).to eq 2
-
-        expect(first_room.schedule_activities.size).to eq 2
-        expect(first_room.schedule_activities.last.child_activities.size).to eq 2
-        expect(ScheduleActivity.all.size).to eq 5
+        expect {
+          # Destroy everything
+          competition.competition_venues.destroy_all
+          # Reconstruct everything from the saved WCIF
+          patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
+        }.to_not change { competition.reload.to_wcif["schedule"] }
       end
 
       it "can update venues and rooms" do
@@ -343,13 +323,10 @@ RSpec.describe "API Competitions" do
         schedule["venues"][1] = new_venue_attributes
         patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
         # We expect these objects to change!
-        venue.reload
-        room.reload
-        competition.reload
-        expect(venue.name).to eq "new name"
-        expect(room.name).to eq "my new third room"
+        expect(venue.reload.name).to eq "new name"
+        expect(room.reload.name).to eq "my new third room"
         # but we still want the first one to be untouched
-        first_venue = competition.competition_venues.find_by(wcif_id: 1)
+        first_venue = competition.reload.competition_venues.find_by(wcif_id: 1)
         expect(first_venue.name).to eq "Venue 1"
       end
 
@@ -360,10 +337,8 @@ RSpec.describe "API Competitions" do
 
         patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
         # We expect this object to change!
-        competition.reload
-        venue.reload
-        expect(venue.venue_rooms.size).to eq 0
-        expect(competition.competition_venues.size).to eq 1
+        expect(venue.reload.venue_rooms.size).to eq 0
+        expect(competition.reload.competition_venues.size).to eq 1
         # We expect the rooms belonging to the deleted venue to be deleted too, so no more room should be there
         expect(VenueRoom.all.size).to eq 0
       end
@@ -406,9 +381,9 @@ RSpec.describe "API Competitions" do
       it "doesn't change anything when submitting an invalid WCIF" do
         schedule["venues"] = []
         schedule["startDate"] = nil
-        patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
-        competition.reload
-        expect(competition.competition_venues.size).to eq 2
+        expect {
+          patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
+        }.to_not change { competition.reload.competition_venues.size }
       end
     end
   end
