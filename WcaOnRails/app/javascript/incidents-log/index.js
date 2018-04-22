@@ -50,6 +50,10 @@ function customIncidentsSearch(text) {
   });
 }
 
+function activatePopover() {
+  $('[data-toggle="popover"]').popover();
+}
+
 wca.initIncidentsLogTable = function(selectizeOptions, $table, $searchInput, $tagsInput) {
   $incidentsTagsInput = $tagsInput;
   $incidentsSearchInput = $searchInput;
@@ -57,8 +61,11 @@ wca.initIncidentsLogTable = function(selectizeOptions, $table, $searchInput, $ta
 
   $table.on('search.bs.table', function() {
     // Yep, when it's filtered we need to reactivate popovers :(
-    $('[data-toggle="popover"]').popover();
+    activatePopover();
     updateUrlParams($searchInput, $tagsInput);
+  });
+  $table.on('page-change.bs.table', function() {
+    activatePopover();
   });
 
   // It's a search filter input, so there is no point to allow user to create tags

@@ -3,7 +3,7 @@
 class Incident < ApplicationRecord
   has_many :incident_tags, autosave: true, dependent: :destroy
   has_many :incident_competitions, dependent: :destroy
-  has_many :competitions, through: :incident_competitions
+  has_many :competitions, -> { order("Competitions.start_date asc") }, through: :incident_competitions
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
@@ -13,6 +13,10 @@ class Incident < ApplicationRecord
   validates_presence_of :title
 
   include Taggable
+
+  def last_happened_date
+    competitions.last&.start_date || created_at.to_date
+  end
 
   def digest_missing?
     digest_worthy && !digest_sent_at
