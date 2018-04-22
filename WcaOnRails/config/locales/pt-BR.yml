@@ -2412,6 +2412,8 @@ pt-BR:
     logo: Uso do Logo da WCA
     #original_hash: 920a98f
     proximity_policy: Política sobre proximidade entre competições
+    #original_hash: f484584
+    competition_name_policy: Política de nomes de competições
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
