@@ -2381,6 +2381,8 @@ fi:
     logo: WCA-logon käyttö
     #original_hash: 920a98f
     proximity_policy: WCA-kilpailujen etäisyyskäytännöt
+    #original_hash: f484584
+    competition_name_policy: WCA-kilpailujen nimikäytännöt
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-delegaatit
