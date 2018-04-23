@@ -132,9 +132,6 @@ export default class EditSchedule extends React.Component {
         {unsavedChanges}
         <div className="row">
           <div className="col-xs-12">
-            <DatesPicker pickerOptions={pickerOptions} scheduleWcif={scheduleWcif}/>
-          </div>
-          <div className="col-xs-12">
             <p>
               Depending on the size and setup of the competition, it may take place in several rooms of several venues.
               Therefore a schedule is necessarily linked to a specific room.
@@ -189,37 +186,6 @@ export default class EditSchedule extends React.Component {
     );
   }
 }
-
-function DatesPicker({ pickerOptions, scheduleWcif }) {
-  let endDate = new Date(scheduleWcif.startDate);
-  endDate.setDate(endDate.getDate() + scheduleWcif.numberOfDays - 1);
-  let endDateString = `${endDate.getFullYear()}-${pad(endDate.getMonth()+1)}-${pad(endDate.getDate())}`
-  return (
-    <div className="row equal">
-      <div className="col-xs-12">
-        Dev notes: changing these dates doesn't do anything yet.
-      </div>
-      <div className="form-group col-md-6 col-lg-3 col-xs-12 date_picker">
-        <label className="control-label date_picker" htmlFor="schedule_start_date">
-          Start date for your schedule
-        </label>
-        <div className="input-group date datetimepicker">
-          <input className="form-control date_picker" placeholder="AAAA-MM-JJ" type="text" defaultValue={scheduleWcif.startDate} data-date-options={JSON.stringify(pickerOptions)} name="startDate" id="schedule_start_date"/>
-        </div>
-      </div>
-      <div className="form-group col-md-6 col-lg-3 col-xs-12 date_picker">
-        <label className="control-label date_picker" htmlFor="schedule_end_date">
-          End date for your schedule
-        </label>
-        <div className="input-group date datetimepicker">
-          <input className="form-control date_picker" placeholder="AAAA-MM-JJ" type="text" defaultValue={endDateString} data-date-options={JSON.stringify(pickerOptions)} name="endDate" id="schedule_end_date"/>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
 
 function NewVenueElement({ newVenueAction }) {
   return (
