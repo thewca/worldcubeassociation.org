@@ -531,11 +531,17 @@ class Competition < ApplicationRecord
 
   def country_zones
     begin
-      ActiveSupport::TimeZone.country_zones(country.iso2).map(&:name).sort()
+      timezones = {}
+      ActiveSupport::TimeZone.country_zones(country.iso2).each do |tz|
+        timezones[tz.name] = tz.tzinfo.name
+      end
+      timezones
     rescue TZInfo::InvalidCountryCode
       # This can occur for non real country *and* XK!
       # FIXME what to provide for XA, XE, XM, XS?
-      ["Europe/London"]
+      {
+        "London" => "Europe/London",
+      }
     end
   end
 

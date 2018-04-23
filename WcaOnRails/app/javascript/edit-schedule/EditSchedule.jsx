@@ -243,7 +243,7 @@ function addVenueToSchedule(competitionInfo, scheduleWcif) {
     latitudeMicrodegrees: competitionInfo.lat,
     longitudeMicrodegrees: competitionInfo.lng,
     // There is at least one for all countries, select the first
-    timezone: competitionInfo.countryZones[0],
+    timezone: competitionInfo.countryZones[Object.keys(competitionInfo.countryZones)[0]],
     rooms: [],
   });
 }

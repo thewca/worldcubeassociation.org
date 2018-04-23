@@ -1308,7 +1308,7 @@ export class SchedulesEditor extends React.Component {
         let newEnd = newStart.add(defaultDurationFromActivityCode(newActivity.activityCode), "m");
         newActivity.endTime = tzConverterHandlers.ambiguousMomentToIsoString(newEnd);
       } else {
-        alert("bad");
+        // Do nothing, user cliked an event without any event selected.
         return;
       }
       roomSelected.activities.push(newActivity);

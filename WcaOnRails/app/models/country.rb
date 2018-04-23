@@ -5,6 +5,24 @@ class Country < ApplicationRecord
   WCA_STATES_JSON_PATH = Rails.root.to_s + "/config/wca-states.json"
   self.table_name = "Countries"
 
+  ALL_TIMEZONE_MAPPING = begin
+                           all_tz = ActiveSupport::TimeZone::MAPPING
+                           grouped_tz = all_tz.group_by { |k, v| v }
+                           duplicates = grouped_tz.select { |k, v| v.size > 1 }
+                           duplicates.each do |tz_id, tz_entries|
+                             selected_name = tz_id
+                             # Try to be smarter here, and find the closest matching name
+                             tz_entries.each do |tz_name, _|
+                               if tz_id.include?(tz_name)
+                                 selected_name = tz_name
+                               end
+                               all_tz.delete(tz_name)
+                             end
+                             all_tz[selected_name] = tz_id
+                           end
+                           all_tz
+                         end.freeze
+
   MULTIPLE_COUNTRIES = [
     { id: 'XA', name: 'Multiple Countries (Asia)', continentId: '_Asia', iso2: 'XA' },
     { id: 'XE', name: 'Multiple Countries (Europe)', continentId: '_Europe', iso2: 'XE' },
