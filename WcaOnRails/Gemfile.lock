@@ -307,7 +307,7 @@ GEM
       rack (>= 1.2, < 3)
     octokit (4.8.0)
       sawyer (~> 0.8.0, >= 0.5.3)
-    oga (2.14)
+    oga (2.15)
       ast
       ruby-ll (~> 2.1)
     openssl (2.1.0)
