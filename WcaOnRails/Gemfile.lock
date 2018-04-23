@@ -134,7 +134,7 @@ GEM
     css_parser (1.6.0)
       addressable
     daemons (1.2.6)
-    database_cleaner (1.6.2)
+    database_cleaner (1.7.0)
     debug_inspector (0.0.3)
     delayed_job (4.1.4)
       activesupport (>= 3.0, < 5.2)
