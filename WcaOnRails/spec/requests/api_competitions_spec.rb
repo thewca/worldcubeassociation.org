@@ -267,6 +267,126 @@ RSpec.describe "API Competitions" do
       end
     end
   end
+
+  describe "PATCH #update_schedule_from_wcif" do
+    let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, with_schedule: true) }
+
+    context "when not signed in" do
+      it "does not allow access" do
+        patch api_v0_competition_update_schedule_from_wcif_path(competition)
+        expect(response).to have_http_status(401)
+        response_json = JSON.parse(response.body)
+        expect(response_json["error"]).to eq "Not logged in"
+      end
+    end
+
+    context "when signed in as not a competition manager" do
+      before(:each) { sign_in FactoryBot.create(:user) }
+      it "does not allow access" do
+        patch api_v0_competition_update_schedule_from_wcif_path(competition)
+        expect(response).to have_http_status(403)
+        response_json = JSON.parse(response.body)
+        expect(response_json["error"]).to eq "Not authorized to manage competition"
+      end
+    end
+
+    context "when signed in as a competition manager" do
+      before { sign_in competition.organizers.first }
+
+      let!(:schedule) { competition.to_wcif["schedule"] }
+
+      it "can set venues, rooms and activities" do
+        expect {
+          # Destroy everything
+          competition.competition_venues.destroy_all
+          # Reconstruct everything from the saved WCIF
+          patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
+        }.to_not change { competition.reload.to_wcif["schedule"] }
+      end
+
+      it "can update venues and rooms" do
+        venue = competition.competition_venues.find_by(wcif_id: 2)
+        room = venue.venue_rooms.find_by(wcif_id: 2)
+        new_venue_attributes = {
+          # keep the WCIF id to update the venue
+          id: 2,
+          name: "new name",
+          latitudeMicrodegrees: 0,
+          longitudeMicrodegrees: 0,
+          timezone: "Europe/Paris",
+          rooms: [{
+            id: 2,
+            name: "my new third room",
+            activities: [],
+          }],
+        }
+        schedule["venues"][1] = new_venue_attributes
+        patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
+        # We expect these objects to change!
+        expect(venue.reload.name).to eq "new name"
+        expect(room.reload.name).to eq "my new third room"
+        # but we still want the first one to be untouched
+        first_venue = competition.reload.competition_venues.find_by(wcif_id: 1)
+        expect(first_venue.name).to eq "Venue 1"
+      end
+
+      it "can delete venues and rooms" do
+        venue = competition.competition_venues.find_by(wcif_id: 2)
+        schedule["venues"][1]["rooms"] = []
+        schedule["venues"].delete_at(0)
+
+        patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
+        # We expect this object to change!
+        expect(venue.reload.venue_rooms.size).to eq 0
+        expect(competition.reload.competition_venues.size).to eq 1
+        # We expect the rooms belonging to the deleted venue to be deleted too, so no more room should be there
+        expect(VenueRoom.all.size).to eq 0
+      end
+
+      it "can update activities and nested activities" do
+        room = competition.competition_venues.first.venue_rooms.first
+        activity_with_child = room.schedule_activities.find_by(wcif_id: 2)
+        wcif_room = schedule["venues"][0]["rooms"][0]
+        wcif_room["activities"][1]["name"] = "new name"
+        wcif_room["activities"][1]["childActivities"][0]["name"] = "foo"
+        wcif_room["activities"][1]["childActivities"][1]["name"] = "bar"
+
+        patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
+
+        activity_with_child.reload
+        expect(activity_with_child.name).to eq "new name"
+        expect(activity_with_child.child_activities.find_by(wcif_id: 3).name).to eq "foo"
+        expect(activity_with_child.child_activities.find_by(wcif_id: 4).name).to eq "bar"
+      end
+
+      it "can delete activities and nested activities" do
+        room = competition.competition_venues.first.venue_rooms.first
+        activity_with_child = room.schedule_activities.find_by(wcif_id: 2)
+        # Remove the nested activity with a child activity
+        wcif_room = schedule["venues"][0]["rooms"][0]
+        wcif_room["activities"][1]["childActivities"].delete_at(1)
+        # Remove an activity
+        wcif_room["activities"].delete_at(0)
+
+        patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
+
+        room.reload
+        activity_with_child.reload
+        expect(room.schedule_activities.size).to eq 1
+        expect(activity_with_child.child_activities.size).to eq 1
+        # We expect the nested-nested activity to be destroyed with its parent
+        expect(ScheduleActivity.all.size).to eq 2
+      end
+
+      it "doesn't change anything when submitting an invalid WCIF" do
+        schedule["venues"] = []
+        schedule["startDate"] = nil
+        expect {
+          patch api_v0_competition_update_schedule_from_wcif_path(competition), params: schedule.to_json, headers: headers
+        }.to_not change { competition.reload.competition_venues.size }
+      end
+    end
+  end
 end
 
 def create_wcif_events(event_ids)

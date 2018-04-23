@@ -659,6 +659,24 @@ CREATE TABLE `competition_tabs` (
   UNIQUE KEY `index_competition_tabs_on_display_order_and_competition_id` (`display_order`,`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `competition_venues`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `competition_venues` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `competition_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wcif_id` int(11) NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `latitude_microdegrees` int(11) NOT NULL,
+  `longitude_microdegrees` int(11) NOT NULL,
+  `timezone_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_competition_venues_on_competition_id_and_wcif_id` (`competition_id`,`wcif_id`),
+  KEY `index_competition_venues_on_competition_id` (`competition_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `completed_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1006,6 +1024,26 @@ CREATE TABLE `rounds` (
   UNIQUE KEY `index_rounds_on_competition_event_id_and_number` (`competition_event_id`,`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `schedule_activities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `schedule_activities` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `holder_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `holder_id` bigint(20) NOT NULL,
+  `wcif_id` int(11) NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `activity_code` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `scramble_set_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_activities_on_their_id_within_holder` (`holder_type`,`holder_id`,`wcif_id`),
+  KEY `index_schedule_activities_on_holder_type_and_holder_id` (`holder_type`,`holder_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `schema_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1117,6 +1155,21 @@ CREATE TABLE `users` (
   UNIQUE KEY `index_users_on_wca_id` (`wca_id`),
   KEY `index_users_on_senior_delegate_id` (`senior_delegate_id`),
   KEY `index_users_on_delegate_id_to_handle_wca_id_claim` (`delegate_id_to_handle_wca_id_claim`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `venue_rooms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `venue_rooms` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `competition_venue_id` bigint(20) NOT NULL,
+  `wcif_id` int(11) NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_venue_rooms_on_competition_venue_id_and_wcif_id` (`competition_venue_id`,`wcif_id`),
+  KEY `index_venue_rooms_on_competition_venue_id` (`competition_venue_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `vote_options`;
@@ -1324,5 +1377,8 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180107142301'),
 ('20180120132926'),
 ('20180201005000'),
+('20180205000001'),
+('20180205000002'),
+('20180205000003'),
 ('20180206211650'),
 ('20180403194359');

@@ -103,11 +103,72 @@ FactoryBot.define do
 
     transient do
       championship_types []
+      with_schedule false
     end
 
     after(:create) do |competition, evaluator|
       evaluator.championship_types.each do |championship_type|
         competition.championships.create!(championship_type: championship_type)
+      end
+      if evaluator.with_schedule
+        2.times do |i|
+          venue_attributes = {
+            name: "Venue #{i+1}",
+            wcif_id: i+1,
+            latitude_microdegrees: 123_456,
+            longitude_microdegrees: 123_456,
+            timezone_id: "Europe/Paris",
+          }
+          venue = competition.competition_venues.create!(venue_attributes)
+          (i+1).times do |j|
+            room_attributes = {
+              wcif_id: j+1,
+              name: "Room #{j+1} for venue #{i+1}",
+            }
+            venue.venue_rooms.create!(room_attributes)
+          end
+          if i == 0
+            start_time = competition.start_date.to_datetime
+            end_time = competition.start_date.to_datetime
+            venue.reload
+            first_room = venue.venue_rooms.first
+            first_room.schedule_activities.create!(
+              wcif_id: 1,
+              name: "Some name",
+              activity_code: "other-lunch",
+              start_time: start_time.change(hour: 12, min: 0, sec: 0).iso8601,
+              end_time: end_time.change(hour: 13, min: 0, sec: 0).iso8601,
+            )
+            activity = first_room.schedule_activities.create!(
+              wcif_id: 2,
+              name: "another activity",
+              activity_code: "333fm-r1",
+              start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
+              end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
+            )
+            activity.child_activities.create!(
+              wcif_id: 3,
+              name: "first group",
+              activity_code: "333fm-r1-g1",
+              start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
+              end_time: end_time.change(hour: 10, min: 30, sec: 0).iso8601,
+            )
+            nested_activity = activity.child_activities.create!(
+              wcif_id: 4,
+              name: "second group",
+              activity_code: "333fm-r1-g2",
+              start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
+              end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
+            )
+            nested_activity.child_activities.create!(
+              wcif_id: 5,
+              name: "some nested thing",
+              activity_code: "333fm-r1-g2-a1",
+              start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
+              end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
+            )
+          end
+        end
       end
     end
   end

@@ -174,6 +174,7 @@ Rails.application.routes.draw do
         get '/wcif' => 'competitions#show_wcif'
         patch '/wcif/events' => 'competitions#update_events_from_wcif', as: :update_events_from_wcif
         patch '/wcif/persons' => 'competitions#update_persons_from_wcif', as: :update_persons_from_wcif
+        patch '/wcif/schedule' => 'competitions#update_schedule_from_wcif', as: :update_schedule_from_wcif
       end
       get '/records' => "api#records"
     end

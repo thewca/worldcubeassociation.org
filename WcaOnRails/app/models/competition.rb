@@ -17,6 +17,7 @@ class Competition < ApplicationRecord
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
+  has_many :competition_venues, dependent: :destroy
   belongs_to :country, foreign_key: :countryId
   has_one :continent, foreign_key: :continentId, through: :country
   has_many :championships, dependent: :delete_all
@@ -156,6 +157,20 @@ class Competition < ApplicationRecord
     end
   end
 
+  def number_of_days
+    (end_date - start_date).to_i + 1
+  end
+
+  def start_time
+    # Take the easternmost offset
+    start_date.to_datetime.change(offset: "+1400")
+  end
+
+  def end_time
+    # Take the westernmost offset
+    (end_date + 1).to_datetime.change(offset: "-1200")
+  end
+
   def with_old_id
     new_id = self.id
     self.id = id_was
@@ -250,6 +265,7 @@ class Competition < ApplicationRecord
              'competition_delegates',
              'competition_events',
              'competition_organizers',
+             'competition_venues',
              'media',
              'scrambles',
              'country',
@@ -877,8 +893,8 @@ class Competition < ApplicationRecord
       "events" => competition_events.map(&:to_wcif),
       "schedule" => {
         "startDate" => start_date.to_s,
-        "numberOfDays" => (end_date - start_date).to_i + 1,
-        # "venues" => TODO: expand on this
+        "numberOfDays" => number_of_days,
+        "venues" => competition_venues.map(&:to_wcif),
       },
     }
   end
@@ -935,6 +951,36 @@ class Competition < ApplicationRecord
         end
       end
     end
+  end
+
+  def set_wcif_schedule!(wcif_schedule, current_user)
+    schedule_schema = {
+      "type" => "object",
+      "properties" => {
+        "venues" => { "type" => "array", "items" => CompetitionVenue.wcif_json_schema },
+        "startDate" => { "type" => "string" },
+        "numberOfDays" => { "type" => "integer" },
+      },
+    }
+    JSON::Validator.validate!(schedule_schema, wcif_schedule)
+
+    if wcif_schedule["startDate"] != start_date.strftime("%F")
+      raise WcaExceptions::BadApiParameter.new("Wrong start date for competition")
+    elsif wcif_schedule["numberOfDays"] != number_of_days
+      raise WcaExceptions::BadApiParameter.new("Wrong number of days for competition")
+    end
+
+    ActiveRecord::Base.transaction do
+      new_venues = wcif_schedule["venues"].map do |venue_wcif|
+        # using this find instead of ActiveRecord's find_or_create_by avoid several queries
+        # (despite having the association included :()
+        venue = competition_venues.find { |v| v.wcif_id == venue_wcif["id"] } || competition_venues.build
+        venue.load_wcif!(venue_wcif)
+      end
+      self.competition_venues = new_venues
+    end
+
+    reload
   end
 
   def serializable_hash(options = nil)
