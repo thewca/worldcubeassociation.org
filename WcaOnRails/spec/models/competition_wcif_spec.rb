@@ -469,7 +469,7 @@ RSpec.describe "Competition WCIF" do
         # Set the start time to a timezone ahead of UTC (meaning if we transform the
         # time to UTC, the day will actually be the day before the competition).
         # It's fine because at least one timezone had entered the day of the competition.
-        activity["startTime"] = competition.start_date.to_datetime.change(hour: 9, offset: "+0800").iso8601
+        activity["startTime"] = competition.start_date.to_datetime.change(hour: 1, offset: "+0800").iso8601
         competition.set_wcif_schedule!(schedule_wcif, delegate)
       end
 

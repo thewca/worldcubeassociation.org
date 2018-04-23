@@ -7,8 +7,6 @@ class ScheduleActivity < ApplicationRecord
   belongs_to :holder, polymorphic: true
   has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
 
-  accepts_nested_attributes_for :child_activities, allow_destroy: true
-
   validates_presence_of :name
   validates_numericality_of :wcif_id, only_integer: true
   validates_presence_of :start_time, allow_blank: false

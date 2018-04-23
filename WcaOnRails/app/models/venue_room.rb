@@ -7,8 +7,6 @@ class VenueRoom < ApplicationRecord
   delegate :end_time, to: :competition
   has_many :schedule_activities, as: :holder, dependent: :destroy
 
-  accepts_nested_attributes_for :schedule_activities, allow_destroy: true
-
   validates_presence_of :name
   validates_numericality_of :wcif_id, only_integer: true
 
