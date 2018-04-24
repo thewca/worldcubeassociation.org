@@ -6,10 +6,12 @@ import AttemptResultInput from './AttemptResultInput'
 import {
   pluralize,
   matchResult,
-  roundIdToString,
-  parseActivityCode,
   attemptResultToString,
 } from './utils'
+import {
+  roundIdToString,
+  parseActivityCode,
+} from 'wca/wcif-utils'
 
 function roundCutoffToString(wcifRound, { short } = {}) {
   let cutoff = wcifRound.cutoff;

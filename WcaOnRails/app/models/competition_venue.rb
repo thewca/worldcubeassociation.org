@@ -4,7 +4,7 @@ class CompetitionVenue < ApplicationRecord
   belongs_to :competition
   has_many :venue_rooms, dependent: :destroy
 
-  VALID_TIMEZONES = ActiveSupport::TimeZone.all.map(&:tzinfo).map(&:name).freeze
+  VALID_TIMEZONES = TZInfo::Timezone.all_identifiers.freeze
 
   validates_presence_of :name
   validates_numericality_of :wcif_id, only_integer: true

@@ -1,48 +1,26 @@
 import React from 'react'
 import cn from 'classnames'
 import _ from 'lodash'
-import ReactDOM from 'react-dom'
-import { Panel, PanelGroup, Alert } from 'react-bootstrap';
+import { Panel, PanelGroup, Alert, Row, Col } from 'react-bootstrap';
 
 import { rootRender, promiseSaveWcif } from 'edit-schedule'
 import { EditVenue } from './EditVenue'
-import { SchedulesEditor } from './EditScheduleForRoom'
+import { SchedulesEditor } from './SchedulesEditor'
+import { initElementsIds, newVenueId } from './utils'
 
-const currentElementsIds = {
-  venue: 0,
-  room: 0,
-  activity: 0,
-};
-
-//TODO: think about the fact users can remove/add rounds to events...
-
-export function newVenueId() { return ++currentElementsIds.venue; }
-export function newRoomId() { return ++currentElementsIds.room; }
-export function newActivityId() { return ++currentElementsIds.activity; }
+export const schedulesEditPanelSelector = "#schedules-edit-panel";
 
 export default class EditSchedule extends React.Component {
   componentWillMount() {
-    this.setState({ savedScheduleWcif: _.cloneDeep(this.props.scheduleWcif) });
-    // Explore the WCIF to get the highest ids.
-    this.props.scheduleWcif.venues.forEach(function(venue, index) {
-      if (venue.id > currentElementsIds.venue) {
-        currentElementsIds.venue = venue.id;
-      }
-      venue.rooms.forEach(function(room, index) {
-        if (room.id > currentElementsIds.room) {
-          currentElementsIds.room = room.id;
-        }
-        let all_ids = room.activities.map(function (elem) { return elem.id; });
-        currentElementsIds.activity = Math.max(currentElementsIds.activity, Math.max(...all_ids));
-      });
-    });
+    this.setState({ savedScheduleWcif: _.cloneDeep(this.props.competitionInfo.scheduleWcif) });
+    initElementsIds(this.props.competitionInfo.scheduleWcif.venues);
   }
 
   save = e => {
-    let { competitionInfo, scheduleWcif } = this.props;
+    let { competitionInfo } = this.props;
     let wcif = {
       id: competitionInfo.id,
-      schedule: scheduleWcif,
+      schedule: competitionInfo.scheduleWcif,
     };
 
     this.setState({ saving: true });
@@ -52,7 +30,7 @@ export default class EditSchedule extends React.Component {
       if(!response.ok) {
         throw new Error(`${response.status}: ${response.statusText}\n${json["error"]}`);
       }
-      this.setState({ savedScheduleWcif: _.cloneDeep(scheduleWcif), saving: false });
+      this.setState({ savedScheduleWcif: _.cloneDeep(competitionInfo.scheduleWcif), saving: false });
     }).catch(e => {
       this.setState({ saving: false });
       alert(`Something went wrong while saving.\n${e.message}`);
@@ -61,7 +39,7 @@ export default class EditSchedule extends React.Component {
 
 
   unsavedChanges() {
-    return !_.isEqual(this.state.savedScheduleWcif, this.props.scheduleWcif);
+    return !_.isEqual(this.state.savedScheduleWcif, this.props.competitionInfo.scheduleWcif);
   }
 
   onUnload = e => {
@@ -83,63 +61,43 @@ export default class EditSchedule extends React.Component {
   }
 
   render() {
-    let { competitionInfo, pickerOptions, scheduleWcif, tzMapping, eventsWcif, locale } = this.props;
-    let unsavedChanges = (
-      <div className={cn({"hide-element": !this.unsavedChanges()})}>
-        <Alert bsStyle="info">
-          You have unsaved changes. Don't forget to{" "}
-          <button onClick={this.save}
-            disabled={this.state.saving}
-            className={cn("btn", "btn-default btn-primary", { saving: this.state.saving })}
-          >
-            save your changes!
-          </button>
-        </Alert>
-      </div>
-    );
+    let { competitionInfo, locale } = this.props;
+    let scheduleWcif = competitionInfo.scheduleWcif;
 
-    let addVenueAction = e => {
-      e.preventDefault();
-      addVenueToSchedule(competitionInfo, scheduleWcif);
-      rootRender();
+    let actionsHandlers = {
+      addVenue: e => {
+        e.preventDefault();
+        addVenueToSchedule(competitionInfo);
+        rootRender();
+      },
+      removeVenue: (e, index) => {
+        e.preventDefault();
+        if (!confirm(`Are you sure you want to remove the venue "${scheduleWcif.venues[index].name}" and all the associated rooms and schedules?`)) {
+          return;
+        }
+        scheduleWcif.venues.splice(index, 1);
+        rootRender();
+      },
     };
 
-    let removeVenueAction = (e, index) => {
-      e.preventDefault();
-      if (!confirm(`Are you sure you want to remove the venue "${scheduleWcif.venues[index].name}" and all the associated rooms and schedules?`)) {
-        return;
-      }
-      scheduleWcif.venues.splice(index, 1);
-      rootRender();
-    };
-
-    let isThereAnyRoom = false;
-    scheduleWcif.venues.forEach(function(venue) {
-      if (venue.rooms.length > 0) {
-        isThereAnyRoom = true;
-        return false;
-      }
+    let isThereAnyRoom = scheduleWcif.venues.some(function (element) {
+      return element.rooms.length > 0;
     });
+
     let defaultActivePanel = isThereAnyRoom ? "2" : "1";
+
+    let unsavedChanges = <UnsavedChangesAlert
+                           unsavedChanges={this.unsavedChanges()}
+                           actionHandler={this.save}
+                           saving={this.state.saving}
+                         />
 
     return (
       <div>
         {unsavedChanges}
-        <div className="row">
-          <div className="col-xs-12">
-            <p>
-              Depending on the size and setup of the competition, it may take place in several rooms of several venues.
-              Therefore a schedule is necessarily linked to a specific room.
-              Each room may have its own schedule (with all or a subset of events).
-              You can create the competition's schedule below by first creating at least one venue with one room first.
-              Then you will be able to select this room in the "Edit schedules" panel, and drag and drop event rounds (or attempts for some events) on it.
-            </p>
-            <p>
-              For the typical simple competition, creating one "Main venue" with one "Main room" is enough.
-              If your competition has a single venue but multiple "stages" with different schedules, please input them as different rooms.
-            </p>
-          </div>
-          <div className="col-xs-12">
+        <Row>
+          <IntroductionMessage />
+          <Col xs={12}>
             <PanelGroup accordion id="accordion-schedule" defaultActiveKey={defaultActivePanel}>
               <Panel id="venues-edit-panel" bsStyle="info" eventKey="1">
                 <div id="accordion-schedule-heading-1" className="panel-heading heading-as-link" aria-controls="accordion-schedule-body-1" role="button" data-toggle="collapse" data-target="#accordion-schedule-body-1" data-parent="#accordion-schedule">
@@ -148,19 +106,16 @@ export default class EditSchedule extends React.Component {
                   </Panel.Title>
                 </div>
                 <Panel.Body collapsible>
-                  <div className="row equal">
-                    <div className="col-xs-12">
+                  <Row>
+                    <Col xs={12}>
                       <p>Please add all your venues and rooms below:</p>
-                    </div>
-                  </div>
-                  <div className="row equal">
-                    {scheduleWcif.venues.map((venueWcif, index) => {
-                      return (
-                        <EditVenue venueWcif={venueWcif} key={index} removeVenueAction={e => removeVenueAction(e, index)} tzMapping={tzMapping} competitionInfo={competitionInfo} />
-                      );
-                    })}
-                    <NewVenueElement newVenueAction={addVenueAction} />
-                  </div>
+                    </Col>
+                  </Row>
+                  <VenuesList
+                    venues={scheduleWcif.venues}
+                    actionsHandlers={actionsHandlers}
+                    competitionInfo={competitionInfo}
+                  />
                 </Panel.Body>
               </Panel>
               <Panel id="schedules-edit-panel" bsStyle="info" eventKey="2">
@@ -170,35 +125,81 @@ export default class EditSchedule extends React.Component {
                   </Panel.Title>
                 </div>
                 <Panel.Body id="schedules-edit-panel-body" collapsible>
-                  <SchedulesEditor scheduleWcif={scheduleWcif} eventsWcif={eventsWcif} locale={locale} />
+                  <SchedulesEditor scheduleWcif={scheduleWcif} eventsWcif={competitionInfo.eventsWcif} locale={locale} />
                 </Panel.Body>
               </Panel>
             </PanelGroup>
-          </div>
-        </div>
+          </Col>
+        </Row>
         {unsavedChanges}
       </div>
     );
   }
 }
 
-function NewVenueElement({ newVenueAction }) {
+const UnsavedChangesAlert = ({ unsavedChanges, actionHandler, saving }) => {
   return (
-    <div className="panel-venue">
-      <a href="#" className="btn btn-success new-venue-link" onClick={newVenueAction}>Add a venue</a>
+    <div className={cn({"hide-element": !unsavedChanges})}>
+      <Alert bsStyle="info">
+        You have unsaved changes. Don't forget to{" "}
+        <button onClick={actionHandler}
+          disabled={saving}
+          className={cn("btn", "btn-default btn-primary", { saving: saving })}
+        >
+          save your changes!
+        </button>
+      </Alert>
     </div>
   );
 }
 
-function pad(number) {
-  if (number < 10) {
-    return '0' + number;
-  }
-  return number;
+const IntroductionMessage = () => {
+  return (
+    <Col xs={12}>
+      <p>
+        Depending on the size and setup of the competition, it may take place in several rooms of several venues.
+        Therefore a schedule is necessarily linked to a specific room.
+        Each room may have its own schedule (with all or a subset of events).
+        You can create the competition's schedule below by first creating at least one venue with one room first.
+        Then you will be able to select this room in the "Edit schedules" panel, and drag and drop event rounds (or attempts for some events) on it.
+      </p>
+      <p>
+        For the typical simple competition, creating one "Main venue" with one "Main room" is enough.
+        If your competition has a single venue but multiple "stages" with different schedules, please input them as different rooms.
+      </p>
+    </Col>
+  );
 }
 
-function addVenueToSchedule(competitionInfo, scheduleWcif) {
-  scheduleWcif.venues.push({
+const VenuesList = ({venues, actionsHandlers, competitionInfo}) => {
+  return (
+    <Row>
+      {venues.map((venueWcif, index) => {
+        return (
+          <EditVenue
+            venueWcif={venueWcif}
+            key={index}
+            index={index}
+            removeVenueAction={e => actionsHandlers.removeVenue(e, index)}
+            competitionInfo={competitionInfo}
+          />
+        );
+      })}
+      <NewVenue actionHandler={actionsHandlers.addVenue} />
+    </Row>
+  );
+}
+
+const NewVenue = ({ actionHandler }) => {
+  return (
+    <div className="panel-venue">
+      <a href="#" className="btn btn-success new-venue-link" onClick={actionHandler}>Add a venue</a>
+    </div>
+  );
+}
+
+function addVenueToSchedule(competitionInfo) {
+  competitionInfo.scheduleWcif.venues.push({
     id: newVenueId(),
     name: competitionInfo.venue,
     latitudeMicrodegrees: competitionInfo.lat,

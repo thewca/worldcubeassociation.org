@@ -7,7 +7,8 @@ import Radio from 'react-bootstrap/lib/Radio'
 import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import AttemptResultInput from './AttemptResultInput'
-import { centisecondsToString, roundIdToString, parseActivityCode } from './utils'
+import { centisecondsToString } from './utils'
+import { roundIdToString, parseActivityCode } from 'wca/wcif-utils'
 import ButtonActivatedModal from 'edit-events/ButtonActivatedModal'
 
 class RadioGroup extends React.Component {

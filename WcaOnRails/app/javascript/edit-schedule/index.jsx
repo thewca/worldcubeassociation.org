@@ -26,18 +26,13 @@ let state = {};
 
 export function rootRender() {
   ReactDOM.render(
-    // FIXME: pass a single state
-    <EditSchedule competitionInfo={state.competitionInfo} pickerOptions={state.pickerOptions} scheduleWcif={state.scheduleWcif} tzMapping={state.tzMapping} eventsWcif={state.eventsWcif} locale={state.locale} />,
+    <EditSchedule competitionInfo={state.competitionInfo} locale={state.locale} />,
     document.getElementById('edit-schedule-area'),
   )
 }
 
-wca.initializeScheduleForm = (competitionInfo, pickerOptions, scheduleWcif, tzMapping, eventsWcif, locale) => {
+wca.initializeScheduleForm = (competitionInfo, locale) => {
   state.competitionInfo = competitionInfo;
-  state.pickerOptions = pickerOptions;
-  state.scheduleWcif = scheduleWcif;
-  state.tzMapping = tzMapping;
-  state.eventsWcif = eventsWcif;
   state.locale = locale;
   rootRender();
 }

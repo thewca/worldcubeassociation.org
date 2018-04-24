@@ -13,17 +13,12 @@
         lat: <%= @competition.latitude.to_json.html_safe %>,
         lng: <%= @competition.longitude.to_json.html_safe %>,
         countryZones: <%= @competition.country_zones.to_json.html_safe %>,
+        scheduleWcif: <%= @competition.to_wcif["schedule"].to_json.html_safe %>,
+        eventsWcif: <%= @competition.competition_events.map(&:to_wcif).to_json.html_safe %>,
       }
       // FIXME: here we can simply pass the WCIF, omitting PB for faster rendering?
       wca.initializeScheduleForm(
         competition_info,
-        <%= DatePickerInput.date_options_base.to_json.html_safe %>,
-        <%= @competition.to_wcif["schedule"].to_json.html_safe %>,
-        // Instead of giving *all* TZInfo, use uniq-fied rails "meaningful" subset
-        // We'll add the "country_zones" to that, because some of our competitions
-        // use TZ not included in this subset.
-        <%= Country::ALL_TIMEZONE_MAPPING.to_json.html_safe %>,
-        <%= @competition.competition_events.map(&:to_wcif).to_json.html_safe %>,
         <%= I18n.locale.to_json.html_safe %>
       );
     });

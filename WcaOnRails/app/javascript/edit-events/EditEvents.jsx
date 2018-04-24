@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom'
 
 import events from 'wca/events.js.erb'
 import { rootRender, promiseSaveWcif } from 'edit-events'
-import { pluralize, buildActivityCode } from 'edit-events/modals/utils'
+import { pluralize } from 'edit-events/modals/utils'
+import { buildActivityCode } from 'wca/wcif-utils'
 import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from 'edit-events/modals'
 
 export default class EditEvents extends React.Component {
