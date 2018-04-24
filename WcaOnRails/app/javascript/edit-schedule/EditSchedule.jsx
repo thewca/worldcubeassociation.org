@@ -46,11 +46,6 @@ export default class EditSchedule extends React.Component {
     };
 
     this.setState({ saving: true });
-    console.log("This is the WCIF that would be saved:");
-    console.log(wcif);
-    this.setState({ savedScheduleWcif: _.cloneDeep(scheduleWcif), saving: false });
-    // TODO actual save
-    return;
     promiseSaveWcif(wcif).then(response => {
       return Promise.all([response, response.json()]);
     }).then(([response, json]) => {

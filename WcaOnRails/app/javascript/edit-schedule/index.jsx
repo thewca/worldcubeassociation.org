@@ -8,7 +8,6 @@ function getAuthenticityToken() {
 }
 
 export function promiseSaveWcif(wcif) {
-  // TODO: endpoint not implemented
   let url = `/api/v0/competitions/${wcif.id}/wcif/schedule`;
   let fetchOptions = {
     headers: {

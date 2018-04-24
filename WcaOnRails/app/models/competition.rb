@@ -885,6 +885,7 @@ class Competition < ApplicationRecord
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
+  # TODO: enable partial WCIF rendering
   def to_wcif
     managers = self.managers
     includes_associations = [

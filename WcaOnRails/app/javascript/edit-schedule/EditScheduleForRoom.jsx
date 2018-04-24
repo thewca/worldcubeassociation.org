@@ -27,6 +27,7 @@ function activityToFcEvent(eventData) {
     eventData.id = newActivityId();
   }
   // Keep activityCode untouched
+  // Keep childActivities untouched
 
   // While in FC, any time is ambiguously-zoned
   // We'll add back the room's timezone when exporting the WCIF
@@ -55,6 +56,8 @@ function fcEventToActivity(event) {
   if (event.hasOwnProperty("childActivities")) {
     // Not modified by FC, put them back anyway
     activity.childActivities = event.childActivities;
+  } else {
+    activity.childActivities = [];
   }
   return activity;
 }
@@ -635,6 +638,8 @@ class EditScheduleForRoom extends React.Component {
       e.preventDefault();
     }
 
+    // FIXME: the menu goes to a separate component
+    // FIXME: display the room's timezone somewhere around here!
     return (
       <div id="schedule-editor" className="row">
         <div className="col-xs-2">
@@ -1298,6 +1303,7 @@ export class SchedulesEditor extends React.Component {
         id: activityData.id || newActivityId(),
         name: activityData.name,
         activityCode: activityData.activityCode,
+        childActivities: [],
       };
       if (activityData.startTime && activityData.endTime) {
         newActivity.startTime = activityData.startTime;
