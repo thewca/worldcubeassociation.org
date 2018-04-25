@@ -16,7 +16,6 @@
         scheduleWcif: <%= @competition.schedule_wcif.to_json.html_safe %>,
         eventsWcif: <%= @competition.events_wcif.to_json.html_safe %>,
       }
-      // FIXME: here we can simply pass the WCIF, omitting PB for faster rendering?
       wca.initializeScheduleForm(
         competition_info,
         <%= I18n.locale.to_json.html_safe %>

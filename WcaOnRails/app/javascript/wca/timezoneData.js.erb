@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export const timezoneData = <%= Country::ALL_TIMEZONE_MAPPING.to_json.html_safe %>;
+export const timezoneData = <%= Country::ALL_TIMEZONES_MAPPING.to_json.html_safe %>;
 
 export function friendlyTimezoneName(id) {
   let friendlyName =  _.findKey(timezoneData, function(value) {
