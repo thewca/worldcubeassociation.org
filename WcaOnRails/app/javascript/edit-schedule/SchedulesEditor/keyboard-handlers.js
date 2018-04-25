@@ -1,5 +1,11 @@
 import _ from 'lodash'
-import { selectedEventInCalendar, addActivityToCalendar, eventModifiedInCalendar, removeEventFromCalendar, singleSelectEvent } from './calendar-utils'
+import {
+  addActivityToCalendar,
+  eventModifiedInCalendar,
+  removeEventFromCalendar,
+  selectedEventInCalendar,
+  singleSelectEvent,
+} from './calendar-utils'
 import { scheduleElementSelector } from './fullcalendar'
 import { schedulesEditPanelSelector } from '../EditSchedule'
 import { activityIndexInArray } from 'wca/wcif-utils'

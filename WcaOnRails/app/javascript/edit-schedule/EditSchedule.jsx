@@ -1,7 +1,13 @@
 import React from 'react'
 import cn from 'classnames'
 import _ from 'lodash'
-import { Panel, PanelGroup, Alert, Row, Col } from 'react-bootstrap';
+import {
+  Alert,
+  Col,
+  Panel,
+  PanelGroup,
+  Row,
+} from 'react-bootstrap'
 
 import { rootRender, promiseSaveWcif } from 'edit-schedule'
 import { EditVenue } from './EditVenue'

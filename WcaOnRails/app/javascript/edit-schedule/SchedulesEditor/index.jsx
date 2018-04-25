@@ -1,20 +1,31 @@
 import React from 'react'
 import _ from 'lodash'
-import { Panel, Row, Col } from 'react-bootstrap';
+import {
+  Col,
+  Panel,
+  Row,
+} from 'react-bootstrap'
 
-import { roomWcifFromId, activityCodeListFromWcif, venueWcifFromRoomId } from 'wca/wcif-utils'
-import { setupConvertHandlers, setupCalendarHandlers, singleSelectLastEvent, addActivityToCalendar, removeEventFromCalendar } from './calendar-utils'
-
+import {
+  activityCodeListFromWcif,
+  roomWcifFromId,
+  venueWcifFromRoomId,
+} from 'wca/wcif-utils'
+import {
+  addActivityToCalendar,
+  removeEventFromCalendar,
+  setupCalendarHandlers,
+  setupConvertHandlers,
+  singleSelectLastEvent,
+} from './calendar-utils'
 import { ActivityPicker } from './ActivityPicker'
 import { keyboardHandlers } from './keyboard-handlers'
 import { ScheduleToolbar, calendarOptionsInfo } from './ScheduleToolbar'
 import { CustomActivityModal, modeDetails } from './CustomActivity'
 import { DropArea } from './DropArea'
 import { ContextualMenu, contextualMenuSelector } from './ContextualMenu.jsx'
-
 import { scheduleElementSelector, generateCalendar } from './fullcalendar'
-
-import { timezoneData, friendlyTimezoneName } from 'wca/timezoneData.js.erb';
+import { timezoneData, friendlyTimezoneName } from 'wca/timezoneData.js.erb'
 
 
 

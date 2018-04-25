@@ -1,6 +1,10 @@
 import { rootRender } from 'edit-schedule'
 import { newActivityId, defaultDurationFromActivityCode } from '../utils'
-import { venueWcifFromRoomId, roomWcifFromId, activityIndexInArray } from 'wca/wcif-utils'
+import {
+  activityIndexInArray,
+  roomWcifFromId,
+  venueWcifFromRoomId,
+} from 'wca/wcif-utils'
 import { scheduleElementSelector } from './fullcalendar'
 
 const tzConverterHandlers = {

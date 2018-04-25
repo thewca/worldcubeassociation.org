@@ -1,6 +1,10 @@
 import React from 'react'
 import { Button, Modal } from 'react-bootstrap'
-import { momentToIso, addActivityToCalendar, eventModifiedInCalendar } from './calendar-utils'
+import {
+  addActivityToCalendar,
+  eventModifiedInCalendar,
+  momentToIso,
+} from './calendar-utils'
 import { scheduleElementSelector } from './fullcalendar'
 
 export const commonActivityCodes = {

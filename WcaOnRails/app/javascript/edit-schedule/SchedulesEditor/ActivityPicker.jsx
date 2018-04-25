@@ -1,5 +1,11 @@
 import React from 'react'
-import { Panel, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import {
+  Col,
+  OverlayTrigger,
+  Panel,
+  Row,
+  Tooltip,
+} from 'react-bootstrap'
 import cn from 'classnames'
 import events from 'wca/events.js.erb'
 import { parseActivityCode, roundIdToString, activityIndexInArray } from 'wca/wcif-utils'
@@ -186,12 +192,12 @@ export class ActivityPicker extends React.Component {
               <ActivityPickerLine key={value.id} selectedLine={index == selectedY} eventWcif={value} usedActivityCodeList={usedActivityCodeList} selectedX={selectedX} />
             );
           })}
-          <div className="col-xs-12">
+          <Col xs={12}>
             <p>
               Want to add a custom activity such as lunch or registration?
               Click and select a timeframe on the calendar!
             </p>
-          </div>
+          </Col>
         </Panel.Body>
       </Panel>
     );
@@ -202,13 +208,13 @@ function ActivityPickerLine({ eventWcif, usedActivityCodeList, selectedLine, sel
   let event = events.byId[eventWcif.id];
 
   return (
-    <div className="col-xs-12 event-picker-line">
-      <div className="row">
-        <div className="col-xs-12 col-md-3 col-lg-2 activity-icon">
+    <Col xs={12} className="event-picker-line">
+      <Row>
+        <Col xs={12} md={3} lg={2} className="activity-icon">
           <span className={cn("cubing-icon", `event-${event.id}`)}></span>
-        </div>
-        <div className="col-xs-12 col-md-9 col-lg-10">
-          <div className="row">
+        </Col>
+        <Col xs={12} md={9} lg={10}>
+          <Row>
             {eventWcif.rounds.map((value, index) => {
               let activities = (
                 <ActivitiesForRound key={value.id}
@@ -226,10 +232,10 @@ function ActivityPickerLine({ eventWcif, usedActivityCodeList, selectedLine, sel
               }
               return activities;
             })}
-          </div>
-        </div>
-      </div>
-    </div>
+          </Row>
+        </Col>
+      </Row>
+    </Col>
   );
 }
 

@@ -1,11 +1,16 @@
 import React from 'react'
 import { rootRender } from 'edit-schedule'
-import { toMicrodegrees, toDegrees, newRoomId, convertVenueActivitiesToVenueTimezone } from '../utils'
+import {
+  convertVenueActivitiesToVenueTimezone,
+  newRoomId,
+  toMicrodegrees,
+  toDegrees,
+} from '../utils'
 import { EditRoom } from './EditRoom'
 import { compose, withProps } from "recompose"
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-import { Panel, Row, Col, Clearfix } from 'react-bootstrap';
-import { timezoneData } from 'wca/timezoneData.js.erb';
+import { Panel, Row, Col, Clearfix } from 'react-bootstrap'
+import { timezoneData } from 'wca/timezoneData.js.erb'
 
 export class EditVenue extends React.Component {
 

@@ -1,5 +1,13 @@
 import React from 'react'
-import { Button, ButtonToolbar, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap';
+import {
+  Button,
+  ButtonToolbar,
+  Col,
+  OverlayTrigger,
+  Popover,
+  Row,
+  Tooltip,
+} from 'react-bootstrap'
 import { scheduleElementSelector } from './fullcalendar'
 
 export class ScheduleToolbar extends React.Component {
@@ -135,20 +143,20 @@ export const calendarOptionsInfo = {
 const CalendarSettingsOption = ({selected, optionName, handlePropChange}) => {
   let optionProps = calendarOptionsInfo[optionName];
   return (
-    <div className="col-xs-12">
-      <div className="row">
-        <div className="col-xs-6 setting-label">
+    <Col xs={12}>
+      <Row>
+        <Col xs={6} className="setting-label">
           {optionProps.label}
-        </div>
-        <div className="col-xs-6">
+        </Col>
+        <Col xs={6}>
           <select className="form-control" value={selected} onChange={e => handlePropChange(optionName, e)}>
             {_.map(optionProps.options, function(value, key) {
               return (<option key={value} value={value}>{key}</option>)
             })}
           </select>
-        </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Col>
   );
 }
 
@@ -165,7 +173,7 @@ const CalendarSettings = ({ currentSettings, handlePropChange, ...props}) => {
 // for why we pass down ...props
   return (
     <Popover id="calendar-settings-popover" title="Calendar settings" {...props} >
-      <div className="row">
+      <Row>
         {Object.keys(calendarOptionsInfo).map(function(optionName) {
           return (
             <CalendarSettingsOption optionName={optionName}
@@ -175,7 +183,7 @@ const CalendarSettings = ({ currentSettings, handlePropChange, ...props}) => {
             />
           );
         })}
-      </div>
+      </Row>
     </Popover>
   );
 }

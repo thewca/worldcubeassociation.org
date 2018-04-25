@@ -5,7 +5,14 @@ import { calendarOptionsInfo } from './ScheduleToolbar'
 import { commonActivityCodes } from './CustomActivity'
 import { dropAreaMouseMoveHandler, dropAreaSelector, isEventOverDropArea } from './DropArea'
 import { fullCalendarDefaultOptions } from 'wca/fullcalendar'
-import { activityToFcEvent, fcEventToActivity, singleSelectEvent, addActivityToCalendar, eventModifiedInCalendar, removeEventFromCalendar } from './calendar-utils'
+import {
+  activityToFcEvent,
+  addActivityToCalendar,
+  eventModifiedInCalendar,
+  fcEventToActivity,
+  removeEventFromCalendar,
+  singleSelectEvent,
+} from './calendar-utils'
 import { defaultDurationFromActivityCode } from '../utils'
 
 export const scheduleElementSelector = "#schedule-calendar";
