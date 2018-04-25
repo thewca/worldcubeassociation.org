@@ -885,8 +885,19 @@ class Competition < ApplicationRecord
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
-  # TODO: enable partial WCIF rendering
   def to_wcif
+    {
+      "formatVersion" => "1.0",
+      "id" => id,
+      "name" => name,
+      "shortName" => cellName,
+      "persons" => persons_wcif,
+      "events" => events_wcif,
+      "schedule" => schedule_wcif,
+    }
+  end
+
+  def persons_wcif
     managers = self.managers
     includes_associations = [
       :events,
@@ -901,18 +912,17 @@ class Competition < ApplicationRecord
     # Note: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
     persons_wcif += managers.map { |m| m.to_wcif(self) }
+  end
+
+  def events_wcif
+    competition_events.map(&:to_wcif)
+  end
+
+  def schedule_wcif
     {
-      "formatVersion" => "1.0",
-      "id" => id,
-      "name" => name,
-      "shortName" => cellName,
-      "persons" => persons_wcif,
-      "events" => competition_events.map(&:to_wcif),
-      "schedule" => {
-        "startDate" => start_date.to_s,
-        "numberOfDays" => number_of_days,
-        "venues" => competition_venues.map(&:to_wcif),
-      },
+      "startDate" => start_date.to_s,
+      "numberOfDays" => number_of_days,
+      "venues" => competition_venues.map(&:to_wcif),
     }
   end
 

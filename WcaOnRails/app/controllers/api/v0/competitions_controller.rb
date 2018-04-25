@@ -29,6 +29,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       :delegates,
       :organizers,
       { competition_events: [rounds: :competition_event] },
+      { competition_venues: { venue_rooms: [ schedule_activities: :child_activities ] } },
     ]
     competition = competition_from_params(includes_associations)
     require_can_manage!(competition)

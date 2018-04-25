@@ -13,8 +13,8 @@
         lat: <%= @competition.latitude.to_json.html_safe %>,
         lng: <%= @competition.longitude.to_json.html_safe %>,
         countryZones: <%= @competition.country_zones.to_json.html_safe %>,
-        scheduleWcif: <%= @competition.to_wcif["schedule"].to_json.html_safe %>,
-        eventsWcif: <%= @competition.competition_events.map(&:to_wcif).to_json.html_safe %>,
+        scheduleWcif: <%= @competition.schedule_wcif.to_json.html_safe %>,
+        eventsWcif: <%= @competition.events_wcif.to_json.html_safe %>,
       }
       // FIXME: here we can simply pass the WCIF, omitting PB for faster rendering?
       wca.initializeScheduleForm(

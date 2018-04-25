@@ -11,7 +11,7 @@
         wca.initializeEventsForm(
           <%= @competition.id.to_json.html_safe %>,
           <%= current_user.can_add_and_remove_events?(@competition).to_json.html_safe %>,
-          <%= @competition.competition_events.map(&:to_wcif).to_json.html_safe %>
+          <%= @competition.events_wcif.to_json.html_safe %>
         );
       });
     </script>
