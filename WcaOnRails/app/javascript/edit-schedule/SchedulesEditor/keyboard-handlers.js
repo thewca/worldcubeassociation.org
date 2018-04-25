@@ -120,7 +120,6 @@ export function editScheduleKeyboardHandler(event, activityPicker) {
       break;
     default:
       return true;
-      break;
   }
   return false;
 }

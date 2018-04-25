@@ -14,6 +14,7 @@
     }
     .panel-venue {
       @extend .col-xs-12, .col-md-6, .col-lg-4;
+      margin-bottom: 15px;
       .new-venue-link {
         width: 100%;
       }
@@ -25,7 +26,6 @@
           margin-bottom: 10px;
         }
       }
-      margin-bottom: 15px;
     }
   }
 
@@ -36,7 +36,7 @@
       }
       &.affix-bottom {
         position: absolute;
-        bottom: auto !important;
+        bottom: auto;
       }
       .selected-activity {
         border: 2px solid #791f82;
@@ -80,23 +80,26 @@
           background-color: transparent;
         }
 
-        .fc-helper-container > .fc-event, .fc-event.selected-fc-event {
+        .fc-helper-container > .fc-event,
+        .fc-event.selected-fc-event {
           border: 2px solid #791f82;
         }
+
         .fc-time-grid-event.fc-short .fc-time span {
         }
 
-        .fc-time-grid-event.fc-short .fc-time:before {
+        .fc-time-grid-event.fc-short .fc-time::before {
         }
+
         .fc-event {
           &.fc-short > .fc-content {
             // By default for vertically short events FC don't display the full time
             // But we have some width to do so
             .fc-time {
-              &:before {
+              &::before {
                 content: "";
               }
-              &:after {
+              &::after {
                 content: ":\000A0";
               }
               span {
@@ -180,16 +183,19 @@
   top: 100px;
   left: 100px;
   display: block;
+  &.hide-element {
+    display: none;
+  }
   &.delete-only {
     .edit-option {
       display: none;
     }
   }
   a {
+    padding: 3px 20px;
     i {
       margin-right: 10px;
     }
-    padding: 3px 20px;
   }
 }
 
@@ -201,7 +207,7 @@
       text-align: right;
       padding-right: 0;
       padding-left: 5px;
-      &:after {
+      &::after {
         content: ":";
       }
     }
@@ -214,8 +220,4 @@
 
 .panel-info > .heading-as-link:hover {
   @extend a.list-group-item-info:hover;
-}
-
-.hide-element {
-  display: none !important;
 }

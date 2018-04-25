@@ -161,7 +161,7 @@ export function activityToFcEvent(eventData) {
     eventData.end = isoToMoment(eventData.endTime);
   }
   return eventData;
-};
+}
 
 export function fcEventToActivity(event) {
   // Build a cleaned up activity from a FullCalendar event

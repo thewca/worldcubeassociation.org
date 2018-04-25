@@ -530,19 +530,17 @@ class Competition < ApplicationRecord
   end
 
   def country_zones
-    begin
-      timezones = {}
-      ActiveSupport::TimeZone.country_zones(country.iso2).each do |tz|
-        timezones[tz.name] = tz.tzinfo.name
-      end
-      timezones
-    rescue TZInfo::InvalidCountryCode
-      # This can occur for non real country *and* XK!
-      # FIXME what to provide for XA, XE, XM, XS?
-      {
-        "London" => "Europe/London",
-      }
+    timezones = {}
+    ActiveSupport::TimeZone.country_zones(country.iso2).each do |tz|
+      timezones[tz.name] = tz.tzinfo.name
     end
+    timezones
+  rescue TZInfo::InvalidCountryCode
+    # This can occur for non real country *and* XK!
+    # FIXME what to provide for XA, XE, XM, XS?
+    {
+      "London" => "Europe/London",
+    }
   end
 
   private def compute_coordinates
@@ -911,7 +909,7 @@ class Competition < ApplicationRecord
     end
     # Note: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
-    persons_wcif += managers.map { |m| m.to_wcif(self) }
+    persons_wcif + managers.map { |m| m.to_wcif(self) }
   end
 
   def events_wcif

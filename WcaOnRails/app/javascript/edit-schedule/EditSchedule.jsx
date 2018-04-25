@@ -86,11 +86,14 @@ export default class EditSchedule extends React.Component {
 
     let defaultActivePanel = isThereAnyRoom ? "2" : "1";
 
-    let unsavedChanges = <UnsavedChangesAlert
+    let unsavedChanges = null;
+    if (this.unsavedChanges()) {
+      unsavedChanges = <UnsavedChangesAlert
                            unsavedChanges={this.unsavedChanges()}
                            actionHandler={this.save}
                            saving={this.state.saving}
-                         />
+                       />
+    }
 
     return (
       <div>
@@ -137,19 +140,17 @@ export default class EditSchedule extends React.Component {
   }
 }
 
-const UnsavedChangesAlert = ({ unsavedChanges, actionHandler, saving }) => {
+const UnsavedChangesAlert = ({ actionHandler, saving }) => {
   return (
-    <div className={cn({"hide-element": !unsavedChanges})}>
-      <Alert bsStyle="info">
-        You have unsaved changes. Don't forget to{" "}
-        <button onClick={actionHandler}
-          disabled={saving}
-          className={cn("btn", "btn-default btn-primary", { saving: saving })}
-        >
-          save your changes!
-        </button>
-      </Alert>
-    </div>
+    <Alert bsStyle="info">
+      You have unsaved changes. Don't forget to{" "}
+      <button onClick={actionHandler}
+        disabled={saving}
+        className={cn("btn", "btn-default btn-primary", { saving: saving })}
+      >
+        save your changes!
+      </button>
+    </Alert>
   );
 }
 
