@@ -1460,6 +1460,12 @@ id:
     please_fix_profile_html: >-
       Untuk mendaftar %{comp} ini, Anda harus memperbaiki masalah pada
       %{profile} Anda:
+    #original_hash: f22ef22
+    registration_full: >-
+      Batas kompetitor untuk kompetisi ini adalah %{competitor_limit} orang dan
+      batas ini telah tercapai. Jika Anda mendaftar, pendaftaran Anda akan
+      ditempatkan pada daftar tunggu. Pendaftaran Anda mungkin tidak disetujui
+      kecuali ada tempat kosong.
     #original_hash: 855ca9c
     can_register: 'Anda dapat mendaftar pada %{comp} di bawah ini.'
     #original_hash: 4167ed7
@@ -2110,13 +2116,6 @@ id:
             WCA</a>. Jika Bahasa Inggris bukan merupakan bahasa utama Anda dan
             Anda kesulitan untuk mengerti regulasi tersebut, baca <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>Terjemahannya</a>.
-          #original_hash: da99893
-          '2': >-
-            Sebagai tambahan, kami menyarankan Anda untuk melihat <a
-            target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>Tutorial menjadi
-            kompetitior dari Cubing USA</a> yang dapat memberikan beberapa tips
-            untuk pendatang baru.
       '5':
         #original_hash: 3b657aa
         title: Bagaimana cara kampung halaman saya memiliki kompetisi WCA?
@@ -2141,15 +2140,11 @@ id:
             membuat kompetisi didukung secara resmi oleh WCA. Delegate WCA akan
             membantu memandu panitia tentang bagaimana cara sukses mengadakan
             kompetisi.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Lihat <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>Pedoman
-            Panitia Kompetisi WCA</a> dan <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>Panduan Kompetisi
-            CubingUSA</a> untuk mengetahui informasi lebih lanjut. (Setiap
-            konflik antara informasi yang diberikan dalam informasi tambahan dan
-            Regulasi WCA digantikan oleh Regulasi WCA.)
+            Panitia Kompetisi WCA</a> untuk mengetahui informasi lebih lanjut.
       '6':
         #original_hash: 8005a61
         title: Apa fungsi akun WCA? Apa perbedaan antara akun WCA dan profil WCA?
@@ -2410,6 +2405,8 @@ id:
     logo: Pemakaian Logo WCA
     #original_hash: 920a98f
     proximity_policy: Kebijakan Kedekatan Kompetisi WCA
+    #original_hash: f484584
+    competition_name_policy: Kebijakan Nama Kompetisi WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegate WCA
