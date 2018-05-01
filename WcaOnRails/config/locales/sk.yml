@@ -146,22 +146,22 @@ sk:
   cutoff:
     #original_hash: cf458e7
     time:
-      other: '%{count} pokusov na dostanie < %{time}'
-      few: '-'
-      one: '%{count} pokus na dostanie < %{time}'
       zero: '-'
+      one: '%{count} pokus na dostanie < %{time}'
+      few: '-'
+      other: '%{count} pokusov na dostanie < %{time}'
     #original_hash: b49d930
     moves:
-      other: '%{count} pokusov na dostanie < %{moves} ťahov'
-      few: '-'
-      one: '%{count} pokus na dostanie < %{moves} ťahov'
       zero: '-'
+      one: '%{count} pokus na dostanie < %{moves} ťahov'
+      few: '-'
+      other: '%{count} pokusov na dostanie < %{moves} ťahov'
     #original_hash: eba1b97
     points:
-      other: '%{count} pokusov na dostanie > %{points} bodov'
-      few: '-'
-      one: '%{count} pokus na dostanie > %{points} bodov'
       zero: '-'
+      one: '%{count} pokus na dostanie > %{points} bodov'
+      few: '-'
+      other: '%{count} pokusov na dostanie > %{points} bodov'
   time_limit:
     cumulative:
       #original_hash: c01adfa
@@ -264,8 +264,8 @@ sk:
         country_iso2: Občianstvo
         #original_hash: ab58155
         dob: Dátum narodenia
-        #original_hash: ab58155
-        dob_verification: Dátum narodenia
+        #original_hash: 7636bbc
+        dob_verification: Váš Dátum narodenia
         #original_hash: 8a754c6
         gender: Pohlavie
         #original_hash: 84add5b
@@ -367,6 +367,8 @@ sk:
         enable_donations: Chcem povoliť donaty dodatočne ku registračným poplatkom
         #original_hash: 4baf44b
         championship_type: Typ šampionátu
+        #original_hash: ff722f0
+        registration_requirements: Požiadavky na registráciu
       registration:
         #original_hash: 3c23a67
         guests: Hostia
@@ -437,6 +439,19 @@ sk:
       vote:
         #original_hash: 153d7a5
         comment: Komentáre
+      incident:
+        #original_hash: 768e0c1
+        title: Názov
+        #original_hash: cf66d44
+        private_description: Popis (súkromný)
+        #original_hash: 1171d85
+        private_wrc_decision: Rozhodnutie (súkromné)
+        #original_hash: 1c2ed61
+        public_summary: Súhrn (verejný)
+        #original_hash: 848eed0
+        tags: Tagy
+        #original_hash: 861e459
+        competition_id: Stalo sa počas
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Súťaž
@@ -470,8 +485,6 @@ sk:
         delegate: Delegát
         #original_hash: d463c23
         senior_delegate: Delegát-senior
-        #original_hash: 660ee15
-        board_member: Člen Predstavenstva
     person:
       gender:
         #original_hash: 3f3a489
@@ -509,6 +522,27 @@ sk:
       #original_hash: d70e9cb
       default_message: 'Prosím, pozrite si problémy uvedené nižšie:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: 'Nezabudnite, že toto je verejné, čiže to musíte vyplniť v angličtine!'
+        #original_hash: 67f2a1a
+        private_description: >-
+          Popis incidentu, ktorý bude videný len Delegátmi. Prosím, vyplňte toto
+          v angičtine.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          Finálne rozhodnute WRC obsahujúce súkromné detaily. Prosím, vyplňte
+          toto v angličtine.
+        #original_hash: 3de5729
+        public_summary: >-
+          Celkový popis incidentu a jeho rozhodnutia, bude videný verejne.
+          Prosím, vyplňte toto v angličtine.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Napíšte váš dátum narodenia vo formáte YYYY-MM-DD
@@ -587,11 +621,6 @@ sk:
         external_website: Webová stránka súťaže. Musí mať pravý http(s) url.
         #original_hash: 9965635
         registration_open: 'Poznámka: Otvorenie a zatvorenie súťaže sú v čase UTC.'
-        #original_hash: 36963bc
-        remarks: >-
-          Nejaké doplnkové informácie ktoré chcete napísať. Napríklad, dôvod,
-          prečo bola táto súťaž požadovaná menej ako jeden mesiac dopredu, ak
-          použiteľné. Vyplňte to prosím v angličtine.
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -1129,10 +1158,6 @@ sk:
         Nemáme zaznamenané vaše meno pre toto WCA ID. Prosím, pošlite email na
         <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
         Výsledkový Tím</a>  pre riešenie problému.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Nemôžeš rezignovať zo svojej pozície člena predstavenstva! Nájdi
-        nejakého iného člena predstavenstva, aby ťa ''vyhodil''.
       #original_hash: d02c03b
       avatar_requires_wca_id: potrebuje mať pridelené WCA ID
     successes:
@@ -1248,17 +1273,13 @@ sk:
         mail_subject: 'Zaregistrovali ste sa na %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Práve ste sa zaregistrovali na %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Vaša registrácia je súčasne na čakacom liste, ktorý aktuálne má
-          %{n_total} %{people} na ňom.
-        #original_hash: 5dd5905
+        #original_hash: 826045f
         approval_info_html: >-
           Dostanete email keď sa odsúhlasí vaša registrácia. Prosím berte na
-          vedomie že súťaže nie sú automaticky odsúhlasené. Keď chcete vedieť
-          kritéria na prijatie, navštívte webovú stránku súťaže alebo
-          kontaktujte organizátorov. Tu si môžete pozrieť status vašej
-          registrácie %{here}.
+          vedomie že súťaže nie sú automaticky odsúhlasené. Je viac krokov pri
+          schvaľovaní registrácie. Keď chcete vedieť kritéria na prijatie,
+          navštívte webovú stránku súťaže alebo kontaktujte organizátorov. Tu si
+          môžete pozrieť status vašej registrácie %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Vaša registrácia na %{comp_name} bola akceptovaná'
@@ -1290,10 +1311,10 @@ sk:
         causes:
           #original_hash: 978944c
           missing_info: Neudali ste všetky potrebné detaily
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Neurobili ste všetky registračné kritéria(napríklad platba vstupu
-            predom)
+            predom alebo splnenie kvalifikačných časov)
           #original_hash: 1e225f0
           registrations_full: 'Limit súťažiacich sa naplnil, nie sú žiadne voľné miesta'
           #original_hash: 0d4cce9
@@ -2039,15 +2060,11 @@ sk:
             href='https://www.worldcubeassociation.org/delegates'>WCA
             Delegáta</a>. Prítomnosť delegáta je potrebná kvôli oficiálnemu
             schváleniu súťaže WCA. WCA delegát pomôže viesť organizáciu súťaže.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Navštívte <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>Súťažné
-            Organizačné Pokyny WCA</a> a <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>Súťažnú príručku
-            CubingUSA</a> pre viac informácii. (Možný konflikt medzi informáciou
-            na týchto doplnkových príručkách a WCA Reguláciami je dominovaný WCA
-            Reguláciami.)
+            Organizačné Pokyny WCA</a> pre viac informácii.
       '6':
         #original_hash: 8005a61
         title: Aký účel majú WCA účty? Aký je rozdiel medzi WCA účtom a WCA profilom?
@@ -2083,6 +2100,17 @@ sk:
         content:
           #original_hash: 07bb6ec
           '1': '%{current_user_claim}'
+      '9':
+        #original_hash: 7a4a71d
+        title: >-
+          Som zaregistrovaný na súťaž a chcem sa prihlásiť na ďaľší event, čo
+          mám robiť? Môžem si priviesť hostí?
+        content:
+          #original_hash: 957487d
+          '1': >-
+            Prosím, kontaktujte organizátora. Môžete nájsť kontaktné informácie
+            na stránke suťaže. Ak si nie ste istí v tom, kde ju nájsť, pozrite
+            si <a href='/competitions'>zoznam súťaží</a>.
       results:
         #original_hash: 9aae576
         title: Kedy budú publikované výsledky WCA súťaže na stránku WCA?
@@ -2105,6 +2133,51 @@ sk:
             Dodatočne, ak máte pripojený váš WCA účet s vaším WCA ID (pozrite
             nižšie), môžete umožniť emailové notifikácie o vaších výsledkoch <a
             href='%{preferences_edit_path}'>here</a>.
+      regulations1:
+        #original_hash: 2951eb6
+        title: Spĺňa môj hlavolam podmienky?
+        content:
+          #original_hash: 5ac78e4
+          '1': >-
+            Môžete nájsť pravidlá ohľadom hlavolamov v <a
+            href='https://www.worldcubeassociation.org/regulations/#3'>Článku
+            3</a>. Všetky kocky musia byť schválené Delegátom WCA. Ak si nie ste
+            istí, pýtajte sa Delegáta na vašej súťaži. Preprípad si vezmite
+            náhradný hlavolam (kocku) v prípade, že by ste ho nemohli použiť.
+      regulations2:
+        #original_hash: 48f1234
+        title: Môžem použiť magnetizovanú kocku na oficiálnej súťaži WCA?
+        content:
+          #original_hash: 024ce81
+          '1': >-
+            Môžete použiť magnetické kocky pokiaľ spĺňajú <a target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/'>Pravidlá
+            WCA</a>. Prosím, dávajte si hlavne pozor na <a
+            href='https://www.worldcubeassociation.org/regulations/#3h'>Pravidlo
+            3h</a>.
+      regulations3:
+        #original_hash: c7460a5
+        title: Stratil som stredné viečko z môjho hlavolamu. Môžem ho stále používať?
+        content:
+          #original_hash: 0d76323
+          '1': >-
+            Nemôžete použiť tento hlavolam. Hlavolamy nemôžu mať žiadne
+            poškodenia alebo iné odlišnosti, ktoré by sa závažne líšili od inej
+            súčasti hlavolamu (<a
+            href='https://www.worldcubeassociation.org/regulations/#3j'>Pravidlo
+            3j</a>).
+      regulations4:
+        #original_hash: 43f9da8
+        title: >-
+          Koľko musím mať rokov na to, aby som sa mohol zaregistrovať na súťaž
+          WCA?
+        content:
+          #original_hash: 984704a
+          '1': >-
+            Nie je stanovený minimálny vek. Avšak mali by ste sa spýtať vašich
+            rodičov pred registrovaním (<a
+            href='https://www.worldcubeassociation.org/regulations/#2b'>Pravidlo
+            2b</a>).
   about:
     #original_hash: 9ac918a
     title: O WCA
@@ -2134,44 +2207,97 @@ sk:
     structure:
       #original_hash: 9482c5d
       title: Štruktúra
-      #original_hash: d855b50
-      board_html: >-
-        WCA je riadená <strong>Predstavenstvom WCA</strong>, pozostávajúcim z
-        týchto členov:
       #original_hash: b0c72a9
       committees: 'Tieto výbory sú zodpovedné za operačné aktivity WCA:'
       wdc:
+        #original_hash: c97077a
+        name: Výbor pre disciplínu WCA
         #original_hash: 286fdf8
         description: >-
           Tento výbor pomáha Predstavenstvu WCA v špeciálnych prípadoch, ako
           údajné poškodenie WCA Regulácii, a môže byť kontaktovaný členmi WCA v
           prípade dôležitých vecí ohľadom WCA súťaží.
       wrc:
+        #original_hash: 3da1e85
+        name: Výbor pre pravidlá WCA
         #original_hash: 13ada5b
         description: Tento výbor je zodpovedný za manažovanie WCA Regulácii.
-      #original_hash: f2ceade
+      wrt:
+        #original_hash: 67be768
+        name: Výsledkový tím WCA
+        #original_hash: 439ffae
+        description: Tento tím je zodpovedný za spravovanie všetkých výsledkov zo súťaží.
+      wst:
+        #original_hash: a14bc62
+        name: Softvérový tím WCA
+        #original_hash: ec961e4
+        description: >-
+          Tento tím je zodpovedný za spravovanie softvéru WCA(stránka,
+          scrambly,...)
+      wct:
+        #original_hash: 63a2388
+        name: Komunikačný tím WCA
+        #original_hash: 50fd091
+        description: >-
+          Komunikačný tím WCA (WCT) má rolu podporovať komunikáciu medzi WCA,
+          komunitou a širokou verejnosťou. Komnikácia WCA by sa mala zúčastňovať
+          na plnení Cieľu WCA a podporovať pozitívnu kultúru priateľstva,
+          transparencie, inkluzivnosti, otvorenosti a zodpovednosti.
+      wfc:
+        #original_hash: 9cb13de
+        name: Finančný výbor WCA
+        #original_hash: 2d4807e
+        description: Tento tím je zodpovedný za spravovanie peňazí WCA.
+      wec:
+        #original_hash: 83bd1d0
+        name: Etický výbor WCA
+        #original_hash: c304d57
+        description: >-
+          Tento výbor má rolu zaistiť to, aby všetky procedúry zamestnancov WCA
+          a vonkajších zamestnancov dodržiavajú Etický kód a vedú vyšetrovanie,
+          ak nejaká časť ich správania sa nezhoduje so správaním určeným v
+          Etickom kóde.
+      wqac:
+        #original_hash: 8f32116
+        name: Výbor zaistenia kvality WCA
+        #original_hash: 0171b3b
+        description: >-
+          Tento výbor má na starosti podporu a propagovanie pokračujúceho
+          zlepšovania kvality v WCA, ako aj celosvetové aplikovanie
+          kvalitatívnych štandardov pre zabezpečenie vysokej kvality procesov,
+          zamestnancov WCA, Regionálnych organizácií, Organizátorov súťaží a
+          Pomocníkov na súťažiach.
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>WCA Delegáti</strong> sú členmi WCA, ktorí sú zodpovední za
-        uisťovanie, že všetky WCA súťaže prebiehajú podľa misie, regulácí a
-        poslaním WCA. WCA ich rozďeluje medzi <strong>WCA Senior
-        Delegáti</strong>, <strong>WCA Delegáti</strong> and <strong>WCA
-        Kandidujúci Delegáti</strong>%{see_link}. Navyše k povinnostiam WCA
-        Delegáta, WCA Senior Delegát je zodpovedný za manažovanie Delegátov v
-        jeho oblasti a taktiež môže byť kontaktovaný komunitou pre regionálne
-        záležitosti. Noví Delegáti sú zozačiatku označení ako WCA Kandidujúci
-        Delegáti a musia ukázať, že sú schopní viesť súťaže úspešne predtým, než
-        budú označení ako WCA Delegáti.
+        <strong>WCA Delegát</strong> je rola zakódovaná v Pravidlách WCA. Má za
+        úlohu dohliadanie na súťažiach a to, aby všetky WCA súťaže prebiehali
+        podľa misie, regulácií a poslania WCA. WCA ich rozďeluje medzi
+        <strong>WCA Senior Delegáti</strong>, <strong>WCA Delegáti</strong> and
+        <strong>WCA Kandidujúci Delegáti</strong>%{see_link}.</p> <p> Navyše k
+        povinnostiam WCA Delegáta, WCA Senior Delegát je zodpovedný za
+        manažovanie Delegátov v jeho oblasti a taktiež môže byť kontaktovaný
+        komunitou pre regionálne záležitosti.</p> <p> Noví Delegáti sú
+        zozačiatku označení ako WCA Kandidujúci Delegáti a musia ukázať, že sú
+        schopní viesť súťaže úspešne predtým, než budú označení ako WCA
+        Delegáti.</p>
       #original_hash: 27d18ac
       see_link_html: '(pozri %{link})'
       #original_hash: 5b01fcc
       members_html: >-
         Všetci súťažiaci budú automaticky zaradení ako <strong>členovia</strong>
         WCA v ich prvej WCA súťaži.
+  documents:
+    #original_hash: 687c828
+    title: Dokumenty
+    #original_hash: 9855f80
+    bylaws: ByLaws
+    #original_hash: 092f99e
+    minutes: Minúty
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegáti
-    #original_hash: 0a89b0f
-    acknowledges: 'WCA priznáva týchto členov ako delegátov pre oficiálne súťaže WCA:'
+    #original_hash: 77b819c
+    acknowledges: 'WCA priznáva týchto členov ako delegátov:'
     table:
       #original_hash: 709a232
       name: Meno
@@ -2256,13 +2382,22 @@ sk:
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Výbory a Tímy</u>
     board:
-      #original_hash: 90fcc48
-      name_html: Predstavenstvo WCA
+      #original_hash: 3a8b1d8
+      info_html: >-
+        WCA je riadená Predstavenstvom WCA. Predstavenstvo je zodpovedné za
+        všetky skúmania a celkovo za WCA. Všetky ohlásenia oficiálnych súťaží
+        musia mať povolenie Predstavenstva WCA.
+    wct:
+      #original_hash: 846684d
+      info_html: >-
+        WCT má na starosti dohliadanie a podporovanie komunikácie medzi WCA,
+        komunitou a širokou verejnosťou. Ak máte otázky ohľadom WCA, kontaktujte
+        ich.
   score_tools:
     #original_hash: ea9d41d
     title: WCA náradie Zaznamenávania Skóre
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         WCA vysoko odporúča používanie <a href="http://cubecomps.com">Cube
         Comps</a> pred a počas súťaže. Cube Comps je online systém so skórovaním
@@ -2298,13 +2433,10 @@ sk:
         3D verzia loga, nadizajnovaná Vu Ming Tanom z Vietnamu: <a
         href="/files/WCALogo3D.png">PNG Verziu</a> (2.1 MB), <a
         href="/files/WCALogo3Dsmall.png">malá PNG verzia</a> (0.25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Všetci organizátori WCA súťaží môžu použiť WCA Logo pre webovú stránku,
-        oblečenie, darčeky alebo dekorácie iba pre oficiálne súťaže WCA. <br
-        />Pre všetky iné osoby alebo účely použitia WCA loga, potrebujete
-        povolenie od <a
-        href="mailto:board@worldcubeassociation.org">Predstavenstva WCA</a>.
+        Povolené používanie loga WCA je popísané zásadami Používania WCA Loga,
+        ktoré sa nachádzajú na <a href="/documents">Stránke dokumentov WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: Asistent WCA Workbooku
