@@ -1518,6 +1518,12 @@ pl:
     please_fix_profile_html: >-
       W celu zarejestrowania się na %{comp}, musisz rozwiązać następujące
       problemy z twoim %{profile}:
+    #original_hash: f22ef22
+    registration_full: >-
+      Limit zawodników dla tych zawodów, który wynosi %{competitor_limit},
+      został osiągnięty. Jeżeli się zarejestrujesz, twoja rejestracja zostanie
+      umieszczona na liście oczekujących i może nie zostać zaakceptowana, dopóki
+      nie zwolni się miejsce.
     #original_hash: 855ca9c
     can_register: 'Możesz się zarejestrować na %{comp} poniżej.'
     #original_hash: 4167ed7
@@ -2178,12 +2184,6 @@ pl:
             WCA</a>. Jeżeli angielski nie jest twoim językiem ojczystym i masz
             problem ze zrozumieniem tego dokumentu, prosimy o przeczytanie <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>Tłumaczeń</a>.
-          #original_hash: da99893
-          '2': >-
-            Dodatkowo pragniemy polecić spojrzenie na <a target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>kurs zawodnika
-            stworzony przez Cubing USA</a>, który daje kilka bardzo dobrych
-            wskazówek dla nowicjuszy.
       '5':
         #original_hash: 3b657aa
         title: W jaki sposób mogę mieć zawody WCA zorganizowane w swoim mieście?
@@ -2208,15 +2208,12 @@ pl:
             WCA</a>. Nadzór WCA jest wymagany, w celu uczynienia zawodów
             oficjalnie zatwierdzonymi przez organizację. Delegat pomoże w
             pomyślnej organizacji zawodów.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Spójrz na <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>Wytyczne
-            Dla Organizatora Zawodów WCA</a> oraz <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>ten poradnik</a> w celu
-            uzyskania dalszych informacji. (W przypadku jakiegokolwiek konfliktu
-            pomiędzy informacjami prezentowanymi w tym dodatkowym źródle wiedzy
-            a regulaminem WCA, regulamin ma pierwszeństwo).
+            Dla Organizatora Zawodów WCA</a> w celu uzyskania dalszych
+            informacji.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2478,6 +2475,8 @@ pl:
     logo: Użycie Logo WCA
     #original_hash: 920a98f
     proximity_policy: Polityka Odległości Zawodów WCA
+    #original_hash: f484584
+    competition_name_policy: Polityka Nazw Zawodów WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegaci WCA
