@@ -193,6 +193,14 @@
                     <li><%= guideline %></li>
                   <% end %>
                 </ul>
+                <% if @user.any_kind_of_delegate? %>
+                  <br /><strong><%= t('.delegate_avatar_guidelines.title') %></strong>
+                  <ul>
+                    <% t('.delegate_avatar_guidelines.paragraphs').values.each do |guideline| %>
+                      <li><%= guideline %></li>
+                    <% end %>
+                  </ul>
+                <% end %>
               </div>
               <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
               <%= f.hidden_field :pending_avatar_cache %>
