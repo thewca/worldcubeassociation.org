@@ -1156,6 +1156,25 @@ da:
         '7': >-
           Avataren må ikke indeholde noget offensivt (f.eks. offensive
           håndbevægelser).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Yderligere retningslinjer for delegerede:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            Avataren skal være af dit nuværende jeg, og skal afspejlede hvordan
+            du vil optræde til en konkurrence som WCA delegeret.
+          #original_hash: 64ded69
+          '2': >-
+            Avataren skal være justeret og belyst, så at enhver deltager eller
+            tilskuer til en konkurrence, kan bruge den til at genkende dig uden
+            problemer.
+          #original_hash: 13fab02
+          '3': >-
+            Miniaturebilledet af avataren er kun et udsnit af avataren, og vil
+            blive brugt til at repræsentere hele din avatar. Miniaturebilledet
+            skal være justeret, så at du kan blive genkendt fra det alene, og
+            det skal indeholde dit ansigt.
     errors:
       #original_hash: 094b763
       not_found: ikke fundet
@@ -2299,7 +2318,7 @@ da:
       committees: 'De følgende komitéer er ansvarlige for aktiviteterne af WCA:'
       wdc:
         #original_hash: c97077a
-        name: WCA Disciplinær Komité
+        name: WCA Disciplinær Komité (WCA Disciplinary Committee)
         #original_hash: 286fdf8
         description: >-
           Denne komité giver WCA Kommisionen råd i specielle tilfælde, som hvis
@@ -2307,26 +2326,26 @@ da:
           medlemmer der har problemer med WCA konkurrencer.
       wrc:
         #original_hash: 3da1e85
-        name: WCA Regelsæt Komité
+        name: WCA Regelsæt Komité (WCA Regulations Committee)
         #original_hash: 13ada5b
         description: Denne komité er ansvarlig for WCA reglerne.
       wrt:
         #original_hash: 67be768
-        name: WCA Resultat Holdet
+        name: WCA Resultat Holdet (WCA Results Team)
         #original_hash: 439ffae
         description: >-
           Dette hold er ansvarlig for at holde styr på alle konkurrence
           resultater.
       wst:
         #original_hash: a14bc62
-        name: WCA Software Holdet
+        name: WCA Software Holdet (WCA Software Team)
         #original_hash: ec961e4
         description: >-
           Dette hold er ansvarlig for at WCAs software (hjemmeside, blandinger,
           workbooks, admin redskaber).
       wct:
         #original_hash: 63a2388
-        name: WCA Kommunikations Holdet
+        name: WCA Kommunikations Holdet (WCA Communication Team)
         #original_hash: 50fd091
         description: >-
           WCA kommunikations holdet (WCT) har rollen at hjælpe kommunikationen
@@ -2335,12 +2354,12 @@ da:
           ansvar, rummelighed og åbenhed.
       wfc:
         #original_hash: 9cb13de
-        name: WCA Finansiel Komité
+        name: WCA Finansiel Komité (WCA Financial Committee)
         #original_hash: 2d4807e
         description: Dette hold er ansvarlig for at holde styr over WCA's økonomi
       wec:
         #original_hash: 83bd1d0
-        name: WCA Etik Komité
+        name: WCA Etik Komité (WCA Ethics Committee)
         #original_hash: c304d57
         description: >-
           Denne komité har rollen at sikre sig, at alle procedurer fulgt af WCA
@@ -2351,7 +2370,7 @@ da:
           har tavshedspligt over for.
       wqac:
         #original_hash: 8f32116
-        name: WCA Kvalitetsforsikrings Komité
+        name: WCA Kvalitetsforsikrings Komité (WCA Quality Assurance Committee)
         #original_hash: 0171b3b
         description: >-
           Denne Komité har rollen at støtte og fremme kvalitets forbedring i
