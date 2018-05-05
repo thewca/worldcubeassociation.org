@@ -880,6 +880,14 @@ hu:
       #original_hash: a2a43b3
       size_too_big: 'túl nagy (legfeljebb %{file_size} méretűnek kellene lennie)'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Bejelentkezés
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Bejelentkezés
     failure:
       #original_hash: 1186218
       invalid: 'Érvénytelen e-mail cím, WCA ID vagy jelszó.'
@@ -1162,6 +1170,24 @@ hu:
         '6': A profilképet helyes orientációban kell feltölteni.
         #original_hash: 1a18831
         '7': A profilkép nem tartalmazhat sértő tartalmat (pl. sértő gesztus).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Extra útmutató delegáltaknak:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            Az avatárodnak a jelenlegi külsődet kell mutatnia, hasonlóan ahogy
+            egy versenyen WCA Delegáltként megjelennél.
+          #original_hash: 64ded69
+          '2': >-
+            Az avatárnak úgy kell kinéznie (keret, körülvágás, szög,
+            megvilágítás), hogy bármely versenyző vagy néző eyértelműen
+            megismerjen egy versenyen.
+          #original_hash: 13fab02
+          '3': >-
+            Az avatár indexképe a képnek csak egy része, ami a teljes avatárt
+            jelképezi. Az indexképet úgy kell kiválasztani, hogy csak erről is
+            felismerhető legyél és tartalmaznia kell az arcodat.
     errors:
       #original_hash: 094b763
       not_found: nem található
@@ -1465,6 +1491,11 @@ hu:
     please_fix_profile_html: >-
       Hogy regisztrálni tudj a(z) %{comp} versenyre, először javítanod kell a
       következő problémákat a %{profile}oddal:
+    #original_hash: f22ef22
+    registration_full: >-
+      Erre a versenyre a versenyzői limit %{competitor_limit} fő, ami már
+      betelt. Ha most regisztrálsz, akkor a regisztrációd várólistára kerül és
+      csak akkor lesz elfogadva, ha elegendő hely szabadul fel.
     #original_hash: 855ca9c
     can_register: 'A(z) %{comp} versenyre alább tudsz regisztrálni.'
     #original_hash: 4167ed7
@@ -1620,6 +1651,11 @@ hu:
         regisztrációs követelményeket.
       #original_hash: ff19a74
       hide_requirements: Regisztrációs követelmények elrejtése.
+      registration_period:
+        #original_hash: 6888733
+        label: Regisztrációs időszak
+        #original_hash: 8f8b05c
+        range_html: 'Kezdődátum: %{start_date_and_time}, Végdátum: %{end_date_and_time}.'
     index:
       #original_hash: db98a68
       title: Versenyek
@@ -2115,12 +2151,6 @@ hu:
             Szabályzatot</a>. Ha az angol nem az anyanyelved és gondjaid vannak
             a dokumentum értelmezésével, akkor nézd meg a <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>Fordítások</a>at.
-          #original_hash: da99893
-          '2': >-
-            Ezen kívül javasoljuk, hogy nézd meg <a target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>Cubing USA újoncoknak
-            szóló videóját</a>, ami számos hasznos tanáccsal szolgálhat az első
-            versenyed előtt.
       '5':
         #original_hash: 3b657aa
         title: Hogyan lehet WCA verseny az én lakóhelyemen is?
@@ -2146,15 +2176,11 @@ hu:
             hogy a verseny hivatalosan elismert legyen a WCA által. A WCA
             delegált segíti a szervezőket, hogy hogyan tudnak sikeres versenyt
             szervezni.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
-            Nézd meg ezt az <a target='_blank'
+            További információkért nézd meg a <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>a
-            WCA Versenyek Szervezői Útmutatóját</a> vagy a <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>CubingUSA Versenyzési
-            Útmutatót</a> további információkért. (Ha bármilyen ellentmondás
-            felmerül a WCA Szabályzat és ezen dokumentum között, akkor a WCA
-            Szabályzatot kell figyelembe venni.)
+            WCA Versenyek Szervezői Útmutatóját</a>.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2414,6 +2440,10 @@ hu:
     dues: WCA Díjrendszer
     #original_hash: 7536665
     logo: WCA Logó Használata
+    #original_hash: 920a98f
+    proximity_policy: WCA Versenyek Közelségi Irányelve
+    #original_hash: f484584
+    competition_name_policy: WCA Versenyek Elnevezési Irányelve
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA delegáltak
@@ -2583,7 +2613,7 @@ hu:
     #original_hash: ea9d41d
     title: WCA adatrögzítő eszközök
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         A WCA nyomatékosan ajánlja a <a href="http://cubecomps.com">Cube
         Comps</a> használatát a verseny előtt és alatt. A Cube Comps egy online
@@ -2600,7 +2630,7 @@ hu:
         A WCA versenyek eredményeinek rögzítésére használt minta legújabb
         verziója letölthető itt: <br /><a href="/files/results.xls"
         target="_blank">WCA competition Score sheet</a>.
-      #original_hash: 24f0b3f
+      #original_hash: a5f2d25
       '4': >-
         Érdekes lehet a verseny csoportbeosztásának előkészítéséhez a <a
         href="https://jonatanklosko.github.io/groupifier">Groupifier</a>
