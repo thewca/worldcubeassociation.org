@@ -1048,6 +1048,16 @@ zh-TW:
         '6': 頭像的方向必須正確。
         #original_hash: 1a18831
         '7': 頭像不得含有攻擊性內容（例如：無禮的手勢）
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 代表的額外指導方針：
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': 頭像必須為您目前的樣子，與您作為WCA代表出席比賽的形象相同。
+          #original_hash: 64ded69
+          '2': 頭像必須為有邊框、裁切過的、角度正常和亮度正常，以便比賽中的任何參賽者或觀眾都可以在比賽場地中明確識別您的身份。
+          #original_hash: 13fab02
+          '3': 頭像的縮圖只是頭像的一部分，它將用來表示您的完整頭像。縮圖必須被調整過，讓人可以單獨地識別您，並且縮圖必須包含您的臉。
     errors:
       #original_hash: 094b763
       not_found: 找不到
@@ -2203,7 +2213,7 @@ zh-TW:
       #original_hash: a5f2d25
       '4': >-
         您可能還想使用<a
-        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>幫比賽的參賽者分組，那麼你找對工具了。
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>幫比賽的參賽者分組，那麼您找對工具了。
         其中主要功能包括：將選手按照成績排序、分配工作（裁判、轉亂）、決定需要多少組別、產生成績單、個人賽程和總結表。這是一個由Jonatan
         Kłosko建立的開源項目。
   logo:
