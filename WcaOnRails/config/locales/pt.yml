@@ -265,8 +265,8 @@ pt:
         country_iso2: Nacionalidade
         #original_hash: ab58155
         dob: Data de nascimento
-        #original_hash: ab58155
-        dob_verification: Data de nascimento
+        #original_hash: 7636bbc
+        dob_verification: A sua data de nascimento
         #original_hash: 8a754c6
         gender: Género
         #original_hash: 84add5b
@@ -442,6 +442,21 @@ pt:
       vote:
         #original_hash: 153d7a5
         comment: Comentário
+      incident:
+        #original_hash: 768e0c1
+        title: Título
+        #original_hash: cf66d44
+        private_description: Descrição (privada)
+        #original_hash: 1171d85
+        private_wrc_decision: Decisão (privada)
+        #original_hash: 1c2ed61
+        public_summary: Sumário (público)
+        #original_hash: 62d6896
+        digest_worthy: Passível de ser colocado em email de resumo para Delegados
+        #original_hash: 848eed0
+        tags: Tags
+        #original_hash: 861e459
+        competition_id: Aconteceu durante
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Competição
@@ -512,6 +527,27 @@ pt:
       #original_hash: d70e9cb
       default_message: 'Por favor verifique os problems abaixo:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: Lembre-se que isto é público e que tem que ser preenchido em inglês!
+        #original_hash: 67f2a1a
+        private_description: >-
+          Uma descrição do incidente que apenas poderá ser visto por Delegados.
+          Por favor, preencha em inglês.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          A decisão final da WRC, incluindo partes privadas. Por favor,
+          preencher em inglês.
+        #original_hash: 3de5729
+        public_summary: >-
+          Uma descrição geral do incidente e sua decisão, para ser apresentada
+          publicamente. Por favor preencha em inglês.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Introduza a sua data de nascimento no formato AAAA-MM-DD.
@@ -844,6 +880,14 @@ pt:
       #original_hash: a2a43b3
       size_too_big: 'é muito grande (deve ser no máximo %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Entrar
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Entrar
     failure:
       #original_hash: 1186218
       invalid: 'Email, ID da WCA ou senha inválida'
@@ -1117,6 +1161,26 @@ pt:
         '6': O avatar deve ser submetido na orientação correta.
         #original_hash: 1a18831
         '7': O avatar não pode apresentar conteúdo ofensivo (ex. gestos ofensivos).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Orientações adicionais para Delegados:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            A imagem deve ser de si próprio,  apresentado-se do mesmo modo em
+            que se apresentaria numa competição enquanto Delegado da WCA.
+          #original_hash: 64ded69
+          '2': >-
+            A imagem deve estar enquadrado, recortada, orientada e iluminada
+            para que qualquer competidor ou espectador numa competição poderem
+            fazer uso dela de forma a identificá-lo de forma inequívoca num
+            local de competição.
+          #original_hash: 13fab02
+          '3': >-
+            A miniatura é apenas uma secção da imagem e que será usada para
+            representar a imagem completa. A miniatura deve ser ajustada por
+            forma a que possa ser reconhecido dessa forma apenas, devendo conter
+            o rosto.
     errors:
       #original_hash: 094b763
       not_found: não encontrado
@@ -1412,6 +1476,11 @@ pt:
     please_fix_profile_html: >-
       Para se inscrever em %{comp}, deve corrigir os seguintes problemas com seu
       %{profile}:
+    #original_hash: f22ef22
+    registration_full: >-
+      O limite de competidores para esta competição é %{competitor_limit} e já
+      foi atingido. Se se registar, o seu registo será colocado numa lista de
+      espera. Poderá não ser aprovado a não ser que uma vaga fique disponível.
     #original_hash: 855ca9c
     can_register: 'Pode inscrever-se em %{comp} abaixo.'
     #original_hash: 4167ed7
@@ -1561,6 +1630,17 @@ pt:
       events: Eventos
       #original_hash: ff722f0
       registration_requirements: Requisitos de registo
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        A competição terminou, clique %{link_here} para mostrar os requisitos de
+        registo usados.
+      #original_hash: ff19a74
+      hide_requirements: Esconder requisitos de registo.
+      registration_period:
+        #original_hash: 6888733
+        label: Período de registo
+        #original_hash: 8f8b05c
+        range_html: 'De %{start_date_and_time} até %{end_date_and_time}.'
     index:
       #original_hash: db98a68
       title: Competições
@@ -2055,11 +2135,6 @@ pt:
             da WCA</a>. Além disso, se inglês não é a primeira língua e houver
             dificuldade em entender o documento, é recomendável ler as <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>Traduções</a>.
-          #original_hash: da99893
-          '2': >-
-            Além disso, também se recomenda uma leitura do <a target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>tutorial do competidor
-            do Cubing USA</a>, que dá várias dicas para novos competidores.
       '5':
         #original_hash: 3b657aa
         title: Como posso ter uma competição da WCA na minha cidade?
@@ -2085,15 +2160,11 @@ pt:
             para que a competição seja reconhecida oficialmente pela WCA. O
             Delegado ajudará a equipa de organização nos preparativos para uma
             competição bem sucedida.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Visite o <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>Guia
-            para Organizadores de Competições WCA</a> e o <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>Guia de Competiçẽos da
-            CubingUSA</a>para mais informações. (Em caso de conflito entre a
-            informação apresentada neste recurso adicional e o Regulamento da
-            WCA, devem ser seguidas as disposições do Regulamento.)
+            para Organizadores de Competições WCA</a> para mais informações.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2352,8 +2423,16 @@ pt:
     motions: Moções
     #original_hash: 092f99e
     minutes: Minutas
+    #original_hash: 8d61184
+    policies: Políticas
     #original_hash: cdad4f1
     dues: Sistema de Contribuições da WCA
+    #original_hash: 7536665
+    logo: Utilização de Logótipo da WCA
+    #original_hash: 920a98f
+    proximity_policy: Política de Proximidade de Competições da WCA
+    #original_hash: f484584
+    competition_name_policy: Política de Nomes de Competições da WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
@@ -2524,14 +2603,14 @@ pt:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         A WCA recomenda o uso do <a href="http://cubecomps.com">Cube Comps</a>
         antes e durante uma competição. Cube Comps é um sistema online com
         resultados ao vivo e muitos recursos interessantes, como impressão de
-        súmulas e um sistema bastante eficiente de entrada de dados que suporta
-        vários utilizadores simultâneos. Criado por Luis J. Iáñez e agora em
-        código aberto (Open Source).
+        folhas de resultados e um sistema bastante eficiente de entrada de dados
+        que suporta vários utilizadores simultâneos. Criado por Luis J. Iáñez e
+        agora em código aberto.
       #original_hash: 7438b0d
       '2': >-
         Folhas de resultados e embaralhamentos devem ser processados e
@@ -2542,6 +2621,16 @@ pt:
         A versão mais recente da Folha de Cálculo de Resultados da WCA pode ser
         descarregada aqui: <br /><a href="/files/results.xls"
         target="_blank">Folha de Cálculo de Resultados da WCA</a>.
+      #original_hash: a5f2d25
+      '4': >-
+        Também pode querer usar o <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> para
+        preparar grupos para uma competição. É uma ferramenta que tenta executar
+        esta tarefa automaticamente. Entre as características principais
+        encontram-se: ordenação de competidores por ranking, atribuição de
+        tarefas (ajuizamento, embaralhamento), decidir quantos grupos são
+        necessários, gerar folhas de resultados, folhas pessoais e sumários. É
+        um projeto em código aberto, criado por Jonatan Kłosko.
   logo:
     #original_hash: c72c969
     title: Logótipo da WCA
@@ -2562,13 +2651,11 @@ pt:
         Versão 3D do logótipo, desenhada por Vu Mihn Tan, do Vietname: <a
         href="/files/WCALogo3D.png">versão PNG</a> (2,1 MB), uma <a
         href="/files/WCALogo3Dsmall.png">versão PNG pequena</a> (0,25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Todas os organizadores podem usar o logótipo da WCA em seus websites,
-        roupas, brindes ou decoração, somente para competições oficiais.<br
-        />Para as demais pessoas e/ou propósitos, o uso do logótipo requer
-        aprovação pelo <a href="mailto:board@worldcubeassociation.org">Conselho
-        da WCA</a>.
+        Utilizações aceitáveis do logótipo da WCA estão definidas na Política de
+        Uso do Logótipo da WCA presente na <a href="/documents">Página de
+        Documentos da WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: Assistente de Resultados da WCA
@@ -2719,6 +2806,11 @@ pt:
         posts: Nenhum artigo encontrado para
         #original_hash: 76a6bf1
         regulations_and_guidelines: Nenhum Regulamento ou Orientação encontrada para
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Note que a secção de incidentes está apenas disponível em inglês, o
+      conteúdo abaixo não está traduzido.
   about_regulations:
     #original_hash: 6bce1b5
     title: Sobre os Regulamentos
