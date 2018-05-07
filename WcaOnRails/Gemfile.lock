@@ -200,7 +200,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    high_voltage (3.0.0)
+    high_voltage (3.1.0)
     highline (1.7.10)
     htmlentities (4.3.4)
     http_accept_language (2.1.1)
