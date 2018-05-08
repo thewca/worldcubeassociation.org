@@ -17,7 +17,7 @@ module IncidentsHelper
         ["warning", "Pending"]
       end
     else
-      ["success", "Not needed"]
+      ["success", ""]
     end
   end
 end
