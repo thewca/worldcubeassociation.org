@@ -14,7 +14,7 @@
   <%= form_tag({action: :submit}, multipart: true) do %>
     <%= text_area_tag :message, params[:message], placeholder: "Email body here", class: "markdown-editor" %><br>
     Results file<br>
-    <%= file_field_tag 'results' %><br>
+    <%= file_field_tag 'results', accept: 'application/json' %><br>
     <input type="submit" class="btn btn-primary" />
   <% end %>
 
