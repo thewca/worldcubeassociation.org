@@ -267,7 +267,7 @@ es:
         country_iso2: Nacionalidad
         #original_hash: ab58155
         dob: Fecha de Nacimiento
-        #original_hash: ab58155
+        #original_hash: 7636bbc
         dob_verification: Fecha de Nacimiento
         #original_hash: 8a754c6
         gender: Sexo
@@ -370,6 +370,8 @@ es:
         enable_donations: Quiero habilitar donaciones además de cobrar el importe del registro
         #original_hash: 4baf44b
         championship_type: Tipo de campeonato
+        #original_hash: ff722f0
+        registration_requirements: Requisitos de registro
       registration:
         #original_hash: 3c23a67
         guests: Acompañantes
@@ -440,6 +442,21 @@ es:
       vote:
         #original_hash: 153d7a5
         comment: Comentario
+      incident:
+        #original_hash: 768e0c1
+        title: Título
+        #original_hash: cf66d44
+        private_description: Descripción
+        #original_hash: 1171d85
+        private_wrc_decision: Decisión
+        #original_hash: 1c2ed61
+        public_summary: Resumen
+        #original_hash: 62d6896
+        digest_worthy: Digno del resumen
+        #original_hash: 848eed0
+        tags: Etiquetas
+        #original_hash: 861e459
+        competition_id: Ocurrió durante
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Competición
@@ -510,6 +527,29 @@ es:
       #original_hash: d70e9cb
       default_message: 'Por favor, revisa los siguientes errores:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: >-
+          Ten en cuenta que esto es público y que tienes que rellenarlo en
+          Inglés
+        #original_hash: 67f2a1a
+        private_description: >-
+          Una descripción del incidente que sólo podrá ser vista por Delegados.
+          Por favor, rellénalo en inglés.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          La decisión final del WRC, incluyendo detalles privados. Por favor,
+          rellénalo en inglés.
+        #original_hash: 3de5729
+        public_summary: >-
+          Una descripción general del incidente y su decisión asociada, para
+          mostrar públicamente. Por favor, rellénalo en inglés.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Introduce tu fecha de nacimiento con el formato AAAA-MM-DD.
@@ -586,7 +626,7 @@ es:
         external_website: Sitio web de la competición. Tiene que ser una URL http(s) válida.
         #original_hash: 9965635
         registration_open: 'Nota: la apertura y cierre se registra según la hora UTC.'
-        #original_hash: 9dfafd4
+        #original_hash: 243212f
         remarks_html: >-
           Información suplementaria que quieras enviar al Board. Por ejemplo,
           explica tus razones si la competición solicitada es en menos de cuatro
@@ -640,6 +680,21 @@ es:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Por favor indica aquí cualquier particularidad sobre el proceso de
+          registro, necesario por <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Directriz 2c1+</a>. Tras anunciarse la competición,
+          este campo <b>No</b> será editable y se necesitará aprobación de la
+          junta directiva para modificarlo.<br/>Por ejemplo indicar aquí si los
+          competidores necesitan tener un historial limpio de pagos con una
+          entidad específica, si hay alguna política de devoluciones o si se
+          deberá contestar a un correo de confirmación en caso de que se alcance
+          el cupo de registros.<br/>Por  favor rellénalo <b>en inglés</b> y
+          cualquier otros lenguajes que hablen tus competidores; será mostrado
+          en la página de registro de la competición si estás usando el registro
+          de la web de la WCA.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -826,6 +881,14 @@ es:
       #original_hash: a2a43b3
       size_too_big: 'demasiado grande (debe ser %{file_size} como máximo)'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Registrarse
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Registrarse
     failure:
       #original_hash: 1186218
       invalid: 'Correo, WCA ID o clave incorrectos.'
@@ -1102,6 +1165,26 @@ es:
         '6': La foto tiene que tener la orientación correcta.
         #original_hash: 1a18831
         '7': La foto no debe contener contenido ofensivo (p.e. gestos ofensivos).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Directrices adicionales para Delegados:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            El avatar tiene que ser de tu propia persona, actualizado y de forma
+            similar a como aparecerías en una competición como Delegado de la
+            WCA.
+          #original_hash: 64ded69
+          '2': >-
+            El avatar debe estar encuadrado, recortado e iluminado de modo que
+            un competidor o espectador en una competición puedan usarlo para
+            identificarte inequívocamente en un recinto de competición.
+          #original_hash: 13fab02
+          '3': >-
+            el thumbnail del avatar es sólo una sección del avatar,, y se usará
+            para representar tu avatar completo, el thumbnail debe ser ajustado
+            para que se te pueda reconocer a través de el, y debe contener tu
+            cara.
     errors:
       #original_hash: 094b763
       not_found: no encontrado
@@ -1406,6 +1489,11 @@ es:
     please_fix_profile_html: >-
       Para registrarte en esta %{comp} debes solventar primero los siguientes
       problemas de tu %{profile}:
+    #original_hash: f22ef22
+    registration_full: >-
+      El Límite de competidores para esta competición es  %{competitor_limit} y
+      ya ha sido alcanzado. Si te registras tu registro será colocado en una
+      lista de espera. Puede no ser aprobado hasta que un hueco quede libre.
     #original_hash: 855ca9c
     can_register: 'Puedes registrarte en %{comp} abajo.'
     #original_hash: 4167ed7
@@ -1469,6 +1557,8 @@ es:
     preferred_events_populated_html: >-
       Hemos rellenado esta lista con tus pruebas favoritas. Puedes configurar
       tus pruebas favoritas %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Requisitos de registro para la competición:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1554,6 +1644,23 @@ es:
       information: Información
       #original_hash: c5497bc
       events: Pruebas
+      #original_hash: ff722f0
+      registration_requirements: Requisitos de registro
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        La competición ha finalizado, haz click %{link_here} para mostrar los
+        requisitos de registro que se usaron.
+      #original_hash: ff19a74
+      hide_requirements: Ocultar requisitos de registro.
+      registration_period:
+        #original_hash: 6888733
+        label: Período de registro
+        #original_hash: e46a61b
+        range_html: >-
+          El registro en línea estará abierto desde %{start_date_and_time} hasta
+          %{end_date_and_time}. Otros métodos de registro pueden estar
+          permitidos (como registrarse en el sitio). Asegúrate de leer la
+          información de la competición para averiguarlo.
     index:
       #original_hash: db98a68
       title: Competiciones
@@ -1792,6 +1899,10 @@ es:
       before: antes
       #original_hash: 405906c
       after: después
+      #original_hash: 24d948e
+      limit: Límite
+      #original_hash: 855bd26
+      competitors: Competidores
     #original_hash: 06b01c4
     announcements: Anuncios
     #original_hash: 5b9523f
@@ -1827,6 +1938,8 @@ es:
         admin_view: Vista administrador
         #original_hash: a857eb4
         tabs: Administrar pestañas
+        #original_hash: f3d6278
+        submit_results: Entregar resultados
         #original_hash: 4c9f914
         delegate_report: Informe del delegado
         #original_hash: b233e77
@@ -2053,12 +2166,6 @@ es:
             de la WCA</a>. Además, recomendamos que mires <a target='_blank'
             href='https://www.youtube.com/watch?v=8O_iWRGq4K8'>este vídeo</a>
             para tener una idea de cómo se compite y cómo se hace de juez.
-          #original_hash: da99893
-          '2': >-
-            Además, recomendamos que eches un vistazo al <a target=‘_blank’
-            href=“http://www.cubingusa.com/ctutorial.php’>Tutorial del
-            competidor de Cubing USA</a>, que aporta varios buenos consejos para
-            los primerizos.
       '5':
         #original_hash: 3b657aa
         title: ¿Qué puedo hacer para tener una competición de la WCA en mi ciudad?
@@ -2082,7 +2189,7 @@ es:
             WCA</a> cercano. La supervisión de un Delegado es necesaria para
             sancionar la competición oficialmente. El Delegado guiará a los
             organizadores para conseguir una competición exitosa.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Hay más información disponible en inglés en <a target='_blank'
             href='https://www.cubingusa.com/cguide.php'>esta guía</a>. (Ante
@@ -2320,7 +2427,7 @@ es:
           estándares de calidad para asegurar una consistente alta calidad de
           procesos, personal WCA, Organizaciones Regionales, Organizadores y
           personal ayudante en competiciones.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
         Los <strong>Delegados de la WCA</strong> son miembros de la WCA que se
         responsabilizan de asegurar que todas las competiciones de la WCA se
@@ -2349,10 +2456,20 @@ es:
     motions: Mociones
     #original_hash: 092f99e
     minutes: Actas
+    #original_hash: 8d61184
+    policies: Políticas
+    #original_hash: cdad4f1
+    dues: Sistema de Cuotas de la WCA
+    #original_hash: 7536665
+    logo: Uso del Logotipo de la WCA
+    #original_hash: 920a98f
+    proximity_policy: Política de Proximidad de las Competiciones WCA
+    #original_hash: f484584
+    competition_name_policy: Política sobre Nombres de Competiciones WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
-    #original_hash: 0a89b0f
+    #original_hash: 77b819c
     acknowledges: >-
       La WCA reconoce a los siguientes miembros como Delegados para sus
       competiciones oficiales:
@@ -2528,7 +2645,7 @@ es:
     #original_hash: ea9d41d
     title: Herramientas para la captación de resultados
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         La WCA recomienda encarecidamente el uso de <a
         href="http://cubecomps.com">Cubecomps</a> antes y durante la celebración
@@ -2547,6 +2664,16 @@ es:
         utiliza Cubecomps u otra herramienta similar) puede descargarse aquí:<br
         /><a href="/files/results.xls" target="_blank">Hoja de Puntuaciones de
         la WCA</a>.
+      #original_hash: a5f2d25
+      '4': >-
+        También puedes usar <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> para
+        preparar grupos de competidores para una competición. Es una herramienta
+        cuyo objetivo es hacer exactamente eso por ti. Entre sus principales
+        funcionalidades encontrarás ordenar competidores por ranking, asignar
+        tareas (juzgar, mezclar), decidir cuantas mezclas son necesarias,
+        generar hojas de tiempos, hojas personales y resúmenes. Es un proyecto
+        de código abierto creado por Jonatan Klosko.
   logo:
     #original_hash: c72c969
     title: Logotipo de la WCA
@@ -2568,7 +2695,7 @@ es:
         Minh Tan de Vietnam: <a href="/files/WCALogo3D.png">versión PNG</a> (2.1
         MB) y una <a href="/files/WCALogo3Dsmall.png">versión pequeña PNG</a>
         (0.25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
         Los organizadores de competiciones oficiales de la WCA están autorizados
         a utilizar el logotipo de la WCA en las webs, la ropa, los regalos o la
@@ -2736,6 +2863,11 @@ es:
         posts: Ninguna publicación encontrada como
         #original_hash: 76a6bf1
         regulations_and_guidelines: Ninguna Regla o Directriz encontrada como
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Por favor, observa que la sección de incidentes sólo está disponible en
+      inglés, El contenido  de abajo no está traducido.
   about_regulations:
     #original_hash: 6bce1b5
     title: Sobre el Reglamento
