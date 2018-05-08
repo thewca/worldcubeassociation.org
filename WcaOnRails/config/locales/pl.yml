@@ -1190,6 +1190,26 @@ pl:
         '7': >-
           Zdjęcie profilowe nie może zawierać żadnych obraźliwych treści (np.
           obraźliwych gestów).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Dodatkowe wytyczne dla Delegatów:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            Zdjęcie profilowe musi przedstawiać Twój obecny wizerunek, w taki
+            sam sposób w jaki pojawiłbyś się na zawodach jako Delegat WCA.
+          #original_hash: 64ded69
+          '2': >-
+            Zdjęcie profilowe musi być wykadrowane, przycięte, nachylone pod
+            odpowiednim kątem oraz dobrze oświetlne, tak aby zawodnik lub widz
+            mogli użyć go w celu jednoznacznej identyfikacji Ciebie na miejscu
+            zawodów.
+          #original_hash: 13fab02
+          '3': >-
+            Miniaturka zdjęcia profilowego jest wyłącznie jego wycinkiem i
+            będzie użyta w celu reprezentacji pełnego zdjęcia. Miniaturka musi
+            być dopasowana tak, aby wystarczała do rozpoznanie Ciebie, musi
+            zawierać Twoją twarz.
     errors:
       #original_hash: 094b763
       not_found: nie znaleziono
@@ -1684,8 +1704,12 @@ pl:
       registration_period:
         #original_hash: 6888733
         label: Okres rejestracyjny
-        #original_hash: 8f8b05c
-        range_html: 'Od %{start_date_and_time} do %{end_date_and_time}.'
+        #original_hash: e46a61b
+        range_html: >-
+          Rejestracja online będzie otwarta od %{start_date_and_time} do
+          %{end_date_and_time}. Inne formy rejestracji mogą być dopuszczone
+          (takie jak rejestracja na miejscu). Przeczytaj dokładnie wszystkie
+          szczegóły na temat zawodów, aby się dowiedzieć.
     index:
       #original_hash: db98a68
       title: Zawody
@@ -1966,6 +1990,8 @@ pl:
         admin_view: Widok administratora
         #original_hash: a857eb4
         tabs: Zarządzaj zakładkami
+        #original_hash: f3d6278
+        submit_results: Wyślij wyniki
         #original_hash: 4c9f914
         delegate_report: Raport delegata
         #original_hash: b233e77
