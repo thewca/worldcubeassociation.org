@@ -1444,8 +1444,9 @@ zh-TW:
       registration_period:
         #original_hash: 6888733
         label: 報名時段
-        #original_hash: 8f8b05c
-        range_html: '從%{start_date_and_time}到%{end_date_and_time}'
+        #original_hash: e46a61b
+        range_html: >-
+          網路報名從%{start_date_and_time}開始到%{end_date_and_time}截止。其他形式的報名也是被允許的（例如現場報名）。請詳細閱讀所有比賽資訊以獲得報名資訊。
     index:
       #original_hash: db98a68
       title: 比賽
@@ -1694,6 +1695,8 @@ zh-TW:
         admin_view: 管理員模式
         #original_hash: a857eb4
         tabs: 管理標籤
+        #original_hash: f3d6278
+        submit_results: 上傳成績
         #original_hash: 4c9f914
         delegate_report: 比賽報告
         #original_hash: b233e77
