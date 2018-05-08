@@ -1161,6 +1161,25 @@ pt-BR:
         '6': O avatar deve estar na orientação correta.
         #original_hash: 1a18831
         '7': Sua foto não pode conter conteúdo ofensivo (p. ex. gestos ofensivos).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Orientações adicionais para Delegados:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            A foto deve ser atual, da mesma forma que você apareceria em uma
+            competição como o Delegado da WCA.
+          #original_hash: 64ded69
+          '2': >-
+            A foto deve ser ajustada, enquadrada e bem iluminada, de forma que
+            qualquer competidor ou espectador consiga te identificar sem dúvida
+            no local da competição.
+          #original_hash: 13fab02
+          '3': >-
+            A miniatura da foto é somente uma parte desta, e será usada para
+            representar sua foto completa. A miniatura deve ser ajustada de
+            forma que você possa ser reconhecido(a) apenas por ela, e deve
+            conter seu rosto.
     errors:
       #original_hash: 094b763
       not_found: não encontrado
@@ -1624,8 +1643,12 @@ pt-BR:
       registration_period:
         #original_hash: 6888733
         label: Período de inscrição
-        #original_hash: 8f8b05c
-        range_html: 'De %{start_date_and_time} a %{end_date_and_time}.'
+        #original_hash: e46a61b
+        range_html: >-
+          A inscrição online estará aberta de %{start_date_and_time} a
+          %{end_date_and_time}. Outras formas de inscrição podem ser permitidas
+          (por exemplo no local da competição). Veja a página da competição para
+          saber mais detalhes.
     index:
       #original_hash: db98a68
       title: Competições
@@ -1904,6 +1927,8 @@ pt-BR:
         admin_view: Visão do administrador
         #original_hash: a857eb4
         tabs: Gerenciar abas
+        #original_hash: f3d6278
+        submit_results: Enviar resultados
         #original_hash: 4c9f914
         delegate_report: Relatório do Delegado
         #original_hash: b233e77
