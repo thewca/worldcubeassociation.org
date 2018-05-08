@@ -423,7 +423,7 @@ class User < ApplicationRecord
   end
 
   def can_change_users_avatar?(user)
-    user.wca_id.present? && self.editable_fields_of_user(user).include?(:pending_avatar)
+    user.wca_id.present? && self.editable_fields_of_user(user).include?(:remove_avatar)
   end
 
   def organizer_for?(user)
@@ -580,7 +580,8 @@ class User < ApplicationRecord
   def editable_fields_of_user(user)
     fields = Set.new
     if user.dummy_account?
-      return fields
+      # That's the only field we want to be able to edit for these accounts
+      return %i(remove_avatar)
     end
     if user == self
       fields += %i(
