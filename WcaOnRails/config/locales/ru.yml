@@ -1174,6 +1174,23 @@ ru:
         '7': >-
           Аватарка не должна быть оскорбительной (например, содержать
           оскорбительные жесты).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Дополнительные указания для Делегатов:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            На аватарке должны быть вы, в том же виде, как если бы вы выступали
+            на соревновании в качестве WCA Делегата.
+          #original_hash: 64ded69
+          '2': >-
+            Аватарка должна быть обрамлена, обрезана, повёрнута и освещена таким
+            образом, чтобы любой участник или зритель на соревновании мог узнать
+            вас с её помощью.
+          #original_hash: 13fab02
+          '3': >-
+            Миниатюру аватарки нужно выбрать так, чтобы вас можно было узнать с
+            её помощью, и она должна содержать ваше лицо.
     errors:
       #original_hash: 094b763
       not_found: не найдено
@@ -1647,8 +1664,11 @@ ru:
       registration_period:
         #original_hash: 6888733
         label: Период регистрации
-        #original_hash: 8f8b05c
-        range_html: 'От %{start_date_and_time} до %{end_date_and_time}'
+        #original_hash: e46a61b
+        range_html: >-
+          Онлайн-регистрация будет открыта с %{start_date_and_time} до
+          %{end_date_and_time}. Чтобы узнать, будут ли другие виды регистрации
+          (например, регистрация на месте), просмотрите страницу соревнования.
     index:
       #original_hash: db98a68
       title: Соревнования
@@ -1926,6 +1946,8 @@ ru:
         admin_view: Редактировать как администратор
         #original_hash: a857eb4
         tabs: Управление вкладками
+        #original_hash: f3d6278
+        submit_results: Отправить результаты
         #original_hash: 4c9f914
         delegate_report: Отчёт Делегата
         #original_hash: b233e77
@@ -2420,6 +2442,8 @@ ru:
     logo: Использование Логотипа WCA
     #original_hash: 920a98f
     proximity_policy: Политика близких соревнований
+    #original_hash: f484584
+    competition_name_policy: Политика названий соревнований
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Делегаты
