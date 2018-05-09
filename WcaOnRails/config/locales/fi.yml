@@ -1151,6 +1151,25 @@ fi:
         '7': >-
           Profiilikuvassa ei saa olla hyökkäävää sisältöä (kuten tällaista
           elekieltä).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Ylimääräisiä ohjesääntöjä delegaateille:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            Profiilikuvassa sinun täytyy olla kuvattuna nykyisessä
+            ulkomuodossasi, samantapaisena kuin olisit WCA-delegaattina
+            kilpailussa.
+          #original_hash: 64ded69
+          '2': >-
+            Profiilikuvan täytyy olla rajattu, kierretty ja valaistu niin, että
+            sen perusteella kaikki kilpailijat ja katsojat voivat tunnistaa
+            sinut kilpailupaikalla.
+          #original_hash: 13fab02
+          '3': >-
+            Pikkukuva on profiilikuvan pieni osa ja se edustaa koko
+            profiilikuvaa. Pikkukuvan tulee olla rajattu niin, että sinut voi
+            tunnistaa pelkästään sen perusteella (sen tulee sisältää kasvosi).
     errors:
       #original_hash: 094b763
       not_found: ei löydetty
@@ -1612,8 +1631,12 @@ fi:
       registration_period:
         #original_hash: 6888733
         label: Rekisteröitymisaika
-        #original_hash: 8f8b05c
-        range_html: 'Alkaa %{start_date_and_time}, loppuu %{end_date_and_time}.'
+        #original_hash: e46a61b
+        range_html: >-
+          Online-rekisteröityminen alkaa %{start_date_and_time} ja loppuu
+          %{end_date_and_time}. Muut rekisteröitymistavat (kuten
+          jälki-ilmoittautuminen kisapaikalla) saattavat olla mahdollisia.
+          Luethan kilpailun tiedot huolella.
     index:
       #original_hash: db98a68
       title: Kilpailut
@@ -1889,6 +1912,8 @@ fi:
         admin_view: Ylläpitonäkymä
         #original_hash: a857eb4
         tabs: Hallitse välilehtiä
+        #original_hash: f3d6278
+        submit_results: Lähetä tulokset
         #original_hash: 4c9f914
         delegate_report: Delegaatin raportti
         #original_hash: b233e77
