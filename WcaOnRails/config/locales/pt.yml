@@ -1639,8 +1639,12 @@ pt:
       registration_period:
         #original_hash: 6888733
         label: Período de registo
-        #original_hash: 8f8b05c
-        range_html: 'De %{start_date_and_time} até %{end_date_and_time}.'
+        #original_hash: e46a61b
+        range_html: >-
+          Registo online estará aberto de %{start_date_and_time} até
+          %{end_date_and_time}. Outras formas de registo podem ser permitidas
+          (como registo no próprio local). Não deixe de ler todos os detalhes da
+          competição para mais informação.
     index:
       #original_hash: db98a68
       title: Competições
@@ -1918,6 +1922,8 @@ pt:
         admin_view: Vista de administrador
         #original_hash: a857eb4
         tabs: Gerir abas
+        #original_hash: f3d6278
+        submit_results: Submeter resultados
         #original_hash: 4c9f914
         delegate_report: Relatório do Delegado
         #original_hash: b233e77
