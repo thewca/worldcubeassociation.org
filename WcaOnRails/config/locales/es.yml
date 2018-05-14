@@ -884,11 +884,11 @@ es:
     sessions:
       new:
         #original_hash: ada2e9e
-        sign_in: Registrarse
+        sign_in: Iniciar sesión
     shared:
       links:
         #original_hash: ada2e9e
-        sign_in: Registrarse
+        sign_in: Iniciar sesión
     failure:
       #original_hash: 1186218
       invalid: 'Correo, WCA ID o clave incorrectos.'
