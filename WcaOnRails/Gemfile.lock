@@ -310,7 +310,7 @@ GEM
     oga (2.15)
       ast
       ruby-ll (~> 2.1)
-    openssl (2.1.0)
+    openssl (2.1.1)
     orm_adapter (0.5.0)
     parallel (1.12.1)
     parser (2.5.1.0)
