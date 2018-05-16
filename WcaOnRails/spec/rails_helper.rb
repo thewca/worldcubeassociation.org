@@ -32,6 +32,7 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 Capybara.javascript_driver = :poltergeist
+Capybara.server = :webrick
 
 RSpec.configure do |config|
   # We're using database_cleaner instead of rspec-rails's implicit wrapping of
