@@ -270,8 +270,8 @@ ro:
         country_iso2: Cetățenie
         #original_hash: ab58155
         dob: Data nașterii
-        #original_hash: ab58155
-        dob_verification: Data nașterii
+        #original_hash: 7636bbc
+        dob_verification: Data nașterii tale
         #original_hash: 8a754c6
         gender: Sex
         #original_hash: 84add5b
@@ -379,6 +379,8 @@ ro:
           înregistrare.
         #original_hash: 4baf44b
         championship_type: Tipul Campionatului
+        #original_hash: ff722f0
+        registration_requirements: Condiții pentru înscriere
       registration:
         #original_hash: 3c23a67
         guests: Însoțitori
@@ -449,6 +451,21 @@ ro:
       vote:
         #original_hash: 153d7a5
         comment: Comentariu
+      incident:
+        #original_hash: 768e0c1
+        title: Titlu
+        #original_hash: cf66d44
+        private_description: Descriere (privată)
+        #original_hash: 1171d85
+        private_wrc_decision: Decizie (privată)
+        #original_hash: 1c2ed61
+        public_summary: Rezumat (public)
+        #original_hash: 62d6896
+        digest_worthy: Digest worthy
+        #original_hash: 848eed0
+        tags: Etichete
+        #original_hash: 861e459
+        competition_id: S-a întâmplat în timpul
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Competiție
@@ -519,6 +536,27 @@ ro:
       #original_hash: d70e9cb
       default_message: 'Te rugăm să corectezi problemele:'
     hints:
+      incident:
+        #original_hash: c54e268
+        title: Ține cont că ce scrii este public și trebuie completat în engleză!
+        #original_hash: 67f2a1a
+        private_description: >-
+          Descrierea incidentului care va fi citită numai de către Delegați. Te
+          rugăm să completezi în engleză.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          Decizia finală a WRC, inclusiv detalii private. Te rugăm să completezi
+          în engleză.
+        #original_hash: 3de5729
+        public_summary: >-
+          O descriere completă a evenimentului și a deciziei luate, pentru a fi
+          afișată public. Te rugăm să completezi în engleză.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Introdu data nașterii în formatul an-lună-zi (AAAA-LL-ZZ)
@@ -650,6 +688,21 @@ ro:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Te rugăm să indici aici orice specificații despre procesul de
+          înscriere, conform <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Îndrumării 2c1+</a>. După ce competiția este anunțată,
+          acest câmp <b>not</b> mai poate fi editat și va fi nevoie de aprobarea
+          Boardului pentru modificări. <br/>De exemplu, indică aici dacă
+          concurenții trebuie să aibă un istoric al plăților fără probleme, dacă
+          există politică de returnare a taxei sau dacă va fi nevoie să răspundă
+          la un email de confirmare, în cazul în care limita de concurenți a
+          fost atinsă.<br/> Te rugăm să completezi acest câmp <b>în engleză</b>
+          și în limbile vorbite de către concurenți; câmpul va fi afișat pe
+          pagina de înregistrare a competiției dacă folosești înregistrarea prin
+          site-ul WCA.
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -836,6 +889,14 @@ ro:
       #original_hash: a2a43b3
       size_too_big: 'e prea mare (ar trebui să aibă cel mult %{file_size})'
   devise:
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Logare
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Logare
     failure:
       #original_hash: 1186218
       invalid: 'Email, Id WCA sau parolă greșite'
@@ -1118,6 +1179,26 @@ ro:
         '7': >-
           Avatarul nu trebuie să aibă conținut ofensiv (de exemplu, gesturi
           ofensive).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Îndrumări adiționale pentru Delegați:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            Avatarul trebuie să fie o imagine cu tine, într-o manieră
+            asemănătore cu cea în care vei apărea la competiții, în calitate de
+            Delegat WCA.
+          #original_hash: 64ded69
+          '2': >-
+            Avatarul trebuie să fie realizat corespunzător (încadrare,
+            iluminare, unghi) astfel încât orice concurent sau spectator la o
+            competiție să te poată identifica pe baza lui fără ambiguități.
+          #original_hash: 13fab02
+          '3': >-
+            Thumbnail-ul avatarului este doar o secțiune a acestuia, folosită
+            pentru a reprezenta imaginea întreagă. Thumbnail-ul trebuie ajustat
+            astfel încât să conțină fața ta și să poți fi recunoscut numai pe
+            baza lui.
     errors:
       #original_hash: 094b763
       not_found: nu s-a găsit
@@ -1433,6 +1514,12 @@ ro:
     please_fix_profile_html: >-
       Pentru a te înregistra pentru această %{comp}, trebuie să rezolvi
       următoarele probleme ale %{profile} tău:
+    #original_hash: f22ef22
+    registration_full: >-
+      Limita numărului de concurenți pentru această competiție este
+      %{competitor_limit} și a fost deja atinsă. Dacă te înregistrezi, vei fi
+      adăugat pe o listă de așteptare. Este posibil ca înregistrarea ta să nu
+      fie aprobată decât dacă se eliberează un loc.
     #original_hash: 855ca9c
     can_register: 'Te poți înregistra pentru %{comp} mai jos.'
     #original_hash: 4167ed7
@@ -1495,6 +1582,8 @@ ro:
     preferred_events_populated_html: >-
       Am completat automat cu evenimentele tale preferate, pe care le poti edita
       %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Condiții pentru înscrierea la competiție:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1582,6 +1671,23 @@ ro:
       information: Informații
       #original_hash: c5497bc
       events: Probe
+      #original_hash: ff722f0
+      registration_requirements: 'Condiții pentru înscriere:'
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        Această competiție s-a încheiat, apasă %{link_here} pentru a afișa
+        condițiile de înscriere ce s-au aplicat.
+      #original_hash: ff19a74
+      hide_requirements: Ascunde condițiile de înscriere
+      registration_period:
+        #original_hash: 6888733
+        label: Perioadă de înregistrare
+        #original_hash: e46a61b
+        range_html: >-
+          Înregistrarea online va fi deschisă între %{start_date_and_time} și
+          %{end_date_and_time}. Este posibil ca și alte modalități de înscriere
+          să fie acceptate (înregistrarea pe loc, de exemplu). Pentru a afla,
+          citește toate detaliile despre competiție.
     index:
       #original_hash: db98a68
       title: Competiții
@@ -1857,6 +1963,8 @@ ro:
         admin_view: Interfață Admin
         #original_hash: a857eb4
         tabs: Administrează taburile
+        #original_hash: f3d6278
+        submit_results: Înregistrează rezultate
         #original_hash: 4c9f914
         delegate_report: Raportul delegatului
         #original_hash: b233e77
@@ -2077,12 +2185,6 @@ ro:
             WCA</a>. Dacă engleza nu este limba ta maternă și îți este greu să
             înțelegi documentul, te rugăm să citești <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>Traducerile</a>.
-          #original_hash: da99893
-          '2': >-
-            În plus, îți recomandăm să te uiți peste <a target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>tutorialul pentru
-            competiții de la Cubing USA</a>, care este oferă sfaturi utile
-            pentru concurenții noi.
       '5':
         #original_hash: 3b657aa
         title: Cum pot avea o Competiție WCA în orașul meu?
@@ -2107,16 +2209,11 @@ ro:
             WCA</a> din zona ei. Competiția este recunoscută oficial de WCA
             numai sub supravegherea unui Delegat WCA. Acesta va îndruma
             organizatorii pentru a face o competiție reușită.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Consultă <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>Ghidul
-            Organizatorului de Competiții WCA</a> și <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>Ghidul de Competiții de
-            la CubingUSA</a>  pentru informații suplimentare (Dacă există vreun
-            conflict între informațiile prezentate în acest ghid suplimentar și
-            Regulamentul WCA, atunci ceea ce se găsește în Regulamentul WCA este
-            corect.)
+            Organizatorului de Competiții WCA</a> pentru mai multe informații.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2343,18 +2440,21 @@ ro:
           de calitate pentru a asigura un nivel consistent de calitate al
           proceselor, Staffului WCA, Organizațiilor Regionale, Organizatorilor
           de Competiții și Staffului de Competiție.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>Delegații WCA</strong> sunt membrii WCA care sunt responsabili
-        să se asigue că toate competițiile se desfășoară conform misiunii,
-        spiritului și Regulamentului WCA. Există <strong>Delegați Seniori
-        WCA</strong>, <strong>Delegați WCA</strong> și <strong>Delegați
-        Candidați WCA</strong> %{see_link}. În plus față de datoriile unui
-        Delegat WCA, un Delegat Senior WCA este responsabil de supravegherea
-        Delegaților din zona lui și poate fi contactat de comunitate pentru
-        probleme regionale. Noii Delegați sunt, mai întâi, Delegați Candidați
-        WCA, și trebuie să arate că sunt capabili să supervizeze cu succes
-        competițiile, înainte de a fi numiți Delegați WCA.
+        <p><strong>Delegatul WCA</strong> este un rol definit în Moțiunile WCA
+        și descris mai departe în Regulamentul WCA. Sarcina principală a unui
+        Delegat este să supravegheze competiții în numele WCA. Un delegat WCA
+        este responsabil să se asigure că toate competițiile se desfășoară
+        conform Misiunii, Spiritului și Regulamentului WCA. WCA recunoaște
+        <strong>Delegați Seniori WCA</strong>, <strong>Delegați WCA</strong> și
+        <strong>Delegați Candidați WCA</strong> %{see_link}.</p><p> În plus față
+        de datoriile unui Delegat WCA, un Delegat Senior WCA este responsabil de
+        supravegherea Delegaților din zona lui și poate fi contactat de
+        comunitate pentru probleme regionale.</p><p> Noii Delegați sunt, mai
+        întâi, Delegați Candidați WCA; după aceea, trebuie să arate că sunt
+        capabili să supervizeze cu succes competițiile, înainte de a fi numiți
+        Delegați WCA.</p>
       #original_hash: 27d18ac
       see_link_html: '(vezi %{link})'
       #original_hash: 5b01fcc
@@ -2370,13 +2470,21 @@ ro:
     motions: Propuneri
     #original_hash: 092f99e
     minutes: Procese-verbale
+    #original_hash: 8d61184
+    policies: Politici
+    #original_hash: cdad4f1
+    dues: Sistemul de Taxe WCA
+    #original_hash: 7536665
+    logo: Utilizarea Logoului WCA
+    #original_hash: 920a98f
+    proximity_policy: Politica de Proximitate a Competițiilor WCA
+    #original_hash: f484584
+    competition_name_policy: Politica de Denumire a Competițiilor WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegați WCA
-    #original_hash: 0a89b0f
-    acknowledges: >-
-      WCA recunoaște pe următorii membrii ca delegați pentru competițiile
-      oficiale WCA:
+    #original_hash: 77b819c
+    acknowledges: 'WCA recunoaște următorii Delegați WCA:'
     table:
       #original_hash: 709a232
       name: Nume
@@ -2539,7 +2647,7 @@ ro:
     #original_hash: ea9d41d
     title: Instrumente de Score Taking WCA
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         WCA recomandă utilizarea <a href="http://cubecomps.com">Cube Comps</a>
         înainte de competiție și în timpul acesteia. Cube Comps este un sistem
@@ -2557,6 +2665,16 @@ ro:
         Cea mai nouă versiune a Score sheet-ului de competiție WCA poate fi
         descărcată de aici: <br /><a href="/files/results.xls"
         target="_blank">Score sheet de competiție WCA</a>.
+      #original_hash: a5f2d25
+      '4': >-
+        Poate vei dori să folosești <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> pentru
+        a crea grupele pentru probele competiției. Este un instrument care face
+        treaba în locul tău. Printre caracteristicile principale, vei găsi:
+        sortarea concurenților după rang, atribuirea sarcinilor (arbitri,
+        scrambleri), determinarea numărului de scramble-uri necesare, generarea
+        scoresheeturilor, soilor personale și sumarelor. Este un proiect Open
+        Source creat de Jonatan Kłosko.
   logo:
     #original_hash: c72c969
     title: Logoul WCA
@@ -2577,13 +2695,11 @@ ro:
         Versiunea 3D a logoului, creată de Vu Minh Tan din Vietnam: <a
         href="/files/WCALogo3D.png">versiunea PNG</a> (2.1 MB), o <a
         href="/files/WCALogo3Dsmall.png">versiune PNG mică</a> (0.25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Toți organizatorii de competiții oficiale WCA pot folosi logoul WCA
-        pentru site-uri, îmbrăcăminte, cadouri sau decorațiuni, numai pentru
-        competițiile oficiale WCA. <br /> Pentru restul persoanelor și pentru
-        alte scopuri, folosirea logoului WCA necesită aprobarea <a
-        href="mailto:board@worldcubeassociation.org">Boardului WCA</a>.
+        Utilizarea acceptabilă a logoului WCA este delimitată în Politica de
+        Utilizare a Logoului WCA, care se găsește în <a href="/documents">pagina
+        de Documente WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
@@ -2740,6 +2856,11 @@ ro:
         posts: Nicio postare găsită pentru
         #original_hash: 76a6bf1
         regulations_and_guidelines: Niciun Regulament sau Îndrumar găsit pentru
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Te rugăm să ții cont că secțiunea de incidente este disponibilă doar în
+      engleză, conținutul de mai jos nu este tradus.
   about_regulations:
     #original_hash: 6bce1b5
     title: Despre Regulament
