@@ -16,7 +16,13 @@ class PostsController < ApplicationController
   end
 
   def rss
-    @posts = Post.where(world_readable: true).order(created_at: :desc).includes(:author).page(params[:page])
+    tag = params[:tag]
+    if tag
+      @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
+    else
+      @posts = Post
+    end
+    @posts = @posts.where(world_readable: true).order(created_at: :desc).includes(:author).page(params[:page])
 
     # Force responding with xml, regardless of the given HTTP_ACCEPT headers.
     request.format = :xml
