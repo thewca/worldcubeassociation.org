@@ -26,7 +26,8 @@
   <% else %>
     <p>
       This competition is set up to accept payments through Stripe.
-      If you ever want to disconnect your account, you can do so from your Stripe account dashboard (please note it will revoke access for all competitions using the account).
+      If you ever want to disconnect your account, you can do so from your Stripe account dashboard
+      <%= link_to "here", "https://dashboard.stripe.com/account/applications" %> (please note it will revoke access for all competitions using the account).
     </p>
   <% end %>
 <% end %>
