@@ -357,6 +357,18 @@ textarea {
   min-height: 50px;
 }
 
+/* In case of form errors, they contain links targetting the relevant form elements.
+   SimpleMDE sets `display: none` for textareas to show custom editor.
+   As the textareas are not displayed, there is no way to target them with such link.
+   To make it work, we force them to be rendered but still invisible. */
+.markdown-editor {
+  display: block !important; // scss-lint:disable ImportantRule
+  visibility: hidden;
+  height: 0 !important; // scss-lint:disable ImportantRule
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
 
 .bs-table-query-fields {
   margin: 15px 0;
