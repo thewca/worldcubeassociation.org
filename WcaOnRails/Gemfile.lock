@@ -92,7 +92,7 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    bootstrap-table-rails (1.11.1.1)
+    bootstrap-table-rails (1.12.1)
     builder (3.2.3)
     bullet (5.7.5)
       activesupport (>= 3.0.0)
