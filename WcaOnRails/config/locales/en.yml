@@ -1323,14 +1323,7 @@ en:
         '6': To keep on file with the WCA a copy of its current by-laws and regulations in an electronic format
     application_instructions:
       title: Application Instructions
-      description: To apply to become a Regional Organization we require the region to submit a written application to the WCA Board containing all of the details listed below.
-      list:
-        '1': Name of the Regional Organization
-        '2': Official address and contact details
-        '3': A copy of its current by-laws, which are in compliance with the By-Laws and Regulations of the WCA
-        '4': A list of its principal officers
-        '5': A clear description of the area that is being covered by the Regional Organization
-        '6': A report on past and current WCA related activities
+      description_html: Please fill out <a href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>this form</a>.
   #context: Contact page
   contact:
     title: "Contact Information"
