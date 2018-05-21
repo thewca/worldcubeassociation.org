@@ -26,6 +26,11 @@ RSpec.describe PostsController do
         get :rss, format: :xml
         expect(assigns(:posts).to_a).to eq [post1, sticky_post, wdc_post]
       end
+
+      it "filters by tag" do
+        get :rss, format: :xml, params: { tag: "wdc" }
+        expect(assigns(:posts).to_a).to eq [wdc_post]
+      end
     end
 
     describe "GET #show" do
