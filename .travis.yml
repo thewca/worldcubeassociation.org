@@ -1,8 +1,6 @@
 dist: trusty
 sudo: false
 language: ruby
-rvm:
-  - 2.5.0
 bundler_args: --path $HOME/.bundle
 cache:
   directories:
