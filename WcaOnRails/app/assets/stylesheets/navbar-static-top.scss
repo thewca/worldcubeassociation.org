@@ -20,8 +20,7 @@
   .navbar-brand {
     padding: 0;
     padding-top: 16px;
-    height: 110px;
-    margin-bottom: -50px;
+    margin-bottom: 10px;
     margin-top: 10px;
 
     span {
@@ -81,6 +80,8 @@
 @media (min-width: $screen-sm-min) {
   .navbar-static-top {
     .navbar-brand {
+      height: 110px;
+      margin-bottom: -50px;
       img {
         height: 100px;
         margin-top: -15px;
