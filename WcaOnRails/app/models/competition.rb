@@ -147,7 +147,7 @@ class Competition < ApplicationRecord
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
 
   # We have stricter validations for confirming a competition
-  validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+  validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, :registration_requirements, presence: true, if: :confirmed_or_visible?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
