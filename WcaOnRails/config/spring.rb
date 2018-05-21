@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 %w(
-  .ruby-version
+  ../.ruby-version
   .rbenv-vars
   tmp/restart.txt
   tmp/caching-dev.txt

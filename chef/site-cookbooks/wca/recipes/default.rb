@@ -140,7 +140,7 @@ package 'g++'
 package 'libmysqlclient-dev'
 package 'imagemagick'
 
-ruby_version = File.read("#{repo_root}/WcaOnRails/.ruby-version").match(/\d+\.\d+/)[0]
+ruby_version = File.read("#{repo_root}/.ruby-version").match(/\d+\.\d+/)[0]
 node.default['brightbox-ruby']['version'] = ruby_version
 include_recipe "brightbox-ruby"
 chef_env_to_rails_env = {
