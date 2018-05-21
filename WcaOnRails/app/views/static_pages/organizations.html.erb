@@ -224,11 +224,5 @@
   </ol>
 
   <h3><%= t('regional_organizations.application_instructions.title') %></h3>
-  <p><%= t('regional_organizations.application_instructions.description') %></p>
-  <ol>
-    <% # We want to iterate through the *English* entries: so that if the translation doesn't have it, it will fall back to English. %>
-    <% t('regional_organizations.application_instructions.list', locale: :en).each do |key, en_value| %>
-      <li><%= t("regional_organizations.application_instructions.list.#{key}") %></li>
-    <% end %>
-  </ol>
+  <p><%= t('regional_organizations.application_instructions.description_html') %></p>
 </div>
