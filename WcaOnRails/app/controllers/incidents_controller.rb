@@ -11,12 +11,13 @@ class IncidentsController < ApplicationController
   ]
 
   def index
-    base_model = Incident.includes(:competitions, :incident_tags).order(created_at: :desc)
+    base_model = Incident.includes(:competitions, :incident_tags)
     if current_user&.can_view_delegate_matters?
       @incidents = base_model.all
     else
       @incidents = base_model.resolved
     end
+    @incidents = @incidents.sort_by(&:last_happened_date).reverse
   end
 
   def show

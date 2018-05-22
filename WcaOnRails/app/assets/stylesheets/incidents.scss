@@ -45,11 +45,8 @@
     .selectize-input > input {
       min-width: 100px;
     }
-    .tags-cell,
-    .comps-cell {
-      width: 25%;
-    }
-    .status-cell {
+    .status-cell,
+    .digest-cell {
       width: 10%;
     }
   }

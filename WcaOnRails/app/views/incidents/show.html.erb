@@ -71,8 +71,11 @@
     <%= link_to 'Destroy', incident_path(@incident), class: "btn btn-danger", method: :delete, data: { confirm: "Are you sure you want to delete this incident?" } %>
   <% end %>
 
+  <hr/>
+  <div>
+    This incident was created on <%= wca_local_time(@incident.created_at) %>.
+  </div>
   <% if @incident.digest_sent? %>
-    <hr/>
     <div>
       This incident was marked as sent to Delegates in a WRC digest on <%= wca_local_time(@incident.digest_sent_at) %>.
     </div>
