@@ -2480,7 +2480,7 @@ pt:
         '2': >-
           Contribuir ativamente para Competições da WCA de caráter continental
           que são levadas a cabo no continente da Organização Regional
-        #original_hash: 5913cd0
+        #original_hash: 8943714
         '3': >-
           Respeitar e operacionalizar os Objetivos definidos nos Estatutos e
           Regulamentos da WCA
@@ -2488,33 +2488,18 @@ pt:
         '4': Cumprir todos os Regulamentos da WCA aplicáveis
         #original_hash: 23cda60
         '5': Aceitar e cumprir com decisões de Oficiais da WCA
-        #original_hash: 08c6d86
+        #original_hash: efe2b55
         '6': >-
-          Manter em arquivo com a WCA uma cópia dos seus estatutos correntes e
-          regulamentos em formato eletrónico
+          Manter em arquivo com a WCA uma cópia dos seus Estatutos e
+          Regulamentos atuais em formato eletrónico
     application_instructions:
       #original_hash: 4da829b
       title: Instruções de Aplicação
-      #original_hash: 7ae038e
-      description: >-
-        Para submeter uma aplicação para se tornar uma Organização Regional é
-        necessário submeter uma aplicação escrita ao Conselho da WCA contendo
-        todos os detalhes listados abaixo.
-      list:
-        #original_hash: 1a9d544
-        '1': Nome da Organização Regional
-        #original_hash: a9bf3f4
-        '2': Morada oficial e detalhes de contacto
-        #original_hash: 2a029e9
-        '3': >-
-          Uma cópia dos seus estatutos atuais, que estão em conformidade com os
-          Estatutos e Regulamentos da WCA
-        #original_hash: a5a2771
-        '4': Lista dos principais membros oficiais
-        #original_hash: 1186ebf
-        '5': Uma descrição clara da área que está coberta pela Organização Regional
-        #original_hash: 826e371
-        '6': Um relatório de atividades passadas e presentes relacionadas com a WCA
+      #original_hash: 7ed06ee
+      description_html: >-
+        Por favor preencha <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>este
+        formulário</a>.
   contact:
     #original_hash: a34b69f
     title: Informações de Contacto
