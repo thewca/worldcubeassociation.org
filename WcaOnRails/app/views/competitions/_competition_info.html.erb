@@ -117,9 +117,19 @@
           <dt><%= t '.registration_period.label' %></dt>
           <dd>
             <p>
-              <%= t('.registration_period.range_html',
+              <% if competition.registration_not_yet_opened? %>
+                <%= t(".registration_period.range_future_html",
                     start_date_and_time: wca_local_time(competition.registration_open),
                     end_date_and_time: wca_local_time(competition.registration_close)) %>
+              <% elsif competition.registration_past? %>
+                <%= t(".registration_period.range_past_html",
+                    start_date_and_time: wca_local_time(competition.registration_open),
+                    end_date_and_time: wca_local_time(competition.registration_close)) %>
+              <% else %>
+                <%= t(".registration_period.range_ongoing_html",
+                    start_date_and_time: wca_local_time(competition.registration_open),
+                    end_date_and_time: wca_local_time(competition.registration_close)) %>
+              <% end %>
             </p>
           </dd>
         <% end %>
