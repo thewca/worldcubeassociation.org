@@ -1639,12 +1639,18 @@ pt:
       registration_period:
         #original_hash: 6888733
         label: Período de registo
-        #original_hash: e46a61b
-        range_html: >-
+        #original_hash: 0c7c1dc
+        range_future_html: >-
           Registo online estará aberto de %{start_date_and_time} até
-          %{end_date_and_time}. Outras formas de registo podem ser permitidas
-          (como registo no próprio local). Não deixe de ler todos os detalhes da
-          competição para mais informação.
+          %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Registo online abriu a %{start_date_and_time} a encerrará a
+          %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Registo online abriu a %{start_date_and_time} a encerrou a
+          %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Competições
