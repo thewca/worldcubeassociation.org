@@ -28,9 +28,9 @@ module RegistrationsHelper
   def please_sign_in(message_key, comp, args = {})
     sign_in = I18n.t('registrations.sign_in')
     here = I18n.t('common.here')
-    raw(I18n.t(message_key, **args,
-               sign_in: link_to(sign_in, competition_register_require_sign_in_path(comp)),
-               here: link_to(here, new_user_registration_path, target: "_blank")))
+    args[:sign_in] = link_to(sign_in, competition_register_require_sign_in_path(comp))
+    args[:here] = link_to(here, new_user_registration_path, target: "_blank")
+    raw(I18n.t(message_key, args))
   end
 
   def registration_date_and_tooltip(competition, registration)
