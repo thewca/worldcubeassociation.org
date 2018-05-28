@@ -1682,12 +1682,18 @@ ro:
       registration_period:
         #original_hash: 6888733
         label: Perioadă de înregistrare
-        #original_hash: e46a61b
-        range_html: >-
-          Înregistrarea online va fi deschisă între %{start_date_and_time} și
-          %{end_date_and_time}. Este posibil ca și alte modalități de înscriere
-          să fie acceptate (înregistrarea pe loc, de exemplu). Pentru a afla,
-          citește toate detaliile despre competiție.
+        #original_hash: 0c7c1dc
+        range_future_html: >-
+          Înregistrarea online va fi valabilă între %{start_date_and_time} și
+          între %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Înregistrarea online s-a deschis în %{start_date_and_time} și se va în
+          %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Înregistrarea online s-a deschis în %{start_date_and_time} și s-a
+          închis în %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Competiții
@@ -2465,7 +2471,7 @@ ro:
     #original_hash: 687c828
     title: Documente
     #original_hash: 9855f80
-    bylaws: Statute
+    bylaws: Statut
     #original_hash: fdceb44
     motions: Propuneri
     #original_hash: 092f99e
@@ -2518,39 +2524,26 @@ ro:
         '2': >-
           Să contribuie activ la Competițiile Continentale WCA  corespunzătoare
           regiunii Organizației
-        #original_hash: 5913cd0
-        '3': Să respecte și să operaționalizeze Obiectivele și Regulamentul WCA
+        #original_hash: 8943714
+        '3': >-
+          Să respecte și să operaționalizeze Obiectivele specificate în Statutul
+          și Regulamentul WCA
         #original_hash: 0c3576b
         '4': Să aplice toate Regulile WCA
         #original_hash: 23cda60
         '5': Să accepte și să aplice hotărârile oficiale ale WCA
-        #original_hash: 08c6d86
+        #original_hash: efe2b55
         '6': >-
-          Să trimită către WCA o copie a regulilor și practicilor stabilite de
+          Să trimită către WCA o copie a regulilor și Statutului stabilite de
           către Organizație, în format electronic
     application_instructions:
       #original_hash: 4da829b
       title: Intrucțiuni pentru aplicație
-      #original_hash: 7ae038e
-      description: >-
-        Pentru a deveni o Organizație Regională, este necesară depunerea unei
-        aplicații scrise către Boardul WCA, care să conțină tot ce se cere în
-        lista de mai jos.
-      list:
-        #original_hash: 1a9d544
-        '1': Numele Organizației Regionale
-        #original_hash: a9bf3f4
-        '2': Adresa oficială și detaliile de contact
-        #original_hash: 2a029e9
-        '3': >-
-          O copie a regulilor curente, care sunt în concordanță cu Regulamentul
-          WCA
-        #original_hash: a5a2771
-        '4': Lista principalilor lideri
-        #original_hash: 1186ebf
-        '5': O descriere clară a zonei acoperite de Organizația Regională
-        #original_hash: 826e371
-        '6': 'Un raport al activităților trecute și curente, legate de WCA'
+      #original_hash: 7ed06ee
+      description_html: >-
+        Te rugăm să completezi <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>acest
+        formular</a>.
   contact:
     #original_hash: a34b69f
     title: Informații de Contact
