@@ -1704,12 +1704,18 @@ pl:
       registration_period:
         #original_hash: 6888733
         label: Okres rejestracyjny
-        #original_hash: e46a61b
-        range_html: >-
+        #original_hash: 0c7c1dc
+        range_future_html: >-
           Rejestracja online będzie otwarta od %{start_date_and_time} do
-          %{end_date_and_time}. Inne formy rejestracji mogą być dopuszczone
-          (takie jak rejestracja na miejscu). Przeczytaj dokładnie wszystkie
-          szczegóły na temat zawodów, aby się dowiedzieć.
+          %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Rejestracja online rozpoczęła się %{start_date_and_time} i zakończy
+          się %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Rejestracja online rozpoczęła się %{start_date_and_time} i zakończyła
+          się %{end_date_and_time}
     index:
       #original_hash: db98a68
       title: Zawody
@@ -2542,7 +2548,7 @@ pl:
         '2': >-
           Aktywny wkład w Kontynentalnych Zawodach WCA, które odbywają się na
           kontynencie danej Organizacji Regionalnej
-        #original_hash: 5913cd0
+        #original_hash: 8943714
         '3': >-
           Respektowanie i działanie zgodnie z celami określonymi przez Status
           oraz Regulamin WCA
@@ -2552,35 +2558,18 @@ pl:
           Regulaminie WCA
         #original_hash: 23cda60
         '5': Akceptowanie i stosowanie się do wszystkich decyzji Oficjeli WCA
-        #original_hash: 08c6d86
+        #original_hash: efe2b55
         '6': >-
           Przechowywać kopię obecnego Statutu oraz Regulaminu WCA w formacie
           elektronicznym
     application_instructions:
       #original_hash: 4da829b
       title: Instrukcje dotyczące składania wniosku
-      #original_hash: 7ae038e
-      description: >-
-        W celu ubiegania się o bycie Organizacją Regionalną wymagamy aby dany
-        region wysłał pisemny wniosek do Zarządu WCA zawierający wszystkie
-        szczegóły wymienione poniżej.
-      list:
-        #original_hash: 1a9d544
-        '1': Nazwę danej Organizacji Regionalnej
-        #original_hash: a9bf3f4
-        '2': Oficjalny adres email oraz szczegółowe dane kontaktowe
-        #original_hash: 2a029e9
-        '3': >-
-          Kopię jej obecnego statutu, który jest zgodny ze Statutem i
-          Regulaminem WCA
-        #original_hash: a5a2771
-        '4': Listę członków zarządu
-        #original_hash: 1186ebf
-        '5': >-
-          Jasny opis obszaru który jest objęty zasięgiem danej Organizacji
-          Regionalnej
-        #original_hash: 826e371
-        '6': Raport dotyczący przeszłych i bieżących działań związanych z WCA
+      #original_hash: 7ed06ee
+      description_html: >-
+        Prosimy o wypełnienie <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>tego
+        formularza</a>.
   contact:
     #original_hash: a34b69f
     title: Informacje kontaktowe
