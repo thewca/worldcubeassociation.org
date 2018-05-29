@@ -1167,6 +1167,26 @@ id:
         '7': >-
           Avatar tidak boleh memuat konten yang menyinggung (contoh:
           gerakan/isyarat yang menyinggung).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Pedoman tambahan untuk Delegate:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            Avatar harus memuat diri Anda saat ini, yang menggambarkan gaya
+            pakaian yang sama pada saat Anda mengikuti kompetisi sebagai
+            Delegate WCA.
+          #original_hash: 64ded69
+          '2': >-
+            Avatar harus diberi bingkai, dipotong, dimiringkan, dan dicerahkan
+            sehingga kompetitor atau penonton pada kompetisi dapat menggunakan
+            avatar ini untuk mengidentifikasi Anda di tempat kompetisi.
+          #original_hash: 13fab02
+          '3': >-
+            Thumbnail avatar hanya memuat sebagian dari keseluruhan avatar dan
+            digunakan untuk menggambarkan keseluruhan avatar Anda. Thumbnail
+            harus diatur sehingga Anda dapat dikenali dan harus memuat wajah
+            Anda.
     errors:
       #original_hash: 094b763
       not_found: tidak ditemukan
@@ -1620,8 +1640,18 @@ id:
       registration_period:
         #original_hash: 6888733
         label: Periode pendaftaran
-        #original_hash: 8f8b05c
-        range_html: 'Dari %{start_date_and_time} sampai %{end_date_and_time}.'
+        #original_hash: 0c7c1dc
+        range_future_html: >-
+          Registrasi online akan dibuka dari %{start_date_and_time} sampai
+          %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Registrasi online dibuka pada %{start_date_and_time} dan akan ditutup
+          pada %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Registrasi online dibuka pada %{start_date_and_time} dan ditutup pada
+          %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Kompetisi
@@ -1897,6 +1927,8 @@ id:
         admin_view: Tampilan admin
         #original_hash: a857eb4
         tabs: Atur tab
+        #original_hash: f3d6278
+        submit_results: Kirimkan hasil
         #original_hash: 4c9f914
         delegate_report: Laporan Delegate
         #original_hash: b233e77
@@ -2448,7 +2480,7 @@ id:
         '2': >-
           Berkontribusi secara aktif di dalam Kompetisi WCA Tingkat Benua yang
           diadakan di benua di mana Organisasi Regional dibentuk
-        #original_hash: 5913cd0
+        #original_hash: 8943714
         '3': >-
           Menghargai dan menjalankan Tujuan yang ditetapkan dalam Anggaran Rumah
           Tangga dan Regulasi WCA
@@ -2456,31 +2488,18 @@ id:
         '4': Memenuhi seluruh Regulasi WCA yang diterapkan
         #original_hash: 23cda60
         '5': Menerima dan memenuhi keputusan Pejabat WCA
-        #original_hash: 08c6d86
+        #original_hash: efe2b55
         '6': >-
           Menyimpan dan memperbarui salinan Anggaran Rumah Tangga dan Regulasi
           WCA dalam bentuk elektronik
     application_instructions:
       #original_hash: 4da829b
       title: Panduan Pengajuan
-      #original_hash: 7ae038e
-      description: >-
-        Untuk mengajukan Organisasi Regional, kami meminta perwakilan untuk
-        mengirimkan pengajuan tertulis ke pada Board WCA yang berisi semua
-        detail pada daftar di bawah ini.
-      list:
-        #original_hash: 1a9d544
-        '1': Nama Organisasi Regional
-        #original_hash: a9bf3f4
-        '2': Alamat dan detail kontak resmi
-        #original_hash: 2a029e9
-        '3': Salinan ART organisasi yang mengikuti ART dan Regulasi WCA
-        #original_hash: a5a2771
-        '4': Daftar petugas utama
-        #original_hash: 1186ebf
-        '5': Deskripsi jelas tentang wilayah yang dicakup oleh Organisasi Regional
-        #original_hash: 826e371
-        '6': Laporan kegiatan WCA lawas dan saat ini
+      #original_hash: 7ed06ee
+      description_html: >-
+        Harap mengisi <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>formulir
+        ini</a>.
   contact:
     #original_hash: a34b69f
     title: Informasi Kontak
