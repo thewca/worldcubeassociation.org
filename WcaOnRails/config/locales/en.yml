@@ -190,7 +190,7 @@ en:
         email: "Email"
         password: "Password"
         current_password: "Current password"
-        password_confirmation: "Password confirmation"
+        password_confirmation: "Re-enter password"
         remember_me: "Remember me"
         pending_avatar: "Upload new avatar"
         remove_avatar: "Remove avatar"
