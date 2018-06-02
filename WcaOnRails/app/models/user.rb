@@ -598,7 +598,7 @@ class User < ApplicationRecord
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
     end
-    if admin? || board_member?
+    if admin? || board_member? || senior_delegate?
       fields += %i(delegate_status senior_delegate_id region)
     end
     if user.any_kind_of_delegate?

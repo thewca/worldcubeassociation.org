@@ -89,6 +89,9 @@ class UsersController < ApplicationController
     old_confirmation_sent_at = @user.confirmation_sent_at
     dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
     if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
+      if @user.saved_change_to_delegate_status
+        DelegateStatusChangeMailer.notify_board_and_wqac_of_delegate_status_change(@user, current_user).deliver_later
+      end
       if current_user == @user
         # Sign in the user, bypassing validation in case their password changed
         bypass_sign_in @user
