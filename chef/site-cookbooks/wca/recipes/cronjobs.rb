@@ -77,7 +77,7 @@ unless node.chef_environment.start_with?("development")
   cron "clear rails cache" do
     minute '0'
     hour '5'
-    weekday 'TUE,FRI'
+    weekday 'MON,WED,SAT'
 
     path path
     mailto admin_email
