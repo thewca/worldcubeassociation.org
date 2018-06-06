@@ -22,6 +22,8 @@ class User < ApplicationRecord
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
 
+  scope :confirmed_email, -> { where.not(confirmed_at: nil) }
+
   def self.eligible_voters
     team_leaders = TeamMember.current.where(team_leader: true).map(&:user)
     eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))
@@ -319,7 +321,7 @@ class User < ApplicationRecord
   after_save :remove_pending_wca_id_claims
   private def remove_pending_wca_id_claims
     if saved_change_to_delegate_status? && !delegate_status
-      users_claiming_wca_id.each do |user|
+      users_claiming_wca_id.confirmed_email.each do |user|
         user.update delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil
         senior_delegate = User.find_by_id(senior_delegate_id_before_last_save)
         WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self, senior_delegate).deliver_later
@@ -668,7 +670,7 @@ class User < ApplicationRecord
   def self.search(query, params: {})
     users = Person.includes(:user).current
     unless ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
-      users = User.where.not(confirmed_at: nil).not_dummy_account
+      users = User.confirmed_email.not_dummy_account
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_delegates])
         users = users.where.not(delegate_status: nil)
