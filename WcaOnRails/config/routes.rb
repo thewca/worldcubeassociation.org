@@ -111,6 +111,7 @@ Rails.application.routes.draw do
   get 'delegates' => 'static_pages#delegates'
   get 'organizations' => 'static_pages#organizations'
   get 'contact' => 'static_pages#contact'
+  get 'privacy' => 'static_pages#privacy'
   get 'faq' => 'static_pages#faq'
   get 'score-tools' => 'static_pages#score_tools'
   get 'logo' => 'static_pages#logo'
