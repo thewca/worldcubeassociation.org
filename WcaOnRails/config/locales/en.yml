@@ -735,7 +735,7 @@ en:
       #context: for a new registration
       new:
         #context: "comp_name" contains the competition's name
-        mail_subject: "You have registered for %{comp_name}"
+        mail_subject: "Your registration for %{comp_name} is submitted and pending approval"
         #context: "comp_name" contains the competition's name
         registered_html: "You just registered for %{comp_name}."
         awaits_approval: "Your registration has been received and is pending approval from the organization team."
