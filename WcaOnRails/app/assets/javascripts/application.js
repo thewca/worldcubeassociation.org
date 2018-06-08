@@ -45,6 +45,7 @@
 //= require moment/ru.js
 //= require moment/sk.js
 //= require moment/sl.js
+//= require moment/vi.js
 //= require moment/zh-cn.js
 //= require moment/zh-tw.js
 //= require bootstrap-datetimepicker
