@@ -1329,8 +1329,10 @@ pt:
       #original_hash: 72e2180
       regards_html: 'Cumprimentos, %{people}.'
       new:
-        #original_hash: 6fb638c
-        mail_subject: 'Registou-se para %{comp_name}'
+        #original_hash: a32db59
+        mail_subject: >-
+          O seu registou-se para a competição %{comp_name} foi submetido,
+          aguardando aprovação
         #original_hash: 8374583
         registered_html: 'Acabou de se registar para %{comp_name}.'
         #original_hash: 13fabed
