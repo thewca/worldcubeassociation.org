@@ -34,7 +34,7 @@
     "sass-loader": "^7.0.3",
     "simplemde": "^1.11.2",
     "style-loader": "^0.21.0",
-    "webpack": "^3.11.0",
+    "webpack": "^4.11.1",
     "webpack-manifest-plugin": "^2.0.3",
     "webpack-merge": "^4.1.2",
     "whatwg-fetch": "^2.0.4"
