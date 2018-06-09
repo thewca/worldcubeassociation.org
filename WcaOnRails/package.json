@@ -19,7 +19,7 @@
     "file-loader": "^1.1.11",
     "flag-icon-css": "^3.0.0",
     "glob": "^7.1.2",
-    "js-yaml": "^3.11.0",
+    "js-yaml": "^3.12.0",
     "node-sass": "^4.9.0",
     "path-complete-extname": "^1.0.0",
     "postcss-loader": "^2.1.5",
