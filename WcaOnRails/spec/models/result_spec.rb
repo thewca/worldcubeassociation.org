@@ -342,11 +342,8 @@ RSpec.describe Result do
     end
 
     it "times over 10 minutes must be rounded" do
-      result = FactoryBot.build :result, value2: 10*6000 + 4343
-      expect(result).to be_invalid_with_errors(value2: ["times over 10 minutes should be rounded"])
-
-      result.value2 = 10*6000 + 4300
-      expect(result).to be_valid
+      expect(FactoryBot.build(:result, value2: 10*6000 + 4343)).to be_invalid_with_errors(value2: ["times over 10 minutes should be rounded"])
+      expect(FactoryBot.build(:result, value2: 10*6000 + 4300)).to be_valid
     end
 
     context "multibld" do
