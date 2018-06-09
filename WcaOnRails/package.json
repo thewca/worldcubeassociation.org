@@ -31,7 +31,7 @@
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.0",
     "resolve-url-loader": "^2.3.0",
-    "sass-loader": "^7.0.1",
+    "sass-loader": "^7.0.3",
     "simplemde": "^1.11.2",
     "style-loader": "^0.21.0",
     "webpack": "^3.11.0",
