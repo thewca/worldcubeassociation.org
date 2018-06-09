@@ -95,7 +95,7 @@ module Locales
       "name": "Bahasa Indonesia",
     },
     "vi": {
-      "flag_id": "vi",
+      "flag_id": "vn",
       "name": "Tiếng Việt",
     },
   }.freeze
