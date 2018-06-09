@@ -1316,8 +1316,10 @@ fi:
       #original_hash: 72e2180
       regards_html: 'Terveisin, %{people}.'
       new:
-        #original_hash: 6fb638c
-        mail_subject: 'Olet rekisteröitynyt kilpailuun %{comp_name}'
+        #original_hash: a32db59
+        mail_subject: >-
+          Rekisteröitymisesi kilpailuun %{comp_name} on lähetetty ja odottaa
+          hyväksyntää
         #original_hash: 8374583
         registered_html: 'Rekisteröidyit juuri kilpailuun %{comp_name}.'
         #original_hash: 13fabed
@@ -1631,12 +1633,18 @@ fi:
       registration_period:
         #original_hash: 6888733
         label: Rekisteröitymisaika
-        #original_hash: e46a61b
-        range_html: >-
+        #original_hash: 0c7c1dc
+        range_future_html: >-
           Online-rekisteröityminen alkaa %{start_date_and_time} ja loppuu
-          %{end_date_and_time}. Muut rekisteröitymistavat (kuten
-          jälki-ilmoittautuminen kisapaikalla) saattavat olla mahdollisia.
-          Luethan kilpailun tiedot huolella.
+          %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Online-rekisteröityminen alkoi %{start_date_and_time} ja loppuu
+          %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Online-rekisteröityminen alkoi %{start_date_and_time} ja loppui
+          %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Kilpailut
@@ -2445,7 +2453,7 @@ fi:
         '2': >-
           Olla aktiivisesti osallisena WCA:n maanosakilpailuissa, jotka pidetään
           alueellisen järjestön maanosassa
-        #original_hash: 5913cd0
+        #original_hash: 8943714
         '3': >-
           Kunnioittaa ja edistää WCA:n arvojärjestyksen ja sääntöjen mukaisia
           päämääriä
@@ -2453,33 +2461,18 @@ fi:
         '4': Suostua kaikkiin asiaankuuluviin WCA-sääntöihin
         #original_hash: 23cda60
         '5': Hyväksyä ja suostua kaikkiin WCA-toimihenkilöiden päätöksiin
-        #original_hash: 08c6d86
+        #original_hash: efe2b55
         '6': >-
           Pitää WCA ajan tasalla järjestön nykyisestä arvojärjestyksestä ja
-          säännöistä
+          säännöistä sähköisessä muodossa
     application_instructions:
       #original_hash: 4da829b
       title: Hakemusohjeet
-      #original_hash: 7ae038e
-      description: >-
-        Hakeakseen alueelliseksi järjestöksi, vaadimme aluetta lähettämään WCA
-        Boardille kirjallisen hakemuksen, joka sisältää kaikki alla luetellut
-        tiedot.
-      list:
-        #original_hash: 1a9d544
-        '1': Alueellisen järjestön nimi
-        #original_hash: a9bf3f4
-        '2': Virallinen osoite ja yhteystiedot
-        #original_hash: 2a029e9
-        '3': >-
-          Kopio sen arvojärjestyksestä, joka noudattaa WCA:n arvojärjestystä ja
-          sääntöjä
-        #original_hash: a5a2771
-        '4': Luettelo sen pääasiallisista toimijoista
-        #original_hash: 1186ebf
-        '5': 'Tarkka kuvaus alueesta, jonka alueellinen järjestö kattaa'
-        #original_hash: 826e371
-        '6': 'Raportti menneistä ja nykyisistä WCA:han liittyvistä toimista'
+      #original_hash: 7ed06ee
+      description_html: >-
+        Täytä <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>tämä
+        lomake</a>.
   contact:
     #original_hash: a34b69f
     title: Yhteystiedot
