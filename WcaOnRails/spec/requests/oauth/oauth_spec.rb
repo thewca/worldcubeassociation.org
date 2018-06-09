@@ -5,6 +5,17 @@ require "rails_helper"
 RSpec.describe "oauth api" do
   include Capybara::DSL
 
+  # Pretend we're running on HTTPS, so that we can use the test server for redirect_uri.
+  before :all do
+    Capybara.default_host = Capybara.default_host.gsub("http", "https")
+    default_url_options[:protocol] = "https"
+  end
+
+  after :all do
+    Capybara.default_host = Capybara.default_host.gsub("https", "http")
+    default_url_options[:protocol] = "http"
+  end
+
   let(:user) { FactoryBot.create :user_with_wca_id }
 
   it 'can authenticate with grant_type password' do
@@ -18,7 +29,7 @@ RSpec.describe "oauth api" do
   end
 
   context "grant_type authorization" do
-    let(:oauth_app) { FactoryBot.create(:oauth_application, redirect_uri: "urn:ietf:wg:oauth:2.0:oob\n#{oauth_authorization_url}") }
+    let(:oauth_app) { FactoryBot.create(:oauth_application, redirect_uri: oauth_authorization_url) }
 
     it 'can authenticate with grant_type authorization' do
       visit oauth_authorization_path(
@@ -64,7 +75,7 @@ RSpec.describe "oauth api" do
       fill_in "user_password", with: user.password
       click_button "Sign in"
       #  2. Expect to see a complain about the redirect uri being incorrect
-      expect(page).to have_text "The redirect uri included is not valid."
+      expect(page).to have_text "The requested redirect uri is malformed or doesn't match client redirect URI."
     end
 
     it 'can use refresh token' do
