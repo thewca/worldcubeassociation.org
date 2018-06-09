@@ -1386,8 +1386,10 @@ pl:
       #original_hash: 72e2180
       regards_html: 'Z poważaniem, %{people}.'
       new:
-        #original_hash: 6fb638c
-        mail_subject: 'Zarejestrowałeś się na %{comp_name}'
+        #original_hash: a32db59
+        mail_subject: >-
+          Twoja rejestracja na %{comp_name} została wysłana i oczekuje na
+          zatwierdzenie
         #original_hash: 8374583
         registered_html: 'Właśnie zarejestrowałeś się na %{comp_name}.'
         #original_hash: 13fabed
