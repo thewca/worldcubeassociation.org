@@ -191,8 +191,6 @@ en:
         password: "Password"
         current_password: "Current password"
         password_confirmation: "Re-enter password"
-        new_password: 'New password'
-        new_password_confirmation: 'Re-enter new password'
         remember_me: "Remember me"
         pending_avatar: "Upload new avatar"
         remove_avatar: "Remove avatar"
@@ -503,6 +501,10 @@ en:
       size_too_big: "is too big (should be at most %{file_size})"
   #context: Overriden key for sign in
   devise:
+    passwords:
+      edit:
+        new_password_confirmation: 'Re-enter new password'
+
     sessions:
       new:
         sign_in: "Sign in"
