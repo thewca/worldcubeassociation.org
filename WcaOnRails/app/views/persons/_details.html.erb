@@ -13,7 +13,7 @@
       </h4>
     <% end %>
     <% if @person.user&.avatar %>
-      <%= image_tag @person.user.avatar, class: "avatar" %>
+      <%= image_tag @person.user.avatar.url, class: "avatar" %>
     <% end %>
     <!-- Handle people with in memoriam. -->
     <% if PersonsHelper::IN_MEMORIAM[@person.wca_id] %>
