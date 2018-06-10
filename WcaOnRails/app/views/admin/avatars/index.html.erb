@@ -39,7 +39,7 @@
 
               <div class="col-sm-6">
                 <div class="pending-avatar">
-                  <%= link_to image_tag(user.pending_avatar), user.pending_avatar.url, target: "_blank", class: "hide-new-window-icon" %>
+                  <%= link_to image_tag(user.pending_avatar.url), user.pending_avatar.url, target: "_blank", class: "hide-new-window-icon" %>
                   <div class="btn-group actions" data-toggle="buttons">
                     <% name = "avatars[#{user.wca_id}][action]" %>
                     <label class="btn btn-default btn-success">
