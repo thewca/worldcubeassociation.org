@@ -1,4 +1,5 @@
-import AutoNumeric from 'autonumeric';
+/* Import the bundled library explicitly, otherwise we end up importing transpiled ES6 module. */
+import AutoNumeric from 'autonumeric/dist/autoNumeric.js';
 import currenciesData from 'wca/currenciesData.js.erb';
 
 
