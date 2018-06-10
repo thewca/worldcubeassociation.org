@@ -21,14 +21,14 @@ RSpec.feature "Eligible voters csv" do
     end
   }
   let!(:team_member) { FactoryBot.create(:user, :wrc_member) }
-  let!(:candidate_delegate) { FactoryBot.create(:candidate_delegate) }
-  let!(:delegate) { FactoryBot.create(:delegate) }
+  let!(:senior_delegate) { FactoryBot.create(:senior_delegate) }
+  let!(:candidate_delegate) { FactoryBot.create(:candidate_delegate, senior_delegate: senior_delegate) }
+  let!(:delegate) { FactoryBot.create(:delegate, senior_delegate: senior_delegate) }
   let!(:delegate_who_is_also_team_leader) {
-    FactoryBot.create(:delegate, :wrc_member).tap do |user|
+    FactoryBot.create(:delegate, :wrc_member, senior_delegate: senior_delegate).tap do |user|
       user.team_members.find_by_team_id(wrc_team_id).update!(team_leader: true)
     end
   }
-  let!(:senior_delegate) { FactoryBot.create(:senior_delegate) }
   let!(:board_member) { FactoryBot.create(:user, :board_member) }
 
   before :each do

@@ -13,7 +13,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders" do
       expect(mail.to).to eq(["board@worldcubeassociation.org"])
-      expect(mail.cc).to match_array(competition.delegates.pluck(:email) + [senior_delegate.email])
+      expect(mail.cc).to match_array(competition.delegates.pluck(:email) + [senior_delegate.email] + [third_delegate.senior_delegate.email])
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
       expect(mail.reply_to).to eq([delegate.email])
 

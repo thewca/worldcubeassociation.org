@@ -216,8 +216,8 @@ RSpec.describe Api::V0::ApiController do
     end
 
     it 'paginates' do
-      30.times do
-        FactoryBot.create :delegate
+      15.times do
+        FactoryBot.create :delegate # Each delegate gets a senior delegate created, so there are 30 delegates in total
       end
 
       get :delegates

@@ -293,15 +293,17 @@ class User < ApplicationRecord
 
   validate :senior_delegate_presence
   def senior_delegate_presence
-    if !User.delegate_status_allows_senior_delegate(delegate_status) && senior_delegate
+    if !User.delegate_status_requires_senior_delegate(delegate_status) && senior_delegate
       errors.add(:senior_delegate, I18n.t('users.errors.must_not_be_present'))
     end
   end
 
-  # This is a copy of def self.delegate_status_allows_senior_delegate(delegate_status) in the user model
+  validates :senior_delegate, presence: true, if: -> { User.delegate_status_requires_senior_delegate(delegate_status) && !senior_delegate }
+
+  # This is a copy of def self.delegate_status_requires_senior_delegate(delegate_status) in the user model
   # https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/app/assets/javascripts/users.js#L3-L11
   # It is necessary to fix both files for changes to work
-  def self.delegate_status_allows_senior_delegate(delegate_status)
+  def self.delegate_status_requires_senior_delegate(delegate_status)
     {
       nil => false,
       "" => false,
