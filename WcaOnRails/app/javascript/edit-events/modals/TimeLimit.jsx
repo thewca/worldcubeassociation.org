@@ -37,14 +37,7 @@ function objectifyArray(arr) {
 }
 
 class SelectRoundsButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { selectedRoundsById: objectifyArray(props.selectedRoundIds) };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ selectedRoundsById: objectifyArray(nextProps.selectedRoundIds) });
-  }
+  state = { selectedRoundsById: objectifyArray(this.props.selectedRoundIds) };
 
   reset = () => {
     this.setState({ selectedRoundsById: objectifyArray(this.props.selectedRoundIds) });
