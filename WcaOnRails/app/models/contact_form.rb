@@ -13,13 +13,16 @@ class ContactForm < MailForm::Base
   end
 
   def validate_to_email
-    errors.add(:to_email, I18n.t('common.errors.invalid')) unless ValidateEmail.valid?(to_email)
+    # Handle both email string and an array of those.
+    if to_email.blank? || Array(to_email).any? { |email| !ValidateEmail.valid?(email) }
+      errors.add(:to_email, I18n.t('common.errors.invalid'))
+    end
   end
 
   def headers
     {
       subject: subject,
-      to: [your_email, to_email],
+      to: [your_email, to_email].flatten,
       reply_to: your_email,
       from: WcaOnRails::Application.config.default_from_address,
     }
