@@ -101,7 +101,7 @@ class SelectRoundsButton extends React.Component {
                   let checked = !!selectedRoundsById[roundId];
                   let eventAlreadySelected = this.getSelectedRoundIds().find(roundId => parseActivityCode(roundId).eventId === eventId);
                   let disabled = !checked && eventAlreadySelected;
-                  let disabledReason = disabled && `Cannot select this round because you've already selected a round with ${event.name}`;
+                  let disabledReason = disabled ? `Cannot select this round because you've already selected a round with ${event.name}` : null;
                   return (
                     <li key={roundId}>
                       <div className="checkbox">
