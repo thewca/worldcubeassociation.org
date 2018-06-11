@@ -404,6 +404,7 @@ en:
         championship_type: ""
         registration_requirements: "Please indicate here any specificities about the registration process, as needed per <a href=\"https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+\" target=\"_blank\">Guideline 2c1+</a>. After the competition is announced, this field will <b>not</b> be editable anymore, and Board's approval will be needed to modify it.<br/>For example indicate here if competitors need to have a clean payment history with a specific entity, if there is some refund policy, or if they will have to answer a confirmation email in case the maximum number of registrations is reached.<br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; it will be displayed on the competition's registration page if you are using the WCA website registrations."
       website_contact:
+        inquiry_target: ""
         message: ""
         name: ""
         your_email: ""
@@ -485,6 +486,7 @@ en:
     #context: This key is used as a label for contact form attributes
     attributes:
       contact_form:
+        inquiry_target: "Which of the following best describes your inquiry?"
         name: "Name"
         your_email: "Your email"
       website_contact:
@@ -1139,6 +1141,12 @@ en:
     website:
       title: "WCA Website Contact Form"
       description_html: "Use this form for website questions, comments, and suggestions only. <a href=\"%{contact_path}\">Other inquiries</a> should be sent to the appropriate party."
+      inquiries:
+        competition: "A specific competition (please select)"
+        competitions_in_general: "Competitions in general (Organizing, Competition rules, etc.)"
+        wca_id_or_profile: "WCA ID or WCA Profile"
+        media: "Media"
+        different: "Other"
       submit: "Send message"
     dob:
       title: "Birthdate Change Request Form"

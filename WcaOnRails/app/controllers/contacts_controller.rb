@@ -2,13 +2,18 @@
 
 class ContactsController < ApplicationController
   def website
-    @contact = WebsiteContact.new(your_email: current_user&.email)
+    @contact = WebsiteContact.new(your_email: current_user&.email, name: current_user&.name)
   end
 
   def website_create
     @contact = WebsiteContact.new(params[:website_contact])
     @contact.request = request
-    @contact.to_email = "contact@worldcubeassociation.org"
+    case @contact.inquiry_target
+    when "wrt" then @contact.to_email = Team.wrt.email
+    when "wct" then @contact.to_email = Team.wct.email
+    when "competition_staff"
+      @contact.to_email = Competition.find_by_id(@contact.competition_id)&.managers&.map(&:email)
+    end
     @contact.subject = Time.now.strftime("WCA Website Comments by #{@contact.name} on %d %b %Y at %R")
     maybe_send_email success_url: contact_website_url, fail_view: :website
   end
