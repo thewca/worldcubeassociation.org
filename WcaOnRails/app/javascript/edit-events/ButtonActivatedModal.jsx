@@ -28,7 +28,15 @@ export default class ButtonActivatedModal extends React.Component {
         {this.props.buttonValue}
         <Modal show={this.state.showModal} onHide={this.close}>
           <form className={this.props.formClass}
-                onSubmit={e => { e.preventDefault(); this.props.onOk(); }}
+                onSubmit={e => {
+                  // Because we're rendering a modal inside of a modal, we're
+                  // actually also rendering a form inside of a form. We don't
+                  // want submitting this inner form to trigger a submit of the
+                  // outer form, so we must stop event propagation here.
+                  e.stopPropagation();
+                  e.preventDefault();
+                  this.props.onOk();
+                }}
                 onClick={e => {
                   // Prevent clicks on the modal from propagating up to the button, which
                   // would cause this modal to be marked as visible. This causes a race when
