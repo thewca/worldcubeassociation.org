@@ -103,6 +103,9 @@ Performance/RedundantMatch:
 Style/NegatedIf:
   Enabled: false
 
+Style/AccessModifierDeclarations:
+  Enabled: false
+
 Style/AsciiComments:
   Enabled: false
 
