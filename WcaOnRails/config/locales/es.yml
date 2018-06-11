@@ -1338,7 +1338,7 @@ es:
       #original_hash: 72e2180
       regards_html: 'Atentamente, %{people}.'
       new:
-        #original_hash: 6fb638c
+        #original_hash: a32db59
         mail_subject: 'Te has registrado en %{comp_name}'
         #original_hash: 8374583
         registered_html: 'Te acabas de registrar en %{comp_name}.'
@@ -1655,12 +1655,18 @@ es:
       registration_period:
         #original_hash: 6888733
         label: Período de registro
-        #original_hash: e46a61b
-        range_html: >-
-          El registro en línea estará abierto desde %{start_date_and_time} hasta
-          %{end_date_and_time}. Otros métodos de registro pueden estar
-          permitidos (como registrarse en el sitio). Asegúrate de leer la
-          información de la competición para averiguarlo.
+        #original_hash: 0c7c1dc
+        range_future_html: >-
+          El registro en línea estará abierto desde el %{start_date_and_time}
+          hasta el %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          El registro en línea se abrió el %{start_date_and_time} y se cerrará
+          el %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          El registro en línea se abrió el %{start_date_and_time} y se cerró el 
+          %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Competiciones
@@ -2509,7 +2515,7 @@ es:
         '2': >-
           Contribuir activamente a las Competiciones Continentales de la WCA que
           se celebren en el continente de la Organización Regional
-        #original_hash: 5913cd0
+        #original_hash: 8943714
         '3': >-
           Respetar y poner en práctica los Objetivos fijados en los Estatutos y
           en el Reglamento de la WCA
@@ -2517,35 +2523,18 @@ es:
         '4': Cumplir con todas las reglas pertinentes de la WCA
         #original_hash: 23cda60
         '5': Acatar las decisiones de los Oficiales de la WCA
-        #original_hash: 08c6d86
+        #original_hash: efe2b55
         '6': >-
           Mantener registrada en la WCA una copia actualizada de sus estatutos y
           regulaciones vigentes en formato electrónico
     application_instructions:
       #original_hash: 4da829b
       title: Instrucciones para la Solicitud
-      #original_hash: 7ae038e
-      description: >-
-        Para solicitar convertirse en una Organización Regional se requiere que
-        la región envíe una solicitud escrita a la Junta Directiva de la WCA que
-        contenga todos los detalles que se listan a continuación.
-      list:
-        #original_hash: 1a9d544
-        '1': Nombre de la Organización Regional
-        #original_hash: a9bf3f4
-        '2': Dirección de la sede y detalles de contacto
-        #original_hash: 2a029e9
-        '3': >-
-          Una copia de sus estatutos vigentes que estén de acuerdo con los
-          Estatutos y el Reglamento de la WCA
-        #original_hash: a5a2771
-        '4': Lista de sus principales directivos
-        #original_hash: 1186ebf
-        '5': Una descripción clara del área que cubre la Organización Regional
-        #original_hash: 826e371
-        '6': >-
-          Un informe sobre actividades pasadas y actuales relacionadas con la
-          WCA
+      #original_hash: 7ed06ee
+      description_html: >-
+        Por favor rellena <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>este
+        formulario</a>.
   contact:
     #original_hash: a34b69f
     title: Información de Contacto
