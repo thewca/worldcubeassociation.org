@@ -32,12 +32,10 @@ ssl_session_timeout 5m;
 ssl_session_cache shared:SSL:5m;
 
 
-# Enable HSTS for the website and its subdomains, and check the preload list.
-# The includeSubdomains is great but dangerous : if at some point we have
-# a subdomain hosted on another server, we'd have to make sure they have a correct
-# SSL cert, because the domain will be HSTS-ed... Anyway, we shouldn't have this
-# problem.
-add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload";
+# Enable HSTS for the website and its subdomains, and request preloading.
+# More info on prelaoding (and the site's current status) is at
+# https://hstspreload.org/?domain=worldcubeassociation.org
+add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
 
 # Enable ssl stapling
 ssl_stapling on;
