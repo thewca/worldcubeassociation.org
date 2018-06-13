@@ -275,8 +275,8 @@ pt:
         password: Senha
         #original_hash: 19dff4d
         current_password: Senha atual
-        #original_hash: 786b8af
-        password_confirmation: Confirmação da senha
+        #original_hash: aefce7f
+        password_confirmation: Reintroduza a password
         #original_hash: ced7b30
         remember_me: Manter-me ligado
         #original_hash: 102efae
@@ -880,6 +880,10 @@ pt:
       #original_hash: a2a43b3
       size_too_big: 'é muito grande (deve ser no máximo %{file_size})'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: Reintroduza a nova password
     sessions:
       new:
         #original_hash: ada2e9e
