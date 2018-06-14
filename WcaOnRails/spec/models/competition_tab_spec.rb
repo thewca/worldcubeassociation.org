@@ -11,6 +11,14 @@ RSpec.describe CompetitionTab, type: :model do
     expect(CompetitionTab.column_names).to match_array(CompetitionTab::CLONEABLE_ATTRIBUTES + CompetitionTab::UNCLONEABLE_ATTRIBUTES)
   end
 
+  context "#slug" do
+    it "generates the same slug under different locales" do
+      competition_tab = FactoryBot.build(:competition_tab, id: 42, name: "Schedule / Расписание")
+      expect(I18n.with_locale(:en) { competition_tab.slug }).to eq "42-schedule"
+      expect(I18n.with_locale(:ru) { competition_tab.slug }).to eq "42-schedule"
+    end
+  end
+
   context "#display_order" do
     let(:competition) { FactoryBot.create(:competition) }
     let(:other_competition) { FactoryBot.create(:competition) }

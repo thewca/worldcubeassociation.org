@@ -18,7 +18,10 @@ class CompetitionTab < ApplicationRecord
   ).freeze
 
   def slug
-    "#{id}-#{name.parameterize}"
+    # parameterization behaves differently under different locales. However, we
+    # want slugs to be the same across all locales, so we intentionally wrap
+    # the call to parameterize in a I18n.with_locale.
+    I18n.with_locale(:en) { "#{id}-#{name.parameterize}" }
   end
 
   after_create :set_display_order
