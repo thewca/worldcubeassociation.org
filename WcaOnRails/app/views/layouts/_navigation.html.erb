@@ -92,13 +92,11 @@
           </a>
           <ul class="dropdown-menu countries" role="menu">
             <% Locales::AVAILABLE.each do |l, data| %>
-              <% unless l == I18n.locale %>
-                <li>
-                  <%= link_to update_locale_path(l), method: :patch do %>
-                    <%= flag_icon data[:flag_id] %> <%= data[:name] %>
-                  <% end %>
-                </li>
-              <% end %>
+              <li class="<%= l == I18n.locale ? "active" : "" %>">
+                <%= link_to update_locale_path(l), method: :patch do %>
+                  <%= flag_icon data[:flag_id] %> <%= data[:name] %>
+                <% end %>
+              </li>
             <% end %>
           </ul>
         </li>
