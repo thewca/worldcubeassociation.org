@@ -3,22 +3,31 @@
 require "rails_helper"
 
 RSpec.feature "Set the locale" do
-  context "As a visitor" do
-    let(:user) { FactoryBot.create :user }
+  scenario "visiting the home page while not signed in and changing the locale", js: true do
+    visit "/#foo"
+    expect(page).to have_content "English"
+    expect(page).not_to have_content "Français"
 
-    scenario "visiting the home page and changing the locale" do
-      visit "/"
-      expect(I18n.locale).to eq I18n.default_locale
-      click_on "Français"
-      visit "/"
-      expect(I18n.locale).to eq :fr
-    end
+    click_on "English" # Activate the locale selection dropdown.
+    click_on "Français"
 
-    scenario "signing in updates to the preferred_locale" do
-      user.update!(preferred_locale: "fr")
-      sign_in user
-      visit "/"
-      expect(I18n.locale).to eq :fr
-    end
+    expect(page.current_path).to eq "/"
+    expect(URI.parse(page.current_url).fragment).to eq "foo"
+
+    expect(page).not_to have_content "English"
+    expect(page).to have_content "Français"
+  end
+
+  scenario "signing in updates to the preferred_locale", js: true do
+    visit "/"
+    expect(page).to have_content "English"
+    expect(page).not_to have_content "Français"
+
+    user = FactoryBot.create :user, preferred_locale: "fr"
+    sign_in user
+    visit "/"
+
+    expect(page).not_to have_content "English"
+    expect(page).to have_content "Français"
   end
 end

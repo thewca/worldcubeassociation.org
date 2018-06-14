@@ -15,5 +15,17 @@ RSpec.describe ApplicationController do
       expect(user.preferred_locale).to eq "fr"
       expect(session[:locale]).to eq "fr"
     end
+
+    it "redirects to given current_url" do
+      sign_in user
+      patch :update_locale, params: { locale: :fr, current_url: "http://foo.com#bar" }
+      expect(response).to redirect_to "http://foo.com#bar"
+    end
+
+    it "redirects to root if not given current_url" do
+      sign_in user
+      patch :update_locale, params: { locale: :fr }
+      expect(response).to redirect_to root_url
+    end
   end
 end
