@@ -379,3 +379,23 @@ $(function() {
     $(this).text(formatted);
   });
 });
+
+// Handler for locale changes.
+$(function() {
+  $('#locale-selector').on('click', 'a', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // More or less copied from
+    // https://github.com/rails/jquery-ujs/blob/9e805c90c8cfc57b39967052e1e9013ccb318cf8/src/rails.js#L215.
+    var csrfToken = $('meta[name=csrf-token]').attr('content');
+    var csrfParam = $('meta[name=csrf-param]').attr('content');
+    var form = $('<form method="post" action="' + this.href + '"></form>');
+    var metadataInput = '<input name="_method" value="patch" type="hidden" />';
+    metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
+    metadataInput += '<input name="current_url" value="' + window.location.toString() + '" type="hidden" />';
+
+    form.hide().append(metadataInput).appendTo('body');
+    form.submit();
+  });
+});

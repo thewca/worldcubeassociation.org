@@ -31,6 +31,12 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+# To debug feature specs using phantomjs, set `Capybara.javascript_driver = :poltergeist_debug`
+# and then call `page.driver.debug` in your feature spec.
+Capybara.register_driver :poltergeist_debug do |app|
+  Capybara::Poltergeist::Driver.new(app, inspector: true, phantomjs: Phantomjs.path, debug: true)
+end
+
 Capybara.javascript_driver = :poltergeist
 Capybara.server = :webrick
 

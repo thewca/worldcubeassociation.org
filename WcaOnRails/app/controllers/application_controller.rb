@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
     else
       flash[:danger] = I18n.t('users.update_locale.unavailable')
     end
-    redirect_to request.referer || root_path
+    redirect_to params[:current_url] || root_path
   end
 
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-the-response-body-when-unauthorized
