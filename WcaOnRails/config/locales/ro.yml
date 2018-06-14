@@ -280,8 +280,8 @@ ro:
         password: Parolă
         #original_hash: 19dff4d
         current_password: Parolă curentă
-        #original_hash: 786b8af
-        password_confirmation: Confirmarea parolei
+        #original_hash: aefce7f
+        password_confirmation: Introdu parola din nou
         #original_hash: ced7b30
         remember_me: Ține-mă minte
         #original_hash: 102efae
@@ -889,6 +889,10 @@ ro:
       #original_hash: a2a43b3
       size_too_big: 'e prea mare (ar trebui să aibă cel mult %{file_size})'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: Introdu din nou noua parolă
     sessions:
       new:
         #original_hash: ada2e9e
