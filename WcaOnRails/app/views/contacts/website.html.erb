@@ -7,13 +7,13 @@
   <%= simple_form_for @contact, url: contact_website_path, html: { class: 'form-horizontal' } do |f| %>
     <% competition_input = f.input :competition_id, as: :competition_id, only_one: true, label: false, wrapper_html: { id: "target_competition" } %>
     <% options = [
-      [t('.inquiries.competition').html_safe + competition_input, "competition_staff"],
-      [t('.inquiries.competitions_in_general'), "wct"],
-      [t('.inquiries.wca_id_or_profile'), "wrt"],
-      [t('.inquiries.media'), "wrt"],
-      [t('.inquiries.different'), "wct"],
+      [t('.inquiries.competition').html_safe + competition_input, "competition"],
+      [t('.inquiries.competitions_in_general'), "competitions_in_general"],
+      [t('.inquiries.wca_id_or_profile'), "wca_id_or_profile"],
+      [t('.inquiries.media'), "media"],
+      [t('.inquiries.different'), "different"],
     ] %>
-    <%= f.input :inquiry_target, as: :radio_buttons, collection: options %>
+    <%= f.input :inquiry, as: :radio_buttons, collection: options %>
     <%= f.input :name %>
     <%= f.input :your_email %>
     <%= f.input :message, as: :text %>
