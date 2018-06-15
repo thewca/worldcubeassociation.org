@@ -277,8 +277,8 @@ fr:
         password: Mot de passe
         #original_hash: 19dff4d
         current_password: Mot de passe actuel
-        #original_hash: 786b8af
-        password_confirmation: Confirmation du mot de passe
+        #original_hash: aefce7f
+        password_confirmation: Ressaisissez le mot de passe
         #original_hash: ced7b30
         remember_me: Se souvenir de moi
         #original_hash: 102efae
@@ -897,6 +897,10 @@ fr:
       #original_hash: a2a43b3
       size_too_big: 'est trop gros (il devrait faire au plus %{file_size})'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: Ressaisissez le nouveau mot de passe
     sessions:
       new:
         #original_hash: ada2e9e
@@ -1196,6 +1200,25 @@ fr:
         '7': >-
           La photo de profil ne doit pas contenir de contenu offensant (par
           exemple : gestes offensant).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Recommandations additionnelles pour les Délégués :'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            La photo de profil doit vous représenter, de la même manière dont
+            vous apparaîtriez à une compétition en tant que Délégué WCA.
+          #original_hash: 64ded69
+          '2': >-
+            La photo de profil doit être cadrée et ajustée de manière à ce que
+            n'importe quel compétiteur ou spectateur à une compétition pourrait
+            l'utiliser pour vous identifiez clairement à une compétition.
+          #original_hash: 13fab02
+          '3': >-
+            La miniature de la photo de profil n'est qu'une partie de la photo
+            de profil, et pourra être utilisée à la place de la photo de profil.
+            La miniature doit être ajustée de manière à ce que vous puissiez
+            être reconnu grace à elle, et doit donc contenir votre visage.
     errors:
       #original_hash: 094b763
       not_found: introuvable
@@ -1346,8 +1369,10 @@ fr:
       #original_hash: 72e2180
       regards_html: 'Cordialement, %{people}.'
       new:
-        #original_hash: 6fb638c
-        mail_subject: 'Vous êtes inscrit à la compétition %{comp_name}'
+        #original_hash: a32db59
+        mail_subject: >-
+          Votre inscription à la compétition %{comp_name} est envoyée et est en
+          attente de validation
         #original_hash: 8374583
         registered_html: 'Vous venez juste de vous inscrire à la compétition %{comp_name}.'
         #original_hash: 13fabed
@@ -1499,6 +1524,12 @@ fr:
     please_fix_profile_html: >-
       Pour pouvoir vous inscrire au %{comp}, vous devez d'abord corriger les
       problèmes suivant dans votre %{profile} :
+    #original_hash: f22ef22
+    registration_full: >-
+      La limite au nombre de compétiteurs pour cette compétition est
+      %{competitor_limit} et a déjà été atteinte. Si vous vous inscrivez, votre
+      inscription sera placée sur une liste d'attente. Elle ne sera pas
+      approuvée avant qu'une place se libère.
     #original_hash: 855ca9c
     can_register: 'Vous pouvez vous inscrire au %{comp} ci-dessous.'
     #original_hash: 4167ed7
@@ -1664,8 +1695,18 @@ fr:
       registration_period:
         #original_hash: 6888733
         label: Ouverture des inscriptions
-        #original_hash: 8f8b05c
-        range_html: 'Du %{start_date_and_time} au %{end_date_and_time}.'
+        #original_hash: 0c7c1dc
+        range_future_html: >-
+          Les inscriptions en ligne seront ouvertes de %{start_date_and_time} à
+          %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Les inscriptions en ligne ont ouvert %{start_date_and_time} et
+          fermeront %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Les inscriptions en ligne étaient ouvertes du %{start_date_and_time}
+          au %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Compétitions
@@ -1948,6 +1989,8 @@ fr:
         admin_view: Page administrateur
         #original_hash: a857eb4
         tabs: Gérer les onglets
+        #original_hash: f3d6278
+        submit_results: Envoyer les résultats
         #original_hash: 4c9f914
         delegate_report: Rapport du délégué
         #original_hash: b233e77
@@ -2171,13 +2214,6 @@ fr:
             WCA</a>. Si vous avez des problèmes pour comprendre le document en
             anglais, merci de consulter les <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>traductions</a>.
-          #original_hash: da99893
-          '2': >-
-            De plus, nous vous recommandons de lire les tutoriels à destination
-            des compétiteurs (en Français sur le <a target='_blank'
-            href='http://www.speedcubingfrance.org/speedcubing/tutos/'>site de
-            l'AFS</a>), qui contiennent des indications pour les nouveaux
-            participants.
       '5':
         #original_hash: 3b657aa
         title: Comment puis-je organiser une compétition dans ma ville ?
@@ -2204,17 +2240,12 @@ fr:
             à la compétition d'être reconnue par la WCA. Le Délégué WCA fournira
             de l'aide à l'équipe d'organisation pour assurer le succès de
             l'organisation de la compétition.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
             Visitez les <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>recommandations
-            à destination des organisateurs de compétitions WCA</a> ainsi que <a
-            target='_blank'
-            href='https://docs.google.com/document/d/19Y66EYz4JYrcVmzE8zmnOHCppGJGDg0sBDQaUv54sJg/edit?usp=sharing'>ce
-            document</a> pour plus d'informations. (En cas de conflit entre les
-            informations présentes dans ce document et le Règlement WCA, les
-            informations présente dans le Règlement WCA doivent être prises en
-            compte.)
+            à destination des organisateurs de compétitions WCA</a> pour plus
+            d'informations.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2489,6 +2520,8 @@ fr:
     logo: Utilisation du logo de la WCA
     #original_hash: 920a98f
     proximity_policy: Politique de proximité des compétitions WCA
+    #original_hash: f484584
+    competition_name_policy: Politique de nommage des compétitions WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Délégués WCA
@@ -2530,43 +2563,26 @@ fr:
         '2': >-
           Contribuer activement aux compétitions continentales WCA qui sont
           organisées sur le continent de l'organisation régionale
-        #original_hash: 5913cd0
+        #original_hash: 8943714
         '3': >-
-          Respecter et mettre en oeuvre les objectifs décrits dans les By-Laws
-          et le Règlement de la WCA
+          Respecter et mettre en oeuvre les objectifs décrits dans les Bylaws et
+          le Règlement de la WCA
         #original_hash: 0c3576b
         '4': Respecter l'ensemble les Règles WCA applicables
         #original_hash: 23cda60
         '5': Accepter et se conformer aux décisions des officiels de la WCA
-        #original_hash: 08c6d86
+        #original_hash: efe2b55
         '6': >-
-          Garder et fournir à la WCA une copie électronique de ses by-laws
+          Garder et fournir à la WCA une copie électronique de ses Bylaws
           (Statuts) et règlements.
     application_instructions:
       #original_hash: 4da829b
       title: Instructions pour la candidature
-      #original_hash: 7ae038e
-      description: >-
-        Pour candidater pour devenir une Organisation Régionale nous demandons à
-        l'organisation de soumettre une candidature au bureau de la WCA, qui
-        devra inclure les éléments ci-dessous.
-      list:
-        #original_hash: 1a9d544
-        '1': Nom de l'Organisation Régionale
-        #original_hash: a9bf3f4
-        '2': Adresse officielle et détails de contact
-        #original_hash: 2a029e9
-        '3': >-
-          Une copie de ses by-laws (Statuts) actuels, qui devront être en accord
-          avec les By-Laws et le Règlement de la WCA
-        #original_hash: a5a2771
-        '4': Une liste des membres du bureau
-        #original_hash: 1186ebf
-        '5': >-
-          Une description claire de la zone couverte par l'Organisation
-          Régionale
-        #original_hash: 826e371
-        '6': Un rapport sur les activités passées et actuelles concernant la WCA
+      #original_hash: 7ed06ee
+      description_html: >-
+        Merci de compléter <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>ce
+        formulaire</a>.
   contact:
     #original_hash: a34b69f
     title: Information de contact
