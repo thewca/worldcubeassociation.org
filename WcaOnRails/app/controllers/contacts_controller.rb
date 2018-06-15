@@ -8,10 +8,12 @@ class ContactsController < ApplicationController
   def website_create
     @contact = WebsiteContact.new(params[:website_contact])
     @contact.request = request
-    case @contact.inquiry_target
-    when "wrt" then @contact.to_email = Team.wrt.email
-    when "wct" then @contact.to_email = Team.wct.email
-    when "competition_staff"
+    case @contact.inquiry
+    when "competitions_in_general", "different"
+      @contact.to_email = Team.wct.email
+    when "wca_id_or_profile", "media"
+      @contact.to_email = Team.wrt.email
+    when "competition"
       @contact.to_email = Competition.find_by_id(@contact.competition_id)&.managers&.map(&:email)
     end
     @contact.subject = Time.now.strftime("WCA Website Comments by #{@contact.name} on %d %b %Y at %R")
