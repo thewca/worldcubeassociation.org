@@ -90,7 +90,8 @@ class UsersController < ApplicationController
     dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
     if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
       if @user.saved_change_to_delegate_status
-        DelegateStatusChangeMailer.notify_board_and_wqac_of_delegate_status_change(@user, current_user).deliver_later
+        # TODO: See https://github.com/thewca/worldcubeassociation.org/issues/2969.
+        DelegateStatusChangeMailer.notify_board_and_wqac_of_delegate_status_change(@user, current_user).deliver_now
       end
       if current_user == @user
         # Sign in the user, bypassing validation in case their password changed
