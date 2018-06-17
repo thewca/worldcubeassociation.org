@@ -4,7 +4,7 @@
 
   <p><%= t('.description') %></p>
 
-  <%= simple_form_for @contact, url: contact_dob_path, html: { multipart: true, class: 'form-horizontal' } do |f| %>
+  <%= simple_form_for @contact, url: contact_dob_path, html: { multipart: true } do |f| %>
     <%= f.input :name %>
     <%= f.input :your_email %>
     <%= f.input :wca_id %>
