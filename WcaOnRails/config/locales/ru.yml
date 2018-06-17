@@ -287,7 +287,7 @@ ru:
         password: Пароль
         #original_hash: 19dff4d
         current_password: Текущий пароль
-        #original_hash: 786b8af
+        #original_hash: aefce7f
         password_confirmation: Подтверждение пароля
         #original_hash: ced7b30
         remember_me: Запомнить меня
@@ -890,6 +890,10 @@ ru:
       #original_hash: a2a43b3
       size_too_big: 'слишком большой размер файла (может быть %{file_size})'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: Введите новый пароль ещё раз
     sessions:
       new:
         #original_hash: ada2e9e
@@ -1354,8 +1358,10 @@ ru:
       #original_hash: 72e2180
       regards_html: 'С уважением, %{people}.'
       new:
-        #original_hash: 6fb638c
-        mail_subject: 'Вы зарегистрировались на %{comp_name}'
+        #original_hash: a32db59
+        mail_subject: >-
+          Вы подали заявку на %{comp_name}. Заявка в процессе рассмотрения
+          организаторами.
         #original_hash: 8374583
         registered_html: 'Вы подали заявку на %{comp_name}'
         #original_hash: 13fabed
