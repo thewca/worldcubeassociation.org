@@ -13,7 +13,6 @@
       @extend label;
     }
     .panel-venue {
-      @extend .col-xs-12, .col-md-6, .col-lg-4;
       margin-bottom: 15px;
       .new-venue-link {
         width: 100%;
@@ -39,7 +38,7 @@
         bottom: auto;
       }
       .selected-activity {
-        border: 2px solid #791f82;
+        border: 2px solid $selected-activity-border-color;
         margin-top: 1px;
         margin-bottom: 1px;
       }
@@ -74,6 +73,28 @@
       }
     }
     #schedule-editor {
+      #schedule-menu {
+        width: 150px;
+        position: fixed;
+        top: 100px;
+        left: 100px;
+        display: block;
+        &.hide-element {
+          display: none;
+        }
+        &.delete-only {
+          .edit-option {
+            display: none;
+          }
+        }
+        a {
+          padding: 3px 20px;
+          i {
+            margin-right: 10px;
+          }
+        }
+      }
+
       #schedule-calendar {
         &:target {
           // Override the flashy yellow we use for targets elsewhere
@@ -82,7 +103,7 @@
 
         .fc-helper-container > .fc-event,
         .fc-event.selected-fc-event {
-          border: 2px solid #791f82;
+          border: 2px solid $selected-activity-border-color;
         }
 
         .fc-time-grid-event.fc-short .fc-time span {
@@ -158,9 +179,9 @@
 }
 
 // This needs to be here, to overcome an issue with draggable activity + overflow container
-.activity {
-  background-color: #337ab7;
-  color: #fff;
+.schedule-activity {
+  background-color: $activity-bg-color;
+  color: $activity-text-color;
   font-weight: bold;
   border-radius: 0.25em;
   margin-top: 3px;
@@ -177,28 +198,7 @@
   }
 }
 
-#schedule-menu {
-  width: 150px;
-  position: fixed;
-  top: 100px;
-  left: 100px;
-  display: block;
-  &.hide-element {
-    display: none;
-  }
-  &.delete-only {
-    .edit-option {
-      display: none;
-    }
-  }
-  a {
-    padding: 3px 20px;
-    i {
-      margin-right: 10px;
-    }
-  }
-}
-
+// The popover gets appended to <body>, so we can't nest this style
 #calendar-help-popover {
   width: 400px;
   dl {
@@ -216,8 +216,4 @@
       padding-left: 5px;
     }
   }
-}
-
-.panel-info > .heading-as-link:hover {
-  @extend a.list-group-item-info:hover;
 }

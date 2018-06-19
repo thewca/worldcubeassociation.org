@@ -53,7 +53,7 @@ function handleEventModifiedInCalendar(reactElem, event) {
   let room = roomWcifFromId(reactElem.props.scheduleWcif, reactElem.state.selectedRoom);
   let activityIndex = activityIndexInArray(room.activities, event.id);
   if (activityIndex < 0) {
-    alert("This is very very BAD, I couldn't find an activity matching the modified event!");
+    throw new Error("This is very very BAD, I couldn't find an activity matching the modified event!");
   }
   let activity = room.activities[activityIndex];
   activity.name = event.name;
@@ -73,7 +73,7 @@ function handleRemoveEventFromCalendar(reactElem, event) {
   let newActivityCodeList = reactElem.state.usedActivityCodeList;
   let activityCodeIndex = newActivityCodeList.indexOf(event.activityCode);
   if (activityCodeIndex < 0) {
-    alert("This is BAD, I couldn't find an activity code when removing event!");
+    throw new Error("This is BAD, I couldn't find an activity code when removing event!");
   }
   newActivityCodeList.splice(activityCodeIndex, 1);
   let scheduleWcif = reactElem.props.scheduleWcif;
@@ -81,7 +81,7 @@ function handleRemoveEventFromCalendar(reactElem, event) {
   let room = roomWcifFromId(scheduleWcif, reactElem.state.selectedRoom);
   let activityIndex = activityIndexInArray(room.activities, event.id);
   if (activityIndex < 0) {
-    alert("This is very very BAD, I couldn't find an activity matching the removed event!");
+    throw new Error("This is very very BAD, I couldn't find an activity matching the removed event!");
   }
   room.activities.splice(activityIndex, 1);
   // We rootRender to display the "Please save your changes..." message

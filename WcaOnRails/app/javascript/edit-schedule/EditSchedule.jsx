@@ -7,6 +7,7 @@ import {
   Panel,
   PanelGroup,
   Row,
+  Clearfix,
 } from 'react-bootstrap'
 
 import { rootRender, promiseSaveWcif } from 'edit-schedule'
@@ -181,18 +182,28 @@ const IntroductionMessage = () => {
 const VenuesList = ({venues, actionsHandlers, competitionInfo}) => {
   return (
     <Row>
-      {venues.map((venueWcif, index) => {
-        return (
-          <EditVenue
-            venueWcif={venueWcif}
-            key={index}
-            index={index}
-            removeVenueAction={e => actionsHandlers.removeVenue(e, index)}
-            competitionInfo={competitionInfo}
-          />
-        );
-      })}
-      <NewVenue actionHandler={actionsHandlers.addVenue} />
+      {venues.map((venueWcif, index) => (
+        <React.Fragment key={index}>
+          <Col xs={12} md={6} lg={4}>
+            <EditVenue
+              venueWcif={venueWcif}
+              removeVenueAction={e => actionsHandlers.removeVenue(e, index)}
+              competitionInfo={competitionInfo}
+            />
+          </Col>
+          {/*
+            Every venue col doesn't have the same height, so we need a clearfix depending on our index and viewport.
+            In XS there is one venue per row, so no clearfix needed.
+            In MD there are two venues per row, so if we're last, we need a clearfix
+            In LG there are three venues per row, so if we're last, we need a clearfix
+          */}
+          {index % 2 === 1 && <Clearfix visibleMdBlock />}
+          {index % 3 === 2 && <Clearfix visibleLgBlock />}
+        </React.Fragment>
+      ))}
+      <Col xs={12} md={6} lg={4}>
+        <NewVenue actionHandler={actionsHandlers.addVenue} />
+      </Col>
     </Row>
   );
 }

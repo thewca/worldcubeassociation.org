@@ -445,6 +445,12 @@ select.input-xs {
 
 .heading-as-link {
   &:hover {
+    .panel-info > & {
+      @extend a.list-group-item-info:hover;
+    }
+    .panel-warning > & {
+      @extend a.list-group-item-warning:hover;
+    }
     cursor: pointer;
   }
   a {

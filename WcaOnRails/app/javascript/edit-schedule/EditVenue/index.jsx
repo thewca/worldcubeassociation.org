@@ -9,7 +9,7 @@ import {
 import { EditRoom } from './EditRoom'
 import { compose, withProps } from "recompose"
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-import { Panel, Row, Col, Clearfix } from 'react-bootstrap'
+import { Panel, Row, Col } from 'react-bootstrap'
 import { timezoneData } from 'wca/timezoneData.js.erb'
 
 export class EditVenue extends React.Component {
@@ -22,10 +22,8 @@ export class EditVenue extends React.Component {
     rootRender();
   }
 
-  markerRefUpdater = (input) => this.marker = input;
-
-  handlePositionChange = () => {
-    let pos = this.marker.getPosition();
+  handlePositionChange = event => {
+    let pos = event.latLng;
     let newLat = toMicrodegrees(pos.lat());
     let newLng = toMicrodegrees(pos.lng());
     // Update parent's WCIF
@@ -59,18 +57,6 @@ export class EditVenue extends React.Component {
       },
     };
 
-    // Every venue col doesn't have the same height, so we need a clearfix depending on our index and viewport.
-    // In XS there is one venue per row, so no clearfix needed.
-    // In MD there are two venues per row, so if we're last, we need a clearfix
-    // In LG there are three venues per row, so if we're last, we need a clearfix
-    let clearfixes = [];
-    if (index%2 == 1) {
-      clearfixes.push(<Clearfix visibleMdBlock key={1} />);
-    }
-    if (index%3 == 2) {
-      clearfixes.push(<Clearfix visibleLgBlock key={2} />);
-    }
-
     return (
       <div>
         <div className="panel-venue">
@@ -91,7 +77,6 @@ export class EditVenue extends React.Component {
                 lat={venueWcif.latitudeMicrodegrees}
                 lng={venueWcif.longitudeMicrodegrees}
                 actionHandler={this.handlePositionChange}
-                refUpdater={this.markerRefUpdater}
               />
               <TimezoneInput
                 timezone={venueWcif.timezone}
@@ -102,7 +87,6 @@ export class EditVenue extends React.Component {
             </Panel.Body>
           </Panel>
         </div>
-        { clearfixes }
       </div>
     );
   }
@@ -121,7 +105,7 @@ const NameInput = ({name, actionHandler}) => {
   );
 }
 
-const VenueLocationInput = ({lat, lng, actionHandler, refUpdater}) => {
+const VenueLocationInput = ({lat, lng, actionHandler}) => {
   return (
     <Row>
       <Col xs={12}>
@@ -130,8 +114,7 @@ const VenueLocationInput = ({lat, lng, actionHandler, refUpdater}) => {
       <Col xs={12}>
         <MapPickerComponent latitudeMicrodegrees={lat}
                             longitudeMicrodegrees={lng}
-                            onPositionChange={actionHandler}
-                            refUpdater={refUpdater}/>
+                            onPositionChange={actionHandler} />
       </Col>
     </Row>
   );
@@ -144,7 +127,7 @@ const MapPickerComponent = compose(
   }),
   withGoogleMap
 )((props) => {
-  let { latitudeMicrodegrees, longitudeMicrodegrees, onPositionChange, refUpdater } = props;
+  let { latitudeMicrodegrees, longitudeMicrodegrees, onPositionChange } = props;
   let lat = toDegrees(latitudeMicrodegrees);
   let lng = toDegrees(longitudeMicrodegrees);
   return (
@@ -152,7 +135,7 @@ const MapPickerComponent = compose(
       defaultZoom={12}
       defaultCenter={{ lat: lat, lng: lng }}
     >
-      <Marker position={{ lat: lat, lng: lng }} draggable={true} ref={refUpdater} onDragEnd={onPositionChange} />
+      <Marker position={{ lat: lat, lng: lng }} draggable={true} onDragEnd={onPositionChange} />
     </GoogleMap>
   );
 })
@@ -213,7 +196,7 @@ function addRoomToVenue(venueWcif, competitionInfo) {
   venueWcif.rooms.push({
     id: newRoomId(),
     // Venue details is an optional field
-    name: competitionInfo.venueDetails.length > 0 ? competitionInfo.venueDetails : "Rooms' name",
+    name: competitionInfo.venueDetails.length > 0 ? competitionInfo.venueDetails : "Room's name",
     activities: [],
   });
 }

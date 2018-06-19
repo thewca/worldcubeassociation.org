@@ -154,7 +154,7 @@ export class ActivityPicker extends React.Component {
     $(window).keydown(keyboardHandlers.activityPicker);
 
     // Activate draggable on all activities
-    $(".activity-in-picker > .activity").draggable({
+    $(".activity-in-picker > .schedule-activity").draggable({
       start: function(event, ui) {
         $(ui.helper).find('.tooltip').hide();
       },
@@ -165,7 +165,7 @@ export class ActivityPicker extends React.Component {
       cursor: "copy",
       cursorAt: { top: 20, left: 10 }
     });
-    $(".activity-in-picker > .activity").click(e => addActivityToCalendar($(e.target).data("event")));
+    $(".activity-in-picker > .schedule-activity").click(e => addActivityToCalendar($(e.target).data("event")));
   }
 
   componentWillUnmount() {
@@ -243,30 +243,27 @@ function ActivitiesForRound({ usedActivityCodeList, round, selectedLine, selecte
   let activityCode = round.id;
   let { eventId } = parseActivityCode(activityCode);
 
-  let attempts = [];
-  if (eventId == "333fm" || eventId == "333mbf") {
+  if (["333fm", "333mbf"].includes(eventId)) {
     let numberOfAttempts = formats.byId[round.format].expectedSolveCount;
-    for (let i = 0; i < numberOfAttempts; i++) {
-      attempts.push(<ActivityForAttempt activityCode={activityCode}
-                                        usedActivityCodeList={usedActivityCodeList}
-                                        key={i}
-                                        attemptNumber={i+1}
-                                        selected={selectedLine && selectedX == i}
-      />);
-    }
-    attempts.push(<div key={numberOfAttempts} className="clearfix" />);
+    return _.times(numberOfAttempts, n => (
+      <ActivityForAttempt
+        activityCode={activityCode}
+        usedActivityCodeList={usedActivityCodeList}
+        key={n}
+        attemptNumber={n + 1}
+        selected={selectedLine && selectedX === n}
+      />
+    ));
   } else {
-    attempts.push(<ActivityForAttempt key="0" usedActivityCodeList={usedActivityCodeList}
-                                              activityCode={activityCode}
-                                              selected={selectedLine && selectedX == indexInRow}
-                                              attemptNumber={null}
-                  />);
+    return (
+      <ActivityForAttempt
+        usedActivityCodeList={usedActivityCodeList}
+        activityCode={activityCode}
+        selected={selectedLine && selectedX == indexInRow}
+        attemptNumber={null}
+      />
+    );
   }
-  return (
-    <div>
-      {attempts}
-    </div>
-  );
 }
 
 class ActivityForAttempt extends React.Component {
@@ -318,7 +315,7 @@ class ActivityForAttempt extends React.Component {
       { "col-xs-12 col-md-6 col-lg-4" : attemptNumber},
     ]
     let innerCssClasses = [
-      "activity",
+      "schedule-activity",
       {"activity-used": (usedActivityCodeList.indexOf(activityCode) > -1)},
       { "selected-activity" : selected},
     ]
