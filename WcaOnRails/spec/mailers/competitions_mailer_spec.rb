@@ -77,6 +77,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match(/Over a week has passed since #{competition.name}/)
+      expect(mail.body.encoded).to match(submit_results_edit_path(competition.id))
     end
   end
 
