@@ -275,8 +275,8 @@ da:
         password: Kodeord
         #original_hash: 19dff4d
         current_password: Nuværende kodeord
-        #original_hash: 786b8af
-        password_confirmation: Bekræft kodeord
+        #original_hash: aefce7f
+        password_confirmation: Skriv dit nye kodeord igen
         #original_hash: ced7b30
         remember_me: Husk mig
         #original_hash: 102efae
@@ -371,7 +371,7 @@ da:
         #original_hash: 4baf44b
         championship_type: Mesterskabs type
         #original_hash: ff722f0
-        registration_requirements: Tilmeldings krav
+        registration_requirements: Tilmeldingskravene
       registration:
         #original_hash: 3c23a67
         guests: Gæster
@@ -874,6 +874,10 @@ da:
       #original_hash: a2a43b3
       size_too_big: 'er for stor (burde højest være %{file_size})'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: Skriv dit nye kodeord igen
     sessions:
       new:
         #original_hash: ada2e9e
@@ -1117,14 +1121,14 @@ da:
       cannot_edit:
         #original_hash: 8501c74
         msg: >-
-          Du kan ikke ændre dit navn, fødselsdag, køn eller land. Grund:
+          Du kan ikke ændre dit navn, fødselsdag, køn eller land. Årsag:
           %{reason}. Kontakt din lokale <a href='%{delegate_url}'>delegerede</a>
           hvis du har brug for at ændre noget af det.
         reason:
           #original_hash: 370ff12
           assigned: Du har et WCA ID tilknyttet
           #original_hash: 1c4670f
-          registered: Du har registreret for en konkurrence
+          registered: Du har tilmeldt dig til en konkurrence
       #original_hash: fe7122d
       guidelines_confirmation: Jeg kan bekræfte at mit billede udfylder alle kravene.
       #original_hash: d677ceb
@@ -1323,8 +1327,8 @@ da:
       #original_hash: 72e2180
       regards_html: 'Hilsen, %{people}.'
       new:
-        #original_hash: 6fb638c
-        mail_subject: 'Du har registreret dig til %{comp_name}'
+        #original_hash: a32db59
+        mail_subject: 'Din tilmelding til %{comp_name} er afsendt og venter på bekræftelse'
         #original_hash: 8374583
         registered_html: 'Du har tilmeldt dig til %{comp_name}.'
         #original_hash: 13fabed
@@ -1382,7 +1386,7 @@ da:
           multiple_registrations: Du tilmeldte dig to eller flere gange
     list:
       #original_hash: 8b7631c
-      title: 'Registreringer til %{comp}'
+      title: 'Tilmeldinger til %{comp}'
       #original_hash: 5301648
       edit: Rediger
       #original_hash: 0ab725c
@@ -1403,9 +1407,9 @@ da:
       #original_hash: 92d40dc
       waiting_list: Venteliste
       #original_hash: 06f7d1a
-      approved_registrations: Accepterede registreringer
+      approved_registrations: Accepterede tilmeldinger
       #original_hash: bff04e8
-      deleted_registrations: Slettede registreringer
+      deleted_registrations: Slettede tilmeldinger
       #original_hash: ac5d958
       not_paid: Ikke betalt
       registered:
@@ -1535,7 +1539,7 @@ da:
       Vi opdateret det med dine foretrukne discipliner, som du kan ændre
       %{link}.
     #original_hash: ee89a3e
-    registration_requirements: 'Tilmeldings kravene for konkurrencen:'
+    registration_requirements: 'Tilmeldingskravene for konkurrencen:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1620,18 +1624,28 @@ da:
       #original_hash: c5497bc
       events: Discipliner
       #original_hash: ff722f0
-      registration_requirements: Tilmeldings kravene
+      registration_requirements: Tilmeldingskravene
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
-        Konkurrencen er slut, klik %{link_here} for at vise tilmeldings kravene
+        Konkurrencen er slut, klik %{link_here} for at vise tilmeldingskravene
         der var for konkurrencen.
       #original_hash: ff19a74
-      hide_requirements: Skjul tilmeldings kravene.
+      hide_requirements: Skjul tilmeldingskravene.
       registration_period:
         #original_hash: 6888733
         label: Tilmeldingsperiode
-        #original_hash: 8f8b05c
-        range_html: 'Fra %{start_date_and_time} til %{end_date_and_time}.'
+        #original_hash: 0c7c1dc
+        range_future_html: >-
+          Online tilmelding vil være åben fra %{start_date_and_time} til
+          %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Online tilmelding åbnede %{start_date_and_time} og vil lukke
+          %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Online tilmelding åbnede %{start_date_and_time} og lukkede
+          %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Konkurrencer
@@ -1910,6 +1924,8 @@ da:
         admin_view: Administrators synsvinkel
         #original_hash: a857eb4
         tabs: Rediger faner
+        #original_hash: f3d6278
+        submit_results: Indsend resultater
         #original_hash: 4c9f914
         delegate_report: Delegat report
         #original_hash: b233e77
@@ -2458,43 +2474,26 @@ da:
         '2': >-
           At aktivt hjælpe til med kontinentale WCA konkurrencer som bliver
           afholdt på kontinentet af den Regionale Organisation
-        #original_hash: 5913cd0
+        #original_hash: 8943714
         '3': >-
-          At respektere og operationalisere målene som er sat af reglerne fra
-          WCA
+          At respektere og operationalisere målene som er sat af vedtægterne og
+          reglerne fra WCA
         #original_hash: 0c3576b
         '4': At overholde alle gældende WCA regler
         #original_hash: 23cda60
         '5': At acceptere og imødekomme valg af WCA Officielle
-        #original_hash: 08c6d86
+        #original_hash: efe2b55
         '6': >-
-          At have en fil med en kopi af WCA's nuværende regler i en elektronisk
-          format.
+          At have en fil med en kopi af WCA's nuværende vedtægter og regler i en
+          elektronisk format
     application_instructions:
       #original_hash: 4da829b
       title: Applikation Instruktioner
-      #original_hash: 7ae038e
-      description: >-
-        For at blive en Regional Organisation kræver vi at regionen indsender en
-        foresprøgelse til WCA Kommissionen som indeholder alle detaljer der er
-        skrevet nedenunder.
-      list:
-        #original_hash: 1a9d544
-        '1': Navn på den Regionale Organisation
-        #original_hash: a9bf3f4
-        '2': Officiel adresse og kontakt detaljer
-        #original_hash: 2a029e9
-        '3': >-
-          En kopi af dens nuværende regler, som er i overholdelse med WCA's
-          regler
-        #original_hash: a5a2771
-        '4': En liste af dens ledere
-        #original_hash: 1186ebf
-        '5': >-
-          En klar beskrivelse af området som bliver dækket af den Regionale
-          Organansation
-        #original_hash: 826e371
-        '6': En report af alle tidligere og nuværende WCA relaterede aktiviteter
+      #original_hash: 7ed06ee
+      description_html: >-
+        Udfyld venligst <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>denne
+        formular</a>.
   contact:
     #original_hash: a34b69f
     title: Kontakt information
