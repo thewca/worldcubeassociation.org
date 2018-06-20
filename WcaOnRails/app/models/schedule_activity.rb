@@ -99,4 +99,45 @@ class ScheduleActivity < ApplicationRecord
       end_time: wcif["endTime"],
     }
   end
+
+  def self.parse_activity_code(activity_code)
+    parts = activity_code.split("-");
+    parts_hash = {
+      event_id: parts.shift(),
+      round_number: nil,
+      group_number: nil,
+      attempt_number: nil,
+    }
+
+    parts.each do |p|
+      case p[0]
+      when "a"
+        parts_hash[:attempt_number] = p[1..-1].to_i
+      when "g"
+        parts_hash[:group_number] = p[1..-1].to_i
+      when "r"
+        parts_hash[:round_number] = p[1..-1].to_i
+      end
+    end
+    parts_hash
+  end
+
+  def self.localized_name_from_activity_code(activity_code, fallback_name)
+    parts = ScheduleActivity.parse_activity_code(activity_code)
+    if parts[:event_id] == "other"
+      # TODO: this
+      #VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc).freeze
+      name = fallback_name
+    else
+      name = Event.c_find(parts[:event_id]).name
+      if parts[:round_number]
+        name = I18n.t("round.name", event: name, number: parts[:round_number])
+      end
+      if parts[:attempt_number]
+        name += " #{I18n.t("attempts.attempt_name", number: parts[:attempt_number])}"
+      end
+      # FIXME: do group number
+      name
+    end
+  end
 end

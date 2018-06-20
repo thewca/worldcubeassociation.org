@@ -1,0 +1,23 @@
+<ul class="nav nav-pills nav-justified">
+  <% competition.competition_venues.each_with_index do |venue, index| %>
+    <li class="<%= (index == 0) ? "active" : "" %>"><a href="#schedule-venue-<%= venue.id %>" data-toggle="pill"><%= venue.name %></a></li>
+  <% end %>
+</ul>
+<div class="tab-content" id="schedule-pills">
+  <% competition.competition_venues.each_with_index do |venue, index| %>
+    <div class="tab-pane <%= (index == 0) ? "active" : "" %>" id="schedule-venue-<%= venue.id %>">
+      <p>
+        <%= t("competitions.schedule.venue_information_html", venue_name: link_to_google_maps_place(venue.name, venue.latitude_degrees, venue.longitude_degrees)) %>
+        <br />
+        <%= t("competitions.schedule.timezone_message", timezone: venue.timezone_id) %>
+        <% if competition.competition_venues.size > 1 %>
+          <br />
+          <%= t("competitions.schedule.multiple_venues_available") %>
+        <% end %>
+      </p>
+      <div class="schedule_container">
+        <%= render "competition_schedule_for_venue_table", competition: competition, venue: venue %>
+      </div>
+    </div>
+  <% end %>
+</div>

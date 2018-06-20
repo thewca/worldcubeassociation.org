@@ -449,7 +449,9 @@ class CompetitionsController < ApplicationController
 
   def show
     associations = {
-      # FIXME: this part is triggerred by the competition menu generator when generating the psychsheet event list, should we care?
+      competition_venues: {
+        venue_rooms: [:schedule_activities],
+      },
       competition_events: {
         # NOTE: we hit this association through competition.has_fees?, which then calls 'has_fee?' on each competition_event, which then use the competition to get the currency.
         competition: [],

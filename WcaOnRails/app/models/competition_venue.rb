@@ -22,6 +22,18 @@ class CompetitionVenue < ApplicationRecord
     self
   end
 
+  def latitude_degrees
+    latitude_microdegrees / 1e6
+  end
+
+  def longitude_degrees
+    longitude_microdegrees / 1e6
+  end
+
+  def sorted_activities_for_date(date)
+    venue_rooms.map { |r| r.activities_for_date(date) }.flatten.sort_by(&:start_time)
+  end
+
   def to_wcif
     {
       "id" => wcif_id,

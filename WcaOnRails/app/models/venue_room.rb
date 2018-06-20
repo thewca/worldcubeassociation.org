@@ -27,6 +27,12 @@ class VenueRoom < ApplicationRecord
     }
   end
 
+  def activities_for_date(date)
+    schedule_activities.select do |a|
+      a.start_time.to_date == date
+    end
+  end
+
   def self.wcif_json_schema
     {
       "type" => "object",

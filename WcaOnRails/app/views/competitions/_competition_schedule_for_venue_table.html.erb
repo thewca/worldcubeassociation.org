@@ -1,0 +1,92 @@
+<% venue_rooms = venue.venue_rooms %>
+<% cumulative_time_limit = false %>
+<% cumulative_across_rounds_time_limit = false %>
+<% rounds_by_wcif_id = Hash[competition.rounds.map { |r| [r.wcif_id, r] }] %>
+<% if venue_rooms.size > 1 %>
+  <p>
+  This venue as multiple rooms, by default all the rooms are displayed on the schedule, but you can filter the rooms below:
+  </p>
+  TODO : checkboxes and js
+  <ul>
+    <% venue_rooms.each do |r| %>
+      <li><%= r.name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% competition.start_date.upto(competition.end_date) do |date| %>
+  <h3><%= t("competitions.schedule.schedule_for_date", day_name: l(date, format: '%A'), full_date: l(date, format: :long)) %></h3>
+
+  <div class="row hidden-xs hidden-sm">
+    <div class="col-md-1"><%= t("competitions.schedule.start") %></div>
+    <div class="col-md-1"><%= t("competitions.schedule.end") %></div>
+    <div class="col-md-3"><%= t("competitions.schedule.activity") %></div>
+    <div class="col-md-2"><%= t("competitions.schedule.room") %></div>
+    <div class="col-md-2"><%= t("competitions.schedule.format") %></div>
+    <div class="col-md-1"><%= t("competitions.schedule.time_limit") %></div>
+    <div class="col-md-1"><%= t("competitions.schedule.cutoff") %></div>
+    <div class="col-md-1"><%= t("competitions.schedule.proceed") %></div>
+  </div>
+  <div class="schedule-table">
+    <% venue.sorted_activities_for_date(date).each do |a| %>
+      <% activity_code_without_attempt = a.activity_code.gsub(/-a[0-9]+/, '') %>
+      <% round_data = rounds_by_wcif_id[activity_code_without_attempt] %>
+      <div class="row">
+        <div class="col-xs-6 col-sm-2 col-md-1">
+          <span class="visible-xs">From</span>
+          <%= l(a.start_time, format: time_format_for_current_locale) %>
+        </div>
+        <div class="col-xs-6 col-sm-2 col-md-1">
+          <span class="visible-xs">To</span>
+          <%= l(a.end_time, format: time_format_for_current_locale) %>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-3">
+          <%= ScheduleActivity.localized_name_from_activity_code(a.activity_code, a.name) %>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-2">
+          <%# Room's name %>
+          <%= a.holder.name %>
+        </div>
+        <div class="col-xs-6 col-sm-3 col-md-2">
+          <%= round_data&.format&.name %>
+        </div>
+        <div class="col-xs-6 col-sm-3 col-md-1">
+          <%= round_data&.time_limit_to_s %>
+          <% if round_data&.competition_event&.event&.can_change_time_limit? %>
+            <% if round_data.time_limit.cumulative_round_ids.length == 1 %>
+              <% cumulative_time_limit = true %>
+              <%= link_to "*", "#cumulative-time-limit" %>
+            <% elsif round_data.time_limit.cumulative_round_ids.length > 1 %>
+              <% cumulative_across_rounds_time_limit = true %>
+              <%= link_to "**", "#cumulative-across-rounds-time-limit" %>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="col-xs-6 col-sm-3 col-md-1">
+          <%= round_data&.cutoff_to_s %>
+        </div>
+        <div class="col-xs-6 col-sm-3 col-md-1">
+          <%= round_data&.advancement_condition_to_s %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+<dl class="dl-horizontal">
+  <%# FIXME: i18n %>
+  <dt id="time-limit">Time Limit</dt>
+  <dd>
+  If you reach the time limit during your solve, the judge will stop you and your result will be DNF (see <%= link_to "Regulation A1a4",  regulations_path + "#A1a4", target: "_blank" %>).
+  <br/>
+  <% if cumulative_time_limit %>
+    A <strong id="cumulative-time-limit">cumulative time limit</strong> may be enforced (see <%= link_to "Regulation A1a2",  regulations_path + "#A1a2", target: "_blank" %>).
+  <% end %>
+  <br/>
+  <% if cumulative_across_rounds_time_limit %>
+    A <strong id="cumulative-across-rounds-time-limit">cumulative time limit</strong> may be enforced across rounds (see <%= link_to "Guideline A1a2++",  regulations_path + "/guidelines.html#A1a2++", target: "_blank" %>).
+  <% end %>
+  </dd>
+
+  <dt id="cutoff">Cutoff</dt>
+  <dd>The ranking or time to meet to proceed to the second phase of a combined round (see <%= link_to "Regulation 9g",  regulations_path + "#9g", target: "_blank" %>)</dd>
+</dl>

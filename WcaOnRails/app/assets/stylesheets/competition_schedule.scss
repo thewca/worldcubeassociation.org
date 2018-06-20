@@ -1,0 +1,19 @@
+.schedule-table {
+  .row {
+    &:nth-of-type(1) {
+      border-top: 3px solid #ddd;
+    }
+    /*
+    &:nth-of-type(even) {
+      background-color: #dcdcdc;
+    }
+    &:nth-of-type(odd){
+      background-color: #aaa;
+    }
+     */
+    div {
+      padding: 8px;
+    }
+    border-bottom: 1px solid #ddd;
+  }
+}
