@@ -1,7 +1,6 @@
 import { rootRender } from 'edit-schedule'
 import { newActivityId, defaultDurationFromActivityCode } from '../utils'
 import {
-  activityIndexInArray,
   roomWcifFromId,
   venueWcifFromRoomId,
 } from 'wca/wcif-utils'
@@ -42,13 +41,13 @@ function handleAddActivityToCalendar(reactElem, activityData, renderItOnCalendar
       $(scheduleElementSelector).fullCalendar("renderEvent", fcEvent);
     }
     // update list of activityCode used, and rootRender to display the save message
-    reactElem.setState({ usedActivityCodeList: [...reactElem.state.usedActivityCodeList, newActivity.activityCode] }, rootRender());
+    reactElem.setState({ usedActivityCodeList: [...reactElem.state.usedActivityCodeList, newActivity.activityCode] }, rootRender);
   }
 }
 
 function handleEventModifiedInCalendar(reactElem, event) {
   let room = roomWcifFromId(reactElem.props.scheduleWcif, reactElem.state.selectedRoom);
-  let activityIndex = activityIndexInArray(room.activities, event.id);
+  let activityIndex = _.findIndex(room.activities, { id: event.id });
   if (activityIndex < 0) {
     throw new Error("This is very very BAD, I couldn't find an activity matching the modified event!");
   }
@@ -58,7 +57,7 @@ function handleEventModifiedInCalendar(reactElem, event) {
 }
 
 function handleRemoveEventFromCalendar(reactElem, event) {
-  if (!confirm(`Are you sure you want to remove ${event.name}`)) {
+  if (!confirm(`Are you sure you want to remove ${event.title}`)) {
     return false;
   }
 
@@ -72,11 +71,8 @@ function handleRemoveEventFromCalendar(reactElem, event) {
   let scheduleWcif = reactElem.props.scheduleWcif;
   // Remove activity from the list used by the ActivityPicker
   let room = roomWcifFromId(scheduleWcif, reactElem.state.selectedRoom);
-  let activityIndex = activityIndexInArray(room.activities, event.id);
-  if (activityIndex < 0) {
-    throw new Error("This is very very BAD, I couldn't find an activity matching the removed event!");
-  }
-  room.activities.splice(activityIndex, 1);
+  _.remove(room.activities, { id: event.id });
+
   // We rootRender to display the "Please save your changes..." message
   reactElem.setState({ usedActivityCodeList: newActivityCodeList }, rootRender());
 
@@ -92,8 +88,7 @@ function isoStringToAmbiguousMoment(editor, isoString) {
   // The final FC display will be timezone-free, and the user expect a calendar
   // in the venue's TZ.
   // First convert the time received into the venue's timezone, then strip its value
-  let ret = $.fullCalendar.moment(isoString).tz(tz).stripZone();
-  return ret;
+  return $.fullCalendar.moment(isoString).tz(tz).stripZone();
 }
 
 function ambiguousMomentToIsoString(editor, momentObject) {
@@ -101,8 +96,7 @@ function ambiguousMomentToIsoString(editor, momentObject) {
   let tz = venue.timezone;
   // Take the moment and "concatenate" the UTC offset of the timezone at that time
   // momentObject is a FC (ambiguously zoned) moment, therefore format() returns a zone free string
-  let ret = moment.tz(momentObject.format(), tz).format();
-  return ret;
+  return moment.tz(momentObject.format(), tz).format();
 }
 
 export function setupConvertHandlers(editor) {
@@ -111,9 +105,9 @@ export function setupConvertHandlers(editor) {
 }
 
 export function setupCalendarHandlers(editor) {
-  calendarHandlers.addActivityToCalendar = (data, renderItOnCalendar) => handleAddActivityToCalendar(editor, data, renderItOnCalendar);
-  calendarHandlers.eventModifiedInCalendar = (event) => handleEventModifiedInCalendar(editor, event);
-  calendarHandlers.removeEventFromCalendar = (event) => handleRemoveEventFromCalendar(editor, event);
+  calendarHandlers.addActivityToCalendar = _.partial(handleAddActivityToCalendar, editor);
+  calendarHandlers.eventModifiedInCalendar = _.partial(handleEventModifiedInCalendar, editor);
+  calendarHandlers.removeEventFromCalendar = _.partial(handleRemoveEventFromCalendar, editor);
 }
 
 export function addActivityToCalendar(data, renderItOnCalendar=true) {
@@ -225,7 +219,7 @@ export function singleSelectLastEvent(scheduleWcif, selectedRoom) {
   let room = roomWcifFromId(scheduleWcif, selectedRoom);
   if (room) {
     if (room.activities.length > 0) {
-      let lastActivity = room.activities[room.activities.length - 1];
+      let lastActivity = _.last(room.activities);
       let fcEvent = $(scheduleElementSelector).fullCalendar("clientEvents", lastActivity.id)[0];
       if (singleSelectEvent(fcEvent)) {
         $(scheduleElementSelector).fullCalendar("updateEvent", fcEvent);

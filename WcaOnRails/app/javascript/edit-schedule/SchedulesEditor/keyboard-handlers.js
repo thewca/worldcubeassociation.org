@@ -8,7 +8,6 @@ import {
 } from './calendar-utils'
 import { scheduleElementSelector } from './fullcalendar'
 import { schedulesEditPanelSelector } from '../EditSchedule'
-import { activityIndexInArray } from 'wca/wcif-utils'
 
 export const keyboardHandlers = [];
 
@@ -27,10 +26,9 @@ export function editScheduleKeyboardHandler(event, activityPicker) {
   }
   let currentEventSelected = selectedEventInCalendar();
   switch (event.which) {
-    // h
-    case 72:
-      // arrow left
-    case 37:
+    case 72: // h
+    // intentionally omitting the break
+    case 37: // arrow left
       if (event.ctrlKey) {
         if (currentEventSelected) {
           let possibleStart = currentEventSelected.start.clone();
@@ -48,10 +46,9 @@ export function editScheduleKeyboardHandler(event, activityPicker) {
         trySetSelectedEvent("left");
       }
       break;
-      // j
-    case 74:
-      // arrow down
-    case 40:
+    case 74: // j
+    // intentionally omitting the break
+    case 40: // arrow down
       if (event.ctrlKey) {
         if (currentEventSelected) {
           currentEventSelected.end.add(5, "m");
@@ -69,10 +66,9 @@ export function editScheduleKeyboardHandler(event, activityPicker) {
         }
       }
       break;
-      // k
-    case 75:
-      // arrow up
-    case 38:
+    case 75: // k
+    // intentionally omitting the break
+    case 38: // arrow up
       if (event.ctrlKey) {
         if (currentEventSelected) {
           currentEventSelected.end.subtract(5, "m");
@@ -90,10 +86,9 @@ export function editScheduleKeyboardHandler(event, activityPicker) {
         }
       }
       break;
-      // l
-    case 76:
-      // arrow right
-    case 39:
+    case 76: // l
+    // intentionally omitting the break
+    case 39: // arrow right
       if (event.ctrlKey) {
         if (currentEventSelected) {
           let possibleStart = currentEventSelected.start.clone();
@@ -138,38 +133,19 @@ function trySetSelectedEvent(direction) {
   }
   let allEvents = _.sortBy($(scheduleElementSelector).fullCalendar("clientEvents"), ["start", "end"]);
   // groupBy preserve sorting
-  let allGroupedEvents = _.groupBy(allEvents, function(value) { return value.start.day(); });
-  if (direction == "up" || direction == "down") {
+  let allGroupedEvents = _.groupBy(allEvents, value => value.start.day());
+  if (direction === "up" || direction === "down") {
     let eventsForDay = allGroupedEvents[currentEventSelected.start.day()];
     // it must exist
-    let index = activityIndexInArray(eventsForDay, currentEventSelected.id);
-    index = (direction == "up") ? index - 1 : index + 1;
-    // because '%' can return negative numbers
-    index = ((index%eventsForDay.length) + eventsForDay.length) % eventsForDay.length;
-    currentEventSelected = eventsForDay[index];
-  } else if (direction == "right" || direction == "left") {
-    let daySelected = currentEventSelected.start.day();
-    let allDays = Object.keys(allGroupedEvents);
-    // As a day may not have event, we need to find the closest one with one event
-    // Thefore we loop through all of them in the expected order
-    if (direction == "left") {
-      allDays = _.reverse(allDays);
-    }
-    // Make sure the selected days is the first element
-    while (allDays[0] != daySelected) {
-      allDays.push(allDays.shift());
-    }
-    // Remove the current day from the selection
-    allDays.splice(0, 1);
-    // Basic for to be able to break out when found
-    for (let i = 0; i < allDays.length; i++) {
-      let eventsForDay = allGroupedEvents[allDays[i]];
-      if (eventsForDay) {
-        // if element exists in groupBy, then at least one event is there
-        currentEventSelected = eventsForDay[0];
-        break;
-      }
-    }
+    let index = _.findIndex(eventsForDay, { id: currentEventSelected.id });
+    index += (direction === "up") ? -1 : +1;
+    // '%' can return negative numbers, but 'nth' deals with them
+    currentEventSelected = _.nth(eventsForDay, index % eventsForDay.length);
+  } else if (direction === "right" || direction === "left") {
+    const daySelected = currentEventSelected.start.day().toString();
+    const allDays = Object.keys(allGroupedEvents);
+    const newDayIndex = allDays.indexOf(daySelected) + (direction === "left" ? -1 : 1);
+    currentEventSelected = allGroupedEvents[_.nth(allDays, newDayIndex % allDays.length)][0];
   }
   if (singleSelectEvent(currentEventSelected)) {
     $(scheduleElementSelector).fullCalendar("updateEvent", currentEventSelected)

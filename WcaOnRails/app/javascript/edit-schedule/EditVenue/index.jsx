@@ -14,11 +14,15 @@ import { timezoneData } from 'wca/timezoneData.js.erb'
 
 export class EditVenue extends React.Component {
 
-  handleSinglePropertyChange = (e, propName) => {
-    this.props.venueWcif[propName] = e.target.value;
-    if (propName == "timezone") {
-      convertVenueActivitiesToVenueTimezone(this.props.venueWcif);
-    }
+  handleTimezoneChange = e => {
+    let oldTZ = this.props.venueWcif.timezone;
+    this.props.venueWcif.timezone = e.target.value;
+    convertVenueActivitiesToVenueTimezone(oldTZ, this.props.venueWcif);
+    rootRender();
+  }
+
+  handleNameChange = e => {
+    this.props.venueWcif.name = e.target.value;
     rootRender();
   }
 
@@ -77,7 +81,7 @@ export class EditVenue extends React.Component {
               </Row>
             </Panel.Heading>
             <Panel.Body>
-              <NameInput name={venueWcif.name} actionHandler={this.handleSinglePropertyChange}/>
+              <NameInput name={venueWcif.name} actionHandler={this.handleNameChange}/>
               <VenueLocationInput
                 lat={venueWcif.latitudeMicrodegrees}
                 lng={venueWcif.longitudeMicrodegrees}
@@ -86,7 +90,7 @@ export class EditVenue extends React.Component {
               <TimezoneInput
                 timezone={venueWcif.timezone}
                 selectKeys={selectKeys}
-                actionHandler={this.handleSinglePropertyChange}
+                actionHandler={this.handleTimezoneChange}
                 />
               <RoomsList venueWcif={venueWcif} actionsHandlers={actionsHandlers}/>
             </Panel.Body>

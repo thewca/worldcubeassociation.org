@@ -13,7 +13,7 @@ class Country < ApplicationRecord
                               selected_name = tz_id
                               # Try to be smarter here, and find the closest matching name
                               tz_entries.each do |tz_name, _|
-                                if tz_id.include?(tz_name)
+                                if tz_id.include?(tz_name.tr(' ', '_'))
                                   selected_name = tz_name
                                 end
                                 all_tz.delete(tz_name)

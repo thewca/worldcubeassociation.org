@@ -5,7 +5,6 @@ import {
   Panel,
   Row,
 } from 'react-bootstrap'
-
 import {
   activityCodeListFromWcif,
   roomWcifFromId,
@@ -27,22 +26,16 @@ import { ContextualMenu, contextualMenuSelector } from './ContextualMenu.jsx'
 import { scheduleElementSelector, generateCalendar } from './fullcalendar'
 import { timezoneData, friendlyTimezoneName } from 'wca/timezoneData.js.erb'
 
-
-
 export class SchedulesEditor extends React.Component {
   constructor(props) {
     super(props);
     setupCalendarHandlers(this);
     setupConvertHandlers(this);
-  }
-
-  componentWillMount() {
-    let { scheduleWcif } = this.props;
-    this.setState({
+    this.state = {
       selectedRoom: "",
-      usedActivityCodeList: activityCodeListFromWcif(scheduleWcif),
+      usedActivityCodeList: activityCodeListFromWcif(props.scheduleWcif),
       keyboardEnabled: false,
-    });
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,18 +55,6 @@ export class SchedulesEditor extends React.Component {
 
   render() {
     let { scheduleWcif, eventsWcif, locale } = this.props;
-    let rightPanelBody = <NoRoomSelected />;
-
-    if (this.state.selectedRoom.length > 0) {
-      rightPanelBody = (
-        <EditScheduleForRoom scheduleWcif={scheduleWcif}
-                             locale={locale}
-                             keyboardEnabled={this.state.keyboardEnabled}
-                             handleKeyboardChange={this.handleToggleKeyboardEnabled}
-                             selectedRoom={this.state.selectedRoom}
-        />);
-    }
-
     return (
       <Row>
         <Col xs={3}>
@@ -85,7 +66,17 @@ export class SchedulesEditor extends React.Component {
               <RoomSelector scheduleWcif={scheduleWcif} selectedRoom={this.state.selectedRoom} handleRoomChange={this.handleRoomChange} />
             </Panel.Heading>
             <Panel.Body>
-              {rightPanelBody}
+              {this.state.selectedRoom.length === 0 ? (
+                <div>Please select a room to edit its schedule</div>
+              ) : (
+                <EditScheduleForRoom
+                  scheduleWcif={scheduleWcif}
+                  locale={locale}
+                  keyboardEnabled={this.state.keyboardEnabled}
+                  handleKeyboardChange={this.handleToggleKeyboardEnabled}
+                  selectedRoom={this.state.selectedRoom}
+                />
+              )}
             </Panel.Body>
           </Panel>
         </Col>
@@ -94,48 +85,40 @@ export class SchedulesEditor extends React.Component {
   }
 }
 
-const NoRoomSelected = () => (
-  <div>Please select a room to edit its schedule</div>
+const RoomSelector = ({ scheduleWcif, selectedRoom, handleRoomChange }) => (
+  <Row className="room-selector">
+      <Col componentClass="label"
+           htmlFor="venue-room-selector"
+           className="control-label"
+           xs={12} md={6} lg={5}
+      >
+        Select a room to edit its schedule:
+      </Col>
+      <Col xs={12} md={6} lg={7}>
+        <select id="venue-room-selector"
+                className="form-control input-sm"
+                onChange={handleRoomChange} value={selectedRoom}>
+          {[<option key="0" value=""></option>].concat(
+            _.flatMap(scheduleWcif.venues, venue =>
+              _.map(venue.rooms, room =>
+                <option key={room.id} value={room.id}>"{room.name}" in "{venue.name}"</option>
+              )
+            )
+          )}
+        </select>
+      </Col>
+  </Row>
 );
-
-const RoomSelector = ({ scheduleWcif, selectedRoom, handleRoomChange }) => {
-  let options = [
-    <option key="0" value=""></option>
-  ];
-
-  scheduleWcif.venues.forEach(function (venue, venueIndex) {
-    venue.rooms.forEach(function (room, roomIndex) {
-      options.push(<option key={ room.id } value={ room.id }>"{room.name}" in "{venue.name}"</option>);
-    });
-  });
-
-  return (
-    <Row className="room-selector">
-        <Col componentClass="label"
-             htmlFor="venue-room-selector"
-             className="control-label"
-             xs={12} md={6} lg={5}
-        >
-          Select a room to edit its schedule:
-        </Col>
-        <Col xs={12} md={6} lg={7}>
-          <select id="venue-room-selector" className="form-control input-sm" onChange={handleRoomChange} value={selectedRoom}>
-            {options}
-          </select>
-        </Col>
-    </Row>
-  );
-}
 
 class EditScheduleForRoom extends React.Component {
 
-  componentWillMount() {
-    this.setState({
-      selectedRoom: this.props.selectedRoom,
+  constructor(props) {
+    super(props);
+    this.state = {
       showModal: false,
       eventProps: { name: "", activityCode: "" },
       actionDetails: modeDetails.create,
-    });
+    };
   }
 
   handleShowModal = (eventProps, mode) => {
@@ -156,34 +139,31 @@ class EditScheduleForRoom extends React.Component {
     });
   }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({ selectedRoom: newProps.selectedRoom });
+  eventFetcher = (start, end, timezone, callback) => {
+    // Create a deep clone, otherwise FC will add some extra attributes that
+    // will make the parent component think some changes have been made...
+    callback(_.cloneDeep(roomWcifFromId(this.props.scheduleWcif, this.props.selectedRoom).activities));
   }
 
   componentDidMount() {
-    let { scheduleWcif, locale } = this.props;
+    let { scheduleWcif, locale, selectedRoom } = this.props;
 
-    let eventFetcher =  (start, end, timezone, callback) => {
-      // Create a deep clone, otherwise FC will add some extra attributes that
-      // will make the parent component think some changes have been made...
-      callback(_.cloneDeep(roomWcifFromId(this.props.scheduleWcif, this.state.selectedRoom).activities));
-    }
-
-    generateCalendar(eventFetcher, this.handleShowModal, scheduleWcif, locale);
-    singleSelectLastEvent(this.props.scheduleWcif, this.state.selectedRoom);
+    generateCalendar(this.eventFetcher, this.handleShowModal, scheduleWcif, locale);
+    singleSelectLastEvent(this.props.scheduleWcif, selectedRoom);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.selectedRoom != this.state.selectedRoom) {
+    let { selectedRoom } = this.props;
+    if (prevProps.selectedRoom != selectedRoom) {
       $(scheduleElementSelector).fullCalendar("refetchEvents")
-      singleSelectLastEvent(this.props.scheduleWcif, this.state.selectedRoom);
+      singleSelectLastEvent(this.props.scheduleWcif, selectedRoom);
     }
   }
 
   render() {
-    let { keyboardEnabled, handleKeyboardChange } = this.props;
+    let { keyboardEnabled, handleKeyboardChange, selectedRoom } = this.props;
 
-    let venueWcif = venueWcifFromRoomId(this.props.scheduleWcif, this.state.selectedRoom);
+    let venueWcif = venueWcifFromRoomId(this.props.scheduleWcif, selectedRoom);
 
     let actionsHandlers = {
       removeEvent: e => {

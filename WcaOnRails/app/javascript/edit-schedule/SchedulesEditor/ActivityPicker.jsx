@@ -8,7 +8,7 @@ import {
 } from 'react-bootstrap'
 import cn from 'classnames'
 import events from 'wca/events.js.erb'
-import { parseActivityCode, roundIdToString, activityIndexInArray } from 'wca/wcif-utils'
+import { parseActivityCode, roundIdToString } from 'wca/wcif-utils'
 import formats from 'wca/formats.js.erb'
 import { selectedEventInCalendar, addActivityToCalendar, eventModifiedInCalendar, removeEventFromCalendar, singleSelectEvent } from './calendar-utils'
 import { scheduleElementSelector } from './fullcalendar'

@@ -59,7 +59,7 @@ const fullCalendarHandlers = {
     newEnd.add(defaultDurationFromActivityCode(event.activityCode), "m");
     event.end = newEnd;
     // Add the event to the calendar (and to the WCIF schedule, but don't
-    // render it as it's already done
+    // render it as it's already done)
     addActivityToCalendar(fcEventToActivity(event), false);
     if (singleSelectEvent(event)) {
       $(scheduleElementSelector).fullCalendar("updateEvent", event);

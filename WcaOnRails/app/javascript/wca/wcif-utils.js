@@ -24,7 +24,7 @@ export function saveWcifPart(competitionId, wcifPath, data, onSuccess, onFailure
     return Promise.all([response, response.json()]);
   }).then(([response, json]) => {
     if(!response.ok) {
-      throw new Error(`${response.status}: ${response.statusText}\n${json["error"]}`);
+      throw new Error(`${response.status}: ${response.statusText}\n${json.error}`);
     }
     onSuccess();
   }).catch(e => {
@@ -74,53 +74,15 @@ export function buildActivityCode(activity) {
 }
 
 export function roomWcifFromId(scheduleWcif, id) {
-  if (id.length > 0) {
-    for (let i = 0; i < scheduleWcif.venues.length; i++) {
-      let venue = scheduleWcif.venues[i];
-      for (let j = 0; j < venue.rooms.length; j++) {
-        let room = venue.rooms[j];
-        if (id == room.id) {
-          return room;
-        }
-      }
-    }
-  }
-  return null;
+  id = parseInt(id);
+  return _.find(_.flatMap(scheduleWcif.venues, 'rooms'), { id });
 }
 
 export function venueWcifFromRoomId(scheduleWcif, id) {
-  if (id.length > 0) {
-    for (let i = 0; i < scheduleWcif.venues.length; i++) {
-      let venue = scheduleWcif.venues[i];
-      for (let j = 0; j < venue.rooms.length; j++) {
-        let room = venue.rooms[j];
-        if (id == room.id) {
-          return venue;
-        }
-      }
-    }
-  }
-  return null;
-}
-
-export function activityIndexInArray(activities, id) {
-  for (let i = 0; i < activities.length; i++) {
-    if (activities[i].id == id) {
-      return i;
-    }
-  }
-  return -1;
+  id = parseInt(id);
+  return _.find(scheduleWcif.venues, venue => _.some(venue.rooms, { id }));
 }
 
 export function activityCodeListFromWcif(scheduleWcif) {
-  let usedActivityCodeList = [];
-  scheduleWcif.venues.forEach(function(venue, index) {
-    venue.rooms.forEach(function(room, index) {
-      let activityCodes = room.activities.map(function(element) {
-        return element.activityCode;
-      });
-      usedActivityCodeList.push(...activityCodes);
-    });
-  });
-  return usedActivityCodeList;
+  return _.map(_.flatMap(_.flatMap(scheduleWcif.venues, 'rooms'), 'activities'), 'activityCode');
 }
