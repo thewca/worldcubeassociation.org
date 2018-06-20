@@ -1,5 +1,38 @@
 import events from './events.js.erb'
 
+function getAuthenticityToken() {
+  return document.querySelector('meta[name=csrf-token]').content;
+}
+
+function promiseSaveWcif(competitionId, wcifPath, data) {
+  let url = `/api/v0/competitions/${competitionId}/wcif${wcifPath}`;
+  let fetchOptions = {
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": getAuthenticityToken(),
+    },
+    credentials: 'include',
+    method: "PATCH",
+    body: JSON.stringify(data),
+  };
+
+  return fetch(url, fetchOptions);
+}
+
+export function saveWcifPart(competitionId, wcifPath, data, onSuccess, onFailure) {
+  promiseSaveWcif(competitionId, wcifPath, data).then(response => {
+    return Promise.all([response, response.json()]);
+  }).then(([response, json]) => {
+    if(!response.ok) {
+      throw new Error(`${response.status}: ${response.statusText}\n${json["error"]}`);
+    }
+    onSuccess();
+  }).catch(e => {
+    onFailure();
+    alert(`Something went wrong while saving.\n${e.message}`);
+  });
+}
+
 export function roundIdToString(roundId) {
   let { eventId, roundNumber } = parseActivityCode(roundId);
   let event = events.byId[eventId];

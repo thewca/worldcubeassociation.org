@@ -106,12 +106,6 @@
           border: 2px solid $selected-activity-border-color;
         }
 
-        .fc-time-grid-event.fc-short .fc-time span {
-        }
-
-        .fc-time-grid-event.fc-short .fc-time::before {
-        }
-
         .fc-event {
           &.fc-short > .fc-content {
             // By default for vertically short events FC don't display the full time
@@ -128,6 +122,7 @@
               }
             }
           }
+
           .fc-bg {
             display: none;
           }
@@ -184,10 +179,7 @@
   color: $activity-text-color;
   font-weight: bold;
   border-radius: 0.25em;
-  margin-top: 3px;
-  margin-bottom: 3px;
-  margin-left: 2px;
-  margin-right: 2px;
+  margin: 3px 2px;
   padding-left: 2px;
   padding-right: 2px;
   text-align: center;

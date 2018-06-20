@@ -62,14 +62,16 @@ export class CustomActivityModal extends React.Component {
       timeText = `On ${eventProps.start.format("dddd, MMMM Do YYYY")}, from ${eventProps.start.format("H:mm")} to ${eventProps.end.format("H:mm")}.`;
     }
 
-    let handlePropChange = (propName, e) => {
-      let newState = {};
-      newState[propName] = e.target.value;
-      if (propName == "activityCode") {
+    let handleNameChange = event => {
+      this.setState({ name: event.target.value });
+    };
+
+    let handleActivityCodeChange = event => {
+      this.setState({
+        activityCode: event.target.value,
         // On change of activity code, we can update the activity name to the default
-        newState.name = commonActivityCodes[newState.activityCode];
-      }
-      this.setState(newState);
+        name: commonActivityCodes[event.target.value]
+      });
     };
 
     return (
@@ -83,7 +85,7 @@ export class CustomActivityModal extends React.Component {
               <label>Type of activity</label>
             </div>
             <div className="col-xs-8">
-              <select className="form-control" id="activity_code" value={this.state.activityCode} onChange={e => handlePropChange("activityCode", e)}>
+              <select className="form-control" id="activity_code" value={this.state.activityCode} onChange={handleActivityCodeChange}>
                 {Object.keys(commonActivityCodes).map(function(key) {
                   return <option key={key} value={key}>{commonActivityCodes[key]}</option>
                 })}
@@ -95,7 +97,7 @@ export class CustomActivityModal extends React.Component {
               <label>Name</label>
             </div>
             <div className="col-xs-8">
-              <input className="form-control" type="text" id="activity_name" value={this.state.name} onChange={e => handlePropChange("name", e)}/>
+              <input className="form-control" type="text" id="activity_name" value={this.state.name} onChange={handleNameChange}/>
             </div>
           </div>
           <div className="form-group">

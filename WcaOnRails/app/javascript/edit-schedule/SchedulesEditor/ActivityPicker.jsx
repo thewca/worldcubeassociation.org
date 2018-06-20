@@ -28,55 +28,36 @@ export class ActivityPicker extends React.Component {
     if ((!keyboardEnabled && !ignoreKeyboard) || eventsWcif.length == 0) {
       return;
     }
-    let x = this.state.selectedX;
-    let y = this.state.selectedY;
+    let { selectedX: x, selectedY: y } = this.state;
     switch (direction) {
-      case "up":
-        y--;
-      break;
-      case "down":
-        y++;
-      break;
-      case "left":
-        x--;
-      break;
-      case "right":
-        x++;
-      break;
-      default:
-        return;
+      case "up":    y--; break;
+      case "down":  y++; break;
+      case "left":  x--; break;
+      case "right": x++; break;
+      default: throw new Error(`Unknown direction: ${direction}`);
     }
-    let fixedY = Math.max(0, Math.min(y, eventsWcif.length - 1));
+    let fixedY = _.clamp(y, 0, eventsWcif.length - 1);
     let fixedX = 0;
-    // Loop at most through all rows, starting from selected, hoping to find one with rounds
-    // Else we just default to 0,0 and nothing will be selected
-    for (let i = 0; i < eventsWcif.length; i++) {
-      let eventRow = eventsWcif[fixedY];
-      let eventRowLength = 0;
-      let eventId = eventRow.id;
-      eventRow.rounds.forEach(function(round) {
-        if (eventId == "333fm" || eventId == "333mbf") {
-          eventRowLength += formats.byId[round.format].expectedSolveCount;
-        } else {
-          eventRowLength++;
-        }
-      });
-      if (eventRowLength != 0) {
-        fixedX = Math.max(0, Math.min(x, eventRowLength - 1));
-        break;
-      }
-      if (direction == "up") {
-        fixedY--;
-        if (fixedY < 0) {
-          return;
-        }
-      } else if (direction == "down") {
-        fixedY++;
-        if (fixedY >= eventsWcif.length) {
-          return;
-        }
-      }
+    // Steps to find a suitable row:
+    //  - Create an array of row lengths matching the events.
+    //  - Start at the current position (fixedY) in the array, and go either upwards or downwards trying to find positive number of rows.
+    //  - Do not move if we didn't find any suitable row.
+    //  - Get corresponding x value;
+    const rowLengths = eventsWcif.map(eventWcif =>
+      ["333fm", "333mbf"].includes(eventWcif.id)
+        ? _.sum(eventWcif.rounds.map(round => formats.byId[round.format].expectedSolveCount))
+        : eventWcif.rounds.length
+      );
+    const positive = x => x > 0;
+    if (direction === "up") {
+      fixedY = _.findLastIndex(rowLengths, positive, fixedY);
+    } else if (direction === "down") {
+      fixedY = _.findIndex(rowLengths, positive, fixedY);
     }
+    if (fixedY < 0)
+      return;
+    let rowLength = rowLengths[fixedY];
+    fixedX = rowLength ? _.clamp(x, 0, rowLength - 1) : 0;
     this.setState({
       selectedY: fixedY,
       selectedX: fixedX,
@@ -189,7 +170,11 @@ export class ActivityPicker extends React.Component {
         <Panel.Body>
           {eventsWcif.map((value, index) => {
             return (
-              <ActivityPickerLine key={value.id} selectedLine={index == selectedY} eventWcif={value} usedActivityCodeList={usedActivityCodeList} selectedX={selectedX} />
+              <ActivityPickerLine key={value.id}
+                                  selectedLine={index == selectedY}
+                                  eventWcif={value}
+                                  usedActivityCodeList={usedActivityCodeList} selectedX={selectedX}
+              />
             );
           })}
           <Col xs={12}>
@@ -204,50 +189,44 @@ export class ActivityPicker extends React.Component {
   }
 }
 
-function ActivityPickerLine({ eventWcif, usedActivityCodeList, selectedLine, selectedX }) {
-  let event = events.byId[eventWcif.id];
+const ActivityPickerLine = ({ eventWcif, usedActivityCodeList, selectedLine, selectedX }) => (
+  <Col xs={12} className="event-picker-line">
+    <Row>
+      <Col xs={12} md={3} lg={2} className="activity-icon">
+        <span className={cn("cubing-icon", `event-${eventWcif.id}`)}></span>
+      </Col>
+      <Col xs={12} md={9} lg={10}>
+        <Row>
+          {eventWcif.rounds.map((value, index) => {
+            let activities = (
+              <ActivitiesForRound key={value.id}
+                                  indexInRow={index}
+                                  eventId={eventWcif.id}
+                                  round={value}
+                                  usedActivityCodeList={usedActivityCodeList}
+                                  selectedLine={selectedLine}
+                                  selectedX={selectedX}
+              />
+            );
+            if (eventWcif.id == "333mbf" || eventWcif.id == "333fm") {
+              // For these events the selectedX spreads accross multiple rounds.
+              // This corrects the offset.
+              selectedX -= formats.byId[value.format].expectedSolveCount;
+            }
+            return activities;
+          })}
+        </Row>
+      </Col>
+    </Row>
+  </Col>
+);
 
-  return (
-    <Col xs={12} className="event-picker-line">
-      <Row>
-        <Col xs={12} md={3} lg={2} className="activity-icon">
-          <span className={cn("cubing-icon", `event-${event.id}`)}></span>
-        </Col>
-        <Col xs={12} md={9} lg={10}>
-          <Row>
-            {eventWcif.rounds.map((value, index) => {
-              let activities = (
-                <ActivitiesForRound key={value.id}
-                                    indexInRow={index}
-                                    round={value}
-                                    usedActivityCodeList={usedActivityCodeList}
-                                    selectedLine={selectedLine}
-                                    selectedX={selectedX}
-                />
-              );
-              if (event.id == "333mbf" || event.id == "333fm") {
-                // For these events the selectedX spreads accross multiple rounds.
-                // This corrects the offset.
-                selectedX -= formats.byId[value.format].expectedSolveCount;
-              }
-              return activities;
-            })}
-          </Row>
-        </Col>
-      </Row>
-    </Col>
-  );
-}
-
-function ActivitiesForRound({ usedActivityCodeList, round, selectedLine, selectedX, indexInRow }) {
-  let activityCode = round.id;
-  let { eventId } = parseActivityCode(activityCode);
-
+const ActivitiesForRound = ({ usedActivityCodeList, eventId, round, selectedLine, selectedX, indexInRow }) => {
   if (["333fm", "333mbf"].includes(eventId)) {
     let numberOfAttempts = formats.byId[round.format].expectedSolveCount;
     return _.times(numberOfAttempts, n => (
       <ActivityForAttempt
-        activityCode={activityCode}
+        activityCode={round.id}
         usedActivityCodeList={usedActivityCodeList}
         key={n}
         attemptNumber={n + 1}
@@ -258,7 +237,7 @@ function ActivitiesForRound({ usedActivityCodeList, round, selectedLine, selecte
     return (
       <ActivityForAttempt
         usedActivityCodeList={usedActivityCodeList}
-        activityCode={activityCode}
+        activityCode={round.id}
         selected={selectedLine && selectedX == indexInRow}
         attemptNumber={null}
       />

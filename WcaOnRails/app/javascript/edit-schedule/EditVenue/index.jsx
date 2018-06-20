@@ -9,7 +9,7 @@ import {
 import { EditRoom } from './EditRoom'
 import { compose, withProps } from "recompose"
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-import { Panel, Row, Col } from 'react-bootstrap'
+import { Button, Panel, Row, Col } from 'react-bootstrap'
 import { timezoneData } from 'wca/timezoneData.js.erb'
 
 export class EditVenue extends React.Component {
@@ -37,6 +37,9 @@ export class EditVenue extends React.Component {
     // Instead of giving *all* TZInfo, use uniq-fied rails "meaningful" subset
     // We'll add the "country_zones" to that, because some of our competitions
     // use TZs not included in this subset.
+    // We want to display the "country_zones" first, so that it's more convenient for the user.
+    // In the end the array should look like that:
+    //   - country_zone_a, country_zone_b, [...], other_tz_a, other_tz_b, [...]
     let competitionZonesKeys = Object.keys(competitionInfo.countryZones);
     let selectKeys = _.difference(Object.keys(timezoneData), competitionZonesKeys);
     selectKeys = _.union(competitionZonesKeys.sort(), selectKeys.sort());
@@ -67,7 +70,9 @@ export class EditVenue extends React.Component {
                   Editing venue "{venueWcif.name}"
                 </Col>
                 <Col xs={3}>
-                  <a href="#" onClick={removeVenueAction} className="btn btn-danger pull-right"><i className="fa fa-trash"></i></a>
+                  <Button onClick={removeVenueAction} bsStyle="danger" className="pull-right">
+                    <i className="fa fa-trash"></i>
+                  </Button>
                 </Col>
               </Row>
             </Panel.Heading>
@@ -92,33 +97,29 @@ export class EditVenue extends React.Component {
   }
 }
 
-const NameInput = ({name, actionHandler}) => {
-  return (
-    <Row>
-      <Col xs={3}>
-        <span className="venue-form-label control-label">Name:</span>
-      </Col>
-      <Col xs={9}>
-        <input type="text" className="form-control" value={name} onChange={e => actionHandler(e, "name")} />
-      </Col>
-    </Row>
-  );
-}
+const NameInput = ({name, actionHandler}) => (
+  <Row>
+    <Col xs={3}>
+      <span className="venue-form-label control-label">Name:</span>
+    </Col>
+    <Col xs={9}>
+      <input type="text" className="form-control" value={name} onChange={e => actionHandler(e, "name")} />
+    </Col>
+  </Row>
+);
 
-const VenueLocationInput = ({lat, lng, actionHandler}) => {
-  return (
-    <Row>
-      <Col xs={12}>
-        <span className="venue-form-label control-label">Please pick the venue location below:</span>
-      </Col>
-      <Col xs={12}>
-        <MapPickerComponent latitudeMicrodegrees={lat}
-                            longitudeMicrodegrees={lng}
-                            onPositionChange={actionHandler} />
-      </Col>
-    </Row>
-  );
-}
+const VenueLocationInput = ({lat, lng, actionHandler}) => (
+  <Row>
+    <Col xs={12}>
+      <span className="venue-form-label control-label">Please pick the venue location below:</span>
+    </Col>
+    <Col xs={12}>
+      <MapPickerComponent latitudeMicrodegrees={lat}
+                          longitudeMicrodegrees={lng}
+                          onPositionChange={actionHandler} />
+    </Col>
+  </Row>
+);
 
 const MapPickerComponent = compose(
   withProps({
@@ -128,69 +129,62 @@ const MapPickerComponent = compose(
   withGoogleMap
 )((props) => {
   let { latitudeMicrodegrees, longitudeMicrodegrees, onPositionChange } = props;
-  let lat = toDegrees(latitudeMicrodegrees);
-  let lng = toDegrees(longitudeMicrodegrees);
+  let [lat, lng] = [latitudeMicrodegrees, longitudeMicrodegrees].map(toDegrees);
   return (
     <GoogleMap
       defaultZoom={12}
-      defaultCenter={{ lat: lat, lng: lng }}
+      defaultCenter={{ lat, lng }}
     >
-      <Marker position={{ lat: lat, lng: lng }} draggable={true} onDragEnd={onPositionChange} />
+      <Marker position={{ lat, lng }} draggable={true} onDragEnd={onPositionChange} />
     </GoogleMap>
   );
 })
 
 
-const TimezoneInput = ({timezone, selectKeys, actionHandler}) => {
-  return (
-    <Row>
-      <Col xs={3}>
-        <span className="venue-form-label control-label">Timezone:</span>
-      </Col>
-      <Col xs={9}>
-        <select
-          className="form-control"
-          value={timezone}
-          onChange={e => actionHandler(e, "timezone")}
-          >
-          {selectKeys.map(key => {
-            return (
-              <option key={key} value={timezoneData[key]}>{key}</option>
-            );
-          })}
-        </select>
-      </Col>
-    </Row>
-  );
-}
-
-const RoomsList = ({venueWcif, actionsHandlers}) => {
-  return (
-    <Row>
-      <Col xs={3}>
-        <span className="venue-form-label control-label">Rooms:</span>
-      </Col>
-      <Col xs={9}>
-        {venueWcif.rooms.map((roomWcif, index) => {
+const TimezoneInput = ({timezone, selectKeys, actionHandler}) => (
+  <Row>
+    <Col xs={3}>
+      <span className="venue-form-label control-label">Timezone:</span>
+    </Col>
+    <Col xs={9}>
+      <select
+        className="form-control"
+        value={timezone}
+        onChange={e => actionHandler(e, "timezone")}
+        >
+        {selectKeys.map(key => {
           return (
-            <EditRoom roomWcif={roomWcif} key={index} removeRoomAction={e => actionsHandlers.removeRoom(e, index)} />
+            <option key={key} value={timezoneData[key] || key}>{key}</option>
           );
         })}
-        <NewRoom newRoomAction={actionsHandlers.addRoom} />
-      </Col>
-    </Row>
-  );
-}
+      </select>
+    </Col>
+  </Row>
+);
 
-const NewRoom = ({ newRoomAction }) => {
-  return (
-    <Row>
-      <Col xs={12}>
-        <a href="#" className="btn btn-success new-room-link" onClick={newRoomAction}>Add room</a>
-      </Col>
-    </Row>
-  );
-}
+const RoomsList = ({venueWcif, actionsHandlers}) => (
+  <Row>
+    <Col xs={3}>
+      <span className="venue-form-label control-label">Rooms:</span>
+    </Col>
+    <Col xs={9}>
+      {venueWcif.rooms.map((roomWcif, index) => {
+        return (
+          <EditRoom roomWcif={roomWcif} key={index} removeRoomAction={e => actionsHandlers.removeRoom(e, index)} />
+        );
+      })}
+      <NewRoom newRoomAction={actionsHandlers.addRoom} />
+    </Col>
+  </Row>
+);
+
+const NewRoom = ({ newRoomAction }) => (
+  <Row>
+    <Col xs={12}>
+      <a href="#" className="btn btn-success new-room-link" onClick={newRoomAction}>Add room</a>
+    </Col>
+  </Row>
+);
 
 function addRoomToVenue(venueWcif, competitionInfo) {
   venueWcif.rooms.push({

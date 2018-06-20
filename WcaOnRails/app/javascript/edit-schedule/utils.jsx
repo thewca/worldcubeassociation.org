@@ -16,18 +16,12 @@ const currentElementsIds = {
 
 export function initElementsIds(venues) {
   // Explore the WCIF to get the highest ids.
-  venues.forEach(function(venue, index) {
-    if (venue.id > currentElementsIds.venue) {
-      currentElementsIds.venue = venue.id;
-    }
-    venue.rooms.forEach(function(room, index) {
-      if (room.id > currentElementsIds.room) {
-        currentElementsIds.room = room.id;
-      }
-      let all_ids = room.activities.map(function (elem) { return elem.id; });
-      currentElementsIds.activity = Math.max(currentElementsIds.activity, Math.max(...all_ids));
-    });
-  });
+  const maxId = objects => _.max(_.map(objects, 'id')) || 0;
+  const rooms = _.flatMap(venues, 'rooms');
+  const activities = _.flatMap(rooms, 'activities');
+  currentElementsIds.venue = maxId(venues);
+  currentElementsIds.rooms = maxId(rooms);
+  currentElementsIds.activities = maxId(activities);
 }
 
 export function newVenueId() { return ++currentElementsIds.venue; }
@@ -37,8 +31,8 @@ export function newActivityId() { return ++currentElementsIds.activity; }
 export function convertVenueActivitiesToVenueTimezone(venueWcif) {
   // Called when a venue's timezone has been updated
   let newTZ = venueWcif.timezone;
-  venueWcif.rooms.forEach(function(room) {
-    room.activities.forEach(function(activity) {
+  venueWcif.rooms.forEach(room => {
+    room.activities.forEach(activity => {
       // Undocumented "keepTime" parameter (see here: https://stackoverflow.com/questions/28593304/same-date-in-different-time-zone/28615654#28615654)
       // This enables us to change the UTC offset without changing the *actual* time of the activity!
       activity.startTime = moment(activity.startTime).tz(newTZ, true).format();

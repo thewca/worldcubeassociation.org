@@ -3,15 +3,21 @@ import React from 'react'
 export const contextualMenuSelector = "#schedule-menu";
 
 export class ContextualMenu extends React.Component {
-  constructor(props) {
-    super(props);
-    $(window).click(function(event) {
-      let $menu = $(contextualMenuSelector);
-      if (!$menu.hasClass("hide-element")) {
-        $menu.removeClass("delete-only");
-        $menu.addClass("hide-element");
-      }
-    });
+
+  clickHandler = () => {
+    let $menu = $(contextualMenuSelector);
+    if (!$menu.hasClass("hide-element")) {
+      $menu.removeClass("delete-only");
+      $menu.addClass("hide-element");
+    }
+  }
+
+  componentDidMount(props) {
+    $(window).click(this.clickHandler);
+  }
+
+  componentWillUnmount(props) {
+    $(window).off("click", this.clickHandler);
   }
 
   render() {
