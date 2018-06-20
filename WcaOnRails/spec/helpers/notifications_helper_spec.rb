@@ -66,6 +66,14 @@ RSpec.describe NotificationsHelper do
               text: "The delegate report for #{past_competition_missing_report.name} has not been submitted.",
               url: delegate_report_path(past_competition_missing_report),
             },
+            {
+              text: "The competition results for #{past_competition_missing_report.name} have not been submitted.",
+              url: submit_results_edit_path(past_competition_missing_report),
+            },
+            {
+              text: "The competition results for #{past_competition_having_report.name} have not been submitted.",
+              url: submit_results_edit_path(past_competition_having_report),
+            },
           ]
         end
       end
