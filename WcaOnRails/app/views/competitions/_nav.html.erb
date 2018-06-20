@@ -187,6 +187,12 @@
         <% end %>
       <% end %>
 
+      <% if @competition.user_should_post_competition_results?(current_user) %>
+        <%= alert :warning, note: true do %>
+          Please submit results for this competition! You can upload them <%= link_to "here", submit_results_edit_path(@competition) %>.
+        <% end %>
+      <% end %>
+
       <% @competition.warnings_for(current_user).each do |field, message| %>
         <%= alert :warning, message, note: true %>
       <% end %>

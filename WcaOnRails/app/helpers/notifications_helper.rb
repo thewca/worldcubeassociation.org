@@ -76,6 +76,16 @@ module NotificationsHelper
           }
         end
 
+    user.delegated_competitions.visible.over
+        .each do |competition|
+          if !competition.results_posted?
+            notifications << {
+              text: "The competition results for #{competition.name} have not been submitted.",
+              url: submit_results_edit_path(competition),
+            }
+          end
+        end
+
     notifications
   end
 end
