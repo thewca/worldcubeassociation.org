@@ -37,10 +37,7 @@ function handleAddActivityToCalendar(reactElem, activityData, renderItOnCalendar
     }
     roomSelected.activities.push(newActivity);
     if (renderItOnCalendar) {
-      // Cloning the object here: activityToFcEvent modifies in place,
-      // and we don't want event.selected to propagate in the WCIF!
-      let fcEvent = Object.assign({}, newActivity);
-      fcEvent = activityToFcEvent(fcEvent);
+      let fcEvent = dataToFcEvent(newActivity);
       singleSelectEvent(fcEvent);
       $(scheduleElementSelector).fullCalendar("renderEvent", fcEvent);
     }
@@ -55,11 +52,7 @@ function handleEventModifiedInCalendar(reactElem, event) {
   if (activityIndex < 0) {
     throw new Error("This is very very BAD, I couldn't find an activity matching the modified event!");
   }
-  let activity = room.activities[activityIndex];
-  activity.name = event.name;
-  activity.activityCode = event.activityCode;
-  activity.startTime = momentToIso(event.start);
-  activity.endTime = momentToIso(event.end);
+  room.activities[activityIndex] = fcEventToActivity(event);
   // We rootRender to display the "Please save your changes..." message
   rootRender();
 }
@@ -143,27 +136,40 @@ export function momentToIso(moment) {
   return tzConverterHandlers.ambiguousMomentToIsoString(moment);
 }
 
-export function activityToFcEvent(eventData) {
+// dataToFcEvent is called in two contexts:
+//   - as a eventDataTransform callback by fullcalendar
+//   - as a way to create an event object from activity data
+// In the first case it may contain attributes that are already defined/changed during the event life in FC, and that we must preserve:
+//   - start, end, selected, title
+// In any case, the data passed will contain activityCode and childActivities, as we propagate them all the time.
+// We must make sure the returned object contains at least:
+//   - id, title, start, end, activityCode, childActivities
+export function dataToFcEvent(data) {
   // Create a FullCalendar event from an activity
-  if (eventData.hasOwnProperty("name")) {
-    eventData.title = eventData.name;
-  }
+  // This copy only defined properties
+  let eventData = _.pick(data, ['id', 'title', 'activityCode', 'childActivities', 'start', 'end', 'selected']);
+
+  // Get missing attributes from the activity data
+
   // Generate a new activity id if needed
   if (!eventData.hasOwnProperty("id")) {
     eventData.id = newActivityId();
   }
 
-  // Keep activityCode untouched
-  // Keep childActivities untouched
+  if (!eventData.hasOwnProperty("title")) {
+    eventData.title = data.name;
+  }
 
   // While in FC, any time is ambiguously-zoned
   // We'll add back the room's venue's timezone when exporting the WCIF
-  if (eventData.hasOwnProperty("startTime")) {
-    eventData.start = isoToMoment(eventData.startTime);
+  if (!eventData.hasOwnProperty("start")) {
+    eventData.start = isoToMoment(data.startTime);
   }
-  if (eventData.hasOwnProperty("endTime")) {
-    eventData.end = isoToMoment(eventData.endTime);
+
+  if (!eventData.hasOwnProperty("end")) {
+    eventData.end = isoToMoment(data.endTime);
   }
+
   return eventData;
 }
 

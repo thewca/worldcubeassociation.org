@@ -20,8 +20,8 @@ export function initElementsIds(venues) {
   const rooms = _.flatMap(venues, 'rooms');
   const activities = _.flatMap(rooms, 'activities');
   currentElementsIds.venue = maxId(venues);
-  currentElementsIds.rooms = maxId(rooms);
-  currentElementsIds.activities = maxId(activities);
+  currentElementsIds.room = maxId(rooms);
+  currentElementsIds.activity = maxId(activities);
 }
 
 export function newVenueId() { return ++currentElementsIds.venue; }

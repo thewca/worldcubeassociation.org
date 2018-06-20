@@ -6,8 +6,8 @@ import { commonActivityCodes } from './CustomActivity'
 import { dropAreaMouseMoveHandler, dropAreaSelector, isEventOverDropArea } from './DropArea'
 import { fullCalendarDefaultOptions } from 'wca/fullcalendar'
 import {
-  activityToFcEvent,
   addActivityToCalendar,
+  dataToFcEvent,
   eventModifiedInCalendar,
   fcEventToActivity,
   removeEventFromCalendar,
@@ -29,7 +29,7 @@ export function generateCalendar(eventFetcher, showModalAction, scheduleWcif, lo
     droppable: true,
     selectable: true,
     dragRevertDuration: 0,
-    eventDataTransform: activityToFcEvent,
+    eventDataTransform: dataToFcEvent,
     eventReceive: fullCalendarHandlers.onReceive,
     eventDragStart: fullCalendarHandlers.onDragStart,
     eventDragStop: fullCalendarHandlers.onDragStop,

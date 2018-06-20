@@ -31,8 +31,6 @@ export const modeDetails = {
     modalTitle: "Edit activity",
     buttonText: "Save",
     action: (hide, eventData) => {
-      // CustomActivityModal only edit name, fix the title to enable a simple update
-      eventData.title = eventData.name;
       eventModifiedInCalendar(eventData);
       $(scheduleElementSelector).fullCalendar("updateEvent", eventData);
       hide();
@@ -63,14 +61,15 @@ export class CustomActivityModal extends React.Component {
     }
 
     let handleNameChange = event => {
-      this.setState({ name: event.target.value });
+      this.setState({ title: event.target.value });
     };
 
     let handleActivityCodeChange = event => {
       this.setState({
         activityCode: event.target.value,
         // On change of activity code, we can update the activity name to the default
-        name: commonActivityCodes[event.target.value]
+        // NOTE: we use "title" as the property for the activity name, as fullcalendar uses "title"
+        title: commonActivityCodes[event.target.value]
       });
     };
 
@@ -97,7 +96,7 @@ export class CustomActivityModal extends React.Component {
               <label>Name</label>
             </div>
             <div className="col-xs-8">
-              <input className="form-control" type="text" id="activity_name" value={this.state.name} onChange={handleNameChange}/>
+              <input className="form-control" type="text" id="activity_name" value={this.state.title} onChange={handleNameChange}/>
             </div>
           </div>
           <div className="form-group">
