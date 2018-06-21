@@ -377,7 +377,7 @@ RSpec.describe CompetitionsController do
         fake_delegate = FactoryBot.create(:user)
         post :update, params: { id: future_competition, competition: { delegate_ids: fake_delegate.id } }
         invalid_competition = assigns(:competition)
-        expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["are not all delegates"]
+        expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["are not all Delegates"]
         future_competition.reload
         expect(future_competition.delegate_ids).to eq delegate_ids_old
       end

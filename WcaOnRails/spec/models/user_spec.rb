@@ -58,7 +58,7 @@ RSpec.describe User, type: :model do
 
     senior_delegate.delegate_status = ""
     expect(senior_delegate.save).to eq false
-    expect(senior_delegate.errors.messages[:delegate_status]).to eq ["cannot demote senior delegate with subordinate delegates"]
+    expect(senior_delegate.errors.messages[:delegate_status]).to eq ["cannot demote Senior Delegate with subordinate Delegates"]
   end
 
   it "allows demotion of a senior delegate with no subordinate delegates" do
@@ -74,7 +74,7 @@ RSpec.describe User, type: :model do
     user = FactoryBot.create :user
 
     delegate.senior_delegate = user
-    expect(delegate).to be_invalid_with_errors(senior_delegate: ["must be a senior delegate"])
+    expect(delegate).to be_invalid_with_errors(senior_delegate: ["must be a Senior Delegate"])
 
     user.senior_delegate!
     expect(delegate).to be_valid
