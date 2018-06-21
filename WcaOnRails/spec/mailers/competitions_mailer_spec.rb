@@ -132,8 +132,15 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   describe "results_submitted" do
     let(:delegates) { FactoryBot.create_list(:delegate, 3) }
     let(:competition) { FactoryBot.create(:competition, name: "Comp of the future 2017", id: "CompFut2017", delegates: delegates) }
-    let(:file_contents) { '{ "results": "good" }' }
-    let(:mail) { CompetitionsMailer.results_submitted(competition, "Hello, here are the results", "John Doe", file_contents) }
+    let(:results_json_str) { '{ "results": "good" }' }
+    let(:results_submission) {
+      FactoryBot.build(
+        :results_submission,
+        message: "Hello, here are the results",
+        results_json_str: results_json_str,
+      )
+    }
+    let(:mail) { CompetitionsMailer.results_submitted(competition, results_submission, delegates.first) }
     let(:utc_now) { Time.utc(2018, 2, 23, 22, 3, 32) }
 
     before(:each) do
@@ -154,7 +161,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "attaches the expected file" do
       expected_file_name = "Results_CompFut2017_#{utc_now.iso8601}.json"
-      expect(mail.attachments[expected_file_name].read).to eq(file_contents)
+      expect(mail.attachments[expected_file_name].read).to eq(results_json_str)
     end
   end
 end

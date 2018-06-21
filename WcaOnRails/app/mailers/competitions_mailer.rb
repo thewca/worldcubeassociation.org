@@ -67,12 +67,12 @@ class CompetitionsMailer < ApplicationMailer
     )
   end
 
-  def results_submitted(competition, message, sender_name, file_contents)
+  def results_submitted(competition, results_submission, submitter_user)
     @competition = competition
-    @message = message
-    @sender_name = sender_name
+    @results_submission = results_submission
+    @submitter_user = submitter_user
     file_name = "Results_#{competition.id}_#{Time.now.utc.iso8601}.json"
-    attachments[file_name] = file_contents
+    attachments[file_name] = results_submission.results_json_str
     mail(
       to: "results@worldcubeassociation.org",
       cc: competition.delegates.pluck(:email),

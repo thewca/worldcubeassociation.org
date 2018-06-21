@@ -11,11 +11,9 @@
                 delegate_crash_course_path(anchor: "submitting-competition-results") %>.
   </p>
 
-  <%= form_tag({action: :submit}, multipart: true) do %>
-    <%= text_area_tag :message, params[:message], placeholder: "Email body here", class: "markdown-editor" %><br>
-    Results file<br>
-    <%= file_field_tag 'results', accept: 'application/json' %><br>
-    <input type="submit" class="btn btn-primary" />
+  <%= simple_form_for @results_submission, url: submit_results_path do |f| %>
+    <%= f.input :message, as: :text, input_html: { class: "markdown-editor" } %>
+    <%= f.input :results, as: :file, input_html: { accept: 'application/json' } %>
+    <%= f.submit "Submit", class: "btn btn-primary" %>
   <% end %>
-
 <% end %>
