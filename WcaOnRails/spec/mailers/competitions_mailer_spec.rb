@@ -136,6 +136,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:results_submission) {
       FactoryBot.build(
         :results_submission,
+        schedule_url: "https://example.com/schedule",
         message: "Hello, here are the results",
         results_json_str: results_json_str,
       )
@@ -157,6 +158,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match(/Hello, here are the results/)
+      expect(mail.body.encoded).to include("https://example.com/schedule")
     end
 
     it "attaches the expected file" do

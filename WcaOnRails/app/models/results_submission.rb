@@ -3,9 +3,10 @@
 class ResultsSubmission
   include ActiveModel::Model
 
-  attr_accessor :results_json_str, :message
+  attr_accessor :results_json_str, :message, :schedule_url
 
   validates :message, presence: true
+  validates :schedule_url, presence: true, url: true
 
   validate do
     if !results_json_str
