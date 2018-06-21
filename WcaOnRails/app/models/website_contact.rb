@@ -14,4 +14,19 @@ class WebsiteContact < ContactForm
       errors.delete(:to_email)
     end
   end
+
+  def to_email
+    case inquiry
+    when "competitions_in_general", "different"
+      Team.wct.email
+    when "wca_id_or_profile", "media"
+      Team.wrt.email
+    when "software"
+      Team.wst.email
+    when "competition"
+      Competition.find_by_id(competition_id)&.managers&.map(&:email)
+    else
+      raise "Invalid inquiry type: `#{inquiry}`" if inquiry.present?
+    end
+  end
 end
