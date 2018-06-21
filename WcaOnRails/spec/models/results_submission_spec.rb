@@ -21,4 +21,12 @@ RSpec.describe ResultsSubmission do
     results_submission.results_json_str = "this is invalid json"
     expect(results_submission).to be_invalid_with_errors(results_file: ["must be a JSON file from the Workbook Assistant"])
   end
+
+  it "requires schedule url looks like a url" do
+    results_submission.schedule_url = nil
+    expect(results_submission).to be_invalid_with_errors(schedule_url: ["can't be blank"])
+
+    results_submission.schedule_url = "i am clearly not a url"
+    expect(results_submission).to be_invalid_with_errors(schedule_url: ["must be a valid url starting with http:// or https://"])
+  end
 end

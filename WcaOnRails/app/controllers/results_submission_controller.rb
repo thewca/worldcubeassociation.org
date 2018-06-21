@@ -14,7 +14,7 @@ class ResultsSubmissionController < ApplicationController
   def create
     @competition = competition_from_params
 
-    submit_results_params = params.require(:results_submission).permit(:results_file, :message)
+    submit_results_params = params.require(:results_submission).permit(:results_file, :message, :schedule_url)
     @results_submission = ResultsSubmission.new(submit_results_params)
     if @results_submission.valid?
       CompetitionsMailer.results_submitted(@competition, @results_submission, current_user).deliver_now

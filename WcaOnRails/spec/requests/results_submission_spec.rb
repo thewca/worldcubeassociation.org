@@ -55,7 +55,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
 
     describe "Posting results" do
       let(:results_submission_params) do
-        { message: submission_message, results_file: file }
+        { message: submission_message, results_file: file, schedule_url: "https://example.com/schedule" }
       end
 
       it "sends the 'results submitted' email immediately" do

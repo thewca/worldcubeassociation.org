@@ -23,18 +23,8 @@ Gen 2 Display: 0
 Gen 3 Display: 0"
   end
 
-  URL_RE = %r{\Ahttps?://\S+\z}
-  VALID_URL_MESSAGE = "must be a valid url starting with http:// or https://"
-  validate :url_validations
-  def url_validations
-    if schedule_url.present? && !URL_RE.match(schedule_url)
-      errors.add(:schedule_url, VALID_URL_MESSAGE)
-    end
-
-    if discussion_url.present? && !URL_RE.match(discussion_url)
-      errors.add(:discussion_url, VALID_URL_MESSAGE)
-    end
-  end
+  validates :schedule_url, url: true
+  validates :discussion_url, url: true
 
   def posted?
     !!posted_at

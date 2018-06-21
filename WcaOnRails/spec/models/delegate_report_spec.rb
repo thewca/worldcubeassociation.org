@@ -8,33 +8,14 @@ RSpec.describe DelegateReport do
     expect(dr).to be_valid
   end
 
-  it "validates urls" do
-    valid_urls = [
-      'http://www.google.com',
-      'https://www.google.com',
-    ]
-    invalid_urls = [
-      'https://',
-      'http://',
-      'http://www.google.com ',
-      ' http://www.google.com',
-      'http://www. google.com',
-      'foo.com',
-      "bar",
-    ]
+  it "expects schedule_url to be a url" do
+    dr = FactoryBot.build :delegate_report, schedule_url: "i am clearly not a url", discussion_url: nil
+    expect(dr).to be_invalid_with_errors schedule_url: ["must be a valid url starting with http:// or https://"]
+  end
 
-    valid_urls.each do |valid_url|
-      dr = FactoryBot.build :delegate_report, schedule_url: valid_url, discussion_url: valid_url
-      expect(dr).to be_valid
-    end
-
-    invalid_urls.each do |invalid_url|
-      dr = FactoryBot.build :delegate_report, schedule_url: invalid_url, discussion_url: nil
-      expect(dr).to be_invalid
-
-      dr = FactoryBot.build :delegate_report, schedule_url: nil, discussion_url: invalid_url
-      expect(dr).to be_invalid
-    end
+  it "expects discussion_url to be a url" do
+    dr = FactoryBot.build :delegate_report, schedule_url: nil, discussion_url: "i am clearly not a url"
+    expect(dr).to be_invalid_with_errors discussion_url: ["must be a valid url starting with http:// or https://"]
   end
 
   it "schedule_url is not required when posted" do
