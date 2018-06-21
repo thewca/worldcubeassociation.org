@@ -266,8 +266,8 @@ id:
         password: Kata sandi
         #original_hash: 19dff4d
         current_password: Kata sandi saat ini
-        #original_hash: 786b8af
-        password_confirmation: Konfirmasi kata sandi
+        #original_hash: aefce7f
+        password_confirmation: Masukkan ulang kata sandi
         #original_hash: ced7b30
         remember_me: Ingat saya
         #original_hash: 102efae
@@ -834,6 +834,11 @@ id:
         submitterComment: ''
         #original_hash: da39a3e
         status: ''
+      results_submission:
+        #original_hash: da39a3e
+        results: ''
+        #original_hash: da39a3e
+        message: ''
     options:
       registration:
         status:
@@ -879,6 +884,10 @@ id:
       #original_hash: a2a43b3
       size_too_big: 'terlalu besar (maksimal %{file_size})'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: Masukkan ulang kata sandi baru
     sessions:
       new:
         #original_hash: ada2e9e
@@ -1329,8 +1338,10 @@ id:
       #original_hash: 72e2180
       regards_html: 'Salam, %{people}.'
       new:
-        #original_hash: 6fb638c
-        mail_subject: 'Anda telah terdaftar pada %{comp_name}'
+        #original_hash: a32db59
+        mail_subject: >-
+          Pendaftaran Anda untuk %{comp_name} telah terkirim dan sedang menunggu
+          persetujuan
         #original_hash: 8374583
         registered_html: 'Anda telah mendaftar pada %{comp_name}.'
         #original_hash: 13fabed
