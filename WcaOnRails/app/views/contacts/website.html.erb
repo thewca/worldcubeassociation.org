@@ -2,8 +2,6 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <p><%= t('.description_html', contact_path: contact_path) %></p>
-
   <%= simple_form_for @contact, url: contact_website_path do |f| %>
     <% competition_input = f.input :competition_id, as: :competition_id, only_one: true, label: false, wrapper_html: { id: "target_competition" } %>
     <% options = [
@@ -11,6 +9,7 @@
       [t('.inquiries.competitions_in_general'), "competitions_in_general"],
       [t('.inquiries.wca_id_or_profile'), "wca_id_or_profile"],
       [t('.inquiries.media'), "media"],
+      [t('.inquiries.software'), "software"],
       [t('.inquiries.different'), "different"],
     ] %>
     <%= f.input :inquiry, as: :radio_buttons, collection: options %>
