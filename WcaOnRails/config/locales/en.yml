@@ -463,6 +463,9 @@ en:
         submitterEmail: ""
         submitterComment: ""
         status: ""
+      results_submission:
+        results: ""
+        message: ""
     #context: and a label for an option
     options:
       #context: about registration

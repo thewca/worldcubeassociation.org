@@ -37,6 +37,7 @@ class CompetitionsMailerPreview < ActionMailer::Preview
   end
 
   def results_submitted
-    CompetitionsMailer.results_submitted(Competition.last, "Here are the results.\nThey look good.", "John Doe", '{ "results": "good" }')
+    results_submission = FactoryBot.build :results_submission
+    CompetitionsMailer.results_submitted(Competition.last, results_submission, User.first)
   end
 end

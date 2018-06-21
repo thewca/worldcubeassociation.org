@@ -54,54 +54,36 @@ RSpec.describe ResultsSubmissionController, type: :request do
     end
 
     describe "Posting results" do
+      let(:results_submission_params) do
+        { message: submission_message, results_file: file }
+      end
+
       it "sends the 'results submitted' email immediately" do
+        expected_results_submission = ResultsSubmission.new(results_submission_params)
         expect(CompetitionsMailer)
           .to receive(:results_submitted)
-          .with(comp, submission_message, user.name, file_contents)
+          .with(comp, expected_results_submission, user)
           .and_call_original
-        post submit_results_path(comp.id), params: { competition_id: comp.id, message: submission_message, results: file }
 
+        expect do
+          post submit_results_path(comp.id), params: { results_submission: results_submission_params }
+        end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        assert_enqueued_jobs 0
+      end
+
+      it "does not send the email if empty message is provided" do
+        expect do
+          results_submission_params[:message] = ""
+          post submit_results_path(comp.id), params: { results_submission: results_submission_params }
+        end.to change { ActionMailer::Base.deliveries.count }.by(0)
         assert_enqueued_jobs 0
       end
 
       it "redirects to competition page" do
-        post submit_results_path(comp.id), params: { competition_id: comp.id, message: submission_message, results: file }
+        post submit_results_path(comp.id), params: { results_submission: results_submission_params }
 
         expect(flash[:success]).not_to be_empty
         expect(response).to redirect_to(competition_path(comp))
-      end
-    end
-
-    describe "Posting results with missing message" do
-      it "flashes an error and doesn't send an email" do
-        expect {
-          post submit_results_path(comp.id), params: { competition_id: comp.id, results: file }
-        }.to_not change { ActionMailer::Base.deliveries.count }
-
-        expect(flash.now[:danger]).not_to be_empty
-      end
-    end
-
-    describe "Posting results with missing file" do
-      it "flashes an error and doesn't send an email" do
-        expect {
-          post submit_results_path(comp.id), params: { competition_id: comp.id, message: submission_message }
-        }.to_not change { ActionMailer::Base.deliveries.count }
-
-        expect(flash.now[:danger]).not_to be_empty
-      end
-    end
-
-    describe "Posting results with a non-JSON file" do
-      it "flashes an error and doesn't send an email" do
-        temp_file = Tempfile.new(["results", ".notjson"])
-        non_json_file = Rack::Test::UploadedFile.new(temp_file.path)
-
-        expect {
-          post submit_results_path(comp.id), params: { competition_id: comp.id, message: submission_message, results: non_json_file }
-        }.to_not change { ActionMailer::Base.deliveries.count }
-
-        expect(flash.now[:danger]).not_to be_empty
       end
     end
   end
