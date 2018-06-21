@@ -68,7 +68,7 @@ RSpec.describe Competition do
       competition = FactoryBot.build :competition, :with_delegate, :future
       competition.delegates.first.update_columns(delegate_status: nil)
 
-      expect(competition).to be_invalid_with_errors(delegate_ids: ["are not all delegates"])
+      expect(competition).to be_invalid_with_errors(delegate_ids: ["are not all Delegates"])
     end
 
     it "delegates for past comps no longer need to be delegates" do

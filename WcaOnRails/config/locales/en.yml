@@ -219,7 +219,7 @@ en:
         generate_website: "I would like to use WCA website instead of an external one for additional information."
         base_entry_fee_lowest_denomination: "Base entry fee"
         currency_code: "Currency code"
-        delegate_ids: "WCA delegate(s)"
+        delegate_ids: "WCA Delegate(s)"
         organizer_ids: "Organizer(s)"
         contact: "Contact"
         information: "Information"
@@ -377,7 +377,7 @@ en:
         cellName: "A short name for displaying. If the name of the competition is already short, you can re-use the name (e.g., Europe 2006)."
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
         information: "Information about the competitor limit, entry fees for competitors and spectators, and other details particularly relevant for people interested in competing or spectating."
-        delegate_ids: "WCA delegates for the competition."
+        delegate_ids: "WCA Delegates for the competition."
         organizer_ids: "Competition organizers (they need an account to be listed here)."
         external_website: "The website of the competition. Must be a valid http(s) url."
         registration_open: "Note: Registration open and close are in UTC time"
@@ -426,7 +426,7 @@ en:
         equipment: "Number and type of timers and displays used in the competition. Please remove the line(s) of equipment which you didn't use."
         venue: "Talk about rooms, light, public access, distribution of the zones (solving, scrambling, waiting, score-taking), if you set up different solving stages, problems that arose (for example, noise) and how you solved them... Please, be concise and do not report irrelevant details."
         organization: "Talk about the organization team and how they worked out the competition, if you got involved on it, their previous experience and if you noticed progress on their work, if they were professional and active the competition days, problems that arose (e.g., getting behind schedule) and how they solved them... Please, be concise and do not report irrelevant details."
-        incidents: "Report any incidents that you consider worth mentioning. Number the incidents starting from 1., so that other delegates can comment referring to them by their numbers. Please make sure to mention only concrete cases, not generic events (e.g., regular +2 and DNF). Feel free to ask for delegates' or WRC's  feedback on any of them. If you'd like to have the WDC involved in some of them, make sure to state this request clearly."
+        incidents: "Report any incidents that you consider worth mentioning. Number the incidents starting from 1., so that other Delegates can comment referring to them by their numbers. Please make sure to mention only concrete cases, not generic events (e.g., regular +2 and DNF). Feel free to ask for Delegates' or WRC's  feedback on any of them. If you'd like to have the WDC involved in some of them, make sure to state this request clearly."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
         discussion_url: ""
       #context: for a competition tab
@@ -629,7 +629,7 @@ en:
       pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
       pending_claim_confirmation_html: "This account is waiting for %{delegate} to confirm their claimed WCA ID %{wca_id}."
-      pending_claim_mail_confirmation_html: "This user has claimed WCA ID %{wca_id}. Their delegate %{delegate} will be notified of this request as soon as this account's email address is confirmed."
+      pending_claim_mail_confirmation_html: "This user has claimed WCA ID %{wca_id}. Their Delegate %{delegate} will be notified of this request as soon as this account's email address is confirmed."
       your_thumbnail: "Your account thumbnail:"
       edit_thumbnail: "Click to edit thumbnail"
       manage_pending: "Manage pending avatars"
@@ -637,7 +637,7 @@ en:
       have_wca_id_html: "Your WCA ID is %{link_id}."
       #context: used in the error message when a user can't edit some part of their profile
       cannot_edit:
-        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact your <a href='%{delegate_url}'>delegate</a> if you need to change any of these."
+        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
         reason:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
@@ -669,9 +669,9 @@ en:
       dob_incorrect_html: "does not match our database. If you're sure you're providing the correct date in the correct format (YYYY-MM-DD) please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unique: "is already used by \"%{used_name}\" with %{used_email}"
       dob_past: "must be in the past"
-      must_be_senior: "must be a senior delegate"
+      must_be_senior: "must be a Senior Delegate"
       must_not_be_present: "must not be present"
-      senior_has_delegate: "cannot demote senior delegate with subordinate delegates"
+      senior_has_delegate: "cannot demote Senior Delegate with subordinate Delegates"
       already_have_id: "cannot claim a WCA ID because you already have WCA ID %{wca_id}"
       wca_id_no_birthdate_html: "We do not have a birthdate recorded for this WCA ID. Please contact the WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
@@ -685,8 +685,8 @@ en:
         wca_id_claimed: "Successfully claimed WCA ID %{wca_id}. Check your email, and wait for %{user} to approve it!"
         account_updated_confirm: "Account updated, emailed %{email} to confirm your new email address."
     select_nearby_delegate:
-      select_delegate_html: "In order to assign you your WCA ID, we need a <a href='%{link_delegate}' target='_blank'>WCA delegate</a> to confirm your identify. Please enter your birthdate and select the delegate you think knows you best."
-      already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA delegate</a>."
+      select_delegate_html: "In order to assign you your WCA ID, we need a <a href='%{link_delegate}' target='_blank'>WCA Delegate</a> to confirm your identify. Please enter your birthdate and select the Delegate you think knows you best."
+      already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned."
       contact_results_team_html: "Please contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
@@ -996,8 +996,8 @@ en:
       cannot_delete_public: "Cannot delete a competition that is publicly visible."
       cannot_delete_confirmed: "Cannot delete a confirmed competition."
       must_contain_event: "must contain at least one event for this competition"
-      must_contain_delegate: "must contain at least one WCA delegate"
-      not_all_delegates: "are not all delegates"
+      must_contain_delegate: "must contain at least one WCA Delegate"
+      not_all_delegates: "are not all Delegates"
       registration_close_after_open: "registration close must be after registration open"
       end_date_before_start: "End date cannot be before start date."
       span_too_many_days: "Competition cannot last more than %{max_days} days."
@@ -1200,7 +1200,7 @@ en:
         #context: Paragraph of the answer to "When are the results of a WCA competition uploaded?"
         content:
           '1': "After a competition has ended, the WCA Delegate has to double-check all score sheets and person data to eliminate possible errors. Once this is done, the results are sent to the WCA Results Team (WRT), which is responsible for uploading competition results and maintaining the WCA database. The WRT finally uploads the results to the WCA database as soon as possible."
-          '2': "Depending on the size of the competition and the delegate's personal schedule, all this can take only a day or up to a week. Please be patient."
+          '2': "Depending on the size of the competition and the Delegate's personal schedule, all this can take only a day or up to a week. Please be patient."
           '3': "Additionally, if you have connected your WCA account with your WCA ID (see below), you can enable email notifications about your results submission <a href='%{preferences_edit_path}'>here</a>."
       '7':
         title: "How do I change my profile picture?"
@@ -1320,7 +1320,7 @@ en:
         wishing to form a regional organization are encouraged to contribute to
         the WCA in their area before submitting their application. For help
         organizing a WCA competition in your area, please contact your nearest
-        delegate.
+        Delegate.
     requirements:
       title: Requirements for WCA Regional Organizations
       list:
@@ -1485,7 +1485,7 @@ en:
       of the WCA Board. It is highly recommended to inform the WCA Board of these reasons as soon as possible to avoid a later refusal of the competition."
     paragraph4:
       title: "Proximity policy"
-      content1: "WCA competitions will be accepted if they are at least 100 km or 19 days away from any other competition. The WCA Board should particularly review a proposed competition if there is another competition for which the distance between them is less than 100 km and the time between them is less than 19 days. A delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
+      content1: "WCA competitions will be accepted if they are at least 100 km or 19 days away from any other competition. The WCA Board should particularly review a proposed competition if there is another competition for which the distance between them is less than 100 km and the time between them is less than 19 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
         '1': "The two competitions don't have events in common."
         '2': "The two competitions take place in different countries."
@@ -1506,7 +1506,7 @@ en:
       content: 'All events that are going to be held at the competition must be specified by the Delegate when requesting the competition approval. This also includes "tentative" events (i.e. events that may be held additionally depending on the competition flow). Further additions must be approved by the Board.'
     paragraph5:
       title: "Competitor limits"
-      content_html: "The number of competitors may be limited per event or per competition (see <a href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulation Z4</a>). Like for all regulations in article Z, the delegate of the competition must get an approval of the competitor limit by the Board. Competitor limits should be
+      content_html: "The number of competitors may be limited per event or per competition (see <a href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulation Z4</a>). Like for all regulations in article Z, the Delegate of the competition must get an approval of the competitor limit by the Board. Competitor limits should be
         chosen wisely and in accordance with the expected competitor interest. The limit should not set to a lower number for minor reasons. The intended limit should already be taken into consideration when searching for a suitable venue. The competitors
         limit must be clearly stated on the competition page on the WCA website."
     paragraph6:
