@@ -1132,12 +1132,12 @@ en:
   contacts:
     website:
       title: "WCA Website Contact Form"
-      description_html: "Use this form for website questions, comments, and suggestions only. <a href=\"%{contact_path}\">Other inquiries</a> should be sent to the appropriate party."
       inquiries:
         competition: "A specific competition (please select)"
         competitions_in_general: "Competitions in general (Organizing, Competition rules, etc.)"
         wca_id_or_profile: "WCA ID or WCA Profile"
         media: "Media"
+        software: "Software"
         different: "Other"
       submit: "Send message"
     dob:

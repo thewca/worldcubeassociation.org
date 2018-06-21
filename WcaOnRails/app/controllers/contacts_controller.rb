@@ -13,6 +13,8 @@ class ContactsController < ApplicationController
       @contact.to_email = Team.wct.email
     when "wca_id_or_profile", "media"
       @contact.to_email = Team.wrt.email
+    when "software"
+      @contact.to_email = Team.wst.email
     when "competition"
       @contact.to_email = Competition.find_by_id(@contact.competition_id)&.managers&.map(&:email)
     else
