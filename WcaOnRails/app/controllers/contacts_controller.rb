@@ -15,6 +15,8 @@ class ContactsController < ApplicationController
       @contact.to_email = Team.wrt.email
     when "competition"
       @contact.to_email = Competition.find_by_id(@contact.competition_id)&.managers&.map(&:email)
+    else
+      raise "Invalid inquiry type: `#{@contact.inquiry}`" if @contact.inquiry.present?
     end
     @contact.subject = Time.now.strftime("WCA Website Comments by #{@contact.name} on %d %b %Y at %R")
     maybe_send_email success_url: contact_website_url, fail_view: :website
