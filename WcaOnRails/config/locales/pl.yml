@@ -344,8 +344,8 @@ pl:
         base_entry_fee_lowest_denomination: Podstawowa wysokość wpisowego
         #original_hash: 28a6fbb
         currency_code: Kod waluty
-        #original_hash: 5b2fe69
-        delegate_ids: Delegat/delegaci WCA
+        #original_hash: 2e3ed8b
+        delegate_ids: Delegat/Delegaci WCA
         #original_hash: 958562e
         organizer_ids: Organizator/organizatorzy
         #original_hash: b37456c
@@ -631,7 +631,7 @@ pl:
           Informacje o limicie zawodników, wysokości wpisowego dla zawodników i
           widzów oraz inne istotne szczegóły dla ludzi zainteresowanych braniem
           udziału lub oglądaniem.
-        #original_hash: 0708400
+        #original_hash: b4d020f
         delegate_ids: Delegaci WCA dla tych zawodów.
         #original_hash: 517d376
         organizer_ids: >-
@@ -780,13 +780,13 @@ pl:
           aktywnie. Napisz o problemach, które się pojawiły (np. opóźnienia w
           harmonogramie) i w jaki sposób oni je rozwiązali. Prosimy, bądź
           zwięzły i nie zgłaszaj nieistotnych szczegółów.
-        #original_hash: 715f020
+        #original_hash: d003c1f
         incidents: >-
           Zgłoś wszystkie incydenty, które uważasz za warte wspomnienia. Numeruj
-          incydenty poczynając od 1., co pozwoli innym delegatom komentować,
+          incydenty poczynając od 1., co pozwoli innym Delegatom komentować,
           odnosząc się do nich po odpowiednim numerze. Prosimy, wspominaj tylko
           konkretne przypadki, nie ogólne zdarzenia (np. zwyczajne +2 i DNF).
-          Nie wahaj się pytać o zdanie innych delegatów lub WRC na
+          Nie wahaj się pytać o zdanie innych Delegatów lub WRC na
           któregokolwiek z nich. Jeżeli chciałbyś zaangażować WDC w dowolny z
           nich, jasno zaznacz tę prośbę.
         #original_hash: f30abdc
@@ -855,6 +855,11 @@ pl:
         submitterComment: ''
         #original_hash: da39a3e
         status: ''
+      results_submission:
+        #original_hash: da39a3e
+        results: ''
+        #original_hash: da39a3e
+        message: ''
     options:
       registration:
         status:
@@ -1130,9 +1135,9 @@ pl:
       pending_claim_confirmation_html: >-
         To konto oczekuje, aż %{delegate} zatwierdzi prośbę podpięcia WCA ID
         %{wca_id}.
-      #original_hash: fc7269a
+      #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
-        Ten użytkownik złożył prośbę podpięcia WCA ID %{wca_id}. Jego delegat
+        Ten użytkownik złożył prośbę podpięcia WCA ID %{wca_id}. Jego Delegat
         %{delegate} zostanie powiadomiony o tym żądaniu jak tylko przynależący
         do tego konta adres email zostanie potwierdzony.
       #original_hash: 1cde7e6
@@ -1148,11 +1153,11 @@ pl:
       #original_hash: 29e25b5
       have_wca_id_html: 'Twoje WCA ID to %{link_id}.'
       cannot_edit:
-        #original_hash: 8501c74
+        #original_hash: 13e8b80
         msg: >-
           Nie możesz zmienić swojego imienia, daty urodzin, płci oraz państwa.
           Powód: %{reason}. Skontaktuj się z twoim <a
-          href='%{delegate_url}'>delegatem</a>, jeżeli potrzebujesz zmienić
+          href='%{delegate_url}'>Delegatem</a>, jeżeli potrzebujesz zmienić
           którekolwiek z nich.
         reason:
           #original_hash: 370ff12
@@ -1229,12 +1234,12 @@ pl:
       unique: "jest już\_używane przez \"%{used_name}\" o adresie email %{used_email}"
       #original_hash: 26f70ed
       dob_past: musi być w przeszłości
-      #original_hash: f599dc5
-      must_be_senior: musi być starszym delegatem
+      #original_hash: 012f032
+      must_be_senior: musi być Starszym Delegatem
       #original_hash: 2e582eb
       must_not_be_present: nie może być obecne
-      #original_hash: b2c4ecc
-      senior_has_delegate: nie może zdegradować starszego delegata z podległymi delegatami
+      #original_hash: 5b4eac9
+      senior_has_delegate: nie może zdegradować Starszego Selegata z podległymi Delegatami
       #original_hash: 48653a9
       already_have_id: >-
         nie możesz poprosić o podpięcie WCA ID ponieważ masz już WCA ID
@@ -1277,17 +1282,17 @@ pl:
           Konto zaktualizowane, wysłano maila na adres %{email}, w celu
           potwierdzenia nowego adresu email.
     select_nearby_delegate:
-      #original_hash: 2b11120
+      #original_hash: 407c4f8
       select_delegate_html: >-
         W celu przypisania tobie twojego WCA ID, potrzebujemy <a
-        href='%{link_delegate}' target='_blank'>delegata WCA</a>, który
+        href='%{link_delegate}' target='_blank'>Delegata WCA</a>, który
         potwierdzi twoją tożsamość. Prosimy o wprowadzenie twojej daty narodzin
-        oraz wybranie delegata, który twoim zdaniem zna cię najlepiej.
-      #original_hash: d69cf94
+        oraz wybranie Delegata, który twoim zdaniem zna cię najlepiej.
+      #original_hash: 2564ee3
       already_assigned_html: >-
         WCA ID %{link_id} jest już przypisane do innego konta. Jeżeli uważasz,
         że wynika to z błędu, skontaktuj się ze swoim lokalnym <a
-        href='%{link_delegate}' target='_blank'>WCA delegatem</a>.
+        href='%{link_delegate}' target='_blank'>WCA Delegatem</a>.
       #original_hash: d26bfdc
       missing_dob_html: 'WCA ID %{link_id} nie ma przypisanej daty narodzin.'
       #original_hash: 5be6803
@@ -1889,10 +1894,10 @@ pl:
       cannot_delete_confirmed: Nie można usunąć potwierdzonych zawodów.
       #original_hash: 191df37
       must_contain_event: musi zawierać co najmniej jedną konkurencję
-      #original_hash: 112490b
-      must_contain_delegate: musi posiadać co najmniej jednego delegata WCA
-      #original_hash: 0b2b56b
-      not_all_delegates: nie wszyscy są delegatami
+      #original_hash: 6e228b7
+      must_contain_delegate: musi posiadać co najmniej jednego Delegata WCA
+      #original_hash: 8131fc2
+      not_all_delegates: nie wszyscy są Delegatami
       #original_hash: 43a23c2
       registration_close_after_open: rejestracja musi zostać zamknięta później niż otwarta
       #original_hash: 43a83a9
@@ -2317,10 +2322,10 @@ pl:
             odpowiedzialny za upublicznianie wyników oraz utrzymywanie bazy
             danych WCA. Ostatecznie WRT przesyła wyniki do tej bazy tak szybko
             jak to możliwe.
-          #original_hash: b6a68ab
+          #original_hash: daf1cb1
           '2': >-
             W zależności od wielkości zawodów, jak również osobistego grafiku
-            delegata, wszystko to może trwać jeden dzień lub nawet do tygodnia.
+            Delegata, wszystko to może trwać jeden dzień lub nawet do tygodnia.
             Prosimy o cierpliwość.
           #original_hash: bf8adbe
           '3': >-
@@ -2535,7 +2540,7 @@ pl:
     how_to:
       #original_hash: fc3af12
       title: Jak zostać Organizacją Regionalną WCA
-      #original_hash: bdf57ff
+      #original_hash: cc1639d
       description: >-
         WCA uznaje wiele organizacji regionalnych na całym świecie. Celem
         organizacji regionalnej WCA jest organizacja zawodów WCA oraz wspieranie
@@ -2543,7 +2548,7 @@ pl:
         organizację reginalną, aby wspomogły WCA w swoim regionie przed
         wysłaniem swojego podania. W celu uzyskania pomocy dotyczącej
         organizacji zawodów WCA w swoim regionie, prosimy o kontakt z
-        najbliższym delegatem.
+        najbliższym Delegatem.
     requirements:
       #original_hash: 1e04fd7
       title: Wymagania stawiane Organizacjom Regionalnym WCA
@@ -2970,7 +2975,7 @@ pl:
     paragraph4:
       #original_hash: b6dca56
       title: Polityka odległości
-      #original_hash: bd8f1fe
+      #original_hash: f86bf95
       content1: "Zawody WCA będą zaakceptowane, jeżeli są co najmniej 100 km lub 19 dni od jakichkolwiek innych zawodów. Zarząd WCA powinien szczególnie rozpatrywać propozycje zawodów, jeżeli mają miejsce inne zawody odległe o mniej niż 100 km oraz w przeciągu mniej niż\_19 dni. Delegat wnoszący o zaakceptowanie takowych zawodów musi przedstawić dalsze informacje, wskazujące dlaczego zawody wciąż powinny zostać zaakceptowane. Możliwe argumenty, które mogą prowadzić do akceptacji takich zawodów, obejmują:"
       olist1:
         #original_hash: de00462
@@ -3020,12 +3025,12 @@ pl:
     paragraph5:
       #original_hash: 17d01de
       title: Limity zawodników
-      #original_hash: 18976be
+      #original_hash: ffcd75e
       content_html: >-
         Liczba zawodników może być ograniczona w danej konkurencji lub na danych
         zawodach (zobacz <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulację
-        Z4</a>). Jak dla każdej regulacji artykułu Z, delegat musi dostać
+        Z4</a>). Jak dla każdej regulacji artykułu Z, Delegat musi dostać
         pozwolenie na ograniczenie liczby zawodników przez Zarząd WCA. Limity
         zawodników powinny być wybierane rozsądnie i zgodnie z oczekiwanym
         zainteresowaniem zawodników. Nie powinny być również zmieniane z błahych
