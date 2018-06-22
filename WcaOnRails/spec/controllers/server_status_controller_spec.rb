@@ -38,6 +38,18 @@ RSpec.describe ServerStatusController, type: :controller do
 
       expect(assigns(:everything_good)).to eq true
     end
+
+    it "ignores jobs in progress" do
+      old_job = Delayed::Job.create(created_at: 10.minutes.ago, handler: "")
+      _oldest_but_running_job = Delayed::Job.create(created_at: 15.minutes.ago, handler: "", locked_at: Time.now)
+
+      get :index
+
+      oldest_job_that_should_have_run_by_now = assigns(:oldest_job_that_should_have_run_by_now)
+      expect(oldest_job_that_should_have_run_by_now).to eq old_job
+
+      expect(assigns(:everything_good)).to eq false
+    end
   end
 
   context "regulations" do
