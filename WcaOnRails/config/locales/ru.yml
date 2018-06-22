@@ -344,7 +344,7 @@ ru:
         base_entry_fee_lowest_denomination: Взнос за участие
         #original_hash: 28a6fbb
         currency_code: Код валюты
-        #original_hash: 5b2fe69
+        #original_hash: 2e3ed8b
         delegate_ids: WCA Делегат(ы)
         #original_hash: 958562e
         organizer_ids: Организатор(ы)
@@ -632,7 +632,7 @@ ru:
           Пример:<br/>Registration will be closed on January 16 or when we reach
           40 competitors. Registration fee is 300 RUB for 7 events or less, 400
           RUB for 8 events or more.
-        #original_hash: 0708400
+        #original_hash: b4d020f
         delegate_ids: WCA Делегат(ы) для этого соревнования.
         #original_hash: 517d376
         organizer_ids: >-
@@ -773,12 +773,12 @@ ru:
           прогресс, были ли они активными во время соревнования, возникали ли
           проблемы (например, отставание от расписания) и как они их решали...
           Будьте краткими и не пишите не относящихся к делу деталей.
-        #original_hash: 715f020
+        #original_hash: d003c1f
         incidents: >-
           Напишите об инцидентах, которые вы считаете важными. Нумеруйте их,
-          начиная с 1, чтобы другие делегаты могли ссылаться на них по номерам.
+          начиная с 1, чтобы другие Делегаты могли ссылаться на них по номерам.
           Не стоит писать про общие штрафы +2 и DNF. Если надо, можете спросить
-          мнения у делегатов или WRC насчёт каких-либо инцидентов. Если хотите
+          мнения у Делегатов или WRC насчёт каких-либо инцидентов. Если хотите
           обратить внимание WDC на какие-либо инциденты, чётко напишите об этом.
         #original_hash: f30abdc
         remarks: >-
@@ -845,6 +845,11 @@ ru:
         submitterComment: ''
         #original_hash: da39a3e
         status: ''
+      results_submission:
+        #original_hash: da39a3e
+        results: ''
+        #original_hash: da39a3e
+        message: ''
     options:
       registration:
         status:
@@ -1118,7 +1123,7 @@ ru:
       pending_avatar_confirmation: Этот аккаунт ожидает подтверждения новой аватарки.
       #original_hash: 7b06f03
       pending_claim_confirmation_html: 'Этот аккаунт ожидает подтверждения WCA ID %{wca_id} от %{delegate}.'
-      #original_hash: fc7269a
+      #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
         Этот пользователь затребовал WCA ID %{wca_id}. Делегат %{delegate} будет
         уведомлён, как только email-адрес будет подтверждён.
@@ -1135,7 +1140,7 @@ ru:
       #original_hash: 29e25b5
       have_wca_id_html: 'Ваш WCA ID %{link_id}.'
       cannot_edit:
-        #original_hash: 8501c74
+        #original_hash: 13e8b80
         msg: >-
           Вы не можете изменить своё имя, день рождения, пол или страну, потому
           что %{reason}. Свяжитесь с вашим <a
@@ -1209,14 +1214,14 @@ ru:
       unique: 'уже используется "%{used_name}" с %{used_email}'
       #original_hash: 26f70ed
       dob_past: должен быть в прошлом
-      #original_hash: f599dc5
-      must_be_senior: должен быть старшим делегатом
+      #original_hash: 012f032
+      must_be_senior: должен быть Старшим Делегатом
       #original_hash: 2e582eb
       must_not_be_present: должен отсутствовать
-      #original_hash: b2c4ecc
+      #original_hash: 5b4eac9
       senior_has_delegate: >-
-        невозможно убрать статус старшего делегата, так как есть подчинённые
-        делегаты
+        невозможно убрать статус Старшего Делегата, так как есть подчинённые
+        Делегаты
       #original_hash: 48653a9
       already_have_id: >-
         невозможно затребовать WCA ID, потому что у вас уже есть WCA ID
@@ -1255,13 +1260,13 @@ ru:
           Аккаунт обновлён, мы отправили email на %{email}, чтобы подтвердить
           ваш новый адрес.
     select_nearby_delegate:
-      #original_hash: 2b11120
+      #original_hash: 407c4f8
       select_delegate_html: >-
         Чтобы привязать к вам ваш WCA ID, нам нужен <a href='%{link_delegate}'
         target='_blank'>WCA Делегат</a>, чтобы подтвердить вашу личность.
         Пожалуйста, введите ваш день рождения и выберите Делегата, который знает
         вас лучше всего.
-      #original_hash: d69cf94
+      #original_hash: 2564ee3
       already_assigned_html: >-
         WCA ID %{link_id} уже привязан к другому аккаунту. Если вы думаете, что
         это было сделано по ошибке, свяжитесь с вашим <a href='%{link_delegate}'
@@ -1846,10 +1851,10 @@ ru:
       cannot_delete_confirmed: Нельзя удалить подтверждённое соревнование.
       #original_hash: 191df37
       must_contain_event: должна быть хотя бы одна дисциплина
-      #original_hash: 112490b
+      #original_hash: 6e228b7
       must_contain_delegate: должен быть хотя бы один WCA Делегат
-      #original_hash: 0b2b56b
-      not_all_delegates: не все являются делегатами
+      #original_hash: 8131fc2
+      not_all_delegates: не все являются Делегатами
       #original_hash: 43a23c2
       registration_close_after_open: закрытие регистрации должно быть после открытия
       #original_hash: 43a83a9
@@ -2262,7 +2267,7 @@ ru:
             посылаются WCA Results Team (WRT), ответственной за выкладывание
             результатов и обслуживание базы данных WCA. WRT выкладывает
             результаты довольно быстро.
-          #original_hash: b6a68ab
+          #original_hash: daf1cb1
           '2': >-
             В зависимости от числа участников и личного времени Делегата этот
             процесс может занять до недели. Пожалуйста, имейте терпение.
@@ -2477,14 +2482,14 @@ ru:
     how_to:
       #original_hash: fc3af12
       title: Как стать Региональной Организацией WCA
-      #original_hash: bdf57ff
+      #original_hash: cc1639d
       description: >-
         WCA признает различные региональные организации по всему миру. Цель
         любой региональной организации WCA - организовывать соревнования WCA и
         поддерживать деятельность WCA в регионе. Странам, желающим создать
         региональную организацию, рекомендуется внести свой вклад в WCA в своем
         регионе до подачи заявки. Для помощи в организации WCA-соревнования в
-        вашем регионе, пожалуйста, свяжитесь с ближайшим к вам делегатом.
+        вашем регионе, пожалуйста, свяжитесь с ближайшим к вам Делегатом.
     requirements:
       #original_hash: 1e04fd7
       title: Требования к Региональным Организациям WCA
@@ -2892,7 +2897,7 @@ ru:
     paragraph4:
       #original_hash: b6dca56
       title: Правила близлежащих соревнований
-      #original_hash: bd8f1fe
+      #original_hash: f86bf95
       content1: >-
         Соревнования WCA будут одобрены, если их отделяют как минимум 100 км или
         19 дней от других соревнований. Если уже заявлено другое соревнование в
@@ -2948,7 +2953,7 @@ ru:
     paragraph5:
       #original_hash: 17d01de
       title: Лимит на число участников
-      #original_hash: 18976be
+      #original_hash: ffcd75e
       content_html: >-
         Число участников в дисциплине или во всём соревновании может быть
         ограничено (см. <a
