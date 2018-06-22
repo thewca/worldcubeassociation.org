@@ -331,6 +331,12 @@ class User < ApplicationRecord
     end
   end
 
+  # This method was copied and overridden from https://github.com/plataformatec/devise/blob/master/lib/devise/models/confirmable.rb#L182
+  # to enable separate emails for sign-up and email reconfirmation
+  def send_on_create_confirmation_instructions
+    NewRegistrationMailer.send_registration_mail(self).deliver_now
+  end
+
   # After the user confirms their account, if they claimed a WCA ID, now is the
   # time to notify their delegate!
   def after_confirmation

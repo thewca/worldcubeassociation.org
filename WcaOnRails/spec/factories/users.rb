@@ -20,9 +20,11 @@ FactoryBot.define do
       end
     end
 
-    before(:create) { |user| user.skip_confirmation! }
-    trait :unconfirmed do
-      before(:create) { |user| user.confirmed_at = nil }
+    transient do
+      confirmed true
+    end
+    before(:create) do |user, options|
+      user.skip_confirmation! if options.confirmed
     end
 
     factory :admin do

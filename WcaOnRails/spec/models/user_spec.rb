@@ -353,6 +353,14 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "check if registration form sends mail to newly registered user" do
+    it "sends mail" do
+      user = FactoryBot.build(:user, confirmed: false)
+      expect(NewRegistrationMailer).to receive(:send_registration_mail).with(user).and_call_original
+      user.save!
+    end
+  end
+
   describe "unconfirmed_wca_id" do
     let!(:person) { FactoryBot.create :person, year: 1990, month: 1, day: 2 }
     let!(:senior_delegate) { FactoryBot.create :senior_delegate }
@@ -489,12 +497,12 @@ RSpec.describe User, type: :model do
       end
 
       it "notifies the user via email" do
-        unconfirmed_user = FactoryBot.create(:user, :unconfirmed,
+        unconfirmed_user = FactoryBot.create(:user,
+                                             confirmed: false,
                                              unconfirmed_wca_id: person.wca_id,
                                              delegate_id_to_handle_wca_id_claim: delegate.id,
                                              claiming_wca_id: true,
                                              dob_verification: "1990-01-2")
-
         expect(WcaIdClaimMailer).to receive(:notify_user_of_delegate_demotion).with(user, delegate, senior_delegate).and_call_original
         expect(WcaIdClaimMailer).not_to receive(:notify_user_of_delegate_demotion).with(unconfirmed_user, delegate, senior_delegate).and_call_original
         delegate.update!(delegate_status: nil, senior_delegate_id: nil)

@@ -1,0 +1,25 @@
+<p>
+  <%= t 'users.mailer.create_new_account.welcome', user_email: @user.email %>
+</p>
+
+<p>
+  <%= t 'users.mailer.create_new_account.confirm' %>
+</p>
+
+<p>
+  <%= link_to t('users.mailer.create_new_account.confirmation_link'), confirmation_url(@user, confirmation_token: @user.confirmation_token, locale: I18n.locale) %>
+</p>
+
+<p>
+  <%= t 'users.mailer.create_new_account.activate' %>
+
+  <%= link_to('login form', new_user_registration_url) %>
+</p>
+
+<p>
+  <%= t 'users.mailer.create_new_account.addendum' %>
+</p>
+
+<p>
+  <%= t 'users.mailer.create_new_account.questions', contact_link: 'contact@worldcubeassociation.org' %>
+</p>
