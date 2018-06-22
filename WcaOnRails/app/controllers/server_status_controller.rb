@@ -9,7 +9,7 @@ class ServerStatusController < ApplicationController
   def index
     @everything_good = true
 
-    @jobs_that_should_have_run_by_now = Delayed::Job.where(attempts: 0).where('created_at < ?', MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
+    @jobs_that_should_have_run_by_now = Delayed::Job.where(attempts: 0).where(locked_at: nil).where('created_at < ?', MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
     @oldest_job_that_should_have_run_by_now = @jobs_that_should_have_run_by_now.order(:created_at).first
     @everything_good &&= @oldest_job_that_should_have_run_by_now.blank?
 
