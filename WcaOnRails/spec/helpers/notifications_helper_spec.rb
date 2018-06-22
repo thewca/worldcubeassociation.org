@@ -42,7 +42,7 @@ RSpec.describe NotificationsHelper do
         user = FactoryBot.create :user
         user.update_attributes!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
-        unconfirmed_user = FactoryBot.create :user, :unconfirmed
+        unconfirmed_user = FactoryBot.create :user, confirmed: false
         unconfirmed_user.update_attributes!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
         notifications = helper.notifications_for_user(delegate)

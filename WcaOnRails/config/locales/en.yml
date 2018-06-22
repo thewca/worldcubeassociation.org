@@ -602,6 +602,22 @@ en:
       success: "Updated locale."
       failure: "Unable to update your profile."
       unavailable: "Requested locale is not available."
+    #context: user receiving mails
+    mailer:
+      #context: user creating new account and receiving confirmation mail
+      create_new_account:
+        header: "Confirmation instructions"
+        welcome: "Welcome %{user_email}!"
+        confirm: "Your account is created and must be activated before you can use it. Please confirm your account through the link below: "
+        confirmation_link: "Confirm my account."
+        activate: "After activation you may log in to the website of the World Cube Association: "
+        addendum: "This email is generated automatically. If you didn't register an account on the website of the World Cube Association and received this message by mistake, please ignore and delete it."
+        questions: "Do you have more questions? We will be happy to answer them! Feel free to send a mail to %{contact_link}."
+      #context: user changing mail address and receiving reconfirmation mail
+      reconfirmation_mail:
+        welcome: "Hello %{user_email}!"
+        confirm: "You can confirm your new account email address through the link below:"
+        confirmation_link: "Confirm mail address."
     #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"

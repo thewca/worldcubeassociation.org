@@ -1,6 +1,15 @@
-<p><%= t('.greeting', :recipient => @resource.email, :default => "Welcome #{@resource.email}!") %></p>
+<p>
+  <%= t 'users.mailer.reconfirmation_mail.welcome', user_email: @user.name %>
+</p>
 
-<p><%= t('.instruction', :default => "You can confirm your account email through the link below:") %></p>
+<p>
+  <%= t 'users.mailer.reconfirmation_mail.confirm' %> 
+</p>
 
-<p><%= link_to t('.action', :default => "Confirm my account"),
-         confirmation_url(@resource, :confirmation_token => @token, locale: I18n.locale) %></p>
+<p>
+  <%= link_to t('users.mailer.reconfirmation_mail.confirmation_link'), confirmation_url(@user, confirmation_token: @user.confirmation_token, locale: I18n.locale) %>
+</p>
+
+<p>
+  <%= t 'users.mailer.create_new_account.questions', contact_link: 'contact@worldcubeassociation.org' %>
+</p>
