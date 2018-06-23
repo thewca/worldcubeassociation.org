@@ -9,7 +9,6 @@ FactoryBot.define do
     currency_code "USD"
     base_entry_fee_lowest_denomination 1000
     information "Information!"
-    registration_requirements "Requirements"
     latitude { rand(-90_000_000..90_000_000) }
     longitude { rand(-180_000_000..180_000_000) }
 
@@ -53,6 +52,9 @@ FactoryBot.define do
     isConfirmed false
 
     guests_enabled true
+    on_the_spot_registration false
+    refund_policy_percent 0
+    guests_entry_fee_lowest_denomination 0
 
     trait :with_delegate do
       delegates { [FactoryBot.create(:delegate)] }

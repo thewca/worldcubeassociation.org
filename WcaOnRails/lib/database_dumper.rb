@@ -68,6 +68,11 @@ module DatabaseDumper
           registration_requirements
           created_at
           updated_at
+          on_the_spot_registration
+          on_the_spot_entry_fee_lowest_denomination
+          refund_policy_percent
+          refund_policy_limit_date
+          guests_entry_fee_lowest_denomination
         ),
         db_default: %w(
           connected_stripe_account_id

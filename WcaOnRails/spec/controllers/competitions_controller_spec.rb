@@ -560,19 +560,19 @@ RSpec.describe CompetitionsController do
         expect(competition.reload.registration_close).to eq new_close
       end
 
-      it "can change registration requirements field before competition is confirmed" do
+      it "can change extra registration requirements field before competition is confirmed" do
         new_requirements = "New requirements"
         patch :update, params: { id: competition, competition: { registration_requirements: new_requirements } }
         competition.reload
         expect(competition.registration_requirements).to eq new_requirements
       end
 
-      it "cannot change registration requirements field after competition is confirmed" do
-        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate])
-        new_requirements = "New requirements"
+      it "cannot change extra registration requirements field after competition is confirmed" do
+        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate], registration_requirements: "Extra requirements")
+        new_requirements = "New extra requirements"
         patch :update, params: { id: comp, competition: { registration_requirements: new_requirements } }
         comp.reload
-        expect(comp.registration_requirements).to eq "Requirements"
+        expect(comp.registration_requirements).to eq "Extra requirements"
       end
     end
 

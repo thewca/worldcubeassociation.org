@@ -85,6 +85,10 @@ class Competition < ApplicationRecord
     currency_code
     enable_donations
     registration_requirements
+    on_the_spot_registration
+    on_the_spot_entry_fee_lowest_denomination
+    refund_policy_percent
+    guests_entry_fee_lowest_denomination
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -108,6 +112,7 @@ class Competition < ApplicationRecord
     created_at
     updated_at
     connected_stripe_account_id
+    refund_policy_limit_date
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
@@ -132,6 +137,20 @@ class Competition < ApplicationRecord
 
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
+  validates_numericality_of :refund_policy_percent, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required?
+  validates :refund_policy_limit_date, presence: true, if: :refund_policy_percent?
+  validates_inclusion_of :on_the_spot_registration, in: [true, false], if: :on_the_spot_registration_required?
+  validates_numericality_of :on_the_spot_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :on_the_spot_registration?
+  monetize :on_the_spot_entry_fee_lowest_denomination,
+           as: "on_the_spot_base_entry_fee",
+           allow_nil: true,
+           with_model_currency: :currency_code
+  validates_numericality_of :guests_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :guests_entry_fee_required?
+  monetize :guests_entry_fee_lowest_denomination,
+           as: "guests_base_fee",
+           allow_nil: true,
+           with_model_currency: :currency_code
+
   NEARBY_DISTANCE_KM_WARNING = 250
   NEARBY_DISTANCE_KM_DANGER = 100
   NEARBY_DISTANCE_KM_INFO = 100
@@ -151,7 +170,7 @@ class Competition < ApplicationRecord
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
 
   # We have stricter validations for confirming a competition
-  validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, :registration_requirements, presence: true, if: :confirmed_or_visible?
+  validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
@@ -585,6 +604,18 @@ class Competition < ApplicationRecord
     competitor_limit_enabled
   end
 
+  def on_the_spot_registration_required?
+    isConfirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
+  end
+
+  def refund_policy_percent_required?
+    isConfirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
+  end
+
+  def guests_entry_fee_required?
+    isConfirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
+  end
+
   def pending_results_or_report(days)
     self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
   end
@@ -625,6 +656,10 @@ class Competition < ApplicationRecord
 
     if (end_date - start_date).to_i > MAX_SPAN_DAYS
       errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS))
+    end
+
+    if refund_policy_limit_date? && refund_policy_limit_date > start_date
+      errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start'))
     end
   end
 

@@ -558,6 +558,7 @@ class CompetitionsController < ApplicationController
       :enable_donations,
       :being_cloned_from_id,
       :clone_tabs,
+      :refund_policy_limit_date,
     ]
 
     if @competition.nil? || @competition.can_edit_registration_fees?
@@ -594,6 +595,11 @@ class CompetitionsController < ApplicationController
         :competitor_limit_reason,
         :remarks,
         :registration_requirements,
+        :on_the_spot_registration,
+        :on_the_spot_entry_fee_lowest_denomination,
+        :refund_policy_percent,
+        :refund_policy_limit_date,
+        :guests_entry_fee_lowest_denomination,
         competition_events_attributes: [:id, :event_id, :_destroy],
         championships_attributes: [:id, :championship_type, :_destroy],
       ]
