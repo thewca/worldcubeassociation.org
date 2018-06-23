@@ -277,7 +277,7 @@ pt-BR:
         password: Senha
         #original_hash: 19dff4d
         current_password: Senha atual
-        #original_hash: 786b8af
+        #original_hash: aefce7f
         password_confirmation: Confirme a senha
         #original_hash: ced7b30
         remember_me: Continuar conectado
@@ -334,7 +334,7 @@ pt-BR:
         base_entry_fee_lowest_denomination: Taxa base de inscrição
         #original_hash: 28a6fbb
         currency_code: Código da moeda do país
-        #original_hash: 5b2fe69
+        #original_hash: 2e3ed8b
         delegate_ids: Delegado(s) da WCA
         #original_hash: 958562e
         organizer_ids: Organizador(es)
@@ -618,7 +618,7 @@ pt-BR:
           Informações sobre o limite de competidores, taxa de inscrição para
           competidores ou espectadores, e outros detalhes relevantes para as
           pessoas interessadas em competir ou assistir.
-        #original_hash: 0708400
+        #original_hash: b4d020f
         delegate_ids: Delegado(s) da WCA da competição.
         #original_hash: 517d376
         organizer_ids: >-
@@ -764,10 +764,10 @@ pt-BR:
           profissionais e ativos durante os dias da competição, problemas que
           ocorreram (p. ex. atrasos no cronograma) e como foram resolvidos. Seja
           breve e não reporte detalhes irrelevantes.
-        #original_hash: 715f020
+        #original_hash: d003c1f
         incidents: >-
           Informe os incidentes que você considera necessário mencionar. Numere
-          os incidentes começando de 1, para que outros delegados possam
+          os incidentes começando de 1, para que outros Delegados possam
           comentar usando os números como referência. Por favor mencione somente
           casos concretos, não ocorrências genéricas (p. ex. casos de +2 ou DNF
           normais). Sinta-se à vontade para pedir opiniões dos delegados ou WRC
@@ -838,6 +838,11 @@ pt-BR:
         submitterComment: ''
         #original_hash: da39a3e
         status: ''
+      results_submission:
+        #original_hash: da39a3e
+        results: ''
+        #original_hash: da39a3e
+        message: ''
     options:
       registration:
         status:
@@ -883,6 +888,10 @@ pt-BR:
       #original_hash: a2a43b3
       size_too_big: 'é muito grande (deve ser no máximo %{file_size})'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: Digite a senha novamente
     sessions:
       new:
         #original_hash: ada2e9e
@@ -1106,9 +1115,9 @@ pt-BR:
       pending_claim_confirmation_html: >-
         Esta conta está aguardando o delegado %{delegate} confirmar a ID da WCA
         solicitada %{wca_id}.
-      #original_hash: fc7269a
+      #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
-        Este usuário solicitou a ID da WCA %{wca_id}. O delegado %{delegate}
+        Este usuário solicitou a ID da WCA %{wca_id}. O Delegado %{delegate}
         será notificado desta solicitação assim que o endereço de email do
         usuário for confirmado.
       #original_hash: 1cde7e6
@@ -1124,11 +1133,11 @@ pt-BR:
       #original_hash: 29e25b5
       have_wca_id_html: 'Sua ID da WCA é %{link_id}.'
       cannot_edit:
-        #original_hash: 8501c74
+        #original_hash: 13e8b80
         msg: >-
           Você não pode alterar seu nome, data de nascimento, gênero ou país.
           Motivo: %{reason}. Entre em contato com seu <a
-          href='%{delegate_url}'>delegado</a> para fazer alguma dessas mudanças.
+          href='%{delegate_url}'>Delegado</a> para fazer alguma dessas mudanças.
         reason:
           #original_hash: 370ff12
           assigned: você tem uma ID da WCA associada
@@ -1194,11 +1203,11 @@ pt-BR:
       unique: 'já está em uso por "%{used_name}", com %{used_email}'
       #original_hash: 26f70ed
       dob_past: deve ser no passado
-      #original_hash: f599dc5
+      #original_hash: 012f032
       must_be_senior: deve ser um Delegado Senior
       #original_hash: 2e582eb
       must_not_be_present: não pode ser presente
-      #original_hash: b2c4ecc
+      #original_hash: 5b4eac9
       senior_has_delegate: não pode rebaixar um Delegado Senior que tenha delegados subordinados
       #original_hash: 48653a9
       already_have_id: 'não pode solicitar uma ID da WCA porque você já tem a ID %{wca_id}'
@@ -1237,13 +1246,13 @@ pt-BR:
           Conta atualizada. Um email foi enviada para %{email} para confirmar
           este endereço.
     select_nearby_delegate:
-      #original_hash: 2b11120
+      #original_hash: 407c4f8
       select_delegate_html: >-
         Para vincular sua ID da WCA, é necessário um <a href='%{link_delegate}'
         target='_blank'>Delegado da WCA</a> para confirmar sua identidade. Por
         favor informe sua data de nascimento e escolha o Delegado que você
         conhece melhor.
-      #original_hash: d69cf94
+      #original_hash: 2564ee3
       already_assigned_html: >-
         ID da WCA %{link_id} já está vinculada a outro usuário. Se você acredita
         que isso foi feito incorretamente, entre em contato com seu <a
@@ -1822,9 +1831,9 @@ pt-BR:
       cannot_delete_confirmed: Não pode excluir uma competição confirmada.
       #original_hash: 191df37
       must_contain_event: deve ter pelo menos um evento
-      #original_hash: 112490b
+      #original_hash: 6e228b7
       must_contain_delegate: deve ter pelo menos um Delegado da WCA
-      #original_hash: 0b2b56b
+      #original_hash: 8131fc2
       not_all_delegates: não são todos Delegados da WCA
       #original_hash: 43a23c2
       registration_close_after_open: o término das inscrições deve ser posterior ao início
@@ -2243,9 +2252,9 @@ pt-BR:
             que isso é feito, os resultados são enviados para a Equipe de
             Resultados da WCA, que é responsável por publicá-los e gerenciar o
             banco de dados da WCA. Essa publlicação é feita assim que possível.
-          #original_hash: b6a68ab
+          #original_hash: daf1cb1
           '2': >-
-            Dependendo do tamanho da competição e da agenda do delegado, isso
+            Dependendo do tamanho da competição e da agenda do Delegado, isso
             pode levar um dia ou até uma semana. Por favor seja paciente.
           #original_hash: bf8adbe
           '3': >-
@@ -2465,14 +2474,14 @@ pt-BR:
     how_to:
       #original_hash: fc3af12
       title: Como se tornar uma Organização Regional da WCA
-      #original_hash: bdf57ff
+      #original_hash: cc1639d
       description: >-
         A WCA reconhece várias organizações regionais no mundo todo. O objetivo
         de uma organização regional é organizar Competições da WCA e apoiar as
         atividades da WCA em sua região. Países que quiserem formar uma
         organização regional devem contribuir com a WCA em sua área antes de
         enviar sua candidatura. Para obter ajuda com a organização de uma
-        competição da WCA em sua área, por favor contate um delegado mais
+        competição da WCA em sua área, por favor contate um Delegado mais
         próximo.
     requirements:
       #original_hash: 1e04fd7
@@ -2900,12 +2909,12 @@ pt-BR:
     paragraph4:
       #original_hash: b6dca56
       title: Política de proximidade
-      #original_hash: bd8f1fe
+      #original_hash: f86bf95
       content1: >-
         Competições da WCA serão aceitas se estiverem pelo menos 100 km ou 19
         dias distantes de qualquer outra competição. O Conselho da WCA pode
         analisar especificamente uma proposta de competição se houver outra a
-        menos de 100km e 19 dias de distância. Um delegado que fizer uma
+        menos de 100km e 19 dias de distância. Um Delegado que fizer uma
         solicitação de uma competição nestes termos deve apresentar informações
         acerca dos motivos para a competição ser aceita. Possíveis argumentos
         que embasam essa decisão incluem:
@@ -2957,12 +2966,12 @@ pt-BR:
     paragraph5:
       #original_hash: 17d01de
       title: Limites de competidores
-      #original_hash: 18976be
+      #original_hash: ffcd75e
       content_html: >-
         o número de competidores pode ser limitado por evento ou por competição
         (veja <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Regra
-        Z4</a>). Assim como todas as regras no artigo Z, o delegado da
+        Z4</a>). Assim como todas as regras no artigo Z, o Delegado da
         competição deve ter aprovação do limite pelo Conselho da WCA. Estes
         limites devem ser escolhidos com cuidado, de acordo com o interesse
         previsto na competição. O limite não deve ser colocado muito baixo por
