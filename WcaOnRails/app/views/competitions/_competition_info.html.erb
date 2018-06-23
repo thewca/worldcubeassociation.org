@@ -43,22 +43,6 @@
           <%= mail_to competition.managers.map(&:email).join(","), competition.managers.map(&:email).join(", "), subject: "Question about #{competition.name}", target: "_blank", class: "hide-new-window-icon" %>
         <% end %>
       </dd>
-
-      <% if competition.competitor_limit_enabled? %>
-        <dt><%= t '.competitor_limit' %></dt>
-        <dd><%= competition.competitor_limit %></dd>
-      <% end %>
-
-      <% if competition.has_fees? %>
-        <dt><%= t '.entry_fee' %></dt>
-        <dd><%= format_money competition.base_entry_fee %></dd>
-        <% competition.competition_events.each do |competition_event| %>
-          <% if competition_event.has_fee? %>
-            <dt><%= competition_event.event.name %></dt>
-            <dd><%= format_money competition_event.fee %></dd>
-          <% end %>
-        <% end %>
-      <% end %>
     </dl>
   </div>
 
@@ -147,8 +131,7 @@
           </div>
         <% end %>
         <div class="<%= collapse ? "collapse" : "" %>" id="registration_requirements_text">
-          <%=md competition.registration_requirements %>
-        </div>
+          <%= render "registration_requirements" %>
         </dd>
       </dl>
     </div>
