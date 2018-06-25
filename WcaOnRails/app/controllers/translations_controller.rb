@@ -72,6 +72,7 @@ class TranslationsController < ApplicationController
     "sk" => %w(2015MOZO01),
     "sl" => %w(2010OMUL01),
     "id" => %w(2015HUDO01),
+    "vi" => %w(2014TRUN01),
   }.freeze
 
   private def pr_description_for(user, locale)
