@@ -12,6 +12,7 @@
   </p>
 
   <%= simple_form_for @results_submission, url: submit_results_path do |f| %>
+    <%= f.input :schedule_url %>
     <%= f.input :message, as: :text, input_html: { class: "markdown-editor" } %>
     <%= f.input :results, as: :file, input_html: { accept: 'application/json' } %>
     <%= f.submit "Submit", class: "btn btn-primary" %>
