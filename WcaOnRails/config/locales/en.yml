@@ -464,6 +464,7 @@ en:
         submitterComment: ""
         status: ""
       results_submission:
+        schedule_url: ""
         results: ""
         message: ""
     #context: and a label for an option
