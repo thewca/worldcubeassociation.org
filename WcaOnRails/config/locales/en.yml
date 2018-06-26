@@ -465,7 +465,7 @@ en:
         status: ""
       results_submission:
         schedule_url: ""
-        results: ""
+        results_file: ""
         message: ""
     #context: and a label for an option
     options:
