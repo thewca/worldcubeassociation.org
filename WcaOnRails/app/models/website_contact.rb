@@ -16,17 +16,24 @@ class WebsiteContact < ContactForm
   end
 
   def to_email
-    case inquiry
-    when "competitions_in_general", "different"
-      Team.wct.email
-    when "wca_id_or_profile", "media"
-      Team.wrt.email
-    when "software"
-      Team.wst.email
-    when "competition"
+    if inquiry == "competition"
       Competition.find_by_id(competition_id)&.managers&.map(&:email)
     else
-      raise "Invalid inquiry type: `#{inquiry}`" if inquiry.present?
+      "contact@worldcubeassociation.org"
     end
+  end
+
+  def subject
+    topic = case inquiry
+            when "competition" then "Comment for #{Competition.find_by_id(competition_id)&.name}"
+            when "competitions_in_general" then "General Competition Comment"
+            when "wca_id_or_profile" then "WCA ID or WCA Profile Comment"
+            when "media" then "Media Comment"
+            when "software" then "Software Comment"
+            when "different" then "Other Comment"
+            else
+              raise "Invalid inquiry type: `#{inquiry}`" if inquiry.present?
+            end
+    Time.now.strftime("[WCA Website] #{topic} by #{name} on %d %b %Y at %R")
   end
 end
