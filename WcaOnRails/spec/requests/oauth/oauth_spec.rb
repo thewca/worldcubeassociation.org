@@ -18,6 +18,10 @@ RSpec.describe "oauth api" do
 
   let(:user) { FactoryBot.create :user_with_wca_id }
 
+  it "redirect uri doesn't require ssl for localhost" do
+    expect(FactoryBot.build(:oauth_application, redirect_uri: "http://localhost:3000")).to be_valid
+  end
+
   it 'can authenticate with grant_type password' do
     post oauth_token_path, params: { grant_type: "password", username: user.email, password: user.password, scope: "public email" }
     expect(response).to be_success
