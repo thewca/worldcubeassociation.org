@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     get 'results/all' => 'competitions#show_all_results'
     get 'results/by_person' => 'competitions#show_results_by_person'
 
+    get 'registrations/event_fee_for_selected_events' => 'registrations#entry_fee_for_selected_events', as: :entry_fee_for_selected_events
     patch 'registrations/selected' => 'registrations#do_actions_for_selected', as: :registrations_do_actions_for_selected
     post 'registrations/export' => 'registrations#export', as: :registrations_export
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet

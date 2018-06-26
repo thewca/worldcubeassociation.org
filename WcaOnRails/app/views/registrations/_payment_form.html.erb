@@ -1,8 +1,8 @@
 <%= horizontal_simple_form_for :payment, url: competition_process_payment_path(@competition), html: { id: :form_payment } do |f| %>
-  <%= render 'entry_fee', label: "Paid", money_amount: @registration.paid_entry_fees %>
+  <%= render 'entry_fee', label: "Paid", money_amount: @registration.paid_entry_fees, entry_fee_class: "entry-fee-paid" %>
   <%= f.input :stripe_token, as: :hidden, input_html: { id: :stripe_token } %>
   <%= f.input :total_amount, as: :hidden, input_html: { id: :total_amount } %>
-  <%= render 'entry_fee', label: "Remaining", money_amount: @registration.outstanding_entry_fees %>
+  <%= render 'entry_fee', label: "Remaining", money_amount: @registration.outstanding_entry_fees, entry_fee_class: "entry-fee-remaining" %>
   <% if @competition.enable_donations %>
     <%= f.input :donation, as: :money_amount, currency: @registration.outstanding_entry_fees.currency.iso_code, value: "0", label: t('registrations.payment_form.labels.donation'), hint: t('registrations.payment_form.hints.donation') %>
   <% end %>

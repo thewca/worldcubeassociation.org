@@ -11,7 +11,7 @@
     <div class="form-group">
       <label class="col-sm-2 control-label" for="entry_fees"><%= label %></label>
       <div class="col-sm-9">
-        <p class="form-control-static"><%= format_money(money_amount) %></p>
+        <p class="form-control-static <%= entry_fee_class %>"><%= format_money(money_amount) %></p>
         <% unless hint.blank? %>
           <p class="help-block"><span <%= raw(hint_context_attribute) %>><%= hint %></span></p>
         <% end %>
