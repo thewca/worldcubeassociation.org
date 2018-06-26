@@ -87,10 +87,12 @@ FactoryBot.define do
     factory :user_with_wca_id, traits: [:wca_id]
 
     factory :delegate, traits: [:wca_id] do
+      association :senior_delegate
       delegate_status "delegate"
     end
 
     factory :candidate_delegate, traits: [:wca_id] do
+      association :senior_delegate
       delegate_status "candidate_delegate"
     end
 

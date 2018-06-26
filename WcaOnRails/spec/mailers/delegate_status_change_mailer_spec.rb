@@ -29,16 +29,6 @@ RSpec.describe DelegateStatusChangeMailer, type: :mailer do
       expect(mail.body.encoded).to match(edit_user_url(user))
     end
 
-    # TODO: This test can get removed once we require delegates to have senior delegates: https://github.com/thewca/worldcubeassociation.org/issues/2933
-    it "promoting a registered speedcuber to a delegate without setting a senior delegate" do
-      user.update!(delegate_status: "candidate_delegate")
-      mail = DelegateStatusChangeMailer.notify_board_and_wqac_of_delegate_status_change(user, senior_delegate1)
-
-      expect(mail.cc).to eq(["quality@worldcubeassociation.org", senior_delegate1.email])
-      expect(mail.body.encoded).to match("Warning: Eddard Stark forgot to assign a Senior Delegate to Jon Snow")
-      expect(mail.body.encoded).to match(edit_user_url(user))
-    end
-
     it "promoting a candidate delegate to a delegate" do
       delegate.update!(delegate_status: "delegate")
       mail = DelegateStatusChangeMailer.notify_board_and_wqac_of_delegate_status_change(delegate, senior_delegate1)

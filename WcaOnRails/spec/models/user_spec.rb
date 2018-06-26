@@ -80,6 +80,11 @@ RSpec.describe User, type: :model do
     expect(delegate).to be_valid
   end
 
+  it "requires senior delegate if delegate status allows it" do
+    delegate = FactoryBot.build :delegate, senior_delegate: nil
+    expect(delegate).to be_invalid_with_errors(senior_delegate: ["can't be blank"])
+  end
+
   it "doesn't delete a real account when a dummy account's WCA ID is cleared" do
     # Create someone without a password and without a WCA ID. This simulates the kind
     # of accounts we originally created for all delegates without accounts.

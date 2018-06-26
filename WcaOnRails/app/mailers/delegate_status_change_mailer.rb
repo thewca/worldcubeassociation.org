@@ -15,9 +15,7 @@ class DelegateStatusChangeMailer < ApplicationMailer
         @user_senior_delegate = User.find_by_id!(user_whose_delegate_status_changed.senior_delegate_id_before_last_save)
       end
       to = ["board@worldcubeassociation.org"]
-      cc = ["quality@worldcubeassociation.org", user_who_made_the_change.email]
-      # TODO: This can get cleaned up once we require delegates to have senior delegates: https://github.com/thewca/worldcubeassociation.org/issues/2933
-      cc << @user_senior_delegate.email if @user_senior_delegate
+      cc = ["quality@worldcubeassociation.org", user_who_made_the_change.email, @user_senior_delegate.email]
       mail(
         to: to,
         cc: cc,

@@ -3,12 +3,7 @@
   <% new_status = @user_whose_delegate_status_changed.delegate_status_i18n || 'Registered Speedcuber' %>
   <%= @user_who_made_the_change.name %> has changed the Delegate status of <%= @user_whose_delegate_status_changed.name %> from <%= old_status %> to <%= new_status %>.
 </h1>
-<%# TODO: This if statement can get removed once we require delegates to have senior delegates: https://github.com/thewca/worldcubeassociation.org/issues/2933 %>
-<% if @user_senior_delegate.nil? %>
-  <h2 class="alert">
-    Warning: <%= @user_who_made_the_change.name %> forgot to assign a Senior Delegate to <%= @user_whose_delegate_status_changed.name %>.
-  </h2>
-<% elsif @user_who_made_the_change.name != @user_senior_delegate.name %>
+<% if @user_who_made_the_change.name != @user_senior_delegate.name %>
   <h2 class="alert">
     Warning: <%= @user_who_made_the_change.name %> is not <%= @user_whose_delegate_status_changed.name %>'s Senior Delegate.
   </h2>
