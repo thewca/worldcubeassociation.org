@@ -466,7 +466,7 @@ class User < ApplicationRecord
   end
 
   def can_manage_competition?(competition)
-    can_admin_results? || competition.organizers.include?(self) || competition.delegates.include?(self) || wrc_team? || competition.delegates.map(&:senior_delegate).compact.include?(self)
+    can_admin_results? || competition.organizers.include?(self) || competition.delegates.include?(self) || wrc_team? || quality_assurance_committee? || competition.delegates.map(&:senior_delegate).compact.include?(self)
   end
 
   def can_view_hidden_competitions?
