@@ -3,21 +3,20 @@
 <% cumulative_across_rounds_time_limit = false %>
 <% rounds_by_wcif_id = Hash[competition.rounds.map { |r| [r.wcif_id, r] }] %>
 <% if venue_rooms.size > 1 %>
-  <p>
-  This venue as multiple rooms, by default all the rooms are displayed on the schedule, but you can filter the rooms below:
-  </p>
-  TODO : checkboxes and js
-  <ul>
-    <% venue_rooms.each do |r| %>
-      <li><%= r.name %></li>
-    <% end %>
-  </ul>
+  <div>
+    This venue as multiple rooms, by default all the rooms are displayed on the schedule, but you can filter the rooms below:
+    <div class="list-group room-list">
+      <% venue_rooms.each do |r| %>
+        <a class="list-group-item list-group-item-success toggle-room" href="#" data-room="<%= r.id %>"><%= r.name %></a>
+      <% end %>
+    </div>
+  </div>
 <% end %>
 
 <% competition.start_date.upto(competition.end_date) do |date| %>
   <h3><%= t("competitions.schedule.schedule_for_date", day_name: l(date, format: '%A'), full_date: l(date, format: :long)) %></h3>
 
-  <div class="row hidden-xs hidden-sm">
+  <div class="row hidden-xs hidden-sm schedule-table-header">
     <div class="col-md-1"><%= t("competitions.schedule.start") %></div>
     <div class="col-md-1"><%= t("competitions.schedule.end") %></div>
     <div class="col-md-3"><%= t("competitions.schedule.activity") %></div>
@@ -31,26 +30,42 @@
     <% venue.sorted_activities_for_date(date).each do |a| %>
       <% activity_code_without_attempt = a.activity_code.gsub(/-a[0-9]+/, '') %>
       <% round_data = rounds_by_wcif_id[activity_code_without_attempt] %>
-      <div class="row">
+      <div class="row room-<%= a.holder.id %>">
         <div class="col-xs-6 col-sm-2 col-md-1">
-          <span class="visible-xs">From</span>
-          <%= l(a.start_time, format: time_format_for_current_locale) %>
+          <span class="visible-xs visible-sm">From</span>
+          <span class="activity-time">
+            <%= l(a.start_time, format: time_format_for_current_locale) %>
+          </span>
         </div>
         <div class="col-xs-6 col-sm-2 col-md-1">
-          <span class="visible-xs">To</span>
-          <%= l(a.end_time, format: time_format_for_current_locale) %>
+          <span class="visible-xs visible-sm">To</span>
+          <span class="activity-time">
+            <%= l(a.end_time, format: time_format_for_current_locale) %>
+          </span>
         </div>
-        <div class="col-xs-12 col-sm-8 col-md-3">
+        <div class="col-xs-12 col-sm-8 col-md-3 activity-name">
           <%= ScheduleActivity.localized_name_from_activity_code(a.activity_code, a.name) %>
+          <span class=""></span>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-2">
+        <div class="clearfix visible-sm"></div>
+        <div class="col-xs-12 col-sm-4 col-md-2 room-name">
           <%# Room's name %>
           <%= a.holder.name %>
         </div>
-        <div class="col-xs-6 col-sm-3 col-md-2">
-          <%= round_data&.format&.name %>
+        <div class="clearfix visible-xs"></div>
+        <% round_format = round_data&.format&.name %>
+        <div class="col-xs-4 visible-xs <%= "hidden-xs" unless round_format %>">
+          Format:
         </div>
-        <div class="col-xs-6 col-sm-3 col-md-1">
+        <div class="col-xs-8 col-sm-3 col-md-2 <%= "hidden-xs" unless round_format %>">
+          <%= round_format %>
+        </div>
+        <div class="clearfix visible-xs"></div>
+        <% round_time_limit = round_data&.time_limit_to_s %>
+        <div class="col-xs-4 visible-xs <%= "hidden-xs" unless round_time_limit %>">
+          Time limit
+        </div>
+        <div class="col-xs-8 col-sm-3 col-md-1 <%= "hidden-xs" unless round_time_limit %>">
           <%= round_data&.time_limit_to_s %>
           <% if round_data&.competition_event&.event&.can_change_time_limit? %>
             <% if round_data.time_limit.cumulative_round_ids.length == 1 %>
@@ -62,10 +77,18 @@
             <% end %>
           <% end %>
         </div>
-        <div class="col-xs-6 col-sm-3 col-md-1">
+        <div class="clearfix visible-xs"></div>
+        <div class="col-xs-4 visible-xs">
+          Cutoff
+        </div>
+        <div class="col-xs-8 col-sm-3 col-md-1">
           <%= round_data&.cutoff_to_s %>
         </div>
-        <div class="col-xs-6 col-sm-3 col-md-1">
+        <div class="clearfix visible-xs"></div>
+        <div class="col-xs-4 visible-xs">
+          Advancement
+        </div>
+        <div class="col-xs-8 col-sm-3 col-md-1">
           <%= round_data&.advancement_condition_to_s %>
         </div>
       </div>

@@ -2119,7 +2119,7 @@ fr:
       room: "Salle"
       venue_information_html: "Vous visualisez le planning de la salle %{venue_name}."
       timezone_message: "Le fuseau horaire de ce planning est %{timezone}."
-      multiple_venues_available: "Cette compétition a plusieurs salles, pensez à consulter les autres planning également."
+      multiple_venues_available: "Cette compétition a plusieurs salles, pensez à consulter le planning des autres salles également."
       schedule_for_date: "Planning pour %{day_name} (%{full_date})"
     nav:
       menu:

@@ -21,3 +21,17 @@
     </div>
   <% end %>
 </div>
+<script>
+$(".toggle-room").click(function(e) {
+  e.preventDefault();
+  var $elem = $(this);
+  var roomId = $elem.data("room");
+  $(".room-" + roomId).toggle();
+  if ($elem.hasClass("list-group-item-success")) {
+    $elem.removeClass("list-group-item-success");
+  } else {
+    $elem.addClass("list-group-item-success");
+  }
+  $elem.blur();
+});
+</script>
