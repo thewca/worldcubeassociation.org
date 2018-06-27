@@ -21,6 +21,7 @@ export const modeDetails = {
     modalTitle: "Add a custom activity",
     buttonText: "Add",
     action: (hide, eventData) => {
+      eventData.name = eventData.title;
       eventData.startTime = momentToIso(eventData.start);
       eventData.endTime = momentToIso(eventData.end);
       addActivityToCalendar(eventData);
@@ -85,9 +86,9 @@ export class CustomActivityModal extends React.Component {
             </div>
             <div className="col-xs-8">
               <select className="form-control" id="activity_code" value={this.state.activityCode} onChange={handleActivityCodeChange}>
-                {Object.keys(commonActivityCodes).map(function(key) {
-                  return <option key={key} value={key}>{commonActivityCodes[key]}</option>
-                })}
+                {Object.keys(commonActivityCodes).map(key => (
+                  <option key={key} value={key}>{commonActivityCodes[key]}</option>
+                ))}
               </select>
             </div>
           </div>

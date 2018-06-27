@@ -190,9 +190,7 @@ export function fcEventToActivity(event) {
 }
 
 export function selectedEventInCalendar() {
-  let matching = $(scheduleElementSelector).fullCalendar("clientEvents", function(event) {
-    return event.selected;
-  });
+  let matching = $(scheduleElementSelector).fullCalendar("clientEvents", event => event.selected);
   return matching.length > 0 ? matching[0] : null;
 }
 
@@ -202,7 +200,7 @@ export function singleSelectEvent(event) {
     return false;
   }
   let events = $(scheduleElementSelector).fullCalendar("clientEvents");
-  events.forEach(function(elem) {
+  events.forEach((elem) => {
     if (elem.selected && (event.id != elem.id)) {
       elem.selected = false;
       // this function might be called while dragging/resizing,

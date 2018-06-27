@@ -122,10 +122,8 @@ export class ActivityPicker extends React.Component {
 
     $pickerElem.affix({
       offset: {
-        top: function () {
-          // Dynamically compute the offset trigger, as we're in a collapsible element
-          return $pickerElem.parent().offset().top + 10;
-        },
+        // Dynamically compute the offset trigger, as we're in a collapsible element
+        top: () => $pickerElem.parent().offset().top + 10,
       },
     });
     $pickerElem.on('affix.bs.affix', computeAffixedPickerDimension);
@@ -136,9 +134,7 @@ export class ActivityPicker extends React.Component {
 
     // Activate draggable on all activities
     $(".activity-in-picker > .schedule-activity").draggable({
-      start: function(event, ui) {
-        $(ui.helper).find('.tooltip').hide();
-      },
+      start: (event, ui) => $(ui.helper).find('.tooltip').hide(),
       revert: false,
       helper: "clone",
       // To get out of the overflow container

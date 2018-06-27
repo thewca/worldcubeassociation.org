@@ -154,9 +154,9 @@ const CalendarSettingsOption = ({selected, optionName, handlePropChange}) => {
         </Col>
         <Col xs={6}>
           <select className="form-control" value={selected} onChange={e => handlePropChange(optionName, e)}>
-            {_.map(optionProps.options, function(value, key) {
-              return (<option key={value} value={value}>{key}</option>)
-            })}
+            {_.map(optionProps.options, (value, key) => (
+              <option key={value} value={value}>{key}</option>)
+            )}
           </select>
         </Col>
       </Row>
@@ -169,15 +169,13 @@ const CalendarSettingsOption = ({selected, optionName, handlePropChange}) => {
 const CalendarSettings = ({ currentSettings, handlePropChange, ...props}) => (
   <Popover id="calendar-settings-popover" title="Calendar settings" {...props} >
     <Row>
-      {Object.keys(calendarOptionsInfo).map(function(optionName) {
-        return (
-          <CalendarSettingsOption optionName={optionName}
-                                  key={optionName}
-                                  selected={currentSettings[optionName]}
-                                  handlePropChange={handlePropChange}
-          />
-        );
-      })}
+      {Object.keys(calendarOptionsInfo).map((optionName) => (
+        <CalendarSettingsOption optionName={optionName}
+                                key={optionName}
+                                selected={currentSettings[optionName]}
+                                handlePropChange={handlePropChange}
+        />
+      ))}
     </Row>
   </Popover>
 );

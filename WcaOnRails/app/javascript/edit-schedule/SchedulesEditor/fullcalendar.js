@@ -35,7 +35,7 @@ export function generateCalendar(eventFetcher, showModalAction, scheduleWcif, lo
     eventDragStop: fullCalendarHandlers.onDragStop,
     eventDrop: fullCalendarHandlers.onMoved,
     eventClick: fullCalendarHandlers.onClick,
-    eventAfterRender: function(event, element) {
+    eventAfterRender: (event, element) => {
       if (event.selected) {
         element.addClass("selected-fc-event");
       }
@@ -43,9 +43,7 @@ export function generateCalendar(eventFetcher, showModalAction, scheduleWcif, lo
     eventResizeStart: fullCalendarHandlers.onResizeStart,
     eventResizeStop: fullCalendarHandlers.onResizeStop,
     eventResize: fullCalendarHandlers.onSizeChanged,
-    select: function(start, end) {
-      fullCalendarHandlers.onTimeframeSelected(showModalAction, start, end);
-    },
+    select: (start, end) => fullCalendarHandlers.onTimeframeSelected(showModalAction, start, end),
   }
 
   _.assign(options, localOptions);
@@ -53,7 +51,7 @@ export function generateCalendar(eventFetcher, showModalAction, scheduleWcif, lo
 }
 
 const fullCalendarHandlers = {
-  onReceive: function(event) {
+  onReceive: event => {
     // Fix the default duration
     let newEnd = event.start.clone();
     newEnd.add(defaultDurationFromActivityCode(event.activityCode), "m");
@@ -65,12 +63,12 @@ const fullCalendarHandlers = {
       $(scheduleElementSelector).fullCalendar("updateEvent", event);
     }
   },
-  onDragStart: function(event) {
+  onDragStart: event => {
     singleSelectEvent(event);
     $(contextualMenuSelector).addClass("hide-element");
     $(window).on("mousemove", dropAreaMouseMoveHandler);
   },
-  onDragStop: function(event, jsEvent) {
+  onDragStop: (event, jsEvent) => {
     $(dropAreaSelector).removeClass("event-on-top");
     $(window).off("mousemove", dropAreaMouseMoveHandler);
     let removed = false;
@@ -83,7 +81,7 @@ const fullCalendarHandlers = {
     }
   },
   onMoved: eventModifiedInCalendar,
-  onClick: function(event, jsEvent) {
+  onClick: (event, jsEvent) => {
     let $menu = $(contextualMenuSelector);
     $menu.removeClass("delete-only");
     // See https://github.com/fullcalendar/fullcalendar/issues/3324
@@ -104,20 +102,18 @@ const fullCalendarHandlers = {
       $(scheduleElementSelector).fullCalendar("updateEvent", event);
     }
   },
-  onResizeStart: function(event) {
+  onResizeStart: event => {
     singleSelectEvent(event);
     // We can't rerender or update here, otherwise FC internal state gets messed up
     // So we do a trick: an fc-event able to be resized receive the class 'fc-allow-mouse-resize'
     $(".fc-allow-mouse-resize").addClass("selected-fc-event");
     $(contextualMenuSelector).addClass("hide-element");
   },
-  onResizeStop: function(event) {
-    $(scheduleElementSelector).fullCalendar("updateEvent", event);
-  },
+  onResizeStop: event => $(scheduleElementSelector).fullCalendar("updateEvent", event),
   onSizeChanged: eventModifiedInCalendar,
-  onTimeframeSelected: function(showModalAction, start, end) {
+  onTimeframeSelected: (showModalAction, start, end) => {
     let eventProps = {
-      name: commonActivityCodes["other-registration"],
+      title: commonActivityCodes["other-registration"],
       activityCode: "other-registration",
       start: start,
       end: end,

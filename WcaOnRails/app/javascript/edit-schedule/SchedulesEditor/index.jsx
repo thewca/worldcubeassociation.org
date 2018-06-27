@@ -127,16 +127,11 @@ class EditScheduleForRoom extends React.Component {
         showModal: true,
         eventProps: eventProps,
         actionDetails: modeDetails[mode]
-      }, function() {
-        $(window).off("keydown", keyboardHandlers.activityPicker);
-      }
-    );
+      }, () => $(window).off("keydown", keyboardHandlers.activityPicker));
   }
 
   handleHideModal = () => {
-    this.setState({ showModal: false, eventProps: {} }, function() {
-      $(window).keydown(keyboardHandlers.activityPicker);
-    });
+    this.setState({ showModal: false, eventProps: {} }, () => $(window).keydown(keyboardHandlers.activityPicker));
   }
 
   eventFetcher = (start, end, timezone, callback) => {
