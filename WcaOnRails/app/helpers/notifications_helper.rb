@@ -67,7 +67,7 @@ module NotificationsHelper
       }
     end
 
-    user.delegated_competitions.visible.over
+    user.delegated_competitions.visible.over.order_by_date
         .includes(:delegate_report).where(delegate_reports: { posted_at: nil })
         .each do |competition|
           notifications << {
@@ -76,7 +76,7 @@ module NotificationsHelper
           }
         end
 
-    user.delegated_competitions.visible.over
+    user.delegated_competitions.visible.over.order_by_date
         .each do |competition|
           if !competition.results_posted?
             notifications << {
