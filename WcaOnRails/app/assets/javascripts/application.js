@@ -48,12 +48,17 @@
 //= require moment/vi.js
 //= require moment/zh-cn.js
 //= require moment/zh-tw.js
+//= require moment-timezone-with-data
 //= require bootstrap-datetimepicker
 //= require bootstrap-table
 //= require bootstrap-table-locale-all
 //= require extensions/bootstrap-table-mobile
 //= require autosize
+//= require fullcalendar
+//= require fullcalendar/locale-all
 //= require jquery_plugins
+//= require jquery-ui/position
+//= require jquery-ui/widgets/draggable
 //= require jquery.slick
 //= require_self
 //= require_tree .

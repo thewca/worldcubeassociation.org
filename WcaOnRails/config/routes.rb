@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
   get 'competitions/:id/events/edit' => 'competitions#edit_events', as: :edit_events
   get 'competitions/:id/events' => 'competitions#show_events', as: :show_events
+  get 'competitions/:id/schedule/edit' => 'competitions#edit_schedule', as: :edit_schedule
   patch 'competitions/:id/events' => 'competitions#update_events', as: :update_events
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
   get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition

@@ -188,6 +188,10 @@ GEM
     font-awesome-sass (4.7.0)
       sass (>= 3.2)
     formatador (0.2.5)
+    fullcalendar-rails (3.4.0.0)
+      jquery-rails (>= 4.0.5, < 5.0.0)
+      jquery-ui-rails (>= 5.0.2)
+      momentjs-rails (>= 2.9.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     guard (2.14.1)
@@ -237,6 +241,8 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-slick-rails (1.9.0)
       railties (>= 3.1)
+    jquery-ui-rails (6.0.1)
+      railties (>= 3.2.16)
     json (2.1.0)
     json-schema (2.8.0)
       addressable (>= 2.4)
@@ -558,6 +564,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   font-awesome-sass
+  fullcalendar-rails
   guard-rspec
   high_voltage
   http_accept_language
@@ -567,6 +574,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   jquery-slick-rails
+  jquery-ui-rails
   json-schema
   kaminari
   kaminari-i18n

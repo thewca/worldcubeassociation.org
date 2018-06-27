@@ -533,6 +533,16 @@ class Competition < ApplicationRecord
     to_radians latitude_degrees
   end
 
+  def country_zones
+    ActiveSupport::TimeZone.country_zones(country.iso2).map { |tz| [tz.name, tz.tzinfo.name] }.to_h
+  rescue TZInfo::InvalidCountryCode
+    # This can occur for non real country *and* XK!
+    # FIXME what to provide for XA, XE, XM, XS?
+    {
+      "London" => "Europe/London",
+    }
+  end
+
   private def compute_coordinates
     unless @latitude_degrees.nil?
       self.latitude_microdegrees = @latitude_degrees * 1e6
@@ -874,6 +884,18 @@ class Competition < ApplicationRecord
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif
+    {
+      "formatVersion" => "1.0",
+      "id" => id,
+      "name" => name,
+      "shortName" => cellName,
+      "persons" => persons_wcif,
+      "events" => events_wcif,
+      "schedule" => schedule_wcif,
+    }
+  end
+
+  def persons_wcif
     managers = self.managers
     includes_associations = [
       :events,
@@ -887,19 +909,18 @@ class Competition < ApplicationRecord
     end
     # Note: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
-    persons_wcif += managers.map { |m| m.to_wcif(self) }
+    persons_wcif + managers.map { |m| m.to_wcif(self) }
+  end
+
+  def events_wcif
+    competition_events.map(&:to_wcif)
+  end
+
+  def schedule_wcif
     {
-      "formatVersion" => "1.0",
-      "id" => id,
-      "name" => name,
-      "shortName" => cellName,
-      "persons" => persons_wcif,
-      "events" => competition_events.map(&:to_wcif),
-      "schedule" => {
-        "startDate" => start_date.to_s,
-        "numberOfDays" => number_of_days,
-        "venues" => competition_venues.map(&:to_wcif),
-      },
+      "startDate" => start_date.to_s,
+      "numberOfDays" => number_of_days,
+      "venues" => competition_venues.map(&:to_wcif),
     }
   end
 

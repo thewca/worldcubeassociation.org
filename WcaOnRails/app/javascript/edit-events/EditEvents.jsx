@@ -3,30 +3,20 @@ import cn from 'classnames'
 import ReactDOM from 'react-dom'
 
 import events from 'wca/events.js.erb'
-import { rootRender, promiseSaveWcif } from 'edit-events'
-import { pluralize, buildActivityCode } from 'edit-events/modals/utils'
+import { rootRender } from 'edit-events'
+import { pluralize } from 'edit-events/modals/utils'
+import { buildActivityCode, saveWcifPart } from 'wca/wcif-utils'
 import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from 'edit-events/modals'
 
 export default class EditEvents extends React.Component {
   save = e => {
     let {competitionId, wcifEvents} = this.props;
-    let wcif = {
-      id: competitionId,
-      events: wcifEvents,
-    };
 
     this.setState({ saving: true });
-    promiseSaveWcif(wcif).then(response => {
-      return Promise.all([response, response.json()]);
-    }).then(([response, json]) => {
-      if(!response.ok) {
-        throw new Error(`${response.status}: ${response.statusText}\n${json["error"]}`);
-      }
-      this.setState({ savedWcifEvents: _.cloneDeep(wcifEvents), saving: false });
-    }).catch(e => {
-      this.setState({ saving: false });
-      alert(`Something went wrong while saving.\n${e.message}`);
-    });
+    let onSuccess = () => this.setState({ savedWcifEvents: _.cloneDeep(wcifEvents), saving: false });
+    let onFailure = () => this.setState({ saving: false });
+
+    saveWcifPart(competitionId, '/events', wcifEvents, onSuccess, onFailure);
   }
 
   unsavedChanges() {
