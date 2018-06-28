@@ -102,16 +102,59 @@
     callback(events);
   }
 
+  function popoverContentFromData(eventData) {
+    let roundId = `${eventData.activityDetails.event_id}-r${eventData.activityDetails.round_number}`;
+    let roundData = roundsByWcifId[roundId];
+    if (!roundData) {
+      return null;
+    }
+    let content = "";
+    // If we have round data, format and time limit are mandatory
+    content += `<div class="row"><div class="col-xs-4"><%= t("competitions.schedule.format") %></div><div class="col-xs-8"><strong>${roundData.format_name}</strong></div></div>`;
+    let time_limit_text = roundData.time_limit;
+    if (roundData.cumulative_round_ids.length == 1) {
+      time_limit_text += `<%= link_to "*", "#cumulative-time-limit" %>`;
+    } else if (roundData.cumulative_round_ids.length > 1) {
+      time_limit_text += `<%= link_to "**", "#cumulative-across-rounds-time-limit" %>`;
+    }
+    content += `<div class="row"><div class="col-xs-4"><%= t("competitions.schedule.time_limit") %></div><div class="col-xs-8"><strong>${time_limit_text}</strong></div></div>`;
+    if (roundData.cutoff.length > 0) {
+      content += `<div class="row"><div class="col-xs-4"><%= t("competitions.schedule.cutoff") %></div><div class="col-xs-8"><strong>${roundData.cutoff}</strong></div></div>`;
+    }
+    if (roundData.advancement.length > 0) {
+      content += `<div class="row"><div class="col-xs-4"><%= t("competitions.schedule.proceed") %></div><div class="col-xs-8"><strong>${roundData.advancement}</strong></div></div>`;
+    }
+    return content;
+  }
+
   function initFullCalendar($elem, venueId) {
     var venueData = dataByVenueId[venueId];
     var options = {
       events: _.partial(fetchCalendarEvents, venueId),
-      // TODO event render with tooltip with formats/time limit/cutoff/advancement
       eventDataTransform: function(eventData) {
         if (eventData.activityDetails.event_id.startsWith("other")) {
           eventData.color = "#666";
         }
         return eventData;
+      },
+      eventRender: function(event, element) {
+        let popoverContent = popoverContentFromData(event);
+        if (!popoverContent) {
+          return;
+        }
+        $(element).addClass("has-popover");
+        $(element).click(function(e) {
+          $(this).popover("toggle");
+          e.stopPropagation();
+        });
+        $(element).popover({
+          title: `<strong>${event.title}</strong>`,
+          container: "body",
+          html: true,
+          content: `<div class="round-info-popover">${popoverContentFromData(event)}</div>`,
+          trigger: "manual",
+          placement: "top",
+        });
       },
       defaultView: 'agendaForComp',
       header: false,
@@ -160,11 +203,16 @@
     $(idSelector + " .schedule-table-link").addClass("active");
   });
 
+  function hidePopovers() {
+    $(".has-popover").popover("hide");
+  }
+
   // Setup action for enabling/disabling a room in a venue
   // For the "table", we just need to hide the row matching ".room-roomId"
   // For the "calendar", we need to refetch events
   $(".toggle-room").click(function(e) {
     e.preventDefault();
+    hidePopovers();
     var $elem = $(this);
     // Toggle the room line's status
     if ($elem.hasClass("room-enabled")) {
@@ -188,4 +236,7 @@
     }
   });
 
+  $('body').click(function(e) {
+    hidePopovers();
+  });
 </script>

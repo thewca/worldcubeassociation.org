@@ -2129,6 +2129,9 @@ fr:
         cumulative_one_round_html: "Une %{cumulative_time_limit} peut être imposée (voir la %{regulation_link})."
         cumulative_across_rounds_html: "Une %{cumulative_time_limit} peut être imposée sur un ensemble de tours (voir la %{guideline_link})."
         cutoff_html: "Le score à atteindre pour passer à la deuxième phase d'un tour combiné (voir la %{regulation_link})."
+      range:
+        from: "De"
+        to: "Jusqu'à"
       start: "Début"
       end: "Fin"
       activity: "Activité"

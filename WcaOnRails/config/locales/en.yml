@@ -1171,6 +1171,10 @@ en:
         cumulative_one_round_html: "A %{cumulative_time_limit} may be enforced (see %{regulation_link})."
         cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{guideline_link})."
         cutoff_html: "The ranking or time to meet to proceed to the second phase of a combined round (see %{regulation_link})."
+      #context: when talking about a time frame, like "From 8:00 To 12:00"
+      range:
+        from: "From"
+        to: "To"
       start: "Start"
       end: "End"
       activity: "Activity"

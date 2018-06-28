@@ -11,64 +11,63 @@
 
   .schedule-table {
     .row {
-      /*
-      &:nth-of-type(even) {
-        background-color: #dcdcdc;
+      & > div {
+        @media (min-width : 992px){
+          padding: 8px;
+        }
       }
-      &:nth-of-type(odd){
-        background-color: #aaa;
+      .schedule-event-icon {
+        .cubing-icon:before {
+          font-size: 40px;
+        }
       }
-       */
-  & > div {
-    @media (min-width : 992px){
-      padding: 8px;
+      @media (max-width : 992px){
+        padding-top: 8px;
+        padding-bottom: 8px;
+        border-bottom-width: 3px;
+        .activity-end-time, .responsive-cell-content {
+          text-align: right;
+        }
+      }
+      @media (min-width : 768px) and (max-width : 992px) {
+        .activity-name, .room-name {
+          padding-top: 8px;
+          padding-bottom: 8px;
+        }
+        .responsive-cell-content {
+          padding-bottom: 5px;
+        }
+        .room-name {
+          text-align: right;
+        }
+      }
+      .bolded-xs-sm {
+        @media (max-width : 992px){
+          font-weight: bold;
+        }
+      }
+      .activity-name {
+        @media (max-width : 768px) {
+          text-align: center;
+          padding-top: 8px;
+        }
+      }
+      .room-name {
+        font-style: italic;
+        @media (max-width : 768px) {
+          text-align: center;
+          padding-bottom: 8px;
+        }
+      }
+      border-bottom: 1px solid #ddd;
     }
+    margin-bottom: 60px;
   }
-  .schedule-event-icon {
-    .cubing-icon:before {
-      font-size: 40px;
-    }
-  }
-  @media (max-width : 992px){
-    padding-top: 8px;
-    padding-bottom: 8px;
-    border-bottom-width: 3px;
-    .activity-end-time, .responsive-cell-content {
-      text-align: right;
-    }
-  }
-  @media (min-width : 768px) and (max-width : 992px) {
-    .activity-name, .room-name {
-      padding-top: 8px;
-      padding-bottom: 8px;
-    }
-    .responsive-cell-content {
-      padding-bottom: 5px;
-    }
-    .room-name {
-      text-align: right;
-    }
-  }
-  .bolded-xs-sm {
-    @media (max-width : 992px){
-      font-weight: bold;
-    }
-  }
-  .activity-name {
-    @media (max-width : 768px) {
-      text-align: center;
-      padding-top: 8px;
-    }
-  }
-  .room-name {
-    font-style: italic;
-    @media (max-width : 768px) {
-      text-align: center;
-      padding-bottom: 8px;
-    }
-  }
-  border-bottom: 1px solid #ddd;
 }
-margin-bottom: 60px;
-}
+// Popover is added to body, can't nest this above
+.round-info-popover {
+  .row {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
 }
