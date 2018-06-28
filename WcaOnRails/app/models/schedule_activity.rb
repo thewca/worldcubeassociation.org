@@ -69,11 +69,9 @@ class ScheduleActivity < ApplicationRecord
       title: ScheduleActivity.localized_name_from_activity_code(activity_code, name),
       roomId: holder.id,
       roomName: holder.name,
-      activityCode: activity_code,
-      start: start_time.in_time_zone(holder.competition_venue.timezone_id).iso8601,
-      start_time: start_time.in_time_zone(holder.competition_venue.timezone_id),
-      end: end_time.in_time_zone(holder.competition_venue.timezone_id).iso8601,
-      end_time: end_time.in_time_zone(holder.competition_venue.timezone_id),
+      activityDetails: ScheduleActivity.parse_activity_code(activity_code),
+      start: start_time.in_time_zone(holder.competition_venue.timezone_id),
+      end: end_time.in_time_zone(holder.competition_venue.timezone_id),
     }
   end
 

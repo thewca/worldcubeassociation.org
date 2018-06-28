@@ -11,6 +11,18 @@
 </ul>
 <div class="tab-content" id="schedule-tab">
   <% competition.competition_venues.each_with_index do |venue, index| %>
+    <%
+      activities = venue.all_activities
+      min_time, max_time = first_and_last_time_from_activities(activities, venue.timezone_id)
+      activities.map!(&:to_event)
+    %>
+    <script>
+      dataByVenueId["<%= venue.id %>"] = {
+        events: <%= raw(activities.to_json) %>,
+        minTime: "<%= min_time %>",
+        maxTime: "<%= max_time %>",
+      }
+    </script>
     <div class="tab-pane <%= (index == 0) ? "active" : "" %>" id="schedule-venue-<%= venue.id %>" data-venue="<%= venue.id %>">
       <p>
         <%= t("competitions.schedule.venue_information_html", venue_name: link_to_google_maps_place(venue.name, venue.latitude_degrees, venue.longitude_degrees)) %>
@@ -24,46 +36,26 @@
       <% venue_rooms = venue.venue_rooms %>
       <div class="row">
         <div class="col-xs-12 col-md-6">
-          Display the schedule as
+          <%= t("competitions.schedule.display_as.label") %>
           <div class="list-group">
-            <a class="list-group-item active schedule-table-link" href="#">Table</a>
-            <a class="list-group-item schedule-calendar-link" href="#">Calendar</a>
+            <a class="list-group-item active schedule-table-link" data-venue="<%= venue.id %>" href="#">
+              <%= t("competitions.schedule.display_as.table") %>
+            </a>
+            <a class="list-group-item schedule-calendar-link" data-venue="<%= venue.id %>" href="#">
+              <%= t("competitions.schedule.display_as.calendar") %>
+            </a>
           </div>
         </div>
         <%# We want to keep these elements in the html for the event filter. %>
         <div class="col-xs-12 col-md-6 <%= "hidden" if venue.venue_rooms.size <= 1 %>">
-          Display schedule for:
+          <%= t("competitions.schedule.display_for_room") %>
           <div class="list-group" id="room-list-<%= venue.id %>">
             <% venue_rooms.each do |r| %>
-              <a class="list-group-item room-enabled toggle-room" href="#" data-room="<%= r.id %>"><%= r.name %></a>
+              <a class="list-group-item room-enabled toggle-room" href="#" data-room="<%= r.id %>" data-venue="<%= venue.id %>"><%= r.name %></a>
             <% end %>
           </div>
         </div>
       </div>
-      <%
-        activities = venue.all_activities
-        sorted_activities = activities.sort_by { |a| a.start_time.strftime("%H:%M") }
-        firstActivity = sorted_activities.first
-        firstTime = if firstActivity
-                      firstActivity.start_time.in_time_zone(venue.timezone_id).strftime("%H:00:00")
-                    else
-                      "08:00:00"
-                    end
-        lastAtivity = sorted_activities.last
-        lastTime = if lastAtivity
-                     lastAtivity.end_time.in_time_zone(venue.timezone_id).strftime("%H:59:00")
-                    else
-                      "20:00:00"
-                    end
-        activities.map!(&:to_event)
-      %>
-      <script>
-        dataByVenueId["<%= venue.id %>"] = {
-          events: <%= raw(activities.to_json) %>,
-          minTime: "<%= firstTime %>",
-          maxTime: "<%= lastTime %>",
-        }
-      </script>
       <div class="schedule_table_container">
         <%= render "competition_schedule_for_venue_table", competition: competition, rounds_by_wcif_id: rounds_by_wcif_id, activities: activities %>
       </div>
@@ -73,100 +65,127 @@
     </div>
   <% end %>
   <div class="time-limit-information">
-    <dl class="dl-horizontal">
-      <%# FIXME: i18n %>
-      <dt id="time-limit">Time Limit</dt>
-      <dd>
-      If you reach the time limit during your solve, the judge will stop you and your result will be DNF (see <%= link_to "Regulation A1a4",  regulations_path + "#A1a4", target: "_blank" %>).
+    <h4 id="time-limit"><%= t("competitions.schedule.time_limit") %></h4>
+    <p>
+      <%= t("competitions.schedule.time_limit_information.time_limit_html",
+            regulation_link: link_to(t("competitions.schedule.time_limit_information.regulation_link_text", number: "A1a4"), regulations_path + "#A1a4", target: "_blank")) %>
       <br/>
-      A <strong id="cumulative-time-limit">cumulative time limit</strong> may be enforced (see <%= link_to "Regulation A1a2",  regulations_path + "#A1a2", target: "_blank" %>).
+      <% cumulative_one_round = "<strong id='cumulative-time-limit'>#{t("competitions.schedule.time_limit_information.cumulative_time_limit")}</strong>" %>
+      <%= t("competitions.schedule.time_limit_information.cumulative_one_round_html",
+            cumulative_time_limit: raw(cumulative_one_round),
+            regulation_link: link_to(t("competitions.schedule.time_limit_information.regulation_link_text", number: "A1a2"), regulations_path + "#A1a2", target: "_blank")) %>
       <br/>
-      A <strong id="cumulative-across-rounds-time-limit">cumulative time limit</strong> may be enforced across rounds (see <%= link_to "Guideline A1a2++",  regulations_path + "/guidelines.html#A1a2++", target: "_blank" %>).
-      </dd>
+      <% cumulative_across_rounds = "<strong id='cumulative-across-rounds-time-limit'>#{t("competitions.schedule.time_limit_information.cumulative_time_limit")}</strong>" %>
+      <%= t("competitions.schedule.time_limit_information.cumulative_across_rounds_html",
+            cumulative_time_limit: raw(cumulative_across_rounds),
+            guideline_link: link_to(t("competitions.schedule.time_limit_information.guideline_link_text", number: "A1a2++"), regulations_path + "/guidelines.html#A1a2++", target: "_blank")) %>
+    </p>
 
-      <dt id="cutoff">Cutoff</dt>
-      <dd>The ranking or time to meet to proceed to the second phase of a combined round (see <%= link_to "Regulation 9g",  regulations_path + "#9g", target: "_blank" %>)</dd>
-    </dl>
+    <h4 id="cutoff"><%= t("competitions.schedule.cutoff") %></h4>
+    <p>
+      <%= t("competitions.schedule.time_limit_information.cutoff_html",
+            regulation_link: link_to(t("competitions.schedule.time_limit_information.regulation_link_text", number: "9g"), regulations_path + "#9g", target: "_blank")) %>
+    </p>
   </div>
 </div>
 <script>
-$(".toggle-room").click(function(e) {
-  e.preventDefault();
-  var $elem = $(this);
-  var $tab = $("#schedule-tab > .tab-pane.active");
-  var venueId = $tab.data("venue");
-  var roomId = $elem.data("room");
-  $(".room-" + roomId).toggle();
-  $calendar = $("#calendar-venue-" + venueId);
-  if ($elem.hasClass("room-enabled")) {
-    $elem.removeClass("room-enabled");
-  } else {
-    $elem.addClass("room-enabled");
-  }
-  $elem.blur();
-  if ($calendar.hasClass("initialized")) {
-    $calendar.fullCalendar("refetchEvents");
-  }
-});
+  function fetchCalendarEvents(venueId, start, end, timezone, callback) {
+    // We don't really care about timezone or start/end as we only have events for a specific competition and venue.
+    var venueData = dataByVenueId[venueId];
+    var allEvents = venueData.events;
+    var rooms = $("#room-list-" + venueId).find(".room-enabled");
+    var events = _.flatMap(rooms, function(room) {
+      let roomId = $(room).data("room");
+      return _.filter(allEvents, { roomId });
+    });
 
-function fetchCalendarEvents(venueId, start, end, timezone, callback) {
-  // We don't really care about timezone or start/end as we only have events for a specific competition and venue.
-  var venueData = dataByVenueId[venueId];
-  var allEvents = venueData.events;
-  var rooms = $("#room-list-" + venueId).find(".room-enabled");
-  var events = _.flatMap(rooms, function(room) {
-    let roomId = $(room).data("room");
-    return _.filter(allEvents, { roomId });
+    callback(events);
+  }
+
+  function initFullCalendar($elem, venueId) {
+    var venueData = dataByVenueId[venueId];
+    var options = {
+      events: _.partial(fetchCalendarEvents, venueId),
+      // TODO event render with tooltip with formats/time limit/cutoff/advancement
+      eventDataTransform: function(eventData) {
+        if (eventData.activityDetails.event_id.startsWith("other")) {
+          eventData.color = "#666";
+        }
+        return eventData;
+      },
+      defaultView: 'agendaForComp',
+      header: false,
+      allDaySlot: false,
+      locale: "<%= I18n.locale %>",
+      minTime: venueData.minTime,
+      maxTime: venueData.maxTime,
+      slotDuration: "00:30:00",
+      height: "auto",
+      defaultDate: "<%= competition.start_date %>",
+      views: {
+        agendaForComp: {
+          type: 'agenda',
+          duration: { days: <%= competition.number_of_days %> },
+          buttonText: 'Calendar',
+        },
+      },
+    }
+    $elem.fullCalendar(options);
+  }
+
+  // Setup click event on "calendar" links (one for each venue)
+  $(".schedule-calendar-link").click(function(e) {
+    e.preventDefault();
+    var venueId = $(this).data("venue");
+    var idSelector = "#schedule-venue-" + venueId;
+    $(idSelector + " .schedule_table_container").hide();
+    $(idSelector + " .schedule-table-link").removeClass("active");
+    $(idSelector + " .schedule_calendar_container").show();
+    $(idSelector + " .schedule-calendar-link").addClass("active");
+    $calendar = $("#calendar-venue-" + venueId);
+    if (!$calendar.hasClass("initialized")) {
+      $calendar.addClass("initialized");
+      initFullCalendar($calendar, venueId);
+    }
   });
 
-  callback(events);
-}
+  // Setup click event on "table" links (one for each venue)
+  $(".schedule-table-link").click(function(e) {
+    e.preventDefault();
+    var venueId = $(this).data("venue");
+    var idSelector = "#schedule-venue-" + venueId;
+    $(idSelector + " .schedule_calendar_container").hide();
+    $(idSelector + " .schedule-calendar-link").removeClass("active");
+    $(idSelector + " .schedule_table_container").show();
+    $(idSelector + " .schedule-table-link").addClass("active");
+  });
 
-function initFullCalendar($elem, venueId) {
-  var venueData = dataByVenueId[venueId];
-  var options = {
-    events: _.partial(fetchCalendarEvents, venueId),
-    defaultView: 'agendaForComp',
-    header: false,
-    allDaySlot: false,
-    locale: "<%= I18n.locale %>",
-    minTime: venueData.minTime,
-    maxTime: venueData.maxTime,
-    slotDuration: "00:30:00",
-    height: "auto",
-    defaultDate: "<%= competition.start_date %>",
-    // see: https://fullcalendar.io/docs/views/Custom_Views/
-    views: {
-      agendaForComp: {
-        type: 'agenda',
-        duration: { days: <%= competition.number_of_days %> },
-        buttonText: 'Calendar',
-      },
-    },
-  }
-  $elem.fullCalendar(options);
-}
+  // Setup action for enabling/disabling a room in a venue
+  // For the "table", we just need to hide the row matching ".room-roomId"
+  // For the "calendar", we need to refetch events
+  $(".toggle-room").click(function(e) {
+    e.preventDefault();
+    var $elem = $(this);
+    // Toggle the room line's status
+    if ($elem.hasClass("room-enabled")) {
+      $elem.removeClass("room-enabled");
+    } else {
+      $elem.addClass("room-enabled");
+    }
+    // Avoid focus on the line
+    $elem.blur();
 
-$(".schedule-calendar-link").click(function(e) {
-  e.preventDefault();
-  var $tab = $("#schedule-tab > .tab-pane.active");
-  var venueId = $tab.data("venue");
-  $tab.find(".schedule_table_container").hide();
-  $tab.find(".schedule-table-link").removeClass("active");
-  $tab.find(".schedule_calendar_container").show();
-  $tab.find(".schedule-calendar-link").addClass("active");
-  $calendar = $("#calendar-venue-" + venueId);
-  if (!$calendar.hasClass("initialized")) {
-    $calendar.addClass("initialized");
-    initFullCalendar($calendar, venueId);
-  }
-});
-$(".schedule-table-link").click(function(e) {
-  e.preventDefault();
-  var $tab = $("#schedule-tab > .tab-pane.active");
-  $tab.find(".schedule_calendar_container").hide();
-  $tab.find(".schedule-calendar-link").removeClass("active");
-  $tab.find(".schedule_table_container").show();
-  $tab.find(".schedule-table-link").addClass("active");
-});
+    var roomId = $elem.data("room");
+    var venueId = $elem.data("venue");
+
+    // Action for the "table"
+    $(".room-" + roomId).toggle();
+
+    // Action for the calendar
+    $calendar = $("#calendar-venue-" + venueId);
+    if ($calendar.hasClass("initialized")) {
+      $calendar.fullCalendar("refetchEvents");
+    }
+  });
+
 </script>

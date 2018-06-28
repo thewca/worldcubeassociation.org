@@ -112,4 +112,21 @@ module CompetitionsHelper
     }
     grouped_options_for_select(grouped_championship_types, selected)
   end
+
+  def first_and_last_time_from_activities(activities, timezone)
+    sorted_activities = activities.sort_by { |a| a.start_time.strftime("%H:%M") }
+    firstActivity = sorted_activities.first
+    firstTime = if firstActivity
+                  firstActivity.start_time.in_time_zone(timezone).strftime("%H:00:00")
+                else
+                  "08:00:00"
+                end
+    lastAtivity = sorted_activities.last
+    lastTime = if lastAtivity
+                 lastAtivity.end_time.in_time_zone(timezone).strftime("%H:59:00")
+               else
+                 "20:00:00"
+               end
+    [firstTime, lastTime]
+  end
 end

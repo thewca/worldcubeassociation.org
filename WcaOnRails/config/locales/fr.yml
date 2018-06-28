@@ -2113,6 +2113,22 @@ fr:
       #original_hash: 02ed4a4
       proceed: Qualifiés
     schedule:
+      display_as:
+        label: "Afficher le planning sous forme de :"
+        table: "Tableau"
+        calendar: "Calendrier"
+      display_for_room: "Afficher le planning pour la salle :"
+      time_limit_information:
+        time_limit_html: "Si vous atteignez la limite de temps pendant votre résolution, le juge vous stoperra et le résultat sera DNF (voir la %{regulation_link})."
+        #context: as used in "please see Regulation A1a4"
+        regulation_link_text: "Règle %{number}"
+        #context: as used in "please see Guideline A1a2++"
+        guideline_link_text: "Recommandation %{number}"
+        #context: used in the sentence "a cumulative time limit may be enforced [...]"
+        cumulative_time_limit: "limite de temps cumulative"
+        cumulative_one_round_html: "Une %{cumulative_time_limit} peut être imposée (voir la %{regulation_link})."
+        cumulative_across_rounds_html: "Une %{cumulative_time_limit} peut être imposée sur un ensemble de tours (voir la %{guideline_link})."
+        cutoff_html: "Le score à atteindre pour passer à la deuxième phase d'un tour combiné (voir la %{regulation_link})."
       start: "Début"
       end: "Fin"
       activity: "Activité"
