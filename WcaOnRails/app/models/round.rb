@@ -77,6 +77,12 @@ class Round < ApplicationRecord
     RoundType.c_find(round_type_id)
   end
 
+  def self.parse_wcif_id(wcif_id)
+    event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
+    round_number = round_number.to_i
+    { event_id: event_id, round_number: round_number }
+  end
+
   def final_round?
     number == total_number_of_rounds
   end

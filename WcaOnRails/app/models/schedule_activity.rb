@@ -112,9 +112,9 @@ class ScheduleActivity < ApplicationRecord
   end
 
   def self.parse_activity_code(activity_code)
-    parts = activity_code.split("-");
+    parts = activity_code.split("-")
     parts_hash = {
-      event_id: parts.shift(),
+      event_id: parts.shift,
       round_number: nil,
       group_number: nil,
       attempt_number: nil,
@@ -136,9 +136,9 @@ class ScheduleActivity < ApplicationRecord
   def self.localized_name_from_activity_code(activity_code, fallback_name)
     parts = ScheduleActivity.parse_activity_code(activity_code)
     if parts[:event_id] == "other"
-      # TODO: this
-      #VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc).freeze
-      name = fallback_name
+      # TODO/NOTE: should we fix the name for event with predefined activity codes? (ie: those below but 'misc' and 'unofficial')
+      # VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc).freeze
+      fallback_name
     else
       name = Event.c_find(parts[:event_id]).name
       if parts[:round_number]
@@ -147,7 +147,6 @@ class ScheduleActivity < ApplicationRecord
       if parts[:attempt_number]
         name += " #{I18n.t("attempts.attempt_name", number: parts[:attempt_number])}"
       end
-      # FIXME: do group number
       name
     end
   end

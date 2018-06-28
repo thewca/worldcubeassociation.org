@@ -6,18 +6,21 @@
     @extend .list-group-item-success;
   }
   .schedule-table-header {
+    margin-top: 30px;
     border-bottom: 3px solid #ddd;
   }
 
   .schedule-table {
+    margin-bottom: 60px;
     .row {
-      & > div {
+      border-bottom: 1px solid #ddd;
+      div {
         @media (min-width : 992px){
           padding: 8px;
         }
       }
       .schedule-event-icon {
-        .cubing-icon:before {
+        .cubing-icon::before {
           font-size: 40px;
         }
       }
@@ -25,12 +28,14 @@
         padding-top: 8px;
         padding-bottom: 8px;
         border-bottom-width: 3px;
-        .activity-end-time, .responsive-cell-content {
+        .activity-end-time,
+        .responsive-cell-content {
           text-align: right;
         }
       }
       @media (min-width : 768px) and (max-width : 992px) {
-        .activity-name, .room-name {
+        .activity-name,
+        .room-name {
           padding-top: 8px;
           padding-bottom: 8px;
         }
@@ -59,9 +64,7 @@
           padding-bottom: 8px;
         }
       }
-      border-bottom: 1px solid #ddd;
     }
-    margin-bottom: 60px;
   }
 }
 // Popover is added to body, can't nest this above
