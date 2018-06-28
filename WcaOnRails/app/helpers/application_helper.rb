@@ -87,7 +87,7 @@ module ApplicationHelper
   def time_format_for_current_locale
     case I18n.t("common.time_format")
     when "12h"
-      "%I:%m %p"
+      "%I:%M %p"
     else
       "%H:%M"
     end

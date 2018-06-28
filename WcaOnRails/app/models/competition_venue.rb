@@ -30,6 +30,10 @@ class CompetitionVenue < ApplicationRecord
     longitude_microdegrees / 1e6
   end
 
+  def all_activities
+    venue_rooms.map { |r| r.schedule_activities }.flatten.sort_by(&:start_time)
+  end
+
   def sorted_activities_for_date(date)
     venue_rooms.map { |r| r.activities_for_date(date) }.flatten.sort_by(&:start_time)
   end

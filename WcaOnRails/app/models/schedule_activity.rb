@@ -64,6 +64,19 @@ class ScheduleActivity < ApplicationRecord
     }
   end
 
+  def to_event
+    {
+      title: ScheduleActivity.localized_name_from_activity_code(activity_code, name),
+      roomId: holder.id,
+      roomName: holder.name,
+      activityCode: activity_code,
+      start: start_time.in_time_zone(holder.competition_venue.timezone_id).iso8601,
+      start_time: start_time.in_time_zone(holder.competition_venue.timezone_id),
+      end: end_time.in_time_zone(holder.competition_venue.timezone_id).iso8601,
+      end_time: end_time.in_time_zone(holder.competition_venue.timezone_id),
+    }
+  end
+
   def load_wcif!(wcif)
     update_attributes!(ScheduleActivity.wcif_to_attributes(wcif))
     new_child_activities = wcif["childActivities"].map do |activity_wcif|

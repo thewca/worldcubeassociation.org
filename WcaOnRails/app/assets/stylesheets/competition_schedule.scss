@@ -1,37 +1,74 @@
-.schedule-table-header {
-  border-bottom: 3px solid #ddd;
-}
-.schedule-table {
-  .row {
-    /*
-    &:nth-of-type(even) {
-      background-color: #dcdcdc;
-    }
-    &:nth-of-type(odd){
-      background-color: #aaa;
-    }
-     */
-    div {
+#schedule-tab {
+  .div.list-group {
+    margin-top: 10px;
+  }
+  .room-enabled {
+    @extend .list-group-item-success;
+  }
+  .schedule-table-header {
+    border-bottom: 3px solid #ddd;
+  }
+
+  .schedule-table {
+    .row {
+      /*
+      &:nth-of-type(even) {
+        background-color: #dcdcdc;
+      }
+      &:nth-of-type(odd){
+        background-color: #aaa;
+      }
+       */
+  & > div {
+    @media (min-width : 992px){
       padding: 8px;
     }
-    .activity-time {
-      @media (max-width : 992px){
-        font-weight: bold;
-      }
+  }
+  .schedule-event-icon {
+    .cubing-icon:before {
+      font-size: 40px;
     }
-    .activity-name {
-      @media (max-width : 992px){
-        font-weight: bold;
-      }
+  }
+  @media (max-width : 992px){
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom-width: 3px;
+    .activity-end-time, .responsive-cell-content {
+      text-align: right;
+    }
+  }
+  @media (min-width : 768px) and (max-width : 992px) {
+    .activity-name, .room-name {
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+    .responsive-cell-content {
+      padding-bottom: 5px;
     }
     .room-name {
-      @media (min-width : 768px) {
-        text-align: center;
-      }
-      @media (max-width : 992px) {
-        font-style: italic;
-      }
+      text-align: right;
     }
-    border-bottom: 1px solid #ddd;
   }
+  .bolded-xs-sm {
+    @media (max-width : 992px){
+      font-weight: bold;
+    }
+  }
+  .activity-name {
+    @media (max-width : 768px) {
+      text-align: center;
+      padding-top: 8px;
+    }
+  }
+  .room-name {
+    font-style: italic;
+    @media (max-width : 768px) {
+      text-align: center;
+      padding-bottom: 8px;
+    }
+  }
+  border-bottom: 1px solid #ddd;
+}
+margin-bottom: 60px;
+}
 }
