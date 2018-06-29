@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Map</title>
+  <%= javascript_include_tag 'application' %>
+  <%= stylesheet_pack_tag 'application' %>
+  <%= javascript_pack_tag 'application' %>
+  <style>
+    body {
+      margin: 0px;
+    }
+    #map {
+      /*
+        Same hardcoded value as in 'app/helpers/markdown_helper.rb'.
+        This avoids some bad rendering when the map is loaded with the tab content hidden.
+      */
+      width: 600px;
+      height: 450px;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+$(function() {
+  let query = "<%= @query %>";
+  let map = wca.createCompetitionsMapLeaflet("map");
+  wca.searchAndPlaceOnMap(map, query);
+});
+  </script>
+</body>

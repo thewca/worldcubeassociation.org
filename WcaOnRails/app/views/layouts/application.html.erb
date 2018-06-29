@@ -17,11 +17,6 @@
   <%= stylesheet_pack_tag 'application' %>
   <%= javascript_pack_tag 'application' %>
 
-  <% if content_for :include_gmaps %>
-    <script type="text/javascript" src='//maps.google.com/maps/api/js?libraries=places&callback=wca._onGoogleMapsLoaded&key=<%= ENVied.GOOGLE_MAPS_API_KEY %>'></script>
-    <%= javascript_include_tag 'oms' %>
-  <% end %>
-
   <% if content_for :include_markdown_editor %>
     <%= stylesheet_pack_tag 'markdown_editor' %>
     <%= javascript_pack_tag 'markdown_editor' %>

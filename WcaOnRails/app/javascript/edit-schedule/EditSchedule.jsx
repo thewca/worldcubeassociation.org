@@ -17,6 +17,7 @@ import { initElementsIds, newVenueId } from './utils'
 import { saveWcif } from 'wca/wcif-utils'
 
 export const schedulesEditPanelSelector = "#schedules-edit-panel";
+export const venuesEditPanelSelector = "#venues-edit-panel";
 
 export default class EditSchedule extends React.Component {
   componentWillMount() {
@@ -51,6 +52,11 @@ export default class EditSchedule extends React.Component {
   componentDidMount() {
     wca.datetimepicker();
     window.addEventListener("beforeunload", this.onUnload);
+    $(venuesEditPanelSelector).find('.panel-collapse').on('shown.bs.collapse', () => {
+      // Trigger this custom event so that venues' map are invalidated
+      // (necessary for leaflet maps)
+      $(window).trigger('venues-panel-shown');
+    });
   }
 
   componentWillUnmount() {
