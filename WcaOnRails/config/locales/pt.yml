@@ -697,6 +697,8 @@ pt:
           a página de registos do website da WCA.
       website_contact:
         #original_hash: da39a3e
+        inquiry: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -837,7 +839,9 @@ pt:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        results: ''
+        schedule_url: ''
+        #original_hash: da39a3e
+        results_file: ''
         #original_hash: da39a3e
         message: ''
     options:
@@ -858,6 +862,8 @@ pt:
   mail_form:
     attributes:
       contact_form:
+        #original_hash: d31ab65
+        inquiry: Qual das seguintes opções melhor descreve a sua questão?
         #original_hash: 709a232
         name: Nome
         #original_hash: 3fa6f5f
@@ -2070,11 +2076,19 @@ pt:
     website:
       #original_hash: ac2ac3d
       title: Formulário de contacto do Website da WCA
-      #original_hash: 9039572
-      description_html: >-
-        Use este formulário para questões sobre o site, comentários e sugestões
-        apenas. <a href="%{contact_path}">Outras questões</a> devem ser enviadas
-        para a equipa apropriada.
+      inquiries:
+        #original_hash: e1d277a
+        competition: Uma competição específica (por favor escolha)
+        #original_hash: f7d3f9f
+        competitions_in_general: 'Competições em geral (Organização, Regras para competições, etc.)'
+        #original_hash: f6ffa78
+        wca_id_or_profile: ID da WCA ou Perfil da WCA
+        #original_hash: 0c77aee
+        media: Média
+        #original_hash: 9ad0522
+        software: Software
+        #original_hash: 6e6a6f2
+        different: Outro
       #original_hash: c70a890
       submit: Enviar mensagem
     dob:
