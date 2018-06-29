@@ -714,6 +714,8 @@ pl:
           rejestracji, jeżeli używasz systemu rejestracji WCA.
       website_contact:
         #original_hash: da39a3e
+        inquiry: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -857,7 +859,9 @@ pl:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        results: ''
+        schedule_url: ''
+        #original_hash: da39a3e
+        results_file: ''
         #original_hash: da39a3e
         message: ''
     options:
@@ -878,6 +882,8 @@ pl:
   mail_form:
     attributes:
       contact_form:
+        #original_hash: d31ab65
+        inquiry: Które z poniższych najlepiej opisuje twoje pytanie?
         #original_hash: 709a232
         name: Imię
         #original_hash: 3fa6f5f
@@ -2138,11 +2144,19 @@ pl:
     website:
       #original_hash: ac2ac3d
       title: Formularz Kontaktowy Strony WCA
-      #original_hash: 9039572
-      description_html: >-
-        Używaj tego formularza wyłącznie w calu wysyłania pytań, komentarzy i
-        sugestii dotyczących strony. <a href="%{contact_path}">Inne
-        zapytania</a> powinny być kierowane do odpowiednich zespołów.
+      inquiries:
+        #original_hash: e1d277a
+        competition: Konkretne zawody (proszę wybrać)
+        #original_hash: f7d3f9f
+        competitions_in_general: 'Ogólne kwestie dotyczące zawodów (organizowanie, zasady, etc.)'
+        #original_hash: f6ffa78
+        wca_id_or_profile: WCA ID lub Profil WCA
+        #original_hash: 0c77aee
+        media: Media
+        #original_hash: 9ad0522
+        software: Oprogramowanie
+        #original_hash: 6e6a6f2
+        different: Inne
       #original_hash: c70a890
       submit: Wyślij wiadomość
     dob:
