@@ -32,16 +32,14 @@
 <% elsif @display == "map" %>
   <script>
     $(function() {
-      wca.addGoogleMapsLoadedListener(function() {
-        var competitions = <%= competitions_json_for_markers competitions %>;
-        /* This file may be rendered in response to an Ajax request in order to replace the existing competitions list.
-           We take this into account and prevent from creating the map twice. */
-        if(wca._competitionsIndexMap === undefined) {
-          wca._competitionsIndexMap = wca.createCompetitionsMap(document.getElementById('competitions-map'));
-        }
-        wca.removeMarkers(wca._competitionsIndexMap);
-        wca.addCompetitionsToMap(wca._competitionsIndexMap, competitions);
-      });
+      var competitions = <%= competitions_json_for_markers competitions %>;
+      /* This file may be rendered in response to an Ajax request in order to replace the existing competitions list.
+         We take this into account and prevent from creating the map twice. */
+      if(wca._competitionsIndexMap === undefined) {
+        wca._competitionsIndexMap = wca.createCompetitionsMapLeaflet('competitions-map');
+      }
+      wca.removeMapMarkersLeaflet(wca._competitionsIndexMap);
+      wca.addCompetitionsToMapLeaflet(wca._competitionsIndexMap, competitions);
     });
   </script>
 <% else %>

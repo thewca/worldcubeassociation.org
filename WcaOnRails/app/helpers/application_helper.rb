@@ -217,4 +217,8 @@ module ApplicationHelper
   def format_money(money)
     "#{humanized_money_with_symbol(money)} (#{money.currency.name})"
   end
+
+  def embedded_map_url(query)
+    "#{ENVied.ROOT_URL}/map?q=#{URI.encode_www_form_component(CGI.unescapeHTML(query))}"
+  end
 end

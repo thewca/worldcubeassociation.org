@@ -16,6 +16,7 @@ class CompetitionsController < ApplicationController
   before_action :authenticate_user!, except: [
     :index,
     :show,
+    :embedable_map,
     :show_podiums,
     :show_all_results,
     :show_results_by_person,
@@ -498,6 +499,12 @@ class CompetitionsController < ApplicationController
 
   def show_results_by_person
     @competition = competition_from_params
+  end
+
+  def embedable_map
+    # NOTE: by default rails has a SAMEORIGIN X-Frame-Options
+    @query = params.require(:q)
+    render layout: false
   end
 
   def update

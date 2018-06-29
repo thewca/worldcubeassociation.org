@@ -71,9 +71,13 @@ onPage('competitions#index', function() {
     $('#loading').hide();
 
     // Scroll to the top of the form if we are in map mode and screen width is greater than 800px
-    if($('#competitions-map').is(':visible') && $(window).innerWidth() > 800) {
-      var formTop = $('#competition-query-form').offset().top;
-      $('html, body').animate({ scrollTop: formTop - 5 }, 300);
+    if($('#competitions-map').is(':visible')) {
+      // Switching between list/map/admin hide the map element, Leaflet needs to recompute the size.
+      wca._competitionsIndexMap.invalidateSize();
+      if ($(window).innerWidth() > 800) {
+        var formTop = $('#competition-query-form').offset().top;
+        $('html, body').animate({ scrollTop: formTop - 5 }, 300);
+      }
     }
   });
 

@@ -4,14 +4,12 @@ import {
   convertVenueActivitiesToVenueTimezone,
   newRoomId,
   toMicrodegrees,
-  toDegrees,
 } from '../utils'
 import { defaultRoomColor } from './constants.js.erb'
 import { EditRoom } from './EditRoom'
-import { compose, withProps } from "recompose"
-import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import { Button, Panel, Row, Col } from 'react-bootstrap'
 import { timezoneData } from 'wca/timezoneData.js.erb'
+import { VenueLocationInput } from './VenueLocationInput.jsx.erb'
 
 export class EditVenue extends React.Component {
 
@@ -28,9 +26,9 @@ export class EditVenue extends React.Component {
   }
 
   handlePositionChange = event => {
-    let pos = event.latLng;
-    let newLat = toMicrodegrees(pos.lat());
-    let newLng = toMicrodegrees(pos.lng());
+    let pos = event.target._latlng;
+    let newLat = toMicrodegrees(pos.lat);
+    let newLng = toMicrodegrees(pos.lng);
     // Update parent's WCIF
     this.props.venueWcif.latitudeMicrodegrees = newLat;
     this.props.venueWcif.longitudeMicrodegrees = newLng;
@@ -64,7 +62,6 @@ export class EditVenue extends React.Component {
         rootRender();
       },
     };
-
     return (
       <div>
         <div className="panel-venue">
@@ -112,39 +109,6 @@ const NameInput = ({name, actionHandler}) => (
     </Col>
   </Row>
 );
-
-const VenueLocationInput = ({lat, lng, actionHandler}) => (
-  <Row>
-    <Col xs={12}>
-      <span className="venue-form-label control-label">Please pick the venue location below:</span>
-    </Col>
-    <Col xs={12}>
-      <MapPickerComponent latitudeMicrodegrees={lat}
-                          longitudeMicrodegrees={lng}
-                          onPositionChange={actionHandler} />
-    </Col>
-  </Row>
-);
-
-const MapPickerComponent = compose(
-  withProps({
-    containerElement: <div className="venue-map" />,
-    mapElement: <div style={{ height: `100%` }} />,
-  }),
-  withGoogleMap
-)((props) => {
-  let { latitudeMicrodegrees, longitudeMicrodegrees, onPositionChange } = props;
-  let [lat, lng] = [latitudeMicrodegrees, longitudeMicrodegrees].map(toDegrees);
-  return (
-    <GoogleMap
-      defaultZoom={12}
-      defaultCenter={{ lat, lng }}
-    >
-      <Marker position={{ lat, lng }} draggable={true} onDragEnd={onPositionChange} />
-    </GoogleMap>
-  );
-})
-
 
 const TimezoneInput = ({timezone, selectKeys, actionHandler}) => (
   <Row>

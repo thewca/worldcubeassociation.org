@@ -30,10 +30,9 @@ module MarkdownHelper
     end
 
     def postprocess(full_document)
-      # Support embed Google Maps
+      # Support embed Open Street Map
       full_document.gsub!(/map\(([^)]*)\)/) do
-        google_maps_url = "https://www.google.com/maps/embed/v1/place?key=#{ENVied.GOOGLE_MAPS_API_KEY}&q=#{URI.encode_www_form_component(CGI.unescapeHTML($1))}"
-        "<iframe width='600' height='450' frameborder='0' style='border:0' src=\"#{google_maps_url}\"></iframe>"
+        "<iframe width='600' height='450' style='overflow: hidden' frameborder='0' style='border:0' src=\"#{embedded_map_url($1)}\"></iframe>"
       end
 
       # Support embed YouTube videos
