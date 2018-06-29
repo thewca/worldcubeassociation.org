@@ -128,6 +128,9 @@ export class ActivityPicker extends React.Component {
     });
     $pickerElem.on('affix.bs.affix', computeAffixedPickerDimension);
     $pickerElem.on('affix-top.bs.affix', resetPanelDimension);
+    // The viewport can be resized when the ActivityPicker is not visible
+    // Therefore we need to compute its dimensions when the panel is made visible
+    $(schedulesEditPanelSelector).find('.panel-collapse').on('shown.bs.collapse', this.computeBasePickerDimension);
     $(window).scroll(this.adjustPickerDimension);
     $(window).resize(this.computeBasePickerDimension);
     $(window).keydown(keyboardHandlers.activityPicker);
