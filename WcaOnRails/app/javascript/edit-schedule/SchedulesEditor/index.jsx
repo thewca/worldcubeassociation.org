@@ -143,15 +143,23 @@ class EditScheduleForRoom extends React.Component {
   componentDidMount() {
     let { scheduleWcif, locale, selectedRoom } = this.props;
 
-    generateCalendar(this.eventFetcher, this.handleShowModal, scheduleWcif, locale);
+    let room = roomWcifFromId(scheduleWcif, selectedRoom);
+    let additionalOptions = {
+      locale: locale,
+      eventColor: room.color,
+    };
+
+    generateCalendar(this.eventFetcher, this.handleShowModal, scheduleWcif, additionalOptions);
     singleSelectLastEvent(this.props.scheduleWcif, selectedRoom);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    let { selectedRoom } = this.props;
+    let { scheduleWcif, selectedRoom } = this.props;
     if (prevProps.selectedRoom != selectedRoom) {
-      $(scheduleElementSelector).fullCalendar("refetchEvents")
-      singleSelectLastEvent(this.props.scheduleWcif, selectedRoom);
+      let room = roomWcifFromId(scheduleWcif, selectedRoom);
+      $(scheduleElementSelector).fullCalendar("refetchEvents");
+      $(scheduleElementSelector).fullCalendar("option", "eventColor", room.color);
+      singleSelectLastEvent(scheduleWcif, selectedRoom);
     }
   }
 

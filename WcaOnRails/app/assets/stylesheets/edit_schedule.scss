@@ -23,6 +23,12 @@
       .panel-body {
         .row {
           margin-bottom: 10px;
+          .room-row {
+            margin-bottom: 20px;
+            .room-color-cell {
+              padding-top: 5px;
+            }
+          }
         }
       }
     }

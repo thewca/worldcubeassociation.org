@@ -6,6 +6,7 @@ import {
   toMicrodegrees,
   toDegrees,
 } from '../utils'
+import { defaultRoomColor } from './constants.js.erb'
 import { EditRoom } from './EditRoom'
 import { compose, withProps } from "recompose"
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
@@ -195,6 +196,7 @@ function addRoomToVenue(venueWcif, competitionInfo) {
     id: newRoomId(),
     // Venue details is an optional field
     name: competitionInfo.venueDetails.length > 0 ? competitionInfo.venueDetails : "Room's name",
+    color: defaultRoomColor,
     activities: [],
   });
 }
