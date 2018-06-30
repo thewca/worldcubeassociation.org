@@ -135,6 +135,7 @@ RSpec.describe "Competition WCIF" do
                 {
                   "id" => 1,
                   "name" => "Room 1 for venue 1",
+                  "color" => VenueRoom::DEFAULT_ROOM_COLOR,
                   "activities" => [
                     {
                       "id" => 1,
@@ -192,11 +193,13 @@ RSpec.describe "Competition WCIF" do
                 {
                   "id" => 1,
                   "name" => "Room 1 for venue 2",
+                  "color" => VenueRoom::DEFAULT_ROOM_COLOR,
                   "activities" => [],
                 },
                 {
                   "id" => 2,
                   "name" => "Room 2 for venue 2",
+                  "color" => VenueRoom::DEFAULT_ROOM_COLOR,
                   "activities" => [],
                 },
               ],
@@ -602,6 +605,7 @@ RSpec.describe "Competition WCIF" do
         schedule_wcif["venues"][0]["rooms"] << {
           "id" => 44,
           "name" => "Hippolyte's backyard",
+          "color" => VenueRoom::DEFAULT_ROOM_COLOR,
           "activities" => [],
         }
         competition.set_wcif_schedule!(schedule_wcif, delegate)
