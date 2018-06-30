@@ -323,7 +323,7 @@ id:
         base_entry_fee_lowest_denomination: Biaya masuk dasar
         #original_hash: 28a6fbb
         currency_code: Kode mata uang
-        #original_hash: 5b2fe69
+        #original_hash: 2e3ed8b
         delegate_ids: Delegate WCA
         #original_hash: 958562e
         organizer_ids: Panitia
@@ -610,7 +610,7 @@ id:
           Informasi tentang batas kompetitor, biaya masuk untuk kompetitor dan
           penonton, dan detail lainnya yang mendukung orang-orang agar tertarik
           untuk berkompetisi atau menonton.
-        #original_hash: 0708400
+        #original_hash: b4d020f
         delegate_ids: Delegate WCA untuk kompetisi.
         #original_hash: 517d376
         organizer_ids: Panitia kompetisi (dibutuhkan akun panitia untuk ditulis di sini).
@@ -690,6 +690,8 @@ id:
           pendaftaran kompetisi jika Anda menggunakan situs web pendaftaran WCA.
       website_contact:
         #original_hash: da39a3e
+        inquiry: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -758,7 +760,7 @@ id:
           profesional dan aktif saat hari kompetisi berlangsung), dll. Harap
           ditulis secara ringkas dan jangan laporkan detail yang tidak ada
           kaitannya.
-        #original_hash: 715f020
+        #original_hash: d003c1f
         incidents: >-
           Laporkan insiden apapun yang menurut Anda layak untuk dilaporkan. Beri
           nomor urut pada insiden, dimulai dari 1., sehingga Delegate lain dapat
@@ -836,7 +838,9 @@ id:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        results: ''
+        schedule_url: ''
+        #original_hash: da39a3e
+        results_file: ''
         #original_hash: da39a3e
         message: ''
     options:
@@ -857,6 +861,8 @@ id:
   mail_form:
     attributes:
       contact_form:
+        #original_hash: d31ab65
+        inquiry: Manakah di bawah ini yang paling tepat menggambarkan pertanyaan Anda?
         #original_hash: 709a232
         name: Nama
         #original_hash: 3fa6f5f
@@ -1112,7 +1118,7 @@ id:
       pending_claim_confirmation_html: >-
         Akun ini menunggu %{delegate} untuk mengkonfirmasi ID WCA %{wca_id} yang
         diklaim.
-      #original_hash: fc7269a
+      #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
         Pengguna ini telah mengklaim ID WCA %{wca_id}. Delegate mereka
         %{delegate} akan diberitahu tentang permintaan ini secepatnya setelah
@@ -1131,7 +1137,7 @@ id:
       #original_hash: 29e25b5
       have_wca_id_html: 'ID WCA Anda adalah %{link_id}.'
       cannot_edit:
-        #original_hash: 8501c74
+        #original_hash: 13e8b80
         msg: >-
           Anda tidak dapat mengubah nama, tanggal lahir, jenis kelamin, atau
           negara Anda. Alasan: %{reason}. Kontak <a
@@ -1210,11 +1216,11 @@ id:
       unique: 'telah terpakai oleh "%{used_name}" dengan %{used_email}'
       #original_hash: 26f70ed
       dob_past: harus merupakan tanggal lampau
-      #original_hash: f599dc5
+      #original_hash: 012f032
       must_be_senior: harus Delegate Senior yang mengubahnya
       #original_hash: 2e582eb
       must_not_be_present: tidak boleh ada
-      #original_hash: b2c4ecc
+      #original_hash: 5b4eac9
       senior_has_delegate: tidak dapat menurunkan jabatan Delegate Senior oleh bawahannya
       #original_hash: 48653a9
       already_have_id: >-
@@ -1254,13 +1260,13 @@ id:
           Akun telah diperbarui, email telah terkirim ke %{email} untuk
           konfirmasi alamat email baru.
     select_nearby_delegate:
-      #original_hash: 2b11120
+      #original_hash: 407c4f8
       select_delegate_html: >-
         Untuk menghubungkan ID WCA Anda, kami membutuhkan seorang <a
         href='%{link_delegate}' target='_blank'>Delegate WCA</a> untuk
         memastikan identitas Anda. Masukkan tanggal lahir Anda dan pilih
         Delegate yang sangat dekat dengan Anda.
-      #original_hash: d69cf94
+      #original_hash: 2564ee3
       already_assigned_html: >-
         ID WCA %{link_id} telah terhubung dengan akun lain. Jika Anda yakin
         bahwa ini merupakan kesalahan, kontak <a href='%{link_delegate}'
@@ -1828,9 +1834,9 @@ id:
       cannot_delete_confirmed: Tidak dapat menghapus kompetisi yang telah disetujui.
       #original_hash: 191df37
       must_contain_event: harus memiliki minimal satu cabang untuk kompetisi ini
-      #original_hash: 112490b
+      #original_hash: 6e228b7
       must_contain_delegate: harus memiliki minimal satu Delegate WCA
-      #original_hash: 0b2b56b
+      #original_hash: 8131fc2
       not_all_delegates: tidak semua merupakan Delegate
       #original_hash: 43a23c2
       registration_close_after_open: Pendaftaran ditutup harus berada setelah pendaftaran dibuka
@@ -2071,11 +2077,19 @@ id:
     website:
       #original_hash: ac2ac3d
       title: Form Kontak Situs Web WCA
-      #original_hash: 9039572
-      description_html: >-
-        Gunakan formulir ini hanya untuk pertanyaan, komentar, atau saran
-        tentang situs web. <a href="%{contact_path}">Pertanyaan lainnya</a>
-        dapat dikirim ke pihak yang bersangkutan.
+      inquiries:
+        #original_hash: e1d277a
+        competition: Kompetisi tertentu (harap pilih)
+        #original_hash: f7d3f9f
+        competitions_in_general: 'Kompetisi secara umum (Kepanitiaan, Peraturan kompetisi, dsb.)'
+        #original_hash: f6ffa78
+        wca_id_or_profile: ID WCA atau Profil WCA
+        #original_hash: 0c77aee
+        media: Media
+        #original_hash: 9ad0522
+        software: Perangkat Lunak
+        #original_hash: 6e6a6f2
+        different: Lainnya
       #original_hash: c70a890
       submit: Kirim pesan
     dob:
@@ -2248,7 +2262,7 @@ id:
             Results Team (WRT) yang berkewajiban untuk mengunggah hasil
             kompetisi dan merawat basis data WCA. Pada akhirnya, WRT mengunggah
             hasil ke basis data WCA sesegera mungkin.
-          #original_hash: b6a68ab
+          #original_hash: daf1cb1
           '2': >-
             Tergantung besarnya kompetisi dan jadwal pribadi Delegate, semua hal
             ini dapat memakan waktu hanya sehari sampai seminggu. Harap
@@ -2470,7 +2484,7 @@ id:
     how_to:
       #original_hash: fc3af12
       title: Bagaimana untuk menjadi Organisasi Regional WCA
-      #original_hash: bdf57ff
+      #original_hash: cc1639d
       description: >-
         WCA mengenal bermacam organisasi regional di seluruh dunia. Tujuan dari
         organisasi regional WCA adalah untuk mengurus Kompetisi WCA dan
@@ -2906,7 +2920,7 @@ id:
     paragraph4:
       #original_hash: b6dca56
       title: Kebijakan kedekatan
-      #original_hash: bd8f1fe
+      #original_hash: f86bf95
       content1: >-
         Kompetisi WCA diterima jika berjarak 100 km atau 19 hari dari kompetisi
         lain. Board WCA harus meninjau ulang kompetisi yang diajukan jika ada
@@ -2965,7 +2979,7 @@ id:
     paragraph5:
       #original_hash: 17d01de
       title: Batas kompetitor
-      #original_hash: 18976be
+      #original_hash: ffcd75e
       content_html: >-
         Jumlah kompetitor mungkin dibatasi per cabang atau per kompetisi (lihat
         <a href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulasi
