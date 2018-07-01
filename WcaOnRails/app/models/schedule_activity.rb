@@ -19,7 +19,6 @@ class ScheduleActivity < ApplicationRecord
 
   def included_in_parent_schedule
     return unless errors.blank?
-
     unless start_time >= holder.start_time
       errors.add(:start_time, "should be after parent's start_time")
     end
@@ -53,6 +52,29 @@ class ScheduleActivity < ApplicationRecord
     end
   end
 
+  # Name can be specified externally, but we may want to infer the activity name
+  # from its activity code (eg: if it's for an event or round).
+  def localized_name
+    parts = ScheduleActivity.parse_activity_code(activity_code)
+    if parts[:event_id] == "other"
+      # TODO/NOTE: should we fix the name for event with predefined activity codes? (ie: those below but 'misc' and 'unofficial')
+      # VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc).freeze
+      name
+    else
+      inferred_name = Event.c_find(parts[:event_id]).name
+      if holder_type == "VenueRoom"
+        round = holder.competition.rounds.find { |r| r.wcif_id == "#{parts[:event_id]}-r#{parts[:round_number]}" }
+        if round
+          inferred_name = round.name
+        end
+        if parts[:attempt_number]
+          inferred_name += " (#{I18n.t("attempts.attempt_name", number: parts[:attempt_number])})"
+        end
+      end
+      inferred_name
+    end
+  end
+
   def to_wcif
     {
       "id" => wcif_id,
@@ -66,7 +88,7 @@ class ScheduleActivity < ApplicationRecord
 
   def to_event
     {
-      title: ScheduleActivity.localized_name_from_activity_code(activity_code, name),
+      title: localized_name,
       roomId: holder.id,
       roomName: holder.name,
       activityDetails: ScheduleActivity.parse_activity_code(activity_code),
@@ -131,23 +153,5 @@ class ScheduleActivity < ApplicationRecord
       end
     end
     parts_hash
-  end
-
-  def self.localized_name_from_activity_code(activity_code, fallback_name)
-    parts = ScheduleActivity.parse_activity_code(activity_code)
-    if parts[:event_id] == "other"
-      # TODO/NOTE: should we fix the name for event with predefined activity codes? (ie: those below but 'misc' and 'unofficial')
-      # VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc).freeze
-      fallback_name
-    else
-      name = Event.c_find(parts[:event_id]).name
-      if parts[:round_number]
-        name = I18n.t("round.name", event: name, number: parts[:round_number])
-      end
-      if parts[:attempt_number]
-        name += " #{I18n.t("attempts.attempt_name", number: parts[:attempt_number])}"
-      end
-      name
-    end
   end
 end

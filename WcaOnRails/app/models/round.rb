@@ -129,6 +129,7 @@ class Round < ApplicationRecord
   def to_string_map
     {
       wcif_id: wcif_id,
+      name: name,
       event_id: event.id,
       cumulative_round_ids: time_limit.cumulative_round_ids,
       format_name: format.name,

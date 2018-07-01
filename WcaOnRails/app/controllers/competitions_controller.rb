@@ -450,7 +450,7 @@ class CompetitionsController < ApplicationController
   def show
     associations = {
       competition_venues: {
-        venue_rooms: [:schedule_activities],
+        venue_rooms: [:schedule_activities, :competition],
       },
       # FIXME: this part is triggerred by the competition menu generator when generating the psychsheet event list, should we care?
       competition_events: {
@@ -464,8 +464,9 @@ class CompetitionsController < ApplicationController
           format: [],
         },
       },
+      # FIXME: weird associations, reword that
       rounds: {
-        competition_event: [],
+        competition: { rounds: [:competition_event] },
         format: [],
       },
     }
