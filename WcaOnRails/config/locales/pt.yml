@@ -2470,6 +2470,8 @@ pt:
     proximity_policy: Política de Proximidade de Competições da WCA
     #original_hash: f484584
     competition_name_policy: Política de Nomes de Competições da WCA
+    #original_hash: c7f7728
+    competition_announcement_policy: Política de Anúncio de Competições da WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
