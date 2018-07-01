@@ -54,7 +54,7 @@ class ScheduleActivity < ApplicationRecord
 
   # Name can be specified externally, but we may want to infer the activity name
   # from its activity code (eg: if it's for an event or round).
-  def localized_name
+  def localized_name(rounds_by_wcif_id = {})
     parts = ScheduleActivity.parse_activity_code(activity_code)
     if parts[:event_id] == "other"
       # TODO/NOTE: should we fix the name for event with predefined activity codes? (ie: those below but 'misc' and 'unofficial')
@@ -62,14 +62,12 @@ class ScheduleActivity < ApplicationRecord
       name
     else
       inferred_name = Event.c_find(parts[:event_id]).name
-      if holder_type == "VenueRoom"
-        round = holder.competition.rounds.find { |r| r.wcif_id == "#{parts[:event_id]}-r#{parts[:round_number]}" }
-        if round
-          inferred_name = round.name
-        end
-        if parts[:attempt_number]
-          inferred_name += " (#{I18n.t("attempts.attempt_name", number: parts[:attempt_number])})"
-        end
+      round = rounds_by_wcif_id["#{parts[:event_id]}-r#{parts[:round_number]}"]
+      if round
+        inferred_name = round[:name]
+      end
+      if parts[:attempt_number]
+        inferred_name += " (#{I18n.t("attempts.attempt_name", number: parts[:attempt_number])})"
       end
       inferred_name
     end
@@ -86,9 +84,10 @@ class ScheduleActivity < ApplicationRecord
     }
   end
 
-  def to_event
+  # TODO: not a fan of how it works (= passing round information)
+  def to_event(rounds_by_wcif_id = {})
     {
-      title: localized_name,
+      title: localized_name(rounds_by_wcif_id),
       roomId: holder.id,
       roomName: holder.name,
       activityDetails: ScheduleActivity.parse_activity_code(activity_code),

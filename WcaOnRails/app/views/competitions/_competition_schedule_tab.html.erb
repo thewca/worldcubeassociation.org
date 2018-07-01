@@ -14,7 +14,7 @@
     <%
       activities = venue.all_activities
       min_time, max_time = first_and_last_time_from_activities(activities, venue.timezone_id)
-      activities.map!(&:to_event)
+      activities.map!{ |a| a.to_event(rounds_by_wcif_id) }
     %>
     <script>
       dataByVenueId["<%= venue.id %>"] = {

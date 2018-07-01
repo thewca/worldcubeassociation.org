@@ -74,7 +74,7 @@ class Round < ApplicationRecord
   end
 
   def round_type
-    RoundType.c_find(round_type_id)
+    RoundType.c_find(roundTypeId)
   end
 
   def self.parse_wcif_id(wcif_id)
