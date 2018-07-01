@@ -41,8 +41,9 @@ class CompetitionEvent < ApplicationRecord
 
   def load_wcif!(wcif)
     self.rounds.destroy_all!
+    total_rounds = wcif["rounds"].size
     wcif["rounds"].each_with_index do |wcif_round, index|
-      self.rounds.create!(Round.wcif_to_round_attributes(wcif_round, index+1))
+      self.rounds.create!(Round.wcif_to_round_attributes(wcif_round, index+1, total_rounds))
     end
   end
 

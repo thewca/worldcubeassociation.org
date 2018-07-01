@@ -11,5 +11,6 @@ FactoryBot.define do
     format { Format.c_find(format_id) }
     competition_event { competition.competition_events.find_by_event_id!(event_id) }
     number 1
+    total_number_of_rounds 1
   end
 end

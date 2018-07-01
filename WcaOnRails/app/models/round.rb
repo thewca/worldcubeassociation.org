@@ -40,6 +40,24 @@ class Round < ApplicationRecord
     Event.c_find(competition_event.event_id)
   end
 
+  # Compute a round type id from round information
+  def round_type_id
+    if number == total_number_of_rounds
+      cutoff ? "c" : "f"
+    elsif number == 1
+      cutoff ? "d" : "1"
+    elsif number == 2
+      cutoff ? "e" : "2"
+    else
+      # Combined third round/Semi Final
+      cutoff ? "g" : "3"
+    end
+  end
+
+  def round_type
+    RoundType.c_find(round_type_id)
+  end
+
   def final_round?
     competition_event.rounds.last == self
   end
@@ -72,9 +90,10 @@ class Round < ApplicationRecord
     advancement_condition ? advancement_condition.to_s(self) : ""
   end
 
-  def self.wcif_to_round_attributes(wcif, round_number)
+  def self.wcif_to_round_attributes(wcif, round_number, total_rounds)
     {
       number: round_number,
+      total_number_of_rounds: total_rounds,
       format_id: wcif["format"],
       time_limit: TimeLimit.load(wcif["timeLimit"]),
       cutoff: Cutoff.load(wcif["cutoff"]),
