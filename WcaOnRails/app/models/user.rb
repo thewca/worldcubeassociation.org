@@ -436,7 +436,7 @@ class User < ApplicationRecord
   end
 
   def can_admin_results?
-    admin? || board_member? || results_team? || quality_assurance_committee?
+    admin? || board_member? || results_team?
   end
 
   # Returns true if the user can perform every action for teams.
@@ -458,19 +458,25 @@ class User < ApplicationRecord
   end
 
   def can_create_posts?
-    admin? || board_member? || results_team? || wdc_team? || wrc_team? || communication_team?
+    admin? || board_member? || results_team? || wdc_team? || wrc_team? || communication_team? || can_announce_competitions?
   end
 
   def can_update_crash_course?
     admin? || board_member? || results_team? || quality_assurance_committee?
   end
 
+  def can_admin_competitions?
+    can_admin_results? || quality_assurance_committee?
+  end
+
+  alias_method :can_announce_competitions?, :can_admin_competitions?
+
   def can_manage_competition?(competition)
-    can_admin_results? || competition.organizers.include?(self) || competition.delegates.include?(self) || wrc_team? || competition.delegates.map(&:senior_delegate).compact.include?(self)
+    can_admin_competitions? || competition.organizers.include?(self) || competition.delegates.include?(self) || wrc_team? || competition.delegates.map(&:senior_delegate).compact.include?(self)
   end
 
   def can_view_hidden_competitions?
-    can_admin_results? || self.any_kind_of_delegate?
+    can_admin_competitions? || self.any_kind_of_delegate?
   end
 
   def can_edit_registration?(registration)
@@ -485,7 +491,7 @@ class User < ApplicationRecord
   end
 
   def can_add_and_remove_events?(competition)
-    can_admin_results? || (can_manage_competition?(competition) && !competition.isConfirmed?)
+    can_admin_competitions? || (can_manage_competition?(competition) && !competition.isConfirmed?)
   end
 
   def can_submit_competition_results?(competition)
