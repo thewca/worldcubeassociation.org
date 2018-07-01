@@ -105,10 +105,10 @@
   function popoverContentFromData(eventData) {
     let roundId = `${eventData.activityDetails.event_id}-r${eventData.activityDetails.round_number}`;
     let roundData = roundsByWcifId[roundId];
+    let content = `<div class="row"><div class="col-xs-12 room-name">${eventData.roomName}</div></div>`;
     if (!roundData) {
       return null;
     }
-    let content = "";
     // If we have round data, format and time limit are mandatory
     content += `<div class="row"><div class="col-xs-4"><%= t("competitions.schedule.format") %></div><div class="col-xs-8"><strong>${roundData.format_name}</strong></div></div>`;
     let time_limit_text = roundData.time_limit;

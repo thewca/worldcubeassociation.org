@@ -70,6 +70,9 @@
 // Popover is added to body, can't nest this above
 .round-info-popover {
   .row {
+    .room-name {
+      font-style: italic;
+    }
     padding-top: 5px;
     padding-bottom: 5px;
   }
