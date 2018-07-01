@@ -11,10 +11,12 @@ class CompetitionsController < ApplicationController
     :show_all_results,
     :show_results_by_person,
   ]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
+  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
     :post_announcement,
-    :post_results,
     :admin_edit,
+  ]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
+    :post_results,
   ]
 
   private def competition_from_params(includes: nil)
@@ -423,7 +425,7 @@ class CompetitionsController < ApplicationController
   def nearby_competitions
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
+    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @nearby_competitions = get_nearby_competitions(@competition)
     render partial: 'nearby_competitions'
   end
@@ -431,7 +433,7 @@ class CompetitionsController < ApplicationController
   def time_until_competition
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
+    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     render json: {
       has_date_errors: @competition.has_date_errors?,
       html: render_to_string(partial: 'time_until_competition'),
@@ -456,7 +458,7 @@ class CompetitionsController < ApplicationController
 
   def update
     @competition = competition_from_params
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
+    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @competition_organizer_view = !@competition_admin_view
 
     comp_params_minus_id = competition_params
@@ -530,7 +532,7 @@ class CompetitionsController < ApplicationController
       ]
     end
 
-    if @competition&.isConfirmed? && !current_user.can_admin_results?
+    if @competition&.isConfirmed? && !current_user.can_admin_competitions?
       # If the competition is confirmed, non admins are not allowed to change anything.
     else
       permitted_competition_params += [
@@ -560,7 +562,7 @@ class CompetitionsController < ApplicationController
         competition_events_attributes: [:id, :event_id, :_destroy],
         championships_attributes: [:id, :championship_type, :_destroy],
       ]
-      if current_user.can_admin_results?
+      if current_user.can_admin_competitions?
         permitted_competition_params += [
           :isConfirmed,
           :showAtAll,
