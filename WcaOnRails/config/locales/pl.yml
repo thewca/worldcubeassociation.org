@@ -2534,6 +2534,8 @@ pl:
     proximity_policy: Polityka Odległości Zawodów WCA
     #original_hash: f484584
     competition_name_policy: Polityka Nazw Zawodów WCA
+    #original_hash: c7f7728
+    competition_announcement_policy: Polityka Ogłaszania Zawodów WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegaci WCA
