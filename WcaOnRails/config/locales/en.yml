@@ -1310,6 +1310,7 @@ en:
     logo: "WCA Logo Usage"
     proximity_policy: "WCA Competition Proximity Policy"
     competition_name_policy: "WCA Competition Name Policy"
+    competition_announcement_policy: "WCA Competition Announcement Policy"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
