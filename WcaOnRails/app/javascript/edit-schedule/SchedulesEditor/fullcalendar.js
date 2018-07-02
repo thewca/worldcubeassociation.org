@@ -59,12 +59,11 @@ const fullCalendarHandlers = {
     // Add the event to the calendar (and to the WCIF schedule, but don't
     // render it as it's already done)
     addActivityToCalendar(fcEventToActivity(event), false);
-    if (singleSelectEvent(event)) {
-      $(scheduleElementSelector).fullCalendar("updateEvent", event);
-    }
+    singleSelectEvent(event);
   },
   onDragStart: event => {
-    singleSelectEvent(event);
+    // Visually remove any selected event
+    $(".selected-fc-event").removeClass("selected-fc-event");
     $(contextualMenuSelector).addClass("hide-element");
     $(window).on("mousemove", dropAreaMouseMoveHandler);
   },
@@ -77,7 +76,7 @@ const fullCalendarHandlers = {
     }
     if (!removed) {
       // Drag stop outside the drop area makes the event render without the selected-fc-event class
-      $(scheduleElementSelector).fullCalendar("updateEvent", event);
+      singleSelectEvent(event);
     }
   },
   onMoved: eventModifiedInCalendar,
@@ -98,18 +97,15 @@ const fullCalendarHandlers = {
     } else {
       $menu.addClass("hide-element");
     }
-    if (singleSelectEvent(event)) {
-      $(scheduleElementSelector).fullCalendar("updateEvent", event);
-    }
+    singleSelectEvent(event);
   },
   onResizeStart: event => {
-    singleSelectEvent(event);
-    // We can't rerender or update here, otherwise FC internal state gets messed up
-    // So we do a trick: an fc-event able to be resized receive the class 'fc-allow-mouse-resize'
-    $(".fc-allow-mouse-resize").addClass("selected-fc-event");
+    // Visually remove any selected event
+    $(".selected-fc-event").removeClass("selected-fc-event");
     $(contextualMenuSelector).addClass("hide-element");
   },
-  onResizeStop: event => $(scheduleElementSelector).fullCalendar("updateEvent", event),
+  // Now that resizing is done, it's safe to actually update FC's internals
+  onResizeStop: event => singleSelectEvent(event),
   onSizeChanged: eventModifiedInCalendar,
   onTimeframeSelected: (showModalAction, start, end) => {
     let eventProps = {

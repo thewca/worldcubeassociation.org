@@ -147,7 +147,5 @@ function trySetSelectedEvent(direction) {
     const newDayIndex = allDays.indexOf(daySelected) + (direction === "left" ? -1 : 1);
     currentEventSelected = allGroupedEvents[_.nth(allDays, newDayIndex % allDays.length)][0];
   }
-  if (singleSelectEvent(currentEventSelected)) {
-    $(scheduleElementSelector).fullCalendar("updateEvent", currentEventSelected)
-  }
+  singleSelectEvent(currentEventSelected);
 }
