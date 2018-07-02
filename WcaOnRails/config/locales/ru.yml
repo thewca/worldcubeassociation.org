@@ -710,6 +710,8 @@ ru:
           регистрации.
       website_contact:
         #original_hash: da39a3e
+        inquiry: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -847,7 +849,9 @@ ru:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        results: ''
+        schedule_url: ''
+        #original_hash: da39a3e
+        results_file: ''
         #original_hash: da39a3e
         message: ''
     options:
@@ -868,6 +872,8 @@ ru:
   mail_form:
     attributes:
       contact_form:
+        #original_hash: d31ab65
+        inquiry: К какой категории относится ваш запрос?
         #original_hash: 709a232
         name: Имя
         #original_hash: 3fa6f5f
@@ -2095,12 +2101,19 @@ ru:
     website:
       #original_hash: ac2ac3d
       title: Контактная форма WCA
-      #original_hash: 9039572
-      description_html: >-
-        Используйте эту форму только для вопросов, комментариев и предложений
-        <b>по сайту</b>. По остальным вопросам  <a
-        href="%{contact_path}">обращайтесь</a> к соответствующему комитету или
-        группе.
+      inquiries:
+        #original_hash: e1d277a
+        competition: 'Конкретное соревнование (пожалуйста, укажите, какое)'
+        #original_hash: f7d3f9f
+        competitions_in_general: 'Соревнования вообще (организация, правила и т.д.)'
+        #original_hash: f6ffa78
+        wca_id_or_profile: WCA ID или WCA профиль
+        #original_hash: 0c77aee
+        media: Медиа
+        #original_hash: 9ad0522
+        software: Программное обеспечение
+        #original_hash: 6e6a6f2
+        different: Другое
       #original_hash: c70a890
       submit: Отправить сообщение
     dob:
@@ -2462,6 +2475,8 @@ ru:
     proximity_policy: Политика близких соревнований
     #original_hash: f484584
     competition_name_policy: Политика названий соревнований
+    #original_hash: c7f7728
+    competition_announcement_policy: Политика объявлений соревнований
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Делегаты
