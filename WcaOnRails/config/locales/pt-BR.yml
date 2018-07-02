@@ -700,6 +700,8 @@ pt-BR:
           de inscrição da WCA.
       website_contact:
         #original_hash: da39a3e
+        inquiry: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -840,7 +842,9 @@ pt-BR:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        results: ''
+        schedule_url: ''
+        #original_hash: da39a3e
+        results_file: ''
         #original_hash: da39a3e
         message: ''
     options:
@@ -861,6 +865,8 @@ pt-BR:
   mail_form:
     attributes:
       contact_form:
+        #original_hash: d31ab65
+        inquiry: Qual destas melhor define seu pedido?
         #original_hash: 709a232
         name: Nome
         #original_hash: 3fa6f5f
@@ -2073,11 +2079,19 @@ pt-BR:
     website:
       #original_hash: ac2ac3d
       title: Formulário de Contato do Website da WCA
-      #original_hash: 9039572
-      description_html: >-
-        Use este formulário somente para questões sobre o website, comentários e
-        sugestões. <a href="%{contact_path}">Outras solicitações</a> devem ser
-        enviadas às pessoas apropriadas.
+      inquiries:
+        #original_hash: e1d277a
+        competition: Uma competição específica (por favor selecione)
+        #original_hash: f7d3f9f
+        competitions_in_general: 'Competições em geral (Organização, Regras, etc.)'
+        #original_hash: f6ffa78
+        wca_id_or_profile: ID da WCA ou Perfil da WCA
+        #original_hash: 0c77aee
+        media: Mídia
+        #original_hash: 9ad0522
+        software: Software
+        #original_hash: 6e6a6f2
+        different: Outro
       #original_hash: c70a890
       submit: Enviar mensagem
     dob:
@@ -2454,6 +2468,8 @@ pt-BR:
     proximity_policy: Política sobre proximidade entre competições
     #original_hash: f484584
     competition_name_policy: Política de nomes de competições
+    #original_hash: c7f7728
+    competition_announcement_policy: Política de anúncio de competições
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
