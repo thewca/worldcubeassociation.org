@@ -1167,7 +1167,7 @@ CREATE TABLE `venue_rooms` (
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `color` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT '#304a96',
+  `color` varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_venue_rooms_on_competition_venue_id_and_wcif_id` (`competition_venue_id`,`wcif_id`),
   KEY `index_venue_rooms_on_competition_venue_id` (`competition_venue_id`)

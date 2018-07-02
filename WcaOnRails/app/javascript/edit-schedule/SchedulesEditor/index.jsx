@@ -25,6 +25,7 @@ import { DropArea } from './DropArea'
 import { ContextualMenu, contextualMenuSelector } from './ContextualMenu.jsx'
 import { scheduleElementSelector, generateCalendar } from './fullcalendar'
 import { timezoneData, friendlyTimezoneName } from 'wca/timezoneData.js.erb'
+import { schedulesEditPanelSelector } from '../EditSchedule.jsx'
 
 export class SchedulesEditor extends React.Component {
   constructor(props) {
@@ -38,12 +39,20 @@ export class SchedulesEditor extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // We cannot handle well changes (such as room color) when fullCalendar's element is hidden.
+    // So we unselect the room when our panel becomes hidden, to avoid running into any visual bug.
+    $(schedulesEditPanelSelector).find('.panel-collapse').on('hidden.bs.collapse', this.resetSelectedRoom);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (!roomWcifFromId(nextProps.scheduleWcif, this.state.selectedRoom)) {
       this.setState({ selectedRoom: "" });
     }
     this.setState({ usedActivityCodeList: activityCodeListFromWcif(nextProps.scheduleWcif) });
   }
+
+  resetSelectedRoom = () => this.setState({ selectedRoom: "" });
 
   handleToggleKeyboardEnabled = () => {
     this.setState({ keyboardEnabled: !this.state.keyboardEnabled });
