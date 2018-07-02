@@ -77,7 +77,7 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     ansi (1.5.0)
-    api-pagination (4.7.1)
+    api-pagination (4.8.1)
     arel (9.0.0)
     ast (2.4.0)
     autoprefixer-rails (7.1.3)
