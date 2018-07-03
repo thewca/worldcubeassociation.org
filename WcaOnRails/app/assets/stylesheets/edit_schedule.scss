@@ -101,6 +101,8 @@
           background-color: transparent;
         }
 
+        // Events get added to 'fc-helper-container' when they are dragged/resized,
+        // so we need to consider any event there as selected.
         .fc-helper-container > .fc-event,
         .fc-event.selected-fc-event {
           border: 2px solid $selected-activity-border-color;

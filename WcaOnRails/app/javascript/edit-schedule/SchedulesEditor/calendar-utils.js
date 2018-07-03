@@ -194,23 +194,27 @@ export function selectedEventInCalendar() {
   return matching.length > 0 ? matching[0] : null;
 }
 
+// DO NOT call this when resizing/dragging!!!
+// When resizing/dragging, FC add the event to a 'fc-helper-container', which
+// has the css to be displayed as the selected event.
+// Instead you'd rather want to:
+//   - visually remove any selected event when resizing/dragging starts (see onDragStart@fullcalendar.js)
+//   - actually update FC's internal states when resizing/dragging is over, as
+//   it is safe to call this function then.
 export function singleSelectEvent(event) {
   // return if the event has been already selected
   if (event.selected) {
-    return false;
+    return;
   }
   let events = $(scheduleElementSelector).fullCalendar("clientEvents");
   events.forEach((elem) => {
     if (elem.selected && (event.id != elem.id)) {
       elem.selected = false;
-      // this function might be called while dragging/resizing,
-      // so we'd better remove the class ourselves instead of calling updateEvent!
-      $(".selected-fc-event").removeClass("selected-fc-event");
+      $(scheduleElementSelector).fullCalendar("updateEvent", elem);
     }
   });
   event.selected = true;
-  // We don't render again the element: on dragging/resizing it will be rerendered, else the caller will take care of the update.
-  return true;
+  $(scheduleElementSelector).fullCalendar("updateEvent", event);
 }
 
 export function singleSelectLastEvent(scheduleWcif, selectedRoom) {
@@ -219,9 +223,7 @@ export function singleSelectLastEvent(scheduleWcif, selectedRoom) {
     if (room.activities.length > 0) {
       let lastActivity = _.last(room.activities);
       let fcEvent = $(scheduleElementSelector).fullCalendar("clientEvents", lastActivity.id)[0];
-      if (singleSelectEvent(fcEvent)) {
-        $(scheduleElementSelector).fullCalendar("updateEvent", fcEvent);
-      }
+      singleSelectEvent(fcEvent);
     }
   }
 }
