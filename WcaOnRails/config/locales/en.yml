@@ -453,6 +453,7 @@ en:
         status: ""
       team:
         friendly_id: ""
+        hidden: ""
       vote:
         comment: ""
       competition_medium:
