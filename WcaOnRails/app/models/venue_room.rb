@@ -12,7 +12,7 @@ class VenueRoom < ApplicationRecord
   validates :color, format: { with: /\A#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\z/, message: "Please input a valid hexadecimal color code" }
 
   before_validation do
-    self.color = DEFAULT_ROOM_COLOR if self.color.blank?
+    self.color ||= DEFAULT_ROOM_COLOR
   end
 
   validates_presence_of :name
