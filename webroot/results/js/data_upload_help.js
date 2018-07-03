@@ -62,4 +62,8 @@ $(document).ready(function() {
   selectize_competition_field("#form-element-competitionId");
   get_comp_info(0);
   $('#form-element-competitionId').change(get_comp_info);
+  // Prevent multiple form submissions.
+  $('#results-submission').on('submit', function() {
+    $('#form-element-submit').hide();
+  });
 });
