@@ -13,7 +13,7 @@ import {
   removeEventFromCalendar,
   singleSelectEvent,
 } from './calendar-utils'
-import { defaultDurationFromActivityCode } from '../utils'
+import { newActivityId, defaultDurationFromActivityCode } from '../utils'
 
 export const scheduleElementSelector = "#schedule-calendar";
 
@@ -56,6 +56,12 @@ const fullCalendarHandlers = {
     let newEnd = event.start.clone();
     newEnd.add(defaultDurationFromActivityCode(event.activityCode), "m");
     event.end = newEnd;
+    // We need to modify the original 'event' referenced here, so we won't
+    // use 'dataToFcEvent'.
+    // Set event title
+    event.title = event.name;
+    // Generate a new id
+    event.id = newActivityId();
     // Add the event to the calendar (and to the WCIF schedule, but don't
     // render it as it's already done)
     addActivityToCalendar(fcEventToActivity(event), false);
