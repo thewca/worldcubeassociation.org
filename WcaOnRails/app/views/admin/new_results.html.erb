@@ -1,0 +1,55 @@
+<% provide(:title, "Upload results") %>
+<%= render layout: 'competitions/nav' do %>
+  <h1><%= yield(:title) %></h1>
+  Import the results JSON for this competition.
+  The server will check for any error compared to the declared rounds, cutoff, and time limit
+
+  <%= simple_form_for @results_submission, url: competition_upload_results_path  do |f| %>
+    <%= f.input :results_file, as: :file, input_html: { accept: 'application/json' } %>
+    <%= f.submit "Submit the competition's JSON", class: "btn btn-primary" %>
+  <% end %>
+
+  <% unless @total_errors == 0 %>
+    <%= @all_errors %>
+    <br/>
+    <% if @all_errors[:competition].any? %>
+      <ul>
+        <% @all_errors[:competition].each do |err| %>
+          <li><%= err %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <% if @all_errors[:persons].any? %>
+      These persons:
+      <ul>
+        <% @all_errors[:persons].each do |err| %>
+          <li><%= err %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <% if @all_errors[:events].any? %>
+      These events:
+      <ul>
+        <% @all_errors[:events].each do |err| %>
+          <li><%= err %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <% if @all_errors[:rounds].any? %>
+      These rounds:
+      <ul>
+        <% @all_errors[:rounds].each do |err| %>
+          <li><%= err %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <% if @all_errors[:results].any? %>
+      These rounds:
+      <ul>
+        <% @all_errors[:results].each do |err| %>
+          <li><%= err %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+<% end %>
