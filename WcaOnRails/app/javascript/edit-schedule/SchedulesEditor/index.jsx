@@ -25,6 +25,7 @@ import { DropArea } from './DropArea'
 import { ContextualMenu, contextualMenuSelector } from './ContextualMenu.jsx'
 import { scheduleElementSelector, generateCalendar } from './fullcalendar'
 import { timezoneData, friendlyTimezoneName } from 'wca/timezoneData.js.erb'
+import { schedulesEditPanelSelector } from '../EditSchedule.jsx'
 
 export class SchedulesEditor extends React.Component {
   constructor(props) {
@@ -38,12 +39,20 @@ export class SchedulesEditor extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // We cannot handle well changes (such as room color) when fullCalendar's element is hidden.
+    // So we unselect the room when our panel becomes hidden, to avoid running into any visual bug.
+    $(schedulesEditPanelSelector).find('.panel-collapse').on('hidden.bs.collapse', this.resetSelectedRoom);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (!roomWcifFromId(nextProps.scheduleWcif, this.state.selectedRoom)) {
       this.setState({ selectedRoom: "" });
     }
     this.setState({ usedActivityCodeList: activityCodeListFromWcif(nextProps.scheduleWcif) });
   }
+
+  resetSelectedRoom = () => this.setState({ selectedRoom: "" });
 
   handleToggleKeyboardEnabled = () => {
     this.setState({ keyboardEnabled: !this.state.keyboardEnabled });
@@ -143,15 +152,23 @@ class EditScheduleForRoom extends React.Component {
   componentDidMount() {
     let { scheduleWcif, locale, selectedRoom } = this.props;
 
-    generateCalendar(this.eventFetcher, this.handleShowModal, scheduleWcif, locale);
+    let room = roomWcifFromId(scheduleWcif, selectedRoom);
+    let additionalOptions = {
+      locale: locale,
+      eventColor: room.color,
+    };
+
+    generateCalendar(this.eventFetcher, this.handleShowModal, scheduleWcif, additionalOptions);
     singleSelectLastEvent(this.props.scheduleWcif, selectedRoom);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    let { selectedRoom } = this.props;
+    let { scheduleWcif, selectedRoom } = this.props;
     if (prevProps.selectedRoom != selectedRoom) {
-      $(scheduleElementSelector).fullCalendar("refetchEvents")
-      singleSelectLastEvent(this.props.scheduleWcif, selectedRoom);
+      let room = roomWcifFromId(scheduleWcif, selectedRoom);
+      $(scheduleElementSelector).fullCalendar("refetchEvents");
+      $(scheduleElementSelector).fullCalendar("option", "eventColor", room.color);
+      singleSelectLastEvent(scheduleWcif, selectedRoom);
     }
   }
 

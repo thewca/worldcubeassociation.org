@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
 class VenueRoom < ApplicationRecord
+  # WCA's blue
+  DEFAULT_ROOM_COLOR = "#304a96"
   belongs_to :competition_venue
   has_one :competition, through: :competition_venue
   delegate :start_time, to: :competition
   delegate :end_time, to: :competition
   has_many :schedule_activities, as: :holder, dependent: :destroy
+
+  validates :color, format: { with: /\A#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\z/, message: "Please input a valid hexadecimal color code" }
+
+  before_validation do
+    self.color ||= DEFAULT_ROOM_COLOR
+  end
 
   validates_presence_of :name
   validates_numericality_of :wcif_id, only_integer: true
@@ -14,6 +22,7 @@ class VenueRoom < ApplicationRecord
     {
       "id" => wcif_id,
       "name" => name,
+      "color" => color,
       "activities" => schedule_activities.map(&:to_wcif),
     }
   end
@@ -24,6 +33,7 @@ class VenueRoom < ApplicationRecord
       "properties" => {
         "id" => { "type" => "integer" },
         "name" => { "type" => "string" },
+        "color" => { "type" => "string" },
         "activities" => { "type" => "array", "items" => ScheduleActivity.wcif_json_schema },
       },
       "required" => ["id", "name", "activities"],
@@ -44,6 +54,7 @@ class VenueRoom < ApplicationRecord
     {
       wcif_id: wcif["id"],
       name: wcif["name"],
+      color: wcif["color"],
     }
   end
 end

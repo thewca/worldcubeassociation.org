@@ -374,6 +374,7 @@ module DatabaseDumper
           competition_venue_id
           wcif_id
           name
+          color
           created_at
           updated_at
         ),

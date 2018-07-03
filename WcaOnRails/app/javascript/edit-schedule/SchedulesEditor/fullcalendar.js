@@ -17,11 +17,11 @@ import { newActivityId, defaultDurationFromActivityCode } from '../utils'
 
 export const scheduleElementSelector = "#schedule-calendar";
 
-export function generateCalendar(eventFetcher, showModalAction, scheduleWcif, locale) {
+export function generateCalendar(eventFetcher, showModalAction, scheduleWcif, additionalOptions) {
   let options = fullCalendarDefaultOptions(scheduleWcif.startDate, scheduleWcif.numberOfDays);
+  _.assign(options, additionalOptions);
 
   let localOptions = {
-    locale: locale,
     // Having only one view for edition enable us to have a "static" list of event
     // If we had more, we would need a function to fetch them everytime
     events: eventFetcher,

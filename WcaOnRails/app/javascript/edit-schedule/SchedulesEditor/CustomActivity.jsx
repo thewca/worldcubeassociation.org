@@ -3,7 +3,7 @@ import { Button, Modal } from 'react-bootstrap'
 import {
   addActivityToCalendar,
   eventModifiedInCalendar,
-  momentToIso,
+  fcEventToActivity,
 } from './calendar-utils'
 import { scheduleElementSelector } from './fullcalendar'
 
@@ -21,10 +21,9 @@ export const modeDetails = {
     modalTitle: "Add a custom activity",
     buttonText: "Add",
     action: (hide, eventData) => {
-      eventData.name = eventData.title;
-      eventData.startTime = momentToIso(eventData.start);
-      eventData.endTime = momentToIso(eventData.end);
-      addActivityToCalendar(eventData);
+      // 'eventData' may contain the id from a previous activity
+      let newEventData = _.pick(eventData, ['title', 'activityCode', 'start', 'end']);
+      addActivityToCalendar(fcEventToActivity(newEventData));
       hide();
     },
   },

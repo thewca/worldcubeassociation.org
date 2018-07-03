@@ -23,6 +23,12 @@
       .panel-body {
         .row {
           margin-bottom: 10px;
+          .room-row {
+            margin-bottom: 20px;
+            .room-color-cell {
+              padding-top: 5px;
+            }
+          }
         }
       }
     }
@@ -126,7 +132,8 @@
           }
 
           .fc-bg {
-            display: none;
+            // FC applies a white background with opacity .25 to each event, .15 makes it a bit darker
+            opacity: 0.15;
           }
         }
       }
@@ -155,6 +162,7 @@
     }
   }
 }
+
 #tooltip-enable-keyboard {
   .tooltip-inner {
     max-width: none;
