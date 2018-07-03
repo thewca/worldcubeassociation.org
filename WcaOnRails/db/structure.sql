@@ -1077,6 +1077,7 @@ CREATE TABLE `teams` (
   `updated_at` datetime NOT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rank` int(11) DEFAULT NULL,
+  `hidden` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_teams_on_rank` (`rank`),
   KEY `index_teams_on_friendly_id` (`friendly_id`)
@@ -1386,4 +1387,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180526084857'),
 ('20180528130810'),
 ('20180621093155'),
-('20180629112054');
+('20180629112054'),
+('20180703172949');
