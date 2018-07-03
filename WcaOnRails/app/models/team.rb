@@ -4,6 +4,8 @@ class Team < ApplicationRecord
   has_many :team_members, dependent: :destroy
   has_many :current_members, -> { current }, class_name: "TeamMember"
 
+  default_scope -> { where(hidden: false) }
+
   accepts_nested_attributes_for :team_members, reject_if: :all_blank, allow_destroy: true
 
   validate :membership_periods_cannot_overlap_for_single_user
