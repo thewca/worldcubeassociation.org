@@ -2,8 +2,22 @@
   div.list-group {
     margin-top: 10px;
   }
-  .room-enabled {
-    @extend .list-group-item-success;
+  .room-entry {
+    color: #333;
+    .room-content {
+      position: relative;
+      z-index: 2;
+    }
+    .room-bg {
+      position: absolute;
+      background-color: #fff;
+      z-index: 1;
+      opacity: 0.25;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
   }
   .schedule-table-header {
     margin-top: 30px;
@@ -70,10 +84,10 @@
 // Popover is added to body, can't nest this above
 .round-info-popover {
   .row {
+    padding-top: 5px;
+    padding-bottom: 5px;
     .room-name {
       font-style: italic;
     }
-    padding-top: 5px;
-    padding-bottom: 5px;
   }
 }

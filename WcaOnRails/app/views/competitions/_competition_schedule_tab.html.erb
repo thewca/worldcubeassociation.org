@@ -51,7 +51,14 @@
           <%= t("competitions.schedule.display_for_room") %>
           <div class="list-group" id="room-list-<%= venue.id %>">
             <% venue_rooms.each do |r| %>
-              <a class="list-group-item room-enabled toggle-room" href="#" data-room="<%= r.id %>" data-venue="<%= venue.id %>"><%= r.name %></a>
+              <a class="list-group-item room-entry room-enabled toggle-room"
+                 style="background-color:<%= r.color %>;"
+                 href="#" data-room="<%= r.id %>" data-venue="<%= venue.id %>">
+                <div class="room-content">
+                  <input type="checkbox" checked/> <%= r.name %>
+                </div>
+                <div class="room-bg"></div>
+              </a>
             <% end %>
           </div>
         </div>
@@ -217,8 +224,10 @@
     // Toggle the room line's status
     if ($elem.hasClass("room-enabled")) {
       $elem.removeClass("room-enabled");
+      $elem.find("input").prop("checked", false);
     } else {
       $elem.addClass("room-enabled");
+      $elem.find("input").prop("checked", true);
     }
     // Avoid focus on the line
     $elem.blur();

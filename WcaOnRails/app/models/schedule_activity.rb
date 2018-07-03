@@ -16,6 +16,7 @@ class ScheduleActivity < ApplicationRecord
   # TODO: we don't yet care for scramble_set_id
   validate :included_in_parent_schedule
   validate :valid_activity_code
+  delegate :color, to: :holder
 
   def included_in_parent_schedule
     return unless errors.blank?
@@ -84,12 +85,13 @@ class ScheduleActivity < ApplicationRecord
     }
   end
 
-  # TODO: not a fan of how it works (= passing round information)
+  # TODO: not a fan of how it works (= passing round information)
   def to_event(rounds_by_wcif_id = {})
     {
       title: localized_name(rounds_by_wcif_id),
       roomId: holder.id,
       roomName: holder.name,
+      color: color,
       activityDetails: ScheduleActivity.parse_activity_code(activity_code),
       start: start_time.in_time_zone(holder.competition_venue.timezone_id),
       end: end_time.in_time_zone(holder.competition_venue.timezone_id),
