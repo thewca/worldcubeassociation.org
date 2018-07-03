@@ -522,7 +522,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "teams" => {
-      where_clause: "",
+      where_clause: "WHERE NOT hidden",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -530,6 +530,7 @@ module DatabaseDumper
           friendly_id
           email
           rank
+          hidden
           updated_at
         ),
       ),
