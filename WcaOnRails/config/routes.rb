@@ -50,6 +50,9 @@ Rails.application.routes.draw do
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
+    get 'upload-results' => "admin#new_results"
+    post 'upload-results' => "admin#create_results"
+    get 'check-results' => "admin#check_results"
   end
 
   get 'competitions/:competition_id/submit-results' => 'results_submission#new', as: :submit_results_edit

@@ -32,6 +32,37 @@ class AdminController < ApplicationController
     render 'merge_people'
   end
 
+  def check_results
+    @competition = Competition.find(params.require(:competition_id))
+  end
+
+  def new_results
+    # FIXME: check for any existing inboxresults or existing results
+    @competition = Competition.find(params.require(:competition_id))
+    @results_submission = ResultsSubmission.new
+    @total_errors = 0
+    @all_errors = {}
+  end
+
+  def create_results
+    # FIXME: check for any existing inboxresults or existing results
+    @competition = Competition.find(params.require(:competition_id))
+
+    submit_results_params = params.require(:results_submission).permit(:results_file)
+    submit_results_params[:competition_id] = @competition.id
+    @results_submission = ResultsSubmission.new(submit_results_params)
+    @results_submission.message = "Uploaded by WST"
+    @results_submission.schedule_url = "https://f2l.org"
+    @total_errors, @all_errors = @results_submission.validate_results
+
+    if @results_submission.valid? && @total_errors == 0
+      # Upload to Inbox
+      redirect_to competition_check_results_path
+    else
+      render :new_results
+    end
+  end
+
   def edit_person
     @person = Person.current.find_by(wca_id: params[:person].try(:[], :wca_id))
     # If there isn't a person in the params, make an empty one that simple form have an object to work with.

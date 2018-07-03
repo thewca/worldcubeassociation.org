@@ -78,6 +78,18 @@
           fa_icon: "cloud-upload",
         }
       end
+      if current_user&.can_admin_results?
+        nav_items << {
+          text: "Admin results",
+          # FIXME: index with all possible actions
+          path: competition_upload_results_path(@competition),
+          fa_icon: "cloud-upload",
+          children: [
+            { text: "Upload JSON", path: competition_upload_results_path(@competition), fa_icon: "cloud-upload" },
+            { text: "Check uploaded results", path: competition_check_results_path(@competition), fa_icon: "check" },
+          ],
+        }
+      end
       if current_user&.can_view_delegate_report?(@competition.delegate_report)
         nav_items << {
           text: t('.menu.delegate_report'),
