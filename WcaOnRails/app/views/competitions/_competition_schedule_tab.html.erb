@@ -63,13 +63,15 @@
             <% end %>
           </div>
         </div>
-        <div class="col-xs-12 panel panel-default panel-events-filter">
-          <div class="panel-body">
-            <div class="events-filter" data-venue="<%= venue.id %>">
-              <div class="event-all selected">ALL</div>
-              <% competition.events.each do |e| %>
-                <span data-event="<%= e.id %>" class="cubing-icon fa-fw selected event-<%= e.id %>"></span>
-              <% end %>
+        <div class="col-xs-12">
+          <div class="panel panel-default panel-events-filter">
+            <div class="panel-body">
+              <div class="events-filter" data-venue="<%= venue.id %>">
+                <div class="event-all selected">ALL</div>
+                <% competition.events.each do |e| %>
+                  <span data-event="<%= e.id %>" class="cubing-icon fa-fw selected event-<%= e.id %>"></span>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
@@ -208,6 +210,8 @@
     if (!$calendar.hasClass("initialized")) {
       $calendar.addClass("initialized");
       initFullCalendar($calendar, venueId);
+    } else {
+      $calendar.fullCalendar("refetchEvents");
     }
   });
 
@@ -252,8 +256,12 @@
 
     // Action for the calendar
     $calendar = $("#calendar-venue-" + venueId);
-    if ($calendar.hasClass("initialized")) {
-      $calendar.fullCalendar("refetchEvents");
+    var idSelector = "#schedule-venue-" + venueId;
+    // Refetch event only if calendar is visible
+    if ($(idSelector + " .schedule-calendar-link").hasClass("active")) {
+      if ($calendar.hasClass("initialized")) {
+        $calendar.fullCalendar("refetchEvents");
+      }
     }
   });
 
@@ -271,6 +279,7 @@ function recomputeAll() {
     }
   });
 }
+
 
 $(".events-filter .event-all").click(function(e) {
   let $elem = $(this);
@@ -294,8 +303,12 @@ $(".events-filter .event-all").click(function(e) {
   }
   let venueId = $elem.parent().data("venue");
   $calendar = $("#calendar-venue-" + venueId);
-  if ($calendar.hasClass("initialized")) {
-    $calendar.fullCalendar("refetchEvents");
+  var idSelector = "#schedule-venue-" + venueId;
+  // Refetch event only if calendar is visible
+  if ($(idSelector + " .schedule-calendar-link").hasClass("active")) {
+    if ($calendar.hasClass("initialized")) {
+      $calendar.fullCalendar("refetchEvents");
+    }
   }
 });
 
@@ -312,8 +325,12 @@ $(".events-filter span.cubing-icon").click(function(e) {
   // Calendar action
   let venueId = $elem.parent().data("venue");
   $calendar = $("#calendar-venue-" + venueId);
-  if ($calendar.hasClass("initialized")) {
-    $calendar.fullCalendar("refetchEvents");
+  var idSelector = "#schedule-venue-" + venueId;
+  // Refetch event only if calendar is visible
+  if ($(idSelector + " .schedule-calendar-link").hasClass("active")) {
+    if ($calendar.hasClass("initialized")) {
+      $calendar.fullCalendar("refetchEvents");
+    }
   }
   recomputeAll();
 });
