@@ -272,8 +272,8 @@ hu:
         password: Jelszó
         #original_hash: 19dff4d
         current_password: Jelenlegi jelszó
-        #original_hash: 786b8af
-        password_confirmation: Jelszó megerősítés
+        #original_hash: aefce7f
+        password_confirmation: Jelszó megerősítése
         #original_hash: ced7b30
         remember_me: Emlékezz rám
         #original_hash: 102efae
@@ -329,8 +329,8 @@ hu:
         base_entry_fee_lowest_denomination: Alap regisztrációs díj
         #original_hash: 28a6fbb
         currency_code: Pénznem kód
-        #original_hash: 5b2fe69
-        delegate_ids: WCA delegált(ak)
+        #original_hash: 2e3ed8b
+        delegate_ids: WCA Delegált(ak)
         #original_hash: 958562e
         organizer_ids: Szervező(k)
         #original_hash: b37456c
@@ -616,8 +616,8 @@ hu:
           Információ a versenyzői limitről, regisztrációs díjról és nézőkről és
           más fontos információról azoknak, akik a versenyzőként vagy nézőként
           érdeklődnek a verseny iránt.
-        #original_hash: 0708400
-        delegate_ids: A verseny WCA delegáltjai
+        #original_hash: b4d020f
+        delegate_ids: A verseny WCA Delegáltjai
         #original_hash: 517d376
         organizer_ids: >-
           A verseny szervezői (szükséges, hogy rendelkezzenek felszanálóval a
@@ -696,6 +696,8 @@ hu:
           oldalon fog megjelenni ez a mező.
       website_contact:
         #original_hash: da39a3e
+        inquiry: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -761,11 +763,11 @@ hu:
           aktívak a verseny alatt, a felmerülő problémáikról (pl: megcsúsztak az
           időbeosztással) és hogyan oldották meg ezeket. Kérlek legyél tömör és
           ne írj le lényegtelen részleteket.
-        #original_hash: 715f020
+        #original_hash: d003c1f
         incidents: >-
           Számolj be minden olyan incidensről, amit érdemesnek tartasz
           megemlíteni. Számozd meg az incidenseket 1-essel kezdve, hogy más
-          delegáltak hivatkozni tudjanak rá. Kérlek csak konkrét eseteket írj
+          Delegáltak hivatkozni tudjanak rá. Kérlek csak konkrét eseteket írj
           le, általános eseteket nem kell. (pl: megszokott +2 és DNF esetek).
           Nyugodtan kérd ki a delegáltak vagy a WRC véleményét, amelyiknél
           gondolod. Ha szeretnéd, hogy a WDC legyen bevonva valamelyik esetbe,
@@ -815,6 +817,8 @@ hu:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -835,6 +839,13 @@ hu:
         submitterComment: ''
         #original_hash: da39a3e
         status: ''
+      results_submission:
+        #original_hash: da39a3e
+        schedule_url: ''
+        #original_hash: da39a3e
+        results_file: ''
+        #original_hash: da39a3e
+        message: ''
     options:
       registration:
         status:
@@ -853,6 +864,8 @@ hu:
   mail_form:
     attributes:
       contact_form:
+        #original_hash: d31ab65
+        inquiry: A következő lehetőségek közül melyik írja le leginkább a kérdésedet?
         #original_hash: 709a232
         name: Név
         #original_hash: 3fa6f5f
@@ -880,6 +893,10 @@ hu:
       #original_hash: a2a43b3
       size_too_big: 'túl nagy (legfeljebb %{file_size} méretűnek kellene lennie)'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: Írd be újra az új jelszavadat
     sessions:
       new:
         #original_hash: ada2e9e
@@ -1105,10 +1122,10 @@ hu:
       pending_claim_confirmation_html: >-
         Ez a felhasználó %{delegate} delegáltra vár, hogy a WCA ID (%{wca_id})
         hozzá legyen kapcsolva.
-      #original_hash: fc7269a
+      #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
         Ez a felhasználó kérte a WCA ID (%{wca_id}) felhasználóhoz kapcsolását.
-        A delegáltja (%{delegate}) értesítve lesz erről, amint a felhasználóhoz
+        A Delegáltja (%{delegate}) értesítve lesz erről, amint a felhasználóhoz
         tartozó e-mail cím meg lesz erősítve.
       #original_hash: 1cde7e6
       your_thumbnail: 'A felhasználód indexképe:'
@@ -1124,11 +1141,11 @@ hu:
       #original_hash: 29e25b5
       have_wca_id_html: 'A te WCA ID-d: %{link_id}.'
       cannot_edit:
-        #original_hash: 8501c74
+        #original_hash: 13e8b80
         msg: >-
           A nevedet, születési dátumodat, nemedet és nemzetiségedet nem tudod
           módosítani. Ennek az oka: %{reason}. Lépj kapcsolatba a <a
-          href='%{delegate_url}'>delegáltaddal</a> ha ezek közül valamelyiket
+          href='%{delegate_url}'>Delegáltaddal</a> ha ezek közül valamelyiket
           módosítani szeretnéd.
         reason:
           #original_hash: 370ff12
@@ -1205,12 +1222,12 @@ hu:
         e-mail címmel.
       #original_hash: 26f70ed
       dob_past: múltbeli időpontnak kell lennie
-      #original_hash: f599dc5
-      must_be_senior: csak szenior delegált módosíthatja
+      #original_hash: 012f032
+      must_be_senior: csak Szenior Delegált módosíthatja
       #original_hash: 2e582eb
       must_not_be_present: nem lehet jelen időpontbeli
-      #original_hash: b2c4ecc
-      senior_has_delegate: nem lehet a szenior delegáltat alárendelt delegáltakkal lefokozni
+      #original_hash: 5b4eac9
+      senior_has_delegate: nem lehet a Szenior Delegáltat alárendelt Delegáltakkal lefokozni
       #original_hash: 48653a9
       already_have_id: >-
         nem tudod WCA ID hozzárendelését kérni, mert már hozzá van rendelve egy
@@ -1253,18 +1270,18 @@ hu:
           Felszanáló frissítve, a megerősítéshez szükséges e-mail kiküldve a
           %{email} címre.
     select_nearby_delegate:
-      #original_hash: 2b11120
+      #original_hash: 407c4f8
       select_delegate_html: >-
         A WCA ID-d hozzárendeléséhez ki kell választanod egy <a
-        href='%{link_delegate}' target='_blank'>WCA delegáltat</a>, aki
+        href='%{link_delegate}' target='_blank'>WCA Delegáltat</a>, aki
         beazonosít téged. Kérlek add meg a születési dátumodat és válaszd ki a
-        delegáltat, aki a legjobban ismer téged.
-      #original_hash: d69cf94
+        Delegáltat, aki a legjobban ismer téged.
+      #original_hash: 2564ee3
       already_assigned_html: >-
         Ez a WCA ID (%{link_id}) már hozzá van rendelve egy másik
         felhasználóhoz. Ha úgy gondolod, hogy ez hibásan történt, lépj
         kapcsolatba a helyi <a href='%{link_delegate}' target='_blank'>WCA
-        delegáltaddal</a>.
+        Delegáltaddal</a>.
       #original_hash: d26bfdc
       missing_dob_html: 'A WCA ID-hez (%{link_id}) nincs hozzárendelve születési dátum.'
       #original_hash: 5be6803
@@ -1339,8 +1356,8 @@ hu:
       #original_hash: 72e2180
       regards_html: 'Üdvözlettel: %{people}.'
       new:
-        #original_hash: 6fb638c
-        mail_subject: 'Regisztráltál a(z) %{comp_name} nevű versenyre'
+        #original_hash: a32db59
+        mail_subject: 'Regisztráltál a(z) %{comp_name} nevű versenyre és jóváhagyásra vár'
         #original_hash: 8374583
         registered_html: 'Regisztráltál a(z) %{comp_name} nevű versenyre.'
         #original_hash: 13fabed
@@ -1654,8 +1671,18 @@ hu:
       registration_period:
         #original_hash: 6888733
         label: Regisztrációs időszak
-        #original_hash: 8f8b05c
-        range_html: 'Kezdődátum: %{start_date_and_time}, Végdátum: %{end_date_and_time}.'
+        #original_hash: 0c7c1dc
+        range_future_html: >-
+          Az online regisztráció kezdete: %{start_date_and_time} és a vége:
+          %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Az online regisztráció kezdete: %{start_date_and_time} és a vége:
+          close %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Az online regisztráció kezdete: %{start_date_and_time} és a vége:
+          %{end_date_and_time} volt.
     index:
       #original_hash: db98a68
       title: Versenyek
@@ -1821,10 +1848,10 @@ hu:
       cannot_delete_confirmed: Nem tudsz megerősített versenyt törölni.
       #original_hash: 191df37
       must_contain_event: legalább 1 versenyszámmal rendelkeznie kell a versenynek
-      #original_hash: 112490b
-      must_contain_delegate: legalább legalább 1 WCA delegálttal rendelkeznie kell a versenynek
-      #original_hash: 0b2b56b
-      not_all_delegates: nem mindegyikük delegált
+      #original_hash: 6e228b7
+      must_contain_delegate: legalább legalább 1 WCA Delegálttal rendelkeznie kell a versenynek
+      #original_hash: 8131fc2
+      not_all_delegates: nem mindegyikük Delegált
       #original_hash: 43a23c2
       registration_close_after_open: a regisztráció zárásának a regisztráció nyitása utánra kell esnie
       #original_hash: 43a83a9
@@ -1931,6 +1958,8 @@ hu:
         admin_view: Admin nézet
         #original_hash: a857eb4
         tabs: Fülek szerkesztése
+        #original_hash: f3d6278
+        submit_results: Eredmények beküldése
         #original_hash: 4c9f914
         delegate_report: Delegált riport
         #original_hash: b233e77
@@ -2060,11 +2089,19 @@ hu:
     website:
       #original_hash: ac2ac3d
       title: WCA weboldal kontakt felülete
-      #original_hash: 9039572
-      description_html: >-
-        Ezt a felületet csak a honlappal kapcsolatos kérdések, hozzászólások és
-        javaslatok közzétételére használd! <a href="%{contact_path}">Más
-        témákkal</a> a megfelelő személyeket keresd meg!
+      inquiries:
+        #original_hash: e1d277a
+        competition: Konkrét verseny (kérlek válassz)
+        #original_hash: f7d3f9f
+        competitions_in_general: 'Versenyek általában (szervezés, szabályok stb.)'
+        #original_hash: f6ffa78
+        wca_id_or_profile: WCA ID vagy WCA profil
+        #original_hash: 0c77aee
+        media: Média
+        #original_hash: 9ad0522
+        software: Szoftver
+        #original_hash: 6e6a6f2
+        different: Egyéb
       #original_hash: c70a890
       submit: Üzenet küldése
     dob:
@@ -2244,9 +2281,9 @@ hu:
             WCA Results Team (WRT)-nek, akik az eredmények feltöltéséért és az
             adatbázis karbantartásáért felelnek. Végül a WRT feltölti az
             eredményeket, amint ez lehetséges.
-          #original_hash: b6a68ab
+          #original_hash: daf1cb1
           '2': >-
-            Ez a verseny méretétől és a delegált elfoglaltságától függően 1 nap
+            Ez a verseny méretétől és a Delegált elfoglaltságától függően 1 nap
             és 1 hét közötti időtartamon belül bármikor megtörténhet. Kérlek
             várj türelemmel!
           #original_hash: bf8adbe
@@ -2444,6 +2481,8 @@ hu:
     proximity_policy: WCA Versenyek Közelségi Irányelve
     #original_hash: f484584
     competition_name_policy: WCA Versenyek Elnevezési Irányelve
+    #original_hash: c7f7728
+    competition_announcement_policy: WCA Versenyek Kihirdetésének Szabályzata
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA delegáltak
@@ -2464,7 +2503,7 @@ hu:
     how_to:
       #original_hash: fc3af12
       title: Hogyan lehet WCA nemzeti szervezetté válni
-      #original_hash: bdf57ff
+      #original_hash: cc1639d
       description: >-
         A WCA világszerte számos nemzeti szervezetet ismer el. A WCA nemzeti
         szervezetek célja, hogy WCA versenyeket szervezzen és támogassa a WCA
@@ -2472,7 +2511,7 @@ hu:
         szervezetet szeretnének létrehozni először támogatniuk kell a WCA
         tevékenységét az adott régióban, mielőtt beadják a jelentkezésüket. WCA
         versenyek szervezésében segítséget kaphatsz a hozzád legközelebb lévő
-        WCA delegálttól.
+        WCA Delegálttól.
     requirements:
       #original_hash: 1e04fd7
       title: Feltételek a WCA nemzeti szervezetekkel szemben
@@ -2483,7 +2522,7 @@ hu:
         '2': >-
           Aktívan támogassa a kontinens versenyeket, amik a nemzeti szervezet
           kontinensén kerülnek megrendezésre
-        #original_hash: 5913cd0
+        #original_hash: 8943714
         '3': >-
           Elismerje és alkalmazza a célkitűzéseket, amelyek WCA Alaptörvényében
           és a WCA Szabályzatban vannak lefektetve
@@ -2491,35 +2530,18 @@ hu:
         '4': Megfeleljen az érvényes WCA Szabályzatnak
         #original_hash: 23cda60
         '5': Fogadja el a WCA képviselőinek döntéseit és feleljen meg nekik
-        #original_hash: 08c6d86
+        #original_hash: efe2b55
         '6': >-
           Folyamatosan el kell juttatnia az aktuális alaptörvényét és
           szabályzatát a WCA-hoz elektronikus formában
     application_instructions:
       #original_hash: 4da829b
       title: Jelentkezés menete
-      #original_hash: 7ae038e
-      description: >-
-        A nemzeti szervezetté válásra való jelentkezéshez kötelező beadni egy
-        írásbeli jelentkezést a WCA Board-nak, amiben az alább felsorolt
-        részletek mindegyikének szerepelnie kell.
-      list:
-        #original_hash: 1a9d544
-        '1': A nemzeti szervezet neve
-        #original_hash: a9bf3f4
-        '2': Hivatalos cím és elérhetőség
-        #original_hash: 2a029e9
-        '3': >-
-          A jelenleg érvényes alaptörvényeinek másolata, ami összhangban van a
-          WCA Alaptörvényével és a WCA Szabályzattal
-        #original_hash: a5a2771
-        '4': A főbb tisztségviselőinek listája
-        #original_hash: 1186ebf
-        '5': >-
-          Egy egyértelmű leírás, arra vonatkozóan, hogy mely területet fedi le a
-          nemzeti szervezet
-        #original_hash: 826e371
-        '6': Egy összegzés a múltbeli és jelenlegi WCA-hoz kötődő tevékenygeiről
+      #original_hash: 7ed06ee
+      description_html: >-
+        Kérlek töltsd ki ezt az űrlapot: <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>this
+        form</a>.
   contact:
     #original_hash: a34b69f
     title: Kontakt Információ
@@ -2911,12 +2933,12 @@ hu:
     paragraph4:
       #original_hash: b6dca56
       title: Összeférhetetlenségi elv
-      #original_hash: bd8f1fe
+      #original_hash: f86bf95
       content1: >-
         A WCA versenyeknek minden más versenytől legalább 100 km és 19 nap
         távolságban kell lenniük egymástól. A WCA Board megvizsgál minden olyan
         kihirdetésre szánt versenyt, ami ennek nem felel meg és 100 km-en vagy
-        19 napon belül van egy másik versennyel. A delegáltnak ilyen esetben
+        19 napon belül van egy másik versennyel. A Delegáltnak ilyen esetben
         extra információkkal kell szolgálnia, hogy milyen okból kéri a verseny
         kihirdetését. Lehetséges érvek, amik segítik egy ilyen verseny
         kihirdetését:
@@ -2967,12 +2989,12 @@ hu:
     paragraph5:
       #original_hash: 17d01de
       title: Versenyzői limitek
-      #original_hash: 18976be
+      #original_hash: ffcd75e
       content_html: >-
         A versenyzők száma limitálva lehet versenyszámonként vagy versenyenként
         (lásd: <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Szabályzat
-        Z4</a>). Minden a Z cikkben szereplő szabály alkalmazására a delegáltnak
+        Z4</a>). Minden a Z cikkben szereplő szabály alkalmazására a Delegáltnak
         engedélyt kell kapnia a Boardtól. A versenyzői limiteket jól meg kell
         fontolni és figyelembe kell venni a versenyzi érdeklődés mértékét. A
         versenyzői limitet nem lehet elhanyagolható okokból alacsonyra állítani.
