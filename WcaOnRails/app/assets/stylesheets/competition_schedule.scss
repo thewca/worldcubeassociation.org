@@ -41,11 +41,13 @@
       .cubing-icon {
         font-size: 25px;
         color: #888;
+        cursor: pointer;
         &.selected {
           color: #333;
         }
       }
       .event-all {
+        cursor: pointer;
         padding-left: 2px;
         padding-right: 2px;
         vertical-align: top;
