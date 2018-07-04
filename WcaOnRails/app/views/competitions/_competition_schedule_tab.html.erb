@@ -237,22 +237,24 @@
     e.preventDefault();
     hidePopovers();
     var $elem = $(this);
+    var roomId = $elem.data("room");
+    var venueId = $elem.data("venue");
+
     // Toggle the room line's status
     if ($elem.hasClass("selected")) {
       $elem.removeClass("selected");
       $elem.find("input").prop("checked", false);
+      // Action for the "table"
+      $(".room-" + roomId).removeClass("room-selected");
     } else {
       $elem.addClass("selected");
       $elem.find("input").prop("checked", true);
+      // Action for the "table"
+      $(".room-" + roomId).addClass("room-selected");
     }
     // Avoid focus on the line
     $elem.blur();
 
-    var roomId = $elem.data("room");
-    var venueId = $elem.data("venue");
-
-    // Action for the "table"
-    $(".room-" + roomId).toggle();
 
     // Action for the calendar
     $calendar = $("#calendar-venue-" + venueId);
@@ -289,7 +291,7 @@ $(".events-filter .event-all").click(function(e) {
       $eventElem = $(element);
       $eventElem.removeClass("selected");
       let eventId = $eventElem.data("event");
-      $(".schedule-table .event-" + eventId).toggle();
+      $(".schedule-table .event-" + eventId).removeClass("event-selected");
     });
     $elem.removeClass("selected");
   } else {
@@ -297,7 +299,7 @@ $(".events-filter .event-all").click(function(e) {
       $eventElem = $(element);
       $eventElem.addClass("selected");
       let eventId = $eventElem.data("event");
-      $(".schedule-table .event-" + eventId).toggle();
+      $(".schedule-table .event-" + eventId).addClass("event-selected");
     });
     $elem.addClass("selected");
   }
@@ -314,14 +316,16 @@ $(".events-filter .event-all").click(function(e) {
 
 $(".events-filter span.cubing-icon").click(function(e) {
   let $elem = $(this);
+  let eventId = $elem.data("event");
   if ($elem.hasClass("selected")) {
     $elem.removeClass("selected");
+    // Table action
+    $(".schedule-table .event-" + eventId).removeClass("event-selected");
   } else {
     $elem.addClass("selected");
+    // Table action
+    $(".schedule-table .event-" + eventId).addClass("event-selected");
   }
-  // Table action
-  let eventId = $elem.data("event");
-  $(".schedule-table .event-" + eventId).toggle();
   // Calendar action
   let venueId = $elem.parent().data("venue");
   $calendar = $("#calendar-venue-" + venueId);

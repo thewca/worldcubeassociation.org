@@ -25,7 +25,7 @@
       <% activities_for_day.each do |a| %>
         <% activity_code_without_attempt = "#{a[:activityDetails][:event_id]}-r#{a[:activityDetails][:round_number]}" %>
         <% round_data = rounds_by_wcif_id[activity_code_without_attempt] || {} %>
-        <div class="row room-<%= a[:roomId] %> event-<%= round_data[:event_id] %>">
+        <div class="row room-<%= a[:roomId] %> event-<%= round_data[:event_id] %> room-selected event-selected">
           <div class="col-xs-4 col-sm-4 col-md-1">
             <span class="visible-xs visible-sm"><%= t("competitions.schedule.range.from") %></span>
             <span class="bolded-xs-sm">

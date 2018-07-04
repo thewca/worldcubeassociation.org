@@ -70,6 +70,10 @@
   .schedule-table {
     margin-bottom: 60px;
     .row {
+      display: none;
+      &.room-selected.event-selected {
+        display: block;
+      }
       border-bottom: 1px solid #ddd;
       div {
         @media (min-width : 992px){
