@@ -51,15 +51,26 @@
           <%= t("competitions.schedule.display_for_room") %>
           <div class="list-group" id="room-list-<%= venue.id %>">
             <% venue_rooms.each do |r| %>
-              <a class="list-group-item room-entry room-enabled toggle-room"
-                 style="background-color:<%= r.color %>;"
+              <a class="list-group-item room-entry selected toggle-room"
                  href="#" data-room="<%= r.id %>" data-venue="<%= venue.id %>">
-                <div class="room-content">
-                  <input type="checkbox" checked/> <%= r.name %>
-                </div>
-                <div class="room-bg"></div>
+                 <div class="room-checkbox">
+                   <div class="room-checkbox-bg" style="background-color:<%= r.color %>;"></div>
+                 </div>
+                 <div class="room-name">
+                  <%= r.name %>
+                 </div>
               </a>
             <% end %>
+          </div>
+        </div>
+        <div class="col-xs-12 panel panel-default panel-events-filter">
+          <div class="panel-body">
+            <div class="events-filter" data-venue="<%= venue.id %>">
+              <div class="event-all selected">ALL</div>
+              <% competition.events.each do |e| %>
+                <span data-event="<%= e.id %>" class="cubing-icon fa-fw selected event-<%= e.id %>"></span>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>
@@ -100,12 +111,13 @@
     // We don't really care about timezone or start/end as we only have events for a specific competition and venue.
     var venueData = dataByVenueId[venueId];
     var allEvents = venueData.events;
-    var rooms = $("#room-list-" + venueId).find(".room-enabled");
+    var rooms = $("#room-list-" + venueId).find(".selected");
     var events = _.flatMap(rooms, function(room) {
       let roomId = $(room).data("room");
       return _.filter(allEvents, { roomId });
     });
-
+    var selectedEvents = _.map($("#schedule-venue-" + venueId + " .events-filter > span.selected"), e => $(e).data("event").toString());
+    events = _.filter(events, e => selectedEvents.includes(e.activityDetails.event_id));
     callback(events);
   }
 
@@ -222,11 +234,11 @@
     hidePopovers();
     var $elem = $(this);
     // Toggle the room line's status
-    if ($elem.hasClass("room-enabled")) {
-      $elem.removeClass("room-enabled");
+    if ($elem.hasClass("selected")) {
+      $elem.removeClass("selected");
       $elem.find("input").prop("checked", false);
     } else {
-      $elem.addClass("room-enabled");
+      $elem.addClass("selected");
       $elem.find("input").prop("checked", true);
     }
     // Avoid focus on the line
@@ -244,6 +256,67 @@
       $calendar.fullCalendar("refetchEvents");
     }
   });
+
+function recomputeAll() {
+  $(".events-filter .event-all").each(function(index, element) {
+    let $elem = $(element);
+    let all = $elem.parent().find(".cubing-icon");
+    let selected = $elem.parent().find(".cubing-icon.selected");
+    if (all.length != selected.length) {
+      $elem.removeClass("selected");
+    } else {
+      if (!$elem.hasClass("selected")) {
+        $elem.addClass("selected");
+      }
+    }
+  });
+}
+
+$(".events-filter .event-all").click(function(e) {
+  let $elem = $(this);
+  let $filter = $elem.parent();
+  if ($elem.hasClass("selected")) {
+    $filter.find(".cubing-icon.selected").each(function(index, element) {
+      $eventElem = $(element);
+      $eventElem.removeClass("selected");
+      let eventId = $eventElem.data("event");
+      $(".schedule-table .event-" + eventId).toggle();
+    });
+    $elem.removeClass("selected");
+  } else {
+    $filter.find(".cubing-icon:not(.selected)").each(function(index, element) {
+      $eventElem = $(element);
+      $eventElem.addClass("selected");
+      let eventId = $eventElem.data("event");
+      $(".schedule-table .event-" + eventId).toggle();
+    });
+    $elem.addClass("selected");
+  }
+  let venueId = $elem.parent().data("venue");
+  $calendar = $("#calendar-venue-" + venueId);
+  if ($calendar.hasClass("initialized")) {
+    $calendar.fullCalendar("refetchEvents");
+  }
+});
+
+$(".events-filter span.cubing-icon").click(function(e) {
+  let $elem = $(this);
+  if ($elem.hasClass("selected")) {
+    $elem.removeClass("selected");
+  } else {
+    $elem.addClass("selected");
+  }
+  // Table action
+  let eventId = $elem.data("event");
+  $(".schedule-table .event-" + eventId).toggle();
+  // Calendar action
+  let venueId = $elem.parent().data("venue");
+  $calendar = $("#calendar-venue-" + venueId);
+  if ($calendar.hasClass("initialized")) {
+    $calendar.fullCalendar("refetchEvents");
+  }
+  recomputeAll();
+});
 
   $('body').click(function(e) {
     hidePopovers();
