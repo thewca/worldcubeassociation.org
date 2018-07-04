@@ -673,6 +673,8 @@ vi:
           đăng ký nếu bạn đang sử dụng trang web đăng ký của WCA.
       website_contact:
         #original_hash: da39a3e
+        inquiry: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -790,6 +792,8 @@ vi:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -812,7 +816,9 @@ vi:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        results: ''
+        schedule_url: ''
+        #original_hash: da39a3e
+        results_file: ''
         #original_hash: da39a3e
         message: ''
     options:
@@ -833,6 +839,8 @@ vi:
   mail_form:
     attributes:
       contact_form:
+        #original_hash: d31ab65
+        inquiry: Phần nào sau đây miêu tả đất nước của bạn đúng nhất?
         #original_hash: 709a232
         name: Tên
         #original_hash: 3fa6f5f
@@ -2022,11 +2030,19 @@ vi:
     website:
       #original_hash: ac2ac3d
       title: Đơn liên lạc trên trang web của WCA
-      #original_hash: 9039572
-      description_html: >-
-        Chỉ sử dụng đơn này cho câu hỏi về trang web, bình luận, và góp ý. <a
-        href="%{contact_path}">Các câu hỏi khác</a> phải được gửi đến các ban
-        tương ứng.
+      inquiries:
+        #original_hash: e1d277a
+        competition: Một giải đấu cụ thể (vui lòng chọn)
+        #original_hash: f7d3f9f
+        competitions_in_general: 'Giải đấu nói chung (Tổ chức, Nội quy thi đấu, v.v)'
+        #original_hash: f6ffa78
+        wca_id_or_profile: ID WCA hoặc Hồ sơ WCA
+        #original_hash: 0c77aee
+        media: Phương tiện truyền thông
+        #original_hash: 9ad0522
+        software: Phần mềm
+        #original_hash: 6e6a6f2
+        different: Khác
       #original_hash: c70a890
       submit: Gửi tin nhắn
     dob:
@@ -2395,6 +2411,8 @@ vi:
     proximity_policy: Chính sách WCA về vùng lân cận của giải đấu
     #original_hash: f484584
     competition_name_policy: Chính sách WCA về tên giải đấu
+    #original_hash: c7f7728
+    competition_announcement_policy: Chính sách Thông báo Giải đấu WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegate
