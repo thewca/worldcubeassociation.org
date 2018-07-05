@@ -66,9 +66,9 @@ RSpec.feature "Competition events management" do
       end
 
       scenario "change scramble group count to 42", js: true do
-        within_round("333", 1) { fill_in("scrambleGroupCount", with: 42) }
+        within_round("333", 1) { fill_in("scrambleSetCount", with: 42) }
         save
-        expect(round_333_1.reload.scramble_group_count).to eq 42
+        expect(round_333_1.reload.scramble_set_count).to eq 42
       end
 
       scenario "change time limit to 5 minutes", js: true do

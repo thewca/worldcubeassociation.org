@@ -87,7 +87,7 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
           <tr>
             <th>#</th>
             <th className="text-center">Format</th>
-            <th className="text-center">Scramble Groups</th>
+            <th className="text-center">Scramble Sets</th>
             {event.canChangeTimeLimit && <th className="text-center">Time Limit</th>}
             <th className="text-center">Cutoff</th>
             <th className="text-center">To Advance</th>
@@ -104,9 +104,9 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
               rootRender();
             };
 
-            let scrambleGroupCountChanged = e => {
-              let newScrambleGroupCount = parseInt(e.target.value);
-              wcifRound.scrambleGroupCount = newScrambleGroupCount;
+            let scrambleSetCountChanged = e => {
+              let newScrambleSetCount = parseInt(e.target.value);
+              wcifRound.scrambleSetCount = newScrambleSetCount;
               rootRender();
             };
 
@@ -124,7 +124,7 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
                 </td>
 
                 <td className="text-center">
-                  <input name="scrambleGroupCount" className="form-control input-xs" type="number" min={1} value={wcifRound.scrambleGroupCount} onChange={scrambleGroupCountChanged} />
+                  <input name="scrambleSetCount" className="form-control input-xs" type="number" min={1} value={wcifRound.scrambleSetCount} onChange={scrambleSetCountChanged} />
                 </td>
 
                 {event.canChangeTimeLimit && (
@@ -261,6 +261,6 @@ function addRoundToEvent(wcifEvent) {
     advancementCondition: null,
     results: [],
     groups: [],
-    scrambleGroupCount: 1,
+    scrambleSetCount: 1,
   });
 }

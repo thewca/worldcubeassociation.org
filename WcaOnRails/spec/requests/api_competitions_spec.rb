@@ -144,7 +144,7 @@ RSpec.describe "API Competitions" do
         it "can update events" do
           competition_events = create_wcif_events(%w(333))
           round333_first = competition_events[0][:rounds][0]
-          round333_first[:scrambleGroupCount] = 2
+          round333_first[:scrambleSetCount] = 2
           round333_first[:roundResults] = [
             {
               personId: 1,
@@ -156,7 +156,7 @@ RSpec.describe "API Competitions" do
           expect(response).to be_success
           rounds = competition.reload.competition_events.find_by_event_id("333").rounds
           expect(rounds.length).to eq 1
-          expect(rounds.first.scramble_group_count).to eq 2
+          expect(rounds.first.scramble_set_count).to eq 2
           expect(rounds.first.round_results.length).to eq 1
           expect(rounds.first.round_results.first.attempts.map(&:result)).to eq [456, 745, 657, 465, 835]
         end
@@ -400,7 +400,7 @@ def create_wcif_events(event_ids)
           timeLimit: nil,
           cutoff: nil,
           advancementCondition: nil,
-          scrambleGroupCount: 1,
+          scrambleSetCount: 1,
         },
       ],
     }
