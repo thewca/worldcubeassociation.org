@@ -817,6 +817,8 @@ pt:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1056,6 +1058,38 @@ pt:
       failure: Não foi possível atualizar o seu perfil.
       #original_hash: c29870c
       unavailable: A linguagem solicitada não está disponível.
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: Instruções de confirmação
+        #original_hash: 6ee63db
+        welcome: 'Bem-vindo %{user_email}!'
+        #original_hash: da39d05
+        confirm: >-
+          A sua conta foi criada e precisa de ser ativada antes de poder ser
+          usada. Por favor confirme a sua conta através do link abaixo:
+        #original_hash: 776476a
+        confirmation_link: Confirmar a minha conta.
+        #original_hash: d484f70
+        activate: >-
+          Após a ativação, poderá entrar na sua conta no website da World Cube
+          Association.
+        #original_hash: 333999b
+        addendum: >-
+          Este email é gerado automaticamente. Se não registou uma conta no
+          website da World Cube Association e recebeu esta mensagem por engano,
+          por favor ignore-a e apague-a.
+        #original_hash: dbc2263
+        questions: >-
+          Tem mais questões? Teremos muito gosto em responder! Por favor envie
+          um email para %{contact_link}.
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: 'Olá %{user_email}!'
+        #original_hash: 3095365
+        confirm: 'Pode confirmar o novo email da sua conta através do link abaixo:'
+        #original_hash: 4900afe
+        confirmation_link: Confirmar endereço de email.
     claim_wca_id:
       #original_hash: f28bf87
       title: Associar o seu ID da WCA
