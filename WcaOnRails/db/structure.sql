@@ -1018,7 +1018,7 @@ CREATE TABLE `rounds` (
   `time_limit` text COLLATE utf8mb4_unicode_ci,
   `cutoff` text COLLATE utf8mb4_unicode_ci,
   `advancement_condition` text COLLATE utf8mb4_unicode_ci,
-  `scramble_group_count` int(11) NOT NULL DEFAULT '1',
+  `scramble_set_count` int(11) NOT NULL DEFAULT '1',
   `round_results` mediumtext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_rounds_on_competition_event_id_and_number` (`competition_event_id`,`number`)
@@ -1388,4 +1388,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180528130810'),
 ('20180621093155'),
 ('20180629112054'),
-('20180703172949');
+('20180703172949'),
+('20180705231137');
