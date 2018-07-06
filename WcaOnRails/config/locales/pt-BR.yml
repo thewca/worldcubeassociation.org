@@ -820,6 +820,8 @@ pt-BR:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -917,6 +919,10 @@ pt-BR:
         recebeu uma mensagem de confirmação? Clique em
         https://www.worldcubeassociation.org/users/confirmation/new para
         solicitar uma nova.
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: Por favor confirme seu novo email
   wca:
     errors:
       messages:
@@ -1059,6 +1065,38 @@ pt-BR:
       failure: Não foi possível atualizar seu perfil.
       #original_hash: c29870c
       unavailable: A linguagem solicitada não está disponível.
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: Instruções de confirmação
+        #original_hash: 6ee63db
+        welcome: 'Bem vindo %{user_email}!'
+        #original_hash: da39d05
+        confirm: >-
+          Sua conta foi criada e precisa ser ativada antes que você possa
+          usá-la. Por favor confirme sua conta no link abaixo:
+        #original_hash: 776476a
+        confirmation_link: Confirmar minha conta.
+        #original_hash: d484f70
+        activate: >-
+          Depois da ativação você poderá fazer o log in no site da World Cube
+          Association:
+        #original_hash: 333999b
+        addendum: >-
+          Esse email é gerado automaticamente. Se você não criou uma conta no
+          site da World Cube Association e recebeu esta mensagem por engano, por
+          favor ignore e apague.
+        #original_hash: dbc2263
+        questions: >-
+          Você tem mais alguma pergunta? Ficaremos felizes em responder! Envie
+          um email para %{contact_link}.
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: 'Olá %{user_email}!'
+        #original_hash: 3095365
+        confirm: 'Você pode confirmar seu novo email no link abaixo:'
+        #original_hash: 4900afe
+        confirmation_link: Confirmar endereço de email.
     claim_wca_id:
       #original_hash: f28bf87
       title: Conectar sua ID da WCA
