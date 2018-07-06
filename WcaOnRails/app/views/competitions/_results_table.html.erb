@@ -41,7 +41,7 @@
       <tr class="sort-by-<%= result.format.sort_by.to_s %> <%= result.muted ? "text-muted" : "" %>">
         <% if !hide_event %>
           <td class="event">
-            <% if !result.muted && result.eventId != results[i - 1].eventId %>
+            <% if !result.muted && (i == 0 || result.eventId != results[i - 1].eventId) %>
               <%= link_to competition_results_all_path(@competition, anchor: "e#{result.event.id}") do %>
                 <%= cubing_icon result.event.id %>
                 <%= result.event.name %>
