@@ -807,6 +807,8 @@ da:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -904,6 +906,10 @@ da:
         en bekræftelses email? Så gå hen på
         https://www.worldcubeassociation.org/users/confirmation/new og bed om en
         ny.
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: Bekræft venligst din nye emailadresse
   wca:
     errors:
       messages:
@@ -1046,6 +1052,38 @@ da:
       failure: Ude af stand til at opdatere din profil.
       #original_hash: c29870c
       unavailable: Efterspurgte sprog er ikke tilgængeligt.
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: Bekræftelsesinstruktioner
+        #original_hash: 6ee63db
+        welcome: 'Velkommen %{user_email}!'
+        #original_hash: da39d05
+        confirm: >-
+          Din konto er blevet oprettet og skal aktiveres før du kan bruge den.
+          Bekræft venligst din konto gennem linket herunder:
+        #original_hash: 776476a
+        confirmation_link: Bekræft min konto.
+        #original_hash: d484f70
+        activate: 'Efter aktivering kan du logge ind på World Cube Association:'
+        #original_hash: 333999b
+        addendum: >-
+          Mailen er genereret automatiskt. Hvis du ikke oprettede en konto på
+          World Cube Association's hjemmeside, og modtog denne meddelelse ved en
+          fejl, så ignorer og slet den venligst.
+        #original_hash: dbc2263
+        questions: >-
+          Har du flere spørgsmål? Så vil vi være glade for at kunne hjælpe dig!
+          Du kan sende en mail til %{contact_link} (PÅ ENGELSK!).
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: 'Hej %{user_email}!'
+        #original_hash: 3095365
+        confirm: >-
+          Du kan bekræfte din nye emailadresse til din konto gennem linket
+          herunder:
+        #original_hash: 4900afe
+        confirmation_link: Bekræft emailadresse.
     claim_wca_id:
       #original_hash: f28bf87
       title: Gør krav på dit WCA ID
@@ -2448,7 +2486,9 @@ da:
     #original_hash: 920a98f
     proximity_policy: WCA Konkurrencers Nærhedspolitik
     #original_hash: f484584
-    competition_name_policy: WCA Konkurrence Navngivnings Politik
+    competition_name_policy: WCA Konkurrence Navngivningspolitik
+    #original_hash: c7f7728
+    competition_announcement_policy: WCA Konkurrence Annonceringspolitik
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegerede
