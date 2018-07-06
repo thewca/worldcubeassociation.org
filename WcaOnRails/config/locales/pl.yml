@@ -837,6 +837,8 @@ pl:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -933,6 +935,10 @@ pl:
         Aby kontunuować musisz aktywować konto. Nie otrzymałeś emaila
         potwierdzającego? Możesz uzyskać nowy tutaj:
         https://www.worldcubeassociation.org/users/confirmation/new
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: Proszę potwierdzić swój nowy adres email
   wca:
     errors:
       messages:
@@ -1079,6 +1085,36 @@ pl:
       failure: Aktualizacja profilu nie powiodła się.
       #original_hash: c29870c
       unavailable: Żądany język nie jest dostępny.
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: Instrukcje dotyczące potwierdzenia konta
+        #original_hash: 6ee63db
+        welcome: 'Witaj %{user_email}!'
+        #original_hash: da39d05
+        confirm: "Twoje konto zostało utworzone i musi być\_aktywowane, zanim będziesz mógł z niego korzystać. Proszę potwierdzić swoje konto poprzez poniższy link:"
+        #original_hash: 776476a
+        confirmation_link: Potwierdź moje konto.
+        #original_hash: d484f70
+        activate: >-
+          Po aktywowaniu konta możesz zalogować się na stronę World Cube
+          Association:
+        #original_hash: 333999b
+        addendum: >-
+          Ten mail został wygenerowany automatycznie. Jeżeli nie utworzyłeś
+          konta na stronie World Cube Association i otrzymałeś tę wiadomość
+          przypadkowo, proszę ją zignorować i usunąć.
+        #original_hash: dbc2263
+        questions: >-
+          Masz więcej pytań? Chętnie na nie odpowiemy! Możesz wysłać maila na
+          adres %{contact_link}.
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: 'Witaj %{user_email}!'
+        #original_hash: 3095365
+        confirm: 'Możesz potwierdzić swój nowy adres email poprzez poniższy link:'
+        #original_hash: 4900afe
+        confirmation_link: Potwierdź swój adres email.
     claim_wca_id:
       #original_hash: f28bf87
       title: Podepnij WCA ID
