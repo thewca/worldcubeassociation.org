@@ -697,6 +697,8 @@ es:
           de la web de la WCA.
       website_contact:
         #original_hash: da39a3e
+        inquiry: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -816,6 +818,8 @@ es:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -838,7 +842,9 @@ es:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        results: ''
+        schedule_url: ''
+        #original_hash: da39a3e
+        results_file: ''
         #original_hash: da39a3e
         message: ''
     options:
@@ -859,6 +865,8 @@ es:
   mail_form:
     attributes:
       contact_form:
+        #original_hash: d31ab65
+        inquiry: ¿Cuál de las siguientes opciones describe mejor tu petición?
         #original_hash: 709a232
         name: Nombre
         #original_hash: 3fa6f5f
@@ -1051,6 +1059,38 @@ es:
       failure: Imposible actualizar tu perfil.
       #original_hash: c29870c
       unavailable: El idioma solicitado no está disponible.
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: Instrucciones de confirmación
+        #original_hash: 6ee63db
+        welcome: '¡Bienvenido %{user_email}!'
+        #original_hash: da39d05
+        confirm: >-
+          Tu cuenta ha sido creada y debe ser activada antes de que puedas
+          usarla. Por favor confirma tu cuenta mediante el enlace de debajo:
+        #original_hash: 776476a
+        confirmation_link: Confirmar mi cuenta.
+        #original_hash: d484f70
+        activate: 'Tras la activación, puedes identificarte en la web de la WCA:'
+        #original_hash: 333999b
+        addendum: >-
+          Este correo se genera automáticamente. Si no has registrado una cuenta
+          en la web de la World Cube Association y has recibido este mensaje por
+          error, por favor ignóralo y bórralo.
+        #original_hash: dbc2263
+        questions: >-
+          ¿Tienes alguna otra pregunta? ¡Estaremos encantados de responderla!
+          Puedes enviar un correo a  %{contact_link}.
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: '¡Hola %{user_email}!'
+        #original_hash: 3095365
+        confirm: >-
+          Puedes confirmar el correo electrónico de tu nueva cuenta en el enlace
+          de debajo:
+        #original_hash: 4900afe
+        confirmation_link: Confirmar dirección de correo electrónico.
     claim_wca_id:
       #original_hash: f28bf87
       title: Reclamar tu WCA ID
@@ -2087,11 +2127,21 @@ es:
     website:
       #original_hash: ac2ac3d
       title: Formulario de Contacto sobre la Web de la WCA
-      #original_hash: 9039572
-      description_html: >-
-        Utiliza este formulario exclusivamente para enviarnos preguntas,
-        comentarios o sugerencias sobre la web. Para otras consultas ponte en
-        contacto con el <a href="%{contact_path}">departamento apropiado</a>.
+      inquiries:
+        #original_hash: e1d277a
+        competition: Una competición específica (selecciona por favor)
+        #original_hash: f7d3f9f
+        competitions_in_general: >-
+          Competiciones en general (Organización, Reglamento de competiciones,
+          etc.)
+        #original_hash: f6ffa78
+        wca_id_or_profile: WCA ID o Perfil WCA
+        #original_hash: 0c77aee
+        media: Medios
+        #original_hash: 9ad0522
+        software: Software
+        #original_hash: 6e6a6f2
+        different: Otros
       #original_hash: c70a890
       submit: Enviar
     dob:
@@ -2481,6 +2531,8 @@ es:
     proximity_policy: Política de Proximidad de las Competiciones WCA
     #original_hash: f484584
     competition_name_policy: Política sobre Nombres de Competiciones WCA
+    #original_hash: c7f7728
+    competition_announcement_policy: Política de Publicación de competiciones WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
