@@ -57,6 +57,7 @@ Rails.application.routes.draw do
 
   get 'competitions/:competition_id/submit-results' => 'results_submission#new', as: :submit_results_edit
   post 'competitions/:competition_id/submit-results' => 'results_submission#create', as: :submit_results
+  post 'competitions/:competition_id/upload-json' => 'results_submission#upload_json', as: :upload_results_json
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report

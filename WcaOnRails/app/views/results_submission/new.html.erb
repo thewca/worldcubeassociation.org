@@ -3,6 +3,24 @@
 <%= render layout: 'nav' do %>
   <h1><%= yield(:title) %></h1>
 
+
+  <p>
+    The result submission process has two steps:
+    <ul>
+      <li>Uploading a valid JSON to the website</li>
+      <li>Then the website will run a number of checks. If everything is correct you'll be able to submit these results to the WRT.</li>
+    </ul>
+  </p>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="alert alert-info">Some results are already there, uploading a new (valid) JSON will override all of them!</div>
+      <%= simple_form_for @upload_json, url: upload_results_json_path do |f| %>
+        <%= f.input :results_file, as: :file, input_html: { accept: 'application/json' }, label: "Results JSON file" %>
+        <%= f.submit "Submit", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+
   <p>Please enter the body of your email to the Results Team.</p>
   <p>
     Make sure to include a link to the competition schedule (and all time
