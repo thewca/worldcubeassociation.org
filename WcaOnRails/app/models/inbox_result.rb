@@ -5,5 +5,5 @@ class InboxResult < ApplicationRecord
 
   self.table_name = "InboxResults"
 
-  belongs_to :inbox_person, foreign_key: :personId
+  #belongs_to :inbox_person, foreign_key: :personId
 end

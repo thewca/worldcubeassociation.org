@@ -8,20 +8,21 @@ module Resultable
 
 
   included do
+    # NOTE: We used cached values instead of belongs_to to improve performances.
     belongs_to :competition, foreign_key: :competitionId
     validates :competition, presence: true
-    # FIXME: shouldn't we take advantage of the fact that these are cached?
-    belongs_to :country, foreign_key: :countryId
-    validates :country, presence: true
-    # FIXME: shouldn't we take advantage of the fact that these are cached?
-    belongs_to :round_type, foreign_key: :roundTypeId
     validates :round_type, presence: true
-    # FIXME: shouldn't we take advantage of the fact that these are cached?
-    belongs_to :event, foreign_key: :eventId
+    def round_type
+      RoundType.c_find(roundTypeId)
+    end
     validates :event, presence: true
-    # FIXME: shouldn't we take advantage of the fact that these are cached?
-    belongs_to :format, foreign_key: :formatId
+    def event
+      Event.c_find(eventId)
+    end
     validates :format, presence: true
+    def format
+      Format.c_find(formatId)
+    end
 
     validate :validate_each_solve, if: :event
     def validate_each_solve
@@ -128,8 +129,10 @@ module Resultable
         sum_moves = counting_solve_times.sum(&:move_count)
         100 * sum_moves / counting_solve_times.length
       else
-        sum_centis = counting_solve_times.sum(&:time_centiseconds)
-        sum_centis / counting_solve_times.length
+        # Cast at least one of the operands to float
+        sum_centis = counting_solve_times.sum(&:time_centiseconds).to_f
+        # Round the result
+        (sum_centis / counting_solve_times.length).round(0)
       end
     end
   end
@@ -142,4 +145,7 @@ module Resultable
     to_solve_time(field).clock_format
   end
 
+  def hlp
+    ActionController::Base.helpers
+  end
 end
