@@ -916,6 +916,10 @@ pt:
         recebeu um email de confirmação? Vá a
         https://www.worldcubeassociation.org/users/confirmation/new para pedir
         um novo.
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: Por favor confirme o seu novo endereço de email.
   wca:
     errors:
       messages:
