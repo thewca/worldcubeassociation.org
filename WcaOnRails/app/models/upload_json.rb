@@ -18,7 +18,7 @@ class UploadJson
         if json["competitionId"] != competition_id
           errors.add(:results_file, "this JSON file is not for this competition but for #{json["competitionId"]}!")
         end
-      rescue JSON::ParserError => e
+      rescue JSON::ParserError
         errors.add(:results_file, "must be a JSON file from the Workbook Assistant")
       rescue JSON::Schema::ValidationError => e
         errors.add(:results_file, "The JSON file had errors: #{e.message}")
@@ -31,7 +31,7 @@ class UploadJson
     results_file.rewind
   end
 
-  # FIXME: what is this used for?
+  # FIXME: what is this used for?
   def ==(other)
     self.class == other.class && self.state == other.state
   end

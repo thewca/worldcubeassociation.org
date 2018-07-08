@@ -6,7 +6,6 @@ module Resultable
   extend ActiveSupport::Concern
   include ResultMethods
 
-
   included do
     # NOTE: We used cached values instead of belongs_to to improve performances.
     belongs_to :competition, foreign_key: :competitionId
@@ -54,7 +53,6 @@ module Resultable
       correct_best = compute_correct_best
       errors.add(:best, "should be #{correct_best}") if correct_best != best
     end
-
   end
 
   def invalid_solve_count_reason

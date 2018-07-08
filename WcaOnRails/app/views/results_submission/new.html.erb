@@ -11,12 +11,76 @@
       <li>Then the website will run a number of checks. If everything is correct you'll be able to submit these results to the WRT.</li>
     </ul>
   </p>
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <div class="alert alert-info">Some results are already there, uploading a new (valid) JSON will override all of them!</div>
+  <% panel_style = @inbox_results.any? ? "success" : "warning" %>
+  <div class="panel panel-<%= panel_style %>">
+    <div class="panel-heading heading-as-link <%= "collapsed" if @inbox_results.any? %>" data-toggle="collapse" data-target="#collapse-submit-json">
+      <h3 class="panel-title">
+        Upload a JSON file
+        <span class="collapse-indicator"></span>
+      </h3>
+    </div>
+    <div id="collapse-submit-json" class="panel-body collapse <%= "in" unless @inbox_results.any? %>">
+      <% if @inbox_results.any? %>
+        <div class="alert alert-info">Some results are already there, uploading a new (valid) JSON will override all of them!</div>
+      <% else %>
+        <p>Please start by selecting a JSON file to import.</p>
+      <% end %>
       <%= simple_form_for @upload_json, url: upload_results_json_path do |f| %>
         <%= f.input :results_file, as: :file, input_html: { accept: 'application/json' }, label: "Results JSON file" %>
         <%= f.submit "Submit", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+
+  <%
+    panel_style = if @total_errors > 0
+                    "danger"
+                  elsif @total_warnings > 0
+                    "warning"
+                  else
+                    "success"
+                  end
+  %>
+
+  <div class="panel panel-<%= panel_style %>">
+    <div class="panel-heading heading-as-link <%= "collapsed" unless @inbox_results.any? %>" data-toggle="collapse" data-target="#collapse-check-results">
+      <h3 class="panel-title">
+        Check imported results
+        <span class="collapse-indicator"></span>
+      </h3>
+    </div>
+    <div id="collapse-check-results" class="panel-body collapse <%= "in" if @inbox_results.any? %>">
+      <h3>Errors</h3>
+      <% if @total_errors > 0 %>
+        <p>Please fix the errors below:</p>
+        <% @all_errors.each do |type, errors| %>
+          <% if errors.any? %>
+            <h4>Errors detected in <%= type %></h4>
+            <ul>
+              <% errors.each do |error| %>
+                <li><%= error %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+      <% else %>
+        <p>No error detected in the submitted results.</p>
+      <% end %>
+      <h3>Warnings</h3>
+      <% if @total_warnings > 0 %>
+        <p>Please pay attention to the warnings below. You may need to add a comment about them when submitting these results to the WRT!</p>
+        <% @all_warnings.each do |type, warnings| %>
+          <% if warnings.any? %>
+            <h4>Warnings detected in <%= type %></h4>
+            <ul>
+              <% warnings.each do |warning| %>
+                <li><%= warning %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+      <% else %>
+        <p>No warning detected in the submitted results.</p>
       <% end %>
     </div>
   </div>

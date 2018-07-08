@@ -17,7 +17,7 @@ class ResultsSubmission
         # Parse the json first
         json = JSON.parse(results_json_str)
         JSON::Validator.validate!(CompetitionResultsValidator::RESULT_JSON_SCHEMA, json)
-      rescue JSON::ParserError => e
+      rescue JSON::ParserError
         errors.add(:results_file, "must be a JSON file from the Workbook Assistant")
       rescue JSON::Schema::ValidationError => e
         errors.add(:results_file, "The JSON file had errors: #{e.message}")
@@ -46,12 +46,4 @@ class ResultsSubmission
   def state
     [results_json_str, message]
   end
-end
-
-# Copied and modified from https://stackoverflow.com/a/26235831
-def valid_json?(json)
-  JSON.parse(json)
-  true
-rescue JSON::ParserError
-  false
 end
