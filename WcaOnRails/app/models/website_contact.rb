@@ -3,6 +3,9 @@
 class WebsiteContact < ContactForm
   attribute :message, validate: true
 
+  validates :inquiry, presence: true
+  validates :competition_id, presence: true, if: -> { inquiry == 'competition' }
+
   attr_accessor :inquiry
   attr_accessor :competition_id
 
