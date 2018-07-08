@@ -876,6 +876,10 @@ class Competition < ApplicationRecord
     self.confirmed_at = new_confirmed ? (self.confirmed_at || Time.now) : nil
   end
 
+  def results_submitted?
+    !results_submitted_at.nil?
+  end
+
   def user_can_view?(user)
     self.showAtAll || user&.can_manage_competition?(self)
   end

@@ -1,6 +1,7 @@
 <p>Results Team,</p>
 
-<p><%= @submitter_user.name %> has uploaded the results for <%= @competition.name %>. You can upload them <%= link_to "here", "https://www.worldcubeassociation.org/results/admin/upload_results.php?competitionId=#{@competition.id}" %>.</p>
+<p><%= @submitter_user.name %> has uploaded the results for <%= @competition.name %>. You can go ahead with the posting process <%= link_to "here", "#{root_url}results/admin/upload_results.php?competitionId=#{@competition.id}" %>.</p>
+<%# TODO: link to the page displaying warnings and errors %>
 
 <p>The competition schedule is available at <%= link_to @results_submission.schedule_url, @results_submission.schedule_url %>.</p>
 

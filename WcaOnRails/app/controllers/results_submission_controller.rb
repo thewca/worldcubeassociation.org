@@ -18,9 +18,8 @@ class ResultsSubmissionController < ApplicationController
     if @inbox_results.any?
       @all_errors, @all_warnings = CompetitionResultsValidator.validate(@inbox_persons, @inbox_results, @scrambles, @competition.id)
     end
-    @total_errors = @all_errors.map { |key, value| value }.map(&:size).reduce(:+)
-    @total_warnings = @all_warnings.map { |key, value| value }.map(&:size).reduce(:+)
-    # TODO: do the result detection and actual result submission
+    @total_errors = @all_errors.map { |key, value| value }.map(&:size).reduce(:+) || 0
+    @total_warnings = @all_warnings.map { |key, value| value }.map(&:size).reduce(:+) || 0
     @results_submission = ResultsSubmission.new
   end
 
@@ -132,15 +131,28 @@ class ResultsSubmissionController < ApplicationController
     # Check inbox, create submission, send email
     @competition = competition_from_params
 
-    submit_results_params = params.require(:results_submission).permit(:results_file, :message, :schedule_url)
+    submit_results_params = params.require(:results_submission).permit(:message, :schedule_url)
     submit_results_params[:competition_id] = @competition.id
     @results_submission = ResultsSubmission.new(submit_results_params)
     if @results_submission.valid?
       CompetitionsMailer.results_submitted(@competition, @results_submission, current_user).deliver_now
 
       flash[:success] = "Thank you for submitting the results!"
+      @competition.update!(results_submitted_at: Time.now)
       redirect_to competition_path(@competition)
     else
+      # FIXME: maybe we should extract this to a separate method
+      @upload_json = UploadJson.new
+      @inbox_results = InboxResult.sorted_for_competition(@competition.id)
+      @inbox_persons = InboxPerson.where(competitionId: @competition.id)
+      @scrambles = Scramble.where(competitionId: @competition.id)
+      @all_errors = []
+      @all_warnings = []
+      if @inbox_results.any?
+        @all_errors, @all_warnings = CompetitionResultsValidator.validate(@inbox_persons, @inbox_results, @scrambles, @competition.id)
+      end
+      @total_errors = @all_errors.map { |key, value| value }.map(&:size).reduce(:+) || 0
+      @total_warnings = @all_warnings.map { |key, value| value }.map(&:size).reduce(:+) || 0
       render :new
     end
   end
