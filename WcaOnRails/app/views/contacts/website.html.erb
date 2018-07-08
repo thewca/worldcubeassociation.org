@@ -3,9 +3,8 @@
   <h1><%= yield(:title) %></h1>
 
   <%= simple_form_for @contact, url: contact_website_path do |f| %>
-    <% competition_input = f.input :competition_id, as: :competition_id, only_one: true, label: false, wrapper_html: { id: "target_competition" } %>
     <% options = [
-      [t('.inquiries.competition').html_safe + competition_input, "competition"],
+      [t('.inquiries.competition'), "competition"],
       [t('.inquiries.competitions_in_general'), "competitions_in_general"],
       [t('.inquiries.wca_id_or_profile'), "wca_id_or_profile"],
       [t('.inquiries.media'), "media"],
@@ -13,6 +12,7 @@
       [t('.inquiries.different'), "different"],
     ] %>
     <%= f.input :inquiry, as: :radio_buttons, collection: options %>
+    <%= f.input :competition_id, as: :competition_id, only_one: true, wrapper_html: { id: "target_competition" } %>
     <%= f.input :name %>
     <%= f.input :your_email %>
     <%= f.input :message, as: :text %>
@@ -25,8 +25,8 @@
 </div>
 
 <script type="text/javascript">
-  /* Focus competition input whenever the corresponding radio button is clicked. */
-  $('#target_competition').siblings('input[type="radio"]').on('click', function() {
-    $('#target_competition').find('input[type="text"]').focus();
-  });
+  /* Show competition input when competition radio is selected. */
+  $('input[type="radio"][name="website_contact[inquiry]"]').on('change', function() {
+    $('#target_competition').toggle($('#website_contact_inquiry_competition').is(':checked'));
+  }).trigger('change');
 </script>
