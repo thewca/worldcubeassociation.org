@@ -122,8 +122,6 @@ class CompetitionsMailer < ApplicationMailer
     @competition = competition
     @results_submission = results_submission
     @submitter_user = submitter_user
-    file_name = "Results_#{competition.id}_#{Time.now.utc.iso8601}.json"
-    attachments[file_name] = results_submission.results_json_str
     mail(
       to: "results@worldcubeassociation.org",
       cc: competition.delegates.pluck(:email),

@@ -3,47 +3,30 @@
 class ResultsSubmission
   include ActiveModel::Model
 
-  attr_accessor :results_json_str, :message, :schedule_url, :competition_id
+  attr_accessor :message, :schedule_url, :competition_id
 
   validates :message, presence: true
   validates :competition_id, presence: true
   validates :schedule_url, presence: true, url: true
 
   validate do
-    if !results_json_str
-      errors.add(:results_file, "can't be blank")
-    else
-      begin
-        # Parse the json first
-        json = JSON.parse(results_json_str)
-        JSON::Validator.validate!(CompetitionResultsValidator::RESULT_JSON_SCHEMA, json)
-      rescue JSON::ParserError
-        errors.add(:results_file, "must be a JSON file from the Workbook Assistant")
-      rescue JSON::Schema::ValidationError => e
-        errors.add(:results_file, "The JSON file had errors: #{e.message}")
-      end
+    inbox_results = InboxResult.sorted_for_competition(competition_id)
+    inbox_persons = InboxPerson.where(competitionId: competition_id)
+    scrambles = Scramble.where(competitionId: competition_id)
+    all_errors, _ = CompetitionResultsValidator.validate(inbox_persons, inbox_results, scrambles, competition_id)
+    total_errors = all_errors.map { |key, value| value }.map(&:size).reduce(:+)
+    if total_errors != 0
+      # this shouldn't actually happen through a "normal" usage of the website
+      errors.add(:message, "submitted results contain errors")
     end
   end
 
-  def validate_results
-    if valid?
-      CompetitionResultsValidator.validate(JSON.parse(results_json_str), competition_id)
-    else
-      # Will error anyway
-      {}
-    end
-  end
-
-  def results_file=(results_file)
-    self.results_json_str = results_file.read
-    results_file.rewind
-  end
-
+  # FIXME: what is this used for?
   def ==(other)
     self.class == other.class && self.state == other.state
   end
 
   def state
-    [results_json_str, message]
+    [message]
   end
 end

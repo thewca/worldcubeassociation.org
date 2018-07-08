@@ -94,7 +94,7 @@ module CompetitionResultsValidator
   }.freeze
 
   DNF_AFTER_RESULT_WARNING = "[%{round_id}] The round has a cumulative time limit and %{person_name} has at least one DNF results followed by a valid result."\
-    "Please make sure the time elapsed for the DNF was short enough to allow for the other subsequent valid results to count."
+    " Please make sure the time elapsed for the DNF was short enough to allow for the other subsequent valid results to count."
 
   # NOTE: results are expected to be sorted correctly
   def self.validate(persons, results, scrambles, competition_id)
@@ -141,7 +141,7 @@ module CompetitionResultsValidator
     end
 
     expected_events = competition.events.map(&:id)
-    expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.roundTypeId}", r] }]
+    expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
     expected_rounds_ids = expected_rounds_by_ids.keys
 
     detected_events = results.map(&:eventId).uniq
