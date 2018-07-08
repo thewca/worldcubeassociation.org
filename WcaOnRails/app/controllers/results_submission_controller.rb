@@ -10,11 +10,22 @@ class ResultsSubmissionController < ApplicationController
     @competition = competition_from_params
     # Should always have an upload_json
     @upload_json = UploadJson.new
+    @inbox_results = InboxResult.sorted_for_competition(@competition.id)
+    @inbox_persons = InboxPerson.where(competitionId: @competition.id)
+    @scrambles = Scramble.where(competitionId: @competition.id)
+    @all_errors = []
+    @all_warnings = []
+    if @inbox_results.any?
+      @all_errors, @all_warnings = CompetitionResultsValidator.validate(@inbox_persons, @inbox_results, @scrambles, @competition.id)
+    end
+    @total_errors = @all_errors.map { |key, value| value }.map(&:size).reduce(:+)
+    @total_warnings = @all_warnings.map { |key, value| value }.map(&:size).reduce(:+)
     # TODO: do the result detection and actual result submission
     @results_submission = ResultsSubmission.new
   end
 
   def upload_json
+    # TODO: redirect if competition already has results!
     @competition = competition_from_params
     # Do json analysis + insert record in db, then redirect to check inbox
     # (and delete existing record if any)
@@ -34,6 +45,7 @@ class ResultsSubmissionController < ApplicationController
         persons_to_import << InboxPerson.new(new_person_attributes)
       end
       results_to_import = []
+      scrambles_to_import = []
       json["events"].each do |event|
         event["rounds"].each do |round|
           round["results"].each do |result|
@@ -60,28 +72,58 @@ class ResultsSubmissionController < ApplicationController
             # (a lot of time considering all the results to import!)
             new_res.competition = @competition
             results_to_import << new_res
+
+            # Import scrambles
+            round["groups"].each do |group|
+              ["scrambles", "extraScrambles"].each do |scramble_type|
+                group[scramble_type].each_with_index do |scramble, index|
+                  new_scramble_attributes = {
+                    competitionId: @competition.id,
+                    eventId: event["eventId"],
+                    roundTypeId: round["roundId"],
+                    groupId: group["group"],
+                    isExtra: scramble_type == "extraScrambles",
+                    scrambleNum: index+1,
+                    scramble: scramble,
+                  }
+                  scrambles_to_import << Scramble.new(new_scramble_attributes)
+                end
+              end
+            end
           end
         end
       end
-      # TODO scrambles
-      ActiveRecord::Base.transaction do
-        InboxPerson.where(competitionId: @competition.id).delete_all
-        InboxResult.where(competitionId: @competition.id).delete_all
-        begin
+      begin
+        ActiveRecord::Base.transaction do
+          InboxPerson.where(competitionId: @competition.id).delete_all
+          InboxResult.where(competitionId: @competition.id).delete_all
+          Scramble.where(competitionId: @competition.id).delete_all
           InboxPerson.import!(persons_to_import)
-        rescue ActiveRecord::RecordInvalid => invalid
-          @upload_json.errors.add(:results_file, "Person #{invalid.record.name} is invalid (#{invalid.message}), please fix it!")
-        end
-        begin
+          Scramble.import!(scrambles_to_import)
           InboxResult.import!(results_to_import)
-        rescue ActiveRecord::RecordInvalid => invalid
-          result = invalid.record
-          @upload_json.errors.add(:results_file, "Result for person #{result.personId} in round #{result.roundTypeId} of event #{result.eventId} is invalid (#{invalid.message}), please fix it!")
+        end
+      rescue ActiveRecord::RecordInvalid => invalid
+        object = invalid.record
+        if object.class == Scramble
+          @upload_json.errors.add(:results_file, "Scramble in round #{object.roundTypeId} of event #{object.eventId} is invalid (#{invalid.message}), please fix it!")
+        elsif object.class == InboxPerson
+          @upload_json.errors.add(:results_file, "Person #{object.name} is invalid (#{invalid.message}), please fix it!")
+        elsif object.class == InboxResult
+          @upload_json.errors.add(:results_file, "Result for person #{object.personId} in round #{object.roundTypeId} of event #{object.eventId} is invalid (#{invalid.message}), please fix it!")
+        else
+          # FIXME: that's actually not supposed to happen, as the only 3 types of records we create are above
+          @upload_json.errors.add(:results_file, "An invalid record prevented the results from being created: #{invalid.message}")
         end
       end
-      # TODO
-      render :new
+      flash[:success] = "JSON File has been imported."
+      redirect_to submit_results_edit_path
     else
+      # FIXME: maybe we should clear in any case? otherwise we would display errors/warning for inbox while trying to import another json
+      @inbox_results = InboxResult.where(competitionId: @competition.id)
+      @all_errors = []
+      @all_warnings = []
+      @total_errors = 0
+      @total_warnings = 0
       render :new
     end
   end

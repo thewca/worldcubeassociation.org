@@ -3,7 +3,6 @@
 class Result < ApplicationRecord
   include Resultable
 
-
   self.table_name = "Results"
 
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
