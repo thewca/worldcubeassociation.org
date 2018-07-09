@@ -33,7 +33,6 @@ class Api::V0::ApiController < ApplicationController
         "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-0.13.4.jar",
       },
       "allowed" => [
-        "TNoodle-WCA-0.13.3",
         "TNoodle-WCA-0.13.4",
       ],
       "history" => [
