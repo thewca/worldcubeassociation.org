@@ -1164,8 +1164,8 @@ en:
     website:
       title: "WCA Website Contact Form"
       inquiries:
-        competition: "A specific competition (please select below)"
-        competitions_in_general: "Competitions in general (Organizing, Competition rules, etc.)"
+        competition: "Contact the Organizers of a Specific Competition (please select below)"
+        competitions_in_general: "Competitions in General (organizing, competition rules, etc.)"
         wca_id_or_profile: "WCA ID or WCA Profile"
         media: "Media"
         software: "Software"
