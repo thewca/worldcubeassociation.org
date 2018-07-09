@@ -32,45 +32,31 @@ class AdminController < ApplicationController
     render 'merge_people'
   end
 
+  def actions_index_for_competition
+    @competition = competition_from_params
+  end
+
   def new_results
-    @competition = Competition.find(params.require(:competition_id))
+    @competition = competition_from_params
     @upload_json = UploadJson.new
-    @inbox_results = InboxResult.sorted_for_competition(@competition.id)
-    @inbox_persons = InboxPerson.where(competitionId: @competition.id)
-    @scrambles = Scramble.where(competitionId: @competition.id)
-    @all_errors = []
-    @all_warnings = []
-    if @inbox_results.any?
-      @all_errors, @all_warnings = CompetitionResultsValidator.validate(@inbox_persons, @inbox_results, @scrambles, @competition.id)
-    end
-    @total_errors = @all_errors.map { |key, value| value }.map(&:size).reduce(:+) || 0
-    @total_warnings = @all_warnings.map { |key, value| value }.map(&:size).reduce(:+) || 0
+    @results_validator = CompetitionResultsValidator.new(@competition.id)
   end
 
   def create_results
-    # FIXME: check for any existing inboxresults or existing results
-    @competition = Competition.find(params.require(:competition_id))
+    @competition = competition_from_params
 
     # Do json analysis + insert record in db, then redirect to check inbox
     # (and delete existing record if any)
     upload_json_params = params.require(:upload_json).permit(:results_file)
     upload_json_params[:competition_id] = @competition.id
     @upload_json = UploadJson.new(upload_json_params)
-    @results_submission = ResultsSubmission.new
 
     # This makes sure the json structure is valid!
     if @upload_json.import_to_inbox
-        flash[:success] = "JSON File has been imported."
-        redirect_to competition_admin_upload_results_edit_path
+      flash[:success] = "JSON File has been imported."
+      redirect_to competition_admin_upload_results_edit_path
     else
-      # FIXME: maybe we should clear in any case? otherwise we would display errors/warning for inbox while trying to import another json
-      #@inbox_results = InboxResult.where(competitionId: @competition.id)
-      @inbox_results = []
-      # FIXME: clarify this as it could show green for invalid results on invalid json
-      @all_errors = []
-      @all_warnings = []
-      @total_errors = 0
-      @total_warnings = 0
+      @results_validator = CompetitionResultsValidator.new(@competition.id)
       render :new_results
     end
   end
@@ -154,5 +140,9 @@ class AdminController < ApplicationController
                     Note that you will receive no information about the outcome,
                     also please don't queue up multiple simultaneous statistics computations."
     redirect_to admin_url
+  end
+
+  private def competition_from_params
+    Competition.find(params[:competition_id])
   end
 end

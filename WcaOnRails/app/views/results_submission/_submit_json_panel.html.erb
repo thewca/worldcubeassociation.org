@@ -17,7 +17,7 @@
       <span class="collapse-indicator"></span>
     </h3>
   </div>
-  <div id="collapse-submit-json" class="panel-body collapse <%= "in" unless already_has_submitted_result %>">
+  <div id="collapse-submit-json" class="panel-body collapse <%= "in" unless already_has_submitted_result && upload_json.errors.empty? %>">
     <% if already_has_submitted_result %>
       <div class="alert alert-info">Some results are already there, uploading a new (valid) JSON will override all of them!</div>
     <% else %>

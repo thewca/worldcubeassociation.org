@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-module CompetitionResultsValidator
+class CompetitionResultsValidator
+  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results
+
   INDIVIDUAL_RESULT_JSON_SCHEMA = {
     "type" => "object",
     "properties" => {
@@ -96,18 +98,19 @@ module CompetitionResultsValidator
   DNF_AFTER_RESULT_WARNING = "[%{round_id}] The round has a cumulative time limit and %{person_name} has at least one DNF results followed by a valid result."\
     " Please make sure the time elapsed for the DNF was short enough to allow for the other subsequent valid results to count."
 
-  # NOTE: results are expected to be sorted correctly
-  def self.validate(persons, results, scrambles, competition_id)
-    all_errors = {
+  def initialize(competition_id)
+    @errors = {
       persons: [],
       events: [],
       rounds: [],
       results: [],
     }
-    all_warnings = {
+    @warnings = {
       persons: [],
       results: [],
     }
+    @total_errors = 0
+    @total_warnings = 0
 
     associations = {
       events: [],
@@ -115,37 +118,46 @@ module CompetitionResultsValidator
         rounds: [:competition_event],
       },
     }
+
     competition = Competition.includes(associations).find(competition_id)
+    inbox_results = InboxResult.sorted_for_competition(competition_id)
+    @has_results = inbox_results.any?
+    unless @has_results
+      return
+    end
+
+    inbox_persons = InboxPerson.where(competitionId: competition_id)
+    scrambles = Scramble.where(competitionId: competition_id)
 
     # check persons
     # name, country are required; others can have 'empty' values (OK to fill in later)
     # FIXME: we could do this by putting an index on (competitionId, id) !
     valid_persons_by_id = {}
-    persons.each do |p|
+    inbox_persons.each do |p|
       # non-blank fields are already tested upon record's validation
       if valid_persons_by_id[p.id]
-        all_errors[:persons] << "Duplicate person with id #{p.id}"
+        @errors[:persons] << "Duplicate person with id #{p.id}"
       else
         valid_persons_by_id[p.id] = p
       end
     end
 
     # Check that the persons who have results matches exactly the persons in InboxPerson
-    detected_person_ids = persons.map(&:id)
-    persons_with_results = results.map(&:personId)
+    detected_person_ids = inbox_persons.map(&:id)
+    persons_with_results = inbox_results.map(&:personId)
     (detected_person_ids - persons_with_results).each do |person_id|
-      all_errors[:events] << "Person with id #{person_id} (#{valid_persons_by_id[person_id]}) has no result"
+      @errors[:events] << "Person with id #{person_id} (#{valid_persons_by_id[person_id]}) has no result"
     end
     (persons_with_results - detected_person_ids).each do |person_id|
-      all_errors[:events] << "Results for unknown person with id #{person_id}"
+      @errors[:events] << "Results for unknown person with id #{person_id}"
     end
 
     expected_events = competition.events.map(&:id)
     expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
     expected_rounds_ids = expected_rounds_by_ids.keys
 
-    detected_events = results.map(&:eventId).uniq
-    detected_rounds_ids = results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
+    detected_events = inbox_results.map(&:eventId).uniq
+    detected_rounds_ids = inbox_results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
 
     # Check for missing/unexpected events and rounds
     # It should handle cases where:
@@ -153,16 +165,16 @@ module CompetitionResultsValidator
     #   - a round changed format from what was planed (eg: Bo3 -> Bo1, no cutoff -> cutoff)
     # FIXME: maybe check for round_id (eg: "333-c") is enough
     (detected_events - expected_events).each do |event_id|
-      all_errors[:events] << "Unexpected results for #{event_id}"
+      @errors[:events] << "Unexpected results for #{event_id}"
     end
     (expected_events - detected_events).each do |event_id|
-      all_errors[:events] << "Missing results for #{event_id}"
+      @errors[:events] << "Missing results for #{event_id}"
     end
     (detected_rounds_ids - expected_rounds_ids).each do |round_id|
-      all_errors[:rounds] << "Unexpected results for round #{round_id}"
+      @errors[:rounds] << "Unexpected results for round #{round_id}"
     end
     (expected_rounds_ids - detected_rounds_ids).each do |round_id|
-      all_errors[:rounds] << "Missing results for round #{round_id}"
+      @errors[:rounds] << "Missing results for round #{round_id}"
     end
 
     # For results
@@ -175,7 +187,7 @@ module CompetitionResultsValidator
     #   - warn for existing name in the db but no ID (can happen, but the Delegate should add a note)
 
     # Group result by round_id
-    results_by_round_id = results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
+    results_by_round_id = inbox_results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
 
     results_by_round_id.each do |round_id, results_for_round|
       # TODO: include cutoff/timelimit values in error messages
@@ -215,12 +227,12 @@ module CompetitionResultsValidator
           if qualifying_results.any?
             # Meets the cutoff, no result should be SKIPPED
             if skipped.any?
-              all_errors[:results] << "[#{round_id}] #{person_info.name} has met the cutoff but is missing results for the second phase."
+              @errors[:results] << "[#{round_id}] #{person_info.name} has met the cutoff but is missing results for the second phase."
             end
           else
             # Doesn't meet the cutoff, all results should be SKIPPED
             if unskipped.any?
-              all_errors[:results] << "[#{round_id}] #{person_info.name} has at least one result for the second phase but didn't meet the cutoff."
+              @errors[:results] << "[#{round_id}] #{person_info.name} has at least one result for the second phase but didn't meet the cutoff."
             end
           end
         end
@@ -243,29 +255,28 @@ module CompetitionResultsValidator
             # easy case: each completed result (not DNS, DNF, or SKIPPED) must be below the time limit.
             results_over_time_limit = completed_solves.select { |t| t.time_centiseconds > time_limit_for_round.centiseconds }
             if results_over_time_limit&.any?
-              all_errors[:results] << "[#{round_id}] At least one result for #{person_info.name} is over the time limit."
+              @errors[:results] << "[#{round_id}] At least one result for #{person_info.name} is over the time limit which is #{time_limit_for_round.to_s(round_info)} for one solve."
             end
           when 1
             # cumulative for the round: the sum of each time must be below the cumulative time limit.
             # if there is any DNF -> warn the Delegate and ask him to double check the time for them.
             sum_of_times = completed_solves.map(&:time_centiseconds).reduce(&:+) || 0
             if sum_of_times > time_limit_for_round.centiseconds
-              all_errors[:results] << "[#{round_id}] The sum of results for #{person_info.name} is over the cumulative time limit."
+              @errors[:results] << "[#{round_id}] The sum of results for #{person_info.name} is over the time limit which is #{time_limit_for_round.to_s(round_info)}."
             end
             if has_result_after_dnf
-              all_warnings[:results] << format(DNF_AFTER_RESULT_WARNING, round_id: round_id, person_name: person_info.name)
+              @warnings[:results] << format(DNF_AFTER_RESULT_WARNING, round_id: round_id, person_name: person_info.name)
             end
           else
             # cross-rounds time limit, the sum of all the results for all the rounds must be below the cumulative time limit.
             # if there is any DNF -> warn the Delegate and ask him to double check the time for them.
-            all_errors[:results] << "Cumul across rounds not implemented"
+            @errors[:results] << "Cumul across rounds not implemented"
           end
         end
       end
     end
-    # TODO: check scrambles
-    # TODO: check for # of qualified people
 
-    [all_errors, all_warnings]
+    @total_errors = @errors.map { |key, value| value }.map(&:size).reduce(:+)
+    @total_warnings = @warnings.map { |key, value| value }.map(&:size).reduce(:+)
   end
 end

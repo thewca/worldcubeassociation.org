@@ -9,14 +9,8 @@
   <%= render "results_submission/submit_json_panel",
     upload_json: @upload_json,
     action: competition_admin_upload_results_path,
-    already_has_submitted_result: @inbox_results.any?
+    already_has_submitted_result: @results_validator.has_results
   %>
 
-  <%= render "results_submission/check_inbox_results_panel",
-    already_has_submitted_result: @inbox_results.any?,
-    total_errors: @total_errors,
-    all_errors: @all_errors,
-    total_warnings: @total_warnings,
-    all_warnings: @all_warnings
-  %>
+  <%= render "results_submission/check_inbox_results_panel", results_validator: @results_validator %>
 <% end %>
