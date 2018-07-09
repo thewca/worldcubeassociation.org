@@ -1,29 +1,25 @@
 <%
-  already_has_submitted_result ||= false
-  total_errors ||= 0
-  total_warnings ||= 0
-  all_errors ||= {}
-  all_warnings ||= {}
-  panel_style = if !already_has_submitted_result || total_errors > 0
+  # NOTE: expect valid 'results_validator' variable
+  panel_style = if !results_validator.has_results || results_validator.total_errors > 0
                   "danger"
-                elsif total_warnings > 0
+                elsif results_validator.total_warnings > 0
                   "warning"
                 else
                   "success"
                 end
 %>
 <div class="panel panel-<%= panel_style %>">
-  <div class="panel-heading heading-as-link <%= "collapsed" unless already_has_submitted_result %>" data-toggle="collapse" data-target="#collapse-check-results">
+  <div class="panel-heading heading-as-link <%= "collapsed" unless results_validator.has_results %>" data-toggle="collapse" data-target="#collapse-check-results">
     <h3 class="panel-title">
       Check imported results
       <span class="collapse-indicator"></span>
     </h3>
   </div>
-  <div id="collapse-check-results" class="panel-body collapse <%= "in" if already_has_submitted_result %>">
+  <div id="collapse-check-results" class="panel-body collapse <%= "in" if results_validator.has_results %>">
     <h3>Errors</h3>
-    <% if total_errors > 0 %>
+    <% if results_validator.total_errors > 0 %>
       <p>Please fix the errors below:</p>
-      <% all_errors.each do |type, errors| %>
+      <% results_validator.errors.each do |type, errors| %>
         <% if errors.any? %>
           <h4>Errors detected in <%= type %></h4>
           <ul>
@@ -33,15 +29,15 @@
           </ul>
         <% end %>
       <% end %>
-    <% elsif !already_has_submitted_result %>
+    <% elsif !results_validator.has_results %>
       <p class="text-danger">No results submitted yet.</p>
     <% else %>
       <p>No error detected in the submitted results.</p>
     <% end %>
     <h3>Warnings</h3>
-    <% if total_warnings > 0 %>
+    <% if results_validator.total_warnings > 0 %>
       <p>Please pay attention to the warnings below. You may need to add a comment about them when submitting these results to the WRT!</p>
-      <% all_warnings.each do |type, warnings| %>
+      <% results_validator.warnings.each do |type, warnings| %>
         <% if warnings.any? %>
           <h4>Warnings detected in <%= type %></h4>
           <ul>
@@ -51,7 +47,7 @@
           </ul>
         <% end %>
       <% end %>
-    <% elsif !already_has_submitted_result %>
+    <% elsif !results_validator.has_results %>
       <p class="text-danger">No results submitted yet.</p>
     <% else %>
       <p>No warning detected in the submitted results.</p>

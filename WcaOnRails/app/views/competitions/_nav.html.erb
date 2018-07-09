@@ -81,8 +81,7 @@
       if current_user&.can_admin_results?
         nav_items << {
           text: "Admin results",
-          # FIXME: index with all possible actions
-          path: competition_admin_upload_results_edit_path(@competition),
+          path: competition_admin_index_path(@competition),
           fa_icon: "cogs",
           children: [
             { text: "Upload and check results", path: competition_admin_upload_results_edit_path(@competition), fa_icon: "check" },
