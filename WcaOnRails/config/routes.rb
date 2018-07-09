@@ -50,14 +50,15 @@ Rails.application.routes.draw do
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
-    get 'upload-results' => "admin#new_results"
-    post 'upload-results' => "admin#create_results"
-    get 'check-results' => "admin#check_results"
+    # Delegate views and action
+    get 'submit-results' => 'results_submission#new', as: :submit_results_edit
+    post 'submit-results' => 'results_submission#create', as: :submit_results
+    post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
+    # WRT views and action
+    get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
+    post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
   end
 
-  get 'competitions/:competition_id/submit-results' => 'results_submission#new', as: :submit_results_edit
-  post 'competitions/:competition_id/submit-results' => 'results_submission#create', as: :submit_results
-  post 'competitions/:competition_id/upload-json' => 'results_submission#upload_json', as: :upload_results_json
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
