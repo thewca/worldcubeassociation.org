@@ -66,6 +66,8 @@ module DatabaseDumper
           base_entry_fee_lowest_denomination
           currency_code
           registration_requirements
+          created_at
+          updated_at
         ),
         db_default: %w(
           connected_stripe_account_id

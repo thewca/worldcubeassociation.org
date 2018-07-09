@@ -53,6 +53,8 @@ CREATE TABLE `Competitions` (
   `competitor_limit` int(11) DEFAULT NULL,
   `competitor_limit_reason` text COLLATE utf8mb4_unicode_ci,
   `registration_requirements` text COLLATE utf8mb4_unicode_ci,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1389,4 +1391,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180621093155'),
 ('20180629112054'),
 ('20180703172949'),
-('20180705231137');
+('20180705231137'),
+('20180709220826');
