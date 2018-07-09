@@ -75,7 +75,7 @@
       if current_user&.can_submit_competition_results?(@competition)
         nav_items << {
           text: t('.menu.submit_results'),
-          path: submit_results_edit_path(@competition),
+          path: competition_submit_results_edit_path(@competition),
           fa_icon: "cloud-upload",
         }
       end
@@ -83,11 +83,10 @@
         nav_items << {
           text: "Admin results",
           # FIXME: index with all possible actions
-          path: competition_upload_results_path(@competition),
-          fa_icon: "cloud-upload",
+          path: competition_admin_upload_results_edit_path(@competition),
+          fa_icon: "cogs",
           children: [
-            { text: "Upload JSON", path: competition_upload_results_path(@competition), fa_icon: "cloud-upload" },
-            { text: "Check uploaded results", path: competition_check_results_path(@competition), fa_icon: "check" },
+            { text: "Upload and check results", path: competition_admin_upload_results_edit_path(@competition), fa_icon: "check" },
           ],
         }
       end
@@ -222,7 +221,7 @@
 
       <% if @competition.user_should_post_competition_results?(current_user) %>
         <%= alert :warning, note: true do %>
-          Please submit results for this competition! You can upload them <%= link_to "here", submit_results_edit_path(@competition) %>.
+          Please submit results for this competition! You can upload them <%= link_to "here", competition_submit_results_edit_path(@competition) %>.
         <% end %>
       <% end %>
 

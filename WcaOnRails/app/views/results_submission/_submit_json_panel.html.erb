@@ -1,4 +1,5 @@
 <% already_has_submitted_result ||= false %>
+<% action ||= competition_upload_results_json_path %>
 <% upload_json || UploadJson.new %>
 <div class="panel panel-<%= already_has_submitted_result ? "success" : "warning" %>">
   <div class="panel-heading heading-as-link <%= "collapsed" if @inbox_results.any? %>" data-toggle="collapse" data-target="#collapse-submit-json">
@@ -13,7 +14,7 @@
     <% else %>
       <p>Please start by selecting a JSON file to import.</p>
     <% end %>
-    <%= simple_form_for upload_json, url: upload_results_json_path do |f| %>
+    <%= simple_form_for upload_json, url: action do |f| %>
       <%= f.input :results_file, as: :file, input_html: { accept: 'application/json' }, label: "Results JSON file" %>
       <%= f.submit "Submit", class: "btn btn-primary" %>
     <% end %>

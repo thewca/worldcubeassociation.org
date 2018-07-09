@@ -307,7 +307,7 @@ class Competition < ApplicationRecord
   end
 
   def user_should_post_competition_results?(user)
-    persisted? && is_probably_over? && !self.results_posted? && delegates.include?(user)
+    persisted? && is_probably_over? && !self.results_submitted? && delegates.include?(user)
   end
 
   def warnings_for(user)

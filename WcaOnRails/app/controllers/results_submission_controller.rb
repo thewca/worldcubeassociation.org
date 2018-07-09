@@ -24,8 +24,10 @@ class ResultsSubmissionController < ApplicationController
   end
 
   def upload_json
-    # TODO: redirect if competition already has results!
     @competition = competition_from_params
+    if @competition.results_submitted?
+      return redirect_to competition_submit_results_edit_path
+    end
     # Do json analysis + insert record in db, then redirect to check inbox
     # (and delete existing record if any)
     upload_json_params = params.require(:upload_json).permit(:results_file)
@@ -115,7 +117,7 @@ class ResultsSubmissionController < ApplicationController
         end
       end
       flash[:success] = "JSON File has been imported."
-      redirect_to submit_results_edit_path
+      redirect_to competition_submit_results_edit_path
     else
       # FIXME: maybe we should clear in any case? otherwise we would display errors/warning for inbox while trying to import another json
       @inbox_results = InboxResult.where(competitionId: @competition.id)

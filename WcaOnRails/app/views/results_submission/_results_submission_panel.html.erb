@@ -15,14 +15,14 @@
     <% if can_submit_results %>
       <p>Please enter the body of your email to the Results Team.</p>
       <p>
-      Make sure to include a link to the competition schedule (and all time
-      limits and cutoffs) and provide any changes to the provided schedule, as
-      well as any other additional details required by the
-      <%= link_to "'Submitting competition results' section of the delegate crash course",
-        delegate_crash_course_path(anchor: "submitting-competition-results") %>.
+        Make sure to include a link to the competition schedule (and all time
+        limits and cutoffs) and provide any changes to the provided schedule, as
+        well as any other additional details required by the
+        <%= link_to "'Submitting competition results' section of the delegate crash course",
+          delegate_crash_course_path(anchor: "submitting-competition-results") %>.
       </p>
 
-      <%= simple_form_for results_submission, url: submit_results_path do |f| %>
+      <%= simple_form_for results_submission, url: competition_submit_results_path do |f| %>
         <%= f.input :schedule_url %>
         <%= f.input :message, as: :text, input_html: { class: "markdown-editor" } %>
         <%= f.submit "Submit", class: "btn btn-primary" %>
