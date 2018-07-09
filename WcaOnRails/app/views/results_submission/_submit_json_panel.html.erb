@@ -1,0 +1,21 @@
+<% already_has_submitted_result ||= false %>
+<% upload_json || UploadJson.new %>
+<div class="panel panel-<%= already_has_submitted_result ? "success" : "warning" %>">
+  <div class="panel-heading heading-as-link <%= "collapsed" if @inbox_results.any? %>" data-toggle="collapse" data-target="#collapse-submit-json">
+    <h3 class="panel-title">
+      Upload a JSON file
+      <span class="collapse-indicator"></span>
+    </h3>
+  </div>
+  <div id="collapse-submit-json" class="panel-body collapse <%= "in" unless already_has_submitted_result %>">
+    <% if already_has_submitted_result %>
+      <div class="alert alert-info">Some results are already there, uploading a new (valid) JSON will override all of them!</div>
+    <% else %>
+      <p>Please start by selecting a JSON file to import.</p>
+    <% end %>
+    <%= simple_form_for upload_json, url: upload_results_json_path do |f| %>
+      <%= f.input :results_file, as: :file, input_html: { accept: 'application/json' }, label: "Results JSON file" %>
+      <%= f.submit "Submit", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
