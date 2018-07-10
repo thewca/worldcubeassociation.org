@@ -25,9 +25,10 @@ class Competition < ApplicationRecord
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
 
-  validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0
+  validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :entry_fee_required?
   monetize :base_entry_fee_lowest_denomination,
            as: "base_entry_fee",
+           allow_nil: true,
            with_model_currency: :currency_code
 
   scope :visible, -> { where(showAtAll: true) }
@@ -567,7 +568,15 @@ class Competition < ApplicationRecord
   end
 
   def has_fees?
-    base_entry_fee_lowest_denomination + competition_events.sum(:fee_lowest_denomination) > 0
+    if base_entry_fee_lowest_denomination.nil?
+      competition_events.sum(:fee_lowest_denomination) > 0
+    else
+      base_entry_fee_lowest_denomination + competition_events.sum(:fee_lowest_denomination) > 0
+    end
+  end
+
+  def entry_fee_required?
+    isConfirmed? && created_at.present? && created_at > Date.new(2018, 7, 17)
   end
 
   def competitor_limit_enabled?

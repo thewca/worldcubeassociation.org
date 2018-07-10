@@ -12,13 +12,16 @@ function getCurrencyInfo(isoCode) {
 // '$element' is a jquery element for the targeted input field
 function applyCurrencyMask(action, $element, currencyIsoCode) {
   let entry = getCurrencyInfo(currencyIsoCode);
-  let currentVal = 0;
+  let currentVal;
 
   // Get current val
   if (action == "update") {
     currentVal = getValueInCurrency($element);
   } else if (action == "init") {
     currentVal = $element.val();
+    if (currentVal === "") {
+      currentVal = null;
+    }
   } else {
     throw new Error('Unsupported action for currency mask');
   }
@@ -45,7 +48,7 @@ function applyCurrencyMask(action, $element, currencyIsoCode) {
   }
 
   // Set new val
-  autoNumericObject.set(currentVal/entry.subunitToUnit);
+  autoNumericObject.set(currentVal === null ? null : currentVal/entry.subunitToUnit);
 }
 
 // Retrieve the real value, in the currency's lowest denomination
@@ -53,6 +56,9 @@ function applyCurrencyMask(action, $element, currencyIsoCode) {
 function getValueInCurrency($element) {
   let currentVal = $element.data("autoNumericObject").getNumber();
   let multiplier = $.data($element[0], "current_subunit_to_unit");
+  if($element.data("autoNumericObject").getNumericString() === "") {
+    return null;
+  }
   // Set back the value to the "lowest denomination" in the currency
   return currentVal * multiplier;
 }
