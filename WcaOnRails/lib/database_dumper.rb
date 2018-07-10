@@ -264,6 +264,7 @@ module DatabaseDumper
           id
           competition_event_id
           format_id
+          total_number_of_rounds
           number
           time_limit
           cutoff
