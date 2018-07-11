@@ -134,42 +134,164 @@ class CompetitionResultsValidator
     # basic checks on persons are done in the model, uniqueness for a given competition
     # is done in the SQL schema.
 
-    # Check that the persons who have results matches exactly the persons in InboxPerson
+    # Map a personId to its corresponding object
     persons_by_id = Hash[inbox_persons.map { |person| [person.id, person] }]
-    detected_person_ids = persons_by_id.keys
-    persons_with_results = inbox_results.map(&:personId)
-    (detected_person_ids - persons_with_results).each do |person_id|
-      @errors[:events] << "Person with id #{person_id} (#{persons_by_id[person_id]}) has no result"
-    end
-    (persons_with_results - detected_person_ids).each do |person_id|
-      @errors[:events] << "Results for unknown person with id #{person_id}"
-    end
 
-    expected_events = competition.events.map(&:id)
+    # Map a competition's (expected!) round id (eg: "444-f") to its corresponding object
     expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
-    expected_rounds_ids = expected_rounds_by_ids.keys
 
-    detected_events = inbox_results.map(&:eventId).uniq
-    detected_rounds_ids = inbox_results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
+    # Group actual results by their round id
+    results_by_round_id = inbox_results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
 
+    check_persons(persons_by_id, inbox_results)
+
+    check_events_match(competition.events, inbox_results)
+
+    check_rounds_match(expected_rounds_by_ids, inbox_results)
+
+    check_individual_results(results_by_round_id, expected_rounds_by_ids, persons_by_id)
+
+    check_avancement_conditions(results_by_round_id, competition.competition_events)
+
+    check_scrambles(scrambles, expected_rounds_by_ids)
+
+    @total_errors = @errors.map { |key, value| value }.map(&:size).reduce(:+)
+    @total_warnings = @warnings.map { |key, value| value }.map(&:size).reduce(:+)
+  end
+
+  private
+  def results_similar_to(reference, reference_index, results)
+    # We do this programatically, but the original check_results.php used to do a big SQL query:
+    # https://github.com/thewca/worldcubeassociation.org/blob/b1ee87b318ff6e4f8658a711c19fd23a3ae51b9c/webroot/results/admin/check_results.php#L321-L353
+
+    similar_results = []
+    # Note that we don't want to treat a particular result as looking
+    # similar to itself, so we don't allow for results with matching ids.
+    # Further more, if a result A is similar to a result B, we don't want to
+    # return both (A, B) and (B, A) as matching pairs, it's sufficient to just
+    # return (A, B), which is why we require Result.id < h.resultId.
+    results.each_with_index do |r, index|
+      next if index >= reference_index
+      score = 0
+      reference_solve_times = reference.solve_times
+      r.solve_times.each_with_index do |solve_time, index|
+        if solve_time.complete? && solve_time == reference_solve_times[index]
+          score += 1
+        end
+      end
+      # We have at least 3 matching values, consider this similar
+      if score > 2
+        similar_results << r
+      end
+    end
+    similar_results
+  end
+
+  private
+  def check_events_match(competition_events, results)
+    expected = competition_events.map(&:id)
+    real = results.map(&:eventId).uniq
     # Check for missing/unexpected events and rounds
     # It should handle cases where:
     #   - an event was added/deleted
     #   - a round changed format from what was planed (eg: Bo3 -> Bo1, no cutoff -> cutoff)
     # FIXME: maybe check for round_id (eg: "333-c") is enough
-    (detected_events - expected_events).each do |event_id|
+    (real - expected).each do |event_id|
       @errors[:events] << "Unexpected results for #{event_id}"
     end
-    (expected_events - detected_events).each do |event_id|
+    (expected - real).each do |event_id|
       @errors[:events] << "Missing results for #{event_id}"
     end
-    (detected_rounds_ids - expected_rounds_ids).each do |round_id|
+  end
+
+  private
+  def check_rounds_match(rounds_by_ids, results)
+    expected = rounds_by_ids.keys
+    real = results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
+    (real - expected).each do |round_id|
       @errors[:rounds] << "Unexpected results for round #{round_id}"
     end
-    (expected_rounds_ids - detected_rounds_ids).each do |round_id|
+    (expected - real).each do |round_id|
       @errors[:rounds] << "Missing results for round #{round_id}"
     end
+  end
 
+  private
+  def check_avancement_conditions(results_by_round_id, competition_events)
+    # TODO: check number of qualified
+    # TODO: check rounds were able to happen
+    # TODO: check if all people with the same result got either qualified or not
+  end
+
+  private
+  def check_scrambles(scrambles, rounds_by_ids)
+    rounds_ids = rounds_by_ids.keys
+    # Group scramble by round_id
+    scrambles_by_round_id = scrambles.group_by { |s| "#{s.eventId}-#{s.roundTypeId}" }
+    detected_scrambles_rounds_ids = scrambles_by_round_id.keys
+    (rounds_ids - detected_scrambles_rounds_ids).each do |round_id|
+      @errors[:scrambles] << "[#{round_id}] Missing scrambles."
+    end
+    (detected_scrambles_rounds_ids - rounds_ids).each do |round_id|
+      @errors[:scrambles] << "[#{round_id}] Unexpected scrambles."
+    end
+
+    # For existing rounds and scrambles, check that the number of scrambles match at least
+    # the number of expected scrambles.
+    (detected_scrambles_rounds_ids & rounds_ids).each do |round_id|
+      format = rounds_by_ids[round_id].format
+      expected_number_of_scrambles = format.expected_solve_count
+      scrambles_by_group_id = scrambles_by_round_id[round_id].group_by(&:groupId)
+      scrambles_by_group_id.each do |group_id, scrambles_for_group|
+        # filter out extra scrambles
+        actual_number_of_scrambles = scrambles_for_group.reject(&:isExtra).size
+        if actual_number_of_scrambles < expected_number_of_scrambles
+          @errors[:scrambles] << "[#{round_id}] Group #{group_id}: missing scrambles, detected only #{actual_number_of_scrambles} instead of #{expected_number_of_scrambles}"
+        end
+      end
+    end
+  end
+
+  private
+  def check_persons(persons_by_id, results)
+    # TODO: warning for dob
+    detected_person_ids = persons_by_id.keys
+    persons_with_results = results.map(&:personId)
+    (detected_person_ids - persons_with_results).each do |person_id|
+      @errors[:events] << "Person with id #{person_id} (#{persons_by_id[person_id].name}) has no result"
+    end
+    (persons_with_results - detected_person_ids).each do |person_id|
+      @errors[:events] << "Results for unknown person with id #{person_id}"
+    end
+  end
+
+  private
+  def check_results_for_cutoff(cutoff, result, round, persons_by_id)
+    number_of_attempts = cutoff.number_of_attempts
+    cutoff_result = SolveTime.new(round.event.id, :single, cutoff.attempt_result)
+    solve_times = result.solve_times
+    # Compare through SolveTime so we don't need to care about DNF/DNS
+    maybe_qualifying_results = solve_times[0, number_of_attempts]
+    # Just use '5' here to get all the remaining solve_times
+    other_results = solve_times[number_of_attempts, 5]
+    qualifying_results = maybe_qualifying_results.select { |solve_time| solve_time < cutoff_result }
+    skipped, unskipped = other_results.partition(&:skipped?)
+    person = persons_by_id[result.personId]
+    if qualifying_results.any?
+      # Meets the cutoff, no result should be SKIPPED
+      if skipped.any?
+        @errors[:results] << "[#{round.id}] #{person.name} has met the cutoff but is missing results for the second phase. Cutoff is #{cutoff.to_s(round)}."
+      end
+    else
+      # Doesn't meet the cutoff, all results should be SKIPPED
+      if unskipped.any?
+        @errors[:results] << "[#{round.id}] #{person.name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is #{cutoff.to_s(round)}."
+      end
+    end
+  end
+
+  private
+  def check_individual_results(results_by_round_id, rounds_by_ids, persons_by_id)
     # For results
     #   - average/best check is done in validation
     #   - "correct" number of attempts is done in validation (but NOT cutoff times)
@@ -179,12 +301,9 @@ class CompetitionResultsValidator
     #   - warn for suspiscious DOB (January 1st)
     #   - warn for existing name in the db but no ID (can happen, but the Delegate should add a note)
 
-    # Group result by round_id
-    results_by_round_id = inbox_results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
-
     results_by_round_id.each do |round_id, results_for_round|
       # get cutoff and timelimit
-      round_info = expected_rounds_by_ids[round_id]
+      round_info = rounds_by_ids[round_id]
       unless round_info
         # These results are for an undeclared round, skip them as an error has
         # already been registered
@@ -220,27 +339,7 @@ class CompetitionResultsValidator
         end
 
         # Checks for cutoff
-        if cutoff_for_round
-          number_of_attempts = cutoff_for_round.number_of_attempts
-          cutoff_result = SolveTime.new(result.eventId, :single, cutoff_for_round.attempt_result)
-          # Compare through SolveTime so we don't need to care about DNF/DNS
-          maybe_qualifying_results = all_solve_times[0, number_of_attempts]
-          # Just use '5' here to get all the remaining solve_times
-          other_results = all_solve_times[number_of_attempts, 5]
-          qualifying_results = maybe_qualifying_results.select { |solve_time| solve_time < cutoff_result }
-          skipped, unskipped = other_results.partition(&:skipped?)
-          if qualifying_results.any?
-            # Meets the cutoff, no result should be SKIPPED
-            if skipped.any?
-              @errors[:results] << "[#{round_id}] #{person_info.name} has met the cutoff but is missing results for the second phase. Cutoff is #{cutoff_for_round.to_s(round_info)}."
-            end
-          else
-            # Doesn't meet the cutoff, all results should be SKIPPED
-            if unskipped.any?
-              @errors[:results] << "[#{round_id}] #{person_info.name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is #{cutoff_for_round.to_s(round_info)}."
-            end
-          end
-        end
+        check_results_for_cutoff(cutoff_for_round, result, round_info, persons_by_id) if cutoff_for_round
 
         # Checks for time limits if it can be user-specified
         if !["333mbf", "333fm"].include?(result.eventId)
@@ -288,61 +387,5 @@ class CompetitionResultsValidator
 
       end
     end
-
-    # Group scramble by round_id
-    scrambles_by_round_id = scrambles.group_by { |s| "#{s.eventId}-#{s.roundTypeId}" }
-    detected_scrambles_rounds_ids = scrambles_by_round_id.keys
-    (detected_rounds_ids - detected_scrambles_rounds_ids).each do |round_id|
-      @errors[:scrambles] << "[#{round_id}] Missing scrambles."
-    end
-    (detected_scrambles_rounds_ids - detected_rounds_ids).each do |round_id|
-      @errors[:scrambles] << "[#{round_id}] Unexpected scrambles."
-    end
-
-    # For existing rounds and scrambles, check that the number of scrambles match at least
-    # the number of expected scrambles.
-    (detected_scrambles_rounds_ids & expected_rounds_ids).each do |round_id|
-      format = expected_rounds_by_ids[round_id].format
-      expected_number_of_scrambles = format.expected_solve_count
-      scrambles_by_group_id = scrambles_by_round_id[round_id].group_by(&:groupId)
-      scrambles_by_group_id.each do |group_id, scrambles_for_group|
-        # filter out extra scrambles
-        actual_number_of_scrambles = scrambles_for_group.reject(&:isExtra).size
-        if actual_number_of_scrambles < expected_number_of_scrambles
-          @errors[:scrambles] << "[#{round_id}] Group #{group_id}: missing scrambles, detected only #{actual_number_of_scrambles} instead of #{expected_number_of_scrambles}"
-        end
-      end
-    end
-
-    @total_errors = @errors.map { |key, value| value }.map(&:size).reduce(:+)
-    @total_warnings = @warnings.map { |key, value| value }.map(&:size).reduce(:+)
-  end
-
-  private
-  def results_similar_to(reference, reference_index, results)
-    # We do this programatically, but the original check_results.php used to do a big SQL query:
-    # https://github.com/thewca/worldcubeassociation.org/blob/b1ee87b318ff6e4f8658a711c19fd23a3ae51b9c/webroot/results/admin/check_results.php#L321-L353
-
-    similar_results = []
-    # Note that we don't want to treat a particular result as looking
-    # similar to itself, so we don't allow for results with matching ids.
-    # Further more, if a result A is similar to a result B, we don't want to
-    # return both (A, B) and (B, A) as matching pairs, it's sufficient to just
-    # return (A, B), which is why we require Result.id < h.resultId.
-    results.each_with_index do |r, index|
-      next if index >= reference_index
-      score = 0
-      reference_solve_times = reference.solve_times
-      r.solve_times.each_with_index do |solve_time, index|
-        if solve_time.complete? && solve_time == reference_solve_times[index]
-          score += 1
-        end
-      end
-      # We have at least 3 matching values, consider this similar
-      if score > 2
-        similar_results << r
-      end
-    end
-    similar_results
   end
 end
