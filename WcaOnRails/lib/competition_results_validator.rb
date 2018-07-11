@@ -190,7 +190,6 @@ class CompetitionResultsValidator
     results_by_round_id = inbox_results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
 
     results_by_round_id.each do |round_id, results_for_round|
-      # TODO: include cutoff/timelimit values in error messages
       # get cutoff and timelimit
       round_info = expected_rounds_by_ids[round_id]
       unless round_info
@@ -202,6 +201,8 @@ class CompetitionResultsValidator
       time_limit_for_round = round_info.time_limit
       cutoff_for_round = round_info.cutoff
 
+      expected_pos = 1
+      last_result = results_for_round.first
       results_for_round.each_with_index do |result, index|
         person_info = valid_persons_by_id[result.personId]
         unless person_info
@@ -212,7 +213,18 @@ class CompetitionResultsValidator
         all_solve_times = result.solve_times
 
         # Check for position in round
-        # TODO
+        # The scope "InboxResult.sorted_for_competition" already sorts by average then best,
+        # so we simply need to check that the position stored matched the expected one
+
+        # Unless we find two exact same results, we increase the expected position
+        unless result.average == last_result.average and result.best == last_result.best
+          expected_pos += 1
+        end
+        last_result = result
+
+        if expected_pos != result.pos
+          @errors[:results] << "[#{round_id}] Result for #{person_info.name} has a wrong position: expected #{expected_pos} and got #{result.pos}."
+        end
 
         # Checks for cutoff
         if cutoff_for_round
@@ -227,12 +239,12 @@ class CompetitionResultsValidator
           if qualifying_results.any?
             # Meets the cutoff, no result should be SKIPPED
             if skipped.any?
-              @errors[:results] << "[#{round_id}] #{person_info.name} has met the cutoff but is missing results for the second phase."
+              @errors[:results] << "[#{round_id}] #{person_info.name} has met the cutoff but is missing results for the second phase. Cutoff is #{cutoff_for_round.to_s(round_info)}."
             end
           else
             # Doesn't meet the cutoff, all results should be SKIPPED
             if unskipped.any?
-              @errors[:results] << "[#{round_id}] #{person_info.name} has at least one result for the second phase but didn't meet the cutoff."
+              @errors[:results] << "[#{round_id}] #{person_info.name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is #{cutoff_for_round.to_s(round_info)}."
             end
           end
         end
@@ -273,10 +285,48 @@ class CompetitionResultsValidator
             @errors[:results] << "Cumul across rounds not implemented"
           end
         end
+
+        # Check for possible similar results
+        similar = results_similar_to(result, index, results_for_round)
+        similar.each do |r|
+          similar_person_name = valid_persons_by_id[r.personId]&.name || "UnknownPerson"
+          @warnings[:results] << "[#{round_id}] Result of #{person_info.name} is similar to the results of #{similar_person_name}."
+        end
+
       end
     end
 
+    # TODO: check scrambles
+
     @total_errors = @errors.map { |key, value| value }.map(&:size).reduce(:+)
     @total_warnings = @warnings.map { |key, value| value }.map(&:size).reduce(:+)
+  end
+
+  private
+  def results_similar_to(reference, reference_index, results)
+    # We do this programatically, but the original check_results.php used to do a big SQL query:
+    # https://github.com/thewca/worldcubeassociation.org/blob/b1ee87b318ff6e4f8658a711c19fd23a3ae51b9c/webroot/results/admin/check_results.php#L321-L353
+
+    similar_results = []
+    # Note that we don't want to treat a particular result as looking
+    # similar to itself, so we don't allow for results with matching ids.
+    # Further more, if a result A is similar to a result B, we don't want to
+    # return both (A, B) and (B, A) as matching pairs, it's sufficient to just
+    # return (A, B), which is why we require Result.id < h.resultId.
+    results.each_with_index do |r, index|
+      next if index >= reference_index
+      score = 0
+      reference_solve_times = reference.solve_times
+      r.solve_times.each_with_index do |solve_time, index|
+        if solve_time.complete? && solve_time == reference_solve_times[index]
+          score += 1
+        end
+      end
+      # We have at least 3 matching values, consider this similar
+      if score > 2
+        similar_results << r
+      end
+    end
+    similar_results
   end
 end
