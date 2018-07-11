@@ -13,19 +13,13 @@
         <li>Then the website will run a number of checks. If everything is correct you'll be able to submit these results to the WRT.</li>
       </ul>
     </p>
-    <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @inbox_results.any? %>
+    <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @results_validator.has_results %>
 
-    <%= render "check_inbox_results_panel",
-      already_has_submitted_result: @inbox_results.any?,
-      total_errors: @total_errors,
-      all_errors: @all_errors,
-      total_warnings: @total_warnings,
-      all_warnings: @all_warnings
-    %>
+    <%= render "check_inbox_results_panel", results_validator: @results_validator %>
 
     <%= render "results_submission_panel",
-      already_has_submitted_result: @inbox_results.any?,
-      has_errors: @total_errors != 0,
+      already_has_submitted_result: @results_validator.has_results,
+      has_errors: @results_validator.total_errors != 0,
       results_submission: @results_submission
     %>
   <% end %>

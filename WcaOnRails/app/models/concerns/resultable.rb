@@ -23,6 +23,8 @@ module Resultable
       Format.c_find(formatId)
     end
 
+    # TODO: validate result for MBF according to H1*
+
     validate :validate_each_solve, if: :event
     def validate_each_solve
       solve_times.each_with_index do |solve_time, i|
