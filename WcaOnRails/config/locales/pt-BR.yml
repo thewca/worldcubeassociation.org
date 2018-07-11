@@ -702,6 +702,8 @@ pt-BR:
         #original_hash: da39a3e
         inquiry: ''
         #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -869,6 +871,8 @@ pt-BR:
       contact_form:
         #original_hash: d31ab65
         inquiry: Qual destas melhor define seu pedido?
+        #original_hash: 1917f4f
+        competition_id: Competição
         #original_hash: 709a232
         name: Nome
         #original_hash: 3fa6f5f
@@ -2118,9 +2122,11 @@ pt-BR:
       #original_hash: ac2ac3d
       title: Formulário de Contato do Website da WCA
       inquiries:
-        #original_hash: e1d277a
-        competition: Uma competição específica (por favor selecione)
-        #original_hash: f7d3f9f
+        #original_hash: 92ea7e8
+        competition: >-
+          Contatar os Organizadores de uma competição específica (por favor
+          selecione)
+        #original_hash: f0bffb7
         competitions_in_general: 'Competições em geral (Organização, Regras, etc.)'
         #original_hash: f6ffa78
         wca_id_or_profile: ID da WCA ou Perfil da WCA
