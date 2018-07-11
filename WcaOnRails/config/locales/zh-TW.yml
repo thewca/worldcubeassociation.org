@@ -645,6 +645,8 @@ zh-TW:
         #original_hash: da39a3e
         inquiry: ''
         #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -734,6 +736,8 @@ zh-TW:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -781,6 +785,8 @@ zh-TW:
       contact_form:
         #original_hash: d31ab65
         inquiry: 下列何者最能描述您的問題？
+        #original_hash: 1917f4f
+        competition_id: 比賽
         #original_hash: 709a232
         name: 姓名
         #original_hash: 3fa6f5f
@@ -828,6 +834,10 @@ zh-TW:
       #original_hash: 3f9db99
       unconfirmed: >-
         您必須確認您的電子郵件才能繼續。沒有收到確認信函嗎？前往https://www.worldcubeassociation.org/users/confirmation/new去要求一封的確認信函。
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: 請確認您的新電子郵件
   wca:
     errors:
       messages:
@@ -965,6 +975,29 @@ zh-TW:
       failure: 無法更新您的個人頁面。
       #original_hash: c29870c
       unavailable: 找不到要求的語言。
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: 確認說明
+        #original_hash: 6ee63db
+        welcome: '歡迎%{user_email}！'
+        #original_hash: da39d05
+        confirm: 您的帳號已經產生了，您必須激活帳號才能使用。請透過以下連結確認您的帳號：
+        #original_hash: 776476a
+        confirmation_link: 確認我的帳號。
+        #original_hash: d484f70
+        activate: 您可以在帳號激活以後登入世界方塊協會的網站
+        #original_hash: 333999b
+        addendum: 此電子郵件為自動產生的。如果您沒有在世界方塊協會的網站申請帳號，請忽略此錯誤訊息並刪除之。
+        #original_hash: dbc2263
+        questions: '您有任何疑問嗎？我們很高興為您解答！請寄信至%{contact_link}。'
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: '您好%{user_email}！'
+        #original_hash: 3095365
+        confirm: 您可以透過以下連結確認您帳號的新電子郵件：
+        #original_hash: 4900afe
+        confirmation_link: 確認電子郵件。
     claim_wca_id:
       #original_hash: f28bf87
       title: 取得WCA ID
@@ -1840,9 +1873,9 @@ zh-TW:
       #original_hash: ac2ac3d
       title: WCA網站聯絡表單
       inquiries:
-        #original_hash: e1d277a
-        competition: 某場特定比賽（請選擇）
-        #original_hash: f7d3f9f
+        #original_hash: 92ea7e8
+        competition: 聯絡某場特定比賽的主辦人（請選擇）
+        #original_hash: f0bffb7
         competitions_in_general: 比賽相關（主辦、比賽規則等）
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID或WCA個人頁面
