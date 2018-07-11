@@ -187,6 +187,7 @@ CREATE TABLE `InboxPersons` (
   `gender` varchar(1) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `dob` date NOT NULL,
   `competitionId` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  UNIQUE KEY `index_InboxPersons_on_competitionId_and_id` (`competitionId`,`id`),
   KEY `InboxPersons_fk_country` (`countryId`),
   KEY `InboxPersons_id` (`wcaId`),
   KEY `InboxPersons_name` (`name`)
@@ -1457,6 +1458,7 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180708214503'),
 ('20180709220826'),
 ('20180710165401'),
+('20180711124055'),
 ('20180729000001'),
 ('20180730182509'),
 ('20180731204733'),
