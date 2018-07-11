@@ -104,6 +104,7 @@ class CompetitionResultsValidator
       events: [],
       rounds: [],
       results: [],
+      scrambles: [],
     }
     @warnings = {
       persons: [],
@@ -115,7 +116,7 @@ class CompetitionResultsValidator
     associations = {
       events: [],
       competition_events: {
-        rounds: [:competition_event],
+        rounds: [:competition_event, :format],
       },
     }
 
@@ -296,7 +297,30 @@ class CompetitionResultsValidator
       end
     end
 
-    # TODO: check scrambles
+    # Group scramble by round_id
+    scrambles_by_round_id = scrambles.group_by { |s| "#{s.eventId}-#{s.roundTypeId}" }
+    detected_scrambles_rounds_ids = scrambles_by_round_id.keys
+    (detected_rounds_ids - detected_scrambles_rounds_ids).each do |round_id|
+      @errors[:scrambles] << "[#{round_id}] Missing scrambles."
+    end
+    (detected_scrambles_rounds_ids - detected_rounds_ids).each do |round_id|
+      @errors[:scrambles] << "[#{round_id}] Unexpected scrambles."
+    end
+
+    # For existing rounds and scrambles, check that the number of scrambles match at least
+    # the number of expected scrambles.
+    (detected_scrambles_rounds_ids & expected_rounds_ids).each do |round_id|
+      format = expected_rounds_by_ids[round_id].format
+      expected_number_of_scrambles = format.expected_solve_count
+      scrambles_by_group_id = scrambles_by_round_id[round_id].group_by(&:groupId)
+      scrambles_by_group_id.each do |group_id, scrambles_for_group|
+        # filter out extra scrambles
+        actual_number_of_scrambles = scrambles_for_group.reject(&:isExtra).size
+        if actual_number_of_scrambles < expected_number_of_scrambles
+          @errors[:scrambles] << "[#{round_id}] Group #{group_id}: missing scrambles, detected only #{actual_number_of_scrambles} instead of #{expected_number_of_scrambles}"
+        end
+      end
+    end
 
     @total_errors = @errors.map { |key, value| value }.map(&:size).reduce(:+)
     @total_warnings = @warnings.map { |key, value| value }.map(&:size).reduce(:+)
