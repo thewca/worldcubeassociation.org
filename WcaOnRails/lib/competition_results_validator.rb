@@ -131,23 +131,15 @@ class CompetitionResultsValidator
     scrambles = Scramble.where(competitionId: competition_id)
 
     # check persons
-    # name, country are required; others can have 'empty' values (OK to fill in later)
-    # FIXME: we could do this by putting an index on (competitionId, id) !
-    valid_persons_by_id = {}
-    inbox_persons.each do |p|
-      # non-blank fields are already tested upon record's validation
-      if valid_persons_by_id[p.id]
-        @errors[:persons] << "Duplicate person with id #{p.id}"
-      else
-        valid_persons_by_id[p.id] = p
-      end
-    end
+    # basic checks on persons are done in the model, uniqueness for a given competition
+    # is done in the SQL schema.
 
     # Check that the persons who have results matches exactly the persons in InboxPerson
-    detected_person_ids = inbox_persons.map(&:id)
+    persons_by_id = Hash[inbox_persons.map { |person| [person.id, person] }]
+    detected_person_ids = persons_by_id.keys
     persons_with_results = inbox_results.map(&:personId)
     (detected_person_ids - persons_with_results).each do |person_id|
-      @errors[:events] << "Person with id #{person_id} (#{valid_persons_by_id[person_id]}) has no result"
+      @errors[:events] << "Person with id #{person_id} (#{persons_by_id[person_id]}) has no result"
     end
     (persons_with_results - detected_person_ids).each do |person_id|
       @errors[:events] << "Results for unknown person with id #{person_id}"
@@ -205,7 +197,7 @@ class CompetitionResultsValidator
       expected_pos = 1
       last_result = results_for_round.first
       results_for_round.each_with_index do |result, index|
-        person_info = valid_persons_by_id[result.personId]
+        person_info = persons_by_id[result.personId]
         unless person_info
           # These results are for an undeclared person, skip them as an error has
           # already been registered
@@ -290,7 +282,7 @@ class CompetitionResultsValidator
         # Check for possible similar results
         similar = results_similar_to(result, index, results_for_round)
         similar.each do |r|
-          similar_person_name = valid_persons_by_id[r.personId]&.name || "UnknownPerson"
+          similar_person_name = persons_by_id[r.personId]&.name || "UnknownPerson"
           @warnings[:results] << "[#{round_id}] Result of #{person_info.name} is similar to the results of #{similar_person_name}."
         end
 
