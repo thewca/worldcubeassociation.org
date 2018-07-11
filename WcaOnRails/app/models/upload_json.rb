@@ -48,6 +48,7 @@ class UploadJson
       scrambles_to_import = []
       json["events"].each do |event|
         event["rounds"].each do |round|
+          # Import results for round
           round["results"].each do |result|
             individual_results = result["results"]
             # Pad the results with 0 up to 5 results
@@ -72,22 +73,22 @@ class UploadJson
             # (a lot of time considering all the results to import!)
             new_res.competition = competition
             results_to_import << new_res
+          end
 
-            # Import scrambles
-            round["groups"].each do |group|
-              ["scrambles", "extraScrambles"].each do |scramble_type|
-                group[scramble_type].each_with_index do |scramble, index|
-                  new_scramble_attributes = {
-                    competitionId: competition_id,
-                    eventId: event["eventId"],
-                    roundTypeId: round["roundId"],
-                    groupId: group["group"],
-                    isExtra: scramble_type == "extraScrambles",
-                    scrambleNum: index+1,
-                    scramble: scramble,
-                  }
-                  scrambles_to_import << Scramble.new(new_scramble_attributes)
-                end
+          # Import scrambles for round
+          round["groups"].each do |group|
+            ["scrambles", "extraScrambles"].each do |scramble_type|
+              group[scramble_type].each_with_index do |scramble, index|
+                new_scramble_attributes = {
+                  competitionId: competition_id,
+                  eventId: event["eventId"],
+                  roundTypeId: round["roundId"],
+                  groupId: group["group"],
+                  isExtra: scramble_type == "extraScrambles",
+                  scrambleNum: index+1,
+                  scramble: scramble,
+                }
+                scrambles_to_import << Scramble.new(new_scramble_attributes)
               end
             end
           end
