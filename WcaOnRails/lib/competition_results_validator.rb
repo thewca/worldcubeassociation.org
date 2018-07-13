@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CompetitionResultsValidator
-  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results
+  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results, :inbox_persons, :inbox_results, :scrambles
 
   INDIVIDUAL_RESULT_JSON_SCHEMA = {
     "type" => "object",
@@ -97,6 +97,7 @@ class CompetitionResultsValidator
 
   DNF_AFTER_RESULT_WARNING = "[%{round_id}] The round has a cumulative time limit and %{person_name} has at least one DNF results followed by a valid result."\
     " Please make sure the time elapsed for the DNF was short enough to allow for the other subsequent valid results to count."
+  DNS_AFTER_RESULT_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
 
   def initialize(competition_id)
     @errors = {
@@ -121,14 +122,14 @@ class CompetitionResultsValidator
     }
 
     competition = Competition.includes(associations).find(competition_id)
-    inbox_results = InboxResult.sorted_for_competition(competition_id)
+    @inbox_results = InboxResult.sorted_for_competition(competition_id)
     @has_results = inbox_results.any?
     unless @has_results
       return
     end
 
-    inbox_persons = InboxPerson.where(competitionId: competition_id)
-    scrambles = Scramble.where(competitionId: competition_id)
+    @inbox_persons = InboxPerson.where(competitionId: competition_id)
+    @scrambles = Scramble.where(competitionId: competition_id)
 
     # check persons
     # basic checks on persons are done in the model, uniqueness for a given competition
@@ -304,6 +305,10 @@ class CompetitionResultsValidator
       if p.dob.month == 1 and p.dob.day == 1
         @warnings[:persons] << "The date of birth of #{p.name} is on January 1st, please make sure it's correct."
       end
+      # Competitor less than 3 years old are extremely rare, so we'd better check these birthdate are correct
+      if p.dob.year >= Time.now.year - 3
+        @warnings[:persons] << "#{p.name} seems to be less than 3 years old, please make sure it's correct."
+      end
       # Look for double whitespaces or leading/trailing whitespaces
       unless p.name.squeeze(" ").strip == p.name
         @errors[:persons] << "Person '#{p.name}' has leading/trailing whitespaces or double whitespaces."
@@ -411,13 +416,21 @@ class CompetitionResultsValidator
         if !["333mbf", "333fm"].include?(result.eventId)
           cumulative_round_ids = time_limit_for_round.cumulative_round_ids
           completed_solves = all_solve_times.select(&:complete?)
-          # Now let's try to find a DNF result followed by a non-DNF result
-          has_result_after_dnf = false
-          first_dnf_index = all_solve_times.find_index(SolveTime::DNF)
-          if first_dnf_index
-            # Again using 5 just to get all
-            solves_after = all_solve_times[first_dnf_index, 5]
-            has_result_after_dnf = solves_after.select(&:complete?).any?
+          # Now let's try to find a DNF/DNS result followed by a non-DNF/DNS result
+          # Do the same for DNS.
+          has_result_after = { SolveTime::DNF => false, SolveTime::DNS => false }
+          has_result_after.keys.each do |not_complete|
+            first_index = all_solve_times.find_index(not_complete)
+            if first_index
+              # Again using 5 just to get all
+              solves_after = all_solve_times[first_index, 5]
+              has_result_after[not_complete] = solves_after.select(&:complete?).any?
+            end
+          end
+
+          # Always output the warning about DNS followed by result
+          if has_result_after[SolveTime::DNS]
+            @warnings[:results] << format(DNS_AFTER_RESULT_WARNING, round_id: round_id, person_name: person_info.name)
           end
 
           case cumulative_round_ids.length
@@ -434,7 +447,7 @@ class CompetitionResultsValidator
             if sum_of_times > time_limit_for_round.centiseconds
               @errors[:results] << "[#{round_id}] The sum of results for #{person_info.name} is over the time limit which is #{time_limit_for_round.to_s(round_info)}."
             end
-            if has_result_after_dnf
+            if has_result_after[SolveTime::DNF]
               @warnings[:results] << format(DNF_AFTER_RESULT_WARNING, round_id: round_id, person_name: person_info.name)
             end
           else
