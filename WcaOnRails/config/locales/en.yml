@@ -625,6 +625,25 @@ en:
         welcome: "Hello %{user_email}!"
         confirm: "You can confirm your new account email address through the link below:"
         confirmation_link: "Confirm mail address."
+      #context: notification to organizer that delegate submitted competition to the WCA Board
+      competition_submission_email:
+        header: "%{delegate_name} confirmed %{competition}"
+        organizers: "Dear organizers of %{competition},"
+        confirmed: "Your competition Delegate %{delegate_name} confirmed %{competition} and sent the submission to the WCA Board. As soon as the WCA Board announces this competition to the public, you will receive another notification."
+        contact: "If you have more questions, please get in contact with the competition Delegate(s) via email: "
+      #context: notification to organizers after the WCA Board announced their competition
+      competition_announcement_email:
+        header: "The WCA Board announced %{competition}"
+        announced: "The WCA Board approved your competition and officially announced it to the public."
+        link: "Please follow the link to get to the competition announcement: "
+      #context: notification to users after they were added to a competition as organizers
+      organizer_addition_email:
+        header: "You were added to %{competition} as an organizer"
+        intro: "Hello %{name},"
+        information: "%{confirmer} added you to %{competition} as an organizer. You can edit this competition here:"
+      organizer_removal_email:
+        header: "You were removed from %{competition} as an organizer"
+        information: "%{remover} removed you from %{competition} as an organizer."
     #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"

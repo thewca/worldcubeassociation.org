@@ -1,0 +1,12 @@
+<p>
+  <%= t 'users.mailer.organizer_addition_email.intro', name: @organizer.name %>
+</p>
+
+<p>
+  <%= t 'users.mailer.organizer_removal_email.information', remover: @remover.name, competition: @competition.name %>
+</p>
+
+<p>
+  <%= t 'users.mailer.competition_submission_email.contact' %>
+  <%= @competition.delegates.pluck(:email).join(" ") %>
+</p>

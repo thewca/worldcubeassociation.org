@@ -7,6 +7,27 @@ class CompetitionsMailerPreview < ActionMailer::Preview
     CompetitionsMailer.notify_board_of_confirmed_competition(c.delegates[0], c)
   end
 
+  def notify_organizer_of_confirmed_competition
+    c = CompetitionDelegate.last.competition
+    CompetitionsMailer.notify_organizer_of_confirmed_competition(c.delegates[0], c)
+  end
+
+  def notify_organizer_of_announced_competition
+    c = CompetitionDelegate.last.competition
+    p = "dummy_link"
+    CompetitionsMailer.notify_organizer_of_announced_competition(c, p)
+  end
+
+  def notify_organizer_of_addition_to_competition
+    c = CompetitionDelegate.last.competition
+    CompetitionsMailer.notify_organizer_of_addition_to_competition(c.delegates[0], c, c.organizers[0])
+  end
+
+  def notify_organizer_of_removal_from_competition
+    c = CompetitionDelegate.last.competition
+    CompetitionsMailer.notify_organizer_of_removal_from_competition(c.delegates[0], c, c.organizers[0])
+  end
+
   def notify_board_of_confirmed_championship_competition
     c = Competition.find("WC2013")
     CompetitionsMailer.notify_board_of_confirmed_competition(c.delegates[0], c)

@@ -1,0 +1,12 @@
+<p>
+  <%= t 'users.mailer.competition_submission_email.organizers', competition: @competition.name %>
+</p>
+
+<p>
+  <%= t 'users.mailer.competition_announcement_email.announced' %>
+</p>
+
+<p>
+  <%= t 'users.mailer.competition_announcement_email.link' %>
+  <%= link_to @competition.name + " announcement", post_url(@post.slug) %>
+</p>
