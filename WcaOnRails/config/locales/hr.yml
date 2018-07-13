@@ -287,8 +287,8 @@ hr:
         password: Lozinka
         #original_hash: 19dff4d
         current_password: Trenutna lozinka
-        #original_hash: 786b8af
-        password_confirmation: Potvrda lozinke
+        #original_hash: aefce7f
+        password_confirmation: Ponovno unesite lozinku
         #original_hash: ced7b30
         remember_me: Zapamti me
         #original_hash: 102efae
@@ -344,7 +344,7 @@ hr:
         base_entry_fee_lowest_denomination: Osnovna kotizacija u najnižoj vrijednosti
         #original_hash: 28a6fbb
         currency_code: Kod valute
-        #original_hash: 5b2fe69
+        #original_hash: 2e3ed8b
         delegate_ids: WCA Delegat(i)
         #original_hash: 958562e
         organizer_ids: Organizator(i)
@@ -625,8 +625,8 @@ hr:
           Informacije o ograničenju broja natjecatelja, kotizacijama za
           natjecatelje i gledatelje i ostali relevanti detalji za osobe
           zainteresirane u natjecanje i gledanje.
-        #original_hash: 0708400
-        delegate_ids: WCA delegati natjecanja.
+        #original_hash: b4d020f
+        delegate_ids: WCA Delegati natjecanja.
         #original_hash: 517d376
         organizer_ids: >-
           Organizatori natjecanja (njihovi korisnički računi moraju biti
@@ -708,6 +708,10 @@ hr:
           za registracije.
       website_contact:
         #original_hash: da39a3e
+        inquiry: ''
+        #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -771,13 +775,13 @@ hr:
           u vrijeme natjecanja, problemi koje su imali (npr. kašnjenje u
           rasporedu) i kako su riješili navedeno. Molimo Vas, budite sažeti i
           nemojte prijavljivati nepotrebne detalje.
-        #original_hash: 715f020
+        #original_hash: d003c1f
         incidents: >-
           Prijavite bilo koje incidente koji su vrijedni spomena. Broj incidenta
-          počinju s 1., tako da bi ostali delegati mogli referirati po njihovim
+          počinju s 1., tako da bi ostali Delegati mogli referirati po njihovim
           brojevima. Molimo Vas da spomenete samo drugačije slučajeve, ne
           uobičajene slučajeve (npr. regularni +2 ili DNF). Slobodno se obratite
-          ostalim delegatima ili tražite feedback WRC-a za bilo što. Ukoliko
+          ostalim Delegatima ili tražite feedback WRC-a za bilo što. Ukoliko
           želite imati WDC uključen u neke od njih, označite navedene incidente
           kao takve.
         #original_hash: f30abdc
@@ -825,6 +829,8 @@ hr:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -845,6 +851,13 @@ hr:
         submitterComment: ''
         #original_hash: da39a3e
         status: ''
+      results_submission:
+        #original_hash: da39a3e
+        schedule_url: ''
+        #original_hash: da39a3e
+        results_file: ''
+        #original_hash: da39a3e
+        message: ''
     options:
       registration:
         status:
@@ -863,6 +876,10 @@ hr:
   mail_form:
     attributes:
       contact_form:
+        #original_hash: d31ab65
+        inquiry: Što od slijedećeg opisuje Vaš upit?
+        #original_hash: 1917f4f
+        competition_id: Natjecanje
         #original_hash: 709a232
         name: Ime
         #original_hash: 3fa6f5f
@@ -890,6 +907,10 @@ hr:
       #original_hash: a2a43b3
       size_too_big: 'je prevelika (treba biti najviše %{file_size})'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: Ponovno unesite novu lozinku
     sessions:
       new:
         #original_hash: ada2e9e
@@ -909,6 +930,10 @@ hr:
         e-mail za prihvaćanje? Idite na
         https://www.worldcubeassociation.org/users/confirmation/new kako biste
         ga ponovno zatražili.
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: Potvrdite svoju novu e-mail adresu
   wca:
     errors:
       messages:
@@ -1053,6 +1078,40 @@ hr:
       failure: U nemogućnosti ažuriranja Vašeg profila.
       #original_hash: c29870c
       unavailable: Zatraženi lokalni zahtjev nije dostupan.
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: Upute za potvrđivanje
+        #original_hash: 6ee63db
+        welcome: 'Dobrodošao/la %{user_email}!'
+        #original_hash: da39d05
+        confirm: >-
+          Vaš račun je kreiran i mora se aktivirati prije upotrebe. Molimo Vas
+          potvrdite svoj račun na poveznici ispod:
+        #original_hash: 776476a
+        confirmation_link: Potvrdi moj račun.
+        #original_hash: d484f70
+        activate: >-
+          Nakon aktivacije možete se prijaviti na web-stranicu World Cube
+          Association:
+        #original_hash: 333999b
+        addendum: >-
+          Ovaj e-mail je automatski generiran. Ukoliko niste napravili račun na
+          web-stranici World Cube Association i primili ste ovu poruku greškom,
+          ignorirajte ju i izbrišite.
+        #original_hash: dbc2263
+        questions: >-
+          Imate li još pitanja? Rado ćemo odgovoriti na njih! Slobodno pošaljite
+          e-mail na %{contact_link}.
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: 'Pozdrav %{user_email}!'
+        #original_hash: 3095365
+        confirm: >-
+          Možete potvrditi svoju novu e-mail adresu svog računa na poveznici
+          ispod:
+        #original_hash: 4900afe
+        confirmation_link: Potvrdi e-mail adresu.
     claim_wca_id:
       #original_hash: f28bf87
       title: Zatražite WCA ID
@@ -1114,9 +1173,9 @@ hr:
       pending_claim_confirmation_html: >-
         Ovaj korisnički račun čeka %{delegate} da potvrdi zatraženi WCA ID
         %{wca_id}.
-      #original_hash: fc7269a
+      #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
-        Ovaj korisnik je zatražio WCA ID %{wca_id}. Njihov delegat %{delegate}
+        Ovaj korisnik je zatražio WCA ID %{wca_id}. Njihov Delegat %{delegate}
         će biti obaviješten o ovom zahtjevu čim se e-mail adresa ovog
         korisničkog računa potvrdi.
       #original_hash: 1cde7e6
@@ -1132,10 +1191,10 @@ hr:
       #original_hash: 29e25b5
       have_wca_id_html: 'Vaš WCA ID je %{link_id}.'
       cannot_edit:
-        #original_hash: 8501c74
+        #original_hash: 13e8b80
         msg: >-
           Ne možete mijenjati Vaše ime, datum rođenja, spol ili državu. Razlog:
-          %{reason}. Kontaktirajte svog <a href='%{delegate_url}'>delegata</a>
+          %{reason}. Kontaktirajte svog <a href='%{delegate_url}'>Delegata</a>
           ukoliko trebate nešto promijeniti.
         reason:
           #original_hash: 370ff12
@@ -1204,12 +1263,12 @@ hr:
       unique: 'već koristi "%{used_name}" s %{used_email}'
       #original_hash: 26f70ed
       dob_past: mora biti u prošlosti
-      #original_hash: f599dc5
-      must_be_senior: mora biti Senior delegat
+      #original_hash: 012f032
+      must_be_senior: mora biti Senior Delegat
       #original_hash: 2e582eb
       must_not_be_present: ne smije biti trenutno
-      #original_hash: b2c4ecc
-      senior_has_delegate: ne može se degradirati Senior delegata sa podređenim delegatima
+      #original_hash: 5b4eac9
+      senior_has_delegate: ne može se degradirati Senior Delegata sa podređenim Delegatima
       #original_hash: 48653a9
       already_have_id: 'ne može se zatražiti WCA ID jer već imate WCA ID %{wca_id}'
       #original_hash: ec5db95
@@ -1247,13 +1306,13 @@ hr:
           Korisnički račun ažuriran, e-mail poslan %{email} za potvrdu nove
           e-mail adrese.
     select_nearby_delegate:
-      #original_hash: 2b11120
+      #original_hash: 407c4f8
       select_delegate_html: >-
         Kako biste spojili Vaš WCA ID, trebamo <a href='%{link_delegate}'
         target='_blank'>WCA Delegata</a> da potvrdi Vaš identitet. Molimo Vas
-        unesite Vaš datum rođenja i delegata za kojeg mislite da Vas najbolje
+        unesite Vaš datum rođenja i Delegata za kojeg mislite da Vas najbolje
         poznaje.
-      #original_hash: d69cf94
+      #original_hash: 2564ee3
       already_assigned_html: >-
         WCA ID %{link_id}  je već dodijeljen drugom računu. Ukoliko mislite da
         je to greška, kontaktirajte svog lokalnog <a href='%{link_delegate}'
@@ -1350,8 +1409,8 @@ hr:
       #original_hash: 72e2180
       regards_html: 'S poštovanjem, %{people}.'
       new:
-        #original_hash: 6fb638c
-        mail_subject: 'Registrirali ste se za %{comp_name}'
+        #original_hash: a32db59
+        mail_subject: 'Vaša registracija za %{comp_name} je poslana i čeka na potvrdu'
         #original_hash: 8374583
         registered_html: 'Upravo ste se registrirali za %{comp_name}.'
         #original_hash: 13fabed
@@ -1665,12 +1724,18 @@ hr:
       registration_period:
         #original_hash: 6888733
         label: Registracijski period
-        #original_hash: e46a61b
-        range_html: >-
-          On-line registracije će biti otvorene od %{start_date_and_time} do
-          %{end_date_and_time}. Ostali oblici registracije mogu biti dozvoljeni
-          (kao što je registracija na licu mjesta). Obratite pozornost i
-          pročitajte sve detalje natjecanja kako biste saznali više detalja.
+        #original_hash: 0c7c1dc
+        range_future_html: >-
+          Online registracije će se otvoriti od %{start_date_and_time} do
+          %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Online registracije se otvaraju %{start_date_and_time} i zatvaraju
+          %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Online registracije su se otvorile %{start_date_and_time} i zatvorile
+          %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Natjecanja
@@ -1833,10 +1898,10 @@ hr:
       cannot_delete_confirmed: Ne može se obrisati potvrđeno natjecanje.
       #original_hash: 191df37
       must_contain_event: mora sadržavati barem 1 disciplinu za ovo natjecanje
-      #original_hash: 112490b
+      #original_hash: 6e228b7
       must_contain_delegate: mora sadržavati barem 1 WCA Delegata
-      #original_hash: 0b2b56b
-      not_all_delegates: nisu svi delegati
+      #original_hash: 8131fc2
+      not_all_delegates: nisu svi Delegati
       #original_hash: 43a23c2
       registration_close_after_open: registracije se moraju zatvoriti nakon što se otvore
       #original_hash: 43a83a9
@@ -2080,11 +2145,19 @@ hr:
     website:
       #original_hash: ac2ac3d
       title: WCA Website obrazac za kontakt
-      #original_hash: 9039572
-      description_html: >-
-        Rabite ovaj obrazac isključivo za pitanja, komentare i prijedloge za
-        web-stranicu. <a href="%{contact_path}">Ostali upiti</a> moraju biti
-        poslani određenoj skupini.
+      inquiries:
+        #original_hash: 92ea7e8
+        competition: Kontaktirajte organizatore specifičnog natjecanja (izaberite ispod)
+        #original_hash: f0bffb7
+        competitions_in_general: 'Generalno o natjecanjima (organiziranje, pravila natjecanja i sl.)'
+        #original_hash: f6ffa78
+        wca_id_or_profile: WCA ID ili WCA Profil
+        #original_hash: 0c77aee
+        media: Media
+        #original_hash: 9ad0522
+        software: Softver
+        #original_hash: 6e6a6f2
+        different: Ostalo
       #original_hash: c70a890
       submit: Pošaljite poruku
     dob:
@@ -2256,9 +2329,9 @@ hr:
             rezultati se šalju WCA Timu za rezultate (WRT) koji je odgovoran za
             prijenos rezultata i održavanje WCA baze podataka. WRT na kraju
             objavljuje rezultate u WCA bazu podataka što je prije moguće.
-          #original_hash: b6a68ab
+          #original_hash: daf1cb1
           '2': >-
-            Ovisno o veličini natjecanja i delegatovom rasporedu, sve ovo može
+            Ovisno o veličini natjecanja i Delegatovom rasporedu, sve ovo može
             trajati samo jedan dana ili najviše tjedan dana. Molimo za
             strpljenje.
           #original_hash: bf8adbe
@@ -2452,6 +2525,8 @@ hr:
     proximity_policy: WCA Competition Proximity Policy
     #original_hash: f484584
     competition_name_policy: WCA Pravila o nazivu natjecanja
+    #original_hash: c7f7728
+    competition_announcement_policy: WCA Pravila o najavljivanju natjecanja
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegati
@@ -2472,14 +2547,14 @@ hr:
     how_to:
       #original_hash: fc3af12
       title: Kako postati WCA Regionalna organizacija
-      #original_hash: bdf57ff
+      #original_hash: cc1639d
       description: >-
         WCA priznaje razne regionalne organizacije diljem svijeta. Svrha WCA
         Regionalnih organizacija jest organiziranje WCA Natjecanja i podrška WCA
         aktivnosti u regiji. Države željne ostvarenja regionalne organizacije
         moraju pridonijeti WCA u toj regiji prije nego prilože svoju prijavnicu.
         Za pomoć u organizaciji WCA Natjecanja u Vašoj regiji, molimo
-        kontaktirajte Vašeg najbližeg delegata.
+        kontaktirajte Vašeg najbližeg Delegata.
     requirements:
       #original_hash: 1e04fd7
       title: Zatjevi za WCA Regionalnu organizaciju
@@ -2891,7 +2966,7 @@ hr:
     paragraph4:
       #original_hash: b6dca56
       title: Politika udaljenosti
-      #original_hash: bd8f1fe
+      #original_hash: f86bf95
       content1: >-
         WCA Natjecanja će biti prihvaćena ako su barem 100km ili 19 dana dalje
         od bilo kojeg drugog natjecanja. WCA Upravni odbor mora obratiti posebnu
@@ -2946,12 +3021,12 @@ hr:
     paragraph5:
       #original_hash: 17d01de
       title: Ograničeni broj natjecatelja
-      #original_hash: 18976be
+      #original_hash: ffcd75e
       content_html: >-
         Broj natjecatelja može biti limitiran po disciplini ili po natjecanju
         (vidi <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulation
-        Z4</a>). Kao i sva ostala pravila pod člankom Z, delegat natjecanja mora
+        Z4</a>). Kao i sva ostala pravila pod člankom Z, Delegat natjecanja mora
         dobiti potvrdu o limitu natjecatelja od strane Upravnog odbora.
         Ograničeni natjecatelja mora biti odabran pomno i u skladu s očekivanim
         interesom natjecatelja. Limit ne smije biti postavljen na manji broj.
