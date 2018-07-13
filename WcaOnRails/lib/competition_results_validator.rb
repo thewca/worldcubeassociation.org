@@ -147,11 +147,15 @@ class CompetitionResultsValidator
 
     check_events_match(competition.events, inbox_results)
 
-    check_rounds_match(expected_rounds_by_ids, inbox_results)
+    number_of_non_matching_rounds = check_rounds_match(expected_rounds_by_ids, inbox_results)
 
     check_individual_results(results_by_round_id, expected_rounds_by_ids, persons_by_id)
 
-    check_avancement_conditions(results_by_round_id, competition.competition_events)
+    if number_of_non_matching_rounds == 0
+      # Only check the advancement conditions if all rounds match: this way we can rely
+      # on the expected competition_events!
+      check_avancement_conditions(results_by_round_id, competition.competition_events)
+    end
 
     check_scrambles(scrambles, expected_rounds_by_ids)
 
@@ -206,21 +210,47 @@ class CompetitionResultsValidator
 
   private
   def check_rounds_match(rounds_by_ids, results)
+    # Check that rounds match what was declared, and return the number of difference
     expected = rounds_by_ids.keys
     real = results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
-    (real - expected).each do |round_id|
+    unexpected = real - expected
+    missing = expected - real
+    unexpected.each do |round_id|
       @errors[:rounds] << "Unexpected results for round #{round_id}"
     end
-    (expected - real).each do |round_id|
+    missing.each do |round_id|
       @errors[:rounds] << "Missing results for round #{round_id}"
     end
+    unexpected.size + missing.size
   end
 
   private
   def check_avancement_conditions(results_by_round_id, competition_events)
-    # TODO: check number of qualified
-    # TODO: check rounds were able to happen
-    # TODO: check if all people with the same result got either qualified or not
+    competition_events.each do |ce|
+      remaining_number_of_rounds = ce.rounds.size
+      if remaining_number_of_rounds > 4
+        # https://www.worldcubeassociation.org/regulations/#9m: Events must have at most four rounds.
+        # Should not happen as we already have a validation to create rounds, but who knows...
+        @errors[:rounds] << "Event #{ce.event_id} has more than four rounds, which must not happen per Regulation 9m."
+      end
+      ce.rounds.each do |r|
+        remaining_number_of_rounds -= 1
+        round_id = "#{ce.event_id}-#{r.round_type_id}"
+        number_of_people_in_round = results_by_round_id[round_id].size
+        if number_of_people_in_round <= 7 && remaining_number_of_rounds > 0
+          # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
+          @errors[:rounds] << "Round #{round_id} has 7 competitors or less but has at least one subsequent round, which must not happen per Regulation 9m3."
+        end
+        if number_of_people_in_round <= 15 && remaining_number_of_rounds > 1
+          # https://www.worldcubeassociation.org/regulations/#9m2: Rounds with 15 or fewer competitors must have at most one subsequent round.
+          @errors[:rounds] << "Round #{round_id} has 15 competitors or less but has at least two subsequents rounds, which must not happen per Regulation 9m2."
+        end
+        if number_of_people_in_round <= 99 && remaining_number_of_rounds > 2
+          # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most one subsequent round.
+          @errors[:rounds] << "Round #{round_id} has 99 competitors or less but has at least three subsequents rounds, which must not happen per Regulation 9m1."
+        end
+      end
+    end
   end
 
   private
@@ -254,14 +284,50 @@ class CompetitionResultsValidator
 
   private
   def check_persons(persons_by_id, results)
-    # TODO: warning for dob
     detected_person_ids = persons_by_id.keys
     persons_with_results = results.map(&:personId)
     (detected_person_ids - persons_with_results).each do |person_id|
-      @errors[:events] << "Person with id #{person_id} (#{persons_by_id[person_id].name}) has no result"
+      @errors[:persons] << "Person with id #{person_id} (#{persons_by_id[person_id].name}) has no result"
     end
     (persons_with_results - detected_person_ids).each do |person_id|
-      @errors[:events] << "Results for unknown person with id #{person_id}"
+      @errors[:persons] << "Results for unknown person with id #{person_id}"
+    end
+
+    without_wca_id, with_wca_id = persons_by_id.map { |_, p| p }.partition { |p| p.wcaId.empty? }
+    if without_wca_id.any?
+      existing_person_in_db = Person.where(name: without_wca_id.map(&:name))
+      existing_person_in_db.each do |p|
+        @warnings[:persons] << "Person '#{p.name}' exists with WCA ID #{p.wca_id} in the WCA database. A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
+      end
+    end
+    without_wca_id.each do |p|
+      if p.dob.month == 1 and p.dob.day == 1
+        @warnings[:persons] << "The date of birth of #{p.name} is on January 1st, please make sure it's correct."
+      end
+      # Look for double whitespaces or leading/trailing whitespaces
+      unless p.name.squeeze(" ").strip == p.name
+        @errors[:persons] << "Person '#{p.name}' has leading/trailing whitespaces or double whitespaces."
+      end
+    end
+    existing_person_by_wca_id = Hash[Person.where(wca_id: with_wca_id.map(&:wcaId)).map { |p| [p.wca_id, p] }]
+    with_wca_id.each do |p|
+      existing_person = existing_person_by_wca_id[p.wcaId]
+      if existing_person
+        # FIXME: check with WRT we do want to show errors here, or just warnings, or nothing!
+        # (If I get this right, we do not actually update existing persons from InboxPerson)
+        unless p.dob == existing_person.dob
+          @errors[:persons] << "Wrong birthdate for #{p.name} (#{p.wcaId})."
+        end
+        # Not using this checks for now, until I get feedback from WRT
+        # unless p.countryId == existing_person.country_iso2
+          # @errors[:persons] << "Wrong country for #{p.name} (#{p.wcaId})."
+        # end
+        # unless p.gender == existing_person.gender
+          # @errors[:persons] << "Wrong gender for #{p.name} (#{p.wcaId})."
+        # end
+      else
+        @errors[:persons] << "Person #{p.name} has a WCA ID which does not exist: #{p.wcaId}."
+      end
     end
   end
 
