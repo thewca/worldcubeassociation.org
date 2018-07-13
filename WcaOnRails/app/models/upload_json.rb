@@ -41,7 +41,6 @@ class UploadJson
       persons_to_import = []
       json["persons"].each do |p|
         new_person_attributes = p.merge(competitionId: competition_id)
-        # TODO: index on (competition_id, personId) to raise stuff
         persons_to_import << InboxPerson.new(new_person_attributes)
       end
       results_to_import = []
