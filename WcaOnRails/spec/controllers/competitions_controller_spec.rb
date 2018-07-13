@@ -201,10 +201,10 @@ RSpec.describe CompetitionsController do
     context 'when signed in as an admin' do
       sign_in { FactoryBot.create :admin }
 
-      it 'creates a new competition' do
+      it "creates a new competition" do
         post :create, params: { competition: { name: "FatBoyXPC 2015" } }
-        expect(response).to redirect_to edit_competition_path("FatBoyXPC2015")
         new_comp = assigns(:competition)
+        expect(response).to redirect_to edit_competition_path("FatBoyXPC2015")
         expect(new_comp.id).to eq "FatBoyXPC2015"
         expect(new_comp.name).to eq "FatBoyXPC 2015"
         expect(new_comp.cellName).to eq "FatBoyXPC 2015"
@@ -223,8 +223,12 @@ RSpec.describe CompetitionsController do
         sign_in delegate
       end
 
-      it 'creates a new competition' do
-        post :create, params: { competition: { name: "Test 2015", delegate_ids: delegate.id } }
+      it 'creates a new competition with organizers and expect them to receive a notification email' do
+        organizer = FactoryBot.create :user
+        expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(delegate, anything, organizer).and_call_original
+        expect do
+          post :create, params: { competition: { name: "Test 2015", delegate_ids: delegate.id, organizer_ids: organizer.id } }
+        end.to change { enqueued_jobs.size }.by(1)
         expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
@@ -473,13 +477,38 @@ RSpec.describe CompetitionsController do
 
     context "when signed in as delegate" do
       let(:delegate) { FactoryBot.create(:delegate) }
+      let(:organizer1) { FactoryBot.create(:user) }
+      let(:organizer2) { FactoryBot.create(:user) }
       before :each do
         competition.delegates << delegate
         sign_in delegate
       end
 
-      it 'can confirm competition' do
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
+      it "adds another organizer and expects him to receive a notification email" do
+        competition.organizers << organizer1
+        new_organizer = FactoryBot.create :user
+        expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
+        organizers = [competition.organizers.first, new_organizer]
+        organizer_ids = organizers.map(&:id).join(",")
+        expect do
+          patch :update, params: { id: competition, competition: { organizer_ids: organizer_ids } }
+        end.to change { enqueued_jobs.size }.by(1)
+      end
+
+      it "removes an organizer and expects him to receive a notification email" do
+        competition.organizers << [organizer1, organizer2]
+        expect(CompetitionsMailer).to receive(:notify_organizer_of_removal_from_competition).with(competition.delegates.last, competition, organizer2).and_call_original
+        expect do
+          patch :update, params: { id: competition, competition: { organizer_ids: organizer1.id } }
+        end.to change { enqueued_jobs.size }.by(1)
+      end
+
+      it "can confirm competition and expects board and organizers to receive a notification email" do
+        expect(CompetitionsMailer).to receive(:notify_organizer_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
+        expect(CompetitionsMailer).to receive(:notify_board_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
+        expect do
+          patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
+        end.to change { enqueued_jobs.size }.by(2)
         expect(response).to redirect_to edit_competition_path(competition)
         expect(competition.reload.isConfirmed?).to eq true
       end
@@ -563,9 +592,14 @@ RSpec.describe CompetitionsController do
         session[:locale] = :fr
       end
 
-      it 'creates an announcement post' do
+      it 'creates an announcement post and expects organizers to receive a notification email' do
         competition.update_attributes(start_date: "2011-12-04", end_date: "2011-12-05")
-        get :post_announcement, params: { id: competition }
+        organizer = FactoryBot.create :user
+        competition.organizers << organizer
+        expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, anything).and_call_original
+        expect do
+          get :post_announcement, params: { id: competition }
+        end.to change { enqueued_jobs.size }.by(1)
         post = assigns(:post)
         expect(post.title).to eq "#{competition.name} on December 4 - 5, 2011 in #{competition.cityName}, #{competition.country.name_in(:en)}"
         expect(post.body).to match(/in #{competition.cityName}, #{competition.country.name_in(:en)}\./)

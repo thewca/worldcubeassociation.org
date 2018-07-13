@@ -1,0 +1,13 @@
+<p>
+  <%= t 'users.mailer.organizer_addition_email.intro', name: @organizer.name %>
+</p>
+
+<p>
+  <%= t 'users.mailer.organizer_addition_email.information', confirmer: @confirmer.name, competition: @competition.name %>
+  <%= link_to 'Competition edit page', edit_competition_url(@competition) %>
+</p>
+
+<p>
+  <%= t 'users.mailer.competition_submission_email.contact' %>
+  <%= @competition.delegates.pluck(:email).join(" ") %>
+</p>

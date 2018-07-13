@@ -1,0 +1,12 @@
+<p>
+  <%= t 'users.mailer.competition_submission_email.organizers', competition: @competition.name %>
+</p>
+
+<p>
+  <%= t 'users.mailer.competition_submission_email.confirmed', delegate_name: @confirmer.name, competition: @competition.name %>
+</p>
+
+<p>
+  <%= t 'users.mailer.competition_submission_email.contact' %>
+  <%= @competition.delegates.pluck(:email).join(" ") %>
+</p>

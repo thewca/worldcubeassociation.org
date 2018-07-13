@@ -150,6 +150,9 @@ class CompetitionsController < ApplicationController
 
     if @competition.save
       flash[:success] = t('competitions.messages.create_success')
+      @competition.organizers.each do |organizer|
+        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, organizer).deliver_later
+      end
       redirect_to edit_competition_path(@competition)
     else
       # Show id errors under name, since we don't actually show an
@@ -168,6 +171,7 @@ class CompetitionsController < ApplicationController
     else
       render 'posts/new'
     end
+    @post
   end
 
   private def editable_post_fields
@@ -186,7 +190,9 @@ class CompetitionsController < ApplicationController
       unless comp.website.blank?
         body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
       end
-      create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
+      @full_post = create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
+      @competition = competition_from_params
+      CompetitionsMailer.notify_organizer_of_announced_competition(@competition, @full_post).deliver_later
 
       comp.update!(announced_at: Time.now)
     end
@@ -464,6 +470,9 @@ class CompetitionsController < ApplicationController
 
     comp_params_minus_id = competition_params
     new_id = comp_params_minus_id.delete(:id)
+
+    old_organizers = @competition.organizers.to_a
+
     if params[:commit] == "Delete"
       cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
       if cannot_delete_competition_reason
@@ -475,6 +484,16 @@ class CompetitionsController < ApplicationController
         redirect_to root_url
       end
     elsif @competition.update_attributes(comp_params_minus_id)
+      new_organizers = @competition.organizers - old_organizers
+      removed_organizers = old_organizers - @competition.organizers
+
+      new_organizers.each do |new_organizer|
+        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, new_organizer).deliver_later
+      end
+
+      removed_organizers.each do |removed_organizer|
+        CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, @competition, removed_organizer).deliver_later
+      end
 
       if new_id && !@competition.update_attributes(id: new_id)
         # Changing the competition id breaks all our associations, and our view
@@ -487,6 +506,7 @@ class CompetitionsController < ApplicationController
 
       if params[:commit] == "Confirm"
         CompetitionsMailer.notify_board_of_confirmed_competition(current_user, @competition).deliver_later
+        CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, @competition).deliver_later
         flash[:success] = t('.confirm_success')
       else
         flash[:success] = t('.save_success')
