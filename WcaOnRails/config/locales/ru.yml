@@ -712,6 +712,8 @@ ru:
         #original_hash: da39a3e
         inquiry: ''
         #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -876,6 +878,8 @@ ru:
       contact_form:
         #original_hash: d31ab65
         inquiry: К какой категории относится ваш запрос?
+        #original_hash: 1917f4f
+        competition_id: Соревнование
         #original_hash: 709a232
         name: Имя
         #original_hash: 3fa6f5f
@@ -926,6 +930,10 @@ ru:
         письмо с подтверждением, откройте
         https://www.worldcubeassociation.org/users/confirmation/new, чтобы мы
         отправили другое письмо.
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: 'Пожалуйста, подтвердите ваш email-адрес'
   wca:
     errors:
       messages:
@@ -2135,9 +2143,11 @@ ru:
       #original_hash: ac2ac3d
       title: Контактная форма WCA
       inquiries:
-        #original_hash: e1d277a
-        competition: 'Конкретное соревнование (пожалуйста, укажите, какое)'
-        #original_hash: f7d3f9f
+        #original_hash: 92ea7e8
+        competition: >-
+          Связаться с организаторами конкретного соревнования (пожалуйста,
+          укажите, какое)
+        #original_hash: f0bffb7
         competitions_in_general: 'Соревнования вообще (организация, правила и т.д.)'
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID или WCA профиль
