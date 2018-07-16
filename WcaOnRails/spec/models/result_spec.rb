@@ -167,6 +167,15 @@ RSpec.describe Result do
               expect(result).to be_invalid_with_errors(average: ["should be 43"])
             end
 
+            it "rounds instead of truncates" do
+              result = build_result(value1: 4, value2: 4, value3: 3, value4: 0, value5: 0, best: 3, average: 4)
+              expect(result).to be_valid
+
+              result.average = 33
+              expect(result.compute_correct_average).to eq 4
+              expect(result).to be_invalid_with_errors(average: ["should be 4"])
+            end
+
             it "missing solves" do
               result = build_result(value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0)
               expect(result.average_is_not_computable_reason).to be_truthy
