@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@rails/webpacker": "^3.5.3",
+    "@rails/webpacker": "^3.5.5",
     "autonumeric": "^4.2.15",
     "autoprefixer": "^8.6.5",
     "babel-core": "^6.26.3",
