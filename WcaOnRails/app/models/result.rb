@@ -127,7 +127,7 @@ class Result < ApplicationRecord
         100 * sum_moves / counting_solve_times.length
       else
         sum_centis = counting_solve_times.sum(&:time_centiseconds)
-        sum_centis / counting_solve_times.length
+        (sum_centis.to_f / counting_solve_times.length).round
       end
     end
   end
