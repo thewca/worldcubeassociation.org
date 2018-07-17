@@ -303,7 +303,7 @@ da:
         #original_hash: 709a232
         name: Navn
         #original_hash: b649210
-        cellName: Konkurrence navn
+        cellName: Kaldenavn for konkurrencen
         #original_hash: d523ebb
         countryId: Land
         #original_hash: 25b7b06
@@ -691,6 +691,8 @@ da:
         #original_hash: da39a3e
         inquiry: ''
         #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -856,6 +858,8 @@ da:
       contact_form:
         #original_hash: d31ab65
         inquiry: Hvilken en af de følgende beskriver bedst din forespørgsel?
+        #original_hash: 1917f4f
+        competition_id: Konkurrence
         #original_hash: 709a232
         name: Navn
         #original_hash: 3fa6f5f
@@ -1084,6 +1088,44 @@ da:
           herunder:
         #original_hash: 4900afe
         confirmation_link: Bekræft emailadresse.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name} bekræftede %{competition}'
+        #original_hash: 3db81b5
+        organizers: 'Kære arrangører af %{competition}'
+        #original_hash: c526fd6
+        confirmed: >-
+          Den delegerede for din konkurrence, %{delegate_name}, bekræftede
+          %{competition} og har sendt den til WCA Bestyrelsen. Så snart at WCA
+          Bestyrelsen annoncerer konkurrencen, vil du modtage en yderligere
+          notifikation.
+        #original_hash: dfea09d
+        contact: >-
+          Hvis du har flere spørgsmål, så kontakt de delegerede for konkurrencen
+          via email:
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'WCA Bestyrelsen annoncerede %{competition}'
+        #original_hash: 8e91977
+        announced: >-
+          WCA Bestyrelsen har godkendt din konkurrencen og den er officielt
+          blevet annonceret.
+        #original_hash: 1c20919
+        link: 'Følg venligst linket for at komme til annonceringen af konkurrencen:'
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'Du blev tilføjet til %{competition} som en arrangør'
+        #original_hash: c9d0561
+        intro: 'Hej %{name}'
+        #original_hash: 372b27f
+        information: >-
+          %{confirmer} tilføjede dig til %{competition}, som en arrangør. Du kan
+          redigere konkurrencen her:
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'Du blev fjernet som arrangør fra %{competition}'
+        #original_hash: 66cb109
+        information: '%{remover} fjernede dig som arrangør fra %{competition}'
     claim_wca_id:
       #original_hash: f28bf87
       title: Gør krav på dit WCA ID
@@ -2103,10 +2145,14 @@ da:
       #original_hash: ac2ac3d
       title: WCA Website Contact Form
       inquiries:
-        #original_hash: e1d277a
-        competition: En bestemt konkurrence (vælg venligst)
-        #original_hash: f7d3f9f
-        competitions_in_general: 'Konkurrencer generelt (At arrangere, konkurrence regler, osv.)'
+        #original_hash: 92ea7e8
+        competition: >-
+          Kontakt arrangørerne af en bestemt konkurrence (vælg venligst
+          herunder)
+        #original_hash: f0bffb7
+        competitions_in_general: >-
+          Konkurrencer generelt (at arrangere konkurrencer, konkurrencereglerne,
+          osv.)
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID eller WCA Profil
         #original_hash: 0c77aee
@@ -2558,9 +2604,9 @@ da:
       på vores %{link}!
     #original_hash: 2b023eb
     questions_and_comments_html: >-
-      For spørgsmål og hjemmesiden, kommentarer og forslag, så brug <a
-      href='/contact/website'>contact form</a>. For at spørgsmål som involverer
-      et specifikt område eller konkurrence, så kontakt dit lokale %{link}.
+      For spørgsmål og hjemmesiden, kommentarer og forslag, så brug denne <a
+      href='/contact/website'>kontakt formular</a>. For spørgsmål som involverer
+      et specifikt område eller konkurrence, så kontakt din lokale %{link}.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Komitéer og Hold</u>
     #original_hash: 1cb449c
