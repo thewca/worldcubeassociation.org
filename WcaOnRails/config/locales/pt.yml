@@ -699,6 +699,8 @@ pt:
         #original_hash: da39a3e
         inquiry: ''
         #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -866,6 +868,8 @@ pt:
       contact_form:
         #original_hash: d31ab65
         inquiry: Qual das seguintes opções melhor descreve a sua questão?
+        #original_hash: 1917f4f
+        competition_id: Competição
         #original_hash: 709a232
         name: Nome
         #original_hash: 3fa6f5f
@@ -1094,6 +1098,44 @@ pt:
         confirm: 'Pode confirmar o novo email da sua conta através do link abaixo:'
         #original_hash: 4900afe
         confirmation_link: Confirmar endereço de email.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name} confirmou %{competition}'
+        #original_hash: 3db81b5
+        organizers: 'Caros organizadores de %{competition},'
+        #original_hash: c526fd6
+        confirmed: >-
+          O Delegado para a competição, %{delegate_name}, confirmou
+          %{competition} e enviou a submissão ao Conselho da WCA. Assim que o
+          Conselho anuncie esta competição ao público, irá receber outra
+          notificação.
+        #original_hash: dfea09d
+        contact: >-
+          Se tiver mais questões, por favor entre em contacto com o(s)
+          Delegado(s) da competição via email:
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'O Conselho da WCA anunciou %{competition}'
+        #original_hash: 8e91977
+        announced: >-
+          O Conselho da WCA aprovou a sua competição e anunciou-a oficialmente
+          ao público.
+        #original_hash: 1c20919
+        link: 'Por favor visite o link para aceder ao anúncio oficial da competição:'
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'Foi adicionado a %{competition} como organizador'
+        #original_hash: c9d0561
+        intro: 'Olá %{name},'
+        #original_hash: 372b27f
+        information: >-
+          %{confirmer} adicionou-te a %{competition} enquanto organizador. É
+          possível editar esta competição aqui:
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'Foi removido de %{competition} enquanto organizador'
+        #original_hash: 66cb109
+        information: '%{remover} removeu-te de %{competition} enquanto organizador.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Associar o seu ID da WCA
@@ -2115,10 +2157,12 @@ pt:
       #original_hash: ac2ac3d
       title: Formulário de contacto do Website da WCA
       inquiries:
-        #original_hash: e1d277a
-        competition: Uma competição específica (por favor escolha)
-        #original_hash: f7d3f9f
-        competitions_in_general: 'Competições em geral (Organização, Regras para competições, etc.)'
+        #original_hash: 92ea7e8
+        competition: >-
+          Contacte os Organizadores de uma competição específica (escolher
+          abaixo)
+        #original_hash: f0bffb7
+        competitions_in_general: 'Competições em geral (organização, regras para competições, etc.)'
         #original_hash: f6ffa78
         wca_id_or_profile: ID da WCA ou Perfil da WCA
         #original_hash: 0c77aee
