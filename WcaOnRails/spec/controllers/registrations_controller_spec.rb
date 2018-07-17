@@ -590,7 +590,7 @@ RSpec.describe RegistrationsController do
 
   describe 'POST #process_payment' do
     context 'when not signed in' do
-      let(:competition) { FactoryBot.create(:competition, :entry_fee, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
       sign_out
 
       it 'redirects to the sign in page' do
@@ -600,7 +600,7 @@ RSpec.describe RegistrationsController do
     end
 
     context 'when signed in' do
-      let(:competition) { FactoryBot.create(:competition, :entry_fee, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
       let!(:user) { FactoryBot.create(:user, :wca_id) }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
 
@@ -656,7 +656,7 @@ RSpec.describe RegistrationsController do
 
   describe 'POST #refund_payment' do
     context 'when signed in as a competitor' do
-      let(:competition) { FactoryBot.create(:competition, :entry_fee, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
       let!(:user) { FactoryBot.create(:user, :wca_id) }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
 
@@ -670,7 +670,7 @@ RSpec.describe RegistrationsController do
 
     context 'when signed in as organizer' do
       let(:organizer) { FactoryBot.create(:user) }
-      let(:competition) { FactoryBot.create(:competition, :entry_fee, :visible, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: organizer) }
 
       context "processes a payment" do
