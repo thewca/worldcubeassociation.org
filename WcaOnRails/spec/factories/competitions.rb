@@ -7,6 +7,7 @@ FactoryBot.define do
     cityName "San Francisco"
     countryId "USA"
     currency_code "USD"
+    base_entry_fee_lowest_denomination 1000
     information "Information!"
     registration_requirements "Requirements"
     latitude { rand(-90_000_000..90_000_000) }
@@ -91,9 +92,7 @@ FactoryBot.define do
       showAtAll true
     end
 
-    trait :entry_fee do
-      base_entry_fee_lowest_denomination 1000
-      currency_code "AUD"
+    trait :stripe_connected do
       # This is an actual test stripe account set up
       # for testing Stripe payments, and is connected
       # to the WCA Stripe account. For more information, see

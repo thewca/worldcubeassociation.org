@@ -37,7 +37,7 @@ RSpec.describe "registrations/register" do
   end
 
   def setup(payment_status)
-    competition = FactoryBot.create(:competition, :entry_fee, :visible, :registration_open)
+    competition = FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open)
     registration = FactoryBot.create(:registration, payment_status, competition: competition)
     allow(view).to receive(:current_user) { registration.user }
     assign(:competition, competition)
