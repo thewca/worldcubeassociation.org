@@ -935,8 +935,8 @@ pt:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: 'Use %{native_redirect_uri} se quiser adicionar URIs localhost'
+          #original_hash: 95c10ec
+          https_info: HTTPS é necessário a não ser que o host seja "localhost"
           #original_hash: 62a0113
           scopes_html: >-
             Separe os âmbitos com espaços. Deixe em branco para usar o(s)
