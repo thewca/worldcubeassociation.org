@@ -1112,6 +1112,45 @@ hr:
           ispod:
         #original_hash: 4900afe
         confirmation_link: Potvrdi e-mail adresu.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name} je potvrdio/la %{competition}'
+        #original_hash: 3db81b5
+        organizers: 'Dragi organizatori natjecanja %{competition},'
+        #original_hash: c526fd6
+        confirmed: >-
+          Vaše natjecanje %{competition} je Delegat %{delegate_name}  potvrdio i
+          poslao je upit WCA Upravnom odboru. Čim prije će WCA Upravni odbor
+          najaviti natjecanje javnosti i tada ćete zaprimiti obavijest.
+        #original_hash: dfea09d
+        contact: >-
+          Ukoliko imate neka dodatna pitanja, molimo Vas kontaktirajte
+          Delegata(e) natjecanja preko e-mail-a:
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'WCA Upravni odbor je najavio natjecanje %{competition}'
+        #original_hash: 8e91977
+        announced: >-
+          WCA Upravni odbor je odobrio Vaše natjecanje i službeno ga je objavio
+          javnosti.
+        #original_hash: 1c20919
+        link: 'Molimo Vas pratite poveznicu kako biste došli do objave natjecanja:'
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'Dodani ste kao organizator za natjecanje %{competition}'
+        #original_hash: c9d0561
+        intro: 'Pozdrav %{name},'
+        #original_hash: 372b27f
+        information: >-
+          %{confirmer} Vas je dodao/la kao organizatora natjecanja
+          %{competition}. Možete uređivati natjecanje ovdje:
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'Izbrisani ste s natjecanja %{competition} kao organizator'
+        #original_hash: 66cb109
+        information: >-
+          %{remover} Vas je izbrisao s natjecanja %{competition} kao
+          organizatora.
     claim_wca_id:
       #original_hash: f28bf87
       title: Zatražite WCA ID
