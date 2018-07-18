@@ -25,11 +25,11 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
   end
 
-  describe "notify_organizer_of_confirmed_competition" do
+  describe "notify_organizers_of_confirmed_competition" do
     let(:delegate) { FactoryBot.create :delegate, name: "Adam Smith" }
     let(:organizer) { FactoryBot.create :user, name: "Will Johnson" }
     let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate] }
-    let(:mail) { CompetitionsMailer.notify_organizer_of_confirmed_competition(delegate, competition) }
+    let(:mail) { CompetitionsMailer.notify_organizers_of_confirmed_competition(delegate, competition) }
 
     it "renders" do
       expect(mail.to).to eq(competition.organizers.pluck(:email))
@@ -38,6 +38,11 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.subject).to eq("#{delegate.name} confirmed #{competition.name}")
       expect(mail.body.encoded).to match("Your competition Delegate #{delegate.name} confirmed #{competition.name} and sent the submission to the WCA Board.")
     end
+
+    it "sends no email if there are no organizers" do
+      competition.organizers = []
+      expect(mail.message).to be_kind_of ActionMailer::Base::NullMail
+    end
   end
 
   describe "notify_organizers_of_announced_competition" do
@@ -45,7 +50,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:delegate) { FactoryBot.create :delegate, name: "Adam Smith" }
     let(:organizer) { FactoryBot.create :user, name: "Will Johnson" }
     let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate] }
-    let(:mail) { CompetitionsMailer.notify_organizer_of_announced_competition(competition, post) }
+    let(:mail) { CompetitionsMailer.notify_organizers_of_announced_competition(competition, post) }
 
     it "renders" do
       expect(mail.to).to eq(competition.organizers.pluck(:email))
@@ -54,9 +59,14 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.body.encoded).to match("Dear organizers of #{competition.name}")
       expect(mail.body.encoded).to match("The WCA Board approved your competition and officially announced it to the public.")
     end
+
+    it "sends no email if there are no organizers" do
+      competition.organizers = []
+      expect(mail.message).to be_kind_of ActionMailer::Base::NullMail
+    end
   end
 
-  describe "notify_organizers_of_addition_to_competititon" do
+  describe "notify_organizer_of_addition_to_competititon" do
     let(:delegate) { FactoryBot.create :delegate, name: "Adam Smith" }
     let(:organizer) { FactoryBot.create :user, name: "Will Johnson" }
     let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate] }
@@ -71,7 +81,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
   end
 
-  describe "notify_organizers_of_removal_from_competition" do
+  describe "notify_organizer_of_removal_from_competition" do
     let(:delegate) { FactoryBot.create :delegate, name: "Adam Smith" }
     let(:organizer) { FactoryBot.create :user, name: "Will Johnson" }
     let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate] }

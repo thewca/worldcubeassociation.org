@@ -192,7 +192,7 @@ class CompetitionsController < ApplicationController
       end
       @full_post = create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
       @competition = competition_from_params
-      CompetitionsMailer.notify_organizer_of_announced_competition(@competition, @full_post).deliver_later
+      CompetitionsMailer.notify_organizers_of_announced_competition(@competition, @full_post).deliver_later
 
       comp.update!(announced_at: Time.now)
     end
@@ -506,7 +506,7 @@ class CompetitionsController < ApplicationController
 
       if params[:commit] == "Confirm"
         CompetitionsMailer.notify_board_of_confirmed_competition(current_user, @competition).deliver_later
-        CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, @competition).deliver_later
+        CompetitionsMailer.notify_organizers_of_confirmed_competition(current_user, @competition).deliver_later
         flash[:success] = t('.confirm_success')
       else
         flash[:success] = t('.save_success')

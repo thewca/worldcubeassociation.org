@@ -504,7 +504,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can confirm competition and expects board and organizers to receive a notification email" do
-        expect(CompetitionsMailer).to receive(:notify_organizer_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
+        expect(CompetitionsMailer).to receive(:notify_organizers_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect(CompetitionsMailer).to receive(:notify_board_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
           patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
@@ -596,7 +596,7 @@ RSpec.describe CompetitionsController do
         competition.update_attributes(start_date: "2011-12-04", end_date: "2011-12-05")
         organizer = FactoryBot.create :user
         competition.organizers << organizer
-        expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, anything).and_call_original
+        expect(CompetitionsMailer).to receive(:notify_organizers_of_announced_competition).with(competition, anything).and_call_original
         expect do
           get :post_announcement, params: { id: competition }
         end.to change { enqueued_jobs.size }.by(1)
