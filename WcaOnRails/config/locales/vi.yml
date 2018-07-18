@@ -675,6 +675,8 @@ vi:
         #original_hash: da39a3e
         inquiry: ''
         #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -841,6 +843,8 @@ vi:
       contact_form:
         #original_hash: d31ab65
         inquiry: Phần nào sau đây miêu tả đất nước của bạn đúng nhất?
+        #original_hash: 1917f4f
+        competition_id: Mục này được sử dụng làm nhãn dán cho các phần của đơn liên lạc
         #original_hash: 709a232
         name: Tên
         #original_hash: 3fa6f5f
@@ -891,6 +895,10 @@ vi:
         xác nhận? Vào trang
         https://www.worldcubeassociation.org/users/confirmation/new để yêu cầu
         email khác.
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: Vui lòng xác nhận địa chỉ email mới của bạn
   wca:
     errors:
       messages:
@@ -1034,6 +1042,78 @@ vi:
       failure: Không thể cập nhật hồ sơ của bạn.
       #original_hash: c29870c
       unavailable: Địa điểm được yêu cầu không khả dụng.
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: Hướng dẫn xác nhận
+        #original_hash: 6ee63db
+        welcome: 'Chào mừng %{user_email}!'
+        #original_hash: da39d05
+        confirm: >-
+          Tài khoản của bạn đã được tạo và phải được kích hoạt trước khi sử
+          dụng. Vui lòng xác nhận tài khoản của bạn qua đường dẫn dưới đây:
+        #original_hash: 776476a
+        confirmation_link: Xác nhận tài khoản của tôi.
+        #original_hash: d484f70
+        activate: >-
+          Sau khi kích hoạt thành công, bạn có thể đăng nhập vào trang web của
+          WCA:
+        #original_hash: 333999b
+        addendum: >-
+          Email này được tự động gửi đi. Nếu bạn không đăng ký tài khoản trên
+          trang web của Hiệp hội Lập phương Thế giới và nhận được tin nhắn này
+          do nhầm lẫn, vui lòng bỏ qua và xoá email này.
+        #original_hash: dbc2263
+        questions: >-
+          Bạn có thêm câu hỏi nào không? Chúng tôi rất vui lòng được trả lời.
+          Đừng ngại gửi email đến %{contact_link}.
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: 'Xin chào %{user_email}!'
+        #original_hash: 3095365
+        confirm: >-
+          Bạn có thể xác nhận địa chỉ email mới của tài khoản qua đường dẫn dưới
+          đây:
+        #original_hash: 4900afe
+        confirmation_link: Xác nhận địa chỉ email.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name} đã xác nhận %{competition}'
+        #original_hash: 3db81b5
+        organizers: 'Thân gửi ban tổ chức của %{competition},'
+        #original_hash: c526fd6
+        confirmed: >-
+          Delegate %{delegate_name} cho giải đấu của bạn đã xác nhận
+          %{competition} và gửi thông tin đến Ban Quản trị WCA. Ngay sau khi Ban
+          Quản trị WCA công bố giải đấu này, bạn sẽ nhận được một thông báo
+          khác.
+        #original_hash: dfea09d
+        contact: >-
+          Nếu bạn còn bất kỳ thắc mắc nào, vui lòng liên hệ với Delegate của
+          giải đấu qua email:
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'Ban Quản trị WCA đã công bố %{competition}'
+        #original_hash: 8e91977
+        announced: >-
+          Ban Quản trị WCA đã thông qua giải đấu của bạn và công bố trên trang
+          chủ.
+        #original_hash: 1c20919
+        link: 'Vui lòng đi theo đường dẫn để đọc thông báo về giải đấu:'
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'Bạn đã được thêm vào %{competition} với tư cách ban tổ chức'
+        #original_hash: c9d0561
+        intro: 'Xin chào %{name},'
+        #original_hash: 372b27f
+        information: >-
+          %{confirmer} đã thêm bạn vào %{competition} với tư cách ban tổ chức.
+          Bạn có thể chỉnh sửa giải đấu tại đây:
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'Bạn đã bị xoá khỏi %{competition} với tư cách ban tổ chức'
+        #original_hash: 66cb109
+        information: '%{remover} đã xoá bạn khỏi %{competition} với tư cách ban tổ chức.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Xác nhận ID WCA
@@ -2031,10 +2111,10 @@ vi:
       #original_hash: ac2ac3d
       title: Đơn liên lạc trên trang web của WCA
       inquiries:
-        #original_hash: e1d277a
-        competition: Một giải đấu cụ thể (vui lòng chọn)
-        #original_hash: f7d3f9f
-        competitions_in_general: 'Giải đấu nói chung (Tổ chức, Nội quy thi đấu, v.v)'
+        #original_hash: 92ea7e8
+        competition: Liên hệ Ban tổ chức của một giải đấu cụ thể (vui lòng chọn)
+        #original_hash: f0bffb7
+        competitions_in_general: 'Giải đấu nói chung (tổ chức, nội quy thi đấu, v.v)'
         #original_hash: f6ffa78
         wca_id_or_profile: ID WCA hoặc Hồ sơ WCA
         #original_hash: 0c77aee
