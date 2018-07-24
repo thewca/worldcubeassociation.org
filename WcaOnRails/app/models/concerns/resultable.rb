@@ -10,15 +10,21 @@ module Resultable
     # NOTE: We use cached values instead of belongs_to to improve performances.
     belongs_to :competition, foreign_key: :competitionId
     validates :competition, presence: true
+    belongs_to :round_type, foreign_key: :roundTypeId
     validates :round_type, presence: true
+    # FIXME: shouldn't we take advantage of the fact that these are cached?
+    belongs_to :event, foreign_key: :eventId
+    validates :event, presence: true
+    belongs_to :format, foreign_key: :formatId
+    validates :format, presence: true
+
+    # Define cached stuff with the same name as the associations for validation
     def round_type
       RoundType.c_find(roundTypeId)
     end
-    validates :event, presence: true
     def event
       Event.c_find(eventId)
     end
-    validates :format, presence: true
     def format
       Format.c_find(formatId)
     end

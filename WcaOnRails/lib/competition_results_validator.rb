@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CompetitionResultsValidator
-  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results, :inbox_persons, :inbox_results, :scrambles, :number_of_non_matching_rounds
+  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results, :inbox_persons, :inbox_results, :scrambles, :number_of_non_matching_rounds, :expected_rounds_by_ids
 
   INDIVIDUAL_RESULT_JSON_SCHEMA = {
     "type" => "object",
@@ -140,18 +140,18 @@ class CompetitionResultsValidator
     persons_by_id = Hash[inbox_persons.map { |person| [person.id, person] }]
 
     # Map a competition's (expected!) round id (eg: "444-f") to its corresponding object
-    expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
+    @expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
 
     # Group actual results by their round id
-    results_by_round_id = inbox_results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
+    results_by_round_id = @inbox_results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
 
-    check_persons(persons_by_id, inbox_results)
+    check_persons(persons_by_id)
 
-    check_events_match(competition.events, inbox_results)
+    check_events_match(competition.events)
 
-    @number_of_non_matching_rounds = check_rounds_match(expected_rounds_by_ids, inbox_results)
+    @number_of_non_matching_rounds = check_rounds_match
 
-    check_individual_results(results_by_round_id, expected_rounds_by_ids, persons_by_id)
+    check_individual_results(results_by_round_id, persons_by_id)
 
     if @number_of_non_matching_rounds == 0
       # Only check the advancement conditions if all rounds match: this way we can rely
@@ -159,7 +159,7 @@ class CompetitionResultsValidator
       check_avancement_conditions(results_by_round_id, competition.competition_events)
     end
 
-    check_scrambles(scrambles, expected_rounds_by_ids)
+    check_scrambles
 
     @total_errors = @errors.map { |key, value| value }.map(&:size).reduce(:+)
     @total_warnings = @warnings.map { |key, value| value }.map(&:size).reduce(:+)
@@ -194,9 +194,9 @@ class CompetitionResultsValidator
   end
 
   private
-  def check_events_match(competition_events, results)
+  def check_events_match(competition_events)
     expected = competition_events.map(&:id)
-    real = results.map(&:eventId).uniq
+    real = @inbox_results.map(&:eventId).uniq
     # Check for missing/unexpected events and rounds
     # It should handle cases where:
     #   - an event was added/deleted
@@ -211,10 +211,10 @@ class CompetitionResultsValidator
   end
 
   private
-  def check_rounds_match(rounds_by_ids, results)
+  def check_rounds_match
     # Check that rounds match what was declared, and return the number of difference
-    expected = rounds_by_ids.keys
-    real = results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
+    expected = @expected_rounds_by_ids.keys
+    real = @inbox_results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
     unexpected = real - expected
     missing = expected - real
     unexpected.each do |round_id|
@@ -256,10 +256,10 @@ class CompetitionResultsValidator
   end
 
   private
-  def check_scrambles(scrambles, rounds_by_ids)
-    rounds_ids = rounds_by_ids.keys
+  def check_scrambles
+    rounds_ids = @expected_rounds_by_ids.keys
     # Group scramble by round_id
-    scrambles_by_round_id = scrambles.group_by { |s| "#{s.eventId}-#{s.roundTypeId}" }
+    scrambles_by_round_id = @scrambles.group_by { |s| "#{s.eventId}-#{s.roundTypeId}" }
     detected_scrambles_rounds_ids = scrambles_by_round_id.keys
     (rounds_ids - detected_scrambles_rounds_ids).each do |round_id|
       @errors[:scrambles] << "[#{round_id}] Missing scrambles."
@@ -271,7 +271,7 @@ class CompetitionResultsValidator
     # For existing rounds and scrambles, check that the number of scrambles match at least
     # the number of expected scrambles.
     (detected_scrambles_rounds_ids & rounds_ids).each do |round_id|
-      format = rounds_by_ids[round_id].format
+      format = @expected_rounds_by_ids[round_id].format
       expected_number_of_scrambles = format.expected_solve_count
       scrambles_by_group_id = scrambles_by_round_id[round_id].group_by(&:groupId)
       scrambles_by_group_id.each do |group_id, scrambles_for_group|
@@ -285,9 +285,9 @@ class CompetitionResultsValidator
   end
 
   private
-  def check_persons(persons_by_id, results)
+  def check_persons(persons_by_id)
     detected_person_ids = persons_by_id.keys
-    persons_with_results = results.map(&:personId)
+    persons_with_results = @inbox_results.map(&:personId)
     (detected_person_ids - persons_with_results).each do |person_id|
       @errors[:persons] << "Person with id #{person_id} (#{persons_by_id[person_id].name}) has no result"
     end
@@ -363,7 +363,7 @@ class CompetitionResultsValidator
   end
 
   private
-  def check_individual_results(results_by_round_id, rounds_by_ids, persons_by_id)
+  def check_individual_results(results_by_round_id, persons_by_id)
     # For results
     #   - average/best check is done in validation
     #   - "correct" number of attempts is done in validation (but NOT cutoff times)
@@ -375,7 +375,7 @@ class CompetitionResultsValidator
 
     results_by_round_id.each do |round_id, results_for_round|
       # get cutoff and timelimit
-      round_info = rounds_by_ids[round_id]
+      round_info = @expected_rounds_by_ids[round_id]
       unless round_info
         # These results are for an undeclared round, skip them as an error has
         # already been registered
@@ -460,6 +460,7 @@ class CompetitionResultsValidator
           else
             # cross-rounds time limit, the sum of all the results for all the rounds must be below the cumulative time limit.
             # if there is any DNF -> warn the Delegate and ask him to double check the time for them.
+            # TODO
             @errors[:results] << "Cumul across rounds not implemented"
           end
         end
