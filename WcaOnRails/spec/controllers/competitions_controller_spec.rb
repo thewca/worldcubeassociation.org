@@ -831,7 +831,7 @@ RSpec.describe CompetitionsController do
               value4: 0,
               value5: 0,
               best: 24,
-              average: dnf ? SolveTime::DNF_VALUE : 2766,
+              average: dnf ? SolveTime::DNF_VALUE : 2767,
             )
           end
 
@@ -843,9 +843,9 @@ RSpec.describe CompetitionsController do
             get :post_results, params: { id: competition, event_id: "333fm" }
             post = assigns(:post)
             expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.country.name_in(:en)}"
-            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a mean of 27.66 moves in the 3x3x3 Fewest Moves event. " \
-              "[Dan](#{person_url('2006YOYO02')}) finished second (27.66) and " \
-              "[Steven](#{person_url('2006YOYO03')}) finished third (27.66).\n\n"
+            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a mean of 27.67 moves in the 3x3x3 Fewest Moves event. " \
+              "[Dan](#{person_url('2006YOYO02')}) finished second (27.67) and " \
+              "[Steven](#{person_url('2006YOYO03')}) finished third (27.67).\n\n"
           end
 
           it "handles DNF averages in the podium" do
@@ -856,8 +856,8 @@ RSpec.describe CompetitionsController do
             get :post_results, params: { id: competition, event_id: "333fm" }
             post = assigns(:post)
             expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.country.name_in(:en)}"
-            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a mean of 27.66 moves in the 3x3x3 Fewest Moves event. " \
-              "[Dan](#{person_url('2006YOYO02')}) finished second (27.66) and " \
+            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a mean of 27.67 moves in the 3x3x3 Fewest Moves event. " \
+              "[Dan](#{person_url('2006YOYO02')}) finished second (27.67) and " \
               "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 24 moves).\n\n"
           end
         end

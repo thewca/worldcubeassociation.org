@@ -114,6 +114,7 @@ class Competition < ApplicationRecord
     registration_open
     registration_close
     results_posted_at
+    results_submitted_at
     results_nag_sent_at
     announced_at
     created_at

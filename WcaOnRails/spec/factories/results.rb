@@ -20,7 +20,7 @@ FactoryBot.define do
     value3 { average }
     value4 { average }
     value5 { average }
-    best { 3000 }
+    best { 5000 }
     average { 5000 }
     regionalSingleRecord { "" }
     regionalAverageRecord { "" }
