@@ -4,9 +4,9 @@ FactoryBot.define do
   factory :scramble do
     eventId { "333" }
     roundTypeId { "f" }
-    groupId { "a" }
+    groupId { "A" }
     isExtra { false }
-    scrambleNum { 0 }
+    scrambleNum { 1 }
     scramble { "R2 D2" }
   end
 end

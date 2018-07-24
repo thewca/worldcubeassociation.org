@@ -68,11 +68,11 @@ RSpec.describe NotificationsHelper do
             },
             {
               text: "The competition results for #{past_competition_missing_report.name} have not been submitted.",
-              url: submit_results_edit_path(past_competition_missing_report),
+              url: competition_submit_results_edit_path(past_competition_missing_report),
             },
             {
               text: "The competition results for #{past_competition_having_report.name} have not been submitted.",
-              url: submit_results_edit_path(past_competition_having_report),
+              url: competition_submit_results_edit_path(past_competition_having_report),
             },
           ]
         end

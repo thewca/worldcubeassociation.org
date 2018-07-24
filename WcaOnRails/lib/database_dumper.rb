@@ -62,6 +62,7 @@ module DatabaseDumper
           competitor_limit_reason
           guests_enabled
           results_posted_at
+          results_submitted_at
           results_nag_sent_at
           generate_website
           announced_at

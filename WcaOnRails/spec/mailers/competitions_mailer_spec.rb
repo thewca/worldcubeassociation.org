@@ -151,7 +151,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match(/Over a week has passed since #{competition.name}/)
-      expect(mail.body.encoded).to match(submit_results_edit_path(competition.id))
+      expect(mail.body.encoded).to match(competition_submit_results_edit_path(competition.id))
     end
   end
 
@@ -207,13 +207,11 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   describe "results_submitted" do
     let(:delegates) { FactoryBot.create_list(:delegate, 3) }
     let(:competition) { FactoryBot.create(:competition, name: "Comp of the future 2017", id: "CompFut2017", delegates: delegates) }
-    let(:results_json_str) { '{ "results": "good" }' }
     let(:results_submission) {
       FactoryBot.build(
         :results_submission,
         schedule_url: "https://example.com/schedule",
         message: "Hello, here are the results",
-        results_json_str: results_json_str,
       )
     }
     let(:mail) { CompetitionsMailer.results_submitted(competition, results_submission, delegates.first) }
@@ -234,11 +232,6 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     it "renders the body" do
       expect(mail.body.encoded).to match(/Hello, here are the results/)
       expect(mail.body.encoded).to include("https://example.com/schedule")
-    end
-
-    it "attaches the expected file" do
-      expected_file_name = "Results_CompFut2017_#{utc_now.iso8601}.json"
-      expect(mail.attachments[expected_file_name].read).to eq(results_json_str)
     end
   end
 end
