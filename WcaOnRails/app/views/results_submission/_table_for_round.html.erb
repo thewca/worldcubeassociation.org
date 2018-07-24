@@ -1,7 +1,8 @@
 <%# expect variables: results, persons %>
 <%# FIXME: replace this by round.name when https://github.com/thewca/worldcubeassociation.org/pull/3018 is merged! %>
-<h3><%= "#{round.event.name} #{round.round_type.name}" %></h3>
-<%= wca_table table_class: "wca-results", floatThead: false do %>
+<% round_id = "#{round.event.id}-#{round.round_type_id}" %>
+<h3><%= link_to "#{round.event.name} #{round.round_type.name}", "##{round_id}", "data-toggle": "collapse" %></h3>
+<%= wca_table table_class: "wca-results collapse", floatThead: false, table_id: round_id do %>
   <thead>
     <tr>
       <th class="pos">#</th>
@@ -12,7 +13,8 @@
 
       <th class="average"><%= t 'common.average' %></th>
 
-      <%# <th class="country"><%= t 'common.user.citizen_of' </th>%>
+      <th class="country"><%= t 'common.user.citizen_of' %> </th>
+
       <th class="solves" colspan="5"><%= t 'common.solves' %></th>
 
       <% # Extra column for .table-greedy-last-column %>
@@ -36,7 +38,7 @@
         </td>
         <td class="single"><%= result.best_solve.clock_format %></td>
         <td class="average"><%= result.average_solve.clock_format %></td>
-        <%# <td class="country"><%= result.country_id </td> %>
+        <td class="country"><%= Country.find_by_iso2(person.countryId).name %></td>
         <%= solve_tds_for_result(result) %>
 
         <% # Extra column for .table-greedy-last-column %>

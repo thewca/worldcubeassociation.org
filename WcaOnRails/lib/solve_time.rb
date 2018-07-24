@@ -249,13 +249,14 @@ class SolveTime
     return unless @event.id == "333mbf"
 
     time_limit_minutes = [60, @attempted * 10].min
-    if time_minutes > time_limit_minutes
-      errors.add(:base, "should be less than or equal to #{time_limit_minutes} minutes")
-    end
+    #if time_minutes > time_limit_minutes
+      #errors.add(:base, "should be less than or equal to #{time_limit_minutes} minutes")
+    #end
   end
 
   validate :times_over_10_minutes_must_be_rounded
   def times_over_10_minutes_must_be_rounded
+    return unless complete?
     if (@event.timed_event? || @event.multiple_blindfolded?) && time_minutes > 10 && time_centiseconds % 100 > 0
       errors.add(:base, "times over 10 minutes should be rounded")
     end

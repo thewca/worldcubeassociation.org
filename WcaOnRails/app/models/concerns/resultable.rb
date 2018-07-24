@@ -7,7 +7,7 @@ module Resultable
   include ResultMethods
 
   included do
-    # NOTE: We used cached values instead of belongs_to to improve performances.
+    # NOTE: We use cached values instead of belongs_to to improve performances.
     belongs_to :competition, foreign_key: :competitionId
     validates :competition, presence: true
     validates :round_type, presence: true
@@ -22,8 +22,6 @@ module Resultable
     def format
       Format.c_find(formatId)
     end
-
-    # TODO: validate result for MBF according to H1*
 
     validate :validate_each_solve, if: :event
     def validate_each_solve
@@ -126,13 +124,13 @@ module Resultable
       if counting_solve_times.any?(&:incomplete?)
         SolveTime::DNF_VALUE
       elsif eventId == "333fm"
-        sum_moves = counting_solve_times.sum(&:move_count)
-        100 * sum_moves / counting_solve_times.length
+        sum_moves = counting_solve_times.sum(&:move_count).to_f
+        (100 * sum_moves / counting_solve_times.length).round
       else
         # Cast at least one of the operands to float
         sum_centis = counting_solve_times.sum(&:time_centiseconds).to_f
         # Round the result
-        (sum_centis / counting_solve_times.length).round(0)
+        (sum_centis / counting_solve_times.length).round
       end
     end
   end

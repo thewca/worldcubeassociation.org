@@ -89,7 +89,7 @@ module ApplicationHelper
     end
   end
 
-  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {}, greedy: true)
+  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {}, greedy: true, table_id: nil)
     data[:locale] = I18n.locale
     table_classes = "table table-condensed #{table_class}"
     if floatThead
@@ -106,7 +106,7 @@ module ApplicationHelper
     end
 
     content_tag :div, class: (responsive ? "table-responsive" : "") do
-      content_tag :table, class: table_classes, data: data do
+      content_tag :table, id: table_id, class: table_classes, data: data do
         yield
       end
     end
