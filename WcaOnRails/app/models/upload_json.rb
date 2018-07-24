@@ -31,7 +31,7 @@ class UploadJson
     results_file.rewind
   end
 
-  # return true if successful, false if validation or record errors
+  # return true if successful, false if validation or record errors
   def import_to_inbox
     # This makes sure the json structure is valid!
     if valid?

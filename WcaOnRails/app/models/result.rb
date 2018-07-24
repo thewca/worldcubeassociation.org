@@ -10,8 +10,10 @@ class Result < ApplicationRecord
   belongs_to :country, foreign_key: :countryId
   validates :country, presence: true
 
-  scope :final, -> { joins(:round_type).merge(RoundType.final_rounds) }
+  scope :final, -> { where(roundTypeId: RoundType.final_rounds.map(&:id)) }
   scope :succeeded, -> { where("best > 0") }
   scope :podium, -> { final.succeeded.where(pos: [1..3]) }
-  scope :winners, -> { final.succeeded.where(pos: 1).joins(:event).order("Events.rank") }
+  # NOTE: we have 'event' as a method using cached event in Resultable, so we use a different association just for this scope.
+  belongs_to :events_table, class_name: "Event", foreign_key: :eventId
+  scope :winners, -> { final.succeeded.where(pos: 1).joins(:events_table).order("Events.rank") }
 end

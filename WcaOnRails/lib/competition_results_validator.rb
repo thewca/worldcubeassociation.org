@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CompetitionResultsValidator
-  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results, :inbox_persons, :inbox_results, :scrambles
+  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results, :inbox_persons, :inbox_results, :scrambles, :number_of_non_matching_rounds
 
   INDIVIDUAL_RESULT_JSON_SCHEMA = {
     "type" => "object",
@@ -113,6 +113,7 @@ class CompetitionResultsValidator
     }
     @total_errors = 0
     @total_warnings = 0
+    @number_of_non_matching_rounds = 0
 
     associations = {
       events: [],
@@ -148,11 +149,11 @@ class CompetitionResultsValidator
 
     check_events_match(competition.events, inbox_results)
 
-    number_of_non_matching_rounds = check_rounds_match(expected_rounds_by_ids, inbox_results)
+    @number_of_non_matching_rounds = check_rounds_match(expected_rounds_by_ids, inbox_results)
 
     check_individual_results(results_by_round_id, expected_rounds_by_ids, persons_by_id)
 
-    if number_of_non_matching_rounds == 0
+    if @number_of_non_matching_rounds == 0
       # Only check the advancement conditions if all rounds match: this way we can rely
       # on the expected competition_events!
       check_avancement_conditions(results_by_round_id, competition.competition_events)
@@ -323,7 +324,7 @@ class CompetitionResultsValidator
         unless p.dob == existing_person.dob
           @errors[:persons] << "Wrong birthdate for #{p.name} (#{p.wcaId})."
         end
-        # Not using this checks for now, until I get feedback from WRT
+        # FIXME: Not using this checks for now, until I get feedback from WRT
         # unless p.countryId == existing_person.country_iso2
           # @errors[:persons] << "Wrong country for #{p.name} (#{p.wcaId})."
         # end
@@ -337,26 +338,26 @@ class CompetitionResultsValidator
   end
 
   private
-  def check_results_for_cutoff(cutoff, result, round, persons_by_id)
+  def check_results_for_cutoff(cutoff, result, round_id, round, persons_by_id)
     number_of_attempts = cutoff.number_of_attempts
     cutoff_result = SolveTime.new(round.event.id, :single, cutoff.attempt_result)
     solve_times = result.solve_times
     # Compare through SolveTime so we don't need to care about DNF/DNS
     maybe_qualifying_results = solve_times[0, number_of_attempts]
-    # Just use '5' here to get all the remaining solve_times
-    other_results = solve_times[number_of_attempts, 5]
+    # Get the remaining attempt according to the expected solve count given the format
+    other_results = solve_times[number_of_attempts, round.format.expected_solve_count - number_of_attempts]
     qualifying_results = maybe_qualifying_results.select { |solve_time| solve_time < cutoff_result }
     skipped, unskipped = other_results.partition(&:skipped?)
     person = persons_by_id[result.personId]
     if qualifying_results.any?
       # Meets the cutoff, no result should be SKIPPED
       if skipped.any?
-        @errors[:results] << "[#{round.id}] #{person.name} has met the cutoff but is missing results for the second phase. Cutoff is #{cutoff.to_s(round)}."
+        @errors[:results] << "[#{round_id}] #{person.name} has met the cutoff but is missing results for the second phase. Cutoff is #{cutoff.to_s(round)}."
       end
     else
       # Doesn't meet the cutoff, all results should be SKIPPED
       if unskipped.any?
-        @errors[:results] << "[#{round.id}] #{person.name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is #{cutoff.to_s(round)}."
+        @errors[:results] << "[#{round_id}] #{person.name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is #{cutoff.to_s(round)}."
       end
     end
   end
@@ -384,8 +385,10 @@ class CompetitionResultsValidator
       time_limit_for_round = round_info.time_limit
       cutoff_for_round = round_info.cutoff
 
-      expected_pos = 1
-      last_result = results_for_round.first
+      expected_pos = 0
+      last_result = nil
+      # Number of tied competitors, *without* counting the first one
+      number_of_tied = 0
       results_for_round.each_with_index do |result, index|
         person_info = persons_by_id[result.personId]
         unless person_info
@@ -400,8 +403,12 @@ class CompetitionResultsValidator
         # so we simply need to check that the position stored matched the expected one
 
         # Unless we find two exact same results, we increase the expected position
-        unless result.average == last_result.average and result.best == last_result.best
+        if last_result && result.average == last_result.average and result.best == last_result.best
+          number_of_tied += 1
+        else
           expected_pos += 1
+          expected_pos += number_of_tied
+          number_of_tied = 0
         end
         last_result = result
 
@@ -410,7 +417,7 @@ class CompetitionResultsValidator
         end
 
         # Checks for cutoff
-        check_results_for_cutoff(cutoff_for_round, result, round_info, persons_by_id) if cutoff_for_round
+        check_results_for_cutoff(cutoff_for_round, result, round_id, round_info, persons_by_id) if cutoff_for_round
 
         # Checks for time limits if it can be user-specified
         if !["333mbf", "333fm"].include?(result.eventId)
@@ -422,7 +429,7 @@ class CompetitionResultsValidator
           has_result_after.keys.each do |not_complete|
             first_index = all_solve_times.find_index(not_complete)
             if first_index
-              # Again using 5 just to get all
+              # Just use '5' here to get all of them
               solves_after = all_solve_times[first_index, 5]
               has_result_after[not_complete] = solves_after.select(&:complete?).any?
             end
