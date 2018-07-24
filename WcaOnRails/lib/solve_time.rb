@@ -246,12 +246,13 @@ class SolveTime
   # Enforce https://www.worldcubeassociation.org/regulations/#H1b.
   validate :multiblind_time_limit
   def multiblind_time_limit
-    return unless @event.id == "333mbf"
+    return unless @event.id == "333mbf" and complete?
 
     time_limit_minutes = [60, @attempted * 10].min
-    #if time_minutes > time_limit_minutes
-      #errors.add(:base, "should be less than or equal to #{time_limit_minutes} minutes")
-    #end
+    # TODO: we need to handle better +2s!
+    if time_minutes > (time_limit_minutes + 1)
+      errors.add(:base, "should be less than or equal to #{time_limit_minutes} minutes")
+    end
   end
 
   validate :times_over_10_minutes_must_be_rounded
