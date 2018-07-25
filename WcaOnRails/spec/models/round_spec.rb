@@ -41,7 +41,7 @@ RSpec.describe Round do
     it "set to 60 minutes shared between 444bf and 555bf" do
       four_blind_round.update!(time_limit: TimeLimit.new(centiseconds: 5.minutes.in_centiseconds, cumulative_round_ids: ["444bf-r1", "555bf-r1"]))
       expect(four_blind_round.time_limit.centiseconds).to eq 5.minutes.in_centiseconds
-      expect(four_blind_round.time_limit_to_s).to eq "5:00.00 total for 4x4x4 Blindfolded Round 1 and 5x5x5 Blindfolded Round 1"
+      expect(four_blind_round.time_limit_to_s).to eq "5:00.00 total for 4x4x4 Blindfolded, Final and 5x5x5 Blindfolded, Final"
     end
   end
 
@@ -118,7 +118,7 @@ RSpec.describe Round do
 
       first_round.update!(advancement_condition: RankingCondition.new(16))
       expect(first_round.advancement_condition.ranking).to eq 16
-      expect(first_round.advancement_condition_to_s).to eq "Top 16 advance to round 2"
+      expect(first_round.advancement_condition_to_s).to eq "Top 16 advance to next round"
     end
 
     it "set to top 25%" do
@@ -126,7 +126,7 @@ RSpec.describe Round do
 
       first_round.update!(advancement_condition: PercentCondition.new(25))
       expect(first_round.advancement_condition.percent).to eq 25
-      expect(first_round.advancement_condition_to_s).to eq "Top 25% advance to round 2"
+      expect(first_round.advancement_condition_to_s).to eq "Top 25% advance to next round"
     end
 
     it "not allowed on last round" do
@@ -141,30 +141,30 @@ RSpec.describe Round do
         first_round, _second_round = create_rounds("333", count: 2)
 
         first_round.update!(advancement_condition: AttemptResultCondition.new(3.minutes.in_centiseconds))
-        expect(first_round.advancement_condition_to_s).to eq "Best solve < 3:00.00 advances to round 2"
+        expect(first_round.advancement_condition_to_s).to eq "Best solve < 3:00.00 advances to next round"
       end
 
       it "set to <= 35 moves" do
         first_round, _second_round = create_rounds("333fm", format_id: 'm', count: 2)
 
         first_round.update!(advancement_condition: AttemptResultCondition.new(35))
-        expect(first_round.advancement_condition_to_s).to eq "Best solve < 35 moves advances to round 2"
+        expect(first_round.advancement_condition_to_s).to eq "Best solve < 35 moves advances to next round"
       end
 
       it "set to >= 6 points" do
         first_round, _second_round = create_rounds("333mbf", format_id: '3', count: 2)
 
         first_round.update!(advancement_condition: AttemptResultCondition.new(SolveTime.points_to_multibld_attempt(6)))
-        expect(first_round.advancement_condition_to_s).to eq "Best solve > 6 points advances to round 2"
+        expect(first_round.advancement_condition_to_s).to eq "Best solve > 6 points advances to next round"
       end
     end
   end
 end
 
 def create_rounds(event_id, format_id: 'a', count:)
-  first_round = FactoryBot.create :round, number: 1, format_id: format_id, event_id: event_id
+  first_round = FactoryBot.create :round, number: 1, format_id: format_id, event_id: event_id, total_number_of_rounds: count
   remaining_rounds = (2..count).map do |number|
-    FactoryBot.create :round, number: number, format_id: format_id, competition_event: first_round.competition_event
+    FactoryBot.create :round, number: number, format_id: format_id, competition_event: first_round.competition_event, total_number_of_rounds: count
   end
   [first_round] + remaining_rounds
 end

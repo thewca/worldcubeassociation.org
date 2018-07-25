@@ -5,6 +5,7 @@ class Competition < ApplicationRecord
 
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
+  has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
   has_many :results, foreign_key: "competitionId"
   has_many :scrambles, foreign_key: "competitionId"
@@ -277,7 +278,8 @@ class Competition < ApplicationRecord
              'scrambles',
              'country',
              'continent',
-             'championships'
+             'championships',
+             'rounds'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
