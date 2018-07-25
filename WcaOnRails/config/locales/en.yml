@@ -1361,8 +1361,6 @@ en:
       name: "Name"
       role: "Role"
       region: "Region"
-  disclaimer:
-    title: "Disclaimer"
   regional_organizations:
     title: "Regional Organizations"
     content: "The WCA acknowledges the following regional organizations:"
