@@ -131,22 +131,6 @@ pt:
   round:
     #original_hash: 66e902f
     name: '%{event} Ronda %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Top %{ranking} avança para a ronda %{next_round_number}'
-    #original_hash: 31ad77c
-    percent: 'Top %{percent}% avança para a ronda %{next_round_number}'
-    attempt_result:
-      #original_hash: 03af49c
-      time: 'Melhor resolução < %{time} avança para a ronda %{next_round_number}'
-      #original_hash: 0b4ae7c
-      moves: >-
-        Melhor resolução < %{moves} movimentos avança para a ronda
-        %{next_round_number}
-      #original_hash: 56c0366
-      points: >-
-        Melhor resolução > %{points} pontos avança para a ronda
-        %{next_round_number}
   cutoff:
     #original_hash: cf458e7
     time:

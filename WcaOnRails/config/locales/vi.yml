@@ -131,18 +131,6 @@ vi:
   round:
     #original_hash: 66e902f
     name: '%{event} Vòng %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Xếp hạng %{ranking} được vào vòng %{next_round_number}'
-    #original_hash: 31ad77c
-    percent: 'Nằm trong nhóm %{percent}% được vào vòng %{next_round_number}'
-    attempt_result:
-      #original_hash: 03af49c
-      time: 'Thành tích đơn < %{time} được vào vòng %{next_round_number}'
-      #original_hash: 0b4ae7c
-      moves: 'Thành tích đơn < %{moves} bước được vào vòng %{next_round_number}'
-      #original_hash: 56c0366
-      points: 'Thành tích đơn > %{points} điểm được vào vòng %{next_round_number}'
   cutoff:
     #original_hash: cf458e7
     time:

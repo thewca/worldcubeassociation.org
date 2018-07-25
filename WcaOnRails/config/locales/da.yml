@@ -131,18 +131,6 @@ da:
   round:
     #original_hash: 66e902f
     name: '%{event} Runde %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Top %{ranking} kommer videre til %{next_round_number}'
-    #original_hash: 31ad77c
-    percent: '%{percent}% kommer videre til %{next_round_number}'
-    attempt_result:
-      #original_hash: 03af49c
-      time: 'Bedste tid < %{time} kommer videre til %{next_round_number}'
-      #original_hash: 0b4ae7c
-      moves: 'Bedste resultat ≤ %{moves} træk kommer videre til %{next_round_number}'
-      #original_hash: 56c0366
-      points: 'Bedste resultat ≥ %{points} point kommer videre til %{next_round_number}'
   cutoff:
     #original_hash: cf458e7
     time:

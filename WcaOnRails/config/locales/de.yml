@@ -131,20 +131,6 @@ de:
   round:
     #original_hash: 66e902f
     name: '%{event} Runde %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Die obersten %{ranking} kommen in Runde %{next_round_number}'
-    #original_hash: 31ad77c
-    percent: 'Die obersten %{percent}% kommen in Runde %{next_round_number}'
-    attempt_result:
-      #original_hash: 03af49c
-      time: 'Das beste Ergebnis < %{time} um in Runde %{next_round_number} zu kommen'
-      #original_hash: 0b4ae7c
-      moves: 'Bestes Ergebnis < %{moves} um in Runde %{next_round_number} zu kommen'
-      #original_hash: 56c0366
-      points: >-
-        Bestes Ergebnis  > %{points} Punkten um in Runde  %{next_round_number}
-        zu kommen
   cutoff:
     #original_hash: cf458e7
     time:

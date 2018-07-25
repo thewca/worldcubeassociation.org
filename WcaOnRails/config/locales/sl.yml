@@ -131,18 +131,6 @@ sl:
   round:
     #original_hash: 66e902f
     name: '%{event} Runda %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Prvih %{ranking} napreduje v rundo %{next_round_number}'
-    #original_hash: 31ad77c
-    percent: 'Prvih %{percent}% napreduje v rundo %{next_round_number}'
-    attempt_result:
-      #original_hash: 03af49c
-      time: 'Najboljši poskus ≤ %{time} napreduje v rundo %{next_round_number}'
-      #original_hash: 0b4ae7c
-      moves: 'najboljši poskus ≤ %{moves} potez napreduje v rundo %{next_round_number}'
-      #original_hash: 56c0366
-      points: 'Najboljši poskus ≥ %{points} točk napreduje v rundo %{next_round_number}'
   cutoff:
     #original_hash: cf458e7
     time:

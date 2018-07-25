@@ -131,18 +131,6 @@ id:
   round:
     #original_hash: 66e902f
     name: '%{event} Ronde %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Ranking %{ranking} besar maju ke ronde %{next_round_number}'
-    #original_hash: 31ad77c
-    percent: '%{percent}% kompetitor teratas maju ke ronde %{next_round_number}'
-    attempt_result:
-      #original_hash: 03af49c
-      time: 'Solve terbaik < %{time} maju ke babak %{next_round_number}'
-      #original_hash: 0b4ae7c
-      moves: 'Solve terbaik < %{moves} gerakan maju ke ronde %{next_round_number}'
-      #original_hash: 56c0366
-      points: 'Solve terbaik > %{points} poin maju ke ronde %{next_round_number}'
   cutoff:
     #original_hash: cf458e7
     time:

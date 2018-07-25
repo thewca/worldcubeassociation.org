@@ -9,6 +9,10 @@ class Format < ApplicationRecord
 
   scope :recommended, -> { where("ranking = 1") }
 
+  def name
+    I18n.t("formats.#{id}", default: self[:name])
+  end
+
   def allowed_first_phase_formats
     {
       "1" => [],

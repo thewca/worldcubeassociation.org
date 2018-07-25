@@ -131,22 +131,6 @@ ro:
   round:
     #original_hash: 66e902f
     name: '%{event} Runda %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Primii %{ranking} avansează în runda %{next_round_number}'
-    #original_hash: 31ad77c
-    percent: 'Primii %{percent}% avansează în runda %{next_round_number}'
-    attempt_result:
-      #original_hash: 03af49c
-      time: 'Cea mai bună rezolvare < %{time} avansează în runda %{next_round_number}'
-      #original_hash: 0b4ae7c
-      moves: >-
-        Cea mai bună rezolvare < %{moves} mutări avansează în runda
-        %{next_round_number}
-      #original_hash: 56c0366
-      points: >-
-        Cea mai bună rezolvare > %{points} puncte avansează în runda
-        %{next_round_number}
   cutoff:
     #original_hash: cf458e7
     time:

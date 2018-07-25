@@ -72,6 +72,12 @@ fr:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: '3x3x3 : résolution multiple à l''aveugle (à l''ancienne)'
+  formats:
+    "1": "Meilleur résultat"
+    "2": "Meilleur des 2"
+    "3": "Meilleur des 3"
+    "a": "Moyenne élaguée des 5"
+    "m": "Moyenne des 3"
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -130,25 +136,22 @@ fr:
       cellName: Qualification combinée
   round:
     #original_hash: 66e902f
-    name: '%{event} Tour %{number}'
+    name: '%{event_name}, %{round_name}'
   advancement_condition:
     #original_hash: 6381d11
-    ranking: 'Les %{ranking} premiers avancent au tour %{next_round_number}'
+    ranking: 'Les %{ranking} premiers avancent au tour suivant'
     #original_hash: 31ad77c
-    percent: 'Le top %{percent}% avance au tour %{next_round_number}'
+    percent: 'Le top %{percent}% avance au tour suivant'
     attempt_result:
       #original_hash: 03af49c
       time: >-
-        Un meilleur temps < %{time} permet d'avancer au tour
-        %{next_round_number}
+        Un meilleur temps < %{time} permet d'avancer au tour suivant
       #original_hash: 0b4ae7c
       moves: >-
-        Un meilleur résultat < %{moves} mouvements permet d'avancer au tour
-        %{next_round_number}
+        Un meilleur résultat < %{moves} mouvements permet d'avancer au tour suivant
       #original_hash: 56c0366
       points: >-
-        Un meilleur résultat > %{points} points permet d'avancer au tour
-        %{next_round_number}
+        Un meilleur résultat > %{points} points permet d'avancer au tour suivant
   cutoff:
     #original_hash: cf458e7
     time:
@@ -1963,6 +1966,20 @@ fr:
     show:
       #original_hash: b0fe391
       general_info: Informations générales
+      events: Épreuves
+    events:
+      time_limit_information:
+        time_limit_html: "Si vous atteignez la limite de temps pendant votre résolution, le juge vous stoperra et le résultat sera DNF (voir la %{regulation_link})."
+        regulation_link_text: "Règle %{number}"
+        guideline_link_text: "Recommandation %{number}"
+        cumulative_time_limit: "limite de temps cumulative"
+        cumulative_one_round_html: "Une %{cumulative_time_limit} peut être imposée (voir la %{regulation_link})."
+        cumulative_across_rounds_html: "Une %{cumulative_time_limit} peut être imposée sur un ensemble de tours (voir la %{guideline_link})."
+        cutoff_html: "Le score à atteindre pour passer à la deuxième phase d'un tour combiné (voir la %{regulation_link})."
+      format: "Format"
+      time_limit: "Limite de temps"
+      cutoff: "Cutoff"
+      proceed: "Qualifiés"
     nav:
       menu:
         #original_hash: 612e12d
