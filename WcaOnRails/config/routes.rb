@@ -110,6 +110,7 @@ Rails.application.routes.draw do
   get 'about' => 'static_pages#about'
   get 'documents' => 'static_pages#documents'
   get 'delegates' => 'static_pages#delegates'
+  get 'disclaimer' => 'static_pages#disclaimer'
   get 'organizations' => 'static_pages#organizations'
   get 'contact' => 'static_pages#contact'
   get 'privacy' => 'static_pages#privacy'
