@@ -246,7 +246,7 @@ class SolveTime
   # Enforce https://www.worldcubeassociation.org/regulations/#H1b.
   validate :multiblind_time_limit
   def multiblind_time_limit
-    return unless @event.id == "333mbf" and complete?
+    return unless @event.id == "333mbf" && complete?
 
     time_limit_minutes = [60, @attempted * 10].min
     # TODO: we need to handle better +2s!

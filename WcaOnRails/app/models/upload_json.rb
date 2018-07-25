@@ -103,7 +103,7 @@ class UploadJson
           InboxResult.import!(results_to_import)
         end
         true
-      rescue ActiveRecord::RecordNotUnique => invalid
+      rescue ActiveRecord::RecordNotUnique
         errors.add(:results_file, "Duplicate personId in JSON.")
         false
       rescue ActiveRecord::RecordInvalid => invalid

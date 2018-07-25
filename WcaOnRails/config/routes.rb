@@ -60,7 +60,6 @@ Rails.application.routes.draw do
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
   end
 
-
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'

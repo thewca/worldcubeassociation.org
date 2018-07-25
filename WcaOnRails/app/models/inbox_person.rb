@@ -3,8 +3,6 @@
 class InboxPerson < ApplicationRecord
   self.table_name = "InboxPersons"
 
-  # FIXME: personId is uniquer per-competition, not globally in the table!
-
   validates :name, presence: true
   validates :dob, presence: true
   validates :countryId, presence: true

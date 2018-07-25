@@ -24,8 +24,8 @@ class ResultsSubmissionController < ApplicationController
 
     # This makes sure the json structure is valid!
     if @upload_json.import_to_inbox
-        flash[:success] = "JSON File has been imported."
-        redirect_to competition_submit_results_edit_path
+      flash[:success] = "JSON File has been imported."
+      redirect_to competition_submit_results_edit_path
     else
       @results_validator = CompetitionResultsValidator.new(@competition.id)
       render :new
