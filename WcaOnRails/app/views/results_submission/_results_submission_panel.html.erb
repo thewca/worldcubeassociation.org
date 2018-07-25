@@ -1,18 +1,16 @@
 <%
-  already_has_submitted_result ||= false
   has_errors ||= false
   results_submission ||= ResultsSubmission.new
-  can_submit_results = already_has_submitted_result && !has_errors
 %>
 <div class="panel panel-default">
-  <div class="panel-heading heading-as-link <%= "collapsed" unless can_submit_results %>" data-toggle="collapse" data-target="#collapse-submit-results">
+  <div class="panel-heading heading-as-link <%= "collapsed" if has_errors %>" data-toggle="collapse" data-target="#collapse-submit-results">
     <h3 class="panel-title">
       Submit the results to the Results Team.
       <span class="collapse-indicator"></span>
     </h3>
   </div>
-  <div id="collapse-submit-results" class="panel-body collapse <%= "in" if can_submit_results %>">
-    <% if can_submit_results %>
+  <div id="collapse-submit-results" class="panel-body collapse <%= "in" unless has_errors %>">
+    <% unless has_errors %>
       <p>Please enter the body of your email to the Results Team.</p>
       <p>
         Make sure to include a link to the competition schedule (and all time

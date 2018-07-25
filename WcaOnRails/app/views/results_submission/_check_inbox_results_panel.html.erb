@@ -1,6 +1,6 @@
 <%
   # NOTE: expect valid 'results_validator' variable
-  panel_style = if !results_validator.has_results || results_validator.total_errors > 0
+  panel_style = if results_validator.total_errors > 0
                   "danger"
                 elsif results_validator.total_warnings > 0
                   "warning"

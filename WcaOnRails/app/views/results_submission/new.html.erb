@@ -18,7 +18,6 @@
     <%= render "check_inbox_results_panel", results_validator: @results_validator %>
 
     <%= render "results_submission_panel",
-      already_has_submitted_result: @results_validator.has_results,
       has_errors: @results_validator.total_errors != 0,
       results_submission: @results_submission
     %>

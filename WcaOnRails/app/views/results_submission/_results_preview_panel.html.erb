@@ -10,7 +10,6 @@
     <% if results_validator.has_results && results_validator.number_of_non_matching_rounds == 0 %>
       <% persons_by_id = Hash[results_validator.inbox_persons.map { |person| [person.id, person] }] %>
       <% results_validator.inbox_results.group_by(&:eventId).each do |event_id, results_for_event| %>
-        <% # Empty div to allow linking directly to results for an event %>
         <% results_for_event.group_by(&:roundTypeId).each do |round_type_id, results_for_round| %>
           <%= render "results_submission/table_for_round", results: results_for_round, persons_by_id: persons_by_id, round: results_validator.expected_rounds_by_ids["#{event_id}-#{round_type_id}"] %>
         <% end %>

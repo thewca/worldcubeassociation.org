@@ -126,6 +126,8 @@ class CompetitionResultsValidator
     @inbox_results = InboxResult.sorted_for_competition(competition_id)
     @has_results = inbox_results.any?
     unless @has_results
+      @total_errors = 1
+      @errors[:results] << "The competition has no result."
       return
     end
 
