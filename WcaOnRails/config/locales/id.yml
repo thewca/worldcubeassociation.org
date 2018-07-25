@@ -692,6 +692,8 @@ id:
         #original_hash: da39a3e
         inquiry: ''
         #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -816,6 +818,8 @@ id:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -863,6 +867,8 @@ id:
       contact_form:
         #original_hash: d31ab65
         inquiry: Manakah di bawah ini yang paling tepat menggambarkan pertanyaan Anda?
+        #original_hash: 1917f4f
+        competition_id: Kompetisi
         #original_hash: 709a232
         name: Nama
         #original_hash: 3fa6f5f
@@ -913,6 +919,10 @@ id:
         menerima email konfirmasi? Klik link
         https://www.worldcubeassociation.org/users/confirmation/new untuk
         meminta email konfirmasi baru.
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: Harap konfirmasi alamat email baru Anda
   wca:
     errors:
       messages:
@@ -923,10 +933,8 @@ id:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: >-
-            Gunakan %{native_redirect_uri} jika Anda ingin menambah URI
-            localhost
+          #original_hash: 95c10ec
+          https_info: HTTPS diperlukan kecuali yang menjadi host adalah "localhost"
           #original_hash: 62a0113
           scopes_html: >-
             Pisahkan Scope dengan spasi. Kosongkan untuk menggunakan Scope
@@ -1058,6 +1066,79 @@ id:
       failure: Tidak dapat memperbarui profil Anda.
       #original_hash: c29870c
       unavailable: Daerah yang diminta tidak tersedia.
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: Petunjuk konfirmasi
+        #original_hash: 6ee63db
+        welcome: 'Selamat datang %{user_email}!'
+        #original_hash: da39d05
+        confirm: >-
+          Akun Anda telah dibuat dan harus diaktivasi terlebih dahulu sebelum
+          Anda bisa memakainya. Harap konfirmasi akun Anda lewat link di bawah
+          ini:
+        #original_hash: 776476a
+        confirmation_link: Konfirmasi akun saya.
+        #original_hash: d484f70
+        activate: >-
+          Setelah aktivasi, Anda dapat masuk ke situs web World Cube
+          Association:
+        #original_hash: 333999b
+        addendum: >-
+          Email ini digenerate secara otomatis. Jika Anda tidak mendaftar akun
+          pada situs web WCA dan mendapatkan pesan ini karena kesalahan, harap
+          abaikan dan hapus pesan ini.
+        #original_hash: dbc2263
+        questions: >-
+          Apakah Anda punya pertanyaan lainnya? Kami dengan senang hati akan
+          menjawabnya! Jangan ragu untuk mengirim pesan ke %{contact_link}.
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: 'Halo %{user_email}!'
+        #original_hash: 3095365
+        confirm: >-
+          Anda dapat mengkonfirmasi alamat email baru akun Anda lewat link di
+          bawah ini:
+        #original_hash: 4900afe
+        confirmation_link: Konfirmasi alamat email.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name} telah mengkonfirmasi %{competition}'
+        #original_hash: 3db81b5
+        organizers: 'Yang terhormat panitia %{competition},'
+        #original_hash: c526fd6
+        confirmed: >-
+          Delegate kompetisi Anda, %{delegate_name}, telah mengkonfirmasi
+          %{competition} dan telah mengirim pengajuan kepada WCA Board. Setelah
+          WCA Board mengumumkan kompetisi ini secara publik, Anda akan
+          mendapatkan pemberitahuan tersebut.
+        #original_hash: dfea09d
+        contact: >-
+          Jika Anda punya pertanyaan lain, harap kontak Delegate kompetisi via
+          email:
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'WCA Board telah mengumumkan %{competition}'
+        #original_hash: 8e91977
+        announced: >-
+          WCA Board telah menyetujui kompetisi Anda dan secara resmi diumumkan
+          kepada publik.
+        #original_hash: 1c20919
+        link: 'Harap ikuti link ini untuk menuju pengumuman kompetisi:'
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'Anda telah ditambahkan ke %{competition} sebagai panitia'
+        #original_hash: c9d0561
+        intro: 'Halo %{name},'
+        #original_hash: 372b27f
+        information: >-
+          %{confirmer} telah menambahkan Anda ke %{competition} sebagai panitia.
+          Anda dapat menyunting kompetisi ini di sini:
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'Anda telah dihapus dari %{competition} sebagai panitia'
+        #original_hash: 66cb109
+        information: '%{remover} telah menghapus Anda dari %{competition} sebagai panitia.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Klaim ID WCA
@@ -2078,10 +2159,10 @@ id:
       #original_hash: ac2ac3d
       title: Form Kontak Situs Web WCA
       inquiries:
-        #original_hash: e1d277a
-        competition: Kompetisi tertentu (harap pilih)
-        #original_hash: f7d3f9f
-        competitions_in_general: 'Kompetisi secara umum (Kepanitiaan, Peraturan kompetisi, dsb.)'
+        #original_hash: 92ea7e8
+        competition: Kontak Panitia dari Kompetisi Tertentu (harap pilih di bawah ini)
+        #original_hash: f0bffb7
+        competitions_in_general: 'Kompetisi Secara Cmum (kepanitiaan, peraturan kompetisi, dsb.)'
         #original_hash: f6ffa78
         wca_id_or_profile: ID WCA atau Profil WCA
         #original_hash: 0c77aee
@@ -2464,6 +2545,8 @@ id:
     proximity_policy: Kebijakan Kedekatan Kompetisi WCA
     #original_hash: f484584
     competition_name_policy: Kebijakan Nama Kompetisi WCA
+    #original_hash: c7f7728
+    competition_announcement_policy: Kebijakan Pengumuman Kompetisi WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegate WCA
@@ -2476,6 +2559,9 @@ id:
       role: Jabatan
       #original_hash: 0f21717
       region: Wilayah
+  disclaimer:
+    #original_hash: 4c4a2e8
+    title: Penolakan
   regional_organizations:
     #original_hash: 37b8fdc
     title: Organisasi Regional
