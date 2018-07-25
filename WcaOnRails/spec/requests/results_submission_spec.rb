@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ResultsSubmissionController, type: :request do
   let(:delegate) { FactoryBot.create :delegate }
-  let(:comp) { FactoryBot.create(:competition, delegates: [delegate]) }
+  let(:comp) { FactoryBot.create(:competition, :with_valid_submitted_results, delegates: [delegate]) }
 
   context "not logged in" do
     it "redirects to sign in" do
@@ -60,8 +60,6 @@ RSpec.describe ResultsSubmissionController, type: :request do
 
       it "sends the 'results submitted' email immediately" do
         expected_results_submission = ResultsSubmission.new(results_submission_params)
-        # TODO: right now ResultsSubmission accepts empty results for competition,
-        # maybe we should create some fake results for a fake competition and enforce having results.
         expect(CompetitionsMailer)
           .to receive(:results_submitted)
           .with(comp, expected_results_submission, user)
