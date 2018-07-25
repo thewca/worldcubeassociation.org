@@ -77,6 +77,20 @@ FactoryBot.define do
     registration_open { 2.weeks.ago.change(usec: 0) }
     registration_close { 1.week.ago.change(usec: 0) }
 
+    trait :with_valid_submitted_results do
+      with_rounds
+      after(:create) do |competition|
+        person = FactoryBot.create(:inbox_person, competitionId: competition.id)
+        rounds = competition.competition_events.map(&:rounds).flatten
+        rounds.each do |round|
+          FactoryBot.create(:inbox_result, competitionId: competition.id, personId: person.id, eventId: round.event.id, formatId: round.format.id)
+          5.times do
+            FactoryBot.create(:scramble, competitionId: competition.id, eventId: round.event.id)
+          end
+        end
+      end
+    end
+
     trait :registration_open do
       use_wca_registration { true }
       registration_open { 2.weeks.ago.change(usec: 0) }

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :results_submission do
-    competition_id { FactoryBot.create(:competition).id }
+    competition_id { FactoryBot.create(:competition, :with_valid_submitted_results).id }
 
     schedule_url { "https://example.com/schedule" }
 
