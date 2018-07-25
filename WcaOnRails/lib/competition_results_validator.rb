@@ -98,6 +98,8 @@ class CompetitionResultsValidator
   DNF_AFTER_RESULT_WARNING = "[%{round_id}] The round has a cumulative time limit and %{person_name} has at least one DNF results followed by a valid result."\
     " Please make sure the time elapsed for the DNF was short enough to allow for the other subsequent valid results to count."
   DNS_AFTER_RESULT_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
+  SAME_PERSON_NAME_WARNING = "Person '%{name}' exists with WCA ID %{wca_id} in the WCA database."\
+    " A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
 
   def initialize(competition_id)
     @errors = {
@@ -168,6 +170,7 @@ class CompetitionResultsValidator
   end
 
   private
+
   def results_similar_to(reference, reference_index, results)
     # We do this programatically, but the original check_results.php used to do a big SQL query:
     # https://github.com/thewca/worldcubeassociation.org/blob/b1ee87b318ff6e4f8658a711c19fd23a3ae51b9c/webroot/results/admin/check_results.php#L321-L353
@@ -182,8 +185,8 @@ class CompetitionResultsValidator
       next if index >= reference_index
       score = 0
       reference_solve_times = reference.solve_times
-      r.solve_times.each_with_index do |solve_time, index|
-        if solve_time.complete? && solve_time == reference_solve_times[index]
+      r.solve_times.each_with_index do |solve_time, solve_time_index|
+        if solve_time.complete? && solve_time == reference_solve_times[solve_time_index]
           score += 1
         end
       end
@@ -195,7 +198,6 @@ class CompetitionResultsValidator
     similar_results
   end
 
-  private
   def check_events_match(competition_events)
     expected = competition_events.map(&:id)
     real = @inbox_results.map(&:eventId).uniq
@@ -212,7 +214,6 @@ class CompetitionResultsValidator
     end
   end
 
-  private
   def check_rounds_match
     # Check that rounds match what was declared, and return the number of difference
     expected = @expected_rounds_by_ids.keys
@@ -228,7 +229,6 @@ class CompetitionResultsValidator
     unexpected.size + missing.size
   end
 
-  private
   def check_avancement_conditions(results_by_round_id, competition_events)
     competition_events.each do |ce|
       remaining_number_of_rounds = ce.rounds.size
@@ -257,7 +257,6 @@ class CompetitionResultsValidator
     end
   end
 
-  private
   def check_scrambles
     rounds_ids = @expected_rounds_by_ids.keys
     # Group scramble by round_id
@@ -286,7 +285,6 @@ class CompetitionResultsValidator
     end
   end
 
-  private
   def check_persons(persons_by_id)
     detected_person_ids = persons_by_id.keys
     persons_with_results = @inbox_results.map(&:personId)
@@ -301,11 +299,11 @@ class CompetitionResultsValidator
     if without_wca_id.any?
       existing_person_in_db = Person.where(name: without_wca_id.map(&:name))
       existing_person_in_db.each do |p|
-        @warnings[:persons] << "Person '#{p.name}' exists with WCA ID #{p.wca_id} in the WCA database. A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
+        @warnings[:persons] << format(SAME_PERSON_NAME_WARNING, name: p.name, wca_id: p.wca_id)
       end
     end
     without_wca_id.each do |p|
-      if p.dob.month == 1 and p.dob.day == 1
+      if p.dob.month == 1 && p.dob.day == 1
         @warnings[:persons] << "The date of birth of #{p.name} is on January 1st, please make sure it's correct."
       end
       # Competitor less than 3 years old are extremely rare, so we'd better check these birthdate are correct
@@ -328,10 +326,10 @@ class CompetitionResultsValidator
         end
         # FIXME: Not using this checks for now, until I get feedback from WRT
         # unless p.countryId == existing_person.country_iso2
-          # @errors[:persons] << "Wrong country for #{p.name} (#{p.wcaId})."
+        # @errors[:persons] << "Wrong country for #{p.name} (#{p.wcaId})."
         # end
         # unless p.gender == existing_person.gender
-          # @errors[:persons] << "Wrong gender for #{p.name} (#{p.wcaId})."
+        # @errors[:persons] << "Wrong gender for #{p.name} (#{p.wcaId})."
         # end
       else
         @errors[:persons] << "Person #{p.name} has a WCA ID which does not exist: #{p.wcaId}."
@@ -339,7 +337,6 @@ class CompetitionResultsValidator
     end
   end
 
-  private
   def check_results_for_cutoff(cutoff, result, round_id, round, persons_by_id)
     number_of_attempts = cutoff.number_of_attempts
     cutoff_result = SolveTime.new(round.event.id, :single, cutoff.attempt_result)
@@ -364,7 +361,6 @@ class CompetitionResultsValidator
     end
   end
 
-  private
   def check_individual_results(results_by_round_id, persons_by_id)
     # For results
     #   - average/best check is done in validation
@@ -405,7 +401,7 @@ class CompetitionResultsValidator
         # so we simply need to check that the position stored matched the expected one
 
         # Unless we find two exact same results, we increase the expected position
-        if last_result && result.average == last_result.average and result.best == last_result.best
+        if last_result && result.average == last_result.average && result.best == last_result.best
           number_of_tied += 1
         else
           expected_pos += 1
@@ -473,7 +469,6 @@ class CompetitionResultsValidator
           similar_person_name = persons_by_id[r.personId]&.name || "UnknownPerson"
           @warnings[:results] << "[#{round_id}] Result of #{person_info.name} is similar to the results of #{similar_person_name}."
         end
-
       end
     end
   end

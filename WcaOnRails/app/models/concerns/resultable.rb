@@ -22,9 +22,11 @@ module Resultable
     def round_type
       RoundType.c_find(roundTypeId)
     end
+
     def event
       Event.c_find(eventId)
     end
+
     def format
       Format.c_find(formatId)
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddResultsSubmittedAtToCompetition < ActiveRecord::Migration[5.2]
   def change
     add_column :Competitions, :results_submitted_at, :datetime
