@@ -23,40 +23,49 @@ class Team < ApplicationRecord
     end
   end
 
+  # Code duplication from Cachable concern, as we index by friendly_id and not by id :(
+  def self.c_all_by_friendly_id
+    @@teams_by_friendly_id ||= all.index_by(&:friendly_id)
+  end
+
+  def self.c_find_by_friendly_id!(friendly_id)
+    self.c_all_by_friendly_id[friendly_id] || raise("id not found #{friendly_id}")
+  end
+
   def self.board
-    Team.find_by_friendly_id!('board')
+    Team.c_find_by_friendly_id!('board')
   end
 
   def self.wct
-    Team.find_by_friendly_id!('wct')
+    Team.c_find_by_friendly_id!('wct')
   end
 
   def self.wdc
-    Team.find_by_friendly_id!('wdc')
+    Team.c_find_by_friendly_id!('wdc')
   end
 
   def self.wec
-    Team.find_by_friendly_id!('wec')
+    Team.c_find_by_friendly_id!('wec')
   end
 
   def self.wfc
-    Team.find_by_friendly_id!('wfc')
+    Team.c_find_by_friendly_id!('wfc')
   end
 
   def self.wqac
-    Team.find_by_friendly_id!('wqac')
+    Team.c_find_by_friendly_id!('wqac')
   end
 
   def self.wrc
-    Team.find_by_friendly_id!('wrc')
+    Team.c_find_by_friendly_id!('wrc')
   end
 
   def self.wrt
-    Team.find_by_friendly_id!('wrt')
+    Team.c_find_by_friendly_id!('wrt')
   end
 
   def self.wst
-    Team.find_by_friendly_id!('wst')
+    Team.c_find_by_friendly_id!('wst')
   end
 
   def acronym
