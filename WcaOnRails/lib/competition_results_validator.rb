@@ -95,8 +95,6 @@ class CompetitionResultsValidator
     "required" => ["formatVersion", "competitionId", "persons", "events"],
   }.freeze
 
-  DNF_AFTER_RESULT_WARNING = "[%{round_id}] The round has a cumulative time limit and %{person_name} has at least one DNF results followed by a valid result."\
-    " Please make sure the time elapsed for the DNF was short enough to allow for the other subsequent valid results to count."
   DNS_AFTER_RESULT_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
   SAME_PERSON_NAME_WARNING = "Person '%{name}' exists with WCA ID %{wca_id} in the WCA database."\
     " A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
@@ -155,15 +153,13 @@ class CompetitionResultsValidator
 
     @number_of_non_matching_rounds = check_rounds_match
 
-    check_individual_results(results_by_round_id, persons_by_id)
-
     if @number_of_non_matching_rounds == 0
-      # Only check the advancement conditions if all rounds match: this way we can rely
+      # Only check these if all rounds match: this way we can rely
       # on the expected competition_events!
+      check_individual_results(results_by_round_id, persons_by_id)
       check_avancement_conditions(results_by_round_id, competition.competition_events)
+      check_scrambles
     end
-
-    check_scrambles
 
     @total_errors = @errors.map { |key, value| value }.map(&:size).reduce(:+)
     @total_warnings = @warnings.map { |key, value| value }.map(&:size).reduce(:+)
@@ -314,23 +310,25 @@ class CompetitionResultsValidator
       unless p.name.squeeze(" ").strip == p.name
         @errors[:persons] << "Person '#{p.name}' has leading/trailing whitespaces or double whitespaces."
       end
+      if /[[:alnum:]]\(/ =~ p.name
+        @errors[:persons] << "Opening parenthethis in '#{p.name}' must be preceeded by a space."
+      end
     end
-    existing_person_by_wca_id = Hash[Person.where(wca_id: with_wca_id.map(&:wcaId)).map { |p| [p.wca_id, p] }]
+    existing_person_by_wca_id = Hash[Person.current.where(wca_id: with_wca_id.map(&:wcaId)).map { |p| [p.wca_id, p] }]
     with_wca_id.each do |p|
       existing_person = existing_person_by_wca_id[p.wcaId]
       if existing_person
-        # FIXME: check with WRT we do want to show errors here, or just warnings, or nothing!
+        # WRT wants to show warnings for wrong DOB or gender, but error for wrong country.
         # (If I get this right, we do not actually update existing persons from InboxPerson)
         unless p.dob == existing_person.dob
-          @errors[:persons] << "Wrong birthdate for #{p.name} (#{p.wcaId})."
+          @warnings[:persons] << "Wrong birthdate for #{p.name} (#{p.wcaId}), expected '#{existing_person.dob}' got '#{p.dob}'."
         end
-        # FIXME: Not using this checks for now, until I get feedback from WRT
-        # unless p.countryId == existing_person.country_iso2
-        # @errors[:persons] << "Wrong country for #{p.name} (#{p.wcaId})."
-        # end
-        # unless p.gender == existing_person.gender
-        # @errors[:persons] << "Wrong gender for #{p.name} (#{p.wcaId})."
-        # end
+        unless p.gender == existing_person.gender
+          @warnings[:persons] << "Wrong gender for #{p.name} (#{p.wcaId}), expected '#{existing_person.gender}' got '#{p.gender}'."
+        end
+        unless p.countryId == existing_person.country_iso2
+          @errors[:persons] << "Wrong country for #{p.name} (#{p.wcaId}), expected '#{existing_person.country_iso2}' got '#{p.countryId}'."
+        end
       else
         @errors[:persons] << "Person #{p.name} has a WCA ID which does not exist: #{p.wcaId}."
       end
@@ -368,8 +366,6 @@ class CompetitionResultsValidator
     #   - check time limit
     #   - check cutoff
     #   - check position
-    #   - warn for suspiscious DOB (January 1st)
-    #   - warn for existing name in the db but no ID (can happen, but the Delegate should add a note)
 
     results_by_round_id.each do |round_id, results_for_round|
       # get cutoff and timelimit
@@ -419,7 +415,7 @@ class CompetitionResultsValidator
 
         # Checks for time limits if it can be user-specified
         if !["333mbf", "333fm"].include?(result.eventId)
-          cumulative_round_ids = time_limit_for_round.cumulative_round_ids
+          cumulative_wcif_round_ids = time_limit_for_round.cumulative_round_ids
           completed_solves = all_solve_times.select(&:complete?)
           # Now let's try to find a DNF/DNS result followed by a non-DNF/DNS result
           # Do the same for DNS.
@@ -438,28 +434,48 @@ class CompetitionResultsValidator
             @warnings[:results] << format(DNS_AFTER_RESULT_WARNING, round_id: round_id, person_name: person_info.name)
           end
 
-          case cumulative_round_ids.length
+          case cumulative_wcif_round_ids.length
           when 0
             # easy case: each completed result (not DNS, DNF, or SKIPPED) must be below the time limit.
             results_over_time_limit = completed_solves.select { |t| t.time_centiseconds > time_limit_for_round.centiseconds }
             if results_over_time_limit&.any?
               @errors[:results] << "[#{round_id}] At least one result for #{person_info.name} is over the time limit which is #{time_limit_for_round.to_s(round_info)} for one solve."
             end
-          when 1
-            # cumulative for the round: the sum of each time must be below the cumulative time limit.
-            # if there is any DNF -> warn the Delegate and ask him to double check the time for them.
-            sum_of_times = completed_solves.map(&:time_centiseconds).reduce(&:+) || 0
-            if sum_of_times > time_limit_for_round.centiseconds
-              @errors[:results] << "[#{round_id}] The sum of results for #{person_info.name} is over the time limit which is #{time_limit_for_round.to_s(round_info)}."
-            end
-            if has_result_after[SolveTime::DNF]
-              @warnings[:results] << format(DNF_AFTER_RESULT_WARNING, round_id: round_id, person_name: person_info.name)
-            end
           else
-            # cross-rounds time limit, the sum of all the results for all the rounds must be below the cumulative time limit.
-            # if there is any DNF -> warn the Delegate and ask him to double check the time for them.
-            # TODO
-            @errors[:results] << "Cumul across rounds not implemented"
+            # Handle both cumulative for a single round or multiple round by doing the following:
+            #  - gather all solve times for all the rounds (necessitate to map round's WCIF id to "our" round ids)
+            #  - check the sum is below the limit
+            #  - check for any suspicious DNF result
+
+            # Match wcif round ids to "our" ids
+            cumulative_round_ids = cumulative_wcif_round_ids.map do |wcif_id|
+              parsed_wcif_id = Round.parse_wcif_id(wcif_id)
+              # Get the actual round_id from our expected rounds by id
+              @expected_rounds_by_ids.select do |id, round|
+                round.event.id == parsed_wcif_id[:event_id] && round.number == parsed_wcif_id[:round_number]
+              end.first[0]
+            end
+
+            # Get all solve times for all cumulative rounds for the current person
+            all_results_for_cumulative_rounds = cumulative_round_ids.map do |id|
+              results_by_round_id[id].find { |r| r.personId == result.personId }
+            end.compact.map(&:solve_times).flatten
+            completed_solves_for_rounds = all_results_for_cumulative_rounds.select(&:complete?)
+            number_of_dnf_solves = all_results_for_cumulative_rounds.select(&:dnf?).size
+            sum_of_times_for_rounds = completed_solves_for_rounds.map(&:time_centiseconds).reduce(&:+) || 0
+
+            # Check the sum is below the limit
+            if sum_of_times_for_rounds > time_limit_for_round.centiseconds
+              @errors[:results] << "[#{cumulative_round_ids.join(",")}] The sum of results for #{person_info.name} is over the time limit which is #{time_limit_for_round.to_s(round_info)}."
+            end
+
+            # Check for any suspicious DNF
+            # Compute avg time per solve for the competitor
+            avg_per_solve = sum_of_times_for_rounds.to_f / completed_solves_for_rounds.size
+            # We want to issue a warning if the estimated time for all solves + DNFs goes roughly over the cumulative time limit by at least 10% (to reduce false positive).
+            if (number_of_dnf_solves + completed_solves_for_rounds.size) * avg_per_solve >= 1.1 * time_limit_for_round.centiseconds
+              @warnings[:results] << "[#{cumulative_round_ids.join(",")}] The round has a cumulative time limit and #{person_info.name} has at least one suspicious DNF solve given his results."
+            end
           end
         end
 
@@ -471,5 +487,9 @@ class CompetitionResultsValidator
         end
       end
     end
+
+    # Cleanup possible duplicate errors and warnings from cumulative time limits
+    @errors[:results].uniq!
+    @warnings[:results].uniq!
   end
 end
