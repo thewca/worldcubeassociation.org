@@ -30,9 +30,11 @@ class UsersController < ApplicationController
         elsif params[:sort]
           @users = @users.order(params[:sort] => params[:order])
         end
+        users_array = @users.to_a
+        selected_rows = users_array[params[:offset].to_i, params[:limit].to_i] || []
         render json: {
-          total: @users.count,
-          rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
+          total: users_array.size,
+          rows: selected_rows.map do |user|
             {
               wca_id: user.wca_id ? view_context.link_to(user.wca_id, person_path(user.wca_id)) : "",
               name: ERB::Util.html_escape(user.name),
