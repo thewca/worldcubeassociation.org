@@ -1353,7 +1353,7 @@ en:
     proximity_policy: "Competition Proximity Policy"
     competition_name_policy: "Competition Name Policy"
     competition_announcement_policy: "Competition Announcement Policy"
-    sponsor: "Sponsor Acknowledgment"
+    sponsor: "Sponsor Acknowledgments"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
