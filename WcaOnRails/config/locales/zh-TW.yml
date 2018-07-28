@@ -849,8 +849,8 @@ zh-TW:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: 'Use %{native_redirect_uri} if you want to add localhost URIs'
+          #original_hash: 95c10ec
+          https_info: HTTPS is required unless the host is "localhost"
           #original_hash: 62a0113
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
@@ -998,6 +998,35 @@ zh-TW:
         confirm: 您可以透過以下連結確認您帳號的新電子郵件：
         #original_hash: 4900afe
         confirmation_link: 確認電子郵件。
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name}確認%{competition}'
+        #original_hash: 3db81b5
+        organizers: '親愛的%{competition}主辦人您好，'
+        #original_hash: c526fd6
+        confirmed: >-
+          您比賽的代表%{delegate_name}已經確認%{competition}並且向WCA董事會提出申請。一旦WCA董事會公告本場比賽之後，您將收到另外一封通知。
+        #original_hash: dfea09d
+        contact: 如果您還有其他疑問，請透過電子郵件聯絡本場比賽的代表。
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'WCA董事會公告%{competition}'
+        #original_hash: 8e91977
+        announced: WCA董事會審核通過您的比賽並且正式公布了。
+        #original_hash: 1c20919
+        link: 請依照連結查看比賽公告：
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: '您已經被新增為%{competition}的主辦人'
+        #original_hash: c9d0561
+        intro: '%{name}您好，'
+        #original_hash: 372b27f
+        information: '%{confirmer}新增您為%{competition}的主辦人。您可以在此編輯比賽：'
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: '您已經被刪除為%{competition}的主辦人'
+        #original_hash: 66cb109
+        information: '%{remover}刪除您為%{competition}的主辦人'
     claim_wca_id:
       #original_hash: f28bf87
       title: 取得WCA ID
