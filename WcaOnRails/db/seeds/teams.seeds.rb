@@ -9,3 +9,4 @@ Team.create(friendly_id: 'wqac', rank: 50, email: "quality@worldcubeassociation.
 Team.create(friendly_id: 'wrc', rank: 60, email: "regulations@worldcubeassociation.org")
 Team.create(friendly_id: 'wrt', rank: 70, email: "results@worldcubeassociation.org")
 Team.create(friendly_id: 'wst', rank: 80, email: "software@worldcubeassociation.org")
+Team.create(friendly_id: 'banned', rank: 90, email: "disciplinary@worldcubeassociation.org", hidden: true)
