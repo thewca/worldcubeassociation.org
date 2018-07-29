@@ -2542,18 +2542,20 @@ pt:
     motions: Moções
     #original_hash: 092f99e
     minutes: Minutas
-    #original_hash: 8d61184
-    policies: Políticas
-    #original_hash: cdad4f1
+    #original_hash: 6db524a
+    policies: Políticas da WCA
+    #original_hash: ffc646a
     dues: Sistema de Contribuições da WCA
-    #original_hash: 7536665
-    logo: Utilização de Logótipo da WCA
-    #original_hash: 920a98f
-    proximity_policy: Política de Proximidade de Competições da WCA
-    #original_hash: f484584
-    competition_name_policy: Política de Nomes de Competições da WCA
-    #original_hash: c7f7728
-    competition_announcement_policy: Política de Anúncio de Competições da WCA
+    #original_hash: 9e7fbc2
+    logo: Utilização de Logótipo
+    #original_hash: 900f7c7
+    proximity_policy: Política de Proximidade de Competições
+    #original_hash: 0d527c8
+    competition_name_policy: Política de Nomes de Competições
+    #original_hash: caccb53
+    competition_announcement_policy: Política de Anúncio de Competições
+    #original_hash: 32e6959
+    sponsor: Reconhecimento de Patrocínios
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
