@@ -938,8 +938,8 @@ pt-BR:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: 'Use %{native_redirect_uri} if you want to add localhost URIs'
+          #original_hash: 95c10ec
+          https_info: HTTPS é necessário a menos que esteja em "localhost"
           #original_hash: 62a0113
           scopes_html: >-
             Separe os escopos com espaços. Deixe em branco para usar o escopo
@@ -2539,18 +2539,20 @@ pt-BR:
     motions: Moções
     #original_hash: 092f99e
     minutes: Atas
-    #original_hash: 8d61184
-    policies: Políticas
-    #original_hash: cdad4f1
-    dues: Sistema de Taxas da WCA
-    #original_hash: 7536665
-    logo: Uso do Logo da WCA
-    #original_hash: 920a98f
+    #original_hash: 6db524a
+    policies: Políticas da WCA
+    #original_hash: ffc646a
+    dues: Sistema de Taxas
+    #original_hash: 9e7fbc2
+    logo: Uso do Logo
+    #original_hash: 900f7c7
     proximity_policy: Política sobre proximidade entre competições
-    #original_hash: f484584
+    #original_hash: 0d527c8
     competition_name_policy: Política de nomes de competições
-    #original_hash: c7f7728
+    #original_hash: caccb53
     competition_announcement_policy: Política de anúncio de competições
+    #original_hash: 32e6959
+    sponsor: Reconhcimento de Patrocinadores
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
