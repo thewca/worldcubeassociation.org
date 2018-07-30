@@ -865,6 +865,7 @@ CREATE TABLE `oauth_applications` (
   `owner_id` int(11) DEFAULT NULL,
   `owner_type` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `dangerously_allow_any_redirect_uri` tinyint(1) NOT NULL DEFAULT '0',
+  `confidential` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_oauth_applications_on_uid` (`uid`),
   KEY `index_oauth_applications_on_owner_id_and_owner_type` (`owner_id`,`owner_type`)
@@ -1396,4 +1397,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180705231137'),
 ('20180709220826'),
 ('20180710165401'),
-('20180731204733');
+('20180731204733'),
+('20180730182509');
