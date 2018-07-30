@@ -262,7 +262,7 @@ GEM
     kaminari-i18n (0.5.0)
       kaminari
       rails
-    kgio (2.11.1)
+    kgio (2.11.2)
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.19)
@@ -505,7 +505,7 @@ GEM
     uglifier (4.1.17)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.4.0)
-    unicorn (5.4.0)
+    unicorn (5.4.1)
       kgio (~> 2.6)
       raindrops (~> 0.7)
     uniform_notifier (1.11.0)
