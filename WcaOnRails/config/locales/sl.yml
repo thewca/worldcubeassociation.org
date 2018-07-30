@@ -146,25 +146,25 @@ sl:
   cutoff:
     #original_hash: cf458e7
     time:
-      other: '%{count} poskusov za < %{time}'
-      few: '%{count} poskusi za < %{time}'
-      two: '%{count} poskusa za < %{time}'
-      one: '%{count} poskus za < %{time}'
       zero: '%{count} poskusov za < %{time}'
+      one: '%{count} poskus za < %{time}'
+      two: '%{count} poskusa za < %{time}'
+      few: '%{count} poskusi za < %{time}'
+      other: '%{count} poskusov za < %{time}'
     #original_hash: b49d930
     moves:
-      other: '%{count} poskusov za < %{moves} potez'
-      few: '%{count} poskusi za < %{moves} potez'
-      two: '%{count} poskusa za < %{moves} potez'
-      one: '%{count} poskus za < %{moves} potez'
       zero: '%{count} poskusov za < %{moves} potez'
+      one: '%{count} poskus za < %{moves} potez'
+      two: '%{count} poskusa za < %{moves} potez'
+      few: '%{count} poskusi za < %{moves} potez'
+      other: '%{count} poskusov za < %{moves} potez'
     #original_hash: eba1b97
     points:
-      other: '%{count} poskusov za > %{points} točk'
-      few: '%{count} poskusi za > %{points} točk'
-      two: '%{count} poskusa za > %{points} točk'
-      one: '%{count} poskus za > %{points} točk'
       zero: '%{count} poskusov za > %{points} točk'
+      one: '%{count} poskus za > %{points} točk'
+      two: '%{count} poskusa za > %{points} točk'
+      few: '%{count} poskusi za > %{points} točk'
+      other: '%{count} poskusov za > %{points} točk'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -271,8 +271,8 @@ sl:
         country_iso2: Državljanstvo
         #original_hash: ab58155
         dob: Datum rojstva
-        #original_hash: ab58155
-        dob_verification: Datum rojstva
+        #original_hash: 7636bbc
+        dob_verification: Vaš datum rojstva
         #original_hash: 8a754c6
         gender: Spol
         #original_hash: 84add5b
@@ -281,8 +281,8 @@ sl:
         password: Geslo
         #original_hash: 19dff4d
         current_password: Trenutno geslo
-        #original_hash: 786b8af
-        password_confirmation: Potrditev gesla
+        #original_hash: aefce7f
+        password_confirmation: Ponovno vnesite geslo
         #original_hash: ced7b30
         remember_me: Zapomni si me
         #original_hash: 102efae
@@ -338,8 +338,8 @@ sl:
         base_entry_fee_lowest_denomination: Osnovna vstopnina
         #original_hash: 28a6fbb
         currency_code: Koda valute
-        #original_hash: 5b2fe69
-        delegate_ids: WCA delegat(i)
+        #original_hash: 2e3ed8b
+        delegate_ids: WCA Delegat(i)
         #original_hash: 958562e
         organizer_ids: Organizator(ji)
         #original_hash: b37456c
@@ -374,6 +374,8 @@ sl:
         enable_donations: Zraven vstopnin bi še rad omogočil prejem donacij
         #original_hash: 4baf44b
         championship_type: Tip prvenstva
+        #original_hash: ff722f0
+        registration_requirements: Zahteve registracije
       registration:
         #original_hash: 3c23a67
         guests: Gostje
@@ -444,6 +446,21 @@ sl:
       vote:
         #original_hash: 153d7a5
         comment: Komentar
+      incident:
+        #original_hash: 768e0c1
+        title: Naziv
+        #original_hash: cf66d44
+        private_description: Opis (zaseben)
+        #original_hash: 1171d85
+        private_wrc_decision: Odločitev (zasebna)
+        #original_hash: 1c2ed61
+        public_summary: Povzetek (javni)
+        #original_hash: 62d6896
+        digest_worthy: Digest worthy
+        #original_hash: 848eed0
+        tags: Oznake
+        #original_hash: 861e459
+        competition_id: Se je zgodilo med
       competition_medium:
         #original_hash: 1917f4f
         competitionId: Tekmovanje
@@ -477,8 +494,6 @@ sl:
         delegate: Delegat
         #original_hash: d463c23
         senior_delegate: Senior Delegat
-        #original_hash: 660ee15
-        board_member: Član odbora
     person:
       gender:
         #original_hash: 3f3a489
@@ -516,6 +531,29 @@ sl:
       #original_hash: d70e9cb
       default_message: Prosim preglejte sledeče težave
     hints:
+      incident:
+        #original_hash: c54e268
+        title: >-
+          Upoštevajte, da je ta stvar javna in je polje potrebno izpolnit v
+          Angleščini!
+        #original_hash: 67f2a1a
+        private_description: >-
+          Opis incidenta, ki je lahko viden samo s strani Delegatov. Prosimo
+          izpolnite v Angleščini.
+        #original_hash: b766029
+        private_wrc_decision: >-
+          Končna WRC odločitev, vključujoč zasebne podrobnosti. Prosimo
+          izpolnite v Angleščini.
+        #original_hash: 3de5729
+        public_summary: >-
+          Splošen opis incidenta in odločitev, ki bodo javno prikazane. Prosimo
+          izpolnite v Angleščini.
+        #original_hash: da39a3e
+        digest_worthy: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: da39a3e
+        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: 'Vnesite datum rojstva v sledečem formatu: LLLL-MM-DD'
@@ -585,8 +623,8 @@ sl:
         information: >-
           Informacije o omejitvi tekmovalcev, vstopnini za tekmovalce in
           gledalce in ostale relevantne informacije.
-        #original_hash: 0708400
-        delegate_ids: WCA delegati tekmovanja.
+        #original_hash: b4d020f
+        delegate_ids: WCA Delegati tekmovanja.
         #original_hash: 517d376
         organizer_ids: Organizatorji tekmovanja (za vnos je potreben uporabniški račun).
         #original_hash: cabe7fb
@@ -595,11 +633,11 @@ sl:
         registration_open: >-
           Registracije se odprejo in zaprejo po univerzalnem koordiniranem času
           (UTC)
-        #original_hash: 36963bc
-        remarks: >-
-          Dodatne informacije, ki se posredujejo odboru. Na primer, razlogi
-          zakaj je bila prošnja za tekmovanje poslana manj kot en mesec vnaprej.
-          Prosimo, da se ta del izpolni v angleščini!
+        #original_hash: 243212f
+        remarks_html: >-
+          Dodatne informacije, ki jih želite posredovati odboru. Na primer,
+          razložite razloge zakaj je tekmovanje najavljeno v razmaku manj kot
+          štirih tednov ali pa če zaprosite za aplikacijo %{link}.
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -647,7 +685,23 @@ sl:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
+        #original_hash: 508c178
+        registration_requirements: >-
+          Prosimo navedite specifike procesa registracije, kot so naveden v <a
+          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
+          target="_blank">Smernici 2c1+</a>. Polja več <b>ne bo</b> možno urejat
+          po napovedi tekmovanja in bo za njeno urejanje potrebna potrditev
+          Odbora. <br/> Na primer, tukaj navedite ali morajo imeti tekmovalci
+          čisto zgodovino plačevanj, če obstaja povračilo štartnine in ali bo
+          potrebno odgovoriti na potrditveni E-Mail.<br/> Prosimo izpolnite v
+          <b>Angleščini</b> in lokalnem jeziku tekmovalcev. Besedilo bo
+          prikazano na strani tekmovanja, če uporabljate WCA stran za
+          registriranje.
       website_contact:
+        #original_hash: da39a3e
+        inquiry: ''
+        #original_hash: da39a3e
+        competition_id: ''
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
@@ -714,7 +768,7 @@ sl:
           tekmovanja, nastale težave (primer zaostanek pri urniku) in kako so se
           rešile... Prosimo bodite kratki in jedrnati ter ne poročajte
           podrobnosti, ki niso relevantne.
-        #original_hash: 715f020
+        #original_hash: d003c1f
         incidents: >-
           Poročilo o incidentih, vrednih omembe. Številke incidentov se začnejo
           z 1., da se lahko ostali delegati pri komentiranju lahko nanašajo na
@@ -767,6 +821,8 @@ sl:
       team:
         #original_hash: da39a3e
         friendly_id: ''
+        #original_hash: da39a3e
+        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -787,6 +843,13 @@ sl:
         submitterComment: ''
         #original_hash: da39a3e
         status: ''
+      results_submission:
+        #original_hash: da39a3e
+        schedule_url: ''
+        #original_hash: da39a3e
+        results_file: ''
+        #original_hash: da39a3e
+        message: ''
     options:
       registration:
         status:
@@ -805,6 +868,10 @@ sl:
   mail_form:
     attributes:
       contact_form:
+        #original_hash: d31ab65
+        inquiry: Kaj od navedenega najbolje opiše vaše povpraševanje?
+        #original_hash: 1917f4f
+        competition_id: Tekmovanje
         #original_hash: 709a232
         name: Ime
         #original_hash: 3fa6f5f
@@ -832,6 +899,18 @@ sl:
       #original_hash: a2a43b3
       size_too_big: 'je prevelik (mora biti največ %{file_size})'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: Ponovno vnesite novo geslo
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: Vpis
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: Vpis
     failure:
       #original_hash: 1186218
       invalid: 'Neveljaven E-naslov, WCA ID ali geslo.'
@@ -842,6 +921,10 @@ sl:
         Pred nadaljevanjem morate potrditi vaš E-naslov. Če tega niste prejeli,
         obiščite https://www.worldcubeassociation.org/users/confirmation/new in
         zahtevajte novega.
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: Prosimo potrditev nov E-Naslov
   wca:
     errors:
       messages:
@@ -855,8 +938,8 @@ sl:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: 'Use %{native_redirect_uri} if you want to add localhost URIs'
+          #original_hash: 95c10ec
+          https_info: 'Potreben je HTTPS, razen če je gostitelj "localhost"'
           #original_hash: 62a0113
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
@@ -899,6 +982,8 @@ sl:
       information: Informacije
       #original_hash: 9ac918a
       about: O WCA
+      #original_hash: ed97787
+      documents: WCA Dokumenti
       #original_hash: d8fd3e4
       delegates: WCA Delegati
       #original_hash: 37b8fdc
@@ -985,6 +1070,69 @@ sl:
       failure: Ni možno posodobiti vašega profila.
       #original_hash: c29870c
       unavailable: Lokalna zahteva ni na voljo.
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: Navodila za potrjevanje
+        #original_hash: 6ee63db
+        welcome: 'Pozdravljen %{user_email}!'
+        #original_hash: da39d05
+        confirm: >-
+          Vaš račun je ustvarjen in mora bit pred uporabo potrjen. Prosimo
+          potrdite račun s sledečo povezavo:
+        #original_hash: 776476a
+        confirmation_link: Potrdi moj račun.
+        #original_hash: d484f70
+        activate: 'Po aktivaciji se lahko vpišete v WCA spletno stran:'
+        #original_hash: 333999b
+        addendum: >-
+          Ta E-mail je avtomatsko generiran. Če niste registrirali računa na WCA
+          spletni strani in ste prejeli to E-pošto pomotoma, potem prosimo
+          ignorirajte in izbrišite ta mail.
+        #original_hash: dbc2263
+        questions: >-
+          Imate več vprašanj? Z veseljem vam bomo odgovorili! Pošljite pošto na
+          %{contact_link}.
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: 'Pozdravljen %{user_email}!'
+        #original_hash: 3095365
+        confirm: 'E-pošto računa lahko potrdite s sledečo povezavo:'
+        #original_hash: 4900afe
+        confirmation_link: Potrdi moj E-naslov.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name} je potrdil/a %{competition}'
+        #original_hash: 3db81b5
+        organizers: 'Dragi organizatorji %{competition},'
+        #original_hash: c526fd6
+        confirmed: >-
+          Delegat tekmovanja %{delegate_name} je potrdil/a %{competition} in
+          poslal/a prošnjo WCA Odboru. Ob najavi tekmovanja javnosti boste
+          prejeli novo obvestilo.
+        #original_hash: dfea09d
+        contact: 'Če imate več vprašanj, kontaktirajte Delegata preko E-naslova:'
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'WCA Odbor je objavil %{competition}'
+        #original_hash: 8e91977
+        announced: WCA Odbor je potrdil vaše tekmovanje in ga uradno naznanil javnosti.
+        #original_hash: 1c20919
+        link: 'Prosimo sledite povezavi, da pridete do objave tekmovanja:'
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'K %{competition} ste bili dodani kot organizator'
+        #original_hash: c9d0561
+        intro: 'Pozdravljen/a %{name},'
+        #original_hash: 372b27f
+        information: >-
+          %{confirmer} vas je dodal k %{competition} kot organizatorja.
+          Tekmovanje lahko uredite tukaj:
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'Iz %{competition} ste bili odstranjeni kot organizator.'
+        #original_hash: 66cb109
+        information: '%{remover} vas je iz %{competition} odstranil kot organizatorja.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Zahtevaj WCA ID
@@ -1046,7 +1194,7 @@ sl:
       pending_claim_confirmation_html: >-
         Uporabniški račun čaka delegata %{delegate}, da potrdi zahtevan WCA ID
         %{wca_id}.
-      #original_hash: fc7269a
+      #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
         Ta uporabnik je zahteval WCA ID %{wca_id}. Njihov delegat %{delegate} bo
         obveščen takoj, ko bo E-naslov potrjen.
@@ -1063,7 +1211,7 @@ sl:
       #original_hash: 29e25b5
       have_wca_id_html: 'Vaš WCA ID je %{link_id}.'
       cannot_edit:
-        #original_hash: 8501c74
+        #original_hash: 13e8b80
         msg: >-
           Imena, datuma rojstva, spola ali države ne morete spremeniti. Razlog:
           %{reason}. Če želite spremeniti naveden stvari, kontaktirajte svojega
@@ -1104,6 +1252,26 @@ sl:
           ozadju.
         #original_hash: cc5f23a
         '6': Avatar mora biti pravilno orientiran.
+        #original_hash: 1a18831
+        '7': Avatar ne sme vsebovati žaljivo vsebino (npr. žaljive geste).
+      delegate_avatar_guidelines:
+        #original_hash: 35abf16
+        title: 'Dodatne smernice za Delegate:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            Avatar mora vsebovati vašo trenutno sliko, prikazano na način kot se
+            boste pojavili na tekmovanju kot WCA Delegat.
+          #original_hash: 64ded69
+          '2': >-
+            Avatar mora biti uokvirjen, obrezan in pod ustreznim kotom tako, da
+            vas bo lahko tekmovalec ali obiskovalec tekmovanja brez težav
+            prepoznal na samem tekmovanju.
+          #original_hash: 13fab02
+          '3': >-
+            Sličica avatarja je edini del avatarja in bo uporabljena za prikaz
+            celotnega avatarja. Sličica mora biti prilagojena tako, da vsebuje
+            vaš obraz in da vas je lahko prepoznati.
     errors:
       #original_hash: 094b763
       not_found: ni najdeno
@@ -1119,12 +1287,12 @@ sl:
       unique: 'je že v uporabi s strani "%{used_name}" z %{used_email}'
       #original_hash: 26f70ed
       dob_past: mora biti v preteklosti
-      #original_hash: f599dc5
+      #original_hash: 012f032
       must_be_senior: mora biti Senior Delegat
       #original_hash: 2e582eb
       must_not_be_present: ne sme biti sedanji
-      #original_hash: b2c4ecc
-      senior_has_delegate: ni možno znižati rang senior delegatu s podrejenimi delegati
+      #original_hash: 5b4eac9
+      senior_has_delegate: ni možno znižati rang Senior Delegatu s podrejenimi delegati
       #original_hash: 48653a9
       already_have_id: 'ni možno zahtevati WCA ID, saj že imate WCA ID %{wca_id}'
       #original_hash: ec5db95
@@ -1147,10 +1315,6 @@ sl:
         Za ta WCA ID nimamo vnesenega imena. Prosimo pošljite E-pošto <a
         href='mailto:results@worldcubeassociation.org' target='_blank'>WCA ekipi
         za rezultate</a>, da se razreši težava.
-      #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        Ni mogoče zapustiti odbora! Prosimo najdite drugega člana odbora da vas
-        odpusti.
       #original_hash: d02c03b
       avatar_requires_wca_id: zahteva dodelitev WCA ID
     successes:
@@ -1166,17 +1330,17 @@ sl:
           Uporabniški račun posodobljen, E-pošta poslana na %{email} za
           potrditev novega naslova.
     select_nearby_delegate:
-      #original_hash: 2b11120
+      #original_hash: 407c4f8
       select_delegate_html: >-
         Za dodelitev WCA ID potrebujemo  <a href='%{link_delegate}'
         target='_blank'>WCA delegata</a>, da potrdi vašo identiteto. Prosimo,
-        vnesite datum rojstva in izberite delegata, za katerega menite da vas
+        vnesite datum rojstva in izberite Delegata, za katerega menite da vas
         najbolj pozna.
-      #original_hash: d69cf94
+      #original_hash: 2564ee3
       already_assigned_html: >-
         WCA ID %{link_id} je že dodeljen drugemu uporabniškemu računu.
         Kontaktirajte lokalnega <a href='%{link_delegate}' target='_blank'>WCA
-        delegata</a>, če ste mnenja da je bila to napaka.
+        Delegata</a>, če ste mnenja da je bila to napaka.
       #original_hash: d26bfdc
       missing_dob_html: 'WCA ID %{link_id} nima dodeljenega datuma rojstva.'
       #original_hash: 5be6803
@@ -1269,21 +1433,22 @@ sl:
       #original_hash: 72e2180
       regards_html: 'S spoštovanjem, %{people}.'
       new:
-        #original_hash: 6fb638c
-        mail_subject: 'Registriali ste se za %{comp_name}'
+        #original_hash: a32db59
+        mail_subject: 'Registracija za %{comp_name} je bila podana in čaka na potrditev'
         #original_hash: 8374583
         registered_html: 'Pravkar ste se registrirali za %{comp_name}.'
-        #original_hash: 9238412
-        on_waiting_list: >-
-          Vaša registracija je na čakalni listi, ki ima trenutno %{n_total}
-          %{people}.
-        #original_hash: 5dd5905
+        #original_hash: 13fabed
+        awaits_approval: >-
+          Vaša registracija je bila prejeta in čaka na potrditev s strani
+          organizacijske ekipe.
+        #original_hash: 826045f
         approval_info_html: >-
           Ob potrditvi registracije vam bo poslana E-pošta. Upoštevajte, da se
-          registracije no potrjujejo avtomatsko - za ogled kriterijev
-          potrjevanja obiščite stran tekmovanja ali pa kontaktirajte
-          organizatorje. Status registracije lahko preverite tudi tukaj:
-          %{here}.
+          registracije no potrjujejo avtomatsko, zato prosimo za potrpežljivost,
+          če ta ne bo takoj sprejeta. Možnost je, da je za uspešno registracijo
+          potrebno opraviti več korakov. Za ogled kriterijev potrjevanja
+          obiščite stran tekmovanja ali pa kontaktirajte organizatorje. Status
+          registracije lahko preverite tudi tukaj: %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Registracija za %{comp_name} je bila sprejeta'
@@ -1317,10 +1482,10 @@ sl:
         causes:
           #original_hash: 978944c
           missing_info: Niste vnesli vseh zahtevanih podrobnosti
-          #original_hash: 788f2ec
+          #original_hash: a700652
           incomplete: >-
             Ne zadovoljujete kriterije registracije (primer vnaprejšnje plačilo
-            vstopnine)
+            vstopnine ali doseženi kvalifikacijski časi za discipline)
           #original_hash: 1e225f0
           registrations_full: Ni več prostih mestih saj je dosežen limit tkemovalcev
           #original_hash: 0d4cce9
@@ -1417,6 +1582,11 @@ sl:
     please_fix_profile_html: >-
       Prosimo popravit sledeče težave v %{profile}, če se želite registrirati na
       %{comp}:
+    #original_hash: f22ef22
+    registration_full: >-
+      Omejitev tekmovalcev za to tekmovanje je %{competitor_limit} in je že bilo
+      doseženo. Če se registrirate boste dani na čakalno listo. Prijava ne bo
+      potrjena dokler se ne sprostijo mesta.
     #original_hash: 855ca9c
     can_register: 'Za %{comp} se lahko registrirate spodaj.'
     #original_hash: 4167ed7
@@ -1441,6 +1611,15 @@ sl:
     will_pay_here: Po predložitvi registracije boste plačali tukaj
     #original_hash: b7ef562
     wont_pay_here: Prosimo preverite informacije tekmovanja za navodila glede plačila
+    refund_form:
+      hints:
+        #original_hash: d97186d
+        refund_amount: >-
+          Znesek povračila je lahko katerakoli vrednost maksimalno do zneska, ki
+          je že bil plačan.
+      labels:
+        #original_hash: 1cc5991
+        refund_amount: Vrednost povračila
     payment_form:
       #original_hash: 4de825f
       title: Vstopnine
@@ -1469,6 +1648,8 @@ sl:
     preferred_events_populated_html: >-
       Tukaj smo avtomatsko zapolnili vaše prednostne discipline, ki jih lahko
       uredite %{link}.
+    #original_hash: ee89a3e
+    registration_requirements: 'Zahteve registracije za tekmovanje:'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1554,6 +1735,29 @@ sl:
       information: Informacije
       #original_hash: c5497bc
       events: Discipline
+      #original_hash: ff722f0
+      registration_requirements: Zahteve registracije
+      #original_hash: 97a31ee
+      click_to_display_requirements_html: >-
+        Tekmovanje je končano. Pritisnite %{link_here} za prikaz uporabljenih
+        zahtev registracije.
+      #original_hash: ff19a74
+      hide_requirements: Skrij zahteve registracije.
+      registration_period:
+        #original_hash: 6888733
+        label: Obdobje registracij
+        #original_hash: 0c7c1dc
+        range_future_html: >-
+          Spletne registracije bodo odprte od %{start_date_and_time} do
+          %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Spletne registracije so se odprle %{start_date_and_time} in se bodo
+          zaprle %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Spletne registracije so se odprle %{start_date_and_time} in zaprle
+          %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Tekmovanja
@@ -1720,10 +1924,10 @@ sl:
       cannot_delete_confirmed: Ni možno zbrisati potrjenega tekmovanja.
       #original_hash: 191df37
       must_contain_event: mora vsebovati vsaj eno disciplino za to tekmovanje
-      #original_hash: 112490b
-      must_contain_delegate: more vsebovati vsaj enega WCA delegata
-      #original_hash: 0b2b56b
-      not_all_delegates: vsi niso delegati
+      #original_hash: 6e228b7
+      must_contain_delegate: more vsebovati vsaj enega WCA Delegata
+      #original_hash: 8131fc2
+      not_all_delegates: vsi niso Delegati
       #original_hash: 43a23c2
       registration_close_after_open: zaprtje registracij mora biti za njihovim odprtjem
       #original_hash: 43a83a9
@@ -1794,6 +1998,10 @@ sl:
       before: pred
       #original_hash: 405906c
       after: po
+      #original_hash: 24d948e
+      limit: Omejitev
+      #original_hash: 855bd26
+      competitors: Tekmovalci
     #original_hash: 06b01c4
     announcements: Obvestila
     #original_hash: 5b9523f
@@ -1829,6 +2037,8 @@ sl:
         admin_view: Administratorski pogled
         #original_hash: a857eb4
         tabs: Upravljaj zavihke
+        #original_hash: f3d6278
+        submit_results: Predloži rezultate
         #original_hash: 4c9f914
         delegate_report: Delegatovo poročilo
         #original_hash: b233e77
@@ -1960,11 +2170,21 @@ sl:
     website:
       #original_hash: ac2ac3d
       title: Kontaktni obrazec WCA spletne strani
-      #original_hash: 9039572
-      description_html: >-
-        Ta obrazec se uporablja samo za vprašanja glede spletne strani,
-        komentarje in predloge. <a href="%{contact_path}">Ostala
-        povpraševanja</a> se morajo poslati ustrezni partiji.
+      inquiries:
+        #original_hash: 92ea7e8
+        competition: >-
+          Kontaktiraj Organizatorje specifičnega tekmovanja (prosimo izberi iz
+          seznama)
+        #original_hash: f0bffb7
+        competitions_in_general: 'Splošno o tekmovanjih (organiziranje, pravila, itd.)'
+        #original_hash: f6ffa78
+        wca_id_or_profile: WCA ID ali WCA Profil
+        #original_hash: 0c77aee
+        media: Mediji
+        #original_hash: 9ad0522
+        software: Programska oprema
+        #original_hash: 6e6a6f2
+        different: Ostalo
       #original_hash: c70a890
       submit: Pošlji sporočilo
     dob:
@@ -2049,11 +2269,6 @@ sl:
             razumevanjem dokumenta, potem preberite <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>prevedeno
             verzijo</a>.
-          #original_hash: da99893
-          '2': >-
-            Prav tako bi predlagali, da si preberete <a target='_blank'
-            href='http://www.cubingusa.com/ctutorial.php'>Cubing USA' vodič za
-            začetnike</a>, kateri poda uporabne nasvete za začetnike.
       '5':
         #original_hash: 3b657aa
         title: Kako lahko imam WCA tekmovanje v domačem mestu?
@@ -2079,14 +2294,11 @@ sl:
             tekmovanje uradno odobri s strani WCA organizacije. WCA Delegat bo
             prav tako pomagal pri vodenju organizacije za uspešno izvedbo
             tekmovanja.
-          #original_hash: e5f67d2
+          #original_hash: 576c3b8
           '4': >-
-            Za več informacij obiščite <a target='_blank'
+            Obiščite <a target='_blank'
             href='https://www.worldcubeassociation.org/organizer-guidelines'>Smernice
-            organiziranja WCA tekmovanja</a> in <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>CubingUSA smernice za
-            tekmovanje</a>. (Pri kakršnemkoli konfliktu med podanimi
-            informacijami bodo vedno obveljala WCA pravila).
+            organiziranja WCA tekmovanja</a> za več informacij.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2146,10 +2358,10 @@ sl:
             rezultate (WRT oz. WCA Results Team), ki je odgovorna za nalaganje
             rezultatov tekmovanj in vzdrževanje WCA baze podatkov. Kakor hitro
             bo mogoče, bodo pri WRT naložili rezultate v WCA bazo podatkov.
-          #original_hash: b6a68ab
+          #original_hash: daf1cb1
           '2': >-
             To lahko traja od enega dneva pa vse do enega tedna - odvisno od
-            velikosti tekmovanja in delegatovega osebnega urnika. Prosimo, bodi
+            velikosti tekmovanja in Delegatovega osebnega urnika. Prosimo, bodi
             potrpežljivi.
           #original_hash: bf8adbe
           '3': >-
@@ -2231,10 +2443,13 @@ sl:
     structure:
       #original_hash: 9482c5d
       title: Struktura
-      #original_hash: d855b50
-      board_html: >-
-        World Cube Association vodi <strong>WCA Odbor</strong>, ki vključuje
-        sledeče člane:
+      board:
+        #original_hash: abd2828
+        name: WCA Odbor Direktorjev
+        #original_hash: d855b50
+        info_html: >-
+          World Cube Association vodi <strong>WCA Odbor</strong>, ki ga
+          sestavljajo sledeči člani:
       #original_hash: b0c72a9
       committees: 'Sledeče komisije so odgovorne za operacijske dejavnosti znotraj WCA:'
       wdc:
@@ -2280,10 +2495,14 @@ sl:
       wec:
         #original_hash: 83bd1d0
         name: WCA komite za etiko
-        #original_hash: ec2b9c3
+        #original_hash: c304d57
         description: >-
           Ta komite ima vlogo zagotavljanja, da vse procedure, ki jim sledi WCA
-          ekipa in zunanja ekipa, upoštevajo Etični zakonik.
+          ekipa in zunanja ekipa, upoštevajo Etični zakonik ter izvajanje
+          pregledov, če kdorkoli ni skladen s omenjenim zakonikom. Takšen
+          pregled lahko zaprosi katerikoli registriran kockar. Med drugim ima
+          komite tudi funkcijo mediatorja, če se kdo ne strinja z odločitvijo
+          WCA  disciplinskega komiteja.
       wqac:
         #original_hash: 8f32116
         name: WCA komite za zagotavljanje kakovosti
@@ -2293,28 +2512,53 @@ sl:
           znotraj WCA kakor tudi zagotavljanje konsistentnosti v kvaliteti in
           procesih WCA ekipe, regionalnih organizacij in organizatorjev
           tekmovanj.
-      #original_hash: f2ceade
+      #original_hash: 3d5b64b
       delegates_html: >-
-        <strong>WCA Delegati</strong> so člani WCA, ki so odgovorni, da vsa WCA
-        tekmovanja potekajo v skladu z misijo, pravili in duhom WCA. WCA
-        razlikuje med <strong>Senior Delegati</strong>, <strong>WCA
-        Delegati</strong> in <strong> WCA kandidati za delegata</strong>
-        %{see_link}. Poleg obveznosti WCA Delegata je Senior Delegat zadolžen za
-        vodenje delegatov svojega področja in je lahko kontaktiran s strani
-        skupnosti za regionalne težave. Novi delegati so navedeni kot WCA
-        kandidati za delegata in se morajo dokazati, da so sposobni uspešno
-        voditi tekmovanje preden se vnesejo kot WCA delegati.
+        <p><strong>WCA Delegat</strong> je vloga, definirana pri WCA gibanju in
+        prikazana v WCA pravilniku. Glavna naloga Delegata je nadzor tekmovanj v
+        imenu WCA. WCA Delegati so odgovorni, da vsa WCA tekmovanja potekajo v
+        skladu z misijo, pravili in duhom WCA. WCA razlikuje med <strong>Senior
+        Delegati</strong>, <strong>WCA Delegati</strong> in <strong> WCA
+        kandidati za delegata</strong> %{see_link}.</p> <p> Poleg obveznosti WCA
+        Delegata je Senior Delegat zadolžen za vodenje delegatov svojega
+        področja in je lahko kontaktiran s strani skupnosti za regionalne
+        težave. </p> <p>Novi delegati so navedeni kot WCA kandidati za delegata
+        in se morajo dokazati, da so sposobni uspešno voditi tekmovanje preden
+        se vnesejo kot WCA delegati.</p>
       #original_hash: 27d18ac
       see_link_html: '(glej %{link})'
       #original_hash: 5b01fcc
       members_html: >-
         Vsi tekmovalci avtomatsko postanejo WCA <strong>člani</strong> ob
         njihovem prvem WCA tekmovanju.
+  documents:
+    #original_hash: 687c828
+    title: Dokumenti
+    #original_hash: 9855f80
+    bylaws: Podzakonski akti
+    #original_hash: fdceb44
+    motions: Gibanja
+    #original_hash: 092f99e
+    minutes: Minute
+    #original_hash: 6db524a
+    policies: WCA politika
+    #original_hash: ffc646a
+    dues: Sistem dajatev
+    #original_hash: 9e7fbc2
+    logo: Uporaba Logotipa
+    #original_hash: 900f7c7
+    proximity_policy: Politika bližine tekmovanj
+    #original_hash: 0d527c8
+    competition_name_policy: Politika imena tekmovanja
+    #original_hash: caccb53
+    competition_announcement_policy: Politika objave tekmovanja
+    #original_hash: 32e6959
+    sponsor: Zahvala sponzorjem
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegati
-    #original_hash: 0a89b0f
-    acknowledges: 'WCA priznava sledeče člane kot delegate za uradna WCA tekmovanja:'
+    #original_hash: 77b819c
+    acknowledges: 'WCA priznava sledeče WCA Delegate:'
     table:
       #original_hash: 709a232
       name: Ime
@@ -2330,14 +2574,14 @@ sl:
     how_to:
       #original_hash: fc3af12
       title: Kako postati WCA Regionalna Organizacija
-      #original_hash: bdf57ff
+      #original_hash: cc1639d
       description: >-
         WCA  prepoznava številne regionalne organizacije širom sveta. Namen WCA
         regionalnih organizacij je organiziranje WCA tekmovanj in podpiranje WCA
         aktivnosti v tej regiji. Države, ki želijo ustvariti regionalno
         organizacijo spodbujamo k prispevanju WCA na njihovem območju preden
         podajo vlogo. Za pomoč pri organiziranju WCA tekmovanja na vašem območju
-        se obrnite na najbližjega delegata.
+        se obrnite na najbližjega Delegata.
     requirements:
       #original_hash: 1e04fd7
       title: Zahteve za WCA Regionalne Organizacije
@@ -2348,7 +2592,7 @@ sl:
         '2': >-
           Aktivno prispevanje k Celinskim WCA tekmovanjem, ki se odvijajo na
           celini Regionalne organizacije
-        #original_hash: 5913cd0
+        #original_hash: 8943714
         '3': >-
           Spoštovati in operacionalizirati cilje, podzakonske akte in pravila
           WCA
@@ -2356,28 +2600,16 @@ sl:
         '4': Podrediti vsem WCA pravilom
         #original_hash: 23cda60
         '5': Sprejeti in ustreči odločitvam WCA uradnikov
-        #original_hash: 08c6d86
+        #original_hash: efe2b55
         '6': Obdržati kopija WCA pravil in regulacij v elektronskem formatu
     application_instructions:
       #original_hash: 4da829b
       title: Navodila aplikacije
-      #original_hash: 7ae038e
-      description: >-
-        Za prošnjo, da postanete Regionalna Organizacija se zahteva pisna
-        aplikacija WCA odboru. Aplikacija mora vsebovati sledeče podrobnosti.
-      list:
-        #original_hash: 1a9d544
-        '1': Ime Regionalne Organizacije
-        #original_hash: a9bf3f4
-        '2': Uradni naslov in kontaktne informacije
-        #original_hash: 2a029e9
-        '3': 'Kopijo trenutnih pravil, ki se morajo skladati s pravili WCA'
-        #original_hash: a5a2771
-        '4': Seznam odgovornih oseb
-        #original_hash: 1186ebf
-        '5': 'Jasen opis področja, ki ga Regionalna organizacija pokriva'
-        #original_hash: 826e371
-        '6': Poročilo o preteklih in trenutnih WCA aktivnostih
+      #original_hash: 7ed06ee
+      description_html: >-
+        Prosimo izpolnite <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>ta
+        obrazec</a>.
   contact:
     #original_hash: a34b69f
     title: Kontaktne Informacije
@@ -2390,9 +2622,9 @@ sl:
       specifičnega področja ali tekmovanja kontaktirajte lokalnega %{link}.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Komisije in Ekipe</u>
+    #original_hash: 1cb449c
+    members: Člani
     board:
-      #original_hash: 90fcc48
-      name_html: WCA Odbor
       #original_hash: 3a8b1d8
       info_html: >-
         World Cube Association vodi WCA odbor, ki je odgovoren za splošna
@@ -2462,7 +2694,7 @@ sl:
     #original_hash: ea9d41d
     title: WCA orodja za beleženje rezultatov
     paragraphs:
-      #original_hash: ec3e0ab
+      #original_hash: 2c5ad71
       '1': >-
         WCA toplo priporoča uporabo <a href="http://cubecomps.com">Cube
         Comps</a> pred in med tekmovanjem. Cube Comps je online sistem z
@@ -2480,6 +2712,14 @@ sl:
         Zadnja verzija WCA tekmovalnih listov za beleženje rezultatov se lahko
         snamejo tukaj:<br /><a href="/files/results.xls" target="_blank">WCA
         tekmovalni listi za beleženje rezultatov</a>.
+      #original_hash: a5f2d25
+      '4': >-
+        Za pripravo skupin tekmovalcev lahko uporabite tudi <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>.
+        Vsebuje stvari, kot so sortiranje tekmovalcev po rangu, dodeljevanje
+        nalog (sojenje, mešanje), določanje števila mešalcev, generiranje
+        tekmovalnih lističev, osebnih lističev in povzetkov. Je Open Source
+        projekt, ki ga je ustvaril Jonatan Kłosko.
   logo:
     #original_hash: c72c969
     title: WCA Logotip
@@ -2500,13 +2740,11 @@ sl:
         3D verzija logotipa, ki ga je ustvaril Vu Minh Tan iz Vietnama: <a
         href="/files/WCALogo3D.png">PNG verzija</a> (2.1 MB), <a
         href="/files/WCALogo3Dsmall.png">majhna PNG verzija</a> (0.25 MB).
-      #original_hash: 545fcd9
+      #original_hash: e5df1bf
       '4': >-
-        Organizatorji WCA tekmovanj lahko uporabijo WCA logotip za spletne
-        strani, oblačila, darila ali dekoracije samo za uradna WCA
-        tekmovanja.<br />Za vse ostale namene uporabe WCA logotipa potrebujete
-        dovoljenje s strani <a href="mailto:board@worldcubeassociation.org">WCA
-        Odbora</a>.
+        Sprejemljiva uporaba WCA Logotipa je zapisana v WCA politiki uporabe
+        logotipov. Najdete je lahko na <a href="/documents">WCA strani z
+        dokumenti</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: Asistent za WCA delovni zvezek
@@ -2658,6 +2896,11 @@ sl:
         posts: No najdenih objav za
         #original_hash: 76a6bf1
         regulations_and_guidelines: Ni najdenih pravilnikov in vodil za
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Prosimo upoštevajte, da je sekcija z incidenti na voljo samo v Angleščini.
+      Sledeča vsebina ni prevedena.
   about_regulations:
     #original_hash: 6bce1b5
     title: O pravilniku
@@ -2743,7 +2986,7 @@ sl:
     paragraph4:
       #original_hash: b6dca56
       title: Politika oddaljenosti
-      #original_hash: bd8f1fe
+      #original_hash: f86bf95
       content1: >-
         WCA tekmovanja bodo sprejeta, če so od drugega tekmovanja oddaljena vsaj
         100 km ali 19 dni. WCA Odbor mora posebej pregledati želeno tekmovanje,
@@ -2792,7 +3035,7 @@ sl:
     paragraph5:
       #original_hash: 17d01de
       title: Limit tekmovalcev
-      #original_hash: 18976be
+      #original_hash: ffcd75e
       content_html: >-
         Število tekmovalcev je lahko omejeno na disciplino ali pa na tekmovanje
         (glej<a
