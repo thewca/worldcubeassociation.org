@@ -495,6 +495,16 @@ RSpec.describe CompetitionsController do
         end.to change { enqueued_jobs.size }.by(1)
       end
 
+      it "notifies organizers correctly when id changes" do
+        new_organizer = FactoryBot.create :user
+        old_id = competition.id
+        competition.id = "NewId2018"
+        expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
+        expect do
+          patch :update, params: { id: old_id, competition: { id: "NewId2018", organizer_ids: new_organizer.id } }
+        end.to change { enqueued_jobs.size }.by(1)
+      end
+
       it "removes an organizer and expects him to receive a notification email" do
         competition.organizers << [organizer1, organizer2]
         expect(CompetitionsMailer).to receive(:notify_organizer_of_removal_from_competition).with(competition.delegates.last, competition, organizer2).and_call_original
