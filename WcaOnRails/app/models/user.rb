@@ -393,15 +393,15 @@ class User < ApplicationRecord
   end
 
   def team_member?(team)
-    self.current_team_members.where(team_id: team.id).count > 0
+    self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
 
   def team_leader?(team)
-    self.current_team_members.where(team_id: team.id, team_leader: true).count > 0
+    self.current_team_members.select { |t| t.team_id == team.id && t.team_leader }.count > 0
   end
 
   def teams_where_is_leader
-    self.current_team_members.where(team_leader: true).map(&:team).uniq
+    self.current_team_members.select(&:team_leader).map(&:team).uniq
   end
 
   def admin?
