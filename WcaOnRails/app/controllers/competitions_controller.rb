@@ -448,10 +448,11 @@ class CompetitionsController < ApplicationController
   end
 
   def show
-    @competition = competition_from_params
     associations = {
       # FIXME: this part is triggerred by the competition menu generator when generating the psychsheet event list, should we care?
       competition_events: {
+        # NOTE: we hit this association through competition.has_fees?, which then calls 'has_fee?' on each competition_event, which then use the competition to get the currency.
+        competition: [],
         event: [],
         rounds: [:competition_event, :format],
       },
