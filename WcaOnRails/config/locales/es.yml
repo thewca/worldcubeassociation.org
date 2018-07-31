@@ -72,6 +72,17 @@ es:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: 'Múltiples cubos 3x3x3 a ciegas, formato anterior'
+  formats:
+    #original_hash: e4b3c11
+    '1': Mejor de 1
+    #original_hash: 778e14d
+    '2': Mejor de 2
+    #original_hash: 21f623c
+    '3': Mejor de 3
+    #original_hash: 2342d2b
+    a: Promedio de 5
+    #original_hash: 940c82d
+    m: Media de 3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -129,8 +140,26 @@ es:
       #original_hash: 4c66ad0
       cellName: Cualificación combinada
   round:
-    #original_hash: 66e902f
-    name: '%{event} Ronda %{number}'
+    #original_hash: 236c41d
+    name: '%{event_name} %{round_name}'
+  advancement_condition:
+    #original_hash: 6e55337
+    ranking: 'Los mejores %{ranking} pasan a la siguiente ronda'
+    #original_hash: 7ee969c
+    percent: 'El %{percent}% mejor pasa a la siguiente ronda'
+    attempt_result:
+      #original_hash: 1fb7fe1
+      time: >-
+        Aquellos con mejor intento en menos de %{time} pasan a la siguiente
+        ronda
+      #original_hash: 8254f3e
+      moves: >-
+        Aquellos con mejor intento en menos de %{moves} movimientos pasan a la
+        siguiente ronda
+      #original_hash: daab86e
+      points: >-
+        Aquellos con mejor intento de más de %{points} puntos pasan a la
+        siguiente ronda
   cutoff:
     #original_hash: cf458e7
     time:
@@ -1997,6 +2026,40 @@ es:
     show:
       #original_hash: b0fe391
       general_info: Información general
+      #original_hash: c5497bc
+      events: Categorías
+    events:
+      time_limit_information:
+        #original_hash: 88c5f1a
+        time_limit_html: >-
+          Si alcanzas el tiempo límite durante tu resolución, el juez te
+          detendrá y tu resultado será DNF (ver  %{regulation_link}).
+        #original_hash: 83d204f
+        regulation_link_text: 'Regla %{number}'
+        #original_hash: bd0e4a9
+        guideline_link_text: 'Guía  %{number}'
+        #original_hash: b2a983a
+        cumulative_time_limit: Tiempo límite acumulativo
+        #original_hash: d47f11a
+        cumulative_one_round_html: >-
+          Un %{cumulative_time_limit}  puede ser aplicado (ver
+          %{regulation_link}).
+        #original_hash: c6190b6
+        cumulative_across_rounds_html: >-
+          Un %{cumulative_time_limit} Puede ser aplicado a través de varias
+          rondas (ver %{guideline_link}).
+        #original_hash: e4e48c6
+        cutoff_html: >-
+          El resultado que hay que batir para pasar a la segunda fase de una
+          ronda combinada (ver %{regulation_link}).
+      #original_hash: 041a5de
+      format: Formato
+      #original_hash: 0d1fcc3
+      time_limit: Tiempo límite
+      #original_hash: 118de39
+      cutoff: Corte
+      #original_hash: 02ed4a4
+      proceed: Avanzar
     nav:
       menu:
         #original_hash: 612e12d
