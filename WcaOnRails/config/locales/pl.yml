@@ -716,6 +716,8 @@ pl:
         #original_hash: da39a3e
         inquiry: ''
         #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -886,6 +888,8 @@ pl:
       contact_form:
         #original_hash: d31ab65
         inquiry: Które z poniższych najlepiej opisuje twoje pytanie?
+        #original_hash: 1917f4f
+        competition_id: Zawody
         #original_hash: 709a232
         name: Imię
         #original_hash: 3fa6f5f
@@ -952,10 +956,8 @@ pl:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: >-
-            Użyj %{native_redirect_uri} jeśli chcesz dodać localhost jako adres
-            URI
+          #original_hash: 95c10ec
+          https_info: 'HTTPS jest wymagane, o ile host to nie "localhost"'
           #original_hash: 62a0113
           scopes_html: >-
             Oddziel zakresy spacjami. Pozostaw puste w celu użycia domyślnego
@@ -1115,6 +1117,41 @@ pl:
         confirm: 'Możesz potwierdzić swój nowy adres email poprzez poniższy link:'
         #original_hash: 4900afe
         confirmation_link: Potwierdź swój adres email.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name} potwierdził %{competition}'
+        #original_hash: 3db81b5
+        organizers: 'Drodzy organizatorzy %{competition},'
+        #original_hash: c526fd6
+        confirmed: >-
+          Delegat twoich zawodów %{delegate_name} potwierdził %{competition} i
+          wysłał zapytanie do Zarządu WCA. Otrzymasz kolejne powiadomienie, gdy
+          tylko Zarząd WCA publicznie ogłosi te zawody.
+        #original_hash: dfea09d
+        contact: >-
+          Jeżeli masz pytania, skontaktuj się z Delegatem/Delegatami zawodów
+          poprzez email:
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'Zarząd WCA ogłosił %{competition}'
+        #original_hash: 8e91977
+        announced: Zarząd WCA zatwierdził twoje zawody i publicznie je ogłosił.
+        #original_hash: 1c20919
+        link: 'Kliknij następujący link, aby zobaczyć ogłoszenie zawodów:'
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'Zostałeś dodany jako organizator %{competition}'
+        #original_hash: c9d0561
+        intro: 'Witaj %{name},'
+        #original_hash: 372b27f
+        information: >-
+          %{confirmer} dodał cię jako organizatora %{competition}. Możesz
+          edytować te zawody tutaj:
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'Zostałeś usunięty z %{competition} jako organizator'
+        #original_hash: 66cb109
+        information: '%{remover} usunął cię z %{competition} jako organizatora.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Podepnij WCA ID
@@ -2181,9 +2218,11 @@ pl:
       #original_hash: ac2ac3d
       title: Formularz Kontaktowy Strony WCA
       inquiries:
-        #original_hash: e1d277a
-        competition: Konkretne zawody (proszę wybrać)
-        #original_hash: f7d3f9f
+        #original_hash: 92ea7e8
+        competition: >-
+          Skontaktuj się z Organizatorami Konkretnych Zawodów (proszę wskazać
+          poniżej)
+        #original_hash: f0bffb7
         competitions_in_general: 'Ogólne kwestie dotyczące zawodów (organizowanie, zasady, etc.)'
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID lub Profil WCA
@@ -2560,18 +2599,20 @@ pl:
     motions: Wnioski
     #original_hash: 092f99e
     minutes: Protokoły
-    #original_hash: 8d61184
-    policies: Polityki
-    #original_hash: cdad4f1
-    dues: System Składek WCA
-    #original_hash: 7536665
-    logo: Użycie Logo WCA
-    #original_hash: 920a98f
-    proximity_policy: Polityka Odległości Zawodów WCA
-    #original_hash: f484584
-    competition_name_policy: Polityka Nazw Zawodów WCA
-    #original_hash: c7f7728
-    competition_announcement_policy: Polityka Ogłaszania Zawodów WCA
+    #original_hash: 6db524a
+    policies: Polityki WCA
+    #original_hash: ffc646a
+    dues: System Składek
+    #original_hash: 9e7fbc2
+    logo: Użycie Logo
+    #original_hash: 900f7c7
+    proximity_policy: Polityka Odległości Zawodów
+    #original_hash: 0d527c8
+    competition_name_policy: Polityka Nazw Zawodów
+    #original_hash: caccb53
+    competition_announcement_policy: Polityka Ogłaszania Zawodów
+    #original_hash: 32e6959
+    sponsor: Uznanie Sponsorów
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegaci WCA
