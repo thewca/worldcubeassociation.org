@@ -15,10 +15,6 @@
     <% if @person.user&.avatar %>
       <%= image_tag @person.user.avatar.url, class: "avatar" %>
     <% end %>
-    <!-- Handle people with in memoriam. -->
-    <% if PersonsHelper::IN_MEMORIAM[@person.wca_id] %>
-      <h4><%= link_to t('persons.show.in_memoriam'), PersonsHelper::IN_MEMORIAM[@person.wca_id] %></h4>
-    <% end %>
   </div>
   <div class="details">
     <table class="table table-striped" data-toggle="table" data-mobile-responsive="true">

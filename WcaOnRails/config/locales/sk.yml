@@ -1881,8 +1881,6 @@ sk:
       #original_hash: 56656a0
       no_persons_found: Žiadna osoba sa nezhoduje s danými kritériami.
     show:
-      #original_hash: 79b6788
-      in_memoriam: In Memoriam
       #original_hash: 4bc65e0
       completed_solves: Počet dokončených zložení
       #original_hash: fc78642
