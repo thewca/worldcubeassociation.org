@@ -131,18 +131,6 @@ ko:
   round:
     #original_hash: 66e902f
     name: '%{event} 라운드 %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: '상위 %{ranking}명의 선수가 라운드 %{next_round_number}에 진출'
-    #original_hash: 31ad77c
-    percent: '상위 %{percent}%의 선수가 라운드 %{next_round_number}에 진출'
-    attempt_result:
-      #original_hash: 03af49c
-      time: '최고기록이 < %{time}인 선수가 라운드 %{next_round_number}에 진출'
-      #original_hash: 0b4ae7c
-      moves: '최고기록이 < %{moves}회전인 선수가 라운드 %{next_round_number}에 진출'
-      #original_hash: 56c0366
-      points: '최고기록이 > %{points}점인 선수가 라운드 %{next_round_number}에 진출'
   cutoff:
     #original_hash: cf458e7
     time:

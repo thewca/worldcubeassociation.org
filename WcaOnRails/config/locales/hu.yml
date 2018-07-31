@@ -131,24 +131,6 @@ hu:
   round:
     #original_hash: 66e902f
     name: '%{event} Forduló %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Az első %{ranking} fő jut tovább a %{next_round_number}. fordulóba'
-    #original_hash: 31ad77c
-    percent: 'Az első %{percent}% jut tovább a(z) %{next_round_number}. fordulóba'
-    attempt_result:
-      #original_hash: 03af49c
-      time: >-
-        Legjobb kirakás < %{time} jut tovább a(z) %{next_round_number}.
-        fordulóba
-      #original_hash: 0b4ae7c
-      moves: >-
-        Legjobb kirakás < %{moves} fordítás jut tovább a(z)
-        %{next_round_number}. fordulóba
-      #original_hash: 56c0366
-      points: >-
-        Legjobb kirakás > %{points} pont jut tovább a(z) %{next_round_number}
-        fordulóba
   cutoff:
     #original_hash: cf458e7
     time:

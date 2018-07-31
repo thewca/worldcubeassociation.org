@@ -131,18 +131,6 @@ zh-TW:
   round:
     #original_hash: 66e902f
     name: '%{event}第%{number}輪'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: '前%{ranking}名晉級第%{next_round_number}輪'
-    #original_hash: 31ad77c
-    percent: '前%{percent}%晉級第%{next_round_number}輪'
-    attempt_result:
-      #original_hash: 03af49c
-      time: '最佳成績 < %{time}晉級第%{next_round_number}輪'
-      #original_hash: 0b4ae7c
-      moves: '最佳成績 < %{moves}步晉級第%{next_round_number}輪'
-      #original_hash: 56c0366
-      points: '最佳成績 > %{points}分晉級第%{next_round_number}輪'
   cutoff:
     #original_hash: cf458e7
     time:

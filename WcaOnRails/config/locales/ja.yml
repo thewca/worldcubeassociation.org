@@ -131,18 +131,6 @@ ja:
   round:
     #original_hash: 66e902f
     name: '%{event} %{number} 回戦'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: '上位%{ranking}名が%{next_round_number}回戦に進出します。'
-    #original_hash: 31ad77c
-    percent: '上位%{percent}%が%{next_round_number}回戦に進出します。'
-    attempt_result:
-      #original_hash: 03af49c
-      time: '単発記録が%{time}未満の場合%{next_round_number}回戦に進出します。'
-      #original_hash: 0b4ae7c
-      moves: '単発%{moves}手未満の場合%{next_round_number}回戦に進出します。'
-      #original_hash: 56c0366
-      points: '単発%{points}点を超える場合%{next_round_number}回戦に進出します。'
   cutoff:
     #original_hash: cf458e7
     time:

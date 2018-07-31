@@ -131,22 +131,6 @@ fi:
   round:
     #original_hash: 66e902f
     name: '%{event} Kierros %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: '%{ranking} parasta jatkavat kierrokselle %{next_round_number}'
-    #original_hash: 31ad77c
-    percent: '%{percent}% jatkaa kierrokselle %{next_round_number}'
-    attempt_result:
-      #original_hash: 03af49c
-      time: 'Paras ratkaisu < %{time} jatkaa kierrokselle %{next_round_number}'
-      #original_hash: 0b4ae7c
-      moves: >-
-        Paras ratkaisu < %{moves} siirtoa jatkaa kierrokselle
-        %{next_round_number}
-      #original_hash: 56c0366
-      points: >-
-        Paras ratkaisu > %{points} pistettä jatkaa kierrokselle
-        %{next_round_number}
   cutoff:
     #original_hash: cf458e7
     time:

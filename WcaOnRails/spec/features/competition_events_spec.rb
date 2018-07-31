@@ -109,7 +109,7 @@ RSpec.feature "Competition events management" do
         end
         save
 
-        expect(round_333_1.reload.advancement_condition_to_s).to eq "Top 12 advance to round 2"
+        expect(round_333_1.reload.advancement_condition_to_s).to eq "Top 12 advance to next round"
       end
     end
   end

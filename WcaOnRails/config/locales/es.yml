@@ -131,24 +131,6 @@ es:
   round:
     #original_hash: 66e902f
     name: '%{event} Ronda %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Los mejores %{ranking} pasan a la ronda %{next_round_number}'
-    #original_hash: 31ad77c
-    percent: 'El %{percent}% más rápido pasa a la ronda %{next_round_number}'
-    attempt_result:
-      #original_hash: 03af49c
-      time: >-
-        Aquellos con mejor intento en menos de %{time} pasan a la ronda
-        %{next_round_number}
-      #original_hash: 0b4ae7c
-      moves: >-
-        Aquellos con mejor intento en menos de %{moves} movimientos pasan a la
-        ronda %{next_round_number}
-      #original_hash: 56c0366
-      points: >-
-        Aquellos con mejor intento de más de %{points} puntos pasan a la ronda
-        %{next_round_number}
   cutoff:
     #original_hash: cf458e7
     time:

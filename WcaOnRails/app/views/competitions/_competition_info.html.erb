@@ -138,10 +138,10 @@
         <% collapse = @competition.is_probably_over? %>
         <% if collapse %>
           <div id="show_registration_requirements">
-            <%= t('competitions.competition_info.click_to_display_requirements_html', link_here: link_to(t('common.here'))) %>
+            <%= t('competitions.competition_info.click_to_display_requirements_html', link_here: link_to(t('common.here'), "#")) %>
           </div>
           <div id="hide_registration_requirements">
-            <%= link_to(t('competitions.competition_info.hide_requirements')) %>
+            <%= link_to(t('competitions.competition_info.hide_requirements'), "#") %>
           </div>
         <% end %>
         <div class="<%= collapse ? "collapse" : "" %>" id="registration_requirements_text">

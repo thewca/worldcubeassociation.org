@@ -131,18 +131,6 @@ cs:
   round:
     #original_hash: 66e902f
     name: '%{event} Kolo %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Nejlepších %{ranking} postupuje do %{next_round_number}. kola'
-    #original_hash: 31ad77c
-    percent: 'Nejlepších %{percent}% postupuje do %{next_round_number}. kola'
-    attempt_result:
-      #original_hash: 03af49c
-      time: 'Nejlepší solve < %{time} postupuje do %{next_round_number}. kola'
-      #original_hash: 0b4ae7c
-      moves: 'Nejlepší solve < %{moves} tahů pokračuje do %{next_round_number}. kola'
-      #original_hash: 56c0366
-      points: 'Nejlepší solve > %{points} bodů postupuje do %{next_round_number}. kola'
   cutoff:
     #original_hash: cf458e7
     time:

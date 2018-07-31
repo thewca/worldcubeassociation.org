@@ -6,6 +6,8 @@ class Round < ApplicationRecord
   has_one :event, through: :competition_event
   belongs_to :format
 
+  delegate :can_change_time_limit?, to: :event
+
   serialize :time_limit, TimeLimit
   validates_associated :time_limit
 
@@ -59,23 +61,11 @@ class Round < ApplicationRecord
   end
 
   def final_round?
-    competition_event.rounds.last == self
-  end
-
-  def self.parse_wcif_id(wcif_id)
-    event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
-    round_number = round_number.to_i
-    { event_id: event_id, round_number: round_number }
-  end
-
-  def self.wcif_id_to_name(wcif_id)
-    parsed = Round.parse_wcif_id(wcif_id)
-    event = Event.c_find(parsed[:event_id])
-    I18n.t("round.name", event: event.name, number: parsed[:round_number])
+    number == total_number_of_rounds
   end
 
   def name
-    Round.wcif_id_to_name(wcif_id)
+    I18n.t("round.name", event_name: event.name, round_name: round_type.name)
   end
 
   def time_limit_to_s
@@ -88,6 +78,12 @@ class Round < ApplicationRecord
 
   def advancement_condition_to_s
     advancement_condition ? advancement_condition.to_s(self) : ""
+  end
+
+  def self.parse_wcif_id(wcif_id)
+    event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
+    round_number = round_number.to_i
+    { event_id: event_id, round_number: round_number }
   end
 
   def self.wcif_to_round_attributes(wcif, round_number, total_rounds)

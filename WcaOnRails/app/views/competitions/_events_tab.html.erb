@@ -1,0 +1,39 @@
+<%= wca_table table_class: "show-events-table" do %>
+  <thead>
+    <tr>
+      <th><%= t("competitions.results_table.event") %></th>
+      <th><%= t("competitions.results_table.round") %></th>
+      <th><%= t("competitions.events.format") %></th>
+      <th><%= link_to t("competitions.events.time_limit"), "#time-limit" %></th>
+      <th><%= link_to t("competitions.events.cutoff"), "#cutoff" %></th>
+      <th><%= t("competitions.events.proceed") %></th>
+    </tr>
+  <thead>
+
+  <tbody>
+    <% @competition.competition_events.each do |competition_event| %>
+      <% competition_event.rounds.each do |round| %>
+        <tr class="<%= round.final_round? ? "last-round" : "" %>">
+          <td>
+            <%= competition_event.event.name if round.number == 1 %>
+          </td>
+          <td><%= round.round_type.name %></td>
+          <td><%= round.format.name %></td>
+          <td>
+            <%= round.time_limit_to_s %>
+            <% if competition_event.event.can_change_time_limit? %>
+              <% if round.time_limit.cumulative_round_ids.length == 1 %>
+                <%= link_to "*", "#cumulative-time-limit" %>
+              <% elsif round.time_limit.cumulative_round_ids.length > 1 %>
+                <%= link_to "**", "#cumulative-across-rounds-time-limit" %>
+              <% end %>
+            <% end %>
+          </td>
+          <td><%= round.cutoff_to_s %></td>
+          <td><%= round.advancement_condition_to_s %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+<% end %>
+<%= render "time_limit_div" %>

@@ -131,18 +131,6 @@ zh-CN:
   round:
     #original_hash: 66e902f
     name: '%{event}第%{number}轮'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: '前%{ranking}名晋级%{next_round_number}轮'
-    #original_hash: 31ad77c
-    percent: '前%{percent}%晋级%{next_round_number}轮'
-    attempt_result:
-      #original_hash: 03af49c
-      time: '单次成绩<%{time}晋级%{next_round_number}轮'
-      #original_hash: 0b4ae7c
-      moves: '单次成绩<%{moves}步晋级%{next_round_number}轮'
-      #original_hash: 56c0366
-      points: '单次成绩>%{points}分晋级%{next_round_number}轮'
   cutoff:
     #original_hash: cf458e7
     time:

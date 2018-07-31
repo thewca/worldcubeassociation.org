@@ -131,22 +131,6 @@ nl:
   round:
     #original_hash: 66e902f
     name: '%{event} Ronde %{number}'
-  advancement_condition:
-    #original_hash: 6381d11
-    ranking: 'Beste %{ranking} gaan door naar ronde %{next_round_number}'
-    #original_hash: 31ad77c
-    percent: 'Beste %{percent}% gaan door naar ronde %{next_round_number}'
-    attempt_result:
-      #original_hash: 03af49c
-      time: 'Beste poging < %{time} gaat door naar ronde %{next_round_number}'
-      #original_hash: 0b4ae7c
-      moves: >-
-        Beste poging < %{moves} draaien gaat door naar ronde
-        %{next_round_number}
-      #original_hash: 56c0366
-      points: >-
-        Beste poging > %{points} punten gaat door naar ronde
-        %{next_round_number}
   cutoff:
     #original_hash: cf458e7
     time:

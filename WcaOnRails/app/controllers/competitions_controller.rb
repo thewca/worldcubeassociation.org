@@ -449,6 +449,14 @@ class CompetitionsController < ApplicationController
 
   def show
     @competition = competition_from_params
+    associations = {
+      # FIXME: this part is triggerred by the competition menu generator when generating the psychsheet event list, should we care?
+      competition_events: {
+        event: [],
+        rounds: [:competition_event, :format],
+      },
+    }
+    @competition = competition_from_params(includes: associations)
   end
 
   def show_podiums
