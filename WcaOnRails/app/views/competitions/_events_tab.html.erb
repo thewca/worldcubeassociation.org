@@ -1,5 +1,3 @@
-<% cumulative_time_limit = false %>
-<% cumulative_across_rounds_time_limit = false %>
 <%= wca_table table_class: "show-events-table" do %>
   <thead>
     <tr>
@@ -15,8 +13,7 @@
   <tbody>
     <% @competition.competition_events.each do |competition_event| %>
       <% competition_event.rounds.each do |round| %>
-        <% line_class = round.final_round? ? "last-round" : "" %>
-        <tr class="<%= line_class %>">
+        <tr class="<%= round.final_round? ? "last-round" : "" %>">
           <td>
             <%= competition_event.event.name if round.number == 1 %>
           </td>
@@ -26,10 +23,8 @@
             <%= round.time_limit_to_s %>
             <% if competition_event.event.can_change_time_limit? %>
               <% if round.time_limit.cumulative_round_ids.length == 1 %>
-                <% cumulative_time_limit = true %>
                 <%= link_to "*", "#cumulative-time-limit" %>
               <% elsif round.time_limit.cumulative_round_ids.length > 1 %>
-                <% cumulative_across_rounds_time_limit = true %>
                 <%= link_to "**", "#cumulative-across-rounds-time-limit" %>
               <% end %>
             <% end %>
