@@ -492,6 +492,15 @@ class CompetitionsController < ApplicationController
         redirect_to root_url
       end
     elsif @competition.update_attributes(comp_params_minus_id)
+      if new_id && !@competition.update_attributes(id: new_id)
+        # Changing the competition id breaks all our associations, and our view
+        # code was not written to handle this. Rather than trying to update our view
+        # code, just revert the attempted id change. The user will have to deal with
+        # editing the ID text box manually. This will go away once we have proper
+        # immutable ids for competitions.
+        @competition = Competition.find(params[:id])
+      end
+
       new_organizers = @competition.organizers - old_organizers
       removed_organizers = old_organizers - @competition.organizers
 
@@ -501,15 +510,6 @@ class CompetitionsController < ApplicationController
 
       removed_organizers.each do |removed_organizer|
         CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, @competition, removed_organizer).deliver_later
-      end
-
-      if new_id && !@competition.update_attributes(id: new_id)
-        # Changing the competition id breaks all our associations, and our view
-        # code was not written to handle this. Rather than trying to update our view
-        # code, just revert the attempted id change. The user will have to deal with
-        # editing the ID text box manually. This will go away once we have proper
-        # immutable ids for competitions.
-        @competition = Competition.find(params[:id])
       end
 
       if params[:commit] == "Confirm"
