@@ -699,6 +699,8 @@ es:
         #original_hash: da39a3e
         inquiry: ''
         #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -867,6 +869,8 @@ es:
       contact_form:
         #original_hash: d31ab65
         inquiry: ¿Cuál de las siguientes opciones describe mejor tu petición?
+        #original_hash: 1917f4f
+        competition_id: Competición
         #original_hash: 709a232
         name: Nombre
         #original_hash: 3fa6f5f
@@ -917,6 +921,10 @@ es:
         continuar. ¿No has recibido un correo de confirmación? Ve a
         https://www.worldcubeassociation.org/users/confirmation/new para pedir
         uno nuevo.
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: Confirma por favor tu nueva dirección de correo
   wca:
     errors:
       messages:
@@ -928,8 +936,8 @@ es:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: 'Usa %{native_redirect_uri} si quieres añadir URIs de localhost'
+          #original_hash: 95c10ec
+          https_info: Se requiere HTTPS a no ser que el host sea "localhost"
           #original_hash: 62a0113
           scopes_html: >-
             Separa los ámbitos con espacios. Deja en blanco para usar los
@@ -1091,6 +1099,46 @@ es:
           de debajo:
         #original_hash: 4900afe
         confirmation_link: Confirmar dirección de correo electrónico.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name} ha confirmado %{competition}'
+        #original_hash: 3db81b5
+        organizers: 'Estimados organizadores de %{competition},'
+        #original_hash: c526fd6
+        confirmed: >-
+          El Delegado  %{delegate_name} de tu competición ha confirmado
+          %{competition} y enviado el formularoo a la Junta de la WCA. Tan
+          pronto como la Junta de la WCA anuncie al público la competición,
+          recibirás otra notificación.
+        #original_hash: dfea09d
+        contact: >-
+          Si tienes alguna pregunta más, por favor ponte en contacto con el/los
+          delegado(s) de la competicón por correo electrónico:
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'La Junta de la WCA ha anunciado %{competition}'
+        #original_hash: 8e91977
+        announced: >-
+          La Junta de la WCA ha aprobado tu competición y será anunciada
+          oficialmente al público.
+        #original_hash: 1c20919
+        link: >-
+          Por favor siga el siguiente enlace para ver el anuncio de la
+          competición:
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'Has sido añadido a %{competition} como organizador'
+        #original_hash: c9d0561
+        intro: 'Hola %{name},'
+        #original_hash: 372b27f
+        information: >-
+          %{confirmer} te añadió a  %{competition} como organizador. Puedes
+          editar la competición aquí:
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'Has sido eliminado como organizador de %{competition}'
+        #original_hash: 66cb109
+        information: '%{remover} te eliminó como organizador de %{competition}.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Reclamar tu WCA ID
@@ -2128,11 +2176,13 @@ es:
       #original_hash: ac2ac3d
       title: Formulario de Contacto sobre la Web de la WCA
       inquiries:
-        #original_hash: e1d277a
-        competition: Una competición específica (selecciona por favor)
-        #original_hash: f7d3f9f
+        #original_hash: 92ea7e8
+        competition: >-
+          Contactar con los organizadores de una competición específica
+          (selecciona por favor)
+        #original_hash: f0bffb7
         competitions_in_general: >-
-          Competiciones en general (Organización, Reglamento de competiciones,
+          Competiciones en General (organización, reglamento de competiciones,
           etc.)
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID o Perfil WCA
@@ -2521,18 +2571,20 @@ es:
     motions: Mociones
     #original_hash: 092f99e
     minutes: Actas
-    #original_hash: 8d61184
-    policies: Políticas
-    #original_hash: cdad4f1
-    dues: Sistema de Cuotas de la WCA
-    #original_hash: 7536665
-    logo: Uso del Logotipo de la WCA
-    #original_hash: 920a98f
-    proximity_policy: Política de Proximidad de las Competiciones WCA
-    #original_hash: f484584
-    competition_name_policy: Política sobre Nombres de Competiciones WCA
-    #original_hash: c7f7728
-    competition_announcement_policy: Política de Publicación de competiciones WCA
+    #original_hash: 6db524a
+    policies: Políticas WCA
+    #original_hash: ffc646a
+    dues: Sistema de Cuotas
+    #original_hash: 9e7fbc2
+    logo: Uso del Logotipo
+    #original_hash: 900f7c7
+    proximity_policy: Política de Proximidad de las Competiciones
+    #original_hash: 0d527c8
+    competition_name_policy: Política sobre Nombres de Competiciones
+    #original_hash: caccb53
+    competition_announcement_policy: Política de Publicación de competiciones
+    #original_hash: 32e6959
+    sponsor: Agradecimientos del patrocinador
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
