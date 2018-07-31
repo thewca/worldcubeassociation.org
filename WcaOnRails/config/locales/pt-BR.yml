@@ -72,6 +72,17 @@ pt-BR:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: 3x3x3 Multi Vendado Antigo
+  formats:
+    #original_hash: e4b3c11
+    '1': Melhor de 1
+    #original_hash: 778e14d
+    '2': Melhor de 2
+    #original_hash: 21f623c
+    '3': Melhor de 3
+    #original_hash: 2342d2b
+    a: Média de 5
+    #original_hash: 940c82d
+    m: Média de 3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -129,8 +140,24 @@ pt-BR:
       #original_hash: 4c66ad0
       cellName: Qualificação combinada
   round:
-    #original_hash: 66e902f
-    name: '%{event} Rodada %{number}'
+    #original_hash: 236c41d
+    name: '%{event_name} %{round_name}'
+  advancement_condition:
+    #original_hash: 6e55337
+    ranking: 'Os %{ranking} primeiros avançam para a próxima rodada'
+    #original_hash: 7ee969c
+    percent: 'Os %{percent}% primeiros avançam para a próxima rodada'
+    attempt_result:
+      #original_hash: 1fb7fe1
+      time: 'Aqueles com melhor tempo menor que %{time} avançam para a próxima rodada'
+      #original_hash: 8254f3e
+      moves: >-
+        Aqueles com melhor resultado menor que %{moves} movimentos avançam para
+        a próxima rodada
+      #original_hash: daab86e
+      points: >-
+        Aqueles com melhor resultado maior que %{points} pontos avançam para a
+        próxima rodada
   cutoff:
     #original_hash: cf458e7
     time:
@@ -1983,6 +2010,40 @@ pt-BR:
     show:
       #original_hash: b0fe391
       general_info: Informações gerais
+      #original_hash: c5497bc
+      events: Eventos
+    events:
+      time_limit_information:
+        #original_hash: 88c5f1a
+        time_limit_html: >-
+          Se você atingir o limite durantes sua resolução, o juiz irá te
+          interromper e seu resultado será DNF (veja %{regulation_link}).
+        #original_hash: 83d204f
+        regulation_link_text: 'Regra %{number}'
+        #original_hash: bd0e4a9
+        guideline_link_text: 'Orientação %{number}'
+        #original_hash: b2a983a
+        cumulative_time_limit: tempo limite cumulativo
+        #original_hash: d47f11a
+        cumulative_one_round_html: >-
+          Um %{cumulative_time_limit} pode ser aplicado (veja
+          %{regulation_link}).
+        #original_hash: c6190b6
+        cumulative_across_rounds_html: >-
+          Um %{cumulative_time_limit} pode ser aplicado em várias rodadas (veja
+          %{guideline_link}).
+        #original_hash: e4e48c6
+        cutoff_html: >-
+          O resultado a ser batido para prosseguir para a segunda fase de uma
+          rodada combinada (veja %{regulation_link}).
+      #original_hash: 041a5de
+      format: Formato
+      #original_hash: 0d1fcc3
+      time_limit: Tempo limite
+      #original_hash: 118de39
+      cutoff: Tempo de corte
+      #original_hash: 02ed4a4
+      proceed: Avançam
     nav:
       menu:
         #original_hash: 612e12d
