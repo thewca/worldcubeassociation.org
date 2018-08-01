@@ -72,6 +72,17 @@ ru:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: Мульти-блайнд по старым правилам
+  formats:
+    #original_hash: e4b3c11
+    '1': Лучшая из 1
+    #original_hash: 778e14d
+    '2': Лучшая из 2
+    #original_hash: 21f623c
+    '3': Лучшая из 3
+    #original_hash: 2342d2b
+    a: Среднее из 5
+    #original_hash: 940c82d
+    m: Среднее из 3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -129,8 +140,20 @@ ru:
       #original_hash: 4c66ad0
       cellName: Комбинированная квалификация
   round:
-    #original_hash: 66e902f
-    name: '%{event} Раунд %{number}'
+    #original_hash: 236c41d
+    name: '%{event_name} %{round_name}'
+  advancement_condition:
+    #original_hash: 6e55337
+    ranking: 'Лучшие %{ranking} участника(ов) проходят в следующий раунд'
+    #original_hash: 7ee969c
+    percent: 'Лучшие %{percent}% участника(ов) проходят в следующий раунд'
+    attempt_result:
+      #original_hash: 1fb7fe1
+      time: 'Участники с лучшей попыткой < %{time} проходят в следующий раунд'
+      #original_hash: 8254f3e
+      moves: 'Участники с лучшей попыткой < %{moves} ходов проходят в следующий раунд'
+      #original_hash: daab86e
+      points: 'Участники с лучшей попыткой > %{points} очков проходят в следующий раунд'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -808,11 +831,6 @@ ru:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
-        #original_hash: da39a3e
-        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -929,10 +947,8 @@ ru:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: >-
-            Используйте %{native_redirect_uri}, если вы хотите добавить
-            localhost URIs.
+          #original_hash: 95c10ec
+          https_info: 'Требуется HTTPS, если адрес не "localhost"'
           #original_hash: 62a0113
           scopes_html: >-
             Scopes разделяются пробелами. Оставьте пустым, чтобы использовать
@@ -1093,6 +1109,43 @@ ru:
         confirm: 'Вы можете подтвердить свой новый email-адрес, открыв эту ссылку:'
         #original_hash: 4900afe
         confirmation_link: Подтвердить email-адрес.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name} подтвердил(а) %{competition}'
+        #original_hash: 3db81b5
+        organizers: 'Уважаемые организаторы %{competition}!'
+        #original_hash: c526fd6
+        confirmed: >-
+          Делегат %{delegate_name} подтвердил %{competition} и отправил заявку
+          Руководству WCA. Как только Руководство WCA одобрит это соревнование,
+          вы получите ещё одно уведомление.
+        #original_hash: dfea09d
+        contact: >-
+          Если у вас есть ещё вопросы, пожалуйста, свяжитесь с Делегатом
+          (Делегатами):
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'Руководство WCA одобрило %{competition}'
+        #original_hash: 8e91977
+        announced: >-
+          Руководство WCA одобрило ваше соревнование, и теперь оно доступно
+          широким массам.
+        #original_hash: 1c20919
+        link: 'Объявление о соревновании доступно по следующей ссылке:'
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'Вас добавили в список организаторов %{competition}'
+        #original_hash: c9d0561
+        intro: 'Здравствуйте, %{name}!'
+        #original_hash: 372b27f
+        information: >-
+          %{confirmer} добавил(а) вас в список организаторов %{competition}. Вы
+          можете редактировать соревнование здесь:
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'Вас удалили из списка организаторов %{competition}'
+        #original_hash: 66cb109
+        information: '%{remover} удалил(а) вас из списка организаторов %{competition}'
     claim_wca_id:
       #original_hash: f28bf87
       title: Затребовать WCA ID
@@ -1967,6 +2020,40 @@ ru:
     show:
       #original_hash: b0fe391
       general_info: Общая информация
+      #original_hash: c5497bc
+      events: Дисциплины
+    events:
+      time_limit_information:
+        #original_hash: 88c5f1a
+        time_limit_html: >-
+          Если во время сборки вы превысите лимит по времени, судья вас
+          остановит, и ваш результат будет DNF (см. %{regulation_link}).
+        #original_hash: 83d204f
+        regulation_link_text: 'Положение %{number}'
+        #original_hash: bd0e4a9
+        guideline_link_text: 'Дополнение %{number}'
+        #original_hash: b2a983a
+        cumulative_time_limit: суммарный лимит по времени
+        #original_hash: d47f11a
+        cumulative_one_round_html: >-
+          Может быть установлен %{cumulative_time_limit} (см.
+          %{regulation_link})
+        #original_hash: c6190b6
+        cumulative_across_rounds_html: >-
+          Может быть установлен %{cumulative_time_limit} для нескольких раундов
+          (см. %{guideline_link})
+        #original_hash: e4e48c6
+        cutoff_html: >-
+          Лимит, который нужно преодолеть, чтобы попасть во вторую часть
+          комбинированного раунда (см. %{regulation_link}).
+      #original_hash: 041a5de
+      format: Формат
+      #original_hash: 0d1fcc3
+      time_limit: Лимит по времени
+      #original_hash: 118de39
+      cutoff: Катофф
+      #original_hash: 02ed4a4
+      proceed: Проходят
     nav:
       menu:
         #original_hash: 612e12d
@@ -2488,18 +2575,20 @@ ru:
     motions: Дополнения к Уставу
     #original_hash: 092f99e
     minutes: Минуты
-    #original_hash: 8d61184
-    policies: Политики
-    #original_hash: cdad4f1
-    dues: Система сборов WCA
-    #original_hash: 7536665
-    logo: Использование Логотипа WCA
-    #original_hash: 920a98f
+    #original_hash: 6db524a
+    policies: WCA Политики
+    #original_hash: ffc646a
+    dues: Система сборов
+    #original_hash: 9e7fbc2
+    logo: Использование Логотипа
+    #original_hash: 900f7c7
     proximity_policy: Политика близких соревнований
-    #original_hash: f484584
+    #original_hash: 0d527c8
     competition_name_policy: Политика названий соревнований
-    #original_hash: c7f7728
+    #original_hash: caccb53
     competition_announcement_policy: Политика объявлений соревнований
+    #original_hash: 32e6959
+    sponsor: Заявление о спонсорах
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Делегаты
