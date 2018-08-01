@@ -68,11 +68,10 @@ RSpec.describe TeamsController do
         sign_in admin
       end
 
-      it 'can change friendly ID' do
+      it 'cannot change friendly ID' do
         patch :update, params: { id: team, team: { friendly_id: "bestteam" } }
         expect(response).to redirect_to edit_team_path(team)
-        team.reload
-        expect(team.friendly_id).to eq "bestteam"
+        expect(team.reload.friendly_id).to_not eq "bestteam"
       end
 
       it 'can add a member' do
