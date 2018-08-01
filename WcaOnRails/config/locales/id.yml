@@ -72,6 +72,17 @@ id:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: 3x3x3 Multi-Blind Old Style
+  formats:
+    #original_hash: e4b3c11
+    '1': Best of 1
+    #original_hash: 778e14d
+    '2': Best of 2
+    #original_hash: 21f623c
+    '3': Best of 3
+    #original_hash: 2342d2b
+    a: Average of 5
+    #original_hash: 940c82d
+    m: Mean of 3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -129,8 +140,20 @@ id:
       #original_hash: 4c66ad0
       cellName: Kualifikasi Gabungan
   round:
-    #original_hash: 66e902f
-    name: '%{event} Ronde %{number}'
+    #original_hash: 236c41d
+    name: '%{event_name} %{round_name}'
+  advancement_condition:
+    #original_hash: 6e55337
+    ranking: 'Ranking %{ranking} besar maju ke babak berikutnya'
+    #original_hash: 7ee969c
+    percent: '%{percent}% kompetitor teratas maju ke babak berikutnya'
+    attempt_result:
+      #original_hash: 1fb7fe1
+      time: 'Solve terbaik < %{time} maju ke babak berikutnya'
+      #original_hash: 8254f3e
+      moves: 'Solve terbaik < %{moves} gerakan maju ke babak berikutnya'
+      #original_hash: daab86e
+      points: 'Solve terbaik > %{points} poin maju ke babak berikutnya'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -803,11 +826,6 @@ id:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
-        #original_hash: da39a3e
-        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1987,6 +2005,41 @@ id:
     show:
       #original_hash: b0fe391
       general_info: Info umum
+      #original_hash: c5497bc
+      events: Cabang
+    events:
+      time_limit_information:
+        #original_hash: 88c5f1a
+        time_limit_html: >-
+          Jika Anda melewati batas waktu saat Anda melakukan solve, Judge akan
+          memberhentikan Anda dan hasil solve Anda akan menjadi DNF (lihat
+          %{regulation_link}).
+        #original_hash: 83d204f
+        regulation_link_text: 'Regulasi %{number}'
+        #original_hash: bd0e4a9
+        guideline_link_text: 'Pedoman %{number}'
+        #original_hash: b2a983a
+        cumulative_time_limit: batas waktu kumulatif
+        #original_hash: d47f11a
+        cumulative_one_round_html: >-
+          %{cumulative_time_limit} dapat diberlakukan secara paksa (lihat
+          %{regulation_link}).
+        #original_hash: c6190b6
+        cumulative_across_rounds_html: >-
+          %{cumulative_time_limit} dapat diberlakukan secara paksa sepanjang
+          babak (lihat %{guideline_link}).
+        #original_hash: e4e48c6
+        cutoff_html: >-
+          Hasil yang perlu dicapai untuk lanjut ke fase kedua babak gabungan
+          (lihat %{regulation_link}).
+      #original_hash: 041a5de
+      format: Format
+      #original_hash: 0d1fcc3
+      time_limit: Batas waktu
+      #original_hash: 118de39
+      cutoff: Cutoff
+      #original_hash: 02ed4a4
+      proceed: Lanjut
     nav:
       menu:
         #original_hash: 612e12d
@@ -2521,18 +2574,20 @@ id:
     motions: Gerakan
     #original_hash: 092f99e
     minutes: Notulensi
-    #original_hash: 8d61184
-    policies: Kebijakan
-    #original_hash: cdad4f1
-    dues: Sistem Iuran WCA
-    #original_hash: 7536665
-    logo: Pemakaian Logo WCA
-    #original_hash: 920a98f
-    proximity_policy: Kebijakan Kedekatan Kompetisi WCA
-    #original_hash: f484584
-    competition_name_policy: Kebijakan Nama Kompetisi WCA
-    #original_hash: c7f7728
-    competition_announcement_policy: Kebijakan Pengumuman Kompetisi WCA
+    #original_hash: 6db524a
+    policies: Kebijakan WCA
+    #original_hash: ffc646a
+    dues: Sistem Iuran
+    #original_hash: 9e7fbc2
+    logo: Pemakaian Logo
+    #original_hash: 900f7c7
+    proximity_policy: Kebijakan Kedekatan Kompetisi
+    #original_hash: 0d527c8
+    competition_name_policy: Kebijakan Nama Kompetisi
+    #original_hash: caccb53
+    competition_announcement_policy: Kebijakan Pengumuman Kompetisi
+    #original_hash: 32e6959
+    sponsor: Pengakuan Sponsor
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegate WCA
@@ -2545,9 +2600,6 @@ id:
       role: Jabatan
       #original_hash: 0f21717
       region: Wilayah
-  disclaimer:
-    #original_hash: 4c4a2e8
-    title: Penolakan
   regional_organizations:
     #original_hash: 37b8fdc
     title: Organisasi Regional
@@ -2779,7 +2831,7 @@ id:
       #original_hash: 36383b1
       content_html: >-
         Bantuan Buku Kerja WCA menghubungkan secara otomatis antara Scramble
-        dengan ronde terkait. Dalam beberapa kasus, seperti banyak berkas
+        dengan babak terkait. Dalam beberapa kasus, seperti banyak berkas
         Scramble yang di-generate, pemilihan harus dilakukan secara manual
         karena terdapat banyak kemungkinan pilihan.
       #original_hash: e869c1e
@@ -2788,21 +2840,21 @@ id:
         <em>Scrambles</em> pada panel ikhtisar lembar.
       #original_hash: 8f4fdfd
       content3_html: >-
-        Hal yang hanya mungkin dilakukan adalah memilih satu ronde dari berkas
-        Scramble untuk ronde yang memiliki hasil. Jika ada situasi di mana
-        Scramble untuk satu ronde di-generate sebagai Scramble untuk ronde
+        Hal yang hanya mungkin dilakukan adalah memilih satu babak dari berkas
+        Scramble untuk babak yang memiliki hasil. Jika ada situasi di mana
+        Scramble untuk satu babak di-generate sebagai Scramble untuk babak
         terpisah pada TNoodle, Anda dapat menggunakan tombol <em>Sunting
         grup...</em> untuk menyunting grup pada berkas Scramble dan pindahkan
-        dari satu ronde ke ronde lainnya atau hapus.
+        dari satu babak ke babak lainnya atau hapus.
       #original_hash: 94353f2
       content4_html: >-
         Pada contoh berikut, kumpulan Scramble ekstra di-generate untuk dua grup
-        pada ronde pertama skewb yang seharusnya untuk satu grup.
+        pada babak pertama skewb yang seharusnya untuk satu grup.
       #original_hash: 68c5b18
       content5_html: >-
-        Scramble untuk grup tambahan dapat ditarik dan ditaruh pada ronde di
+        Scramble untuk grup tambahan dapat ditarik dan diletakkan pada babak di
         mana asal Scramble di-generate. Hal ini menyatukan dua grup pada satu
-        ronde.
+        babak.
     step4:
       #original_hash: ed940d2
       title: 'Langkah 4: Perbaiki segala galat yang dilaporkan oleh aplikasi'
@@ -3111,7 +3163,7 @@ id:
           Kompetitor harus dibagi dalam beberapa grup, Score sheet harus dicetak
           dan harus dipisah berdasarkan pembagian grup. Disarankan untuk membuat
           rencana tentang siapa yang harus menjadi Scrambler untuk setiap grup
-          pada setiap cabang, setidaknya untuk satu ronde. Scrambler harus dapat
+          pada setiap cabang, setidaknya untuk satu babak. Scrambler harus dapat
           dipercaya.
     paragraph9:
       #original_hash: ead44f5
