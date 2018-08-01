@@ -828,11 +828,6 @@ pt-BR:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
-        #original_hash: da39a3e
-        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
