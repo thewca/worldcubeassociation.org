@@ -68,6 +68,13 @@ en:
     "3": "Best of 3"
     "a": "Average of 5"
     "m": "Mean of 3"
+    #context: short name alternative
+    short:
+      "1": "Bo1"
+      "2": "Bo2"
+      "3": "Bo3"
+      "a": "Ao5"
+      "m": "Mo3"
   #context: Round name
   rounds:
     "0":
@@ -131,7 +138,7 @@ en:
       one_round: "%{time} cumulative"
       across_rounds: "%{time} total for %{rounds}"
     333fm: "1 hour"
-    333mbf: "10 minutes per cube"
+    333mbf: "10 minutes per cube, up to 60 minutes"
   #context: Common word used in multiple places on the website
   common:
     continent: "Continent"

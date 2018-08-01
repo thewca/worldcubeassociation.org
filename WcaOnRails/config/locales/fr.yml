@@ -181,7 +181,7 @@ fr:
     #original_hash: f030c3d
     333fm: 1 heure
     #original_hash: 2c2abd5
-    333mbf: 10 minutes par cube
+    333mbf: 10 minutes par cube, au plus 60 minutes
   common:
     #original_hash: 2513cf0
     continent: Continent
