@@ -49,11 +49,11 @@
           </div>
           <div class="clearfix visible-xs visible-sm"></div>
           <% round_format = round_data[:format_name] %>
-          <%= render "schedule_table_responsive_cell", label: t("competitions.schedule.format"), empty: round_format.blank?, md_size: "2" do %>
+          <%= render "schedule_table_responsive_cell", label: t("competitions.events.format"), empty: round_format.blank?, md_size: "2" do %>
             <%= round_format %>
           <% end %>
           <% round_time_limit = round_data[:time_limit] %>
-          <%= render "schedule_table_responsive_cell", label: t("competitions.schedule.time_limit"), empty: round_time_limit.blank? do %>
+          <%= render "schedule_table_responsive_cell", label: t("competitions.events.time_limit"), empty: round_time_limit.blank? do %>
             <%= round_time_limit %>
             <% cumulative_round_ids_length = round_data[:cumulative_round_ids]&.size || 0 %>
             <% if cumulative_round_ids_length == 1 %>
@@ -69,11 +69,11 @@
             <div class="clearfix visible-sm"></div>
           <% end %>
           <% round_cutoff = round_data[:cutoff] %>
-          <%= render "schedule_table_responsive_cell", label: t("competitions.schedule.cutoff"), empty: round_cutoff.blank? do %>
+          <%= render "schedule_table_responsive_cell", label: t("competitions.events.cutoff"), empty: round_cutoff.blank? do %>
             <%= round_cutoff %>
           <% end %>
           <% round_advancement = round_data[:advancement] %>
-          <%= render "schedule_table_responsive_cell", label: t("competitions.schedule.proceed"), empty: round_advancement.blank? do %>
+          <%= render "schedule_table_responsive_cell", label: t("competitions.events.proceed"), empty: round_advancement.blank? do %>
             <%= round_advancement %>
           <% end %>
         </div>

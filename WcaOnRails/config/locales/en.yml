@@ -1159,18 +1159,6 @@ en:
         calendar: "Calendar"
       #context: when selecting the rooms to display on the schedule
       display_for_room: "Display schedule for:"
-      #context: explanation of what time limit and cutoff are
-      time_limit_information:
-        time_limit_html: "If you reach the time limit during your solve, the judge will stop you and your result will be DNF (see %{regulation_link})."
-        #context: as used in "please see Regulation A1a4"
-        regulation_link_text: "Regulation %{number}"
-        #context: as used in "please see Guideline A1a2++"
-        guideline_link_text: "Guideline %{number}"
-        #context: used in the sentence "a cumulative time limit may be enforced [...]"
-        cumulative_time_limit: "cumulative time limit"
-        cumulative_one_round_html: "A %{cumulative_time_limit} may be enforced (see %{regulation_link})."
-        cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{guideline_link})."
-        cutoff_html: "The result to beat to proceed to the second phase of a combined round (see %{regulation_link})."
       #context: when talking about a time frame, like "From 8:00 To 12:00"
       range:
         from: "From"

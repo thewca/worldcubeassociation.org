@@ -1,8 +1,8 @@
 <%# Generate round informations for the competition %>
 <% rounds_by_wcif_id = Hash[competition.rounds.map { |r| [r.wcif_id, r.to_string_map] }] %>
+<%= javascript_pack_tag 'show_schedule' %>
 <script>
-  var roundsByWcifId = <%= raw(rounds_by_wcif_id.to_json) %>;
-  var dataByVenueId = {};
+  let roundsByWcifId = <%= raw(rounds_by_wcif_id.to_json) %>;
 </script>
 <ul class="nav nav-pills nav-justified">
   <% competition.competition_venues.each_with_index do |venue, index| %>
@@ -17,11 +17,11 @@
       activities.map!{ |a| a.to_event(rounds_by_wcif_id) }
     %>
     <script>
-      dataByVenueId["<%= venue.id %>"] = {
+      wca.registerVenueData("<%= venue.id %>", {
         events: <%= raw(activities.to_json) %>,
         minTime: "<%= min_time %>",
         maxTime: "<%= max_time %>",
-      }
+      });
     </script>
     <div class="tab-pane <%= (index == 0) ? "active" : "" %>" id="schedule-venue-<%= venue.id %>" data-venue="<%= venue.id %>">
       <p>
@@ -87,21 +87,8 @@
 
   <%= render "time_limit_div" %>
 </div>
-<script>
-  function fetchCalendarEvents(venueId, start, end, timezone, callback) {
-    // We don't really care about timezone or start/end as we only have events for a specific competition and venue.
-    var venueData = dataByVenueId[venueId];
-    var allEvents = venueData.events;
-    var rooms = $("#room-list-" + venueId).find(".selected");
-    var events = _.flatMap(rooms, function(room) {
-      let roomId = $(room).data("room");
-      return _.filter(allEvents, { roomId });
-    });
-    var selectedEvents = _.map($("#schedule-venue-" + venueId + " .events-filter > span.selected"), e => $(e).data("event").toString());
-    events = _.filter(events, e => selectedEvents.includes(e.activityDetails.event_id));
-    callback(events);
-  }
 
+<script>
   function popoverContentFromData(eventData) {
     let roundId = `${eventData.activityDetails.event_id}-r${eventData.activityDetails.round_number}`;
     let roundData = roundsByWcifId[roundId];
@@ -110,215 +97,26 @@
       return null;
     }
     // If we have round data, format and time limit are mandatory
-    content += `<div class="row"><div class="col-xs-4"><%= t("competitions.schedule.format") %></div><div class="col-xs-8"><strong>${roundData.format_name}</strong></div></div>`;
+    content += `<div class="row"><div class="col-xs-4"><%= t("competitions.events.format") %></div><div class="col-xs-8"><strong>${roundData.format_name}</strong></div></div>`;
     let time_limit_text = roundData.time_limit;
     if (roundData.cumulative_round_ids.length == 1) {
       time_limit_text += `<%= link_to "*", "#cumulative-time-limit" %>`;
     } else if (roundData.cumulative_round_ids.length > 1) {
       time_limit_text += `<%= link_to "**", "#cumulative-across-rounds-time-limit" %>`;
     }
-    content += `<div class="row"><div class="col-xs-4"><%= t("competitions.schedule.time_limit") %></div><div class="col-xs-8"><strong>${time_limit_text}</strong></div></div>`;
+    content += `<div class="row"><div class="col-xs-4"><%= t("competitions.events.time_limit") %></div><div class="col-xs-8"><strong>${time_limit_text}</strong></div></div>`;
     if (roundData.cutoff.length > 0) {
-      content += `<div class="row"><div class="col-xs-4"><%= t("competitions.schedule.cutoff") %></div><div class="col-xs-8"><strong>${roundData.cutoff}</strong></div></div>`;
+      content += `<div class="row"><div class="col-xs-4"><%= t("competitions.events.cutoff") %></div><div class="col-xs-8"><strong>${roundData.cutoff}</strong></div></div>`;
     }
     if (roundData.advancement.length > 0) {
-      content += `<div class="row"><div class="col-xs-4"><%= t("competitions.schedule.proceed") %></div><div class="col-xs-8"><strong>${roundData.advancement}</strong></div></div>`;
+      content += `<div class="row"><div class="col-xs-4"><%= t("competitions.events.proceed") %></div><div class="col-xs-8"><strong>${roundData.advancement}</strong></div></div>`;
     }
     return content;
   }
 
-  function initFullCalendar($elem, venueId) {
-    var venueData = dataByVenueId[venueId];
-    var options = {
-      events: _.partial(fetchCalendarEvents, venueId),
-      eventDataTransform: function(eventData) {
-        if (eventData.activityDetails.event_id.startsWith("other")) {
-          eventData.color = "#666";
-        }
-        return eventData;
-      },
-      eventRender: function(event, element) {
-        let popoverContent = popoverContentFromData(event);
-        if (!popoverContent) {
-          return;
-        }
-        $(element).addClass("has-popover");
-        $(element).click(function(e) {
-          $(this).popover("toggle");
-          e.stopPropagation();
-        });
-        $(element).popover({
-          title: `<strong>${event.title}</strong>`,
-          container: "body",
-          html: true,
-          content: `<div class="round-info-popover">${popoverContentFromData(event)}</div>`,
-          trigger: "manual",
-          placement: "top",
-        });
-      },
-      defaultView: 'agendaForComp',
-      header: false,
-      allDaySlot: false,
-      locale: "<%= I18n.locale %>",
-      minTime: venueData.minTime,
-      maxTime: venueData.maxTime,
-      slotDuration: "00:30:00",
-      height: "auto",
-      defaultDate: "<%= competition.start_date %>",
-      views: {
-        agendaForComp: {
-          type: 'agenda',
-          duration: { days: <%= competition.number_of_days %> },
-          buttonText: 'Calendar',
-        },
-      },
-    }
-    $elem.fullCalendar(options);
-  }
-
-  // Setup click event on "calendar" links (one for each venue)
-  $(".schedule-calendar-link").click(function(e) {
-    e.preventDefault();
-    var venueId = $(this).data("venue");
-    var idSelector = "#schedule-venue-" + venueId;
-    $(idSelector + " .schedule_table_container").hide();
-    $(idSelector + " .schedule-table-link").removeClass("active");
-    $(idSelector + " .schedule_calendar_container").show();
-    $(idSelector + " .schedule-calendar-link").addClass("active");
-    $calendar = $("#calendar-venue-" + venueId);
-    if (!$calendar.hasClass("initialized")) {
-      $calendar.addClass("initialized");
-      initFullCalendar($calendar, venueId);
-    } else {
-      $calendar.fullCalendar("refetchEvents");
-    }
-  });
-
-  // Setup click event on "table" links (one for each venue)
-  $(".schedule-table-link").click(function(e) {
-    e.preventDefault();
-    var venueId = $(this).data("venue");
-    var idSelector = "#schedule-venue-" + venueId;
-    $(idSelector + " .schedule_calendar_container").hide();
-    $(idSelector + " .schedule-calendar-link").removeClass("active");
-    $(idSelector + " .schedule_table_container").show();
-    $(idSelector + " .schedule-table-link").addClass("active");
-  });
-
-  function hidePopovers() {
-    $(".has-popover").popover("hide");
-  }
-
-  // Setup action for enabling/disabling a room in a venue
-  // For the "table", we just need to hide the row matching ".room-roomId"
-  // For the "calendar", we need to refetch events
-  $(".toggle-room").click(function(e) {
-    e.preventDefault();
-    hidePopovers();
-    var $elem = $(this);
-    var roomId = $elem.data("room");
-    var venueId = $elem.data("venue");
-
-    // Toggle the room line's status
-    if ($elem.hasClass("selected")) {
-      $elem.removeClass("selected");
-      $elem.find("input").prop("checked", false);
-      // Action for the "table"
-      $(".room-" + roomId).removeClass("room-selected");
-    } else {
-      $elem.addClass("selected");
-      $elem.find("input").prop("checked", true);
-      // Action for the "table"
-      $(".room-" + roomId).addClass("room-selected");
-    }
-    // Avoid focus on the line
-    $elem.blur();
-
-
-    // Action for the calendar
-    $calendar = $("#calendar-venue-" + venueId);
-    var idSelector = "#schedule-venue-" + venueId;
-    // Refetch event only if calendar is visible
-    if ($(idSelector + " .schedule-calendar-link").hasClass("active")) {
-      if ($calendar.hasClass("initialized")) {
-        $calendar.fullCalendar("refetchEvents");
-      }
-    }
-  });
-
-function recomputeAll() {
-  $(".events-filter .event-all").each(function(index, element) {
-    let $elem = $(element);
-    let all = $elem.parent().find(".cubing-icon");
-    let selected = $elem.parent().find(".cubing-icon.selected");
-    if (all.length != selected.length) {
-      $elem.removeClass("selected");
-    } else {
-      if (!$elem.hasClass("selected")) {
-        $elem.addClass("selected");
-      }
-    }
-  });
-}
-
-
-$(".events-filter .event-all").click(function(e) {
-  let $elem = $(this);
-  let $filter = $elem.parent();
-  if ($elem.hasClass("selected")) {
-    $filter.find(".cubing-icon.selected").each(function(index, element) {
-      $eventElem = $(element);
-      $eventElem.removeClass("selected");
-      let eventId = $eventElem.data("event");
-      $(".schedule-table .event-" + eventId).removeClass("event-selected");
-    });
-    $elem.removeClass("selected");
-  } else {
-    $filter.find(".cubing-icon:not(.selected)").each(function(index, element) {
-      $eventElem = $(element);
-      $eventElem.addClass("selected");
-      let eventId = $eventElem.data("event");
-      $(".schedule-table .event-" + eventId).addClass("event-selected");
-    });
-    $elem.addClass("selected");
-  }
-  let venueId = $elem.parent().data("venue");
-  $calendar = $("#calendar-venue-" + venueId);
-  var idSelector = "#schedule-venue-" + venueId;
-  // Refetch event only if calendar is visible
-  if ($(idSelector + " .schedule-calendar-link").hasClass("active")) {
-    if ($calendar.hasClass("initialized")) {
-      $calendar.fullCalendar("refetchEvents");
-    }
-  }
-});
-
-$(".events-filter span.cubing-icon").click(function(e) {
-  let $elem = $(this);
-  let eventId = $elem.data("event");
-  if ($elem.hasClass("selected")) {
-    $elem.removeClass("selected");
-    // Table action
-    $(".schedule-table .event-" + eventId).removeClass("event-selected");
-  } else {
-    $elem.addClass("selected");
-    // Table action
-    $(".schedule-table .event-" + eventId).addClass("event-selected");
-  }
-  // Calendar action
-  let venueId = $elem.parent().data("venue");
-  $calendar = $("#calendar-venue-" + venueId);
-  var idSelector = "#schedule-venue-" + venueId;
-  // Refetch event only if calendar is visible
-  if ($(idSelector + " .schedule-calendar-link").hasClass("active")) {
-    if ($calendar.hasClass("initialized")) {
-      $calendar.fullCalendar("refetchEvents");
-    }
-  }
-  recomputeAll();
-});
-
-  $('body').click(function(e) {
-    hidePopovers();
+  $(() => {
+    wca.setupCalendarAndFilter(popoverContentFromData, "<%= I18n.locale %>",
+        "<%= competition.start_date %>",
+        <%= competition.number_of_days %>);
   });
 </script>

@@ -81,12 +81,6 @@ class Round < ApplicationRecord
     number == total_number_of_rounds
   end
 
-  def self.parse_wcif_id(wcif_id)
-    event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
-    round_number = round_number.to_i
-    { event_id: event_id, round_number: round_number }
-  end
-
   def name
     I18n.t("round.name", event_name: event.name, round_name: round_type.name)
   end
@@ -101,6 +95,12 @@ class Round < ApplicationRecord
 
   def advancement_condition_to_s
     advancement_condition ? advancement_condition.to_s(self) : ""
+  end
+
+  def self.parse_wcif_id(wcif_id)
+    event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
+    round_number = round_number.to_i
+    { event_id: event_id, round_number: round_number }
   end
 
   def self.wcif_to_round_attributes(wcif, round_number, total_rounds)

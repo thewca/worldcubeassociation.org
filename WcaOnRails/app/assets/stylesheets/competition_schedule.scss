@@ -71,10 +71,10 @@
     margin-bottom: 60px;
     .row {
       display: none;
+      border-bottom: 1px solid #ddd;
       &.room-selected.event-selected {
         display: block;
       }
-      border-bottom: 1px solid #ddd;
       div {
         @media (min-width : 992px){
           padding: 8px;
@@ -128,6 +128,7 @@
     }
   }
 }
+
 // Popover is added to body, can't nest this above
 .round-info-popover {
   .row {
@@ -136,5 +137,29 @@
     .room-name {
       font-style: italic;
     }
+  }
+}
+
+// We want this to be shared both by the show and edit schedule views
+.fc-event {
+  &.fc-short > .fc-content {
+    // By default for vertically short events FC don't display the full time
+    // But we have some width to do so
+    .fc-time {
+      &::before {
+        content: "";
+      }
+      &::after {
+        content: ":\000A0";
+      }
+      span {
+        display: inline-block;
+      }
+    }
+  }
+
+  .fc-bg {
+    // FC applies a white background with opacity .25 to each event, .15 makes it a bit darker
+    opacity: 0.15;
   }
 }
