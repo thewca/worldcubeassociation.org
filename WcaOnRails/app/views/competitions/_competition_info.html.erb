@@ -18,8 +18,10 @@
         <dd><%=md competition.venueDetails %></dd>
       <% end %>
 
-      <dt><%= t '.website' %></dt>
-      <dd><%= link_to "#{competition.name} website", competition.website, target: "_blank" %></dd>
+      <% if competition.external_website %>
+        <dt><%= t '.website' %></dt>
+        <dd><%= link_to "#{competition.name} website", competition.website, target: "_blank" %></dd>
+      <% end %>
 
       <% if competition.organizers.length > 0 %>
         <dt><%= t('.organizer_plural', count: competition.organizers.length) %></dt>
