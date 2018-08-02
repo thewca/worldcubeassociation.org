@@ -696,6 +696,11 @@ class Competition < ApplicationRecord
     !results_posted? && (start_date..end_date).cover?(Date.today)
   end
 
+  def uses_cutoff?
+    cutoff = competition_events.find { |ce| ce.rounds.find { |r| r.cutoff } }
+    !cutoff.nil?
+  end
+
   # The name `is_probably_over` is meant to be surprising.
   # We don't actually know when competitions are over, because we don't know their schedules, nor
   # do we know their timezones.

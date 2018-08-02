@@ -1,3 +1,7 @@
+<%
+  has_cumulative_one_round = false
+  has_cumulative_across_rounds = false
+%>
 <%= wca_table table_class: "show-events-table" do %>
   <thead>
     <tr>
@@ -5,7 +9,9 @@
       <th><%= t("competitions.results_table.round") %></th>
       <th><%= link_to t("competitions.events.format"), "#format" %></th>
       <th><%= link_to t("competitions.events.time_limit"), "#time-limit" %></th>
-      <th><%= link_to t("competitions.events.cutoff"), "#cutoff" %></th>
+      <% if @competition.uses_cutoff? %>
+        <th><%= link_to t("competitions.events.cutoff"), "#cutoff" %></th>
+      <% end %>
       <th><%= t("competitions.events.proceed") %></th>
     </tr>
   <thead>
@@ -30,17 +36,21 @@
             <%= round.time_limit_to_s %>
             <% if competition_event.event.can_change_time_limit? %>
               <% if round.time_limit.cumulative_round_ids.length == 1 %>
+                <% has_cumulative_one_round = true %>
                 <%= link_to "*", "#cumulative-time-limit" %>
               <% elsif round.time_limit.cumulative_round_ids.length > 1 %>
+                <% has_cumulative_across_rounds = true %>
                 <%= link_to "**", "#cumulative-across-rounds-time-limit" %>
               <% end %>
             <% end %>
           </td>
-          <td><%= round.cutoff_to_s %></td>
+          <% if @competition.uses_cutoff? %>
+            <td><%= round.cutoff_to_s %></td>
+          <% end %>
           <td><%= round.advancement_condition_to_s %></td>
         </tr>
       <% end %>
     <% end %>
   </tbody>
 <% end %>
-<%= render "time_limit_div" %>
+<%= render "time_limit_div", show_cumulative_one_round: has_cumulative_one_round, show_cumulative_across_rounds: has_cumulative_across_rounds, show_cutoff: @competition.uses_cutoff? %>
