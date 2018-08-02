@@ -128,9 +128,6 @@ vi:
       name: Vòng loại gộp
       #original_hash: 4c66ad0
       cellName: Vòng loại gộp
-  round:
-    #original_hash: 66e902f
-    name: '%{event} Vòng %{number}'
   cutoff:
     #original_hash: cf458e7
     time:

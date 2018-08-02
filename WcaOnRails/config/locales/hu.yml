@@ -128,9 +128,6 @@ hu:
       name: Kombinált kvalifikáció
       #original_hash: 4c66ad0
       cellName: Kombinált kvalifikáció
-  round:
-    #original_hash: 66e902f
-    name: '%{event} Forduló %{number}'
   cutoff:
     #original_hash: cf458e7
     time:

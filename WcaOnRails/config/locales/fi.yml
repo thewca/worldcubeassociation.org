@@ -128,9 +128,6 @@ fi:
       name: Yhdistetty karsintakierros
       #original_hash: 4c66ad0
       cellName: Yhdistetty karsintakierros
-  round:
-    #original_hash: 66e902f
-    name: '%{event} Kierros %{number}'
   cutoff:
     #original_hash: cf458e7
     time:

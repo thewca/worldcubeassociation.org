@@ -128,9 +128,6 @@ cs:
       name: Kombinovaná kvalifikace
       #original_hash: 4c66ad0
       cellName: Kombinovaná kvalifikace
-  round:
-    #original_hash: 66e902f
-    name: '%{event} Kolo %{number}'
   cutoff:
     #original_hash: cf458e7
     time:

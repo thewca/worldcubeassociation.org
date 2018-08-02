@@ -128,9 +128,6 @@ ja:
       name: 複合予選
       #original_hash: 4c66ad0
       cellName: 複合予選
-  round:
-    #original_hash: 66e902f
-    name: '%{event} %{number} 回戦'
   cutoff:
     #original_hash: cf458e7
     time:
