@@ -38,6 +38,9 @@ export function generateCalendar(eventFetcher, showModalAction, scheduleWcif, ad
     eventAfterRender: (event, element) => {
       if (event.selected) {
         element.addClass("selected-fc-event");
+        // FC automatically add a border color in the "style" attribute based on the event color :(
+        // I couldn't find a way around it, so the simpler is to simply reset it here.
+        element.css("border-color", "");
       }
     },
     eventResizeStart: fullCalendarHandlers.onResizeStart,
