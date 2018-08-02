@@ -11,7 +11,7 @@
   <thead>
 
   <tbody>
-    <% @competition.competition_events.each do |competition_event| %>
+    <% @competition.competition_events.sort_by { |ce| ce.event.rank }.each do |competition_event| %>
       <% competition_event.rounds.each do |round| %>
         <tr class="<%= round.final_round? ? "last-round" : "" %>">
           <td>
