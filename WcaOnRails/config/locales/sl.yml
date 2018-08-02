@@ -128,9 +128,6 @@ sl:
       name: Kombinirane kvalifikacije
       #original_hash: 4c66ad0
       cellName: Kombinirane kvalifikacije
-  round:
-    #original_hash: 66e902f
-    name: '%{event} Runda %{number}'
   cutoff:
     #original_hash: cf458e7
     time:

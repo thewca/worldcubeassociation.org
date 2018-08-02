@@ -128,9 +128,6 @@ it:
       name: Qualificazione combinata
       #original_hash: 4c66ad0
       cellName: Qualificazione combinata
-  round:
-    #original_hash: 66e902f
-    name: '%{event} Round %{number}'
   cutoff:
     #original_hash: cf458e7
     time:

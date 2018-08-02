@@ -128,9 +128,6 @@ ko:
       name: 혼합 예선
       #original_hash: 4c66ad0
       cellName: 혼합 예선
-  round:
-    #original_hash: 66e902f
-    name: '%{event} 라운드 %{number}'
   cutoff:
     #original_hash: cf458e7
     time:
