@@ -20,4 +20,10 @@
     <%= t("competitions.events.time_limit_information.cutoff_html",
           regulation_link: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "9g"), regulations_path + "#9g", target: "_blank")) %>
   </p>
+  <h4 id="format"><%= t("competitions.events.format") %></h4>
+  <p>
+    <%= t("competitions.events.time_limit_information.format_html",
+          link_to_9b: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "9b"), regulations_path + "#9b", target: "_blank"),
+          link_to_9f: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "9f"), regulations_path + "#9f", target: "_blank")) %>
+  </p>
 </div>

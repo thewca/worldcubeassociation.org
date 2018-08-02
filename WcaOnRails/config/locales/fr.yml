@@ -2088,6 +2088,7 @@ fr:
         cutoff_html: >-
           Le score à atteindre pour passer à la deuxième phase d'un tour combiné
           (voir la %{regulation_link}).
+        format_html: "Le format décrit la manière de déterminer le classement des compétiteurs. La liste des formats autorisés par épreuve est donnée dans la %{link_to_9b}. La description de chaque format est disponible dans la %{link_to_9f}."
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
