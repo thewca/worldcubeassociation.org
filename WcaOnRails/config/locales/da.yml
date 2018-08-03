@@ -72,6 +72,17 @@ da:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: 3x3x3 Multi-Blind "Old Style"
+  formats:
+    #original_hash: e4b3c11
+    '1': Bedst af 1
+    #original_hash: 778e14d
+    '2': Bedst af 2
+    #original_hash: 21f623c
+    '3': Bedst af 3
+    #original_hash: 2342d2b
+    a: Gennemsnit af 5
+    #original_hash: 940c82d
+    m: Middelværdi af 3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -128,22 +139,37 @@ da:
       name: Kombineret kvalifikation
       #original_hash: 4c66ad0
       cellName: Kombineret kvalifikation
+  round:
+    #original_hash: 236c41d
+    name: '%{event_name} %{round_name}'
+  advancement_condition:
+    #original_hash: 6e55337
+    ranking: 'Top %{ranking} kommer videre til næste runde'
+    #original_hash: 7ee969c
+    percent: 'Top %{percent}% kommer videre til næste runde'
+    attempt_result:
+      #original_hash: 1fb7fe1
+      time: 'Bedste tid < %{time} kommer videre til næste runde'
+      #original_hash: 8254f3e
+      moves: 'Bedste resultat < %{moves} træk kommer videre til næste runde'
+      #original_hash: daab86e
+      points: 'Bedste resultat > %{points} point kommer videre til næste runde'
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} prøver at få < %{time}'
-      one: '%{count} prøver at få < %{time}'
-      other: '%{count} prøver at få < %{time}'
+      other: '%{count} forsøg til at få under %{time}'
+      one: '%{count} forsøg til at få under %{time}'
+      zero: '%{count} forsøg til at få under %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} prøver at få < %{moves} moves'
-      one: '%{count} prøver at få < %{moves} moves'
-      other: '%{count} prøver at få < %{moves} moves'
+      other: '%{count} forsøg til at få under %{moves} moves'
+      one: '%{count} forsøg til at få under %{moves} moves'
+      zero: '%{count} forsøg til at få under %{moves} moves'
     #original_hash: eba1b97
     points:
-      zero: '%{count} prøver at få > %{points} points'
-      one: '%{count} prøver at få > %{points} points'
-      other: '%{count} prøver at få > %{points} points'
+      other: '%{count} forsøg til at få over %{points} point'
+      one: '%{count} forsøg til at få over %{points} point'
+      zero: '%{count} forsøg til at få over %{points} point'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -153,7 +179,7 @@ da:
     #original_hash: f030c3d
     333fm: 1 time
     #original_hash: 2c2abd5
-    333mbf: 10 minutter per terning
+    333mbf: 10 minutter per terning op til 60 minutter maksimum
   common:
     #original_hash: 2513cf0
     continent: Kontinent
@@ -791,11 +817,6 @@ da:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
-        #original_hash: da39a3e
-        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -910,8 +931,8 @@ da:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: 'Brug %{native_redirect_uri} hvis du vil tilføje "localhost URIs"'
+          #original_hash: 95c10ec
+          https_info: 'HTTPS er nødvendigt, medmindre at hosten er "localhost"'
           #original_hash: 62a0113
           scopes_html: >-
             Opdel scopes med mellemrum. Lad den være tom for at bruge standard
@@ -1970,6 +1991,39 @@ da:
     show:
       #original_hash: b0fe391
       general_info: General info
+      #original_hash: c5497bc
+      events: Discipliner
+    events:
+      time_limit_information:
+        #original_hash: 88c5f1a
+        time_limit_html: >-
+          Hvis du går over tidsgrænsen ("time limit") under din løsning vil
+          dommeren stoppe dig, og dit result vil blive markeret som en DNF (se
+          %{regulation_link}).
+        #original_hash: 83d204f
+        regulation_link_text: 'Regel %{number}'
+        #original_hash: bd0e4a9
+        guideline_link_text: 'Retningslinje %{number}'
+        #original_hash: b2a983a
+        cumulative_time_limit: sammenlagt tidsgrænse
+        #original_hash: d47f11a
+        cumulative_one_round_html: 'En %{cumulative_time_limit} kan blive brugt (se %{regulation_link}).'
+        #original_hash: c6190b6
+        cumulative_across_rounds_html: >-
+          En %{cumulative_time_limit} kan blive brugt over forskelige runder (se
+          %{guideline_link}).
+        #original_hash: e4e48c6
+        cutoff_html: >-
+          Resultatet man være bedre end, for at komme videre til den anden del
+          af den kombinerede runde (se %{regulation_link}).
+      #original_hash: 041a5de
+      format: Format
+      #original_hash: 0d1fcc3
+      time_limit: Tidsgrænse
+      #original_hash: 118de39
+      cutoff: Cutoff
+      #original_hash: 02ed4a4
+      proceed: Krav for at gå videre til næste runde.
     nav:
       menu:
         #original_hash: 612e12d
@@ -2506,18 +2560,20 @@ da:
     motions: Forslag
     #original_hash: 092f99e
     minutes: Referater
-    #original_hash: 8d61184
-    policies: Politikker
-    #original_hash: cdad4f1
-    dues: WCA Afgiftssystemet
-    #original_hash: 7536665
-    logo: Brugen af WCA Logoet
-    #original_hash: 920a98f
-    proximity_policy: WCA Konkurrencers Nærhedspolitik
-    #original_hash: f484584
-    competition_name_policy: WCA Konkurrence Navngivningspolitik
-    #original_hash: c7f7728
-    competition_announcement_policy: WCA Konkurrence Annonceringspolitik
+    #original_hash: 6db524a
+    policies: WCA Politikker
+    #original_hash: ffc646a
+    dues: Afgiftssystemet
+    #original_hash: 9e7fbc2
+    logo: Brugen af Logoet
+    #original_hash: 900f7c7
+    proximity_policy: Konkurrencenærhedspolitik
+    #original_hash: 0d527c8
+    competition_name_policy: Konkurrencenavngivningspolitik
+    #original_hash: caccb53
+    competition_announcement_policy: Konkurrenceannonceringspolitik
+    #original_hash: 32e6959
+    sponsor: Sponsor anerkendelser
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegerede
