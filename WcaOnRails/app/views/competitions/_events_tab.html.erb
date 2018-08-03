@@ -25,11 +25,7 @@
           </td>
           <td><%= round.round_type.name %></td>
           <td>
-            <% if round.cutoff %>
-              <% cutoff_format = Format.c_find!(round.cutoff.number_of_attempts.to_s) %>
-              <span data-toggle="tooltip" title="<%= cutoff_format.name %>"><%= cutoff_format.short_name %></span> /
-            <% end %>
-            <span data-toggle="tooltip" title="<%= round.format.name %>"><%= round.format.short_name %></span>
+            <%= round.full_format_name(true, true) %>
           </td>
           <td>
             <%= round.time_limit_to_s %>
