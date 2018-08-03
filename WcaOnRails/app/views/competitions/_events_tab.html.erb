@@ -25,7 +25,7 @@
           </td>
           <td><%= round.round_type.name %></td>
           <td>
-            <%= round.full_format_name(true, true) %>
+            <%= round.full_format_name(with_short_names: true, with_tooltips: true) %>
           </td>
           <td>
             <%= round.time_limit_to_s %>

@@ -697,8 +697,7 @@ class Competition < ApplicationRecord
   end
 
   def uses_cutoff?
-    cutoff = competition_events.find { |ce| ce.rounds.find { |r| r.cutoff } }
-    !cutoff.nil?
+    competition_events.any? { |ce| ce.rounds.any?(&:cutoff) }
   end
 
   # The name `is_probably_over` is meant to be surprising.
