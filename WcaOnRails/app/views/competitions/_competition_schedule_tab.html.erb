@@ -1,9 +1,6 @@
 <%# Generate round informations for the competition %>
 <% rounds_by_wcif_id = Hash[competition.rounds.map { |r| [r.wcif_id, r.to_string_map] }] %>
 <%= javascript_pack_tag 'show_schedule' %>
-<script>
-  let roundsByWcifId = <%= raw(rounds_by_wcif_id.to_json) %>;
-</script>
 <ul class="nav nav-pills nav-justified">
   <% competition.competition_venues.each_with_index do |venue, index| %>
     <li class="<%= (index == 0) ? "active" : "" %>"><a href="#schedule-venue-<%= venue.id %>" data-toggle="pill"><%= venue.name %></a></li>
@@ -89,6 +86,7 @@
 </div>
 
 <script>
+  let roundsByWcifId = <%= raw(rounds_by_wcif_id.to_json) %>;
   function popoverContentFromData(eventData) {
     let roundId = `${eventData.activityDetails.event_id}-r${eventData.activityDetails.round_number}`;
     let roundData = roundsByWcifId[roundId];

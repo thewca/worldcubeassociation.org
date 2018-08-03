@@ -87,6 +87,7 @@ class ScheduleActivity < ApplicationRecord
 
   # TODO: not a fan of how it works (= passing round information)
   def to_event(rounds_by_wcif_id = {})
+    raise "#to_event called for nested activity" unless holder.is_a?(VenueRoom)
     {
       title: localized_name(rounds_by_wcif_id),
       roomId: holder.id,

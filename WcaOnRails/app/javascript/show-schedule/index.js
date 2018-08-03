@@ -1,9 +1,10 @@
+import events from 'wca/events.js.erb'
 
 const dataByVenueId = {
 };
 
 wca.registerVenueData = (id, venueData) => {
-  dataByVenueId[`${id}`] = venueData;
+  dataByVenueId[id] = venueData;
 }
 
 wca.setupCalendarAndFilter = (popoverContentBuilder, locale, startDate, numberOfDays) => {
@@ -29,36 +30,30 @@ wca.setupCalendarAndFilter = (popoverContentBuilder, locale, startDate, numberOf
 const getCalendarElemId = venueId => `#calendar-venue-${venueId}`;
 const getScheduleElemId = venueId => `#schedule-venue-${venueId}`;
 
+const toggleScheduleView = (venueId, showTable) => {
+  let $scheduleElem = $(getScheduleElemId(venueId));
+  $scheduleElem.find(".schedule_table_container").toggle(showTable);
+  $scheduleElem.find(".schedule_calendar_container").toggle(!showTable);
+  $scheduleElem.find(".schedule-table-link").toggleClass("active", showTable);
+  $scheduleElem.find(".schedule-calendar-link").toggleClass("active", !showTable);
+};
+
 // Setup click event on "table" links (one for each venue)
 const onClickTableLinkAction = e => {
   e.preventDefault();
-  let venueId = $(e.currentTarget).data("venue");
-  let idSelector = getScheduleElemId(venueId);
-  $(idSelector + " .schedule_calendar_container").hide();
-  $(idSelector + " .schedule-calendar-link").removeClass("active");
-  $(idSelector + " .schedule_table_container").show();
-  $(idSelector + " .schedule-table-link").addClass("active");
+  toggleScheduleView($(e.currentTarget).data("venue"), true);
 }
 
 const onClickCalencarLinkAction = (popoverContentBuilder, locale, startDate, numberOfDays, e) => {
   e.preventDefault();
   let venueId = $(e.currentTarget).data("venue");
-  let idSelector = getScheduleElemId(venueId);
-  $(idSelector + " .schedule_table_container").hide();
-  $(idSelector + " .schedule-table-link").removeClass("active");
-  $(idSelector + " .schedule_calendar_container").show();
-  $(idSelector + " .schedule-calendar-link").addClass("active");
-  $calendar = $(getCalendarElemId(venueId));
+  toggleScheduleView(venueId, false);
+  let $calendar = $(getCalendarElemId(venueId));
   if (!$calendar.hasClass("initialized")) {
     $calendar.addClass("initialized");
-    let calendarParams = {
-      locale: locale,
-      venueId: venueId,
-      startDate: startDate,
-      numberOfDays: numberOfDays,
-      popoverContentBuilder: popoverContentBuilder,
-    };
-    initFullCalendar($calendar, calendarParams);
+    initFullCalendar($calendar, {
+      locale, venueId, startDate, numberOfDays, popoverContentBuilder
+    });
   } else {
     $calendar.fullCalendar("refetchEvents");
   }
@@ -71,26 +66,15 @@ const onClickAllAction = e => {
   // The whole filter with all events icons
   let $filter = $allButton.parent();
 
-  if ($allButton.hasClass("selected")) {
-    // If "ALL" was active, we want to unselect all
-    $filter.find(".cubing-icon.selected").each(function(index, element) {
-      $element = $(element);
-      $element.removeClass("selected");
-      let eventId = $element.data("event");
-      // Table view action
-      $(".schedule-table .event-" + eventId).removeClass("event-selected");
-    });
-    $allButton.removeClass("selected");
-  } else {
-    $filter.find(".cubing-icon:not(.selected)").each(function(index, element) {
-      $element = $(element);
-      $element.addClass("selected");
-      let eventId = $element.data("event");
-      // Table view action
-      $(".schedule-table .event-" + eventId).addClass("event-selected");
-    });
-    $allButton.addClass("selected");
-  }
+  let selectAll = !$allButton.hasClass("selected");
+  $allButton.toggleClass("selected", selectAll);
+  $filter.find(".cubing-icon").each((index, element) => {
+    let $element = $(element);
+    $element.toggleClass("selected", selectAll);
+    let eventId = $element.data("event");
+    // Table view action
+    $(".schedule-table .event-" + eventId).toggleClass("event-selected", selectAll);
+  });
   let venueId = $filter.data("venue");
   // Calendar action
   maybeRefreshEvents(venueId);
@@ -105,15 +89,8 @@ const onClickEventIconAction = e => {
   let eventId = $elem.data("event");
 
   // Toggle the event visibility
-  if ($elem.hasClass("selected")) {
-    $elem.removeClass("selected");
-    // Table action
-    $(".schedule-table .event-" + eventId).removeClass("event-selected");
-  } else {
-    $elem.addClass("selected");
-    // Table action
-    $(".schedule-table .event-" + eventId).addClass("event-selected");
-  }
+  $elem.toggleClass("selected");
+  $(".schedule-table .event-" + eventId).toggleClass("event-selected");
 
   // The whole filter with all events icons contains the venue id
   let venueId = $filter.data("venue");
@@ -122,16 +99,10 @@ const onClickEventIconAction = e => {
   maybeRefreshEvents(venueId);
 
   // Now check if we should change the "ALL" buttons status
-  $allButton = $filter.find(".event-all").first();
+  let $allButton = $filter.find(".event-all").first();
   let allEvents = $filter.find(".cubing-icon");
   let selectedEvents = $filter.find(".cubing-icon.selected");
-  if (allEvents.length != selectedEvents.length) {
-    $allButton.removeClass("selected");
-  } else {
-    if (!$allButton.hasClass("selected")) {
-      $allButton.addClass("selected");
-    }
-  }
+  $allButton.toggleClass("selected", allEvents.length === selectedEvents.length);
 }
 
 // Callback when the user click on a room's name
@@ -140,22 +111,15 @@ const onClickOnRoomAction = e => {
   // Starts by hiding all popovers
   $(".has-popover").popover("hide");
 
-  var $room = $(e.currentTarget);
-  var roomId = $room.data("room");
-  var venueId = $room.data("venue");
+  let $room = $(e.currentTarget);
+  let roomId = $room.data("room");
+  let venueId = $room.data("venue");
 
   // Toggle the room line's status
-  if ($room.hasClass("selected")) {
-    $room.removeClass("selected");
-    $room.find("input").prop("checked", false);
-    // Action for the Table view
-    $(".room-" + roomId).removeClass("room-selected");
-  } else {
-    $room.addClass("selected");
-    $room.find("input").prop("checked", true);
-    // Action for the Table view
-    $(".room-" + roomId).addClass("room-selected");
-  }
+  $room.find("input").prop("checked", !$room.hasClass("selected"));
+  $room.toggleClass("selected");
+  // Action for the Table view
+  $(".room-" + roomId).toggleClass("room-selected");
 
   // Avoid focus on the line
   $room.blur();
@@ -165,8 +129,8 @@ const onClickOnRoomAction = e => {
 }
 
 const maybeRefreshEvents = venueId => {
-  $calendar = $(getCalendarElemId(venueId));
-  var idSelector = getScheduleElemId(venueId);
+  let $calendar = $(getCalendarElemId(venueId));
+  let idSelector = getScheduleElemId(venueId);
   // Refetch event only if calendar is visible
   if ($(idSelector + " .schedule-calendar-link").hasClass("active")) {
     if ($calendar.hasClass("initialized")) {
@@ -193,6 +157,8 @@ const initFullCalendar = ($elem, calendarParams) => {
       }
       $element.addClass("has-popover");
       $element.click(e => {
+        // Hide other popovers to only have one at once.
+        $(".has-popover").popover("hide")
         $(e.currentTarget).popover("toggle");
         e.stopPropagation();
       });
@@ -228,16 +194,18 @@ const initFullCalendar = ($elem, calendarParams) => {
 
 // fullCalendar's events fetcher function.
 // 'callback' must be called passing all events that should be rendered on the calendar
-function fetchCalendarEvents(venueId, start, end, timezone, callback) {
+const fetchCalendarEvents = (venueId, start, end, timezone, callback) => {
   // We don't really care about timezone or start/end as we only have events for a specific competition and venue.
-  var venueData = dataByVenueId[venueId];
-  var allEvents = venueData.events;
-  var rooms = $("#room-list-" + venueId).find(".selected");
-  var events = _.flatMap(rooms, function(room) {
-    let roomId = $(room).data("room");
-    return _.filter(allEvents, { roomId });
-  });
-  var selectedEvents = _.map($("#schedule-venue-" + venueId + " .events-filter > span.selected"), e => $(e).data("event").toString());
-  events = _.filter(events, e => selectedEvents.includes(e.activityDetails.event_id));
-  callback(events);
+  let allEvents = dataByVenueId[venueId].events;
+  let rooms = $("#room-list-" + venueId).find(".selected");
+  let calendarEvents = _.flatMap(rooms, room =>
+      _.filter(allEvents, { roomId: $(room).data("room") })
+  );
+  let selectedEvents = _.map($("#schedule-venue-" + venueId + " .events-filter > span.selected"), e => $(e).data("event").toString());
+  // Filter events by id only if they are WCA events (we don't want to filter custom activities for which event_id is "other").
+  let filterableEventIds = Object.keys(events.byId);
+  calendarEvents = _.filter(calendarEvents, e =>
+    selectedEvents.includes(e.activityDetails.event_id) || !filterableEventIds.includes(e.activityDetails.event_id)
+  );
+  callback(calendarEvents);
 }

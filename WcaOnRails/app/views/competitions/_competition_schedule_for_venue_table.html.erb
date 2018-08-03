@@ -3,8 +3,7 @@
 <%#   - activities %>
 <%#   - rounds_by_wcif_id %>
 
-<%# The first 10 chars of iso8601 string are "YYYY-MM-DD" %>
-<% activities_by_day = activities.group_by { |a| a[:start].iso8601[0..9] } %>
+<% activities_by_day = activities.group_by { |a| a[:start].strftime("%Y-%m-%d") } %>
 
 <% competition.start_date.upto(competition.end_date) do |date| %>
   <% activities_for_day = activities_by_day[date.to_s] %>
