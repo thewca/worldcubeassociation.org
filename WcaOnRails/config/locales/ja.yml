@@ -72,6 +72,17 @@ ja:
     mmagic: マスターマジック
     #original_hash: 1843dc4
     333mbo: 3x3x3 複数目隠し(旧スコア)
+  formats:
+    #original_hash: e4b3c11
+    '1': Best of 1
+    #original_hash: 778e14d
+    '2': Best of 2
+    #original_hash: 21f623c
+    '3': Best of 3
+    #original_hash: 2342d2b
+    a: Average of 5
+    #original_hash: 940c82d
+    m: Mean of 3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -128,6 +139,21 @@ ja:
       name: 複合予選
       #original_hash: 4c66ad0
       cellName: 複合予選
+  round:
+    #original_hash: 236c41d
+    name: '%{event_name} %{round_name}'
+  advancement_condition:
+    #original_hash: 6e55337
+    ranking: '上位%{ranking}名が次のラウンドに進出します。'
+    #original_hash: 7ee969c
+    percent: '上位%{percent}%が次のラウンドに進出します。'
+    attempt_result:
+      #original_hash: 1fb7fe1
+      time: '単発%{time}未満を記録した競技者が次のラウンドに進出します。'
+      #original_hash: 8254f3e
+      moves: '単発%{moves}手未満を記録した競技者が次のラウンドに進出します。'
+      #original_hash: daab86e
+      points: '単発記録が%{points}より高い競技者が次のラウンドに進出します。'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -632,6 +658,8 @@ ja:
         #original_hash: da39a3e
         inquiry: ''
         #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
@@ -713,9 +741,6 @@ ja:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -763,6 +788,8 @@ ja:
       contact_form:
         #original_hash: d31ab65
         inquiry: 何に関するお問い合わせですか？
+        #original_hash: 1917f4f
+        competition_id: 大会
         #original_hash: 709a232
         name: 氏名
         #original_hash: 3fa6f5f
@@ -812,6 +839,10 @@ ja:
         メールアドレス認証を完了してください。確認メールが届かない場合は，
         https://www.worldcubeassociation.org/users/confirmation/new
         よりメールアドレスを再登録してください。
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: 新しいメールアドレス認証を完了してください。
   wca:
     errors:
       messages:
@@ -822,8 +853,8 @@ ja:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: 'localhost URI を追加: %{native_redirect_uri}'
+          #original_hash: 95c10ec
+          https_info: ホストがlocalhostでない場合，HTTPSが必須です。
           #original_hash: 62a0113
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
@@ -948,6 +979,58 @@ ja:
       failure: プロフィールを更新できません。
       #original_hash: c29870c
       unavailable: その言語は指定できません。
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: 認証方法
+        #original_hash: 6ee63db
+        welcome: 'ようこそ%{user_email}さん！'
+        #original_hash: da39d05
+        confirm: アカウントが作成されました。利用するには，下記リンクより認証してください。
+        #original_hash: 776476a
+        confirmation_link: アカウント認証
+        #original_hash: d484f70
+        activate: アカウント有効化後，WCAウェブサイトへのログインが可能となります。
+        #original_hash: 333999b
+        addendum: このメールは自動配信です。WCAウェブサイトに登録しておらず，このメールが誤送信と思われる場合は，無視して削除してください。
+        #original_hash: dbc2263
+        questions: '何かご不明な点がございましたら，%{contact_link}までご連絡ください。'
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: 'こんにちは，%{user_email}さん！'
+        #original_hash: 3095365
+        confirm: 下記リンクより，新しいメールアドレスを認証してください。
+        #original_hash: 4900afe
+        confirmation_link: メールアドレスを認証する。
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{competition}の申請は%{delegate_name}により承認されました。'
+        #original_hash: 3db81b5
+        organizers: '%{competition}運営各位'
+        #original_hash: c526fd6
+        confirmed: >-
+          %{competition}は大会代理人%{delegate_name}により確定され，WCA理事に申請が送信されました。WCA理事により大会が告知された際に，再度通知いたします。
+        #original_hash: dfea09d
+        contact: ご不明な点がございましたら，大会代理人までメールにてお問い合わせください：
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'WCA理事は%{competition}を告知しました。'
+        #original_hash: 8e91977
+        announced: WCA理事は大会を承認し，告知しました。
+        #original_hash: 1c20919
+        link: 大会告知は下記リンクをご覧ください。
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'あなたは%{competition}の運営として追加されました。'
+        #original_hash: c9d0561
+        intro: 'こんにちは，%{name}さん。'
+        #original_hash: 372b27f
+        information: 'あなたは%{confirmer}により%{competition}の運営として追加されました。下記リンクより大会を編集できます。'
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'あなたは%{competition}の運営から外されました。'
+        #original_hash: 66cb109
+        information: 'あなたは%{remover}により%{competition}の運営から外されました。'
     claim_wca_id:
       #original_hash: f28bf87
       title: WCA ID 連携
@@ -1679,6 +1762,33 @@ ja:
     show:
       #original_hash: b0fe391
       general_info: お知らせ
+      #original_hash: c5497bc
+      events: 大会競技
+    events:
+      time_limit_information:
+        #original_hash: 88c5f1a
+        time_limit_html: >-
+          試技中に制限タイムを超過した場合，ジャッジは試技を中断し，その試技の記録はDNF（記録なし）となります（%{regulation_link}参照）。
+        #original_hash: 83d204f
+        regulation_link_text: '大会規則%{number}'
+        #original_hash: bd0e4a9
+        guideline_link_text: 'ガイドライン%{number}'
+        #original_hash: b2a983a
+        cumulative_time_limit: 累積制限タイム
+        #original_hash: d47f11a
+        cumulative_one_round_html: '%{cumulative_time_limit}が採用される場合があります（%{regulation_link}参照）。'
+        #original_hash: c6190b6
+        cumulative_across_rounds_html: '%{cumulative_time_limit}がラウンドをまたいで採用される場合があります（%{guideline_link}参照）。'
+        #original_hash: e4e48c6
+        cutoff_html: '複合ラウンドにおいて，第2段階（第2または第3試技以降）を行うための基準（%{regulation_link}参照）。'
+      #original_hash: 041a5de
+      format: 競技形式
+      #original_hash: 0d1fcc3
+      time_limit: 制限タイム
+      #original_hash: 118de39
+      cutoff: カットオフ
+      #original_hash: 02ed4a4
+      proceed: 進出人数
     nav:
       menu:
         #original_hash: 612e12d
@@ -1831,9 +1941,9 @@ ja:
       #original_hash: ac2ac3d
       title: WCA ウェブサイトお問い合わせフォーム
       inquiries:
-        #original_hash: e1d277a
+        #original_hash: 92ea7e8
         competition: 特定の大会に関して（選択してください）
-        #original_hash: f7d3f9f
+        #original_hash: f0bffb7
         competitions_in_general: 大会一般に関して（大会運営、大会ルールに関すること等）
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID や WCA プロフィール
@@ -2126,16 +2236,20 @@ ja:
     motions: 動議
     #original_hash: 092f99e
     minutes: 議事録
-    #original_hash: 8d61184
+    #original_hash: 6db524a
     policies: 政策
-    #original_hash: cdad4f1
+    #original_hash: ffc646a
     dues: WCA Dues について
-    #original_hash: 7536665
+    #original_hash: 9e7fbc2
     logo: WCA ロゴ使用について
-    #original_hash: 920a98f
+    #original_hash: 900f7c7
     proximity_policy: WCA 大会開催地ポリシー
-    #original_hash: f484584
+    #original_hash: 0d527c8
     competition_name_policy: WCA 大会名ポリシー
+    #original_hash: caccb53
+    competition_announcement_policy: 大会告知方針
+    #original_hash: 32e6959
+    sponsor: スポンサー承認
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA 代理人
