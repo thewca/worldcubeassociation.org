@@ -180,8 +180,7 @@ fr:
       across_rounds: '%{time} au total pour les tours suivant : %{rounds}'
     #original_hash: f030c3d
     333fm: 1 heure
-    #original_hash: 2c2abd5
-    333mbf: 10 minutes par cube
+    333mbf: 10:00.00 par cube, au plus 60:00.00
   common:
     #original_hash: 2513cf0
     continent: Continent
@@ -2088,6 +2087,7 @@ fr:
         cutoff_html: >-
           Le score à atteindre pour passer à la deuxième phase d'un tour combiné
           (voir la %{regulation_link}).
+        format_html: "Le format décrit la manière de déterminer le classement des compétiteurs. La liste des formats autorisés par épreuve est donnée dans la %{link_to_9b}. La description de chaque format est disponible dans la %{link_to_9f}."
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3

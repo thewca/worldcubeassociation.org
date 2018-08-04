@@ -68,6 +68,13 @@ en:
     "3": "Best of 3"
     "a": "Average of 5"
     "m": "Mean of 3"
+    #context: short name alternative
+    short:
+      "1": "Bo1"
+      "2": "Bo2"
+      "3": "Bo3"
+      "a": "Ao5"
+      "m": "Mo3"
   #context: Round name
   rounds:
     "0":
@@ -131,7 +138,7 @@ en:
       one_round: "%{time} cumulative"
       across_rounds: "%{time} total for %{rounds}"
     333fm: "1 hour"
-    333mbf: "10 minutes per cube"
+    333mbf: "10:00.00 per cube, up to 60:00.00"
   #context: Common word used in multiple places on the website
   common:
     continent: "Continent"
@@ -1096,7 +1103,7 @@ en:
       events: "Events"
     #context: on the events page
     events:
-      #context: explanation of what time limit and cutoff are
+      #context: explanation of what time limit, cutoff, and format are
       time_limit_information:
         time_limit_html: "If you reach the time limit during your solve, the judge will stop you and your result will be DNF (see %{regulation_link})."
         #context: as used in "please see Regulation A1a4"
@@ -1108,6 +1115,7 @@ en:
         cumulative_one_round_html: "A %{cumulative_time_limit} may be enforced (see %{regulation_link})."
         cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{guideline_link})."
         cutoff_html: "The result to beat to proceed to the second phase of a combined round (see %{regulation_link})."
+        format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
       format: "Format"
       time_limit: "Time limit"
       cutoff: "Cutoff"

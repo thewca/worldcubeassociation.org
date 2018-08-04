@@ -3,7 +3,7 @@
 class Competition < ApplicationRecord
   self.table_name = "Competitions"
 
-  has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
+  has_many :competition_events, dependent: :destroy
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
@@ -694,6 +694,10 @@ class Competition < ApplicationRecord
 
   def in_progress?
     !results_posted? && (start_date..end_date).cover?(Date.today)
+  end
+
+  def uses_cutoff?
+    competition_events.any? { |ce| ce.rounds.any?(&:cutoff) }
   end
 
   # The name `is_probably_over` is meant to be surprising.

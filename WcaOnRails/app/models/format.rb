@@ -13,6 +13,10 @@ class Format < ApplicationRecord
     I18n.t("formats.#{id}", default: self[:name])
   end
 
+  def short_name
+    I18n.t("formats.short.#{id}", default: self[:name])
+  end
+
   def allowed_first_phase_formats
     {
       "1" => [],

@@ -454,7 +454,12 @@ class CompetitionsController < ApplicationController
         # NOTE: we hit this association through competition.has_fees?, which then calls 'has_fee?' on each competition_event, which then use the competition to get the currency.
         competition: [],
         event: [],
-        rounds: [:competition_event, :format],
+        # NOTE: we eventually hit the rounds->competition->competition_event in the TimeLimit 'to_s' method when having cumulative limit across rounds
+        rounds: {
+          competition: { rounds: [:competition_event] },
+          competition_event: [],
+          format: [],
+        },
       },
     }
     @competition = competition_from_params(includes: associations)
