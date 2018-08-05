@@ -200,6 +200,39 @@ class Competition < ApplicationRecord
     end
   end
 
+  validate :schedule_must_match_rounds, if: :confirmed_at_changed?
+  def schedule_must_match_rounds
+    unless has_round? && schedule_includes_rounds?
+      errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
+    end
+  end
+
+  def has_round?
+    rounds.any?
+  end
+
+  def schedule_includes_rounds?
+    # We use activities instead of simply rounds, because for 333mbf and 333fm
+    # we want to check all attempts are scheduled!
+    expected_activity_codes = rounds.flat_map do |r|
+      # Logic similar to "ActivitiesForRound"
+      # from app/javascript/edit-schedule/SchedulesEditor/ActivityPicker.jsx
+      if ["333mbf", "333fm"].include?(r.event.id)
+        (1..r.format.expected_solve_count).map do |i|
+          "#{r.wcif_id}-a#{i}"
+        end
+      else
+        r.wcif_id
+      end
+    end
+    declared_activity_codes = competition_venues.map do |venue|
+      venue.venue_rooms.map do |room|
+        room.schedule_activities.map(&:all_activity_codes)
+      end
+    end.flatten
+    (expected_activity_codes - declared_activity_codes).empty?
+  end
+
   def number_of_days
     (end_date - start_date).to_i + 1
   end
@@ -280,6 +313,13 @@ class Competition < ApplicationRecord
 
       if no_events?
         warnings[:events] = I18n.t('competitions.messages.must_have_events')
+      end
+
+      # NOTE: this will show up on the edit schedule page, and stay even if the
+      # schedule matches when saved. Should we add some logic to not show this
+      # message on the edit schedule page?
+      unless has_round? && schedule_includes_rounds?
+        warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds')
       end
     end
 
