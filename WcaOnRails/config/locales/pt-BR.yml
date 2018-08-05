@@ -83,6 +83,17 @@ pt-BR:
     a: Média de 5
     #original_hash: 940c82d
     m: Média de 3
+    short:
+      #original_hash: c21bc2a
+      '1': Melhor de 1
+      #original_hash: 49e914a
+      '2': Melhor de 2
+      #original_hash: b41f36f
+      '3': Melhor de 3
+      #original_hash: 4a34175
+      a: Média de 5
+      #original_hash: 53ba088
+      m: Média de 3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -182,8 +193,8 @@ pt-BR:
       across_rounds: '%{time} total para %{rounds}'
     #original_hash: f030c3d
     333fm: 1 hora
-    #original_hash: 2c2abd5
-    333mbf: 10 minutos por cubo
+    #original_hash: cc7d8bb
+    333mbf: '10 minutos por cubo, no máximo 60 minutos'
   common:
     #original_hash: 2513cf0
     continent: Continente
@@ -2031,6 +2042,11 @@ pt-BR:
         cutoff_html: >-
           O resultado a ser batido para prosseguir para a segunda fase de uma
           rodada combinada (veja %{regulation_link}).
+        #original_hash: f571a30
+        format_html: >-
+          O formato descreve como é determinado o ranking dos competidores
+          baseado em seus resultados. A lista de formatos permitidos está em
+          %{link_to_9b}. Veja %{link_to_9f} para uma descrição de cada formato.
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3
