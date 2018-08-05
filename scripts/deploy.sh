@@ -125,6 +125,17 @@ rebuild_regs() {
   rm -rf $tmp_dir
 }
 
+update_docs() {
+  public_folder=WcaOnRails/public
+  tmp_dir=/tmp/wca-documents-clone
+
+  rm -rf $tmp_dir
+  git clone --depth=1 https://github.com/thewca/wca-documents.git $tmp_dir
+  rm -rf $public_folder/documents
+  mv $tmp_dir/documents $public_folder
+  rm -rf $tmp_dir
+}
+
 restart_dj() {
   sudo supervisorctl update
   sudo supervisorctl restart workers:*
@@ -155,5 +166,5 @@ fi
 # Workaround for https://github.com/rails/webpacker/issues/773
 export RAILS_ENV=${RACK_ENV}
 
-allowed_commands="pull_latest restart_app restart_dj rebuild_rails rebuild_regs"
+allowed_commands="pull_latest restart_app restart_dj rebuild_rails rebuild_regs update_docs"
 source scripts/_parse_args.sh
