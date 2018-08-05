@@ -21,6 +21,11 @@ RSpec.describe Championship do
       championship = competition.championships.build championship_type: "XE"
       expect(championship).to be_invalid_with_errors(championship_type: ["is not included in the list"])
     end
+
+    it "cannot create a championship for a fictive continent" do
+      championship = competition.championships.build championship_type: "_Multiple Continents"
+      expect(championship).to be_invalid_with_errors(championship_type: ["is not included in the list"])
+    end
   end
 
   describe "name" do

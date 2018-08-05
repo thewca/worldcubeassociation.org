@@ -3,7 +3,7 @@
 class Championship < ApplicationRecord
   CHAMPIONSHIP_TYPES = [
     "world",
-    *Continent.c_all_by_id.keys,
+    *Continent.real.map(&:id),
     *Country.real.map(&:iso2),
     *EligibleCountryIso2ForChampionship.championship_types,
   ].freeze
