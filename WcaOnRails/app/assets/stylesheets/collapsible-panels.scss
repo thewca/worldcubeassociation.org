@@ -15,7 +15,8 @@
  * Make collapse link fill up entire panel-title
  * Copied from http://stackoverflow.com/a/20188613
  */
-.panel-title a[data-toggle="collapse"] {
+.panel-title a[data-toggle="collapse"],
+.panel-title a.full-space {
   display: block;
   padding: 10px 15px;
   margin: -10px -15px;
