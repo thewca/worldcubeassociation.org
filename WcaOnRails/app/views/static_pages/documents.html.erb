@@ -3,23 +3,56 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <h3><%= link_to t('documents.bylaws'), "/documents/WCA Bylaws 2017-12-12.pdf" %></h3>
-
-  <h3><%= link_to t('documents.motions'), "/documents/Public Table of Contents.pdf" %></h3>
-
-  <h3><%= t('documents.minutes') %></h3>
-  <ul>
-    <li><%= link_to "WCA Minutes Log", "https://docs.google.com/spreadsheets/d/1SeojQM8xYhQFmZcyM13T67mQU1TBdgvghpuMhrFxGPo/edit?usp=sharing" %></li>
-    <li><%= link_to "WCA Board Founding Meeting - 2017-12-12", "/documents/WCA Board Meeting 2017-12-12 Public.pdf" %></li>
-    <li><%= link_to "WCA Board Meeting - 2018-01-16", "/documents/WCA Board Meeting 2018-01-16.pdf" %></li>
-  </ul>
-  <h3><%= t('documents.policies') %></h3>
-  <ul>
-    <li><%= link_to t('documents.competition_announcement_policy'), "/documents/WCA Competition Announcement Policy.pdf" %></li>
-    <li><%= link_to t('documents.competition_name_policy'), "/documents/WCA Competition Name Policy.pdf" %></li>
-    <li><%= link_to t('documents.proximity_policy'), "/documents/WCA Competition Proximity Policy.pdf" %></li>
-    <li><%= link_to t('documents.dues'), "/documents/WCA Dues System.pdf" %></li>
-    <li><%= link_to t('documents.logo'), "/documents/WCA Logo Usage.pdf" %></li>
-    <li><%= link_to t('documents.sponsor'), "/documents/WCA Sponsor Acknowledgments.pdf" %></li>
-  </ul>
+  <div id="accordion" class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading heading-as-link">
+        <h4 class="panel-title">
+          <%= link_to icon("file-text", t('documents.bylaws')), "/documents/WCA Bylaws 2017-12-12.pdf", class: "full-space" %>
+        </h4>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading heading-as-link">
+        <h4 class="panel-title">
+          <%= link_to icon("list-ul", t('documents.motions')), "#motions", data: { toggle: "collapse", parent: "#accordion" } %>
+        </h4>
+      </div>
+      <div id="motions" class="panel-collapse collapse">
+        <div class="panel-body">
+          <ul>
+            <%= documents_list("motions") %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading  heading-as-link">
+        <h4 class="panel-title">
+          <%= link_to icon("list-ul", t('documents.minutes')), "#minutes", data: { toggle: "collapse", parent: "#accordion" } %>
+        </h4>
+      </div>
+      <div id="minutes" class="panel-collapse collapse">
+        <div class="panel-body">
+          <ul>
+            <li><%= link_to "WCA Minutes Log", "https://docs.google.com/spreadsheets/d/1SeojQM8xYhQFmZcyM13T67mQU1TBdgvghpuMhrFxGPo/edit?usp=sharing" %></li>
+            <%= documents_list("minutes") %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading  heading-as-link">
+        <h4 class="panel-title">
+          <%= link_to icon("list-ul", t('documents.policies')), "#policies", data: { toggle: "collapse", parent: "#accordion" } %>
+        </h4>
+      </div>
+      <div id="policies" class="panel-collapse collapse">
+        <div class="panel-body">
+          <ul>
+            <%= documents_list("policies") %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -10,6 +10,9 @@ regulations/
 !WcaOnRails/app/views/regulations/history/*.erb
 WcaOnRails/app/views/regulations-todelete/
 
+# WCA Documents
+WcaOnRails/public/documents/*
+
 # acme.sh stuff
 WcaOnRails/public/.well-known/
 
@@ -29,4 +32,3 @@ webroot/forum/files/*
 webroot/forum/images/avatars/gallery/*
 webroot/forum/images/avatars/upload/*
 webroot/forum/store/*
-
