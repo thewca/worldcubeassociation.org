@@ -83,6 +83,17 @@ ru:
     a: Среднее из 5
     #original_hash: 940c82d
     m: Среднее из 3
+    short:
+      #original_hash: c21bc2a
+      '1': Bo1
+      #original_hash: 49e914a
+      '2': Bo2
+      #original_hash: b41f36f
+      '3': Bo3
+      #original_hash: 4a34175
+      a: Ao5
+      #original_hash: 53ba088
+      m: Mo3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -184,8 +195,8 @@ ru:
       across_rounds: 'Суммарно %{time} на %{rounds}'
     #original_hash: f030c3d
     333fm: 1 час
-    #original_hash: 2c2abd5
-    333mbf: 10 минут на куб
+    #original_hash: cc7d8bb
+    333mbf: '10 минут на куб, до 60:00.00'
   common:
     #original_hash: 2513cf0
     continent: Континент
@@ -2046,6 +2057,11 @@ ru:
         cutoff_html: >-
           Лимит, который нужно преодолеть, чтобы попасть во вторую часть
           комбинированного раунда (см. %{regulation_link}).
+        #original_hash: f571a30
+        format_html: >-
+          Формат определяет ранжирование участников на основе их результатов.
+          Список допустимых форматов для каждой дисциплины описан в
+          %{link_to_9b}. Описание каждого формата см. %{link_to_9f}.
       #original_hash: 041a5de
       format: Формат
       #original_hash: 0d1fcc3
