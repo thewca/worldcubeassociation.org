@@ -83,6 +83,17 @@ ja:
     a: Average of 5
     #original_hash: 940c82d
     m: Mean of 3
+    short:
+      #original_hash: c21bc2a
+      '1': Bo1
+      #original_hash: 49e914a
+      '2': Bo2
+      #original_hash: b41f36f
+      '3': Bo3
+      #original_hash: 4a34175
+      a: Ao5
+      #original_hash: 53ba088
+      m: Mo3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -175,7 +186,7 @@ ja:
       across_rounds: '%{rounds} で合計 %{time}'
     #original_hash: f030c3d
     333fm: 1時間
-    #original_hash: 2c2abd5
+    #original_hash: cc7d8bb
     333mbf: 1個あたり10分
   common:
     #original_hash: 2513cf0
@@ -339,8 +350,7 @@ ja:
         #original_hash: b37456c
         contact: 連絡先
         #original_hash: 0eb5ed5
-        information: 情報
-        #original_hash: 87b7d5f
+        information: 概要        #original_hash: 87b7d5f
         use_wca_registration: 参加申し込みに WCA ウェブサイトを使用する
         #original_hash: a2dfcf8
         competitor_limit_enabled: 大会定員を設定する。
@@ -1780,7 +1790,12 @@ ja:
         #original_hash: c6190b6
         cumulative_across_rounds_html: '%{cumulative_time_limit}がラウンドをまたいで採用される場合があります（%{guideline_link}参照）。'
         #original_hash: e4e48c6
-        cutoff_html: '複合ラウンドにおいて，第2段階（第2または第3試技以降）を行うための基準（%{regulation_link}参照）。'
+        cutoff_html: '複合ラウンドにおいて，第2段階（第2または第3試技以降）を行うための条件（%{regulation_link}参照）。'
+        #original_hash: f571a30
+        format_html: >-
+          競技形式は，計測結果をどう計算して順位を決定するのかを決めたものです。競技形式の一覧は%{link_to_9b}をご覧ください。（Ao5
+          (Average of 5) : 5回の記録のベストとワーストを除く3回の平均，Bo3 (Best of 3) :
+          3回の記録のベスト，Mo3 (Mean of 3) : 3回の記録の平均，詳細は%{link_to_9f}参照）
       #original_hash: 041a5de
       format: 競技形式
       #original_hash: 0d1fcc3
@@ -1935,7 +1950,7 @@ ja:
     #original_hash: 2a7da42
     confirm_delete_post: この投稿を削除してよいですか？削除は元に戻せません。
     #original_hash: 3dcbf6d
-    announcement_info_html: '%{author_name}によって%{date_time}に公開されています'
+    announcement_info_html: '%{author_name}によって%{date_time}に公開されました'
   contacts:
     website:
       #original_hash: ac2ac3d
