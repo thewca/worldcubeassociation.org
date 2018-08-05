@@ -74,6 +74,13 @@ class ScheduleActivity < ApplicationRecord
     end
   end
 
+  # Get this activity's activity_code and all of its nested activities
+  # NOTE: as is, the WCA schedule editor doesn't support nested activities, but this
+  # doesn't prevent anyone from submitting a WCIF with 333fm-a1 nested in 333fm (for instance).
+  def all_activity_codes
+    [activity_code, child_activities.map(&:all_activity_codes)].flatten
+  end
+
   def to_wcif
     {
       "id" => wcif_id,

@@ -3,8 +3,17 @@
 class Round < ApplicationRecord
   belongs_to :competition_event
   has_one :competition, through: :competition_event
+
   has_one :event, through: :competition_event
+  # CompetitionEvent uses the cached value
+  delegate :event, to: :competition_event
+
+  # For the following association, we want to keep it to be able to do some joins,
+  # but we definitely want to use cached values when directly using the method.
   belongs_to :format
+  def format
+    Format.c_find(format_id)
+  end
 
   delegate :can_change_time_limit?, to: :event
 
@@ -36,10 +45,6 @@ class Round < ApplicationRecord
     if final_round? && advancement_condition
       errors.add(:advancement_condition, "cannot be set on a final round")
     end
-  end
-
-  def event
-    Event.c_find(competition_event.event_id)
   end
 
   # Compute a round type id from round information

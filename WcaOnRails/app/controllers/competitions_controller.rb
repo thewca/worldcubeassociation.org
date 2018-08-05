@@ -4,6 +4,15 @@ class CompetitionsController < ApplicationController
   include ApplicationHelper
 
   PAST_COMPETITIONS_DAYS = 90
+  CHECK_SCHEDULE_ASSOCIATIONS = {
+    rounds: [:competition_event],
+    competition_venues: {
+      venue_rooms: {
+        schedule_activities: [:child_activities],
+      },
+    },
+  }.freeze
+
   before_action :authenticate_user!, except: [
     :index,
     :show,
@@ -345,7 +354,12 @@ class CompetitionsController < ApplicationController
   end
 
   def edit_events
-    @competition = competition_from_params(includes: [:events, competition_events: { rounds: [:competition_event] }])
+    associations = CHECK_SCHEDULE_ASSOCIATIONS.merge(
+      competition_events: {
+        rounds: [:competition_event],
+      },
+    )
+    @competition = competition_from_params(includes: associations)
   end
 
   def edit_schedule
@@ -353,7 +367,7 @@ class CompetitionsController < ApplicationController
   end
 
   def update_events
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     if @competition.update_attributes(competition_params)
       flash[:success] = t('.update_success')
       redirect_to edit_events_path(@competition)
@@ -369,7 +383,7 @@ class CompetitionsController < ApplicationController
   end
 
   def admin_edit
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = true
     @competition_organizer_view = false
     @nearby_competitions = get_nearby_competitions(@competition)
@@ -377,7 +391,7 @@ class CompetitionsController < ApplicationController
   end
 
   def edit
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = false
     @competition_organizer_view = true
     @nearby_competitions = get_nearby_competitions(@competition)
@@ -385,7 +399,7 @@ class CompetitionsController < ApplicationController
   end
 
   def payment_setup
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
 
     client = create_stripe_oauth_client
     oauth_params = {
@@ -464,7 +478,6 @@ class CompetitionsController < ApplicationController
         rounds: {
           competition: { rounds: [:competition_event] },
           competition_event: [],
-          format: [],
         },
       },
       rounds: {
@@ -488,7 +501,7 @@ class CompetitionsController < ApplicationController
   end
 
   def update
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @competition_organizer_view = !@competition_admin_view
 
