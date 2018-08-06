@@ -329,15 +329,15 @@ autoprefixer@^7.1.1:
     postcss "^6.0.14"
     postcss-value-parser "^3.2.3"
 
-autoprefixer@^9.0.1:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.0.1.tgz#b5b74aba3fa60b4f1403729e46a6a1246f16818f"
+autoprefixer@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.1.0.tgz#566a70d1148046b96b31efa08090f1999ffb6d8c"
   dependencies:
     browserslist "^4.0.1"
-    caniuse-lite "^1.0.30000865"
+    caniuse-lite "^1.0.30000872"
     normalize-range "^0.1.2"
     num2fraction "^1.2.2"
-    postcss "^7.0.1"
+    postcss "^7.0.2"
     postcss-value-parser "^3.2.3"
 
 aws-sign2@~0.6.0:
@@ -1368,6 +1368,10 @@ caniuse-lite@^1.0.30000835:
 caniuse-lite@^1.0.30000865:
   version "1.0.30000865"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000865.tgz#70026616e8afe6e1442f8bb4e1092987d81a2f25"
+
+caniuse-lite@^1.0.30000872:
+  version "1.0.30000874"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000874.tgz#a641b1f1c420d58d9b132920ef6ba87bbdcd2223"
 
 case-sensitive-paths-webpack-plugin@^2.1.2:
   version "2.1.2"
@@ -5219,7 +5223,7 @@ postcss@^6, postcss@^6.0, postcss@^6.0.0, postcss@^6.0.1, postcss@^6.0.11, postc
     source-map "^0.6.1"
     supports-color "^5.4.0"
 
-postcss@^7.0.1:
+postcss@^7.0.2:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.2.tgz#7b5a109de356804e27f95a960bef0e4d5bc9bb18"
   dependencies:
