@@ -126,14 +126,13 @@ rebuild_regs() {
 }
 
 update_docs() {
-  public_folder=WcaOnRails/public
+  documents_folder=WcaOnRails/public/documents
   tmp_dir=/tmp/wca-documents-clone
 
   rm -rf $tmp_dir
-  git clone --depth=1 https://github.com/thewca/wca-documents.git $tmp_dir
-  rm -rf $public_folder/documents
-  mv $tmp_dir/documents $public_folder
-  rm -rf $tmp_dir
+  git clone --depth=1 --branch=build https://github.com/thewca/wca-documents.git $tmp_dir
+  rm -rf $documents_folder
+  mv $tmp_dir $documents_folder
 }
 
 restart_dj() {
