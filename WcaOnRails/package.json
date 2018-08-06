@@ -32,7 +32,7 @@
     "react-dom": "^16.4.1",
     "react-google-maps": "^9.4.5",
     "resolve-url-loader": "^2.3.0",
-    "sass-loader": "^7.0.3",
+    "sass-loader": "^7.1.0",
     "simplemde": "^1.11.2",
     "style-loader": "^0.21.0",
     "webpack": "^3.11.0",
