@@ -83,6 +83,17 @@ pl:
     a: Average of 5
     #original_hash: 940c82d
     m: Mean of 3
+    short:
+      #original_hash: c21bc2a
+      '1': Bo1
+      #original_hash: 49e914a
+      '2': Bo2
+      #original_hash: b41f36f
+      '3': Bo3
+      #original_hash: 4a34175
+      a: Ao5
+      #original_hash: 53ba088
+      m: Mo3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -184,8 +195,8 @@ pl:
       across_rounds: '%{time} łącznie na %{rounds}'
     #original_hash: f030c3d
     333fm: 1 godzina
-    #original_hash: 2c2abd5
-    333mbf: 10 minut na kostkę
+    #original_hash: cc7d8bb
+    333mbf: '10 minut na kostkę, do 60:00.00'
   common:
     #original_hash: 2513cf0
     continent: Kontynent
@@ -843,11 +854,6 @@ pl:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
-        #original_hash: da39a3e
-        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -2093,6 +2099,12 @@ pl:
         cutoff_html: >-
           Rezultat który należy pokonać, aby przejść do drugiej fazy rundy
           kombinowanej (zobacz %{regulation_link}).
+        #original_hash: f571a30
+        format_html: >-
+          Format określa na jakiej podstawie ustalany jest ranking zawodników w
+          oparciu o ich wyniki. Listę dopuszczalnych formatów dla każdej z
+          konkurencji opisje %{link_to_9b}. Zobacz %{link_to_9f} opisujący każdy
+          z formatów.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
