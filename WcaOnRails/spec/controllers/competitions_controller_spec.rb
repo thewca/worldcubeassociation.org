@@ -1193,4 +1193,39 @@ RSpec.describe CompetitionsController do
       end
     end
   end
+
+  describe 'GET #edit_schedule' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        get :edit_schedule, params: { id: competition }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as a regular user' do
+      sign_in { FactoryBot.create :user }
+
+      it 'does not allow access' do
+        expect {
+          get :edit_schedule, params: { id: competition }
+        }.to raise_error(ActionController::RoutingError)
+      end
+    end
+
+    context 'when signed in as a competition delegate' do
+      before do
+        sign_in competition.delegates.first
+      end
+
+      it 'display the page' do
+        # NOTE: we test the javascript part renders in the feature spec!
+        get :edit_schedule, params: { id: competition }
+        expect(response.status).to eq 200
+        expect(assigns(:competition)).to eq competition
+      end
+    end
+
+  end
 end
