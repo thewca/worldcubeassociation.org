@@ -83,6 +83,17 @@ fr:
     a: Moyenne élaguée des 5
     #original_hash: 940c82d
     m: Moyenne des 3
+    short:
+      #original_hash: c21bc2a
+      '1': Bo1
+      #original_hash: 49e914a
+      '2': Bo2
+      #original_hash: b41f36f
+      '3': Bo3
+      #original_hash: 4a34175
+      a: Ao5
+      #original_hash: 53ba088
+      m: Mo3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -180,7 +191,8 @@ fr:
       across_rounds: '%{time} au total pour les tours suivant : %{rounds}'
     #original_hash: f030c3d
     333fm: 1 heure
-    333mbf: 10:00.00 par cube, au plus 60:00.00
+    #original_hash: cc7d8bb
+    333mbf: '10:00.00 par cube, jusqu''à 60:00.00'
   common:
     #original_hash: 2513cf0
     continent: Continent
@@ -839,11 +851,6 @@ fr:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
-        #original_hash: da39a3e
-        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -2087,7 +2094,12 @@ fr:
         cutoff_html: >-
           Le score à atteindre pour passer à la deuxième phase d'un tour combiné
           (voir la %{regulation_link}).
-        format_html: "Le format décrit la manière de déterminer le classement des compétiteurs. La liste des formats autorisés par épreuve est donnée dans la %{link_to_9b}. La description de chaque format est disponible dans la %{link_to_9f}."
+        #original_hash: f571a30
+        format_html: >-
+          Le format décrit la manière de déterminer le classement des
+          compétiteurs. La liste des formats autorisés par épreuve est donnée
+          dans la %{link_to_9b}. La description de chaque format est disponible
+          dans la %{link_to_9f}.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
