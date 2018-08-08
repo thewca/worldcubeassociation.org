@@ -1219,13 +1219,12 @@ RSpec.describe CompetitionsController do
         sign_in competition.delegates.first
       end
 
-      it 'display the page' do
+      it 'displays the page' do
         # NOTE: we test the javascript part renders in the feature spec!
         get :edit_schedule, params: { id: competition }
         expect(response.status).to eq 200
         expect(assigns(:competition)).to eq competition
       end
     end
-
   end
 end

@@ -36,7 +36,7 @@ export class EditRoom extends React.Component {
     return (
       <div className="row room-row">
         <div className="col-xs-9">
-          <input type="text" className="form-control" value={roomWcif.name} onChange={this.handleNameChange} />
+          <input type="text" className="room-name-input form-control" value={roomWcif.name} onChange={this.handleNameChange} />
         </div>
         <div className="col-xs-3">
           <a href="#" onClick={removeRoomAction} className="btn btn-danger pull-right"><i className="fa fa-trash"></i></a>

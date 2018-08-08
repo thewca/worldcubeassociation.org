@@ -68,6 +68,18 @@ FactoryBot.define do
       end
     end
 
+    trait :with_rounds do
+      after(:create) do |competition|
+        competition.competition_events.each do |ce|
+          ce.rounds.create!(
+            format: ce.event.preferred_formats.first.format,
+            number: 1,
+            total_number_of_rounds: 1,
+          )
+        end
+      end
+    end
+
     use_wca_registration false
     registration_open 2.weeks.ago.change(usec: 0)
     registration_close 1.week.ago.change(usec: 0)
@@ -110,6 +122,8 @@ FactoryBot.define do
         competition.championships.create!(championship_type: championship_type)
       end
       if evaluator.with_schedule
+        # room id in wcif for a competition are unique, so we need to have a global counter
+        current_room_id = 1
         2.times do |i|
           venue_attributes = {
             name: "Venue #{i+1}",
@@ -121,9 +135,10 @@ FactoryBot.define do
           venue = competition.competition_venues.create!(venue_attributes)
           (i+1).times do |j|
             room_attributes = {
-              wcif_id: j+1,
+              wcif_id: current_room_id,
               name: "Room #{j+1} for venue #{i+1}",
             }
+            current_room_id += 1
             venue.venue_rooms.create!(room_attributes)
           end
           if i == 0
