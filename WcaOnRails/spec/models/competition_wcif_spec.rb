@@ -196,13 +196,13 @@ RSpec.describe "Competition WCIF" do
               "timezone" => "Europe/Paris",
               "rooms" => [
                 {
-                  "id" => 1,
+                  "id" => 2,
                   "name" => "Room 1 for venue 2",
                   "color" => VenueRoom::DEFAULT_ROOM_COLOR,
                   "activities" => [],
                 },
                 {
-                  "id" => 2,
+                  "id" => 3,
                   "name" => "Room 2 for venue 2",
                   "color" => VenueRoom::DEFAULT_ROOM_COLOR,
                   "activities" => [],

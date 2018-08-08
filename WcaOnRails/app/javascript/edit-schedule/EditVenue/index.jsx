@@ -108,7 +108,7 @@ const NameInput = ({name, actionHandler}) => (
       <span className="venue-form-label control-label">Name:</span>
     </Col>
     <Col xs={9}>
-      <input type="text" className="form-control" value={name} onChange={e => actionHandler(e, "name")} />
+      <input type="text" className="venue-name-input form-control" value={name} onChange={e => actionHandler(e, "name")} />
     </Col>
   </Row>
 );
@@ -194,8 +194,8 @@ const NewRoom = ({ newRoomAction }) => (
 function addRoomToVenue(venueWcif, competitionInfo) {
   venueWcif.rooms.push({
     id: newRoomId(),
-    // Venue details is an optional field
-    name: competitionInfo.venueDetails.length > 0 ? competitionInfo.venueDetails : "Room's name",
+    // Venue details is an optional (nullable) field
+    name: competitionInfo.venueDetails ? competitionInfo.venueDetails : "Room's name",
     color: defaultRoomColor,
     activities: [],
   });
