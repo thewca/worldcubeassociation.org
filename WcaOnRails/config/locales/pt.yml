@@ -83,6 +83,17 @@ pt:
     a: Média de 5
     #original_hash: 940c82d
     m: Média de 3
+    short:
+      #original_hash: c21bc2a
+      '1': Bo1
+      #original_hash: 49e914a
+      '2': Bo2
+      #original_hash: b41f36f
+      '3': Bo3
+      #original_hash: 4a34175
+      a: Ao5
+      #original_hash: 53ba088
+      m: Mo3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -178,8 +189,8 @@ pt:
       across_rounds: '%{time} total para %{rounds}'
     #original_hash: f030c3d
     333fm: 1 hora
-    #original_hash: 2c2abd5
-    333mbf: 10 minutos por cubo
+    #original_hash: cc7d8bb
+    333mbf: '10:00.00 por cubo, até 60:00.00'
   common:
     #original_hash: 2513cf0
     continent: Continente
@@ -823,11 +834,6 @@ pt:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
-        #original_hash: da39a3e
-        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -2030,6 +2036,12 @@ pt:
         cutoff_html: >-
           O resultado a bater para seguir para a segunda fase de uma ronda
           combinada (ver %{regulation_link}).
+        #original_hash: f571a30
+        format_html: >-
+          O formato descreve como se determina o ranking de competidores com
+          base nos seus resultados. A lista de formatos permitidos por evento é
+          descrita em %{link_to_9b}. Ver %{link_to_9f} para uma descrição de
+          cada formato.
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3
@@ -2549,6 +2561,9 @@ pt:
           qualidade para garantir processos consistentes de alta qualidade,
           Staff da WCA, Organizações Regionais, Organizadores de Competições e
           Staff de Competições.
+      banned:
+        #original_hash: d30e2e5
+        name: Competidores Banidos
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>Delegado da WCA</strong> é o papel definido nas Moções da WCA
