@@ -2561,6 +2561,9 @@ pt-BR:
           qualidade para garantir uma consistente alta qualidade dos processos,
           do Staff da WCA, Organizações Regionais, Organizadores e Competição e
           Staff de Competição.
+      banned:
+        #original_hash: d30e2e5
+        name: Competidores Suspensos ou Banidos
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>Delegado da WCA</strong> é uma função definida nas Moções
