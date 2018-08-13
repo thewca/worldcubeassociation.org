@@ -551,6 +551,10 @@ class User < ApplicationRecord
     admin? || communication_team?
   end
 
+  def can_see_eligible_voters?
+    can_admin_results? || team_leader?(Team.wec)
+  end
+
   def get_cannot_delete_competition_reason(competition)
     # Only allow results admins and competition delegates to delete competitions.
     if !can_manage_competition?(competition)

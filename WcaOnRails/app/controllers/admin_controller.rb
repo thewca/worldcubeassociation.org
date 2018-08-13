@@ -4,7 +4,8 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: [:voters]
+  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: [:voters]
 
   before_action :compute_navbar_data
   def compute_navbar_data
