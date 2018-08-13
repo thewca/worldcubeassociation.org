@@ -24,5 +24,7 @@ class Championship < ApplicationRecord
 
     country = Country.find_by_iso2(championship_type)
     return "National Championship for #{country.name}" if country
+
+    "Championship for #{championship_type}"
   end
 end
