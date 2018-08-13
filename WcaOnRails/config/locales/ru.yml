@@ -2563,6 +2563,9 @@ ru:
           качества для обеспечения постоянного высокого качества процессов,
           персонала WCA, региональных организаций, организаторов соревнований и
           персонала соревнований.
+      banned:
+        #original_hash: d30e2e5
+        name: Забаненные участники
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>WCA Делегат</strong> &mdash; это роль, определяемая
@@ -2593,18 +2596,6 @@ ru:
     minutes: Минуты
     #original_hash: 6db524a
     policies: WCA Политики
-    #original_hash: ffc646a
-    dues: Система сборов
-    #original_hash: 9e7fbc2
-    logo: Использование Логотипа
-    #original_hash: 900f7c7
-    proximity_policy: Политика близких соревнований
-    #original_hash: 0d527c8
-    competition_name_policy: Политика названий соревнований
-    #original_hash: caccb53
-    competition_announcement_policy: Политика объявлений соревнований
-    #original_hash: 32e6959
-    sponsor: Заявление о спонсорах
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Делегаты
