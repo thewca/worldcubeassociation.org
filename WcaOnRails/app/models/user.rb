@@ -31,6 +31,12 @@ class User < ApplicationRecord
     (team_leaders + eligible_delegates + board_members).uniq
   end
 
+  def self.leader_senior_voters
+    team_leaders = TeamMember.current.where(team_leader: true).map(&:user)
+    senior_delegates = User.where(delegate_status: "senior_delegate")
+    (team_leaders + senior_delegates).uniq
+  end
+
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 
   strip_attributes only: [:wca_id, :country_iso2]

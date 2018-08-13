@@ -4,8 +4,8 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: [:voters]
-  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: [:voters]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: [:all_voters, :leader_senior_voters]
+  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: [:all_voters, :leader_senior_voters]
 
   before_action :compute_navbar_data
   def compute_navbar_data
@@ -88,15 +88,23 @@ class AdminController < ApplicationController
     redirect_to admin_compute_auxiliary_data_path
   end
 
-  def voters
+  def all_voters
+    voters User.eligible_voters, "all-wca-voters"
+  end
+
+  def leader_senior_voters
+    voters User.leader_senior_voters, "leader-senior-wca-voters"
+  end
+
+  private def voters(users, filename)
     csv = CSV.generate do |line|
       line << ["id", "email", "name"]
 
-      User.eligible_voters.each do |user|
+      users.each do |user|
         line << [user.id, user.email, user.name]
       end
     end
-    send_data csv, filename: "wca-voters-#{Time.now.utc.iso8601}.csv", type: :csv
+    send_data csv, filename: "#{filename}-#{Time.now.utc.iso8601}.csv", type: :csv
   end
 
   def update_statistics
