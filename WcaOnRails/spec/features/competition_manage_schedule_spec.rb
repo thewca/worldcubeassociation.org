@@ -46,7 +46,8 @@ RSpec.feature "Competition events management" do
 end
 
 def save
-  first(:button, "save your changes!", visible: true).click
+  # Trigger click directly on the element ignoring any modals.
+  first(:button, "save your changes!", visible: true).trigger('click')
   # Wait for ajax to complete.
   expect(page).to have_no_content("You have unsaved changes")
 end
