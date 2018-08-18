@@ -31,6 +31,17 @@ module NotificationsHelper
       end
     end
 
+    if user.senior_delegate?
+      user.subordinate_delegates.each do |delegate|
+        delegate.users_claiming_wca_id.where.not(confirmed_at: nil).each do |user_claiming_wca_id|
+          notifications << {
+            text: "#{user_claiming_wca_id.email} has claimed WCA ID #{user_claiming_wca_id.unconfirmed_wca_id} and is waiting for #{delegate.name}",
+            url: edit_user_path(user_claiming_wca_id.id, anchor: "wca_id"),
+          }
+        end
+      end
+    end
+
     if user.wca_id.blank?
       notifications << if user.unconfirmed_wca_id? && user.delegate_to_handle_wca_id_claim
                          # The user has already claimed a WCA ID, let them know we're on it.
