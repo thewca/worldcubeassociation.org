@@ -28,7 +28,7 @@
     "prop-types": "^15.6.2",
     "rails-erb-loader": "^5.4.2",
     "react": "^16.4.2",
-    "react-bootstrap": "^0.32.1",
+    "react-bootstrap": "^0.32.2",
     "react-dom": "^16.4.2",
     "react-google-maps": "^9.4.5",
     "resolve-url-loader": "^2.3.0",
