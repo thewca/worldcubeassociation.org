@@ -266,6 +266,22 @@ RSpec.describe Competition do
     end
   end
 
+  context "competition with results posted" do
+    let!(:competition) { FactoryBot.create :competition, :ongoing, :results_posted }
+
+    it "in_progress? is false" do
+      expect(competition.in_progress?).to be false
+    end
+
+    it "over scope does include the competition" do
+      expect(Competition.over.find_by_id(competition.id)).to eq competition
+    end
+
+    it "not_over scope does not include the competition" do
+      expect(Competition.not_over.find_by_id(competition.id)).to eq nil
+    end
+  end
+
   it "knows the calendar" do
     competition = FactoryBot.create :competition
     competition.start_date = "1987-0-04"
