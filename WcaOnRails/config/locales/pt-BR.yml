@@ -390,8 +390,18 @@ pt-BR:
         enable_donations: Quero habilitar doações além de coletar as taxas de inscrição
         #original_hash: 4baf44b
         championship_type: Tipo de Campeonato
-        #original_hash: ff722f0
-        registration_requirements: Requisitos para inscrição
+        #original_hash: 556fda0
+        registration_requirements: Requisitos adicionais para inscrição
+        #original_hash: ad74833
+        on_the_spot_registration: Quero aceita inscrições na hora do evento
+        #original_hash: bbff74c
+        on_the_spot_entry_fee_lowest_denomination: Taxa de inscrição no local
+        #original_hash: efbdbab
+        refund_policy_percent: Percentual a ser devolvido
+        #original_hash: b332299
+        refund_policy_limit_date: Data limite para devoluções
+        #original_hash: 3542671
+        guests_entry_fee_lowest_denomination: Taxa de entrada para espectadores/convidados
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
@@ -633,11 +643,11 @@ pt-BR:
         cityName: >-
           Nome da cidade e estado onde a competição acontecerá. Não inclua o
           país (exemplos: São Paulo, São Paulo ou Uberlândia, Minas Gerais).
-        #original_hash: 3d99319
+        #original_hash: bb470cc
         information: >-
-          Informações sobre o limite de competidores, taxa de inscrição para
-          competidores ou espectadores, e outros detalhes relevantes para as
-          pessoas interessadas em competir ou assistir.
+          Informações importantes que os competidores devem saber. Estas serão
+          mostradas na página principal da competição. <br/>Por favor preencha
+          <b>em Inglês</b> e quaisquer outras línguas que os competidores falam.
         #original_hash: b4d020f
         delegate_ids: Delegado(s) da WCA da competição.
         #original_hash: 517d376
@@ -663,10 +673,12 @@ pt-BR:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 950a7ea
+        #original_hash: 9edba75
         base_entry_fee_lowest_denomination: >-
           A taxa base de inscrição para a competição. A taxa base será mostrada
-          nas informações da competição e na página de inscrição.
+          nas informações da competição e na página de inscrição, caso exista.
+          Se for deixada como 0, uma frase será mostrada dizendo que as
+          inscrições serão gratuitas.
         #original_hash: 866bc05
         currency_code: O código da moeda da taxa de inscrição.
         #original_hash: da39a3e
@@ -703,21 +715,33 @@ pt-BR:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
-        #original_hash: 508c178
+        #original_hash: 3de153b
         registration_requirements: >-
-          Por favor indique aqui alguma particularidade sobre o processo de
-          inscrição, conforme <a
-          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
-          target="_blank">Orientação 2c1+</a>. Depois que a competição for
-          anunciada, esse campo não será mais editável, e você precisa de
-          aprovação do Board para modificá-lo.<br/>Por exemplo, informe aqui se
-          os competidores precisam ter um histórico de pagamentos "limpo" com
-          alguma entidade, se existe uma política de reembolso, ou se os
-          competidores terão que responder a um email de confirmação caso o
-          limite de inscritos seja atingido.<br/>Por favor preencha esse campo
-          <b>em Inglês</b> e outra(s) língua(s) que seus competidores falem; ele
-          será mostrado na página de inscrição se você estiver usando o sistema
-          de inscrição da WCA.
+          Por favor indique aqui qualquer requisito adicional não previsto
+          acima, como por exemplo instruções de como pagar. <br/>Por favor
+          preencha <b>em Inglês</b> e quaisquer outras línguas que os
+          competidores falem; estes serão mostrados na página de informações da
+          competição, e também na página de inscrições se você estiver usando a
+          inscrição pelo website da WCA.
+        #original_hash: da39a3e
+        on_the_spot_registration: ''
+        #original_hash: 48dd815
+        on_the_spot_entry_fee_lowest_denomination: >-
+          Se for deixada como 0, uma frase será mostrada dizendo que inscrições
+          no local serão aceitas de graça.
+        #original_hash: effff56
+        refund_policy_percent: >-
+          Por enquanto este número é apenas informacional; devoluções terão que
+          ser feitas manualmente. Se for deixado como 0, uma frase será mostrada
+          dizendo que a taxa de inscrição não será devolvida em nenhuma
+          circustância.
+        #original_hash: f64d853
+        refund_policy_limit_date: Data após a qual não serão feitas mais devoluções.
+        #original_hash: eb638e2
+        guests_entry_fee_lowest_denomination: >-
+          Por enquanto este número é apenas informacional; taxas para convidados
+          não são gerenciadas por este website. Se for deixado como 0, uma frase
+          será mostrada dizendo que espectadores podem assistir de graça.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1733,16 +1757,51 @@ pt-BR:
         other: Delegados da WCA
       #original_hash: b37456c
       contact: Contato
-      #original_hash: 32946e9
-      competitor_limit: Limite de competidores
-      #original_hash: a428739
-      entry_fee: Taxa de inscrição
       #original_hash: 0eb5ed5
       information: Informação
       #original_hash: c5497bc
       events: Eventos
       #original_hash: ff722f0
       registration_requirements: Requisitos para inscrição
+      #original_hash: 74d0bf1
+      create_wca_account_html: 'Crie uma conta WCA %{here} se você não tem uma ainda.'
+      #original_hash: a082288
+      claim_wca_id_html: >-
+        Se esta não é sua primeira competição, associe sua ID da WCA à sua conta
+        da WCA %{here}.
+      #original_hash: 56fc229
+      register_html: 'Se inscreva para esta competição %{here}.'
+      #original_hash: 196725e
+      competitor_limit_is: 'Há uma limite de %{competitor_limit} competidores.'
+      #original_hash: 5101f65
+      no_competitor_limit: Não há limite de competidores.
+      #original_hash: 86cf09f
+      entry_fee_is: 'A taxa de inscrição para esta competição é %{base_entry_fee}.'
+      #original_hash: 5390a91
+      no_entry_fee: A inscrição para esta competição é gratuita.
+      #original_hash: 29af5c2
+      use_stripe_html: >-
+        A taxa de inscrição deve ser feita pelo Stripe %{here} após sua
+        inscrição.
+      #original_hash: 16cd1ba
+      refund_policy_html: >-
+        Se sua inscrição for cancelada antes de %{limit_date_and_time} você
+        receberá uma devolução de %{refund_policy_percent}% de sua taxa de
+        inscrição.
+      #original_hash: 4aca553
+      no_refunds: Taxas de inscrição não serão devolvidas em nenhuma circunstância.
+      #original_hash: b38fa7b
+      on_the_spot_registration: >-
+        Inscrições no local serão aceitas com uma taxa de
+        %{on_the_spot_base_entry_fee}.
+      #original_hash: 1637bea
+      on_the_spot_registration_free: Inscrições no local serão aceitas gratuitamente.
+      #original_hash: f5f687d
+      no_on_the_spot_registration: Não serão aceitas inscrições no local.
+      #original_hash: 4df139d
+      guests_pay: 'Espectadores podem assistir pagando uma taxa de %{guests_base_fee}.'
+      #original_hash: b6c863e
+      guests_free: Espectadores podem assistir gratuitamente.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Esta competição já terminou; clique %{link_here} para ver os requisitos
@@ -1939,6 +1998,10 @@ pt-BR:
       registration_close_after_open: o término das inscrições deve ser posterior ao início
       #original_hash: 43a83a9
       end_date_before_start: A data de término não pode ser anterior à data de início.
+      #original_hash: 0c507fa
+      refund_date_after_start: >-
+        Data limite para devoluções não pode ser posterior à data de início da
+        competição.
       #original_hash: be3933b
       span_too_many_days: 'A competição não pode durar mais que %{max_days} dias.'
       #original_hash: cdcd288
@@ -2461,7 +2524,7 @@ pt-BR:
     title: Sobre a WCA
     mission:
       paragraphs:
-        #original_hash: 3e4f9b5
+        #original_hash: c86d105
         '1': >-
           A World Cube Association regula competicões de quebra-cabeças
           mecânicos que são operados girando-se os lados, comumente chamados de
@@ -2561,6 +2624,14 @@ pt-BR:
           qualidade para garantir uma consistente alta qualidade dos processos,
           do Staff da WCA, Organizações Regionais, Organizadores e Competição e
           Staff de Competição.
+      wmt:
+        #original_hash: 2035811
+        name: Equipe de Marketing da WCA
+        #original_hash: f2a0140
+        description: >-
+          Essa equipe é responsável por desenvolver e gerir a marca da WCA,
+          procurar patrocínios, apoiar a distribuição de Equipamento de
+          Competição da WCA, e comercializar Mercadorias da WCA.
       banned:
         #original_hash: d30e2e5
         name: Competidores Suspensos ou Banidos
@@ -2596,18 +2667,6 @@ pt-BR:
     minutes: Atas
     #original_hash: 6db524a
     policies: Políticas da WCA
-    #original_hash: ffc646a
-    dues: Sistema de Taxas
-    #original_hash: 9e7fbc2
-    logo: Uso do Logo
-    #original_hash: 900f7c7
-    proximity_policy: Política sobre proximidade entre competições
-    #original_hash: 0d527c8
-    competition_name_policy: Política de nomes de competições
-    #original_hash: caccb53
-    competition_announcement_policy: Política de anúncio de competições
-    #original_hash: 32e6959
-    sponsor: Reconhcimento de Patrocinadores
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
@@ -2760,6 +2819,12 @@ pt-BR:
         para garantir uma consistente alta qualidade dos processos, do Staff da
         WCA, Organizações Regionais, Organizadores e Competição e Staff de
         Competição.
+    wmt:
+      #original_hash: f2a0140
+      info_html: >-
+        Essa equipe é responsável por desenvolver e gerir a marca da WCA,
+        procurar patrocínios, apoiar a distribuição de Equipamento de Competição
+        da WCA, e comercializar Mercadorias da WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
