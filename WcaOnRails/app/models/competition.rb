@@ -3,6 +3,7 @@
 class Competition < ApplicationRecord
   self.table_name = "Competitions"
 
+  # We need this default order, tests rely on it.
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
