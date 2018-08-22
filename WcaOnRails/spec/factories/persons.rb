@@ -8,22 +8,22 @@ FactoryBot.define do
       id = id.next while Person.exists?(wca_id: id)
       id
     end
-    subId 1
+    subId { 1 }
     name { Faker::Name.name }
     countryId { Country.real.sample.id }
-    gender "m"
-    year 1966
-    month 4
-    day 4
+    gender { "m" }
+    year { 1966 }
+    month { 4 }
+    day { 4 }
 
     trait :missing_dob do
-      year 0
-      month 0
-      day 0
+      year { 0 }
+      month { 0 }
+      day { 0 }
     end
 
     trait :missing_gender do
-      gender ""
+      gender { "" }
     end
 
     factory :person_with_multiple_sub_ids do

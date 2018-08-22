@@ -4,16 +4,16 @@ FactoryBot.define do
   factory :competition do
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
 
-    cityName "San Francisco"
-    countryId "USA"
-    currency_code "USD"
-    base_entry_fee_lowest_denomination 1000
-    information "Information!"
+    cityName { "San Francisco" }
+    countryId { "USA" }
+    currency_code { "USD" }
+    base_entry_fee_lowest_denomination { 1000 }
+    information { "Information!" }
     latitude { rand(-90_000_000..90_000_000) }
     longitude { rand(-180_000_000..180_000_000) }
 
     transient do
-      starts 1.year.ago
+      starts { 1.year.ago }
       ends { starts }
       event_ids { %w(333 333oh) }
     end
@@ -22,39 +22,39 @@ FactoryBot.define do
     end_date { ends.nil? ? nil : ends.strftime("%F") }
 
     trait :future do
-      starts 1.week.from_now
+      starts { 1.week.from_now }
     end
 
     trait :ongoing do
-      starts Time.now
+      starts { Time.now }
     end
 
     trait :past do
-      starts 1.week.ago
+      starts { 1.week.ago }
     end
 
     trait :results_posted do
-      results_posted_at Time.now
+      results_posted_at { Time.now }
     end
 
     trait :with_competitor_limit do
-      competitor_limit_enabled true
-      competitor_limit 100
-      competitor_limit_reason "The hall only fits 100 competitors."
+      competitor_limit_enabled { true }
+      competitor_limit { 100 }
+      competitor_limit_reason { "The hall only fits 100 competitors." }
     end
 
     events { Event.where(id: event_ids) }
 
-    venue "My backyard"
-    venueAddress "My backyard street"
-    external_website "https://www.worldcubeassociation.org"
-    showAtAll false
-    isConfirmed false
+    venue { "My backyard" }
+    venueAddress { "My backyard street" }
+    external_website { "https://www.worldcubeassociation.org" }
+    showAtAll { false }
+    isConfirmed { false }
 
-    guests_enabled true
-    on_the_spot_registration false
-    refund_policy_percent 0
-    guests_entry_fee_lowest_denomination 0
+    guests_enabled { true }
+    on_the_spot_registration { false }
+    refund_policy_percent { 0 }
+    guests_entry_fee_lowest_denomination { 0 }
 
     trait :with_delegate do
       delegates { [FactoryBot.create(:delegate)] }
@@ -82,28 +82,28 @@ FactoryBot.define do
       end
     end
 
-    use_wca_registration false
-    registration_open 2.weeks.ago.change(usec: 0)
-    registration_close 1.week.ago.change(usec: 0)
+    use_wca_registration { false }
+    registration_open { 2.weeks.ago.change(usec: 0) }
+    registration_close { 1.week.ago.change(usec: 0) }
 
     trait :registration_open do
-      use_wca_registration true
-      registration_open 2.weeks.ago.change(usec: 0)
-      registration_close 2.weeks.from_now.change(usec: 0)
+      use_wca_registration { true }
+      registration_open { 2.weeks.ago.change(usec: 0) }
+      registration_close { 2.weeks.from_now.change(usec: 0) }
     end
 
     trait :confirmed do
       with_delegate
-      isConfirmed true
+      isConfirmed { true }
     end
 
     trait :not_visible do
-      showAtAll false
+      showAtAll { false }
     end
 
     trait :visible do
       with_delegate
-      showAtAll true
+      showAtAll { true }
     end
 
     trait :stripe_connected do
@@ -111,12 +111,12 @@ FactoryBot.define do
       # for testing Stripe payments, and is connected
       # to the WCA Stripe account. For more information, see
       # https://github.com/thewca/worldcubeassociation.org/wiki/Payments-with-Stripe
-      connected_stripe_account_id "acct_19ZQVmE2qoiROdto"
+      connected_stripe_account_id { "acct_19ZQVmE2qoiROdto" }
     end
 
     transient do
-      championship_types []
-      with_schedule false
+      championship_types { [] }
+      with_schedule { false }
     end
 
     after(:create) do |competition, evaluator|

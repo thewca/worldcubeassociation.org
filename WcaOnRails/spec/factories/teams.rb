@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :team do
-    friendly_id 'foo'
+    friendly_id { 'foo' }
   end
 end

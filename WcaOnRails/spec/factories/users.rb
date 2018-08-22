@@ -5,13 +5,13 @@ FactoryBot.define do
     name { Faker::Name.name }
     email { Faker::Internet.email }
     country_iso2 { Country.real.sample.iso2 }
-    gender "m"
-    dob Date.new(1980, 1, 1)
-    password "wca"
+    gender { "m" }
+    dob { Date.new(1980, 1, 1) }
+    password { "wca" }
     password_confirmation { "wca" }
 
     transient do
-      preferred_event_ids []
+      preferred_event_ids { [] }
     end
     # Using accept_nested_attributes_for
     user_preferred_events_attributes do
@@ -21,15 +21,15 @@ FactoryBot.define do
     end
 
     transient do
-      confirmed true
+      confirmed { true }
     end
     before(:create) do |user, options|
       user.skip_confirmation! if options.confirmed
     end
 
     factory :admin do
-      name "Mr. Admin"
-      email "admin@worldcubeassociation.org"
+      name { "Mr. Admin" }
+      email { "admin@worldcubeassociation.org" }
       after(:create) do |user|
         software_team = Team.wst
         FactoryBot.create(:team_member, team_id: software_team.id, user_id: user.id, team_leader: true)
@@ -90,20 +90,20 @@ FactoryBot.define do
 
     factory :delegate, traits: [:wca_id] do
       association :senior_delegate
-      delegate_status "delegate"
+      delegate_status { "delegate" }
     end
 
     factory :candidate_delegate, traits: [:wca_id] do
       association :senior_delegate
-      delegate_status "candidate_delegate"
+      delegate_status { "candidate_delegate" }
     end
 
     factory :senior_delegate, traits: [:wca_id] do
-      delegate_status "senior_delegate"
+      delegate_status { "senior_delegate" }
     end
 
     factory :dummy_user, traits: [:wca_id] do
-      encrypted_password ""
+      encrypted_password { "" }
       after(:create) do |user|
         user.update_column(:email, "#{user.wca_id}@worldcubeassociation.org")
       end
