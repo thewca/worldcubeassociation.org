@@ -2,14 +2,14 @@
 
 FactoryBot.define do
   factory :incident do
-    title "Incident title"
-    private_description "Some private description"
-    private_wrc_decision "Some private decision"
-    public_summary "The incident public summary"
+    title { "Incident title" }
+    private_description { "Some private description" }
+    private_wrc_decision { "Some private decision" }
+    public_summary { "The incident public summary" }
 
     transient do
-      tags ["DefaultTag"]
-      comps []
+      tags { ["DefaultTag"] }
+      comps { [] }
     end
 
     incident_competitions_attributes do
@@ -19,11 +19,11 @@ FactoryBot.define do
     end
 
     trait :resolved do
-      resolved_at 1.week.ago
+      resolved_at { 1.week.ago }
     end
 
     trait :digest_worthy do
-      digest_worthy 1
+      digest_worthy { 1 }
     end
 
     trait :with_comp do
@@ -36,7 +36,7 @@ FactoryBot.define do
     factory :sent_incident do
       resolved
       digest_worthy
-      digest_sent_at 2.days.ago
+      digest_sent_at { 2.days.ago }
     end
 
     after(:create) do |incident, evaluator|

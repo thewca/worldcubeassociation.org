@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :poll do
     question { Faker::Lorem.paragraph }
-    multiple false
+    multiple { false }
     deadline { Date.today + 15 }
 
     trait :confirmed do
@@ -16,7 +16,7 @@ FactoryBot.define do
     end
 
     trait :multiple do
-      multiple true
+      multiple { true }
     end
   end
 end
