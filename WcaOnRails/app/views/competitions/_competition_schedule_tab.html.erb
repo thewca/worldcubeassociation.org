@@ -42,6 +42,9 @@
               <%= t("competitions.schedule.display_as.calendar") %>
             </a>
           </div>
+          <% if current_user&.can_manage_competition?(@competition) %>
+            <p><%= link_to "Cubecomps export", competition_cubecomps_schedule_path(@competition, venue.id, format: :txt), download: true, class: "btn btn-info" %></p>
+          <% end %>
         </div>
         <%# We want to keep these elements in the html for the event filter. %>
         <div class="col-xs-12 col-md-6 <%= "hidden" if venue.venue_rooms.size <= 1 %>">

@@ -133,4 +133,25 @@ module CompetitionsHelper
                 end
     [first_time, last_time]
   end
+
+  def cubecomps_title_from_activity(activity)
+    activity[:activityDetails][:event_id] == "other" ? activity[:title] : ""
+  end
+
+  def cubecomps_id_from_activity_details(activity_details)
+    if activity_details[:event_id] == "other"
+      case activity_details[:other_parts].first
+      when "lunch"
+        "lun"
+      when "awards"
+        "tro"
+      when "registration"
+        "reg"
+      else
+        "other"
+      end
+    else
+      activity_details[:event_id]
+    end
+  end
 end

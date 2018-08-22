@@ -124,6 +124,7 @@ class Round < ApplicationRecord
     {
       wcif_id: wcif_id,
       name: name,
+      round_type_name: round_type.name,
       event_id: event.id,
       cumulative_round_ids: time_limit.cumulative_round_ids,
       format_name: full_format_name,
