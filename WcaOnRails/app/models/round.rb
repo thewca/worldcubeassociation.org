@@ -126,7 +126,7 @@ class Round < ApplicationRecord
       name: name,
       event_id: event.id,
       cumulative_round_ids: time_limit.cumulative_round_ids,
-      format_name: format.name,
+      format_name: full_format_name,
       time_limit: time_limit_to_s,
       cutoff: cutoff_to_s,
       advancement: advancement_condition_to_s,
