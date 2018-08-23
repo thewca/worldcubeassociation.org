@@ -85,6 +85,7 @@ class ScheduleActivity < ApplicationRecord
     }
   end
 
+  # TODO: not a fan of how it works (= passing round information)
   def to_event(rounds_by_wcif_id = {})
     raise "#to_event called for nested activity" unless holder.is_a?(VenueRoom)
     {
@@ -136,29 +137,21 @@ class ScheduleActivity < ApplicationRecord
 
   def self.parse_activity_code(activity_code)
     parts = activity_code.split("-")
-    # When event is "other" we may want to look into the other data to figure out
-    # what kind of other activity it is. As this part is relatively open to the user's immagination,
-    # we simply store all remaining parts in 'other_parts'.
     parts_hash = {
       event_id: parts.shift,
-      other_parts: [],
       round_number: nil,
       group_number: nil,
       attempt_number: nil,
     }
 
-    if parts_hash[:event_id] == "other"
-      parts_hash[:other_parts] = parts
-    else
-      parts.each do |p|
-        case p[0]
-        when "a"
-          parts_hash[:attempt_number] = p[1..-1].to_i
-        when "g"
-          parts_hash[:group_number] = p[1..-1].to_i
-        when "r"
-          parts_hash[:round_number] = p[1..-1].to_i
-        end
+    parts.each do |p|
+      case p[0]
+      when "a"
+        parts_hash[:attempt_number] = p[1..-1].to_i
+      when "g"
+        parts_hash[:group_number] = p[1..-1].to_i
+      when "r"
+        parts_hash[:round_number] = p[1..-1].to_i
       end
     end
     parts_hash

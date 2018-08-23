@@ -11,7 +11,6 @@ class CompetitionsController < ApplicationController
     :show_all_results,
     :show_results_by_person,
     :show_events,
-    :show_schedule_for_venue,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
     :post_announcement,
@@ -340,30 +339,6 @@ class CompetitionsController < ApplicationController
 
   def show_events
     @competition = competition_from_params(includes: [:events, competition_events: { rounds: [:format, :competition_event] }])
-  end
-
-  def cubecomps_schedule_for_venue
-    associations = {
-      competition_events: {
-        # NOTE: we eventually hit the rounds->competition->competition_event in the TimeLimit 'to_s' method when having cumulative limit across rounds
-        rounds: {
-          competition: { rounds: [:competition_event] },
-          competition_event: [],
-          format: [],
-        },
-      },
-      rounds: {
-        # Used by TimeLimit, but this is a weird includes...
-        competition: { rounds: [:competition_event] },
-      },
-    }
-    @competition = competition_from_params(includes: associations)
-    @venue = @competition.competition_venues.includes(venue_rooms: [:schedule_activities]).find(params[:venue_id])
-    respond_to do |format|
-      format.txt do
-        headers['Content-Disposition'] = "attachment; filename=\"#{@competition.id}-schedule.txt\""
-      end
-    end
   end
 
   def edit_events
