@@ -41,7 +41,6 @@ RSpec.feature "Eligible voters csv" do
 
       expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="all-wca-voters-2016-05-05T10:05:03Z.csv"'
       expect(CSV.parse(page.body)).to match_array [
-        ["id", "email", "name"],
         [team_leader.id.to_s, team_leader.email, team_leader.name],
         [delegate.id.to_s, delegate.email, delegate.name],
         [delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
@@ -57,7 +56,6 @@ RSpec.feature "Eligible voters csv" do
 
       expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="leader-senior-wca-voters-2016-05-05T10:05:03Z.csv"'
       expect(CSV.parse(page.body)).to match_array [
-        ["id", "email", "name"],
         [team_leader.id.to_s, team_leader.email, team_leader.name],
         [delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
         [senior_delegate.id.to_s, senior_delegate.email, senior_delegate.name],
