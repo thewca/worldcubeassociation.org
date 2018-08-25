@@ -639,7 +639,7 @@ class User < ApplicationRecord
         avatar avatar_cache
       )
     end
-    if user == self || admin? || any_kind_of_delegate?
+    if user == self || admin? || any_kind_of_delegate? || results_team?
       cannot_edit_data = !!cannot_edit_data_reason_html(user)
       if !cannot_edit_data
         fields += %i(name dob gender country_iso2)
