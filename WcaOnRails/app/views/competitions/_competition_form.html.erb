@@ -268,7 +268,7 @@
         <%= f.input :on_the_spot_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
       </div>
 
-      <%= f.input :registration_requirements, input_html: { class: "markdown-editor" } %>
+      <%= f.input :extra_registration_requirements, input_html: { class: "markdown-editor" } %>
     <% end %>
 
     <hr>

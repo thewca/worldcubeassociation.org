@@ -8,7 +8,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
     let(:second_delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
     let(:third_delegate) { FactoryBot.create :delegate }
-    let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate, second_delegate, third_delegate], registration_requirements: "Some requirements" }
+    let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate, second_delegate, third_delegate] }
     let(:mail) do
       I18n.locale = :pl
       CompetitionsMailer.notify_board_of_confirmed_competition(delegate, competition)

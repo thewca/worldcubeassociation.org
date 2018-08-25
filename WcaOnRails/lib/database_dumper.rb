@@ -65,7 +65,7 @@ module DatabaseDumper
           announced_at
           base_entry_fee_lowest_denomination
           currency_code
-          registration_requirements
+          extra_registration_requirements
           created_at
           updated_at
           on_the_spot_registration

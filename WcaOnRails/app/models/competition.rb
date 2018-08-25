@@ -85,7 +85,7 @@ class Competition < ApplicationRecord
     base_entry_fee_lowest_denomination
     currency_code
     enable_donations
-    registration_requirements
+    extra_registration_requirements
     on_the_spot_registration
     on_the_spot_entry_fee_lowest_denomination
     refund_policy_percent
