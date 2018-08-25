@@ -1,11 +1,16 @@
 <% if @competition.use_wca_registration.nil? %>
 <% elsif @competition.use_wca_registration %>
-  <%= t('competitions.competition_info.create_wca_account_html', here: link_to(t('common.here'), new_user_registration_path)) %>
-  <br>
-  <%= t('competitions.competition_info.claim_wca_id_html', here: link_to(t('common.here'), profile_claim_wca_id_path)) %>
-  <br>
-  <%= t('competitions.competition_info.register_html', here: link_to(t('common.here'), competition_register_path(@competition))) %>
-  <br>
+  <% if @current_user.nil? %>
+    <%= t('competitions.competition_info.create_wca_account_html', here: link_to(t('common.here'), new_user_registration_path)) %>
+    <br>
+    <%= t('competitions.competition_info.claim_wca_id_html', here: link_to(t('common.here'), profile_claim_wca_id_path)) %>
+    <br>
+  <% elsif !@current_user.wca_id && !@current_user.unconfirmed_wca_id %>
+    <%= t('competitions.competition_info.claim_wca_id_html', here: link_to(t('common.here'), profile_claim_wca_id_path)) %>
+    <br>
+  <% end %>
+<%= t('competitions.competition_info.register_html', here: link_to(t('common.here'), competition_register_path(@competition))) %>
+<br>
 <% elsif @competition.website %>
   <%= t('competitions.competition_info.register_html', here: link_to(t('common.here'), @competition.website, target: "_blank")) %>
   <br>
