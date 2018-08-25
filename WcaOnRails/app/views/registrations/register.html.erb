@@ -4,7 +4,7 @@
 
   <p><b><%= t('registrations.registration_requirements') %></b>
   </p>
-  <%= render "competitions/registration_requirements" %>
+  <%= render "competitions/registration_requirements", show_links_to_register_page: false %>
   <hr/>
 
   <% opens_in_days = distance_of_time_in_words_to_now(@competition.registration_open) %>
