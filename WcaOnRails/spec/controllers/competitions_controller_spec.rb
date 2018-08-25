@@ -359,12 +359,12 @@ RSpec.describe CompetitionsController do
         expect(CompetitionOrganizer.where(competition_id: "NewId2015").map(&:id).sort).to eq cos.map(&:id).sort
       end
 
-      it "can change registration requirements field after competition is confirmed" do
+      it "can change extra registration requirements field after competition is confirmed" do
         comp = FactoryBot.create(:competition, :confirmed)
-        new_requirements = "New requirements"
-        patch :update, params: { id: comp, competition: { registration_requirements: new_requirements } }
+        new_requirements = "New extra requirements"
+        patch :update, params: { id: comp, competition: { extra_registration_requirements: new_requirements } }
         comp.reload
-        expect(comp.registration_requirements).to eq new_requirements
+        expect(comp.extra_registration_requirements).to eq new_requirements
       end
     end
 
@@ -561,18 +561,18 @@ RSpec.describe CompetitionsController do
       end
 
       it "can change extra registration requirements field before competition is confirmed" do
-        new_requirements = "New requirements"
-        patch :update, params: { id: competition, competition: { registration_requirements: new_requirements } }
+        new_requirements = "New extra requirements"
+        patch :update, params: { id: competition, competition: { extra_registration_requirements: new_requirements } }
         competition.reload
-        expect(competition.registration_requirements).to eq new_requirements
+        expect(competition.extra_registration_requirements).to eq new_requirements
       end
 
       it "cannot change extra registration requirements field after competition is confirmed" do
-        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate], registration_requirements: "Extra requirements")
+        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate], extra_registration_requirements: "Extra requirements")
         new_requirements = "New extra requirements"
-        patch :update, params: { id: comp, competition: { registration_requirements: new_requirements } }
+        patch :update, params: { id: comp, competition: { extra_registration_requirements: new_requirements } }
         comp.reload
-        expect(comp.registration_requirements).to eq "Extra requirements"
+        expect(comp.extra_registration_requirements).to eq "Extra requirements"
       end
     end
 

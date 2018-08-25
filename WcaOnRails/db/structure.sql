@@ -52,7 +52,7 @@ CREATE TABLE `Competitions` (
   `competitor_limit_enabled` tinyint(1) NOT NULL DEFAULT '0',
   `competitor_limit` int(11) DEFAULT NULL,
   `competitor_limit_reason` text COLLATE utf8mb4_unicode_ci,
-  `registration_requirements` text COLLATE utf8mb4_unicode_ci,
+  `extra_registration_requirements` text COLLATE utf8mb4_unicode_ci,
   `on_the_spot_registration` tinyint(1) DEFAULT NULL,
   `on_the_spot_entry_fee_lowest_denomination` int(11) DEFAULT NULL,
   `refund_policy_percent` int(11) DEFAULT NULL,
@@ -1406,4 +1406,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180729000001'),
 ('20180730182509'),
 ('20180731204733'),
-('20180822165331');
+('20180822165331'),
+('20180825115701');
