@@ -1,3 +1,7 @@
+<%
+  show_links_to_register_page ||= false
+%>
+
 <% if @competition.use_wca_registration.nil? %>
 <% elsif @competition.use_wca_registration %>
   <% if @current_user.nil? %>
@@ -9,10 +13,15 @@
     <%= t('competitions.competition_info.claim_wca_id_html', here: link_to(t('common.here'), profile_claim_wca_id_path)) %>
     <br>
   <% end %>
-<%= t('competitions.competition_info.register_html', here: link_to(t('common.here'), competition_register_path(@competition))) %>
-<br>
+  <% if show_links_to_register_page %>
+    <%= t('competitions.competition_info.register_link_html', here: link_to(t('common.here'), competition_register_path(@competition))) %>
+    <br>
+  <% else %>
+    <%= t('competitions.competition_info.register_below_html') %>
+    <br>
+  <% end %>
 <% elsif @competition.website %>
-  <%= t('competitions.competition_info.register_html', here: link_to(t('common.here'), @competition.website, target: "_blank")) %>
+  <%= t('competitions.competition_info.register_link_html', here: link_to(t('common.here'), @competition.website, target: "_blank")) %>
   <br>
 <% end %>
 
@@ -41,10 +50,14 @@
 <% end %>
 
 <% if @competition.using_stripe_payments? %>
-  <%= t('competitions.competition_info.use_stripe_html', here: link_to(t('common.here'), competition_register_path(@competition))) %>
-  <br>
+  <% if show_links_to_register_page %>
+    <%= t('competitions.competition_info.use_stripe_link_html', here: link_to(t('common.here'), competition_register_path(@competition))) %>
+    <br>
+  <% else %>
+    <%= t('competitions.competition_info.use_stripe_below_html') %>
+    <br>
+  <% end %>
 <% end %>
-
 
 <% if @competition.refund_policy_percent.nil? %>
 <% elsif @competition.refund_policy_percent? %>
@@ -78,4 +91,7 @@
   <br>
 <% end %>
 
-<%=md @competition.extra_registration_requirements if @competition.extra_registration_requirements %>
+<% if @competition.extra_registration_requirements %>
+  <br>
+  <%=md @competition.extra_registration_requirements %>
+<% end %>
