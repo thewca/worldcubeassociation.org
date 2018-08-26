@@ -98,8 +98,6 @@ class AdminController < ApplicationController
 
   private def voters(users, filename)
     csv = CSV.generate do |line|
-      line << ["id", "email", "name"]
-
       users.each do |user|
         line << [user.id, user.email, user.name]
       end
