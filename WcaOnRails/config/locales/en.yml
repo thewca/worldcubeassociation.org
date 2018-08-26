@@ -252,7 +252,7 @@ en:
         enable_donations: "I want to enable donations additionally to collecting the registration fees"
         championship_type: "Championship type"
         extra_registration_requirements: "Extra registration requirements"
-        on_the_spot_registration: "I want to accept on the spot registrations"
+        on_the_spot_registration: "On the spot registrations"
         on_the_spot_entry_fee_lowest_denomination: "On the spot entry fee"
         refund_policy_percent: "Percent to be refunded"
         refund_policy_limit_date: "Limit date for refunds"
@@ -506,6 +506,9 @@ en:
         guests_enabled:
           "true": "Ask about guests"
           "false": "Do NOT ask about guests"
+        on_the_spot_registration:
+          "true": "On the spot registrations will be accepted"
+          "false": "On the spot registrations WILL NOT be accepted"
   mail_form:
     #context: This key is used as a label for contact form attributes
     attributes:
