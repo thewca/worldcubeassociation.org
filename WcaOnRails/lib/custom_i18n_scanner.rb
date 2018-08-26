@@ -71,8 +71,8 @@ unless Rails.env.production?
         end
       end
 
-      # Then scan for possible radio choices
-      text.scan(/^\s*<%= f.input :(\w+), as: :radio_buttons, collection: \[(.*)\](.*)%>/) do |attribute, collection|
+      # Then scan for collection options.
+      text.scan(/^\s*<%= f.input :(\w+).* collection: \[(.*)\](.*)%>/) do |attribute, collection|
         abskey = absolute_key(".#{attribute}", path)
         occurrence = occurrence_from_position(path, text, Regexp.last_match.offset(0).first)
         model = extract_model_name(abskey)

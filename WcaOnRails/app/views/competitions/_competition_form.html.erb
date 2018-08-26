@@ -263,7 +263,7 @@
       <%= f.input :refund_policy_percent %>
       <%= f.input :refund_policy_limit_date, as: :datetime_picker %>
 
-      <%= f.input :on_the_spot_registration %>
+      <%= f.input :on_the_spot_registration, collection: [ :true, :false ] %>
       <div class="wca-on-the-spot-registration-options">
         <%= f.input :on_the_spot_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
       </div>
