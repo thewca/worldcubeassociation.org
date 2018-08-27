@@ -122,8 +122,9 @@ Rails.application.routes.draw do
 
   get 'contact/website' => 'contacts#website'
   post 'contact/website' => 'contacts#website_create'
-  get 'contact/dob' => 'contacts#dob'
-  post 'contact/dob' => 'contacts#dob_create'
+  get 'contact/dob' => redirect('contact/fix-personal-information')
+  get 'contact/fix-personal-information' => 'contacts#fix_personal_information'
+  post 'contact/fix-personal-information' => 'contacts#fix_personal_information_create'
 
   get '/regulations' => 'regulations#show', id: 'index'
   get '/regulations/*id' => 'regulations#show'
@@ -160,7 +161,7 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    get '/', to: redirect('/api/v0')
+    get '/', to: redirect('/api/v0', status: 302)
     namespace :v0 do
       get '/' => 'api#help'
       get '/me' => 'api#me'

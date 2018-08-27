@@ -1,5 +1,4 @@
 onPage('admin#edit_person, admin#update_person', function() {
-
   $('#person_wca_id').on('change', function() {
     // Update person wca id in the url.
     var personWcaId = $('#person_wca_id').val();
@@ -9,17 +8,17 @@ onPage('admin#edit_person, admin#update_person', function() {
 
     // Clear or fill all the other fields.
     var $personFields = $('#person-fields :input');
-    if($(this).val() === '') {
+    if(personWcaId === '') {
       $personFields.attr('disabled', true);
       $personFields.not('[type="submit"]').val('');
     } else {
-      $personFields.attr('disabled', false);
       wca.cancelPendingAjaxAndAjax('grab_person_data', {
         url: '/admin/person_data',
         data: {
-          'person_wca_id': $(this).val(),
+          'person_wca_id': personWcaId,
         },
         success: function(data) {
+          $personFields.attr('disabled', false);
           $.each(data, function(attribute, value) {
             $('#person_' + attribute).val(value);
             if(attribute === 'dob') {

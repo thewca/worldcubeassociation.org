@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let(:dob_form_path) { Rails.application.routes.url_helpers.contact_dob_path }
+  let(:dob_form_path) { Rails.application.routes.url_helpers.contact_fix_personal_information_path }
 
   it "defines a valid user" do
     user = FactoryBot.create :user

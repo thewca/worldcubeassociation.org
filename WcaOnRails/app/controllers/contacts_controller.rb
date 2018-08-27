@@ -11,16 +11,19 @@ class ContactsController < ApplicationController
     maybe_send_email success_url: contact_website_url, fail_view: :website
   end
 
-  def dob
-    @contact = DobContact.new(your_email: current_user&.email)
+  def fix_personal_information
+    params[:fix_personal_information_contact] ||= {}
+    params[:fix_personal_information_contact][:wca_id] ||= current_user&.wca_id
+    @contact = FixPersonalInformationContact.new(wca_id: params[:fix_personal_information_contact][:wca_id], your_email: current_user&.email)
   end
 
-  def dob_create
-    @contact = DobContact.new(params[:dob_contact])
+  def fix_personal_information_create
+    person_params = params.require(:fix_personal_information_contact).permit(:wca_id, :your_email, :name, :gender, :dob, :document)
+    @contact = FixPersonalInformationContact.new(person_params)
     @contact.request = request
     @contact.to_email = "results@worldcubeassociation.org"
-    @contact.subject = "WCA DOB change request by #{@contact.name}"
-    maybe_send_email success_url: contact_dob_url, fail_view: :dob
+    @contact.subject = "WCA personal information change request by #{@contact.name}"
+    maybe_send_email success_url: contact_fix_personal_information_url, fail_view: :fix_personal_information
   end
 
   private def maybe_send_email(success_url: nil, fail_view: nil)

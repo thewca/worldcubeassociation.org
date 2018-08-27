@@ -1,17 +1,21 @@
 <p>Hey WRT,</p>
 <p>
-  <%= @resource.name %> reported that the birthdate in our database is incorrect.
+  <%= @resource.name %> reported that our information about them in our database is incorrect.
 </p>
 <h4>Data</h4>
 <table>
   <body>
     <tr>
-      <td>Name</td>
-      <td><%= @resource.name %></td>
-    </tr>
-    <tr>
       <td>WCA ID</td>
       <td><%= @resource.wca_id %></td>
+    </tr>
+    <tr>
+      <td>Correct name</td>
+      <td><strong><%= @resource.name %></strong></td>
+    </tr>
+    <tr>
+      <td>Correct gender</td>
+      <td><strong><%= @resource.gender %></strong></td>
     </tr>
     <tr>
       <td>Correct birthdate</td>

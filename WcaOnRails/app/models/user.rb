@@ -158,7 +158,7 @@ class User < ApplicationRecord
 
       dob_verification_date = Date.safe_parse(dob_verification, nil)
       if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
-        dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
+        dob_form_path = Rails.application.routes.url_helpers.contact_fix_personal_information_path
         if !unconfirmed_person.dob
           errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
         elsif unconfirmed_person.gender.blank?

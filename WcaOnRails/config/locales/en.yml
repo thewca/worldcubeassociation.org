@@ -439,8 +439,9 @@ en:
         message: ""
         name: ""
         your_email: ""
-      dob_contact:
+      fix_personal_information_contact:
         name: ""
+        gender: ""
         your_email: ""
         wca_id: ""
         dob: "Your correct day of birth in the format YYYY-MM-DD"
@@ -524,12 +525,14 @@ en:
         your_email: "Your email"
       website_contact:
         message: "Message"
-      dob_contact:
+      fix_personal_information_contact:
         wca_id: "Your WCA ID"
+        gender: "Correct gender"
+        name: "Correct name"
         dob: "Correct birthdate"
         document: "Document"
     errors:
-      dob_contact:
+      fix_personal_information_contact:
         dob_invalid: "is misformatted"
   errors:
     #These are locales used in lib/ (ignored by configuration)
@@ -737,7 +740,7 @@ en:
           '2': "The avatar must be framed, cropped, angled, and lit, so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
           '3': "The thumbnail of the avatar is only a section of the avatar, and it will be used to represent your full avatar. The thumbnail must be adjusted, so you can be recognized from it alone, and it must contain your face."
 
-    #context: when an error occured during the edition
+    #context: when an error occured while editing
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
@@ -1278,9 +1281,9 @@ en:
         software: "Software"
         different: "Other"
       submit: "Send message"
-    dob:
-      title: "Birthdate Change Request Form"
-      description: "Use this form if your birthdate stored in our database is different from the real one."
+    fix_personal_information:
+      title: "Personal Information Change Request Form"
+      description: "Use this form if your personal information stored in our database is incorrect."
       important_message_html: '<span class="text-danger">IMPORTANT</span>: Attach a picture of a <u>legal document</u> (identity card, driver license, passport...) showing your name AND date of birth.'
       submit: "Request change"
     messages:

@@ -23,12 +23,12 @@ unless Rails.env.production?
       when "oauth" then "doorkeeper/application"
       when "medium" then "competition_medium"
       when "contact"
-        # ContactsController uses WebsiteContact or DobContact (which are much like extended models).
+        # ContactsController uses WebsiteContact or FixPersonalInformationContact (which are much like extended models).
         # We need to determine which one does the key refer to.
         if key.start_with?("contacts.website")
           "website_contact"
-        elsif key.start_with?("contacts.dob")
-          "dob_contact"
+        elsif key.start_with?("contacts.fix_personal_information")
+          "fix_personal_information_contact"
         else
           throw "Unrecognized contact model. Key: #{key}"
         end

@@ -13,7 +13,7 @@
     <p>
       Choose 'Update' if the person's name or country has been changed.
       It will add a new entry in the Persons table and make it the current information for that person (subId=1)
-      but it will not modify the Results table so previous results keep the old name.
+      but it will not modify the Results table. This means that previous results keep the old name.
     </p>
 
     <%= simple_form_for @person, url: admin_update_person_path, method: :patch do |f| %>
