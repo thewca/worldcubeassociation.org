@@ -49,36 +49,38 @@ class TranslationsController < ApplicationController
     @pr_url = Octokit.create_pull_request(upstream_repo, "master", "#{user_login}:#{branch_name}", message, pr_description_for(current_user, locale))[:html_url]
   end
 
+  # rubocop:disable Style/NumericLiterals
   VERIFIED_TRANSLATORS_BY_LOCALE = {
-    "cs" => %w(2015VAST01),
-    "de" => %w(2009OHRN01),
-    "es" => %w(2013MORA02 2010GARC02),
-    "fi" => %w(2017NORR01),
-    "fr" => %w(2008VIRO01),
-    "hu" => %w(2008PLAC01),
-    "it" => %w(2009COLO03 2012CANT02),
-    "ja" => %w(2010TERA01 2010TANA02),
-    "ko" => %w(2008CHOI04),
-    "pl" => %w(2013KOSK01),
-    "pt" => %w(2014GOME07),
-    "pt-BR" => %w(2007GUIM01),
-    "zh-CN" => %w(2008DONG06),
-    "zh-TW" => %w(2011LIUR02),
-    "nl" => %w(2003BRUC01),
-    "ro" => %w(2015TOMA04),
-    "ru" => %w(2011GRIT01),
-    "da" => %w(2013EGDA01),
-    "hr" => %w(2013VIDA03),
-    "sk" => %w(2015MOZO01),
-    "sl" => %w(2010OMUL01),
-    "id" => %w(2015HUDO01),
-    "vi" => %w(2014TRUN01),
+    "cs" => [8583],
+    "da" => [6777],
+    "de" => [870],
+    "es" => [7340, 1439],
+    "fi" => [39072],
+    "fr" => [277],
+    "hr" => [46],
+    "hu" => [378],
+    "id" => [1285],
+    "it" => [397, 454],
+    "ja" => [32229, 1118],
+    "ko" => [14],
+    "nl" => [1, 41519],
+    "pl" => [6008],
+    "pt" => [331],
+    "pt-BR" => [18],
+    "ro" => [11918],
+    "ru" => [140],
+    "sk" => [7922],
+    "sl" => [1381],
+    "vi" => [7158],
+    "zh-CN" => [9],
+    "zh-TW" => [38],
   }.freeze
+  # rubocop:enable Style/NumericLiterals
 
   private def pr_description_for(user, locale)
     info = ["WCA Account ID: *#{user.id}*"]
     info.unshift("WCA ID: *[#{user.wca_id}](#{person_url(user.wca_id)})*") if user.wca_id
-    verification_info = if VERIFIED_TRANSLATORS_BY_LOCALE[locale]&.include?(user.wca_id)
+    verification_info = if VERIFIED_TRANSLATORS_BY_LOCALE[locale]&.include?(user.id)
                           ":heavy_check_mark: This translation comes from a verified translator for this language."
                         else
                           ":warning: This translation doesn't come from a verified translator for this language."
