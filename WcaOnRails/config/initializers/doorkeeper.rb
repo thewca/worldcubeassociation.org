@@ -92,8 +92,7 @@ Doorkeeper.configure do
   #
   # Note that we intentionally allow HTTP for localhost urls. This is needed by
   # TNoodle, and is also useful for local devlopment.
-  # TODO: The check for 'http' is a workaround for https://github.com/doorkeeper-gem/doorkeeper/issues/1091.
-  force_ssl_in_redirect_uri { |uri| uri.host != 'localhost' && uri.try(:scheme) == 'http' }
+  force_ssl_in_redirect_uri { |uri| uri.host != 'localhost' }
 
   # Specify what grant flows are enabled in array of Strings. The valid
   # strings and the flows they enable are:
