@@ -230,13 +230,18 @@
       </div>
       <hr>
       <%= f.input :use_wca_registration %>
+    <% end %>
 
+    <div class="wca-registration-options">
+      <% if @competition.can_receive_registration_emails?(current_user.id) %>
+        <%# Quick hack to fill receive_registration_emails with the correct value for the current_user %>
+        <% @competition.receive_registration_emails = @competition.receiving_registration_emails?(current_user.id) %>
+        <%= f.input :receive_registration_emails, as: :boolean %>
+      <% end %>
+    </div>
+
+    <% if @competition_admin_view || !is_actually_confirmed %>
       <div class="wca-registration-options">
-        <% if @competition.can_receive_registration_emails?(current_user.id) %>
-          <%# Quick hack to fill receive_registration_emails with the correct value for the current_user %>
-          <% @competition.receive_registration_emails = @competition.receiving_registration_emails?(current_user.id) %>
-          <%= f.input :receive_registration_emails, as: :boolean %>
-        <% end %>
         <%= f.input :enable_donations %>
         <%= f.input :guests_enabled, as: :radio_buttons, collection: [ :true, :false ] %>
       </div>
@@ -303,5 +308,4 @@
         <% end %>
       </div>
     </div>
-
   <% end %>
