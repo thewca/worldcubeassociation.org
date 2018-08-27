@@ -350,7 +350,8 @@ ja:
         #original_hash: b37456c
         contact: 連絡先
         #original_hash: 0eb5ed5
-        information: 概要        #original_hash: 87b7d5f
+        information: 概要
+        #original_hash: 87b7d5f
         use_wca_registration: 参加申し込みに WCA ウェブサイトを使用する
         #original_hash: a2dfcf8
         competitor_limit_enabled: 大会定員を設定する。
@@ -359,7 +360,7 @@ ja:
         #original_hash: 4a8b6f1
         competitor_limit_reason: 大会定員設定の理由
         #original_hash: 3c23a67
-        guests_enabled: 同伴者人数
+        guests_enabled: 見学者人数
         #original_hash: 089cbfd
         receive_registration_emails: 大会に参加申し込みがあったとき電子メールで通知する
         #original_hash: d4aeed9
@@ -376,11 +377,21 @@ ja:
         enable_donations: 寄付金の受け入れを有効にする
         #original_hash: 4baf44b
         championship_type: 大会タイプ(日本大会，アジア大会など)
-        #original_hash: ff722f0
-        registration_requirements: 参加申し込み要件
+        #original_hash: 556fda0
+        extra_registration_requirements: 大会申し込み要件（追加）　※自動生成される大会申し込み要件の後に追加される情報です。
+        #original_hash: 2529d04
+        on_the_spot_registration: 会場受付について
+        #original_hash: bbff74c
+        on_the_spot_entry_fee_lowest_denomination: 会場受付の参加費
+        #original_hash: efbdbab
+        refund_policy_percent: キャンセル時返金率 (％)
+        #original_hash: b332299
+        refund_policy_limit_date: 返金可能なキャンセル期日
+        #original_hash: 3542671
+        guests_entry_fee_lowest_denomination: 見学者の入場料
       registration:
         #original_hash: 3c23a67
-        guests: 同伴者人数
+        guests: 見学者人数
         #original_hash: fce06e2
         comments: コメント
         #original_hash: dc9d458
@@ -601,7 +612,7 @@ ja:
         cellName: 大会名の略称 (Kansai 2017 など正式名が短い場合は正式名と重複可)
         #original_hash: bce4589
         cityName: '開催都市名 (例 : Kawasaki, Kanagawa や Shibuya, Tokyo など「市区町村, 都道府県」の順)'
-        #original_hash: 3d99319
+        #original_hash: bb470cc
         information: >-
           大会の概要 (例 : UT Open 2010 is the first students-organized competition in
           Japan.)
@@ -625,7 +636,7 @@ ja:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 950a7ea
+        #original_hash: 82ad56b
         base_entry_fee_lowest_denomination: 大会に参加する基本参加費です。参加費は大会情報ページと申し込みページ (使用する場合) に表示されます。
         #original_hash: 866bc05
         currency_code: 通貨単位
@@ -657,13 +668,21 @@ ja:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
-        #original_hash: 508c178
-        registration_requirements: >-
-          参加申し込みの際の特記事項がある場合はこちらに記入してください。<a
-          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
-          target="_blank">ガイドライン 2c1+</a>
-          により明言することが義務付けられています。大会告知後はこの欄は<b>編集できません</b>。変更には理事の承認が必要になります。<br/>例えば、支払歴に支障が無いことを要求する場合、返金ポリシーが存在する場合、定員に達しているため確認メールへの返信を要求する場合等は記入してください。<br/>ここでは、<b>英語で</b>（必要があれば、競技者の母国語も併記して）記述してください。WCA
-          の参加申し込みシステムを使用する場合、この参加申し込み要件は参加申し込みページに表示されます。
+        #original_hash: 3de153b
+        extra_registration_requirements: >-
+          支払い方法など，「大会申し込み要件」で不足する内容はこちらに入力してください。<br/>必ず<b>英語を併記して</b>記入してください。<br/>入力内容は大会情報ページと大会申込ページに表示されます。
+        #original_hash: da39a3e
+        on_the_spot_registration: ''
+        #original_hash: 8c4fdf8
+        on_the_spot_entry_fee_lowest_denomination: 0と入力した場合，「見学者は入場無料です。」と表示されます。
+        #original_hash: 180b7b3
+        refund_policy_percent: >-
+          現在のところ返金システムは未実装のため，この値は表示されるのみで自動処理は行われません。実際の返金は手動で行ってください。<br/>0と入力した場合，「キャンセル時の返金は行いません。」と表示されます。
+        #original_hash: f64d853
+        refund_policy_limit_date: 返金対応期限
+        #original_hash: 25a1324
+        guests_entry_fee_lowest_denomination: >-
+          現在のところ見学者入場料集金システムは未実装のため，この値は表示されるのみで自動処理は行われません。実際の集金は手動で行ってください。<br/>0と入力した場合，「見学者入場料は無料です。」と表示されます。
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -790,9 +809,14 @@ ja:
       competition:
         guests_enabled:
           #original_hash: cb8809d
-          'true': 同伴者人数記入を求める
+          'true': 見学者人数記入を求める
           #original_hash: f8c2332
-          'false': 同伴者人数記入を求めない
+          'false': 見学者人数記入を求めない
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': 会場受付を行う
+          #original_hash: 0f236df
+          'false': 会場受付を行わない
   mail_form:
     attributes:
       contact_form:
@@ -1524,16 +1548,43 @@ ja:
         other: WCA 代理人
       #original_hash: b37456c
       contact: お問い合わせ
-      #original_hash: 32946e9
-      competitor_limit: 大会定員
-      #original_hash: a428739
-      entry_fee: 基本参加費
       #original_hash: 0eb5ed5
       information: 情報
       #original_hash: c5497bc
       events: 種目
       #original_hash: ff722f0
       registration_requirements: 参加申し込み要件
+      #original_hash: 74d0bf1
+      create_wca_account_html: 'WCAアカウントをお持ちでない場合，%{here}より作成してください。'
+      #original_hash: a082288
+      claim_wca_id_html: '初めての大会参加でない場合，%{here}よりWCA IDをWCAアカウントに連携させてください。'
+      #original_hash: 56fc229
+      register_html: '大会参加申込は%{here}より行ってください。'
+      #original_hash: 196725e
+      competitor_limit_is: '競技者の定員は%{competitor_limit}名です。'
+      #original_hash: 5101f65
+      no_competitor_limit: 大会参加定員はありません。
+      #original_hash: 86cf09f
+      entry_fee_is: '大会基本参加費は%{base_entry_fee}です。'
+      #original_hash: 5390a91
+      no_entry_fee: 大会参加費は無料です。
+      #original_hash: 29af5c2
+      use_stripe_html: '大会参加費はStripe (%{here}) によりお支払いください。'
+      #original_hash: 16cd1ba
+      refund_policy_html: >-
+        %{limit_date_and_time}以前にキャンセルされた場合，参加費の%{refund_policy_percent}を返金いたします。
+      #original_hash: 4aca553
+      no_refunds: キャンセル時の返金は行いません。
+      #original_hash: b38fa7b
+      on_the_spot_registration: '会場受付を受け付けます。会場受付の場合の大会基本参加費は%{on_the_spot_base_entry_fee}です。'
+      #original_hash: 1637bea
+      on_the_spot_registration_free: 会場受付は無料で受け付けます。
+      #original_hash: f5f687d
+      no_on_the_spot_registration: 会場受付は行いません。
+      #original_hash: 4df139d
+      guests_pay: '見学者は入場料%{guests_base_fee}をお支払いください。'
+      #original_hash: b6c863e
+      guests_free: 見学者の入場は無料です。
       #original_hash: 97a31ee
       click_to_display_requirements_html: 'この大会は終了しています。%{link_here} をクリックして参加申し込み要件を表示する。'
       #original_hash: ff19a74
@@ -1700,6 +1751,8 @@ ja:
       registration_close_after_open: 申し込み締め切りは申し込み開始より後である必要があります
       #original_hash: 43a83a9
       end_date_before_start: 終了日は開始日より後である必要があります
+      #original_hash: 0c507fa
+      refund_date_after_start: 返金期限は返金開始日以降としてください。
       #original_hash: be3933b
       span_too_many_days: '%{max_days} 間を超える大会は開催できません。'
       #original_hash: cdcd288
@@ -2091,7 +2144,7 @@ ja:
           '1': '%{current_user_claim}'
       '9':
         #original_hash: 7a4a71d
-        title: 大会に申し込み済みですが、競技種目を追加したい場合はどうしたらいいですか？同伴者を連れてきてもいいですか？
+        title: 大会に申し込み済みですが、競技種目を追加したい場合はどうしたらいいですか？見学者を連れてきてもいいですか？
         content:
           #original_hash: 957487d
           '1': >-
@@ -2156,7 +2209,7 @@ ja:
     title: WCA について
     mission:
       paragraphs:
-        #original_hash: 3e4f9b5
+        #original_hash: c86d105
         '1': >-
           World Cube Association はすべての Rubik ブランドパズルと側面を回転させて揃えるタイプのパズル
           の大会を管理します。代表的なものは、ハンガリーの Rubik 教授が発明した Rubik's Cube (ルービックキューブ)
@@ -2230,6 +2283,14 @@ ja:
         description: >-
           この委員会はWCA内での永続的な品質の向上、およびプロセス・WCA
           スタッフ・地域組織・大会運営者・大会スタッフを高い品質に保つための品質規格を世界中に適用することをサポートし促進する役割を担います。
+      wmt:
+        #original_hash: 2035811
+        name: WCAマーケティングチーム
+        #original_hash: f2a0140
+        description: このチームはWCAブランドの発展および管理，スポンサーの打診，WCA大会機器の援助，WCA関連商品の広告などを担当します。
+      banned:
+        #original_hash: d30e2e5
+        name: 制裁対象の競技者
       #original_hash: 3d5b64b
       delegates_html: >-
         <strong>WCA 代理人</strong>は、すべての WCA 公式大会が WCA
@@ -2253,18 +2314,6 @@ ja:
     minutes: 議事録
     #original_hash: 6db524a
     policies: 政策
-    #original_hash: ffc646a
-    dues: WCA Dues について
-    #original_hash: 9e7fbc2
-    logo: WCA ロゴ使用について
-    #original_hash: 900f7c7
-    proximity_policy: WCA 大会開催地ポリシー
-    #original_hash: 0d527c8
-    competition_name_policy: WCA 大会名ポリシー
-    #original_hash: caccb53
-    competition_announcement_policy: 大会告知方針
-    #original_hash: 32e6959
-    sponsor: スポンサー承認
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA 代理人
@@ -2387,6 +2436,9 @@ ja:
       info_html: >-
         この委員会はWCA内での永続的な品質の向上、およびプロセス・WCA
         スタッフ・地域組織・大会運営者・大会スタッフを高い品質に保つための品質規格を世界中に適用することをサポートし促進する役割を担います。
+    wmt:
+      #original_hash: f2a0140
+      info_html: このチームはWCAブランドの発展および管理，スポンサーの打診，WCA大会機器の援助，WCA関連商品の広告などを担当します。
   score_tools:
     #original_hash: ea9d41d
     title: WCA 記録ツール
