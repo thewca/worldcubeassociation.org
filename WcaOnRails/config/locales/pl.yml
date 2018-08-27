@@ -402,8 +402,18 @@ pl:
           wpisowego podczas rejestracji
         #original_hash: 4baf44b
         championship_type: Rodzaj mistrzostw
-        #original_hash: ff722f0
-        registration_requirements: Wymagania rejestracyjne
+        #original_hash: 556fda0
+        extra_registration_requirements: Dodatkowe wymagania rejestracyjne
+        #original_hash: 2529d04
+        on_the_spot_registration: Rejestracja na miejscu
+        #original_hash: bbff74c
+        on_the_spot_entry_fee_lowest_denomination: Wpisowe na miejscu
+        #original_hash: efbdbab
+        refund_policy_percent: Zwracany procent płatności
+        #original_hash: b332299
+        refund_policy_limit_date: Ostateczny termin zwracania płatności
+        #original_hash: 3542671
+        guests_entry_fee_lowest_denomination: Wpisowe dla gości
       registration:
         #original_hash: 3c23a67
         guests: Goście
@@ -644,11 +654,12 @@ pl:
         cityName: >-
           Nazwa miasta gdzie zawody mają miejsce. Nie powinna zawierać nazwy
           państwa (np. Warszawa).
-        #original_hash: 3d99319
+        #original_hash: bb470cc
         information: >-
-          Informacje o limicie zawodników, wysokości wpisowego dla zawodników i
-          widzów oraz inne istotne szczegóły dla ludzi zainteresowanych braniem
-          udziału lub oglądaniem.
+          Ważne informacje, z którymi powinien zapoznać się zawodnik. Będą one
+          wyświetlone na głównej stronie zawodów. <br/>Prosimy o wypełnienie
+          tego <b>w języku angielskim</b> oraz jakichkolwiek innych językach
+          używanych przez twoich zawodników.
         #original_hash: b4d020f
         delegate_ids: Delegaci WCA dla tych zawodów.
         #original_hash: 517d376
@@ -675,10 +686,12 @@ pl:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 950a7ea
+        #original_hash: 82ad56b
         base_entry_fee_lowest_denomination: >-
           Bazowe wpisowe na zawody. To wpisowe będzie wyświetlane na stronie
           informacyjnej zawodów i stronie rejestracji, jeżeli jest używana.
+          Jeżeli wynosi 0, zostanie wyświetlone zdanie informujące o tym, że
+          rejestracje będą akceptowane za darmo.
         #original_hash: 866bc05
         currency_code: Kod waluty w której wyrażone jest wpisowe.
         #original_hash: da39a3e
@@ -715,21 +728,34 @@ pl:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
-        #original_hash: 508c178
-        registration_requirements: >-
-          Prosimy o wskazanie tutaj wszelkich szczegółów odnośnie procesu
-          rejestracji, zgodnie z <a
-          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
-          target="_blank">Guideline 2c1+</a>. Po ogłoszeniu zawodów edycja tego
-          pola <b>nie</b> będzie już możliwa i wszelkie jego zmiany będa
-          wymagały zgody Zarządu. Przykładowo umieść tutaj informację, jeśli
-          zawodnicy muszą mieć czystą historię płatności z konkretnym podmiotem,
-          jeśli istnieje jakaś polityka zwrotów pieniężnych, lub jeśli będą
-          musieli odpowiedzieć na email potwierdzający w przypadku osiągnięcia
-          limitu zawodników.<br/>Prosimy o wypełnienie tego <b>w języku
-          angielskim</b> oraz jakichkolwiek innych językach używanych przez
-          twoich zawodników. Tekst ten będzie wyświetlany na stronie
-          rejestracji, jeżeli używasz systemu rejestracji WCA.
+        #original_hash: 3de153b
+        extra_registration_requirements: >-
+          Wskaż tutaj wszelkie dodatkowe wymagania rejestracyjne nieuwzględnione
+          powyżej, na przykład sposób płatności. <br/>Prosimy o wypełnienie tego
+          <b>w języku angielskim</b> oraz jakichkolwiek innych językach
+          używanych przez twoich zawodników. Tekst ten będzie wyświetlany na
+          stronie informacyjnej zawodów oraz na stronie rejestracji, jeżeli
+          używasz systemu rejestracji WCA.
+        #original_hash: da39a3e
+        on_the_spot_registration: ''
+        #original_hash: 8c4fdf8
+        on_the_spot_entry_fee_lowest_denomination: >-
+          Jeżeli wynosi 0, zostanie wyświetlone zdanie informujące o tym, że
+          rejestracja na miejscu będzie możliwa za darmo.
+        #original_hash: 180b7b3
+        refund_policy_percent: >-
+          Obecnie liczba ta pełni jedynie rolę informacyjną, zwroty płatności
+          będą musiały być dokonywane ręcznie. Jeżeli wynosi 0, zostanie
+          wyświetlone zdanie informujące o tym, że wpisowe nie będzie zwracane
+          pod żadnym warunkiem.
+        #original_hash: f64d853
+        refund_policy_limit_date: "Data po której płatności nie będą już\_zwracane"
+        #original_hash: 25a1324
+        guests_entry_fee_lowest_denomination: >-
+          Obecnie liczba ta pełni jedynie rolę informacyjną, wpisowe dla gości
+          nie może być zarządzane za pomocą strony. Jeżeli wynosi 0, zostanie
+          wyświetlone zdanie informujące o tym, że wstęp dla widzów jest
+          darmowy.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -896,6 +922,11 @@ pl:
           'true': Pytaj o gości
           #original_hash: f8c2332
           'false': NIE pytaj o gości
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': Rejestracja na miejscu będzie możliwa
+          #original_hash: 0f236df
+          'false': Rejestracja na miejscu NIE będzie możliwa
   mail_form:
     attributes:
       contact_form:
@@ -1788,16 +1819,51 @@ pl:
         other: Delegaci WCA
       #original_hash: b37456c
       contact: Kontakt
-      #original_hash: 32946e9
-      competitor_limit: Limit Zawodników
-      #original_hash: a428739
-      entry_fee: Wpisowe
       #original_hash: 0eb5ed5
       information: Informacje
       #original_hash: c5497bc
       events: Konkurencje
       #original_hash: ff722f0
       registration_requirements: Wymagania rejestracyjne
+      #original_hash: 74d0bf1
+      create_wca_account_html: 'Utwórz konto WCA %{here}, jeśli takowego nie posiadasz.'
+      #original_hash: a082288
+      claim_wca_id_html: >-
+        Jeżeli to nie są twoje pierwsze zawody, połącz swoje WCA ID ze swoim
+        kontem WCA %{here}.
+      #original_hash: 56fc229
+      register_html: 'Zarejestrauj się na te zawody %{here}.'
+      #original_hash: 196725e
+      competitor_limit_is: 'Limit zawodników wynosi %{competitor_limit}.'
+      #original_hash: 5101f65
+      no_competitor_limit: Nie ma limitu zawodników.
+      #original_hash: 86cf09f
+      entry_fee_is: 'Wpisowe na te zawody wynosi %{base_entry_fee}.'
+      #original_hash: 5390a91
+      no_entry_fee: Rejestracja na te zawody jest darmowa.
+      #original_hash: 29af5c2
+      use_stripe_html: >-
+        Wpisowe musi być uiszczone za pomocą Stripe %{here} po zarejestrowaniu
+        się.
+      #original_hash: 16cd1ba
+      refund_policy_html: >-
+        Jeżeli twoja rejestracja zostanie anulowana przed
+        %{limit_date_and_time}, otrzymasz zwrot w wysokości
+        %{refund_policy_percent} zapłaconego wpisowego.
+      #original_hash: 4aca553
+      no_refunds: Wpisowe nie będzie zwracane pod żadnym warunkiem.
+      #original_hash: b38fa7b
+      on_the_spot_registration: >-
+        Rejestracja na miejscu będzie możliwa z wpisowym w wysokości
+        %{on_the_spot_base_entry_fee}.
+      #original_hash: 1637bea
+      on_the_spot_registration_free: Rejestracja na miejscu będzie możliwa za darmo.
+      #original_hash: f5f687d
+      no_on_the_spot_registration: Rejestracja na miejscu nie będzie możliwa.
+      #original_hash: 4df139d
+      guests_pay: 'Wstęp dla widzów wynosi %{guests_base_fee}.'
+      #original_hash: b6c863e
+      guests_free: Wstęp dla widzów jest darmowy.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Zawody są zakończone, kliknij %{link_here}, aby wyświetlić zastosowane
@@ -1994,6 +2060,10 @@ pl:
       registration_close_after_open: rejestracja musi zostać zamknięta później niż otwarta
       #original_hash: 43a83a9
       end_date_before_start: Data końcowa nie może być przed datą początkową.
+      #original_hash: 0c507fa
+      refund_date_after_start: >-
+        Ostateczny termin zwracania płatności nie może następować po rozpoczęciu
+        zawodów.
       #original_hash: be3933b
       span_too_many_days: 'Zawody nie mogą trwać więcej niż %{max_days} dni.'
       #original_hash: cdcd288
@@ -2519,7 +2589,7 @@ pl:
     title: O WCA
     mission:
       paragraphs:
-        #original_hash: 3e4f9b5
+        #original_hash: c86d105
         '1': >-
           World Cube Association zarządza zawodami w łamigłówkach mechanicznych
           manipulowanych poprzez przekręcanie grup elementów, szerzej znanych
@@ -2620,6 +2690,14 @@ pl:
           standardów jakości, w celu zapewnienia spójnej wysokiej jakości
           procesów, Personelu WCA, Organizacji Regionalnych, Organizatorów
           Zawodów oraz Zespołów Organizacyjnych.
+      wmt:
+        #original_hash: 2035811
+        name: Zespół do Spraw Marketingu
+        #original_hash: f2a0140
+        description: >-
+          Ten zespół jest odpowiedzialny za rozwój i zarządzenianie Marką WCA,
+          szukanie sponsorów, wspieranie dystrybucji Sprzętu Zawodów WCA, oraz
+          zarządzanie towarami promocyjnymi WCA.
       banned:
         #original_hash: d30e2e5
         name: Zawodnicy z Zakazem Startu
@@ -2655,18 +2733,6 @@ pl:
     minutes: Protokoły
     #original_hash: 6db524a
     policies: Polityki WCA
-    #original_hash: ffc646a
-    dues: System Składek
-    #original_hash: 9e7fbc2
-    logo: Użycie Logo
-    #original_hash: 900f7c7
-    proximity_policy: Polityka Odległości Zawodów
-    #original_hash: 0d527c8
-    competition_name_policy: Polityka Nazw Zawodów
-    #original_hash: caccb53
-    competition_announcement_policy: Polityka Ogłaszania Zawodów
-    #original_hash: 32e6959
-    sponsor: Uznanie Sponsorów
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegaci WCA
@@ -2812,6 +2878,12 @@ pl:
         w celu zapewnienia spójnej wysokiej jakości procesów, Personelu WCA,
         Organizacji Regionalnych, Organizatorów Zawodów oraz Zespołów
         Organizacyjnych.
+    wmt:
+      #original_hash: f2a0140
+      info_html: >-
+        Ten zespół jest odpowiedzialny za rozwój i zarządzenianie Marką WCA,
+        szukanie sponsorów, wspieranie dystrybucji Sprzętu Zawodów WCA, oraz
+        zarządzanie towarami promocyjnymi WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Narzędzia Operujące na Wynikach WCA
