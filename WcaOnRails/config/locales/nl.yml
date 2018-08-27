@@ -1756,6 +1756,10 @@ nl:
       competitor_limit_is: 'Het maximum aantal deelnemers is %{competitor_limit}.'
       #original_hash: 86cf09f
       entry_fee_is: 'De deelnemersbijdrage voor deze wedstrijd is %{base_entry_fee}.'
+      #original_hash: 16cd1ba
+      refund_policy_html: >-
+        Als je aanmelding wordt geannuleerd voor %{limit_date_and_time}, dan
+        krijg je %{refund_policy_percent} euro van het betaalde bedrag terug.
       #original_hash: f5f687d
       no_on_the_spot_registration: Aanmeldingen bij binnenkomst worden niet geaccepteerd.
       #original_hash: 97a31ee
