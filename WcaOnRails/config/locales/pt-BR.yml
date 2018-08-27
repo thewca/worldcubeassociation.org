@@ -391,9 +391,9 @@ pt-BR:
         #original_hash: 4baf44b
         championship_type: Tipo de Campeonato
         #original_hash: 556fda0
-        registration_requirements: Requisitos adicionais para inscrição
-        #original_hash: ad74833
-        on_the_spot_registration: Quero aceita inscrições na hora do evento
+        extra_registration_requirements: Requisitos adicionais de inscrição
+        #original_hash: 2529d04
+        on_the_spot_registration: Inscrições na hora do evento
         #original_hash: bbff74c
         on_the_spot_entry_fee_lowest_denomination: Taxa de inscrição no local
         #original_hash: efbdbab
@@ -673,11 +673,11 @@ pt-BR:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 9edba75
+        #original_hash: 82ad56b
         base_entry_fee_lowest_denomination: >-
           A taxa base de inscrição para a competição. A taxa base será mostrada
           nas informações da competição e na página de inscrição, caso exista.
-          Se for deixada como 0, uma frase será mostrada dizendo que as
+          Se for configurada como 0, uma frase será mostrada dizendo que as
           inscrições serão gratuitas.
         #original_hash: 866bc05
         currency_code: O código da moeda da taxa de inscrição.
@@ -716,7 +716,7 @@ pt-BR:
         #original_hash: da39a3e
         championship_type: ''
         #original_hash: 3de153b
-        registration_requirements: >-
+        extra_registration_requirements: >-
           Por favor indique aqui qualquer requisito adicional não previsto
           acima, como por exemplo instruções de como pagar. <br/>Por favor
           preencha <b>em Inglês</b> e quaisquer outras línguas que os
@@ -725,23 +725,23 @@ pt-BR:
           inscrição pelo website da WCA.
         #original_hash: da39a3e
         on_the_spot_registration: ''
-        #original_hash: 48dd815
+        #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: >-
-          Se for deixada como 0, uma frase será mostrada dizendo que inscrições
-          no local serão aceitas de graça.
-        #original_hash: effff56
+          Se for configurada como 0, uma frase será mostrada dizendo que
+          inscrições no local serão aceitas de graça.
+        #original_hash: 180b7b3
         refund_policy_percent: >-
           Por enquanto este número é apenas informacional; devoluções terão que
-          ser feitas manualmente. Se for deixado como 0, uma frase será mostrada
-          dizendo que a taxa de inscrição não será devolvida em nenhuma
+          ser feitas manualmente. Se for configurado como 0, uma frase será
+          mostrada dizendo que a taxa de inscrição não será devolvida em nenhuma
           circustância.
         #original_hash: f64d853
         refund_policy_limit_date: Data após a qual não serão feitas mais devoluções.
-        #original_hash: eb638e2
+        #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
           Por enquanto este número é apenas informacional; taxas para convidados
-          não são gerenciadas por este website. Se for deixado como 0, uma frase
-          será mostrada dizendo que espectadores podem assistir de graça.
+          não são gerenciadas por este website. Se for configurado como 0, uma
+          frase será mostrada dizendo que espectadores podem assistir de graça.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -905,6 +905,11 @@ pt-BR:
           'true': Perguntar sobre acompanhantes
           #original_hash: f8c2332
           'false': NÃO perguntar sobre acompanhantes
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': Inscrições no local serão aceitas
+          #original_hash: 0f236df
+          'false': Inscrições no local NÃO serão aceitas
   mail_form:
     attributes:
       contact_form:
