@@ -151,7 +151,8 @@ fr:
       #original_hash: 4c66ad0
       cellName: Qualification combinée
   attempts:
-    attempt_name: "Essai %{number}"
+    #original_hash: 17dae1e
+    attempt_name: 'Essai %{number}'
   round:
     #original_hash: 236c41d
     name: '%{event_name}, %{round_name}'
@@ -243,7 +244,8 @@ fr:
     date_placeholder: AAAA-MM-JJ
     #original_hash: 52249b5
     datetime_placeholder: 'AAAA-MM-JJ HH:MM'
-    time_format: "24h"
+    #original_hash: 7136e3b
+    time_format: 24h
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -396,9 +398,9 @@ fr:
         #original_hash: 4baf44b
         championship_type: Type de championnat
         #original_hash: 556fda0
-        registration_requirements: Conditions d'inscription additionnelles
-        #original_hash: ad74833
-        on_the_spot_registration: Je souhaite accepter les inscriptions sur place
+        extra_registration_requirements: Conditions d'inscription additionnelles
+        #original_hash: 2529d04
+        on_the_spot_registration: Inscriptions sur place
         #original_hash: bbff74c
         on_the_spot_entry_fee_lowest_denomination: Coût des inscriptions sur place
         #original_hash: efbdbab
@@ -684,12 +686,12 @@ fr:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 9edba75
+        #original_hash: 82ad56b
         base_entry_fee_lowest_denomination: >-
           Les frais d'inscriptions de base pour la compétition. Les frais
           d'inscriptions seront affichés dans les informations de la compétition
-          et lors de l'inscription (si utilisée). S'ils sont laissés à 0, une
-          phrase sera affichée informant que les inscriptions sont gratuites.
+          et lors de l'inscription (si utilisée). S'ils sont mis à 0, une phrase
+          sera affichée informant que les inscriptions sont gratuites.
         #original_hash: 866bc05
         currency_code: La monnaie utilisée pour les frais d'inscription
         #original_hash: da39a3e
@@ -727,7 +729,7 @@ fr:
         #original_hash: da39a3e
         championship_type: ''
         #original_hash: 3de153b
-        registration_requirements: >-
+        extra_registration_requirements: >-
           Merci d'indiquer ici toute autre conditions d'inscriptions non
           couverte ci dessus, comme par exemple comment payer les frais
           d'inscription. <br/>Merci de remplir ces informations <b>en
@@ -737,23 +739,23 @@ fr:
           inscriptions sur le site de la WCA.
         #original_hash: da39a3e
         on_the_spot_registration: ''
-        #original_hash: 48dd815
+        #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: >-
-          Si laissé à 0, une phrase indiquera que les inscriptions sur place
-          seront gratuites.
-        #original_hash: effff56
+          Si mis à 0, une phrase indiquera que les inscriptions sur place seront
+          gratuites.
+        #original_hash: 180b7b3
         refund_policy_percent: >-
           Pour le moment ce nombre est à titre informatif, les remboursements
-          doivent être effectués manuellement. Si laissé à 0, une phrase
-          indiquera que les frais d'inscriptions ne seront pas remboursés.
+          doivent être effectués manuellement. Si mis à 0, une phrase indiquera
+          que les frais d'inscriptions ne seront pas remboursés.
         #original_hash: f64d853
         refund_policy_limit_date: Date après laquelle aucun remboursement ne sera effectué.
-        #original_hash: eb638e2
+        #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
           Pour le moment ce nombre est à titre informatif seulement, les frais
           d'inscription pour les accompagnateurs ne peuvent pas être gérés sur
-          ce site. Si laissé à 0, une phrase indiquera que les accompagnateurs
-          et spectateurs peuvent venir gratuitement.
+          ce site. Si mis à 0, une phrase indiquera que les accompagnateurs et
+          spectateurs peuvent venir gratuitement.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -921,6 +923,11 @@ fr:
           'true': Demander de renseigner les accompagnateurs
           #original_hash: f8c2332
           'false': Ne PAS demander de renseigner les accompagnateurs
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': Les inscriptions sur place seront acceptées
+          #original_hash: 0f236df
+          'false': Les inscriptions sur place ne seront PAS acceptées
   mail_form:
     attributes:
       contact_form:
@@ -1822,7 +1829,9 @@ fr:
         Si ce n'est pas votre première compétition, associez votre ID WCA à
         votre compte WCA %{here}.
       #original_hash: 56fc229
-      register_html: 'Inscrivez-vous pour cette compétition %{here}.'
+      register_link_html: 'Inscrivez-vous pour cette compétition %{here}.'
+      #original_hash: 45834fd
+      register_below_html: Inscrivez-vous pour cette compétition ci-dessous.
       #original_hash: 196725e
       competitor_limit_is: 'Les inscriptions sont limitées à %{competitor_limit} compétiteurs.'
       #original_hash: 5101f65
@@ -1832,9 +1841,13 @@ fr:
       #original_hash: 5390a91
       no_entry_fee: L'inscription à cette compétition est gratuite.
       #original_hash: 29af5c2
-      use_stripe_html: >-
-        Les frais d'inscriptions doivent être payé via Stripe %{here} une fois
+      use_stripe_link_html: >-
+        Les frais d'inscriptions doivent être réglés via Stripe %{here} une fois
         l'inscription soumise.
+      #original_hash: cea0eb4
+      use_stripe_below_html: >-
+        Les frais d'inscriptions doivent être réglés via Stripe ci-dessous une
+        fois l'inscription soumise.
       #original_hash: 16cd1ba
       refund_policy_html: >-
         Si votre inscription est annulée avant le %{limit_date_and_time} vous
@@ -2137,6 +2150,7 @@ fr:
       general_info: Informations générales
       #original_hash: c5497bc
       events: Épreuves
+      #original_hash: 0a8adac
       schedule: Planning
     events:
       time_limit_information:
@@ -2178,32 +2192,37 @@ fr:
       proceed: Qualifiés
     schedule:
       display_as:
-        label: "Afficher le planning sous forme de :"
-        table: "Tableau"
-        calendar: "Calendrier"
-      display_for_room: "Afficher le planning pour la salle :"
-      time_limit_information:
-        time_limit_html: "Si vous atteignez la limite de temps pendant votre résolution, le juge vous stoperra et le résultat sera DNF (voir la %{regulation_link})."
-        #context: as used in "please see Regulation A1a4"
-        regulation_link_text: "Règle %{number}"
-        #context: as used in "please see Guideline A1a2++"
-        guideline_link_text: "Recommandation %{number}"
-        #context: used in the sentence "a cumulative time limit may be enforced [...]"
-        cumulative_time_limit: "limite de temps cumulative"
-        cumulative_one_round_html: "Une %{cumulative_time_limit} peut être imposée (voir la %{regulation_link})."
-        cumulative_across_rounds_html: "Une %{cumulative_time_limit} peut être imposée sur un ensemble de tours (voir la %{guideline_link})."
-        cutoff_html: "Le score à atteindre pour passer à la deuxième phase d'un tour combiné (voir la %{regulation_link})."
+        #original_hash: ec5dd7c
+        label: 'Afficher le planning sous forme de :'
+        #original_hash: 0424f6e
+        table: Tableau
+        #original_hash: adab509
+        calendar: Calendrier
+      #original_hash: 017e4d8
+      display_for_room: 'Afficher le planning pour la salle :'
       range:
-        from: "De"
-        to: "Jusqu'à"
-      start: "Début"
-      end: "Fin"
-      activity: "Activité"
-      room: "Salle"
-      venue_information_html: "Vous visualisez le planning de la salle %{venue_name}."
-      timezone_message: "Le fuseau horaire de ce planning est %{timezone}."
-      multiple_venues_available: "Cette compétition a plusieurs salles, pensez à consulter le planning des autres salles également."
-      schedule_for_date: "Planning pour %{day_name} (%{full_date})"
+        #original_hash: 3f66052
+        from: De
+        #original_hash: ae79ea1
+        to: Jusqu'à
+      #original_hash: 952f375
+      start: Début
+      #original_hash: a2bb9d3
+      end: Fin
+      #original_hash: 81c0d91
+      activity: Activité
+      #original_hash: 90e2fca
+      room: Salle
+      #original_hash: 2896c7a
+      venue_information_html: 'Vous visualisez le planning de la salle %{venue_name}.'
+      #original_hash: b97e383
+      timezone_message: 'Le fuseau horaire de ce planning est %{timezone}.'
+      #original_hash: 2ab94a0
+      multiple_venues_available: >-
+        Cette compétition a plusieurs salles, pensez à consulter le planning des
+        autres salles également.
+      #original_hash: 37b1adb
+      schedule_for_date: 'Planning pour %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -2224,6 +2243,8 @@ fr:
         orga_view: Page organisateur
         #original_hash: c6171f8
         event_view: Gérer les épreuves
+        #original_hash: 6235b27
+        schedule_view: Gérer le planning
         #original_hash: 6f7aef9
         payment_view: Compte des paiements
         #original_hash: 76bfdcf
