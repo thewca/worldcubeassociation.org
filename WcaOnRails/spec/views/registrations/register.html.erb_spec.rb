@@ -48,7 +48,7 @@ RSpec.describe "registrations/register" do
 
   it "renders paid registrations" do
     setup :paid
-    expect(rendered).to match(/which fully covers the entry fees/)
+    expect(rendered).to match(/which fully covers the registration fees/)
   end
 
   it "renders unpaid registrations and ask for payment" do
