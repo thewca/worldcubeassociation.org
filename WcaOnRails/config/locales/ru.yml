@@ -150,6 +150,9 @@ ru:
       name: Комбинированная квалификация
       #original_hash: 4c66ad0
       cellName: Комбинированная квалификация
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: 'Попытка %{number}'
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
@@ -249,6 +252,8 @@ ru:
     date_placeholder: ГГГГ-ММ-ДД
     #original_hash: 52249b5
     datetime_placeholder: 'ГГГГ-ММ-ДД ЧЧ:ММ'
+    #original_hash: 7136e3b
+    time_format: 24h
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -394,8 +399,18 @@ ru:
         enable_donations: Включить возможность пожертвований вместе со взносом за участие
         #original_hash: 4baf44b
         championship_type: Тип чемпионата
-        #original_hash: ff722f0
-        registration_requirements: Требования к регистрации
+        #original_hash: 556fda0
+        extra_registration_requirements: Дополнительные требования к регистрации
+        #original_hash: 2529d04
+        on_the_spot_registration: Регистрации на месте
+        #original_hash: bbff74c
+        on_the_spot_entry_fee_lowest_denomination: Взнос за участие на месте
+        #original_hash: efbdbab
+        refund_policy_percent: Возвращаемая доля
+        #original_hash: b332299
+        refund_policy_limit_date: Крайний срок возврата взноса
+        #original_hash: 3542671
+        guests_entry_fee_lowest_denomination: Взнос для зрителей
       registration:
         #original_hash: 3c23a67
         guests: Гости
@@ -642,12 +657,12 @@ ru:
           <strong>Moscow</strong>, или <strong>San Francisco,
           California</strong>. <br/>Это поле, а также все поля в этой форме
           заполняются по-английски.
-        #original_hash: 3d99319
+        #original_hash: bb470cc
         information: >-
-          Информация об этих соревнованиях, взносы за участие.
-          Пример:<br/>Registration will be closed on January 16 or when we reach
-          40 competitors. Registration fee is 300 RUB for 7 events or less, 400
-          RUB for 8 events or more.
+          Важная информация, которую следует знать участникам. Она будет
+          отображена на главной странице соревнования. <br/>Пожалуйста,
+          заполняйте это поле <b>на английском</b> и на других языках, на
+          которых говорят ваши участники.
         #original_hash: b4d020f
         delegate_ids: WCA Делегат(ы) для этого соревнования.
         #original_hash: 517d376
@@ -672,10 +687,12 @@ ru:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 950a7ea
+        #original_hash: 82ad56b
         base_entry_fee_lowest_denomination: >-
           Взнос за участие на соревнованиях. Он будет отображаться на странице
           соревнований, а также на странице регистрации, если она используется.
+          Если в этом поле стоит 0, то будет написано, что регистрация
+          бесплатна.
         #original_hash: 866bc05
         currency_code: Код валюты для взноса за участие.
         #original_hash: da39a3e
@@ -709,21 +726,32 @@ ru:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
-        #original_hash: 508c178
-        registration_requirements: >-
-          Пожалуйста, напишите какие-либо особенности в процессе регистрации,
-          согласно <a
-          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
-          target="_blank">Дополнению 2c1+</a>. После того, как соревнование
-          объявлено, это поле будет <b>невозможно</b> редактировать, и нужно
-          будет одобрение Руководства WCA для его изменения.<br/>Например,
-          напишите, должны ли участники не иметь долгов перед какими-либо
-          организаторами, возможен ли возврат взносов, должны ли участники
-          ответить на какое-нибудь письмо, если достигнут максимальный лимит на
-          участников.<br/>Пожалуйста, заполняйте это <b>по-английски</b>, а
-          также на других языках, на которых говорят ваши участники; это будет
-          отображаться на странице регистрации, если вы используете сайт WCA для
-          регистрации.
+        #original_hash: 3de153b
+        extra_registration_requirements: >-
+          Пожалуйста, укажите дополнительные требования к регистрации, которые
+          не были указаны выше, например, инструкции по оплате. <br/>
+          Пожалуйста, заполняйте это поле <b>на английском</b>, а также на
+          других языках, на которых разговаривают ваши участники; эти требования
+          будут отображаться на странице соревнования, а также на странице
+          регистрации, если вы используете для них сайт WCA.
+        #original_hash: da39a3e
+        on_the_spot_registration: ''
+        #original_hash: 8c4fdf8
+        on_the_spot_entry_fee_lowest_denomination: >-
+          Если в этом поле стоит 0, участникам будет указано, что регистрация на
+          месте бесплатная.
+        #original_hash: 180b7b3
+        refund_policy_percent: >-
+          Пока что это поле только для информации, вы должны сами возвращать
+          взносы. Если здесь стоит 0, участникам будет показано, что взносы не
+          будут возвращаться.
+        #original_hash: f64d853
+        refund_policy_limit_date: 'Дата, после которой взносы больше не будут возвращаться'
+        #original_hash: 25a1324
+        guests_entry_fee_lowest_denomination: >-
+          Пока что это число только для информации, на этом сайте нельзя
+          принимать взносы для гостей. Если здесь стоит 0, участникам будет
+          показано, что зрители могут прийти бесплатно.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -884,6 +912,11 @@ ru:
           'true': Спрашивать о гостях
           #original_hash: f8c2332
           'false': Не спрашивать о гостях
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': Можно зарегистрироваться на месте
+          #original_hash: 0f236df
+          'false': На месте зарегистрироваться НЕЛЬЗЯ
   mail_form:
     attributes:
       contact_form:
@@ -1749,16 +1782,52 @@ ru:
         other: WTF
       #original_hash: b37456c
       contact: Контакты
-      #original_hash: 32946e9
-      competitor_limit: Лимит участников
-      #original_hash: a428739
-      entry_fee: Взнос за участие
       #original_hash: 0eb5ed5
       information: Информация
       #original_hash: c5497bc
       events: Дисциплины
       #original_hash: ff722f0
       registration_requirements: Требования к регистрации
+      #original_hash: 74d0bf1
+      create_wca_account_html: 'Создайте WCA аккаунт %{here}, если у вас его ещё нет.'
+      #original_hash: a082288
+      claim_wca_id_html: >-
+        Если вы уже были на каком-нибудь соревновании, привяжите ваш WCA ID к
+        вашему аккаунту %{here}.
+      #original_hash: 56fc229
+      register_link_html: 'Зарегистрируйтесь на соревнование %{here}.'
+      #original_hash: 45834fd
+      register_below_html: Зарегистрируйтесь на соревнование ниже.
+      #original_hash: 196725e
+      competitor_limit_is: 'Лимит на число участников %{competitor_limit}.'
+      #original_hash: 5101f65
+      no_competitor_limit: Лимита на число участников нет.
+      #original_hash: 86cf09f
+      entry_fee_is: 'Взнос за участие составляет %{base_entry_fee}.'
+      #original_hash: 5390a91
+      no_entry_fee: Регистрация на это соревнование бесплатна.
+      #original_hash: 29af5c2
+      use_stripe_link_html: 'Взнос за участие нужно оплатить через Stripe %{here} после регистрации.'
+      #original_hash: cea0eb4
+      use_stripe_below_html: Взнос за участие надо оплатить через Stripe ниже после регистрации.
+      #original_hash: 16cd1ba
+      refund_policy_html: >-
+        Если вы отмените вашу регистрацию до %{limit_date_and_time}, вам будет
+        возвращено %{refund_policy_percent} от вашего взноса.
+      #original_hash: 4aca553
+      no_refunds: Взносы за участие не будут возвращаться при отмене регистрации.
+      #original_hash: b38fa7b
+      on_the_spot_registration: >-
+        Можно зарегистрироваться на месте, взнос будет составлять
+        %{on_the_spot_base_entry_fee}.
+      #original_hash: 1637bea
+      on_the_spot_registration_free: Можно бесплатно зарегистрироваться на месте.
+      #original_hash: f5f687d
+      no_on_the_spot_registration: Зарегистрироваться на месте нельзя.
+      #original_hash: 4df139d
+      guests_pay: 'Взнос для зрителей составляет %{guests_base_fee}.'
+      #original_hash: b6c863e
+      guests_free: Зрители могут прийти бесплатно.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Соревнование окончено, посмотрите %{link_here}, какие были требования к
@@ -1952,6 +2021,8 @@ ru:
       registration_close_after_open: закрытие регистрации должно быть после открытия
       #original_hash: 43a83a9
       end_date_before_start: Дата окончания не может быть до даты начала.
+      #original_hash: 0c507fa
+      refund_date_after_start: Крайний срок возврата взносов не может быть после начала соревнования.
       #original_hash: be3933b
       span_too_many_days: 'Соревнование не может длиться более %{max_days} дней.'
       #original_hash: cdcd288
@@ -2033,6 +2104,8 @@ ru:
       general_info: Общая информация
       #original_hash: c5497bc
       events: Дисциплины
+      #original_hash: 0a8adac
+      schedule: Расписание
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2070,6 +2143,39 @@ ru:
       cutoff: Катофф
       #original_hash: 02ed4a4
       proceed: Проходят
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: 'Показывать расписание:'
+        #original_hash: 0424f6e
+        table: В виде таблицы
+        #original_hash: adab509
+        calendar: В виде календаря
+      #original_hash: 017e4d8
+      display_for_room: 'Показать расписание для:'
+      range:
+        #original_hash: 3f66052
+        from: От
+        #original_hash: ae79ea1
+        to: до
+      #original_hash: 952f375
+      start: Начало
+      #original_hash: a2bb9d3
+      end: Конец
+      #original_hash: 81c0d91
+      activity: Дисциплина
+      #original_hash: 90e2fca
+      room: Помещение
+      #original_hash: 2896c7a
+      venue_information_html: 'Расписание для помещения %{venue_name}'
+      #original_hash: b97e383
+      timezone_message: 'Все времена указаны в часовом поясе %{timezone}.'
+      #original_hash: 2ab94a0
+      multiple_venues_available: >-
+        Есть несколько помещений, убедитесь, что вы также просмотрели расписание
+        других помещений!
+      #original_hash: 37b1adb
+      schedule_for_date: 'Расписание на %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -2090,6 +2196,8 @@ ru:
         orga_view: Редактировать как организатор
         #original_hash: c6171f8
         event_view: Управление дисциплинами
+        #original_hash: 6235b27
+        schedule_view: Управление расписанием
         #original_hash: 6f7aef9
         payment_view: Настроить платежи
         #original_hash: 76bfdcf
@@ -2465,7 +2573,7 @@ ru:
     title: О WCA
     mission:
       paragraphs:
-        #original_hash: 3e4f9b5
+        #original_hash: c86d105
         '1': >-
           Всемирная Ассоциация Кубика (WCA) проводит соревнования по шарнирным
           головоломкам. Наиболее известная из них &mdash; кубик Рубика,
@@ -2563,6 +2671,13 @@ ru:
           качества для обеспечения постоянного высокого качества процессов,
           персонала WCA, региональных организаций, организаторов соревнований и
           персонала соревнований.
+      wmt:
+        #original_hash: 2035811
+        name: Команда Маркетинга WCA
+        #original_hash: f2a0140
+        description: >-
+          Эта команда ответственна за развитие и управление Марки WCA, поиск
+          спонсоров, оснащение оборудованием и сбыт товаров WCA.
       banned:
         #original_hash: d30e2e5
         name: Забаненные участники
@@ -2748,6 +2863,11 @@ ru:
         обеспечить высокое качество процессов между Персоналом WCA,
         Региональными Организациями, организаторами соревнований и участниками
         соревнований.
+    wmt:
+      #original_hash: f2a0140
+      info_html: >-
+        Эта команда ответственна за развитие и управление Марки WCA, поиск
+        спонсоров, оснащение оборудованием и сбыт товаров WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Утилиты для ввода результатов
