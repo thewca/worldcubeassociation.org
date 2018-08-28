@@ -21,11 +21,6 @@ module LocalizedSortable
 
   included do
     scope :uncached_real, -> { where.not(id: fictive_ids) }
-
-    self::ALL_SORTED_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
-      objects = I18nUtils.localized_sort_by!(locale, self.c_all_by_id.values) { |object| object.name_in(locale) }
-      [locale, objects]
-    end].freeze
   end
 
   class_methods do
@@ -38,7 +33,11 @@ module LocalizedSortable
     end
 
     def all_sorted_by(locale, real: false)
-      real ? self::ALL_SORTED_BY_LOCALE[locale].select(&:real?) : self::ALL_SORTED_BY_LOCALE[locale]
+      @all_sorted_by_locale ||= Hash[I18n.available_locales.map do |available_locale|
+        objects = I18nUtils.localized_sort_by!(available_locale, self.c_all_by_id.values) { |object| object.name_in(available_locale) }
+        [available_locale, objects]
+      end].freeze
+      real ? @all_sorted_by_locale[locale].select(&:real?) : @all_sorted_by_locale[locale]
     end
   end
 end

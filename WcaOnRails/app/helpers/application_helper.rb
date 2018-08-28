@@ -148,7 +148,7 @@ module ApplicationHelper
 
   def region_option_tags(selected_id: nil, real_only: false)
     regions = {
-      t('common.continent') => Continent::ALL_SORTED_BY_LOCALE[I18n.locale].map { |continent| [continent.name, continent.id] },
+      t('common.continent') => Continent.all_sorted_by(I18n.locale, real: real_only).map { |continent| [continent.name, continent.id] },
       t('common.country') => Country.all_sorted_by(I18n.locale, real: real_only).map { |country| [country.name, country.id] },
     }
 
