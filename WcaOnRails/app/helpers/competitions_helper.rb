@@ -112,4 +112,25 @@ module CompetitionsHelper
     }
     grouped_options_for_select(grouped_championship_types, selected)
   end
+
+  def first_and_last_time_from_activities(activities, timezone)
+    # The goal of this function is to determine what should be the starting and ending points in the time axis of the calendar.
+    # Which means we need to find the earliest start_time (and latest end_time) for any activity occuring on all days, expressed in the local timezone.
+    # To do that we first convert the start_time to the local timezone, and keep only the "time of the day" component of the datetime.
+    # We can sort the activities based on this value to compute the extremum of the time axis.
+    sorted_activities = activities.sort_by { |a| a.start_time.in_time_zone(timezone).strftime("%H:%M") }
+    first_activity = sorted_activities.first
+    first_time = if first_activity
+                   first_activity.start_time.in_time_zone(timezone).strftime("%H:00:00")
+                 else
+                   "08:00:00"
+                 end
+    last_activity = sorted_activities.last
+    last_time = if last_activity
+                  last_activity.end_time.in_time_zone(timezone).strftime("%H:59:00")
+                else
+                  "20:00:00"
+                end
+    [first_time, last_time]
+  end
 end

@@ -149,7 +149,7 @@ const IntroductionMessage = () => (
       Depending on the size and setup of the competition, it may take place in several rooms of several venues.
       Therefore a schedule is necessarily linked to a specific room.
       Each room may have its own schedule (with all or a subset of events).
-      You can create the competition's schedule below by first creating at least one venue with one room first.
+      So you can start creating the competition's schedule below by adding at least one venue with one room.
       Then you will be able to select this room in the "Edit schedules" panel, and drag and drop event rounds (or attempts for some events) on it.
     </p>
     <p>

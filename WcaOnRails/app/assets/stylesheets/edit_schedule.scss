@@ -44,7 +44,7 @@
         bottom: auto;
       }
       .selected-activity {
-        border: 2px solid $selected-activity-border-color;
+        border: 3px solid $selected-activity-border-color;
         margin-top: 1px;
         margin-bottom: 1px;
       }
@@ -114,28 +114,6 @@
           border: 2px solid $selected-activity-border-color;
         }
 
-        .fc-event {
-          &.fc-short > .fc-content {
-            // By default for vertically short events FC don't display the full time
-            // But we have some width to do so
-            .fc-time {
-              &::before {
-                content: "";
-              }
-              &::after {
-                content: ":\000A0";
-              }
-              span {
-                display: inline-block;
-              }
-            }
-          }
-
-          .fc-bg {
-            // FC applies a white background with opacity .25 to each event, .15 makes it a bit darker
-            opacity: 0.15;
-          }
-        }
       }
       #drop-event-area {
         z-index: 0;

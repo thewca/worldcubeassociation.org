@@ -110,6 +110,9 @@ en:
     "h":
       name: "Combined qualification"
       cellName: "Combined qualification"
+  #context: attempt name
+  attempts:
+    attempt_name: "Attempt %{number}"
   round:
     #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Combined First round"
     name: "%{event_name} %{round_name}"
@@ -171,6 +174,8 @@ en:
     delete: Delete
     date_placeholder: "YYYY-MM-DD"
     datetime_placeholder: "YYYY-MM-DD HH:MM"
+    #context: the time format in the schedule table. Please use "12h" for am/pm time, or "24h" for 24 hours time.
+    time_format: "12h"
   #context: Key used in the OAuth part of the site (checkout the /oauth/applications page for more details)
   oauth:
     applications:
@@ -1130,6 +1135,7 @@ en:
     show:
       general_info: "General info"
       events: "Events"
+      schedule: "Schedule"
     #context: on the events page
     events:
       #context: explanation of what time limit, cutoff, and format are
@@ -1149,6 +1155,27 @@ en:
       time_limit: "Time limit"
       cutoff: "Cutoff"
       proceed: "Proceed"
+    #context: competition's schedule tab
+    schedule:
+      #context: when selecting the kind of schedule to display
+      display_as:
+        label: "Display the schedule as:"
+        table: "Table"
+        calendar: "Calendar"
+      #context: when selecting the rooms to display on the schedule
+      display_for_room: "Display schedule for:"
+      #context: when talking about a time frame, like "From 8:00 To 12:00"
+      range:
+        from: "From"
+        to: "To"
+      start: "Start"
+      end: "End"
+      activity: "Activity"
+      room: "Room"
+      venue_information_html: "You are viewing the schedule for the venue %{venue_name}."
+      timezone_message: "The schedule is displayed in the timezone %{timezone}."
+      multiple_venues_available: "This competition has multiple venues, make sure to check out the schedule for the other venues as well!"
+      schedule_for_date: "Schedule for %{day_name} (%{full_date})"
     #context: entry of the left navigation menu
     nav:
       menu:
@@ -1161,6 +1188,7 @@ en:
         clone: "Clone"
         orga_view: "Organizer view"
         event_view: "Manage events"
+        schedule_view: "Manage schedule"
         payment_view: "Setup payments"
         admin_view: "Admin view"
         tabs: "Manage tabs"

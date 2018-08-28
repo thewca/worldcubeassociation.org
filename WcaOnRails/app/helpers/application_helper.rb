@@ -84,6 +84,15 @@ module ApplicationHelper
     content_tag :span, "", class: "wca-local-time", data: { utc_time: time.in_time_zone.utc.iso8601, locale: I18n.locale }
   end
 
+  def time_format_for_current_locale
+    case I18n.t("common.time_format")
+    when "12h"
+      "%I:%M %p"
+    else
+      "%H:%M"
+    end
+  end
+
   def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {}, greedy: true)
     data[:locale] = I18n.locale
     table_classes = "table table-condensed #{table_class}"
