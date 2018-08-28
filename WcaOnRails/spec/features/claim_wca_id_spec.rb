@@ -19,12 +19,8 @@ RSpec.feature "Claim WCA ID" do
       # field.
       expect(page.find("div.user_dob_verification", visible: false).visible?).to eq false
 
-      selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
-      selectize_input.native.send_key(person.wca_id)
-      # Wait for selectize popup to appear.
-      expect(page).to have_selector("div.selectize-dropdown", visible: true)
-      # Select item with selectize.
-      page.find("div.user_unconfirmed_wca_id input").native.send_key(:return)
+      # Fill in WCA ID.
+      fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
       expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
@@ -56,12 +52,7 @@ RSpec.feature "Claim WCA ID" do
     it 'tells you to contact Results team if your WCA ID does not have a birthdate' do
       visit "/profile/claim_wca_id"
 
-      selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
-      selectize_input.native.send_key(person_without_dob.wca_id)
-      # Wait for selectize popup to appear.
-      expect(page).to have_selector("div.selectize-dropdown", visible: true)
-      # Select item with selectize.
-      page.find("div.user_unconfirmed_wca_id input").native.send_key(:return)
+      fill_in_selectize "WCA ID", with: person_without_dob.wca_id
 
       expect(page.find("#select-nearby-delegate-area")).to have_content "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact the WCA Results Team to resolve this."
     end
