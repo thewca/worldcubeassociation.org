@@ -150,6 +150,9 @@ pt-BR:
       name: Qualificação combinada
       #original_hash: 4c66ad0
       cellName: Qualificação combinada
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: 'Tentativa %{number}'
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
@@ -243,6 +246,8 @@ pt-BR:
     date_placeholder: AAAA-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'AAAA-MM-DD HH:MM'
+    #original_hash: 7136e3b
+    time_format: 12h
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1775,7 +1780,9 @@ pt-BR:
         Se esta não é sua primeira competição, associe sua ID da WCA à sua conta
         da WCA %{here}.
       #original_hash: 56fc229
-      register_html: 'Se inscreva para esta competição %{here}.'
+      register_link_html: 'Inscreva-se para esta competição %{here}.'
+      #original_hash: 45834fd
+      register_below_html: Inscreva-se para esta competição abaixo.
       #original_hash: 196725e
       competitor_limit_is: 'Há uma limite de %{competitor_limit} competidores.'
       #original_hash: 5101f65
@@ -1785,9 +1792,9 @@ pt-BR:
       #original_hash: 5390a91
       no_entry_fee: A inscrição para esta competição é gratuita.
       #original_hash: 29af5c2
-      use_stripe_html: >-
-        A taxa de inscrição deve ser feita pelo Stripe %{here} após sua
-        inscrição.
+      use_stripe_link_html: 'A taxa de inscrição deve ser paga pelo Stripe %{here} após a inscrição.'
+      #original_hash: cea0eb4
+      use_stripe_below_html: A taxa de inscrição deve ser paga pelo Stripe abaixo após a inscrição.
       #original_hash: 16cd1ba
       refund_policy_html: >-
         Se sua inscrição for cancelada antes de %{limit_date_and_time} você
@@ -2086,6 +2093,8 @@ pt-BR:
       general_info: Informações gerais
       #original_hash: c5497bc
       events: Eventos
+      #original_hash: 0a8adac
+      schedule: Cronograma
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2123,6 +2132,39 @@ pt-BR:
       cutoff: Tempo de corte
       #original_hash: 02ed4a4
       proceed: Avançam
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: 'Mostrar o cronograma como:'
+        #original_hash: 0424f6e
+        table: Tabela
+        #original_hash: adab509
+        calendar: Calendário
+      #original_hash: 017e4d8
+      display_for_room: 'Mostrar cronograma de:'
+      range:
+        #original_hash: 3f66052
+        from: De
+        #original_hash: ae79ea1
+        to: Até
+      #original_hash: 952f375
+      start: Início
+      #original_hash: a2bb9d3
+      end: Fim
+      #original_hash: 81c0d91
+      activity: Atividade
+      #original_hash: 90e2fca
+      room: Sala
+      #original_hash: 2896c7a
+      venue_information_html: 'Você está vendo o cronograma do local %{venue_name}.'
+      #original_hash: b97e383
+      timezone_message: 'O cronograma está no fuso horário %{timezone}.'
+      #original_hash: 2ab94a0
+      multiple_venues_available: >-
+        Esta competição tem múltiplos locais; certifique-se de ver o cronograma
+        para os outros locais também!
+      #original_hash: 37b1adb
+      schedule_for_date: 'Cronograma de %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -2143,6 +2185,8 @@ pt-BR:
         orga_view: Visão do organizador
         #original_hash: c6171f8
         event_view: Gerenciar eventos
+        #original_hash: 6235b27
+        schedule_view: Gerenciar cronograma
         #original_hash: 6f7aef9
         payment_view: Configurar pagamentos
         #original_hash: 76bfdcf
