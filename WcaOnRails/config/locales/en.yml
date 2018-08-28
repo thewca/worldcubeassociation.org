@@ -237,7 +237,7 @@ en:
         end_date: "End date"
         external_website: "Website"
         generate_website: "I would like to use WCA website instead of an external one for additional information."
-        base_entry_fee_lowest_denomination: "Base entry fee"
+        base_entry_fee_lowest_denomination: "Base registration fee"
         currency_code: "Currency code"
         delegate_ids: "WCA Delegate(s)"
         organizer_ids: "Organizer(s)"
@@ -258,7 +258,7 @@ en:
         championship_type: "Championship type"
         extra_registration_requirements: "Extra registration requirements"
         on_the_spot_registration: "On the spot registrations"
-        on_the_spot_entry_fee_lowest_denomination: "On the spot entry fee"
+        on_the_spot_entry_fee_lowest_denomination: "On the spot base registration fee"
         refund_policy_percent: "Percent to be refunded"
         refund_policy_limit_date: "Limit date for refunds"
         guests_entry_fee_lowest_denomination: "Entry fee for guests"
@@ -411,8 +411,8 @@ en:
         countryId: ""
         end_date: ""
         generate_website: ""
-        base_entry_fee_lowest_denomination: 'The base entry fee for the competition. The entry fee will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free.'
-        currency_code: "The currency code for entry fees."
+        base_entry_fee_lowest_denomination: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free.'
+        currency_code: "The currency code for fees."
         guests_enabled: ""
         enable_donations: ""
         id: ""
@@ -910,7 +910,7 @@ en:
     contact_organizer: "Contact the organizer if you wish to make a change."
     waiting_list: "Your registration is pending. For approval, you may need to pay a registration fee. Check the competition website for details."
     accepted: "Your registration has been accepted!"
-    entry_fees_fully_paid: "You have paid %{paid}, which fully covers the entry fees."
+    entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check competition's information for instruction about how to pay"
     refund_form:
@@ -924,7 +924,7 @@ en:
       hints:
         donation: "Optional donation that will go only to the organization team"
       labels:
-        entry_fees: "Entry fees"
+        entry_fees: "Registration fees"
         donation: "Donation"
       alerts:
         not_a_number: "Please enter a valid amount."
@@ -983,13 +983,13 @@ en:
       register_below_html: "Register for this competition below."
       competitor_limit_is: "There is a competitor limit of %{competitor_limit} competitors."
       no_competitor_limit: "There is no competitor limit."
-      entry_fee_is: "The registration fee for this competition is %{base_entry_fee}."
+      entry_fee_is: "The base registration fee for this competition is %{base_entry_fee}."
       no_entry_fee: "Registering for this competition is free."
       use_stripe_link_html: "The registration fee has to be paid through Stripe %{here} once registered."
       use_stripe_below_html: "The registration fee has to be paid through Stripe below once registered."
       refund_policy_html: "If your registration is cancelled before %{limit_date_and_time} you will be refunded a %{refund_policy_percent} of your registration fee."
       no_refunds: "Registration fees won't be refunded under any circumstance."
-      on_the_spot_registration: "On the spot registrations will be accepted with a registration fee of %{on_the_spot_base_entry_fee}."
+      on_the_spot_registration: "On the spot registrations will be accepted with a base registration fee of %{on_the_spot_base_entry_fee}."
       on_the_spot_registration_free: "On the spot registrations will be accepted for free."
       no_on_the_spot_registration: "No on the spot registrations will be accepted."
       guests_pay: "Spectators can attend paying an entry fee of %{guests_base_fee}."
@@ -1621,7 +1621,7 @@ en:
       help you with finding a suitable date as they know if there are any other competitions planned in the same time frame. If there is no WCA Delegate near your area, please get in touch with the Senior Delegate for your region."
     paragraph2:
       title: "Expected expenses for organizing a competition"
-      content: "The expected expenses differ greatly from country to country and are determined by several factors like the size of the venue and other general conditions. Recouping all expenses with entry fees is possible. However, to keep these as low as possible,
+      content: "The expected expenses differ greatly from country to country and are determined by several factors like the size of the venue and other general conditions. Recouping all expenses with registration fees is possible. However, to keep these as low as possible,
       it is highly recommended to search for sponsors. Although WCA Delegates are volunteers and do not receive a salary for their work, organizers should consider paying compensation for their travel expenses."
     paragraph3:
       title: "Deadlines for the announcement of the competition"
@@ -1655,12 +1655,12 @@ en:
         limit must be clearly stated on the competition page on the WCA website."
     paragraph6:
       title: "Handling registrations"
-      content: "Registrations must be processed on a first come first served basis, which means that the earliest complete registration must be treated first. If entry fees are prepaid, a registration is considered complete when the entry fee has been paid. This
+      content: "Registrations must be processed on a first come first served basis, which means that the earliest complete registration must be treated first. If registration fees are prepaid, a registration is considered complete when the registration fee has been paid. This
       should be clearly stated in the paying instructions on the competition website."
     paragraph7:
       title: "Managing the waiting list"
       content1: "Once the competitor limit for a competition is reached, a waiting list should be opened. When registered and approved competitors cancel their registration, they can be replaced with the next competitors on the waiting list."
-      content2: "If competition entry fees are prepaid, it is an efficient approach to offer the free spot to the next competitor on the waiting list and set a deadline until when the registration fee should be paid to complete the registration (e.g. 48 hours). In case the payment is not
+      content2: "If competition registration fees are prepaid, it is an efficient approach to offer the free spot to the next competitor on the waiting list and set a deadline until when the registration fee should be paid to complete the registration (e.g. 48 hours). In case the payment is not
       received in time or the competitor denies, the free spot should be offered to the next person on the waiting list. This process should be continued until the free spots are filled. There are no exceptions for competitors to bypass the waiting list."
       content3: "If competitors did not go through the regular registration process but competed, their results will be removed retroactively (assuming the competitors limit existed and was reached)."
     paragraph8:
