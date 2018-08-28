@@ -30,12 +30,7 @@ RSpec.feature "Sign up" do
       # field.
       expect(page).to have_selector("div.user_dob_verification", visible: false)
 
-      selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
-      selectize_input.native.send_key(person.wca_id)
-      # Wait for selectize popup to appear.
-      expect(page).to have_selector("div.selectize-dropdown", visible: true)
-      # Select item with selectize.
-      selectize_input.native.send_key(:return)
+      fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
       expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
@@ -91,12 +86,7 @@ RSpec.feature "Sign up" do
       # field.
       expect(page).to have_selector("div.user_dob_verification", visible: false)
 
-      selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
-      selectize_input.native.send_key(person.wca_id)
-      # Wait for selectize popup to appear.
-      expect(page).to have_selector("div.selectize-dropdown", visible: true)
-      # Select item with selectize.
-      selectize_input.native.send_key(:return)
+      fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
       expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
@@ -119,12 +109,7 @@ RSpec.feature "Sign up" do
       # field.
       expect(page).to have_selector("div.user_dob_verification", visible: false)
 
-      selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
-      selectize_input.native.send_key(person.wca_id)
-      # Wait for selectize popup to appear.
-      expect(page).to have_selector("div.selectize-dropdown", visible: true)
-      # Select item with selectize.
-      selectize_input.native.send_key(:return)
+      fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
       expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
@@ -135,12 +120,7 @@ RSpec.feature "Sign up" do
 
       # Select a custom delegate.
       selectize = page.find("#nearby-delegate-search + div.selectize-control")
-      selectize_input = selectize.find("input")
-      selectize_input.native.send_key(custom_delegate.wca_id)
-      # Wait for selectize popup to appear.
-      expect(page).to have_selector("div.selectize-dropdown", visible: true)
-      # Select item with selectize.
-      selectize_input.native.send_key(:return)
+      fill_in_selectize selectize, with: custom_delegate.wca_id
 
       click_button "Sign up"
 
@@ -201,12 +181,7 @@ RSpec.feature "Sign up" do
       fill_in "user[password_confirmation]", with: "wca"
 
       click_on "I have competed in a WCA competition."
-      selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
-      selectize_input.native.send_key(person.wca_id)
-      # Wait for selectize popup to appear.
-      expect(page).to have_selector("div.selectize-dropdown", visible: true)
-      # Select item with selectize.
-      selectize_input.native.send_key(:return)
+      fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
       expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
@@ -258,12 +233,7 @@ RSpec.feature "Sign up" do
       fill_in "user[password_confirmation]", with: "wca"
 
       click_on "I have competed in a WCA competition."
-      selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
-      selectize_input.native.send_key(person.wca_id)
-      # Wait for selectize popup to appear.
-      expect(page).to have_selector("div.selectize-dropdown", visible: true)
-      # Select item with selectize.
-      selectize_input.native.send_key(:return)
+      fill_in_selectize "WCA ID", with: person.wca_id
 
       click_button "Sign up"
       click_on "I have never competed in a WCA competition."

@@ -62,8 +62,9 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
-  # Make sign_in helper available in feature specs
+  # Make helpers available in feature specs
   config.include SessionHelper, type: :feature
+  config.include SelectizeHelper, type: :feature
 
   # Make sign_in helper available in controller and request specs
   config.include ApiSignInHelper, type: :controller
