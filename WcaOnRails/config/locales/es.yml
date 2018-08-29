@@ -150,6 +150,9 @@ es:
       name: Cualificación combinada
       #original_hash: 4c66ad0
       cellName: Cualificación combinada
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: 'Intento %{number}'
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
@@ -245,6 +248,8 @@ es:
     date_placeholder: AAAA-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'AAAA-MM-DD HH:MM'
+    #original_hash: 7136e3b
+    time_format: 12h
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -393,9 +398,9 @@ es:
         #original_hash: 4baf44b
         championship_type: Tipo de campeonato
         #original_hash: 556fda0
-        registration_requirements: Requisitos de registro adicionales
-        #original_hash: ad74833
-        on_the_spot_registration: Quiero aceptar registros in situ
+        extra_registration_requirements: Requisitos de registro adicionales
+        #original_hash: 2529d04
+        on_the_spot_registration: Registros in situ
         #original_hash: bbff74c
         on_the_spot_entry_fee_lowest_denomination: Cuota de registro in situ
         #original_hash: efbdbab
@@ -674,11 +679,11 @@ es:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 9edba75
+        #original_hash: 82ad56b
         base_entry_fee_lowest_denomination: >-
           Precio del registro básico. El precio del registro se muestra en la
           página de información de la competición y en el proceso de registro si
-          se utiliza. Si esto se deja a 0, se mostrará una frase indicando que
+          se utiliza. Si esto se pone a 0, se mostrará una frase indicando que
           se aceptan registros gratuitos.
         #original_hash: 866bc05
         currency_code: Moneda en que se especifica el precio del registro.
@@ -716,31 +721,31 @@ es:
         #original_hash: da39a3e
         championship_type: ''
         #original_hash: 3de153b
-        registration_requirements: >-
+        extra_registration_requirements: >-
           Por favor indica aquí cualquier requisito adicional no cubierto
           arriba, como por ejemplo indicaciones sobre cómo efectuar el pago.
-          <br/>Por  favor rellénalo <b>en inglés</b> y cualquier lenguaje
+          <br/>Por favor rellénalo <b>en inglés</b> y cualquier lenguaje
           adicional que hablen tus competidores; será mostrado en la página de
           registro de la competición si estás usando el registro de la web de la
           WCA.
         #original_hash: da39a3e
         on_the_spot_registration: ''
-        #original_hash: 48dd815
+        #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: >-
-          Si esto se deja a 0, se mostrará una frase indicando que se aceptan
+          Si esto se pone a 0, se mostrará una frase indicando que se aceptan
           los registros in situ de forma gratuita.
-        #original_hash: effff56
+        #original_hash: 180b7b3
         refund_policy_percent: >-
           Por ahora esta cifra es informativa, los reembolsos deberán realizarse
-          manualmente. Si esto se deja a 0, se mostrará una frase indicando que
+          manualmente. Si esto se pone a 0, se mostrará una frase indicando que
           las cuotas de registro no se reembolsarán bajo ninguna circunstancia.
         #original_hash: f64d853
         refund_policy_limit_date: Fecha tras la cual no se efectuarán más reembolsos.
-        #original_hash: eb638e2
+        #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
           Por el momento esta cifra es solamente informativa, los precios de
           entrada de espectadores no se pueden gestionar desde este sitio web.
-          Si se deja a 0, se mostrará una frase indicando que los espectadores
+          Si se pone a 0, se mostrará una frase indicando que los espectadores
           pueden atender de forma gratuita.
       website_contact:
         #original_hash: da39a3e
@@ -906,6 +911,11 @@ es:
           'true': Preguntar por acompañantes
           #original_hash: f8c2332
           'false': NO preguntar por acompañantes
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': Se aceptan registros in situ
+          #original_hash: 0f236df
+          'false': NO se aceptarán registros in situ
   mail_form:
     attributes:
       contact_form:
@@ -1788,7 +1798,9 @@ es:
         Si esta no es tu primera competición, asocia tu ID WCA a tu cuenta WCA
         %{here}.
       #original_hash: 56fc229
-      register_html: 'Regístrate para esta competición %{here}.'
+      register_link_html: 'Regístrate para esta competición %{here}.'
+      #original_hash: 45834fd
+      register_below_html: Regístrate para esta competición aquí debajo.
       #original_hash: 196725e
       competitor_limit_is: 'Hay un límite de competidores de %{competitor_limit} competidores.'
       #original_hash: 5101f65
@@ -1798,9 +1810,13 @@ es:
       #original_hash: 5390a91
       no_entry_fee: Registrarse para esta competición es gratuito.
       #original_hash: 29af5c2
-      use_stripe_html: >-
-        La cuota de registro ha de ser pagada a través de Stripe %{here} una vez
-        se registre.
+      use_stripe_link_html: >-
+        La cuota de registro debe ser pagada mediante Stripe %{here} una vez
+        registrado.
+      #original_hash: cea0eb4
+      use_stripe_below_html: >-
+        La cuota de registro ha de ser pagada mediante Stripe aquí debajo una
+        vez registrado.
       #original_hash: 16cd1ba
       refund_policy_html: >-
         Si tu registro se cancela antes de %{limit_date_and_time} se te
@@ -2099,6 +2115,8 @@ es:
       general_info: Información general
       #original_hash: c5497bc
       events: Categorías
+      #original_hash: 0a8adac
+      schedule: Horario
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2137,6 +2155,39 @@ es:
       cutoff: Corte
       #original_hash: 02ed4a4
       proceed: Avanzar
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: 'Mostrar el horario como:'
+        #original_hash: 0424f6e
+        table: Tabla
+        #original_hash: adab509
+        calendar: Calendario
+      #original_hash: 017e4d8
+      display_for_room: 'Mostrar el horario para:'
+      range:
+        #original_hash: 3f66052
+        from: De
+        #original_hash: ae79ea1
+        to: A
+      #original_hash: 952f375
+      start: Comienzo
+      #original_hash: a2bb9d3
+      end: Fin
+      #original_hash: 81c0d91
+      activity: Actividad
+      #original_hash: 90e2fca
+      room: Sala
+      #original_hash: 2896c7a
+      venue_information_html: 'Estás viendo el horario para la localización %{venue_name}.'
+      #original_hash: b97e383
+      timezone_message: 'El horario se muestra en  la zona horaria %{timezone}.'
+      #original_hash: 2ab94a0
+      multiple_venues_available: >-
+        Esta competición tiene múltiples localizaciones, ¡Asegúrate de comprobar
+        el horario para otras localizaciones también!
+      #original_hash: 37b1adb
+      schedule_for_date: 'Horario para el %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -2157,6 +2208,8 @@ es:
         orga_view: Vista organizador
         #original_hash: c6171f8
         event_view: Administrar pruebas
+        #original_hash: 6235b27
+        schedule_view: Gestionar horario
         #original_hash: 6f7aef9
         payment_view: Configurar pagos
         #original_hash: 76bfdcf
@@ -2662,6 +2715,14 @@ es:
           estándares de calidad para asegurar una consistente alta calidad de
           procesos, personal WCA, Organizaciones Regionales, Organizadores y
           personal ayudante en competiciones.
+      wmt:
+        #original_hash: 2035811
+        name: Equipo de Márketing de la WCA
+        #original_hash: f2a0140
+        description: >-
+          Este equipo es responsable de desarrollar y gestionar la Marca WCA,
+          buscando patrocinadores, la distribución de equipación de competición
+          y haciendo márketing de la mercancía WCA.
       banned:
         #original_hash: d30e2e5
         name: Competiciones no Autorizadas
@@ -2854,6 +2915,12 @@ es:
         estándares de calidad para asegurar una consistente alta calidad de
         procesos, personal WCA, Organizaciones Regionales, Organizadores y
         personal ayudante en competiciones.
+    wmt:
+      #original_hash: f2a0140
+      info_html: >-
+        Este equipo es responsable de desarrollar y gestionar la Marca WCA,
+        buscando patrocinadores, apoyando la distribución de equipación de
+        competición WCA, y y haciendo márketing de mercancía WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Herramientas para la captación de resultados
