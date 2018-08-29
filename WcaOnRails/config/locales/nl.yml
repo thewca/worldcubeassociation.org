@@ -1298,6 +1298,22 @@ nl:
       delegate_avatar_guidelines:
         #original_hash: 35abf16
         title: 'Aanvullende richtlijnen voor delegates:'
+        paragraphs:
+          #original_hash: 3cf91ed
+          '1': >-
+            De avatar moet een foto zijn waarop je te zien bent zoals je er ook
+            op een wedstrijd uit kunt zien.
+          #original_hash: 64ded69
+          '2': >-
+            De foto in je avatar moet zo zijn genomen, omkaderd, uitgesneden en
+            verlicht dat iedere deelnemer of toeschouwer bij een wedstrijd
+            zonder probleem jou kan herkennen.
+          #original_hash: 13fab02
+          '3': >-
+            De 'thumbnail' van de avatar is een klein stukje van de avatar en
+            wordt gebruikt om je volledige avatar weer te geven. De 'thumbnail'
+            moet zo zijn aangepast dat je hiervan te herkennen bent, het moet je
+            gezicht bevatten.
     errors:
       #original_hash: 094b763
       not_found: niet gevonden
@@ -1599,6 +1615,12 @@ nl:
     please_fix_profile_html: >-
       Om je aan te melden voor deze %{comp}, moet je de volgende problemen in je
       %{profile} oplossen:
+    #original_hash: f22ef22
+    registration_full: >-
+      Het maximum aantal deelnemers voor deze wedstrijd is %{competitor_limit}
+      en dit aantal is bereikt. Als je je nu aanmeldt, dan kom je op een
+      wachtlijst. Je aanmelding wordt goed gekeurd wanneer er een plekje
+      vrijkomt, dit hoeft niet het geval te zijn.
     #original_hash: 855ca9c
     can_register: 'Je kunt je hieronder aanmelden voor %{comp}.'
     #original_hash: 4167ed7
@@ -1754,20 +1776,57 @@ nl:
       register_html: 'Meld je %{here} aan voor deze wedstrijd.'
       #original_hash: 196725e
       competitor_limit_is: 'Het maximum aantal deelnemers is %{competitor_limit}.'
+      #original_hash: 5101f65
+      no_competitor_limit: Er is geen maximum aantal deelnemers.
       #original_hash: 86cf09f
       entry_fee_is: 'De deelnemersbijdrage voor deze wedstrijd is %{base_entry_fee}.'
+      #original_hash: 5390a91
+      no_entry_fee: Aanmelden voor deze wedstrijd is gratis.
+      #original_hash: 29af5c2
+      use_stripe_html: >-
+        De deelnamekosten moeten na registratie,  %{here} middels Stripe voldaan
+        worden.
       #original_hash: 16cd1ba
       refund_policy_html: >-
         Als je aanmelding wordt geannuleerd voor %{limit_date_and_time}, dan
         krijg je %{refund_policy_percent} euro van het betaalde bedrag terug.
+      #original_hash: 4aca553
+      no_refunds: Deelnamekosten worden niet terugbetaald.
+      #original_hash: b38fa7b
+      on_the_spot_registration: >-
+        Aanmeldingen bij de deur worden geaccepteerd. De deelnamekosten zijn dan
+        %{on_the_spot_base_entry_fee}.
+      #original_hash: 1637bea
+      on_the_spot_registration_free: Aanmeldingen bij de deur worden geaccepteerd en zijn gratis.
       #original_hash: f5f687d
       no_on_the_spot_registration: Aanmeldingen bij binnenkomst worden niet geaccepteerd.
+      #original_hash: 4df139d
+      guests_pay: >-
+        Toeschouwers zijn welkom, zij betalen een toegangsprijs van
+        %{guests_base_fee}.
+      #original_hash: b6c863e
+      guests_free: Toeschouwers zijn welkom en hoeven niet te betalen.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         De wedstrijd is voorbij, klik %{link_here} om de registratie-eisen die
         zien die werden gehanteerd.
       #original_hash: ff19a74
       hide_requirements: Verberg registratie-eisen.
+      registration_period:
+        #original_hash: 6888733
+        label: Aanmeld periode
+        #original_hash: 0c7c1dc
+        range_future_html: >-
+          Online aanmelding is van %{start_date_and_time} tot
+          %{end_date_and_time}.
+        #original_hash: 679222e
+        range_ongoing_html: >-
+          Online aanmelding is geopend op %{start_date_and_time} en stopt op
+          %{end_date_and_time}.
+        #original_hash: 7ac8349
+        range_past_html: >-
+          Online aanmelding is geopend op %{start_date_and_time} en stopt op
+          %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Wedstrijden
@@ -1942,6 +2001,8 @@ nl:
       registration_close_after_open: sluiten van de aanmelding moet na het openen van de aanmelding
       #original_hash: 43a83a9
       end_date_before_start: Einddatum kan niet voor startdatum liggen.
+      #original_hash: 0c507fa
+      refund_date_after_start: De uiterste terugbetaal datum kan niet na de startdatum liggen.
       #original_hash: be3933b
       span_too_many_days: 'Wedstrijd kan niet langer duren dan %{max_days} dagen.'
       #original_hash: cdcd288
@@ -2019,6 +2080,44 @@ nl:
     show:
       #original_hash: b0fe391
       general_info: Algemene informatie
+      #original_hash: c5497bc
+      events: Onderdelen
+    events:
+      time_limit_information:
+        #original_hash: 88c5f1a
+        time_limit_html: >-
+          Als je de tijdlimiet bereikt tijdens je oplospoging, dan zal de judge
+          je stoppen en het resultaat als DNF noteren (zie %{regulation_link}).
+        #original_hash: 83d204f
+        regulation_link_text: 'Reglement %{number}'
+        #original_hash: bd0e4a9
+        guideline_link_text: 'Richtlijn %{number}'
+        #original_hash: b2a983a
+        cumulative_time_limit: Cumulatieve tijdlimiet
+        #original_hash: d47f11a
+        cumulative_one_round_html: 'Er kan een %{cumulative_time_limit} gelden (zie %{regulation_link}).'
+        #original_hash: c6190b6
+        cumulative_across_rounds_html: >-
+          Er kan een %{cumulative_time_limit} gelden over meerdere rondes (zie 
+          %{guideline_link}).
+        #original_hash: e4e48c6
+        cutoff_html: >-
+          Het resultaat dat behaald moet worden om door te gaan naar de tweede
+          fase van een gecombineerde ronde (zie %{regulation_link}).
+        #original_hash: f571a30
+        format_html: >-
+          Het formaat geeft aan hoe de volgorde van de uitslag van de
+          deelnemers, gebaseerd op de resultaten wordt bepaald. De lijst met
+          toegestane formats per onderdeel is beschreven in %{link_to_9b}. Zie
+          %{link_to_9f} voor een omschrijving van de formats.
+      #original_hash: 041a5de
+      format: Formaat
+      #original_hash: 0d1fcc3
+      time_limit: Tijdlimiet
+      #original_hash: 118de39
+      cutoff: Cutoff
+      #original_hash: 02ed4a4
+      proceed: Doorgaan
     nav:
       menu:
         #original_hash: 612e12d
@@ -2045,6 +2144,8 @@ nl:
         admin_view: Overzicht Admin
         #original_hash: a857eb4
         tabs: Tabbladen
+        #original_hash: f3d6278
+        submit_results: Resultaten invoeren
         #original_hash: 4c9f914
         delegate_report: Report
         #original_hash: b233e77
@@ -2174,6 +2275,21 @@ nl:
     website:
       #original_hash: ac2ac3d
       title: WCA-website contactformulier
+      inquiries:
+        #original_hash: 92ea7e8
+        competition: >-
+          Neem contact op met de organisatie van een bepaalde wedstrijd (kies
+          hieronder)
+        #original_hash: f0bffb7
+        competitions_in_general: 'Wedstrijden in het algemeen (organiseren, wedstrijdregels, enz.)'
+        #original_hash: f6ffa78
+        wca_id_or_profile: WCA ID of WCA profiel
+        #original_hash: 0c77aee
+        media: Pers
+        #original_hash: 9ad0522
+        software: Software
+        #original_hash: 6e6a6f2
+        different: Ander
       #original_hash: c70a890
       submit: Verstuur bericht
     dob:
@@ -2523,6 +2639,9 @@ nl:
           kwaliteitsstandaarden om een consistente hoge kwaliteit te garanderen
           van processen, WCA Staff, regionale organisaties,
           wedstrijdorganisatoren en wedstrijdstaf.
+      wmt:
+        #original_hash: 2035811
+        name: WCA Marketing Team
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>WCA delegates</strong> zijn leden van de WCA die
