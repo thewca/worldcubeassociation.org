@@ -1,7 +1,7 @@
 <%
-  show_cumulative_one_round ||= false
-  show_cumulative_across_rounds ||= false
-  show_cutoff ||= false
+  show_cumulative_one_round = competition.uses_cumulative?
+  show_cumulative_across_rounds = competition.uses_cumulative_across_rounds?
+  show_cutoff = competition.uses_cutoff?
 %>
 <div class="time-limit-information">
   <h4 id="time-limit"><%= t("competitions.events.time_limit") %></h4>

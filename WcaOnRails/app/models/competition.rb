@@ -741,6 +741,14 @@ class Competition < ApplicationRecord
     competition_events.any? { |ce| ce.rounds.any?(&:cutoff) }
   end
 
+  def uses_cumulative?
+    competition_events.any? { |ce| ce.rounds.any? { |r| r.time_limit.cumulative_round_ids.size == 1 } }
+  end
+
+  def uses_cumulative_across_rounds?
+    competition_events.any? { |ce| ce.rounds.any? { |r| r.time_limit.cumulative_round_ids.size > 1 } }
+  end
+
   # The name `is_probably_over` is meant to be surprising.
   # We don't actually know when competitions are over, because we don't know their schedules, nor
   # do we know their timezones.
