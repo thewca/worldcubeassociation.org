@@ -72,6 +72,28 @@ zh-TW:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: 3x3x3多顆盲解（舊）
+  formats:
+    #original_hash: e4b3c11
+    '1': 1次取最佳
+    #original_hash: 778e14d
+    '2': 2次取最佳
+    #original_hash: 21f623c
+    '3': 3次取最佳
+    #original_hash: 2342d2b
+    a: 5次去頭尾平均
+    #original_hash: 940c82d
+    m: 3次平均
+    short:
+      #original_hash: c21bc2a
+      '1': 1次取最佳
+      #original_hash: 49e914a
+      '2': 2次取最佳
+      #original_hash: b41f36f
+      '3': 3次取最佳
+      #original_hash: 4a34175
+      a: 5次平均
+      #original_hash: 53ba088
+      m: 3次平均
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -128,6 +150,24 @@ zh-TW:
       name: 門檻制資格賽
       #original_hash: 4c66ad0
       cellName: 門檻制資格賽
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: '第%{number}次還原'
+  round:
+    #original_hash: 236c41d
+    name: '%{event_name} %{round_name}'
+  advancement_condition:
+    #original_hash: 6e55337
+    ranking: '前%{ranking}名晉級下一輪'
+    #original_hash: 7ee969c
+    percent: '前%{percent}%晉級下一輪'
+    attempt_result:
+      #original_hash: 1fb7fe1
+      time: '最佳成績 < %{time}晉級下一輪'
+      #original_hash: 8254f3e
+      moves: '最佳成績 < %{moves}步晉級下一輪'
+      #original_hash: daab86e
+      points: '最佳成績 > %{points}分晉級下一輪'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -152,8 +192,8 @@ zh-TW:
       across_rounds: '%{rounds}輪總計%{time}'
     #original_hash: f030c3d
     333fm: 1小時
-    #original_hash: 2c2abd5
-    333mbf: 10分鐘/每顆
+    #original_hash: cc7d8bb
+    333mbf: 10分鐘/每顆，最多60分鐘
   common:
     #original_hash: 2513cf0
     continent: 大洲
@@ -202,6 +242,8 @@ zh-TW:
     date_placeholder: YYYY-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
+    #original_hash: 7136e3b
+    time_format: 12小時制
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -345,8 +387,18 @@ zh-TW:
         enable_donations: 我想要開啟捐款以增加報名費收入
         #original_hash: 4baf44b
         championship_type: 錦標賽種類
-        #original_hash: ff722f0
-        registration_requirements: 報名條件
+        #original_hash: 556fda0
+        extra_registration_requirements: 額外報名條件
+        #original_hash: 2529d04
+        on_the_spot_registration: 現場報名
+        #original_hash: bbff74c
+        on_the_spot_entry_fee_lowest_denomination: 現場報名費用
+        #original_hash: efbdbab
+        refund_policy_percent: 退費比例
+        #original_hash: b332299
+        refund_policy_limit_date: 退費期限
+        #original_hash: 3542671
+        guests_entry_fee_lowest_denomination: 訪客入場費
       registration:
         #original_hash: 3c23a67
         guests: 訪客
@@ -371,7 +423,7 @@ zh-TW:
         #original_hash: 983d541
         discussion_url: Google Group討論區網址
         #original_hash: 65a9b28
-        schedule_url: 賽程表網址
+        schedule_url: 賽程網址
         #original_hash: 36155d4
         equipment: 器材設備
         #original_hash: 67cd406
@@ -569,8 +621,8 @@ zh-TW:
         cellName: 供顯示方便的縮寫。如果比賽名稱已經很短，縮寫可以和比賽名稱一樣（例如：All is Well 2017）。
         #original_hash: bce4589
         cityName: 比賽舉行的城市或州（如果適用）。不要包含國家名稱（例如：台北、台中或高雄）。
-        #original_hash: 3d99319
-        information: 關於人數上限、參賽者及觀眾的報名費的資訊，以及其他有興趣比賽或觀賽等相關細節。
+        #original_hash: bb470cc
+        information: 參賽者須知的重要資訊，將會顯示在比賽主頁面。<br/>請用 <b>英文</b> 和您當地參賽者使用的語言填寫此欄。
         #original_hash: b4d020f
         delegate_ids: 本場比賽的WCA代表。
         #original_hash: 517d376
@@ -589,8 +641,9 @@ zh-TW:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 950a7ea
-        base_entry_fee_lowest_denomination: 這場比賽的基礎報名費。如果有使用WCA報名系統，基礎報名費將會被顯示在比賽資訊頁面以及報名頁面。
+        #original_hash: 82ad56b
+        base_entry_fee_lowest_denomination: >-
+          這場比賽的基礎報名費。如果有使用WCA報名系統，基礎報名費將會被顯示在比賽資訊頁面以及報名頁面。如果此處設為0，會有一個句子表示報名為免費的。
         #original_hash: 866bc05
         currency_code: 基礎報名費的貨幣代碼。
         #original_hash: da39a3e
@@ -621,11 +674,20 @@ zh-TW:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
-        #original_hash: 508c178
-        registration_requirements: >-
-          請在此處說明任何有關報名過程的特殊情況，以符合<a
-          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
-          target="_blank">指導方針2c1+</a>。一旦比賽公告後，該段落將<b>不可</b>再編輯，並且需要董事會批准才能對其進行修改。<br/>例如，在此說明參賽者是否需要具有一定程度的良好付款歷史記錄，是否有退款政策，或者參賽者是否必須回覆確認電子郵件。.<br/>請用<b>英文</b>和您當地參賽者使用的語言填寫此欄。如果您使用WCA網站報名，它將顯示在比賽的報名頁面上。
+        #original_hash: 3de153b
+        extra_registration_requirements: >-
+          請在此處說明任何以上未提及到的額外報名條件，例如有關如何支付。<br/>請用 <b>英文</b>
+          和您當地參賽者使用的語言填寫此欄。它將顯示在比賽的資訊頁面上，如果您使用WCA網站報名，它也會顯示在報名頁面上。
+        #original_hash: da39a3e
+        on_the_spot_registration: ''
+        #original_hash: 8c4fdf8
+        on_the_spot_entry_fee_lowest_denomination: 如果此處設為0，會有一個句子表示現場報名為免費的。
+        #original_hash: 180b7b3
+        refund_policy_percent: 目前這個數字僅供參考，退費還是由人工處理。如果此處設為0，會有一個句子表示報名費在任何情況下皆不退費。
+        #original_hash: f64d853
+        refund_policy_limit_date: 這個日期以後皆不再退費
+        #original_hash: 25a1324
+        guests_entry_fee_lowest_denomination: 目前這個數字僅供參考，本網站不處理訪客入場費。如果此處設為0，會有一個句子表示觀眾可以免費進場。
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -668,7 +730,7 @@ zh-TW:
           still accessible to the public via permalink or through tags.
       delegate_report:
         #original_hash: 4eefb60
-        schedule_url: '公開賽程表的完整網址（例如：https://www.cubingusa.com/usnationals2016/schedule.php）'
+        schedule_url: '公開賽程的完整網址（例如：https://www.cubingusa.com/usnationals2016/schedule.php）'
         #original_hash: 1a68719
         equipment: 這場比賽使用的大顯、計時器數量和款式。請把您沒用到的器材該行刪掉。
         #original_hash: 4658dd9
@@ -718,11 +780,6 @@ zh-TW:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
-        #original_hash: da39a3e
-        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -765,6 +822,11 @@ zh-TW:
           'true': 詢問是否有訪客
           #original_hash: f8c2332
           'false': 不要詢問是否有訪客
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': 接受現場報名
+          #original_hash: 0f236df
+          'false': 不接受現場報名
   mail_form:
     attributes:
       contact_form:
@@ -990,7 +1052,7 @@ zh-TW:
         organizers: '親愛的%{competition}主辦人您好，'
         #original_hash: c526fd6
         confirmed: >-
-          您比賽的代表%{delegate_name}已經確認%{competition}並且向WCA董事會提出申請。一旦WCA董事會公告本場比賽之後，您將收到另外一封通知。
+          您比賽的代表%{delegate_name}已經確認%{competition}並且向WCA董事會提出申請。一旦WCA董事會公告這場比賽之後，您將收到另外一封通知。
         #original_hash: dfea09d
         contact: 如果您還有其他疑問，請透過電子郵件聯絡本場比賽的代表。
       competition_announcement_email:
@@ -1489,16 +1551,46 @@ zh-TW:
         other: WCA代表
       #original_hash: b37456c
       contact: 聯絡
-      #original_hash: 32946e9
-      competitor_limit: 人數上限
-      #original_hash: a428739
-      entry_fee: 報名費
       #original_hash: 0eb5ed5
       information: 比賽資訊
       #original_hash: c5497bc
       events: 項目
       #original_hash: ff722f0
       registration_requirements: 報名條件
+      #original_hash: 74d0bf1
+      create_wca_account_html: '如果您還沒有WCA帳號，在%{here}建立一個。'
+      #original_hash: a082288
+      claim_wca_id_html: '如果這不是您第一場比賽，在%{here}將您的WCA ID和您的WCA帳號連結。'
+      #original_hash: 56fc229
+      register_link_html: '在%{here}報名本場比賽。'
+      #original_hash: 45834fd
+      register_below_html: 在底下報名本場比賽。
+      #original_hash: 196725e
+      competitor_limit_is: '比賽人數上限為%{competitor_limit}位'
+      #original_hash: 5101f65
+      no_competitor_limit: 比賽沒有人數上限
+      #original_hash: 86cf09f
+      entry_fee_is: '本場比賽的報名費為%{base_entry_fee}。'
+      #original_hash: 5390a91
+      no_entry_fee: 本場比賽報名費免費
+      #original_hash: 29af5c2
+      use_stripe_link_html: '一旦報名後，報名費必須透過Stripe在%{here}支付。'
+      #original_hash: cea0eb4
+      use_stripe_below_html: 一旦報名後，報名費必須透過Stripe在底下支付。
+      #original_hash: 16cd1ba
+      refund_policy_html: '如果您在%{limit_date_and_time}之前取消報名，我們將會退還您報名費的%{refund_policy_percent}。'
+      #original_hash: 4aca553
+      no_refunds: 報名費在任何情況下皆不退費。
+      #original_hash: b38fa7b
+      on_the_spot_registration: '現場報名者需繳交報名費%{on_the_spot_base_entry_fee}。'
+      #original_hash: 1637bea
+      on_the_spot_registration_free: 現場報名者免費。
+      #original_hash: f5f687d
+      no_on_the_spot_registration: 不允許現場報名。
+      #original_hash: 4df139d
+      guests_pay: '觀眾需繳交進場費%{guests_base_fee}才得入場。'
+      #original_hash: b6c863e
+      guests_free: 觀眾可以免費進場。
       #original_hash: 97a31ee
       click_to_display_requirements_html: '本次比賽已經結束，請點%{link_here}顯示報名條件。'
       #original_hash: ff19a74
@@ -1661,6 +1753,8 @@ zh-TW:
       registration_close_after_open: 報名截止時間必須晚於報名開始時間。
       #original_hash: 43a83a9
       end_date_before_start: 結束日期不得早於開始日期。
+      #original_hash: 0c507fa
+      refund_date_after_start: 退費期限不能在開始日期之後。
       #original_hash: be3933b
       span_too_many_days: '比賽不得多於%{max_days}天。'
       #original_hash: cdcd288
@@ -1734,6 +1828,68 @@ zh-TW:
     show:
       #original_hash: b0fe391
       general_info: 基本資訊
+      #original_hash: c5497bc
+      events: 項目
+      #original_hash: 0a8adac
+      schedule: 賽程
+    events:
+      time_limit_information:
+        #original_hash: 88c5f1a
+        time_limit_html: '如果您超過了時間限制，裁判會停止您並將成績記錄為DNF(參見%{regulation_link})。'
+        #original_hash: 83d204f
+        regulation_link_text: '規則%{number}'
+        #original_hash: bd0e4a9
+        guideline_link_text: '指導方針%{number}'
+        #original_hash: b2a983a
+        cumulative_time_limit: 累計制時間限制
+        #original_hash: d47f11a
+        cumulative_one_round_html: '可能採用%{cumulative_time_limit}(參見%{regulation_link})。'
+        #original_hash: c6190b6
+        cumulative_across_rounds_html: '可能採用%{cumulative_time_limit}於不同輪(參見%{guideline_link})。'
+        #original_hash: e4e48c6
+        cutoff_html: '在門檻制比賽中，進入第二階段的秒數門檻(參見%{regulation_link})。'
+        #original_hash: f571a30
+        format_html: >-
+          此賽制描述比賽如何根據選手的成績決定排名。%{link_to_9b}描述了每個項目允許的賽制。有關各個賽制的說明，請參見%{link_to_9f}。
+      #original_hash: 041a5de
+      format: 型式
+      #original_hash: 0d1fcc3
+      time_limit: 時間限制
+      #original_hash: 118de39
+      cutoff: 秒數門檻
+      #original_hash: 02ed4a4
+      proceed: 晉級條件
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: 將賽程顯示為：
+        #original_hash: 0424f6e
+        table: 列表模式
+        #original_hash: adab509
+        calendar: 日曆模式
+      #original_hash: 017e4d8
+      display_for_room: 顯示賽程：
+      range:
+        #original_hash: 3f66052
+        from: 從
+        #original_hash: ae79ea1
+        to: 到
+      #original_hash: 952f375
+      start: 開始
+      #original_hash: a2bb9d3
+      end: 結束
+      #original_hash: 81c0d91
+      activity: 事件
+      #original_hash: 90e2fca
+      room: 賽場
+      #original_hash: 2896c7a
+      venue_information_html: '您正在瀏覽賽場%{venue_name}的賽程。'
+      #original_hash: b97e383
+      timezone_message: '賽程顯示的時區為%{timezone}。'
+      #original_hash: 2ab94a0
+      multiple_venues_available: 本場比賽有多個賽場，請留意其他賽場的賽程！
+      #original_hash: 37b1adb
+      schedule_for_date: '%{day_name}的賽程(%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -1754,6 +1910,8 @@ zh-TW:
         orga_view: 主辦人模式
         #original_hash: c6171f8
         event_view: 管理項目
+        #original_hash: 6235b27
+        schedule_view: 管理賽程
         #original_hash: 6f7aef9
         payment_view: 建立付款
         #original_hash: 76bfdcf
@@ -2073,7 +2231,7 @@ zh-TW:
     title: 關於WCA
     mission:
       paragraphs:
-        #original_hash: 3e4f9b5
+        #original_hash: c86d105
         '1': >-
           世界方塊協會掌管魔術方塊比賽，這些魔術方塊是透過轉動一部份的零件來操控，通常稱之為「魔術方塊」。這些魔術方塊當中最有名的就是魯比克方塊，由匈牙利的魯比克教授發明。而當中的一些魔術方塊則被挑選為WCA官方的比賽項目。
         #original_hash: 22c3593
@@ -2134,6 +2292,14 @@ zh-TW:
         #original_hash: 0171b3b
         description: >-
           該委員會的職責是支持並促進WCA內部持續的品質改善，以及應用於全球的品質標準以確保一致的高品質流程、WCA員工、區域組織、比賽主辦人和工作人員。
+      wmt:
+        #original_hash: 2035811
+        name: WCA行銷組
+        #original_hash: f2a0140
+        description: 該團隊負責開發和管理WCA品牌、尋求贊助、協助WCA比賽器材的分配以及行銷WCA商品。
+      banned:
+        #original_hash: d30e2e5
+        name: 禁賽名單
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>WCA代表</strong>是WCA提案中定義的角色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的任務、精神和規則。WCA將代表區別成<strong>WCA高級代表</strong>、<strong>WCA代表</strong>和<strong>WCA代表候選人</strong>%{see_link}。</p>
@@ -2152,18 +2318,8 @@ zh-TW:
     motions: 提議
     #original_hash: 092f99e
     minutes: 會議記錄
-    #original_hash: 8d61184
-    policies: 政策
-    #original_hash: cdad4f1
-    dues: WCA稅金制度
-    #original_hash: 7536665
-    logo: WCA標誌使用
-    #original_hash: 920a98f
-    proximity_policy: WCA鄰近比賽政策
-    #original_hash: f484584
-    competition_name_policy: WCA比賽名稱政策
-    #original_hash: c7f7728
-    competition_announcement_policy: WCA比賽公告政策
+    #original_hash: 6db524a
+    policies: WCA政策
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
@@ -2263,6 +2419,9 @@ zh-TW:
     wqac:
       #original_hash: 0171b3b
       info_html: 該委員會的職責是支持並促進WCA內部持續的品質改善，以及應用於全球的品質標準以確保一致的高品質流程、WCA員工、區域組織、比賽主辦人和工作人員。
+    wmt:
+      #original_hash: f2a0140
+      info_html: 該團隊負責開發和管理WCA品牌、尋求贊助、協助WCA比賽器材的分配以及行銷WCA商品。
   score_tools:
     #original_hash: ea9d41d
     title: WCA成績輸入工具
