@@ -9,6 +9,7 @@ import { scheduleElementSelector } from './fullcalendar'
 
 export const commonActivityCodes = {
   "other-registration": "Registration",
+  "other-tutorial": "Tutorial for new competitors",
   "other-breakfast": "Breakfast",
   "other-lunch": "Lunch",
   "other-dinner": "Dinner",
