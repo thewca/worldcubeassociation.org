@@ -1,7 +1,3 @@
-<%
-  has_cumulative_one_round = false
-  has_cumulative_across_rounds = false
-%>
 <%= wca_table table_class: "show-events-table" do %>
   <thead>
     <tr>
@@ -31,10 +27,8 @@
             <%= round.time_limit_to_s %>
             <% if competition_event.event.can_change_time_limit? %>
               <% if round.time_limit.cumulative_round_ids.length == 1 %>
-                <% has_cumulative_one_round = true %>
                 <%= link_to "*", "#cumulative-time-limit" %>
               <% elsif round.time_limit.cumulative_round_ids.length > 1 %>
-                <% has_cumulative_across_rounds = true %>
                 <%= link_to "**", "#cumulative-across-rounds-time-limit" %>
               <% end %>
             <% end %>
@@ -48,4 +42,3 @@
     <% end %>
   </tbody>
 <% end %>
-<%= render "time_limit_div", show_cumulative_one_round: has_cumulative_one_round, show_cumulative_across_rounds: has_cumulative_across_rounds, show_cutoff: @competition.uses_cutoff? %>
