@@ -10,7 +10,9 @@
   <br/>
   <p><%= preamble %></p>
   <% states_lists.each do |list| %>
-    <h3 id="<%= list["title"].downcase.tr(' ', '-') %>"><%= list["title"] %></h3>
+    <% unless list["title"].blank? %>
+      <h3 id="<%= list["title"].downcase.tr(' ', '-') %>"><%= list["title"] %></h3>
+    <% end %>
     <ul>
       <% list["states"].each do |state| %>
         <li><strong><%= state["name"] %></strong>
