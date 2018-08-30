@@ -243,7 +243,7 @@ zh-TW:
     #original_hash: 52249b5
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
     #original_hash: 7136e3b
-    time_format: 12小時制
+    time_format: 24h
   oauth:
     applications:
       #original_hash: 0c4ea38
