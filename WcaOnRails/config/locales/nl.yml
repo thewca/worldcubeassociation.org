@@ -1797,8 +1797,8 @@ nl:
         aanmelding.
       #original_hash: 16cd1ba
       refund_policy_html: >-
-        Als je aanmelding wordt geannuleerd voor %{limit_date_and_time}, dan
-        krijg je %{refund_policy_percent} euro van het betaalde bedrag terug.
+        Als je je aanmelding annuleert voor %{limit_date_and_time}, dan krijg je
+        %{refund_policy_percent} van het betaalde bedrag terug.
       #original_hash: 4aca553
       no_refunds: Deelnamekosten worden niet terugbetaald.
       #original_hash: b38fa7b
