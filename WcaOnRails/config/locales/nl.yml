@@ -150,6 +150,9 @@ nl:
       name: Gecombineerde kwalificatie
       #original_hash: 4c66ad0
       cellName: Gecombineerde kwalificatie
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: 'Poging %{number}'
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
@@ -239,6 +242,8 @@ nl:
     date_placeholder: JJJJ-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'JJJJ-MM-DD UU:MM'
+    #original_hash: 7136e3b
+    time_format: 24h
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -361,7 +366,7 @@ nl:
         #original_hash: a2dfcf8
         competitor_limit_enabled: >-
           Ik wil een limiet opgeven voor het aantal deelnemers dat zich kan
-          registreren voor deze wedstrijd.
+          aanmelden voor deze wedstrijd.
         #original_hash: 749f4c9
         competitor_limit: Maximumaantal deelnemers
         #original_hash: 4a8b6f1
@@ -387,9 +392,9 @@ nl:
         #original_hash: 4baf44b
         championship_type: Type Kampioenschap
         #original_hash: 556fda0
-        registration_requirements: Registratie-eisen
-        #original_hash: ad74833
-        on_the_spot_registration: Ik wil aanmeldingen bij binnenkomst accepteren
+        extra_registration_requirements: Extra aanmeldingseisen
+        #original_hash: 2529d04
+        on_the_spot_registration: Ik wil aanmeldingen bij binnenkomst op locatie accepteren.
         #original_hash: bbff74c
         on_the_spot_entry_fee_lowest_denomination: Deelnamekosten bij binnenkomst
         #original_hash: efbdbab
@@ -638,10 +643,10 @@ nl:
           we de staat zien)
         #original_hash: bb470cc
         information: >-
-          Informatie over een limiet van het aantal deelnemers, de
-          registratiekosten voor deelnemers en toeschouwers, en andere details
-          die relevant zijn voor mensen die zijn geïnteresseerd om deel te nemen
-          of te komen kijken.
+          Informatie over een limiet van het aantal deelnemers, de aanmeldkosten
+          voor deelnemers en toeschouwers, en andere details die relevant zijn
+          voor mensen die zijn geïnteresseerd om deel te nemen of te komen
+          kijken.
         #original_hash: b4d020f
         delegate_ids: WCA delegates van de wedstrijd.
         #original_hash: 517d376
@@ -666,10 +671,11 @@ nl:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 9edba75
+        #original_hash: 82ad56b
         base_entry_fee_lowest_denomination: >-
           Het basisbedrag voor aanmelding voor de wedstrijd. Het bedrag wordt
-          getoond op de wedstrijdinformatiepagina en aanmeldingspagina.
+          getoond op de wedstrijdinformatiepagina en aanmeldingspagina. Als het
+          bedrag 0 is, wordt een tekst getoond dat aanmelding gratis is.
         #original_hash: 866bc05
         currency_code: Valutacode van het aanmeldingsbedrag.
         #original_hash: da39a3e
@@ -706,38 +712,30 @@ nl:
         #original_hash: da39a3e
         championship_type: ''
         #original_hash: 3de153b
-        registration_requirements: >-
-          Geef hier specifieke zaken weer over het aanmeldingsproces, zoals
-          vereist in de <a
-          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
-          target="_blank">Richtlijn 2c1+</a>. Na aankondiging van de wedstrijd
-          is dit veld <b>niet</b> meer aan te passen en is goedkeuring van de
-          board vereist om het toch aan te passen.<br/>Geef hier bijvoorbeeld
-          aan of deelnemers een schone lei moeten hebben voor betalingen, of er
-          een geld-terugregeling is of dat deelnemers een mail moeten bevestigen
-          als het maximumaantal deelnemers is bereikt.<br/>Vul dit in het
-          <b>Engels</b> en eventueel in andere talen die de deelnemers spreken.
-          De informatie komt op de wedstrijdpagina als je de WCA-website
-          gebruikt voor aanmeldingen.
+        extra_registration_requirements: >-
+          Geef hier alle extra aanmeldingseisen aan die niet boven zijn genoemd,
+          zoals aanwijzingen over hoe te betalen.</br>Geef de tekst <b>in
+          Engels</b> en andere talen die de deelnemers spreken; de tekst wordt
+          getoond op de informatiepagina van de wedstrijd, en op de
+          aanmeldpagina als je de aanmelding via de WCA-website doet.
         #original_hash: da39a3e
         on_the_spot_registration: ''
-        #original_hash: 48dd815
+        #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: >-
-          Als dit 0 blijft, dan wordt een zin getoond die zegt dat aanmelding
-          bij binnenkomst gratis kan.
-        #original_hash: effff56
+          Als dit bedrag 0 is, dan wordt een zin getoond dat aanmelding bij
+          binnenkomst gratis is.
+        #original_hash: 180b7b3
         refund_policy_percent: >-
           Dit getal is slechts ter informatie, teruggaves moeten handmatig
-          uitgevoerd worden. Als hier 0 staat, dan wordt een zin getoond die
-          zegt dat aanmeldkosten onder geen enkele omstandigheid worden
-          teruggegeven.
+          worden uitgevoerd. Als het bedrag 0 is, dan wordt een zin dat
+          aanmeldkosten onder geen enkele omstandigheid worden teruggegeven.
         #original_hash: f64d853
         refund_policy_limit_date: Datum waarna aanmeldkosten niet meer teruggegeven worden.
-        #original_hash: eb638e2
+        #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
           Dit getal is ter informatie, de toegangsprijs voor gasten kun je niet
-          via deze website regelen. Als er 0 staat, dan wordt er een zin getoond
-          die zegt dat gasten gratis mogen kijken.
+          via deze website regelen. Als het bedrag 0 is, dan wordt een zin
+          getoond dat gasten gratis toegang hebben.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -896,6 +894,11 @@ nl:
           'true': Vraag naar gasten
           #original_hash: f8c2332
           'false': Vraag niet naar gasten
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': Registratie op wedstrijdlocatie toegestaan
+          #original_hash: 0f236df
+          'false': Nieuwe aanmeldingen op de wedstrijdlocatie worden NIET toegestaan
   mail_form:
     attributes:
       contact_form:
@@ -1145,7 +1148,7 @@ nl:
         #original_hash: dfea09d
         contact: >-
           Als je meer vragen hebt, stuur dan een e-mail naar de delegate(s) van
-          de competitie:
+          de wedstrijd:
       competition_announcement_email:
         #original_hash: 1571dd8
         header: 'The WCA Board heeft %{competition} aangekondigd'
@@ -1722,7 +1725,7 @@ nl:
       #original_hash: a821396
       stripe_connected: >-
         Je hebt nu je Stripe-account verbonden en kunt betalingen ontvangen voor
-        deze competitie.
+        deze wedstrijd.
       #original_hash: 0a4bb53
       stripe_not_connected: Er was een probleem waardoor we je Stripe-account niet konden verbinden.
     my_competitions:
@@ -1731,8 +1734,8 @@ nl:
       #original_hash: 1fa5a4b
       disclaimer: >-
         Hier zijn alleen wedstrijden zichtbaar die de aanmeldingen via de
-        WCA-website verwerken. Als je competitie hier niet bij staat, kijk dan
-        op de website van de competitie of er een aanmeldingenlijst is.
+        WCA-website verwerken. Als je wedstrijd hier niet bij staat, kijk dan op
+        de website van de wedstrijd of er een aanmeldingenlijst is.
       #original_hash: 94a2fc8
       past_competitions: Wedstrijden uit het verleden
     competition_info:
@@ -1770,10 +1773,12 @@ nl:
       create_wca_account_html: 'Maak %{here} een WCA account aan als je er nog geen hebt.'
       #original_hash: a082288
       claim_wca_id_html: >-
-        Als dit niet je eerste competitie is, koppel dan %{here} je WCA ID aan
-        je WCA account.
+        Als dit niet je eerste wedstrijd is, koppel dan %{here} je WCA ID aan je
+        WCA-account.
       #original_hash: 56fc229
-      register_html: 'Meld je %{here} aan voor deze wedstrijd.'
+      register_link_html: 'Meld je %{here} aan voor deze wedstrijd.'
+      #original_hash: 45834fd
+      register_below_html: Meld je hieronder aan voor deze wedstrijd.
       #original_hash: 196725e
       competitor_limit_is: 'Het maximum aantal deelnemers is %{competitor_limit}.'
       #original_hash: 5101f65
@@ -1783,9 +1788,13 @@ nl:
       #original_hash: 5390a91
       no_entry_fee: Aanmelden voor deze wedstrijd is gratis.
       #original_hash: 29af5c2
-      use_stripe_html: >-
-        De deelnamekosten moeten na registratie,  %{here} middels Stripe voldaan
-        worden.
+      use_stripe_link_html: >-
+        Het aanmeldingsbedrag moet %{here} worden betaald via Stripe, na
+        aanmelding.
+      #original_hash: cea0eb4
+      use_stripe_below_html: >-
+        Het aanmeldingsbedrag moet hieronder worden betaald via Stripe, na
+        aanmelding.
       #original_hash: 16cd1ba
       refund_policy_html: >-
         Als je aanmelding wordt geannuleerd voor %{limit_date_and_time}, dan
@@ -1808,10 +1817,10 @@ nl:
       guests_free: Toeschouwers zijn welkom en hoeven niet te betalen.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
-        De wedstrijd is voorbij, klik %{link_here} om de registratie-eisen die
+        De wedstrijd is voorbij, klik %{link_here} om de aanmeldingseisen die
         zien die werden gehanteerd.
       #original_hash: ff19a74
-      hide_requirements: Verberg registratie-eisen.
+      hide_requirements: Verberg aanmeldingseisen.
       registration_period:
         #original_hash: 6888733
         label: Aanmeld periode
@@ -2082,6 +2091,8 @@ nl:
       general_info: Algemene informatie
       #original_hash: c5497bc
       events: Onderdelen
+      #original_hash: 0a8adac
+      schedule: Tijdschema
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2118,6 +2129,39 @@ nl:
       cutoff: Cutoff
       #original_hash: 02ed4a4
       proceed: Doorgaan
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: 'Toon het tijdschema als:'
+        #original_hash: 0424f6e
+        table: Tabel
+        #original_hash: adab509
+        calendar: Agenda
+      #original_hash: 017e4d8
+      display_for_room: 'Toon het tijdschema voor:'
+      range:
+        #original_hash: 3f66052
+        from: Van
+        #original_hash: ae79ea1
+        to: Tot
+      #original_hash: 952f375
+      start: Start
+      #original_hash: a2bb9d3
+      end: Eind
+      #original_hash: 81c0d91
+      activity: Activiteit
+      #original_hash: 90e2fca
+      room: Ruimte
+      #original_hash: 2896c7a
+      venue_information_html: 'Je kijkt naar het schema van de wedstrijdlocatie %{venue_name}.'
+      #original_hash: b97e383
+      timezone_message: 'Het tijdschema wordt getoond in tijdzone %{timezone}.'
+      #original_hash: 2ab94a0
+      multiple_venues_available: >-
+        Deze wedstrijd heeft meerdere wedstrijdlocaties, let op het tijdschema
+        voor de andere wedstrijdlocatie(s).
+      #original_hash: 37b1adb
+      schedule_for_date: 'Tijdschema voor %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -2138,6 +2182,8 @@ nl:
         orga_view: Overzicht Organisatoren
         #original_hash: c6171f8
         event_view: Wedstrijdonderdelen beheren
+        #original_hash: 6235b27
+        schedule_view: Beheren tijdschema
         #original_hash: 6f7aef9
         payment_view: Instellen betalingen
         #original_hash: 76bfdcf
@@ -2642,6 +2688,15 @@ nl:
       wmt:
         #original_hash: 2035811
         name: WCA Marketing Team
+        #original_hash: f2a0140
+        description: >-
+          Dit team is verantwoordelijk voor het ontwikkelen en managen van het
+          WCA Brand, het zoeken van sponsoren, het ondersteunen van de
+          distributie van WCA wedstrijdmaterialen en het marketen van WCA
+          merchandise.
+      banned:
+        #original_hash: d30e2e5
+        name: Geschorste deelnemers
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>WCA delegates</strong> zijn leden van de WCA die
@@ -2670,6 +2725,8 @@ nl:
     motions: Moties
     #original_hash: 092f99e
     minutes: Verslagen
+    #original_hash: 6db524a
+    policies: WCA Beleidsdocumenten
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA delegates
@@ -2726,6 +2783,11 @@ nl:
     application_instructions:
       #original_hash: 4da829b
       title: Aanmeldinstructies
+      #original_hash: 7ed06ee
+      description_html: >-
+        Vul het <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>formulier</a>
+        in.
   contact:
     #original_hash: a34b69f
     title: Contactinformatie
@@ -2737,7 +2799,7 @@ nl:
     questions_and_comments_html: >-
       Voor vragen, opmerkingen en suggesties over de WCA-website, gebruik dit <a
       href='/contact/website'>contactformulier</a>. Voor vragen over een
-      specifieke regio of competitie neem je contact op met je lokale %{link}.
+      specifieke regio of wedstrijd neem je contact op met je lokale %{link}.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Commissies en Teams</u>
     #original_hash: 1cb449c
@@ -2819,6 +2881,12 @@ nl:
         kwaliteitsstandaard om constante hoge kwaliteit te garanderen voor
         processen, WCA Staff, regionale organisaties, wedstrijdorganisatoren en
         wedstrijdstaff.
+    wmt:
+      #original_hash: f2a0140
+      info_html: >-
+        Dit team is verantwoordelijk voor het ontwikkelen en managen van het WCA
+        Brand, het zoeken van sponsoren, het ondersteunen van de distributie van
+        WCA wedstrijdmaterialen en het marketen van WCA merchandise.
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score tools
@@ -2841,6 +2909,17 @@ nl:
         De nieuwste versie van het WCA-resultatenbestand kan worden gedownload
         hier: <br /><a href="/files/results.xls"
         target="_blank">WCA-resultatenbestand</a>.
+      #original_hash: a5f2d25
+      '4': >-
+        Je kunt ook <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>
+        gebruiken voor het voorbereiden van de deelnemersgroepen voor een
+        wedstrijd. Het is tool die precies hiervoor is bedoeld. Onder de
+        belangrijkste features zit: sorteren van deelnemers op basis van
+        ranking, toewijzen van taken (judgen, scramblen), bepalen hoeveel
+        scrambles nodig zijn, genereren van wedstrijdbriefjes, persoonlijke
+        lijsten en samenvattingen. Het is een open source project van Jonatan
+        Klosko.
   logo:
     #original_hash: c72c969
     title: WCA-logo
@@ -3024,6 +3103,11 @@ nl:
         posts: Geen berichten gevonden voor
         #original_hash: 76a6bf1
         regulations_and_guidelines: Geen wedstrijdreglement of richtlijnen gevonden voor
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Let op dat de sectie voor incidenten alleen in het Engels beschikbaar is,
+      onderstaande content wordt niet vertaald.
   about_regulations:
     #original_hash: 6bce1b5
     title: Over de Wedstrijdreglementen
@@ -3095,12 +3179,12 @@ nl:
       content: >-
         De verwachte kosten verschillen sterk per land en worden bepaald door
         factoren als de grootte van de wedstrijdlocatie and other algemene
-        voorwaarden. Het afdekking van de kosten met registratiegelden is
+        voorwaarden. Het afdekking van de kosten met aanmeldingsgelden is
         mogelijk. Echter, om de kosten zo laag mogelijk te houden, is het
         aanbevolen om sponsoren te zoeken. Hoewel de WCA-delegates vrijwilligers
         zijn en geen vergoeding ontvangen voor hun werk, zouden organisatoren
         rekening moeten houden met vergoeding van onkosten en eventuele
-        reiskosten
+        reiskosten.
     paragraph3:
       #original_hash: 00d3bf8
       title: Deadline voor het aankondigen van de wedstrijd
@@ -3195,7 +3279,7 @@ nl:
       content: >-
         Aanmeldingen moeten worden verwerkt in volgorde van wie het eerst, die
         het eerst maalt, wat betekent dat vroeger afgeronde aanmeldingen als
-        eerste moeten verwerkt. Als er registratiegelden voor moeten worden
+        eerste moeten verwerkt. Als er aanmeldingsgelden voor moeten worden
         betaald, dan is de aanmelding pas compleet als het geld is betaald. Dit
         moet duidelijk worden vermeld in de instructies op de wedstrijdpagina.
     paragraph7:
