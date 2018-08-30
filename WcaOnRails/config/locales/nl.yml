@@ -1788,8 +1788,8 @@ nl:
         worden.
       #original_hash: 16cd1ba
       refund_policy_html: >-
-        Als je aanmelding wordt geannuleerd voor %{limit_date_and_time}, dan
-        krijg je %{refund_policy_percent} euro van het betaalde bedrag terug.
+        Als je je aanmelding annuleert voor %{limit_date_and_time}, dan krijg je
+        %{refund_policy_percent} van het betaalde bedrag terug.
       #original_hash: 4aca553
       no_refunds: Deelnamekosten worden niet terugbetaald.
       #original_hash: b38fa7b
@@ -2642,6 +2642,15 @@ nl:
       wmt:
         #original_hash: 2035811
         name: WCA Marketing Team
+        #original_hash: f2a0140
+        description: >-
+          Dit team is verantwoordelijk voor het ontwikkelen en managen van het
+          WCA Brand, het zoeken van sponsoren, het ondersteunen van de
+          distributie van WCA wedstrijdmaterialen en het marketen van WCA
+          merchandise.
+      banned:
+        #original_hash: d30e2e5
+        name: Geschorste deelnemers
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>WCA delegates</strong> zijn leden van de WCA die
@@ -2670,6 +2679,8 @@ nl:
     motions: Moties
     #original_hash: 092f99e
     minutes: Verslagen
+    #original_hash: 6db524a
+    policies: WCA Beleidsdocumenten
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA delegates
@@ -2726,6 +2737,11 @@ nl:
     application_instructions:
       #original_hash: 4da829b
       title: Aanmeldinstructies
+      #original_hash: 7ed06ee
+      description_html: >-
+        Vul het <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>formulier</a>
+        in.
   contact:
     #original_hash: a34b69f
     title: Contactinformatie
@@ -2819,6 +2835,12 @@ nl:
         kwaliteitsstandaard om constante hoge kwaliteit te garanderen voor
         processen, WCA Staff, regionale organisaties, wedstrijdorganisatoren en
         wedstrijdstaff.
+    wmt:
+      #original_hash: f2a0140
+      info_html: >-
+        Dit team is verantwoordelijk voor het ontwikkelen en managen van het WCA
+        Brand, het zoeken van sponsoren, het ondersteunen van de distributie van
+        WCA wedstrijdmaterialen en het marketen van WCA merchandise.
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score tools
@@ -2841,6 +2863,17 @@ nl:
         De nieuwste versie van het WCA-resultatenbestand kan worden gedownload
         hier: <br /><a href="/files/results.xls"
         target="_blank">WCA-resultatenbestand</a>.
+      #original_hash: a5f2d25
+      '4': >-
+        Je kunt ook <a
+        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>
+        gebruiken voor het voorbereiden van de deelnemersgroepen voor een
+        wedstrijd. Het is tool die precies hiervoor is bedoeld. Onder de
+        belangrijkste features zit: sorteren van deelnemers op basis van
+        ranking, toewijzen van taken (judgen, scramblen), bepalen hoeveel
+        scrambles nodig zijn, genereren van wedstrijdbriefjes, persoonlijke
+        lijsten en samenvattingen. Het is een open source project van Jonatan
+        Klosko.
   logo:
     #original_hash: c72c969
     title: WCA-logo
@@ -3024,6 +3057,11 @@ nl:
         posts: Geen berichten gevonden voor
         #original_hash: 76a6bf1
         regulations_and_guidelines: Geen wedstrijdreglement of richtlijnen gevonden voor
+  incidents_log:
+    #original_hash: 61ab89f
+    i18n_disclaimer: >-
+      Let op dat de sectie voor incidenten alleen in het Engels beschikbaar is,
+      onderstaande content wordt niet vertaald.
   about_regulations:
     #original_hash: 6bce1b5
     title: Over de Wedstrijdreglementen
