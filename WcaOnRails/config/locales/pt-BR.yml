@@ -369,10 +369,8 @@ pt-BR:
         information: Informação
         #original_hash: 87b7d5f
         use_wca_registration: Eu quero usar o site da WCA para as inscrições
-        #original_hash: a2dfcf8
-        competitor_limit_enabled: >-
-          Eu quero especificar um limite para o número de competidores que podem
-          participar desta competição.
+        #original_hash: 9bb1965
+        competitor_limit_enabled: Limite de competidores
         #original_hash: 749f4c9
         competitor_limit: Número máximo de competidores
         #original_hash: 4a8b6f1
@@ -704,14 +702,16 @@ pt-BR:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
-          Por enquanto este número é apenas informativo, e não impede mais
-          pessoas de se inscreverem. Estamos trabalhando em disponibilizar
-          suporte para isso no processo de inscrição, mas alguns outros pontos
-          são necessários primeiro.
-        #original_hash: b9bc84d
-        competitor_limit: O número de competidores permitido nesta competição.
+          Ainda que não seja obrigatório segundo o Regulamento informar um
+          limite de competidores, é altamente recomendável fazê-lo.
+        #original_hash: b7b599b
+        competitor_limit: >-
+          O número de competidores permitido nesta competição. Por enquanto este
+          número é apenas a título de informação, e não impede mais pessoas de
+          se inscreverem. Estamos trabalhando para ter suporte específico para
+          isso no fluxo da inscrição, mas isto requer outras melhorias primeiro.
         #original_hash: 4bd7102
         competitor_limit_reason: >-
           Qual a razão para o limite de competidores? Por favor preencha em
@@ -910,6 +910,11 @@ pt-BR:
           'true': Perguntar sobre acompanhantes
           #original_hash: f8c2332
           'false': NÃO perguntar sobre acompanhantes
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Quero especificar um limite de competidores
+          #original_hash: 5b581b5
+          'false': NÃO QUERO especificar um limite de competidores
         on_the_spot_registration:
           #original_hash: 0c521ca
           'true': Inscrições no local serão aceitas
