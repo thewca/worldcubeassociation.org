@@ -150,6 +150,9 @@ pl:
       name: Kwalifikacje Kombinowane
       #original_hash: 4c66ad0
       cellName: Kwalifikacje Kombinowane
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: 'Próba %{number}'
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
@@ -249,6 +252,8 @@ pl:
     date_placeholder: RRRR-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'RRRR-MM-DD GG:MM'
+    #original_hash: 7136e3b
+    time_format: 24h
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1832,7 +1837,9 @@ pl:
         Jeżeli to nie są twoje pierwsze zawody, połącz swoje WCA ID ze swoim
         kontem WCA %{here}.
       #original_hash: 56fc229
-      register_html: 'Zarejestrauj się na te zawody %{here}.'
+      register_link_html: 'Zarejestruj się na te zawody %{here}.'
+      #original_hash: 45834fd
+      register_below_html: Zarejestruj się na te zawody poniżej.
       #original_hash: 196725e
       competitor_limit_is: 'Limit zawodników wynosi %{competitor_limit}.'
       #original_hash: 5101f65
@@ -1842,9 +1849,13 @@ pl:
       #original_hash: 5390a91
       no_entry_fee: Rejestracja na te zawody jest darmowa.
       #original_hash: 29af5c2
-      use_stripe_html: >-
-        Wpisowe musi być uiszczone za pomocą Stripe %{here} po zarejestrowaniu
-        się.
+      use_stripe_link_html: >-
+        Wpisowe musi zostać opłacone za pomocą systemu Stripe %{here} po
+        dokonaniu rejestracji.
+      #original_hash: cea0eb4
+      use_stripe_below_html: >-
+        Wpisowe musi zostać opłacone za pomocą systemu Stripe poniżej po
+        dokonaniu rejestracji.
       #original_hash: 16cd1ba
       refund_policy_html: >-
         Jeżeli twoja rejestracja zostanie anulowana przed
@@ -2145,6 +2156,8 @@ pl:
       general_info: Ogólne informacje
       #original_hash: c5497bc
       events: Konkurencje
+      #original_hash: 0a8adac
+      schedule: Harmonogram
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2183,6 +2196,39 @@ pl:
       cutoff: Cutoff
       #original_hash: 02ed4a4
       proceed: Przechodzi
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: 'Wyświetl harmonogram jako:'
+        #original_hash: 0424f6e
+        table: Tabela
+        #original_hash: adab509
+        calendar: Kalendarz
+      #original_hash: 017e4d8
+      display_for_room: 'Wyświetl harmonogram dla:'
+      range:
+        #original_hash: 3f66052
+        from: Od
+        #original_hash: ae79ea1
+        to: Do
+      #original_hash: 952f375
+      start: Początek
+      #original_hash: a2bb9d3
+      end: Koniec
+      #original_hash: 81c0d91
+      activity: Czynność
+      #original_hash: 90e2fca
+      room: Pokój
+      #original_hash: 2896c7a
+      venue_information_html: 'Widzisz harmonogram dla miejsca %{venue_name}.'
+      #original_hash: b97e383
+      timezone_message: 'Harmonogram jest wyświetlany w strafie czasowej %{timezone}.'
+      #original_hash: 2ab94a0
+      multiple_venues_available: >-
+        Te zawody odbywają się w kilku miejscach, sprawdź również harmonogram
+        dla pozostałych miejsc!
+      #original_hash: 37b1adb
+      schedule_for_date: '%{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -2203,6 +2249,8 @@ pl:
         orga_view: Widok organizatora
         #original_hash: c6171f8
         event_view: Zarządzaj konkurencjami
+        #original_hash: 6235b27
+        schedule_view: Zarządzaj harmonogramem
         #original_hash: 6f7aef9
         payment_view: Konfiguracja płatności
         #original_hash: 76bfdcf
