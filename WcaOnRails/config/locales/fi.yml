@@ -80,7 +80,7 @@ fi:
     #original_hash: 21f623c
     '3': 'Paras 3:sta'
     #original_hash: 2342d2b
-    a: '5:n keskiarvo'
+    a: 'Typistetty 5:n keskiarvo'
     #original_hash: 940c82d
     m: '3:n keskiarvo'
     short:
@@ -255,11 +255,11 @@ fi:
       #original_hash: f6f1389
       callback_url: Callback Url
       #original_hash: 89ff312
-      owner: Omistaja
+      owner: Owner
       #original_hash: 557031c
       application_id: Application ID
       #original_hash: c3cd636
-      actions: Toiminnot
+      actions: Actions
       #original_hash: f4e7a87
       secret: Secret
       #original_hash: c23540e
@@ -364,7 +364,7 @@ fi:
         #original_hash: 87b7d5f
         use_wca_registration: Haluan käyttää WCA-sivua rekisteröitymiseen
         #original_hash: a2dfcf8
-        competitor_limit_enabled: Haluaisin asettaa rajoituksen tämän kilpailun osallistujamäärään.
+        competitor_limit_enabled: Haluan asettaa rajoituksen tämän kilpailun osallistujamäärään.
         #original_hash: 749f4c9
         competitor_limit: Kilpailijoiden enimmäismäärä
         #original_hash: 4a8b6f1
@@ -425,11 +425,11 @@ fi:
         #original_hash: 65a9b28
         schedule_url: Aikataulun url-osoite
         #original_hash: 36155d4
-        equipment: Tarvikkeet
+        equipment: Välineistö
         #original_hash: 67cd406
         venue: Kilpailupaikka
         #original_hash: 519255a
-        organization: Järjestö
+        organization: Järjestäminen
         #original_hash: 5e326b1
         incidents: Poikkeustilanteet
         #original_hash: d7020f4
@@ -803,7 +803,7 @@ fi:
           ratkaisivat ne. Kerro lyhyesti, äläkä mainitse epäolennaisia asioita.
         #original_hash: d003c1f
         incidents: >-
-          Raportoi kaikista väliköhtauksista, joiden uskot olevan mainitsemisen
+          Raportoi kaikista välikohtauksista, joiden uskot olevan mainitsemisen
           arvoisia. Numeroi tapahtumat alkaen numerosta 1, niin toiset
           delegaatit voivat kommentoidessaan viitata niihin numeron avulla.
           Mainitsethan ainoastaan konkreettisia tapauksia, etkä yleisiä
@@ -820,7 +820,7 @@ fi:
         discussion_url: ''
       competition_tab:
         #original_hash: e396d28
-        name: 'Esimerkkejä: Lajit, Matkustus, Palkinnot, Majoitus'
+        name: 'Esimerkkejä: Matkustus, Palkinnot, Majoitus'
         #original_hash: da39a3e
         content: ''
       person:
@@ -1515,9 +1515,7 @@ fi:
             osallistumismaksun maksaminen etukäteen tai lajien
             karsintavaatimukset)
           #original_hash: 1e225f0
-          registrations_full: >-
-            Osallistujarajoitus on saavutettu, eikä enempää paikkoja ole
-            saatavilla
+          registrations_full: 'Osallistujaraja on saavutettu, eikä enempää paikkoja ole saatavilla'
           #original_hash: 0d4cce9
           multiple_registrations: Rekisteröidyit useamman kerran
     list:
@@ -1614,7 +1612,7 @@ fi:
       ongelmat %{profile}ssasi:
     #original_hash: f22ef22
     registration_full: >-
-      Tämän kilpailun osallistujarajoitus %{competitor_limit} on jo täynnä. Jos
+      Tämän kilpailun osallistujaraja %{competitor_limit} on jo täynnä. Jos
       rekisteröidyt, sinut laitetaan jonotuslistalle. Rekisteröitymistä ei
       välttämättä hyväksytä, ellei paikkoja vapaudu.
     #original_hash: 855ca9c
@@ -1772,7 +1770,7 @@ fi:
       #original_hash: 45834fd
       register_below_html: Rekisteröidy tähän kilpailuun alla.
       #original_hash: 196725e
-      competitor_limit_is: 'Osallistujarajoitus on %{competitor_limit} kilpailijaa.'
+      competitor_limit_is: 'Osallistujaraja on %{competitor_limit} kilpailijaa.'
       #original_hash: 5101f65
       no_competitor_limit: Osallistujarajoitusta ei ole.
       #original_hash: 86cf09f
@@ -2101,7 +2099,7 @@ fi:
           (ks. %{guideline_link}).
         #original_hash: e4e48c6
         cutoff_html: >-
-          Yhdistetyn kierroksen toiseen osioon pääsyyn vaadittava tulos (ks.
+          Yhdistetyn kierroksen toiseen vaiheeseen pääsyyn vaadittava tulos (ks.
           %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
@@ -2548,10 +2546,10 @@ fi:
         #original_hash: c86d105
         '1': >-
           World Cube Association kattaa kilpailuja mekaanisille pulmapeleille,
-          joita operoidaan kääntelemällä tiettyjä palajoukkoja (engl. 'twisty
-          puzzles'). Kuuluisin tällainen pulmapeli on Rubikin kuutio, jonka
-          keksi unkarilainen professori Rubik. Valikoima tällaisia pulmapelejä
-          on valittu WCA:n virallisiksi lajeiksi.
+          joita operoidaan kääntelemällä palajoukkoja (engl. 'twisty puzzles').
+          Kuuluisin tällainen pulmapeli on Rubikin kuutio, jonka keksi
+          unkarilainen professori Rubik. Valikoima tällaisia pulmapelejä on
+          valittu WCA:n virallisiksi lajeiksi.
         #original_hash: 22c3593
         '2': >-
           World Cube Association järjestää kilpailuja ympäri maailmaa.
@@ -3046,8 +3044,8 @@ fi:
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
-      Huomioithan, että poikkeustilanneosio on ainoastaan englanniksi,
-      allaolevaa sisältöä ei ole käännetty.
+      Poikkeustilanneosio on ainoastaan englanniksi, allaolevaa sisältöä ei ole
+      käännetty.
   about_regulations:
     #original_hash: 6bce1b5
     title: Tietoa WCA-säännöistä
@@ -3183,8 +3181,9 @@ fi:
       content: >-
         Delegaatin täytyy määrittää kaikki kilpailussa pidettävät lajit
         hakiessaan kilpailulle hyväksyntää. Tämä sisältää myös "mahdolliset"
-        lajit (lajit, jotka saatetaan pitää muiden lisäksi riippuen kilpailun
-        sujuvuudesta). Muiden lisäysten täytyy olla Boardin hyväksymiä.
+        (englanniksi "tentative") lajit (lajit, jotka saatetaan pitää muiden
+        lisäksi riippuen kilpailun sujuvuudesta). Muiden lisäysten täytyy olla
+        Boardin hyväksymiä.
     paragraph5:
       #original_hash: 17d01de
       title: Osallistujarajoitukset
@@ -3194,10 +3193,10 @@ fi:
         kilpailukohtaisesti (ks. <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>sääntö
         Z4</a>). Kuten kaikille artiklan Z säännöille, delegaatin täytyy saada
-        osallistujarajoitukselle Boardin hyväksyntä. Rajoitukset tulisi valita
+        osallistujarajoitukselle Boardin hyväksyntä. Rajat tulisi valita
         viisaasti ja kilpailun odotetun suosion mukaan. Määrää ei pitäisi laskea
-        vähäpätöisistä syistä. Tarkoitettu rajoitus tulisi ottaa huomioon jo
-        sopivaa kilpailupaikkaa etsittäessä. Rajoitus täytyy kertoa selkeästi
+        vähäpätöisistä syistä. Aiottu rajoitus tulisi ottaa huomioon jo sopivaa
+        kilpailupaikkaa etsittäessä. Rajoitus täytyy kertoa selkeästi
         WCA-verkkosivuston kilpailusivulla.
     paragraph6:
       #original_hash: ce4c3d0
@@ -3215,8 +3214,8 @@ fi:
       title: Jonotuslistan hallinnointi
       #original_hash: 81ca3f3
       content1: >-
-        Kun kilpailun osallistujarajoitus on saavutettu, pitäisi avata
-        jonotuslista. Kun hyväksytysti rekisteröitynyt kilpailija peruuttaa
+        Kun kilpailun osallistujaraja on saavutettu, pitäisi avata jonotuslista.
+        Kun hyväksytysti rekisteröitynyt kilpailija peruuttaa
         rekisteröitymisensä, hänet voidaan korvata seuraavalla jonotuslistan
         kilpailijalla.
       #original_hash: 1b2ea79
@@ -3233,7 +3232,7 @@ fi:
       content3: >-
         Jos kilpailussa kilpaili kilpailijoita, jotka eivät päässeet läpi
         rekisteröitymisestä, heidän tuloksensa poistetaan takautuvasti
-        (olettaen, että osallistujarajoitus oli olemassa ja saavutettiin).
+        (olettaen, että osallistujaraja oli olemassa ja saavutettiin).
     paragraph8:
       #original_hash: c8ad8e6
       title: Tehtävät ennen kilpailua
