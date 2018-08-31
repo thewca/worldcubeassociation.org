@@ -363,8 +363,8 @@ fi:
         information: Tietoa
         #original_hash: 87b7d5f
         use_wca_registration: Haluan käyttää WCA-sivua rekisteröitymiseen
-        #original_hash: a2dfcf8
-        competitor_limit_enabled: Haluan asettaa rajoituksen tämän kilpailun osallistujamäärään.
+        #original_hash: 9bb1965
+        competitor_limit_enabled: Osallistujaraja
         #original_hash: 749f4c9
         competitor_limit: Kilpailijoiden enimmäismäärä
         #original_hash: 4a8b6f1
@@ -694,13 +694,17 @@ fi:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
           Toistaiseksi tämä luku on vain informatiivinen, eikä vielä estä
           enempää kilpailijoita rekisteröitymästä. Yritämme saada tämän
           automaattiseksi, mutta se vaatii muiden asioiden hoitamista ensin.
-        #original_hash: b9bc84d
-        competitor_limit: Kilpailuun osallistuvien sallittu määrä.
+        #original_hash: b7b599b
+        competitor_limit: >-
+          Kilpailuun osallistuvien sallittu määrä. Toistaiseksi tämä luku on
+          vain informatiivinen, eikä vielä estä enempää kilpailijoita
+          rekisteröitymästä. Yritämme saada tämän automaattiseksi, mutta se
+          vaatii muiden asioiden hoitamista ensin.
         #original_hash: 4bd7102
         competitor_limit_reason: Mikä on syy osallistujarajoitukselle? Täytä tämä osa englanniksi!
         #original_hash: da39a3e
@@ -894,6 +898,11 @@ fi:
           'true': Kysy vierailijoista
           #original_hash: f8c2332
           'false': Älä kysy vierailijoista
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Haluan asettaa osallistujarajoituksen
+          #original_hash: 5b581b5
+          'false': En halua asettaa osallistujarajoitusta
         on_the_spot_registration:
           #original_hash: 0c521ca
           'true': Jälki-ilmoittautuminen kisapaikalla on mahdollista
