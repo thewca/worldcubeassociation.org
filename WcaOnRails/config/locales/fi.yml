@@ -696,9 +696,9 @@ fi:
         use_wca_registration: ''
         #original_hash: c0ab502
         competitor_limit_enabled: >-
-          Toistaiseksi tämä luku on vain suuntaa antava, eikä vielä estä enempää
-          kilpailijoita rekisteröitymästä. Yritämme saada tähän tarkan
-          lukumäärän, mutta se vaatii muiden asioiden hoitamista ensin.
+          Toistaiseksi tämä luku on vain informatiivinen, eikä vielä estä
+          enempää kilpailijoita rekisteröitymästä. Yritämme saada tämän
+          automaattiseksi, mutta se vaatii muiden asioiden hoitamista ensin.
         #original_hash: b9bc84d
         competitor_limit: Kilpailuun osallistuvien sallittu määrä.
         #original_hash: 4bd7102
