@@ -49,7 +49,7 @@ CREATE TABLE `Competitions` (
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `enable_donations` tinyint(1) DEFAULT NULL,
-  `competitor_limit_enabled` tinyint(1) NOT NULL DEFAULT '0',
+  `competitor_limit_enabled` tinyint(1) DEFAULT NULL,
   `competitor_limit` int(11) DEFAULT NULL,
   `competitor_limit_reason` text COLLATE utf8mb4_unicode_ci,
   `extra_registration_requirements` text COLLATE utf8mb4_unicode_ci,
@@ -1407,4 +1407,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180730182509'),
 ('20180731204733'),
 ('20180822165331'),
-('20180825115701');
+('20180825115701'),
+('20180831075355');

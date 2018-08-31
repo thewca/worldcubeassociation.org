@@ -244,7 +244,7 @@ en:
         contact: "Contact"
         information: "Information"
         use_wca_registration: "I would like to use the WCA website for registration"
-        competitor_limit_enabled: "I would like to specify a limit on the number of competitors that can enter this competition."
+        competitor_limit_enabled: "Competitor limit"
         competitor_limit: "Maximum number of competitors"
         competitor_limit_reason: "The reason for the competitor limit"
         guests_enabled: "Guests"
@@ -422,8 +422,8 @@ en:
         showAtAll: ""
         start_date: ""
         use_wca_registration: ""
-        competitor_limit_enabled: "For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
-        competitor_limit: "The number of competitors allowed in this competition."
+        competitor_limit_enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
+        competitor_limit: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
         competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
         venueAddress: ""
         championship_type: ""
@@ -511,6 +511,9 @@ en:
         guests_enabled:
           "true": "Ask about guests"
           "false": "Do NOT ask about guests"
+        competitor_limit_enabled:
+          "true": "I want to specify a competitor limit"
+          "false": "I DON'T WANT to specify a competitor limit"
         on_the_spot_registration:
           "true": "On the spot registrations will be accepted"
           "false": "On the spot registrations WILL NOT be accepted"
