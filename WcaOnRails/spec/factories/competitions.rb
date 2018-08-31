@@ -51,6 +51,7 @@ FactoryBot.define do
     showAtAll { false }
     isConfirmed { false }
 
+    competitor_limit_enabled { false }
     guests_enabled { true }
     on_the_spot_registration { false }
     refund_policy_percent { 0 }

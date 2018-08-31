@@ -121,6 +121,7 @@ class Competition < ApplicationRecord
   MAX_ID_LENGTH = 32
   MAX_NAME_LENGTH = 50
   MAX_COMPETITOR_LIMIT = 5000
+  validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
   validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH },
@@ -603,6 +604,10 @@ class Competition < ApplicationRecord
 
   def competitor_limit_enabled?
     competitor_limit_enabled
+  end
+
+  def competitor_limit_required?
+    isConfirmed? && created_at.present? && created_at > Date.new(2018, 9, 1)
   end
 
   def on_the_spot_registration_required?

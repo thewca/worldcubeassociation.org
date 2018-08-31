@@ -7,8 +7,8 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     $('.wca-on-the-spot-registration-options').toggle(this.value === "true");
   }).trigger('change');
 
-  $('input[name="competition[competitor_limit_enabled]"]').on('change', function() {
-    $('.wca-competitor-limit-options').toggle(this.checked);
+  $('select[name="competition[competitor_limit_enabled]"]').on('change', function() {
+    $('.wca-competitor-limit-options').toggle(this.value === "true");
   }).trigger('change');
 
   $('input[name="competition[generate_website]"]').on('change', function() {
