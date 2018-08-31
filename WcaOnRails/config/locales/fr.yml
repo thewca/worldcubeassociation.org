@@ -367,7 +367,7 @@ fr:
         information: Informations
         #original_hash: 87b7d5f
         use_wca_registration: Je souhaite utiliser le site de la WCA pour les inscriptions
-        #original_hash: a2dfcf8
+        #original_hash: 9bb1965
         competitor_limit_enabled: >-
           Je souhaite spécifier une limite au nombre de compétiteurs qui peuvent
           participer à cette compétition.
@@ -712,13 +712,13 @@ fr:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
           Pour l'instant ce nombre est informatif, et ne permet pas d'empêcher
           plus de personnes de s'inscrire. Nous sommes entrain de travailler sur
           l'intégration de cette limite dans la procédure d'inscription, mais
           cela demande un peu de travail.
-        #original_hash: b9bc84d
+        #original_hash: b7b599b
         competitor_limit: Le nombre de compétiteurs autorisés dans cette compétition.
         #original_hash: 4bd7102
         competitor_limit_reason: >-
@@ -923,6 +923,11 @@ fr:
           'true': Demander de renseigner les accompagnateurs
           #original_hash: f8c2332
           'false': Ne PAS demander de renseigner les accompagnateurs
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Je veux spécifier une limite au nombre de compétiteurs
+          #original_hash: 5b581b5
+          'false': Je NE VEUX PAS spécifier de limite au nombre de compétiteurs
         on_the_spot_registration:
           #original_hash: 0c521ca
           'true': Les inscriptions sur place seront acceptées
@@ -1855,8 +1860,8 @@ fr:
         d'inscription.
       #original_hash: 4aca553
       no_refunds: >-
-        Les frais d'inscriptions ne seront pas remboursés, quelques soient les
-        circonstances.
+        Les frais d'inscriptions ne seront pas remboursés, quelles que soient
+        les circonstances.
       #original_hash: b38fa7b
       on_the_spot_registration: >-
         Les inscriptions sur place seront acceptées et coûteront
