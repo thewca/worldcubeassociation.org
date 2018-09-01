@@ -262,6 +262,10 @@ en:
         refund_policy_percent: "Percent to be refunded"
         refund_policy_limit_date: "Limit date for refunds"
         guests_entry_fee_lowest_denomination: "Entry fee for guests"
+        regulation_z1: "I would like to require competitors to submit puzzles during registration as per Regulation Z1)"
+        regulation_z1_reason: "Reason for Z1)"
+        regulation_z3: "I would like to select competitors who directly qualify for certain rounds of certain events based on the results of specific previous competitions as per Regulation Z3)"
+        regulation_z3_reason: "Reason for Z3)"
       #context: a registration to a competition
       registration:
         guests: "Guests"
@@ -433,6 +437,10 @@ en:
         refund_policy_percent: "For now this number is informational only, refunds will have to be issued manually. If this is set to 0, a sentence will be displayed saying that registration fees won't be refunded under any circumstance."
         refund_policy_limit_date: "Date after which no more refunds will be issued."
         guests_entry_fee_lowest_denomination: "For now this number is informational only, guest fees cannot be managed through this website. If this is set to 0, a sentence will be displayed saying that spectators can attend for free."
+        regulation_z1: ""
+        regulation_z1_reason: "Please elaborate here why you would like to adopt Regulation Z1). Please fill this out in English!"
+        regulation_z3: ""
+        regulation_z3_reason: "Please elaborate here why you would like to adopt Regulation Z3). Please fill this out in English!"
       website_contact:
         inquiry: ""
         competition_id: ""

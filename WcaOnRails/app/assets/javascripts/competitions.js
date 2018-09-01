@@ -16,6 +16,14 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     $('div.competition_external_website').toggle(!generateWebsite);
     $('input#competition_external_website').prop('disabled', generateWebsite);
   }).trigger('change');
+
+  $('input[name="competition[regulation_z1]"]').on('change', function() {
+    $('.wca-regulation-z1-reason').toggle(this.checked);
+  }).trigger('change');
+
+  $('input[name="competition[regulation_z3]"]').on('change', function() {
+    $('.wca-regulation-z3-reason').toggle(this.checked);
+  }).trigger('change');
 });
 
 // Sets map container height.

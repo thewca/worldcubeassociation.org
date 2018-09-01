@@ -73,6 +73,10 @@ module DatabaseDumper
           refund_policy_percent
           refund_policy_limit_date
           guests_entry_fee_lowest_denomination
+          regulation_z1
+          regulation_z1_reason
+          regulation_z3
+          regulation_z3_reason
         ),
         db_default: %w(
           connected_stripe_account_id

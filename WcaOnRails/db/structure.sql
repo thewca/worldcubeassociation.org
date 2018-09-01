@@ -60,6 +60,10 @@ CREATE TABLE `Competitions` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `confirmed_at` datetime DEFAULT NULL,
+  `regulation_z1` tinyint(1) DEFAULT NULL,
+  `regulation_z1_reason` text COLLATE utf8mb4_unicode_ci,
+  `regulation_z3` tinyint(1) DEFAULT NULL,
+  `regulation_z3_reason` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1410,4 +1414,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180825114051'),
 ('20180825115701'),
 ('20180831075355'),
+('20180831164420'),
 ('20180912042457');
