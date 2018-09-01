@@ -566,6 +566,10 @@ class CompetitionsController < ApplicationController
       :being_cloned_from_id,
       :clone_tabs,
       :refund_policy_limit_date,
+      :regulation_z1,
+      :regulation_z1_reason,
+      :regulation_z3,
+      :regulation_z3_reason,
     ]
 
     if @competition.nil? || @competition.can_edit_registration_fees?

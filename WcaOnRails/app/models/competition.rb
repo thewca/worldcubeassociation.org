@@ -117,6 +117,10 @@ class Competition < ApplicationRecord
     updated_at
     connected_stripe_account_id
     refund_policy_limit_date
+    regulation_z1
+    regulation_z1_reason
+    regulation_z3
+    regulation_z3_reason
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
@@ -155,6 +159,8 @@ class Competition < ApplicationRecord
            as: "guests_base_fee",
            allow_nil: true,
            with_model_currency: :currency_code
+  validates :regulation_z1_reason, presence: true, if: :regulation_z1?
+  validates :regulation_z3_reason, presence: true, if: :regulation_z3?
 
   NEARBY_DISTANCE_KM_WARNING = 250
   NEARBY_DISTANCE_KM_DANGER = 100
