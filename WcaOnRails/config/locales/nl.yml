@@ -7,7 +7,7 @@ nl:
     #original_hash: 459f987
     XS: Meerdere landen (Zuid-Amerika)
     #original_hash: 374ac0d
-    XM: Meerdere Landen (Amerika's)
+    XM: Meerdere landen (Amerika's)
     #original_hash: 918c53a
     MO: Macao
     #original_hash: 2f488ff
@@ -31,25 +31,25 @@ nl:
     South America: Zuid-Amerika
   events:
     #original_hash: 3732390
-    '222': 2x2x2 kubus
+    '222': 2x2x2 Kubus
     #original_hash: 8180137
     '333': 3x3x3 Kubus
     #original_hash: 2ee5b5a
-    '444': 4x4x4 kubus
+    '444': 4x4x4 Kubus
     #original_hash: b7a99fa
-    '555': 5x5x5 kubus
+    '555': 5x5x5 Kubus
     #original_hash: 4e3ea57
-    '666': 6x6x6 kubus
+    '666': 6x6x6 Kubus
     #original_hash: b567fc4
-    '777': 7x7x7 kubus
+    '777': 7x7x7 Kubus
     #original_hash: 29d5411
-    333bf: 3x3x3 geblinddoekt
+    333bf: 3x3x3 Geblinddoekt
     #original_hash: 0a5e7bf
-    333fm: 3x3x3 met minste draaien
+    333fm: 3x3x3 Met minste draaien
     #original_hash: 31ed23f
-    333oh: 3x3x3 met één hand
+    333oh: 3x3x3 Met één hand
     #original_hash: be41d70
-    333ft: 3x3x3 met voeten
+    333ft: 3x3x3 Met voeten
     #original_hash: 04f6b3e
     clock: Clock
     #original_hash: d542376
@@ -61,17 +61,17 @@ nl:
     #original_hash: 1551a2c
     sq1: Square-1
     #original_hash: 5bae501
-    444bf: 4x4x4 geblinddoekt
+    444bf: 4x4x4 Geblinddoekt
     #original_hash: aea5216
-    555bf: 5x5x5 geblinddoekt
+    555bf: 5x5x5 Geblinddoekt
     #original_hash: cedbf87
-    333mbf: 3x3x3 meervoudig geblinddoekt
+    333mbf: 3x3x3 Meervoudig geblinddoekt
     #original_hash: e6791be
     magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
     #original_hash: 1843dc4
-    333mbo: '3x3x3 Cube: meervoudig geblinddoekt, oude regels'
+    333mbo: '3x3x3 Meervoudig geblinddoekt, oude regels'
   formats:
     #original_hash: e4b3c11
     '1': Best of 1
@@ -1735,7 +1735,7 @@ nl:
       disclaimer: >-
         Hier zijn alleen wedstrijden zichtbaar die de aanmeldingen via de
         WCA-website verwerken. Als je wedstrijd hier niet bij staat, kijk dan op
-        de website van de wedstrijd of er een aanmeldingenlijst is.
+        de website van de website of er een aanmeldingenlijst is.
       #original_hash: 94a2fc8
       past_competitions: Wedstrijden uit het verleden
     competition_info:
@@ -1774,7 +1774,7 @@ nl:
       #original_hash: a082288
       claim_wca_id_html: >-
         Als dit niet je eerste wedstrijd is, koppel dan %{here} je WCA ID aan je
-        WCA-account.
+        WCA account.
       #original_hash: 56fc229
       register_link_html: 'Meld je %{here} aan voor deze wedstrijd.'
       #original_hash: 45834fd
@@ -1797,8 +1797,8 @@ nl:
         aanmelding.
       #original_hash: 16cd1ba
       refund_policy_html: >-
-        Als je je aanmelding annuleert voor %{limit_date_and_time}, dan krijg je
-        %{refund_policy_percent} van het betaalde bedrag terug.
+        Als je aanmelding wordt geannuleerd voor %{limit_date_and_time}, dan
+        krijg je %{refund_policy_percent} euro van het betaalde bedrag terug.
       #original_hash: 4aca553
       no_refunds: Deelnamekosten worden niet terugbetaald.
       #original_hash: b38fa7b
@@ -1830,12 +1830,12 @@ nl:
           %{end_date_and_time}.
         #original_hash: 679222e
         range_ongoing_html: >-
-          Online aanmelding is geopend op %{start_date_and_time} en stopt op
+          Online aanmelding is gestart op %{start_date_and_time} en sluit op
           %{end_date_and_time}.
         #original_hash: 7ac8349
         range_past_html: >-
-          Online aanmelding is geopend op %{start_date_and_time} en stopt op
-          %{end_date_and_time}.
+          Online aanmelding is gestart op %{start_date_and_time} en is gesloten
+          op %{end_date_and_time}.
     index:
       #original_hash: db98a68
       title: Wedstrijden
@@ -2138,30 +2138,30 @@ nl:
         #original_hash: adab509
         calendar: Agenda
       #original_hash: 017e4d8
-      display_for_room: 'Toon het tijdschema voor:'
+      display_for_room: 'Toon schema voor:'
       range:
         #original_hash: 3f66052
         from: Van
         #original_hash: ae79ea1
-        to: Tot
+        to: Naar
       #original_hash: 952f375
-      start: Start
+      start: Begin
       #original_hash: a2bb9d3
-      end: Eind
+      end: Einde
       #original_hash: 81c0d91
       activity: Activiteit
       #original_hash: 90e2fca
       room: Ruimte
       #original_hash: 2896c7a
-      venue_information_html: 'Je kijkt naar het schema van de wedstrijdlocatie %{venue_name}.'
+      venue_information_html: 'Je bekijkt het schema voor de locatie %{venue_name}.'
       #original_hash: b97e383
-      timezone_message: 'Het tijdschema wordt getoond in tijdzone %{timezone}.'
+      timezone_message: 'In het tijdschema wordt tijdzone %{timezone} gebruikt.'
       #original_hash: 2ab94a0
       multiple_venues_available: >-
-        Deze wedstrijd heeft meerdere wedstrijdlocaties, let op het tijdschema
-        voor de andere wedstrijdlocatie(s).
+        Deze wedstrijd heeft meerdere locaties, zorg ervoor dat je het schema
+        ook controleert voor de andere locaties!
       #original_hash: 37b1adb
-      schedule_for_date: 'Tijdschema voor %{day_name} (%{full_date})'
+      schedule_for_date: 'Schema voor %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -2183,7 +2183,7 @@ nl:
         #original_hash: c6171f8
         event_view: Wedstrijdonderdelen beheren
         #original_hash: 6235b27
-        schedule_view: Beheren tijdschema
+        schedule_view: Bewerk het schema
         #original_hash: 6f7aef9
         payment_view: Instellen betalingen
         #original_hash: 76bfdcf
