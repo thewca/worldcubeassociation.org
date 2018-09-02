@@ -509,7 +509,7 @@ GEM
       mail (>= 2.6.1)
     warden (1.2.7)
       rack (>= 1.0)
-    wca_i18n (0.4.2)
+    wca_i18n (0.4.3)
       colorize (~> 0.8)
     web-console (3.6.2)
       actionview (>= 5.0)
