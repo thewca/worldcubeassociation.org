@@ -35,14 +35,9 @@ table#competition-tabs {
   }
 }
 
-// By default hide the div holding cutoff/time limit information.
-// If the Events tab or the Schedule tab is active, display it.
-div.time-limit-information {
+// Hide the div with all the time limit/format/cutoff information if the active tab is not the Schedule or Events.
+.tab-pane.active:not(#competition-events):not(#competition-schedule) ~ div.time-limit-information {
   display: none;
-  #competition-events.active ~ &,
-  #competition-schedule.active ~ &, {
-    display: block;
-  }
 }
 
 div#competition-tabs {
