@@ -37,7 +37,7 @@ variable :RECAPTCHA_PUBLIC_KEY, :string, default: ''
 variable :RECAPTCHA_PRIVATE_KEY, :string, default: ''
 variable :NEW_RELIC_LICENSE_KEY, :string, default: ''
 
-variable :GOOGLE_MAPS_API_KEY, :string, default: 'AIzaSyCthnikDc6olZ2lftHfqb_nkRuRrqBp17w'
+variable :GOOGLE_MAPS_API_KEY, :string, default: 'AIzaSyDYBIU04Tv_j914utSX9OJhJDxi7eiZ84w'
 variable :GITHUB_CREATE_PR_ACCESS_TOKEN, :string, default: ''
 variable :STRIPE_API_KEY, :string, default: 'sk_test_CY2eQJchZKUrPGQtJ3Z60ycA'
 variable :STRIPE_PUBLISHABLE_KEY, :string, default: 'pk_test_N0KdZIOedIrP8C4bD5XLUxOY'
