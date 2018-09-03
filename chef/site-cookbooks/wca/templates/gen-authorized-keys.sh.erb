@@ -16,8 +16,10 @@ fi
   --keyfile /home/cubing/.ssh/authorized_keys
 
 # Add keys used by Travis for deployment.
+# Note that we restrict Travis to running our deploy.sh script.
 authorized_keys_path=/home/cubing/.ssh/authorized_keys
 wca_documents_key_url="https://raw.githubusercontent.com/thewca/wca-documents/master/.travis/deploy_rsa.pub"
 echo "" >> $authorized_keys_path
 echo "# Keys for WCA Documents - Travis" >> $authorized_keys_path
-curl -s $wca_documents_key_url >> $authorized_keys_path
+travis_public_key=$(curl -s $wca_documents_key_url)
+echo 'command="/home/cubing/worldcubeassociation.org/scripts/deploy.sh update_docs"' $travis_public_key >> $authorized_keys_path
