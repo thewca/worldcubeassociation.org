@@ -1,3 +1,4 @@
+<% # TODO (jeremy): Fix all indentation once people have taken a look at this. %>
   <% provide(:include_gmaps, true) %>
   <% provide(:include_markdown_editor, true) %>
   <% provide(:include_auto_numeric, true) %>
@@ -23,7 +24,11 @@
       <% end %>
     <% end %>
 
-    <% if @competition_admin_view || !is_actually_confirmed %>
+    <% can_edit_competition = (@competition_admin_view || !is_actually_confirmed) %>
+    <% disable_form = !can_edit_competition %>
+
+    <fieldset <%= disable_form && "disabled" %>>
+
       <% if @competition.persisted? %>
         <%= f.input :id %>
       <% end %>
@@ -62,6 +67,7 @@
 
       <script>
         (function() {
+          var form_disabled = <%= disable_form.to_json %>;
           var $map = $('#venue-map-wrapper .map');
           wca.addGoogleMapsLoadedListener(function() {
             function roundToMicrodegrees($el) {
@@ -71,6 +77,7 @@
               $el.val(rounded);
             }
             $map.locationpicker({
+              draggable: !form_disabled,
               zoom: 8,
               location: {
                 latitude: <%= @competition.latitude_degrees || 0 %>,
@@ -119,6 +126,12 @@
           });
 
           wca.fetchNearbyCompetitions = function() {
+            if(form_disabled) {
+              // The user isn't allowed to change the location of the
+              // competition, so there's no need to bother recomputing the nearby
+              // competitions.
+              return;
+            }
             $("#nearby-competitions").addClass('loading');
             var obj = $("#competition-form").serializeJSON();
 
@@ -234,7 +247,6 @@
       </div>
       <hr>
       <%= f.input :use_wca_registration %>
-    <% end %>
 
     <div class="wca-registration-options">
       <% if @competition.can_receive_registration_emails?(current_user.id) %>
@@ -244,7 +256,6 @@
       <% end %>
     </div>
 
-    <% if @competition_admin_view || !is_actually_confirmed %>
       <div class="wca-registration-options">
         <%= f.input :enable_donations %>
         <%= f.input :guests_enabled, as: :radio_buttons, collection: [ :true, :false ] %>
@@ -289,7 +300,8 @@
       <div class="wca-regulation-z3-reason">
         <%= f.input :regulation_z3_reason %>
       </div>
-    <% end %>
+
+    </fieldset>
 
     <hr>
     <%= f.input :remarks, disabled: is_actually_confirmed, hint: t('simple_form.hints.competition.remarks_html', link: link_to("Article Z", "https://www.worldcubeassociation.org/regulations/#article-Z-optional", target: "_blank")) %>
