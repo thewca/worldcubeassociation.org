@@ -349,7 +349,7 @@ nl:
         external_website: Website
         #original_hash: 692e1f9
         generate_website: Ik wil de WCA-website gebruiken in plaats van een externe website.
-        #original_hash: dd88e47
+        #original_hash: 6cf623b
         base_entry_fee_lowest_denomination: Basisbedrag voor aanmelding
         #original_hash: 28a6fbb
         currency_code: Valutacode
@@ -363,7 +363,7 @@ nl:
         information: Informatie
         #original_hash: 87b7d5f
         use_wca_registration: Ik wil de WCA-website gebruiken voor aanmeldingen
-        #original_hash: a2dfcf8
+        #original_hash: 9bb1965
         competitor_limit_enabled: >-
           Ik wil een limiet opgeven voor het aantal deelnemers dat zich kan
           aanmelden voor deze wedstrijd.
@@ -387,16 +387,16 @@ nl:
         competition_events: Wedstrijdonderdelen
         #original_hash: 71c8461
         enable_donations: >-
-          Ik wil naast de aanmeldingsbedragen ook de mogelijkheid bieden om
-          donaties te doen
+          Ik wil naast de deelnamekosten ook de mogelijkheid bieden om donaties
+          te doen
         #original_hash: 4baf44b
         championship_type: Type Kampioenschap
         #original_hash: 556fda0
         extra_registration_requirements: Extra aanmeldingseisen
         #original_hash: 2529d04
         on_the_spot_registration: Ik wil aanmeldingen bij binnenkomst op locatie accepteren.
-        #original_hash: bbff74c
-        on_the_spot_entry_fee_lowest_denomination: Deelnamekosten bij binnenkomst
+        #original_hash: 69780b5
+        on_the_spot_entry_fee_lowest_denomination: Deelnamekosten bij nieuwe aanmelding op locatie
         #original_hash: efbdbab
         refund_policy_percent: Teruggave percentage
         #original_hash: b332299
@@ -671,13 +671,13 @@ nl:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 82ad56b
+        #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Het basisbedrag voor aanmelding voor de wedstrijd. Het bedrag wordt
           getoond op de wedstrijdinformatiepagina en aanmeldingspagina. Als het
           bedrag 0 is, wordt een tekst getoond dat aanmelding gratis is.
-        #original_hash: 866bc05
-        currency_code: Valutacode van het aanmeldingsbedrag.
+        #original_hash: 9735ddf
+        currency_code: Valutacode van de deelnamekosten.
         #original_hash: da39a3e
         guests_enabled: ''
         #original_hash: da39a3e
@@ -696,13 +696,16 @@ nl:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
-          Dit aantal is nu nog alleen ter informatie, en voorkomt niet dat meer
-          mensen zich aanmelden. We werken aan ondersteuning voor het hele
-          aanmeldingsproces, maar hiervoor is nog meer werk nodig.
-        #original_hash: b9bc84d
-        competitor_limit: Het aantal deelnemers dat wordt geaccepteerd voor deze wedstrijd.
+          Hoewel het niet vereist is in het wedstrijdreglement om een
+          deelnemerslimiet op te geven, wordt dit wel sterk aanbevolen.
+        #original_hash: b7b599b
+        competitor_limit: >-
+          Het aantal deelnemers dat wordt geaccepteerd voor deze wedstrijd.
+          Voorlopig is dit aantal alleen ter informatie, en voorkomt het niet
+          dat meer mensen zich aanmelden. We werken aan expliciete ondersteuning
+          voor het registratieproces, maar dit vraagt nog wat werk.
         #original_hash: 4bd7102
         competitor_limit_reason: >-
           Wat is de reden voor de limiet op deelnemersaantal? Graag in het
@@ -894,6 +897,11 @@ nl:
           'true': Vraag naar gasten
           #original_hash: f8c2332
           'false': Vraag niet naar gasten
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Ik wil een deelnemerslimiet opgeven
+          #original_hash: 5b581b5
+          'false': Ik wil GEEN deelnemerslimiet opgeven
         on_the_spot_registration:
           #original_hash: 0c521ca
           'true': Registratie op wedstrijdlocatie toegestaan
@@ -1142,7 +1150,7 @@ nl:
         organizers: 'Beste organisatoren van %{competition},'
         #original_hash: c526fd6
         confirmed: >-
-          %{delegate_name}, de delegate van jouw wedstrijd, heeft %{competition}
+          %{delegate_name}, de delegate van je wedstrijd, heeft %{competition}
           bevestigd en de aanvraag naar de WCA Board gestuurd. Zodra de WCA
           Board deze wedstrijd openbaar maakt, ontvang je weer een notificatie.
         #original_hash: dfea09d
@@ -1342,8 +1350,8 @@ nl:
       already_have_id: 'kan WCA-id niet claimen omdat je al een WCA-id %{wca_id} hebt'
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
-        We hebben jouw geboortedatum nog niet. Neem alsjeblieft contact op met
-        het WCA-resultatenteam via <a href="%{dob_form_path}">dit formulier</a>.
+        We hebben je geboortedatum nog niet. Neem alsjeblieft contact op met het
+        WCA-resultatenteam via <a href="%{dob_form_path}">dit formulier</a>.
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Voor deze WCA-id hebben we nog geen geslacht. Stuur een e-mail aan <a
@@ -1377,7 +1385,7 @@ nl:
       #original_hash: 407c4f8
       select_delegate_html: >-
         Om je je WCA-id toe te kennen, moet een <a href='%{link_delegate}'
-        target='_blank'>WCA delegate</a> jouw identiteit bevestigen. Voer je
+        target='_blank'>WCA delegate</a> je identiteit bevestigen. Voer je
         geboortedatum in en selecteer de WCA delegate die jou het beste kent.
       #original_hash: 2564ee3
       already_assigned_html: >-
@@ -1455,7 +1463,7 @@ nl:
       #original_hash: 856484a
       failed: Aanmelding bijwerken mislukt
       #original_hash: 016b4ae
-      deleted: 'Jouw aanmelding voor %{comp} is verwijderd'
+      deleted: 'Je aanmelding voor %{comp} is verwijderd'
       #original_hash: 648424f
       registered: Aanmelding gelukt!
     edit_registration:
@@ -1520,7 +1528,7 @@ nl:
           #original_hash: a700652
           incomplete: >-
             Je hebt niet aan de aanmeldingsvoorwaarden voldaan (bijv. het van
-            tevoren betalen van het aanmeldingsbedrag of het voldoen aan
+            tevoren betalen van de deelnamekosten of het voldoen aan
             kwalificatietijden voor wedstrijdonderdelen)
           #original_hash: 1e225f0
           registrations_full: >-
@@ -1629,7 +1637,7 @@ nl:
     #original_hash: 4167ed7
     check_registration_information: >-
       Controleer ajb de informatie over de aanmelding om te bepalen of je nog
-      iets extra's moet doen, zoals een aanmeldingsbedrag betalen.
+      iets extra's moet doen, zoals deelnamekosten betalen.
     #original_hash: 88ac7c3
     have_registered: >-
       Je hebt je aangemeld voor %{comp}. Je kunt hieronder de informatie over je
@@ -1639,14 +1647,16 @@ nl:
     #original_hash: 59354fd
     waiting_list: >-
       Je aanmelding is in behandeling. Voor goedkeuring kan het zijn dat je
-      eerst online een aanmeldingsbedrag moet betalen. Zie de wedstrijdpagina
-      voor details.
+      eerst online deelnamekosten moet betalen. Zie de wedstrijdpagina voor
+      details.
     #original_hash: 58b1a3c
     accepted: Je aanmelding is geaccepteerd!
-    #original_hash: 70de60f
-    entry_fees_fully_paid: 'Je hebt %{paid} betaald, wat het volledige bedrag voor de aanmelding is.'
+    #original_hash: bcd7d70
+    entry_fees_fully_paid: >-
+      Je hebt %{paid} betaald, wat het volledige bedrag van de deelnamekosten
+      is.
     #original_hash: 2e5d1b9
-    will_pay_here: Je zult het aanmeldingsbedrag hier betalen na je aanmelding
+    will_pay_here: Je zult de deelnamekosten hier betalen na je aanmelding
     #original_hash: b7ef562
     wont_pay_here: Controleer de wedstrijdinformatie voor instructies over hoe te belaten
     refund_form:
@@ -1665,7 +1675,7 @@ nl:
         #original_hash: bf3a39e
         donation: Optionele donatie voor het organisatieteam
       labels:
-        #original_hash: 948ec72
+        #original_hash: 4de825f
         entry_fees: Aanmeldingsbedrag
         #original_hash: 2c09302
         donation: Donatie
@@ -1674,10 +1684,10 @@ nl:
         not_a_number: Voer een juist bedrag in.
         #original_hash: 707b9ca
         amount_too_low: >-
-          Het totaalbedag moet minimaal gelijk zijn aan het te betalen
-          aanmeldingsbedrag.
+          Het totaalbedag moet minimaal gelijk zijn aan de te betalen
+          deelnamekosten.
     #original_hash: 8607a87
-    payment_button_text: Betaal het aanmeldingsbedrag met kaart
+    payment_button_text: Betaal de deelnamekosten met kaart
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Om je in de toekomst makkelijker aan te melden, kun je je voorkeuren voor
@@ -1783,17 +1793,19 @@ nl:
       competitor_limit_is: 'Het maximum aantal deelnemers is %{competitor_limit}.'
       #original_hash: 5101f65
       no_competitor_limit: Er is geen maximum aantal deelnemers.
-      #original_hash: 86cf09f
-      entry_fee_is: 'De deelnemersbijdrage voor deze wedstrijd is %{base_entry_fee}.'
+      #original_hash: f979d5e
+      entry_fee_is: >-
+        Het basisbedrag voor aanmelding voor deze wedstrijd is
+        %{base_entry_fee}.
       #original_hash: 5390a91
       no_entry_fee: Aanmelden voor deze wedstrijd is gratis.
       #original_hash: 29af5c2
       use_stripe_link_html: >-
-        Het aanmeldingsbedrag moet %{here} worden betaald via Stripe, na
+        De deelnamekosten moeten %{here} worden betaald via Stripe, na
         aanmelding.
       #original_hash: cea0eb4
       use_stripe_below_html: >-
-        Het aanmeldingsbedrag moet hieronder worden betaald via Stripe, na
+        De deelnamekosten moeten hieronder worden betaald via Stripe, na
         aanmelding.
       #original_hash: 16cd1ba
       refund_policy_html: >-
@@ -1801,7 +1813,7 @@ nl:
         krijg je %{refund_policy_percent} euro van het betaalde bedrag terug.
       #original_hash: 4aca553
       no_refunds: Deelnamekosten worden niet terugbetaald.
-      #original_hash: b38fa7b
+      #original_hash: cf7be5d
       on_the_spot_registration: >-
         Aanmeldingen bij de deur worden geaccepteerd. De deelnamekosten zijn dan
         %{on_the_spot_base_entry_fee}.
@@ -3175,16 +3187,15 @@ nl:
     paragraph2:
       #original_hash: f20dd3b
       title: Verwachte kosten voor het organiseren van een wedstrijd
-      #original_hash: ab53dda
+      #original_hash: f16a06f
       content: >-
         De verwachte kosten verschillen sterk per land en worden bepaald door
-        factoren als de grootte van de wedstrijdlocatie and other algemene
-        voorwaarden. Het afdekking van de kosten met aanmeldingsgelden is
-        mogelijk. Echter, om de kosten zo laag mogelijk te houden, is het
-        aanbevolen om sponsoren te zoeken. Hoewel de WCA-delegates vrijwilligers
-        zijn en geen vergoeding ontvangen voor hun werk, zouden organisatoren
-        rekening moeten houden met vergoeding van onkosten en eventuele
-        reiskosten.
+        factoren als de grootte van de wedstrijdlocatie and andere algemene
+        zaken. Het afdekken van de kosten met deelnamekosten is mogelijk.
+        Echter, om de kosten zo laag mogelijk te houden, is het aanbevolen om
+        sponsoren te zoeken. Hoewel de WCA-delegates vrijwilligers zijn en geen
+        vergoeding ontvangen voor hun werk, zouden organisatoren moeten
+        overwegen om onkosten en eventuele reiskosten te vergoeden.
     paragraph3:
       #original_hash: 00d3bf8
       title: Deadline voor het aankondigen van de wedstrijd
@@ -3275,11 +3286,11 @@ nl:
     paragraph6:
       #original_hash: ce4c3d0
       title: Afhandelen van aanmeldingen
-      #original_hash: cb13cd0
+      #original_hash: bd669a1
       content: >-
         Aanmeldingen moeten worden verwerkt in volgorde van wie het eerst, die
         het eerst maalt, wat betekent dat vroeger afgeronde aanmeldingen als
-        eerste moeten verwerkt. Als er aanmeldingsgelden voor moeten worden
+        eerste moeten verwerkt. Als er deelnamekosten voor moeten worden
         betaald, dan is de aanmelding pas compleet als het geld is betaald. Dit
         moet duidelijk worden vermeld in de instructies op de wedstrijdpagina.
     paragraph7:
@@ -3291,12 +3302,12 @@ nl:
         geopend. Als aangemelde en goedgekeurde deelnemers hun aanmelden
         annuleren, kunnen zij worden vervangen door de volgende aanmeldingen op
         de wachtlijst.
-      #original_hash: 1b2ea79
+      #original_hash: 802b34f
       content2: >-
-        Als er wedstrijdgelden vooraf moeten worden betaald, is het efficiënt om
+        Als er deelnamekosten vooraf moeten worden betaald, is het efficiënt om
         een vrije plek aan te bieden aan de volgende deelnemer op de wachtlijst
-        en een deadline te zetten wanneer de wedstrijdgelden moeten zijn
-        betaald. Als de betaling niet op tijd is, wordt de deelnameplek
+        en een deadline te zetten wanneer de wedstrijdgelden moeten zijn betaald
+        (bijv. 48 uur). Als de betaling niet op tijd is, wordt de deelnameplek
         aangeboden aan de volgende persoon op de wachtlijst. Dit proces gaat zo
         door tot alle vrije plekken zijn bezet. Er is geen mogelijkheid voor
         speciale behandeling van deelnemers om de wachtlijst te passeren.
