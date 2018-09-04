@@ -83,6 +83,17 @@ da:
     a: Gennemsnit af 5
     #original_hash: 940c82d
     m: Middelværdi af 3
+    short:
+      #original_hash: c21bc2a
+      '1': Ba1
+      #original_hash: 49e914a
+      '2': Ba2
+      #original_hash: b41f36f
+      '3': Ba3
+      #original_hash: 4a34175
+      a: Ga5
+      #original_hash: 53ba088
+      m: Ma3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -139,6 +150,9 @@ da:
       name: Kombineret kvalifikation
       #original_hash: 4c66ad0
       cellName: Kombineret kvalifikation
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: '%{number}. forsøg'
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
@@ -157,19 +171,19 @@ da:
   cutoff:
     #original_hash: cf458e7
     time:
-      other: '%{count} forsøg til at få under %{time}'
-      one: '%{count} forsøg til at få under %{time}'
       zero: '%{count} forsøg til at få under %{time}'
+      one: '%{count} forsøg til at få under %{time}'
+      other: '%{count} forsøg til at få under %{time}'
     #original_hash: b49d930
     moves:
-      other: '%{count} forsøg til at få under %{moves} moves'
-      one: '%{count} forsøg til at få under %{moves} moves'
       zero: '%{count} forsøg til at få under %{moves} moves'
+      one: '%{count} forsøg til at få under %{moves} moves'
+      other: '%{count} forsøg til at få under %{moves} moves'
     #original_hash: eba1b97
     points:
-      other: '%{count} forsøg til at få over %{points} point'
-      one: '%{count} forsøg til at få over %{points} point'
       zero: '%{count} forsøg til at få over %{points} point'
+      one: '%{count} forsøg til at få over %{points} point'
+      other: '%{count} forsøg til at få over %{points} point'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -178,8 +192,8 @@ da:
       across_rounds: '%{time} total for %{rounds}'
     #original_hash: f030c3d
     333fm: 1 time
-    #original_hash: 2c2abd5
-    333mbf: 10 minutter per terning op til 60 minutter maksimum
+    #original_hash: cc7d8bb
+    333mbf: '10:00.00 per terning op til 60:00.00'
   common:
     #original_hash: 2513cf0
     continent: Kontinent
@@ -228,6 +242,8 @@ da:
     date_placeholder: ÅÅÅÅ-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'ÅÅÅÅ-MM-DD TT:MM'
+    #original_hash: 7136e3b
+    time_format: 12 timers ur
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -335,7 +351,7 @@ da:
         generate_website: >-
           Jeg vil gerne bruge WCA hjemmesiden i stedet for at bruge en anden
           hjemmeside.
-        #original_hash: dd88e47
+        #original_hash: 6cf623b
         base_entry_fee_lowest_denomination: Basis deltagergebyr
         #original_hash: 28a6fbb
         currency_code: Valuta kode
@@ -349,10 +365,8 @@ da:
         information: Information
         #original_hash: 87b7d5f
         use_wca_registration: Jeg vil gerne bruge WCA hjemmesiden til registrering
-        #original_hash: a2dfcf8
-        competitor_limit_enabled: >-
-          Jeg vil gerne specificere en grænse på antal deltagere der kan deltage
-          i denne her konkurrence.
+        #original_hash: 9bb1965
+        competitor_limit_enabled: Deltagergrænse
         #original_hash: 749f4c9
         competitor_limit: Max antal deltagere
         #original_hash: 4a8b6f1
@@ -377,8 +391,18 @@ da:
           deltagergebyrene
         #original_hash: 4baf44b
         championship_type: Mesterskabs type
-        #original_hash: ff722f0
-        registration_requirements: Tilmeldingskravene
+        #original_hash: 556fda0
+        extra_registration_requirements: Ekstra tilmeldingskrav
+        #original_hash: 2529d04
+        on_the_spot_registration: Tilmeldinger i konkurrencelokalet
+        #original_hash: 69780b5
+        on_the_spot_entry_fee_lowest_denomination: Deltagergebyret for tilmelding i konkurrencelokalet
+        #original_hash: efbdbab
+        refund_policy_percent: Procent der vil blive tilbagebetalt
+        #original_hash: b332299
+        refund_policy_limit_date: Sidste frist for tilbagebetaling
+        #original_hash: 3542671
+        guests_entry_fee_lowest_denomination: Indgangsgebyr for tilskuere
       registration:
         #original_hash: 3c23a67
         guests: Gæster
@@ -617,11 +641,11 @@ da:
           Byens navn og stat (hvis det er relevant) hvor konkurrencen bliver
           afholdt. Inkluder ikke land (eksempel, Paris eller San Francisco,
           California).
-        #original_hash: 3d99319
+        #original_hash: bb470cc
         information: >-
-          Information om deltagergrænsen, adgangsgebyret for deltager og
-          tilskuere, og andre detaljer som er vigtige for folk der ønsker at
-          deltage eller at være tilskuere.
+          Vigtig information som deltagerne burde vide. Det vil blive vist på
+          konkurrencens forside. <br/>Udfyld venligst det her på engelsk</b> og
+          andre sprog som dine deltagere snakker.
         #original_hash: b4d020f
         delegate_ids: WCA Delegerede for konkurrencen.
         #original_hash: 517d376
@@ -646,13 +670,14 @@ da:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 950a7ea
+        #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Basis deltagergebyret for konkurrencen. Deltagergebyret vil blive vist
-          på konkurrencens informations side og tilmeldings siden hvis det
-          bliver brugt.
-        #original_hash: 866bc05
-        currency_code: Valuta koden for deltagergebyret.
+          på konkurrencens informationsside og tilmeldingssiden hvis den bliver
+          brugt. Hvis den bliver sat på 0, så vil en sætning blive vist, der
+          fortæller at tilmeldingen for konkurrencen er gratis.
+        #original_hash: 9735ddf
+        currency_code: Valutakoden for deltagergebyret.
         #original_hash: da39a3e
         guests_enabled: ''
         #original_hash: da39a3e
@@ -671,33 +696,49 @@ da:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
-          For nu er det her tal kun information, og forhindre ikke folk i at
-          tilmelde sig. Vi arbejder på at tilføje tydelig hjælp til
-          tilmeldings-flowet, men det kræver noget arbejde først.
-        #original_hash: b9bc84d
-        competitor_limit: Antal deltagere tilladt for denne konkurrence.
+          Selvom at det ikke er nødvendigt ifølge Regelsættet, så er det
+          foreslået at have en deltagergrænse.
+        #original_hash: b7b599b
+        competitor_limit: >-
+          Antal deltagere tilladt for denne konkurrence. For nu er det tal kun
+          brugt for information, og forhindrer ikke folk i at tilmelde sig
+          konkurrencen. Der arbejdes på sagen.
         #original_hash: 4bd7102
         competitor_limit_reason: Hvad er grunden til deltagergrænsen? Udfyld det her på engelsk!
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
-        #original_hash: 508c178
-        registration_requirements: >-
-          Her skal du angive hvordan tilmeldingsproceduren vil foregå. Det skal
-          du på grund af <a
-          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
-          target="_blank">Retningslinjen 2c1+</a>. Efter konkurrencen er
-          offentliggjort, så kan du <b>ikke</b> ændre det uden Bestyrelsen
-          bekræftelse. <br/>For eksempel så forklar her hvis en deltager skal
-          have en "ren betalings historik", hvis der er en "pengene tilbage
-          politik", eller hvis man skal svare på en mail, for at bekræfte at man
-          faktisk kommer. <br/>Udfyld det her på engelsk</b> og hvilket som
-          helst andet sprog som dine deltagere måske taler. Det vil blive vist
-          på konkurrencens tilmeldingsside, hvis du bruger WCA's hjemmeside til
-          tilmeldinger.
+        #original_hash: 3de153b
+        extra_registration_requirements: >-
+          Indikere venligst her ekstra tilmeldingskrav, som ikke er nævnt oven
+          over. Det kan være eksempler på hvordan man betaler. <br/>Udfyld det
+          her <b>på engelsk</b> og hvilke andre sprog som dine deltagere taler.
+          Det her vil blive vist på konkurrencens forside, og på
+          tilmeldingssiden, hvis der bruges WCA's tilmeldingssystem.
+        #original_hash: da39a3e
+        on_the_spot_registration: ''
+        #original_hash: 8c4fdf8
+        on_the_spot_entry_fee_lowest_denomination: >-
+          Hvis den bliver sat til 0, så vil en sætning blive vist, der siger at
+          tilmelding i lokalet vil være gratis.
+        #original_hash: 180b7b3
+        refund_policy_percent: >-
+          For nu, er dette tal kun for information. Refunderinger skal stadig
+          tilbagebetales manuelt. Hvis dette bliver sat til 0, så vil en sætning
+          blive vist, der vil sige, at det ikke vil være nogle refunderinger.
+        #original_hash: f64d853
+        refund_policy_limit_date: >-
+          Datoen hvorefter at der ikke vil blive tilbagebetalt nogle
+          deltagergebyrer.
+        #original_hash: 25a1324
+        guests_entry_fee_lowest_denomination: >-
+          For nu er dette tal kun for information. Betaling for gæster kan ikke
+          blive håndteret gennem denne hjemmeside. Hvis det er sat til 0, så vil
+          en sætning blive tilføjet, der vil sige, at det er gratis for
+          tilskuere.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -859,6 +900,16 @@ da:
           'true': Spørg om gæster
           #original_hash: f8c2332
           'false': Spørg IKKE om gæster
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Jeg vil gerne sætte en deltagergrænse
+          #original_hash: 5b581b5
+          'false': Jeg vil IKKE sætte en deltagergrænse
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': Tilmelding i lokalet vil være muligt
+          #original_hash: 0f236df
+          'false': Tilmelding i lokalet VIL IKKE være muligt
   mail_form:
     attributes:
       contact_form:
@@ -1590,7 +1641,7 @@ da:
       betale et deltagergebyr. Tjek konkurrencens hjemmeside for flere detaljer.
     #original_hash: 58b1a3c
     accepted: Din tilmelding er blevet accepteret!
-    #original_hash: 70de60f
+    #original_hash: bcd7d70
     entry_fees_fully_paid: 'Du har betalt %{paid}, som dækker hele deltagergebyret.'
     #original_hash: 2e5d1b9
     will_pay_here: Du vil betale dem her efter at du har tilmeldt dig
@@ -1612,7 +1663,7 @@ da:
         #original_hash: bf3a39e
         donation: Valgfri donation der vil gå til arrangørholdet
       labels:
-        #original_hash: 948ec72
+        #original_hash: 4de825f
         entry_fees: Deltagergebyre
         #original_hash: 2c09302
         donation: Donation
@@ -1708,16 +1759,60 @@ da:
         other: WCA Delegerede
       #original_hash: b37456c
       contact: Kontakt
-      #original_hash: 32946e9
-      competitor_limit: Deltagergrænse
-      #original_hash: a428739
-      entry_fee: Adgangsgebyr
       #original_hash: 0eb5ed5
       information: Information
       #original_hash: c5497bc
       events: Discipliner
       #original_hash: ff722f0
       registration_requirements: Tilmeldingskravene
+      #original_hash: 74d0bf1
+      create_wca_account_html: 'Opret en WCA konto %{here}, hvis du ikke har en.'
+      #original_hash: a082288
+      claim_wca_id_html: >-
+        Hvis dette ikke er din første konkurrence, så tilknyt dit WCA ID med din
+        WCA konto %{here}.
+      #original_hash: 56fc229
+      register_link_html: 'Tilmeld dig til konkurrencen %{here}.'
+      #original_hash: 45834fd
+      register_below_html: Tilmeld dig til konkurrencen herunder.
+      #original_hash: 196725e
+      competitor_limit_is: 'Der er en deltagergrænse på %{competitor_limit} deltagere.'
+      #original_hash: 5101f65
+      no_competitor_limit: Der er ingen deltagergrænse.
+      #original_hash: f979d5e
+      entry_fee_is: 'Tilmeldingsgebyret for konkurrencen er %{base_entry_fee}.'
+      #original_hash: 5390a91
+      no_entry_fee: Tilmelding for denne konkurrence er gratis.
+      #original_hash: 29af5c2
+      use_stripe_link_html: >-
+        Tilmeldingsgebyret skal betales gennem Stripe %{here} når du har
+        tilmeldt dig.
+      #original_hash: cea0eb4
+      use_stripe_below_html: >-
+        Tilmeldingsgebyret skal betales gennem Stripe herunder, når du har
+        tilmeldt dig.
+      #original_hash: 16cd1ba
+      refund_policy_html: >-
+        Hvis du har afmeldt dig konkurrencen inden %{limit_date_and_time} vil du
+        få refunderet %{refund_policy_percent} af tilmeldingsgebyret.
+      #original_hash: 4aca553
+      no_refunds: >-
+        Tilmeldingsgebyrer vil ikke blive tilbagebetalt under nogen
+        omstændigheder.
+      #original_hash: cf7be5d
+      on_the_spot_registration: >-
+        Tilmelding i lokalet vil være muligt, og koster
+        %{on_the_spot_base_entry_fee}.
+      #original_hash: 1637bea
+      on_the_spot_registration_free: Tilmelding i konkurrencelokalet vil være gratis.
+      #original_hash: f5f687d
+      no_on_the_spot_registration: >-
+        Det er ikke muligt at tilmelde sig til konkurrencen i lokalet! Du skal
+        være tilmeldt på forhånd!
+      #original_hash: 4df139d
+      guests_pay: 'Det koster %{guests_base_fee} for tilskuere.'
+      #original_hash: b6c863e
+      guests_free: Det er gratis at være tilskuer til konkurrencen.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Konkurrencen er slut, klik %{link_here} for at vise tilmeldingskravene
@@ -1914,6 +2009,10 @@ da:
       registration_close_after_open: tilmeldingens lukketid skal være efter tilmeldingen åbner
       #original_hash: 43a83a9
       end_date_before_start: Slut dato kan ikke være før start dato.
+      #original_hash: 0c507fa
+      refund_date_after_start: >-
+        Sidste dato for tilbagebetaling kan ikke være efter konkurrencen er
+        startet.
       #original_hash: be3933b
       span_too_many_days: 'Konkurrencer kan ikke vare mere end %{max_days} dage.'
       #original_hash: cdcd288
@@ -1993,6 +2092,8 @@ da:
       general_info: General info
       #original_hash: c5497bc
       events: Discipliner
+      #original_hash: 0a8adac
+      schedule: Tidsskema
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2014,16 +2115,55 @@ da:
           %{guideline_link}).
         #original_hash: e4e48c6
         cutoff_html: >-
-          Resultatet man være bedre end, for at komme videre til den anden del
-          af den kombinerede runde (se %{regulation_link}).
+          Resultatet skal være bedre end tidskravet, for at komme videre til den
+          anden del af den kombinerede runde (se %{regulation_link}).
+        #original_hash: f571a30
+        format_html: >-
+          Formatet bestemmer hvordan deltagernes rangeringen skal opgøres ud fra
+          deres resultater. Listen af tilladte formater for de forskellige
+          discipliner er beskrevet i %{link_to_9b}. Se %{link_to_9f} for en
+          beskrivelse af hver format.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
       time_limit: Tidsgrænse
       #original_hash: 118de39
-      cutoff: Cutoff
+      cutoff: Tidskrav
       #original_hash: 02ed4a4
-      proceed: Krav for at gå videre til næste runde.
+      proceed: Går videre
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: 'Hvis tidsskemaet som:'
+        #original_hash: 0424f6e
+        table: Tabel
+        #original_hash: adab509
+        calendar: Kalender
+      #original_hash: 017e4d8
+      display_for_room: 'Hvis skema for:'
+      range:
+        #original_hash: 3f66052
+        from: Fra
+        #original_hash: ae79ea1
+        to: Til
+      #original_hash: 952f375
+      start: Start
+      #original_hash: a2bb9d3
+      end: Slut
+      #original_hash: 81c0d91
+      activity: Aktivitet
+      #original_hash: 90e2fca
+      room: Lokale
+      #original_hash: 2896c7a
+      venue_information_html: 'Du kigger på tidsskemaet for lokalet %{venue_name}.'
+      #original_hash: b97e383
+      timezone_message: 'Tidsskemaet er vist i tidszonen %{timezone}.'
+      #original_hash: 2ab94a0
+      multiple_venues_available: >-
+        Konkurrencen har flere lokaler. Tjek venligst også tidsskemaet for de
+        andre lokaler!
+      #original_hash: 37b1adb
+      schedule_for_date: 'Tidsskemaet for %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -2044,6 +2184,8 @@ da:
         orga_view: Arrangørs synsvinkel
         #original_hash: c6171f8
         event_view: Rediger discipliner
+        #original_hash: 6235b27
+        schedule_view: Administrer tidsskemaet
         #original_hash: 6f7aef9
         payment_view: Betalings setup
         #original_hash: 76bfdcf
@@ -2434,13 +2576,13 @@ da:
     title: Om WCA
     mission:
       paragraphs:
-        #original_hash: 3e4f9b5
+        #original_hash: c86d105
         '1': >-
           World Cube Association styrer konkurrencen for alle "puzzles" der
           bliver brugt når man drejer siderne, de såkaldte 'twisty puzzles'. Den
-          meste kendte af disse "puzzles" er Rubiks Kuben, opfundet af professor
-          Rubik fra Ungarn. Et udvalg af disse "puzzles" er valgt som officielle
-          discipliner af WCA.
+          mest kendte af disse "puzzles" er Rubik's Terningen, som blev opfundet
+          af professor Rubik fra Ungarn. Et udvalg af disse "puzzles" er valgt
+          som officielle discipliner af WCA.
         #original_hash: 22c3593
         '2': >-
           World Cube Association arrangerer konkurrencer over hele verden,
@@ -2529,6 +2671,17 @@ da:
           WCA, og at sikre verdensomspændende kvalitet hos WCA Personale,
           Regionale Organisationer, Konkurrence Arrangører og Konkurrence
           Personale.
+      wmt:
+        #original_hash: 2035811
+        name: WCA Marketing Hold (WCA Marketing Team)
+        #original_hash: f2a0140
+        description: >-
+          Holdet er ansvarlig for at udvikle og håndtere WCA's Varemærke. Det
+          involvere at finde sponsorarter, støtte distribuering af WCA
+          Konkurrence Udstyr og markedsføre WCA varer.
+      banned:
+        #original_hash: d30e2e5
+        name: Banlyste Deltagere
       #original_hash: 3d5b64b
       delegates_html: >-
         <strong>WCA Delegerede</strong> har rollen som er beskrevet i WCA's
@@ -2562,18 +2715,6 @@ da:
     minutes: Referater
     #original_hash: 6db524a
     policies: WCA Politikker
-    #original_hash: ffc646a
-    dues: Afgiftssystemet
-    #original_hash: 9e7fbc2
-    logo: Brugen af Logoet
-    #original_hash: 900f7c7
-    proximity_policy: Konkurrencenærhedspolitik
-    #original_hash: 0d527c8
-    competition_name_policy: Konkurrencenavngivningspolitik
-    #original_hash: caccb53
-    competition_announcement_policy: Konkurrenceannonceringspolitik
-    #original_hash: 32e6959
-    sponsor: Sponsor anerkendelser
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegerede
@@ -2719,6 +2860,12 @@ da:
         Denne Komité har rollen at støtte og fremme kvalitets forbedring i WCA,
         og at sikre verdensomspændende kvalitet hos WCA Personale, Regionale
         Organisationer, Konkurrence Arrangører og Konkurrence Personale.
+    wmt:
+      #original_hash: f2a0140
+      info_html: >-
+        Holdet er ansvarlig for at udvikle og håndtere WCA's Varemærke. Det
+        involvere at finde sponsorarter, støtte distribuering af WCA Konkurrence
+        Udstyr og markedsføre WCA varer.
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score-Taking værktøjer
@@ -2993,7 +3140,7 @@ da:
     paragraph2:
       #original_hash: f20dd3b
       title: Forventede omkostninger for at arrangere en konkurrence
-      #original_hash: ab53dda
+      #original_hash: f16a06f
       content: >-
         De forventede omkostninger varierer meget fra land til land og er
         afhængelige af mange faktorer, som lokalets størrelse og placering. At
@@ -3087,7 +3234,7 @@ da:
     paragraph6:
       #original_hash: ce4c3d0
       title: Håndtering af tilmeldinger
-      #original_hash: cb13cd0
+      #original_hash: bd669a1
       content: >-
         Tilmeldinger skal blive behandlet sådan at dem der tilmelder sig først
         for retten til at deltage. Det betyder at den tidligste fuldendte
@@ -3102,7 +3249,7 @@ da:
         Når deltagergrænsen er nået for en konkurrence, så burde man åbne en
         venteliste. Når deltagere aflyser deres tilmelding, så bliver de
         erstattet af den næste person på ventelisten.
-      #original_hash: 1b2ea79
+      #original_hash: 802b34f
       content2: >-
         Hvis konkurrencens deltagergebyret skal betales på forhånd, er det en
         effektiv måde at tilbyde en gratis plads til den næste deltager på
