@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :competition do
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
 
-    cityName { "San Francisco" }
+    cityName { "San Francisco, California" }
     countryId { "USA" }
     currency_code { "USD" }
     base_entry_fee_lowest_denomination { 1000 }
