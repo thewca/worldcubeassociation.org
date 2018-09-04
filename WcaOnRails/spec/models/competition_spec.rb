@@ -26,6 +26,16 @@ RSpec.describe Competition do
     end
   end
 
+  it "rejects invalid city names" do
+    city = "San Diego"
+    expect(FactoryBot.build(:competition, countryId: "USA", cityName: city)).to be_invalid_with_errors(
+      cityName: ["is not of the form 'city, state'"],
+    )
+
+    city = "San Diego, California"
+    expect(FactoryBot.build(:competition, countryId: "USA", cityName: city)).to be_valid
+  end
+
   context "when there is an entry fee" do
     it "correctly identifies there is a fee when there is only a base fee" do
       competition = FactoryBot.build :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10
@@ -705,7 +715,7 @@ RSpec.describe Competition do
 
   describe "#contains" do
     let!(:delegate) { FactoryBot.create :delegate, name: 'Pedro' }
-    let!(:search_comp) { FactoryBot.create :competition, name: "Awesome Comp 2016", cityName: "Piracicaba", delegates: [delegate] }
+    let!(:search_comp) { FactoryBot.create :competition, name: "Awesome Comp 2016", cityName: "Piracicaba", countryId: "Brazil", delegates: [delegate] }
     it "searching with two words" do
       expect(Competition.contains('eso').contains('aci').first).to eq search_comp
       expect(Competition.contains('awesome').contains('comp').first).to eq search_comp

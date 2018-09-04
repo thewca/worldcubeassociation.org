@@ -171,6 +171,8 @@ class Competition < ApplicationRecord
   # https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
 
+  validates :cityName, city: true
+
   # We have stricter validations for confirming a competition
   validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
