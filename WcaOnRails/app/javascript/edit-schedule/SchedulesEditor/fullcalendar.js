@@ -46,7 +46,14 @@ export function generateCalendar(eventFetcher, showModalAction, scheduleWcif, ad
     eventResizeStart: fullCalendarHandlers.onResizeStart,
     eventResizeStop: fullCalendarHandlers.onResizeStop,
     eventResize: fullCalendarHandlers.onSizeChanged,
+
+    // We need to set selectMinDistance greater than 0 to suppress `select`
+    // events when the user simply single clicks (and does not drag) on the
+    // calendar. See https://fullcalendar.io/docs/selectMinDistance.
+    // I have no idea why this isn't the default behavior.
+    selectMinDistance: 5,
     select: (start, end) => fullCalendarHandlers.onTimeframeSelected(showModalAction, start, end),
+    dayClick: (date) => fullCalendarHandlers.onTimeframeSelected(showModalAction, date, date.clone().add(moment.duration(options.defaultTimedEventDuration))),
   }
 
   _.assign(options, localOptions);
