@@ -45,11 +45,11 @@ ko:
     #original_hash: 29d5411
     333bf: 3x3x3 눈 가리고 맞추기
     #original_hash: 0a5e7bf
-    333fm: 3x3x3 최소회전으로 맞추기
+    333fm: 3x3x3 최소회전
     #original_hash: 31ed23f
-    333oh: 3x3x3 한 손으로 맞추기
+    333oh: 3x3x3 한 손
     #original_hash: be41d70
-    333ft: 3x3x3 발로 맞추기
+    333ft: 3x3x3 발
     #original_hash: 04f6b3e
     clock: 클락
     #original_hash: d542376
@@ -302,7 +302,7 @@ ko:
         #original_hash: 58e0c56
         remove_avatar: 아바타 제거
         #original_hash: 9af9099
-        results_notifications_enabled: 나의 결과 등록시 이메일로 알림
+        results_notifications_enabled: 참가한 대회의 결과 등록시 이메일로 알림
         #original_hash: de60ab8
         delegate_status: 파견위원 신분
         #original_hash: 0f21717
@@ -530,7 +530,7 @@ ko:
         #original_hash: 4360c2d
         article: 조
         #original_hash: 82dabd0
-        multimedia: 언론
+        multimedia: 보도자료
   simple_form:
     #original_hash: 5397e05
     'yes': 예
@@ -792,9 +792,9 @@ ko:
         sign_in: 로그인
     failure:
       #original_hash: 1186218
-      invalid: '잘못된 이메일, WCA ID, 혹은 비밀번호'
+      invalid: '이메일, WCA ID, 혹은 비밀번호가 잘못되었습니다.'
       #original_hash: 1186218
-      not_found_in_database: '잘못된 이메일, WCA ID, 혹은 비밀번호.'
+      not_found_in_database: '이메일, WCA ID, 혹은 비밀번호가 잘못되었습니다.'
       #original_hash: 3f9db99
       unconfirmed: >-
         계속 진행하시기전에 이메일을 검증받으셔야 합니다. 검증 이메일을 못 받으셨으면 다음 링크를 눌러서 새로 요청하세요:
@@ -866,7 +866,7 @@ ko:
       #original_hash: 2086b21
       statistics: 통계
       #original_hash: 82dabd0
-      multimedia: 언론
+      multimedia: 보도자료
       #original_hash: 4fd2a7f
       db_export: 데이터베이스 추출
       #original_hash: 1fa73f3
@@ -1302,7 +1302,7 @@ ko:
     #original_hash: 3c9141f
     contact_organizer: 수정하고 싶으시면 대회 주최자에게 문의하세요.
     #original_hash: 59354fd
-    waiting_list: 참가 신청이 대기 상태 입니다. 승인을 위해서는 참가비를 납부 해야할 수도 있다. 대회 홈페이지에서 자세한 사항을 확인하세요.
+    waiting_list: 참가 신청이 대기 상태 입니다. 승인을 위해서는 참가비를 납부 해야 할 수도 있습니다. 대회 홈페이지에서 자세한 사항을 확인하세요.
     #original_hash: 58b1a3c
     accepted: 참가 신청이 승인 되었습니다!
     #original_hash: bcd7d70
@@ -1350,7 +1350,7 @@ ko:
       title: 나의 대회
       #original_hash: 1fa5a4b
       disclaimer: >-
-        WCA 홈페이지상에서 참가 신청을 받는 대회들만 나열합니다. 만약 본인의 대회의 이 목록에 없으면, 그 대회의 참가자 명단을
+        WCA 홈페이지상에서 참가 신청을 받는 대회들만 나열합니다. 만약 본인의 대회가 이 목록에 없으면, 해당 대회의 참가자 명단을
         확인하세요.
       #original_hash: 94a2fc8
       past_competitions: 과거 대회
@@ -1629,7 +1629,7 @@ ko:
       #original_hash: d523ebb
       country: 국적
       #original_hash: 02ae2bd
-      podiums: 입상자
+      podiums: 입상
       #original_hash: 56656a0
       no_persons_found: 조건을 만족하는 선수가 없습니다
     show:
@@ -1670,9 +1670,9 @@ ko:
       #original_hash: 1917f4f
       competition: 대회
       #original_hash: 612e12d
-      results: 기록
+      results: 전체 결과
       #original_hash: e51c552
-      records: 기록
+      records: 신기록 수립 이력
       #original_hash: ab478f3
       competitions_map: 지도
       #original_hash: a99cec5
@@ -1696,7 +1696,7 @@ ko:
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID 혹은 WCA 프로필
         #original_hash: 0c77aee
-        media: 언론
+        media: 보도자료
         #original_hash: 9ad0522
         software: 소프트웨어
         #original_hash: 6e6a6f2
@@ -1954,8 +1954,8 @@ ko:
         name: WCA 윤리위원회
         #original_hash: c304d57
         description: >-
-          WCA 윤리위원회의 역할은 WCA 관계자가 옮바른 윤리관을 가지고 각자의 역할을 수행해 나가는 것을 검증하는 것이다. 또한,
-          옳바른 윤리관을 따르지 않는 행위를하는 WCA 관계자에 대한 독립적인 조사를 하기도 한다. 이러한 조사는 WCA 회원 누구나가
+          WCA 윤리위원회의 역할은 WCA 관계자가 올바른 윤리관을 가지고 각자의 역할을 수행해 나가는 것을 검증하는 것이다. 또한,
+          올바른 윤리관을 따르지 않는 행위를하는 WCA 관계자에 대한 독립적인 조사를 하기도 한다. 이러한 조사는 WCA 회원 누구나가
           요청 할 수 있다. WCA 윤리위원회는 또한 WCA 징계위원회의 결정에 동의하지 않는 사람의 상담자 역할도 한다.
       wqac:
         #original_hash: 8f32116
@@ -1993,9 +1993,9 @@ ko:
     #original_hash: 9855f80
     bylaws: 회칙
     #original_hash: fdceb44
-    motions: 회칙
+    motions: 발의
     #original_hash: 092f99e
-    minutes: 기록
+    minutes: 회의록
     #original_hash: 6db524a
     policies: WCA 정책
   delegates_page:
@@ -2242,7 +2242,7 @@ ko:
         together_with: 에 다음 선수와 함께 참가 했습니다
     messages:
       #original_hash: 4406a0b
-      invalid_wca_ids: 옳바른 두개의 다른 WCA ID를 제공하세요
+      invalid_wca_ids: 올바른 두개의 다른 WCA ID를 제공하세요
   search_results:
     index:
       #original_hash: db98a68
@@ -2352,7 +2352,7 @@ ko:
         '3': 열고자하는 대회 장소를 기준 100km 반경안에 지난 12달간 16개 보다 적은 대회가 열렸습니다
       #original_hash: 5c5cf04
       content2: >-
-        "공동 3X3X3 최소 회전 대회"는 WCA 대회로서 종목은 3x3x3 최소 회전으로 맞추기 밖에 없으며 여러 장소에서 동시에
+        "공동 3x3x3 최소 회전 대회"는 WCA 대회로서 종목은 3x3x3 최소 회전으로 맞추기 밖에 없으며 여러 장소에서 동시에
         열리는 대회이다.
       olist2:
         '1':
@@ -2473,7 +2473,7 @@ ko:
       #original_hash: df43670
       validate_media: 보도자료 승인
       #original_hash: 9f2158f
-      submit_media_html: 보도자료 제출은 <a href="/media/new">여기</a>.
+      submit_media_html: 보도자료는 <a href="/media/new">여기</a>로 제출 해주세요.
     validate:
       #original_hash: 1e0eee6
       title: 연론물 승인
