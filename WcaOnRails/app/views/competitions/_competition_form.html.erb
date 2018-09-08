@@ -28,6 +28,7 @@
       <% if @competition.persisted? %>
         <%= f.input :cellName %>
       <% end %>
+      <%= f.input :name_reason, hint: t('.name_reason_html') %>
 
       <%= f.input :countryId, collection: Country.all_sorted_by(I18n.locale), label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
       <%= f.input :cityName %>

@@ -30,6 +30,7 @@ module DatabaseDumper
         copy: %w(
           id
           name
+          name_reason
           cityName
           countryId
           information
