@@ -5,6 +5,7 @@ FactoryBot.define do
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
 
     cityName { "San Francisco, California" }
+    name_reason { "Foo sounds cool, right?" }
     countryId { "USA" }
     currency_code { "USD" }
     base_entry_fee_lowest_denomination { 1000 }

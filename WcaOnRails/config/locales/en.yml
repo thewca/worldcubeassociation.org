@@ -227,6 +227,7 @@ en:
         confirmed: "Do not let organizers edit this competition"
         showAtAll: "Make competition visible to the public"
         name: "Name"
+        name_reason: "The reason for the name"
         cellName: "Competition nickname"
         countryId: "Country"
         cityName: "City name"
@@ -1075,6 +1076,7 @@ en:
     competition_form:
       board: "Board"
       supports_md_html: "Supports <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>"
+      name_reason_html: "A brief explanation of the competition name. The name must comply with the <a href='/documents/policies/Competition%20Name.pdf'>WCA Competition Name Policy</a>."
       venue_html: "The venue where the competition takes place. %{md}. For example: [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
       venue_details_html: "Details about the venue (e.g., On the first floor far in the back, follow the signs). %{md}"
       contact_html: "Optional contact information. If you do not fill this in, organizer emails will be shown to the public. %{md}. Example: [Text to display](mailto:some@email.com)"
