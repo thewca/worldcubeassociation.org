@@ -35,7 +35,7 @@
     "rails-erb-loader": "^5.5.0",
     "react": "^16.4.2",
     "react-bootstrap": "^0.32.4",
-    "react-dom": "^16.4.2",
+    "react-dom": "^16.5.0",
     "react-google-maps": "^9.4.5",
     "resolve-url-loader": "^2.3.0",
     "sass-loader": "^7.1.0",
