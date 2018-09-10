@@ -199,6 +199,5 @@ Style/YodaCondition:
 Style/FormatStringToken:
   Enabled: false
 
-# Disabled until https://github.com/bbatsov/rubocop/issues/5333 is released.
-Layout/EmptyLinesAroundArguments:
+Layout/EmptyLineAfterGuardClause:
   Enabled: false
