@@ -98,7 +98,7 @@
   </div>
   <div class="col-md-12">
     <dl class="dl-horizontal">
-      <% if competition.use_wca_registration? %>
+      <% if competition.registration_open.present? && competition.registration_close.present? %>
         <dt><%= t '.registration_period.label' %></dt>
         <dd>
           <p>
