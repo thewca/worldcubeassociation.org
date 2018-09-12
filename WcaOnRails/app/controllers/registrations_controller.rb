@@ -45,18 +45,8 @@ class RegistrationsController < ApplicationController
       render :psych_results_posted
       return
     end
-    @sort_by = params[:sort_by]
-    if @sort_by == @event.recommended_format.sort_by
-      @sort_by_second = @event.recommended_format.sort_by_second
-    elsif @sort_by == @event.recommended_format.sort_by_second
-      @sort_by_second = @event.recommended_format.sort_by
-      @sort_by = @event.recommended_format.sort_by_second
-    else
-      @sort_by = @event.recommended_format.sort_by
-      @sort_by_second = @event.recommended_format.sort_by_second
-    end
 
-    @registrations = @competition.psych_sheet_event(@event, @sort_by, @sort_by_second)
+    @psych_sheet = @competition.psych_sheet_event(@event, params[:sort_by])
   end
 
   def index
