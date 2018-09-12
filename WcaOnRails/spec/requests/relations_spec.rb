@@ -23,7 +23,7 @@ RSpec.describe "relations" do
         wca_id1: person1.wca_id,
         wca_id2: person2.wca_id,
       }
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(flash.now[:danger]).to be_nil
     end
   end

@@ -10,7 +10,7 @@ RSpec.describe "regulations" do
         expect(response).to redirect_to '/regulations/scrambles/'
 
         follow_redirect!
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -20,7 +20,7 @@ RSpec.describe "regulations" do
         expect(response).to redirect_to '/regulations/scrambles/?foo=3'
 
         follow_redirect!
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end

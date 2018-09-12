@@ -65,7 +65,7 @@ RSpec.describe "media" do
   describe 'GET #new' do
     it_should_behave_like 'must sign in',
                           lambda { get new_medium_path },
-                          lambda { |current_user| expect(response).to be_success }
+                          lambda { |current_user| expect(response).to be_successful }
   end
 
   describe 'POST #create' do
@@ -142,7 +142,7 @@ RSpec.describe "media" do
   describe 'GET #validate' do
     it_should_behave_like 'only WCT',
                           lambda { get validate_media_path },
-                          lambda { expect(response).to be_success }
+                          lambda { expect(response).to be_successful }
 
     context "signed in as WCT member" do
       before :each do
@@ -167,7 +167,7 @@ RSpec.describe "media" do
   describe "GET #edit" do
     it_should_behave_like 'only WCT',
                           lambda { get edit_medium_path(medium) },
-                          lambda { expect(response).to be_success }
+                          lambda { expect(response).to be_successful }
   end
 
   describe "PATCH #update" do

@@ -10,11 +10,11 @@ RSpec.describe "HTTP_ACCEPT" do
 
   it 'handles malformed HTTP_ACCEPT' do
     get root_url, params: { "HTTP_ACCEPT" => "*/*;" }
-    expect(response).to be_success
+    expect(response).to be_successful
   end
 
   it 'rss' do
     get rss_url, params: { "HTTP_ACCEPT" => "text/plain" }
-    expect(response).to be_success
+    expect(response).to be_successful
   end
 end
