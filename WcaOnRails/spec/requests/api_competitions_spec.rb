@@ -48,7 +48,7 @@ RSpec.describe "API Competitions" do
         context "confirmed competition" do
           before :each do
             competition.events = [Event.find("333"), Event.find("222")]
-            competition.update!(isConfirmed: true)
+            competition.update!(confirmed: true)
           end
 
           it "can add events" do
@@ -77,7 +77,7 @@ RSpec.describe "API Competitions" do
 
         context "confirmed competition" do
           before :each do
-            competition.update!(isConfirmed: true)
+            competition.update!(confirmed: true)
           end
 
           it "allows adding rounds to an event" do

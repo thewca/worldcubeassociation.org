@@ -143,7 +143,7 @@ RSpec.feature "Competition management" do
       expect(new_competition.delegates).to eq [delegate, cloned_delegate]
       expect(new_competition.venue).to eq competition_to_clone.venue
       expect(new_competition.showAtAll).to eq false
-      expect(new_competition.isConfirmed).to eq false
+      expect(new_competition.confirmed?).to eq false
       expect(new_competition.cityName).to eq 'Melbourne'
     end
 

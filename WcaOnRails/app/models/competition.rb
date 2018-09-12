@@ -34,6 +34,7 @@ class Competition < ApplicationRecord
            with_model_currency: :currency_code
 
   scope :visible, -> { where(showAtAll: true) }
+  scope :not_visible, -> { where(showAtAll: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
   scope :belongs_to_region, lambda { |region_id|
@@ -63,6 +64,8 @@ class Competition < ApplicationRecord
       ).group(:id)
   }
   scope :order_by_date, -> { order(:start_date, :end_date) }
+  scope :confirmed, -> { where.not(confirmed_at: nil) }
+  scope :not_confirmed, -> { where(confirmed_at: nil) }
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -104,7 +107,7 @@ class Competition < ApplicationRecord
     endDay
     cellName
     showAtAll
-    isConfirmed
+    confirmed_at
     registration_open
     registration_close
     results_posted_at
@@ -220,7 +223,7 @@ class Competition < ApplicationRecord
   end
 
   def confirmed_or_visible?
-    self.isConfirmed || self.showAtAll
+    self.confirmed? || self.showAtAll
   end
 
   def country
@@ -601,7 +604,7 @@ class Competition < ApplicationRecord
   end
 
   def entry_fee_required?
-    isConfirmed? && created_at.present? && created_at > Date.new(2018, 7, 17)
+    confirmed? && created_at.present? && created_at > Date.new(2018, 7, 17)
   end
 
   def competitor_limit_enabled?
@@ -609,19 +612,19 @@ class Competition < ApplicationRecord
   end
 
   def competitor_limit_required?
-    isConfirmed? && created_at.present? && created_at > Date.new(2018, 9, 1)
+    confirmed? && created_at.present? && created_at > Date.new(2018, 9, 1)
   end
 
   def on_the_spot_registration_required?
-    isConfirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
+    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
   end
 
   def refund_policy_percent_required?
-    isConfirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
+    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
   end
 
   def guests_entry_fee_required?
-    isConfirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
+    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
   end
 
   def pending_results_or_report(days)
@@ -725,6 +728,19 @@ class Competition < ApplicationRecord
 
   def results_posted?
     !results_posted_at.nil?
+  end
+
+  def confirmed?
+    !confirmed_at.nil?
+  end
+
+  def confirmed
+    self.confirmed?
+  end
+
+  def confirmed=(new_confirmed_str)
+    new_confirmed = ActiveRecord::Type::Boolean.new.cast(new_confirmed_str)
+    self.confirmed_at = new_confirmed ? (self.confirmed_at || Time.now) : nil
   end
 
   def user_can_view?(user)

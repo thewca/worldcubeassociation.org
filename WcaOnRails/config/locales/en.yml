@@ -224,7 +224,7 @@ en:
       #context: a competition
       competition:
         id: "ID"
-        isConfirmed: "Do not let organizers edit this competition"
+        confirmed: "Do not let organizers edit this competition"
         showAtAll: "Make competition visible to the public"
         name: "Name"
         cellName: "Competition nickname"
@@ -416,7 +416,7 @@ en:
         guests_enabled: ""
         enable_donations: ""
         id: ""
-        isConfirmed: ""
+        confirmed: ""
         receive_registration_emails: ""
         registration_close: ""
         showAtAll: ""

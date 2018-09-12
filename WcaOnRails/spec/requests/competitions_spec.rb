@@ -18,11 +18,11 @@ RSpec.describe "competitions" do
         follow_redirect!
         expect(response).to be_success
 
-        expect(competition.reload.isConfirmed?).to eq true
+        expect(competition.reload.confirmed?).to eq true
       end
 
       it 'can set championship types for an unconfirmed competition' do
-        expect(competition.isConfirmed).to be false
+        expect(competition.confirmed?).to be false
 
         patch competition_path(competition), params: {
           competition: {
@@ -38,7 +38,7 @@ RSpec.describe "competitions" do
       end
 
       it 'can set championship types for a confirmed competition' do
-        competition.update!(isConfirmed: true)
+        competition.update!(confirmed: true)
 
         patch competition_path(competition), params: {
           competition: {
@@ -60,7 +60,7 @@ RSpec.describe "competitions" do
       end
 
       it 'can set championship types for an unconfirmed competition' do
-        expect(competition.isConfirmed).to be false
+        expect(competition.confirmed?).to be false
 
         patch competition_path(competition), params: {
           competition: {
@@ -76,7 +76,7 @@ RSpec.describe "competitions" do
       end
 
       it 'cannot set championship types for a confirmed competition' do
-        competition.update!(isConfirmed: true)
+        competition.update!(confirmed: true)
 
         patch competition_path(competition), params: {
           competition: {

@@ -163,7 +163,7 @@ RSpec.describe CompetitionsController do
       it 'cannot see unconfirmed nearby competitions' do
         get :edit, params: { id: my_competition }
         expect(assigns(:nearby_competitions)).to eq []
-        other_competition.isConfirmed = true
+        other_competition.confirmed = true
         other_competition.save!
         get :edit, params: { id: my_competition }
         expect(assigns(:nearby_competitions)).to eq [other_competition]
@@ -246,7 +246,7 @@ RSpec.describe CompetitionsController do
 
       it 'clones a competition' do
         # Set some attributes we don't want cloned.
-        competition.update_attributes(isConfirmed: true,
+        competition.update_attributes(confirmed: true,
                                       results_posted_at: Time.now,
                                       showAtAll: true)
 
@@ -261,9 +261,9 @@ RSpec.describe CompetitionsController do
         expect(new_comp.id).to eq ""
         expect(new_comp.name).to eq ""
         # When cloning a competition, we don't want to clone its showAtAll,
-        # isConfirmed, and results_posted_at attributes.
+        # confirmed, and results_posted_at attributes.
         expect(new_comp.showAtAll).to eq false
-        expect(new_comp.isConfirmed).to eq false
+        expect(new_comp.confirmed?).to eq false
         expect(new_comp.results_posted_at).to eq nil
         # We don't want to clone its dates.
         %w(year month day endYear endMonth endDay).each do |attribute|
@@ -320,7 +320,7 @@ RSpec.describe CompetitionsController do
       it 'can confirm competition' do
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         expect(response).to redirect_to edit_competition_path(competition)
-        expect(competition.reload.isConfirmed?).to eq true
+        expect(competition.reload.confirmed?).to eq true
       end
 
       it 'saves delegate_ids' do
@@ -396,7 +396,7 @@ RSpec.describe CompetitionsController do
       it 'cannot confirm competition' do
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         expect(response.status).to redirect_to edit_competition_path(competition)
-        expect(competition.reload.isConfirmed?).to eq false
+        expect(competition.reload.confirmed?).to eq false
       end
 
       it "who is also the delegate can remove oneself as delegate" do
@@ -520,11 +520,11 @@ RSpec.describe CompetitionsController do
           patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         end.to change { enqueued_jobs.size }.by(2)
         expect(response).to redirect_to edit_competition_path(competition)
-        expect(competition.reload.isConfirmed?).to eq true
+        expect(competition.reload.confirmed?).to eq true
       end
 
       it "cannot delete not confirmed, but visible competition" do
-        competition.update_attributes(isConfirmed: false, showAtAll: true)
+        competition.update_attributes(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we only allow
         # deletion of (not confirmed and not visible) competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -533,7 +533,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot delete confirmed competition" do
-        competition.update_attributes(isConfirmed: true, showAtAll: false)
+        competition.update_attributes(confirmed: true, showAtAll: false)
         # Attempt to delete competition. This should not work, because we only let
         # delegates deleting unconfirmed competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -542,7 +542,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can delete not confirmed and not visible competition" do
-        competition.update_attributes(isConfirmed: false, showAtAll: false)
+        competition.update_attributes(confirmed: false, showAtAll: false)
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -551,7 +551,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can change registration open/close of locked competition" do
-        competition.update_attribute(:isConfirmed, true)
+        competition.update_attribute(:confirmed, true)
 
         new_open = 1.week.from_now.change(sec: 0)
         new_close = 2.weeks.from_now.change(sec: 0)
@@ -583,7 +583,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot delete competition they are not delegating" do
-        competition.update_attributes(isConfirmed: false, showAtAll: true)
+        competition.update_attributes(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we're
         # not the delegate for this competition.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }

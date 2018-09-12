@@ -503,7 +503,7 @@ class User < ApplicationRecord
   end
 
   def can_add_and_remove_events?(competition)
-    can_admin_competitions? || (can_manage_competition?(competition) && !competition.isConfirmed?)
+    can_admin_competitions? || (can_manage_competition?(competition) && !competition.confirmed?)
   end
 
   def can_submit_competition_results?(competition)
@@ -567,7 +567,7 @@ class User < ApplicationRecord
       I18n.t('competitions.errors.cannot_manage')
     elsif competition.showAtAll
       I18n.t('competitions.errors.cannot_delete_public')
-    elsif competition.isConfirmed && !self.can_admin_results?
+    elsif competition.confirmed? && !self.can_admin_results?
       I18n.t('competitions.errors.cannot_delete_confirmed')
     else
       nil

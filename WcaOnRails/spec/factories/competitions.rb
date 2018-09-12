@@ -49,7 +49,7 @@ FactoryBot.define do
     venueAddress { "My backyard street" }
     external_website { "https://www.worldcubeassociation.org" }
     showAtAll { false }
-    isConfirmed { false }
+    confirmed_at { nil }
 
     competitor_limit_enabled { false }
     guests_enabled { true }
@@ -95,7 +95,7 @@ FactoryBot.define do
 
     trait :confirmed do
       with_delegate
-      isConfirmed { true }
+      confirmed_at { Time.now }
     end
 
     trait :not_visible do
