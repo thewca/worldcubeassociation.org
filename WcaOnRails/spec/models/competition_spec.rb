@@ -103,13 +103,9 @@ RSpec.describe Competition do
     expect(competition).to be_invalid_with_errors(registration_close: ["registration close must be after registration open"])
   end
 
-  it "requires registration_open if use_wca_registration" do
-    competition = FactoryBot.build :competition, name: "Foo Test 2015", registration_open: nil, registration_close: 2.weeks.ago, use_wca_registration: true
+  it "requires registration period if use_wca_registration" do
+    competition = FactoryBot.build :competition, name: "Foo Test 2015", registration_open: nil, registration_close: nil, use_wca_registration: true
     expect(competition).to be_invalid_with_errors(registration_open: ["required"])
-  end
-
-  it "requires registration_close if use_wca_registration" do
-    competition = FactoryBot.build :competition, name: "Foo Test 2015", registration_open: 1.week.ago, registration_close: nil, use_wca_registration: true
     expect(competition).to be_invalid_with_errors(registration_close: ["required"])
   end
 

@@ -177,6 +177,8 @@ class Competition < ApplicationRecord
   validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
+  validates :registration_open, :registration_close, presence: { message: I18n.t('simple_form.required.text') }, if: :registration_period_required?
+
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   private def must_have_at_least_one_event
     if no_events?
@@ -440,16 +442,8 @@ class Competition < ApplicationRecord
 
   validate :registration_must_close_after_it_opens
   def registration_must_close_after_it_opens
-    if use_wca_registration?
-      if !registration_open
-        errors.add(:registration_open, I18n.t('simple_form.required.text'))
-      end
-      if !registration_close
-        errors.add(:registration_close, I18n.t('simple_form.required.text'))
-      end
-      if registration_open && registration_close && !(registration_open < registration_close)
-        errors.add(:registration_close, I18n.t('competitions.errors.registration_close_after_open'))
-      end
+    if registration_open && registration_close && !(registration_open < registration_close)
+      errors.add(:registration_close, I18n.t('competitions.errors.registration_close_after_open'))
     end
   end
 
@@ -622,6 +616,10 @@ class Competition < ApplicationRecord
 
   def guests_entry_fee_required?
     isConfirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
+  end
+
+  def registration_period_required?
+    use_wca_registration? || (isConfirmed? && created_at.present? && created_at > Date.new(2018, 9, 13))
   end
 
   def pending_results_or_report(days)
