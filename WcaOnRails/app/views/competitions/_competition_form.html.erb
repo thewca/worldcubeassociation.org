@@ -1,11 +1,11 @@
   <% provide(:include_gmaps, true) %>
-  <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).isConfirmed? : false %>
+  <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).confirmed? : false %>
   <%= horizontal_simple_form_for @competition, html: { class: 'are-you-sure no-submit-on-enter', id: 'competition-form' } do |f| %>
     <% if @competition.persisted? %>
       <% if @competition_admin_view %>
         <%= hidden_field_tag :competition_admin_view, "1" %>
 
-        <%= f.input :isConfirmed %>
+        <%= f.input :confirmed, as: :boolean %>
         <%= f.input :showAtAll %>
       <% else %>
         <%= if is_actually_confirmed && @competition.showAtAll?

@@ -9,7 +9,7 @@ RSpec.describe NotificationsHelper do
 
       context "with some unconfirmed competitions" do
         let!(:unconfirmed_competition) { FactoryBot.create :competition, delegates: [delegate] }
-        let!(:confirmed_competition) { FactoryBot.create :competition, delegates: [delegate], isConfirmed: true }
+        let!(:confirmed_competition) { FactoryBot.create :competition, :confirmed, delegates: [delegate] }
 
         it "shows unconfirmed competitions" do
           notifications = helper.notifications_for_user(delegate)

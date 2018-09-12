@@ -49,7 +49,7 @@ module DatabaseDumper
           showAtAll
           latitude
           longitude
-          isConfirmed
+          confirmed_at
           contact
           registration_open
           registration_close

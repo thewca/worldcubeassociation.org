@@ -23,8 +23,8 @@
       <tbody>
         <% competitions.each do |competition| %>
           <% registration = competition.registrations.find_by_user_id(current_user.id) %>
-          <tr class="<%=[ competition.isConfirmed ? "confirmed" : "not-confirmed",
-                          competition.showAtAll ? "visible" : "not-visible",
+          <tr class="<%=[ competition.confirmed? ? "confirmed" : "not-confirmed",
+                          competition.showAtAll? ? "visible" : "not-visible",
                           past ? "past" : "not-past" ].join(' ') %>"
               data-toggle="tooltip" data-placement="top" data-container="body"
               title="<%= competition_message_for_user(competition, current_user) unless past %>">

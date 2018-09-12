@@ -478,7 +478,7 @@ RSpec.describe Competition do
     let(:competition_with_delegate) { FactoryBot.build :competition, :with_delegate, generate_website: false }
     let(:competition_without_delegate) { FactoryBot.build :competition }
 
-    [:isConfirmed, :showAtAll].each do |action|
+    [:confirmed, :showAtAll].each do |action|
       it "can set #{action}" do
         competition_with_delegate.public_send "#{action}=", true
         expect(competition_with_delegate).to be_valid
@@ -505,6 +505,36 @@ RSpec.describe Competition do
         competition_without_delegate.public_send "#{action}=", true
         expect(competition_without_delegate).not_to be_valid
       end
+    end
+
+    it "sets confirmed_at when setting confirmed true" do
+      competition = FactoryBot.create :competition, :with_delegate
+      expect(competition.confirmed_at).to be_nil
+
+      now = Time.at(Time.now.to_i)
+      Timecop.freeze(now) do
+        competition.update!(confirmed: true)
+        expect(competition.reload.confirmed_at).to eq now
+      end
+    end
+
+    it "does not update confirmed_at when confirming already confirmed competition" do
+      competition = FactoryBot.create :competition, :confirmed
+
+      confirmed_at = competition.confirmed_at
+      expect(confirmed_at).not_to be_nil
+      Timecop.freeze(confirmed_at + 10) do
+        competition.update!(confirmed: true)
+        expect(competition.reload.confirmed_at).to eq confirmed_at
+      end
+    end
+
+    it "clears confirmed_at when setting confirmed false" do
+      competition = FactoryBot.create :competition, :confirmed
+
+      expect(competition.confirmed_at).not_to be_nil
+      competition.update!(confirmed: false)
+      expect(competition.reload.confirmed_at).to be_nil
     end
   end
 

@@ -361,7 +361,7 @@ class CompetitionsController < ApplicationController
 
   def get_nearby_competitions(competition)
     nearby_competitions = competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING)[0, 10]
-    nearby_competitions.select!(&:isConfirmed?) unless current_user.can_view_hidden_competitions?
+    nearby_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     nearby_competitions
   end
 
@@ -575,7 +575,7 @@ class CompetitionsController < ApplicationController
       ]
     end
 
-    if @competition&.isConfirmed? && !current_user.can_admin_competitions?
+    if @competition&.confirmed? && !current_user.can_admin_competitions?
       # If the competition is confirmed, non admins are not allowed to change anything.
     else
       permitted_competition_params += [
@@ -612,7 +612,7 @@ class CompetitionsController < ApplicationController
       ]
       if current_user.can_admin_competitions?
         permitted_competition_params += [
-          :isConfirmed,
+          :confirmed,
           :showAtAll,
         ]
       end
@@ -620,7 +620,7 @@ class CompetitionsController < ApplicationController
 
     params.require(:competition).permit(*permitted_competition_params).tap do |competition_params|
       if params[:commit] == "Confirm" && current_user.can_confirm_competition?(@competition)
-        competition_params[:isConfirmed] = true
+        competition_params[:confirmed] = true
       end
       competition_params[:editing_user_id] = current_user.id
     end

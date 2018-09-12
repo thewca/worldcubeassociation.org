@@ -8,7 +8,7 @@ module CompetitionsHelper
       messages << (registration.accepted? ? t('competitions.messages.tooltip_registered') : t('competitions.messages.tooltip_waiting_list'))
     end
     visible = competition.showAtAll?
-    messages << if competition.isConfirmed?
+    messages << if competition.confirmed?
                   visible ? t('competitions.messages.confirmed_visible') : t('competitions.messages.confirmed_not_visible')
                 else
                   visible ? t('competitions.messages.not_confirmed_visible') : t('competitions.messages.not_confirmed_not_visible')

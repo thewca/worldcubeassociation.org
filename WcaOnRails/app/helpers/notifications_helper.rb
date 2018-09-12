@@ -4,7 +4,7 @@ module NotificationsHelper
   def notifications_for_user(user)
     notifications = []
     # Be careful to not show a competition twice if we're both organizing and delegating it.
-    unconfirmed_competitions = (user.delegated_competitions.where(isConfirmed: false) + user.organized_competitions.where(isConfirmed: false)).uniq(&:id)
+    unconfirmed_competitions = (user.delegated_competitions.not_confirmed + user.organized_competitions.not_confirmed).uniq(&:id)
     unconfirmed_competitions.each do |unconfirmed_competition|
       notifications << {
         text: "#{unconfirmed_competition.name} is not confirmed",
@@ -17,13 +17,13 @@ module NotificationsHelper
       #                                             these competitions.
       #  - Unconfirmed, but visible competitions: These competitions should be confirmed
       #                                           so people cannot change old competitions.
-      Competition.where(isConfirmed: true, showAtAll: false).each do |competition|
+      Competition.confirmed.not_visible.each do |competition|
         notifications << {
           text: "#{competition.name} is waiting to be announced",
           url: admin_edit_competition_path(competition),
         }
       end
-      Competition.where(isConfirmed: false, showAtAll: true).each do |competition|
+      Competition.not_confirmed.visible.each do |competition|
         notifications << {
           text: "#{competition.name} is visible, but unlocked",
           url: admin_edit_competition_path(competition),

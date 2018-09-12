@@ -31,7 +31,6 @@ CREATE TABLE `Competitions` (
   `showAtAll` tinyint(1) NOT NULL DEFAULT '0',
   `latitude` int(11) DEFAULT NULL,
   `longitude` int(11) DEFAULT NULL,
-  `isConfirmed` tinyint(1) NOT NULL DEFAULT '0',
   `contact` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remarks` text COLLATE utf8mb4_unicode_ci,
   `registration_open` datetime DEFAULT NULL,
@@ -60,6 +59,7 @@ CREATE TABLE `Competitions` (
   `guests_entry_fee_lowest_denomination` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `confirmed_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1408,4 +1408,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180731204733'),
 ('20180822165331'),
 ('20180825115701'),
-('20180831075355');
+('20180831075355'),
+('20180912042457');
