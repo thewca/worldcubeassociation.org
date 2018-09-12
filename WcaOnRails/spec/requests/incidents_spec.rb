@@ -31,7 +31,7 @@ RSpec.describe "Incidents management", type: :request do
       sign_in { FactoryBot.create(:user) }
       it "shows a resolved incident" do
         get incident_path(incident)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
       it "does not show a pending incident" do
         get incident_path(pending_incident)
@@ -43,7 +43,7 @@ RSpec.describe "Incidents management", type: :request do
       sign_in { FactoryBot.create(:delegate) }
       it "shows a pending incident" do
         get incident_path(pending_incident)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -51,7 +51,7 @@ RSpec.describe "Incidents management", type: :request do
       sign_in { FactoryBot.create(:user, :wdc_member) }
       it "shows a pending incident" do
         get incident_path(pending_incident)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -59,7 +59,7 @@ RSpec.describe "Incidents management", type: :request do
       sign_in { FactoryBot.create(:user, :wqac_member) }
       it "shows a pending incident" do
         get incident_path(pending_incident)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end
@@ -87,7 +87,7 @@ RSpec.describe "Incidents management", type: :request do
       end
       it "shows the incident creation form" do
         get new_incident_path
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end
@@ -107,7 +107,7 @@ RSpec.describe "Incidents management", type: :request do
       end
       it "renders the edit page" do
         get edit_incident_path(incident)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end
@@ -143,7 +143,7 @@ RSpec.describe "Incidents management", type: :request do
         expect {
           post incidents_path, params: { incident: invalid_attributes }
         }.to change(Incident, :count).by(0)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end
@@ -187,7 +187,7 @@ RSpec.describe "Incidents management", type: :request do
         summary = incident.public_summary
         put incident_path(incident), params: { incident: invalid_attributes }
         incident.reload
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(incident.public_summary).to eq summary
       end
     end

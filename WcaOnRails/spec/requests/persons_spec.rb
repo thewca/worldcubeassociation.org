@@ -10,7 +10,7 @@ RSpec.describe "persons" do
 
     it 'renders without error' do
       get person_path(person.wca_id)
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 end

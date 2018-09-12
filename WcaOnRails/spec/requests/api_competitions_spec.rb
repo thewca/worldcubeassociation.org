@@ -25,7 +25,7 @@ RSpec.describe "API Competitions" do
 
         it "updates the competition events of an unconfirmed competition" do
           patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333)).to_json, headers: headers
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 1
         end
 
@@ -84,7 +84,7 @@ RSpec.describe "API Competitions" do
             competition_events = create_wcif_events(%w(222 333))
             expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 0
             patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 1
           end
 
@@ -153,7 +153,7 @@ RSpec.describe "API Competitions" do
             },
           ]
           patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: { "CONTENT_TYPE" => "application/json" }
-          expect(response).to be_success
+          expect(response).to be_successful
           rounds = competition.reload.competition_events.find_by_event_id("333").rounds
           expect(rounds.length).to eq 1
           expect(rounds.first.scramble_set_count).to eq 2
@@ -212,7 +212,7 @@ RSpec.describe "API Competitions" do
           headers["ACCESS_TOKEN"] = nil
           competition_events = create_wcif_events(%w(333))
           patch api_v0_competition_update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
-          expect(response).to be_success
+          expect(response).to be_successful
         end
       end
     end

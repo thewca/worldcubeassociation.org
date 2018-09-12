@@ -16,7 +16,7 @@ RSpec.describe "competitions" do
           'commit' => 'Confirm',
         }
         follow_redirect!
-        expect(response).to be_success
+        expect(response).to be_successful
 
         expect(competition.reload.isConfirmed?).to eq true
       end
@@ -33,7 +33,7 @@ RSpec.describe "competitions" do
           },
         }
         follow_redirect!
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(competition.reload.championships.count).to eq 2
       end
 
@@ -49,7 +49,7 @@ RSpec.describe "competitions" do
           },
         }
         follow_redirect!
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(competition.reload.championships.count).to eq 2
       end
     end
@@ -71,7 +71,7 @@ RSpec.describe "competitions" do
           },
         }
         follow_redirect!
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(competition.reload.championships.count).to eq 2
       end
 
@@ -87,7 +87,7 @@ RSpec.describe "competitions" do
           },
         }
         follow_redirect!
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(competition.reload.championships.count).to eq 0
       end
     end
