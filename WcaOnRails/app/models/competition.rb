@@ -852,7 +852,9 @@ class Competition < ApplicationRecord
     self.organizers.empty? ? self.delegates : self.organizers
   end
 
-  def psych_sheet_event(event, sort_by, sort_by_second)
+  SortedRegistration = Struct.new(:registration, :tied_previous, :pos, keyword_init: true)
+  PsychSheet = Struct.new(:sorted_registrations, :sort_by, :sort_by_second, keyword_init: true)
+  def psych_sheet_event(event, sort_by)
     competition_event = competition_events.find_by!(event_id: event.id)
     joinsql = <<-SQL
       JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
@@ -876,7 +878,13 @@ class Competition < ApplicationRecord
       ifnull(RanksSingle.best, 0) single_best
     SQL
 
-    sort_clause = "-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name"
+    if sort_by == event.recommended_format.sort_by_second
+      sort_by_second = event.recommended_format.sort_by
+    else
+      sort_by = event.recommended_format.sort_by
+      sort_by_second = event.recommended_format.sort_by_second
+    end
+    sort_clause = Arel.sql("-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name")
 
     registrations = self.registrations
                         .accepted
@@ -884,22 +892,39 @@ class Competition < ApplicationRecord
                         .where("registration_competition_events.competition_event_id=?", competition_event.id)
                         .order(sort_clause)
                         .select(selectsql)
+                        .to_a
 
-    prev_registration = nil
+    prev_sorted_registration = nil
+    sorted_registrations = []
     registrations.each_with_index do |registration, i|
       if sort_by == 'single'
         rank = registration.single_rank
-        prev_rank = prev_registration&.single_rank
+        prev_rank = prev_sorted_registration&.registration&.single_rank
       else
         rank = registration.average_rank
-        prev_rank = prev_registration&.average_rank
+        prev_rank = prev_sorted_registration&.registration&.average_rank
       end
-      break if !rank # hasn't competed in this event yet and all subsequent registrations too
-      registration.tied_previous = (rank == prev_rank)
-      registration.pos = registration.tied_previous ? prev_registration.pos : i + 1
-      prev_registration = registration
+      if !rank
+        # Hasn't competed in this event yet.
+        tied_previous = nil
+        pos = nil
+      else
+        tied_previous = rank == prev_rank
+        pos = tied_previous ? prev_sorted_registration.pos : i + 1
+      end
+      sorted_registration = SortedRegistration.new(
+        registration: registration,
+        tied_previous: tied_previous,
+        pos: pos,
+      )
+      sorted_registrations << sorted_registration
+      prev_sorted_registration = sorted_registration
     end
-    registrations
+    PsychSheet.new(
+      sorted_registrations: sorted_registrations,
+      sort_by: sort_by,
+      sort_by_second: sort_by_second,
+    )
   end
 
   # For associated_events_picker

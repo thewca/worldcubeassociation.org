@@ -69,9 +69,6 @@ class Registration < ApplicationRecord
     user.name
   end
 
-  attr_accessor :pos
-  attr_accessor :tied_previous
-
   def birthday
     user.dob
   end
