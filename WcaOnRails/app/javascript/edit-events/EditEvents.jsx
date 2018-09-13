@@ -3,9 +3,10 @@ import cn from 'classnames'
 import ReactDOM from 'react-dom'
 
 import events from 'wca/events.js.erb'
+import formats from 'wca/formats.js.erb'
 import { rootRender } from 'edit-events'
 import { pluralize } from 'edit-events/modals/utils'
-import { buildActivityCode, saveWcifPart } from 'wca/wcif-utils'
+import { buildActivityCode, saveWcifPart, roundIdToString } from 'wca/wcif-utils'
 import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from 'edit-events/modals'
 
 export default class EditEvents extends React.Component {
@@ -100,7 +101,14 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
 
             let roundFormatChanged = e => {
               let newFormat = e.target.value;
-              wcifRound.format = newFormat;
+              if (wcifRound.cutoff && !formats.byId[newFormat].allowedFirstPhaseFormats.includes(wcifRound.cutoff.numberOfAttempts.toString())) {
+                if (confirm(`Are you sure you want to change the format of ${roundIdToString(wcifRound.id)}? This will clear the cutoff.`)) {
+                  wcifRound.format = newFormat;
+                  wcifRound.cutoff = null;
+                }
+              } else {
+                wcifRound.format = newFormat;
+              }
               rootRender();
             };
 
