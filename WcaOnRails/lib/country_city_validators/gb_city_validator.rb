@@ -94,4 +94,4 @@ GB_COUNTIES = %w(
   Yorkshire
 ).to_set
 
-CityValidator.add_validator_for_country "GB", CityCommaRegionValidator.new(type_of_region: "county", valid_regions: GB_PROVINCES)
+CityValidator.add_validator_for_country "GB", CityCommaRegionValidator.new(type_of_region: "county", valid_regions: GB_COUNTIES)
