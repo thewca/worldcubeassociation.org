@@ -95,8 +95,8 @@ class CompetitionsController < ApplicationController
       from_date = Date.safe_parse(params[:from_date])
       to_date = Date.safe_parse(params[:to_date])
       if from_date || to_date
-        @competitions = @competitions.where("start_date >= ?", from_date) if from_date
-        @competitions = @competitions.where("end_date <= ?", to_date) if to_date
+        @competitions = @competitions.where("start_date <= ?", to_date) if to_date
+        @competitions = @competitions.where("end_date >= ?", from_date) if from_date
       else
         @competitions = Competition.none
       end

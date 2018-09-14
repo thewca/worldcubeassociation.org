@@ -39,7 +39,7 @@ RSpec.describe CompetitionsController do
       end
     end
 
-    describe "selecting present/past/recent competitions" do
+    describe "selecting present/past/recent/custom competitions" do
       let!(:past_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: 1.year.ago) }
       let!(:past_comp2) { FactoryBot.create(:competition, :confirmed, :visible, starts: 3.years.ago) }
       let!(:in_progress_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: Date.today, ends: 1.day.from_now) }
@@ -85,6 +85,16 @@ RSpec.describe CompetitionsController do
 
         it "shows in progress competition that ends today" do
           expect(assigns(:competitions)).to match_array [in_progress_comp2]
+        end
+      end
+
+      context "when custom is selected" do
+        before do
+          get :index, params: { state: :custom, from_date: 1.day.from_now, to_date: 2.weeks.from_now }
+        end
+
+        it "shows competitions overlapping the given date range" do
+          expect(assigns(:competitions)).to match_array [in_progress_comp1, upcoming_comp1]
         end
       end
     end
