@@ -622,7 +622,7 @@ class Competition < ApplicationRecord
   end
 
   def registration_period_required?
-    use_wca_registration? || (isConfirmed? && created_at.present? && created_at > Date.new(2018, 9, 13))
+    use_wca_registration? || (confirmed? && created_at.present? && created_at > Date.new(2018, 9, 13))
   end
 
   def pending_results_or_report(days)
