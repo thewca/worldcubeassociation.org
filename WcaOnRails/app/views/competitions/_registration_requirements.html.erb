@@ -59,7 +59,7 @@
   <% end %>
 <% end %>
 
-<% if @competition.refund_policy_percent.nil? %>
+<% if @competition.refund_policy_percent.nil? || !@competition.has_fees? %>
 <% elsif @competition.refund_policy_percent? %>
   <%= t('competitions.competition_info.refund_policy_html', refund_policy_percent: number_to_percentage(@competition.refund_policy_percent, precision: 0), limit_date_and_time: wca_local_time(@competition.refund_policy_limit_date)) %>
   <br>
