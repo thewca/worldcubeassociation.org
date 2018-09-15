@@ -332,7 +332,7 @@ es:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: No permitir que los organizadores editen esta competición
+        confirmed: No permitir modificar esta competición a organizadores
         #original_hash: d493e6a
         showAtAll: Hacer esta competición públicamente visible
         #original_hash: 709a232
@@ -357,7 +357,7 @@ es:
         external_website: Sitio web
         #original_hash: 692e1f9
         generate_website: Usaré la web de la WCA en vez de una web externa
-        #original_hash: dd88e47
+        #original_hash: 6cf623b
         base_entry_fee_lowest_denomination: Tarifa básica
         #original_hash: 28a6fbb
         currency_code: Moneda
@@ -371,10 +371,8 @@ es:
         information: Información
         #original_hash: 87b7d5f
         use_wca_registration: Usaré la web de la WCA para el registro
-        #original_hash: a2dfcf8
-        competitor_limit_enabled: >-
-          Querría especificar un límite en el número de competidores que pueden
-          participar en esta competición
+        #original_hash: 9bb1965
+        competitor_limit_enabled: Límite de competidores
         #original_hash: 749f4c9
         competitor_limit: Número máximo de competidores
         #original_hash: 4a8b6f1
@@ -401,8 +399,8 @@ es:
         extra_registration_requirements: Requisitos de registro adicionales
         #original_hash: 2529d04
         on_the_spot_registration: Registros in situ
-        #original_hash: bbff74c
-        on_the_spot_entry_fee_lowest_denomination: Cuota de registro in situ
+        #original_hash: 69780b5
+        on_the_spot_entry_fee_lowest_denomination: Cuota básica de registro in situ
         #original_hash: efbdbab
         refund_policy_percent: Porcentaje a reembolsar
         #original_hash: b332299
@@ -679,14 +677,13 @@ es:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 82ad56b
+        #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
-          Precio del registro básico. El precio del registro se muestra en la
-          página de información de la competición y en el proceso de registro si
-          se utiliza. Si esto se pone a 0, se mostrará una frase indicando que
-          se aceptan registros gratuitos.
-        #original_hash: 866bc05
-        currency_code: Moneda en que se especifica el precio del registro.
+          Precio del registro básico. Se mostrará en la página de información de
+          la competición y en la de registro si se utiliza. Si esto se pone a 0,
+          se mostrará una frase indicando que se aceptan registros gratuitos.
+        #original_hash: 9735ddf
+        currency_code: Moneda en que se especifican los pagos.
         #original_hash: da39a3e
         guests_enabled: ''
         #original_hash: da39a3e
@@ -694,7 +691,7 @@ es:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -705,13 +702,17 @@ es:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
-          De momento este número solo tiene carácter informativo y no impide el
-          registro de más participantes. Estamos trabajando en añadir soporte
-          explícito para el flujo de registro, pero requiere trabajo previo.
-        #original_hash: b9bc84d
-        competitor_limit: El número de competidores permitido en esta competición
+          Aunque el reglamento no requiere especificar un límite de
+          competidores, es altamente recomendable hacerlo.
+        #original_hash: b7b599b
+        competitor_limit: >-
+          El número de competidores permitido en esta competición. Por el
+          momento este número es meramente informativo y todavía no impide que
+          se registre más gente. Estamos trabajando en añadir soporte explícito
+          para este flujo de registro, pero es necesario finalizar otras tareas
+          previamente.
         #original_hash: 4bd7102
         competitor_limit_reason: >-
           ¿Cuál es el motivo para el límite de competidores? Por favor, ¡rellena
@@ -746,7 +747,7 @@ es:
           Por el momento esta cifra es solamente informativa, los precios de
           entrada de espectadores no se pueden gestionar desde este sitio web.
           Si se pone a 0, se mostrará una frase indicando que los espectadores
-          pueden atender de forma gratuita.
+          pueden asistir de forma gratuita.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -911,6 +912,11 @@ es:
           'true': Preguntar por acompañantes
           #original_hash: f8c2332
           'false': NO preguntar por acompañantes
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Quiero especificar un límite de competidores
+          #original_hash: 5b581b5
+          'false': NO QUIERO especificar un límite de competidores
         on_the_spot_registration:
           #original_hash: 0c521ca
           'true': Se aceptan registros in situ
@@ -1663,7 +1669,7 @@ es:
       la página web del campeonato.
     #original_hash: 58b1a3c
     accepted: ¡Tu registro ha sido aceptado!
-    #original_hash: 70de60f
+    #original_hash: bcd7d70
     entry_fees_fully_paid: 'Has pagado la totalidad de tu registro (%{paid}).'
     #original_hash: 2e5d1b9
     will_pay_here: Vas a pagar en cuanto solicites el registro
@@ -1687,8 +1693,8 @@ es:
         #original_hash: bf3a39e
         donation: Donativo opcional para el equipo organizador
       labels:
-        #original_hash: 948ec72
-        entry_fees: Precio de la entrada
+        #original_hash: 4de825f
+        entry_fees: Precio del registro
         #original_hash: 2c09302
         donation: Donativo
       alerts:
@@ -1805,8 +1811,10 @@ es:
       competitor_limit_is: 'Hay un límite de competidores de %{competitor_limit} competidores.'
       #original_hash: 5101f65
       no_competitor_limit: No hay límite de competidores.
-      #original_hash: 86cf09f
-      entry_fee_is: 'La cuota de registro para esta competición es de %{base_entry_fee}.'
+      #original_hash: f979d5e
+      entry_fee_is: >-
+        La cuota de registro básica para esta competición es de
+        %{base_entry_fee}.
       #original_hash: 5390a91
       no_entry_fee: Registrarse para esta competición es gratuito.
       #original_hash: 29af5c2
@@ -1823,9 +1831,9 @@ es:
         reembolsará un %{refund_policy_percent} de tu cuota de registro.
       #original_hash: 4aca553
       no_refunds: Las cuotas de registro no se reembolsarán bajo ninguna circunstancia.
-      #original_hash: b38fa7b
+      #original_hash: cf7be5d
       on_the_spot_registration: >-
-        Se aceptarán registros in situ con una cuota de
+        Se aceptarán registros in situ con una cuota básica de
         %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Se aceptarán registros in situ de forma gratuita.
@@ -1833,10 +1841,10 @@ es:
       no_on_the_spot_registration: No se aceptarán registros in situ.
       #original_hash: 4df139d
       guests_pay: >-
-        Los espectadores pueden atender pagando una entrada de
+        Los espectadores pueden asistir pagando una entrada de
         %{guests_base_fee}.
       #original_hash: b6c863e
-      guests_free: Los espectadores pueden atender de forma gratuita
+      guests_free: Los espectadores pueden asistir de forma gratuita
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         La competición ha finalizado, haz click %{link_here} para mostrar los
@@ -3216,7 +3224,7 @@ es:
     paragraph2:
       #original_hash: f20dd3b
       title: Gastos esperados para organizar una competición
-      #original_hash: ab53dda
+      #original_hash: f16a06f
       content: >-
         Los gastos esperados varían enormemente de país en país y dependen de
         múltiples factores, como el tamaño del local y otras condiciones
@@ -3318,12 +3326,12 @@ es:
     paragraph6:
       #original_hash: ce4c3d0
       title: Gestionar registros
-      #original_hash: cb13cd0
+      #original_hash: bd669a1
       content: >-
         Los registros deben ser procesados por orden de llegada, lo que
         significa que el primer registro completo debe ser tratado en primer
-        lugar. Si las tasas de entrada son prepago, un registro se considera
-        completo cuando se ha pagado la tasa. Esto debería quedar claramente
+        lugar. Si las cuotas de registro son prepago, un registro se considera
+        completo cuando se ha pagado la cuota. Esto debería quedar claramente
         indicado en las instrucciones de pago en la página web de la
         competición.
     paragraph7:
@@ -3335,7 +3343,7 @@ es:
         lista de espera. Cuando los competidores registrados y aprobados
         cancelen su registro, pueden ser reemplazados por los siguientes
         competidores que estén en la lista de espera.
-      #original_hash: 1b2ea79
+      #original_hash: 802b34f
       content2: >-
         Si el registro es por prepago, es una práctica eficiente ofrecer la
         plaza libre al siguiente competidor en la lista de espera y establecer
