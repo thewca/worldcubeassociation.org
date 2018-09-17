@@ -329,7 +329,7 @@ ro:
         #original_hash: 89f89c0
         id: Id
         #original_hash: 7f3d889
-        isConfirmed: Organizatorii nu au voie să editeze această competiție
+        confirmed: Nu permite organizatorilor să editeze competiția
         #original_hash: d493e6a
         showAtAll: Fă competiția vizibilă
         #original_hash: 709a232
@@ -695,7 +695,7 @@ ro:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
