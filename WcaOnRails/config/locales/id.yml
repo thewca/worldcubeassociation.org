@@ -83,6 +83,17 @@ id:
     a: Average of 5
     #original_hash: 940c82d
     m: Mean of 3
+    short:
+      #original_hash: c21bc2a
+      '1': Bo1
+      #original_hash: 49e914a
+      '2': Bo2
+      #original_hash: b41f36f
+      '3': Bo3
+      #original_hash: 4a34175
+      a: Ao5
+      #original_hash: 53ba088
+      m: Mo3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -139,6 +150,9 @@ id:
       name: Kualifikasi Gabungan
       #original_hash: 4c66ad0
       cellName: Kualifikasi Gabungan
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: 'Attempt %{number}'
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
@@ -175,8 +189,8 @@ id:
       across_rounds: 'Total %{time} untuk %{rounds}'
     #original_hash: f030c3d
     333fm: 1 jam
-    #original_hash: 2c2abd5
-    333mbf: 10 menit per kubus
+    #original_hash: cc7d8bb
+    333mbf: '10:00.00 per kubus, total hingga 60:00.00'
   common:
     #original_hash: 2513cf0
     continent: Benua
@@ -223,6 +237,8 @@ id:
     date_placeholder: YYYY-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
+    #original_hash: 7136e3b
+    time_format: 24h
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -303,7 +319,7 @@ id:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: Jangan biarkan panitia menyunting kompetisi ini
+        confirmed: Panitia dilarang menyunting kompetisi ini
         #original_hash: d493e6a
         showAtAll: Buat kompetisi terlihat di publik
         #original_hash: 709a232
@@ -330,8 +346,8 @@ id:
         generate_website: >-
           Saya ingin menggunakan situs web WCA daripada situs web eksternal
           untuk informasi tambahan.
-        #original_hash: dd88e47
-        base_entry_fee_lowest_denomination: Biaya masuk dasar
+        #original_hash: 6cf623b
+        base_entry_fee_lowest_denomination: Biaya dasar pendaftaran
         #original_hash: 28a6fbb
         currency_code: Kode mata uang
         #original_hash: 2e3ed8b
@@ -344,10 +360,8 @@ id:
         information: Informasi
         #original_hash: 87b7d5f
         use_wca_registration: Saya ingin menggunakan situs web WCA untuk pendaftaran
-        #original_hash: a2dfcf8
-        competitor_limit_enabled: >-
-          Saya ingin menetapkan batas jumlah kompetitor yang dapat
-          berpartisipasi.
+        #original_hash: 9bb1965
+        competitor_limit_enabled: Batas kompetitor
         #original_hash: 749f4c9
         competitor_limit: Jumlah kompetitor maksimal
         #original_hash: 4a8b6f1
@@ -372,8 +386,18 @@ id:
           biaya pendaftaran
         #original_hash: 4baf44b
         championship_type: Tipe kejuaraan
-        #original_hash: ff722f0
-        registration_requirements: Syarat pendaftaran
+        #original_hash: 556fda0
+        extra_registration_requirements: Kebutuhan pendaftaran ekstra
+        #original_hash: 2529d04
+        on_the_spot_registration: Pendaftaran di tempat
+        #original_hash: 69780b5
+        on_the_spot_entry_fee_lowest_denomination: Biaya dasar pendaftaran di tempat
+        #original_hash: efbdbab
+        refund_policy_percent: Persentase uang yang dikembalikan
+        #original_hash: b332299
+        refund_policy_limit_date: Batas tanggal untuk pengembalian uang
+        #original_hash: 3542671
+        guests_entry_fee_lowest_denomination: Biaya masuk untuk tamu
       registration:
         #original_hash: 3c23a67
         guests: Tamu
@@ -616,11 +640,12 @@ id:
           Nama kota dan provinsi (jika memungkinkan) di mana kompetisi
           dilaksanakan. Jangan menuliskan nama negara (contoh: Paris ATAU San
           Francisco, California).
-        #original_hash: 3d99319
+        #original_hash: bb470cc
         information: >-
-          Informasi tentang batas kompetitor, biaya masuk untuk kompetitor dan
-          penonton, dan detail lainnya yang mendukung orang-orang agar tertarik
-          untuk berkompetisi atau menonton.
+          Informasi penting yang harus diketahui oleh kompetitor. Informasi ini
+          akan ditampilkan dalam halaman utama kompetisi. <br/>Harap isi bagian
+          ini <b>dalam Bahasa Inggris</b> dan bahasa apapun yang dimengerti oleh
+          calon kompetitor.
         #original_hash: b4d020f
         delegate_ids: Delegate WCA untuk kompetisi.
         #original_hash: 517d376
@@ -645,12 +670,14 @@ id:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 950a7ea
+        #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
-          Biaya masuk dasar untuk kompetisi. Biaya masuk akan ditampilkan pada
-          halaman informasi kompetisi dan pendaftaran jika dipakai.
-        #original_hash: 866bc05
-        currency_code: Kode mata uang untuk biaya masuk.
+          Biaya dasar pendaftaran untuk kompetisi. Biaya ini akan ditampilkan
+          pada halaman informasi kompetisi dan pendaftaran jika dipakai. Jika
+          diisi dengan nilai 0, akan ditampilkan bahwa pendaftaran dapat
+          dilakukan dengan gratis.
+        #original_hash: 9735ddf
+        currency_code: Kode mata uang untuk biaya.
         #original_hash: da39a3e
         guests_enabled: ''
         #original_hash: da39a3e
@@ -658,7 +685,7 @@ id:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -669,14 +696,17 @@ id:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
-          Untuk saat ini, angka ini hanya berfungsi sebagai informasi dan tidak
-          menghalangi orang untuk mendaftar. Kami masih berusaha untuk
-          menambahkan dukungan eksplisit dalam hal ini untuk alur pendaftaran,
-          namun diperlukan beberapa hasil kerja yang lain terlebih dulu.
-        #original_hash: b9bc84d
-        competitor_limit: Jumlah kompetitor yang boleh mendaftar pada kompetisi ini.
+          Walaupun pernyataan batas kompetitor tidak diperlukan berdasarkan
+          Regulasi, hal ini sangat dianjurkan.
+        #original_hash: b7b599b
+        competitor_limit: >-
+          Jumlah kompetitor yang boleh mendaftar pada kompetisi ini. Untuk saat
+          ini, angka ini hanya digunakan sebagai informasi dan tidak mencegah
+          orang-orang untuk mendaftar. Kami sedang bekerja untuk menambah
+          dukungan eksplisit untuk hal ini pada alur pendaftaran, namun hal ini
+          butuh pekerjaan lainnya yang harus selesai terlebih dulu.
         #original_hash: 4bd7102
         competitor_limit_reason: >-
           Apa alasan jumlah kompetitor dibatasi? Harap ditulis dengan Bahasa
@@ -685,20 +715,32 @@ id:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
-        #original_hash: 508c178
-        registration_requirements: >-
-          Harap tunjukkan di sini syarat terkait proses pendaftaran, yang
-          dibutuhkan sesuai dengan <a
-          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
-          target="_blank">Pedoman 2c1+</a>. Setelah kompetisi diumumkan, kolom
-          ini <b>tidak</b> dapat diubah kembali, dan diperlukan persetujuan
-          Board untuk mengubahnya.<br/>Sebagai contoh tunjukkan di sini jika
-          kompetitor perlu membuat riwayat pembayaran bersih dengan entitas
-          spesifik, jika ada kebijakan pengembalian dana, atau jika kompetitor
-          perlu menjawab email konfirmasi jika batas jumlah kompetitor telah
-          tercapai.<br/>Harap diisi <b>dalam Bahasa Inggris</b> dan bahasa yang
-          dimengerti kompetitor Anda; hal ini akan ditampilkan pada halaman
-          pendaftaran kompetisi jika Anda menggunakan situs web pendaftaran WCA.
+        #original_hash: 3de153b
+        extra_registration_requirements: >-
+          Harap tunjukkan di sini tentang kebutuhan pendaftaran ekstra yang
+          belum ditulis di atas, seperti cara membayar. <br/>Harap isi <b>dalam
+          Bahasa Inggris</b> dan bahasa yang dimengerti oleh calon kompetitor;
+          hal ini akan ditampilkan di halaman informasi kompetisi, dan juga
+          halaman pendaftaran jika Anda menggunakan situs web pendaftaran WCA.
+        #original_hash: da39a3e
+        on_the_spot_registration: ''
+        #original_hash: 8c4fdf8
+        on_the_spot_entry_fee_lowest_denomination: >-
+          Jika diisi dengan nilai 0, akan ditampilkan bahwa pendaftaran di
+          tempat dapat dilakukan secara gratis.
+        #original_hash: 180b7b3
+        refund_policy_percent: >-
+          Untuk saat ini, angka ini hanya digunakan sebagai informasi,
+          pengembalian uang perlu dilaporkan secara manual. Jika diisi dengan
+          nilai 0, akan ditampilkan bahwa biaya registrasi tidak akan
+          dikembalikan dalam kondisi apapun.
+        #original_hash: f64d853
+        refund_policy_limit_date: Tanggal setelahnya tidak akan ada lagi laporan pengembalian uang.
+        #original_hash: 25a1324
+        guests_entry_fee_lowest_denomination: >-
+          Untuk saat ini, angka ini hanya digunakan sebagai informasi, biaya
+          tamu tidak dapat diatur melalui situs web ini. Jika diisi dengan angka
+          0, akan ditampilkan bahwa penonton dapat datang secara gratis.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -868,6 +910,16 @@ id:
           'true': Tanya tentang tamu yang mendampingi
           #original_hash: f8c2332
           'false': JANGAN tanya tentang tamu yang mendampingi
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Saya ingin menetapkan batas kompetitor
+          #original_hash: 5b581b5
+          'false': Saya TIDAK INGIN menetapkan batas kompetitor
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': Pendaftaran di tempat dapat diterima
+          #original_hash: 0f236df
+          'false': Pendaftaran di tempat TIDAK AKAN diterima
   mail_form:
     attributes:
       contact_form:
@@ -1609,8 +1661,8 @@ id:
       web kompetisi.
     #original_hash: 58b1a3c
     accepted: Pendaftaran Anda telah diterima!
-    #original_hash: 70de60f
-    entry_fees_fully_paid: 'Anda telah membayar %{paid} untuk menutup biaya masuk.'
+    #original_hash: bcd7d70
+    entry_fees_fully_paid: 'Anda telah membayar %{paid} untuk menutup biaya pendaftaran.'
     #original_hash: 2e5d1b9
     will_pay_here: Anda akan membayar setelah mengirim pendaftaran Anda
     #original_hash: b7ef562
@@ -1631,8 +1683,8 @@ id:
         #original_hash: bf3a39e
         donation: Donasi opsional untuk tim panitia
       labels:
-        #original_hash: 948ec72
-        entry_fees: Biaya masuk
+        #original_hash: 4de825f
+        entry_fees: Biaya pendaftaran
         #original_hash: 2c09302
         donation: Donasi
       alerts:
@@ -1725,16 +1777,59 @@ id:
         other: Delegate WCA
       #original_hash: b37456c
       contact: Kontak
-      #original_hash: 32946e9
-      competitor_limit: Batas Kompetitor
-      #original_hash: a428739
-      entry_fee: Biaya Masuk
       #original_hash: 0eb5ed5
       information: Informasi
       #original_hash: c5497bc
       events: Cabang
       #original_hash: ff722f0
       registration_requirements: Syarat pendaftaran
+      #original_hash: 74d0bf1
+      create_wca_account_html: 'Buat akun WCA %{here} jika Anda belum punya.'
+      #original_hash: a082288
+      claim_wca_id_html: >-
+        Jika ini bukan kompetisi pertama Anda, hubungkan WCA ID dengan akun WCA
+        Anda %{here}.
+      #original_hash: 56fc229
+      register_link_html: 'Daftar ke kompetisi ini %{here}.'
+      #original_hash: 45834fd
+      register_below_html: Daftar ke kompetisi ini di bawah.
+      #original_hash: 196725e
+      competitor_limit_is: 'Terdapat batas kompetitor sejumlah %{competitor_limit} kompetitor.'
+      #original_hash: 5101f65
+      no_competitor_limit: Tidak ada batas kompetitor.
+      #original_hash: f979d5e
+      entry_fee_is: 'Biaya dasar pendaftaran untuk kompetisi ini berjumlah %{base_entry_fee}.'
+      #original_hash: 5390a91
+      no_entry_fee: Mendaftar ke kompetisi ini gratis.
+      #original_hash: 29af5c2
+      use_stripe_link_html: >-
+        Biaya pendaftaran harus dibayar melalui Stripe %{here} setelah
+        terdaftar.
+      #original_hash: cea0eb4
+      use_stripe_below_html: >-
+        Biaya pendaftaran harus dibayar melalui Stripe di bawah ini setelah
+        terdaftar.
+      #original_hash: 16cd1ba
+      refund_policy_html: >-
+        Jika pendaftaran Anda ditunda sebelum %{limit_date_and_time} Anda akan
+        mendapat pengembalian uang sejumlah %{refund_policy_percent} dari biaya
+        pendaftaran Anda.
+      #original_hash: 4aca553
+      no_refunds: Biaya pendaftaran tidak akan dikembalikan dalam kondisi apapun.
+      #original_hash: cf7be5d
+      on_the_spot_registration: >-
+        Pendaftaran di tempat akan diterima dengan biaya dasar pendaftaran
+        sejumlah %{on_the_spot_base_entry_fee}.
+      #original_hash: 1637bea
+      on_the_spot_registration_free: Pendaftaran di tempat akan diterima secara gratis.
+      #original_hash: f5f687d
+      no_on_the_spot_registration: Tidak menerima pendaftaran di tempat.
+      #original_hash: 4df139d
+      guests_pay: >-
+        Penonton dapat datang dengan membayar biaya masuk sejumlah
+        %{guests_base_fee}.
+      #original_hash: b6c863e
+      guests_free: Penonton dapat datang secara gratis.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Kompetisi ini telah berakhir, klik %{link_here} untuk menampilkan syarat
@@ -1929,6 +2024,10 @@ id:
       registration_close_after_open: Pendaftaran ditutup harus berada setelah pendaftaran dibuka
       #original_hash: 43a83a9
       end_date_before_start: Tanggal berakhir tidak dapat berada sebelum tanggal mulai.
+      #original_hash: 0c507fa
+      refund_date_after_start: >-
+        Batas tanggal pengembalian uang tidak boleh berada sebelum tanggal
+        mulai.
       #original_hash: be3933b
       span_too_many_days: 'Kompetisi tidak dapat berlangsung lebih dari %{max_days} hari.'
       #original_hash: cdcd288
@@ -2007,6 +2106,8 @@ id:
       general_info: Info umum
       #original_hash: c5497bc
       events: Cabang
+      #original_hash: 0a8adac
+      schedule: Jadwal
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2032,6 +2133,12 @@ id:
         cutoff_html: >-
           Hasil yang perlu dicapai untuk lanjut ke fase kedua babak gabungan
           (lihat %{regulation_link}).
+        #original_hash: f571a30
+        format_html: >-
+          Format ini menjelaskan bagaimana menentukan ranking kompetitor
+          berdasarkan hasil mereka. Daftar format yang diperbolehkan per cabang
+          dijelaskan di %{link_to_9b}. Lihat %{link_to_9f} untuk penjelasan
+          setiap format.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
@@ -2040,6 +2147,39 @@ id:
       cutoff: Cutoff
       #original_hash: 02ed4a4
       proceed: Lanjut
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: 'Tampilkan jadwal sebagai:'
+        #original_hash: 0424f6e
+        table: Tabel
+        #original_hash: adab509
+        calendar: Kalender
+      #original_hash: 017e4d8
+      display_for_room: 'Tampilkan jadwal untuk:'
+      range:
+        #original_hash: 3f66052
+        from: Dari
+        #original_hash: ae79ea1
+        to: Sampai
+      #original_hash: 952f375
+      start: Mulai
+      #original_hash: a2bb9d3
+      end: Selesai
+      #original_hash: 81c0d91
+      activity: Kegiatan
+      #original_hash: 90e2fca
+      room: Ruang
+      #original_hash: 2896c7a
+      venue_information_html: 'Anda sedang melihat jadwal untuk venue %{venue_name}.'
+      #original_hash: b97e383
+      timezone_message: 'Jadwal ditampilkan dalam zona waktu %{timezone}.'
+      #original_hash: 2ab94a0
+      multiple_venues_available: >-
+        Kompetisi ini memiliki beberapa venue, pastikan Anda sudah mengecek
+        jadwal untuk venue lainnya!
+      #original_hash: 37b1adb
+      schedule_for_date: 'Jadwal untuk %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -2060,6 +2200,8 @@ id:
         orga_view: Tampilan panitia
         #original_hash: c6171f8
         event_view: Atur cabang
+        #original_hash: 6235b27
+        schedule_view: Atur jadwal
         #original_hash: 6f7aef9
         payment_view: Siapkan pembayaran
         #original_hash: 76bfdcf
@@ -2445,7 +2587,7 @@ id:
     title: Tentang WCA
     mission:
       paragraphs:
-        #original_hash: 3e4f9b5
+        #original_hash: c86d105
         '1': >-
           World Cube Association berkuasa dalam mengadakan kompetisi untuk
           puzzle mekanik yang beroperasi dengan memutar Piece, yang secara umum
@@ -2544,6 +2686,17 @@ id:
           kualitas di seluruh dunia untuk memastikan konsistensi kualitas yang
           tinggi dari proses, Staf WCA, Organisasi Regional, Panitia Kompetisi,
           dan Staf Kompetisi.
+      wmt:
+        #original_hash: 2035811
+        name: WCA Marketing Team
+        #original_hash: f2a0140
+        description: >-
+          Tim ini bertanggung jawab untuk mengembangkan dan mengatur Brand WCA,
+          mencari sponsor, membantu penyebaran Kelengkapan Kompetisi WCA, dan
+          memasarkan Merchandise WCA.
+      banned:
+        #original_hash: d30e2e5
+        name: Kompetitor yang Diblokir
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>Delegate WCA</strong> adalah sebuah peran dalam Gerakan WCA
@@ -2576,18 +2729,6 @@ id:
     minutes: Notulensi
     #original_hash: 6db524a
     policies: Kebijakan WCA
-    #original_hash: ffc646a
-    dues: Sistem Iuran
-    #original_hash: 9e7fbc2
-    logo: Pemakaian Logo
-    #original_hash: 900f7c7
-    proximity_policy: Kebijakan Kedekatan Kompetisi
-    #original_hash: 0d527c8
-    competition_name_policy: Kebijakan Nama Kompetisi
-    #original_hash: caccb53
-    competition_announcement_policy: Kebijakan Pengumuman Kompetisi
-    #original_hash: 32e6959
-    sponsor: Pengakuan Sponsor
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegate WCA
@@ -2739,6 +2880,12 @@ id:
         kualitas di seluruh dunia untuk memastikan konsistensi kualitas yang
         tinggi dari proses, Staf WCA, Organisasi Regional, Panitia Kompetisi,
         dan Staf Kompetisi.
+    wmt:
+      #original_hash: f2a0140
+      info_html: >-
+        Tim ini bertanggung jawab untuk mengembangkan dan mengatur Brand WCA,
+        mencari sponsor, membantu penyebaran Kelengkapan Kompetisi WCA, dan
+        memasarkan Merchandise WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Alat Score Taking WCA
@@ -3019,14 +3166,14 @@ id:
     paragraph2:
       #original_hash: f20dd3b
       title: Perkiraan biaya untuk mengurus kompetisi
-      #original_hash: ab53dda
+      #original_hash: f16a06f
       content: >-
         Perkiraan biaya sangat berbeda antar negara dan ditentukan dari beberapa
         faktor seperti luas lokasi dan kondisi umum lainnya. Kerugian mungkin
-        dapat ditutup dengan biaya masuk. Namun, agar kerugian dapat seminimal
-        mungkin, disarankan untuk mencari sponsor. Meskipun Delegate WCA
-        merupakan sukarelawan dan tidak mendapat bayaran atas pekerjaan mereka,
-        panitia harus mempertimbangkan untuk membayar kompensasi biaya
+        dapat ditutup dengan biaya pendaftaran. Namun, agar kerugian dapat
+        seminimal mungkin, disarankan untuk mencari sponsor. Meskipun Delegate
+        WCA merupakan sukarelawan dan tidak mendapat bayaran atas pekerjaan
+        mereka, panitia harus mempertimbangkan untuk membayar kompensasi biaya
         perjalanan mereka.
     paragraph3:
       #original_hash: 00d3bf8
@@ -3117,14 +3264,14 @@ id:
     paragraph6:
       #original_hash: ce4c3d0
       title: Menangani pendaftaran
-      #original_hash: cb13cd0
+      #original_hash: bd669a1
       content: >-
         Pendaftaran harus diproses dengan dasar "Siapa Cepat Dia Dapat", yang
         berarti orang yang pertama melakukan pendaftaran harus dilayani pertama
-        kali. Jika biaya masuk dapat dibayar sebelum hari kompetisi, pendaftaran
-        dianggap selesai jika biaya masuk sudah dibayar sebelumnya. Hal ini
-        harus ditulis secara jelas pada panduan pembayaran pada situs web
-        kompetisi.
+        kali. Jika biaya pendaftaran dapat dibayar sebelum hari kompetisi,
+        pendaftaran dianggap selesai jika biaya pendaftaran sudah dibayar
+        sebelumnya. Hal ini harus ditulis secara jelas pada panduan pembayaran
+        pada situs web kompetisi.
     paragraph7:
       #original_hash: e4f1c62
       title: Mengatur daftar tunggu
@@ -3134,9 +3281,9 @@ id:
         tetap dibuka. Ketika kompetitor yang telah mendaftar dan telah disetujui
         membatalkan pendaftarannya, kompetitor pertama pada daftar tunggu dapat
         menggantikannya.
-      #original_hash: 1b2ea79
+      #original_hash: 802b34f
       content2: >-
-        Jika biaya masuk kompetisi dapat dibayar sebelum hari kompetisi,
+        Jika biaya pendaftaran kompetisi dapat dibayar sebelum hari kompetisi,
         menawarkan tempat kepada seorang kompetitor pada daftar tunggu dan
         menetapkan batas waktu sampai waktu biaya pendaftaran harus selesai
         dibayar (contoh: 48 jam) merupakan pendekatan yang efisien. Jika
