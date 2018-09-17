@@ -42,7 +42,7 @@
     "simplemde": "^1.11.2",
     "style-loader": "^0.23.0",
     "webpack": "^3.11.0",
-    "webpack-manifest-plugin": "^2.0.3",
+    "webpack-manifest-plugin": "^2.0.4",
     "webpack-merge": "^4.1.4",
     "whatwg-fetch": "^2.0.4"
   },
