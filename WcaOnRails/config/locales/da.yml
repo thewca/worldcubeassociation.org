@@ -324,9 +324,9 @@ da:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: Lad ikke arrangører redigere denne konkurrence
+        confirmed: Lad ikke arrangørene redigere konkurrencen
         #original_hash: d493e6a
-        showAtAll: Gør konkurrence offentlig
+        showAtAll: Gør konkurrencen offentlig
         #original_hash: 709a232
         name: Navn
         #original_hash: b649210
@@ -458,7 +458,7 @@ da:
         #original_hash: 768e0c1
         title: Titel
         #original_hash: 718a7e8
-        body: Body
+        body: Brødtekst
         #original_hash: 6f915a2
         sticky: Sticky
         #original_hash: 848eed0
@@ -685,7 +685,7 @@ da:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
