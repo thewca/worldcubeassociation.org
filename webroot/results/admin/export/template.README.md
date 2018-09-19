@@ -42,11 +42,13 @@ https://www.worldcubeassociation.org/about
 
 The export contains a `metadata.json` file, with the following fields:
 
-- `exportFormatVersion`: Database export format version. If you regularly
-  process this export, we recommend that you check this value in your program
-  and and review your code if the major part of the version (the part before the
-  first `.`) changes.
 - `date`: The date and time of the export, in ISO 8601 format.
+  - Sample value: `"2018-09-19T05:04:58+02:00"`
+- `exportFormatVersion`: Database export format version.
+  - Sample value: `"1.0.0"`
+  - If you regularly process this export, we recommend that you check this value
+    in your program and and review your code if the major part of the version
+    (the part before the first `.`) changes.
 
 ## Format (version [exportFormatVersion])
 
