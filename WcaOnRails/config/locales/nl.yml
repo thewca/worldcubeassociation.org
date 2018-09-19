@@ -324,7 +324,7 @@ nl:
         #original_hash: 89f89c0
         id: id
         #original_hash: 7f3d889
-        isConfirmed: Laat organisatoren deze wedstrijd niet bewerken
+        confirmed: Laat de organisatoren niet deze wedstrijd bewerken
         #original_hash: d493e6a
         showAtAll: Maak deze wedstrijd zichtbaar voor publiek
         #original_hash: 709a232
@@ -364,13 +364,11 @@ nl:
         #original_hash: 87b7d5f
         use_wca_registration: Ik wil de WCA-website gebruiken voor aanmeldingen
         #original_hash: 9bb1965
-        competitor_limit_enabled: >-
-          Ik wil een limiet opgeven voor het aantal deelnemers dat zich kan
-          aanmelden voor deze wedstrijd.
+        competitor_limit_enabled: Maximumaantal deelnemers
         #original_hash: 749f4c9
         competitor_limit: Maximumaantal deelnemers
         #original_hash: 4a8b6f1
-        competitor_limit_reason: De reden voor de limiet op deelnemersaantal
+        competitor_limit_reason: De reden voor het maximumaantal deelnemers
         #original_hash: 3c23a67
         guests_enabled: Gasten
         #original_hash: 089cbfd
@@ -643,10 +641,9 @@ nl:
           we de staat zien)
         #original_hash: bb470cc
         information: >-
-          Informatie over een limiet van het aantal deelnemers, de aanmeldkosten
-          voor deelnemers en toeschouwers, en andere details die relevant zijn
-          voor mensen die zijn geïnteresseerd om deel te nemen of te komen
-          kijken.
+          Informatie over maximumaantal deelnemers, de aanmeldkosten voor
+          deelnemers en toeschouwers, en andere details die relevant zijn voor
+          mensen die zijn geïnteresseerd om deel te nemen of te komen kijken.
         #original_hash: b4d020f
         delegate_ids: WCA delegates van de wedstrijd.
         #original_hash: 517d376
@@ -685,7 +682,7 @@ nl:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -708,7 +705,7 @@ nl:
           voor het registratieproces, maar dit vraagt nog wat werk.
         #original_hash: 4bd7102
         competitor_limit_reason: >-
-          Wat is de reden voor de limiet op deelnemersaantal? Graag in het
+          Wat is de reden voor het maximumaantal deelnemers? Graag in het
           Engels!
         #original_hash: da39a3e
         venueAddress: ''
@@ -1628,8 +1625,8 @@ nl:
       %{profile} oplossen:
     #original_hash: f22ef22
     registration_full: >-
-      Het maximum aantal deelnemers voor deze wedstrijd is %{competitor_limit}
-      en dit aantal is bereikt. Als je je nu aanmeldt, dan kom je op een
+      Het maximumaantal deelnemers voor deze wedstrijd is %{competitor_limit} en
+      dit aantal is bereikt. Als je je nu aanmeldt, dan kom je op een
       wachtlijst. Je aanmelding wordt goed gekeurd wanneer er een plekje
       vrijkomt, dit hoeft niet het geval te zijn.
     #original_hash: 855ca9c
@@ -1790,15 +1787,13 @@ nl:
       #original_hash: 45834fd
       register_below_html: Meld je hieronder aan voor deze wedstrijd.
       #original_hash: 196725e
-      competitor_limit_is: 'Het maximum aantal deelnemers is %{competitor_limit}.'
+      competitor_limit_is: 'Het maximumaantal deelnemers is %{competitor_limit}.'
       #original_hash: 5101f65
-      no_competitor_limit: Er is geen maximum aantal deelnemers.
+      no_competitor_limit: Er is geen maximumaantal deelnemers.
       #original_hash: f979d5e
-      entry_fee_is: >-
-        Het basisbedrag voor aanmelding voor deze wedstrijd is
-        %{base_entry_fee}.
+      entry_fee_is: 'Het basisbedrag voor deelname aan deze wedstrijd is %{base_entry_fee}.'
       #original_hash: 5390a91
-      no_entry_fee: Aanmelden voor deze wedstrijd is gratis.
+      no_entry_fee: Deelname aan deze wedstrijd is gratis.
       #original_hash: 29af5c2
       use_stripe_link_html: >-
         De deelnamekosten moeten %{here} worden betaald via Stripe, na
@@ -1810,7 +1805,7 @@ nl:
       #original_hash: 16cd1ba
       refund_policy_html: >-
         Als je aanmelding wordt geannuleerd voor %{limit_date_and_time}, dan
-        krijg je %{refund_policy_percent} euro van het betaalde bedrag terug.
+        krijg je %{refund_policy_percent} van het betaalde bedrag terug.
       #original_hash: 4aca553
       no_refunds: Deelnamekosten worden niet terugbetaald.
       #original_hash: cf7be5d
@@ -3276,7 +3271,7 @@ nl:
         wedstrijd (zie <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Reglement
         Z4</a>). Zoals alle Reglementen in artikel Z, moet de WCA-delegate van
-        de wedstrijd goedkeuring krijgen van de WCA-board. Maximaantallen
+        de wedstrijd goedkeuring krijgen van de WCA-board. Maximumaantallen
         deelnemers moeten zorgvuldig woren gekozen en in lijn zijn met het
         verwachte aantal aanmeldingen. Het maximumaantal mag niet voor
         onbelangrijke reden laag worden ingesteld. Het bedoelde maximum moet al
