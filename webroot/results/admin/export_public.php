@@ -1,5 +1,31 @@
 <?php
 #----------------------------------------------------------------------
+#   Export Version
+#----------------------------------------------------------------------
+
+# We try to use semantic MAJOR.MINOR.PATCH versioning: https://semver.org/
+#
+# Guidelines for how to bump this version:
+#
+# MAJOR
+# - Remove/reorder/change the meaning any columns in a table
+# - Change the encoding for any type of result
+#
+# MINOR
+# - Add a new column to the *end* of a table
+# - Add a new table
+#
+# PATCH
+# - Fix bugs or typos in the export formatting.
+#
+# No bump
+# - Add events, formats, or countries that can be representated using the
+#   existing schema
+# - Routine database export.
+#
+$exportFormatVersion = "1.0.0";
+
+#----------------------------------------------------------------------
 #   Initialization and page contents.
 #----------------------------------------------------------------------
 
@@ -189,7 +215,10 @@ function exportPublic ( $sources ) {
 
   #--- Build the README file
   echo "<p><b>Build the README file</b></p>";
-  instantiateTemplate( 'README.md', array( 'longDate' => wcaDate( 'F j, Y' ) ) );
+  instantiateTemplate( 'README.md', array(
+    'longDate' => wcaDate( 'F j, Y' ),
+    'exportFormatVersion' => $exportFormatVersion
+  ) );
 
   #------------------------------------------
   # metadata.json
@@ -197,7 +226,7 @@ function exportPublic ( $sources ) {
 
   $metadataFile = "metadata.json";
   $metadataValue = array(
-    "exportFormatVersion" => "0.1.0",
+    "exportFormatVersion" => $exportFormatVersion,
     "date" => wcaDate( 'c' )
   );
   file_put_contents( $metadataFile, json_encode( $metadataValue ) );

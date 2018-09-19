@@ -1,6 +1,7 @@
 # World Cube Association – Results Database Export
 
-- Date:    [longDate]
+- Date: [longDate]
+- Export Format Version: [exportFormatVersion]
 - Contact: WCA Results Team (results@worldcubeassociation.org)
 - Website: https://www.worldcubeassociation.org/results
 
@@ -17,16 +18,12 @@ statistical and personal purposes.
 
 ## Allowed Use
 
-The information in this file may be re-published, in whole or in part, under the
-following conditions:
+The information in this file may be re-published, in whole or in part, as long
+as users are clearly notified of the following:
 
-- The style and format of the information must be clearly distinguishable
-  from the official WCA website.
-- Users are clearly notified of the following:
-
-  This information is based on competition results owned and maintained by the
-  World Cube Assocation, published at worldcubeassociation.org/results as of
-  [longDate].
+> This information is based on competition results owned and maintained by the
+> World Cube Assocation, published at https://worldcubeassociation.org/results
+> as of [longDate].
 
 ## Acknowledgements
 
@@ -41,7 +38,17 @@ The database contents are now maintained by the WCA Results Team, and the
 software for the database is maintained by the WCA Software Team:
 https://www.worldcubeassociation.org/about
 
-## Format
+## Metadata
+
+The export contains a `metadata.json` file, with the following fields:
+
+- `exportFormatVersion`: Database export format version. If you regularly
+  process this export, we recommend that you check this value in your program
+  and and review your code if the major part of the version (the part before the
+  first `.`) changes.
+- `date`: The date and time of the export, in ISO 8601 format.
+
+## Format (version [exportFormatVersion])
 
 The database export consists of these tables:
 
