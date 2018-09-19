@@ -23,7 +23,7 @@
 #   existing schema
 # - Routine database export.
 #
-$exportFormatVersion = "1.0.0";
+$CURRENT_EXPORT_FORMAT_VERSION = "1.0.0";
 
 #----------------------------------------------------------------------
 #   Initialization and page contents.
@@ -38,7 +38,7 @@ showChoices();
 
 if( $chosenExport ){
 
-  exportPublic( array(
+  exportPublic( $CURRENT_EXPORT_FORMAT_VERSION, array(
     'Results'      => 'SELECT   competitionId, eventId, roundTypeId, pos,
                                 best, average,
                                 personName, personId, countryId AS personCountryId,
@@ -110,7 +110,7 @@ function showChoices () {
 }
 
 #----------------------------------------------------------------------
-function exportPublic ( $sources ) {
+function exportPublic ( $exportFormatVersion, $sources ) {
 #----------------------------------------------------------------------
 
   #--- No time limit
