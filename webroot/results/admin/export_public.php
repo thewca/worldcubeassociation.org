@@ -1,6 +1,6 @@
 <?php
 #----------------------------------------------------------------------
-#   Export Version
+#   Export Format Version
 #----------------------------------------------------------------------
 
 # We try to use semantic MAJOR.MINOR.PATCH versioning: https://semver.org/
