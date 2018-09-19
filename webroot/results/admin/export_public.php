@@ -229,7 +229,7 @@ function exportPublic ( $exportFormatVersion, $sources ) {
     "exportFormatVersion" => $exportFormatVersion,
     "date" => wcaDate( 'c' )
   );
-  file_put_contents( $metadataFile, json_encode( $metadataValue ) );
+  file_put_contents( $metadataFile, json_encode( $metadataValue, JSON_PRETTY_PRINT ) );
 
   #------------------------------------------
   # ZIPs
