@@ -8,17 +8,17 @@ FactoryBot.define do
     end
 
     personId { person.id }
-    pos 1
+    pos { 1 }
     competitionId { competition.id }
-    eventId "333oh"
-    roundTypeId "f"
-    formatId "a"
+    eventId { "333oh" }
+    roundTypeId { "f" }
+    formatId { "a" }
     value1 { best }
     value2 { average }
     value3 { average }
     value4 { average }
     value5 { average }
-    best 2000
-    average 5000
+    best { 2000 }
+    average { 5000 }
   end
 end
