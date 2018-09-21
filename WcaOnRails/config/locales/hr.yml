@@ -334,7 +334,7 @@ hr:
         #original_hash: 89f89c0
         id: Identifikacija
         #original_hash: 7f3d889
-        isConfirmed: Ne dopusti organizatorima uređivanje ovog natjecanja
+        confirmed: Zabrani organizatorima uređivanje ovog natjecanja
         #original_hash: d493e6a
         showAtAll: Napravi natjecanje vidljivim
         #original_hash: 709a232
@@ -361,8 +361,8 @@ hr:
         generate_website: >-
           Htio bih koristiti WCA web-stranicu umjesto vanjske za dodatne
           informacije.
-        #original_hash: dd88e47
-        base_entry_fee_lowest_denomination: Osnovna kotizacija u najnižoj vrijednosti
+        #original_hash: 6cf623b
+        base_entry_fee_lowest_denomination: Osnovna kotizacija
         #original_hash: 28a6fbb
         currency_code: Kod valute
         #original_hash: 2e3ed8b
@@ -375,10 +375,8 @@ hr:
         information: Informacije
         #original_hash: 87b7d5f
         use_wca_registration: Htio bih koristiti WCA web-stranicu za registracije
-        #original_hash: a2dfcf8
-        competitor_limit_enabled: >-
-          Htio bi specificirati ograničenje broja natjecatelja koji će
-          pristupiti ovom natjecanju.
+        #original_hash: 9bb1965
+        competitor_limit_enabled: Natjecateljski limit
         #original_hash: 749f4c9
         competitor_limit: Maksimalan broj natjecatelja
         #original_hash: 4a8b6f1
@@ -405,14 +403,27 @@ hr:
         extra_registration_requirements: Dodatni zahtjevi za registraciju
         #original_hash: 2529d04
         on_the_spot_registration: Registracije na licu mjesta
-        #original_hash: bbff74c
-        on_the_spot_entry_fee_lowest_denomination: Kotizacija na licu mjesta
+        #original_hash: 69780b5
+        on_the_spot_entry_fee_lowest_denomination: Osnovna kotizacija na licu mjesta
         #original_hash: efbdbab
         refund_policy_percent: Postotak povrata novca
         #original_hash: b332299
         refund_policy_limit_date: Datumski rok za povrat novca
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Kotizacija za goste/gledatelje
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Želim da natjecatelji predaju svoje slagalice tijekom registracije kao
+          u Regulaciji Z1)
+        #original_hash: 466aca7
+        regulation_z1_reason: Razlog za Z1)
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Želim specifično odabrati natjecatelje koji se direktno kvalificiraju
+          u određene runde određenih disciplina bazirano na rezultatima od
+          specifičnih prijašnjih natjecanja kao rečeno u Regulaciji Z3)
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Razlog za Z3)
       registration:
         #original_hash: 3c23a67
         guests: Gosti
@@ -683,13 +694,13 @@ hr:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 82ad56b
+        #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Osnovna kotizacija za natjecanje. Kotizacija će biti prikazana na
           stranici informacija o natjecanju i na stranici za registraciju,
           ukoliko se koristi. Ukoliko je postavljeno na 0, prikazat će se
           rečenica koja govori da će se registracije prihvatiti besplatno.
-        #original_hash: 866bc05
+        #original_hash: 9735ddf
         currency_code: Kod valute za kotizaciju.
         #original_hash: da39a3e
         guests_enabled: ''
@@ -698,7 +709,7 @@ hr:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -709,13 +720,16 @@ hr:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
-          Zasad je ovaj broj samo u informacijskoj svrsi i ne sprječava ljude da
-          se registriraju. Radimo na dodavanju podrške ovom registracijskom
-          obliku, no to zahtijeva puno posla.
-        #original_hash: b9bc84d
-        competitor_limit: Dozvoljeni broj natjecatelja na ovom natjecanju.
+          Iako nije potrebno reći natjecateljski limit prema Pravilniku, toplo
+          se preporučuje.
+        #original_hash: b7b599b
+        competitor_limit: >-
+          Dozvoljeni broj natjecatelja na ovom natjecanju. Zasad je ovaj broj
+          informativnog karaktera i ne sprječava više ljudi da se registriraju.
+          Radimo na dodavanju eksplicitne podrške u registracijskom toku, ali to
+          prvo zahtjeva dodatni rad.
         #original_hash: 4bd7102
         competitor_limit_reason: >-
           Koji je razlog ograničavanja broja natjecatelja? Molimo Vas ispunite
@@ -752,6 +766,18 @@ hr:
           goste/gledatelje se ne mogu uređivati preko web-stranice. Ukoliko je
           ovaj broj stavljen na 0, prikazat će se rečenica koja govori da
           gledatelji mogu doći besplatno.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Objasnite zašto želite iskoristiti Regulaciju Z1). Ispunite ovo na
+          engleskom jeziku!
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Objasnite zašto želite iskoristiti Regulaciju Z3). Ispunite ovo na
+          engleskom jeziku!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -914,6 +940,11 @@ hr:
           'true': Pitaj u vezi gostiju
           #original_hash: f8c2332
           'false': Ne pitaj u vezi gostiju
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Želim specificirati natjecateljski limit
+          #original_hash: 5b581b5
+          'false': NE ŽELIM specificirati natjecateljski limit
         on_the_spot_registration:
           #original_hash: 0c521ca
           'true': Registracije na licu mjesta će se prihvatiti
@@ -1668,7 +1699,7 @@ hr:
       kotizaciju unaprijed. Provjerite web-stranicu natjecanja za detalje.
     #original_hash: 58b1a3c
     accepted: Vaša registracija je prihvaćena!
-    #original_hash: 70de60f
+    #original_hash: bcd7d70
     entry_fees_fully_paid: 'Platili ste %{paid}, što pokriva troškove kotizacije.'
     #original_hash: 2e5d1b9
     will_pay_here: Platit ćete nakon prilaganja Vaše registracije
@@ -1690,7 +1721,7 @@ hr:
         #original_hash: bf3a39e
         donation: Neobavezna donacija koja će ići direktno organizacijskom timu
       labels:
-        #original_hash: 948ec72
+        #original_hash: 4de825f
         entry_fees: Kotizacije
         #original_hash: 2c09302
         donation: Donacija
@@ -1812,8 +1843,8 @@ hr:
         natjecatelja.
       #original_hash: 5101f65
       no_competitor_limit: Ne postoji maksimalan broj natjecatelja.
-      #original_hash: 86cf09f
-      entry_fee_is: 'Kotizacija za ovo natjecanje iznosi %{base_entry_fee}.'
+      #original_hash: f979d5e
+      entry_fee_is: 'Osnovna kotizacija za ovo natjecanje iznosi %{base_entry_fee}.'
       #original_hash: 5390a91
       no_entry_fee: Registracija za ovo natjecanje je potpuno besplatna.
       #original_hash: 29af5c2
@@ -1830,9 +1861,9 @@ hr:
         ćete povrat novca %{refund_policy_percent} od Vaše kotizacije.
       #original_hash: 4aca553
       no_refunds: Kotizacije se neće vraćati ni pod kojim okolnostima.
-      #original_hash: b38fa7b
+      #original_hash: cf7be5d
       on_the_spot_registration: >-
-        Registracije na licu će se prihvaćati s iznosom kotizacije od
+        Registracije na licu će se prihvaćati s iznosom osnovne kotizacije od
         %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Registracije na licu mjesta će biti prihvaćene potpuno besplatno.
@@ -3152,7 +3183,7 @@ hr:
     paragraph2:
       #original_hash: f20dd3b
       title: Očekivani troškovi organiziranja natjecanja
-      #original_hash: ab53dda
+      #original_hash: f16a06f
       content: >-
         Očekivani troškovi se uvelike razlikuju od države do države i određeni
         su s nekoliko faktora kao većina prostora i ostali uvjeti. Pokrivanje
@@ -3246,7 +3277,7 @@ hr:
     paragraph6:
       #original_hash: ce4c3d0
       title: Upravljanje registracijama
-      #original_hash: cb13cd0
+      #original_hash: bd669a1
       content: >-
         Registracije se moraju upravljati po principu "tko prvi, njegovo", što u
         znači da se ranije registracije mroaju tretirati kao prve. Ako se
@@ -3261,7 +3292,7 @@ hr:
         čekanja. Kada registrirani i prihvaćeni natjecatelji otkažu svoje
         prisustvo, oni mogu biti zamijenjeni za prve natjecatelje na listi
         čekanja.
-      #original_hash: 1b2ea79
+      #original_hash: 802b34f
       content2: >-
         Ako se kotizacije naplaćuju, preporučljivo je ponuditi prvoj osobi na
         listi čekanja registraciju, ali i rok (npr. 48h) plaćanja kotizacije.
