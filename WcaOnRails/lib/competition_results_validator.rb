@@ -99,6 +99,9 @@ class CompetitionResultsValidator
   SAME_PERSON_NAME_WARNING = "Person '%{name}' exists with WCA ID %{wca_id} in the WCA database."\
     " A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
 
+  COMPETITOR_LIMIT_WARNING = "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit})."\
+  "Unless specific agreement was made when announcing the competition (such as a per-day competitor limit), the results of the competitors registered after the competitor limit was reached must be removed."
+
   def initialize(competition_id, check_real_results = false)
     @errors = {
       persons: [],
@@ -122,7 +125,7 @@ class CompetitionResultsValidator
       },
     }
 
-    competition = Competition.includes(associations).find(competition_id)
+    @competition = Competition.includes(associations).find(competition_id)
 
     @check_real_results = check_real_results
 
@@ -136,7 +139,7 @@ class CompetitionResultsValidator
     end
 
     @persons = if @check_real_results
-                 competition.competitors
+                 @competition.competitors
                else
                  InboxPerson.where(competitionId: competition_id)
                end
@@ -151,14 +154,14 @@ class CompetitionResultsValidator
     @persons_by_id = Hash[@persons.map { |person| [@check_real_results ? person.wca_id : person.id, person] }]
 
     # Map a competition's (expected!) round id (eg: "444-f") to its corresponding object
-    @expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
+    @expected_rounds_by_ids = Hash[@competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
 
     # Group actual results by their round id
     results_by_round_id = @results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
 
     check_persons
 
-    check_events_match(competition.events)
+    check_events_match(@competition.events)
 
     @number_of_non_matching_rounds = check_rounds_match
 
@@ -166,9 +169,11 @@ class CompetitionResultsValidator
       # Only check these if all rounds match: this way we can rely
       # on the expected competition_events!
       check_individual_results(results_by_round_id)
-      check_avancement_conditions(results_by_round_id, competition.competition_events)
+      check_avancement_conditions(results_by_round_id, @competition.competition_events)
       check_scrambles
     end
+
+    check_competitor_limit
 
     @total_errors = @errors.map { |key, value| value }.map(&:size).reduce(:+)
     @total_warnings = @warnings.map { |key, value| value }.map(&:size).reduce(:+)
@@ -500,5 +505,11 @@ class CompetitionResultsValidator
     # Cleanup possible duplicate errors and warnings from cumulative time limits
     @errors[:results].uniq!
     @warnings[:results].uniq!
+  end
+
+  def check_competitor_limit
+    unless @persons.size <= @competition.competitor_limit
+      @warnings[:persons] << format(COMPETITOR_LIMIT_WARNING, n_competitors: @persons.size, competitor_limit: @competition.competitor_limit)
+    end
   end
 end
