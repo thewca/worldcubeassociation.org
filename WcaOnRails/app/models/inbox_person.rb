@@ -3,6 +3,8 @@
 class InboxPerson < ApplicationRecord
   self.table_name = "InboxPersons"
 
+  alias_attribute :wca_id, :wcaId
+
   validates :name, presence: true
   validates :dob, presence: true
   validates :countryId, presence: true
@@ -15,6 +17,6 @@ class InboxPerson < ApplicationRecord
   end
 
   def country
-    Country.c_find(countryId)
+    Country.find_by_iso2(countryId)
   end
 end

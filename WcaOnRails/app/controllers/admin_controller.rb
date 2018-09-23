@@ -42,6 +42,11 @@ class AdminController < ApplicationController
     @results_validator = CompetitionResultsValidator.new(@competition.id)
   end
 
+  def check_results
+    @competition = competition_from_params
+    @results_validator = CompetitionResultsValidator.new(@competition.id, true)
+  end
+
   def create_results
     @competition = competition_from_params
 
