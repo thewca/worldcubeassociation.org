@@ -31,7 +31,7 @@ class CompetitionResultsValidator
         "items" => { "type" => "string" },
       },
     },
-    "required" => ["group", "scrambles", "extraScrambles"],
+    "required" => ["group", "scrambles"],
   }.freeze
 
   ROUND_JSON_SCHEMA = {
