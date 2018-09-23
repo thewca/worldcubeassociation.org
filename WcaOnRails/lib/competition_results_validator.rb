@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CompetitionResultsValidator
-  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results, :inbox_persons, :inbox_results, :scrambles, :number_of_non_matching_rounds, :expected_rounds_by_ids
+  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results, :persons, :persons_by_id, :results, :scrambles, :number_of_non_matching_rounds, :expected_rounds_by_ids, :check_real_results
 
   INDIVIDUAL_RESULT_JSON_SCHEMA = {
     "type" => "object",
@@ -99,7 +99,7 @@ class CompetitionResultsValidator
   SAME_PERSON_NAME_WARNING = "Person '%{name}' exists with WCA ID %{wca_id} in the WCA database."\
     " A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
 
-  def initialize(competition_id)
+  def initialize(competition_id, check_real_results = false)
     @errors = {
       persons: [],
       events: [],
@@ -123,15 +123,24 @@ class CompetitionResultsValidator
     }
 
     competition = Competition.includes(associations).find(competition_id)
-    @inbox_results = InboxResult.sorted_for_competition(competition_id)
-    @has_results = inbox_results.any?
+
+    @check_real_results = check_real_results
+
+    result_model = @check_real_results ? Result : InboxResult
+    @results = result_model.sorted_for_competition(competition_id)
+    @has_results = @results.any?
     unless @has_results
       @total_errors = 1
       @errors[:results] << "The competition has no result."
       return
     end
 
-    @inbox_persons = InboxPerson.where(competitionId: competition_id)
+    @persons = if @check_real_results
+                 competition.competitors
+               else
+                 InboxPerson.where(competitionId: competition_id)
+               end
+
     @scrambles = Scramble.where(competitionId: competition_id)
 
     # check persons
@@ -139,15 +148,15 @@ class CompetitionResultsValidator
     # is done in the SQL schema.
 
     # Map a personId to its corresponding object
-    persons_by_id = Hash[inbox_persons.map { |person| [person.id, person] }]
+    @persons_by_id = Hash[@persons.map { |person| [@check_real_results ? person.wca_id : person.id, person] }]
 
     # Map a competition's (expected!) round id (eg: "444-f") to its corresponding object
     @expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
 
     # Group actual results by their round id
-    results_by_round_id = @inbox_results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
+    results_by_round_id = @results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
 
-    check_persons(persons_by_id)
+    check_persons
 
     check_events_match(competition.events)
 
@@ -156,7 +165,7 @@ class CompetitionResultsValidator
     if @number_of_non_matching_rounds == 0
       # Only check these if all rounds match: this way we can rely
       # on the expected competition_events!
-      check_individual_results(results_by_round_id, persons_by_id)
+      check_individual_results(results_by_round_id)
       check_avancement_conditions(results_by_round_id, competition.competition_events)
       check_scrambles
     end
@@ -196,7 +205,7 @@ class CompetitionResultsValidator
 
   def check_events_match(competition_events)
     expected = competition_events.map(&:id)
-    real = @inbox_results.map(&:eventId).uniq
+    real = @results.map(&:eventId).uniq
     # Check for missing/unexpected events and rounds
     # It should handle cases where:
     #   - an event was added/deleted
@@ -213,7 +222,7 @@ class CompetitionResultsValidator
   def check_rounds_match
     # Check that rounds match what was declared, and return the number of difference
     expected = @expected_rounds_by_ids.keys
-    real = @inbox_results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
+    real = @results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
     unexpected = real - expected
     missing = expected - real
     unexpected.each do |round_id|
@@ -281,17 +290,17 @@ class CompetitionResultsValidator
     end
   end
 
-  def check_persons(persons_by_id)
-    detected_person_ids = persons_by_id.keys
-    persons_with_results = @inbox_results.map(&:personId)
+  def check_persons
+    detected_person_ids = @persons_by_id.keys
+    persons_with_results = @results.map(&:personId)
     (detected_person_ids - persons_with_results).each do |person_id|
-      @errors[:persons] << "Person with id #{person_id} (#{persons_by_id[person_id].name}) has no result"
+      @errors[:persons] << "Person with id #{person_id} (#{@persons_by_id[person_id].name}) has no result"
     end
     (persons_with_results - detected_person_ids).each do |person_id|
       @errors[:persons] << "Results for unknown person with id #{person_id}"
     end
 
-    without_wca_id, with_wca_id = persons_by_id.map { |_, p| p }.partition { |p| p.wcaId.empty? }
+    without_wca_id, with_wca_id = @persons_by_id.map { |_, p| p }.partition { |p| p.wca_id.empty? }
     if without_wca_id.any?
       existing_person_in_db = Person.where(name: without_wca_id.map(&:name))
       existing_person_in_db.each do |p|
@@ -314,28 +323,28 @@ class CompetitionResultsValidator
         @errors[:persons] << "Opening parenthethis in '#{p.name}' must be preceeded by a space."
       end
     end
-    existing_person_by_wca_id = Hash[Person.current.where(wca_id: with_wca_id.map(&:wcaId)).map { |p| [p.wca_id, p] }]
+    existing_person_by_wca_id = Hash[Person.current.where(wca_id: with_wca_id.map(&:wca_id)).map { |p| [p.wca_id, p] }]
     with_wca_id.each do |p|
-      existing_person = existing_person_by_wca_id[p.wcaId]
+      existing_person = existing_person_by_wca_id[p.wca_id]
       if existing_person
         # WRT wants to show warnings for wrong DOB or gender, but error for wrong country.
         # (If I get this right, we do not actually update existing persons from InboxPerson)
         unless p.dob == existing_person.dob
-          @warnings[:persons] << "Wrong birthdate for #{p.name} (#{p.wcaId}), expected '#{existing_person.dob}' got '#{p.dob}'."
+          @warnings[:persons] << "Wrong birthdate for #{p.name} (#{p.wca_id}), expected '#{existing_person.dob}' got '#{p.dob}'."
         end
         unless p.gender == existing_person.gender
-          @warnings[:persons] << "Wrong gender for #{p.name} (#{p.wcaId}), expected '#{existing_person.gender}' got '#{p.gender}'."
+          @warnings[:persons] << "Wrong gender for #{p.name} (#{p.wca_id}), expected '#{existing_person.gender}' got '#{p.gender}'."
         end
-        unless p.countryId == existing_person.country_iso2
-          @errors[:persons] << "Wrong country for #{p.name} (#{p.wcaId}), expected '#{existing_person.country_iso2}' got '#{p.countryId}'."
+        unless p.country.id == existing_person.country.id
+          @errors[:persons] << "Wrong country for #{p.name} (#{p.wca_id}), expected '#{existing_person.country_iso2}' got '#{p.countryId}'."
         end
       else
-        @errors[:persons] << "Person #{p.name} has a WCA ID which does not exist: #{p.wcaId}."
+        @errors[:persons] << "Person #{p.name} has a WCA ID which does not exist: #{p.wca_id}."
       end
     end
   end
 
-  def check_results_for_cutoff(cutoff, result, round_id, round, persons_by_id)
+  def check_results_for_cutoff(cutoff, result, round_id, round)
     number_of_attempts = cutoff.number_of_attempts
     cutoff_result = SolveTime.new(round.event.id, :single, cutoff.attempt_result)
     solve_times = result.solve_times
@@ -345,7 +354,7 @@ class CompetitionResultsValidator
     other_results = solve_times[number_of_attempts, round.format.expected_solve_count - number_of_attempts]
     qualifying_results = maybe_qualifying_results.select { |solve_time| solve_time < cutoff_result }
     skipped, unskipped = other_results.partition(&:skipped?)
-    person = persons_by_id[result.personId]
+    person = @persons_by_id[result.personId]
     if qualifying_results.any?
       # Meets the cutoff, no result should be SKIPPED
       if skipped.any?
@@ -359,7 +368,7 @@ class CompetitionResultsValidator
     end
   end
 
-  def check_individual_results(results_by_round_id, persons_by_id)
+  def check_individual_results(results_by_round_id)
     # For results
     #   - average/best check is done in validation
     #   - "correct" number of attempts is done in validation (but NOT cutoff times)
@@ -384,7 +393,7 @@ class CompetitionResultsValidator
       # Number of tied competitors, *without* counting the first one
       number_of_tied = 0
       results_for_round.each_with_index do |result, index|
-        person_info = persons_by_id[result.personId]
+        person_info = @persons_by_id[result.personId]
         unless person_info
           # These results are for an undeclared person, skip them as an error has
           # already been registered
@@ -411,7 +420,7 @@ class CompetitionResultsValidator
         end
 
         # Checks for cutoff
-        check_results_for_cutoff(cutoff_for_round, result, round_id, round_info, persons_by_id) if cutoff_for_round
+        check_results_for_cutoff(cutoff_for_round, result, round_id, round_info) if cutoff_for_round
 
         # Checks for time limits if it can be user-specified
         if !["333mbf", "333fm"].include?(result.eventId)
@@ -482,7 +491,7 @@ class CompetitionResultsValidator
         # Check for possible similar results
         similar = results_similar_to(result, index, results_for_round)
         similar.each do |r|
-          similar_person_name = persons_by_id[r.personId]&.name || "UnknownPerson"
+          similar_person_name = @persons_by_id[r.personId]&.name || "UnknownPerson"
           @warnings[:results] << "[#{round_id}] Result of #{person_info.name} is similar to the results of #{similar_person_name}."
         end
       end

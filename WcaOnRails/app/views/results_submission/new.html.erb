@@ -15,7 +15,7 @@
     </p>
     <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @results_validator.has_results %>
 
-    <%= render "check_inbox_results_panel", results_validator: @results_validator %>
+    <%= render "check_results_panel", results_validator: @results_validator %>
 
     <%= render "results_submission_panel",
       has_errors: @results_validator.total_errors != 0,

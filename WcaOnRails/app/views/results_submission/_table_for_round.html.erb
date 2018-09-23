@@ -30,15 +30,15 @@
         </td>
         <td class="name">
           <% person = persons_by_id[result.personId] %>
-          <% unless person.wcaId.blank? %>
-            <%= link_to person.name, person_path(person.wcaId) %>
+          <% unless person.wca_id.blank? %>
+            <%= link_to person.name, person_path(person.wca_id) %>
           <% else %>
             <%= person.name %>
           <% end %>
         </td>
         <td class="single"><%= result.best_solve.clock_format %></td>
         <td class="average"><%= result.average_solve.clock_format %></td>
-        <td class="country"><%= Country.find_by_iso2(person.countryId).name %></td>
+        <td class="country"><%= person.country.name %></td>
         <%= solve_tds_for_result(result) %>
 
         <% # Extra column for .table-greedy-last-column %>

@@ -11,7 +11,11 @@
 <div class="panel panel-<%= panel_style %>">
   <div class="panel-heading heading-as-link <%= "collapsed" unless results_validator.has_results %>" data-toggle="collapse" data-target="#collapse-check-results">
     <h3 class="panel-title">
-      Check imported results
+      <% if results_validator.check_real_results %>
+        Check competition's results
+      <% else %>
+        Check imported results
+      <% end %>
       <span class="collapse-indicator"></span>
     </h3>
   </div>
@@ -30,13 +34,24 @@
         <% end %>
       <% end %>
     <% elsif !results_validator.has_results %>
-      <p class="text-danger">No results submitted yet.</p>
+      <p class="text-danger">
+        <% if results_validator.check_real_results %>
+          No results for the competition yet.
+        <% else %>
+          No results submitted yet.
+        <% end %>
+      </p>
     <% else %>
-      <p>No error detected in the submitted results.</p>
+      <p>No error detected in the results.</p>
     <% end %>
     <h3>Warnings</h3>
     <% if results_validator.total_warnings > 0 %>
-      <p>Please pay attention to the warnings below. You may need to add a comment about them when submitting these results to the WRT!</p>
+      <p>
+        Please pay attention to the warnings below.
+        <% unless results_validator.check_real_results %>
+          You may need to add a comment about them when submitting these results to the WRT!
+        <% end %>
+      </p>
       <% results_validator.warnings.each do |type, warnings| %>
         <% if warnings.any? %>
           <h4>Warnings detected in <%= type %></h4>
@@ -48,9 +63,15 @@
         <% end %>
       <% end %>
     <% elsif !results_validator.has_results %>
-      <p class="text-danger">No results submitted yet.</p>
+      <p class="text-danger">
+        <% if results_validator.check_real_results %>
+          No results for the competition yet.
+        <% else %>
+          No results submitted yet.
+        <% end %>
+      </p>
     <% else %>
-      <p>No warning detected in the submitted results.</p>
+      <p>No warning detected in the results.</p>
     <% end %>
   </div>
 </div>

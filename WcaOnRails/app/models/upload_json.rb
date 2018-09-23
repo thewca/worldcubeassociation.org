@@ -77,7 +77,7 @@ class UploadJson
           # Import scrambles for round
           round["groups"].each do |group|
             ["scrambles", "extraScrambles"].each do |scramble_type|
-              group[scramble_type].each_with_index do |scramble, index|
+              group[scramble_type]&.each_with_index do |scramble, index|
                 new_scramble_attributes = {
                   competitionId: competition_id,
                   eventId: event["eventId"],
