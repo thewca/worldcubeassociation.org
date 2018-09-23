@@ -230,11 +230,24 @@ class CompetitionResultsValidator
     real = @results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
     unexpected = real - expected
     missing = expected - real
+    missing.each do |round_id|
+      event_id, round_type_id = round_id.split("-")
+      equivalent_round_id = "#{event_id}-#{RoundType.equivalent(round_type_id)}"
+      if unexpected.include?(equivalent_round_id)
+        unexpected.delete(equivalent_round_id)
+        round = @expected_rounds_by_ids[round_id]
+        turned_into = if round.round_type.combined?
+                        "is not combined anymore"
+                      else
+                        "has turned into a combined round"
+                      end
+        @errors[:rounds] << "It looks like '#{round.name}' #{turned_into} in the results. Please update the corresponding round in the competition's manage events page."
+      else
+        @errors[:rounds] << "Missing results for round #{round_id}"
+      end
+    end
     unexpected.each do |round_id|
       @errors[:rounds] << "Unexpected results for round #{round_id}"
-    end
-    missing.each do |round_id|
-      @errors[:rounds] << "Missing results for round #{round_id}"
     end
     unexpected.size + missing.size
   end
@@ -508,7 +521,7 @@ class CompetitionResultsValidator
   end
 
   def check_competitor_limit
-    unless @persons.size <= @competition.competitor_limit
+    if @competition.competitor_limit && @persons.size > @competition.competitor_limit
       @warnings[:persons] << format(COMPETITOR_LIMIT_WARNING, n_competitors: @persons.size, competitor_limit: @competition.competitor_limit)
     end
   end

@@ -20,4 +20,24 @@ class RoundType < ApplicationRecord
   def combined?
     %w(c d e g h).include?(id)
   end
+
+  # Returns the equivalent round_type_id with cutoff (or without cutoff)
+  def self.equivalent(round_type_id)
+    case round_type_id
+    when "c"
+      "f"
+    when "f"
+      "c"
+    when "d"
+      "1"
+    when "1"
+      "d"
+    when "e"
+      "2"
+    when "2"
+      "e"
+    when "g"
+      "3"
+    end
+  end
 end
