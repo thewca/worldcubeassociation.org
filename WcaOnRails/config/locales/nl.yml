@@ -401,6 +401,20 @@ nl:
         refund_policy_limit_date: Uiterste datum voor teruggave
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Bezoekerskosten
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Ik wil dat deelnemers hun puzzels inleveren tijdens de registratie, op
+          basis van Reglement Z1)
+        #original_hash: 466aca7
+        regulation_z1_reason: Reden voor Z1)
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Ik wil deelnemers selecteren die zich rechtstreeks voor bepaalde
+          ronden van de bepaalde wedstrijdonderdelen kwalificeren, gebaseerd op
+          resultaten van specifieke eerdere wedstrijden, op basis van Reglement
+          Z3)
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Reden voor Z3)
       registration:
         #original_hash: 3c23a67
         guests: Gasten
@@ -736,6 +750,18 @@ nl:
           Dit getal is ter informatie, de toegangsprijs voor gasten kun je niet
           via deze website regelen. Als het bedrag 0 is, dan wordt een zin
           getoond dat gasten gratis toegang hebben.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Licht hier toe waarom je Reglement Z1) wilt toepassen. Graag in het
+          Engels!
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Licht hier toe waarom je Reglement Z3) wilt toepassen. Graag in het
+          Engels!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
