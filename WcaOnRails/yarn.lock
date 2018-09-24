@@ -3180,9 +3180,9 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
-flag-icon-css@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-3.0.0.tgz#a67cb3913973e38a8117e738ebbe9081049d8127"
+flag-icon-css@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-3.2.0.tgz#a9898b92078505ce5249fe8bba071518d6ae7880"
 
 flatten@^1.0.2:
   version "1.0.2"
