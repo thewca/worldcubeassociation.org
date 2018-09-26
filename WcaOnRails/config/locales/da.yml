@@ -376,9 +376,9 @@ da:
         #original_hash: 089cbfd
         receive_registration_emails: Send mig en email når nogen tilmelder sig til denne konkurrence.
         #original_hash: d4aeed9
-        registration_open: Registrering åben
+        registration_open: Tilmelding er åben
         #original_hash: f8153a2
-        registration_close: Luk tilmelding
+        registration_close: Tilmelding er lukket
         #original_hash: d7020f4
         remarks: Bemærkninger
         #original_hash: c305010
@@ -403,6 +403,19 @@ da:
         refund_policy_limit_date: Sidste frist for tilbagebetaling
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Indgangsgebyr for tilskuere
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Jeg vil gerne have at deltagerne afleverer terninger under tilmelding,
+          som beskrevet i regel Z1)
+        #original_hash: 466aca7
+        regulation_z1_reason: Årsag for Z1)
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Jeg vil gerne vælge deltagere, som direkte kvalificerer sig til
+          bestemte runder af bestemte discipliner, på baggrund af resultaterne
+          fra en specifik tidligere konkurrence, som beskrevet i regel Z3)
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Årsag for Z3)
       registration:
         #original_hash: 3c23a67
         guests: Gæster
@@ -739,6 +752,18 @@ da:
           blive håndteret gennem denne hjemmeside. Hvis det er sat til 0, så vil
           en sætning blive tilføjet, der vil sige, at det er gratis for
           tilskuere.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Uddyb venligst hvorfor du gerne vil bruge regel Z1). Udfyld det her på
+          engelsk!
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Uddyb venligst hvorfor du gerne vil bruge regel Z3). Udfyld det her på
+          engelsk!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1200,9 +1225,9 @@ da:
         tilknyttet til din konto.
       #original_hash: 7d605f8
       info_never_competed_html: >-
-        Hvis du aldrig har deltaget før, kan du gå til en konkurrence %{comp}!
-        Et WCA ID vil blive oprettet for dig når resultaterne fra din første
-        konkurrence bliver offentliggjort.
+        Hvis du aldrig har deltaget før, kan du gå til en %{comp}! Et WCA ID vil
+        blive oprettet for dig når resultaterne fra din første konkurrence
+        bliver offentliggjort.
       #original_hash: f28bf87
       submit_value: Gør krav på dit WCA ID
     edit_avatar_thumbnail:
@@ -2140,7 +2165,7 @@ da:
         #original_hash: adab509
         calendar: Kalender
       #original_hash: 017e4d8
-      display_for_room: 'Hvis skema for:'
+      display_for_room: 'Vis skema for:'
       range:
         #original_hash: 3f66052
         from: Fra
@@ -2688,16 +2713,15 @@ da:
         forslag, og beskrevet i WCA Regelsæt. Den vigtigeste pligt for en
         delegeret er at holde øje med konkurrencer på vegne af WCA. En WCA
         Delegeret er ansvarlig for at sikre sig at alle WCA konkurrencer
-        forløber i overensstemmelse med WCA's mål, ånd, og regelsæt. WCA skelner
-        mellem <strong>WCA Senior Delegerede</strong>, <strong>WCA
-        Delegerede</strong> og <strong>WCA Kandidat
-        Delegerede</strong>%{see_link}.</p> <p>I forlængelse til deres pligter
-        som WCA Delegerede, så er en WCA Senior Delegeret ansvarlig for at holde
-        styr over WCA Delegerede i sit område, og kan blive kontaktet, hvis der
-        er nogle regionale problemer.</p> <p>Nye Delegerede er først skrevet op
-        som WCA Kandidat Delegerede. Derefter skal de vise at de kan finde ud af
-        at holde styr over WCA konkurrencer, før at de kan blive forfremmet til
-        WCA Delegerede.</p>
+        forløber korrekt efter WCA's mål, ånd, og regelsæt. WCA skelner mellem
+        <strong>WCA Senior Delegerede</strong>, <strong>WCA Delegerede</strong>
+        og <strong>WCA Kandidat Delegerede</strong>%{see_link}.</p> <p>I
+        forlængelse til deres pligter som WCA Delegerede, så er en WCA Senior
+        Delegeret ansvarlig for at holde styr over WCA Delegerede i sit område,
+        og kan blive kontaktet, hvis der er nogle regionale problemer.</p>
+        <p>Nye Delegerede er først skrevet op som WCA Kandidat Delegerede.
+        Derefter skal de vise at de kan finde ud af at holde styr over WCA
+        konkurrencer, før at de kan blive forfremmet til WCA Delegerede.</p>
       #original_hash: 27d18ac
       see_link_html: ' (see %{link})'
       #original_hash: 5b01fcc
