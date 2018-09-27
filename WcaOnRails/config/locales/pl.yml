@@ -417,6 +417,19 @@ pl:
         refund_policy_limit_date: Ostateczny termin zwracania płatności
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Wpisowe dla gości
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Chciałbym wymagać od zawodników dostarczenia układanek podczas
+          rejestracji zgodnie z Punktem Z1) Regulaminu
+        #original_hash: 466aca7
+        regulation_z1_reason: Powód dla zastosowania Z1)
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Chciałbym wyselekcjonować zawodników, którzy bezpośrednio kwalifikują
+          się do ustalonych rund ustalonych konkurenji, na podstawie wyników
+          konkretnych wcześniejszych zawodów zgodnie z Punktem Z3) Regulaminu
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Powód dla zastosowania Z3)
       registration:
         #original_hash: 3c23a67
         guests: Goście
@@ -761,6 +774,18 @@ pl:
           nie może być zarządzane za pomocą strony. Jeżeli wynosi 0, zostanie
           wyświetlone zdanie informujące o tym, że wstęp dla widzów jest
           darmowy.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Opisz dlaczego chciałbyś zastosować Punkt Z1) Regulaminu. Prosimy o
+          wypełnienie w języku angielskim.
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Opisz dlaczego chciałbyś zastosować Punkt Z3) Regulaminu. Prosimy o
+          wypełnienie w języku angielskim.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
