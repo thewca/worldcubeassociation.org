@@ -326,7 +326,7 @@ fr:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: Bloquer l'édition pour les organisateurs
+        confirmed: Ne pas laisser les organisateurs modifier cette compétition
         #original_hash: d493e6a
         showAtAll: Rendre la compétition publique
         #original_hash: 709a232
@@ -407,6 +407,20 @@ fr:
         refund_policy_limit_date: Date limite pour les remboursements
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Frais d'inscription pour les accompagnateurs
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Je souhaite imposer aux compétiteurs la soumission de leurs
+          casse-têtes pendant l'inscription comme le prévoit la Règle Z1.
+        #original_hash: 466aca7
+        regulation_z1_reason: Raison pour l'utilisation de Z1
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Je souhaite sélectionner les compétiteurs qui se qualifient
+          directement pour certains tours de certaines épreuves, en se basant
+          sur les résultats de certaines compétitions, comme le prévoit la Règle
+          Z3
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Raison pour l'utilisation de Z3
       registration:
         #original_hash: 3c23a67
         guests: Accompagnateurs
@@ -699,7 +713,7 @@ fr:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -757,6 +771,18 @@ fr:
           d'inscription pour les accompagnateurs ne peuvent pas être gérés sur
           ce site. Si mis à 0, une phrase indiquera que les accompagnateurs et
           spectateurs peuvent venir gratuitement.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Merci de détailler ici pourquoi vous souhaitez utiliser la Règle Z1.
+          Merci de remplir ce champ en anglais !
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Merci de détailler ici pourquoi vous souhaitez utiliser la Règle Z3.
+          Merci de remplir ce champ en anglais !
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
