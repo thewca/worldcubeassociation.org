@@ -10,12 +10,25 @@ function pdo_query($query, $array = null)
             "errorCode: " . $DBH->errorCode() . "<br>\n" .
             "errorInfo: " . join(", ", $DBH->errorInfo()));
     for($x=0;$x<count($array);$x++)
-        $sth->bindParam($x+1, $array[$x],(is_int($array[$x]) ? PDO::PARAM_INT : PDO::PARAM_STR));
+        $sth->bindParam($x+1, $array[$x], pdo_get_data_type($array[$x]));
     if(!$sth->execute())
         die("Could not execute statement<br>\n" .
             "errorCode: " . $sth->errorCode() . "<br>\n" .
             "errorInfo: " . join(", ", $sth->errorInfo()));
     return $sth->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function pdo_get_data_type($value) {
+  switch (true) {
+    case is_null($value):
+      return PDO::PARAM_NULL;
+    case is_int($value):
+      return PDO::PARAM_INT;
+    case is_bool($value):
+      return PDO::PARAM_BOOL;
+    default:
+      return PDO::PARAM_STR;
+  }
 }
 
 function pdo_fetch_result(&$result)
