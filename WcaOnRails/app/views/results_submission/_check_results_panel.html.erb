@@ -1,4 +1,5 @@
 <%
+  force_collapse ||= false
   # NOTE: expect valid 'results_validator' variable
   panel_style = if results_validator.total_errors > 0
                   "danger"
@@ -7,9 +8,10 @@
                 else
                   "success"
                 end
+  collapse_panel = force_collapse || !results_validator.has_results
 %>
 <div class="panel panel-<%= panel_style %>">
-  <div class="panel-heading heading-as-link <%= "collapsed" unless results_validator.has_results %>" data-toggle="collapse" data-target="#collapse-check-results">
+  <div class="panel-heading heading-as-link <%= "collapsed" if collapse_panel %>" data-toggle="collapse" data-target="#collapse-check-results">
     <h3 class="panel-title">
       <% if results_validator.check_real_results %>
         Check competition's results
@@ -19,7 +21,7 @@
       <span class="collapse-indicator"></span>
     </h3>
   </div>
-  <div id="collapse-check-results" class="panel-body collapse <%= "in" if results_validator.has_results %>">
+  <div id="collapse-check-results" class="panel-body collapse <%= "in" unless collapse_panel %>">
     <h3>Errors</h3>
     <% if results_validator.total_errors > 0 %>
       <p>Please fix the errors below:</p>

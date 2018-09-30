@@ -701,6 +701,14 @@ class Competition < ApplicationRecord
     confirmed? && !use_wca_registration && created_at.present? && created_at > Date.new(2018, 12, 31)
   end
 
+  def has_rounds?
+    rounds.any?
+  end
+
+  def has_schedule?
+    competition_venues.any?
+  end
+
   def entry_fee_required?
     (
       confirmed? && created_at.present? && created_at > Date.new(2018, 7, 17) &&

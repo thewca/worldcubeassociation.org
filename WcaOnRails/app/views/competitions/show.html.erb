@@ -1,14 +1,12 @@
 <% provide(:title, @competition.name) %>
 <%# We use this to hide the 'Events' information for competition which didn't declared rounds %>
-<% competition_has_round = @competition.rounds.any? %>
-<% competition_has_venue = @competition.competition_venues.any? %>
 <%= render layout: 'nav' do %>
   <ul class="nav nav-tabs">
     <li><a href="#general-info" data-toggle="tab"><%=t 'competitions.show.general_info' %></a></li>
-    <% if competition_has_round %>
+    <% if @competition.has_rounds? %>
       <li><a href="#competition-events" data-toggle="tab"><%=t 'competitions.show.events' %></a></li>
     <% end %>
-    <% if competition_has_venue %>
+    <% if @competition.has_schedule? %>
       <li><a href="#competition-schedule" data-toggle="tab"><%=t 'competitions.show.schedule' %></a></li>
     <% end %>
     <% @competition.tabs.each do |tab| %>
@@ -22,12 +20,12 @@
         <%= render "results_table", results: @competition.winning_results, hide_pos: true, hide_round: true %>
       <% end %>
     </div>
-    <% if competition_has_round %>
+    <% if @competition.has_rounds? %>
       <div class="tab-pane" id="competition-events">
         <%= render "events_tab" %>
       </div>
     <% end %>
-    <% if competition_has_venue %>
+    <% if @competition.has_schedule? %>
       <div class="tab-pane" id="competition-schedule">
         <%= render "competition_schedule_tab", competition: @competition %>
       </div>
