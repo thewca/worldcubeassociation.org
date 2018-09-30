@@ -15,9 +15,12 @@
     </p>
     <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @results_validator.has_results %>
 
-    <%= render "check_results_panel", results_validator: @results_validator %>
-
+    <%= render "check_results_panel",
+      results_validator: @results_validator,
+      force_collapse: @results_submission
+    %>
     <%= render "results_submission_panel",
+      competition: @competition,
       has_errors: @results_validator.total_errors != 0,
       results_submission: @results_submission
     %>

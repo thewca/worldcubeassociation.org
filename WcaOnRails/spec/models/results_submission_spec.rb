@@ -14,6 +14,11 @@ RSpec.describe ResultsSubmission do
     expect(results_submission).to be_invalid_with_errors(message: ["can't be blank"])
   end
 
+  it "requires confirmation" do
+    results_submission.confirm_information = nil
+    expect(results_submission).to be_invalid_with_errors(confirm_information: [ResultsSubmission::CONFIRM_INFORMATION_ERROR])
+  end
+
   it "requires schedule url looks like a url" do
     results_submission.schedule_url = nil
     expect(results_submission).to be_invalid_with_errors(schedule_url: ["can't be blank"])

@@ -38,6 +38,10 @@ module ApplicationHelper
     link_to text, url, target: "_blank"
   end
 
+  def link_to_competition_schedule_tab(comp)
+    competition_url(comp, anchor: "competition-schedule")
+  end
+
   def filename_to_url(filename)
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end

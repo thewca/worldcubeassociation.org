@@ -7,5 +7,7 @@ FactoryBot.define do
     schedule_url { "https://example.com/schedule" }
 
     message { "Here are the results.\nThey look good." }
+
+    confirm_information { true }
   end
 end

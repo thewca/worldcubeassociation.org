@@ -55,7 +55,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
 
     describe "Posting results" do
       let(:results_submission_params) do
-        { message: submission_message, schedule_url: "https://example.com/schedule" }
+        { message: submission_message, schedule_url: "https://example.com/schedule", confirm_information: 1, competition_id: comp.id }
       end
 
       it "sends the 'results submitted' email immediately" do
@@ -73,8 +73,18 @@ RSpec.describe ResultsSubmissionController, type: :request do
 
       it "does not send the email if empty message is provided" do
         expect do
-          results_submission_params[:message] = ""
-          post competition_submit_results_path(comp.id), params: { results_submission: results_submission_params }
+          request_params = results_submission_params.clone
+          request_params[:message] = ""
+          post competition_submit_results_path(comp.id), params: { results_submission: request_params }
+        end.to change { ActionMailer::Base.deliveries.count }.by(0)
+        assert_enqueued_jobs 0
+      end
+
+      it "does not send the email if no confirmation is provided" do
+        expect do
+          request_params = results_submission_params.clone
+          request_params.delete(:confirm_information)
+          post competition_submit_results_path(comp.id), params: { results_submission: request_params }
         end.to change { ActionMailer::Base.deliveries.count }.by(0)
         assert_enqueued_jobs 0
       end

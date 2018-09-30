@@ -1,6 +1,13 @@
 <%
   has_errors ||= false
   results_submission ||= ResultsSubmission.new
+  schedule_url_kwargs = {}
+  if competition.has_schedule?
+    schedule_url_kwargs[:readonly] = true
+    schedule_url_kwargs[:input_html] = {
+      value: link_to_competition_schedule_tab(competition),
+    }
+  end
 %>
 <div class="panel panel-default">
   <div class="panel-heading heading-as-link <%= "collapsed" if has_errors %>" data-toggle="collapse" data-target="#collapse-submit-results">
@@ -13,16 +20,24 @@
     <% unless has_errors %>
       <p>Please enter the body of your email to the Results Team.</p>
       <p>
-        Make sure to include a link to the competition schedule (and all time
-        limits and cutoffs) and provide any changes to the provided schedule, as
-        well as any other additional details required by the
+        <% if competition.has_schedule? %>
+          It looks like you have entered your competition's schedule into the WCA website, so we automatically filled the link to the schedule below.
+          Make sure the schedule on the WCA website actually reflects what happened during the competition.
+        <% else %>
+          Make sure to include a link to the competition schedule (and all time
+          limits and cutoffs) and provide any changes to the provided schedule.
+        <% end %>
+      </p>
+      <p>
+        Please also make sure to include any other additional details required by the
         <%= link_to "'Submitting competition results' section of the delegate crash course",
           delegate_crash_course_path(anchor: "submitting-competition-results") %>.
       </p>
 
       <%= simple_form_for results_submission, url: competition_submit_results_path do |f| %>
-        <%= f.input :schedule_url %>
+        <%= f.input :schedule_url, **schedule_url_kwargs %>
         <%= f.input :message, as: :text, input_html: { class: "markdown-editor" } %>
+        <%= f.input :confirm_information, as: :boolean, label: "I confirm the information displayed on the WCA website's events page and on the competition's schedule page reflect what happened during the competition." %>
         <%= f.submit "Submit", class: "btn btn-primary" %>
       <% end %>
     <% else %>
