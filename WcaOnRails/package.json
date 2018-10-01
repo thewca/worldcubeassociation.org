@@ -16,7 +16,7 @@
     "@rails/webpacker": "^3.5.5",
     "autonumeric": "^4.4.2",
     "autoprefixer": "^9.1.5",
-    "babel-loader": "^8.0.0",
+    "babel-loader": "^8.0.4",
     "blueimp-load-image": "^2.19.0",
     "classnames": "^2.2.6",
     "compression-webpack-plugin": "^1.1.12",
