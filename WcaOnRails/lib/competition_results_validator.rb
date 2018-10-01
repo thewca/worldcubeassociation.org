@@ -163,15 +163,14 @@ class CompetitionResultsValidator
 
     check_events_match(@competition.events)
 
-    @number_of_non_matching_rounds = check_rounds_match
-
-    if @number_of_non_matching_rounds == 0
-      # Only check these if all rounds match: this way we can rely
-      # on the expected competition_events!
-      check_individual_results(results_by_round_id)
-      check_avancement_conditions(results_by_round_id, @competition.competition_events)
-      check_scrambles
+    # Ensure retro-compatibility for "old" competitions without rounds.
+    if @competition.has_rounds?
+      check_rounds_match
     end
+
+    check_individual_results(results_by_round_id)
+    check_avancement_conditions(results_by_round_id, @competition.competition_events)
+    check_scrambles
 
     check_competitor_limit
 
@@ -253,17 +252,22 @@ class CompetitionResultsValidator
   end
 
   def check_avancement_conditions(results_by_round_id, competition_events)
-    competition_events.each do |ce|
-      remaining_number_of_rounds = ce.rounds.size
+    results_by_event_id = @results.group_by(&:eventId)
+    results_by_event_id.each do |event_id, results|
+      results_by_event_id[event_id] = results.group_by(&:roundTypeId)
+    end
+    ordered_round_type_ids = RoundType.order(:rank).all.map(&:id)
+    results_by_event_id.each do |event_id, results_by_round_type_id|
+      remaining_number_of_rounds = results_by_round_type_id.keys.size
       if remaining_number_of_rounds > 4
         # https://www.worldcubeassociation.org/regulations/#9m: Events must have at most four rounds.
         # Should not happen as we already have a validation to create rounds, but who knows...
-        @errors[:rounds] << "Event #{ce.event_id} has more than four rounds, which must not happen per Regulation 9m."
+        @errors[:rounds] << "Event #{event_id} has more than four rounds, which must not happen per Regulation 9m."
       end
-      ce.rounds.each do |r|
+      (ordered_round_type_ids & results_by_round_type_id.keys).each do |round_type_id|
         remaining_number_of_rounds -= 1
-        round_id = "#{ce.event_id}-#{r.round_type_id}"
-        number_of_people_in_round = results_by_round_id[round_id].size
+        number_of_people_in_round = results_by_round_type_id[round_type_id].size
+        round_id = "#{event_id}-#{round_type_id}"
         if number_of_people_in_round <= 7 && remaining_number_of_rounds > 0
           # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
           @errors[:rounds] << "Round #{round_id} has 7 competitors or less but has at least one subsequent round, which must not happen per Regulation 9m3."
@@ -288,6 +292,12 @@ class CompetitionResultsValidator
     (rounds_ids - detected_scrambles_rounds_ids).each do |round_id|
       @errors[:scrambles] << "[#{round_id}] Missing scrambles."
     end
+
+    unless @competition.has_rounds?
+      # Additional checks are not possible without rounds information
+      return
+    end
+
     (detected_scrambles_rounds_ids - rounds_ids).each do |round_id|
       @errors[:scrambles] << "[#{round_id}] Unexpected scrambles."
     end
@@ -395,17 +405,6 @@ class CompetitionResultsValidator
     #   - check position
 
     results_by_round_id.each do |round_id, results_for_round|
-      # get cutoff and timelimit
-      round_info = @expected_rounds_by_ids[round_id]
-      unless round_info
-        # These results are for an undeclared round, skip them as an error has
-        # already been registered
-        next
-      end
-
-      time_limit_for_round = round_info.time_limit
-      cutoff_for_round = round_info.cutoff
-
       expected_pos = 0
       last_result = nil
       # Number of tied competitors, *without* counting the first one
@@ -436,6 +435,25 @@ class CompetitionResultsValidator
         if expected_pos != result.pos
           @errors[:results] << "[#{round_id}] Result for #{person_info.name} has a wrong position: expected #{expected_pos} and got #{result.pos}."
         end
+
+        # Check for possible similar results
+        similar = results_similar_to(result, index, results_for_round)
+        similar.each do |r|
+          similar_person_name = @persons_by_id[r.personId]&.name || "UnknownPerson"
+          @warnings[:results] << "[#{round_id}] Result of #{person_info.name} is similar to the results of #{similar_person_name}."
+        end
+
+        # get cutoff and timelimit
+        round_info = @expected_rounds_by_ids[round_id]
+        unless round_info
+          @warnings[:results] << "[#{round_id}] Could not find information about cutoff and timelimit for this round, these validations have been skipped."
+          # These results are for an undeclared round, skip them as an error has
+          # already been registered
+          next
+        end
+
+        time_limit_for_round = round_info.time_limit
+        cutoff_for_round = round_info.cutoff
 
         # Checks for cutoff
         check_results_for_cutoff(cutoff_for_round, result, round_id, round_info) if cutoff_for_round
@@ -504,13 +522,6 @@ class CompetitionResultsValidator
               @warnings[:results] << "[#{cumulative_round_ids.join(",")}] The round has a cumulative time limit and #{person_info.name} has at least one suspicious DNF solve given his results."
             end
           end
-        end
-
-        # Check for possible similar results
-        similar = results_similar_to(result, index, results_for_round)
-        similar.each do |r|
-          similar_person_name = @persons_by_id[r.personId]&.name || "UnknownPerson"
-          @warnings[:results] << "[#{round_id}] Result of #{person_info.name} is similar to the results of #{similar_person_name}."
         end
       end
     end
