@@ -122,12 +122,21 @@ class CompetitionsMailer < ApplicationMailer
     @competition = competition
     @results_submission = results_submission
     @submitter_user = submitter_user
+    last_uploaded_json = @competition.uploaded_jsons.last
+    if last_uploaded_json
+      attachments["Results for #{@competition.id}.json"] = {
+        mime_type: "application/json",
+        content: last_uploaded_json.json_str,
+      }
+    end
     mail(
       to: "results@worldcubeassociation.org",
       cc: competition.delegates.pluck(:email),
       reply_to: competition.delegates.pluck(:email),
       subject: "Results for #{competition.name}",
     )
+    # Cleanup the uploaded jsons now that we attached the relevant one when mailing the WRT.
+    @competition.uploaded_jsons.delete_all
   end
 
   private def delegates_to_senior_delegates_email(delegates)

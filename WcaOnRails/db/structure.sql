@@ -1139,6 +1139,17 @@ CREATE TABLE `timestamps` (
   UNIQUE KEY `index_timestamps_on_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `uploaded_jsons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `uploaded_jsons` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `competition_id` bigint(20) DEFAULT NULL,
+  `json_str` text COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `index_uploaded_jsons_on_competition_id` (`competition_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_preferred_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1468,6 +1479,7 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180831075355'),
 ('20180831164420'),
 ('20180908195553'),
+('20180911140010'),
 ('20180912042457'),
 ('20181020004209'),
 ('20181021185003'),
