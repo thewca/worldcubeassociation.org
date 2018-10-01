@@ -10,6 +10,7 @@ class Competition < ApplicationRecord
   has_many :registrations, dependent: :destroy
   has_many :results, foreign_key: "competitionId"
   has_many :scrambles, foreign_key: "competitionId"
+  has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
@@ -372,6 +373,7 @@ class Competition < ApplicationRecord
              'continent',
              'championships',
              'rounds',
+             'uploaded_jsons'
              'wcif_extensions'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
