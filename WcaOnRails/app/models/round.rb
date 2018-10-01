@@ -89,7 +89,7 @@ class Round < ApplicationRecord
   end
 
   def name
-    I18n.t("round.name", event_name: event.name, round_name: round_type.name)
+    Round.name_from_attributes(event, round_type)
   end
 
   def time_limit_to_s
@@ -168,5 +168,13 @@ class Round < ApplicationRecord
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
+  end
+
+  def self.name_from_attributes_id(event_id, round_type_id)
+    name_from_attributes(Event.c_find(event_id), RoundType.c_find(round_type_id))
+  end
+
+  def self.name_from_attributes(event, round_type)
+    I18n.t("round.name", event_name: event.name, round_name: round_type.name)
   end
 end

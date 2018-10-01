@@ -7,14 +7,12 @@
   </div>
   <div id="collapse-preview-results" class="panel-body collapse <%= "in" if results_validator.has_results %>">
     <p>Click on a round's name to display its preview.</p>
-    <% if results_validator.has_results && results_validator.number_of_non_matching_rounds == 0 %>
+    <% if results_validator.has_results %>
       <% results_validator.results.group_by(&:eventId).each do |event_id, results_for_event| %>
         <% results_for_event.group_by(&:roundTypeId).each do |round_type_id, results_for_round| %>
-          <%= render "results_submission/table_for_round", results: results_for_round, persons_by_id: results_validator.persons_by_id, round: results_validator.expected_rounds_by_ids["#{event_id}-#{round_type_id}"] %>
+          <%= render "results_submission/table_for_round", results: results_for_round, results_validator: results_validator, round_id: "#{event_id}-#{round_type_id}" %>
         <% end %>
       <% end %>
-    <% elsif results_validator.number_of_non_matching_rounds != 0 %>
-      <p>Cannot preview results yet: the results rounds don't match the expected rounds.</p>
     <% else %>
       <p>No results uploaded to Inbox yet.</p>
     <% end %>
