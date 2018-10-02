@@ -986,9 +986,9 @@ atob@~1.1.0:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/atob/-/atob-1.1.3.tgz#95f13629b12c3a51a5d215abdce2aa9f32f80773"
 
-autonumeric@^4.4.2:
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.4.2.tgz#2d9a8c0f975d67fef9b0b6b73fa69c838e3114f2"
+autonumeric@^4.4.3:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.4.3.tgz#5ada90101f9ebe9a750b628ae50a0d16faf7dad2"
 
 autoprefixer@^6.3.1:
   version "6.7.7"
