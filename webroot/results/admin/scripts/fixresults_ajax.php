@@ -68,7 +68,7 @@ function getValue($key)
 
 function getRecord($key)
 {
-    return get_GET($key,'/[^A-Za-z]/');
+    return get_GET($key,'/[^A-Za-z]/') ?: null;
 }
 
 function getResultId()
@@ -114,8 +114,8 @@ if (getFix()) { // fix data
     }
     if (($values[] = getValue('best'))===null) error('Invalid calling - no best');
     if (($values[] = getValue('average'))===null) error('Invalid calling - no average');
-    if (($values[] = getRecord('regionalSingleRecord'))===null) error('Invalid calling - no regionalSingleRecord');
-    if (($values[] = getRecord('regionalAverageRecord'))===null) error('Invalid calling - no regionalAverageRecord');
+    $values[] = getRecord('regionalSingleRecord');
+    $values[] = getRecord('regionalAverageRecord');
     $values[] = $resultId;
 
     pdo_query(
