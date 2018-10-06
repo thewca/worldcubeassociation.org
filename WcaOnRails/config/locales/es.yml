@@ -407,6 +407,19 @@ es:
         refund_policy_limit_date: Fecha límite para reembolsos
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Precio de entrada de acompañantes
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Me gustaría que los competidores tuvieran que entregar sus puzzles
+          durante el registro como indica la Regla Z1)
+        #original_hash: 466aca7
+        regulation_z1_reason: Razón para Z1)
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Me gustaría seleccionar competidores que califican directamente para
+          determinadas rondas de determinadas categorías basado en resultados de
+          competiciones previas específicas como indica la Regla Z3)
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Razón para Z3)
       registration:
         #original_hash: 3c23a67
         guests: Acompañantes
@@ -748,6 +761,18 @@ es:
           entrada de espectadores no se pueden gestionar desde este sitio web.
           Si se pone a 0, se mostrará una frase indicando que los espectadores
           pueden asistir de forma gratuita.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Por favor, explica aquí por qué  te gustaría aplicar la regla Z1). Por
+          favor rellénalo en Inglés.
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Por favor explica aquí por qué te gustaría aplicar la Regla Z3). Por
+          favor rellénalo en Inglés.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
