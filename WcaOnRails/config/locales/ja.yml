@@ -150,6 +150,9 @@ ja:
       name: 複合予選
       #original_hash: 4c66ad0
       cellName: 複合予選
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: '第%{number}試技'
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
@@ -234,6 +237,8 @@ ja:
     date_placeholder: YYYY-MM-DD (西暦-月-日)
     #original_hash: 52249b5
     datetime_placeholder: YYYY-MM-DD HH-MM (西暦-月-日 時-分)
+    #original_hash: 7136e3b
+    time_format: 12時間制
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -314,7 +319,7 @@ ja:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: 運営メンバーがこの大会を編集することを許可しない
+        confirmed: 運営メンバー（代理人除く）による大会編集を許可しない。
         #original_hash: d493e6a
         showAtAll: 大会を一般公開する
         #original_hash: 709a232
@@ -339,7 +344,7 @@ ja:
         external_website: ウェブサイト
         #original_hash: 692e1f9
         generate_website: 追加情報用の外部ウェブサイトを用意せずに WCA ウェブサイトを使用する
-        #original_hash: dd88e47
+        #original_hash: 6cf623b
         base_entry_fee_lowest_denomination: 基本参加費
         #original_hash: 28a6fbb
         currency_code: 通貨コード
@@ -353,8 +358,8 @@ ja:
         information: 概要
         #original_hash: 87b7d5f
         use_wca_registration: 参加申し込みに WCA ウェブサイトを使用する
-        #original_hash: a2dfcf8
-        competitor_limit_enabled: 大会定員を設定する。
+        #original_hash: 9bb1965
+        competitor_limit_enabled: 大会定員
         #original_hash: 749f4c9
         competitor_limit: 大会定員
         #original_hash: 4a8b6f1
@@ -381,7 +386,7 @@ ja:
         extra_registration_requirements: 大会申し込み要件（追加）　※自動生成される大会申し込み要件の後に追加される情報です。
         #original_hash: 2529d04
         on_the_spot_registration: 会場受付について
-        #original_hash: bbff74c
+        #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: 会場受付の参加費
         #original_hash: efbdbab
         refund_policy_percent: キャンセル時返金率 (％)
@@ -389,6 +394,14 @@ ja:
         refund_policy_limit_date: 返金可能なキャンセル期日
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: 見学者の入場料
+        #original_hash: 9e1008d
+        regulation_z1: 当日の受付時にパズルを回収する (参考：WCA大会規則Z1))
+        #original_hash: 466aca7
+        regulation_z1_reason: WCA大会規則Z1) による
+        #original_hash: 588c6a0
+        regulation_z3: 特定の過去の大会での成績に基づき、特定の種目の特定のラウンドに直接参加できるよう競技者を選抜する。
+        #original_hash: 18d9a8c
+        regulation_z3_reason: WCA大会規則Z3) による
       registration:
         #original_hash: 3c23a67
         guests: 見学者人数
@@ -413,7 +426,7 @@ ja:
         #original_hash: 983d541
         discussion_url: Google グループ上のディスカッション URL
         #original_hash: 65a9b28
-        schedule_url: スケジュール URL
+        schedule_url: タイムスケジュール URL
         #original_hash: 36155d4
         equipment: 備品
         #original_hash: 67cd406
@@ -636,10 +649,10 @@ ja:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 82ad56b
-        base_entry_fee_lowest_denomination: 大会に参加する基本参加費です。参加費は大会情報ページと申し込みページ (使用する場合) に表示されます。
-        #original_hash: 866bc05
-        currency_code: 通貨単位
+        #original_hash: 784879d
+        base_entry_fee_lowest_denomination: 大会の基本参加費。大会情報ページおよび大会申込ページ (使用する場合) に表示されます。0に設定した場合，参加無料である旨表示されます。
+        #original_hash: 9735ddf
+        currency_code: 参加費の通貨コード
         #original_hash: da39a3e
         guests_enabled: ''
         #original_hash: da39a3e
@@ -647,7 +660,7 @@ ja:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -658,10 +671,10 @@ ja:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
-        competitor_limit_enabled: 現在，この値はあくまで通知されるのみで，申込の可否には反映されていません。
-        #original_hash: b9bc84d
-        competitor_limit: 大会定員
+        #original_hash: dc47c39
+        competitor_limit_enabled: WCA大会規則では大会定員の設定は必須とはされていませんが，強く推奨されています。
+        #original_hash: b7b599b
+        competitor_limit: この大会で許容される参加者数の上限。現在のところ定員による締切システムは未実装のため，この値は表示されるのみで自動処理は行われません。
         #original_hash: 4bd7102
         competitor_limit_reason: 大会定員設定の理由 (英語で記入してください)
         #original_hash: da39a3e
@@ -683,6 +696,14 @@ ja:
         #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
           現在のところ見学者入場料集金システムは未実装のため，この値は表示されるのみで自動処理は行われません。実際の集金は手動で行ってください。<br/>0と入力した場合，「見学者入場料は無料です。」と表示されます。
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: 大会規則Z1) を採用する理由を詳細に記入してください。必ず英語で記入してください。
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: 大会規則Z3) を採用する理由を詳細に記入してください。必ず英語で記入してください。
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -812,6 +833,11 @@ ja:
           'true': 見学者人数記入を求める
           #original_hash: f8c2332
           'false': 見学者人数記入を求めない
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': 大会定員を設定する。
+          #original_hash: 5b581b5
+          'false': 大会定員を設定しない。
         on_the_spot_registration:
           #original_hash: 0c521ca
           'true': 会場受付を行う
@@ -1449,8 +1475,8 @@ ja:
     waiting_list: 申し込みは承認待ち状態です。登録料を支払う必要がある場合は支払ってください。詳しくは大会ウェブサイトをご覧ください。
     #original_hash: 58b1a3c
     accepted: 参加申し込みが完了しました！
-    #original_hash: 70de60f
-    entry_fees_fully_paid: '参加費 %{paid} を全額支払い済みです。'
+    #original_hash: bcd7d70
+    entry_fees_fully_paid: '既に参加費全額の%{paid}を支払い済みです。'
     #original_hash: 2e5d1b9
     will_pay_here: 申し込み申請後にこのウェブサイトで支払います
     #original_hash: b7ef562
@@ -1469,8 +1495,8 @@ ja:
         #original_hash: bf3a39e
         donation: 寄付金 (任意) は大会運営チームへのみ寄付されます
       labels:
-        #original_hash: 948ec72
-        entry_fees: 参加費
+        #original_hash: 4de825f
+        entry_fees: 大会参加費
         #original_hash: 2c09302
         donation: 寄付金
       alerts:
@@ -1559,24 +1585,28 @@ ja:
       #original_hash: a082288
       claim_wca_id_html: '初めての大会参加でない場合，%{here}よりWCA IDをWCAアカウントに連携させてください。'
       #original_hash: 56fc229
-      register_html: '大会参加申込は%{here}より行ってください。'
+      register_link_html: '大会参加申込は%{here}より行ってください。'
+      #original_hash: 45834fd
+      register_below_html: 下記より大会にお申し込みください。
       #original_hash: 196725e
       competitor_limit_is: '競技者の定員は%{competitor_limit}名です。'
       #original_hash: 5101f65
-      no_competitor_limit: 大会参加定員はありません。
-      #original_hash: 86cf09f
-      entry_fee_is: '大会基本参加費は%{base_entry_fee}です。'
+      no_competitor_limit: 大会定員はありません。
+      #original_hash: f979d5e
+      entry_fee_is: 'この大会の基本参加費は%{base_entry_fee}です。'
       #original_hash: 5390a91
       no_entry_fee: 大会参加費は無料です。
       #original_hash: 29af5c2
-      use_stripe_html: '大会参加費はStripe (%{here}) によりお支払いください。'
+      use_stripe_link_html: '大会参加費は，申し込み後にStripe (%{here})  よりお支払いください。'
+      #original_hash: cea0eb4
+      use_stripe_below_html: 大会参加費は，申し込み後にStripeよりお支払いください。
       #original_hash: 16cd1ba
       refund_policy_html: >-
         %{limit_date_and_time}以前にキャンセルされた場合，参加費の%{refund_policy_percent}を返金いたします。
       #original_hash: 4aca553
       no_refunds: キャンセル時の返金は行いません。
-      #original_hash: b38fa7b
-      on_the_spot_registration: '会場受付を受け付けます。会場受付の場合の大会基本参加費は%{on_the_spot_base_entry_fee}です。'
+      #original_hash: cf7be5d
+      on_the_spot_registration: '会場受付を受け付けます。会場受付の場合の基本参加費は%{on_the_spot_base_entry_fee}です。'
       #original_hash: 1637bea
       on_the_spot_registration_free: 会場受付は無料で受け付けます。
       #original_hash: f5f687d
@@ -1827,6 +1857,8 @@ ja:
       general_info: お知らせ
       #original_hash: c5497bc
       events: 大会競技
+      #original_hash: 0a8adac
+      schedule: タイムスケジュール
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -1857,6 +1889,37 @@ ja:
       cutoff: カットオフ
       #original_hash: 02ed4a4
       proceed: 進出人数
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: タイムスケジュールの表示形式：
+        #original_hash: 0424f6e
+        table: 表
+        #original_hash: adab509
+        calendar: タイムテーブル
+      #original_hash: 017e4d8
+      display_for_room: 次の会場のタイムスケジュールを表示する：
+      range:
+        #original_hash: 3f66052
+        from: 開始
+        #original_hash: ae79ea1
+        to: 終了
+      #original_hash: 952f375
+      start: 開始
+      #original_hash: a2bb9d3
+      end: 終了
+      #original_hash: 81c0d91
+      activity: 内容
+      #original_hash: 90e2fca
+      room: 部屋
+      #original_hash: 2896c7a
+      venue_information_html: '次の会場のタイムスケジュールを表示しています：%{venue_name}'
+      #original_hash: b97e383
+      timezone_message: 'タイムスケジュールは次のタイムゾーンの時刻で表示されています：%{timezone}'
+      #original_hash: 2ab94a0
+      multiple_venues_available: この大会は複数の会場で開催されています。別会場のタイムスケジュールもご確認ください。
+      #original_hash: 37b1adb
+      schedule_for_date: 'タイムスケジュール：%{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -1877,6 +1940,8 @@ ja:
         orga_view: 主催者モード
         #original_hash: c6171f8
         event_view: 競技種目を編集
+        #original_hash: 6235b27
+        schedule_view: タイムスケジュールを編集する。
         #original_hash: 6f7aef9
         payment_view: 支払い設定
         #original_hash: 76bfdcf
@@ -2690,10 +2755,9 @@ ja:
     paragraph2:
       #original_hash: f20dd3b
       title: 大会運営に要する費用
-      #original_hash: ab53dda
+      #original_hash: f16a06f
       content: >-
-        大会運営に要する費用は、国ごとによって、または会場の広さ等のいくつかの条件によって大きく違ってきます。参加費で全費用をまかなうことは可能です。しかし、費用を可能な限り抑えるために、スポンサーを見つけることを強く推奨します。WCA
-        代理人はボランティアであり給料は受け取っていませんが、大会運営チームは WCA 代理人の交通費 (旅費) を支払うことが望ましいです。
+        大会運営にかかる費用は国によっても異なり，開場の大きさやその他要因により異なります。費用をすべて参加費でまかなうことも可能ですが，参加費を安く抑えるためにも，スポンサーを探すことは強く推奨されます。また，WCA代理人はボランティアのため給与を得ることはありませんが，運営はその旅費等の補償を行うことが望ましいです。
     paragraph3:
       #original_hash: 00d3bf8
       title: 大会アナウンスの期限
@@ -2756,19 +2820,18 @@ ja:
     paragraph6:
       #original_hash: ce4c3d0
       title: 申込について
-      #original_hash: cb13cd0
+      #original_hash: bd669a1
       content: >-
-        大会申込は先着順にもとづいている必要があります。つまり、先に申込を完了させた方が優先されるということです。参加費を前払いする必要がある場合、支払いが完了した時点で申込が完了したものと考えます。このことについては、大会ページの支払い方法の記述で明確に表示することが望ましいです。
+        大会参加受付は先着順で受理されなければなりません。参加費の事前支払いが必要な場合は，参加費の支払いが完了した段階で参加受付が完了したものとします。これは大会ウェブサイトの支払い要領に明記されます。
     paragraph7:
       #original_hash: e4f1c62
       title: 承認待ちリストの管理
       #original_hash: 81ca3f3
       content1: >-
         競技者の人数制限に達したら、承認待ちリストを用意することが望ましいです。申込済み競技者が申込をキャンセルした場合、承認待ちリストで次に控えている競技者を承認することができます。
-      #original_hash: 1b2ea79
+      #original_hash: 802b34f
       content2: >-
-        大会参加費が前払いの場合、承認待ちリストで先頭の競技者に「フリースポット」を与えて、申込を完了するための支払い期限 (例えば 48 時間)
-        を設定する方法が有効です。期限内に支払いが確認できない場合や支払いが拒否された場合、「フリースポット」は承認待ちリストでの次の競技者に与えられることが望ましいです。これを繰り返します。競技者が承認待ちリストを回避することはできません。
+        参加費の事前支払い制を採用する場合，キャンセル待ちを繰り上げる際にはキャンセル待ち最上位に支払期限（例：48時間）を設けることが推奨されます。期限以内に支払われないか辞退した場合その権利は次に移行させ，空き枠が埋まるまでこれを繰り返します。
       #original_hash: 37bcbd6
       content3: >-
         競技者が正常の申込手続きせずに競技した場合、その競技者の結果は過去にさかのぼって抹消されます
@@ -2778,7 +2841,7 @@ ja:
       title: 大会前にやること
       list:
         #original_hash: c8abb5e
-        '1': 大会を告知する前に、大会ページで公開するためのスケジュールが必要です。このスケジュールは後で変更することができます。
+        '1': 大会を告知する前に、大会ページで公開するためのタイムスケジュールが必要です。このタイムスケジュールは後で変更することができます。
         #original_hash: e93d043
         '2': >-
           競技者をグループに分割し、スコアシートは必ず印刷し、グループごとに分けて準備しておくことが望ましいです。少なくとも 1
