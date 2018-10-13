@@ -249,8 +249,7 @@ class SolveTime
     return unless @event.id == "333mbf" && complete?
 
     time_limit_minutes = [60, @attempted * 10].min
-    # TODO: we need to handle better +2s!
-    if time_minutes > (time_limit_minutes + 1)
+    if time_minutes > time_limit_minutes
       errors.add(:base, "should be less than or equal to #{time_limit_minutes} minutes")
     end
   end

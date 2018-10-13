@@ -59,6 +59,7 @@ CREATE TABLE `Competitions` (
   `guests_entry_fee_lowest_denomination` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `results_submitted_at` datetime DEFAULT NULL,
   `regulation_z1` tinyint(1) DEFAULT NULL,
   `regulation_z1_reason` text COLLATE utf8mb4_unicode_ci,
   `regulation_z3` tinyint(1) DEFAULT NULL,
@@ -66,7 +67,6 @@ CREATE TABLE `Competitions` (
   `name_reason` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `external_registration_page` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `confirmed_at` datetime DEFAULT NULL,
-  `results_submitted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1144,8 +1144,8 @@ DROP TABLE IF EXISTS `uploaded_jsons`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `uploaded_jsons` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `competition_id` bigint(20) DEFAULT NULL,
-  `json_str` text COLLATE utf8mb4_unicode_ci,
+  `competition_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `json_str` longtext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `index_uploaded_jsons_on_competition_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
