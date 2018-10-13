@@ -3,8 +3,9 @@
 class CreateUploadedJson < ActiveRecord::Migration[5.2]
   def change
     create_table :uploaded_jsons do |t|
-      t.belongs_to :competition
-      t.text :json_str
+      t.string :competition_id
+      t.longtext :json_str
     end
+    add_index :uploaded_jsons, :competition_id
   end
 end

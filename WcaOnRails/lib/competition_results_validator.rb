@@ -285,7 +285,9 @@ class CompetitionResultsValidator
   end
 
   def check_scrambles
-    rounds_ids = @expected_rounds_by_ids.keys
+    # Get actual round ids from results
+    rounds_ids = @results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
+
     # Group scramble by round_id
     scrambles_by_round_id = @scrambles.group_by { |s| "#{s.eventId}-#{s.roundTypeId}" }
     detected_scrambles_rounds_ids = scrambles_by_round_id.keys
@@ -293,18 +295,13 @@ class CompetitionResultsValidator
       @errors[:scrambles] << "[#{round_id}] Missing scrambles."
     end
 
-    unless @competition.has_rounds?
-      # Additional checks are not possible without rounds information
-      return
-    end
-
     (detected_scrambles_rounds_ids - rounds_ids).each do |round_id|
       @errors[:scrambles] << "[#{round_id}] Unexpected scrambles."
     end
 
-    # For existing rounds and scrambles, check that the number of scrambles match at least
-    # the number of expected scrambles.
-    (detected_scrambles_rounds_ids & rounds_ids).each do |round_id|
+    # For existing rounds and scrambles matching expected rounds in the WCA website,
+    # check that the number of scrambles match at least the number of expected scrambles.
+    (detected_scrambles_rounds_ids & @expected_rounds_by_ids.keys).each do |round_id|
       format = @expected_rounds_by_ids[round_id].format
       expected_number_of_scrambles = format.expected_solve_count
       scrambles_by_group_id = scrambles_by_round_id[round_id].group_by(&:groupId)
@@ -440,7 +437,7 @@ class CompetitionResultsValidator
         similar = results_similar_to(result, index, results_for_round)
         similar.each do |r|
           similar_person_name = @persons_by_id[r.personId]&.name || "UnknownPerson"
-          @warnings[:results] << "[#{round_id}] Result of #{person_info.name} is similar to the results of #{similar_person_name}."
+          @warnings[:results] << "[#{round_id}] Result for #{person_info.name} is similar to the results for #{similar_person_name}."
         end
 
         # get cutoff and timelimit
@@ -450,6 +447,11 @@ class CompetitionResultsValidator
           # These results are for an undeclared round, skip them as an error has
           # already been registered
           next
+        end
+
+        # Check that the result's format matches the round format
+        unless round_info.format.id == result.formatId
+          @errors[:results] << "[#{round_id}] Result for #{person_info.name} are in the wrong format: expected #{round_info.format.name}, but got #{Format.c_find(result.formatId).name}."
         end
 
         time_limit_for_round = round_info.time_limit
