@@ -400,6 +400,7 @@ class CompetitionResultsValidator
     #   - check time limit
     #   - check cutoff
     #   - check position
+    #   - for multiblind, check if we should ouput a warning (if time is over the time limit, as the 'Result' object validation allows for time up to 30s over the timelimit)
 
     results_by_round_id.each do |round_id, results_for_round|
       expected_pos = 0
@@ -460,10 +461,11 @@ class CompetitionResultsValidator
         # Checks for cutoff
         check_results_for_cutoff(cutoff_for_round, result, round_id, round_info) if cutoff_for_round
 
+        completed_solves = all_solve_times.select(&:complete?)
+
         # Checks for time limits if it can be user-specified
         if !["333mbf", "333fm"].include?(result.eventId)
           cumulative_wcif_round_ids = time_limit_for_round.cumulative_round_ids
-          completed_solves = all_solve_times.select(&:complete?)
           # Now let's try to find a DNF/DNS result followed by a non-DNF/DNS result
           # Do the same for DNS.
           has_result_after = { SolveTime::DNF => false, SolveTime::DNS => false }
@@ -522,6 +524,15 @@ class CompetitionResultsValidator
             # We want to issue a warning if the estimated time for all solves + DNFs goes roughly over the cumulative time limit by at least 10% (to reduce false positive).
             if (number_of_dnf_solves + completed_solves_for_rounds.size) * avg_per_solve >= 1.1 * time_limit_for_round.centiseconds
               @warnings[:results] << "[#{cumulative_round_ids.join(",")}] The round has a cumulative time limit and #{person_info.name} has at least one suspicious DNF solve given his results."
+            end
+          end
+        end
+
+        if result.eventId == "333mbf"
+          completed_solves.each do |solve_time|
+            time_limit_seconds = [3600, solve_time.attempted * 600].min
+            if solve_time.time_seconds > time_limit_seconds
+              @warnings[:results] << "[#{round_id}] Result '#{solve_time.clock_format}' for #{person_info.name} is over the time limit. Please make sure it is the consequence of +2 penalties before sending the results, or fix the result to DNF."
             end
           end
         end
