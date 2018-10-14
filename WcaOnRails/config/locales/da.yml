@@ -243,7 +243,7 @@ da:
     #original_hash: 52249b5
     datetime_placeholder: 'ÅÅÅÅ-MM-DD TT:MM'
     #original_hash: 7136e3b
-    time_format: 12 timers ur
+    time_format: 12h
   oauth:
     applications:
       #original_hash: 0c4ea38
