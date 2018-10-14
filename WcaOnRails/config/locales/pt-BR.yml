@@ -405,6 +405,19 @@ pt-BR:
         refund_policy_limit_date: Data limite para devoluções
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de entrada para espectadores/convidados
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Eu quero solicitar que os competidores entreguem os quebra-cabeças no
+          credenciamento, conforme Regra Z1.
+        #original_hash: 466aca7
+        regulation_z1_reason: Razão para Z1
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Eu quero selecionar competidores que se classificam diretamente para
+          certas rodadas de certos eventos, baseando-se em resultados de
+          competições anteriores específicas, conforme Regra Z3
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Razão para Z3
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
@@ -747,6 +760,18 @@ pt-BR:
           Por enquanto este número é apenas informacional; taxas para convidados
           não são gerenciadas por este website. Se for configurado como 0, uma
           frase será mostrada dizendo que espectadores podem assistir de graça.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Por favor informe aqui por que você quer usar a Regra Z1. Preencha em
+          Inglês!
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Por favor informe aqui por que você quer usar a Regra Z3. Preencha em
+          Inglês!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
