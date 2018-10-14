@@ -174,7 +174,7 @@ en:
     delete: Delete
     date_placeholder: "YYYY-MM-DD"
     datetime_placeholder: "YYYY-MM-DD HH:MM"
-    #context: the time format in the schedule table. Please use "12h" for am/pm time, or "24h" for 24 hours time.
+    #context: the time format in the schedule table. Please set this to *exactly* "12h" to use am/pm time, or "24h" for 24 hours time (do not translate the 'h' or anything).
     time_format: "12h"
   #context: Key used in the OAuth part of the site (checkout the /oauth/applications page for more details)
   oauth:

@@ -238,7 +238,7 @@ ja:
     #original_hash: 52249b5
     datetime_placeholder: YYYY-MM-DD HH-MM (西暦-月-日 時-分)
     #original_hash: 7136e3b
-    time_format: 12時間制
+    time_format: 12h
   oauth:
     applications:
       #original_hash: 0c4ea38
