@@ -145,18 +145,6 @@ get_pem_filename() {
   eval $__resultvar="'${__pem_filename}'"
 }
 
-rsync_secrets() {
-  local ssh_command=$1
-
-  ${ssh_command} 'sudo -E rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation.org/secrets'
-}
-
-disable_old_cron() {
-  local ssh_command=$1
-
-  ssh cubing@worldcubeassociation.org 'crontab -l | sed -e "s/^/#/" -e "1i# Cronjobs disabled on `date` by servers.sh" | crontab'
-}
-
 new() {
   print_command_usage_and_exit() {
     echo "Usage: $0 new [--staging] [keyname]" >> /dev/stderr
@@ -421,10 +409,12 @@ function passthetorch() {
   echo "We're almost ready to assign it the elastic ip address ${elastic_ip}"
 
   # The contents of the secrets directory on the live production server may
-  # have changed since the user spun up this new server.
-  rsync_secrets "${ssh_command}"
+  # have changed since the user spun up this new server. Rsync it.
+  ${ssh_command} "sudo -E rsync -az -e 'ssh -o StrictHostKeyChecking=no' --info=progress2 cubing@${host}:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation.org/secrets"
 
-  disable_old_cron
+  # Disable cron job running on the old server, to prevent it from operating
+  # on the remote database (the same for both old and new server).
+  ${ssh_command} 'crontab -l | sed -e "s/^/#/" -e "1i# Cronjobs disabled on `date` by servers.sh" | crontab'
 
   aws ec2 associate-address --public-ip ${elastic_ip} --instance-id ${new_server_id}
   echo ""
