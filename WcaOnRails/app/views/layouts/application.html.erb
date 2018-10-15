@@ -22,6 +22,15 @@
     <%= javascript_include_tag 'oms' %>
   <% end %>
 
+  <% if content_for :include_markdown_editor %>
+    <%= stylesheet_pack_tag 'markdown_editor' %>
+    <%= javascript_pack_tag 'markdown_editor' %>
+  <% end %>
+
+  <% if content_for :include_auto_numeric %>
+    <%= javascript_pack_tag 'auto_numeric' %>
+  <% end %>
+
   <%= csrf_meta_tags %>
   <%= auto_discovery_link_tag(:rss, rss_url(format: :xml)) %>
   <% if ENVied.WCA_LIVE_SITE %>
