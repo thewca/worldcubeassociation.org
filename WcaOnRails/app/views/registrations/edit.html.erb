@@ -1,4 +1,5 @@
 <% provide(:title, t('registrations.edit_registration.title', person: @registration.name, comp: @competition.name)) %>
+<% provide(:include_auto_numeric, true) %>
 
 <%= render layout: 'nav' do %>
   <%= horizontal_simple_form_for @registration, html: { class: 'are-you-sure' } do |f| %>

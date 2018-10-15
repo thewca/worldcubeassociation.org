@@ -7,9 +7,7 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import 'markdown-editor';
 import 'image-preview';
 import 'polyfills';
 import 'flag-icon-css/css/flag-icon.css';
-import 'auto-numeric';
 import 'incidents-log';

@@ -1,5 +1,6 @@
 <% provide(:title, "Report for #{@competition.name}") %>
 <% provide(:editing_delegate_report, true) %>
+<% provide(:include_markdown_editor, true) %>
 
 <%= render layout: 'nav' do %>
   <h2>Editing Delegate Report for <%= @competition.name%></h2>

@@ -1,3 +1,4 @@
+<% provide(:include_auto_numeric, true) %>
 <%= horizontal_simple_form_for :payment, url: competition_process_payment_path(@competition), html: { id: :form_payment } do |f| %>
   <%= render 'entry_fee', label: "Paid", money_amount: @registration.paid_entry_fees %>
   <%= f.input :stripe_token, as: :hidden, input_html: { id: :stripe_token } %>
