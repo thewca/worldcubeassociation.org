@@ -32,12 +32,13 @@ class Person < ApplicationRecord
       self.year = self.month = self.day = 0
     else
       unless @dob =~ /\A\d{4}-\d{2}-\d{2}\z/
-        errors.add(:dob, "is invalid")
+        # NOTE: error message built-in rails
+        errors.add(:dob, I18n.t('errors.messages.invalid'))
         return false
       end
       self.year, self.month, self.day = @dob.split("-").map(&:to_i)
       unless Date.valid_date? self.year, self.month, self.day
-        errors.add(:dob, "is invalid")
+        errors.add(:dob, I18n.t('errors.messages.invalid'))
         return false
       end
     end
@@ -46,7 +47,7 @@ class Person < ApplicationRecord
   validate :dob_must_be_in_the_past
   private def dob_must_be_in_the_past
     if dob && dob >= Date.today
-      errors.add(:dob, "must be in the past")
+      errors.add(:dob, I18n.t('users.errors.dob_past'))
     end
   end
 
@@ -60,7 +61,7 @@ class Person < ApplicationRecord
     if countryId_changed? && !new_record? && !@updating_using_sub_id
       has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
       if has_represented_this_country_already
-        errors.add(:countryId, "Cannot change the country to a country the person has already represented in the past.")
+        errors.add(:countryId, I18n.t('users.errors.already_represented_country'))
       end
     end
   end
@@ -90,7 +91,7 @@ class Person < ApplicationRecord
     attributes = attributes.to_h
     @updating_using_sub_id = true
     if attributes.slice(:name, :countryId).all? { |k, v| v.nil? || v == self.send(k) }
-      errors[:base] << "The name or the country must be different to update the person."
+      errors[:base] << I18n.t('users.errors.must_have_a_change')
       return false
     end
     old_attributes = self.attributes

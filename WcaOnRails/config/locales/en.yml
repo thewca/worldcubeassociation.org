@@ -755,6 +755,8 @@ en:
       dob_incorrect_html: "does not match our database. If you're sure you're providing the correct date in the correct format (YYYY-MM-DD) please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unique: "is already used by \"%{used_name}\" with %{used_email}"
       dob_past: "must be in the past"
+      already_represented_country: "Cannot change the country to a country the person has already represented in the past."
+      must_have_a_change: "The name or the country must be different to update the person."
       must_be_senior: "must be a Senior Delegate"
       must_not_be_present: "must not be present"
       senior_has_delegate: "cannot demote Senior Delegate with subordinate Delegates"
