@@ -243,7 +243,7 @@ da:
     #original_hash: 52249b5
     datetime_placeholder: 'ÅÅÅÅ-MM-DD TT:MM'
     #original_hash: 7136e3b
-    time_format: 12h
+    time_format: 12 timers ur
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1362,6 +1362,14 @@ da:
       unique: 'er allerede brugt af "%{used_name}" med %{used_email}'
       #original_hash: 26f70ed
       dob_past: skal være i fortiden
+      #original_hash: b64df45
+      already_represented_country: >-
+        Kan ikke ændre landet til et landet, som personen allerede har
+        repræsenteret før.
+      #original_hash: b589014
+      must_have_a_change: >-
+        Navnet eller landet skal være anderledes end før, for at opdatere
+        personen.
       #original_hash: 012f032
       must_be_senior: skal være en Senior Delegeret
       #original_hash: 2e582eb
