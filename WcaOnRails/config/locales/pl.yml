@@ -1392,6 +1392,12 @@ pl:
       unique: "jest już\_używane przez \"%{used_name}\" o adresie email %{used_email}"
       #original_hash: 26f70ed
       dob_past: musi być w przeszłości
+      #original_hash: b64df45
+      already_represented_country: >-
+        Nie można zmienić kraju na taki, który dana osoba wcześniej
+        reprezentowała.
+      #original_hash: b589014
+      must_have_a_change: 'Imię lub kraj musi zostać zmienione, aby zaktualizować daną osobę.'
       #original_hash: 012f032
       must_be_senior: musi być Starszym Delegatem
       #original_hash: 2e582eb
