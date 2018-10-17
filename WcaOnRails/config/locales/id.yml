@@ -398,6 +398,19 @@ id:
         refund_policy_limit_date: Batas tanggal untuk pengembalian uang
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Biaya masuk untuk tamu
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Saya ingin kompetitor mengumpulkan puzzle saat pendaftaran sesuai
+          dengan Regulasi Z1)
+        #original_hash: 466aca7
+        regulation_z1_reason: Alasan penggunaan Z1)
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Saya ingin memilih kompetitor yang dapat langsung lolos ke babak
+          tertentu pada cabang tertentu berdasarkan hasil dari
+          kompetisi-kompetisi sebelumnya sesuai dengan Regulasi Z3)
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Alasan penggunaan Z3)
       registration:
         #original_hash: 3c23a67
         guests: Tamu
@@ -741,6 +754,18 @@ id:
           Untuk saat ini, angka ini hanya digunakan sebagai informasi, biaya
           tamu tidak dapat diatur melalui situs web ini. Jika diisi dengan angka
           0, akan ditampilkan bahwa penonton dapat datang secara gratis.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Jelaskan mengapa Anda ingin menggunakan Regulasi Z1). Harap isi dengan
+          Bahasa Inggris!
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Jelaskan mengapa Anda ingin menggunakan Regulasi Z3). Harap isi dengan
+          Bahasa Inggris!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1355,6 +1380,12 @@ id:
       unique: 'telah terpakai oleh "%{used_name}" dengan %{used_email}'
       #original_hash: 26f70ed
       dob_past: harus merupakan tanggal lampau
+      #original_hash: b64df45
+      already_represented_country: >-
+        Tidak dapat mengganti negara dengan negara yang sebelumnya telah
+        diwakili oleh orang tersebut.
+      #original_hash: b589014
+      must_have_a_change: Nama atau negara harus berbeda untuk memperbarui orang tersebut.
       #original_hash: 012f032
       must_be_senior: harus Delegate Senior yang mengubahnya
       #original_hash: 2e582eb
