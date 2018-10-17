@@ -158,16 +158,16 @@ nl:
     name: '%{event_name} %{round_name}'
   advancement_condition:
     #original_hash: 6e55337
-    ranking: 'Top %{ranking} gaan door naar volgende ronde'
+    ranking: 'Top %{ranking} naar volgende ronde'
     #original_hash: 7ee969c
-    percent: 'Top %{percent}% gaan door naar volgende ronde'
+    percent: 'Top %{percent}% naar volgende ronde'
     attempt_result:
       #original_hash: 1fb7fe1
-      time: 'Beste resultaat < %{time} gaan door naar volgende ronde'
+      time: 'Beste resultaat < %{time} naar volgende ronde'
       #original_hash: 8254f3e
-      moves: 'Beste resultaat < %{moves} draaien gaan door naar volgende ronde'
+      moves: 'Beste resultaat < %{moves} draaien naar volgende ronde'
       #original_hash: daab86e
-      points: 'Beste resultaat > %{points} punten gaan door naar volgende ronde'
+      points: 'Beste resultaat > %{points} punten naar volgende ronde'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -1363,6 +1363,14 @@ nl:
       unique: 'is al in gebruik door %{used_name}" met %{used_email}'
       #original_hash: 26f70ed
       dob_past: moet in het verleden liggen
+      #original_hash: b64df45
+      already_represented_country: >-
+        Het land kan niet worden gewijzigd naar een land waarvoor de persoon al
+        eerder is uitgekomen.
+      #original_hash: b589014
+      must_have_a_change: >-
+        De naam of het land moet verschillend zijn om de persoon te kunnen
+        bijwerken.
       #original_hash: 012f032
       must_be_senior: moet een senior delegate zijn
       #original_hash: 2e582eb
@@ -1833,7 +1841,7 @@ nl:
         Als je aanmelding wordt geannuleerd voor %{limit_date_and_time}, dan
         krijg je %{refund_policy_percent} van het betaalde bedrag terug.
       #original_hash: 4aca553
-      no_refunds: Deelnamekosten worden niet terugbetaald.
+      no_refunds: Aanmeldkosten worden niet terugbetaald.
       #original_hash: cf7be5d
       on_the_spot_registration: >-
         Aanmeldingen bij de deur worden geaccepteerd. De deelnamekosten zijn dan
@@ -1856,7 +1864,7 @@ nl:
       hide_requirements: Verberg aanmeldingseisen.
       registration_period:
         #original_hash: 6888733
-        label: Aanmeld periode
+        label: Aanmeldperiode
         #original_hash: 0c7c1dc
         range_future_html: >-
           Online aanmelding is van %{start_date_and_time} tot
