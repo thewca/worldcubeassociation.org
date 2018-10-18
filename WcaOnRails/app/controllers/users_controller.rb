@@ -18,27 +18,25 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html {}
       format.json do
-        @users = User.joins("INNER JOIN Countries ON iso2 = country_iso2")
+        @users = User.in_region(params[:region])
         params[:search]&.split&.each do |part|
-          like_query = %w(users.name wca_id email Countries.name).map do |column|
+          like_query = %w(users.name wca_id email).map do |column|
             column + " LIKE :part"
           end.join(" OR ")
           @users = @users.where(like_query, part: "%#{part}%")
         end
-        if params[:sort] == "country"
-          @users = @users.order("Countries.name #{params[:order]}")
-        elsif params[:sort]
+        params[:sort] = params[:sort] == "country" ? :country_iso2 : params[:sort]
+        if params[:sort]
           @users = @users.order(params[:sort] => params[:order])
         end
-        users_array = @users.to_a
-        selected_rows = users_array[params[:offset].to_i, params[:limit].to_i] || []
         render json: {
-          total: users_array.size,
-          rows: selected_rows.map do |user|
+          total: @users.size,
+          rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
             {
               wca_id: user.wca_id ? view_context.link_to(user.wca_id, person_path(user.wca_id)) : "",
               name: ERB::Util.html_escape(user.name),
-              country: user.country.id,
+              # Users don't have to provide a country upon registration
+              country: user.country&.id,
               email: ERB::Util.html_escape(user.email),
               edit: view_context.link_to("Edit", edit_user_path(user)),
             }

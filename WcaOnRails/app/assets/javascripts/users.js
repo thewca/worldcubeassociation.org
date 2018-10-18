@@ -62,6 +62,7 @@ onPage('users#edit, users#update', function() {
 var usersTableAjax = {
   queryParams: function(params) {
     return $.extend(params || {}, {
+      region: $('#region').val(),
       search: $('#search').val(),
     });
   },
@@ -99,6 +100,7 @@ onPage('users#index', function() {
     $table.bootstrapTable('refresh');
   }
 
+  $('#region').on('change', reloadUsers);
   $('#search').on('input', _.debounce(reloadUsers, TEXT_INPUT_DEBOUNCE_MS));
 
   $table.on('load-success.bs.table', function(e, data) {

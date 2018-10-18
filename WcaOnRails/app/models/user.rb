@@ -24,6 +24,12 @@ class User < ApplicationRecord
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
+  scope :in_region, lambda { |region_id|
+    unless region_id.blank? || region_id == 'all'
+      where(country_iso2: (Continent.country_iso2s(region_id) || Country.c_find(region_id)&.iso2))
+    end
+  }
+
   def self.eligible_voters
     team_leaders = TeamMember.current.where(team_leader: true).map(&:user)
     eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))

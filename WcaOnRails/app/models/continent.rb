@@ -13,4 +13,8 @@ class Continent < ApplicationRecord
   def self.country_ids(continent_id)
     c_all_by_id[continent_id]&.countries&.map(&:id)
   end
+
+  def self.country_iso2s(continent_id)
+    c_all_by_id[continent_id]&.countries&.map(&:iso2)
+  end
 end
