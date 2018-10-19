@@ -238,7 +238,7 @@ ko:
     #original_hash: 52249b5
     datetime_placeholder: '년-월-일 시간 (YYYY-MM-DD HH:MM)'
     #original_hash: 7136e3b
-    time_format: 12h
+    time_format: 12기준
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -319,7 +319,7 @@ ko:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: 주최자 변경 불가
+        confirmed: 문서 내용 변경 불가 (주최자)
         #original_hash: d493e6a
         showAtAll: 대회 공개
         #original_hash: 709a232
@@ -394,6 +394,14 @@ ko:
         refund_policy_limit_date: 환불 기한
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: 관객 입장료
+        #original_hash: 9e1008d
+        regulation_z1: 규정 Z1)을 적용하여 대회 장소에서 접수 진행시 퍼즐을 받습니다.
+        #original_hash: 466aca7
+        regulation_z1_reason: Z1) 적용 사유
+        #original_hash: 588c6a0
+        regulation_z3: 규정 Z3)를 적용하여 특정 종목의 특정 라운드에 바로 진출하는 선수들을 선택하고 싶습니다.
+        #original_hash: 18d9a8c
+        regulation_z3_reason: 규정 Z3) 적용 사유
       registration:
         #original_hash: 3c23a67
         guests: 참관객
@@ -473,6 +481,8 @@ ko:
         private_wrc_decision: 결론 (비공개)
         #original_hash: 1c2ed61
         public_summary: 요약 (공개)
+        #original_hash: 62d6896
+        digest_worthy: 사건
         #original_hash: 848eed0
         tags: 태그
         #original_hash: 861e459
@@ -621,7 +631,7 @@ ko:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -638,6 +648,10 @@ ko:
         championship_type: ''
         #original_hash: da39a3e
         on_the_spot_registration: ''
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: da39a3e
+        regulation_z3: ''
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -810,6 +824,20 @@ ko:
         form_error:
           zero: '하나의 오류가 있습니다:'
           other: '%{count}개의 오류가 있습니다:'
+    doorkeeper:
+      applications:
+        help:
+          #original_hash: 95c10ec
+          https_info: 'HTTPS는 필수입니다 (예외: 호스트가 "localhost")'
+      scopes:
+        #original_hash: 1920e95
+        public: '이름, WCA ID, 성별, 국적, 프로필 사진의 개인정보를 접근할 수 있습니다'
+        #original_hash: d4003be
+        dob: 생년월일을 접근 할 수 있습니다.
+        #original_hash: 17aa24f
+        email: 이메일을 접근 할 수 있습니다
+        #original_hash: e0d0654
+        manage_competitions: 주최자로서 다가오는 대회를 관리 할 수 있습니다
     devise:
       #original_hash: 06184f5
       no_account: 계정 만들기
@@ -883,10 +911,22 @@ ko:
       translations: 번역본
       #original_hash: b8be3d1
       administration: 관리자
+      #original_hash: b7ee3c4
+      manage_users: 사용자 관리
+      #original_hash: 12ab214
+      delegate: 파견위원
+      #original_hash: 2f4bd74
+      panel: 패널
       #original_hash: d3a928c
       results_team: WCA 결과팀
       #original_hash: 4e7afeb
       results_admin: 관리자
+      #original_hash: f158a5a
+      results_phpmyadmin: phpMyAdmin
+      #original_hash: aee74b8
+      new_post: 새 글
+      #original_hash: 0d67445
+      team_leader: 팀 리더
       #original_hash: dc1649a
       sign_out: 로그 아웃
       #original_hash: 753a22b
@@ -930,6 +970,20 @@ ko:
         confirm: '아래 링크를 통해서 본인의 새로운 이메일 주소를 검증하실 수 있습니다:'
         #original_hash: 4900afe
         confirmation_link: 이메일 검증.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{competition}가 %{delegate_name}에 의해 신청되었습니다.'
+        #original_hash: 3db81b5
+        organizers: '%{competition}의 주최자에게 보냅니다,'
+        #original_hash: c526fd6
+        confirmed: >-
+          파견위원인 %{delegate_name}가 %{competition}을 WCA 회장단에게 신청했습니다. WCA 회장단이 대회를
+          발표할 시 또 이메일을 받게 될 것 입니다.
+        #original_hash: dfea09d
+        contact: '질문이 있으면, 대회의 파견위원에게 이메일로 연락하세요:'
+      competition_announcement_email:
+        #original_hash: 1571dd8
+        header: 'WCA 회장단이 %{competition}을 발표했습니다.'
     claim_wca_id:
       #original_hash: f28bf87
       title: WCA ID 연결
@@ -1408,7 +1462,7 @@ ko:
       #original_hash: 1637bea
       on_the_spot_registration_free: On the spot registrations will be accepted for free.
       #original_hash: f5f687d
-      no_on_the_spot_registration: No on the spot registrations will be accepted.
+      no_on_the_spot_registration: 현장 접수는 가능하지 않습니다.
       #original_hash: 4df139d
       guests_pay: '일반 관객의 관람료는 %{guests_base_fee}원 입니다.'
       #original_hash: b6c863e
