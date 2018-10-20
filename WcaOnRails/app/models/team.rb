@@ -72,6 +72,10 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('banned')
   end
 
+  def self.wcat
+    Team.c_find_by_friendly_id!('wcat')
+  end
+
   def acronym
     friendly_id.upcase
   end

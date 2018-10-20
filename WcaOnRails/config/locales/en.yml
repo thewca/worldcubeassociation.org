@@ -1440,6 +1440,10 @@ en:
       wqac:
         name: "WCA Quality Assurance Committee"
         description: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
+      #context: WCAT
+      wcat:
+        name: "WCA Competition Announcement Team"
+        description: "This committee has the role to approve and announce WCA Competitions and ensure such announcements adhere to WCA quality standards."
       #context: WMT
       wmt:
         name: "WCA Marketing Team"
@@ -1517,6 +1521,8 @@ en:
       info_html: "This committee has the role to ensure that all the procedures followed by the WCA Staff and External Staff abide by its Code of Ethics."
     wqac:
       info_html: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
+    wcat:
+      info_html: "This committee has the role to approve and announce WCA Competitions and ensure such announcements adhere to WCA quality standards."
     wmt:
       info_html: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
   score_tools:
