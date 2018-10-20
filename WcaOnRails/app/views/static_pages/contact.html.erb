@@ -19,8 +19,7 @@
     <%= t('contact.members') %>: <%= Team.board.current_members.includes(:user).map { |team_member| team_member.user.name }.sort.join(", ") %>
   </p>
 
-  <% Team.all_ordered_by_english_name.each do |team| %>
-    <% next if team == Team.board %>
+  <% Team.all_official.each do |team| %>
     <p>
       <strong><%= team.name %> (<%= team.acronym %>)</strong> - <%= mail_to team.email %><br />
       <%= t("contact.#{team.friendly_id}.info_html") %><br />

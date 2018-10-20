@@ -524,7 +524,7 @@ module DatabaseDumper
     }.freeze,
     "schema_migrations" => :skip_all_rows, # This is populated when loading our schema dump
     "team_members" => {
-      where_clause: "",
+      where_clause: "JOIN teams ON teams.id=team_id WHERE NOT teams.hidden",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -540,7 +540,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "teams" => {
-      where_clause: "WHERE NOT hidden",
+      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
