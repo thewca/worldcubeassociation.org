@@ -585,6 +585,7 @@ class CompetitionsController < ApplicationController
       permitted_competition_params += [
         :id,
         :name,
+        :name_reason,
         :cellName,
         :countryId,
         :cityName,
