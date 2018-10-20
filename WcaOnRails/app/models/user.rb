@@ -398,6 +398,10 @@ class User < ApplicationRecord
     team_member?(Team.wqac)
   end
 
+  def competition_announcement_team?
+    team_member?(Team.wcat)
+  end
+
   def team_member?(team)
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
@@ -478,7 +482,7 @@ class User < ApplicationRecord
   end
 
   def can_admin_competitions?
-    can_admin_results? || quality_assurance_committee?
+    can_admin_results? || quality_assurance_committee? || competition_announcement_team?
   end
 
   alias_method :can_announce_competitions?, :can_admin_competitions?
@@ -521,7 +525,7 @@ class User < ApplicationRecord
   end
 
   def can_view_delegate_matters?
-    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee?
+    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee? || competition_announcement_team?
   end
 
   def can_manage_incidents?
@@ -550,7 +554,7 @@ class User < ApplicationRecord
   end
 
   def can_see_admin_competitions?
-    board_member? || senior_delegate? || admin? || quality_assurance_committee?
+    board_member? || senior_delegate? || admin? || quality_assurance_committee? || competition_announcement_team?
   end
 
   def can_approve_media?
