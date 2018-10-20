@@ -59,6 +59,13 @@ RSpec.describe TeamsController do
         expect(flash[:danger]).to_not be_nil
       end
     end
+
+    it "leader of WDC can manage the banned team, despite not being a member of the banned team" do
+      sign_in FactoryBot.create :user, :wdc_leader
+
+      get :edit, params: { id: Team.banned.id }
+      expect(response).to render_template :edit
+    end
   end
 
   describe 'POST #update' do
@@ -140,6 +147,18 @@ RSpec.describe TeamsController do
         member = FactoryBot.create :user
         patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: nil, end_date: Date.today+5 } } } }
         expect(team.reload.team_members.count).to eq 0
+      end
+    end
+
+    context "leader of WDC managing the banned team, despite not being a member of the banned team" do
+      sign_in { FactoryBot.create :user, :wdc_leader }
+
+      it 'can add a member' do
+        team = Team.banned
+        member = FactoryBot.create :user
+        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
+        expect(response).to redirect_to edit_team_path(team)
+        expect(team.reload.team_members.first.user.id).to eq member.id
       end
     end
   end
