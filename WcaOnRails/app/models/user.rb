@@ -436,12 +436,34 @@ class User < ApplicationRecord
     team_member?(Team.wst)
   end
 
+  # See https://www.worldcubeassociation.org/documents/motions/02.2018.1%20-%20Definitions.pdf
+  def internal_staff?
+    full_delegate? || senior_delegate? || leader_of_any_team? || board_member?
+  end
+
+  # See https://www.worldcubeassociation.org/documents/motions/02.2018.1%20-%20Definitions.pdf
+  def external_staff?
+    candidate_delegate? || member_of_any_team?
+  end
+
+  def any_kind_of_staff?
+    internal_staff? || external_staff?
+  end
+
   def team_member?(team)
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
 
   def team_leader?(team)
     self.current_team_members.select { |t| t.team_id == team.id && t.team_leader }.count > 0
+  end
+
+  def member_of_any_team?
+    !self.current_team_members.empty?
+  end
+
+  def leader_of_any_team?
+    !self.teams_where_is_leader.empty?
   end
 
   def teams_where_is_leader
@@ -454,6 +476,10 @@ class User < ApplicationRecord
 
   def any_kind_of_delegate?
     delegate_status.present?
+  end
+
+  def full_delegate?
+    delegate_status == "delegate"
   end
 
   def senior_delegate?
