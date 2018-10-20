@@ -333,6 +333,8 @@ pt-BR:
         showAtAll: Tornar competição visível ao público
         #original_hash: 709a232
         name: Nome
+        #original_hash: f91b080
+        name_reason: Razão para o nome
         #original_hash: b649210
         cellName: Apelido
         #original_hash: d523ebb
@@ -1968,6 +1970,11 @@ pt-BR:
         Você pode usar <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        Uma explicação breve sobre o nome da competição. O nome deve estar de
+        acordo com a <a href='/documents/policies/Competition%20Name.pdf'>WCA
+        Competition Name Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
         O local onde a competição vai acontecer. %{md}. Por exemplo [Cité des
@@ -2709,6 +2716,14 @@ pt-BR:
           qualidade para garantir uma consistente alta qualidade dos processos,
           do Staff da WCA, Organizações Regionais, Organizadores e Competição e
           Staff de Competição.
+      wcat:
+        #original_hash: 2b81984
+        name: Equipe de Anúncios de Competições da WCA
+        #original_hash: 61a471f
+        description: >-
+          Esse comitê tem o papel de aprovar e anunciar as competições da WCA e
+          garantir que esses anúncios estejam de acordo com os padrões de
+          qualidade da WCA.
       wmt:
         #original_hash: 2035811
         name: Equipe de Marketing da WCA
@@ -2904,6 +2919,12 @@ pt-BR:
         para garantir uma consistente alta qualidade dos processos, do Staff da
         WCA, Organizações Regionais, Organizadores e Competição e Staff de
         Competição.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Esse comitê tem o papel de aprovar e anunciar as competições da WCA e
+        garantir que esses anúncios estejam de acordo com os padrões de
+        qualidade da WCA.
     wmt:
       #original_hash: f2a0140
       info_html: >-
