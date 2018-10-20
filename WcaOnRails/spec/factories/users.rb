@@ -62,6 +62,18 @@ FactoryBot.define do
       end
     end
 
+    trait :wdc_leader do
+      after(:create) do |user|
+        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id, team_leader: true)
+      end
+    end
+
+    trait :banned do
+      after(:create) do |user|
+        FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id)
+      end
+    end
+
     trait :wrc_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)

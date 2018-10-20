@@ -447,11 +447,13 @@ class User < ApplicationRecord
   end
 
   def staff?
-    any_kind_of_delegate? || member_of_any_team?
+    any_kind_of_delegate? || member_of_any_official_team? || board_member?
   end
 
   def staff_with_voting_rights?
-    full_delegate? || senior_delegate? || senior_member_of_any_team? || leader_of_any_team? || board_member?
+    # See "Member with Voting Rights" in:
+    #  https://www.worldcubeassociation.org/documents/motions/02.2019.1%20-%20Definitions.pdf
+    full_delegate? || senior_delegate? || senior_member_of_any_official_team? || leader_of_any_official_team? || board_member?
   end
 
   def team_member?(team)
@@ -466,16 +468,16 @@ class User < ApplicationRecord
     self.current_team_members.select { |t| t.team_id == team.id && t.team_leader }.count > 0
   end
 
-  def member_of_any_team?
-    !self.current_team_members.empty?
+  def member_of_any_official_team?
+    self.current_teams.official.any?
   end
 
-  def senior_member_of_any_team?
-    !self.teams_where_is_senior_member.empty?
+  def senior_member_of_any_official_team?
+    self.teams_where_is_senior_member.official.any?
   end
 
-  def leader_of_any_team?
-    !self.teams_where_is_leader.empty?
+  def leader_of_any_official_team?
+    self.teams_where_is_leader.official.any?
   end
 
   def teams_where_is_senior_member

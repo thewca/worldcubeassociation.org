@@ -5,6 +5,9 @@ class Team < ApplicationRecord
   has_many :current_members, -> { current }, class_name: "TeamMember"
 
   default_scope -> { where(hidden: false) }
+  scope :with_hidden, -> { unscope(where: :hidden) }
+
+  scope :official, -> { where(id: Team.all_official.map(&:id)) }
 
   accepts_nested_attributes_for :team_members, reject_if: :all_blank, allow_destroy: true
 
@@ -23,19 +26,32 @@ class Team < ApplicationRecord
     end
   end
 
-  def self.all_ordered_by_english_name
-    I18n.with_locale :en do
-      self.all.sort_by(&:name)
-    end
+  # "Official" teams are teams recognized by Motion "10.2019.0":
+  #  https://www.worldcubeassociation.org/documents/motions/10.2019.0%20-%20Committees%20and%20Teams.pdf
+  # Motions starting with "10.YYYY.N" define these teams:
+  #  https://www.worldcubeassociation.org/documents
+  def self.all_official
+    [
+      Team.wct,
+      Team.wcat,
+      Team.wdc,
+      Team.wec,
+      Team.wfc,
+      Team.wmt,
+      Team.wqac,
+      Team.wrc,
+      Team.wrt,
+      Team.wst,
+    ]
   end
 
   # Code duplication from Cachable concern, as we index by friendly_id and not by id :(
   def self.c_all_by_friendly_id
-    @@teams_by_friendly_id ||= all.index_by(&:friendly_id)
+    @@teams_by_friendly_id ||= all.with_hidden.index_by(&:friendly_id)
   end
 
   def self.c_find_by_friendly_id!(friendly_id)
-    self.c_all_by_friendly_id[friendly_id] || raise("id not found #{friendly_id}")
+    self.c_all_by_friendly_id[friendly_id] || raise("friendly id not found #{friendly_id}")
   end
 
   def self.board
