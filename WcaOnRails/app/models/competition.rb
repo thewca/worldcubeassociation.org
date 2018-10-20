@@ -236,6 +236,10 @@ class Competition < ApplicationRecord
     self.confirmed? || self.showAtAll
   end
 
+  def registration_full?
+    self.competitor_limit_enabled? && self.registrations.accepted.count >= self.competitor_limit
+  end
+
   def country
     Country.c_find(self.countryId)
   end

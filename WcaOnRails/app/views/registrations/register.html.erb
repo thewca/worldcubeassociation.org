@@ -57,7 +57,7 @@
           </ul>
         <% end %>
       <% else %>
-        <% if @competition.competitor_limit_enabled? && @competition.registrations.accepted.count >= @competition.competitor_limit %>
+        <% if @competition.registration_full? %>
           <%= alert :warning, t('registrations.registration_full', competitor_limit: @competition.competitor_limit) %>
         <% end %>
         <p>

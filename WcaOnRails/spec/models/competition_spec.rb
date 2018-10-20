@@ -780,4 +780,26 @@ RSpec.describe Competition do
       expect(competition.serializable_hash[:country_iso2]).to be_nil
     end
   end
+
+  describe "#registration_full?" do
+    let(:competition) {
+      FactoryBot.create :competition,
+                        :registration_open,
+                        competitor_limit_enabled: true,
+                        competitor_limit: 10,
+                        competitor_limit_reason: "Dude, this is my closet"
+    }
+
+    it "detects full competition" do
+      expect(competition.registration_full?).to be false
+
+      # Add 9 accepted registrations. The list should not yet be full.
+      FactoryBot.create_list :registration, 9, :accepted, competition: competition
+      expect(competition.registration_full?).to be false
+
+      # Add a 10th registration, which will fill up the registration list.
+      FactoryBot.create :registration, :accepted, competition: competition
+      expect(competition.registration_full?).to be true
+    end
+  end
 end
