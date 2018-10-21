@@ -335,7 +335,7 @@ class RegistrationsController < ApplicationController
       return
     end
 
-    charge = Stripe::Charge.create(
+    charge = journaled_stripe_charge(
       {
         amount: amount,
         currency: registration.outstanding_entry_fees.currency.iso_code,
@@ -357,6 +357,50 @@ class RegistrationsController < ApplicationController
   rescue Stripe::CardError => e
     flash[:danger] = 'Unsuccessful payment: ' + e.message
     redirect_to competition_register_path
+  end
+
+  private def journaled_stripe_charge(*stripe_charge_create_args)
+    # Talk to Stripe to make a charge, but "journal" the attempt.
+    #  1. Before talking to Stripe, we first create a StripeCharge in status "unknown".
+    #  2. Talk to Stripe.
+    #  3. After talking to Stripe, we update that StripeCharge to status to "success" or "failure".
+    # If anything else happens (maybe our server crashed during step 2, or
+    # between step 2 and 3), then we'll have a StripeCharge in our database
+    # with "unknown" status, and we'll know to investigate it, most likely by
+    # visiting our Stripe dashboard to see if the charge actually happened or not.
+
+    stripe_charge = StripeCharge.create!(
+      metadata: stripe_charge_create_args.to_json,
+      stripe_charge_id: nil,
+      status: "unknown",
+    )
+
+    begin
+      charge = Stripe::Charge.create(*stripe_charge_create_args)
+      stripe_charge.update!(
+        status: "success",
+        stripe_charge_id: charge.id,
+      )
+    rescue Stripe::CardError => e
+      stripe_charge.update!(
+        status: "failure",
+        error: error_to_s(e),
+      )
+      raise e
+    rescue Exception => e # rubocop:disable Lint/RescueException
+      # Note that we intentionally leave the status of the charge as "unknown" here. That's because at this
+      # point, we don't know if it actually succeeded or failed. Perhaps the
+      # Stripe backend fully processed our request, but there was some
+      # connectivity error that caused us to not know about it.
+      stripe_charge.update!(error: error_to_s(e))
+      raise e
+    end
+
+    charge
+  end
+
+  private def error_to_s(error)
+    error.inspect + "\n" + error.backtrace.join("\n")
   end
 
   def refund_payment
