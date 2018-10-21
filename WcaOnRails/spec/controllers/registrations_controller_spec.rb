@@ -642,6 +642,71 @@ RSpec.describe RegistrationsController do
         expect(flash[:danger]).to eq "Unsuccessful payment: Your card was declined."
         expect(response).to redirect_to competition_register_path(competition)
       end
+
+      context 'stripe journal' do
+        it 'records successes' do
+          expect(StripeCharge.all.length).to eq 0
+
+          pay_all_with(registration, stripe_token_id)
+
+          expect(StripeCharge.all.length).to eq 1
+          stripe_charge = StripeCharge.first
+          expect(stripe_charge.status).to eq "success"
+          expect(stripe_charge.stripe_charge_id).not_to be_nil
+          metadata = JSON.parse(stripe_charge.metadata)[0]["metadata"]
+          expect(metadata["wca_id"]).to eq registration.user.wca_id
+        end
+
+        it 'records failures' do
+          expect(StripeCharge.all.length).to eq 0
+
+          # Attempt payment with invalid credit card.
+          bad_card_token = stripe_token_id(number: "4000000000000002")
+          pay_all_with(registration, bad_card_token)
+
+          expect(StripeCharge.all.length).to eq 1
+          stripe_charge = StripeCharge.first
+          expect(stripe_charge.status).to eq "failure"
+          expect(stripe_charge.stripe_charge_id).to be_nil
+          expect(stripe_charge.error).to include "Stripe::CardError"
+          metadata = JSON.parse(stripe_charge.metadata)[0]["metadata"]
+          expect(metadata["wca_id"]).to eq registration.user.wca_id
+        end
+
+        it 'records attempts even if something weird happens' do
+          expect(StripeCharge.all.length).to eq 0
+
+          # Simulate some weird issue happening after we start talking to
+          # Stripe, and we never get around to recording the payment on our
+          # end, but maybe Stripe actually did charge the credit card.
+          stripe_double = class_double("Stripe::Charge").as_stubbed_const(transfer_nested_constants: true)
+          unexpected_error = "Uh oh!"
+          expect(stripe_double).to receive(:create).and_raise(unexpected_error)
+
+          expect {
+            pay_all_with(registration, stripe_token_id)
+          }.to raise_error(unexpected_error)
+
+          expect(StripeCharge.all.length).to eq 1
+          stripe_charge = StripeCharge.first
+          expect(stripe_charge.status).to eq "unknown"
+          expect(stripe_charge.stripe_charge_id).to be_nil
+          expect(stripe_charge.error).to include "RuntimeError: Uh oh"
+          metadata = JSON.parse(stripe_charge.metadata)[0]["metadata"]
+          expect(metadata["wca_id"]).to eq registration.user.wca_id
+        end
+
+        def pay_all_with(registration, stripe_token)
+          post :process_payment, params: {
+            competition_id: registration.competition.id,
+            payment: {
+              stripe_token: stripe_token,
+              total_amount:
+              registration.outstanding_entry_fees.cents,
+            },
+          }
+        end
+      end
     end
   end
 
