@@ -526,7 +526,7 @@ class CompetitionsController < ApplicationController
       end
 
       if params[:commit] == "Confirm"
-        CompetitionsMailer.notify_board_of_confirmed_competition(current_user, @competition).deliver_later
+        CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
         CompetitionsMailer.notify_organizers_of_confirmed_competition(current_user, @competition).deliver_later
         flash[:success] = t('.confirm_success')
       else

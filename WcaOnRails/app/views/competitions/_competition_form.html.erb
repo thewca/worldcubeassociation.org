@@ -8,14 +8,15 @@
         <%= f.input :confirmed, as: :boolean %>
         <%= f.input :showAtAll %>
       <% else %>
+        <% mail_to_wcat = mail_to Team.wcat.email, t(".wcat"), target: "_blank" %>
         <%= if is_actually_confirmed && @competition.showAtAll?
-              alert :success, t('.locked_edit_html', board: mail_to_wca_board)
+              alert :success, t('.public_and_locked_html')
             elsif is_actually_confirmed && !@competition.showAtAll?
-              alert :warning, t('.confirmed_not_visible_html', board: mail_to_wca_board)
+              alert :warning, t('.confirmed_but_not_visible_html', contact: mail_to_wcat)
             elsif !is_actually_confirmed && @competition.showAtAll?
               alert :danger, t('.is_visible')
             elsif !is_actually_confirmed && !@competition.showAtAll?
-              alert :warning, t('.awaiting_confirmation_html', board: mail_to_wca_board)
+              alert :warning, t('.pending_confirmation_html', contact: mail_to_wcat)
             end %>
       <% end %>
     <% end %>

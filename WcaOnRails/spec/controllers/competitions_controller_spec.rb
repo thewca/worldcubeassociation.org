@@ -525,7 +525,7 @@ RSpec.describe CompetitionsController do
 
       it "can confirm competition and expects board and organizers to receive a notification email" do
         expect(CompetitionsMailer).to receive(:notify_organizers_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
-        expect(CompetitionsMailer).to receive(:notify_board_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
+        expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
           patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         end.to change { enqueued_jobs.size }.by(2)

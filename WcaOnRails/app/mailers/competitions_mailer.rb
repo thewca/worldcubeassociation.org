@@ -6,13 +6,13 @@ class CompetitionsMailer < ApplicationMailer
   include MailersHelper
   helper :markdown
 
-  def notify_board_of_confirmed_competition(confirmer, competition)
+  def notify_wcat_of_confirmed_competition(confirmer, competition)
     I18n.with_locale :en do
       @competition = competition
       @confirmer = confirmer
       mail(
-        to: "board@worldcubeassociation.org",
-        cc: competition.delegates.flat_map { |d| [d.email, d.senior_delegate&.email] }.compact.uniq + [Team.wqac.email],
+        to: Team.wcat.email,
+        cc: competition.delegates.flat_map { |d| [d.email, d.senior_delegate&.email] }.compact.uniq + [Team.wqac.email, Team.board.email],
         reply_to: confirmer.email,
         subject: "#{confirmer.name} just confirmed #{competition.name}",
       )

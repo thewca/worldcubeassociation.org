@@ -38,10 +38,6 @@ module ApplicationHelper
     link_to text, url, target: "_blank"
   end
 
-  def mail_to_wca_board
-    mail_to "board@worldcubeassociation.org", I18n.t("competitions.competition_form.board"), target: "_blank"
-  end
-
   def filename_to_url(filename)
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe WcaIdClaimMailer, type: :mailer do
-  describe "notify_board_of_confirmed_competition" do
+  describe "notify_wcat_of_confirmed_competition" do
     let(:delegate) { FactoryBot.create :delegate }
     let(:person) { FactoryBot.create :person }
     let(:user_claiming_wca_id) { FactoryBot.create :user, unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob }

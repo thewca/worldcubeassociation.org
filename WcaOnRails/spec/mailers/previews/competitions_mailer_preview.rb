@@ -2,9 +2,9 @@
 
 # Preview all emails at http://localhost:3000/rails/mailers/competitions_mailer
 class CompetitionsMailerPreview < ActionMailer::Preview
-  def notify_board_of_confirmed_competition
+  def notify_wcat_of_confirmed_competition
     c = CompetitionDelegate.last.competition
-    CompetitionsMailer.notify_board_of_confirmed_competition(c.delegates[0], c)
+    CompetitionsMailer.notify_wcat_of_confirmed_competition(c.delegates[0], c)
   end
 
   def notify_organizer_of_confirmed_competition
@@ -30,7 +30,7 @@ class CompetitionsMailerPreview < ActionMailer::Preview
 
   def notify_board_of_confirmed_championship_competition
     c = Competition.find("WC2013")
-    CompetitionsMailer.notify_board_of_confirmed_competition(c.delegates[0], c)
+    CompetitionsMailer.notify_wcat_of_confirmed_competition(c.delegates[0], c)
   end
 
   def notify_users_of_results_presence

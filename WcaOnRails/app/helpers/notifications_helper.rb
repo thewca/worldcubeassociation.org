@@ -11,7 +11,7 @@ module NotificationsHelper
         url: edit_competition_path(unconfirmed_competition),
       }
     end
-    if user.board_member? || user.quality_assurance_committee?
+    if user.competition_announcement_team? || user.board_member? || user.quality_assurance_committee?
       # Show Board and WQAC members:
       #  - Confirmed, but not visible competitions: They need to approve or reject
       #                                             these competitions.
