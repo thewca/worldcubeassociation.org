@@ -31,6 +31,9 @@ class ServerStatusController < ApplicationController
     @certificate_good = Rails.env.test? || Rails.env.development? || (@expires_in || 0) > ServerStatusController::CERTIFICATE_RENEW_DELAY
     @everything_good &&= @certificate_good
 
+    @unknown_stripe_charges_count = StripeCharge.where(status: "unknown").count
+    @everything_good &&= @unknown_stripe_charges_count == 0
+
     @locale_stats = ApplicationController.locale_counts.sort_by { |locale, count| count }.reverse
 
     if !@everything_good

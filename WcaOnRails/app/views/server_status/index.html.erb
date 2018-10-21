@@ -74,6 +74,20 @@
     </div>
   </div>
 
+  <% kind_class = @unknown_stripe_charges_count == 0 ? "success" : "danger" %>
+  <div class="panel panel-<%= kind_class %>">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <span class="label label-<%= kind_class %>">Stripe Charges</span>
+        <% if @unknown_stripe_charges_count > 0 %>
+          <%= pluralize(@unknown_stripe_charges_count, "Stripe charge") %> with status "unknown".
+        <% else %>
+          Looking good!
+        <% end %>
+      </h3>
+    </div>
+  </div>
+
   <%= alert :info do
     sha1 = `git rev-parse HEAD`
     {
