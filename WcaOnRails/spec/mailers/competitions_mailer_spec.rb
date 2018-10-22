@@ -39,7 +39,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
       expect(mail.subject).to eq("#{delegate.name} confirmed #{competition.name}")
-      expect(mail.body.encoded).to match("Your competition Delegate #{delegate.name} confirmed #{competition.name} and sent the submission to the WCA Board.")
+      expect(mail.body.encoded).to match("Your competition Delegate #{delegate.name} confirmed #{competition.name} and sent the submission to the WCAT.")
     end
 
     it "sends no email if there are no organizers" do
@@ -58,9 +58,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     it "renders" do
       expect(mail.to).to eq(competition.organizers.pluck(:email))
       expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
-      expect(mail.subject).to eq "The WCA Board announced #{competition.name}"
+      expect(mail.subject).to eq "The WCAT announced #{competition.name}"
       expect(mail.body.encoded).to match("Dear organizers of #{competition.name}")
-      expect(mail.body.encoded).to match("The WCA Board approved your competition and officially announced it to the public.")
+      expect(mail.body.encoded).to match("The WCAT approved your competition and officially announced it to the public.")
     end
 
     it "sends no email if there are no organizers" do
