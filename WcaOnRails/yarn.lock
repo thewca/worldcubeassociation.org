@@ -3704,10 +3704,9 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
-flag-icon-css@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-3.2.0.tgz#a9898b92078505ce5249fe8bba071518d6ae7880"
-  integrity sha512-XwbQgswfJ19jVrYL92+MKK3HJfIG+6lC8oifaG6mOtahWaXHbDFXQ7UVbw1+I+zidM1azOD8aFC0DO+xZzK0Xg==
+flag-icon-css@viroulep/flag-icon-css#3.2.1-xk:
+  version "3.2.1"
+  resolved "https://codeload.github.com/viroulep/flag-icon-css/tar.gz/9b5f113466e9597b5b2fe8e4bc5d8414789c5175"
 
 flatten@^1.0.2:
   version "1.0.2"
