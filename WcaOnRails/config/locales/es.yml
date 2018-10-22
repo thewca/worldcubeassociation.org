@@ -337,6 +337,8 @@ es:
         showAtAll: Hacer esta competición públicamente visible
         #original_hash: 709a232
         name: Nombre
+        #original_hash: f91b080
+        name_reason: Razón para el nomrbre
         #original_hash: b649210
         cellName: Nombre breve
         #original_hash: d523ebb
@@ -1380,6 +1382,12 @@ es:
       unique: 'está actualmente en uso por "%{used_name}" con %{used_email}'
       #original_hash: 26f70ed
       dob_past: debe ser una fecha pasada
+      #original_hash: b64df45
+      already_represented_country: >-
+        No se puede cambiar el país a un país que la persona haya representado
+        en el pasado.
+      #original_hash: b589014
+      must_have_a_change: El nombre del país debe ser distinto para actualizar.
       #original_hash: 012f032
       must_be_senior: debe ser un Delegado Senior
       #original_hash: 2e582eb
@@ -1987,6 +1995,12 @@ es:
       supports_md_html: >-
         Admite <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        Una breve descripción del nombre de la competición. El nombre debe
+        respetar la <a
+        href='/documents/policies/Competition%20Name.pdf'>Política de Nombres de
+        Competiciones de la WCA</a>
       #original_hash: 9d9126e
       venue_html: >-
         El local donde se celebra la competición. %{md}. Por ejemplo: [Parque de
@@ -2748,6 +2762,14 @@ es:
           estándares de calidad para asegurar una consistente alta calidad de
           procesos, personal WCA, Organizaciones Regionales, Organizadores y
           personal ayudante en competiciones.
+      wcat:
+        #original_hash: 2b81984
+        name: Equipo de Anuncios de Competiciones de la WCA
+        #original_hash: 61a471f
+        description: >-
+          Este comité tiene la labor de aprobar y anunciar Competiciones WCA y
+          asegurarse de que dichos anuncios se adhieren a los estándares de
+          calidad de la WCA.
       wmt:
         #original_hash: 2035811
         name: Equipo de Márketing de la WCA
@@ -2948,6 +2970,12 @@ es:
         estándares de calidad para asegurar una consistente alta calidad de
         procesos, personal WCA, Organizaciones Regionales, Organizadores y
         personal ayudante en competiciones.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Este comité tiele la labor de aprobar y anunciar Competiciones WCA y
+        asegurarse de que dichos anuncios se adhieren a los estándares de
+        calidad de la WCA.
     wmt:
       #original_hash: f2a0140
       info_html: >-
