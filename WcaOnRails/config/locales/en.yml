@@ -411,7 +411,7 @@ en:
         organizer_ids: "Competition organizers (they need an account to be listed here)."
         external_website: "The website of the competition. Must be a valid http(s) url."
         registration_open: "Note: Registration open and close are in UTC time"
-        remarks_html: "Some additional information you want to pass on to the Board. For example, elaborate your reasons if this competition is requested less than four weeks away, or if you are requesting the application of %{link}. Please fill this out in English!"
+        remarks_html: "Some additional information you want to pass on to the WCAT. For example, elaborate your reasons if this competition is requested less than four weeks away, or if you are requesting the application of %{link}. Please fill this out in English!"
         clone_tabs: ""
         countryId: ""
         end_date: ""
@@ -669,16 +669,16 @@ en:
         welcome: "Hello %{user_email}!"
         confirm: "You can confirm your new account email address through the link below:"
         confirmation_link: "Confirm mail address."
-      #context: notification to organizer that delegate submitted competition to the WCA Board
+      #context: notification to organizer that delegate submitted competition to the WCAT
       competition_submission_email:
         header: "%{delegate_name} confirmed %{competition}"
         organizers: "Dear organizers of %{competition},"
-        confirmed: "Your competition Delegate %{delegate_name} confirmed %{competition} and sent the submission to the WCA Board. As soon as the WCA Board announces this competition to the public, you will receive another notification."
+        confirmed: "Your competition Delegate %{delegate_name} confirmed %{competition} and sent the submission to the WCAT. As soon as the WCAT announces this competition to the public, you will receive another notification."
         contact: "If you have more questions, please get in contact with the competition Delegate(s) via email: "
-      #context: notification to organizers after the WCA Board announced their competition
+      #context: notification to organizers after the WCAT announced their competition
       competition_announcement_email:
-        header: "The WCA Board announced %{competition}"
-        announced: "The WCA Board approved your competition and officially announced it to the public."
+        header: "The WCAT announced %{competition}"
+        announced: "The WCAT approved your competition and officially announced it to the public."
         link: "Please follow the link to get to the competition announcement: "
       #context: notification to users after they were added to a competition as organizers
       organizer_addition_email:
@@ -1115,7 +1115,7 @@ en:
       update_success: "Successfully updated the competition events."
     update:
       save_success: "Successfully saved competition."
-      confirm_success: "Successfully confirmed competition. Check your email, and wait for the Board to announce it!"
+      confirm_success: "Successfully confirmed competition. Check your email, and wait for the WCAT to announce it!"
       delete_success: "Successfully deleted competition %{id}."
     time_until_competition:
       competition_in: "Competition is in %{n_days}."
@@ -1504,7 +1504,7 @@ en:
     committees_and_teams_html: "<u>Committees and Teams</u>"
     members: "Members"
     board:
-      info_html: "The World Cube Association is led by the WCA Board. They are responsible for general inquiries and the WCA organization as a whole. All official competitions need the approval of the WCA Board to be announced."
+      info_html: "The World Cube Association is led by the WCA Board. They are responsible for general inquiries and the WCA organization as a whole."
     wct:
       info_html: "The WCT is in charge of overseeing and supporting communications of the WCA with the community and general public. They should be contacted if you have general questions about the WCA or their social media appearance."
     wdc:
@@ -1647,10 +1647,10 @@ en:
     paragraph3:
       title: "Deadlines for the announcement of the competition"
       content_html: "The competition should be announced at least one month before the start of the competition (see <a href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Guideline 8a4++</a>). If there are special reasons preventing this deadline to be met, competitions may be announced up to two weeks before, at the discretion
-      of the WCA Board. It is highly recommended to inform the WCA Board of these reasons as soon as possible to avoid a later refusal of the competition."
+      of the WCAT. It is highly recommended to inform the WCAT of these reasons as soon as possible to avoid a later refusal of the competition."
     paragraph4:
       title: "Proximity policy"
-      content1: "WCA competitions will be accepted if they are at least 100 km or 19 days away from any other competition. The WCA Board should particularly review a proposed competition if there is another competition for which the distance between them is less than 100 km and the time between them is less than 19 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
+      content1: "WCA competitions will be accepted if they are at least 100 km or 19 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 100 km and the time between them is less than 19 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
         '1': "The two competitions don't have events in common."
         '2': "The two competitions take place in different countries."
@@ -1668,10 +1668,10 @@ en:
             '2b': "the other competition must not have the 3x3x3 Fewest Moves event."
     paragraph-events:
       title: "Announcing events"
-      content: 'All events that are going to be held at the competition must be specified by the Delegate when requesting the competition approval. This also includes "tentative" events (i.e. events that may be held additionally depending on the competition flow). Further additions must be approved by the Board.'
+      content: 'All events that are going to be held at the competition must be specified by the Delegate when requesting the competition approval. This also includes "tentative" events (i.e. events that may be held additionally depending on the competition flow). Further additions must be approved by the WCAT.'
     paragraph5:
       title: "Competitor limits"
-      content_html: "The number of competitors may be limited per event or per competition (see <a href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulation Z4</a>). Like for all regulations in article Z, the Delegate of the competition must get an approval of the competitor limit by the Board. Competitor limits should be
+      content_html: "The number of competitors may be limited per event or per competition (see <a href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulation Z4</a>). Like for all regulations in article Z, the Delegate of the competition must get an approval of the competitor limit by the WCAT. Competitor limits should be
         chosen wisely and in accordance with the expected competitor interest. The limit should not set to a lower number for minor reasons. The intended limit should already be taken into consideration when searching for a suitable venue. The competitors
         limit must be clearly stated on the competition page on the WCA website."
     paragraph6:
