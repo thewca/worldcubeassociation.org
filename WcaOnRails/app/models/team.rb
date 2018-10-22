@@ -23,6 +23,12 @@ class Team < ApplicationRecord
     end
   end
 
+  def self.all_ordered_by_english_name
+    I18n.with_locale :en do
+      self.all.sort_by(&:name)
+    end
+  end
+
   # Code duplication from Cachable concern, as we index by friendly_id and not by id :(
   def self.c_all_by_friendly_id
     @@teams_by_friendly_id ||= all.index_by(&:friendly_id)

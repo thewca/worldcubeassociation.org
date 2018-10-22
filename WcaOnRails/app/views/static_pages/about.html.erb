@@ -22,7 +22,7 @@
 
   <p><%= t('about.structure.committees') %>
   <ul>
-    <% Team.order(:rank).each do |team| %>
+    <% Team.all_ordered_by_english_name.each do |team| %>
       <% next if team == Team.board %>
       <li>
         <strong><%= team.name %> (<%= team.acronym %>)</strong>: <%= format_team_members(team) %> <br />

@@ -1090,10 +1090,8 @@ CREATE TABLE `teams` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `rank` int(11) DEFAULT NULL,
   `hidden` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_teams_on_rank` (`rank`),
   KEY `index_teams_on_friendly_id` (`friendly_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1416,6 +1414,7 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180825115701'),
 ('20180831075355'),
 ('20180831164420'),
-('20180912042457'),
 ('20180908195553'),
-('20181020004209');
+('20180912042457'),
+('20181020004209'),
+('20181022031135');

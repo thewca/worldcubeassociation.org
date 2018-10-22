@@ -542,7 +542,6 @@ module DatabaseDumper
           created_at
           friendly_id
           email
-          rank
           hidden
           updated_at
         ),
