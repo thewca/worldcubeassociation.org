@@ -89,6 +89,8 @@ Rails.application.routes.draw do
   get 'delegate/crash-course' => 'delegates_panel#crash_course'
   get 'delegate/crash-course/edit' => 'delegates_panel#edit_crash_course'
   patch 'delegate/crash-course' => 'delegates_panel#update_crash_course'
+  get 'delegate/pending-claims(/:user_id)' => 'delegates_panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
+  get 'delegate/seniors' => 'delegates_panel#seniors'
   resources :notifications, only: [:index]
 
   root 'posts#index'
