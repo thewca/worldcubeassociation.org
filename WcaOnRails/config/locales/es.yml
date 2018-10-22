@@ -337,6 +337,8 @@ es:
         showAtAll: Hacer esta competición públicamente visible
         #original_hash: 709a232
         name: Nombre
+        #original_hash: f91b080
+        name_reason: Razón para el nomrbre
         #original_hash: b649210
         cellName: Nombre breve
         #original_hash: d523ebb
@@ -1380,6 +1382,12 @@ es:
       unique: 'está actualmente en uso por "%{used_name}" con %{used_email}'
       #original_hash: 26f70ed
       dob_past: debe ser una fecha pasada
+      #original_hash: b64df45
+      already_represented_country: >-
+        No se puede cambiar el país a un país que la persona haya representado
+        en el pasado.
+      #original_hash: b589014
+      must_have_a_change: El nombre del país debe ser distinto para actualizar.
       #original_hash: 012f032
       must_be_senior: debe ser un Delegado Senior
       #original_hash: 2e582eb
@@ -1981,12 +1989,18 @@ es:
       #original_hash: 9104a03
       no_past_competitions: No tienes competiciones anteriores.
     competition_form:
-      #original_hash: e879b0b
-      board: Junta Directiva
+      #original_hash: 2b81984
+      wcat: Equipo de Anuncio de Competiciones de la WCA
       #original_hash: f957dcb
       supports_md_html: >-
         Admite <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        Una breve descripción del nombre de la competición. El nombre debe
+        respetar la <a
+        href='/documents/policies/Competition%20Name.pdf'>Política de Nombres de
+        Competiciones de la WCA</a>
       #original_hash: 9d9126e
       venue_html: >-
         El local donde se celebra la competición. %{md}. Por ejemplo: [Parque de
@@ -2006,22 +2020,23 @@ es:
       deprecated_events: >-
         Esta competición tiene pruebas que ya no son oficiales, no admitimos
         editarlas.
-      #original_hash: 815d5c3
-      locked_edit_html: >-
-        Esta competición es visible y su edición está bloqueada. Si necesitas
-        modificar algo, ponte en contacto con la %{board}.
-      #original_hash: ce33e21
-      confirmed_not_visible_html: >-
-        Has confirmado esta competición, pero aún no es públicamente visible. La
-        %{board} la anunciará y la hará visible pronto.
+      #original_hash: cafc153
+      public_and_locked_html: >-
+        Esta competición es visible públicamente y no puede ser editada. Si
+        necesitas hacer algún cambio, por favor responde al hilo de correo
+        electrónico donde la competición fue confirmada.
+      #original_hash: e00a339
+      confirmed_but_not_visible_html: >-
+        Has confirmado esta competición, pero todavía no es visible
+        públicamente. Espera a que el %{contact} lo haga visible.
       #original_hash: e94cba8
       is_visible: >-
         ¡Esta competición es visible! Cualquier cambio que hagas se mostrará
         públicamente.
-      #original_hash: 34862bb
-      awaiting_confirmation_html: >-
-        Rellena todos los campos y haz clic en "Confirmar" cuando la competición
-        esté preparada para que la %{board} la apruebe.
+      #original_hash: f99b3f7
+      pending_confirmation_html: >-
+        Rellena todos los campos y haz click en Confirmar cuando estés listo
+        para que el %{contact} apruebe esta competición .
       #original_hash: 8966fd0
       submit_create_value: Crear una Competición
       #original_hash: 40b0dfd
@@ -2030,11 +2045,11 @@ es:
       submit_confirm_value: Confirmar
       #original_hash: f6fdbe4
       submit_delete_value: Eliminar
-      #original_hash: 1ca19b1
+      #original_hash: 22316f1
       submit_confirm: >-
         ¿Estás seguro de que quieres confirmar? Después de confirmar no podrás
         modificar nada. Tras confirmar, comprueba tu correo para verificar que
-        la Junta Directiva ha sido notificada.
+        el Equipo de Anuncios de Competiciones de la WCA ha sido notificada.
       #original_hash: 4c7deb7
       submit_delete: >-
         ¿Estás seguro de querer eliminar esta competición? Esta operación no es
@@ -2748,6 +2763,14 @@ es:
           estándares de calidad para asegurar una consistente alta calidad de
           procesos, personal WCA, Organizaciones Regionales, Organizadores y
           personal ayudante en competiciones.
+      wcat:
+        #original_hash: 2b81984
+        name: Equipo de Anuncios de Competiciones de la WCA
+        #original_hash: 61a471f
+        description: >-
+          Este comité tiene la labor de aprobar y anunciar Competiciones WCA y
+          asegurarse de que dichos anuncios se adhieren a los estándares de
+          calidad de la WCA.
       wmt:
         #original_hash: 2035811
         name: Equipo de Márketing de la WCA
@@ -2948,6 +2971,12 @@ es:
         estándares de calidad para asegurar una consistente alta calidad de
         procesos, personal WCA, Organizaciones Regionales, Organizadores y
         personal ayudante en competiciones.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Este comité tiele la labor de aprobar y anunciar Competiciones WCA y
+        asegurarse de que dichos anuncios se adhieren a los estándares de
+        calidad de la WCA.
     wmt:
       #original_hash: f2a0140
       info_html: >-
