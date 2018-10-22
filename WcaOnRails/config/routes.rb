@@ -121,6 +121,7 @@ Rails.application.routes.draw do
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
+  get 'tutorial' => redirect('/files/WCA_Competition_Tutorial.pdf', status: 302)
 
   get 'contact/website' => 'contacts#website'
   post 'contact/website' => 'contacts#website_create'
@@ -162,7 +163,7 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    get '/', to: redirect('/api/v0')
+    get '/', to: redirect('/api/v0', status: 302)
     namespace :v0 do
       get '/' => 'api#help'
       get '/me' => 'api#me'
