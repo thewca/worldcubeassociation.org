@@ -18,6 +18,23 @@
   <% if current_user&.can_view_senior_delegate_material? %>
     <h1>Senior Delegates panel</h2>
 
-    <%= link_to "Senior Delegate forms", "https://docs.google.com/document/d/12oyMQTC6hBhiil8CFvYuIT-iZfLO48urap4yq0w4xkg/" %>
+    <ul>
+      <li>
+        <%= link_to "Senior Delegate forms", "https://docs.google.com/document/d/12oyMQTC6hBhiil8CFvYuIT-iZfLO48urap4yq0w4xkg/" %>
+      </li>
+      <li>
+        <%= link_to "Pending claims for your subordinate Delegates", pending_claims_path %>
+      </li>
+    </ul>
+  <% end %>
+
+  <% if current_user&.board_member? %>
+    <h1>Board panel</h2>
+
+    <ul>
+      <li>
+        <%= link_to "List of Senior Delegates", delegate_seniors_path %>
+      </li>
+    </ul>
   <% end %>
 </div>
