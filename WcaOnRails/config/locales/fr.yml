@@ -331,6 +331,8 @@ fr:
         showAtAll: Rendre la compétition publique
         #original_hash: 709a232
         name: Nom
+        #original_hash: f91b080
+        name_reason: Explication du nom
         #original_hash: b649210
         cellName: Alias
         #original_hash: d523ebb
@@ -2029,6 +2031,11 @@ fr:
         Supporte le <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        Une brève explication du nom de la compétition. Le nom doit être en
+        accord avec la <a href='/documents/policies/Competition%20Name.pdf'>WCA
+        Competition Name Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
         La salle où la compétition à lieu. %{md}. Par exemple : [Cité des
@@ -2792,6 +2799,14 @@ fr:
           l'échelle mondiale de standards de qualité pour s'assurer de la haute
           qualité des processus, Staff WCA, Organisations Régionales,
           Organisateurs de Compétitions, et Staff de compétitions.
+      wcat:
+        #original_hash: 2b81984
+        name: Équipe des annonces de compétitions de la WCA
+        #original_hash: 61a471f
+        description: >-
+          Cette équipe a le rôle d'approuver et d'annoncer les Compétitions WCA,
+          et de s'assurer que ces annonces suivent les standards de qualités de
+          la WCA.
       wmt:
         #original_hash: 2035811
         name: Équipe Marketing de la WCA
@@ -2997,6 +3012,12 @@ fr:
         mondiale de standards de qualité pour s'assurer de la haute qualité des
         processus, Staff WCA, Organisations Régionales, Organisateurs de
         Compétitions, et Staff de compétitions.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Cette équipe a le rôle d'approuver et d'annoncer les Compétitions WCA,
+        et de s'assurer que ces annonces suivent les standards de qualités de la
+        WCA.
     wmt:
       #original_hash: f2a0140
       info_html: >-
