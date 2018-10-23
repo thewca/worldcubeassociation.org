@@ -72,6 +72,28 @@ hu:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: '3x3x3 kocka: több kocka vakon régi formátum'
+  formats:
+    #original_hash: e4b3c11
+    '1': 1-ből a legjobb
+    #original_hash: 778e14d
+    '2': 2-ből a legjobb
+    #original_hash: 21f623c
+    '3': 3-ból a legjobb
+    #original_hash: 2342d2b
+    a: 5 átlaga
+    #original_hash: 940c82d
+    m: 3 átlaga
+    short:
+      #original_hash: c21bc2a
+      '1': Bo1
+      #original_hash: 49e914a
+      '2': Bo2
+      #original_hash: b41f36f
+      '3': Bo3
+      #original_hash: 4a34175
+      a: Ao5
+      #original_hash: 53ba088
+      m: Mo3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -128,6 +150,24 @@ hu:
       name: Kombinált kvalifikáció
       #original_hash: 4c66ad0
       cellName: Kombinált kvalifikáció
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: '%{number}. kirakás'
+  round:
+    #original_hash: 236c41d
+    name: '%{event_name} %{round_name}'
+  advancement_condition:
+    #original_hash: 6e55337
+    ranking: 'Az első %{ranking} fő jut tovább a következő fordulóba'
+    #original_hash: 7ee969c
+    percent: 'Az első %{percent}% jut tovább a következő fordulóba'
+    attempt_result:
+      #original_hash: 1fb7fe1
+      time: 'Legjobb kirakás < %{time} jut tovább a következő fordulóba'
+      #original_hash: 8254f3e
+      moves: 'Legjobb kirakás < %{moves} fordítás jut tovább a következő fordulóba'
+      #original_hash: daab86e
+      points: 'Legjobb kirakás > %{points} pont jut tovább a következő fordulóba'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -149,8 +189,8 @@ hu:
       across_rounds: 'összesen %{time}időd van a %{rounds} fordulóra'
     #original_hash: f030c3d
     333fm: 1 óra
-    #original_hash: 2c2abd5
-    333mbf: 10 perc per kocka
+    #original_hash: cc7d8bb
+    333mbf: '10 perc per kocka, maximum 60:00.00'
   common:
     #original_hash: 2513cf0
     continent: Kontinens
@@ -197,6 +237,8 @@ hu:
     date_placeholder: ÉÉÉÉ-HH-NN
     #original_hash: 52249b5
     datetime_placeholder: 'ÉÉÉÉ-HH-NN ÓÓ:PP'
+    #original_hash: 7136e3b
+    time_format: 12h
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -277,11 +319,13 @@ hu:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: 'Ne engedd, hogy a szervezők szerkeszteni tudják ezt a versenyt'
+        confirmed: A szervezők ne szerkeszthessék a versenyt
         #original_hash: d493e6a
         showAtAll: Tedd publikussá a versenyt
         #original_hash: 709a232
         name: Név
+        #original_hash: f91b080
+        name_reason: A név indoklása
         #original_hash: b649210
         cellName: Verseny rövid neve
         #original_hash: d523ebb
@@ -304,7 +348,7 @@ hu:
         generate_website: >-
           A WCA honlapot szeretném használni külső honlap helyett a további
           információkhoz.
-        #original_hash: dd88e47
+        #original_hash: 6cf623b
         base_entry_fee_lowest_denomination: Alap regisztrációs díj
         #original_hash: 28a6fbb
         currency_code: Pénznem kód
@@ -318,10 +362,8 @@ hu:
         information: Információ
         #original_hash: 87b7d5f
         use_wca_registration: A WCA holnapot szeretném használni a regisztrációhoz
-        #original_hash: a2dfcf8
-        competitor_limit_enabled: >-
-          Szeretnék versenyzői limitet meghatározni, hogy hányan vehetnek részt
-          ezen a versenyen.
+        #original_hash: 9bb1965
+        competitor_limit_enabled: Versenyzői limit
         #original_hash: 749f4c9
         competitor_limit: A versenyzők maximális száma
         #original_hash: 4a8b6f1
@@ -346,8 +388,31 @@ hu:
           mellett
         #original_hash: 4baf44b
         championship_type: Verseny típus
-        #original_hash: ff722f0
-        registration_requirements: A regisztráció feltételei
+        #original_hash: 556fda0
+        extra_registration_requirements: Extra regisztrációs követelmények
+        #original_hash: 2529d04
+        on_the_spot_registration: Helyszíni regisztráció
+        #original_hash: 69780b5
+        on_the_spot_entry_fee_lowest_denomination: Helyszíni alap regisztrációs díj
+        #original_hash: efbdbab
+        refund_policy_percent: Visszatérített összeg (százalékos)
+        #original_hash: b332299
+        refund_policy_limit_date: Visszatérítés kérésének határideje
+        #original_hash: 3542671
+        guests_entry_fee_lowest_denomination: Nézői regisztrációs díj
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Szeretném követelezővé tenni a versenyzőknek, hogy leadják a
+          kockájukat a regisztráció során a Szabályzat Z1) pontja szerint
+        #original_hash: 466aca7
+        regulation_z1_reason: Z1) indoklása
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Szeretnék kiválasztani versenyzőket, akik közvetlenül továbbjutnak egy
+          meghatározott versenyszám meghtározott fordulójába korábbi versenyek
+          eredményei alapján a Szabélyzat Z3)-nak megfelelően
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Z3) indoklása
       registration:
         #original_hash: 3c23a67
         guests: Nézők
@@ -590,11 +655,11 @@ hu:
           A város és állam neve (amennyiben értelmezhető), ahol a verseny
           megrendezésre kerül. Ne tartalmazza az ország nevét (pl: Párizs VAGY
           San Francisco, California)!
-        #original_hash: 3d99319
+        #original_hash: bb470cc
         information: >-
-          Információ a versenyzői limitről, regisztrációs díjról és nézőkről és
-          más fontos információról azoknak, akik a versenyzőként vagy nézőként
-          érdeklődnek a verseny iránt.
+          Információk, amiket a versenyzőknek tudniuk kell, ami verseny
+          főoldalán lesz látható. <br/>Kérlek ezt <>angolul</b> mindenképp
+          töltsd ki és bármilyen olyan nyelven, amit a versenyzők beszélnek.
         #original_hash: b4d020f
         delegate_ids: A verseny WCA Delegáltjai
         #original_hash: 517d376
@@ -605,9 +670,9 @@ hu:
         external_website: 'A verseny honlapja. Érvényes http(s) URL-lel kell, hogy rendelkezzen.'
         #original_hash: 9965635
         registration_open: 'Megjegyzés: A regisztráció UTC időzóna szerint nyit és zár'
-        #original_hash: 243212f
+        #original_hash: bd402bf
         remarks_html: >-
-          Olyan extra információk, amiket közölni szeretnél a Boarddal. Például
+          Olyan extra információk, amiket közölni szeretnél a WCAT-tal. Például
           leírhatod, hogy miért lett kihirdetve a verseny kevesebb, mint 4
           héttel a verseny előtt vagy ha valamilyen speciális jóváhagyásra van
           szükséged a %{link} értelmében. Kérünk, hogy angolul töltsd ki!
@@ -619,13 +684,14 @@ hu:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 950a7ea
+        #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Az alap regisztrációs díj a versenyre. A regisztrációs díj az
           információs lapon és a regisztrációs lapon fog megjelenni, amennyiben
-          létezik.
-        #original_hash: 866bc05
-        currency_code: A regisztrációs díj pénzneme.
+          létezik. Amennyiben ez 0-ra van állítva, úgy egy mondat lesz
+          megjelenítve, mely szerint nincs regisztrációs díj a versenyre.
+        #original_hash: 9735ddf
+        currency_code: A regisztrációs díjak pénzneme.
         #original_hash: da39a3e
         guests_enabled: ''
         #original_hash: da39a3e
@@ -633,7 +699,7 @@ hu:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -644,38 +710,69 @@ hu:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
-          Jelenleg ez az szám csak információs jellegű, nem gátolja meg, hogy
-          több ember jelentkezni tudjon a versenyre. Dolgozunk, rajta hogy
-          támogassuk a regisztráció menetét, de ez néhány más felad elvégzését
-          követeli meg ezt megelőzően.
-        #original_hash: b9bc84d
-        competitor_limit: 'A versenyzők maximális száma, akik részt vehetnek a versenyen.'
+          Bár a Szabályzat nem követeli meg a versenyzői limit megadását, de
+          erősen ajánlott.
+        #original_hash: b7b599b
+        competitor_limit: >-
+          A versenyzők maximális száma, akik részt vehetnek a versenyen. Ez a
+          szám csak információs jellegű, ez nem fogja megakadályozni, hogy
+          többen regisztráljanak a versenyre. Dolgozunk azon, hogy ez
+          megvalósuljon, de ehhez még némi időre van szükségünk.
         #original_hash: 4bd7102
         competitor_limit_reason: 'Mi az oka a versenyzői limitnek? Kérlek, hogy ezt angolul töltsd ki!'
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
-        #original_hash: 508c178
-        registration_requirements: >-
-          Kérünk, hogy minden az <a
-          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
-          target="_blank">Útmutató 2c1+</a> pontjába eső követelményt tüntess
-          fel, ami érinti a regisztráció folyamatát. Miután a verseny ki lett
-          hirdetve ezt a mezőt <b>nem</b> tudod szerkeszteni és a Board
-          jóváhagyása kell hozzá, hogy megváltoztasd. <br/> Például itt tüntesd
-          fel, hogy ha a versenyzőknek nem lehet tartozása korábbi versenyekről,
-          ha a visszatérítés feltételhet kötött vagy ha a regisztráció e-mailes
-          megerősítésére van szükség a versenyzői limit elérése esetén. <br/>
-          Kérünk, hogy ezt a mezőt <b>angolul</b> mindenképp töltsd ki és
-          emellett bármely más nyelven is megteheted, amit a versenyzők
-          beszélnek. Ha WCA regisztrációt használsz, akkor a regisztrációs
-          oldalon fog megjelenni ez a mező.
+        #original_hash: 3de153b
+        extra_registration_requirements: >-
+          Kérlek itt adj meg minden olyan regisztrációs követelményt, ami fent
+          nem történt meg, például a fizetésre vonatkozó útmutatásokat. <br/>
+          Kérlek ezt <b>angolul</b> mindenképp töltsd ki és bármely olyan
+          nyelven, amint a versenyzők beszélnek. Ez a verseny főoldalán és a
+          regisztrációs lapon fog megjelenni, amennyiben a WCA honlapot
+          használod a regisztrációk kezelésére.
+        #original_hash: da39a3e
+        on_the_spot_registration: ''
+        #original_hash: 8c4fdf8
+        on_the_spot_entry_fee_lowest_denomination: >-
+          Ha ez -ra van állítva, akkor egy mondat lesz megjelenítve, mely
+          szerint a helyszíni regisztráció ingyenes lesz.
+        #original_hash: 180b7b3
+        refund_policy_percent: >-
+          Ez a szám csak információt ad, a visszatérítéseket kézzel kell
+          indítani. Ha -ra van állítva, akkor egy mondat fog megjelenni, mely
+          szerint a befizetett regisztrációs díjak nem lesznek visszatérítve
+          semmilyen esetben sem.
+        #original_hash: f64d853
+        refund_policy_limit_date: >-
+          Az a dátum, ami után a regisztrációs díjak visszatérítésére nincs
+          lehetőség.
+        #original_hash: 25a1324
+        guests_entry_fee_lowest_denomination: >-
+          Ez a szám csak információs jellegű, a nézői regisztrációs díjak
+          kezelésére nincs lehetőség ezen a honlapon keresztül. Ha -ra van
+          állítva, akkor egy mondat fog megjelenni, mely szerint a nézők
+          ingyenesen vehetnek részt a versenyen.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Kérlek itt fejtsd ki, hogy miért szeretnéd használni a Szabályzat Z1)
+          pontját. Kérlek, hogy ezt angolul töltsd ki!
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Kérlek itt fejtsd ki, hogy miért szeretnéd használni a Szabályzat Z3)
+          pontját. Kérlek, hogy ezt angolul töltsd ki!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
+        #original_hash: da39a3e
+        competition_id: ''
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
@@ -793,11 +890,6 @@ hu:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
-        #original_hash: da39a3e
-        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -840,11 +932,23 @@ hu:
           'true': Kérdezz a vendégekről
           #original_hash: f8c2332
           'false': NE kérdezz a vendégekről
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Szeretnék versenyzői limitet meghatározni
+          #original_hash: 5b581b5
+          'false': NEM SZERETNÉK versenyzői limitet meghatározni
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': Helyszíni regisztráció lehetséges lesz
+          #original_hash: 0f236df
+          'false': Helyszíni regisztráció NEM lesz lehetséges
   mail_form:
     attributes:
       contact_form:
         #original_hash: d31ab65
         inquiry: A következő lehetőségek közül melyik írja le leginkább a kérdésedet?
+        #original_hash: 1917f4f
+        competition_id: Verseny
         #original_hash: 709a232
         name: Név
         #original_hash: 3fa6f5f
@@ -895,6 +999,10 @@ hu:
         megerősítő levelet? Keresd fel a
         https://www.worldcubeassociation.org/users/confirmation/new oldalt és
         kérj egy újat.
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: 'Kérlek, hogy erősítsd meg az új e-mail címedet'
   wca:
     errors:
       messages:
@@ -905,10 +1013,8 @@ hu:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: >-
-            Használd a %{native_redirect_uri} linket, ha URI-t szeretnél
-            hozzáadni
+          #original_hash: 95c10ec
+          https_info: 'HTTPS szükséges, hacsak a host nem "localhost"'
           #original_hash: 62a0113
           scopes_html: >-
             Válaszd el a scope-okat szőközökkel. Hagyj üres helyet az default
@@ -1039,6 +1145,77 @@ hu:
       failure: A profilod frissítése nem lehetséges.
       #original_hash: c29870c
       unavailable: A kért nyelv nem elérhető.
+    mailer:
+      create_new_account:
+        #original_hash: a4ef6b6
+        header: Megerősítési útmutatások
+        #original_hash: 6ee63db
+        welcome: 'Üdvözlünk %{user_email}!'
+        #original_hash: da39d05
+        confirm: >-
+          A felhasználód létrejött, de mielőtt használni tudnád, még aktiválnod
+          kell. Kérlek, hogy erősítsd meg a felhasználódat az alábbi linken:
+        #original_hash: 776476a
+        confirmation_link: A felhasználóm megerősítése.
+        #original_hash: d484f70
+        activate: >-
+          Az aktiválás után be tudsz jelentkezni a World Cube Association
+          weboldalára:
+        #original_hash: 333999b
+        addendum: >-
+          Ez az e-mail automatikusan generálódott. Amennyiben nem regisztráltál
+          a World Cube Association weboldalára és mégis véletlenül megkaptad,
+          akkor kérünk, hogy hagyd figyelmen kívül és töröld.
+        #original_hash: dbc2263
+        questions: >-
+          Több kérdésed van? Szívesen segítünk! Nyugodtan küld egy emailt a
+          %{contact_link} címre.
+      reconfirmation_mail:
+        #original_hash: f34029e
+        welcome: 'Helló %{user_email}!'
+        #original_hash: 3095365
+        confirm: >-
+          A felhasználódhoz tartozó új e-mail címet az alábbi linken tudod
+          megerősíteni:
+        #original_hash: 4900afe
+        confirmation_link: E-mail cím megerőstése.
+      competition_submission_email:
+        #original_hash: ac4841b
+        header: '%{delegate_name} megerősítette a(z) %{competition} nevű versenyt'
+        #original_hash: 3db81b5
+        organizers: 'Kedves %{competition} Szervezők'
+        #original_hash: d353d8c
+        confirmed: >-
+          A versenyed Delegáltja, %{delegate_name} megerősítette a(z)
+          %{competition} nevű versenyedet és elküldte a WCAT-nak kihirdetésre.
+          Amint a WCAT kihirdette a versenyt egy újabb értesítést fogsz kapni.
+        #original_hash: dfea09d
+        contact: >-
+          Amennyiben további kérdésed van, kérlek lépj kapcsolatban a verseny
+          Delegáltja(i)val e-mailben:
+      competition_announcement_email:
+        #original_hash: 87f1f49
+        header: 'A WCAT kihirdette a(z) %{competition} nevű versenyt'
+        #original_hash: 0d3d10c
+        announced: A WCAT jóváhagyta a versenyedet és hivatalosan kihirdette.
+        #original_hash: 1c20919
+        link: >-
+          Kérlek, hogy kattints a linkre, hogy megkapd a verseny kihirdetésének
+          szövegét:
+      organizer_addition_email:
+        #original_hash: dc6f415
+        header: 'Hozzá lettél adva a(z) %{competition} nevű versenyhez, mint szervező'
+        #original_hash: c9d0561
+        intro: 'Helló %{name}!'
+        #original_hash: 372b27f
+        information: >-
+          %{confirmer} hozzáadott a(z) %{competition} nevű versenyhez, mint
+          szervező. Az alábbi linken tudod szerkeszteni a versenyt:
+      organizer_removal_email:
+        #original_hash: a31e8fb
+        header: 'Törölve lettél a(z) %{competition} versenyről, mint szervező'
+        #original_hash: 66cb109
+        information: '%{remover} törölt a(z) %{competition} nevű versenyről, mint szervező.'
     claim_wca_id:
       #original_hash: f28bf87
       title: WCA ID kérése
@@ -1201,6 +1378,14 @@ hu:
         e-mail címmel.
       #original_hash: 26f70ed
       dob_past: múltbeli időpontnak kell lennie
+      #original_hash: b64df45
+      already_represented_country: >-
+        Nem tudod módosítani az országot egy olyan országra, amit a versenyző
+        korábban már képviselt a múltban.
+      #original_hash: b589014
+      must_have_a_change: >-
+        A névnek vagy az országnak különböznie kell a jelenlegitől, hogy
+        frissíteni tudd a személyt.
       #original_hash: 012f032
       must_be_senior: csak Szenior Delegált módosíthatja
       #original_hash: 2e582eb
@@ -1511,7 +1696,7 @@ hu:
       honlapját!
     #original_hash: 58b1a3c
     accepted: A regisztrációd el lett fogadva!
-    #original_hash: 70de60f
+    #original_hash: bcd7d70
     entry_fees_fully_paid: >-
       A(z) %{paid} összeget fizettél be, ami teljesen fedezi a regisztrációs
       díjadat.
@@ -1535,7 +1720,7 @@ hu:
         #original_hash: bf3a39e
         donation: 'Szabadon hozzáadható adomány, ami a szervezőkhöz kerül'
       labels:
-        #original_hash: 948ec72
+        #original_hash: 4de825f
         entry_fees: Regisztrációs díjak
         #original_hash: 2c09302
         donation: Adomány
@@ -1631,16 +1816,60 @@ hu:
         other: WCA delegált(ak)
       #original_hash: b37456c
       contact: Kontakt
-      #original_hash: 32946e9
-      competitor_limit: Versenyzői limit
-      #original_hash: a428739
-      entry_fee: Regisztrációs díj
       #original_hash: 0eb5ed5
       information: Információk
       #original_hash: c5497bc
       events: Versenyszámok
       #original_hash: ff722f0
       registration_requirements: A regisztráció feltételei
+      #original_hash: 74d0bf1
+      create_wca_account_html: 'Ha még nincs WCA felhasználód, akkor hozz létre egyet %{here}.'
+      #original_hash: a082288
+      claim_wca_id_html: >-
+        Ha ez nem az első versenyed, akkor rendeld hozzá a WCA ID-det a WCA
+        felhasználódhoz %{here}.
+      #original_hash: 56fc229
+      register_link_html: 'Regisztrálj erre a versenyre %{here}.'
+      #original_hash: 45834fd
+      register_below_html: Regisztrálj erre a versenyre lent.
+      #original_hash: 196725e
+      competitor_limit_is: 'A versenyre %{competitor_limit} fős versenyzői limit van.'
+      #original_hash: 5101f65
+      no_competitor_limit: Nincs versenyzői limit a versenyre.
+      #original_hash: f979d5e
+      entry_fee_is: 'Az alap regisztrációs díj a versenyre %{base_entry_fee}.'
+      #original_hash: 5390a91
+      no_entry_fee: A versenyre ingyenes a regisztráció.
+      #original_hash: 29af5c2
+      use_stripe_link_html: >-
+        A regisztrációs díjat a Stripe rendszeren keresztül %{here} kell
+        befizetni a regisztráció után.
+      #original_hash: cea0eb4
+      use_stripe_below_html: >-
+        A regisztrációs díjat a Stripe rendszeren keresztül kell befizetni lent,
+        a regisztrció után.
+      #original_hash: 16cd1ba
+      refund_policy_html: >-
+        A regisztrációd a %{limit_date_and_time} határidő előtt lett törölve,
+        így a regisztrációs díjad %{refund_policy_percent}-a vissza lesz tértve.
+      #original_hash: 4aca553
+      no_refunds: >-
+        A regisztrációs díjak nem lesznek visszatérítve semmilyen körülmények
+        között.
+      #original_hash: cf7be5d
+      on_the_spot_registration: >-
+        A helyszíni regisztráció lehetséges lesz %{on_the_spot_base_entry_fee}
+        alap regisztrációs díjjal.
+      #original_hash: 1637bea
+      on_the_spot_registration_free: A helyszíni regisztrció ingyenes lesz.
+      #original_hash: f5f687d
+      no_on_the_spot_registration: Helyszíni regisztráció nem lesz lehetséges.
+      #original_hash: 4df139d
+      guests_pay: >-
+        Nézők a %{guests_base_fee} alap nézői regisztrációs díj megfizetésével
+        tudnak részt venni a versenyen.
+      #original_hash: b6c863e
+      guests_free: Nézők ingyenesen részt vehetnek a versenyen.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         A versenynek vége, kattints %{link_here}, hogy megjelenítsd a használt
@@ -1752,13 +1981,18 @@ hu:
       #original_hash: 9104a03
       no_past_competitions: Nincs múltbéli versenyed.
     competition_form:
-      #original_hash: e879b0b
-      board: Board
+      #original_hash: 2b81984
+      wcat: WCA Competition Announcement Team
       #original_hash: f957dcb
       supports_md_html: >-
         Támogatja  a <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown-t</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        A verseny nevének rövid magyarázata. A névnek meg kell felelnie a <a
+        href='/documents/policies/Competition%20Name.pdf'>WCA Competition Name
+        Policy</a>-nek.
       #original_hash: 9d9126e
       venue_html: >-
         A helyszín, ahol a verseny megrendezésre kerül. %{md}. Például: [Cité
@@ -1778,22 +2012,23 @@ hu:
       deprecated_events: >-
         A versenyenyhez olyan versenyszámok vannak hozzáadva, amik többé nem
         hivatalosan és nem támogatjuk a szerkesztésüket.
-      #original_hash: 815d5c3
-      locked_edit_html: >-
-        Ez a verseny mindenki számára látható és nem szerkeszthető. Ha valamit
-        változtatni szeretnél, lépj kapcsolatba a %{board}-dal.
-      #original_hash: ce33e21
-      confirmed_not_visible_html: >-
-        Megerősítetted a versenyt, de még nem publikus. Várj, amíg a %{board}
-        kihirdeti.
+      #original_hash: cafc153
+      public_and_locked_html: >-
+        Ez a verseny ki van hirdetve és nem lehet szerkeszteni. Ha bármilyen
+        módosításra van szükséged, akkor a verseny megerősítésekor kapott
+        e-mailre válaszolj.
+      #original_hash: e00a339
+      confirmed_but_not_visible_html: >-
+        Megerősítetted a versenyed, de még nincs kihirdetve. Várj, amíg
+        %{contact} kihirdeti.
       #original_hash: e94cba8
       is_visible: >-
         Ez a verseny mindenki számára látható, minden változtatás, amit
         végrehajtasz egyből látható lesz mindenkinek.
-      #original_hash: 34862bb
-      awaiting_confirmation_html: >-
-        Tölts ki minden mezőt és kattints a Jóváhagy gombra, amikor készen
-        állsz, hogy a %{board} kihirdesse.
+      #original_hash: f99b3f7
+      pending_confirmation_html: >-
+        Tölts ki minden mezőt és kattints a Megerősítés-re, amikor készen állsz
+        arra, hogy %{contact} jóváhagyja a versenyt.
       #original_hash: 8966fd0
       submit_create_value: Verseny létrehozása
       #original_hash: 40b0dfd
@@ -1802,11 +2037,11 @@ hu:
       submit_confirm_value: Megerősítés
       #original_hash: f6fdbe4
       submit_delete_value: Törlés
-      #original_hash: 1ca19b1
+      #original_hash: 22316f1
       submit_confirm: >-
         Biztosan megerősíted? A megerősítés után többé nem leszel képes az
         információk módosítására. Ezután nézd meg az e-mailedet, hogy meggyőződj
-        róla, hogy a Board értesítve lett.
+        róla, hogy a WCAT értesítve lett.
       #original_hash: 4c7deb7
       submit_delete: Biztosan törölni szeretnéd ezt a versenyt? Utána nem tudod visszavonni.
       #original_hash: 8ebebca
@@ -1835,6 +2070,8 @@ hu:
       registration_close_after_open: a regisztráció zárásának a regisztráció nyitása utánra kell esnie
       #original_hash: 43a83a9
       end_date_before_start: A záró dátum nem lehet a nyitó dátum előtt.
+      #original_hash: 0c507fa
+      refund_date_after_start: A visszatérítési határidő nem lehet a kezdési dátum után.
       #original_hash: be3933b
       span_too_many_days: 'A verseny nem tarthat %{max_days} napnál több ideig.'
       #original_hash: cdcd288
@@ -1852,10 +2089,10 @@ hu:
     update:
       #original_hash: 5fb2f57
       save_success: Sikeresen elmentetted a versenyt.
-      #original_hash: 9d1649e
+      #original_hash: 5253c86
       confirm_success: >-
         Sikeresen megerősítetted a versenyt. Nézd meg az e-mailedet és várj,
-        amíg a Board kihirdeti!
+        amíg a WCAT kihirdeti!
       #original_hash: 28567f0
       delete_success: 'Sikeresen törölt verseny (%{id}).'
     time_until_competition:
@@ -1911,6 +2148,79 @@ hu:
     show:
       #original_hash: b0fe391
       general_info: Általános információk
+      #original_hash: c5497bc
+      events: Versenyszámok
+      #original_hash: 0a8adac
+      schedule: Időbeosztás
+    events:
+      time_limit_information:
+        #original_hash: 88c5f1a
+        time_limit_html: >-
+          Ha eléred az időlimitet a kirakás közben, akkor a bíró le fog állítani
+          és az eredményed DNF (lásd %{regulation_link}) lesz.
+        #original_hash: 83d204f
+        regulation_link_text: 'Szabályzat %{number}'
+        #original_hash: bd0e4a9
+        guideline_link_text: 'Útmutató %{number}'
+        #original_hash: b2a983a
+        cumulative_time_limit: Kumulált időlimit
+        #original_hash: d47f11a
+        cumulative_one_round_html: '%{cumulative_time_limit} lehet használatban (lásd %{regulation_link}).'
+        #original_hash: c6190b6
+        cumulative_across_rounds_html: >-
+          %{cumulative_time_limit} lehet használatban több fordulóra együttesen
+          is (lásd %{guideline_link}).
+        #original_hash: e4e48c6
+        cutoff_html: >-
+          Az az eredmény, ami által jogosulttá válasz egy kombinált forduló
+          második szakaszában való versenyzésre (lásd %{regulation_link}).
+        #original_hash: f571a30
+        format_html: >-
+          A formátum írja le, hogy mi alapján határozzuk meg a versenyzők
+          helyezését az eredményeik alapján. Az egyes versenyszámoknál
+          megengedett formátumokat a %{link_to_9b} írja le. Nézd meg a
+          %{link_to_9f}-t az egyes formátumok értelmezéséhez.
+      #original_hash: 041a5de
+      format: Formátum
+      #original_hash: 0d1fcc3
+      time_limit: Időlimit
+      #original_hash: 118de39
+      cutoff: Cutoff
+      #original_hash: 02ed4a4
+      proceed: Tovább jut
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: 'Az időbeosztás megjelenítése, mint:'
+        #original_hash: 0424f6e
+        table: Táblázat
+        #original_hash: adab509
+        calendar: Naptár
+      #original_hash: 017e4d8
+      display_for_room: 'Az időbeosztás megjelenítése:'
+      range:
+        #original_hash: 3f66052
+        from: 'Kezdő időpont:'
+        #original_hash: ae79ea1
+        to: 'Vég időpont:'
+      #original_hash: 952f375
+      start: Kezdés
+      #original_hash: a2bb9d3
+      end: Vége
+      #original_hash: 81c0d91
+      activity: Tevékenység
+      #original_hash: 90e2fca
+      room: Terem
+      #original_hash: 2896c7a
+      venue_information_html: 'A %{venue_name} helyszín időbeosztását nézed épp.'
+      #original_hash: b97e383
+      timezone_message: 'Az időbeosztás a(z) %{timezone} időzónában jelenik meg.'
+      #original_hash: 2ab94a0
+      multiple_venues_available: >-
+        A verseny több helyszínen is zajlik, ne felejtsd el megnézni a többi
+        helyszín időbeosztását!
+      #original_hash: 37b1adb
+      schedule_for_date: 'Időbeosztás %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -1931,6 +2241,8 @@ hu:
         orga_view: Szervezői nézet
         #original_hash: c6171f8
         event_view: Versenyszámok szerkesztése
+        #original_hash: 6235b27
+        schedule_view: Időbeosztás szerkeztése
         #original_hash: 6f7aef9
         payment_view: Fizetések beállítása
         #original_hash: 76bfdcf
@@ -2067,9 +2379,9 @@ hu:
       #original_hash: ac2ac3d
       title: WCA weboldal kontakt felülete
       inquiries:
-        #original_hash: e1d277a
-        competition: Konkrét verseny (kérlek válassz)
-        #original_hash: f7d3f9f
+        #original_hash: 92ea7e8
+        competition: Egy konkrét verseny szervezői (kérlek válassz)
+        #original_hash: f0bffb7
         competitions_in_general: 'Versenyek általában (szervezés, szabályok stb.)'
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID vagy WCA profil
@@ -2322,7 +2634,7 @@ hu:
     title: A WCA-ról
     mission:
       paragraphs:
-        #original_hash: 3e4f9b5
+        #original_hash: c86d105
         '1': >-
           A World Cube Association olyan mechanikus játékok versenyeinek
           irányítószerve, amiknél az elemek csoportjait egymáshoz képest
@@ -2418,6 +2730,25 @@ hu:
           fejlődését, biztosítsa a minőségügyi elvárások betartását világszerte
           beleértve a folyamatokat, a WCA Staff-ot, a Nemzeti szervezeteket, a
           szervezőket és a versenyek lebonyolítását segítő embereket.
+      wcat:
+        #original_hash: 2b81984
+        name: WCA Competition Announcement Team
+        #original_hash: 61a471f
+        description: >-
+          A szervezet feladata a WCA versenyek jóváhagyása és kihirdetésre,
+          valamint a kihirdetések WCA minőségi elvárásainak való megfelelésének
+          biztosítása.
+      wmt:
+        #original_hash: 2035811
+        name: WCA Marketing Team
+        #original_hash: f2a0140
+        description: >-
+          Ez a csoport felelős a WCA márka fejlesztéséért és kezeléséért,
+          szponzorok kereséséért, a versenyeszközök elosztásáért és a WCA
+          termékek marketingjéért.
+      banned:
+        #original_hash: d30e2e5
+        name: Eltiltott versenyzők
       #original_hash: 3d5b64b
       delegates_html: >-
         <p>A <strong>WCA delegált</strong> a WCA Motions-ben meghatározott
@@ -2448,18 +2779,8 @@ hu:
     motions: Motions
     #original_hash: 092f99e
     minutes: Minutes
-    #original_hash: 8d61184
-    policies: Szabályozások
-    #original_hash: cdad4f1
-    dues: WCA Díjrendszer
-    #original_hash: 7536665
-    logo: WCA Logó Használata
-    #original_hash: 920a98f
-    proximity_policy: WCA Versenyek Közelségi Irányelve
-    #original_hash: f484584
-    competition_name_policy: WCA Versenyek Elnevezési Irányelve
-    #original_hash: c7f7728
-    competition_announcement_policy: WCA Versenyek Kihirdetésének Szabályzata
+    #original_hash: 6db524a
+    policies: WCA Szabályozások
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA delegáltak
@@ -2537,11 +2858,10 @@ hu:
     #original_hash: 1cb449c
     members: Tagok
     board:
-      #original_hash: 3a8b1d8
+      #original_hash: f3cbb35
       info_html: >-
         A World Cube Associationt a WCA Board vezeti. Ők felelősek az általános
-        témákért és a WCA szerevezet egészéért. Minden hivatalos verseny
-        kihirdetéséhez szükség van a WCA Board jóváhagyására.
+        témákért és a WCA szerevezet egészéért.
     wct:
       #original_hash: 846684d
       info_html: >-
@@ -2608,6 +2928,17 @@ hu:
         fejlődését, biztosítsa a minőségügyi elvárások betartását világszerte
         beleértve a folyamatokat, a WCA Staff-ot, a Nemzeti szervezeteket, a
         szervezőket és a versenyek lebonyolítását segítő embereket.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Ez a szervezet felelős a WCA versenyek jóváhagyásáért és kihirdetéséért,
+        valamint a kihirdetések WCA minőségési elvárásainak való megfeleléséért.
+    wmt:
+      #original_hash: f2a0140
+      info_html: >-
+        Ez a csoport felelős a WCA márka fejlesztéséért és kezeléséért,
+        szponzorok kereséséért, a versenyeszközök elosztásáért és a WCA termékek
+        marketingjéért.
   score_tools:
     #original_hash: ea9d41d
     title: WCA adatrögzítő eszközök
@@ -2885,7 +3216,7 @@ hu:
     paragraph2:
       #original_hash: f20dd3b
       title: A versenyszervezés várható költségei
-      #original_hash: ab53dda
+      #original_hash: f16a06f
       content: >-
         A várható költségek nagyban eltérnek az egyes országokban és számos
         tényező befolyásolja őket, mint a helyszín mérete és más általános
@@ -2897,23 +3228,23 @@ hu:
     paragraph3:
       #original_hash: 00d3bf8
       title: A verseny kihirdetésének határideje
-      #original_hash: c61c6c9
+      #original_hash: 305cfb1
       content_html: >-
         A versenyeket legalább 1 hónappal a kezdetük előtt ki kell hirdetni.
         (lásd: <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Útmutató
         8a4++</a>). Ha valamilyen speciális indok miatt nem sikerül tartani a
         határidőt, akkor a versenyt megelőző 2 hétig lehetséges a verseny
-        kihirdetése a WCA Board jóváhagyásával. Ebben az esetben érdemes minél
-        előbb értesíteni a WCA Boardot a késedelem okáról, hogy elkerüld a
-        verseny visszautasítását.
+        kihirdetése a WCAT jóváhagyásával. Ebben az esetben érdemes minél előbb
+        értesíteni a WCAT-ot a késedelem okáról, hogy elkerüld a verseny
+        visszautasítását.
     paragraph4:
       #original_hash: b6dca56
       title: Összeférhetetlenségi elv
-      #original_hash: f86bf95
+      #original_hash: 79ed06e
       content1: >-
         A WCA versenyeknek minden más versenytől legalább 100 km és 19 nap
-        távolságban kell lenniük egymástól. A WCA Board megvizsgál minden olyan
+        távolságban kell lenniük egymástól. A WCAT megvizsgál minden olyan
         kihirdetésre szánt versenyt, ami ennek nem felel meg és 100 km-en vagy
         19 napon belül van egy másik versennyel. A Delegáltnak ilyen esetben
         extra információkkal kell szolgálnia, hogy milyen okból kéri a verseny
@@ -2956,23 +3287,23 @@ hu:
     paragraph-events:
       #original_hash: b16c5f1
       title: Versenyszámok kihirdetése
-      #original_hash: b6c6d26
+      #original_hash: cee85f7
       content: >-
         Minden versenyszámot, ami a versenyen megszervezésre kerül a WCA
         delegáltnak a verseny kihirdetésekor meg kell határoznia. Ez vonatkozik
         a "feltételes" versenyszámokra is (pl: olyan versenyszámok, amik a
         verseny menetétől függően feltételesen kerülnek meghirdetésre). További
-        versenyszámok hozzáadását a WCA Board-nak kell jóváhagynia.
+        versenyszámok hozzáadását a WCAT-nak kell jóváhagynia.
     paragraph5:
       #original_hash: 17d01de
       title: Versenyzői limitek
-      #original_hash: ffcd75e
+      #original_hash: b4748cf
       content_html: >-
         A versenyzők száma limitálva lehet versenyszámonként vagy versenyenként
         (lásd: <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Szabályzat
         Z4</a>). Minden a Z cikkben szereplő szabály alkalmazására a Delegáltnak
-        engedélyt kell kapnia a Boardtól. A versenyzői limiteket jól meg kell
+        engedélyt kell kapnia a WCAT-tól. A versenyzői limiteket jól meg kell
         fontolni és figyelembe kell venni a versenyzi érdeklődés mértékét. A
         versenyzői limitet nem lehet elhanyagolható okokból alacsonyra állítani.
         A kívánt limitet már a helyszín-választásnál is figyelembe kell venni. A
@@ -2980,7 +3311,7 @@ hu:
     paragraph6:
       #original_hash: ce4c3d0
       title: Regisztrációk kezelése
-      #original_hash: cb13cd0
+      #original_hash: bd669a1
       content: >-
         A regisztrációkat időrendi sorrendben kell feldolgozni, ami azt jelenti,
         hogy a legelső teljes regisztrációt kell elsőként kezelni. Ha a
@@ -2996,7 +3327,7 @@ hu:
         limitet, várólistát kell létrehozni. Ha elfogadott regisztrációval
         rendelkező versenyzők visszamondják a versenyt, akkor a várólistán
         elsőként szereplő versenyzőt lehet elfogadni.
-      #original_hash: 1b2ea79
+      #original_hash: 802b34f
       content2: >-
         Amennyiben a versenyere a regisztrációs díjakat előre kell befizetni,
         érdemes a várólistán elsőként szereplő versenyzőnek egy határidőt adni,
