@@ -22,7 +22,7 @@
       </thead>
       <tbody>
         <% competitions.each do |competition| %>
-          <% registration = competition.registrations.find_by_user_id(current_user.id) %>
+          <% registration = registrations_by_competition_id[competition.id] %>
           <tr class="<%=[ competition.confirmed? ? "confirmed" : "not-confirmed",
                           competition.showAtAll? ? "visible" : "not-visible",
                           past ? "past" : "not-past" ].join(' ') %>"
