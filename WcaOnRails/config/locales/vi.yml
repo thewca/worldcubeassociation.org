@@ -72,6 +72,28 @@ vi:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: Bịt mắt nhiều 3x3x3 kiểu cũ
+  formats:
+    #original_hash: e4b3c11
+    '1': Thành tích tốt nhất trong 1 lượt
+    #original_hash: 778e14d
+    '2': Thành tích tốt nhất trong 2 lượt
+    #original_hash: 21f623c
+    '3': Thành tích tốt nhất trong 3 lượt
+    #original_hash: 2342d2b
+    a: Trung bình 5 lượt
+    #original_hash: 940c82d
+    m: Trung bình 3 lượt
+    short:
+      #original_hash: c21bc2a
+      '1': Bo1
+      #original_hash: 49e914a
+      '2': Bo2
+      #original_hash: b41f36f
+      '3': Bo3
+      #original_hash: 4a34175
+      a: Ao5
+      #original_hash: 53ba088
+      m: Mo3
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -128,6 +150,24 @@ vi:
       name: Vòng loại gộp
       #original_hash: 4c66ad0
       cellName: Vòng loại gộp
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: 'Lượt %{number}'
+  round:
+    #original_hash: 236c41d
+    name: '%{event_name} %{round_name}'
+  advancement_condition:
+    #original_hash: 6e55337
+    ranking: 'Xếp hạng %{ranking} được vào vòng tiếp theo'
+    #original_hash: 7ee969c
+    percent: 'Nằm trong nhóm %{percent}% được vào vòng tiếp theo'
+    attempt_result:
+      #original_hash: 1fb7fe1
+      time: 'Thành tích đơn < %{time} được vào vòng tiếp theo'
+      #original_hash: 8254f3e
+      moves: 'Thành tích đơn < %{moves} bước được vào vòng tiếp theo'
+      #original_hash: daab86e
+      points: 'Thành tích đơn > %{points} điểm được vào vòng tiếp theo'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -149,8 +189,8 @@ vi:
       across_rounds: '%{time} tổng cộng cho %{rounds}'
     #original_hash: f030c3d
     333fm: 1 giờ đồng hồ
-    #original_hash: 2c2abd5
-    333mbf: 10 phút mỗi khối hình
+    #original_hash: cc7d8bb
+    333mbf: '10:00.00 mỗi khối hình, tối đa 60:00.00'
   common:
     #original_hash: 2513cf0
     continent: Châu lục
@@ -197,6 +237,8 @@ vi:
     date_placeholder: YYYY-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
+    #original_hash: 7136e3b
+    time_format: 12h
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -277,11 +319,13 @@ vi:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: Không để ban tổ chức chỉnh sửa nội dung giải đấu
+        confirmed: Không để ban tổ chức điều chỉnh giải đấu
         #original_hash: d493e6a
         showAtAll: Hiển thị giải đấu cho công chúng
         #original_hash: 709a232
         name: Tên
+        #original_hash: f91b080
+        name_reason: Lý do đặt tên
         #original_hash: b649210
         cellName: Biệt danh trong giải đấu
         #original_hash: d523ebb
@@ -304,8 +348,8 @@ vi:
         generate_website: >-
           Tôi muốn sử dụng trang web của WCA để hiển thị thông tin thay cho
           trang web bên ngoài.
-        #original_hash: dd88e47
-        base_entry_fee_lowest_denomination: Lệ phí thi đấu (cơ sở)
+        #original_hash: 6cf623b
+        base_entry_fee_lowest_denomination: Lệ phí đăng ký (cơ sở)
         #original_hash: 28a6fbb
         currency_code: Mã tiền tệ
         #original_hash: 2e3ed8b
@@ -318,8 +362,8 @@ vi:
         information: Thông tin
         #original_hash: 87b7d5f
         use_wca_registration: Tôi muốn sử dụng trang web của WCA cho việc đăng ký
-        #original_hash: a2dfcf8
-        competitor_limit_enabled: Tôi muốn giới hạn số lượng thí sinh có thể tham gia giải đấu này.
+        #original_hash: 9bb1965
+        competitor_limit_enabled: Giới hạn số lượng thí sinh
         #original_hash: 749f4c9
         competitor_limit: Số lượng thí sinh tối đa
         #original_hash: 4a8b6f1
@@ -342,8 +386,30 @@ vi:
         enable_donations: Tôi muốn tiếp nhận quyên góp ngoài việc thu lệ phí thi
         #original_hash: 4baf44b
         championship_type: Kiểu thi đấu
-        #original_hash: ff722f0
-        registration_requirements: Yêu cầu trong đơn đăng ký
+        #original_hash: 556fda0
+        extra_registration_requirements: Yêu cầu thêm khi đăng ký
+        #original_hash: 2529d04
+        on_the_spot_registration: Đăng ký tại giải đấu
+        #original_hash: 69780b5
+        on_the_spot_entry_fee_lowest_denomination: Lệ phi đăng ký cơ sở tại giải đấu
+        #original_hash: efbdbab
+        refund_policy_percent: Phần trăm được hoàn trả
+        #original_hash: b332299
+        refund_policy_limit_date: Hạn chót để hoàn trả
+        #original_hash: 3542671
+        guests_entry_fee_lowest_denomination: Lệ phí vào cửa cho khách mời
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Tôi muốn yêu cầu thí sinh nộp khối hình trong khi đăng ký theo như Quy
+          định Z1)
+        #original_hash: 466aca7
+        regulation_z1_reason: Lý do cho Z1)
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Tôi muốn lựa chọn thí sinh trực tiếp vào một vòng đấu của một nội dung
+          dựa vào thành tích tại các giải đấu trước theo như Quy định Z3)
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Lý do cho Z3)
       registration:
         #original_hash: 3c23a67
         guests: Khách mời
@@ -581,11 +647,11 @@ vi:
         cityName: >-
           Tên của thành phố và bang (nếu có thể) nơi giải đấu diễn ra. Không bao
           gồm quốc gia (v.d. Hà Nội hoặc San Francisco, California).
-        #original_hash: 3d99319
+        #original_hash: bb470cc
         information: >-
-          Thông tin về giới hạn số lượng thí sinh, lệ phí tham gia cho thí sinh
-          & khán giả, và chi tiết liên quan đến những người muốn tham gia thi
-          đấu hoặc quan sát.
+          Thông tin quan trọng mà thí sinh cần biết. Thông tin này sẽ được hiển
+          thị trên trang chính của giải đấu. <br/>Vui lòng điền phần này <b>bằng
+          tiếng Anh</b> và bất kỳ ngôn ngữ nào thí sinh của bạn sử dụng.
         #original_hash: b4d020f
         delegate_ids: WCA Delegate cho giải đấu.
         #original_hash: 517d376
@@ -594,11 +660,11 @@ vi:
         external_website: Trang chủ của giải đấu. Bắt buộc phải là đường dẫn http(s) hợp lệ.
         #original_hash: 9965635
         registration_open: 'Ghi chú: Thời gian mở và đóng đơn đăng ký theo múi giờ UTC.'
-        #original_hash: 243212f
+        #original_hash: bd402bf
         remarks_html: >-
-          Một số thông tin bổ sung bạn muốn nhắn cho Ban Quản trị. Ví dụ, nói rõ
-          lý do giải đấu được thông báo trong vòng ít hơn bốn tuần, hoặc bạn
-          đang đăng ký cho %{link}. Vui lòng điền bằng tiếng Anh.
+          Một số thông tin bổ sung bạn muốn nhắn cho WCAT. Ví dụ, nói rõ lý do
+          giải đấu được thông báo trong vòng ít hơn bốn tuần, hoặc bạn đang đăng
+          ký cho %{link}. Vui lòng điền bằng tiếng Anh!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -607,12 +673,14 @@ vi:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 950a7ea
+        #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
-          Lệ phí cơ sở cho giải đấu. Lệ phí đăng ký sẽ được hiển thị trên trang
-          thông tin của giải đấu và trang đăng ký.
-        #original_hash: 866bc05
-        currency_code: Mã tiền tệ cho lệ phí đăng ký.
+          Lệ phí cơ sở cho giải đấu. Thông tin này sẽ được hiển thị trên trang
+          thông tin của giải đấu và trang đăng ký nếu được sử dụng. Nếu được đặt
+          là 0, thí sinh sẽ nhận được thông báo đơn đăng ký tham gia giải đấu là
+          hoàn toàn miễn phí.
+        #original_hash: 9735ddf
+        currency_code: Mã tiền tệ cho lệ phí.
         #original_hash: da39a3e
         guests_enabled: ''
         #original_hash: da39a3e
@@ -620,7 +688,7 @@ vi:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -631,13 +699,16 @@ vi:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
-          Hiện tại số liệu chỉ mang tính tương đối, và không cản trở việc đăng
-          ký của thí sinh. Chúng tôi đang hoàn thiện phần hỗ trợ cho việc đăng
-          ký, nhưng đòi hỏi một số thứ khác trước.
-        #original_hash: b9bc84d
-        competitor_limit: Số lượng thí sinh được tham gia giải đấu.
+          Mặc dù Quy định không yêu cầu, việc đặt giới hạn số lượng thí sinh rất
+          được khuyến khích.
+        #original_hash: b7b599b
+        competitor_limit: >-
+          Số lượng thí sinh được tham gia giải đấu. Hiện tại con số này chỉ mang
+          tính thông báo, và không cản trở các thí sinh đăng ký thêm. Chúng tôi
+          đang nỗ lực phát triển công cụ hỗ trợ quản lý đăng ký giải đấu, và sẽ
+          cập nhật tính năng sau này.
         #original_hash: 4bd7102
         competitor_limit_reason: >-
           Lý do có giới hạn số lượng thí sinh là gì? Vui lòng điền bằng tiếng
@@ -646,16 +717,44 @@ vi:
         venueAddress: ''
         #original_hash: da39a3e
         championship_type: ''
-        #original_hash: 508c178
-        registration_requirements: >-
-          Vui lòng ghi rõ bất kỳ yêu cầu cụ thể nào liên quan đến quá trình đăng
-          ký, theo như <a
-          href="https://www.worldcubeassociation.org/regulations/guidelines.html#2c1+"
-          target="_blank">Hướng dẫn 2c1+</a>. Sau khi giải đấu được công bố, mục
-          này <b>không thể</b> bị thay đổi, chỉ Ban Quản trị mới có thể đưa ra
-          quyết định thay đổi.<br/>Vui lòng điền <b>bằng tiếng Anh</b> và bất kỳ
-          ngôn ngữ nào thí sinh sử dụng; thông tin sẽ được hiển thị trên trang
-          đăng ký nếu bạn đang sử dụng trang web đăng ký của WCA.
+        #original_hash: 3de153b
+        extra_registration_requirements: >-
+          Vui lòng ghi rõ bất kỳ tiêu chí đăng ký nào chưa được liệt kê, ví dụ
+          hướng dẫn nộp lệ phí đăng ký. <br/>Vui lòng điền mục này <b>bằng tiếng
+          Anh</b> và bất kỳ ngôn ngữ nào thí sinh sử dụng; thông tin này sẽ được
+          hiển thị trên trang thông tin của giải đấu, và trang đăng ký của WCA
+          nếu được sử dụng.
+        #original_hash: da39a3e
+        on_the_spot_registration: ''
+        #original_hash: 8c4fdf8
+        on_the_spot_entry_fee_lowest_denomination: >-
+          Nếu được đặt bằng 0, một thông báo sẽ được hiển thị với nội dung các
+          đơn đăng ký tại giải đấu sẽ được chấp nhận miễn phí.
+        #original_hash: 180b7b3
+        refund_policy_percent: >-
+          Hiện tại con số này chỉ mang tính thông báo, phần hoàn tiền sẽ được xử
+          lý theo từng trường hợp. Nếu được đặt bằng 0, một thông báo sẽ được
+          hiển thị rằng lệ phí đăng ký sẽ không được hoàn trả trong bất kỳ
+          trường hợp nào.
+        #original_hash: f64d853
+        refund_policy_limit_date: Hạn chót để hoàn trả bất kỳ lệ phí nào.
+        #original_hash: 25a1324
+        guests_entry_fee_lowest_denomination: >-
+          Hiện tại con số này chỉ mang tính thông báo, lệ phí cho khách mời
+          không thể được quản lý qua trang này. Nếu được đặt bằng 0, một thông
+          báo sẽ được hiển thị rằng khách mời có thể vào cửa miễn phí.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Vui lòng ghi rõ lý do bạn muốn sử dụng Quy định Z1). Vui lòng điền
+          bằng tiếng Anh!
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Vui lòng ghi rõ lý do bạn muốn sử dụng Quy định Z3). Vui lòng điền
+          bằng tiếng Anh!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -776,11 +875,6 @@ vi:
         guests: ''
         #original_hash: da39a3e
         status: ''
-      team:
-        #original_hash: da39a3e
-        friendly_id: ''
-        #original_hash: da39a3e
-        hidden: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -823,6 +917,16 @@ vi:
           'true': Hỏi về khách mời
           #original_hash: f8c2332
           'false': Không hỏi về khách mời
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Tôi muốn đặt giới hạn số lượng thí sinh
+          #original_hash: 5b581b5
+          'false': Tôi không muốn đặt giới hạn số lượng thí sinh
+        on_the_spot_registration:
+          #original_hash: 0c521ca
+          'true': Đăng ký tại giải đấu sẽ được chấp nhận
+          #original_hash: 0f236df
+          'false': Đăng ký tại giải đấu sẽ KHÔNG ĐƯỢC chấp nhận
   mail_form:
     attributes:
       contact_form:
@@ -894,8 +998,8 @@ vi:
     doorkeeper:
       applications:
         help:
-          #original_hash: 92e00ff
-          native_redirect_uri: 'Sử dụng %{native_redirect_uri} nếu bạn muốn thêm URI localhost'
+          #original_hash: 95c10ec
+          https_info: Bắt buộc sử dụng HTTPS trừ khi máy chủ là "localhost"
           #original_hash: 62a0113
           scopes_html: >-
             Phân chia phạm vi bằng dấu cách. Để trống để sử dụng những phạm vi
@@ -1066,23 +1170,20 @@ vi:
         header: '%{delegate_name} đã xác nhận %{competition}'
         #original_hash: 3db81b5
         organizers: 'Thân gửi ban tổ chức của %{competition},'
-        #original_hash: c526fd6
+        #original_hash: d353d8c
         confirmed: >-
           Delegate %{delegate_name} cho giải đấu của bạn đã xác nhận
-          %{competition} và gửi thông tin đến Ban Quản trị WCA. Ngay sau khi Ban
-          Quản trị WCA công bố giải đấu này, bạn sẽ nhận được một thông báo
-          khác.
+          %{competition} và gửi thông tin đến WCAT. Ngay sau khi WCAT công bố
+          giải đấu này, bạn sẽ nhận được một thông báo khác.
         #original_hash: dfea09d
         contact: >-
           Nếu bạn còn bất kỳ thắc mắc nào, vui lòng liên hệ với Delegate của
           giải đấu qua email:
       competition_announcement_email:
-        #original_hash: 1571dd8
-        header: 'Ban Quản trị WCA đã công bố %{competition}'
-        #original_hash: 8e91977
-        announced: >-
-          Ban Quản trị WCA đã thông qua giải đấu của bạn và công bố trên trang
-          chủ.
+        #original_hash: 87f1f49
+        header: 'WCAT đã công bố %{competition}'
+        #original_hash: 0d3d10c
+        announced: WCAT đã thông qua giải đấu của bạn và công bố trên trang chủ.
         #original_hash: 1c20919
         link: 'Vui lòng đi theo đường dẫn để đọc thông báo về giải đấu:'
       organizer_addition_email:
@@ -1251,6 +1352,12 @@ vi:
       unique: 'đã được sử dụng bởi "%{used_name}" với %{used_email}'
       #original_hash: 26f70ed
       dob_past: phải trong quá khứ
+      #original_hash: b64df45
+      already_represented_country: >-
+        Không thể thay đổi quốc tịch thành một quốc gia mà người này đã từng đại
+        diện.
+      #original_hash: b589014
+      must_have_a_change: Phải sử dụng tên quốc gia khác để cập nhật hồ sơ cá nhân này.
       #original_hash: 012f032
       must_be_senior: phải là Senior Delegate
       #original_hash: 2e582eb
@@ -1545,8 +1652,8 @@ vi:
       đóng lệ phí thi. Theo dõi trang web của giải đấu để biết thêm chi tiết.
     #original_hash: 58b1a3c
     accepted: Đơn đăng ký của bạn đã được chấp nhận!
-    #original_hash: 70de60f
-    entry_fees_fully_paid: 'Bạn đã đóng đầy đủ lệ phí thi (%{paid}).'
+    #original_hash: bcd7d70
+    entry_fees_fully_paid: 'Bạn đã đóng đầy đủ lệ phí đăng ký (%{paid}).'
     #original_hash: 2e5d1b9
     will_pay_here: Bạn sẽ đóng lệ phí tại đây sau khi nộp đơn đăng ký
     #original_hash: b7ef562
@@ -1567,7 +1674,7 @@ vi:
         #original_hash: bf3a39e
         donation: Phần quyên góp không bắt buộc (được gửi trực tiếp đến ban tổ chức)
       labels:
-        #original_hash: 948ec72
+        #original_hash: 4de825f
         entry_fees: Lệ phí đăng ký
         #original_hash: 2c09302
         donation: Quyên góp
@@ -1659,16 +1766,52 @@ vi:
         other: WCA Delegate
       #original_hash: b37456c
       contact: Liên lạc
-      #original_hash: 32946e9
-      competitor_limit: Giới hạn thí sinh
-      #original_hash: a428739
-      entry_fee: Lệ phí thi
       #original_hash: 0eb5ed5
       information: Thông tin
       #original_hash: c5497bc
       events: Nội dung
       #original_hash: ff722f0
       registration_requirements: Yêu cầu khi đăng ký
+      #original_hash: 74d0bf1
+      create_wca_account_html: 'Tạo một tài khoản WCA %{here} nếu bạn không có sẵn.'
+      #original_hash: a082288
+      claim_wca_id_html: >-
+        Nếu đây không phải giải đấu WCA đầu tiên của bạn, kết nối với ID WCA của
+        bạn và tạo một tài khoản WCA %{here}.
+      #original_hash: 56fc229
+      register_link_html: 'Đăng ký cho giải đấu %{here}.'
+      #original_hash: 45834fd
+      register_below_html: Đăng ký cho giải đấu này dưới đây.
+      #original_hash: 196725e
+      competitor_limit_is: 'Giải đấu này có giới hạn %{competitor_limit} thí sinh.'
+      #original_hash: 5101f65
+      no_competitor_limit: Giải đấu này không có giới hạn số lượng thí sinh.
+      #original_hash: f979d5e
+      entry_fee_is: 'Lệ phí đăng ký cơ sở của giải đấu này là %{base_entry_fee}.'
+      #original_hash: 5390a91
+      no_entry_fee: Giải đấu này không có lệ phí đăng ký.
+      #original_hash: 29af5c2
+      use_stripe_link_html: 'Lệ phí đăng ký phải được thanh toán qua Stripe %{here} sau khi đăng ký.'
+      #original_hash: cea0eb4
+      use_stripe_below_html: Lệ phí đăng ký phải được thanh toán qua Stripe dưới đây sau khi đăng ký.
+      #original_hash: 16cd1ba
+      refund_policy_html: >-
+        Nếu đơn đăng ký của bạn bị huỷ trước %{limit_date_and_time} bạn sẽ được
+        hoàn trả %{refund_policy_percent} lệ phí đăng ký.
+      #original_hash: 4aca553
+      no_refunds: Lệ phí đăng ký sẽ không được hoàn trả trong bất kỳ trường hợp nào.
+      #original_hash: cf7be5d
+      on_the_spot_registration: >-
+        Lệ phí đăng ký tại giải đấu sẽ được chấp nhận với mức cơ sở là
+        %{on_the_spot_base_entry_fee}.
+      #original_hash: 1637bea
+      on_the_spot_registration_free: Đơn đăng ký tại giải đấu sẽ được chấp nhận miễn phí.
+      #original_hash: f5f687d
+      no_on_the_spot_registration: Không thể đăng ký trực tiếp tại giải đấu.
+      #original_hash: 4df139d
+      guests_pay: 'Khán giả có thể tham gia sau khi đóng lệ phí vào cửa %{guests_base_fee}.'
+      #original_hash: b6c863e
+      guests_free: Khán giả có thể vào xem miễn phí.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Giải đấu này đã kết thúc, nhấn vào %{link_here} để xem yêu cầu khi đăng
@@ -1780,12 +1923,17 @@ vi:
       #original_hash: 9104a03
       no_past_competitions: Bạn không có giải đấu nào trong quá khứ.
     competition_form:
-      #original_hash: e879b0b
-      board: Bảng
+      #original_hash: 2b81984
+      wcat: Đội ngũ Thông báo Giải đấu WCA
       #original_hash: f957dcb
       supports_md_html: >-
         Hỗ trợ <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        Giải thích ngắn về ý nghĩa tên giải đấu. Tên giải đấu phải tuân theo <a
+        href='/documents/policies/Competition%20Name.pdf'>Chính sách về Tên Giải
+        đấu của WCA</a>.
       #original_hash: 9d9126e
       venue_html: >-
         Địa điểm nơi giải đấu diễn ra. %{md}. Ví dụ: [Cité des Sciences et de
@@ -1805,22 +1953,22 @@ vi:
       deprecated_events: >-
         Giải đấu này có nội dung không còn được công nhận, chúng tôi không hỗ
         trợ việc chỉnh sửa các nội dung đó.
-      #original_hash: 815d5c3
-      locked_edit_html: >-
-        Giải đấu này hoàn toàn được không khai và đã được khoá chỉnh sửa. Nếu
-        bạn cần chỉnh sửa, liên hệ %{board}.
-      #original_hash: ce33e21
-      confirmed_not_visible_html: >-
-        Bạn đã xác nhận giải đấu này, nhưng hiện chưa công khai. Vui lòng đợi
-        %{board} công khai giải đấu.
+      #original_hash: cafc153
+      public_and_locked_html: >-
+        Giải đấu này hoàn toàn được công khai và được khoá chỉnh sửa. Nếu bạn
+        muốn thay đổi, vui lòng trả lời chuỗi email xác nhận về giải đấu.
+      #original_hash: e00a339
+      confirmed_but_not_visible_html: >-
+        Bạn đã xác nhận giải đấu này, nhưng giải đấu chưa được công khai. Vui
+        lòng đợi %{contact} công bố giải đấu.
       #original_hash: e94cba8
       is_visible: >-
         Giải đấu này hoàn toàn công khai, và bất kỳ thay đổi nào đều sẽ được
         hiển thị cho mọi người!
-      #original_hash: 34862bb
-      awaiting_confirmation_html: >-
-        Điền vào tất cả các mục và nhấn Xác nhận khi bạn đã sẵn sàng gửi để
-        %{board} thông qua giải đấu.
+      #original_hash: f99b3f7
+      pending_confirmation_html: >-
+        Điền vào tất cả các mục và ấn Xác nhận khi bạn đã sẵn sàng để %{contact}
+        thông qua giải đấu.
       #original_hash: 8966fd0
       submit_create_value: Tạo giải đấu
       #original_hash: 40b0dfd
@@ -1829,11 +1977,11 @@ vi:
       submit_confirm_value: Xác nhận
       #original_hash: f6fdbe4
       submit_delete_value: Xoá
-      #original_hash: 1ca19b1
+      #original_hash: 22316f1
       submit_confirm: >-
         Bạn có chắc đã sẵn sàng để xác nhận? Sau khi xác nhận, bạn sẽ không thể
         thay đổi bất kỳ thông tin nào. Kiểm tra email của bạn sau đó để xác nhận
-        rằng Ban Quản trị đã được thông báo.
+        rằng Đội ngũ Quản lý Giải đấu WCA đã được thông báo.
       #original_hash: 4c7deb7
       submit_delete: Bạn có chắc muốn xoá giải đấu này? Bạn không thể hoàn tác.
       #original_hash: 8ebebca
@@ -1862,6 +2010,8 @@ vi:
       registration_close_after_open: hạn chót đăng ký phải diễn ra sau ngày mở đăng ký
       #original_hash: 43a83a9
       end_date_before_start: Ngày kết thúc phải diễn ra sau ngày bắt đầu.
+      #original_hash: 0c507fa
+      refund_date_after_start: Hạn chót hoàn tiền không thể diễn ra sau ngày bắt đầu.
       #original_hash: be3933b
       span_too_many_days: 'Giải đấu không được diễn ra quá %{max_days} ngày.'
       #original_hash: cdcd288
@@ -1879,10 +2029,10 @@ vi:
     update:
       #original_hash: 5fb2f57
       save_success: Lưu giải đấu thành công.
-      #original_hash: 9d1649e
+      #original_hash: 5253c86
       confirm_success: >-
-        Xác nhận giải đấu thành công. Vui lòng kiểm tra email, và chờ Ban Quản
-        trị công bố giải đấu!
+        Xác nhận giải đấu thành công. Vui lòng kiểm tra email, và chờ WCAT công
+        bố giải đấu!
       #original_hash: 28567f0
       delete_success: 'Xoá giải đấu thành công %{id}.'
     time_until_competition:
@@ -1938,6 +2088,79 @@ vi:
     show:
       #original_hash: b0fe391
       general_info: Thông tin chung
+      #original_hash: c5497bc
+      events: Các nội dung
+      #original_hash: 0a8adac
+      schedule: Lịch trình
+    events:
+      time_limit_information:
+        #original_hash: 88c5f1a
+        time_limit_html: >-
+          Nếu bạn vượt quá giới hạn thời gian trong lượt giải, trọng tài sẽ ra
+          hiệu dừng và đánh dấu kết quả là DNF (xem %{regulation_link}).
+        #original_hash: 83d204f
+        regulation_link_text: 'Quy định %{number}'
+        #original_hash: bd0e4a9
+        guideline_link_text: 'Hướng dẫn %{number}'
+        #original_hash: b2a983a
+        cumulative_time_limit: Tổng giới hạn thời gian
+        #original_hash: d47f11a
+        cumulative_one_round_html: '%{cumulative_time_limit} có thể được sử dụng (xem %{regulation_link}).'
+        #original_hash: c6190b6
+        cumulative_across_rounds_html: >-
+          %{cumulative_time_limit} có thể được sử dụng giữa các vòng đấu (xem
+          %{guideline_link}).
+        #original_hash: e4e48c6
+        cutoff_html: >-
+          Phải đạt được kết quả để bước vào giai đoạn tiếp theo của một vòng thi
+          gộp (xem %{regulation_link}).
+        #original_hash: f571a30
+        format_html: >-
+          Hình thức vòng đấu dùng để phân biệt cách xếp hạng thí sinh dựa trên
+          thành tích. Danh sách các hình thức hợp lệ cho mỗi nội dung được miêu
+          tả trong %{link_to_9b}. Xem %{link_to_9f} để tìm hiểu chi tiết của mỗi
+          hình thức.
+      #original_hash: 041a5de
+      format: Hình thức
+      #original_hash: 0d1fcc3
+      time_limit: Giới hạn thời gian
+      #original_hash: 118de39
+      cutoff: Giới hạn
+      #original_hash: 02ed4a4
+      proceed: Tiếp tục
+    schedule:
+      display_as:
+        #original_hash: ec5dd7c
+        label: 'Hiển thị lịch trình dưới dạng:'
+        #original_hash: 0424f6e
+        table: Bảng
+        #original_hash: adab509
+        calendar: Lịch
+      #original_hash: 017e4d8
+      display_for_room: 'Hiển thị lịch trình cho:'
+      range:
+        #original_hash: 3f66052
+        from: Bắt đầu
+        #original_hash: ae79ea1
+        to: Đến
+      #original_hash: 952f375
+      start: Bắt đầu
+      #original_hash: a2bb9d3
+      end: Kết thúc
+      #original_hash: 81c0d91
+      activity: Hoạt động
+      #original_hash: 90e2fca
+      room: Phòng
+      #original_hash: 2896c7a
+      venue_information_html: 'Bạn đang theo dõi lịch trình cho địa điểm %{venue_name}.'
+      #original_hash: b97e383
+      timezone_message: 'Lịch trình đang được hiển thị theo múi giờ %{timezone}.'
+      #original_hash: 2ab94a0
+      multiple_venues_available: >-
+        Giải đấu này có nhiều địa điểm, vui lòng kiểm tra lịch trình cho cả
+        những địa điểm khác!
+      #original_hash: 37b1adb
+      schedule_for_date: 'Lịch trình cho %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -1958,6 +2181,8 @@ vi:
         orga_view: Xem với tư cách người tổ chức
         #original_hash: c6171f8
         event_view: Quản lý nội dung
+        #original_hash: 6235b27
+        schedule_view: Quản lý lịch trình
         #original_hash: 6f7aef9
         payment_view: Cài đặt thanh toán
         #original_hash: 76bfdcf
@@ -2340,7 +2565,7 @@ vi:
     title: Về WCA
     mission:
       paragraphs:
-        #original_hash: 3e4f9b5
+        #original_hash: c86d105
         '1': >-
           Hiệp hội Lập phương Thế giới quản lý các giải đấu với khối hình cơ
           học, sử dụng bằng cách xoay một nhóm các viên nhỏ, thường được gọi là
@@ -2435,6 +2660,24 @@ vi:
           trong cộng đồng WCA, cũng như ứng dụng trên toàn thế giới để đảm bảo
           tiêu chuẩn chất lượng của đội ngũ WCA, tổ chức khu vực, ban tổ chức
           giải đấu, và đội ngũ giải đấu.
+      wcat:
+        #original_hash: 2b81984
+        name: Đội ngũ Thông báo Giải đấu WCA
+        #original_hash: 61a471f
+        description: >-
+          Ban này có trách nhiệm duyệt và thông báo Giải đấu WCA và đảm bảo rằng
+          các thông báo tuân theo tiêu chuẩn chất lượng của WCA.
+      wmt:
+        #original_hash: 2035811
+        name: Đội ngũ Marketing WCA
+        #original_hash: f2a0140
+        description: >-
+          Ban này có trách nhiệm phát triển và quản lý thương hiệu của WCA, tìm
+          kiếm tài trợ, giúp đỡ phân phối dụng cụ cho Giải đấu WCA, và quảng bá
+          các mặt hàng của WCA.
+      banned:
+        #original_hash: d30e2e5
+        name: Các thí sinh bị cấm
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>WCA Delegate</strong> là một chức vụ được định nghĩa trong
@@ -2464,18 +2707,8 @@ vi:
     motions: Động cơ
     #original_hash: 092f99e
     minutes: Ghi chép
-    #original_hash: 8d61184
-    policies: Chính sách
-    #original_hash: cdad4f1
-    dues: Hệ thống tính phí WCA
-    #original_hash: 7536665
-    logo: Sử dụng Logo WCA
-    #original_hash: 920a98f
-    proximity_policy: Chính sách WCA về vùng lân cận của giải đấu
-    #original_hash: f484584
-    competition_name_policy: Chính sách WCA về tên giải đấu
-    #original_hash: c7f7728
-    competition_announcement_policy: Chính sách Thông báo Giải đấu WCA
+    #original_hash: 6db524a
+    policies: Chính sách của WCA
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegate
@@ -2545,12 +2778,10 @@ vi:
     #original_hash: 1cb449c
     members: Thành viên
     board:
-      #original_hash: 3a8b1d8
+      #original_hash: f3cbb35
       info_html: >-
         Hiệp hội Lập phương Thế giới được dẫn dắt bởi Ban Quản trị WCA. Họ có
-        trách nhiệm trả lời các câu hỏi tổng quan về tổ chức WCA. Tất cả các
-        giải đấu chính thức cần được thông qua bởi Ban Quản trị trước khi được
-        công bố.
+        trách nhiệm trả lời các câu hỏi tổng quan về tổ chức WCA.
     wct:
       #original_hash: 846684d
       info_html: >-
@@ -2613,6 +2844,17 @@ vi:
         chất lượng của WCA, cũng như ứng dụng trên toàn thế giới để đảm bảo tiêu
         chuẩn chất lượng của đội ngũ WCA, tổ chức khu vực, ban tổ chức các giải
         đấu, và đội ngũ giải đấu.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Ban này có trách nhiệm duyệt và thông báo Giải đấu WCA và đảm bảo rằng
+        các thông báo tuân theo tiêu chuẩn chất lượng của WCA.
+    wmt:
+      #original_hash: f2a0140
+      info_html: >-
+        Ban này có trách nhiệm phát triển và quản lý thương hiệu của WCA, tìm
+        kiếm tài trợ, giúp đỡ phân phối dụng cụ cho Giải đấu WCA, và quảng bá
+        các mặt hàng của WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Công cụ Ghi kết quả của WCA
@@ -2882,7 +3124,7 @@ vi:
     paragraph2:
       #original_hash: f20dd3b
       title: Chi phí dự tính để tổ chức một giải đấu
-      #original_hash: ab53dda
+      #original_hash: f16a06f
       content: >-
         Chi phí dự tính có sự khác biệt rõ rệt ở từng quốc gia và được đánh giá
         bằng một vài nguyên tố như kích thước của địa điểm và một vài điều kiện
@@ -2893,26 +3135,25 @@ vi:
     paragraph3:
       #original_hash: 00d3bf8
       title: Hạn chót để thông báo giải đấu
-      #original_hash: c61c6c9
+      #original_hash: 305cfb1
       content_html: >-
         Giải đấu phải được thông báo ít nhất một tháng trước khi bắt đầu (xem <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Hướng
         dẫn 8a4++</a>). Nếu vì lý do đặc biệt khiến bạn không thể kịp hạn chót,
         giải đấu có thể được thông báo muộn nhất là trước hai tuần, theo quyết
-        định của Ban Quản trị WCA. Chúng tôi rất khuyến khích bạn thông báo cho
-        Ban Quản trị WCA những lý do sớm nhất có thể để đề phòng trường hợp giải
-        đấu bị từ chối.
+        định của WCAT. Chúng tôi rất khuyến khích bạn thông báo cho WCAT những
+        lý do sớm nhất có thể để đề phòng trường hợp giải đấu bị từ chối.
     paragraph4:
       #original_hash: b6dca56
       title: Chính sách về vùng lân cận
-      #original_hash: f86bf95
+      #original_hash: 79ed06e
       content1: >-
         Giải đấu WCA sẽ được chấp nhận nếu diễn ra cách bất kỳ giải đấu nào khác
-        khoảng cách 100 km hoặc thời gian 19 ngày. Ban Quản trị WCA cần xem xét
-        kỹ kế hoạch của giải đấu nếu như có một giải đấu nào khác ở trong cự li
-        nhỏ hơn 100 km và thời gian gần hơn 19 ngày. Delegate nếu yêu cầu tổ
-        chức giải đấu như vậy cần cung cấp thêm lý do vì sao giải đấu nên được
-        tổ chức. Những lý do có thể được chấp nhận bao gồm:
+        khoảng cách 100 km hoặc thời gian 19 ngày. WCAT cần xem xét kỹ kế hoạch
+        của giải đấu nếu như có một giải đấu nào khác ở trong cự li nhỏ hơn 100
+        km và thời gian gần hơn 19 ngày. Delegate nếu yêu cầu tổ chức giải đấu
+        như vậy cần cung cấp thêm lý do vì sao giải đấu nên được tổ chức. Những
+        lý do có thể được chấp nhận bao gồm:
       olist1:
         #original_hash: de00462
         '1': Hai giải đấu không có nội dung giống nhau.
@@ -2948,29 +3189,29 @@ vi:
     paragraph-events:
       #original_hash: b16c5f1
       title: Thông báo nội dung
-      #original_hash: b6c6d26
+      #original_hash: cee85f7
       content: >-
         Tất cả các nội dung của một giải đấu phải được chỉ rõ bởi delegate khi
         gửi đơn đăng ký giải đấu. Các nội dung phải bao gồm cả nội dung "dự
         kiến" (nội dung có thể được bổ sung, tuỳ thuộc vào tiến độ của giải
-        đấu). Bất kỳ phần bổ sung nào phải được thông qua bởi Ban Quản trị.
+        đấu). Bất kỳ phần bổ sung nào phải được thông qua bởi WCAT.
     paragraph5:
       #original_hash: 17d01de
       title: Giới hạn thí sinh
-      #original_hash: ffcd75e
+      #original_hash: b4748cf
       content_html: >-
         Số lượng thí sinh có thể được giới hạn theo nội dung hoặc theo giải đấu
         (xem <a href='https://www.worldcubeassociation.org/regulations/#Z4'>Quy
         định Z4</a>). Như tất cả các quy định trong mục Z, Delegate của một giải
-        đấu phải xin phép Ban Quản trị để giới hạn số lượng thí sinh. Giới hạn
-        số lượng phải được lựa chọn phù hợp với nhu cầu thí sinh. Giới hạn không
-        dược đặt quá thấp vì lý do không đáng kể. Giới hạn số lượng phải được
-        cân nhắc khi lựa chọn một địa điểm phù hợp. Giới hạn phải được thông báo
-        rõ ràng trên trang thông tin giải đấu trên trang web của WCA.
+        đấu phải xin phép WCAT để giới hạn số lượng thí sinh. Giới hạn số lượng
+        phải được lựa chọn phù hợp với nhu cầu thí sinh. Giới hạn không dược đặt
+        quá thấp vì lý do không đáng kể. Giới hạn số lượng phải được cân nhắc
+        khi lựa chọn một địa điểm phù hợp. Giới hạn phải được thông báo rõ ràng
+        trên trang thông tin giải đấu trên trang web của WCA.
     paragraph6:
       #original_hash: ce4c3d0
       title: Xử lý đơn đăng ký
-      #original_hash: cb13cd0
+      #original_hash: bd669a1
       content: >-
         Đơn đăng ký phải được thông qua theo trình tự thời gian (đơn đăng ký
         hoàn thành trước cần được xem xét trước). Nếu lệ phí đăng ký cần phải
@@ -2985,7 +3226,7 @@ vi:
         Một khi đã đạt đến giới hạn số lượng thí sinh, cần phải mở một danh sách
         chờ. Khi những thí sinh đã được thông qua huỷ bỏ đơn đăng ký, có thể đưa
         thí sinh từ danh sách chờ vào xem xét.
-      #original_hash: 1b2ea79
+      #original_hash: 802b34f
       content2: >-
         Nếu cần đóng trước lệ phí thi, bạn có thể đặt một hạn chót để đóng lệ
         phí thi trước giải đấu. Trong trường hợp các thí sinh đã đăng ký không
