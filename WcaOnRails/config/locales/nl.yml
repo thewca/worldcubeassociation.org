@@ -329,6 +329,8 @@ nl:
         showAtAll: Maak deze wedstrijd zichtbaar voor publiek
         #original_hash: 709a232
         name: Naam
+        #original_hash: f91b080
+        name_reason: De reden voor de naam
         #original_hash: b649210
         cellName: Verkorte naam van wedstrijd
         #original_hash: d523ebb
@@ -668,9 +670,9 @@ nl:
         external_website: 'Link naar de website van de wedstrijd, inclusief http(s).'
         #original_hash: 9965635
         registration_open: 'Let op: de tijden van de aanmelding zijn in UTC tijdzone'
-        #original_hash: 243212f
+        #original_hash: bd402bf
         remarks_html: >-
-          Aanvullende informatie die je aan de board wilt doorgeven.
+          Aanvullende informatie die je aan de WCAT wilt doorgeven.
           Bijvoorbeeld, nadere uitleg als een wedstrijd minder dan vier weken
           van tevoren wordt aangevraagd, of als je toepassing vraagt van
           %{link}. Vul deze informatie in het Engels!
@@ -1171,22 +1173,20 @@ nl:
         header: '%{delegate_name} heeft %{competition} bevestigd'
         #original_hash: 3db81b5
         organizers: 'Beste organisatoren van %{competition},'
-        #original_hash: c526fd6
+        #original_hash: d353d8c
         confirmed: >-
           %{delegate_name}, de delegate van je wedstrijd, heeft %{competition}
-          bevestigd en de aanvraag naar de WCA Board gestuurd. Zodra de WCA
-          Board deze wedstrijd openbaar maakt, ontvang je weer een notificatie.
+          bevestigd en de aanvraag naar de WCAT gestuurd. Zodra de WCAT deze
+          wedstrijd openbaar maakt, ontvang je weer een notificatie.
         #original_hash: dfea09d
         contact: >-
           Als je meer vragen hebt, stuur dan een e-mail naar de delegate(s) van
           de wedstrijd:
       competition_announcement_email:
-        #original_hash: 1571dd8
-        header: 'The WCA Board heeft %{competition} aangekondigd'
-        #original_hash: 8e91977
-        announced: >-
-          De WCA Board heeft je wedstrijd goedgekeurd en officieel openbaar
-          gemaakt.
+        #original_hash: 87f1f49
+        header: 'The WCAT heeft %{competition} aangekondigd'
+        #original_hash: 0d3d10c
+        announced: De WCAT heeft je wedstrijd goedgekeurd en officieel openbaar gemaakt.
         #original_hash: 1c20919
         link: 'Volg de link naar de aankondiging van de wedstrijd:'
       organizer_addition_email:
@@ -1967,13 +1967,18 @@ nl:
       #original_hash: 9104a03
       no_past_competitions: Je hebt geen wedstrijden in het verleden.
     competition_form:
-      #original_hash: e879b0b
-      board: Board
+      #original_hash: 2b81984
+      wcat: WCA Competition Announcement Team (Wedstrijdaankondigingsteam)
       #original_hash: f957dcb
       supports_md_html: >-
         Ondersteunt <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        Een korte uitleg van de wedstrijdnaam. De naam moet voldoen aan de <a
+        href='/documents/policies/Competition%20Name.pdf'>WCA Competition Name
+        Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
         De locatie waar de wedstrijd plaatsvindt. %{md}. Bijvoorbeeld: [Cité des
@@ -1993,22 +1998,24 @@ nl:
       deprecated_events: >-
         Deze wedstrijd heeft wedstrijdonderdelen die niet langer officieel zijn,
         we ondersteunen niet het bewerken daarvan.
-      #original_hash: 815d5c3
-      locked_edit_html: >-
-        Deze wedstrijd is publiek zichtbaar en kan worden bewerkt. Als je een
-        aanpassing wilt doen, neem dan contact op met de %{board}.
-      #original_hash: ce33e21
-      confirmed_not_visible_html: >-
-        Je hebt de wedstrijd bevestigd, maar deze is nog niet zichtbaar voor het
-        publiek. Wacht op de %{board} om de wedstrijd zichtbaar te maken.
+      #original_hash: cafc153
+      public_and_locked_html: >-
+        De competition is publiek zichtbaar en kan niet worden bewerkt. Als je
+        een wijziging nodig hebt, antwoord dan in de oorspronkelijke maildraad
+        waarin de wedstrijd is bevestigd.
+      #original_hash: e00a339
+      confirmed_but_not_visible_html: >-
+        Je hebt deze wedstrijd bevestigd, maar de wedstrijd is nog niet
+        zichtbaar voor het publiek. Wacht op %{contact} om de wedstrijd
+        zichtbaar te maken.
       #original_hash: e94cba8
       is_visible: >-
         De wedstrijd is zichtbaar voor publiek, elke wijziging is meteen
         zichtbaar voor het publiek!
-      #original_hash: 34862bb
-      awaiting_confirmation_html: >-
-        Vul alle velden in en klik op Bevestigen als je klaar bent om de
-        %{board} de wedstrijd te laten goedkeuren.
+      #original_hash: f99b3f7
+      pending_confirmation_html: >-
+        Vul alle velden in en klik op Bevestigen als je klaar bent voor de
+        %{contact} om de wedstrijd goed te keuren.
       #original_hash: 8966fd0
       submit_create_value: Aanmaken wedstrijd
       #original_hash: 40b0dfd
@@ -2017,11 +2024,12 @@ nl:
       submit_confirm_value: Bevestigen
       #original_hash: f6fdbe4
       submit_delete_value: Verwijderen
-      #original_hash: 1ca19b1
+      #original_hash: 22316f1
       submit_confirm: >-
         Weet je zeker dat je klaar bent om te bevestigen? Na bevestigen kun je
         de informatie niet meer aanpassen. Controleer je mail om te zien of de
-        Board is geïnformeerd.
+        WCA Competition Announcement Team (Wedstrijdaankondigingsteam) is
+        geïnformeerd.
       #original_hash: 4c7deb7
       submit_delete: Weet je zeker dat je de wedstrijd wilt verwijderen? Je kunt niet terug.
       #original_hash: 8ebebca
@@ -2070,9 +2078,9 @@ nl:
     update:
       #original_hash: 5fb2f57
       save_success: Wedstrijd opgeslagen.
-      #original_hash: 9d1649e
+      #original_hash: 5253c86
       confirm_success: >-
-        Wedstrijd bevestigd. Controleer je mail en wacht op de Board om de
+        Wedstrijd bevestigd. Controleer je mail en wacht op de WCAT om de
         wedstrijd aan te kondigen!
       #original_hash: 28567f0
       delete_success: 'Wedstrijd %{id} verwijderd.'
@@ -2721,11 +2729,19 @@ nl:
         name: WCA QA Committee
         #original_hash: 0171b3b
         description: >-
-          Deze commissie heeft de rol om continue verbetering de ondersteunen en
+          Deze commissie heeft de rol om continue verbetering te ondersteunen en
           bevorderen binnen de WCA, en de wereldwijde toepassing van
           kwaliteitsstandaarden om een consistente hoge kwaliteit te garanderen
           van processen, WCA Staff, regionale organisaties,
           wedstrijdorganisatoren en wedstrijdstaf.
+      wcat:
+        #original_hash: 2b81984
+        name: WCA Competition Announcement Team (Wedstrijdaankondigingsteam)
+        #original_hash: 61a471f
+        description: >-
+          Deze commissie heeft de rol om WCA-wedstrijden goed te keuren en aan
+          te kondigen, en te zorgen dat zulke aankondigingen voldoen aan de
+          WCA-kwaliteitsstandaarden.
       wmt:
         #original_hash: 2035811
         name: WCA Marketing Team
@@ -2846,12 +2862,10 @@ nl:
     #original_hash: 1cb449c
     members: Leden
     board:
-      #original_hash: 3a8b1d8
+      #original_hash: f3cbb35
       info_html: >-
         De World Cube Association wordt geleid door de WCA Board. Ze zijn
         verantwoordelijk voor algemene vragen en de WCA-organisatie als geheel.
-        Alle officiële wedstrijden hebben goedkeuring nodig van WCA Board
-        voordat ze worden aangekondigd.
     wct:
       #original_hash: 846684d
       info_html: >-
@@ -2922,6 +2936,12 @@ nl:
         kwaliteitsstandaard om constante hoge kwaliteit te garanderen voor
         processen, WCA Staff, regionale organisaties, wedstrijdorganisatoren en
         wedstrijdstaff.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Deze commissie heeft de rol om WCA-wedstrijden goed te keuren en aan te
+        kondigen, en te zorgen dat zulke aankondigingen voldoen aan de
+        WCA-kwaliteitsstandaarden.
     wmt:
       #original_hash: f2a0140
       info_html: >-
@@ -3228,28 +3248,28 @@ nl:
     paragraph3:
       #original_hash: 00d3bf8
       title: Deadline voor het aankondigen van de wedstrijd
-      #original_hash: c61c6c9
+      #original_hash: 305cfb1
       content_html: >-
         De wedstrijd zou minstens een maand van tevoren moeten worden
         aangekondigd (zie <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Richtlijn
-        8a4++</a>). als er speciale redenen zijn waarom deze deadline niet kan
-        worden gehaald, mogen wedstrijd tot uiterlijk twee weken van tevoren
-        worden aangekondigd. Het is sterk aan te bevelen om de WCA-board van
-        deze redenen op de hoogte te brengen om latere weigering te voorkomen.
+        8a4++</a>). Als er speciale redenen zijn waarom deze deadline niet kan
+        worden gehaald, mogen wedstrijden tot uiterlijk twee weken van tevoren
+        worden aangekondigd, te bepalen door de WCAT. Het is sterk aan te
+        bevelen om de WCAT van deze redenen op de hoogte te brengen om latere
+        weigering te voorkomen.
     paragraph4:
       #original_hash: b6dca56
       title: Nabijheidsbeleid
-      #original_hash: f86bf95
+      #original_hash: 79ed06e
       content1: >-
-        Algemeen beleid is dat wedstrijden worden geaccepteerd als ze minstens
-        100km of 19 dagen van andere wedstrijden plaatsvinden. De WCA-board zal
-        specifiek voorstellen voor wedstrijden beoordelen als er een andere
-        wedstrijd is op minder dan 100km afstand en met minder dan 19 dagen
-        verschil. Een WCA-delegate die zo'n wedstrijd wil laten goedkeuren, moet
-        nadere informatie leveren waarom deze wedstrijd alsnog moet worden
-        geaccepteerd. Mogelijke argumenten die daarbij ondersteunend kunnen
-        zijn:
+        Wedstrijden worden geaccepteerd als ze minstens 100km of 19 dagen van
+        andere wedstrijden plaatsvinden. De WCAT zal specifiek voorstellen voor
+        wedstrijden beoordelen als er een andere wedstrijd is op minder dan
+        100km afstand en met minder dan 19 dagen verschil. Een WCA-delegate die
+        zo'n wedstrijd wil laten goedkeuren, moet nadere informatie leveren
+        waarom deze wedstrijd alsnog moet worden geaccepteerd. Mogelijke
+        argumenten die daarbij ondersteunend kunnen zijn:
       olist1:
         #original_hash: de00462
         '1': De twee wedstrijden hebben geen overlappende wedstrijdonderdelen
@@ -3288,24 +3308,24 @@ nl:
     paragraph-events:
       #original_hash: b16c5f1
       title: Wedstrijdonderdelen aankondigen
-      #original_hash: b6c6d26
+      #original_hash: cee85f7
       content: >-
         Alle wedstrijdonderdelen die tijdens een wedstrijd worden gehouden
-        moeten worden gespecificeerd door de WCA Delegate, bij het goedkeuren
-        van een wedstrijd. Hieronder vallen ook de wedstrijdonderdelen die
-        misschien worden gehouden, d.w.z. wedstrijdonderdelen die afhangen van
-        hoe soepel de wedstrijd verloopt. Aanvullingen moeten worden goedgekeurd
-        door de WCA Board,
+        moeten worden gespecificeerd door de WCA Delegate, bij het aanvragen van
+        een wedstrijd. Hieronder vallen ook de wedstrijdonderdelen die misschien
+        worden gehouden, d.w.z. wedstrijdonderdelen die afhangen van hoe soepel
+        de wedstrijd verloopt. Aanvullingen moeten worden goedgekeurd door de
+        WCAT.
     paragraph5:
       #original_hash: 17d01de
       title: Maximumaantal Deelnemers
-      #original_hash: ffcd75e
+      #original_hash: b4748cf
       content_html: >-
         Het aantal deelnemers kan worden beperkt per wedstrijdonderdeel of per
         wedstrijd (zie <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Reglement
-        Z4</a>). Zoals alle Reglementen in artikel Z, moet de WCA-delegate van
-        de wedstrijd goedkeuring krijgen van de WCA-board. Maximumaantallen
+        Z4</a>). Zoals alle Reglementen in artikel Z, moet de WCA Delegate van
+        de wedstrijd goedkeuring krijgen van de WCAT. Maximumaantallen
         deelnemers moeten zorgvuldig woren gekozen en in lijn zijn met het
         verwachte aantal aanmeldingen. Het maximumaantal mag niet voor
         onbelangrijke reden laag worden ingesteld. Het bedoelde maximum moet al
