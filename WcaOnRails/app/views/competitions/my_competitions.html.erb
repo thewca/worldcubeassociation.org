@@ -5,7 +5,7 @@
 
   <%= t '.disclaimer' %>
 
-  <%= render "my_competitions_table", competitions: @not_past_competitions, past: false %>
+  <%= render "my_competitions_table", competitions: @not_past_competitions, registrations_by_competition_id: @registered_for_by_competition_id, past: false %>
 
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -19,7 +19,7 @@
 
     <div id="past-competitions" class="panel-collapse collapse">
       <div class="panel-body">
-        <%= render "my_competitions_table", competitions: @past_competitions, past: true %>
+        <%= render "my_competitions_table", competitions: @past_competitions, registrations_by_competition_id: @registered_for_by_competition_id, past: true %>
       </div>
     </div>
   </div>

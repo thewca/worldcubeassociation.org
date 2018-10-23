@@ -544,14 +544,20 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    competitions = (current_user.delegated_competitions +
-      current_user.organized_competitions +
-      current_user.registrations.includes(:competition).accepted.map(&:competition).reject(&:results_posted?) +
-      current_user.registrations.includes(:competition).pending.map(&:competition).select(&:upcoming?))
+    competition_ids = current_user.organized_competitions.pluck(:competition_id)
+    competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
+    registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
+    registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
+    @registered_for_by_competition_id = Hash[registrations.uniq.map do |r|
+      [r.competition.id, r]
+    end]
+    competition_ids.concat(@registered_for_by_competition_id.keys)
     if current_user.person
-      competitions += current_user.person.competitions
+      competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
     end
-    competitions = competitions.uniq.sort_by { |comp| comp.start_date || Date.today + 20.year }.reverse
+    competitions = Competition.includes(:delegate_report, :delegates)
+                              .where(id: competition_ids.uniq)
+                              .sort_by { |comp| comp.start_date || Date.today + 20.year }.reverse
     @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
   end
 
