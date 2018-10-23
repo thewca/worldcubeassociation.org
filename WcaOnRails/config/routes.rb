@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   post 'admin/avatars' => 'admin/avatars#update_all'
 
   get 'competitions/mine' => 'competitions#my_competitions', as: :my_comps
+  get 'competitions/for_senior(/:user_id)' => 'competitions#for_senior', as: :competitions_for_senior
   resources :competitions, only: [:index, :show, :edit, :update, :new, :create] do
     get 'results/podiums' => 'competitions#show_podiums'
     get 'results/all' => 'competitions#show_all_results'

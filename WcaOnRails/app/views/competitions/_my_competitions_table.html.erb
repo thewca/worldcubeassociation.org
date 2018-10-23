@@ -1,3 +1,5 @@
+<% show_delegates ||= false %>
+<% registrations_by_competition_id ||= {} %>
 <% if competitions.length < 1 %>
   <%= alert :info do %>
     <% if !past %>
@@ -17,15 +19,17 @@
           <th></th>
           <th></th>
           <th></th>
+          <th></th>
           <th class="big-column"></th>
         </tr>
       </thead>
       <tbody>
         <% competitions.each do |competition| %>
           <% registration = registrations_by_competition_id[competition.id] %>
-          <tr class="<%=[ competition.confirmed? ? "confirmed" : "not-confirmed",
+          <% tr_classes = [ competition.confirmed? ? "confirmed" : "not-confirmed",
                           competition.showAtAll? ? "visible" : "not-visible",
-                          past ? "past" : "not-past" ].join(' ') %>"
+                          past ? "past" : "not-past" ].join(' ') %>
+          <tr class="<%= tr_classes %>"
               data-toggle="tooltip" data-placement="bottom" data-container="body"
               title="<%= competition_message_for_user(competition, current_user) unless past %>">
             <td><%= link_to competition.name, competition_path(competition) %></td>
@@ -61,6 +65,13 @@
             </td>
             <td class="big-column"></td>
           </tr>
+          <% if show_delegates %>
+            <tr class="<%= tr_classes %>">
+              <td></td>
+              <td colspan="6"><%= competition.delegates.map(&:name).join(", ") %></td>
+              <td class="big-column"></td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>

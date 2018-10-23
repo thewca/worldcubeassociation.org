@@ -1,0 +1,8 @@
+<% provide(:title, "Upcoming competitions for Delegates managed by #{@user.name}") %>
+
+<div class="container">
+  <h3><%= yield(:title) %></h3>
+
+  <%= render "my_competitions_table", competitions: @competitions, past: false, show_delegates: true %>
+
+</div>

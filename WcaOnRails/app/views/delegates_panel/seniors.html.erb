@@ -7,6 +7,7 @@
     <h4><%= s.name %></h4>
     <ul>
       <li><%= link_to("List of subordinate pending WCA ID claims", pending_claims_path(s.id)) %></li>
+      <li><%= link_to("List of subordinate upcoming competitions", competitions_for_senior_path(s.id)) %></li>
     </ul>
   <% end %>
 </div>

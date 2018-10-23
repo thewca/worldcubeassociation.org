@@ -159,6 +159,35 @@ RSpec.describe CompetitionsController do
     end
   end
 
+  describe 'GET #for_senior' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        get :new
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as a senior Delegate' do
+      sign_in { FactoryBot.create :senior_delegate }
+
+      it 'renders the for_senior page' do
+        get :for_senior
+        expect(response).to render_template :for_senior
+      end
+    end
+
+    context 'when signed in as a regular Delegate' do
+      sign_in { FactoryBot.create :delegate }
+
+      it 'does not allow access' do
+        get :for_senior
+        expect(response).to redirect_to root_url
+      end
+    end
+  end
+
   describe 'GET #edit' do
     let(:organizer) { FactoryBot.create(:user) }
     let(:admin) { FactoryBot.create :admin }
