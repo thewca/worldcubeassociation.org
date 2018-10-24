@@ -425,9 +425,12 @@ class Competition < ApplicationRecord
     CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
   end
 
+  # We setup an alias here to be able to take advantage of `includes(:delegate_report)` on a competition,
+  # while still being able to use the 'with_old_id' trick.
+  alias_method :original_delegate_report, :delegate_report
   def delegate_report
     with_old_id do
-      DelegateReport.find_by_competition_id(id)
+      original_delegate_report
     end
   end
 
