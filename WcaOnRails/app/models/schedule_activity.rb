@@ -109,6 +109,20 @@ class ScheduleActivity < ApplicationRecord
     self
   end
 
+  def move_by(diff)
+    # 'diff' must be something add-able to a date (eg: 2.days, 34.seconds)
+    self.assign_attributes(start_time: start_time + diff, end_time: end_time + diff)
+    self.save(validate: false)
+    child_activities.map { |a| a.move_by(diff) }
+  end
+
+  def move_to(date)
+    self.assign_attributes(start_time: start_time.change(year: date.year, month: date.month, day: date.day),
+                           end_time: end_time.change(year: date.year, month: date.month, day: date.day))
+    self.save(validate: false)
+    child_activities.map { |a| a.move_to(date) }
+  end
+
   def self.wcif_json_schema
     {
       "type" => "object",

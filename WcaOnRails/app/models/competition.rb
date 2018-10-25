@@ -446,6 +446,38 @@ class Competition < ApplicationRecord
     end
   end
 
+  def any_date_has_changed?
+    saved_change_to_start_date? || saved_change_to_end_date?
+  end
+
+  after_save :move_schedule, if: :any_date_has_changed?
+  def move_schedule
+    old_end_date = saved_changes["end_date"]&.first || end_date
+    old_start_date = saved_changes["start_date"]&.first || start_date
+    old_number_of_days = (old_end_date - old_start_date).to_i + 1
+
+    competition_activities = competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:all_activities).flatten
+    if start_date && end_date
+      # NOTE: when doing the change we don't need to care about the timezone, as we just "move" all the datetime the same way
+      if number_of_days >= old_number_of_days
+        competition_activities.each do |a|
+          a.move_by((start_date - old_start_date).to_i.days)
+        end
+      else
+        # NOTE: this is an arbitrary chosen policy when shrinking competition dates.
+        # move all activities on start_date to new "start_date"
+        # move all activities on days between ]start_date, end_date] to new "end_date"
+        to_start, to_end = competition_activities.partition { |a| a.start_time.to_date == old_start_date }
+        to_end.each { |a| a.move_to(end_date) }
+        to_start.each { |a| a.move_to(start_date) }
+      end
+    elsif start_date || end_date
+      competition_activities.each { |a| a.move_to(start_date || end_date) }
+    else
+      competition_activities.each(&:destroy)
+    end
+  end
+
   attr_accessor :editing_user_id
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself
