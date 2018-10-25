@@ -157,6 +157,10 @@ FactoryBot.define do
               start_time: start_time.change(hour: 12, min: 0, sec: 0).iso8601,
               end_time: end_time.change(hour: 13, min: 0, sec: 0).iso8601,
             )
+            # In case we're generating multi days competition, add some activities
+            # on the other day.
+            start_time = competition.end_date.to_time
+            end_time = competition.end_date.to_time
             activity = first_room.schedule_activities.create!(
               wcif_id: 2,
               name: "another activity",

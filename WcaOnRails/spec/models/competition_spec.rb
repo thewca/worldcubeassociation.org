@@ -802,4 +802,47 @@ RSpec.describe Competition do
       expect(competition.registration_full?).to be true
     end
   end
+
+  context "when changing the competition's date" do
+    let(:competition) {
+      FactoryBot.create :competition,
+                        with_schedule: true,
+                        start_date: Date.parse("2018-10-24"),
+                        end_date: Date.parse("2018-10-26")
+    }
+    let(:all_activities) {
+      competition.competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:all_activities).flatten
+    }
+
+    def change_and_check_activities(new_start_date, new_end_date)
+      on_first_day, on_last_day = all_activities.partition { |a| a.start_time.to_date == competition.start_date }
+      # the factory define one activity per day, the two lines below are
+      # basically safe guards against a future change to the competition's factory.
+      expect(on_first_day).not_to be_empty
+      expect(on_last_day).not_to be_empty
+      competition.update(start_date: new_start_date,
+                         end_date: new_end_date)
+      all_activities.map(&:reload)
+      # Check activities moved
+      expect(on_first_day.map { |a| [a.start_time.to_date, a.end_time.to_date] }.flatten.uniq).to eq([new_start_date])
+      expect(on_last_day.map { |a| [a.start_time.to_date, a.end_time.to_date] }.flatten.uniq).to eq([new_end_date])
+      # Check nested activities moved
+      nested_last_date = on_last_day.map(&:child_activities).flatten
+      expect(nested_last_date).not_to be_empty
+      expect(nested_last_date.map { |a| [a.start_time.to_date, a.end_time.to_date] }.flatten.uniq).to eq([new_end_date])
+    end
+
+    it "shrinks schedule" do
+      # Move the competition and shrink it by one day
+      # The expected behavior is:
+      #   - activities on the old start date go to new start date
+      #   - others go to the new end date
+      change_and_check_activities(Date.parse("2018-09-18"), Date.parse("2018-09-19"))
+    end
+
+    it "moves schedule" do
+      # Keep the same number of days, just move it around
+      change_and_check_activities(Date.parse("2018-11-18"), Date.parse("2018-11-20"))
+    end
+  end
 end
