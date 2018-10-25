@@ -155,7 +155,7 @@ ko:
     attempt_name: '시도 %{number}'
   round:
     #original_hash: 236c41d
-    name: '%{event_name} 라운드 %{round_name}'
+    name: '%{event_name} %{round_name}'
   advancement_condition:
     #original_hash: 6e55337
     ranking: '상위 %{ranking}명의 선수가 다음 라운드 진출'
@@ -975,15 +975,15 @@ ko:
         header: '%{competition}가 %{delegate_name}에 의해 신청되었습니다.'
         #original_hash: 3db81b5
         organizers: '%{competition}의 주최자에게 보냅니다,'
-        #original_hash: c526fd6
+        #original_hash: d353d8c
         confirmed: >-
-          파견위원인 %{delegate_name}가 %{competition}을 WCA 회장단에게 신청했습니다. WCA 회장단이 대회를
-          발표할 시 또 이메일을 받게 될 것 입니다.
+          파견위원인 %{delegate_name}가 %{competition}을 WCAT에게 신청했습니다. WCAT이 대회를 발표할 시
+          또 이메일을 받게 될 것 입니다.
         #original_hash: dfea09d
         contact: '질문이 있으면, 대회의 파견위원에게 이메일로 연락하세요:'
       competition_announcement_email:
-        #original_hash: 1571dd8
-        header: 'WCA 회장단이 %{competition}을 발표했습니다.'
+        #original_hash: 87f1f49
+        header: 'WCAT가 %{competition}을 발표했습니다.'
     claim_wca_id:
       #original_hash: f28bf87
       title: WCA ID 연결
@@ -2110,10 +2110,8 @@ ko:
     #original_hash: 1cb449c
     members: 회원
     board:
-      #original_hash: 3a8b1d8
-      info_html: >-
-        세계 큐브 협회는 WCA 대표단이 이끌어갑니다. WCA 대표단은 세계 큐브 협회의 전단에 대한 책임을 집니다. 모든 WCA 대회는
-        WCA의 대표단에 의해 승인됩니다.
+      #original_hash: f3cbb35
+      info_html: 세계 큐브 협회는 WCA 대표단이 이끌어갑니다. WCA 대표단은 세계 큐브 협회의 전단에 대한 책임을 집니다.
     wct:
       #original_hash: 846684d
       info_html: >-
@@ -2381,22 +2379,22 @@ ko:
     paragraph3:
       #original_hash: 00d3bf8
       title: WCA 대회 공지 마감일
-      #original_hash: c61c6c9
+      #original_hash: 305cfb1
       content_html: >-
         <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>권장
         사항 8a4++</a>에 의거하여 모든 WCA 대회는 일반적으로 대회 시작 날의 한 달 전에 발표됩니다. 특별한 경우에 이 조건을
-        충족 시키지 못한다면, WCA 대표단의 결정에 따라 대회 시작 날의 2주 전까지 발표가 가능합니다. 만약 이 경우에 처할 가능성이
-        있다면, 최대한 빨리 WCA 대표단에게 알려 줄 것을 추천합니다. 너무 늦게 알려주시면 대회 발표가 거절 될 수 있습니다.
+        충족 시키지 못한다면, WCAT의 결정에 따라 대회 시작 날의 2주 전까지 발표가 가능합니다. 만약 이 경우에 처할 가능성이
+        있다면, 최대한 빨리 WCAT에게 알려 줄 것을 추천합니다. 너무 늦게 알려주시면 대회 발표가 거절 될 수 있습니다.
     paragraph4:
       #original_hash: b6dca56
       title: WCA 대회 거리 정책
-      #original_hash: f86bf95
+      #original_hash: 79ed06e
       content1: >-
         WCA 대회는 다른 대회로 부터 거리가 100k 또는 일시가 19일 이상 차이가 난다면 거절 할 이유가 없습니다. 만약 주최하려는
-        WCA 대회가 다른 WCA 대회로 부터 거리상 100km 이내 혹은 일시가 18일 이내에 있다면, WCA 대표단은 대회 주최에
-        대한 심의를 거치게 됩니다. 이러한 대회를 주최하려는 WCA 파견위원은 WCA 대표단에게 합당한 이유를 들어 설득해야 합니다.
-        합당한 이유가 될 수 있는 예시들 입니다:
+        WCA 대회가 다른 WCA 대회로 부터 거리상 100km 이내 혹은 일시가 18일 이내에 있다면, WCAT가 대회 주최에 대한
+        심의를 진행합니다. 이러한 대회를 주최하려는 WCA 파견위원은 WCA 대표단에게 합당한 이유를 들어 설득해야 합니다. 합당한
+        이유가 될 수 있는 예시들 입니다:
       olist1:
         #original_hash: de00462
         '1': 두 WCA 대회에 같은 종목이 없습니다
@@ -2426,18 +2424,18 @@ ko:
     paragraph-events:
       #original_hash: b16c5f1
       title: 종목 발표
-      #original_hash: b6c6d26
+      #original_hash: cee85f7
       content: >-
-        WCA 대회에서 열릴 종목은 WCA 대표단에게 승인 요청할시 WCA 파견위원에 의해서 결정됩니다. 이는 추가적으로 열릴 수도 있는
-        임시 종목도 포함 됩니다. 이 이외의 종목 추가는 WCA 대표단의 승인이 있어야 합니다.
+        WCA 대회에서 열릴 종목은 WCAT에게 승인 요청할시 WCA 파견위원에 의해서 결정됩니다. 이는 추가적으로 열릴 수도 있는 임시
+        종목도 포함 됩니다. 이 이외의 종목 추가는 WCA 대표단의 승인이 있어야 합니다.
     paragraph5:
       #original_hash: 17d01de
       title: 대회 참가자 제한
-      #original_hash: ffcd75e
+      #original_hash: b4748cf
       content_html: >-
         대회 참가자 제한은 대회별 또는 종목별로 이루어 질 수 있습니다. (<a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>규정 Z4</a>
-        참조.) 조항 Z의 모든 사항들은 WCA 파견위원이 WCA 대표단의 승인을 받아야 합니다. 대회 참가자 제한은 기대 참가자 기호를
+        참조.) 조항 Z의 모든 사항들은 WCA 파견위원이 WCAT의 승인을 받아야 합니다. 대회 참가자 제한은 기대 참가자 기호를
         고려하여 조심스럽게 결정되어야 합니다. 단순한 이유로 참가자 제한을 더 적은 숫자로 제한하면 안됩니다. 대회 장소를 구할 당시에
         참가자 제한을 염두해두고 구해야합니다. 참가자 제한은 WCA 홈페이지의 각 대회 홈페이지에 명시되어야 합니다.
     paragraph6:
