@@ -678,9 +678,9 @@ es:
         external_website: Sitio web de la competición. Tiene que ser una URL http(s) válida.
         #original_hash: 9965635
         registration_open: 'Nota: la apertura y cierre se registra según la hora UTC.'
-        #original_hash: 243212f
+        #original_hash: bd402bf
         remarks_html: >-
-          Información suplementaria que quieras enviar al Board. Por ejemplo,
+          Información suplementaria que quieras enviar al WCAT. Por ejemplo,
           explica tus razones si la competición solicitada es en menos de cuatro
           semanas o si estás solicitando que se aplique %{link}. Por favor,
           rellénalo en inglés.
@@ -1189,23 +1189,22 @@ es:
         header: '%{delegate_name} ha confirmado %{competition}'
         #original_hash: 3db81b5
         organizers: 'Estimados organizadores de %{competition},'
-        #original_hash: c526fd6
+        #original_hash: d353d8c
         confirmed: >-
           El Delegado  %{delegate_name} de tu competición ha confirmado
-          %{competition} y enviado el formularoo a la Junta de la WCA. Tan
-          pronto como la Junta de la WCA anuncie al público la competición,
-          recibirás otra notificación.
+          %{competition} y enviado el formularoo al WCAT. Tan pronto como el
+          WCAT anuncie al público la competición, recibirás otra notificación.
         #original_hash: dfea09d
         contact: >-
           Si tienes alguna pregunta más, por favor ponte en contacto con el/los
           delegado(s) de la competicón por correo electrónico:
       competition_announcement_email:
-        #original_hash: 1571dd8
-        header: 'La Junta de la WCA ha anunciado %{competition}'
-        #original_hash: 8e91977
+        #original_hash: 87f1f49
+        header: 'El WCAT ha anunciado %{competition}'
+        #original_hash: 0d3d10c
         announced: >-
-          La Junta de la WCA ha aprobado tu competición y será anunciada
-          oficialmente al público.
+          El WCAT ha aprobado tu competición y será anunciada oficialmente al
+          público.
         #original_hash: 1c20919
         link: >-
           Por favor siga el siguiente enlace para ver el anuncio de la
@@ -2101,10 +2100,10 @@ es:
     update:
       #original_hash: 5fb2f57
       save_success: La competición se ha guardado satisfactoriamente.
-      #original_hash: 9d1649e
+      #original_hash: 5253c86
       confirm_success: >-
-        La competición se ha confirmado satisfactoriamente. La Junta Directiva
-        la anunciará en breve. Comprueba tu correo.
+        La competición se ha confirmado satisfactoriamente. EL WCAT la anunciará
+        en breve. Comprueba tu correo.
       #original_hash: 28567f0
       delete_success: 'La competición %{id} se ha eliminado satisfactoriamente.'
     time_until_competition:
@@ -2894,12 +2893,11 @@ es:
     #original_hash: 1cb449c
     members: Miembros
     board:
-      #original_hash: 3a8b1d8
+      #original_hash: f3cbb35
       info_html: >-
         La organización Mundial del cubo (WCA) está liderada por la junta WCA.
         Son responsables de atender peticiones de índole general y de la
-        organización de la WCA en conjunto. Todas las competiciones oficiales
-        necesitan la aprobación de la junta WCA antes de ser anunciadas.
+        organización de la WCA en conjunto.
     wct:
       #original_hash: 846684d
       info_html: >-
@@ -3291,29 +3289,29 @@ es:
     paragraph3:
       #original_hash: 00d3bf8
       title: Fecha límite para anunciar la competición
-      #original_hash: c61c6c9
+      #original_hash: 305cfb1
       content_html: >-
         Se debe anunciar la competición al menos un mes antes del comienzo de la
         misma (ver la <a
         href=‘https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++’>Directriz
         8a4++</a>) Si hay motivos especiales que eviten que se cumpla este
         límite, las competiciones pueden ser anunciadas hasta dos semanas antes,
-        a discreción de la Junta Directiva de la WCA. Se recomienda
-        encarecidamente informar a la Junta Directiva de la WCA de estos motivos
-        lo antes posible para evitar que se termine rechazando la competición.
+        a discreción del WCAT. Se recomienda encarecidamente informar al WCAT de
+        estos motivos lo antes posible para evitar que se termine rechazando la
+        competición.
     paragraph4:
       #original_hash: b6dca56
       title: Política de Proximidad
-      #original_hash: f86bf95
+      #original_hash: 79ed06e
       content1: >-
         Las Competiciones de la WCA se aceptarán si están al menos a 100 km o a
-        19 días de otra competición. La Junta Directiva de la WCA debería
-        revisar particularmente una competición propuesta si hay otra
-        competición para la que la distancia entre ellas sea menor que 100 km y
-        el tiempo entre ellas sea menor que 19 días. Un Delegado que pida la
-        aceptación de tal competición debe aportar más información sobre por qué
-        la competición debería ser aceptada de todos modos. Posibles argumentos
-        a favor de que se acepte dicha competición incluyen:
+        19 días de otra competición. El WCAT debería revisar particularmente una
+        competición propuesta si hay otra competición para la que la distancia
+        entre ellas sea menor que 100 km y el tiempo entre ellas sea menor que
+        19 días. Un Delegado que pida la aceptación de tal competición debe
+        aportar más información sobre por qué la competición debería ser
+        aceptada de todos modos. Posibles argumentos a favor de que se acepte
+        dicha competición incluyen:
       olist1:
         #original_hash: de00462
         '1': Las dos competiciones no tienen pruebas en común.
@@ -3354,29 +3352,29 @@ es:
     paragraph-events:
       #original_hash: b16c5f1
       title: Anunciar pruebas
-      #original_hash: b6c6d26
+      #original_hash: cee85f7
       content: >-
         Todas las pruebas que se vayan a celebrar en la competición deben ser
         especificadas por el Delegado cuando se solicite la aprobación de la
         competición. Esto también incluye pruebas “tentativas” (i.e. pruebas que
         pueden ser celebradas adicionalmente dependiendo del transcurso de la
-        competición). La Junta Directiva debe aprobar nuevas adiciones.
+        competición). El WCAT debe aprobar nuevas adiciones.
     paragraph5:
       #original_hash: 17d01de
       title: Límites de competidores
-      #original_hash: ffcd75e
+      #original_hash: b4748cf
       content_html: >-
         El número de competidores puede ser limitado por prueba o por
         competición (ver la <a
         href=‘https://www.worldcubeassociation.org/regulations/#Z4’>Regla
         Z4</a>). Al igual que todas las reglas en el artículo Z, el Delegado de
         la competición debe obtener la aprobación del límite de competidores por
-        parte de la Junta Directiva. Los límites de competidores deberían ser
-        elegidos sabiamente y de acuerdo con el interés estimado de los
-        competidores. El límite no debería bajarse por motivos menorse. El
-        límite pretendido debería tenerse en consideración cuando se busque un
-        local apropiado. El límite de competidores debe mostrarse claramente en
-        la página de la competición en la página web de la WCA.
+        parte del WCAT. Los límites de competidores deberían ser elegidos
+        sabiamente y de acuerdo con el interés estimado de los competidores. El
+        límite no debería bajarse por motivos menorse. El límite pretendido
+        debería tenerse en consideración cuando se busque un local apropiado. El
+        límite de competidores debe mostrarse claramente en la página de la
+        competición en la página web de la WCA.
     paragraph6:
       #original_hash: ce4c3d0
       title: Gestionar registros
