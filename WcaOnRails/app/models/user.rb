@@ -17,7 +17,7 @@ class User < ApplicationRecord
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
-  has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
+  has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
@@ -329,11 +329,12 @@ class User < ApplicationRecord
   after_save :remove_pending_wca_id_claims
   private def remove_pending_wca_id_claims
     if saved_change_to_delegate_status? && !delegate_status
-      users_claiming_wca_id.confirmed_email.each do |user|
-        user.update delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil
+      confirmed_users_claiming_wca_id.each do |user|
         senior_delegate = User.find_by_id(senior_delegate_id_before_last_save)
         WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self, senior_delegate).deliver_later
       end
+      # Clear all pending WCA IDs claims for the demoted Delegate
+      User.where(delegate_to_handle_wca_id_claim: self.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
     end
   end
 

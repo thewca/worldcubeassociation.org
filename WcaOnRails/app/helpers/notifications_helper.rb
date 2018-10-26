@@ -53,7 +53,7 @@ module NotificationsHelper
     # for an account. We don't want to bother delegates with these claims until
     # the user has confirmed their account, though, so filter out users with
     # confirmed_at=NULL.
-    user.users_claiming_wca_id.where.not(confirmed_at: nil).each do |user_claiming_wca_id|
+    user.confirmed_users_claiming_wca_id.each do |user_claiming_wca_id|
       notifications << {
         text: "#{user_claiming_wca_id.email} has claimed WCA ID #{user_claiming_wca_id.unconfirmed_wca_id}",
         url: edit_user_path(user_claiming_wca_id.id, anchor: "wca_id"),
