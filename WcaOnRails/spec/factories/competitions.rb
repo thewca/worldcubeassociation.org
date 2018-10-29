@@ -146,8 +146,8 @@ FactoryBot.define do
             venue.venue_rooms.create!(room_attributes)
           end
           if i == 0
-            start_time = competition.start_date.to_datetime
-            end_time = competition.start_date.to_datetime
+            start_time = competition.start_date.to_time
+            end_time = competition.start_date.to_time
             venue.reload
             first_room = venue.venue_rooms.first
             first_room.schedule_activities.create!(
