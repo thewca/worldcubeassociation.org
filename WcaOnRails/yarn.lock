@@ -3704,9 +3704,10 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
-flag-icon-css@viroulep/flag-icon-css#3.2.1-xk:
+flag-icon-css@viroulep/flag-icon-css#3.2.1:
   version "3.2.1"
-  resolved "https://codeload.github.com/viroulep/flag-icon-css/tar.gz/9b5f113466e9597b5b2fe8e4bc5d8414789c5175"
+  uid dcf77c57d0a98d4474356408f33571bbbec37961
+  resolved "https://codeload.github.com/viroulep/flag-icon-css/tar.gz/dcf77c57d0a98d4474356408f33571bbbec37961"
 
 flatten@^1.0.2:
   version "1.0.2"
