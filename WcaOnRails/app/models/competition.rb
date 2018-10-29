@@ -123,9 +123,9 @@ class Competition < ApplicationRecord
     regulation_z3
     regulation_z3_reason
   ).freeze
-  VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
-  PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
-  PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
+  VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/.freeze
+  PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/.freeze
+  PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/.freeze
   MAX_ID_LENGTH = 32
   MAX_NAME_LENGTH = 50
   MAX_COMPETITOR_LIMIT = 5000
@@ -203,12 +203,12 @@ class Competition < ApplicationRecord
 
   def start_time
     # Take the easternmost offset
-    start_date.to_datetime.change(offset: "+1400")
+    start_date.to_time.change(offset: "+14:00")
   end
 
   def end_time
     # Take the westernmost offset
-    (end_date + 1).to_datetime.change(offset: "-1200")
+    (end_date + 1).to_time.change(offset: "-12:00")
   end
 
   def with_old_id

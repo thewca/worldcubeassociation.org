@@ -143,7 +143,7 @@ class RegistrationsController < ApplicationController
   def update
     @registration = Registration.find(params[:id])
     @competition = @registration.competition
-    if params[:from_admin_view] && @registration.updated_at.to_datetime != params[:registration][:updated_at].to_datetime
+    if params[:from_admin_view] && @registration.updated_at.to_time != params[:registration][:updated_at].to_time
       flash.now[:danger] = "Did not update registration because competitor updated registration since the page was loaded."
       render :edit
       return

@@ -369,7 +369,7 @@ RSpec.describe "Competition WCIF" do
 
   describe "#set_wcif_schedule!" do
     let(:schedule_wcif) { competition.to_wcif["schedule"] }
-    let(:competition_start_time) { competition.start_date.to_datetime }
+    let(:competition_start_time) { competition.start_date.to_time }
 
     context "activities" do
       it "Removing activities works and destroy nested activities" do
@@ -480,7 +480,7 @@ RSpec.describe "Competition WCIF" do
         # Set the start time to a timezone ahead of UTC (meaning if we transform the
         # time to UTC, the day will actually be the day before the competition).
         # It's fine because at least one timezone had entered the day of the competition.
-        activity["startTime"] = competition.start_date.to_datetime.change(hour: 1, offset: "+0800").iso8601
+        activity["startTime"] = competition.start_date.to_time.change(hour: 1, offset: "+08:00").iso8601
         competition.set_wcif_schedule!(schedule_wcif, delegate)
       end
 
@@ -489,13 +489,13 @@ RSpec.describe "Competition WCIF" do
         # Set the start time to a timezone behind UTC (meaning if we transform the
         # time to UTC, the day will actually be the day after the competition).
         # It's fine because at least one timezone is still in the last day of the competition.
-        activity["endTime"] = competition.end_date.to_datetime.change(hour: 20, offset: "-0800").iso8601
+        activity["endTime"] = competition.end_date.to_time.change(hour: 20, offset: "-08:00").iso8601
         competition.set_wcif_schedule!(schedule_wcif, delegate)
       end
 
       it "Doesn't update with an past start time" do
         activity = schedule_wcif["venues"][0]["rooms"][0]["activities"][1]
-        activity["startTime"] = (competition.start_date - 1.day).to_datetime.iso8601
+        activity["startTime"] = (competition.start_date - 1.day).to_time.iso8601
         expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(ActiveRecord::RecordInvalid)
       end
 

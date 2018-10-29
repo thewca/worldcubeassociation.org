@@ -9,7 +9,7 @@ class Post < ApplicationRecord
   validates :body, presence: true
   validates :slug, presence: true, uniqueness: true
 
-  BREAK_TAG_RE = /<!--\s*break\s*-->/
+  BREAK_TAG_RE = /<!--\s*break\s*-->/.freeze
 
   def body_full
     body.sub(BREAK_TAG_RE, "")
