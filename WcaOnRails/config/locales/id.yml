@@ -324,6 +324,8 @@ id:
         showAtAll: Buat kompetisi terlihat di publik
         #original_hash: 709a232
         name: Nama
+        #original_hash: f91b080
+        name_reason: Alasan pemilihan nama
         #original_hash: b649210
         cellName: Julukan kompetisi
         #original_hash: d523ebb
@@ -669,9 +671,9 @@ id:
         registration_open: >-
           Catatan: Waktu pendaftaran dibuka dan ditutup mengikuti standar waktu
           UTC
-        #original_hash: 243212f
+        #original_hash: bd402bf
         remarks_html: >-
-          Beberapa informasi tambahan yang ingin Anda beritahu kepada Board.
+          Beberapa informasi tambahan yang ingin Anda beritahu kepada WCAT.
           Sebagai contoh, uraikan alasan Anda jika kompetisi ini diajukan kurang
           dari empat minggu sebelum tanggal kompetisi, atau jika Anda mengajukan
           permohonan %{link}. Harap isi dalam Bahasa Inggris!
@@ -1189,23 +1191,23 @@ id:
         header: '%{delegate_name} telah mengkonfirmasi %{competition}'
         #original_hash: 3db81b5
         organizers: 'Yang terhormat panitia %{competition},'
-        #original_hash: c526fd6
+        #original_hash: d353d8c
         confirmed: >-
           Delegate kompetisi Anda, %{delegate_name}, telah mengkonfirmasi
-          %{competition} dan telah mengirim pengajuan kepada WCA Board. Setelah
-          WCA Board mengumumkan kompetisi ini secara publik, Anda akan
-          mendapatkan pemberitahuan tersebut.
+          %{competition} dan telah mengirim pengajuan kepada WCAT. Setelah WCAT
+          mengumumkan kompetisi ini secara publik, Anda akan mendapatkan
+          pemberitahuan tersebut.
         #original_hash: dfea09d
         contact: >-
           Jika Anda punya pertanyaan lain, harap kontak Delegate kompetisi via
           email:
       competition_announcement_email:
-        #original_hash: 1571dd8
-        header: 'WCA Board telah mengumumkan %{competition}'
-        #original_hash: 8e91977
+        #original_hash: 87f1f49
+        header: 'WCAT telah mengumumkan %{competition}'
+        #original_hash: 0d3d10c
         announced: >-
-          WCA Board telah menyetujui kompetisi Anda dan secara resmi diumumkan
-          kepada publik.
+          WCAT telah menyetujui kompetisi Anda dan secara resmi diumumkan kepada
+          publik.
         #original_hash: 1c20919
         link: 'Harap ikuti link ini untuk menuju pengumuman kompetisi:'
       organizer_addition_email:
@@ -1972,12 +1974,17 @@ id:
       #original_hash: 9104a03
       no_past_competitions: Anda tidak memiliki kompetisi lawas.
     competition_form:
-      #original_hash: e879b0b
-      board: Board
+      #original_hash: 2b81984
+      wcat: WCA Competition Announcement Team
       #original_hash: f957dcb
       supports_md_html: >-
         Mendukung <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        Penjelasan singkat tentang nama kompetisi. Nama kompetisi harus memenuhi
+        <a href='/documents/policies/Competition%20Name.pdf'>Kebijakan Nama
+        Kompetisi WCA</a>.
       #original_hash: 9d9126e
       venue_html: >-
         Lokasi di mana kompetisi berada. %{md}. Sebagai contoh: [Cité des
@@ -1997,22 +2004,23 @@ id:
       deprecated_events: >-
         Kompetisi ini memiliki cabang yang tidak lagi resmi, kami tidak
         mendukung untuk menyuntingnya.
-      #original_hash: 815d5c3
-      locked_edit_html: >-
-        Kompetisi ini terlihat secara publik dan terkunci untuk disunting. Jika
-        Anda ingin mengubah sesuatu, kontak %{board}.
-      #original_hash: ce33e21
-      confirmed_not_visible_html: >-
-        Anda telah menyetujui kompetisi ini, namun belum dapat terlihat di
-        publik. Tunggu %{board} untuk membuatnya dapat terlihat.
+      #original_hash: cafc153
+      public_and_locked_html: >-
+        Kompetisi ini terlihat oleh publik dan tidak dapat disunting. Jika Anda
+        ingin melakukan perubahan, harap balas thread email yang telah berisi
+        konfirmasi kompetisi.
+      #original_hash: e00a339
+      confirmed_but_not_visible_html: >-
+        Anda telah menyetujui kompetisi ini, tetapi belu dapat terlihat oleh
+        publik. Tunggu %{contact} untuk membuatnya terlihat.
       #original_hash: e94cba8
       is_visible: >-
         Kompetisi ini dapat terlihat secara publik, setiap perubahan yang Anda
         buat dapat terlihat di publik!
-      #original_hash: 34862bb
-      awaiting_confirmation_html: >-
-        Isi semua kolom dan klik Setuju jika Anda siap untuk menunggu
-        persetujuan %{board} untuk kompetisi ini.
+      #original_hash: f99b3f7
+      pending_confirmation_html: >-
+        Isi semua kolom dan klik Setuju ketika Anda siap untuk menunggu
+        persetujuan kompetisi dari %{contact}.
       #original_hash: 8966fd0
       submit_create_value: Buat Kompetisi
       #original_hash: 40b0dfd
@@ -2021,11 +2029,11 @@ id:
       submit_confirm_value: Setuju
       #original_hash: f6fdbe4
       submit_delete_value: Hapus
-      #original_hash: 1ca19b1
+      #original_hash: 22316f1
       submit_confirm: >-
         Apakah Anda yakin untuk menyetujuinya? Setelah Anda menyetujuinya, Anda
-        tidak dapat mengubah informasi apapun. Lihat email setelah ini untuk
-        verifikasi bahwa Board telah diberitahu.
+        tidak dapat mengubah informasi apapun. Cek email Anda setelah ini untuk
+        verifikasi bahwa WCA Competition Announcement Team telah diberitahu.
       #original_hash: 4c7deb7
       submit_delete: >-
         Apakah Anda yakin untuk menghapus kompetisi ini? Tindakan ini tidak
@@ -2076,9 +2084,9 @@ id:
     update:
       #original_hash: 5fb2f57
       save_success: Berhasil menyimpan kompetisi.
-      #original_hash: 9d1649e
+      #original_hash: 5253c86
       confirm_success: >-
-        Berhasil menyetujui kompetisi. Cek email Anda, dan tunggu Board untuk
+        Berhasil menyetujui kompetisi. Cek email Anda, dan tunggu WCAT untuk
         mengumumkannya!
       #original_hash: 28567f0
       delete_success: 'Berhasil menghapus kompetisi %{id}.'
@@ -2717,6 +2725,14 @@ id:
           kualitas di seluruh dunia untuk memastikan konsistensi kualitas yang
           tinggi dari proses, Staf WCA, Organisasi Regional, Panitia Kompetisi,
           dan Staf Kompetisi.
+      wcat:
+        #original_hash: 2b81984
+        name: WCA Competition Announcement Team
+        #original_hash: 61a471f
+        description: >-
+          Komite ini mempunyai peran untuk menyetujui dan mengumumkan Kompetisi
+          WCA dan memeriksa pengumuman kompetisi apakah sudah mengikuti standar
+          kualitas WCA.
       wmt:
         #original_hash: 2035811
         name: WCA Marketing Team
@@ -2836,11 +2852,10 @@ id:
     #original_hash: 1cb449c
     members: Anggota
     board:
-      #original_hash: 3a8b1d8
+      #original_hash: f3cbb35
       info_html: >-
         World Cube Association dipimpin oleh Board WCA. Board bertanggung jawab
-        dalam kepentingan umum dan organisasi WCA secara menyeluruh. Seluruh
-        kompetisi resmi butuh persetujuan Board WCA untuk diumumkan.
+        dalam kepentingan umum dan organisasi WCA secara menyeluruh.
     wct:
       #original_hash: 846684d
       info_html: >-
@@ -2911,6 +2926,12 @@ id:
         kualitas di seluruh dunia untuk memastikan konsistensi kualitas yang
         tinggi dari proses, Staf WCA, Organisasi Regional, Panitia Kompetisi,
         dan Staf Kompetisi.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Komite ini mempunyai peran untuk menyetujui dan mengumumkan Kompetisi
+        WCA dan memeriksa pengumuman kompetisi apakah sudah mengikuti standar
+        kualitas WCA.
     wmt:
       #original_hash: f2a0140
       info_html: >-
@@ -3209,23 +3230,23 @@ id:
     paragraph3:
       #original_hash: 00d3bf8
       title: Batas waktu pengumuman kompetisi
-      #original_hash: c61c6c9
+      #original_hash: 305cfb1
       content_html: >-
         Kompetisi harus diumumkan minimal satu bulan sebelum tanggal mulai
         kompetisi (lihat <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Pedoman
         8a4++</a>). Jika terdapat alasan-alasan khusus yang dapat melampaui
         batas waktu, kompetisi setidaknya diumumkan dua minggu sebelumnya atas
-        keputusan Board WCA. Sangat disarankan untuk memberitahu Board WCA
-        tentang alasan-alasan tersebut secepat mungkin untuk menghindari
-        pembatalan kompetisi.
+        keputusan WCAT. Sangat disarankan untuk memberitahu WCAT tentang
+        alasan-alasan tersebut secepat mungkin untuk menghindari pembatalan
+        kompetisi.
     paragraph4:
       #original_hash: b6dca56
       title: Kebijakan kedekatan
-      #original_hash: f86bf95
+      #original_hash: 79ed06e
       content1: >-
         Kompetisi WCA diterima jika berjarak 100 km atau 19 hari dari kompetisi
-        lain. Board WCA harus meninjau ulang kompetisi yang diajukan jika ada
+        lain. WCAT harus meninjau ulang kompetisi yang diajukan jika ada
         kompetisi lain yang berjarak kurang dari 100 km dan memiliki selang
         waktu kurang dari 19 hari. Delegate yang meminta persetujuan untuk
         kompetisi tersebut harus memberikan informasi lebih lanjut tentang
@@ -3271,22 +3292,22 @@ id:
     paragraph-events:
       #original_hash: b16c5f1
       title: Mengumumkan cabang
-      #original_hash: b6c6d26
+      #original_hash: cee85f7
       content: >-
         Seluruh cabang yang diadakan pada kompetisi harus ditentukan oleh
         Delegate saat meminta persetujuan kompetisi. Hal ini juga termasuk
         cabang "tentatif" (yaitu cabang tambahan yang mungkin diadakan
         tergantung alur kompetisi). Tambahan lebih lanjut harus disetujui oleh
-        Board.
+        WCAT.
     paragraph5:
       #original_hash: 17d01de
       title: Batas kompetitor
-      #original_hash: ffcd75e
+      #original_hash: b4748cf
       content_html: >-
         Jumlah kompetitor mungkin dibatasi per cabang atau per kompetisi (lihat
         <a href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulasi
         Z4</a>). Seperti semua regulasi pada Pasal Z, Delegate kompetisi harus
-        mendapat persetujuan oleh Board terkait batas kompetitior. Batas
+        mendapat persetujuan oleh WCAT terkait batas kompetitior. Batas
         kompetitor harus ditentukan secara bijak dan sesuai dengan perkiraan
         minat kompetitor. Batas tidak boleh dibuat lebih rendah hanya dengan
         alasan yang sepele. Batas yang dimaksud harus sudah dipikirkan saat
