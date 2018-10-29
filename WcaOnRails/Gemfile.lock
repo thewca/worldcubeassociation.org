@@ -273,7 +273,7 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.12)
-    mail (2.7.0)
+    mail (2.7.1)
       mini_mime (>= 0.1.1)
     mail_form (1.7.1)
       actionmailer (>= 3.2, < 6)
@@ -506,7 +506,7 @@ GEM
       kgio (~> 2.6)
       raindrops (~> 0.7)
     uniform_notifier (1.11.0)
-    valid_email (0.1.0)
+    valid_email (0.1.1)
       activemodel
       mail (>= 2.6.1)
     warden (1.2.7)
