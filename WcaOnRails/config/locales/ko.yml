@@ -1058,7 +1058,7 @@ ko:
           href='%{delegate_url}'>WCA 파견위원</a>에게 연락하세요.
         reason:
           #original_hash: 370ff12
-          assigned: 연견된 WCA ID가 있습니다.
+          assigned: 이미 연결된 WCA ID가 있습니다.
           #original_hash: 1c4670f
           registered: 대회 참가 신청하셨습니다.
       #original_hash: fe7122d
