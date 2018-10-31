@@ -1836,7 +1836,7 @@ ru:
       #original_hash: 45834fd
       register_below_html: Зарегистрируйтесь на соревнование ниже.
       #original_hash: 196725e
-      competitor_limit_is: 'Лимит на число участников %{competitor_limit}.'
+      competitor_limit_is: 'Лимит на число участников: %{competitor_limit}.'
       #original_hash: 5101f65
       no_competitor_limit: Лимита на число участников нет.
       #original_hash: f979d5e
@@ -1884,7 +1884,7 @@ ru:
           %{end_date_and_time}.
         #original_hash: 7ac8349
         range_past_html: >-
-          Онлайн-регистрация будет открылась %{start_date_and_time} и закрылась
+          Онлайн-регистрация открылась в %{start_date_and_time} и закрылась в
           %{end_date_and_time}.
     index:
       #original_hash: db98a68
@@ -2022,7 +2022,7 @@ ru:
       #original_hash: f99b3f7
       pending_confirmation_html: >-
         Заполните все поля и нажмите на "Подтвердить", когда вы будете готовы к
-        тому, чтобы %{contact} подтвердил это соревнование.
+        тому, чтобы %{contact} подтвердила это соревнование.
       #original_hash: 8966fd0
       submit_create_value: Создать соревнование
       #original_hash: 40b0dfd
@@ -2753,6 +2753,8 @@ ru:
   documents:
     #original_hash: 687c828
     title: Документы
+    #original_hash: 1b537dc
+    determination_letter: Подтверждение из налогового управления США
     #original_hash: 9855f80
     bylaws: Устав
     #original_hash: fdceb44
