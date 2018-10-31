@@ -1458,6 +1458,8 @@ en:
       members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
   documents:
     title: "Documents"
+    #context: The letter from the US Internal Revenue Service confirming that we are exempt from federal income tax
+    determination_letter: "IRS Determination Letter"
     bylaws: "Bylaws"
     motions: "Motions"
     minutes: "Minutes"
