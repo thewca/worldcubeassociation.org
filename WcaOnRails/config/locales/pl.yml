@@ -2082,7 +2082,7 @@ pl:
       submit_delete_value: Usuń
       #original_hash: 22316f1
       submit_confirm: >-
-        Czy jesteś pewien, że jesteś godowy na potwierdzenie? Po potwierdzeniu,
+        Czy jesteś pewien, że jesteś gotowy na potwierdzenie? Po potwierdzeniu,
         nie będziesz w stanie zmieniać żadnych informacji. Sprawdź swojego
         emaila po wykonaniu tej czynności, w celu zweryfikowania, że Zespół do
         Spraw Ogłaszania Zawodów został powiadomiony.
@@ -2824,6 +2824,8 @@ pl:
   documents:
     #original_hash: 687c828
     title: Dokumenty
+    #original_hash: 1b537dc
+    determination_letter: List Postanawiajacy IRS
     #original_hash: 9855f80
     bylaws: Statut
     #original_hash: fdceb44
