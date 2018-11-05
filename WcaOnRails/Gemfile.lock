@@ -476,7 +476,7 @@ GEM
       sprockets (>= 3.0.0)
     strip_attributes (1.8.0)
       activemodel (>= 3.0, < 6.0)
-    stripe (3.28.0)
+    stripe (3.29.0)
       faraday (~> 0.10)
     term-ansicolor (1.6.0)
       tins (~> 1.0)
