@@ -217,13 +217,14 @@ GEM
       railties (>= 5.0, < 5.3)
     i18n-spec (0.6.0)
       iso
-    i18n-tasks (0.9.27)
+    i18n-tasks (0.9.28)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
       highline (>= 2.0.0)
       i18n
       parser (>= 2.2.3.0)
+      rails-i18n
       rainbow (>= 2.2.2, < 4.0)
       terminal-table (>= 1.5.1)
     iso (0.2.2)
@@ -324,7 +325,7 @@ GEM
     openssl (2.1.2)
     orm_adapter (0.5.0)
     parallel (1.12.1)
-    parser (2.5.1.2)
+    parser (2.5.3.0)
       ast (~> 2.4.0)
     phantomjs (2.1.1.0)
     pluginator (1.5.0)
