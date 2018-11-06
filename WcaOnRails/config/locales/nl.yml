@@ -104,12 +104,12 @@ nl:
       #original_hash: 1e725b6
       name: Eerste ronde
       #original_hash: 916a78d
-      cellName: Eerste
+      cellName: Eerste ronde
     '2':
       #original_hash: 985c8d0
       name: Tweede ronde
       #original_hash: 2a4bcae
-      cellName: Tweede
+      cellName: Tweede ronde
     '3':
       #original_hash: e2f74d2
       name: Halve finale
@@ -2027,7 +2027,7 @@ nl:
       #original_hash: 22316f1
       submit_confirm: >-
         Weet je zeker dat je klaar bent om te bevestigen? Na bevestigen kun je
-        de informatie niet meer aanpassen. Controleer je mail om te zien of de
+        de informatie niet meer aanpassen. Controleer je mail om te zien of het
         WCA Competition Announcement Team (Wedstrijdaankondigingsteam) is
         geïnformeerd.
       #original_hash: 4c7deb7
@@ -2595,7 +2595,7 @@ nl:
         content:
           #original_hash: 024ce81
           '1': >-
-            Je mag alleen magnetische puzzles gebruiken als ze voldoen aan het
+            Je mag alleen magnetische puzzels gebruiken als ze voldoen aan het
             <a target='_blank'
             href='https://www.worldcubeassociation.org/regulations/'>WCA-wedstrijdreglement</a>.
             Let specifiek op <a
@@ -2760,7 +2760,7 @@ nl:
         verantwoordelijk zijn dat alle WCA-wedstrijden verlopen volgens de
         missie, reglementen en spirit van de WCA. De WCA onderscheidt
         <strong>WCA Senior delegates</strong>, <strong>WCA delegates</strong> en
-        <strong>WCA kandidaat delegates</strong>%{see_link}. Naast de taken van
+        <strong>WCA kandidaat delegates</strong> %{see_link}. Naast de taken van
         een WCA delegate is een WCA Senior delegate verantwoordelijk voor het
         managen van de WCA delegates in hun regio en kan deze door de community
         worden benaderd over regionale zaken.</p> <p>Nieuwe WCA delegates worden
@@ -2776,6 +2776,8 @@ nl:
   documents:
     #original_hash: 687c828
     title: Documenten
+    #original_hash: 1b537dc
+    determination_letter: IRS Besluitdocument
     #original_hash: 9855f80
     bylaws: Statuten
     #original_hash: fdceb44
