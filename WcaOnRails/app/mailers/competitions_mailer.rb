@@ -12,7 +12,7 @@ class CompetitionsMailer < ApplicationMailer
       @confirmer = confirmer
       mail(
         to: Team.wcat.email,
-        cc: competition.delegates.flat_map { |d| [d.email, d.senior_delegate&.email] }.compact.uniq + [Team.wqac.email, Team.board.email],
+        cc: competition.delegates.flat_map { |d| [d.email, d.senior_delegate&.email] }.compact.uniq,
         reply_to: confirmer.email,
         subject: "#{confirmer.name} just confirmed #{competition.name}",
       )

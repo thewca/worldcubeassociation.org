@@ -489,7 +489,7 @@ class User < ApplicationRecord
   end
 
   def can_admin_competitions?
-    can_admin_results? || quality_assurance_committee? || competition_announcement_team?
+    can_admin_results? || competition_announcement_team?
   end
 
   alias_method :can_announce_competitions?, :can_admin_competitions?
