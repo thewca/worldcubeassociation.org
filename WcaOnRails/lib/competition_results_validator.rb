@@ -3,6 +3,53 @@
 class CompetitionResultsValidator
   attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results, :persons, :persons_by_id, :results, :scrambles, :number_of_non_matching_rounds, :expected_rounds_by_ids, :check_real_results
 
+  # List of all possible errors and warnings for the results
+
+  # General errors and warnings
+  UNEXPECTED_RESULTS_ERROR = "Unexpected results for %{event_id}"
+  MISSING_RESULTS_ERROR = "Missing results for %{event_id}"
+  UNEXPECTED_ROUND_RESULTS_ERROR = "Unexpected results for round %{round_id}"
+  MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}"
+  MISMATCHED_ROUND_FORMAT_ERROR = "It looks like '%{round_name}' %{turned_into} in the results. Please update the corresponding round in the competition's manage events page."
+  MISSING_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Missing scrambles."
+  UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Unexpected scrambles."
+  MISSING_SCRAMBLES_FOR_GROUP_ERROR = "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
+
+  # Regulations-specific errors and warnings
+  COMPETITOR_LIMIT_WARNING = "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit})."\
+  "Unless specific agreement was made when announcing the competition (such as a per-day competitor limit), the results of the competitors registered after the competitor limit was reached must be removed."
+  REGULATION_9M_ERROR = "Event %{event_id} has more than four rounds, which must not happen per Regulation 9m."
+  REGULATION_9M1_ERROR = "Round %{round_id} has 99 competitors or less but has at least three subsequents rounds, which must not happen per Regulation 9m1."
+  REGULATION_9M2_ERROR = "Round %{round_id} has 15 competitors or less but has at least two subsequents rounds, which must not happen per Regulation 9m2."
+  REGULATION_9M3_ERROR = "Round %{round_id} has 7 competitors or less but has at least one subsequent round, which must not happen per Regulation 9m3."
+
+  # Person-related errors and warnings
+  PERSON_WITHOUT_RESULTS_ERROR = "Person with id %{person_id} (%{person_name}) has no result"
+  RESULTS_WITHOUT_PERSON_ERROR = "Results for unknown person with id %{person_id}"
+  WHITESPACE_IN_NAME_ERROR = "Person '%{name}' has leading/trailing whitespaces or double whitespaces."
+  NON_MATCHING_COUNTRY_ERROR = "Wrong country for %{name} (%{wca_id}), expected '%{expected_country}' got '%{country}'."
+  WRONG_WCA_ID_ERROR = "Person %{name} has a WCA ID which does not exist: %{wca_id}."
+  WRONG_PARENTHETHIS_FORMAT_ERROR = "Opening parenthethis in '%{name}' must be preceeded by a space."
+  DOB_0101_WARNING = "The date of birth of %{name} is on January 1st, please make sure it's correct."
+  VERY_YOUNG_PERSON_WARNING = "%{name} seems to be less than 3 years old, please make sure it's correct."
+  SAME_PERSON_NAME_WARNING = "Person '%{name}' exists with WCA ID %{wca_id} in the WCA database."\
+    " A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
+  NON_MATCHING_DOB_WARNING = "Wrong birthdate for %{name} (%{wca_id}), expected '%{expected_dob}' got '%{dob}'."
+  NON_MATCHING_GENDER_WARNING = "Wrong gender for %{name} (%{wca_id}), expected '%{expected_gender}' got '%{gender}'."
+
+  # Results-related errors and warnings
+  MET_CUTOFF_MISSING_RESULTS_ERROR = "[%{round_id}] %{person_name} has met the cutoff but is missing results for the second phase. Cutoff is %{cutoff}."
+  DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = "[%{round_id}] %{person_name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is %{cutoff}."
+  WRONG_POSITION_IN_RESULTS_ERROR = "[%{round_id}] Result for %{person_name} has a wrong position: expected %{expected_pos} and got %{pos}."
+  MISMATCHED_RESULT_FORMAT_ERROR = "[%{round_id}] Result for %{person_name} are in the wrong format: expected %{expected_format}, but got %{format}."
+  RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit which is %{time_limit} for one solve."
+  RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the time limit which is %{time_limit}."
+  NO_ROUND_INFORMATION_WARNING = "[%{round_id}] Could not find information about cutoff and timelimit for this round, these validations have been skipped."
+  SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit and %{person_name} has at least one suspicious DNF solve given his results."
+  MBF_RESULT_OVER_TIME_LIMIT_WARNING = "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please make sure it is the consequence of +2 penalties before sending the results, or fix the result to DNF."
+  DNS_AFTER_RESULT_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
+  SIMILAR_RESULTS_WARNING = "[%{round_id}] Result for %{person_name} is similar to the results for %{similar_person_name}."
+
   INDIVIDUAL_RESULT_JSON_SCHEMA = {
     "type" => "object",
     "properties" => {
@@ -94,13 +141,6 @@ class CompetitionResultsValidator
     },
     "required" => ["formatVersion", "competitionId", "persons", "events"],
   }.freeze
-
-  DNS_AFTER_RESULT_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
-  SAME_PERSON_NAME_WARNING = "Person '%{name}' exists with WCA ID %{wca_id} in the WCA database."\
-    " A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
-
-  COMPETITOR_LIMIT_WARNING = "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit})."\
-  "Unless specific agreement was made when announcing the competition (such as a per-day competitor limit), the results of the competitors registered after the competitor limit was reached must be removed."
 
   def initialize(competition_id, check_real_results = false)
     @errors = {
@@ -216,10 +256,10 @@ class CompetitionResultsValidator
     #   - a round changed format from what was planed (eg: Bo3 -> Bo1, no cutoff -> cutoff)
     # FIXME: maybe check for round_id (eg: "333-c") is enough
     (real - expected).each do |event_id|
-      @errors[:events] << "Unexpected results for #{event_id}"
+      @errors[:events] << format(UNEXPECTED_RESULTS_ERROR, event_id: event_id)
     end
     (expected - real).each do |event_id|
-      @errors[:events] << "Missing results for #{event_id}"
+      @errors[:events] << format(MISSING_RESULTS_ERROR, event_id: event_id)
     end
   end
 
@@ -240,13 +280,13 @@ class CompetitionResultsValidator
                       else
                         "has turned into a combined round"
                       end
-        @errors[:rounds] << "It looks like '#{round.name}' #{turned_into} in the results. Please update the corresponding round in the competition's manage events page."
+        @errors[:rounds] << format(MISMATCHED_ROUND_FORMAT_ERROR, round_name: round.name, turned_into: turned_into)
       else
-        @errors[:rounds] << "Missing results for round #{round_id}"
+        @errors[:rounds] << format(MISSING_ROUND_RESULTS_ERROR, round_id: round_id)
       end
     end
     unexpected.each do |round_id|
-      @errors[:rounds] << "Unexpected results for round #{round_id}"
+      @errors[:rounds] << format(UNEXPECTED_ROUND_RESULTS_ERROR, round_id: round_id)
     end
     unexpected.size + missing.size
   end
@@ -262,7 +302,7 @@ class CompetitionResultsValidator
       if remaining_number_of_rounds > 4
         # https://www.worldcubeassociation.org/regulations/#9m: Events must have at most four rounds.
         # Should not happen as we already have a validation to create rounds, but who knows...
-        @errors[:rounds] << "Event #{event_id} has more than four rounds, which must not happen per Regulation 9m."
+        @errors[:rounds] << format(REGULATION_9M_ERROR, event_id: event_id)
       end
       (ordered_round_type_ids & results_by_round_type_id.keys).each do |round_type_id|
         remaining_number_of_rounds -= 1
@@ -270,15 +310,15 @@ class CompetitionResultsValidator
         round_id = "#{event_id}-#{round_type_id}"
         if number_of_people_in_round <= 7 && remaining_number_of_rounds > 0
           # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
-          @errors[:rounds] << "Round #{round_id} has 7 competitors or less but has at least one subsequent round, which must not happen per Regulation 9m3."
+          @errors[:rounds] << format(REGULATION_9M3_ERROR, round_id: round_id)
         end
         if number_of_people_in_round <= 15 && remaining_number_of_rounds > 1
           # https://www.worldcubeassociation.org/regulations/#9m2: Rounds with 15 or fewer competitors must have at most one subsequent round.
-          @errors[:rounds] << "Round #{round_id} has 15 competitors or less but has at least two subsequents rounds, which must not happen per Regulation 9m2."
+          @errors[:rounds] << format(REGULATION_9M2_ERROR, round_id: round_id)
         end
         if number_of_people_in_round <= 99 && remaining_number_of_rounds > 2
           # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most one subsequent round.
-          @errors[:rounds] << "Round #{round_id} has 99 competitors or less but has at least three subsequents rounds, which must not happen per Regulation 9m1."
+          @errors[:rounds] << format(REGULATION_9M1_ERROR, round_id: round_id)
         end
       end
     end
@@ -292,11 +332,11 @@ class CompetitionResultsValidator
     scrambles_by_round_id = @scrambles.group_by { |s| "#{s.eventId}-#{s.roundTypeId}" }
     detected_scrambles_rounds_ids = scrambles_by_round_id.keys
     (rounds_ids - detected_scrambles_rounds_ids).each do |round_id|
-      @errors[:scrambles] << "[#{round_id}] Missing scrambles."
+      @errors[:scrambles] << format(MISSING_SCRAMBLES_FOR_ROUND_ERROR, round_id: round_id)
     end
 
     (detected_scrambles_rounds_ids - rounds_ids).each do |round_id|
-      @errors[:scrambles] << "[#{round_id}] Unexpected scrambles."
+      @errors[:scrambles] << format(UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR, round_id: round_id)
     end
 
     # For existing rounds and scrambles matching expected rounds in the WCA website,
@@ -309,7 +349,10 @@ class CompetitionResultsValidator
         # filter out extra scrambles
         actual_number_of_scrambles = scrambles_for_group.reject(&:isExtra).size
         if actual_number_of_scrambles < expected_number_of_scrambles
-          @errors[:scrambles] << "[#{round_id}] Group #{group_id}: missing scrambles, detected only #{actual_number_of_scrambles} instead of #{expected_number_of_scrambles}"
+          @errors[:scrambles] << format(MISSING_SCRAMBLES_FOR_GROUP_ERROR,
+                                        round_id: round_id,
+                                        group_id: group_id, actual: actual_number_of_scrambles,
+                                        expected: expected_number_of_scrambles)
         end
       end
     end
@@ -319,10 +362,10 @@ class CompetitionResultsValidator
     detected_person_ids = @persons_by_id.keys
     persons_with_results = @results.map(&:personId)
     (detected_person_ids - persons_with_results).each do |person_id|
-      @errors[:persons] << "Person with id #{person_id} (#{@persons_by_id[person_id].name}) has no result"
+      @errors[:persons] << format(PERSON_WITHOUT_RESULTS_ERROR, person_id: person_id, person_name: @persons_by_id[person_id].name)
     end
     (persons_with_results - detected_person_ids).each do |person_id|
-      @errors[:persons] << "Results for unknown person with id #{person_id}"
+      @errors[:persons] << format(RESULTS_WITHOUT_PERSON_ERROR, person_id: person_id)
     end
 
     without_wca_id, with_wca_id = @persons_by_id.map { |_, p| p }.partition { |p| p.wca_id.empty? }
@@ -334,18 +377,18 @@ class CompetitionResultsValidator
     end
     without_wca_id.each do |p|
       if p.dob.month == 1 && p.dob.day == 1
-        @warnings[:persons] << "The date of birth of #{p.name} is on January 1st, please make sure it's correct."
+        @warnings[:persons] << format(DOB_0101_WARNING, name: p.name)
       end
       # Competitor less than 3 years old are extremely rare, so we'd better check these birthdate are correct
       if p.dob.year >= Time.now.year - 3
-        @warnings[:persons] << "#{p.name} seems to be less than 3 years old, please make sure it's correct."
+        @warnings[:persons] << format(VERY_YOUNG_PERSON_WARNING, name: p.name)
       end
       # Look for double whitespaces or leading/trailing whitespaces
       unless p.name.squeeze(" ").strip == p.name
-        @errors[:persons] << "Person '#{p.name}' has leading/trailing whitespaces or double whitespaces."
+        @errors[:persons] << format(WHITESPACE_IN_NAME_ERROR, name: p.name)
       end
       if /[[:alnum:]]\(/ =~ p.name
-        @errors[:persons] << "Opening parenthethis in '#{p.name}' must be preceeded by a space."
+        @errors[:persons] << format(WRONG_PARENTHETHIS_FORMAT_ERROR, name: p.name)
       end
     end
     existing_person_by_wca_id = Hash[Person.current.where(wca_id: with_wca_id.map(&:wca_id)).map { |p| [p.wca_id, p] }]
@@ -355,16 +398,16 @@ class CompetitionResultsValidator
         # WRT wants to show warnings for wrong DOB or gender, but error for wrong country.
         # (If I get this right, we do not actually update existing persons from InboxPerson)
         unless p.dob == existing_person.dob
-          @warnings[:persons] << "Wrong birthdate for #{p.name} (#{p.wca_id}), expected '#{existing_person.dob}' got '#{p.dob}'."
+          @warnings[:persons] << format(NON_MATCHING_DOB_WARNING, name: p.name, wca_id: p.wca_id, expected_dob: existing_person.dob, dob: p.dob)
         end
         unless p.gender == existing_person.gender
-          @warnings[:persons] << "Wrong gender for #{p.name} (#{p.wca_id}), expected '#{existing_person.gender}' got '#{p.gender}'."
+          @warnings[:persons] << format(NON_MATCHING_GENDER_WARNING, name: p.name, wca_id: p.wca_id, expected_gender: existing_person.gender, gender: p.gender)
         end
         unless p.country.id == existing_person.country.id
-          @errors[:persons] << "Wrong country for #{p.name} (#{p.wca_id}), expected '#{existing_person.country_iso2}' got '#{p.countryId}'."
+          @errors[:persons] << format(NON_MATCHING_COUNTRY_ERROR, name: p.name, wca_id: p.wca_id, expected_country: existing_person.country_iso2, country: p.countryId)
         end
       else
-        @errors[:persons] << "Person #{p.name} has a WCA ID which does not exist: #{p.wca_id}."
+        @errors[:persons] << format(WRONG_WCA_ID_ERROR, name: p.name, wca_id: p.wca_id)
       end
     end
   end
@@ -383,12 +426,12 @@ class CompetitionResultsValidator
     if qualifying_results.any?
       # Meets the cutoff, no result should be SKIPPED
       if skipped.any?
-        @errors[:results] << "[#{round_id}] #{person.name} has met the cutoff but is missing results for the second phase. Cutoff is #{cutoff.to_s(round)}."
+        @errors[:results] << format(MET_CUTOFF_MISSING_RESULTS_ERROR, round_id: round_id, person_name: person.name, cutoff: cutoff.to_s(round))
       end
     else
       # Doesn't meet the cutoff, all results should be SKIPPED
       if unskipped.any?
-        @errors[:results] << "[#{round_id}] #{person.name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is #{cutoff.to_s(round)}."
+        @errors[:results] << format(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR, round_id: round_id, person_name: person.name, cutoff: cutoff.to_s(round))
       end
     end
   end
@@ -431,20 +474,21 @@ class CompetitionResultsValidator
         last_result = result
 
         if expected_pos != result.pos
-          @errors[:results] << "[#{round_id}] Result for #{person_info.name} has a wrong position: expected #{expected_pos} and got #{result.pos}."
+          @errors[:results] << format(WRONG_POSITION_IN_RESULTS_ERROR, round_id: round_id, person_name: person_info.name, expected_pos: expected_pos, pos: result.pos)
         end
 
         # Check for possible similar results
         similar = results_similar_to(result, index, results_for_round)
         similar.each do |r|
           similar_person_name = @persons_by_id[r.personId]&.name || "UnknownPerson"
-          @warnings[:results] << "[#{round_id}] Result for #{person_info.name} is similar to the results for #{similar_person_name}."
+          @warnings[:results] << format(SIMILAR_RESULTS_WARNING, round_id: round_id, person_name: person_info.name, similar_person_name: similar_person_name)
         end
 
         # get cutoff and timelimit
         round_info = @expected_rounds_by_ids[round_id]
         unless round_info
-          @warnings[:results] << "[#{round_id}] Could not find information about cutoff and timelimit for this round, these validations have been skipped."
+          # This situation may happen with "old" competitions
+          @warnings[:results] << format(NO_ROUND_INFORMATION_WARNING, round_id: round_id)
           # These results are for an undeclared round, skip them as an error has
           # already been registered
           next
@@ -452,7 +496,7 @@ class CompetitionResultsValidator
 
         # Check that the result's format matches the round format
         unless round_info.format.id == result.formatId
-          @errors[:results] << "[#{round_id}] Result for #{person_info.name} are in the wrong format: expected #{round_info.format.name}, but got #{Format.c_find(result.formatId).name}."
+          @errors[:results] << format(MISMATCHED_RESULT_FORMAT_ERROR, round_id: round_id, person_name: person_info.name, expected_format: round_info.format.name, format: Format.c_find(result.formatId).name)
         end
 
         time_limit_for_round = round_info.time_limit
@@ -488,7 +532,7 @@ class CompetitionResultsValidator
             # easy case: each completed result (not DNS, DNF, or SKIPPED) must be below the time limit.
             results_over_time_limit = completed_solves.select { |t| t.time_centiseconds > time_limit_for_round.centiseconds }
             if results_over_time_limit&.any?
-              @errors[:results] << "[#{round_id}] At least one result for #{person_info.name} is over the time limit which is #{time_limit_for_round.to_s(round_info)} for one solve."
+              @errors[:results] << format(RESULT_OVER_TIME_LIMIT_ERROR, round_id: round_id, person_name: person_info.name, time_limit: time_limit_for_round.to_s(round_info))
             end
           else
             # Handle both cumulative for a single round or multiple round by doing the following:
@@ -515,7 +559,7 @@ class CompetitionResultsValidator
 
             # Check the sum is below the limit
             if sum_of_times_for_rounds > time_limit_for_round.centiseconds
-              @errors[:results] << "[#{cumulative_round_ids.join(",")}] The sum of results for #{person_info.name} is over the time limit which is #{time_limit_for_round.to_s(round_info)}."
+              @errors[:results] << format(RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR, round_ids: cumulative_round_ids.join(","), person_name: person_info.name, time_limit: time_limit_for_round.to_s(round_info))
             end
 
             # Check for any suspicious DNF
@@ -523,7 +567,7 @@ class CompetitionResultsValidator
             avg_per_solve = sum_of_times_for_rounds.to_f / completed_solves_for_rounds.size
             # We want to issue a warning if the estimated time for all solves + DNFs goes roughly over the cumulative time limit by at least 10% (to reduce false positive).
             if (number_of_dnf_solves + completed_solves_for_rounds.size) * avg_per_solve >= 1.1 * time_limit_for_round.centiseconds
-              @warnings[:results] << "[#{cumulative_round_ids.join(",")}] The round has a cumulative time limit and #{person_info.name} has at least one suspicious DNF solve given his results."
+              @warnings[:results] << format(SUSPICIOUS_DNF_WARNING, round_ids: cumulative_round_ids.join(","), person_name: person_info.name)
             end
           end
         end
@@ -532,7 +576,7 @@ class CompetitionResultsValidator
           completed_solves.each do |solve_time|
             time_limit_seconds = [3600, solve_time.attempted * 600].min
             if solve_time.time_seconds > time_limit_seconds
-              @warnings[:results] << "[#{round_id}] Result '#{solve_time.clock_format}' for #{person_info.name} is over the time limit. Please make sure it is the consequence of +2 penalties before sending the results, or fix the result to DNF."
+              @warnings[:results] << format(MBF_RESULT_OVER_TIME_LIMIT_WARNING, round_id: round_id, result: solve_time.clock_format, person_name: person_info.name)
             end
           end
         end
