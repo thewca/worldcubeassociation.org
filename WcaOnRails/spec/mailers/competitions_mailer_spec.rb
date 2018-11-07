@@ -16,7 +16,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders in English" do
       expect(mail.to).to eq(["competitions@worldcubeassociation.org"])
-      expect(mail.cc).to match_array(competition.delegates.pluck(:email) + [senior_delegate.email, third_delegate.senior_delegate.email, Team.wqac.email, Team.board.email])
+      expect(mail.cc).to match_array(competition.delegates.pluck(:email) + [senior_delegate.email, third_delegate.senior_delegate.email])
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
       expect(mail.reply_to).to eq([delegate.email])
 
