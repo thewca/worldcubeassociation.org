@@ -1088,7 +1088,7 @@ nl:
       #original_hash: 1fa73f3
       regulations: Wedstrijdreglement
       #original_hash: 6bce1b5
-      about_regulations: Over de Wedstrijdreglementen
+      about_regulations: Over het Wedstrijdreglement
       #original_hash: 141d1d7
       guidelines: Aanvullende richtlijnen
       #original_hash: c4622c3
@@ -2581,7 +2581,7 @@ nl:
         content:
           #original_hash: 5ac78e4
           '1': >-
-            Je kunt de wedstrijdreglementen over puzzels vinden in <a
+            Je kunt het wedstrijdreglement over puzzels vinden in <a
             href='https://www.worldcubeassociation.org/regulations/#3'>Artikel
             3</a>. Alle puzzels moeten worden goedgekeurd door de WCA-delegate.
             Als je het niet zeker weet, vraag het dan aan de WCA-delegate van je
@@ -2758,7 +2758,7 @@ nl:
       delegates_html: >-
         <p><strong>WCA delegates</strong> zijn leden van de WCA die
         verantwoordelijk zijn dat alle WCA-wedstrijden verlopen volgens de
-        missie, reglementen en spirit van de WCA. De WCA onderscheidt
+        missie, wedstrijdreglement en spirit van de WCA. De WCA onderscheidt
         <strong>WCA Senior delegates</strong>, <strong>WCA delegates</strong> en
         <strong>WCA kandidaat delegates</strong> %{see_link}. Naast de taken van
         een WCA delegate is een WCA Senior delegate verantwoordelijk voor het
@@ -2832,7 +2832,7 @@ nl:
           Respecteren en operationaliseren van de Doelstellingen in de Statuten
           en Reglementen van de WCA
         #original_hash: 0c3576b
-        '4': Voldoen aan alle van toepassing zijnde WCA-wedstrijdreglementen
+        '4': Voldoen aan van toepassing zijnd WCA-wedstrijdreglement
         #original_hash: 23cda60
         '5': Accepteren en voldoen aan beslissingen van WCA-officials
         #original_hash: efe2b55
@@ -2879,9 +2879,9 @@ nl:
       info_html: >-
         De WDC onderzoekt een breed scala aan zaken en stelt oplossingen voor,
         inclusief disciplinaire maatregelen indien nodig. Dit kan o.a. bij
-        serieuze schending van de WCA-reglementen of zaken in de community. Als
-        je zoiets hebt meegemaakt, neem dan gerust met deze commissie contact
-        op.
+        serieuze schending van het WCA-wedstrijdreglement of zaken in de
+        community. Als je zoiets hebt meegemaakt, neem dan gerust met deze
+        commissie contact op.
     wrc:
       #original_hash: fcd3526
       info_html: >-
@@ -3173,18 +3173,19 @@ nl:
       onderstaande content wordt niet vertaald.
   about_regulations:
     #original_hash: 6bce1b5
-    title: Over de Wedstrijdreglementen
+    title: Over het Wedstrijdreglement
     panel1:
       #original_hash: 1fa73f3
-      title: Wedstrijdreglementen
+      title: Wedstrijdreglement
       #original_hash: 557095b
       content1_html: >-
-        Alle wedstrijden moeten de <a href="/regulations/'">WCA
-        Wedstrijdreglementen</a> volgen. Het is belangrijk voor de deelnemers om
-        deze reglementen te lezen voor het meedoen aan hun eerste wedstrijd.
+        Alle wedstrijden moeten het <a
+        href="/regulations/'">WCA-wedstrijdreglement</a> volgen. Het is
+        belangrijk voor de deelnemers om het reglement te lezen voor het meedoen
+        aan hun eerste wedstrijd.
       #original_hash: 4296902
       content2_html: >-
-        De WCA Wedstrijdreglementen zijn aangevuld met de <a
+        Het WCA-wedstrijdreglement is aangevuld met de <a
         href="/regulations/guidelines.html">WCA Richtlijnen</a>, die aanvullende
         verduidelijkingen en toelichtingen bevatten.
     panel2:
@@ -3192,21 +3193,21 @@ nl:
       title: Vertalingen
       #original_hash: 7477d9b
       content1_html: >-
-        De WCA Wedstrijdreglementen zijn niet alleen in het Engels beschikbaar,
+        Het WCA-wedstrijdreglement is niet alleen in het Engels beschikbaar,
         maar leden van de WCA hebben deze in verschillende talen vertaald: <a
         href="/regulations/translations/">Vertalingen</a>.
       #original_hash: 6add7a3
       content2_html: >-
-        <strong>Belangrijk</strong>: Hoewel de vertaling erg nuttig zijn, zijn
-        ze niet officieel, de Engelse versie van de WCA Wedstrijdreglementen is
+        <strong>Belangrijk</strong>: Hoewel de vertalingen erg nuttig zijn, zijn
+        ze niet officieel, de Engelse versie van het WCA-wedstrijdreglement is
         bindend.
     panel3:
       #original_hash: 234fd4d
-      title: Wedstrijdreglementen FAQ
+      title: Wedstrijdreglement FAQ
       #original_hash: 8afba93
       content1_html: >-
-        De <a href="/faq">FAQ</a> geeft antwoord op veelgestelde vragen over de
-        WCA Wedstrijdreglementen.
+        De <a href="/faq">FAQ</a> geeft antwoord op veelgestelde vragen over het
+        WCA-wedstrijdreglement.
     panel4:
       #original_hash: ad5f6e7
       title: Organisatorrichtlijnen
