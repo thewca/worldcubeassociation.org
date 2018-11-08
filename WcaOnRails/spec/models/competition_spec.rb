@@ -528,7 +528,7 @@ RSpec.describe Competition do
     end
 
     it "sets confirmed_at when setting confirmed true" do
-      competition = FactoryBot.create :competition, :with_delegate
+      competition = FactoryBot.create :competition, :with_delegate, :with_valid_schedule
       expect(competition.confirmed_at).to be_nil
 
       now = Time.at(Time.now.to_i)

@@ -46,10 +46,7 @@ RSpec.describe "API Competitions" do
         end
 
         context "confirmed competition" do
-          before :each do
-            competition.events = [Event.find("333"), Event.find("222")]
-            competition.update!(confirmed: true)
-          end
+          let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
 
           it "can add events" do
             patch api_v0_competition_update_events_from_wcif_path(competition), params: create_wcif_events(%w(333 333oh 222)).to_json, headers: headers
@@ -76,9 +73,7 @@ RSpec.describe "API Competitions" do
         end
 
         context "confirmed competition" do
-          before :each do
-            competition.update!(confirmed: true)
-          end
+          let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222)) }
 
           it "allows adding rounds to an event" do
             competition_events = create_wcif_events(%w(222 333))

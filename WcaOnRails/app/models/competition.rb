@@ -200,7 +200,9 @@ class Competition < ApplicationRecord
     end
   end
 
-  validate :schedule_must_match_rounds, if: :confirmed_at_changed?
+  # Only validate on update: nobody can confirm competition on creation.
+  # The only exception to this is within tests, in which case we actually don't want to run this validation.
+  validate :schedule_must_match_rounds, if: :confirmed_at_changed?, on: :update
   def schedule_must_match_rounds
     unless has_round? && schedule_includes_rounds?
       errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))

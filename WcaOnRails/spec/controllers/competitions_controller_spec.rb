@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open) }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule) }
   let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
@@ -192,7 +192,7 @@ RSpec.describe CompetitionsController do
     let(:organizer) { FactoryBot.create(:user) }
     let(:admin) { FactoryBot.create :admin }
     let!(:my_competition) { FactoryBot.create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
-    let!(:other_competition) { FactoryBot.create(:competition, :with_delegate, latitude: 11.0, longitude: 11.0, starts: 1.day.ago) }
+    let!(:other_competition) { FactoryBot.create(:competition, :with_delegate, :with_valid_schedule, latitude: 11.0, longitude: 11.0, starts: 1.day.ago) }
 
     context 'when signed in as an organizer' do
       before :each do
