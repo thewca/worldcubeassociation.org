@@ -645,4 +645,18 @@ RSpec.describe User, type: :model do
       expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :senior_delegate_id, :region)
     end
   end
+
+  describe "birthdate validations" do
+    it "requires birthdate in past" do
+      user = FactoryBot.create :user
+      user.dob = 5.days.from_now
+      expect(user).to be_invalid_with_errors(dob: ["must be in the past"])
+    end
+
+    it "requires user over two years old" do
+      user = FactoryBot.create :user
+      user.dob = 5.days.ago
+      expect(user).to be_invalid_with_errors(dob: ["must be at least two years old"])
+    end
+  end
 end
