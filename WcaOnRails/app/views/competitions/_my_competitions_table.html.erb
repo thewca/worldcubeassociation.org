@@ -19,7 +19,7 @@
           <th></th>
           <th></th>
           <th></th>
-          <th></th>
+          <th><%= "Delegates" if show_delegates %></th>
           <th class="big-column"></th>
         </tr>
       </thead>
@@ -53,25 +53,22 @@
               <% end %>
             </td>
             <td>
-              <% if current_user.can_view_delegate_report?(competition.delegate_report) %>
-                <%= link_to icon('file-text-o'), delegate_report_path(competition), title: t('.report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
-              <% end %>
-              <% if current_user.can_edit_delegate_report?(competition.delegate_report) %>
-                <%= link_to icon('pencil-square-o'), delegate_report_edit_path(competition), title: t('.edit_report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
-              <% end %>
-              <% if competition.user_should_post_delegate_report?(current_user) %>
-                <%= icon('warning', title: t('.missing_report'), data: { 'toggle': 'tooltip', 'container': 'body' }) %>
+              <% if show_delegates %>
+                <%= competition.delegates.map(&:name).join(", ") %>
+              <% else %>
+                <% if current_user.can_view_delegate_report?(competition.delegate_report) %>
+                  <%= link_to icon('file-text-o'), delegate_report_path(competition), title: t('.report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
+                <% end %>
+                <% if current_user.can_edit_delegate_report?(competition.delegate_report) %>
+                  <%= link_to icon('pencil-square-o'), delegate_report_edit_path(competition), title: t('.edit_report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
+                <% end %>
+                <% if competition.user_should_post_delegate_report?(current_user) %>
+                  <%= icon('warning', title: t('.missing_report'), data: { 'toggle': 'tooltip', 'container': 'body' }) %>
+                <% end %>
               <% end %>
             </td>
             <td class="big-column"></td>
           </tr>
-          <% if show_delegates %>
-            <tr class="<%= tr_classes %>">
-              <td></td>
-              <td colspan="6"><%= competition.delegates.map(&:name).join(", ") %></td>
-              <td class="big-column"></td>
-            </tr>
-          <% end %>
         <% end %>
       </tbody>
     </table>
