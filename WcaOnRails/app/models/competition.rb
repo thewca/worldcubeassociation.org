@@ -108,6 +108,7 @@ class Competition < ApplicationRecord
     endDay
     cellName
     showAtAll
+    external_registration_page
     confirmed_at
     registration_open
     registration_close
@@ -126,6 +127,7 @@ class Competition < ApplicationRecord
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/.freeze
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/.freeze
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/.freeze
+  URL_RE = %r{\Ahttps?://.*\z}.freeze
   MAX_ID_LENGTH = 32
   MAX_NAME_LENGTH = 50
   MAX_COMPETITOR_LIMIT = 5000
@@ -143,7 +145,8 @@ class Competition < ApplicationRecord
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
                        format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
-  validates :external_website, format: { with: %r{\Ahttps?://.*\z} }, allow_blank: true
+  validates :external_website, format: { with: URL_RE }, allow_blank: true
+  validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
 
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
@@ -642,6 +645,10 @@ class Competition < ApplicationRecord
     else
       base_entry_fee_lowest_denomination + competition_events.sum(:fee_lowest_denomination) > 0
     end
+  end
+
+  def external_registration_page_required?
+    confirmed? && !use_wca_registration && created_at.present? && created_at > Date.new(2018, 12, 31)
   end
 
   def entry_fee_required?

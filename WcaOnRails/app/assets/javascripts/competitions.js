@@ -1,6 +1,8 @@
 onPage('competitions#edit, competitions#update, competitions#admin_edit, competitions#new, competitions#create, competitions#clone_competition', function() {
   $('input[name="competition[use_wca_registration]"]').on('change', function() {
-    $('.wca-registration-options').toggle(this.checked);
+    var registrationWca = this.checked;
+    $('.wca-registration-options').toggle(registrationWca);
+    $('.competition_external_registration_page').toggle(!registrationWca);
   }).trigger('change');
 
   $('select[name="competition[on_the_spot_registration]"]').on('change', function() {

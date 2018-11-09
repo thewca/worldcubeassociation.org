@@ -56,6 +56,7 @@ module DatabaseDumper
           registration_close
           enable_donations
           use_wca_registration
+          external_registration_page
           competitor_limit_enabled
           competitor_limit
           competitor_limit_reason

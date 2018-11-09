@@ -52,6 +52,7 @@ FactoryBot.define do
     showAtAll { false }
     confirmed_at { nil }
 
+    external_registration_page { "https://www.worldcubeassociation.org" }
     competitor_limit_enabled { false }
     guests_enabled { true }
     on_the_spot_registration { false }

@@ -571,6 +571,7 @@ class CompetitionsController < ApplicationController
   private def competition_params
     permitted_competition_params = [
       :use_wca_registration,
+      :external_registration_page,
       :receive_registration_emails,
       :registration_open,
       :registration_close,
