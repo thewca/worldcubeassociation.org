@@ -2,7 +2,16 @@
   <div class="container">
     <div class="navbar-brand">
       <a href="<%= root_path %>"><%= image_tag "wca_logo.svg" %></a>
-      <a href="<%= root_path %>"><span>World Cube Association</span></a>
+      <span>
+        <a href="<%= root_path %>">World Cube Association</a>
+        <br>
+        <%= link_to(icon("instagram"), "https://www.instagram.com/worldcubeassociation/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("facebook-official"), "https://www.facebook.com/WorldCubeAssociation/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("twitter"), "https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("reddit"), "https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("twitch"), "https://www.twitch.tv/worldcubeassociation/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("weibo"), "https://www.weibo.com/theWCA/", target: "_blank", class: "hide-new-window-icon") %>
+      </span>
     </div>
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
