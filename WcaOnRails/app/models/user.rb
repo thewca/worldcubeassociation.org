@@ -109,10 +109,11 @@ class User < ApplicationRecord
     end
   end
 
-  validate :dob_must_be_in_the_past
-  def dob_must_be_in_the_past
+  validate do
     if dob && dob >= Date.today
       errors.add(:dob, I18n.t('users.errors.dob_past'))
+    elsif dob && dob >= 2.years.ago
+      errors.add(:dob, I18n.t('users.errors.dob_recent'))
     end
   end
 
