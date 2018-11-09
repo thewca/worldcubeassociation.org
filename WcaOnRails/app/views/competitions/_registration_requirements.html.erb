@@ -20,8 +20,8 @@
     <%= t('competitions.competition_info.register_below_html') %>
     <br>
   <% end %>
-<% elsif @competition.website %>
-  <%= t('competitions.competition_info.register_link_html', here: link_to(t('common.here'), @competition.website, target: "_blank")) %>
+<% elsif @competition.external_registration_page.present? %>
+  <%= t('competitions.competition_info.register_link_html', here: link_to(t('common.here'), @competition.external_registration_page, target: "_blank")) %>
   <br>
 <% end %>
 

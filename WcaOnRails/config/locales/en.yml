@@ -246,6 +246,7 @@ en:
         contact: "Contact"
         information: "Information"
         use_wca_registration: "I would like to use the WCA website for registration"
+        external_registration_page: "Registration page"
         competitor_limit_enabled: "Competitor limit"
         competitor_limit: "Maximum number of competitors"
         competitor_limit_reason: "The reason for the competitor limit"
@@ -418,6 +419,7 @@ en:
         countryId: ""
         end_date: ""
         generate_website: ""
+        external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
         base_entry_fee_lowest_denomination: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free.'
         currency_code: "The currency code for fees."
         guests_enabled: ""
