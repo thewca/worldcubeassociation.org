@@ -230,7 +230,7 @@ GEM
     iso (0.2.2)
       i18n
     jaro_winkler (1.5.1)
-    jbuilder (2.7.0)
+    jbuilder (2.8.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
     jquery-rails (4.3.3)
