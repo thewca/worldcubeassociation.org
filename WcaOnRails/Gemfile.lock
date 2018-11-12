@@ -128,7 +128,7 @@ GEM
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     colorize (0.8.1)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.1.3)
     coveralls (0.8.22)
       json (>= 1.8, < 3)
       simplecov (~> 0.16.1)
@@ -230,7 +230,7 @@ GEM
     iso (0.2.2)
       i18n
     jaro_winkler (1.5.1)
-    jbuilder (2.7.0)
+    jbuilder (2.8.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
     jquery-rails (4.3.3)
