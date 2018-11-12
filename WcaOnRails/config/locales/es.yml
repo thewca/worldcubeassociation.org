@@ -1072,6 +1072,8 @@ es:
       organizations: Organizaciones Nacionales
       #original_hash: d790b40
       faq: Preguntas Más Frecuentes
+      #original_hash: 02617c0
+      tutorial: Tutorial de Competición
       #original_hash: a34b69f
       contact: Información de Contacto
       #original_hash: 4fa8cc8
@@ -1192,12 +1194,12 @@ es:
         #original_hash: d353d8c
         confirmed: >-
           El Delegado  %{delegate_name} de tu competición ha confirmado
-          %{competition} y enviado el formularoo al WCAT. Tan pronto como el
+          %{competition} y enviado el formulario al WCAT. Tan pronto como el
           WCAT anuncie al público la competición, recibirás otra notificación.
         #original_hash: dfea09d
         contact: >-
           Si tienes alguna pregunta más, por favor ponte en contacto con el/los
-          delegado(s) de la competicón por correo electrónico:
+          delegado(s) de la competición por correo electrónico:
       competition_announcement_email:
         #original_hash: 87f1f49
         header: 'El WCAT ha anunciado %{competition}'
@@ -2804,6 +2806,8 @@ es:
   documents:
     #original_hash: 687c828
     title: Documentos
+    #original_hash: 1b537dc
+    determination_letter: Carta con la Determinación del IRS
     #original_hash: 9855f80
     bylaws: Estatutos
     #original_hash: fdceb44
