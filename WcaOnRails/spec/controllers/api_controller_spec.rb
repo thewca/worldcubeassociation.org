@@ -474,4 +474,29 @@ RSpec.describe Api::V0::ApiController do
       end
     end
   end
+
+  describe 'GET #export_public' do
+    it 'returns information about latest public export' do
+      Dir.mktmpdir do |dir|
+        rails_root = Pathname.new(dir).join("WcaOnRails")
+        FileUtils.mkdir_p rails_root
+        expect(Rails).to receive(:root).twice.and_return(rails_root)
+
+        FileUtils.mkdir_p "#{dir}/webroot/results/misc"
+        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export001_20171114T062335Z.sql.zip"
+        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export002_20181114T062335Z.sql.zip"
+        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export001_20171114T062335Z.tsv.zip"
+        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export002_20181114T062335Z.tsv.zip"
+
+        get :export_public
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+        expect(json).to eq(
+          'export_date' => '2018-11-14T06:23:35Z',
+          'sql_url' => "#{root_url}results/misc/WCA_export002_20181114T062335Z.sql.zip",
+          'tsv_url' => "#{root_url}results/misc/WCA_export002_20181114T062335Z.tsv.zip",
+        )
+      end
+    end
+  end
 end
