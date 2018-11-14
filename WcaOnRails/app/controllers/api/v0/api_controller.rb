@@ -140,6 +140,22 @@ class Api::V0::ApiController < ApplicationController
     render json: json
   end
 
+  def export_public
+    sql_zips = Dir.glob(Rails.root.join("../webroot/results/misc/*.sql.zip")).sort!
+    tsv_zips = Dir.glob(Rails.root.join("../webroot/results/misc/*.tsv.zip")).sort!
+
+    last_sql = File.basename(sql_zips.last)
+    last_tsv = File.basename(tsv_zips.last)
+    m = /WCA_export(\d+)_(.*).sql.zip/.match(last_sql)
+    date = Time.parse(m[2])
+
+    render json: {
+      export_date: date.iso8601,
+      sql_url: "#{root_url}results/misc/#{last_sql}",
+      tsv_url: "#{root_url}results/misc/#{last_tsv}",
+    }
+  end
+
   private def records_by_event(records)
     records.group_by { |record| record["event_id"] }.transform_values! do |event_records|
       event_records.group_by { |record| record["type"] }.transform_values! do |type_records|

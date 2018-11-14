@@ -103,7 +103,8 @@ function exportPublic ( $sources ) {
   file_put_contents( 'serial.txt', $serial );
 
   #--- Build the file basename
-  $basename         = sprintf( 'WCA_export%03d_%s', $serial,    wcaDate( 'Ymd' ) );
+  $dateTime         = (new DateTime('NOW', new DateTimeZone('UTC')))->format('Ymd\THis\Z');
+  $basename         = sprintf( 'WCA_export%03d_%s', $serial, $dateTime );
   $oldBasenameStart = sprintf( 'WCA_export%03d_', $oldSerial );
 
   #------------------------------------------
