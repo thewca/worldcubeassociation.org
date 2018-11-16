@@ -11,8 +11,8 @@ module NotificationsHelper
         url: edit_competition_path(unconfirmed_competition),
       }
     end
-    if user.competition_announcement_team? || user.board_member?
-      # Show WCAT (and Board) members:
+    if user.competition_announcement_team?
+      # Show WCAT members:
       #  - Confirmed, but not visible competitions: They need to approve or reject
       #                                             these competitions.
       #  - Unconfirmed, but visible competitions: These competitions should be confirmed
