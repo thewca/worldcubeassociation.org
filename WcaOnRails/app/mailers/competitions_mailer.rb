@@ -90,7 +90,7 @@ class CompetitionsMailer < ApplicationMailer
     I18n.with_locale :en do
       @competition = competition
       mail(
-        to: "delegates@worldcubeassociation.org",
+        to: "reports@worldcubeassociation.org",
         cc: competition.delegates.pluck(:email),
         reply_to: competition.delegates.pluck(:email),
         subject: "[wca-report] [#{competition.continent.name}] #{competition.name}",
