@@ -190,7 +190,9 @@ class User < ApplicationRecord
     wca_id.present? && encrypted_password.blank? && email.casecmp("#{wca_id}@worldcubeassociation.org") == 0
   end
 
+  scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
   scope :delegates, -> { where.not(delegate_status: nil) }
+  scope :senior_delegates, -> { where(delegate_status: "senior_delegate") }
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
