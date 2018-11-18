@@ -83,6 +83,7 @@ gem 'webpacker'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
+gem 'google-api-client'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
