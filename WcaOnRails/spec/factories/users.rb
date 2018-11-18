@@ -76,6 +76,36 @@ FactoryBot.define do
       end
     end
 
+    trait :wcat_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wcat.id, user_id: user.id, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wec_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wec.id, user_id: user.id, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wfc_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wfc.id, user_id: user.id, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wmt_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wmt.id, user_id: user.id, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wst_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wst.id, user_id: user.id, team_leader: options.team_leader)
+      end
+    end
+
     trait :wca_id do
       transient do
         person { FactoryBot.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
