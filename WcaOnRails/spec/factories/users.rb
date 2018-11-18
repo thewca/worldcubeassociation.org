@@ -36,39 +36,43 @@ FactoryBot.define do
       end
     end
 
+    transient do
+      team_leader { false }
+    end
+
     trait :board_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.board.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.board.id, user_id: user.id, team_leader: options.team_leader)
       end
     end
 
     trait :wrt_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, team_leader: options.team_leader)
       end
     end
 
     trait :wdc_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id, team_leader: options.team_leader)
       end
     end
 
     trait :wrc_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id, team_leader: options.team_leader)
       end
     end
 
     trait :wct_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wct.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wct.id, user_id: user.id, team_leader: options.team_leader)
       end
     end
 
     trait :wqac_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wqac.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wqac.id, user_id: user.id, team_leader: options.team_leader)
       end
     end
 
