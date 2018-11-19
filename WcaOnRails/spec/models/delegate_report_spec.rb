@@ -31,7 +31,7 @@ RSpec.describe DelegateReport do
 
   it "discussion_url is set on creation" do
     dr = FactoryBot.create :delegate_report
-    expect(dr.discussion_url).to eq "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode_www_form_component(dr.competition.name)
+    expect(dr.discussion_url).to eq "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/" + URI.encode_www_form_component(dr.competition.name)
   end
 
   context "can_view_delegate_report?" do
