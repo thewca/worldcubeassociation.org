@@ -19,5 +19,7 @@ class SyncMailingListsJob < ApplicationJob
     GsuiteMailingLists.sync_group("regulations@worldcubeassociation.org", Team.wrc.current_members.includes(:user).map(&:user))
     GsuiteMailingLists.sync_group("results@worldcubeassociation.org", Team.wrt.current_members.includes(:user).map(&:user))
     GsuiteMailingLists.sync_group("software@worldcubeassociation.org", Team.wst.current_members.includes(:user).map(&:user))
+    translators = User.where(id: TranslationsController::VERIFIED_TRANSLATORS_BY_LOCALE.values.flatten)
+    GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translators)
   end
 end

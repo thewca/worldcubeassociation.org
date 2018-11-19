@@ -110,6 +110,16 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(wst_member),
     )
 
+    stub_const "TranslationsController::VERIFIED_TRANSLATORS_BY_LOCALE", ({
+      "es" => [wst_member.id],
+      "fr" => [wrc_member.id, wrt_leader.id],
+    })
+    # translators@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "translators@worldcubeassociation.org",
+      a_collection_containing_exactly(wst_member, wrc_member, wrt_leader),
+    )
+
     SyncMailingListsJob.perform_now
   end
 end
