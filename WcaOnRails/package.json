@@ -18,7 +18,7 @@
     "autoprefixer": "^9.3.1",
     "babel-loader": "^8.0.4",
     "babel-plugin-lodash": "^3.3.4",
-    "blueimp-load-image": "^2.19.0",
+    "blueimp-load-image": "^2.20.1",
     "classnames": "^2.2.6",
     "compression-webpack-plugin": "^1.1.12",
     "css-loader": "^1.0.1",
