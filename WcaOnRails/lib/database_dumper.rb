@@ -511,6 +511,7 @@ module DatabaseDumper
           updated_at
           user_id
           roles
+          assignments
         ),
         db_default: %w(ip),
         fake_values: {

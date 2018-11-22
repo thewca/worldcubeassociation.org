@@ -1014,6 +1014,7 @@ CREATE TABLE `registrations` (
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` int(11) DEFAULT NULL,
   `roles` text COLLATE utf8mb4_unicode_ci,
+  `assignments` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_registrations_on_competition_id_and_user_id` (`competition_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1417,4 +1418,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180908195553'),
 ('20180912042457'),
 ('20181020004209'),
-('20181022031135');
+('20181022031135'),
+('20181122185538');
