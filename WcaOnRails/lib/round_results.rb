@@ -49,7 +49,7 @@ class RoundResult
       "properties" => {
         "personId" => { "type" => "integer" },
         "ranking" => { "type" => "integer" },
-        "attempts" => { "type" => "array", "items" => { "type" => Attempt.wcif_json_schema } },
+        "attempts" => { "type" => "array", "items" => Attempt.wcif_json_schema },
       },
     }
   end
@@ -79,7 +79,7 @@ class Attempt
       "type" => ["object", "null"],
       "properties" => {
         "result" => { "type" => "integer" },
-        "reconstruction" => { "type" => "string" },
+        "reconstruction" => { "type" => ["string", "null"] },
       },
     }
   end
