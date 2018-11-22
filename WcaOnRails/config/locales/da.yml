@@ -329,6 +329,8 @@ da:
         showAtAll: Gør konkurrencen offentlig
         #original_hash: 709a232
         name: Navn
+        #original_hash: f91b080
+        name_reason: Årsagen til navnet for konkurrencen
         #original_hash: b649210
         cellName: Kaldenavn for konkurrencen
         #original_hash: d523ebb
@@ -669,12 +671,12 @@ da:
         external_website: Konkurrencens hjemmeside. Skal være en gyldig http(s) url.
         #original_hash: 9965635
         registration_open: 'Note: Registreringens åbningstider og lukketider er i UTC-tid'
-        #original_hash: 243212f
+        #original_hash: bd402bf
         remarks_html: >-
-          Noget ekstra information som du vil give til Bestyrelsen. For
-          eksempel, forklar hvorfor denne konkurrence er efterspurgt mindre end
-          fire uger fra nu, eller hvis du efterspørger ansøgningen fra %{link}.
-          Udfyld det her på engelsk!
+          Noget ekstra information som du vil give til WCAT. For eksempel,
+          forklar hvorfor denne konkurrence er efterspurgt mindre end fire uger
+          fra nu, eller hvis du efterspørger ansøgningen fra %{link}. Udfyld det
+          her på engelsk!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -1058,6 +1060,8 @@ da:
       organizations: Regionale Organisationer
       #original_hash: d790b40
       faq: Ofte Stillede Spørgsmål
+      #original_hash: 02617c0
+      tutorial: Hvordan man deltager i konkurrencer
       #original_hash: a34b69f
       contact: Kontakt Information
       #original_hash: 4fa8cc8
@@ -1175,23 +1179,22 @@ da:
         header: '%{delegate_name} bekræftede %{competition}'
         #original_hash: 3db81b5
         organizers: 'Kære arrangører af %{competition}'
-        #original_hash: c526fd6
+        #original_hash: d353d8c
         confirmed: >-
           Den delegerede for din konkurrence, %{delegate_name}, bekræftede
-          %{competition} og har sendt den til WCA Bestyrelsen. Så snart at WCA
-          Bestyrelsen annoncerer konkurrencen, vil du modtage en yderligere
-          notifikation.
+          %{competition} og har sendt den til WCAT. Så snart at WCAT annoncerer
+          konkurrencen, vil du modtage en yderligere notifikation.
         #original_hash: dfea09d
         contact: >-
           Hvis du har flere spørgsmål, så kontakt de delegerede for konkurrencen
           via email:
       competition_announcement_email:
-        #original_hash: 1571dd8
-        header: 'WCA Bestyrelsen annoncerede %{competition}'
-        #original_hash: 8e91977
+        #original_hash: 87f1f49
+        header: 'WCAT annoncerede %{competition}'
+        #original_hash: 0d3d10c
         announced: >-
-          WCA Bestyrelsen har godkendt din konkurrencen og den er officielt
-          blevet annonceret.
+          WCAT har godkendt din konkurrencen, og den er officielt blevet
+          annonceret.
         #original_hash: 1c20919
         link: 'Følg venligst linket for at komme til annonceringen af konkurrencen:'
       organizer_addition_email:
@@ -1957,12 +1960,17 @@ da:
       #original_hash: 9104a03
       no_past_competitions: Du har ingen tidligere konkurrencer.
     competition_form:
-      #original_hash: e879b0b
-      board: Bestyrrelsen
+      #original_hash: 2b81984
+      wcat: WCA Konkurrenceannonceringsholdet
       #original_hash: f957dcb
       supports_md_html: >-
         Supports <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        En kort forklaring på konkurrencens navn. Navnet skal overholde <a
+        href='/documents/policies/Competition%20Name.pdf'>WCA
+        Navngivningspolitikken</a>.
       #original_hash: 9d9126e
       venue_html: >-
         Lokalet som konkurrencen vil blive afholdt. %{md}. For eksempel:  [Cité
@@ -1982,22 +1990,23 @@ da:
       deprecated_events: >-
         Denne konkurrence har discipliner der ikke længere er officielle, vi
         understøtter ikke muligheden for at ændre dem.
-      #original_hash: 815d5c3
-      locked_edit_html: >-
-        Denne konkurrence er offentlig og er ikke mulig at redigere. Hvis du
-        skal lave nogle ændringer så kontakt %{board}.
-      #original_hash: ce33e21
-      confirmed_not_visible_html: >-
-        Du har bekræftet denne konkurrence, men den er ikke offentlig endnu.
-        Vent på at %{board} gør den offentlig.
+      #original_hash: cafc153
+      public_and_locked_html: >-
+        Konkurrencen er offentlig og låst for redigering. Hvis du har brug for
+        at lave en ændring, så svar på email-tråden hvor konkurrencen blev
+        annonceret.
+      #original_hash: e00a339
+      confirmed_but_not_visible_html: >-
+        Du har bekræftet denne konkurrence, men den er ikke synlig for
+        offentligheden. Vent på at %{contact} gør den synlig.
       #original_hash: e94cba8
       is_visible: >-
         Denne konkurrence er offentlig, alle ændringer du laver vil blive vist
         offentligt!
-      #original_hash: 34862bb
-      awaiting_confirmation_html: >-
-        Udfyld alle fælter og klik Bekræft når du er klar til at %{board}
-        acceptere denne konkurrence.
+      #original_hash: f99b3f7
+      pending_confirmation_html: >-
+        Udfyld alle fælterne og klik "Bekræft" når du er klar til at %{contact}
+        skal gennemgå konkurrencen.
       #original_hash: 8966fd0
       submit_create_value: Opret Konkurrence
       #original_hash: 40b0dfd
@@ -2006,12 +2015,12 @@ da:
       submit_confirm_value: Bekræft
       #original_hash: f6fdbe4
       submit_delete_value: Slet
-      #original_hash: 1ca19b1
+      #original_hash: 22316f1
       submit_confirm: >-
         Er du sikker på at du er klar til at bekræfte den? Efter den er
         bekræftet vil du ikke længere have mulighed for at ændre noget
-        information. Tjek din email efter det for at bekræfte at Kommisionen var
-        blevet informeret.
+        information. Tjek din email efter, for at bekræfte at WCA
+        Konkurrenceannonceringsholdet er blevet informeret.
       #original_hash: 4c7deb7
       submit_delete: >-
         Er du sikker på at du vil slette denne konkurrence? Der er ingen vej
@@ -2063,10 +2072,10 @@ da:
     update:
       #original_hash: 5fb2f57
       save_success: Gemte succesfuldt konkurrencen.
-      #original_hash: 9d1649e
+      #original_hash: 5253c86
       confirm_success: >-
-        Bekræftede succesfuldt konkurrencen. Tjek din email, og vent på at
-        Kommisionen annoncerer den!
+        Bekræftede succesfuldt konkurrencen. Tjek din email, og vent på at WCAT
+        annoncerer den!
       #original_hash: 28567f0
       delete_success: 'Slettede succesfuldt konkurrencen %{id}.'
     time_until_competition:
@@ -2704,6 +2713,13 @@ da:
           WCA, og at sikre verdensomspændende kvalitet hos WCA Personale,
           Regionale Organisationer, Konkurrence Arrangører og Konkurrence
           Personale.
+      wcat:
+        #original_hash: 2b81984
+        name: WCA Konkurrenceannonceringsholdet (WCA Competition Announcement Team)
+        #original_hash: 61a471f
+        description: >-
+          Denne komité har rollen at godkende og annoncere WCA Konkurrencer, og
+          sikre sig at de overholder WCA's standarder.
       wmt:
         #original_hash: 2035811
         name: WCA Marketing Hold (WCA Marketing Team)
@@ -2739,6 +2755,8 @@ da:
   documents:
     #original_hash: 687c828
     title: Dokumenter
+    #original_hash: 1b537dc
+    determination_letter: IRS Bestemmelsesbrev
     #original_hash: 9855f80
     bylaws: Vedtægter
     #original_hash: fdceb44
@@ -2824,12 +2842,10 @@ da:
     #original_hash: 1cb449c
     members: Medlemmer
     board:
-      #original_hash: 3a8b1d8
+      #original_hash: f3cbb35
       info_html: >-
         "The World Cube Association" er ledt af WCA bestyrelsen. De er
-        ansvarlige for generelle forespørgsler og WCA organisationens helehed.
-        Alle officielle konkurrencer skal være bekræftet af WCA bestyrelsen for
-        at blive annonceret.
+        ansvarlige for generelle forespørgsler og WCA organisationens helhed.
     wct:
       #original_hash: 846684d
       info_html: >-
@@ -2892,6 +2908,11 @@ da:
         Denne Komité har rollen at støtte og fremme kvalitets forbedring i WCA,
         og at sikre verdensomspændende kvalitet hos WCA Personale, Regionale
         Organisationer, Konkurrence Arrangører og Konkurrence Personale.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Denne komité har rollen at godkende og annoncere WCA Konkurrencer, og
+        sikre sig at de overholder WCA's standarder.
     wmt:
       #original_hash: f2a0140
       info_html: >-
@@ -3184,25 +3205,25 @@ da:
     paragraph3:
       #original_hash: 00d3bf8
       title: Sidste frist for at annoncere konkurrencen
-      #original_hash: c61c6c9
+      #original_hash: 305cfb1
       content_html: >-
         Konkurrence burde blive annonceret mindst en måned før dens start (se <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Retningslinje
         8a4++</a>). Hvis der er en speciel årsag som forhindre fristen i at
         blive nået, så kan konkurrence blive annonceret senest 2 uger før, hvis
-        det bliver godkendt af bestyrtelsen. Det er forslået at informere
-        bestyrtelsen om årsagerne så hurtigt som muligt, for at undgå at
-        konkurrencen bliver afvist.
+        det bliver godkendt af WCAT. Det er forslået at informere WCAT om
+        årsagerne så hurtigt som muligt, for at undgå at konkurrencen bliver
+        afvist.
     paragraph4:
       #original_hash: b6dca56
       title: Nærhedpolitik
-      #original_hash: f86bf95
+      #original_hash: 79ed06e
       content1: >-
         WCA konkurrencer vil blive accepteret hvis de er mindst 100 km eller 19
-        dage fra en anden konkurrence. WCA Bestyrelsen gennemgår grundigt en
-        forslået konkurrence hvis der er mindre end 100 km mellem den og en
-        anden konkurrence, og der er mindre end 19 dage mellem dem. En Delegeret
-        der ansøger om sådan en konkurrence skal give årsager til hvorfor
+        dage fra en anden konkurrence. WCAT gennemgår grundigt en forslået
+        konkurrence hvis der er mindre end 100 km mellem den og en anden
+        konkurrence, og der er mindre end 19 dage mellem dem. En Delegeret der
+        ansøger om sådan en konkurrence skal give årsager til hvorfor
         konkurrence skal blive accepteret. Mulige argumenter der vil understøtte
         at konkurrence skal accepteres kan være:
       olist1:
@@ -3243,23 +3264,23 @@ da:
     paragraph-events:
       #original_hash: b16c5f1
       title: Annoncere discipliner
-      #original_hash: b6c6d26
+      #original_hash: cee85f7
       content: >-
         Alle discipliner der skal afholdes under konkurrencen skal nævnes af den
         delegerede når de ansøger om at få konkurrencen godkendt. Det skal også
         indeholde "mulige" discipliner (discipliner der måske vil bliver afholdt
-        hvis der er nok tid). Yderlige ændringer skal godkendes af bestyrelsen.
+        hvis der er nok tid). Yderlige ændringer skal godkendes af WCAT.
     paragraph5:
       #original_hash: 17d01de
       title: Deltager grænser
-      #original_hash: ffcd75e
+      #original_hash: b4748cf
       content_html: >-
         Antallet af deltagere kan være begrænset per disciplin eller for hele
         konkurrencen (se <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Regel
         Z4</a>). Som alle regler under artikel Z, skal den Delegerede have
-        godkendelse af Bestyrelsen. Deltagergrænser burde blive valgt med omhu,
-        og efter hvor mange man tror der vil komme. Grænsen burde ikke blive sat
+        godkendelse af WCAT. Deltagergrænser burde blive valgt med omhu, og
+        efter hvor mange man tror der vil komme. Grænsen burde ikke blive sat
         til et lavere nummer for små årsager. Grænsen burde allerede blive tænkt
         over når man finder lokalet til konkurrencen. Deltagergrænsen skal være
         tydeligt nævnt på WCA hjemmesiden.
