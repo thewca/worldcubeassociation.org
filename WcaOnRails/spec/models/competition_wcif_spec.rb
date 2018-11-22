@@ -60,7 +60,7 @@ RSpec.describe "Competition WCIF" do
                 },
                 "scrambleSetCount" => 16,
                 "scrambleGroupCount" => 16, # TODO: remove once TNoodle is updated to not read this. See https://github.com/thewca/worldcubeassociation.org/issues/3059.
-                "roundResults" => [],
+                "results" => [],
               },
               {
                 "id" => "333-r2",
@@ -73,7 +73,7 @@ RSpec.describe "Competition WCIF" do
                 "advancementCondition" => nil,
                 "scrambleSetCount" => 1,
                 "scrambleGroupCount" => 1, # TODO: remove once TNoodle is updated to not read this. See https://github.com/thewca/worldcubeassociation.org/issues/3059.
-                "roundResults" => [],
+                "results" => [],
               },
             ],
           },
@@ -88,7 +88,7 @@ RSpec.describe "Competition WCIF" do
                 "advancementCondition" => nil,
                 "scrambleSetCount" => 1,
                 "scrambleGroupCount" => 1, # TODO: remove once TNoodle is updated to not read this. See https://github.com/thewca/worldcubeassociation.org/issues/3059.
-                "roundResults" => [],
+                "results" => [],
               },
             ],
           },
@@ -103,7 +103,7 @@ RSpec.describe "Competition WCIF" do
                 "advancementCondition" => nil,
                 "scrambleSetCount" => 1,
                 "scrambleGroupCount" => 1, # TODO: remove once TNoodle is updated to not read this. See https://github.com/thewca/worldcubeassociation.org/issues/3059.
-                "roundResults" => [],
+                "results" => [],
               },
             ],
           },
@@ -121,7 +121,7 @@ RSpec.describe "Competition WCIF" do
                 "advancementCondition" => nil,
                 "scrambleSetCount" => 1,
                 "scrambleGroupCount" => 1, # TODO: remove once TNoodle is updated to not read this. See https://github.com/thewca/worldcubeassociation.org/issues/3059.
-                "roundResults" => [],
+                "results" => [],
               },
             ],
           },
@@ -263,7 +263,7 @@ RSpec.describe "Competition WCIF" do
             "advancementCondition" => nil,
             "scrambleSetCount" => 1,
             "scrambleGroupCount" => 1, # TODO: remove once TNoodle is updated to not read this. See https://github.com/thewca/worldcubeassociation.org/issues/3059.
-            "roundResults" => [],
+            "results" => [],
           },
         ],
       }
@@ -290,7 +290,7 @@ RSpec.describe "Competition WCIF" do
         "advancementCondition" => nil,
         "scrambleSetCount" => 1,
         "scrambleGroupCount" => 1, # TODO: remove once TNoodle is updated to not read this. See https://github.com/thewca/worldcubeassociation.org/issues/3059.
-        "roundResults" => [],
+        "results" => [],
       }
 
       competition.set_wcif_events!(wcif["events"], delegate)
@@ -346,9 +346,9 @@ RSpec.describe "Competition WCIF" do
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
 
-    it "can set roundResults" do
+    it "can set round results" do
       wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
-      wcif_333_event["rounds"][0]["roundResults"] = [
+      wcif_333_event["rounds"][0]["results"] = [
         {
           "personId" => 1,
           "ranking" => 10,

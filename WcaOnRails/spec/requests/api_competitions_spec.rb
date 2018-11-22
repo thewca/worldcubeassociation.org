@@ -145,7 +145,7 @@ RSpec.describe "API Competitions" do
           competition_events = create_wcif_events(%w(333))
           round333_first = competition_events[0][:rounds][0]
           round333_first[:scrambleSetCount] = 2
-          round333_first[:roundResults] = [
+          round333_first[:results] = [
             {
               personId: 1,
               ranking: 10,
