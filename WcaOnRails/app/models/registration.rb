@@ -17,6 +17,8 @@ class Registration < ApplicationRecord
 
   serialize :roles, Array
 
+  serialize :assignments, Assignments
+
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
 
   validates :user, presence: true, on: [:create]

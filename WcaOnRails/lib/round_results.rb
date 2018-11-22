@@ -76,7 +76,7 @@ class Attempt
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => ["object"],
       "properties" => {
         "result" => { "type" => "integer" },
         "reconstruction" => { "type" => "string" },
