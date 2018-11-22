@@ -249,6 +249,19 @@ RSpec.describe "API Competitions" do
         expect(person_wcif["roles"]).to match_array ["scrambler", "organizer"]
       end
 
+      it "can change assignments for a person" do
+        assignments = [
+          { activityId: 1, assignmentCode: "competitor" },
+          { activityId: 2, assignmentCode: "staff-judge", stationNumber: 3 },
+        ]
+        persons = [{ wcaUserId: registration.user.id, assignments: assignments }]
+        patch api_v0_competition_update_persons_from_wcif_path(competition), params: persons.to_json, headers: headers
+        expect(registration.reload.assignments).to match_array [
+          Assignment.new(activity_id: 1, assignment_code: "competitor", station_number: nil),
+          Assignment.new(activity_id: 2, assignment_code: "staff-judge", station_number: 3),
+        ]
+      end
+
       it "cannot change person immutable data" do
         persons = [{
           wcaUserId: registration.user.id,

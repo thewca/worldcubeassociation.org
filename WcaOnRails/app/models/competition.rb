@@ -1132,6 +1132,9 @@ class Competition < ApplicationRecord
           roles = wcif_person["roles"] - ["delegate", "organizer"] # These two are added on the fly.
           registration.update!(roles: roles)
         end
+        if registration && wcif_person["assignments"]
+          registration.update!(assignments: Assignments.load(wcif_person["assignments"]))
+        end
       end
     end
   end
