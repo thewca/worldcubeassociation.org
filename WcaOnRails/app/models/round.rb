@@ -112,7 +112,7 @@ class Round < ApplicationRecord
       cutoff: Cutoff.load(wcif["cutoff"]),
       advancement_condition: AdvancementCondition.load(wcif["advancementCondition"]),
       scramble_set_count: wcif["scrambleSetCount"],
-      round_results: RoundResults.load(wcif["roundResults"]),
+      round_results: RoundResults.load(wcif["results"]),
     }
   end
 
@@ -148,7 +148,7 @@ class Round < ApplicationRecord
       "scrambleGroupCount" => self.scramble_set_count,
 
       "scrambleSetCount" => self.scramble_set_count,
-      "roundResults" => round_results.map(&:to_wcif),
+      "results" => round_results.map(&:to_wcif),
     }
   end
 
@@ -161,7 +161,7 @@ class Round < ApplicationRecord
         "timeLimit" => TimeLimit.wcif_json_schema,
         "cutoff" => Cutoff.wcif_json_schema,
         "advancementCondition" => AdvancementCondition.wcif_json_schema,
-        "roundResults" => { "type" => "array", "items" => { "type" => RoundResult.wcif_json_schema } },
+        "results" => { "type" => "array", "items" => { "type" => RoundResult.wcif_json_schema } },
         "groups" => { "type" => "array" }, # TODO: expand on this
         "scrambleSetCount" => { "type" => "integer" },
       },
