@@ -29,6 +29,8 @@ class Round < ApplicationRecord
   serialize :round_results, RoundResults
   validates_associated :round_results
 
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+
   MAX_NUMBER = 4
   validates_numericality_of :number,
                             only_integer: true,
@@ -147,6 +149,7 @@ class Round < ApplicationRecord
       "advancementCondition" => advancement_condition&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
       "results" => round_results.map(&:to_wcif),
+      "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
@@ -162,6 +165,7 @@ class Round < ApplicationRecord
         "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
         "scrambleSets" => { "type" => "array" }, # TODO: expand on this
         "scrambleSetCount" => { "type" => "integer" },
+        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
   end
