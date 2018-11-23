@@ -26,6 +26,7 @@ RSpec.describe "Competition WCIF" do
   let!(:round444_1) { FactoryBot.create(:round, competition: competition, event_id: "444", number: 1) }
   let!(:round333fm_1) { FactoryBot.create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
   let!(:round333mbf_1) { FactoryBot.create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
+  let!(:round333mbf_1_extension) { round333mbf_1.wcif_extensions.create!(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
   before :each do
     # Load all the rounds we just created.
     competition.reload
@@ -42,6 +43,7 @@ RSpec.describe "Competition WCIF" do
         "events" => [
           {
             "id" => "333",
+            "extensions" => [],
             "rounds" => [
               {
                 "id" => "333-r1",
@@ -60,6 +62,7 @@ RSpec.describe "Competition WCIF" do
                 },
                 "scrambleSetCount" => 16,
                 "results" => [],
+                "extensions" => [],
               },
               {
                 "id" => "333-r2",
@@ -72,11 +75,13 @@ RSpec.describe "Competition WCIF" do
                 "advancementCondition" => nil,
                 "scrambleSetCount" => 1,
                 "results" => [],
+                "extensions" => [],
               },
             ],
           },
           {
             "id" => "333fm",
+            "extensions" => [],
             "rounds" => [
               {
                 "id" => "333fm-r1",
@@ -86,11 +91,13 @@ RSpec.describe "Competition WCIF" do
                 "advancementCondition" => nil,
                 "scrambleSetCount" => 1,
                 "results" => [],
+                "extensions" => [],
               },
             ],
           },
           {
             "id" => "333mbf",
+            "extensions" => [],
             "rounds" => [
               {
                 "id" => "333mbf-r1",
@@ -100,11 +107,21 @@ RSpec.describe "Competition WCIF" do
                 "advancementCondition" => nil,
                 "scrambleSetCount" => 1,
                 "results" => [],
+                "extensions" => [
+                  {
+                    "id" => "com.third.party",
+                    "specUrl" => "https://example.com",
+                    "data" => {
+                      "tables" => 5,
+                    },
+                  },
+                ],
               },
             ],
           },
           {
             "id" => "444",
+            "extensions" => [],
             "rounds" => [
               {
                 "id" => "444-r1",
@@ -117,6 +134,7 @@ RSpec.describe "Competition WCIF" do
                 "advancementCondition" => nil,
                 "scrambleSetCount" => 1,
                 "results" => [],
+                "extensions" => [],
               },
             ],
           },
@@ -131,11 +149,13 @@ RSpec.describe "Competition WCIF" do
               "latitudeMicrodegrees" => 123_456,
               "longitudeMicrodegrees" => 123_456,
               "timezone" => "Europe/Paris",
+              "extensions" => [],
               "rooms" => [
                 {
                   "id" => 1,
                   "name" => "Room 1 for venue 1",
                   "color" => VenueRoom::DEFAULT_ROOM_COLOR,
+                  "extensions" => [],
                   "activities" => [
                     {
                       "id" => 1,
@@ -144,6 +164,7 @@ RSpec.describe "Competition WCIF" do
                       "startTime" => "2014-02-03T12:00:00Z",
                       "endTime" => "2014-02-03T13:00:00Z",
                       "childActivities" => [],
+                      "extensions" => [],
                     },
                     {
                       "id" => 2,
@@ -151,6 +172,7 @@ RSpec.describe "Competition WCIF" do
                       "activityCode" => "333fm-r1",
                       "startTime" => "2014-02-05T10:00:00Z",
                       "endTime" => "2014-02-05T11:00:00Z",
+                      "extensions" => [],
                       "childActivities" => [
                         {
                           "id" => 3,
@@ -159,6 +181,7 @@ RSpec.describe "Competition WCIF" do
                           "startTime" => "2014-02-05T10:00:00Z",
                           "endTime" => "2014-02-05T10:30:00Z",
                           "childActivities" => [],
+                          "extensions" => [],
                         },
                         {
                           "id" => 4,
@@ -166,6 +189,7 @@ RSpec.describe "Competition WCIF" do
                           "activityCode" => "333fm-r1-g2",
                           "startTime" => "2014-02-05T10:30:00Z",
                           "endTime" => "2014-02-05T11:00:00Z",
+                          "extensions" => [],
                           "childActivities" => [
                             {
                               "id" => 5,
@@ -174,6 +198,7 @@ RSpec.describe "Competition WCIF" do
                               "startTime" => "2014-02-05T10:30:00Z",
                               "endTime" => "2014-02-05T11:00:00Z",
                               "childActivities" => [],
+                              "extensions" => [],
                             },
                           ],
                         },
@@ -189,18 +214,21 @@ RSpec.describe "Competition WCIF" do
               "latitudeMicrodegrees" => 123_456,
               "longitudeMicrodegrees" => 123_456,
               "timezone" => "Europe/Paris",
+              "extensions" => [],
               "rooms" => [
                 {
                   "id" => 2,
                   "name" => "Room 1 for venue 2",
                   "color" => VenueRoom::DEFAULT_ROOM_COLOR,
                   "activities" => [],
+                  "extensions" => [],
                 },
                 {
                   "id" => 3,
                   "name" => "Room 2 for venue 2",
                   "color" => VenueRoom::DEFAULT_ROOM_COLOR,
                   "activities" => [],
+                  "extensions" => [],
                 },
               ],
             },
@@ -246,6 +274,7 @@ RSpec.describe "Competition WCIF" do
     it "creates competition event when adding round to previously nonexistent event" do
       wcif["events"] << {
         "id" => "555",
+        "extensions" => [],
         "rounds" => [
           {
             "id" => "555-r1",
@@ -258,6 +287,7 @@ RSpec.describe "Competition WCIF" do
             "advancementCondition" => nil,
             "scrambleSetCount" => 1,
             "results" => [],
+            "extensions" => [],
           },
         ],
       }
@@ -284,6 +314,7 @@ RSpec.describe "Competition WCIF" do
         "advancementCondition" => nil,
         "scrambleSetCount" => 1,
         "results" => [],
+        "extensions" => [],
       }
 
       competition.set_wcif_events!(wcif["events"], delegate)
@@ -357,6 +388,32 @@ RSpec.describe "Competition WCIF" do
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
+
+    it "can set event and round extensions" do
+      wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+      wcif_333_event["extensions"] = [
+        {
+          "id" => "com.third.party.event",
+          "specUrl" => "https://example.com/event.json",
+          "data" => {
+            "prizes" => ['100$', '50$', '20$'],
+          },
+        },
+      ]
+      wcif_333_event["rounds"][0]["extensions"] = [
+        {
+          "id" => "com.third.party.round",
+          "specUrl" => "https://example.com/round.json",
+          "data" => {
+            "displays" => 10,
+          },
+        },
+      ]
+
+      competition.set_wcif_events!(wcif["events"], delegate)
+
+      expect(competition.to_wcif["events"]).to eq(wcif["events"])
+    end
   end
 
   describe "#set_wcif_schedule!" do
@@ -410,8 +467,10 @@ RSpec.describe "Competition WCIF" do
               "startTime" => competition_start_time.change(hour: 9, min: 0, sec: 0).utc.iso8601,
               "endTime" => competition_start_time.change(hour: 9, min: 15, sec: 0).utc.iso8601,
               "childActivities" => [],
+              "extensions" => [],
             },
           ],
+          "extensions" => [],
         }
         schedule_wcif["venues"][0]["rooms"][0]["activities"] << new_activity
         competition.set_wcif_schedule!(schedule_wcif, delegate)
@@ -556,6 +615,7 @@ RSpec.describe "Competition WCIF" do
           "longitudeMicrodegrees" => 456,
           "timezone" => "Europe/London",
           "rooms" => [],
+          "extensions" => [],
         }
         competition.set_wcif_schedule!(schedule_wcif, delegate)
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
@@ -607,6 +667,7 @@ RSpec.describe "Competition WCIF" do
           "name" => "Hippolyte's backyard",
           "color" => VenueRoom::DEFAULT_ROOM_COLOR,
           "activities" => [],
+          "extensions" => [],
         }
         competition.set_wcif_schedule!(schedule_wcif, delegate)
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)

@@ -313,6 +313,13 @@ RSpec.describe "API Competitions" do
             id: 2,
             name: "my new third room",
             activities: [],
+            extensions: [{
+              id: "com.third.party.room",
+              specUrl: "https://example.com/room.json",
+              data: {
+                capacity: 100,
+              },
+            }],
           }],
         }
         schedule["venues"][1] = new_venue_attributes
@@ -320,6 +327,7 @@ RSpec.describe "API Competitions" do
         # We expect these objects to change!
         expect(venue.reload.name).to eq "new name"
         expect(room.reload.name).to eq "my new third room"
+        expect(room.wcif_extensions.first.extension_id).to eq "com.third.party.room"
         # but we still want the first one to be untouched
         first_venue = competition.reload.competition_venues.find_by(wcif_id: 1)
         expect(first_venue.name).to eq "Venue 1"
