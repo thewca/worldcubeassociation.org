@@ -226,8 +226,8 @@ function exportPublic ( $exportFormatVersion, $sources ) {
 
   $metadataFile = "metadata.json";
   $metadataValue = array(
-    "exportFormatVersion" => $exportFormatVersion,
-    "date" => wcaDate( 'c' )
+    "export_format_version" => $exportFormatVersion,
+    "export_date" => wcaDate( 'c' )
   );
   file_put_contents( $metadataFile, json_encode( $metadataValue, JSON_PRETTY_PRINT ) );
 
