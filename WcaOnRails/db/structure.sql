@@ -1214,6 +1214,20 @@ CREATE TABLE `votes` (
   KEY `index_votes_on_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `wcif_extensions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wcif_extensions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `extendable_type` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `extendable_id` bigint(20) DEFAULT NULL,
+  `extension_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `spec_url` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_wcif_extensions_on_extendable_type_and_extendable_id` (`extendable_type`,`extendable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -1428,4 +1442,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20181208145408'),
 ('20181209171137'),
 ('20181222224850'),
-('20181226115357');
+('20181226115357'),
+('20181122233823');
