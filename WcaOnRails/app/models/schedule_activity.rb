@@ -6,6 +6,7 @@ class ScheduleActivity < ApplicationRecord
   VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc tutorial).freeze
   belongs_to :holder, polymorphic: true
   has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   validates_presence_of :name
   validates_numericality_of :wcif_id, only_integer: true
@@ -82,6 +83,7 @@ class ScheduleActivity < ApplicationRecord
       "startTime" => start_time.iso8601,
       "endTime" => end_time.iso8601,
       "childActivities" => child_activities.map(&:to_wcif),
+      "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
@@ -106,6 +108,7 @@ class ScheduleActivity < ApplicationRecord
       activity.load_wcif!(activity_wcif)
     end
     self.child_activities = new_child_activities
+    WcifExtension.update_wcif_extensions!(self, wcif["extensions"])
     self
   end
 
@@ -134,6 +137,7 @@ class ScheduleActivity < ApplicationRecord
         "startTime" => { "type" => "string" },
         "endTime" => { "type" => "string" },
         "childActivities" => { "type" => "array", "items" => { "$ref" => "activity" } },
+        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
       "required" => ["id", "name", "activityCode", "startTime", "endTime", "childActivities"],
     }
