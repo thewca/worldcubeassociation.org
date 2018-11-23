@@ -672,6 +672,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "wcif_extensions" => :skip_all_rows,
   }.freeze
 
   def self.development_dump(dump_filename)
