@@ -6,13 +6,16 @@ class CompetitionResultsValidator
   # List of all possible errors and warnings for the results
 
   # General errors and warnings
-  UNEXPECTED_RESULTS_ERROR = "Unexpected results for %{event_id}"
-  MISSING_RESULTS_ERROR = "Missing results for %{event_id}"
-  UNEXPECTED_ROUND_RESULTS_ERROR = "Unexpected results for round %{round_id}"
-  MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}"
-  MISMATCHED_ROUND_FORMAT_ERROR = "It looks like '%{round_name}' %{turned_into} in the results. Please update the corresponding round in the competition's manage events page."
-  MISSING_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Missing scrambles."
-  UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Unexpected scrambles."
+  UNEXPECTED_RESULTS_ERROR = "Unexpected results for %{event_id}. The event is present in the results but not listed as an official event."\
+  "Remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
+  MISSING_RESULTS_ERROR = "Missing results for %{event_id}. The event is not present in the results but listed as an official event."\
+  "If the event was held, correct the results. If the event was not held contact the WCAT to get the event removed before submitting the results."
+  UNEXPECTED_ROUND_RESULTS_ERROR = "Unexpected results for round %{round_id}. The round is present in the results but not created on the events tab. Edit the events tab to include the round."
+  MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}. There is an additional round in the events tab that is not present in the results. Edit the events tab to remove the round."
+  UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a combined round in the results. Please update the round's information in the competition's manage events page."
+  COMBINED_ROUND_CHANGED_TO_REGULAR_ROUND_WARNING = "'%{round_name}' was announced to have a cutoff, but it was detected in the results that it didn't. Please leave a comment about that to the WRT."
+  MISSING_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Missing scrambles. Use the workbook assistant to add the correct scrambles to the round."
+  UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Too many scrambles. Use the workbook assistant to uncheck the unused scrambles."
   MISSING_SCRAMBLES_FOR_GROUP_ERROR = "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
 
   # Regulations-specific errors and warnings
@@ -27,7 +30,6 @@ class CompetitionResultsValidator
   PERSON_WITHOUT_RESULTS_ERROR = "Person with id %{person_id} (%{person_name}) has no result"
   RESULTS_WITHOUT_PERSON_ERROR = "Results for unknown person with id %{person_id}"
   WHITESPACE_IN_NAME_ERROR = "Person '%{name}' has leading/trailing whitespaces or double whitespaces."
-  NON_MATCHING_COUNTRY_ERROR = "Wrong country for %{name} (%{wca_id}), expected '%{expected_country}' got '%{country}'."
   WRONG_WCA_ID_ERROR = "Person %{name} has a WCA ID which does not exist: %{wca_id}."
   WRONG_PARENTHETHIS_FORMAT_ERROR = "Opening parenthethis in '%{name}' must be preceeded by a space."
   DOB_0101_WARNING = "The date of birth of %{name} is on January 1st, please make sure it's correct."
@@ -36,14 +38,16 @@ class CompetitionResultsValidator
     " A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
   NON_MATCHING_DOB_WARNING = "Wrong birthdate for %{name} (%{wca_id}), expected '%{expected_dob}' got '%{dob}'."
   NON_MATCHING_GENDER_WARNING = "Wrong gender for %{name} (%{wca_id}), expected '%{expected_gender}' got '%{gender}'."
+  NON_MATCHING_NAME_WARNING = "Wrong name for %{wca_id}, expected '%{expected_name}' got '%{name}'. If the competitor did not change their name then fix the name to the expected name."
+  NON_MATCHING_COUNTRY_WARNING = "Wrong country for %{name} (%{wca_id}), expected '%{expected_country}' got '%{country}'. If this is an error, fix it. Otherwise, do leave a comment to the WRT about it."
 
   # Results-related errors and warnings
   MET_CUTOFF_MISSING_RESULTS_ERROR = "[%{round_id}] %{person_name} has met the cutoff but is missing results for the second phase. Cutoff is %{cutoff}."
   DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = "[%{round_id}] %{person_name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is %{cutoff}."
   WRONG_POSITION_IN_RESULTS_ERROR = "[%{round_id}] Result for %{person_name} has a wrong position: expected %{expected_pos} and got %{pos}."
   MISMATCHED_RESULT_FORMAT_ERROR = "[%{round_id}] Result for %{person_name} are in the wrong format: expected %{expected_format}, but got %{format}."
-  RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit which is %{time_limit} for one solve."
-  RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the time limit which is %{time_limit}."
+  RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit which is %{time_limit} for one solve. All solves over the time limit must be changed to DNF."
+  RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit which is %{time_limit}."
   NO_ROUND_INFORMATION_WARNING = "[%{round_id}] Could not find information about cutoff and timelimit for this round, these validations have been skipped."
   SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit and %{person_name} has at least one suspicious DNF solve given his results."
   MBF_RESULT_OVER_TIME_LIMIT_WARNING = "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please make sure it is the consequence of +2 penalties before sending the results, or fix the result to DNF."
@@ -153,6 +157,7 @@ class CompetitionResultsValidator
     @warnings = {
       persons: [],
       results: [],
+      rounds: [],
     }
     @total_errors = 0
     @total_warnings = 0
@@ -275,12 +280,14 @@ class CompetitionResultsValidator
       if unexpected.include?(equivalent_round_id)
         unexpected.delete(equivalent_round_id)
         round = @expected_rounds_by_ids[round_id]
-        turned_into = if round.round_type.combined?
-                        "is not combined anymore"
-                      else
-                        "has turned into a combined round"
-                      end
-        @errors[:rounds] << format(MISMATCHED_ROUND_FORMAT_ERROR, round_name: round.name, turned_into: turned_into)
+        if round.round_type.combined?
+          # NOTE: here we intentionally update the expected round information,
+          # so that we have a valid round_info when checking individual results later.
+          @expected_rounds_by_ids[equivalent_round_id] = @expected_rounds_by_ids.delete(round_id)
+          @warnings[:rounds] << format(COMBINED_ROUND_CHANGED_TO_REGULAR_ROUND_WARNING, round_name: round.name)
+        else
+          @errors[:rounds] << format(UNEXPECTED_COMBINED_ROUND_ERROR, round_name: round.name)
+        end
       else
         @errors[:rounds] << format(MISSING_ROUND_RESULTS_ERROR, round_id: round_id)
       end
@@ -403,8 +410,11 @@ class CompetitionResultsValidator
         unless p.gender == existing_person.gender
           @warnings[:persons] << format(NON_MATCHING_GENDER_WARNING, name: p.name, wca_id: p.wca_id, expected_gender: existing_person.gender, gender: p.gender)
         end
+        unless p.name == existing_person.name
+          @warnings[:persons] << format(NON_MATCHING_NAME_WARNING, name: p.name, wca_id: p.wca_id, expected_name: existing_person.name)
+        end
         unless p.country.id == existing_person.country.id
-          @errors[:persons] << format(NON_MATCHING_COUNTRY_ERROR, name: p.name, wca_id: p.wca_id, expected_country: existing_person.country_iso2, country: p.countryId)
+          @warnings[:persons] << format(NON_MATCHING_COUNTRY_WARNING, name: p.name, wca_id: p.wca_id, expected_country: existing_person.country_iso2, country: p.countryId)
         end
       else
         @errors[:persons] << format(WRONG_WCA_ID_ERROR, name: p.name, wca_id: p.wca_id)
