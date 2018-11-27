@@ -38,18 +38,24 @@ The database contents are now maintained by the WCA Results Team, and the
 software for the database is maintained by the WCA Software Team:
 https://www.worldcubeassociation.org/about
 
-## Metadata
+## Date and Format Version
 
 The export contains a `metadata.json` file, with the following fields:
 
-| Field                 | Sample Value                  |
-|-----------------------|-------------------------------|
-| `date`                | `"2018-09-19T05:04:58+02:00"` |
-| `exportFormatVersion` | `"1.0.0"`                     |
+| Field                   | Sample Value                  |
+|-------------------------|-------------------------------|
+| `export_date`           | `"2018-09-19T05:04:58+02:00"` |
+| `export_format_version` | `"1.0.0"`                     |
 
 If you regularly process this export, we recommend that you check the
-`exportFormatVersion` value in your program and and review your code if the
+`export_format_version` value in your program and and review your code if the
 major part of the version (the part before the first `.`) changes.
+
+If you are processing the exported data using an automated system, we recommend
+using a cron job to check the API endpoint at:
+https://www.worldcubeassociation.org/api/v0/export/public  
+You can use the `export_date` to detect if there is a new export, and the
+`sql_url` and `tsv_url` will contain the URLs for the corresponding downloads.
 
 ## Format (version [exportFormatVersion])
 
