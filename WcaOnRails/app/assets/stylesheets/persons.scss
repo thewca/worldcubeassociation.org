@@ -178,6 +178,12 @@
           color: $orange;
         }
       }
+
+      &.highlight-gold tr.gold-place,
+      &.highlight-silver tr.silver-place,
+      &.highlight-bronze tr.bronze-place {
+        background-color: $highlight-row-color;
+      }
     }
   }
 

@@ -35,7 +35,7 @@
             <% pb_markers = historical_pb_markers(results.reverse) # Compute pb markers for results in the chronological order. %>
             <% results.group_by(&:competitionId).each do |_, results| %>
               <% results.each_with_index do |result, index| %>
-                <tr class="result">
+                <tr class="result <%= return_podium_class result %>">
                   <td class="competition">
                     <% if index == 0 # Show each competition name only once to avoid redundancy. %>
                       <%= link_to result.competition.name, result.competition %>

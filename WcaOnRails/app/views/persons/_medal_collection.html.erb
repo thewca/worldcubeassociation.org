@@ -10,9 +10,15 @@
     </thead>
     <tbody>
       <tr>
-        <td><%= @medals[:gold] %></td>
-        <td><%= @medals[:silver] %></td>
-        <td><%= @medals[:bronze] %></td>
+        <td>
+          <%= link_to @medals[:gold], "#", class: "highlight-medal", data: { place:"gold" } %>
+        </td>
+        <td>
+          <%= link_to @medals[:silver], "#", class: "highlight-medal", data: { place:"silver" } %>
+        </td>
+        <td>
+          <%= link_to @medals[:bronze], "#", class: "highlight-medal", data: { place:"bronze" } %>
+        </td>
       </tr>
     </tbody>
   </table>
