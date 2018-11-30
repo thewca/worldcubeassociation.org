@@ -39,7 +39,7 @@
       <%= link_to t('layouts.navigation.my_results'), person_path(current_user.wca_id) %>
     </p>
     <% if current_user.senior_delegate? %>
-      <p><%= link_to "Upcoming competitions for my subordinate Delegates", competitions_for_senior_path %></p>
+      <p><%= link_to "Upcoming competitions for your subordinate Delegates", competitions_for_senior_path %></p>
     <% end %>
   <% end %>
 
