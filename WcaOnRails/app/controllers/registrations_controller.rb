@@ -15,7 +15,7 @@ class RegistrationsController < ApplicationController
     competition
   end
 
-  before_action :competition_must_be_using_wca_registration!
+  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import]
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
       flash[:danger] = I18n.t('registrations.flash.not_using_wca')
@@ -96,6 +96,28 @@ class RegistrationsController < ApplicationController
         headers['Content-Type'] ||= 'text/csv; charset=UTF-8'
       end
     end
+  end
+
+  def import
+    @competition = competition_from_params
+  end
+
+  def do_import
+    @competition = competition_from_params
+    file = params[:registrations_import][:registrations_file]
+    required_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"] + @competition.events.map(&:id)
+    # Ensure the CSV file includes all required columns.
+    headers = CSV.read(file.path).first.compact.map(&:downcase)
+    missing_headers = required_columns - headers
+    if missing_headers.any?
+      flash[:danger] = "Missing columns: #{missing_headers.to_sentence}."
+      redirect_to competition_registrations_import_url(@competition) and return
+    end
+    registrations = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
+      .map(&:to_hash)
+      .reject { |competitor| competitor.values.all? &:nil? }
+    puts registrations.inspect
+    redirect_to competition_registrations_import_url(@competition)
   end
 
   def do_actions_for_selected

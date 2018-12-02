@@ -1215,6 +1215,7 @@ en:
         submit_results: "Submit results"
         delegate_report: "Delegate report"
         registration: "Registration"
+        import_registrations: "Import registrations"
         register: "Register"
         competitors: "Competitors"
     results_table:

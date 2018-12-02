@@ -39,6 +39,8 @@ Rails.application.routes.draw do
 
     patch 'registrations/selected' => 'registrations#do_actions_for_selected', as: :registrations_do_actions_for_selected
     post 'registrations/export' => 'registrations#export', as: :registrations_export
+    get 'registrations/import' => 'registrations#import', as: :registrations_import
+    post 'registrations/import' => 'registrations#do_import', as: :registrations_do_import
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
