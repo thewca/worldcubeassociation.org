@@ -1,0 +1,8 @@
+<% provide(:title, "Import registrations") %>
+
+<%= render layout: "nav" do %>
+  <%= simple_form_for :registrations_import, url: competition_registrations_do_import_path(@competition) do |f| %>
+    <%= f.input :registrations_file, as: :file, input_html: { accept: 'text/csv' } %>
+    <%= f.submit "Import", class: "btn btn-primary" %>
+  <% end %>
+<% end %>
