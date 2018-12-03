@@ -148,9 +148,14 @@ class RegistrationsController < ApplicationController
       render :edit
       return
     end
+    registration_attributes = registration_params
+    # Don't change status columns if the status is the same.
+    if @registration.checked_status.to_s == params[:registration][:status]
+      registration_attributes = registration_attributes.except(:accepted_at, :accepted_by, :deleted_at, :deleted_by)
+    end
     was_accepted = @registration.accepted?
     was_deleted = @registration.deleted?
-    if current_user.can_edit_registration?(@registration) && @registration.update_attributes(registration_params)
+    if current_user.can_edit_registration?(@registration) && @registration.update_attributes(registration_attributes)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)
         mailer.deliver_later
