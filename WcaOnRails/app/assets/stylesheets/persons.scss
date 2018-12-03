@@ -33,7 +33,7 @@
 #person {
   /* Generic table style for the person profile page. */
   table {
-    @extend table.with-solves;
+    @extend table, .with-solves;
     white-space: nowrap;
 
     .cubing-icon {

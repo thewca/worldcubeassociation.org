@@ -129,7 +129,7 @@ table.with-solves {
 }
 
 table.wca-results {
-  @extend table.with-solves;
+  @extend table, .with-solves;
 
   thead tr th {
     &.pos {
@@ -447,10 +447,10 @@ select.input-xs {
   &:hover {
     cursor: pointer;
     .panel-info > & {
-      @extend a.list-group-item-info:hover;
+      @extend a, .list-group-item-info, :hover;
     }
     .panel-warning > & {
-      @extend a.list-group-item-warning:hover;
+      @extend a, .list-group-item-warning, :hover;
     }
   }
   a {
