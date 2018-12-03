@@ -1,0 +1,28 @@
+<% provide(:title, 'WCA Teams and Committees') %>
+
+<div class="container">
+  <h1>WCA Teams and Committees</h1>
+
+  <p>The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. When there are committee openings, information about how to apply is posted on the front page.</p>
+
+  <p><%= t('about.structure.committees') %></p>
+  <% Team.all_ordered_by_english_name.each do |team| %>
+    <% next if team == Team.board %>
+      <h3><%= team.name %> (<%= team.acronym %>) <span class="badge team-email"><%= mail_to team.email %></span></h3>
+      <%= t("about.structure.#{team.friendly_id}.description") %>
+      <br /><br />
+
+      <% team.current_members.includes(:user).order(team_leader: :desc).order("users.name asc").each do |u| %>
+        <div class="badge team-member-badge <%= u.team_leader ? "team-leader-badge" : "" %>">
+          <%= render "shared/user_avatar", user: u.user %>
+          <div class="team-member-name"><%= u.user.name %>
+            <% if u.team_leader %>
+              <br />
+              <span class="team-leader-subtext">Leader</span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+  <% end %>
+
+</div>

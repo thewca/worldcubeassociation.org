@@ -120,6 +120,7 @@ Rails.application.routes.draw do
   patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
+  get 'teams-committees' => 'static_pages#teams_committees'
   get 'documents' => 'static_pages#documents'
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'

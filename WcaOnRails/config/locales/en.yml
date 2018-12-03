@@ -1313,7 +1313,7 @@ en:
   #context: Contact forms
   contacts:
     website:
-      title: "WCA Website Contact Form"
+      title: "WCA Contact Form"
       inquiries:
         competition: "Contact the Organizers of a Specific Competition (please select below)"
         competitions_in_general: "Competitions in General (organizing, competition rules, etc.)"

@@ -1,0 +1,30 @@
+.badge.team-member-badge {
+  margin-right: 1em;
+  margin-bottom: 1em;
+  color: #555;
+  background-color: #dddddd;
+}
+
+.team-member-name {
+  padding-left: 1em;
+  display: inline-block;
+}
+
+.badge.team-leader-badge {
+  background-color: #007bff;
+  color: white;
+  padding-top: 6px;
+  vertical-align: top;
+  span.team-leader-subtext {
+    font-style: oblique;
+    margin-top: 6px;
+    display: block;
+  }
+}
+
+.badge.team-email {
+  background-color: #e64503;
+  a {
+    color: white;
+  }
+}
