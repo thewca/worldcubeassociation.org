@@ -55,6 +55,7 @@ RSpec.describe RegistrationsController do
         patch :update, params: { id: registration.id, registration: { status: 'accepted' } }
       end.to change { enqueued_jobs.size }.by(1)
       expect(registration.reload.accepted?).to be true
+      expect(registration.accepted_user).to eq organizer
     end
 
     it "changes an accepted registration to pending" do
@@ -66,6 +67,13 @@ RSpec.describe RegistrationsController do
       end.to change { enqueued_jobs.size }.by(1)
       expect(registration.reload.pending?).to be true
       expect(response).to redirect_to edit_registration_path(registration)
+    end
+
+    it "doesn't update accepted_at when status doesn't change" do
+      registration.update!(accepted_at: Time.now)
+      expect do
+        patch :update, params: { id: registration.id, registration: { comments: "A new comment.", status: "accepted" } }
+      end.to_not change { registration.reload.accepted_at }
     end
 
     it "can delete registration" do
