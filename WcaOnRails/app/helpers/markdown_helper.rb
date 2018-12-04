@@ -78,3 +78,8 @@ module MarkdownHelper
     output
   end
 end
+
+def md_flatten(content, target_blank: false, toc: false)
+  fragment = Nokogiri::HTML(md(content, target_blank: target_blank, toc: toc))
+  fragment.text
+end
