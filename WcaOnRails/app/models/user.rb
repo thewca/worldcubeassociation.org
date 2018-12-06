@@ -530,7 +530,7 @@ class User < ApplicationRecord
   end
 
   def can_vote_in_poll?
-    admin? || results_team? || any_kind_of_delegate? || wrc_team?
+    any_kind_of_delegate?
   end
 
   def can_view_delegate_matters?
