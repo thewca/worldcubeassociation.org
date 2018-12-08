@@ -396,36 +396,44 @@ class User < ApplicationRecord
     team_member?(Team.board)
   end
 
-  def software_team?
-    team_member?(Team.wst)
+  def communication_team?
+    team_member?(Team.wct)
   end
 
-  def results_team?
-    team_member?(Team.wrt)
-  end
-
-  def wrc_team?
-    team_member?(Team.wrc)
+  def competition_announcement_team?
+    team_member?(Team.wcat)
   end
 
   def wdc_team?
     team_member?(Team.wdc)
   end
 
-  def communication_team?
-    team_member?(Team.wct)
-  end
-
   def ethics_committee?
     team_member?(Team.wec)
+  end
+
+  def financial_committee?
+    team_member?(Team.wfc)
+  end
+
+  def marketing_team?
+    team_member?(Team.wmt)
   end
 
   def quality_assurance_committee?
     team_member?(Team.wqac)
   end
 
-  def competition_announcement_team?
-    team_member?(Team.wcat)
+  def wrc_team?
+    team_member?(Team.wrc)
+  end
+
+  def results_team?
+    team_member?(Team.wrt)
+  end
+
+  def software_team?
+    team_member?(Team.wst)
   end
 
   def team_member?(team)
