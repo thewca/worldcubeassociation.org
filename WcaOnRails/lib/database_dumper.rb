@@ -590,6 +590,7 @@ module DatabaseDumper
           senior_delegate_id unconfirmed_wca_id
           updated_at
           wca_id
+          receive_delegate_reports
         ),
         db_default: %w(
           confirmation_sent_at

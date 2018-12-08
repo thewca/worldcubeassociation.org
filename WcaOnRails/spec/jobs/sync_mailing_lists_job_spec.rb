@@ -4,16 +4,10 @@ require 'rails_helper'
 
 RSpec.describe SyncMailingListsJob, type: :job do
   it "syncs mailing lists" do
-    # candidates@ mailing list
+    # delegates@ mailing list
     candidate_delegate = FactoryBot.create :candidate_delegate
     delegate = FactoryBot.create :delegate
     senior_delegate = FactoryBot.create :senior_delegate
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "candidates@worldcubeassociation.org",
-      a_collection_containing_exactly(candidate_delegate),
-    )
-
-    # delegates@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "delegates@worldcubeassociation.org",
       a_collection_containing_exactly(candidate_delegate, candidate_delegate.senior_delegate, delegate, delegate.senior_delegate, senior_delegate),
@@ -29,9 +23,9 @@ RSpec.describe SyncMailingListsJob, type: :job do
     board_member = FactoryBot.create :user, :board_member, team_leader: false
     wct_member = FactoryBot.create :user, :wct_member, team_leader: false
     wcat_member = FactoryBot.create :user, :wcat_member, team_leader: false
-    wdc_leader = FactoryBot.create :user, :wdc_member, team_leader: true
-    wdc_member = FactoryBot.create :user, :wdc_member, team_leader: false
-    wec_member = FactoryBot.create :user, :wec_member, team_leader: false
+    wdc_leader = FactoryBot.create :user, :wdc_member, team_leader: true, receive_delegate_reports: true
+    wdc_member = FactoryBot.create :user, :wdc_member, team_leader: false, receive_delegate_reports: true
+    wec_member = FactoryBot.create :user, :wec_member, team_leader: false, receive_delegate_reports: true
     wfc_member = FactoryBot.create :user, :wfc_member, team_leader: false
     wmt_member = FactoryBot.create :user, :wmt_member, team_leader: false
     wqac_member = FactoryBot.create :user, :wqac_member, team_leader: false
@@ -118,6 +112,12 @@ RSpec.describe SyncMailingListsJob, type: :job do
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "translators@worldcubeassociation.org",
       a_collection_containing_exactly(wst_member, wrc_member, wrt_leader),
+    )
+
+    # reports@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "reports@worldcubeassociation.org",
+      a_collection_containing_exactly(candidate_delegate, candidate_delegate.senior_delegate, delegate.senior_delegate, senior_delegate, wdc_leader, wdc_member, wec_member, wqac_member, wrc_member),
     )
 
     SyncMailingListsJob.perform_now

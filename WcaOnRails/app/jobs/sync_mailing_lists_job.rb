@@ -4,7 +4,6 @@ class SyncMailingListsJob < ApplicationJob
   queue_as :default
 
   def perform
-    GsuiteMailingLists.sync_group("candidates@worldcubeassociation.org", User.candidate_delegates)
     GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", User.delegates)
     GsuiteMailingLists.sync_group("seniors@worldcubeassociation.org", User.senior_delegates)
     GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", TeamMember.current.where(team_leader: true).map(&:user))
@@ -21,5 +20,6 @@ class SyncMailingListsJob < ApplicationJob
     GsuiteMailingLists.sync_group("software@worldcubeassociation.org", Team.wst.current_members.includes(:user).map(&:user))
     translators = User.where(id: TranslationsController::VERIFIED_TRANSLATORS_BY_LOCALE.values.flatten)
     GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translators)
+    GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers)
   end
 end
