@@ -719,7 +719,19 @@ class User < ApplicationRecord
     if user.wca_id.blank? && organizer_for?(user)
       fields << :name
     end
+    if user.any_kind_of_staff?
+      fields += %i(receive_delegate_reports)
+    end
     fields
+  end
+
+  def self.delegate_reports_receivers
+    candidate_delegates = User.candidate_delegates
+    senior_delegates = User.senior_delegates
+    wqac_members = Team.wqac.current_members.includes(:user).map(&:user)
+    wrc_members = Team.wrc.current_members.includes(:user).map(&:user)
+    other_staff = User.where(receive_delegate_reports: true)
+    (candidate_delegates + senior_delegates + wqac_members + wrc_members + other_staff.select(&:any_kind_of_staff?)).uniq
   end
 
   def notify_of_results_posted(competition)

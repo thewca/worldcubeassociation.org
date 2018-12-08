@@ -657,6 +657,13 @@ RSpec.describe User, type: :model do
       user = FactoryBot.create :user
       user.dob = 5.days.ago
       expect(user).to be_invalid_with_errors(dob: ["must be at least two years old"])
+
+  describe "#delegate_reports_receivers" do
+    it "returns only current staff who want to receive reports" do
+      _past_staff = FactoryBot.create :user, receive_delegate_reports: true
+      current_staff1 = FactoryBot.create :user, :wdc_member, receive_delegate_reports: true
+      _current_staff2 = FactoryBot.create :user, :wdc_member, receive_delegate_reports: false
+      expect(User.delegate_reports_receivers).to eq [current_staff1]
     end
   end
 end

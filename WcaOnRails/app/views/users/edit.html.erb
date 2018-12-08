@@ -134,6 +134,10 @@
           </div>
         <% end %>
 
+        <% if @user.any_kind_of_staff? %>
+          <%= f.input :receive_delegate_reports %>
+        <% end %>
+
         <%= f.submit t('.save'), class: "btn btn-primary" %>
       <% end %>
     </div>
