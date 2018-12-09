@@ -227,6 +227,7 @@ CREATE TABLE `Persons` (
   `day` tinyint(4) NOT NULL DEFAULT '0',
   `comments` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `rails_id` int(11) NOT NULL AUTO_INCREMENT,
+  `incorrect_wca_id_claim_count` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`rails_id`),
   UNIQUE KEY `index_Persons_on_id_and_subId` (`id`,`subId`),
   KEY `Persons_fk_country` (`countryId`),
@@ -966,7 +967,8 @@ SET character_set_client = utf8;
  1 AS `year`,
  1 AS `month`,
  1 AS `day`,
- 1 AS `comments`*/;
+ 1 AS `comments`,
+ 1 AS `incorrect_wca_id_claim_count`*/;
 SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `registration_competition_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1212,11 +1214,11 @@ CREATE TABLE `votes` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_unicode_ci */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50001 VIEW `rails_persons` AS select `Persons`.`rails_id` AS `id`,`Persons`.`id` AS `wca_id`,`Persons`.`subId` AS `subId`,`Persons`.`name` AS `name`,`Persons`.`countryId` AS `countryId`,`Persons`.`gender` AS `gender`,`Persons`.`year` AS `year`,`Persons`.`month` AS `month`,`Persons`.`day` AS `day`,`Persons`.`comments` AS `comments` from `Persons` */;
+/*!50001 VIEW `rails_persons` AS select `Persons`.`rails_id` AS `id`,`Persons`.`id` AS `wca_id`,`Persons`.`subId` AS `subId`,`Persons`.`name` AS `name`,`Persons`.`countryId` AS `countryId`,`Persons`.`gender` AS `gender`,`Persons`.`year` AS `year`,`Persons`.`month` AS `month`,`Persons`.`day` AS `day`,`Persons`.`comments` AS `comments`,`Persons`.`incorrect_wca_id_claim_count` AS `incorrect_wca_id_claim_count` from `Persons` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1417,4 +1419,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180908195553'),
 ('20180912042457'),
 ('20181020004209'),
-('20181022031135');
+('20181022031135'),
+('20181209171137');
