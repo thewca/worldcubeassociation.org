@@ -205,7 +205,10 @@ module DatabaseDumper
           rails_id
           subId
         ),
-        db_default: %w(comments),
+        db_default: %w(
+          comments
+          incorrect_wca_id_claim_count
+        ),
         fake_values: {
           "year" => "1954",
           "month" => "12",

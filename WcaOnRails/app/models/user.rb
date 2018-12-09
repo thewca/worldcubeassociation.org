@@ -140,9 +140,12 @@ class User < ApplicationRecord
 
   # Virtual attribute for people claiming a WCA ID.
   attr_accessor :dob_verification
+  attr_accessor :was_incorrect_wca_id_claim
 
+  MAX_INCORRECT_WCA_ID_CLAIM_COUNT = 5
   validate :claim_wca_id_validations
   def claim_wca_id_validations
+    self.was_incorrect_wca_id_claim = false
     already_assigned_to_user = false
     if unconfirmed_wca_id.present?
       already_assigned_to_user = unconfirmed_person && unconfirmed_person.user && !unconfirmed_person.user.dummy_account?
@@ -165,13 +168,17 @@ class User < ApplicationRecord
       dob_verification_date = Date.safe_parse(dob_verification, nil)
       if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
         dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
-        if !unconfirmed_person.dob
+        remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
+        if remaining_wca_id_claims == 0
+          errors.add(:unconfirmed_wca_id, I18n.t('users.errors.too_many_wca_id_claims_html').html_safe)
+        elsif !unconfirmed_person.dob
           errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
         elsif unconfirmed_person.gender.blank?
           errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html').html_safe)
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
           # Note that we don't verify DOB for WCA IDs that have already been
           # claimed. This protects people from DOB guessing attacks.
+          self.was_incorrect_wca_id_claim = true
           errors.add(:dob_verification, I18n.t('users.errors.dob_incorrect_html', dob_form_path: dob_form_path).html_safe)
         end
       end
@@ -183,6 +190,15 @@ class User < ApplicationRecord
         errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found'))
       end
     end
+  end
+
+  after_rollback do
+    # This is a bit of a mess. If the user makes an incorrect WCA ID claim,
+    # then we want to incrememnt our count of incorrect claims. We can't update
+    # the database in the `claim_wca_id_validations` above, because that all
+    # happens in a transaction that gets rolled back if the claim is invalid.
+    # So instead, we must do this in a `after_rollback` callback.
+    unconfirmed_person.increment!(:incorrect_wca_id_claim_count, 1) if self.was_incorrect_wca_id_claim
   end
 
   scope :not_dummy_account, -> { where('wca_id = "" OR encrypted_password != "" OR email NOT LIKE "%@worldcubeassociation.org"') }
