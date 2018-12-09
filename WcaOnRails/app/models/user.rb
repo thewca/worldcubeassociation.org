@@ -601,7 +601,7 @@ class User < ApplicationRecord
     # Don't allow editing data if they have a WCA ID, or if they
     # have already registered for a competition. We do allow admins and delegates
     # who have registered for a competition to edit their own data.
-    cannot_edit_reason = if user_to_edit.wca_id
+    cannot_edit_reason = if user_to_edit.wca_id && !(admin? || any_kind_of_delegate?)
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')
