@@ -1070,6 +1070,8 @@ pt-BR:
       organizations: Organizações Regionais
       #original_hash: d790b40
       faq: Perguntas Frequentes
+      #original_hash: 02617c0
+      tutorial: Tutorial de Competição
       #original_hash: a34b69f
       contact: Informação de contato
       #original_hash: 4fa8cc8
@@ -1383,6 +1385,11 @@ pt-BR:
       senior_has_delegate: não pode rebaixar um Delegado Senior que tenha delegados subordinados
       #original_hash: 48653a9
       already_have_id: 'não pode solicitar uma ID da WCA porque você já tem a ID %{wca_id}'
+      #original_hash: 8bd15ba
+      too_many_wca_id_claims_html: >-
+        Houve muitas tentativas erradas de conectar esta ID da WCA. Por favor
+        entre em contato com a <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>Equipe de Resultados da WCA</a> para resolver isto.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Não temos uma data de nascimento registrada para esta ID da WCA. Por
@@ -2761,6 +2768,8 @@ pt-BR:
   documents:
     #original_hash: 687c828
     title: Documentos
+    #original_hash: 1b537dc
+    determination_letter: Carta de Determinação do IRS
     #original_hash: 9855f80
     bylaws: Estatuto (Bylaws)
     #original_hash: fdceb44
