@@ -1401,6 +1401,11 @@ es:
       already_have_id: >-
         no puedes reclamar un WCA ID porque ya tienes asignado el WCA ID
         %{wca_id}
+      #original_hash: 8bd15ba
+      too_many_wca_id_claims_html: >-
+        Ha habido demasiados intentos  de asignar este WCA ID. Por favor escribe
+        al <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>Equipo de Resultados WCA</a> Para resolverlo.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         No consta ninguna fecha de nacimiento asociada a este WCA ID. Por favor,
