@@ -34,7 +34,6 @@ class Api::V0::ApiController < ApplicationController
       },
       "allowed" => [
         "TNoodle-WCA-0.13.5",
-        "TNoodle-WCA-0.14.0",
       ],
       "history" => [
         "TNoodle-0.7.4",
