@@ -368,7 +368,7 @@ de:
         #original_hash: 87b7d5f
         use_wca_registration: Ich würde gerne die WCA-Website für die Registrierung benutzen
         #original_hash: 9bb1965
-        competitor_limit_enabled: Teilneh
+        competitor_limit_enabled: Teilnehmerlimit
         #original_hash: 749f4c9
         competitor_limit: Maximale Anzahl an Teilnehmern
         #original_hash: 4a8b6f1
@@ -1411,6 +1411,11 @@ de:
       already_have_id: >-
         kann keine WCA-ID anfordern da Du bereits mit der WCA-ID %{wca_id}
         verknüpft bist
+      #original_hash: 8bd15ba
+      too_many_wca_id_claims_html: >-
+        Es gab zu viele falsche Anforderungen für diese WCA ID. Bitte
+        kontaktiere das <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA Results Team</a> um dieses Problem zu lösen.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Wir haben kein Geburtsdatum für diese WCA-ID hinterlegt. Bitte
@@ -1700,10 +1705,10 @@ de:
       %{profile} beheben:
     #original_hash: f22ef22
     registration_full: >-
-      Das Teilnehmerlimit für diesen Wettbwerb ist %{competitor_limit} und wurde
-      bereits erreicht. Wenn du dich anmeldest, wird deine Anmeldung auf eine
-      Warteliste gesetzt. Sie wird nicht bestätigt werden, bevor ein Platz frei
-      ist.
+      Das Teilnehmerlimit für diesen Wettbewerb ist %{competitor_limit} und
+      wurde bereits erreicht. Wenn du dich anmeldest, wird deine Anmeldung auf
+      eine Warteliste gesetzt. Sie wird nicht bestätigt werden, bevor ein Platz
+      frei ist.
     #original_hash: 855ca9c
     can_register: 'Du kannst dich weiter unten für %{comp} anmelden.'
     #original_hash: 4167ed7
@@ -1895,7 +1900,7 @@ de:
       #original_hash: f5f687d
       no_on_the_spot_registration: Vor-Ort-Anmeldungen sind nicht möglich.
       #original_hash: 4df139d
-      guests_pay: 'Zuschauer können für eine Gebühr von %{guests_base_fee} teilnemen.'
+      guests_pay: 'Zuschauer können für eine Gebühr von %{guests_base_fee} zusehen.'
       #original_hash: b6c863e
       guests_free: Zuschauer haben freien Eintritt.
       #original_hash: 97a31ee
