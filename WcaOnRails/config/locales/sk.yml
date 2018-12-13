@@ -536,10 +536,6 @@ sk:
           Napíšte svoje celé meno správne, napríklad <strong>Stefan
           Pochmann</strong>. Nie nepresne ako <strong>s pochman</strong>.
           Stredné mená (buď celé alebo ako iniciálky) sú voliteľné.
-        #original_hash: c03b949
-        email: >-
-          Na vymenenie vášho emailu budeme potrebovať potvrdenie vášho nového
-          emailu.
         #original_hash: 8a91e53
         pending_avatar: >-
           Po tom, ako nahráte svojho nového Avatara, budete musieť počkať,
@@ -1039,6 +1035,7 @@ sk:
       approve: Povoliť
       #original_hash: 85de4b8
       unconfirmed_email: 'Emailová adresa tohto účtu (%{email}) nie je potvrdená.'
+      confirm_new_email: 'Na vymenenie vášho emailu budeme potrebovať potvrdenie vášho nového emailu.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Tomuto účtu chýbajú informácie novej emailovej adresy %{email}.'
       #original_hash: 0340b0b

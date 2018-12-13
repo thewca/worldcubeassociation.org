@@ -594,8 +594,6 @@ vi:
           Điền họ tên chính xác của bạn, có đầy đủ dấu, ví dụ <strong>Vương
           Thiện Trung</strong>. Ví dụ tên không hợp lệ: <strong>V T
           trung</strong> hoặc <strong>Vuong Thien Trung</strong>.
-        #original_hash: c03b949
-        email: Thay đổi địa chỉ email yêu cầu bạn phải xác nhận địa chỉ email mới.
         #original_hash: 8a91e53
         pending_avatar: >-
           Sau khi đăng tải hình đại diện mới, bạn phải đợi Đội ngũ Kết quả WCA
@@ -1254,6 +1252,7 @@ vi:
       approve: Chấp nhận
       #original_hash: 85de4b8
       unconfirmed_email: 'Địa chỉ email (%{email}) của tài khoản này chưa được xác nhận.'
+      confirm_new_email: 'Thay đổi địa chỉ email yêu cầu bạn phải xác nhận địa chỉ email mới.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Tài khoản này đang chờ xác nhận từ địa chỉ email mới %{email}.'
       #original_hash: 0340b0b

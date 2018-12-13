@@ -619,10 +619,6 @@ pl:
         name: >-
           Wprowadź swoje pełne imię poprawnie, na przykład <strong>Jan
           Kowalski</strong>. Nie zdrobniale jak <strong>j kowalski</strong>.
-        #original_hash: c03b949
-        email: >-
-          Zmiana twojego adresu email będzie wymagać potwierdzenia nowego
-          adresu.
         #original_hash: 8a91e53
         pending_avatar: >-
           Po przesłaniu nowego zdjęcia profilowego, będziesz musiał zaczekać, aż
@@ -1296,6 +1292,7 @@ pl:
       approve: Zatwierdź
       #original_hash: 85de4b8
       unconfirmed_email: 'Adres email należący do tego konta (%{email}) nie został potwierdzony.'
+      confirm_new_email: 'Zmiana twojego adresu email będzie wymagać potwierdzenia nowego adresu.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'To konto oczekuje potwierdzenia nowego adresu email %{email}.'
       #original_hash: 0340b0b

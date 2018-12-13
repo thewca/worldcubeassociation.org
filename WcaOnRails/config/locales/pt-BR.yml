@@ -610,10 +610,6 @@ pt-BR:
           Informe seu nome completo corretamente, por exemplo <strong>Ayrton
           Senna da Silva</strong>, não desleixadamente como <strong>ayrton
           s</strong>.
-        #original_hash: c03b949
-        email: >-
-          Será necessário confirmar o novo email se você alterar seu email
-          cadastrado.
         #original_hash: 8a91e53
         pending_avatar: >-
           Após enviar um novo avatar, será necessário esperar a Equipe de
@@ -1284,6 +1280,7 @@ pt-BR:
       approve: Aprovar
       #original_hash: 85de4b8
       unconfirmed_email: 'O endereço de email desta conta (%{email}) não foi confirmado.'
+      confirm_new_email: 'Será necessário confirmar o novo email se você alterar seu email cadastrado.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Está pendente a confirmação do novo email desta conta (%{email}).'
       #original_hash: 0340b0b

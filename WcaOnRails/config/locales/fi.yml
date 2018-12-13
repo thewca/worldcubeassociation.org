@@ -584,8 +584,6 @@ fi:
           Pochmann</strong>. Ei huolimattomasti, kuten <strong>s
           pochman</strong>. Muut (toinen, kolmas jne.) etunimet (joko kokonaan
           tai pelkkänä alkukirjaimena) ovat vapaaehtoisia.
-        #original_hash: c03b949
-        email: Sähköpostiosoitteen vaihtaminen vaatii uuden osoitteen vahvistamista.
         #original_hash: 8a91e53
         pending_avatar: >-
           Uuden profiilikuvan lataamisen jälkeen sinun täytyy odottaa, että WCA
@@ -1229,6 +1227,7 @@ fi:
       approve: Hyväksy
       #original_hash: 85de4b8
       unconfirmed_email: 'Tämän tilin sähköpostiosoitetta (%{email}) ei ole vahvistettu.'
+      confirm_new_email: 'Sähköpostiosoitteen vaihtaminen vaatii uuden osoitteen vahvistamista.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Tämä tili odottaa uuden sähköpostiosoitteen (%{email}) vahvistamista.'
       #original_hash: 0340b0b

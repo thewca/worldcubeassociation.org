@@ -617,8 +617,6 @@ ru:
           <strong>Antoshka Rostovikov</strong>, <strong>ANTON
           ROSTOVIKOV</strong>. Если у вас есть заграничный паспорт, введите имя
           в соответствии с ним.
-        #original_hash: c03b949
-        email: Изменение email-адреса потребует подтверждения нового адреса.
         #original_hash: 8a91e53
         pending_avatar: >-
           После загрузки новой аватарки вам придётся подождать, пока её одобрит
@@ -1285,6 +1283,7 @@ ru:
       approve: Подтвердить
       #original_hash: 85de4b8
       unconfirmed_email: 'Email-адрес этого аккаунта (%{email}) не подтверждён.'
+      confirm_new_email: 'Изменение email-адреса потребует подтверждения нового адреса.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Этот аккаунт ожидает подтверждения нового email-адреса %{email}.'
       #original_hash: 0340b0b

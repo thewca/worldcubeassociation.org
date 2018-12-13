@@ -611,10 +611,6 @@ es:
         name: >-
           Introduce tu nombre completo y con corrección, por ejemplo
           <strong>Darío Méndez</strong> y no <strong>D Mendez</strong>.
-        #original_hash: c03b949
-        email: >-
-          Esta dirección tendrá que ser validada siguiendo las instrucciones en
-          un correo que te enviaremos.
         #original_hash: 8a91e53
         pending_avatar: >-
           Después de subir un nuevo avatar, tendrás que esperar que el Equipo de
@@ -1287,6 +1283,7 @@ es:
       approve: Aprobar
       #original_hash: 85de4b8
       unconfirmed_email: 'El correo electrónico de esta cuenta (%{email}) no está confirmado.'
+      confirm_new_email: 'Esta dirección tendrá que ser validada siguiendo las instrucciones en un correo que te enviaremos.'
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
         Esta cuenta tiene pendiente confirmar una nueva dirección de correo

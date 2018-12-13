@@ -598,10 +598,6 @@ hu:
           például: <strong>Péter Példa</strong>. Nem pedig hanyagul, mint
           <strong>pelda peter</strong>.<br/>A második keresztnevedet, ha nem
           használod, akkor kihagyhatod.
-        #original_hash: c03b949
-        email: >-
-          Az e-mail címed megváltoztatásához szükséges az új e-mail címed
-          megerősítése.
         #original_hash: 8a91e53
         pending_avatar: >-
           Miután feltöltötted az új profilképedet, várnod kell amíg a WCA
@@ -1268,6 +1264,7 @@ hu:
       approve: Jóváhagyás
       #original_hash: 85de4b8
       unconfirmed_email: 'A felhasználóhoz tartozó e-mail cím (%{email}) nem megerősített.'
+      confirm_new_email: 'Az e-mail címed megváltoztatásához szükséges az új e-mail címed megerősítése.'
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
         Ehhez a felhasználóhoz függőben van egy új e-mail cím (%{email})

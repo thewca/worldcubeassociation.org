@@ -611,8 +611,6 @@ fr:
           Entrez votre nom complet correctement, par exemple <strong>Stefan
           Pochmann</strong>. Pas négligemment comme <strong>s pochman</strong>
           ou <strong>Stefan POCHMAN</strong>.
-        #original_hash: c03b949
-        email: 'Si vous changez votre adresse email, vous devrez la confirmer.'
         #original_hash: 8a91e53
         pending_avatar: >-
           Après avoir chargé une nouvelle photo de profil, vous devrez attendre
@@ -1297,6 +1295,7 @@ fr:
       approve: Approuver
       #original_hash: 85de4b8
       unconfirmed_email: 'L''adresse email (%{email}) de ce compte n''est pas confirmée.'
+      confirm_new_email: 'Si vous changez votre adresse email, vous devrez la confirmer.'
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
         Ce compte est en attente de confirmation de la nouvelle adresse email

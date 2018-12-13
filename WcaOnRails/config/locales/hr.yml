@@ -608,8 +608,6 @@ hr:
           Unesite svoje puno ime točno, primjerice <strong>Pero Perić</strong>.
           Nemoje unijeti loše kao <strong>p perić</strong>. <br/> Srednje ime
           ili inicijali su neobavezni.
-        #original_hash: c03b949
-        email: Promjena Vaše e-mail adrese će zahtijevati potvrdu nove e-mail adrese.
         #original_hash: 8a91e53
         pending_avatar: >-
           Nakon prijenosa novog avatara, morate čekati potvrdu WCA Tima za
@@ -1281,6 +1279,7 @@ hr:
       approve: Prihvatite
       #original_hash: 85de4b8
       unconfirmed_email: 'E-mail adresa (%{email}) ovog korisničkog računa nije potvrđena.'
+      confirm_new_email: 'Promjena Vaše e-mail adrese će zahtijevati potvrdu nove e-mail adrese.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Ovaj korisnički račun čeka odobrenje nove e-mail adrese %{email}.'
       #original_hash: 0340b0b

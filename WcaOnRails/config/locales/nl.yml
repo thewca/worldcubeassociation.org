@@ -601,10 +601,6 @@ nl:
           Voer je naam volledig en juist in, bijvoorbeeld <strong>Stefan
           Pochmann</strong>. Niet: <strong>s pochmann</strong>. Tussennamen
           (volledige of als initialen) zijn optioneel.
-        #original_hash: c03b949
-        email: >-
-          Veranderen van je e-mailadres vereist bevestiging van het nieuwe
-          e-mailadres.
         #original_hash: 8a91e53
         pending_avatar: >-
           Na het uploaden van je profielfoto, is het wachten tot het
@@ -1257,6 +1253,7 @@ nl:
       approve: Goedkeuren
       #original_hash: 85de4b8
       unconfirmed_email: 'Het e-mailadres van deze account (%{email}) is nog niet bevestigd.'
+      confirm_new_email: 'Veranderen van je e-mailadres vereist bevestiging van het nieuwe e-mailadres.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Dit account wacht op bevestiging van het nieuwe e-mailadres %{email}.'
       #original_hash: 0340b0b

@@ -604,10 +604,6 @@ pt:
           Introduza o seu nome corretamente, por exemplo <strong>Luís Vaz de
           Camões</strong>, não desleixadamente como <strong>luis v
           camoes</strong>. Nomes do meio (completos ou iniciais) são opcionais.
-        #original_hash: c03b949
-        email: >-
-          Será necessário confirmar o novo email se alterar o seu email de
-          registo.
         #original_hash: 8a91e53
         pending_avatar: >-
           Após carregar um avatar novo, terá que aguardar a sua aprovação pela
@@ -1277,6 +1273,7 @@ pt:
       approve: Aprovar
       #original_hash: 85de4b8
       unconfirmed_email: 'O endereço de email desta conta (%{email}) não foi confirmado.'
+      confirm_new_email: 'Será necessário confirmar o novo email se alterar o seu email de registo.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Está pendente a confirmação do novo email (%{email}) para esta conta.'
       #original_hash: 0340b0b

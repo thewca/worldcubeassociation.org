@@ -584,8 +584,6 @@ ja:
           氏名を「ローマ字名姓 (漢字名)」の形で記入してください。ローマ字名・漢字名ともにご記入ください
           (ある場合)。スペースなど、記入方法にご注意ください。例: 中島 悠 の場合: <strong>Yu Nakajima
           (中島悠)</strong>
-        #original_hash: c03b949
-        email: メールアドレスを変更する場合は、確認メールによる認証が必要となります。
         #original_hash: 8a91e53
         pending_avatar: プロフィール画像の変更は、 WCA 競技結果チームの承認後に反映されます。
         #original_hash: da39a3e
@@ -1141,6 +1139,7 @@ ja:
       approve: 承認
       #original_hash: 85de4b8
       unconfirmed_email: 'メールアドレス (%{email}) が確認できません。'
+      confirm_new_email: 'メールアドレスを変更する場合は、確認メールによる認証が必要となります。'
       #original_hash: 8a770cf
       pending_mail_confirmation: '新しいメールアドレス %{email} の確認を待っています'
       #original_hash: 0340b0b

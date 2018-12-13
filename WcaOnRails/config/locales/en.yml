@@ -385,7 +385,7 @@ en:
       user:
         dob: "Enter your date of birth in the format YYYY-MM-DD."
         name: "Enter your full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>.<br/>Middle names (either full or as initials) are optional."
-        email: "Changing your email will require confirming the new email."
+        email: ""
         pending_avatar: "After uploading a new avatar, you will have to wait for the WCA Results Team to approve it."
         country_iso2: ""
         current_password: ""
@@ -718,6 +718,7 @@ en:
       profile: "Profile"
       approve: "Approve"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
+      confirm_new_email: "Changing your email will require confirming the new email."
       pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
       pending_claim_confirmation_html: "This account is waiting for %{delegate} to confirm their claimed WCA ID %{wca_id}."

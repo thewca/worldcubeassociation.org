@@ -579,8 +579,6 @@ ko:
         name: >-
           성명을 입력하세요. 예를 들어 <strong>Ilkyoo Choi</strong>. <strong>I
           Choi</strong>의 형식은 안됩니다. <br/>
-        #original_hash: c03b949
-        email: '이메일 변경시, 새로운 이메일을 검증 받으셔야 합니다.'
         #original_hash: 8a91e53
         pending_avatar: '새로운 아바타를 업로드 할 시, WCA 결과팀이 승인하기를 기다리셔야 합니다.'
         #original_hash: da39a3e
@@ -1029,6 +1027,7 @@ ko:
       approve: 승인
       #original_hash: 85de4b8
       unconfirmed_email: '이 계정의 이메일 주소 (%{email})이 검증되지 않았습니다.'
+      confirm_new_email: '이메일 변경시, 새로운 이메일을 검증 받으셔야 합니다.'
       #original_hash: 8a770cf
       pending_mail_confirmation: '이 계정은 새로운 이메일 주소 %{email}의 검증을 기다리고 있습니다.'
       #original_hash: 0340b0b

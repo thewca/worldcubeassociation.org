@@ -581,8 +581,6 @@ zh-TW:
         name: >-
           請正確地輸入您的全名，例如<strong>Stefan Pochmann</strong>。禁止隨意輸入，例如<strong>s
           pochman</strong>。<br/>中間名（全名或字首縮寫）則可有可無。
-        #original_hash: c03b949
-        email: 您必須確認新的電子郵件才能更改您的電子郵件。
         #original_hash: 8a91e53
         pending_avatar: 上傳新的頭像之後，必須等待WCA成績組的審核。
         #original_hash: da39a3e
@@ -1133,6 +1131,7 @@ zh-TW:
       approve: 確認
       #original_hash: 85de4b8
       unconfirmed_email: '這個帳號的電子郵件(%{email})尚未確認。'
+      confirm_new_email: '您必須確認新的電子郵件才能更改您的電子郵件。'
       #original_hash: 8a770cf
       pending_mail_confirmation: '這個帳號的新電子郵件%{email}正在等待審核。'
       #original_hash: 0340b0b

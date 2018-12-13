@@ -600,8 +600,6 @@ id:
           Pochmann</strong>. Tidak sembarangan seperti <strong>s
           pochman</strong>.<br/>Nama tengah (lengkap atau disingkat) tidak
           diharuskan.
-        #original_hash: c03b949
-        email: Mengganti email Anda akan membutuhkan konfirmasi untuk email baru.
         #original_hash: 8a91e53
         pending_avatar: >-
           Setelah mengunggah avatar baru, Anda harus menunggu WCA Results Team
@@ -1276,6 +1274,7 @@ id:
       approve: Setujui
       #original_hash: 85de4b8
       unconfirmed_email: 'Alamat email akun ini (%{email}) belum terkonfirmasi.'
+      confirm_new_email: 'Mengganti email Anda akan membutuhkan konfirmasi untuk email baru.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Akun ini menunggu konfirmasi alamat email baru %{email}.'
       #original_hash: 0340b0b
