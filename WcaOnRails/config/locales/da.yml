@@ -606,8 +606,6 @@ da:
           Skriv dit fulde navn korrekt, for eksempel <strong>Stefan
           Pochmann</strong>. Ikke sjusket som <strong>s pochman</strong>.
           <br/>Mellem navne (enten fulde eller som initialer) er valgfrie.
-        #original_hash: c03b949
-        email: At skifte din email kræver at du bekræfter den nye email.
         #original_hash: 8a91e53
         pending_avatar: >-
           Efter at du har uploaded en ny avatar, bliver du nød til at vente på
@@ -1274,6 +1272,7 @@ da:
       approve: Godkende
       #original_hash: 85de4b8
       unconfirmed_email: 'Denne kontos email adresse (%{email}) er ikke bekræftet.'
+      confirm_new_email: 'At skifte din email kræver at du bekræfter den nye email.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Denne konto venter bekræftelse af den nye email adresse %{email}.'
       #original_hash: 0340b0b

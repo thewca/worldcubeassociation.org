@@ -607,10 +607,6 @@ de:
           Pochmann</strong>. Nicht unachtsam wie etwa <strong>s
           pochman</strong>. Zweite Vornamen (entweder ganz oder als Initial)
           sind optional.
-        #original_hash: c03b949
-        email: >-
-          Wenn Du deine E-Mail änderst, musst Du die neue Adresse erneut
-          bestätigen
         #original_hash: 8a91e53
         pending_avatar: >-
           Nachdem Du ein neues Profilbild hochgeladen hast, muss dieses erst vom
@@ -1281,6 +1277,7 @@ de:
       approve: Zustimmen
       #original_hash: 85de4b8
       unconfirmed_email: 'Die E-Mail-Adresse dieses Benutzerkontos (%{email}) ist nicht bestätigt.'
+      confirm_new_email: 'Wenn Du deine E-Mail änderst, musst Du die neue Adresse erneut bestätigen'
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
         Die Bestätigung der neuen E-Mail-Adresse %{email} für diesen Acccount

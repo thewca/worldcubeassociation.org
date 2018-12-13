@@ -534,8 +534,6 @@ it:
           Vigani Poli</strong>. Non inserire abbreviazioni come <strong> l
           vigani</strong>.<br/>I secondi nomi (sia completi o anche solo le
           iniziali) sono opzionali.
-        #original_hash: c03b949
-        email: Per cambiare la tua email è necessario confermare il nuovo indirizzo.
         #original_hash: 8a91e53
         pending_avatar: >-
           Dopo aver caricato il nuovo avatar, dovrai aspettare che il WCA
@@ -1075,6 +1073,7 @@ it:
       approve: Approva
       #original_hash: 85de4b8
       unconfirmed_email: 'L''indirizzo email (%{email}) di questo account non è confermato.'
+      confirm_new_email: 'Per cambiare la tua email è necessario confermare il nuovo indirizzo.'
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
         Questo account è in attesa di conferma del nuovo indirizzo email

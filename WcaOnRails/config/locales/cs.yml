@@ -612,8 +612,6 @@ cs:
           Trávníček</strong>. Ne nedbale jako <strong>b
           travnicek</strong>.<br/>Prostřední jména (celá i iniciály) jsou
           nepovinná.
-        #original_hash: c03b949
-        email: Pro změnu e-mailu je nutné nový e-mail potvrdit.
         #original_hash: 8a91e53
         pending_avatar: >-
           Po nahrání nového avataru budete muset počkat na schválení od WCA
@@ -673,7 +671,7 @@ cs:
         #original_hash: bb470cc
         information: >-
           Důležité informace, které by soutěžící měli vědět. Zobrazí se na
-          hlavní stránce soutěže. <br/>Prosíme, napište to <b>v angličtině</b> 
+          hlavní stránce soutěže. <br/>Prosíme, napište to <b>v angličtině</b>
           a v jakémkoli dalším jazyce, kterým vaši soutěžící mluví.
         #original_hash: b4d020f
         delegate_ids: Delegáti WCA pro tuto soutěž.
@@ -1278,6 +1276,7 @@ cs:
       approve: Schválit
       #original_hash: 85de4b8
       unconfirmed_email: 'E-mailová adresa tohoto účtu (%{email}) není potvrzena.'
+      confirm_new_email: Pro změnu e-mailu je nutné nový e-mail potvrdit.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Tento účet čeká na potvrzení nové e-mailové adresy %{email}.'
       #original_hash: 0340b0b
