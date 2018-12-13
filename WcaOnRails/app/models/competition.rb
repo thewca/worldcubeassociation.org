@@ -921,7 +921,7 @@ class Competition < ApplicationRecord
       users.wca_id select_wca_id,
       registrations.accepted_at,
       registrations.deleted_at,
-      Countries.name select_country,
+      Countries.id select_country_id,
       registration_competition_events.competition_event_id,
       RanksAverage.worldRank average_rank,
       ifnull(RanksAverage.best, 0) average_best,
