@@ -159,6 +159,13 @@ class StaticPagesController < ApplicationController
   def logo
   end
 
+  def teams_committees
+    @officers = [["2003BURT01", "Executive Director"],
+                ["2007PERG01", "Chair"],
+                ["2011FIOL01", "Secretary"]]
+    @officers += Team.wfc.current_members.select { |member| member.team_leader }.map { |leader| [leader.user.wca_id, "Treasurer"]}
+  end
+
   def wca_workbook_assistant
   end
 

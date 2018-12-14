@@ -22,6 +22,12 @@
   }
 }
 
+.badge.officer-badge {
+  @extend .badge, .team-leader-badge;
+  background-color: black;
+  color: white;
+}
+
 .badge.team-email {
   background-color: #e64503;
   a {
