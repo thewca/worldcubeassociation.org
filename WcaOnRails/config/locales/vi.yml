@@ -1051,6 +1051,8 @@ vi:
       organizations: Các tổ chức trong khu vực
       #original_hash: d790b40
       faq: Những câu hỏi thường gặp
+      #original_hash: 02617c0
+      tutorial: Hướng dẫn tham gia giải đấu
       #original_hash: a34b69f
       contact: Thông tin liên lạc
       #original_hash: 4fa8cc8
@@ -1352,6 +1354,8 @@ vi:
       unique: 'đã được sử dụng bởi "%{used_name}" với %{used_email}'
       #original_hash: 26f70ed
       dob_past: phải trong quá khứ
+      #original_hash: b320913
+      dob_recent: phải từ hai tuổi trở lên
       #original_hash: b64df45
       already_represented_country: >-
         Không thể thay đổi quốc tịch thành một quốc gia mà người này đã từng đại
@@ -1366,6 +1370,11 @@ vi:
       senior_has_delegate: không thể hạ cấp Senior Delegate bằng cấp dưới
       #original_hash: 48653a9
       already_have_id: 'không thể xác nhận ID WCA vì bạn đã có ID WCA %{wca_id}'
+      #original_hash: 8bd15ba
+      too_many_wca_id_claims_html: >-
+        Đã có quá nhiều xác nhận không chính xác đối với ID WCA này. Vui lòng
+        liên hệ <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>Đội ngũ Kết quả WCA</a> để giải quyết.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Chúng tôi không có ngày sinh của ID WCA này trong dữ liệu. Vui lòng liên
@@ -2701,6 +2710,8 @@ vi:
   documents:
     #original_hash: 687c828
     title: Tài liệu
+    #original_hash: 1b537dc
+    determination_letter: Đơn xác nhận IRS
     #original_hash: 9855f80
     bylaws: Điều luật
     #original_hash: fdceb44
