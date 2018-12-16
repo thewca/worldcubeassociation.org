@@ -17,6 +17,24 @@
   The Delegate has confirmed the competition's events page and the competition's schedule page reflect what happened during the competition.
 </p>
 
+<p>
+  <% if @results_submission.results_validator.total_warnings == 0 %>
+    The competition results had no warning.
+  <% else %>
+    Please find below the list of warnings for the competition's results:
+    <% @results_submission.results_validator.warnings.each do |type, warnings| %>
+      <% if warnings.any? %>
+        <br/>Warnings detected in <%= type %>
+        <ul>
+          <% warnings.each do |warning| %>
+            <li><%= warning %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+  <% end %>
+</p>
+
 <p>Here's a message from <%= @submitter_user.name %>:</p>
 
 <blockquote><%= md @results_submission.message %></blockquote>
