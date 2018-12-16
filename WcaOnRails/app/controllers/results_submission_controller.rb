@@ -48,7 +48,8 @@ class ResultsSubmissionController < ApplicationController
       @competition.update!(results_submitted_at: Time.now)
       redirect_to competition_path(@competition)
     else
-      @results_validator = CompetitionResultsValidator.new(@competition.id)
+      flash[:danger] = "Submitted results contain errors."
+      @results_validator = @results_submission.results_validator
       render :new
     end
   end
