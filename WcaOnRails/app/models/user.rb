@@ -427,6 +427,10 @@ class User < ApplicationRecord
     software_team?
   end
 
+  def any_kind_of_staff?
+    any_kind_of_delegate? || current_team_members.count > 0
+  end
+
   def any_kind_of_delegate?
     delegate_status.present?
   end

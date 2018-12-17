@@ -15,11 +15,11 @@
         <li>If the correct orientation of the picture is clear (portrait or landscape) the picture must be submitted in that correct orientation.</li>
         <li>The avatar must not contain offensive content (e.g. offensive gestures).</li>
       </ul>
-      <h4>Additional guidelines for Delegates</h4>
+      <h4>Additional guidelines for Staff and External Staff</h4>
       <ul>
-        <li>The avatar must be of the Delegate's current self, depicted in the same fashion as how they would appear at a competition as the WCA Delegate.</li>
-        <li>The avatar must be framed, cropped, angled, and lit, so that any competitor or spectator at a competition can use it to unambiguously identify the Delegate at a competition venue.</li>
-        <li>The thumbnail of the avatar is only a section of the avatar, and it will be used to represent the full avatar. The thumbnail must be adjusted, so the Delegate can be recognized from it alone, and it must contain their face.</li>
+        <li>The avatar must be of the Staff Member's current self, depicted in the same fashion as how they would appear at a competition.</li>
+        <li>The avatar must be framed, cropped, angled, and lit, so that any competitor or spectator at a competition can use it to unambiguously identify them at a competition venue.</li>
+        <li>The thumbnail of the avatar is only a section of the avatar, and it will be used to represent the full avatar. The thumbnail must be adjusted, so the Staff Member can be recognized from it alone, and it must contain their face.</li>
       </ul>
     </div>
 
@@ -29,8 +29,8 @@
           <div class="panel-heading">
             <h3 class="panel-title">
               <%= link_to user.name, edit_user_path(user) %>
-              <% if user.any_kind_of_delegate? %>
-                (<strong>Delegate</strong> - see guidelines above)
+              <% if user.any_kind_of_staff? %>
+                (<strong>Staff/External Staff</strong> - see guidelines above)
               <% end %>
             </h3>
           </div>
