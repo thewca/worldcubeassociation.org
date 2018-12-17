@@ -512,7 +512,7 @@ GEM
       sprockets (>= 3.0.0)
     strip_attributes (1.8.0)
       activemodel (>= 3.0, < 6.0)
-    stripe (4.2.0)
+    stripe (4.3.0)
       faraday (~> 0.13)
       net-http-persistent (~> 3.0)
     term-ansicolor (1.6.0)
