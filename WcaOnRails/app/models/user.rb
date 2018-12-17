@@ -406,9 +406,22 @@ class User < ApplicationRecord
   def quality_assurance_committee?
     team_member?(Team.wqac)
   end
-
   def competition_announcement_team?
     team_member?(Team.wcat)
+  end
+
+  # See https://www.worldcubeassociation.org/documents/motions/02.2018.1%20-%20Definitions.pdf
+  def internal_staff?
+    full_delegate? || senior_delegate? || leader_of_any_team? || board_member?
+  end
+
+  # See https://www.worldcubeassociation.org/documents/motions/02.2018.1%20-%20Definitions.pdf
+  def external_staff?
+    candidate_delegate? || member_of_any_team?
+  end
+
+  def any_kind_of_staff?
+    internal_staff? || external_staff?
   end
 
   def team_member?(team)
@@ -419,6 +432,14 @@ class User < ApplicationRecord
     self.current_team_members.select { |t| t.team_id == team.id && t.team_leader }.count > 0
   end
 
+  def member_of_any_team?
+    !self.current_team_members.empty?
+  end
+
+  def leader_of_any_team?
+    !self.teams_where_is_leader.empty?
+  end
+
   def teams_where_is_leader
     self.current_team_members.select(&:team_leader).map(&:team).uniq
   end
@@ -427,12 +448,12 @@ class User < ApplicationRecord
     software_team?
   end
 
-  def any_kind_of_staff?
-    any_kind_of_delegate? || current_team_members.count > 0
-  end
-
   def any_kind_of_delegate?
     delegate_status.present?
+  end
+
+  def full_delegate?
+    delegate_status == "delegate"
   end
 
   def senior_delegate?
