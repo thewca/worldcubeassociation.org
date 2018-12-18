@@ -117,7 +117,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # reports@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "reports@worldcubeassociation.org",
-      a_collection_containing_exactly(candidate_delegate, candidate_delegate.senior_delegate, delegate.senior_delegate, senior_delegate, wdc_leader, wdc_member, wec_member, wqac_member, wrc_member),
+      a_collection_containing_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", candidate_delegate, wdc_leader, wdc_member, wec_member),
     )
 
     SyncMailingListsJob.perform_now
