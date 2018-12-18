@@ -47,6 +47,15 @@ module MarkdownHelper
     end
   end
 
+  class RawTextRenderer < Redcarpet::Render::HTML
+    def link(link, title, content)
+      content
+    end
+    def paragraph(text)
+      text
+    end
+  end
+
   def md(content, target_blank: false, toc: false)
     if content.nil?
       return ""
@@ -77,9 +86,8 @@ module MarkdownHelper
     output += Redcarpet::Markdown.new(WcaMarkdownRenderer.new(options), extensions).render(content).html_safe
     output
   end
-end
 
-def md_flatten(content, target_blank: false, toc: false)
-  fragment = Nokogiri::HTML(md(content, target_blank: target_blank, toc: toc))
-  fragment.text
+  def md_as_text(content)
+    Redcarpet::Markdown.new(RawTextRenderer.new(filter_html: true)).render(content)
+  end
 end

@@ -3,7 +3,7 @@
 <%= javascript_pack_tag 'show_schedule' %>
 <ul class="nav nav-pills nav-justified">
   <% competition.competition_venues.each_with_index do |venue, index| %>
-    <li class="<%= (index == 0) ? "active" : "" %>"><a href="#schedule-venue-<%= venue.id %>" data-toggle="pill"><%= md_flatten venue.name %></a></li>
+    <li class="<%= (index == 0) ? "active" : "" %>"><a href="#schedule-venue-<%= venue.id %>" data-toggle="pill"><%= md_as_text venue.name %></a></li>
   <% end %>
 </ul>
 <div class="tab-content" id="schedule-tab">
@@ -22,7 +22,7 @@
     </script>
     <div class="tab-pane <%= (index == 0) ? "active" : "" %>" id="schedule-venue-<%= venue.id %>" data-venue="<%= venue.id %>">
       <p>
-        <%= t("competitions.schedule.venue_information_html", venue_name: link_to_google_maps_place(md_flatten(venue.name), venue.latitude_degrees, venue.longitude_degrees)) %>
+        <%= t("competitions.schedule.venue_information_html", venue_name: link_to_google_maps_place(md_as_text(venue.name), venue.latitude_degrees, venue.longitude_degrees)) %>
         <br />
         <%= t("competitions.schedule.timezone_message", timezone: venue.timezone_id) %>
         <% if competition.competition_venues.size > 1 %>
