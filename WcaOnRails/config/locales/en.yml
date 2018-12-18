@@ -1435,7 +1435,7 @@ en:
       title: "Structure"
       board:
         name: "WCA Board of Directors"
-        info_html: "The World Cube Association is led by the <strong>WCA Board</strong>, consisting of the following members:"
+        description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams and Committees."
       chair:
         name: "WCA Chair"
       executive_director:
@@ -1444,7 +1444,7 @@ en:
         name: "WCA Secretary"
       vice_chair:
         name: "WCA Vice-Chair"
-      committees: "The following committees are responsible for the operational activities of the WCA:"
+      committees: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. When there are committee openings, information about how to apply is posted on the front page."
       #context: WDC
       wdc:
         name: "WCA Disciplinary Committee"
