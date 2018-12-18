@@ -2715,7 +2715,7 @@ pt:
         #original_hash: abd2828
         name: Conselho da WCA
         #original_hash: d855b50
-        info_html: >-
+        description: >-
           A World Cube Association é liderada pelo <strong>Conselho da
           WCA</strong>, que é formado pelos seguintes membros:
       chair:

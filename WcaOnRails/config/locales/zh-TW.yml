@@ -2319,7 +2319,7 @@ zh-TW:
         #original_hash: abd2828
         name: WCA董事會
         #original_hash: d855b50
-        info_html: 世界方塊協會由<strong>WCA董事會</strong>領導，包括以下成員：
+        description: 世界方塊協會由WCA董事會領導，包括以下成員：
       chair:
         #original_hash: de34439
         name: WCA主席

@@ -2718,7 +2718,7 @@ ru:
         #original_hash: abd2828
         name: Совет Директоров WCA
         #original_hash: d855b50
-        info_html: >-
+        description: >-
           Всемирную Ассоциацию Кубика (WCA) возглавляет <strong>Руководство
           WCA</strong>, состоящее из следующих участников:
       chair:

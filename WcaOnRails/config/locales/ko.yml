@@ -1966,7 +1966,7 @@ ko:
         #original_hash: abd2828
         name: WCA 대표단
         #original_hash: d855b50
-        info_html: '세계 큐브 협회는 다음 <strong>WCA 대표단</strong>이 이끈다:'
+        description: '세계 큐브 협회는 다음 <strong>WCA 대표단</strong>이 이끈다:'
       #original_hash: b0c72a9
       committees: 'WCA의 활동은 다음 부서들이 책임진다:'
       wdc:
