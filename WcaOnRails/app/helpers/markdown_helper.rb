@@ -51,6 +51,7 @@ module MarkdownHelper
     def link(link, title, content)
       content
     end
+
     def paragraph(text)
       text
     end
