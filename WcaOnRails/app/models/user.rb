@@ -725,13 +725,22 @@ class User < ApplicationRecord
     fields
   end
 
+  def self.clear_receive_delegate_reports_if_not_staff
+    User.where(receive_delegate_reports: true).reject(&:any_kind_of_staff?).map { |u| u.update(receive_delegate_reports: false) }
+  end
+
+  # This method is only called in sync_mailing_lists_job.rb, right after clear_receive_delegate_reports_if_not_staff.
+  # If used without calling clear_receive_delegate_reports_if_not_staff it might return non-current Staff members.
+  # The reason why clear_receive_delegate_reports_if_not_staff is needed is because there's no automatic code that
+  # runs once a user is no longer a team member, we just schedule their end date.
   def self.delegate_reports_receivers
     candidate_delegates = User.candidate_delegates
-    senior_delegates = User.senior_delegates
-    wqac_members = Team.wqac.current_members.includes(:user).map(&:user)
-    wrc_members = Team.wrc.current_members.includes(:user).map(&:user)
     other_staff = User.where(receive_delegate_reports: true)
-    (candidate_delegates + senior_delegates + wqac_members + wrc_members + other_staff.select(&:any_kind_of_staff?)).uniq
+    (%w(
+      seniors@worldcubeassociation.org
+      quality@worldcubeassociation.org
+      regulations@worldcubeassociation.org
+    ) + candidate_delegates + other_staff).uniq
   end
 
   def notify_of_results_posted(competition)
