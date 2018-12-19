@@ -18,7 +18,7 @@ RSpec.describe RegistrationsController do
 
   context "signed in as organizer" do
     let(:organizer) { FactoryBot.create(:user) }
-    let(:competition) { FactoryBot.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let(:competition) { FactoryBot.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333)), competitor_limit: 5) }
     let(:zzyzx_user) { FactoryBot.create :user, name: "Zzyzx" }
     let(:registration) { FactoryBot.create(:registration, competition: competition, user: zzyzx_user) }
 
@@ -144,6 +144,31 @@ RSpec.describe RegistrationsController do
       expect(registration.reload.accepted?).to be true
       expect(registration2.reload.accepted?).to be true
       expect(accepted_registration.reload.accepted?).to be true
+    end
+
+    it "cannot accept registrations over the competitor limit" do
+      accepted_registration1 = FactoryBot.create(:registration, :accepted, competition: competition)
+      accepted_registration2 = FactoryBot.create(:registration, :accepted, competition: competition)
+      accepted_registration3 = FactoryBot.create(:registration, :accepted, competition: competition)
+      new_registration1 = FactoryBot.create(:registration, competition: competition)
+      new_registration2 = FactoryBot.create(:registration, competition: competition)
+      new_registration3 = FactoryBot.create(:registration, competition: competition)
+
+      expect(RegistrationsMailer).not_to receive(:notify_registrant_of_accepted_registration).with(new_registration1).and_call_original
+      expect(RegistrationsMailer).not_to receive(:notify_registrant_of_accepted_registration).with(new_registration2).and_call_original
+      expect(RegistrationsMailer).not_to receive(:notify_registrant_of_accepted_registration).with(new_registration3).and_call_original
+
+      expect do
+        patch :do_actions_for_selected, params: {
+          competition_id: competition.id,
+          registrations_action: "accept-selected",
+          selected_registrations: ["registration-#{new_registration1.id}", "registration-#{new_registration2.id}", "registration-#{new_registration3.id}"],
+        }, xhr: true
+      end.to change { enqueued_jobs.size }.by(0)
+      expect(new_registration1.reload.accepted?).to be false
+      expect(new_registration2.reload.accepted?).to be false
+      expect(new_registration3.reload.accepted?).to be false
+      expect(flash[:danger]).to eq "The number of accepted registrations cannot exceed the competitor limit of 5"
     end
 
     describe "with views" do

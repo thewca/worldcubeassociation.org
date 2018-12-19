@@ -824,6 +824,7 @@ en:
       failed: "Could not update registration"
       deleted: "Successfully deleted your registration for %{comp}"
       registered: "Successfully registered!"
+      competitor_limit_exceeded: "The number of accepted registrations cannot exceed the competitor limit of %{limit}"
     edit_registration:
       #context: the title for a specific registration to a competition
       title: "%{person} for %{comp}"

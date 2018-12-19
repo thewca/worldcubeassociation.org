@@ -82,13 +82,9 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  private def selected_registrations_ids
-    params[:selected_registrations].map { |r| r.split('-')[1] }
-  end
-
   def export
     @competition = competition_from_params
-    @registrations = @competition.registrations.includes(:user, :events).find(selected_registrations_ids)
+    @registrations = @competition.registrations.includes(:user, :events).find(helpers.selected_registrations_ids)
 
     respond_to do |format|
       format.csv do
@@ -101,17 +97,21 @@ class RegistrationsController < ApplicationController
   def do_actions_for_selected
     @show_events = params[:show_events] == "true"
     @competition = competition_from_params
-    registrations = @competition.registrations.find(selected_registrations_ids)
+    registrations = @competition.registrations.find(helpers.selected_registrations_ids)
 
     case params[:registrations_action]
     when "accept-selected"
-      registrations.each do |registration|
-        if !registration.accepted?
-          registration.update!(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
-          RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
+      if !helpers.selected_would_exceed_competitor_limit?
+        registrations.each do |registration|
+          if !registration.accepted?
+            registration.update!(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
+            RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
+          end
         end
+        flash.now[:success] = I18n.t('registrations.flash.accepted_and_mailed', count: registrations.length)
+      else
+        flash.now[:danger] = I18n.t('registrations.flash.competitor_limit_exceeded', limit: @competition.competitor_limit.to_s)
       end
-      flash.now[:success] = I18n.t('registrations.flash.accepted_and_mailed', count: registrations.length)
     when "reject-selected"
       registrations.each do |registration|
         if !registration.pending?
