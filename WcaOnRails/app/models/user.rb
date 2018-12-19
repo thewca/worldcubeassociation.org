@@ -406,6 +406,7 @@ class User < ApplicationRecord
   def quality_assurance_committee?
     team_member?(Team.wqac)
   end
+
   def competition_announcement_team?
     team_member?(Team.wcat)
   end
