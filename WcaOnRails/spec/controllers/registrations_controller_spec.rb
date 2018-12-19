@@ -147,9 +147,9 @@ RSpec.describe RegistrationsController do
     end
 
     it "cannot accept registrations over the competitor limit" do
-      accepted_registration1 = FactoryBot.create(:registration, :accepted, competition: competition)
-      accepted_registration2 = FactoryBot.create(:registration, :accepted, competition: competition)
-      accepted_registration3 = FactoryBot.create(:registration, :accepted, competition: competition)
+      FactoryBot.create(:registration, :accepted, competition: competition)
+      FactoryBot.create(:registration, :accepted, competition: competition)
+      FactoryBot.create(:registration, :accepted, competition: competition)
       new_registration1 = FactoryBot.create(:registration, competition: competition)
       new_registration2 = FactoryBot.create(:registration, competition: competition)
       new_registration3 = FactoryBot.create(:registration, competition: competition)

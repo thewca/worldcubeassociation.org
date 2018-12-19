@@ -42,13 +42,13 @@ module RegistrationsHelper
     end
   end
 
-  def selected_registrations_ids()
+  def selected_registrations_ids
     params[:selected_registrations].map { |r| r.split('-')[1] }
   end
 
-  def selected_would_exceed_competitor_limit?()
-    accepted = @competition.registrations.select{ |registration| registration.accepted? }.count
-    to_be_accepted = @competition.registrations.find(selected_registrations_ids).select { |registration| !registration.accepted?}.count
+  def selected_would_exceed_competitor_limit?
+    accepted = @competition.registrations.select { |registration| registration.accepted? }.count
+    to_be_accepted = @competition.registrations.find(selected_registrations_ids).select { |registration| !registration.accepted? }.count
     accepted + to_be_accepted > @competition.competitor_limit
   end
 end
