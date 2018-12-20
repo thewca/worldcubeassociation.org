@@ -1097,6 +1097,12 @@ en:
       submit_delete: "Are you sure you want to delete this competition? There is no going back."
       coordinates: "Coordinates"
       add_championship: "Add Championship"
+      championship_types:
+        world: "World Championship"
+        continental: "Continental Championship: %{continent}"
+        national: "National Championship: %{country}"
+        greater_china: "Greater China Championship"
+        generic: "Championship: %{type}"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"

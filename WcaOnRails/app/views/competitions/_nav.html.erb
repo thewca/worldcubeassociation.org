@@ -169,7 +169,14 @@
 
     </div>
     <div id="competition-data">
-      <h3><%= @competition.name %></h3>
+      <h3>
+        <% if @competition.championships.any? %>
+          <span class="championship-trophy" data-toggle="tooltip" data-placement="bottom" title="<%= @competition.championships.sort.map { |championship| championship.name }.join(", ") %>">
+            <%= icon('trophy') %>
+          </span>
+        <% end %>
+        <%= @competition.name %>
+      </h3>
       <hr />
 
       <% if @competition.user_should_post_delegate_report?(current_user) %>
