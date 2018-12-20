@@ -22,7 +22,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       expect(mail.subject).to eq("#{delegate.name} just confirmed #{competition.name}")
       expect(mail.body.encoded).to match("#{competition.name} is confirmed")
-      expect(mail.body.encoded).to match("This competition is marked as National Championship for Poland and World Championship")
+      expect(mail.body.encoded).to match("This competition is marked as World Championship and National Championship: Poland")
       expect(mail.body.encoded).to match("There is a competitor limit of 100 because \"The hall only fits 100 competitors.\"")
       expect(mail.body.encoded).to match(admin_edit_competition_url(competition))
     end

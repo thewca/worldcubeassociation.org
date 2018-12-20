@@ -34,13 +34,13 @@ RSpec.describe Championship do
       expect(championship.name).to eq "World Championship"
 
       championship = Championship.new(championship_type: "_Europe")
-      expect(championship.name).to eq "Continental Championship for Europe"
+      expect(championship.name).to eq "Continental Championship: Europe"
 
       championship = Championship.new(championship_type: "greater_china")
       expect(championship.name).to eq "Greater China Championship"
 
       championship = Championship.new(championship_type: "ES")
-      expect(championship.name).to eq "National Championship for Spain"
+      expect(championship.name).to eq "National Championship: Spain"
     end
   end
 end
