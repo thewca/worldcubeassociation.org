@@ -1396,6 +1396,8 @@ pl:
       unique: "jest już\_używane przez \"%{used_name}\" o adresie email %{used_email}"
       #original_hash: 26f70ed
       dob_past: musi być w przeszłości
+      #original_hash: b320913
+      dob_recent: musi mieć conajmniej dwa lata
       #original_hash: b64df45
       already_represented_country: >-
         Nie można zmienić kraju na taki, który dana osoba wcześniej
