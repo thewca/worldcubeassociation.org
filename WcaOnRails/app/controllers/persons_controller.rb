@@ -6,8 +6,9 @@ class PersonsController < ApplicationController
       format.html
       format.js do
         persons = Person.in_region(params[:region]).order(:name)
-        params[:search]&.split&.select { |part| part.length >= 4 }.each do |part|
-          persons = persons.where("MATCH(rails_persons.name) AGAINST (:name_match IN BOOLEAN MODE) OR wca_id LIKE :wca_id_part OR ", name_match: "#{part}*", wca_id_part: "#{part}%")
+        # We're only looking at queries longer than 4 characters to avoid blocked queries because of how fulltext is currently set up. See https://github.com/thewca/worldcubeassociation.org/issues/2234
+        params[:search]&.split&.select { |part| part.length >= 4 }&.each do |part|
+          persons = persons.where("MATCH(rails_persons.name) AGAINST (:name_match IN BOOLEAN MODE) OR wca_id LIKE :wca_id_part", name_match: "#{part}*", wca_id_part: "#{part}%")
         end
 
         render json: {
