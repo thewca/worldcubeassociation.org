@@ -6,8 +6,8 @@ class PersonsController < ApplicationController
       format.html
       format.js do
         persons = Person.in_region(params[:region]).order(:name)
-        params[:search]&.split&.each do |part|
-          persons = persons.where("MATCH(rails_persons.name) AGAINST (:name_match IN BOOLEAN MODE) OR wca_id LIKE :wca_id_part", name_match: "#{part}*", wca_id_part: "#{part}%")
+        params[:search]&.split&.select { |part| part.length >= 4 }.each do |part|
+          persons = persons.where("MATCH(rails_persons.name) AGAINST (:name_match IN BOOLEAN MODE) OR wca_id LIKE :wca_id_part OR ", name_match: "#{part}*", wca_id_part: "#{part}%")
         end
 
         render json: {
