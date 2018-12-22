@@ -202,10 +202,7 @@ class User < ApplicationRecord
     unconfirmed_person.increment!(:incorrect_wca_id_claim_count, 1) if self.was_incorrect_wca_id_claim
   end
 
-  scope :not_dummy_account, -> { where('wca_id = "" OR encrypted_password != "" OR email NOT LIKE "%@worldcubeassociation.org"') }
-  def dummy_account?
-    wca_id.present? && encrypted_password.blank? && email.casecmp("#{wca_id}@worldcubeassociation.org") == 0
-  end
+  scope :not_dummy_account, -> { where(dummy_account: false) }
 
   scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
   scope :delegates, -> { where.not(delegate_status: nil) }
@@ -240,7 +237,7 @@ class User < ApplicationRecord
   before_save :remove_dummy_account_and_copy_name_when_wca_id_changed
   def remove_dummy_account_and_copy_name_when_wca_id_changed
     if wca_id_change && wca_id.present?
-      dummy_user = User.where(wca_id: wca_id).find(&:dummy_account?)
+      dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
       if dummy_user
         _mounter(:avatar).uploader.override_column_value = dummy_user.read_attribute :avatar
         dummy_user.destroy!
@@ -927,5 +924,10 @@ class User < ApplicationRecord
   def clean_up_passwords
     self.dob = nil
     super
+  end
+
+  # Overrides https://github.com/plataformatec/devise/blob/8266e8557622c978e6927a635d62e245bf54f239/lib/devise/models/validatable.rb#L64-L66
+  def email_required?
+    !dummy_account?
   end
 end

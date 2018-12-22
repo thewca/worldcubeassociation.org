@@ -1165,6 +1165,7 @@ CREATE TABLE `users` (
   `preferred_locale` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `competition_notifications_enabled` tinyint(1) DEFAULT NULL,
   `receive_delegate_reports` tinyint(1) NOT NULL DEFAULT '0',
+  `dummy_account` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1422,4 +1423,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20181020004209'),
 ('20181022031135'),
 ('20181208145408'),
-('20181209171137');
+('20181209171137'),
+('20181222224850');
