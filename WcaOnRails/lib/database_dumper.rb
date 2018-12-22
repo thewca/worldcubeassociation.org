@@ -591,6 +591,7 @@ module DatabaseDumper
           updated_at
           wca_id
           receive_delegate_reports
+          dummy_account
         ),
         db_default: %w(
           confirmation_sent_at

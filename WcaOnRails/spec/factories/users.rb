@@ -144,9 +144,7 @@ FactoryBot.define do
 
     factory :dummy_user, traits: [:wca_id] do
       encrypted_password { "" }
-      after(:create) do |user|
-        user.update_column(:email, "#{user.wca_id}@worldcubeassociation.org")
-      end
+      dummy_account { true }
     end
   end
 end
