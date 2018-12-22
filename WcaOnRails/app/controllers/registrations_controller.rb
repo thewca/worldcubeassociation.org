@@ -103,21 +103,85 @@ class RegistrationsController < ApplicationController
   end
 
   def do_import
-    @competition = competition_from_params
+    competition = competition_from_params
     file = params[:registrations_import][:registrations_file]
-    required_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"] + @competition.events.map(&:id)
+    required_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"] + competition.events.map(&:id)
     # Ensure the CSV file includes all required columns.
     headers = CSV.read(file.path).first.compact.map(&:downcase)
     missing_headers = required_columns - headers
     if missing_headers.any?
       flash[:danger] = "Missing columns: #{missing_headers.to_sentence}."
-      redirect_to competition_registrations_import_url(@competition) and return
+      redirect_to competition_registrations_import_url(competition) and return
     end
     registrations = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
       .map(&:to_hash)
-      .reject { |competitor| competitor.values.all? &:nil? }
-    puts registrations.inspect
-    redirect_to competition_registrations_import_url(@competition)
+      .reject { |registration| registration.values.all? &:nil? }
+      .filter { |registration| registration[:status] == "a" }
+    # The actual importing steps
+    ActiveRecord::Base.transaction do
+      registrations.each do |registration|
+        user = user_for_registration!(registration)
+        registration_competition_events_attributes = competition.events.map do |event|
+          registration[event.id] == "1" ? { competition_event_id: event.id } : nil
+        end.compact
+        competition.registrations.create!(
+          user_id: user.id,
+          accepted_at: Time.now,
+          accepted_by: current_user.id,
+          registration_competition_events_attributes: registration_competition_events_attributes,
+        )
+      end
+    end
+    redirect_to competition_registrations_import_url(competition)
+  end
+
+  private def user_for_registration!(registration)
+    if registration[:wca_id].present?
+      user = User.find_by(wca_id: registration[:wca_id])
+      if user
+        if user.dummy_account?
+          email_user = User.find_by(email: registration[:email])
+          if email_user
+            if email_user.wca_id.present?
+              raise "There is already a user with email #{registration[:email]}"
+                  + ", but it has WCA ID of #{email_user.wca_id} instead of #{registration[:wca_id]}."
+            else
+              email_user.update!(wca_id: registration[:wca_id]) # User hooks will also remove the dummy user account.
+            end
+          else
+            # Promote user to a locked account, how to mark it's locked?
+            user.update!(email: registration[:email])
+          end
+        else
+          user # Use this account
+        end
+      else
+        create_locked_account!(registration) # Create a locked account with confirmed WCA ID
+      end
+    else
+      email_user = User.find_by(email: registration[:email])
+      if email_user
+        email_user # Use this account
+      else
+        create_locked_account!(registration) # Create a locked account without WCA ID
+      end
+    end
+  end
+
+  private def create_locked_account!(registration)
+    User.new(
+      name: registration[:name],
+      email: registration[:email],
+      wca_id: registration[:wca_id],
+      country_iso2: Country.c_find(registration[:country]).iso2,
+      gender: registration[:gender],
+      dob: registration[:birth_date],
+      encrypted_password: "",
+    ).tap do |user|
+      user.define_singleton_method(:password_required?) { false }
+      user.skip_confirmation!
+      user.save!
+    end
   end
 
   def do_actions_for_selected
