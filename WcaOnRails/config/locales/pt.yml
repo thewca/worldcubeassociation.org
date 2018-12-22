@@ -1371,6 +1371,8 @@ pt:
       unique: 'já é utilizado por "%{used_name}" com %{used_email}'
       #original_hash: 26f70ed
       dob_past: deve ser no passado
+      #original_hash: b320913
+      dob_recent: tem de ter pelo menos dois anos de idade
       #original_hash: b64df45
       already_represented_country: >-
         Não é possível modificar o país para um que a pessoa já representou no
