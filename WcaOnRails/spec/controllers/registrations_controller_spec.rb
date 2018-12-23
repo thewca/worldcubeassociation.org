@@ -391,23 +391,6 @@ RSpec.describe RegistrationsController do
       expect(response).to redirect_to competition_psych_sheet_event_url(competition.id, "333")
     end
 
-    it "redirects to root if competition is not using WCA registration" do
-      competition.use_wca_registration = false
-      competition.save!
-
-      get :psych_sheet, params: { competition_id: competition.id }
-      expect(response).to redirect_to competition_path(competition)
-      expect(flash[:danger]).to match "not using WCA registration"
-
-      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
-      expect(response).to redirect_to competition_path(competition)
-      expect(flash[:danger]).to match "not using WCA registration"
-
-      get :index, params: { competition_id: competition.id }
-      expect(response).to redirect_to competition_path(competition)
-      expect(flash[:danger]).to match "not using WCA registration"
-    end
-
     it "redirects psych sheet to highest ranked event if no 333" do
       competition.events = [Event.find("222"), Event.find("444")]
       competition.save!

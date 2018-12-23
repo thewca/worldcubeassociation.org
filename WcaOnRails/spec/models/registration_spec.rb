@@ -21,12 +21,6 @@ RSpec.describe Registration do
     expect(registration.errors.messages[:competition]).to eq ["Competition not found"]
   end
 
-  it "cannot create a registration for a competition without wca registration" do
-    competition = FactoryBot.create(:competition, use_wca_registration: false)
-    reg = FactoryBot.build :registration, competition: competition
-    expect(reg).to be_invalid_with_errors(competition: ["Competition registration is closed"])
-  end
-
   it "allows no user on update" do
     registration.user_id = nil
     expect(registration).to be_valid
