@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "csv"
 
 class RegistrationsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register]
@@ -118,19 +119,18 @@ class RegistrationsController < ApplicationController
     headers = CSV.read(file.path).first.compact.map(&:downcase)
     missing_headers = required_columns - headers
     if missing_headers.any?
-      flash[:danger] = "Missing columns: #{missing_headers.to_sentence}."
-      redirect_to competition_registrations_import_url(competition) and return
+      raise "Missing columns: #{missing_headers.to_sentence}."
     end
     registrations = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
       .map(&:to_hash)
       .reject { |registration| registration.values.all? &:nil? }
-      .filter { |registration| registration[:status] == "a" }
+      .select { |registration| registration[:status] == "a" }
     # The actual importing steps
     ActiveRecord::Base.transaction do
       registrations.each do |registration|
         user = user_for_registration!(registration)
-        registration_competition_events_attributes = competition.events.map do |event|
-          registration[event.id] == "1" ? { competition_event_id: event.id } : nil
+        registration_competition_events_attributes = competition.competition_events.map do |competition_event|
+          registration[competition_event.event_id.to_sym] == "1" ? { competition_event_id: competition_event.id } : nil
         end.compact
         competition.registrations.create!(
           user_id: user.id,
@@ -140,6 +140,9 @@ class RegistrationsController < ApplicationController
         )
       end
     end
+    redirect_to competition_registrations_import_url(competition)
+  rescue StandardError => error
+    flash[:danger] = error.to_s
     redirect_to competition_registrations_import_url(competition)
   end
 
@@ -155,10 +158,13 @@ class RegistrationsController < ApplicationController
                   + ", but it has WCA ID of #{email_user.wca_id} instead of #{registration[:wca_id]}."
             else
               email_user.update!(wca_id: registration[:wca_id]) # User hooks will also remove the dummy user account.
+              email_user
             end
           else
             # Promote user to a locked account, how to mark it's locked?
+            user.skip_reconfirmation!
             user.update!(email: registration[:email])
+            user
           end
         else
           user # Use this account

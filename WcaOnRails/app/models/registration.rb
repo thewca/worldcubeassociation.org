@@ -20,17 +20,9 @@ class Registration < ApplicationRecord
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
 
   validates :user, presence: true, on: [:create]
+  validates :competition, presence: { message: I18n.t('registrations.errors.comp_not_found') }
 
   validates_numericality_of :guests, greater_than_or_equal_to: 0
-
-  validate :competition_must_use_wca_registration
-  private def competition_must_use_wca_registration
-    if !competition
-      errors.add(:competition, I18n.t('registrations.errors.comp_not_found'))
-    elsif !competition.use_wca_registration?
-      errors.add(:competition, I18n.t('registrations.errors.registration_closed'))
-    end
-  end
 
   validate :registration_cannot_be_deleted_and_accepted_simultaneously
   private def registration_cannot_be_deleted_and_accepted_simultaneously
