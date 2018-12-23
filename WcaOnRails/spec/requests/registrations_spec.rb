@@ -23,9 +23,9 @@ RSpec.describe "registrations" do
     end
 
     it "renders an error when there are missing columns" do
-      file = csv_file([
+      file = csv_file [
         ["Status", "Name", "WCA ID", "Birth date", "Gender", "Email", "444"],
-      ])
+      ]
       post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
       follow_redirect!
       expect(response.body).to include "Missing columns: country and 333."
@@ -41,10 +41,10 @@ RSpec.describe "registrations" do
               context "the user already has WCA ID" do
                 it "renders an error" do
                   user = FactoryBot.create(:user, :wca_id)
-                  file = csv_file([
+                  file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                     ["a", "Sherlock Holmes", "United Kingdom", dummy_user.wca_id, "2000-01-01", "m", user.email, "1", "0"],
-                  ])
+                  ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
                   }.to_not change { competition.registrations.count }
@@ -56,10 +56,10 @@ RSpec.describe "registrations" do
               context "the user doesn't have WCA ID" do
                 it "merges the user with the dummy one and registers him" do
                   user = FactoryBot.create(:user)
-                  file = csv_file([
+                  file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                     ["a", "Sherlock Holmes", "United Kingdom", dummy_user.wca_id, "2000-01-01", "m", user.email, "1", "0"],
-                  ])
+                  ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
                   }.to change { User.count }.by(-1)
@@ -74,10 +74,10 @@ RSpec.describe "registrations" do
 
             context "no user exist with registrant's email" do
               it "promotes the dummy user to a locked one and registers him" do
-                file = csv_file([
+                file = csv_file [
                   ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                   ["a", "Sherlock Holmes", "United Kingdom", dummy_user.wca_id, "2000-01-01", "m", "sherlock@example.com", "1", "0"],
-                ])
+                ]
                 expect {
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
                 }.to_not change { User.count }
@@ -94,10 +94,10 @@ RSpec.describe "registrations" do
           context "the user is not a dummy account" do
             it "registers this user" do
               user = FactoryBot.create(:user, :wca_id)
-              file = csv_file([
+              file = csv_file [
                 ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                 ["a", "Sherlock Holmes", "United Kingdom", user.wca_id, "2000-01-01", "m", "sherlock@example.com", "1", "0"],
-              ])
+              ]
               expect {
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
               }.to_not change { User.count }
@@ -111,10 +111,10 @@ RSpec.describe "registrations" do
           it "creates a locked user with this WCA ID and registers him" do
             expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
             person = FactoryBot.create(:person)
-            file = csv_file([
+            file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
               ["a", "Sherlock Holmes", "United Kingdom", person.wca_id, "2000-01-01", "m", "sherlock@example.com", "1", "0"],
-            ])
+            ]
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to change { User.count }.by(1)
@@ -129,10 +129,10 @@ RSpec.describe "registrations" do
         context "user exists with registrant's email" do
           it "registers this user" do
             user = FactoryBot.create(:user)
-            file = csv_file([
+            file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
               ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
-            ])
+            ]
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to_not change { User.count }
@@ -144,10 +144,10 @@ RSpec.describe "registrations" do
         context "no user exist with registrant's email" do
           it "creates a locked user without WCA ID and registers him" do
             expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
-            file = csv_file([
+            file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
               ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
-            ])
+            ]
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to change { User.count }.by(1)
@@ -162,7 +162,7 @@ RSpec.describe "registrations" do
 end
 
 def csv_file(lines)
-  temp_file = Tempfile.new(["registrations", ".csv"])
+  temp_file = Tempfile.new ["registrations", ".csv"]
   CSV.open(temp_file.path, "w") do |csv|
     lines.each { |line| csv << line }
   end
