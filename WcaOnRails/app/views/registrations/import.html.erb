@@ -1,8 +1,8 @@
-<% provide(:title, "Import registrations") %>
+<% provide(:title, t('registrations.registrations_import_form.title', comp: @competition.name)) %>
 
 <%= render layout: "nav" do %>
   <%= simple_form_for :registrations_import, url: competition_registrations_do_import_path(@competition) do |f| %>
-    <%= f.input :registrations_file, as: :file, input_html: { accept: 'text/csv' } %>
-    <%= f.submit "Import", class: "btn btn-primary" %>
+    <%= f.input :registrations_file, as: :file, input_html: { accept: 'text/csv' }, hint: "", label: t('registrations.registrations_import_form.registrations_file') %>
+    <%= f.submit t('registrations.registrations_import_form.import'), class: "btn btn-primary" %>
   <% end %>
 <% end %>
