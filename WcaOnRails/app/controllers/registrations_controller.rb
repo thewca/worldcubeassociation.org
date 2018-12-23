@@ -157,8 +157,8 @@ class RegistrationsController < ApplicationController
           email_user = User.find_by(email: registration[:email])
           if email_user
             if email_user.wca_id.present?
-              raise "There is already a user with email #{registration[:email]}"
-                  + ", but it has WCA ID of #{email_user.wca_id} instead of #{registration[:wca_id]}."
+              raise "There is already a user with email #{registration[:email]}"\
+                    ", but it has WCA ID of #{email_user.wca_id} instead of #{registration[:wca_id]}."
             else
               email_user.update!(wca_id: registration[:wca_id]) # User hooks will also remove the dummy user account.
               email_user

@@ -70,7 +70,7 @@ class RegistrationsMailer < ApplicationMailer
     @competition = competition
     mail(
       to: user.email,
-      reply_to: competition.managers.map(&:email),
+      reply_to: competition.organizers_or_delegates.map(&:email),
       subject: "Unlock your new account on the WCA website",
     )
   end
