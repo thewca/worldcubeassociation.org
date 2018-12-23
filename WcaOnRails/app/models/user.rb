@@ -204,6 +204,10 @@ class User < ApplicationRecord
 
   scope :not_dummy_account, -> { where(dummy_account: false) }
 
+  def locked_account?
+    !dummy_account? && encrypted_password == ""
+  end
+
   scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
   scope :delegates, -> { where.not(delegate_status: nil) }
   scope :senior_delegates, -> { where(delegate_status: "senior_delegate") }
