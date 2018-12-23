@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "csv"
 
 class RegistrationsController < ApplicationController
@@ -122,9 +123,9 @@ class RegistrationsController < ApplicationController
       raise "Missing columns: #{missing_headers.to_sentence}."
     end
     registrations = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
-      .map(&:to_hash)
-      .reject { |registration| registration.values.all? &:nil? }
-      .select { |registration| registration[:status] == "a" }
+                       .map(&:to_hash)
+                       .reject { |registration| registration.values.all?(&:nil?) }
+                       .select { |registration| registration[:status] == "a" }
     new_locked_users = []
     ActiveRecord::Base.transaction do
       registrations.each do |registration|
@@ -164,29 +165,24 @@ class RegistrationsController < ApplicationController
               email_user
             end
           else
-            # Promote user to a locked account, how to mark it's locked?
             user.skip_reconfirmation!
-            user.update!(email: registration[:email])
+            user.update!(email: registration[:email]) # TODO: add dummy_account: false once #3722 gets merged.
             user
           end
         else
-          user # Use this account
+          user # Use this account.
         end
       else
-        # Create a locked account with confirmed WCA ID
+        # Create a locked account with confirmed WCA ID.
         create_locked_account!(registration).tap do |locked_user|
           new_locked_users << locked_user
         end
       end
     else
       email_user = User.find_by(email: registration[:email])
-      if email_user
-        email_user # Use this account
-      else
-        # Create a locked account without WCA ID
-        create_locked_account!(registration).tap do |locked_user|
-          new_locked_users << locked_user
-        end
+      # Use the user if exists, otherwise create a locked account without WCA ID.
+      email_user || create_locked_account!(registration).tap do |locked_user|
+        new_locked_users << locked_user
       end
     end
   end
