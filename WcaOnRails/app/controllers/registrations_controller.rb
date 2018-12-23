@@ -125,10 +125,10 @@ class RegistrationsController < ApplicationController
       .map(&:to_hash)
       .reject { |registration| registration.values.all? &:nil? }
       .select { |registration| registration[:status] == "a" }
-    # The actual importing steps
+    new_locked_users = []
     ActiveRecord::Base.transaction do
       registrations.each do |registration|
-        user = user_for_registration!(registration)
+        user = user_for_registration!(registration, new_locked_users)
         registration_competition_events_attributes = competition.competition_events.map do |competition_event|
           registration[competition_event.event_id.to_sym] == "1" ? { competition_event_id: competition_event.id } : nil
         end.compact
@@ -140,13 +140,16 @@ class RegistrationsController < ApplicationController
         )
       end
     end
+    new_locked_users.each do |user|
+      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, competition).deliver_later
+    end
     redirect_to competition_registrations_import_url(competition)
   rescue StandardError => error
     flash[:danger] = error.to_s
     redirect_to competition_registrations_import_url(competition)
   end
 
-  private def user_for_registration!(registration)
+  private def user_for_registration!(registration, new_locked_users)
     if registration[:wca_id].present?
       user = User.find_by(wca_id: registration[:wca_id])
       if user
@@ -170,14 +173,20 @@ class RegistrationsController < ApplicationController
           user # Use this account
         end
       else
-        create_locked_account!(registration) # Create a locked account with confirmed WCA ID
+        # Create a locked account with confirmed WCA ID
+        create_locked_account!(registration).tap do |locked_user|
+          new_locked_users << locked_user
+        end
       end
     else
       email_user = User.find_by(email: registration[:email])
       if email_user
         email_user # Use this account
       else
-        create_locked_account!(registration) # Create a locked account without WCA ID
+        # Create a locked account without WCA ID
+        create_locked_account!(registration).tap do |locked_user|
+          new_locked_users << locked_user
+        end
       end
     end
   end

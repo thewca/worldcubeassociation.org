@@ -64,4 +64,14 @@ class RegistrationsMailer < ApplicationMailer
                    to: registration.email,
                    reply_to: registration.competition.organizers_or_delegates.map(&:email)
   end
+
+  def notify_registrant_of_locked_account_creation(user, competition)
+    @user = user
+    @competition = competition
+    mail(
+      to: user.email,
+      reply_to: competition.managers.map(&:email),
+      subject: "Unlock your new account on the WCA website",
+    )
+  end
 end
