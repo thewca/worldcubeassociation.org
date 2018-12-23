@@ -31,4 +31,8 @@ class RegistrationsMailerPreview < ActionMailer::Preview
     registration = Registration.accepted.where.not(user_id: nil).first
     RegistrationsMailer.notify_registrant_of_deleted_registration(registration)
   end
+
+  def notify_registrant_of_locked_account_creation
+    RegistrationsMailer.notify_registrant_of_locked_account_creation(User.first, Competition.first)
+  end
 end
