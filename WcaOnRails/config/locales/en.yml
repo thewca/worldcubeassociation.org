@@ -793,7 +793,6 @@ en:
       need_dob: "Need a birthdate"
       need_country: "Need a country"
       comp_not_found: "Competition not found"
-      registration_closed: "Competition registration is closed"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
     registration_info_people:
