@@ -16,7 +16,7 @@ class RegistrationsController < ApplicationController
     competition
   end
 
-  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import]
+  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :index, :psych_sheet, :psych_sheet_event]
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
       flash[:danger] = I18n.t('registrations.flash.not_using_wca')
