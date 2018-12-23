@@ -23,6 +23,14 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  before_action :redirect_unless_can_import, only: [:import, :do_import]
+  private def redirect_unless_can_import
+    competition = competition_from_params
+    if competition.use_wca_registration? || competition.registrations.any?
+      redirect_to competition_path(competition_from_params)
+    end
+  end
+
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_selected, :edit, :refund_payment]
 
   def edit_registrations
