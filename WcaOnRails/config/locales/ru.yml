@@ -328,6 +328,8 @@ ru:
         phone_number: Телефонный номер
         #original_hash: 7044004
         notes: Заметки
+        #original_hash: 730db33
+        receive_delegate_reports: Хочу получать отчёты Делегатов о WCA соревнованиях по email
         #original_hash: 57eaf24
         user_preferred_events: Предпочитаемые дисциплины
       competition:
@@ -653,6 +655,11 @@ ru:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
+        #original_hash: 8c266ea
+        receive_delegate_reports: >-
+          Если вы Кандидат в Делегаты, Старший Делегат или член WRC или WQAC, вы
+          уже получаете отчёты по умолчанию. Внимание: изменение вступит в силу
+          в течение часа.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1077,6 +1084,8 @@ ru:
       organizations: Региональные организации
       #original_hash: d790b40
       faq: Часто Задаваемые Вопросы
+      #original_hash: 02617c0
+      tutorial: Руководство для участников
       #original_hash: a34b69f
       contact: Контактная информация
       #original_hash: 4fa8cc8
@@ -1373,6 +1382,8 @@ ru:
       unique: 'уже используется "%{used_name}" с %{used_email}'
       #original_hash: 26f70ed
       dob_past: должен быть в прошлом
+      #original_hash: b320913
+      dob_recent: возраст должен быть минимум 2 года
       #original_hash: b64df45
       already_represented_country: 'Невозможно поменять страну, которую этот участник уже представлял ранее.'
       #original_hash: b589014
@@ -1389,6 +1400,12 @@ ru:
       already_have_id: >-
         невозможно затребовать WCA ID, потому что у вас уже есть WCA ID
         %{wca_id}
+      #original_hash: 8bd15ba
+      too_many_wca_id_claims_html: >-
+        Слишком много неправильных попыток получить этот WCA ID. Пожалуйста,
+        свяжитесь с <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>Командой Результатов WCA (WRT)</a>, чтобы решить эту
+        проблему (пишите по-английски).
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         День рождения для этого WCA ID нам неизвестен. Пожалуйста, свяжитесь с
