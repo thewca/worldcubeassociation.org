@@ -166,7 +166,7 @@ class RegistrationsController < ApplicationController
             end
           else
             user.skip_reconfirmation!
-            user.update!(email: registration[:email]) # TODO: add dummy_account: false once #3722 gets merged.
+            user.update!(dummy_account: false, email: registration[:email])
             user
           end
         else
