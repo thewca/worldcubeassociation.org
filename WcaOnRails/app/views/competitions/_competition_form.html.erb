@@ -1,338 +1,337 @@
-<% # TODO (jeremy): Fix all indentation once people have taken a look at this. %>
-  <% provide(:include_gmaps, true) %>
-  <% provide(:include_markdown_editor, true) %>
-  <% provide(:include_auto_numeric, true) %>
-  <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).confirmed? : false %>
-  <%= horizontal_simple_form_for @competition, html: { class: 'are-you-sure no-submit-on-enter', id: 'competition-form' } do |f| %>
-    <% if @competition.persisted? %>
-      <% if @competition_admin_view %>
-        <%= hidden_field_tag :competition_admin_view, "1" %>
+<% provide(:include_gmaps, true) %>
+<% provide(:include_markdown_editor, true) %>
+<% provide(:include_auto_numeric, true) %>
+<% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).confirmed? : false %>
+<%= horizontal_simple_form_for @competition, html: { class: 'are-you-sure no-submit-on-enter', id: 'competition-form' } do |f| %>
+  <% if @competition.persisted? %>
+    <% if @competition_admin_view %>
+      <%= hidden_field_tag :competition_admin_view, "1" %>
 
-        <%= f.input :confirmed, as: :boolean %>
-        <%= f.input :showAtAll %>
-      <% else %>
-        <% mail_to_wcat = mail_to Team.wcat.email, t(".wcat"), target: "_blank" %>
-        <%= if is_actually_confirmed && @competition.showAtAll?
-              alert :success, t('.public_and_locked_html')
-            elsif is_actually_confirmed && !@competition.showAtAll?
-              alert :warning, t('.confirmed_but_not_visible_html', contact: mail_to_wcat)
-            elsif !is_actually_confirmed && @competition.showAtAll?
-              alert :danger, t('.is_visible')
-            elsif !is_actually_confirmed && !@competition.showAtAll?
-              alert :warning, t('.pending_confirmation_html', contact: mail_to_wcat)
-            end %>
+      <%= f.input :confirmed, as: :boolean %>
+      <%= f.input :showAtAll %>
+    <% else %>
+      <% mail_to_wcat = mail_to Team.wcat.email, t(".wcat"), target: "_blank" %>
+      <%= if is_actually_confirmed && @competition.showAtAll?
+            alert :success, t('.public_and_locked_html')
+          elsif is_actually_confirmed && !@competition.showAtAll?
+            alert :warning, t('.confirmed_but_not_visible_html', contact: mail_to_wcat)
+          elsif !is_actually_confirmed && @competition.showAtAll?
+            alert :danger, t('.is_visible')
+          elsif !is_actually_confirmed && !@competition.showAtAll?
+            alert :warning, t('.pending_confirmation_html', contact: mail_to_wcat)
+          end %>
+        <% end %>
       <% end %>
-    <% end %>
 
-    <% can_edit_competition = (@competition_admin_view || !is_actually_confirmed) %>
-    <% disable_form = !can_edit_competition %>
+      <% can_edit_competition = (@competition_admin_view || !is_actually_confirmed) %>
+      <% disable_form = !can_edit_competition %>
 
-    <fieldset <%= disable_form && "disabled" %>>
+      <fieldset <%= disable_form && "disabled" %>>
 
-      <% if @competition.persisted? %>
-        <%= f.input :id %>
-      <% end %>
-      <%= f.input :name, wrapper_html: { class: @competition.warnings_for(current_user)[:name] ? "has-warning" : "" } %>
-      <% if @competition.persisted? %>
-        <%= f.input :cellName %>
-      <% end %>
-      <%= f.input :name_reason, hint: t('.name_reason_html') %>
+        <% if @competition.persisted? %>
+          <%= f.input :id %>
+        <% end %>
+        <%= f.input :name, wrapper_html: { class: @competition.warnings_for(current_user)[:name] ? "has-warning" : "" } %>
+        <% if @competition.persisted? %>
+          <%= f.input :cellName %>
+        <% end %>
+        <%= f.input :name_reason, hint: t('.name_reason_html') %>
 
-      <%= f.input :countryId, collection: Country.all_sorted_by(I18n.locale), label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
-      <%= f.input :cityName %>
-      <%= f.input :venue, hint: t('.venue_html', md: t('.supports_md_html')) %>
-      <%= f.input :venueDetails, hint: t('.venue_details_html', md: t('.supports_md_html')) %>
-      <%= f.input :venueAddress %>
+        <%= f.input :countryId, collection: Country.all_sorted_by(I18n.locale), label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
+        <%= f.input :cityName %>
+        <%= f.input :venue, hint: t('.venue_html', md: t('.supports_md_html')) %>
+        <%= f.input :venueDetails, hint: t('.venue_details_html', md: t('.supports_md_html')) %>
+        <%= f.input :venueAddress %>
 
-      <div id="venue-map-wrapper">
-        <input type="text" id="googleMapsLocationInput" class="form-control" data-ays-ignore="true">
-        <div class="map"></div>
-      </div>
-
-      <div class="form-group <%= !@competition.errors[:latitude].empty? || !@competition.errors[:longitude].empty? ? "has-error" : "" %>">
-        <label class="integer optional col-sm-2 control-label" for="competition_latitude">
-          <%= t '.coordinates' %>
-        </label>
-        <div class="col-sm-9">
-          <div class="input-group">
-            <span class="input-group-addon">Latitude</span>
-            <input type="text" data-ays-ignore-float-close="true" class="input-sm form-control" name="competition[latitude_degrees]" id="competition_latitude" value="<%= @competition.latitude_degrees %>" />
-            <span class="input-group-addon">Longitude</span>
-            <input type="text" data-ays-ignore-float-close="true" class="input-sm form-control" name="competition[longitude_degrees]" id="competition_longitude" value="<%= @competition.longitude_degrees %>" />
-          </div>
-          <span class="help-block"><%= f.error :latitude %></span>
-          <span class="help-block"><%= f.error :longitude %></span>
+        <div id="venue-map-wrapper">
+          <input type="text" id="googleMapsLocationInput" class="form-control" data-ays-ignore="true">
+          <div class="map"></div>
         </div>
-      </div>
 
-      <script>
-        (function() {
-          var form_disabled = <%= disable_form.to_json %>;
-          var $map = $('#venue-map-wrapper .map');
-          wca.addGoogleMapsLoadedListener(function() {
-            function roundToMicrodegrees($el) {
-              // To prevent are you sure? from firing even when nothing has changed,
-              // explicitly round coordinates to an integer number of microdegrees.
-              var rounded = Math.trunc(parseFloat($el.val())*1e9) / 1e9;
-              $el.val(rounded);
-            }
-            $map.locationpicker({
-              draggable: !form_disabled,
-              zoom: 8,
-              location: {
-                latitude: <%= @competition.latitude_degrees || 0 %>,
-                longitude: <%= @competition.longitude_degrees || 0 %>,
-              },
-              radius: 0,
-              scrollwheel: false,
-              inputBinding: {
-                latitudeInput: $('#competition_latitude'),
-                longitudeInput: $('#competition_longitude'),
-                locationNameInput: $('#googleMapsLocationInput')
-              },
-              enableAutocomplete: true,
-              oninitialized: function(component) {
-                roundToMicrodegrees($('#competition_latitude'));
-                roundToMicrodegrees($('#competition_longitude'));
-              },
-              onchanged: function(currentLocation, radius, isMarkerDropped) {
-                setTimeout(function() {
-                  // The locationpicker library calls 'onchanged' before actually updating the input fields.
-                  // setTimeout lets us wait until the inputs have actually changed.
+        <div class="form-group <%= !@competition.errors[:latitude].empty? || !@competition.errors[:longitude].empty? ? "has-error" : "" %>">
+          <label class="integer optional col-sm-2 control-label" for="competition_latitude">
+            <%= t '.coordinates' %>
+          </label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <span class="input-group-addon">Latitude</span>
+              <input type="text" data-ays-ignore-float-close="true" class="input-sm form-control" name="competition[latitude_degrees]" id="competition_latitude" value="<%= @competition.latitude_degrees %>" />
+              <span class="input-group-addon">Longitude</span>
+              <input type="text" data-ays-ignore-float-close="true" class="input-sm form-control" name="competition[longitude_degrees]" id="competition_longitude" value="<%= @competition.longitude_degrees %>" />
+            </div>
+            <span class="help-block"><%= f.error :latitude %></span>
+            <span class="help-block"><%= f.error :longitude %></span>
+          </div>
+        </div>
+
+        <script>
+          (function() {
+            var form_disabled = <%= disable_form.to_json %>;
+            var $map = $('#venue-map-wrapper .map');
+            wca.addGoogleMapsLoadedListener(function() {
+              function roundToMicrodegrees($el) {
+                // To prevent are you sure? from firing even when nothing has changed,
+                // explicitly round coordinates to an integer number of microdegrees.
+                var rounded = Math.trunc(parseFloat($el.val())*1e9) / 1e9;
+                $el.val(rounded);
+              }
+              $map.locationpicker({
+                draggable: !form_disabled,
+                zoom: 8,
+                location: {
+                  latitude: <%= @competition.latitude_degrees || 0 %>,
+                  longitude: <%= @competition.longitude_degrees || 0 %>,
+                },
+                radius: 0,
+                scrollwheel: false,
+                inputBinding: {
+                  latitudeInput: $('#competition_latitude'),
+                  longitudeInput: $('#competition_longitude'),
+                  locationNameInput: $('#googleMapsLocationInput')
+                },
+                enableAutocomplete: true,
+                oninitialized: function(component) {
                   roundToMicrodegrees($('#competition_latitude'));
                   roundToMicrodegrees($('#competition_longitude'));
-                  wca.fetchNearbyCompetitions();
-                }, 0);
-              },
-            });
-            var locationpicker = $map.data('locationpicker');
-
-            var dangerCircle = new google.maps.Circle({
-              map: locationpicker.map,
-              radius: <%= (Competition::NEARBY_DISTANCE_KM_DANGER * 1000).to_json.html_safe %>,
-              strokeColor: '#d9534f', // @brand-danger
-              fillOpacity: 0.0,
-              clickable: false,
-            });
-            dangerCircle.bindTo('center', locationpicker.marker, 'position');
-            var warningCircle = new google.maps.Circle({
-              map: locationpicker.map,
-              radius: <%= (Competition::NEARBY_DISTANCE_KM_WARNING * 1000).to_json.html_safe %>,
-              strokeColor: '#f0ad4e', // @brand-warning
-              fillOpacity: 0.0,
-              clickable: false,
-            });
-            warningCircle.bindTo('center', locationpicker.marker, 'position');
-          });
-
-          wca.fetchNearbyCompetitions = function() {
-            if(form_disabled) {
-              // The user isn't allowed to change the location of the
-              // competition, so there's no need to bother recomputing the nearby
-              // competitions.
-              return;
-            }
-            $("#nearby-competitions").addClass('loading');
-            var obj = $("#competition-form").serializeJSON();
-
-            wca.cancelPendingAjaxAndAjax('render_nearby_competitions', {
-              url: '<%= nearby_competitions_path %>',
-              data: {
-                <% if @competition_admin_view %>
-                  'competition_admin_view': true,
-                <% end %>
-                'competition[id]': obj['competition[id]'],
-                'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
-                'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
-                'competition[start_date]': obj['competition[start_date]'],
-                'competition[end_date]': obj['competition[end_date]'],
-              },
-              success: function(data) {
-                $('#nearby-competitions').html(data);
-              }
-            });
-            wca.cancelPendingAjaxAndAjax('render_time_until_competition', {
-              url: '<%= time_until_competition_path %>',
-              data: {
-                'competition[id]': obj['competition[id]'],
-                'competition[start_date]': obj['competition[start_date]'],
-                'competition[end_date]': obj['competition[end_date]'],
-              },
-              success: function(data) {
-                $('#time-until-competition').closest(".form-group").toggleClass('has-error', data.has_date_errors);
-                $('#time-until-competition').html(data.html);
-              }
-            });
-          };
-
-          wca._nearbyCompetitionById = {};
-          wca.setNearbyCompetitions = function(nearbyCompetitions) {
-            wca.addGoogleMapsLoadedListener(function() {
-              var desiredNearbyCompetitionById = _.keyBy(nearbyCompetitions, 'id');
-
-              var desiredIds = Object.keys(desiredNearbyCompetitionById);
-              var currentIds = Object.keys(wca._nearbyCompetitionById);
-              var idsToAdd = _.difference(desiredIds, currentIds);
-              var idsToRemove = _.difference(currentIds, desiredIds);
-
-              // First, remove all uneeded markers.
-              idsToRemove.forEach(function(id) {
-                wca._nearbyCompetitionById[id].marker.setMap(null);
-                delete wca._nearbyCompetitionById[id];
+                },
+                onchanged: function(currentLocation, radius, isMarkerDropped) {
+                  setTimeout(function() {
+                    // The locationpicker library calls 'onchanged' before actually updating the input fields.
+                    // setTimeout lets us wait until the inputs have actually changed.
+                    roundToMicrodegrees($('#competition_latitude'));
+                    roundToMicrodegrees($('#competition_longitude'));
+                    wca.fetchNearbyCompetitions();
+                  }, 0);
+                },
               });
-
               var locationpicker = $map.data('locationpicker');
-              // Now create all the new markers.
-              idsToAdd.forEach(function(id) {
-                var c = desiredNearbyCompetitionById[id];
-                c.marker = new google.maps.Marker({
-                  map: locationpicker.map,
-                  position: {
-                    lat: c.latitude_degrees,
-                    lng: c.longitude_degrees,
-                  },
-                  title: c.name,
-                });
-                wca._nearbyCompetitionById[id] = c;
+
+              var dangerCircle = new google.maps.Circle({
+                map: locationpicker.map,
+                radius: <%= (Competition::NEARBY_DISTANCE_KM_DANGER * 1000).to_json.html_safe %>,
+                strokeColor: '#d9534f', // @brand-danger
+                fillOpacity: 0.0,
+                clickable: false,
               });
+              dangerCircle.bindTo('center', locationpicker.marker, 'position');
+              var warningCircle = new google.maps.Circle({
+                map: locationpicker.map,
+                radius: <%= (Competition::NEARBY_DISTANCE_KM_WARNING * 1000).to_json.html_safe %>,
+                strokeColor: '#f0ad4e', // @brand-warning
+                fillOpacity: 0.0,
+                clickable: false,
+              });
+              warningCircle.bindTo('center', locationpicker.marker, 'position');
             });
 
-            $("#nearby-competitions").removeClass('loading');
-          };
-        })();
-      </script>
+            wca.fetchNearbyCompetitions = function() {
+              if(form_disabled) {
+                // The user isn't allowed to change the location of the
+                // competition, so there's no need to bother recomputing the nearby
+                // competitions.
+                return;
+              }
+              $("#nearby-competitions").addClass('loading');
+              var obj = $("#competition-form").serializeJSON();
 
-      <div class="form-group">
-         <div class="col-sm-offset-2 col-sm-9">
-          <div class="row datetimerange">
-            <%= f.input :start_date, as: :date_picker, wrapper: :ranged_datetime %>
-            <%= f.input :end_date, as: :date_picker, wrapper: :ranged_datetime %>
+              wca.cancelPendingAjaxAndAjax('render_nearby_competitions', {
+                url: '<%= nearby_competitions_path %>',
+                data: {
+                  <% if @competition_admin_view %>
+                    'competition_admin_view': true,
+                <% end %>
+                  'competition[id]': obj['competition[id]'],
+                  'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
+                  'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
+                  'competition[start_date]': obj['competition[start_date]'],
+                  'competition[end_date]': obj['competition[end_date]'],
+                },
+                success: function(data) {
+                  $('#nearby-competitions').html(data);
+                }
+              });
+              wca.cancelPendingAjaxAndAjax('render_time_until_competition', {
+                url: '<%= time_until_competition_path %>',
+                data: {
+                  'competition[id]': obj['competition[id]'],
+                  'competition[start_date]': obj['competition[start_date]'],
+                  'competition[end_date]': obj['competition[end_date]'],
+                },
+                success: function(data) {
+                  $('#time-until-competition').closest(".form-group").toggleClass('has-error', data.has_date_errors);
+                  $('#time-until-competition').html(data.html);
+                }
+              });
+            };
+
+            wca._nearbyCompetitionById = {};
+            wca.setNearbyCompetitions = function(nearbyCompetitions) {
+              wca.addGoogleMapsLoadedListener(function() {
+                var desiredNearbyCompetitionById = _.keyBy(nearbyCompetitions, 'id');
+
+                var desiredIds = Object.keys(desiredNearbyCompetitionById);
+                var currentIds = Object.keys(wca._nearbyCompetitionById);
+                var idsToAdd = _.difference(desiredIds, currentIds);
+                var idsToRemove = _.difference(currentIds, desiredIds);
+
+                // First, remove all uneeded markers.
+                idsToRemove.forEach(function(id) {
+                  wca._nearbyCompetitionById[id].marker.setMap(null);
+                  delete wca._nearbyCompetitionById[id];
+                });
+
+                var locationpicker = $map.data('locationpicker');
+                // Now create all the new markers.
+                idsToAdd.forEach(function(id) {
+                  var c = desiredNearbyCompetitionById[id];
+                  c.marker = new google.maps.Marker({
+                    map: locationpicker.map,
+                    position: {
+                      lat: c.latitude_degrees,
+                      lng: c.longitude_degrees,
+                    },
+                    title: c.name,
+                  });
+                  wca._nearbyCompetitionById[id] = c;
+                });
+              });
+
+              $("#nearby-competitions").removeClass('loading');
+            };
+          })();
+        </script>
+
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-9">
+            <div class="row datetimerange">
+              <%= f.input :start_date, as: :date_picker, wrapper: :ranged_datetime %>
+              <%= f.input :end_date, as: :date_picker, wrapper: :ranged_datetime %>
+            </div>
+            <span id="time-until-competition" class="help-block">
+              <%= render "time_until_competition" %>
+            </span>
           </div>
-          <span id="time-until-competition" class="help-block">
-            <%= render "time_until_competition" %>
-          </span>
         </div>
-      </div>
 
-      <script>
-        $(".datetimepicker").on("dp.change", function(e) {
-          wca.fetchNearbyCompetitions();
-        });
-      </script>
+        <script>
+          $(".datetimepicker").on("dp.change", function(e) {
+            wca.fetchNearbyCompetitions();
+          });
+        </script>
 
-      <div id="nearby-competitions">
-        <%= render "nearby_competitions" %>
-      </div>
-
-      <%= f.input :information, input_html: { class: "markdown-editor" } %>
-      <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
-      <%= f.input :organizer_ids, as: :user_ids %>
-      <%= f.input :contact, hint: t('.contact_html', md: t('.supports_md_html')) %>
-
-      <hr>
-      <%= f.input :generate_website %>
-      <%= f.input :external_website %>
-      <hr>
-
-      <div class="championships">
-        <%= f.simple_fields_for :championships, @competition.championships do |f2| %>
-          <%= render "championship_fields", f: f2 %>
-        <% end %>
-      </div>
-      <div class="row">
-        <div class="col-sm-offset-2 col-sm-9">
-          <%= link_to_add_association button_tag(icon("plus", t('.add_championship')), type: "button", class: "btn btn-default"), f, :championships,
-                                      data: { association_insertion_node: '.championships', association_insertion_method: 'append' } %>
+        <div id="nearby-competitions">
+          <%= render "nearby_competitions" %>
         </div>
-      </div>
-      <hr>
-      <%= f.input :use_wca_registration %>
 
-    <div class="wca-registration-options">
-      <% if @competition.can_receive_registration_emails?(current_user.id) %>
-        <%# Quick hack to fill receive_registration_emails with the correct value for the current_user %>
-        <% @competition.receive_registration_emails = @competition.receiving_registration_emails?(current_user.id) %>
-        <%= f.input :receive_registration_emails, as: :boolean %>
-      <% end %>
-    </div>
+        <%= f.input :information, input_html: { class: "markdown-editor" } %>
+        <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
+        <%= f.input :organizer_ids, as: :user_ids %>
+        <%= f.input :contact, hint: t('.contact_html', md: t('.supports_md_html')) %>
 
-      <div class="wca-registration-options">
-        <%= f.input :enable_donations %>
-        <%= f.input :guests_enabled, as: :radio_buttons, collection: [ :true, :false ] %>
-      </div>
+        <hr>
+        <%= f.input :generate_website %>
+        <%= f.input :external_website %>
+        <hr>
 
-      <%= f.input :guests_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
-
-      <div class="col-sm-offset-2 col-sm-9">
-        <div class="row datetimerange">
-          <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
-          <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
-        </div>
-      </div>
-
-      <%= f.input :competitor_limit_enabled, collection: [ :true, :false ] %>
-      <div class="wca-competitor-limit-options">
-        <%= f.input :competitor_limit %>
-        <%= f.input :competitor_limit_reason %>
-      </div>
-
-      <% disable_money_input = !@competition.can_edit_registration_fees? %>
-      <%= f.input :currency_code, collection: Money::Currency.table.values, label_method: lambda { |c| c[:name]  }, value_method: lambda { |c| c[:iso_code] }, disabled: disable_money_input  %>
-      <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input, currency_selector: "#competition_currency_code" %>
-
-      <%= f.input :refund_policy_percent %>
-      <%= f.input :refund_policy_limit_date, as: :datetime_picker %>
-
-      <%= f.input :on_the_spot_registration, collection: [ :true, :false ] %>
-      <div class="wca-on-the-spot-registration-options">
-        <%= f.input :on_the_spot_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
-      </div>
-
-      <%= f.input :extra_registration_requirements, input_html: { class: "markdown-editor" } %>
-
-      <hr>
-      <%= f.input :regulation_z1 %>
-      <div class="wca-regulation-z1-reason">
-        <%= f.input :regulation_z1_reason %>
-      </div>
-
-      <%= f.input :regulation_z3 %>
-      <div class="wca-regulation-z3-reason">
-        <%= f.input :regulation_z3_reason %>
-      </div>
-
-    </fieldset>
-
-    <hr>
-    <%= f.input :remarks, disabled: is_actually_confirmed, hint: t('simple_form.hints.competition.remarks_html', link: link_to("Article Z", "https://www.worldcubeassociation.org/regulations/#article-Z-optional", target: "_blank")) %>
-
-    <% if @competition.being_cloned_from&.tabs&.present? %>
-      <%= f.input :being_cloned_from_id, as: :hidden %>
-      <%= f.input :clone_tabs, as: :boolean %>
-    <% end %>
-
-    <hr>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <% if @competition.persisted? %>
-          <%= f.button :submit, t('.submit_update_value'), class: "btn-primary" %>
-        <% else %>
-          <%= f.button :submit, t('.submit_create_value'), class: "btn-primary" %>
-        <% end %>
-
-        <% if @competition.persisted? && !@competition_admin_view && !is_actually_confirmed && current_user.can_confirm_competition?(@competition) %>
-          <%= button_tag(type: 'submit', name: "commit", value: "Confirm", class: "btn btn-warning", data: { confirm: t('.submit_confirm') }) do %>
-            <%= t '.submit_confirm_value' %>
+        <div class="championships">
+          <%= f.simple_fields_for :championships, @competition.championships do |f2| %>
+            <%= render "championship_fields", f: f2 %>
           <% end %>
-        <% end %>
+        </div>
+        <div class="row">
+          <div class="col-sm-offset-2 col-sm-9">
+            <%= link_to_add_association button_tag(icon("plus", t('.add_championship')), type: "button", class: "btn btn-default"), f, :championships,
+              data: { association_insertion_node: '.championships', association_insertion_method: 'append' } %>
+          </div>
+        </div>
+        <hr>
+        <%= f.input :use_wca_registration %>
 
-        <% if @competition.persisted? %>
-          <% unless current_user.get_cannot_delete_competition_reason(@competition) %>
-            <%= button_tag(type: 'submit', name: "commit", value: "Delete", class: "btn btn-danger", data: { confirm: t('.submit_delete') }) do %>
-              <i class="glyphicon glyphicon-trash"></i> <%= t '.submit_delete_value' %>
+        <div class="wca-registration-options">
+          <% if @competition.can_receive_registration_emails?(current_user.id) %>
+            <%# Quick hack to fill receive_registration_emails with the correct value for the current_user %>
+            <% @competition.receive_registration_emails = @competition.receiving_registration_emails?(current_user.id) %>
+            <%= f.input :receive_registration_emails, as: :boolean %>
+          <% end %>
+        </div>
+
+        <div class="wca-registration-options">
+          <%= f.input :enable_donations %>
+          <%= f.input :guests_enabled, as: :radio_buttons, collection: [ :true, :false ] %>
+        </div>
+
+        <%= f.input :guests_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
+
+        <div class="col-sm-offset-2 col-sm-9">
+          <div class="row datetimerange">
+            <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
+            <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
+          </div>
+        </div>
+
+        <%= f.input :competitor_limit_enabled, collection: [ :true, :false ] %>
+        <div class="wca-competitor-limit-options">
+          <%= f.input :competitor_limit %>
+          <%= f.input :competitor_limit_reason %>
+        </div>
+
+        <% disable_money_input = !@competition.can_edit_registration_fees? %>
+        <%= f.input :currency_code, collection: Money::Currency.table.values, label_method: lambda { |c| c[:name]  }, value_method: lambda { |c| c[:iso_code] }, disabled: disable_money_input  %>
+        <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input, currency_selector: "#competition_currency_code" %>
+
+        <%= f.input :refund_policy_percent %>
+        <%= f.input :refund_policy_limit_date, as: :datetime_picker %>
+
+        <%= f.input :on_the_spot_registration, collection: [ :true, :false ] %>
+        <div class="wca-on-the-spot-registration-options">
+          <%= f.input :on_the_spot_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
+        </div>
+
+        <%= f.input :extra_registration_requirements, input_html: { class: "markdown-editor" } %>
+
+        <hr>
+        <%= f.input :regulation_z1 %>
+        <div class="wca-regulation-z1-reason">
+          <%= f.input :regulation_z1_reason %>
+        </div>
+
+        <%= f.input :regulation_z3 %>
+        <div class="wca-regulation-z3-reason">
+          <%= f.input :regulation_z3_reason %>
+        </div>
+
+      </fieldset>
+
+      <hr>
+      <%= f.input :remarks, disabled: is_actually_confirmed, hint: t('simple_form.hints.competition.remarks_html', link: link_to("Article Z", "https://www.worldcubeassociation.org/regulations/#article-Z-optional", target: "_blank")) %>
+
+      <% if @competition.being_cloned_from&.tabs&.present? %>
+        <%= f.input :being_cloned_from_id, as: :hidden %>
+        <%= f.input :clone_tabs, as: :boolean %>
+      <% end %>
+
+      <hr>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <% if @competition.persisted? %>
+            <%= f.button :submit, t('.submit_update_value'), class: "btn-primary" %>
+          <% else %>
+            <%= f.button :submit, t('.submit_create_value'), class: "btn-primary" %>
+          <% end %>
+
+          <% if @competition.persisted? && !@competition_admin_view && !is_actually_confirmed && current_user.can_confirm_competition?(@competition) %>
+            <%= button_tag(type: 'submit', name: "commit", value: "Confirm", class: "btn btn-warning", data: { confirm: t('.submit_confirm') }) do %>
+              <%= t '.submit_confirm_value' %>
+            <% end %>
+          <% end %>
+
+          <% if @competition.persisted? %>
+            <% unless current_user.get_cannot_delete_competition_reason(@competition) %>
+              <%= button_tag(type: 'submit', name: "commit", value: "Delete", class: "btn btn-danger", data: { confirm: t('.submit_delete') }) do %>
+                <i class="glyphicon glyphicon-trash"></i> <%= t '.submit_delete_value' %>
             <% end %>
           <% end %>
         <% end %>
+        </div>
       </div>
-    </div>
-  <% end %>
+    <% end %>
