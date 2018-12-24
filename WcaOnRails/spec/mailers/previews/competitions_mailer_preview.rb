@@ -40,11 +40,11 @@ class CompetitionsMailerPreview < ActionMailer::Preview
   end
 
   def submit_results_nag
-    CompetitionsMailer.submit_results_nag(Competition.last)
+    CompetitionsMailer.submit_results_nag(Competition.find("Euro2018"))
   end
 
   def submit_report_nag
-    CompetitionsMailer.submit_report_nag(Competition.last)
+    CompetitionsMailer.submit_report_nag(Competition.find("Euro2018"))
   end
 
   def notify_of_delegate_report_submission

@@ -16,5 +16,15 @@
 </p>
 
 <p>
-  Regards, The WCA Results Team.
+  @Senior Delegate: You can view the <%= "history".pluralize(@competition.delegates.count) %> of these <%= "Delegate".pluralize(@competition.delegates.count) %> here:
+  <ul>
+    <% @competition.delegates.each do |delegate| %>
+      <li><%= link_to "#{delegate.name}", competitions_url(display: "admin", years: "all", delegate: delegate.id), target: "_blank" %></li>
+    <% end %>
+  </ul>
+</p>
+
+<p>
+  Regards,
+  The WCA Results Team.
 </p>
