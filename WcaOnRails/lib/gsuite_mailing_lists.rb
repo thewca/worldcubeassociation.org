@@ -7,10 +7,9 @@ require 'googleauth/stores/file_token_store'
 require 'google/apis/admin_directory_v1'
 
 module GsuiteMailingLists
-  def self.sync_group(group, users)
+  def self.sync_group(group, desired_emails)
     service = get_service
 
-    desired_emails = users.map(&:email)
     desired_emails = desired_emails.map do |email|
       if email.include?("+")
         old_email = email
