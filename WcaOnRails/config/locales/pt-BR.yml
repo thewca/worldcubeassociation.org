@@ -322,6 +322,10 @@ pt-BR:
         phone_number: Número de telefone
         #original_hash: 7044004
         notes: Detalhes
+        #original_hash: 730db33
+        receive_delegate_reports: >-
+          Eu quero receber os Relatórios do Delegado das competições da WCA por
+          email.
         #original_hash: 57eaf24
         user_preferred_events: Eventos favoritos
       competition:
@@ -646,6 +650,11 @@ pt-BR:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
+        #original_hash: 8c266ea
+        receive_delegate_reports: >-
+          Se você é um Delegado Candidato, Delegado Senior ou Membro do WRC ou
+          WQAC, você receberá os Relatórios do Delegado por padrão. Nota: a
+          mudança pode demorar até uma hora para ter efeito.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1371,6 +1380,8 @@ pt-BR:
       unique: 'já está em uso por "%{used_name}", com %{used_email}'
       #original_hash: 26f70ed
       dob_past: deve ser no passado
+      #original_hash: b320913
+      dob_recent: deve ter pelo menos dois anos de idade
       #original_hash: b64df45
       already_represented_country: >-
         Não é possível alterar o país para um que a pessoa já tenha representado
@@ -1829,7 +1840,7 @@ pt-BR:
       #original_hash: 45834fd
       register_below_html: Inscreva-se para esta competição abaixo.
       #original_hash: 196725e
-      competitor_limit_is: 'Há uma limite de %{competitor_limit} competidores.'
+      competitor_limit_is: 'Há um limite de %{competitor_limit} competidores.'
       #original_hash: 5101f65
       no_competitor_limit: Não há limite de competidores.
       #original_hash: f979d5e
@@ -2151,7 +2162,7 @@ pt-BR:
       time_limit_information:
         #original_hash: 88c5f1a
         time_limit_html: >-
-          Se você atingir o limite durantes sua resolução, o juiz irá te
+          Se você atingir o limite durante sua resolução, o juiz irá te
           interromper e seu resultado será DNF (veja %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Regra %{number}'
