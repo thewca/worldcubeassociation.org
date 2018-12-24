@@ -733,14 +733,14 @@ class User < ApplicationRecord
   # If used without calling clear_receive_delegate_reports_if_not_staff it might return non-current Staff members.
   # The reason why clear_receive_delegate_reports_if_not_staff is needed is because there's no automatic code that
   # runs once a user is no longer a team member, we just schedule their end date.
-  def self.delegate_reports_receivers
+  def self.delegate_reports_receivers_emails
     candidate_delegates = User.candidate_delegates
     other_staff = User.where(receive_delegate_reports: true)
     (%w(
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    ) + candidate_delegates + other_staff).uniq
+    ) + candidate_delegates.map(&:email) + other_staff.map(&:email)).uniq
   end
 
   def notify_of_results_posted(competition)

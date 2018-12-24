@@ -672,7 +672,7 @@ RSpec.describe User, type: :model do
     end
 
     it "adds to reports@ only current staff members who want to receive reports" do
-      expect(User.delegate_reports_receivers).to eq ["seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", staff_member1]
+      expect(User.delegate_reports_receivers_emails).to eq ["seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", staff_member1.email]
     end
   end
 end
