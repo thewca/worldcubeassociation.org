@@ -650,10 +650,11 @@ cs:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
-        #original_hash: c89a00d
+        #original_hash: 8c266ea
         receive_delegate_reports: >-
           Pokud jste Kandidát na Delegáta, nebo člen WRC či WQAC budou vám
-          zasílány Reporty Delegátů automaticky.
+          zasílány Reporty Delegátů automaticky. Poznámka: může trvat až hodinu,
+          než se změna projeví
       competition:
         #original_hash: 2c812a0
         name: >-
