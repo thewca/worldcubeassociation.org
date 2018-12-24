@@ -34,7 +34,7 @@
     "precss": "^4.0.0",
     "prop-types": "^15.6.2",
     "rails-erb-loader": "^5.5.0",
-    "react": "^16.6.3",
+    "react": "^16.7.0",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.6.3",
     "react-google-maps": "^9.4.5",
