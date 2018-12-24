@@ -318,6 +318,8 @@ pt:
         phone_number: Número de telefone
         #original_hash: 7044004
         notes: Notas
+        #original_hash: 730db33
+        receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 57eaf24
         user_preferred_events: Eventos preferidos
       competition:
@@ -642,6 +644,11 @@ pt:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
+        #original_hash: 8c266ea
+        receive_delegate_reports: >-
+          Se for Delegado Candidato, Delegado Sénior ou membro do WRC ou do
+          WQAC, recebe Relatórios de Delegados por defeito. Nota: a alteração
+          pode levar até uma hora a tomar efeito.
       competition:
         #original_hash: 2c812a0
         name: >-
