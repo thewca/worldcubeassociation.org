@@ -318,6 +318,10 @@ da:
         phone_number: Telefonnummer
         #original_hash: 7044004
         notes: Noter
+        #original_hash: 730db33
+        receive_delegate_reports: >-
+          Jeg vil gerne modtage reporter fra delegerede om WCA konkurrencer over
+          email.
         #original_hash: 57eaf24
         user_preferred_events: Foretrukne discipliner
       competition:
@@ -640,6 +644,11 @@ da:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
+        #original_hash: 8c266ea
+        receive_delegate_reports: >-
+          Hvis du er Kandidat Delegeret, Senior Delegeret eller medlem af WRC
+          eller WQAC, så modtager du reporter fra Delegerede allerede. Noter:
+          Der går op til en time før ændringen tager effekt.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1365,6 +1374,8 @@ da:
       unique: 'er allerede brugt af "%{used_name}" med %{used_email}'
       #original_hash: 26f70ed
       dob_past: skal være i fortiden
+      #original_hash: b320913
+      dob_recent: skal være mindst to år gammel
       #original_hash: b64df45
       already_represented_country: >-
         Kan ikke ændre landet til et landet, som personen allerede har
@@ -1383,6 +1394,11 @@ da:
       already_have_id: >-
         kan ikke gøre krav på et WCA ID, fordi du allerede har et WCA ID
         %{wca_id}
+      #original_hash: 8bd15ba
+      too_many_wca_id_claims_html: >-
+        Der har været for mange falske krav på dette WCA ID. Kontakt <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Resultat Holdet</a> for at løse det.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Vi har ikke nogen fødselsdag for dette WCA ID. Kontakt venligst WCA
