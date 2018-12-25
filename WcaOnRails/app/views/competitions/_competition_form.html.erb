@@ -223,7 +223,7 @@
           <%= render "nearby_competitions" %>
         </div>
 
-        <%= f.input :information, input_html: { class: "markdown-editor" } %>
+        <%= f.input :information, input_html: { class: disable_form ? "" : "markdown-editor" } %>
         <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
         <%= f.input :organizer_ids, as: :user_ids %>
         <%= f.input :contact, hint: t('.contact_html', md: t('.supports_md_html')) %>
@@ -247,6 +247,8 @@
         <hr>
         <%= f.input :use_wca_registration %>
 
+      </fieldset>
+
         <div class="wca-registration-options">
           <% if @competition.can_receive_registration_emails?(current_user.id) %>
             <%# Quick hack to fill receive_registration_emails with the correct value for the current_user %>
@@ -254,6 +256,8 @@
             <%= f.input :receive_registration_emails, as: :boolean %>
           <% end %>
         </div>
+
+      <fieldset <%= disable_form && "disabled" %>>
 
         <div class="wca-registration-options">
           <%= f.input :enable_donations %>
@@ -287,7 +291,7 @@
           <%= f.input :on_the_spot_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
         </div>
 
-        <%= f.input :extra_registration_requirements, input_html: { class: "markdown-editor" } %>
+        <%= f.input :extra_registration_requirements, input_html: { class: disable_form ? "" : "markdown-editor" } %>
 
         <hr>
         <%= f.input :regulation_z1 %>
