@@ -534,6 +534,7 @@ module DatabaseDumper
           team_leader
           updated_at
           user_id
+          team_senior_member
         ),
       ),
     }.freeze,
