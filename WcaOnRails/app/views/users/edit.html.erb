@@ -134,7 +134,7 @@
           </div>
         <% end %>
 
-        <% if @user.any_kind_of_staff? %>
+        <% if @user.staff? %>
           <%= f.input :receive_delegate_reports %>
         <% end %>
 

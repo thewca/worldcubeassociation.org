@@ -11,24 +11,17 @@ RSpec.feature "Eligible voters csv" do
 
   let!(:user) { FactoryBot.create(:user) }
   let!(:former_team_leader) {
-    FactoryBot.create(:user, :wrc_member).tap do |user|
-      user.team_members.find_by_team_id(wrc_team_id).update!(team_leader: true, end_date: 1.day.ago)
+    FactoryBot.create(:user, :wrc_member, team_leader: true).tap do |user|
+      user.team_members.find_by_team_id(wrc_team_id).update!(end_date: 1.day.ago)
     end
   }
-  let!(:team_leader) {
-    FactoryBot.create(:user, :wrc_member).tap do |user|
-      user.team_members.find_by_team_id(wrc_team_id).update!(team_leader: true)
-    end
-  }
+  let!(:team_leader) { FactoryBot.create(:user, :wrc_member, team_leader: true) }
+  let!(:team_senior_member) { FactoryBot.create(:user, :wrc_member, team_senior_member: true) }
   let!(:team_member) { FactoryBot.create(:user, :wrc_member) }
   let!(:senior_delegate) { FactoryBot.create(:senior_delegate) }
   let!(:candidate_delegate) { FactoryBot.create(:candidate_delegate, senior_delegate: senior_delegate) }
   let!(:delegate) { FactoryBot.create(:delegate, senior_delegate: senior_delegate) }
-  let!(:delegate_who_is_also_team_leader) {
-    FactoryBot.create(:delegate, :wrc_member, senior_delegate: senior_delegate).tap do |user|
-      user.team_members.find_by_team_id(wrc_team_id).update!(team_leader: true)
-    end
-  }
+  let!(:delegate_who_is_also_team_leader) { FactoryBot.create(:delegate, :wrc_member, team_leader: true, senior_delegate: senior_delegate) }
   let!(:board_member) { FactoryBot.create(:user, :board_member) }
 
   before :each do
@@ -42,6 +35,7 @@ RSpec.feature "Eligible voters csv" do
       expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="all-wca-voters-2016-05-05T10:05:03Z.csv"'
       expect(CSV.parse(page.body)).to match_array [
         [team_leader.id.to_s, team_leader.email, team_leader.name],
+        [team_senior_member.id.to_s, team_senior_member.email, team_senior_member.name],
         [delegate.id.to_s, delegate.email, delegate.name],
         [delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
         [senior_delegate.id.to_s, senior_delegate.email, senior_delegate.name],

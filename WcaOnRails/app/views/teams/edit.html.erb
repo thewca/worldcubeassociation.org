@@ -1,4 +1,4 @@
-<% provide(:title, "Editing team #{@team.friendly_id} members") %>
+<% provide(:title, "Editing #{@team.name} members") %>
 
 <div class="container">
   <h3><%= yield(:title) %></h3>
@@ -11,7 +11,8 @@
             <th>User</th>
             <th>Start date</th>
             <th>End date</th>
-            <th>Team leader</th>
+            <th>Leader</th>
+            <th>Senior Member</th>
             <th></th> <!-- Extra column for .table-greedy-last-column -->
           </tr>
         </thead>

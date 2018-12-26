@@ -184,7 +184,7 @@
               <% if current_user.can_see_eligible_voters? && !current_user.can_admin_results? %>
                 <li class="divider"></li>
                 <li><%= link_to "WCA Voting Members", eligible_voters_path %></li>
-                <li><%= link_to "WCA Leader/Senior Members", leader_senior_voters_path %></li>
+                <li><%= link_to "WCA Leaders and Seniors", leader_senior_voters_path %></li>
               <% end %>
 
               <li class="divider"></li>

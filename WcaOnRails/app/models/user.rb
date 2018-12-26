@@ -32,9 +32,10 @@ class User < ApplicationRecord
 
   def self.eligible_voters
     team_leaders = TeamMember.current.where(team_leader: true).map(&:user)
+    team_senior_members = TeamMember.current.where(team_senior_member: true).map(&:user)
     eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))
     board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
-    (team_leaders + eligible_delegates + board_members).uniq
+    (team_leaders + team_senior_members + eligible_delegates + board_members).uniq
   end
 
   def self.leader_senior_voters
@@ -445,22 +446,20 @@ class User < ApplicationRecord
     team_member?(Team.wst)
   end
 
-  # See https://www.worldcubeassociation.org/documents/motions/02.2018.1%20-%20Definitions.pdf
-  def internal_staff?
-    full_delegate? || senior_delegate? || leader_of_any_team? || board_member?
+  def staff?
+    any_kind_of_delegate? || member_of_any_team?
   end
 
-  # See https://www.worldcubeassociation.org/documents/motions/02.2018.1%20-%20Definitions.pdf
-  def external_staff?
-    candidate_delegate? || member_of_any_team?
-  end
-
-  def any_kind_of_staff?
-    internal_staff? || external_staff?
+  def staff_with_voting_rights?
+    full_delegate? || senior_delegate? || senior_member_of_any_team? || leader_of_any_team? || board_member?
   end
 
   def team_member?(team)
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
+  end
+
+  def team_senior_member?(team)
+    self.current_team_members.select { |t| t.team_id == team.id && t.team_senior_member }.count > 0
   end
 
   def team_leader?(team)
@@ -471,8 +470,16 @@ class User < ApplicationRecord
     !self.current_team_members.empty?
   end
 
+  def senior_member_of_any_team?
+    !self.teams_where_is_senior_member.empty?
+  end
+
   def leader_of_any_team?
     !self.teams_where_is_leader.empty?
+  end
+
+  def teams_where_is_senior_member
+    self.current_team_members.select(&:team_senior_member).map(&:team).uniq
   end
 
   def teams_where_is_leader
@@ -728,14 +735,14 @@ class User < ApplicationRecord
     if user.wca_id.blank? && organizer_for?(user)
       fields << :name
     end
-    if user.any_kind_of_staff?
+    if user.staff?
       fields += %i(receive_delegate_reports)
     end
     fields
   end
 
   def self.clear_receive_delegate_reports_if_not_staff
-    User.where(receive_delegate_reports: true).reject(&:any_kind_of_staff?).map { |u| u.update(receive_delegate_reports: false) }
+    User.where(receive_delegate_reports: true).reject(&:staff?).map { |u| u.update(receive_delegate_reports: false) }
   end
 
   # This method is only called in sync_mailing_lists_job.rb, right after clear_receive_delegate_reports_if_not_staff.
