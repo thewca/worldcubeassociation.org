@@ -326,6 +326,10 @@ es:
         phone_number: Número de teléfono
         #original_hash: 7044004
         notes: Notas
+        #original_hash: 730db33
+        receive_delegate_reports: >-
+          Me gustaría recibir los informes de delegados de Competiciones WCA por
+          correo electrónico
         #original_hash: 57eaf24
         user_preferred_events: Pruebas favoritas
       competition:
@@ -647,6 +651,11 @@ es:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
+        #original_hash: 8c266ea
+        receive_delegate_reports: >-
+          Si eres un Candidato a Delegado, Delegado Senior, Delegado, o Miembro
+          del WRC o del WQAC, recibes los Informes de Delegados por defecto. El
+          cambio puede tardar hasta una hora en estar operativo.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1383,6 +1392,8 @@ es:
       unique: 'está actualmente en uso por "%{used_name}" con %{used_email}'
       #original_hash: 26f70ed
       dob_past: debe ser una fecha pasada
+      #original_hash: b320913
+      dob_recent: Debe tener al menos dos años
       #original_hash: b64df45
       already_represented_country: >-
         No se puede cambiar el país a un país que la persona haya representado
