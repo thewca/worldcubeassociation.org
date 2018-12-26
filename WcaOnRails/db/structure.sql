@@ -1080,6 +1080,7 @@ CREATE TABLE `team_members` (
   `team_leader` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `team_senior_member` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1424,4 +1425,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20181022031135'),
 ('20181208145408'),
 ('20181209171137'),
-('20181222224850');
+('20181222224850'),
+('20181226115357');
