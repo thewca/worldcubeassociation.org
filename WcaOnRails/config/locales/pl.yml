@@ -330,6 +330,8 @@ pl:
         phone_number: Numer telefonu
         #original_hash: 7044004
         notes: Uwagi
+        #original_hash: 730db33
+        receive_delegate_reports: Chciałbym otrzymywać Raporty Delegata z Zawodów WCA drogą mailową
         #original_hash: 57eaf24
         user_preferred_events: Preferowane konkurencje
       competition:
@@ -657,6 +659,11 @@ pl:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
+        #original_hash: 8c266ea
+        receive_delegate_reports: >-
+          Jeżeli jesteś Kandydatem na Delegata, Starszym Delegatem, Członkiem
+          WRC lub WQAC, otrzymujesz Raporty Delegata domyślnie. Uwaga: zmiana
+          przyniesie skutek do godziny.
       competition:
         #original_hash: 2c812a0
         name: >-
