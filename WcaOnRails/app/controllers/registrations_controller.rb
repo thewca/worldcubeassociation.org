@@ -167,6 +167,7 @@ class RegistrationsController < ApplicationController
           else
             user.skip_reconfirmation!
             user.update!(dummy_account: false, email: registration[:email])
+            new_locked_users << user
             user
           end
         else
