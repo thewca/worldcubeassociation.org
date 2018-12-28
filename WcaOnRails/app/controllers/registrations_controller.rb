@@ -131,7 +131,11 @@ class RegistrationsController < ApplicationController
       registrations.each do |registration|
         user = user_for_registration!(registration, new_locked_users)
         registration_competition_events_attributes = competition.competition_events.map do |competition_event|
-          registration[competition_event.event_id.to_sym] == "1" ? { competition_event_id: competition_event.id } : nil
+          value = registration[competition_event.event_id.to_sym]
+          unless %w(0 1).include?(value)
+            raise "Event columns should include either 0 or 1, found #{value} in column #{competition_event.event_id}."
+          end
+          value == "1" ? { competition_event_id: competition_event.id } : nil
         end.compact
         competition.registrations.create!(
           user_id: user.id,
