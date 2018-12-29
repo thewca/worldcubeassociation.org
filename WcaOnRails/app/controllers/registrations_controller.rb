@@ -129,7 +129,8 @@ class RegistrationsController < ApplicationController
     new_locked_users = []
     ActiveRecord::Base.transaction do
       registrations.each do |registration|
-        user = user_for_registration!(registration, new_locked_users)
+        user, locked_account_created = user_for_registration!(registration)
+        new_locked_users << user if locked_account_created
         registration_competition_events_attributes = competition.competition_events.map do |competition_event|
           value = registration[competition_event.event_id.to_sym]
           unless %w(0 1).include?(value)
@@ -154,7 +155,7 @@ class RegistrationsController < ApplicationController
     redirect_to competition_registrations_import_url(competition)
   end
 
-  private def user_for_registration!(registration, new_locked_users)
+  private def user_for_registration!(registration)
     if registration[:wca_id].present?
       unless Person.exists?(wca_id: registration[:wca_id])
         raise "Non-existent WCA ID given #{registration[:wca_id]}."
@@ -169,28 +170,27 @@ class RegistrationsController < ApplicationController
                     ", but it has WCA ID of #{email_user.wca_id} instead of #{registration[:wca_id]}."
             else
               email_user.update!(wca_id: registration[:wca_id]) # User hooks will also remove the dummy user account.
-              email_user
+              [email_user, false]
             end
           else
             user.skip_reconfirmation!
             user.update!(dummy_account: false, email: registration[:email])
-            new_locked_users << user
-            user
+            [user, true]
           end
         else
-          user # Use this account.
+          [user, false] # Use this account.
         end
       else
         # Create a locked account with confirmed WCA ID.
-        create_locked_account!(registration).tap do |locked_user|
-          new_locked_users << locked_user
-        end
+        [create_locked_account!(registration), true]
       end
     else
       email_user = User.find_by(email: registration[:email])
       # Use the user if exists, otherwise create a locked account without WCA ID.
-      email_user || create_locked_account!(registration).tap do |locked_user|
-        new_locked_users << locked_user
+      if email_user
+        [email_user, false]
+      else
+        [create_locked_account!(registration), true]
       end
     end
   end
