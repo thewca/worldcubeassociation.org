@@ -156,6 +156,9 @@ class RegistrationsController < ApplicationController
 
   private def user_for_registration!(registration, new_locked_users)
     if registration[:wca_id].present?
+      unless Person.exists?(wca_id: registration[:wca_id])
+        raise "Non-existent WCA ID given #{registration[:wca_id]}."
+      end
       user = User.find_by(wca_id: registration[:wca_id])
       if user
         if user.dummy_account?
