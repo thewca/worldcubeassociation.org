@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "csv"
 
 RSpec.describe "registrations" do
   let!(:competition) { FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 444)) }
@@ -42,7 +43,7 @@ RSpec.describe "registrations" do
         post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
       }.to_not change { competition.registrations.count }
       follow_redirect!
-      expect(response.body).to include "The given file includes 2 accepted registrations, while 1 is the competitor limit."
+      expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
     end
 
     describe "user import" do

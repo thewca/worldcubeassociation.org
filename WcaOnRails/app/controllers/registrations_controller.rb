@@ -128,7 +128,7 @@ class RegistrationsController < ApplicationController
                        .select { |registration| registration[:status] == "a" }
     if competition.competitor_limit_enabled? && registrations.length > competition.competitor_limit
       raise "The given file includes #{registrations.length} accepted #{"registration".pluralize(registrations.length)}"\
-            ", while #{competition.competitor_limit} is the competitor limit."
+            ", which is more than the competitor limit of #{competition.competitor_limit}."
     end
     new_locked_users = []
     ActiveRecord::Base.transaction do
@@ -186,7 +186,7 @@ class RegistrationsController < ApplicationController
         end
       else
         # Create a locked account with confirmed WCA ID.
-        [User.create_locked_account!(registration), true]
+        [create_locked_account!(registration), true]
       end
     else
       email_user = User.find_by(email: registration[:email])
@@ -194,9 +194,20 @@ class RegistrationsController < ApplicationController
       if email_user
         [email_user, false]
       else
-        [User.create_locked_account!(registration), true]
+        [create_locked_account!(registration), true]
       end
     end
+  end
+
+  private def create_locked_account!(registration)
+    User.new_locked_account(
+      name: registration[:name],
+      email: registration[:email],
+      wca_id: registration[:wca_id],
+      country_iso2: Country.c_find(registration[:country]).iso2,
+      gender: registration[:gender],
+      dob: registration[:birth_date],
+    ).tap { |user| user.save! }
   end
 
   def do_actions_for_selected
