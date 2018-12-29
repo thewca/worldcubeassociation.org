@@ -934,4 +934,20 @@ class User < ApplicationRecord
   def email_required?
     !dummy_account?
   end
+
+  def self.create_locked_account!(registration_csv_data)
+    User.new(
+      name: registration_csv_data[:name],
+      email: registration_csv_data[:email],
+      wca_id: registration_csv_data[:wca_id],
+      country_iso2: Country.c_find(registration_csv_data[:country]).iso2,
+      gender: registration_csv_data[:gender],
+      dob: registration_csv_data[:birth_date],
+      encrypted_password: "",
+    ).tap do |user|
+      user.define_singleton_method(:password_required?) { false }
+      user.skip_confirmation!
+      user.save!
+    end
+  end
 end
