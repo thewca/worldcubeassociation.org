@@ -72,7 +72,7 @@ RSpec.describe "registrations" do
               end
             end
 
-            context "no user exist with registrant's email" do
+            context "no user exists with registrant's email" do
               it "promotes the dummy user to a locked one, registers and notifies him" do
                 expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
                 file = csv_file [
@@ -108,7 +108,7 @@ RSpec.describe "registrations" do
           end
         end
 
-        context "no user exist with the given WCA ID" do
+        context "no user exists with the given WCA ID" do
           it "creates a locked user with this WCA ID, registers and notifies him" do
             expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
             person = FactoryBot.create(:person)
@@ -142,7 +142,7 @@ RSpec.describe "registrations" do
           end
         end
 
-        context "no user exist with registrant's email" do
+        context "no user exists with registrant's email" do
           it "creates a locked user without WCA ID, registers and notifies him" do
             expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
             file = csv_file [
