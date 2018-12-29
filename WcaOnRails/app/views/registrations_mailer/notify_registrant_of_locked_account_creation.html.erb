@@ -1,10 +1,11 @@
 <p>
   Your registration for <%= @competition.name %> has been imported to the WCA website
-  and as a result a locked account has been created for you.
+  and as a result an account has been created for you.
 </p>
 
 <p>
-  To unlock the account for further use, please visit <%= link_to "this page", new_user_password_url %>.
+  To use the account you must first reset your password visiting
+  <%= link_to "this page", new_user_password_url %>.
 </p>
 
 <%= render partial: 'organizers_or_delegates_signature' %>

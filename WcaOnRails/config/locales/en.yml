@@ -953,9 +953,9 @@ en:
     registration_requirements: "Registration requirements for the competition:"
     import:
       title: "Import registrations for %{comp}"
-      warning: "This action is not reversible, make sure to do this once the registration is closed."
+      warning: "This action is not reversible and should be done only once, so don't do this until after registration is closed."
       registrations_file_label: "Registrations file"
-      registrations_file_hint: "CSV file with columns: Status, Name, Country, WCA ID, Birth Date, Gender, Email and one column for each event."
+      registrations_file_hint: "CSV file with columns: Status, Name, Country, WCA ID, Birth Date, Gender, Email, and one column for each event."
       import: "Import"
   #context: Key used when managing competitions
   competitions:
