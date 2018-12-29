@@ -126,6 +126,10 @@ class RegistrationsController < ApplicationController
                        .map(&:to_hash)
                        .reject { |registration| registration.values.all?(&:nil?) }
                        .select { |registration| registration[:status] == "a" }
+    if competition.competitor_limit_enabled? && registrations.length > competition.competitor_limit
+      raise "The given file includes #{registrations.length} accepted #{"registration".pluralize(registrations.length)}"\
+            ", while #{competition.competitor_limit} is the competitor limit."
+    end
     new_locked_users = []
     ActiveRecord::Base.transaction do
       registrations.each do |registration|
