@@ -53,4 +53,8 @@ class Country < ApplicationRecord
   def self.find_by_iso2(iso2)
     c_all_by_id.values.select { |c| c.iso2 == iso2 }.first
   end
+
+  def multiple_countries?
+    MULTIPLE_COUNTRIES.any? { |c| c[:id] == self.id }
+  end
 end

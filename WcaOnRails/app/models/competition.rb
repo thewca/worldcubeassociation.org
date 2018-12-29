@@ -150,7 +150,7 @@ class Competition < ApplicationRecord
   validates_numericality_of :refund_policy_percent, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required?
   validates :refund_policy_limit_date, presence: true, if: :refund_policy_percent?
   validates_inclusion_of :on_the_spot_registration, in: [true, false], if: :on_the_spot_registration_required?
-  validates_numericality_of :on_the_spot_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :on_the_spot_registration?
+  validates_numericality_of :on_the_spot_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :on_the_spot_entry_fee_required?
   monetize :on_the_spot_entry_fee_lowest_denomination,
            as: "on_the_spot_base_entry_fee",
            allow_nil: true,
@@ -645,7 +645,13 @@ class Competition < ApplicationRecord
   end
 
   def entry_fee_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 7, 17)
+    (
+      confirmed? && created_at.present? && created_at > Date.new(2018, 7, 17) &&
+
+      # The different venues may have different entry fees. It's better for
+      # people to leave this blank than to set an incorrect value here.
+      country.present? && !country.multiple_countries?
+    )
   end
 
   def competitor_limit_enabled?
@@ -660,12 +666,34 @@ class Competition < ApplicationRecord
     confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
   end
 
+  def on_the_spot_entry_fee_required?
+    (
+      on_the_spot_registration? &&
+
+      # The different venues may have different entry fees. It's better for
+      # people to leave this blank than to set an incorrect value here.
+      country.present? && !country.multiple_countries?
+    )
+  end
+
   def refund_policy_percent_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
+    (
+      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+
+      # The different venues may have different entry fees. It's better for
+      # people to leave this blank than to set an incorrect value here.
+      country.present? && !country.multiple_countries?
+    )
   end
 
   def guests_entry_fee_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
+    (
+      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+
+      # The different venues may have different entry fees. It's better for
+      # people to leave this blank than to set an incorrect value here.
+      country.present? && !country.multiple_countries?
+    )
   end
 
   def registration_period_required?

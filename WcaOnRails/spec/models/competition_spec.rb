@@ -51,6 +51,26 @@ RSpec.describe Competition do
     end
   end
 
+  it "requires entry fees" do
+    competition = FactoryBot.create :competition
+    competition.confirmed = true
+
+    # Required for non-multi venue competitions.
+    competition.countryId = "USA"
+    expect(competition.entry_fee_required?).to be true
+    expect(competition.guests_entry_fee_required?).to be true
+
+    # Not required for competitions in multiple countries
+    competition.countryId = "XA"
+    expect(competition.entry_fee_required?).to be false
+    expect(competition.guests_entry_fee_required?).to be false
+
+    # Not required for with no country
+    competition.countryId = nil
+    expect(competition.entry_fee_required?).to be false
+    expect(competition.guests_entry_fee_required?).to be false
+  end
+
   context "when competition has a competitor limit" do
     it "requires competitor limit to be a number" do
       competition = FactoryBot.build :competition, competitor_limit_enabled: true
