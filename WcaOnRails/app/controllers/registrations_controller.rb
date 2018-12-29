@@ -186,7 +186,7 @@ class RegistrationsController < ApplicationController
         end
       else
         # Create a locked account with confirmed WCA ID.
-        [create_locked_account!(registration), true]
+        [User.create_locked_account!(registration), true]
       end
     else
       email_user = User.find_by(email: registration[:email])
@@ -194,24 +194,8 @@ class RegistrationsController < ApplicationController
       if email_user
         [email_user, false]
       else
-        [create_locked_account!(registration), true]
+        [User.create_locked_account!(registration), true]
       end
-    end
-  end
-
-  private def create_locked_account!(registration)
-    User.new(
-      name: registration[:name],
-      email: registration[:email],
-      wca_id: registration[:wca_id],
-      country_iso2: Country.c_find(registration[:country]).iso2,
-      gender: registration[:gender],
-      dob: registration[:birth_date],
-      encrypted_password: "",
-    ).tap do |user|
-      user.define_singleton_method(:password_required?) { false }
-      user.skip_confirmation!
-      user.save!
     end
   end
 
