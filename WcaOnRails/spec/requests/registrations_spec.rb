@@ -17,12 +17,6 @@ RSpec.describe "registrations" do
       expect(response).to redirect_to competition_path(competition)
     end
 
-    it "redirects when the competition has registrations" do
-      FactoryBot.create(:registration, competition: competition)
-      post competition_registrations_do_import_path(competition)
-      expect(response).to redirect_to competition_path(competition)
-    end
-
     it "renders an error when there are missing columns" do
       file = csv_file [
         ["Status", "Name", "WCA ID", "Birth date", "Gender", "Email", "444"],
@@ -46,7 +40,7 @@ RSpec.describe "registrations" do
       expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
     end
 
-    describe "user import" do
+    describe "registrations import" do
       context "registrant has WCA ID" do
         context "user exists with the given WCA ID" do
           context "the user is a dummy account" do
@@ -184,6 +178,96 @@ RSpec.describe "registrations" do
             expect(user.wca_id).to be_blank
             expect(user).to be_locked_account
           end
+        end
+      end
+    end
+
+    describe "registrations re-import" do
+      context "CSV registrant already accepted in the database" do
+        it "leaves existing registration unchanged" do
+          registration = FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
+          user = registration.user
+          file = csv_file [
+            ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+            ["a", user.name, user.country.name, "", user.dob, user.gender, user.email, "1", "0"],
+          ]
+          expect {
+            post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          }.to not_change { competition.registrations.count }
+            .and not_change { registration.reload.accepted_at }
+        end
+      end
+
+      context "CSV registrant already accepted in the database, but with different events" do
+        it "only updates registration events" do
+          registration = FactoryBot.create(:registration, :accepted, competition: competition, events: %(333))
+          user = registration.user
+          file = csv_file [
+            ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+            ["a", user.name, user.country.name, "", user.dob, user.gender, user.email, "1", "1"],
+          ]
+          expect {
+            post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          }.to not_change { competition.registrations.count }
+            .and not_change { registration.reload.accepted_at }
+            .and change { registration.reload.events.map(&:id) }.from(%w(333)).to(%w(333 444))
+        end
+      end
+
+      context "CSV registrant already in the database, but deleted" do
+        it "acceptes the registration again" do
+          registration = FactoryBot.create(:registration, :deleted, competition: competition)
+          user = registration.user
+          file = csv_file [
+            ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+            ["a", user.name, user.country.name, "", user.dob, user.gender, user.email, "1", "0"],
+          ]
+          expect {
+            post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          }.to not_change { competition.registrations.count }
+            .and change { registration.reload.accepted_at }
+          expect(registration.reload).to be_accepted
+        end
+      end
+
+      context "registrant deleted in the database, but not in the CSV file" do
+        it "leaves the registration unchanged" do
+          registration = FactoryBot.create(:registration, :deleted, competition: competition)
+          file = csv_file [
+            ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ]
+          expect {
+            post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          }.to not_change { competition.registrations.count }
+            .and not_change { registration.reload.deleted_at }
+          expect(registration.reload).to be_deleted
+        end
+      end
+
+      context "registrant accepted in the database, but not in the CSV file" do
+        it "deletes the registration" do
+          registration = FactoryBot.create(:registration, :accepted, competition: competition)
+          file = csv_file [
+            ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ]
+          expect {
+            post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          }.to not_change { User.count }
+            .and not_change { competition.registrations.count }
+            .and change { competition.registrations.accepted.count }.by(-1)
+          expect(registration.reload).to be_deleted
+        end
+      end
+
+      context "CSV registrant not in the database" do
+        it "creates a new registration registration" do
+          file = csv_file [
+            ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+            ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+          ]
+          expect {
+            post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          }.to change { competition.registrations.count }.by(1)
         end
       end
     end
