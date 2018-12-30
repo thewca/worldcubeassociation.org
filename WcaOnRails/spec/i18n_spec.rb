@@ -14,4 +14,19 @@ RSpec.describe 'I18n' do
   it 'does not have unused keys' do
     expect(unused_keys).to be_empty, "#{unused_keys.leaves.count} unused i18n keys\n#{unused_keys.inspect}\nYou can also run `i18n-tasks unused -l en' to show them"
   end
+
+  I18n.available_locales.each do |locale|
+    it "#{locale} defines time_format correctly" do
+      time_format = I18n.translate("common.time_format", locale: locale, default: nil)
+      allowed_values = [
+        "12h",
+        "24h",
+
+        # It's ok if the translation doesn't define a value for time_format, because
+        # we'll fall back to the English setting.
+        nil,
+      ]
+      expect(allowed_values).to include time_format
+    end
+  end
 end
