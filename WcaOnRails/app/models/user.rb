@@ -109,6 +109,14 @@ class User < ApplicationRecord
     end
   end
 
+  validate :check_if_email_used_by_locked_account, on: :create
+  private def check_if_email_used_by_locked_account
+    if User.find_by(email: email)&.locked_account?
+      errors.delete(:email)
+      errors.add(:email, I18n.t('users.errors.email_used_by_locked_account_html').html_safe)
+    end
+  end
+
   validate do
     if dob && dob >= Date.today
       errors.add(:dob, I18n.t('users.errors.dob_past'))
