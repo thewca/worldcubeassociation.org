@@ -957,7 +957,7 @@ en:
     registration_requirements: "Registration requirements for the competition:"
     import:
       title: "Import registrations for %{comp}"
-      warning: "This action is not reversible and can only be done once, so don't do this until after registration is closed."
+      info: "You can import registrations multiple times, changes will be determined and the database will be updated accordingly."
       registrations_file_label: "Registrations file"
       registrations_file_hint: "CSV file with columns: Status, Name, Country, WCA ID, Birth Date, Gender, Email, and one column for each event."
       import: "Import"
