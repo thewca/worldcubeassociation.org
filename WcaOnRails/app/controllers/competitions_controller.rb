@@ -192,11 +192,12 @@ class CompetitionsController < ApplicationController
       unless comp.website.blank?
         body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
       end
-      @full_post = create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
-      @competition = competition_from_params
-      CompetitionsMailer.notify_organizers_of_announced_competition(@competition, @full_post).deliver_later
-
-      comp.update!(announced_at: Time.now)
+      full_post = nil
+      ActiveRecord::Base.transaction do
+        full_post = create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
+        comp.update!(announced_at: Time.now)
+      end
+      CompetitionsMailer.notify_organizers_of_announced_competition(comp, full_post).deliver_later
     end
   end
 
