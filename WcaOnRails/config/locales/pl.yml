@@ -381,6 +381,8 @@ pl:
         information: Informacje
         #original_hash: 87b7d5f
         use_wca_registration: Chciałbym używać systemu rejestracji zawodników na stronie WCA
+        #original_hash: 8020e88
+        external_registration_page: Strona rejestracji
         #original_hash: 9bb1965
         competitor_limit_enabled: Limit zawodników
         #original_hash: 749f4c9
@@ -619,6 +621,8 @@ pl:
         name: >-
           Wprowadź swoje pełne imię poprawnie, na przykład <strong>Jan
           Kowalski</strong>. Nie zdrobniale jak <strong>j kowalski</strong>.
+        #original_hash: da39a3e
+        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Po przesłaniu nowego zdjęcia profilowego, będziesz musiał zaczekać, aż
@@ -707,6 +711,10 @@ pl:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: b2af5f5
+        external_registration_page: >-
+          Strona na której zawodnicy muszą się zarejestrować na zawody. Musi być
+          poprawnym adresem url, zawierającym protokół http(s).
         #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Bazowe wpisowe na zawody. To będzie wyświetlane na stronie
@@ -1292,7 +1300,8 @@ pl:
       approve: Zatwierdź
       #original_hash: 85de4b8
       unconfirmed_email: 'Adres email należący do tego konta (%{email}) nie został potwierdzony.'
-      confirm_new_email: 'Zmiana twojego adresu email będzie wymagać potwierdzenia nowego adresu.'
+      #original_hash: c03b949
+      confirm_new_email: Zmiana twojego adresu email będzie wymagać potwierdzenia nowego adresu.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'To konto oczekuje potwierdzenia nowego adresu email %{email}.'
       #original_hash: 0340b0b
@@ -1448,6 +1457,12 @@ pl:
         problemu.
       #original_hash: d02c03b
       avatar_requires_wca_id: 'wymaga, aby WCA ID było przydzielone'
+      #original_hash: 8f785ea
+      email_used_by_locked_account_html: >-
+        jest już używany przez innę konto. Zostało ono stworzone automatycznie
+        na skutek twojej rejstracji na zawody za pomocą zewnętrznego serwisu.
+        Jeżeli jesteś właścicielem tego adresu email, możesz używać tego konta
+        po zresetowaniu swojego hasła <a href='/users/password/new'>tutaj</a>.
     successes:
       messages:
         #original_hash: 31bd401
@@ -1493,8 +1508,6 @@ pl:
       need_country: Wymaga państwa
       #original_hash: cec28a0
       comp_not_found: Zawody nieznalezione
-      #original_hash: cb763b8
-      registration_closed: Rejestracja na zawody jest zamknięta
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Rejestracja nie może zostać usunięta i zaakceptowania na raz.
       #original_hash: a38d024
@@ -1796,6 +1809,22 @@ pl:
       edytować %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Wymagania rejestracyjne dla zawodów:'
+    import:
+      #original_hash: 5a394f3
+      title: 'Importuj rejestracje na %{comp}'
+      #original_hash: ccda564
+      info: >-
+        Możesz importować rejestracje wielokrotnie, odpowiednie zmiany zostaną
+        zapisane do bazy danych.
+      #original_hash: 779b272
+      registrations_file_label: Plik z rejestracjami
+      #original_hash: 4017f0e
+      registrations_file_hint: >-
+        Plik CSV musi zawierać następujące kolumny: Status, Name, Country, WCA
+        ID, Birth Date, Gender, Email, oraz jedną kolumnę dla każdej
+        konkurencji.
+      #original_hash: d6fbc9d
+      import: Importuj
   competitions:
     messages:
       #original_hash: 7b80062
@@ -2320,6 +2349,8 @@ pl:
         delegate_report: Raport delegata
         #original_hash: b233e77
         registration: Rejestracja
+        #original_hash: 3f9176e
+        import_registrations: Importuj rejestracje
         #original_hash: d672995
         register: Zarejestruj się
         #original_hash: 855bd26
