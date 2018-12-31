@@ -377,6 +377,8 @@ es:
         information: Información
         #original_hash: 87b7d5f
         use_wca_registration: Usaré la web de la WCA para el registro
+        #original_hash: 8020e88
+        external_registration_page: Página de registro
         #original_hash: 9bb1965
         competitor_limit_enabled: Límite de competidores
         #original_hash: 749f4c9
@@ -611,6 +613,8 @@ es:
         name: >-
           Introduce tu nombre completo y con corrección, por ejemplo
           <strong>Darío Méndez</strong> y no <strong>D Mendez</strong>.
+        #original_hash: da39a3e
+        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Después de subir un nuevo avatar, tendrás que esperar que el Equipo de
@@ -697,6 +701,10 @@ es:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: b2af5f5
+        external_registration_page: >-
+          La página donde los competidores deben hacer el registro para la
+          competición. Debe ser una URL http o https válida.
         #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Precio del registro básico. Se mostrará en la página de información de
@@ -1283,7 +1291,10 @@ es:
       approve: Aprobar
       #original_hash: 85de4b8
       unconfirmed_email: 'El correo electrónico de esta cuenta (%{email}) no está confirmado.'
-      confirm_new_email: 'Esta dirección tendrá que ser validada siguiendo las instrucciones en un correo que te enviaremos.'
+      #original_hash: c03b949
+      confirm_new_email: >-
+        Esta dirección tendrá que ser validada siguiendo las instrucciones en un
+        correo que te enviaremos.
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
         Esta cuenta tiene pendiente confirmar una nueva dirección de correo
@@ -1436,6 +1447,13 @@ es:
         Resultados de la WCA</a> para resolver esto.
       #original_hash: d02c03b
       avatar_requires_wca_id: requiere que se le asigne un WCA ID
+      #original_hash: 8f785ea
+      email_used_by_locked_account_html: >-
+        esta ya en uso por otra cuenta. Se ha creado automáticamente como
+        resultado de haberte registrado a una competición por medio de un
+        servicio externo. Si eres el dueño de este correo, puedes usar este
+        correo tras establecer de nuevo la contraseña <a
+        href='/users/password/new'>here</a>.
     successes:
       messages:
         #original_hash: 31bd401
@@ -1481,8 +1499,6 @@ es:
       need_country: Necesita un país
       #original_hash: cec28a0
       comp_not_found: Competición no encontrada
-      #original_hash: cb763b8
-      registration_closed: El registro para esta competición está cerrado
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Un registro no puede ser aceptado y borrado a la vez.
       #original_hash: a38d024
@@ -1761,6 +1777,21 @@ es:
       tus pruebas favoritas %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Requisitos de registro para la competición:'
+    import:
+      #original_hash: 5a394f3
+      title: 'Importar registros de %{comp}'
+      #original_hash: ccda564
+      info: >-
+        Puedes importar registros varias veces, se detectarán los cambios y se
+        actualizará la base de datos de acuerdo a los mismos.
+      #original_hash: 779b272
+      registrations_file_label: Fichero de registros
+      #original_hash: 4017f0e
+      registrations_file_hint: >-
+        Fichero CSV con columnas: Estado, Nombre, País, WCA ID, Fecha de
+        nacimiento, Género, Correo electrónico y una columna por cada categoría.
+      #original_hash: d6fbc9d
+      import: Importar
   competitions:
     messages:
       #original_hash: 7b80062
@@ -2284,6 +2315,8 @@ es:
         delegate_report: Informe del delegado
         #original_hash: b233e77
         registration: Registro
+        #original_hash: 3f9176e
+        import_registrations: Importar registros
         #original_hash: d672995
         register: Registrarse
         #original_hash: 855bd26
