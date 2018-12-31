@@ -288,22 +288,16 @@
         <%= f.input :refund_policy_limit_date, as: :datetime_picker %>
 
         <%= f.input :on_the_spot_registration, collection: [ :true, :false ] %>
-        <div class="wca-on-the-spot-registration-options">
-          <%= f.input :on_the_spot_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
-        </div>
+        <%= f.input :on_the_spot_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
 
         <%= f.input :extra_registration_requirements, input_html: { class: disable_form ? "" : "markdown-editor" } %>
 
         <hr>
         <%= f.input :regulation_z1 %>
-        <div class="wca-regulation-z1-reason">
-          <%= f.input :regulation_z1_reason %>
-        </div>
+        <%= f.input :regulation_z1_reason %>
 
         <%= f.input :regulation_z3 %>
-        <div class="wca-regulation-z3-reason">
-          <%= f.input :regulation_z3_reason %>
-        </div>
+        <%= f.input :regulation_z3_reason %>
 
       </fieldset>
 
