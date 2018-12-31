@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "webpack-bundle-analyzer": "^3.0.2",
-    "webpack-dev-server": "^3.1.13"
+    "webpack-dev-server": "^3.1.14"
   },
   "scripts": {
     "webpack:analyze": "mkdir -p public/packs && NODE_ENV=production node_modules/.bin/webpack --config config/webpack/production.js --profile --json > public/packs/stats.json && node_modules/.bin/webpack-bundle-analyzer public/packs/stats.json"
