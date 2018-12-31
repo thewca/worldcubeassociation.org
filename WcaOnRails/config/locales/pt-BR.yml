@@ -375,6 +375,8 @@ pt-BR:
         information: Informação
         #original_hash: 87b7d5f
         use_wca_registration: Eu quero usar o site da WCA para as inscrições
+        #original_hash: 8020e88
+        external_registration_page: Página de inscrição
         #original_hash: 9bb1965
         competitor_limit_enabled: Limite de competidores
         #original_hash: 749f4c9
@@ -610,6 +612,8 @@ pt-BR:
           Informe seu nome completo corretamente, por exemplo <strong>Ayrton
           Senna da Silva</strong>, não desleixadamente como <strong>ayrton
           s</strong>.
+        #original_hash: da39a3e
+        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Após enviar um novo avatar, será necessário esperar a Equipe de
@@ -696,6 +700,10 @@ pt-BR:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: b2af5f5
+        external_registration_page: >-
+          A página na qual os competidores se inscrevem. Deve ser uma URL
+          http(s) válida.
         #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           A taxa base de inscrição para a competição. Ela será mostrada nas
@@ -1280,7 +1288,10 @@ pt-BR:
       approve: Aprovar
       #original_hash: 85de4b8
       unconfirmed_email: 'O endereço de email desta conta (%{email}) não foi confirmado.'
-      confirm_new_email: 'Será necessário confirmar o novo email se você alterar seu email cadastrado.'
+      #original_hash: c03b949
+      confirm_new_email: >-
+        Será necessário confirmar o novo email se você alterar seu email
+        cadastrado.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Está pendente a confirmação do novo email desta conta (%{email}).'
       #original_hash: 0340b0b
@@ -1420,6 +1431,12 @@ pt-BR:
         target='_blank'>Equipe de Resultados da WCA</a> para resolver isto.
       #original_hash: d02c03b
       avatar_requires_wca_id: é necessário uma ID da WCA vinculada
+      #original_hash: 8f785ea
+      email_used_by_locked_account_html: >-
+        já está em uso por outra conta. Foi criado automaticamente porque você
+        se inscreveu em uma competição por um site externo. Se você é o dono
+        deste email, você pode usar a conta depois de redefinir sua senha <a
+        href='/users/password/new'>aqui</a>.
     successes:
       messages:
         #original_hash: 31bd401
@@ -1465,8 +1482,6 @@ pt-BR:
       need_country: precisa ter um país
       #original_hash: cec28a0
       comp_not_found: Competição não encontrada
-      #original_hash: cb763b8
-      registration_closed: As inscrições estão encerradas
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Uma inscrição não pode estar aceita e excluída ao mesmo tempo.
       #original_hash: a38d024
@@ -1743,6 +1758,21 @@ pt-BR:
       %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Requisitos para inscrição para a competição:'
+    import:
+      #original_hash: 5a394f3
+      title: 'Importar inscrições para %{comp}'
+      #original_hash: ccda564
+      info: >-
+        Você pode importar inscrições várias vezes; as mudanças serão
+        verificadas e o banco de dados será atualizado de acordo.
+      #original_hash: 779b272
+      registrations_file_label: Arquivo de inscrições
+      #original_hash: 4017f0e
+      registrations_file_hint: >-
+        Arquivo CSV com as seguintes colunas: Status, Name, Country, WCA ID,
+        Birth Date, Gender, Email, e uma coluna para cada modalidade.
+      #original_hash: d6fbc9d
+      import: Importar
   competitions:
     messages:
       #original_hash: 7b80062
@@ -2259,6 +2289,8 @@ pt-BR:
         delegate_report: Relatório do Delegado
         #original_hash: b233e77
         registration: Inscrição
+        #original_hash: 3f9176e
+        import_registrations: Importar inscrições
         #original_hash: d672995
         register: Inscrever
         #original_hash: 855bd26
