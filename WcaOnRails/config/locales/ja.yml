@@ -362,6 +362,8 @@ ja:
         information: 概要
         #original_hash: 87b7d5f
         use_wca_registration: 参加申し込みに WCA ウェブサイトを使用する
+        #original_hash: 8020e88
+        external_registration_page: 参加申込ページ
         #original_hash: 9bb1965
         competitor_limit_enabled: 大会定員
         #original_hash: 749f4c9
@@ -584,6 +586,8 @@ ja:
           氏名を「ローマ字名姓 (漢字名)」の形で記入してください。ローマ字名・漢字名ともにご記入ください
           (ある場合)。スペースなど、記入方法にご注意ください。例: 中島 悠 の場合: <strong>Yu Nakajima
           (中島悠)</strong>
+        #original_hash: da39a3e
+        email: ''
         #original_hash: 8a91e53
         pending_avatar: プロフィール画像の変更は、 WCA 競技結果チームの承認後に反映されます。
         #original_hash: da39a3e
@@ -652,6 +656,8 @@ ja:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: b2af5f5
+        external_registration_page: 競技者が参加申込を行うためのページ。httpまたはhttpsのURLとしてください。
         #original_hash: 784879d
         base_entry_fee_lowest_denomination: 大会の基本参加費。大会情報ページおよび大会申込ページ (使用する場合) に表示されます。0に設定した場合，参加無料である旨表示されます。
         #original_hash: 9735ddf
@@ -1139,7 +1145,8 @@ ja:
       approve: 承認
       #original_hash: 85de4b8
       unconfirmed_email: 'メールアドレス (%{email}) が確認できません。'
-      confirm_new_email: 'メールアドレスを変更する場合は、確認メールによる認証が必要となります。'
+      #original_hash: c03b949
+      confirm_new_email: メールアドレスを変更する場合は、確認メールによる認証が必要となります。
       #original_hash: 8a770cf
       pending_mail_confirmation: '新しいメールアドレス %{email} の確認を待っています'
       #original_hash: 0340b0b
@@ -1262,6 +1269,10 @@ ja:
         Results Team</a> に電子メールで回答を送付してください。
       #original_hash: d02c03b
       avatar_requires_wca_id: WCA ID の連携が必要です
+      #original_hash: 8f785ea
+      email_used_by_locked_account_html: >-
+        は他のアカウントによって使用されています。他ウェブサイトから大会の参加申込をされた場合でも，このメールアドレスで自動的にアカウントが作成されている場合があります。この場合，<a
+        href='/users/password/new'>こちら</a>でパスワードをリセットすることでアカウントを使用することができます。
     successes:
       messages:
         #original_hash: 31bd401
@@ -1299,8 +1310,6 @@ ja:
       need_country: 国籍を入力してください
       #original_hash: cec28a0
       comp_not_found: 大会が見つかりません
-      #original_hash: cb763b8
-      registration_closed: 大会申し込みは終了しています
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: 参加申し込みの削除と承認を同時に行うことはできません。
       #original_hash: a38d024
@@ -1529,6 +1538,17 @@ ja:
     preferred_events_populated_html: '競技種目はお気に入り種目を設定しておくと自動選択されます。お気に入り種目の設定: %{link}'
     #original_hash: ee89a3e
     registration_requirements: この大会の参加申し込み要件：
+    import:
+      #original_hash: 5a394f3
+      title: '%{comp}の参加申込データをインポートする。'
+      #original_hash: ccda564
+      info: 参加申込データは2回以上登録しても問題ありません。その場合，データは対応して変更されます。
+      #original_hash: 779b272
+      registrations_file_label: 参加申込データファイル
+      #original_hash: 4017f0e
+      registrations_file_hint: 各列が「ステータス」「氏名」「国籍」「WCA ID」「生年月日」「性別」「メールアドレス」「種目（各種目1列）」となっているCSVファイル
+      #original_hash: d6fbc9d
+      import: インポート
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1975,10 +1995,12 @@ ja:
         delegate_report: 代理人レポート
         #original_hash: b233e77
         registration: 申し込み
+        #original_hash: 3f9176e
+        import_registrations: 参加申込データをインポートする
         #original_hash: d672995
         register: 申し込む
         #original_hash: 855bd26
-        competitors: 参加者数
+        competitors: 参加者一覧
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCAプロフィール
