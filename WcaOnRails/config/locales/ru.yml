@@ -379,6 +379,8 @@ ru:
         information: Информация
         #original_hash: 87b7d5f
         use_wca_registration: Использовать сайт WCA для регистрации
+        #original_hash: 8020e88
+        external_registration_page: Страница регистрации
         #original_hash: 9bb1965
         competitor_limit_enabled: Лимит на число участников
         #original_hash: 749f4c9
@@ -617,6 +619,8 @@ ru:
           <strong>Antoshka Rostovikov</strong>, <strong>ANTON
           ROSTOVIKOV</strong>. Если у вас есть заграничный паспорт, введите имя
           в соответствии с ним.
+        #original_hash: da39a3e
+        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           После загрузки новой аватарки вам придётся подождать, пока её одобрит
@@ -707,6 +711,10 @@ ru:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: b2af5f5
+        external_registration_page: >-
+          Страница, где участники должны регистрироваться на соревнование.
+          Должна быть правильным http(s) URL.
         #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Базовый взнос за участие на соревнованиях. Он будет отображаться на
@@ -1283,7 +1291,8 @@ ru:
       approve: Подтвердить
       #original_hash: 85de4b8
       unconfirmed_email: 'Email-адрес этого аккаунта (%{email}) не подтверждён.'
-      confirm_new_email: 'Изменение email-адреса потребует подтверждения нового адреса.'
+      #original_hash: c03b949
+      confirm_new_email: При изменении вашего email потребуется подтвердить новый email.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Этот аккаунт ожидает подтверждения нового email-адреса %{email}.'
       #original_hash: 0340b0b
@@ -1426,6 +1435,12 @@ ru:
         target='_blank'>WCA Results Team</a>.
       #original_hash: d02c03b
       avatar_requires_wca_id: требуется привязать WCA ID
+      #original_hash: 8f785ea
+      email_used_by_locked_account_html: >-
+        уже используется другим аккаунтом. Он был создан автоматически, когда вы
+        регистрировались на соревнование на стороннем сервисе. Если вы владелец
+        данного email, вы можете сбросить пароль <a
+        href='/users/password/new'>здесь</a>.
     successes:
       messages:
         #original_hash: 31bd401
@@ -1471,8 +1486,6 @@ ru:
       need_country: Нужно выбрать страну
       #original_hash: cec28a0
       comp_not_found: Соревнование не найдено
-      #original_hash: cb763b8
-      registration_closed: Регистрация закрыта
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Невозможно одновременно принять и удалить регистрацию.
       #original_hash: a38d024
@@ -1756,6 +1769,21 @@ ru:
       предпочитаемые дисциплины %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Требования к регистрации на соревнование:'
+    import:
+      #original_hash: 5a394f3
+      title: 'Импорт регистраций на %{comp}.'
+      #original_hash: ccda564
+      info: >-
+        Вы можете импортировать регистрации несколько раз, база данных будет
+        обновлена соответствующим образом.
+      #original_hash: 779b272
+      registrations_file_label: Файл с регистрациями
+      #original_hash: 4017f0e
+      registrations_file_hint: >-
+        CSV-файл со следующими колонками: статус, имя, страна, WCA ID, дата
+        рождения, пол, email и по одной колонке на каждую дисциплину.
+      #original_hash: d6fbc9d
+      import: Импорт
   competitions:
     messages:
       #original_hash: 7b80062
@@ -2269,6 +2297,8 @@ ru:
         delegate_report: Отчёт Делегата
         #original_hash: b233e77
         registration: Регистрация
+        #original_hash: 3f9176e
+        import_registrations: Импорт регистраций
         #original_hash: d672995
         register: Зарегистрироваться
         #original_hash: 855bd26
