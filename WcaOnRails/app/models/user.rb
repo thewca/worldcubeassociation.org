@@ -896,10 +896,10 @@ class User < ApplicationRecord
     {
       "type" => "object",
       "properties" => {
-        "registrantId" => { "type" => "integer" },
+        "registrantId" => { "type" => ["integer", "null"] }, # Note: for now registrantId may be null if the person doesn't compete.
         "name" => { "type" => "string" },
         "wcaUserId" => { "type" => "integer" },
-        "wcaId" => { "type" => "string" },
+        "wcaId" => { "type" => ["string", "null"] },
         "countryIso2" => { "type" => "string" },
         "gender" => { "type" => "string", "enum" => %w(m f o) },
         "birthdate" => { "type" => "string" },

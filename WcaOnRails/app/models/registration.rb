@@ -180,7 +180,7 @@ class Registration < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => "object",
+      "type" => ["object", "null"], # Note: for now there may be WCIF persons without registration.
       "properties" => {
         "wcaRegistrationId" => { "type" => "integer" },
         "eventIds" => { "type" => "array", "items" => { "type" => "string", "enum" => Event.pluck(:id) } },
