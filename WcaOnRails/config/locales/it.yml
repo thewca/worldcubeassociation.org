@@ -1808,6 +1808,11 @@ it:
         grati se lo cambiassi con uno più corto.
       #original_hash: 1a20fae
       must_have_events: Aggiungi almeno un evento prima di confermare la competizione.
+      #original_hash: a3aea56
+      schedule_must_match_rounds: >-
+        Assicurati che la competizione abbia almeno un round per evento e che il
+        programma che hai creato includa tutti i round che hai dichiarato prima
+        di confermare la competizione.
       #original_hash: e390250
       create_success: Competizione creata correttamente!
       #original_hash: afe3a23
@@ -2126,6 +2131,10 @@ it:
       cannot_delete_confirmed: Non è possibile cancellare una competizione confermata.
       #original_hash: 191df37
       must_contain_event: deve contenere almeno un evento
+      #original_hash: 54fe619
+      schedule_must_match_rounds: >-
+        deve avere almeno un round e tutti i round devono essere inclusi nella
+        schedule.
       #original_hash: 6e228b7
       must_contain_delegate: deve contenere almeno un Delegato WCA
       #original_hash: 8131fc2
