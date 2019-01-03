@@ -5,7 +5,7 @@ class CompetitionsController < ApplicationController
 
   PAST_COMPETITIONS_DAYS = 90
   CHECK_SCHEDULE_ASSOCIATIONS = {
-    rounds: [:competition_event],
+    competition_events: [:rounds],
     competition_venues: {
       venue_rooms: {
         schedule_activities: [:child_activities],
