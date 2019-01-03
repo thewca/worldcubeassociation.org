@@ -193,6 +193,11 @@ class Competition < ApplicationRecord
 
   validates :registration_open, :registration_close, presence: { message: I18n.t('simple_form.required.text') }, if: :registration_period_required?
 
+  # NOTE: we only validate when confirming, until we have a unified events/rounds editor.
+  # If we would validate everytime, changing the number of rounds for
+  # competition wouldn't be possible: adding rounds through the events page
+  # couldn't be possible because the schedule doesn't contain the round
+  # just added.
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   private def must_have_at_least_one_event
     if no_events?
@@ -204,13 +209,13 @@ class Competition < ApplicationRecord
   # The only exception to this is within tests, in which case we actually don't want to run this validation.
   validate :schedule_must_match_rounds, if: :confirmed_at_changed?, on: :update
   def schedule_must_match_rounds
-    unless has_round? && schedule_includes_rounds?
+    unless has_any_round_per_event? && schedule_includes_rounds?
       errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
     end
   end
 
-  def has_round?
-    rounds.any?
+  def has_any_round_per_event?
+    competition_events.map(&:rounds).none?(&:empty?)
   end
 
   def schedule_includes_rounds?
@@ -320,7 +325,7 @@ class Competition < ApplicationRecord
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
-      unless has_round? && schedule_includes_rounds?
+      unless has_any_round_per_event? && schedule_includes_rounds?
         warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds')
       end
     end
