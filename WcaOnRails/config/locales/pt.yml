@@ -1777,6 +1777,11 @@ pt:
         curtos e agradecemos se puder alterá-lo.
       #original_hash: 1a20fae
       must_have_events: Por favor adicione pelo menos um evento antes de confirmar a competição.
+      #original_hash: a3aea56
+      schedule_must_match_rounds: >-
+        Por favor garanta que a competição tem pelo menos uma ronda por evento e
+        que o horário que criou inclui todas as rondas que declarou antes de
+        confirmar a competição.
       #original_hash: e390250
       create_success: Competição criada com sucesso!
       #original_hash: afe3a23
@@ -2083,6 +2088,10 @@ pt:
       cannot_delete_confirmed: Não pode excluir uma competição confirmada.
       #original_hash: 191df37
       must_contain_event: deve ter pelo menos um evento para esta competição
+      #original_hash: 54fe619
+      schedule_must_match_rounds: >-
+        tem de ter pelo menos uma ronda e todas as rondas têm que ser incluídas
+        no horário.
       #original_hash: 6e228b7
       must_contain_delegate: deve ter pelo menos um Delegado da WCA
       #original_hash: 8131fc2
