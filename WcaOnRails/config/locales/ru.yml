@@ -1796,6 +1796,11 @@ ru:
       must_have_events: >-
         Пожалуйста добавьте хотя бы одну дисциплину, прежде чем подтверждать
         соревнование.
+      #original_hash: a3aea56
+      schedule_must_match_rounds: >-
+        Перед тем, как подтвердить соревнование, пожалуйста, убедитесь, что у
+        каждой заявленной дисциплины есть хотя бы один раунд, и что в вашем
+        расписании присутствуют все раунды.
       #original_hash: e390250
       create_success: Соревнование успешно создано!
       #original_hash: afe3a23
@@ -2100,6 +2105,10 @@ ru:
       cannot_delete_confirmed: Нельзя удалить подтверждённое соревнование.
       #original_hash: 191df37
       must_contain_event: должна быть хотя бы одна дисциплина
+      #original_hash: 54fe619
+      schedule_must_match_rounds: >-
+        должна иметь хотя бы один раунд, и все раунды должны присутствовать в
+        расписании.
       #original_hash: 6e228b7
       must_contain_delegate: должен быть хотя бы один WCA Делегат
       #original_hash: 8131fc2
