@@ -603,6 +603,20 @@ CREATE TABLE `archive_registrations` (
   UNIQUE KEY `index_registrations_on_competitionId_and_user_id` (`competitionId`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `assignments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `assignments` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `registration_id` bigint(20) DEFAULT NULL,
+  `schedule_activity_id` bigint(20) DEFAULT NULL,
+  `station_number` int(11) DEFAULT NULL,
+  `assignment_code` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_assignments_on_registration_id` (`registration_id`),
+  KEY `index_assignments_on_schedule_activity_id` (`schedule_activity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `championships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1439,8 +1453,9 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20181020004209'),
 ('20181022031135'),
 ('20181109172930'),
+('20181122233823'),
 ('20181208145408'),
 ('20181209171137'),
 ('20181222224850'),
 ('20181226115357'),
-('20181122233823');
+('20190105215446');
