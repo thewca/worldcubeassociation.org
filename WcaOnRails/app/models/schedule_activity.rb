@@ -7,6 +7,7 @@ class ScheduleActivity < ApplicationRecord
   belongs_to :holder, polymorphic: true
   has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+  has_many :assignments
 
   validates_presence_of :name
   validates_numericality_of :wcif_id, only_integer: true

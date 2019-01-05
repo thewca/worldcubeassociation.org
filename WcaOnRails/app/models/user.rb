@@ -881,6 +881,7 @@ class User < ApplicationRecord
         "thumbUrl" => avatar.url(:thumb),
       },
       "roles" => roles,
+      "assignments" => registration&.assignments&.map(&:to_wcif) || [],
       "personalBests" => person_pb.map(&:to_wcif),
     }
   end
@@ -906,7 +907,7 @@ class User < ApplicationRecord
         },
         "roles" => { "type" => "array", "items" => { "type" => "string" } },
         "registration" => Registration.wcif_json_schema,
-        "assignments" => { "type" => "object" }, # TODO: expand on this,
+        "assignments" => { "type" => "array", "items" => Assignment.wcif_json_schema },
         "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema },
       },
     }

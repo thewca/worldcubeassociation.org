@@ -506,7 +506,7 @@ class Competition < ApplicationRecord
     old_start_date = saved_changes["start_date"]&.first || start_date
     old_number_of_days = (old_end_date - old_start_date).to_i + 1
 
-    competition_activities = competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:all_activities).flatten
+    competition_activities = all_activities
     if start_date && end_date
       # NOTE: when doing the change we don't need to care about the timezone, as we just "move" all the datetime the same way
       if number_of_days >= old_number_of_days
@@ -1122,6 +1122,10 @@ class Competition < ApplicationRecord
     competitions.includes(:delegates, :organizers).order(start_date: :desc)
   end
 
+  def all_activities
+    competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:all_activities).flatten
+  end
+
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif
     {
@@ -1213,6 +1217,24 @@ class Competition < ApplicationRecord
         if registration && wcif_person["roles"]
           roles = wcif_person["roles"] - ["delegate", "organizer"] # These two are added on the fly.
           registration.update!(roles: roles)
+        end
+        if registration && wcif_person["assignments"]
+          competition_activities = all_activities
+          registration.assignments = []
+          wcif_person["assignments"].each do |assignment_wcif|
+            schedule_activity = competition_activities.find do |competition_activity|
+              competition_activity.wcif_id == assignment_wcif["activityId"]
+            end
+            unless schedule_activity
+              raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
+            end
+            registration.assignments.build(
+              schedule_activity_id: schedule_activity.id,
+              station_number: assignment_wcif["stationNumber"],
+              assignment_code: assignment_wcif["assignmentCode"],
+            )
+          end
+          registration.save!
         end
       end
     end

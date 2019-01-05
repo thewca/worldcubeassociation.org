@@ -214,7 +214,7 @@ RSpec.describe "API Competitions" do
   end
 
   describe "PATCH #update_persons_from_wcif" do
-    let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :registration_open) }
+    let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, :with_valid_schedule) }
     let!(:registration) { FactoryBot.create(:registration, competition: competition) }
     let!(:organizer_registration) { FactoryBot.create(:registration, competition: competition, user: competition.organizers.first) }
 
@@ -242,6 +242,19 @@ RSpec.describe "API Competitions" do
         expect(organizer_registration.reload.roles).to eq ["scrambler"]
         person_wcif = competition.reload.to_wcif["persons"].find { |person| person["wcaUserId"] == organizer_registration.user.id }
         expect(person_wcif["roles"]).to match_array ["scrambler", "organizer"]
+      end
+
+      it "can change assignments for a person" do
+        registration.assignments.create!(
+          schedule_activity: ScheduleActivity.first, assignment_code: "staff-runner",
+        )
+        assignments = [
+          { "activityId" => 1, "assignmentCode" => "competitor", "stationNumber" => nil },
+          { "activityId" => 2, "assignmentCode" => "staff-judge", "stationNumber" => 3 },
+        ]
+        persons = [{ wcaUserId: registration.user.id, assignments: assignments }]
+        patch api_v0_competition_update_persons_from_wcif_path(competition), params: persons.to_json, headers: headers
+        expect(registration.reload.assignments.map(&:to_wcif)).to match_array assignments
       end
 
       it "cannot change person immutable data" do
