@@ -273,7 +273,7 @@ function exportPublic ( $exportFormatVersion, $sources ) {
 
   #--- Delete temporary and old stuff we don't need anymore
   echo "<p><b>Delete temporary and old stuff we don't need anymore</b></p>";
-  mySystem( "rm README.md $sqlFile *.tsv" );
+  mySystem( "rm README.md $sqlFile *.tsv metadata.json" );
   mySystem( "rm ../../misc/$oldBasenameStart*" );
 
   #------------------------------------------
