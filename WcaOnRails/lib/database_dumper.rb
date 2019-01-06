@@ -673,6 +673,18 @@ module DatabaseDumper
       ),
     }.freeze,
     "wcif_extensions" => :skip_all_rows,
+    "assignments" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          registration_id
+          schedule_activity_id
+          station_number
+          assignment_code
+        ),
+      ),
+    }.freeze,
   }.freeze
 
   def self.development_dump(dump_filename)
