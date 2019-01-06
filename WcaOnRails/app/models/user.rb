@@ -551,13 +551,15 @@ class User < ApplicationRecord
 
   # Returns true if the user can edit the given team.
   def can_edit_team?(team)
-    (
-      can_manage_teams? ||
+    can_manage_teams? ||
       team_leader?(team) ||
 
       # The leader of the WDC can edit the banned competitors list
       (team == Team.banned && team_leader?(Team.wdc))
-    )
+  end
+
+  def can_view_banned_competitors?
+    admin? || staff?
   end
 
   def can_create_competitions?
