@@ -126,6 +126,8 @@ Rails.application.routes.draw do
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
   get 'tutorial' => redirect('/files/WCA_Competition_Tutorial.pdf', status: 302)
 
+  get 'disciplinary' => 'wdc#root'
+
   get 'contact/website' => 'contacts#website'
   post 'contact/website' => 'contacts#website_create'
   get 'contact/dob' => 'contacts#dob'
