@@ -7550,10 +7550,10 @@ querystringify@^2.0.0:
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.0.tgz#7ded8dfbf7879dcc60d0a644ac6754b283ad17ef"
   integrity sha512-sluvZZ1YiTLD5jsqZcDmFyV2EwToyXZBfpoVOmktMmW+VEnhgakFHnasVph65fOjGPTWN0Nw3+XQaSeMayr0kg==
 
-rails-erb-loader@^5.5.0:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/rails-erb-loader/-/rails-erb-loader-5.5.0.tgz#fcf698f693e6a3b9b86d0d657040c2bfd8b88e28"
-  integrity sha512-WUHdQdTo+Z9jkLGuG1py4y2fTSXCgPhqz5KY2OZXSRR2vJwpZ1LTRxkzitum0mfZz6vhwDZVBGxSWZ+zS+MKAw==
+rails-erb-loader@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/rails-erb-loader/-/rails-erb-loader-5.5.1.tgz#d8e68253a8e089fa93ffc4a0d2684242338d390b"
+  integrity sha512-UvTbC5IL2rS9YWs3Vke7pBDu+VsowJohjozTjVfz4NZPFVzVMgA+JqsJNL9YfvUSJhup01NFzALerpGpzbxRBw==
   dependencies:
     loader-utils "^1.1.0"
     lodash.defaults "^4.2.0"
