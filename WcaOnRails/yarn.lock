@@ -1308,10 +1308,10 @@ atob@~1.1.0:
   resolved "https://registry.yarnpkg.com/atob/-/atob-1.1.3.tgz#95f13629b12c3a51a5d215abdce2aa9f32f80773"
   integrity sha1-lfE2KbEsOlGl0hWr3OKqnzL4B3M=
 
-autonumeric@^4.5.1:
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.5.1.tgz#128297441ce643d74acd609ea95a979cb35f4851"
-  integrity sha512-NMNaidOYLP9CnDnD9oHhUeyBQXzGLrazidcE9qWHYygP86QZ6A7bsLC4PA39QzGeEdiVr597lrMvC+yGuXcsCw==
+autonumeric@^4.5.3:
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.5.3.tgz#8f244aca5e50fee3b723dc10751e59cbaeee6781"
+  integrity sha512-MPl+P5Ssa6xQyPfGJjPKZFpzddxGSvAEgkZsvtW8HOG92BcBeWb74MhvVx23+ww+62U3aWC5O/WUjeX2HlN38g==
 
 autoprefixer@^6.3.1:
   version "6.7.7"
