@@ -7,7 +7,7 @@ class AddConfidentialToDoorkeeperApplication < ActiveRecord::Migration[5.2]
       :confidential,
       :boolean,
       null: false,
-      default: true # maintaining backwards compatibility: require secrets
+      default: true, # maintaining backwards compatibility: require secrets
     )
   end
 end
