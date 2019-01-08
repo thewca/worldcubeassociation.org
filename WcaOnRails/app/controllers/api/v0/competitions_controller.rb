@@ -37,12 +37,18 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.to_wcif
   end
 
-  def update_from_wcif(setter, associations = {})
-    competition = competition_from_params(associations)
+  def update_wcif
+    competition = competition_from_params({
+      competition_venues: {
+        venue_rooms: {
+          schedule_activities: [{ child_activities: [:holder] }, :holder],
+        },
+      },
+    })
     require_can_manage!(competition)
     wcif = params.permit!.to_h
     wcif = wcif["_json"] || wcif
-    competition.send(setter, wcif, require_user!)
+    competition.set_wcif!(wcif, require_user!)
     render json: {
       status: "Successfully saved WCIF",
     }
@@ -56,25 +62,6 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       status: "Error while saving WCIF",
       error: e.message,
     }
-  end
-
-  def update_events_from_wcif
-    update_from_wcif(:set_wcif_events!)
-  end
-
-  def update_persons_from_wcif
-    update_from_wcif(:update_persons_wcif!)
-  end
-
-  def update_schedule_from_wcif
-    includes_associations = {
-      competition_venues: {
-        venue_rooms: {
-          schedule_activities: [{ child_activities: [:holder] }, :holder],
-        },
-      },
-    }
-    update_from_wcif(:set_wcif_schedule!, includes_associations)
   end
 
   private def competition_from_params(associations = {})

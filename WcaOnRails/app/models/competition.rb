@@ -1172,37 +1172,41 @@ class Competition < ApplicationRecord
     }
   end
 
-  def set_wcif_events!(wcif_events, current_user)
-    events_schema = { "type" => "array", "items" => CompetitionEvent.wcif_json_schema }
-    JSON::Validator.validate!(events_schema, wcif_events)
-
+  def set_wcif!(wcif, current_user)
+    JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
     ActiveRecord::Base.transaction do
-      # Remove extra events.
-      self.competition_events.each do |competition_event|
-        wcif_event = wcif_events.find { |e| e["id"] == competition_event.event.id }
-        event_to_be_removed = !wcif_event || !wcif_event["rounds"]
-        if event_to_be_removed
-          raise WcaExceptions::BadApiParameter.new("Cannot remove events from a confirmed competition") unless current_user.can_add_and_remove_events?(self)
-          competition_event.destroy!
-        end
-      end
+      update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
+      set_wcif_events!(wcif["events"], current_user) if wcif["events"]
+      set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
+    end
+  end
 
-      # Create missing events.
-      wcif_events.each do |wcif_event|
-        event_found = competition_events.find_by_event_id(wcif_event["id"])
-        event_to_be_added = wcif_event["rounds"]
-        if !event_found && event_to_be_added
-          raise WcaExceptions::BadApiParameter.new("Cannot add events to a confirmed competition") unless current_user.can_add_and_remove_events?(self)
-          competition_events.create!(event_id: wcif_event["id"])
-        end
+  private def set_wcif_events!(wcif_events, current_user)
+    # Remove extra events.
+    self.competition_events.each do |competition_event|
+      wcif_event = wcif_events.find { |e| e["id"] == competition_event.event.id }
+      event_to_be_removed = !wcif_event || !wcif_event["rounds"]
+      if event_to_be_removed
+        raise WcaExceptions::BadApiParameter.new("Cannot remove events from a confirmed competition") unless current_user.can_add_and_remove_events?(self)
+        competition_event.destroy!
       end
+    end
 
-      # Update all events.
-      wcif_events.each do |wcif_event|
-        event_to_be_added = wcif_event["rounds"]
-        if event_to_be_added
-          competition_events.find_by_event_id!(wcif_event["id"]).load_wcif!(wcif_event)
-        end
+    # Create missing events.
+    wcif_events.each do |wcif_event|
+      event_found = competition_events.find_by_event_id(wcif_event["id"])
+      event_to_be_added = wcif_event["rounds"]
+      if !event_found && event_to_be_added
+        raise WcaExceptions::BadApiParameter.new("Cannot add events to a confirmed competition") unless current_user.can_add_and_remove_events?(self)
+        competition_events.create!(event_id: wcif_event["id"])
+      end
+    end
+
+    # Update all events.
+    wcif_events.each do |wcif_event|
+      event_to_be_added = wcif_event["rounds"]
+      if event_to_be_added
+        competition_events.find_by_event_id!(wcif_event["id"]).load_wcif!(wcif_event)
       end
     end
 
@@ -1210,68 +1214,73 @@ class Competition < ApplicationRecord
   end
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
-  def update_persons_wcif!(wcif_persons, current_user)
-    persons_schema = { "type" => "array", "items" => User.wcif_json_schema }
-    JSON::Validator.validate!(persons_schema, wcif_persons)
-
-    ActiveRecord::Base.transaction do
-      wcif_persons.each do |wcif_person|
-        registration = registrations.find_by(user_id: wcif_person["wcaUserId"])
-        # Note: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
-        if registration && wcif_person["roles"]
-          roles = wcif_person["roles"] - ["delegate", "organizer"] # These two are added on the fly.
-          registration.update!(roles: roles)
-        end
-        if registration && wcif_person["assignments"]
-          competition_activities = all_activities
-          registration.assignments = []
-          wcif_person["assignments"].each do |assignment_wcif|
-            schedule_activity = competition_activities.find do |competition_activity|
-              competition_activity.wcif_id == assignment_wcif["activityId"]
-            end
-            unless schedule_activity
-              raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
-            end
-            registration.assignments.build(
-              schedule_activity_id: schedule_activity.id,
-              station_number: assignment_wcif["stationNumber"],
-              assignment_code: assignment_wcif["assignmentCode"],
-            )
+  private def update_persons_wcif!(wcif_persons, current_user)
+    wcif_persons.each do |wcif_person|
+      registration = registrations.find_by(user_id: wcif_person["wcaUserId"])
+      # Note: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
+      if registration && wcif_person["roles"]
+        roles = wcif_person["roles"] - ["delegate", "organizer"] # These two are added on the fly.
+        registration.update!(roles: roles)
+      end
+      if registration && wcif_person["assignments"]
+        competition_activities = all_activities
+        registration.assignments = []
+        wcif_person["assignments"].each do |assignment_wcif|
+          schedule_activity = competition_activities.find do |competition_activity|
+            competition_activity.wcif_id == assignment_wcif["activityId"]
           end
-          registration.save!
+          unless schedule_activity
+            raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
+          end
+          registration.assignments.build(
+            schedule_activity_id: schedule_activity.id,
+            station_number: assignment_wcif["stationNumber"],
+            assignment_code: assignment_wcif["assignmentCode"],
+          )
         end
+        registration.save!
       end
     end
   end
 
-  def set_wcif_schedule!(wcif_schedule, current_user)
-    schedule_schema = {
-      "type" => "object",
-      "properties" => {
-        "venues" => { "type" => "array", "items" => CompetitionVenue.wcif_json_schema },
-        "startDate" => { "type" => "string" },
-        "numberOfDays" => { "type" => "integer" },
-      },
-    }
-    JSON::Validator.validate!(schedule_schema, wcif_schedule)
-
+  private def set_wcif_schedule!(wcif_schedule, current_user)
     if wcif_schedule["startDate"] != start_date.strftime("%F")
       raise WcaExceptions::BadApiParameter.new("Wrong start date for competition")
     elsif wcif_schedule["numberOfDays"] != number_of_days
       raise WcaExceptions::BadApiParameter.new("Wrong number of days for competition")
     end
 
-    ActiveRecord::Base.transaction do
-      new_venues = wcif_schedule["venues"].map do |venue_wcif|
-        # using this find instead of ActiveRecord's find_or_create_by avoid several queries
-        # (despite having the association included :()
-        venue = competition_venues.find { |v| v.wcif_id == venue_wcif["id"] } || competition_venues.build
-        venue.load_wcif!(venue_wcif)
-      end
-      self.competition_venues = new_venues
+    new_venues = wcif_schedule["venues"].map do |venue_wcif|
+      # using this find instead of ActiveRecord's find_or_create_by avoid several queries
+      # (despite having the association included :()
+      venue = competition_venues.find { |v| v.wcif_id == venue_wcif["id"] } || competition_venues.build
+      venue.load_wcif!(venue_wcif)
     end
+    self.competition_venues = new_venues
 
     reload
+  end
+
+  def self.wcif_json_schema
+    {
+      "type" => "object",
+      "properties" => {
+        "formatVersion" => { "type" => "string" },
+        "id" => { "type" => "string" },
+        "name" => { "type" => "string" },
+        "shortName" => { "type" => "string" },
+        "persons" => { "type" => "array", "items" => User.wcif_json_schema },
+        "events" => { "type" => "array", "items" => CompetitionEvent.wcif_json_schema },
+        "schedule" => {
+          "type" => "object",
+          "properties" => {
+            "venues" => { "type" => "array", "items" => CompetitionVenue.wcif_json_schema },
+            "startDate" => { "type" => "string" },
+            "numberOfDays" => { "type" => "integer" },
+          },
+        },
+      }
+    }
   end
 
   def serializable_hash(options = nil)
