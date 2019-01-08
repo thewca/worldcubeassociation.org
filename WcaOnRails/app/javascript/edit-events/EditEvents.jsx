@@ -17,7 +17,7 @@ export default class EditEvents extends React.Component {
     let onSuccess = () => this.setState({ savedWcifEvents: _.cloneDeep(wcifEvents), saving: false });
     let onFailure = () => this.setState({ saving: false });
 
-    saveWcifPart(competitionId, '/events', wcifEvents, onSuccess, onFailure);
+    saveWcifPart(competitionId, 'events', wcifEvents, onSuccess, onFailure);
   }
 
   unsavedChanges() {
