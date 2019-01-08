@@ -187,9 +187,7 @@ Rails.application.routes.draw do
       get '/persons/:wca_id' => "persons#show", as: :person
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
-        patch '/wcif/events' => 'competitions#update_events_from_wcif', as: :update_events_from_wcif
-        patch '/wcif/persons' => 'competitions#update_persons_from_wcif', as: :update_persons_from_wcif
-        patch '/wcif/schedule' => 'competitions#update_schedule_from_wcif', as: :update_schedule_from_wcif
+        patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
       get '/records' => "api#records"
     end
