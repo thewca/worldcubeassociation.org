@@ -31,7 +31,7 @@ export default class EditSchedule extends React.Component {
     let onSuccess = () => this.setState({ savedScheduleWcif: _.cloneDeep(competitionInfo.scheduleWcif), saving: false });
     let onFailure = () => this.setState({ saving: false });
 
-    saveWcifPart(competitionInfo.id, '/schedule', competitionInfo.scheduleWcif, onSuccess, onFailure);
+    saveWcifPart(competitionInfo.id, 'schedule', competitionInfo.scheduleWcif, onSuccess, onFailure);
   }
 
 
