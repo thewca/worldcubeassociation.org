@@ -490,15 +490,6 @@ RSpec.describe "Competition WCIF" do
         expect(child_activity.end_time).to eq new_activity["childActivities"][0]["endTime"]
       end
 
-      it "Doesn't update invalid activity" do
-        %w(id name childActivities activityCode startTime endTime).each do |attr|
-          save_attr = schedule_wcif["venues"][0]["rooms"][0]["activities"][0][attr]
-          schedule_wcif["venues"][0]["rooms"][0]["activities"][0][attr] = nil
-          expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
-          schedule_wcif["venues"][0]["rooms"][0]["activities"][0][attr] = save_attr
-        end
-      end
-
       it "Doesn't update with an invalid activity code" do
         # Try updating an activity with an invalid activity code
         activity = schedule_wcif["venues"][0]["rooms"][0]["activities"][0]
@@ -626,15 +617,6 @@ RSpec.describe "Competition WCIF" do
         expect(venue.longitude_microdegrees).to eq 456
         expect(venue.timezone_id).to eq "Europe/London"
       end
-
-      it "Doesn't update invalid venue" do
-        %w(id name latitudeMicrodegrees longitudeMicrodegrees timezone rooms).each do |attr|
-          save_attr = schedule_wcif["venues"][0][attr]
-          schedule_wcif["venues"][0][attr] = nil
-          expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
-          schedule_wcif["venues"][0][attr] = save_attr
-        end
-      end
     end
 
     context "rooms" do
@@ -676,12 +658,37 @@ RSpec.describe "Competition WCIF" do
         expect(room.name).to eq "Hippolyte's backyard"
       end
 
+    end
+  end
+
+  describe "#set_wcif!" do
+    let(:wcif) { competition.to_wcif }
+
+    context "validates the given data with JSON Schema definition" do
+      it "Doesn't update invalid venue" do
+        %w(id name latitudeMicrodegrees longitudeMicrodegrees timezone rooms).each do |attr|
+          save_attr = wcif["schedule"]["venues"][0][attr]
+          wcif["schedule"]["venues"][0][attr] = nil
+          expect { competition.set_wcif!(wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
+          wcif["schedule"]["venues"][0][attr] = save_attr
+        end
+      end
+
+      it "Doesn't update invalid activity" do
+        %w(id name childActivities activityCode startTime endTime).each do |attr|
+          save_attr = wcif["schedule"]["venues"][0]["rooms"][0]["activities"][0][attr]
+          wcif["schedule"]["venues"][0]["rooms"][0]["activities"][0][attr] = nil
+          expect { competition.set_wcif!(wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
+          wcif["schedule"]["venues"][0]["rooms"][0]["activities"][0][attr] = save_attr
+        end
+      end
+
       it "Doesn't update invalid room" do
         %w(id name activities).each do |attr|
-          save_attr = schedule_wcif["venues"][0]["rooms"][0][attr]
-          schedule_wcif["venues"][0]["rooms"][0][attr] = nil
-          expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
-          schedule_wcif["venues"][0]["rooms"][0][attr] = save_attr
+          save_attr = wcif["schedule"]["venues"][0]["rooms"][0][attr]
+          wcif["schedule"]["venues"][0]["rooms"][0][attr] = nil
+          expect { competition.set_wcif!(wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
+          wcif["schedule"]["venues"][0]["rooms"][0][attr] = save_attr
         end
       end
     end

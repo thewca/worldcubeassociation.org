@@ -1181,7 +1181,7 @@ class Competition < ApplicationRecord
     end
   end
 
-  private def set_wcif_events!(wcif_events, current_user)
+  def set_wcif_events!(wcif_events, current_user)
     # Remove extra events.
     self.competition_events.each do |competition_event|
       wcif_event = wcif_events.find { |e| e["id"] == competition_event.event.id }
@@ -1214,7 +1214,7 @@ class Competition < ApplicationRecord
   end
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
-  private def update_persons_wcif!(wcif_persons, current_user)
+  def update_persons_wcif!(wcif_persons, current_user)
     wcif_persons.each do |wcif_person|
       registration = registrations.find_by(user_id: wcif_person["wcaUserId"])
       # Note: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
@@ -1243,7 +1243,7 @@ class Competition < ApplicationRecord
     end
   end
 
-  private def set_wcif_schedule!(wcif_schedule, current_user)
+  def set_wcif_schedule!(wcif_schedule, current_user)
     if wcif_schedule["startDate"] != start_date.strftime("%F")
       raise WcaExceptions::BadApiParameter.new("Wrong start date for competition")
     elsif wcif_schedule["numberOfDays"] != number_of_days
