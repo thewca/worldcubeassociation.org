@@ -232,6 +232,11 @@ class User < ApplicationRecord
     end
   end
 
+  before_validation :strip_name
+  def strip_name
+    self.name = self.name.strip if self.name.present?
+  end
+
   validate :wca_id_prereqs
   def wca_id_prereqs
     p = person || unconfirmed_person

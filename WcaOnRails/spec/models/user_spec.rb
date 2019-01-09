@@ -546,6 +546,13 @@ RSpec.describe User, type: :model do
     expect(wrt_leader.teams_where_is_leader.count).to eq 0
   end
 
+  it "removes whitespace around names" do
+    user = FactoryBot.create :user
+    user.update_attributes!(name: '  test user  ')
+
+    expect(user.name).to eq 'test user'
+  end
+
   describe "#update_with_password" do
     let(:user) { FactoryBot.create(:user, password: "wca") }
 
