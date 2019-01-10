@@ -27,6 +27,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wdc_member = FactoryBot.create :user, :wdc_member, team_leader: false, receive_delegate_reports: true
     wec_member = FactoryBot.create :user, :wec_member, team_leader: false, receive_delegate_reports: true
     wfc_member = FactoryBot.create :user, :wfc_member, team_leader: false
+    wfc_leader = FactoryBot.create :user, :wfc_member, team_leader: true
     wmt_member = FactoryBot.create :user, :wmt_member, team_leader: false
     wqac_member = FactoryBot.create :user, :wqac_member, team_leader: false
     wrc_member = FactoryBot.create :user, :wrc_member, team_leader: false
@@ -35,7 +36,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wst_member = FactoryBot.create :user, :wst_member, team_leader: false
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "leaders@worldcubeassociation.org",
-      a_collection_containing_exactly(wrt_leader.email, wdc_leader.email),
+      a_collection_containing_exactly(wrt_leader.email, wdc_leader.email, wfc_leader.email),
     )
 
     # board@ mailing list
@@ -71,7 +72,13 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # finance@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "finance@worldcubeassociation.org",
-      a_collection_containing_exactly(wfc_member.email),
+      a_collection_containing_exactly(wfc_member.email, wfc_leader.email),
+    )
+
+    # treasurer@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "treasurer@worldcubeassociation.org",
+      a_collection_containing_exactly(wfc_leader.email),
     )
 
     # marketing@ mailing list
