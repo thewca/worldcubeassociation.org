@@ -324,7 +324,7 @@ fi:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: Älä anna järjestäjien muokata tätä kilpailua
+        confirmed: Älä anna järjestäjien muokata tätä kilpailua
         #original_hash: d493e6a
         showAtAll: Tee kilpailusta julkisesti näkyvä
         #original_hash: 709a232
@@ -349,7 +349,7 @@ fi:
         external_website: Verkkosivusto
         #original_hash: 692e1f9
         generate_website: Haluan käyttää ulkoisen sivuston sijaan WCA-sivua lisätietoihin.
-        #original_hash: dd88e47
+        #original_hash: 6cf623b
         base_entry_fee_lowest_denomination: Osallistumismaksu
         #original_hash: 28a6fbb
         currency_code: Valuuttatunnus
@@ -391,7 +391,7 @@ fi:
         extra_registration_requirements: Ylimääräiset rekisteröitymisvaatimukset
         #original_hash: 2529d04
         on_the_spot_registration: Jälki-ilmoittautuminen kisapaikalla
-        #original_hash: bbff74c
+        #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Jälki-ilmoittautumismaksu
         #original_hash: efbdbab
         refund_policy_percent: Palautettava osuus prosentteina
@@ -399,6 +399,19 @@ fi:
         refund_policy_limit_date: Takaraja palautuksille
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Vieraiden pääsymaksu
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Haluaisin, että kilpailijoita vaaditaan toimittamaan pulmapelinsä
+          ilmoittautumisen yhteydessä (säännön Z1) mukaan)
+        #original_hash: 466aca7
+        regulation_z1_reason: 'Syy Z1:en käyttämiseen'
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Haluan valita kilpailijoita, jotka pääsevät suoraan tiettyjen lajien
+          tietyille kierroksille määrättyjen aikaisempien kilpailujen tulosten
+          perusteella (säännön Z3) mukaan)
+        #original_hash: 18d9a8c
+        regulation_z3_reason: 'Syy Z3:n käyttämiseen'
       registration:
         #original_hash: 3c23a67
         guests: Vierailijat
@@ -584,6 +597,8 @@ fi:
           Pochmann</strong>. Ei huolimattomasti, kuten <strong>s
           pochman</strong>. Muut (toinen, kolmas jne.) etunimet (joko kokonaan
           tai pelkkänä alkukirjaimena) ovat vapaaehtoisia.
+        #original_hash: c03b949
+        email: Sähköpostiosoitteen vaihtaminen vaatii uuden osoitteen vahvistamista.
         #original_hash: 8a91e53
         pending_avatar: >-
           Uuden profiilikuvan lataamisen jälkeen sinun täytyy odottaa, että WCA
@@ -624,9 +639,9 @@ fi:
         #original_hash: 2c812a0
         name: >-
           Kilpailun koko nimi sisältäen vuosiluvun lopussa (esim. Danish Open
-          2016). Muistathan isot alkukirjaimet. Nimi saa sisältää vain
-          kirjaimia, numeroita, yhdysmerkkejä (-), ja-merkkejä (&), pisteitä
-          (.), kaksoispisteitä (:), heittomerkkejä (') ja välilyöntejä ( ).
+          2016). Muista isot alkukirjaimet. Nimi saa sisältää vain kirjaimia,
+          numeroita, yhdysmerkkejä (-), ja-merkkejä (&), pisteitä (.),
+          kaksoispisteitä (:), heittomerkkejä (') ja välilyöntejä ( ).
         #original_hash: 525fcc8
         cellName: >-
           Kilpailun lyhennetty nimi. Jos kilpailun koko nimi on lyhyt, voit
@@ -667,12 +682,12 @@ fi:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 82ad56b
+        #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Osallistumismaksu kilpailuun. Maksu näytetään kilpailusivun
           tietoja-osiossa ja rekisteröitymissivulla, jos käytössä. Jos arvoksi
           asetetaan 0, kilpailusivulla lukee, että osallistuminen on ilmaista.
-        #original_hash: 866bc05
+        #original_hash: 9735ddf
         currency_code: Osallistumismaksujen valuuttatunnus.
         #original_hash: da39a3e
         guests_enabled: ''
@@ -681,7 +696,7 @@ fi:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -734,6 +749,18 @@ fi:
           Toistaiseksi tämä luku on vain suuntaa antava, vieraiden pääsymaksuja
           ei voi hallita tämän sivuston kautta. Jos arvoksi asetetaan 0,
           kilpailusivulla lukee, että katsojat pääsevät paikalle ilmaiseksi.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Please elaborate here why you would like to adopt Regulation Z1).
+          Please fill this out in English!
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Please elaborate here why you would like to adopt Regulation Z3).
+          Please fill this out in English!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -808,10 +835,10 @@ fi:
           Raportoi kaikista välikohtauksista, joiden uskot olevan mainitsemisen
           arvoisia. Numeroi tapahtumat alkaen numerosta 1, niin toiset
           delegaatit voivat kommentoidessaan viitata niihin numeron avulla.
-          Mainitsethan ainoastaan konkreettisia tapauksia, etkä yleisiä
-          tapahtumia (kuten normaalit rangaistukset +2 ja DNF). Voit kysyä
-          delegaattien tai WRC:n mielipidettä niistä. Jos haluat WDC:n
-          osalliseksi joihinkin niistä, mainitsethan tämän pyynnön selkeästi.
+          Mainitse ainoastaan erityiset tapaukset, etkä yleisiä tapahtumia
+          (kuten normaalit rangaistukset +2 ja DNF). Voit kysyä delegaattien tai
+          WRC:n mielipidettä niistä. Jos haluat WDC:n osalliseksi joihinkin
+          niistä, mainitsethan tämän pyynnön selkeästi.
         #original_hash: f30abdc
         remarks: >-
           Kerro muista yksityiskohdista, jotka haluat jakaa (esim.
@@ -1227,7 +1254,6 @@ fi:
       approve: Hyväksy
       #original_hash: 85de4b8
       unconfirmed_email: 'Tämän tilin sähköpostiosoitetta (%{email}) ei ole vahvistettu.'
-      confirm_new_email: 'Sähköpostiosoitteen vaihtaminen vaatii uuden osoitteen vahvistamista.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Tämä tili odottaa uuden sähköpostiosoitteen (%{email}) vahvistamista.'
       #original_hash: 0340b0b
@@ -1333,6 +1359,14 @@ fi:
       unique: 'on jo käyttäjän %{used_name} käytössä osoitteella %{used_email}'
       #original_hash: 26f70ed
       dob_past: täytyy olla mennyt
+      #original_hash: b64df45
+      already_represented_country: >-
+        Cannot change the country to a country the person has already
+        represented in the past.
+      #original_hash: b589014
+      must_have_a_change: >-
+        Nimen tai kansalaisuuden täytyy muuttua henkilön tietojen päivittämistä
+        varten.
       #original_hash: 012f032
       must_be_senior: täytyy olla vastaava delegaatti
       #original_hash: 2e582eb
@@ -1641,7 +1675,7 @@ fi:
       ennen hyväksymistä. Tarkista yksityiskohdat kilpailun verkkosivulta.
     #original_hash: 58b1a3c
     accepted: Rekisteröitymisesi on hyväksytty!
-    #original_hash: 70de60f
+    #original_hash: bcd7d70
     entry_fees_fully_paid: 'Olet maksanut %{paid}, mikä kattaa koko osallistumismaksun.'
     #original_hash: 2e5d1b9
     will_pay_here: 'Maksat ne vasta, kun olet lähettänyt rekisteröitymisesi'
@@ -1663,7 +1697,7 @@ fi:
         #original_hash: bf3a39e
         donation: 'Valinnainen lahjoitus, joka päätyy ainoastaan järjestäjäryhmälle'
       labels:
-        #original_hash: 948ec72
+        #original_hash: 4de825f
         entry_fees: Osallistumismaksu
         #original_hash: 2c09302
         donation: Lahjoitus
@@ -1781,7 +1815,7 @@ fi:
       competitor_limit_is: 'Osallistujaraja on %{competitor_limit} kilpailijaa.'
       #original_hash: 5101f65
       no_competitor_limit: Osallistujarajoitusta ei ole.
-      #original_hash: 86cf09f
+      #original_hash: f979d5e
       entry_fee_is: 'Kilpailun osallistumismaksu on %{base_entry_fee}.'
       #original_hash: 5390a91
       no_entry_fee: Kilpailuun rekisteröityminen on ilmaista.
@@ -1799,7 +1833,7 @@ fi:
         sinulle palautetaan %{refund_policy_percent} osallistumismaksustasi.
       #original_hash: 4aca553
       no_refunds: Osallistumismaksuja ei palauteta missään tilanteessa.
-      #original_hash: b38fa7b
+      #original_hash: cf7be5d
       on_the_spot_registration: >-
         Kisapaikalla voi jälki-ilmoittautua. Osallistumismaksu on tällöin
         %{on_the_spot_base_entry_fee}.
@@ -2553,11 +2587,11 @@ fi:
       paragraphs:
         #original_hash: c86d105
         '1': >-
-          World Cube Association kattaa kilpailuja mekaanisille pulmapeleille,
-          joita operoidaan kääntelemällä palajoukkoja (engl. 'twisty puzzles').
-          Kuuluisin tällainen pulmapeli on Rubikin kuutio, jonka keksi
-          unkarilainen professori Rubik. Valikoima tällaisia pulmapelejä on
-          valittu WCA:n virallisiksi lajeiksi.
+          World Cube Associationin alla järjestetään kilpailuja mekaanisille
+          pulmapeleille, jotka ratkaistaan suorittamalla siirtosarjoja (engl.
+          'twisty puzzles'). Kuuluisin tällainen pulmapeli on Rubikin kuutio,
+          jonka keksi unkarilainen professori Rubik. Valikoima näitä pulmapelejä
+          on valittu WCA:n virallisiksi lajeiksi.
         #original_hash: 22c3593
         '2': >-
           World Cube Association järjestää kilpailuja ympäri maailmaa.
@@ -2565,9 +2599,9 @@ fi:
           järjestämisestä, tukevat WCA:ta tässä.
         #original_hash: 0902c4a
         '3': >-
-          World Cube Associationin tavoite on saada <strong>useampia kilpailuja
-          useampiin maihin ja useammille ihmisille, reiluissa, tasavertaisissa
-          ja iloisissa olosuhteissa</strong>.
+          World Cube Associationin tavoite on saada <strong>enemmän kilpailuja
+          useampiin maihin ja useammille ihmisille, reiluissa ja tasavertaisissa
+          oloissa</strong>.
         #original_hash: 2b993c0
         '4': >-
           World Cube Associationin henkeen kuuluu, että <strong>ihmiset
@@ -2682,7 +2716,7 @@ fi:
     #original_hash: 687c828
     title: Asiakirjat
     #original_hash: 9855f80
-    bylaws: Arvojärjestys
+    bylaws: Bylaws
     #original_hash: fdceb44
     motions: Aloitteet
     #original_hash: 092f99e
@@ -2713,7 +2747,7 @@ fi:
       description: >-
         WCA tunnustaa useita alueellisia järjestöjä maailmanlaajuisesti.
         Alueellisen järjestön tehtävä on järjestää WCA-kilpailuja ja tukea WCA:n
-        toimia alueella. Valtioita, jotka haluavat muodostaa alueellisen
+        toimia alueella. Valtioita, jotka haluavat perustaa alueellisen
         järjestön, kannustetaan edistämään WCA:n asemaa alueellaan ennen
         hakemuksensa lähettämistä.
     requirements:
@@ -2727,17 +2761,15 @@ fi:
           Olla aktiivisesti osallisena WCA:n maanosakilpailuissa, jotka pidetään
           alueellisen järjestön maanosassa
         #original_hash: 8943714
-        '3': >-
-          Kunnioittaa ja edistää WCA:n arvojärjestyksen ja sääntöjen mukaisia
-          päämääriä
+        '3': 'Kunnioittaa ja edistää WCA:n Bylawsin ja sääntöjen mukaisia päämääriä'
         #original_hash: 0c3576b
         '4': Suostua kaikkiin asiaankuuluviin WCA-sääntöihin
         #original_hash: 23cda60
         '5': Hyväksyä ja suostua kaikkiin WCA-toimihenkilöiden päätöksiin
         #original_hash: efe2b55
         '6': >-
-          Pitää WCA ajan tasalla järjestön nykyisestä arvojärjestyksestä ja
-          säännöistä sähköisessä muodossa
+          Pitää WCA ajan tasalla järjestön nykyisestä Bylawsista ja säännöistä
+          sähköisessä muodossa
     application_instructions:
       #original_hash: 4da829b
       title: Hakemusohjeet
@@ -3120,7 +3152,7 @@ fi:
     paragraph2:
       #original_hash: f20dd3b
       title: Kilpailun arvioidut kustannukset
-      #original_hash: ab53dda
+      #original_hash: f16a06f
       content: >-
         Odotettavat kustannukset vaihtelevat suuresti maiden vällillä ja
         riippuvat useista tekijöistä, kuten kilpailupaikan koosta ja muista
@@ -3156,7 +3188,7 @@ fi:
         #original_hash: de00462
         '1': Kilpailuilla ei ole yhteisiä lajeja.
         #original_hash: f7bacc5
-        '2': Kilpailut järjestetään eri valtioissa.
+        '2': Kilpailut järjestetään eri maissa.
         #original_hash: 7b2c099
         '3': >-
           Viimeisen 12 kuukauden aikana kilpailua ympäröivällä 100 km alueella
@@ -3209,7 +3241,7 @@ fi:
     paragraph6:
       #original_hash: ce4c3d0
       title: Rekisteröitymisten käsittely
-      #original_hash: cb13cd0
+      #original_hash: bd669a1
       content: >-
         Rekisteröitymiset täytyy käsitellä rekisteröitymisjärjestyksessä siten,
         että he, jotka suorittivat rekisteröitymisen loppuun asti ensimmäisenä,
@@ -3226,7 +3258,7 @@ fi:
         Kun hyväksytysti rekisteröitynyt kilpailija peruuttaa
         rekisteröitymisensä, hänet voidaan korvata seuraavalla jonotuslistan
         kilpailijalla.
-      #original_hash: 1b2ea79
+      #original_hash: 802b34f
       content2: >-
         Jos osallistumismaksut maksetaan etukäteen, on tehokas lähestymistapa
         tarjota vapaa paikka jonotuslistan seuraavalle kilpailijalle ja asettaa
