@@ -387,6 +387,6 @@ def create_wcif_with_events(event_ids)
           },
         ],
       }
-    end
+    end,
   }
 end

@@ -38,13 +38,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def update_wcif
-    competition = competition_from_params({
+    includes_associations = [{
       competition_venues: {
         venue_rooms: {
           schedule_activities: [{ child_activities: [:holder] }, :holder],
         },
       },
-    })
+    }]
+    competition = competition_from_params(includes_associations)
     require_can_manage!(competition)
     wcif = params.permit!.to_h
     wcif = wcif["_json"] || wcif
