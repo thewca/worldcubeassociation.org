@@ -506,7 +506,7 @@ class Competition < ApplicationRecord
     old_start_date = saved_changes["start_date"]&.first || start_date
     old_number_of_days = (old_end_date - old_start_date).to_i + 1
 
-    competition_activities = all_activities
+    competition_activities = top_level_activities
     if start_date && end_date
       # NOTE: when doing the change we don't need to care about the timezone, as we just "move" all the datetime the same way
       if number_of_days >= old_number_of_days
@@ -1124,6 +1124,10 @@ class Competition < ApplicationRecord
 
   def all_activities
     competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:all_activities).flatten
+  end
+
+  def top_level_activities
+    competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:top_level_activities).flatten
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif

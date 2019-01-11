@@ -83,6 +83,10 @@ class ScheduleActivity < ApplicationRecord
     [activity_code, child_activities.map(&:all_activity_codes)].flatten
   end
 
+  def all_activities
+    [self, child_activities.map(&:all_activities)].flatten
+  end
+
   def to_wcif
     {
       "id" => wcif_id,

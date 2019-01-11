@@ -19,6 +19,10 @@ class VenueRoom < ApplicationRecord
   validates_presence_of :name
   validates_numericality_of :wcif_id, only_integer: true
 
+  def all_activities
+    schedule_activities.flat_map(&:all_activities)
+  end
+
   def to_wcif
     {
       "id" => wcif_id,
