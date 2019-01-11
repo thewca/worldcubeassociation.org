@@ -33,6 +33,10 @@ class CompetitionVenue < ApplicationRecord
   end
 
   def all_activities
+    venue_rooms.flat_map(&:all_activities).sort_by(&:start_time)
+  end
+
+  def top_level_activities
     venue_rooms.flat_map(&:schedule_activities).sort_by(&:start_time)
   end
 
