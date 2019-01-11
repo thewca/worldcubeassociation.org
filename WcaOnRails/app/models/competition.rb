@@ -1279,7 +1279,7 @@ class Competition < ApplicationRecord
             "numberOfDays" => { "type" => "integer" },
           },
         },
-      }
+      },
     }
   end
 

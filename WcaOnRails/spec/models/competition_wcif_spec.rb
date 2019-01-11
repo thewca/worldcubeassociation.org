@@ -657,7 +657,6 @@ RSpec.describe "Competition WCIF" do
         room = competition.competition_venues.first.venue_rooms.find_by(wcif_id: 44)
         expect(room.name).to eq "Hippolyte's backyard"
       end
-
     end
   end
 
