@@ -1424,6 +1424,14 @@ en:
       board:
         name: "WCA Board of Directors"
         info_html: "The World Cube Association is led by the <strong>WCA Board</strong>, consisting of the following members:"
+      chair:
+        name: "WCA Chair"
+      executive_director:
+        name: "WCA Executive Director"
+      secretary:
+        name: "WCA Secretary"
+      vice_chair:
+        name: "WCA Vice-Chair"
       committees: "The following committees are responsible for the operational activities of the WCA:"
       #context: WDC
       wdc:

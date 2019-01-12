@@ -35,7 +35,8 @@ class User < ApplicationRecord
     team_senior_members = TeamMember.current.where(team_senior_member: true).map(&:user)
     eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))
     board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
-    (team_leaders + team_senior_members + eligible_delegates + board_members).uniq
+    officers = TeamMember.current.where(team_id: Team.all_officers.map(&:id)).map(&:user)
+    (team_leaders + team_senior_members + eligible_delegates + board_members + officers).uniq
   end
 
   def self.leader_senior_voters
@@ -411,6 +412,11 @@ class User < ApplicationRecord
     team_member?(Team.board)
   end
 
+  # Officers are defined in our Bylaws. Every Officer has a team on the website except for the WCA Treasurer, as it is the WFC Leader.
+  def officer?
+    team_member?(Team.chair) || team_member?(Team.executive_director) || team_member?(Team.secretary) || team_member?(Team.vice_chair) || team_leader?(Team.wfc)
+  end
+
   def communication_team?
     team_member?(Team.wct)
   end
@@ -452,13 +458,13 @@ class User < ApplicationRecord
   end
 
   def staff?
-    any_kind_of_delegate? || member_of_any_official_team? || board_member?
+    any_kind_of_delegate? || member_of_any_official_team? || board_member? || officer?
   end
 
   def staff_with_voting_rights?
     # See "Member with Voting Rights" in:
     #  https://www.worldcubeassociation.org/documents/motions/02.2019.1%20-%20Definitions.pdf
-    full_delegate? || senior_delegate? || senior_member_of_any_official_team? || leader_of_any_official_team? || board_member?
+    full_delegate? || senior_delegate? || senior_member_of_any_official_team? || leader_of_any_official_team? || board_member? || officer?
   end
 
   def team_member?(team)
