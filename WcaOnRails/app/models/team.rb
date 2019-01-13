@@ -45,6 +45,15 @@ class Team < ApplicationRecord
     ]
   end
 
+  def self.all_officers
+    [
+      Team.chair,
+      Team.executive_director,
+      Team.secretary,
+      Team.vice_chair,
+    ]
+  end
+
   # Code duplication from Cachable concern, as we index by friendly_id and not by id :(
   def self.c_all_by_friendly_id
     @@teams_by_friendly_id ||= all.with_hidden.index_by(&:friendly_id)
@@ -56,6 +65,22 @@ class Team < ApplicationRecord
 
   def self.board
     Team.c_find_by_friendly_id!('board')
+  end
+
+  def self.chair
+    Team.c_find_by_friendly_id!('chair')
+  end
+
+  def self.executive_director
+    Team.c_find_by_friendly_id!('executive_director')
+  end
+
+  def self.secretary
+    Team.c_find_by_friendly_id!('secretary')
+  end
+
+  def self.vice_chair
+    Team.c_find_by_friendly_id!('vice_chair')
   end
 
   def self.wct
