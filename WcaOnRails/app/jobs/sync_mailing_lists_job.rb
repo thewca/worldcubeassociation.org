@@ -11,6 +11,7 @@ class SyncMailingListsJob < ApplicationJob
     GsuiteMailingLists.sync_group("communication@worldcubeassociation.org", Team.wct.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("competitions@worldcubeassociation.org", Team.wcat.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("disciplinary@worldcubeassociation.org", Team.wdc.current_members.includes(:user).map(&:user).map(&:email))
+    GsuiteMailingLists.sync_group("dataprotection@worldcubeassociation.org", Team.wdpc.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("ethics@worldcubeassociation.org", Team.wec.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("finance@worldcubeassociation.org", Team.wfc.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("treasurer@worldcubeassociation.org", Team.wfc.current_members.where(team_leader: true).map(&:user).map(&:email))
