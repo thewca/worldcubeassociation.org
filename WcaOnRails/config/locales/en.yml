@@ -1443,6 +1443,10 @@ en:
       wdc:
         name: "WCA Disciplinary Committee"
         description: "This committee advises the WCA Board in special cases, like alleged violations of WCA Regulations, and may be contacted by WCA members in case of important personal matters regarding WCA competitions."
+      #context: WDPC
+      wdpc:
+        name: "WCA Data Protection Committee"
+        description: "This committee is responsible for all matters relating to Data Protection."
       #context: WRC
       wrc:
         name: "WCA Regulations Committee"
@@ -1542,6 +1546,8 @@ en:
       info_html: "The WCT is in charge of overseeing and supporting communications of the WCA with the community and general public. They should be contacted if you have general questions about the WCA or their social media appearance."
     wdc:
       info_html: "The WDC investigates a variety of situations and proposes solutions, including punishments when necessary.  Among other topics, these situations could be serious violations of WCA Regulations or community issues. If you have experienced any of these, feel free to approach this committee."
+    wdpc:
+      info_html: "The WDPC has the responsibility and duty of researching, creating, implementing, managing, and enforcing all WCA Data Protection policies, contracts with external Data Processors of WCA Data, and managing tasks relating to Data Protection."
     wrc:
       info_html: "The WRC handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents. The WRC regularly publishes WCA internal reports to help all WCA Delegates and improve their knowledge of the Regulations. If you would like to take part in regulation development or propose changes you can reach out to the WRC by contacting them via mail or discussions on <a href='https://github.com/thewca/wca-regulations'>GitHub</a>."
     wrt:

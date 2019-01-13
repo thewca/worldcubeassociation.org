@@ -429,6 +429,10 @@ class User < ApplicationRecord
     team_member?(Team.wdc)
   end
 
+  def wdpc_team?
+    team_member?(Team.wdpc)
+  end
+
   def ethics_committee?
     team_member?(Team.wec)
   end
@@ -516,7 +520,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate?
+    admin? || board_member? || results_team? || communication_team? || wdc_team? || wdpc_team? || any_kind_of_delegate?
   end
 
   def can_view_senior_delegate_material?

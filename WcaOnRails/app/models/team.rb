@@ -35,6 +35,7 @@ class Team < ApplicationRecord
       Team.wct,
       Team.wcat,
       Team.wdc,
+      Team.wdpc,
       Team.wec,
       Team.wfc,
       Team.wmt,
@@ -125,6 +126,10 @@ class Team < ApplicationRecord
 
   def self.wmt
     Team.c_find_by_friendly_id!('wmt')
+  end
+
+  def self.wdpc
+    Team.c_find_by_friendly_id!('wdpc')
   end
 
   def acronym
