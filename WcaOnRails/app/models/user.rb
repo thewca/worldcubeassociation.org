@@ -981,4 +981,13 @@ class User < ApplicationRecord
       user.skip_confirmation!
     end
   end
+
+  # This method is called by Devise when a new user signs up.
+  # This gives us an opportunity to stash the user's preferred locale in the
+  # database, which is useful for when we send them emails in the future.
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      user.preferred_locale = session[:locale]
+    end
+  end
 end
