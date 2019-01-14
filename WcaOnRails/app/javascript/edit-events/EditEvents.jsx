@@ -6,7 +6,7 @@ import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import { rootRender } from 'edit-events'
 import { pluralize } from 'edit-events/modals/utils'
-import { buildActivityCode, saveWcifPart, roundIdToString } from 'wca/wcif-utils'
+import { buildActivityCode, saveWcif, roundIdToString } from 'wca/wcif-utils'
 import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from 'edit-events/modals'
 
 export default class EditEvents extends React.Component {
@@ -17,7 +17,7 @@ export default class EditEvents extends React.Component {
     let onSuccess = () => this.setState({ savedWcifEvents: _.cloneDeep(wcifEvents), saving: false });
     let onFailure = () => this.setState({ saving: false });
 
-    saveWcifPart(competitionId, 'events', wcifEvents, onSuccess, onFailure);
+    saveWcif(competitionId, { events: wcifEvents }, onSuccess, onFailure);
   }
 
   unsavedChanges() {
