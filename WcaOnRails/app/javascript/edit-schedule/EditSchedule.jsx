@@ -14,7 +14,7 @@ import { rootRender } from 'edit-schedule'
 import { EditVenue } from './EditVenue'
 import { SchedulesEditor } from './SchedulesEditor'
 import { initElementsIds, newVenueId } from './utils'
-import { saveWcifPart } from 'wca/wcif-utils'
+import { saveWcif } from 'wca/wcif-utils'
 
 export const schedulesEditPanelSelector = "#schedules-edit-panel";
 
@@ -31,7 +31,7 @@ export default class EditSchedule extends React.Component {
     let onSuccess = () => this.setState({ savedScheduleWcif: _.cloneDeep(competitionInfo.scheduleWcif), saving: false });
     let onFailure = () => this.setState({ saving: false });
 
-    saveWcifPart(competitionInfo.id, 'schedule', competitionInfo.scheduleWcif, onSuccess, onFailure);
+    saveWcif(competitionInfo.id, { schedule: competitionInfo.scheduleWcif }, onSuccess, onFailure);
   }
 
 

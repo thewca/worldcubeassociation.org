@@ -19,8 +19,8 @@ function promiseSaveWcif(competitionId, data) {
   return fetch(url, fetchOptions);
 }
 
-export function saveWcifPart(competitionId, partName, data, onSuccess, onFailure) {
-  promiseSaveWcif(competitionId, { [partName]: data }).then(response => {
+export function saveWcif(competitionId, data, onSuccess, onFailure) {
+  promiseSaveWcif(competitionId, data).then(response => {
     return Promise.all([response, response.json()]);
   }).then(([response, json]) => {
     if(!response.ok) {
