@@ -234,6 +234,7 @@ RSpec.describe "Competition WCIF" do
             },
           ],
         },
+        "extensions" => [],
       )
     end
   end

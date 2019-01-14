@@ -23,6 +23,7 @@ class Competition < ApplicationRecord
   belongs_to :country, foreign_key: :countryId
   has_one :continent, foreign_key: :continentId, through: :country
   has_many :championships, dependent: :delete_all
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -369,7 +370,8 @@ class Competition < ApplicationRecord
              'country',
              'continent',
              'championships',
-             'rounds'
+             'rounds',
+             'wcif_extensions'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -1140,6 +1142,7 @@ class Competition < ApplicationRecord
       "persons" => persons_wcif,
       "events" => events_wcif,
       "schedule" => schedule_wcif,
+      "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
@@ -1178,6 +1181,7 @@ class Competition < ApplicationRecord
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       set_wcif_events!(wcif["events"], current_user) if wcif["events"]
       set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
+      WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     end
   end
 
@@ -1279,6 +1283,7 @@ class Competition < ApplicationRecord
             "numberOfDays" => { "type" => "integer" },
           },
         },
+        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
   end
