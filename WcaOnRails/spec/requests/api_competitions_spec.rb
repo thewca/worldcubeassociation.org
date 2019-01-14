@@ -278,6 +278,25 @@ RSpec.describe "API Competitions" do
       end
     end
 
+    describe "extensions" do
+      let(:competition) { FactoryBot.create(:competition, :with_organizer, :visible) }
+      context "when signed in as a competition manager" do
+        before { sign_in competition.organizers.first }
+
+        it "can update WCIF root extensions" do
+          extensions = [{
+            "id" => "com.third.party.competition",
+            "specUrl" => "https://example.com/competition.json",
+            "data" => {
+              "logoUrl" => "https://example.com/logo.jpg",
+            },
+          }]
+          patch api_v0_competition_update_wcif_path(competition), params: { extensions: extensions }.to_json, headers: headers
+          expect(competition.wcif_extensions.first.to_wcif).to eq extensions.first
+        end
+      end
+    end
+
     describe "OAuth user" do
       let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
 
