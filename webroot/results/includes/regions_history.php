@@ -26,7 +26,7 @@ function showRegionalRecordsHistory () {
   #--- Order: normal history or mixed?
   $order = $chosenHistory
            ? 'event.rank, type, value, year desc, month desc, day desc, roundType.rank desc'
-           : 'year desc, month desc, day desc, roundType.rank desc, event.rank, type, value';
+           : 'year desc, month desc, day desc, event.rank, type, value, roundType.rank desc';
 
   #--- Get the results.
   $results = dbQuery("
