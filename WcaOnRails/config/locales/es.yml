@@ -1804,6 +1804,11 @@ es:
       must_have_events: >-
         Por favor, selecciona al menos una prueba antes de confirmar la
         competición.
+      #original_hash: a3aea56
+      schedule_must_match_rounds: >-
+        Por favor, asegúrate de que la competición tiene al menos una ronda por
+        categoría  y  que el horario que has creado contiene todas las rondas
+        que declaraste antes de confirmar la competición.
       #original_hash: e390250
       create_success: ¡La competición se ha creado satisfactoriamente!
       #original_hash: afe3a23
@@ -2117,6 +2122,10 @@ es:
       cannot_delete_confirmed: No se puede eliminar una competición confirmada.
       #original_hash: 191df37
       must_contain_event: debe contener al menos una prueba para esta competición
+      #original_hash: 54fe619
+      schedule_must_match_rounds: >-
+        debe tener al menos una ronda, y todas las rondas deben estar incluidas
+        en el horario.
       #original_hash: 6e228b7
       must_contain_delegate: debe contener al menos un Delegado de la WCA
       #original_hash: 8131fc2
@@ -2739,6 +2748,18 @@ es:
         info_html: >-
           La Asociación Mundial del Cubo (WCA) está liderada por la
           <strong>Junta Directiva WCA</strong>, cuyos miembros son:
+      chair:
+        #original_hash: de34439
+        name: Presidente de la WCA
+      executive_director:
+        #original_hash: 7d405ff
+        name: Director Ejecutivo de la WCA
+      secretary:
+        #original_hash: 1dd4a07
+        name: Secretario de la WCA
+      vice_chair:
+        #original_hash: 0388b19
+        name: Vicepresidente de la WCA
       #original_hash: b0c72a9
       committees: >-
         Los siguientes comités se encargan de las actividades operacionales de
