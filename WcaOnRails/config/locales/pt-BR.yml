@@ -1785,6 +1785,11 @@ pt-BR:
       must_have_events: >-
         Por favor acrescente pelo menos um evento antes de confirmar a
         competição.
+      #original_hash: a3aea56
+      schedule_must_match_rounds: >-
+        Por favor certifique-se de que a competição tem pelo menos uma rodada
+        por evento e que o cronograma que você criou inclui todas as rodadas que
+        você informou antes de confirmar a competição.
       #original_hash: e390250
       create_success: Competição criada com sucesso!
       #original_hash: afe3a23
@@ -2092,6 +2097,10 @@ pt-BR:
       cannot_delete_confirmed: Não pode excluir uma competição confirmada.
       #original_hash: 191df37
       must_contain_event: deve ter pelo menos um evento
+      #original_hash: 54fe619
+      schedule_must_match_rounds: >-
+        precisa ter pelo menos uma rodada, e todas as rodadas precisam estar no
+        cronograma.
       #original_hash: 6e228b7
       must_contain_delegate: deve ter pelo menos um Delegado da WCA
       #original_hash: 8131fc2
@@ -2697,6 +2706,18 @@ pt-BR:
         info_html: >-
           A World Cube Association é conduzida pelo <strong>WCA Board (Conselho
           da WCA)</strong>, que consiste nos seguintes membros:
+      chair:
+        #original_hash: de34439
+        name: Presidente da WCA
+      executive_director:
+        #original_hash: 7d405ff
+        name: Diretor Executivo da WCA
+      secretary:
+        #original_hash: 1dd4a07
+        name: Secretário da WCA
+      vice_chair:
+        #original_hash: 0388b19
+        name: Vice-Presidente da WCA
       #original_hash: b0c72a9
       committees: >-
         Os seguintes comitês e equipes são responsáveis pelas atividades
