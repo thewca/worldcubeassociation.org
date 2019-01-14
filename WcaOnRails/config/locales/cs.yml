@@ -2693,6 +2693,18 @@ cs:
         info_html: >-
           World Cube Association je vedena <strong>WCA Boardem</strong>, který
           se skládá z následujících členů:
+      chair:
+        #original_hash: de34439
+        name: WCA Chair
+      executive_director:
+        #original_hash: 7d405ff
+        name: WCA Executive Director
+      secretary:
+        #original_hash: 1dd4a07
+        name: WCA Secretary
+      vice_chair:
+        #original_hash: 0388b19
+        name: WCA Vice-Chair
       #original_hash: b0c72a9
       committees: 'Následující výbory jsou odpovědné za provozní aktivity WCA:'
       wdc:
