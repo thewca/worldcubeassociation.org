@@ -7,7 +7,7 @@ class ResultsSubmission
 
   validates :message, presence: true
   validates :competition_id, presence: true
-  CONFIRM_INFORMATION_ERROR = "You must confirm the information are accurate"
+  CONFIRM_INFORMATION_ERROR = "You must confirm the information is accurate"
   validates_acceptance_of :confirm_information, message: CONFIRM_INFORMATION_ERROR, allow_nil: false
   validates :schedule_url, presence: true, url: true
 
@@ -22,7 +22,8 @@ class ResultsSubmission
     @results_validator ||= CompetitionResultsValidator.new(competition_id)
   end
 
-  # FIXME: what is this used for?
+  # This is used in specs to compare two ResultsSubmission
+  # See spec/requests/results_submission_spec.rb
   def ==(other)
     self.class == other.class && self.state == other.state
   end

@@ -373,7 +373,7 @@ class Competition < ApplicationRecord
              'continent',
              'championships',
              'rounds',
-             'uploaded_jsons'
+             'uploaded_jsons',
              'wcif_extensions'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'

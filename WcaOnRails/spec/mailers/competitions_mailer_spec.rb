@@ -210,7 +210,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:results_submission) {
       FactoryBot.build(
         :results_submission,
-        schedule_url: "https://example.com/schedule",
+        schedule_url: link_to_competition_schedule_tab(competition),
         message: "Hello, here are the results",
       )
     }
@@ -231,7 +231,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match(/Hello, here are the results/)
-      expect(mail.body.encoded).to include("https://example.com/schedule")
+      expect(mail.body.encoded).to include(link_to_competition_schedule_tab(competition))
     end
   end
 end

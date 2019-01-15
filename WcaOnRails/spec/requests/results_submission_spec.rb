@@ -73,18 +73,16 @@ RSpec.describe ResultsSubmissionController, type: :request do
 
       it "does not send the email if empty message is provided" do
         expect do
-          request_params = results_submission_params.clone
-          request_params[:message] = ""
-          post competition_submit_results_path(comp.id), params: { results_submission: request_params }
+          results_submission_params[:message] = ""
+          post competition_submit_results_path(comp.id), params: { results_submission: results_submission_params }
         end.to change { ActionMailer::Base.deliveries.count }.by(0)
         assert_enqueued_jobs 0
       end
 
       it "does not send the email if no confirmation is provided" do
         expect do
-          request_params = results_submission_params.clone
-          request_params.delete(:confirm_information)
-          post competition_submit_results_path(comp.id), params: { results_submission: request_params }
+          results_submission_params.delete(:confirm_information)
+          post competition_submit_results_path(comp.id), params: { results_submission: results_submission_params }
         end.to change { ActionMailer::Base.deliveries.count }.by(0)
         assert_enqueued_jobs 0
       end
