@@ -90,7 +90,7 @@ RSpec.describe CompetitionsController do
 
       context "when custom is selected" do
         before do
-          get :index, params: { state: :custom, from_date: 1.day.from_now, to_date: 2.weeks.from_now }
+          get :index, params: { state: :custom, from_date: 1.day.from_now.to_date, to_date: 2.weeks.from_now.to_date }
         end
 
         it "shows competitions overlapping the given date range" do
