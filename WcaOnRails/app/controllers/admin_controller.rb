@@ -58,7 +58,7 @@ class AdminController < ApplicationController
 
     # This makes sure the json structure is valid!
     if @upload_json.import_to_inbox
-      flash[:success] = "JSON File has been imported."
+      flash[:success] = "JSON file has been imported."
       redirect_to competition_admin_upload_results_edit_path
     else
       @results_validator = CompetitionResultsValidator.new(@competition.id)
@@ -148,6 +148,6 @@ class AdminController < ApplicationController
   end
 
   private def competition_from_params
-    Competition.find(params[:competition_id])
+    Competition.find_by_id!(params[:competition_id])
   end
 end

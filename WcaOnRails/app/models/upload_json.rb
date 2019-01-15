@@ -13,17 +13,20 @@ class UploadJson
     else
       begin
         # Parse the json first
-        json = JSON.parse(results_json_str)
-        JSON::Validator.validate!(CompetitionResultsValidator::RESULT_JSON_SCHEMA, json)
-        if json["competitionId"] != competition_id
-          errors.add(:results_file, "this JSON file is not for this competition but for #{json["competitionId"]}!")
+        JSON::Validator.validate!(CompetitionResultsValidator::RESULT_JSON_SCHEMA, parsed_json)
+        if parsed_json["competitionId"] != competition_id
+          errors.add(:results_file, "is not for this competition but for #{parsed_json["competitionId"]}!")
         end
       rescue JSON::ParserError
         errors.add(:results_file, "must be a JSON file from the Workbook Assistant")
       rescue JSON::Schema::ValidationError => e
-        errors.add(:results_file, "The JSON file had errors: #{e.message}")
+        errors.add(:results_file, "has errors: #{e.message}")
       end
     end
+  end
+
+  def parsed_json
+    @parsed_json ||= JSON.parse(results_json_str)
   end
 
   def results_file=(results_file)
@@ -36,16 +39,14 @@ class UploadJson
     # This makes sure the json structure is valid!
     if valid?
       competition = Competition.find(competition_id)
-      json = JSON.parse(results_json_str)
-
       persons_to_import = []
-      json["persons"].each do |p|
+      parsed_json["persons"].each do |p|
         new_person_attributes = p.merge(competitionId: competition_id)
         persons_to_import << InboxPerson.new(new_person_attributes)
       end
       results_to_import = []
       scrambles_to_import = []
-      json["events"].each do |event|
+      parsed_json["events"].each do |event|
         event["rounds"].each do |round|
           # Import results for round
           round["results"].each do |result|
@@ -104,7 +105,7 @@ class UploadJson
         end
         true
       rescue ActiveRecord::RecordNotUnique
-        errors.add(:results_file, "Duplicate personId in JSON.")
+        errors.add(:results_file, "Duplicate record found while uploading results. Maybe there is a duplicate personId in the JSON?")
         false
       rescue ActiveRecord::RecordInvalid => invalid
         object = invalid.record
@@ -115,7 +116,6 @@ class UploadJson
         elsif object.class == InboxResult
           errors.add(:results_file, "Result for person #{object.personId} in '#{Round.name_from_attributes_id(object.eventId, object.roundTypeId)}' is invalid (#{invalid.message}), please fix it!")
         else
-          # FIXME: that's actually not supposed to happen, as the only 3 types of records we create are above
           errors.add(:results_file, "An invalid record prevented the results from being created: #{invalid.message}")
         end
         false
@@ -123,14 +123,5 @@ class UploadJson
     else
       false
     end
-  end
-
-  # FIXME: what is this used for?
-  def ==(other)
-    self.class == other.class && self.state == other.state
-  end
-
-  def state
-    [results_json_str]
   end
 end

@@ -1,13 +1,8 @@
 <%
   force_collapse ||= false
   # NOTE: expect valid 'results_validator' variable
-  panel_style = if results_validator.total_errors > 0
-                  "danger"
-                elsif results_validator.total_warnings > 0
-                  "warning"
-                else
-                  "success"
-                end
+  panel_style = class_for_panel(error: results_validator.total_errors > 0,
+                                warning: results_validator.total_warnings > 0)
   collapse_panel = force_collapse || !results_validator.has_results
 %>
 <div class="panel panel-<%= panel_style %>">

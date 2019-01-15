@@ -1,13 +1,12 @@
 <%
   has_errors ||= false
   results_submission ||= ResultsSubmission.new
-  schedule_url_kwargs = {}
-  if competition.has_schedule?
-    schedule_url_kwargs[:readonly] = true
-    schedule_url_kwargs[:input_html] = {
+  schedule_url_kwargs = {
+    readonly: true,
+    input_html: {
       value: link_to_competition_schedule_tab(competition),
-    }
-  end
+    },
+  }
 %>
 <div class="panel panel-default">
   <div class="panel-heading heading-as-link <%= "collapsed" if has_errors %>" data-toggle="collapse" data-target="#collapse-submit-results">
@@ -19,15 +18,7 @@
   <div id="collapse-submit-results" class="panel-body collapse <%= "in" unless has_errors %>">
     <% unless has_errors %>
       <p>Please enter the body of your email to the Results Team.</p>
-      <p>
-        <% if competition.has_schedule? %>
-          It looks like you have entered your competition's schedule into the WCA website, so we automatically filled the link to the schedule below.
-          Make sure the schedule on the WCA website actually reflects what happened during the competition.
-        <% else %>
-          Make sure to include a link to the competition schedule (and all time
-          limits and cutoffs) and provide any changes to the provided schedule.
-        <% end %>
-      </p>
+      <p>Make sure the schedule on the WCA website actually reflects what happened during the competition.</p>
       <p>
         Please also make sure to include any other additional details required by the
         <%= link_to "'Submitting competition results' section of the delegate crash course",
@@ -41,7 +32,7 @@
         <%= f.submit "Submit", class: "btn btn-primary" %>
       <% end %>
     <% else %>
-      <p>Please upload a JSON file and make sure the results don't contain any error.</p>
+      <p>Please upload a JSON file and make sure the results don't contain any errors.</p>
     <% end %>
   </div>
 </div>

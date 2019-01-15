@@ -22,22 +22,9 @@ class RoundType < ApplicationRecord
   end
 
   # Returns the equivalent round_type_id with cutoff (or without cutoff)
-  def self.equivalent(round_type_id)
-    case round_type_id
-    when "c"
-      "f"
-    when "f"
-      "c"
-    when "d"
-      "1"
-    when "1"
-      "d"
-    when "e"
-      "2"
-    when "2"
-      "e"
-    when "g"
-      "3"
-    end
+  def self.toggle_cutoff(round_type_id)
+    [%w(c f), %w(d 1), %w(e 2), %w(g 3)]
+      .flat_map { |pair| [pair, pair.reverse] }
+      .to_h[round_type_id]
   end
 end

@@ -197,7 +197,9 @@ class CompetitionResultsValidator
     # basic checks on persons are done in the model, uniqueness for a given competition
     # is done in the SQL schema.
 
-    # Map a personId to its corresponding object
+    # Map a personId to its corresponding object.
+    # When dealing with Persons from "InboxPerson" they are indexed by "id",
+    # whereas when dealing with Persons from "Person" they are indexed by "wca_id".
     @persons_by_id = Hash[@persons.map { |person| [@check_real_results ? person.wca_id : person.id, person] }]
 
     # Map a competition's (expected!) round id (eg: "444-f") to its corresponding object
@@ -216,13 +218,13 @@ class CompetitionResultsValidator
     end
 
     check_individual_results(results_by_round_id)
-    check_avancement_conditions(results_by_round_id, @competition.competition_events)
+    check_advancement_conditions(results_by_round_id, @competition.competition_events)
     check_scrambles
 
     check_competitor_limit
 
-    @total_errors = @errors.map { |key, value| value }.map(&:size).reduce(:+)
-    @total_warnings = @warnings.map { |key, value| value }.map(&:size).reduce(:+)
+    @total_errors = @errors.values.sum(&:size)
+    @total_warnings = @warnings.values.sum(&:size)
   end
 
   private
@@ -241,10 +243,9 @@ class CompetitionResultsValidator
       next if index >= reference_index
       score = 0
       reference_solve_times = reference.solve_times
-      r.solve_times.each_with_index do |solve_time, solve_time_index|
-        if solve_time.complete? && solve_time == reference_solve_times[solve_time_index]
-          score += 1
-        end
+      # We attribute 1 point for each similar solve_time, we then just have to count the points.
+      r.solve_times.each_with_index.count do |solve_time, solve_time_index|
+        solve_time.complete? && solve_time == reference_solve_times[solve_time_index]
       end
       # We have at least 3 matching values, consider this similar
       if score > 2
@@ -255,13 +256,10 @@ class CompetitionResultsValidator
   end
 
   def check_events_match(competition_events)
+    # Check for missing/unexpected events
+    # As events must be validated by WCAT, any missing or unexpected event should lead to an error.
     expected = competition_events.map(&:id)
     real = @results.map(&:eventId).uniq
-    # Check for missing/unexpected events and rounds
-    # It should handle cases where:
-    #   - an event was added/deleted
-    #   - a round changed format from what was planed (eg: Bo3 -> Bo1, no cutoff -> cutoff)
-    # FIXME: maybe check for round_id (eg: "333-c") is enough
     (real - expected).each do |event_id|
       @errors[:events] << format(UNEXPECTED_RESULTS_ERROR, event_id: event_id)
     end
@@ -271,14 +269,15 @@ class CompetitionResultsValidator
   end
 
   def check_rounds_match
-    # Check that rounds match what was declared, and return the number of difference
+    # Check that rounds match what was declared.
+    # This function automatically casts combined rounds to regular rounds if everyone has met the cutoff.
     expected = @expected_rounds_by_ids.keys
     real = @results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
     unexpected = real - expected
     missing = expected - real
     missing.each do |round_id|
       event_id, round_type_id = round_id.split("-")
-      equivalent_round_id = "#{event_id}-#{RoundType.equivalent(round_type_id)}"
+      equivalent_round_id = "#{event_id}-#{RoundType.toggle_cutoff(round_type_id)}"
       if unexpected.include?(equivalent_round_id)
         unexpected.delete(equivalent_round_id)
         round = @expected_rounds_by_ids[round_id]
@@ -297,10 +296,9 @@ class CompetitionResultsValidator
     unexpected.each do |round_id|
       @errors[:rounds] << format(UNEXPECTED_ROUND_RESULTS_ERROR, round_id: round_id)
     end
-    unexpected.size + missing.size
   end
 
-  def check_avancement_conditions(results_by_round_id, competition_events)
+  def check_advancement_conditions(results_by_round_id, competition_events)
     results_by_event_id = @results.group_by(&:eventId)
     results_by_event_id.each do |event_id, results|
       results_by_event_id[event_id] = results.group_by(&:roundTypeId)
@@ -397,7 +395,7 @@ class CompetitionResultsValidator
       @errors[:persons] << format(RESULTS_WITHOUT_PERSON_ERROR, person_id: person_id)
     end
 
-    without_wca_id, with_wca_id = @persons_by_id.map { |_, p| p }.partition { |p| p.wca_id.empty? }
+    without_wca_id, with_wca_id = @persons_by_id.values.partition { |p| p.wca_id.empty? }
     if without_wca_id.any?
       existing_person_in_db = Person.where(name: without_wca_id.map(&:name))
       existing_person_in_db.each do |p|
@@ -424,7 +422,7 @@ class CompetitionResultsValidator
     with_wca_id.each do |p|
       existing_person = existing_person_by_wca_id[p.wca_id]
       if existing_person
-        # WRT wants to show warnings for wrong DOB or gender, but error for wrong country.
+        # WRT wants to show warnings for wrong person information.
         # (If I get this right, we do not actually update existing persons from InboxPerson)
         unless p.dob == existing_person.dob
           @warnings[:persons] << format(NON_MATCHING_DOB_WARNING, name: p.name, wca_id: p.wca_id, expected_dob: existing_person.dob, dob: p.dob)
@@ -587,7 +585,7 @@ class CompetitionResultsValidator
             end.compact.map(&:solve_times).flatten
             completed_solves_for_rounds = all_results_for_cumulative_rounds.select(&:complete?)
             number_of_dnf_solves = all_results_for_cumulative_rounds.select(&:dnf?).size
-            sum_of_times_for_rounds = completed_solves_for_rounds.map(&:time_centiseconds).reduce(&:+) || 0
+            sum_of_times_for_rounds = completed_solves_for_rounds.sum(&:time_centiseconds)
 
             # Check the sum is below the limit
             if sum_of_times_for_rounds > time_limit_for_round.centiseconds

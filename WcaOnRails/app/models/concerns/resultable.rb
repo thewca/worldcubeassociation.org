@@ -39,7 +39,7 @@ module Resultable
     def validate_each_solve
       solve_times.each_with_index do |solve_time, i|
         unless solve_time.valid?
-          errors.add(:"value#{i + 1}", solve_time.errors.messages[:base].join(" "))
+          errors.add(:"value#{i + 1}", solve_time.errors.full_messages.join(" "))
         end
       end
     end
