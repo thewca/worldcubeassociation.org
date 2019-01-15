@@ -3,6 +3,28 @@
 <div class="container">
   <h3><%= yield(:title) %></h3>
   <%= alert(:info, "This team is hidden") if @team.hidden? %>
+
+  <p>
+    <b>Please note:</b> This UI is a bit tricky.
+    The <b>only</b> situation where you should be editing existing rows is to
+    fix mistakes, or to change someone's "End date" from unset to set. If you
+    run into a situation you don't know how to handle, do not hesitate to reach
+    out to the WCA Software Team!
+  </p>
+
+  <p>
+    We want to store historical data of team
+    membership <b>and</b> roles. Consider the situation where leadership of a
+    team is changing from Joe to Jane, and Joe is stepping down from the team.
+    It's tempting to uncheck Joe's "Leader" checkbox, and check the "Leader"
+    checkbox from Jane. However, this causes us to lost track of the fact that
+    Joe was a leader for a period of time, and it makes it look like Jane was
+    leader for her entire time on the team. Instead, you should mark both Joe's
+    leadership row and Jane's non-leadership rows as ending today, and create
+    two new rows starting tomorrow where Joe is not leader and Jane is leader.
+  </p>
+
+
   <%= horizontal_simple_form_for @team, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
     <div class="team-members-wrapper">
       <%= wca_table table_class: "team-members", hover: false, striped: false do %>
