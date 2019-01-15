@@ -204,8 +204,8 @@ RSpec.describe Competition do
 
   it "last less than MAX_SPAN_DAYS days" do
     competition = FactoryBot.create :competition
-    competition.start_date = 1.days.ago.strftime("%F")
-    competition.end_date = Competition::MAX_SPAN_DAYS.days.from_now.strftime("%F")
+    competition.start_date = Date.today.strftime("%F")
+    competition.end_date = (Date.today + Competition::MAX_SPAN_DAYS).strftime("%F")
     expect(competition).to be_invalid_with_errors(
       end_date: [I18n.t('competitions.errors.span_too_many_days', max_days: Competition::MAX_SPAN_DAYS)],
     )

@@ -798,7 +798,7 @@ class Competition < ApplicationRecord
       errors.add(:end_date, I18n.t('competitions.errors.end_date_before_start'))
     end
 
-    if (end_date - start_date).to_i > MAX_SPAN_DAYS
+    if number_of_days > MAX_SPAN_DAYS
       errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS))
     end
 
