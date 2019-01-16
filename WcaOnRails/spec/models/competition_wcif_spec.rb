@@ -237,6 +237,12 @@ RSpec.describe "Competition WCIF" do
         "extensions" => [],
       )
     end
+
+    it "rendered WCIF matches JSON Schema definition" do
+      expect {
+        JSON::Validator.validate!(Competition.wcif_json_schema, competition.to_wcif)
+      }.to_not raise_error
+    end
   end
 
   describe "#set_wcif_events!" do
