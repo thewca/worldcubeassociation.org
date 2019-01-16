@@ -698,5 +698,24 @@ RSpec.describe "Competition WCIF" do
         end
       end
     end
+
+    it "allows adding assignments for newly added activities" do
+      registration = FactoryBot.create(:registration, competition: competition)
+      activities = wcif["schedule"]["venues"][0]["rooms"][0]["activities"]
+      activities << {
+        "id" => 1000,
+        "name" => "Some stuff going on",
+        "activityCode" => "other-misc-stuff",
+        "startTime" => activities.last["startTime"],
+        "endTime" => activities.last["endTime"],
+        "childActivities" => [],
+        "extensions" => [],
+      }
+      wcif["persons"].find { |person| person["wcaUserId"] == registration.user.id }["assignments"] << {
+        "activityId" => 1000,
+        "assignmentCode" => "competitor",
+      }
+      expect { competition.set_wcif!(wcif, delegate) }.to change { registration.assignments.count }.by(1)
+    end
   end
 end
