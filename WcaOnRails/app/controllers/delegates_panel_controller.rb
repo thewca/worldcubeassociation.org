@@ -32,7 +32,8 @@ class DelegatesPanelController < ApplicationController
 
   def pending_claims_for_subordinate_delegates
     # Show pending claims for a given user, or the current user, if they can see them
-    @user = User.includes(subordinate_delegates: [:confirmed_users_claiming_wca_id]).find_by_id(params[:user_id] || current_user.id)
+    @user = User.includes(subordinate_delegates: [:confirmed_users_claiming_wca_id]).find_by_id!(params[:user_id] || current_user.id)
+    @subordinate_delegates = @user.subordinate_delegates.to_a.push(@user)
   end
 
   def seniors
