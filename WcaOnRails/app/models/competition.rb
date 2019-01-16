@@ -1178,9 +1178,9 @@ class Competition < ApplicationRecord
   def set_wcif!(wcif, current_user)
     JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
     ActiveRecord::Base.transaction do
-      update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       set_wcif_events!(wcif["events"], current_user) if wcif["events"]
       set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
+      update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     end
   end
