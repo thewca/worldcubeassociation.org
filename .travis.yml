@@ -15,6 +15,7 @@ env:
 before_install:
   # Workaround for https://github.com/travis-ci/travis-ci/issues/8978
   - gem update --system
+  - gem update bundler
 
   - nvm install 8
   - nvm use 8
