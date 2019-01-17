@@ -1125,7 +1125,7 @@ class Competition < ApplicationRecord
   end
 
   def all_activities
-    competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:all_activities).flatten
+    competition_venues.includes(venue_rooms: { schedule_activities: [child_activities: [:child_activities]] }).map(&:all_activities).flatten
   end
 
   def top_level_activities
@@ -1150,6 +1150,7 @@ class Competition < ApplicationRecord
     managers = self.managers
     includes_associations = [
       :events,
+      { assignments: [:schedule_activity] },
       user: {
         person: [:ranksSingle, :ranksAverage],
       },
@@ -1164,14 +1165,27 @@ class Competition < ApplicationRecord
   end
 
   def events_wcif
-    competition_events.map(&:to_wcif)
+    includes_associations = [
+      { rounds: [:competition_event, :wcif_extensions] },
+      :wcif_extensions,
+    ]
+    competition_events.includes(includes_associations).map(&:to_wcif)
   end
 
   def schedule_wcif
+    competition_venues_includes_associations = [
+      {
+        venue_rooms: [
+          :wcif_extensions,
+          { schedule_activities: [{ child_activities: [:child_activities, :wcif_extensions] }, :wcif_extensions] },
+        ],
+      },
+      :wcif_extensions,
+    ]
     {
       "startDate" => start_date.to_s,
       "numberOfDays" => number_of_days,
-      "venues" => competition_venues.map(&:to_wcif),
+      "venues" => competition_venues.includes(competition_venues_includes_associations).map(&:to_wcif),
     }
   end
 
@@ -1187,7 +1201,11 @@ class Competition < ApplicationRecord
 
   def set_wcif_events!(wcif_events, current_user)
     # Remove extra events.
-    self.competition_events.each do |competition_event|
+    competition_events_includes_assotiations = [
+      { rounds: [:competition_event, :wcif_extensions] },
+      :wcif_extensions,
+    ]
+    self.competition_events.includes(competition_events_includes_assotiations).each do |competition_event|
       wcif_event = wcif_events.find { |e| e["id"] == competition_event.event.id }
       event_to_be_removed = !wcif_event || !wcif_event["rounds"]
       if event_to_be_removed
@@ -1219,28 +1237,39 @@ class Competition < ApplicationRecord
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
   def update_persons_wcif!(wcif_persons, current_user)
+    registrations = self.registrations.includes [
+      { assignments: [:schedule_activity] },
+      :user,
+      :registration_competition_events,
+    ]
+    competition_activities = all_activities
     wcif_persons.each do |wcif_person|
-      registration = registrations.find_by(user_id: wcif_person["wcaUserId"])
+      registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
       # Note: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if registration && wcif_person["roles"]
         roles = wcif_person["roles"] - ["delegate", "organizer"] # These two are added on the fly.
         registration.update!(roles: roles)
       end
       if registration && wcif_person["assignments"]
-        competition_activities = all_activities
-        registration.assignments = []
-        wcif_person["assignments"].each do |assignment_wcif|
-          schedule_activity = competition_activities.find do |competition_activity|
-            competition_activity.wcif_id == assignment_wcif["activityId"]
+        registration.assignments = wcif_person["assignments"].map do |assignment_wcif|
+          existing_assignment = registration.assignments.find do |assignment|
+            assignment.wcif_equal?(assignment_wcif)
           end
-          unless schedule_activity
-            raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
+          if existing_assignment
+            existing_assignment
+          else
+            schedule_activity = competition_activities.find do |competition_activity|
+              competition_activity.wcif_id == assignment_wcif["activityId"]
+            end
+            unless schedule_activity
+              raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
+            end
+            registration.assignments.build(
+              schedule_activity_id: schedule_activity.id,
+              station_number: assignment_wcif["stationNumber"],
+              assignment_code: assignment_wcif["assignmentCode"],
+            )
           end
-          registration.assignments.build(
-            schedule_activity_id: schedule_activity.id,
-            station_number: assignment_wcif["stationNumber"],
-            assignment_code: assignment_wcif["assignmentCode"],
-          )
         end
         registration.save!
       end
@@ -1253,7 +1282,15 @@ class Competition < ApplicationRecord
     elsif wcif_schedule["numberOfDays"] != number_of_days
       raise WcaExceptions::BadApiParameter.new("Wrong number of days for competition")
     end
-
+    competition_venues = self.competition_venues.includes [
+      {
+        venue_rooms: [
+          :wcif_extensions,
+          { schedule_activities: [{ child_activities: [:child_activities, :wcif_extensions] }, :wcif_extensions] },
+        ],
+      },
+      :wcif_extensions,
+    ]
     new_venues = wcif_schedule["venues"].map do |venue_wcif|
       # using this find instead of ActiveRecord's find_or_create_by avoid several queries
       # (despite having the association included :()

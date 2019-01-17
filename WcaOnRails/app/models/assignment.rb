@@ -15,6 +15,10 @@ class Assignment < ApplicationRecord
     end
   end
 
+  def wcif_equal?(other_wcif)
+    to_wcif.all? { |key, value| value == other_wcif[key] }
+  end
+
   def to_wcif
     {
       "activityId" => schedule_activity.wcif_id,

@@ -14,7 +14,7 @@ class Registration < ApplicationRecord
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
-  has_many :assignments
+  has_many :assignments, dependent: :delete_all
 
   serialize :roles, Array
 
