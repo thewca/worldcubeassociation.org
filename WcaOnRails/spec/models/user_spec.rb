@@ -369,7 +369,7 @@ RSpec.describe User, type: :model do
       FactoryBot.create(:user, unconfirmed_wca_id: person.wca_id,
                                delegate_id_to_handle_wca_id_claim: delegate.id,
                                claiming_wca_id: true,
-                               dob_verification: "1990-01-02")
+                               dob_verification: "1990-01-2")
     end
 
     let!(:person_without_dob) { FactoryBot.create :person, year: 0, month: 0, day: 0 }
@@ -502,7 +502,7 @@ RSpec.describe User, type: :model do
                                              unconfirmed_wca_id: person.wca_id,
                                              delegate_id_to_handle_wca_id_claim: delegate.id,
                                              claiming_wca_id: true,
-                                             dob_verification: "1990-01-02")
+                                             dob_verification: "1990-01-2")
         expect(WcaIdClaimMailer).to receive(:notify_user_of_delegate_demotion).with(user, delegate, senior_delegate).and_call_original
         expect(WcaIdClaimMailer).not_to receive(:notify_user_of_delegate_demotion).with(unconfirmed_user, delegate, senior_delegate).and_call_original
         delegate.update!(delegate_status: nil, senior_delegate_id: nil)
