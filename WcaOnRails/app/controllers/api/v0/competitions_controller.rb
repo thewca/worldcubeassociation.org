@@ -23,29 +23,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def show_wcif
-    # This is all the associations we may need for the competition WCIF!
-    # Since registrations are ordered later, associations inclusion for them is done later
-    includes_associations = [
-      :delegates,
-      :organizers,
-      { competition_events: [rounds: :competition_event] },
-      { competition_venues: { venue_rooms: [schedule_activities: :child_activities] } },
-    ]
-    competition = competition_from_params(includes_associations)
+    competition = competition_from_params
     require_can_manage!(competition)
 
     render json: competition.to_wcif
   end
 
   def update_wcif
-    includes_associations = [{
-      competition_venues: {
-        venue_rooms: {
-          schedule_activities: [{ child_activities: [:holder] }, :holder],
-        },
-      },
-    }]
-    competition = competition_from_params(includes_associations)
+    competition = competition_from_params
     require_can_manage!(competition)
     wcif = params.permit!.to_h
     wcif = wcif["_json"] || wcif
