@@ -1249,7 +1249,7 @@ DROP TABLE IF EXISTS `wcif_extensions`;
 CREATE TABLE `wcif_extensions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `extendable_type` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `extendable_id` bigint(20) DEFAULT NULL,
+  `extendable_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `extension_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `spec_url` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1475,4 +1475,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20181222224850'),
 ('20181226115357'),
 ('20190105215446'),
-('20190112130723');
+('20190112130723'),
+('20190117112257');
