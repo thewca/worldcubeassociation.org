@@ -3,10 +3,13 @@
 # Hook into rails auto reload mechanism.
 #  http://stackoverflow.com/a/7670266/1739415
 Rails.configuration.to_prepare do
+  # Date.safe_parse
+  # http://stackoverflow.com/a/21034652/1739415
   Date.class_eval do
     def self.safe_parse(value, default = nil)
-      m = /\A(\d{4})-(\d{2})-(\d{2})\z/.match(value.to_s)
-      m ? Date.new(m[1].to_i, m[2].to_i, m[3].to_i) : default
+      Date.strptime(value.to_s, '%Y-%m-%d')
+    rescue ArgumentError
+      default
     end
   end
 
