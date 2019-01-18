@@ -1410,7 +1410,7 @@ pl:
       #original_hash: 26f70ed
       dob_past: musi być w przeszłości
       #original_hash: b320913
-      dob_recent: musi mieć conajmniej dwa lata
+      dob_recent: musi mieć co najmniej dwa lata
       #original_hash: b64df45
       already_represented_country: >-
         Nie można zmienić kraju na taki, który dana osoba wcześniej
@@ -1837,6 +1837,8 @@ pl:
       must_have_events: >-
         Prosimy o dodanie co najmniej jednej konkurencji przed potwierdzeniem
         zawodów.
+      #original_hash: a3aea56
+      schedule_must_match_rounds: "Zanim potwierdzisz zawody upewnij się, że mają\_one co najmniej jedną rundę dla każdej konkurencji, oraz że harmonogram zawiera wszystkie zadeklarowane rundy."
       #original_hash: e390250
       create_success: Pomyślnie utworzono nowe zawody!
       #original_hash: afe3a23
@@ -2136,6 +2138,17 @@ pl:
       coordinates: Koordynaty
       #original_hash: a672984
       add_championship: Dodaj mistrzostwa
+      championship_types:
+        #original_hash: dc71704
+        world: Mistrzostwa Świata
+        #original_hash: d573eb7
+        continental: 'Mistrzostwa Kontynentu: %{continent}'
+        #original_hash: 39f47e0
+        national: 'Mistrzostwa Kraju: %{country}'
+        #original_hash: e045169
+        greater_china: Mistrzostwa Wielkich Chin
+        #original_hash: 3b920b7
+        generic: 'Mistrzostwa: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2149,6 +2162,10 @@ pl:
       cannot_delete_confirmed: Nie można usunąć potwierdzonych zawodów.
       #original_hash: 191df37
       must_contain_event: musi zawierać co najmniej jedną konkurencję
+      #original_hash: 54fe619
+      schedule_must_match_rounds: >-
+        musi mieć co najmniej jedną rundę, harmonogram musi zawierać wszystkie
+        rundy.
       #original_hash: 6e228b7
       must_contain_delegate: musi posiadać co najmniej jednego Delegata WCA
       #original_hash: 8131fc2
@@ -2757,6 +2774,18 @@ pl:
         info_html: >-
           World Cube Association jest kierowane przez <strong>Zarząd
           WCA</strong>, składający się z następujących członków:
+      chair:
+        #original_hash: de34439
+        name: Prezes WCA
+      executive_director:
+        #original_hash: 7d405ff
+        name: Dyrektor Wykonawczy WCA
+      secretary:
+        #original_hash: 1dd4a07
+        name: Sekretarz WCA
+      vice_chair:
+        #original_hash: 0388b19
+        name: Wiceprezes WCA
       #original_hash: b0c72a9
       committees: 'Następujące komitety są odpowiedzialne za działalność WCA:'
       wdc:
