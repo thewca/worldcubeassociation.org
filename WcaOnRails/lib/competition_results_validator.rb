@@ -25,6 +25,8 @@ class CompetitionResultsValidator
   REGULATION_9M1_ERROR = "Round %{round_id} has 99 competitors or less but has at least three subsequents rounds, which must not happen per Regulation 9m1."
   REGULATION_9M2_ERROR = "Round %{round_id} has 15 competitors or less but has at least two subsequents rounds, which must not happen per Regulation 9m2."
   REGULATION_9M3_ERROR = "Round %{round_id} has 7 competitors or less but has at least one subsequent round, which must not happen per Regulation 9m3."
+  REGULATION_9P1_ERROR = "Round %{round_id}: there was not 25%% of competitors eliminated, which is needed per Regulation 9p1."
+  OLD_REGULATION_9P_ERROR = "Round %{round_id}: there must be at least one competitor eliminated, which is required per Regulation 9p (competitions before April 2010)."
 
   # Person-related errors and warnings
   PERSON_WITHOUT_RESULTS_ERROR = "Person with id %{person_id} (%{person_name}) has no result"
@@ -311,6 +313,7 @@ class CompetitionResultsValidator
         # Should not happen as we already have a validation to create rounds, but who knows...
         @errors[:rounds] << format(REGULATION_9M_ERROR, event_id: event_id)
       end
+      number_of_people_in_previous_round = nil
       (ordered_round_type_ids & results_by_round_type_id.keys).each do |round_type_id|
         remaining_number_of_rounds -= 1
         number_of_people_in_round = results_by_round_type_id[round_type_id].size
@@ -327,6 +330,25 @@ class CompetitionResultsValidator
           # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most one subsequent round.
           @errors[:rounds] << format(REGULATION_9M1_ERROR, round_id: round_id)
         end
+
+        # Check for the number of qualified competitors (only if we are not
+        # in a first round).
+        if number_of_people_in_previous_round
+          # Article 9p, since July 20, 2006 until April 13, 2010
+          if Date.new(2006, 7, 20) <= @competition.start_date &&
+             @competition.start_date <= Date.new(2010, 4, 13)
+            if number_of_people_in_round >= number_of_people_in_previous_round
+              @errors[:rounds] << format(OLD_REGULATION_9P_ERROR, round_id: round_id)
+            end
+          else
+            # Article 9p1, since April 14, 2010
+            # https://www.worldcubeassociation.org/regulations/#9p1: At least 25% of competitors must be eliminated between consecutive rounds of the same event.
+            if number_of_people_in_round > 3 * number_of_people_in_previous_round / 4
+              @errors[:rounds] << format(REGULATION_9P1_ERROR, round_id: round_id)
+            end
+          end
+        end
+        number_of_people_in_previous_round = number_of_people_in_round
       end
     end
   end
