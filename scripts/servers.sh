@@ -420,7 +420,8 @@ function passthetorch() {
 
   # Disable cron job running on the old server, to prevent it from operating
   # on the remote database (the same for both old and new server).
-  ${ssh_command} 'crontab -l | sed -e "s/^/#/" -e "1i# Cronjobs disabled on `date` by servers.sh" | crontab'
+  old_ssh_command="ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no cubing@${host}"
+  ${old_ssh_command} 'crontab -l | sed -e "s/^/#/" -e "1i# Cronjobs disabled on `date` by servers.sh" | crontab'
 
   aws ec2 associate-address --public-ip ${elastic_ip} --instance-id ${new_server_id}
   echo ""
