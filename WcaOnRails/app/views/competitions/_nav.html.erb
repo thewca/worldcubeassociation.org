@@ -56,13 +56,12 @@
               end,
             }],
           }
-        # TODO: Uncomment the code below once the import feature is needed.
-        # else
-        #   nav_items << {
-        #     text: t('.menu.import_registrations'),
-        #     path: competition_registrations_import_path(@competition),
-        #     fa_icon: "upload",
-        #   }
+        else
+          nav_items << {
+            text: t('.menu.import_registrations'),
+            path: competition_registrations_import_path(@competition),
+            fa_icon: "upload",
+          }
         end
       end
       if current_user&.can_create_competitions?
