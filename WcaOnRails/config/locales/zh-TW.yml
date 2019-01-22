@@ -1782,6 +1782,17 @@ zh-TW:
       coordinates: 座標
       #original_hash: a672984
       add_championship: 新增錦標賽種類
+      championship_types:
+        #original_hash: dc71704
+        world: 世界錦標賽
+        #original_hash: d573eb7
+        continental: '洲際錦標賽：%{continent}'
+        #original_hash: 39f47e0
+        national: '國家錦標賽：%{country}'
+        #original_hash: e045169
+        greater_china: 中華錦標賽
+        #original_hash: 3b920b7
+        generic: '錦標賽：%{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必須以年份為結尾且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白號()'
@@ -2299,6 +2310,18 @@ zh-TW:
         name: WCA董事會
         #original_hash: d855b50
         info_html: 世界方塊協會由<strong>WCA董事會</strong>領導，包括以下成員：
+      chair:
+        #original_hash: de34439
+        name: WCA主席
+      executive_director:
+        #original_hash: 7d405ff
+        name: WCA執行長
+      secretary:
+        #original_hash: 1dd4a07
+        name: WCA秘書
+      vice_chair:
+        #original_hash: 0388b19
+        name: WCA副主席
       #original_hash: b0c72a9
       committees: 以下的委員會負責WCA的分工：
       wdc:
