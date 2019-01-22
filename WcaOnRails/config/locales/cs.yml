@@ -2083,6 +2083,17 @@ cs:
       coordinates: Coordinates
       #original_hash: a672984
       add_championship: Přidat Šampionát
+      championship_types:
+        #original_hash: dc71704
+        world: World Championship
+        #original_hash: d573eb7
+        continental: 'Continental Championship: %{continent}'
+        #original_hash: 39f47e0
+        national: 'National Championship: %{country}'
+        #original_hash: e045169
+        greater_china: Greater China Championship
+        #original_hash: 3b920b7
+        generic: 'Championship: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2715,6 +2726,13 @@ cs:
           Tato committee radí WCA Boardu ve zvláštních případech, jako například
           při údajném porušování Pravidel WCA a může být kontaktována členy WCA
           v případě důležitých osobních záležitostí týkajících se WCA soutěží.
+      wdpc:
+        #original_hash: 70539cd
+        name: WCA Data Protection Committee
+        #original_hash: 1f69829
+        description: >-
+          Tato committee je zodpovědná za všechny záležitosti týkající se Data
+          Protection.
       wrc:
         #original_hash: 3da1e85
         name: WCA Regulations Committee
@@ -2912,6 +2930,13 @@ cs:
         Mimo jiné by jednou z těchto situací mohlo být vážné porušení Pravidel
         WCA nebo záležitosti ohledně komunity. Pokud jste zažili nějakou z
         těchto situací, nebojte se obrátit na tuto committee.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        WDPC má odpovědnost a povinnost zkoumat, vytvářet, implementovat,
+        spravovat a vyžadovat všechny zásady WCA Data Protection, smlouvy s
+        externími Data Processors WCA Dat a spravování úkonů souvisejících s
+        Data Protection.
     wrc:
       #original_hash: fcd3526
       info_html: >-
