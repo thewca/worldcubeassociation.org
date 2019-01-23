@@ -1478,7 +1478,7 @@ en:
       #context: WCAT
       wcat:
         name: "WCA Competition Announcement Team"
-        description: "This committee has the role to approve and announce WCA Competitions and ensure such announcements adhere to WCA quality standards."
+        description: "This team has the role to approve and announce WCA Competitions and ensure such announcements adhere to WCA quality standards."
       #context: WMT
       wmt:
         name: "WCA Marketing Team"
