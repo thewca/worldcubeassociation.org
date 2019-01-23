@@ -16,4 +16,8 @@ class DobContact < ContactForm
   def headers
     super.merge(template_name: "dob_contact")
   end
+
+  def incorrect_wca_id_claim_count
+    Person.find_by_wca_id(wca_id)&.incorrect_wca_id_claim_count
+  end
 end
