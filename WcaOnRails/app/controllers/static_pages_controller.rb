@@ -29,6 +29,12 @@ class StaticPagesController < ApplicationController
       logo: "canada_cubing.jpg",
     },
     {
+      country: "Croatia",
+      name: "Speedcubing Hrvatska",
+      url: "https://speedcubinghrvatska.hr",
+      logo: "speedcubing-hrvatska.png",
+    },
+    {
       country: "Denmark",
       name: "Dansk Speedcubing Forening",
       url: "http://danskspeedcubingforening.dk",
