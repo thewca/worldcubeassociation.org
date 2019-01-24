@@ -2713,6 +2713,13 @@ fi:
           Tämä toimikunta neuvoo WCA Boardia erikoistapauksissa, kuten
           väitetyissä sääntörikkomuksissa, ja WCA:n jäsenet voivat ottaa siihen
           yhteyttä tärkeissä WCA-kilpailuja koskevissa ongelmissa.
+      wdpc:
+        #original_hash: 70539cd
+        name: WCA Data Protection Committee
+        #original_hash: 1f69829
+        description: >-
+          Tämä toimikunta on vastuusta kaikista tietosuojaan liittyvistä
+          asioista.
       wrc:
         #original_hash: 3da1e85
         name: WCA Regulations Committee
@@ -2769,9 +2776,9 @@ fi:
       wcat:
         #original_hash: 2b81984
         name: WCA Competition Announcement Team
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
-          Tämän toimikunnan rooli on hyväksyä ja ilmoittaa WCA-kilpailuja ja
+          Tämän tiimin rooli on hyväksyä ja ilmoittaa WCA-kilpailuja ja
           varmistaa, että nämä ilmoitukset noudattavat WCA:n laatustandardeja.
       wmt:
         #original_hash: 2035811
@@ -2906,6 +2913,12 @@ fi:
         tarvittaessa rangaistuksia. Tällaiset tilanteet saattavat olla vakavia
         sääntörikkomuksia tai ongelmia yhteisön keskuudessa. Jos olet kohdannut
         mitä tahansa näistä, otathan tähän toimikuntaan yhteyttä.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        WDPC:llä on vastuu ja velvollisuus tutkia, luoda, toimeenpanna, hallita
+        ja valvoa kaikkia WCA:n tietosuojakäytäntöjä, sopimuksia ulkoisten WCA:n
+        datan käyttäjien kanssa sekä hallita tietosuojaan liittyviä töitä.
     wrc:
       #original_hash: fcd3526
       info_html: >-
