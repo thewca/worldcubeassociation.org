@@ -2329,6 +2329,11 @@ zh-TW:
         name: WCA紀律委員會
         #original_hash: 286fdf8
         description: 該委員會在特殊案件下向WCA董事會提供建議，例如有違反WCA規則嫌疑的，以及處理WCA比賽當中重大個人事件。
+      wdpc:
+        #original_hash: 70539cd
+        name: WCA資料保護委員會
+        #original_hash: 1f69829
+        description: 該委員會負責與資料保護相關的所有事務。
       wrc:
         #original_hash: 3da1e85
         name: WCA規則委員會
@@ -2369,7 +2374,7 @@ zh-TW:
       wcat:
         #original_hash: 2b81984
         name: WCA比賽公告團隊
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: 該團隊負責審核和公告WCA比賽，並確保此類公告符合WCA品質標準。
       wmt:
         #original_hash: 2035811
@@ -2471,6 +2476,10 @@ zh-TW:
       info_html: >-
         WCA紀律委員會負責調查各種狀況並提出解決方案，包括必要的處罰。 除此之外，這些情況可能會嚴重違反WCA規則或社群紀律。
         如果您遇到過類似情況，請隨時與本委員會聯絡。
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        WCA資料保護委員會有責任和義務研究、建立、實施、管理和執行所有與經手WCA資料的外部資料處理人員共同協議的WCA資料保護政策與合約，以及管理與資料保護相關的事務。
     wrc:
       #original_hash: fcd3526
       info_html: >-
