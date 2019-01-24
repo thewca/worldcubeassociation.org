@@ -2797,6 +2797,13 @@ pl:
           domniemane naruszenie Regulaminu WCA. Mogą się z nim kontaktować
           członkowie WCA w przypadkach ważnych osobistych spraw związanych z
           zawodami WCA.
+      wdpc:
+        #original_hash: 70539cd
+        name: Komitet Ochrony Danych WCA
+        #original_hash: 1f69829
+        description: >-
+          Ten komited jest odpowiedzialny za wszystkie kwestie związane z
+          Ochroną Danych.
       wrc:
         #original_hash: 3da1e85
         name: Komitet Regulacyjny WCA (WRC)
@@ -2858,7 +2865,7 @@ pl:
       wcat:
         #original_hash: 2b81984
         name: Zespół do Spraw Ogłaszania Zawodów
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
           Ten zespół jest odpowiedzialny za potwierdzanie i ogłaszanie Zawodów
           WCA oraz zapewnianie ich zgodności ze standardami jakości WCA.
@@ -3004,6 +3011,13 @@ pl:
         kar, gdy to konieczne. Sytuacjami tymi mogą być między innymi poważne
         naruszenia Regulaminu WCA lub problemy społecznościowe. Jeżeli spotkałeś
         się z którąś z nich, nie wahaj się skontaktować się z tym komitetem.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        DWPC odpowiada za badanie, tworzenie, implementację, zarządzanie i
+        egzekwowanie wszystkich polityk związanych z Ochroną Danych WCA,
+        kontraktów z zewnętrznymi Przetwórcami Danych WCA, oraz kierowanie
+        zadaniami związanymi z Ochroną Danych.
     wrc:
       #original_hash: fcd3526
       info_html: "WRC rozwiązuje problemy związane ze stosowaniem, poprawianiem i rozwojem Regulaminu WCA. Wspiera on delegatów we wszelkich niejasnościach proceduralnych podczas zawodów oraz podejmuje decyzje w spawie nierozwiązanych incydentów. WRC regularnie publikuje wewnętrzne raporty dotyczące WCA, aby pomóc wszystkim Delegatom WCA i udoskonalić ich znajomość Regulaminu. Jeżeli chciałbyś uczestnczyć w rozwoju regulaminu lub zasugerować zmiany w nim, możesz skontaktować się\_z WRC poprzez emaila lub dyskusję na <a href='https://github.com/thewca/wca-regulations'>GitHub'ie</a>."
