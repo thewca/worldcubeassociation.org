@@ -2083,6 +2083,17 @@ pt-BR:
       coordinates: Coordenadas
       #original_hash: a672984
       add_championship: Adicionar Campeonato
+      championship_types:
+        #original_hash: dc71704
+        world: Campeonato Mundial
+        #original_hash: d573eb7
+        continental: 'Campeonato Continental: %{continent}'
+        #original_hash: 39f47e0
+        national: 'Campeponato Nacional: %{country}'
+        #original_hash: e045169
+        greater_china: Campeonato da Grande China
+        #original_hash: 3b920b7
+        generic: 'Campeonato: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2731,6 +2742,13 @@ pt-BR:
           supostas violações do Regulamento da WCA, e pode ser contactado pelos
           membros da WCA em caso de algum assunto pessoal importante referente a
           competições da WCA.
+      wdpc:
+        #original_hash: 70539cd
+        name: Comitê de Proteção de Dados da WCA
+        #original_hash: 1f69829
+        description: >-
+          Este comitê é responsável por todos os assuntos acerca de Proteção de
+          Dados.
       wrc:
         #original_hash: 3da1e85
         name: Comitê do Regulamento da WCA
@@ -2789,9 +2807,9 @@ pt-BR:
       wcat:
         #original_hash: 2b81984
         name: Equipe de Anúncios de Competições da WCA
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
-          Esse comitê tem o papel de aprovar e anunciar as competições da WCA e
+          Essa equipe tem o papel de aprovar e anunciar as competições da WCA e
           garantir que esses anúncios estejam de acordo com os padrões de
           qualidade da WCA.
       wmt:
@@ -2933,6 +2951,13 @@ pt-BR:
         ser violações graves do Regulamento da WCA ou problemas na comunidade.
         Se você passou por alguma dessas, sinta-se livre para contatar este
         comitê.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        O WDPC tem a responsabilidade e dever de pesquisar, criar, implementar,
+        gerenciar e aplicar as políticas de Proteção de Dados da WCA, contratos
+        com Processados de Dados externos da WCA, e tarefas relacionadas a
+        Proteção de Dados.
     wrc:
       #original_hash: fcd3526
       info_html: >-
