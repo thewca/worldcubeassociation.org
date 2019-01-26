@@ -939,6 +939,8 @@ hu:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -2118,6 +2120,17 @@ hu:
       coordinates: Koordináták
       #original_hash: a672984
       add_championship: Adj hozzá versenyt
+      championship_types:
+        #original_hash: dc71704
+        world: Világbajnokság
+        #original_hash: d573eb7
+        continental: 'Kontinentális Bajnokság: %{continent}'
+        #original_hash: 39f47e0
+        national: 'Nemzeti Bajnokság: %{country}'
+        #original_hash: e045169
+        greater_china: Greater China Bajnokság
+        #original_hash: 3b920b7
+        generic: 'Bajnokság: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2744,6 +2757,18 @@ hu:
         info_html: >-
           A World Cube Association-t a <strong>WCA Board</strong> vezeti, amit a
           következő tagok alkotnak:
+      chair:
+        #original_hash: de34439
+        name: WCA Elnök
+      executive_director:
+        #original_hash: 7d405ff
+        name: WCA Ügyvezető Igazgató
+      secretary:
+        #original_hash: 1dd4a07
+        name: WCA Titkár
+      vice_chair:
+        #original_hash: 0388b19
+        name: WCA Alelnök
       #original_hash: b0c72a9
       committees: 'Az alábbi bizottságok felelősek a WCA működtetéséért:'
       wdc:
@@ -2755,6 +2780,11 @@ hu:
           esetekben, mint a WCA Szabályzat feltételezett megszegése és velük
           léphetnek kapcsolatba a WCA tagjai ha a WCA versenyeket érintő,
           lényeges személyes kérdések merülnek fel.
+      wdpc:
+        #original_hash: 70539cd
+        name: WCA Data Protection Committee
+        #original_hash: 1f69829
+        description: Ez a szervezet felelős minden adatvédelemmel kapcsolatos témáért.
       wrc:
         #original_hash: 3da1e85
         name: WCA Regulations Committee
@@ -2810,7 +2840,7 @@ hu:
       wcat:
         #original_hash: 2b81984
         name: WCA Competition Announcement Team
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
           A szervezet feladata a WCA versenyek jóváhagyása és kihirdetésre,
           valamint a kihirdetések WCA minőségi elvárásainak való megfelelésének
@@ -2956,6 +2986,13 @@ hu:
         mellett, ezek a helyzetek eredhetnek a WCA Szabályzat súlyos
         megsértéséből vagy a közösségben felmerülő incidensekből. Ha ezek közül
         bármelyikkel találkoznál, nyugodtan fordul ezzez a szervezethez.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        A WDCP felelős a WCA minden adatvédelemmel kapcsolatos szabályozásának a
+        felkutatásáért, megalkotásáért, bevezetéséért, kezeléséért és
+        betartatásáért, valamint a külső  adatfeldolgozókkal való szerződések
+        megkötéséért és az adatvédelemmel való egyéb feladatok kezeléséért.
     wrc:
       #original_hash: fcd3526
       info_html: >-
