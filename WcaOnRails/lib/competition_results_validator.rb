@@ -36,7 +36,7 @@ class CompetitionResultsValidator
   WRONG_PARENTHETHIS_FORMAT_ERROR = "Opening parenthethis in '%{name}' must be preceeded by a space."
   DOB_0101_WARNING = "The date of birth of %{name} is on January 1st, please make sure it's correct."
   VERY_YOUNG_PERSON_WARNING = "%{name} seems to be less than 3 years old, please make sure it's correct."
-  SAME_PERSON_NAME_WARNING = "Person '%{name}' exists with WCA ID %{wca_id} in the WCA database."\
+  SAME_PERSON_NAME_WARNING = "Person '%{name}' exists with one or multiple WCA IDs (%{wca_ids}) in the WCA database."\
     " A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
   NON_MATCHING_DOB_WARNING = "Wrong birthdate for %{name} (%{wca_id}), expected '%{expected_dob}' got '%{dob}'."
   NON_MATCHING_GENDER_WARNING = "Wrong gender for %{name} (%{wca_id}), expected '%{expected_gender}' got '%{gender}'."
@@ -397,9 +397,9 @@ class CompetitionResultsValidator
 
     without_wca_id, with_wca_id = @persons_by_id.values.partition { |p| p.wca_id.empty? }
     if without_wca_id.any?
-      existing_person_in_db = Person.where(name: without_wca_id.map(&:name))
-      existing_person_in_db.each do |p|
-        @warnings[:persons] << format(SAME_PERSON_NAME_WARNING, name: p.name, wca_id: p.wca_id)
+      existing_person_in_db_by_name = Person.where(name: without_wca_id.map(&:name)).group_by(&:name)
+      existing_person_in_db_by_name.each do |name, persons|
+        @warnings[:persons] << format(SAME_PERSON_NAME_WARNING, name: name, wca_ids: persons.map(&:wca_id).join(", "))
       end
     end
     without_wca_id.each do |p|
