@@ -60,6 +60,7 @@ Rails.application.routes.draw do
     get '/admin' => "admin#actions_index_for_competition", as: :admin_index
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_results", as: :admin_check_existing_results
+    post '/admin/fix-results-errors' => "admin#fix_errors", as: :admin_fix_results_errors
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
   end

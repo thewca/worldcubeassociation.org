@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CompetitionResultsValidator
-  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results, :persons, :persons_by_id, :results, :scrambles, :number_of_non_matching_rounds, :expected_rounds_by_ids, :check_real_results
+  attr_reader :total_errors, :total_warnings, :errors, :warnings, :has_results, :persons, :persons_by_id, :results, :scrambles, :number_of_non_matching_rounds, :expected_rounds_by_ids, :check_real_results, :suggest_fixes
 
   # List of all possible errors and warnings for the results
 
@@ -152,7 +152,7 @@ class CompetitionResultsValidator
     "required" => ["formatVersion", "competitionId", "persons", "events"],
   }.freeze
 
-  def initialize(competition_id, check_real_results = false)
+  def initialize(competition_id, check_real_results = false, apply_fixes = {})
     @errors = {
       persons: [],
       events: [],
@@ -166,6 +166,12 @@ class CompetitionResultsValidator
       rounds: [],
       events: [],
     }
+    @suggest_fixes = {
+      positions: false,
+    }
+    @apply_fixes = {
+      positions: false,
+    }.merge!(apply_fixes)
     @total_errors = 0
     @total_warnings = 0
     @number_of_non_matching_rounds = 0
@@ -485,6 +491,19 @@ class CompetitionResultsValidator
     end
   end
 
+  def check_position(result, expected_pos, round_id, name)
+    if expected_pos != result.pos
+      if @apply_fixes[:positions] && @check_real_results
+        result.update_attributes(pos: expected_pos)
+      else
+        # We suggest fixes only on existing results.
+        # Otherwise the json can be fixed before landing in the db.
+        @suggest_fixes[:positions] = true if @check_real_results
+        @errors[:results] << format(WRONG_POSITION_IN_RESULTS_ERROR, round_id: round_id, person_name: name, expected_pos: expected_pos, pos: result.pos)
+      end
+    end
+  end
+
   def check_individual_results(results_by_round_id)
     # For results
     #   - average/best check is done in validation
@@ -522,9 +541,7 @@ class CompetitionResultsValidator
         end
         last_result = result
 
-        if expected_pos != result.pos
-          @errors[:results] << format(WRONG_POSITION_IN_RESULTS_ERROR, round_id: round_id, person_name: person_info.name, expected_pos: expected_pos, pos: result.pos)
-        end
+        check_position(result, expected_pos, round_id, person_info.name)
 
         # Check for possible similar results
         similar = results_similar_to(result, index, results_for_round)

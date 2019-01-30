@@ -1,0 +1,13 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Fix results errors</h3>
+  </div>
+  <div class="panel-body">
+    The following automatic fixes are available for some of the results errors:
+    <ul>
+      <% results_validator.suggest_fixes.select { |_, value| value }.keys.each do |key| %>
+        <li><%= link_to "Fix #{key}", competition_admin_fix_results_errors_path(fix: key), method: :post %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

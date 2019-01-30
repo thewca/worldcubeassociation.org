@@ -7,5 +7,7 @@
 
   <%= render "results_submission/check_results_panel", results_validator: @results_validator %>
 
+  <%= render "results_submission/automatic_fixes_panel", results_validator: @results_validator if @results_validator.suggest_fixes.values.any? %>
+
   <%= render "results_submission/results_preview_panel", results_validator: @results_validator %>
 <% end %>

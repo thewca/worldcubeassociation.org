@@ -37,14 +37,22 @@ class AdminController < ApplicationController
   end
 
   def new_results
-    @competition = competition_from_params
+    @results_validator = competition_results_validator_from_params
     @upload_json = UploadJson.new
-    @results_validator = CompetitionResultsValidator.new(@competition.id)
   end
 
   def check_results
-    @competition = competition_from_params
-    @results_validator = CompetitionResultsValidator.new(@competition.id, true)
+    @results_validator = competition_results_validator_from_params(true)
+  end
+
+  def fix_errors
+    # We want to apply this only on *existing* results
+    automatic_fixes = {}
+    fix_kind = params.permit(:fix)[:fix]
+    automatic_fixes[fix_kind.to_sym] = true if fix_kind
+    @results_validator = competition_results_validator_from_params(true, automatic_fixes)
+    @upload_json = UploadJson.new
+    render :check_results
   end
 
   def clear_results_submission
@@ -163,5 +171,10 @@ class AdminController < ApplicationController
 
   private def competition_from_params
     Competition.find_by_id!(params[:competition_id])
+  end
+
+  private def competition_results_validator_from_params(real = false, automatic_fixes = {})
+    @competition = competition_from_params
+    CompetitionResultsValidator.new(@competition.id, real, automatic_fixes)
   end
 end
