@@ -1429,11 +1429,6 @@ hu:
       already_have_id: >-
         nem tudod WCA ID hozzárendelését kérni, mert már hozzá van rendelve egy
         WCA ID (%{wca_id}) a felhasználódhoz
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        Túl sok kérés érkezett ennek a WCA ID-nek a társítására. Kérlek lépj
-        kapcsolatba a <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a>-mel a probléma megoldása miatt.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Ehhez a WCA ID-hez nincs hozzárendelve születési dátum. Kérlek lépj

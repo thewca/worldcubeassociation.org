@@ -1408,12 +1408,6 @@ ru:
       already_have_id: >-
         невозможно затребовать WCA ID, потому что у вас уже есть WCA ID
         %{wca_id}
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        Слишком много неправильных попыток получить этот WCA ID. Пожалуйста,
-        свяжитесь с <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Командой Результатов WCA (WRT)</a>, чтобы решить эту
-        проблему (пишите по-английски).
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         День рождения для этого WCA ID нам неизвестен. Пожалуйста, свяжитесь с

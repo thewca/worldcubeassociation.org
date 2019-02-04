@@ -180,9 +180,7 @@ class User < ApplicationRecord
       if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
         dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
         remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
-        if remaining_wca_id_claims == 0
-          errors.add(:unconfirmed_wca_id, I18n.t('users.errors.too_many_wca_id_claims_html').html_safe)
-        elsif !unconfirmed_person.dob
+        if remaining_wca_id_claims == 0 || !unconfirmed_person.dob
           errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
         elsif unconfirmed_person.gender.blank?
           errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html').html_safe)

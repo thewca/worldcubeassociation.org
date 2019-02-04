@@ -1402,11 +1402,6 @@ da:
       already_have_id: >-
         kan ikke gøre krav på et WCA ID, fordi du allerede har et WCA ID
         %{wca_id}
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        Der har været for mange falske krav på dette WCA ID. Kontakt <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Resultat Holdet</a> for at løse det.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Vi har ikke nogen fødselsdag for dette WCA ID. Kontakt venligst WCA

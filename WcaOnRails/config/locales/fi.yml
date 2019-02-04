@@ -1398,11 +1398,6 @@ fi:
       senior_has_delegate: alempiarvoinen delegaatti ei voi alentaa vastaavaa delegaattia
       #original_hash: 48653a9
       already_have_id: 'ei voi lunastaa WCA ID:tä, koska sinulla on jo WCA ID %{wca_id}'
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        There have been too many incorrect claims for this WCA ID. Please
-        contact the <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> to resolve this.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Tälle WCA ID:lle ei ole tallennettu syntymäaikaa. Ota yhteyttä WCA

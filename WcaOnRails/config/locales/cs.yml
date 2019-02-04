@@ -1405,11 +1405,6 @@ cs:
       senior_has_delegate: nelze snížit hodnost Vyššího Delegáta z pozice podřízeného Delegáta
       #original_hash: 48653a9
       already_have_id: 'nebylo možné zažádat o WCA ID, jelikož již máte WCA ID %{wca_id}'
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        Bylo příliš mnoho nesprávných žádostí o toto WCA ID. Prosíme,
-        kontaktujte <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> pro vyřešení.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Pro toto WCA ID nemáme zaznamenané datum narození. Prosíme, kontaktujte
