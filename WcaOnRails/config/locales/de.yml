@@ -1408,11 +1408,6 @@ de:
       already_have_id: >-
         kann keine WCA-ID anfordern da Du bereits mit der WCA-ID %{wca_id}
         verknüpft bist
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        Es gab zu viele falsche Anforderungen für diese WCA ID. Bitte
-        kontaktiere das <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> um dieses Problem zu lösen.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Wir haben kein Geburtsdatum für diese WCA-ID hinterlegt. Bitte

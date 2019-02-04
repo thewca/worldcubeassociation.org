@@ -1413,12 +1413,6 @@ it:
       already_have_id: >-
         non puoi richiedere un WCA ID perchè ti è già stato assegnato il WCA ID
         %{wca_id}
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        Ci sono stati troppi reclami errati per questo WCA ID. Per risolvere
-        questo problema, contatta il <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a>.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Non è presente alcuna data di nascita registrata per questo WCA ID.

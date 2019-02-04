@@ -1243,11 +1243,6 @@ ja:
       senior_has_delegate: cannot demote senior delegate with subordinate delegates
       #original_hash: 48653a9
       already_have_id: '既に WCA ID %{wca_id} が連携されているため、WCA ID の連携申請ができません'
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        このWCA IDはこれまで多くの連携があったため，連携できません。<a
-        href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA競技結果チーム</a>にご連絡ください。
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         この WCA ID には生年月日が登録されていません。<a href="%{dob_form_path}">専用フォーム</a> から WCA

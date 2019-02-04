@@ -1237,10 +1237,6 @@ zh-TW:
       senior_has_delegate: 一般代表無法將高級代表降職
       #original_hash: 48653a9
       already_have_id: '無法取得WCA ID，因為您已經有WCA ID %{wca_id}了'
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        此WCA ID有過多的錯誤請求。請聯絡<a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA成績組</a>解決此問題。
       #original_hash: ec5db95
       wca_id_no_birthdate_html: '我們沒有記錄到此WCA ID的生日。請使用<a href="%{dob_form_path}">此表單</a>聯絡WCA成績組。'
       #original_hash: 51fa5a4

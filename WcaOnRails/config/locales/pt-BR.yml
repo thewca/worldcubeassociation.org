@@ -1404,11 +1404,6 @@ pt-BR:
       senior_has_delegate: não pode rebaixar um Delegado Senior que tenha delegados subordinados
       #original_hash: 48653a9
       already_have_id: 'não pode solicitar uma ID da WCA porque você já tem a ID %{wca_id}'
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        Houve muitas tentativas erradas de conectar esta ID da WCA. Por favor
-        entre em contato com a <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Equipe de Resultados da WCA</a> para resolver isto.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Não temos uma data de nascimento registrada para esta ID da WCA. Por

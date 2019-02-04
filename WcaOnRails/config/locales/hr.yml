@@ -1411,11 +1411,6 @@ hr:
       senior_has_delegate: ne može se degradirati Senior Delegata sa podređenim Delegatima
       #original_hash: 48653a9
       already_have_id: 'ne može se zatražiti WCA ID jer već imate WCA ID %{wca_id}'
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        Za ovaj WCA ID postoji previše netočnih pokušaja spajanja. Molimo
-        kontaktirajte <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Tim za rezultate/a> kako biste riješili problem.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Nemamo zabilježen datum rođenja za ovaj WCA ID. Molimo Vas,

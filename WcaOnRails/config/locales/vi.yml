@@ -1369,11 +1369,6 @@ vi:
       senior_has_delegate: không thể hạ cấp Senior Delegate bằng cấp dưới
       #original_hash: 48653a9
       already_have_id: 'không thể xác nhận ID WCA vì bạn đã có ID WCA %{wca_id}'
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        Đã có quá nhiều xác nhận không chính xác đối với ID WCA này. Vui lòng
-        liên hệ <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Đội ngũ Kết quả WCA</a> để giải quyết.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Chúng tôi không có ngày sinh của ID WCA này trong dữ liệu. Vui lòng liên

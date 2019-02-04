@@ -1427,11 +1427,6 @@ pl:
       already_have_id: >-
         nie możesz poprosić o podpięcie WCA ID ponieważ masz już WCA ID
         %{wca_id}
-      #original_hash: 8bd15ba
-      too_many_wca_id_claims_html: >-
-        Przekroczono limit prób przypisania tego WCA ID. Skontaktuj się z <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>Zespołem
-        do spraw wyników</a> w celu rozwiązania problemu.
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Nie mamy zapisanej daty urodzin dla tego WCA ID. Prosimy o kontakt z
