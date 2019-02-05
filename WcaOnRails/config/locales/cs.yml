@@ -933,6 +933,8 @@ cs:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -2789,10 +2791,10 @@ cs:
       wcat:
         #original_hash: 2b81984
         name: WCA Competition Announcement Team
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
-          Tato committee má za úkol schvalovat a ohlašovat soutěže WCA a
-          zajišťuje, aby tato ohlášení dodržovala standardy kvality WCA.
+          Tento team má za úkol schvalovat a ohlašovat soutěže WCA a zajišťuje,
+          aby tato ohlášení dodržovala standardy kvality WCA.
       wmt:
         #original_hash: 2035811
         name: WCA Marketing Team
