@@ -51,7 +51,21 @@ function handleEventModifiedInCalendar(reactElem, event) {
   if (activityIndex < 0) {
     throw new Error("This is very very BAD, I couldn't find an activity matching the modified event!");
   }
-  room.activities[activityIndex] = fcEventToActivity(event);
+  let currentActivity = room.activities[activityIndex];
+  let updatedActivity = fcEventToActivity(event);
+  const activityToMoments = ({ startTime, endTime }) => [moment(startTime), moment(endTime)];
+  let [currentStart, currentEnd] = activityToMoments(currentActivity);
+  let [updatedStart, updatedEnd] = activityToMoments(updatedActivity);
+  /* Move and proportionally scale child activities. */
+  let lengthRate = updatedEnd.diff(updatedStart) / currentEnd.diff(currentStart);
+  updatedActivity.childActivities.forEach(childActivity => {
+    let [childStart, childEnd] = activityToMoments(childActivity);
+    let updatedStartDiff = Math.floor(childStart.diff(currentStart) * lengthRate);
+    childActivity.startTime = updatedStart.clone().add(updatedStartDiff, 'ms').utc().format();
+    let updatedEndDiff = Math.floor(childEnd.diff(currentStart) * lengthRate);
+    childActivity.endTime = updatedStart.clone().add(updatedEndDiff, 'ms').utc().format();
+  });
+  room.activities[activityIndex] = updatedActivity;
   // We rootRender to display the "Please save your changes..." message
   rootRender();
 }
@@ -96,7 +110,7 @@ function ambiguousMomentToIsoString(editor, momentObject) {
   let tz = venue.timezone;
   // Take the moment and "concatenate" the UTC offset of the timezone at that time
   // momentObject is a FC (ambiguously zoned) moment, therefore format() returns a zone free string
-  return moment.tz(momentObject.format(), tz).format();
+  return moment.tz(momentObject.format(), tz).utc().format();
 }
 
 export function setupConvertHandlers(editor) {
@@ -227,4 +241,3 @@ export function singleSelectLastEvent(scheduleWcif, selectedRoom) {
     }
   }
 }
-

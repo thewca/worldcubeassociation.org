@@ -47,9 +47,9 @@ class CompetitionEvent < ApplicationRecord
     total_rounds = wcif["rounds"].size
     wcif["rounds"].each_with_index do |wcif_round, index|
       round = self.rounds.create!(Round.wcif_to_round_attributes(wcif_round, index+1, total_rounds))
-      WcifExtension.update_wcif_extensions!(round, wcif_round["extensions"])
+      WcifExtension.update_wcif_extensions!(round, wcif_round["extensions"]) if wcif_round["extensions"]
     end
-    WcifExtension.update_wcif_extensions!(self, wcif["extensions"])
+    WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
   end
 
   def self.wcif_json_schema
