@@ -60,7 +60,7 @@ class VenueRoom < ApplicationRecord
       activity.load_wcif!(activity_wcif)
     end
     self.schedule_activities = new_activities
-    WcifExtension.update_wcif_extensions!(self, wcif["extensions"])
+    WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
   end
 

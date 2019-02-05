@@ -20,7 +20,7 @@ class CompetitionVenue < ApplicationRecord
       room.load_wcif!(room_wcif)
     end
     self.venue_rooms = new_rooms
-    WcifExtension.update_wcif_extensions!(self, wcif["extensions"])
+    WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
   end
 
