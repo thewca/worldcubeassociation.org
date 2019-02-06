@@ -35,7 +35,6 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def registrations
     competition = competition_from_params
     render json: competition.registrations.accepted.includes(:events)
-    # render json: competition.results
   end
 
   def show_wcif
