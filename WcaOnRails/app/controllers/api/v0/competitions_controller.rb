@@ -100,5 +100,4 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     require_user!
     raise WcaExceptions::NotPermitted.new("Not authorized to manage competition") unless can_manage?(competition)
   end
-
 end
