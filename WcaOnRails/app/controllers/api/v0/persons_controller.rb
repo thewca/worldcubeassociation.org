@@ -14,6 +14,11 @@ class Api::V0::PersonsController < Api::V0::ApiController
     render json: person_to_json(person)
   end
 
+  def results
+    person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(params[:wca_id])
+    render json: person.results
+  end
+
   private def person_to_json(person)
     {
       person: person.serializable_hash.slice(:wca_id, :name, :url, :gender, :country_iso2, :delegate_status, :teams, :avatar),
