@@ -34,7 +34,8 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def registrations
     competition = competition_from_params
-    render json: competition.registrations
+    render json: competition.registrations.accepted.includes(:events)
+    # render json: competition.results
   end
 
   def show_wcif
@@ -99,5 +100,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def require_can_manage!(competition)
     require_user!
     raise WcaExceptions::NotPermitted.new("Not authorized to manage competition") unless can_manage?(competition)
+  end
+
+  private def serializable_hash(options = nil)
+    {
+      id: id,
+      competition_id: competition_id,
+      user_id: user_id,
+      event_ids: events.map(&:id)
+    }
   end
 end

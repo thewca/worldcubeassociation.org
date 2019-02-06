@@ -15,7 +15,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
   end
 
   def results
-    person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(params[:wca_id])
+    person = Person.current.find_by_wca_id!(params[:wca_id])
     render json: person.results
   end
 
