@@ -9,7 +9,7 @@ class CompetitionResultsValidator
   UNEXPECTED_RESULTS_ERROR = "Unexpected results for %{event_id}. The event is present in the results but not listed as an official event."\
   "Remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
   MISSING_RESULTS_ERROR = "Missing results for %{event_id}. The event is not present in the results but listed as an official event."\
-  "If the event was held, correct the results. If the event was not held contact the WCAT to get the event removed before submitting the results."
+  "If the event was held, correct the results. If the event was not held, leave a comment about that to the WRT."
   UNEXPECTED_ROUND_RESULTS_ERROR = "Unexpected results for round %{round_id}. The round is present in the results but not created on the events tab. Edit the events tab to include the round."
   MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}. There is an additional round in the events tab that is not present in the results. Edit the events tab to remove the round."
   UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a combined round in the results. Please update the round's information in the competition's manage events page."
