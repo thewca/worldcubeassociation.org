@@ -120,7 +120,7 @@ class ScheduleActivity < ApplicationRecord
       activity.load_wcif!(activity_wcif)
     end
     self.child_activities = new_child_activities
-    WcifExtension.update_wcif_extensions!(self, wcif["extensions"])
+    WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
   end
 
