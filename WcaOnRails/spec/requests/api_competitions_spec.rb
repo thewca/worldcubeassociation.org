@@ -13,7 +13,9 @@ RSpec.describe "API Competitions" do
       get api_v0_competition_results_path(competition)
       expect(response).to be_successful
       json = JSON.parse(response.body)
-      expect(json[0]["competitionId"]).to eq competition
+      if json[0]
+        expect(json[0]["competitionId"]).to eq competition
+      end
     end
   end
 
@@ -24,7 +26,9 @@ RSpec.describe "API Competitions" do
       get api_v0_competition_competitors_path(competition)
       expect(response).to be_successful
       json = JSON.parse(response.body)
-      expect(json[0]["class"]).to eq "person"
+      if json[0]
+        expect(json[0]["class"]).to eq "person"
+      end
     end
   end
 
@@ -35,7 +39,9 @@ RSpec.describe "API Competitions" do
       get api_v0_competition_registrations_path(competition)
       expect(response).to be_successful
       json = JSON.parse(response.body)
-      expect(json[0]["competitionId"]).to eq competition
+      if json[0]
+        expect(json[0]["competitionId"]).to eq competition
+      end
     end
   end
 
