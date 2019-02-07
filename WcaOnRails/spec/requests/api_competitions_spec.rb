@@ -7,10 +7,11 @@ RSpec.describe "API Competitions" do
 
 
   describe "GET #results" do
+    let!(:competition) { FactoryBot.create :competition, :visible }
     let!(:result) { FactoryBot.create :result, competition: competition }
 
     it "renders properly" do
-      get api_v0_competition_results_path(result)
+      get api_v0_competition_results_path(competition)
       expect(response).to be_successful
       json = JSON.parse(response.body)
       expect(json[0]["id"]).to be >= 0
@@ -18,10 +19,11 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #competitors" do
+    let!(:competition) { FactoryBot.create :competition, :visible }
     let!(:result) { FactoryBot.create :result, competition: competition }
 
     it "renders properly" do
-      get api_v0_competition_competitors_path(result)
+      get api_v0_competition_competitors_path(competition)
       expect(response).to be_successful
       json = JSON.parse(response.body)
       if json[0]
