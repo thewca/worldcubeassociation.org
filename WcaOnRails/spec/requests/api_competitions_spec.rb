@@ -31,6 +31,7 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #registrations" do
+    let!(:competition) { FactoryBot.create :competition, :visible }
     let!(:accepted_registration) { FactoryBot.create :registration, :accepted, competition: competition }
     let!(:pending_registration) { FactoryBot.create :registration, competition: competition }
 
