@@ -60,9 +60,7 @@ RSpec.describe "API Persons" do
       get api_v0_person_results_path(result)
       expect(response).to be_successful
       json = JSON.parse(response.body)
-      if json[0]
-        expect(json[0]["id"]).to eq result.id
-      end
+      expect(json[0]["id"]).to eq result.id
     end
   end
 end
