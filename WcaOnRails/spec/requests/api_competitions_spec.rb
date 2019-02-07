@@ -7,23 +7,21 @@ RSpec.describe "API Competitions" do
 
 
   describe "GET #results" do
-    let!(:competition) { FactoryBot.create :competition, :visible }
+    let!(:result) { FactoryBot.create :result, competition: competition }
 
     it "renders properly" do
-      get api_v0_competition_results_path(competition)
+      get api_v0_competition_results_path(result)
       expect(response).to be_successful
       json = JSON.parse(response.body)
-      if json[0]
-        expect(json[0]["competitionId"]).to eq competition
-      end
+      expect(json[0]["id"]).to be >= 0
     end
   end
 
   describe "GET #competitors" do
-    let!(:competition) { FactoryBot.create :competition, :visible }
+    let!(:result) { FactoryBot.create :result, competition: competition }
 
     it "renders properly" do
-      get api_v0_competition_competitors_path(competition)
+      get api_v0_competition_competitors_path(result)
       expect(response).to be_successful
       json = JSON.parse(response.body)
       if json[0]
@@ -33,15 +31,14 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #registrations" do
-    let!(:competition) { FactoryBot.create :competition, :visible }
+    let!(:accepted_registration) { FactoryBot.create :registration, :accepted, competition: competition }
+    let!(:pending_registration) { FactoryBot.create :registration, competition: competition }
 
     it "renders properly" do
-      get api_v0_competition_registrations_path(competition)
+      get api_v0_competition_registrations_path(pending_registration)
       expect(response).to be_successful
       json = JSON.parse(response.body)
-      if json[0]
-        expect(json[0]["competitionId"]).to eq competition
-      end
+      expect(json.map { |r| r["id"] }).to eq [accepted_registration.id]
     end
   end
 

@@ -55,13 +55,13 @@ RSpec.describe "API Persons" do
   end
 
   describe "GET #results" do
+    let!(:result) { FactoryBot.create :result, person: person }
     it "renders properly" do
-      get api_v0_person_results_path(person.wca_id)
+      get api_v0_person_results_path(result)
       expect(response).to be_successful
       json = JSON.parse(response.body)
       if json[0]
-        expect(json[0]["personId"]).to eq person.wca_id
-        expect(json[0]["personName"]).to eq person.name
+        expect(json[0]["id"]).to eq result.id
       end
     end
   end

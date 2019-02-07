@@ -21,7 +21,7 @@ class Result < ApplicationRecord
       event_id: eventId,
       round_type_id: roundTypeId,
       format_id: formatId,
-      person_id: personId,
+      wca_id: personId,
       attempts: [value1, value2, value3, value4, value5],
       best: best,
       average: average,
