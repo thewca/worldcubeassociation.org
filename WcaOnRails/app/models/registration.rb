@@ -219,7 +219,7 @@ class Registration < ApplicationRecord
       id: id,
       competition_id: competition_id,
       user_id: user_id,
-      event_ids: events.map(&:id)
+      event_ids: events.map(&:id),
     }
   end
 end
