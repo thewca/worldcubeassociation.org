@@ -213,4 +213,13 @@ class Registration < ApplicationRecord
       registration_competition_events.find_by_competition_event_id(competition_event.id) || registration_competition_events.build(competition_event: competition_event)
     end
   end
+
+  def serializable_hash(options = nil)
+    {
+      id: id,
+      competition_id: competition_id,
+      user_id: user_id,
+      event_ids: events.map(&:id),
+    }
+  end
 end

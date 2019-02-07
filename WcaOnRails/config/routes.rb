@@ -191,8 +191,12 @@ Rails.application.routes.draw do
       get '/delegates' => 'api#delegates'
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person
+      get '/persons/:wca_id/results' => "persons#results", as: :person_results
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
+        get '/results' => 'competitions#results'
+        get '/competitors' => 'competitions#competitors'
+        get '/registrations' => 'competitions#registrations'
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
       get '/records' => "api#records"

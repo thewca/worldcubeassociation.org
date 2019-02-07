@@ -5,6 +5,43 @@ require "rails_helper"
 RSpec.describe "API Competitions" do
   let(:headers) { { "CONTENT_TYPE" => "application/json" } }
 
+  describe "GET #results" do
+    let!(:competition) { FactoryBot.create :competition, :visible }
+    let!(:result) { FactoryBot.create :result, competition: competition }
+
+    it "renders properly" do
+      get api_v0_competition_results_path(competition)
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json[0]["id"]).to eq result.id
+    end
+  end
+
+  describe "GET #competitors" do
+    let!(:competition) { FactoryBot.create :competition, :visible }
+    let!(:result) { FactoryBot.create :result, competition: competition }
+
+    it "renders properly" do
+      get api_v0_competition_competitors_path(competition)
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json[0]["class"]).to eq "person"
+    end
+  end
+
+  describe "GET #registrations" do
+    let!(:competition) { FactoryBot.create :competition, :visible }
+    let!(:accepted_registration) { FactoryBot.create :registration, :accepted, competition: competition }
+    let!(:pending_registration) { FactoryBot.create :registration, competition: competition }
+
+    it "renders properly" do
+      get api_v0_competition_registrations_path(competition)
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json.map { |r| r["id"] }).to eq [accepted_registration.id]
+    end
+  end
+
   describe "PATCH #update_wcif" do
     context "when not signed in" do
       let(:competition) { FactoryBot.create(:competition, :visible) }

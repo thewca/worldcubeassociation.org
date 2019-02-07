@@ -22,6 +22,21 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition
   end
 
+  def results
+    competition = competition_from_params
+    render json: competition.results
+  end
+
+  def competitors
+    competition = competition_from_params
+    render json: competition.competitors
+  end
+
+  def registrations
+    competition = competition_from_params
+    render json: competition.registrations.accepted.includes(:events)
+  end
+
   def show_wcif
     competition = competition_from_params
     require_can_manage!(competition)
