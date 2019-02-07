@@ -8,7 +8,7 @@ class CompetitionResultsValidator
   # General errors and warnings
   UNEXPECTED_RESULTS_ERROR = "Unexpected results for %{event_id}. The event is present in the results but not listed as an official event."\
   "Remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
-  MISSING_RESULTS_ERROR = "Missing results for %{event_id}. The event is not present in the results but listed as an official event."\
+  MISSING_RESULTS_WARNING = "Missing results for %{event_id}. The event is not present in the results but listed as an official event."\
   "If the event was held, correct the results. If the event was not held, leave a comment about that to the WRT."
   UNEXPECTED_ROUND_RESULTS_ERROR = "Unexpected results for round %{round_id}. The round is present in the results but not created on the events tab. Edit the events tab to include the round."
   MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}. There is an additional round in the events tab that is not present in the results. Edit the events tab to remove the round."
@@ -160,6 +160,7 @@ class CompetitionResultsValidator
       persons: [],
       results: [],
       rounds: [],
+      events: []
     }
     @total_errors = 0
     @total_warnings = 0
@@ -264,7 +265,7 @@ class CompetitionResultsValidator
       @errors[:events] << format(UNEXPECTED_RESULTS_ERROR, event_id: event_id)
     end
     (expected - real).each do |event_id|
-      @errors[:events] << format(MISSING_RESULTS_ERROR, event_id: event_id)
+      @warnings[:events] << format(MISSING_RESULTS_WARNING, event_id: event_id)
     end
   end
 
