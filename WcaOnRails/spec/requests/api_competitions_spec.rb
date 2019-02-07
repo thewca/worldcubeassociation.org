@@ -35,7 +35,7 @@ RSpec.describe "API Competitions" do
     let!(:pending_registration) { FactoryBot.create :registration, competition: competition }
 
     it "renders properly" do
-      get api_v0_competition_registrations_path(pending_registration)
+      get api_v0_competition_registrations_path(competition)
       expect(response).to be_successful
       json = JSON.parse(response.body)
       expect(json.map { |r| r["id"] }).to eq [accepted_registration.id]
