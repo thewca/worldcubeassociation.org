@@ -5,7 +5,6 @@ require "rails_helper"
 RSpec.describe "API Competitions" do
   let(:headers) { { "CONTENT_TYPE" => "application/json" } }
 
-
   describe "GET #results" do
     let!(:competition) { FactoryBot.create :competition, :visible }
     let!(:result) { FactoryBot.create :result, competition: competition }
