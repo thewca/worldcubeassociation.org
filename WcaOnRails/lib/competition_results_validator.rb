@@ -160,7 +160,7 @@ class CompetitionResultsValidator
       persons: [],
       results: [],
       rounds: [],
-      events: []
+      events: [],
     }
     @total_errors = 0
     @total_warnings = 0
