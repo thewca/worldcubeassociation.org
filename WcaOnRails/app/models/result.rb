@@ -26,7 +26,7 @@ class Result < ApplicationRecord
       best: best,
       average: average,
       regional_single_record: regionalSingleRecord,
-      regional_average_record: regionalAverageRecord
+      regional_average_record: regionalAverageRecord,
     }
   end
 end
