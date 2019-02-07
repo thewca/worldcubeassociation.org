@@ -14,7 +14,7 @@ RSpec.describe "API Competitions" do
       get api_v0_competition_results_path(competition)
       expect(response).to be_successful
       json = JSON.parse(response.body)
-      expect(json[0]["id"]).to be >= 0
+      expect(json[0]["id"]).to eq result.id
     end
   end
 
