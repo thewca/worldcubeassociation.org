@@ -1128,6 +1128,8 @@ fr:
       scrambles: Mélanges
       #original_hash: 90ccd64
       history: Historique
+      disciplinary: "Disciplinary log"
+      incidents: "Incidents log"
       #original_hash: 8ad8302
       translations: Traductions
       #original_hash: b8be3d1
