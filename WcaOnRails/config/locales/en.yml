@@ -637,6 +637,8 @@ en:
       scrambles: "Scrambles"
       history: "History"
       translations: "Translations"
+      disciplinary: "Disciplinary log"
+      incidents: "Incidents log"
       administration: "Administration"
       manage_users: "Manage users"
       delegate: "Delegate"
