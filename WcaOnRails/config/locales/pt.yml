@@ -927,6 +927,8 @@ pt:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -2074,6 +2076,17 @@ pt:
       coordinates: Coordenadas
       #original_hash: a672984
       add_championship: Adicionar Campeonato
+      championship_types:
+        #original_hash: dc71704
+        world: Campeonato do Mundo
+        #original_hash: d573eb7
+        continental: 'Campeonato Continental: %{continent}'
+        #original_hash: 39f47e0
+        national: 'Campeonato Nacional: %{country}'
+        #original_hash: e045169
+        greater_china: Campeonato da Grande China
+        #original_hash: 3b920b7
+        generic: 'Campeonato: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2697,6 +2710,18 @@ pt:
         info_html: >-
           A World Cube Association é liderada pelo <strong>Conselho da
           WCA</strong>, que é formado pelos seguintes membros:
+      chair:
+        #original_hash: de34439
+        name: Presidente da WCA
+      executive_director:
+        #original_hash: 7d405ff
+        name: Diretor Executivo da WCA
+      secretary:
+        #original_hash: 1dd4a07
+        name: Secretário da WCA
+      vice_chair:
+        #original_hash: 0388b19
+        name: Vice-Presidente da WCA
       #original_hash: b0c72a9
       committees: >-
         Os seguintes comités e equipas são responsáveis pelas atividades
@@ -2710,6 +2735,13 @@ pt:
           como supostas violações do Regulamento da WCA, e pode ser contactado
           pelos membros da WCA em caso de algum assunto pessoal importante
           referente a competições da WCA.
+      wdpc:
+        #original_hash: 70539cd
+        name: Comité de Proteção de Dados da WCA
+        #original_hash: 1f69829
+        description: >-
+          Este comité é responsável por todos os assuntos respeitantes à
+          Proteção de Dados.
       wrc:
         #original_hash: 3da1e85
         name: Comité de Regulamentos da WCA
@@ -2770,7 +2802,7 @@ pt:
       wcat:
         #original_hash: 2b81984
         name: Equipa de Anúncio de Competições da WCA
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
           Esta equipa tem o papel de aprovar e anunciar as Competições da WCA e
           garantir que tais anúncios cumpram os padrões de qualidade da WCA.
@@ -2915,6 +2947,13 @@ pt:
         ser violações sérias dos Regulamentos da WCA ou questões na comunidade.
         Se teve alguma destas experiências, sinta-se à vontade para contactar
         este comité.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        O WDPC tem a responsabilidade e o dever de pesquisar, criar,
+        implementar, gerir e impor todas as políticas de Proteção de Dados da
+        WCA, contratos com Processadores de Dados Externos de dados da WCA e
+        gerir tarefas relacionadas à Proteção de Dados.
     wrc:
       #original_hash: fcd3526
       info_html: >-
