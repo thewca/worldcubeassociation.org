@@ -937,6 +937,8 @@ es:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -2108,6 +2110,17 @@ es:
       coordinates: Coordenadas
       #original_hash: a672984
       add_championship: Añadir Campeonato
+      championship_types:
+        #original_hash: dc71704
+        world: Campeonato Mundial
+        #original_hash: d573eb7
+        continental: 'Campeonato Continental:  %{continent}'
+        #original_hash: 39f47e0
+        national: 'Campeonato Nacional: %{country}'
+        #original_hash: e045169
+        greater_china: Campeonato de la Gran China
+        #original_hash: 3b920b7
+        generic: 'Campeonato: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2773,6 +2786,13 @@ es:
           especiales de presuntas violaciones del Reglamento de la WCA. Los
           miembros de la WCA pueden ponerse en contacto con el WDC en caso de
           asuntos importantes relacionados con las competiciones de la WCA.
+      wdpc:
+        #original_hash: 70539cd
+        name: Comité de protección de datos de la WCA
+        #original_hash: 1f69829
+        description: >-
+          Este comité es responsable de cualquier asunto que tenga que ver con
+          Protección de Datos.
       wrc:
         #original_hash: 3da1e85
         name: Comité Reglamentario de la WCA
@@ -2834,9 +2854,9 @@ es:
       wcat:
         #original_hash: 2b81984
         name: Equipo de Anuncios de Competiciones de la WCA
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
-          Este comité tiene la labor de aprobar y anunciar Competiciones WCA y
+          Este equipo tiene la labor de aprobar y anunciar Competiciones WCA y
           asegurarse de que dichos anuncios se adhieren a los estándares de
           calidad de la WCA.
       wmt:
@@ -2983,6 +3003,13 @@ es:
         situaciones pueden ser graves violaciones del reglamento WCA o temas
         comunitarios. Si te has visto invlucrado en algo de esto, puedes
         contactar este comité.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        El WDPC tiene la labor y la responsabilidad de investigar, crear,
+        implementar, gestionar y hacer cumplir todas las políticas de Protección
+        Datos de la WCA, contratos con Procesadores externos de Datos WCA y
+        gestionar tareas relativas a Protección de Datos.
     wrc:
       #original_hash: fcd3526
       info_html: >-
