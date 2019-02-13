@@ -97,7 +97,7 @@ class RegistrationsController < ApplicationController
 
   def export
     @competition = competition_from_params
-    @registrations = @competition.registrations.includes(:user, :events).find(selected_registrations_ids)
+    @registrations = @competition.registrations.order(:id).includes(:user, :events).find(selected_registrations_ids)
 
     respond_to do |format|
       format.csv do
