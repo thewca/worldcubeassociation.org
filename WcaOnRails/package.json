@@ -32,7 +32,7 @@
     "postcss-loader": "^3.0.0",
     "postcss-smart-import": "^0.7.6",
     "precss": "^4.0.0",
-    "prop-types": "^15.6.2",
+    "prop-types": "^15.7.1",
     "rails-erb-loader": "^5.5.1",
     "react": "^16.8.1",
     "react-bootstrap": "^0.32.4",
