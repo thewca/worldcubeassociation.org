@@ -13,7 +13,6 @@ class CompetitionResultsValidator
   UNEXPECTED_ROUND_RESULTS_ERROR = "Unexpected results for round %{round_id}. The round is present in the results but not created on the events tab. Edit the events tab to include the round."
   MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}. There is an additional round in the events tab that is not present in the results. Edit the events tab to remove the round."
   UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a combined round in the results. Please update the round's information in the competition's manage events page."
-  COMBINED_ROUND_CHANGED_TO_REGULAR_ROUND_WARNING = "'%{round_name}' was announced to have a cutoff, but it was detected in the results that it didn't. Please leave a comment about that to the WRT."
   MISSING_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Missing scrambles. Use the workbook assistant to add the correct scrambles to the round."
   UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Too many scrambles. Use the workbook assistant to uncheck the unused scrambles."
   MISSING_SCRAMBLES_FOR_GROUP_ERROR = "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
@@ -283,10 +282,12 @@ class CompetitionResultsValidator
         unexpected.delete(equivalent_round_id)
         round = @expected_rounds_by_ids[round_id]
         if round.round_type.combined?
-          # NOTE: here we intentionally update the expected round information,
-          # so that we have a valid round_info when checking individual results later.
+          # NOTE: we cannot know if everyone legitimately cleared the cutoff,
+          # or if the cutoff was removed during the competition and not
+          # updated on the website's schedule. So we just consider it fine,
+          # but we have to update the expected round information so that we have
+          # a valid round_info when checking individual results later.
           @expected_rounds_by_ids[equivalent_round_id] = @expected_rounds_by_ids.delete(round_id)
-          @warnings[:rounds] << format(COMBINED_ROUND_CHANGED_TO_REGULAR_ROUND_WARNING, round_name: round.name)
         else
           @errors[:rounds] << format(UNEXPECTED_COMBINED_ROUND_ERROR, round_name: round.name)
         end
