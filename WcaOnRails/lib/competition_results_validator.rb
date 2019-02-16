@@ -210,22 +210,26 @@ class CompetitionResultsValidator
     # Group actual results by their round id
     results_by_round_id = @results.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
 
-    check_persons
+    # Ensure any call to localizable name (eg: round names) is made in English,
+    # as all errors and warnings are in English.
+    I18n.with_locale(:en) do
+      check_persons
 
-    check_events_match(@competition.events)
+      check_events_match(@competition.events)
 
-    check_main_event
+      check_main_event
 
-    # Ensure retro-compatibility for "old" competitions without rounds.
-    if @competition.has_rounds?
-      check_rounds_match
+      # Ensure retro-compatibility for "old" competitions without rounds.
+      if @competition.has_rounds?
+        check_rounds_match
+      end
+
+      check_individual_results(results_by_round_id)
+      check_advancement_conditions(results_by_round_id, @competition.competition_events)
+      check_scrambles
+
+      check_competitor_limit
     end
-
-    check_individual_results(results_by_round_id)
-    check_advancement_conditions(results_by_round_id, @competition.competition_events)
-    check_scrambles
-
-    check_competitor_limit
 
     @total_errors = @errors.values.sum(&:size)
     @total_warnings = @warnings.values.sum(&:size)
