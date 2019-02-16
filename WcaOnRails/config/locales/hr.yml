@@ -939,6 +939,8 @@ hr:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -2102,6 +2104,17 @@ hr:
       coordinates: Koordinate
       #original_hash: a672984
       add_championship: Dodaj prvenstvo
+      championship_types:
+        #original_hash: dc71704
+        world: Svjetsko Prvenstvo
+        #original_hash: d573eb7
+        continental: 'Kontinentalno Prvenstvo: %{continent}'
+        #original_hash: 39f47e0
+        national: 'Nacionalno Prvenstvo: %{country}'
+        #original_hash: e045169
+        greater_china: Prvenstvo Velike Kine
+        #original_hash: 3b920b7
+        generic: 'Prvenstvo: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2723,6 +2736,18 @@ hr:
         info_html: >-
           World Cube Association vodi <strong>WCA Upravni odbor</strong>, čiji
           su članovi:
+      chair:
+        #original_hash: de34439
+        name: WCA Predsjednik
+      executive_director:
+        #original_hash: 7d405ff
+        name: WCA Izvršni direktor
+      secretary:
+        #original_hash: 1dd4a07
+        name: WCA Tajnik
+      vice_chair:
+        #original_hash: 0388b19
+        name: WCA Dopredsjednik
       #original_hash: b0c72a9
       committees: 'Slijedeći odbori su odgovorni za operacijske aktivnosti WCA:'
       wdc:
@@ -2733,6 +2758,11 @@ hr:
           Odbor savjetuje WCA Upravni odbor u specijalnim slučajevima, kao
           namjerno kršenje WCA Pravilnika i može biti kontaktirano od strane WCA
           članova u slučaju osobnih potreba u vezi WCA Natjecanja.
+      wdpc:
+        #original_hash: 70539cd
+        name: WCA Odbor za zaštitu podataka
+        #original_hash: 1f69829
+        description: Ovaj odbor je odgovoran za sve teme oko Zaštite podataka.
       wrc:
         #original_hash: 3da1e85
         name: WCA Odbor o pravilniku
@@ -2789,9 +2819,9 @@ hr:
       wcat:
         #original_hash: 2b81984
         name: WCA Tim za najavljivanje natjecanja
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
-          Ovaj Odbor ima ulogu potvrđivati i najavljivati WCA Natjecanja i imati
+          Ovaj odbor ima ulogu potvrđivati i najavljivati WCA Natjecanja i imati
           u vidu da takve najave budu u skladu s WCA standardima kvalitete.
       wmt:
         #original_hash: 2035811
@@ -2927,6 +2957,13 @@ hr:
         ukoliko je potrebno. Izuzev svih ostalih tema, takve situacije mogu biti
         ozbiljno kršenje WCA Pravilnika ili problema sa zajednicom. Ukoliko ste
         iskusili nešto od toga, slobodno se obratite ovom odboru.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        WDPC ima odgovornost i dužnost pretraživanja, kreiranja, implementacije,
+        upravljanja i primjene svih politika WCA Zaštite podataka, ugovora s
+        eksternim procesorima podataka WCA i upravljanje zadacima povezanih sa
+        Zaštitom podataka.
     wrc:
       #original_hash: fcd3526
       info_html: >-
