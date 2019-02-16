@@ -87,7 +87,9 @@ RSpec.feature "Claim WCA ID" do
       fill_in "Birthdate", with: "1988-02-03"
       click_button "Claim WCA ID"
 
-      expect(page.find(".alert.alert-danger")).to have_content("There have been too many incorrect claims for this WCA ID. Please contact the WCA Results Team to resolve this.")
+      # Based on WRT request here: https://github.com/thewca/worldcubeassociation.org/pull/3666#discussion_r253315031,
+      # the expected message for this is users.errors.wca_id_no_birthdate_html
+      expect(page.find(".alert.alert-danger")).to have_content("We do not have a birthdate recorded for this WCA ID. Please contact the WCA Results Team")
       user.reload
       expect(user.unconfirmed_wca_id).to eq nil
       expect(user.delegate_to_handle_wca_id_claim).to eq nil
