@@ -131,4 +131,5 @@ end
 group :production do
   gem 'unicorn'
   gem 'newrelic_rpm'
+  gem 'aws-sdk-s3', require: false
 end

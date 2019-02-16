@@ -336,6 +336,38 @@ CREATE TABLE `Scrambles` (
   KEY `competitionId` (`competitionId`,`eventId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `active_storage_attachments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `active_storage_attachments` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `record_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `record_id` bigint(20) NOT NULL,
+  `blob_id` bigint(20) NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_active_storage_attachments_uniqueness` (`record_type`,`record_id`,`name`,`blob_id`),
+  KEY `index_active_storage_attachments_on_blob_id` (`blob_id`),
+  CONSTRAINT `fk_rails_c3b3935057` FOREIGN KEY (`blob_id`) REFERENCES `active_storage_blobs` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `active_storage_blobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `active_storage_blobs` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `key` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `filename` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content_type` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `metadata` text COLLATE utf8mb4_unicode_ci,
+  `byte_size` bigint(20) NOT NULL,
+  `checksum` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_active_storage_blobs_on_key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ar_internal_metadata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1494,5 +1526,6 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190112130723'),
 ('20190113180945'),
 ('20190117112257'),
+('20190124180224'),
 ('20190208175255'),
 ('20190221194112');

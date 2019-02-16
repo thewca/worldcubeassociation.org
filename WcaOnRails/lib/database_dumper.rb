@@ -318,6 +318,8 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "active_storage_attachments" => :skip_all_rows,
+    "active_storage_blobs" => :skip_all_rows,
     "ar_internal_metadata" => :skip_all_rows,
     "competition_delegates" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
