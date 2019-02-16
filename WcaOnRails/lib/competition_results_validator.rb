@@ -16,6 +16,7 @@ class CompetitionResultsValidator
   MISSING_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Missing scrambles. Use the workbook assistant to add the correct scrambles to the round."
   UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Too many scrambles. Use the workbook assistant to uncheck the unused scrambles."
   MISSING_SCRAMBLES_FOR_GROUP_ERROR = "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
+  CHOOSE_MAIN_EVENT_WARNING = "Your results do not contain results for 3x3x3 Cube. Please tell WRT if the results should be anounced with 'no main event' or if there was a different main event at the competition."
 
   # Regulations-specific errors and warnings
   COMPETITOR_LIMIT_WARNING = "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit})."\
@@ -212,6 +213,8 @@ class CompetitionResultsValidator
 
     check_events_match(@competition.events)
 
+    check_main_event
+
     # Ensure retro-compatibility for "old" competitions without rounds.
     if @competition.has_rounds?
       check_rounds_match
@@ -253,6 +256,13 @@ class CompetitionResultsValidator
       end
     end
     similar_results
+  end
+
+  def check_main_event
+    events_in_results = @results.map(&:eventId).uniq
+    unless events_in_results.include?("333")
+      @warnings[:events] << CHOOSE_MAIN_EVENT_WARNING
+    end
   end
 
   def check_events_match(competition_events)
