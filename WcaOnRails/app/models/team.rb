@@ -46,6 +46,16 @@ class Team < ApplicationRecord
     ]
   end
 
+  # Councils are recognized by Motion "20.2019.0":
+  #  https://www.worldcubeassociation.org/documents/motions/20.2019.0%20-%20Councils.pdf
+  # Motions starting with "20.YYYY.N" define these councils:
+  #  https://www.worldcubeassociation.org/documents
+  def self.all_councils
+    [
+      Team.wac,
+    ]
+  end
+
   def self.all_officers
     [
       Team.chair,
@@ -130,6 +140,10 @@ class Team < ApplicationRecord
 
   def self.wdpc
     Team.c_find_by_friendly_id!('wdpc')
+  end
+
+  def self.wac
+    Team.c_find_by_friendly_id!('wac')
   end
 
   def acronym

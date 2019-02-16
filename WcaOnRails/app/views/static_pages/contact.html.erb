@@ -26,4 +26,14 @@
       <%= t('contact.members') %>: <%= format_team_members(team) %>
     </p>
   <% end %>
+
+  <h2><u><%= t('contact.councils_html') %></u></h2>
+
+  <% Team.all_councils.each do |team| %>
+    <p>
+      <strong><%= team.name %> (<%= team.acronym %>)</strong> - <%= mail_to team.email %><br />
+      <%= t("contact.#{team.friendly_id}.info_html") %><br />
+      <%= t('contact.members') %>: <%= format_team_members(team) %>
+    </p>
+  <% end %>
 </div>

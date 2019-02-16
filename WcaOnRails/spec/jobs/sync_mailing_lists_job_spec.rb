@@ -35,6 +35,8 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wrt_leader = FactoryBot.create :user, :wrt_member, team_leader: true
     wrt_member = FactoryBot.create :user, :wrt_member, team_leader: false
     wst_member = FactoryBot.create :user, :wst_member, team_leader: false
+    wac_member = FactoryBot.create :user, :wac_member, team_leader: false
+    wac_leader = FactoryBot.create :user, :wac_member, team_leader: true
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "leaders@worldcubeassociation.org",
       a_collection_containing_exactly(wrt_leader.email, wdc_leader.email, wfc_leader.email),
@@ -132,6 +134,12 @@ RSpec.describe SyncMailingListsJob, type: :job do
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "reports@worldcubeassociation.org",
       a_collection_containing_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", candidate_delegate.email, wdc_leader.email, wdc_member.email, wec_member.email),
+    )
+
+    # advisory@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "advisory@worldcubeassociation.org",
+      a_collection_containing_exactly(wac_leader.email, wac_member.email),
     )
 
     SyncMailingListsJob.perform_now
