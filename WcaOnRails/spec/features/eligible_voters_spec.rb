@@ -16,6 +16,7 @@ RSpec.feature "Eligible voters csv" do
     end
   }
   let!(:team_leader) { FactoryBot.create(:user, :wrc_member, team_leader: true) }
+  let!(:wac_leader) { FactoryBot.create(:user, :wac_member, team_leader: true) }
   let!(:team_senior_member) { FactoryBot.create(:user, :wrc_member, team_senior_member: true) }
   let!(:team_member) { FactoryBot.create(:user, :wrc_member) }
   let!(:senior_delegate) { FactoryBot.create(:senior_delegate) }

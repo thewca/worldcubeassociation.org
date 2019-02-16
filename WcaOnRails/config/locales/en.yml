@@ -1483,6 +1483,11 @@ en:
       wmt:
         name: "WCA Marketing Team"
         description: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
+      councils: "The following councils have the role of advising the WCA Board of Directors:"
+      #context: WAC
+      wac:
+        name: "WCA Advisory Council"
+        description: "This council is responsible for building and maintaining bilateral communication between the WCA Community and the WCA Staff."
       #context: Hidden team for list of banned competitors
       banned:
         name: "Banned Competitors"
@@ -1564,6 +1569,9 @@ en:
       info_html: "This committee has the role to approve and announce WCA Competitions and ensure such announcements adhere to WCA quality standards."
     wmt:
       info_html: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
+    councils_html: "Councils"
+    wac:
+      info_html: "This council is responsible for building and maintaining bilateral communication between the WCA Community and the WCA Staff."
   score_tools:
     title: "WCA Score Taking tools"
     paragraphs:
