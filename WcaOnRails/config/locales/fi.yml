@@ -750,8 +750,8 @@ fi:
         on_the_spot_registration: ''
         #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: >-
-          Jos arvoksi asetetaan 0, kilpailusivulla lukee, että
-          jälki-ilmoittautuminen kisapaikalla on ilmainen.
+          Jos arvoksi asetetaan 0, kilpailusivulla lukee, että paikan päällä
+          rekisteröityminen on ilmaista.
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Toistaiseksi tämä numero on vain suuntaa antava, palautukset täytyy
@@ -923,6 +923,8 @@ fi:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -1885,12 +1887,12 @@ fi:
       no_refunds: Osallistumismaksuja ei palauteta missään tilanteessa.
       #original_hash: cf7be5d
       on_the_spot_registration: >-
-        Kisapaikalla voi jälki-ilmoittautua. Osallistumismaksu on tällöin
+        Osallistumismaksu paikan päällä rekisteröityville on
         %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Jälki-ilmoittautuminen kisapaikalla on ilmaista.
       #original_hash: f5f687d
-      no_on_the_spot_registration: Ei jälki-ilmoittautumista kisapaikalla.
+      no_on_the_spot_registration: Paikan päällä ei voi rekisteröityä.
       #original_hash: 4df139d
       guests_pay: 'Katsojien pääsymaksu on %{guests_base_fee}.'
       #original_hash: b6c863e
