@@ -2755,6 +2755,15 @@ vi:
           Ban này có trách nhiệm phát triển và quản lý thương hiệu của WCA, tìm
           kiếm tài trợ, giúp đỡ phân phối dụng cụ cho Giải đấu WCA, và quảng bá
           các mặt hàng của WCA.
+      #original_hash: a2c8ad3
+      councils: 'Các hội đồng sau đây có trách nhiệm cố vấn Ban Quản trị WCA:'
+      wac:
+        #original_hash: 1ce7604
+        name: Hội đồng Cố vấn WCA
+        #original_hash: fb6cd86
+        description: >-
+          Hội đồng này có trách nhiệm xây dựng và duy trì việc trao đổi tin tức
+          giữa Cộng đồng WCA và Tổ chức WCA.
       banned:
         #original_hash: d30e2e5
         name: Các thí sinh bị cấm
@@ -2944,6 +2953,13 @@ vi:
         Ban này có trách nhiệm phát triển và quản lý thương hiệu của WCA, tìm
         kiếm tài trợ, giúp đỡ phân phối dụng cụ cho Giải đấu WCA, và quảng bá
         các mặt hàng của WCA.
+    #original_hash: f97a4f5
+    councils_html: Hội đồng
+    wac:
+      #original_hash: fb6cd86
+      info_html: >-
+        Hội đồng này có trách nhiệm xây dựng và duy trì sự trao đổi giữa Cộng
+        đồng WCA và Tổ chức WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Công cụ Ghi kết quả của WCA
