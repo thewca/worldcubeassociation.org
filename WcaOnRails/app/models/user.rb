@@ -31,8 +31,8 @@ class User < ApplicationRecord
   }
 
   def self.eligible_voters
-    team_leaders = TeamMember.current.where(team_id: Team.official).where(team_leader: true).map(&:user)
-    team_senior_members = TeamMember.current.where(team_id: Team.official).where(team_senior_member: true).map(&:user)
+    team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
+    team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
     eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))
     board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
     officers = TeamMember.current.where(team_id: Team.all_officers.map(&:id)).map(&:user)
@@ -40,7 +40,7 @@ class User < ApplicationRecord
   end
 
   def self.leader_senior_voters
-    team_leaders = TeamMember.current.where(team_id: Team.official).where(team_leader: true).map(&:user)
+    team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
     senior_delegates = User.where(delegate_status: "senior_delegate")
     (team_leaders + senior_delegates).uniq
   end

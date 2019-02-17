@@ -6,7 +6,7 @@ class SyncMailingListsJob < ApplicationJob
   def perform
     GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", User.delegates.map(&:email))
     GsuiteMailingLists.sync_group("seniors@worldcubeassociation.org", User.senior_delegates.map(&:email))
-    GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", TeamMember.current.where(team_id: Team.official).where(team_leader: true).map(&:user).map(&:email))
+    GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", TeamMember.current.in_official_team.leader.map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("board@worldcubeassociation.org", Team.board.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("communication@worldcubeassociation.org", Team.wct.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("competitions@worldcubeassociation.org", Team.wcat.current_members.includes(:user).map(&:user).map(&:email))
@@ -14,7 +14,7 @@ class SyncMailingListsJob < ApplicationJob
     GsuiteMailingLists.sync_group("dataprotection@worldcubeassociation.org", Team.wdpc.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("ethics@worldcubeassociation.org", Team.wec.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("finance@worldcubeassociation.org", Team.wfc.current_members.includes(:user).map(&:user).map(&:email))
-    GsuiteMailingLists.sync_group("treasurer@worldcubeassociation.org", Team.wfc.current_members.where(team_leader: true).map(&:user).map(&:email))
+    GsuiteMailingLists.sync_group("treasurer@worldcubeassociation.org", Team.wfc.current_members.leader.map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("marketing@worldcubeassociation.org", Team.wmt.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("quality@worldcubeassociation.org", Team.wqac.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("regulations@worldcubeassociation.org", Team.wrc.current_members.includes(:user).map(&:user).map(&:email))
