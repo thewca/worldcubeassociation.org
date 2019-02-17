@@ -5,6 +5,9 @@ class TeamMember < ApplicationRecord
   belongs_to :user
 
   scope :current, -> { where("end_date IS NULL OR end_date > ?", Date.today) }
+  scope :in_official_team, -> { where(team_id: Team.all_official.map(&:id)) }
+  scope :leader, -> { where(team_leader: true) }
+  scope :senior_member, -> { where(team_senior_member: true) }
 
   attr_accessor :current_user
 

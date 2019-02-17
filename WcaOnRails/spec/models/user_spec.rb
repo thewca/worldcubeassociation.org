@@ -671,7 +671,7 @@ RSpec.describe User, type: :model do
     let!(:staff_member1) { FactoryBot.create :user, :wec_member, receive_delegate_reports: true }
     let!(:staff_member2) { FactoryBot.create :user, :wrt_member, receive_delegate_reports: false }
 
-    it "gets cleared field if user is not staff anymore" do
+    it "gets cleared if user is not staff anymore" do
       former_staff_member = FactoryBot.create :user, receive_delegate_reports: true
       User.clear_receive_delegate_reports_if_not_staff
       expect(former_staff_member.reload.receive_delegate_reports).to eq false
