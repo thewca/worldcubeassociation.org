@@ -313,6 +313,8 @@ vi:
         phone_number: Số điện thoại
         #original_hash: 7044004
         notes: Ghi chú
+        #original_hash: 730db33
+        receive_delegate_reports: Tôi muốn nhận Báo cáo cho Giải đấu WCA từ Delegate qua email
         #original_hash: 57eaf24
         user_preferred_events: Nội dung ưa thích
       competition:
@@ -362,6 +364,8 @@ vi:
         information: Thông tin
         #original_hash: 87b7d5f
         use_wca_registration: Tôi muốn sử dụng trang web của WCA cho việc đăng ký
+        #original_hash: 8020e88
+        external_registration_page: Trang đăng ký
         #original_hash: 9bb1965
         competitor_limit_enabled: Giới hạn số lượng thí sinh
         #original_hash: 749f4c9
@@ -594,6 +598,8 @@ vi:
           Điền họ tên chính xác của bạn, có đầy đủ dấu, ví dụ <strong>Vương
           Thiện Trung</strong>. Ví dụ tên không hợp lệ: <strong>V T
           trung</strong> hoặc <strong>Vuong Thien Trung</strong>.
+        #original_hash: da39a3e
+        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Sau khi đăng tải hình đại diện mới, bạn phải đợi Đội ngũ Kết quả WCA
@@ -630,6 +636,11 @@ vi:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
+        #original_hash: 8c266ea
+        receive_delegate_reports: >-
+          Nếu bạn là Candidate Delegate, Senior Delegate, thành viên WRC hoặc
+          WQAC, bạn sẽ mặc định nhận Báo cáo từ Delegate. Lưu ý, có thể mất vài
+          giờ để thay đổi có hiệu lực.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -671,6 +682,10 @@ vi:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: b2af5f5
+        external_registration_page: >-
+          Trang web dành cho thí sinh để đăng ký tham gia giải đấu. Bắt buộc
+          phải điền một đường dẫn có hiệu lực.
         #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Lệ phí cơ sở cho giải đấu. Thông tin này sẽ được hiển thị trên trang
@@ -900,6 +915,8 @@ vi:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -1252,7 +1269,8 @@ vi:
       approve: Chấp nhận
       #original_hash: 85de4b8
       unconfirmed_email: 'Địa chỉ email (%{email}) của tài khoản này chưa được xác nhận.'
-      confirm_new_email: 'Thay đổi địa chỉ email yêu cầu bạn phải xác nhận địa chỉ email mới.'
+      #original_hash: c03b949
+      confirm_new_email: Bạn phải xác nhận địa chỉ email mới khi thay đổi email cá nhân.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Tài khoản này đang chờ xác nhận từ địa chỉ email mới %{email}.'
       #original_hash: 0340b0b
@@ -1391,6 +1409,12 @@ vi:
         target='_blank'>Đội ngũ Kết quả của WCA</a> để giải quyết.
       #original_hash: d02c03b
       avatar_requires_wca_id: yêu cầu xác nhận ID WCA
+      #original_hash: 8f785ea
+      email_used_by_locked_account_html: >-
+        đã được sử dụng bởi tài khoản khác. Tài khoản đã được tự động tạo khi
+        bạn đăng ký tham gia giải đấu qua một trang web khác. Nếu bạn là chủ sở
+        hữu của email này, bạn có thể sử dụng tài khoản sau khi thay đổi mật
+        khẩu <a href='/users/password/new'>tại đây</a>.
     successes:
       messages:
         #original_hash: 31bd401
@@ -1434,8 +1458,6 @@ vi:
       need_country: Cần có quốc gia
       #original_hash: cec28a0
       comp_not_found: Không tìm thấy giải đấu
-      #original_hash: cb763b8
-      registration_closed: Đơn đăng ký giải đấu đã đóng
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Đơn đăng ký không thể bị xoá và được chấp thuận cùng một lúc.
       #original_hash: a38d024
@@ -1698,6 +1720,21 @@ vi:
       %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Yêu cầu khi đăng ký cho giải đấu:'
+    import:
+      #original_hash: 5a394f3
+      title: 'Nhập đơn đăng ký cho %{comp}'
+      #original_hash: ccda564
+      info: >-
+        Bạn có thể nhập đơn đăng ký nhiều lần, thay đổi sẽ được xác định bởi hệ
+        thống và dữ liệu sẽ được cập nhật.
+      #original_hash: 779b272
+      registrations_file_label: File chứa đơn đăng ký
+      #original_hash: 4017f0e
+      registrations_file_hint: >-
+        File định dạng CSV với các cột: Trạng thái, Tên, Quốc gia, ID WCA, Sinh
+        nhật, Giới tính, Email, và một cột cho mỗi nội dung thi đấu.
+      #original_hash: d6fbc9d
+      import: Nhập
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1708,6 +1745,10 @@ vi:
         giải ngắn hơn.
       #original_hash: 1a20fae
       must_have_events: Vui lòng thêm ít nhất một nội dung trước khi xác nhận giải đấu.
+      #original_hash: a3aea56
+      schedule_must_match_rounds: >-
+        Vui lòng bảo đảm rằng giải đấu có ít nhất một vòng cho mỗi nội dung và
+        lịch thi đấu có đầy đủ các vòng trước khi xác nhận giải đấu.
       #original_hash: e390250
       create_success: Tạo giải đấu mới thành công!
       #original_hash: afe3a23
@@ -1991,6 +2032,17 @@ vi:
       coordinates: Điều phối
       #original_hash: a672984
       add_championship: Thêm Giải vô địch
+      championship_types:
+        #original_hash: dc71704
+        world: Giải Vô địch Thế giới
+        #original_hash: d573eb7
+        continental: 'Giải Vô địch Lục địa: %{continent}'
+        #original_hash: 39f47e0
+        national: 'Giải Vô địch Quốc gia: %{country}'
+        #original_hash: e045169
+        greater_china: Giải Vô địch Trung Quốc Đại Lục
+        #original_hash: 3b920b7
+        generic: 'Giải Vô địch: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2005,6 +2057,10 @@ vi:
       cannot_delete_confirmed: Không thể xoá một giải đấu đã được xác nhận.
       #original_hash: 191df37
       must_contain_event: phải có ít nhất một nội dung trong giải đấu
+      #original_hash: 54fe619
+      schedule_must_match_rounds: >-
+        Phải có ít nhất một vòng thi, và tất cả các vòng đều phải được ghi rõ
+        trong lịch thi đấu.
       #original_hash: 6e228b7
       must_contain_delegate: phải có ít nhất một WCA Delegate
       #original_hash: 8131fc2
@@ -2198,6 +2254,8 @@ vi:
         delegate_report: Báo cáo của delegate
         #original_hash: b233e77
         registration: Đăng ký
+        #original_hash: 3f9176e
+        import_registrations: Nhập đơn đăng ký
         #original_hash: d672995
         register: Đăng ký
         #original_hash: 855bd26
@@ -2601,6 +2659,18 @@ vi:
         info_html: >-
           Hiệp hội Lập phương Thế giới được dẫn đầu bởi <strong>Ban Quản trị
           WCA</strong>, bao gồm các thành viên sau:
+      chair:
+        #original_hash: de34439
+        name: Chủ tịch WCA
+      executive_director:
+        #original_hash: 7d405ff
+        name: Giám đốc Điều hành WCA
+      secretary:
+        #original_hash: 1dd4a07
+        name: Thư ký WCA
+      vice_chair:
+        #original_hash: 0388b19
+        name: Phó Chủ tịch WCA
       #original_hash: b0c72a9
       committees: 'Các ban sau chịu trách nhiệm cho từng công việc của WCA:'
       wdc:
@@ -2612,6 +2682,13 @@ vi:
           các trường hợp cáo buộc vi phạm Quy định WCA, và có thể được liên hệ
           bởi thành viên WCA về các vấn đề cá nhân quan trọng liên quan đến giải
           đấu WCA.
+      wdpc:
+        #original_hash: 70539cd
+        name: Ban Bảo mật Dữ liệu WCA
+        #original_hash: 1f69829
+        description: >-
+          Ban này có trách nhiệm về tất cả các vấn đề liên quan đến bảo mật dữ
+          liệu.
       wrc:
         #original_hash: 3da1e85
         name: Ban Quy định WCA
@@ -2666,7 +2743,7 @@ vi:
       wcat:
         #original_hash: 2b81984
         name: Đội ngũ Thông báo Giải đấu WCA
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
           Ban này có trách nhiệm duyệt và thông báo Giải đấu WCA và đảm bảo rằng
           các thông báo tuân theo tiêu chuẩn chất lượng của WCA.
@@ -2800,6 +2877,13 @@ vi:
         phạt nếu cần thiết. Trong đó, các trường hợp vi phạm có thể mang tính
         nghiêm trọng đối với Quy định WCA hoặc ảnh hưởng tới cộng đồng. Nếu bạn
         phải trải qua bất kỳ trường hợp nào, đừng ngần ngại liên hệ với ban này.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        WDPC có trách nhiệm tìm hiểu, thiết kế, quản lý và thi hành tất cả các
+        chính sách về Bảo mật Dữ liệu WCA, hợp đồng với các bên liên quan về
+        việc sử dụng dữ liệu của WCA, và theo dõi các công việc liên quan đến
+        Bảo mật Dữ liệu.
     wrc:
       #original_hash: fcd3526
       info_html: >-
