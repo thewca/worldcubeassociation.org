@@ -935,6 +935,8 @@ pt-BR:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -2815,6 +2817,17 @@ pt-BR:
           Essa equipe é responsável por desenvolver e gerir a marca da WCA,
           procurar patrocínios, apoiar a distribuição de Equipamento de
           Competição da WCA, e comercializar Mercadorias da WCA.
+      #original_hash: a2c8ad3
+      councils: >-
+        Os seguintes conselhos têm o papel de aconselhar o Conselho de Diretores
+        da WCA:
+      wac:
+        #original_hash: 1ce7604
+        name: Conselho Consultivo da WCA
+        #original_hash: fb6cd86
+        description: >-
+          Esse conselho é responsável por construir e manter comunicação
+          bilateral entre a Comunidade da WCA e a Equipe da WCA.
       banned:
         #original_hash: d30e2e5
         name: Competidores Suspensos ou Banidos
@@ -3021,6 +3034,13 @@ pt-BR:
         Essa equipe é responsável por desenvolver e gerir a marca da WCA,
         procurar patrocínios, apoiar a distribuição de Equipamento de Competição
         da WCA, e comercializar Mercadorias da WCA.
+    #original_hash: f97a4f5
+    councils_html: Conselhos
+    wac:
+      #original_hash: fb6cd86
+      info_html: >-
+        Esse conselho é responsável por construir e manter comunicação bilateral
+        entre a Comunidade da WCA e a Equipe da WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
