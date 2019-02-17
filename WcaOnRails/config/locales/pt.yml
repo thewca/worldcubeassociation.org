@@ -2809,6 +2809,17 @@ pt:
           Esta equipa é responsável por desenvolver e gerir a Marca WCA,
           procurar patrocínios, suportar a distribuição de materiais para
           competições e promover a divulgação de produtos WCA.
+      #original_hash: a2c8ad3
+      councils: >-
+        Os seguintes Conselhos têm o papel de assessorar o Conselho de Diretores
+        da WCA:
+      wac:
+        #original_hash: 1ce7604
+        name: Conselho Consultivo da WCA
+        #original_hash: fb6cd86
+        description: >-
+          Este Conselho é responsável por criar e manter comunicação bilateral
+          entre a Comunidade e o Staff da WCA.
       banned:
         #original_hash: d30e2e5
         name: Competidores Banidos
@@ -3013,6 +3024,13 @@ pt:
         Esta equipa é responsável por desenvolver e gerir a Marca WCA, procurar
         patrocínios, suportar a distribuição de materiais para competições e
         promover a divulgação de produtos WCA.
+    #original_hash: f97a4f5
+    councils_html: Conselhos
+    wac:
+      #original_hash: fb6cd86
+      info_html: >-
+        Este Conselho é responsável por criar e manter comunicação bilateral
+        entre a Comunidade WCA e o Staff da WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
