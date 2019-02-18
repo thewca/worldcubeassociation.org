@@ -308,13 +308,13 @@ ko:
         #original_hash: 0f21717
         region: 지역
         #original_hash: a10b651
-        location_description: 장소 설명
+        location_description: 활동 지역
         #original_hash: 8961d3b
         phone_number: 전화번호
         #original_hash: 7044004
         notes: 비고
         #original_hash: 57eaf24
-        user_preferred_events: 선호하는 종목
+        user_preferred_events: 선호 종목
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -577,8 +577,10 @@ ko:
         dob: 생년월일을 YYYY-MM-DD의 꼴로 입력하세요.
         #original_hash: d0bb74a
         name: >-
-          성명을 입력하세요. 예를 들어 <strong>Ilkyoo Choi</strong>. <strong>I
-          Choi</strong>의 형식은 안됩니다. <br/>
+          성명을 입력하세요. 예시: <strong>Ilkyoo Choi</strong>. 잘못된 예시: <strong>I
+          Choi</strong> <br/>
+        #original_hash: da39a3e
+        email: ''
         #original_hash: 8a91e53
         pending_avatar: '새로운 아바타를 업로드 할 시, WCA 결과팀이 승인하기를 기다리셔야 합니다.'
         #original_hash: da39a3e
@@ -747,6 +749,8 @@ ko:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -1012,7 +1016,7 @@ ko:
       #original_hash: 84add5b
       email: 이메일
       #original_hash: 9dfd349
-      preferences: 선호
+      preferences: 선호 종목
       #original_hash: 8be3c94
       password: 비밀번호
       #original_hash: 3fc6dbe
@@ -1027,7 +1031,6 @@ ko:
       approve: 승인
       #original_hash: 85de4b8
       unconfirmed_email: '이 계정의 이메일 주소 (%{email})이 검증되지 않았습니다.'
-      confirm_new_email: '이메일 변경시, 새로운 이메일을 검증 받으셔야 합니다.'
       #original_hash: 8a770cf
       pending_mail_confirmation: '이 계정은 새로운 이메일 주소 %{email}의 검증을 기다리고 있습니다.'
       #original_hash: 0340b0b
@@ -1053,11 +1056,11 @@ ko:
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
-          성명, 생년월일, 성별, 국적을 변경하실 수 없습니다. 이유: %{reason}. 변경을 하셔야하면 <a
+          성명, 생년월일, 성별, 국적을 변경하실 수 없습니다. 사유: %{reason}. 변경을 하셔야하면 <a
           href='%{delegate_url}'>WCA 파견위원</a>에게 연락하세요.
         reason:
           #original_hash: 370ff12
-          assigned: 이미 연결된 WCA ID가 있습니다.
+          assigned: 이미 연결된 WCA ID가 있습니다
           #original_hash: 1c4670f
           registered: 대회 참가 신청하셨습니다.
       #original_hash: fe7122d
@@ -1164,8 +1167,6 @@ ko:
       need_country: 국적이 필요합니다
       #original_hash: cec28a0
       comp_not_found: 대회를 찾을 수 없습니다
-      #original_hash: cb763b8
-      registration_closed: 대회 참가 신청 기간이 지났습니다
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: 승인과 삭제를 동시에 진행할 수 없습니다
       #original_hash: a38d024
@@ -1417,7 +1418,7 @@ ko:
       #original_hash: d70f93d
       address: 주소
       #original_hash: dc3decb
-      details: 자세히
+      details: 상세한 위치
       #original_hash: 2e8a57c
       website: 홈페이지
       #original_hash: 680567f
@@ -1445,7 +1446,7 @@ ko:
       #original_hash: 45834fd
       register_below_html: 아래에서 이 대회의 참가신청을 해주세요.
       #original_hash: 196725e
-      competitor_limit_is: '참가자 제한이 있으며, %{competitor_limit}으로 제한합니다.'
+      competitor_limit_is: '참가자 정원은 %{competitor_limit}명 입니다.'
       #original_hash: 5101f65
       no_competitor_limit: 참가자 제한이 없습니다.
       #original_hash: f979d5e
@@ -1465,7 +1466,7 @@ ko:
       #original_hash: 4df139d
       guests_pay: '일반 관객의 관람료는 %{guests_base_fee}원 입니다.'
       #original_hash: b6c863e
-      guests_free: 관객은 무료입니다.
+      guests_free: 관람객은 무료입니다.
       #original_hash: 97a31ee
       click_to_display_requirements_html: '이미 종료 된 대회입니다. %{link_here}를 눌러 대회의 참가 필수 요건을 확인하세요.'
       #original_hash: ff19a74
@@ -1513,16 +1514,16 @@ ko:
       #original_hash: ae79ea1
       to_date: 끝
       #original_hash: 52c30f8
-      past_from: '%{year} 이전'
+      past_from: '%{year}년 대회'
       #original_hash: 7cff459
-      past_all: 모든 연도 이전
+      past_all: 지난 연도 모두
       titles:
         #original_hash: 69447c9
         in_progress: 진행 중인 대회
         #original_hash: 9e66032
-        past: '%{year} 이전 대회'
+        past: '%{year}년 대회'
         #original_hash: f628f0e
-        past_all: 이전 대회
+        past_all: 지난 모든 대회
         #original_hash: cbe8a54
         recent: '최근 대회 (최근 %{count}일)'
         #original_hash: 914742f
@@ -1649,9 +1650,9 @@ ko:
         #original_hash: b233e77
         registration: 참가 신청
         #original_hash: d672995
-        register: 신청
+        register: 참가 신청
         #original_hash: 855bd26
-        competitors: 참가자
+        competitors: 참가 확정 명단
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA 프로필
