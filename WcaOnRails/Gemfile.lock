@@ -82,7 +82,7 @@ GEM
     api-pagination (4.8.2)
     arel (9.0.0)
     ast (2.4.0)
-    autoprefixer-rails (9.4.3)
+    autoprefixer-rails (9.4.7)
       execjs
     bcrypt (3.1.12)
     better_errors (2.5.1)
@@ -95,7 +95,7 @@ GEM
     blocks (3.0.4)
       call_with_params
       rails (>= 3.0.0)
-    bootstrap-sass (3.4.0)
+    bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
     bootstrap-table-rails (1.11.1.1)
