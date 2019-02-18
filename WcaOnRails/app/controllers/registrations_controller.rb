@@ -166,6 +166,8 @@ class RegistrationsController < ApplicationController
   end
 
   private def user_for_registration!(registration_row)
+    registration_row[:wca_id]&.upcase!
+    registration_row[:email]&.downcase!
     if registration_row[:wca_id].present?
       unless Person.exists?(wca_id: registration_row[:wca_id])
         raise "Non-existent WCA ID given #{registration_row[:wca_id]}."

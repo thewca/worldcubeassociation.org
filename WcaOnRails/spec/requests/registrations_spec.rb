@@ -42,6 +42,19 @@ RSpec.describe "registrations" do
 
     describe "registrations import" do
       context "registrant has WCA ID" do
+        it "renders an error if the WCA ID doesn't exist" do
+          expect(RegistrationsMailer).to_not receive(:notify_registrant_of_locked_account_creation)
+          file = csv_file [
+            ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+            ["a", "Sherlock Holmes", "United Kingdom", "1000DARN99", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+          ]
+          expect {
+            post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          }.to_not change { competition.registrations.count }
+          follow_redirect!
+          expect(response.body).to include "Non-existent WCA ID given 1000DARN99."
+        end
+
         context "user exists with the given WCA ID" do
           context "the user is a dummy account" do
             let!(:dummy_user) { FactoryBot.create(:dummy_user) }
@@ -131,19 +144,6 @@ RSpec.describe "registrations" do
             user = competition.registrations.first.user
             expect(user.wca_id).to eq person.wca_id
             expect(user).to be_locked_account
-          end
-
-          it "renders an error if the WCA ID doesn't exist" do
-            expect(RegistrationsMailer).to_not receive(:notify_registrant_of_locked_account_creation)
-            file = csv_file [
-              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", "Sherlock Holmes", "United Kingdom", "1000DARN99", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
-            ]
-            expect {
-              post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.to_not change { competition.registrations.count }
-            follow_redirect!
-            expect(response.body).to include "Non-existent WCA ID given 1000DARN99."
           end
         end
       end
