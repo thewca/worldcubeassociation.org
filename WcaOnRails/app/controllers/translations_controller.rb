@@ -53,7 +53,7 @@ class TranslationsController < ApplicationController
   VERIFIED_TRANSLATORS_BY_LOCALE = {
     "cs" => [8583],
     "da" => [6777],
-    "de" => [870],
+    "de" => [870, 7121],
     "es" => [7340, 1439],
     "fi" => [39072],
     "fr" => [277],
