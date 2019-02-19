@@ -193,8 +193,19 @@ class RegistrationsController < ApplicationController
           [user, false] # Use this account.
         end
       else
-        # Create a locked account with confirmed WCA ID.
-        [create_locked_account!(registration_row), true]
+        email_user = User.find_by(email: registration_row[:email])
+        if email_user
+          if email_user.unconfirmed_wca_id.present? && email_user.unconfirmed_wca_id != registration_row[:wca_id]
+            raise "There is already a user with email #{registration_row[:email]}"\
+                  ", but it has unconfirmed WCA ID of #{email_user.unconfirmed_wca_id} instead of #{registration_row[:wca_id]}."
+          else
+            email_user.update!(wca_id: registration_row[:wca_id])
+            [email_user, false]
+          end
+        else
+          # Create a locked account with confirmed WCA ID.
+          [create_locked_account!(registration_row), true]
+        end
       end
     else
       email_user = User.find_by(email: registration_row[:email])

@@ -131,19 +131,81 @@ RSpec.describe "registrations" do
         end
 
         context "no user exists with the given WCA ID" do
-          it "creates a locked user with this WCA ID, registers and notifies him" do
-            expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
-            person = FactoryBot.create(:person)
-            file = csv_file [
-              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", "Sherlock Holmes", "United Kingdom", person.wca_id, "2000-01-01", "m", "sherlock@example.com", "1", "0"],
-            ]
-            expect {
-              post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.to change { User.count }.by(1)
-            user = competition.registrations.first.user
-            expect(user.wca_id).to eq person.wca_id
-            expect(user).to be_locked_account
+          context "user exists with registrant's email" do
+            context "the user has unconfirmed WCA ID different from the given WCA ID" do
+              it "renders an error" do
+                person = FactoryBot.create(:person)
+                unconfirmed_person = FactoryBot.create(:person)
+                user = FactoryBot.create(
+                  :user,
+                  unconfirmed_wca_id: unconfirmed_person.wca_id,
+                  dob_verification: unconfirmed_person.dob,
+                  delegate_to_handle_wca_id_claim: User.delegates.first,
+                )
+                file = csv_file [
+                  ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+                  ["a", "Sherlock Holmes", "United Kingdom", person.wca_id, "2000-01-01", "m", user.email, "1", "0"],
+                ]
+                expect {
+                  post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                }.to_not change { competition.registrations.count }
+                follow_redirect!
+                expect(response.body).to include "There is already a user with email #{user.email}, but it has unconfirmed WCA ID of #{unconfirmed_person.wca_id} instead of #{person.wca_id}."
+              end
+            end
+
+            context "the user has unconfirmed WCA ID same as the given WCA ID" do
+              it "claims the WCA ID and registers the user" do
+                person = FactoryBot.create(:person)
+                user = FactoryBot.create(:user)
+                file = csv_file [
+                  ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+                  ["a", "Sherlock Holmes", "United Kingdom", person.wca_id, "2000-01-01", "m", user.email, "1", "0"],
+                ]
+                expect {
+                  post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                }.to_not change { User.count }
+                expect(user.reload.wca_id).to eq person.wca_id
+                expect(user.reload.unconfirmed_wca_id).to be_nil
+                expect(user.reload.delegate_to_handle_wca_id_claim).to be_nil
+                expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                expect(competition.registrations.count).to eq 1
+              end
+            end
+
+            context "the user has no unconfirmed WCA ID" do
+              it "updates this user with the WCA ID and registers him" do
+                person = FactoryBot.create(:person)
+                user = FactoryBot.create(:user)
+                file = csv_file [
+                  ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+                  ["a", "Sherlock Holmes", "United Kingdom", person.wca_id, "2000-01-01", "m", user.email, "1", "0"],
+                ]
+                expect {
+                  post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                }.to_not change { User.count }
+                expect(user.reload.wca_id).to eq person.wca_id
+                expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                expect(competition.registrations.count).to eq 1
+              end
+            end
+          end
+
+          context "no user exists with registrant's email" do
+            it "creates a locked user with this WCA ID, registers and notifies him" do
+              expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
+              person = FactoryBot.create(:person)
+              file = csv_file [
+                ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+                ["a", "Sherlock Holmes", "United Kingdom", person.wca_id, "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+              ]
+              expect {
+                post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+              }.to change { User.count }.by(1)
+              user = competition.registrations.first.user
+              expect(user.wca_id).to eq person.wca_id
+              expect(user).to be_locked_account
+            end
           end
         end
       end
