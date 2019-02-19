@@ -175,7 +175,7 @@ class Registration < ApplicationRecord
                     'pending'
                   end,
       "guests" => guests,
-      "comments" => comments,
+      "comments" => comments || '',
     }
   end
 
