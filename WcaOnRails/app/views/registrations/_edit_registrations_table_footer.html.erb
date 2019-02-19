@@ -21,6 +21,10 @@
         <%= registrations.to_a.sum(&:guests) %>
       <% end %>
     </td>
-    <td colspan="3"></td>
+    <td></td>
+    <% if @competition.using_stripe_payments? %>
+      <td><%= format_money registrations.to_a.sum(&:paid_entry_fees) %></td>
+    <% end %>
+    <td></td>
   </tr>
 </tfoot>
