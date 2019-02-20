@@ -18,7 +18,7 @@
           <%= link_to team_member.user.wca_id, person_path(team_member.user.wca_id) if team_member.user.wca_id %>
           <p>
             Banned until:
-            <%= team_member.end_date || "not decided yet" %>
+            <%= team_member.end_date || "unlimited or conditional" %>
           </p>
         </li>
       <% end %>
