@@ -71,7 +71,7 @@
 <% if @competition.on_the_spot_registration.nil? %>
 <% elsif @competition.on_the_spot_registration? %>
   <% if @competition.on_the_spot_entry_fee_lowest_denomination? %>
-    <%= t('competitions.competition_info.on_the_spot_registration', on_the_spot_base_entry_fee: format_money(@competition.on_the_spot_base_entry_fee)) %>
+    <%= t('competitions.competition_info.on_the_spot_registration_html', on_the_spot_base_entry_fee: format_money(@competition.on_the_spot_base_entry_fee), end_of_registration: wca_local_time(@competition.registration_close)) %>
     <br>
   <% else %>
     <%= t('competitions.competition_info.on_the_spot_registration_free') %>
