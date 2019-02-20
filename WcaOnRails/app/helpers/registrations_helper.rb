@@ -4,7 +4,7 @@ module RegistrationsHelper
   def fees_hint_and_context(registration)
     if registration.competition.using_stripe_payments?
       if registration.outstanding_entry_fees <= 0
-        [t('registrations.entry_fees_fully_paid', paid: registration.paid_entry_fees), "success"]
+        [t('registrations.entry_fees_fully_paid', paid: format_money(registration.paid_entry_fees)), "success"]
       else
         [t('registrations.will_pay_here'), "info"]
       end
