@@ -1,13 +1,21 @@
 pt:
   countries:
+    #original_hash: 9af4622
+    XF: Vários Países (África)
+    #original_hash: 374ac0d
+    XM: Vários Países (Américas)
     #original_hash: 3f8c9de
     XA: Vários Países (Ásia)
     #original_hash: 090f3ce
     XE: Vários Países (Europa)
+    #original_hash: b50b7a5
+    XN: Vários Países (América do Norte)
+    #original_hash: 428e7af
+    XO: Vários Países (Oceânia)
     #original_hash: 459f987
     XS: Vários Países (América do Sul)
-    #original_hash: 374ac0d
-    XM: Vários Países (Américas)
+    #original_hash: 9027fe6
+    XW: Vários Países (Mundo)
     #original_hash: 918c53a
     MO: Macau
     #original_hash: 2f488ff
@@ -1121,6 +1129,10 @@ pt:
       history: História
       #original_hash: 8ad8302
       translations: Traduções
+      #original_hash: c420cb4
+      disciplinary: Registo Disciplinar
+      #original_hash: ecba5f4
+      incidents: Registo de Incidentes
       #original_hash: b8be3d1
       administration: Administração
       #original_hash: b7ee3c4
