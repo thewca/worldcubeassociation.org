@@ -22,10 +22,14 @@
 en:
   #context: Special country name
   countries:
+    XF: "Multiple Countries (Africa)"
+    XM: "Multiple Countries (Americas)"
     XA: "Multiple Countries (Asia)"
     XE: "Multiple Countries (Europe)"
+    XN: "Multiple Countries (North America)"
+    XO: "Multiple Countries (Oceania)"
     XS: "Multiple Countries (South America)"
-    XM: "Multiple Countries (Americas)"
+    XW: "Multiple Countries (World)"
     MO: "Macao"
     HK: "Hong Kong"
     KR: "Korea"
