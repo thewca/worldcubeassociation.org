@@ -71,6 +71,12 @@ class StaticPagesController < ApplicationController
       logo: "korea.png",
     },
     {
+      country: "Macedonia",
+      name: "Macedonian Cubing Association",
+      url: "https://speedcubing.mk/",
+      logo: "mca.png",
+    },
+    {
       country: "Malaysia",
       name: "Malaysia Cube Association",
       url: "https://www.mycubeassociation.com",
