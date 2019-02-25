@@ -124,7 +124,6 @@ Rails.application.routes.draw do
   get 'documents' => 'static_pages#documents'
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
-  get 'organizations' => 'static_pages#organizations'
   get 'contact' => 'static_pages#contact'
   get 'privacy' => 'static_pages#privacy'
   get 'faq' => 'static_pages#faq'
@@ -135,7 +134,8 @@ Rails.application.routes.draw do
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
   get 'tutorial' => redirect('/files/WCA_Competition_Tutorial.pdf', status: 302)
 
-  resources :regional_organizations, only: [:index, :new, :update, :edit], path: '/regional-organizations'
+  resources :regional_organizations, only: [:new, :update, :edit], path: '/regional-organizations'
+  get 'organizations' => 'regional_organizations#index'
   get 'admin/regional-organizations' => 'regional_organizations#admin'
   patch 'regional-organizations/:id/edit' => 'regional_organizations#update'
   post 'regional-organizations/new' => 'regional_organizations#create'
