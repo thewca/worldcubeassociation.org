@@ -11,4 +11,4 @@ AU_STATES = %w(
   Western\ Australia
 ).to_set
 
-CityValidator.add_validator_for_country "AU", CityCommaRegionValidator.new(type_of_region: "state/territory", valid_regions: AU_STATES)
+CityValidator.add_validator_for_country "AU", CityCommaRegionValidator.new(type_of_region: "state or territory", valid_regions: AU_STATES)
