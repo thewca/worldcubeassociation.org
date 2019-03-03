@@ -26,6 +26,8 @@ onPage('admin#edit_person, admin#update_person', function() {
               $('#person_dob').data("DateTimePicker").date(value);
             }
           });
+          /* Unfocus person select once the data is loaded, so the autocomplete doesn't show up on browser tab change. */
+          $('.person_wca_id .selectize-control input').blur();
         }
       });
     }
