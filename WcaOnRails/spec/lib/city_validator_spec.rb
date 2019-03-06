@@ -42,7 +42,7 @@ RSpec.describe CityValidator do
   end
 
   context "FR" do
-    let(:country) { Country.find_by_iso2!("GB") }
+    let(:country) { Country.find_by_iso2!("FR") }
     let(:model) { TestModel.new(country: country) }
 
     it "anything goes" do
