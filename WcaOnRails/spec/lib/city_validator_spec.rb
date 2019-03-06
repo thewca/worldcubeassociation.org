@@ -40,7 +40,7 @@ RSpec.describe CityValidator do
       expect(model).to be_invalid_with_errors city: ["is not of the form 'city, province'"]
     end
   end
-  
+
   context "GB" do
     let(:country) { Country.find_by_iso2!("GB") }
     let(:model) { TestModel.new(country: country) }
@@ -56,7 +56,7 @@ RSpec.describe CityValidator do
       expect(model).to be_invalid_with_errors city: ["is not of the form 'city, county'"]
     end
   end
-  
+
   context "AR" do
     let(:country) { Country.find_by_iso2!("AR") }
     let(:model) { TestModel.new(country: country) }
@@ -72,7 +72,7 @@ RSpec.describe CityValidator do
       expect(model).to be_invalid_with_errors city: ["is not of the form 'city, province'"]
     end
   end
-  
+
   context "AU" do
     let(:country) { Country.find_by_iso2!("AU") }
     let(:model) { TestModel.new(country: country) }
@@ -88,7 +88,7 @@ RSpec.describe CityValidator do
       expect(model).to be_invalid_with_errors city: ["is not of the form 'city, state or territory'"]
     end
   end
-  
+
   context "IN" do
     let(:country) { Country.find_by_iso2!("IN") }
     let(:model) { TestModel.new(country: country) }
@@ -104,7 +104,7 @@ RSpec.describe CityValidator do
       expect(model).to be_invalid_with_errors city: ["is not of the form 'city, state'"]
     end
   end
-  
+
   context "BR" do
     let(:country) { Country.find_by_iso2!("BR") }
     let(:model) { TestModel.new(country: country) }
