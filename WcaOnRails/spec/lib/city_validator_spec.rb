@@ -45,7 +45,7 @@ RSpec.describe CityValidator do
     let(:country) { Country.find_by_iso2!("GB") }
     let(:model) { TestModel.new(country: country) }
 
-    it "requires city, province" do
+    it "requires city, county" do
       model.city = "Birmingham, West Midlands"
       expect(model).to be_valid
 
@@ -77,7 +77,7 @@ RSpec.describe CityValidator do
     let(:country) { Country.find_by_iso2!("AU") }
     let(:model) { TestModel.new(country: country) }
 
-    it "requires city, province" do
+    it "requires city, state or territory" do
       model.city = "Darwin, Northern Territory"
       expect(model).to be_valid
 
@@ -93,7 +93,7 @@ RSpec.describe CityValidator do
     let(:country) { Country.find_by_iso2!("IN") }
     let(:model) { TestModel.new(country: country) }
 
-    it "requires city, province" do
+    it "requires city, state" do
       model.city = "Mumbai, Maharashtra"
       expect(model).to be_valid
 
@@ -109,7 +109,7 @@ RSpec.describe CityValidator do
     let(:country) { Country.find_by_iso2!("BR") }
     let(:model) { TestModel.new(country: country) }
 
-    it "requires city, province" do
+    it "requires city, state" do
       model.city = "Brasília, Distrito Federal"
       expect(model).to be_valid
 
