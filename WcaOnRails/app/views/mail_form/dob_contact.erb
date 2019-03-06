@@ -17,6 +17,13 @@
       <td>Correct birthdate</td>
       <td><strong><%= @resource.dob %></strong></td>
     </tr>
+    <tr style="height: 1em">
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+      <td>Incorrect WCA ID claims</td>
+      <td><strong><%= "#{@resource.incorrect_wca_id_claim_count}/#{User::MAX_INCORRECT_WCA_ID_CLAIM_COUNT}" %></strong></td>
+    </tr>
   </body>
 </table>
 <p>You can edit this person <%= link_to "here", admin_edit_person_url(person: { wca_id: @resource.wca_id }) %>.</p>

@@ -6,6 +6,8 @@ class ScheduleActivity < ApplicationRecord
   VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc tutorial).freeze
   belongs_to :holder, polymorphic: true
   has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+  has_many :assignments, dependent: :delete_all
 
   validates_presence_of :name
   validates_numericality_of :wcif_id, only_integer: true
@@ -74,6 +76,17 @@ class ScheduleActivity < ApplicationRecord
     end
   end
 
+  # Get this activity's activity_code and all of its nested activities
+  # NOTE: as is, the WCA schedule editor doesn't support nested activities, but this
+  # doesn't prevent anyone from submitting a WCIF with 333fm-a1 nested in 333fm (for instance).
+  def all_activity_codes
+    [activity_code, child_activities.map(&:all_activity_codes)].flatten
+  end
+
+  def all_activities
+    [self, child_activities.map(&:all_activities)].flatten
+  end
+
   def to_wcif
     {
       "id" => wcif_id,
@@ -82,6 +95,7 @@ class ScheduleActivity < ApplicationRecord
       "startTime" => start_time.iso8601,
       "endTime" => end_time.iso8601,
       "childActivities" => child_activities.map(&:to_wcif),
+      "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
@@ -106,7 +120,22 @@ class ScheduleActivity < ApplicationRecord
       activity.load_wcif!(activity_wcif)
     end
     self.child_activities = new_child_activities
+    WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
+  end
+
+  def move_by(diff)
+    # 'diff' must be something add-able to a date (eg: 2.days, 34.seconds)
+    self.assign_attributes(start_time: start_time + diff, end_time: end_time + diff)
+    self.save(validate: false)
+    child_activities.map { |a| a.move_by(diff) }
+  end
+
+  def move_to(date)
+    self.assign_attributes(start_time: start_time.change(year: date.year, month: date.month, day: date.day),
+                           end_time: end_time.change(year: date.year, month: date.month, day: date.day))
+    self.save(validate: false)
+    child_activities.map { |a| a.move_to(date) }
   end
 
   def self.wcif_json_schema
@@ -120,6 +149,7 @@ class ScheduleActivity < ApplicationRecord
         "startTime" => { "type" => "string" },
         "endTime" => { "type" => "string" },
         "childActivities" => { "type" => "array", "items" => { "$ref" => "activity" } },
+        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
       "required" => ["id", "name", "activityCode", "startTime", "endTime", "childActivities"],
     }

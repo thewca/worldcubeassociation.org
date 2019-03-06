@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Championship < ApplicationRecord
+  include Comparable
   CHAMPIONSHIP_TYPES = [
     "world",
     *Continent.real.map(&:id),
@@ -15,16 +16,43 @@ class Championship < ApplicationRecord
                                 inclusion: { in: CHAMPIONSHIP_TYPES }
 
   def name
-    return "World Championship" if championship_type == "world"
+    return I18n.t('competitions.competition_form.championship_types.world') if world?
 
-    return "Greater China Championship" if championship_type == "greater_china"
+    return I18n.t('competitions.competition_form.championship_types.greater_china') if greater_china?
 
-    continent = Continent.c_find(championship_type)
-    return "Continental Championship for #{continent.name}" if continent
+    return I18n.t('competitions.competition_form.championship_types.continental', continent: continent.name) if continent
 
-    country = Country.find_by_iso2(championship_type)
-    return "National Championship for #{country.name}" if country
+    return I18n.t('competitions.competition_form.championship_types.national', country: country.name) if country
 
-    "Championship for #{championship_type}"
+    I18n.t('competitions.competition_form.championship_types.generic', type: championship_type)
+  end
+
+  def country
+    Country.find_by_iso2(championship_type)
+  end
+
+  def greater_china?
+    championship_type == "greater_china"
+  end
+
+  def continent
+    Continent.c_find(championship_type)
+  end
+
+  def world?
+    championship_type == "world"
+  end
+
+  def to_a
+    [
+      world? ? 0 : 1,
+      continent ? 0 : 1,
+      greater_china? ? 0 : 1,
+      country ? 0 : 1,
+    ]
+  end
+
+  def <=>(other)
+    self.to_a <=> other.to_a
   end
 end

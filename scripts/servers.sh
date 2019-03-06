@@ -64,12 +64,13 @@ test_aws_cli() {
   fi
 }
 
-test_ssh_to_production() {
-  local test_command='ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no cubing@worldcubeassociation.org echo Successfulness'
+test_ssh_to_server() {
+  local host=$1
+  local test_command="ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no cubing@${host} echo Successfulness"
   local connected_str=`${test_command} || true`
   if [ "${connected_str}" != "Successfulness" ]; then
     echo "" >> /dev/stderr
-    echo "Unable to connect to the current production server." >> /dev/stderr
+    echo "Unable to connect to the current server." >> /dev/stderr
     echo "You need to set up passwordless ssh to production locally before spinning up a new server." >> /dev/stderr
     echo "If you do not know how to do this, look into ssh-copy-id." >> /dev/stderr
     echo "When you think you've got things set up correctly, try running '${test_command}'." >> /dev/stderr
@@ -78,9 +79,10 @@ test_ssh_to_production() {
 }
 
 test_ssh_agent_forwarding() {
-  test_ssh_to_production
-
   local ssh_command=$1
+  local host=$2
+
+  test_ssh_to_server ${host}
 
   local test_command="${ssh_command} echo Successfulness"
   local connected_str=`${test_command} || true`
@@ -91,11 +93,11 @@ test_ssh_agent_forwarding() {
     exit 1
   fi
 
-  local test_command="${ssh_command} ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no cubing@worldcubeassociation.org echo Successfulness"
+  local test_command="${ssh_command} ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no cubing@${host} echo Successfulness"
   local connected_str=`${test_command} || true`
   if [ "${connected_str}" != "Successfulness" ]; then
     echo "" >> /dev/stderr
-    echo "Unable to connect to the current production server through the newly created server." >> /dev/stderr
+    echo "Unable to connect to the current server through the newly created server." >> /dev/stderr
     echo "This is indicative of a problem with your ssh agent forwarding. GitHub has some useful troubleshooting tips here: https://developer.github.com/v3/guides/using-ssh-agent-forwarding/#troubleshooting-ssh-agent-forwarding." >> /dev/stderr
     echo "When you think you've got things set up correctly, try running '${test_command}'." >> /dev/stderr
     exit 1
@@ -145,18 +147,6 @@ get_pem_filename() {
   eval $__resultvar="'${__pem_filename}'"
 }
 
-rsync_secrets() {
-  local ssh_command=$1
-
-  ${ssh_command} 'sudo -E rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation.org/secrets'
-}
-
-disable_old_cron() {
-  local ssh_command=$1
-
-  ssh cubing@worldcubeassociation.org 'crontab -l | sed -e "s/^/#/" -e "1i# Cronjobs disabled on `date` by servers.sh" | crontab'
-}
-
 new() {
   print_command_usage_and_exit() {
     echo "Usage: $0 new [--staging] [keyname]" >> /dev/stderr
@@ -190,13 +180,15 @@ new() {
 
   if [ "$staging" = true ]; then
     temp_new_server_name=${TEMP_NEW_STAGING_SERVER_NAME}
+    host=staging.worldcubeassociation.org
   else
     temp_new_server_name=${TEMP_NEW_PROD_SERVER_NAME}
+    host=www.worldcubeassociation.org
   fi
 
   get_pem_filename pem_filename ${keyname}
 
-  test_ssh_to_production
+  test_ssh_to_server ${host}
 
   # Spin up a new EC2 instance.
   json=`aws ec2 run-instances \
@@ -226,9 +218,11 @@ bootstrap() {
 
   if [ "${server_name}" == "${TEMP_NEW_STAGING_SERVER_NAME}" ]; then
     environment=staging
+    host=staging.worldcubeassociation.org
     next_cmd="$0 passthetorch --staging"
   elif [ "${server_name}" == "${TEMP_NEW_PROD_SERVER_NAME}" ]; then
     environment=production
+    host=www.worldcubeassociation.org
     next_cmd="$0 passthetorch"
   else
     echo "Unrecognized server name '${server_name}'" >> /dev/stderr
@@ -243,7 +237,7 @@ bootstrap() {
 
   ssh_command="ssh -i ${pem_filename} -o StrictHostKeyChecking=no -A ubuntu@${domain_name}"
 
-  test_ssh_agent_forwarding "${ssh_command}"
+  test_ssh_agent_forwarding "${ssh_command}" ${host}
 
   echo "For debugging purposes, you can ssh to the server via '${ssh_command}'"
   echo "Bootstrapping the newly created server..."
@@ -382,7 +376,7 @@ function passthetorch() {
 
   get_instance_domain_name domain_name ${new_server_id}
   ssh_command="ssh -o StrictHostKeyChecking=no -A cubing@${domain_name}"
-  test_ssh_agent_forwarding "${ssh_command}"
+  test_ssh_agent_forwarding "${ssh_command}" ${host}
 
   # Do a quick smoke test of the new server.
   echo "Testing out new server at ${domain_name}"
@@ -421,10 +415,13 @@ function passthetorch() {
   echo "We're almost ready to assign it the elastic ip address ${elastic_ip}"
 
   # The contents of the secrets directory on the live production server may
-  # have changed since the user spun up this new server.
-  rsync_secrets "${ssh_command}"
+  # have changed since the user spun up this new server. Rsync it.
+  ${ssh_command} "sudo -E rsync -az -e 'ssh -o StrictHostKeyChecking=no' --info=progress2 cubing@${host}:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation.org/secrets"
 
-  disable_old_cron
+  # Disable cron job running on the old server, to prevent it from operating
+  # on the remote database (the same for both old and new server).
+  old_ssh_command="ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no cubing@${host}"
+  ${old_ssh_command} 'crontab -l | sed -e "s/^/#/" -e "1i# Cronjobs disabled on `date` by servers.sh" | crontab'
 
   aws ec2 associate-address --public-ip ${elastic_ip} --instance-id ${new_server_id}
   echo ""

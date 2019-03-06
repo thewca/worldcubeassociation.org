@@ -1,7 +1,7 @@
 <% provide(:title, 'WCA Scrambles') %>
 <div class="container">
   <h1>WCA Scrambles</h1>
-  <% latest_version = "TNoodle-WCA-0.13.4" %>
+  <% latest_version = "TNoodle-WCA-0.14.0" %>
   <% latest_jarfilename = "#{latest_version}.jar" %>
   <p>The current official scramble programs is <em><%= latest_version %></em>. It generates high-quality scramble sequences for all the events of a competition at once.</p>
   <center>
@@ -10,7 +10,7 @@
       <strong><%= link_to latest_jarfilename, "./tnoodle/#{latest_jarfilename}" %></strong>
     </span>
     <br/>
-    Last official change: July 2nd, 2018
+    Last official change: December 3, 2018
   </center>
   <h2>Important Notes for Delegates</h2>
   <ul>
@@ -18,6 +18,16 @@
     <li>Delegates should download TNoodle to run it on a computer. They should not use TNoodle running on a public server (for security reasons).</li>
     <li>Delegates must save all scramble sequences generated for an official competition, and send them with the results (see <%= link_to "Regulation 1c3a", "../#1c3a" %>).</li>
   </ul>
+  <h3 id="scramble-secrecy">Scramble Secrecy</h3>
+    <ul>
+      <li><b>Always</b> encrypt your scrambles in TNoodle with an unguessable password. The password must have nothing to do with the competition or personal data (name, birthdate) of any of the Delegates.</li>
+      <li>If you are displaying scrambles on a digital device, only share <code>[Competition Name] - Computer Display PDFs.zip</code>.</li>
+      <ul>
+        <li>Make sure that only Delegates have access to any other files.</li>
+        <li>Give passcodes to scramblers when the corresponding groups begin but <b>not any earlier</b>. (In particular, do not give the passcodes for all the scramble sets in a round to scramblers at the beginning of that round.)</li>
+        <li>Don't put someone else in charge of the passcodes unless absolutely necessary, and only give them the minimum amount of passcodes needed.</li>
+      </ul>
+    </ul>
   <h2>Detailed Instructions for TNoodle</h2>
   <p>TNoodle requires <%= link_to "Java", "https://www.java.com/en/" %> to be installed on your computer.</p>
   <ol>
@@ -56,6 +66,8 @@
     <li><%= link_to "TNoodle-WCA-0.13.1", "./tnoodle/old/TNoodle-WCA-0.13.1.jar" %> (2018-01-29)</li>
     <li><%= link_to "TNoodle-WCA-0.13.2", "./tnoodle/old/TNoodle-WCA-0.13.2.jar" %> (2018-02-03)</li>
     <li><%= link_to "TNoodle-WCA-0.13.3", "./tnoodle/old/TNoodle-WCA-0.13.3.jar" %> (2018-02-05)</li>
-    <li><%= link_to "TNoodle-WCA-0.13.4", "./tnoodle/TNoodle-WCA-0.13.4.jar" %> (2018-07-02)</li>
+    <li><%= link_to "TNoodle-WCA-0.13.4", "./tnoodle/old/TNoodle-WCA-0.13.4.jar" %> (2018-07-02)</li>
+    <li><%= link_to "TNoodle-WCA-0.13.5", "./tnoodle/old/TNoodle-WCA-0.13.5.jar" %> (2018-10-08)</li>
+    <li><%= link_to "TNoodle-WCA-0.14.0", "./tnoodle/TNoodle-WCA-0.13.5.jar" %> (2018-12-03)</li>
   </ul>
 </div>

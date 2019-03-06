@@ -60,6 +60,7 @@ module MarkdownHelper
     extensions = {
       tables: true,
       autolink: true,
+      strikethrough: true,
     }
 
     if target_blank

@@ -1,0 +1,34 @@
+<h1><%= @competition.name %> is confirmed</h1>
+
+<% if @competition.championships.present? %>
+  <h2 class="alert">This competition is marked as <%= @competition.championships.sort.map(&:name).to_sentence %></h2>
+  <% end %>
+
+<% if @competition.remarks.present? %>
+  <p>
+    <%= @confirmer.name %> says: <%= @competition.remarks %>
+  </p>
+<% end %>
+
+<% if @competition.competitor_limit_enabled? %>
+  <p>
+    There is a competitor limit of <%= @competition.competitor_limit %> because "<%= @competition.competitor_limit_reason %>"
+  </p>
+<% end %>
+
+<% if @competition.regulation_z1? %>
+  <p>
+    The Delegate(s) requested the adoption of <b>Regulation Z1)</b> because "<%= @competition.regulation_z1_reason %>"
+  </p>
+<% end %>
+
+<% if @competition.regulation_z3? %>
+  <p>
+    The Delegate(s) requested the adoption of <b>Regulation Z3)</b> because "<%= @competition.regulation_z3_reason %>"
+  </p>
+<% end %>
+
+<p>
+  @WCAT: You can delete this competition or make it publicly visible <%= link_to "here", admin_edit_competition_url(@competition) %>.
+  For a complete list of confirmed but unannounced competitions see your <%= link_to "notifications", notifications_url %>.
+</p>

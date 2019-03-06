@@ -36,39 +36,125 @@ FactoryBot.define do
       end
     end
 
+    transient do
+      team_leader { false }
+    end
+
+    transient do
+      team_senior_member { false }
+    end
+
     trait :board_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.board.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.board.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
+    trait :chair do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.chair.id, user_id: user.id)
+      end
+    end
+
+    trait :executive_director do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.executive_director.id, user_id: user.id)
+      end
+    end
+
+    trait :secretary do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.secretary.id, user_id: user.id)
+      end
+    end
+
+    trait :vice_chair do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.vice_chair.id, user_id: user.id)
       end
     end
 
     trait :wrt_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
       end
     end
 
     trait :wdc_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wdpc_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wdpc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wdc_leader do
       after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id)
+        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id, team_leader: true)
+      end
+    end
+
+    trait :banned do
+      after(:create) do |user|
+        FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id)
       end
     end
 
     trait :wrc_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
       end
     end
 
     trait :wct_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wct.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wct.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
       end
     end
 
     trait :wqac_member do
-      after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wqac.id, user_id: user.id)
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wqac.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wcat_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wcat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wec_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wec.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wfc_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wfc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wmt_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wmt.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wst_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wst.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wac_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wac.id, user_id: user.id, team_leader: options.team_leader)
       end
     end
 
@@ -104,9 +190,7 @@ FactoryBot.define do
 
     factory :dummy_user, traits: [:wca_id] do
       encrypted_password { "" }
-      after(:create) do |user|
-        user.update_column(:email, "#{user.wca_id}@worldcubeassociation.org")
-      end
+      dummy_account { true }
     end
   end
 end

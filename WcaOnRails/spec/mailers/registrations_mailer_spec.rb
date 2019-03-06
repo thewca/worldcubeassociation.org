@@ -214,4 +214,20 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_with_organizers.organizers_or_delegates)}.")
     end
   end
+
+  describe "notify_registrant_of_locked_account_creation" do
+    let(:registration) { FactoryBot.create(:registration, competition: competition_with_organizers) }
+    let(:mail) { RegistrationsMailer.notify_registrant_of_locked_account_creation(registration.user, registration.competition) }
+
+    it "renders the headers" do
+      expect(mail.to).to eq [registration.user.email]
+      expect(mail.reply_to).to eq(competition_with_organizers.organizers_or_delegates.map(&:email))
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match(registration.competition.name)
+      expect(mail.body.encoded).to match(new_user_password_url)
+      expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_with_organizers.organizers_or_delegates)}.")
+    end
+  end
 end

@@ -329,7 +329,7 @@ ro:
         #original_hash: 89f89c0
         id: Id
         #original_hash: 7f3d889
-        isConfirmed: Organizatorii nu au voie să editeze această competiție
+        confirmed: Nu permite organizatorilor să editeze competiția
         #original_hash: d493e6a
         showAtAll: Fă competiția vizibilă
         #original_hash: 709a232
@@ -597,8 +597,6 @@ ro:
           Pochmann</strong>, nu <strong>stefan pochmann</strong> sau <strong>S.
           Pochmann</strong>). Nu este obligatoriu să iți treci toate prenumele
           (dacă vrei, le poți scrie, întregi sau doar inițialele).
-        #original_hash: c03b949
-        email: Schimbarea adresei de e-mail necesită confiramrea noii adrese.
         #original_hash: 8a91e53
         pending_avatar: >-
           După încărcarea unui nou avatar, va trebui să aștepți ca Echipa de
@@ -695,7 +693,7 @@ ro:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -1253,6 +1251,7 @@ ro:
       approve: Aprobă
       #original_hash: 85de4b8
       unconfirmed_email: 'Adresa de e-mail acestui cont (%{email}) nu este confirmată.'
+      confirm_new_email: 'Schimbarea adresei de e-mail necesită confiramrea noii adrese.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Așteptăm confirmarea noii adrese de e-mail: %{email}.'
       #original_hash: 0340b0b

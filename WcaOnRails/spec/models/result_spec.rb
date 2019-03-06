@@ -371,7 +371,7 @@ RSpec.describe Result do
         solve_time = SolveTime.new("333mbf", :single, 0)
         solve_time.solved = 2
         solve_time.attempted = 3
-        solve_time.time_centiseconds = 31*60*100
+        solve_time.time_centiseconds = 32*60*100
 
         result = FactoryBot.build :result, eventId: "333mbf", value1: solve_time.wca_value
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 30 minutes"])

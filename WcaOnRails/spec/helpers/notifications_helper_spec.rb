@@ -9,7 +9,7 @@ RSpec.describe NotificationsHelper do
 
       context "with some unconfirmed competitions" do
         let!(:unconfirmed_competition) { FactoryBot.create :competition, delegates: [delegate] }
-        let!(:confirmed_competition) { FactoryBot.create :competition, delegates: [delegate], isConfirmed: true }
+        let!(:confirmed_competition) { FactoryBot.create :competition, :confirmed, delegates: [delegate] }
 
         it "shows unconfirmed competitions" do
           notifications = helper.notifications_for_user(delegate)
@@ -68,26 +68,26 @@ RSpec.describe NotificationsHelper do
             },
             {
               text: "The competition results for #{past_competition_missing_report.name} have not been submitted.",
-              url: submit_results_edit_path(past_competition_missing_report),
+              url: competition_submit_results_edit_path(past_competition_missing_report),
             },
             {
               text: "The competition results for #{past_competition_having_report.name} have not been submitted.",
-              url: submit_results_edit_path(past_competition_having_report),
+              url: competition_submit_results_edit_path(past_competition_having_report),
             },
           ]
         end
       end
     end
 
-    context "when signed in as a board member" do
-      let(:board_member) { FactoryBot.create :user, :board_member, :wca_id }
+    context "when signed in as a WCAT member" do
+      let(:wcat_member) { FactoryBot.create :user, :wcat_member, :wca_id }
       let!(:unconfirmed_competition) { FactoryBot.create :competition }
       let!(:confirmed_competition) { FactoryBot.create(:competition, :confirmed) }
       let!(:visible_confirmed_competition) { FactoryBot.create(:competition, :confirmed, :visible) }
       let!(:visible_unconfirmed_competition) { FactoryBot.create :competition, :visible }
 
       it "shows confirmed, but not visible competitions, as well as unconfirmed, but visible competitions" do
-        notifications = helper.notifications_for_user(board_member)
+        notifications = helper.notifications_for_user(wcat_member)
         expect(notifications).to eq [
           {
             text: "#{confirmed_competition.name} is waiting to be announced",

@@ -1,20 +1,29 @@
 <% provide(:title, "Results submission") %>
+<% provide(:include_markdown_editor, true) %>
 <%= render layout: 'nav' do %>
   <h1><%= yield(:title) %></h1>
 
-  <p>Please enter the body of your email to the Results Team.</p>
-  <p>
-    Make sure to include a link to the competition schedule (and all time
-    limits and cutoffs) and provide any changes to the provided schedule, as
-    well as any other additional details required by the
-    <%= link_to "'Submitting competition results' section of the delegate crash course",
-                delegate_crash_course_path(anchor: "submitting-competition-results") %>.
-  </p>
+  <% if @competition.results_submitted? %>
+    <p>The results have already been submitted. If you have any more questions or comments please reply to the email sent with the first results submission.</p>
+  <% else %>
+    <p>
+      The result submission process has two steps:
+      <ul>
+        <li>Uploading a valid JSON to the website</li>
+        <li>Then the website will run a number of checks. If everything is correct you'll be able to submit these results to the WRT.</li>
+      </ul>
+    </p>
+    <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @results_validator.has_results %>
 
-  <%= simple_form_for @results_submission, url: submit_results_path do |f| %>
-    <%= f.input :schedule_url %>
-    <%= f.input :message, as: :text, input_html: { class: "markdown-editor" } %>
-    <%= f.input :results_file, as: :file, input_html: { accept: 'application/json' } %>
-    <%= f.submit "Submit", class: "btn btn-primary" %>
+    <%= render "check_results_panel",
+      results_validator: @results_validator,
+      force_collapse: @results_submission
+    %>
+    <%= render "results_submission_panel",
+      competition: @competition,
+      has_errors: @results_validator.total_errors != 0,
+      results_submission: @results_submission
+    %>
   <% end %>
+
 <% end %>

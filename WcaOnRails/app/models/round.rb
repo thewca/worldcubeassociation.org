@@ -3,8 +3,17 @@
 class Round < ApplicationRecord
   belongs_to :competition_event
   has_one :competition, through: :competition_event
+
   has_one :event, through: :competition_event
+  # CompetitionEvent uses the cached value
+  delegate :event, to: :competition_event
+
+  # For the following association, we want to keep it to be able to do some joins,
+  # but we definitely want to use cached values when directly using the method.
   belongs_to :format
+  def format
+    Format.c_find(format_id)
+  end
 
   delegate :can_change_time_limit?, to: :event
 
@@ -19,6 +28,8 @@ class Round < ApplicationRecord
 
   serialize :round_results, RoundResults
   validates_associated :round_results
+
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   MAX_NUMBER = 4
   validates_numericality_of :number,
@@ -36,10 +47,6 @@ class Round < ApplicationRecord
     if final_round? && advancement_condition
       errors.add(:advancement_condition, "cannot be set on a final round")
     end
-  end
-
-  def event
-    Event.c_find(competition_event.event_id)
   end
 
   # Compute a round type id from round information
@@ -82,7 +89,7 @@ class Round < ApplicationRecord
   end
 
   def name
-    I18n.t("round.name", event_name: event.name, round_name: round_type.name)
+    Round.name_from_attributes(event, round_type)
   end
 
   def time_limit_to_s
@@ -112,7 +119,7 @@ class Round < ApplicationRecord
       cutoff: Cutoff.load(wcif["cutoff"]),
       advancement_condition: AdvancementCondition.load(wcif["advancementCondition"]),
       scramble_set_count: wcif["scrambleSetCount"],
-      round_results: RoundResults.load(wcif["roundResults"]),
+      round_results: RoundResults.load(wcif["results"]),
     }
   end
 
@@ -140,15 +147,9 @@ class Round < ApplicationRecord
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
-
-      # TODO: This is here for backwards compatibility with TNoodle 0.13.4,
-      # which looks at scrambleGroupCount. We can remove this once a new
-      # version of TNoodle is released which looks at a different field.
-      # See https://github.com/thewca/worldcubeassociation.org/issues/3059.
-      "scrambleGroupCount" => self.scramble_set_count,
-
       "scrambleSetCount" => self.scramble_set_count,
-      "roundResults" => round_results.map(&:to_wcif),
+      "results" => round_results.map(&:to_wcif),
+      "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
@@ -161,10 +162,19 @@ class Round < ApplicationRecord
         "timeLimit" => TimeLimit.wcif_json_schema,
         "cutoff" => Cutoff.wcif_json_schema,
         "advancementCondition" => AdvancementCondition.wcif_json_schema,
-        "roundResults" => { "type" => "array", "items" => { "type" => RoundResult.wcif_json_schema } },
-        "groups" => { "type" => "array" }, # TODO: expand on this
+        "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
+        "scrambleSets" => { "type" => "array" }, # TODO: expand on this
         "scrambleSetCount" => { "type" => "integer" },
+        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
+  end
+
+  def self.name_from_attributes_id(event_id, round_type_id)
+    name_from_attributes(Event.c_find(event_id), RoundType.c_find(round_type_id))
+  end
+
+  def self.name_from_attributes(event, round_type)
+    I18n.t("round.name", event_name: event.name, round_name: round_type.name)
   end
 end

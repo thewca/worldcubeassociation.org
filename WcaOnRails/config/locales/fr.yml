@@ -326,11 +326,13 @@ fr:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: Bloquer l'édition pour les organisateurs
+        confirmed: Ne pas laisser les organisateurs modifier cette compétition
         #original_hash: d493e6a
         showAtAll: Rendre la compétition publique
         #original_hash: 709a232
         name: Nom
+        #original_hash: f91b080
+        name_reason: Explication du nom
         #original_hash: b649210
         cellName: Alias
         #original_hash: d523ebb
@@ -407,6 +409,20 @@ fr:
         refund_policy_limit_date: Date limite pour les remboursements
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Frais d'inscription pour les accompagnateurs
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Je souhaite imposer aux compétiteurs la soumission de leurs
+          casse-têtes pendant l'inscription comme le prévoit la Règle Z1.
+        #original_hash: 466aca7
+        regulation_z1_reason: Raison pour l'utilisation de Z1
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Je souhaite sélectionner les compétiteurs qui se qualifient
+          directement pour certains tours de certaines épreuves, en se basant
+          sur les résultats de certaines compétitions, comme le prévoit la Règle
+          Z3
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Raison pour l'utilisation de Z3
       registration:
         #original_hash: 3c23a67
         guests: Accompagnateurs
@@ -595,8 +611,6 @@ fr:
           Entrez votre nom complet correctement, par exemple <strong>Stefan
           Pochmann</strong>. Pas négligemment comme <strong>s pochman</strong>
           ou <strong>Stefan POCHMAN</strong>.
-        #original_hash: c03b949
-        email: 'Si vous changez votre adresse email, vous devrez la confirmer.'
         #original_hash: 8a91e53
         pending_avatar: >-
           Après avoir chargé une nouvelle photo de profil, vous devrez attendre
@@ -669,13 +683,13 @@ fr:
         registration_open: >-
           Note : Les dates d'ouverture et de fermeture des inscriptions sont au
           fuseau horaire UTC !
-        #original_hash: 243212f
+        #original_hash: bd402bf
         remarks_html: >-
           Informations complémentaires que vous souhaitez faire parvenir au
-          bureau de la WCA. Par exemple, expliquez les raisons si cette
-          compétition est demandée moins de quatre semaines à l'avance, ou si
-          vous demandez l'utilisation de %{link}. Merci de remplir ces
-          informations en Anglais !
+          WCAT. Par exemple, expliquez les raisons si cette compétition est
+          demandée moins de quatre semaines à l'avance, ou si vous demandez
+          l'utilisation de %{link}. Merci de remplir ces informations en Anglais
+          !
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -699,7 +713,7 @@ fr:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -757,6 +771,18 @@ fr:
           d'inscription pour les accompagnateurs ne peuvent pas être gérés sur
           ce site. Si mis à 0, une phrase indiquera que les accompagnateurs et
           spectateurs peuvent venir gratuitement.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Merci de détailler ici pourquoi vous souhaitez utiliser la Règle Z1.
+          Merci de remplir ce champ en anglais !
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Merci de détailler ici pourquoi vous souhaitez utiliser la Règle Z3.
+          Merci de remplir ce champ en anglais !
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1054,6 +1080,8 @@ fr:
       about: À propos de la WCA
       #original_hash: ed97787
       documents: Documents de la WCA
+      #original_hash: jflyprv
+      tutorial: Tutoriel pour les compétitions
       #original_hash: d8fd3e4
       delegates: Délégués WCA
       #original_hash: 37b8fdc
@@ -1100,6 +1128,8 @@ fr:
       scrambles: Mélanges
       #original_hash: 90ccd64
       history: Historique
+      disciplinary: "Disciplinary log"
+      incidents: "Incidents log"
       #original_hash: 8ad8302
       translations: Traductions
       #original_hash: b8be3d1
@@ -1180,23 +1210,23 @@ fr:
         header: '%{delegate_name} a confirmé %{competition}'
         #original_hash: 3db81b5
         organizers: 'Chère équipe organisatrice du %{competition},'
-        #original_hash: c526fd6
+        #original_hash: d353d8c
         confirmed: >-
           %{delegate_name} est Délégué(e) pour le %{competition} et vient de
-          confirmer cette compétition, qui vient d'être soumise au Bureau de la
-          WCA. Dès que le Bureau de la WCA aura annoncé cette compétition
-          publiquement, vous recevrez une nouvelle notification.
+          confirmer cette compétition, qui vient d'être soumise au WCAT. Dès que
+          le WCAT aura annoncé cette compétition publiquement, vous recevrez une
+          nouvelle notification.
         #original_hash: dfea09d
         contact: >-
           Si vous avez d'autres questions, merci de contacter le(s) Délégué(e)s
           de votre compétition par email :
       competition_announcement_email:
-        #original_hash: 1571dd8
-        header: 'Le Bureau de la WCA a annoncé le %{competition}'
-        #original_hash: 8e91977
+        #original_hash: 87f1f49
+        header: 'Le WCAT a annoncé le %{competition}'
+        #original_hash: 0d3d10c
         announced: >-
-          Le Bureau de la WCA vient d'approuver votre compétition et a effectué
-          l'annonce publique officielle.
+          Le WCAT vient d'approuver votre compétition et a effectué l'annonce
+          publique officielle.
         #original_hash: 1c20919
         link: 'Merci de cliquer sur ce lien pour voir l''annonce de la compétition :'
       organizer_addition_email:
@@ -1267,6 +1297,7 @@ fr:
       approve: Approuver
       #original_hash: 85de4b8
       unconfirmed_email: 'L''adresse email (%{email}) de ce compte n''est pas confirmée.'
+      confirm_new_email: 'Si vous changez votre adresse email, vous devrez la confirmer.'
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
         Ce compte est en attente de confirmation de la nouvelle adresse email
@@ -1338,7 +1369,7 @@ fr:
           visible.
         #original_hash: ebbbf8a
         '5': >-
-          La photo de doit pas avoir d'autres textes que ceux présents en
+          La photo ne doit pas avoir d'autres textes que ceux présents en
           arrière plan.
         #original_hash: cc5f23a
         '6': La photo doit être soumise dans la bonne orientation.
@@ -1380,6 +1411,14 @@ fr:
       unique: 'est déjà utilisé par "%{used_name}" avec l''adresse %{used_email}'
       #original_hash: 26f70ed
       dob_past: doit être dans le passé
+      #original_hash: b64df45
+      already_represented_country: >-
+        Impossible de changer le pays pour un pays que cette personne a déjà
+        représenté.
+      #original_hash: b589014
+      must_have_a_change: >-
+        Le nom ou le pays de la personne doit changer pour pouvoir mettre à jour
+        cette personne.
       #original_hash: 012f032
       must_be_senior: doit être un Délégué sénior
       #original_hash: 2e582eb
@@ -1988,13 +2027,18 @@ fr:
       #original_hash: 9104a03
       no_past_competitions: Vous n'avez participé à aucune compétition.
     competition_form:
-      #original_hash: e879b0b
-      board: Board
+      #original_hash: 2b81984
+      wcat: Équipe des annonces de compétitions de la WCA
       #original_hash: f957dcb
       supports_md_html: >-
         Supporte le <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        Une brève explication du nom de la compétition. Le nom doit être en
+        accord avec la <a href='/documents/policies/Competition%20Name.pdf'>WCA
+        Competition Name Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
         La salle où la compétition à lieu. %{md}. Par exemple : [Cité des
@@ -2014,23 +2058,23 @@ fr:
       deprecated_events: >-
         Cette compétition a des épreuves qui ne sont plus officielles, on ne
         peut plus les éditer.
-      #original_hash: 815d5c3
-      locked_edit_html: >-
+      #original_hash: cafc153
+      public_and_locked_html: >-
         Cette compétition est visible publiquement et son édition est
-        vérouillée. Si vous souhaitez faire un changement, contactez le
-        %{board}.
-      #original_hash: ce33e21
-      confirmed_not_visible_html: >-
+        verrouillée. Si vous souhaitez faire un changement, merci d'écrire en
+        réponse au mail où la compétition a été confirmée.
+      #original_hash: e00a339
+      confirmed_but_not_visible_html: >-
         Vous avez confirmé cette compétition, mais elle n'est pas encore visible
-        publiquement. Attendez que le %{board} la rende visible.
+        publiquement. Attendez que l'%{contact} la rende visible.
       #original_hash: e94cba8
       is_visible: >-
         Cette compétition est visible publiquement, chaque modification que vous
         ferez sera visible par le public !
-      #original_hash: 34862bb
-      awaiting_confirmation_html: >-
+      #original_hash: f99b3f7
+      pending_confirmation_html: >-
         Remplissez tous les champs et cliquez sur Confirmer quand vous êtes près
-        à ce que le %{board} approuve cette compétition.
+        à ce que l'%{contact} approuve cette compétition.
       #original_hash: 8966fd0
       submit_create_value: Créer la compétition
       #original_hash: 40b0dfd
@@ -2039,12 +2083,11 @@ fr:
       submit_confirm_value: Confirmer
       #original_hash: f6fdbe4
       submit_delete_value: Supprimer
-      #original_hash: 1ca19b1
+      #original_hash: 22316f1
       submit_confirm: >-
         Êtes-vous sûr de vouloir confirmer ? Une fois la compétition confirmée,
         vous ne pourrez plus modifier les informations la concernant. Consultez
-        ensuite vos emails après ça pour vérifier que le bureau de la WCA a été
-        informé.
+        ensuite vos emails après ça pour vérifier que le WCAT a été informé.
       #original_hash: 4c7deb7
       submit_delete: >-
         Êtes-vous sûr de vouloir supprimer cette compétition ? Cette opération
@@ -2094,10 +2137,10 @@ fr:
     update:
       #original_hash: 5fb2f57
       save_success: Compétition mise à jour avec succès
-      #original_hash: 9d1649e
+      #original_hash: 5253c86
       confirm_success: >-
         Compétition confirmée avec succès. Vérifiez vos mails et attendez que le
-        bureau de la WCA l'annonce !
+        WCAT l'annonce !
       #original_hash: 28567f0
       delete_success: 'La compétition %{id} a été supprimée avec succès'
     time_until_competition:
@@ -2758,6 +2801,14 @@ fr:
           l'échelle mondiale de standards de qualité pour s'assurer de la haute
           qualité des processus, Staff WCA, Organisations Régionales,
           Organisateurs de Compétitions, et Staff de compétitions.
+      wcat:
+        #original_hash: 2b81984
+        name: Équipe des annonces de compétitions de la WCA
+        #original_hash: 61a471f
+        description: >-
+          Cette équipe a le rôle d'approuver et d'annoncer les Compétitions WCA,
+          et de s'assurer que ces annonces suivent les standards de qualités de
+          la WCA.
       wmt:
         #original_hash: 2035811
         name: Équipe Marketing de la WCA
@@ -2883,12 +2934,11 @@ fr:
     #original_hash: 1cb449c
     members: Membres
     board:
-      #original_hash: 3a8b1d8
+      #original_hash: f3cbb35
       info_html: >-
         La World Cube Association est dirigée par le Bureau de la WCA. Ils sont
         responsables des demandes génériques, ainsi que de la WCA dans son
-        ensemble. Toutes les compétitions officielles ont besoin d'être
-        approuvées par le Bureau de la WCA pour être annoncées.
+        ensemble.
     wct:
       #original_hash: 846684d
       info_html: >-
@@ -2963,6 +3013,12 @@ fr:
         mondiale de standards de qualité pour s'assurer de la haute qualité des
         processus, Staff WCA, Organisations Régionales, Organisateurs de
         Compétitions, et Staff de compétitions.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Cette équipe a le rôle d'approuver et d'annoncer les Compétitions WCA,
+        et de s'assurer que ces annonces suivent les standards de qualités de la
+        WCA.
     wmt:
       #original_hash: f2a0140
       info_html: >-
@@ -3268,28 +3324,28 @@ fr:
     paragraph3:
       #original_hash: 00d3bf8
       title: Dates limites pour l'annonce de la compétition
-      #original_hash: c61c6c9
+      #original_hash: 305cfb1
       content_html: >-
         La compétition devrait être annoncée au moins un mois avant le début de
         la compétition (voir la <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Recommandation
         8a4++</a>). S'il y a des raisons spécifiques qui empêche de respecter
         cette date limite, les compétitions peuvent être annoncées jusqu'à deux
-        semaines avant, à la discrétion du Bureau de la WCA. Il est fortement
-        recommandé d'informer le Bureau de la WCA de ces raisons dès que
-        possible, pour éviter un refus ultérieur de la compétition.
+        semaines avant, à la discrétion du WCAT. Il est fortement recommandé
+        d'informer le WCAT de ces raisons dès que possible, pour éviter un refus
+        ultérieur de la compétition.
     paragraph4:
       #original_hash: b6dca56
       title: Politique de proximité
-      #original_hash: f86bf95
+      #original_hash: 79ed06e
       content1: >-
         Les compétitions WCA seront acceptées si elles sont à au moins 100 km ou
-        19 jours de distance de toute autre compétition. Le Bureau de la WCA
-        portera une attention particulière aux compétitions ne correspondant pas
-        à ces critères. Un Délégué demandant l'approbation d'une telle
-        compétition doit donner des informations détaillées sur pourquoi la
-        compétition devrait tout de même être acceptée. Les arguments possibles
-        qui supporteront l'acceptation de la compétition incluent :
+        19 jours de distance de toute autre compétition. Le WCAT portera une
+        attention particulière aux compétitions ne correspondant pas à ces
+        critères. Un Délégué demandant l'approbation d'une telle compétition
+        doit donner des informations détaillées sur pourquoi la compétition
+        devrait tout de même être acceptée. Les arguments possibles qui
+        supporteront l'acceptation de la compétition incluent :
       olist1:
         #original_hash: de00462
         '1': Les deux compétitions n'ont pas d'épreuves en commun.
@@ -3330,27 +3386,27 @@ fr:
     paragraph-events:
       #original_hash: b16c5f1
       title: Annonce des épreuves
-      #original_hash: b6c6d26
+      #original_hash: cee85f7
       content: >-
         Toutes les épreuves qui vont avoir lieu pendant la compétition doivent
         être indiquées par le Délégué lors de la demande de validation de la
         compétition. Cela inclue aussi les épreuves "incertaines" (i.e. les
         épreuves qui pourraient avoir lieu en plus, en fonction de comment la
         compétition se passe). Toute addition supplémentaire doit être approuvée
-        par le Bureau de la WCA.
+        par le WCAT.
     paragraph5:
       #original_hash: 17d01de
       title: Limites de compétiteurs
-      #original_hash: ffcd75e
+      #original_hash: b4748cf
       content_html: >-
         Le nombre de compétiteurs peut être limité par épreuve ou par
         compétition (voir la <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Règle
         Z4</a>). Comme pour toutes les règles de l'article Z, le Délégué doit
-        obtenir l'approbation du Bureau de la WCA. Les limites de compétiteurs
-        doivent être choisies avec soin, et en accord avec l'attrait estimé de
-        la compétition. Les limites ne devraient pas être plus basses que
-        possible sans raison majeure. Les limites prévues doivent être prises en
+        obtenir l'approbation du WCAT. Les limites de compétiteurs doivent être
+        choisies avec soin, et en accord avec l'attrait estimé de la
+        compétition. Les limites ne devraient pas être plus basses que possible
+        sans raison majeure. Les limites prévues doivent être prises en
         considération lors de la recherche d'une salle adaptée. Les limites au
         nombre de compétiteurs doivent être indiquées clairement sur la page de
         la compétition sur le site internet de la WCA.

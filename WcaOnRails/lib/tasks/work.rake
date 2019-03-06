@@ -7,5 +7,6 @@ namespace :work do
     SubmitReportNagJob.perform_later
     ComputeLinkings.perform_later
     DumpDeveloperDatabase.perform_later
+    SyncMailingListsJob.perform_later
   end
 end

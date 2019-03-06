@@ -5,7 +5,7 @@
 
   <%= t '.disclaimer' %>
 
-  <%= render "my_competitions_table", competitions: @not_past_competitions, past: false %>
+  <%= render "my_competitions_table", competitions: @not_past_competitions, registrations_by_competition_id: @registered_for_by_competition_id, past: false %>
 
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -19,7 +19,7 @@
 
     <div id="past-competitions" class="panel-collapse collapse">
       <div class="panel-body">
-        <%= render "my_competitions_table", competitions: @past_competitions, past: true %>
+        <%= render "my_competitions_table", competitions: @past_competitions, registrations_by_competition_id: @registered_for_by_competition_id, past: true %>
       </div>
     </div>
   </div>
@@ -34,10 +34,13 @@
     })();
   </script>
 
-  <p>
-    <% if current_user.wca_id %>
+  <% if current_user.wca_id %>
+    <p>
       <%= link_to t('layouts.navigation.my_results'), person_path(current_user.wca_id) %>
+    </p>
+    <% if current_user.senior_delegate? %>
+      <p><%= link_to "Upcoming competitions for your subordinate Delegates", competitions_for_senior_path %></p>
     <% end %>
-  </p>
+  <% end %>
 
 </div>

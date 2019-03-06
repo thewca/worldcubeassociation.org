@@ -24,11 +24,19 @@
     margin-top: 10px;
 
     span {
+      display: inline-block;
+      margin-top: -10px;
+      vertical-align: top;
       white-space: nowrap;
       font-size: 0.9em;
     }
+    i {
+      font-size: 15px;
+    }
     img {
       height: 50px;
+      float: left;
+      display: inline;
       vertical-align: top;
       margin-top: -15px;
       margin-left: 10px;
@@ -84,14 +92,22 @@
       margin-bottom: -50px;
       img {
         height: 100px;
+        float: left;
+        display: inline;
         margin-top: -15px;
         margin-left: 35px;
         margin-right: 20px;
       }
       span {
+        display: inline-block;
+        margin-top: -10px;
+        vertical-align: top;
         white-space: nowrap;
         font-size: 30px;
         font-variant: small-caps;
+      }
+      i {
+        font-size: 15px;
       }
     }
 

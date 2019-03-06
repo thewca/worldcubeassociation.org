@@ -5,6 +5,8 @@ class CompetitionEvent < ApplicationRecord
   belongs_to :event
   has_many :registration_competition_events, dependent: :destroy
   has_many :rounds, -> { order(:number) }, dependent: :destroy
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+
   accepts_nested_attributes_for :rounds, allow_destroy: true
 
   validates_numericality_of :fee_lowest_denomination, greater_than_or_equal_to: 0
@@ -36,6 +38,7 @@ class CompetitionEvent < ApplicationRecord
     {
       "id" => self.event.id,
       "rounds" => self.rounds.map(&:to_wcif),
+      "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
@@ -43,8 +46,10 @@ class CompetitionEvent < ApplicationRecord
     self.rounds.destroy_all!
     total_rounds = wcif["rounds"].size
     wcif["rounds"].each_with_index do |wcif_round, index|
-      self.rounds.create!(Round.wcif_to_round_attributes(wcif_round, index+1, total_rounds))
+      round = self.rounds.create!(Round.wcif_to_round_attributes(wcif_round, index+1, total_rounds))
+      WcifExtension.update_wcif_extensions!(round, wcif_round["extensions"]) if wcif_round["extensions"]
     end
+    WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
   end
 
   def self.wcif_json_schema
@@ -55,6 +60,7 @@ class CompetitionEvent < ApplicationRecord
         "rounds" => { "type" => ["array", "null"], "items" => Round.wcif_json_schema },
         "competitorLimit" => { "type" => "integer" },
         "qualification" => { "type" => "object" }, # TODO: expand on this
+        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
   end

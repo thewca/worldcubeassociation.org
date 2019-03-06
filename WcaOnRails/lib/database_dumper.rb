@@ -30,6 +30,7 @@ module DatabaseDumper
         copy: %w(
           id
           name
+          name_reason
           cityName
           countryId
           information
@@ -49,17 +50,19 @@ module DatabaseDumper
           showAtAll
           latitude
           longitude
-          isConfirmed
+          confirmed_at
           contact
           registration_open
           registration_close
           enable_donations
           use_wca_registration
+          external_registration_page
           competitor_limit_enabled
           competitor_limit
           competitor_limit_reason
           guests_enabled
           results_posted_at
+          results_submitted_at
           results_nag_sent_at
           generate_website
           announced_at
@@ -73,6 +76,10 @@ module DatabaseDumper
           refund_policy_percent
           refund_policy_limit_date
           guests_entry_fee_lowest_denomination
+          regulation_z1
+          regulation_z1_reason
+          regulation_z3
+          regulation_z3_reason
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -200,7 +207,10 @@ module DatabaseDumper
           rails_id
           subId
         ),
-        db_default: %w(comments),
+        db_default: %w(
+          comments
+          incorrect_wca_id_claim_count
+        ),
         fake_values: {
           "year" => "1954",
           "month" => "12",
@@ -515,7 +525,7 @@ module DatabaseDumper
     }.freeze,
     "schema_migrations" => :skip_all_rows, # This is populated when loading our schema dump
     "team_members" => {
-      where_clause: "",
+      where_clause: "JOIN teams ON teams.id=team_id WHERE NOT teams.hidden",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -526,18 +536,18 @@ module DatabaseDumper
           team_leader
           updated_at
           user_id
+          team_senior_member
         ),
       ),
     }.freeze,
     "teams" => {
-      where_clause: "WHERE NOT hidden",
+      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           created_at
           friendly_id
           email
-          rank
           hidden
           updated_at
         ),
@@ -583,6 +593,8 @@ module DatabaseDumper
           senior_delegate_id unconfirmed_wca_id
           updated_at
           wca_id
+          receive_delegate_reports
+          dummy_account
         ),
         db_default: %w(
           confirmation_sent_at
@@ -661,6 +673,21 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "wcif_extensions" => :skip_all_rows,
+    "assignments" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          registration_id
+          schedule_activity_id
+          station_number
+          assignment_code
+        ),
+      ),
+    }.freeze,
+    "stripe_charges" => :skip_all_rows,
+    "uploaded_jsons" => :skip_all_rows,
   }.freeze
 
   def self.development_dump(dump_filename)

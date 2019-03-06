@@ -5,6 +5,7 @@ FactoryBot.define do
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
 
     cityName { "San Francisco, California" }
+    name_reason { "Foo sounds cool, right?" }
     countryId { "USA" }
     currency_code { "USD" }
     base_entry_fee_lowest_denomination { 1000 }
@@ -49,8 +50,9 @@ FactoryBot.define do
     venueAddress { "My backyard street" }
     external_website { "https://www.worldcubeassociation.org" }
     showAtAll { false }
-    isConfirmed { false }
+    confirmed_at { nil }
 
+    external_registration_page { "https://www.worldcubeassociation.org" }
     competitor_limit_enabled { false }
     guests_enabled { true }
     on_the_spot_registration { false }
@@ -71,21 +73,21 @@ FactoryBot.define do
       end
     end
 
-    trait :with_rounds do
-      after(:create) do |competition|
-        competition.competition_events.each do |ce|
-          ce.rounds.create!(
-            format: ce.event.preferred_formats.first.format,
-            number: 1,
-            total_number_of_rounds: 1,
-          )
-        end
-      end
-    end
-
     use_wca_registration { false }
     registration_open { 2.weeks.ago.change(usec: 0) }
     registration_close { 1.week.ago.change(usec: 0) }
+
+    trait :with_valid_submitted_results do
+      with_rounds { true }
+      after(:create) do |competition|
+        person = FactoryBot.create(:inbox_person, competitionId: competition.id)
+        rounds = competition.competition_events.map(&:rounds).flatten
+        rounds.each do |round|
+          FactoryBot.create(:inbox_result, competitionId: competition.id, personId: person.id, eventId: round.event.id, formatId: round.format.id)
+          FactoryBot.create_list(:scramble, 5, competitionId: competition.id, eventId: round.event.id)
+        end
+      end
+    end
 
     trait :registration_open do
       use_wca_registration { true }
@@ -95,7 +97,8 @@ FactoryBot.define do
 
     trait :confirmed do
       with_delegate
-      isConfirmed { true }
+      with_valid_schedule
+      confirmed_at { Time.now }
     end
 
     trait :not_visible do
@@ -115,14 +118,29 @@ FactoryBot.define do
       connected_stripe_account_id { "acct_19ZQVmE2qoiROdto" }
     end
 
+    trait :with_valid_schedule do
+      with_rounds { true }
+      with_schedule { true }
+    end
+
     transient do
       championship_types { [] }
+      with_rounds { false }
       with_schedule { false }
     end
 
     after(:create) do |competition, evaluator|
       evaluator.championship_types.each do |championship_type|
         competition.championships.create!(championship_type: championship_type)
+      end
+      if evaluator.with_rounds
+        competition.competition_events.each do |ce|
+          ce.rounds.create!(
+            format: ce.event.preferred_formats.first.format,
+            number: 1,
+            total_number_of_rounds: 1,
+          )
+        end
       end
       if evaluator.with_schedule
         # room id in wcif for a competition are unique, so we need to have a global counter
@@ -145,8 +163,8 @@ FactoryBot.define do
             venue.venue_rooms.create!(room_attributes)
           end
           if i == 0
-            start_time = competition.start_date.to_datetime
-            end_time = competition.start_date.to_datetime
+            start_time = Time.zone.local_to_utc(competition.start_time)
+            end_time = start_time
             venue.reload
             first_room = venue.venue_rooms.first
             first_room.schedule_activities.create!(
@@ -156,6 +174,10 @@ FactoryBot.define do
               start_time: start_time.change(hour: 12, min: 0, sec: 0).iso8601,
               end_time: end_time.change(hour: 13, min: 0, sec: 0).iso8601,
             )
+            # In case we're generating multi days competition, add some activities
+            # on the other day.
+            start_time = Time.zone.local_to_utc(competition.end_date.to_time)
+            end_time = start_time
             activity = first_room.schedule_activities.create!(
               wcif_id: 2,
               name: "another activity",
@@ -184,6 +206,23 @@ FactoryBot.define do
               start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
               end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
             )
+          end
+        end
+        # Add valid schedule for existing rounds
+        room = competition.competition_venues.last.venue_rooms.first
+        current_activity_id = 1
+        start_time = Time.zone.local_to_utc(competition.start_time)
+        end_time = start_time
+        competition.competition_events.each do |ce|
+          ce.rounds.each do |r|
+            room.schedule_activities.create!(
+              wcif_id: current_activity_id,
+              name: "Great round",
+              activity_code: r.wcif_id,
+              start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
+              end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
+            )
+            current_activity_id += 1
           end
         end
       end

@@ -4,6 +4,15 @@ class CompetitionsController < ApplicationController
   include ApplicationHelper
 
   PAST_COMPETITIONS_DAYS = 90
+  CHECK_SCHEDULE_ASSOCIATIONS = {
+    competition_events: [:rounds],
+    competition_venues: {
+      venue_rooms: {
+        schedule_activities: [:child_activities],
+      },
+    },
+  }.freeze
+
   before_action :authenticate_user!, except: [
     :index,
     :show,
@@ -31,6 +40,8 @@ class CompetitionsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :update_events, :update_events_from_wcif, :payment_setup]
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
+
+  before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
 
   def new
     @competition = Competition.new
@@ -95,8 +106,8 @@ class CompetitionsController < ApplicationController
       from_date = Date.safe_parse(params[:from_date])
       to_date = Date.safe_parse(params[:to_date])
       if from_date || to_date
-        @competitions = @competitions.where("start_date >= ?", from_date) if from_date
-        @competitions = @competitions.where("end_date <= ?", to_date) if to_date
+        @competitions = @competitions.where("start_date <= ?", to_date) if to_date
+        @competitions = @competitions.where("end_date >= ?", from_date) if from_date
       else
         @competitions = Competition.none
       end
@@ -190,11 +201,12 @@ class CompetitionsController < ApplicationController
       unless comp.website.blank?
         body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
       end
-      @full_post = create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
-      @competition = competition_from_params
-      CompetitionsMailer.notify_organizers_of_announced_competition(@competition, @full_post).deliver_later
-
-      comp.update!(announced_at: Time.now)
+      full_post = nil
+      ActiveRecord::Base.transaction do
+        full_post = create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
+        comp.update!(announced_at: Time.now)
+      end
+      CompetitionsMailer.notify_organizers_of_announced_competition(comp, full_post).deliver_later
     end
   end
 
@@ -342,7 +354,12 @@ class CompetitionsController < ApplicationController
   end
 
   def edit_events
-    @competition = competition_from_params(includes: [:events, competition_events: { rounds: [:competition_event] }])
+    associations = CHECK_SCHEDULE_ASSOCIATIONS.merge(
+      competition_events: {
+        rounds: [:competition_event],
+      },
+    )
+    @competition = competition_from_params(includes: associations)
   end
 
   def edit_schedule
@@ -350,7 +367,7 @@ class CompetitionsController < ApplicationController
   end
 
   def update_events
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     if @competition.update_attributes(competition_params)
       flash[:success] = t('.update_success')
       redirect_to edit_events_path(@competition)
@@ -361,12 +378,12 @@ class CompetitionsController < ApplicationController
 
   def get_nearby_competitions(competition)
     nearby_competitions = competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING)[0, 10]
-    nearby_competitions.select!(&:isConfirmed?) unless current_user.can_view_hidden_competitions?
+    nearby_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     nearby_competitions
   end
 
   def admin_edit
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = true
     @competition_organizer_view = false
     @nearby_competitions = get_nearby_competitions(@competition)
@@ -374,7 +391,7 @@ class CompetitionsController < ApplicationController
   end
 
   def edit
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = false
     @competition_organizer_view = true
     @nearby_competitions = get_nearby_competitions(@competition)
@@ -382,7 +399,7 @@ class CompetitionsController < ApplicationController
   end
 
   def payment_setup
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
 
     client = create_stripe_oauth_client
     oauth_params = {
@@ -461,7 +478,6 @@ class CompetitionsController < ApplicationController
         rounds: {
           competition: { rounds: [:competition_event] },
           competition_event: [],
-          format: [],
         },
       },
       rounds: {
@@ -485,7 +501,7 @@ class CompetitionsController < ApplicationController
   end
 
   def update
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @competition_organizer_view = !@competition_admin_view
 
@@ -526,7 +542,7 @@ class CompetitionsController < ApplicationController
       end
 
       if params[:commit] == "Confirm"
-        CompetitionsMailer.notify_board_of_confirmed_competition(current_user, @competition).deliver_later
+        CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
         CompetitionsMailer.notify_organizers_of_confirmed_competition(current_user, @competition).deliver_later
         flash[:success] = t('.confirm_success')
       else
@@ -544,20 +560,32 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    competitions = (current_user.delegated_competitions +
-      current_user.organized_competitions +
-      current_user.registrations.includes(:competition).accepted.map(&:competition).reject(&:results_posted?) +
-      current_user.registrations.includes(:competition).pending.map(&:competition).select(&:upcoming?))
+    competition_ids = current_user.organized_competitions.pluck(:competition_id)
+    competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
+    registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
+    registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
+    @registered_for_by_competition_id = Hash[registrations.uniq.map do |r|
+      [r.competition.id, r]
+    end]
+    competition_ids.concat(@registered_for_by_competition_id.keys)
     if current_user.person
-      competitions += current_user.person.competitions
+      competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
     end
-    competitions = competitions.uniq.sort_by { |comp| comp.start_date || Date.today + 20.year }.reverse
+    competitions = Competition.includes(:delegate_report, :delegates)
+                              .where(id: competition_ids.uniq)
+                              .sort_by { |comp| comp.start_date || Date.today + 20.year }.reverse
     @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
+  end
+
+  def for_senior
+    @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
+    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || Date.today + 20.year }.reverse
   end
 
   private def competition_params
     permitted_competition_params = [
       :use_wca_registration,
+      :external_registration_page,
       :receive_registration_emails,
       :registration_open,
       :registration_close,
@@ -566,6 +594,10 @@ class CompetitionsController < ApplicationController
       :being_cloned_from_id,
       :clone_tabs,
       :refund_policy_limit_date,
+      :regulation_z1,
+      :regulation_z1_reason,
+      :regulation_z3,
+      :regulation_z3_reason,
     ]
 
     if @competition.nil? || @competition.can_edit_registration_fees?
@@ -575,12 +607,13 @@ class CompetitionsController < ApplicationController
       ]
     end
 
-    if @competition&.isConfirmed? && !current_user.can_admin_competitions?
+    if @competition&.confirmed? && !current_user.can_admin_competitions?
       # If the competition is confirmed, non admins are not allowed to change anything.
     else
       permitted_competition_params += [
         :id,
         :name,
+        :name_reason,
         :cellName,
         :countryId,
         :cityName,
@@ -612,7 +645,7 @@ class CompetitionsController < ApplicationController
       ]
       if current_user.can_admin_competitions?
         permitted_competition_params += [
-          :isConfirmed,
+          :confirmed,
           :showAtAll,
         ]
       end
@@ -620,7 +653,7 @@ class CompetitionsController < ApplicationController
 
     params.require(:competition).permit(*permitted_competition_params).tap do |competition_params|
       if params[:commit] == "Confirm" && current_user.can_confirm_competition?(@competition)
-        competition_params[:isConfirmed] = true
+        competition_params[:confirmed] = true
       end
       competition_params[:editing_user_id] = current_user.id
     end

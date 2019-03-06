@@ -15,6 +15,7 @@ env:
 before_install:
   # Workaround for https://github.com/travis-ci/travis-ci/issues/8978
   - gem update --system
+  - gem update bundler
 
   - nvm install 8
   - nvm use 8
@@ -26,7 +27,9 @@ before_install:
   - cd WcaOnRails/
 before_script:
   - bundle exec rake db:reset
-  - bundle exec rake assets:precompile
+  # See https://github.com/usabilityhub/rails-erb-loader/issues/63#issuecomment-374791504
+  # and our https://github.com/thewca/worldcubeassociation.org/issues/3476
+  - DISABLE_SPRING=1 bundle exec rake assets:precompile
 script:
   - bundle exec pre-commit run git
   - bundle exec rubocop

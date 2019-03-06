@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe CompetitionsMailer, type: :mailer do
-  describe "notify_board_of_confirmed_competition" do
+  describe "notify_wcat_of_confirmed_competition" do
     let(:senior_delegate) { FactoryBot.create :senior_delegate }
     let(:delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
     let(:second_delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
@@ -11,18 +11,18 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate, second_delegate, third_delegate] }
     let(:mail) do
       I18n.locale = :pl
-      CompetitionsMailer.notify_board_of_confirmed_competition(delegate, competition)
+      CompetitionsMailer.notify_wcat_of_confirmed_competition(delegate, competition)
     end
 
     it "renders in English" do
-      expect(mail.to).to eq(["board@worldcubeassociation.org"])
-      expect(mail.cc).to match_array(competition.delegates.pluck(:email) + [senior_delegate.email, third_delegate.senior_delegate.email, Team.wqac.email])
+      expect(mail.to).to eq(["competitions@worldcubeassociation.org"])
+      expect(mail.cc).to match_array(competition.delegates.pluck(:email) + [senior_delegate.email, third_delegate.senior_delegate.email])
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
       expect(mail.reply_to).to eq([delegate.email])
 
       expect(mail.subject).to eq("#{delegate.name} just confirmed #{competition.name}")
       expect(mail.body.encoded).to match("#{competition.name} is confirmed")
-      expect(mail.body.encoded).to match("This competition is marked as National Championship for Poland and World Championship")
+      expect(mail.body.encoded).to match("This competition is marked as World Championship and National Championship: Poland")
       expect(mail.body.encoded).to match("There is a competitor limit of 100 because \"The hall only fits 100 competitors.\"")
       expect(mail.body.encoded).to match(admin_edit_competition_url(competition))
     end
@@ -39,7 +39,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
       expect(mail.subject).to eq("#{delegate.name} confirmed #{competition.name}")
-      expect(mail.body.encoded).to match("Your competition Delegate #{delegate.name} confirmed #{competition.name} and sent the submission to the WCA Board.")
+      expect(mail.body.encoded).to match("Your competition Delegate #{delegate.name} confirmed #{competition.name} and sent the submission to the WCAT.")
     end
 
     it "sends no email if there are no organizers" do
@@ -58,9 +58,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     it "renders" do
       expect(mail.to).to eq(competition.organizers.pluck(:email))
       expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
-      expect(mail.subject).to eq "The WCA Board announced #{competition.name}"
+      expect(mail.subject).to eq "The WCAT announced #{competition.name}"
       expect(mail.body.encoded).to match("Dear organizers of #{competition.name}")
-      expect(mail.body.encoded).to match("The WCA Board approved your competition and officially announced it to the public.")
+      expect(mail.body.encoded).to match("The WCAT approved your competition and officially announced it to the public.")
     end
 
     it "sends no email if there are no organizers" do
@@ -151,7 +151,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match(/Over a week has passed since #{competition.name}/)
-      expect(mail.body.encoded).to match(submit_results_edit_path(competition.id))
+      expect(mail.body.encoded).to match(competition_submit_results_edit_path(competition.id))
     end
   end
 
@@ -188,7 +188,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
-      expect(mail.to).to eq ["delegates@worldcubeassociation.org"]
+      expect(mail.to).to eq ["reports@worldcubeassociation.org"]
       expect(mail.cc).to match_array competition.delegates.pluck(:email)
       expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
       expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -207,13 +207,11 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   describe "results_submitted" do
     let(:delegates) { FactoryBot.create_list(:delegate, 3) }
     let(:competition) { FactoryBot.create(:competition, name: "Comp of the future 2017", id: "CompFut2017", delegates: delegates) }
-    let(:results_json_str) { '{ "results": "good" }' }
     let(:results_submission) {
       FactoryBot.build(
         :results_submission,
-        schedule_url: "https://example.com/schedule",
+        schedule_url: link_to_competition_schedule_tab(competition),
         message: "Hello, here are the results",
-        results_json_str: results_json_str,
       )
     }
     let(:mail) { CompetitionsMailer.results_submitted(competition, results_submission, delegates.first) }
@@ -233,12 +231,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match(/Hello, here are the results/)
-      expect(mail.body.encoded).to include("https://example.com/schedule")
-    end
-
-    it "attaches the expected file" do
-      expected_file_name = "Results_CompFut2017_#{utc_now.iso8601}.json"
-      expect(mail.attachments[expected_file_name].read).to eq(results_json_str)
+      expect(mail.body.encoded).to include(link_to_competition_schedule_tab(competition))
     end
   end
 end

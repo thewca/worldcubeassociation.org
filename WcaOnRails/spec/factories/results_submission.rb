@@ -2,10 +2,12 @@
 
 FactoryBot.define do
   factory :results_submission do
+    competition_id { FactoryBot.create(:competition, :with_valid_submitted_results).id }
+
     schedule_url { "https://example.com/schedule" }
 
     message { "Here are the results.\nThey look good." }
 
-    results_json_str { '{"results": "good"}' }
+    confirm_information { true }
   end
 end

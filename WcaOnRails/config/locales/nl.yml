@@ -104,12 +104,12 @@ nl:
       #original_hash: 1e725b6
       name: Eerste ronde
       #original_hash: 916a78d
-      cellName: Eerste
+      cellName: Eerste ronde
     '2':
       #original_hash: 985c8d0
       name: Tweede ronde
       #original_hash: 2a4bcae
-      cellName: Tweede
+      cellName: Tweede ronde
     '3':
       #original_hash: e2f74d2
       name: Halve finale
@@ -158,16 +158,16 @@ nl:
     name: '%{event_name} %{round_name}'
   advancement_condition:
     #original_hash: 6e55337
-    ranking: 'Top %{ranking} gaan door naar volgende ronde'
+    ranking: 'Top %{ranking} naar volgende ronde'
     #original_hash: 7ee969c
-    percent: 'Top %{percent}% gaan door naar volgende ronde'
+    percent: 'Top %{percent}% naar volgende ronde'
     attempt_result:
       #original_hash: 1fb7fe1
-      time: 'Beste resultaat < %{time} gaan door naar volgende ronde'
+      time: 'Beste resultaat < %{time} naar volgende ronde'
       #original_hash: 8254f3e
-      moves: 'Beste resultaat < %{moves} draaien gaan door naar volgende ronde'
+      moves: 'Beste resultaat < %{moves} draaien naar volgende ronde'
       #original_hash: daab86e
-      points: 'Beste resultaat > %{points} punten gaan door naar volgende ronde'
+      points: 'Beste resultaat > %{points} punten naar volgende ronde'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -324,11 +324,13 @@ nl:
         #original_hash: 89f89c0
         id: id
         #original_hash: 7f3d889
-        isConfirmed: Laat organisatoren deze wedstrijd niet bewerken
+        confirmed: Laat de organisatoren niet deze wedstrijd bewerken
         #original_hash: d493e6a
         showAtAll: Maak deze wedstrijd zichtbaar voor publiek
         #original_hash: 709a232
         name: Naam
+        #original_hash: f91b080
+        name_reason: De reden voor de naam
         #original_hash: b649210
         cellName: Verkorte naam van wedstrijd
         #original_hash: d523ebb
@@ -364,13 +366,11 @@ nl:
         #original_hash: 87b7d5f
         use_wca_registration: Ik wil de WCA-website gebruiken voor aanmeldingen
         #original_hash: 9bb1965
-        competitor_limit_enabled: >-
-          Ik wil een limiet opgeven voor het aantal deelnemers dat zich kan
-          aanmelden voor deze wedstrijd.
+        competitor_limit_enabled: Maximumaantal deelnemers
         #original_hash: 749f4c9
         competitor_limit: Maximumaantal deelnemers
         #original_hash: 4a8b6f1
-        competitor_limit_reason: De reden voor de limiet op deelnemersaantal
+        competitor_limit_reason: De reden voor het maximumaantal deelnemers
         #original_hash: 3c23a67
         guests_enabled: Gasten
         #original_hash: 089cbfd
@@ -403,6 +403,20 @@ nl:
         refund_policy_limit_date: Uiterste datum voor teruggave
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Bezoekerskosten
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Ik wil dat deelnemers hun puzzels inleveren tijdens de registratie, op
+          basis van Reglement Z1)
+        #original_hash: 466aca7
+        regulation_z1_reason: Reden voor Z1)
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Ik wil deelnemers selecteren die zich rechtstreeks voor bepaalde
+          ronden van de bepaalde wedstrijdonderdelen kwalificeren, gebaseerd op
+          resultaten van specifieke eerdere wedstrijden, op basis van Reglement
+          Z3)
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Reden voor Z3)
       registration:
         #original_hash: 3c23a67
         guests: Gasten
@@ -587,10 +601,6 @@ nl:
           Voer je naam volledig en juist in, bijvoorbeeld <strong>Stefan
           Pochmann</strong>. Niet: <strong>s pochmann</strong>. Tussennamen
           (volledige of als initialen) zijn optioneel.
-        #original_hash: c03b949
-        email: >-
-          Veranderen van je e-mailadres vereist bevestiging van het nieuwe
-          e-mailadres.
         #original_hash: 8a91e53
         pending_avatar: >-
           Na het uploaden van je profielfoto, is het wachten tot het
@@ -643,10 +653,9 @@ nl:
           we de staat zien)
         #original_hash: bb470cc
         information: >-
-          Informatie over een limiet van het aantal deelnemers, de aanmeldkosten
-          voor deelnemers en toeschouwers, en andere details die relevant zijn
-          voor mensen die zijn geïnteresseerd om deel te nemen of te komen
-          kijken.
+          Informatie over maximumaantal deelnemers, de aanmeldkosten voor
+          deelnemers en toeschouwers, en andere details die relevant zijn voor
+          mensen die zijn geïnteresseerd om deel te nemen of te komen kijken.
         #original_hash: b4d020f
         delegate_ids: WCA delegates van de wedstrijd.
         #original_hash: 517d376
@@ -657,9 +666,9 @@ nl:
         external_website: 'Link naar de website van de wedstrijd, inclusief http(s).'
         #original_hash: 9965635
         registration_open: 'Let op: de tijden van de aanmelding zijn in UTC tijdzone'
-        #original_hash: 243212f
+        #original_hash: bd402bf
         remarks_html: >-
-          Aanvullende informatie die je aan de board wilt doorgeven.
+          Aanvullende informatie die je aan de WCAT wilt doorgeven.
           Bijvoorbeeld, nadere uitleg als een wedstrijd minder dan vier weken
           van tevoren wordt aangevraagd, of als je toepassing vraagt van
           %{link}. Vul deze informatie in het Engels!
@@ -685,7 +694,7 @@ nl:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -708,7 +717,7 @@ nl:
           voor het registratieproces, maar dit vraagt nog wat werk.
         #original_hash: 4bd7102
         competitor_limit_reason: >-
-          Wat is de reden voor de limiet op deelnemersaantal? Graag in het
+          Wat is de reden voor het maximumaantal deelnemers? Graag in het
           Engels!
         #original_hash: da39a3e
         venueAddress: ''
@@ -739,6 +748,18 @@ nl:
           Dit getal is ter informatie, de toegangsprijs voor gasten kun je niet
           via deze website regelen. Als het bedrag 0 is, dan wordt een zin
           getoond dat gasten gratis toegang hebben.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Licht hier toe waarom je Reglement Z1) wilt toepassen. Graag in het
+          Engels!
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Licht hier toe waarom je Reglement Z3) wilt toepassen. Graag in het
+          Engels!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1063,7 +1084,7 @@ nl:
       #original_hash: 1fa73f3
       regulations: Wedstrijdreglement
       #original_hash: 6bce1b5
-      about_regulations: Over de Wedstrijdreglementen
+      about_regulations: Over het Wedstrijdreglement
       #original_hash: 141d1d7
       guidelines: Aanvullende richtlijnen
       #original_hash: c4622c3
@@ -1148,22 +1169,20 @@ nl:
         header: '%{delegate_name} heeft %{competition} bevestigd'
         #original_hash: 3db81b5
         organizers: 'Beste organisatoren van %{competition},'
-        #original_hash: c526fd6
+        #original_hash: d353d8c
         confirmed: >-
           %{delegate_name}, de delegate van je wedstrijd, heeft %{competition}
-          bevestigd en de aanvraag naar de WCA Board gestuurd. Zodra de WCA
-          Board deze wedstrijd openbaar maakt, ontvang je weer een notificatie.
+          bevestigd en de aanvraag naar de WCAT gestuurd. Zodra de WCAT deze
+          wedstrijd openbaar maakt, ontvang je weer een notificatie.
         #original_hash: dfea09d
         contact: >-
           Als je meer vragen hebt, stuur dan een e-mail naar de delegate(s) van
           de wedstrijd:
       competition_announcement_email:
-        #original_hash: 1571dd8
-        header: 'The WCA Board heeft %{competition} aangekondigd'
-        #original_hash: 8e91977
-        announced: >-
-          De WCA Board heeft je wedstrijd goedgekeurd en officieel openbaar
-          gemaakt.
+        #original_hash: 87f1f49
+        header: 'The WCAT heeft %{competition} aangekondigd'
+        #original_hash: 0d3d10c
+        announced: De WCAT heeft je wedstrijd goedgekeurd en officieel openbaar gemaakt.
         #original_hash: 1c20919
         link: 'Volg de link naar de aankondiging van de wedstrijd:'
       organizer_addition_email:
@@ -1234,6 +1253,7 @@ nl:
       approve: Goedkeuren
       #original_hash: 85de4b8
       unconfirmed_email: 'Het e-mailadres van deze account (%{email}) is nog niet bevestigd.'
+      confirm_new_email: 'Veranderen van je e-mailadres vereist bevestiging van het nieuwe e-mailadres.'
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Dit account wacht op bevestiging van het nieuwe e-mailadres %{email}.'
       #original_hash: 0340b0b
@@ -1340,6 +1360,14 @@ nl:
       unique: 'is al in gebruik door %{used_name}" met %{used_email}'
       #original_hash: 26f70ed
       dob_past: moet in het verleden liggen
+      #original_hash: b64df45
+      already_represented_country: >-
+        Het land kan niet worden gewijzigd naar een land waarvoor de persoon al
+        eerder is uitgekomen.
+      #original_hash: b589014
+      must_have_a_change: >-
+        De naam of het land moet verschillend zijn om de persoon te kunnen
+        bijwerken.
       #original_hash: 012f032
       must_be_senior: moet een senior delegate zijn
       #original_hash: 2e582eb
@@ -1628,8 +1656,8 @@ nl:
       %{profile} oplossen:
     #original_hash: f22ef22
     registration_full: >-
-      Het maximum aantal deelnemers voor deze wedstrijd is %{competitor_limit}
-      en dit aantal is bereikt. Als je je nu aanmeldt, dan kom je op een
+      Het maximumaantal deelnemers voor deze wedstrijd is %{competitor_limit} en
+      dit aantal is bereikt. Als je je nu aanmeldt, dan kom je op een
       wachtlijst. Je aanmelding wordt goed gekeurd wanneer er een plekje
       vrijkomt, dit hoeft niet het geval te zijn.
     #original_hash: 855ca9c
@@ -1790,15 +1818,13 @@ nl:
       #original_hash: 45834fd
       register_below_html: Meld je hieronder aan voor deze wedstrijd.
       #original_hash: 196725e
-      competitor_limit_is: 'Het maximum aantal deelnemers is %{competitor_limit}.'
+      competitor_limit_is: 'Het maximumaantal deelnemers is %{competitor_limit}.'
       #original_hash: 5101f65
-      no_competitor_limit: Er is geen maximum aantal deelnemers.
+      no_competitor_limit: Er is geen maximumaantal deelnemers.
       #original_hash: f979d5e
-      entry_fee_is: >-
-        Het basisbedrag voor aanmelding voor deze wedstrijd is
-        %{base_entry_fee}.
+      entry_fee_is: 'Het basisbedrag voor deelname aan deze wedstrijd is %{base_entry_fee}.'
       #original_hash: 5390a91
-      no_entry_fee: Aanmelden voor deze wedstrijd is gratis.
+      no_entry_fee: Deelname aan deze wedstrijd is gratis.
       #original_hash: 29af5c2
       use_stripe_link_html: >-
         De deelnamekosten moeten %{here} worden betaald via Stripe, na
@@ -1810,9 +1836,9 @@ nl:
       #original_hash: 16cd1ba
       refund_policy_html: >-
         Als je aanmelding wordt geannuleerd voor %{limit_date_and_time}, dan
-        krijg je %{refund_policy_percent} euro van het betaalde bedrag terug.
+        krijg je %{refund_policy_percent} van het betaalde bedrag terug.
       #original_hash: 4aca553
-      no_refunds: Deelnamekosten worden niet terugbetaald.
+      no_refunds: Aanmeldkosten worden niet terugbetaald.
       #original_hash: cf7be5d
       on_the_spot_registration: >-
         Aanmeldingen bij de deur worden geaccepteerd. De deelnamekosten zijn dan
@@ -1835,7 +1861,7 @@ nl:
       hide_requirements: Verberg aanmeldingseisen.
       registration_period:
         #original_hash: 6888733
-        label: Aanmeld periode
+        label: Aanmeldperiode
         #original_hash: 0c7c1dc
         range_future_html: >-
           Online aanmelding is van %{start_date_and_time} tot
@@ -1938,13 +1964,18 @@ nl:
       #original_hash: 9104a03
       no_past_competitions: Je hebt geen wedstrijden in het verleden.
     competition_form:
-      #original_hash: e879b0b
-      board: Board
+      #original_hash: 2b81984
+      wcat: WCA Competition Announcement Team (Wedstrijdaankondigingsteam)
       #original_hash: f957dcb
       supports_md_html: >-
         Ondersteunt <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        Een korte uitleg van de wedstrijdnaam. De naam moet voldoen aan de <a
+        href='/documents/policies/Competition%20Name.pdf'>WCA Competition Name
+        Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
         De locatie waar de wedstrijd plaatsvindt. %{md}. Bijvoorbeeld: [Cité des
@@ -1964,22 +1995,24 @@ nl:
       deprecated_events: >-
         Deze wedstrijd heeft wedstrijdonderdelen die niet langer officieel zijn,
         we ondersteunen niet het bewerken daarvan.
-      #original_hash: 815d5c3
-      locked_edit_html: >-
-        Deze wedstrijd is publiek zichtbaar en kan worden bewerkt. Als je een
-        aanpassing wilt doen, neem dan contact op met de %{board}.
-      #original_hash: ce33e21
-      confirmed_not_visible_html: >-
-        Je hebt de wedstrijd bevestigd, maar deze is nog niet zichtbaar voor het
-        publiek. Wacht op de %{board} om de wedstrijd zichtbaar te maken.
+      #original_hash: cafc153
+      public_and_locked_html: >-
+        De competition is publiek zichtbaar en kan niet worden bewerkt. Als je
+        een wijziging nodig hebt, antwoord dan in de oorspronkelijke maildraad
+        waarin de wedstrijd is bevestigd.
+      #original_hash: e00a339
+      confirmed_but_not_visible_html: >-
+        Je hebt deze wedstrijd bevestigd, maar de wedstrijd is nog niet
+        zichtbaar voor het publiek. Wacht op %{contact} om de wedstrijd
+        zichtbaar te maken.
       #original_hash: e94cba8
       is_visible: >-
         De wedstrijd is zichtbaar voor publiek, elke wijziging is meteen
         zichtbaar voor het publiek!
-      #original_hash: 34862bb
-      awaiting_confirmation_html: >-
-        Vul alle velden in en klik op Bevestigen als je klaar bent om de
-        %{board} de wedstrijd te laten goedkeuren.
+      #original_hash: f99b3f7
+      pending_confirmation_html: >-
+        Vul alle velden in en klik op Bevestigen als je klaar bent voor de
+        %{contact} om de wedstrijd goed te keuren.
       #original_hash: 8966fd0
       submit_create_value: Aanmaken wedstrijd
       #original_hash: 40b0dfd
@@ -1988,11 +2021,12 @@ nl:
       submit_confirm_value: Bevestigen
       #original_hash: f6fdbe4
       submit_delete_value: Verwijderen
-      #original_hash: 1ca19b1
+      #original_hash: 22316f1
       submit_confirm: >-
         Weet je zeker dat je klaar bent om te bevestigen? Na bevestigen kun je
-        de informatie niet meer aanpassen. Controleer je mail om te zien of de
-        Board is geïnformeerd.
+        de informatie niet meer aanpassen. Controleer je mail om te zien of het
+        WCA Competition Announcement Team (Wedstrijdaankondigingsteam) is
+        geïnformeerd.
       #original_hash: 4c7deb7
       submit_delete: Weet je zeker dat je de wedstrijd wilt verwijderen? Je kunt niet terug.
       #original_hash: 8ebebca
@@ -2041,9 +2075,9 @@ nl:
     update:
       #original_hash: 5fb2f57
       save_success: Wedstrijd opgeslagen.
-      #original_hash: 9d1649e
+      #original_hash: 5253c86
       confirm_success: >-
-        Wedstrijd bevestigd. Controleer je mail en wacht op de Board om de
+        Wedstrijd bevestigd. Controleer je mail en wacht op de WCAT om de
         wedstrijd aan te kondigen!
       #original_hash: 28567f0
       delete_success: 'Wedstrijd %{id} verwijderd.'
@@ -2544,7 +2578,7 @@ nl:
         content:
           #original_hash: 5ac78e4
           '1': >-
-            Je kunt de wedstrijdreglementen over puzzels vinden in <a
+            Je kunt het wedstrijdreglement over puzzels vinden in <a
             href='https://www.worldcubeassociation.org/regulations/#3'>Artikel
             3</a>. Alle puzzels moeten worden goedgekeurd door de WCA-delegate.
             Als je het niet zeker weet, vraag het dan aan de WCA-delegate van je
@@ -2558,7 +2592,7 @@ nl:
         content:
           #original_hash: 024ce81
           '1': >-
-            Je mag alleen magnetische puzzles gebruiken als ze voldoen aan het
+            Je mag alleen magnetische puzzels gebruiken als ze voldoen aan het
             <a target='_blank'
             href='https://www.worldcubeassociation.org/regulations/'>WCA-wedstrijdreglement</a>.
             Let specifiek op <a
@@ -2692,11 +2726,19 @@ nl:
         name: WCA QA Committee
         #original_hash: 0171b3b
         description: >-
-          Deze commissie heeft de rol om continue verbetering de ondersteunen en
+          Deze commissie heeft de rol om continue verbetering te ondersteunen en
           bevorderen binnen de WCA, en de wereldwijde toepassing van
           kwaliteitsstandaarden om een consistente hoge kwaliteit te garanderen
           van processen, WCA Staff, regionale organisaties,
           wedstrijdorganisatoren en wedstrijdstaf.
+      wcat:
+        #original_hash: 2b81984
+        name: WCA Competition Announcement Team (Wedstrijdaankondigingsteam)
+        #original_hash: 61a471f
+        description: >-
+          Deze commissie heeft de rol om WCA-wedstrijden goed te keuren en aan
+          te kondigen, en te zorgen dat zulke aankondigingen voldoen aan de
+          WCA-kwaliteitsstandaarden.
       wmt:
         #original_hash: 2035811
         name: WCA Marketing Team
@@ -2713,9 +2755,9 @@ nl:
       delegates_html: >-
         <p><strong>WCA delegates</strong> zijn leden van de WCA die
         verantwoordelijk zijn dat alle WCA-wedstrijden verlopen volgens de
-        missie, reglementen en spirit van de WCA. De WCA onderscheidt
+        missie, wedstrijdreglement en spirit van de WCA. De WCA onderscheidt
         <strong>WCA Senior delegates</strong>, <strong>WCA delegates</strong> en
-        <strong>WCA kandidaat delegates</strong>%{see_link}. Naast de taken van
+        <strong>WCA kandidaat delegates</strong> %{see_link}. Naast de taken van
         een WCA delegate is een WCA Senior delegate verantwoordelijk voor het
         managen van de WCA delegates in hun regio en kan deze door de community
         worden benaderd over regionale zaken.</p> <p>Nieuwe WCA delegates worden
@@ -2731,6 +2773,8 @@ nl:
   documents:
     #original_hash: 687c828
     title: Documenten
+    #original_hash: 1b537dc
+    determination_letter: IRS Besluitdocument
     #original_hash: 9855f80
     bylaws: Statuten
     #original_hash: fdceb44
@@ -2785,7 +2829,7 @@ nl:
           Respecteren en operationaliseren van de Doelstellingen in de Statuten
           en Reglementen van de WCA
         #original_hash: 0c3576b
-        '4': Voldoen aan alle van toepassing zijnde WCA-wedstrijdreglementen
+        '4': Voldoen aan van toepassing zijnd WCA-wedstrijdreglement
         #original_hash: 23cda60
         '5': Accepteren en voldoen aan beslissingen van WCA-officials
         #original_hash: efe2b55
@@ -2817,12 +2861,10 @@ nl:
     #original_hash: 1cb449c
     members: Leden
     board:
-      #original_hash: 3a8b1d8
+      #original_hash: f3cbb35
       info_html: >-
         De World Cube Association wordt geleid door de WCA Board. Ze zijn
         verantwoordelijk voor algemene vragen en de WCA-organisatie als geheel.
-        Alle officiële wedstrijden hebben goedkeuring nodig van WCA Board
-        voordat ze worden aangekondigd.
     wct:
       #original_hash: 846684d
       info_html: >-
@@ -2834,9 +2876,9 @@ nl:
       info_html: >-
         De WDC onderzoekt een breed scala aan zaken en stelt oplossingen voor,
         inclusief disciplinaire maatregelen indien nodig. Dit kan o.a. bij
-        serieuze schending van de WCA-reglementen of zaken in de community. Als
-        je zoiets hebt meegemaakt, neem dan gerust met deze commissie contact
-        op.
+        serieuze schending van het WCA-wedstrijdreglement of zaken in de
+        community. Als je zoiets hebt meegemaakt, neem dan gerust met deze
+        commissie contact op.
     wrc:
       #original_hash: fcd3526
       info_html: >-
@@ -2893,6 +2935,12 @@ nl:
         kwaliteitsstandaard om constante hoge kwaliteit te garanderen voor
         processen, WCA Staff, regionale organisaties, wedstrijdorganisatoren en
         wedstrijdstaff.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Deze commissie heeft de rol om WCA-wedstrijden goed te keuren en aan te
+        kondigen, en te zorgen dat zulke aankondigingen voldoen aan de
+        WCA-kwaliteitsstandaarden.
     wmt:
       #original_hash: f2a0140
       info_html: >-
@@ -3122,18 +3170,19 @@ nl:
       onderstaande content wordt niet vertaald.
   about_regulations:
     #original_hash: 6bce1b5
-    title: Over de Wedstrijdreglementen
+    title: Over het Wedstrijdreglement
     panel1:
       #original_hash: 1fa73f3
-      title: Wedstrijdreglementen
+      title: Wedstrijdreglement
       #original_hash: 557095b
       content1_html: >-
-        Alle wedstrijden moeten de <a href="/regulations/'">WCA
-        Wedstrijdreglementen</a> volgen. Het is belangrijk voor de deelnemers om
-        deze reglementen te lezen voor het meedoen aan hun eerste wedstrijd.
+        Alle wedstrijden moeten het <a
+        href="/regulations/'">WCA-wedstrijdreglement</a> volgen. Het is
+        belangrijk voor de deelnemers om het reglement te lezen voor het meedoen
+        aan hun eerste wedstrijd.
       #original_hash: 4296902
       content2_html: >-
-        De WCA Wedstrijdreglementen zijn aangevuld met de <a
+        Het WCA-wedstrijdreglement is aangevuld met de <a
         href="/regulations/guidelines.html">WCA Richtlijnen</a>, die aanvullende
         verduidelijkingen en toelichtingen bevatten.
     panel2:
@@ -3141,21 +3190,21 @@ nl:
       title: Vertalingen
       #original_hash: 7477d9b
       content1_html: >-
-        De WCA Wedstrijdreglementen zijn niet alleen in het Engels beschikbaar,
+        Het WCA-wedstrijdreglement is niet alleen in het Engels beschikbaar,
         maar leden van de WCA hebben deze in verschillende talen vertaald: <a
         href="/regulations/translations/">Vertalingen</a>.
       #original_hash: 6add7a3
       content2_html: >-
-        <strong>Belangrijk</strong>: Hoewel de vertaling erg nuttig zijn, zijn
-        ze niet officieel, de Engelse versie van de WCA Wedstrijdreglementen is
+        <strong>Belangrijk</strong>: Hoewel de vertalingen erg nuttig zijn, zijn
+        ze niet officieel, de Engelse versie van het WCA-wedstrijdreglement is
         bindend.
     panel3:
       #original_hash: 234fd4d
-      title: Wedstrijdreglementen FAQ
+      title: Wedstrijdreglement FAQ
       #original_hash: 8afba93
       content1_html: >-
-        De <a href="/faq">FAQ</a> geeft antwoord op veelgestelde vragen over de
-        WCA Wedstrijdreglementen.
+        De <a href="/faq">FAQ</a> geeft antwoord op veelgestelde vragen over het
+        WCA-wedstrijdreglement.
     panel4:
       #original_hash: ad5f6e7
       title: Organisatorrichtlijnen
@@ -3199,28 +3248,28 @@ nl:
     paragraph3:
       #original_hash: 00d3bf8
       title: Deadline voor het aankondigen van de wedstrijd
-      #original_hash: c61c6c9
+      #original_hash: 305cfb1
       content_html: >-
         De wedstrijd zou minstens een maand van tevoren moeten worden
         aangekondigd (zie <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Richtlijn
-        8a4++</a>). als er speciale redenen zijn waarom deze deadline niet kan
-        worden gehaald, mogen wedstrijd tot uiterlijk twee weken van tevoren
-        worden aangekondigd. Het is sterk aan te bevelen om de WCA-board van
-        deze redenen op de hoogte te brengen om latere weigering te voorkomen.
+        8a4++</a>). Als er speciale redenen zijn waarom deze deadline niet kan
+        worden gehaald, mogen wedstrijden tot uiterlijk twee weken van tevoren
+        worden aangekondigd, te bepalen door de WCAT. Het is sterk aan te
+        bevelen om de WCAT van deze redenen op de hoogte te brengen om latere
+        weigering te voorkomen.
     paragraph4:
       #original_hash: b6dca56
       title: Nabijheidsbeleid
-      #original_hash: f86bf95
+      #original_hash: 79ed06e
       content1: >-
-        Algemeen beleid is dat wedstrijden worden geaccepteerd als ze minstens
-        100km of 19 dagen van andere wedstrijden plaatsvinden. De WCA-board zal
-        specifiek voorstellen voor wedstrijden beoordelen als er een andere
-        wedstrijd is op minder dan 100km afstand en met minder dan 19 dagen
-        verschil. Een WCA-delegate die zo'n wedstrijd wil laten goedkeuren, moet
-        nadere informatie leveren waarom deze wedstrijd alsnog moet worden
-        geaccepteerd. Mogelijke argumenten die daarbij ondersteunend kunnen
-        zijn:
+        Wedstrijden worden geaccepteerd als ze minstens 100km of 19 dagen van
+        andere wedstrijden plaatsvinden. De WCAT zal specifiek voorstellen voor
+        wedstrijden beoordelen als er een andere wedstrijd is op minder dan
+        100km afstand en met minder dan 19 dagen verschil. Een WCA-delegate die
+        zo'n wedstrijd wil laten goedkeuren, moet nadere informatie leveren
+        waarom deze wedstrijd alsnog moet worden geaccepteerd. Mogelijke
+        argumenten die daarbij ondersteunend kunnen zijn:
       olist1:
         #original_hash: de00462
         '1': De twee wedstrijden hebben geen overlappende wedstrijdonderdelen
@@ -3259,24 +3308,24 @@ nl:
     paragraph-events:
       #original_hash: b16c5f1
       title: Wedstrijdonderdelen aankondigen
-      #original_hash: b6c6d26
+      #original_hash: cee85f7
       content: >-
         Alle wedstrijdonderdelen die tijdens een wedstrijd worden gehouden
-        moeten worden gespecificeerd door de WCA Delegate, bij het goedkeuren
-        van een wedstrijd. Hieronder vallen ook de wedstrijdonderdelen die
-        misschien worden gehouden, d.w.z. wedstrijdonderdelen die afhangen van
-        hoe soepel de wedstrijd verloopt. Aanvullingen moeten worden goedgekeurd
-        door de WCA Board,
+        moeten worden gespecificeerd door de WCA Delegate, bij het aanvragen van
+        een wedstrijd. Hieronder vallen ook de wedstrijdonderdelen die misschien
+        worden gehouden, d.w.z. wedstrijdonderdelen die afhangen van hoe soepel
+        de wedstrijd verloopt. Aanvullingen moeten worden goedgekeurd door de
+        WCAT.
     paragraph5:
       #original_hash: 17d01de
       title: Maximumaantal Deelnemers
-      #original_hash: ffcd75e
+      #original_hash: b4748cf
       content_html: >-
         Het aantal deelnemers kan worden beperkt per wedstrijdonderdeel of per
         wedstrijd (zie <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Reglement
-        Z4</a>). Zoals alle Reglementen in artikel Z, moet de WCA-delegate van
-        de wedstrijd goedkeuring krijgen van de WCA-board. Maximaantallen
+        Z4</a>). Zoals alle Reglementen in artikel Z, moet de WCA Delegate van
+        de wedstrijd goedkeuring krijgen van de WCAT. Maximumaantallen
         deelnemers moeten zorgvuldig woren gekozen en in lijn zijn met het
         verwachte aantal aanmeldingen. Het maximumaantal mag niet voor
         onbelangrijke reden laag worden ingesteld. Het bedoelde maximum moet al

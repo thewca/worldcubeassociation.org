@@ -488,9 +488,7 @@ zh-CN:
         #original_hash: d0bb74a
         name: >-
           正确输入你的全名，比如<strong>Baiqiang Dong (董百强)</strong>。别偷懒只输入<strong>Baiqiang
-          (百强)</strong>。
-        #original_hash: c03b949
-        email: 修改邮箱需要确认新邮箱。
+          (百强)</strong>
         #original_hash: 8a91e53
         pending_avatar: 你需要等待WCA成绩组通过你上传的新头像。
         #original_hash: da39a3e
@@ -917,6 +915,7 @@ zh-CN:
       approve: 通过
       #original_hash: 85de4b8
       unconfirmed_email: '该帐号的邮件地址 (%{email})尚未确认。'
+      confirm_new_email: '修改邮箱需要确认新邮箱。'
       #original_hash: 8a770cf
       pending_mail_confirmation: '该帐号的新邮件地址%{email}正在等待确认。'
       #original_hash: 0340b0b

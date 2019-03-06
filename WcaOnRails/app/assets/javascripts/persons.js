@@ -97,4 +97,13 @@ onPage('persons#show', function() {
     $('.event-selector #radio-' + eventId).click();
     scrollToTabs();
   });
+
+  /* Highlight rows when user clicks on medal count. */
+  $(".highlight-medal").on('click', function(event) {
+    event.preventDefault();
+    var dataPlace = $(this).data('place');
+    $('.results-by-event table').toggleClass('highlight-' + dataPlace);
+    return false;
+  });
+
 });

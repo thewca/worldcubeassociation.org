@@ -2,7 +2,7 @@
 
 # lib/file_size_validator.rb
 class UrlValidator < ActiveModel::EachValidator
-  URL_RE = %r{\Ahttps?://\S+\z}
+  URL_RE = %r{\Ahttps?://\S+\z}.freeze
   VALID_URL_MESSAGE = "must be a valid url starting with http:// or https://"
 
   def validate_each(record, attribute, value)

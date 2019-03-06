@@ -1,3 +1,5 @@
+<% show_delegates ||= false %>
+<% registrations_by_competition_id ||= {} %>
 <% if competitions.length < 1 %>
   <%= alert :info do %>
     <% if !past %>
@@ -17,16 +19,18 @@
           <th></th>
           <th></th>
           <th></th>
+          <th><%= "Delegates" if show_delegates %></th>
           <th class="big-column"></th>
         </tr>
       </thead>
       <tbody>
         <% competitions.each do |competition| %>
-          <% registration = competition.registrations.find_by_user_id(current_user.id) %>
-          <tr class="<%=[ competition.isConfirmed ? "confirmed" : "not-confirmed",
-                          competition.showAtAll ? "visible" : "not-visible",
-                          past ? "past" : "not-past" ].join(' ') %>"
-              data-toggle="tooltip" data-placement="top" data-container="body"
+          <% registration = registrations_by_competition_id[competition.id] %>
+          <% tr_classes = [ competition.confirmed? ? "confirmed" : "not-confirmed",
+                          competition.showAtAll? ? "visible" : "not-visible",
+                          past ? "past" : "not-past" ].join(' ') %>
+          <tr class="<%= tr_classes %>"
+              data-toggle="tooltip" data-placement="bottom" data-container="body"
               title="<%= competition_message_for_user(competition, current_user) unless past %>">
             <td><%= link_to competition.name, competition_path(competition) %></td>
             <td><%= competition.city_and_country %></td>
@@ -49,14 +53,18 @@
               <% end %>
             </td>
             <td>
-              <% if current_user.can_view_delegate_report?(competition.delegate_report) %>
-                <%= link_to icon('file-text-o'), delegate_report_path(competition), title: t('.report'), 'data-toggle': 'tooltip' %>
-              <% end %>
-              <% if current_user.can_edit_delegate_report?(competition.delegate_report) %>
-                <%= link_to icon('pencil-square-o'), delegate_report_edit_path(competition), title: t('.edit_report'), 'data-toggle': 'tooltip' %>
-              <% end %>
-              <% if competition.user_should_post_delegate_report?(current_user) %>
-                <%= icon('warning', title: t('.missing_report'), 'data-toggle': 'tooltip') %>
+              <% if show_delegates %>
+                <%= competition.delegates.map(&:name).join(", ") %>
+              <% else %>
+                <% if current_user.can_view_delegate_report?(competition.delegate_report) %>
+                  <%= link_to icon('file-text-o'), delegate_report_path(competition), title: t('.report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
+                <% end %>
+                <% if current_user.can_edit_delegate_report?(competition.delegate_report) %>
+                  <%= link_to icon('pencil-square-o'), delegate_report_edit_path(competition), title: t('.edit_report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
+                <% end %>
+                <% if competition.user_should_post_delegate_report?(current_user) %>
+                  <%= icon('warning', title: t('.missing_report'), data: { 'toggle': 'tooltip', 'container': 'body' }) %>
+                <% end %>
               <% end %>
             </td>
             <td class="big-column"></td>

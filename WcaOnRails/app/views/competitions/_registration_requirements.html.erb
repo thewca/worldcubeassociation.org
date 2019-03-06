@@ -20,8 +20,8 @@
     <%= t('competitions.competition_info.register_below_html') %>
     <br>
   <% end %>
-<% elsif @competition.website %>
-  <%= t('competitions.competition_info.register_link_html', here: link_to(t('common.here'), @competition.website, target: "_blank")) %>
+<% elsif @competition.external_registration_page.present? %>
+  <%= t('competitions.competition_info.register_link_html', here: link_to(t('common.here'), @competition.external_registration_page, target: "_blank")) %>
   <br>
 <% end %>
 
@@ -59,7 +59,7 @@
   <% end %>
 <% end %>
 
-<% if @competition.refund_policy_percent.nil? %>
+<% if @competition.refund_policy_percent.nil? || !@competition.has_fees? %>
 <% elsif @competition.refund_policy_percent? %>
   <%= t('competitions.competition_info.refund_policy_html', refund_policy_percent: number_to_percentage(@competition.refund_policy_percent, precision: 0), limit_date_and_time: wca_local_time(@competition.refund_policy_limit_date)) %>
   <br>

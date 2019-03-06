@@ -73,4 +73,17 @@ RSpec.describe ServerStatusController, type: :controller do
       expect(assigns(:everything_good)).to eq false
     end
   end
+
+  context "stripe charges" do
+    it "warns about stripe charges with status unknown" do
+      StripeCharge.create!(
+        metadata: "",
+        status: "unknown",
+      )
+
+      get :index
+
+      expect(assigns(:everything_good)).to eq false
+    end
+  end
 end

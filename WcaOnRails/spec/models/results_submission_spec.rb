@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ResultsSubmission do
   let(:results_submission) { FactoryBot.build(:results_submission) }
 
-  it "is valid" do
+  it "is defines a valid factory" do
     expect(results_submission).to be_valid
   end
 
@@ -14,12 +14,9 @@ RSpec.describe ResultsSubmission do
     expect(results_submission).to be_invalid_with_errors(message: ["can't be blank"])
   end
 
-  it "requires results_json_str is valid json" do
-    results_submission.results_json_str = nil
-    expect(results_submission).to be_invalid_with_errors(results_file: ["can't be blank"])
-
-    results_submission.results_json_str = "this is invalid json"
-    expect(results_submission).to be_invalid_with_errors(results_file: ["must be a JSON file from the Workbook Assistant"])
+  it "requires confirmation" do
+    results_submission.confirm_information = nil
+    expect(results_submission).to be_invalid_with_errors(confirm_information: [ResultsSubmission::CONFIRM_INFORMATION_ERROR])
   end
 
   it "requires schedule url looks like a url" do

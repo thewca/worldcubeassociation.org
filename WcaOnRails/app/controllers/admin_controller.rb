@@ -32,6 +32,40 @@ class AdminController < ApplicationController
     render 'merge_people'
   end
 
+  def actions_index_for_competition
+    @competition = competition_from_params
+  end
+
+  def new_results
+    @competition = competition_from_params
+    @upload_json = UploadJson.new
+    @results_validator = CompetitionResultsValidator.new(@competition.id)
+  end
+
+  def check_results
+    @competition = competition_from_params
+    @results_validator = CompetitionResultsValidator.new(@competition.id, true)
+  end
+
+  def create_results
+    @competition = competition_from_params
+
+    # Do json analysis + insert record in db, then redirect to check inbox
+    # (and delete existing record if any)
+    upload_json_params = params.require(:upload_json).permit(:results_file)
+    upload_json_params[:competition_id] = @competition.id
+    @upload_json = UploadJson.new(upload_json_params)
+
+    # This makes sure the json structure is valid!
+    if @upload_json.import_to_inbox
+      flash[:success] = "JSON file has been imported."
+      redirect_to competition_admin_upload_results_edit_path
+    else
+      @results_validator = CompetitionResultsValidator.new(@competition.id)
+      render :new_results
+    end
+  end
+
   def edit_person
     @person = Person.current.find_by(wca_id: params[:person].try(:[], :wca_id))
     # If there isn't a person in the params, make an empty one that simple form have an object to work with.
@@ -111,5 +145,9 @@ class AdminController < ApplicationController
                     Note that you will receive no information about the outcome,
                     also please don't queue up multiple simultaneous statistics computations."
     redirect_to admin_url
+  end
+
+  private def competition_from_params
+    Competition.find_by_id!(params[:competition_id])
   end
 end

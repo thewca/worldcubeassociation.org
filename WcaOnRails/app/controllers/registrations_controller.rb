@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "csv"
+
 class RegistrationsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register]
 
@@ -15,10 +17,17 @@ class RegistrationsController < ApplicationController
     competition
   end
 
-  before_action :competition_must_be_using_wca_registration!
+  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :index, :psych_sheet, :psych_sheet_event]
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
       flash[:danger] = I18n.t('registrations.flash.not_using_wca')
+      redirect_to competition_path(competition_from_params)
+    end
+  end
+
+  before_action :competition_must_not_be_using_wca_registration!, only: [:import, :do_import]
+  private def competition_must_not_be_using_wca_registration!
+    if competition_from_params.use_wca_registration?
       redirect_to competition_path(competition_from_params)
     end
   end
@@ -45,18 +54,8 @@ class RegistrationsController < ApplicationController
       render :psych_results_posted
       return
     end
-    @sort_by = params[:sort_by]
-    if @sort_by == @event.recommended_format.sort_by
-      @sort_by_second = @event.recommended_format.sort_by_second
-    elsif @sort_by == @event.recommended_format.sort_by_second
-      @sort_by_second = @event.recommended_format.sort_by
-      @sort_by = @event.recommended_format.sort_by_second
-    else
-      @sort_by = @event.recommended_format.sort_by
-      @sort_by_second = @event.recommended_format.sort_by_second
-    end
 
-    @registrations = @competition.psych_sheet_event(@event, @sort_by, @sort_by_second)
+    @psych_sheet = @competition.psych_sheet_event(@event, params[:sort_by])
   end
 
   def index
@@ -98,7 +97,7 @@ class RegistrationsController < ApplicationController
 
   def export
     @competition = competition_from_params
-    @registrations = @competition.registrations.includes(:user, :events).find(selected_registrations_ids)
+    @registrations = @competition.registrations.order(:id).includes(:user, :events).find(selected_registrations_ids)
 
     respond_to do |format|
       format.csv do
@@ -106,6 +105,128 @@ class RegistrationsController < ApplicationController
         headers['Content-Type'] ||= 'text/csv; charset=UTF-8'
       end
     end
+  end
+
+  def import
+    @competition = competition_from_params
+  end
+
+  def do_import
+    competition = competition_from_params
+    file = params[:registrations_import][:registrations_file]
+    required_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"] + competition.events.map(&:id)
+    # Ensure the CSV file includes all required columns.
+    headers = CSV.read(file.path).first.compact.map(&:downcase)
+    missing_headers = required_columns - headers
+    if missing_headers.any?
+      raise "Missing columns: #{missing_headers.to_sentence}."
+    end
+    registration_rows = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
+                           .map(&:to_hash)
+                           .select { |registration_row| registration_row[:status] == "a" }
+    if competition.competitor_limit_enabled? && registration_rows.length > competition.competitor_limit
+      raise "The given file includes #{registration_rows.length} accepted #{"registration".pluralize(registration_rows.length)}"\
+            ", which is more than the competitor limit of #{competition.competitor_limit}."
+    end
+    new_locked_users = []
+    ActiveRecord::Base.transaction do
+      accepted_emails = registration_rows.map { |registration_row| registration_row[:email] }
+      competition.registrations.accepted.each do |registration|
+        unless accepted_emails.include?(registration.user.email)
+          registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
+        end
+      end
+      registration_rows.each do |registration_row|
+        user, locked_account_created = user_for_registration!(registration_row)
+        new_locked_users << user if locked_account_created
+        registration = competition.registrations.find_or_initialize_by(user_id: user.id)
+        unless registration.accepted?
+          registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
+        end
+        registration.registration_competition_events = []
+        competition.competition_events.map do |competition_event|
+          value = registration_row[competition_event.event_id.to_sym]
+          if value == "1"
+            registration.registration_competition_events.build(competition_event_id: competition_event.id)
+          elsif value != "0"
+            raise "Event columns should include either 0 or 1, found #{value} in column #{competition_event.event_id}."
+          end
+        end
+        registration.save!
+      end
+    end
+    new_locked_users.each do |user|
+      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, competition).deliver_later
+    end
+    flash[:success] = "Successfully imported registrations!"
+    redirect_to competition_registrations_import_url(competition)
+  rescue StandardError => error
+    flash[:danger] = error.to_s
+    redirect_to competition_registrations_import_url(competition)
+  end
+
+  private def user_for_registration!(registration_row)
+    registration_row[:wca_id]&.upcase!
+    registration_row[:email]&.downcase!
+    if registration_row[:wca_id].present?
+      unless Person.exists?(wca_id: registration_row[:wca_id])
+        raise "Non-existent WCA ID given #{registration_row[:wca_id]}."
+      end
+      user = User.find_by(wca_id: registration_row[:wca_id])
+      if user
+        if user.dummy_account?
+          email_user = User.find_by(email: registration_row[:email])
+          if email_user
+            if email_user.wca_id.present?
+              raise "There is already a user with email #{registration_row[:email]}"\
+                    ", but it has WCA ID of #{email_user.wca_id} instead of #{registration_row[:wca_id]}."
+            else
+              email_user.update!(wca_id: registration_row[:wca_id]) # User hooks will also remove the dummy user account.
+              [email_user, false]
+            end
+          else
+            user.skip_reconfirmation!
+            user.update!(dummy_account: false, email: registration_row[:email])
+            [user, true]
+          end
+        else
+          [user, false] # Use this account.
+        end
+      else
+        email_user = User.find_by(email: registration_row[:email])
+        if email_user
+          if email_user.unconfirmed_wca_id.present? && email_user.unconfirmed_wca_id != registration_row[:wca_id]
+            raise "There is already a user with email #{registration_row[:email]}"\
+                  ", but it has unconfirmed WCA ID of #{email_user.unconfirmed_wca_id} instead of #{registration_row[:wca_id]}."
+          else
+            email_user.update!(wca_id: registration_row[:wca_id])
+            [email_user, false]
+          end
+        else
+          # Create a locked account with confirmed WCA ID.
+          [create_locked_account!(registration_row), true]
+        end
+      end
+    else
+      email_user = User.find_by(email: registration_row[:email])
+      # Use the user if exists, otherwise create a locked account without WCA ID.
+      if email_user
+        [email_user, false]
+      else
+        [create_locked_account!(registration_row), true]
+      end
+    end
+  end
+
+  private def create_locked_account!(registration_row)
+    User.new_locked_account(
+      name: registration_row[:name],
+      email: registration_row[:email],
+      wca_id: registration_row[:wca_id],
+      country_iso2: Country.c_find(registration_row[:country]).iso2,
+      gender: registration_row[:gender],
+      dob: registration_row[:birth_date],
+    ).tap { |user| user.save! }
   end
 
   def do_actions_for_selected
@@ -153,14 +274,19 @@ class RegistrationsController < ApplicationController
   def update
     @registration = Registration.find(params[:id])
     @competition = @registration.competition
-    if params[:from_admin_view] && @registration.updated_at.to_datetime != params[:registration][:updated_at].to_datetime
+    if params[:from_admin_view] && @registration.updated_at.to_time != params[:registration][:updated_at].to_time
       flash.now[:danger] = "Did not update registration because competitor updated registration since the page was loaded."
       render :edit
       return
     end
+    registration_attributes = registration_params
+    # Don't change status columns if the status is the same.
+    if @registration.checked_status.to_s == params[:registration][:status]
+      registration_attributes = registration_attributes.except(:accepted_at, :accepted_by, :deleted_at, :deleted_by)
+    end
     was_accepted = @registration.accepted?
     was_deleted = @registration.deleted?
-    if current_user.can_edit_registration?(@registration) && @registration.update_attributes(registration_params)
+    if current_user.can_edit_registration?(@registration) && @registration.update_attributes(registration_attributes)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)
         mailer.deliver_later
@@ -222,7 +348,7 @@ class RegistrationsController < ApplicationController
       return
     end
 
-    charge = Stripe::Charge.create(
+    charge = journaled_stripe_charge(
       {
         amount: amount,
         currency: registration.outstanding_entry_fees.currency.iso_code,
@@ -244,6 +370,50 @@ class RegistrationsController < ApplicationController
   rescue Stripe::CardError => e
     flash[:danger] = 'Unsuccessful payment: ' + e.message
     redirect_to competition_register_path
+  end
+
+  private def journaled_stripe_charge(*stripe_charge_create_args)
+    # Talk to Stripe to make a charge, but "journal" the attempt.
+    #  1. Before talking to Stripe, we first create a StripeCharge in status "unknown".
+    #  2. Talk to Stripe.
+    #  3. After talking to Stripe, we update that StripeCharge to status to "success" or "failure".
+    # If anything else happens (maybe our server crashed during step 2, or
+    # between step 2 and 3), then we'll have a StripeCharge in our database
+    # with "unknown" status, and we'll know to investigate it, most likely by
+    # visiting our Stripe dashboard to see if the charge actually happened or not.
+
+    stripe_charge = StripeCharge.create!(
+      metadata: stripe_charge_create_args.to_json,
+      stripe_charge_id: nil,
+      status: "unknown",
+    )
+
+    begin
+      charge = Stripe::Charge.create(*stripe_charge_create_args)
+      stripe_charge.update!(
+        status: "success",
+        stripe_charge_id: charge.id,
+      )
+    rescue Stripe::CardError => e
+      stripe_charge.update!(
+        status: "failure",
+        error: error_to_s(e),
+      )
+      raise e
+    rescue Exception => e # rubocop:disable Lint/RescueException
+      # Note that we intentionally leave the status of the charge as "unknown" here. That's because at this
+      # point, we don't know if it actually succeeded or failed. Perhaps the
+      # Stripe backend fully processed our request, but there was some
+      # connectivity error that caused us to not know about it.
+      stripe_charge.update!(error: error_to_s(e))
+      raise e
+    end
+
+    charge
+  end
+
+  private def error_to_s(error)
+    error.inspect + "\n" + error.backtrace.join("\n")
   end
 
   def refund_payment

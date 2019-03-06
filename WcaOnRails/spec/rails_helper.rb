@@ -74,3 +74,6 @@ RSpec.configure do |config|
 
   config.include ActiveJob::TestHelper
 end
+
+# See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
+RSpec::Matchers.define_negated_matcher :not_change, :change

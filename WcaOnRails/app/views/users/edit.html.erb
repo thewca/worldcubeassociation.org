@@ -134,6 +134,10 @@
           </div>
         <% end %>
 
+        <% if @user.staff? %>
+          <%= f.input :receive_delegate_reports %>
+        <% end %>
+
         <%= f.submit t('.save'), class: "btn btn-primary" %>
       <% end %>
     </div>
@@ -142,7 +146,7 @@
       <div class="tab-pane active" id="email">
         <%= simple_form_for @user do |f| %>
           <%= hidden_field_tag "section", "email" %>
-          <%= f.input :email, disabled: !editable_fields.include?(:email) %>
+          <%= f.input :email, disabled: !editable_fields.include?(:email), hint: t('.confirm_new_email') %>
 
           <%= f.input :current_password %>
 

@@ -17,22 +17,30 @@ class User < ApplicationRecord
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
-  has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
+  has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
+  scope :in_region, lambda { |region_id|
+    unless region_id.blank? || region_id == 'all'
+      where(country_iso2: (Continent.country_iso2s(region_id) || Country.c_find(region_id)&.iso2))
+    end
+  }
+
   def self.eligible_voters
-    team_leaders = TeamMember.current.where(team_leader: true).map(&:user)
+    team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
+    team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
     eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))
     board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
-    (team_leaders + eligible_delegates + board_members).uniq
+    officers = TeamMember.current.where(team_id: Team.all_officers.map(&:id)).map(&:user)
+    (team_leaders + team_senior_members + eligible_delegates + board_members + officers).uniq
   end
 
   def self.leader_senior_voters
-    team_leaders = TeamMember.current.where(team_leader: true).map(&:user)
+    team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
     senior_delegates = User.where(delegate_status: "senior_delegate")
     (team_leaders + senior_delegates).uniq
   end
@@ -50,7 +58,7 @@ class User < ApplicationRecord
   # name empty, so long as they're a returning competitor and are claiming their
   # wca id.
   validates :name, presence: true, if: -> { !claiming_wca_id }
-  WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
+  WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/.freeze
   validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
@@ -103,10 +111,19 @@ class User < ApplicationRecord
     end
   end
 
-  validate :dob_must_be_in_the_past
-  def dob_must_be_in_the_past
+  validate :check_if_email_used_by_locked_account, on: :create
+  private def check_if_email_used_by_locked_account
+    if User.find_by(email: email)&.locked_account?
+      errors.delete(:email)
+      errors.add(:email, I18n.t('users.errors.email_used_by_locked_account_html').html_safe)
+    end
+  end
+
+  validate do
     if dob && dob >= Date.today
       errors.add(:dob, I18n.t('users.errors.dob_past'))
+    elsif dob && dob >= 2.years.ago
+      errors.add(:dob, I18n.t('users.errors.dob_recent'))
     end
   end
 
@@ -134,9 +151,12 @@ class User < ApplicationRecord
 
   # Virtual attribute for people claiming a WCA ID.
   attr_accessor :dob_verification
+  attr_accessor :was_incorrect_wca_id_claim
 
+  MAX_INCORRECT_WCA_ID_CLAIM_COUNT = 5
   validate :claim_wca_id_validations
   def claim_wca_id_validations
+    self.was_incorrect_wca_id_claim = false
     already_assigned_to_user = false
     if unconfirmed_wca_id.present?
       already_assigned_to_user = unconfirmed_person && unconfirmed_person.user && !unconfirmed_person.user.dummy_account?
@@ -159,13 +179,15 @@ class User < ApplicationRecord
       dob_verification_date = Date.safe_parse(dob_verification, nil)
       if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
         dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
-        if !unconfirmed_person.dob
+        remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
+        if remaining_wca_id_claims == 0 || !unconfirmed_person.dob
           errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
         elsif unconfirmed_person.gender.blank?
           errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html').html_safe)
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
           # Note that we don't verify DOB for WCA IDs that have already been
           # claimed. This protects people from DOB guessing attacks.
+          self.was_incorrect_wca_id_claim = true
           errors.add(:dob_verification, I18n.t('users.errors.dob_incorrect_html', dob_form_path: dob_form_path).html_safe)
         end
       end
@@ -179,12 +201,24 @@ class User < ApplicationRecord
     end
   end
 
-  scope :not_dummy_account, -> { where('wca_id = "" OR encrypted_password != "" OR email NOT LIKE "%@worldcubeassociation.org"') }
-  def dummy_account?
-    wca_id.present? && encrypted_password.blank? && email.casecmp("#{wca_id}@worldcubeassociation.org") == 0
+  after_rollback do
+    # This is a bit of a mess. If the user makes an incorrect WCA ID claim,
+    # then we want to incrememnt our count of incorrect claims. We can't update
+    # the database in the `claim_wca_id_validations` above, because that all
+    # happens in a transaction that gets rolled back if the claim is invalid.
+    # So instead, we must do this in a `after_rollback` callback.
+    unconfirmed_person.increment!(:incorrect_wca_id_claim_count, 1) if self.was_incorrect_wca_id_claim
   end
 
+  scope :not_dummy_account, -> { where(dummy_account: false) }
+
+  def locked_account?
+    !dummy_account? && encrypted_password == ""
+  end
+
+  scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
   scope :delegates, -> { where.not(delegate_status: nil) }
+  scope :senior_delegates, -> { where(delegate_status: "senior_delegate") }
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
@@ -195,6 +229,11 @@ class User < ApplicationRecord
       self.gender = p.gender
       self.country_iso2 = p.country_iso2
     end
+  end
+
+  before_validation :strip_name
+  def strip_name
+    self.name = self.name.strip if self.name.present?
   end
 
   validate :wca_id_prereqs
@@ -215,7 +254,7 @@ class User < ApplicationRecord
   before_save :remove_dummy_account_and_copy_name_when_wca_id_changed
   def remove_dummy_account_and_copy_name_when_wca_id_changed
     if wca_id_change && wca_id.present?
-      dummy_user = User.where(wca_id: wca_id).find(&:dummy_account?)
+      dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
       if dummy_user
         _mounter(:avatar).uploader.override_column_value = dummy_user.read_attribute :avatar
         dummy_user.destroy!
@@ -329,11 +368,12 @@ class User < ApplicationRecord
   after_save :remove_pending_wca_id_claims
   private def remove_pending_wca_id_claims
     if saved_change_to_delegate_status? && !delegate_status
-      users_claiming_wca_id.confirmed_email.each do |user|
-        user.update delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil
+      confirmed_users_claiming_wca_id.each do |user|
         senior_delegate = User.find_by_id(senior_delegate_id_before_last_save)
         WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self, senior_delegate).deliver_later
       end
+      # Clear all pending WCA IDs claims for the demoted Delegate
+      User.where(delegate_to_handle_wca_id_claim: self.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
     end
   end
 
@@ -370,40 +410,95 @@ class User < ApplicationRecord
     team_member?(Team.board)
   end
 
-  def software_team?
-    team_member?(Team.wst)
-  end
-
-  def results_team?
-    team_member?(Team.wrt)
-  end
-
-  def wrc_team?
-    team_member?(Team.wrc)
-  end
-
-  def wdc_team?
-    team_member?(Team.wdc)
+  # Officers are defined in our Bylaws. Every Officer has a team on the website except for the WCA Treasurer, as it is the WFC Leader.
+  def officer?
+    team_member?(Team.chair) || team_member?(Team.executive_director) || team_member?(Team.secretary) || team_member?(Team.vice_chair) || team_leader?(Team.wfc)
   end
 
   def communication_team?
     team_member?(Team.wct)
   end
 
+  def competition_announcement_team?
+    team_member?(Team.wcat)
+  end
+
+  def wdc_team?
+    team_member?(Team.wdc)
+  end
+
+  def wdpc_team?
+    team_member?(Team.wdpc)
+  end
+
   def ethics_committee?
     team_member?(Team.wec)
+  end
+
+  def financial_committee?
+    team_member?(Team.wfc)
+  end
+
+  def marketing_team?
+    team_member?(Team.wmt)
   end
 
   def quality_assurance_committee?
     team_member?(Team.wqac)
   end
 
+  def wrc_team?
+    team_member?(Team.wrc)
+  end
+
+  def results_team?
+    team_member?(Team.wrt)
+  end
+
+  def software_team?
+    team_member?(Team.wst)
+  end
+
+  def wac_team?
+    team_member?(Team.wac)
+  end
+
+  def staff?
+    any_kind_of_delegate? || member_of_any_official_team? || board_member? || officer?
+  end
+
+  def staff_with_voting_rights?
+    # See "Member with Voting Rights" in:
+    #  https://www.worldcubeassociation.org/documents/motions/02.2019.1%20-%20Definitions.pdf
+    full_delegate? || senior_delegate? || senior_member_of_any_official_team? || leader_of_any_official_team? || board_member? || officer?
+  end
+
   def team_member?(team)
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
 
+  def team_senior_member?(team)
+    self.current_team_members.select { |t| t.team_id == team.id && t.team_senior_member }.count > 0
+  end
+
   def team_leader?(team)
     self.current_team_members.select { |t| t.team_id == team.id && t.team_leader }.count > 0
+  end
+
+  def member_of_any_official_team?
+    self.current_teams.official.any?
+  end
+
+  def senior_member_of_any_official_team?
+    self.teams_where_is_senior_member.official.any?
+  end
+
+  def leader_of_any_official_team?
+    self.teams_where_is_leader.official.any?
+  end
+
+  def teams_where_is_senior_member
+    self.current_team_members.select(&:team_senior_member).map(&:team).uniq
   end
 
   def teams_where_is_leader
@@ -418,12 +513,16 @@ class User < ApplicationRecord
     delegate_status.present?
   end
 
+  def full_delegate?
+    delegate_status == "delegate"
+  end
+
   def senior_delegate?
     delegate_status == "senior_delegate"
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate?
+    admin? || board_member? || results_team? || communication_team? || wdc_team? || wdpc_team? || any_kind_of_delegate?
   end
 
   def can_view_senior_delegate_material?
@@ -458,7 +557,15 @@ class User < ApplicationRecord
 
   # Returns true if the user can edit the given team.
   def can_edit_team?(team)
-    can_manage_teams? || team_leader?(team)
+    can_manage_teams? ||
+      team_leader?(team) ||
+
+      # The leader of the WDC can edit the banned competitors list
+      (team == Team.banned && team_leader?(Team.wdc))
+  end
+
+  def can_view_banned_competitors?
+    admin? || staff?
   end
 
   def can_create_competitions?
@@ -466,7 +573,7 @@ class User < ApplicationRecord
   end
 
   def can_view_crash_course?
-    can_view_delegate_matters? || communication_team?
+    can_view_delegate_matters? || communication_team? || competition_announcement_team?
   end
 
   def can_create_posts?
@@ -474,11 +581,11 @@ class User < ApplicationRecord
   end
 
   def can_update_crash_course?
-    admin? || board_member? || results_team? || quality_assurance_committee?
+    admin? || board_member? || results_team? || quality_assurance_committee? || competition_announcement_team?
   end
 
   def can_admin_competitions?
-    can_admin_results? || quality_assurance_committee?
+    can_admin_results? || competition_announcement_team?
   end
 
   alias_method :can_announce_competitions?, :can_admin_competitions?
@@ -503,7 +610,7 @@ class User < ApplicationRecord
   end
 
   def can_add_and_remove_events?(competition)
-    can_admin_competitions? || (can_manage_competition?(competition) && !competition.isConfirmed?)
+    can_admin_competitions? || (can_manage_competition?(competition) && !competition.confirmed?)
   end
 
   def can_submit_competition_results?(competition)
@@ -517,11 +624,11 @@ class User < ApplicationRecord
   end
 
   def can_vote_in_poll?
-    admin? || results_team? || any_kind_of_delegate? || wrc_team?
+    any_kind_of_delegate?
   end
 
   def can_view_delegate_matters?
-    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee?
+    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee? || competition_announcement_team?
   end
 
   def can_manage_incidents?
@@ -550,7 +657,7 @@ class User < ApplicationRecord
   end
 
   def can_see_admin_competitions?
-    board_member? || senior_delegate? || admin? || quality_assurance_committee?
+    board_member? || senior_delegate? || admin? || quality_assurance_committee? || competition_announcement_team?
   end
 
   def can_approve_media?
@@ -567,7 +674,7 @@ class User < ApplicationRecord
       I18n.t('competitions.errors.cannot_manage')
     elsif competition.showAtAll
       I18n.t('competitions.errors.cannot_delete_public')
-    elsif competition.isConfirmed && !self.can_admin_results?
+    elsif competition.confirmed? && !self.can_admin_results?
       I18n.t('competitions.errors.cannot_delete_confirmed')
     else
       nil
@@ -655,7 +762,28 @@ class User < ApplicationRecord
     if user.wca_id.blank? && organizer_for?(user)
       fields << :name
     end
+    if user.staff?
+      fields += %i(receive_delegate_reports)
+    end
     fields
+  end
+
+  def self.clear_receive_delegate_reports_if_not_staff
+    User.where(receive_delegate_reports: true).reject(&:staff?).map { |u| u.update(receive_delegate_reports: false) }
+  end
+
+  # This method is only called in sync_mailing_lists_job.rb, right after clear_receive_delegate_reports_if_not_staff.
+  # If used without calling clear_receive_delegate_reports_if_not_staff it might return non-current Staff members.
+  # The reason why clear_receive_delegate_reports_if_not_staff is needed is because there's no automatic code that
+  # runs once a user is no longer a team member, we just schedule their end date.
+  def self.delegate_reports_receivers_emails
+    candidate_delegates = User.candidate_delegates
+    other_staff = User.where(receive_delegate_reports: true)
+    (%w(
+      seniors@worldcubeassociation.org
+      quality@worldcubeassociation.org
+      regulations@worldcubeassociation.org
+    ) + candidate_delegates.map(&:email) + other_staff.map(&:email)).uniq
   end
 
   def notify_of_results_posted(competition)
@@ -780,6 +908,7 @@ class User < ApplicationRecord
         "thumbUrl" => avatar.url(:thumb),
       },
       "roles" => roles,
+      "assignments" => registration&.assignments&.map(&:to_wcif) || [],
       "personalBests" => person_pb.map(&:to_wcif),
     }
   end
@@ -788,10 +917,10 @@ class User < ApplicationRecord
     {
       "type" => "object",
       "properties" => {
-        "registrantId" => { "type" => "integer" },
+        "registrantId" => { "type" => ["integer", "null"] }, # Note: for now registrantId may be null if the person doesn't compete.
         "name" => { "type" => "string" },
         "wcaUserId" => { "type" => "integer" },
-        "wcaId" => { "type" => "string" },
+        "wcaId" => { "type" => ["string", "null"] },
         "countryIso2" => { "type" => "string" },
         "gender" => { "type" => "string", "enum" => %w(m f o) },
         "birthdate" => { "type" => "string" },
@@ -805,7 +934,7 @@ class User < ApplicationRecord
         },
         "roles" => { "type" => "array", "items" => { "type" => "string" } },
         "registration" => Registration.wcif_json_schema,
-        "assignments" => { "type" => "object" }, # TODO: expand on this,
+        "assignments" => { "type" => "array", "items" => Assignment.wcif_json_schema },
         "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema },
       },
     }
@@ -842,5 +971,29 @@ class User < ApplicationRecord
   def clean_up_passwords
     self.dob = nil
     super
+  end
+
+  # Overrides https://github.com/plataformatec/devise/blob/8266e8557622c978e6927a635d62e245bf54f239/lib/devise/models/validatable.rb#L64-L66
+  def email_required?
+    !dummy_account?
+  end
+
+  # A locked account is just a user with an empty password.
+  # It's impossible to sign into an account with an empty password,
+  # so the only way to log into a locked account is to reset its password.
+  def self.new_locked_account(attributes = {})
+    User.new(attributes.merge(encrypted_password: "")).tap do |user|
+      user.define_singleton_method(:password_required?) { false } # More on that: https://stackoverflow.com/a/45589123
+      user.skip_confirmation!
+    end
+  end
+
+  # This method is called by Devise when a new user signs up.
+  # This gives us an opportunity to stash the user's preferred locale in the
+  # database, which is useful for when we send them emails in the future.
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      user.preferred_locale = session[:locale]
+    end
   end
 end

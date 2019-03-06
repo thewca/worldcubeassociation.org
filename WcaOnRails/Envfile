@@ -29,7 +29,7 @@ elsif defined? Rails::Server
   port = Rails::Server::Options.new.parse!(ARGV)[:Port]
   default_root_url = "http://localhost:#{port}"
 else
-  default_root_url = ""
+  default_root_url = "http://test.host"
 end
 variable :ROOT_URL, :string, default: default_root_url
 

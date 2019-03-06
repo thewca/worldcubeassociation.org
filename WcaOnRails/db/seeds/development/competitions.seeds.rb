@@ -149,7 +149,7 @@ after "development:users" do
       countryId: countries.sample.id,
       information: "Information!",
       start_date: start_day.strftime("%F"),
-      end_date:  end_day.strftime("%F"),
+      end_date: end_day.strftime("%F"),
       venue: Faker::Address.street_name,
       venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
       external_website: "https://www.worldcubeassociation.org",

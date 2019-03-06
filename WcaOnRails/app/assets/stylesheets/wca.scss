@@ -129,7 +129,7 @@ table.with-solves {
 }
 
 table.wca-results {
-  @extend table.with-solves;
+  @extend table, .with-solves;
 
   thead tr th {
     &.pos {
@@ -281,6 +281,10 @@ table.wca-results {
   background-color: rgba($gray-darker, 0.2);
 
   // Set flag imitations for competitions taking place in multiple countries.
+  &.flag-icon-xf,
+  &.flag-icon-xo,
+  &.flag-icon-xw,
+  &.flag-icon-xn,
   &.flag-icon-xe,
   &.flag-icon-xa,
   &.flag-icon-xs,
@@ -299,10 +303,18 @@ table.wca-results {
   &.flag-icon-xa {
     border: 1px solid yellow;
   }
-  &.flag-icon-xs {
+  &.flag-icon-xs,
+  &.flag-icon-xn {
     border: 1px solid red;
   }
-  &.flag-icon-xm {
+  &.flag-icon-xf {
+    border: 1px solid green;
+  }
+  &.flag-icon-xo {
+    border: 1px solid $orange;
+  }
+  &.flag-icon-xm,
+  &.flag-icon-xw {
     border: 1px solid;
     border-image: linear-gradient(to right, red, blue) 1;
   }
@@ -447,10 +459,10 @@ select.input-xs {
   &:hover {
     cursor: pointer;
     .panel-info > & {
-      @extend a.list-group-item-info:hover;
+      @extend a, .list-group-item-info, :hover;
     }
     .panel-warning > & {
-      @extend a.list-group-item-warning:hover;
+      @extend a, .list-group-item-warning, :hover;
     }
   }
   a {

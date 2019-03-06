@@ -22,8 +22,17 @@
 
   <p><%= t('about.structure.committees') %>
   <ul>
-    <% Team.order(:rank).each do |team| %>
-      <% next if team == Team.board %>
+    <% Team.all_official.each do |team| %>
+      <li>
+        <strong><%= team.name %> (<%= team.acronym %>)</strong>: <%= format_team_members(team) %> <br />
+        <%= t("about.structure.#{team.friendly_id}.description") %>
+      </li>
+    <% end %>
+  </ul>
+
+  <p><%= t('about.structure.councils') %>
+  <ul>
+    <% Team.all_councils.each do |team| %>
       <li>
         <strong><%= team.name %> (<%= team.acronym %>)</strong>: <%= format_team_members(team) %> <br />
         <%= t("about.structure.#{team.friendly_id}.description") %>

@@ -8,6 +8,7 @@ class VenueRoom < ApplicationRecord
   delegate :start_time, to: :competition
   delegate :end_time, to: :competition
   has_many :schedule_activities, as: :holder, dependent: :destroy
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   validates :color, format: { with: /\A#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\z/, message: "Please input a valid hexadecimal color code" }
 
@@ -18,12 +19,17 @@ class VenueRoom < ApplicationRecord
   validates_presence_of :name
   validates_numericality_of :wcif_id, only_integer: true
 
+  def all_activities
+    schedule_activities.flat_map(&:all_activities)
+  end
+
   def to_wcif
     {
       "id" => wcif_id,
       "name" => name,
       "color" => color,
       "activities" => schedule_activities.map(&:to_wcif),
+      "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
@@ -41,6 +47,7 @@ class VenueRoom < ApplicationRecord
         "name" => { "type" => "string" },
         "color" => { "type" => "string" },
         "activities" => { "type" => "array", "items" => ScheduleActivity.wcif_json_schema },
+        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
       "required" => ["id", "name", "activities"],
     }
@@ -53,6 +60,7 @@ class VenueRoom < ApplicationRecord
       activity.load_wcif!(activity_wcif)
     end
     self.schedule_activities = new_activities
+    WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
   end
 

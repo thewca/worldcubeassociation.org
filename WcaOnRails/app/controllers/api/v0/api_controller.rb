@@ -28,12 +28,12 @@ class Api::V0::ApiController < ApplicationController
   def scramble_program
     render json: {
       "current" => {
-        "name" => "TNoodle-WCA-0.13.4",
+        "name" => "TNoodle-WCA-0.14.0",
         "information" => "#{root_url}regulations/scrambles/",
-        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-0.13.4.jar",
+        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-0.14.0.jar",
       },
       "allowed" => [
-        "TNoodle-WCA-0.13.4",
+        "TNoodle-WCA-0.14.0",
       ],
       "history" => [
         "TNoodle-0.7.4",
@@ -54,6 +54,8 @@ class Api::V0::ApiController < ApplicationController
         "TNoodle-WCA-0.13.2",
         "TNoodle-WCA-0.13.3",
         "TNoodle-WCA-0.13.4",
+        "TNoodle-WCA-0.13.5",
+        "TNoodle-WCA-0.14.0",
       ],
     }
   end
@@ -137,6 +139,22 @@ class Api::V0::ApiController < ApplicationController
       }
     end
     render json: json
+  end
+
+  def export_public
+    sql_zips = Dir.glob(Rails.root.join("../webroot/results/misc/*.sql.zip")).sort!
+    tsv_zips = Dir.glob(Rails.root.join("../webroot/results/misc/*.tsv.zip")).sort!
+
+    last_sql = File.basename(sql_zips.last)
+    last_tsv = File.basename(tsv_zips.last)
+    m = /WCA_export(\d+)_(.*).sql.zip/.match(last_sql)
+    date = Time.parse(m[2])
+
+    render json: {
+      export_date: date.iso8601,
+      sql_url: "#{root_url}results/misc/#{last_sql}",
+      tsv_url: "#{root_url}results/misc/#{last_tsv}",
+    }
   end
 
   private def records_by_event(records)

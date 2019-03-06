@@ -1,20 +1,30 @@
 onPage('competitions#edit, competitions#update, competitions#admin_edit, competitions#new, competitions#create, competitions#clone_competition', function() {
-  $('input[name="competition[use_wca_registration]"]').on('change', function() {
-    $('.wca-registration-options').toggle(this.checked);
+  $('input[name="competition[generate_website]"]').on('change', function() {
+    var generateWebsite = this.checked;
+    $('div.competition_external_website').toggle(!generateWebsite);
+    $('input#competition_external_website').prop('disabled', generateWebsite);
   }).trigger('change');
 
-  $('select[name="competition[on_the_spot_registration]"]').on('change', function() {
-    $('.wca-on-the-spot-registration-options').toggle(this.value === "true");
+  $('input[name="competition[use_wca_registration]"]').on('change', function() {
+    var registrationWca = this.checked;
+    $('.wca-registration-options').toggle(registrationWca);
+    $('.competition_external_registration_page').toggle(!registrationWca);
   }).trigger('change');
 
   $('select[name="competition[competitor_limit_enabled]"]').on('change', function() {
     $('.wca-competitor-limit-options').toggle(this.value === "true");
   }).trigger('change');
 
-  $('input[name="competition[generate_website]"]').on('change', function() {
-    var generateWebsite = this.checked;
-    $('div.competition_external_website').toggle(!generateWebsite);
-    $('input#competition_external_website').prop('disabled', generateWebsite);
+  $('select[name="competition[on_the_spot_registration]"]').on('change', function() {
+    $('.competition_on_the_spot_entry_fee_lowest_denomination').toggle(this.value === "true");
+  }).trigger('change');
+
+  $('input[name="competition[regulation_z1]"]').on('change', function() {
+    $('.competition_regulation_z1_reason').toggle(this.checked);
+  }).trigger('change');
+
+  $('input[name="competition[regulation_z3]"]').on('change', function() {
+    $('.competition_regulation_z3_reason').toggle(this.checked);
   }).trigger('change');
 });
 

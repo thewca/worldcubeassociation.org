@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   post 'admin/avatars' => 'admin/avatars#update_all'
 
   get 'competitions/mine' => 'competitions#my_competitions', as: :my_comps
+  get 'competitions/for_senior(/:user_id)' => 'competitions#for_senior', as: :competitions_for_senior
   resources :competitions, only: [:index, :show, :edit, :update, :new, :create] do
     get 'results/podiums' => 'competitions#show_podiums'
     get 'results/all' => 'competitions#show_all_results'
@@ -38,6 +39,8 @@ Rails.application.routes.draw do
 
     patch 'registrations/selected' => 'registrations#do_actions_for_selected', as: :registrations_do_actions_for_selected
     post 'registrations/export' => 'registrations#export', as: :registrations_export
+    get 'registrations/import' => 'registrations#import', as: :registrations_import
+    post 'registrations/import' => 'registrations#do_import', as: :registrations_do_import
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
@@ -47,10 +50,16 @@ Rails.application.routes.draw do
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
+    # Delegate views and action
+    get 'submit-results' => 'results_submission#new', as: :submit_results_edit
+    post 'submit-results' => 'results_submission#create', as: :submit_results
+    post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
+    # WRT views and action
+    get '/admin' => "admin#actions_index_for_competition", as: :admin_index
+    get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
+    get '/admin/check-existing-results' => "admin#check_results", as: :admin_check_existing_results
+    post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
   end
-
-  get 'competitions/:competition_id/submit-results' => 'results_submission#new', as: :submit_results_edit
-  post 'competitions/:competition_id/submit-results' => 'results_submission#create', as: :submit_results
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
@@ -89,6 +98,8 @@ Rails.application.routes.draw do
   get 'delegate/crash-course' => 'delegates_panel#crash_course'
   get 'delegate/crash-course/edit' => 'delegates_panel#edit_crash_course'
   patch 'delegate/crash-course' => 'delegates_panel#update_crash_course'
+  get 'delegate/pending-claims(/:user_id)' => 'delegates_panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
+  get 'delegate/seniors' => 'delegates_panel#seniors'
   resources :notifications, only: [:index]
 
   root 'posts#index'
@@ -119,6 +130,9 @@ Rails.application.routes.draw do
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
+  get 'tutorial' => redirect('/files/WCA_Competition_Tutorial.pdf', status: 302)
+
+  get 'disciplinary' => 'wdc#root'
 
   get 'contact/website' => 'contacts#website'
   post 'contact/website' => 'contacts#website_create'
@@ -160,11 +174,12 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    get '/', to: redirect('/api/v0')
+    get '/', to: redirect('/api/v0', status: 302)
     namespace :v0 do
       get '/' => 'api#help'
       get '/me' => 'api#me'
       get '/auth/results' => 'api#auth_results'
+      get '/export/public' => 'api#export_public'
       get '/scramble-program' => 'api#scramble_program'
       get '/search' => 'api#omni_search'
       get '/search/posts' => 'api#posts_search'
@@ -176,11 +191,13 @@ Rails.application.routes.draw do
       get '/delegates' => 'api#delegates'
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person
+      get '/persons/:wca_id/results' => "persons#results", as: :person_results
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
-        patch '/wcif/events' => 'competitions#update_events_from_wcif', as: :update_events_from_wcif
-        patch '/wcif/persons' => 'competitions#update_persons_from_wcif', as: :update_persons_from_wcif
-        patch '/wcif/schedule' => 'competitions#update_schedule_from_wcif', as: :update_schedule_from_wcif
+        get '/results' => 'competitions#results'
+        get '/competitors' => 'competitions#competitors'
+        get '/registrations' => 'competitions#registrations'
+        patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
       get '/records' => "api#records"
     end

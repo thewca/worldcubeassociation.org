@@ -13,6 +13,7 @@ RSpec.feature "Competition management" do
       scenario "with valid data" do
         visit "/competitions/new"
         fill_in "Name", with: "My Competition 2015"
+        uncheck "I would like to use the WCA website for registration"
         click_button "Create Competition"
 
         expect(page).to have_text("Successfully created new competition!")
@@ -51,7 +52,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "User confirms a competition" do
-      competition = FactoryBot.create(:competition, :with_delegate)
+      competition = FactoryBot.create(:competition, :with_delegate, :with_valid_schedule)
       visit edit_competition_path(competition)
       click_button "Confirm"
 
@@ -118,7 +119,7 @@ RSpec.feature "Competition management" do
       visit "/competitions/new"
 
       fill_in "Name", with: "New Comp 2015"
-
+      uncheck "I would like to use the WCA website for registration"
       click_button "Create Competition"
       expect(page).to have_content "Successfully created new competition!" # wait for request to complete
 
@@ -143,7 +144,7 @@ RSpec.feature "Competition management" do
       expect(new_competition.delegates).to eq [delegate, cloned_delegate]
       expect(new_competition.venue).to eq competition_to_clone.venue
       expect(new_competition.showAtAll).to eq false
-      expect(new_competition.isConfirmed).to eq false
+      expect(new_competition.confirmed?).to eq false
       expect(new_competition.cityName).to eq 'Melbourne'
     end
 

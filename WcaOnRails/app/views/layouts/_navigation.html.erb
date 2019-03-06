@@ -2,7 +2,16 @@
   <div class="container">
     <div class="navbar-brand">
       <a href="<%= root_path %>"><%= image_tag "wca_logo.svg" %></a>
-      <a href="<%= root_path %>"><span>World Cube Association</span></a>
+      <span>
+        <a href="<%= root_path %>">World Cube Association</a>
+        <br>
+        <%= link_to(icon("instagram"), "https://www.instagram.com/thewcaofficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("facebook-official"), "https://www.facebook.com/WorldCubeAssociation/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("twitter"), "https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("reddit"), "https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("twitch"), "https://www.twitch.tv/worldcubeassociation/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("weibo"), "https://www.weibo.com/theWCA/", target: "_blank", class: "hide-new-window-icon") %>
+      </span>
     </div>
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -25,6 +34,7 @@
             <li><a href="<%= organizations_path %>"><%= icon('flag') %> <%= t '.organizations' %></a></li>
             <li class="divider"></li>
             <li><a href="<%= faq_path %>"><%= icon('question-circle') %> <%= t '.faq' %></a></li>
+            <li><a href="<%= tutorial_path %>"><%= icon('graduation-cap') %> <%= t '.tutorial' %></a></li>
             <li><a href="<%= contact_path %>"><%= icon('envelope') %> <%= t '.contact' %></a></li>
             <li><a href="<%= privacy_path %>"><%= icon('user-secret') %> Privacy</a></li>
             <li><a href="<%= disclaimer_path %>"><%= icon('exclamation-circle') %> Disclaimer</a></li>
@@ -72,7 +82,8 @@
             <li><a href="/regulations/"><%= icon('book') %> <%= t '.regulations' %></a></li>
             <li><a href="/regulations/guidelines.html"><%= icon('sticky-note') %> <%= t '.guidelines' %></a></li>
             <li><a href="/regulations/scrambles/"><%= icon('random') %> <%= t '.scrambles' %></a></li>
-            <li><%= link_to(icon('balance-scale', "Incidents log"), incidents_path) %></li>
+            <li><%= link_to(icon('balance-scale', t('.incidents')), incidents_path) %></li>
+            <li><%= link_to(icon('bullhorn', t('.disciplinary')), disciplinary_path) %></li>
             <li class="divider"></li>
             <li><a href="/regulations/history/"><%= icon('history') %> <%= t '.history' %></a></li>
             <li><a href="/regulations/translations/"><%= icon('language') %> <%= t '.translations' %></a></li>
@@ -174,7 +185,7 @@
               <% if current_user.can_see_eligible_voters? && !current_user.can_admin_results? %>
                 <li class="divider"></li>
                 <li><%= link_to "WCA Voting Members", eligible_voters_path %></li>
-                <li><%= link_to "WCA Leader/Senior Members", leader_senior_voters_path %></li>
+                <li><%= link_to "WCA Leaders and Seniors", leader_senior_voters_path %></li>
               <% end %>
 
               <li class="divider"></li>

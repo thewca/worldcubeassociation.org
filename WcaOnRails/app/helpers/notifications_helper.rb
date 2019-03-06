@@ -4,26 +4,26 @@ module NotificationsHelper
   def notifications_for_user(user)
     notifications = []
     # Be careful to not show a competition twice if we're both organizing and delegating it.
-    unconfirmed_competitions = (user.delegated_competitions.where(isConfirmed: false) + user.organized_competitions.where(isConfirmed: false)).uniq(&:id)
+    unconfirmed_competitions = (user.delegated_competitions.not_confirmed + user.organized_competitions.not_confirmed).uniq(&:id)
     unconfirmed_competitions.each do |unconfirmed_competition|
       notifications << {
         text: "#{unconfirmed_competition.name} is not confirmed",
         url: edit_competition_path(unconfirmed_competition),
       }
     end
-    if user.board_member? || user.quality_assurance_committee?
-      # Show Board and WQAC members:
+    if user.competition_announcement_team?
+      # Show WCAT members:
       #  - Confirmed, but not visible competitions: They need to approve or reject
       #                                             these competitions.
       #  - Unconfirmed, but visible competitions: These competitions should be confirmed
       #                                           so people cannot change old competitions.
-      Competition.where(isConfirmed: true, showAtAll: false).each do |competition|
+      Competition.confirmed.not_visible.each do |competition|
         notifications << {
           text: "#{competition.name} is waiting to be announced",
           url: admin_edit_competition_path(competition),
         }
       end
-      Competition.where(isConfirmed: false, showAtAll: true).each do |competition|
+      Competition.not_confirmed.visible.each do |competition|
         notifications << {
           text: "#{competition.name} is visible, but unlocked",
           url: admin_edit_competition_path(competition),
@@ -53,7 +53,7 @@ module NotificationsHelper
     # for an account. We don't want to bother delegates with these claims until
     # the user has confirmed their account, though, so filter out users with
     # confirmed_at=NULL.
-    user.users_claiming_wca_id.where.not(confirmed_at: nil).each do |user_claiming_wca_id|
+    user.confirmed_users_claiming_wca_id.each do |user_claiming_wca_id|
       notifications << {
         text: "#{user_claiming_wca_id.email} has claimed WCA ID #{user_claiming_wca_id.unconfirmed_wca_id}",
         url: edit_user_path(user_claiming_wca_id.id, anchor: "wca_id"),
@@ -78,10 +78,10 @@ module NotificationsHelper
 
     user.delegated_competitions.visible.over.order_by_date
         .each do |competition|
-          if !competition.results_posted?
+          if competition.user_should_post_competition_results?(user)
             notifications << {
               text: "The competition results for #{competition.name} have not been submitted.",
-              url: submit_results_edit_path(competition),
+              url: competition_submit_results_edit_path(competition),
             }
           end
         end

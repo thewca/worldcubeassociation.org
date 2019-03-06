@@ -35,6 +35,7 @@ RSpec.describe "DatabaseDumper" do
     not_visible_competition = FactoryBot.create :competition, :not_visible, :with_delegate
     visible_competition = FactoryBot.create :competition, :visible, remarks: "Super secret message to the Board"
     user = FactoryBot.create :user, dob: Date.new(1989, 1, 1)
+    FactoryBot.create :user, :banned
 
     dump_file = Tempfile.new
     before_dump = Time.now.change(usec: 0) # Truncate the sub second part of the datetime, since mysql only stores 1 second granularity.
@@ -53,6 +54,12 @@ RSpec.describe "DatabaseDumper" do
       expect(CompetitionDelegate.find_by_competition_id(not_visible_competition.id)).to eq nil
       expect(user.reload.dob).to eq Date.new(1954, 12, 4)
       expect(Timestamp.find_by_name(DatabaseDumper::DUMP_TIMESTAMP_NAME).date).to be >= before_dump
+
+      # It's ok for the public to know about the existence of a hidden team,
+      # but we don't want them to know about the *members* of that hidden team.
+      banned_team = Team.unscoped.find_by_friendly_id!("banned")
+      expect(banned_team).not_to be_nil
+      expect(banned_team.team_members).to be_empty
     end
   end
 end

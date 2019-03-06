@@ -6,13 +6,13 @@ class CompetitionsMailer < ApplicationMailer
   include MailersHelper
   helper :markdown
 
-  def notify_board_of_confirmed_competition(confirmer, competition)
+  def notify_wcat_of_confirmed_competition(confirmer, competition)
     I18n.with_locale :en do
       @competition = competition
       @confirmer = confirmer
       mail(
-        to: "board@worldcubeassociation.org",
-        cc: competition.delegates.flat_map { |d| [d.email, d.senior_delegate&.email] }.compact.uniq + [Team.wqac.email],
+        to: Team.wcat.email,
+        cc: competition.delegates.flat_map { |d| [d.email, d.senior_delegate&.email] }.compact.uniq,
         reply_to: confirmer.email,
         subject: "#{confirmer.name} just confirmed #{competition.name}",
       )
@@ -90,7 +90,7 @@ class CompetitionsMailer < ApplicationMailer
     I18n.with_locale :en do
       @competition = competition
       mail(
-        to: "delegates@worldcubeassociation.org",
+        to: "reports@worldcubeassociation.org",
         cc: competition.delegates.pluck(:email),
         reply_to: competition.delegates.pluck(:email),
         subject: "[wca-report] [#{competition.continent.name}] #{competition.name}",
@@ -122,14 +122,21 @@ class CompetitionsMailer < ApplicationMailer
     @competition = competition
     @results_submission = results_submission
     @submitter_user = submitter_user
-    file_name = "Results_#{competition.id}_#{Time.now.utc.iso8601}.json"
-    attachments[file_name] = results_submission.results_json_str
+    last_uploaded_json = @competition.uploaded_jsons.order(:id).last
+    if last_uploaded_json
+      attachments["Results for #{@competition.id}.json"] = {
+        mime_type: "application/json",
+        content: last_uploaded_json.json_str,
+      }
+    end
     mail(
       to: "results@worldcubeassociation.org",
       cc: competition.delegates.pluck(:email),
       reply_to: competition.delegates.pluck(:email),
       subject: "Results for #{competition.name}",
     )
+    # Cleanup the uploaded jsons now that we attached the relevant one when mailing the WRT.
+    @competition.uploaded_jsons.delete_all
   end
 
   private def delegates_to_senior_delegates_email(delegates)

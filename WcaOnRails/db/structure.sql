@@ -31,12 +31,11 @@ CREATE TABLE `Competitions` (
   `showAtAll` tinyint(1) NOT NULL DEFAULT '0',
   `latitude` int(11) DEFAULT NULL,
   `longitude` int(11) DEFAULT NULL,
-  `isConfirmed` tinyint(1) NOT NULL DEFAULT '0',
   `contact` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remarks` text COLLATE utf8mb4_unicode_ci,
   `registration_open` datetime DEFAULT NULL,
   `registration_close` datetime DEFAULT NULL,
-  `use_wca_registration` tinyint(1) NOT NULL DEFAULT '0',
+  `use_wca_registration` tinyint(1) NOT NULL DEFAULT '1',
   `guests_enabled` tinyint(1) NOT NULL DEFAULT '1',
   `results_posted_at` datetime DEFAULT NULL,
   `results_nag_sent_at` datetime DEFAULT NULL,
@@ -60,6 +59,14 @@ CREATE TABLE `Competitions` (
   `guests_entry_fee_lowest_denomination` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `results_submitted_at` datetime DEFAULT NULL,
+  `regulation_z1` tinyint(1) DEFAULT NULL,
+  `regulation_z1_reason` text COLLATE utf8mb4_unicode_ci,
+  `regulation_z3` tinyint(1) DEFAULT NULL,
+  `regulation_z3_reason` text COLLATE utf8mb4_unicode_ci,
+  `name_reason` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `external_registration_page` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `confirmed_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -180,6 +187,7 @@ CREATE TABLE `InboxPersons` (
   `gender` varchar(1) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `dob` date NOT NULL,
   `competitionId` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  UNIQUE KEY `index_InboxPersons_on_competitionId_and_id` (`competitionId`,`id`),
   KEY `InboxPersons_fk_country` (`countryId`),
   KEY `InboxPersons_id` (`wcaId`),
   KEY `InboxPersons_name` (`name`)
@@ -222,6 +230,7 @@ CREATE TABLE `Persons` (
   `day` tinyint(4) NOT NULL DEFAULT '0',
   `comments` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `rails_id` int(11) NOT NULL AUTO_INCREMENT,
+  `incorrect_wca_id_claim_count` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`rails_id`),
   UNIQUE KEY `index_Persons_on_id_and_subId` (`id`,`subId`),
   KEY `Persons_fk_country` (`countryId`),
@@ -596,6 +605,20 @@ CREATE TABLE `archive_registrations` (
   UNIQUE KEY `index_registrations_on_competitionId_and_user_id` (`competitionId`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `assignments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `assignments` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `registration_id` bigint(20) DEFAULT NULL,
+  `schedule_activity_id` bigint(20) DEFAULT NULL,
+  `station_number` int(11) DEFAULT NULL,
+  `assignment_code` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_assignments_on_registration_id` (`registration_id`),
+  KEY `index_assignments_on_schedule_activity_id` (`schedule_activity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `championships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -961,7 +984,8 @@ SET character_set_client = utf8;
  1 AS `year`,
  1 AS `month`,
  1 AS `day`,
- 1 AS `comments`*/;
+ 1 AS `comments`,
+ 1 AS `incorrect_wca_id_claim_count`*/;
 SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `registration_competition_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1061,6 +1085,21 @@ CREATE TABLE `schema_migrations` (
   UNIQUE KEY `unique_schema_migrations` (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `stripe_charges`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stripe_charges` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `metadata` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `stripe_charge_id` int(11) DEFAULT NULL,
+  `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `error` text COLLATE utf8mb4_unicode_ci,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_stripe_charges_on_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `team_members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1073,6 +1112,7 @@ CREATE TABLE `team_members` (
   `team_leader` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `team_senior_member` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1085,10 +1125,8 @@ CREATE TABLE `teams` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `rank` int(11) DEFAULT NULL,
   `hidden` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_teams_on_rank` (`rank`),
   KEY `index_teams_on_friendly_id` (`friendly_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1099,6 +1137,17 @@ CREATE TABLE `timestamps` (
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` datetime DEFAULT NULL,
   UNIQUE KEY `index_timestamps_on_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `uploaded_jsons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `uploaded_jsons` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `competition_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `json_str` longtext COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `index_uploaded_jsons_on_competition_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_preferred_events`;
@@ -1159,6 +1208,8 @@ CREATE TABLE `users` (
   `notes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `preferred_locale` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `competition_notifications_enabled` tinyint(1) DEFAULT NULL,
+  `receive_delegate_reports` tinyint(1) NOT NULL DEFAULT '0',
+  `dummy_account` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1205,15 +1256,29 @@ CREATE TABLE `votes` (
   KEY `index_votes_on_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `wcif_extensions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wcif_extensions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `extendable_type` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `extendable_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `extension_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `spec_url` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_wcif_extensions_on_extendable_type_and_extendable_id` (`extendable_type`,`extendable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_unicode_ci */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50001 VIEW `rails_persons` AS select `Persons`.`rails_id` AS `id`,`Persons`.`id` AS `wca_id`,`Persons`.`subId` AS `subId`,`Persons`.`name` AS `name`,`Persons`.`countryId` AS `countryId`,`Persons`.`gender` AS `gender`,`Persons`.`year` AS `year`,`Persons`.`month` AS `month`,`Persons`.`day` AS `day`,`Persons`.`comments` AS `comments` from `Persons` */;
+/*!50001 VIEW `rails_persons` AS select `Persons`.`rails_id` AS `id`,`Persons`.`id` AS `wca_id`,`Persons`.`subId` AS `subId`,`Persons`.`name` AS `name`,`Persons`.`countryId` AS `countryId`,`Persons`.`gender` AS `gender`,`Persons`.`year` AS `year`,`Persons`.`month` AS `month`,`Persons`.`day` AS `day`,`Persons`.`comments` AS `comments`,`Persons`.`incorrect_wca_id_claim_count` AS `incorrect_wca_id_claim_count` from `Persons` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1401,11 +1466,33 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20180701160042'),
 ('20180703172949'),
 ('20180705231137'),
+('20180708214503'),
 ('20180709220826'),
 ('20180710165401'),
+('20180711124055'),
 ('20180729000001'),
 ('20180730182509'),
 ('20180731204733'),
 ('20180822165331'),
+('20180825114051'),
 ('20180825115701'),
-('20180831075355');
+('20180831075355'),
+('20180831164420'),
+('20180908195553'),
+('20180911140010'),
+('20180912042457'),
+('20181020004209'),
+('20181021185003'),
+('20181022031135'),
+('20181109172930'),
+('20181122233823'),
+('20181208145408'),
+('20181209171137'),
+('20181222224850'),
+('20181226115357'),
+('20190105215446'),
+('20190112130723'),
+('20190113180945'),
+('20190117112257'),
+('20190208175255'),
+('20190221194112');

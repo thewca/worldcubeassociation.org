@@ -1,0 +1,30 @@
+<% provide(:title, 'Pending claims for subordinate Delegates') %>
+
+<div class="container">
+  <h2>Pending WCA ID claims for Delegates managed by <%= @user.name %></h2>
+
+  <div class="panel-group">
+    <% @subordinate_delegates.sort_by { |u| u.confirmed_users_claiming_wca_id.size }.reverse_each do |delegate| %>
+      <% users = delegate.confirmed_users_claiming_wca_id %>
+      <div class="panel panel-default">
+        <div class="panel-heading heading-as-link" data-toggle="collapse" data-target="#panel-<%= delegate.id %>">
+          <%= delegate.name %>
+          <span class="badge"><%= users.size %></span>
+        </div>
+        <div id="panel-<%= delegate.id %>" class="collapse panel-collapse">
+          <ul class="list-group">
+            <% if users.empty? %>
+              <li class="list-group-item">No pending claims.</li>
+            <% else %>
+              <% users.each do |u| %>
+                <%= link_to(edit_user_path(u.id, anchor: "wca_id"), class: "list-group-item") do %>
+                  <%= u.name %> has claimed WCA ID <%= u.unconfirmed_wca_id %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

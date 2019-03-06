@@ -51,6 +51,26 @@ RSpec.describe Competition do
     end
   end
 
+  it "requires entry fees" do
+    competition = FactoryBot.create :competition
+    competition.confirmed = true
+
+    # Required for non-multi venue competitions.
+    competition.countryId = "USA"
+    expect(competition.entry_fee_required?).to be true
+    expect(competition.guests_entry_fee_required?).to be true
+
+    # Not required for competitions in multiple countries
+    competition.countryId = "XA"
+    expect(competition.entry_fee_required?).to be false
+    expect(competition.guests_entry_fee_required?).to be false
+
+    # Not required for with no country
+    competition.countryId = nil
+    expect(competition.entry_fee_required?).to be false
+    expect(competition.guests_entry_fee_required?).to be false
+  end
+
   context "when competition has a competitor limit" do
     it "requires competitor limit to be a number" do
       competition = FactoryBot.build :competition, competitor_limit_enabled: true
@@ -184,8 +204,8 @@ RSpec.describe Competition do
 
   it "last less than MAX_SPAN_DAYS days" do
     competition = FactoryBot.create :competition
-    competition.start_date = 1.days.ago.strftime("%F")
-    competition.end_date = Competition::MAX_SPAN_DAYS.days.from_now.strftime("%F")
+    competition.start_date = Date.today.strftime("%F")
+    competition.end_date = (Date.today + Competition::MAX_SPAN_DAYS).strftime("%F")
     expect(competition).to be_invalid_with_errors(
       end_date: [I18n.t('competitions.errors.span_too_many_days', max_days: Competition::MAX_SPAN_DAYS)],
     )
@@ -478,7 +498,7 @@ RSpec.describe Competition do
     let(:competition_with_delegate) { FactoryBot.build :competition, :with_delegate, generate_website: false }
     let(:competition_without_delegate) { FactoryBot.build :competition }
 
-    [:isConfirmed, :showAtAll].each do |action|
+    [:confirmed, :showAtAll].each do |action|
       it "can set #{action}" do
         competition_with_delegate.public_send "#{action}=", true
         expect(competition_with_delegate).to be_valid
@@ -505,6 +525,36 @@ RSpec.describe Competition do
         competition_without_delegate.public_send "#{action}=", true
         expect(competition_without_delegate).not_to be_valid
       end
+    end
+
+    it "sets confirmed_at when setting confirmed true" do
+      competition = FactoryBot.create :competition, :with_delegate, :with_valid_schedule
+      expect(competition.confirmed_at).to be_nil
+
+      now = Time.at(Time.now.to_i)
+      Timecop.freeze(now) do
+        competition.update!(confirmed: true)
+        expect(competition.reload.confirmed_at).to eq now
+      end
+    end
+
+    it "does not update confirmed_at when confirming already confirmed competition" do
+      competition = FactoryBot.create :competition, :confirmed
+
+      confirmed_at = competition.confirmed_at
+      expect(confirmed_at).not_to be_nil
+      Timecop.freeze(confirmed_at + 10) do
+        competition.update!(confirmed: true)
+        expect(competition.reload.confirmed_at).to eq confirmed_at
+      end
+    end
+
+    it "clears confirmed_at when setting confirmed false" do
+      competition = FactoryBot.create :competition, :confirmed
+
+      expect(competition.confirmed_at).not_to be_nil
+      competition.update!(confirmed: false)
+      expect(competition.reload.confirmed_at).to be_nil
     end
   end
 
@@ -748,6 +798,67 @@ RSpec.describe Competition do
 
     it "sets iso2 to nil when country is missing" do
       expect(competition.serializable_hash[:country_iso2]).to be_nil
+    end
+  end
+
+  describe "#registration_full?" do
+    let(:competition) {
+      FactoryBot.create :competition,
+                        :registration_open,
+                        competitor_limit_enabled: true,
+                        competitor_limit: 10,
+                        competitor_limit_reason: "Dude, this is my closet"
+    }
+
+    it "detects full competition" do
+      expect(competition.registration_full?).to be false
+
+      # Add 9 accepted registrations. The list should not yet be full.
+      FactoryBot.create_list :registration, 9, :accepted, competition: competition
+      expect(competition.registration_full?).to be false
+
+      # Add a 10th registration, which will fill up the registration list.
+      FactoryBot.create :registration, :accepted, competition: competition
+      expect(competition.registration_full?).to be true
+    end
+  end
+
+  context "when changing the competition's date" do
+    let(:competition) {
+      FactoryBot.create :competition,
+                        with_schedule: true,
+                        start_date: Date.parse("2018-10-24"),
+                        end_date: Date.parse("2018-10-26")
+    }
+    let(:all_activities) {
+      competition.all_activities
+    }
+
+    def change_and_check_activities(new_start_date, new_end_date)
+      on_first_day, on_last_day = all_activities.partition { |a| a.start_time.to_date == competition.start_date }
+      # the factory define one activity per day, the two lines below are
+      # basically safe guards against a future change to the competition's factory.
+      expect(on_first_day).not_to be_empty
+      expect(on_last_day).not_to be_empty
+      competition.update(start_date: new_start_date,
+                         end_date: new_end_date)
+      all_activities.map(&:reload)
+      # Check activities moved
+      expect(on_first_day.map { |a| [a.start_time.to_date, a.end_time.to_date] }.flatten.uniq).to eq([new_start_date])
+      expect(on_last_day.map { |a| [a.start_time.to_date, a.end_time.to_date] }.flatten.uniq).to eq([new_end_date])
+    end
+
+    it "shrinks schedule" do
+      # Move the competition and shrink it by one day
+      # The expected behavior is:
+      #   - activities on the old start date go to new start date
+      #   - others go to the new end date
+      change_and_check_activities(Date.parse("2018-09-18"), Date.parse("2018-09-19"))
+    end
+
+    it "moves schedule" do
+      # Keep the same number of days, just move it around
+      change_and_check_activities(Date.parse("2018-11-18"), Date.parse("2018-11-20"))
     end
   end
 end

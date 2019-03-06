@@ -328,17 +328,21 @@ ru:
         phone_number: Телефонный номер
         #original_hash: 7044004
         notes: Заметки
+        #original_hash: 730db33
+        receive_delegate_reports: Хочу получать отчёты Делегатов о WCA соревнованиях по email
         #original_hash: 57eaf24
         user_preferred_events: Предпочитаемые дисциплины
       competition:
         #original_hash: 89f89c0
         id: ID
         #original_hash: 7f3d889
-        isConfirmed: Не разрешать организаторам редактировать это соревнование
+        confirmed: Не давать организаторам редактировать это соревнование
         #original_hash: d493e6a
         showAtAll: Сделать соревнование видимым для всех
         #original_hash: 709a232
         name: Имя
+        #original_hash: f91b080
+        name_reason: Причина названия
         #original_hash: b649210
         cellName: Короткое имя
         #original_hash: d523ebb
@@ -361,7 +365,7 @@ ru:
         generate_website: >-
           Я хочу использовать сайт WCA для размещения информации вместо внешнего
           сайта.
-        #original_hash: dd88e47
+        #original_hash: 6cf623b
         base_entry_fee_lowest_denomination: Взнос за участие
         #original_hash: 28a6fbb
         currency_code: Код валюты
@@ -375,8 +379,10 @@ ru:
         information: Информация
         #original_hash: 87b7d5f
         use_wca_registration: Использовать сайт WCA для регистрации
-        #original_hash: a2dfcf8
-        competitor_limit_enabled: Установить лимит на число участников на соревновании
+        #original_hash: 8020e88
+        external_registration_page: Страница регистрации
+        #original_hash: 9bb1965
+        competitor_limit_enabled: Лимит на число участников
         #original_hash: 749f4c9
         competitor_limit: Максимальное число участников
         #original_hash: 4a8b6f1
@@ -403,14 +409,27 @@ ru:
         extra_registration_requirements: Дополнительные требования к регистрации
         #original_hash: 2529d04
         on_the_spot_registration: Регистрации на месте
-        #original_hash: bbff74c
-        on_the_spot_entry_fee_lowest_denomination: Взнос за участие на месте
+        #original_hash: 69780b5
+        on_the_spot_entry_fee_lowest_denomination: Базовый взнос за участие на месте
         #original_hash: efbdbab
         refund_policy_percent: Возвращаемая доля
         #original_hash: b332299
         refund_policy_limit_date: Крайний срок возврата взноса
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Взнос для зрителей
+        #original_hash: 9e1008d
+        regulation_z1: >-
+          Я хочу заставить участников сдать головоломки во время регистрации, в
+          соответствии с Положением Z1)
+        #original_hash: 466aca7
+        regulation_z1_reason: Причина применения Z1)
+        #original_hash: 588c6a0
+        regulation_z3: >-
+          Я хочу выбрать участников, которые напрямую проходят в определённые
+          раунды определённых дисциплин, основываясь на результатах определённых
+          предыдущих соревнований, в соответствии с Положением Z3)
+        #original_hash: 18d9a8c
+        regulation_z3_reason: Причина применения Z3)
       registration:
         #original_hash: 3c23a67
         guests: Гости
@@ -600,8 +619,8 @@ ru:
           <strong>Antoshka Rostovikov</strong>, <strong>ANTON
           ROSTOVIKOV</strong>. Если у вас есть заграничный паспорт, введите имя
           в соответствии с ним.
-        #original_hash: c03b949
-        email: Изменение email-адреса потребует подтверждения нового адреса.
+        #original_hash: da39a3e
+        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           После загрузки новой аватарки вам придётся подождать, пока её одобрит
@@ -638,6 +657,11 @@ ru:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
+        #original_hash: 8c266ea
+        receive_delegate_reports: >-
+          Если вы Кандидат в Делегаты, Старший Делегат или член WRC или WQAC, вы
+          уже получаете отчёты по умолчанию. Внимание: изменение вступит в силу
+          в течение часа.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -673,9 +697,9 @@ ru:
         external_website: Сайт соревнования. Должен быть правильный http(s) URL.
         #original_hash: 9965635
         registration_open: Время открытия и закрытия регистрации указаны в часовом поясе UTC.
-        #original_hash: 243212f
+        #original_hash: bd402bf
         remarks_html: >-
-          Дополнительная информация, которую вы бы хотели передать Руководству.
+          Дополнительная информация, которую вы бы хотели передать WCAT.
           Например, почему соревнование объявляется менее чем за 4 недели, или
           почему вы хотите применять %{link}. Пожалуйста, заполняйте
           по-английски!
@@ -687,13 +711,17 @@ ru:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: 82ad56b
+        #original_hash: b2af5f5
+        external_registration_page: >-
+          Страница, где участники должны регистрироваться на соревнование.
+          Должна быть правильным http(s) URL.
+        #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
-          Взнос за участие на соревнованиях. Он будет отображаться на странице
-          соревнований, а также на странице регистрации, если она используется.
-          Если в этом поле стоит 0, то будет написано, что регистрация
-          бесплатна.
-        #original_hash: 866bc05
+          Базовый взнос за участие на соревнованиях. Он будет отображаться на
+          странице соревнований, а также на странице регистрации, если она
+          используется. Если в этом поле стоит 0, то будет написано, что
+          регистрация бесплатна.
+        #original_hash: 9735ddf
         currency_code: Код валюты для взноса за участие.
         #original_hash: da39a3e
         guests_enabled: ''
@@ -702,7 +730,7 @@ ru:
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
-        isConfirmed: ''
+        confirmed: ''
         #original_hash: da39a3e
         receive_registration_emails: ''
         #original_hash: da39a3e
@@ -713,13 +741,16 @@ ru:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
-        #original_hash: c0ab502
+        #original_hash: dc47c39
         competitor_limit_enabled: >-
-          Пока что это число только для информации, оно не предотвращает новые
-          регистрации. Мы работаем над использованием этого числа как
-          ограничение новых регистраций.
-        #original_hash: b9bc84d
-        competitor_limit: 'Число участников, которые могут посетить это соревнование.'
+          Хотя Положения WCA не требуют ограничивать число участников, это
+          настоятельно рекомендуется.
+        #original_hash: b7b599b
+        competitor_limit: >-
+          Число участников, которые могут посетить это соревнование. Пока что
+          это поле только для информации, и ничто не остановит новых участников
+          от регистрации. Мы работаем над тем, чтобы оно учитывалось в процессе
+          регистрации.
         #original_hash: 4bd7102
         competitor_limit_reason: 'Какова причина лимита? Заполните, пожалуйста, по-английски!'
         #original_hash: da39a3e
@@ -752,6 +783,18 @@ ru:
           Пока что это число только для информации, на этом сайте нельзя
           принимать взносы для гостей. Если здесь стоит 0, участникам будет
           показано, что зрители могут прийти бесплатно.
+        #original_hash: da39a3e
+        regulation_z1: ''
+        #original_hash: d3872a2
+        regulation_z1_reason: >-
+          Пожалуйста, напишите здесь, почему вы хотите применять Положения Z1).
+          Заполните это поле по-английски!
+        #original_hash: da39a3e
+        regulation_z3: ''
+        #original_hash: af960d9
+        regulation_z3_reason: >-
+          Пожалуйста, напишите здесь, почему вы хотите применять Положения Z3).
+          Заполните это поле по-английски!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -912,6 +955,11 @@ ru:
           'true': Спрашивать о гостях
           #original_hash: f8c2332
           'false': Не спрашивать о гостях
+        competitor_limit_enabled:
+          #original_hash: d9c05cc
+          'true': Я хочу установить лимит на число участников
+          #original_hash: 5b581b5
+          'false': Я не хочу устанавливать лимит на число участников
         on_the_spot_registration:
           #original_hash: 0c521ca
           'true': Можно зарегистрироваться на месте
@@ -1042,6 +1090,8 @@ ru:
       organizations: Региональные организации
       #original_hash: d790b40
       faq: Часто Задаваемые Вопросы
+      #original_hash: 02617c0
+      tutorial: Руководство для участников
       #original_hash: a34b69f
       contact: Контактная информация
       #original_hash: 4fa8cc8
@@ -1158,22 +1208,20 @@ ru:
         header: '%{delegate_name} подтвердил(а) %{competition}'
         #original_hash: 3db81b5
         organizers: 'Уважаемые организаторы %{competition}!'
-        #original_hash: c526fd6
+        #original_hash: d353d8c
         confirmed: >-
           Делегат %{delegate_name} подтвердил %{competition} и отправил заявку
-          Руководству WCA. Как только Руководство WCA одобрит это соревнование,
-          вы получите ещё одно уведомление.
+          WCAT. Как только WCAT одобрит это соревнование, вы получите ещё одно
+          уведомление.
         #original_hash: dfea09d
         contact: >-
           Если у вас есть ещё вопросы, пожалуйста, свяжитесь с Делегатом
           (Делегатами):
       competition_announcement_email:
-        #original_hash: 1571dd8
-        header: 'Руководство WCA одобрило %{competition}'
-        #original_hash: 8e91977
-        announced: >-
-          Руководство WCA одобрило ваше соревнование, и теперь оно доступно
-          широким массам.
+        #original_hash: 87f1f49
+        header: 'WCAT одобрила %{competition}'
+        #original_hash: 0d3d10c
+        announced: 'WCAT одобрила ваше соревнование, и теперь оно доступно широким массам.'
         #original_hash: 1c20919
         link: 'Объявление о соревновании доступно по следующей ссылке:'
       organizer_addition_email:
@@ -1243,6 +1291,8 @@ ru:
       approve: Подтвердить
       #original_hash: 85de4b8
       unconfirmed_email: 'Email-адрес этого аккаунта (%{email}) не подтверждён.'
+      #original_hash: c03b949
+      confirm_new_email: При изменении вашего email потребуется подтвердить новый email.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Этот аккаунт ожидает подтверждения нового email-адреса %{email}.'
       #original_hash: 0340b0b
@@ -1340,6 +1390,12 @@ ru:
       unique: 'уже используется "%{used_name}" с %{used_email}'
       #original_hash: 26f70ed
       dob_past: должен быть в прошлом
+      #original_hash: b320913
+      dob_recent: возраст должен быть минимум 2 года
+      #original_hash: b64df45
+      already_represented_country: 'Невозможно поменять страну, которую этот участник уже представлял ранее.'
+      #original_hash: b589014
+      must_have_a_change: 'Имя или страна должны отличаться, чтобы было что обновлять.'
       #original_hash: 012f032
       must_be_senior: должен быть Старшим Делегатом
       #original_hash: 2e582eb
@@ -1373,6 +1429,12 @@ ru:
         target='_blank'>WCA Results Team</a>.
       #original_hash: d02c03b
       avatar_requires_wca_id: требуется привязать WCA ID
+      #original_hash: 8f785ea
+      email_used_by_locked_account_html: >-
+        уже используется другим аккаунтом. Он был создан автоматически, когда вы
+        регистрировались на соревнование на стороннем сервисе. Если вы владелец
+        данного email, вы можете сбросить пароль <a
+        href='/users/password/new'>здесь</a>.
     successes:
       messages:
         #original_hash: 31bd401
@@ -1418,8 +1480,6 @@ ru:
       need_country: Нужно выбрать страну
       #original_hash: cec28a0
       comp_not_found: Соревнование не найдено
-      #original_hash: cb763b8
-      registration_closed: Регистрация закрыта
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Невозможно одновременно принять и удалить регистрацию.
       #original_hash: a38d024
@@ -1658,7 +1718,7 @@ ru:
       взнос за участие, если об этом написано на сайте соревнования.
     #original_hash: 58b1a3c
     accepted: Ваша регистрация принята!
-    #original_hash: 70de60f
+    #original_hash: bcd7d70
     entry_fees_fully_paid: 'Вы полностью оплатили взнос %{paid}.'
     #original_hash: 2e5d1b9
     will_pay_here: Вы оплатите взнос здесь после отправки заявки
@@ -1682,7 +1742,7 @@ ru:
         #original_hash: bf3a39e
         donation: 'Необязательный взнос, который пойдёт только команде организаторов'
       labels:
-        #original_hash: 948ec72
+        #original_hash: 4de825f
         entry_fees: Взносы за участие
         #original_hash: 2c09302
         donation: Пожертвование
@@ -1703,6 +1763,21 @@ ru:
       предпочитаемые дисциплины %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Требования к регистрации на соревнование:'
+    import:
+      #original_hash: 5a394f3
+      title: 'Импорт регистраций на %{comp}.'
+      #original_hash: ccda564
+      info: >-
+        Вы можете импортировать регистрации несколько раз, база данных будет
+        обновлена соответствующим образом.
+      #original_hash: 779b272
+      registrations_file_label: Файл с регистрациями
+      #original_hash: 4017f0e
+      registrations_file_hint: >-
+        CSV-файл со следующими колонками: статус, имя, страна, WCA ID, дата
+        рождения, пол, email и по одной колонке на каждую дисциплину.
+      #original_hash: d6fbc9d
+      import: Импорт
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1715,6 +1790,11 @@ ru:
       must_have_events: >-
         Пожалуйста добавьте хотя бы одну дисциплину, прежде чем подтверждать
         соревнование.
+      #original_hash: a3aea56
+      schedule_must_match_rounds: >-
+        Перед тем, как подтвердить соревнование, пожалуйста, убедитесь, что у
+        каждой заявленной дисциплины есть хотя бы один раунд, и что в вашем
+        расписании присутствуют все раунды.
       #original_hash: e390250
       create_success: Соревнование успешно создано!
       #original_hash: afe3a23
@@ -1799,11 +1879,11 @@ ru:
       #original_hash: 45834fd
       register_below_html: Зарегистрируйтесь на соревнование ниже.
       #original_hash: 196725e
-      competitor_limit_is: 'Лимит на число участников %{competitor_limit}.'
+      competitor_limit_is: 'Лимит на число участников: %{competitor_limit}.'
       #original_hash: 5101f65
       no_competitor_limit: Лимита на число участников нет.
-      #original_hash: 86cf09f
-      entry_fee_is: 'Взнос за участие составляет %{base_entry_fee}.'
+      #original_hash: f979d5e
+      entry_fee_is: 'Базовый взнос за участие составляет %{base_entry_fee}.'
       #original_hash: 5390a91
       no_entry_fee: Регистрация на это соревнование бесплатна.
       #original_hash: 29af5c2
@@ -1816,9 +1896,9 @@ ru:
         возвращено %{refund_policy_percent} от вашего взноса.
       #original_hash: 4aca553
       no_refunds: Взносы за участие не будут возвращаться при отмене регистрации.
-      #original_hash: b38fa7b
+      #original_hash: cf7be5d
       on_the_spot_registration: >-
-        Можно зарегистрироваться на месте, взнос будет составлять
+        Можно зарегистрироваться на месте, базовый взнос будет составлять
         %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Можно бесплатно зарегистрироваться на месте.
@@ -1847,7 +1927,7 @@ ru:
           %{end_date_and_time}.
         #original_hash: 7ac8349
         range_past_html: >-
-          Онлайн-регистрация будет открылась %{start_date_and_time} и закрылась
+          Онлайн-регистрация открылась в %{start_date_and_time} и закрылась в
           %{end_date_and_time}.
     index:
       #original_hash: db98a68
@@ -1939,13 +2019,18 @@ ru:
       #original_hash: 9104a03
       no_past_competitions: У вас нет прошедших соревнований.
     competition_form:
-      #original_hash: e879b0b
-      board: Board
+      #original_hash: 2b81984
+      wcat: Команда Анонсов Соревнований WCA (WCAT)
       #original_hash: f957dcb
       supports_md_html: >-
         Поддерживает <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
+      #original_hash: a1b7d1b
+      name_reason_html: >-
+        Короткое объяснение названия соревнования. Название должно удовлетворять
+        <a href='/documents/policies/Competition%20Name.pdf'>Правилам Названий
+        Соревнований WCA</a>.
       #original_hash: 9d9126e
       venue_html: >-
         Помещение, где будет проходить соревнование. %{md}. Например: [Moscow
@@ -1964,22 +2049,23 @@ ru:
       deprecated_events: >-
         Некоторые дисциплины этого соревнования больше не являются официальными,
         их редактирование невозможно.
-      #original_hash: 815d5c3
-      locked_edit_html: >-
-        Соревнование доступно массам, его нельзя отредактировать. Если вам надо
-        внести изменения, свяжитесь с %{board}.
-      #original_hash: ce33e21
-      confirmed_not_visible_html: >-
-        Вы подтвердили это соревнование, но оно ещё невидимо для широкой
-        публики. Подождите, пока %{board} одобрит соревнование.
+      #original_hash: cafc153
+      public_and_locked_html: >-
+        Это соревнование доступно широким массам, и его нельзя редактировать.
+        Если вам надо что-то поменять, пожалуйста, напишите об этом в той
+        цепочке писем, где ваше соревнование было подтверждено.
+      #original_hash: e00a339
+      confirmed_but_not_visible_html: >-
+        Вы подтвердили это соревнование, но оно пока недоступно широким массам.
+        Подождите, пока %{contact} его подтвердит.
       #original_hash: e94cba8
       is_visible: >-
         Соревнование доступно массам, и любое изменение, которое вы сделаете,
         все сразу увидят.
-      #original_hash: 34862bb
-      awaiting_confirmation_html: >-
-        Заполните все поля и нажмите "Подтвердить", чтобы %{board} одобрило это
-        соревнование.
+      #original_hash: f99b3f7
+      pending_confirmation_html: >-
+        Заполните все поля и нажмите на "Подтвердить", когда вы будете готовы к
+        тому, чтобы %{contact} подтвердила это соревнование.
       #original_hash: 8966fd0
       submit_create_value: Создать соревнование
       #original_hash: 40b0dfd
@@ -1988,11 +2074,11 @@ ru:
       submit_confirm_value: Подтвердить
       #original_hash: f6fdbe4
       submit_delete_value: Удалить
-      #original_hash: 1ca19b1
+      #original_hash: 22316f1
       submit_confirm: >-
         Вы уверены, что хотите подтвердить соревнование? Потом вы уже не сможете
         ничего редактировать. После нажатия проверьте свою почту, чтобы
-        убедиться, что Руководство WCA было уведомлено.
+        убедиться, что Команда Анонсов Соревнований была уведомлена.
       #original_hash: 4c7deb7
       submit_delete: 'Вы уверены, что хотите удалить соревнование? Пути назад не будет.'
       #original_hash: 8ebebca
@@ -2013,6 +2099,10 @@ ru:
       cannot_delete_confirmed: Нельзя удалить подтверждённое соревнование.
       #original_hash: 191df37
       must_contain_event: должна быть хотя бы одна дисциплина
+      #original_hash: 54fe619
+      schedule_must_match_rounds: >-
+        должна иметь хотя бы один раунд, и все раунды должны присутствовать в
+        расписании.
       #original_hash: 6e228b7
       must_contain_delegate: должен быть хотя бы один WCA Делегат
       #original_hash: 8131fc2
@@ -2040,10 +2130,10 @@ ru:
     update:
       #original_hash: 5fb2f57
       save_success: Соревнование успешно сохранено.
-      #original_hash: 9d1649e
+      #original_hash: 5253c86
       confirm_success: >-
-        Соревнование успешно подтверждено. Проверьте email и ждите, пока
-        Руководство WCA не одобрит соревнование!
+        Соревнование успешно подтверждено. Проверьте email и ждите, пока WCAT не
+        одобрит соревнование!
       #original_hash: 28567f0
       delete_success: 'Успешно удалено соревнование %{id}.'
     time_until_competition:
@@ -2210,6 +2300,8 @@ ru:
         delegate_report: Отчёт Делегата
         #original_hash: b233e77
         registration: Регистрация
+        #original_hash: 3f9176e
+        import_registrations: Импорт регистраций
         #original_hash: d672995
         register: Зарегистрироваться
         #original_hash: 855bd26
@@ -2276,7 +2368,7 @@ ru:
       no_persons_found: Такому критерию не удовлетворяет ни один участник.
     show:
       #original_hash: 1e43436
-      previously: Previously
+      previously: Ранее
       #original_hash: 4bc65e0
       completed_solves: Выполненные сборки
       #original_hash: fc78642
@@ -2671,6 +2763,13 @@ ru:
           качества для обеспечения постоянного высокого качества процессов,
           персонала WCA, региональных организаций, организаторов соревнований и
           персонала соревнований.
+      wcat:
+        #original_hash: 2b81984
+        name: Команда Анонсов Соревнований WCA (WCAT)
+        #original_hash: 61a471f
+        description: >-
+          Эта команда ответственна за одобрение и анонсы соревнований WCA, а
+          также за обеспечение высоких стандартов качества этих анонсов.
       wmt:
         #original_hash: 2035811
         name: Команда Маркетинга WCA
@@ -2703,6 +2802,8 @@ ru:
   documents:
     #original_hash: 687c828
     title: Документы
+    #original_hash: 1b537dc
+    determination_letter: Подтверждение из налогового управления США
     #original_hash: 9855f80
     bylaws: Устав
     #original_hash: fdceb44
@@ -2789,11 +2890,10 @@ ru:
     #original_hash: 1cb449c
     members: Участники
     board:
-      #original_hash: 3a8b1d8
+      #original_hash: f3cbb35
       info_html: >-
         Всемирную ассоциацию кубика возглавляет Руководство WCA. Оно отвечает за
-        общие вопросы и организацию WCA в целом. Все официальные соревнования
-        должны быть одобрены Руководством WCA перед обнародованием.
+        общие вопросы и организацию WCA в целом.
     wct:
       #original_hash: 846684d
       info_html: >-
@@ -2863,6 +2963,11 @@ ru:
         обеспечить высокое качество процессов между Персоналом WCA,
         Региональными Организациями, организаторами соревнований и участниками
         соревнований.
+    wcat:
+      #original_hash: 61a471f
+      info_html: >-
+        Эта команда ответственна за одобрение и анонсы соревнований WCA, а также
+        за обеспечение высоких стандартов качества этих анонсов.
     wmt:
       #original_hash: f2a0140
       info_html: >-
@@ -3127,7 +3232,7 @@ ru:
     paragraph2:
       #original_hash: f20dd3b
       title: Ожидаемые расходы при организации соревнования
-      #original_hash: ab53dda
+      #original_hash: f16a06f
       content: >-
         Ожидаемые расходы сильно зависят от страны и зависят от нескольких
         факторов, например, от размера помещения. Можно возместить расходы
@@ -3138,26 +3243,25 @@ ru:
     paragraph3:
       #original_hash: 00d3bf8
       title: Крайний срок объявления соревнования
-      #original_hash: c61c6c9
+      #original_hash: 305cfb1
       content_html: >-
         Соревнование следует объявить минимум за месяц до начала соревнования
         (см. <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Положение
         8a4++</a>). Если есть особые причины, по которым это невозможно, то
         соревнование может быть объявлено не позже, чем за две недели до его
-        начала, по усмотрению Руководства WCA. Настоятельно рекомендуется
-        проинформировать Руководство WCA об этих особых причинах как можно
-        скорее, чтобы избежать отклонение заявки.
+        начала, по усмотрению WCAT. Настоятельно рекомендуется проинформировать
+        WCAT об этих особых причинах как можно скорее, чтобы избежать отклонение
+        заявки.
     paragraph4:
       #original_hash: b6dca56
       title: Правила близлежащих соревнований
-      #original_hash: f86bf95
+      #original_hash: 79ed06e
       content1: >-
         Соревнования WCA будут одобрены, если их отделяют как минимум 100 км или
         19 дней от других соревнований. Если уже заявлено другое соревнование в
-        пределах 100 км и 19 дней, то Делегат должен обосновать Руководству WCA,
-        почему это соревнование тоже нужно объявить. Возможные аргументы в
-        пользу этого:
+        пределах 100 км и 19 дней, то Делегат должен обосновать WCAT, почему это
+        соревнование тоже нужно объявить. Возможные аргументы в пользу этого:
       olist1:
         #original_hash: de00462
         '1': На этих двух соревнований нет общих дисциплин.
@@ -3197,32 +3301,32 @@ ru:
     paragraph-events:
       #original_hash: b16c5f1
       title: Объявление дисциплин
-      #original_hash: b6c6d26
+      #original_hash: cee85f7
       content: >-
         Все дисциплины, которые будут проводиться на соревновании, должны быть
         перечислены Делегатом в заявке. Это также включает в себя
         "необязательные" дисциплины (т.е. те, которые могут быть проведены или
         нет, в зависимости от опережения или отставания от расписания).
-        Дальнейшие добавления должны быть утверждены Руководством WCA.
+        Дальнейшие добавления должны быть утверждены WCAT.
     paragraph5:
       #original_hash: 17d01de
       title: Лимит на число участников
-      #original_hash: ffcd75e
+      #original_hash: b4748cf
       content_html: >-
         Число участников в дисциплине или во всём соревновании может быть
         ограничено (см. <a
         href='https://www.worldcubeassociation.org/regulations/#Z4'>Положение
         Z4</a>). Как и все Положения из Статьи Z, Делегат соревнования должен
-        получить одобрение Руководства WCA на такое ограничение. Лимит на число
-        участников нужно выбирать с умом, в соответствии с ожидаемым интересом
-        со стороны участников. Не следует устанавливать маленький лимит из-за
+        получить одобрение WCAT на такое ограничение. Лимит на число участников
+        нужно выбирать с умом, в соответствии с ожидаемым интересом со стороны
+        участников. Не следует устанавливать маленький лимит из-за
         незначительных причин. Также стоит учитывать ожидаемое число участников
         при поиске помещения подходящего размера. Лимит на число участников
         должен быть чётко заявлен на странице соревнований.
     paragraph6:
       #original_hash: ce4c3d0
       title: Обработка регистраций
-      #original_hash: cb13cd0
+      #original_hash: bd669a1
       content: >-
         Регистрации нужно обрабатывать в порядке очереди, то есть самую раннюю
         завершённую регистрацию надо обрабатывать первой. Если взносы за участие
@@ -3238,7 +3342,7 @@ ru:
         участники попадают в список ожидания. Когда зарегистрированные и
         одобренные участники отменяют свои заявки, их можно заменить первым
         участником из списка ожидания.
-      #original_hash: 1b2ea79
+      #original_hash: 802b34f
       content2: >-
         Если взносы за участие необходимо оплачивать до начала соревнований, то
         эффективным подходом будет предлагать освободившееся место следующему

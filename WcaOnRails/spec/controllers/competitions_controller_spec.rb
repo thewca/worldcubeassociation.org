@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open) }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule) }
   let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
@@ -39,7 +39,7 @@ RSpec.describe CompetitionsController do
       end
     end
 
-    describe "selecting present/past/recent competitions" do
+    describe "selecting present/past/recent/custom competitions" do
       let!(:past_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: 1.year.ago) }
       let!(:past_comp2) { FactoryBot.create(:competition, :confirmed, :visible, starts: 3.years.ago) }
       let!(:in_progress_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: Date.today, ends: 1.day.from_now) }
@@ -85,6 +85,16 @@ RSpec.describe CompetitionsController do
 
         it "shows in progress competition that ends today" do
           expect(assigns(:competitions)).to match_array [in_progress_comp2]
+        end
+      end
+
+      context "when custom is selected" do
+        before do
+          get :index, params: { state: :custom, from_date: 1.day.from_now, to_date: 2.weeks.from_now }
+        end
+
+        it "shows competitions overlapping the given date range" do
+          expect(assigns(:competitions)).to match_array [in_progress_comp1, upcoming_comp1]
         end
       end
     end
@@ -149,11 +159,40 @@ RSpec.describe CompetitionsController do
     end
   end
 
+  describe 'GET #for_senior' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        get :new
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as a senior Delegate' do
+      sign_in { FactoryBot.create :senior_delegate }
+
+      it 'renders the for_senior page' do
+        get :for_senior
+        expect(response).to render_template :for_senior
+      end
+    end
+
+    context 'when signed in as a regular Delegate' do
+      sign_in { FactoryBot.create :delegate }
+
+      it 'does not allow access' do
+        get :for_senior
+        expect(response).to redirect_to root_url
+      end
+    end
+  end
+
   describe 'GET #edit' do
     let(:organizer) { FactoryBot.create(:user) }
     let(:admin) { FactoryBot.create :admin }
     let!(:my_competition) { FactoryBot.create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
-    let!(:other_competition) { FactoryBot.create(:competition, :with_delegate, latitude: 11.0, longitude: 11.0, starts: 1.day.ago) }
+    let!(:other_competition) { FactoryBot.create(:competition, :with_delegate, :with_valid_schedule, latitude: 11.0, longitude: 11.0, starts: 1.day.ago) }
 
     context 'when signed in as an organizer' do
       before :each do
@@ -163,7 +202,7 @@ RSpec.describe CompetitionsController do
       it 'cannot see unconfirmed nearby competitions' do
         get :edit, params: { id: my_competition }
         expect(assigns(:nearby_competitions)).to eq []
-        other_competition.isConfirmed = true
+        other_competition.confirmed = true
         other_competition.save!
         get :edit, params: { id: my_competition }
         expect(assigns(:nearby_competitions)).to eq [other_competition]
@@ -202,7 +241,7 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryBot.create :admin }
 
       it "creates a new competition" do
-        post :create, params: { competition: { name: "FatBoyXPC 2015" } }
+        post :create, params: { competition: { name: "FatBoyXPC 2015", use_wca_registration: false } }
         new_comp = assigns(:competition)
         expect(response).to redirect_to edit_competition_path("FatBoyXPC2015")
         expect(new_comp.id).to eq "FatBoyXPC2015"
@@ -211,7 +250,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "creates a competition with correct website when using WCA as competition's website" do
-        post :create, params: { competition: { name: "Awesome Competition 2016", external_website: nil, generate_website: "1" } }
+        post :create, params: { competition: { name: "Awesome Competition 2016", external_website: nil, generate_website: "1", use_wca_registration: false } }
         competition = assigns(:competition)
         expect(competition.website).to eq competition_url(competition)
       end
@@ -227,7 +266,7 @@ RSpec.describe CompetitionsController do
         organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(delegate, anything, organizer).and_call_original
         expect do
-          post :create, params: { competition: { name: "Test 2015", delegate_ids: delegate.id, organizer_ids: organizer.id } }
+          post :create, params: { competition: { name: "Test 2015", delegate_ids: delegate.id, organizer_ids: organizer.id, use_wca_registration: false } }
         end.to change { enqueued_jobs.size }.by(1)
         expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)
@@ -246,7 +285,7 @@ RSpec.describe CompetitionsController do
 
       it 'clones a competition' do
         # Set some attributes we don't want cloned.
-        competition.update_attributes(isConfirmed: true,
+        competition.update_attributes(confirmed: true,
                                       results_posted_at: Time.now,
                                       showAtAll: true)
 
@@ -261,9 +300,9 @@ RSpec.describe CompetitionsController do
         expect(new_comp.id).to eq ""
         expect(new_comp.name).to eq ""
         # When cloning a competition, we don't want to clone its showAtAll,
-        # isConfirmed, and results_posted_at attributes.
+        # confirmed, and results_posted_at attributes.
         expect(new_comp.showAtAll).to eq false
-        expect(new_comp.isConfirmed).to eq false
+        expect(new_comp.confirmed?).to eq false
         expect(new_comp.results_posted_at).to eq nil
         # We don't want to clone its dates.
         %w(year month day endYear endMonth endDay).each do |attribute|
@@ -320,7 +359,7 @@ RSpec.describe CompetitionsController do
       it 'can confirm competition' do
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         expect(response).to redirect_to edit_competition_path(competition)
-        expect(competition.reload.isConfirmed?).to eq true
+        expect(competition.reload.confirmed?).to eq true
       end
 
       it 'saves delegate_ids' do
@@ -396,7 +435,7 @@ RSpec.describe CompetitionsController do
       it 'cannot confirm competition' do
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         expect(response.status).to redirect_to edit_competition_path(competition)
-        expect(competition.reload.isConfirmed?).to eq false
+        expect(competition.reload.confirmed?).to eq false
       end
 
       it "who is also the delegate can remove oneself as delegate" do
@@ -515,16 +554,16 @@ RSpec.describe CompetitionsController do
 
       it "can confirm competition and expects board and organizers to receive a notification email" do
         expect(CompetitionsMailer).to receive(:notify_organizers_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
-        expect(CompetitionsMailer).to receive(:notify_board_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
+        expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
           patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         end.to change { enqueued_jobs.size }.by(2)
         expect(response).to redirect_to edit_competition_path(competition)
-        expect(competition.reload.isConfirmed?).to eq true
+        expect(competition.reload.confirmed?).to eq true
       end
 
       it "cannot delete not confirmed, but visible competition" do
-        competition.update_attributes(isConfirmed: false, showAtAll: true)
+        competition.update_attributes(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we only allow
         # deletion of (not confirmed and not visible) competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -533,7 +572,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot delete confirmed competition" do
-        competition.update_attributes(isConfirmed: true, showAtAll: false)
+        competition.update_attributes(confirmed: true, showAtAll: false)
         # Attempt to delete competition. This should not work, because we only let
         # delegates deleting unconfirmed competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -542,7 +581,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can delete not confirmed and not visible competition" do
-        competition.update_attributes(isConfirmed: false, showAtAll: false)
+        competition.update_attributes(confirmed: false, showAtAll: false)
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -551,7 +590,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can change registration open/close of locked competition" do
-        competition.update_attribute(:isConfirmed, true)
+        competition.update_attribute(:confirmed, true)
 
         new_open = 1.week.from_now.change(sec: 0)
         new_close = 2.weeks.from_now.change(sec: 0)
@@ -583,7 +622,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot delete competition they are not delegating" do
-        competition.update_attributes(isConfirmed: false, showAtAll: true)
+        competition.update_attributes(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we're
         # not the delegate for this competition.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -792,7 +831,7 @@ RSpec.describe CompetitionsController do
               value4: 0,
               value5: 0,
               best: 24,
-              average: dnf ? SolveTime::DNF_VALUE : 2766,
+              average: dnf ? SolveTime::DNF_VALUE : 2767,
             )
           end
 
@@ -804,9 +843,9 @@ RSpec.describe CompetitionsController do
             get :post_results, params: { id: competition, event_id: "333fm" }
             post = assigns(:post)
             expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.country.name_in(:en)}"
-            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a mean of 27.66 moves in the 3x3x3 Fewest Moves event. " \
-              "[Dan](#{person_url('2006YOYO02')}) finished second (27.66) and " \
-              "[Steven](#{person_url('2006YOYO03')}) finished third (27.66).\n\n"
+            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a mean of 27.67 moves in the 3x3x3 Fewest Moves event. " \
+              "[Dan](#{person_url('2006YOYO02')}) finished second (27.67) and " \
+              "[Steven](#{person_url('2006YOYO03')}) finished third (27.67).\n\n"
           end
 
           it "handles DNF averages in the podium" do
@@ -817,8 +856,8 @@ RSpec.describe CompetitionsController do
             get :post_results, params: { id: competition, event_id: "333fm" }
             post = assigns(:post)
             expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.country.name_in(:en)}"
-            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a mean of 27.66 moves in the 3x3x3 Fewest Moves event. " \
-              "[Dan](#{person_url('2006YOYO02')}) finished second (27.66) and " \
+            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a mean of 27.67 moves in the 3x3x3 Fewest Moves event. " \
+              "[Dan](#{person_url('2006YOYO02')}) finished second (27.67) and " \
               "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 24 moves).\n\n"
           end
         end

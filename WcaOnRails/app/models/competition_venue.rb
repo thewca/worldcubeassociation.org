@@ -3,6 +3,7 @@
 class CompetitionVenue < ApplicationRecord
   belongs_to :competition
   has_many :venue_rooms, dependent: :destroy
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   VALID_TIMEZONES = TZInfo::Timezone.all_identifiers.freeze
 
@@ -19,6 +20,7 @@ class CompetitionVenue < ApplicationRecord
       room.load_wcif!(room_wcif)
     end
     self.venue_rooms = new_rooms
+    WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
   end
 
@@ -31,6 +33,10 @@ class CompetitionVenue < ApplicationRecord
   end
 
   def all_activities
+    venue_rooms.flat_map(&:all_activities).sort_by(&:start_time)
+  end
+
+  def top_level_activities
     venue_rooms.flat_map(&:schedule_activities).sort_by(&:start_time)
   end
 
@@ -42,6 +48,7 @@ class CompetitionVenue < ApplicationRecord
       "longitudeMicrodegrees" => longitude_microdegrees,
       "timezone" => timezone_id,
       "rooms" => venue_rooms.map(&:to_wcif),
+      "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
@@ -55,6 +62,7 @@ class CompetitionVenue < ApplicationRecord
         "longitudeMicrodegrees" => { "type" => "integer" },
         "timezone" => { "type" => "string", "enum" => VALID_TIMEZONES },
         "rooms" => { "type" => "array", "items" => VenueRoom.wcif_json_schema },
+        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
       "required" => ["id", "name", "latitudeMicrodegrees", "longitudeMicrodegrees", "timezone", "rooms"],
     }

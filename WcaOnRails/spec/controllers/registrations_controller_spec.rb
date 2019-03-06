@@ -55,6 +55,7 @@ RSpec.describe RegistrationsController do
         patch :update, params: { id: registration.id, registration: { status: 'accepted' } }
       end.to change { enqueued_jobs.size }.by(1)
       expect(registration.reload.accepted?).to be true
+      expect(registration.accepted_user).to eq organizer
     end
 
     it "changes an accepted registration to pending" do
@@ -66,6 +67,13 @@ RSpec.describe RegistrationsController do
       end.to change { enqueued_jobs.size }.by(1)
       expect(registration.reload.pending?).to be true
       expect(response).to redirect_to edit_registration_path(registration)
+    end
+
+    it "doesn't update accepted_at when status doesn't change" do
+      registration.update!(accepted_at: Time.now)
+      expect do
+        patch :update, params: { id: registration.id, registration: { comments: "A new comment.", status: "accepted" } }
+      end.to_not change { registration.reload.accepted_at }
     end
 
     it "can delete registration" do
@@ -383,23 +391,6 @@ RSpec.describe RegistrationsController do
       expect(response).to redirect_to competition_psych_sheet_event_url(competition.id, "333")
     end
 
-    it "redirects to root if competition is not using WCA registration" do
-      competition.use_wca_registration = false
-      competition.save!
-
-      get :psych_sheet, params: { competition_id: competition.id }
-      expect(response).to redirect_to competition_path(competition)
-      expect(flash[:danger]).to match "not using WCA registration"
-
-      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
-      expect(response).to redirect_to competition_path(competition)
-      expect(flash[:danger]).to match "not using WCA registration"
-
-      get :index, params: { competition_id: competition.id }
-      expect(response).to redirect_to competition_path(competition)
-      expect(flash[:danger]).to match "not using WCA registration"
-    end
-
     it "redirects psych sheet to highest ranked event if no 333" do
       competition.events = [Event.find("222"), Event.find("444")]
       competition.save!
@@ -414,16 +405,16 @@ RSpec.describe RegistrationsController do
       FactoryBot.create :ranks_average, rank: 10, best: 2000, eventId: "333", personId: pending_registration.personId
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
-      registrations = assigns(:registrations)
-      expect(registrations.map(&:accepted?).all?).to be true
+      psych_sheet = assigns(:psych_sheet)
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.accepted? }.all?).to be true
     end
 
     it "handles user without average" do
       FactoryBot.create(:registration, :accepted, competition: competition)
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
-      registrations = assigns(:registrations)
-      expect(registrations.map(&:accepted?).all?).to be true
+      psych_sheet = assigns(:psych_sheet)
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.accepted? }.all?).to be true
     end
 
     it "sorts 444 by single, and average, and handles ties" do
@@ -442,16 +433,16 @@ RSpec.describe RegistrationsController do
       FactoryBot.create :ranks_average, rank: 11, best: 4545, eventId: "444", personId: registration4.personId
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
-      registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [registration3.id, registration2.id, registration1.id, registration4.id]
-      expect(registrations.map(&:pos)).to eq [1, 2, 2, 4]
-      expect(registrations.map(&:tied_previous)).to eq [false, false, true, false]
+      psych_sheet = assigns(:psych_sheet)
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration3.id, registration2.id, registration1.id, registration4.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, 2, 4]
+      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, true, false]
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444", sort_by: :single }
-      registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [registration2.id, registration1.id, registration3.id, registration4.id]
-      expect(registrations.map(&:pos)).to eq [1, 2, nil, nil]
-      expect(registrations.map(&:tied_previous)).to eq [false, false, nil, nil]
+      psych_sheet = assigns(:psych_sheet)
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration2.id, registration1.id, registration3.id, registration4.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, nil, nil]
+      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, nil, nil]
     end
 
     it "handles missing average" do
@@ -467,9 +458,9 @@ RSpec.describe RegistrationsController do
       registration3 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
-      registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [registration2.id, registration1.id, registration3.id]
-      expect(registrations.map(&:pos)).to eq [1, nil, nil]
+      psych_sheet = assigns(:psych_sheet)
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration2.id, registration1.id, registration3.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, nil, nil]
     end
 
     it "handles 1 registration" do
@@ -484,9 +475,9 @@ RSpec.describe RegistrationsController do
       )
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
-      registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [registration.id]
-      expect(registrations.map(&:pos)).to eq [1]
+      psych_sheet = assigns(:psych_sheet)
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1]
     end
 
     it "sorts 333bf by single" do
@@ -527,14 +518,14 @@ RSpec.describe RegistrationsController do
       )
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333bf" }
-      registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [registration1.id, registration2.id]
-      expect(registrations.map(&:pos)).to eq [1, 2]
+      psych_sheet = assigns(:psych_sheet)
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration1.id, registration2.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2]
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333bf", sort_by: :average }
-      registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [registration2.id, registration1.id]
-      expect(registrations.map(&:pos)).to eq [1, 2]
+      psych_sheet = assigns(:psych_sheet)
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration2.id, registration1.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2]
     end
 
     it "shows first timers on bottom" do
@@ -565,9 +556,9 @@ RSpec.describe RegistrationsController do
       registration3 = FactoryBot.create(:registration, :accepted, user: user3, competition: competition, events: [Event.find("333bf")])
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333bf" }
-      registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [registration1.id, registration3.id, registration2.id]
-      expect(registrations.map(&:pos)).to eq [1, nil, nil]
+      psych_sheet = assigns(:psych_sheet)
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration1.id, registration3.id, registration2.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, nil, nil]
     end
 
     it "handles 1 registration" do
@@ -582,9 +573,9 @@ RSpec.describe RegistrationsController do
       )
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
-      registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [registration.id]
-      expect(registrations.map(&:pos)).to eq [1]
+      psych_sheet = assigns(:psych_sheet)
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1]
     end
   end
 
@@ -650,6 +641,71 @@ RSpec.describe RegistrationsController do
         post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
         expect(flash[:danger]).to eq "Unsuccessful payment: Your card was declined."
         expect(response).to redirect_to competition_register_path(competition)
+      end
+
+      context 'stripe journal' do
+        it 'records successes' do
+          expect(StripeCharge.all.length).to eq 0
+
+          pay_all_with(registration, stripe_token_id)
+
+          expect(StripeCharge.all.length).to eq 1
+          stripe_charge = StripeCharge.first
+          expect(stripe_charge.status).to eq "success"
+          expect(stripe_charge.stripe_charge_id).not_to be_nil
+          metadata = JSON.parse(stripe_charge.metadata)[0]["metadata"]
+          expect(metadata["wca_id"]).to eq registration.user.wca_id
+        end
+
+        it 'records failures' do
+          expect(StripeCharge.all.length).to eq 0
+
+          # Attempt payment with invalid credit card.
+          bad_card_token = stripe_token_id(number: "4000000000000002")
+          pay_all_with(registration, bad_card_token)
+
+          expect(StripeCharge.all.length).to eq 1
+          stripe_charge = StripeCharge.first
+          expect(stripe_charge.status).to eq "failure"
+          expect(stripe_charge.stripe_charge_id).to be_nil
+          expect(stripe_charge.error).to include "Stripe::CardError"
+          metadata = JSON.parse(stripe_charge.metadata)[0]["metadata"]
+          expect(metadata["wca_id"]).to eq registration.user.wca_id
+        end
+
+        it 'records attempts even if something weird happens' do
+          expect(StripeCharge.all.length).to eq 0
+
+          # Simulate some weird issue happening after we start talking to
+          # Stripe, and we never get around to recording the payment on our
+          # end, but maybe Stripe actually did charge the credit card.
+          stripe_double = class_double("Stripe::Charge").as_stubbed_const(transfer_nested_constants: true)
+          unexpected_error = "Uh oh!"
+          expect(stripe_double).to receive(:create).and_raise(unexpected_error)
+
+          expect {
+            pay_all_with(registration, stripe_token_id)
+          }.to raise_error(unexpected_error)
+
+          expect(StripeCharge.all.length).to eq 1
+          stripe_charge = StripeCharge.first
+          expect(stripe_charge.status).to eq "unknown"
+          expect(stripe_charge.stripe_charge_id).to be_nil
+          expect(stripe_charge.error).to include "RuntimeError: Uh oh"
+          metadata = JSON.parse(stripe_charge.metadata)[0]["metadata"]
+          expect(metadata["wca_id"]).to eq registration.user.wca_id
+        end
+
+        def pay_all_with(registration, stripe_token)
+          post :process_payment, params: {
+            competition_id: registration.competition.id,
+            payment: {
+              stripe_token: stripe_token,
+              total_amount:
+              registration.outstanding_entry_fees.cents,
+            },
+          }
+        end
       end
     end
   end

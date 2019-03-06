@@ -4,6 +4,8 @@ class DelegatesPanelController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_view_crash_course?) }
   before_action -> { redirect_to_root_unless_user(:can_update_crash_course?) }, only: [:edit_crash_course, :update_crash_course]
+  before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:pending_claims_for_subordinate_delegates]
+  before_action -> { redirect_to_root_unless_user(:board_member?) }, only: [:seniors]
 
   def index
   end
@@ -26,6 +28,17 @@ class DelegatesPanelController < ApplicationController
     else
       render 'edit'
     end
+  end
+
+  def pending_claims_for_subordinate_delegates
+    # Show pending claims for a given user, or the current user, if they can see them
+    @user = User.includes(subordinate_delegates: [:confirmed_users_claiming_wca_id]).find_by_id!(params[:user_id] || current_user.id)
+    @subordinate_delegates = @user.subordinate_delegates.to_a.push(@user)
+  end
+
+  def seniors
+    # Show the list of seniors and actions available
+    @seniors = User.where(delegate_status: "senior_delegate").order(:name)
   end
 
   private def editable_post_fields

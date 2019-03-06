@@ -1,0 +1,13 @@
+<p>
+  Your registration for <%= @competition.name %> has been imported to the WCA website
+  and as a result an account has been created for you.
+</p>
+
+<p>
+  With this account, you can add a picture to your WCA results profile page,
+  and register for other competitions around the world.
+  To use the account you must first reset your password visiting
+  <%= link_to "this page", new_user_password_url %>.
+</p>
+
+<%= render partial: 'organizers_or_delegates_signature' %>

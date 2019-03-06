@@ -25,7 +25,7 @@
         { text: "Delegates", path: delegates_stats_path, fa_icon: "sitemap" },
         { text: "Server status", path: server_status_path, fa_icon: "info" },
         { text: "WCA All Voting Members", path: eligible_voters_path, fa_icon: "download" },
-        { text: "WCA Leader/Senior Members", path: leader_senior_voters_path, fa_icon: "download" },
+        { text: "WCA Leaders and Seniors", path: leader_senior_voters_path, fa_icon: "download" },
       ].each do |nav_item| %>
         <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
           <i class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></i> <%= nav_item[:text] %>

@@ -1,0 +1,21 @@
+<% provide(:title, "Upload results") %>
+<%= render layout: 'competitions/nav' do %>
+  <h1><%= yield(:title) %></h1>
+  <p>
+    Import the results JSON for this competition.
+    The server will check for any error compared to the declared rounds, cutoffs, and time limits.
+  </p>
+  <p>
+    When you are done checking the results, you can go ahead and post them <%= link_to "here", "#{root_url}results/admin/upload_results.php?competitionId=#{@competition.id}" %>.
+  </p>
+
+  <%= render "results_submission/submit_json_panel",
+    upload_json: @upload_json,
+    action: competition_admin_upload_results_path,
+    already_has_submitted_result: @results_validator.has_results
+  %>
+
+  <%= render "results_submission/check_results_panel", results_validator: @results_validator %>
+
+  <%= render "results_submission/results_preview_panel", results_validator: @results_validator %>
+<% end %>

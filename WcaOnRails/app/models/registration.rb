@@ -14,23 +14,16 @@ class Registration < ApplicationRecord
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
+  has_many :assignments, dependent: :delete_all
 
   serialize :roles, Array
 
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
 
   validates :user, presence: true, on: [:create]
+  validates :competition, presence: { message: I18n.t('registrations.errors.comp_not_found') }
 
   validates_numericality_of :guests, greater_than_or_equal_to: 0
-
-  validate :competition_must_use_wca_registration
-  private def competition_must_use_wca_registration
-    if !competition
-      errors.add(:competition, I18n.t('registrations.errors.comp_not_found'))
-    elsif !competition.use_wca_registration?
-      errors.add(:competition, I18n.t('registrations.errors.registration_closed'))
-    end
-  end
 
   validate :registration_cannot_be_deleted_and_accepted_simultaneously
   private def registration_cannot_be_deleted_and_accepted_simultaneously
@@ -68,9 +61,6 @@ class Registration < ApplicationRecord
   def name
     user.name
   end
-
-  attr_accessor :pos
-  attr_accessor :tied_previous
 
   def birthday
     user.dob
@@ -185,13 +175,13 @@ class Registration < ApplicationRecord
                     'pending'
                   end,
       "guests" => guests,
-      "comments" => comments,
+      "comments" => comments || '',
     }
   end
 
   def self.wcif_json_schema
     {
-      "type" => "object",
+      "type" => ["object", "null"], # Note: for now there may be WCIF persons without registration.
       "properties" => {
         "wcaRegistrationId" => { "type" => "integer" },
         "eventIds" => { "type" => "array", "items" => { "type" => "string", "enum" => Event.pluck(:id) } },
@@ -222,5 +212,14 @@ class Registration < ApplicationRecord
       competition_event = competition.competition_events.find_by!(event: event)
       registration_competition_events.find_by_competition_event_id(competition_event.id) || registration_competition_events.build(competition_event: competition_event)
     end
+  end
+
+  def serializable_hash(options = nil)
+    {
+      id: id,
+      competition_id: competition_id,
+      user_id: user_id,
+      event_ids: events.map(&:id),
+    }
   end
 end

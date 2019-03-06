@@ -546,6 +546,13 @@ RSpec.describe User, type: :model do
     expect(wrt_leader.teams_where_is_leader.count).to eq 0
   end
 
+  it "removes whitespace around names" do
+    user = FactoryBot.create :user
+    user.update_attributes!(name: '  test user  ')
+
+    expect(user.name).to eq 'test user'
+  end
+
   describe "#update_with_password" do
     let(:user) { FactoryBot.create(:user, password: "wca") }
 
@@ -643,6 +650,36 @@ RSpec.describe User, type: :model do
       senior_delegate = FactoryBot.create :senior_delegate
       expect(senior_delegate.can_edit_user?(user)).to eq true
       expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :senior_delegate_id, :region)
+    end
+  end
+
+  describe "birthdate validations" do
+    it "requires birthdate in past" do
+      user = FactoryBot.create :user
+      user.dob = 5.days.from_now
+      expect(user).to be_invalid_with_errors(dob: ["must be in the past"])
+    end
+
+    it "requires user over two years old" do
+      user = FactoryBot.create :user
+      user.dob = 5.days.ago
+      expect(user).to be_invalid_with_errors(dob: ["must be at least two years old"])
+    end
+  end
+
+  describe "receive_delegate_reports field" do
+    let!(:staff_member1) { FactoryBot.create :user, :wec_member, receive_delegate_reports: true }
+    let!(:staff_member2) { FactoryBot.create :user, :wrt_member, receive_delegate_reports: false }
+
+    it "gets cleared if user is not staff anymore" do
+      former_staff_member = FactoryBot.create :user, receive_delegate_reports: true
+      User.clear_receive_delegate_reports_if_not_staff
+      expect(former_staff_member.reload.receive_delegate_reports).to eq false
+      expect(staff_member1.reload.receive_delegate_reports).to eq true
+    end
+
+    it "adds to reports@ only current staff members who want to receive reports" do
+      expect(User.delegate_reports_receivers_emails).to eq ["seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", staff_member1.email]
     end
   end
 end

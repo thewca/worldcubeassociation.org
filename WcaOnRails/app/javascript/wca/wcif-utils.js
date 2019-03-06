@@ -4,8 +4,8 @@ function getAuthenticityToken() {
   return document.querySelector('meta[name=csrf-token]').content;
 }
 
-function promiseSaveWcif(competitionId, wcifPath, data) {
-  let url = `/api/v0/competitions/${competitionId}/wcif${wcifPath}`;
+function promiseSaveWcif(competitionId, data) {
+  let url = `/api/v0/competitions/${competitionId}/wcif`;
   let fetchOptions = {
     headers: {
       "Content-Type": "application/json",
@@ -19,8 +19,8 @@ function promiseSaveWcif(competitionId, wcifPath, data) {
   return fetch(url, fetchOptions);
 }
 
-export function saveWcifPart(competitionId, wcifPath, data, onSuccess, onFailure) {
-  promiseSaveWcif(competitionId, wcifPath, data).then(response => {
+export function saveWcif(competitionId, data, onSuccess, onFailure) {
+  promiseSaveWcif(competitionId, data).then(response => {
     return Promise.all([response, response.json()]);
   }).then(([response, json]) => {
     if(!response.ok) {

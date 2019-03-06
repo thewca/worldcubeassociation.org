@@ -240,4 +240,22 @@ RSpec.feature "Sign up" do
       expect(page.find("#user_dob").value).to eq ""
     end
   end
+
+  context "when signing up as a non-english speaker", js: true do
+    it "stores the user's preferred locale" do
+      page.driver.headers = { 'Accept-Language' => 'es' }
+      visit "/users/sign_up"
+
+      fill_in "user[email]", with: "jack@example.com"
+      fill_in "user[password]", with: "wca"
+      fill_in "user[password_confirmation]", with: "wca"
+      click_on "Nunca he competido en competiciones de la WCA."
+      fill_in "user[name]", with: "Jack Johnson"
+
+      click_button "Registrarse"
+
+      user = User.find_by_email!("jack@example.com")
+      expect(user.preferred_locale).to eq "es"
+    end
+  end
 end
