@@ -106,7 +106,8 @@ RSpec.feature "Competition management" do
   context "when signed in as delegate" do
     let(:delegate) { FactoryBot.create(:delegate) }
     let(:cloned_delegate) { FactoryBot.create(:delegate) }
-    let(:competition_to_clone) { FactoryBot.create :competition, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate], showAtAll: true }
+    let(:competition_to_clone) { FactoryBot.create :competition, cityName: '
+, Victoria', countryId: "Australia", delegates: [cloned_delegate], showAtAll: true }
 
     let(:threes) { Event.find("333") }
     let(:fours) { Event.find("444") }
@@ -145,7 +146,7 @@ RSpec.feature "Competition management" do
       expect(new_competition.venue).to eq competition_to_clone.venue
       expect(new_competition.showAtAll).to eq false
       expect(new_competition.confirmed?).to eq false
-      expect(new_competition.cityName).to eq 'Melbourne'
+      expect(new_competition.cityName).to eq 'Melbourne, Victoria'
     end
 
     feature "edit" do
