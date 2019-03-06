@@ -469,3 +469,13 @@ select.input-xs {
     text-decoration: none;
   }
 }
+
+.invisible-iframe-map {
+  z-index: -1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border: none;
+}
