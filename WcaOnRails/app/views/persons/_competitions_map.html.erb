@@ -4,11 +4,5 @@
     var competitions = <%= competitions_json_for_markers @person.competitions %>
     var map = wca.createCompetitionsMapLeaflet('competitions-map');
     wca.addCompetitionsToMapLeaflet(map, competitions);
-
-    $('#competitions-map').one('map-shown', function() {
-      /* Leaflet is not properly initialized within a hidden container, that's how we fix it. */
-      map.invalidateSize();
-      map.panTo({ lat: 0, lng: 0 });
-    });
   });
 </script>

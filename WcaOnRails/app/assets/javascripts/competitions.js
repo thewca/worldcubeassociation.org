@@ -72,7 +72,8 @@ onPage('competitions#index', function() {
 
     // Scroll to the top of the form if we are in map mode and screen width is greater than 800px
     if($('#competitions-map').is(':visible')) {
-      // Switching between list/map/admin hide the map element, Leaflet needs to recompute the size.
+      // Switching between list/map/admin uses AJAX to load the map element,
+      // unfortunately it does not trigger our iframe resize trick...
       wca._competitionsIndexMap.invalidateSize();
       if ($(window).innerWidth() > 800) {
         var formTop = $('#competition-query-form').offset().top;

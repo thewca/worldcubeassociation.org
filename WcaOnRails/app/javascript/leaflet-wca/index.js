@@ -60,7 +60,7 @@ wca.createSearchInput = map => {
   map.addControl(searchControl);
 };
 
-wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0]) => {
+wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTrick = true) => {
   let map = new LeafletMap(elementId, {
     zoom: 2,
     center: center,
@@ -72,6 +72,20 @@ wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0]) => {
     attribution: provider.attribution,
   });
   layer.addTo(map);
+  if (iframeTrick) {
+    // We create an invisible iframe that triggers an invalidate size when
+    // resized (which includes bootstrap's collapse/hide/show events).
+    let iframe = $('<iframe src="about:blank" class="invisible-iframe-map" />');
+
+    $(`#${elementId}`).append(iframe);
+
+    iframe.ready(() => {
+      iframe[0].contentWindow.addEventListener("resize", () => {
+        map.invalidateSize();
+      });
+      map.invalidateSize();
+    });
+  }
   return map;
 };
 
@@ -115,7 +129,7 @@ var nearbyCompetitionsById = {};
 
 wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled) => {
   nearbyCompetitionsById = {};
-  let map = wca.createCompetitionsMapLeaflet(elem);
+  let map = wca.createCompetitionsMapLeaflet(elem, [0,0], false);
   wca._venue_map = map;
   let latLng = { lat: $lat.val(), lng: $lng.val() };
   // Create warning and danger circles
