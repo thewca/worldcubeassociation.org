@@ -29,6 +29,9 @@
       vertical-align: top;
       white-space: nowrap;
       font-size: 0.9em;
+      .hide-new-window-icon {
+        font-size: initial;
+      }
     }
     i {
       font-size: 15px;
