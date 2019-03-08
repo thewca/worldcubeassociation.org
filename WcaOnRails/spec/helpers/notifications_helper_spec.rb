@@ -11,29 +11,9 @@ RSpec.describe NotificationsHelper do
         let!(:unconfirmed_competition) { FactoryBot.create :competition, delegates: [delegate] }
         let!(:confirmed_competition) { FactoryBot.create :competition, :confirmed, delegates: [delegate] }
 
-        it "shows unconfirmed competitions" do
+        it "does not show unconfirmed competitions" do
           notifications = helper.notifications_for_user(delegate)
-          expect(notifications).to eq [
-            {
-              text: "#{unconfirmed_competition.name} is not confirmed",
-              url: edit_competition_path(unconfirmed_competition),
-            },
-          ]
-        end
-
-        it "doesn't duplicate competitions which we are both delegating and organizing" do
-          # Add ourselves as an organizer in addition to being a delegate
-          # for this competition.
-          unconfirmed_competition.organizers << delegate
-          unconfirmed_competition.save
-
-          notifications = helper.notifications_for_user(delegate)
-          expect(notifications).to eq [
-            {
-              text: "#{unconfirmed_competition.name} is not confirmed",
-              url: edit_competition_path(unconfirmed_competition),
-            },
-          ]
+          expect(notifications).to eq []
         end
       end
 

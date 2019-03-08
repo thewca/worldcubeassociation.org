@@ -3,14 +3,6 @@
 module NotificationsHelper
   def notifications_for_user(user)
     notifications = []
-    # Be careful to not show a competition twice if we're both organizing and delegating it.
-    unconfirmed_competitions = (user.delegated_competitions.not_confirmed + user.organized_competitions.not_confirmed).uniq(&:id)
-    unconfirmed_competitions.each do |unconfirmed_competition|
-      notifications << {
-        text: "#{unconfirmed_competition.name} is not confirmed",
-        url: edit_competition_path(unconfirmed_competition),
-      }
-    end
     if user.competition_announcement_team?
       # Show WCAT members:
       #  - Confirmed, but not visible competitions: They need to approve or reject
