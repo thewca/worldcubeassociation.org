@@ -1,13 +1,21 @@
 ru:
   countries:
+    #original_hash: 9af4622
+    XF: Несколько стран (Африка)
+    #original_hash: 374ac0d
+    XM: Несколько стран (С/Ю Америка)
     #original_hash: 3f8c9de
     XA: Несколько стран (Азия)
     #original_hash: 090f3ce
     XE: Несколько стран (Европа)
+    #original_hash: b50b7a5
+    XN: Несколько стран (Северная Америка)
+    #original_hash: 428e7af
+    XO: Несколько стран (Океания)
     #original_hash: 459f987
     XS: Несколько стран (Южная Америка)
-    #original_hash: 374ac0d
-    XM: Несколько стран (С/Ю Америка)
+    #original_hash: 9027fe6
+    XW: Несколько стран (Мир)
     #original_hash: 918c53a
     MO: Макао
     #original_hash: 2f488ff
@@ -410,7 +418,7 @@ ru:
         #original_hash: 2529d04
         on_the_spot_registration: Регистрации на месте
         #original_hash: 69780b5
-        on_the_spot_entry_fee_lowest_denomination: Базовый взнос за участие на месте
+        on_the_spot_entry_fee_lowest_denomination: Базовый взнос за регистрацию на месте
         #original_hash: efbdbab
         refund_policy_percent: Возвращаемая доля
         #original_hash: b332299
@@ -940,6 +948,8 @@ ru:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -978,7 +988,7 @@ ru:
         your_email: Ваш email
       website_contact:
         #original_hash: 68f4145
-        message: Сообщение
+        message: 'Сообщение (пожалуйста, пишите по-английски)'
       dob_contact:
         #original_hash: 390edfa
         wca_id: Ваш WCA ID
@@ -1134,6 +1144,10 @@ ru:
       history: История
       #original_hash: 8ad8302
       translations: Переводы
+      #original_hash: c420cb4
+      disciplinary: Дисциплинарный журнал
+      #original_hash: ecba5f4
+      incidents: Журнал инцидентов
       #original_hash: b8be3d1
       administration: Управление
       #original_hash: b7ee3c4
@@ -1896,10 +1910,11 @@ ru:
         возвращено %{refund_policy_percent} от вашего взноса.
       #original_hash: 4aca553
       no_refunds: Взносы за участие не будут возвращаться при отмене регистрации.
-      #original_hash: cf7be5d
-      on_the_spot_registration: >-
-        Можно зарегистрироваться на месте, базовый взнос будет составлять
-        %{on_the_spot_base_entry_fee}.
+      #original_hash: b86fee2
+      on_the_spot_registration_html: >-
+        Регистрации на месте будут разрешены с базовым взносом
+        %{on_the_spot_base_entry_fee}, при условии, что лимит на число
+        участников не был достигнут до %{end_of_registration}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Можно бесплатно зарегистрироваться на месте.
       #original_hash: f5f687d
@@ -2085,6 +2100,17 @@ ru:
       coordinates: Координаты
       #original_hash: a672984
       add_championship: Добавить чемпионат
+      championship_types:
+        #original_hash: dc71704
+        world: Чемпионат Мира
+        #original_hash: d573eb7
+        continental: 'Континентальный Чемпионат: %{continent}'
+        #original_hash: 39f47e0
+        national: 'Национальный Чемпионат: %{country}'
+        #original_hash: e045169
+        greater_china: Чемпионат Большого Китая
+        #original_hash: 3b920b7
+        generic: 'Чемпионат: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2428,8 +2454,8 @@ ru:
       inquiries:
         #original_hash: 92ea7e8
         competition: >-
-          Связаться с организаторами конкретного соревнования (пожалуйста,
-          укажите, какого)
+          Связь с организаторами конкретного соревнования (пожалуйста, укажите,
+          какого)
         #original_hash: f0bffb7
         competitions_in_general: 'Соревнования вообще (организация, правила и т.д.)'
         #original_hash: f6ffa78
@@ -2695,6 +2721,18 @@ ru:
         info_html: >-
           Всемирную Ассоциацию Кубика (WCA) возглавляет <strong>Руководство
           WCA</strong>, состоящее из следующих участников:
+      chair:
+        #original_hash: de34439
+        name: Председатель WCA
+      executive_director:
+        #original_hash: 7d405ff
+        name: Исполнительный Директор WCA
+      secretary:
+        #original_hash: 1dd4a07
+        name: Секретарь WCA
+      vice_chair:
+        #original_hash: 0388b19
+        name: Заместитель Председателя WCA
       #original_hash: b0c72a9
       committees: >-
         Следующие комитеты ответственны за различную операционную деятельность
@@ -2708,6 +2746,11 @@ ru:
           например, предположительные нарушения Положений WCA. С ним могут
           связаться участники WCA в случае важных личных дел, связанных с WCA
           соревнованиями.
+      wdpc:
+        #original_hash: 70539cd
+        name: Комитет по Защите Данных WCA
+        #original_hash: 1f69829
+        description: 'Этот комитет ответственен за всё, связанное с Защитой Данных.'
       wrc:
         #original_hash: 3da1e85
         name: Комитет Положений WCA
@@ -2766,7 +2809,7 @@ ru:
       wcat:
         #original_hash: 2b81984
         name: Команда Анонсов Соревнований WCA (WCAT)
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
           Эта команда ответственна за одобрение и анонсы соревнований WCA, а
           также за обеспечение высоких стандартов качества этих анонсов.
@@ -2777,6 +2820,15 @@ ru:
         description: >-
           Эта команда ответственна за развитие и управление Марки WCA, поиск
           спонсоров, оснащение оборудованием и сбыт товаров WCA.
+      #original_hash: a2c8ad3
+      councils: 'Следующие команды имеют роль советников Руководства WCA:'
+      wac:
+        #original_hash: 1ce7604
+        name: Консультативный Совет WCA
+        #original_hash: fb6cd86
+        description: >-
+          Этот совет ответственен за формирование и поддержку коммуникации между
+          Сообществом WCA и Персоналом WCA.
       banned:
         #original_hash: d30e2e5
         name: Забаненные участники
@@ -2809,7 +2861,7 @@ ru:
     #original_hash: fdceb44
     motions: Дополнения к Уставу
     #original_hash: 092f99e
-    minutes: Минуты
+    minutes: Протоколы собрания
     #original_hash: 6db524a
     policies: WCA Политики
   delegates_page:
@@ -2908,6 +2960,13 @@ ru:
         быть серьезными нарушениями Положений WCA или проблемами сообщества.
         Если вы столкнулись с какой-либо из них, не стесняйтесь обращаться к
         этому комитету.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        WDPC ответственен за исследование, создание, внедрение, управление и
+        обеспечение соблюдения всех политик Защиты Данных WCA, заключение
+        контрактов с внешними Обработчиками Данных WCA и управление задачами,
+        связанными с Защитой Данных.
     wrc:
       #original_hash: fcd3526
       info_html: >-
@@ -2973,6 +3032,13 @@ ru:
       info_html: >-
         Эта команда ответственна за развитие и управление Марки WCA, поиск
         спонсоров, оснащение оборудованием и сбыт товаров WCA.
+    #original_hash: f97a4f5
+    councils_html: Советы
+    wac:
+      #original_hash: fb6cd86
+      info_html: >-
+        Этот совет ответственен за формирование и поддержку коммуникации между
+        Сообществом WCA и Персоналом WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Утилиты для ввода результатов
