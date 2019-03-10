@@ -5,6 +5,28 @@ require "rails_helper"
 RSpec.describe "API Competitions" do
   let(:headers) { { "CONTENT_TYPE" => "application/json" } }
 
+  describe "GET #index" do
+    let!(:competition1) { FactoryBot.create :competition, :visible, starts: 1.week.from_now }
+    let!(:competition2) { FactoryBot.create :competition, :visible, starts: 2.weeks.from_now }
+    let!(:competition3) { FactoryBot.create :competition, :visible, starts: 3.weeks.from_now }
+
+    it "orders competitions by date descending by default" do
+      get api_v0_competitions_path, params: { start: 2.week.from_now }
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json[0]["id"]).to eq competition3.id
+      expect(json[1]["id"]).to eq competition2.id
+    end
+
+    it "allows ordering by date ascending" do
+      get api_v0_competitions_path, params: { start: 2.week.from_now, date_order: "asc" }
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json[0]["id"]).to eq competition2.id
+      expect(json[1]["id"]).to eq competition3.id
+    end
+  end
+
   describe "GET #results" do
     let!(:competition) { FactoryBot.create :competition, :visible }
     let!(:result) { FactoryBot.create :result, competition: competition }
