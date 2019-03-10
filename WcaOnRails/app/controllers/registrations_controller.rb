@@ -367,11 +367,9 @@ class RegistrationsController < ApplicationController
 
     flash[:success] = 'Your payment was successful.'
     redirect_to competition_register_path
-  rescue Stripe::CardError => e
+  rescue Stripe::CardError, Stripe::InvalidRequestError => e
     flash[:danger] = 'Unsuccessful payment: ' + e.message
     redirect_to competition_register_path
-  rescue Stripe::InvalidRequestError
-    flash[:danger] = 'Unsuccessful payment: ' + e.message
   end
 
   private def journaled_stripe_charge(*stripe_charge_create_args)
@@ -396,7 +394,7 @@ class RegistrationsController < ApplicationController
         status: "success",
         stripe_charge_id: charge.id,
       )
-    rescue Stripe::CardError => e
+    rescue Stripe::CardError, Stripe::InvalidRequestError => e
       stripe_charge.update!(
         status: "failure",
         error: error_to_s(e),
