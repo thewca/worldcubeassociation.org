@@ -12,7 +12,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     end
 
     competitions = Competition.search(params[:q], params: params, managed_by_user: managed_by_user)
-    competitions = competitions.includes(:delegates, :organizers)
+    competitions = competitions.includes(:delegates, :organizers, :events)
 
     paginate json: competitions
   end
