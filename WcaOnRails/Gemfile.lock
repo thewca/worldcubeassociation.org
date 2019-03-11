@@ -514,7 +514,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    strip_attributes (1.8.1)
+    strip_attributes (1.9.0)
       activemodel (>= 3.0, < 7.0)
     stripe (4.9.0)
       faraday (~> 0.13)
