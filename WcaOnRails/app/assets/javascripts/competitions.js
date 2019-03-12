@@ -74,6 +74,8 @@ onPage('competitions#index', function() {
     if($('#competitions-map').is(':visible')) {
       // Switching between list/map/admin uses AJAX to load the map element,
       // unfortunately it does not trigger our iframe resize trick...
+      // Google maps somehow did make this work, so if you're motivated,
+      // you could look at their source code to try to figure out how they detect and handle this situation.
       wca._competitionsIndexMap.invalidateSize();
       if ($(window).innerWidth() > 800) {
         var formTop = $('#competition-query-form').offset().top;
