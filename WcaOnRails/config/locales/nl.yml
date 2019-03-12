@@ -1,13 +1,21 @@
 nl:
   countries:
+    #original_hash: 9af4622
+    XF: Meerdere Landen (Afrika)
+    #original_hash: 374ac0d
+    XM: Meerdere landen (Amerika's)
     #original_hash: 3f8c9de
     XA: Meerdere landen (Azië)
     #original_hash: 090f3ce
     XE: Meerdere landen (Europa)
+    #original_hash: b50b7a5
+    XN: Meerdere Landen (Noord-Amerika)
+    #original_hash: 428e7af
+    XO: Meerdere Landen (Oceanië)
     #original_hash: 459f987
     XS: Meerdere landen (Zuid-Amerika)
-    #original_hash: 374ac0d
-    XM: Meerdere landen (Amerika's)
+    #original_hash: 9027fe6
+    XW: Meerdere Landen (Wereld)
     #original_hash: 918c53a
     MO: Macao
     #original_hash: 2f488ff
@@ -318,6 +326,8 @@ nl:
         phone_number: Telefoonnummer
         #original_hash: 7044004
         notes: Opmerkingen
+        #original_hash: 730db33
+        receive_delegate_reports: Ik wil graag Delegate Reports van WCA-wedstrijden per email ontvangen
         #original_hash: 57eaf24
         user_preferred_events: Voorkeur wedstrijdonderdelen
       competition:
@@ -365,6 +375,8 @@ nl:
         information: Informatie
         #original_hash: 87b7d5f
         use_wca_registration: Ik wil de WCA-website gebruiken voor aanmeldingen
+        #original_hash: 8020e88
+        external_registration_page: Aanmeldingspagina
         #original_hash: 9bb1965
         competitor_limit_enabled: Maximumaantal deelnemers
         #original_hash: 749f4c9
@@ -601,6 +613,8 @@ nl:
           Voer je naam volledig en juist in, bijvoorbeeld <strong>Stefan
           Pochmann</strong>. Niet: <strong>s pochmann</strong>. Tussennamen
           (volledige of als initialen) zijn optioneel.
+        #original_hash: da39a3e
+        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Na het uploaden van je profielfoto, is het wachten tot het
@@ -637,6 +651,11 @@ nl:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
+        #original_hash: 8c266ea
+        receive_delegate_reports: >-
+          Als je een Candidate Delegate, Senior Delegate, of Lid van de WRC of
+          WQAC bent, ontvang je standaard de Delegate Reports. Let op: het kan
+          tot een uur duren voordat wijzigingen effect hebben.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -680,6 +699,10 @@ nl:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: b2af5f5
+        external_registration_page: >-
+          De pagina waar deelnemers zich moeten aanmelden voor de wedstrijd.
+          Moet een valide http-link zijn.
         #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Het basisbedrag voor aanmelding voor de wedstrijd. Het bedrag wordt
@@ -903,6 +926,8 @@ nl:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -1051,6 +1076,8 @@ nl:
       organizations: Regionale Organisaties
       #original_hash: d790b40
       faq: Veelgestelde vragen (FAQ)
+      #original_hash: 02617c0
+      tutorial: Competitiehandleiding
       #original_hash: a34b69f
       contact: Contactinformatie
       #original_hash: 4fa8cc8
@@ -1093,6 +1120,10 @@ nl:
       history: Geschiedenis
       #original_hash: 8ad8302
       translations: Vertalingen
+      #original_hash: c420cb4
+      disciplinary: Discipinair logboek
+      #original_hash: ecba5f4
+      incidents: Incidentenlogboek
       #original_hash: b8be3d1
       administration: Beheer
       #original_hash: b7ee3c4
@@ -1253,7 +1284,10 @@ nl:
       approve: Goedkeuren
       #original_hash: 85de4b8
       unconfirmed_email: 'Het e-mailadres van deze account (%{email}) is nog niet bevestigd.'
-      confirm_new_email: 'Veranderen van je e-mailadres vereist bevestiging van het nieuwe e-mailadres.'
+      #original_hash: c03b949
+      confirm_new_email: >-
+        Veranderen van je e-mailadres vereist bevestiging van het nieuwe
+        e-mailadres.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Dit account wacht op bevestiging van het nieuwe e-mailadres %{email}.'
       #original_hash: 0340b0b
@@ -1360,6 +1394,8 @@ nl:
       unique: 'is al in gebruik door %{used_name}" met %{used_email}'
       #original_hash: 26f70ed
       dob_past: moet in het verleden liggen
+      #original_hash: b320913
+      dob_recent: moet minimaal 2 jaar oud zijn
       #original_hash: b64df45
       already_represented_country: >-
         Het land kan niet worden gewijzigd naar een land waarvoor de persoon al
@@ -1397,6 +1433,13 @@ nl:
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: d02c03b
       avatar_requires_wca_id: vereist een toegekend WCA-id
+      #original_hash: 8f785ea
+      email_used_by_locked_account_html: >-
+        is al in gebruik voor een ander account. Het is automatisch aangemaakt
+        als resultaat van dat je je hebt aangemeld voor een wedstrijd via een
+        externe service. Als je de eigenaar bent van dit emailadres, kun je het
+        account gebruiken na het resetten van je wachtwoord <a
+        href='/users/password/new'>hier</a>.
     successes:
       messages:
         #original_hash: 31bd401
@@ -1440,8 +1483,6 @@ nl:
       need_country: Voer een land in
       #original_hash: cec28a0
       comp_not_found: Wedstrijd niet gevonden
-      #original_hash: cb763b8
-      registration_closed: Aanmelding voor deze wedstrijd is gesloten
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: >-
         Een aanmelding kan niet tegelijkertijd worden verwijderd en
@@ -1726,6 +1767,21 @@ nl:
       %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Registratie-eisen voor de wedstrijd:'
+    import:
+      #original_hash: 5a394f3
+      title: 'Importeer aanmeldingen voor %{comp}'
+      #original_hash: ccda564
+      info: >-
+        Je kunt de aanmeldingen meerdere keren importeren, wijzigingen worden
+        afgeleid en de database wordt dienovereenkomstig bijgewerkt.
+      #original_hash: 779b272
+      registrations_file_label: Aanmeldingenbestand
+      #original_hash: 4017f0e
+      registrations_file_hint: >-
+        CSV-bestand met kolommen: Status, Naam, Land, WCA-ide, Geboortedatum,
+        Geslacht, Emailadres, en een kolom per wedstrijdonderdeel.
+      #original_hash: d6fbc9d
+      import: Importeren
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1736,6 +1792,11 @@ nl:
         kortere namen en vragen je om de naam aan te passen.
       #original_hash: 1a20fae
       must_have_events: Voeg minimaal één onderdeel toe voor je de wedstrijd bevestigt.
+      #original_hash: a3aea56
+      schedule_must_match_rounds: >-
+        Zorg dat de wedstrijd tenminste één ronde per wedstrijdonderdeel heeft
+        en dat het tijdschema dat je hebt gemaakt alle rondes bevat die zijn
+        vastgesteld, voordat je de wedstrijd bevestigt.
       #original_hash: e390250
       create_success: Nieuwe wedstrijd succesvol aangemaakt!
       #original_hash: afe3a23
@@ -1839,10 +1900,11 @@ nl:
         krijg je %{refund_policy_percent} van het betaalde bedrag terug.
       #original_hash: 4aca553
       no_refunds: Aanmeldkosten worden niet terugbetaald.
-      #original_hash: cf7be5d
-      on_the_spot_registration: >-
-        Aanmeldingen bij de deur worden geaccepteerd. De deelnamekosten zijn dan
-        %{on_the_spot_base_entry_fee}.
+      #original_hash: b86fee2
+      on_the_spot_registration_html: >-
+        Nieuwe aanmeldingen op de wedstrijdlocatie worden geaccepteerd met een
+        basisaanmeldbedrag van %{on_the_spot_base_entry_fee}, als de
+        deelnemerslimiet nog niet is bereikt voor %{end_of_registration}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Aanmeldingen bij de deur worden geaccepteerd en zijn gratis.
       #original_hash: f5f687d
@@ -2033,6 +2095,17 @@ nl:
       coordinates: Coördinaten
       #original_hash: a672984
       add_championship: Voeg Kampioenschap toe
+      championship_types:
+        #original_hash: dc71704
+        world: Wereldkampioenschap
+        #original_hash: d573eb7
+        continental: 'Continentaal Kampioenschap: %{continent}'
+        #original_hash: 39f47e0
+        national: 'Nationaal Kampioenschap: %{country}'
+        #original_hash: e045169
+        greater_china: Greater China Kampioenschap
+        #original_hash: 3b920b7
+        generic: 'Kampioenschap: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2048,6 +2121,10 @@ nl:
       cannot_delete_confirmed: Kan een bevestigde wedstrijd niet verwijderen.
       #original_hash: 191df37
       must_contain_event: moet minimaal één wedstrijdonderdeel bevatten voor deze wedstrijd
+      #original_hash: 54fe619
+      schedule_must_match_rounds: >-
+        moet minimaal één ronde hebben, en alle rondes moeten in het tijdschema
+        zijn opgenomen.
       #original_hash: 6e228b7
       must_contain_delegate: moet minimaal één WCA delegate bevatten
       #original_hash: 8131fc2
@@ -2242,6 +2319,8 @@ nl:
         delegate_report: Report
         #original_hash: b233e77
         registration: Aanmeldingen
+        #original_hash: 3f9176e
+        import_registrations: Importeren aanmeldingen
         #original_hash: d672995
         register: Aanmelden
         #original_hash: 855bd26
@@ -2659,6 +2738,18 @@ nl:
         info_html: >-
           De World Cube Association wordt geleid door the <strong>WCA
           Board</strong>, bestaande uit de volgende leden:
+      chair:
+        #original_hash: de34439
+        name: WCA Voorzitter
+      executive_director:
+        #original_hash: 7d405ff
+        name: WCA Directeur
+      secretary:
+        #original_hash: 1dd4a07
+        name: WCA Secretaris
+      vice_chair:
+        #original_hash: 0388b19
+        name: WCA Vice-Voorzitter
       #original_hash: b0c72a9
       committees: >-
         De volgende commissies zijn verantwoordelijk voor de operationele
@@ -2672,6 +2763,13 @@ nl:
           verdenkingen van schending van het WCA Wedstrijdreglement, and kan
           worden gecontacteerd door WCA-leden ingeval van belangrijke
           persoonlijke zaken betreffende WCA-wedstrijden.
+      wdpc:
+        #original_hash: 70539cd
+        name: WCA Data Protection Committee
+        #original_hash: 1f69829
+        description: >-
+          Deze commissie is verantwoordelijk voor alle zaken rond Data
+          Protection.
       wrc:
         #original_hash: 3da1e85
         name: WCA Reglementen Commissie
@@ -2734,10 +2832,10 @@ nl:
       wcat:
         #original_hash: 2b81984
         name: WCA Competition Announcement Team (Wedstrijdaankondigingsteam)
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
-          Deze commissie heeft de rol om WCA-wedstrijden goed te keuren en aan
-          te kondigen, en te zorgen dat zulke aankondigingen voldoen aan de
+          Dit team heeft de rol om WCA-wedstrijden goed te keuren en aan te
+          kondigen, en te zorgen dat zulke aankondigingen voldoen aan de
           WCA-kwaliteitsstandaarden.
       wmt:
         #original_hash: 2035811
@@ -2748,6 +2846,15 @@ nl:
           WCA Brand, het zoeken van sponsoren, het ondersteunen van de
           distributie van WCA wedstrijdmaterialen en het marketen van WCA
           merchandise.
+      #original_hash: a2c8ad3
+      councils: 'De volgende adviesraden hebben de rol om het WCA-bestuur te adviseren:'
+      wac:
+        #original_hash: 1ce7604
+        name: WCA Adviesraad
+        #original_hash: fb6cd86
+        description: >-
+          Deze adviesraad is verantwoordelijk voor het opbouwen en onderhouden
+          van bilaterale communicatie tussen de WCA-community en de WCA-staf.
       banned:
         #original_hash: d30e2e5
         name: Geschorste deelnemers
@@ -2879,6 +2986,14 @@ nl:
         serieuze schending van het WCA-wedstrijdreglement of zaken in de
         community. Als je zoiets hebt meegemaakt, neem dan gerust met deze
         commissie contact op.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        De WDPC heeft de verantwoordelijkheid en taak voor het onderzoeken,
+        creëren, implementeren, managen, en afdwingen van alle punten van het
+        beleid voor WCA Data Protection, contracten met externe Data Processors
+        van WCA-data, en het managen van de taken in relatie tot Data
+        Protection.
     wrc:
       #original_hash: fcd3526
       info_html: >-
@@ -2947,6 +3062,13 @@ nl:
         Dit team is verantwoordelijk voor het ontwikkelen en managen van het WCA
         Brand, het zoeken van sponsoren, het ondersteunen van de distributie van
         WCA wedstrijdmaterialen en het marketen van WCA merchandise.
+    #original_hash: f97a4f5
+    councils_html: Adviesraden
+    wac:
+      #original_hash: fb6cd86
+      info_html: >-
+        Deze adviesraad is verantwoordelijk voor het opbouwen en onderhouden van
+        bilaterale communicatie tussen de WCA-community en de WCA-staf.
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score tools
