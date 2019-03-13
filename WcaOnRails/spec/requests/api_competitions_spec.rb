@@ -6,24 +6,30 @@ RSpec.describe "API Competitions" do
   let(:headers) { { "CONTENT_TYPE" => "application/json" } }
 
   describe "GET #index" do
-    let!(:competition1) { FactoryBot.create :competition, :visible, starts: 1.week.from_now }
-    let!(:competition2) { FactoryBot.create :competition, :visible, starts: 2.weeks.from_now }
-    let!(:competition3) { FactoryBot.create :competition, :visible, starts: 3.weeks.from_now }
+    let!(:competition1) { FactoryBot.create :competition, :visible, starts: 1.week.from_now, name: "First 2019" }
+    let!(:competition2) { FactoryBot.create :competition, :visible, starts: 1.week.from_now, name: "Second 2019" }
+    let!(:competition3) { FactoryBot.create :competition, :visible, starts: 2.weeks.from_now, name: "Third 2019" }
+    let!(:competition4) { FactoryBot.create :competition, :visible, starts: 3.weeks.from_now, name: "Fourth 2019" }
 
     it "orders competitions by date descending by default" do
       get api_v0_competitions_path, params: { start: 2.week.from_now }
       expect(response).to be_successful
-      json = JSON.parse(response.body)
-      expect(json[0]["id"]).to eq competition3.id
-      expect(json[1]["id"]).to eq competition2.id
+      ids = JSON.parse(response.body).map { |c| c["id"] }
+      expect(ids).to eq [competition4, competition3].map(&:id)
     end
 
     it "allows ordering by date ascending" do
-      get api_v0_competitions_path, params: { start: 2.week.from_now, date_order: "asc" }
+      get api_v0_competitions_path, params: { start: 2.week.from_now, sort: "start_date" }
       expect(response).to be_successful
-      json = JSON.parse(response.body)
-      expect(json[0]["id"]).to eq competition2.id
-      expect(json[1]["id"]).to eq competition3.id
+      ids = JSON.parse(response.body).map { |c| c["id"] }
+      expect(ids).to eq [competition3, competition4].map(&:id)
+    end
+
+    it "allows ordering by multiple fields" do
+      get api_v0_competitions_path, params: { sort: "start_date,-name" }
+      expect(response).to be_successful
+      ids = JSON.parse(response.body).map { |c| c["id"] }
+      expect(ids).to eq [competition2, competition1, competition3, competition4].map(&:id)
     end
   end
 
