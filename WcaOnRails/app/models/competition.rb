@@ -1136,8 +1136,20 @@ class Competition < ApplicationRecord
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
-    date_order = params[:date_order] == "asc" ? :asc : :desc
-    competitions.includes(:delegates, :organizers).order(start_date: date_order)
+    orderable_fields = %i(name start_date end_date)
+    if params[:sort]
+      order = params[:sort].split(',')
+                           .map do |part|
+                             reverse, field = part.match(/^(-)?(\w+)$/).captures
+                             [field.to_sym, reverse ? :desc : :asc]
+                           end
+                           .select { |field, _| orderable_fields.include?(field) }
+                           .to_h
+    else
+      order = { start_date: :desc }
+    end
+
+    competitions.includes(:delegates, :organizers).order(**order)
   end
 
   def all_activities
