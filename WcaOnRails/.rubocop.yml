@@ -100,9 +100,6 @@ Naming/MemoizedInstanceVariableName:
 Performance/RedundantMatch:
   Enabled: false
 
-Style/NegatedIf:
-  Enabled: false
-
 Style/AccessModifierDeclarations:
   Enabled: false
 
