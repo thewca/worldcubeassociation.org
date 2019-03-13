@@ -26,6 +26,13 @@ RSpec.describe "API Competitions" do
     end
 
     it "allows ordering by multiple fields" do
+      get api_v0_competitions_path, params: { sort: "start_date,name" }
+      expect(response).to be_successful
+      ids = JSON.parse(response.body).map { |c| c["id"] }
+      expect(ids).to eq [competition1, competition2, competition3, competition4].map(&:id)
+    end
+
+    it "allows setting descending order" do
       get api_v0_competitions_path, params: { sort: "start_date,-name" }
       expect(response).to be_successful
       ids = JSON.parse(response.body).map { |c| c["id"] }
