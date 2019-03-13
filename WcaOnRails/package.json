@@ -52,6 +52,6 @@
     "webpack-dev-server": "^3.2.1"
   },
   "scripts": {
-    "webpack:analyze": "mkdir -p public/packs && NODE_ENV=production node_modules/.bin/webpack --config config/webpack/production.js --profile --json > public/packs/stats.json && node_modules/.bin/webpack-bundle-analyzer public/packs/stats.json"
+    "webpack:analyze": "mkdir -p public/packs && RACK_ENV=test NODE_ENV=production webpack --config config/webpack/production.js --profile --json > public/packs/stats.json && webpack-bundle-analyzer public/packs/stats.json"
   }
 }
