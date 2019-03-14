@@ -211,6 +211,16 @@ class RegistrationsController < ApplicationController
       email_user = User.find_by(email: registration_row[:email])
       # Use the user if exists, otherwise create a locked account without WCA ID.
       if email_user
+        unless email_user.wca_id.present?
+          # If this is just a user account with no WCA ID, update its data.
+          # Given it's verified by organizers, it's more trustworthy/official data (if different at all).
+          email_user.update!(
+            name: registration_row[:name],
+            country_iso2: Country.c_find(registration_row[:country]).iso2,
+            gender: registration_row[:gender],
+            dob: registration_row[:birth_date],
+          )
+        end
         [email_user, false]
       else
         [create_locked_account!(registration_row), true]

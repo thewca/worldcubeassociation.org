@@ -224,6 +224,20 @@ RSpec.describe "registrations" do
             expect(user.registrations.first.events.map(&:id)).to eq %w(333)
             expect(competition.registrations.count).to eq 1
           end
+
+          it "updates user data unless it has WCA ID" do
+            user = FactoryBot.create(:user)
+            file = csv_file [
+              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+              ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
+            ]
+            expect {
+              post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+            }.to_not change { User.count }
+            expect(user.reload.name).to eq "Sherlock Holmes"
+            expect(user.dob).to eq Date.new(2000, 1, 1)
+            expect(user.country_iso2).to eq "GB"
+          end
         end
 
         context "no user exists with registrant's email" do
