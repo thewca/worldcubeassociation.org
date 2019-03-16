@@ -37,7 +37,7 @@ class StaticPagesController < ApplicationController
     {
       country: "Denmark",
       name: "Dansk Speedcubing Forening",
-      url: "http://danskspeedcubingforening.dk",
+      url: "http://danishcubing.dk/",
       logo: "denmark.png",
     },
     {
@@ -50,7 +50,7 @@ class StaticPagesController < ApplicationController
       country: "France",
       name: "Association Française de Speedcubing",
       url: "http://www.speedcubingfrance.org",
-      logo: "france.svg",
+      logo: "afs.png",
     },
     {
       country: "Japan",
@@ -67,7 +67,7 @@ class StaticPagesController < ApplicationController
     {
       country: "Korea",
       name: "Korea Cube Culture United",
-      url: "https://sites.google.com/view/kccu",
+      url: "https://www.kccu.kr/",
       logo: "korea.png",
     },
     {
@@ -97,6 +97,7 @@ class StaticPagesController < ApplicationController
       country: "Norway",
       name: "Norges kubeforbund",
       url: "http://www.kubing.no",
+      logo: "nkf.png",
     },
     {
       country: "Paraguay",
@@ -106,7 +107,7 @@ class StaticPagesController < ApplicationController
     },
     {
       country: "Poland",
-      name: "Polish Speedcubing Association",
+      name: "Polskie Stowarzyszenie Speedcubingu",
       url: "http://www.speedcubing.pl",
       logo: "pss.jpg",
     },
@@ -125,7 +126,7 @@ class StaticPagesController < ApplicationController
     {
       country: "Slovenia",
       name: "Rubik klub Slovenija",
-      url: "http://www.rubik.si",
+      url: "https://www.rubiks.si/",
       logo: "slovenia.png",
     },
     {
