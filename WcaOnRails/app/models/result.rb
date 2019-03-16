@@ -17,6 +17,7 @@ class Result < ApplicationRecord
   def serializable_hash(options = nil)
     {
       id: id,
+      competition_id: competitionId,
       pos: pos,
       event_id: eventId,
       round_type_id: roundTypeId,
