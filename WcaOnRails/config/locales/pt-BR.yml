@@ -1899,10 +1899,11 @@ pt-BR:
         inscrição.
       #original_hash: 4aca553
       no_refunds: Taxas de inscrição não serão devolvidas em nenhuma circunstância.
-      #original_hash: cf7be5d
-      on_the_spot_registration: >-
-        Inscrições no local serão aceitas com uma taxa de
-        %{on_the_spot_base_entry_fee}.
+      #original_hash: b86fee2
+      on_the_spot_registration_html: >-
+        Inscrições no local serão aceitas com uma taxa base de
+        %{on_the_spot_base_entry_fee} caso o limite de competidores ainda não
+        tenha sido atingido até %{end_of_registration}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Inscrições no local serão aceitas gratuitamente.
       #original_hash: f5f687d
