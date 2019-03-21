@@ -19,7 +19,7 @@
       </div>
   <% end %>
 
-  <% Team.all_ordered_by_english_name.each do |team| %>
+  <% Team.all_official.each do |team| %>
     <h3><%= team.name %> <%= team != Team.board ? "(" + team.acronym + ")" : "" %> <span class="badge team-email"><%= mail_to team.email %></span></h3>
     <p><%= t("about.structure.#{team.friendly_id}.description") %></p>
     <br />
