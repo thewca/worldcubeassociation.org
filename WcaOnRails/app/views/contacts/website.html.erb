@@ -1,9 +1,8 @@
 <% provide(:title, t('.title')) %>
 <div class="container">
   <h1><%= yield(:title) %></h1>
-  <div class="alert alert-info">
-      Before making an inquiry, you may wish to take a look at our <%= link_to 'Frequently Asked Questions', '/faq' %>! If you wish to contact a specific committee or team, you can find their contact information on our <%= link_to 'about page', '/about' %>.
-  </div>
+  <%= alert :info, t('website.faq_note_html') %>
+
   <%= simple_form_for @contact, url: contact_website_path do |f| %>
     <% options = [
       [t('.inquiries.competition'), "competition"],

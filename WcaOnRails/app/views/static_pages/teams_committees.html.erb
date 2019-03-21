@@ -24,11 +24,11 @@
     <p><%= t("about.structure.#{team.friendly_id}.description") %></p>
     <br />
 
-    <% team.current_members.includes(:user).order(team_leader: :desc).order("users.name asc").each do |u| %>
-      <div class="badge team-member-badge <%= u.team_leader ? "team-leader-badge" : "" %>">
-        <%= render "shared/user_avatar", user: u.user %>
-        <div class="team-member-name"><%= u.user.name %>
-          <% if u.team_leader %>
+    <% team.current_members.includes(:user).order(team_leader: :desc).order("users.name asc").each do |tm| %>
+      <div class="badge team-member-badge <%= tm.team_leader ? "team-leader-badge" : "" %>">
+        <%= render "shared/user_avatar", user: tm.user %>
+        <div class="team-member-name"><%= tm.user.name %>
+          <% if tm.team_leader %>
             <br />
             <span class="team-leader-subtext">Leader</span>
           <% end %>

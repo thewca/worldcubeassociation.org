@@ -1,36 +1,38 @@
-.badge.team-member-badge {
-  margin-right: 1em;
-  margin-bottom: 1em;
-  color: #555;
-  background-color: #dddddd;
+.badge {
+  &.team-member-badge {
+    margin-right: 1em;
+    margin-bottom: 1em;
+    color: $gray;
+    background-color: $gray-lighter;
+  }
+
+  &.team-leader-badge,
+  &.officer-badge {
+    background-color: $bright-blue;
+    color: white;
+    padding-top: 6px;
+    vertical-align: top;
+    span.team-leader-subtext {
+      font-style: oblique;
+      margin-top: 6px;
+      display: block;
+    }
+  }
+
+  &.officer-badge {
+    background-color: black;
+    color: white;
+  }
+
+  &.team-email {
+    background-color: $orange;
+    a {
+      color: white;
+    }
+  }
 }
 
 .team-member-name {
   padding-left: 1em;
   display: inline-block;
-}
-
-.badge.team-leader-badge {
-  background-color: #007bff;
-  color: white;
-  padding-top: 6px;
-  vertical-align: top;
-  span.team-leader-subtext {
-    font-style: oblique;
-    margin-top: 6px;
-    display: block;
-  }
-}
-
-.badge.officer-badge {
-  @extend .badge, .team-leader-badge;
-  background-color: black;
-  color: white;
-}
-
-.badge.team-email {
-  background-color: #e64503;
-  a {
-    color: white;
-  }
 }
