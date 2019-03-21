@@ -2723,10 +2723,9 @@ pt-BR:
       board:
         #original_hash: abd2828
         name: Conselho de Diretores da WCA
-        #original_hash: d855b50
         description: >-
-          A World Cube Association é conduzida pelo <strong>WCA Board (Conselho
-          da WCA)</strong>, que consiste nos seguintes membros:
+          A World Cube Association é conduzida pelo WCA Board (Conselho
+          da WCA), que consiste nos seguintes membros:
       chair:
         #original_hash: de34439
         name: Presidente da WCA

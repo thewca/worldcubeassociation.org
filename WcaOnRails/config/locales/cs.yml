@@ -2710,9 +2710,8 @@ cs:
       board:
         #original_hash: abd2828
         name: WCA Board of Directors
-        #original_hash: d855b50
         description: >-
-          World Cube Association je vedena <strong>WCA Boardem</strong>, který
+          World Cube Association je vedena WCA Boardem, který
           se skládá z následujících členů:
       chair:
         #original_hash: de34439

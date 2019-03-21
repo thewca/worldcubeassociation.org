@@ -2495,9 +2495,8 @@ sl:
       board:
         #original_hash: abd2828
         name: WCA Odbor Direktorjev
-        #original_hash: d855b50
         description: >-
-          World Cube Association vodi <strong>WCA Odbor</strong>, ki ga
+          World Cube Association vodi WCA Odbor, ki ga
           sestavljajo sledeči člani:
       #original_hash: b0c72a9
       committees: 'Sledeče komisije so odgovorne za operacijske dejavnosti znotraj WCA:'

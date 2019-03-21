@@ -2705,10 +2705,9 @@ da:
       board:
         #original_hash: abd2828
         name: WCA Bestyrelsen
-        #original_hash: d855b50
         description: >-
-          World Cube Association bliver ledt af <strong>WCA
-          Bestyrelsen</strong>, som består af følgende medlemmer:
+          World Cube Association bliver ledt af WCA
+          Bestyrelsen, som består af følgende medlemmer:
       chair:
         #original_hash: de34439
         name: WCA Formand

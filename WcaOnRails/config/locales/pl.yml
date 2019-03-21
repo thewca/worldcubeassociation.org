@@ -2780,10 +2780,9 @@ pl:
       board:
         #original_hash: abd2828
         name: Zarząd WCA
-        #original_hash: d855b50
         description: >-
-          World Cube Association jest kierowane przez <strong>Zarząd
-          WCA</strong>, składający się z następujących członków:
+          World Cube Association jest kierowane przez Zarząd
+          WCA, składający się z następujących członków:
       chair:
         #original_hash: de34439
         name: Prezes WCA

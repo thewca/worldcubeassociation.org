@@ -2727,10 +2727,9 @@ fr:
       board:
         #original_hash: abd2828
         name: Bureau des Directeurs de la WCA
-        #original_hash: d855b50
         description: >-
-          La World Cube Association est dirigée par le <strong>bureau de la
-          WCA</strong>, constitué des membres suivants :
+          La World Cube Association est dirigée par le bureau de la
+          WCA, constitué des membres suivants :
       #original_hash: b0c72a9
       committees: >-
         Les comités suivants sont responsables des activités opérationnelles de

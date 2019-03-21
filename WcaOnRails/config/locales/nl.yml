@@ -2734,10 +2734,9 @@ nl:
       board:
         #original_hash: abd2828
         name: WCA Board (bestuur)
-        #original_hash: d855b50
         description: >-
-          De World Cube Association wordt geleid door the <strong>WCA
-          Board</strong>, bestaande uit de volgende leden:
+          De World Cube Association wordt geleid door the WCA
+          Board, bestaande uit de volgende leden:
       chair:
         #original_hash: de34439
         name: WCA Voorzitter
