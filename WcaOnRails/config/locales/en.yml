@@ -619,6 +619,7 @@ en:
       delegates: "WCA Delegates"
       organizations: "Regional Organizations"
       faq: "Frequently Asked Questions"
+      teams: "Teams, Committees, and Councils"
       tutorial: "Competition Tutorial"
       contact: "Contact Information"
       tools: "Tools"
@@ -1450,10 +1451,15 @@ en:
       donate_credit: Donate via credit card
       donate_other: Other ways to donate
     structure:
+      teams_committees_councils: "WCA Teams, Committees, and Councilss"
       title: "Structure"
       board:
         name: "WCA Board of Directors"
-        description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams and Committees."
+        description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
+      committees: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. Councils are a special type of team that serve an advisory role to the WCA Board and are made up of community members, not WCA staff members. When there are committee, team, or council openings, information about how to apply is posted on the front page."
+      officers:
+        name: "WCA Officers"
+        description: "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA."
       chair:
         name: "WCA Chair"
       executive_director:
@@ -1462,7 +1468,6 @@ en:
         name: "WCA Secretary"
       vice_chair:
         name: "WCA Vice-Chair"
-      committees: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. When there are committee openings, information about how to apply is posted on the front page."
       #context: WDC
       wdc:
         name: "WCA Disciplinary Committee"
@@ -1507,7 +1512,6 @@ en:
       wmt:
         name: "WCA Marketing Team"
         description: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
-      councils: "The following councils have the role of advising the WCA Board of Directors:"
       #context: WAC
       wac:
         name: "WCA Advisory Council"

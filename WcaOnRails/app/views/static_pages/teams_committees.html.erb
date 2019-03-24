@@ -1,25 +1,25 @@
-<% provide(:title, 'WCA Teams and Committees') %>
+<% provide(:title, t("about.structure.teams_committees_councils")) %>
 
 <div class="container">
-  <h1>WCA Teams and Committees</h1>
+  <h1><%= t("about.structure.teams_committees_councils") %></h1>
 
   <p><%= t("about.structure.committees") %></p>
 
-  <h3>WCA Officers</h3>
-  <p>The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization\'s documents, and the Treasurer manages financial matters of the WCA.</p>
+  <h3><%= t("about.structure.officers.name") %></h3>
+  <p><%= t("about.structure.officers.description") %></p>
   <br />
-  <% @officers.each do |wca_id, position| %>
-    <% user = (Person.find_by wca_id: wca_id).user %>
+
+  <% @officers.each do |user, positions| %>
     <div class="badge team-member-badge officer-badge">
         <%= render "shared/user_avatar", user: user %>
         <div class="team-member-name"><%= user.name %>
           <br />
-          <span class="team-leader-subtext"><%= position %></span>
+          <span class="team-leader-subtext"><%= positions %></span>
         </div>
       </div>
   <% end %>
 
-  <% Team.all_official.each do |team| %>
+  <% ([Team.board] + Team.all_official + Team.all_councils).each do |team| %>
     <h3><%= team.name %> <%= team != Team.board ? "(" + team.acronym + ")" : "" %> <span class="badge team-email"><%= mail_to team.email %></span></h3>
     <p><%= t("about.structure.#{team.friendly_id}.description") %></p>
     <br />

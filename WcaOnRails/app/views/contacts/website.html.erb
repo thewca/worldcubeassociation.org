@@ -1,7 +1,7 @@
 <% provide(:title, t('.title')) %>
 <div class="container">
   <h1><%= yield(:title) %></h1>
-  <%= alert :info, t('faq_note_html') %>
+  <%= alert :info, t('contacts.website.faq_note_html') %>
 
   <%= simple_form_for @contact, url: contact_website_path do |f| %>
     <% options = [
