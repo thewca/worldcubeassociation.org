@@ -248,10 +248,9 @@ class CompetitionResultsValidator
     # return (A, B), which is why we require Result.id < h.resultId.
     results.each_with_index do |r, index|
       next if index >= reference_index
-      score = 0
       reference_solve_times = reference.solve_times
       # We attribute 1 point for each similar solve_time, we then just have to count the points.
-      r.solve_times.each_with_index.count do |solve_time, solve_time_index|
+      score = r.solve_times.each_with_index.count do |solve_time, solve_time_index|
         solve_time.complete? && solve_time == reference_solve_times[solve_time_index]
       end
       # We have at least 3 matching values, consider this similar
