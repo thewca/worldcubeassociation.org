@@ -165,7 +165,7 @@ class StaticPagesController < ApplicationController
     @officers = []
     officer_users.uniq.each do |user|
       # for each officer, find all officer teams they belong to
-      positions = user.current_teams.filter{|team| Team.all_officers.include? team}
+      positions = user.current_teams.filter { |team| Team.all_officers.include? team }
       @officers.push([user, positions.map(&:name).join(", ")])
     end
   end
