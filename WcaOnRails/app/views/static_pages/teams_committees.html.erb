@@ -11,12 +11,12 @@
 
   <% @officers.each do |user, positions| %>
     <div class="badge team-member-badge officer-badge">
-        <%= render "shared/user_avatar", user: user %>
-        <div class="team-member-name"><%= user.name %>
-          <br />
-          <span class="team-leader-subtext"><%= positions %></span>
-        </div>
+      <%= render "shared/user_avatar", user: user %>
+      <div class="team-member-name"><%= user.name %>
+        <br />
+        <span class="team-leader-subtext"><%= positions %></span>
       </div>
+    </div>
   <% end %>
 
   <% ([Team.board] + Team.all_official + Team.all_councils).each do |team| %>
