@@ -1,3 +1,10 @@
+.officer-container {
+  @media (min-width: 576px) {
+    display: inline-flex;
+    flex-wrap: wrap;
+  }
+}
+
 .badge {
   &.team-member-badge {
     margin-right: 1em;
@@ -20,6 +27,10 @@
       font-style: oblique;
       margin-top: 6px;
       display: block;
+      line-height: 1.5;
+    }
+    .avatar-thumbnail {
+      vertical-align: top;
     }
   }
 

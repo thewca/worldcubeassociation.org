@@ -1451,7 +1451,7 @@ en:
       donate_credit: Donate via credit card
       donate_other: Other ways to donate
     structure:
-      teams_committees_councils: "WCA Teams, Committees, and Councilss"
+      teams_committees_councils: "WCA Teams, Committees, and Councils"
       title: "Structure"
       board:
         name: "WCA Board of Directors"
@@ -1468,6 +1468,8 @@ en:
         name: "WCA Secretary"
       vice_chair:
         name: "WCA Vice-Chair"
+      treasurer:
+        name: "WCA Treasurer"
       #context: WDC
       wdc:
         name: "WCA Disciplinary Committee"

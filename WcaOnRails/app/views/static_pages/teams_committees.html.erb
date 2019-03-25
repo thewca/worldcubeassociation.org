@@ -9,15 +9,19 @@
   <p><%= t("about.structure.officers.description") %></p>
   <br />
 
-  <% @officers.each do |user, positions| %>
-    <div class="badge team-member-badge officer-badge">
-      <%= render "shared/user_avatar", user: user %>
-      <div class="team-member-name"><%= user.name %>
-        <br />
-        <span class="team-leader-subtext"><%= positions %></span>
+  <div class="officer-container">
+    <% @officers.each do |user, positions| %>
+      <div class="badge team-member-badge officer-badge">
+        <%= render "shared/user_avatar", user: user %>
+        <div class="team-member-name"><%= user.name %>
+          <br />
+          <span class="team-leader-subtext">
+            <%= positions %>
+          </span>
+        </div>
       </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 
   <% ([Team.board] + Team.all_official + Team.all_councils).each do |team| %>
     <h3><%= team.name %> <%= team != Team.board ? "(" + team.acronym + ")" : "" %> <span class="badge team-email"><%= mail_to team.email %></span></h3>

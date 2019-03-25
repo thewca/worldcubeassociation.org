@@ -162,11 +162,15 @@ class StaticPagesController < ApplicationController
   def teams_committees
     # get all users who hold one or more officer positions
     officer_users = Team.all_officers.map(&:current_members).inject(&:+).map(&:user)
+    treasurers = Team.wfc.current_members.filter(&:team_leader).map(&:user)
     @officers = []
-    officer_users.uniq.each do |user|
+    (officer_users + treasurers).uniq.each do |user|
       # for each officer, find all officer teams they belong to
-      positions = user.current_teams.filter { |team| Team.all_officers.include? team }
-      @officers.push([user, positions.map(&:name).join(", ")])
+      positions = user.current_teams.filter { |team| Team.all_officers.include? team }.map(&:name)
+      if Team.wfc.current_members.filter(&:team_leader).map(&:user).include?(user) then
+        positions.push(t('about.structure.treasurer.name'))
+      end
+      @officers.push([user, positions.join("<br />").html_safe])
     end
   end
 
