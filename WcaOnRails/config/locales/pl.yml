@@ -1954,10 +1954,11 @@ pl:
         %{refund_policy_percent} zapłaconego wpisowego.
       #original_hash: 4aca553
       no_refunds: Wpisowe nie będzie zwracane pod żadnym warunkiem.
-      #original_hash: cf7be5d
-      on_the_spot_registration: >-
-        Rejestracja na miejscu będzie możliwa z bazowym wpisowym w wysokości
-        %{on_the_spot_base_entry_fee}.
+      #original_hash: b86fee2
+      on_the_spot_registration_html: >-
+        Rejestracje na miejscu będą akceptowane przy bazowym wpisowym w
+        wysokości %{on_the_spot_base_entry_fee}, jeżeli limit zawodników nie
+        zostanie osiągnięty do %{end_of_registration}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Rejestracja na miejscu będzie możliwa za darmo.
       #original_hash: f5f687d
