@@ -1510,6 +1510,7 @@ en:
     motions: "Motions"
     minutes: "Minutes"
     policies: "WCA Policies"
+    codeofethics: "Code of Ethics"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
