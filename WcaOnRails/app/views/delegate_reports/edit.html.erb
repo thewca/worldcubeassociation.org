@@ -11,7 +11,8 @@
     <% if @delegate_report.posted? %>
       <%= f.input :discussion_url %>
     <% end %>
-    <%= f.input :schedule_url %>
+    <% default_schedule_url = @competition.competition_venues.any? ? link_to_competition_schedule_tab(@competition) : '' %>
+    <%= f.input :schedule_url, input_html: { value: default_schedule_url } %>
 
     <%= f.input :equipment, input_html: { class: "markdown-editor" } %>
     <%= f.input :venue, input_html: { class: "markdown-editor" } %>
