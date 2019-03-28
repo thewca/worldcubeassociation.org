@@ -266,9 +266,6 @@ class CompetitionsController < ApplicationController
       unless comp.results
         return render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe
       end
-      unless comp.results_posted.nil?
-        return render html: "<div class='container'><div class='alert alert-warning'>Results already posted</div></div>".html_safe
-      end
 
       event = Event.c_find(params[:event_id])
       if event.nil?
