@@ -2922,6 +2922,8 @@ es:
     minutes: Actas
     #original_hash: 6db524a
     policies: Políticas WCA
+    #original_hash: 91ac873
+    codeofethics: Código de Ética
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
