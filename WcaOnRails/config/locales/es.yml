@@ -2922,6 +2922,8 @@ es:
     minutes: Actas
     #original_hash: 6db524a
     policies: Políticas WCA
+    #original_hash: 91ac873
+    codeofethics: Código de Ética
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
@@ -3341,13 +3343,13 @@ es:
       #original_hash: 557095b
       content1_html: >-
         Todas las competiciones deber seguir el <a
-        href=“/regulations/“>Reglamento de la WCA</a>. Es importante que los
+        href="/regulations/">Reglamento de la WCA</a>. Es importante que los
         competidores lean este reglamento antes de presentarse a su primera
         competición.
       #original_hash: 4296902
       content2_html: >-
         El Reglamento de la WCA está complementado por las <a
-        href=“/regulations/guidelines.html”>Directrices de la WCA</a>, que
+        href="/regulations/guidelines.html">Directrices de la WCA</a>, que
         contienen aclaraciones y explicaciones adicionales.
     panel2:
       #original_hash: 8ad8302
@@ -3356,7 +3358,7 @@ es:
       content1_html: >-
         El reglamento de la WCA no está disponible solo en inglés: ha sido
         traducido a varios idiomas por miembros de la WCA: <a
-        href=“/regulations/translations/“>Traducciones</a>.
+        href="/regulations/translations/">Traducciones</a>.
       #original_hash: 6add7a3
       content2_html: >-
         <strong>Importante</strong>: Aunque las traducciones son de mucha ayuda,
@@ -3367,7 +3369,7 @@ es:
       title: Preguntas Frecuentes sobre el Reglamento
       #original_hash: 8afba93
       content1_html: >-
-        La <a href=“/faq”>sección de preguntas frecuentes</a> responde a
+        La <a href="/faq">sección de preguntas frecuentes</a> responde a
         múltiples preguntas frecuentes sobre el Reglamento de la WCA.
     panel4:
       #original_hash: ad5f6e7
@@ -3376,7 +3378,7 @@ es:
       content1_html: >-
         Si estás interesado en organizar una competición o ya has planeado
         organizar una, por favor, lee nuestras <a
-        href=“/organizer-guidelines”>Directrices para Organizadores</a>.
+        href="/organizer-guidelines">Directrices para Organizadores</a>.
       #original_hash: 5016669
       content2_html: >-
         Este documento contiene información importante y debería ser leído por
