@@ -7,6 +7,7 @@ class Result < ApplicationRecord
 
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
   belongs_to :country, foreign_key: :countryId
+  belongs_to :round_type, foreign_key: :roundTypeId
   validates :country, presence: true
 
   scope :final, -> { where(roundTypeId: RoundType.final_rounds.map(&:id)) }

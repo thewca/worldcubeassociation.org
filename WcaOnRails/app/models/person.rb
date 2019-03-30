@@ -176,12 +176,11 @@ class Person < ApplicationRecord
   end
 
   def championship_podiums_with_condition
-    # Get all championship competitions of the given type where the person made it to the finals.
-    # For each of these competitions, get final results only for people eligible for the championship
-    # and reassign their positions. If a result belongs to the person, add it to the array.
+    # Get all championship competitions of the given type in which the person competed.
+    # For each of these competitions, get results only for people eligible for the championship
+    # and reassign their positions. If a podium result belongs to the person, add it to the array.
     [].tap do |championship_podium_results|
       yield(results)
-        .final
         .succeeded
         .order("year DESC")
         .includes(:competition)
@@ -189,20 +188,21 @@ class Person < ApplicationRecord
         .uniq
         .each do |competition|
           yield(competition.results)
-            .final
             .succeeded
-            .joins(:event)
-            .order("Events.rank, pos")
+            .joins(:event, :round_type)
+            .order("Events.rank, RoundTypes.rank DESC, pos")
             .includes(:format, :competition)
             .group_by(&:eventId)
-            .each_value do |final_results|
-              previous_old_pos = nil
-              previous_new_pos = nil
-              final_results.each_with_index do |result, index|
-                old_pos = result.pos
-                result.pos = (result.pos == previous_old_pos ? previous_new_pos : index + 1)
-                previous_old_pos = old_pos
-                previous_new_pos = result.pos
+            .each_value do |event_results|
+              event_results = event_results.uniq(&:personId)
+              previous_result = nil
+              event_results.each_with_index do |result, index|
+                if result.roundTypeId == previous_result&.roundTypeId && result.pos == previous_result&.pos_was
+                  result.pos = previous_result.pos
+                else
+                  result.pos = index + 1
+                end
+                previous_result = result
                 break if result.pos > 3
                 championship_podium_results.push result if result.personId == self.wca_id
               end

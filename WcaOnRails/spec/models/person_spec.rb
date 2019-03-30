@@ -129,13 +129,13 @@ RSpec.describe Person, type: :model do
     let!(:us_nationals2017) { FactoryBot.create :competition, championship_types: ["US"], starts: Date.new(2017, 1, 1) }
     let!(:fr_competitor) do
       FactoryBot.create(:person, countryId: "France").tap do |fr_competitor|
-        FactoryBot.create :result, person: fr_competitor, competition: fr_nationals2016, pos: 1, eventId: "333"
-        FactoryBot.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, eventId: "333"
+        FactoryBot.create :result, person: fr_competitor, competition: fr_nationals2016, pos: 1, eventId: "333", roundTypeId: "f"
+        FactoryBot.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, eventId: "333", roundTypeId: "f"
       end
     end
     let!(:us_competitor) do
       FactoryBot.create(:person, countryId: "USA").tap do |us_competitor|
-        FactoryBot.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, eventId: "333"
+        FactoryBot.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, eventId: "333", roundTypeId: "f"
       end
     end
 
@@ -190,6 +190,14 @@ RSpec.describe Person, type: :model do
       expect(us_competitor1.championship_podiums[:national].first.pos).to eq 1
       expect(us_competitor2.championship_podiums[:national].first.pos).to eq 1
       expect(us_competitor3.championship_podiums[:national].first.pos).to eq 3
+    end
+
+    context "when a championship final don't have sufficient number of competitors" do
+      it "takes people from previous round into account" do
+        fr_first_round_competitor = FactoryBot.create(:person, countryId: "France")
+        FactoryBot.create :result, person: fr_first_round_competitor, competition: fr_nationals2016, pos: 1, eventId: "333", roundTypeId: "1"
+        expect(fr_first_round_competitor.championship_podiums[:national].first.pos).to eq 2
+      end
     end
   end
 end
