@@ -1890,10 +1890,11 @@ pt:
         reembolsado %{refund_policy_percent} da sua taxa de registo.
       #original_hash: 4aca553
       no_refunds: Taxas de registo não serão reembolsadas em nenhuma circunstância.
-      #original_hash: cf7be5d
-      on_the_spot_registration: >-
-        Registos no local serão aceites com uma taxa base de registo de
-        %{on_the_spot_base_entry_fee}.
+      #original_hash: b86fee2
+      on_the_spot_registration_html: >-
+        Registos no local da competição serão aceites com uma taxa de registo
+        base de %{on_the_spot_base_entry_fee} se o número limite de competidores
+        não for atingido até %{end_of_registration}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Registos no local serão aceites gratuitamente.
       #original_hash: f5f687d
@@ -2869,6 +2870,8 @@ pt:
     minutes: Minutas
     #original_hash: 6db524a
     policies: Políticas da WCA
+    #original_hash: 91ac873
+    codeofethics: Código de Ética
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
