@@ -262,7 +262,7 @@ GEM
       railties (>= 3.1)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
-    json (2.1.0)
+    json (2.2.0)
     json-schema (2.8.1)
       addressable (>= 2.4)
     jwt (2.1.0)
@@ -418,7 +418,7 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     rdoc (6.0.1)
-    recaptcha (4.13.1)
+    recaptcha (4.13.2)
       json
     redcarpet (3.4.0)
     ref (2.0.0)
