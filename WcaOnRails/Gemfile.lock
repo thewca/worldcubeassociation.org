@@ -227,7 +227,7 @@ GEM
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
     high_voltage (3.1.0)
-    highline (2.0.0)
+    highline (2.0.1)
     htmlentities (4.3.4)
     http_accept_language (2.1.1)
     httpclient (2.8.3)
@@ -238,7 +238,7 @@ GEM
       railties (>= 5.0, < 5.3)
     i18n-spec (0.6.0)
       iso
-    i18n-tasks (0.9.28)
+    i18n-tasks (0.9.29)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
@@ -350,7 +350,7 @@ GEM
     orm_adapter (0.5.0)
     os (1.0.0)
     parallel (1.13.0)
-    parser (2.6.0.0)
+    parser (2.6.2.0)
       ast (~> 2.4.0)
     phantomjs (2.1.1.0)
     pluginator (1.5.0)
