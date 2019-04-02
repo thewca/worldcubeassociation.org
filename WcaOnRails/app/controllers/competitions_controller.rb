@@ -342,9 +342,11 @@ class CompetitionsController < ApplicationController
           body += "#{record_strs.join(", ")}.  \n" # Trailing spaces for markdown give us a <br>
         end
       end
-      comp.update!(results_posted_at: Time.now)
-      comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
-      comp.registrations.accepted.each { |registration| registration.user.notify_of_id_claim_possibility(comp) }
+      unless competition.results_posted?
+        comp.update!(results_posted_at: Time.now)
+        comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
+        comp.registrations.accepted.each { |registration| registration.user.notify_of_id_claim_possibility(comp) }
+      end
       create_post_and_redirect(title: title, body: body, author: current_user, tags: "results", world_readable: true)
     end
   end
