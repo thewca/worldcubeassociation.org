@@ -2933,6 +2933,8 @@ pl:
     minutes: Protokoły
     #original_hash: 6db524a
     policies: Polityki WCA
+    #original_hash: 91ac873
+    codeofethics: Kodeks Moralny
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegaci WCA
