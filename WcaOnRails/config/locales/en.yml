@@ -283,6 +283,7 @@ en:
         name: "Name"
         birthday: "Birthday"
         registration_competition_events: "Events"
+        email: "Email"
       #context: a competition tab
       competition_tab:
         content: "Content"

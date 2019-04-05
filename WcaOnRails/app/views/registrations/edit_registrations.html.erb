@@ -7,6 +7,12 @@
     <%= link_to icon("plus", "Show events"), competition_edit_registrations_path(@competition, show_events: "true"), class: "btn btn-primary" %>
   <% end %>
 
+  <% if @show_full_mail %>
+    <%= link_to icon("minus", "Hide Emails"), competition_edit_registrations_path(@competition), class: "btn btn-primary" %>
+  <% else %>
+    <%= link_to icon("plus", "Show Emails"), competition_edit_registrations_path(@competition, show_email: "true"), class: "btn btn-primary" %>
+  <% end %>
+
   <%= form_for @competition, url: competition_registrations_do_actions_for_selected_path(@competition), remote: true do |f| %>
     <% [:pending, :accepted, :deleted].each do |status| %>
       <% if :pending == status %>
@@ -42,7 +48,9 @@
             <% if @competition.using_stripe_payments? %>
               <th class="paid"><%= t 'activerecord.attributes.registration.paid_entry_fees' %></th>
             <% end %>
-            <th></th>
+            <% if @show_full_mail %>
+              <th class="email"><%= t 'activerecord.attributes.registration.email' %></th>
+            <% end %>
 
             <!-- Extra column for .table-greedy-last-column -->
             <th></th>
@@ -96,9 +104,15 @@
                 </td>
               <% end %>
               <td>
+              <% if @show_full_mail %>
+                <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
+                  <%= registration.email %>
+                <% end %>
+              <% else %>
                 <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
                   <span class="glyphicon glyphicon-envelope"></span>
                 <% end %>
+              <% end %>
               </td>
 
               <!-- Extra column for .table-greedy-last-column -->

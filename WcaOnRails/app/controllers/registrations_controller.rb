@@ -36,6 +36,7 @@ class RegistrationsController < ApplicationController
 
   def edit_registrations
     @show_events = params[:show_events] == "true"
+    @show_full_mail = params[:show_email] == "true"
     @competition = competition_from_params
     @registrations = @competition.registrations.includes(:user, :registration_payments)
     @registrations = @registrations.includes(:events) if @show_events
