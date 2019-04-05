@@ -32,6 +32,16 @@ RSpec.describe "API Persons" do
         expect(json.map { |element| element["person"]["wca_id"] }).to match_array other_people.map(&:wca_id)
       end
     end
+
+    context "when a query is given" do
+      it "renders only people matching the query parameter" do
+        get api_v0_persons_path, params: { q: "#{person.wca_id.first(4)} #{person.name[1..-1]}" }
+        expect(response).to be_successful
+        json = JSON.parse(response.body)
+        expect(json.length).to eq 1
+        expect(json.map { |element| element["person"]["wca_id"] }).to match_array [person.wca_id]
+      end
+    end
   end
 
   describe "GET #show" do
