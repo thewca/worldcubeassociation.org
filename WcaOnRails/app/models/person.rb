@@ -259,6 +259,14 @@ class Person < ApplicationRecord
     %w(m f).include? gender
   end
 
+  def self.search(query)
+    persons = Person.current.includes(:user)
+    query.split.each do |part|
+      persons = persons.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
+    end
+    persons.order(:name)
+  end
+
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,

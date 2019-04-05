@@ -2,7 +2,12 @@
 
 class Api::V0::PersonsController < Api::V0::ApiController
   def index
-    persons = Person.current.includes(:user, :ranksSingle, :ranksAverage)
+    if params[:q].present?
+      persons = Person.search(params[:q])
+    else
+      persons = Person.current.includes(:user)
+    end
+    persons = persons.includes(:ranksSingle, :ranksAverage)
     if params[:wca_ids].present?
       persons = persons.where(wca_id: params[:wca_ids].split(','))
     end
