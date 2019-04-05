@@ -461,6 +461,10 @@ class Competition < ApplicationRecord
     end
   end
 
+  def has_defined_dates?
+    return self.start_date.present? && self.end_date.present?
+  end
+
   old_competition_events_attributes = instance_method(:competition_events_attributes=)
   define_method(:competition_events_attributes=) do |attributes|
     # This is also a mess. We "overload" the competition_events_attributes= method
