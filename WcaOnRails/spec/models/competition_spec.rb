@@ -861,4 +861,16 @@ RSpec.describe Competition do
       change_and_check_activities(Date.parse("2018-11-18"), Date.parse("2018-11-20"))
     end
   end
+
+  describe "has_defined_dates" do
+    it "is false when no start and end date" do
+      competition = FactoryBot.create(:competition, start_date: nil, end_date: nil)
+      expect(competition.has_defined_dates?).to eq false
+    end
+
+    it "is true when has start and end date" do
+      competition = FactoryBot.create(:competition)
+      expect(competition.has_defined_dates?).to eq true
+    end
+  end
 end

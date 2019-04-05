@@ -2,23 +2,31 @@
 <%= javascript_pack_tag 'edit_schedule' %>
 
 <%= render layout: 'nav' do %>
-  <div id="edit-schedule-area"></div>
-  <script>
-    $(function() {
-      competition_info = {
-        id: <%= @competition.id.to_json.html_safe %>,
-        venue: <%= @competition.venue.to_json.html_safe %>,
-        venueDetails: <%= @competition.venueDetails.to_json.html_safe %>,
-        lat: <%= @competition.latitude.to_json.html_safe %>,
-        lng: <%= @competition.longitude.to_json.html_safe %>,
-        countryZones: <%= @competition.country_zones.to_json.html_safe %>,
-        scheduleWcif: <%= @competition.schedule_wcif.to_json.html_safe %>,
-        eventsWcif: <%= @competition.events_wcif.to_json.html_safe %>,
-      }
-      wca.initializeScheduleForm(
-        competition_info,
-        <%= I18n.locale.to_json.html_safe %>
-      );
-    });
-  </script>
+  <% if @competition.has_defined_dates? %>
+    <div id="edit-schedule-area"></div>
+    <script>
+      $(function() {
+        competition_info = {
+          id: <%= @competition.id.to_json.html_safe %>,
+          venue: <%= @competition.venue.to_json.html_safe %>,
+          venueDetails: <%= @competition.venueDetails.to_json.html_safe %>,
+          lat: <%= @competition.latitude.to_json.html_safe %>,
+          lng: <%= @competition.longitude.to_json.html_safe %>,
+          countryZones: <%= @competition.country_zones.to_json.html_safe %>,
+          scheduleWcif: <%= @competition.schedule_wcif.to_json.html_safe %>,
+          eventsWcif: <%= @competition.events_wcif.to_json.html_safe %>,
+        }
+        wca.initializeScheduleForm(
+          competition_info,
+          <%= I18n.locale.to_json.html_safe %>
+        );
+      });
+    </script>
+  <% else %>
+    <div class="alert alert-danger">
+      There is no start and/or end date assigned to this competition yet.
+      Before you can manage your schedule, you have to add them by clicking
+      <%=link_to "here", edit_competition_path(@competition, anchor: "competition_start_date")%>.
+    </div>
+  <% end %>
 <% end %>
