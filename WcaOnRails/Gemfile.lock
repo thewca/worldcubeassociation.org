@@ -535,7 +535,7 @@ GEM
     tins (1.16.3)
     translighterate (0.2.2)
       actionview (>= 4.0, < 6.0)
-    twitter_cldr (4.4.3)
+    twitter_cldr (4.4.4)
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.0)
       tzinfo
