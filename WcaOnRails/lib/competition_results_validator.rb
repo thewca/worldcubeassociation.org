@@ -7,9 +7,9 @@ class CompetitionResultsValidator
 
   # General errors and warnings
   UNEXPECTED_RESULTS_ERROR = "Unexpected results for %{event_id}. The event is present in the results but not listed as an official event."\
-  "Remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
+    " Remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
   MISSING_RESULTS_WARNING = "Missing results for %{event_id}. The event is not present in the results but listed as an official event."\
-  "If the event was held, correct the results. If the event was not held, leave a comment about that to the WRT."
+    " If the event was held, correct the results. If the event was not held, leave a comment about that to the WRT."
   UNEXPECTED_ROUND_RESULTS_ERROR = "Unexpected results for round %{round_id}. The round is present in the results but not created on the events tab. Edit the events tab to include the round."
   MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}. There is an additional round in the events tab that is not present in the results. Edit the events tab to remove the round."
   UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a combined round in the results. Please update the round's information in the competition's manage events page."
@@ -20,7 +20,7 @@ class CompetitionResultsValidator
 
   # Regulations-specific errors and warnings
   COMPETITOR_LIMIT_WARNING = "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit})."\
-  "Unless specific agreement was made when announcing the competition (such as a per-day competitor limit), the results of the competitors registered after the competitor limit was reached must be removed."
+    " Unless a specific agreement was made when announcing the competition (such as a per-day competitor limit), the results of the competitors registered after the competitor limit was reached must be removed."
   REGULATION_9M_ERROR = "Event %{event_id} has more than four rounds, which must not happen per Regulation 9m."
   REGULATION_9M1_ERROR = "Round %{round_id} has 99 competitors or less but has at least three subsequents rounds, which must not happen per Regulation 9m1."
   REGULATION_9M2_ERROR = "Round %{round_id} has 15 competitors or less but has at least two subsequents rounds, which must not happen per Regulation 9m2."
