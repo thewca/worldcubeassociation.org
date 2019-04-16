@@ -56,6 +56,10 @@ class CompetitionResultsValidator
   DNS_AFTER_RESULT_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
   SIMILAR_RESULTS_WARNING = "[%{round_id}] Result for %{person_name} is similar to the results for %{similar_person_name}."
 
+  # Miscelaneous errors
+  MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round \"%{wcif_id}\" for the cumulative time limit specified in the WCIF."\
+  " Please go to the manage events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
+
   INDIVIDUAL_RESULT_JSON_SCHEMA = {
     "type" => "object",
     "properties" => {
@@ -589,14 +593,22 @@ class CompetitionResultsValidator
             cumulative_round_ids = cumulative_wcif_round_ids.map do |wcif_id|
               parsed_wcif_id = Round.parse_wcif_id(wcif_id)
               # Get the actual round_id from our expected rounds by id
-              @expected_rounds_by_ids.select do |id, round|
+              actual_round_id = @expected_rounds_by_ids.select do |id, round|
                 round.event.id == parsed_wcif_id[:event_id] && round.number == parsed_wcif_id[:round_number]
-              end.first[0]
-            end
+              end.first
+              unless actual_round_id
+                # FIXME: this needs to be removed when https://github.com/thewca/worldcubeassociation.org/issues/3254 is fixed.
+                @errors[:results] << format(MISSING_CUMULATIVE_ROUND_ID_ERROR, wcif_id: wcif_id, original_round_id: round_id)
+              end
+              actual_round_id&.at(0)
+            end.compact
 
             # Get all solve times for all cumulative rounds for the current person
             all_results_for_cumulative_rounds = cumulative_round_ids.map do |id|
-              results_by_round_id[id].find { |r| r.personId == result.personId }
+              # NOTE: since we proceed with all checks even if some expected rounds
+              # do not exist, we may have *expected* cumulative rounds that may
+              # not exist in results.
+              results_by_round_id[id]&.find { |r| r.personId == result.personId }
             end.compact.map(&:solve_times).flatten
             completed_solves_for_rounds = all_results_for_cumulative_rounds.select(&:complete?)
             number_of_dnf_solves = all_results_for_cumulative_rounds.select(&:dnf?).size
