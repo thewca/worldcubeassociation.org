@@ -573,15 +573,15 @@ class User < ApplicationRecord
   end
 
   def can_view_crash_course?
-    can_view_delegate_matters? || communication_team? || competition_announcement_team?
+    can_view_delegate_matters? || communication_team?
   end
 
   def can_create_posts?
-    admin? || board_member? || results_team? || wdc_team? || wrc_team? || communication_team? || can_announce_competitions?
+    wdc_team? || wrc_team? || communication_team? || can_announce_competitions?
   end
 
   def can_update_crash_course?
-    admin? || board_member? || results_team? || quality_assurance_committee? || competition_announcement_team?
+    can_admin_competitions? || quality_assurance_committee?
   end
 
   def can_admin_competitions?
