@@ -657,7 +657,7 @@ class User < ApplicationRecord
   end
 
   def can_see_admin_competitions?
-    board_member? || senior_delegate? || admin? || quality_assurance_committee? || competition_announcement_team?
+    can_admin_competitions? || senior_delegate? || quality_assurance_committee?
   end
 
   def can_approve_media?
