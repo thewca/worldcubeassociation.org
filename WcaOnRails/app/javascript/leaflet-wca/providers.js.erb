@@ -1,6 +1,10 @@
-import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import { GoogleProvider } from 'leaflet-geosearch';
 
-export const searchProvider = new OpenStreetMapProvider();
+export const searchProvider = new GoogleProvider({
+  params: {
+    key: "<%= ENVied.GOOGLE_MAPS_API_KEY %>",
+  },
+});
 
 const tileProviders = {
   osm: {
