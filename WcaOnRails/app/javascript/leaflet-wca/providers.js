@@ -1,10 +1,6 @@
-import { GoogleProvider } from 'leaflet-geosearch';
+import { WCAProvider } from './wcaProvider.js.erb';
 
-export const searchProvider = new GoogleProvider({
-  params: {
-    key: "<%= ENVied.GOOGLE_MAPS_API_KEY %>",
-  },
-});
+export const searchProvider = new WCAProvider();
 
 const tileProviders = {
   osm: {

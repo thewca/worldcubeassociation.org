@@ -1,9 +1,5 @@
 import events from './events.js.erb'
 
-function getAuthenticityToken() {
-  return document.querySelector('meta[name=csrf-token]').content;
-}
-
 function promiseSaveWcif(competitionId, data) {
   let url = `/api/v0/competitions/${competitionId}/wcif`;
   let fetchOptions = {
@@ -17,6 +13,10 @@ function promiseSaveWcif(competitionId, data) {
   };
 
   return fetch(url, fetchOptions);
+}
+
+export function getAuthenticityToken() {
+  return document.querySelector('meta[name=csrf-token]').content;
 }
 
 export function saveWcif(competitionId, data, onSuccess, onFailure) {

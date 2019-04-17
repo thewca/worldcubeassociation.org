@@ -85,6 +85,7 @@ gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
 gem 'google-api-client'
+gem 'rest-client'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
