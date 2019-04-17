@@ -168,7 +168,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.0.2)
       railties (>= 4.2)
-    doorkeeper-i18n (5.0.0)
+    doorkeeper-i18n (5.0.1)
     dotenv (2.7.2)
     dotenv-rails (2.7.2)
       dotenv (= 2.7.2)
