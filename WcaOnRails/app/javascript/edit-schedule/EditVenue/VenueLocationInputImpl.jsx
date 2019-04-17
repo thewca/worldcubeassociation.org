@@ -2,7 +2,7 @@ import React from 'react'
 // Import leaflet, and the fix for the icon url
 import 'leaflet-wca';
 import { Map, TileLayer, Marker } from "react-leaflet"
-import { userTileProvider } from 'leaflet-wca/providers.js.erb';
+import { userTileProvider } from 'leaflet-wca/providers.js';
 import { toDegrees } from '../utils'
 import { Row, Col } from 'react-bootstrap'
 

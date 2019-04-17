@@ -11,7 +11,7 @@ import {
 } from 'leaflet';
 import { redMarker, blueMarker } from './markers';
 import { GeoSearchControl } from 'leaflet-geosearch';
-import { searchProvider, userTileProvider } from './providers.js.erb';
+import { searchProvider, userTileProvider } from './providers.js';
 
 // Leaflet and webpacker are not good friend, we need to require the images for
 // the assets to be properly setup.
