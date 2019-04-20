@@ -34,30 +34,32 @@ module AuxiliaryDataComputation
       %w(best ConciseSingleResults),
       %w(average ConciseAverageResults),
     ].each do |field, table_name|
-      ActiveRecord::Base.connection.execute "DROP TABLE IF EXISTS #{table_name}"
-      ActiveRecord::Base.connection.execute <<-SQL
-        CREATE TABLE #{table_name}
-        SELECT
-          result.id,
-          #{field},
-          valueAndId,
-          personId,
-          eventId,
-          country.id countryId,
-          continentId,
-          year, month, day
-        FROM (
-            SELECT MIN(#{field} * 1000000000 + result.id) valueAndId
-            FROM Results result
+      ActiveRecord::Base.transaction do
+        ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
+        ActiveRecord::Base.connection.execute <<-SQL
+          INSERT INTO #{table_name} (id, #{field}, valueAndId, personId, eventId, countryId, continentId, year, month, day)
+          SELECT
+            result.id,
+            #{field},
+            valueAndId,
+            personId,
+            eventId,
+            country.id countryId,
+            continentId,
+            year, month, day
+          FROM (
+              SELECT MIN(#{field} * 1000000000 + result.id) valueAndId
+              FROM Results result
+              JOIN Competitions competition ON competition.id = competitionId
+              JOIN Events event ON event.id = eventId AND event.rank < 990
+              WHERE #{field} > 0
+              GROUP BY personId, result.countryId, eventId, year
+            ) MinValuesWithId
+            JOIN Results result ON result.id = valueAndId % 1000000000
             JOIN Competitions competition ON competition.id = competitionId
-            JOIN Events event ON event.id = eventId AND event.rank < 990
-            WHERE #{field} > 0
-            GROUP BY personId, result.countryId, eventId, year
-          ) MinValuesWithId
-          JOIN Results result ON result.id = valueAndId % 1000000000
-          JOIN Competitions competition ON competition.id = competitionId
-          JOIN Countries country ON country.id = result.countryId
-      SQL
+            JOIN Countries country ON country.id = result.countryId
+        SQL
+      end
     end
   end
 
