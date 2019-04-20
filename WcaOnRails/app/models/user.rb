@@ -627,6 +627,10 @@ class User < ApplicationRecord
     any_kind_of_delegate?
   end
 
+  def can_view_poll?
+    admin? || can_vote_in_poll?
+  end
+
   def can_view_delegate_matters?
     any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee? || competition_announcement_team?
   end
