@@ -7,10 +7,10 @@ class Regulation < SimpleDelegator
     @regulations = JSON.parse(File.read(REGULATIONS_JSON_PATH)).freeze
     @regulations_by_id = @regulations.index_by { |r| r["id"] }
     @regulations_load_error = nil
-  rescue StandardError => error
+  rescue StandardError => e
     @regulations = []
     @regulations_by_id = {}
-    @regulations_load_error = error
+    @regulations_load_error = e
   end
 
   reload_regulations

@@ -160,8 +160,8 @@ class RegistrationsController < ApplicationController
     end
     flash[:success] = "Successfully imported registrations!"
     redirect_to competition_registrations_import_url(competition)
-  rescue StandardError => error
-    flash[:danger] = error.to_s
+  rescue StandardError => e
+    flash[:danger] = e.to_s
     redirect_to competition_registrations_import_url(competition)
   end
 
