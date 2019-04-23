@@ -134,8 +134,8 @@
           </div>
         <% end %>
 
-        <% if @user.staff? %>
-          <%= f.input :receive_delegate_reports %>
+        <% if current_user.can_view_all_users? && @user.staff? %>
+          <%= f.input :receive_delegate_reports, disabled: !editable_fields.include?(:receive_delegate_reports) %>
         <% end %>
 
         <%= f.submit t('.save'), class: "btn btn-primary" %>

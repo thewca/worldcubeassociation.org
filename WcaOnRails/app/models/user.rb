@@ -732,6 +732,9 @@ class User < ApplicationRecord
         email preferred_events results_notifications_enabled
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
+      if user.staff?
+        fields += %i(receive_delegate_reports)
+      end
     end
     if admin? || board_member? || senior_delegate?
       fields += %i(delegate_status senior_delegate_id region)
@@ -765,9 +768,6 @@ class User < ApplicationRecord
     end
     if user.wca_id.blank? && organizer_for?(user)
       fields << :name
-    end
-    if user.staff?
-      fields += %i(receive_delegate_reports)
     end
     fields
   end
