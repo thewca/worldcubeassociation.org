@@ -27,9 +27,9 @@
 //= require moment
 //= require moment-timezone-with-data
 //= require bootstrap-datetimepicker
-//= require bootstrap-table
-//= require bootstrap-table-locale-all
-//= require extensions/bootstrap-table-mobile
+//= require bootstrap-table/bootstrap-table
+//= require bootstrap-table/bootstrap-table-locale-all
+//= require bootstrap-table/extensions/mobile/bootstrap-table-mobile
 //= require autosize
 //= require fullcalendar
 //= require fullcalendar/lang/cs.js
