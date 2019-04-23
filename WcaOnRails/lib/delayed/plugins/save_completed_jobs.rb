@@ -8,9 +8,9 @@ module Delayed
           begin
             block.call(job, *args)
             Delayed::Plugins::SaveCompletedJobs.save_completed_job(job)
-          rescue Exception => error # rubocop:disable Lint/RescueException
-            JobFailureMailer.notify_admin_of_job_failure(job, error).deliver_now
-            raise error
+          rescue Exception => e # rubocop:disable Lint/RescueException
+            JobFailureMailer.notify_admin_of_job_failure(job, e).deliver_now
+            raise e
           end
         end
       end
