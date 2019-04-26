@@ -1,6 +1,5 @@
 <% avatar_symbol = defined?(show_pending) && show_pending ? :pending_avatar : :avatar %>
   <% url = user.send(avatar_symbol).url(:thumb) + ( defined?(break_cache) ? "?#{Time.now.to_f}" : "" ) %>
-  <% url.gsub!("localhost:3000", "worldcubeassociation.org") %>
 <div class="avatar-thumbnail <%= defined?(avatar_class) ? avatar_class : "" %>"
      style="background-image: url('<%= url %>');"
      <% user_uploaded_img = user.send "#{avatar_symbol}?".to_sym %>
