@@ -85,6 +85,8 @@ gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
 gem 'google-api-client'
+gem 'activestorage-validator'
+gem 'image_processing'
 gem 'rest-client'
 
 source 'https://rails-assets.org' do

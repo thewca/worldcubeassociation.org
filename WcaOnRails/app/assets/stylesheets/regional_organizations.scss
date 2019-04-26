@@ -1,0 +1,48 @@
+$organization-cell-width: 120px;
+.organizations-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .organization-box {
+    text-align: center;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    a {
+      display: inline-block;
+      position: relative;
+      height: $organization-cell-width;
+      min-width: $organization-cell-width;
+      img {
+        // Let the image take up whatever width it likes.
+        height: $organization-cell-width;
+      }
+      .organization-info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* align horizontal */
+        align-items: center; /* align vertical */
+        z-index: 1;
+        .country {
+          width: 100%;
+          font-size: 25px;
+        }
+        .name {
+          font-size: 15px;
+        }
+      }
+    }
+    .organization-info.hide-until-hover {
+      visibility: hidden;
+    }
+    &:hover .organization-info.hide-until-hover {
+      visibility: visible;
+      background-color: rgba(#fff, 0.8);
+    }
+  }
+}

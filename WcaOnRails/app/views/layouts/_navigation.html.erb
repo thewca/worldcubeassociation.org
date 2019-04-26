@@ -186,6 +186,15 @@
                 <% end %>
               <% end %>
 
+              <% if current_user.can_manage_regional_organizations? %>
+                <li class="divider"></li>
+                <li role="presentation" class="dropdown-header">
+                  <%= t '.regional_organizations' %>
+                </li>
+                <li><%= link_to t('.manage_regional_organizations'), admin_regional_organizations_path %></li>
+                <li><%= link_to t('.new_regional_organization'), new_regional_organization_path %></li>
+              <% end %>
+
               <!-- Don't show the link for admins, as they have it in the dedicated admin navigation. -->
               <% if current_user.can_see_eligible_voters? && !current_user.can_admin_results? %>
                 <li class="divider"></li>

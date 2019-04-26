@@ -71,6 +71,8 @@ GEM
       actionpack (= 5.2.3)
       activerecord (= 5.2.3)
       marcel (~> 0.3.1)
+    activestorage-validator (0.1.2)
+      rails (~> 5.2.0)
     activesupport (5.2.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
@@ -267,6 +269,9 @@ GEM
       rails-i18n
       rainbow (>= 2.2.2, < 4.0)
       terminal-table (>= 1.5.1)
+    image_processing (1.7.1)
+      mini_magick (~> 4.0)
+      ruby-vips (>= 2.0.13, < 3)
     iso (0.2.2)
       i18n
     jaro_winkler (1.5.2)
@@ -486,6 +491,8 @@ GEM
       ansi
       ast
     ruby-progressbar (1.10.0)
+    ruby-vips (2.0.13)
+      ffi (~> 1.9)
     ruby_dep (1.5.0)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -600,6 +607,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
+  activestorage-validator
   api-pagination
   aws-sdk-s3
   better_errors
@@ -638,6 +646,7 @@ DEPENDENCIES
   i18n-country-translations
   i18n-spec
   i18n-tasks
+  image_processing
   jbuilder
   jquery-rails
   jquery-slick-rails

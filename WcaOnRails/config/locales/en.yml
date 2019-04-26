@@ -339,6 +339,13 @@ en:
         submitterEmail: "Submitter email"
         submitterComment: "Submitter comment"
         status: "Status"
+      regional_organization:
+        name: "Name"
+        country: "Country"
+        website: "Website"
+        logo: "Logo"
+        start_date: "Acknowledged since"
+        end_date: "Acknowledged until"
   enums:
     user:
       gender:
@@ -515,6 +522,13 @@ en:
         results_file: ""
         message: ""
         confirm_information: ""
+      regional_organization:
+        name: ""
+        country: ""
+        website: "Must be a valid http(s) url. HTTPS is recommended."
+        logo: "Must be in good resolution and transparent background"
+        start_date: ""
+        end_date: ""
     #context: and a label for an option
     options:
       #context: about registration
@@ -652,6 +666,9 @@ en:
       results_phpmyadmin: "phpMyAdmin"
       new_post: "New post"
       team_leader: "Team leader"
+      regional_organizations: "Regional Organizations"
+      manage_regional_organizations: "Manage Regional Organizations"
+      new_regional_organization: "New Regional Organization"
       sign_out: "Sign out"
       notifications: "Notifications"
       edit_profile: "Edit profile"
@@ -1522,7 +1539,8 @@ en:
       region: "Region"
   regional_organizations:
     title: "Regional Organizations"
-    content: "The WCA acknowledges the following regional organizations:"
+    content: "The WCA acknowledges the following Regional Organizations:"
+    empty: "No Regional Organizations are currently acknowledged by the WCA."
     how_to:
       title: How to become a WCA Regional Organization
       description: The WCA recognizes various regional organizations worldwide.
@@ -1544,6 +1562,8 @@ en:
     application_instructions:
       title: Application Instructions
       description_html: Please fill out <a href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>this form</a>.
+    errors:
+      end_date_after_start_date: "cannot be after Acknowledged until"
   #context: Contact page
   contact:
     title: "Contact Information"

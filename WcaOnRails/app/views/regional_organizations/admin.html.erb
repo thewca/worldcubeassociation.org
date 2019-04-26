@@ -1,0 +1,23 @@
+<% provide(:title, 'Regional Organizations') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <% if @regional_organizations.empty? %>
+    <%= alert :warning, "There are currently no Regional Organizations." %>
+  <% else %>
+    <% unless @regional_organizations.currently_acknowledged.empty? %>
+      <h2>Currently acknowledged:</h2>
+      <%= render "regional_organizations/regional_organizations_table", regional_organizations: @regional_organizations.currently_acknowledged %>
+    <% end %>
+
+    <% unless @regional_organizations.not_currently_acknowledged.empty? %>
+      <h2>Previously acknowledged:</h2>
+      <%= render "regional_organizations/regional_organizations_table", regional_organizations: @regional_organizations.not_currently_acknowledged %>
+    <% end %>
+  <% end %>
+
+  <div class="links">
+    <%= link_to icon("plus", "Add Regional Organization"), new_regional_organization_path, class: "btn btn-primary add" %>
+  </div>
+</div>

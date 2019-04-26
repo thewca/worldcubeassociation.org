@@ -492,6 +492,21 @@ module DatabaseDumper
       ),
     }.freeze,
     "rails_persons" => :skip_all_rows,
+    "regional_organizations" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          name
+          country
+          website
+          start_date
+          end_date
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "registration_competition_events" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(

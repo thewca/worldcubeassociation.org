@@ -1019,6 +1019,23 @@ SET character_set_client = utf8;
  1 AS `comments`,
  1 AS `incorrect_wca_id_claim_count`*/;
 SET character_set_client = @saved_cs_client;
+DROP TABLE IF EXISTS `regional_organizations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `regional_organizations` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `website` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_regional_organizations_on_name` (`name`),
+  KEY `index_regional_organizations_on_country` (`country`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `registration_competition_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1528,4 +1545,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190117112257'),
 ('20190124180224'),
 ('20190208175255'),
+('20190216102110'),
 ('20190221194112');

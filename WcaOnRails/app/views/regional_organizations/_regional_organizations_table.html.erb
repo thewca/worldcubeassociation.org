@@ -1,0 +1,20 @@
+<div class="table-responsive">
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Country</th>
+      <th>Acknowledged since</th>
+      <th>Acknowledged until</th>
+      <th></th>
+    </tr>
+    <% regional_organizations.each do |ro| %>
+      <tr>
+        <td><%= ro.name %></td>
+        <td><%= ro.country %></td>
+        <td><%= ro.start_date %></td>
+        <td><%= ro.end_date %></td>
+        <td><%= link_to icon("pencil-square-o", "Manage"), edit_regional_organization_path(ro), class: "btn btn-success" %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
