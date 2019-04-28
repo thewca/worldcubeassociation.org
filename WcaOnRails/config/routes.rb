@@ -61,6 +61,7 @@ Rails.application.routes.draw do
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_results", as: :admin_check_existing_results
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
+    post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
   end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
