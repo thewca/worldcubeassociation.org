@@ -1,0 +1,74 @@
+<% provide(:title, 'Panel') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <h2>Staff</h2>
+
+  <ul>
+    <li>
+      <%= link_to "WCA Deceased Registered Speedcubers Policy", "https://drive.google.com/open?id=1IAz5XFWFIXuweTyKoh4nrgQQnw9BO6Su" %>
+    </li>
+    <li>
+      <%= link_to "WCA Delegate Probationary Status Policy", "https://drive.google.com/open?id=1p9cXihULfAy_QS7SFNrs07JEf3cBQMxr" %>
+    </li>
+  </ul>
+
+  <% if current_user&.can_view_delegate_crash_course? %>
+    <h2>Delegates</h2>
+
+    <ul>
+      <li>
+        <%= link_to "Delegate Crash course", panel_delegate_crash_course_path %>
+      </li>
+      <li>
+        <%= link_to "Delegates", delegates_stats_path %>
+      </li>
+      <li>
+        <%= link_to "WR Submission Form", "https://docs.google.com/forms/d/e/1FAIpQLSeJwf6b7yGGyWFhU0xfKSF3ki_nITyIKXVFRP86unb9EYRtHQ/viewform" %>
+      </li>
+    </ul>
+  <% end %>
+
+  <% if current_user&.can_view_senior_delegate_material? %>
+    <h2>Senior Delegates</h2>
+
+    <ul>
+      <li>
+        <%= link_to "WCA Candidate Delegate Nomination form", "https://docs.google.com/forms/d/e/1FAIpQLSfji_fOKEKcqS1Fb9fpu3qsBx-O8LiSJu_fG0TU7DJnR9Yj8g/viewform" %>
+      </li>
+      <li>
+        <%= link_to "WCA Candidate Delegate Promotion form", "https://docs.google.com/forms/d/e/1FAIpQLScq0JIOq1-2PHJoty5IE_uln_1Uq26Isp4mr3bqpfXKELQoqQ/viewform" %>
+      </li>
+      <li>
+        <%= link_to "WCA Delegate Demotion form", "https://docs.google.com/forms/d/e/1FAIpQLSf5BnccDL656ZPD3zl72Xgz7LmzLjFeTtjXKqvupo9Tn_VIRg/viewform" %>
+      </li>
+      <li>
+        <%= link_to "Pending claims for your subordinate Delegates", pending_claims_path %>
+      </li>
+      <li>
+        <%= link_to "Upcoming competitions for your subordinate Delegates", competitions_for_senior_path %>
+      </li>
+    </ul>
+  <% end %>
+
+  <% if current_user&.can_view_leader_material? %>
+    <h2>Committee/Team Leaders</h2>
+
+    <ul>
+      <li>
+        <%= link_to "WCA Committee/Team Member Promotion form", "https://docs.google.com/forms/d/e/1FAIpQLSf3079GXcGUYDmJIIdRt0GPlDA_-aMSBZqk93zDgaFRxG15xQ/viewform" %>
+      </li>
+    </ul>
+  <% end %>
+
+  <% if current_user&.board_member? %>
+    <h2>Board</h2>
+
+    <ul>
+      <li>
+        <%= link_to "List of Senior Delegates", panel_seniors_path %>
+      </li>
+    </ul>
+  <% end %>
+</div>
