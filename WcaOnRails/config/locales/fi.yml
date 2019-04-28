@@ -1,13 +1,21 @@
 fi:
   countries:
+    #original_hash: 9af4622
+    XF: Useita valtioita (Afrikka)
+    #original_hash: 374ac0d
+    XM: Useita valtioita (Amerikka)
     #original_hash: 3f8c9de
     XA: Useita valtioita (Aasia)
     #original_hash: 090f3ce
     XE: Useita valtioita (Eurooppa)
+    #original_hash: b50b7a5
+    XN: Useita valtioita (Pohjois-Amerikka)
+    #original_hash: 428e7af
+    XO: Useita valtioita (Oseania)
     #original_hash: 459f987
     XS: Useita valtioita (Etelä-Amerikka)
-    #original_hash: 374ac0d
-    XM: Useita valtioita (Amerikka)
+    #original_hash: 9027fe6
+    XW: Useita valtioita (Maailma)
     #original_hash: 918c53a
     MO: Macao
     #original_hash: 2f488ff
@@ -586,7 +594,7 @@ fi:
           englanniksi.
         #original_hash: 3de5729
         public_summary: >-
-          Kokonaiskuvaus tapauksesta ja sitä koskevasta päätöksestä (nähtävissä
+          Kokonaiskuvaus tapauksesta ja sitä koskevasta päätöksestä (nähtävillä
           julkisesti). Täytäthän tämän englanniksi.
         #original_hash: da39a3e
         digest_worthy: ''
@@ -858,8 +866,8 @@ fi:
         remarks: >-
           Kerro muista yksityiskohdista, jotka haluat jakaa (esim.
           yhteisöllisyyden paraneminen/huononeminen tai aluetta koskevat
-          suunnitelmat). Jos jätit aikaisemmissa osioissa jotakin tiivistämisen
-          vuoksi kertomatta, kerro tässä.
+          tulevaisuudensuunnitelmat). Jos jätit aikaisemmissa osioissa jotakin
+          tiivistämisen vuoksi kertomatta, kerro tässä.
         #original_hash: da39a3e
         discussion_url: ''
       competition_tab:
@@ -1113,6 +1121,10 @@ fi:
       history: Historia
       #original_hash: 8ad8302
       translations: Käännökset
+      #original_hash: c420cb4
+      disciplinary: Kurinpitoloki
+      #original_hash: ecba5f4
+      incidents: Poikkeustilanneloki
       #original_hash: b8be3d1
       administration: Ylläpito
       #original_hash: b7ee3c4
@@ -1636,7 +1648,7 @@ fi:
     #original_hash: 5d45a00
     profile: profiili
     #original_hash: 801b3e9
-    panel_title: Rekisteröitymisen yksityiskohdat
+    panel_title: Rekisteröitymisen tiedot
     #original_hash: c0063c3
     register: Rekisteröidy!
     #original_hash: f484f15
@@ -1692,14 +1704,14 @@ fi:
       jotakin muuta, kuten maksaa osallistumismaksu.
     #original_hash: 88ac7c3
     have_registered: >-
-      Olet lähettänyt rekisteröitymisesi kilpailuun %{comp}. Näet yksityiskohdat
-      rekisteröitymisestä alla.
+      Olet lähettänyt rekisteröitymisesi kilpailuun %{comp}. Näet
+      rekisteröitymisen tiedot alla.
     #original_hash: 3c9141f
     contact_organizer: 'Ota yhteyttä järjestäjään, jos haluat tehdä muutoksia.'
     #original_hash: 59354fd
     waiting_list: >-
       Rekisteröitymisesi on vireillä. Saatat joutua maksamaan osallistumismaksun
-      ennen hyväksymistä. Tarkista yksityiskohdat kilpailun verkkosivulta.
+      ennen hyväksymistä. Tarkista lisätiedot kilpailun verkkosivulta.
     #original_hash: 58b1a3c
     accepted: Rekisteröitymisesi on hyväksytty!
     #original_hash: bcd7d70
@@ -1719,7 +1731,7 @@ fi:
         refund_amount: Palautettava rahasumma
     payment_form:
       #original_hash: 4de825f
-      title: Osallistumismaksut
+      title: Osallistumismaksu
       hints:
         #original_hash: bf3a39e
         donation: 'Valinnainen lahjoitus, joka päätyy ainoastaan järjestäjäryhmälle'
@@ -1794,13 +1806,13 @@ fi:
       #original_hash: f2d092f
       tooltip_waiting_list: Olet tällä hetkellä jonotuslistalla.
       #original_hash: 9ecd976
-      confirmed_visible: Tämä kilpailu on vahvistettu ja nähtävissä
+      confirmed_visible: Tämä kilpailu on vahvistettu ja nähtävillä
       #original_hash: fa186a9
-      confirmed_not_visible: 'Tämä kilpailu on vahvistettu, mutta ei nähtävissä'
+      confirmed_not_visible: 'Tämä kilpailu on vahvistettu, mutta ei nähtävillä'
       #original_hash: a66bbe3
-      not_confirmed_visible: 'Tätä kilpailua ei ole vahvistettu, mutta se on nähtävissä'
+      not_confirmed_visible: 'Tätä kilpailua ei ole vahvistettu, mutta se on nähtävillä'
       #original_hash: 0f44e45
-      not_confirmed_not_visible: 'Tätä kilpailua ei ole vahvistettu, eikä se ole nähtävissä'
+      not_confirmed_not_visible: 'Tätä kilpailua ei ole vahvistettu, eikä se ole nähtävillä'
       #original_hash: a821396
       stripe_connected: >-
         Olet yhdistänyt Stripe-tilisi onnistuneesti ja voit nyt vastaanottaa
@@ -1880,8 +1892,10 @@ fi:
         sinulle palautetaan %{refund_policy_percent} osallistumismaksustasi.
       #original_hash: 4aca553
       no_refunds: Osallistumismaksuja ei palauteta missään tilanteessa.
-      #original_hash: cf7be5d
-      on_the_spot_registration: >-
+      #original_hash: b86fee2
+      on_the_spot_registration_html: >-
+        Paikan päällä voi rekisteröityä, jos osallistujarajoitus ei ole
+        täyttynyt takarajaan (%{end_of_registration}) mennessä.
         Osallistumismaksu paikan päällä rekisteröityville on
         %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
@@ -2018,8 +2032,8 @@ fi:
         l'Industrie](http://www.cite-sciences.fr)
       #original_hash: 2651d1a
       venue_details_html: >-
-        Kilpailupaikan yksityiskohdat (esim. ensimmäisen kerroksen perällä,
-        seuraa opasteita). %{md}
+        Lisätietoa kilpailupaikasta (esim. Ensimmäisen kerroksen perällä, seuraa
+        opasteita). %{md}
       #original_hash: b727e58
       contact_html: >-
         Yhteystiedot (valinnainen). Jos et täytä tätä, järjestäjien
@@ -2042,7 +2056,7 @@ fi:
         nähtävillä. Odota, että %{contact} muuttaa sen näkyväksi.
       #original_hash: e94cba8
       is_visible: >-
-        Tämä kilpailu on julkisesti nähtävissä, ja kaikki tekemäsi muutokset
+        Tämä kilpailu on julkisesti nähtävillä, ja kaikki tekemäsi muutokset
         näkyvät julkisesti!
       #original_hash: f99b3f7
       pending_confirmation_html: >-
@@ -2089,7 +2103,7 @@ fi:
       #original_hash: 8e8f765
       cannot_manage: Ei voida hallita kilpailua.
       #original_hash: 0acc454
-      cannot_delete_public: 'Ei voida poistaa kilpailua, joka on julkisesti nähtävissä.'
+      cannot_delete_public: 'Ei voida poistaa kilpailua, joka on julkisesti nähtävillä.'
       #original_hash: 3935fd6
       cannot_delete_confirmed: Ei voida poistaa vahvistettua kilpailua.
       #original_hash: 191df37
@@ -2785,6 +2799,17 @@ fi:
           Tämä tiimi on vastuussa WCA:n brändin kehittämisestä ja
           hallinnoinnista, sponsoreiden etsinnästä, WCA:n kilpailuvarusteiden
           jaon tukemisesta ja WCA:n myyntitavaroiden markkinoinnista.
+      #original_hash: a2c8ad3
+      councils: >-
+        The following councils have the role of advising the WCA Board of
+        Directors:
+      wac:
+        #original_hash: 1ce7604
+        name: WCA Advisory Council
+        #original_hash: fb6cd86
+        description: >-
+          This council is responsible for building and maintaining bilateral
+          communication between the WCA Community and the WCA Staff.
       banned:
         #original_hash: d30e2e5
         name: Banned Competitors
@@ -2821,6 +2846,8 @@ fi:
     minutes: Pöytäkirjat
     #original_hash: 6db524a
     policies: 'WCA:n käytännöt'
+    #original_hash: 91ac873
+    codeofethics: Code of Ethics
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-delegaatit
@@ -2981,6 +3008,13 @@ fi:
         Tämä tiimi on vastuussa WCA:n brändin kehittämisestä ja hallinnoinnista,
         sponsoreiden etsinnästä, WCA:n kilpailuvarusteiden jaon tukemisesta ja
         WCA:n myyntitavaroiden markkinoinnista.
+    #original_hash: f97a4f5
+    councils_html: Councils
+    wac:
+      #original_hash: fb6cd86
+      info_html: >-
+        This council is responsible for building and maintaining bilateral
+        communication between the WCA Community and the WCA Staff.
   score_tools:
     #original_hash: ea9d41d
     title: 'WCA:n tulostyökalut'
@@ -3191,7 +3225,7 @@ fi:
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
-      Poikkeustilanneosio on ainoastaan englanniksi, allaolevaa sisältöä ei ole
+      Poikkeustilanneloki on ainoastaan englanniksi, allaolevaa sisältöä ei ole
       käännetty.
   about_regulations:
     #original_hash: 6bce1b5
@@ -3352,7 +3386,7 @@ fi:
       content: >-
         Rekisteröitymiset täytyy käsitellä rekisteröitymisjärjestyksessä siten,
         että he, jotka suorittivat rekisteröitymisen loppuun asti ensimmäisenä,
-        käsitellään ensin. Jos osallistumismaksut maksetaan etukäteen,
+        käsitellään ensin. Jos osallistumismaksu maksetaan etukäteen,
         rekisteröityminen katsotaan loppuun asti suoritetuksi, kun maksu on
         maksettu. Tämä tulisi mainita selkeästi kilpailun verkkosivuilla
         maksuohjeissa.
@@ -3367,7 +3401,7 @@ fi:
         kilpailijalla.
       #original_hash: 802b34f
       content2: >-
-        Jos osallistumismaksut maksetaan etukäteen, on tehokas lähestymistapa
+        Jos osallistumismaksu maksetaan etukäteen, on tehokas lähestymistapa
         tarjota vapaa paikka jonotuslistan seuraavalle kilpailijalle ja asettaa
         takaraja, johon mennessä kilpailijan tulee maksaa osallistumismaksu
         (esim. 48h). Jos maksua ei saada ajoissa tai kilpailija kieltäytyy,
