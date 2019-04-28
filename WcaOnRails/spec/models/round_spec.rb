@@ -141,21 +141,21 @@ RSpec.describe Round do
         first_round, _second_round = create_rounds("333", count: 2)
 
         first_round.update!(advancement_condition: AttemptResultCondition.new(3.minutes.in_centiseconds))
-        expect(first_round.advancement_condition_to_s).to eq "Best solve < 3:00.00 advances to next round"
+        expect(first_round.advancement_condition_to_s).to eq "Best result < 3:00.00 advances to next round"
       end
 
       it "set to <= 35 moves" do
         first_round, _second_round = create_rounds("333fm", format_id: 'm', count: 2)
 
         first_round.update!(advancement_condition: AttemptResultCondition.new(35))
-        expect(first_round.advancement_condition_to_s).to eq "Best solve < 35 moves advances to next round"
+        expect(first_round.advancement_condition_to_s).to eq "Best result < 35 moves advances to next round"
       end
 
       it "set to >= 6 points" do
         first_round, _second_round = create_rounds("333mbf", format_id: '3', count: 2)
 
         first_round.update!(advancement_condition: AttemptResultCondition.new(SolveTime.points_to_multibld_attempt(6)))
-        expect(first_round.advancement_condition_to_s).to eq "Best solve > 6 points advances to next round"
+        expect(first_round.advancement_condition_to_s).to eq "Best result > 6 points advances to next round"
       end
     end
   end

@@ -125,9 +125,9 @@ en:
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
     attempt_result:
-      time: "Best solve < %{time} advances to next round"
-      moves: "Best solve < %{moves} moves advances to next round"
-      points: "Best solve > %{points} points advances to next round"
+      time: "Best result < %{time} advances to next round"
+      moves: "Best result < %{moves} moves advances to next round"
+      points: "Best result > %{points} points advances to next round"
   #context: Words used to describe combined round cutoffs
   cutoff:
     time:
