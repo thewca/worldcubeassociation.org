@@ -1,6 +1,15 @@
 <% provide(:title, "Upload results") %>
 <%= render layout: 'competitions/nav' do %>
   <h1><%= yield(:title) %></h1>
+  <% if @competition.results_submitted? && !@competition.results_posted? %>
+    <%= alert :info, note: true do %>
+      It looks like the results have been submitted by the Delegate but not posted yet.
+      If you want to let the Delegate submit the results again you can
+      <%= link_to("clear the results submission",
+                  competition_clear_results_submission_path(@competition),
+                  method: :post, class: "btn btn-primary") %>
+    <% end %>
+  <% end %>
   <p>
     Import the results JSON for this competition.
     The server will check for any error compared to the declared rounds, cutoffs, and time limits.
