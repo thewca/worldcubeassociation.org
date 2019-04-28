@@ -146,6 +146,10 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wac')
   end
 
+  def official?
+    Team.all_official.include?(self)
+  end
+
   def acronym
     friendly_id.upcase
   end

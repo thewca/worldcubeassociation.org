@@ -139,6 +139,12 @@
                 <% end %>
               </li>
               <li><%= link_to t('.edit_profile'), profile_edit_path %></li>
+
+              <% if current_user.staff? %>
+                <li class="divider"></li>
+                <li><%= link_to t('.panel'), panel_path %></li>
+              <% end %>
+
               <% if current_user.can_view_all_users? %>
                 <li class="divider"></li>
                 <li role="presentation" class="dropdown-header">
@@ -152,7 +158,6 @@
                 <li role="presentation" class="dropdown-header">
                   <%= t '.delegate' %>
                 </li>
-                <li><%= link_to t('.panel'), delegate_path %></li>
                 <li><%= link_to t('.new_competition'), new_competition_path if current_user.can_create_competitions? %></li>
               <% end %>
 
