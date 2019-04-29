@@ -479,6 +479,12 @@ class CompetitionsController < ApplicationController
       },
     }
     @competition = competition_from_params(includes: associations)
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: "#{@competition.name}_Information"
+      end
+    end
   end
 
   def show_podiums

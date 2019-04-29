@@ -1,0 +1,192 @@
+/*
+ * This scss file is specifically used in the pdf rendered page (eg: the competition info and schedule page).
+ */
+
+@import "variables";
+@import "cubing-icons";
+
+a {
+  color: black;
+}
+
+header {
+  height: 120px;
+  width: 100%;
+  display: block;
+  .wca_logo {
+    width: 120px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .pdf_title {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 30px;
+  }
+}
+
+.nobreak {
+  page-break-inside: avoid;
+  &::before {
+    clear: both;
+  }
+}
+
+.break-before {
+  page-break-before: always;
+}
+
+.break-after {
+  page-break-after: always;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  word-break: break-word;
+  th {
+    padding: 5px 0;
+  }
+}
+
+//td, th { border: 1px solid orange; }
+
+.main_content {
+  width: 100%;
+  table {
+    &.general_information {
+      td {
+        padding-bottom: 5px;
+        &:nth-child(odd) {
+          font-weight: bold;
+          width: 25%;
+          vertical-align: top;
+        }
+        &:nth-child(even) {
+          width: 75%;
+        }
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+    }
+    &.show-events-table {
+      text-align: center;
+      a {
+        text-decoration: none;
+      }
+      thead {
+        th {
+          border-bottom: 2px solid black;
+        }
+        // Due to the nested table, the percentage are not relative to the
+        // same parent and are a bit tricky to get right.
+        .event-name {
+          width: 13%;
+        }
+        .round-name {
+          width: 22%;
+        }
+        .round-format {
+          width: 13%;
+        }
+        .round-proceed {
+          width: 15%;
+        }
+      }
+      tbody {
+        tr.event-info {
+          > td {
+            border-bottom: 2px solid black;
+            &.event-name {
+              width: 13%;
+              .cubing-icon {
+                &::before {
+                  font-size: 40px;
+                  padding: 10px;
+                }
+              }
+            }
+            &.rounds-info {
+              table {
+                td {
+                  padding: 3px 0;
+                  &.round-name {
+                    width: 25%;
+                  }
+                  &.round-format {
+                    width: 15%;
+                  }
+                  &.round-proceed {
+                    width: 17%;
+                  }
+                }
+                :not(.last-round) > td {
+                  border-bottom: 1px solid black;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    &.show-schedule-table {
+      text-align: center;
+      thead {
+        th {
+          border-bottom: 2px solid black;
+        }
+      }
+      tbody {
+        td {
+          border: 1px solid black;
+          padding: 3px;
+          p {
+            padding: 0;
+            margin: 0;
+          }
+          &.event-icon {
+            border-right: 0;
+            height: 46px;
+            width: 46px;
+            .cubing-icon {
+              //border: 1px solid purple;
+              &::before {
+                //border: 1px solid green;
+                font-size: 40px;
+              }
+            }
+          }
+          &.event-data {
+            //border: 1px solid green;
+            border-left: 0;
+            .activity-name {
+              font-size: 18px;
+              font-weight: bold;
+            }
+            .room-name {
+              font-size: 14px;
+              font-style: italic;
+            }
+          }
+          &.activity-start,
+          &.activity-end {
+            min-width: 60px;
+            max-width: 80px;
+            font-weight: bold;
+          }
+          &.round-time-limit {
+            max-width: 100px;
+          }
+          &.round-proceed {
+            min-width: 70px;
+          }
+          &.round-format {
+            min-width: 60px;
+          }
+        }
+      }
+    }
+  }
+}

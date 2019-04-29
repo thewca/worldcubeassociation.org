@@ -106,6 +106,7 @@ class ScheduleActivity < ApplicationRecord
       title: localized_name(rounds_by_wcif_id),
       roomId: holder.id,
       roomName: holder.name,
+      venueName: holder.competition_venue.name,
       color: color,
       activityDetails: ScheduleActivity.parse_activity_code(activity_code),
       start: start_time.in_time_zone(holder.competition_venue.timezone_id),
