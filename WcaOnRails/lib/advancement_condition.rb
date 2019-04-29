@@ -58,8 +58,8 @@ class RankingCondition < AdvancementCondition
     "ranking"
   end
 
-  def to_s(round)
-    I18n.t("advancement_condition.ranking", ranking: ranking)
+  def to_s(round, short: false)
+    I18n.t("advancement_condition#{".short" if short}.ranking", ranking: ranking)
   end
 end
 
@@ -70,8 +70,8 @@ class PercentCondition < AdvancementCondition
     "percent"
   end
 
-  def to_s(round)
-    I18n.t("advancement_condition.percent", percent: percent)
+  def to_s(round, short: false)
+    I18n.t("advancement_condition#{".short" if short}.percent", percent: percent)
   end
 end
 
@@ -82,13 +82,13 @@ class AttemptResultCondition < AdvancementCondition
     "attemptResult"
   end
 
-  def to_s(round)
+  def to_s(round, short: false)
     if round.event.timed_event?
-      I18n.t("advancement_condition.attempt_result.time", time: SolveTime.centiseconds_to_clock_format(attempt_result))
+      I18n.t("advancement_condition#{".short" if short}.attempt_result.time", time: SolveTime.centiseconds_to_clock_format(attempt_result))
     elsif round.event.fewest_moves?
-      I18n.t("advancement_condition.attempt_result.moves", moves: attempt_result)
+      I18n.t("advancement_condition#{".short" if short}.attempt_result.moves", moves: attempt_result)
     elsif round.event.multiple_blindfolded?
-      I18n.t("advancement_condition.attempt_result.points", points: SolveTime.multibld_attempt_to_points(attempt_result))
+      I18n.t("advancement_condition#{".short" if short}.attempt_result.points", points: SolveTime.multibld_attempt_to_points(attempt_result))
     end
   end
 end

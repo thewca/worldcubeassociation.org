@@ -96,12 +96,12 @@ class Round < ApplicationRecord
     time_limit.to_s(self)
   end
 
-  def cutoff_to_s
-    cutoff ? cutoff.to_s(self) : ""
+  def cutoff_to_s(short: false)
+    cutoff ? cutoff.to_s(self, short: short) : ""
   end
 
-  def advancement_condition_to_s
-    advancement_condition ? advancement_condition.to_s(self) : ""
+  def advancement_condition_to_s(short: false)
+    advancement_condition ? advancement_condition.to_s(self, short: short) : ""
   end
 
   def self.parse_wcif_id(wcif_id)
@@ -127,16 +127,16 @@ class Round < ApplicationRecord
     "#{event.id}-r#{self.number}"
   end
 
-  def to_string_map
+  def to_string_map(short: false)
     {
       wcif_id: wcif_id,
       name: name,
       event_id: event.id,
       cumulative_round_ids: time_limit.cumulative_round_ids,
-      format_name: full_format_name,
+      format_name: full_format_name(with_short_names: true),
       time_limit: time_limit_to_s,
-      cutoff: cutoff_to_s,
-      advancement: advancement_condition_to_s,
+      cutoff: cutoff_to_s(short: short),
+      advancement: advancement_condition_to_s(short: short),
     }
   end
 

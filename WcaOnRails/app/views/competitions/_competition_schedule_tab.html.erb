@@ -9,7 +9,7 @@
 <div class="tab-content" id="schedule-tab">
   <% competition.competition_venues.each_with_index do |venue, index| %>
     <%
-      activities = venue.top_level_activities
+      activities = venue.top_level_activities.sort_by(&:start_time)
       min_time, max_time = first_and_last_time_from_activities(activities, venue.timezone_id)
       activities.map!{ |a| a.to_event(rounds_by_wcif_id) }
     %>

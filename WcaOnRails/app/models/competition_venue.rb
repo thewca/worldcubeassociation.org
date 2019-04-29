@@ -37,7 +37,7 @@ class CompetitionVenue < ApplicationRecord
   end
 
   def top_level_activities
-    venue_rooms.flat_map(&:schedule_activities).sort_by(&:start_time)
+    venue_rooms.flat_map(&:schedule_activities)
   end
 
   def to_wcif
