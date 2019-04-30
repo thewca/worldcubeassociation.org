@@ -482,6 +482,7 @@ class CompetitionsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
+        @colored_schedule = params.key?(:with_colors)
         render pdf: "#{@competition.name}_Information", orientation: 'Landscape'
       end
     end

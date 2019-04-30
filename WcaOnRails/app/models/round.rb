@@ -63,11 +63,15 @@ class Round < ApplicationRecord
     end
   end
 
+  def formats_used
+    cutoff_format = Format.c_find!(cutoff.number_of_attempts.to_s) if cutoff
+    [cutoff_format, format].compact
+  end
+
   def full_format_name(with_short_names: false, with_tooltips: false)
     # 'with_tooltips' implies that short names are used for display, and long
     # names are used in the tooltip.
-    cutoff_format = Format.c_find!(cutoff.number_of_attempts.to_s) if cutoff
-    phase_formats = [cutoff_format, format].compact
+    phase_formats = formats_used
     phase_formats.map! do |f|
       if with_tooltips
         content_tag(:span, f.short_name, data: { toggle: "tooltip" }, title: f.name)

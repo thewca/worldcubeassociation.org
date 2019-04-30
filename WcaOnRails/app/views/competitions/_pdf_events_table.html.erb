@@ -1,11 +1,12 @@
+<%# NOTE: Assumes local variable 'formats_list' to be passed! %>
 <table class="show-events-table">
   <thead>
     <tr>
-      <th class="event-name"><%= t("competitions.results_table.event") %></th>
-      <th class="round-name"><%= t("competitions.results_table.round") %></th>
-      <th class="round-format"><%= t("competitions.events.format") %></th>
-      <th class="round-time-limit"><%= t("competitions.events.time_limit") %></th>
-      <th class="round-proceed"><%= t("competitions.events.proceed") %></th>
+      <th class="event-name"><%= t "competitions.results_table.event" %></th>
+      <th class="round-name"><%= t "competitions.results_table.round" %></th>
+      <th class="round-format"><%= t "competitions.events.format" %></th>
+      <th class="round-time-limit"><%= t "competitions.events.time_limit" %></th>
+      <th class="round-proceed"><%= t "competitions.events.proceed" %></th>
     </tr>
   </thead>
   <tbody>
@@ -18,24 +19,15 @@
           <%# Nested table trick to avoid page breaks within events %>
           <table>
             <% competition_event.rounds.each do |round| %>
+              <%# While this is unused in this partial, the filled container is used by the including view. %>
+              <% formats_list << round.formats_used.map(&:id) %>
               <tr class="<%= round.final_round? ? "last-round" : "" %>">
                 <td class="round-name"><%= round.round_type.name %></td>
                 <td class="round-format">
                   <%= round.full_format_name(with_short_names: true) %><br/>
-                  <%# TODO: i18n %>
-                  <%= "#{t("competitions.events.cutoff")}: #{round.cutoff_to_s(short: true)}" if round.cutoff %>
+                  <%= t "competitions.competition_info.pdf.cutoff", short_cutoff: round.cutoff_to_s(short: true) if round.cutoff  %>
                 </td>
-                <td class="round-time-limit">
-                  <%= round.time_limit_to_s %>
-                  <% if competition_event.event.can_change_time_limit? %>
-                    <% if round.time_limit.cumulative_round_ids.length == 1 %>
-                      <%# TODO: FOOTNOTE %>
-                      <%= link_to "*", "#cumulative-time-limit" %>
-                    <% elsif round.time_limit.cumulative_round_ids.length > 1 %>
-                      <%= link_to "**", "#cumulative-across-rounds-time-limit" %>
-                    <% end %>
-                  <% end %>
-                </td>
+                <td class="round-time-limit"><%= round.time_limit_to_s %></td>
                 <td class="round-proceed"><%= round.advancement_condition_to_s(short: true) %></td>
               </tr>
             <% end %>
