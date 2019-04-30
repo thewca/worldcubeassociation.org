@@ -124,7 +124,7 @@ en:
   advancement_condition:
     short:
       ranking: "Top %{ranking}"
-      percent: "Top %{ranking}%"
+      percent: "Top %{percent}%"
       attempt_result:
         time: "Result < %{time}"
         moves: "Result < %{moves}"
