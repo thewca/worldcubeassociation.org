@@ -5,8 +5,6 @@
 <% output_venue_name = @competition.competition_venues.size > 1 %>
 <% output_room_name = @competition.competition_venues.map(&:venue_rooms).flatten.size > 1 %>
 
-<%# TODO: optionally enhance with room color! %>
-
 <% @competition.start_date.upto(@competition.end_date) do |date| %>
   <% activities_for_day = activities_by_day[date.to_s] %>
   <% if activities_for_day&.any? %>
@@ -26,7 +24,7 @@
         <% activities_for_day.each do |a| %>
           <% activity_code_without_attempt = "#{a[:activityDetails][:event_id]}-r#{a[:activityDetails][:round_number]}" %>
           <% round_data = rounds_by_wcif_id[activity_code_without_attempt] || {} %>
-          <tr class="nobreak">
+          <tr class="nobreak" style="<%= "background-color:#{a[:color]};" if @colored_schedule %>">
             <td class="activity-start"><%= l(a[:start], format: time_format_for_current_locale) %></td>
             <%# TODO: ask Germans about that, it's pretty ugly in that locale %>
             <td class="activity-end"><%= l(a[:end], format: time_format_for_current_locale) %></td>
@@ -47,7 +45,7 @@
             </td>
             <td class="round-format">
               <%= round_data[:format_name] %><br/>
-              <%= "#{t("competitions.events.cutoff")}: #{round_data[:cutoff]}" unless round_data[:cutoff].blank? %>
+              <%= t "competitions.competition_info.pdf.cutoff", short_cutoff: round_data[:cutoff] unless round_data[:cutoff].blank?  %>
             </td>
             <td class="round-time-limit"><%= round_data[:time_limit] %></td>
             <td class="round-proceed"><%= round_data[:advancement] %></td>
