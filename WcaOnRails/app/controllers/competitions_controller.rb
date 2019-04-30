@@ -482,7 +482,7 @@ class CompetitionsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "#{@competition.name}_Information"
+        render pdf: "#{@competition.name}_Information", orientation: 'Landscape'
       end
     end
   end

@@ -10,18 +10,29 @@ a {
 }
 
 header {
-  height: 120px;
   width: 100%;
   display: block;
-  .wca_logo {
-    width: 120px;
-    display: inline-block;
-    vertical-align: middle;
+  text-align: center;
+  font-size: 30px;
+  .pdf-logo {
+    width: 100%;
+    img {
+      width: 200px;
+    }
   }
-  .pdf_title {
+  .pdf-title {
+    font-size: 40px;
+  }
+  .comp-date {
+  }
+  .separator {
     display: inline-block;
-    vertical-align: middle;
-    font-size: 30px;
+    width: 50px;
+    border-top: 3px solid black;
+  }
+  p {
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -54,23 +65,6 @@ table {
 .main_content {
   width: 100%;
   table {
-    &.general_information {
-      td {
-        padding-bottom: 5px;
-        &:nth-child(odd) {
-          font-weight: bold;
-          width: 25%;
-          vertical-align: top;
-        }
-        &:nth-child(even) {
-          width: 75%;
-        }
-        p {
-          margin: 0;
-          padding: 0;
-        }
-      }
-    }
     &.show-events-table {
       text-align: center;
       a {
@@ -173,11 +167,11 @@ table {
           &.activity-start,
           &.activity-end {
             min-width: 60px;
-            max-width: 80px;
+            max-width: 100px;
             font-weight: bold;
           }
           &.round-time-limit {
-            max-width: 100px;
+            max-width: 200px;
           }
           &.round-proceed {
             min-width: 70px;
