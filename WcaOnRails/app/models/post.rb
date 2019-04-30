@@ -46,7 +46,7 @@ class Post < ApplicationRecord
 
   def edit_path
     if is_delegate_crash_course_post?
-      Rails.application.routes.url_helpers.delegate_crash_course_edit_path
+      Rails.application.routes.url_helpers.panel_delegate_crash_course_edit_path
     else
       Rails.application.routes.url_helpers.edit_post_path(slug)
     end
