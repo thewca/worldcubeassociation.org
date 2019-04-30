@@ -2,7 +2,6 @@
  * This scss file is specifically used in the pdf rendered page (eg: the competition info and schedule page).
  */
 
-@import "variables";
 @import "cubing-icons";
 
 a {
@@ -145,15 +144,12 @@ table {
             height: 46px;
             width: 46px;
             .cubing-icon {
-              //border: 1px solid purple;
               &::before {
-                //border: 1px solid green;
                 font-size: 40px;
               }
             }
           }
           &.event-data {
-            //border: 1px solid green;
             border-left: 0;
             .activity-name {
               font-size: 18px;
