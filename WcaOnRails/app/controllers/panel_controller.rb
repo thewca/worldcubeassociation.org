@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PanelController < ApplicationController
+  include DocumentsHelper
+
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:staff?) }
   before_action -> { redirect_to_root_unless_user(:can_update_delegate_crash_course?) }, only: [:edit_delegate_crash_course, :update_delegate_crash_course]

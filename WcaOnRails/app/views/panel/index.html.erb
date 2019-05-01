@@ -6,12 +6,7 @@
   <h2>Staff</h2>
 
   <ul>
-    <li>
-      <%= link_to "WCA Deceased Registered Speedcubers Policy", "https://drive.google.com/open?id=1IAz5XFWFIXuweTyKoh4nrgQQnw9BO6Su" %>
-    </li>
-    <li>
-      <%= link_to "WCA Delegate Probationary Status Policy", "https://drive.google.com/open?id=1p9cXihULfAy_QS7SFNrs07JEf3cBQMxr" %>
-    </li>
+    <%= documents_list("policies/internal") %>
   </ul>
 
   <% if current_user&.can_view_delegate_crash_course? %>
