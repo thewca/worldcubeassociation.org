@@ -4,8 +4,8 @@ require 'rails_helper'
 require 'auxiliary_data_computation'
 
 RSpec.describe "AuxiliaryDataComputation" do
-  describe ".compute_best_of_3_in_333bf" do
-    def create_new_333bld_result(attributes = {})
+  describe ".compute_mean_for_bo3_as_mo3_events" do
+    def create_new_result(attributes = {})
       FactoryBot.build(:result, {
         eventId: "333bf", formatId: "3", roundTypeId: "c",
         value1: 3000, value2: 3000, value3: 3000, best: 3000,
@@ -16,31 +16,52 @@ RSpec.describe "AuxiliaryDataComputation" do
       end
     end
 
-    it "leaves average as skipped if one of three solves is skipped" do
-      with_skipped_solve = create_new_333bld_result value3: SolveTime::SKIPPED_VALUE
-      AuxiliaryDataComputation.compute_best_of_3_in_333bf
+    it "leaves average for 333bf as skipped if one of three solves is skipped" do
+      with_skipped_solve = create_new_result value3: SolveTime::SKIPPED_VALUE
+      AuxiliaryDataComputation.compute_mean_for_bo3_as_mo3_events
       expect(with_skipped_solve.reload.average).to eq SolveTime::SKIPPED_VALUE
     end
 
-    it "sets DNF average if one of three solves is either DNF or DNS" do
-      with_dnf = create_new_333bld_result value3: SolveTime::DNF_VALUE
-      with_dns = create_new_333bld_result value3: SolveTime::DNS_VALUE
-      AuxiliaryDataComputation.compute_best_of_3_in_333bf
+    it "sets DNF average for 333bf if one of three solves is either DNF or DNS" do
+      with_dnf = create_new_result value3: SolveTime::DNF_VALUE
+      with_dns = create_new_result value3: SolveTime::DNS_VALUE
+      AuxiliaryDataComputation.compute_mean_for_bo3_as_mo3_events
       expect(with_dnf.reload.average).to eq SolveTime::DNF_VALUE
       expect(with_dns.reload.average).to eq SolveTime::DNF_VALUE
     end
 
-    it "sets a valid average if all three solves are completed" do
-      with_completed_solves = create_new_333bld_result
-      AuxiliaryDataComputation.compute_best_of_3_in_333bf
+    it "sets a valid average for 333bf if all three solves are completed" do
+      with_completed_solves = create_new_result
+      AuxiliaryDataComputation.compute_mean_for_bo3_as_mo3_events
       expect(with_completed_solves.reload.average).to eq 3000
     end
 
-    it "rounds averages over 10 minutes to down to full seconds" do
-      over10 = (10.minutes + 10.5.seconds) * 100 # In centiseconds.
-      with_completed_solves = create_new_333bld_result value1: over10, value2: over10, value3: over10
-      AuxiliaryDataComputation.compute_best_of_3_in_333bf
+    # https://www.worldcubeassociation.org/regulations/#9f2
+    it "rounds averages for 333bf over 10 minutes down to nearest second for x.49" do
+      over10 = (10.minutes + 10.49.seconds) * 100 # In centiseconds.
+      with_completed_solves = create_new_result value1: over10, value2: over10, value3: over10
+      AuxiliaryDataComputation.compute_mean_for_bo3_as_mo3_events
       expect(with_completed_solves.reload.average).to eq((10.minutes + 10.seconds) * 100)
+    end
+
+    # https://www.worldcubeassociation.org/regulations/#9f2
+    it "rounds averages for 333bf over 10 minutes up to nearest second for x.50" do
+      over10 = (10.minutes + 10.50.seconds) * 100 # In centiseconds.
+      with_completed_solves = create_new_result value1: over10, value2: over10, value3: over10
+      AuxiliaryDataComputation.compute_mean_for_bo3_as_mo3_events
+      expect(with_completed_solves.reload.average).to eq((10.minutes + 11.seconds) * 100)
+    end
+
+    it "sets a valid average for 444bf if all three solves are completed" do
+      with_completed_solves = create_new_result eventId: "444bf"
+      AuxiliaryDataComputation.compute_mean_for_bo3_as_mo3_events
+      expect(with_completed_solves.reload.average).to eq 3000
+    end
+
+    it "sets a valid average for 555bf if all three solves are completed" do
+      with_completed_solves = create_new_result eventId: "555bf"
+      AuxiliaryDataComputation.compute_mean_for_bo3_as_mo3_events
+      expect(with_completed_solves.reload.average).to eq 3000
     end
   end
 

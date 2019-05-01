@@ -2,27 +2,31 @@
 
 module AuxiliaryDataComputation
   def self.compute_everything
-    self.compute_best_of_3_in_333bf
+    self.compute_mean_for_bo3_as_mo3_events
     self.compute_concise_results
     self.compute_rank_tables
 
     self.delete_php_cache # Note: this should go away together with the PHP code.
   end
 
-  ## Compute mean for 'best of 3' results in 333bf.
-  def self.compute_best_of_3_in_333bf
+  ## Compute mean for 'best of 3' results in 333bf/444bf/555bf.
+  def self.compute_mean_for_bo3_as_mo3_events
     # Set new DNF average where any of three solves is not completed.
-    Result.where(eventId: "333bf", formatId: "3", average: 0)
+    Result.where(eventId: ["333bf", "444bf", "555bf"], formatId: "3", average: 0)
           .where("LEAST(value1, value2, value3) < 0")
           .where.not(value1: 0, value2: 0, value3: 0)
           .update_all(average: -1)
     # Set new averages (round times > 10:00).
-    Result.where(eventId: "333bf", formatId: "3", average: 0)
+    Result.where(eventId: ["333bf", "444bf", "555bf"], formatId: "3", average: 0)
           .where("LEAST(value1, value2, value3) > 0")
           .update_all <<-SQL
             average = IF(
               (value1 + value2 + value3)/3.0 > 60000,
-              (value1 + value2 + value3)/3.0 - MOD((value1 + value2 + value3)/3.0, 100),
+              -- In order to round according to Regulation 9f2, we do the
+              -- following equivalent procedure:
+              -- - Add 50 centiseconds to the average
+              -- - Truncate centiseconds from the resulting average.
+              (value1 + value2 + value3)/3.0 + 50 - MOD((value1 + value2 + value3)/3.0 + 50, 100),
               (value1 + value2 + value3)/3.0
             )
           SQL
