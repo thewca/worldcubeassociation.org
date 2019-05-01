@@ -632,7 +632,7 @@ class User < ApplicationRecord
   end
 
   def can_view_poll?
-    admin? || can_vote_in_poll?
+    can_create_poll? || can_vote_in_poll?
   end
 
   def can_view_delegate_matters?
