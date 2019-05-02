@@ -126,9 +126,9 @@ en:
       ranking: "Top %{ranking}"
       percent: "Top %{percent}%"
       attempt_result:
-        time: "Result < %{time}"
-        moves: "Result < %{moves}"
-        points: "Result > %{points}"
+        time: "Best result < %{time}"
+        moves: "Best result < %{moves}"
+        points: "Best result > %{points}"
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
     attempt_result:
@@ -1044,7 +1044,6 @@ en:
     competition_info:
       #context: used on the pdf export
       pdf:
-        title: "Information for %{comp_name}"
         terms_and_abbr: "Technical terms and abbreviations"
         formats_abbr: "Abbreviations for formats:"
         abbr_description: "%{short_name}: %{long_name}"

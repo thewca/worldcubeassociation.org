@@ -8,7 +8,7 @@
 <% @competition.start_date.upto(@competition.end_date) do |date| %>
   <% activities_for_day = activities_by_day[date.to_s] %>
   <% if activities_for_day&.any? %>
-    <h3><%= t("competitions.schedule.schedule_for_date", day_name: l(date, format: '%A'), full_date: l(date, format: :long)) %></h3>
+    <h1 class="break-before"><%= t("competitions.schedule.schedule_for_date", day_name: l(date, format: '%A'), full_date: l(date, format: :long)) %></h1>
     <table class="show-schedule-table break-after">
       <thead>
         <tr>
@@ -26,7 +26,6 @@
           <% round_data = rounds_by_wcif_id[activity_code_without_attempt] || {} %>
           <tr class="nobreak" style="<%= "background-color:#{a[:color]};" if @colored_schedule %>">
             <td class="activity-start"><%= l(a[:start], format: time_format_for_current_locale) %></td>
-            <%# TODO: ask Germans about that, it's pretty ugly in that locale %>
             <td class="activity-end"><%= l(a[:end], format: time_format_for_current_locale) %></td>
             <td class="event-icon <%= "no-event" if round_data.empty? %>">
               <%= cubing_icon(round_data[:event_id]) unless round_data.empty? %>
@@ -35,11 +34,11 @@
               <p class="activity-name"><%= a[:title] %></p>
               <% if output_room_name %>
                 <p class="room-name">
-                <% if output_venue_name %>
-                  <%= t("competitions.schedule.room_in_venue", room: a[:roomName], venue: a[:venueName]) %>
-                <% else %>
-                  <%= a[:roomName] %>
-                <% end %>
+                  <% if output_venue_name %>
+                    <%= t("competitions.schedule.room_in_venue", room: a[:roomName], venue: a[:venueName]) %>
+                  <% else %>
+                    <%= a[:roomName] %>
+                  <% end %>
                 </p>
               <% end %>
             </td>
