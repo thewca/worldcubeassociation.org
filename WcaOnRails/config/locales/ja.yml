@@ -1,13 +1,21 @@
 ja:
   countries:
+    #original_hash: 9af4622
+    XF: アフリカ地域
+    #original_hash: 374ac0d
+    XM: アメリカ地域
     #original_hash: 3f8c9de
     XA: アジア地域
     #original_hash: 090f3ce
     XE: ヨーロッパ地域
+    #original_hash: b50b7a5
+    XN: 北アメリカ地域
+    #original_hash: 428e7af
+    XO: オセアニア地域
     #original_hash: 459f987
     XS: 南アメリカ地域
-    #original_hash: 374ac0d
-    XM: アメリカ地域
+    #original_hash: 9027fe6
+    XW: 世界
     #original_hash: 918c53a
     MO: マカオ
     #original_hash: 2f488ff
@@ -162,12 +170,12 @@ ja:
     #original_hash: 7ee969c
     percent: '上位%{percent}%が次のラウンドに進出します。'
     attempt_result:
-      #original_hash: 1fb7fe1
-      time: '単発%{time}未満を記録した競技者が次のラウンドに進出します。'
-      #original_hash: 8254f3e
-      moves: '単発%{moves}手未満を記録した競技者が次のラウンドに進出します。'
-      #original_hash: daab86e
-      points: '単発記録が%{points}より高い競技者が次のラウンドに進出します。'
+      #original_hash: b3c8a02
+      time: '単発%{time}未満の記録で次のラウンドに進出'
+      #original_hash: 07bca6c
+      moves: '単発%{moves}手未満で次のラウンドに進出'
+      #original_hash: 837083c
+      points: '単発%{points}ポイントを超える場合次のラウンドに進出'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -827,6 +835,8 @@ ja:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -1012,6 +1022,10 @@ ja:
       history: 過去の大会規則
       #original_hash: 8ad8302
       translations: 各国語訳
+      #original_hash: c420cb4
+      disciplinary: 懲罰履歴
+      #original_hash: ecba5f4
+      incidents: インシデント履歴
       #original_hash: b8be3d1
       administration: 管理
       #original_hash: b7ee3c4
@@ -1552,6 +1566,8 @@ ja:
       name_too_long: 大会名が 32 文字を超えています。短い名前が好ましいので変更してください。
       #original_hash: 1a20fae
       must_have_events: 大会内容を確定する前に 1 個以上の競技種目を追加してください。
+      #original_hash: a3aea56
+      schedule_must_match_rounds: 各種目は少なくとも1ラウンドあり，またスケジュールはすべてのラウンドを含むことを確認してください。
       #original_hash: e390250
       create_success: 大会が新規作成されました！
       #original_hash: afe3a23
@@ -1637,8 +1653,9 @@ ja:
         %{limit_date_and_time}以前にキャンセルされた場合，参加費の%{refund_policy_percent}を返金いたします。
       #original_hash: 4aca553
       no_refunds: キャンセル時の返金は行いません。
-      #original_hash: cf7be5d
-      on_the_spot_registration: '会場申込を受け付けます。会場申込の場合の基本参加費は%{on_the_spot_base_entry_fee}です。'
+      #original_hash: b86fee2
+      on_the_spot_registration_html: >-
+        会場申込は，%{end_of_registration}までに参加定員が達していない場合に限り，基本参加費%{on_the_spot_base_entry_fee}にて受付けます。
       #original_hash: 1637bea
       on_the_spot_registration_free: 会場申込は無料で受け付けます。
       #original_hash: f5f687d
@@ -1796,6 +1813,17 @@ ja:
       coordinates: 緯度・経度
       #original_hash: a672984
       add_championship: 大会タイプを追加する
+      championship_types:
+        #original_hash: dc71704
+        world: 世界大会
+        #original_hash: d573eb7
+        continental: '大陸別大会: %{continent}'
+        #original_hash: 39f47e0
+        national: '国別大会: %{country}'
+        #original_hash: e045169
+        greater_china: 中国統一大会
+        #original_hash: 3b920b7
+        generic: '地域別大会: %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -1809,6 +1837,8 @@ ja:
       cannot_delete_confirmed: 確定済みの大会は削除できません。
       #original_hash: 191df37
       must_contain_event: この大会には 1 個以上の競技種目を追加する必要があります
+      #original_hash: 54fe619
+      schedule_must_match_rounds: は少なくとも1つのラウンドがあり，すべてのラウンドはスケジュールに含まれていなければなりません。
       #original_hash: 6e228b7
       must_contain_delegate: 1 人以上の WCA 代理人を追加する必要があります
       #original_hash: 8131fc2
@@ -2331,70 +2361,91 @@ ja:
       title: 組織
       board:
         #original_hash: abd2828
-        name: WCA 理事会
+        name: WCA理事
         #original_hash: d855b50
         info_html: >-
-          World Cube Association は <strong>WCA 理事</strong>が指揮をとります。WCA
+          世界キューブ協会 (WCA) は <strong>WCA 理事</strong>が指揮をとります。WCA
           理事は以下のメンバーで構成されます:
+      chair:
+        #original_hash: de34439
+        name: WCA 議長
+      executive_director:
+        #original_hash: 7d405ff
+        name: WCA 理事長
+      secretary:
+        #original_hash: 1dd4a07
+        name: WCA 事務局
+      vice_chair:
+        #original_hash: 0388b19
+        name: WCA副議長
       #original_hash: b0c72a9
-      committees: '以下の委員会は WCA の業務活動を担当します:'
+      committees: '以下の委員会はWCAの各業務を担当します:'
       wdc:
         #original_hash: c97077a
         name: WCA懲罰委員会
         #original_hash: 286fdf8
         description: >-
-          この委員会は、WCA 大会規則違反疑いのような特別な事例を WCA 理事に通告し、WCA 公式大会に関する重要な個人的事案がある場合は
-          WCA メンバーと連絡を取ります。
+          WCA大会規則違反の疑いのような事例をWCA理事に通告し、WCA公式大会において重要な個人的事案がある場合にはWCAメンバーから報告を受けます。
+      wdpc:
+        #original_hash: 70539cd
+        name: WCA情報保護委員会
+        #original_hash: 1f69829
+        description: 情報保護に関するすべての事項に対し責任を負います。
       wrc:
         #original_hash: 3da1e85
         name: WCA規則委員会
         #original_hash: 13ada5b
-        description: この委員会は、WCA 大会規則の管理を担当します。
+        description: WCA 大会規則の管理を担当します。
       wrt:
         #original_hash: 67be768
-        name: WCA競技結果チーム
+        name: WCA結果チーム
         #original_hash: 439ffae
-        description: このチームは、すべての競技結果の管理を担当します。
+        description: すべての競技結果の管理を担当します。
       wst:
         #original_hash: a14bc62
         name: WCAソフトウェアチーム
         #original_hash: ec961e4
-        description: このチームは、WCA のソフトウェア (ウェブサイト、スクランブル、ワークブック、管理ツール) の管理を担当します。
+        description: WCAのシステム面 (ウェブサイト、スクランブル、ワークブック、管理ツール) の管理を担当します。
       wct:
         #original_hash: 63a2388
         name: WCAコミュニケーションチーム
         #original_hash: 50fd091
         description: >-
-          WCA Communication Team (WCT)
-          はWCAとコミュニティ・一般の人々とのコミュニケーションを監督しサポートする役割を担っています。
-          これはWCAの目標に貢献し、親しみやすさ、透明性、包括性、見通し，応答性等を維持する必要があります。
+          WCAとコミュニティ・一般とのコミュニケーションを監督しサポートする役割を担っています。
+          これはWCAの目標に貢献し、親しみやすく、透明性、包括性，応答性等を維持する必要があります。
       wfc:
         #original_hash: 9cb13de
         name: WCA財務委員会
         #original_hash: 2d4807e
-        description: このチームは WCA の会計を担当します。
+        description: WCAの会計を担当します。
       wec:
         #original_hash: 83bd1d0
         name: WCA倫理委員会
         #original_hash: c304d57
-        description: この委員会は「WCA スタッフ」と「外部スタッフ」によるすべての手続きが倫理規定を遵守しているかを確かめる役割を担っています。
+        description: WCA スタッフと外部スタッフによるすべての手続きがWCA倫理規定を遵守しているかを確かめる役割を担っています。
       wqac:
         #original_hash: 8f32116
         name: WCA品質保証委員会
         #original_hash: 0171b3b
         description: >-
-          この委員会はWCA内での永続的な品質の向上、およびプロセス・WCA
-          スタッフ・地域組織・大会運営者・大会スタッフを高い品質に保つための品質規格を世界中に適用することをサポートし促進する役割を担います。
+          WCAの継続的な品質の向上、およびプロセス・WCAスタッフ・地域組織・大会運営者・大会スタッフを高い品質に保つための品質規格を世界中に適用することをサポートし促進する役割を担います。
       wcat:
         #original_hash: 2b81984
         name: WCA大会告知チーム
-        #original_hash: 61a471f
-        description: この委員会は，WCA代理人により申請されたWCA公式大会がWCAの品質基準を満たしていることを確認し，承認・告知を行います。
+        #original_hash: f511502
+        description: WCATはWCA公式大会を承認・告知し，WCA品質水準に合致していることを確認します。
       wmt:
         #original_hash: 2035811
         name: WCAマーケティングチーム
         #original_hash: f2a0140
         description: このチームはWCAブランドの発展および管理，スポンサーの打診，WCA大会機器の援助，WCA関連商品の広告などを担当します。
+      #original_hash: a2c8ad3
+      councils: 以下の機関はWCA理事に対して助言を行います。
+      wac:
+        #original_hash: 1ce7604
+        name: WCA協議会
+        #original_hash: fb6cd86
+        description: WCAコミュニティとWCAスタッフの間の意見交換の場の設置・維持に対し責任を負います。
       banned:
         #original_hash: d30e2e5
         name: 制裁対象の競技者
@@ -2423,6 +2474,8 @@ ja:
     minutes: 議事録
     #original_hash: 6db524a
     policies: 政策
+    #original_hash: 91ac873
+    codeofethics: 倫理規程
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA 代理人
@@ -2509,6 +2562,9 @@ ja:
       info_html: >-
         WDC は様々な事象を調査し解決方法を提案します (必要あらば罰則を与えます)。事象とは特に WCA
         大会規則の違反やコミュニティの問題のことを指します。これらに関与する場合 WDC にお問い合わせください。
+    wdpc:
+      #original_hash: c21a96e
+      info_html: WCA情報保護方針・WCAデータを扱う外部機関との契約について調査・締結・改訂・管理・執行および，情報保護に関する管理業務に対し責任を負います。
     wrc:
       #original_hash: fcd3526
       info_html: >-
@@ -2549,6 +2605,11 @@ ja:
     wmt:
       #original_hash: f2a0140
       info_html: このチームはWCAブランドの発展および管理，スポンサーの打診，WCA大会機器の援助，WCA関連商品の広告などを担当します。
+    #original_hash: f97a4f5
+    councils_html: 協議会
+    wac:
+      #original_hash: fb6cd86
+      info_html: WCAコミュニティとWCAスタッフの間の意見交換の場の設置・維持に対し責任を負います。
   score_tools:
     #original_hash: ea9d41d
     title: WCA 記録ツール
