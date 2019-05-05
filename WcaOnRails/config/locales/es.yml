@@ -170,17 +170,17 @@ es:
     #original_hash: 7ee969c
     percent: 'El %{percent}% mejor pasa a la siguiente ronda'
     attempt_result:
-      #original_hash: 1fb7fe1
+      #original_hash: b3c8a02
       time: >-
-        Aquellos con mejor intento en menos de %{time} pasan a la siguiente
+        Aquellos con mejor resultado en menos de %{time} pasan a la siguiente
         ronda
-      #original_hash: 8254f3e
+      #original_hash: 07bca6c
       moves: >-
-        Aquellos con mejor intento en menos de %{moves} movimientos pasan a la
+        Aquellos con mejor resultado en menos de %{moves} movimientos pasan a la
         siguiente ronda
-      #original_hash: daab86e
+      #original_hash: 837083c
       points: >-
-        Aquellos con mejor intento de más de %{points} puntos pasan a la
+        Aquellos con mejor resultado de más de %{points} puntos pasan a la
         siguiente ronda
   cutoff:
     #original_hash: cf458e7
