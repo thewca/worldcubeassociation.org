@@ -197,7 +197,7 @@ class CompetitionsController < ApplicationController
       date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long)
       title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.country.name}"
 
-      body = "The [#{comp.name}](#{competition_url(comp)})"
+      body = "[#{comp.name}](#{competition_url(comp)})"
       body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.country.name}."
       unless comp.website.blank?
         body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
@@ -283,7 +283,7 @@ class CompetitionsController < ApplicationController
           title = "#{people_to_sentence(winners, link: false)} #{winners.length > 1 ? "win" : "wins"} " \
                   "#{comp.name}, in #{comp.cityName}, #{comp.country.name}"
 
-          body = "#{people_to_sentence(winners, link: true)} won the [#{comp.name}](#{competition_url(comp)})" \
+          body = "#{people_to_sentence(winners, link: true)} won [#{comp.name}](#{competition_url(comp)})" \
                  " #{pretty_print_result(winners.first)}" # If there are more winners then their results are the same.
           body += " in the #{event.name} event" if event.id != "333"
           body += "."
