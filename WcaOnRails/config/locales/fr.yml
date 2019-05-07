@@ -1,13 +1,21 @@
 fr:
   countries:
+    #original_hash: 9af4622
+    XF: Pays multiple (Afrique)
+    #original_hash: 374ac0d
+    XM: Pays multiple (Amériques)
     #original_hash: 3f8c9de
     XA: Pays multiple (Asie)
     #original_hash: 090f3ce
     XE: Pays multiple (Europe)
+    #original_hash: b50b7a5
+    XN: Pays multiple (Amérique du Nord)
+    #original_hash: 428e7af
+    XO: Pays multiple (Océanie)
     #original_hash: 459f987
     XS: Pays multiple (Amérique du Sud)
-    #original_hash: 374ac0d
-    XM: Pays multiple (Amériques)
+    #original_hash: 9027fe6
+    XW: Pays multiple (Monde)
     #original_hash: 918c53a
     MO: Macau
     #original_hash: 2f488ff
@@ -162,13 +170,13 @@ fr:
     #original_hash: 7ee969c
     percent: 'Le top %{percent}% avance au tour suivant'
     attempt_result:
-      #original_hash: 1fb7fe1
-      time: 'Un meilleur temps < %{time} permet d''avancer au tour suivant'
-      #original_hash: 8254f3e
+      #original_hash: b3c8a02
+      time: 'Un meilleur résultat < %{time} permet d''avancer au tour suivant'
+      #original_hash: 07bca6c
       moves: >-
         Un meilleur résultat < %{moves} mouvements permet d'avancer au tour
         suivant
-      #original_hash: daab86e
+      #original_hash: 837083c
       points: 'Un meilleur résultat > %{points} points permet d''avancer au tour suivant'
   cutoff:
     #original_hash: cf458e7
@@ -320,6 +328,8 @@ fr:
         phone_number: Numéro de téléphone
         #original_hash: 7044004
         notes: Notes
+        #original_hash: 730db33
+        receive_delegate_reports: Je souhaite recevoir les rapports des compétitions WCA par email
         #original_hash: 57eaf24
         user_preferred_events: Épreuves préférées
       competition:
@@ -369,6 +379,8 @@ fr:
         information: Informations
         #original_hash: 87b7d5f
         use_wca_registration: Je souhaite utiliser le site de la WCA pour les inscriptions
+        #original_hash: 8020e88
+        external_registration_page: Page pour les inscriptions
         #original_hash: 9bb1965
         competitor_limit_enabled: Nombre maximum de compétiteurs
         #original_hash: 749f4c9
@@ -611,6 +623,8 @@ fr:
           Entrez votre nom complet correctement, par exemple <strong>Stefan
           Pochmann</strong>. Pas négligemment comme <strong>s pochman</strong>
           ou <strong>Stefan POCHMAN</strong>.
+        #original_hash: da39a3e
+        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Après avoir chargé une nouvelle photo de profil, vous devrez attendre
@@ -647,6 +661,11 @@ fr:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
+        #original_hash: 8c266ea
+        receive_delegate_reports: >-
+          Si vous êtes Candidat Délégué, Délégué Senior, ou membre du WRC ou du
+          WQAC, vous recevez les rapports des Délégués par défaut. Note : un
+          changement peut prendre jusqu'à une heure pour prendre effet.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -698,6 +717,10 @@ fr:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: b2af5f5
+        external_registration_page: >-
+          La page sur laquelle les compétiteurs doivent s'inscrire pour la
+          compétition. Doit être une url http(s) valide.
         #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
           Les frais d'inscriptions de base pour la compétition. Les frais
@@ -935,6 +958,8 @@ fr:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -1080,14 +1105,14 @@ fr:
       about: À propos de la WCA
       #original_hash: ed97787
       documents: Documents de la WCA
-      #original_hash: jflyprv
-      tutorial: Tutoriel pour les compétitions
       #original_hash: d8fd3e4
       delegates: Délégués WCA
       #original_hash: 37b8fdc
       organizations: Organisations Régionales
       #original_hash: d790b40
       faq: Questions Fréquentes
+      #original_hash: 02617c0
+      tutorial: Tutoriel pour les compétitions
       #original_hash: a34b69f
       contact: Informations de Contact
       #original_hash: 4fa8cc8
@@ -1128,10 +1153,12 @@ fr:
       scrambles: Mélanges
       #original_hash: 90ccd64
       history: Historique
-      disciplinary: "Disciplinary log"
-      incidents: "Incidents log"
       #original_hash: 8ad8302
       translations: Traductions
+      #original_hash: c420cb4
+      disciplinary: Disciplinary log
+      #original_hash: ecba5f4
+      incidents: Incidents log
       #original_hash: b8be3d1
       administration: Administration
       #original_hash: b7ee3c4
@@ -1297,6 +1324,7 @@ fr:
       approve: Approuver
       #original_hash: 85de4b8
       unconfirmed_email: 'L''adresse email (%{email}) de ce compte n''est pas confirmée.'
+      #original_hash: c03b949
       confirm_new_email: 'Si vous changez votre adresse email, vous devrez la confirmer.'
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
@@ -1411,6 +1439,8 @@ fr:
       unique: 'est déjà utilisé par "%{used_name}" avec l''adresse %{used_email}'
       #original_hash: 26f70ed
       dob_past: doit être dans le passé
+      #original_hash: b320913
+      dob_recent: doit avoir au moins 2 ans
       #original_hash: b64df45
       already_represented_country: >-
         Impossible de changer le pays pour un pays que cette personne a déjà
@@ -1450,6 +1480,13 @@ fr:
         Results Team</a> (en Anglais) pour résoudre ce problème.
       #original_hash: d02c03b
       avatar_requires_wca_id: requiert d'avoir un ID WCA
+      #original_hash: 8f785ea
+      email_used_by_locked_account_html: >-
+        est déjà utilisé par un autre compte. Il a été créé automatiquement
+        lorsque vous vous êtes inscrit à une compétition sur un site externe. Si
+        vous êtes le propriétaire de cet email, vous pouvez utiliser ce compte
+        après avoir réinitialisé votre mot de passe <a
+        href='/users/password/new'>ici</a>.
     successes:
       messages:
         #original_hash: 31bd401
@@ -1495,8 +1532,6 @@ fr:
       need_country: Pays obligatoire
       #original_hash: cec28a0
       comp_not_found: Compétition introuvable
-      #original_hash: cb763b8
-      registration_closed: Les inscriptions pour la compétition sont fermées
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Une inscription ne peut pas être à la fois supprimée et acceptée.
       #original_hash: a38d024
@@ -1783,6 +1818,21 @@ fr:
       pouvez éditer %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Conditions d''inscription pour la compétition :'
+    import:
+      #original_hash: 5a394f3
+      title: 'Importer les inscriptions pour %{comp}'
+      #original_hash: ccda564
+      info: >-
+        Vous pouvez importer les inscriptions plusieurs fois, les changements
+        seront détectés et la base de données sera mise à jour en conséquence.
+      #original_hash: 779b272
+      registrations_file_label: Fichier des inscriptions
+      #original_hash: 4017f0e
+      registrations_file_hint: >-
+        Fichier CSV avec les colonnes suivantes : Status, Name, Country, WCA ID,
+        Birth Date, Gender, Email, et une colonne pour chaque épreuve.
+      #original_hash: d6fbc9d
+      import: Importer
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1793,6 +1843,11 @@ fr:
         court serait préférable, et on serait ravi que vous le changiez.
       #original_hash: 1a20fae
       must_have_events: Merci d'ajouter au moins une épreuve avant de confirmer la compétition.
+      #original_hash: a3aea56
+      schedule_must_match_rounds: >-
+        Avant de confirmer la compétition merci de vérifier que la compétition a
+        au moins un tour par épreuve, et que le planning que vous avez créé
+        inclue tous les tours que vous avez déclaré.
       #original_hash: e390250
       create_success: Nouvelle compétition créée avec succès !
       #original_hash: afe3a23
@@ -1904,10 +1959,11 @@ fr:
       no_refunds: >-
         Les frais d'inscriptions ne seront pas remboursés, quelles que soient
         les circonstances.
-      #original_hash: cf7be5d
-      on_the_spot_registration: >-
-        Les inscriptions sur place seront acceptées et coûteront de base
-        %{on_the_spot_base_entry_fee}.
+      #original_hash: b86fee2
+      on_the_spot_registration_html: >-
+        Les inscriptions sur place seront acceptées pour un montant de
+        %{on_the_spot_base_entry_fee} si la limite au nombre de compétiteurs n'a
+        pas été atteinte avant le %{end_of_registration}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Les inscriptions sur place seront acceptées gratuitement.
       #original_hash: f5f687d
@@ -2096,6 +2152,17 @@ fr:
       coordinates: Coordonnées GPS
       #original_hash: a672984
       add_championship: Ajouter un type de championnat
+      championship_types:
+        #original_hash: dc71704
+        world: Championnat du Monde
+        #original_hash: d573eb7
+        continental: 'Championnat Continental : %{continent}'
+        #original_hash: 39f47e0
+        national: 'Championnat National : %{country}'
+        #original_hash: e045169
+        greater_china: Championnats de Grande Chine
+        #original_hash: 3b920b7
+        generic: 'Championnat : %{type}'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2110,6 +2177,10 @@ fr:
       cannot_delete_confirmed: Impossible de supprimer une compétition confirmée.
       #original_hash: 191df37
       must_contain_event: doit contenir au moins une épreuve pour cette compétition
+      #original_hash: 54fe619
+      schedule_must_match_rounds: >-
+        doit avoir au moins un tour, et tous les tours doivent être inclus dans
+        le planning.
       #original_hash: 6e228b7
       must_contain_delegate: doit contenir au moins un Délégué WCA
       #original_hash: 8131fc2
@@ -2308,6 +2379,8 @@ fr:
         delegate_report: Rapport du délégué
         #original_hash: b233e77
         registration: Inscriptions
+        #original_hash: 3f9176e
+        import_registrations: Importer les inscriptions
         #original_hash: d672995
         register: S'inscrire
         #original_hash: 855bd26
@@ -2731,6 +2804,18 @@ fr:
         info_html: >-
           La World Cube Association est dirigée par le <strong>bureau de la
           WCA</strong>, constitué des membres suivants :
+      chair:
+        #original_hash: de34439
+        name: Président de la WCA
+      executive_director:
+        #original_hash: 7d405ff
+        name: Directeur Exécutif de la WCA
+      secretary:
+        #original_hash: 1dd4a07
+        name: Secrétaire de la WCA
+      vice_chair:
+        #original_hash: 0388b19
+        name: Vice-Président de la WCA
       #original_hash: b0c72a9
       committees: >-
         Les comités suivants sont responsables des activités opérationnelles de
@@ -2744,6 +2829,13 @@ fr:
           que des violations présumées du Règlement WCA, et il peut être
           contacté par les membres de la WCA en cas d'affaires personnelles
           importantes concernant les compétitions WCA.
+      wdpc:
+        #original_hash: 70539cd
+        name: Comité de la Protection des Données de la WCA
+        #original_hash: 1f69829
+        description: >-
+          Ce comité est responsable de gérer les affaires relatives à la
+          protection des données.
       wrc:
         #original_hash: 3da1e85
         name: Comité Réglementaire de la WCA
@@ -2804,7 +2896,7 @@ fr:
       wcat:
         #original_hash: 2b81984
         name: Équipe des annonces de compétitions de la WCA
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
           Cette équipe a le rôle d'approuver et d'annoncer les Compétitions WCA,
           et de s'assurer que ces annonces suivent les standards de qualités de
@@ -2818,6 +2910,17 @@ fr:
           de la WCA, rechercher des sponsors, supporter la distribution du
           matériel de compétition WCA, et gérer les produits promotionnels de la
           WCA.
+      #original_hash: a2c8ad3
+      councils: >-
+        Les Conseils suivant ont le rôle de conseiller le Bureau des directeurs
+        de la WCA :
+      wac:
+        #original_hash: 1ce7604
+        name: Conseil Consultatif de la WCA
+        #original_hash: fb6cd86
+        description: >-
+          Ce Conseil est responsable de créer et maintenir une communication
+          bilatérale entre la communauté de la WCA et le Staff de la WCA.
       banned:
         #original_hash: d30e2e5
         name: Compétiteurs bannis
@@ -2847,6 +2950,8 @@ fr:
   documents:
     #original_hash: 687c828
     title: Documents
+    #original_hash: 1b537dc
+    determination_letter: Lettre de décision de l'IRS
     #original_hash: 9855f80
     bylaws: Statuts
     #original_hash: fdceb44
@@ -2855,6 +2960,8 @@ fr:
     minutes: Compte-rendus
     #original_hash: 6db524a
     policies: Politiques de la WCA
+    #original_hash: 91ac873
+    codeofethics: Code d'Éthique
   delegates_page:
     #original_hash: d8fd3e4
     title: Délégués WCA
@@ -2955,6 +3062,14 @@ fr:
         WCA ou des problèmes avec la communauté. Si vous avez vécu ou été témoin
         d'un problème de ce type, n'hésitez pas à contacter ce comité (en
         Anglais).
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        Le WDPC a la responsabilité et le devoir de chercher, créer,
+        implémenter, gérer, et faire appliquer : les politiques de protection
+        des données de la WCA, les contrats avec des utilisateurs externes des
+        données de la WCA, et gérer les tâches relatives à la protection des
+        données.
     wrc:
       #original_hash: fcd3526
       info_html: >-
@@ -3025,6 +3140,13 @@ fr:
         Cette équipe est responsable de développer et gérer l'image de marque de
         la WCA, rechercher des sponsors, supporter la distribution du matériel
         de compétition WCA, et gérer les produits promotionnels de la WCA.
+    #original_hash: f97a4f5
+    councils_html: Conseils
+    wac:
+      #original_hash: fb6cd86
+      info_html: >-
+        Ce Conseil est responsable de créer et maintenir une communication
+        bilatérale entre la communauté de la WCA et le Staff de la WCA.
   score_tools:
     #original_hash: ea9d41d
     title: Outils WCA pour la saisie des résultats
