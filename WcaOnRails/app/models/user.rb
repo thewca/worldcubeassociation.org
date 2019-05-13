@@ -841,8 +841,10 @@ class User < ApplicationRecord
       end
     end
 
+    query_options = "name LIKE :part OR wca_id LIKE :part #{"OR email LIKE :part" if params[:email]}"
+
     query.split.each do |part|
-      users = users.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
+      users = users.where(query_options, part: "%#{part}%")
     end
 
     users.order(:name)
