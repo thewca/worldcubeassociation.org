@@ -160,7 +160,7 @@
           }
           $.ajax({
             url: url,
-            data: _.extend({}, defaultSearchData, { q: query }),
+            data: _.extend({}, defaultSearchData, { q: query, email: true }),
             type: 'GET',
             error: function() {
               callback();

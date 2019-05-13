@@ -56,7 +56,7 @@ RSpec.describe Api::V0::ApiController do
 
   describe 'GET #users_search' do
     let(:person) { FactoryBot.create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
-    let!(:user) { FactoryBot.create(:user, person: person) }
+    let!(:user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
 
     it 'requires query parameter' do
       get :users_search
@@ -96,6 +96,15 @@ RSpec.describe Api::V0::ApiController do
       expect(json["result"].length).to eq 1
       expect(json["result"][0]["id"]).to eq user.id
     end
+
+    it "can find by email" do
+      get :users_search, params: { q: "example", email: true}
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["result"].length).to eq 1
+      expect(json["result"][0]["id"]).to eq user.id
+    end
+
 
     context 'Person without User' do
       let!(:userless_person) { FactoryBot.create(:person, name: "Bob") }
