@@ -47,8 +47,23 @@
       <li>
         <%= link_to "Upcoming competitions for your subordinate Delegates", competitions_for_senior_path %>
       </li>
+      <li>
+        <%= link_to "Modify Delegates on Probation", edit_team_path(Team.probation) %>
+      </li>
     </ul>
   <% end %>
+
+
+  <% if current_user.team_leader?(Team.wfc) || current_user.team_senior_member?(Team.wfc) %>
+    <h2><%= Team.wfc.name %></h2>
+
+    <ul>
+      <li>
+        <%= link_to "Modify Delegates on Probation", edit_team_path(Team.probation) %>
+      </li>
+    </ul>
+  <% end %>
+
 
   <% if current_user&.can_view_leader_material? %>
     <h2>Committee/Team Leaders</h2>

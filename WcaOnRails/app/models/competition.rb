@@ -184,8 +184,8 @@ class Competition < ApplicationRecord
   ANNOUNCED_DAYS_DANGER = 28
   MAX_SPAN_DAYS = 6
 
-  # https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++
-  SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
+  # 1. on https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
+  MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 28
 
   validates :cityName, city: true
 
@@ -863,7 +863,18 @@ class Competition < ApplicationRecord
 
   def has_date_errors?
     valid?
-    !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until && days_until < SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
+    !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
+  end
+
+  # The competition must be at least 28 days in advance in order to confirm it. Admins are able to modify the competition despite being less than 28 days in advance.
+  validate :start_date_must_be_28_days_in_advance, if: :confirmed_or_visible?
+  def start_date_must_be_28_days_in_advance
+    if editing_user_id
+      editing_user = User.find(editing_user_id)
+      if !editing_user.can_admin_competitions? && start_date && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS
+        errors.add(:start_date, I18n.t('competitions.errors.start_date_must_be_28_days_in_advance'))
+      end
+    end
   end
 
   def dangerously_close_to?(c)

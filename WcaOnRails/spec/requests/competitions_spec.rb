@@ -57,6 +57,7 @@ RSpec.describe "competitions" do
     context "signed in as a delegate" do
       before :each do
         sign_in competition.delegates.first
+        competition.update!(start_date: 5.weeks.from_now, end_date: 5.weeks.from_now)
       end
 
       it 'can set championship types for an unconfirmed competition' do

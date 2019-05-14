@@ -1,34 +1,91 @@
-<h1><%= @competition.name %> is confirmed</h1>
+Competition Announcement Team, 
+<br>
+<br>
+<strong><%= @confirmer.name %> has confirmed <%= link_to @competition.name, competition_url(@competition) %>.</strong>
+<br>
+
+<span class="<%= 'alert' if (@competition.start_date - Time.now.to_date).to_i <= 30 %>">
+  The competition will take place on <%= wca_date_range(@competition.start_date, @competition.end_date) %> in <%= (@competition.start_date - Time.now.to_date).to_i %> days.
+  <% if (@competition.start_date - Time.now.to_date).to_i <= 30 %>
+    There are less than 48 hours remaining for the competition to be announced. @<%= "Delegate".pluralize(@competition.delegates.count) %>: please respond to any WCAT concerns as soon as possible to ensure that the competition becomes announced. If the competition becomes less than 28 days away, the WCAT cannot announce it.
+  <% end %>
+  <br>
+  <br>
+</span>
 
 <% if @competition.championships.present? %>
-  <h2 class="alert">This competition is marked as <%= @competition.championships.sort.map(&:name).to_sentence %></h2>
+  <span class="alert">
+    This competition is marked as <%= @competition.championships.sort.map(&:name).to_sentence %>.
+    <br>
+    <br>
+  </span>
+<% end %>
+
+<% @competition.delegates.map do |delegate| %> 
+  <% if Team.probation.current_members.map { |member| member.user_id }.include?(delegate.id) %>
+    <span class="alert">
+      <%= delegate.name %> is currently on probation. Please check the <%= link_to "Delegates on Probation spreadsheet", "https://docs.google.com/spreadsheets/d/1ZU1lk0niGn-vjmbiDkoROU8qjmdHkNebZ2GCFHm6vvA/edit#gid=1887522006" %> for more details.
+      <br>
+      <br>
+    </span>
   <% end %>
+<% end %>
+
+<% @competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING).each do |c| %>
+  <% if @competition.dangerously_close_to?(c) %>
+    <% days_difference = (@competition.start_date - c.start_date).to_i %>
+    <% days_sentence = days_difference > 0 ? "#{days_difference} days before" : "#{-days_difference} days after" %>
+    <span class="alert">
+      This competition has a potential proximity conflict with
+      <%= link_to c.name, admin_edit_competition_url(c) %>
+      which is <%= days_sentence %> and <%= @competition.kilometers_to(c).round(2) %> km away.
+      <br>
+      <br>
+    </span>
+  <% end %>
+<% end %>
 
 <% if @competition.remarks.present? %>
-  <p>
-    <%= @confirmer.name %> says: <%= @competition.remarks %>
-  </p>
+  <span>
+    <%= @confirmer.name %> says: "<%= @competition.remarks %>".
+    <br>
+  </span>
+<% end %>
+
+<% if @competition.name_reason? %>
+  <span>
+    The competition name is because "<%= @competition.name_reason %>".
+    <br>
+  </span>
 <% end %>
 
 <% if @competition.competitor_limit_enabled? %>
-  <p>
-    There is a competitor limit of <%= @competition.competitor_limit %> because "<%= @competition.competitor_limit_reason %>"
-  </p>
+  <span class="<%= 'alert' if @competition.competitor_limit < 50 %>">
+    There is a competitor limit of <%= @competition.competitor_limit %> because "<%= @competition.competitor_limit_reason %>".
+    <br>
+  </span>
 <% end %>
 
 <% if @competition.regulation_z1? %>
-  <p>
-    The Delegate(s) requested the adoption of <b>Regulation Z1)</b> because "<%= @competition.regulation_z1_reason %>"
-  </p>
+  <span>
+    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested for competitors to <b>submit puzzles early</b> because "<%= @competition.regulation_z1_reason %>".
+    <br>
+  </span>
 <% end %>
 
 <% if @competition.regulation_z3? %>
-  <p>
-    The Delegate(s) requested the adoption of <b>Regulation Z3)</b> because "<%= @competition.regulation_z3_reason %>"
-  </p>
+  <span>
+    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested the adoption of <b>qualification results</b> because "<%= @competition.regulation_z3_reason %>".
+    <br>
+  </span>
 <% end %>
 
-<p>
-  @WCAT: You can delete this competition or make it publicly visible <%= link_to "here", admin_edit_competition_url(@competition) %>.
+<span>
+  @WCAT: You can manage this competition <%= link_to "here", admin_edit_competition_url(@competition) %>.
   For a complete list of confirmed but unannounced competitions see your <%= link_to "notifications", notifications_url %>.
-</p>
+  <br>
+  <br>
+  Regards,
+  <br> 
+  <%= @competition.delegates.sort_by { |d| d.name }.map { |d| d.name }.to_sentence %>
+</span>
