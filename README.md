@@ -8,6 +8,22 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   git clone https://github.com/thewca/worldcubeassociation.org
   cd worldcubeassociation.org
   ```
+- Ensure you have the correct [Ruby version](./.ruby_version) installed. We recommend using a Ruby version manager like [rvm](https://rvm.io/rvm/install) or [rbenv](https://github.com/rbenv/rbenv). To install using rvm:
+  ```
+  rvm install 2.5.3
+  rvm use 2.5.3
+  ```
+- Ensure [Bundler 2](https://bundler.io/v2.0/guides/bundler_2_upgrade.html) is installed
+  - To update from bundler 1:
+    ```
+    gem update --system
+    bundle update --bundler
+    ```
+  - Or, if you haven't installed bundler previously:
+    ```
+    gem update --system
+    gem install bundler
+    ```
 - Set up git pre-commit hook. Optional, but very useful.
   ```shell
   (cd WcaOnRails; bundle install && bundle exec pre-commit install) && git config pre-commit.ruby "scripts/ruby_in_wca_on_rails.sh"
