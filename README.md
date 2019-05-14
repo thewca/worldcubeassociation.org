@@ -3,8 +3,15 @@
 This repository contains all of the code that runs on [worldcubeassociation.org](https://www.worldcubeassociation.org/).
 
 ## Setup
-- `git clone https://github.com/thewca/worldcubeassociation.org` - Clone this repo! (And navigate into it, `cd worldcubeassociation.org`)
-- `(cd WcaOnRails; bundle install && bundle exec pre-commit install) && git config pre-commit.ruby "scripts/ruby_in_wca_on_rails.sh"` - Set up git pre-commit hook. Optional, but very useful.
+- Clone this repo! (And navigate into it)
+  ```
+  git clone https://github.com/thewca/worldcubeassociation.org
+  cd worldcubeassociation.org
+  ```
+- Set up git pre-commit hook. Optional, but very useful.
+  ```shell
+  (cd WcaOnRails; bundle install && bundle exec pre-commit install) && git config pre-commit.ruby "scripts/ruby_in_wca_on_rails.sh"
+  ```
 
 ## Run directly with Ruby (lightweight, but only runs the Rails portions of the site)
 - Set up MySQL with a user with username "root" with an empty password.
@@ -18,9 +25,10 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   ```
 - Install dependencies and load development database.
   1. `cd WcaOnRails/`
-  2. `bundle install && bin/yarn`
-  3. `bin/rake db:load:development` - Download and import the [developer's database export](https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export).
-  4. `bin/rails server` - Run rails. The server will be accessible at localhost:3000
+  2. [Install yarn](https://yarnpkg.com/en/docs/install) if you hadn't
+  3. `bundle install && bin/yarn`
+  4. `bin/rake db:load:development` - Download and import the [developer's database export](https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export).
+  5. `bin/rails server` - Run rails. The server will be accessible at localhost:3000
 - Run tests.  Setup instructions follow `before_script` in `.travis.yml`.
   1. `RAILS_ENV=test bin/rake db:reset` - Set up test database.
   2. `RAILS_ENV=test bin/rake assets:precompile` - Compile some assets needed for tests to run.
