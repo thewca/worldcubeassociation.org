@@ -1,13 +1,21 @@
 da:
   countries:
+    #original_hash: 9af4622
+    XF: Flere Lande (Afrika)
+    #original_hash: 374ac0d
+    XM: Flere Lande (Amerika)
     #original_hash: 3f8c9de
     XA: Flere Lande (Asien)
     #original_hash: 090f3ce
     XE: Flere Lande (Europa)
+    #original_hash: b50b7a5
+    XN: Flere Lande (Nord Amerika)
+    #original_hash: 428e7af
+    XO: Flere Lande (Oceanien)
     #original_hash: 459f987
     XS: Flere Lande (Syd Amerika)
-    #original_hash: 374ac0d
-    XM: Flere Lande (Amerika)
+    #original_hash: 9027fe6
+    XW: Flere Lande (Verden)
     #original_hash: 918c53a
     MO: Macao
     #original_hash: 2f488ff
@@ -162,11 +170,11 @@ da:
     #original_hash: 7ee969c
     percent: 'Top %{percent}% kommer videre til næste runde'
     attempt_result:
-      #original_hash: 1fb7fe1
-      time: 'Bedste tid < %{time} kommer videre til næste runde'
-      #original_hash: 8254f3e
+      #original_hash: b3c8a02
+      time: 'Bedste resultat < %{time} kommer videre til næste runde'
+      #original_hash: 07bca6c
       moves: 'Bedste resultat < %{moves} træk kommer videre til næste runde'
-      #original_hash: daab86e
+      #original_hash: 837083c
       points: 'Bedste resultat > %{points} point kommer videre til næste runde'
   cutoff:
     #original_hash: cf458e7
@@ -927,6 +935,8 @@ da:
         results_file: ''
         #original_hash: da39a3e
         message: ''
+        #original_hash: da39a3e
+        confirm_information: ''
     options:
       registration:
         status:
@@ -1119,6 +1129,10 @@ da:
       history: Historik
       #original_hash: 8ad8302
       translations: Oversættelser
+      #original_hash: c420cb4
+      disciplinary: Disciplinær logbog
+      #original_hash: ecba5f4
+      incidents: Hændelses logbog
       #original_hash: b8be3d1
       administration: Administration
       #original_hash: b7ee3c4
@@ -1879,10 +1893,11 @@ da:
       no_refunds: >-
         Tilmeldingsgebyrer vil ikke blive tilbagebetalt under nogen
         omstændigheder.
-      #original_hash: cf7be5d
-      on_the_spot_registration: >-
-        Tilmelding i lokalet vil være muligt, og koster
-        %{on_the_spot_base_entry_fee}.
+      #original_hash: b86fee2
+      on_the_spot_registration_html: >-
+        Tilmelding i lokalet vil blive accepteret med et grundgebyr på
+        %{on_the_spot_base_entry_fee} hvis deltagergrænsen ikke er blevet fyldt
+        inden %{end_of_registration}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Tilmelding i konkurrencelokalet vil være gratis.
       #original_hash: f5f687d
@@ -2010,11 +2025,11 @@ da:
       supports_md_html: >-
         Supports <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         En kort forklaring på konkurrencens navn. Navnet skal overholde <a
-        href='/documents/policies/Competition%20Name.pdf'>WCA
-        Navngivningspolitikken</a>.
+        href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+        Konkurrence Kravs Politikken</a>.
       #original_hash: 9d9126e
       venue_html: >-
         Lokalet som konkurrencen vil blive afholdt. %{md}. For eksempel:  [Cité
@@ -2731,6 +2746,11 @@ da:
           Denne komité giver WCA Kommisionen råd i specielle tilfælde, som hvis
           WCA reglerne bliver brudt, eller vil muligvis blive kontaktet af WCA
           medlemmer der har problemer med WCA konkurrencer.
+      wdpc:
+        #original_hash: 70539cd
+        name: WCA Databeskyttelses Komité (WCA Data Protection Committee)
+        #original_hash: 1f69829
+        description: Denne komité er ansvarlig for alle emner vedrørende databeskyttelse.
       wrc:
         #original_hash: 3da1e85
         name: WCA Regelsæt Komité (WCA Regulations Committee)
@@ -2787,9 +2807,9 @@ da:
       wcat:
         #original_hash: 2b81984
         name: WCA Konkurrenceannonceringsholdet (WCA Competition Announcement Team)
-        #original_hash: 61a471f
+        #original_hash: f511502
         description: >-
-          Denne komité har rollen at godkende og annoncere WCA Konkurrencer, og
+          Dette hold har rollen at godkende og annoncere WCA Konkurrencer, og
           sikre sig at de overholder WCA's standarder.
       wmt:
         #original_hash: 2035811
@@ -2799,6 +2819,15 @@ da:
           Holdet er ansvarlig for at udvikle og håndtere WCA's Varemærke. Det
           involvere at finde sponsorarter, støtte distribuering af WCA
           Konkurrence Udstyr og markedsføre WCA varer.
+      #original_hash: a2c8ad3
+      councils: 'De følgende råd har rollen af rådgive WCA Bestyrelsen:'
+      wac:
+        #original_hash: 1ce7604
+        name: WCA Rådgivnings Råd
+        #original_hash: fb6cd86
+        description: >-
+          Dette råd er ansvarlig for at bygge og vedligeholde tosidig
+          kommunikation mellem WCA Samfundet og WCA Personale.
       banned:
         #original_hash: d30e2e5
         name: Banlyste Deltagere
@@ -2836,6 +2865,8 @@ da:
     minutes: Referater
     #original_hash: 6db524a
     policies: WCA Politikker
+    #original_hash: 91ac873
+    codeofethics: Etiske Regler
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegerede
@@ -2931,6 +2962,13 @@ da:
         regelbrud fra WCA regelsættet, eller problemer i kubing samfundet. Hvis
         du nogensinde har oplevet nogle eksempler på det, så kontakt venligst
         denne komite.
+    wdpc:
+      #original_hash: c21a96e
+      info_html: >-
+        WDPC er ansvarlig for at undersøge, oprette, udføre, håndtere og
+        håndhæve alle WCA's Databeskyttelses politikker. WDPC har også ansvar
+        for at lave kontrakter med eksterne dataprocessorer af WCA's data og at
+        styre alle opgaver der involvere Databeskyttelse.
     wrc:
       #original_hash: fcd3526
       info_html: >-
@@ -2990,6 +3028,13 @@ da:
         Holdet er ansvarlig for at udvikle og håndtere WCA's Varemærke. Det
         involvere at finde sponsorarter, støtte distribuering af WCA Konkurrence
         Udstyr og markedsføre WCA varer.
+    #original_hash: f97a4f5
+    councils_html: Råd
+    wac:
+      #original_hash: fb6cd86
+      info_html: >-
+        Dette råd er ansvarlig for at bygge og vedligeholde tosidig
+        kommunikation mellem WCA Samfundet og WCA Personale.
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score-Taking værktøjer
