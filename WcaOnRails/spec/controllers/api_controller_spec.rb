@@ -98,13 +98,12 @@ RSpec.describe Api::V0::ApiController do
     end
 
     it "can find by email" do
-      get :users_search, params: { q: "example", email: true}
+      get :users_search, params: { q: "example", email: true }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
       expect(json["result"][0]["id"]).to eq user.id
     end
-
 
     context 'Person without User' do
       let!(:userless_person) { FactoryBot.create(:person, name: "Bob") }
