@@ -2032,11 +2032,12 @@ pt-BR:
         Você pode usar <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         Uma explicação breve sobre o nome da competição. O nome deve estar de
-        acordo com a <a href='/documents/policies/Competition%20Name.pdf'>WCA
-        Competition Name Policy</a>.
+        acordo com a <a
+        href='/documents/policies/Competition%20Requirements.pdf'>WCA
+        Competition Requirements Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
         O local onde a competição vai acontecer. %{md}. Por exemplo [Cité des
