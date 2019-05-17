@@ -10,7 +10,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   ```
 - Ensure you have the correct [Ruby version](./.ruby_version) installed. We recommend using a Ruby version manager like [rvm](https://rvm.io/rvm/install) or [rbenv](https://github.com/rbenv/rbenv). To install using rvm:
   ```
-  rvm install 2.5.3
+  rvm install `cat .ruby-version`
   rvm use 2.5.3
   ```
 - Ensure [Bundler 2](https://bundler.io/v2.0/guides/bundler_2_upgrade.html) is installed
