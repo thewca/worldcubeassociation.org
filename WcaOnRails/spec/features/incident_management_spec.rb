@@ -82,7 +82,7 @@ RSpec.feature "Incident Management" do
       sign_in delegate
     end
 
-    feature "shows incidents list" do
+    feature "shows incidents log" do
       scenario "shows all incidents" do
         visit "/incidents"
         expect(page).to have_content("First incident")
@@ -116,7 +116,7 @@ RSpec.feature "Incident Management" do
       sign_in user
     end
 
-    feature "shows incidents list" do
+    feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
         expect(page).to have_no_content("First incident")
@@ -136,7 +136,7 @@ RSpec.feature "Incident Management" do
   end
 
   context "when signed out" do
-    feature "shows incidents list" do
+    feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
         expect(page).to have_no_content("First incident")

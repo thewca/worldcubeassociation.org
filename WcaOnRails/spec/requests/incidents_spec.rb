@@ -203,7 +203,7 @@ RSpec.describe "Incidents management", type: :request do
     end
 
     context "when signed in as a WRC member" do
-      it "destroys the requested incident and redirects to the incident list" do
+      it "destroys the requested incident and redirects to the incidents log" do
         sign_in wrc_member
         new_incident = FactoryBot.create(:incident)
         expect {
