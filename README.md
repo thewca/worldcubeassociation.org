@@ -8,11 +8,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   git clone https://github.com/thewca/worldcubeassociation.org
   cd worldcubeassociation.org
   ```
-- Ensure you have the correct [Ruby version](./.ruby_version) installed. We recommend using a Ruby version manager like [rvm](https://rvm.io/rvm/install) or [rbenv](https://github.com/rbenv/rbenv). To install using rvm:
-  ```
-  rvm install `cat .ruby-version`
-  rvm use 2.5.3
-  ```
+- Ensure you have the correct [Ruby version](./.ruby_version) installed. We recommend using a Ruby version manager like [rvm](https://rvm.io/rvm/install) or [rbenv](https://github.com/rbenv/rbenv). They should both read `.ruby_version` file to use the correct version (`rvm current` or `rbenv version` to confirm).
 - Ensure [Bundler 2](https://bundler.io/v2.0/guides/bundler_2_upgrade.html) is installed
   - To update from bundler 1:
     ```
