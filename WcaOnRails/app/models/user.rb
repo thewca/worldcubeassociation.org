@@ -486,15 +486,15 @@ class User < ApplicationRecord
   end
 
   def member_of_any_official_team?
-    self.current_teams.official.any?
+    self.current_teams.any?(&:official?)
   end
 
   def senior_member_of_any_official_team?
-    self.teams_where_is_senior_member.official.any?
+    self.teams_where_is_senior_member.any?(&:official?)
   end
 
   def leader_of_any_official_team?
-    self.teams_where_is_leader.official.any?
+    self.teams_where_is_leader.any?(&:official?)
   end
 
   def teams_where_is_senior_member
@@ -527,6 +527,10 @@ class User < ApplicationRecord
 
   def can_view_senior_delegate_material?
     admin? || board_member? || senior_delegate?
+  end
+
+  def can_view_leader_material?
+    admin? || board_member? || leader_of_any_official_team?
   end
 
   def can_edit_user?(user)
@@ -572,7 +576,7 @@ class User < ApplicationRecord
     can_admin_results? || any_kind_of_delegate?
   end
 
-  def can_view_crash_course?
+  def can_view_delegate_crash_course?
     can_view_delegate_matters? || communication_team?
   end
 
@@ -580,7 +584,7 @@ class User < ApplicationRecord
     wdc_team? || wrc_team? || communication_team? || can_announce_competitions?
   end
 
-  def can_update_crash_course?
+  def can_update_delegate_crash_course?
     can_admin_competitions? || quality_assurance_committee?
   end
 
@@ -628,7 +632,7 @@ class User < ApplicationRecord
   end
 
   def can_view_poll?
-    admin? || can_vote_in_poll?
+    can_create_poll? || can_vote_in_poll?
   end
 
   def can_view_delegate_matters?
@@ -732,6 +736,9 @@ class User < ApplicationRecord
         email preferred_events results_notifications_enabled
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
+      if user.staff?
+        fields += %i(receive_delegate_reports)
+      end
     end
     if admin? || board_member? || senior_delegate?
       fields += %i(delegate_status senior_delegate_id region)
@@ -765,9 +772,6 @@ class User < ApplicationRecord
     end
     if user.wca_id.blank? && organizer_for?(user)
       fields << :name
-    end
-    if user.staff?
-      fields += %i(receive_delegate_reports)
     end
     fields
   end

@@ -107,16 +107,16 @@ class UploadJson
       rescue ActiveRecord::RecordNotUnique
         errors.add(:results_file, "Duplicate record found while uploading results. Maybe there is a duplicate personId in the JSON?")
         false
-      rescue ActiveRecord::RecordInvalid => invalid
-        object = invalid.record
+      rescue ActiveRecord::RecordInvalid => e
+        object = e.record
         if object.class == Scramble
-          errors.add(:results_file, "Scramble in '#{Round.name_from_attributes_id(object.eventId, object.roundTypeId)}' is invalid (#{invalid.message}), please fix it!")
+          errors.add(:results_file, "Scramble in '#{Round.name_from_attributes_id(object.eventId, object.roundTypeId)}' is invalid (#{e.message}), please fix it!")
         elsif object.class == InboxPerson
-          errors.add(:results_file, "Person #{object.name} is invalid (#{invalid.message}), please fix it!")
+          errors.add(:results_file, "Person #{object.name} is invalid (#{e.message}), please fix it!")
         elsif object.class == InboxResult
-          errors.add(:results_file, "Result for person #{object.personId} in '#{Round.name_from_attributes_id(object.eventId, object.roundTypeId)}' is invalid (#{invalid.message}), please fix it!")
+          errors.add(:results_file, "Result for person #{object.personId} in '#{Round.name_from_attributes_id(object.eventId, object.roundTypeId)}' is invalid (#{e.message}), please fix it!")
         else
-          errors.add(:results_file, "An invalid record prevented the results from being created: #{invalid.message}")
+          errors.add(:results_file, "An invalid record prevented the results from being created: #{e.message}")
         end
         false
       end

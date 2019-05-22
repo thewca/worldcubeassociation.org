@@ -170,11 +170,11 @@ pl:
     #original_hash: 7ee969c
     percent: 'Najlepsze %{percent}% osób awansuje do następnej rundy'
     attempt_result:
-      #original_hash: 1fb7fe1
-      time: 'Najlepszy czas < %{time}  awansuje do następnej rundy'
-      #original_hash: 8254f3e
-      moves: 'Najlepsze ułożenie < %{moves} ruchów awansuje do następnej rundy'
-      #original_hash: daab86e
+      #original_hash: b3c8a02
+      time: 'Najlepszy wynik < %{time}  awansuje do następnej rundy'
+      #original_hash: 07bca6c
+      moves: 'Najlepszy wynik < %{moves} ruchów awansuje do następnej rundy'
+      #original_hash: 837083c
       points: 'Najlepszy wynik > %{points} punktów awansuje do następnej rundy'
   cutoff:
     #original_hash: cf458e7
@@ -2085,11 +2085,11 @@ pl:
         Możliwe jest używanie języka <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         Krótkie wyjaśnienie nazwy zawodów. Nazwa musi być zgodna z <a
-        href='/documents/policies/Competition%20Name.pdf'>Polityką Nazw Zawodów
-        WCA</a>.
+        href='/documents/policies/external/Competition%20Requirements.pdf'>Polityką
+        Wymagań Zawodów WCA</a>.
       #original_hash: 9d9126e
       venue_html: >-
         Miejsce, gdzie odbywają się zawody. %{md}. Na przykład:

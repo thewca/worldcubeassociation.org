@@ -47,6 +47,20 @@ class AdminController < ApplicationController
     @results_validator = CompetitionResultsValidator.new(@competition.id, true)
   end
 
+  def clear_results_submission
+    # Just clear the "results_submitted_at" field to let the Delegate submit
+    # the results again. We don't actually want to clear InboxResult and InboxPerson.
+    @competition = competition_from_params
+
+    if @competition.results_submitted? && !@competition.results_posted?
+      @competition.update_attributes(results_submitted_at: nil)
+      flash[:success] = "Results submission cleared."
+    else
+      flash[:danger] = "Could not clear the results submission. Maybe results are alredy posted, or there is no submission."
+    end
+    redirect_to competition_admin_upload_results_edit_path
+  end
+
   def create_results
     @competition = competition_from_params
 

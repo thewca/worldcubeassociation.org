@@ -350,7 +350,7 @@ function setRoundFormat(formatChr, formatName)
 {
     /* 333bf is actually a best of 3, but it's better to think of it as a mean of 3,
        since it does contain an average and we are only looking at a single result */
-    roundFormat = lastEventId=='333bf' && formatChr=='3' ? FORMAT_MEAN : formatChr;
+    roundFormat = (lastEventId=='333bf' || lastEventId=='444bf' || lastEventId=='555bf') && formatChr=='3' ? FORMAT_MEAN : formatChr;
     $('#roundFormat').html('<p>Round format:<div style="color:#510000;">'+formatName+'</div></p>');
     $('#labelAverage').text(roundFormat < FORMAT_AVERAGE ? '' : (roundFormat == FORMAT_MEAN ? 'mean' : 'average'));
 }

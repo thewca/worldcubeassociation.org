@@ -31,7 +31,7 @@ class Post < ApplicationRecord
 
   CRASH_COURSE_POST_SLUG = "delegate-crash-course"
 
-  def self.crash_course_post
+  def self.delegate_crash_course_post
     Post.find_or_create_by!(slug: CRASH_COURSE_POST_SLUG) do |post|
       post.title = "Delegate crash course"
       post.body = "Nothing here yet"
@@ -41,20 +41,20 @@ class Post < ApplicationRecord
   end
 
   def deletable
-    persisted? && !is_crash_course_post?
+    persisted? && !is_delegate_crash_course_post?
   end
 
   def edit_path
-    if is_crash_course_post?
-      Rails.application.routes.url_helpers.delegate_crash_course_edit_path
+    if is_delegate_crash_course_post?
+      Rails.application.routes.url_helpers.panel_delegate_crash_course_edit_path
     else
       Rails.application.routes.url_helpers.edit_post_path(slug)
     end
   end
 
   def update_path
-    if is_crash_course_post?
-      Rails.application.routes.url_helpers.delegate_crash_course_path
+    if is_delegate_crash_course_post?
+      Rails.application.routes.url_helpers.panel_delegate_crash_course_path
     else
       Rails.application.routes.url_helpers.post_path(self)
     end
@@ -82,7 +82,7 @@ class Post < ApplicationRecord
     json
   end
 
-  private def is_crash_course_post?
+  private def is_delegate_crash_course_post?
     slug == CRASH_COURSE_POST_SLUG
   end
 end

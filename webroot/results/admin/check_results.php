@@ -242,7 +242,7 @@ function showCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
       $eventHtml = eventLink( $eventId, $eventName );
       $caption = spaced( array( $eventHtml, $roundName, $formatName ));
       tableCaptionNew( false, $anchors, $caption );
-      $bo3_as_mo3 = ($formatId=='3' && ($eventId=='333bf' || $eventId=='333fm' || $eventId=='333ft'));
+      $bo3_as_mo3 = ($formatId=='3' && ($eventId=='333bf' || $eventId=='444bf' || $eventId=='555bf' || $eventId=='333fm' || $eventId=='333ft'));
       $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm' || $bo3_as_mo3) ? 'Average' : '';
       $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
       tableHeader( explode( '|', "Place|Person|Best||$headerAverage||Citizen of|$headerAllResults" ),

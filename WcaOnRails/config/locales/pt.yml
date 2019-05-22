@@ -170,12 +170,12 @@ pt:
     #original_hash: 7ee969c
     percent: 'Top %{percent}% avança para a próxima ronda'
     attempt_result:
-      #original_hash: 1fb7fe1
-      time: 'Melhor resolução < %{time} avança para a próxima ronda'
-      #original_hash: 8254f3e
-      moves: 'Melhor resolução < %{moves} movimentos avança para a próxima ronda'
-      #original_hash: daab86e
-      points: 'Melhor resolução > %{points} pontos avança para a próxima ronda'
+      #original_hash: b3c8a02
+      time: 'Melhor resultado < %{time} avança para a próxima ronda'
+      #original_hash: 07bca6c
+      moves: 'Melhor resultado < %{moves} movimentos avança para a próxima ronda'
+      #original_hash: 837083c
+      points: 'Melhor resultado > %{points} pontos avança para a próxima ronda'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -2022,11 +2022,11 @@ pt:
       supports_md_html: >-
         Suporta <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         Uma breve explicação do nome da competição. O nome deve cumprir com a <a
-        href='/documents/policies/Competition%20Name.pdf'>Política de Nomes de
-        Competições da WCA</a>.
+        href='/documents/policies/external/Competition%20Requirements.pdf'>Política
+        de Requisitos de Competições da WCA</a>.
       #original_hash: 9d9126e
       venue_html: >-
         O local onde a competição vai acontecer. %{md}. Por exemplo [Cité des

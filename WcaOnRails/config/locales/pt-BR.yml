@@ -170,13 +170,15 @@ pt-BR:
     #original_hash: 7ee969c
     percent: 'Os %{percent}% primeiros avançam para a próxima rodada'
     attempt_result:
-      #original_hash: 1fb7fe1
-      time: 'Aqueles com melhor tempo menor que %{time} avançam para a próxima rodada'
-      #original_hash: 8254f3e
+      #original_hash: b3c8a02
+      time: >-
+        Aqueles com melhor resultado menor que %{time} avançam para a próxima
+        rodada
+      #original_hash: 07bca6c
       moves: >-
         Aqueles com melhor resultado menor que %{moves} movimentos avançam para
         a próxima rodada
-      #original_hash: daab86e
+      #original_hash: 837083c
       points: >-
         Aqueles com melhor resultado maior que %{points} pontos avançam para a
         próxima rodada
@@ -2030,11 +2032,12 @@ pt-BR:
         Você pode usar <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         Uma explicação breve sobre o nome da competição. O nome deve estar de
-        acordo com a <a href='/documents/policies/Competition%20Name.pdf'>WCA
-        Competition Name Policy</a>.
+        acordo com a <a
+        href='/documents/policies/Competition%20Requirements.pdf'>WCA
+        Competition Requirements Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
         O local onde a competição vai acontecer. %{md}. Por exemplo [Cité des

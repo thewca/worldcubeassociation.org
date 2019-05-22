@@ -1,25 +1,32 @@
-<% provide(:title, 'Delegates panel') %>
+<% provide(:title, 'Panel') %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
+  <h2>Staff</h2>
+
   <ul>
-    <li>
-      <%= link_to "Crash course", delegate_crash_course_path %>
-    </li>
-    <li>
-      <%= link_to "Delegates", delegates_stats_path %>
-    </li>
-    <li>
-      <%= link_to "WR Submission Form", "https://docs.google.com/forms/d/e/1FAIpQLSeJwf6b7yGGyWFhU0xfKSF3ki_nITyIKXVFRP86unb9EYRtHQ/viewform" %>
-    </li>
-    <li>
-      <%= link_to "WCA Delegate Probationary Status Policy", "https://drive.google.com/file/d/12QnFjsR2A6Dg8SlzMjsflvJAmydZ5iTP/view" %>
-    </li>
+    <%= documents_list("policies/internal") %>
   </ul>
 
+  <% if current_user&.can_view_delegate_crash_course? %>
+    <h2>Delegates</h2>
+
+    <ul>
+      <li>
+        <%= link_to "Delegate Crash course", panel_delegate_crash_course_path %>
+      </li>
+      <li>
+        <%= link_to "Delegates", delegates_stats_path %>
+      </li>
+      <li>
+        <%= link_to "WR Submission Form", "https://docs.google.com/forms/d/e/1FAIpQLSeJwf6b7yGGyWFhU0xfKSF3ki_nITyIKXVFRP86unb9EYRtHQ/viewform" %>
+      </li>
+    </ul>
+  <% end %>
+
   <% if current_user&.can_view_senior_delegate_material? %>
-    <h1>Senior Delegates panel</h1>
+    <h2>Senior Delegates</h2>
 
     <ul>
       <li>
@@ -40,12 +47,22 @@
     </ul>
   <% end %>
 
-  <% if current_user&.board_member? %>
-    <h1>Board panel</h1>
+  <% if current_user&.can_view_leader_material? %>
+    <h2>Committee/Team Leaders</h2>
 
     <ul>
       <li>
-        <%= link_to "List of Senior Delegates", delegate_seniors_path %>
+        <%= link_to "WCA Committee/Team Member Promotion form", "https://docs.google.com/forms/d/e/1FAIpQLSf3079GXcGUYDmJIIdRt0GPlDA_-aMSBZqk93zDgaFRxG15xQ/viewform" %>
+      </li>
+    </ul>
+  <% end %>
+
+  <% if current_user&.board_member? %>
+    <h2>Board</h2>
+
+    <ul>
+      <li>
+        <%= link_to "List of Senior Delegates", panel_seniors_path %>
       </li>
     </ul>
   <% end %>

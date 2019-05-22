@@ -8,7 +8,7 @@ RSpec.describe Post do
   end
 
   it "delegates crash course post is not world_readable" do
-    expect(Post.crash_course_post.world_readable).to be false
+    expect(Post.delegate_crash_course_post.world_readable).to be false
   end
 
   it "displays body teaser and body full when break present" do

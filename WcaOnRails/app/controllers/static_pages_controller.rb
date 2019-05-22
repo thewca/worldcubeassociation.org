@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class StaticPagesController < ApplicationController
+  include DocumentsHelper
+
   def home
   end
 
