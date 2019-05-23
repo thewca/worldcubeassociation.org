@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DumpDeveloperDatabase < ApplicationJob
+class DumpDeveloperDatabase < SingletonApplicationJob
   queue_as :default
 
   def perform
