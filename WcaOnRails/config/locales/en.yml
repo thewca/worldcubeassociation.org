@@ -805,6 +805,7 @@ en:
       comp_not_found: "Competition not found"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
+      banned: "You are banned. If you believe this is an error, please contact the WDC."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:

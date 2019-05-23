@@ -42,6 +42,12 @@ RSpec.describe Registration do
     expect(registration).to be_invalid_with_errors(user_id: ["Need a gender"])
   end
 
+  it "requires user not banned" do
+    user = FactoryBot.create(:user, :banned)
+    registration.user = user
+    expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.banned')])
+  end
+
   it "requires dob" do
     user = FactoryBot.create(:user, dob: nil)
     registration.user = user
