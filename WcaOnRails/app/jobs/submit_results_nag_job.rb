@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SubmitResultsNagJob < ApplicationJob
+class SubmitResultsNagJob < SingletonApplicationJob
   queue_as :default
 
   def nag_needed(competition)
