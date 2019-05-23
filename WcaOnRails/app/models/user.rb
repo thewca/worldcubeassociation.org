@@ -521,6 +521,10 @@ class User < ApplicationRecord
     delegate_status == "senior_delegate"
   end
 
+  def banned?
+    current_teams.include?(Team.banned)
+  end
+
   def can_view_all_users?
     admin? || board_member? || results_team? || communication_team? || wdc_team? || wdpc_team? || any_kind_of_delegate?
   end
@@ -696,6 +700,7 @@ class User < ApplicationRecord
       reasons << I18n.t('registrations.errors.need_gender') if gender.blank?
       reasons << I18n.t('registrations.errors.need_dob') if dob.blank?
       reasons << I18n.t('registrations.errors.need_country') if country_iso2.blank?
+      reasons << I18n.t('registrations.errors.banned') if banned?
     end
   end
 
