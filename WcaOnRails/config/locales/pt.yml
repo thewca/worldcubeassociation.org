@@ -1490,6 +1490,10 @@ pt:
       cannot_be_deleted_and_accepted: Uma inscrição não pode estar aceite e excluída ao mesmo tempo.
       #original_hash: a38d024
       must_register: deve inscrever-se em pelo menos um evento
+      #original_hash: 191294a
+      banned: >-
+        Foste banido. Se acreditas que isto foi um erro, por favor contacta a
+        WDC.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
