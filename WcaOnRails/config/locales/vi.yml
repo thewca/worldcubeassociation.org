@@ -1,13 +1,21 @@
 vi:
   countries:
+    #original_hash: 9af4622
+    XF: Nhiều quốc gia (Châu Phi)
+    #original_hash: 374ac0d
+    XM: Nhiều quốc gia (Châu Mỹ)
     #original_hash: 3f8c9de
     XA: Nhiều quốc gia (Châu Á)
     #original_hash: 090f3ce
     XE: Nhiều quốc gia (Châu Âu)
+    #original_hash: b50b7a5
+    XN: Nhiều quốc gia (Bắc Mỹ)
+    #original_hash: 428e7af
+    XO: Nhiều quốc gia (Châu Đại Dương)
     #original_hash: 459f987
     XS: Nhiều quốc gia (Nam Mỹ)
-    #original_hash: 374ac0d
-    XM: Nhiều quốc gia (Châu Mỹ)
+    #original_hash: 9027fe6
+    XW: Nhiều quốc gia (toàn thế giới)
     #original_hash: 918c53a
     MO: Ma Cao
     #original_hash: 2f488ff
@@ -162,11 +170,11 @@ vi:
     #original_hash: 7ee969c
     percent: 'Nằm trong nhóm %{percent}% được vào vòng tiếp theo'
     attempt_result:
-      #original_hash: 1fb7fe1
+      #original_hash: b3c8a02
       time: 'Thành tích đơn < %{time} được vào vòng tiếp theo'
-      #original_hash: 8254f3e
+      #original_hash: 07bca6c
       moves: 'Thành tích đơn < %{moves} bước được vào vòng tiếp theo'
-      #original_hash: daab86e
+      #original_hash: 837083c
       points: 'Thành tích đơn > %{points} điểm được vào vòng tiếp theo'
   cutoff:
     #original_hash: cf458e7
@@ -1110,6 +1118,10 @@ vi:
       history: Lịch sử
       #original_hash: 8ad8302
       translations: Phiên dịch
+      #original_hash: c420cb4
+      disciplinary: Lưu trữ về kỷ luật
+      #original_hash: ecba5f4
+      incidents: Lưu trữ về các sự cố
       #original_hash: b8be3d1
       administration: Quản trị
       #original_hash: b7ee3c4
@@ -1462,6 +1474,10 @@ vi:
       cannot_be_deleted_and_accepted: Đơn đăng ký không thể bị xoá và được chấp thuận cùng một lúc.
       #original_hash: a38d024
       must_register: phải đăng ký ít nhất một nội dung
+      #original_hash: 191294a
+      banned: >-
+        Bạn đã bị cấm đăng ký. Nếu bạn tin rằng đây là lỗi hệ thống, vui lòng
+        liên lạc WDC.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1844,10 +1860,11 @@ vi:
         hoàn trả %{refund_policy_percent} lệ phí đăng ký.
       #original_hash: 4aca553
       no_refunds: Lệ phí đăng ký sẽ không được hoàn trả trong bất kỳ trường hợp nào.
-      #original_hash: cf7be5d
-      on_the_spot_registration: >-
-        Lệ phí đăng ký tại giải đấu sẽ được chấp nhận với mức cơ sở là
-        %{on_the_spot_base_entry_fee}.
+      #original_hash: b86fee2
+      on_the_spot_registration_html: >-
+        Đăng ký tại cửa sẽ được chấp nhận với mức lệ phí cơ bản là
+        %{on_the_spot_base_entry_fee} nếu số lượng đăng ký không vượt quá giới
+        hạn trước %{end_of_registration}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Đơn đăng ký tại giải đấu sẽ được chấp nhận miễn phí.
       #original_hash: f5f687d
@@ -1973,11 +1990,11 @@ vi:
       supports_md_html: >-
         Hỗ trợ <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         Giải thích ngắn về ý nghĩa tên giải đấu. Tên giải đấu phải tuân theo <a
-        href='/documents/policies/Competition%20Name.pdf'>Chính sách về Tên Giải
-        đấu của WCA</a>.
+        href='/documents/policies/external/Competition%20Requirements.pdf'>Chính
+        sách về Quy định Giải đấu của WCA</a>.
       #original_hash: 9d9126e
       venue_html: >-
         Địa điểm nơi giải đấu diễn ra. %{md}. Ví dụ: [Cité des Sciences et de
@@ -2800,6 +2817,8 @@ vi:
     minutes: Ghi chép
     #original_hash: 6db524a
     policies: Chính sách của WCA
+    #original_hash: 91ac873
+    codeofethics: Nội quy
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegate
