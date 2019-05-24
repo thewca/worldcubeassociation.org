@@ -170,12 +170,16 @@ ru:
     #original_hash: 7ee969c
     percent: 'Лучшие %{percent}% участника(ов) проходят в следующий раунд'
     attempt_result:
-      #original_hash: 1fb7fe1
-      time: 'Участники с лучшей попыткой < %{time} проходят в следующий раунд'
-      #original_hash: 8254f3e
-      moves: 'Участники с лучшей попыткой < %{moves} ходов проходят в следующий раунд'
-      #original_hash: daab86e
-      points: 'Участники с лучшей попыткой > %{points} очков проходят в следующий раунд'
+      #original_hash: b3c8a02
+      time: 'Участники с лучшим результатом < %{time} проходят в следующий раунд'
+      #original_hash: 07bca6c
+      moves: >-
+        Участники с лучшим результатом < %{moves} ходов проходят в следующий
+        раунд
+      #original_hash: 837083c
+      points: >-
+        Участники с лучшим результатом > %{points} очков проходят в следующий
+        раунд
   cutoff:
     #original_hash: cf458e7
     time:
@@ -1498,6 +1502,10 @@ ru:
       cannot_be_deleted_and_accepted: Невозможно одновременно принять и удалить регистрацию.
       #original_hash: a38d024
       must_register: нужно выбрать хотя бы одну дисциплину
+      #original_hash: 191294a
+      banned: >-
+        Вас забанили. Если вы считаете, что это произошло по ошибке, пожалуйста,
+        свяжитесь с WDC.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2041,11 +2049,12 @@ ru:
         Поддерживает <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         Короткое объяснение названия соревнования. Название должно удовлетворять
-        <a href='/documents/policies/Competition%20Name.pdf'>Правилам Названий
-        Соревнований WCA</a>.
+        <a
+        href='/documents/policies/external/Competition%20Name20Requirements.pdf'>Требованиям
+        к Соревнованиям WCA</a>.
       #original_hash: 9d9126e
       venue_html: >-
         Помещение, где будет проходить соревнование. %{md}. Например: [Moscow
@@ -2864,6 +2873,8 @@ ru:
     minutes: Протоколы собрания
     #original_hash: 6db524a
     policies: WCA Политики
+    #original_hash: 91ac873
+    codeofethics: Кодекс этики
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Делегаты
