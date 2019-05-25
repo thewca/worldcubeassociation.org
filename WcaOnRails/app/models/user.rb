@@ -834,8 +834,11 @@ class User < ApplicationRecord
 
   def self.search(query, params: {})
     users = Person.includes(:user).current
+    # We can't search by email on the 'Person' table
+    search_by_email = false
     unless ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
       users = User.confirmed_email.not_dummy_account
+      search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_delegates])
         users = users.where.not(delegate_status: nil)
@@ -846,10 +849,8 @@ class User < ApplicationRecord
       end
     end
 
-    query_options = "name LIKE :part OR wca_id LIKE :part #{"OR email LIKE :part" if params[:email] && !params[:persons_table]}"
-
     query.split.each do |part|
-      users = users.where(query_options, part: "%#{part}%")
+      users = users.where("name LIKE :part OR wca_id LIKE :part #{"OR email LIKE :part" if search_by_email}", part: "%#{part}%")
     end
 
     users.order(:name)
