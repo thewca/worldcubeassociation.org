@@ -170,11 +170,11 @@ hr:
     #original_hash: 7ee969c
     percent: 'Najboljih %{percent}% prolazi u slijedeću rundu'
     attempt_result:
-      #original_hash: 1fb7fe1
+      #original_hash: b3c8a02
       time: 'Najbolje rješenje < %{time} prolazi u slijedeću rundu'
-      #original_hash: 8254f3e
+      #original_hash: 07bca6c
       moves: 'Najbolje rješenje < %{moves} prolazi u slijedeću rundu'
-      #original_hash: daab86e
+      #original_hash: 837083c
       points: 'Najbolje rješenje > %{points} bodova prolazi u slijedeću rundu'
   cutoff:
     #original_hash: cf458e7
@@ -1502,6 +1502,10 @@ hr:
       cannot_be_deleted_and_accepted: Registracija ne može biti obrisana i prihvaćena u isto vrijeme
       #original_hash: a38d024
       must_register: morate se registrirati za bar jednu disciplinu
+      #original_hash: 191294a
+      banned: >-
+        Zabranjeno Vam je natjecati se. Ukoliko mislite da je ovo greška,
+        kontaktirajte WDC.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2053,11 +2057,11 @@ hr:
       supports_md_html: >-
         Supports <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         Kratko objašnjenje imena natjecanja. Ime se mora držati s <a
-        href='/documents/policies/Competition%20Name.pdf'>WCA Pravilom o imenu
-        natjecanja</a>.
+        href='/documents/policies/external/Competition%20Name20Requirements.pdf'>WCA
+        Politika najavljivanja natjecanja</a>.
       #original_hash: 9d9126e
       venue_html: >-
         Prostor gdje se natjecanje održava. %{md}.Primjerice: [Cité des Sciences
@@ -2884,6 +2888,8 @@ hr:
     minutes: Bilješke
     #original_hash: 6db524a
     policies: WCA Politike
+    #original_hash: 91ac873
+    codeofethics: Etički kodeks
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegati
