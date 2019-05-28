@@ -32,7 +32,7 @@ module MarkdownHelper
     def postprocess(full_document)
       # Support embed Open Street Map
       full_document.gsub!(/map\(([^)]*)\)/) do
-        "<iframe width='600' height='450' style='overflow: hidden' frameborder='0' style='border:0' src=\"#{embedded_map_url($1)}\"></iframe>"
+        "<iframe width='600' height='450' style='overflow: hidden' frameborder='0' style='border:0' data-src=\"#{embedded_map_url($1)}\"></iframe>"
       end
 
       # Support embed YouTube videos
