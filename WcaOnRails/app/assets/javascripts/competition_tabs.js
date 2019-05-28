@@ -11,6 +11,12 @@ onPage("competitions#show", function() {
   function showTabFromHash() {
     id = window.location.hash || '#general-info';
     $('a[href="' + id + '"]').tab('show');
+    $(id).find("iframe").each(function () {
+      $iframe = $(this);
+      if ($iframe.attr("src") === undefined) {
+        $iframe.attr("src", $iframe.data("src"));
+      }
+    });
   }
 });
 
