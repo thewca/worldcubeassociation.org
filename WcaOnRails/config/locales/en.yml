@@ -312,6 +312,7 @@ en:
         title: "Title"
         body: "Body"
         sticky: "Sticky"
+        unstick_at: "Unstick at"
         tags: "Tags"
         show_on_homepage: "Show on homepage"
       #context: a team
@@ -473,6 +474,7 @@ en:
       post:
         body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
         sticky: ""
+        unstick_at: ""
         title: ""
         tags: ""
         show_on_homepage: "Careful! This is not secure for private data. This is only to prevent cluttering the homepage. Posts that are not shown on the homepage are still accessible to the public via permalink or through tags."
@@ -1328,6 +1330,8 @@ en:
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
     announcement_info_html: "Announced by %{author_name} on %{date_time}"
+    errors:
+      unstick_at_future: "must be in the future"
   #context: Contact forms
   contacts:
     website:
