@@ -984,6 +984,7 @@ CREATE TABLE `posts` (
   `updated_at` datetime NOT NULL,
   `world_readable` tinyint(1) NOT NULL DEFAULT '0',
   `show_on_homepage` tinyint(1) NOT NULL DEFAULT '1',
+  `unstick_at` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_posts_on_slug` (`slug`),
   KEY `index_posts_on_world_readable_and_sticky_and_created_at` (`world_readable`,`sticky`,`created_at`),
@@ -1546,4 +1547,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190124180224'),
 ('20190208175255'),
 ('20190216102110'),
-('20190221194112');
+('20190221194112'),
+('20190601231550');
