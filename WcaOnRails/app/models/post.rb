@@ -9,6 +9,18 @@ class Post < ApplicationRecord
   validates :body, presence: true
   validates :slug, presence: true, uniqueness: true
 
+  validate :unstick_at_must_be_in_the_future, if: :unstick_at
+  private def unstick_at_must_be_in_the_future
+    if unstick_at <= Date.today
+      errors.add(:unstick_at, I18n.t('posts.errors.unstick_at_future'))
+    end
+  end
+
+  before_validation :clear_unstick_at, unless: :sticky?
+  private def clear_unstick_at
+    self.unstick_at = nil
+  end
+
   BREAK_TAG_RE = /<!--\s*break\s*-->/.freeze
 
   def body_full
