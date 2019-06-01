@@ -135,6 +135,11 @@ Rails.application.routes.draw do
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
   get 'tutorial' => redirect('/files/WCA_Competition_Tutorial.pdf', status: 302)
 
+  resources :regional_organizations, only: [:index, :new, :update, :edit], path: '/regional-organizations'
+  get 'admin/regional-organizations' => 'regional_organizations#admin'
+  patch 'regional-organizations/:id/edit' => 'regional_organizations#update'
+  post 'regional-organizations/new' => 'regional_organizations#create'
+
   get 'disciplinary' => 'wdc#root'
 
   get 'contact/website' => 'contacts#website'

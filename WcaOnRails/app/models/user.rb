@@ -576,6 +576,10 @@ class User < ApplicationRecord
     admin? || staff?
   end
 
+  def can_manage_regional_organizations?
+    admin? || board_member?
+  end
+
   def can_create_competitions?
     can_admin_results? || any_kind_of_delegate?
   end

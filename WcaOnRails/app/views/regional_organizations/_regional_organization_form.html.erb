@@ -1,0 +1,23 @@
+<% url = @regional_organization.new_record? ? new_regional_organization_path : edit_regional_organization_path(@regional_organization) %>
+<%= simple_form_for @regional_organization, url: url, html: { class: 'form-horizontal' } do |f| %>
+  <%= f.input :name %>
+  <%= f.input :country, collection: Country.all_sorted_by(I18n.locale), label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id } %>
+  <%= f.input :website %>
+
+  <%= f.input :logo, label: "Logo" %>
+  <%= image_tag @regional_organization.logo.variant(resize: "500x300") if @regional_organization.logo.attached? %>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-9">
+      <div class="row">
+        <%= f.input :start_date, as: :date_picker, wrapper: :ranged_datetime %>
+        <%= f.input :end_date, as: :date_picker, wrapper: :ranged_datetime %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group form-actions">
+    <%= link_to icon("undo", "Back to Regional Organizations list"), admin_regional_organizations_path, class: "btn btn-default" %>
+    <%= f.button :submit, class: "btn btn-primary" %>
+  </div>
+<% end %>
