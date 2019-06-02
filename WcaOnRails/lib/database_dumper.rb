@@ -464,6 +464,7 @@ module DatabaseDumper
           created_at
           slug
           sticky
+          unstick_at
           title
           updated_at
           world_readable
