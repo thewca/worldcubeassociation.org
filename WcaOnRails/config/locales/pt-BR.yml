@@ -494,6 +494,8 @@ pt-BR:
         body: Corpo
         #original_hash: 6f915a2
         sticky: Fixado
+        #original_hash: 231d9ff
+        unstick_at: Desafixar em
         #original_hash: 848eed0
         tags: Tags
         #original_hash: fb4002e
@@ -538,6 +540,19 @@ pt-BR:
         submitterComment: Comentário
         #original_hash: bae7d5b
         status: Status
+      regional_organization:
+        #original_hash: 709a232
+        name: Nome
+        #original_hash: d523ebb
+        country: País
+        #original_hash: 2e8a57c
+        website: Site
+        #original_hash: 83fce83
+        logo: Logotipo
+        #original_hash: 5ddd986
+        start_date: Reconhecida desde
+        #original_hash: 1ee885a
+        end_date: Reconhecida até
   enums:
     user:
       gender:
@@ -835,6 +850,8 @@ pt-BR:
         #original_hash: da39a3e
         sticky: ''
         #original_hash: da39a3e
+        unstick_at: ''
+        #original_hash: da39a3e
         title: ''
         #original_hash: da39a3e
         tags: ''
@@ -947,6 +964,19 @@ pt-BR:
         message: ''
         #original_hash: da39a3e
         confirm_information: ''
+      regional_organization:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        country: ''
+        #original_hash: d650b3a
+        website: Deve ser um url http(s) válido. HTTPS é recomendado.
+        #original_hash: 37e3009
+        logo: Deve estar em boa resolução e com fundo transparente
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        end_date: ''
     options:
       registration:
         status:
@@ -1161,6 +1191,12 @@ pt-BR:
       new_post: Novo post
       #original_hash: 0d67445
       team_leader: Líder de Equipe
+      #original_hash: 37b8fdc
+      regional_organizations: Organizações Regionais
+      #original_hash: 6568fa0
+      manage_regional_organizations: Gerenciar Organizações Regionais
+      #original_hash: 411bbca
+      new_regional_organization: Nova Organização Regional
       #original_hash: dc1649a
       sign_out: Sair
       #original_hash: 753a22b
@@ -1497,6 +1533,10 @@ pt-BR:
       cannot_be_deleted_and_accepted: Uma inscrição não pode estar aceita e excluída ao mesmo tempo.
       #original_hash: a38d024
       must_register: deve se inscrever em pelo menos um evento
+      #original_hash: 191294a
+      banned: >-
+        Você está banido. Se você acredita que isso é um erro, por favor contate
+        o WDC.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2443,6 +2483,9 @@ pt-BR:
     confirm_delete_post: Você tem certeza que quer excluir este post? Esta ação não é reversível.
     #original_hash: 3dcbf6d
     announcement_info_html: 'Anunciado por %{author_name} on %{date_time}'
+    errors:
+      #original_hash: 75d7ff7
+      unstick_at_future: deve estar no futuro
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -2506,6 +2549,7 @@ pt-BR:
       '1':
         #original_hash: f79b522
         title: Como obtenho uma ID da WCA e um perfil da WCA?
+        #original_hash: 15a06d6
         content:
           #original_hash: b645fe1
           '1': >-
@@ -2898,8 +2942,9 @@ pt-BR:
   regional_organizations:
     #original_hash: 37b8fdc
     title: Organizações Regionais
-    #original_hash: ba87c07
-    content: 'A WCA reconhece as seguintes organizações regionais:'
+    content: 'A WCA reconhece as seguintes Organizações Regionais:'
+    #original_hash: e5b77eb
+    empty: Nenhuma Organização Regional é reconhecida atualmente pela WCA.
     how_to:
       #original_hash: fc3af12
       title: Como se tornar uma Organização Regional da WCA
@@ -2942,6 +2987,9 @@ pt-BR:
         Por favor preencha <a
         href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>este
         formulário</a>.
+    errors:
+      #original_hash: 08122c4
+      end_date_after_start_date: não pode ser posterior a Reconhecida até
   contact:
     #original_hash: a34b69f
     title: Informações de Contato
