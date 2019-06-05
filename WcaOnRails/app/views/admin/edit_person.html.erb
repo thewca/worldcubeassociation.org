@@ -24,6 +24,7 @@
 
         <%= f.input :gender %>
         <%= f.input :dob, as: :date_picker %>
+        <%= f.input :reset_incorrect_wca_id_claim_count, as: :boolean %>
 
         <button type="submit" name="method" value="fix" class="btn btn-primary">
           <%= icon("wrench", "Fix") %>
