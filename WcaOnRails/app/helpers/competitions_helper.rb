@@ -133,4 +133,20 @@ module CompetitionsHelper
                 end
     [first_time, last_time]
   end
+
+  def create_pdfs_directory
+    FileUtils.mkdir_p(CleanupPdfs::CACHE_DIRECTORY) unless File.directory?(CleanupPdfs::CACHE_DIRECTORY)
+  end
+
+  def path_to_cached_pdf(competition, colors)
+    CleanupPdfs::CACHE_DIRECTORY.join("#{cached_pdf_name(competition, colors)}.pdf")
+  end
+
+  def pdf_name(competition)
+    "#{competition.id}_#{I18n.locale}"
+  end
+
+  def cached_pdf_name(competition, colors)
+    "#{pdf_name(competition)}_#{competition.updated_at.iso8601}_#{colors}"
+  end
 end

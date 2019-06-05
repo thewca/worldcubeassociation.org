@@ -483,7 +483,23 @@ class CompetitionsController < ApplicationController
       format.html
       format.pdf do
         @colored_schedule = params.key?(:with_colors)
-        render pdf: "#{@competition.name}_Information", orientation: 'Landscape'
+        # Manually cache the pdf on:
+        #   - competiton.updated_at (touched by any change through WCIF)
+        #   - locale
+        #   - color or n&b
+        # We have a scheduled job to clear out old files
+        cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
+        begin
+          File.open(cached_path) do |f|
+            send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
+                              type: "application/pdf", disposition: "inline"
+          end
+        rescue Errno::ENOENT
+          # This exception occurs when the file doesn't exist: let's create it!
+          helpers.create_pdfs_directory
+          render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
+                 save_to_file: cached_path, disposition: "inline"
+        end
       end
     end
   end
