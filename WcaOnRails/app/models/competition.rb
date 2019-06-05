@@ -1225,6 +1225,7 @@ class Competition < ApplicationRecord
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     end
+    update_column(:updated_at, Time.now)
   end
 
   def set_wcif_events!(wcif_events, current_user)
