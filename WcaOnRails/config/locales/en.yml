@@ -1050,6 +1050,7 @@ en:
         abbr_description: "%{short_name}: %{long_name}"
         #context: the "short" version of cutoff, which appear below the format (eg: Bo2/Ao5)
         cutoff: "Cutoff: %{short_cutoff}"
+        download_html: "Download all the competition's details as PDF %{here}."
       date: "Date"
       city: "City"
       venue: "Venue"
