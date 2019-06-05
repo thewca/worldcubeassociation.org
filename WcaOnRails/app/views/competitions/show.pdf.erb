@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" %>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   </head>
   <body>
@@ -25,15 +25,14 @@
       <div><%= @competition.city_and_country %></div>
     </header>
     <div class="main_content">
-      <% formats_list = [] %>
       <h1 class="break-before"><%=t 'competitions.show.events' %></h1>
-      <%= render "pdf_events_table.html.erb", formats_list: formats_list %>
+      <%= render "pdf_events_table.html.erb" %>
       <%= render "pdf_schedule_table.html.erb" %>
       <h1><%= t 'competitions.competition_info.pdf.terms_and_abbr' %></h1>
       <%= render "time_limit_cutoff_format_info.html.erb", competition: @competition %>
       <h4><%= t 'competitions.competition_info.pdf.formats_abbr' %></h4>
       <ul>
-        <% formats_list.flatten.uniq.sort.each do |format_id| %>
+        <% @competition.rounds.flat_map(&:formats_used).map(&:id).uniq.sort.each do |format_id| %>
           <li>
             <%= t "competitions.competition_info.pdf.abbr_description",
               short_name: t("formats.short.#{format_id}"),
