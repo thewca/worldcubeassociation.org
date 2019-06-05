@@ -134,7 +134,7 @@
           </div>
         <% end %>
 
-        <% if current_user.can_view_all_users? && @user.staff? %>
+        <% if @user.staff? && (current_user.can_view_all_users? || current_user == @user) %>
           <%= f.input :receive_delegate_reports, disabled: !editable_fields.include?(:receive_delegate_reports) %>
         <% end %>
 
