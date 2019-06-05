@@ -3,7 +3,7 @@
 <% activities.map!{ |a| a.to_event(rounds_by_wcif_id) } %>
 <% activities_by_day = activities.group_by { |a| a[:start].strftime("%Y-%m-%d") } %>
 <% output_venue_name = @competition.competition_venues.size > 1 %>
-<% output_room_name = @competition.competition_venues.map(&:venue_rooms).flatten.size > 1 %>
+<% output_room_name = @competition.competition_venues.flat_map(&:venue_rooms).size > 1 %>
 
 <% @competition.start_date.upto(@competition.end_date) do |date| %>
   <% activities_for_day = activities_by_day[date.to_s] %>

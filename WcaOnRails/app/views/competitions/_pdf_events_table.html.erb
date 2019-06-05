@@ -1,4 +1,3 @@
-<%# NOTE: Assumes local variable 'formats_list' to be passed! %>
 <table class="show-events-table">
   <thead>
     <tr>
@@ -19,8 +18,6 @@
           <%# Nested table trick to avoid page breaks within events %>
           <table>
             <% competition_event.rounds.each do |round| %>
-              <%# While this is unused in this partial, the filled container is used by the including view. %>
-              <% formats_list << round.formats_used.map(&:id) %>
               <tr class="<%= round.final_round? ? "last-round" : "" %>">
                 <td class="round-name"><%= round.round_type.name %></td>
                 <td class="round-format">
