@@ -1151,36 +1151,6 @@ RSpec.describe CompetitionsController do
     end
   end
 
-  describe 'POST #update_events' do
-    context 'when not signed in' do
-      sign_out
-
-      it 'redirects to the sign in page' do
-        patch :update_events, params: { id: competition, competition: { name: competition.name } }
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when signed in as an admin' do
-      sign_in { FactoryBot.create :admin }
-
-      it 'updates the competition events' do
-        patch :update_events, params: { id: competition, competition: { name: competition.name } }
-        expect(response).to redirect_to edit_events_path(competition)
-      end
-    end
-
-    context 'when signed in as a regular user' do
-      sign_in { FactoryBot.create :user }
-
-      it 'does not allow access' do
-        expect {
-          patch :update_events, params: { id: competition, competition: { name: competition.name } }
-        }.to raise_error(ActionController::RoutingError)
-      end
-    end
-  end
-
   describe 'GET #payment_setup' do
     context 'when not signed in' do
       sign_out
