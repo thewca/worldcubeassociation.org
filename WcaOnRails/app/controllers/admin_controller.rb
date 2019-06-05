@@ -94,6 +94,9 @@ class AdminController < ApplicationController
       case params[:method]
       when "fix"
         if @person.update_attributes(person_params)
+          if @person.incorrect_wca_id_claim_count > 0
+            @person.update_attribute :incorrect_wca_id_claim_count, 0
+          end
           flash.now[:success] = "Successfully fixed #{@person.name}."
           if @person.saved_change_to_countryId?
             flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
