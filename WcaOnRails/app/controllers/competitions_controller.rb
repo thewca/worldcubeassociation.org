@@ -38,7 +38,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :update_events, :update_events_from_wcif, :payment_setup]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup]
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
@@ -367,16 +367,6 @@ class CompetitionsController < ApplicationController
 
   def edit_schedule
     @competition = competition_from_params(includes: [competition_events: { rounds: { competition_event: [:event] } }, competition_venues: { venue_rooms: { schedule_activities: [:child_activities] } }])
-  end
-
-  def update_events
-    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
-    if @competition.update_attributes(competition_params)
-      flash[:success] = t('.update_success')
-      redirect_to edit_events_path(@competition)
-    else
-      render :edit_events
-    end
   end
 
   def get_nearby_competitions(competition)

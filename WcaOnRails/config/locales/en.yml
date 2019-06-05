@@ -1140,8 +1140,6 @@ en:
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
-    update_events:
-      update_success: "Successfully updated the competition events."
     update:
       save_success: "Successfully saved competition."
       confirm_success: "Successfully confirmed competition. Check your email, and wait for the WCAT to announce it!"
