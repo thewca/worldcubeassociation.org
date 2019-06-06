@@ -124,7 +124,7 @@ const hours = _.fromPairs(_.times(24, i => [i, `${i}:00:00`]));
 export const calendarOptionsInfo = {
   slotDuration: {
     label: "Minutes per row",
-    defaultValue: "00:30:00",
+    defaultValue: "00:15:00",
     options: {
       "5": "00:05:00",
       "15": "00:15:00",
