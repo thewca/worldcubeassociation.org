@@ -191,7 +191,7 @@ class Competition < ApplicationRecord
 
   # We have stricter validations for confirming a competition
   validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
-  validates :name_reason, presence: true, if: :name_reason_required?
+  validates :name_reason, presence: true
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
   validates :registration_open, :registration_close, presence: { message: I18n.t('simple_form.required.text') }, if: :registration_period_required?
@@ -765,10 +765,6 @@ class Competition < ApplicationRecord
 
   def registration_period_required?
     use_wca_registration? || (confirmed? && created_at.present? && created_at > Date.new(2018, 9, 13))
-  end
-
-  def name_reason_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 10, 20)
   end
 
   def pending_results_or_report(days)

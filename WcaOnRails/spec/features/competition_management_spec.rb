@@ -13,6 +13,7 @@ RSpec.feature "Competition management" do
       scenario "with valid data" do
         visit "/competitions/new"
         fill_in "Name", with: "My Competition 2015"
+        fill_in "The reason for the name", with: "A competition in 2015"
         uncheck "I would like to use the WCA website for registration"
         click_button "Create Competition"
 
@@ -33,6 +34,7 @@ RSpec.feature "Competition management" do
         visit edit_competition_path(competition)
         click_link "Clone"
         fill_in "Name", with: "Pedro 2016"
+        fill_in "The reason for the name", with: "A competition in 2016"
         fill_in "Start date", with: "2016-11-30"
         fill_in "End date", with: "2016-11-30"
         click_button "Create Competition"
@@ -119,6 +121,7 @@ RSpec.feature "Competition management" do
       visit "/competitions/new"
 
       fill_in "Name", with: "New Comp 2015"
+      fill_in "The reason for the name", with: "A new competition in 2015"
       uncheck "I would like to use the WCA website for registration"
       click_button "Create Competition"
       expect(page).to have_content "Successfully created new competition!" # wait for request to complete
@@ -133,6 +136,7 @@ RSpec.feature "Competition management" do
       visit clone_competition_path(competition_to_clone)
 
       fill_in "Name", with: "New Comp 2015"
+      fill_in "The reason for the name", with: "A new competition in 2015"
 
       expect(page).to have_button('Create Competition')
       click_button "Create Competition"

@@ -709,6 +709,7 @@ RSpec.describe Competition do
       competition.build_clone.tap do |clone|
         clone.name = "Cloned Competition 2016"
         clone.start_date, clone.end_date = [1.month.from_now.strftime("%F")] * 2
+        clone.name_reason = "This competition is a clone"
       end
     end
     let!(:tab) { FactoryBot.create(:competition_tab, competition: competition) }
