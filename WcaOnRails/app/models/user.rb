@@ -603,7 +603,7 @@ class User < ApplicationRecord
   alias_method :can_announce_competitions?, :can_admin_competitions?
 
   def can_manage_competition?(competition)
-    can_admin_competitions? || competition.organizers.include?(self) || competition.delegates.include?(self) || wrc_team? || competition.delegates.map(&:senior_delegate).compact.include?(self)
+    can_admin_competitions? || competition.organizers.include?(self) || competition.delegates.include?(self) || wrc_team? || competition.delegates.map(&:senior_delegate).compact.include?(self) || ethics_committee?
   end
 
   def can_view_hidden_competitions?
@@ -663,7 +663,7 @@ class User < ApplicationRecord
     if delegate_report.posted?
       can_view_delegate_matters?
     else
-      delegate_report.competition.delegates.include?(self) || can_admin_results?
+      delegate_report.competition.delegates.include?(self) || can_admin_results? || ethics_committee?
     end
   end
 
