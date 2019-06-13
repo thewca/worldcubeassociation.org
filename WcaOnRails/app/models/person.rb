@@ -284,9 +284,4 @@ class Person < ApplicationRecord
     # the Person's data takes priority, though.
     (user || User.new).serializable_hash.merge(json)
   end
-
-  attr_reader :reset_incorrect_wca_id_claim_count
-  def reset_incorrect_wca_id_claim_count=(r)
-    @reset_incorrect_wca_id_claim_count = ActiveRecord::Type::Boolean.new.cast(r)
-  end
 end
