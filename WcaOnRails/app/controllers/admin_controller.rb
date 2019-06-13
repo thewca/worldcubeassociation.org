@@ -90,13 +90,10 @@ class AdminController < ApplicationController
   def update_person
     @person = Person.current.find_by(wca_id: params[:person][:wca_id])
     if @person
-      person_params = params.require(:person).permit(:name, :countryId, :gender, :dob, :reset_incorrect_wca_id_claim_count)
+      person_params = params.require(:person).permit(:name, :countryId, :gender, :dob, :incorrect_wca_id_claim_count)
       case params[:method]
       when "fix"
         if @person.update_attributes(person_params)
-          if @person.reset_incorrect_wca_id_claim_count == true
-            @person.update_attribute :incorrect_wca_id_claim_count, 0
-          end
           flash.now[:success] = "Successfully fixed #{@person.name}."
           if @person.saved_change_to_countryId?
             flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
@@ -127,6 +124,7 @@ class AdminController < ApplicationController
       countryId: @person.countryId,
       gender: @person.gender,
       dob: @person.dob,
+      incorrect_wca_id_claim_count: @person.incorrect_wca_id_claim_count
     }
   end
 
