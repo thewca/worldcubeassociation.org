@@ -303,6 +303,7 @@ en:
         dob: "Birthdate"
         gender: "Gender"
         name: "Name"
+        incorrect_wca_id_claim_count: "Incorrect WCA ID claim count"
       #context: a poll
       poll:
         question: "Question"
@@ -500,6 +501,7 @@ en:
         person1_wca_id: ""
         person2_wca_id: ""
         wca_id: ""
+        incorrect_wca_id_claim_count: ""
       poll:
         comment: ""
         multiple: ""
