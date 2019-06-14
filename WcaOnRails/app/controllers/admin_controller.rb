@@ -90,7 +90,7 @@ class AdminController < ApplicationController
   def update_person
     @person = Person.current.find_by(wca_id: params[:person][:wca_id])
     if @person
-      person_params = params.require(:person).permit(:name, :countryId, :gender, :dob)
+      person_params = params.require(:person).permit(:name, :countryId, :gender, :dob, :incorrect_wca_id_claim_count)
       case params[:method]
       when "fix"
         if @person.update_attributes(person_params)
@@ -124,6 +124,7 @@ class AdminController < ApplicationController
       countryId: @person.countryId,
       gender: @person.gender,
       dob: @person.dob,
+      incorrect_wca_id_claim_count: @person.incorrect_wca_id_claim_count
     }
   end
 
