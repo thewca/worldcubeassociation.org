@@ -124,7 +124,7 @@ class AdminController < ApplicationController
       countryId: @person.countryId,
       gender: @person.gender,
       dob: @person.dob,
-      incorrect_wca_id_claim_count: @person.incorrect_wca_id_claim_count
+      incorrect_wca_id_claim_count: @person.incorrect_wca_id_claim_count,
     }
   end
 
