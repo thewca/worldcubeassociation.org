@@ -489,7 +489,9 @@ da:
         #original_hash: 718a7e8
         body: Brødtekst
         #original_hash: 6f915a2
-        sticky: Sticky
+        sticky: Fastgjort
+        #original_hash: 231d9ff
+        unstick_at: 'Fjern fastgørelsen af opslaget på følgende dato:'
         #original_hash: 848eed0
         tags: Tags
         #original_hash: fb4002e
@@ -534,6 +536,19 @@ da:
         submitterComment: Afsenderens kommentar
         #original_hash: bae7d5b
         status: Status
+      regional_organization:
+        #original_hash: 709a232
+        name: Navn
+        #original_hash: d523ebb
+        country: Land
+        #original_hash: 2e8a57c
+        website: Hjemmeside
+        #original_hash: 83fce83
+        logo: Logo
+        #original_hash: 5ddd986
+        start_date: Anerkendt siden
+        #original_hash: 1ee885a
+        end_date: Anerkendt indtil
   enums:
     user:
       gender:
@@ -825,6 +840,8 @@ da:
         #original_hash: da39a3e
         sticky: ''
         #original_hash: da39a3e
+        unstick_at: ''
+        #original_hash: da39a3e
         title: ''
         #original_hash: da39a3e
         tags: ''
@@ -937,6 +954,19 @@ da:
         message: ''
         #original_hash: da39a3e
         confirm_information: ''
+      regional_organization:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        country: ''
+        #original_hash: d650b3a
+        website: Skal være en gyldig http(s) url. HTTPS er forslået.
+        #original_hash: 37e3009
+        logo: Skal være høj kvalitet og have en gennemsigtig baggrund
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        end_date: ''
     options:
       registration:
         status:
@@ -1140,7 +1170,7 @@ da:
       #original_hash: 12ab214
       delegate: Delegeret
       #original_hash: 2f4bd74
-      panel: Panel
+      panel: Oversigt
       #original_hash: d3a928c
       results_team: Resultat holdet
       #original_hash: 4e7afeb
@@ -1151,6 +1181,12 @@ da:
       new_post: Nyt opslag
       #original_hash: 0d67445
       team_leader: Hold leder
+      #original_hash: 37b8fdc
+      regional_organizations: Regionale Organisationer
+      #original_hash: 6568fa0
+      manage_regional_organizations: Administrer Regionale Organisationer
+      #original_hash: 411bbca
+      new_regional_organization: Ny Regional Organisation
       #original_hash: dc1649a
       sign_out: Log ud
       #original_hash: 753a22b
@@ -1492,6 +1528,10 @@ da:
       cannot_be_deleted_and_accepted: En registrering kan ikke blive slettet og accepteret på samme tid.
       #original_hash: a38d024
       must_register: skal tilmelde sig til mindst en disciplin
+      #original_hash: 191294a
+      banned: >-
+        Du er banlyst fra konkurrencer. Hvis du tror dette er en fejl, så
+        kontakt venligst WDC.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2138,9 +2178,6 @@ da:
       note_clone: >-
         For at kopiere en eksisterende konkurrence, besøg informationsiden for
         den konkurrencen og klik derefter på "Kopier" i menuen.
-    update_events:
-      #original_hash: 00204fa
-      update_success: Opdaterede succesfuldt konkurrencens discipliner.
     update:
       #original_hash: 5fb2f57
       save_success: Gemte succesfuldt konkurrencen.
@@ -2435,6 +2472,9 @@ da:
       gøres om.
     #original_hash: 3dcbf6d
     announcement_info_html: 'Annonceret af %{author_name} %{date_time}'
+    errors:
+      #original_hash: 75d7ff7
+      unstick_at_future: skal være i fremtiden
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -2500,6 +2540,7 @@ da:
       '1':
         #original_hash: f79b522
         title: Hvordan får man fat i et WCA ID og en WCA profil?
+        #original_hash: 15a06d6
         content:
           #original_hash: b645fe1
           '1': >-
@@ -2882,8 +2923,11 @@ da:
   regional_organizations:
     #original_hash: 37b8fdc
     title: Regionale Organisationer
-    #original_hash: ba87c07
-    content: 'WCA anerkender de følgende regionale organisationer:'
+    content: 'WCA anerkender de følgende Regionale Organisationer:'
+    #original_hash: e5b77eb
+    empty: >-
+      Der er ingen Regionale Organisationer, som på nuværende tidspunkt er
+      anerkendt af WCA.
     how_to:
       #original_hash: fc3af12
       title: Hvordan laver man en WCA Regional Organisation
@@ -2927,6 +2971,9 @@ da:
         Udfyld venligst <a
         href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>denne
         formular</a>.
+    errors:
+      #original_hash: 08122c4
+      end_date_after_start_date: kan ikke være efter "anerkendt indtil"
   contact:
     #original_hash: a34b69f
     title: Kontakt information
