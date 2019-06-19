@@ -482,6 +482,8 @@ pt-BR:
         gender: Gênero
         #original_hash: 709a232
         name: Nome
+        #original_hash: c6bc0f4
+        incorrect_wca_id_claim_count: Número de tentativas incorretas de conectar a ID da WCA
       poll:
         #original_hash: 002ff59
         question: Questão
@@ -921,6 +923,8 @@ pt-BR:
         person2_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: da39a3e
+        incorrect_wca_id_claim_count: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -2188,9 +2192,6 @@ pt-BR:
       note_clone: >-
         Para clonar uma competição existente, visite a página de informações
         daquela competição e clique no link "Clonar" no menu.
-    update_events:
-      #original_hash: 00204fa
-      update_success: Eventos atualizados com sucesso.
     update:
       #original_hash: 5fb2f57
       save_success: Competição salva com sucesso.
