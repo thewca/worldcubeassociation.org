@@ -141,8 +141,11 @@ module Resultable
       else
         # Cast at least one of the operands to float
         sum_centis = counting_solve_times.sum(&:time_centiseconds).to_f
-        # Round the result
-        (sum_centis / counting_solve_times.length).round
+        raw_average = sum_centis / counting_solve_times.length
+        # Round the result.
+        # If the average is above 10 minutes, round it to the nearest second as per
+        # https://www.worldcubeassociation.org/regulations/#9f2
+        raw_average > 60_000 ? raw_average.round(-2) : raw_average.round
       end
     end
   end
