@@ -271,7 +271,7 @@ class CompetitionsController < ApplicationController
       event = Event.c_find(params[:event_id])
       if event.nil?
         title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.country.name} posted"
-        body = "Results of the [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
+        body = "Results of [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
       else
         top_three = comp.results.where(event: event).podium.order(:pos)
         if top_three.empty?

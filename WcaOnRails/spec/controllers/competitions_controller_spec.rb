@@ -678,7 +678,7 @@ RSpec.describe CompetitionsController do
         get :post_results, params: { id: competition }
         post = assigns(:post)
         expect(post.title).to eq "Results of #{competition.name}, in #{competition.cityName}, #{competition.country.name_in(:en)} posted"
-        expect(post.body).to eq "Results of the [#{competition.name}](#{competition_url(competition)}) are now available.\n\n"
+        expect(post.body).to eq "Results of [#{competition.name}](#{competition_url(competition)}) are now available.\n\n"
       end
 
       context "winners announcement" do
