@@ -34,7 +34,7 @@ class CompetitionResultsValidator
   RESULTS_WITHOUT_PERSON_ERROR = "Results for unknown person with id %{person_id}"
   WHITESPACE_IN_NAME_ERROR = "Person '%{name}' has leading/trailing whitespaces or double whitespaces."
   WRONG_WCA_ID_ERROR = "Person %{name} has a WCA ID which does not exist: %{wca_id}."
-  WRONG_PARENTHETHIS_FORMAT_ERROR = "Opening parenthethis in '%{name}' must be preceeded by a space."
+  WRONG_PARENTHESIS_FORMAT_ERROR = "Opening parenthesis in '%{name}' must be preceeded by a space."
   DOB_0101_WARNING = "The date of birth of %{name} is on January 1st, please make sure it's correct."
   VERY_YOUNG_PERSON_WARNING = "%{name} seems to be less than 3 years old, please make sure it's correct."
   SAME_PERSON_NAME_WARNING = "Person '%{name}' exists with one or multiple WCA IDs (%{wca_ids}) in the WCA database."\
@@ -52,7 +52,7 @@ class CompetitionResultsValidator
   RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit which is %{time_limit} for one solve. All solves over the time limit must be changed to DNF."
   RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit which is %{time_limit}."
   NO_ROUND_INFORMATION_WARNING = "[%{round_id}] Could not find information about cutoff and timelimit for this round, these validations have been skipped."
-  SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit and %{person_name} has at least one suspicious DNF solve given his results."
+  SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit and %{person_name} has at least one suspicious DNF solve given their results."
   MBF_RESULT_OVER_TIME_LIMIT_WARNING = "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please make sure it is the consequence of +2 penalties before sending the results, or fix the result to DNF."
   DNS_AFTER_RESULT_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
   SIMILAR_RESULTS_WARNING = "[%{round_id}] Result for %{person_name} is similar to the results for %{similar_person_name}."
