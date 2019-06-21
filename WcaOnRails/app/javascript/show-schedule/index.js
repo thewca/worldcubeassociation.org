@@ -177,7 +177,7 @@ const initFullCalendar = ($elem, calendarParams) => {
     locale: calendarParams.locale,
     minTime: venueData.minTime,
     maxTime: venueData.maxTime,
-    slotDuration: "00:30:00",
+    slotDuration: "00:15:00",
     height: "auto",
     defaultDate: calendarParams.startDate,
     views: {
