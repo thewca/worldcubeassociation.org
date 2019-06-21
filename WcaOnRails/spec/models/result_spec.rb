@@ -96,13 +96,24 @@ RSpec.describe Result do
         context "uncombined round" do
           let(:roundTypeId) { "1" }
 
-          it "all solves" do
-            result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44)
+          it "all solves with average below 10 minutes" do
+            # This average computes to 44.0066... and should be rounded to 44.01
+            result = build_result(value1: 4200, value2: 4300, value3: 4400, value4: 4502, value5: 4600, best: 4200, average: 4401)
             expect(result).to be_valid
 
             result.average = 33
-            expect(result.compute_correct_average).to eq 44
-            expect(result).to be_invalid_with_errors(average: ["should be 44"])
+            expect(result.compute_correct_average).to eq 4401
+            expect(result).to be_invalid_with_errors(average: ["should be 4401"])
+          end
+
+          it "all solves with average above 10 minutes" do
+            # This average computes to 600.66... and should be rounded to 601
+            result = build_result(value1: 1001, value2: 60_100, value3: 60_100, value4: 60_000, value5: 70_000, best: 1001, average: 60_100)
+            expect(result).to be_valid
+
+            result.average = 33
+            expect(result.compute_correct_average).to eq 60_100
+            expect(result).to be_invalid_with_errors(average: ["should be 60100"])
           end
 
           it "DNF average" do
@@ -158,13 +169,24 @@ RSpec.describe Result do
           context "uncombined round" do
             let(:roundTypeId) { "1" }
 
-            it "all solves" do
-              result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43)
+            it "all solves with average below 10 minutes" do
+              # This average computes to 44.0066... and should be rounded to 44.01
+              result = build_result(value1: 4300, value2: 4502, value3: 4400, value4: 0, value5: 0, best: 4300, average: 4401)
               expect(result).to be_valid
 
               result.average = 33
-              expect(result.compute_correct_average).to eq 43
-              expect(result).to be_invalid_with_errors(average: ["should be 43"])
+              expect(result.compute_correct_average).to eq 4401
+              expect(result).to be_invalid_with_errors(average: ["should be 4401"])
+            end
+
+            it "all solves with average above 10 minutes" do
+              # This average computes to 600.66... and should be rounded to 601
+              result = build_result(value1: 60_100, value2: 60_100, value3: 60_000, value4: 0, value5: 0, best: 60_000, average: 60_100)
+              expect(result).to be_valid
+
+              result.average = 33
+              expect(result.compute_correct_average).to eq 60_100
+              expect(result).to be_invalid_with_errors(average: ["should be 60100"])
             end
 
             it "rounds instead of truncates" do
