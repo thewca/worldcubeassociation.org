@@ -482,6 +482,8 @@ es:
         gender: Sexo
         #original_hash: 709a232
         name: Nombre
+        #original_hash: c6bc0f4
+        incorrect_wca_id_claim_count: Número de peticiones de WCA ID incorrectas
       poll:
         #original_hash: 002ff59
         question: Consulta
@@ -494,6 +496,8 @@ es:
         body: Cuerpo
         #original_hash: 6f915a2
         sticky: Destacado
+        #original_hash: 231d9ff
+        unstick_at: Eliminar fijación en
         #original_hash: 848eed0
         tags: Etiquetas
         #original_hash: fb4002e
@@ -538,6 +542,39 @@ es:
         submitterComment: Comentario del autor
         #original_hash: bae7d5b
         status: Estado
+      regional_organization:
+        #original_hash: 709a232
+        name: Nombre
+        #original_hash: d523ebb
+        country: País
+        #original_hash: 2e8a57c
+        website: Sitio Web
+        #original_hash: 83fce83
+        logo: Logo
+        #original_hash: 84add5b
+        email: Correo Electrónico
+        #original_hash: 82c42fb
+        address: Dirección oficial
+        #original_hash: 9855f80
+        bylaws: Estatutos
+        #original_hash: 405201b
+        directors_and_officers: Lista de miembros de la Junta y sus cargos
+        #original_hash: 719db2d
+        area_description: Descripción concisa del área cubierta
+        #original_hash: 0cdb036
+        past_and_current_activities: Informe de actividades relacionadas con la WCA pasadas y actuales
+        #original_hash: 0faebcf
+        future_plans: >-
+          Planificación de futuro como Organización regional reconocida por la
+          WCA
+        #original_hash: f5ad34a
+        extra_information: ¿Alguna información adicional?
+        #original_hash: bc07619
+        extra_file: ¿Algún fichero adicional?
+        #original_hash: 5ddd986
+        start_date: Reconocida desde
+        #original_hash: 1ee885a
+        end_date: Reconocida hasta
   enums:
     user:
       gender:
@@ -833,6 +870,8 @@ es:
         #original_hash: da39a3e
         sticky: ''
         #original_hash: da39a3e
+        unstick_at: ''
+        #original_hash: da39a3e
         title: ''
         #original_hash: da39a3e
         tags: ''
@@ -904,6 +943,8 @@ es:
         person2_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: da39a3e
+        incorrect_wca_id_claim_count: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -947,6 +988,43 @@ es:
         message: ''
         #original_hash: da39a3e
         confirm_information: ''
+      regional_organization:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        country: ''
+        #original_hash: 72448d6
+        website: Debe ser una URL http(s) válida. Se recomienda HTTPS
+        #original_hash: 2ace571
+        logo: >-
+          Debe estar en formato PNG, con buena resolución y con fondo
+          transparente
+        #original_hash: da54ab5
+        email: >-
+          Debería ser una lista de correo conteniendo todos los cargos de la
+          Junta directiva
+        #original_hash: da39a3e
+        address: ''
+        #original_hash: 7d25ff5
+        bylaws: Debe estar en formato PDF
+        #original_hash: da39a3e
+        directors_and_officers: ''
+        #original_hash: da39a3e
+        area_description: ''
+        #original_hash: da39a3e
+        past_and_current_activities: ''
+        #original_hash: da39a3e
+        future_plans: ''
+        #original_hash: da39a3e
+        extra_information: ''
+        #original_hash: 79555ff
+        extra_file: >-
+          Debe estar en formato PDF.  Si necesitas  añadir más ficheros, por
+          favor únelos en uno solo
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        end_date: ''
     options:
       registration:
         status:
@@ -1161,6 +1239,12 @@ es:
       new_post: Nueva noticia
       #original_hash: 0d67445
       team_leader: Líder de equipo
+      #original_hash: 37b8fdc
+      regional_organizations: Organizaciones Regionales
+      #original_hash: 6568fa0
+      manage_regional_organizations: Gestionar Organizaciones Regionales
+      #original_hash: 411bbca
+      new_regional_organization: Nueva Organización Regional
       #original_hash: dc1649a
       sign_out: Desconectarse
       #original_hash: 753a22b
@@ -1512,6 +1596,10 @@ es:
       cannot_be_deleted_and_accepted: Un registro no puede ser aceptado y borrado a la vez.
       #original_hash: a38d024
       must_register: debes registrarte al menos para una prueba
+      #original_hash: 191294a
+      banned: >-
+        Estás suspendido. Si crees que se trata de un error, por favor contacta
+        con el WDC
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2055,12 +2143,12 @@ es:
       supports_md_html: >-
         Admite <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         Una breve descripción del nombre de la competición. El nombre debe
         respetar la <a
-        href='/documents/policies/Competition%20Name.pdf'>Política de Nombres de
-        Competiciones de la WCA</a>
+        href='/documents/policies/external/Competition%20Requirements.pdf'>Política
+        de Requisitos de Competiciones de la WCA</a>
       #original_hash: 9d9126e
       venue_html: >-
         El local donde se celebra la competición. %{md}. Por ejemplo: [Parque de
@@ -2170,9 +2258,6 @@ es:
       note_clone: >-
         Para clonar una competición ve a la página de esa competición y haz clic
         en el botón "Clonar" en el menú.
-    update_events:
-      #original_hash: 00204fa
-      update_success: Las pruebas de la competición se han actualizado satisfactoriamente.
     update:
       #original_hash: 5fb2f57
       save_success: La competición se ha guardado satisfactoriamente.
@@ -2469,6 +2554,9 @@ es:
       reversible.
     #original_hash: 3dcbf6d
     announcement_info_html: 'Anunciado por %{author_name} el %{date_time}'
+    errors:
+      #original_hash: 75d7ff7
+      unstick_at_future: Debe ser en el futuro
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -2536,6 +2624,7 @@ es:
       '1':
         #original_hash: f79b522
         title: ¿Cómo obtengo un WCA ID y un perfil de la WCA?
+        #original_hash: 15a06d6
         content:
           #original_hash: b645fe1
           '1': >-
@@ -2941,8 +3030,9 @@ es:
   regional_organizations:
     #original_hash: 37b8fdc
     title: Organizaciones Regionales
-    #original_hash: ba87c07
-    content: 'La WCA reconoce las siguientes organizaciones regionales:'
+    content: 'La WCA reconoce las siguientes Organizaciones Regionales:'
+    #original_hash: e5b77eb
+    empty: No hay organizaciones Regionales reconocida por la WCA actualmente
     how_to:
       #original_hash: fc3af12
       title: Cómo convertirse en una Organización Regional de la WCA
@@ -2987,6 +3077,20 @@ es:
         Por favor rellena <a
         href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>este
         formulario</a>.
+    regional_organization_form:
+      #original_hash: 134df45
+      filling_instructions_html: Por favor rellena todo <b>en Inglés</b>
+      #original_hash: fbd64df
+      public_information: Información pública
+      #original_hash: a1c6de9
+      private_information: Información privada
+      #original_hash: 87a1c7e
+      private_information_disclaimer: >-
+        Toda la información a continuación será visible solamente por la Junta
+        Directiva de la WCA
+    errors:
+      #original_hash: 08122c4
+      end_date_after_start_date: no puede ser posteriormente Reconocida hasta
   contact:
     #original_hash: a34b69f
     title: Información de Contacto
