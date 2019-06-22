@@ -559,6 +559,24 @@ pl:
         website: Strona internetowa
         #original_hash: 83fce83
         logo: Logo
+        #original_hash: 84add5b
+        email: Email
+        #original_hash: 82c42fb
+        address: Oficjalny adres
+        #original_hash: 9855f80
+        bylaws: Statut
+        #original_hash: 405201b
+        directors_and_officers: Lista głównych członków zarządu wraz z tytułami
+        #original_hash: 719db2d
+        area_description: Jasny opis obejmowanego terenu
+        #original_hash: 0cdb036
+        past_and_current_activities: Raport z przeszłej oraz obecnej aktywności związanej z WCA
+        #original_hash: 0faebcf
+        future_plans: Przyszłe plany jako Organizacji Regionalnej rozpoznawanej przez WCA
+        #original_hash: f5ad34a
+        extra_information: Dodatkowe informacje (opcjonalne)
+        #original_hash: bc07619
+        extra_file: Dodatkowy plik (opcjonalne)
         #original_hash: 5ddd986
         start_date: Uznana od
         #original_hash: 1ee885a
@@ -986,12 +1004,34 @@ pl:
         name: ''
         #original_hash: da39a3e
         country: ''
-        #original_hash: d650b3a
+        #original_hash: 72448d6
         website: >-
           Musi być poprawnym adresem url, zawierającym protokół http(s). HTTPS
-          jest zalecany.
-        #original_hash: 37e3009
-        logo: Musi być w dobrej rozdzielczości oraz posiadać przeźroczyste tło.
+          jest zalecany
+        #original_hash: 2ace571
+        logo: >-
+          Musi być w formacie PNG, dobrej rozdzielczości oraz posiadać
+          przeźroczyste tło
+        #original_hash: da54ab5
+        email: Powinien być adresem grupowym członków zarządu
+        #original_hash: da39a3e
+        address: ''
+        #original_hash: 7d25ff5
+        bylaws: Musi być w formacie PDF
+        #original_hash: da39a3e
+        directors_and_officers: ''
+        #original_hash: da39a3e
+        area_description: ''
+        #original_hash: da39a3e
+        past_and_current_activities: ''
+        #original_hash: da39a3e
+        future_plans: ''
+        #original_hash: da39a3e
+        extra_information: ''
+        #original_hash: 79555ff
+        extra_file: >-
+          Musi być w formacie PDF. Jeżeli potrzebujesz dodać więcej plików, scal
+          je w jeden.
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -3042,6 +3082,17 @@ pl:
         Prosimy o wypełnienie <a
         href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>tego
         formularza</a>.
+    regional_organization_form:
+      #original_hash: 134df45
+      filling_instructions_html: Prosimy o wypełnienie wszystkiego w <b>języku angielskim</b>.
+      #original_hash: fbd64df
+      public_information: Publiczne informacje
+      #original_hash: a1c6de9
+      private_information: Prywatne informacje
+      #original_hash: 87a1c7e
+      private_information_disclaimer: >-
+        Wszystkie informacje poniżej będą widoczne wyłącznie dla członków
+        Zarządu WCA
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: nie może być później niż Uznana do
