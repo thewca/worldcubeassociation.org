@@ -346,6 +346,15 @@ en:
         country: "Country"
         website: "Website"
         logo: "Logo"
+        email: "Email"
+        address: "Official address"
+        bylaws: "Bylaws"
+        directors_and_officers: "List of principal Directors and Officers and their titles"
+        area_description: "Clear description of the area covered"
+        past_and_current_activities: "Report of the past and current WCA-related activities"
+        future_plans: "Plans for the future as a WCA-acknowledged Regional Organization"
+        extra_information: "Any extra information?"
+        extra_file: "Any extra file?"
         start_date: "Acknowledged since"
         end_date: "Acknowledged until"
   enums:
@@ -529,8 +538,17 @@ en:
       regional_organization:
         name: ""
         country: ""
-        website: "Must be a valid http(s) url. HTTPS is recommended."
-        logo: "Must be in good resolution and transparent background"
+        website: "Must be a valid http(s) url. HTTPS is recommended"
+        logo: "Must be in PNG format, in good resolution, and with a transparent background"
+        email: "Should be a mailing list containing all the Directors and Officers"
+        address: ""
+        bylaws: "Must be in PDF format"
+        directors_and_officers: ""
+        area_description: ""
+        past_and_current_activities: ""
+        future_plans: ""
+        extra_information: ""
+        extra_file: "Must be in PDF format. If you need to add more files, please merge them together"
         start_date: ""
         end_date: ""
     #context: and a label for an option
@@ -1566,6 +1584,11 @@ en:
     application_instructions:
       title: Application Instructions
       description_html: Please fill out <a href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>this form</a>.
+    regional_organization_form:
+      filling_instructions_html: "Please fill everything <b>in English!</b>"
+      public_information: "Public information"
+      private_information: "Private information"
+      private_information_disclaimer: "All the information below will only be visible to the WCA Board of Directors"
     errors:
       end_date_after_start_date: "cannot be after Acknowledged until"
   #context: Contact page
