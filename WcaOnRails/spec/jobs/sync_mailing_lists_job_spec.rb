@@ -245,6 +245,16 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(usa_canada_delegate.email, usa_canada_delegate.senior_delegate.email),
     )
 
+    # organizations@ mailing list
+    regional_organization = FactoryBot.create :regional_organization
+    previously_acknowledged_regional_organization = FactoryBot.create :regional_organization
+    previously_acknowledged_regional_organization.update(start_date: 2.days.ago, end_date: 1.days.ago)
+
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "organizations@worldcubeassociation.org",
+      a_collection_containing_exactly(regional_organization.email),
+    )
+
     SyncMailingListsJob.perform_now
   end
 end
