@@ -9,6 +9,14 @@ RSpec.describe "Regional Organizations management", type: :request do
       name: "World Cube Association",
       country: "United States",
       website: "https://www.worldcubeassociation.org/",
+      logo: Rack::Test::UploadedFile.new('spec/support/logo.png', 'image/png'),
+      email: "contact@worldcubeassociation.org",
+      address: "Street and Number, City, State, Postal code, Country",
+      bylaws: Rack::Test::UploadedFile.new('spec/support/bylaws.pdf', 'application/pdf'),
+      directors_and_officers: "Directors and Officers",
+      area_description: "World",
+      past_and_current_activities: "Activities",
+      future_plans: "Plans",
       start_date: Date.today,
       end_date: nil,
     }
@@ -19,6 +27,14 @@ RSpec.describe "Regional Organizations management", type: :request do
       name: "",
       country: "",
       website: "www.worldcubeassociation.org/",
+      logo: Rack::Test::UploadedFile.new('spec/support/logo.png', 'image/png'),
+      email: "",
+      address: "",
+      bylaws: Rack::Test::UploadedFile.new('spec/support/bylaws.pdf', 'application/pdf'),
+      directors_and_officers: "",
+      area_description: "",
+      past_and_current_activities: "",
+      future_plans: "",
       start_date: nil,
       end_date: 3.days.ago,
     }
@@ -37,12 +53,12 @@ RSpec.describe "Regional Organizations management", type: :request do
     end
   end
 
-  describe "GET #list" do
+  describe "GET #admin" do
     context "when logged in as a board_member" do
       before do
         sign_in board_member
       end
-      it "shows regional organizations list" do
+      it "shows regional organizations admin panel" do
         get admin_regional_organizations_path
         expect(response).to be_successful
       end
@@ -51,8 +67,8 @@ RSpec.describe "Regional Organizations management", type: :request do
     context "when logged in as a user" do
       sign_in { FactoryBot.create(:user) }
       it "does not allow access" do
-        get organizations_path
-        expect(response).to be_successful
+        get admin_regional_organizations_path
+        expect(response).to redirect_to root_url
       end
     end
   end

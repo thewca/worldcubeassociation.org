@@ -1032,6 +1032,13 @@ CREATE TABLE `regional_organizations` (
   `end_date` date DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `directors_and_officers` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `area_description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `past_and_current_activities` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `future_plans` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `extra_information` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `index_regional_organizations_on_name` (`name`),
   KEY `index_regional_organizations_on_country` (`country`)
@@ -1548,4 +1555,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190208175255'),
 ('20190216102110'),
 ('20190221194112'),
+('20190601105825'),
 ('20190601231550');

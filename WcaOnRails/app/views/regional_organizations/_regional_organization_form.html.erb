@@ -1,11 +1,37 @@
 <% url = @regional_organization.new_record? ? new_regional_organization_path : edit_regional_organization_path(@regional_organization) %>
 <%= simple_form_for @regional_organization, url: url, html: { class: 'form-horizontal' } do |f| %>
+  <p><%= t('.filling_instructions_html') %></p>
+
+  <h3><%= t('.public_information') %></h3>
   <%= f.input :name %>
   <%= f.input :country, collection: Country.all_sorted_by(I18n.locale), label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id } %>
   <%= f.input :website %>
 
-  <%= f.input :logo, label: "Logo" %>
-  <%= image_tag @regional_organization.logo.variant(resize: "500x300") if @regional_organization.logo.attached? %>
+  <%= f.input :logo %>
+  <% if @regional_organization.logo.attached? && @regional_organization.logo.previewable? %>
+    <%= image_tag @regional_organization.logo.variant(resize: "200x200") %>
+  <% end %>
+
+  <h3><%= t('.private_information') %></h3>
+  <p><%= t('.private_information_disclaimer') %></p>
+  <%= f.input :email %>
+  <%= f.input :address %>
+
+  <%= f.input :bylaws %>
+  <% if @regional_organization.bylaws.attached? && @regional_organization.bylaws.previewable? %>
+    <%= link_to(image_tag(@regional_organization.bylaws.preview(resize: "200x200")), rails_blob_path(@regional_organization.bylaws, disposition: "attachment")) %>
+  <% end %>
+
+  <%= f.input :directors_and_officers %>
+  <%= f.input :area_description %>
+  <%= f.input :past_and_current_activities %>
+  <%= f.input :future_plans %>
+  <%= f.input :extra_information %>
+
+  <%= f.input :extra_file %>
+  <% if @regional_organization.extra_file.attached? && @regional_organization.extra_file.previewable? %>
+    <%= link_to(image_tag(@regional_organization.extra_file.preview(resize: "200x200")), rails_blob_path(@regional_organization.extra_file, disposition: "attachment"))  %>
+  <% end %>
 
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-9">

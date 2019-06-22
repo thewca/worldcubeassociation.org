@@ -501,6 +501,13 @@ module DatabaseDumper
           name
           country
           website
+          email
+          address
+          directors_and_officers
+          area_description
+          past_and_current_activities
+          future_plans
+          extra_information
           start_date
           end_date
           created_at

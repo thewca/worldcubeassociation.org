@@ -35,6 +35,8 @@ class RegionalOrganizationsController < ApplicationController
     @regional_organization = RegionalOrganization.new(regional_organization_params)
 
     @regional_organization.logo.attach(params[:regional_organization][:logo])
+    @regional_organization.bylaws.attach(params[:regional_organization][:bylaws])
+    @regional_organization.extra_file.attach(params[:regional_organization][:extra_file])
     if @regional_organization.save
       flash[:success] = "Created new Regional Organization"
       redirect_to edit_regional_organization_path(@regional_organization)
@@ -45,7 +47,8 @@ class RegionalOrganizationsController < ApplicationController
   end
 
   private def regional_organization_params
-    params.require(:regional_organization).permit(:name, :country, :website, :logo, :start_date, :end_date)
+    params.require(:regional_organization).permit(:name, :country, :website, :logo, :email, :address, :bylaws, :directors_and_officers, :area_description,
+                                                  :past_and_current_activities, :future_plans, :extra_information, :extra_file, :start_date, :end_date)
   end
 
   private def regional_organization_from_params
