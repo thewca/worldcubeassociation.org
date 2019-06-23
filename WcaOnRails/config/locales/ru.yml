@@ -488,6 +488,8 @@ ru:
         gender: Пол
         #original_hash: 709a232
         name: Имя
+        #original_hash: c6bc0f4
+        incorrect_wca_id_claim_count: Количество неправильных запросов WCA ID
       poll:
         #original_hash: 002ff59
         question: Вопрос
@@ -500,6 +502,8 @@ ru:
         body: Сообщение
         #original_hash: 6f915a2
         sticky: Закрепить
+        #original_hash: 231d9ff
+        unstick_at: Открепить
         #original_hash: 848eed0
         tags: Теги
         #original_hash: fb4002e
@@ -544,6 +548,37 @@ ru:
         submitterComment: Комментарий отправителя
         #original_hash: bae7d5b
         status: Статус
+      regional_organization:
+        #original_hash: 709a232
+        name: Название
+        #original_hash: d523ebb
+        country: Страна
+        #original_hash: 2e8a57c
+        website: Сайт
+        #original_hash: 83fce83
+        logo: Лого
+        #original_hash: 84add5b
+        email: Email
+        #original_hash: 82c42fb
+        address: Официальный адрес
+        #original_hash: 9855f80
+        bylaws: Устав
+        #original_hash: 405201b
+        directors_and_officers: 'Список людей, входящих в Совет Директоров, и их титулы'
+        #original_hash: 719db2d
+        area_description: Чёткое описание покрываемой территории
+        #original_hash: 0cdb036
+        past_and_current_activities: 'Отчёт о прошедшей и текущей деятельности, связанной с WCA'
+        #original_hash: 0faebcf
+        future_plans: Планы на будущее в случае признания Региональной Организации
+        #original_hash: f5ad34a
+        extra_information: Дополнительная информация
+        #original_hash: bc07619
+        extra_file: Дополнительные файлы
+        #original_hash: 5ddd986
+        start_date: Признана с
+        #original_hash: 1ee885a
+        end_date: Признана до
   enums:
     user:
       gender:
@@ -843,6 +878,8 @@ ru:
         #original_hash: da39a3e
         sticky: ''
         #original_hash: da39a3e
+        unstick_at: ''
+        #original_hash: da39a3e
         title: ''
         #original_hash: da39a3e
         tags: ''
@@ -911,6 +948,8 @@ ru:
         person2_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: da39a3e
+        incorrect_wca_id_claim_count: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -954,6 +993,41 @@ ru:
         message: ''
         #original_hash: da39a3e
         confirm_information: ''
+      regional_organization:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        country: ''
+        #original_hash: 72448d6
+        website: Должен быть правильный http(s) url. Рекомендуется HTTPS
+        #original_hash: 2ace571
+        logo: >-
+          Должно быть в формате PNG, в хорошем разрешении и с прозрачным задним
+          фоном
+        #original_hash: da54ab5
+        email: Email-адрес Совета Директоров
+        #original_hash: da39a3e
+        address: ''
+        #original_hash: 7d25ff5
+        bylaws: Должен быть в формате PDF
+        #original_hash: da39a3e
+        directors_and_officers: ''
+        #original_hash: da39a3e
+        area_description: ''
+        #original_hash: da39a3e
+        past_and_current_activities: ''
+        #original_hash: da39a3e
+        future_plans: ''
+        #original_hash: da39a3e
+        extra_information: ''
+        #original_hash: 79555ff
+        extra_file: >-
+          Должен быть в формате PDF. Если вы хотите добавить больше файлов,
+          пожалуйста, объедините их в один
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        end_date: ''
     options:
       registration:
         status:
@@ -1170,6 +1244,12 @@ ru:
       new_post: Создать пост
       #original_hash: 0d67445
       team_leader: Лидер команды
+      #original_hash: 37b8fdc
+      regional_organizations: Региональные Организации
+      #original_hash: 6568fa0
+      manage_regional_organizations: Управление Региональными Организациями
+      #original_hash: 411bbca
+      new_regional_organization: Новая Региональная Организация
       #original_hash: dc1649a
       sign_out: Выйти
       #original_hash: 753a22b
@@ -2159,9 +2239,6 @@ ru:
       note_clone: >-
         Чтобы скопировать существующее соревнование, откройте его страницу и
         нажмите "Скопировать" в меню.
-    update_events:
-      #original_hash: 00204fa
-      update_success: Дисциплины успешно обновлены.
     update:
       #original_hash: 5fb2f57
       save_success: Соревнование успешно сохранено.
@@ -2456,6 +2533,9 @@ ru:
     confirm_delete_post: 'Вы уверены, что хотите удалить этот пост? Назад пути не будет.'
     #original_hash: 3dcbf6d
     announcement_info_html: 'Анонсировано %{author_name} on %{date_time}'
+    errors:
+      #original_hash: 75d7ff7
+      unstick_at_future: должна быть в будущем
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -2520,6 +2600,7 @@ ru:
       '1':
         #original_hash: f79b522
         title: Как мне получить WCA ID и WCA профиль?
+        #original_hash: 15a06d6
         content:
           #original_hash: b645fe1
           '1': >-
@@ -2890,8 +2971,9 @@ ru:
   regional_organizations:
     #original_hash: 37b8fdc
     title: Региональные организации
-    #original_hash: ba87c07
-    content: 'WCA признаёт следующие региональные организации:'
+    content: 'WCA признаёт следующие Региональные Организации:'
+    #original_hash: e5b77eb
+    empty: В настоящий момент никакие Региональные Организации не признаются WCA.
     how_to:
       #original_hash: fc3af12
       title: Как стать Региональной Организацией WCA
@@ -2925,8 +3007,8 @@ ru:
         '5': Принимать и исполнять решения официальных лиц WCA
         #original_hash: efe2b55
         '6': >-
-          Вносить в файл с WCA копию своих текущих подзаконных актов и положений
-          в электронном формате
+          Вносить в файл с WCA копию своих текущих положений и устава в
+          электронном формате
     application_instructions:
       #original_hash: 4da829b
       title: Инструкции по подаче заявки
@@ -2935,6 +3017,18 @@ ru:
         Пожалуйста, заполните <a
         href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>эту
         форму</a>.
+    regional_organization_form:
+      #original_hash: 134df45
+      filling_instructions_html: 'Пожалуйста, заполняйте все поля <b>по-английски!</b>'
+      #original_hash: fbd64df
+      public_information: Общедоступная информация
+      #original_hash: a1c6de9
+      private_information: Частная информация
+      #original_hash: 87a1c7e
+      private_information_disclaimer: Вся информация ниже будет доступна только Совету Директоров WCA
+    errors:
+      #original_hash: 08122c4
+      end_date_after_start_date: дата начала позже даты окончания
   contact:
     #original_hash: a34b69f
     title: Контактная информация
