@@ -276,13 +276,13 @@ function checkDuplicatesInCompetition () {
 
 
 #----------------------------------------------------------------------
-function getMostSimilarPersons ( $id, $name, $countryId, $persons ) {
+function getMostSimilarPersons ( $id, $name, $countryId, &$persons ) {
 #----------------------------------------------------------------------
   return getMostSimilarPersonsMax( $id, $name, $countryId, $persons, 5 );
 }
 
 #----------------------------------------------------------------------
-function getMostSimilarPersonsMax ( $id, $name, $countryId, $persons, $max ) {
+function getMostSimilarPersonsMax ( $id, $name, $countryId, &$persons, $max ) {
 #----------------------------------------------------------------------
 
   #--- Compute similarities to all persons.
