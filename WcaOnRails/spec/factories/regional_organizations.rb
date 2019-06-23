@@ -13,6 +13,7 @@ FactoryBot.define do
     area_description { "World" }
     past_and_current_activities { "Activities" }
     future_plans { "Plans" }
+    extra_information { "" }
     start_date { Date.today }
     end_date { nil }
   end

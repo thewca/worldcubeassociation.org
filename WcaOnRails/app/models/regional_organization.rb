@@ -5,8 +5,9 @@ class RegionalOrganization < ApplicationRecord
   has_one_attached :bylaws
   has_one_attached :extra_file
 
-  scope :currently_acknowledged, -> { where("end_date IS NULL OR end_date > ?", Date.today) }
-  scope :not_currently_acknowledged, -> { where("end_date < ?", Date.today) }
+  scope :currently_acknowledged, -> { where("start_date IS NOT NULL AND (end_date IS NULL OR end_date > ?)", Date.today) }
+  scope :pending_approval, -> { where("start_date IS NULL") }
+  scope :previously_acknowledged, -> { where("start_date IS NOT NULL AND end_date IS NOT NULL AND end_date < ?", Date.today) }
 
   validates_presence_of :name, :country, :email, :address, :directors_and_officers, :area_description, :past_and_current_activities, :future_plans
   validates :website, presence: true, format: { with: %r{\Ahttps?://.*\z} }
@@ -19,7 +20,6 @@ class RegionalOrganization < ApplicationRecord
     errors.add(:email, I18n.t('common.errors.invalid')) unless ValidateEmail.valid?(email)
   end
 
-  validates :start_date, presence: true
   validate :start_date_must_be_earlier_than_end_date
   def start_date_must_be_earlier_than_end_date
     if start_date && end_date && start_date >= end_date

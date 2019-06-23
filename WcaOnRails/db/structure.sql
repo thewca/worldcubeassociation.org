@@ -1028,7 +1028,7 @@ CREATE TABLE `regional_organizations` (
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `country` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `website` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `start_date` date NOT NULL,
+  `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -1556,4 +1556,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190216102110'),
 ('20190221194112'),
 ('20190601105825'),
-('20190601231550');
+('20190601231550'),
+('20190622173635');
