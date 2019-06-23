@@ -501,18 +501,20 @@ module DatabaseDumper
           name
           country
           website
-          email
-          address
-          directors_and_officers
-          area_description
-          past_and_current_activities
-          future_plans
-          extra_information
           start_date
           end_date
           created_at
           updated_at
         ),
+        fake_values: {
+          "email" => "'contact@regional-organization.org'",
+          "address" => "'Street and Number, City, State, Postal code, Country'",
+          "directors_and_officers" => "'Directors and Officers'",
+          "area_description" => "'Area'",
+          "past_and_current_activities" => "'Activities'",
+          "future_plans" => "'Plans'",
+          "extra_information" => "'Extra information'",
+        },
       ),
     }.freeze,
     "registration_competition_events" => {

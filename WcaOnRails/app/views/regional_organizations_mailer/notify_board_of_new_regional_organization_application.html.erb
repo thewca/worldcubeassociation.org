@@ -1,0 +1,36 @@
+<h1>
+  <%= @user_who_applied.name %> has submitted an application for <%= @regional_organization.name %> to be acknowledged as a WCA Regional Organization.
+</h1>
+<p>
+  Here"s the Regional Organization data:
+  <ul>
+    <% i18n_prefix = "activerecord.attributes.regional_organization" %>
+    <li><b><%= t "#{i18n_prefix}.name" %>:</b> <%= @regional_organization.name %></li>
+    <li><b><%= t "#{i18n_prefix}.country" %>:</b> <%= @regional_organization.country %></li>
+    <li><b><%= t "#{i18n_prefix}.website" %>:</b> <%= link_to "#{@regional_organization.website}", @regional_organization.website %></li>
+    <% if @regional_organization.logo.attached? %>
+      <li><b><%= t "#{i18n_prefix}.logo" %>:</b></li>
+      <%= link_to(image_tag(@regional_organization.logo.variant(resize: "200x200")), rails_blob_url(@regional_organization.logo, disposition: "attachment")) %>
+    <% end %>
+    <li><b><%= t "#{i18n_prefix}.email" %>:</b> <%= mail_to @regional_organization.email, "#{@regional_organization.email}" %></li>
+    <li><b><%= t "#{i18n_prefix}.address" %>:</b> <%= @regional_organization.address %></li>
+    <% if @regional_organization.bylaws.attached? && @regional_organization.bylaws.previewable? %>
+      <li><b><%= t "#{i18n_prefix}.bylaws" %>:</b></li>
+      <%= link_to(image_tag(@regional_organization.bylaws.preview(resize: "200x200")), rails_blob_url(@regional_organization.bylaws, disposition: "attachment")) %>
+    <% end %>
+    <li><b><%= t "#{i18n_prefix}.directors_and_officers" %>:</b> <%= @regional_organization.directors_and_officers %></li>
+    <li><b><%= t "#{i18n_prefix}.area_description" %>:</b> <%= @regional_organization.area_description %></li>
+    <li><b><%= t "#{i18n_prefix}.past_and_current_activities" %>:</b> <%= @regional_organization.past_and_current_activities %></li>
+    <li><b><%= t "#{i18n_prefix}.future_plans" %>:</b> <%= @regional_organization.future_plans %></li>
+    <% if @regional_organization.extra_information? %>
+      <li><b>Extra information:</b> <%= @regional_organization.extra_information %></li>
+    <% end %>
+    <% if @regional_organization.extra_file.attached? && @regional_organization.extra_file.previewable? %>
+      <li><b>Extra file:</b></li>
+      <%= link_to(image_tag(@regional_organization.extra_file.preview(resize: "200x200")), rails_blob_url(@regional_organization.extra_file, disposition: "attachment")) %>
+    <% end %>
+  </ul>
+</p>
+<p>
+  @Board: You can check all the information and approve or reject the application in the <%= link_to "Edit Regional Organization", edit_regional_organization_url(@regional_organization) %> page.
+</p>

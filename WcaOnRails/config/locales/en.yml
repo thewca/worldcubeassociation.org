@@ -1611,26 +1611,20 @@ en:
     content: "The WCA acknowledges the following Regional Organizations:"
     empty: "No Regional Organizations are currently acknowledged by the WCA."
     how_to:
-      title: How to become a WCA Regional Organization
-      description: The WCA recognizes various regional organizations worldwide.
-        The purpose of a WCA regional organization is to organize WCA
-        Competitions and support the WCA’s activities in the region. Countries
-        wishing to form a regional organization are encouraged to contribute to
-        the WCA in their area before submitting their application. For help
-        organizing a WCA competition in your area, please contact your nearest
-        Delegate.
+      title: How to become an acknowledged WCA Regional Organization
+      description: The WCA recognizes various Regional Organizations worldwide. The purpose of a WCA Regional Organization is to organize WCA Competitions and support the WCA’s activities in the region. Countries wishing to form a Regional Organization are encouraged to contribute to the WCA in their area before submitting their application. For help organizing a WCA competition in your area, please contact your nearest WCA Delegate.
     requirements:
       title: Requirements for WCA Regional Organizations
       list:
         '1': To actively organize or support WCA Competitions in the region of the organization
-        '2': To actively contribute to the Continental WCA Competitions that are held in the continent of the Regional Organization
-        '3': To respect and operationalize the Objectives set out in the Bylaws and Regulations of the WCA
+        '2': To contribute to the Continental WCA Competitions that are held in the continent of the Regional Organization, if required by the corresponding Organization Team
+        '3': To respect and operationalize the Objectives set out in the WCA Bylaws and Motions
         '4': To comply with all applicable WCA Regulations
-        '5': To accept and comply with decisions of WCA Officials
-        '6': To keep on file with the WCA a copy of its current Bylaws and regulations in an electronic format
+        '5': To accept and comply with decisions of WCA Staff
+        '6': To keep on file at the WCA a copy of its current bylaws and, if applicable, regulations in an electronic format
     application_instructions:
       title: Application Instructions
-      description_html: Please fill out <a href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>this form</a>.
+      description_html: To apply for acknowledgment, please fill out <a href='/regional-organizations/new'>this form</a>.
     regional_organization_form:
       filling_instructions_html: "Please fill everything <b>in English!</b>"
       public_information: "Public information"
@@ -1638,6 +1632,8 @@ en:
       private_information_disclaimer: "All the information below will only be visible to the WCA Board of Directors"
     errors:
       end_date_after_start_date: "cannot be after Acknowledged until"
+    create:
+      create_success: "Application successfully submitted! Please check your email, and wait for the WCA Board of Directors to review it"
   #context: Contact page
   contact:
     title: "Contact Information"

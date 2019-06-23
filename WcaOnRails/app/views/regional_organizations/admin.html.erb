@@ -11,9 +11,14 @@
       <%= render "regional_organizations/regional_organizations_table", regional_organizations: @regional_organizations.currently_acknowledged %>
     <% end %>
 
-    <% unless @regional_organizations.not_currently_acknowledged.empty? %>
+    <% unless @regional_organizations.pending_approval.empty? %>
+      <h2>Pending approval:</h2>
+      <%= render "regional_organizations/regional_organizations_table", regional_organizations: @regional_organizations.pending_approval %>
+    <% end %>
+
+    <% unless @regional_organizations.previously_acknowledged.empty? %>
       <h2>Previously acknowledged:</h2>
-      <%= render "regional_organizations/regional_organizations_table", regional_organizations: @regional_organizations.not_currently_acknowledged %>
+      <%= render "regional_organizations/regional_organizations_table", regional_organizations: @regional_organizations.previously_acknowledged %>
     <% end %>
   <% end %>
 
