@@ -19,6 +19,11 @@ RSpec.describe CityValidator do
       expect(model).to be_invalid_with_errors city: ["is not of the form 'city, state'"]
     end
 
+    it "does not allow extra commas" do
+      model.city = "New York, New York, foo bar"
+      expect(model).to be_invalid_with_errors city: ["New York, foo bar is not a valid state"]
+    end
+
     it "allows multiple cities" do
       model.city = "Multiple cities"
       expect(model).to be_valid
