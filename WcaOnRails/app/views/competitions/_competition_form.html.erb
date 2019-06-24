@@ -27,8 +27,20 @@
 
       <fieldset <%= disable_form && "disabled" %>>
 
+        <script>
+          $(document).ready(function() {
+            console.log($('#competition_name').val());
+            $('#competition_name').change(function() {
+              $(this).nextAll().remove()
+              if ($('#competition_name').val().split(' ').join('') != $('#competition_id').val()){
+                $('#competition_name').after(`<div style="margin-top: 20px;" class="alert alert-warning" role="alert"><%= t('.name_id_warning') %></div>`);
+              }
+            });
+          });
+        </script>
+
         <% if @competition.persisted? %>
-          <%= f.input :id %>
+          <%= f.input :id, disabled: is_actually_confirmed && !@competition_admin_view %>
         <% end %>
         <%= f.input :name, wrapper_html: { class: @competition.warnings_for(current_user)[:name] ? "has-warning" : "" } %>
         <% if @competition.persisted? %>
