@@ -45,7 +45,7 @@ RSpec.describe Registration do
   it "requires user not banned" do
     user = FactoryBot.create(:user, :banned)
     registration.user = user
-    expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.banned')])
+    expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.banned_html').html_safe])
   end
 
   it "requires dob" do
