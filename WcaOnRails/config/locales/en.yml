@@ -844,7 +844,7 @@ en:
       comp_not_found: "Competition not found"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
-      banned: "You are banned. If you believe this is an error, please contact the WDC."
+      banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -970,7 +970,7 @@ en:
     please_sign_in_not_yet_open_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but its registration is not yet open."
     please_sign_in_html: "%{sign_in} to register for %{comp}. If you do not yet have a WCA account, you can create one %{here}."
     greeting: "Hi, %{name}!"
-    please_fix_profile_html: "In order to register for this %{comp}, you must fix the following problems with your %{profile}:"
+    please_fix_profile_html: "In order to register for %{comp}, you must fix the following problems with your %{profile}:"
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     can_register: "You can register for %{comp} below."
     check_registration_information: "Please check the information about registration to find out if you need to do something else, like paying a registration fee."
