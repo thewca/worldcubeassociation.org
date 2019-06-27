@@ -86,6 +86,7 @@ class SyncMailingListsJob < SingletonApplicationJob
       GsuiteMailingLists.sync_group(region[:mailing_list], (delegates + [senior_delegate]).map(&:email))
     end
 
-    GsuiteMailingLists.sync_group("organizations@worldcubeassociation.org", RegionalOrganization.currently_acknowledged.map(&:email))
+    organizations = RegionalOrganization.currently_acknowledged + [Team.board]
+    GsuiteMailingLists.sync_group("organizations@worldcubeassociation.org", organizations.map(&:email))
   end
 end
