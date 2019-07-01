@@ -1,0 +1,69 @@
+.officer-container {
+  @media (min-width: 576px) {
+    display: inline-flex;
+    flex-wrap: wrap;
+  }
+}
+
+.badge {
+  &.team-member-badge {
+    margin-right: 1em;
+    margin-bottom: 1em;
+    color: $gray;
+    background-color: $gray-lighter;
+    @media (max-width: 576px) {
+      display: block;
+      width: max-content;
+    }
+  }
+
+  &.team-senior-member-badge {
+    background-color: $green;
+    color: white;
+    padding-top: 6px;
+    vertical-align: top;
+    span.team-senior-member-subtext {
+      font-style: oblique;
+      margin-top: 6px;
+      display: block;
+      line-height: 1.5;
+    }
+    .avatar-thumbnail {
+      vertical-align: top;
+    }
+  }
+
+  &.team-leader-badge,
+  &.officer-badge {
+    background-color: $bright-blue;
+    color: white;
+    padding-top: 6px;
+    vertical-align: top;
+    span.team-leader-subtext {
+      font-style: oblique;
+      margin-top: 6px;
+      display: block;
+      line-height: 1.5;
+    }
+    .avatar-thumbnail {
+      vertical-align: top;
+    }
+  }
+
+  &.officer-badge {
+    background-color: black;
+    color: white;
+  }
+
+  &.team-email {
+    background-color: $orange;
+    a {
+      color: white;
+    }
+  }
+}
+
+.team-member-name {
+  padding-left: 1em;
+  display: inline-block;
+}

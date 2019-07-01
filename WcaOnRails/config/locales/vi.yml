@@ -2672,10 +2672,9 @@ vi:
       board:
         #original_hash: abd2828
         name: Ban Quản trị WCA
-        #original_hash: d855b50
-        info_html: >-
-          Hiệp hội Lập phương Thế giới được dẫn đầu bởi <strong>Ban Quản trị
-          WCA</strong>, bao gồm các thành viên sau:
+        description: >-
+          Hiệp hội Lập phương Thế giới được dẫn đầu bởi Ban Quản trị
+          WCA, bao gồm các thành viên sau:
       chair:
         #original_hash: de34439
         name: Chủ tịch WCA

@@ -1175,6 +1175,7 @@ es:
       faq: Preguntas Más Frecuentes
       #original_hash: 02617c0
       tutorial: Tutorial de Competición
+      teams: Comités, Equipos y Consejos
       #original_hash: a34b69f
       contact: Información de Contacto
       #original_hash: 4fa8cc8
@@ -2045,7 +2046,7 @@ es:
           el %{end_date_and_time}.
         #original_hash: 7ac8349
         range_past_html: >-
-          El registro en línea se abrió el %{start_date_and_time} y se cerró el 
+          El registro en línea se abrió el %{start_date_and_time} y se cerró el
           %{end_date_and_time}.
     index:
       #original_hash: db98a68
@@ -2854,10 +2855,9 @@ es:
       board:
         #original_hash: abd2828
         name: Junta Directiva de la WCA
-        #original_hash: d855b50
-        info_html: >-
+        description: >-
           La Asociación Mundial del Cubo (WCA) está liderada por la
-          <strong>Junta Directiva WCA</strong>, cuyos miembros son:
+          Junta Directiva WCA, cuyos miembros son:
       chair:
         #original_hash: de34439
         name: Presidente de la WCA
