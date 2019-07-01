@@ -1,0 +1,48 @@
+<% provide(:title, t("about.structure.teams_committees_councils")) %>
+
+<div class="container">
+  <h1><%= t("about.structure.teams_committees_councils") %></h1>
+
+  <p><%= t("about.structure.committees") %></p>
+
+  <h3><%= t("about.structure.officers.name") %></h3>
+  <p><%= t("about.structure.officers.description") %></p>
+  <br />
+
+  <div class="officer-container">
+    <% @officers.each do |user, positions| %>
+      <div class="badge team-member-badge officer-badge">
+        <%= render "shared/user_avatar", user: user %>
+        <div class="team-member-name"><%= user.name %>
+          <br />
+          <span class="team-leader-subtext">
+            <%= positions %>
+          </span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% ([Team.board] + Team.all_official + Team.all_councils).each do |team| %>
+    <h3><%= team.name %> <%= team != Team.board ? "(" + team.acronym + ")" : "" %> <span class="badge team-email"><%= mail_to team.email %></span></h3>
+    <p><%= t("about.structure.#{team.friendly_id}.description") %></p>
+    <br />
+
+    <% team.current_members.includes(:user).order(team_leader: :desc).order(team_senior_member: :desc).order("users.name asc").each do |tm| %>
+      <div class="badge team-member-badge <%= tm.team_senior_member ? "team-senior-member-badge" : "" %> <%= tm.team_leader ? "team-leader-badge" : "" %>">
+        <%= render "shared/user_avatar", user: tm.user %>
+        <div class="team-member-name"><%= tm.user.name %>
+          <% if tm.team_senior_member %>
+            <br />
+            <span class="team-senior-member-subtext"><%= t("about.structure.senior_member") %></span>
+          <% end %>
+          <% if tm.team_leader %>
+            <br />
+            <span class="team-leader-subtext"><%= t("about.structure.leader") %></span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+</div>

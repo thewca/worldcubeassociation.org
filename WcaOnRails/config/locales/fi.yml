@@ -2698,9 +2698,8 @@ fi:
       board:
         #original_hash: abd2828
         name: 'WCA:n johtokunta'
-        #original_hash: d855b50
-        info_html: >-
-          World Cube Associationia johtaa <strong>WCA Board </strong>, joka
+        description: >-
+          World Cube Associationia johtaa WCA Board, joka
           koostuu seuraavista jäsenistä:
       chair:
         #original_hash: de34439

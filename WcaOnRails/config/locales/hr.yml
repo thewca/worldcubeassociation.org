@@ -2744,9 +2744,8 @@ hr:
       board:
         #original_hash: abd2828
         name: WCA Upravni odbor
-        #original_hash: d855b50
-        info_html: >-
-          World Cube Association vodi <strong>WCA Upravni odbor</strong>, čiji
+        description: >-
+          World Cube Association vodi WCA Upravni odbor, čiji
           su članovi:
       chair:
         #original_hash: de34439

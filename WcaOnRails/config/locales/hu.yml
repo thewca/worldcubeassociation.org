@@ -2748,9 +2748,8 @@ hu:
       board:
         #original_hash: abd2828
         name: WCA Board of Directors
-        #original_hash: d855b50
-        info_html: >-
-          A World Cube Association-t a <strong>WCA Board</strong> vezeti, amit a
+        description: >-
+          A World Cube Association-t a WCA Board vezeti, amit a
           következő tagok alkotnak:
       chair:
         #original_hash: de34439

@@ -2361,10 +2361,9 @@ ja:
       title: 組織
       board:
         #original_hash: abd2828
-        name: WCA理事
-        #original_hash: d855b50
-        info_html: >-
-          世界キューブ協会 (WCA) は <strong>WCA 理事</strong>が指揮をとります。WCA
+        name: WCA 理事会
+        description: >-
+          World Cube Association は WCA 理事が指揮をとります。WCA
           理事は以下のメンバーで構成されます:
       chair:
         #original_hash: de34439
