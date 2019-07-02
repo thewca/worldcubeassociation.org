@@ -1467,7 +1467,7 @@ en:
   #context: About the WCA
   about:
     title: "About the WCA"
-    mission: Our mission is to have more competitions in more countries with more people and more fun, under fair and equal conditions.
+    mission_statement: Our mission is to have more competitions in more countries with more people and more fun, under fair and equal conditions.
     mission_footer: WCA Mission Statement
     who_we_are_title: Who we are
     who_we_are_content_html: <p>The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'. The most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA.</p>
