@@ -48,9 +48,7 @@
             <% if @competition.using_stripe_payments? %>
               <th class="paid"><%= t 'activerecord.attributes.registration.paid_entry_fees' %></th>
             <% end %>
-            <% if @show_full_mail %>
-              <th class="email"><%= t 'activerecord.attributes.registration.email' %></th>
-            <% end %>
+            <th class="email"><%= t 'activerecord.attributes.registration.email' %></th>
 
             <!-- Extra column for .table-greedy-last-column -->
             <th></th>
