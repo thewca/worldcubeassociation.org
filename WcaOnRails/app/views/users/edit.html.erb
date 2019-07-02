@@ -197,7 +197,7 @@
                     <li><%= guideline %></li>
                   <% end %>
                 </ul>
-                <% if @user.any_kind_of_delegate? %>
+                <% if @user.staff? %>
                   <br /><strong><%= t('.delegate_avatar_guidelines.title') %></strong>
                   <ul>
                     <% t('.delegate_avatar_guidelines.paragraphs').values.each do |guideline| %>

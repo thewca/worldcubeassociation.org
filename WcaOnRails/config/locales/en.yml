@@ -797,9 +797,9 @@ en:
         '6': "The avatar must be submitted in correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
       delegate_avatar_guidelines:
-        title: "Additional guidelines for Delegates:"
+        title: "Additional guidelines for Staff Members:"
         paragraphs:
-          '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition as the WCA Delegate."
+          '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition."
           '2': "The avatar must be framed, cropped, angled, and lit, so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
           '3': "The thumbnail of the avatar is only a section of the avatar, and it will be used to represent your full avatar. The thumbnail must be adjusted, so you can be recognized from it alone, and it must contain your face."
 
