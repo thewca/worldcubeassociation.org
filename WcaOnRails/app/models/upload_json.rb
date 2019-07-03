@@ -13,7 +13,7 @@ class UploadJson
     else
       begin
         # Parse the json first
-        JSON::Validator.validate!(CompetitionResultsValidator::RESULT_JSON_SCHEMA, parsed_json)
+        JSON::Validator.validate!(ResultsValidators::JSONSchemas::RESULT_JSON_SCHEMA, parsed_json)
         if parsed_json["competitionId"] != competition_id
           errors.add(:results_file, "is not for this competition but for #{parsed_json["competitionId"]}!")
         end
