@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :inbox_result do
     transient do
       competition { FactoryBot.create(:competition, :with_rounds, event_ids: ["333oh"]) }
-      person { FactoryBot.create(:inbox_person, competitionId: competition) }
+      person { FactoryBot.create(:inbox_person, competitionId: competition.id) }
     end
 
     personId { person.id }

@@ -61,98 +61,6 @@ class CompetitionResultsValidator
   MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round \"%{wcif_id}\" for the cumulative time limit specified in the WCIF."\
   " Please go to the manage events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
 
-  INDIVIDUAL_RESULT_JSON_SCHEMA = {
-    "type" => "object",
-    "properties" => {
-      "personId" => { "type" => "number" },
-      "position" => { "type" => "number" },
-      "results" => {
-        "type" => "array",
-        "items" => { "type" => "number" },
-      },
-      "best" => { "type" => "number" },
-      "average" => { "type" => "number" },
-    },
-    "required" => ["personId", "position", "results", "best", "average"],
-  }.freeze
-
-  GROUP_JSON_SCHEMA = {
-    "type" => "object",
-    "properties" => {
-      "group" => { "type" => "string" },
-      "scrambles" => {
-        "type" => "array",
-        "items" => { "type" => "string" },
-      },
-      "extraScrambles" => {
-        "type" => "array",
-        "items" => { "type" => "string" },
-      },
-    },
-    "required" => ["group", "scrambles"],
-  }.freeze
-
-  ROUND_JSON_SCHEMA = {
-    "type" => "object",
-    "properties" => {
-      "roundId" => { "type" => "string" },
-      "formatId" => { "type" => "string" },
-      "results" => {
-        "type" => "array",
-        "items" => INDIVIDUAL_RESULT_JSON_SCHEMA,
-      },
-      "groups" => {
-        "type" => "array",
-        "items" => GROUP_JSON_SCHEMA,
-      },
-    },
-    "required" => ["roundId", "formatId", "results", "groups"],
-  }.freeze
-
-  PERSON_JSON_SCHEMA = {
-    "type" => "object",
-    "properties" => {
-      "id" => { "type" => "number" },
-      "name" => { "type" => "string" },
-      # May be empty
-      "wcaId" => { "type" => "string" },
-      "countryId" => { "type" => "string" },
-      # May be empty
-      "gender" => { "type" => "string" },
-      "dob" => { "type" => "string" },
-    },
-    "required" => ["id", "name", "wcaId", "countryId", "gender", "dob"],
-  }.freeze
-
-  EVENT_JSON_SCHEMA = {
-    "type" => "object",
-    "properties" => {
-      "eventId" => { "type" => "string" },
-      "rounds" => {
-        "type" => "array",
-        "items" => ROUND_JSON_SCHEMA,
-      },
-    },
-    "required" => ["eventId", "rounds"],
-  }.freeze
-
-  RESULT_JSON_SCHEMA = {
-    "type" => "object",
-    "properties" => {
-      "formatVersion" => { "type" => "string" },
-      "competitionId" => { "type" => "string" },
-      "persons" => {
-        "type" => "array",
-        "items" => PERSON_JSON_SCHEMA,
-      },
-      "events" => {
-        "type" => "array",
-        "items" => EVENT_JSON_SCHEMA,
-      },
-    },
-    "required" => ["formatVersion", "competitionId", "persons", "events"],
-  }.freeze
-
   def initialize(competition_id, check_real_results = false)
     @errors = {
       persons: [],
@@ -183,7 +91,7 @@ class CompetitionResultsValidator
     @check_real_results = check_real_results
 
     result_model = @check_real_results ? Result : InboxResult
-    @results = result_model.sorted_for_competition(competition_id)
+    @results = result_model.sorted_for_competitions(competition_id)
     @has_results = @results.any?
     unless @has_results
       @total_errors = 1
@@ -233,6 +141,11 @@ class CompetitionResultsValidator
       check_scrambles
 
       check_competitor_limit
+
+      # Note: the "long term" plan is to have an array of validators to apply
+      # on the results, and the line below would turn into:
+      # merge(validator_classes.map { |v| v.new.validate(results: @results) })
+      merge(ResultsValidators::PositionsValidator.new.validate(results: @results))
     end
 
     @total_errors = @errors.values.sum(&:size)
@@ -240,6 +153,22 @@ class CompetitionResultsValidator
   end
 
   private
+
+  def merge(other_validators)
+    unless other_validators.respond_to?(:each)
+      other_validators = [other_validators]
+    end
+    other_validators.each do |v|
+      v.errors.group_by(&:kind).each do |kind, errors|
+        @errors[kind].concat(errors)
+      end
+      v.warnings.group_by(&:kind).each do |kind, warnings|
+        @warnings[kind].concat(errors)
+      end
+    end
+    @total_errors = @errors.values.sum(&:size)
+    @total_warnings = @warnings.values.sum(&:size)
+  end
 
   def results_similar_to(reference, reference_index, results)
     # We do this programatically, but the original check_results.php used to do a big SQL query:
@@ -492,7 +421,6 @@ class CompetitionResultsValidator
     #   - "correct" number of attempts is done in validation (but NOT cutoff times)
     #   - check time limit
     #   - check cutoff
-    #   - check position
     #   - for multiblind, check if we should ouput a warning (if time is over the time limit, as the 'Result' object validation allows for time up to 30s over the timelimit)
 
     results_by_round_id.each do |round_id, results_for_round|
@@ -508,24 +436,6 @@ class CompetitionResultsValidator
           next
         end
         all_solve_times = result.solve_times
-
-        # Check for position in round
-        # The scope "InboxResult.sorted_for_competition" already sorts by average then best,
-        # so we simply need to check that the position stored matched the expected one
-
-        # Unless we find two exact same results, we increase the expected position
-        if last_result && result.average == last_result.average && result.best == last_result.best
-          number_of_tied += 1
-        else
-          expected_pos += 1
-          expected_pos += number_of_tied
-          number_of_tied = 0
-        end
-        last_result = result
-
-        if expected_pos != result.pos
-          @errors[:results] << format(WRONG_POSITION_IN_RESULTS_ERROR, round_id: round_id, person_name: person_info.name, expected_pos: expected_pos, pos: result.pos)
-        end
 
         # Check for possible similar results
         similar = results_similar_to(result, index, results_for_round)
