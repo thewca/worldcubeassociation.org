@@ -482,6 +482,10 @@ class CompetitionsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
+        unless @competition.has_schedule?
+          flash[:danger] = t('.no_schedule')
+          return redirect_to competition_path(@competition)
+        end
         @colored_schedule = params.key?(:with_colors)
         # Manually cache the pdf on:
         #   - competiton.updated_at (touched by any change through WCIF)

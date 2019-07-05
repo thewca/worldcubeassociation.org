@@ -1234,6 +1234,7 @@ en:
       general_info: "General info"
       events: "Events"
       schedule: "Schedule"
+      no_schedule: "This competition has no schedule, the pdf can't be generated."
     #context: on the events page
     events:
       #context: explanation of what time limit, cutoff, and format are

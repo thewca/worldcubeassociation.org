@@ -44,15 +44,18 @@
         <% end %>
       </dd>
     </dl>
-    <dl class="dl-horizontal">
-      <dt><%= icon("print") %></dt>
-      <dd>
-        <%= t("competitions.competition_info.pdf.download_html",
-              here: link_to(t("common.here"),
-                            competition_path(competition, format: :pdf),
-                            target: :_blank, class: "hide-new-window-icon")) %>
-      </dd>
-    </dl>
+
+    <% if @competition.has_schedule? %>
+      <dl class="dl-horizontal">
+        <dt><%= icon("print") %></dt>
+        <dd>
+          <%= t("competitions.competition_info.pdf.download_html",
+                here: link_to(t("common.here"),
+                              competition_path(competition, format: :pdf),
+                              target: :_blank, class: "hide-new-window-icon")) %>
+        </dd>
+      </dl>
+    <% end %>
   </div>
 
   <div class="col-md-6">
