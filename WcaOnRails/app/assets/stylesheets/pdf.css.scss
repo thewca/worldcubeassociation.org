@@ -2,11 +2,13 @@
  * This scss file is specifically used in the pdf rendered page (eg: the competition info and schedule page).
  */
 
-@import "cubing-icons";
-
 a {
   color: black;
 }
+
+// We need the import here, otherwise Rails' asset adds a BOM at the beginning of it,
+// and the font doesn't get recognize!
+@import "cubing-icons";
 
 header {
   width: 100%;
