@@ -165,9 +165,19 @@ hr:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
   advancement_condition:
-    #original_hash: 6e55337
+    short:
+      #original_hash: 6100c20
+      ranking: 'Najboljih %{ranking}'
+      #original_hash: 0664a83
+      percent: 'Najboljih %{percent}%'
+      attempt_result:
+        #original_hash: 482f137
+        time: 'Najbolje vrijeme < %{time}'
+        #original_hash: 3faa63e
+        moves: 'Najbolji rezultat< %{moves}'
+        #original_hash: c3133c2
+        points: 'Najbolji rezultat > %{points}'
     ranking: 'Najboljih %{ranking} prolazi u slijedeću rundu'
-    #original_hash: 7ee969c
     percent: 'Najboljih %{percent}% prolazi u slijedeću rundu'
     attempt_result:
       #original_hash: b3c8a02
@@ -453,6 +463,8 @@ hr:
         birthday: Rođendan
         #original_hash: c5497bc
         registration_competition_events: Discipline
+        #original_hash: 84add5b
+        email: E-mail
       competition_tab:
         #original_hash: 4f9be05
         content: Sadržaj
@@ -484,6 +496,8 @@ hr:
         gender: Spol
         #original_hash: 709a232
         name: Ime
+        #original_hash: c6bc0f4
+        incorrect_wca_id_claim_count: Incorrect WCA ID claim count
       poll:
         #original_hash: 002ff59
         question: Pitanje
@@ -496,6 +510,8 @@ hr:
         body: Tijelo
         #original_hash: 6f915a2
         sticky: Sticky
+        #original_hash: 231d9ff
+        unstick_at: Otkvači na
         #original_hash: 848eed0
         tags: Tagovi
         #original_hash: fb4002e
@@ -540,6 +556,37 @@ hr:
         submitterComment: Komentar osobe koja prilaže
         #original_hash: bae7d5b
         status: Status
+      regional_organization:
+        #original_hash: 709a232
+        name: Ime
+        #original_hash: d523ebb
+        country: Država
+        #original_hash: 2e8a57c
+        website: Web stranica
+        #original_hash: 83fce83
+        logo: Logotip
+        #original_hash: 84add5b
+        email: E-mail
+        #original_hash: 82c42fb
+        address: Službena adresa
+        #original_hash: 9855f80
+        bylaws: Statut
+        #original_hash: 405201b
+        directors_and_officers: Lista službenih osoba i njihove titule
+        #original_hash: 719db2d
+        area_description: Detaljan opis prostora koji se nadgleda
+        #original_hash: 0cdb036
+        past_and_current_activities: Izvješće o prijašnjim i sadašnjim WCA aktivnostima
+        #original_hash: 0faebcf
+        future_plans: Planovi za budućnost kao WCA priznata Regionalna Organizacija
+        #original_hash: f5ad34a
+        extra_information: Neke dodatne informacije?
+        #original_hash: bc07619
+        extra_file: Neka dodatna datoteka?
+        #original_hash: 5ddd986
+        start_date: Priznati od
+        #original_hash: 1ee885a
+        end_date: Priznati do
   enums:
     user:
       gender:
@@ -837,6 +884,8 @@ hr:
         #original_hash: da39a3e
         sticky: ''
         #original_hash: da39a3e
+        unstick_at: ''
+        #original_hash: da39a3e
         title: ''
         #original_hash: da39a3e
         tags: ''
@@ -906,6 +955,8 @@ hr:
         person2_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: da39a3e
+        incorrect_wca_id_claim_count: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -949,6 +1000,41 @@ hr:
         message: ''
         #original_hash: da39a3e
         confirm_information: ''
+      regional_organization:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        country: ''
+        #original_hash: 72448d6
+        website: Mora biti valjan http(s) url. HTTPS je preporučljiv
+        #original_hash: 2ace571
+        logo: >-
+          Mora biti u PNG formatu, u dobroj rezoluciji i sa transparentnom
+          pozadinom
+        #original_hash: da54ab5
+        email: Trebala bi biti mailing lista koja uključuje sve službene osobe
+        #original_hash: da39a3e
+        address: ''
+        #original_hash: 7d25ff5
+        bylaws: Mora biti u PDF formatu
+        #original_hash: da39a3e
+        directors_and_officers: ''
+        #original_hash: da39a3e
+        area_description: ''
+        #original_hash: da39a3e
+        past_and_current_activities: ''
+        #original_hash: da39a3e
+        future_plans: ''
+        #original_hash: da39a3e
+        extra_information: ''
+        #original_hash: 79555ff
+        extra_file: >-
+          Mora biti u PDF formatu. Ukoliko trebate dodati više datoteka, spojite
+          ih zajedno
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        end_date: ''
     options:
       registration:
         status:
@@ -1099,6 +1185,8 @@ hr:
       organizations: Nacionalne organizacije
       #original_hash: d790b40
       faq: Često postavljena pitanja
+      #original_hash: 3ad28c0
+      teams: 'Timovi, Odbori, Vijeća'
       #original_hash: 02617c0
       tutorial: Natjecateljski tutorijal
       #original_hash: a34b69f
@@ -1165,6 +1253,12 @@ hr:
       new_post: Nova objava
       #original_hash: 0d67445
       team_leader: Voditelj tima
+      #original_hash: 37b8fdc
+      regional_organizations: Regionalne Organizacije
+      #original_hash: 6568fa0
+      manage_regional_organizations: Upravljaj Regionalnim Organizacijama
+      #original_hash: 411bbca
+      new_regional_organization: Nova Regionalna Organizacija
       #original_hash: dc1649a
       sign_out: Odjavite se
       #original_hash: 753a22b
@@ -1377,13 +1471,13 @@ hr:
         #original_hash: 1a18831
         '7': Avatar ne smije sadržavati uvredljiv sadržaj (npr. uvredljive geste).
       delegate_avatar_guidelines:
-        #original_hash: 35abf16
-        title: 'Dodatne smjernice za Delegate:'
+        #original_hash: da9e6df
+        title: 'Dodatne smjernice za Osoblje:'
         paragraphs:
-          #original_hash: 3cf91ed
+          #original_hash: ff6d2e8
           '1': >-
             Avatar mora prikazivati Vas osobno, mora opisivati Vas onako kako bi
-            Vas se opisivalo kao da ste WCA Delegat.
+            izgledali na natjecanju.
           #original_hash: 64ded69
           '2': >-
             Avatar mora biti uokviren, izrezan, nakošen i dobro osvjetljen kako
@@ -1502,10 +1596,11 @@ hr:
       cannot_be_deleted_and_accepted: Registracija ne može biti obrisana i prihvaćena u isto vrijeme
       #original_hash: a38d024
       must_register: morate se registrirati za bar jednu disciplinu
-      #original_hash: 191294a
-      banned: >-
-        Zabranjeno Vam je natjecati se. Ukoliko mislite da je ovo greška,
-        kontaktirajte WDC.
+      #original_hash: e78eec3
+      banned_html: >-
+        Zabranjen Vam je pristup. Ukoliko mislite da je ovo pogreška,
+        kontaktirajte <a href='mailto:disciplinary@worldcubeassociation.org'
+        target='_blank'>WDC</a>.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1717,7 +1812,7 @@ hr:
       korisnički račun, napravite ga %{here}.
     #original_hash: 89b4e7f
     greeting: 'Pozdrav, %{name}!'
-    #original_hash: fb34a17
+    #original_hash: 322f646
     please_fix_profile_html: >-
       Kako biste se registrirali za %{comp}, morate popraviti slijedeće probleme
       na svom %{profile}:
@@ -1859,6 +1954,17 @@ hr:
       #original_hash: 94a2fc8
       past_competitions: Prošla natjecanja
     competition_info:
+      pdf:
+        #original_hash: 05af803
+        terms_and_abbr: Tehnički izrazi i kratice
+        #original_hash: 18f306c
+        formats_abbr: 'Kratice za formate:'
+        #original_hash: 55dc8bc
+        abbr_description: '%{short_name}: %{long_name}'
+        #original_hash: a1984e1
+        cutoff: 'Cutoff: %{short_cutoff}'
+        #original_hash: a8b6fe6
+        download_html: 'Preuzmi sve detalje natjecanja kao PDF %{here}.'
       #original_hash: eb9a4bc
       date: Datum
       #original_hash: 4271627
@@ -2167,9 +2273,6 @@ hr:
         Kako biste klonirali postojeće natjecanje, posjetite stranicu s
         informacijama za to natjecanje i kliknite "Klonirajte" poveznicu u
         izborniku.
-    update_events:
-      #original_hash: 00204fa
-      update_success: Uspješno ažurirane discipline na natjecanju.
     update:
       #original_hash: 5fb2f57
       save_success: Uspješno spremljeno natjecanje.
@@ -2239,6 +2342,8 @@ hr:
       events: Discipline
       #original_hash: 0a8adac
       schedule: Raspored
+      #original_hash: 1060ed0
+      no_schedule: 'Ovo natjecanje nema raspored, PDF se ne može generirati.'
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2299,6 +2404,8 @@ hr:
       activity: Aktivnost
       #original_hash: 90e2fca
       room: Prostorija
+      #original_hash: 73acb7f
+      room_in_venue: '%{room} u %{venue}'
       #original_hash: 2896c7a
       venue_information_html: 'Pregledavate raspored prostorije %{venue_name}.'
       #original_hash: b97e383
@@ -2466,10 +2573,19 @@ hr:
       vratiti.
     #original_hash: 3dcbf6d
     announcement_info_html: 'Najavio/la %{author_name} na dan %{date_time}'
+    errors:
+      #original_hash: 75d7ff7
+      unstick_at_future: mora biti u budućnosti
   contacts:
     website:
-      #original_hash: ac2ac3d
-      title: WCA Website obrazac za kontakt
+      #original_hash: 5b225ad
+      faq_note_html: >-
+        Prije slanja upita, pogledajte na našu stranicu <a href="/faq">Često
+        postavljenih pitanja</a>! Ukoliko želite kontaktirati specifični odbor
+        ili tim, njihove informacije možete pronaći na stranici <a
+        href="/about">O nama</a>.
+      #original_hash: 4ef2aad
+      title: WCA Obrazac za kontakt
       inquiries:
         #original_hash: 92ea7e8
         competition: Kontaktirajte organizatore specifičnog natjecanja (izaberite ispod)
@@ -2714,39 +2830,132 @@ hr:
   about:
     #original_hash: 9ac918a
     title: Više o WCA
-    mission:
-      paragraphs:
-        #original_hash: c86d105
-        '1': >-
-          World Cube Association upravlja natjecanjima za sve mehaničke
-          slagalice kojima se upravlja okretanjem grupe dijelova, drugim
-          riječima rečeno "twisty puzzles". Najpoznatija slagalica među svima
-          jest Rubikova kocka, izum profesora Rubika iz Mađarske. Određene
-          slagalice su odabrane kao službene discipline WCA.
-        #original_hash: 22c3593
-        '2': >-
-          World Cube Association organizira natjecanja u čitavom svijetu,
-          podržana od strane nacionalnih organizacija odgovornih za
-          organiziranje natjecanja u njihovim državama.
-        #original_hash: 0902c4a
-        '3': >-
-          Misija World Cube Association jest imati <strong>više natjecanja u
-          više država s više ljudi i s više zabave, pod pravednim i jednakim
-          uvjetima</strong>.
-        #original_hash: 2b993c0
-        '4': >-
-          Duh World Cube Association jest <strong>da ljudi iz svih zemalja
-          svijeta imaju zabavu u prijateljskoj atmosferi, da pomažu jedni
-          drugima i da se ponašaju sportski.</strong>
+    #original_hash: af00571
+    mission_statement: >-
+      Naša misija je imati što više natjecanja u što više zemalja s više ljudi i
+      više zabave, uz poštene i jednake uvjete.
+    #original_hash: e627278
+    mission_footer: WCA Izjava o Misiji
+    #original_hash: cdab446
+    who_we_are_title: Tko smo mi
+    #original_hash: 78e63f4
+    who_we_are_content_html: >-
+      <p> World Cube Association upravlja natjecanjima za mehaničke mozgalice
+      koje se korite okretanjem grupe dijelova, poznatije kao "twisty puzzles".
+      Najpoznatija među njima je Rubikova kocka, koju je izumio profesor Rubik
+      iz Mađarske. Odabrane mozgalice su službene discipline WCA.</p> <p>Kako se
+      WCA razvijao u proteklom desetljeću, preko 100 000 ljudi se natjecalo na
+      našim natjecanjima. Unatoč ovom rastu, i dalje smo organizacija koja je u
+      potpunosti pogonjena volonterima, od lokalnih organizatora do Delegata, pa
+      i do Upravnog odbora. Veoma smo zahvalni svima koji svoje osobno vrijeme
+      izdvajaju kako bi dopustili da WCA nastavi funkcionirati. S više
+      financijske potpore, nadamo se podići razinu profesionalizma naših
+      natjecanja jer se trudimo organizirati ih što više diljem svijeta.</p>
+      <p>World Cube Association želi otvoriti nove mogućnosti za članstvo u
+      zajednici i vodstvo svim mladima diljem svijeta kroz veću pristupačnost
+      natjecanjima diljem svijeta. Vjerujemo da iskustva na natjecanjima i
+      unutar zajednice kreiraju prilike za rast za mlade ljude i da se
+      pokazivanjem mozgalica novim grupama ljudi pruža veliku priliku za rast
+      zajednice.</p>
+    #original_hash: bccd8c5
+    spirit: >-
+      Naš duh čine ljudi diljem svijeta koji se zabavljaju zajedno u
+      prijateljskoj atmosferi, pomažući jedni drugima i u sportskom duhu.
+    #original_hash: 69131cc
+    spirit_footer: WCA Spirit
+    #original_hash: c1781ee
+    our_goals_title: Naši ciljevi
+    #original_hash: 1ca8ac4
+    our_goals_content_html: >-
+      <p>World Cube Association želi otvoriti nove mogućnosti za članstvo u
+      zajednici i vodstvo svim mladima diljem svijeta kroz veću pristupačnost
+      natjecanjima diljem svijeta. Vjerujemo da iskustva na natjecanjima i
+      unutar zajednice kreiraju prilike za rast za mlade ljude i da se
+      pokazivanjem mozgalica novim grupama ljudi pruža veliku priliku za rast
+      zajednice.</p>
+    #original_hash: f64ccc7
+    whats_next_title: Što je slijedeće za WCA?
+    #original_hash: a08c67f
+    whats_next_content_html: >-
+      <p>World Cube Association je podržao preko 100 000 natjecatelja diljem 140
+      zemalja svijeta i ne mislimo usporiti tempo! Cubing zajednica se postepeno
+      razvijala otkad smo mi nastali 2004. godine i želimo da se ovaj trend
+      nastavi i u budućnosti kroz omogućavanje natjecanja na novim područjima. U
+      budućnosti, nadamo se podržati našu zajednicu još više kroz kolaboracije i
+      nove dosege s onima koji vole mozgalice.</p>
+    #original_hash: dc71704
+    world_championship_title: Svjetsko prvenstvo
+    #original_hash: 57cf7f7
+    world_championship_content_html: >-
+      <p>Svake dvije godine, organiziramo veliko natjecanje na kojemu se sazna
+      tko je slijedeći svjetski prvak. Ovakvi događaju zahtijevaju vrlo pažljivo
+      planiranje velikog broja volontera, kao i velika financijska obaveza s
+      kojom se plaća prostor i ostale potrebne stvari.</p>
+    #original_hash: 1aa5344
+    contributing_title: Davanje doprinosa
+    #original_hash: e64beb7
+    contributing_content_html: >-
+      Možete donirati kreditnom karticom koristeći Guidestar <a
+      href="https://www.nfggive.com/guidestar/82-3825954">ovdje</a>. Ukoliko
+      želite napisati ček, možete pisati na:
+    #original_hash: 2af9b71
+    tax_deductible_note: Donacije se odbijaju od poreza u Sjedinjenim Američkim Državama.
+    #original_hash: 6026d35
+    other_help_title: Ostali načini kako pomoći
+    #original_hash: 55b7b72
+    other_help_content_html: >-
+      <p>Ukoliko vjerujete da možete pomoći World Cube Associationu u
+      nefinancijskom dijelu, voljeli bismo čuti kako! Molimo Vas, pošaljite nam
+      mail na <a href="">communication@worldcubeassociation.org</a>.</p>
+    donation_banner:
+      #original_hash: 6253f90
+      content: >-
+        World Cube Association je 501(c)(3) organizacija oslobođena od poreza.
+        Kao 100% volontersko neprofitna organizacija, prihvaćamo donacije koje
+        bi nam mogle pomoći u ostvarivanju naše vizije oganiziranja više
+        natjecanja diljem svijeta.
+      #original_hash: 24c87db
+      donate_credit: Doniraj preko kreditne kartice
+      #original_hash: 96d77f3
+      donate_other: Ostali načini donacije
     structure:
+      #original_hash: 0d62207
+      teams_committees_councils: 'WCA Timovi, Odbori i Vijeća'
       #original_hash: 9482c5d
       title: Struktura
       board:
         #original_hash: abd2828
         name: WCA Upravni odbor
+        #original_hash: e0d37a2
         description: >-
-          World Cube Association vodi WCA Upravni odbor, čiji
-          su članovi:
+          WCA Upravni odbor je odgovoran za upravljanje organizacije i
+          upotpunjavanje svih onih dužnosti koje nisu u mogućnosti upotpuniti
+          Timovi, Odbori i Vijeća
+      #original_hash: bb562cf
+      committees: >-
+        Slijedeći WCA timovi i odbori su integrirani dio organizacije i
+        obavljaju dnevne dužnosti koje su potrebne za funkcionanost
+        organizacije. Ovi odbori su stvoreni od WCA članova zajednice,
+        uključujući Delegate i natjecatelje. Svaki tim ima svojeg vođu, čija je
+        uloga osiguravanje valjane funkcije tima i vođenje ostalih članova tima.
+        Vijeća su specijalni tip timova koji služe kao savjetnici WCA Upravnog
+        odbora i čine ih članovi zajednice, ne WCA osoblje. Kada se otvore nova
+        mjesta za odbore, tim ili viječa, informacije o tome kako se prijaviti
+        za određeno mjesto budu dostupne na glavnoj stranici WCA.
+      #original_hash: c366473
+      senior_member: Stariji član
+      #original_hash: e26c936
+      leader: Vođa
+      officers:
+        #original_hash: d79bd00
+        name: WCA Službenici
+        #original_hash: 312e799
+        description: >-
+          WCA Službenici obavljaju dužnost svega u vezi neprofitnog statusa WCA.
+          Oni su izabrani od strane WCA Upravnog odbora. Izvršni direktor je
+          glavni izvršni direktor WCA, Predsjednik predsjedava svim sastancima
+          Odbora, Tajnik vodi dokumente organizacije, a Blagajnik upravlja
+          financijskim pitanjima WCA.
       chair:
         #original_hash: de34439
         name: WCA Predsjednik
@@ -2759,8 +2968,9 @@ hr:
       vice_chair:
         #original_hash: 0388b19
         name: WCA Dopredsjednik
-      #original_hash: b0c72a9
-      committees: 'Slijedeći odbori su odgovorni za operacijske aktivnosti WCA:'
+      treasurer:
+        #original_hash: 75e65d9
+        name: WCA Blagajnik
       wdc:
         #original_hash: c97077a
         name: WCA Disciplinarni odbor
@@ -2842,8 +3052,6 @@ hr:
           Ovaj tim je odgovoran za razvoj i upravljanje WCA Branda, traženje
           sponzorstva, podršku distribucije WCA Opreme za natjecanje i za
           marketing WCA Robe.
-      #original_hash: a2c8ad3
-      councils: 'Slijedeća vijeća imaju ulogu savjetovanja WCA Upravnog odbora:'
       wac:
         #original_hash: 1ce7604
         name: WCA Savjetodavno vijeće
@@ -2854,6 +3062,10 @@ hr:
       banned:
         #original_hash: d30e2e5
         name: Zabranjeni natjecatelji
+      #original_hash: f8c3f3c
+      operations_html: 'Dnevne operacije vode WCA %{committees_and_teams}.'
+      #original_hash: 0e7a036
+      teams_committees: Timovi i Odbori
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>WCA Delegat</strong> je uloga definirana u WCA Prijedlozima i
@@ -2904,8 +3116,10 @@ hr:
   regional_organizations:
     #original_hash: 37b8fdc
     title: Regionalne organizacije
-    #original_hash: ba87c07
-    content: 'WCA priznaje slijedeće regionalne organizacije:'
+    #original_hash: 15a06d6
+    content: 'WCA priznaje slijedeće Regionalne Organizacije:'
+    #original_hash: e5b77eb
+    empty: Nijedna Regionalna Organizacija nije trenutno priznata od strane WCA.
     how_to:
       #original_hash: fc3af12
       title: Kako postati WCA Regionalna organizacija
@@ -2945,6 +3159,18 @@ hr:
         Molimo Vas ispunite <a
         href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>ovu
         formu</a>.
+    regional_organization_form:
+      #original_hash: 134df45
+      filling_instructions_html: Molimo Vas ispunite sve <b>na engleskom!</b>
+      #original_hash: fbd64df
+      public_information: Javne informacije
+      #original_hash: a1c6de9
+      private_information: Privatne informacije
+      #original_hash: 87a1c7e
+      private_information_disclaimer: Sve ispod informacije su vidljive samo WCA Upravnom odboru
+    errors:
+      #original_hash: 08122c4
+      end_date_after_start_date: nemože biti nakon Priznata do
   contact:
     #original_hash: a34b69f
     title: Kontakt informacije
