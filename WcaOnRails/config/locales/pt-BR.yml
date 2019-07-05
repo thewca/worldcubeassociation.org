@@ -165,9 +165,19 @@ pt-BR:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
   advancement_condition:
-    #original_hash: 6e55337
+    short:
+      #original_hash: 6100c20
+      ranking: 'Primeiros %{ranking}'
+      #original_hash: 0664a83
+      percent: 'Primeiros %{percent}%'
+      attempt_result:
+        #original_hash: 482f137
+        time: 'Melhor resultado < %{time}'
+        #original_hash: 3faa63e
+        moves: 'Melhor resultado < %{moves}'
+        #original_hash: c3133c2
+        points: 'Melhor resultado > %{points}'
     ranking: 'Os %{ranking} primeiros avançam para a próxima rodada'
-    #original_hash: 7ee969c
     percent: 'Os %{percent}% primeiros avançam para a próxima rodada'
     attempt_result:
       #original_hash: b3c8a02
@@ -451,6 +461,8 @@ pt-BR:
         birthday: Data de nascimento
         #original_hash: c5497bc
         registration_competition_events: Eventos
+        #original_hash: 84add5b
+        email: E-mail
       competition_tab:
         #original_hash: 4f9be05
         content: Conteúdo
@@ -1454,13 +1466,13 @@ pt-BR:
         #original_hash: 1a18831
         '7': Sua foto não pode conter conteúdo ofensivo (p. ex. gestos ofensivos).
       delegate_avatar_guidelines:
-        #original_hash: 35abf16
-        title: 'Orientações adicionais para Delegados:'
+        #original_hash: da9e6df
+        title: 'Orientações adicionais para Staff Members:'
         paragraphs:
-          #original_hash: 3cf91ed
+          #original_hash: ff6d2e8
           '1': >-
             A foto deve ser atual, da mesma forma que você apareceria em uma
-            competição como o Delegado da WCA.
+            competição.
           #original_hash: 64ded69
           '2': >-
             A foto deve ser ajustada, enquadrada e bem iluminada, de forma que
@@ -1929,6 +1941,17 @@ pt-BR:
       #original_hash: 94a2fc8
       past_competitions: Competições passadas
     competition_info:
+      pdf:
+        #original_hash: 05af803
+        terms_and_abbr: Termos técnicos e abreviações
+        #original_hash: 18f306c
+        formats_abbr: 'Abreviações e formatos:'
+        #original_hash: 55dc8bc
+        abbr_description: '%{short_name}: %{long_name}'
+        #original_hash: a1984e1
+        cutoff: 'Tempo de corte: %{short_cutoff}'
+        #original_hash: a8b6fe6
+        download_html: 'Baixe os detalhes da competição em PDF %{here}.'
       #original_hash: eb9a4bc
       date: Data
       #original_hash: 4271627
@@ -2302,6 +2325,8 @@ pt-BR:
       events: Eventos
       #original_hash: 0a8adac
       schedule: Cronograma
+      #original_hash: 1060ed0
+      no_schedule: 'Esta competição não tem um cronograma, o PDF não pode ser gerado.'
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2362,6 +2387,8 @@ pt-BR:
       activity: Atividade
       #original_hash: 90e2fca
       room: Sala
+      #original_hash: 73acb7f
+      room_in_venue: '%{room} in %{venue}'
       #original_hash: 2896c7a
       venue_information_html: 'Você está vendo o cronograma do local %{venue_name}.'
       #original_hash: b97e383
