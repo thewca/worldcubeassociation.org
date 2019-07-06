@@ -12,7 +12,7 @@
       <%= f.input :discussion_url %>
     <% end %>
     <% default_schedule_url = @competition.has_schedule? ? link_to_competition_schedule_tab(@competition) : '' %>
-    <%= f.input :schedule_url, input_html: { value: default_schedule_url }, disabled: default_schedule_url.present? %>
+    <%= f.input :schedule_url, input_html: { value: default_schedule_url }, readonly: default_schedule_url.present? %>
 
     <%= f.input :equipment, input_html: { class: "markdown-editor" } %>
     <%= f.input :venue, input_html: { class: "markdown-editor" } %>
