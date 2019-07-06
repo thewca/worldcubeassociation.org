@@ -41,7 +41,7 @@ module ResultsValidators
                 person = InboxPerson.where(competitionId: competition_id, id: result.personId).first
                 person_name = person ? person.name : "<personId=#{result.personId}>"
               end
-              @errors << ValidationError.new(:results, competition_id,WRONG_POSITION_IN_RESULTS_ERROR, round_id: round_id, person_name: person_name, expected_pos: expected_pos, pos: result.pos)
+              @errors << ValidationError.new(:results, competition_id, WRONG_POSITION_IN_RESULTS_ERROR, round_id: round_id, person_name: person_name, expected_pos: expected_pos, pos: result.pos)
             end
           end
         end

@@ -16,8 +16,8 @@ module ResultsValidators
       format(@message, @args)
     end
 
-    def ==(o)
-      o.class == self.class && o.state == state
+    def ==(other)
+      other.class == self.class && other.state == state
     end
 
     def state
