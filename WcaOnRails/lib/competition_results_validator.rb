@@ -47,7 +47,6 @@ class CompetitionResultsValidator
   # Results-related errors and warnings
   MET_CUTOFF_MISSING_RESULTS_ERROR = "[%{round_id}] %{person_name} has met the cutoff but is missing results for the second phase. Cutoff is %{cutoff}."
   DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = "[%{round_id}] %{person_name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is %{cutoff}."
-  WRONG_POSITION_IN_RESULTS_ERROR = "[%{round_id}] Result for %{person_name} has a wrong position: expected %{expected_pos} and got %{pos}."
   MISMATCHED_RESULT_FORMAT_ERROR = "[%{round_id}] Result for %{person_name} are in the wrong format: expected %{expected_format}, but got %{format}."
   RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit which is %{time_limit} for one solve. All solves over the time limit must be changed to DNF."
   RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit which is %{time_limit}."
@@ -424,10 +423,6 @@ class CompetitionResultsValidator
     #   - for multiblind, check if we should ouput a warning (if time is over the time limit, as the 'Result' object validation allows for time up to 30s over the timelimit)
 
     results_by_round_id.each do |round_id, results_for_round|
-      expected_pos = 0
-      last_result = nil
-      # Number of tied competitors, *without* counting the first one
-      number_of_tied = 0
       results_for_round.each_with_index do |result, index|
         person_info = @persons_by_id[result.personId]
         unless person_info

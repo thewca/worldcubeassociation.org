@@ -210,6 +210,8 @@ CREATE TABLE `InboxResults` (
   `value5` int(11) NOT NULL DEFAULT '0',
   `best` int(11) NOT NULL DEFAULT '0',
   `average` int(11) NOT NULL DEFAULT '0',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
   KEY `InboxResults_fk_tournament` (`competitionId`),
   KEY `InboxResults_fk_event` (`eventId`),
   KEY `InboxResults_fk_format` (`formatId`),
@@ -1557,4 +1559,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190221194112'),
 ('20190601105825'),
 ('20190601231550'),
-('20190622173635');
+('20190622173635'),
+('20190716065618');
