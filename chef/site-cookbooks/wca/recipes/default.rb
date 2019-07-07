@@ -139,6 +139,7 @@ package 'libsqlite3-dev'
 package 'g++'
 package 'libmysqlclient-dev'
 package 'imagemagick'
+package 'poppler-utils' # Required by ActiveStorage built-in PDF previewer.
 
 ruby_version = File.read("#{repo_root}/.ruby-version").match(/\d+\.\d+/)[0]
 node.default['brightbox-ruby']['version'] = ruby_version
