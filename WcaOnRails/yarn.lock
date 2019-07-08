@@ -241,17 +241,7 @@
   dependencies:
     "@babel/types" "^7.4.4"
 
-"@babel/helper-wrap-function@^7.1.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@babel/helper-wrap-function/-/helper-wrap-function-7.1.0.tgz#8cf54e9190706067f016af8f75cb3df829cc8c66"
-  integrity sha512-R6HU3dete+rwsdAfrOzTlE9Mcpk4RjU3aX3gi9grtmugQY0u79X7eogUvfXA5sI81Mfq1cn6AgxihfN33STjJA==
-  dependencies:
-    "@babel/helper-function-name" "^7.1.0"
-    "@babel/template" "^7.1.0"
-    "@babel/traverse" "^7.1.0"
-    "@babel/types" "^7.0.0"
-
-"@babel/helper-wrap-function@^7.2.0":
+"@babel/helper-wrap-function@^7.1.0", "@babel/helper-wrap-function@^7.2.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@babel/helper-wrap-function/-/helper-wrap-function-7.2.0.tgz#c4e0012445769e2815b55296ead43a958549f6fa"
   integrity sha512-o9fP1BZLLSrYlxYEYyl2aS+Flun5gtjTIG8iln+XuEzQTs0PLagAGSXUcqruJwD5fM48jzIEggCKpIfWTcR7pQ==
@@ -318,10 +308,10 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/plugin-syntax-export-namespace-from" "^7.2.0"
 
-"@babel/plugin-proposal-function-sent@^7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-function-sent/-/plugin-proposal-function-sent-7.2.0.tgz#f707d78551f49162e152d477fba32357341915d1"
-  integrity sha512-qQBDKRSCu1wGJi3jbngs18vrujVQA4F+OkSuIQYRhE6y19jcPzeEIGOc683mCQXDUR3BQCz8JyCupIwv+IRFmA==
+"@babel/plugin-proposal-function-sent@^7.5.0":
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-function-sent/-/plugin-proposal-function-sent-7.5.0.tgz#39233aa801145e7d8072077cdb2d25f781c1ffd7"
+  integrity sha512-JXdfiQpKoC6UgQliZkp3NX7K3MVec1o1nfTWiCCIORE5ag/QZXhL0aSD8/Y2K+hIHonSTxuJF9rh9zsB6hBi2A==
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/helper-wrap-function" "^7.2.0"
