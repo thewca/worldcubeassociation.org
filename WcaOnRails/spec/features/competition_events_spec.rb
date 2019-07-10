@@ -181,7 +181,7 @@ end
 def save
   # Wait for the modal to be hidden.
   expect(page).to have_no_css(".modal-open")
-  first(:button, "save your changes!", visible: true).click
+  first(:button, "save your changes!", visible: true, wait: 3).click
   # Wait for ajax to complete.
   expect(page).to have_no_content("You have unsaved changes")
 end
