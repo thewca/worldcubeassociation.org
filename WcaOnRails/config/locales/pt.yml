@@ -165,9 +165,19 @@ pt:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
   advancement_condition:
-    #original_hash: 6e55337
+    short:
+      #original_hash: 6100c20
+      ranking: 'Top %{ranking}'
+      #original_hash: 0664a83
+      percent: 'Top %{percent}%'
+      attempt_result:
+        #original_hash: 482f137
+        time: 'Melhor resultado < %{time}'
+        #original_hash: 3faa63e
+        moves: 'Melhor resultado < %{moves}'
+        #original_hash: c3133c2
+        points: 'Melhor resultado > %{points}'
     ranking: 'Top %{ranking} avança para a próxima ronda'
-    #original_hash: 7ee969c
     percent: 'Top %{percent}% avança para a próxima ronda'
     attempt_result:
       #original_hash: b3c8a02
@@ -445,6 +455,8 @@ pt:
         birthday: Data de nascimento
         #original_hash: c5497bc
         registration_competition_events: Eventos
+        #original_hash: 84add5b
+        email: Email
       competition_tab:
         #original_hash: 4f9be05
         content: Conteúdo
@@ -545,6 +557,26 @@ pt:
         website: Website
         #original_hash: 83fce83
         logo: Logotipo
+        #original_hash: 84add5b
+        email: Email
+        #original_hash: 82c42fb
+        address: Endereço oficial
+        #original_hash: 9855f80
+        bylaws: Regulamentos
+        #original_hash: 405201b
+        directors_and_officers: Lista de Diretores principais e Oficiais e respetivos títulos
+        #original_hash: 719db2d
+        area_description: Descrição clara da área abrangida
+        #original_hash: 0cdb036
+        past_and_current_activities: Relatório de atividades passadas e presentes relacionadas com a WCA
+        #original_hash: 0faebcf
+        future_plans: >-
+          Planos para o futuro enquanto Organização Regional reconhecida pela
+          WCA
+        #original_hash: f5ad34a
+        extra_information: Alguma informação extra?
+        #original_hash: bc07619
+        extra_file: Algum ficheiro adicional?
         #original_hash: 5ddd986
         start_date: Reconhecida desde
         #original_hash: 1ee885a
@@ -963,10 +995,30 @@ pt:
         name: ''
         #original_hash: da39a3e
         country: ''
-        #original_hash: d650b3a
+        #original_hash: 72448d6
         website: Tem que ser um url http(s) válido. HTTPS é recomendado.
-        #original_hash: 37e3009
-        logo: Deve ter boa resolução e ter fundo transparente
+        #original_hash: 2ace571
+        logo: 'Deve ser em formato PNG, com boa resolução e de fundo transparente'
+        #original_hash: da54ab5
+        email: Deve ser uma mailing list que contenha todos os Diretores e Oficiais
+        #original_hash: da39a3e
+        address: ''
+        #original_hash: 7d25ff5
+        bylaws: Tem de ser em formato PDF
+        #original_hash: da39a3e
+        directors_and_officers: ''
+        #original_hash: da39a3e
+        area_description: ''
+        #original_hash: da39a3e
+        past_and_current_activities: ''
+        #original_hash: da39a3e
+        future_plans: ''
+        #original_hash: da39a3e
+        extra_information: ''
+        #original_hash: 79555ff
+        extra_file: >-
+          Tem de ser em formato PDF. Se precisar de mais ficheiros, deverá
+          uni-los num mesmo ficheiro
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -1119,6 +1171,8 @@ pt:
       organizations: Organizações Regionais
       #original_hash: d790b40
       faq: Perguntas Frequentes
+      #original_hash: 3ad28c0
+      teams: 'Equipas, Comités e Conselhos'
       #original_hash: 02617c0
       tutorial: Tutorial de Competições
       #original_hash: a34b69f
@@ -1404,13 +1458,13 @@ pt:
         #original_hash: 1a18831
         '7': O avatar não pode apresentar conteúdo ofensivo (ex. gestos ofensivos).
       delegate_avatar_guidelines:
-        #original_hash: 35abf16
-        title: 'Orientações adicionais para Delegados:'
+        #original_hash: da9e6df
+        title: 'Orientações adicionais para Membros de Staff:'
         paragraphs:
-          #original_hash: 3cf91ed
+          #original_hash: ff6d2e8
           '1': >-
             A imagem deve ser de si próprio,  apresentado-se do mesmo modo em
-            que se apresentaria numa competição enquanto Delegado da WCA.
+            que se apresentaria numa competição.
           #original_hash: 64ded69
           '2': >-
             A imagem deve estar enquadrado, recortada, orientada e iluminada
@@ -1530,10 +1584,11 @@ pt:
       cannot_be_deleted_and_accepted: Uma inscrição não pode estar aceite e excluída ao mesmo tempo.
       #original_hash: a38d024
       must_register: deve inscrever-se em pelo menos um evento
-      #original_hash: 191294a
-      banned: >-
-        Foste banido. Se acreditas que isto foi um erro, por favor contacta a
-        WDC.
+      #original_hash: e78eec3
+      banned_html: >-
+        Está banido. Se acreditar que se trata de um erro, por favor contacte o
+        <a href='mailto:disciplinary@worldcubeassociation.org'
+        target='_blank'>WDC</a>.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1711,7 +1766,7 @@ pt:
     #original_hash: cfc4865
     delete_registration: Apagar registo.
     #original_hash: e9ddc6e
-    will_open_html: 'Inscrições irão abrir em <strong>%{days}</strong> às %{time}.'
+    will_open_html: 'Inscrições irão abrir em <strong>%{days}</strong> na data/hora: %{time}.'
     #original_hash: 34eb009
     will_close_html: 'As inscrições terminam daqui por <strong>%{days}, no dia %{time}'
     #original_hash: dc8a520
@@ -1732,7 +1787,7 @@ pt:
       site da WCA, pode criar uma %{here}.
     #original_hash: 89b4e7f
     greeting: 'Olá, %{name}!'
-    #original_hash: fb34a17
+    #original_hash: 322f646
     please_fix_profile_html: >-
       Para se inscrever em %{comp}, deve corrigir os seguintes problemas com seu
       %{profile}:
@@ -1876,6 +1931,17 @@ pt:
       #original_hash: 94a2fc8
       past_competitions: Competições passadas
     competition_info:
+      pdf:
+        #original_hash: 05af803
+        terms_and_abbr: Termos técnicos e abreviaturas
+        #original_hash: 18f306c
+        formats_abbr: 'Abreviaturas para formatos:'
+        #original_hash: 55dc8bc
+        abbr_description: '%{short_name}: %{long_name}'
+        #original_hash: a1984e1
+        cutoff: 'Corte: %{short_cutoff}'
+        #original_hash: a8b6fe6
+        download_html: 'Descarregar todos os detalhes da competição como PDF %{here}.'
       #original_hash: eb9a4bc
       date: Data
       #original_hash: 4271627
@@ -2245,6 +2311,8 @@ pt:
       events: Eventos
       #original_hash: 0a8adac
       schedule: Cronograma
+      #original_hash: 1060ed0
+      no_schedule: 'Esta competição não tem cronograma, o PDF não pode ser gerado.'
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2304,6 +2372,8 @@ pt:
       activity: Atividade
       #original_hash: 90e2fca
       room: Espaço
+      #original_hash: 73acb7f
+      room_in_venue: '%{room} em %{venue}'
       #original_hash: 2896c7a
       venue_information_html: 'Está a ver o horário para o local %{venue_name}.'
       #original_hash: b97e383
@@ -2474,8 +2544,14 @@ pt:
       unstick_at_future: tem de ser no futuro
   contacts:
     website:
-      #original_hash: ac2ac3d
-      title: Formulário de contacto do Website da WCA
+      #original_hash: 5b225ad
+      faq_note_html: >-
+        Antes de colocar uma questão, pode querer verificar a nossa <a
+        href="/faq">Lista de Perguntas Frequentes </a>! Se desejar contactar um
+        comité ou equipa específicos, pode encontrar as informações de contacto
+        na página <a href="/about">Sobre a WCA</a>.
+      #original_hash: 4ef2aad
+      title: Formulário de Contacto da WCA
       inquiries:
         #original_hash: 92ea7e8
         competition: >-
@@ -2535,7 +2611,6 @@ pt:
       '1':
         #original_hash: f79b522
         title: Como obtenho um ID da WCA e um perfil da WCA?
-        #original_hash: 15a06d6
         content:
           #original_hash: b645fe1
           '1': >-
@@ -2728,40 +2803,140 @@ pt:
   about:
     #original_hash: 9ac918a
     title: Sobre a WCA
-    mission:
-      paragraphs:
-        #original_hash: c86d105
-        '1': >-
-          A World Cube Association regula competições de quebra-cabeças
-          mecânicos que são operados por rotações de grupos de peças,
-          normalmente chamados "twisty puzzles". O mais famoso entre eles é o
-          Cubo de Rubik (ou Cubo Mágico), inventado pelo professor Rubik, da
-          Hungria. Alguns destes quebra-cabeças foram definidos como eventos
-          oficiais da WCA.
-        #original_hash: 22c3593
-        '2': >-
-          A World Cube Association organiza competições em todo o mundo, apoiada
-          por organizações nacionais, responsáveis por organizar competições nos
-          seus países.
-        #original_hash: 0902c4a
-        '3': >-
-          A Missão da World Cube Association é ter <strong>mais competições em
-          mais países, com mais pessoas e mais diversão, sob condições iguais e
-          justas.</strong>.
-        #original_hash: 2b993c0
-        '4': >-
-          O Espírito da World Cube Association é que <strong>pessoas de todo o
-          mundo se divirtam juntas numa atmosfera amigável, se entreajudem e se
-          comportem com espírito desportivo.</strong>
+    #original_hash: af00571
+    mission_statement: >-
+      A nossa missão é ter mais competições em mais países com mais pessoas e
+      mais divertimento, sob condições justas e semelhantes.
+    #original_hash: e627278
+    mission_footer: Declaração da Missão da WCA
+    #original_hash: cdab446
+    who_we_are_title: Quem somos
+    #original_hash: 78e63f4
+    who_we_are_content_html: >-
+      <p> A World Cube Association rege as competições de puzzles mecânicos que
+      são operados por rotação de grupos de peças, geralmente conhecidos como
+      'twisty puzzles'. O mais famoso desses quebra-cabeças é o Cubo de Rubik,
+      inventado pelo professor Rubik, da Hungria. Uma seleção desses
+      quebra-cabeças é escolhida como eventos oficiais da WCA.</p> <p>Como a WCA
+      evoluiu na última década, mais de 100.000 pessoas competiram nas nossas
+      competições. Apesar desse crescimento, continuamos a ser uma organização
+      que é inteiramente gerida por voluntários, de organizadores locais a
+      delegados e até mesmo ao Conselho da WCA. Somos muito gratos a todos que
+      tiram tempo de suas vidas para permitir que a WCA funcione. Com mais apoio
+      financeiro, esperamos trazer um nível ainda maior de profissionalismo às
+      nossas competições à medida que continuamos a sancionar mais eventos em
+      todo o mundo.</p> <p> A World Cube Association quer trazer oportunidades
+      para a participação da comunidade e de liderança a jovens de todo o mundo
+      através do aumento da acessibilidade das nossas competições de 'twisty
+      puzzles'. Acreditamos que experiências em competições e dentro da nossa
+      comunidade criam oportunidades de crescimento para os jovens envolvidos e
+      que a introdução de eventos de quebra-cabeças em novos grupos de pessoas
+      permite que nossa comunidade em geral se fortaleça.</p>
+    #original_hash: bccd8c5
+    spirit: >-
+      O nosso espírito é que pessoas de todo o mundo possam divertir-se juntas
+      numa atmosfera amigável, se entreajudem e se comportem enquanto
+      desportistas com lealdade.
+    #original_hash: 69131cc
+    spirit_footer: Espírito da WCA
+    #original_hash: c1781ee
+    our_goals_title: Os nossos objetivos
+    #original_hash: 1ca8ac4
+    our_goals_content_html: >-
+      <p>A World Cube Association quer trazer oportunidades de participação da
+      comunidade e de liderança para jovens de todo o mundo, através do aumento
+      da acessibilidade das nossas competições de 'twisty puzzles'. Acreditamos
+      que experiências em competições e dentro de nossa comunidade criam
+      oportunidades de crescimento para os jovens envolvidos e que a introdução
+      de eventos de quebra-cabeças em novos grupos de pessoas permite que nossa
+      comunidade em geral se fortaleça.</p>
+    #original_hash: f64ccc7
+    whats_next_title: O que vem a seguir para a WCA?
+    #original_hash: a08c67f
+    whats_next_content_html: >-
+      <p> A World Cube Association teve mais de 100.000 competidores únicos de
+      140 países diferentes e não estamos a planear abrandar tão cedo! A
+      comunidade de cubing tem crescido constantemente desde a nossa fundação em
+      2004 e queremos encorajá-la a continuar no futuro aumentando a
+      acessibilidade das competições a novas áreas. No futuro, esperamos apoiar
+      ainda mais a nossa comunidade por meio de colaborações e divulgação para
+      aqueles que se interessam por quebra-cabeças.</p>
+    #original_hash: dc71704
+    world_championship_title: Campeonato do Mundo
+    #original_hash: 57cf7f7
+    world_championship_content_html: >-
+      <p>A cada dois anos, sancionamos a competição que determina o campeão
+      mundial. Estes eventos exigem um planeamento extremamente cuidadoso de um
+      número elevado de voluntários, bem como um grande compromisso financeiro
+      para reservar o local e fazer os preparativos necessários.</p>
+    #original_hash: 1aa5344
+    contributing_title: Fazer uma contribuição
+    #original_hash: e64beb7
+    contributing_content_html: >-
+      Pode efetuar um donativo com cartão de crédito usando o Guidestar <a
+      href="https://www.nfggive.com/guidestar/82-3825954">aqui</a>. Se preferir
+      passar um cheque, poderá passar para:
+    #original_hash: 2af9b71
+    tax_deductible_note: As doações são dedutíveis nos Estados Unidos.
+    #original_hash: 6026d35
+    other_help_title: Outras formas de ajudar
+    #original_hash: 55b7b72
+    other_help_content_html: >-
+      <p>Se acredita que poderia contribuir para a World Cube Association de uma
+      forma não financeira, nós adoraríamos saber de si! Entre em contacto
+      connosco pelo e-mail <a href="">communication@worldcubeassociation.org
+      </a>.</p>
+    donation_banner:
+      #original_hash: 6253f90
+      content: >-
+        A World Cube Association é uma organização 501(c)(3) isenta de impostos.
+        Sendo uma organização sem fins lucrativos, 100% voluntária, agradecemos
+        donativos para nos ajudar a promover a nossa visão de ter competições
+        mais agradáveis em todo o mundo.
+      #original_hash: 24c87db
+      donate_credit: Doar via cartão de crédito
+      #original_hash: 96d77f3
+      donate_other: Outras formas de doar
     structure:
+      #original_hash: 0d62207
+      teams_committees_councils: 'Equipas, Comités e Conselhos da WCA'
       #original_hash: 9482c5d
       title: Estrutura
       board:
         #original_hash: abd2828
         name: Conselho da WCA
+        #original_hash: e0d37a2
         description: >-
-          A World Cube Association é liderada pelo Conselho da
-          WCA, que é formado pelos seguintes membros:
+          O Conselho da WCA é responsável por liderar a organização como um todo
+          e dar cumprimento a todas as tarefas que não sejam do âmbito de outras
+          Equipas, Comités e Conselhos
+      #original_hash: bb562cf
+      committees: >-
+        Os comités e equipas da WCA são uma parte integral da organização e
+        realizam tarefas do dia a dia necessárias ao seu funcionamento. Estes
+        comités são constituídos por membro da comunidade WCA, incluindo
+        Delegados e competidores. Cada equipa tem um líder, cujo papel é o de
+        assegurar o seu funcionamento adequado e guiar os restantes membros.
+        Conselhos são tipos especiais de equipas que têm um papel de
+        aconselhamento ao Conselho da WCA e que são constituídos por membros da
+        comunidade e não por elementos de Staff da WCA. Quando há vagas para
+        comités, equipas e conselhos, é colocada na página inicial informação
+        sobre candidaturas.
+      #original_hash: c366473
+      senior_member: Membro Sénior
+      #original_hash: e26c936
+      leader: Líder
+      officers:
+        #original_hash: d79bd00
+        name: Oficiais da WCA
+        #original_hash: 312e799
+        description: >-
+          Os oficiais da WCA lidam com tarefas relacionadas ao estado de
+          organização sem fins lucrativos da WCA. Esses oficiais são eleitos
+          pelo Conselho da WCA. O Diretor Executivo é o Diretor Executivo da
+          WCA, o Presidente preside todas as reuniões do Conselho, o Secretário
+          mantém os documentos da organização e o Tesoureiro gere os assuntos
+          financeiros da WCA.
       chair:
         #original_hash: de34439
         name: Presidente da WCA
@@ -2774,10 +2949,9 @@ pt:
       vice_chair:
         #original_hash: 0388b19
         name: Vice-Presidente da WCA
-      #original_hash: b0c72a9
-      committees: >-
-        Os seguintes comités e equipas são responsáveis pelas atividades
-        operacionais da WCA:
+      treasurer:
+        #original_hash: 75e65d9
+        name: Tesoureiro da WCA
       wdc:
         #original_hash: c97077a
         name: Comité Disciplinar da WCA
@@ -2866,10 +3040,6 @@ pt:
           Esta equipa é responsável por desenvolver e gerir a Marca WCA,
           procurar patrocínios, suportar a distribuição de materiais para
           competições e promover a divulgação de produtos WCA.
-      #original_hash: a2c8ad3
-      councils: >-
-        Os seguintes Conselhos têm o papel de assessorar o Conselho de Diretores
-        da WCA:
       wac:
         #original_hash: 1ce7604
         name: Conselho Consultivo da WCA
@@ -2880,6 +3050,12 @@ pt:
       banned:
         #original_hash: d30e2e5
         name: Competidores Banidos
+      #original_hash: f8c3f3c
+      operations_html: >-
+        As operações do dia a dia são realizadas pelos %{committees_and_teams}
+        da WCA.
+      #original_hash: 0e7a036
+      teams_committees: Equipas e Comités
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>Delegado da WCA</strong> é o papel definido nas Moções da WCA
@@ -2931,6 +3107,7 @@ pt:
   regional_organizations:
     #original_hash: 37b8fdc
     title: Organizações Regionais
+    #original_hash: 15a06d6
     content: 'A WCA reconhece as seguintes Organizações Regionais:'
     #original_hash: e5b77eb
     empty: Nenhuma Organização Regional é atualmente reconhecida pela WCA.
@@ -2978,6 +3155,15 @@ pt:
         Por favor preencha <a
         href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>este
         formulário</a>.
+    regional_organization_form:
+      #original_hash: 134df45
+      filling_instructions_html: Por favor preencha tudo <b>em Inglês!</b>
+      #original_hash: fbd64df
+      public_information: Informação pública
+      #original_hash: a1c6de9
+      private_information: Informação privada
+      #original_hash: 87a1c7e
+      private_information_disclaimer: Toda a informação abaixo apenas será visível pelo Conselho da WCA
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: não pode ser após Reconhecida até
