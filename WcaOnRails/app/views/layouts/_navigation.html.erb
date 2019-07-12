@@ -141,6 +141,12 @@
               </li>
               <li><%= link_to t('.edit_profile'), profile_edit_path %></li>
 
+              <% if current_user.wca_id? %>
+                <li class="divider"></li>
+                <li><%= link_to t('.my_results'), person_path(current_user.wca_id) -%></li>
+                <li><%= link_to t('.my_competitions'), my_comps_path -%></li>
+              <% end %>
+
               <% if current_user.staff? %>
                 <li class="divider"></li>
                 <li><%= link_to t('.panel'), panel_path %></li>
