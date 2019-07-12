@@ -10,6 +10,7 @@ class RegionalOrganizationsMailer < ApplicationMailer
       mail(
         to: to,
         cc: cc,
+        reply_to: [@user_who_applied.email],
         subject: "Regional Organization application - #{@regional_organization.name}",
       )
     end
