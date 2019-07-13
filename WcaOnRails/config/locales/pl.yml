@@ -165,13 +165,23 @@ pl:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
   advancement_condition:
-    #original_hash: 6e55337
+    short:
+      #original_hash: 6100c20
+      ranking: 'Najlepsze %{ranking} osób'
+      #original_hash: 0664a83
+      percent: 'Najlepsze %{percent}% osób'
+      attempt_result:
+        #original_hash: 482f137
+        time: 'Najlepszy wynik < %{time}'
+        #original_hash: 3faa63e
+        moves: 'Najlepszy wynik < %{moves}'
+        #original_hash: c3133c2
+        points: 'Najlepszy wynik > %{points}'
     ranking: 'Najlepsze %{ranking} osób awansuje do następnej rundy'
-    #original_hash: 7ee969c
     percent: 'Najlepsze %{percent}% osób awansuje do następnej rundy'
     attempt_result:
       #original_hash: b3c8a02
-      time: 'Najlepszy wynik < %{time}  awansuje do następnej rundy'
+      time: 'Najlepszy wynik < %{time} awansuje do następnej rundy'
       #original_hash: 07bca6c
       moves: 'Najlepszy wynik < %{moves} ruchów awansuje do następnej rundy'
       #original_hash: 837083c
@@ -459,6 +469,8 @@ pl:
         birthday: Data urodzenia
         #original_hash: c5497bc
         registration_competition_events: Konkurencje
+        #original_hash: 84add5b
+        email: Email
       competition_tab:
         #original_hash: 4f9be05
         content: Zawartość
@@ -1185,6 +1197,8 @@ pl:
       organizations: Organizacje Regionalne
       #original_hash: d790b40
       faq: Często Zadawane Pytania
+      #original_hash: 3ad28c0
+      teams: 'Zespoły, Komitety i Rady'
       #original_hash: 02617c0
       tutorial: Poradnik Dotyczący Zawodów
       #original_hash: a34b69f
@@ -1471,13 +1485,13 @@ pl:
           Zdjęcie profilowe nie może zawierać żadnych obraźliwych treści (np.
           obraźliwych gestów).
       delegate_avatar_guidelines:
-        #original_hash: 35abf16
-        title: 'Dodatkowe wytyczne dla Delegatów:'
+        #original_hash: da9e6df
+        title: 'Dodatkowe wytyczne dla Członków Personelu:'
         paragraphs:
-          #original_hash: 3cf91ed
+          #original_hash: ff6d2e8
           '1': >-
             Zdjęcie profilowe musi przedstawiać Twój obecny wizerunek, w taki
-            sam sposób w jaki pojawiłbyś się na zawodach jako Delegat WCA.
+            sam sposób w jaki pojawiłbyś się na zawodach.
           #original_hash: 64ded69
           '2': >-
             Zdjęcie profilowe musi być wykadrowane, przycięte, nachylone pod
@@ -1603,8 +1617,11 @@ pl:
       cannot_be_deleted_and_accepted: Rejestracja nie może zostać usunięta i zaakceptowania na raz.
       #original_hash: a38d024
       must_register: musisz się zarejestrować na co najmniej jedną konkurencję
-      #original_hash: 191294a
-      banned: 'Jesteś zablokowany. Jeżeli uważasz że to błąd, skontaktuj się z WDC.'
+      #original_hash: e78eec3
+      banned_html: >-
+        Jesteś zablokowany. Jeżeli uważasz że to błąd, skontaktuj się z <a
+        href='mailto:disciplinary@worldcubeassociation.org'
+        target='_blank'>WDC</a>.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1830,7 +1847,7 @@ pl:
       konta WCA, możesz założyć je %{here}.
     #original_hash: 89b4e7f
     greeting: 'Cześć, %{name}!'
-    #original_hash: fb34a17
+    #original_hash: 322f646
     please_fix_profile_html: >-
       W celu zarejestrowania się na %{comp}, musisz rozwiązać następujące
       problemy z twoim %{profile}:
@@ -1971,6 +1988,17 @@ pl:
       #original_hash: 94a2fc8
       past_competitions: Minione zawody
     competition_info:
+      pdf:
+        #original_hash: 05af803
+        terms_and_abbr: Pojęcia i skróty
+        #original_hash: 18f306c
+        formats_abbr: 'Skróty formatów:'
+        #original_hash: 55dc8bc
+        abbr_description: '%{short_name}: %{long_name}'
+        #original_hash: a1984e1
+        cutoff: 'Cutoff: %{short_cutoff}'
+        #original_hash: a8b6fe6
+        download_html: 'Pobierz wszystkie szczegóły dotyczące zawodów w formacie PDF %{here}.'
       #original_hash: eb9a4bc
       date: Data
       #original_hash: 4271627
@@ -2352,6 +2380,8 @@ pl:
       events: Konkurencje
       #original_hash: 0a8adac
       schedule: Harmonogram
+      #original_hash: 1060ed0
+      no_schedule: "Te zawody nie mają\_harmonogramu, PDF nie może zostać wygenerowany."
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2413,6 +2443,8 @@ pl:
       activity: Czynność
       #original_hash: 90e2fca
       room: Pokój
+      #original_hash: 73acb7f
+      room_in_venue: '%{room} w %{venue}'
       #original_hash: 2896c7a
       venue_information_html: 'Widzisz harmonogram dla miejsca %{venue_name}.'
       #original_hash: b97e383
@@ -2583,8 +2615,14 @@ pl:
       unstick_at_future: musi być w przyszłości
   contacts:
     website:
-      #original_hash: ac2ac3d
-      title: Formularz Kontaktowy Strony WCA
+      #original_hash: 5b225ad
+      faq_note_html: >-
+        Przed wysłaniem zapytania, możesz spojrzeć na <a href="/faq">Najczęsciej
+        Zadawane Pytania</a>! Jeżeli chcesz skontaktować się z konkretnym
+        zespołem lub komitetem, możesz znaleźć jego informacje kontaktowe na <a
+        href="/teams-committees">tej stronie</a>
+      #original_hash: 4ef2aad
+      title: Formularz Kontaktowy WCA
       inquiries:
         #original_hash: 92ea7e8
         competition: >-
@@ -2644,7 +2682,6 @@ pl:
       '1':
         #original_hash: f79b522
         title: Jak uzyskam WCA ID i profil WCA?
-        #original_hash: 15a06d6
         content:
           #original_hash: b645fe1
           '1': >-
@@ -2835,39 +2872,130 @@ pl:
   about:
     #original_hash: 9ac918a
     title: O WCA
-    mission:
-      paragraphs:
-        #original_hash: c86d105
-        '1': >-
-          World Cube Association zarządza zawodami w łamigłówkach mechanicznych
-          manipulowanych poprzez przekręcanie grup elementów, szerzej znanych
-          jako 'twisty puzzles'. Najsłynniejszą z nich jest Kostka Rubika,
-          wymyśloną przez profesora Rubika z Węgier. Określony zbiór tych kostek
-          jest wybrany jako oficjalne konkurencje WCA.
-        #original_hash: 22c3593
-        '2': >-
-          World Cube Association organizuje zawody na całym świecie, przy
-          wsparciu organizacji regionalnych odpowiedzialnych za organizację
-          zawodów swoich państwach.
-        #original_hash: 0902c4a
-        '3': >-
-          Misją World Cube Association jest organizacja <strong>większej liczby
-          zawodów, w większej ilości państw, z większą liczbą osób oraz większą
-          ilością zabawy, przy wzajemnej równości i uczciwości.</strong>
-        #original_hash: 2b993c0
-        '4': >-
-          W Duchu World Cube Association jest, aby <strong>ludzie z całego
-          świata dobrze bawili się razem w przyjaznej atmosferze, pomagając
-          sobie wzajemnie i zachowując się jak prawdziwi sportowcy.</strong>
+    #original_hash: af00571
+    mission_statement: >-
+      Naszą misją jest organizacja większej liczby zawodów, w większej ilości
+      państw, z większą liczbą osób oraz większą ilością zabawy, przy uczciwych
+      i równych warunkach.
+    #original_hash: e627278
+    mission_footer: Deklaracja Misji WCA
+    #original_hash: cdab446
+    who_we_are_title: Kim jesteśmy
+    #original_hash: 78e63f4
+    who_we_are_content_html: >-
+      <p>World Cube Association zarządza zawodami w łamigłówkach mechanicznych
+      manipulowanych poprzez przekręcanie grup elementów, szerzej znanych jako
+      'twisty puzzles'. Najsłynniejszą z nich jest Kostka Rubika, wymyśloną
+      przez profesora Rubika z Węgier. Określony zbiór tych kostek jest wybrany
+      jako oficjalne konkurencje WCA.</p> <p>Wraz z rozwojem WCA przez ostatnią
+      dekadę, ponad 100 000 osób wzięło udział w naszych zawodach. Pomimo tego
+      wzrostu, pozostajemy organizacją w pełni prowadzoną przez wolontariuszy,
+      począwszy od lokalnych organizatorów i Delegatów, aż do członków Zarządu.
+      Jesteśmy niezmiernie wdzięczni każdemu, kto poświęca swój czas, by pomóc
+      WCA w funkcjonowaniu. Przy większym wsparciu finansowym, mamy nadzieję
+      zapewnić jeszcze większy poziom profesjonalizmu na naszych zawodach, w
+      miarę przeprowadzania większej liczby wydarzeń na całym świecie.</p>
+      <p>World Cube Association pragnie dostarczyć możliwość bycia członkami
+      oraz przewodniczącymi społeczności młodym osobom z całego świata poprzez
+      zwiększenie dostępności naszych zawodów. Wierzymy, że doświadczenia
+      zabrane na zawodach i w naszej społeczności stwarzają dla młodych ludzi
+      możliwość rozwoju, oraz że przeprowadzanie wydarzeń w nowych grupach ludzi
+      pozwala na wzmocnienie naszej społeczności.</p>
+    #original_hash: bccd8c5
+    spirit: >-
+      W naszym duchu jest, aby ludzie z całego świata dobrze bawili się razem w
+      przyjaznej atmosferze, pomagając sobie wzajemnie i zachowując się na miarę
+      sportowców.
+    #original_hash: 69131cc
+    spirit_footer: Duch WCA
+    #original_hash: c1781ee
+    our_goals_title: Nasze cele
+    #original_hash: 1ca8ac4
+    our_goals_content_html: >-
+      <p>World Cube Association pragnie dostarczyć możliwość bycia członkami
+      oraz przewodniczącymi społeczności młodym osobom z całego świata poprzez
+      zwiększenie dostępności naszych zawodów. Wierzymy, że doświadczenia
+      zabrane na zawodach i w naszej społeczności stwarzają dla młodych ludzi
+      możliwość rozwoju, oraz że przeprowadzanie wydarzeń w nowych grupach ludzi
+      pozwala na wzmocnienie naszej społeczności.</p>
+    #original_hash: f64ccc7
+    whats_next_title: Co czeka WCA?
+    #original_hash: a08c67f
+    whats_next_content_html: >-
+      <p>Do tej pory odnotowaliśmy ponad 100 000 zawodników spośród 140 krajów i
+      nie zamierzamy zwolnić w rozwoju. Społeczność cubing'owa wzrastała stale
+      począwszy od założenia organizacji w 2004 roku i pragniemy podtrzymać ten
+      wzrost poprzez zwiększanie dostępności naszych zawodów w nowych
+      rejonach.</p>
+    #original_hash: dc71704
+    world_championship_title: Mistrzostwa Świata
+    #original_hash: 57cf7f7
+    world_championship_content_html: >-
+      <p>Co dwa lata przeprowadzamy zawody, które wyłaniają mistrza świata. Te
+      wydarzenia wymagają niezwykle starannych przygotowań czynionych przez
+      licznych wolontariuszy, jak również wielkiego nakładu finansowego
+      związanego z rezerwacją miejsca zawodów oraz niezbędnych przygotowań.</p>
+    #original_hash: 1aa5344
+    contributing_title: Wkład finansowy
+    #original_hash: e64beb7
+    contributing_content_html: >-
+      Możesz ofiarować darowiznę przy użyciu karty kredytowej za pomocą
+      Guidestar <a
+      href="https://www.nfggive.com/guidestar/82-3825954">tutaj</a>. Jeżeli
+      preferujesz czek, możesz wypisać go dla:
+    #original_hash: 2af9b71
+    tax_deductible_note: Darowizny są odliczane od podatku w Stanach Zjednoczonych.
+    #original_hash: 6026d35
+    other_help_title: Inne sposoby pomocy
+    #original_hash: 55b7b72
+    other_help_content_html: >-
+      <p>Jeżeli uważasz, że mógłbyś pomóc w działalności World Cube Association
+      na zasadzie non-profit, będziemy bardzo szczęśliwi, jeżeli się z nami
+      skontaktujesz! Możesz to zrobić pod adresem <a
+      href="">communication@worldcubeassociation.org</a>.</p>
+    donation_banner:
+      #original_hash: 6253f90
+      content: >-
+        World Cube Association jest organizacją 501(c)(3) zwolnioną z podatku.
+        Jako organizacja niedochodowa, prowadzona w 100% przez wolontariuszy, z
+        radością przejmiemy przyjmujemy darowizny, pomagające w realizacji
+        naszej wizji organizacji bardziej przyjemnych zawodów na całym świecie.
+      #original_hash: 24c87db
+      donate_credit: Wesprzyj przy użyciu karty kredytowej
+      #original_hash: 96d77f3
+      donate_other: Inne sposoby przekazania darowizny
     structure:
+      #original_hash: 0d62207
+      teams_committees_councils: 'Zespoły, Komitety oraz Rady WCA'
       #original_hash: 9482c5d
       title: Struktura
       board:
         #original_hash: abd2828
         name: Zarząd WCA
+        #original_hash: e0d37a2
         description: >-
-          World Cube Association jest kierowane przez Zarząd
-          WCA, składający się z następujących członków:
+          World Cube Association jest kierowane przez Zarząd WCA, składający się
+          z następujących członków:
+      #original_hash: bb562cf
+      committees: >-
+        Zespoły oraz komitety WCA są kluczową częścią organizacji, odpowiadają
+        za codzienne zadania niezbędne do jej funkcjonowania. Komitety te są
+        tworzone przez członków społeczności WCA, w szczególności Delegatów oraz
+        zawodników. Każdy zespół ma swego lidera, którego rolą jest zapewnianie
+        właściwego funkcjonowania zespołu oraz koordynowanie pracy pozostałych
+        członków. Rada jest specjalnym rodzajem zespołu, pełniącym rolę doradczą
+        dla Zarządu WCA i składa się z członków społeczności, a nie członków
+        personelu WCA. Gdy zostają otwarte nabory na członków zespołów,
+        informacje o sposobie aplikowania umieszczane są na stronie głównej.
+      #original_hash: c366473
+      senior_member: Starszy Członek
+      #original_hash: e26c936
+      leader: Lider
+      officers:
+        #original_hash: d79bd00
+        name: Urzędnicy WCA
+        #original_hash: 312e799
+        description: "Urzędnicy WCA zajmują się zadaniami związanymi z oficjalnym statusem WCA. Są\_oni wybierani przez Zarząd WCA. Dyrektorem Zarządzającym jest Dyrektor Generalny WCA, Prezes przewodniczy wszystkim spotkaniom Zarządu, Sekretarz utrzymuje dokumentację organizacji, a Skarbnik zarządza sprawami finansowymi WCA."
       chair:
         #original_hash: de34439
         name: Prezes WCA
@@ -2880,8 +3008,9 @@ pl:
       vice_chair:
         #original_hash: 0388b19
         name: Wiceprezes WCA
-      #original_hash: b0c72a9
-      committees: 'Następujące komitety są odpowiedzialne za działalność WCA:'
+      treasurer:
+        #original_hash: 75e65d9
+        name: Skarbnik WCA
       wdc:
         #original_hash: c97077a
         name: Komitet Dyscyplinarny WCA (WDC)
@@ -2971,8 +3100,6 @@ pl:
           Ten zespół jest odpowiedzialny za rozwój i zarządzenianie Marką WCA,
           szukanie sponsorów, wspieranie dystrybucji Sprzętu Zawodów WCA, oraz
           zarządzanie towarami promocyjnymi WCA.
-      #original_hash: a2c8ad3
-      councils: 'Następujące rady mają za zadanie doradzanie Zarządowi WCA:'
       wac:
         #original_hash: 1ce7604
         name: Komitet Doradczy WCA
@@ -2983,6 +3110,10 @@ pl:
       banned:
         #original_hash: d30e2e5
         name: Zawodnicy z Zakazem Startu
+      #original_hash: f8c3f3c
+      operations_html: 'Codzienne działania są sprawowane przez %{committees_and_teams} WCA.'
+      #original_hash: 0e7a036
+      teams_committees: Zespoły i Komitety
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>Delegat WCA</strong> to rola zdefiniowana we Wnioskach WCA
@@ -3034,53 +3165,54 @@ pl:
   regional_organizations:
     #original_hash: 37b8fdc
     title: Organizacje Regionalne
+    #original_hash: 15a06d6
     content: 'WCA rozpoznaje następujące Organizacje Regionalne:'
     #original_hash: e5b77eb
     empty: Nie ma obecnie Organizacji Reginoalnych rozpoznawanych przez WCA.
     how_to:
-      #original_hash: fc3af12
+      #original_hash: b243b1f
       title: Jak zostać Organizacją Regionalną WCA
-      #original_hash: cc1639d
+      #original_hash: f042a88
       description: >-
-        WCA uznaje wiele organizacji regionalnych na całym świecie. Celem
-        organizacji regionalnej WCA jest organizacja zawodów WCA oraz wspieranie
+        WCA uznaje wiele Organizacji Regionalnych na całym świecie. Celem
+        Organizacji Regionalnej WCA jest organizacja zawodów WCA oraz wspieranie
         działań WCA w jej regionie. Zachęcamy kraje pragnące utworzyć
-        organizację reginalną, aby wspomogły WCA w swoim regionie przed
+        Organizację Reginalną, aby wspomogły WCA w swoim regionie przed
         wysłaniem swojego podania. W celu uzyskania pomocy dotyczącej
         organizacji zawodów WCA w swoim regionie, prosimy o kontakt z
-        najbliższym Delegatem.
+        najbliższym Delegatem WCA.
     requirements:
       #original_hash: 1e04fd7
       title: Wymagania stawiane Organizacjom Regionalnym WCA
       list:
         #original_hash: 22a9f26
         '1': Aktywna organizacja lub wspieranie Zawodów WCA we własnym regionie
-        #original_hash: 8c5a7fe
+        #original_hash: 63714d1
         '2': >-
-          Aktywny wkład w Kontynentalnych Zawodach WCA, które odbywają się na
-          kontynencie danej Organizacji Regionalnej
-        #original_hash: 8943714
+          Wkład organizację Kontynentalnych Zawodów WCA, które odbywają się na
+          kontynencie danej Organizacji Regionalnej, jeżeli wymaga tego
+          odpowiedni Zespół Organizacyjny.
+        #original_hash: 3c07dd6
         '3': >-
-          Respektowanie i działanie zgodnie z celami określonymi przez Status
-          oraz Regulamin WCA
+          Respektowanie i działanie zgodnie z Celami określonymi przez Statut
+          WCA oraz Wnioski
         #original_hash: 0c3576b
         '4': >-
           Spełnianie wszystkich obowiązujących przepisów określonych w
           Regulaminie WCA
-        #original_hash: 23cda60
-        '5': Akceptowanie i stosowanie się do wszystkich decyzji Oficjeli WCA
-        #original_hash: efe2b55
+        #original_hash: 1a9e6c5
+        '5': Akceptowanie i stosowanie się do wszystkich decyzji Personelu WCA
+        #original_hash: d4ae7c1
         '6': >-
-          Przechowywać kopię obecnego Statutu oraz Regulaminu WCA w formacie
-          elektronicznym
+          Przechowywać na stronie WCA kopię obecnego Statutu oraz (jeżeli
+          dotyczy) Regulaminu w formacie elektronicznym
     application_instructions:
       #original_hash: 4da829b
       title: Instrukcje dotyczące składania wniosku
-      #original_hash: 7ed06ee
+      #original_hash: 7b7de7e
       description_html: >-
-        Prosimy o wypełnienie <a
-        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>tego
-        formularza</a>.
+        W celu aplikowania o uznanie organizacji, prosimy o wypełnienie <a
+        href='/regional-organizations/new'>tego formularza</a>.
     regional_organization_form:
       #original_hash: 134df45
       filling_instructions_html: Prosimy o wypełnienie wszystkiego w <b>języku angielskim</b>.
@@ -3095,6 +3227,11 @@ pl:
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: nie może być później niż Uznana do
+    create:
+      #original_hash: 60cdccc
+      create_success: >-
+        Podanie pomyślnie wysłane! Sprawdź swoją skrzynkę pocztową i oczekuj aż
+        Zarząd WCA je rozpatrzy.
   contact:
     #original_hash: a34b69f
     title: Informacje kontaktowe
