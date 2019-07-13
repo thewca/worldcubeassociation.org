@@ -3112,14 +3112,14 @@ pt:
     #original_hash: e5b77eb
     empty: Nenhuma Organização Regional é atualmente reconhecida pela WCA.
     how_to:
-      #original_hash: fc3af12
-      title: Como se tornar uma Organização Regional WCA
-      #original_hash: cc1639d
+      #original_hash: b243b1f
+      title: Como se tornar uma Organização Regional reconhecida pela WCA
+      #original_hash: f042a88
       description: >-
-        A WCA reconhece várias organizações regionais pelo mundo inteiro. O
-        objetivo de uma organização regional WCA é organizar competições da WCA
+        A WCA reconhece várias Organizações Regionais pelo mundo inteiro. O
+        objetivo de uma Organização Regional WCA é organizar competições da WCA
         e suportar as suas atividades nessa região. Países que desejem formar
-        uma organização regional são encorajadas a contribuir para a WCA na sua
+        uma Organização Regional são encorajadas a contribuir para a WCA na sua
         área antes de submeterem uma aplicação. Para ajudar a organizar uma
         competição da WCA na sua área, por favor contacte o seu Delegado mais
         próximo.
@@ -3131,30 +3131,29 @@ pt:
         '1': >-
           Organizar ativamente ou suportar Competições da WCA na região da
           organização
-        #original_hash: 8c5a7fe
+        #original_hash: 63714d1
         '2': >-
-          Contribuir ativamente para Competições da WCA de caráter continental
-          que são levadas a cabo no continente da Organização Regional
-        #original_hash: 8943714
+          Contribuir para Competições da WCA de caráter continental que são
+          levadas a cabo no continente da Organização Regional
+        #original_hash: 3c07dd6
         '3': >-
-          Respeitar e operacionalizar os Objetivos definidos nos Estatutos e
-          Regulamentos da WCA
+          Respeitar e operacionalizar os Objetivos definidos nos Estatutos da
+          WCA
         #original_hash: 0c3576b
         '4': Cumprir todos os Regulamentos da WCA aplicáveis
-        #original_hash: 23cda60
-        '5': Aceitar e cumprir com decisões de Oficiais da WCA
-        #original_hash: efe2b55
+        #original_hash: 1a9e6c5
+        '5': Aceitar e cumprir com decisões de Staff da WCA
+        #original_hash: d4ae7c1
         '6': >-
-          Manter em arquivo com a WCA uma cópia dos seus Estatutos e
+          Manter em arquivo na WCA uma cópia dos seus Estatutos e, se aplicável,
           Regulamentos atuais em formato eletrónico
     application_instructions:
       #original_hash: 4da829b
       title: Instruções de Aplicação
-      #original_hash: 7ed06ee
+      #original_hash: 7b7de7e
       description_html: >-
-        Por favor preencha <a
-        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>este
-        formulário</a>.
+        Para requerer reconhecimento, por favor preencha <a
+        href='/regional-organizations/new'>este formulário</a>.
     regional_organization_form:
       #original_hash: 134df45
       filling_instructions_html: Por favor preencha tudo <b>em Inglês!</b>
@@ -3167,6 +3166,11 @@ pt:
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: não pode ser após Reconhecida até
+    create:
+      #original_hash: 60cdccc
+      create_success: >-
+        Aplicação submetida com sucesso! Esteja atento ao seu email e espere
+        pela revisão do Conselho da WCA
   contact:
     #original_hash: a34b69f
     title: Informações de Contacto
