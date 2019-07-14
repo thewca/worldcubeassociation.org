@@ -2578,12 +2578,12 @@ hr:
       unstick_at_future: mora biti u budućnosti
   contacts:
     website:
-      #original_hash: 5b225ad
+      #original_hash: 35c333c
       faq_note_html: >-
         Prije slanja upita, pogledajte na našu stranicu <a href="/faq">Često
         postavljenih pitanja</a>! Ukoliko želite kontaktirati specifični odbor
-        ili tim, njihove informacije možete pronaći na stranici <a
-        href="/about">O nama</a>.
+        ili tim, njihove informacije možete pronaći na <a
+        href="/aboutteams-committees">ovoj stranici</a>.
       #original_hash: 4ef2aad
       title: WCA Obrazac za kontakt
       inquiries:
@@ -2838,7 +2838,7 @@ hr:
     mission_footer: WCA Izjava o Misiji
     #original_hash: cdab446
     who_we_are_title: Tko smo mi
-    #original_hash: 78e63f4
+    #original_hash: 5924c26
     who_we_are_content_html: >-
       <p> World Cube Association upravlja natjecanjima za mehaničke mozgalice
       koje se korite okretanjem grupe dijelova, poznatije kao "twisty puzzles".
@@ -2851,12 +2851,6 @@ hr:
       izdvajaju kako bi dopustili da WCA nastavi funkcionirati. S više
       financijske potpore, nadamo se podići razinu profesionalizma naših
       natjecanja jer se trudimo organizirati ih što više diljem svijeta.</p>
-      <p>World Cube Association želi otvoriti nove mogućnosti za članstvo u
-      zajednici i vodstvo svim mladima diljem svijeta kroz veću pristupačnost
-      natjecanjima diljem svijeta. Vjerujemo da iskustva na natjecanjima i
-      unutar zajednice kreiraju prilike za rast za mlade ljude i da se
-      pokazivanjem mozgalica novim grupama ljudi pruža veliku priliku za rast
-      zajednice.</p>
     #original_hash: bccd8c5
     spirit: >-
       Naš duh čine ljudi diljem svijeta koji se zabavljaju zajedno u
@@ -3121,16 +3115,16 @@ hr:
     #original_hash: e5b77eb
     empty: Nijedna Regionalna Organizacija nije trenutno priznata od strane WCA.
     how_to:
-      #original_hash: fc3af12
+      #original_hash: b243b1f
       title: Kako postati WCA Regionalna organizacija
-      #original_hash: cc1639d
+      #original_hash: f042a88
       description: >-
-        WCA priznaje razne regionalne organizacije diljem svijeta. Svrha WCA
+        WCA priznaje razne Regionalne organizacije diljem svijeta. Svrha WCA
         Regionalnih organizacija jest organiziranje WCA Natjecanja i podrška WCA
-        aktivnosti u regiji. Države željne ostvarenja regionalne organizacije
+        aktivnosti u regiji. Države željne ostvarenja Regionalne organizacije
         moraju pridonijeti WCA u toj regiji prije nego prilože svoju prijavnicu.
         Za pomoć u organizaciji WCA Natjecanja u Vašoj regiji, molimo
-        kontaktirajte Vašeg najbližeg Delegata.
+        kontaktirajte Vašeg najbližeg WCA Delegata.
     requirements:
       #original_hash: 1e04fd7
       title: Zatjevi za WCA Regionalnu organizaciju
@@ -3139,25 +3133,30 @@ hr:
         '1': >-
           Aktivna organizacija i podrška WCA Natjecanja u regiji gdje se
           organizira
-        #original_hash: 8c5a7fe
+        #original_hash: 63714d1
         '2': >-
-          Aktivna podrška kontinentalnim WCA Natjecanjima koja se održavaju na
-          kontinetu željene regionalne organizacije
-        #original_hash: 8943714
-        '3': Respekt i operativnost po načelima koja su donešena u WCA Pravilniku
+          Podrška kontinentalnim WCA Natjecanjima koja se održavaju na kontinetu
+          željene Regionalne organizacije, ukoliko to zahtijeva Organizacijski
+          tim
+        #original_hash: 3c07dd6
+        '3': >-
+          Respekt i operativnost po načelima koja su donešena u WCA Statutu i
+          Pravilniku
         #original_hash: 0c3576b
         '4': U skladu sa svim važećim WCA Pravilima
-        #original_hash: 23cda60
-        '5': Prihvaćanje i u skladu sa svim odlukama WCA službenih osoba
-        #original_hash: efe2b55
-        '6': Biti u toku s WCA odlukama i pravilima u elektroničkom formatu
+        #original_hash: 1a9e6c5
+        '5': Prihvaćanje i u skladu sa svim odlukama WCA Osoblja
+        #original_hash: d4ae7c1
+        '6': >-
+          Biti u toku s WCA Statutom i, ukoliko je moguće, pravilima u
+          elektroničkom formatu
     application_instructions:
       #original_hash: 4da829b
       title: Upute za prijavu
-      #original_hash: 7ed06ee
+      #original_hash: 7b7de7e
       description_html: >-
-        Molimo Vas ispunite <a
-        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>ovu
+        Kako biste se prijavili za priznavanje , molimo ispunite <a
+        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw='/regional-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsgorganizations/viewformnew'>ovu
         formu</a>.
     regional_organization_form:
       #original_hash: 134df45
@@ -3171,6 +3170,11 @@ hr:
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: nemože biti nakon Priznata do
+    create:
+      #original_hash: 60cdccc
+      create_success: >-
+        Prijavnica je uspješno zaprimljena! Molimo provjerite svoj e-mail i
+        pričekajte da WCA Upravni odbor donese odluku
   contact:
     #original_hash: a34b69f
     title: Kontakt informacije
