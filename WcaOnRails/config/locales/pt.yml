@@ -2544,12 +2544,12 @@ pt:
       unstick_at_future: tem de ser no futuro
   contacts:
     website:
-      #original_hash: 5b225ad
+      #original_hash: 35c333c
       faq_note_html: >-
         Antes de colocar uma questão, pode querer verificar a nossa <a
         href="/faq">Lista de Perguntas Frequentes </a>! Se desejar contactar um
         comité ou equipa específicos, pode encontrar as informações de contacto
-        na página <a href="/about">Sobre a WCA</a>.
+        <a href="/teams-committees">nesta página</a>.
       #original_hash: 4ef2aad
       title: Formulário de Contacto da WCA
       inquiries:
@@ -2811,7 +2811,7 @@ pt:
     mission_footer: Declaração da Missão da WCA
     #original_hash: cdab446
     who_we_are_title: Quem somos
-    #original_hash: 78e63f4
+    #original_hash: 5924c26
     who_we_are_content_html: >-
       <p> A World Cube Association rege as competições de puzzles mecânicos que
       são operados por rotação de grupos de peças, geralmente conhecidos como
@@ -2825,13 +2825,7 @@ pt:
       tiram tempo de suas vidas para permitir que a WCA funcione. Com mais apoio
       financeiro, esperamos trazer um nível ainda maior de profissionalismo às
       nossas competições à medida que continuamos a sancionar mais eventos em
-      todo o mundo.</p> <p> A World Cube Association quer trazer oportunidades
-      para a participação da comunidade e de liderança a jovens de todo o mundo
-      através do aumento da acessibilidade das nossas competições de 'twisty
-      puzzles'. Acreditamos que experiências em competições e dentro da nossa
-      comunidade criam oportunidades de crescimento para os jovens envolvidos e
-      que a introdução de eventos de quebra-cabeças em novos grupos de pessoas
-      permite que nossa comunidade em geral se fortaleça.</p>
+      todo o mundo.</p>
     #original_hash: bccd8c5
     spirit: >-
       O nosso espírito é que pessoas de todo o mundo possam divertir-se juntas
