@@ -99,7 +99,15 @@ class Api::V0::ApiController < ApplicationController
 
   def show_user(user)
     if user
-      render status: :ok, json: { user: user }
+      json = { user: user }
+      if params[:upcoming_competitions]
+        json[:upcoming_competitions] = user.registrations
+                                           .accepted
+                                           .includes(competition: [:delegates, :organizers, :events])
+                                           .map(&:competition)
+                                           .select(&:upcoming?)
+      end
+      render status: :ok, json: json
     else
       render status: :not_found, json: { user: nil }
     end
