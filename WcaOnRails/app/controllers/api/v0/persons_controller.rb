@@ -34,6 +34,8 @@ class Api::V0::PersonsController < Api::V0::ApiController
         ranks[event_id] = { single: rank_to_json(rank_single) }
         ranks[event_id][:average] = rank_to_json(rank_average) if rank_average
       end,
+      medals: person.medals,
+      records: person.records,
     }
   end
 
