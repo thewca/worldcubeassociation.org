@@ -677,7 +677,7 @@ class User < ApplicationRecord
   end
 
   def can_approve_media?
-    admin? || communication_team?
+    admin? || communication_team? || board_member?
   end
 
   def can_see_eligible_voters?
