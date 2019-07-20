@@ -1644,8 +1644,8 @@ pt:
       new:
         #original_hash: a32db59
         mail_subject: >-
-          O seu registou-se para a competição %{comp_name} foi submetido,
-          aguardando aprovação
+          O seu registo para a competição %{comp_name} foi submetido, aguardando
+          aprovação
         #original_hash: 8374583
         registered_html: 'Acabou de se registar para %{comp_name}.'
         #original_hash: 13fabed
