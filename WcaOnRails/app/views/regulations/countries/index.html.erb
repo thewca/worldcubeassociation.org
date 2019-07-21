@@ -3,6 +3,7 @@
 <% version_hash = Country::WCA_STATES["version_hash"] %>
 <% preamble = Country::WCA_STATES["text"] %>
 <% states_lists = Country::WCA_STATES["states_lists"] %>
+<% credit = Country::WCA_STATES["credit"] %>
 <% provide(:title, title) %>
 <div class="container">
   <h1><%= title %></h1>
@@ -23,4 +24,5 @@
       <% end %>
     </ul>
   <% end %>
+  <p><%=md credit %></p>
 </div>
