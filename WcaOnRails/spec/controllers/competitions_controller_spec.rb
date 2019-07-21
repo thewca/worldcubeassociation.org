@@ -589,14 +589,16 @@ RSpec.describe CompetitionsController do
         expect(response).to redirect_to root_url
       end
 
-      it "can change registration open/close of locked competition" do
-        competition.update_attribute(:confirmed, true)
+      it "cannot change registration open/close of locked competition" do
+        old_open = 2.days.from_now.change(sec: 0)
+        old_close = 4.weeks.from_now.change(sec: 0)
+        competition.update_attributes(confirmed: true, registration_open: old_open, registration_close: old_close)
 
         new_open = 1.week.from_now.change(sec: 0)
         new_close = 2.weeks.from_now.change(sec: 0)
         patch :update, params: { id: competition, competition: { registration_open: new_open, registration_close: new_close } }
-        expect(competition.reload.registration_open).to eq new_open
-        expect(competition.reload.registration_close).to eq new_close
+        expect(competition.reload.registration_open).to eq old_open
+        expect(competition.reload.registration_close).to eq old_close
       end
 
       it "can change extra registration requirements field before competition is confirmed" do

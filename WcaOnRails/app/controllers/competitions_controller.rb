@@ -610,20 +610,9 @@ class CompetitionsController < ApplicationController
 
   private def competition_params
     permitted_competition_params = [
-      :use_wca_registration,
-      :external_registration_page,
       :receive_registration_emails,
-      :registration_open,
-      :registration_close,
-      :guests_enabled,
-      :enable_donations,
       :being_cloned_from_id,
       :clone_tabs,
-      :refund_policy_limit_date,
-      :regulation_z1,
-      :regulation_z1_reason,
-      :regulation_z3,
-      :regulation_z3_reason,
     ]
 
     if @competition.nil? || @competition.can_edit_registration_fees?
@@ -656,6 +645,12 @@ class CompetitionsController < ApplicationController
         :contact,
         :generate_website,
         :external_website,
+        :use_wca_registration,
+        :external_registration_page,
+        :enable_donations,
+        :guests_enabled,
+        :registration_open,
+        :registration_close,
         :competitor_limit_enabled,
         :competitor_limit,
         :competitor_limit_reason,
@@ -665,6 +660,10 @@ class CompetitionsController < ApplicationController
         :on_the_spot_entry_fee_lowest_denomination,
         :refund_policy_percent,
         :refund_policy_limit_date,
+        :regulation_z1,
+        :regulation_z1_reason,
+        :regulation_z3,
+        :regulation_z3_reason,
         :guests_entry_fee_lowest_denomination,
         competition_events_attributes: [:id, :event_id, :_destroy],
         championships_attributes: [:id, :championship_type, :_destroy],
