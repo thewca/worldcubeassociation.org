@@ -18,14 +18,14 @@ RSpec.describe DelegateReport do
     expect(dr).to be_invalid_with_errors discussion_url: ["must be a valid url starting with http:// or https://"]
   end
 
-  it "schedule_url is not required when posted" do
+  it "schedule_url is required when posted" do
     dr = FactoryBot.build :delegate_report, schedule_url: nil
     expect(dr).to be_valid
 
     dr.posted = true
-    expect(dr).to be_valid
+    expect(dr).to be_invalid_with_errors schedule_url: ["can't be blank"]
 
-    dr.schedule_url = "http://www.google.com"
+    dr.schedule_url = "http://example.com"
     expect(dr).to be_valid
   end
 
