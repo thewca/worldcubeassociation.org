@@ -5,7 +5,9 @@ require 'rails_helper'
 RSpec.describe DelegateReportsController do
   let(:delegate) { FactoryBot.create :delegate }
   let(:comp) { FactoryBot.create(:competition, delegates: [delegate], starts: 2.days.ago) }
+  let!(:delegate_report1) { FactoryBot.create :delegate_report, competition: comp, schedule_url: "http://example.com" }
   let(:pre_delegate_reports_form_comp) { FactoryBot.create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
+  let!(:delegate_report2) { FactoryBot.create :delegate_report, competition: pre_delegate_reports_form_comp, schedule_url: "http://example.com" }
 
   context "not logged in" do
     it "redirects to sign in" do
@@ -76,7 +78,7 @@ RSpec.describe DelegateReportsController do
     it "can post report and cannot edit report if it's posted" do
       # Update the remarks *and* set posted to true for next test.
       expect(CompetitionsMailer).to receive(:notify_of_delegate_report_submission).with(comp).and_call_original
-      post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", schedule_url: "http://example.com", posted: true } }
+      post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
       expect(response).to redirect_to(delegate_report_path(comp))
       assert_enqueued_jobs 1
       expect(flash[:info]).to eq "Your report has been posted and emailed!"
@@ -93,7 +95,7 @@ RSpec.describe DelegateReportsController do
 
     it "posting report for an ancient competition doesn't send email notification" do
       # Update the remarks *and* set posted to true for next test.
-      post :update, params: { competition_id: pre_delegate_reports_form_comp.id, delegate_report: { remarks: "My newer remarks", schedule_url: "http://example.com", posted: true } }
+      post :update, params: { competition_id: pre_delegate_reports_form_comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
       expect(response).to redirect_to(delegate_report_path(pre_delegate_reports_form_comp))
       expect(flash[:info]).to eq "Your report has been posted but not emailed because it is for a pre June 2016 competition."
       assert_enqueued_jobs 0

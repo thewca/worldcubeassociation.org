@@ -23,8 +23,14 @@ Gen 2 Display: 0
 Gen 3 Display: 0"
   end
 
+  validates :schedule_url, presence: true, if: :schedule_and_disussion_urls_required?
   validates :schedule_url, url: true
+  validates :discussion_url, presence: true, if: :schedule_and_disussion_urls_required?
   validates :discussion_url, url: true
+
+  def schedule_and_disussion_urls_required?
+    posted? && created_at > Date.new(2019, 7, 21)
+  end
 
   def posted?
     !!posted_at
