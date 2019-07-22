@@ -2559,12 +2559,12 @@ pt-BR:
       unstick_at_future: deve estar no futuro
   contacts:
     website:
-      #original_hash: 5b225ad
+      #original_hash: 35c333c
       faq_note_html: >-
         Antes de fazer uma pergunta, você pode dar uma olhada em nossas <a
         href="/faq">Perguntas Frequentes</a>! Se você quer contatar uma equipe
-        ou comitê específico, as informações de contato estão na nossa página <a
-        href="/about">Sobre a WCA</a>.
+        ou comitê específico, as informações de contato estão <a
+        href="/teams-committees">nesta página</a>.
       #original_hash: 4ef2aad
       title: Formulário de Contato da WCA
       inquiries:
@@ -2824,7 +2824,7 @@ pt-BR:
     mission_footer: Declaração de Missão da WCA
     #original_hash: cdab446
     who_we_are_title: Quem somos nós
-    #original_hash: 78e63f4
+    #original_hash: 5924c26
     who_we_are_content_html: >-
       <p>A World Cube Association regula competicões de quebra-cabeças mecânicos
       que são operados girando-se os lados, comumente chamados de "twisty
@@ -2837,14 +2837,7 @@ pt-BR:
       aos Delegados e inclusive o Conselho. Somos muito gratos a todos que
       dispõe seu tempo para permitir que a WCA funcione. Com mais apoio
       financeiro, esperamos trazer um nível ainda maior de profissionalismo para
-      nossas competições, continuando a ter mais eventos ao redor do
-      globo.</p><p>A World Cube Association quer trazer oportunidades de
-      participação e liderança para jovens em todo o mundo, aumentando a
-      acessibilidade de nossas competições de "twisty puzzles". Acreditamos que
-      as experiências nas competições e na nossa comunidade criam oportunidades
-      de crescimento para os jovens envolvidos e que apresentar esses
-      quebra-cabeças para novos grupos de pessoas permite que nossa comunidade
-      se fortaleça.</p>
+      nossas competições, continuando a ter mais eventos ao redor do globo.</p>
     #original_hash: bccd8c5
     spirit: >-
       O Espírito da World Cube Association é que <strong>pessoas de todo o mundo
@@ -3119,16 +3112,16 @@ pt-BR:
     #original_hash: e5b77eb
     empty: Nenhuma Organização Regional é reconhecida atualmente pela WCA.
     how_to:
-      #original_hash: fc3af12
+      #original_hash: b243b1f
       title: Como se tornar uma Organização Regional da WCA
-      #original_hash: cc1639d
+      #original_hash: f042a88
       description: >-
-        A WCA reconhece várias organizações regionais no mundo todo. O objetivo
-        de uma organização regional é organizar Competições da WCA e apoiar as
+        A WCA reconhece várias Organizações Regionais no mundo todo. O objetivo
+        de uma Organização Regional é organizar Competições da WCA e apoiar as
         atividades da WCA em sua região. Países que quiserem formar uma
-        organização regional devem contribuir com a WCA em sua área antes de
+        Organização Regional devem contribuir com a WCA em sua área antes de
         enviar sua candidatura. Para obter ajuda com a organização de uma
-        competição da WCA em sua área, por favor contate um Delegado mais
+        competição da WCA em sua área, por favor contate um Delegado da WCA mais
         próximo.
     requirements:
       #original_hash: 1e04fd7
@@ -3136,28 +3129,28 @@ pt-BR:
       list:
         #original_hash: 22a9f26
         '1': Ativamente organizer ou apoiar competições da WCA em sua região
-        #original_hash: 8c5a7fe
+        #original_hash: 63714d1
         '2': >-
-          Ativamente contribuir para Competições Continentais da WCA que
-          acontecerem em seu continente
-        #original_hash: 8943714
+          Contribuir nas Competições Continentais da WCA que acontecerem em seu
+          continente
+        #original_hash: 3c07dd6
         '3': >-
           Respeitar e operacionalizar os Objetivos definidos no Estatuto e
           Regulamento da WCA
         #original_hash: 0c3576b
         '4': Cumprir com o Regulamento da WCA
-        #original_hash: 23cda60
+        #original_hash: 1a9e6c5
         '5': Aceitar e cumprir as decisões dos Oficiais da WCA
-        #original_hash: efe2b55
+        #original_hash: d4ae7c1
         '6': >-
           Manter em arquivo na WCA uma cópia de seu estatuto e regulamento em
           formato eletrônico
     application_instructions:
       #original_hash: 4da829b
       title: Instruções de Candidatura
-      #original_hash: 7ed06ee
+      #original_hash: 7b7de7e
       description_html: >-
-        Por favor preencha <a
+        Para se candidatar, por favor preencha <a
         href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>este
         formulário</a>.
     regional_organization_form:
@@ -3172,6 +3165,11 @@ pt-BR:
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: não pode ser posterior a Reconhecida até
+    create:
+      #original_hash: 60cdccc
+      create_success: >-
+        Candidatura enviada com sucesso! Por favor verifique seu e-mail, e
+        aguarde o Conselho da WCA fazer sua análise
   contact:
     #original_hash: a34b69f
     title: Informações de Contato
