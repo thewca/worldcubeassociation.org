@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module ResultsValidators
-  ERRORS_AND_WARNING_KINDS = [:events, :persons, :results, :rounds, :scrambles].freeze
-
   class ValidationIssue
     attr_reader :kind, :competition_id
     def initialize(kind, competition_id, message, **message_args)
