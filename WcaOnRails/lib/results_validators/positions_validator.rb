@@ -22,7 +22,17 @@ module ResultsValidators
             # so we simply need to check that the position stored matched the expected one
 
             # Unless we find two exact same results, we increase the expected position
-            if last_result && result.average == last_result.average && result.best == last_result.best
+            tied = false
+            if last_result
+              if ["a", "m"].include?(result.formatId)
+                # If the ranking is based on average, look at both average and best.
+                tied = result.average == last_result.average && result.best == last_result.best
+              else
+                # else we just compare the bests
+                tied = result.best == last_result.best
+              end
+            end
+            if tied
               number_of_tied += 1
             else
               expected_pos += 1
