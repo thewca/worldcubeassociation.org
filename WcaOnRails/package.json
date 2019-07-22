@@ -23,7 +23,7 @@
     "compression-webpack-plugin": "^3.0.0",
     "css-loader": "^2.1.1",
     "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^4.0.0",
+    "file-loader": "^4.1.0",
     "flag-icon-css": "viroulep/flag-icon-css#3.2.1-xk",
     "glob": "^7.1.4",
     "js-yaml": "^3.13.1",
