@@ -143,5 +143,5 @@ def create_result_error(competition_id, round_id, name, expected_pos, actual_pos
 end
 
 def name_for_result(result)
-  result.respond_to?(:personName) ? result.personName : InboxPerson.where(id: result.personId).first.name
+  result.respond_to?(:personName) ? result.personName : InboxPerson.find_by(id: result.personId).name
 end
