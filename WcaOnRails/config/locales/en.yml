@@ -1081,7 +1081,7 @@ en:
       use_stripe_below_html: "The registration fee has to be paid through Stripe below once registered."
       refund_policy_html: "If your registration is cancelled before %{limit_date_and_time} you will be refunded a %{refund_policy_percent} of your registration fee."
       no_refunds: "Registration fees won't be refunded under any circumstance."
-      on_the_spot_registration_html: "On the spot registrations will be accepted with a base registration fee of %{on_the_spot_base_entry_fee} if the competitor limit has not been reached by %{end_of_registration}."
+      on_the_spot_registration_fee_html: "On the spot registrations will be accepted with a base registration fee of %{on_the_spot_base_entry_fee}."
       on_the_spot_registration_free: "On the spot registrations will be accepted for free."
       no_on_the_spot_registration: "No on the spot registrations will be accepted."
       guests_pay: "Spectators can attend paying an entry fee of %{guests_base_fee}."
