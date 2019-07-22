@@ -12,3 +12,9 @@ import 'polyfills';
 import 'flag-icon-css/css/flag-icon.css';
 import 'incidents-log';
 import 'leaflet-wca';
+import autosize from 'autosize';
+
+// Setting up autosize
+$(function() {
+  autosize($('textarea:not(.no-autosize)'));
+});

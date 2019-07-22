@@ -90,10 +90,6 @@ gem 'image_processing'
 gem 'rest-client'
 gem 'wicked_pdf'
 
-source 'https://rails-assets.org' do
-  gem 'rails-assets-autosize'
-end
-
 group :development, :test do
   gem 'spring'
   gem 'spring-commands-rspec'
