@@ -30,7 +30,6 @@
 //= require bootstrap-table
 //= require bootstrap-table-locale-all
 //= require extensions/bootstrap-table-mobile
-//= require autosize
 //= require fullcalendar
 //= require fullcalendar/lang/cs.js
 //= require fullcalendar/lang/da.js
@@ -345,11 +344,6 @@ $(function() {
     // Re-apply tooltip on each table body change
     $('[data-toggle="tooltip"]').tooltip();
   });
-});
-
-// Setting up autosize
-$(function() {
-  autosize($('textarea:not(.no-autosize)'));
 });
 
 // Helpers
