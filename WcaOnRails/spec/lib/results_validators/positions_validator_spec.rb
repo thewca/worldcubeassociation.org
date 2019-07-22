@@ -58,6 +58,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
         end
       end
     end
+
     context "tied results" do
       it "validates correctly tied results" do
         create_correct_tied_results(competition1, "333oh")
@@ -78,6 +79,34 @@ RSpec.describe ResultsValidators::PositionsValidator do
           pv = ResultsValidators::PositionsValidator.new.validate(arg)
           expect(pv.errors).to match_array(expected_errors[arg[:model].to_s])
         end
+      end
+    end
+
+    context "bo3 results with a mean" do
+      # NOTE: I assume the previous sets of tests validates that the validator works
+      # on either Result/InboxResult and on any given results input.
+      # The next few tests are very specific cases and are made against only real results on a given competition.
+      it "validates correctly tied results" do
+        # In a BoX format, results with the same best should have the same position,
+        # even if one has a mean.
+        FactoryBot.create(:result, :blind_dnf_mo3, competition: competition1, pos: 1, best: 1000)
+        FactoryBot.create(:result, :blind_mo3, competition: competition1, pos: 1, best: 1000)
+        FactoryBot.create(:result, :blind_mo3, competition: competition1, pos: 3, best: 2000)
+        pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
+        expect(pv.has_errors?).to eq false
+      end
+
+      it "invalidates incorrectly ordered results" do
+        # In a BoX format, results should be ordered by best, not mean.
+        r1 = FactoryBot.create(:result, :blind_mo3, competition: competition1, pos: 1, best: 2000)
+        r2 = FactoryBot.create(:result, :blind_dnf_mo3, competition: competition1, pos: 2, best: 1000)
+        expected_errors = [
+          create_result_error(competition1.id, "333bf-f", r1.personName, 2, 1),
+          create_result_error(competition1.id, "333bf-f", r2.personName, 1, 2),
+        ]
+
+        pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
+        expect(pv.errors).to match_array(expected_errors)
       end
     end
   end

@@ -24,5 +24,27 @@ FactoryBot.define do
     average { 5000 }
     regionalSingleRecord { "" }
     regionalAverageRecord { "" }
+
+    trait :blind_mo3 do
+      eventId { "333bf" }
+      formatId { "3" }
+      average { best }
+      value1 { best }
+      value2 { best }
+      value3 { best }
+      value4 { 0 }
+      value5 { 0 }
+    end
+
+    trait :blind_dnf_mo3 do
+      eventId { "333bf" }
+      formatId { "3" }
+      average { -1 }
+      value1 { best }
+      value2 { best }
+      value3 { -1 }
+      value4 { 0 }
+      value5 { 0 }
+    end
   end
 end
