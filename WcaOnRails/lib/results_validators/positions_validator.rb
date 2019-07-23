@@ -42,16 +42,12 @@ module ResultsValidators
             last_result = result
 
             if expected_pos != result.pos
-              person_name = result.personName if result.respond_to?(:personName)
-              unless person_name
-                # Then we should check InboxPerson to get that name!
-                # Note: this fires one sql select per wrong position, but it should
-                # be fine since in this case we should be checking "InboxResult"
-                # and therefore the results from one single competition submission.
-                person = InboxPerson.find_by(competitionId: competition_id, id: result.personId)
-                person_name = person ? person.name : "<personId=#{result.personId}>"
-              end
-              @errors << ValidationError.new(:results, competition_id, WRONG_POSITION_IN_RESULTS_ERROR, round_id: round_id, person_name: person_name, expected_pos: expected_pos, pos: result.pos)
+              @errors << ValidationError.new(:results, competition_id,
+                                             WRONG_POSITION_IN_RESULTS_ERROR,
+                                             round_id: round_id,
+                                             person_name: self.name_from_result(result),
+                                             expected_pos: expected_pos,
+                                             pos: result.pos)
             end
           end
         end
