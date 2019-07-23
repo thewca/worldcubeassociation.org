@@ -15,11 +15,15 @@ module ResultsValidators
     end
 
     def ==(other)
-      other.class == self.class && other.state == state
+      other.class == self.class && other.hash == hash
     end
 
-    def state
-      [@kind, @competition_id, @message, @args]
+    def hash
+      [@kind, @competition_id, @message, @args].hash
+    end
+
+    def eql?(other)
+      self == other
     end
   end
 
