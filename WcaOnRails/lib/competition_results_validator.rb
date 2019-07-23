@@ -44,18 +44,6 @@ class CompetitionResultsValidator
   NON_MATCHING_NAME_WARNING = "Wrong name for %{wca_id}, expected '%{expected_name}' got '%{name}'. If the competitor did not change their name then fix the name to the expected name."
   NON_MATCHING_COUNTRY_WARNING = "Wrong country for %{name} (%{wca_id}), expected '%{expected_country}' got '%{country}'. If this is an error, fix it. Otherwise, do leave a comment to the WRT about it."
 
-  # Results-related errors and warnings
-  MET_CUTOFF_MISSING_RESULTS_ERROR = "[%{round_id}] %{person_name} has met the cutoff but is missing results for the second phase. Cutoff is %{cutoff}."
-  DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = "[%{round_id}] %{person_name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is %{cutoff}."
-  MISMATCHED_RESULT_FORMAT_ERROR = "[%{round_id}] Result for %{person_name} are in the wrong format: expected %{expected_format}, but got %{format}."
-  RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit which is %{time_limit} for one solve. All solves over the time limit must be changed to DNF."
-  RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit which is %{time_limit}."
-  NO_ROUND_INFORMATION_WARNING = "[%{round_id}] Could not find information about cutoff and timelimit for this round, these validations have been skipped."
-  SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit and %{person_name} has at least one suspicious DNF solve given their results."
-  MBF_RESULT_OVER_TIME_LIMIT_WARNING = "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please make sure it is the consequence of +2 penalties before sending the results, or fix the result to DNF."
-  DNS_AFTER_RESULT_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
-  SIMILAR_RESULTS_WARNING = "[%{round_id}] Result for %{person_name} is similar to the results for %{similar_person_name}."
-
   # Miscelaneous errors
   MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round \"%{wcif_id}\" for the cumulative time limit specified in the WCIF."\
   " Please go to the manage events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
@@ -135,7 +123,6 @@ class CompetitionResultsValidator
         check_rounds_match
       end
 
-      check_individual_results(results_by_round_id)
       check_advancement_conditions(results_by_round_id, @competition.competition_events)
       check_scrambles
 
@@ -144,7 +131,8 @@ class CompetitionResultsValidator
       # Note: the "long term" plan is to have an array of validators to apply
       # on the results, and the line below would turn into:
       # merge(validator_classes.map { |v| v.new.validate(results: @results) })
-      merge(ResultsValidators::PositionsValidator.new.validate(results: @results))
+      validator_classes = [ResultsValidators::PositionsValidator, ResultsValidators::IndividualResultsValidator]
+      merge(validator_classes.map { |v| v.new.validate(results: @results) })
     end
 
     @total_errors = @errors.values.sum(&:size)
@@ -162,7 +150,7 @@ class CompetitionResultsValidator
         @errors[kind].concat(errors)
       end
       v.warnings.group_by(&:kind).each do |kind, warnings|
-        @warnings[kind].concat(errors)
+        @warnings[kind].concat(warnings)
       end
     end
     @total_errors = @errors.values.sum(&:size)
@@ -388,167 +376,6 @@ class CompetitionResultsValidator
         @errors[:persons] << format(WRONG_WCA_ID_ERROR, name: p.name, wca_id: p.wca_id)
       end
     end
-  end
-
-  def check_results_for_cutoff(cutoff, result, round_id, round)
-    number_of_attempts = cutoff.number_of_attempts
-    cutoff_result = SolveTime.new(round.event.id, :single, cutoff.attempt_result)
-    solve_times = result.solve_times
-    # Compare through SolveTime so we don't need to care about DNF/DNS
-    maybe_qualifying_results = solve_times[0, number_of_attempts]
-    # Get the remaining attempt according to the expected solve count given the format
-    other_results = solve_times[number_of_attempts, round.format.expected_solve_count - number_of_attempts]
-    qualifying_results = maybe_qualifying_results.select { |solve_time| solve_time < cutoff_result }
-    skipped, unskipped = other_results.partition(&:skipped?)
-    person = @persons_by_id[result.personId]
-    if qualifying_results.any?
-      # Meets the cutoff, no result should be SKIPPED
-      if skipped.any?
-        @errors[:results] << format(MET_CUTOFF_MISSING_RESULTS_ERROR, round_id: round_id, person_name: person.name, cutoff: cutoff.to_s(round))
-      end
-    else
-      # Doesn't meet the cutoff, all results should be SKIPPED
-      if unskipped.any?
-        @errors[:results] << format(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR, round_id: round_id, person_name: person.name, cutoff: cutoff.to_s(round))
-      end
-    end
-  end
-
-  def check_individual_results(results_by_round_id)
-    # For results
-    #   - average/best check is done in validation
-    #   - "correct" number of attempts is done in validation (but NOT cutoff times)
-    #   - check time limit
-    #   - check cutoff
-    #   - for multiblind, check if we should ouput a warning (if time is over the time limit, as the 'Result' object validation allows for time up to 30s over the timelimit)
-
-    results_by_round_id.each do |round_id, results_for_round|
-      results_for_round.each_with_index do |result, index|
-        person_info = @persons_by_id[result.personId]
-        unless person_info
-          # These results are for an undeclared person, skip them as an error has
-          # already been registered
-          next
-        end
-        all_solve_times = result.solve_times
-
-        # Check for possible similar results
-        similar = results_similar_to(result, index, results_for_round)
-        similar.each do |r|
-          similar_person_name = @persons_by_id[r.personId]&.name || "UnknownPerson"
-          @warnings[:results] << format(SIMILAR_RESULTS_WARNING, round_id: round_id, person_name: person_info.name, similar_person_name: similar_person_name)
-        end
-
-        # get cutoff and timelimit
-        round_info = @expected_rounds_by_ids[round_id]
-        unless round_info
-          # This situation may happen with "old" competitions
-          @warnings[:results] << format(NO_ROUND_INFORMATION_WARNING, round_id: round_id)
-          # These results are for an undeclared round, skip them as an error has
-          # already been registered
-          next
-        end
-
-        # Check that the result's format matches the round format
-        unless round_info.format.id == result.formatId
-          @errors[:results] << format(MISMATCHED_RESULT_FORMAT_ERROR, round_id: round_id, person_name: person_info.name, expected_format: round_info.format.name, format: Format.c_find(result.formatId).name)
-        end
-
-        time_limit_for_round = round_info.time_limit
-        cutoff_for_round = round_info.cutoff
-
-        # Checks for cutoff
-        check_results_for_cutoff(cutoff_for_round, result, round_id, round_info) if cutoff_for_round
-
-        completed_solves = all_solve_times.select(&:complete?)
-
-        # Checks for time limits if it can be user-specified
-        if !["333mbf", "333fm"].include?(result.eventId)
-          cumulative_wcif_round_ids = time_limit_for_round.cumulative_round_ids
-          # Now let's try to find a DNF/DNS result followed by a non-DNF/DNS result
-          # Do the same for DNS.
-          has_result_after = { SolveTime::DNF => false, SolveTime::DNS => false }
-          has_result_after.keys.each do |not_complete|
-            first_index = all_solve_times.find_index(not_complete)
-            if first_index
-              # Just use '5' here to get all of them
-              solves_after = all_solve_times[first_index, 5]
-              has_result_after[not_complete] = solves_after.select(&:complete?).any?
-            end
-          end
-
-          # Always output the warning about DNS followed by result
-          if has_result_after[SolveTime::DNS]
-            @warnings[:results] << format(DNS_AFTER_RESULT_WARNING, round_id: round_id, person_name: person_info.name)
-          end
-
-          case cumulative_wcif_round_ids.length
-          when 0
-            # easy case: each completed result (not DNS, DNF, or SKIPPED) must be below the time limit.
-            results_over_time_limit = completed_solves.select { |t| t.time_centiseconds > time_limit_for_round.centiseconds }
-            if results_over_time_limit&.any?
-              @errors[:results] << format(RESULT_OVER_TIME_LIMIT_ERROR, round_id: round_id, person_name: person_info.name, time_limit: time_limit_for_round.to_s(round_info))
-            end
-          else
-            # Handle both cumulative for a single round or multiple round by doing the following:
-            #  - gather all solve times for all the rounds (necessitate to map round's WCIF id to "our" round ids)
-            #  - check the sum is below the limit
-            #  - check for any suspicious DNF result
-
-            # Match wcif round ids to "our" ids
-            cumulative_round_ids = cumulative_wcif_round_ids.map do |wcif_id|
-              parsed_wcif_id = Round.parse_wcif_id(wcif_id)
-              # Get the actual round_id from our expected rounds by id
-              actual_round_id = @expected_rounds_by_ids.select do |id, round|
-                round.event.id == parsed_wcif_id[:event_id] && round.number == parsed_wcif_id[:round_number]
-              end.first
-              unless actual_round_id
-                # FIXME: this needs to be removed when https://github.com/thewca/worldcubeassociation.org/issues/3254 is fixed.
-                @errors[:results] << format(MISSING_CUMULATIVE_ROUND_ID_ERROR, wcif_id: wcif_id, original_round_id: round_id)
-              end
-              actual_round_id&.at(0)
-            end.compact
-
-            # Get all solve times for all cumulative rounds for the current person
-            all_results_for_cumulative_rounds = cumulative_round_ids.map do |id|
-              # NOTE: since we proceed with all checks even if some expected rounds
-              # do not exist, we may have *expected* cumulative rounds that may
-              # not exist in results.
-              results_by_round_id[id]&.find { |r| r.personId == result.personId }
-            end.compact.map(&:solve_times).flatten
-            completed_solves_for_rounds = all_results_for_cumulative_rounds.select(&:complete?)
-            number_of_dnf_solves = all_results_for_cumulative_rounds.select(&:dnf?).size
-            sum_of_times_for_rounds = completed_solves_for_rounds.sum(&:time_centiseconds)
-
-            # Check the sum is below the limit
-            if sum_of_times_for_rounds > time_limit_for_round.centiseconds
-              @errors[:results] << format(RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR, round_ids: cumulative_round_ids.join(","), person_name: person_info.name, time_limit: time_limit_for_round.to_s(round_info))
-            end
-
-            # Check for any suspicious DNF
-            # Compute avg time per solve for the competitor
-            avg_per_solve = sum_of_times_for_rounds.to_f / completed_solves_for_rounds.size
-            # We want to issue a warning if the estimated time for all solves + DNFs goes roughly over the cumulative time limit by at least 10% (to reduce false positive).
-            if (number_of_dnf_solves + completed_solves_for_rounds.size) * avg_per_solve >= 1.1 * time_limit_for_round.centiseconds
-              @warnings[:results] << format(SUSPICIOUS_DNF_WARNING, round_ids: cumulative_round_ids.join(","), person_name: person_info.name)
-            end
-          end
-        end
-
-        if result.eventId == "333mbf"
-          completed_solves.each do |solve_time|
-            time_limit_seconds = [3600, solve_time.attempted * 600].min
-            if solve_time.time_seconds > time_limit_seconds
-              @warnings[:results] << format(MBF_RESULT_OVER_TIME_LIMIT_WARNING, round_id: round_id, result: solve_time.clock_format, person_name: person_info.name)
-            end
-          end
-        end
-      end
-    end
-
-    # Cleanup possible duplicate errors and warnings from cumulative time limits
-    @errors[:results].uniq!
-    @warnings[:results].uniq!
   end
 
   def check_competitor_limit
