@@ -92,7 +92,7 @@ module ResultsValidators
               case cumulative_wcif_round_ids.length
               when 0
                 # easy case: each completed result (not DNS, DNF, or SKIPPED) must be below the time limit.
-                results_over_time_limit = completed_solves.select { |t| t.time_centiseconds > time_limit_for_round.centiseconds }
+                results_over_time_limit = completed_solves.reject { |t| t.time_centiseconds < time_limit_for_round.centiseconds }
                 if results_over_time_limit&.any?
                   @errors << ValidationError.new(:results, competition_id,
                                                  RESULT_OVER_TIME_LIMIT_ERROR,
@@ -244,7 +244,7 @@ module ResultsValidators
       sum_of_times_for_rounds = completed_solves_for_rounds.sum(&:time_centiseconds)
 
       # Check the sum is below the limit
-      if sum_of_times_for_rounds > time_limit_for_round.centiseconds
+      unless sum_of_times_for_rounds < time_limit_for_round.centiseconds
         @errors << ValidationError.new(:results, competition_id,
                                        RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR,
                                        round_ids: cumulative_round_ids.join(","),
