@@ -67,7 +67,7 @@ module ResultMethods
   end
 
   # When someone changes an attribute, clear our cached values.
-  def write_attribute(attr, value)
+  def _write_attribute(attr, value)
     @sorted_solves_with_index = nil
     @solve_times = nil
     @counting = nil
