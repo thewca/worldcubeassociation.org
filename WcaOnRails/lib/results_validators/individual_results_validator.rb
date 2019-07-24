@@ -4,7 +4,7 @@ module ResultsValidators
   class IndividualResultsValidator < GenericValidator
     MBF_RESULT_OVER_TIME_LIMIT_WARNING = "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please make sure it is the consequence of +2 penalties before sending the results, or fix the result to DNF."
 
-    DNS_AFTER_RESULT_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
+    RESULT_AFTER_DNS_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
     SIMILAR_RESULTS_WARNING = "[%{round_id}] Results for %{person_name} are similar to the results for %{similar_person_name}."
 
     MET_CUTOFF_MISSING_RESULTS_ERROR = "[%{round_id}] %{person_name} has met the cutoff but is missing results for the second phase. Cutoff is %{cutoff}."
@@ -86,25 +86,8 @@ module ResultsValidators
             # Checks for time limits if it can be user-specified
             if !["333mbf", "333fm"].include?(result.eventId)
               cumulative_wcif_round_ids = time_limit_for_round.cumulative_round_ids
-              # Now let's try to find a DNF/DNS result followed by a non-DNF/DNS result
-              # Do the same for DNS.
-              has_result_after = { SolveTime::DNF => false, SolveTime::DNS => false }
-              has_result_after.keys.each do |not_complete|
-                first_index = all_solve_times.find_index(not_complete)
-                if first_index
-                  # Just use '5' here to get all of them
-                  solves_after = all_solve_times[first_index, 5]
-                  has_result_after[not_complete] = solves_after.select(&:complete?).any?
-                end
-              end
 
-              # Always output the warning about DNS followed by result
-              if has_result_after[SolveTime::DNS]
-                @warnings << ValidationWarning.new(:results, competition_id,
-                                                   DNS_AFTER_RESULT_WARNING,
-                                                   round_id: round_id,
-                                                   person_name: person_name)
-              end
+              check_result_after_dns(context, all_solve_times)
 
               case cumulative_wcif_round_ids.length
               when 0
@@ -159,6 +142,20 @@ module ResultsValidators
                                            round_id: round_id,
                                            person_name: person_name,
                                            similar_person_name: self.name_from_result(r))
+      end
+    end
+
+    def check_result_after_dns(context, all_solve_times)
+      # Now let's try to find a DNS result followed by a non-DNS result
+      # Do the same for DNS.
+      first_index = all_solve_times.find_index(SolveTime::DNS)
+      # Just use '5' here to get all of them
+      if first_index && all_solve_times[first_index, 5].select(&:complete?).any?
+        competition_id, person_name, round_id, = context
+        @warnings << ValidationWarning.new(:results, competition_id,
+                                           RESULT_AFTER_DNS_WARNING,
+                                           round_id: round_id,
+                                           person_name: person_name)
       end
     end
 

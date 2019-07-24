@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
 module ResultsValidators
-  class ValidationError < ValidationIssue
+  class ValidationWarning < ValidationIssue
   end
 end
