@@ -7,7 +7,7 @@ IRV=RV::IndividualResultsValidator
 
 RSpec.describe IRV do
   context "on InboxResult and Result" do
-    let!(:competition1) { FactoryBot.create(:competition, :past, event_ids: ["333oh", "444", "333mbf"]) }
+    let!(:competition1) { FactoryBot.create(:competition, :past, event_ids: ["333oh", "444", "333mbf", "333bf"]) }
     let!(:competition2) { FactoryBot.create(:competition, :past, event_ids: ["222", "555", "666", "777", "333fm"]) }
 
     # The idea behind this variable is the following: the validator can be applied
@@ -21,13 +21,6 @@ RSpec.describe IRV do
         ]
       }
     }
-
-    # Triggers MBF_RESULT_OVER_TIME_LIMIT_WARNING
-    # Triggers RESULT_AFTER_DNS_WARNING
-    # Triggers SIMILAR_RESULTS_WARNING
-    # Triggers MISMATCHED_RESULT_FORMAT_ERROR
-    # Triggers NO_ROUND_INFORMATION_WARNING
-    # Triggers SUSPICIOUS_DNF_WARNING
 
     it "triggers errors on cutoff and time limits" do
       # Triggers:
@@ -53,8 +46,8 @@ RSpec.describe IRV do
       FactoryBot.create(:round, competition: competition2, event_id: "777", time_limit: cumul_invalid, format_id: "m")
 
       expected_errors = {
-        "Result": [],
-        "InboxResult": [],
+        "Result" => [],
+        "InboxResult" => [],
       }
 
       # Here the positions will be messed up but this is fine, we don't run the PositionsValidator.
@@ -121,6 +114,118 @@ RSpec.describe IRV do
       validator_args.each do |arg|
         irv = IRV.new.validate(arg)
         expect(irv.errors).to match_array(expected_errors[arg[:model].to_s])
+        expect(irv.warnings).to be_empty
+      end
+    end
+
+    it "triggers missing round information warning" do
+      # Triggers NO_ROUND_INFORMATION_WARNING
+
+      [Result, InboxResult].each do |model|
+        result_kind = model.model_name.singular.to_sym
+        FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
+      end
+      irv = IRV.new.validate(competition_ids: competition1.id)
+
+      expected_warnings = [
+        RV::ValidationWarning.new(:results, competition1.id,
+                                  IRV::NO_ROUND_INFORMATION_WARNING,
+                                  round_id: "333oh-f"),
+      ]
+      validator_args.each do |arg|
+        irv = IRV.new.validate(arg)
+        expect(irv.errors).to be_empty
+        expect(irv.warnings).to match_array(expected_warnings)
+      end
+    end
+
+    it "triggers mismatched result format error" do
+      # Triggers MISMATCHED_RESULT_FORMAT_ERROR
+      errs = {
+        "Result" => [],
+        "InboxResult" => [],
+      }
+
+      FactoryBot.create(:round, competition: competition1, event_id: "444")
+
+      [Result, InboxResult].each do |model|
+        result_kind = model.model_name.singular.to_sym
+        FactoryBot.create(result_kind, competition: competition1, eventId: "444")
+        res_ko = FactoryBot.create(result_kind, :mo3, competition: competition1, eventId: "444")
+        errs[model.to_s] << RV::ValidationError.new(:results, competition1.id,
+                                                    IRV::MISMATCHED_RESULT_FORMAT_ERROR,
+                                                    round_id: "444-f",
+                                                    person_name: name_for_result(res_ko),
+                                                    expected_format: "Average of 5",
+                                                    format: "Mean of 3")
+      end
+      validator_args.each do |arg|
+        irv = IRV.new.validate(arg)
+        expect(irv.errors).to match_array(errs[arg[:model].to_s])
+        expect(irv.warnings).to be_empty
+      end
+    end
+
+    it "triggers several warnings about results" do
+      # Triggers MBF_RESULT_OVER_TIME_LIMIT_WARNING
+      # Triggers RESULT_AFTER_DNS_WARNING
+      # Triggers SIMILAR_RESULTS_WARNING
+      # Triggers SUSPICIOUS_DNF_WARNING
+
+      expected_warnings = {
+        "Result" => [],
+        "InboxResult" => [],
+      }
+
+      FactoryBot.create(:round, competition: competition2, event_id: "222")
+      FactoryBot.create(:round, competition: competition1, event_id: "333mbf", format_id: "3")
+      tl = TimeLimit.new(centiseconds: 2.minutes.in_centiseconds, cumulative_round_ids: ["333bf-r1"])
+      FactoryBot.create(:round, competition: competition1, event_id: "333bf",
+                                format_id: "3", time_limit: tl)
+      [Result, InboxResult].each do |model|
+        warns = []
+        result_kind = model.model_name.singular.to_sym
+        res_mbf = FactoryBot.create(result_kind, :mbf, competition: competition1)
+        # 8 points in 60:02 (ie: reached the time limit and got +2)
+        res_mbf.update(value2: 910_360_200)
+        warns << RV::ValidationWarning.new(:results, competition1.id,
+                                           IRV::MBF_RESULT_OVER_TIME_LIMIT_WARNING,
+                                           round_id: "333mbf-f",
+                                           person_name: name_for_result(res_mbf),
+                                           result: res_mbf.solve_times[1].clock_format)
+
+        res22 = FactoryBot.create(result_kind, competition: competition2, eventId: "222")
+        res22.update(value4: -2)
+        warns << RV::ValidationWarning.new(:results, competition2.id,
+                                           IRV::RESULT_AFTER_DNS_WARNING,
+                                           round_id: "222-f",
+                                           person_name: name_for_result(res22))
+
+        # This creates the same result row for a different person as res22, expect for the DNS.
+        res_sim1 = FactoryBot.create(result_kind, competition: competition2, eventId: "222")
+        warns << RV::ValidationWarning.new(:results, competition2.id,
+                                           IRV::SIMILAR_RESULTS_WARNING,
+                                           round_id: "222-f",
+                                           person_name: name_for_result(res_sim1),
+                                           similar_person_name: name_for_result(res22))
+
+        res_bf = FactoryBot.create(result_kind, :blind_dnf_mo3, competition: competition1, best: 100_00)
+        # So now we have attempts #1 and #3 which are DNF.
+        # #1 is suspiscious because the success on #2 is 1:40.00, while the cumulative
+        # time limit is 2:00.00.
+        res_bf.update(value1: -1)
+
+        warns << RV::ValidationWarning.new(:results, competition1.id,
+                                           IRV::SUSPICIOUS_DNF_WARNING,
+                                           round_ids: "333bf-f",
+                                           person_name: name_for_result(res_bf))
+
+        expected_warnings[model.to_s] = warns
+      end
+      validator_args.each do |arg|
+        irv = IRV.new.validate(arg)
+        expect(irv.errors).to be_empty
+        expect(irv.warnings).to match_array(expected_warnings[arg[:model].to_s])
       end
     end
   end
