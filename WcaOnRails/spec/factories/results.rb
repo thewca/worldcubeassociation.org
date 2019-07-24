@@ -19,6 +19,20 @@ FactoryBot.define do
     best { 3000 }
     average { 5000 }
 
+    trait :mbf do
+      eventId { "333mbf" }
+      formatId { "3" }
+      average { 0 }
+      # 9 points in 4 minutes
+      best { 900_024_000 }
+      value1 { best }
+      # 4 points in 2 minutes
+      value2 { 950_012_000 }
+      value3 { -1 }
+      value4 { 0 }
+      value5 { 0 }
+    end
+
     trait :mo3 do
       formatId { "m" }
       average { best }
