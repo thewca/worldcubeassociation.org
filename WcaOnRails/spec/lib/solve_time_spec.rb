@@ -111,6 +111,14 @@ RSpec.describe "SolveTime" do
         expect(solve_time.clock_format).to eq "2/2 0:59"
         expect(solve_time.clock_format_with_units).to eq "2/2 0:59"
       end
+
+      it "gives correct cutoff value" do
+        cutoff = SolveTime.points_to_multibld_attempt(4)
+        solve4pts = SolveTime.new("333mbf", :single, 950_024_000)
+        solve5pts = SolveTime.new("333mbf", :single, 940_360_200)
+        expect(solve4pts.wca_value).to be > cutoff
+        expect(solve5pts.wca_value).to be < cutoff
+      end
     end
 
     describe "333mbo" do

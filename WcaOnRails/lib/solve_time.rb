@@ -164,7 +164,7 @@ class SolveTime
     SolveTime.new("333mbf", :best, 0).tap do |solve_time|
       solve_time.attempted = points
       solve_time.solved = points
-      solve_time.time_centiseconds = 99_999
+      solve_time.time_centiseconds = 0
     end.wca_value
   end
 

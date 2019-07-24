@@ -48,7 +48,7 @@ export function attemptResultToMbPoints(mbValue) {
 export function mbPointsToAttemptResult(mbPoints) {
   let solved = mbPoints;
   let attempted = mbPoints;
-  let timeCentiseconds = 99999*100;
+  let timeCentiseconds = 0;
   return parsedMbToAttemptResult({ solved, attempted, timeCentiseconds });
 }
 
