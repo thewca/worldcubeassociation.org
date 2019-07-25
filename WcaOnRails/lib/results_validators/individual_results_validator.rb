@@ -59,8 +59,6 @@ module ResultsValidators
             @warnings << ValidationWarning.new(:results, competition_id,
                                                NO_ROUND_INFORMATION_WARNING,
                                                round_id: round_id)
-            # These results are for an undeclared round, skip them as an error has
-            # already been registered
             next
           end
 
@@ -68,7 +66,7 @@ module ResultsValidators
           cutoff_for_round = round_info.cutoff
 
           results_for_round.each_with_index do |result, index|
-            person_name = self.name_from_result(result)
+            person_name = result.personName
             context = [competition_id, person_name, round_id, round_info]
             all_solve_times = result.solve_times
 
@@ -141,13 +139,12 @@ module ResultsValidators
                                            SIMILAR_RESULTS_WARNING,
                                            round_id: round_id,
                                            person_name: person_name,
-                                           similar_person_name: self.name_from_result(r))
+                                           similar_person_name: r.personName)
       end
     end
 
     def check_result_after_dns(context, all_solve_times)
       # Now let's try to find a DNS result followed by a non-DNS result
-      # Do the same for DNS.
       first_index = all_solve_times.find_index(SolveTime::DNS)
       # Just use '5' here to get all of them
       if first_index && all_solve_times[first_index, 5].select(&:complete?).any?
@@ -220,9 +217,9 @@ module ResultsValidators
         parsed_wcif_id = Round.parse_wcif_id(wcif_id)
         # Get the actual round_id from our expected rounds by id
 
-        actual_round_id = rounds_by_ids.select do |id, round|
+        actual_round_id = rounds_by_ids.find do |id, round|
           round.event.id == parsed_wcif_id[:event_id] && round.number == parsed_wcif_id[:round_number]
-        end.first
+        end
         unless actual_round_id
           # FIXME: this needs to be removed when https://github.com/thewca/worldcubeassociation.org/issues/3254 is fixed.
           @errors << ValidationError.new(:results, competition_id,
@@ -252,6 +249,9 @@ module ResultsValidators
                                        time_limit: time_limit_for_round.to_s(round_info))
       end
 
+      # Avoid any silly dividing by 0 on the next check.
+      return if completed_solves_for_rounds.empty?
+
       # Check for any suspicious DNF
       # Compute avg time per solve for the competitor
       avg_per_solve = sum_of_times_for_rounds.to_f / completed_solves_for_rounds.size
@@ -273,13 +273,12 @@ module ResultsValidators
       # similar to itself, so we don't allow for results with matching ids.
       # Further more, if a result A is similar to a result B, we don't want to
       # return both (A, B) and (B, A) as matching pairs, it's sufficient to just
-      # return (A, B), which is why we require Result.id < h.resultId.
+      # return (A, B), which is why we require A.id < B.id.
       results.each_with_index do |r, index|
         next if index >= reference_index
-        reference_solve_times = reference.solve_times
-        # We attribute 1 point for each similar solve_time, we then just have to count the points.
-        score = r.solve_times.each_with_index.count do |solve_time, solve_time_index|
-          solve_time.complete? && solve_time == reference_solve_times[solve_time_index]
+        # We attribute 1 point for each identical solve_time, we then just have to count the points.
+        score = r.solve_times.zip(reference.solve_times).count do |solve_time, reference_solve_time|
+          solve_time.complete? && solve_time == reference_solve_time
         end
         # We have at least 3 matching values, consider this similar
         if score > 2
@@ -295,6 +294,7 @@ module ResultsValidators
       unless round_info
         # There is a legitimate situation where a round_id may be missing in the
         # competition rounds: if it was a combined round and everyone made the cutoff!
+        # See additional comment here: https://github.com/thewca/worldcubeassociation.org/pull/4357#discussion_r307312177
         event_id, round_type_id = round_id.split("-")
         equivalent_round_id = "#{event_id}-#{RoundType.toggle_cutoff(round_type_id)}"
         equivalent_round = competition_rounds[equivalent_round_id]

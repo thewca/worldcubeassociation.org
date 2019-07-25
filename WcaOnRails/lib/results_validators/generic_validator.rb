@@ -34,17 +34,5 @@ module ResultsValidators
       @errors = []
       @warnings = []
     end
-
-    protected
-
-    # FIXME: this is kind of a helper that will be needed in several validators as well as in specs.
-    # Where does it belong?
-    def name_from_result(result)
-      if result.respond_to?(:personName)
-        result.personName
-      else
-        InboxPerson.find_by(id: result.personId)&.name || "<personId=#{result.personId}>"
-      end
-    end
   end
 end

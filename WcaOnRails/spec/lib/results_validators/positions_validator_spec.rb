@@ -43,8 +43,8 @@ RSpec.describe ResultsValidators::PositionsValidator do
         expected_errors = {}
         [InboxResult, Result].each do |model|
           table_results = results[model.to_s]
-          personName1 = name_for_result(table_results[0].first)
-          personName2 = name_for_result(table_results[1].last)
+          personName1 = table_results[0].first.personName
+          personName2 = table_results[1].last.personName
           expected_errors[model.to_s] = [
             create_result_error(competition1.id, "333oh-f", personName1, 1, 2),
             create_result_error(competition2.id, "222-f", personName2, 5, 7),
@@ -72,8 +72,8 @@ RSpec.describe ResultsValidators::PositionsValidator do
         results1 = create_incorrect_tied_results(competition1, "222")
         results2 = create_incorrect_tied_results(competition1, "222", kind: :inbox_result)
         expected_errors = {
-          "Result" => create_result_error(competition1.id, "222-f", name_for_result(results1[1]), 1, 2),
-          "InboxResult" => create_result_error(competition1.id, "222-f", name_for_result(results2[1]), 1, 2),
+          "Result" => create_result_error(competition1.id, "222-f", results1[1].personName, 1, 2),
+          "InboxResult" => create_result_error(competition1.id, "222-f", results2[1].personName, 1, 2),
         }
         validator_args.each do |arg|
           pv = ResultsValidators::PositionsValidator.new.validate(arg)
@@ -140,8 +140,4 @@ end
 
 def create_result_error(competition_id, round_id, name, expected_pos, actual_pos)
   ResultsValidators::ValidationError.new(:results, competition_id, ResultsValidators::PositionsValidator::WRONG_POSITION_IN_RESULTS_ERROR, round_id: round_id, person_name: name, expected_pos: expected_pos, pos: actual_pos)
-end
-
-def name_for_result(result)
-  result.respond_to?(:personName) ? result.personName : InboxPerson.find_by(id: result.personId).name
 end
