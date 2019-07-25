@@ -34,5 +34,33 @@ module ResultsValidators
       @errors = []
       @warnings = []
     end
+
+    protected
+
+    def get_rounds_info_for_competition(competition, round_ids_from_results)
+      # Get rounds information from the competition, and detect a legitimate situation
+      # where a round_id may be missing in the competition rounds: if it was a
+      # combined round and everyone made the cutoff!
+      # See additional comment here: https://github.com/thewca/worldcubeassociation.org/pull/4357#discussion_r307312177
+      rounds_information = Hash[
+        competition.competition_events.flat_map(&:rounds).map do |r|
+          ["#{r.event.id}-#{r.round_type_id}", r]
+        end
+      ]
+      # Now try to "cast" a declared combined round to an existing non-combined round
+      missing_round_ids = round_ids_from_results - rounds_information.keys
+      extra_round_ids = rounds_information.keys - round_ids_from_results
+      missing_round_ids.each do |round_id|
+        event_id, round_type_id = round_id.split("-")
+        equivalent_round_id = "#{event_id}-#{RoundType.toggle_cutoff(round_type_id)}"
+        if extra_round_ids.delete(equivalent_round_id)
+          equivalent_round = rounds_information[equivalent_round_id]
+          if equivalent_round.round_type.combined?
+            rounds_information[round_id] = rounds_information.delete(equivalent_round_id)
+          end
+        end
+      end
+      rounds_information
+    end
   end
 end

@@ -42,17 +42,17 @@ module ResultsValidators
         },
       }
 
-      competitions = Competition.includes(associations).where(id: results_by_round_id_by_competition_id.keys)
-      rounds_info_by_round_id_by_competition_id = Hash[
-        competitions.map do |c|
-          [c.id, Hash[c.competition_events.flat_map(&:rounds).map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]]
+      # eagerload all competitions informations with all appropriate associations.
+      competitions = Hash[
+        Competition.includes(associations).where(id: results_by_round_id_by_competition_id.keys).map do |c|
+          [c.id, c]
         end
       ]
       results_by_round_id_by_competition_id.each do |competition_id, results_by_round_id|
-        rounds_info_by_round_id = rounds_info_by_round_id_by_competition_id[competition_id]
+        rounds_info_by_round_id = get_rounds_info_for_competition(competitions[competition_id], results_by_round_id.keys)
         results_by_round_id.each do |round_id, results_for_round|
           # get cutoff and timelimit
-          round_info = get_round_info(rounds_info_by_round_id, round_id)
+          round_info = rounds_info_by_round_id[round_id]
 
           unless round_info
             # This situation may happen with "old" competitions
@@ -286,25 +286,6 @@ module ResultsValidators
         end
       end
       similar_results
-    end
-
-    def get_round_info(competition_rounds, round_id)
-      # This tries to get the round information from all the rounds in the competition.
-      round_info = competition_rounds[round_id]
-      unless round_info
-        # There is a legitimate situation where a round_id may be missing in the
-        # competition rounds: if it was a combined round and everyone made the cutoff!
-        # See additional comment here: https://github.com/thewca/worldcubeassociation.org/pull/4357#discussion_r307312177
-        event_id, round_type_id = round_id.split("-")
-        equivalent_round_id = "#{event_id}-#{RoundType.toggle_cutoff(round_type_id)}"
-        equivalent_round = competition_rounds[equivalent_round_id]
-        # Check that we indeed detected a "regular" round in the results that
-        # was a combined round before.
-        if equivalent_round&.round_type&.combined?
-          round_info = equivalent_round
-        end
-      end
-      round_info
     end
   end
 end
