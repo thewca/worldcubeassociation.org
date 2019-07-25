@@ -45,7 +45,7 @@ module ResultsValidators
               @errors << ValidationError.new(:results, competition_id,
                                              WRONG_POSITION_IN_RESULTS_ERROR,
                                              round_id: round_id,
-                                             person_name: self.name_from_result(result),
+                                             person_name: result.personName,
                                              expected_pos: expected_pos,
                                              pos: result.pos)
             end

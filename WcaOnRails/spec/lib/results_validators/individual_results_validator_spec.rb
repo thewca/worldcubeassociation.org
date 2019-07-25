@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RV=ResultsValidators
-IRV=RV::IndividualResultsValidator
+RV = ResultsValidators
+IRV = RV::IndividualResultsValidator
 
 RSpec.describe IRV do
   context "on InboxResult and Result" do
@@ -67,7 +67,7 @@ RSpec.describe IRV do
         errs << RV::ValidationError.new(:results, competition1.id,
                                         IRV::DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
                                         round_id: "444-c",
-                                        person_name: name_for_result(res_over_with_results),
+                                        person_name: res_over_with_results.personName,
                                         cutoff: cutoff.to_s(round44))
 
         # Create a result which meets the cutoff but has one result over the time limit
@@ -80,7 +80,7 @@ RSpec.describe IRV do
         errs << RV::ValidationError.new(:results, competition1.id,
                                         IRV::RESULT_OVER_TIME_LIMIT_ERROR,
                                         round_id: "444-c",
-                                        person_name: name_for_result(res_over_limit),
+                                        person_name: res_over_limit.personName,
                                         time_limit: time_limit.to_s(round44))
 
         # Create a result which meets the cutoff but doesn't have all the necessary values
@@ -90,7 +90,7 @@ RSpec.describe IRV do
         errs << RV::ValidationError.new(:results, competition2.id,
                                         IRV::MET_CUTOFF_MISSING_RESULTS_ERROR,
                                         round_id: "333fm-c",
-                                        person_name: name_for_result(res_fm),
+                                        person_name: res_fm.personName,
                                         cutoff: cutoff_fm.to_s(round_fm))
 
         res_cumul = FactoryBot.create(result_kind, :mo3, competition: competition2, eventId: "666", best: 6000)
@@ -99,7 +99,7 @@ RSpec.describe IRV do
         errs << RV::ValidationError.new(:results, competition2.id,
                                         IRV::RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR,
                                         round_ids: "555-f,666-f",
-                                        person_name: name_for_result(res_cumul),
+                                        person_name: res_cumul.personName,
                                         time_limit: cumul_valid.to_s(round55))
 
         FactoryBot.create(result_kind, :mo3, competition: competition2, eventId: "777")
@@ -155,7 +155,7 @@ RSpec.describe IRV do
         errs[model.to_s] << RV::ValidationError.new(:results, competition1.id,
                                                     IRV::MISMATCHED_RESULT_FORMAT_ERROR,
                                                     round_id: "444-f",
-                                                    person_name: name_for_result(res_ko),
+                                                    person_name: res_ko.personName,
                                                     expected_format: "Average of 5",
                                                     format: "Mean of 3")
       end
@@ -191,7 +191,7 @@ RSpec.describe IRV do
         warns << RV::ValidationWarning.new(:results, competition1.id,
                                            IRV::MBF_RESULT_OVER_TIME_LIMIT_WARNING,
                                            round_id: "333mbf-f",
-                                           person_name: name_for_result(res_mbf),
+                                           person_name: res_mbf.personName,
                                            result: res_mbf.solve_times[1].clock_format)
 
         res22 = FactoryBot.create(result_kind, competition: competition2, eventId: "222")
@@ -199,26 +199,25 @@ RSpec.describe IRV do
         warns << RV::ValidationWarning.new(:results, competition2.id,
                                            IRV::RESULT_AFTER_DNS_WARNING,
                                            round_id: "222-f",
-                                           person_name: name_for_result(res22))
+                                           person_name: res22.personName)
 
         # This creates the same result row for a different person as res22, expect for the DNS.
         res_sim1 = FactoryBot.create(result_kind, competition: competition2, eventId: "222")
         warns << RV::ValidationWarning.new(:results, competition2.id,
                                            IRV::SIMILAR_RESULTS_WARNING,
                                            round_id: "222-f",
-                                           person_name: name_for_result(res_sim1),
-                                           similar_person_name: name_for_result(res22))
+                                           person_name: res_sim1.personName,
+                                           similar_person_name: res22.personName)
 
-        res_bf = FactoryBot.create(result_kind, :blind_dnf_mo3, competition: competition1, best: 100_00)
-        # So now we have attempts #1 and #3 which are DNF.
-        # #1 is suspiscious because the success on #2 is 1:40.00, while the cumulative
-        # time limit is 2:00.00.
-        res_bf.update(value1: -1)
+        # We create a result with attempts #1 and #3 which are DNF.
+        # Attempt 2 is suspiscious because the time is 1:40.00, and the competitor
+        # already has one DNF which counts towards the cumulative time limit of 2:00.00.
+        res_bf = FactoryBot.create(result_kind, :blind_dnf_mo3, competition: competition1, best: 100_00, value1: -1)
 
         warns << RV::ValidationWarning.new(:results, competition1.id,
                                            IRV::SUSPICIOUS_DNF_WARNING,
                                            round_ids: "333bf-f",
-                                           person_name: name_for_result(res_bf))
+                                           person_name: res_bf.personName)
 
         expected_warnings[model.to_s] = warns
       end
@@ -245,10 +244,6 @@ def create_over_cutoff(kind, competition, cutoff, event_id)
     roundTypeId: "c",
   }
   FactoryBot.create(kind, attributes)
-end
-
-def name_for_result(result)
-  result.respond_to?(:personName) ? result.personName : InboxPerson.find_by(id: result.personId).name
 end
 
 def person_for_result(result)

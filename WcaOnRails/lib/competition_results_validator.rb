@@ -128,9 +128,6 @@ class CompetitionResultsValidator
 
       check_competitor_limit
 
-      # Note: the "long term" plan is to have an array of validators to apply
-      # on the results, and the line below would turn into:
-      # merge(validator_classes.map { |v| v.new.validate(results: @results) })
       validator_classes = [ResultsValidators::PositionsValidator, ResultsValidators::IndividualResultsValidator]
       merge(validator_classes.map { |v| v.new.validate(results: @results) })
     end
