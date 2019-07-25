@@ -37,7 +37,7 @@ module ResultsValidators
 
     protected
 
-    def get_rounds_info_for_competition(competition, round_ids_from_results)
+    def get_rounds_info(competition, round_ids_from_results)
       # Get rounds information from the competition, and detect a legitimate situation
       # where a round_id may be missing in the competition rounds: if it was a
       # combined round and everyone made the cutoff!

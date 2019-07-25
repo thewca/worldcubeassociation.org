@@ -13,9 +13,6 @@ class CompetitionResultsValidator
   UNEXPECTED_ROUND_RESULTS_ERROR = "Unexpected results for round %{round_id}. The round is present in the results but not created on the events tab. Edit the events tab to include the round."
   MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}. There is an additional round in the events tab that is not present in the results. Edit the events tab to remove the round."
   UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a combined round in the results. Please update the round's information in the competition's manage events page."
-  MISSING_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Missing scrambles. Use the workbook assistant to add the correct scrambles to the round."
-  UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Too many scrambles. Use the workbook assistant to uncheck the unused scrambles."
-  MISSING_SCRAMBLES_FOR_GROUP_ERROR = "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
   CHOOSE_MAIN_EVENT_WARNING = "Your results do not contain results for 3x3x3 Cube. Please tell WRT in the comments that there was 'no main event' if no event was treated as the main event at the competition."\
   " Otherwise, if an event other than 3x3x3 Cube was treated as the main event, please name the main event in your comments to WRT and explain how that event was treated as the main event of the competition."
 
@@ -43,10 +40,6 @@ class CompetitionResultsValidator
   NON_MATCHING_GENDER_WARNING = "Wrong gender for %{name} (%{wca_id}), expected '%{expected_gender}' got '%{gender}'."
   NON_MATCHING_NAME_WARNING = "Wrong name for %{wca_id}, expected '%{expected_name}' got '%{name}'. If the competitor did not change their name then fix the name to the expected name."
   NON_MATCHING_COUNTRY_WARNING = "Wrong country for %{name} (%{wca_id}), expected '%{expected_country}' got '%{country}'. If this is an error, fix it. Otherwise, do leave a comment to the WRT about it."
-
-  # Miscelaneous errors
-  MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round \"%{wcif_id}\" for the cumulative time limit specified in the WCIF."\
-  " Please go to the manage events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
 
   def initialize(competition_id, check_real_results = false)
     @errors = {
@@ -124,11 +117,14 @@ class CompetitionResultsValidator
       end
 
       check_advancement_conditions(results_by_round_id, @competition.competition_events)
-      check_scrambles
 
       check_competitor_limit
 
-      validator_classes = [ResultsValidators::PositionsValidator, ResultsValidators::IndividualResultsValidator]
+      validator_classes = [
+        ResultsValidators::PositionsValidator,
+        ResultsValidators::IndividualResultsValidator,
+        ResultsValidators::ScramblesValidator,
+      ]
       merge(validator_classes.map { |v| v.new.validate(results: @results) })
     end
 
@@ -280,40 +276,6 @@ class CompetitionResultsValidator
           end
         end
         number_of_people_in_previous_round = number_of_people_in_round
-      end
-    end
-  end
-
-  def check_scrambles
-    # Get actual round ids from results
-    rounds_ids = @results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
-
-    # Group scramble by round_id
-    scrambles_by_round_id = @scrambles.group_by { |s| "#{s.eventId}-#{s.roundTypeId}" }
-    detected_scrambles_rounds_ids = scrambles_by_round_id.keys
-    (rounds_ids - detected_scrambles_rounds_ids).each do |round_id|
-      @errors[:scrambles] << format(MISSING_SCRAMBLES_FOR_ROUND_ERROR, round_id: round_id)
-    end
-
-    (detected_scrambles_rounds_ids - rounds_ids).each do |round_id|
-      @errors[:scrambles] << format(UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR, round_id: round_id)
-    end
-
-    # For existing rounds and scrambles matching expected rounds in the WCA website,
-    # check that the number of scrambles match at least the number of expected scrambles.
-    (detected_scrambles_rounds_ids & @expected_rounds_by_ids.keys).each do |round_id|
-      format = @expected_rounds_by_ids[round_id].format
-      expected_number_of_scrambles = format.expected_solve_count
-      scrambles_by_group_id = scrambles_by_round_id[round_id].group_by(&:groupId)
-      scrambles_by_group_id.each do |group_id, scrambles_for_group|
-        # filter out extra scrambles
-        actual_number_of_scrambles = scrambles_for_group.reject(&:isExtra).size
-        if actual_number_of_scrambles < expected_number_of_scrambles
-          @errors[:scrambles] << format(MISSING_SCRAMBLES_FOR_GROUP_ERROR,
-                                        round_id: round_id,
-                                        group_id: group_id, actual: actual_number_of_scrambles,
-                                        expected: expected_number_of_scrambles)
-        end
       end
     end
   end
