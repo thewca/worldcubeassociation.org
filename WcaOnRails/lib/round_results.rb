@@ -18,7 +18,7 @@ class RoundResult
 
   attr_accessor :person_id, :ranking, :attempts
   validates :person_id, numericality: { only_integer: true }
-  validates :ranking, numericality: { only_integer: true }
+  validates :ranking, numericality: { only_integer: true }, allow_nil: true
   validates :attempts, length: { is: 5, message: "must have 5 attempts" }
 
   def initialize(person_id: nil, ranking: nil, attempts: nil)
