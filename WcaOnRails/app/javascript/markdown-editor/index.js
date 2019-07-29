@@ -75,7 +75,6 @@ $(function() {
         '|', 'guide',
       ],
 
-      // Status bar isn't quite working. See https://github.com/NextStepWebs/simplemde-markdown-editor/issues/334
       status: false,
       previewRender: function(plainText, preview) {
         if(this.markdownReqest) {
