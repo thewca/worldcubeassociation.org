@@ -33,6 +33,12 @@ $(function() {
     cm.focus();
   }
 
+  $('input[name="delegate_report[wrc_feedback_requested]"]').on('change', function() {
+    var feedback_requested = this.checked;
+    $('div.delegate_report_wrc_incidents').toggle(feedback_requested);
+    $('input#delegate_report_wrc_incidents').prop('disabled', !feedback_requested);
+  }).trigger('change');
+
   $('.markdown-editor').each(function() {
     let textFormattings = ['bold', 'italic', 'heading'];
     let textStructures = ['quote', 'unordered-list', 'ordered-list', 'table'];

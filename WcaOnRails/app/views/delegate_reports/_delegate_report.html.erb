@@ -1,6 +1,13 @@
 <% competition = delegate_report.competition %>
 
 <div class="delegate-report">
+  <% if delegate_report.wrc_feedback_requested %>
+    <font color="red">
+      <strong>@WRC: Feedback requested on incidents: <%= delegate_report.wrc_incidents %></strong>
+    </font>
+    <br><br>
+  <% end %>
+
   <div>
     <strong>Date</strong>
     <%= wca_date_range(competition.start_date, competition.end_date, locale: :en) %>
