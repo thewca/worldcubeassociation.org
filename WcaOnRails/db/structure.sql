@@ -795,6 +795,8 @@ CREATE TABLE `delegate_reports` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `nag_sent_at` datetime DEFAULT NULL,
+  `wrc_feedback_requested` tinyint(1) NOT NULL DEFAULT '0',
+  `wrc_incidents` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_delegate_reports_on_competition_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1560,4 +1562,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190601105825'),
 ('20190601231550'),
 ('20190622173635'),
-('20190716065618');
+('20190716065618'),
+('20190728084145');

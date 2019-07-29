@@ -18,6 +18,8 @@
     <%= f.input :venue, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
     <%= f.input :organization, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
     <%= f.input :incidents, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
+    <%= f.input :wrc_feedback_requested, as: :boolean %>
+    <%= f.input :wrc_incidents %>
     <%= f.input :remarks, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
 
     <%= f.button :submit, class: "btn-primary" %>

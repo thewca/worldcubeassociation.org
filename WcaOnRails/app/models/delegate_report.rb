@@ -27,6 +27,7 @@ Gen 3 Display: 0"
   validates :schedule_url, url: true
   validates :discussion_url, presence: true, if: :schedule_and_disussion_urls_required?
   validates :discussion_url, url: true
+  validates :wrc_incidents, presence: true, if: :wrc_feedback_requested
 
   def schedule_and_disussion_urls_required?
     posted? && created_at > Date.new(2019, 7, 21)

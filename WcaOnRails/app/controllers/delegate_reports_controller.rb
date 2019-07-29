@@ -62,6 +62,8 @@ class DelegateReportsController < ApplicationController
       :incidents,
       :remarks,
       :posted,
+      :wrc_feedback_requested,
+      :wrc_incidents,
     )
   end
 end

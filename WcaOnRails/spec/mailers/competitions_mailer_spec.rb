@@ -186,16 +186,38 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       CompetitionsMailer.notify_of_delegate_report_submission(competition)
     end
 
-    it "renders the headers" do
-      expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
-      expect(mail.to).to eq ["reports@worldcubeassociation.org"]
-      expect(mail.cc).to match_array competition.delegates.pluck(:email)
-      expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
-      expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
+    context "wrc feedback requested" do
+      before(:each) do
+        competition.delegate_report.update_attributes!(wrc_feedback_requested: true, wrc_incidents: "1, 2, 3")
+      end
+
+      it "renders the headers" do
+        expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
+        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["regulations@worldcubeassociation.org"]
+        expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+        expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
+      end
+
+      it "renders the body" do
+        expect(mail.body.encoded).to match(/@WRC: Feedback requested on incidents: 1, 2, 3/)
+        expect(mail.body.encoded).to match(/This was a great competition/)
+      end
     end
 
-    it "renders the body" do
-      expect(mail.body.encoded).to match(/This was a great competition/)
+    context "no wrc feedback" do
+      it "renders the headers" do
+        expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
+        expect(mail.to).to eq ["reports@worldcubeassociation.org"]
+        expect(mail.cc).to match_array competition.delegates.pluck(:email)
+        expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+        expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
+      end
+
+      it "renders the body" do
+        expect(mail.body.encoded).not_to match(/@WRC/)
+        expect(mail.body.encoded).to match(/This was a great competition/)
+      end
     end
 
     it "is sent in English" do

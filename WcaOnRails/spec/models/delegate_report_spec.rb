@@ -34,6 +34,22 @@ RSpec.describe DelegateReport do
     expect(dr.discussion_url).to eq "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/" + URI.encode_www_form_component(dr.competition.name)
   end
 
+  it "wrc_feedback_requested is set false on creation" do
+    dr = FactoryBot.create :delegate_report
+    expect(dr.wrc_feedback_requested).to eq false
+  end
+
+  it "wrc_incidents is required when wrc_feedback_requested is true" do
+    dr = FactoryBot.build :delegate_report
+    expect(dr).to be_valid
+
+    dr.wrc_feedback_requested = true
+    expect(dr).to be_invalid_with_errors wrc_incidents: ["can't be blank"]
+
+    dr.wrc_incidents = "1, 2, 3"
+    expect(dr).to be_valid
+  end
+
   context "can_view_delegate_report?" do
     let(:other_delegate) { FactoryBot.create :delegate }
     let(:board_member) { FactoryBot.create :user, :board_member }
