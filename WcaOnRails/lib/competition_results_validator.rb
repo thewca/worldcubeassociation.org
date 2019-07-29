@@ -17,8 +17,6 @@ class CompetitionResultsValidator
   " Otherwise, if an event other than 3x3x3 Cube was treated as the main event, please name the main event in your comments to WRT and explain how that event was treated as the main event of the competition."
 
   # Regulations-specific errors and warnings
-  COMPETITOR_LIMIT_WARNING = "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit})."\
-    " Unless a specific agreement was made when announcing the competition (such as a per-day competitor limit), the results of the competitors registered after the competitor limit was reached must be removed."
   REGULATION_9M_ERROR = "Event %{event_id} has more than four rounds, which must not happen per Regulation 9m."
   REGULATION_9M1_ERROR = "Round %{round_id} has 99 competitors or less but has at least three subsequents rounds, which must not happen per Regulation 9m1."
   REGULATION_9M2_ERROR = "Round %{round_id} has 15 competitors or less but has at least two subsequents rounds, which must not happen per Regulation 9m2."
@@ -118,12 +116,11 @@ class CompetitionResultsValidator
 
       check_advancement_conditions(results_by_round_id, @competition.competition_events)
 
-      check_competitor_limit
-
       validator_classes = [
         ResultsValidators::PositionsValidator,
         ResultsValidators::IndividualResultsValidator,
         ResultsValidators::ScramblesValidator,
+        ResultsValidators::CompetitorLimitValidator,
       ]
       merge(validator_classes.map { |v| v.new.validate(results: @results) })
     end
@@ -334,12 +331,6 @@ class CompetitionResultsValidator
       else
         @errors[:persons] << format(WRONG_WCA_ID_ERROR, name: p.name, wca_id: p.wca_id)
       end
-    end
-  end
-
-  def check_competitor_limit
-    if @competition.competitor_limit && @persons.size > @competition.competitor_limit
-      @warnings[:persons] << format(COMPETITOR_LIMIT_WARNING, n_competitors: @persons.size, competitor_limit: @competition.competitor_limit)
     end
   end
 end
