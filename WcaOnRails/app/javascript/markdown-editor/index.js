@@ -1,10 +1,10 @@
-import SimpleMDE from 'simplemde';
+import EasyMDE from "easymde";
 // For some reason, the SimpleMDE css file in the src directory does not seem to work,
-// fortunately, the one in the debug directory *does*.
-// See https://github.com/NextStepWebs/simplemde-markdown-editor/issues/578.
-//import 'simplemde/src/css/simplemde.css';
-import 'simplemde/debug/simplemde.css';
-import './style.scss';
+// fortunately, the one in the dist directory *does*.
+// See https://github.com/Ionaru/easy-markdown-editor/issues/108
+// import "easymde/src/css/easymde.css";
+import "easymde/dist/easymde.min.css";
+import "./style.scss";
 
 $(function() {
   function insertText(editor, markup, promptText) {
@@ -32,7 +32,7 @@ $(function() {
   }
 
   $('.markdown-editor').each(function() {
-    var editor = new SimpleMDE({
+    var editor = new EasyMDE({
       element: this,
       spellChecker: false,
       promptURLs: true,
@@ -92,7 +92,7 @@ $(function() {
     });
 
     // Trick to fix tab and shift+tab focus from:
-    //  https://github.com/NextStepWebs/simplemde-markdown-editor/issues/122#issuecomment-176329907
+    //  https://github.com/sparksuite/simplemde-markdown-editor/issues/122#issuecomment-176329907
     editor.codemirror.options.extraKeys.Tab = false;
     editor.codemirror.options.extraKeys['Shift-Tab'] = false;
   });
