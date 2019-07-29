@@ -1,5 +1,5 @@
 import { GoogleProvider } from 'leaflet-geosearch';
-import { getAuthenticityToken } from 'wca/wcif-utils';
+import fetchWithAuthenticityToken from 'wca/fetchWithAuthenticityToken';
 
 export class WCAProvider extends GoogleProvider {
   endpoint({ query } = {}) {
@@ -12,12 +12,7 @@ export class WCAProvider extends GoogleProvider {
   // This overrides Provider's search method, to be able to include the CSRF token.
   async search({ query }) {
     const url = this.endpoint({ query });
-    let fetchOptions = {
-      headers: {
-        "X-CSRF-Token": getAuthenticityToken(),
-      },
-    };
-    const request = await fetch(url, fetchOptions);
+    const request = await fetchWithAuthenticityToken(url);
     const json = await request.json();
     return this.parse({ data: json });
   }

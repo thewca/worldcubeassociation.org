@@ -1,3 +1,5 @@
+import fetchWithAuthenticityToken from 'wca/fetchWithAuthenticityToken';
+
 import EasyMDE from "easymde";
 // For some reason, the SimpleMDE css file in the src directory does not seem to work,
 // fortunately, the one in the dist directory *does*.
@@ -32,50 +34,60 @@ $(function() {
   }
 
   $('.markdown-editor').each(function() {
+    let textFormattings = ['bold', 'italic', 'heading'];
+    let textStructures = ['quote', 'unordered-list', 'ordered-list', 'table'];
+    let allowImageUploads = this.classList.contains("markdown-editor-image-upload");
+    let uploadsAndInserts = [
+      'link',
+    ];
+    if(allowImageUploads) {
+      uploadsAndInserts.push('upload-image');
+    }
+    uploadsAndInserts = [
+      ...uploadsAndInserts,
+      {
+        name: 'map',
+        action: function insertMap(editor) {
+          var mapMarkup = {
+            start: 'map(',
+            end: ')',
+            build: function(address) { return this.start + address + this.end; }
+          };
+
+          insertText(editor, mapMarkup, 'Address or coordinates of the place:');
+        },
+        className: 'fa fa-map-marker',
+        title: 'Insert Map',
+      },
+      {
+        name: 'youtube',
+        action: function insertMap(editor) {
+          var youTubeMarkup = {
+            start: 'youtube(',
+            end: ')',
+            build: function(videoUrl) { return this.start + videoUrl + this.end; }
+          };
+
+          insertText(editor, youTubeMarkup, 'Full url to the YouTube video:');
+        },
+        className: 'fa fa-youtube-play',
+        title: 'Insert YouTube Video',
+      },
+    ];
+    let previews = ['preview', 'side-by-side', 'fullscreen'];
+    let helps = ['guide'];
+    let toolbar = [
+      ...textFormattings,
+      '|', ...textStructures,
+      '|', ...uploadsAndInserts,
+      '|', ...previews,
+      '|', ...helps,
+    ];
     var editor = new EasyMDE({
       element: this,
       spellChecker: false,
       promptURLs: true,
-      insertTexts: {
-        image: ['![Image description', '](#url#)'],
-      },
-      toolbar: [
-        'bold', 'italic', 'heading',
-        '|', 'quote', 'unordered-list', 'ordered-list', 'table',
-        '|', 'link', 'image',
-        {
-          name: 'map',
-          action: function insertMap(editor) {
-            var mapMarkup = {
-              start: 'map(',
-              end: ')',
-              build: function(address) { return this.start + address + this.end; }
-            };
-
-            insertText(editor, mapMarkup, 'Address or coordinates of the place:');
-          },
-          className: 'fa fa-map-marker',
-          title: 'Insert Map',
-        },
-        {
-          name: 'youtube',
-          action: function insertMap(editor) {
-            var youTubeMarkup = {
-              start: 'youtube(',
-              end: ')',
-              build: function(videoUrl) { return this.start + videoUrl + this.end; }
-            };
-
-            insertText(editor, youTubeMarkup, 'Full url to the YouTube video:');
-          },
-          className: 'fa fa-youtube-play',
-          title: 'Insert YouTube Video',
-        },
-        '|', 'preview', 'side-by-side', 'fullscreen',
-        '|', 'guide',
-      ],
-
-      status: false,
+      toolbar: toolbar,
       previewRender: function(plainText, preview) {
         if(this.markdownReqest) {
           clearTimeout(this.markdownReqest);
@@ -89,7 +101,25 @@ $(function() {
 
         return "Waiting...";
       },
+
+      status: ['upload-image'],
+      uploadImage: true,
+      imageUploadFunction: async function(file, onSuccess, onError) {
+        let formData = new FormData();
+        formData.append("image", file);
+        try {
+          let response = await fetchWithAuthenticityToken('/upload/image', {method: "POST", body: formData});
+          let data = await response.json();
+          onSuccess(data.filePath);
+        } catch(e) {
+          onError(e);
+        }
+      },
     });
+    // Workaround for https://github.com/Ionaru/easy-markdown-editor/pull/109/
+    editor.uploadImages = function(files, onSuccess, onError) {
+      this.uploadImagesUsingCustomFunction(editor.options.imageUploadFunction, files);
+    }
 
     // Trick to fix tab and shift+tab focus from:
     //  https://github.com/sparksuite/simplemde-markdown-editor/issues/122#issuecomment-176329907

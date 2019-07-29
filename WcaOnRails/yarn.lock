@@ -2909,10 +2909,10 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
-easymde@^2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/easymde/-/easymde-2.7.0.tgz#42e52010b5611892d61bcaf29f595c8f40e43002"
-  integrity sha512-ir+RC4y72HuOqwy5ZCeyfMSzgh4ZBRwYT/gjuBhBzXc6tYFhFSVQD87nEpdZehvhLSa2DshZLsPAFSGxs4ZI5A==
+easymde@^2.7.1-202.0:
+  version "2.7.1-202.0"
+  resolved "https://registry.yarnpkg.com/easymde/-/easymde-2.7.1-202.0.tgz#98487a95299390737b5360fc07818c833f80d72f"
+  integrity sha512-oZ+bqsbW6OkTagdevf1//nqBIS1KwAeSGBH6eYxl2WCARmMl0gSJK16wK3grWJseFv9fHom5SSvyd1lDcZ3Ydw==
   dependencies:
     codemirror "^5.48.0"
     codemirror-spell-checker "1.1.2"
