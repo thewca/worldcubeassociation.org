@@ -93,5 +93,19 @@ GB_COUNTIES = %w(
   Worcestershire
   Yorkshire
 ).to_set
+GB_TERRITORIES = %w(
+  Akrotiri\ and\ Dhekelia
+  Anguilla
+  Bermuda
+  British\ Virgin\ Islands
+  Cayman\ Islands
+  Falkland\ Islands
+  Gibraltar
+  Montserrat
+  Pitcairn\ Islands
+  Saint\ Helena,\ Ascension\ and\ Tristan\ da\ Cunha
+  Turks\ and\ Caicos\ Islands
+).to_set
+GB_REGIONS = GB_COUNTIES | GB_TERRITORIES
 
-CityValidator.add_validator_for_country "GB", CityCommaRegionValidator.new(type_of_region: "county", valid_regions: GB_COUNTIES)
+CityValidator.add_validator_for_country "GB", CityCommaRegionValidator.new(type_of_region: "county", valid_regions: GB_REGIONS)
