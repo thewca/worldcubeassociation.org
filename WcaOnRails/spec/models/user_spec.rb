@@ -682,4 +682,19 @@ RSpec.describe User, type: :model do
       expect(User.delegate_reports_receivers_emails).to eq ["seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", staff_member1.email]
     end
   end
+
+  describe "#can_manage_any_not_over_competitions?" do
+    let!(:manager_upcoming_and_past) { FactoryBot.create :user }
+    let!(:manager_past_only) { FactoryBot.create :user }
+    let!(:upcoming_competition) { FactoryBot.create :competition, starts: 1.month.from_now, organizers: [manager_upcoming_and_past] }
+    let!(:past_competition) { FactoryBot.create :competition, starts: 1.month.ago, organizers: [manager_past_only, manager_upcoming_and_past] }
+
+    it "knows if you are managing upcoming competitions" do
+      expect(manager_upcoming_and_past.can_manage_any_not_over_competitions?).to be true
+    end
+
+    it "knows if you only managed past competitions" do
+      expect(manager_past_only.can_manage_any_not_over_competitions?).to be false
+    end
+  end
 end

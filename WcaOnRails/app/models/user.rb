@@ -592,6 +592,15 @@ class User < ApplicationRecord
     wdc_team? || wrc_team? || communication_team? || can_announce_competitions?
   end
 
+  def can_upload_images?
+    (
+      can_create_posts? ||
+      can_update_delegate_crash_course? ||
+      any_kind_of_delegate? || # Delegates are allowed to upload photos when writing a delegate report.
+      can_manage_any_not_over_competitions? # Competition managers may want to upload photos to their competition tabs.
+    )
+  end
+
   def can_update_delegate_crash_course?
     can_admin_competitions? || quality_assurance_committee?
   end
@@ -604,6 +613,10 @@ class User < ApplicationRecord
 
   def can_manage_competition?(competition)
     can_admin_competitions? || competition.organizers.include?(self) || competition.delegates.include?(self) || wrc_team? || competition.delegates.map(&:senior_delegate).compact.include?(self) || ethics_committee?
+  end
+
+  def can_manage_any_not_over_competitions?
+    delegated_competitions.not_over.present? || organized_competitions.not_over.present?
   end
 
   def can_view_hidden_competitions?

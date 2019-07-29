@@ -1,18 +1,18 @@
-import events from './events.js.erb'
+import events from './events.js.erb';
+import fetchWithAuthenticityToken from './fetchWithAuthenticityToken';
 
 function promiseSaveWcif(competitionId, data) {
   let url = `/api/v0/competitions/${competitionId}/wcif`;
   let fetchOptions = {
     headers: {
       "Content-Type": "application/json",
-      "X-CSRF-Token": getAuthenticityToken(),
     },
     credentials: 'include',
     method: "PATCH",
     body: JSON.stringify(data),
   };
 
-  return fetch(url, fetchOptions);
+  return fetchWithAuthenticityToken(url, fetchOptions);
 }
 
 export function getAuthenticityToken() {
