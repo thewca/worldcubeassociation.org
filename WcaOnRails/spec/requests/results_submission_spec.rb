@@ -34,13 +34,6 @@ RSpec.describe ResultsSubmissionController, type: :request do
   context "logged in as THE delegate" do
     let(:user) { comp.delegates.first }
     let(:submission_message) { "Hello, here are the results" }
-    let(:file_contents) { '{ "results": "good" }' }
-    let(:file) do
-      temp_file = Tempfile.new(["sometmpfilename", ".json"])
-      temp_file.write(file_contents)
-      temp_file.rewind
-      Rack::Test::UploadedFile.new(temp_file.path, "application/json")
-    end
 
     before :each do
       sign_in user
