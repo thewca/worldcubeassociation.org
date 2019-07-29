@@ -6,9 +6,9 @@ FactoryBot.define do
     # and id is not the usual auto increment integer (it's actually a varchar!)
     # Therefore we make the simple choice of always setting the id based on
     # what is present in the db.
-    # 'maximum(:id).to_i' always work: either it's nil and returns 0, or it just
-    # returns the appropriate number.
-    id { (InboxPerson.maximum(:id).to_i + 1) }
+    # Since id is a varchar, `maximum(:id)` only works up to "9"...
+    # Therefore we must do the max logic in RoR's world after casting.
+    id { ((InboxPerson.pluck(:id).map(&:to_i).max || 0) + 1) }
     wcaId { "" }
     name { Faker::Name.name }
     countryId { Country.real.sample.iso2 }
