@@ -97,9 +97,6 @@ Metrics/ModuleLength:
 Naming/MemoizedInstanceVariableName:
   Enabled: false
 
-Performance/RedundantMatch:
-  Enabled: false
-
 Style/AccessModifierDeclarations:
   Enabled: false
 
