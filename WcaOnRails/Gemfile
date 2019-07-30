@@ -11,7 +11,7 @@ end
 gem 'rails'
 gem 'rails-i18n'
 gem 'activerecord-import'
-gem 'sass-rails'
+gem 'sassc-rails'
 gem 'uglifier'
 gem 'therubyracer'
 
