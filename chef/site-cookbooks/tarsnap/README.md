@@ -9,7 +9,6 @@ Provides a chef cookbook with LWRP's to take directory snapshots and maintain re
 
 Backup services are handled by [Colin Percival](https://twitter.com/cperciva)'s excellent [tarsnap](https://www.tarsnap.com/).
 
-
 ## Installation
 
 ### Cookbook Installation
@@ -26,7 +25,6 @@ Or install the cookbook from github:
 Or use the [knife-github-cookbooks](https://github.com/websterclay/knife-github-cookbooks) plugin:
 
     $ knife cookbook github install jssjr/chef-tarsnap
-
 
 ### Knife Plugin Installation
 
@@ -49,7 +47,6 @@ Alternatively, add this line to your application's Gemfile:
 And then execute:
 
     $ bundle
-
 
 ## Usage
 
@@ -114,7 +111,6 @@ tarsnap_schedule "realtime" do
 end
 ```
 
-
 ### Tarsnap keys
 
 Tarsnap keys are stored on the chef server in an encrypted data bag. When the tarsnap::default recipe is included in a node's run list, it will call the tarsnap_key LWRP and attempt to create the /root/tarsnap.key file. If the key is not found in the tarsnap keys data bag, then the LWRP will create a placeholder data bag item indicating the key needs to be created. The tarsnap knife plugin provides tasks to simplify key management.
@@ -129,7 +125,6 @@ The format of the encrypted data bag item is:
 }
 ```
 
-
 ### Configuring the tarsnap knife plugin
 
 > **NOTE** This plugin requires you to have tarsnap installed! Please see [https://www.tarsnap.com/download.html](https://www.tarsnap.com/download.html) for sources, or ask your favorite operating system's package manager.
@@ -138,51 +133,49 @@ The format of the encrypted data bag item is:
 
 You can provide the required options for the knife plugin on the command line, or you can set them in your knife.rb file.
 
-* **Username**
+- **Username**
 
   command line: `-A` or `--tarsnap-username`
 
   knife.rb: `knife[:tarsnap_username] = "root@example.com"`
 
-* **Password** (By default, knife will prompt for the password if required.)
+- **Password** (By default, knife will prompt for the password if required.)
 
   command line: `-K` or `--tarsnap-password`
 
   knife.rb: `knife[:tarsnap_password] = "supersecret" # Bad idea!`
 
-* **Data Bag** (By default, the keys data bag is `tarsnap_keys`)
+- **Data Bag** (By default, the keys data bag is `tarsnap_keys`)
 
   command line: `-B` or `--tarsnap-data-bag`
 
   knife.rb: `knife[:tarsnap_data_bag] = "tarsnap_keys"`
 
-
 ### Managing keys with the knife plugin
 
-#### $ knife tarsnap key list (options)
+#### \$ knife tarsnap key list (options)
 
 Lists all known and pending tarsnap keys.
 
-#### $ knife tarsnap key create NODE (options)
+#### \$ knife tarsnap key create NODE (options)
 
 Creates the tarsnap key for a node, and removes the placeholder data bag item so the node is no longer considered pending. This command will prompt for your Tarsnap password if it isn't provided as an option or in your knife.rb config file.
 
-#### $ knife tarsnap key from file KEYFILE NODE (options)
+#### \$ knife tarsnap key from file KEYFILE NODE (options)
 
 Create the tarsnap key for a node by reading the key contents from a file.
 
-#### $ knife tarsnap key show NODE (options)
+#### \$ knife tarsnap key show NODE (options)
 
 Output the decrypted tarsnap key for a node.
 
-#### $ knife tarsnap key export (options)
+#### \$ knife tarsnap key export (options)
 
 Export all keys into a local directory named ./tarsnap-keys-TIMESTAMP. Override the directory with the `-D DIRNAME` option.
 
-
 ### Managing backups with the knife plugin
 
-#### $ knife tarsnap backup show NODE \[ARCHIVE\] (options)
+#### \$ knife tarsnap backup show NODE \[ARCHIVE\] (options)
 
 Show all of the archives that tarsnap has for a node. If the archive name is provided, then list the filenames in the archive.
 
@@ -209,11 +202,11 @@ Example:
     etc/acpi/powerbtn.sh
     etc/adduser.conf
 
-#### $ knife tarsnap backup download NODE ARCHIVE (options)
+#### \$ knife tarsnap backup download NODE ARCHIVE (options)
 
 Download an archive tarball from the tarsnap server.
 
-#### $ knife tarsnap backup dump NODE ARCHIVE PATTERN (options)
+#### \$ knife tarsnap backup dump NODE ARCHIVE PATTERN (options)
 
 Dump the contents of files in an archive that match the provided pattern to standard output. This is similar to using the tar command with an inclusion pattern. Use the `-D DIRECTORY` option to retrieve the matching files into a local directory instead.
 
@@ -222,20 +215,18 @@ Example:
     $ knife tarsnap backup dump ip-10-72-206-146.ec2.internal etc-201304070526UTC-daily 'etc/adduser.conf' | head
     # /etc/adduser.conf: `adduser' configuration.
     # See adduser(8) and adduser.conf(5) for full documentation.
-    
+
     # The DSHELL variable specifies the default login shell on your
     # system.
     DSHELL=/bin/bash
-    
+
     # The DHOME variable specifies the directory containing users' home
     # directories.
     DHOME=/home
 
-
 ## Warning!
 
 You need to keep a copy of your keys somewhere safe. If you lose them, then it is **impossible** to recover anything from your tarsnap backups. The chef server provides a convenient storage system for this data through data bags, however I strongly suggest storing redundant copies of the keys in multiple locations.
-
 
 ## Contributing
 

@@ -20,10 +20,10 @@ $rows = dbQuery("
     Competitions competition,
     Events event
   $WHERE 1
-  
+
     AND ((type = 'Single' AND result.best = record.value) OR (type = 'Average' AND result.average = record.value))
     AND result.eventId = record.eventId
-  
+
     AND competition.id = result.competitionId
     AND event.id       = result.eventId
     AND event.rank < 990

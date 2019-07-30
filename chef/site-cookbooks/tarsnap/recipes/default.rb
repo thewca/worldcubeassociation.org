@@ -32,7 +32,7 @@ when "freebsd"
     action :install
   end
 else
-  unless ::File.exists?(bin_cmd) && 
+  unless ::File.exists?(bin_cmd) &&
     current_version.run_command.stdout.split[1] == latest_version
 
     require 'digest'

@@ -31,7 +31,7 @@ function migrate () {
     noticeBox( false, "You need to apply migation 1 first." );
     return;
   }
-  
+
   #--- Leave if we are already up-to-date
   $number = dbQuery( "
               SELECT value FROM  ResultsStatus
@@ -57,7 +57,7 @@ function migrate () {
   alterTableCompetitions();
   alterTableCountries();
   alterTableContinents();
-    
+
   #--- Yippie, we did it!
   noticeBox( true, "Migration completed." );
 }
@@ -80,7 +80,7 @@ function alterTableCompetitions () {
       ADD    COLUMN `latitude`  INTEGER NOT NULL DEFAULT 0,
       ADD    COLUMN `longitude` INTEGER NOT NULL DEFAULT 0
   ");
-  
+
   }
 
 #----------------------------------------------------------------------
@@ -104,7 +104,7 @@ function alterTableContinents () {
            zoom='3'
     WHERE  id = '_Africa'
   ");
-  
+
   dbCommand( "
     UPDATE Continents
     SET    latitude='34364439',
@@ -112,7 +112,7 @@ function alterTableContinents () {
            zoom='2'
     WHERE  id = '_Asia'
   ");
-  
+
   dbCommand( "
     UPDATE Continents
     SET    latitude='-25274398',
@@ -120,7 +120,7 @@ function alterTableContinents () {
            zoom='3'
     WHERE  id = '_Australia'
   ");
-  
+
   dbCommand( "
     UPDATE Continents
     SET    latitude='58299984',
@@ -128,7 +128,7 @@ function alterTableContinents () {
            zoom='3'
     WHERE  id = '_Europe'
   ");
-  
+
   dbCommand( "
     UPDATE Continents
     SET    latitude='45486546',
@@ -136,7 +136,7 @@ function alterTableContinents () {
            zoom='3'
     WHERE  id = '_North America'
   ");
-  
+
   dbCommand( "
     UPDATE Continents
     SET    latitude='-21735104',

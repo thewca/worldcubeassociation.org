@@ -1,6 +1,6 @@
 <?php
 /* @file
- * 
+ *
  * Just something to print out stylesheet links a bit more cleanly.
  * Should add 'media' functionality.
  */

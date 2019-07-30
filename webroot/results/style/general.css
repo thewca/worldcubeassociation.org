@@ -1,11 +1,13 @@
 body {
   /*margin: 15px;*/
   padding: 0;
-  background: #FFF;
+  background: #fff;
   color: #333;
 }
 
-body, td, th {
+body,
+td,
+th {
   font-family: Arial, Verdana, Helvetica, sans-serif;
 }
 
@@ -37,7 +39,7 @@ ul {
   margin-left: auto;
   margin-right: auto;
   /*border: 1px solid #CCC;*/
-  background: #FFF;
+  background: #fff;
   padding: 2px;
   text-align: left;
 }
@@ -52,7 +54,7 @@ ul {
   margin: 0;
   padding: 40px 0 0 105px;
   height: 65px;
-  background: url('images/logo.gif') no-repeat;
+  background: url("images/logo.gif") no-repeat;
   text-align: left;
   vertical-align: middle;
   color: orange;
@@ -69,13 +71,13 @@ ul {
 }
 
 #rimenu {
-  border: 1px solid #CCC;
+  border: 1px solid #ccc;
   padding: 2px;
   margin: 0;
 }
 
 #choices .space {
-  font-size:   0.75em;
+  font-size: 0.75em;
   font-weight: bold;
   padding: 2px 8px 0 0;
 }
@@ -86,12 +88,12 @@ ul {
 
 #choices select,
 #choices input {
-   /*margin-top: 2px;*/
+  /*margin-top: 2px;*/
 }
 
-table td.body_outer   {
+table td.body_outer {
   padding: 2px;
-  border: 1px solid #CCC;
+  border: 1px solid #ccc;
 }
 
 .back_button {
@@ -101,18 +103,18 @@ table td.body_outer   {
   font-size: 0.8em;
   font-weight: bold;
   border: double;
-  border-color: #CCC;
+  border-color: #ccc;
   width: auto;
   padding: 0 3px;
   line-height: 16px;
   margin: 1px;
-  
+
   /* background gradient */
   background: #f0f0f0;
 }
 
 .buttborder {
-  border: 3.4px double #CCC;
+  border: 3.4px double #ccc;
   margin: -6px 0 0;
   padding: 0;
 }
@@ -132,44 +134,44 @@ label {
 }
 
 .butt {
-  color: #A40;
+  color: #a40;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
   vertical-align: middle;
   font-weight: bold;
   width: auto;
-  border: 3.4px double #CCC;
+  border: 3.4px double #ccc;
   padding: 0 2px;
   margin: 0;
   line-height: 20px;
   height: 24px;
   font-size: 1em;
-  
+
   /* background gradient */
   background: #f0f0f0;
 }
 
 .chosenButton {
-  color: #F60;
+  color: #f60;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
   vertical-align: middle;
   font-weight: bold;
   width: auto;
-  border: 3.4px double #CCC;
+  border: 3.4px double #ccc;
   padding: 0 2px;
   margin: 0;
   line-height: 20px;
   height: 24px;
   font-size: 1em;
-  
+
   /* background gradient */
   background: #eeeeee;
 }
 
 .drop {
-  color: #F60;
-  background-color: #EEE;
+  color: #f60;
+  background-color: #eee;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
@@ -184,14 +186,15 @@ label {
     display: inline;
   }
 
-  form.form-inline input[type="text"], form.form-inline select {
+  form.form-inline input[type="text"],
+  form.form-inline select {
     width: 100%;
   }
 }
 
 .butt2 {
-  color: #F60;
-  background-color: #EEE;
+  color: #f60;
+  background-color: #eee;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
@@ -199,18 +202,22 @@ label {
 
 .inputbox {
   padding: 2px;
-  border: 1px solid #CCC;
-  background-color: #FFF;
+  border: 1px solid #ccc;
+  background-color: #fff;
   font-size: 1em;
 }
 
-h1, h2, h3, table caption, .caption {
+h1,
+h2,
+h3,
+table caption,
+.caption {
   text-align: center;
   padding: 0;
   margin: 0em 0;
   font-size: 1.2em;
   font-weight: bold;
-  color: #A20;
+  color: #a20;
 }
 
 h2 {
@@ -224,7 +231,8 @@ h3 {
   font-size: 0.8em;
 }
 
-dt, dd {
+dt,
+dd {
   text-align: left;
   margin: 0;
 }
@@ -232,7 +240,7 @@ dt, dd {
 dt {
   padding: 5px 0 0 5px;
   font-size: 0.8em;
-  color: #A20;
+  color: #a20;
 }
 
 dd {
@@ -244,7 +252,7 @@ dd {
 
 .errorMessage {
   font-size: 2em;
-  color:     #F00;
+  color: #f00;
   text-align: center;
 }
 
@@ -259,12 +267,12 @@ img {
 }
 
 img.person {
-  max-width:  600px;
+  max-width: 600px;
   max-height: 300px;
 }
 
 div:target {
-  border-left: 5px solid #0C0;
+  border-left: 5px solid #0c0;
   padding-left: 5px;
 }
 
@@ -276,29 +284,30 @@ div .notice {
   padding: 10px 5px;
   border: 3px solid #777;
   color: #000;
-  background-color: #EEE;
+  background-color: #eee;
   font-weight: bold;
 }
 
 div .notice.failure {
-  border-color: #C00;
-  color: #C00;
-  background-color: #FEE;
+  border-color: #c00;
+  color: #c00;
+  background-color: #fee;
 }
 
 div .notice.warning {
-  border-color: #DB0;
-  color: #DB0;
-  background-color: #FF8; 
+  border-color: #db0;
+  color: #db0;
+  background-color: #ff8;
 }
 
 div .notice.success {
-  border-color: #3C3;
-  color: #3C3;
-  background-color: #DFD;
+  border-color: #3c3;
+  color: #3c3;
+  background-color: #dfd;
 }
 
-div .notice p, div.notice ul {
+div .notice p,
+div.notice ul {
   margin: 5px 10px;
 }
 
@@ -312,22 +321,23 @@ fieldset {
   margin: 10px 15px;
   border: 1px solid #000;
   border-radius: 3px;
-  box-shadow: 2px 2px 3px #EEE;
+  box-shadow: 2px 2px 3px #eee;
   padding: 10px;
 }
 
 fieldset legend {
   border: 1px solid #000;
   border-radius: 3px;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   padding: 2px 4px;
   font-style: italic;
   font-size: 0.8em;
 }
 
-input[error], select[error] {
-  border: 1px solid #C00;
-  background-color: #FEE;
+input[error],
+select[error] {
+  border: 1px solid #c00;
+  background-color: #fee;
 }
 
 .form-element-wrapper {
@@ -363,7 +373,6 @@ input[error], select[error] {
   font-weight: normal;
   font-size: 0.85em;
 }
-
 
 /* specific form styles - photo submission */
 form#photo-submissions div.form-element-wrapper {
@@ -404,17 +413,24 @@ form#photo-submission-approval .form-element-radio-option label {
   margin-top: 0;
 }
 
-form#photo-submission-approval .form-element-wrapper .form-element-radio-option {
+form#photo-submission-approval
+  .form-element-wrapper
+  .form-element-radio-option {
   margin: 20px 15px 0 0;
   color: #090;
 }
-form#photo-submission-approval .form-element-wrapper .form-element-radio-option
+form#photo-submission-approval
+  .form-element-wrapper
+  .form-element-radio-option
   + .form-element-radio-option {
   color: #900;
 }
-form#photo-submission-approval .form-element-wrapper .form-element-radio-option
-  + .form-element-radio-option + .form-element-radio-option {
-  color: #A90;
+form#photo-submission-approval
+  .form-element-wrapper
+  .form-element-radio-option
+  + .form-element-radio-option
+  + .form-element-radio-option {
+  color: #a90;
 }
 
 /* specific form styles - 'choices' form */
@@ -441,11 +457,11 @@ form.choices_form .form-element-wrapper .form-element {
   float: left;
   clear: both;
   margin: 2px 0;
-} 
+}
 
 form.choices_form .form-element-wrapper #form-element-submit {
   display: block;
-  border: 3.4px double #CCC;
+  border: 3.4px double #ccc;
   font-size: 12px;
   margin: 14px 0 0 8px;
   height: 26px;

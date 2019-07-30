@@ -38,7 +38,7 @@ foreach ( $validTimes as $personId => $times ) {
 usort( $rows, "rowComparison" );
 array_splice( $rows, 10 );
 
-#--- Helper function for sorting rows by (rate,attempts) 
+#--- Helper function for sorting rows by (rate,attempts)
 function rowComparison ( $a, $b ) {
   list( $solvesA, $attemptsA, $averageA ) = array( $a[2], $a[3], $a[6] );
   list( $solvesB, $attemptsB, $averageB ) = array( $b[2], $b[3], $b[6] );
@@ -48,7 +48,7 @@ function rowComparison ( $a, $b ) {
   #--- Same rate? Then who has more attempts?
   if ( $attemptsA != $attemptsB ) return $attemptsB - $attemptsA;
   #--- Still the same? Then better average wins (if even same average, I don't care anymore)
-  return ($averageA < $averageB) ? -1 : 1; 
+  return ($averageA < $averageB) ? -1 : 1;
 }
 
 #--- Add this statistic to the statistics collection

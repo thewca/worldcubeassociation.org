@@ -29,7 +29,7 @@ function migrate () {
     noticeBox( false, "You need to apply migation 1 first." );
     return;
   }
-  
+
   #--- Leave if we are already up-to-date
   $number = dbQuery( "
               SELECT value FROM  ResultsStatus
@@ -53,7 +53,7 @@ function migrate () {
 
   #--- Apply the migration changes.
   alterTableCompetitions();
-    
+
   #--- Yippie, we did it!
   noticeBox( true, "Migration completed." );
 }
@@ -77,8 +77,8 @@ function alterTableCompetitions () {
       ADD    COLUMN `showResults`    BOOLEAN NOT NULL DEFAULT 0,
       ADD    COLUMN `password`       VARCHAR(45) NOT NULL;
   ");
-  
-  #--- Make showAtAll true, and showResults true for all competitions with results. 
+
+  #--- Make showAtAll true, and showResults true for all competitions with results.
   reportAction( "Competitions", "Set {showAtAll,showResults}" );
   dbCommand( "UPDATE Competitions SET showAtAll=1" );
   dbCommand( "
@@ -97,7 +97,7 @@ function alterTableCompetitions () {
       UPDATE Competitions
       SET password='$password'
       WHERE id='$id'
-    " );  
+    " );
   }
 }
 

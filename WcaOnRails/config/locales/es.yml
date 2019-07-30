@@ -2070,7 +2070,7 @@ es:
           el %{end_date_and_time}.
         #original_hash: 7ac8349
         range_past_html: >-
-          El registro en línea se abrió el %{start_date_and_time} y se cerró el 
+          El registro en línea se abrió el %{start_date_and_time} y se cerró el
           %{end_date_and_time}.
     index:
       #original_hash: db98a68

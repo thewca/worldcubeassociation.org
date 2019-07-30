@@ -21,7 +21,7 @@ function migrate () {
     noticeBox( false, "You need to apply migation 1 first." );
     return;
   }
-  
+
   #--- Leave if we are already up-to-date
   $number = dbQuery( "
               SELECT value FROM  ResultsStatus

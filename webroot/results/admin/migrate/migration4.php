@@ -27,7 +27,7 @@ function migrate () {
     noticeBox( false, "You need to apply migation 1 first." );
     return;
   }
-  
+
   #--- Leave if we are already up-to-date
   $number = dbQuery( "
               SELECT value FROM  ResultsStatus
@@ -52,7 +52,7 @@ function migrate () {
   #--- Apply the migration changes.
   alterTableCompetitions();
   createTablePreregs();
-    
+
   #--- Yippie, we did it!
   noticeBox( true, "Migration completed." );
 }
@@ -75,7 +75,7 @@ function alterTableCompetitions () {
       ADD    COLUMN `showPreregForm` BOOLEAN NOT NULL DEFAULT 0,
       ADD    COLUMN `showPreregList` BOOLEAN NOT NULL DEFAULT 0
   ");
-  
+
   }
 #----------------------------------------------------------------------
 function createTablePreregs () {

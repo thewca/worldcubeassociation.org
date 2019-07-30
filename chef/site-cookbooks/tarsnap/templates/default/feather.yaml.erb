@@ -16,11 +16,11 @@ max_runtime: <%= @node['tarsnap']['feather']['max_runtime'] %>
 # Define the schedule
 #
 # period: Seconds.  A backup is taken every period.
-# always_keep: Number of backups to keep of a particular period, before 
+# always_keep: Number of backups to keep of a particular period, before
 #              pruning old backups.  Backups younger than now()-period are
 #              never removed.
 # implies:  Include another defined schedule.  i.e. if WEEKLY implies
-#           MONTHLY, and you ask for WEEKLY backups, you will get WEEKLY 
+#           MONTHLY, and you ask for WEEKLY backups, you will get WEEKLY
 #           and MONTHLY.
 # before/after: Restrict running to a certain time of day (UTC)
 <% fc043_hack = @schedules %>

@@ -10,7 +10,7 @@ $lists[] = array(
 
 function sdRanking () {
   global $WHERE;
-  
+
   #--- Get ...
   $results = dbQuery("
     SELECT personName, personId, value1, value2, value3, value4, value5,
@@ -26,7 +26,7 @@ function sdRanking () {
     ORDER BY sd, personName
     LIMIT 0, 10
   ");
- 
+
   foreach( $results as $result){
     extract( $result );
 
