@@ -1423,7 +1423,7 @@ nl:
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
-        Voor deze WCA-id hebben wij nog geen land gevuld. Stuur een e-mail aan 
+        Voor deze WCA-id hebben wij nog geen land gevuld. Stuur een e-mail aan
         <a href='mailto:results@worldcubeassociation.org'
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: c3839bc
@@ -2232,7 +2232,7 @@ nl:
         cumulative_one_round_html: 'Er kan een %{cumulative_time_limit} gelden (zie %{regulation_link}).'
         #original_hash: c6190b6
         cumulative_across_rounds_html: >-
-          Er kan een %{cumulative_time_limit} gelden over meerdere rondes (zie 
+          Er kan een %{cumulative_time_limit} gelden over meerdere rondes (zie
           %{guideline_link}).
         #original_hash: e4e48c6
         cutoff_html: >-

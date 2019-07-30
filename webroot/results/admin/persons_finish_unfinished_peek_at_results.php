@@ -29,7 +29,7 @@ function showDescription () {
   global $chosenNameHtml, $chosenCountryIdHtml;
 
   echo "<p>This page shows results where...<ul><li>personName = <b>$chosenNameHtml</b></li><li>countryId = <b>$chosenCountryIdHtml</b></li><li>personId is missing</li></ul></p>";
-  
+
   echo "<hr>";
 }
 

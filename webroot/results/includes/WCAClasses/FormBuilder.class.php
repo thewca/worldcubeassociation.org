@@ -1,10 +1,10 @@
 <?php
 /* @file
- * 
+ *
  * This file implements basic functionality for creating and validating forms.
- * 
+ *
  * Please help improve this class!  Extending functionality here can help us implement a maintainable codebase.
- * 
+ *
  */
 namespace WCAClasses;
 

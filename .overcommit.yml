@@ -51,3 +51,6 @@ PreCommit:
     enabled: true
     required_executable: 'WcaOnRails/bin/yarn'
     flags: ['run', '-s', 'stylelint', '-f', 'compact']
+
+  TrailingWhitespace:
+    enabled: true

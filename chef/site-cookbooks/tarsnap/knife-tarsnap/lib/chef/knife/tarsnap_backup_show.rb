@@ -42,7 +42,7 @@ class Chef
           f.close
 
           if archive_name.nil?
-            list_cmd = "#{tarsnap_tool} --keyfile #{f.path} --list-archives" 
+            list_cmd = "#{tarsnap_tool} --keyfile #{f.path} --list-archives"
           else
             list_cmd = "#{tarsnap_tool} -t --keyfile #{f.path} -f #{archive_name}"
           end

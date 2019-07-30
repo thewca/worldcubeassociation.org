@@ -36,7 +36,7 @@ switch($action) {
     $new_id = getRawParamThisShouldBeAnException('new_id');
     $new_name = getRawParamThisShouldBeAnException('new_name');
     $new_country = getRawParamThisShouldBeAnException('new_country');
-    
+
     $command = 'UPDATE Results SET personId = ?, personName = ?, countryId = ? WHERE personId = ? AND personName = ? AND countryId = ?';
     $params = array('ssssss', &$new_id, &$new_name, &$new_country, &$old_id, &$old_name, &$old_country);
 

@@ -1,10 +1,10 @@
 <?php
 /* @file
- * 
+ *
  * This file implements basic functionality for creating and validating form elements.
- * 
+ *
  * Please help improve this class!  Extending functionality here can help us implement a maintainable codebase.
- * 
+ *
  */
 namespace WCAClasses\FormBuilderEntities;
 
@@ -36,7 +36,7 @@ class Entity
                                     "class" => "form-element form-element-{$name}");
 
         // Get submitted value - work with raw values, since current functionality can garble input.
-        global $rawParametersDontUseOutsideParametersModule;            
+        global $rawParametersDontUseOutsideParametersModule;
         if(isset($_REQUEST[$name])) {
             $this->submitted_value = $_REQUEST[$name];
         } elseif(isset($rawParametersDontUseOutsideParametersModule[$name])) {

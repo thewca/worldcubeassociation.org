@@ -16,7 +16,7 @@ function showUpdateSQL () {
 #----------------------------------------------------------------------
 
   echo "<pre>I'm doing this:\n";
-  
+
   foreach( getRawParamsThisShouldBeAnException() as $key => $value ){
 
     if( preg_match( '/^setround(\w*)\/(\w*)\/(\w*)$/', $key, $match )){
@@ -39,7 +39,7 @@ function showUpdateSQL () {
       dbCommand( $command );
     }
   }
- 
+
   foreach( $updateRounds as $competitionId => $eventIds ){
     foreach( $eventIds as $eventId => $roundTypeIds ){
       if( $roundTypeIds['confirm'] != 1 ) continue;
@@ -72,7 +72,7 @@ function showUpdateSQL () {
         foreach( $roundTypeIds as $roundTypeIdOld => $roundTypeIdNew ){
 
           // We can replace a roundTypeId with another one if the new one will not be replaced again
-          if( ! in_array( $roundTypeIdNew, array_keys( $roundTypeIds ))){ 
+          if( ! in_array( $roundTypeIdNew, array_keys( $roundTypeIds ))){
 
             // Replace in Results table
             $command = "UPDATE Results
@@ -100,7 +100,7 @@ function showUpdateSQL () {
       if( $i == 5 ) noticeBox( false, "Found a loop for competition $competitionId and event $eventId" );
 
     }
-  } 
+  }
   echo "\nFinished.</pre>\n";
 }
 

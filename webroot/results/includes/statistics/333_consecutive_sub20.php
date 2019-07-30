@@ -4,7 +4,7 @@ add_333_consecutive_sub20();
 
 function add_333_consecutive_sub20 () {
   global $lists, $WHERE;
-  
+
   #--- Get ...
   $results = dbQuery("
     SELECT personName, personId, value1, value2, value3, value4, value5
@@ -14,10 +14,10 @@ function add_333_consecutive_sub20 () {
       AND competition.id = competitionId
     ORDER BY personId, year, month, day, roundTypeId
   ");
-  
+
   foreach( structureBy( $results, 'personId' ) as $personResults ){
     extract( $personResults[0] );
-    
+
     #--- Collect all values of this person, add a DNF at the end.
     $values = array();
     foreach( $personResults as $personResult ){
@@ -28,7 +28,7 @@ function add_333_consecutive_sub20 () {
       }
     }
     $values[] = -1;
-  
+
     #--- Find longest streak.
     $streak = array();
     $bestStreak = array();
@@ -57,7 +57,7 @@ function add_333_consecutive_sub20 () {
   $ongoing = array_slice( $ongoing, 0, 10 );
   $persons = array_map( 'formatSub20Streak', $persons );
   $ongoing = array_map( 'formatSub20Streak', $ongoing );
-  
+
   #--- Specify the list.
   $lists[] = array(
     "sub20_streak_3x3",
@@ -71,7 +71,7 @@ function add_333_consecutive_sub20 () {
 function analyzeSub20Streak ( $personId, $personName, $streak ) {
   return array (
     'idAndName' => "$personId-$personName",
-    'length'    => count( $streak ), 
+    'length'    => count( $streak ),
     'best'      => min( $streak ),
     'worst'      => max( $streak ),
     'average'   => array_sum( $streak ) / count( $streak )

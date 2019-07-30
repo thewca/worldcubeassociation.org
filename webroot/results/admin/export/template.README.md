@@ -43,7 +43,7 @@ https://www.worldcubeassociation.org/about
 The export contains a `metadata.json` file, with the following fields:
 
 | Field                   | Sample Value                  |
-|-------------------------|-------------------------------|
+| ----------------------- | ----------------------------- |
 | `export_date`           | `"2018-09-19T05:04:58+02:00"` |
 | `export_format_version` | `"1.0.0"`                     |
 
@@ -53,7 +53,7 @@ major part of the version (the part before the first `.`) changes.
 
 If you are processing the exported data using an automated system, we recommend
 using a cron job to check the API endpoint at:
-https://www.worldcubeassociation.org/api/v0/export/public  
+https://www.worldcubeassociation.org/api/v0/export/public
 You can use the `export_date` to detect if there is a new export, and the
 `sql_url` and `tsv_url` will contain the URLs for the corresponding downloads.
 
@@ -62,7 +62,7 @@ You can use the `export_date` to detect if there is a new export, and the
 The database export consists of these tables:
 
 | Table                                   | Contents                                           |
-|-----------------------------------------|----------------------------------------------------|
+| --------------------------------------- | -------------------------------------------------- |
 | Persons                                 | WCA competitors                                    |
 | Competitions                            | WCA competitions                                   |
 | Events                                  | WCA events (3x3x3 Cube, Megaminx, etc)             |
@@ -120,6 +120,7 @@ Values of the `Results` table can be interpreted as follows:
 - The value `0` means "no result". For example a result in a `best-of-3` round
   has a value of `0` for the `value4`, `value5`, and `average` fields.
 - Positive values depend on the event; see the column "format" in Events.
+
   - Most events have the format "time", where the value represents centiseconds.
     For example, 8653 means 1 minute and 26.53 seconds.
   - The format "number" means the value is a raw number, currently only used by

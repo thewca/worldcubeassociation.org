@@ -1,12 +1,12 @@
 <?php
 /* @file
- * 
+ *
  * This file implements logic to create a basic mysqli connection, and implements a couple other functions contained
  * in the _database.php include file.  Currently most of the results system relies on mysql functionality, which will
  * soon be deprecated.
- * 
+ *
  * Please help improve this class!  Extending functionality here can help us implement a maintainable codebase.
- * 
+ *
  */
 namespace WCAClasses;
 
@@ -165,7 +165,7 @@ class DBConn
             $cols[] = &$data[$column->name];
         }
         call_user_func_array(array($statement, 'bind_result'), $cols);
-        
+
         // amass results (less than ideal - return the statement if optimization needed)
         $array = array(); $i=0;
         while($statement->fetch())
@@ -189,7 +189,7 @@ class DBConn
             echo "<tr>";
             foreach(get_object_vars($result) as $property => $value)
             {
-                echo "<td>" . htmlEntities($value) . "</td>"; 
+                echo "<td>" . htmlEntities($value) . "</td>";
             }
             echo "</tr>";
         }

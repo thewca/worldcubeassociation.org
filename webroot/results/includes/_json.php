@@ -7,7 +7,7 @@ function wca_decode_json ( $json ) {
   $data = json_decode( $json, true );
   if (json_last_error() == JSON_ERROR_NONE)
     return array($data, false);
-  
+
   switch (json_last_error()) {
     case JSON_ERROR_DEPTH:          return array(false, 'Maximum stack depth exceeded');
     case JSON_ERROR_STATE_MISMATCH: return array(false, 'Underflow or the modes mismatch');

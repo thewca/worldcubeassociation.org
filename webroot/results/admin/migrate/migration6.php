@@ -31,7 +31,7 @@ function migrate () {
     noticeBox( false, "You need to apply migation 1 first." );
     return;
   }
-  
+
   #--- Leave if we are already up-to-date
   $number = dbQuery( "
               SELECT value FROM  ResultsStatus
@@ -55,7 +55,7 @@ function migrate () {
 
   #--- Apply the migration changes.
   moveOldMulti();
-    
+
   #--- Yippie, we did it!
   noticeBox( true, "Migration completed." );
 }
@@ -74,7 +74,7 @@ function moveOldMulti () {
   #--- Alter the field set.
   reportAction( "Results", "Move" );
   $results = dbQuery(" SELECT * FROM Results WHERE eventId='333mbo' ");
- 
+
   foreach( $results as $result ){
     $oneGood = false;
     $theBest = 0;

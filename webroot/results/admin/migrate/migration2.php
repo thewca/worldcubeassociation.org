@@ -40,7 +40,7 @@ function migrate () {
     noticeBox( false,  "Wrong version number : " . $number . ". Must be 1");
     return;
   }
- 
+
 
   #--- ResultsStatus table: Update migration number.
   reportAction( "ResultsStatus", "Set migration number to 2" );
@@ -48,12 +48,12 @@ function migrate () {
     UPDATE   ResultsStatus
       SET    value = '2'
       WHERE  id = 'migration'
-  "); 
+  ");
 
   #--- Apply the migration changes.
   buildTableCompetitionsMedia();
   alterTableCompetitions();
-  
+
   #--- Yippie, we did it!
   noticeBox( true, "Migration completed." );
 }
@@ -96,9 +96,9 @@ function buildTableCompetitionsMedia () {
     UNION
     SELECT id competitionId, 'multimedia' type, multimedia data FROM Competitions
   ");
-  
+
   #--- Fill the CompetitionsMedia table with the data.
-  reportAction( "CompetitionsMedia", "Fill with data from table Competitions" );  
+  reportAction( "CompetitionsMedia", "Fill with data from table Competitions" );
 #  echo "<table>";
   foreach( $media as $data ){
     extract( $data ); # competitionId, type, data
@@ -110,11 +110,11 @@ function buildTableCompetitionsMedia () {
     preg_match_all( '/\[ \{ ([^}]+) } \{ ([^}]+) } ]/x', $data, $matches, PREG_SET_ORDER );
     foreach( $matches as $match ){
       list( $all, $text, $uri ) = $match;
-      
+
       #--- Polish the data.
       $text = mysqlEscape( $text );
       $uri = mysqlEscape( $uri );
-      
+
 #      echo "<tr><td>";
 #      echo implode( "</td><td>", array( $competitionId, $type, $text, $uri ));
 #      echo "</td></tr>";
@@ -123,7 +123,7 @@ function buildTableCompetitionsMedia () {
           (competitionId, type, uri, text, submitterComment, submitterEmail, submitterName, timestampSubmitted, timestampDecided, status)
         VALUES
           ('$competitionId', '$type', '$uri', '$text', '$comment', '', '', '$timestampComp', '$timestampComp', 'accepted')
-      "); 
+      ");
     }
   }
 #  echo "</table>";
@@ -141,7 +141,7 @@ function alterTableCompetitions () {
       DROP   COLUMN `reports`,
       DROP   COLUMN `multimedia`
   ");
-  
+
 
 }
 

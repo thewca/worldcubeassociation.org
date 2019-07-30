@@ -6,9 +6,9 @@
 #
 #   If you want to add a list, write a file like the others and include
 #   it in the list in this script.
-# 
+#
 #   Each list definition appends to $lists an array with these values:
-# 
+#
 #     - Id (used as html anchor)
 #     - Title (for the top-list and shown in brown-red above the stat)
 #     - Subtitle (shown in gray)
@@ -18,7 +18,7 @@
 #
 #   The column definitions must reflect the data rows. Each column
 #   is defined as "[type] name" with these possible types:
-# 
+#
 #     [P] Person.      For person ids.
 #     [E] Event.       For event ids.
 #     [C] Competition. For competition ids.
@@ -29,7 +29,7 @@
 #                      guess it's a 'time' format event.
 #     [f] Filler.      Automatically added later, used for last column
 #                      to fill the table to make it page width.
-# 
+#
 #   Moreover, types [T], [N] and [R] are bold versions of their lower
 #   case versions and should be used for important values while the
 #   lower case versions should be used for auxiliary values.
@@ -62,7 +62,7 @@ $statisticFiles = array(
 
 #--- You can test a single statistic by overwriting the list like this:
 #$statisticFiles = array( 'sub_x' );
-  
+
 foreach ( $statisticFiles as $statisticFile )
   addOneStatistic( $statisticFile );
 
@@ -72,7 +72,7 @@ function addOneStatistic ( $statisticFile ) {
 #----------------------------------------------------------------------
   global $lists;
   global $WHERE, $sinceDateHtml, $sinceDateMysql, $sinceDateCondition;
-  
+
   startTimer();
   require( "$statisticFile.php" );
   stopTimer( "STATISTIC: $statisticFile" );

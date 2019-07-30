@@ -1,8 +1,8 @@
 <?php
 /* @file
- * 
+ *
  * This file contains a class which can be used for storing/accessing competition data.
- * 
+ *
  */
 namespace WCAClasses;
 

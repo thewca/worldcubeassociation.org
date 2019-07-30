@@ -276,7 +276,7 @@ function checkRoundNames ( $roundInfos, $competitionId, $eventId ) {
   #--- Switch between combined and not combined
   $switchCombined = array('h' => '0', '0' => 'h', 'd' => '1', '1' => 'd', '2' => 'e', 'e' => '2', 'g' => '3', '3' => 'g', 'c' => 'f', 'f' => 'c' );
 
-  $normalRoundIds = array( 0 => array(), 1 => array( 'f' ), 2 => array( '1', 'f' ), 3 => array( '1', '2', 'f' ), 4 => array( '1', '2', '3', 'f' )); 
+  $normalRoundIds = array( 0 => array(), 1 => array( 'f' ), 2 => array( '1', 'f' ), 3 => array( '1', '2', 'f' ), 4 => array( '1', '2', '3', 'f' ));
 
   $nbErrors = 0;
   $nbRounds = (( $roundInfos[0][0] == '0' ) or ( $roundInfos[0][0] == 'h' )) ? count( $roundInfos ) - 1 : count( $roundInfos );
@@ -298,7 +298,7 @@ function checkRoundNames ( $roundInfos, $competitionId, $eventId ) {
       #--- Check for round name
       $normalRoundId = array_shift( $normalRoundIds[$nbRounds] );
       if(( $listCombined[$roundTypeId]?$switchCombined[$roundTypeId]:$roundTypeId ) != $normalRoundId ){
-        $roundTypeId = $listCombined[$roundTypeId]?$switchCombined[$normalRoundId]:$normalRoundId; 
+        $roundTypeId = $listCombined[$roundTypeId]?$switchCombined[$normalRoundId]:$normalRoundId;
         echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $backRoundId</a></p>";
         echo "<p>Round $roundCellName should be ". roundCellName( $roundTypeId ) . "</p>";
         $nbErrors += 1;
@@ -495,7 +495,7 @@ function changeRounds ( $competitionId, $eventId, $translateRounds, $checked ) {
     extract( $roundRow );
 
     $formId = "setround$competitionId/$eventId/$roundTypeId";
-    tableRow( array( $cellName, listRounds( $translateRounds[$roundTypeId], $formId), '' )); 
+    tableRow( array( $cellName, listRounds( $translateRounds[$roundTypeId], $formId), '' ));
 
   }
   tableEnd();

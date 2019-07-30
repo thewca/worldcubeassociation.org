@@ -4,7 +4,7 @@ add_blindfold_333_consecutive_successes();
 
 function add_blindfold_333_consecutive_successes () {
   global $lists, $WHERE;
-  
+
   #--- Get ...
   $results = dbQuery("
     SELECT personId, value1, value2, value3, value4, value5, year, month
@@ -14,10 +14,10 @@ function add_blindfold_333_consecutive_successes () {
       AND competition.id = competitionId
     ORDER BY personId, year, month, day, roundTypeId
   ");
-  
+
   foreach( structureBy( $results, 'personId' ) as $personResults ){
     extract( $personResults[0] );
-    
+
     #--- Collect all values of this person, add a 'current DNF' sentinel at the end.
     unset( $datedValues );
     foreach( $personResults as $personResult ){
@@ -74,7 +74,7 @@ function add_blindfold_333_consecutive_successes () {
 
   usort( $persons, 'compareBlindfoldStreaks' );
   $persons = array_slice( $persons, 0, 10 );
-  
+
   $lists[] = array(
     "blind_streak_3x3",
     "3x3x3 Blindfolded longest success streak",

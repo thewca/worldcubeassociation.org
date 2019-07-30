@@ -16,7 +16,7 @@ function showUpdateSQL () {
 #----------------------------------------------------------------------
 
   echo "<pre>I'm doing this:\n";
-  
+
   foreach( getRawParamsThisShouldBeAnException() as $key => $value ){
 
     if( preg_match( '/^setpos([1-9]\d*)$/', $key, $match ) && preg_match( '/^[1-9]\d*$/', $value )){
@@ -26,7 +26,7 @@ function showUpdateSQL () {
       dbCommand( $command );
     }
   }
- 
+
   echo "\nFinished.</pre>\n";
 }
 

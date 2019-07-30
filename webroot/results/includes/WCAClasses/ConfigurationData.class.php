@@ -76,7 +76,7 @@ class ConfigurationData
         $filesPath = $this->data["filesPath"];
         $pathToRoot = $this->data["pathToRoot"];
         $errors = Array();
-        
+
         $writable_paths = Array("uploads", "generated", "generated/cache");
         foreach($writable_paths as $path) {
             $fullpath = $filesPath . $path;

@@ -1,10 +1,10 @@
 <?php
 /* @file
- * 
+ *
  * This file implements basic functionality for creating and validating form elements.
- * 
+ *
  * Please help improve this class!  Extending functionality here can help us implement a maintainable codebase.
- * 
+ *
  */
 namespace WCAClasses\FormBuilderEntities;
 
@@ -20,7 +20,7 @@ class Input extends Entity
     {
         $output = parent::render();
         $output .= "<div class='form-element-wrapper'>";
-        
+
         if($this->label && $this->attributes['id']) {
             $output .= "<label for='" . o($this->attributes['id']) . "'>" . o($this->label) . ": </label>";
         }

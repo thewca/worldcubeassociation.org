@@ -2,15 +2,15 @@
 
 # - New table "ResultsStatus" (id VARCHAR(50), value VARCHAR(50))
 #   to store some attributes for the system.
-# 
+#
 # - Start with: ResultsStatus['migration'] = '1'
 #
 # - Table "Competitions":
 #     - Remove field "comments".
 #     - Rename field "eventIds" to "eventSpecs".
 #     - Repace endMonth/endDay zeroes with positive numbers.
-  
- 
+
+
 #----------------------------------------------------------------------
 #   Initialization and page contents.
 #----------------------------------------------------------------------
@@ -31,7 +31,7 @@ function migrate () {
     noticeBox( false, "This migration has already been applied." );
     return;
   }
-  
+
   #--- ResultsStatus table: Create it.
   reportAction( "ResultsStatus", "Create" );
   dbCommand("
@@ -43,11 +43,11 @@ function migrate () {
 
   #--- ResultsStatus table: Set migration number.
   reportAction( "ResultsStatus", "Set migration number to 1" );
-  dbCommand( "INSERT INTO ResultsStatus (id, value) VALUES ('migration', '1')" ); 
+  dbCommand( "INSERT INTO ResultsStatus (id, value) VALUES ('migration', '1')" );
 
   #--- Apply the migration changes.
   alterTableCompetitions();
-    
+
   #--- Yippie, we did it!
   noticeBox( true, "Migration completed." );
 }
@@ -70,14 +70,14 @@ function alterTableCompetitions () {
       DROP   COLUMN `comments`,
       CHANGE COLUMN `eventIds` `eventSpecs` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL
   ");
-  
+
   #--- Repace endMonth/endDay zeroes with positive numbers.
   reportAction( "Competitions", "Replace endMonth zeroes" );
-  dbCommand( "UPDATE Competitions SET endMonth=month WHERE endMonth=0" );  
-  
+  dbCommand( "UPDATE Competitions SET endMonth=month WHERE endMonth=0" );
+
   #--- Repace endMonth/endDay zeroes with positive numbers.
   reportAction( "Competitions", "Replace endDay zeroes" );
-  dbCommand( "UPDATE Competitions SET endDay=day WHERE endDay=0" );  
+  dbCommand( "UPDATE Competitions SET endDay=day WHERE endDay=0" );
 }
 
 ?>

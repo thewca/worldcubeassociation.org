@@ -161,6 +161,6 @@ function numberSelect ( $id, $label, $from, $to, $default ) {
       $result .= "<option value='$i'>$i</option>\n";
   }
   $result .= "</select>\n\n";
-  return "<label for='$id'>$label:</label> $result";  
+  return "<label for='$id'>$label:</label> $result";
 
 }

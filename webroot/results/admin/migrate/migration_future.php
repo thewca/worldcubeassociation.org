@@ -2,7 +2,7 @@
 
 # - New table "ResultsStatus" (id VARCHAR(50), value VARCHAR(50))
 #   to store some attributes for the system.
-# 
+#
 # - Start with: ResultsStatus['migration'] = '1'
 #
 # - New table "CompetitionsMedia" to store articles/reports/multimedia
@@ -15,8 +15,8 @@
 #     - Add flags {showAtAll,showResults,showPreregForm,showPreregList}.
 #     - Add {viewPassword,editPassword}.
 #     - Repace endMonth/endDay zeroes with positive numbers.
-  
- 
+
+
 #----------------------------------------------------------------------
 #   Initialization and page contents.
 #----------------------------------------------------------------------
@@ -33,13 +33,13 @@ function migrate () {
 #----------------------------------------------------------------------
 
 # TODO: unescape the uris.
-    
+
   #--- Leave if we've done this migration already.
   if( databaseTableExists( 'ResultsStatus' )){
     noticeBox( false, "This migration has already been applied." );
     return;
   }
-  
+
   #--- ResultsStatus table: Create it.
   reportAction( "ResultsStatus", "Create" );
   dbCommand("
@@ -51,14 +51,14 @@ function migrate () {
 
   #--- ResultsStatus table: Set migration number.
   reportAction( "ResultsStatus", "Set migration number to 1" );
-  dbCommand( "INSERT INTO ResultsStatus (id, value) VALUES ('migration', '1')" ); 
+  dbCommand( "INSERT INTO ResultsStatus (id, value) VALUES ('migration', '1')" );
 
   #--- Apply the migration changes.
   buildTableCompetitionsMedia();
   alterTableCompetitions();
-    
+
   #--- PreRegs table: Create it.
-  
+
   #--- UPDATE aux...
 
   #--- Yippie, we did it!
@@ -102,23 +102,23 @@ function buildTableCompetitionsMedia () {
     UNION
     SELECT id competitionId, 'multimedia' type, multimedia data FROM Competitions
   ");
-  
+
   #--- Fill the CompetitionsMedia table with the data.
-  reportAction( "CompetitionsMedia", "Fill with data from table Competitions" );  
+  reportAction( "CompetitionsMedia", "Fill with data from table Competitions" );
 #  echo "<table>";
   foreach( $media as $data ){
     extract( $data ); # competitionId, type, data
 #    if( $competitionId == 'BelgianOpen2007' )
 #      echo "<b>$data</b>";
-      
+
     preg_match_all( '/\[ \{ ([^}]+) } \{ ([^}]+) } ]/x', $data, $matches, PREG_SET_ORDER );
     foreach( $matches as $match ){
       list( $all, $text, $uri ) = $match;
-      
+
       #--- Polish the data.
       $text = mysqlEscape( $text );
       $uri = mysqlEscape( $uri );
-      
+
 #      echo "<tr><td>";
 #      echo implode( "</td><td>", array( $competitionId, $type, $text, $uri ));
 #      echo "</td></tr>";
@@ -127,7 +127,7 @@ function buildTableCompetitionsMedia () {
           (competitionId, type, uri, text, submitterComment, submitterEmail, timestampDecided, status)
         VALUES
           ('$competitionId', '$type', '$uri', '$text', '$comment', '', now(), 'accepted')
-      "); 
+      ");
     }
   }
 #  echo "</table>";
@@ -154,8 +154,8 @@ function alterTableCompetitions () {
       ADD    COLUMN `viewPassword`   VARCHAR(45) NOT NULL,
       ADD    COLUMN `editPassword`   VARCHAR(45) NOT NULL;
   ");
-  
-  #--- Make showAtAll true, and showResults true for all competitions with results. 
+
+  #--- Make showAtAll true, and showResults true for all competitions with results.
   reportAction( "Competitions", "Set {showAtAll,showResults}" );
   dbCommand( "UPDATE Competitions SET showAtAll=1" );
   dbCommand( "
@@ -174,13 +174,13 @@ function alterTableCompetitions () {
       UPDATE Competitions
       SET viewPassword='$password', editPassword='$password'
       WHERE id='$id'
-    " );  
+    " );
   }
 
   #--- Repace endMonth/endDay zeroes with positive numbers.
   reportAction( "Competitions", "Replace endMonth/endDay zeroes" );
   dbCommand( "UPDATE Competitions SET endMonth=month WHERE endMonth=0" );
-  dbCommand( "UPDATE Competitions SET endDay=day WHERE endDay=0" );  
+  dbCommand( "UPDATE Competitions SET endDay=day WHERE endDay=0" );
 }
 
 ?>

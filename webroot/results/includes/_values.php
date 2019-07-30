@@ -71,7 +71,7 @@ function formatValue( $value, $format='time' ) {
     #--- Combine.
     if ( $old )
       return "<span style='color:#999'>$solved/$attempted</span> <span style='color:#999'>$result</span>";
-    else      
+    else
       return "$solved/$attempted <span style='color:#999'>$result</span>";
   }
 

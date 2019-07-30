@@ -1,10 +1,10 @@
 <?php
 /* @file
- * 
+ *
  * This file implements basic functionality for creating and validating form elements.
- * 
+ *
  * Please help improve this class!  Extending functionality here can help us implement a maintainable codebase.
- * 
+ *
  */
 namespace WCAClasses\FormBuilderEntities;
 
@@ -19,7 +19,7 @@ class Markup extends Entity
 
     public function __construct($markup)
     {
-        parent::__construct("");        
+        parent::__construct("");
         $this->markup = $markup;
         $this->validator(NULL); // Can't really validate this.
     }

@@ -1655,7 +1655,7 @@ sk:
         kontaktujte %{board}.
       #original_hash: ce33e21
       confirmed_not_visible_html: >-
-        Potvrdili ste túto súťaž, ale ešte nie je viditeľná. Počkajte na 
+        Potvrdili ste túto súťaž, ale ešte nie je viditeľná. Počkajte na
         %{board} aby ju spravila viditeľnou.
       #original_hash: e94cba8
       is_visible: 'Táto súťaž je viditeľná, hociaké zmeny, ktoré urobíte sa ukážu verejne!'

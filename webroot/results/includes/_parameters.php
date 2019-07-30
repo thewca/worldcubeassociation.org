@@ -3,7 +3,7 @@
 #   This module handles all incoming parameters. First it does is
 #   hide them all in a variable no other script should use (somewhat
 #   enforced by a ridiculously long and self-explanatory name).
-# 
+#
 #   The scripts can then get the parameters through the functions
 #   below. Examples demonstrating the naming conventions and result
 #   values follow:
@@ -16,7 +16,7 @@
 #
 #     $chosenFoo = getNormalParamDefault( 'foo', 'ANYTHING' );
 #       -> [A-Za-z0-9_ ]*
-# 
+#
 #     $chosenFooHtml  = getHtmlParam( 'foo' );
 #       -> html-safe string
 #
@@ -27,9 +27,9 @@
 #   ANYTHING is an arbitrary string. The prefix 'chosen' and the
 #   suffices 'Html' and 'Mysql' are our conventions and must be
 #   followed to emphasize the meaning!
-# 
+#
 #   An html-string must only be used in printing the HTML output.
-# 
+#
 #   A mysql-string must only be used in an SQL query, and must be
 #   enclosed in quotes.
 #

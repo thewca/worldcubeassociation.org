@@ -19,7 +19,7 @@ if($table == "Results") {
   $deleted = $wcadb_conn->boundCommand(
      "DELETE FROM Results WHERE competitionId=? AND eventId=? AND roundTypeId=?",
       array('sss', &$compId, &$eventId, &$roundTypeId)
-    );  
+    );
 }
 
 if($table == "All") {
