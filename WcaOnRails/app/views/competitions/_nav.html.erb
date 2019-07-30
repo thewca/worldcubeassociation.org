@@ -1,3 +1,4 @@
+<% collapsible_id = 0 %>
 <div class="container-fluid">
   <div class="row">
     <div id="competition-nav">
@@ -31,8 +32,8 @@
       if current_user&.can_manage_competition?(@competition)
         nav_items << {
           text: t('.menu.edit'),
-          path: current_user.can_admin_competitions? ? admin_edit_competition_path(@competition) : edit_competition_path(@competition),
           fa_icon: "lock",
+          collapsible: true,
           children: [
             { text: t('.menu.orga_view'), path: edit_competition_path(@competition), fa_icon: "lock" },
             { text: t('.menu.event_view'), path: edit_events_path(@competition), fa_icon: "cubes" },
@@ -81,7 +82,7 @@
       if current_user&.can_admin_results?
         nav_items << {
           text: "Admin results",
-          path: competition_admin_index_path(@competition),
+          collapsible: true,
           fa_icon: "cogs",
           children: [
             { text: "Upload and check results", path: competition_admin_upload_results_edit_path(@competition), fa_icon: "check" },
@@ -146,8 +147,13 @@
 
       <% blocks.define :nav_list_item do |nav_item| %>
         <% if !nav_item[:hidden] %>
-
-          <%= link_to nav_item[:path], class: "list-group-item" + (nav_item[:active] ? ' active' : '') do %>
+          <% link_args = [nav_item[:path], { class: "list-group-item" + (nav_item[:active] ? ' active' : '') }] %>
+          <% if nav_item[:collapsible] %>
+            <% collapsible_id += 1 %>
+            <% link_args[0] = "#collapsible-#{collapsible_id}" %>
+            <% link_args[1][:data] = { toggle: "collapse" } %>
+          <% end %>
+          <%= link_to *link_args do %>
             <%= blocks.render :nav_icon, nav_item, {} %>
             <%= nav_item[:text] %>
             <% if nav_item[:notification_count] %>
@@ -157,7 +163,7 @@
             <% end %>
           <% end %>
 
-          <% if nav_item[:active] %>
+          <% if nav_item[:active] || nav_item[:collapsible] %>
 
             <% if nav_item[:tiny_children] && nav_item[:tiny_children].length > 0 %>
               <div class="list-group">
@@ -179,7 +185,16 @@
             <% end %>
 
             <% if nav_item[:children] && nav_item[:children].length > 0 %>
-              <div class="list-group">
+              <% css_classes = %w(list-group) %>
+              <% if nav_item[:collapsible] %>
+                <% css_classes << "collapse" %>
+                <% css_classes << "in" if nav_item[:active] %>
+              <% end %>
+              <div class="<%= css_classes.join(" ") %>"
+                <% if nav_item[:collapsible] %>
+                     id="collapsible-<%= collapsible_id %>"
+                <% end %>
+                >
                 <%= blocks.render :nav_list_item, collection: nav_item[:children] %>
               </div>
             <% end %>

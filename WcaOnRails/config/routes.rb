@@ -58,7 +58,6 @@ Rails.application.routes.draw do
     post 'submit-results' => 'results_submission#create', as: :submit_results
     post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
     # WRT views and action
-    get '/admin' => "admin#actions_index_for_competition", as: :admin_index
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_results", as: :admin_check_existing_results
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results

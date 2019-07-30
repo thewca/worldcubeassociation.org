@@ -32,10 +32,6 @@ class AdminController < ApplicationController
     render 'merge_people'
   end
 
-  def actions_index_for_competition
-    @competition = competition_from_params
-  end
-
   def new_results
     @competition = competition_from_params
     @upload_json = UploadJson.new
