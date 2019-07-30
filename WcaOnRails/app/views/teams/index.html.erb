@@ -23,7 +23,7 @@
             <td>
               <%= users_to_sentence team.current_members.where(team_leader: true).map(&:user) %>
             </td>
-            <td><%= link_to icon("pencil-square-o", "Manage"), edit_team_path(team), class: "btn btn-success" %></td>
+            <td><%= link_to icon("fas", "edit", "Manage"), edit_team_path(team), class: "btn btn-success" %></td>
           </tr>
         <% end %>
       </table>

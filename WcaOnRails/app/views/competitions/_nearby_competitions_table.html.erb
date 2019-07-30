@@ -17,7 +17,7 @@
           link_to c.name, competition_path(c.id)
         end %>
         <% unless c.confirmed? %>
-          <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="top" data-container="body" title="This competition is not confirmed yet."></i>
+          <i class="fas fa-exclamation-circle" data-toggle="tooltip" data-placement="top" data-container="body" title="This competition is not confirmed yet."></i>
         <% end %>
       </td>
       <td><%= users_to_sentence c.delegates %></td>

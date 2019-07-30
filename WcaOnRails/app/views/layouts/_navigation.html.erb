@@ -5,12 +5,12 @@
       <span>
         <a href="<%= root_path %>">World Cube Association</a>
         <br>
-        <%= link_to(icon("instagram"), "https://www.instagram.com/thewcaofficial/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(icon("facebook-official"), "https://www.facebook.com/WorldCubeAssociation/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(icon("twitter"), "https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(icon("reddit"), "https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(icon("twitch"), "https://www.twitch.tv/worldcubeassociation/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(icon("weibo"), "https://www.weibo.com/theWCA/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("fab", "instagram"), "https://www.instagram.com/thewcaofficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("fab", "facebook-official"), "https://www.facebook.com/WorldCubeAssociation/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("fab", "twitter"), "https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("fab", "reddit"), "https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("fab", "twitch"), "https://www.twitch.tv/worldcubeassociation/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(icon("fab", "weibo"), "https://www.weibo.com/theWCA/", target: "_blank", class: "hide-new-window-icon") %>
       </span>
     </div>
     <div class="navbar-header">
@@ -25,69 +25,69 @@
       <ul class="nav navbar-nav">
         <li class="dropdown <%= params[:controller] == 'static_pages' || params[:controller] == 'posts' ? 'active' : '' %>">
           <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= icon('info-circle') %> <span class="hidden-sm"><%= t '.information' %></span> <span class="caret"></span>
+            <%= icon('fa', 'info-circle') %> <span class="hidden-sm"><%= t '.information' %></span> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="<%= about_path %>"><%= icon('file-text') %> <%= t '.about' %></a></li>
-            <li><a href="<%= documents_path %>"><%= icon('files-o') %> <%= t '.documents' %></a></li>
-            <li><a href="<%= delegates_path %>"><%= icon('sitemap') %> <%= t '.delegates' %></a></li>
-            <li><a href="<%= teams_committees_path %>"><%= icon('id-badge') %> <%= t '.teams' %></a></li>
-            <li><a href="<%= organizations_path %>"><%= icon('flag') %> <%= t '.organizations' %></a></li>
+            <li><a href="<%= about_path %>"><%= icon('fas', 'file-alt') %> <%= t '.about' %></a></li>
+            <li><a href="<%= documents_path %>"><%= icon('fas', 'copy') %> <%= t '.documents' %></a></li>
+            <li><a href="<%= delegates_path %>"><%= icon('fas', 'sitemap') %> <%= t '.delegates' %></a></li>
+            <li><a href="<%= teams_committees_path %>"><%= icon('fas', 'id-badge') %> <%= t '.teams' %></a></li>
+            <li><a href="<%= organizations_path %>"><%= icon('fas', 'flag') %> <%= t '.organizations' %></a></li>
             <li class="divider"></li>
-            <li><a href="<%= faq_path %>"><%= icon('question-circle') %> <%= t '.faq' %></a></li>
-            <li><a href="<%= tutorial_path %>"><%= icon('graduation-cap') %> <%= t '.tutorial' %></a></li>
-            <li><a href="<%= contact_website_path %>"><%= icon('envelope') %> <%= t '.contact' %></a></li>
-            <li><a href="<%= privacy_path %>"><%= icon('user-secret') %> Privacy</a></li>
-            <li><a href="<%= disclaimer_path %>"><%= icon('exclamation-circle') %> Disclaimer</a></li>
+            <li><a href="<%= faq_path %>"><%= icon('fas', 'question-circle') %> <%= t '.faq' %></a></li>
+            <li><a href="<%= tutorial_path %>"><%= icon('fas', 'graduation-cap') %> <%= t '.tutorial' %></a></li>
+            <li><a href="<%= contact_website_path %>"><%= icon('fas', 'envelope') %> <%= t '.contact' %></a></li>
+            <li><a href="<%= privacy_path %>"><%= icon('fas', 'user-secret') %> Privacy</a></li>
+            <li><a href="<%= disclaimer_path %>"><%= icon('fas', 'exclamation-circle') %> Disclaimer</a></li>
             <li class="divider"></li>
-            <li><a href="<%= score_tools_path %>"><%= icon('wrench') %> <%= t '.tools' %></a></li>
-            <li><a href="<%= logo_path %>"><%= image_tag('wca_logo.svg', width: '16px', class: 'fa') %> <%= t '.logo' %></a></li>
+            <li><a href="<%= score_tools_path %>"><%= icon('fas', 'wrench') %> <%= t '.tools' %></a></li>
+            <li><a href="<%= logo_path %>"><i><%= image_tag('wca_logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
           </ul>
         </li>
         <li class="dropdown">
           <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-             <%= icon('cube') %> <%= t '.competitions' %> <span class="caret"></span>
+             <%= icon('fas', 'cube') %> <%= t '.competitions' %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="<%= competitions_path %>"><%= icon('globe') %> <%= t '.all' %></a></li>
-            <li><a href="<%= my_comps_path %>"><%= icon('list') %> <%= t '.my_competitions' %></a></li>
+            <li><a href="<%= competitions_path %>"><%= icon('fas', 'globe') %> <%= t '.all' %></a></li>
+            <li><a href="<%= my_comps_path %>"><%= icon('fas', 'list') %> <%= t '.my_competitions' %></a></li>
             <% if current_user&.can_create_competitions? %>
-              <li><a href="<%= new_competition_path %>"><%= icon('plus') %> <%= t '.new_competition' %></a></li>
+              <li><a href="<%= new_competition_path %>"><%= icon('fas', 'plus') %> <%= t '.new_competition' %></a></li>
             <% end %>
           </ul>
         </li>
         <li class="dropdown">
           <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= icon('list-ol') %> <%= t '.results' %> <span class="caret"></span>
+            <%= icon('fas', 'list-ol') %> <%= t '.results' %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/results/events.php"><%= icon('signal', class: 'fa-rotate-90') %> <%= t '.rankings' %></a></li>
-            <li><a href="/results/regions.php"><%= icon('trophy') %> <%= t '.records' %></a></li>
-            <li><a href="<%= persons_path %>"><%= icon('users') %> <%= t '.persons' %></a></li>
+            <li><a href="/results/events.php"><%= icon('fas', 'signal', class: 'fa-rotate-90') %> <%= t '.rankings' %></a></li>
+            <li><a href="/results/regions.php"><%= icon('fas', 'trophy') %> <%= t '.records' %></a></li>
+            <li><a href="<%= persons_path %>"><%= icon('fas', 'users') %> <%= t '.persons' %></a></li>
             <% if current_user&.wca_id? %>
-              <li><%= link_to icon('user', t('.my_results')), person_path(current_user.wca_id) -%></li>
+              <li><%= link_to icon('fas', 'user', t('.my_results')), person_path(current_user.wca_id) -%></li>
             <% end %>
             <li class="divider"></li>
-            <li><a href="/results/statistics.php"><%= icon('area-chart') %> <%= t '.statistics' %></a></li>
-            <li><a href="<%= media_path %>"><%= icon('film') %> <%= t '.multimedia' %></a></li>
-            <li><a href="/results/misc/export.html"><%= icon('download') %> <%= t '.db_export' %></a></li>
+            <li><a href="/results/statistics.php"><%= icon('fas', 'chart-area') %> <%= t '.statistics' %></a></li>
+            <li><a href="<%= media_path %>"><%= icon('fas', 'film') %> <%= t '.multimedia' %></a></li>
+            <li><a href="/results/misc/export.html"><%= icon('fas', 'download') %> <%= t '.db_export' %></a></li>
           </ul>
         </li>
         <li class="dropdown <%= params[:controller] == 'regulations' ? 'active' : '' %>">
           <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= icon('book') %> <span class="hidden-sm"><%= t '.regulations' %></span> <span class="caret"></span>
+            <%= icon('fas', 'book') %> <span class="hidden-sm"><%= t '.regulations' %></span> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/regulations/about"><%= icon('info-circle') %> <%= t '.about_regulations' %></a></li>
+            <li><a href="/regulations/about"><%= icon('fas', 'info-circle') %> <%= t '.about_regulations' %></a></li>
             <li class="divider"></li>
-            <li><a href="/regulations/"><%= icon('book') %> <%= t '.regulations' %></a></li>
-            <li><a href="/regulations/guidelines.html"><%= icon('sticky-note') %> <%= t '.guidelines' %></a></li>
-            <li><a href="/regulations/scrambles/"><%= icon('random') %> <%= t '.scrambles' %></a></li>
-            <li><%= link_to(icon('balance-scale', t('.incidents')), incidents_path) %></li>
-            <li><%= link_to(icon('bullhorn', t('.disciplinary')), disciplinary_path) %></li>
+            <li><a href="/regulations/"><%= icon('fas', 'book') %> <%= t '.regulations' %></a></li>
+            <li><a href="/regulations/guidelines.html"><%= icon('fas', 'sticky-note') %> <%= t '.guidelines' %></a></li>
+            <li><a href="/regulations/scrambles/"><%= icon('fas', 'random') %> <%= t '.scrambles' %></a></li>
+            <li><%= link_to(icon('fas', 'balance-scale', t('.incidents')), incidents_path) %></li>
+            <li><%= link_to(icon('fas', 'bullhorn', t('.disciplinary')), disciplinary_path) %></li>
             <li class="divider"></li>
-            <li><a href="/regulations/history/"><%= icon('history') %> <%= t '.history' %></a></li>
-            <li><a href="/regulations/translations/"><%= icon('language') %> <%= t '.translations' %></a></li>
+            <li><a href="/regulations/history/"><%= icon('fas', 'history') %> <%= t '.history' %></a></li>
+            <li><a href="/regulations/translations/"><%= icon('fas', 'language') %> <%= t '.translations' %></a></li>
           </ul>
         </li>
       </ul>

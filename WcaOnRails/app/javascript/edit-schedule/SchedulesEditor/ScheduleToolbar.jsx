@@ -56,7 +56,7 @@ export class ScheduleToolbar extends React.Component {
                         overlay={<CalendarHelp />}
                         placement="bottom"
         >
-          <Button><i className="fa fa-question-circle"></i></Button>
+          <Button><i className="fas fa-question-circle"></i></Button>
         </OverlayTrigger>
         <OverlayTrigger trigger="click"
                         rootClose
@@ -66,12 +66,12 @@ export class ScheduleToolbar extends React.Component {
                                  />}
         >
           <OverlayTrigger overlay={tooltipSettings} placement="top">
-            <Button><i className="fa fa-cog"></i></Button>
+            <Button><i className="fas fa-cog"></i></Button>
           </OverlayTrigger>
         </OverlayTrigger>
         <OverlayTrigger overlay={<TooltipKeyboard enabled={keyboardEnabled}/>} placement="top">
           <Button onClick={handleKeyboardChange} active={keyboardEnabled}>
-            <i className="fa fa-keyboard-o"></i>
+            <i className="fas fa-keyboard"></i>
           </Button>
         </OverlayTrigger>
       </ButtonToolbar>
@@ -84,7 +84,7 @@ export class ScheduleToolbar extends React.Component {
 const CalendarHelp = ({ ...props }) => (
   <Popover id="calendar-help-popover" title="Keyboard shortcuts help" {...props} >
     <dl className="row">
-      <dt className="col-xs-4"><i className="fa fa-keyboard-o"/> or<br/> [C] + i</dt>
+      <dt className="col-xs-4"><i className="fas fa-keyboard"/> or<br/> [C] + i</dt>
       <dd className="col-xs-8">Toggle keyboard shortcuts</dd>
       <dt className="col-xs-4">Arrow keys</dt>
       <dd className="col-xs-8">Change selected event in calendar</dd>

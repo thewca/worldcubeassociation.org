@@ -35,11 +35,11 @@ table.table {
         margin-left: 5px;
       }
       &.asc::after {
-        content: $fa-var-sort-asc;
+        content: $fa-var-sort-up;
         color: $blue;
       }
       &.desc::after {
-        content: $fa-var-sort-desc;
+        content: $fa-var-sort-down;
         color: $blue;
       }
     }
@@ -98,7 +98,6 @@ table.table-greedy-last-column {
   }
 }
 
-
 table.with-solves {
   thead tr th {
     &.solves {
@@ -106,14 +105,14 @@ table.with-solves {
     }
   }
   tbody tr td {
-    &.solve, {
+    &.solve {
       text-align: right;
       &::before {
-        content: '(';
+        content: "(";
         opacity: 0;
       }
       &::after {
-        content: ')';
+        content: ")";
         opacity: 0;
       }
       &.trimmed {
@@ -335,8 +334,8 @@ textarea {
   label {
     margin-bottom: 0;
   }
-  input[type=checkbox],
-  input[type=radio] {
+  input[type="checkbox"],
+  input[type="radio"] {
     display: none;
     + span.cubing-icon {
       color: #ccc;
@@ -400,9 +399,15 @@ a.plain {
 // Modified from http://bootsnipp.com/snippets/featured/loading-button-effect-no-js
 button.saving {
   @keyframes ld {
-    0% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(180deg) scale(1.1); }
-    100% { transform: rotate(360deg) scale(1); }
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+    50% {
+      transform: rotate(180deg) scale(1.1);
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
   }
 
   position: relative;
@@ -416,7 +421,7 @@ button.saving {
   }
 
   &::before {
-    content: '';
+    content: "";
 
     display: inline-block;
 

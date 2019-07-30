@@ -68,7 +68,7 @@
 
   <br>
   <% if current_user&.can_manage_incidents? %>
-    <%= link_to icon('plus', 'New Incident'), new_incident_path, class: "btn btn-success" %>
+    <%= link_to icon("fas", 'plus', 'New Incident'), new_incident_path, class: "btn btn-success" %>
   <% end %>
 
 <% end %>
