@@ -73,7 +73,7 @@ export class EditVenue extends React.Component {
                 </Col>
                 <Col xs={3}>
                   <Button onClick={removeVenueAction} bsStyle="danger" className="pull-right">
-                    <i className="fa fa-trash"></i>
+                    <i className="fas fa-trash"></i>
                   </Button>
                 </Col>
               </Row>

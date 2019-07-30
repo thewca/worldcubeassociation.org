@@ -9,7 +9,7 @@
 
   <div id="search-results" class="row competitions-<%= @display %>">
     <div id="loading">
-      <div class="spinner-wrapper"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+      <div class="spinner-wrapper"><%= icon("fas", "spinner", class: "fa-spin fa-5x") %></div>
     </div>
     <div id="competitions-list">
       <%= render 'index_competitions_list', competitions: @competitions %>

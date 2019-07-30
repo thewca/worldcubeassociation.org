@@ -39,7 +39,7 @@ export class EditRoom extends React.Component {
           <input type="text" className="room-name-input form-control" value={roomWcif.name} onChange={this.handleNameChange} />
         </div>
         <div className="col-xs-3">
-          <a href="#" onClick={removeRoomAction} className="btn btn-danger pull-right"><i className="fa fa-trash"></i></a>
+          <a href="#" onClick={removeRoomAction} className="btn btn-danger pull-right"><i className="fas fa-trash"></i></a>
         </div>
         <div className="col-xs-9 room-color-cell">
           <input type="color" className="form-control" value={this.state.color} onChange={this.handleColorChange} onBlur={this.updateColorInWcif} />

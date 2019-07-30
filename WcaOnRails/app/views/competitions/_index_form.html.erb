@@ -27,7 +27,7 @@
     <div class="input-group">
       <span class="input-group-addon" data-toggle="tooltip" data-placement="top"
             title="<%= t 'competitions.index.tooltips.search' %>">
-        <%= icon('search') %>
+        <%= icon("fas", 'search') %>
       </span>
       <%= text_field_tag "search", params[:search], class: "form-control" %>
     </div>
@@ -121,7 +121,7 @@
     <% if current_user&.can_see_admin_competitions? %>
       <label id="display-admin" class="btn btn-info">
         <%= radio_button_tag "display", "admin" %>
-        <i class="fa fa-user-secret fa-lg"></i> Admin
+        <%= icon("fas", "user-secret", "Admin") %>
       </label>
     <% end %>
   </div>
