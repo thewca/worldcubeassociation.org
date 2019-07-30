@@ -1,4 +1,4 @@
 {
-  "esnext": true,
+  "esversion": 8,
   "asi": true
 }
