@@ -140,6 +140,8 @@ GEM
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
+    childprocess (1.0.1)
+      rake (< 13.0)
     cldr-plurals-runtime-rb (1.0.1)
     cliver (0.3.2)
     cocoon (1.2.14)
@@ -272,6 +274,7 @@ GEM
     image_processing (1.9.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.13, < 3)
+    iniparse (1.4.4)
     irb (1.0.0)
     iso (0.2.2)
       i18n
@@ -376,17 +379,17 @@ GEM
     openssl (2.1.2)
     orm_adapter (0.5.0)
     os (1.0.1)
+    overcommit (0.49.0)
+      childprocess (>= 0.6.3, < 2.0)
+      iniparse (~> 1.4)
     parallel (1.17.0)
     parser (2.6.3.0)
       ast (~> 2.4.0)
     phantomjs (2.1.1.0)
-    pluginator (1.5.0)
     poltergeist (1.18.1)
       capybara (>= 2.1, < 4)
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
-    pre-commit (0.39.0)
-      pluginator (~> 1.5)
     premailer (1.11.1)
       addressable
       css_parser (>= 1.6.0)
@@ -511,9 +514,6 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
-    scss_lint (0.58.0)
-      rake (>= 0.9, < 13)
-      sass (~> 3.5, >= 3.5.5)
     sdoc (1.0.0)
       rdoc (>= 5.0)
     seedbank (0.4.0)
@@ -669,9 +669,9 @@ DEPENDENCIES
   octokit
   oga
   openssl
+  overcommit
   phantomjs
   poltergeist
-  pre-commit
   premailer-rails
   rack-cors
   rails
@@ -684,7 +684,6 @@ DEPENDENCIES
   rspec-rails
   rubocop
   sass-rails
-  scss_lint
   sdoc
   seedbank
   selectize-rails!

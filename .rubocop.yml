@@ -4,9 +4,9 @@ AllCops:
   TargetRubyVersion: 2.3
   DisplayCopNames: true
   Exclude:
-    - 'node_modules/**/*'
-    - 'bin/**/*'
-    - 'vendor/**/*'
+    - 'WcaOnRails/node_modules/**/*'
+    - 'WcaOnRails/bin/**/*'
+    - 'WcaOnRails/vendor/**/*'
 
 Bundler/OrderedGems:
   Enabled: false

@@ -31,6 +31,6 @@ before_script:
   # and our https://github.com/thewca/worldcubeassociation.org/issues/3476
   - DISABLE_SPRING=1 bundle exec rake assets:precompile
 script:
-  - bundle exec pre-commit run git
+  - bundle exec overcommit --sign && bundle exec overcommit --sign pre-commit && (cd .. && BUNDLE_GEMFILE=WcaOnRails/Gemfile bundle exec overcommit --run)
   - bundle exec rubocop
   - bundle exec rake

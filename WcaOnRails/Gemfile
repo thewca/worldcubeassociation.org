@@ -109,9 +109,8 @@ group :development, :test do
 end
 
 group :development do
-  gem 'pre-commit', require: false
+  gem 'overcommit', require: false
   gem 'rubocop', require: false
-  gem 'scss_lint', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
