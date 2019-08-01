@@ -1016,6 +1016,10 @@ en:
       registrations_file_label: "Registrations file"
       registrations_file_hint: "CSV file with columns: Status, Name, Country, WCA ID, Birth Date, Gender, Email, and one column for each event."
       import: "Import"
+    add:
+      title: "Add registration for %{comp}"
+      info: "This will create an approved registration. Use this form to add walk-ins during the competition."
+      add: "Add registration"
   #context: Key used when managing competitions
   competitions:
     #context: generic message
