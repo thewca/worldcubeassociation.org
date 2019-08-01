@@ -58,3 +58,13 @@ function compareHtmlContent(a, b) {
   var second = $('<p>' + b + '</p>').text().trim();
   return first.localeCompare(second);
 }
+
+onPage('registrations#add, registrations#do_add', function() {
+  // Bind all/clear cubing event buttons
+  $('#clear-all-events').on('click', function() {
+    $('#events input[type="checkbox"]').prop('checked', false);
+  });
+  $('#select-all-events').on('click', function() {
+    $('#events input[type="checkbox"]').prop('checked', true);
+  });
+});

@@ -1,0 +1,52 @@
+<% provide(:title, t('registrations.add.title', comp: @competition.name)) %>
+
+<%= render layout: "nav" do %>
+  <% if @competition.registration_full? %>
+    <%= alert :warning, t('registrations.mailer.deleted.causes.registrations_full'), note: true %>
+  <% else %>
+    <%= alert :info, t('registrations.add.info'), note: true %>
+    <%= simple_form_for :registration_data, url: competition_registrations_do_add_path(@competition) do |f| %>
+      <%= f.input :name, input_html: { value: params.dig(:registration_data, :name) },
+                         label: t('activerecord.attributes.user.name') %>
+      <%= f.input :country, selected: params.dig(:registration_data, :country),
+                            include_blank: true,
+                            collection: Country.real,
+                            value_method: lambda { |c| c.id },
+                            label_method: lambda { |c| c.name },
+                            label: t('activerecord.attributes.user.country_iso2') %>
+      <%= f.input :birth_date, as: :date_picker,
+                               input_html: { value: params.dig(:registration_data, :birth_date) },
+                               label: t('activerecord.attributes.user.dob') %>
+      <%= f.input :gender, selected: params.dig(:registration_data, :gender), #
+                           include_blank: true,
+                           collection: User::ALLOWABLE_GENDERS,
+                           label_method: User::GENDER_LABEL_METHOD,
+                           label: t('activerecord.attributes.user.gender') %>
+      <%= f.input :email, input_html: { value: params.dig(:registration_data, :email) },
+                          label: t('activerecord.attributes.user.email') %>
+      <%= f.input :wca_id, as: :wca_id,
+                           input_html: { value: params.dig(:registration_data, :wca_id) },
+                           label: t('activerecord.attributes.user.wca_id') %>
+
+      <div class="form-group">
+        <%= label_tag "events" do %>
+          <%= t 'competitions.competition_form.events' %>
+          <button type="button" id="select-all-events" class="btn btn-primary btn-xs"><%= t 'competitions.index.all_events' %></button>
+          <button type="button" id="clear-all-events" class="btn btn-default btn-xs"><%= t 'competitions.index.clear' %></button>
+        <% end %>
+        <div id="events">
+          <% @competition.events.each do |event| %>
+          <span class="event-checkbox">
+            <%= label_tag "checkbox-#{event.id}" do %>
+              <%= check_box_tag "registration_data[event_ids][]", event.id, params.dig(:registration_data, :event_ids)&.include?(event.id), id: "checkbox-#{event.id}" %>
+              <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name %>
+            <% end %>
+          </span>
+          <% end %>
+        </div>
+      </div>
+
+      <%= f.submit t('registrations.add.add'), class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+<% end %>

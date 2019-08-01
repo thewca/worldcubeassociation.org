@@ -17,6 +17,9 @@ class RegistrationsController < ApplicationController
     competition
   end
 
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
+                only: [:edit_registrations, :do_actions_for_selected, :edit, :refund_payment, :import, :do_import, :add, :do_add]
+
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :index, :psych_sheet, :psych_sheet_event]
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
@@ -31,8 +34,6 @@ class RegistrationsController < ApplicationController
       redirect_to competition_path(competition_from_params)
     end
   end
-
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_selected, :edit, :refund_payment]
 
   def edit_registrations
     @show_events = params[:show_events] == "true"
@@ -164,6 +165,33 @@ class RegistrationsController < ApplicationController
   rescue StandardError => e
     flash[:danger] = e.to_s
     redirect_to competition_registrations_import_url(competition)
+  end
+
+  def add
+    @competition = competition_from_params
+  end
+
+  def do_add
+    @competition = competition_from_params
+    ActiveRecord::Base.transaction do
+      user, locked_account_created = user_for_registration!(params[:registration_data])
+      registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
+      raise "This person already has a registration." unless registration.new_record?
+      registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id)
+      params[:registration_data][:event_ids]&.each do |event_id|
+        competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
+        registration.registration_competition_events.build(competition_event_id: competition_event.id)
+      end
+      registration.save!
+      if locked_account_created
+        RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later
+      end
+    end
+    flash[:success] = "Successfully added registration!"
+    redirect_to competition_registrations_add_url(@competition)
+  rescue StandardError => e
+    flash.now[:danger] = e.to_s
+    render :add
   end
 
   private def user_for_registration!(registration_row)
