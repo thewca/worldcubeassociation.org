@@ -20,7 +20,7 @@ class RegistrationsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
                 only: [:edit_registrations, :do_actions_for_selected, :edit, :refund_payment, :import, :do_import, :add, :do_add]
 
-  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :index, :psych_sheet, :psych_sheet_event]
+  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event]
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
       flash[:danger] = I18n.t('registrations.flash.not_using_wca')
@@ -173,6 +173,11 @@ class RegistrationsController < ApplicationController
 
   def do_add
     @competition = competition_from_params
+    if @competition.registration_full?
+      flash[:danger] = "The competitor limit has been reached."
+      redirect_to competition_path(@competition)
+      return
+    end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
