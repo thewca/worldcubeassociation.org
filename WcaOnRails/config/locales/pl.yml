@@ -211,7 +211,7 @@ pl:
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
-      one_round: '%{time} łączenie'
+      one_round: '%{time} łącznie'
       #original_hash: c01adfa
       across_rounds: '%{time} łącznie na %{rounds}'
     #original_hash: f030c3d
@@ -2066,11 +2066,10 @@ pl:
         %{refund_policy_percent} zapłaconego wpisowego.
       #original_hash: 4aca553
       no_refunds: Wpisowe nie będzie zwracane pod żadnym warunkiem.
-      #original_hash: b86fee2
-      on_the_spot_registration_html: >-
-        Rejestracje na miejscu będą akceptowane przy bazowym wpisowym w
-        wysokości %{on_the_spot_base_entry_fee}, jeżeli limit zawodników nie
-        zostanie osiągnięty do %{end_of_registration}.
+      #original_hash: cf7be5d
+      on_the_spot_registration_fee_html: >-
+        Rejestracja na miejscu będzie możliwa przy bazowym wpisowym w wysokości
+        %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Rejestracja na miejscu będzie możliwa za darmo.
       #original_hash: f5f687d
@@ -2615,7 +2614,7 @@ pl:
       unstick_at_future: musi być w przyszłości
   contacts:
     website:
-      #original_hash: 5b225ad
+      #original_hash: 35c333c
       faq_note_html: >-
         Przed wysłaniem zapytania, możesz spojrzeć na <a href="/faq">Najczęsciej
         Zadawane Pytania</a>! Jeżeli chcesz skontaktować się z konkretnym
@@ -2881,7 +2880,7 @@ pl:
     mission_footer: Deklaracja Misji WCA
     #original_hash: cdab446
     who_we_are_title: Kim jesteśmy
-    #original_hash: 78e63f4
+    #original_hash: 5924c26
     who_we_are_content_html: >-
       <p>World Cube Association zarządza zawodami w łamigłówkach mechanicznych
       manipulowanych poprzez przekręcanie grup elementów, szerzej znanych jako
@@ -2895,12 +2894,6 @@ pl:
       WCA w funkcjonowaniu. Przy większym wsparciu finansowym, mamy nadzieję
       zapewnić jeszcze większy poziom profesjonalizmu na naszych zawodach, w
       miarę przeprowadzania większej liczby wydarzeń na całym świecie.</p>
-      <p>World Cube Association pragnie dostarczyć możliwość bycia członkami
-      oraz przewodniczącymi społeczności młodym osobom z całego świata poprzez
-      zwiększenie dostępności naszych zawodów. Wierzymy, że doświadczenia
-      zabrane na zawodach i w naszej społeczności stwarzają dla młodych ludzi
-      możliwość rozwoju, oraz że przeprowadzanie wydarzeń w nowych grupach ludzi
-      pozwala na wzmocnienie naszej społeczności.</p>
     #original_hash: bccd8c5
     spirit: >-
       W naszym duchu jest, aby ludzie z całego świata dobrze bawili się razem w
