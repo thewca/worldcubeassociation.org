@@ -66,18 +66,17 @@ module ResultsValidators
           cutoff_for_round = round_info.cutoff
 
           results_for_round.each_with_index do |result, index|
-            person_name = result.personName
-            context = [competition_id, person_name, round_id, round_info]
+            context = [competition_id, result, round_id, round_info]
             all_solve_times = result.solve_times
 
             # Check for possible similar results
-            check_similar_results(context, result, index, results_for_round)
+            check_similar_results(context, index, results_for_round)
 
             # Check that the result's format matches the expected one
-            check_format_matches(context, result)
+            check_format_matches(context)
 
             # Checks for cutoff
-            check_results_for_cutoff(context, cutoff_for_round, result) if cutoff_for_round
+            check_results_for_cutoff(context, cutoff_for_round) if cutoff_for_round
 
             completed_solves = all_solve_times.select(&:complete?)
 
@@ -95,17 +94,16 @@ module ResultsValidators
                   @errors << ValidationError.new(:results, competition_id,
                                                  RESULT_OVER_TIME_LIMIT_ERROR,
                                                  round_id: round_id,
-                                                 person_name: person_name,
+                                                 person_name: result.personName,
                                                  time_limit: time_limit_for_round.to_s(round_info))
                 end
               else
-                check_cumulative_across_rounds(context, result.personId,
-                                               rounds_info_by_round_id,
+                check_cumulative_across_rounds(context, rounds_info_by_round_id,
                                                results_by_round_id)
               end
             end
 
-            check_multi_time_limit(competition_id, round_id, completed_solves, person_name) if result.eventId == "333mbf"
+            check_multi_time_limit(context, competition_id, round_id, completed_solves) if result.eventId == "333mbf"
           end
         end
       end
@@ -118,7 +116,8 @@ module ResultsValidators
 
     private
 
-    def check_multi_time_limit(competition_id, round_id, completed_solves, person_name)
+    def check_multi_time_limit(context, competition_id, round_id, completed_solves)
+      _, result, = context
       completed_solves.each do |solve_time|
         time_limit_seconds = [3600, solve_time.attempted * 600].min
         if solve_time.time_seconds > time_limit_seconds
@@ -126,19 +125,19 @@ module ResultsValidators
                                              MBF_RESULT_OVER_TIME_LIMIT_WARNING,
                                              round_id: round_id,
                                              result: solve_time.clock_format,
-                                             person_name: person_name)
+                                             person_name: result.personName)
         end
       end
     end
 
-    def check_similar_results(context, result, index, results_for_round)
-      competition_id, person_name, round_id, = context
+    def check_similar_results(context, index, results_for_round)
+      competition_id, result, round_id, = context
       similar = results_similar_to(result, index, results_for_round)
       similar.each do |r|
         @warnings << ValidationWarning.new(:results, competition_id,
                                            SIMILAR_RESULTS_WARNING,
                                            round_id: round_id,
-                                           person_name: person_name,
+                                           person_name: result.personName,
                                            similar_person_name: r.personName)
       end
     end
@@ -148,16 +147,16 @@ module ResultsValidators
       first_index = all_solve_times.find_index(SolveTime::DNS)
       # Just use '5' here to get all of them
       if first_index && all_solve_times[first_index, 5].select(&:complete?).any?
-        competition_id, person_name, round_id, = context
+        competition_id, result, round_id, = context
         @warnings << ValidationWarning.new(:results, competition_id,
                                            RESULT_AFTER_DNS_WARNING,
                                            round_id: round_id,
-                                           person_name: person_name)
+                                           person_name: result.personName)
       end
     end
 
-    def check_format_matches(context, result)
-      competition_id, person_name, round_id, round_info = context
+    def check_format_matches(context)
+      competition_id, result, round_id, round_info = context
       # FIXME: maybe that can be part of the separate
       # "check consistency of roundTypeIds and formatIds" across a given round
       # Check that the result's format matches the round format
@@ -165,14 +164,14 @@ module ResultsValidators
         @errors << ValidationError.new(:results, competition_id,
                                        MISMATCHED_RESULT_FORMAT_ERROR,
                                        round_id: round_id,
-                                       person_name: person_name,
+                                       person_name: result.personName,
                                        expected_format: round_info.format.name,
                                        format: Format.c_find(result.formatId).name)
       end
     end
 
-    def check_results_for_cutoff(context, cutoff, result)
-      competition_id, person_name, round_id, round = context
+    def check_results_for_cutoff(context, cutoff)
+      competition_id, result, round_id, round = context
       number_of_attempts = cutoff.number_of_attempts
       cutoff_result = SolveTime.new(round.event.id, :single, cutoff.attempt_result)
       solve_times = result.solve_times
@@ -188,7 +187,7 @@ module ResultsValidators
           @errors << ValidationError.new(:results, competition_id,
                                          MET_CUTOFF_MISSING_RESULTS_ERROR,
                                          round_id: round_id,
-                                         person_name: person_name,
+                                         person_name: result.personName,
                                          cutoff: cutoff.to_s(round))
         end
       else
@@ -197,14 +196,14 @@ module ResultsValidators
           @errors << ValidationError.new(:results, competition_id,
                                          DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
                                          round_id: round_id,
-                                         person_name: person_name,
+                                         person_name: result.personName,
                                          cutoff: cutoff.to_s(round))
         end
       end
     end
 
-    def check_cumulative_across_rounds(context, person_id, rounds_by_ids, results_by_round_id)
-      competition_id, person_name, round_id, round_info = context
+    def check_cumulative_across_rounds(context, rounds_by_ids, results_by_round_id)
+      competition_id, result, round_id, round_info = context
       time_limit_for_round = round_info.time_limit
       cumulative_wcif_round_ids = time_limit_for_round.cumulative_round_ids
       # Handle both cumulative for a single round or multiple round by doing the following:
@@ -234,7 +233,7 @@ module ResultsValidators
         # NOTE: since we proceed with all checks even if some expected rounds
         # do not exist, we may have *expected* cumulative rounds that may
         # not exist in results.
-        results_by_round_id[id]&.find { |r| r.personId == person_id }
+        results_by_round_id[id]&.find { |r| r.personId == result.personId }
       end.compact.map(&:solve_times).flatten
       completed_solves_for_rounds = all_results_for_cumulative_rounds.select(&:complete?)
       number_of_dnf_solves = all_results_for_cumulative_rounds.select(&:dnf?).size
@@ -245,7 +244,7 @@ module ResultsValidators
         @errors << ValidationError.new(:results, competition_id,
                                        RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR,
                                        round_ids: cumulative_round_ids.join(","),
-                                       person_name: person_name,
+                                       person_name: result.personName,
                                        time_limit: time_limit_for_round.to_s(round_info))
       end
 
@@ -260,7 +259,7 @@ module ResultsValidators
         @warnings << ValidationWarning.new(:results, competition_id,
                                            SUSPICIOUS_DNF_WARNING,
                                            round_ids: cumulative_round_ids.join(","),
-                                           person_name: person_name)
+                                           person_name: result.personName)
       end
     end
 
