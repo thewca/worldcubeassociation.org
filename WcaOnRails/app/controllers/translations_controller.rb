@@ -64,7 +64,7 @@ class TranslationsController < ApplicationController
     "ja" => [32229, 1118],
     "ko" => [14],
     "nl" => [1, 41519],
-    "pl" => [6008],
+    "pl" => [6008, 1686],
     "pt" => [331],
     "pt-BR" => [18],
     "ro" => [11918],
