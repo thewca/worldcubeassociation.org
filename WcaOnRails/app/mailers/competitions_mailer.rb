@@ -91,7 +91,9 @@ class CompetitionsMailer < ApplicationMailer
       @competition = competition
       mail(
         to: "reports@worldcubeassociation.org",
-        cc: competition.delegates.pluck(:email) + (competition.delegate_report.wrc_feedback_requested ? ["regulations@worldcubeassociation.org"] : []),
+        cc: competition.delegates.pluck(:email) +
+          (competition.delegate_report.wrc_feedback_requested ? ["regulations@worldcubeassociation.org"] : []) +
+          (competition.delegate_report.wdc_feedback_requested ? ["disciplinary@worldcubeassociation.org"] : []),
         reply_to: competition.delegates.pluck(:email),
         subject: "[wca-report] [#{competition.continent.name}] #{competition.name}",
       )

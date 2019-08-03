@@ -443,6 +443,8 @@ module DatabaseDumper
           nag_sent_at
           wrc_feedback_requested
           wrc_incidents
+          wdc_feedback_requested
+          wdc_incidents
         ),
       ),
     }.freeze,

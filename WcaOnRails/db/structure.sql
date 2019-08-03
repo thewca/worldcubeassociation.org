@@ -797,6 +797,8 @@ CREATE TABLE `delegate_reports` (
   `nag_sent_at` datetime DEFAULT NULL,
   `wrc_feedback_requested` tinyint(1) NOT NULL DEFAULT '0',
   `wrc_incidents` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `wdc_feedback_requested` tinyint(1) NOT NULL DEFAULT '0',
+  `wdc_incidents` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_delegate_reports_on_competition_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

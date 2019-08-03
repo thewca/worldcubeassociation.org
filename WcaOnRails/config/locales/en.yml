@@ -304,7 +304,9 @@ en:
         organization: "Organization"
         incidents: "Incidents"
         wrc_feedback_requested: "I would like feedback from the WRC on some of the incidents above."
-        wrc_incidents: "Incidents Needing Feedback"
+        wrc_incidents: "Incidents Needing WRC Feedback"
+        wdc_feedback_requested: "I would like feedback from the WDC on some of the incidents above."
+        wdc_incidents: "Incidents Needing WDC Feedback"
         remarks: "Remarks"
       #context: a person
       person:
@@ -507,6 +509,8 @@ en:
         incidents: "Report any incidents that you consider worth mentioning. Number the incidents starting from 1., so that other Delegates can comment referring to them by their numbers. Please make sure to mention only concrete cases, not generic events (e.g., regular +2 and DNF). Feel free to ask for Delegates' or WRC's  feedback on any of them. If you'd like to have the WDC involved in some of them, make sure to state this request clearly."
         wrc_feedback_requested: ""
         wrc_incidents: "List of numbers referencing any incidents that you would like the WRC's feedback on."
+        wdc_feedback_requested: ""
+        wdc_incidents: "List of numbers referencing any incidents that you would like the WDC's feedback on."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
         discussion_url: ""
       #context: for a competition tab
