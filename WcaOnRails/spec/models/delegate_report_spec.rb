@@ -50,6 +50,22 @@ RSpec.describe DelegateReport do
     expect(dr).to be_valid
   end
 
+  it "wdc_feedback_requested is set false on creation" do
+    dr = FactoryBot.create :delegate_report
+    expect(dr.wdc_feedback_requested).to eq false
+  end
+
+  it "wdc_incidents is required when wdc_feedback_requested is true" do
+    dr = FactoryBot.build :delegate_report
+    expect(dr).to be_valid
+
+    dr.wdc_feedback_requested = true
+    expect(dr).to be_invalid_with_errors wdc_incidents: ["can't be blank"]
+
+    dr.wdc_incidents = "4, 5, 6"
+    expect(dr).to be_valid
+  end
+
   context "can_view_delegate_report?" do
     let(:other_delegate) { FactoryBot.create :delegate }
     let(:board_member) { FactoryBot.create :user, :board_member }
