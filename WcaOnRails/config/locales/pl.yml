@@ -489,6 +489,18 @@ pl:
         organization: Organizacja
         #original_hash: 5e326b1
         incidents: Incydenty
+        #original_hash: 1362470
+        wrc_feedback_requested: >-
+          Chciałbym uzyskać opinię Komitetu Regulacyjnego WCA (WRC) na temat
+          niektórych z powyższych incydentów.
+        #original_hash: 0c7191d
+        wrc_incidents: Incydenty wymagające opinii WRC
+        #original_hash: 5a92b25
+        wdc_feedback_requested: >-
+          Chciałbym uzyskać opinię Komitetu Dyscyplinarnego WCA (WDC) na temat
+          niektórych z powyższych incydentów.
+        #original_hash: 06a0568
+        wdc_incidents: Incydenty wymagające opinii WDC
         #original_hash: d7020f4
         remarks: Uwagi
       person:
@@ -937,6 +949,14 @@ pl:
           Nie wahaj się pytać o zdanie innych Delegatów lub WRC na temat
           któregokolwiek z nich. Jeżeli chciałbyś zaangażować WDC w dowolny z
           nich, jasno zaznacz tę prośbę.
+        #original_hash: da39a3e
+        wrc_feedback_requested: ''
+        #original_hash: 98bb5cd
+        wrc_incidents: Lista numerów incydentów dla których chciałbyś uzyskać opinię WRC.
+        #original_hash: da39a3e
+        wdc_feedback_requested: ''
+        #original_hash: 38a95e5
+        wdc_incidents: Lista numerów incydentów dla których chciałbyś uzyskać opinię WDC.
         #original_hash: f30abdc
         remarks: >-
           Opisz inne szczegóły, którymi chciałbyś się podzielić (np. postępy,
