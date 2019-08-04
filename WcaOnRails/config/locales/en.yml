@@ -1515,7 +1515,7 @@ en:
     contributing_content_html: 'You can donate by credit card using Guidestar <a href="https://www.nfggive.com/guidestar/82-3825954">here</a>. If you prefer to write a check, you can write to:'
     tax_deductible_note: Donations are tax-deductible in the United States.
     other_help_title: Other ways to help
-    other_help_content_html: '<p>If you believe you would be able to contribute to the World Cube Association in a non-financial way, we would love to hear from you! Please get in touch with us at <a href="">communication@worldcubeassociation.org</a>.</p>'
+    other_help_content_html: '<p>If you believe you would be able to contribute to the World Cube Association in a non-financial way, we would love to hear from you! Please get in touch with us at <a href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>'
     donation_banner:
       content: The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-run nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world.
       donate_credit: Donate via credit card
