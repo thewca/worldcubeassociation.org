@@ -29,4 +29,18 @@ RSpec.describe 'I18n' do
       expect(allowed_values).to include time_format
     end
   end
+
+  it "English country translations, database names, all match the names in wca-states.json" do
+    Country::WCA_STATES["states_lists"].map do |list|
+      list["states"].map do |state|
+        state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
+        country = Country.c_find(state_id)
+        db_name = country.read_attribute(:name)
+        wca_regs_name = state["name"]
+        i18n_en_name = country.name
+        expect(i18n_en_name).to eq wca_regs_name
+        expect(db_name).to eq wca_regs_name
+      end
+    end
+  end
 end
