@@ -18,7 +18,7 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                only: [:edit_registrations, :do_actions_for_selected, :edit, :refund_payment, :import, :do_import, :add, :do_add]
+                except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :process_payment, :destroy, :update]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event]
   private def competition_must_be_using_wca_registration!
