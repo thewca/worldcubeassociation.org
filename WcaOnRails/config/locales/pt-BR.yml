@@ -481,6 +481,14 @@ pt-BR:
         organization: Organização
         #original_hash: 5e326b1
         incidents: Incidentes
+        #original_hash: 1362470
+        wrc_feedback_requested: Eu gostaria de uma resposta do WRC em alguns dos incidentes acima.
+        #original_hash: 0c7191d
+        wrc_incidents: Incidentes que necessitam de retorno do WRC
+        #original_hash: 5a92b25
+        wdc_feedback_requested: Eu gostaria de uma resposta do WDC em alguns dos incidentes acima.
+        #original_hash: 06a0568
+        wdc_incidents: Incidentes que necessitam retorno do WDC
         #original_hash: d7020f4
         remarks: Observações
       person:
@@ -927,6 +935,18 @@ pt-BR:
           normais). Sinta-se à vontade para pedir opiniões dos delegados ou WRC
           em algum incidente. Se você gostaria de envolver a WDC em algum deles,
           faça este pedido claramente.
+        #original_hash: da39a3e
+        wrc_feedback_requested: ''
+        #original_hash: 98bb5cd
+        wrc_incidents: >-
+          Lista dos números de incidentes para os quais você deseja uma resposta
+          do WRC.
+        #original_hash: da39a3e
+        wdc_feedback_requested: ''
+        #original_hash: 38a95e5
+        wdc_incidents: >-
+          Lista dos números dos incidentes para os quais você quer uma resposta
+          do WDC.
         #original_hash: f30abdc
         remarks: >-
           Fale sobre qualquer outro detalhe que você gostaria de compartilhar
@@ -1883,6 +1903,15 @@ pt-BR:
         Birth Date, Gender, Email, e uma coluna para cada modalidade.
       #original_hash: d6fbc9d
       import: Importar
+    add:
+      #original_hash: 975275e
+      title: 'Adicionar inscrição para %{comp}'
+      #original_hash: b52b179
+      info: >-
+        Isto irá criar uma inscrição aprovada. Use este formulário para pessoas
+        que se inscreveram durante a competição.
+      #original_hash: a11edb8
+      add: Adicionar inscrição
   competitions:
     messages:
       #original_hash: 7b80062
