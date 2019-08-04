@@ -475,6 +475,14 @@ pt:
         organization: Organização
         #original_hash: 5e326b1
         incidents: Incidentes
+        #original_hash: 1362470
+        wrc_feedback_requested: Quero obter feedback do WRC em alguns dos incidentes anteriores.
+        #original_hash: 0c7191d
+        wrc_incidents: Incidentes a necessitar feedback do WRC
+        #original_hash: 5a92b25
+        wdc_feedback_requested: Gostaria de obter feedback do WDC em alguns dos incidentes acima.
+        #original_hash: 06a0568
+        wdc_incidents: Incidentes a necessitar de feedback pelo WDC
         #original_hash: d7020f4
         remarks: Observações
       person:
@@ -917,6 +925,18 @@ pt:
           Sinta-se à vontade para pedir opiniões dos Delegados ou o feedback do
           WRC em algum incidente. Se considerar necessário envolver a WDC em
           algum deles, faça este pedido claramente.
+        #original_hash: da39a3e
+        wrc_feedback_requested: ''
+        #original_hash: 98bb5cd
+        wrc_incidents: >-
+          Lista de números referenciando qualquer incidente que gostaria de
+          obter feedback pelo WRC.
+        #original_hash: da39a3e
+        wdc_feedback_requested: ''
+        #original_hash: 38a95e5
+        wdc_incidents: >-
+          Lista de números referenciando qualquer incidente que gostaria de
+          obter feedback pelo WDC.
         #original_hash: f30abdc
         remarks: >-
           Fale sobre qualquer outro detalhe que gostaria de partilhar (p. ex.
@@ -1875,6 +1895,15 @@ pt:
         Nascimento, Sexo, Email e uma coluna para cada evento.
       #original_hash: d6fbc9d
       import: Importar
+    add:
+      #original_hash: 975275e
+      title: 'Adicionar registo para %{comp}'
+      #original_hash: b52b179
+      info: >-
+        Isto criará um registo aprovado. Use este formulário para adicionar
+        registos feitos durante a competição.
+      #original_hash: a11edb8
+      add: Adicionar registo
   competitions:
     messages:
       #original_hash: 7b80062
@@ -3584,7 +3613,7 @@ pt:
       title: Política de proximidade
       #original_hash: 79ed06e
       content1: >-
-        Competições da WCA serão aceites se acontecerem com pelo menos 100 km
+        Competições da WCA serão aceites se acontecerem com pelo menos 100 km 
         ou com intervalo de 19 dias de qualquer outra competição nessa região. A
         Equipa de Competições da WCA deve rever particularmente uma proposta de
         competição se existir outra competição em que a distância seja inferior
