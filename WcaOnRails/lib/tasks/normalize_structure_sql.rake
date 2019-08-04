@@ -3,8 +3,9 @@
 # Copied (and modified) from https://stackoverflow.com/a/20695238
 
 def normalize_schema_dump(schema_dump)
-  schema_dump.gsub(/ AUTO_INCREMENT=\d*/, '')
-             .rstrip + "\n" # remove extra newlines at the end
+  schema_dump = schema_dump.gsub(/ AUTO_INCREMENT=\d*/, '').rstrip + "\n" # remove extra newlines at the end
+  schema_dump = schema_dump.gsub(/ *$/, '') # remove trailing whitespace
+  schema_dump.gsub(%r{\n.* DEFINER=[^*]* \*/$}, '') # remove DEFINER= declarations
 end
 
 Rake::Task["db:structure:dump"].enhance do
