@@ -22,6 +22,27 @@
 en:
   #context: Special country name
   countries:
+    AG: "Antigua and Barbuda"
+    BA: "Bosnia and Herzegovina"
+    CD: "Democratic Republic of the Congo"
+    CG: "Congo"
+    CI: "Côte d'Ivoire"
+    CV: "Cabo Verde"
+    FM: "Federated States of Micronesia"
+    GW: "Guinea Bissau"
+    HK: "Hong Kong"
+    KN: "Saint Kitts and Nevis"
+    KP: "Democratic People’s Republic of Korea"
+    KR: "Republic of Korea"
+    LC: "Saint Lucia"
+    MM: "Myanmar"
+    MO: "Macau"
+    PS: "Palestine"
+    ST: "São Tomé and Príncipe"
+    TT: "Trinidad and Tobago"
+    VA: "Holy See"
+    VC: "Saint Vincent and the Grenadines"
+
     XF: "Multiple Countries (Africa)"
     XM: "Multiple Countries (Americas)"
     XA: "Multiple Countries (Asia)"
@@ -30,9 +51,6 @@ en:
     XO: "Multiple Countries (Oceania)"
     XS: "Multiple Countries (South America)"
     XW: "Multiple Countries (World)"
-    MO: "Macao"
-    HK: "Hong Kong"
-    KR: "Korea"
   #context: Continent name
   continents:
     "Multiple Continents": "Multiple Continents"
