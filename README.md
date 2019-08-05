@@ -25,6 +25,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   ```shell
   (cd WcaOnRails; bundle install && bin/yarn && bundle exec overcommit --install)
   ```
+  If some changes are made to this hook, you will have to update it running this command from the repository's root directory: `BUNDLE_GEMFILE=WcaOnRails/Gemfile bundle exec overcommit --sign`.
 
 ## Run directly with Ruby (lightweight, but only runs the Rails portions of the site)
 
