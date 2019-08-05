@@ -156,6 +156,11 @@ function exportPublic ( $exportFormatVersion, $sources ) {
     file_put_contents( $sqlFile, getTableCreationSql( $tableName, $query ), FILE_APPEND );
 
     #--- Do the query
+    # ``group_concat_max_len` defaults to 1024, which is not long enough for
+    # competitions with a whole bunch of delegates. See
+    # https://github.com/thewca/worldcubeassociation.org/issues/4120 for more
+    # information.
+    mysql_unbuffered_query("SET SESSION group_concat_max_len=99999;");
     $dbResult = mysql_unbuffered_query( $query )
       or die( '<p>Unable to perform database query.<br/>\n(' . mysql_error() . ')</p>\n' );
 
