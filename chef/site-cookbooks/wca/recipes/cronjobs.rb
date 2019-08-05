@@ -84,6 +84,17 @@ unless node.chef_environment.start_with?("development")
     user username
     command "(cd #{repo_root}/WcaOnRails; RACK_ENV=production bin/rake tmp:cache:clear)"
   end
+
+  cron "send WST monthly chore" do
+    minute '0'
+    hour '8'
+    day '23'
+
+    path path
+    mailto admin_email
+    user username
+    command "(cd #{repo_root}/WcaOnRails; RACK_ENV=production bin/rake chores:generate)"
+  end
 end
 
 # Run init-php-results on our first provisioning, but not on subsequent provisions.
