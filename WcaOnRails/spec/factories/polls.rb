@@ -23,6 +23,6 @@ end
 
 FactoryBot.define do
   factory :poll_option do
-    description { Faker::Lorem.words(4).join }
+    description { Faker::Lorem.words(number: 4).join }
   end
 end
