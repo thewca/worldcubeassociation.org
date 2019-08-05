@@ -44,7 +44,7 @@
             <li><a href="<%= logo_path %>"><i><%= image_tag('wca_logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
           </ul>
         </li>
-        <li class="dropdown">
+        <li class="dropdown <%= params[:controller] == 'competitions' ? 'active' : '' %>">
           <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
              <%= icon('fas', 'cube') %> <%= t '.competitions' %> <span class="caret"></span>
           </a>
@@ -56,7 +56,7 @@
             <% end %>
           </ul>
         </li>
-        <li class="dropdown">
+        <li class="dropdown <%= params[:controller] == 'persons' || params[:controller] == 'media' ? 'active' : '' %>">
           <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
             <%= icon('fas', 'list-ol') %> <%= t '.results' %> <span class="caret"></span>
           </a>
