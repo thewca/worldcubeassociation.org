@@ -23,7 +23,7 @@
     </div>
     <div class="navbar-collapse collapse disabled">
       <ul class="nav navbar-nav">
-        <li class="dropdown <%= params[:controller] == 'static_pages' || params[:controller] == 'posts' ? 'active' : '' %>">
+        <li class="dropdown <%= Set['static_pages', 'posts'].include?(params[:controller]) ? 'active' : '' %>">
           <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
             <%= icon('fa', 'info-circle') %> <span class="hidden-sm"><%= t '.information' %></span> <span class="caret"></span>
           </a>
@@ -44,7 +44,7 @@
             <li><a href="<%= logo_path %>"><i><%= image_tag('wca_logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
           </ul>
         </li>
-        <li class="dropdown <%= params[:controller] == 'competitions' ? 'active' : '' %>">
+        <li class="dropdown <%= Set['competitions'].include?(params[:controller]) ? 'active' : '' %>">
           <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
              <%= icon('fas', 'cube') %> <%= t '.competitions' %> <span class="caret"></span>
           </a>
@@ -56,7 +56,7 @@
             <% end %>
           </ul>
         </li>
-        <li class="dropdown <%= params[:controller] == 'persons' || params[:controller] == 'media' ? 'active' : '' %>">
+        <li class="dropdown <%= Set['persons', 'media'].include?(params[:controller]) ? 'active' : '' %>">
           <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
             <%= icon('fas', 'list-ol') %> <%= t '.results' %> <span class="caret"></span>
           </a>
@@ -73,7 +73,7 @@
             <li><a href="/results/misc/export.html"><%= icon('fas', 'download') %> <%= t '.db_export' %></a></li>
           </ul>
         </li>
-        <li class="dropdown <%= params[:controller] == 'regulations' ? 'active' : '' %>">
+        <li class="dropdown <%= Set['regulations'].include?(params[:controller]) ? 'active' : '' %>">
           <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
             <%= icon('fas', 'book') %> <span class="hidden-sm"><%= t '.regulations' %></span> <span class="caret"></span>
           </a>
