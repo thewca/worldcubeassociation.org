@@ -475,6 +475,14 @@ pt:
         organization: Organização
         #original_hash: 5e326b1
         incidents: Incidentes
+        #original_hash: 1362470
+        wrc_feedback_requested: Quero obter feedback do WRC em alguns dos incidentes anteriores.
+        #original_hash: 0c7191d
+        wrc_incidents: Incidentes a necessitar feedback do WRC
+        #original_hash: 5a92b25
+        wdc_feedback_requested: Gostaria de obter feedback do WDC em alguns dos incidentes acima.
+        #original_hash: 06a0568
+        wdc_incidents: Incidentes a necessitar de feedback pelo WDC
         #original_hash: d7020f4
         remarks: Observações
       person:
@@ -917,6 +925,18 @@ pt:
           Sinta-se à vontade para pedir opiniões dos Delegados ou o feedback do
           WRC em algum incidente. Se considerar necessário envolver a WDC em
           algum deles, faça este pedido claramente.
+        #original_hash: da39a3e
+        wrc_feedback_requested: ''
+        #original_hash: 98bb5cd
+        wrc_incidents: >-
+          Lista de números referenciando qualquer incidente que gostaria de
+          obter feedback pelo WRC.
+        #original_hash: da39a3e
+        wdc_feedback_requested: ''
+        #original_hash: 38a95e5
+        wdc_incidents: >-
+          Lista de números referenciando qualquer incidente que gostaria de
+          obter feedback pelo WDC.
         #original_hash: f30abdc
         remarks: >-
           Fale sobre qualquer outro detalhe que gostaria de partilhar (p. ex.
@@ -1875,6 +1895,15 @@ pt:
         Nascimento, Sexo, Email e uma coluna para cada evento.
       #original_hash: d6fbc9d
       import: Importar
+    add:
+      #original_hash: 975275e
+      title: 'Adicionar registo para %{comp}'
+      #original_hash: b52b179
+      info: >-
+        Isto criará um registo aprovado. Use este formulário para adicionar
+        registos feitos durante a competição.
+      #original_hash: a11edb8
+      add: Adicionar registo
   competitions:
     messages:
       #original_hash: 7b80062
@@ -2873,11 +2902,12 @@ pt:
     tax_deductible_note: As doações são dedutíveis nos Estados Unidos.
     #original_hash: 6026d35
     other_help_title: Outras formas de ajudar
-    #original_hash: 55b7b72
+    #original_hash: cb228f6
     other_help_content_html: >-
       <p>Se acredita que poderia contribuir para a World Cube Association de uma
       forma não financeira, nós adoraríamos saber de si! Entre em contacto
-      connosco pelo e-mail <a href="">communication@worldcubeassociation.org
+      connosco pelo e-mail <a
+      href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org
       </a>.</p>
     donation_banner:
       #original_hash: 6253f90
@@ -3569,22 +3599,18 @@ pt:
     paragraph3:
       #original_hash: 00d3bf8
       title: Prazos para o anúncio de uma competição
-      #original_hash: 305cfb1
+      #original_hash: 3613823
       content_html: >-
-        Uma competição deve ser anunciada pelo menos um mês antes do início da
-        competição (ver <a
-        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Orientação
-        8a4++</a>). Se existem razões especiais que previnam este prazo de ser
-        cumprido, competições podem ser anunciadas até duas semanas antes,
-        segundo critério da Equipa de Competições da WCA. É altamente
-        recomendado informar a Equipa de Competições da WCA destas razões tão
-        cedo quanto possível para evitar uma possível recusa da competição.
+        Uma competição tem que ser anunciada pelo menos 28 dias antes do início
+        da competição (ver <a
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisitos
+        de Competições</a>).
     paragraph4:
       #original_hash: b6dca56
       title: Política de proximidade
       #original_hash: 79ed06e
       content1: >-
-        Competições da WCA serão aceites se acontecerem com pelo menos 100 km
+        Competições da WCA serão aceites se acontecerem com pelo menos 100 km 
         ou com intervalo de 19 dias de qualquer outra competição nessa região. A
         Equipa de Competições da WCA deve rever particularmente uma proposta de
         competição se existir outra competição em que a distância seja inferior
@@ -3634,29 +3660,26 @@ pt:
     paragraph-events:
       #original_hash: b16c5f1
       title: Anunciando eventos
-      #original_hash: cee85f7
+      #original_hash: 7ad62c7
       content: >-
         Todos os eventos que serão realizados na competição têm que ser
         especificados pelo Delegado quando regista a competição para aprovação.
-        Isto inclui igualmente eventos "provisórios" (i.e. eventos que podem ou
-        não ser realizados consoante o fluxo da competição). Adições extra têm
-        que ser aprovadas pela Equipa de Competições da WCA.
+        Adições extra têm que ser aprovadas pela Equipa de Competições da WCA.
     paragraph5:
       #original_hash: 17d01de
       title: Limite de competidores
-      #original_hash: b4748cf
+      #original_hash: bd8e6ee
       content_html: >-
         O número de competidores pode ser limitado por evento ou por competição
         (ver <a
-        href='https://www.worldcubeassociation.org/regulations/#Z4'>Regra
-        Z4</a>). Como para todas as regras do artigo Z, o Delegado da competição
-        tem de obter aprovação do limite de competidores pela Equipa de
-        Competições da WCA. Limites de competidores devem ser escolhidos com
-        cautela e de acordo com o interesse esperado na competição. O limite não
-        deve ser muito restrito por razões menores. O limite esperado deve
-        também ter em conta na procura de um espaço de competição adequado. O
-        limite de competidores deve estar claramente definido na página da
-        competição no site da WCA.
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisitos
+        de Competições</a>). O Delegado da competição tem de obter aprovação do
+        limite de competidores pela Equipa de Competições da WCA. Limites de
+        competidores devem ser escolhidos com cautela e de acordo com o
+        interesse esperado na competição. O limite não deve ser muito restrito
+        por razões menores. O limite esperado deve também ter em conta na
+        procura de um espaço de competição adequado. O limite de competidores
+        deve estar claramente definido na página da competição no site da WCA.
     paragraph6:
       #original_hash: ce4c3d0
       title: Gestão de registos
