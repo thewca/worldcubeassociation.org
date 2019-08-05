@@ -44,7 +44,7 @@
             <li><a href="<%= logo_path %>"><i><%= image_tag('wca_logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
           </ul>
         </li>
-        <li class="dropdown <%= Set['competitions', delegate_reports, 'results_submission'].include?(params[:controller]) ? 'active' : '' %>">
+        <li class="dropdown <%= Set['competitions', 'delegate_reports', 'results_submission'].include?(params[:controller]) ? 'active' : '' %>">
           <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
              <%= icon('fas', 'cube') %> <%= t '.competitions' %> <span class="caret"></span>
           </a>
