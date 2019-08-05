@@ -1,5 +1,45 @@
 es:
   countries:
+    #original_hash: 530670d
+    AG: Antigua y Barbuda
+    #original_hash: 62ac59b
+    BA: Bosnia y Herzegovina
+    #original_hash: f39d280
+    CD: República Democrática del Congo
+    #original_hash: 77f256b
+    CG: Congo
+    #original_hash: b218299
+    CI: Costa de Marfil
+    #original_hash: 07dee45
+    CV: Cabo Verde
+    #original_hash: ee10075
+    FM: Estados Federados de Micronesia
+    #original_hash: db871b0
+    GW: Guinea-Bisáu
+    #original_hash: 2f488ff
+    HK: Hong Kong
+    #original_hash: 3ad2dd8
+    KN: San Cristóbal y Nieves
+    #original_hash: 7184d1a
+    KP: República Democrática Popular de Corea
+    #original_hash: 4430b22
+    KR: República de Corea
+    #original_hash: 673b1cf
+    LC: Santa Lucía
+    #original_hash: 928b7c4
+    MM: Myanmar
+    #original_hash: d887137
+    MO: Macao
+    #original_hash: 05a15c1
+    PS: Palestina
+    #original_hash: 655191a
+    ST: Santo Tomé y Príncipe
+    #original_hash: 4d206a8
+    TT: Trinidad y Tobago
+    #original_hash: 0f3f60b
+    VA: Santa Sede
+    #original_hash: 3fa9b2d
+    VC: San Vicente y las Granadinas
     #original_hash: 9af4622
     XF: Multiples Países (África)
     #original_hash: 374ac0d
@@ -16,12 +56,6 @@ es:
     XS: Varios Países (Sudamérica)
     #original_hash: 9027fe6
     XW: Múltiples Países (Mundial)
-    #original_hash: 918c53a
-    MO: Macao
-    #original_hash: 2f488ff
-    HK: Hong Kong
-    #original_hash: 4e8bd04
-    KR: Corea
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Varios Continentes
@@ -481,6 +515,18 @@ es:
         organization: Organización
         #original_hash: 5e326b1
         incidents: Incidentes
+        #original_hash: 1362470
+        wrc_feedback_requested: >-
+          Me gustaría obtener feedback del WRC en algunos de los incidentes
+          citados.
+        #original_hash: 0c7191d
+        wrc_incidents: Incidentes que necesitan feedback del WRC
+        #original_hash: 5a92b25
+        wdc_feedback_requested: >-
+          Me gustaría obtener feedback del WDC en algunos de los incidentes
+          citados.
+        #original_hash: 06a0568
+        wdc_incidents: Incidentes que necesitan feedback del WDC
         #original_hash: d7020f4
         remarks: Observaciones
       person:
@@ -927,6 +973,18 @@ es:
           incidentes. Si quieres que el WDC valore iniciar alguna acción
           derivada de alguno de tus incidentes, asegúrate de mencionarlo
           claramente.
+        #original_hash: da39a3e
+        wrc_feedback_requested: ''
+        #original_hash: 98bb5cd
+        wrc_incidents: >-
+          Lista de números que referenciando a algún incidente sobre el que te
+          gustaría obtener feedback del WRC.
+        #original_hash: da39a3e
+        wdc_feedback_requested: ''
+        #original_hash: 38a95e5
+        wdc_incidents: >-
+          Lista de números que referenciando a algún incidente sobre el que te
+          gustaría obtener feedback del WDC.
         #original_hash: f30abdc
         remarks: >-
           Habla acerca de otros detalles que quieras compartir (por ejemplo,
@@ -1903,6 +1961,15 @@ es:
         nacimiento, Género, Correo electrónico y una columna por cada categoría.
       #original_hash: d6fbc9d
       import: Importar
+    add:
+      #original_hash: 975275e
+      title: 'Añadir registros para %{comp}'
+      #original_hash: b52b179
+      info: >-
+        Esto creará un registro aprobado. Usa este formulario para añadir
+        registros in situ durante la competición.
+      #original_hash: a11edb8
+      add: Añadir registro
   competitions:
     messages:
       #original_hash: 7b80062
@@ -2036,11 +2103,10 @@ es:
         reembolsará un %{refund_policy_percent} de tu cuota de registro.
       #original_hash: 4aca553
       no_refunds: Las cuotas de registro no se reembolsarán bajo ninguna circunstancia.
-      #original_hash: b86fee2
-      on_the_spot_registration_html: >-
-        Los registros in situ serán aceptados con una cuota base de
-        %{on_the_spot_base_entry_fee} si no se ha alcanzado el límite de
-        competidores para el %{end_of_registration}.
+      #original_hash: cf7be5d
+      on_the_spot_registration_fee_html: >-
+        Se aceptarán registros in situ con una cuota base de registro de
+        %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Se aceptarán registros in situ de forma gratuita.
       #original_hash: f5f687d
@@ -2921,18 +2987,19 @@ es:
     contributing_title: Contribuir
     #original_hash: e64beb7
     contributing_content_html: >-
-      Puedes donar mediante tarjeta de crédito usando  <a
+      Puedes donar mediante tarjeta de crédito usando Guidestar <a
       href="https://www.nfggive.com/guidestar/82-3825954">aquí</a>. Si prefiere
       enviarnos un cheque puede hacerlo a:
     #original_hash: 2af9b71
     tax_deductible_note: Las donaciones pueden ser  desgravadas en los Estados Unidos.
     #original_hash: 6026d35
     other_help_title: Otras formas de ayudar
-    #original_hash: 55b7b72
+    #original_hash: cb228f6
     other_help_content_html: >-
       <p>Si cree que podría colaborar con la Asociación Mundial del Cubo de un
       modo no económico, ¡estaremos encantados de escucharte! Por favor
-      contáctanos en <a href="">communication@worldcubeassociation.org</a>.</p>
+      contáctanos en <a
+      href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>
     donation_banner:
       #original_hash: 6253f90
       content: >-
@@ -3652,16 +3719,12 @@ es:
     paragraph3:
       #original_hash: 00d3bf8
       title: Fecha límite para anunciar la competición
-      #original_hash: 305cfb1
+      #original_hash: 3613823
       content_html: >-
-        Se debe anunciar la competición al menos un mes antes del comienzo de la
-        misma (ver la <a
-        href=‘https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++’>Directriz
-        8a4++</a>) Si hay motivos especiales que eviten que se cumpla este
-        límite, las competiciones pueden ser anunciadas hasta dos semanas antes,
-        a discreción del WCAT. Se recomienda encarecidamente informar al WCAT de
-        estos motivos lo antes posible para evitar que se termine rechazando la
-        competición.
+        Se debe anunciar la competición al 28 días antes del comienzo de la
+        misma (ver los <a href=‘
+        https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf’>Requisitos
+        de Competiciones</a>).
     paragraph4:
       #original_hash: b6dca56
       title: Política de Proximidad
@@ -3715,29 +3778,27 @@ es:
     paragraph-events:
       #original_hash: b16c5f1
       title: Anunciar pruebas
-      #original_hash: cee85f7
+      #original_hash: 7ad62c7
       content: >-
         Todas las pruebas que se vayan a celebrar en la competición deben ser
         especificadas por el Delegado cuando se solicite la aprobación de la
-        competición. Esto también incluye pruebas “tentativas” (i.e. pruebas que
-        pueden ser celebradas adicionalmente dependiendo del transcurso de la
-        competición). El WCAT debe aprobar nuevas adiciones.
+        competición. El WCAT debe aprobar nuevas adiciones.
     paragraph5:
       #original_hash: 17d01de
       title: Límites de competidores
-      #original_hash: b4748cf
+      #original_hash: bd8e6ee
       content_html: >-
         El número de competidores puede ser limitado por prueba o por
-        competición (ver la <a
-        href=‘https://www.worldcubeassociation.org/regulations/#Z4’>Regla
-        Z4</a>). Al igual que todas las reglas en el artículo Z, el Delegado de
-        la competición debe obtener la aprobación del límite de competidores por
-        parte del WCAT. Los límites de competidores deberían ser elegidos
-        sabiamente y de acuerdo con el interés estimado de los competidores. El
-        límite no debería bajarse por motivos menorse. El límite pretendido
-        debería tenerse en consideración cuando se busque un local apropiado. El
-        límite de competidores debe mostrarse claramente en la página de la
-        competición en la página web de la WCA.
+        competición (ver los <a href=‘
+        https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf’>Requisitos
+        de Competiciones</a>). El Delegado de la competición debe obtener la
+        aprobación del límite de competidores por parte del WCAT. Los límites de
+        competidores deberían ser elegidos sabiamente y de acuerdo con el
+        interés estimado de los competidores. El límite no debería bajarse por
+        motivos menores. El límite pretendido debería tenerse en consideración
+        cuando se busque un local apropiado. El límite de competidores debe
+        mostrarse claramente en la página de la competición en la página web de
+        la WCA.
     paragraph6:
       #original_hash: ce4c3d0
       title: Gestionar registros
