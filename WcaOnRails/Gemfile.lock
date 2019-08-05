@@ -447,7 +447,7 @@ GEM
     rdoc (6.0.1)
     recaptcha (5.0.0)
       json
-    redcarpet (3.4.0)
+    redcarpet (3.5.0)
     ref (2.0.0)
     regexp_parser (1.6.0)
     representable (3.0.4)
