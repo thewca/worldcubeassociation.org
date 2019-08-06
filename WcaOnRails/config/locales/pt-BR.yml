@@ -1,5 +1,45 @@
 pt-BR:
   countries:
+    #original_hash: 530670d
+    AG: Antígua e Barbuda
+    #original_hash: 62ac59b
+    BA: Bósnia e Herzegovina
+    #original_hash: f39d280
+    CD: República Democrática do Congo
+    #original_hash: 77f256b
+    CG: Congo
+    #original_hash: b218299
+    CI: Costa do Marfim
+    #original_hash: 07dee45
+    CV: Cabo Verde
+    #original_hash: ee10075
+    FM: Estados Federados da Micronésia
+    #original_hash: db871b0
+    GW: Guiné Bissau
+    #original_hash: 2f488ff
+    HK: Hong Kong
+    #original_hash: 3ad2dd8
+    KN: São Cristóvão e Névis
+    #original_hash: 7184d1a
+    KP: Coreia do Norte
+    #original_hash: 4430b22
+    KR: Coréia
+    #original_hash: 673b1cf
+    LC: Santa Lúcia
+    #original_hash: 928b7c4
+    MM: Myanmar
+    #original_hash: d887137
+    MO: Macau
+    #original_hash: 05a15c1
+    PS: Palestina
+    #original_hash: 655191a
+    ST: São Tomé and Príncipe
+    #original_hash: 4d206a8
+    TT: Trindade e Tobago
+    #original_hash: 0f3f60b
+    VA: Santa Sé
+    #original_hash: 3fa9b2d
+    VC: São Vicente e Granadinas
     #original_hash: 9af4622
     XF: Múltiplos países (África)
     #original_hash: 374ac0d
@@ -16,12 +56,6 @@ pt-BR:
     XS: Múltiplos Países (América do Sul)
     #original_hash: 9027fe6
     XW: Múltiplos países (Mundo)
-    #original_hash: 918c53a
-    MO: Macau
-    #original_hash: 2f488ff
-    HK: Hong Kong
-    #original_hash: 4e8bd04
-    KR: Coréia
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Múltiplos Continentes
@@ -2913,11 +2947,12 @@ pt-BR:
     tax_deductible_note: Doações são dedutíveis de impostos nos Estados Unidos.
     #original_hash: 6026d35
     other_help_title: Outras formas de ajudar
-    #original_hash: 55b7b72
+    #original_hash: cb228f6
     other_help_content_html: >-
       <p>Se você acredita que pode contribuir com a WCA de uma forma não
       financeira, adoraríamos te ouvir! Por favor entre em contato conosco no
-      email <a href="">communication@worldcubeassociation.org</a>.</p>
+      email <a
+      href="communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>
     donation_banner:
       #original_hash: 6253f90
       content: >-
@@ -3605,15 +3640,12 @@ pt-BR:
     paragraph3:
       #original_hash: 00d3bf8
       title: Prazos para anunciar a competição
-      #original_hash: 305cfb1
+      #original_hash: 3613823
       content_html: >-
-        A competição deve ser anunciada pelo menos um mês antes de seu início
-        (veja <a
-        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Orientação
-        8a4++</a>). Se houver alguma razão especial que impeça o cumprimento
-        deste prazo, uma competição pode ser anunciada até duas semanas antes, a
-        critério do WCAT. É altamente recomendável informar ao WCAT dessas
-        razões assim que possível, para evitar uma recusa da competição.
+        A competição precisa ser anunciada pelo menos 28 dias antes de seu
+        início (veja <a
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
+        Requirements</a>).
     paragraph4:
       #original_hash: b6dca56
       title: Política de proximidade
@@ -3664,28 +3696,26 @@ pt-BR:
     paragraph-events:
       #original_hash: b16c5f1
       title: Anunciando eventos
-      #original_hash: cee85f7
+      #original_hash: 7ad62c7
       content: >-
         Todos os eventos que vão acontecer na competição devem ser listados pelo
-        Delegado quando solicitar a aprovação da competição. Isso também inclui
-        eventos "prováveis" (ou seja, eventos que podem acontecer dependendo do
-        andamento da competição). Mudanças nos eventos devem ser aprovadas pelo
-        WCAT.
+        Delegado quando solicitar a aprovação da competição. Mudanças nos
+        eventos devem ser aprovadas pelo WCAT.
     paragraph5:
       #original_hash: 17d01de
       title: Limites de competidores
-      #original_hash: b4748cf
+      #original_hash: bd8e6ee
       content_html: >-
         o número de competidores pode ser limitado por evento ou por competição
         (veja <a
-        href='https://www.worldcubeassociation.org/regulations/#Z4'>Regra
-        Z4</a>). Assim como todas as regras no artigo Z, o Delegado da
-        competição deve ter aprovação do limite pelo WCAT. Estes limites devem
-        ser escolhidos com cuidado, de acordo com o interesse previsto na
-        competição. O limite não deve ser colocado muito baixo por razões
-        simples. O limite pretendido deve ser levado em consideração ao se
-        procurar um local para a competição. Os limites de competidores devem
-        estar claramente informados na página da competição no website da WCA.
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
+        Requirements</a>). O Delegado da competição deve ter aprovação do limite
+        pelo WCAT. Estes limites devem ser escolhidos com cuidado, de acordo com
+        o interesse previsto na competição. O limite não deve ser colocado muito
+        baixo por razões simples. O limite pretendido deve ser levado em
+        consideração ao se procurar um local para a competição. Os limites de
+        competidores devem estar claramente informados na página da competição
+        no website da WCA.
     paragraph6:
       #original_hash: ce4c3d0
       title: Gerenciando inscrições
