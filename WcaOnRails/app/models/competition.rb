@@ -858,7 +858,7 @@ class Competition < ApplicationRecord
   end
 
   def days_until
-    start_date ? (start_date - Time.now.to_date).to_i : nil
+    start_date ? (start_date - Time.now.utc.to_date).to_i : nil
   end
 
   def has_date_errors?
