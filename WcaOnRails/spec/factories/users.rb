@@ -134,6 +134,12 @@ FactoryBot.define do
       end
     end
 
+    trait :weat_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.weat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
     trait :wfc_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wfc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)

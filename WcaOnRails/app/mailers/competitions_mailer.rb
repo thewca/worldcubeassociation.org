@@ -104,7 +104,7 @@ class CompetitionsMailer < ApplicationMailer
     @competition = competition
     mail(
       to: competition.delegates.pluck(:email),
-      cc: ["results@worldcubeassociation.org", "quality@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
+      cc: ["results@worldcubeassociation.org", "assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: "results@worldcubeassociation.org",
       subject: "#{competition.name} Results",
     )
@@ -114,7 +114,7 @@ class CompetitionsMailer < ApplicationMailer
     @competition = competition
     mail(
       to: competition.delegates.pluck(:email),
-      cc: ["quality@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
+      cc: ["assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: delegates_to_senior_delegates_email(competition.delegates),
       subject: "#{competition.name} Delegate Report",
     )
