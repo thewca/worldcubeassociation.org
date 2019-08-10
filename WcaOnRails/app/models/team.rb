@@ -37,6 +37,7 @@ class Team < ApplicationRecord
       Team.wdc,
       Team.wdpc,
       Team.wec,
+      Team.weat,
       Team.wfc,
       Team.wmt,
       Team.wqac,
@@ -56,6 +57,7 @@ class Team < ApplicationRecord
     ]
   end
 
+  # Don't forget that the WFC Leader is an officer too, the WCA Treasurer!
   def self.all_officers
     [
       Team.chair,
@@ -104,6 +106,10 @@ class Team < ApplicationRecord
 
   def self.wec
     Team.c_find_by_friendly_id!('wec')
+  end
+
+  def self.weat
+    Team.c_find_by_friendly_id!('weat')
   end
 
   def self.wfc

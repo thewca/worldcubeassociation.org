@@ -39,7 +39,7 @@ class RegionalOrganizationsController < ApplicationController
     @regional_organization.extra_file.attach(params[:regional_organization][:extra_file])
     if @regional_organization.save
       flash[:success] = t('.create_success')
-      RegionalOrganizationsMailer.notify_board_of_new_regional_organization_application(current_user, @regional_organization).deliver_later
+      RegionalOrganizationsMailer.notify_board_and_assistants_of_new_regional_organization_application(current_user, @regional_organization).deliver_later
       if current_user.can_manage_regional_organizations?
         redirect_to edit_regional_organization_path(@regional_organization)
       else

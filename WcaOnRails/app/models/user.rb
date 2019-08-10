@@ -435,6 +435,10 @@ class User < ApplicationRecord
     team_member?(Team.wec)
   end
 
+  def weat_team?
+    team_member?(Team.weat)
+  end
+
   def financial_committee?
     team_member?(Team.wfc)
   end
