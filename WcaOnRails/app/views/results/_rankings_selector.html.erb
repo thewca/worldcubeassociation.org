@@ -1,0 +1,130 @@
+<div class="form-group">
+  <%= label_tag(t("results.rankings.form_elements.event")) %>
+  <div id="event">
+    <% Event.official.each do |event| %>
+      <span class="event-radio">
+        <%= link_to cubing_icon(event.id),
+                      request.params.merge(event_id: event.id),
+                      class: (event.id == params[:event_id] ? " active" : ""),
+                      id: "cubing-icon",
+                      data: {
+                        toggle: "tooltip",
+                        placement: "top"
+                      },
+                      title: event.name %>
+      </span>
+    <% end %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= label_tag(t("results.rankings.form_elements.region")) %>
+  <%= select_tag(:region, region_option_tags(selected_id: params[:region], real_only: true, use_world: true), class: "form-control") %>
+</div>
+
+<br>
+
+<% unless params[:event_id] == "333mbf" %>
+  <div class="form-group">
+    <%= label_tag(t("results.rankings.form_elements.type_selector.type")) %>
+    <div id="type" class="btn-group">
+      <% @types.each do |type| %>
+        <%= link_to t("results.rankings.form_elements.type_selector.#{type}"),
+                      request.params.merge(type: type),
+                      class: "btn btn-primary" + (type == params[:type] ? " active" : "") %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="form-group">
+  <%= label_tag(t("results.rankings.form_elements.years_selector.years")) %>
+  <div id="years" class="btn-group">
+    <%= link_to t("results.rankings.form_elements.years_selector.all_years"), request.params.merge(years: "all years"), class: "btn btn-info" + (@is_all_years ? " active" : "") %>
+    <div class="btn-group">
+      <% only_active = @is_only %>
+      <ul class="dropdown-menu years-only">
+        <% @years.each do |year| %>
+          <li class="only <%= (only_active && year.to_s == @year ? " active" : "") %>"><%= link_to year.to_s, request.params.merge(years: "only #{year}") %></li>
+        <% end %>
+      </ul>
+      <label id="only-years" class="btn btn-info <%= only_active ? " active" : "" %>" data-toggle="dropdown">
+        <span class="caption">
+          <% if only_active %>
+            <%= t("results.rankings.form_elements.years_selector.only_html", year: @year) %>
+          <% else %>
+            <%= t("results.rankings.form_elements.years_selector.only") %>
+          <% end %>
+        </span>
+      </label>
+    </div>
+    <div class="btn-group">
+      <% until_active = @is_until %>
+      <ul class="dropdown-menu years-until">
+        <% @years.each do |year| %>
+          <li class="until <%= (until_active && year.to_s == @year ? " active" : "") %>"><%= link_to year.to_s, request.params.merge(years: "until #{year}") %></li>
+        <% end %>
+      </ul>
+      <label id="until-years" class="btn btn-info <%= until_active ? " active" : "" %>" data-toggle="dropdown">
+        <span class="caption">
+          <% if until_active %>
+            <%= t("results.rankings.form_elements.years_selector.until_html", year: @year) %>
+          <% else %>
+            <%= t("results.rankings.form_elements.years_selector.until") %>
+          <% end %>
+        </span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= label_tag(t("results.rankings.form_elements.show_selector.show")) %>
+  <div id="show" class="btn-group">
+    <div class="btn-group">
+      <% persons_active = @is_persons %>
+      <label id="persons" class="btn btn-info <%= persons_active ? " active" : "" %>" data-toggle="dropdown">
+        <span class="caption">
+          <% if persons_active %>
+            <%= t("results.rankings.form_elements.show_selector.persons_html", quantity: @show) %>
+          <% else %>
+            <%= t("results.rankings.form_elements.show_selector.persons") %>
+          <% end %>
+        </span>
+      </label>
+      <ul class="dropdown-menu show-persons">
+        <% @quantities.each do |quantity| %>
+          <li class="persons <%= (persons_active && quantity.to_s == @show ? " active" : "") %>"><%= link_to quantity.to_s, request.params.merge(show: "#{quantity} persons") %></li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="btn-group">
+      <% results_active = @is_results %>
+      <label id="results" class="btn btn-info <%= results_active ? " active" : "" %>" data-toggle="dropdown">
+        <span class="caption">
+          <% if results_active %>
+            <%= t("results.rankings.form_elements.show_selector.results_html", quantity: @show) %>
+          <% else %>
+            <%= t("results.rankings.form_elements.show_selector.results") %>
+          <% end %>
+        </span>
+      </label>
+      <ul class="dropdown-menu show-results">
+        <% @quantities.each do |quantity| %>
+          <li class="results <%= (results_active && quantity.to_s == @show ? " active" : "") %>"><%= link_to quantity.to_s, request.params.merge(show: "#{quantity} results") %></li>
+        <% end %>
+      </ul>
+    </div>
+    <%= link_to t("results.rankings.form_elements.show_selector.by_region"), request.params.merge(show: "by region"), class: "btn btn-info" + (@is_by_region ? " active" : "") %>
+  </div>
+</div>
+
+<script>
+  $(function() {
+    $('#region').bind('change', function () {
+      var params = $.getUrlParams();
+      params.region = $(this).val();
+      window.location.search = $.param(params);
+    });
+  });
+</script>

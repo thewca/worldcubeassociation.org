@@ -1,0 +1,19 @@
+#results-selector {
+  width: 100%;
+  margin: 20px 0;
+
+  #event,
+  #region,
+  #type,
+  #years,
+  #show {
+    font-size: 12px;
+    font-weight: normal;
+    display: block;
+    min-width: 165px;
+    @media (max-width: $screen-sm) {
+      display: inline-block;
+      width: 100%;
+    }
+  }
+}

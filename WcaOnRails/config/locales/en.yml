@@ -173,6 +173,7 @@ en:
     333mbf: "10:00.00 per cube, up to 60:00.00"
   #context: Common word used in multiple places on the website
   common:
+    world: "World"
     continent: "Continent"
     country: "Country"
     #context: "here" is used in html links such as "You can create an account here".
@@ -1356,6 +1357,43 @@ en:
       tabs_introduction_text: "Here you can add and edit tabs which are shown on the competition info page."
     edit:
       edit_tab_title: "Edit %{tab_name} tab"
+  #context: Key used for results (rankings, records, etc.)
+  results:
+    #context: On the rankings page
+    rankings:
+      title: "Rankings"
+      form_elements:
+        event: "Event"
+        region: "Region"
+        type_selector:
+          type: "Type"
+          single: "Single"
+          average: "Average"
+        years_selector:
+          years: "Years"
+          all_years: "All years"
+          only: "Only"
+          only_html: "Only %{year}"
+          until: "Until"
+          until_html: "Until %{year}"
+        show_selector:
+          show: "Show"
+          persons: "Persons"
+          persons_html: "%{quantity} persons"
+          results: "Results"
+          results_html: "%{quantity} results"
+          by_region: "By region"
+      table_elements:
+        name: "Name"
+        result: "Result"
+        citizen_of: "Citizen of"
+        competition: "Competition"
+        solves: "Solves"
+        region: "Region"
+        world: "World"
+      #context: Options of params to select which kind of rankings to show
+      unknown_type: "Unknown type parameter, must be either \"single\" or \"average\""
+      unknown_show: "Unknown show parameter, must be either \"N persons\", \"N results\", or \"by region\""
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
