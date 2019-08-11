@@ -155,6 +155,11 @@ table.wca-results {
     &.single {
       text-align: right;
     }
+    &.result {
+      text-align: right;
+    }
+    &.region {
+    }
   }
   tbody tr td {
     padding: 3px 5px;
@@ -189,6 +194,15 @@ table.wca-results {
     }
     &.single {
       text-align: right;
+    }
+    &.result {
+      text-align: right;
+      font-weight: bold;
+    }
+    &.region {
+      &.tied-previous {
+        @extend .text-muted;
+      }
     }
   }
 
@@ -349,6 +363,10 @@ textarea {
     label {
       cursor: pointer;
     }
+  }
+
+  a.active {
+    color: $blue;
   }
 }
 
