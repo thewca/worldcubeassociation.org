@@ -552,7 +552,8 @@ RSpec.describe CompetitionsController do
         end.to change { enqueued_jobs.size }.by(1)
       end
 
-      it "can confirm competition and expects board and organizers to receive a notification email" do
+      it "can confirm a competition and expects wcat and organizers to receive a notification email" do
+        competition.update_attributes(start_date: 5.week.from_now, end_date: 5.week.from_now)
         expect(CompetitionsMailer).to receive(:notify_organizers_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
@@ -560,6 +561,12 @@ RSpec.describe CompetitionsController do
         end.to change { enqueued_jobs.size }.by(2)
         expect(response).to redirect_to edit_competition_path(competition)
         expect(competition.reload.confirmed?).to eq true
+      end
+
+      it "cannot confirm a competition that is not at least 28 days in the future" do
+        competition.update_attributes(start_date: 26.day.from_now, end_date: 26.day.from_now)
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
+        expect(competition.reload.confirmed?).to eq false
       end
 
       it "cannot delete not confirmed, but visible competition" do
