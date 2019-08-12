@@ -461,19 +461,18 @@ pt:
         refund_policy_limit_date: Data limite para reembolsos
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de entrada para público
-        #original_hash: 9e1008d
+        #original_hash: 723cad9
         regulation_z1: >-
-          Quero exigir que competidores submetam puzzles durante o registro
-          conforme a Regra Z1)
-        #original_hash: 466aca7
-        regulation_z1_reason: Razão para Z1)
-        #original_hash: 588c6a0
+          Quero exigir que competidores submetam puzzles a uma hora específica
+          antes do evento estar agendado para começar
+        #original_hash: 78308cc
+        regulation_z1_reason: Razões e detalhes para submeter puzzles antecipadamente
+        #original_hash: 88da0ef
         regulation_z3: >-
-          Quero selecionar competidores que se qualificam diretamente para
-          certas rondas de certos eventos baseado nos resultados de determinadas
-          competições anteriores segundo a Regra Z3)
-        #original_hash: 18d9a8c
-        regulation_z3_reason: Razão para Z3)
+          Quero usar resultados de qualificação para limitar quem pode competir
+          em certos eventos
+        #original_hash: 1ec6dd4
+        regulation_z3_reason: Razões e detalhes para resultados de qualificação
       registration:
         #original_hash: 3c23a67
         guests: Convidados
@@ -868,16 +867,16 @@ pt:
           frase será mostrada dizendo que público pode aceder gratuitamente.
         #original_hash: da39a3e
         regulation_z1: ''
-        #original_hash: d3872a2
+        #original_hash: 4e8488b
         regulation_z1_reason: >-
-          Por favor elabore aqui o porquê de adotar a Regra Z1). Por favor
-          preencha em inglês!
+          Por favor elabore aqui o porquê de requerer que competidores submetam
+          puzzles antecipadamente. Por favor preencha em inglês!
         #original_hash: da39a3e
         regulation_z3: ''
-        #original_hash: af960d9
+        #original_hash: f859883
         regulation_z3_reason: >-
-          Por favor elabore aqui o porquê de adotar a Regra Z3). Por favor
-          preencha em inglês!
+          Por favor elabore aqui o porquê de querer usar tempos de qualificação.
+          Por favor preencha em inglês!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1824,7 +1823,7 @@ pt:
     #original_hash: 34eb009
     will_close_html: 'As inscrições terminam daqui por <strong>%{days}, no dia %{time}'
     #original_hash: dc8a520
-    closed_html: 'As inscrições terminaram há <strong>%{days}</strong> atrás, às %{time}.'
+    closed_html: 'As inscrições terminaram há <strong>%{days}</strong> atrás: %{time}.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
       %{sign_in} para ver o estado da sua inscrição. Se ainda não tem uma conta
@@ -2291,6 +2290,8 @@ pt:
       not_all_delegates: não são todos Delegados da WCA
       #original_hash: 43a23c2
       registration_close_after_open: o fim das inscrições deve ser posterior ao início
+      #original_hash: 8a3a4f6
+      start_date_must_be_28_days_in_advance: Data de início tem de ser pelo menos 28 dias no futuro.
       #original_hash: 43a83a9
       end_date_before_start: A data de fim não pode ser anterior à data de início.
       #original_hash: 0c507fa
@@ -3113,6 +3114,9 @@ pt:
         da WCA.
       #original_hash: 0e7a036
       teams_committees: Equipas e Comités
+      probation:
+        #original_hash: 1dd6e3b
+        name: Delegados em Provação
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>Delegado da WCA</strong> é o papel definido nas Moções da WCA
