@@ -17,7 +17,7 @@ gem 'therubyracer'
 
 gem 'sdoc', group: :doc
 gem 'dotenv-rails', require: 'dotenv/rails-now'
-gem 'envied'
+gem 'envied', '0.9.1' # https://github.com/thewca/worldcubeassociation.org/issues/4455
 gem 'seedbank'
 gem 'jquery-rails'
 gem 'jbuilder'
