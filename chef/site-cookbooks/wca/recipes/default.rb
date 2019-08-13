@@ -349,7 +349,7 @@ template "#{repo_root}/webroot/results/admin/phpMyAdmin/config.inc.php" do
 end
 
 #### Legacy PHP results system
-PHP_MEMORY_LIMIT = '512M'
+PHP_MEMORY_LIMIT = '768M'
 PHP_IDLE_TIMEOUT_SECONDS = 120
 PHP_POST_MAX_SIZE = '20M'
 PHP_MAX_INPUT_VARS = 5000
