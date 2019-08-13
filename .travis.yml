@@ -1,7 +1,7 @@
 dist: trusty
 sudo: false
 language: ruby
-bundler_args: --path $HOME/.bundle
+bundler_args: --deployment --path $HOME/.bundle
 cache:
   directories:
     - $HOME/.phantomjs

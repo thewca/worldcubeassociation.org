@@ -630,7 +630,7 @@ DEPENDENCIES
   doorkeeper-i18n
   dotenv-rails
   enum_help
-  envied
+  envied (= 0.9.1)
   factory_bot_rails
   faker
   font-awesome-sass
