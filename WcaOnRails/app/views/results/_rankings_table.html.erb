@@ -20,7 +20,7 @@
     <% previous_rank = 0 %>
     <% @rows.each_with_index do |row, i| %>
       <% result = LightResult.new(row) %>
-      <% competition = Competition.find(row["competitionId"]) %>
+      <% competition = @competitions_by_id[row["competitionId"]] %>
       <% value = row["value"] %>
       <% rank = value == previous_value ? previous_rank : i+1 %>
       <% tied_previous = rank == previous_rank %>
