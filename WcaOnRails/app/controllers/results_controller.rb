@@ -188,6 +188,11 @@ class ResultsController < ApplicationController
     end
 
     @rows = ActiveRecord::Base.connection.exec_query(query)
+    @competitions_by_id = Hash[
+      Competition.where(id: @rows.map { |r| r["competitionId"] }.uniq).map do |c|
+        [c.id, c]
+      end
+    ]
     compute_rankings_by_region if @is_by_region
   end
 
