@@ -228,6 +228,8 @@ class ResultsController < ApplicationController
 
   # Normalizes the params so that old links to rankings still work.
   private def support_old_links!
+    params[:region]&.gsub!("+", " ")
+
     params[:years]&.gsub!("+", " ")
     if params[:years] == "all"
       params[:years] = nil
