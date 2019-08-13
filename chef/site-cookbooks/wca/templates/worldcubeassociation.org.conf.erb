@@ -155,6 +155,45 @@ server {
     return 302 /media/;
   }
 
+  # Redirect /results/e.php to /results/events.php
+  location /results/e.php {
+    return 302 /results/events.php$is_args$args;
+  }
+  # Redirect /results/events.php to /results/rankings
+  location /results/events.php {
+    set $rails_path "333";
+    set $rails_args "";
+
+    if ($arg_eventId != "") {
+      set $rails_path $arg_eventId;
+    }
+
+    if ($arg_single != "") {
+      set $rails_path "${rails_path}/single";
+    }
+    if ($arg_average != "") {
+      set $rails_path "${rails_path}/average";
+    }
+
+    if ($arg_regionId != "") {
+      set $rails_args "${rails_args}&region=${arg_regionId}";
+    }
+
+    if ($arg_years != "") {
+      set $rails_args "${rails_args}&years=${arg_years}";
+    }
+
+    if ($arg_show != "") {
+      set $rails_args "${rails_args}&show=${arg_show}";
+    }
+
+    return 302 /results/rankings/$rails_path?$rails_args;
+  }
+
+  location /results/rankings {
+    try_files $uri @app;
+  }
+
   location /results {
     alias <%= @repo_root %>/webroot/results;
     index index.php index.html;

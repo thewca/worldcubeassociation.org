@@ -56,12 +56,12 @@
             <% end %>
           </ul>
         </li>
-        <li class="dropdown <%= Set['persons', 'media'].include?(params[:controller]) ? 'active' : '' %>">
-          <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+        <li class="dropdown <%= Set['results', 'persons', 'media'].include?(params[:controller]) ? 'active' : '' %>">
+          <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
             <%= icon('fas', 'list-ol') %> <%= t '.results' %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/results/events.php"><%= icon('fas', 'signal', class: 'fa-rotate-90') %> <%= t '.rankings' %></a></li>
+            <li><a href="<%= rankings_path("333", "single") %>"><%= icon('fas', 'signal', class: 'fa-rotate-90') %> <%= t '.rankings' %></a></li>
             <li><a href="/results/regions.php"><%= icon('fas', 'trophy') %> <%= t '.records' %></a></li>
             <li><a href="<%= persons_path %>"><%= icon('fas', 'users') %> <%= t '.persons' %></a></li>
             <% if current_user&.wca_id? %>

@@ -28,12 +28,12 @@
             <%= rank_td rank_single, "continent" %>
             <%= rank_td rank_single, "world" %>
             <td class="single">
-              <%= link_to_ranking rank_single.event_id, :single do %>
+              <%= link_to rankings_path(rank_single.event_id, "single"), class: "plain" do %>
                 <%= rank_single.solve_time.clock_format %>
               <% end %>
             </td>
             <td class="average">
-              <%= link_to_ranking rank_single.event_id, :average do %>
+              <%= link_to rankings_path(rank_single.event_id, "average"), class: "plain" do %>
                 <%= rank_average&.solve_time&.clock_format %>
               <% end %>
             </td>
