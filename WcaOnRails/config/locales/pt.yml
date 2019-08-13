@@ -247,6 +247,8 @@ pt:
     #original_hash: cc7d8bb
     333mbf: '10:00.00 por cubo, até 60:00.00'
   common:
+    #original_hash: 70c07ec
+    world: Mundo
     #original_hash: 2513cf0
     continent: Continente
     #original_hash: d523ebb
@@ -934,13 +936,14 @@ pt:
         equipment: >-
           Número e tipo de timers e displays usados na competição. Remova a(s)
           linha(s) de equipamentos que não foram usados.
-        #original_hash: 4658dd9
+        #original_hash: a4aebc8
         venue: >-
           Fale sobre salas, iluminação, acesso ao público, distribuição das
           áreas (de competição, embaralhamento, espera), se foram usados espaços
           diferentes de competição, problemas que ocorreram (barulho, por
           exemplo) e como foram resolvidos. Seja breve e não reporte detalhes
-          irrelevantes.
+          irrelevantes. Carregue uma foto do espaço da competição para mostrar a
+          disposição da área de embaralhamento e de competição.
         #original_hash: f8de509
         organization: >-
           Fale sobre a equipa de organização e como trabalharam na competição;
@@ -2532,6 +2535,69 @@ pt:
     edit:
       #original_hash: 5f1f5b8
       edit_tab_title: 'Editar aba %{tab_name}'
+  results:
+    rankings:
+      #original_hash: f5fe73c
+      title: Rankings
+      form_elements:
+        #original_hash: ad8919a
+        event: Evento
+        #original_hash: 0f21717
+        region: Região
+        type_selector:
+          #original_hash: 3deb745
+          type: Tipo
+          #original_hash: dd11868
+          single: Singular
+          #original_hash: 15f86c0
+          average: Média
+        years_selector:
+          #original_hash: 96f997b
+          years: Anos
+          #original_hash: 0977c76
+          all_years: Todos
+          #original_hash: 8737f09
+          only: Apenas
+          #original_hash: b3c0fe7
+          only_html: 'Apenas %{year}'
+          #original_hash: 96bdb66
+          until: Até
+          #original_hash: fa23930
+          until_html: 'Até %{year}'
+        show_selector:
+          #original_hash: d97d1ee
+          show: Mostrar
+          #original_hash: f3cf96e
+          persons: Pessoas
+          #original_hash: 16d3376
+          persons_html: '%{quantity} pessoas'
+          #original_hash: 612e12d
+          results: Resultados
+          #original_hash: f3baa4a
+          results_html: '%{quantity} resultados'
+          #original_hash: d46d2ee
+          by_region: Por região
+      table_elements:
+        #original_hash: 709a232
+        name: Nome
+        #original_hash: 5faa59d
+        result: Resultado
+        #original_hash: e0f64f7
+        citizen_of: Cidadão de
+        #original_hash: 1917f4f
+        competition: Competição
+        #original_hash: e7f6fc5
+        solves: Resoluções
+        #original_hash: 0f21717
+        region: Região
+        #original_hash: 70c07ec
+        world: Mundo
+      #original_hash: 65310e5
+      unknown_type: 'Tipo de parâmetro desconhecido, tem de ser "Singular" ou "Média"'
+      #original_hash: 01e188f
+      unknown_show: >-
+        Parâmetro desconhecido, tem de ser "N pessoas", "N resultados", ou "por
+        região"
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Associe o seu ID da WCA à sua conta!
