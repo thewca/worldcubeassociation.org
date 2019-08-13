@@ -253,6 +253,8 @@ pt-BR:
     #original_hash: cc7d8bb
     333mbf: '10 minutos por cubo, no máximo 60 minutos'
   common:
+    #original_hash: 70c07ec
+    world: Mundo
     #original_hash: 2513cf0
     continent: Continente
     #original_hash: d523ebb
@@ -467,19 +469,18 @@ pt-BR:
         refund_policy_limit_date: Data limite para devoluções
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de entrada para espectadores/convidados
-        #original_hash: 9e1008d
+        #original_hash: 723cad9
         regulation_z1: >-
-          Eu quero solicitar que os competidores entreguem os quebra-cabeças no
-          credenciamento, conforme Regra Z1.
-        #original_hash: 466aca7
-        regulation_z1_reason: Razão para Z1
-        #original_hash: 588c6a0
+          Eu quero solicitar que os competidores entreguem os quebra-cabeças em
+          algum momento específico antes do início do evento.
+        #original_hash: 78308cc
+        regulation_z1_reason: Razão e detalhes para a entrega antecipada dos quebra-cabeças
+        #original_hash: 88da0ef
         regulation_z3: >-
-          Eu quero selecionar competidores que se classificam diretamente para
-          certas rodadas de certos eventos, baseando-se em resultados de
-          competições anteriores específicas, conforme Regra Z3
-        #original_hash: 18d9a8c
-        regulation_z3_reason: Razão para Z3
+          Eu quero resultados de qualificação para limitar quem pode participar
+          em alguns eventos
+        #original_hash: 1ec6dd4
+        regulation_z3_reason: Razão e detalhes para uso de resultados de qualificação
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
@@ -878,16 +879,16 @@ pt-BR:
           frase será mostrada dizendo que espectadores podem assistir de graça.
         #original_hash: da39a3e
         regulation_z1: ''
-        #original_hash: d3872a2
+        #original_hash: 4e8488b
         regulation_z1_reason: >-
-          Por favor informe aqui por que você quer usar a Regra Z1. Preencha em
-          Inglês!
+          Por favor informe aqui por que você quer que os competidores entreguem
+          os quebra-cabeças antecipadament. Por favor preencha em Inglês!
         #original_hash: da39a3e
         regulation_z3: ''
-        #original_hash: af960d9
+        #original_hash: f859883
         regulation_z3_reason: >-
-          Por favor informe aqui por que você quer usar a Regra Z3. Preencha em
-          Inglês!
+          Por favor informe aqui por que você quer usar tempos de qualificação.
+          Por favor preencha em Inglês!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -945,13 +946,15 @@ pt-BR:
         equipment: >-
           Número e tipo de timers e displays usados na competição. Remova a(s)
           linha(s) de equipamentos que não foram usados.
-        #original_hash: 4658dd9
+        #original_hash: a4aebc8
         venue: >-
           Fale sobre salas, iluminação, acesso ao público, distribuição das
           áreas (de competição, embaralhamento, espera), se foram usados espaços
           diferentes de competição, problemas que ocorreram (barulho, por
           exemplo) e como foram resolvidos. Seja breve e não reporte detalhes
-          irrelevantes.
+          irrelevantes. Por favor inclua uma ou mais fotos do local para mostrar
+          a disposição da área de embaralhamento, de competidores e as estações
+          de resolução.
         #original_hash: f8de509
         organization: >-
           Fale sobre a equipe de organização e como trabalharam durante a
@@ -2303,6 +2306,8 @@ pt-BR:
       not_all_delegates: não são todos Delegados da WCA
       #original_hash: 43a23c2
       registration_close_after_open: o término das inscrições deve ser posterior ao início
+      #original_hash: 8a3a4f6
+      start_date_must_be_28_days_in_advance: Data de início deve ser pelo menos 28 dias no futuro.
       #original_hash: 43a83a9
       end_date_before_start: A data de término não pode ser anterior à data de início.
       #original_hash: 0c507fa
@@ -2546,6 +2551,69 @@ pt-BR:
     edit:
       #original_hash: 5f1f5b8
       edit_tab_title: 'Editar aba %{tab_name}'
+  results:
+    rankings:
+      #original_hash: f5fe73c
+      title: Rankings
+      form_elements:
+        #original_hash: ad8919a
+        event: Evento
+        #original_hash: 0f21717
+        region: Região
+        type_selector:
+          #original_hash: 3deb745
+          type: Tipo
+          #original_hash: dd11868
+          single: Tempo único
+          #original_hash: 15f86c0
+          average: Média
+        years_selector:
+          #original_hash: 96f997b
+          years: Anos
+          #original_hash: 0977c76
+          all_years: Todos os anos
+          #original_hash: 8737f09
+          only: Somente
+          #original_hash: b3c0fe7
+          only_html: 'Somente %{year}'
+          #original_hash: 96bdb66
+          until: Até
+          #original_hash: fa23930
+          until_html: 'Até %{year}'
+        show_selector:
+          #original_hash: d97d1ee
+          show: Mostrar
+          #original_hash: f3cf96e
+          persons: Pessoas
+          #original_hash: 16d3376
+          persons_html: '%{quantity} pessoas'
+          #original_hash: 612e12d
+          results: Resultados
+          #original_hash: f3baa4a
+          results_html: '%{quantity} resultados'
+          #original_hash: d46d2ee
+          by_region: Por região
+      table_elements:
+        #original_hash: 709a232
+        name: Nome
+        #original_hash: 5faa59d
+        result: Resultado
+        #original_hash: e0f64f7
+        citizen_of: Nacionalidade
+        #original_hash: 1917f4f
+        competition: Competição
+        #original_hash: e7f6fc5
+        solves: Tempos
+        #original_hash: 0f21717
+        region: Região
+        #original_hash: 70c07ec
+        world: Mundo
+      #original_hash: 65310e5
+      unknown_type: 'Parâmetro de tipo desconhecido, deve ser "tempo único" ou "média"'
+      #original_hash: 01e188f
+      unknown_show: >-
+        Parâmetro de visualização desconhecido, deve ser "N pessoas", "Ne
+        resultados" ou "por região"
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Vincular sua ID da WCA à sua conta!
@@ -3119,6 +3187,9 @@ pt-BR:
       operations_html: 'As operações cotidianas são feitas pelos %{committees_and_teams} da WCA.'
       #original_hash: 0e7a036
       teams_committees: Equipes e Comitês
+      probation:
+        #original_hash: 1dd6e3b
+        name: Delegados em "Probation"
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>Delegado da WCA</strong> é uma função definida nas Moções
