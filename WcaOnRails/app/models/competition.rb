@@ -331,6 +331,21 @@ class Competition < ApplicationRecord
       unless has_any_round_per_event? && schedule_includes_rounds?
         warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds')
       end
+
+      if championship_warnings.any?
+        warnings = championship_warnings.merge(warnings)
+      end
+    end
+
+    warnings
+  end
+
+  def championship_warnings
+    warnings = {}
+    self.championships.each do |championship|
+      if Championship.joins(:competition).merge(Competition.visible).exists?(championship_type: championship.championship_type, Competitions: { year: self.year })
+        warnings[championship.championship_type] = I18n.t('competitions.messages.championship_exists', championship_type: championship.name, year: self.year)
+      end
     end
 
     warnings

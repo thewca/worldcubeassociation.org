@@ -269,6 +269,25 @@ RSpec.describe Competition do
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:events]).to eq "Please add at least one event before confirming the competition."
     end
+
+    it "does not warn about other different championships" do
+      # Different championship type
+      FactoryBot.create :competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: ["_North America"]
+      # Different year
+      FactoryBot.create :competition, :confirmed, :visible, starts: Date.new(2018, 2, 3), championship_types: ["world"]
+
+      competition = FactoryBot.create :competition, starts: Date.new(2019, 10, 1), championship_types: ["world"]
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)["world"]).to eq nil
+    end
+
+    it "warns if championship already exists" do
+      FactoryBot.create :competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: ["world", "_Oceania"]
+
+      competition = FactoryBot.create :competition, starts: Date.new(2019, 10, 1), championship_types: ["world"]
+      expect(competition).to be_valid
+      expect(competition.championship_warnings["world"]).to eq "There is already a World Championship in 2019"
+    end
   end
 
   context "info_for" do
