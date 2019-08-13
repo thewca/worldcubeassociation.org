@@ -79,11 +79,11 @@ Rails.application.routes.draw do
   get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
 
-  get 'new-results/rankings', to: redirect('new-results/rankings/333/single', status: 302)
-  get 'new-results/rankings/333mbf/average',
-      to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "new-results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "new-results/rankings/333mbf/single" }
-  get 'new-results/rankings/:event_id', to: redirect('new-results/rankings/%{event_id}/single', status: 302)
-  get 'new-results/rankings/:event_id/:type' => 'results#rankings', as: :results_rankings
+  get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
+  get 'results/rankings/333mbf/average',
+      to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
+  get 'results/rankings/:event_id', to: redirect('results/rankings/%{event_id}/single', status: 302)
+  get 'results/rankings/:event_id/:type' => 'results#rankings', as: :rankings
 
   get "media/validate" => 'media#validate', as: :validate_media
   resources :media, only: [:index, :new, :create, :edit, :update, :destroy]

@@ -16,7 +16,7 @@ class ResultsController < ApplicationController
     @types = ["single", "average"]
     if !@types.include?(params[:type])
       flash[:danger] = t(".unknown_type")
-      return redirect_to results_rankings_path(params[:event_id], "single")
+      return redirect_to rankings_path(params[:event_id], "single")
     end
     @is_average = params[:type] == @types[1]
     value = @is_average ? "average" : "best"
@@ -184,7 +184,7 @@ class ResultsController < ApplicationController
       SQL
     else
       flash[:danger] = t(".unknown_show")
-      return redirect_to results_rankings_path
+      return redirect_to rankings_path
     end
 
     @rows = ActiveRecord::Base.connection.exec_query(query)

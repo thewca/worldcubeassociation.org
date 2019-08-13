@@ -28,9 +28,4 @@ module ResultsHelper
       end
     end
   end
-
-  def link_to_ranking(event_id, type, &block)
-    url = "/results/events.php?eventId=#{event_id}&#{type}=true"
-    link_to url, class: "plain", &block
-  end
 end
