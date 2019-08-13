@@ -18,6 +18,9 @@
     This competition is marked as <%= @competition.championships.sort.map(&:name).to_sentence %>.
   </p>
 <% end %>
+<% @competition.championship_warnings.each do |key, warning| %>
+  <h2 class="alert"><%= warning %></h2>
+<% end %>
 
 <% @competition.delegates.map do |delegate| %>
   <% if Team.probation.current_members.map { |member| member.user_id }.include?(delegate.id) %>
