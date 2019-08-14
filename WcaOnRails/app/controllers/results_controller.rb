@@ -56,7 +56,7 @@ class ResultsController < ApplicationController
     end
 
     if @is_persons
-      query = <<-SQL
+      @query = <<-SQL
         SELECT
           result.*,
           result.#{value} value
@@ -92,7 +92,7 @@ class ResultsController < ApplicationController
             average
           #{limit_condition}
         SQL
-        query = <<-SQL
+        @query = <<-SQL
           SELECT *
           FROM (#{subquery}) result
           ORDER BY average, personName, competitionId, roundTypeId
@@ -115,7 +115,7 @@ class ResultsController < ApplicationController
           SQL
         end
         subquery = "(" + subqueries.join(") UNION ALL (") + ")"
-        query = <<-SQL
+        @query = <<-SQL
           SELECT *
           FROM (#{subquery}) result
           ORDER BY value, personName, competitionId, roundTypeId
@@ -123,7 +123,7 @@ class ResultsController < ApplicationController
         SQL
       end
     elsif @is_by_region
-      query = <<-SQL
+      @query = <<-SQL
         SELECT
           result.*,
           result.#{value} value
@@ -148,49 +148,6 @@ class ResultsController < ApplicationController
       flash[:danger] = t(".unknown_show")
       return redirect_to rankings_path
     end
-
-    @rows = ActiveRecord::Base.connection.exec_query(query)
-    @competitions_by_id = Hash[
-      Competition.where(id: @rows.map { |r| r["competitionId"] }.uniq).map do |c|
-        [c.id, c]
-      end
-    ]
-    compute_rankings_by_region if @is_by_region
-  end
-
-  def compute_rankings_by_region
-    best_value_of_world = @rows.first["value"]
-    best_values_of_continents = {}
-    best_values_of_countries = {}
-    world_rows = []
-    continents_rows = []
-    countries_rows = []
-    @rows.each do |row|
-      result = LightResult.new(row)
-      value = row["value"]
-
-      world_rows << row if value == best_value_of_world
-
-      if best_values_of_continents[result.country.continent.id].nil? || value == best_values_of_continents[result.country.continent.id]
-        best_values_of_continents[result.country.continent.id] = value
-
-        if (@country.present? && @country.continent.id == result.country.continent.id) || (@continent.present? && @continent.id == result.country.continent.id) || params[:region] == "world"
-          continents_rows << row
-        end
-      end
-
-      if best_values_of_countries[result.country.id].nil? || value == best_values_of_countries[result.country.id]
-        best_values_of_countries[result.country.id] = value
-
-        if (@country.present? && @country.id == result.country.id) || params[:region] == "world"
-          countries_rows << row
-        end
-      end
-    end
-
-    @first_continent_index = world_rows.length
-    @first_country_index = @first_continent_index + continents_rows.length
-    @rows_to_display = world_rows + continents_rows + countries_rows
   end
 
   # Normalizes the params so that old links to rankings still work.
