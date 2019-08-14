@@ -181,9 +181,11 @@ new() {
   if [ "$staging" = true ]; then
     temp_new_server_name=${TEMP_NEW_STAGING_SERVER_NAME}
     host=staging.worldcubeassociation.org
+    instance_type=t2.medium
   else
     temp_new_server_name=${TEMP_NEW_PROD_SERVER_NAME}
     host=www.worldcubeassociation.org
+    instance_type=t2.large
   fi
 
   get_pem_filename pem_filename ${keyname}
@@ -194,7 +196,7 @@ new() {
   json=`aws ec2 run-instances \
     --image-id ami-7c22b41c \
     --count 1 \
-    --instance-type t2.medium \
+    --instance-type $instance_type \
     --key-name $keyname \
     --security-groups "allow all incoming" \
     --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 32, "VolumeType": "standard" } } ]'`
