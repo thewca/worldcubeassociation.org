@@ -20,7 +20,7 @@
     <% shown = {} %>
     <% @rows_to_display.each_with_index do |row, i| %>
       <% result = LightResult.new(row) %>
-      <% competition = Competition.find(row["competitionId"]) %>
+      <% competition = @competitions_by_id[row["competitionId"]] %>
       <% value = row["value"] %>
       <% if i < @first_continent_index %>
         <% tied_previous = shown["World"] %>
