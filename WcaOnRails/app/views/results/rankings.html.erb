@@ -6,14 +6,22 @@
   <div id="results-selector" class="results-select form-inline">
     <%= render 'rankings_selector' %>
   </div>
-
-  <div id="search-results" class="row results">
-    <div id="results-list">
-      <% unless @is_by_region %>
-        <%= render 'rankings_table' %>
-      <% else %>
-        <%= render 'rankings_by_region_table' %>
-      <% end %>
+  <% ranking_params = params.permit(:event_id, :type, :region, :years, :show).to_hash.values %>
+  <% ranking_timestamp = Timestamp.find_by(name: "compute_auxiliary_data_end") %>
+  <% cache_if ranking_timestamp.present?, ["rankings", *ranking_params, ranking_timestamp&.date] do %>
+    <%
+      @rows = ActiveRecord::Base.connection.exec_query(@query)
+      comp_ids = @rows.map { |r| r["competitionId"] }.uniq
+      @competitions_by_id = Hash[Competition.where(id: comp_ids).map { |c| [c.id, c] }]
+    %>
+    <div id="search-results" class="row results">
+      <div id="results-list">
+        <% unless @is_by_region %>
+          <%= render 'rankings_table' %>
+        <% else %>
+          <%= render 'rankings_by_region_table' %>
+        <% end %>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>

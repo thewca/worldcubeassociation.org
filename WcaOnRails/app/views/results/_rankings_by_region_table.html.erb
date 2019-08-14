@@ -1,3 +1,4 @@
+<% rows_to_display, first_continent_index, first_country_index = compute_rankings_by_region(@rows, @continent, @country) %>
 <%= wca_table table_class: "wca-results" do %>
   <thead>
     <tr>
@@ -18,15 +19,15 @@
 
   <tbody>
     <% shown = {} %>
-    <% @rows_to_display.each_with_index do |row, i| %>
+    <% rows_to_display.each_with_index do |row, i| %>
       <% result = LightResult.new(row) %>
       <% competition = @competitions_by_id[row["competitionId"]] %>
       <% value = row["value"] %>
-      <% if i < @first_continent_index %>
+      <% if i < first_continent_index %>
         <% tied_previous = shown["World"] %>
         <% show = t("results.rankings.table_elements.world") %>
         <% shown["World"] = true %>
-      <% elsif i >= @first_continent_index && i < @first_country_index %>
+      <% elsif i >= first_continent_index && i < first_country_index %>
         <% tied_previous = shown[result.country.continent.id] %>
         <% show = result.country.continent.name %>
         <% shown[result.country.continent.id] = true %>
@@ -50,7 +51,7 @@
       </tr>
 
       <!-- To visually separate the results between world, continents, and countries -->
-      <% if i+1 == @first_continent_index || (i+1 == @first_country_index && @continent.nil?) %>
+      <% if i+1 == first_continent_index || (i+1 == first_country_index && @continent.nil?) %>
         <tr>
           <td class="blank-row" colspan="<%= columns_number %>"><br></td>
         </tr>
