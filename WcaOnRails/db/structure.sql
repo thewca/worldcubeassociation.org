@@ -307,7 +307,12 @@ CREATE TABLE `Results` (
   KEY `Results_regionalSingleRecordCheckSpeedup` (`eventId`,`competitionId`,`roundTypeId`,`countryId`,`best`),
   KEY `Results_fk_competitor` (`personId`),
   KEY `index_Results_on_competitionId_and_updated_at` (`competitionId`,`updated_at`),
-  KEY `_tmp_index_Results_on_countryId` (`countryId`)
+  KEY `_tmp_index_Results_on_countryId` (`countryId`),
+  KEY `index_Results_on_eventId_and_value1` (`eventId`,`value1`),
+  KEY `index_Results_on_eventId_and_value2` (`eventId`,`value2`),
+  KEY `index_Results_on_eventId_and_value3` (`eventId`,`value3`),
+  KEY `index_Results_on_eventId_and_value4` (`eventId`,`value4`),
+  KEY `index_Results_on_eventId_and_value5` (`eventId`,`value5`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `RoundTypes`;
@@ -1566,4 +1571,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190601231550'),
 ('20190622173635'),
 ('20190716065618'),
-('20190728084145');
+('20190728084145'),
+('20190814232833');
