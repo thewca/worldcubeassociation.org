@@ -1410,38 +1410,54 @@ en:
     #context: On the rankings page
     rankings:
       title: "Rankings"
-      form_elements:
-        event: "Event"
-        region: "Region"
-        type_selector:
-          type: "Type"
-          single: "Single"
-          average: "Average"
-        years_selector:
-          years: "Years"
-          all_years: "All years"
-          only: "Only"
-          only_html: "Only %{year}"
-          until: "Until"
-          until_html: "Until %{year}"
-        show_selector:
-          show: "Show"
-          persons: "Persons"
-          persons_html: "%{quantity} persons"
-          results: "Results"
-          results_html: "%{quantity} results"
-          by_region: "By region"
-      table_elements:
-        name: "Name"
-        result: "Result"
-        citizen_of: "Citizen of"
-        competition: "Competition"
-        solves: "Solves"
-        region: "Region"
-        world: "World"
       #context: Options of params to select which kind of rankings to show
       unknown_type: "Unknown type parameter, must be either \"single\" or \"average\""
       unknown_show: "Unknown show parameter, must be either \"N persons\", \"N results\", or \"by region\""
+    records:
+      title: "Records"
+    selector_elements:
+      events_selector:
+        event: "Event"
+        all_events: "All events"
+      region: "Region"
+      type_selector:
+        type: "Type"
+        single: "Single"
+        average: "Average"
+      years_selector:
+        years: "Years"
+        all_years: "All years"
+        only: "Only"
+        only_html: "Only %{year}"
+        until: "Until"
+        until_html: "Until %{year}"
+      show_selector:
+        show: "Show"
+        persons: "Persons"
+        persons_html: "%{quantity} persons"
+        results: "Results"
+        results_html: "%{quantity} results"
+        by_region: "By region"
+        mixed: "Mixed"
+        slim: "Slim"
+        separate: "Separate"
+        history: "History"
+        mixed_history: "Mixed history"
+    table_elements:
+      name: "Name"
+      result: "Result"
+      citizen_of: "Citizen of"
+      competition: "Competition"
+      solves: "Solves"
+      region: "Region"
+      world: "World"
+      type_options:
+        type: "Type"
+        single: "Single"
+        average: "Average"
+      event: "Event"
+      date_circa: "Date circa"
+      record: "Record"
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"

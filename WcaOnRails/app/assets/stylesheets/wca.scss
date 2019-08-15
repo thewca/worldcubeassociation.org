@@ -134,6 +134,21 @@ table.wca-results {
     &.pos {
       text-align: right;
     }
+    &.type {
+      text-align: left;
+    }
+    &.event {
+      text-align: left;
+      &.centered {
+        text-align: center;
+      }
+    }
+    &.date {
+      text-align: left;
+    }
+    &.record {
+      text-align: right;
+    }
     &.name {
     }
     &.wca-id {
@@ -163,13 +178,32 @@ table.wca-results {
   }
   tbody tr td {
     padding: 3px 5px;
-    &.event {
-    }
     &.pos {
       text-align: right;
       &.tied-previous {
         @extend .text-muted;
       }
+    }
+    &.type {
+      text-align: left;
+      &.tied-previous {
+        @extend .text-muted;
+      }
+    }
+    &.event {
+      text-align: left;
+      &.centered {
+        text-align: center;
+      }
+      &.tied-previous {
+        @extend .text-muted;
+      }
+    }
+    &.date {
+      text-align: left;
+    }
+    &.record {
+      text-align: right;
     }
     &.round {
     }
@@ -185,6 +219,7 @@ table.wca-results {
     }
     &.average {
       text-align: right;
+      font-weight: bold;
     }
     &.world-rank-single {
       text-align: right;
@@ -194,6 +229,7 @@ table.wca-results {
     }
     &.single {
       text-align: right;
+      font-weight: bold;
     }
     &.result {
       text-align: right;

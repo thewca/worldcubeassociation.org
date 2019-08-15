@@ -1,12 +1,12 @@
-<%= wca_table table_class: "wca-results" do %>
+<%= wca_table table_class: "wca-results", floatThead: false do %>
   <thead>
     <tr>
-      <th class="pos"> # </th>
+      <th class="type"> <%= t("results.table_elements.type_options.type") %> </th>
       <th class="name"> <%= t("results.table_elements.name") %> </th>
       <th class="result"> <%= t("results.table_elements.result") %> </th>
       <th class="country"> <%= t("results.table_elements.citizen_of") %> </th>
       <th class="competition"> <%= t("results.table_elements.competition") %> </th>
-      <% if @is_average %>
+      <% unless rows.first["eventId"] == "333mbf" %>
         <th class="solves" colspan="5"> <%= t("results.table_elements.solves") %> </th>
       <% end %>
 
@@ -16,31 +16,34 @@
   </thead>
 
   <tbody>
+    <% previous_type = nil %>
     <% previous_value = 0 %>
-    <% previous_rank = 0 %>
-    <% @rows.each_with_index do |row, i| %>
+    <% rows.each do |row| %>
       <% result = LightResult.new(row) %>
       <% competition = @competitions_by_id[row["competitionId"]] %>
+      <% type = row["type"] %>
       <% value = row["value"] %>
-      <% rank = value == previous_value ? previous_rank : i+1 %>
-      <% tied_previous = rank == previous_rank %>
+      <% tied_previous = (type == previous_type && value == previous_value) %>
+      <% is_average = type == "average" %>
 
       <tr>
-        <td class="pos <%= tied_previous ? "tied-previous" : "" %>"> <%= rank %> </td>
+        <td class="type <%= tied_previous ? "tied-previous" : "" %>"> <%= t("results.table_elements.type_options.#{type}") %> </td>
         <td class="name"> <%= link_to result.personName, person_url(result.personId) %> </td>
-        <td class="result"> <%= SolveTime.new(params[:event_id], @is_average ? :average : :single, value).clock_format %> </td>
+        <td class="result"> <%= SolveTime.new(result.event.id, type.to_sym, value).clock_format %> </td>
         <td class="country"> <%= flag_icon result.country.iso2 %> <%= result.country.name %> </td>
         <td class="competition"> <%= flag_icon competition.country.iso2 if competition.country.real? %> <%= link_to competition.name, competition_path(competition.id) %> </td>
-        <% if @is_average %>
+        <% if is_average %>
           <%= solve_tds_for_result(result) %>
+        <% elsif !is_average && result.event.id != "333mbf" %>
+          <td class="blank-cell" colspan="5"><br></td>
         <% end %>
 
         <!-- Extra column for .table-greedy-last-column -->
         <td></td>
       </tr>
 
+      <% previous_type = type %>
       <% previous_value = value %>
-      <% previous_rank = rank %>
     <% end %>
   </tbody>
 <% end %>

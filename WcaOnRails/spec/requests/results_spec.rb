@@ -28,4 +28,13 @@ RSpec.describe "results" do
       end
     end
   end
+
+  describe "GET #records" do
+    context "with default params" do
+      it "shows records" do
+        get records_path
+        expect(response).to be_successful
+      end
+    end
+  end
 end

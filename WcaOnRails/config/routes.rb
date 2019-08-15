@@ -87,6 +87,7 @@ Rails.application.routes.draw do
       to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
   get 'results/rankings/:event_id', to: redirect('results/rankings/%{event_id}/single', status: 302)
   get 'results/rankings/:event_id/:type' => 'results#rankings', as: :rankings
+  get 'results/records' => 'results#records', as: :records
 
   get "media/validate" => 'media#validate', as: :validate_media
   resources :media, only: [:index, :new, :create, :edit, :update, :destroy]
