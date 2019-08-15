@@ -55,13 +55,14 @@ module AuxiliaryDataComputation
               SELECT MIN(#{field} * 1000000000 + result.id) valueAndId
               FROM Results result
               JOIN Competitions competition ON competition.id = competitionId
-              JOIN Events event ON event.id = eventId AND event.rank < 990
               WHERE #{field} > 0
               GROUP BY personId, result.countryId, eventId, year
             ) MinValuesWithId
             JOIN Results result ON result.id = valueAndId % 1000000000
             JOIN Competitions competition ON competition.id = competitionId
             JOIN Countries country ON country.id = result.countryId
+            JOIN Events event ON event.id = eventId
+            WHERE event.rank < 990
         SQL
       end
     end
@@ -80,7 +81,6 @@ module AuxiliaryDataComputation
         personal_records_with_event = ActiveRecord::Base.connection.execute <<-SQL
           SELECT eventId, personId, countryId, continentId, min(#{field}) value
           FROM #{concise_table_name}
-          WHERE eventId <> '333mbo'
           GROUP BY personId, countryId, continentId, eventId
           ORDER BY eventId, value
         SQL
