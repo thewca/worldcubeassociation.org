@@ -3,13 +3,13 @@
   <thead>
     <tr>
       <% columns_number = 5 %>
-      <th class="region"> <%= t("results.rankings.table_elements.region") %> </th>
-      <th class="result"> <%= t("results.rankings.table_elements.result") %> </th>
-      <th class="name"> <%= t("results.rankings.table_elements.name") %> </th>
-      <th class="competition"> <%= t("results.rankings.table_elements.competition") %> </th>
+      <th class="region"> <%= t("results.table_elements.region") %> </th>
+      <th class="result"> <%= t("results.table_elements.result") %> </th>
+      <th class="name"> <%= t("results.table_elements.name") %> </th>
+      <th class="competition"> <%= t("results.table_elements.competition") %> </th>
       <% if @is_average %>
         <% columns_number += 5 %>
-        <th class="solves" colspan="5"> <%= t("results.rankings.table_elements.solves") %> </th>
+        <th class="solves" colspan="5"> <%= t("results.table_elements.solves") %> </th>
       <% end %>
 
       <!-- Extra column for .table-greedy-last-column -->
@@ -25,7 +25,7 @@
       <% value = row["value"] %>
       <% if i < first_continent_index %>
         <% tied_previous = shown["World"] %>
-        <% show = t("results.rankings.table_elements.world") %>
+        <% show = t("results.table_elements.world") %>
         <% shown["World"] = true %>
       <% elsif i >= first_continent_index && i < first_country_index %>
         <% tied_previous = shown[result.country.continent.id] %>

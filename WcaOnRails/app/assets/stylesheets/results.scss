@@ -15,5 +15,34 @@
       display: inline-block;
       width: 100%;
     }
+
+    .all-events {
+      cursor: pointer;
+      padding-left: 2px;
+      padding-right: 2px;
+      vertical-align: top;
+      display: inline-block;
+      border-radius: 3px;
+      font-size: 12px;
+      color: white !important;
+      height: 25px;
+      line-height: 25px;
+      background-color: $link-color;
+      &:hover {
+        background-color: $link-hover-color;
+      }
+      &.active {
+        background-color: $blue;
+      }
+      &.active:hover {
+        background-color: $blue;
+      }
+    }
+  }
+}
+
+#search-results {
+  .cubing-icon {
+    vertical-align: middle;
   }
 }

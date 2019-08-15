@@ -4,7 +4,7 @@
   <h1><%= yield(:title) %></h1>
 
   <div id="results-selector" class="results-select form-inline">
-    <%= render 'rankings_selector' %>
+    <%= render 'results_selector', show_rankings_options: true %>
   </div>
   <% ranking_params = params.permit(:event_id, :type, :region, :years, :show).to_hash.values %>
   <% ranking_timestamp = Timestamp.find_by(name: "compute_auxiliary_data_end") %>
@@ -14,7 +14,7 @@
       comp_ids = @rows.map { |r| r["competitionId"] }.uniq
       @competitions_by_id = Hash[Competition.where(id: comp_ids).map { |c| [c.id, c] }]
     %>
-    <div id="search-results" class="row results">
+    <div id="search-results" class="results">
       <div id="results-list">
         <% unless @is_by_region %>
           <%= render 'rankings_table' %>
