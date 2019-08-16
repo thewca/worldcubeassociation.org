@@ -1,5 +1,45 @@
 fi:
   countries:
+    #original_hash: 530670d
+    AG: Antigua ja Barbuda
+    #original_hash: 62ac59b
+    BA: Bosnia ja Hertsegovina
+    #original_hash: f39d280
+    CD: Kongon demokraattinen tasavalta
+    #original_hash: 77f256b
+    CG: Kongo
+    #original_hash: b218299
+    CI: Norsunluurannikko
+    #original_hash: 07dee45
+    CV: Kap Verde
+    #original_hash: ee10075
+    FM: Mikronesia
+    #original_hash: db871b0
+    GW: Guinea-Bissau
+    #original_hash: 2f488ff
+    HK: Hong Kong
+    #original_hash: 3ad2dd8
+    KN: Saint Kitts ja Nevis
+    #original_hash: 7184d1a
+    KP: Pohjois-Korea
+    #original_hash: 4430b22
+    KR: Etelä-Korea
+    #original_hash: 673b1cf
+    LC: Saint Lucia
+    #original_hash: 928b7c4
+    MM: Myanmar
+    #original_hash: d887137
+    MO: Macao
+    #original_hash: 05a15c1
+    PS: Palestiina
+    #original_hash: 655191a
+    ST: São Tomé and Príncipe
+    #original_hash: 4d206a8
+    TT: Trinidad ja Tobago
+    #original_hash: 0f3f60b
+    VA: Pyhä istuin
+    #original_hash: 3fa9b2d
+    VC: Saint Vincent ja Grenadiinit
     #original_hash: 9af4622
     XF: Useita valtioita (Afrikka)
     #original_hash: 374ac0d
@@ -16,12 +56,6 @@ fi:
     XS: Useita valtioita (Etelä-Amerikka)
     #original_hash: 9027fe6
     XW: Useita valtioita (Maailma)
-    #original_hash: 918c53a
-    MO: Macao
-    #original_hash: 2f488ff
-    HK: Hong Kong
-    #original_hash: 4e8bd04
-    KR: Korea
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Useita maanosia
@@ -79,7 +113,7 @@ fi:
     #original_hash: c962425
     mmagic: Master Magic
     #original_hash: 1843dc4
-    333mbo: 3x3x3 multisokko vanhalla tavalla
+    333mbo: 3x3x3 multisokko vanhoilla säännöillä
   formats:
     #original_hash: e4b3c11
     '1': 'Paras 1:stä'
@@ -165,17 +199,27 @@ fi:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
   advancement_condition:
-    #original_hash: 6e55337
+    short:
+      #original_hash: 6100c20
+      ranking: 'Parhaat %{ranking}'
+      #original_hash: 0664a83
+      percent: 'Parhaat %{percent}%'
+      attempt_result:
+        #original_hash: 482f137
+        time: 'Jos paras tulos < %{time}'
+        #original_hash: 3faa63e
+        moves: 'Jos paras tulos < %{moves}'
+        #original_hash: c3133c2
+        points: 'Jos paras tulos > %{points}'
     ranking: '%{ranking} parasta jatkaa seuraavalle kierrokselle'
-    #original_hash: 7ee969c
     percent: '%{percent}% jatkaa seuraavalle kierrokselle'
     attempt_result:
-      #original_hash: 1fb7fe1
-      time: 'Paras ratkaisu < %{time} jatkaa seuraavalle kierrokselle'
-      #original_hash: 8254f3e
-      moves: 'Paras ratkaisu < %{moves} siirtoa jatkaa seuraavalle kierrokselle'
-      #original_hash: daab86e
-      points: 'Paras ratkaisu > %{points} pistettä jatkaa seuraavalle kierrokselle'
+      #original_hash: b3c8a02
+      time: 'Paras tulos < %{time} jatkaa seuraavalle kierrokselle'
+      #original_hash: 07bca6c
+      moves: 'Paras tulos < %{moves} siirtoa jatkaa seuraavalle kierrokselle'
+      #original_hash: 837083c
+      points: 'Paras tulos > %{points} pistettä jatkaa seuraavalle kierrokselle'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -203,6 +247,8 @@ fi:
     #original_hash: cc7d8bb
     333mbf: '10:00.00/kuutio, max. 60:00:00'
   common:
+    #original_hash: 70c07ec
+    world: Maailma
     #original_hash: 2513cf0
     continent: Maanosa
     #original_hash: d523ebb
@@ -413,19 +459,18 @@ fi:
         refund_policy_limit_date: Takaraja palautuksille
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Vieraiden pääsymaksu
-        #original_hash: 9e1008d
+        #original_hash: 723cad9
         regulation_z1: >-
-          Haluaisin, että kilpailijoita vaaditaan toimittamaan pulmapelinsä
-          ilmoittautumisen yhteydessä (säännön Z1) mukaan)
-        #original_hash: 466aca7
-        regulation_z1_reason: 'Syy Z1:en käyttämiseen'
-        #original_hash: 588c6a0
+          Haluan vaatia kilpailijoita toimittamaan pulmapelinsä määrättynä
+          ajankohtana ennen lajin alkamista
+        #original_hash: 78308cc
+        regulation_z1_reason: Syy ja yksityiskohdat aikaistettuun toimittamiseen
+        #original_hash: 88da0ef
         regulation_z3: >-
-          Haluan valita kilpailijoita, jotka pääsevät suoraan tiettyjen lajien
-          tietyille kierroksille määrättyjen aikaisempien kilpailujen tulosten
-          perusteella (säännön Z3) mukaan)
-        #original_hash: 18d9a8c
-        regulation_z3_reason: 'Syy Z3:n käyttämiseen'
+          Haluan käyttää karsintatuloksia rajoittamaan kilpailuoikeutta
+          tietyissä lajeissa
+        #original_hash: 1ec6dd4
+        regulation_z3_reason: Syy ja yksityiskohdat karsintatulosten käyttämiseen
       registration:
         #original_hash: 3c23a67
         guests: Vierailijat
@@ -441,6 +486,8 @@ fi:
         birthday: Syntymäpäivä
         #original_hash: c5497bc
         registration_competition_events: Lajit
+        #original_hash: 84add5b
+        email: Sähköposti
       competition_tab:
         #original_hash: 4f9be05
         content: Sisältö
@@ -459,6 +506,14 @@ fi:
         organization: Järjestäminen
         #original_hash: 5e326b1
         incidents: Poikkeustilanteet
+        #original_hash: 1362470
+        wrc_feedback_requested: I would like feedback from the WRC on some of the incidents above.
+        #original_hash: 0c7191d
+        wrc_incidents: Incidents Needing WRC Feedback
+        #original_hash: 5a92b25
+        wdc_feedback_requested: I would like feedback from the WDC on some of the incidents above.
+        #original_hash: 06a0568
+        wdc_incidents: Incidents Needing WDC Feedback
         #original_hash: d7020f4
         remarks: Huomautukset
       person:
@@ -472,6 +527,8 @@ fi:
         gender: Sukupuoli
         #original_hash: 709a232
         name: Nimi
+        #original_hash: c6bc0f4
+        incorrect_wca_id_claim_count: Incorrect WCA ID claim count
       poll:
         #original_hash: 002ff59
         question: Kysymys
@@ -484,6 +541,8 @@ fi:
         body: Leipäteksti
         #original_hash: 6f915a2
         sticky: Kiinnitetty julkaisu
+        #original_hash: 231d9ff
+        unstick_at: Unstick at
         #original_hash: 848eed0
         tags: Tunnisteet
         #original_hash: fb4002e
@@ -528,6 +587,37 @@ fi:
         submitterComment: Lähettäjän kommentti
         #original_hash: bae7d5b
         status: Tila
+      regional_organization:
+        #original_hash: 709a232
+        name: Nimi
+        #original_hash: d523ebb
+        country: Maa
+        #original_hash: 2e8a57c
+        website: Verkkosivusto
+        #original_hash: 83fce83
+        logo: Logo
+        #original_hash: 84add5b
+        email: Sähköpostiosoite
+        #original_hash: 82c42fb
+        address: Virallinen osoite
+        #original_hash: 9855f80
+        bylaws: Sisäiset säännöt (Bylaws)
+        #original_hash: 405201b
+        directors_and_officers: List of principal Directors and Officers and their titles
+        #original_hash: 719db2d
+        area_description: Tarkka kuvaus järjestön kattamasta alueesta
+        #original_hash: 0cdb036
+        past_and_current_activities: Report of the past and current WCA-related activities
+        #original_hash: 0faebcf
+        future_plans: Plans for the future as a WCA-acknowledged Regional Organization
+        #original_hash: f5ad34a
+        extra_information: Any extra information?
+        #original_hash: bc07619
+        extra_file: Any extra file?
+        #original_hash: 5ddd986
+        start_date: Acknowledged since
+        #original_hash: 1ee885a
+        end_date: Acknowledged until
   enums:
     user:
       gender:
@@ -774,15 +864,15 @@ fi:
           kilpailusivulla lukee, että katsojat pääsevät paikalle ilmaiseksi.
         #original_hash: da39a3e
         regulation_z1: ''
-        #original_hash: d3872a2
+        #original_hash: 4e8488b
         regulation_z1_reason: >-
-          Please elaborate here why you would like to adopt Regulation Z1).
-          Please fill this out in English!
+          Please elaborate here why you would like to require competitors to
+          submit puzzles early. Please fill this out in English!
         #original_hash: da39a3e
         regulation_z3: ''
-        #original_hash: af960d9
+        #original_hash: f859883
         regulation_z3_reason: >-
-          Please elaborate here why you would like to adopt Regulation Z3).
+          Please elaborate here why you would like to use qualification times.
           Please fill this out in English!
       website_contact:
         #original_hash: da39a3e
@@ -821,6 +911,8 @@ fi:
         #original_hash: da39a3e
         sticky: ''
         #original_hash: da39a3e
+        unstick_at: ''
+        #original_hash: da39a3e
         title: ''
         #original_hash: da39a3e
         tags: ''
@@ -838,13 +930,14 @@ fi:
         equipment: >-
           Kilpailussa käytettyjen ajastimien ja näyttöjen lukumäärä ja mallit.
           Poista rivit, joilla on tarvikkeita, joita ei käytetty.
-        #original_hash: 4658dd9
+        #original_hash: a4aebc8
         venue: >-
-          Kerro tiloista, valaistuksesta, paikalle pääsystä, asemien (ratkaisu,
-          sekoittaminen, odotus, tulospalvelu) jakautumisesta, oliko erilaisia
-          ratkaisupaikkoja, ongelmista, joita ilmeni (kuten melu) ja siitä,
-          miten ongelmat ratkaistiin. Kerro lyhyesti, äläkä mainitse
-          epäolennaisia asioita.
+          Talk about rooms, light, public access, distribution of the zones
+          (solving, scrambling, waiting, score-taking), if you set up different
+          solving stages, problems that arose (for example, noise) and how you
+          solved them... be concise and do not report irrelevant details. Please
+          upload a picture of your venue to show the layout of scramble
+          stations, competitors area, and solving stations.
         #original_hash: f8de509
         organization: >-
           Kerro järjestäjäryhmästä ja siitä, miten he onnistuivat kilpailun
@@ -862,6 +955,18 @@ fi:
           (kuten normaalit rangaistukset +2 ja DNF). Voit kysyä delegaattien tai
           WRC:n mielipidettä niistä. Jos haluat WDC:n osalliseksi joihinkin
           niistä, mainitsethan tämän pyynnön selkeästi.
+        #original_hash: da39a3e
+        wrc_feedback_requested: ''
+        #original_hash: 98bb5cd
+        wrc_incidents: >-
+          List of numbers referencing any incidents that you would like the
+          WRC's feedback on.
+        #original_hash: da39a3e
+        wdc_feedback_requested: ''
+        #original_hash: 38a95e5
+        wdc_incidents: >-
+          List of numbers referencing any incidents that you would like the
+          WDC's feedback on.
         #original_hash: f30abdc
         remarks: >-
           Kerro muista yksityiskohdista, jotka haluat jakaa (esim.
@@ -890,6 +995,8 @@ fi:
         person2_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: da39a3e
+        incorrect_wca_id_claim_count: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -933,6 +1040,41 @@ fi:
         message: ''
         #original_hash: da39a3e
         confirm_information: ''
+      regional_organization:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        country: ''
+        #original_hash: 72448d6
+        website: Must be a valid http(s) url. HTTPS is recommended
+        #original_hash: 2ace571
+        logo: >-
+          Must be in PNG format, in good resolution, and with a transparent
+          background
+        #original_hash: da54ab5
+        email: Should be a mailing list containing all the Directors and Officers
+        #original_hash: da39a3e
+        address: ''
+        #original_hash: 7d25ff5
+        bylaws: Must be in PDF format
+        #original_hash: da39a3e
+        directors_and_officers: ''
+        #original_hash: da39a3e
+        area_description: ''
+        #original_hash: da39a3e
+        past_and_current_activities: ''
+        #original_hash: da39a3e
+        future_plans: ''
+        #original_hash: da39a3e
+        extra_information: ''
+        #original_hash: 79555ff
+        extra_file: >-
+          Must be in PDF format. If you need to add more files, please merge
+          them together
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        end_date: ''
     options:
       registration:
         status:
@@ -1077,6 +1219,8 @@ fi:
       organizations: Alueelliset järjestöt
       #original_hash: d790b40
       faq: Usein kysytyt kysymykset
+      #original_hash: 3ad28c0
+      teams: Toimikunnat ja valtuustot
       #original_hash: 02617c0
       tutorial: Kilpailuohjeet
       #original_hash: a34b69f
@@ -1143,6 +1287,12 @@ fi:
       new_post: Uusi julkaisu
       #original_hash: 0d67445
       team_leader: Toimikunnan johtaja
+      #original_hash: 37b8fdc
+      regional_organizations: Alueelliset järjestöt
+      #original_hash: 6568fa0
+      manage_regional_organizations: Hallitse alueellisia järjestöjä
+      #original_hash: 411bbca
+      new_regional_organization: Uusi alueellinen järjestö
       #original_hash: dc1649a
       sign_out: Kirjaudu ulos
       #original_hash: 753a22b
@@ -1360,14 +1510,13 @@ fi:
           Profiilikuvassa ei saa olla hyökkäävää sisältöä (kuten tällaista
           elekieltä).
       delegate_avatar_guidelines:
-        #original_hash: 35abf16
-        title: 'Ylimääräisiä ohjesääntöjä delegaateille:'
+        #original_hash: da9e6df
+        title: 'Additional guidelines for Staff Members:'
         paragraphs:
-          #original_hash: 3cf91ed
+          #original_hash: ff6d2e8
           '1': >-
-            Profiilikuvassa sinun täytyy olla kuvattuna nykyisessä
-            ulkomuodossasi, samantapaisena kuin olisit WCA-delegaattina
-            kilpailussa.
+            Profiilikuvan täytyy kuvata nykyistä ulkomuotoasi niin, että sen
+            perusteella sinut voi tunnistaa kilpailussa.
           #original_hash: 64ded69
           '2': >-
             Profiilikuvan täytyy olla rajattu, kierretty ja valaistu niin, että
@@ -1485,6 +1634,11 @@ fi:
       cannot_be_deleted_and_accepted: Rekisteröitymistä ei voi poistaa ja hyväksyä yhtä aikaa.
       #original_hash: a38d024
       must_register: täytyy rekisteröityä ainakin yhteen lajiin
+      #original_hash: e78eec3
+      banned_html: >-
+        You are banned. If you believe this is an error, please contact the <a
+        href='mailto:disciplinary@worldcubeassociation.org'
+        target='_blank'>WDC</a>.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1687,7 +1841,7 @@ fi:
       WCA-tiliä, voit luoda sellaisen %{here}.
     #original_hash: 89b4e7f
     greeting: 'Hei, %{name}!'
-    #original_hash: fb34a17
+    #original_hash: 322f646
     please_fix_profile_html: >-
       Rekisteröityäksesi tähän %{comp}un, sinun täytyy korjata seuraavat
       ongelmat %{profile}ssasi:
@@ -1774,6 +1928,15 @@ fi:
         Birth Date, Gender, Email, ja yhden sarakkeen jokaiselle lajille.
       #original_hash: d6fbc9d
       import: Tuo
+    add:
+      #original_hash: 975275e
+      title: 'Lisää kilpailija kilpailuun %{comp}'
+      #original_hash: b52b179
+      info: >-
+        Tämä luo uuden hyväksytyn rekisteröitymisen. Käytä tätä toimintoa
+        lisätäksesi kilpailussa paikan päällä rekisteröityviä.
+      #original_hash: a11edb8
+      add: Lisää rekisteröityminen
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1819,6 +1982,10 @@ fi:
         tämän kilpailun osallistumismaksuja.
       #original_hash: 0a4bb53
       stripe_not_connected: 'Ilmeni ongelma, emmekä voineet yhdistää Stripe-tiliäsi.'
+      #original_hash: 724cf0d
+      championship_exists: >-
+        Tämän tyyppinen mestaruuskilpailu (%{championship_type}) on jo olemassa
+        vuonna %{year}
     my_competitions:
       #original_hash: 5c6d3ea
       title: Omat kilpailuni
@@ -1830,6 +1997,17 @@ fi:
       #original_hash: 94a2fc8
       past_competitions: Menneet kilpailut
     competition_info:
+      pdf:
+        #original_hash: 05af803
+        terms_and_abbr: Technical terms and abbreviations
+        #original_hash: 18f306c
+        formats_abbr: 'Abbreviations for formats:'
+        #original_hash: 55dc8bc
+        abbr_description: '%{short_name}: %{long_name}'
+        #original_hash: a1984e1
+        cutoff: 'Cutoff: %{short_cutoff}'
+        #original_hash: a8b6fe6
+        download_html: 'Lataa kilpailun tiedot PDF-tiedostona %{here}.'
       #original_hash: eb9a4bc
       date: Päiväys
       #original_hash: 4271627
@@ -1892,12 +2070,8 @@ fi:
         sinulle palautetaan %{refund_policy_percent} osallistumismaksustasi.
       #original_hash: 4aca553
       no_refunds: Osallistumismaksuja ei palauteta missään tilanteessa.
-      #original_hash: b86fee2
-      on_the_spot_registration_html: >-
-        Paikan päällä voi rekisteröityä, jos osallistujarajoitus ei ole
-        täyttynyt takarajaan (%{end_of_registration}) mennessä.
-        Osallistumismaksu paikan päällä rekisteröityville on
-        %{on_the_spot_base_entry_fee}.
+      #original_hash: cf7be5d
+      on_the_spot_registration_fee_html: 'Paikan päällä voi rekisteröityä hintaan %{on_the_spot_base_entry_fee}.'
       #original_hash: 1637bea
       on_the_spot_registration_free: Paikan päällä voi rekisteröityä ilmaiseksi.
       #original_hash: f5f687d
@@ -2021,11 +2195,11 @@ fi:
       supports_md_html: >-
         Tukee <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdownia</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         Lyhyt selitys kilpailun nimelle. Nimen täytyy noudattaa <a
-        href='/documents/policies/Competition%20Name.pdf'>WCA Competition Name
-        Policyn</a> vaatimuksia.
+        href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+        Competition Name Policyn</a> vaatimuksia.
       #original_hash: 9d9126e
       venue_html: >-
         Kilpailupaikka. %{md}. Esimerkiksi: [Cité des Sciences et de
@@ -2118,6 +2292,8 @@ fi:
       not_all_delegates: eivät kaikki ole delegaatteja
       #original_hash: 43a23c2
       registration_close_after_open: rekisteröitymisen täytyy avautua ennen sulkeutumista
+      #original_hash: 8a3a4f6
+      start_date_must_be_28_days_in_advance: Alkamispäivän tulee olla vähintään 28 päivän päässä nykyhetkestä.
       #original_hash: 43a83a9
       end_date_before_start: Aloituspäivämäärän täytyy olla ennen lopetuspäivämäärää.
       #original_hash: 0c507fa
@@ -2133,9 +2309,6 @@ fi:
       note_clone: >-
         Monistaaksesi olemassaolevan kilpailun, mene kilpailun Tietoja-sivulle
         ja klikkaa valikossa linkkiä "Monista".
-    update_events:
-      #original_hash: 00204fa
-      update_success: Kilpailun lajit päivitetty onnistuneesti.
     update:
       #original_hash: 5fb2f57
       save_success: Kilpailu tallennettu onnistuneesti.
@@ -2203,6 +2376,8 @@ fi:
       events: Lajit
       #original_hash: 0a8adac
       schedule: Aikataulu
+      #original_hash: 1060ed0
+      no_schedule: 'Kilpailulla ei ole aikataulua, PDF-tiedostoa ei voi luoda.'
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -2262,6 +2437,8 @@ fi:
       activity: Toiminta
       #original_hash: 90e2fca
       room: Huone
+      #original_hash: 73acb7f
+      room_in_venue: 'Huone %{room} (%{venue})'
       #original_hash: 2896c7a
       venue_information_html: 'Tarkastelet kisapaikan %{venue_name} aikataulua.'
       #original_hash: b97e383
@@ -2357,6 +2534,69 @@ fi:
     edit:
       #original_hash: 5f1f5b8
       edit_tab_title: 'Muokkaa välilehteä %{tab_name}'
+  results:
+    rankings:
+      #original_hash: f5fe73c
+      title: Ranking
+      form_elements:
+        #original_hash: ad8919a
+        event: Laji
+        #original_hash: 0f21717
+        region: Alue
+        type_selector:
+          #original_hash: 3deb745
+          type: Tyyppi
+          #original_hash: dd11868
+          single: Paras ratkaisu
+          #original_hash: 15f86c0
+          average: Keskiarvo
+        years_selector:
+          #original_hash: 96f997b
+          years: Vuodet
+          #original_hash: 0977c76
+          all_years: Kaikki vuodet
+          #original_hash: 8737f09
+          only: Vain vuosi
+          #original_hash: b3c0fe7
+          only_html: 'Vain %{year}'
+          #original_hash: 96bdb66
+          until: Vuoteen asti
+          #original_hash: fa23930
+          until_html: 'Vuoteen %{year}'
+        show_selector:
+          #original_hash: d97d1ee
+          show: Näytä
+          #original_hash: f3cf96e
+          persons: Henkilöitä
+          #original_hash: 16d3376
+          persons_html: '%{quantity} henkilöä'
+          #original_hash: 612e12d
+          results: Tuloksia
+          #original_hash: f3baa4a
+          results_html: '%{quantity} tulosta'
+          #original_hash: d46d2ee
+          by_region: Alueittain
+      table_elements:
+        #original_hash: 709a232
+        name: Nimi
+        #original_hash: 5faa59d
+        result: Tulos
+        #original_hash: e0f64f7
+        citizen_of: Kansalaisuus
+        #original_hash: 1917f4f
+        competition: Kilpailu
+        #original_hash: e7f6fc5
+        solves: Ratkaisut
+        #original_hash: 0f21717
+        region: Alue
+        #original_hash: 70c07ec
+        world: Maailma
+      #original_hash: 65310e5
+      unknown_type: 'Unknown type parameter, must be either "single" or "average"'
+      #original_hash: 01e188f
+      unknown_show: >-
+        Unknown show parameter, must be either "N persons", "N results", or "by
+        region"
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: 'Yhdistä WCA ID:si tiliisi!'
@@ -2429,10 +2669,19 @@ fi:
       peruuttaa.
     #original_hash: 3dcbf6d
     announcement_info_html: 'Ilmoittaja: %{author_name}, ilmoitettu: %{date_time}'
+    errors:
+      #original_hash: 75d7ff7
+      unstick_at_future: must be in the future
   contacts:
     website:
-      #original_hash: ac2ac3d
-      title: WCA-verkkosivuston yhteydenottolomake
+      #original_hash: 35c333c
+      faq_note_html: >-
+        Before making an inquiry, you may wish to take a look at our <a
+        href="/faq">Frequently Asked Questions</a>! If you wish to contact a
+        specific committee or team, you can find their contact information on <a
+        href="/teams-committees">this page</a>.
+      #original_hash: 4ef2aad
+      title: 'WCA:n yhteydenottolomake'
       inquiries:
         #original_hash: 92ea7e8
         competition: Ota yhteyttä tietyn kilpailun järjestäjiin (valitse alla)
@@ -2667,40 +2916,129 @@ fi:
   about:
     #original_hash: 9ac918a
     title: 'Tietoa WCA:sta'
-    mission:
-      paragraphs:
-        #original_hash: c86d105
-        '1': >-
-          World Cube Associationin alla järjestetään kilpailuja mekaanisille
-          pulmapeleille, jotka ratkaistaan suorittamalla siirtosarjoja (engl.
-          'twisty puzzles'). Kuuluisin tällainen pulmapeli on Rubikin kuutio,
-          jonka keksi unkarilainen professori Rubik. Valikoima näitä pulmapelejä
-          on valittu WCA:n virallisiksi lajeiksi.
-        #original_hash: 22c3593
-        '2': >-
-          World Cube Association järjestää kilpailuja ympäri maailmaa.
-          Alueelliset järjestöt, jotka ovat vastuussa oman maansa kilpailujen
-          järjestämisestä, tukevat WCA:ta tässä.
-        #original_hash: 0902c4a
-        '3': >-
-          World Cube Associationin tavoite on saada <strong>enemmän kilpailuja
-          useampiin maihin ja useammille ihmisille, reiluissa ja tasavertaisissa
-          oloissa</strong>.
-        #original_hash: 2b993c0
-        '4': >-
-          World Cube Associationin henkeen kuuluu, että <strong>ihmiset
-          kaikkialta maailmasta pitävät hauskaa yhdessä ystävällisessä
-          ilmapiirissä, auttavat toisiaan ja käyttäytyvät
-          urheilijamaisesti</strong>.
+    #original_hash: af00571
+    mission_statement: >-
+      Tavoitteenamme on saada useampia kilpailuja useampiin maihin useampien
+      kilpailijoiden ulottuville sekä edistää kilpailujen reiluutta ja
+      yhdenvertaisuutta.
+    #original_hash: e627278
+    mission_footer: WCA Mission Statement
+    #original_hash: cdab446
+    who_we_are_title: Keitä me olemme
+    #original_hash: 9248dc4
+    who_we_are_content_html: >-
+      <p>World Cube Association on mekaanisten pulmapelien kilpailujen
+      kattojärjestö. Kuuluisin tällainen pulmapeli on Rubikin kuutio,
+      unkarilaisen professori Rubikin keksintö. Valikoima tällaisia pulmapelejä
+      kuuluu WCA:n virallisiin kilpailulajeihin.</p> <p>Kuluneen vuosikymmenen
+      aikana WCA on kehittynyt merkittävästi ja yli 100 000 kilpailijaa on
+      kilpaillut kilpailuissamme. Kasvusta huolimatta olemme edelleen järjestö,
+      joka toimii täysin vapaaehtoistoiminnan varassa. Olemme erittäin
+      kiitollisia jokaiselle, joka käyttää omaa aikaansa pitääkseen WCA:n
+      toiminnassa. Kasvavan taloudellisen tuen myötä toivomme, että yhä
+      laajemmalle levittäytyvissä WCA-kilpailuissa näkyy entistä suurempi
+      ammattimaisuus.</p>
+    #original_hash: bccd8c5
+    spirit: >-
+      Henkeemme kuuluu, että ihmiset kaikkialta maailmasta voivat pitää hauskaa
+      yhdessä, nauttia ystävällisestä ilmapiiristä, auttaa toisiaan ja
+      käyttäytyä urheilijamaisesti.
+    #original_hash: 69131cc
+    spirit_footer: 'WCA:n henki'
+    #original_hash: c1781ee
+    our_goals_title: Päämäärämme
+    #original_hash: 1ca8ac4
+    our_goals_content_html: >-
+      <p>World Cube Association haluaa tarjota yhteenkuuluvuuden tunteen
+      nuorille ympäri maailmaa kilpailujen saavutettavuutta lisäämällä. Uskomme,
+      että kilpailujen ja yhteisön tarjoamat kokemukset vahvistavat mukana
+      olevien nuorten henkistä kasvua. Uskomme myös, että uusien ryhmien
+      tutustuttaminen pulmapelien maailmaan mahdollistaa yhteisöllisyyden
+      vahvistumisen.</p>
+    #original_hash: f64ccc7
+    whats_next_title: Mitä seuraavaksi?
+    #original_hash: a08c67f
+    whats_next_content_html: >-
+      <p>World Cube Associationin kilpailuissa on kilpaillut yli 100 000
+      kilpailijaa 140:stä eri maasta, ja suunnitelmissa ei ole hidastaa tahtia!
+      Cubing-yhteisö on kasvanut tasaisesti WCA:n perustamisvuodesta 2004
+      lähtien ja haluamme rohkaista tätä kasvua lisäämällä kilpailujen
+      saatavuutta uusilla alueilla. Yhteistyökumppanien avulla toivomme, että
+      tulevaisuudessa voimme tukea yhteisöä entistä enemmän ja saavuttaa kaikki
+      pulmapeliharrastajat.</p>
+    #original_hash: dc71704
+    world_championship_title: Maailmanmestaruuskilpailut
+    #original_hash: 57cf7f7
+    world_championship_content_html: >-
+      <p>Kahden vuoden välein sanktioimme kilpailun, jossa panoksena on
+      maailmanmestaruus. Nämä kilpailut vaativat erittäin huolellista
+      suunnittelua lukuisten vapaaehtoisten toimesta sekä suurta taloudellista
+      panostusta kilpailupaikan varaamiseen ja muihin välttämättömiin
+      valmisteluihin.</p>
+    #original_hash: 1aa5344
+    contributing_title: Anna oma panoksesi
+    #original_hash: e64beb7
+    contributing_content_html: >-
+      Voit tehdä lahjoituksia luottokortilla <a
+      href="https://www.nfggive.com/guidestar/82-3825954">Guidestarin</a>
+      kautta. Jos haluat kirjoittaa shekin, osoite on seuraava:
+    #original_hash: 2af9b71
+    tax_deductible_note: Lahjoitukset ovat Yhdysvaltojen verovähennysten piirissä.
+    #original_hash: 6026d35
+    other_help_title: Muita tapoja auttaa
+    #original_hash: cb228f6
+    other_help_content_html: >-
+      <p>Jos uskot, että sinulla on jotain tarjottavaa World Cube
+      Associationille (lahjoitusten lisäksi), kuulisimme mielellämme sinusta!
+      Voit ottaa yhteyttä sähköpostiosoitteeseen <a
+      href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>
+    donation_banner:
+      #original_hash: 6253f90
+      content: >-
+        The World Cube Association is a 501(c)(3) tax-exempt organization. As a
+        100% volunteer-run nonprofit, we welcome your donations to help us
+        further our vision of having more enjoyable competitions all over the
+        world.
+      #original_hash: 24c87db
+      donate_credit: Tee lahjoitus luottokortilla
+      #original_hash: 96d77f3
+      donate_other: Muut lahjoitustavat
     structure:
+      #original_hash: 0d62207
+      teams_committees_councils: 'WCA:n toimikunnat ja valtuustot'
       #original_hash: 9482c5d
       title: Rakenne
       board:
         #original_hash: abd2828
         name: 'WCA:n johtokunta'
+        #original_hash: e0d37a2
         description: >-
-          World Cube Associationia johtaa WCA Board, joka
-          koostuu seuraavista jäsenistä:
+          WCA Boardilla on vastuu järjestön johtamisesta ja se toimittaa muiden
+          toimikuntien ja valtuustojen toimialueiden ulkopuolella olevia
+          tehtäviä
+      #original_hash: d54d953
+      committees: >-
+        WCA:n toimikunnat suorittavat päivittäisiä tehtäviä, jotka ovat
+        elintärkeitä järjestön toiminnan kannalta. Toimikunnat koostuvat WCA:n
+        jäsenistä: delegaateista ja kilpailijoista. Jokaisella toimikunnalla on
+        johtaja, jonka rooli on varmistaa toimikunnan oikeanlainen toiminta ja
+        ohjata muita sen jäseniä. Toimikuntien erikoistapaus on valtuustot
+        (councils), jotka toimivat tiedottajina WCA Boardille. Kun toimikunnassa
+        tai valtuustossa on vapaita paikkoja, hakuohjeet julkaistaan etusivulla.
+      #original_hash: c366473
+      senior_member: Senior Member
+      #original_hash: e26c936
+      leader: Johtaja
+      officers:
+        #original_hash: d79bd00
+        name: WCA Officers
+        #original_hash: 312e799
+        description: >-
+          The officers of the WCA handle tasks relating to the non-profit status
+          of the WCA. These officers are elected by the WCA Board. The Executive
+          Director is the Chief Executive Officer of the WCA, the Chair presides
+          over all Board meetings, the Secretary maintains the organization's
+          documents, and the Treasurer manages financial matters of the WCA.
       chair:
         #original_hash: de34439
         name: WCA Chair
@@ -2713,8 +3051,9 @@ fi:
       vice_chair:
         #original_hash: 0388b19
         name: WCA Vice-Chair
-      #original_hash: b0c72a9
-      committees: 'Seuraavat toimikunnat ovat vastuussa WCA:n operatiivisista toimista:'
+      treasurer:
+        #original_hash: 75e65d9
+        name: WCA Treasurer
       wdc:
         #original_hash: c97077a
         name: WCA Disciplinary Committee
@@ -2798,10 +3137,6 @@ fi:
           Tämä tiimi on vastuussa WCA:n brändin kehittämisestä ja
           hallinnoinnista, sponsoreiden etsinnästä, WCA:n kilpailuvarusteiden
           jaon tukemisesta ja WCA:n myyntitavaroiden markkinoinnista.
-      #original_hash: a2c8ad3
-      councils: >-
-        The following councils have the role of advising the WCA Board of
-        Directors:
       wac:
         #original_hash: 1ce7604
         name: WCA Advisory Council
@@ -2812,6 +3147,13 @@ fi:
       banned:
         #original_hash: d30e2e5
         name: Banned Competitors
+      #original_hash: f8c3f3c
+      operations_html: 'Päivittäisiä toimia hoitavat WCA:n %{committees_and_teams}.'
+      #original_hash: 0e7a036
+      teams_committees: Tiimit ja toimikunnat
+      probation:
+        #original_hash: 1dd6e3b
+        name: Delegates on Probation
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>WCA-delegaatti</strong> on WCA-säännöissä esitelty rooli,
@@ -2862,46 +3204,67 @@ fi:
   regional_organizations:
     #original_hash: 37b8fdc
     title: Alueelliset järjestöt
-    #original_hash: ba87c07
+    #original_hash: 15a06d6
     content: 'WCA tunnustaa seuraavat alueelliset järjestöt:'
+    #original_hash: e5b77eb
+    empty: WCA ei tällä hetkellä tunnusta alueellisia järjestöjä.
     how_to:
-      #original_hash: fc3af12
-      title: 'Kuinka tulla WCA:n alueelliseksi järjestöksi'
-      #original_hash: cc1639d
+      #original_hash: b243b1f
+      title: 'Kuinka tulla tunnustetuksi WCA:n alueelliseksi järjestöksi'
+      #original_hash: f042a88
       description: >-
         WCA tunnustaa useita alueellisia järjestöjä maailmanlaajuisesti.
-        Alueellisen järjestön tehtävä on järjestää WCA-kilpailuja ja tukea WCA:n
-        toimia alueella. Valtioita, jotka haluavat perustaa alueellisen
-        järjestön, kannustetaan edistämään WCA:n asemaa alueellaan ennen
-        hakemuksensa lähettämistä.
+        Alueellisen järjestön tarkoitus on järjestää WCA-kilpailuja ja tukea
+        WCA:n toimia alueellaan. Maita, jotka haluavat perustaa alueellisen
+        järjestön, kannustetaan tukemaan WCA:n asemaa alueellaan ennen
+        hakemuksensa lähettämistä. Jos haluat apua kilpailun järjestämisessä,
+        ota lähimpään WCA-delegaattiisi yhteyttä.
     requirements:
       #original_hash: 1e04fd7
       title: 'WCA:n alueellisten järjestöjen vaatimukset'
       list:
         #original_hash: 22a9f26
         '1': Järjestää ja tukea aktiivisesti WCA-kilpailuja järjestön alueella
-        #original_hash: 8c5a7fe
+        #original_hash: 63714d1
         '2': >-
-          Olla aktiivisesti osallisena WCA:n maanosakilpailuissa, jotka pidetään
-          alueellisen järjestön maanosassa
-        #original_hash: 8943714
-        '3': 'Kunnioittaa ja edistää WCA:n Bylawsin ja sääntöjen mukaisia päämääriä'
+          Tukea alueellisen järjestön alueella järjestettäviä maanosan
+          mestaruuskilpailuja, jos kilpailun järjestäjäryhmä toivoo niin
+        #original_hash: 3c07dd6
+        '3': 'Kunnioittaa ja edistää WCA:n Bylaws:n ja Motions:n mukaisia päämääriä'
         #original_hash: 0c3576b
         '4': Suostua kaikkiin asiaankuuluviin WCA-sääntöihin
-        #original_hash: 23cda60
+        #original_hash: 1a9e6c5
         '5': Hyväksyä ja suostua kaikkiin WCA-toimihenkilöiden päätöksiin
-        #original_hash: efe2b55
+        #original_hash: d4ae7c1
         '6': >-
-          Pitää WCA ajan tasalla järjestön nykyisestä Bylawsista ja säännöistä
-          sähköisessä muodossa
+          Jakaa WCA:n kanssa ajantasainen kopio järjestön omista säännöistä ja
+          jos mahdollista, muista säännöistä sähköisessä muodossa
     application_instructions:
       #original_hash: 4da829b
       title: Hakemusohjeet
-      #original_hash: 7ed06ee
+      #original_hash: 7b7de7e
       description_html: >-
-        Täytä <a
-        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>tämä
-        lomake</a>.
+        Hakeaksesi järjestölle tunnustusta, täytä <a
+        href='/regional-organizations/new'>tämä lomake</a>.
+    regional_organization_form:
+      #original_hash: 134df45
+      filling_instructions_html: Please fill everything <b>in English!</b>
+      #original_hash: fbd64df
+      public_information: Public information
+      #original_hash: a1c6de9
+      private_information: Private information
+      #original_hash: 87a1c7e
+      private_information_disclaimer: >-
+        All the information below will only be visible to the WCA Board of
+        Directors
+    errors:
+      #original_hash: 08122c4
+      end_date_after_start_date: cannot be after Acknowledged until
+    create:
+      #original_hash: 60cdccc
+      create_success: >-
+        Hakemus lähetetty onnistuneesti! Tarkista sähköpostisi ja odota, että
+        WCA Board tarkistaa hakemuksen.
   contact:
     #original_hash: a34b69f
     title: Yhteystiedot
@@ -3304,14 +3667,11 @@ fi:
     paragraph3:
       #original_hash: 00d3bf8
       title: Kilpailun ilmoittamisen takarajat
-      #original_hash: 305cfb1
+      #original_hash: 3613823
       content_html: >-
-        Kilpailu pitäisi ilmoittaa vähintään kuukausi ennen sen alkua (ks. <a
-        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>ohjesääntö
-        8a4++</a>). Jos erityiset syyt estävät tämän rajan noudattamista,
-        kilpailut voi ilmoittaa vähintään kaksi viikkoa ennen niiden alkua,
-        WCAT:in harkinnan mukaan. On suositeltavaa ilmoittaa nämä syyt WCAT:lle
-        mahdollisimman pian kilpailun myöhemmän hylkäämisen välttämiseksi.
+        Kilpailu täytyy ilmoittaa vähintään 28 päivää ennen sen alkua (ks. <a
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>kilpailun
+        vaatimukset</a>).
     paragraph4:
       #original_hash: b6dca56
       title: Etäisyyskäytännöt
@@ -3357,27 +3717,23 @@ fi:
     paragraph-events:
       #original_hash: b16c5f1
       title: Lajien ilmoittaminen
-      #original_hash: cee85f7
+      #original_hash: 7ad62c7
       content: >-
         Delegaatin täytyy kertoa kaikki kilpailussa pidettävät lajit hakiessaan
-        kilpailulle hyväksyntää. Tämä sisältää myös "mahdolliset" (englanniksi
-        "tentative") lajit (lajit, jotka saatetaan pitää muiden lisäksi,
-        riippuen kilpailun sujuvuudesta). Muiden lisäysten täytyy olla WCAT:in
-        hyväksymiä.
+        kilpailulle hyväksyntää. WCAT:n täytyy hyväksyä lisäykset.
     paragraph5:
       #original_hash: 17d01de
       title: Osallistujarajoitukset
-      #original_hash: b4748cf
+      #original_hash: bd8e6ee
       content_html: >-
         Kilpailijoiden määrää voidaan rajoittaa lajikohtaisesti tai
         kilpailukohtaisesti (ks. <a
-        href='https://www.worldcubeassociation.org/regulations/#Z4'>sääntö
-        Z4</a>). Kuten kaikille artiklan Z säännöille, delegaatin täytyy saada
-        osallistujarajoitukselle WCAT:in hyväksyntä. Rajat tulisi valita
-        viisaasti ja kilpailun odotetun suosion mukaan. Määrää ei pitäisi laskea
-        vähäpätöisistä syistä. Aiottu rajoitus tulisi ottaa huomioon jo sopivaa
-        kilpailupaikkaa etsittäessä. Rajoitus täytyy kertoa selkeästi
-        WCA-verkkosivuston kilpailusivulla.
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>kilpailun
+        vaatimukset</a>). Delegaatin täytyy saada osallistujarajoitukselle
+        WCAT:n hyväksyntä. Raja tulee valita viisaasti ja kilpailun odotetun
+        suosion mukaan. Määrää ei pidä laskea vähäpätöisistä syistä. Aiottu
+        rajoitus tulisi ottaa huomioon jo sopivaa kilpailupaikkaa etsittäessä.
+        Rajoitus täytyy kertoa selkeästi WCA-verkkosivuston kilpailusivulla.
     paragraph6:
       #original_hash: ce4c3d0
       title: Rekisteröitymisten käsittely
