@@ -68,6 +68,10 @@
   <% if @competition.qualification_results? %>
     The <%= "Delegate".pluralize(@competition.delegates.count) %> requested the adoption of <b>qualification results</b> because "<%= @competition.qualification_results_reason %>".
   <% end %>
+
+  <% if @competition.event_restrictions? %>
+    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested the adoption of <b>event restrictions</b> because "<%= @competition.event_restrictions_reason %>".
+  <% end %>
 </p>
 
 <p>
