@@ -126,6 +126,8 @@ class Competition < ApplicationRecord
     early_puzzle_submission_reason
     qualification_results
     qualification_results_reason
+    event_restrictions
+    event_restrictions_reason
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/.freeze
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/.freeze
@@ -168,6 +170,7 @@ class Competition < ApplicationRecord
            with_model_currency: :currency_code
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
   validates :qualification_results_reason, presence: true, if: :qualification_results?
+  validates :event_restrictions_reason, presence: true, if: :event_restrictions?
 
   NEARBY_DISTANCE_KM_WARNING = 250
   NEARBY_DISTANCE_KM_DANGER = 100

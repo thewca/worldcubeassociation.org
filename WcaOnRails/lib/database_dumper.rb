@@ -80,6 +80,8 @@ module DatabaseDumper
           early_puzzle_submission_reason
           qualification_results
           qualification_results_reason
+          event_restrictions
+          event_restrictions_reason
         ),
         db_default: %w(
           connected_stripe_account_id

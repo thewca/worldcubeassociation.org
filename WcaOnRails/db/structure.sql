@@ -67,6 +67,8 @@ CREATE TABLE `Competitions` (
   `name_reason` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `external_registration_page` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `confirmed_at` datetime DEFAULT NULL,
+  `event_restrictions` tinyint(1) DEFAULT NULL,
+  `event_restrictions_reason` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1573,4 +1575,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190716065618'),
 ('20190728084145'),
 ('20190814232833'),
-('20190816001639');
+('20190816001639'),
+('20190816004605');

@@ -664,6 +664,8 @@ class CompetitionsController < ApplicationController
         :early_puzzle_submission_reason,
         :qualification_results,
         :qualification_results_reason,
+        :event_restrictions,
+        :event_restrictions_reason,
         :guests_entry_fee_lowest_denomination,
         competition_events_attributes: [:id, :event_id, :_destroy],
         championships_attributes: [:id, :championship_type, :_destroy],
