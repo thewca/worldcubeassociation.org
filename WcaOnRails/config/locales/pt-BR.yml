@@ -1996,6 +1996,8 @@ pt-BR:
         competição.
       #original_hash: 0a4bb53
       stripe_not_connected: Houve um problema e não foi possível conectar sua conta do Stripe.
+      #original_hash: 724cf0d
+      championship_exists: 'Já existe um %{championship_type} em %{year}'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -2954,7 +2956,7 @@ pt-BR:
     mission_footer: Declaração de Missão da WCA
     #original_hash: cdab446
     who_we_are_title: Quem somos nós
-    #original_hash: 5924c26
+    #original_hash: 9248dc4
     who_we_are_content_html: >-
       <p>A World Cube Association regula competicões de quebra-cabeças mecânicos
       que são operados girando-se os lados, comumente chamados de "twisty
@@ -3044,7 +3046,7 @@ pt-BR:
         description: >-
           A World Cube Association é conduzida pelo WCA Board (Conselho da WCA),
           que consiste nos seguintes membros:
-      #original_hash: bb562cf
+      #original_hash: d54d953
       committees: >-
         Os comitês e equipes da WCA são uma parte fundamental da organização e
         desempenham as atividades cotidianas que são necessárias para seu
