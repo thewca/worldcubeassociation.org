@@ -51,6 +51,43 @@ RSpec.describe Api::V0::CompetitionsController do
     end
   end
 
+  describe 'GET #schedule' do
+    let(:competition) {
+      FactoryBot.create(
+        :competition,
+        :with_delegate,
+        :with_valid_schedule,
+        id: "TestComp2014",
+        start_date: "2014-02-03",
+        end_date: "2014-02-05",
+        external_website: "http://example.com",
+        showAtAll: true,
+      )
+    }
+
+    it '404s on invalid competition' do
+      get :show, params: { id: "FakeId2014" }
+      expect(response.status).to eq 404
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["error"]).to eq "Competition with id FakeId2014 not found"
+    end
+
+    it '404s on hidden competition' do
+      competition.update_column(:showAtAll, false)
+      get :show, params: { id: competition.id }
+      expect(response.status).to eq 404
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["error"]).to eq "Competition with id #{competition.id} not found"
+    end
+
+    it 'displays schedule' do
+      get :schedule, params: { competition_id: competition.id }
+      expect(response.status).to eq 200
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body['startDate']).to eq '2014-02-03'
+    end
+  end
+
   describe 'GET #index' do
     it 'sorts newest to oldest' do
       yesteryear_comp = FactoryBot.create(:competition, :confirmed, :visible, starts: 1.year.ago)
