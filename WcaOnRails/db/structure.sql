@@ -60,10 +60,10 @@ CREATE TABLE `Competitions` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `results_submitted_at` datetime DEFAULT NULL,
-  `regulation_z1` tinyint(1) DEFAULT NULL,
-  `regulation_z1_reason` text COLLATE utf8mb4_unicode_ci,
-  `regulation_z3` tinyint(1) DEFAULT NULL,
-  `regulation_z3_reason` text COLLATE utf8mb4_unicode_ci,
+  `early_puzzle_submission` tinyint(1) DEFAULT NULL,
+  `early_puzzle_submission_reason` text COLLATE utf8mb4_unicode_ci,
+  `qualification_results` tinyint(1) DEFAULT NULL,
+  `qualification_results_reason` text COLLATE utf8mb4_unicode_ci,
   `name_reason` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `external_registration_page` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `confirmed_at` datetime DEFAULT NULL,
@@ -1572,4 +1572,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190622173635'),
 ('20190716065618'),
 ('20190728084145'),
-('20190814232833');
+('20190814232833'),
+('20190816001639');
