@@ -19,12 +19,12 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     $('.competition_on_the_spot_entry_fee_lowest_denomination').toggle(this.value === "true");
   }).trigger('change');
 
-  $('input[name="competition[regulation_z1]"]').on('change', function() {
-    $('.competition_regulation_z1_reason').toggle(this.checked);
+  $('input[name="competition[early_puzzle_submission]"]').on('change', function() {
+    $('.competition_early_puzzle_submission_reason').toggle(this.checked);
   }).trigger('change');
 
-  $('input[name="competition[regulation_z3]"]').on('change', function() {
-    $('.competition_regulation_z3_reason').toggle(this.checked);
+  $('input[name="competition[qualification_results]"]').on('change', function() {
+    $('.competition_qualification_results_reason').toggle(this.checked);
   }).trigger('change');
 });
 

@@ -60,13 +60,13 @@
     <br>
   <% end %>
 
-  <% if @competition.regulation_z1? %>
-    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested for competitors to <b>submit puzzles early</b> because "<%= @competition.regulation_z1_reason %>".
+  <% if @competition.early_puzzle_submission? %>
+    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested for competitors to <b>submit puzzles early</b> because "<%= @competition.early_puzzle_submission_reason %>".
     <br>
   <% end %>
 
-  <% if @competition.regulation_z3? %>
-    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested the adoption of <b>qualification results</b> because "<%= @competition.regulation_z3_reason %>".
+  <% if @competition.qualification_results? %>
+    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested the adoption of <b>qualification results</b> because "<%= @competition.qualification_results_reason %>".
   <% end %>
 </p>
 
