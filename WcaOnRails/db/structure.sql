@@ -784,6 +784,16 @@ CREATE TABLE `delayed_jobs` (
   KEY `delayed_jobs_priority` (`priority`,`run_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `delegate_regions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `delegate_regions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `isActive` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `delegate_reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -809,6 +819,38 @@ CREATE TABLE `delegate_reports` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_delegate_reports_on_competition_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `delegate_subregions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `delegate_subregions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `delegate_region_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_delegate_subregions_on_delegate_region_id` (`delegate_region_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `delegates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `delegates` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `delegate_status` varchar(191) NOT NULL,
+  `delegate_region_id` bigint(20) NOT NULL,
+  `delegate_subregion_id` bigint(20) DEFAULT NULL,
+  `country_id` varchar(191) DEFAULT NULL,
+  `location` varchar(191) DEFAULT NULL,
+  `start_date` datetime NOT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_delegates_on_user_id` (`user_id`),
+  KEY `index_delegates_on_delegate_region_id` (`delegate_region_id`),
+  KEY `index_delegates_on_delegate_subregion_id` (`delegate_subregion_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `eligible_country_iso2s_for_championship`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1576,4 +1618,7 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190728084145'),
 ('20190814232833'),
 ('20190816001639'),
-('20190816004605');
+('20190816004605'),
+('20190817155010'),
+('20190817161100'),
+('20190817162434');
