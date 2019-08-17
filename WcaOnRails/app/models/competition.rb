@@ -340,17 +340,6 @@ class Competition < ApplicationRecord
     warnings
   end
 
-  def championship_warnings
-    warnings = {}
-    self.championships.each do |championship|
-      if Championship.joins(:competition).merge(Competition.visible).exists?(championship_type: championship.championship_type, Competitions: { year: self.year })
-        warnings[championship.championship_type] = I18n.t('competitions.messages.championship_exists', championship_type: championship.name, year: self.year)
-      end
-    end
-
-    warnings
-  end
-
   def info_for(user)
     info = {}
     if !self.results_posted? && self.is_probably_over?
@@ -930,7 +919,7 @@ class Competition < ApplicationRecord
   end
 
   def in_progress?
-    !results_posted? && (start_date..end_date).cover?(Date.today)
+    !results_posted? && !is_probably_over? && !upcoming?
   end
 
   def uses_cutoff?
@@ -946,15 +935,18 @@ class Competition < ApplicationRecord
   end
 
   # The name `is_probably_over` is meant to be surprising.
-  # We don't actually know when competitions are over, because we don't know their schedules, nor
-  # do we know their timezones.
-  # See discussion here: https://github.com/thewca/worldcubeassociation.org/pull/1206/files#r98485399.
+  # While we now know competition schedules, not all competitions might have a schedule
   def is_probably_over?
-    !end_date.nil? && end_date < Date.today
+    last_event_end = top_level_activities.map { |a| a.end_time }.max
+    (!last_event_end.nil? && last_event_end < Time.now) ||
+      (last_event_end.nil? && !end_date.nil? && end_date < Date.today)
   end
 
   def upcoming?
-    !results_posted? && (start_date.nil? || start_date > Date.today)
+    first_event_start = top_level_activities.map { |a| a.end_time }.min
+    !results_posted? && ((!first_event_start.nil? && first_event_start > Time.now) ||
+    (first_event_start.nil? && start_date.nil?) ||
+      (first_event_start.nil? && !start_date.nil? && start_date > Date.today))
   end
 
   def city_and_country
@@ -1020,7 +1012,7 @@ class Competition < ApplicationRecord
     ActiveRecord::Base.connection
                       .execute(relation.to_sql)
                       .each(as: :hash).map { |r|
-                        LightResult.new(r)
+                        LightResult.new(r, Country.c_find(r["countryId"]), Format.c_find(r["formatId"]), RoundType.c_find(r["roundTypeId"]), Event.c_find(r["eventId"]))
                       }
   end
 
