@@ -391,6 +391,8 @@ RSpec.describe "API Competitions" do
               personId: 1,
               ranking: 10,
               attempts: [{ result: 456 }, { result: 745 }, { result: 657 }, { result: 465 }, { result: 835 }],
+              best: 456,
+              average: 622,
             },
           ]
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: { "CONTENT_TYPE" => "application/json" }

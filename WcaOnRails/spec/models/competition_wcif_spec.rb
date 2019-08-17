@@ -385,11 +385,15 @@ RSpec.describe "Competition WCIF" do
           "personId" => 1,
           "ranking" => 10,
           "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5,
+          "best" => 456,
+          "average" => 456,
         },
         {
           "personId" => 2,
           "ranking" => 5,
           "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5,
+          "best" => 784,
+          "average" => 784,
         },
       ]
 
