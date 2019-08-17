@@ -253,6 +253,8 @@ es:
     #original_hash: cc7d8bb
     333mbf: '10:00.00 por cubo, hasta 60:00.00'
   common:
+    #original_hash: 70c07ec
+    world: Mundo
     #original_hash: 2513cf0
     continent: Continente
     #original_hash: d523ebb
@@ -467,19 +469,18 @@ es:
         refund_policy_limit_date: Fecha límite para reembolsos
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Precio de entrada de acompañantes
-        #original_hash: 9e1008d
+        #original_hash: 723cad9
         regulation_z1: >-
-          Me gustaría que los competidores tuvieran que entregar sus puzzles
-          durante el registro como indica la Regla Z1)
-        #original_hash: 466aca7
-        regulation_z1_reason: Razón para Z1)
-        #original_hash: 588c6a0
+          Me gustaría que los competidores tuvieran que entregar sus puzzles en
+          una hora dada antes de que de comienzo la categoría
+        #original_hash: 78308cc
+        regulation_z1_reason: Razón y detalles para entregar los puzzles con anterioridad
+        #original_hash: 88da0ef
         regulation_z3: >-
-          Me gustaría seleccionar competidores que califican directamente para
-          determinadas rondas de determinadas categorías basado en resultados de
-          competiciones previas específicas como indica la Regla Z3)
-        #original_hash: 18d9a8c
-        regulation_z3_reason: Razón para Z3)
+          Me gustaría seleccionar resultados de calificación para limitar quien
+          compite en determinadas categorías
+        #original_hash: 1ec6dd4
+        regulation_z3_reason: Razón y detalles para resultados de calificación
       registration:
         #original_hash: 3c23a67
         guests: Acompañantes
@@ -881,16 +882,17 @@ es:
           pueden asistir de forma gratuita.
         #original_hash: da39a3e
         regulation_z1: ''
-        #original_hash: d3872a2
+        #original_hash: 4e8488b
         regulation_z1_reason: >-
-          Por favor, explica aquí por qué  te gustaría aplicar la regla Z1). Por
-          favor rellénalo en Inglés.
+          Por favor, explica aquí por qué  te gustaría requerir a los
+          competidores que entreguen los puzzles con anterioridad. Por favor
+          Rellena esto en inglés
         #original_hash: da39a3e
         regulation_z3: ''
-        #original_hash: af960d9
+        #original_hash: f859883
         regulation_z3_reason: >-
-          Por favor explica aquí por qué te gustaría aplicar la Regla Z3). Por
-          favor rellénalo en Inglés.
+          Por favor explica aquí por qué te gustaría aplicar tiempos de
+          calificación. Por favor rellénalo en Inglés.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -948,13 +950,15 @@ es:
         equipment: >-
           Cantidad y tipo de timers y displays utilizados en la competición. Por
           favor, quita las líneas relativas a equipo que no hayas utilizado.
-        #original_hash: 4658dd9
+        #original_hash: a4aebc8
         venue: >-
           Habla acerca de las salas, la luz, el acceso al local, la distribución
           de las zonas (de competición, de mezclas, de espera, del ordenador),
           si utilizaste diferentes zonas de competición, problemas que surgieron
-          (por ejemplo, ruido) y cómo los resolviste... Por favor, sé breve y no
-          informes sobre detalles irrelevantes.
+          (por ejemplo, ruido) y cómo los resolviste... Sé breve y no informes
+          sobre detalles irrelevantes. Por favor, sube alguna foto para mostrar
+          como están dispuestas la zona de mezclas, de competidores y de
+          resoluciones.
         #original_hash: f8de509
         organization: >-
           Habla acerca del equipo organizador y cómo trabajaron para la
@@ -2017,6 +2021,8 @@ es:
         pagos de registro para esta competición.
       #original_hash: 0a4bb53
       stripe_not_connected: Ha habido problemas y no hemos podido conectar con tu cuenta Stripe.
+      #original_hash: 724cf0d
+      championship_exists: 'Ya hay un %{championship_type} en %{year}'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -2332,6 +2338,8 @@ es:
       not_all_delegates: no todos son Delegados
       #original_hash: 43a23c2
       registration_close_after_open: el cierre del registro debe ser posterior a la apertura
+      #original_hash: 8a3a4f6
+      start_date_must_be_28_days_in_advance: La fecha de comienzo debe ser al menos dentro de 28 días.
       #original_hash: 43a83a9
       end_date_before_start: La fecha final no puede ser anterior a la de inicio.
       #original_hash: 0c507fa
@@ -2576,6 +2584,69 @@ es:
     edit:
       #original_hash: 5f1f5b8
       edit_tab_title: 'Editar la pestaña %{tab_name}'
+  results:
+    rankings:
+      #original_hash: f5fe73c
+      title: Clasificaciones
+      form_elements:
+        #original_hash: ad8919a
+        event: Categoría
+        #original_hash: 0f21717
+        region: Zona
+        type_selector:
+          #original_hash: 3deb745
+          type: Tipo
+          #original_hash: dd11868
+          single: Sencillo
+          #original_hash: 15f86c0
+          average: Media
+        years_selector:
+          #original_hash: 96f997b
+          years: Años
+          #original_hash: 0977c76
+          all_years: Todos los años
+          #original_hash: 8737f09
+          only: Solo
+          #original_hash: b3c0fe7
+          only_html: 'Solo %{year}'
+          #original_hash: 96bdb66
+          until: Hasta
+          #original_hash: fa23930
+          until_html: 'Hasta %{year}'
+        show_selector:
+          #original_hash: d97d1ee
+          show: Mostrar
+          #original_hash: f3cf96e
+          persons: Personas
+          #original_hash: 16d3376
+          persons_html: '%{quantity} personas'
+          #original_hash: 612e12d
+          results: Resultados
+          #original_hash: f3baa4a
+          results_html: '%{quantity} resultados'
+          #original_hash: d46d2ee
+          by_region: Por zona
+      table_elements:
+        #original_hash: 709a232
+        name: Nombra
+        #original_hash: 5faa59d
+        result: Resultado
+        #original_hash: e0f64f7
+        citizen_of: Ciudadano de
+        #original_hash: 1917f4f
+        competition: Competición
+        #original_hash: e7f6fc5
+        solves: Resoluciones
+        #original_hash: 0f21717
+        region: Zona
+        #original_hash: 70c07ec
+        world: Mundo
+      #original_hash: 65310e5
+      unknown_type: 'Parámetro de tipo desconocido, debe ser  "single" o "average"'
+      #original_hash: 01e188f
+      unknown_show: >-
+        Parámetro de mostrar desconocido debe ser "N persons", "N results" o "by
+        region"
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: ¡Vincula tu WCA ID a tu cuenta!
@@ -2930,7 +3001,7 @@ es:
     mission_footer: Declaración de propósitos de la WCA
     #original_hash: cdab446
     who_we_are_title: Quienes somos
-    #original_hash: 5924c26
+    #original_hash: 9248dc4
     who_we_are_content_html: >-
       <p>La Asociación Mundial del Cubo (WCA) gobierna competiciones sobre
       puzzles mecánicos que funcionan aplicando giros a grupos de piezas,
@@ -3023,19 +3094,19 @@ es:
         description: >-
           La Asociación Mundial del Cubo (WCA) está liderada por la Junta
           Directiva WCA, cuyos miembros son:
-      #original_hash: bb562cf
+      #original_hash: d54d953
       committees: >-
         Los comités y equipos de la WCA son una parte integral de la
         organización y realizan labores del día a día necesarias para mantenerla
         en funcionamiento. Estos comités están compuestos por miembros de la
-        comunidad WCA, incluyendo Delegados y competidores. Cada equipo tiene un
-        líder, cuyo rol es asegurar el correcto funcionamiento del equipo y
-        guiar a otros miembros del equipo. Los Consejos son un tipo especial de
-        equipo que realiza una labor de asesoría a la Junta Directiva de la WCA
-        y están compuestos de miembros de la comunidad, no de personal de la
-        WCA. Cuando hay plazas libres en un comité, equipo o consejo, se
-        publicará información sobre como optar al puesto en la portada de la
-        web.
+        comunidad WCA, incluyendo Delegados WCA y competidores. Cada equipo
+        tiene un líder, cuyo rol es asegurar el correcto funcionamiento del
+        equipo y guiar a otros miembros del equipo. Los Consejos son un tipo
+        especial de equipo que realiza una labor de asesoría a la Junta
+        Directiva de la WCA y están compuestos de miembros de la comunidad, no
+        de Personal de la WCA. Cuando hay plazas libres en un comité, equipo o
+        consejo, se publicará información sobre como optar al puesto en la
+        portada de la web.
       #original_hash: c366473
       senior_member: Miembro Senior
       #original_hash: e26c936
@@ -3172,6 +3243,9 @@ es:
         %{committees_and_teams} de la WCA.
       #original_hash: 0e7a036
       teams_committees: Equipos y Comités
+      probation:
+        #original_hash: 1dd6e3b
+        name: Delegados en período de prueba
       #original_hash: 3d5b64b
       delegates_html: >-
         Los <strong>Delegados de la WCA</strong> son miembros de la WCA que se
