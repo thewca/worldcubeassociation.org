@@ -46,6 +46,7 @@ class CompetitionVenue < ApplicationRecord
       "name" => name,
       "latitudeMicrodegrees" => latitude_microdegrees,
       "longitudeMicrodegrees" => longitude_microdegrees,
+      "countryIso2" => country_iso2,
       "timezone" => timezone_id,
       "rooms" => venue_rooms.map(&:to_wcif),
       "extensions" => wcif_extensions.map(&:to_wcif),
@@ -60,11 +61,12 @@ class CompetitionVenue < ApplicationRecord
         "name" => { "type" => "string" },
         "latitudeMicrodegrees" => { "type" => "integer" },
         "longitudeMicrodegrees" => { "type" => "integer" },
+        "countryIso2" => { "type" => "string" },
         "timezone" => { "type" => "string", "enum" => VALID_TIMEZONES },
         "rooms" => { "type" => "array", "items" => VenueRoom.wcif_json_schema },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
-      "required" => ["id", "name", "latitudeMicrodegrees", "longitudeMicrodegrees", "timezone", "rooms"],
+      "required" => ["id", "name", "latitudeMicrodegrees", "countryIso2", "longitudeMicrodegrees", "timezone", "rooms"],
     }
   end
 
@@ -72,6 +74,7 @@ class CompetitionVenue < ApplicationRecord
     {
       wcif_id: wcif["id"],
       name: wcif["name"],
+      country_iso2: wcif["countryIso2"],
       latitude_microdegrees: wcif["latitudeMicrodegrees"],
       longitude_microdegrees: wcif["longitudeMicrodegrees"],
       timezone_id: wcif["timezone"],

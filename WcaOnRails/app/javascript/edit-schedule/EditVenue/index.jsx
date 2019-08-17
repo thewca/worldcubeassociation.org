@@ -9,6 +9,7 @@ import { defaultRoomColor } from './constants.js.erb'
 import { EditRoom } from './EditRoom'
 import { Button, Panel, Row, Col } from 'react-bootstrap'
 import { timezoneData } from 'wca/timezoneData.js.erb'
+import countries from 'wca/countries.js.erb'
 import { VenueLocationInput } from './VenueLocationInput.jsx.erb'
 
 export class EditVenue extends React.Component {
@@ -22,6 +23,11 @@ export class EditVenue extends React.Component {
 
   handleNameChange = e => {
     this.props.venueWcif.name = e.target.value;
+    rootRender();
+  }
+
+  handleCountryChange = e => {
+    this.props.venueWcif.countryIso2 = e.target.value;
     rootRender();
   }
 
@@ -85,6 +91,7 @@ export class EditVenue extends React.Component {
                 lng={venueWcif.longitudeMicrodegrees}
                 actionHandler={this.handlePositionChange}
               />
+              <CountryInput value={venueWcif.countryIso2} onChange={this.handleCountryChange} />
               <TimezoneInput
                 timezone={venueWcif.timezone}
                 selectKeys={selectKeys}
@@ -106,6 +113,27 @@ const NameInput = ({name, actionHandler}) => (
     </Col>
     <Col xs={9}>
       <input type="text" className="venue-name-input form-control" value={name} onChange={e => actionHandler(e, "name")} />
+    </Col>
+  </Row>
+);
+
+const CountryInput = ({value, onChange}) => (
+  <Row>
+    <Col xs={3}>
+      <span className="venue-form-label control-label">Country:</span>
+    </Col>
+    <Col xs={9}>
+      <select
+        className="form-control"
+        value={value}
+        onChange={onChange}
+      >
+        {countries.map(country => (
+          <option key={country.iso2} value={country.iso2}>
+            {country.name}
+          </option>
+        ))}
+      </select>
     </Col>
   </Row>
 );

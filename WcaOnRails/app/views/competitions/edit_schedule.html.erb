@@ -2,7 +2,19 @@
 <%= javascript_pack_tag 'edit_schedule' %>
 
 <%= render layout: 'nav' do %>
-  <% if @competition.has_defined_dates? %>
+  <% if !@competition.has_defined_dates? %>
+    <div class="alert alert-danger">
+      There is no start and/or end date assigned to this competition yet.
+      Before you can manage your schedule, you have to add them
+      <%= link_to "here", edit_competition_path(@competition, anchor: "competition_start_date")%>.
+    </div>
+  <% elsif @competition.country.blank? %>
+    <div class="alert alert-danger">
+      There is no country assigned to this competition yet.
+      Before you can manage your schedule, you have to add one
+      <%= link_to "here", edit_competition_path(@competition, anchor: "competition_countryId")%>.
+    </div>
+  <% else %>
     <div id="edit-schedule-area"></div>
     <script>
       $(function() {
@@ -10,6 +22,7 @@
           id: <%= @competition.id.to_json.html_safe %>,
           venue: <%= @competition.venue.to_json.html_safe %>,
           venueDetails: <%= @competition.venueDetails.to_json.html_safe %>,
+          countryIso2: <%= @competition.country.iso2.to_json.html_safe %>,
           lat: <%= @competition.latitude.to_json.html_safe %>,
           lng: <%= @competition.longitude.to_json.html_safe %>,
           countryZones: <%= @competition.country_zones.to_json.html_safe %>,
@@ -22,11 +35,5 @@
         );
       });
     </script>
-  <% else %>
-    <div class="alert alert-danger">
-      There is no start and/or end date assigned to this competition yet.
-      Before you can manage your schedule, you have to add them by clicking
-      <%=link_to "here", edit_competition_path(@competition, anchor: "competition_start_date")%>.
-    </div>
   <% end %>
 <% end %>

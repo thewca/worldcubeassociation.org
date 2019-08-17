@@ -380,6 +380,7 @@ module DatabaseDumper
           competition_id
           wcif_id
           name
+          country_iso2
           latitude_microdegrees
           longitude_microdegrees
           timezone_id
