@@ -268,6 +268,7 @@ RSpec.describe "API Competitions" do
             # keep the WCIF id to update the venue
             id: 2,
             name: "new name",
+            countryIso2: "FR",
             latitudeMicrodegrees: 0,
             longitudeMicrodegrees: 0,
             timezone: "Europe/Paris",
@@ -286,6 +287,7 @@ RSpec.describe "API Competitions" do
           }
           wcif["schedule"]["venues"][1] = new_venue_attributes
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
+          expect(response).to be_successful
           # We expect these objects to change!
           expect(venue.reload.name).to eq "new name"
           expect(room.reload.name).to eq "my new third room"

@@ -743,6 +743,7 @@ CREATE TABLE `competition_venues` (
   `timezone_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `country_iso2` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_competition_venues_on_competition_id_and_wcif_id` (`competition_id`,`wcif_id`),
   KEY `index_competition_venues_on_competition_id` (`competition_id`)
@@ -1576,4 +1577,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190728084145'),
 ('20190814232833'),
 ('20190816001639'),
-('20190816004605');
+('20190816004605'),
+('20190817170648');

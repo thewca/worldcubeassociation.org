@@ -148,6 +148,7 @@ RSpec.describe "Competition WCIF" do
               "name" => "Venue 1",
               "latitudeMicrodegrees" => 123_456,
               "longitudeMicrodegrees" => 123_456,
+              "countryIso2" => "US",
               "timezone" => "Europe/Paris",
               "extensions" => [],
               "rooms" => [
@@ -213,6 +214,7 @@ RSpec.describe "Competition WCIF" do
               "name" => "Venue 2",
               "latitudeMicrodegrees" => 123_456,
               "longitudeMicrodegrees" => 123_456,
+              "countryIso2" => "US",
               "timezone" => "Europe/Paris",
               "extensions" => [],
               "rooms" => [
@@ -609,6 +611,7 @@ RSpec.describe "Competition WCIF" do
         schedule_wcif["venues"] << {
           "id" => 44,
           "name" => "My new venue",
+          "countryIso2" => "GB",
           "latitudeMicrodegrees" => 123,
           "longitudeMicrodegrees" => 456,
           "timezone" => "Europe/London",
@@ -620,6 +623,7 @@ RSpec.describe "Competition WCIF" do
         competition.reload
         venue = competition.competition_venues.find_by(wcif_id: 44)
         expect(venue.name).to eq "My new venue"
+        expect(venue.country_iso2).to eq "GB"
         expect(venue.latitude_microdegrees).to eq 123
         expect(venue.longitude_microdegrees).to eq 456
         expect(venue.timezone_id).to eq "Europe/London"

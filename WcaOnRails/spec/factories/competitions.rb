@@ -149,6 +149,7 @@ FactoryBot.define do
           venue_attributes = {
             name: "Venue #{i+1}",
             wcif_id: i+1,
+            country_iso2: competition.country.iso2,
             latitude_microdegrees: 123_456,
             longitude_microdegrees: 123_456,
             timezone_id: "Europe/Paris",

@@ -196,6 +196,7 @@ function addVenueToSchedule(competitionInfo) {
   competitionInfo.scheduleWcif.venues.push({
     id: newVenueId(),
     name: competitionInfo.venue,
+    countryIso2: competitionInfo.countryIso2,
     latitudeMicrodegrees: competitionInfo.lat,
     longitudeMicrodegrees: competitionInfo.lng,
     // There is at least one for all countries, select the first
