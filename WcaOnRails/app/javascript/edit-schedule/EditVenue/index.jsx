@@ -145,10 +145,11 @@ const TimezoneInput = ({timezone, selectKeys, actionHandler}) => (
     </Col>
     <Col xs={9}>
       <select
-        className="form-control"
+        className="venue-timezone-input form-control"
         value={timezone}
         onChange={e => actionHandler(e, "timezone")}
         >
+        <option value=""></option>
         {selectKeys.map(key => {
           return (
             <option key={key} value={timezoneData[key] || key}>{key}</option>

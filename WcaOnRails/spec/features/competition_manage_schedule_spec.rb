@@ -21,6 +21,9 @@ RSpec.feature "Competition events management" do
       fill_in with: "Venue", class: "venue-name-input"
       click_on "Add room"
       fill_in with: "Youpitralala", class: "room-name-input"
+      within('.venue-timezone-input') do
+        select "Pacific Time (US & Canada)"
+      end
       save
       expect(competition.competition_venues.map(&:name)).to match_array %w(Venue)
       expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w(Youpitralala)
