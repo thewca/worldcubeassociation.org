@@ -464,17 +464,23 @@ pt:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de entrada para público
         #original_hash: 723cad9
-        regulation_z1: >-
-          Quero exigir que competidores submetam puzzles a uma hora específica
-          antes do evento estar agendado para começar
+        early_puzzle_submission: >-
+          Quero pedir a competidores que submetam puzzles a uma hora específica
+          antes de um evento estar previsto começar
         #original_hash: 78308cc
-        regulation_z1_reason: Razões e detalhes para submeter puzzles antecipadamente
+        early_puzzle_submission_reason: Razão e detalhes para submeter puzzles mais cedo
         #original_hash: 88da0ef
-        regulation_z3: >-
-          Quero usar resultados de qualificação para limitar quem pode competir
-          em certos eventos
+        qualification_results: >-
+          Quero usar tempos de qualificação para limitar quem pode competir em
+          certos eventos
         #original_hash: 1ec6dd4
-        regulation_z3_reason: Razões e detalhes para resultados de qualificação
+        qualification_results_reason: Razão e detalhe para resultados de qualificação
+        #original_hash: ac30de9
+        event_restrictions: >-
+          Quero restringir competidores de se registarem a uma combinação
+          específica de eventos
+        #original_hash: 4bf194c
+        event_restrictions_reason: Razão e detalhe para restrições de eventos
       registration:
         #original_hash: 3c23a67
         guests: Convidados
@@ -868,17 +874,23 @@ pt:
           podem ser geridas por este website. Se isto for colocado a 0, uma
           frase será mostrada dizendo que público pode aceder gratuitamente.
         #original_hash: da39a3e
-        regulation_z1: ''
+        early_puzzle_submission: ''
         #original_hash: 4e8488b
-        regulation_z1_reason: >-
-          Por favor elabore aqui o porquê de requerer que competidores submetam
-          puzzles antecipadamente. Por favor preencha em inglês!
+        early_puzzle_submission_reason: >-
+          Por favor elabore aqui o porquê de necessitar que competidores
+          submetam puzzles mais cedo. Por favor preencha em Inglês!
         #original_hash: da39a3e
-        regulation_z3: ''
+        qualification_results: ''
         #original_hash: f859883
-        regulation_z3_reason: >-
+        qualification_results_reason: >-
           Por favor elabore aqui o porquê de querer usar tempos de qualificação.
-          Por favor preencha em inglês!
+          Por favor preencha em Inglês!
+        #original_hash: da39a3e
+        event_restrictions: ''
+        #original_hash: d3329d7
+        event_restrictions_reason: >-
+          Por favor elabore aqui o porquê de restringir certas combinações de
+          eventos. Por favor preencha em Inglês!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1985,6 +1997,8 @@ pt:
         pagamentos de registos para esta competição.
       #original_hash: 0a4bb53
       stripe_not_connected: Houve um problema e não foi possível ligar à sua conta Stripe.
+      #original_hash: 724cf0d
+      championship_exists: 'Já existe um %{championship_type} em %{year}'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -2940,7 +2954,7 @@ pt:
     mission_footer: Declaração da Missão da WCA
     #original_hash: cdab446
     who_we_are_title: Quem somos
-    #original_hash: 5924c26
+    #original_hash: 9248dc4
     who_we_are_content_html: >-
       <p> A World Cube Association rege as competições de puzzles mecânicos que
       são operados por rotação de grupos de peças, geralmente conhecidos como
@@ -2950,11 +2964,11 @@ pt:
       evoluiu na última década, mais de 100.000 pessoas competiram nas nossas
       competições. Apesar desse crescimento, continuamos a ser uma organização
       que é inteiramente gerida por voluntários, de organizadores locais a
-      delegados e até mesmo ao Conselho da WCA. Somos muito gratos a todos que
-      tiram tempo de suas vidas para permitir que a WCA funcione. Com mais apoio
-      financeiro, esperamos trazer um nível ainda maior de profissionalismo às
-      nossas competições à medida que continuamos a sancionar mais eventos em
-      todo o mundo.</p>
+      delegados da WCA e até mesmo ao Conselho da WCA. Somos muito gratos a
+      todos que tiram tempo de suas vidas para permitir que a WCA funcione. Com
+      mais apoio financeiro, esperamos trazer um nível ainda maior de
+      profissionalismo às nossas competições à medida que continuamos a
+      sancionar mais eventos em todo o mundo.</p>
     #original_hash: bccd8c5
     spirit: >-
       O nosso espírito é que pessoas de todo o mundo possam divertir-se juntas
@@ -3034,14 +3048,14 @@ pt:
           O Conselho da WCA é responsável por liderar a organização como um todo
           e dar cumprimento a todas as tarefas que não sejam do âmbito de outras
           Equipas, Comités e Conselhos
-      #original_hash: bb562cf
+      #original_hash: d54d953
       committees: >-
         Os comités e equipas da WCA são uma parte integral da organização e
         realizam tarefas do dia a dia necessárias ao seu funcionamento. Estes
         comités são constituídos por membro da comunidade WCA, incluindo
-        Delegados e competidores. Cada equipa tem um líder, cujo papel é o de
-        assegurar o seu funcionamento adequado e guiar os restantes membros.
-        Conselhos são tipos especiais de equipas que têm um papel de
+        Delegados da WCA e competidores. Cada equipa tem um líder, cujo papel é
+        o de assegurar o seu funcionamento adequado e guiar os restantes
+        membros. Conselhos são tipos especiais de equipas que têm um papel de
         aconselhamento ao Conselho da WCA e que são constituídos por membros da
         comunidade e não por elementos de Staff da WCA. Quando há vagas para
         comités, equipas e conselhos, é colocada na página inicial informação
