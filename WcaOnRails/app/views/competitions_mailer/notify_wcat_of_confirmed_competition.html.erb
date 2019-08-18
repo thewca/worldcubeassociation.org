@@ -3,7 +3,7 @@
 </p>
 
 <p>
-  <strong><%= @confirmer.name %> has confirmed <%= link_to @competition.name, competition_url(@competition) %>.</strong>
+  <strong><%= @confirmer.name %> has confirmed <%= link_to @competition.name, competition_url(@competition) %> in <%= @competition.cityName %>, <%= @competition.country.name %>.</strong>
 </p>
 
 <p class="<%= 'alert' if (@competition.start_date - Time.now.to_date).to_i <= 30 %>">
@@ -26,6 +26,7 @@
   <% if Team.probation.current_members.map { |member| member.user_id }.include?(delegate.id) %>
     <p class="alert">
       <%= delegate.name %> is currently on probation. Please check the <%= link_to "Delegates on Probation spreadsheet", "https://docs.google.com/spreadsheets/d/1ZU1lk0niGn-vjmbiDkoROU8qjmdHkNebZ2GCFHm6vvA/edit#gid=1887522006" %> for more details.
+      You can view the Delegate's currently announced competitions <%= link_to "here", competitions_url(delegate: delegate.id) %>.
     </p>
   <% end %>
 <% end %>
@@ -59,7 +60,9 @@
     </span>
     <br>
   <% end %>
+</p>
 
+<p>
   <% if @competition.early_puzzle_submission? %>
     The <%= "Delegate".pluralize(@competition.delegates.count) %> requested for competitors to <b>submit puzzles early</b> because "<%= @competition.early_puzzle_submission_reason %>".
     <br>
