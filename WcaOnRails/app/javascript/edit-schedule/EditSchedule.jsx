@@ -199,8 +199,7 @@ function addVenueToSchedule(competitionInfo) {
     countryIso2: competitionInfo.countryIso2,
     latitudeMicrodegrees: competitionInfo.lat,
     longitudeMicrodegrees: competitionInfo.lng,
-    // There is at least one for all countries, select the first
-    timezone: Object.values(competitionInfo.countryZones)[0],
+    timezone: null,
     rooms: [],
   });
 }
