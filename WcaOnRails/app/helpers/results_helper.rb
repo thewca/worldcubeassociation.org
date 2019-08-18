@@ -33,4 +33,14 @@ module ResultsHelper
     url = "/results/events.php?eventId=#{event_id}&#{type}=true"
     link_to url, class: "plain", &block
   end
+
+  def pb_type_class_for_result(regionalRecord)
+    if regionalRecord=='WR'
+      pb_type = 'wr'
+    elsif regionalRecord=='NR'
+      pb_type = 'nr'
+    else 
+      pb_type = 'cr'
+    end
+  end
 end

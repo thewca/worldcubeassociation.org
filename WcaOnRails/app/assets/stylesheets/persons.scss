@@ -175,7 +175,19 @@
         }
 
         &.pb {
-          color: $orange;
+          color: $pb-color;
+        }
+
+        &.wr {
+          color : $wr-color;
+        }
+
+        &.cr {
+          color : $cr-color;
+        }
+
+        &.nr {
+          color : $nr-color;
         }
       }
 
