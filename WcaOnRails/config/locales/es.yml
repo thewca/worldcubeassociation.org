@@ -470,17 +470,23 @@ es:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Precio de entrada de acompañantes
         #original_hash: 723cad9
-        regulation_z1: >-
-          Me gustaría que los competidores tuvieran que entregar sus puzzles en
-          una hora dada antes de que de comienzo la categoría
+        early_puzzle_submission: >-
+          Me gustaría requerir que los competidores entreguen sus puzzles a una
+          hora dada antes de que comience la categoría
         #original_hash: 78308cc
-        regulation_z1_reason: Razón y detalles para entregar los puzzles con anterioridad
+        early_puzzle_submission_reason: Razón y detallas para entregar los puzzles con anterioridad
         #original_hash: 88da0ef
-        regulation_z3: >-
-          Me gustaría seleccionar resultados de calificación para limitar quien
-          compite en determinadas categorías
+        qualification_results: >-
+          Me gustaría usar los resultados de calificación para limitar quien
+          puede competir en determinadas categorías
         #original_hash: 1ec6dd4
-        regulation_z3_reason: Razón y detalles para resultados de calificación
+        qualification_results_reason: Razón y detalles para usar resultados de calificación
+        #original_hash: ac30de9
+        event_restrictions: >-
+          Me gustaría restringir registrarse a los competidores en determinadas
+          combinaciones de categorías
+        #original_hash: 4bf194c
+        event_restrictions_reason: Razón y detalles para restricciones de categorías
       registration:
         #original_hash: 3c23a67
         guests: Acompañantes
@@ -881,18 +887,24 @@ es:
           Si se pone a 0, se mostrará una frase indicando que los espectadores
           pueden asistir de forma gratuita.
         #original_hash: da39a3e
-        regulation_z1: ''
+        early_puzzle_submission: ''
         #original_hash: 4e8488b
-        regulation_z1_reason: >-
-          Por favor, explica aquí por qué  te gustaría requerir a los
-          competidores que entreguen los puzzles con anterioridad. Por favor
-          Rellena esto en inglés
+        early_puzzle_submission_reason: >-
+          Por favor explica aquí por que te gustaría requerir que los
+          competidores entreguen sus puzzles con anelación. Por favor rellena
+          esto en inglés
         #original_hash: da39a3e
-        regulation_z3: ''
+        qualification_results: ''
         #original_hash: f859883
-        regulation_z3_reason: >-
-          Por favor explica aquí por qué te gustaría aplicar tiempos de
-          calificación. Por favor rellénalo en Inglés.
+        qualification_results_reason: >-
+          Por favor explica aquí por que te gustaría requerir usar tiempos de
+          calificación. Por favor rellena esto en inglés
+        #original_hash: da39a3e
+        event_restrictions: ''
+        #original_hash: d3329d7
+        event_restrictions_reason: >-
+          Por favor explica aquí por que te gustaría restringir ciertas
+          combinaciones de categorías. Por favor rellena esto en inglés
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -2628,7 +2640,7 @@ es:
           by_region: Por zona
       table_elements:
         #original_hash: 709a232
-        name: Nombra
+        name: Nombre
         #original_hash: 5faa59d
         result: Resultado
         #original_hash: e0f64f7
@@ -3186,7 +3198,7 @@ es:
       wfc:
         #original_hash: 9cb13de
         name: Comité de Finanzas de la WCA
-        #original_hash: 2d4807e
+        #original_hash: b4ed44b
         description: Este equipo es el responsable de gestionar las finanzas de la WCA
       wec:
         #original_hash: 83bd1d0
@@ -3201,6 +3213,13 @@ es:
           el WEC es un confidente. Este comité también funciona como junta de
           apelación si  cualquiera involucrado no está de acuerdo con alguna
           decisión del Comité Disciplinario de la WCA (WDC).
+      weat:
+        #original_hash: d1dbb86
+        name: Equipo de Asistentes Ejecutivos de la WCA
+        #original_hash: 889dd90
+        description: >-
+          Este equipo es responsable de llevar a cabo las tareas administrativas
+          de la Junta Directiva de la WCA.
       wqac:
         #original_hash: 8f32116
         name: Comité de Control de Calidad de la WCA
@@ -3458,6 +3477,11 @@ es:
       info_html: >-
         Este comité tiene la labor de asegurarse de que los procedimientos
         seguidos por el personal WCA y Externo siguen su Código Ético.
+    weat:
+      #original_hash: 889dd90
+      info_html: >-
+        Este equipo es responsable de llevar a cabo las tareas administrativas
+        de la Junta Directiva de la WCA.
     wqac:
       #original_hash: 0171b3b
       info_html: >-
