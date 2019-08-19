@@ -36,16 +36,17 @@ module ResultsHelper
 
   def pb_type_class_for_result(regional_record, pb_marker)
     if pb_marker
-      classes = 'pb'
+      record_class = 'pb'
       unless regional_record.blank?
         if regional_record == 'WR'
-          classes = 'wr'
+          record_class = 'wr'
         elsif regional_record == 'NR'
-          classes = 'nr'
+          record_class = 'nr'
         else
-          classes = 'cr'
+          record_class = 'cr'
         end
       end
     end
+    record_class
   end
 end
