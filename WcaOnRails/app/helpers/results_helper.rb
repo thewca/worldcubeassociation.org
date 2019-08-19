@@ -35,15 +35,15 @@ module ResultsHelper
   end
 
   def pb_type_class_for_result(regionalRecord,pbMarker)
-    if pbMarker 
-      pb_type = 'pb'
-      if !regionalRecord.blank? 
+    if pbMarker
+      'pb'
+      if !regionalRecord.blank?
         if regionalRecord=='WR'
-          pb_type = 'wr'
+          'wr'
         elsif regionalRecord=='NR'
-          pb_type = 'nr'
-        else 
-          pb_type = 'cr'
+          'nr'
+        else
+          'cr'
         end
       end
     end
