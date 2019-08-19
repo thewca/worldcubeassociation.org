@@ -34,13 +34,18 @@ module ResultsHelper
     link_to url, class: "plain", &block
   end
 
-  def pb_type_class_for_result(regionalRecord)
-    if regionalRecord=='WR'
-      pb_type = 'wr'
-    elsif regionalRecord=='NR'
-      pb_type = 'nr'
-    else 
-      pb_type = 'cr'
+  def pb_type_class_for_result(regionalRecord,pbMarker)
+    if pbMarker 
+      pb_type = 'pb'
+      if !regionalRecord.blank? 
+        if regionalRecord=='WR'
+          pb_type = 'wr'
+        elsif regionalRecord=='NR'
+          pb_type = 'nr'
+        else 
+          pb_type = 'cr'
+        end
+      end
     end
   end
 end
