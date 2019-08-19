@@ -1861,6 +1861,19 @@ en:
       title: "Organizer Guidelines"
       content1_html: 'If you are interested in organizing a competition or already planning to organize one, please read our <a href="/organizer-guidelines">Organizer Guidelines</a>.'
       content2_html: 'This document contains important information and should be read by every competition organizer.'
+  #context: Translations of the regulations
+  regulations_translations:
+    title: 'WCA Regulations and Guidelines: Translations'
+    paragraph1: 'If you speak a language other than English, you may find these translations useful.'
+    paragraph2: 'Please note that translations do not have any official status, even though they are provided on the WCA website: they do not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used.'
+    translations: 'Translations'
+    current: 'Current'
+    old: 'Old'
+    table_elements:
+      version: 'Version'
+      language: 'Language'
+    translating: 'Translating the Regulations'
+    paragraph3_html: 'If you are interested in adding/updating a translation, please view <a href="https://github.com/thewca/wca-regulations-translations#translation-instructions">the instructions on the GitHub repository for translations</a>.'
   #context: Organizer Guidelines
   organizer_guidelines:
     title: "WCA Competition Organizer Guidelines"
