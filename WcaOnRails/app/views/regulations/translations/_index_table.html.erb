@@ -1,0 +1,17 @@
+<%= wca_table(table_class: "regulations-translations-table", floatThead: false, greedy: false) do %>
+  <thead>
+    <tr>
+      <th><%= t("regulations_translations.table_elements.verison") %></th>
+      <th><%= t("regulations_translations.table_elements.language") %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% translations.each do |translation| %>
+      <tr>
+        <td><%= translation[:version] %></td>
+        <td><%= link_to translation[:language], translation[:url] %> (<%= translation[:language_english] %>)</td>
+      </tr>
+    <% end %>
+  </tbody>
+<% end %>

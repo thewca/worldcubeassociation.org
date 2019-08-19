@@ -3,7 +3,7 @@ WcaOnRails/app/views/regulations/*.*
 WcaOnRails/app/views/regulations/translations/*
 WcaOnRails/app/views/regulations/scrambles/*
 WcaOnRails/app/views/regulations/history/*
-regulations/
+/regulations/
 # Except static pages
 !WcaOnRails/app/views/regulations/translations/*.erb
 !WcaOnRails/app/views/regulations/scrambles/*.erb
