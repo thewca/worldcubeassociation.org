@@ -1886,7 +1886,7 @@ pt:
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Pagou %{paid}, que cobre na totalidade a taxa de registo.'
     #original_hash: 2e5d1b9
-    will_pay_here: Irá pagar-lhes aqui após submeter o registo
+    will_pay_here: Irá efetuar o pagamento aqui após submeter o registo
     #original_hash: b7ef562
     wont_pay_here: >-
       Por favor verifique a informação da competição para instruções de como
@@ -3138,7 +3138,7 @@ pt:
       wfc:
         #original_hash: 9cb13de
         name: Comité Financeiro da WCA
-        #original_hash: 2d4807e
+        #original_hash: b4ed44b
         description: Esta equipa é responsável por gerir as finanças da WCA
       wec:
         #original_hash: 83bd1d0
@@ -3153,6 +3153,13 @@ pt:
           de quem o WEC é confidente. Este comité também funciona como um
           conselho de apelo se alguém envolvido discordar com uma decisão tomada
           pelo Conselho de Disciplina da WCA.
+      weat:
+        #original_hash: d1dbb86
+        name: Equipa de Assistentes Executivos da WCA
+        #original_hash: 889dd90
+        description: >-
+          Esta equipa é responsável por realizar tarefas administrativas do
+          Conselho da WCA.
       wqac:
         #original_hash: 8f32116
         name: Comité de Garantia de Qualidade da WCA
@@ -3399,6 +3406,11 @@ pt:
       info_html: >-
         Este comité tem o papel de assegurar que todos os procedimentos seguidos
         pelo Staff da WCA e Staff Externo seguem o seu Código de Ética.
+    weat:
+      #original_hash: 889dd90
+      info_html: >-
+        Esta equipa é responsável por realizar tarefas administrativas do
+        Conselho da WCA.
     wqac:
       #original_hash: 0171b3b
       info_html: >-
