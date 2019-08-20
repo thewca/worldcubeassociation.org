@@ -1022,6 +1022,7 @@ RSpec.describe CompetitionsController do
     let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:future_competition2) { FactoryBot.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let!(:future_competition3) { FactoryBot.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition4) { FactoryBot.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [], events: Event.where(id: %w(222 333))) }
     let!(:past_competition1) { FactoryBot.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let!(:past_competition2) { FactoryBot.create(:competition, :registration_open, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:past_competition3) { FactoryBot.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
@@ -1103,6 +1104,19 @@ RSpec.describe CompetitionsController do
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition1]
       end
+
+      it 'shows upcoming competitions they have bookmarked' do
+        BookmarkedCompetition.create(competition: future_competition2, user: registered_user)
+        BookmarkedCompetition.create(competition: future_competition4, user: registered_user)
+        get :my_competitions
+        expect(assigns(:bookmarked_competitions)).to eq [future_competition4, future_competition2]
+      end
+
+      it 'does not show past competitions they have bookmarked' do
+        BookmarkedCompetition.create(competition: past_competition1, user: registered_user)
+        get :my_competitions
+        expect(assigns(:bookmarked_competitions)).to eq []
+      end
     end
 
     context 'when signed in as an organizer' do
@@ -1126,6 +1140,30 @@ RSpec.describe CompetitionsController do
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [unscheduled_competition1, future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition2, past_competition3, past_competition4]
+      end
+    end
+  end
+
+  describe 'POST #bookmark' do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:competition) { FactoryBot.create(:competition, :visible) }
+
+    context 'when signed in' do
+      before do
+        sign_in user
+      end
+
+      it 'bookmarks a competition' do
+        expect(user.is_bookmarked?(competition)).to eq false
+        post :bookmark, params: { id: competition.id }
+        expect(user.is_bookmarked?(competition)).to eq true
+      end
+
+      it 'unbookmarks a competition' do
+        post :bookmark, params: { id: competition.id }
+        expect(user.is_bookmarked?(competition)).to eq true
+        post :unbookmark, params: { id: competition.id }
+        expect(user.is_bookmarked?(competition)).to eq false
       end
     end
   end

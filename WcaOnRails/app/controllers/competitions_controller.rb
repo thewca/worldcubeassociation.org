@@ -526,6 +526,18 @@ class CompetitionsController < ApplicationController
     render layout: false
   end
 
+  def bookmark
+    @competition = competition_from_params
+    BookmarkedCompetition.find_or_create_by(competition: @competition, user: current_user)
+    head :ok
+  end
+
+  def unbookmark
+    @competition = competition_from_params
+    BookmarkedCompetition.where(competition: @competition, user: current_user).each(&:destroy!)
+    head :ok
+  end
+
   def update
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
@@ -601,6 +613,10 @@ class CompetitionsController < ApplicationController
                               .where(id: competition_ids.uniq)
                               .sort_by { |comp| comp.start_date || Date.today + 20.year }.reverse
     @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
+    bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
+    @bookmarked_competitions = Competition.not_over
+                                          .where(id: bookmarked_ids.uniq)
+                                          .sort_by(&:start_date)
   end
 
   def for_senior

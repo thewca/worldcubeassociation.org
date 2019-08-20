@@ -69,6 +69,7 @@ CREATE TABLE `Competitions` (
   `confirmed_at` datetime DEFAULT NULL,
   `event_restrictions` tinyint(1) DEFAULT NULL,
   `event_restrictions_reason` text COLLATE utf8mb4_unicode_ci,
+  `registration_reminder_sent_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -658,6 +659,18 @@ CREATE TABLE `assignments` (
   PRIMARY KEY (`id`),
   KEY `index_assignments_on_registration_id` (`registration_id`),
   KEY `index_assignments_on_schedule_activity_id` (`schedule_activity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `bookmarked_competitions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bookmarked_competitions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `competition_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_bookmarked_competitions_on_competition_id` (`competition_id`),
+  KEY `index_bookmarked_competitions_on_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `championships`;
@@ -1581,4 +1594,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190816001639'),
 ('20190816004605'),
 ('20190817170648'),
-('20190817193315');
+('20190817193315'),
+('20190818102517');

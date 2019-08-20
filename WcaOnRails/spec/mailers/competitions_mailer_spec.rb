@@ -301,4 +301,35 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.body.encoded).to include(link_to_competition_schedule_tab(competition))
     end
   end
+
+  describe "registration_reminder_email" do
+    let(:competitor) { FactoryBot.create(:user) }
+    let(:competition) { FactoryBot.create :competition, :with_organizer, :with_delegate, name: "Comp of the future 2020", id: "CompFut2020" }
+
+    context "non-registered user" do
+      let(:mail) { CompetitionsMailer.registration_reminder(competition, competitor, false) }
+
+      it "renders the headers" do
+        expect(mail.subject).to eq "Comp of the future 2020 registration opens soon"
+        expect(mail.to).to eq [competitor.email]
+        expect(mail.reply_to).to eq competition.organizers.pluck(:email)
+      end
+
+      it "renders the body" do
+        expect(mail.body.encoded).to match(/This is a reminder that registration/)
+        expect(mail.body.encoded).to_not match(/You have registered/)
+        expect(mail.body.encoded).to include(competition_url(competition))
+      end
+    end
+
+    context "registered but not accepted user" do
+      let(:mail) { CompetitionsMailer.registration_reminder(competition, competitor, true) }
+
+      it "says the user is registered" do
+        expect(mail.body.encoded).to match(/This is a reminder that registration/)
+        expect(mail.body.encoded).to match(/You have registered/)
+        expect(mail.body.encoded).to include(competition_url(competition))
+      end
+    end
+  end
 end
