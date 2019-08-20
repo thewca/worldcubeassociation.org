@@ -141,6 +141,16 @@ class CompetitionsMailer < ApplicationMailer
     @competition.uploaded_jsons.delete_all
   end
 
+  def registration_reminder(competition, user, registered_but_not_accepted)
+    @competition = competition
+    @user = user
+    @registered_but_not_accepted = registered_but_not_accepted
+    localized_mail @user.locale,
+                   -> { I18n.t('users.mailer.registration_reminder_email.header', competition: competition.name) },
+                   to: user.email,
+                   reply_to: competition.organizers.pluck(:email)
+  end
+
   private def delegates_to_senior_delegates_email(delegates)
     delegates.map { |delegate| delegate.senior_delegate&.email }.uniq.compact
   end

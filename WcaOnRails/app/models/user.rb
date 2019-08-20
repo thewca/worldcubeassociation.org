@@ -21,6 +21,8 @@ class User < ApplicationRecord
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
+  has_many :bookmarked_competitions, dependent: :destroy
+  has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
@@ -831,6 +833,10 @@ class User < ApplicationRecord
     if !wca_id && !unconfirmed_wca_id
       CompetitionsMailer.notify_users_of_id_claim_possibility(self, competition).deliver_later
     end
+  end
+
+  def is_bookmarked?(competition)
+    BookmarkedCompetition.where(competition: competition, user: self).present?
   end
 
   def self.find_first_by_auth_conditions(warden_conditions)

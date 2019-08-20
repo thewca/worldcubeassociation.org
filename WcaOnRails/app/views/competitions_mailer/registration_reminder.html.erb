@@ -1,0 +1,18 @@
+<p>
+  <%= t 'users.mailer.registration_reminder_email.intro', name: @user.name %>
+</p>
+
+<p>
+  <%= t 'users.mailer.registration_reminder_email.information_html', competition_url: competition_url(@competition), competition: @competition.name %>
+</p>
+
+<p>
+  <% if @registered_but_not_accepted %>
+    <%= t 'users.mailer.registration_reminder_email.not_accepted_html' %>
+  <% end %>
+  <%= t 'users.mailer.registration_reminder_email.more_info_html', competition_url: competition_url(@competition) %>
+</p>
+
+<p>
+  <%= t 'registrations.mailer.regards_html', people: users_to_sentence(@competition.managers) %>
+</p>

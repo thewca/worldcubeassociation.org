@@ -25,6 +25,8 @@ class Competition < ApplicationRecord
   has_one :continent, foreign_key: :continentId, through: :country
   has_many :championships, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+  has_many :bookmarked_competitions, dependent: :delete_all
+  has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -117,6 +119,7 @@ class Competition < ApplicationRecord
     results_posted_at
     results_submitted_at
     results_nag_sent_at
+    registration_reminder_sent_at
     announced_at
     created_at
     updated_at
@@ -392,7 +395,9 @@ class Competition < ApplicationRecord
              'championships',
              'rounds',
              'uploaded_jsons',
-             'wcif_extensions'
+             'wcif_extensions',
+             'bookmarked_competitions',
+             'bookmarked_users'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers

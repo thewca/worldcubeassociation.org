@@ -56,6 +56,14 @@ $competition-nav-padding: 50px;
       border-bottom: 4px solid #ccc;
     }
   }
+
+  .bookmark-icon {
+    cursor: pointer;
+  }
+
+  #not-bookmarked {
+    color: #bbbbbb;
+  }
 }
 
 // Workaround for https://github.com/cubing/icons/issues/16

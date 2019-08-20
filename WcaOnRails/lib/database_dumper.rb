@@ -64,6 +64,7 @@ module DatabaseDumper
           results_posted_at
           results_submitted_at
           results_nag_sent_at
+          registration_reminder_sent_at
           generate_website
           announced_at
           base_entry_fee_lowest_denomination
@@ -722,6 +723,16 @@ module DatabaseDumper
     }.freeze,
     "stripe_charges" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
+    "bookmarked_competitions" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          user_id
+          competition_id
+        ),
+      ),
+    }.freeze,
   }.freeze
 
   def self.development_dump(dump_filename)

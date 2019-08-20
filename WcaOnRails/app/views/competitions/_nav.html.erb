@@ -211,6 +211,14 @@
     </div>
     <div id="competition-data">
       <h3>
+        <% if current_user %>
+          <span class="bookmark-icon" id="not-bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.bookmark') %>" <% if current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
+            <%= icon('far', 'bookmark') %>
+          </span>
+          <span class="bookmark-icon" id="bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.is_bookmarked') %>" <% if !current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
+            <%= icon('fa', 'bookmark') %>
+          </span>
+        <% end %>
         <% if @competition.championships.any? %>
           <span class="championship-trophy" data-toggle="tooltip" data-placement="bottom" title="<%= @competition.championships.sort.map { |championship| championship.name }.join(", ") %>">
             <%= icon('fas', 'trophy') %>
@@ -270,6 +278,33 @@
           return (this.bottom = $('.footer').outerHeight(true));
         },
       },
+    });
+
+    $('#not-bookmarked').click(function() {
+      wca.cancelPendingAjaxAndAjax('bookmark', {
+        url: '<%= bookmark_path %>',
+        method: 'POST',
+        data: {
+          'id': <%= @competition.id.to_json.html_safe %>,
+        },
+        success: function(data) {
+          $('#not-bookmarked').toggle();
+          $('#bookmarked').toggle();
+        }
+      });
+    });
+    $('#bookmarked').click(function() {
+      wca.cancelPendingAjaxAndAjax('bookmark', {
+        url: '<%= unbookmark_path %>',
+        method: 'POST',
+        data: {
+          'id': <%= @competition.id.to_json.html_safe %>,
+        },
+        success: function(data) {
+          $('#not-bookmarked').toggle();
+          $('#bookmarked').toggle();
+        }
+      });
     });
   })();
 </script>

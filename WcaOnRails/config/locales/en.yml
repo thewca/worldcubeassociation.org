@@ -779,6 +779,12 @@ en:
       organizer_removal_email:
         header: "You were removed from %{competition} as an organizer"
         information: "%{remover} removed you from %{competition} as an organizer."
+      registration_reminder_email:
+        header: "%{competition} registration opens soon"
+        intro: "Hello %{name},"
+        information_html: "This is a reminder that registration for <a href=%{competition_url}>%{competition}</a> opens in less than 24 hours."
+        not_accepted_html: "You have registered but your registration has not been accepted."
+        more_info_html: "Please see the <a href=%{competition_url}>competition website</a> for more information and registration requirements."
     #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"
@@ -1077,6 +1083,8 @@ en:
       title: "My competitions"
       disclaimer: "Only competitions that use the WCA registration system are shown here. If your competition isn't listed here, check the competition website's own competitor list."
       past_competitions: "Past competitions"
+      bookmarked_title: "Bookmarked competitions"
+      bookmarked_explanation: "Competitions that you've bookmarked on the WCA site. We'll send you an email 24 hours before registration opens."
     #context: on the competition's information page
     competition_info:
       #context: used on the pdf export
@@ -1131,6 +1139,9 @@ en:
         range_future_html: "Online registration will be open from %{start_date_and_time} to %{end_date_and_time}."
         range_ongoing_html: "Online registration opened %{start_date_and_time} and will close %{end_date_and_time}."
         range_past_html: "Online registration opened %{start_date_and_time} and closed %{end_date_and_time}."
+      bookmark: "Bookmark this competition"
+      is_bookmarked: "You've bookmarked this competition"
+      number_of_bookmarks: "Number of times bookmarked"
     #context: on the competition's index page
     index:
       title: "Competitions"
@@ -1186,6 +1197,8 @@ en:
       no_upcoming_competitions_html: "You currently have no upcoming competitions! Check out the %{link}."
       competitions_list: "competitions list"
       no_past_competitions: "You have no past competitions."
+      no_bookmarked_competitions: "You haven't bookmarked any upcoming competitions. Click the bookmark icon on a competition page to save it here!"
+    #context: on the competition's information page
     #context: in the competition edition form
     competition_form:
       wcat: "WCA Competition Announcement Team"

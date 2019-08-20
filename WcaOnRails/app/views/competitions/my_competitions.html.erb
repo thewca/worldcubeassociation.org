@@ -43,4 +43,13 @@
     <% end %>
   <% end %>
 
+  <h3>
+    <%= icon('fa', 'bookmark') %>
+    <%= t '.bookmarked_title' %>
+  </h3>
+
+  <%= t '.bookmarked_explanation' %>
+
+  <%= render "my_competitions_table", competitions: @bookmarked_competitions, registrations_by_competition_id: @registered_for_by_competition_id, past: false, bookmarked: true %>
+
 </div>

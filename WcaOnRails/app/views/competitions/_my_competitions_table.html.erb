@@ -1,8 +1,11 @@
 <% show_delegates ||= false %>
+<% bookmarked ||= false %>
 <% registrations_by_competition_id ||= {} %>
 <% if competitions.length < 1 %>
   <%= alert :info do %>
-    <% if !past %>
+    <% if bookmarked %>
+      <%= t '.no_bookmarked_competitions' %>
+    <% elsif !past %>
       <%= t '.no_upcoming_competitions_html', link: link_to(t('.competitions_list'), competitions_path) %>
     <% else %>
       <%= t '.no_past_competitions' %>
