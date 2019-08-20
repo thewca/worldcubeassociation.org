@@ -1015,7 +1015,7 @@ class Competition < ApplicationRecord
       .map do |event, results_for_event|
         round_types_with_results = results_for_event
                                    .group_by(&:round_type)
-                                   .sort_by { |format, _results| format.rank }
+                                   .sort_by { |format, _results| format.rank }.reverse
                                    .map { |round_type, results| [round_type, results.sort_by { |r| [r.pos, r.personName] }] }
 
         [event, round_types_with_results]
