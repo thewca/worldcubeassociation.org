@@ -99,3 +99,33 @@ onPage('competitions#index', function() {
     }, 0);
   });
 });
+
+onPage("competitions#show_all_results", function() {
+  /* Show tbody for the given event. */
+  function showResultsFor(eventId) {
+    var $results = $('.one-event');
+    $results.hide();
+    $results.filter('.event-' + eventId).show();
+  }
+
+  /* Handle events selector for results by event. */
+  $('.event-selector input[type="radio"]').on('change', function() {
+    var eventId = $(this).val();
+    showResultsFor(eventId);
+    $.setUrlParams({ event:  eventId });
+  });
+
+  if(location.hash) {
+    /* Support old URLs with hash indicating an eventId.
+       Hash is of the form #e444; hash.slice(2) strips the "#e" and leaves the eventId ("444"). */
+    document.getElementById('radio-' + location.hash.slice(2)).click();
+  } else {
+    var $checked = $('.event-selector input[checked="checked"]');
+    if ($checked.length != 0) {
+      showResultsFor($checked.val());
+    } else {
+      var $toCheck = $('.event-selector input:first');
+      $toCheck.click();
+    }
+  }
+});

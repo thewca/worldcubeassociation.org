@@ -2,16 +2,24 @@
 
 <%= render layout: 'results_nav' do %>
   <% cache @competition.result_cache_key("all_results") do %>
+    <div class="event-selector text-center">
+      <% @competition.events_with_round_types_with_results.each do |event, rounds_with_results| %>
+        <span class="event-radio">
+          <%= label_tag "radio-#{event.id}" do %>
+            <%= radio_button_tag "event", event.id, params[:event] == event.id, id: "radio-#{event.id}" %>
+            <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name %>
+          <% end %>
+        </span>
+      <% end %>
+    </div>
     <% @competition.events_with_round_types_with_results.each do |event, rounds_with_results| %>
-
-      <% # Empty div to allow linking directly to results for an event %>
-      <%= content_tag :div, "", id: "e#{event.id}" %>
-
-      <% rounds_with_results.each do |round, results| %>
-        <h3>
-          <%= anchorable "#{event.name} #{round.name}", "e#{event.id}_#{round.id}" %>
-        </h3>
-        <%= render "results_table", results: results, hide_event: true, hide_round: true %>
+      <%= content_tag :div, class: ["event-#{event.id}", "one-event"] do %>
+        <% rounds_with_results.each do |round, results| %>
+          <h3>
+            <%= cubing_icon event.id %> <%= "#{event.name} #{round.name}" %>
+          </h3>
+          <%= render "results_table", results: results, hide_event: true, hide_round: true %>
+        <% end %>
       <% end %>
     <% end %>
 

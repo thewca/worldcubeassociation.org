@@ -64,6 +64,10 @@ $competition-nav-padding: 50px;
   #not-bookmarked {
     color: #bbbbbb;
   }
+
+  .one-event {
+    display: none;
+  }
 }
 
 // Workaround for https://github.com/cubing/icons/issues/16

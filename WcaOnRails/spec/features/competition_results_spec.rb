@@ -27,7 +27,7 @@ RSpec.feature "competition results" do
   end
 
   describe "all results" do
-    it "displays the results for each person" do
+    it "displays the results for each person", js: true do
       visit competition_results_all_path(competition)
       expect(page).to have_content(person_1.name)
       expect(page).to have_content(person_2.name)
