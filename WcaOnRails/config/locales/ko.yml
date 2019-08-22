@@ -1,19 +1,19 @@
 ko:
   countries:
+    #original_hash: 2f488ff
+    HK: 홍콩
+    #original_hash: 4430b22
+    KR: 대한민국
+    #original_hash: d887137
+    MO: 마카오
+    #original_hash: 374ac0d
+    XM: 여러 나라 (북미)
     #original_hash: 3f8c9de
     XA: 여러 나라 (아시아)
     #original_hash: 090f3ce
     XE: 여러 나라 (유럽)
     #original_hash: 459f987
     XS: 여러 나라 (남미)
-    #original_hash: 374ac0d
-    XM: 여러 나라 (북미)
-    #original_hash: 918c53a
-    MO: 마카오
-    #original_hash: 2f488ff
-    HK: 홍콩
-    #original_hash: 4e8bd04
-    KR: 대한민국
   continents:
     #original_hash: 0f138c8
     Multiple Continents: 여러 대륙
@@ -74,7 +74,7 @@ ko:
     333mbo: 3x3x3 눈 가리고 맞추기 (복수) 과거
   formats:
     #original_hash: e4b3c11
-    '1': 1회 최고
+    '1': 1회 단일
     #original_hash: 778e14d
     '2': 2회 최고
     #original_hash: 21f623c
@@ -85,11 +85,11 @@ ko:
     m: 3회 평균
     short:
       #original_hash: c21bc2a
-      '1': 최고(1회)
+      '1': 단일(1회)
       #original_hash: 49e914a
-      '2': 최고(2회)
+      '2': 단일(2회)
       #original_hash: b41f36f
-      '3': 최고(3회)
+      '3': 단일(3회)
       #original_hash: 4a34175
       a: 평균(5회)
       #original_hash: 53ba088
@@ -162,25 +162,25 @@ ko:
     #original_hash: 7ee969c
     percent: '상위 %{percent}%의 선수가 다음 라운드 진출'
     attempt_result:
-      #original_hash: 1fb7fe1
-      time: '최고기록이 < %{time}인 선수가 다음 라운드 진출'
-      #original_hash: 8254f3e
-      moves: '최고기록이 < %{moves}회전인 선수가 다음 라운드'
-      #original_hash: daab86e
-      points: '최고기록이 > %{points}점인 선수가 다음 라운드 진출'
+      #original_hash: b3c8a02
+      time: '단일 기록이 < %{time}인 선수가 다음 라운드 진출'
+      #original_hash: 07bca6c
+      moves: '단일 기록이 < %{moves}회전인 선수가 다음 라운드'
+      #original_hash: 837083c
+      points: '단일 기록이 > %{points}점인 선수가 다음 라운드 진출'
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count}번의 시도 중 최고기록 < %{time}'
-      other: '%{count}번의 시도 중 최고기록 < %{time}'
+      zero: '%{count}번의 시도 중 단일기록 < %{time}'
+      other: '%{count}번의 시도 중 단일기록 < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count}번의 시도 중 최고기록 < %{moves}회전'
-      other: '%{count}번의 시도 중 최고기록 < %{moves}회전'
+      zero: '%{count}번의 시도 중 단일기록 < %{moves}회전'
+      other: '%{count}번의 시도 중 단일기록 < %{moves}회전'
     #original_hash: eba1b97
     points:
-      zero: '%{count}번의 시도 중 최고기록 > %{points}점'
-      other: '%{count}번의 시도 중 최고기록 > %{points}점'
+      zero: '%{count}번의 시도 중 단일기록 > %{points}점'
+      other: '%{count}번의 시도 중 단일기록 > %{points}점'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -199,9 +199,9 @@ ko:
     #original_hash: 0154c0d
     here: 여기
     #original_hash: 77003d0
-    best: 최고
+    best: 단일
     #original_hash: dd11868
-    single: 최고
+    single: 단일
     #original_hash: 15f86c0
     average: 평균
     #original_hash: e7f6fc5
@@ -238,7 +238,7 @@ ko:
     #original_hash: 52249b5
     datetime_placeholder: '년-월-일 시간 (YYYY-MM-DD HH:MM)'
     #original_hash: 7136e3b
-    time_format: 12h
+    time_format: 12기준
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -394,14 +394,6 @@ ko:
         refund_policy_limit_date: 환불 기한
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: 관객 입장료
-        #original_hash: 9e1008d
-        regulation_z1: 규정 Z1)을 적용하여 대회 장소에서 접수 진행시 퍼즐을 받습니다.
-        #original_hash: 466aca7
-        regulation_z1_reason: Z1) 적용 사유
-        #original_hash: 588c6a0
-        regulation_z3: 규정 Z3)를 적용하여 특정 종목의 특정 라운드에 바로 진출하는 선수들을 선택하고 싶습니다.
-        #original_hash: 18d9a8c
-        regulation_z3_reason: 규정 Z3) 적용 사유
       registration:
         #original_hash: 3c23a67
         guests: 참관객
@@ -649,9 +641,11 @@ ko:
         #original_hash: da39a3e
         on_the_spot_registration: ''
         #original_hash: da39a3e
-        regulation_z1: ''
+        early_puzzle_submission: ''
         #original_hash: da39a3e
-        regulation_z3: ''
+        qualification_results: ''
+        #original_hash: da39a3e
+        event_restrictions: ''
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -684,10 +678,16 @@ ko:
         #original_hash: da39a3e
         sticky: ''
         #original_hash: da39a3e
+        unstick_at: ''
+        #original_hash: da39a3e
         title: ''
         #original_hash: da39a3e
         tags: ''
       delegate_report:
+        #original_hash: da39a3e
+        wrc_feedback_requested: ''
+        #original_hash: da39a3e
+        wdc_feedback_requested: ''
         #original_hash: da39a3e
         discussion_url: ''
       competition_tab:
@@ -708,6 +708,8 @@ ko:
         person2_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: da39a3e
+        incorrect_wca_id_claim_count: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -751,6 +753,27 @@ ko:
         message: ''
         #original_hash: da39a3e
         confirm_information: ''
+      regional_organization:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        country: ''
+        #original_hash: da39a3e
+        address: ''
+        #original_hash: da39a3e
+        directors_and_officers: ''
+        #original_hash: da39a3e
+        area_description: ''
+        #original_hash: da39a3e
+        past_and_current_activities: ''
+        #original_hash: da39a3e
+        future_plans: ''
+        #original_hash: da39a3e
+        extra_information: ''
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        end_date: ''
     options:
       registration:
         status:
@@ -1341,7 +1364,7 @@ ko:
     please_sign_in_html: '%{comp}에 참가 신청하기 위해서는 %{sign_in}하세요. 만약 WCA 계정이 없으시면, %{here}서 만드실 수 있습니다.'
     #original_hash: 89b4e7f
     greeting: '%{name}님, 안녕하세요!'
-    #original_hash: fb34a17
+    #original_hash: 322f646
     please_fix_profile_html: '%{comp}에 참가 신청을 하시려면, %{profile}에 있는 다음 오류를 수정하세요:'
     #original_hash: f22ef22
     registration_full: >-
@@ -1455,10 +1478,6 @@ ko:
       no_entry_fee: 이 대회는 참가비가 별도로 없습니다.
       #original_hash: 4aca553
       no_refunds: 참가비는 어떠한 경우에도 환불 되지 않습니다.
-      #original_hash: cf7be5d
-      on_the_spot_registration: >-
-        On the spot registrations will be accepted with a base registration fee
-        of %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
       on_the_spot_registration_free: On the spot registrations will be accepted for free.
       #original_hash: f5f687d
@@ -1740,8 +1759,8 @@ ko:
     announcement_info_html: '%{date_time}에 %{author_name}에 의해 공지'
   contacts:
     website:
-      #original_hash: ac2ac3d
-      title: WCA 홈페이지 문의
+      #original_hash: 4ef2aad
+      title: WCA 문의
       inquiries:
         #original_hash: 92ea7e8
         competition: 특정한 대회의 주최자에게 문의 (아래에서 대회 선택)
@@ -1942,32 +1961,19 @@ ko:
   about:
     #original_hash: 9ac918a
     title: WCA 알아보기
-    mission:
-      paragraphs:
-        #original_hash: c86d105
-        '1': >-
-          세계 큐브 협회(World Cube Association (WCA))는 '트위스티 퍼즐(twisty puzzle)'이라고
-          알려진, 조각을 움직여서 맞추는 기계적인, 퍼즐의 대회를 관장한다. 이 중 가장 유명한 퍼즐은 헝가리의 루빅 (Rubik)
-          교수에 의해 발명된 루빅스 큐브 (Rubik's Cube)이다. 이러한 퍼즐의 일부를 WCA의 공식 종목으로 채택된다.
-        #original_hash: 22c3593
-        '2': '세계 큐브 협회는 지역별 단체, 국가별 단체의 도움으로 전 세계적으로 대회를 주최한다.'
-        #original_hash: 0902c4a
-        '3': >-
-          세계 큐브 협회의 목적은 <strong>공정하고 공평한 조건하에 더 많은 나라에서 더 많은 대회를 더 많은 사람이 참가하여 더
-          많은 재미</strong>를 재공하는 것이다.
-        #original_hash: 2b993c0
-        '4': >-
-          세계 큐브 협회의 정신은 <strong>전 세계 사람들이 서로 도우면서 스포츠맨쉽을 토대로 친밀한 분위기에서 같이
-          재미</strong>를 느끼는 것이다.
     structure:
       #original_hash: 9482c5d
       title: 조직도
       board:
         #original_hash: abd2828
         name: WCA 대표단
-        description: '세계 큐브 협회는 다음 WCA 대표단이 이끈다:'
-      #original_hash: b0c72a9
-      committees: 'WCA의 활동은 다음 부서들이 책임진다:'
+      #original_hash: d54d953
+      committees: >-
+        WCA의 부서들은 WCA의 중추적인 역할을하며 WCA가 제 기능을 할 수 있도록 필요한 역할을 담당합니다. 이 부서들은 WCA
+        파견위원과 선수들과 같은 WCA의 회원들로 이루어져 있습니다. 각 부서는 리더가 있으며, 그의 역할은 그 부서가 제 기능을 하도록
+        보장하며 부서의 다른 인원들을 이끌어줍니다. 의회는 특별한 종류의 부서로서 WCA Board에게 조언을 건네는 역할을 하며,
+        WCA 스태프가 아니여도 큐브계의 사람이면 함께할 수 있습니다. 부서나 의회의 인원 모집을 해야하면, 그에 해당되는 정보는
+        홈페이지 첫 페이지에 공지가 올라갑니다.
       wdc:
         #original_hash: c97077a
         name: WCA 징계위원회
@@ -2000,7 +2006,7 @@ ko:
       wfc:
         #original_hash: 9cb13de
         name: WCA 회계위원회
-        #original_hash: 2d4807e
+        #original_hash: b4ed44b
         description: WCA 회계위원회는 WCA의 회계를 관리한다.
       wec:
         #original_hash: 83bd1d0
@@ -2066,12 +2072,12 @@ ko:
   regional_organizations:
     #original_hash: 37b8fdc
     title: 지역 단체
-    #original_hash: ba87c07
+    #original_hash: 15a06d6
     content: WCA 공인 단체 목록
     how_to:
-      #original_hash: fc3af12
-      title: WCA 지역 단체가 되는 방법
-      #original_hash: cc1639d
+      #original_hash: b243b1f
+      title: WCA 공인 지역 단체가 되는 방법
+      #original_hash: f042a88
       description: >-
         WCA는 전 세계의 다양한 지역 단체를 인정합니다. WCA 지역 단체의 목적은 해당 지역에서 WCA 대회를 주최하고 해당 지역의
         WCA 활동을 돕는 것입니다. 지역 단체를 인정 받고 싶은 나라는 지원서를 제출하기 전에 각자 지역에서 WCA과 함께 일할 것을
@@ -2082,15 +2088,15 @@ ko:
       list:
         #original_hash: 22a9f26
         '1': 해당 지역에서 활발히 WCA 대회를 주최하거나 지원한다
-        #original_hash: 8c5a7fe
+        #original_hash: 63714d1
         '2': 해당 지역의 대륙 대회를 활발히 지원한다
-        #original_hash: 8943714
+        #original_hash: 3c07dd6
         '3': WCA 회칙과 규정에 있는 목적들을 존중하며 실천에 옮긴다
         #original_hash: 0c3576b
         '4': WCA 규정을 지킨다
-        #original_hash: 23cda60
+        #original_hash: 1a9e6c5
         '5': WCA 관계자의 결정에 따른다
-        #original_hash: efe2b55
+        #original_hash: d4ae7c1
         '6': 해당 지역 단체의 회식과 규정을 전자 형식으로 WCA에 제출한다
     application_instructions:
       #original_hash: 4da829b
@@ -2378,11 +2384,11 @@ ko:
     paragraph3:
       #original_hash: 00d3bf8
       title: WCA 대회 공지 마감일
-      #original_hash: 305cfb1
+      #original_hash: 3613823
       content_html: >-
         <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>권장
-        사항 8a4++</a>에 의거하여 모든 WCA 대회는 일반적으로 대회 시작 날의 한 달 전에 발표됩니다. 특별한 경우에 이 조건을
+        사항 8a4++</a>에 의거하여 모든 WCA 대회는 일반적으로 대회 시작 날의 28일 전에 발표됩니다. 특별한 경우에 이 조건을
         충족 시키지 못한다면, WCAT의 결정에 따라 대회 시작 날의 2주 전까지 발표가 가능합니다. 만약 이 경우에 처할 가능성이
         있다면, 최대한 빨리 WCAT에게 알려 줄 것을 추천합니다. 너무 늦게 알려주시면 대회 발표가 거절 될 수 있습니다.
     paragraph4:
@@ -2423,20 +2429,20 @@ ko:
     paragraph-events:
       #original_hash: b16c5f1
       title: 종목 발표
-      #original_hash: cee85f7
+      #original_hash: 7ad62c7
       content: >-
         WCA 대회에서 열릴 종목은 WCAT에게 승인 요청할시 WCA 파견위원에 의해서 결정됩니다. 이는 추가적으로 열릴 수도 있는 임시
         종목도 포함 됩니다. 이 이외의 종목 추가는 WCA 대표단의 승인이 있어야 합니다.
     paragraph5:
       #original_hash: 17d01de
       title: 대회 참가자 제한
-      #original_hash: b4748cf
+      #original_hash: bd8e6ee
       content_html: >-
         대회 참가자 제한은 대회별 또는 종목별로 이루어 질 수 있습니다. (<a
-        href='https://www.worldcubeassociation.org/regulations/#Z4'>규정 Z4</a>
-        참조.) 조항 Z의 모든 사항들은 WCA 파견위원이 WCAT의 승인을 받아야 합니다. 대회 참가자 제한은 기대 참가자 기호를
-        고려하여 조심스럽게 결정되어야 합니다. 단순한 이유로 참가자 제한을 더 적은 숫자로 제한하면 안됩니다. 대회 장소를 구할 당시에
-        참가자 제한을 염두해두고 구해야합니다. 참가자 제한은 WCA 홈페이지의 각 대회 홈페이지에 명시되어야 합니다.
+        href='https://www.worldcubeassociation.org/regulations/#Z4'>대회 규정 Z4</a>
+        참조.) WCA 파견위원이 WCAT의 승인을 받아야 합니다. 대회 참가자 제한은 기대 참가자 기호를 고려하여 조심스럽게 결정되어야
+        합니다. 단순한 이유로 참가자 제한을 더 적은 숫자로 제한하면 안됩니다. 대회 장소를 구할 당시에 참가자 제한을 염두해두고
+        구해야합니다. 참가자 제한은 WCA 홈페이지의 각 대회 홈페이지에 명시되어야 합니다.
     paragraph6:
       #original_hash: ce4c3d0
       title: 참가 신청 관리
