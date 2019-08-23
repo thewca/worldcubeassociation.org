@@ -1,7 +1,0 @@
-# Country overrides until https://github.com/onomojo/i18n-country-translations/pull/53 gets merged
-ja:
-  countries:
-    GE: ジョージア
-    KN: セントクリストファー・ネービス
-    MK: 北マケドニア
-    SZ: エスワティニ
