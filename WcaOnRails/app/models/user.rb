@@ -662,7 +662,7 @@ class User < ApplicationRecord
   end
 
   def can_view_delegate_matters?
-    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee? || competition_announcement_team?
+    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee? || competition_announcement_team? || weat_team?
   end
 
   def can_manage_incidents?
@@ -691,7 +691,7 @@ class User < ApplicationRecord
   end
 
   def can_see_admin_competitions?
-    can_admin_competitions? || senior_delegate? || quality_assurance_committee?
+    can_admin_competitions? || senior_delegate? || quality_assurance_committee? || weat_team?
   end
 
   def can_approve_media?
