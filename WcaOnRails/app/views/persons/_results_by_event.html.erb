@@ -43,11 +43,11 @@
                   </td>
                   <td class="round"><%= t "rounds.#{result.roundTypeId}.cellName" %></td>
                   <td class="place"><%= result.pos %></td>
-                  <td class="single <%= 'pb' if pb_markers[result.id][:single] %>">
+                  <td class="single <%= pb_type_class_for_result(result.regionalSingleRecord, pb_markers[result.id][:single]) %>">
                     <%= result.best_solve.clock_format %>
                   </td>
                   <td class="regional-single-record"><%= result.regionalSingleRecord %></td>
-                  <td class="average <%= 'pb' if pb_markers[result.id][:average] %>">
+                  <td class="average <%= pb_type_class_for_result(result.regionalAverageRecord, pb_markers[result.id][:average]) %>">
                     <%= result.average_solve.clock_format %>
                   </td>
                   <td class="regional-average-record"><%= result.regionalAverageRecord %></td>

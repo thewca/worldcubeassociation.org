@@ -64,4 +64,20 @@ module ResultsHelper
     rows_to_display = world_rows + continents_rows + countries_rows
     [rows_to_display, first_continent_index, first_country_index]
   end
+
+  def pb_type_class_for_result(regional_record, pb_marker)
+    if pb_marker
+      record_class = 'pb'
+      if regional_record.present?
+        if regional_record == 'WR'
+          record_class = 'wr'
+        elsif regional_record == 'NR'
+          record_class = 'nr'
+        else
+          record_class = 'cr'
+        end
+      end
+    end
+    record_class
+  end
 end
