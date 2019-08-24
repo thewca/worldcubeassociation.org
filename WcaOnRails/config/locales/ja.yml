@@ -26,6 +26,8 @@ ja:
     KR: 大韓民国
     #original_hash: 673b1cf
     LC: セントルシア
+    #original_hash: e2ac50f
+    MK: 北マケドニア
     #original_hash: 928b7c4
     MM: ミャンマー
     #original_hash: d887137
@@ -34,6 +36,8 @@ ja:
     PS: パレスチナ
     #original_hash: 655191a
     ST: サントメ・プリンシペ
+    #original_hash: 16cc7f8
+    SZ: エスワティニ
     #original_hash: 4d206a8
     TT: トリニダード・トバゴ
     #original_hash: 0f3f60b
@@ -455,13 +459,17 @@ ja:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: 見学者の入場料
         #original_hash: 723cad9
-        regulation_z1: 競技の開始以前に特定の時点で、競技者のパズル提出を求める。
+        early_puzzle_submission: 競技の開始以前に特定の時点で、競技者のパズル提出を求める
         #original_hash: 78308cc
-        regulation_z1_reason: パズル提出を早く設定する理由
+        early_puzzle_submission_reason: パズル提出を早く設定する理由および詳細
         #original_hash: 88da0ef
-        regulation_z3: 特定の種目の参加者を制限するために、過去の記録を使用する。
+        qualification_results: 特定の種目の参加者を制限するために、過去の記録を使用する
         #original_hash: 1ec6dd4
-        regulation_z3_reason: 過去の記録の適用の理由および詳細
+        qualification_results_reason: 過去の記録の適用の理由および詳細
+        #original_hash: ac30de9
+        event_restrictions: 特定の種目への同時参加を制限する。
+        #original_hash: 4bf194c
+        event_restrictions_reason: 特定種目への同時参加を制限する理由および詳細
       registration:
         #original_hash: 3c23a67
         guests: 見学者人数
@@ -810,13 +818,17 @@ ja:
           現在のところ見学者入場料集金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の集金は手動で行ってください。<br/>0
           と入力した場合、「見学者入場料は無料です。」と表示されます。
         #original_hash: da39a3e
-        regulation_z1: ''
+        early_puzzle_submission: ''
         #original_hash: 4e8488b
-        regulation_z1_reason: パズル提出を早く設定する理由を詳しく説明してください (英語で)
+        early_puzzle_submission_reason: パズル提出を早く設定する理由を詳しく説明してください (英語で)
         #original_hash: da39a3e
-        regulation_z3: ''
+        qualification_results: ''
         #original_hash: f859883
-        regulation_z3_reason: 過去の記録の適用の理由および詳細を記載してください (英語で)
+        qualification_results_reason: 過去の記録の適用の理由および詳細を記載してください (英語で)
+        #original_hash: da39a3e
+        event_restrictions: ''
+        #original_hash: d3329d7
+        event_restrictions_reason: 特定種目への同時参加を制限する理由および詳細を記載してください (英語で)
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1756,6 +1768,8 @@ ja:
       stripe_connected: Stripe アカウントと連携しました。この大会の参加費の支払いをこのアカウントで受け取ることができます。
       #original_hash: 0a4bb53
       stripe_not_connected: 問題があり、Stripe アカウントを連携できませんでした。
+      #original_hash: 724cf0d
+      championship_exists: '%{year} 年にすでに %{championship_type} が開催されています'
     my_competitions:
       #original_hash: 5c6d3ea
       title: 自分の大会
@@ -2592,11 +2606,11 @@ ja:
     mission_footer: WCA のミッション
     #original_hash: cdab446
     who_we_are_title: WCA とは
-    #original_hash: 5924c26
+    #original_hash: 9248dc4
     who_we_are_content_html: >-
-      <p>世界キューブ協会 (WCA)
-      は、一部をひねることで操作する機械的パズル、すなわち回転パズルの大会を統制しています。このようなパズルで最も有名なものは、ハンガリーのルービック教授によって発明されたルービックキューブです。このようなもののうちいくつかが、WCA
-      の公式競技として選ばれています。</p><p>WCA
+      <p>世界キューブ協会 (WCA) は、一部をひねることで操作するような機械的パズル (回転パズル)
+      の大会を統制しています。このようなパズルで最も有名なものは、ハンガリーのルービック教授によって発明されたルービックキューブです。このようなパズルのうちのいくつかが
+      WCA の公式競技種目として選ばれています。</p> <p>WCA
       は10年以上にわたり発展を続け、現在までに10万人以上が我々の大会に参加しました。この成長の一方で、地域の代理人から理事に及ぶまで、我々は全面的にボランティアによって運営されています。我々は
       WCA
       が機能するために日々時間を割くすべての人々に感謝します。さらなる財政的支援により、我々がより多くの世界中でイベントを認定するなかで大会でより高度な専門性を発揮できることを望んでいます。</p>
@@ -2656,10 +2670,10 @@ ja:
         name: WCA 理事
         #original_hash: e0d37a2
         description: '世界キューブ協会は WCA 理事が指揮をとります。WCA 理事は以下のメンバーで構成されます:'
-      #original_hash: bb562cf
+      #original_hash: d54d953
       committees: >-
-        WCA のチームおよび委員会は、我々の組織に不可欠なもので、機能させるのに必要な日々の業務を遂行します。これらの委員会は代理人、競技者からなる
-        WCA
+        WCA のチームおよび委員会は、我々の組織に不可欠なもので、機能させるのに必要な日々の業務を遂行します。これらの委員会は WCA
+        代理人と競技者からなる WCA
         のコミュニティメンバーにより組織されています。各チームは、正常な機能を保証し、またチームの他のメンバーを導くリーダーが定められています。議事会は
         WCA 理事に対して助言を行い、また WCA
         スタッフではなくコミュニティメンバーからなる特殊な種別のチームです。これらの委員会、チーム、議事会が新たなメンバーを求めている際には、募集要項がトップページに掲載されます。
@@ -2726,13 +2740,18 @@ ja:
       wfc:
         #original_hash: 9cb13de
         name: WCA 財務委員会
-        #original_hash: 2d4807e
+        #original_hash: b4ed44b
         description: WCA の会計を担当します。
       wec:
         #original_hash: 83bd1d0
         name: WCA 倫理委員会
         #original_hash: c304d57
         description: WCA スタッフと外部スタッフによるすべての手続きが WCA 倫理規定を遵守しているかを確かめる役割を担っています。
+      weat:
+        #original_hash: d1dbb86
+        name: WCA 運営補佐チーム
+        #original_hash: 889dd90
+        description: このチームは WCA 理事の運営上の業務の遂行を担当します。
       wqac:
         #original_hash: 8f32116
         name: WCA 品質保証委員会
@@ -2915,6 +2934,9 @@ ja:
     wec:
       #original_hash: ec2b9c3
       info_html: この委員会は「WCA スタッフ」と「外部スタッフ」によるすべての手続きが倫理規定を遵守しているかを確かめる役割を担っています。
+    weat:
+      #original_hash: 889dd90
+      info_html: このチームは WCA 理事の運営上の業務の遂行を担当します。
     wqac:
       #original_hash: 0171b3b
       info_html: >-
