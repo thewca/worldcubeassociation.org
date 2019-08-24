@@ -26,6 +26,8 @@ pt-BR:
     KR: Coréia
     #original_hash: 673b1cf
     LC: Santa Lúcia
+    #original_hash: e2ac50f
+    MK: Macedônia do Norte
     #original_hash: 928b7c4
     MM: Myanmar
     #original_hash: d887137
@@ -34,6 +36,8 @@ pt-BR:
     PS: Palestina
     #original_hash: 655191a
     ST: São Tomé and Príncipe
+    #original_hash: 16cc7f8
+    SZ: Suazilândia
     #original_hash: 4d206a8
     TT: Trindade e Tobago
     #original_hash: 0f3f60b
@@ -470,17 +474,23 @@ pt-BR:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de entrada para espectadores/convidados
         #original_hash: 723cad9
-        regulation_z1: >-
-          Eu quero solicitar que os competidores entreguem os quebra-cabeças em
-          algum momento específico antes do início do evento.
+        early_puzzle_submission: >-
+          Eu gostaria de exigir que os competidores entreguem os quebra-cabeças
+          em algum momento específico antes do horário de início do evento
         #original_hash: 78308cc
-        regulation_z1_reason: Razão e detalhes para a entrega antecipada dos quebra-cabeças
+        early_puzzle_submission_reason: Razões e detalhes para a entrega antecipada dos quebra-cabeças
         #original_hash: 88da0ef
-        regulation_z3: >-
-          Eu quero resultados de qualificação para limitar quem pode participar
-          em alguns eventos
+        qualification_results: >-
+          Eu gostaria de usar resultados de qualificação para limitar quem pode
+          competir em certos eventos
         #original_hash: 1ec6dd4
-        regulation_z3_reason: Razão e detalhes para uso de resultados de qualificação
+        qualification_results_reason: Razões e detalhes para uso de resultados de qualificação
+        #original_hash: ac30de9
+        event_restrictions: >-
+          Eu gostaria de restringir as combinações de eventos nas quais os
+          competidores podem se inscrever
+        #original_hash: 4bf194c
+        event_restrictions_reason: Razões e detalhes para restrição de eventos
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
@@ -878,17 +888,23 @@ pt-BR:
           não são gerenciadas por este website. Se for configurado como 0, uma
           frase será mostrada dizendo que espectadores podem assistir de graça.
         #original_hash: da39a3e
-        regulation_z1: ''
+        early_puzzle_submission: ''
         #original_hash: 4e8488b
-        regulation_z1_reason: >-
-          Por favor informe aqui por que você quer que os competidores entreguem
-          os quebra-cabeças antecipadament. Por favor preencha em Inglês!
+        early_puzzle_submission_reason: >-
+          Por favor detalhe aqui os motivos para exigir a entrega antecipada dos
+          quebra-cabeças. Por favor preencha em Inglês!
         #original_hash: da39a3e
-        regulation_z3: ''
+        qualification_results: ''
         #original_hash: f859883
-        regulation_z3_reason: >-
-          Por favor informe aqui por que você quer usar tempos de qualificação.
-          Por favor preencha em Inglês!
+        qualification_results_reason: >-
+          Por favor detalhe aqui os motivos para o uso de resultados de
+          qualificação. Por favor preencha em Inglês!
+        #original_hash: da39a3e
+        event_restrictions: ''
+        #original_hash: d3329d7
+        event_restrictions_reason: >-
+          Por favor detalhe aqui os motivos para restrição de combinações de
+          eventos. Por favor preencha em Inglês!
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3134,7 +3150,7 @@ pt-BR:
       wfc:
         #original_hash: 9cb13de
         name: Comitê Financeiro da WCA
-        #original_hash: 2d4807e
+        #original_hash: b4ed44b
         description: Esse comitê é responsável por gerenciar as finanças da WCA
       wec:
         #original_hash: 83bd1d0
@@ -3149,6 +3165,13 @@ pt-BR:
           WEC é um confidente. Esse comitê também funciona como conselho de
           recurso se algum dos envolvidos não concorda com uma decisão do Comitê
           Disciplinar da WCA.
+      weat:
+        #original_hash: d1dbb86
+        name: Equipe de Assistentes Executivos da WCA
+        #original_hash: 889dd90
+        description: >-
+          Essa equipe é responsável por desempenhar as tarefas administrativas
+          do Conselho de Diretores da WCA.
       wqac:
         #original_hash: 8f32116
         name: Comitê de Garantia da Qualidade da WCA
@@ -3396,6 +3419,11 @@ pt-BR:
       info_html: >-
         Esse comitê tem a função de garantir que todos os procedimentos do Staff
         e External Staff da WCA estejam de acordo com o Código de Ética.
+    weat:
+      #original_hash: 889dd90
+      info_html: >-
+        Esta equipe é responsável por desempenhar as tarefas administrativas do
+        Conselho de Diretores da WCA.
     wqac:
       #original_hash: 0171b3b
       info_html: >-
