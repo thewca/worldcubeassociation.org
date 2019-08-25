@@ -83,6 +83,9 @@ module DatabaseDumper
           qualification_results_reason
           event_restrictions
           event_restrictions_reason
+          announced_by
+          results_posted_by
+          main_event_id
         ),
         db_default: %w(
           connected_stripe_account_id

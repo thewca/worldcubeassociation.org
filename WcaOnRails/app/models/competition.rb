@@ -131,6 +131,9 @@ class Competition < ApplicationRecord
     qualification_results_reason
     event_restrictions
     event_restrictions_reason
+    announced_by
+    results_posted_by
+    main_event_id
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/.freeze
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/.freeze
