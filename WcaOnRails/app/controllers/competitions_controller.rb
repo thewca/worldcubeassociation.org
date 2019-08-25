@@ -205,7 +205,7 @@ class CompetitionsController < ApplicationController
       full_post = nil
       ActiveRecord::Base.transaction do
         full_post = create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
-        comp.update!(announced_at: Time.now)
+        comp.update!(announced_at: Time.now, announced_by: current_user.id)
       end
       CompetitionsMailer.notify_organizers_of_announced_competition(comp, full_post).deliver_later
     end
@@ -344,7 +344,7 @@ class CompetitionsController < ApplicationController
         end
       end
       unless comp.results_posted?
-        comp.update!(results_posted_at: Time.now)
+        comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id)
         comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
         comp.registrations.accepted.each { |registration| registration.user.notify_of_id_claim_possibility(comp) }
       end
@@ -683,6 +683,7 @@ class CompetitionsController < ApplicationController
         :event_restrictions,
         :event_restrictions_reason,
         :guests_entry_fee_lowest_denomination,
+        :main_event_id,
         competition_events_attributes: [:id, :event_id, :_destroy],
         championships_attributes: [:id, :championship_type, :_destroy],
       ]

@@ -303,6 +303,7 @@ en:
         qualification_results_reason: "Reason and details for qualification results"
         event_restrictions: "I would like to restrict competitors from registering for specific combinations of events"
         event_restrictions_reason: "Reason and details for event restrictions"
+        main_event_id: "Main event"
       #context: a registration to a competition
       registration:
         guests: "Guests"
@@ -505,6 +506,7 @@ en:
         qualification_results_reason: "Please elaborate here why you would like to use qualification times. Please fill this out in English!"
         event_restrictions: ""
         event_restrictions_reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
+        main_event_id: "The winner of this event will be the winner of the competition."
       website_contact:
         inquiry: ""
         competition_id: ""

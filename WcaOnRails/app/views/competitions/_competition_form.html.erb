@@ -216,6 +216,13 @@
         <%= f.input :event_restrictions %>
         <%= f.input :event_restrictions_reason %>
 
+        <% if @competition.events.any? %>
+          <hr>
+          <%= f.input :main_event_id do %>
+            <%= f.select :main_event_id, options_for_select(@competition.events.map { |event| [event.name, event.id] }, @competition.main_event_id), { include_blank: "" }, { class: "form-control main-event" } %>
+          <% end %>
+        <% end %>
+
       </fieldset>
 
       <hr>

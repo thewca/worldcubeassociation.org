@@ -641,12 +641,13 @@ RSpec.describe CompetitionsController do
   end
 
   describe 'GET #post_announcement' do
-    context 'when signed in as results team member' do
-      sign_in { FactoryBot.create(:user, :wrt_member) }
+    context 'when signed in as competition announcement team member' do
+      let(:wcat_member) { FactoryBot.create(:user, :wcat_member) }
 
       # Posts should always be in English, therefore we want to check using an English text,
       # even if the user posting has a different locale
       before :each do
+        sign_in wcat_member
         session[:locale] = :fr
       end
 
@@ -654,10 +655,15 @@ RSpec.describe CompetitionsController do
         competition.update_attributes(start_date: "2011-12-04", end_date: "2011-12-05")
         organizer = FactoryBot.create :user
         competition.organizers << organizer
+        expect(competition.announced_at).to be nil
+        expect(competition.announced_by).to be nil
         expect(CompetitionsMailer).to receive(:notify_organizers_of_announced_competition).with(competition, anything).and_call_original
         expect do
           get :post_announcement, params: { id: competition }
         end.to change { enqueued_jobs.size }.by(1)
+        competition.reload
+        expect(competition.announced_at.to_f).to be < Time.now.to_f
+        expect(competition.announced_by).to eq wcat_member.id
         post = assigns(:post)
         expect(post.title).to eq "#{competition.name} on December 4 - 5, 2011 in #{competition.cityName}, #{competition.country.name_in(:en)}"
         expect(post.body).to match(/in #{competition.cityName}, #{competition.country.name_in(:en)}\./)
@@ -675,11 +681,12 @@ RSpec.describe CompetitionsController do
 
   describe 'GET #post_results' do
     context 'when signed in as results team member' do
-      sign_in { FactoryBot.create(:user, :wrt_member) }
+      let(:wrt_member) { FactoryBot.create(:user, :wrt_member) }
 
       # Posts should always be in English, therefore we want to check using an English text,
       # even if the user posting has a different locale
       before :each do
+        sign_in wrt_member
         session[:locale] = :fr
       end
 
@@ -982,6 +989,7 @@ RSpec.describe CompetitionsController do
           regionalAverageRecord: "",
         )
         expect(competition.results_posted_at).to be nil
+        expect(competition.results_posted_by).to be nil
         get :post_results, params: { id: competition }
         post = assigns(:post)
         expect(post.body).to include "World records: Jeremy Fleischman&lrm; 3x3x3 One-Handed 50.00 (average), " \
@@ -991,6 +999,7 @@ RSpec.describe CompetitionsController do
         expect(post.title).to include "in #{competition.cityName}, #{competition.country.name_in(:en)}"
         competition.reload
         expect(competition.results_posted_at.to_f).to be < Time.now.to_f
+        expect(competition.results_posted_by).to eq wrt_member.id
       end
 
       it "sends the notification emails to users that competed" do
