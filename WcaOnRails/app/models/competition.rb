@@ -352,8 +352,8 @@ class Competition < ApplicationRecord
   def championship_warnings
     warnings = {}
     self.championships.each do |championship|
-      if Championship.joins(:competition).merge(Competition.visible).exists?(championship_type: championship.championship_type, Competitions: { year: self.year })
-        warnings[championship.championship_type] = I18n.t('competitions.messages.championship_exists', championship_type: championship.name, year: self.year)
+      if Championship.joins(:competition).merge(Competition.visible).exists?(championship_type: championship.championship_type, competition_id: Competition.where('YEAR(start_date) = ?', self.start_date.year))
+        warnings[championship.championship_type] = I18n.t('competitions.messages.championship_exists', championship_type: championship.name, year: self.start_date.year)
       end
     end
 
