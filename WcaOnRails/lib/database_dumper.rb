@@ -753,10 +753,13 @@ module DatabaseDumper
         end
 
         column_expressions = column_sanitizers.map do |column_name, column_sanitizer|
-          column_sanitizer == :copy ? "#{table_name}.#{column_name}" : "#{column_sanitizer} as #{column_name}"
+          column_sanitizer == :copy ? "#{table_name}.#{column_name}" : "#{column_sanitizer} as #{ActiveRecord::Base.connection.quote_column_name column_name}"
         end.join(", ")
 
-        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{column_sanitizers.keys.join(", ")}) SELECT #{column_expressions} FROM #{table_name} #{table_sanitizer[:where_clause]}"
+        # Some column names like "rank" are reserved keywords starting mysql 8.0 and require quoting.
+        quoted_column_list = column_sanitizers.keys.map { |column_name| ActiveRecord::Base.connection.quote_column_name column_name }.join(", ")
+
+        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{table_name} #{table_sanitizer[:where_clause]}"
         ActiveRecord::Base.connection.execute(populate_table_sql)
       end
 
