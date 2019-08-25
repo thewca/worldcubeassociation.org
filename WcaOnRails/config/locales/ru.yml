@@ -26,6 +26,8 @@ ru:
     KR: Республика Корея
     #original_hash: 673b1cf
     LC: Сент-Люсия
+    #original_hash: e2ac50f
+    MK: Северная Македония
     #original_hash: 928b7c4
     MM: Мьянма
     #original_hash: d887137
@@ -34,6 +36,8 @@ ru:
     PS: Палестина
     #original_hash: 655191a
     ST: Сан-Томе и Принсипи
+    #original_hash: 16cc7f8
+    SZ: Эсватини
     #original_hash: 4d206a8
     TT: Тринидад и Тобаго
     #original_hash: 0f3f60b
@@ -476,17 +480,25 @@ ru:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Взнос для зрителей
         #original_hash: 723cad9
-        regulation_z1: >-
-          Я хочу заставить участников сдать головоломки в определённое время, до
+        early_puzzle_submission: >-
+          Я хочу, чтобы участники сдали головоломки в специальное время до
           начала дисциплины
         #original_hash: 78308cc
-        regulation_z1_reason: Причина требования ранней сдачи головоломок
+        early_puzzle_submission_reason: Причины и детали ранней сдачи головоломок
         #original_hash: 88da0ef
-        regulation_z3: >-
-          Я хочу использовать квалификационные результаты для ограничения
-          участников в некоторых дисциплинах
+        qualification_results: >-
+          Я хочу использовать квалификацию, чтобы ограничить участников в
+          некоторых дисциплинах
         #original_hash: 1ec6dd4
-        regulation_z3_reason: Причина применения квалификации
+        qualification_results_reason: Причины и детали использования квалификации
+        #original_hash: ac30de9
+        event_restrictions: >-
+          Я хочу запретить участникам регистрироваться на определённую
+          комбинацию дисциплин
+        #original_hash: 4bf194c
+        event_restrictions_reason: Причины и детали ограничений по дисциплинам
+        #original_hash: 3c24bd2
+        main_event_id: Главная дисциплина
       registration:
         #original_hash: 3c23a67
         guests: Гости
@@ -886,17 +898,26 @@ ru:
           принимать взносы для гостей. Если здесь стоит 0, участникам будет
           показано, что зрители могут прийти бесплатно.
         #original_hash: da39a3e
-        regulation_z1: ''
+        early_puzzle_submission: ''
         #original_hash: 4e8488b
-        regulation_z1_reason: >-
-          Пожалуйста, напишите здесь, почему вы хотите заставить участников
-          сдавать головоломки раньше. Заполните это поле по-английски!
+        early_puzzle_submission_reason: >-
+          Пожалуйста, объясните, почему вы хотите заставить участников заранее
+          сдать головоломки. Заполняйте это поле по-английски!
         #original_hash: da39a3e
-        regulation_z3: ''
+        qualification_results: ''
         #original_hash: f859883
-        regulation_z3_reason: >-
-          Пожалуйста, напишите здесь, почему вы хотите использовать
-          квалификацию. Заполните это поле по-английски!
+        qualification_results_reason: >-
+          Пожалуйста, объясните, почему вы хотите использовать квалификацию.
+          Заполняйте это поле по-английски!
+        #original_hash: da39a3e
+        event_restrictions: ''
+        #original_hash: d3329d7
+        event_restrictions_reason: >-
+          Пожалуйста, объясните, почему вы хотите запретить участникам
+          регистрироваться на некоторые комбинации дисциплин. Заполняйте это
+          поле по-английски!
+        #original_hash: 1067798
+        main_event_id: Победитель этой дисциплины будет победителем соревнования.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1403,6 +1424,22 @@ ru:
         header: 'Вас удалили из списка организаторов %{competition}'
         #original_hash: 66cb109
         information: '%{remover} удалил(а) вас из списка организаторов %{competition}'
+      registration_reminder_email:
+        #original_hash: 7d355cb
+        header: 'Регистрация на %{competition} скоро откроется'
+        #original_hash: c9d0561
+        intro: 'Здравствуйте, %{name}!'
+        #original_hash: a8f7e72
+        information_html: >-
+          Напоминаем, что регистрация на <a
+          href=%{competition_url}>%{competition}</a> откроется менее, чем через
+          24 часа.
+        #original_hash: 2b93022
+        not_accepted_html: 'Вы зарегистрировались, но ваша регистрация не была одобрена.'
+        #original_hash: 3724e7c
+        more_info_html: >-
+          Пожалуйста, проверьте требования к регистрации на <a
+          href=%{competition_url}>странице соревнования</a>.
     claim_wca_id:
       #original_hash: f28bf87
       title: Затребовать WCA ID
@@ -2002,6 +2039,8 @@ ru:
         платежи за это соревнование.
       #original_hash: 0a4bb53
       stripe_not_connected: 'Возникла проблема, и мы не смогли подключить ваш Stripe аккаунт.'
+      #original_hash: 724cf0d
+      championship_exists: 'В %{year} г. уже есть %{championship_type}'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Мои соревнования
@@ -2012,6 +2051,12 @@ ru:
         зарегистрированных на него участников можно посмотреть на его сайте.
       #original_hash: 94a2fc8
       past_competitions: Прошедшие соревнования
+      #original_hash: ec7e697
+      bookmarked_title: Помеченные соревнования
+      #original_hash: e5665fb
+      bookmarked_explanation: >-
+        Соревнования, которые вы пометили на сайте WCA. Мы пришлём вам
+        напоминание за 24 часа до открытия регистрации.
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2119,6 +2164,12 @@ ru:
         range_past_html: >-
           Онлайн-регистрация открылась в %{start_date_and_time} и закрылась в
           %{end_date_and_time}.
+      #original_hash: 8eda7ac
+      bookmark: Пометить это соревнование
+      #original_hash: 4dfea97
+      is_bookmarked: Вы пометили это соревнование
+      #original_hash: 74598a7
+      number_of_bookmarks: Сколько раз это соревнование было помечено
     index:
       #original_hash: db98a68
       title: Соревнования
@@ -2208,6 +2259,10 @@ ru:
       competitions_list: список соревнований
       #original_hash: 9104a03
       no_past_competitions: У вас нет прошедших соревнований.
+      #original_hash: 43c3543
+      no_bookmarked_competitions: >-
+        Вы не отметили никаких соревнований. Нажмите на иконку закладки на
+        странице соревнований, чтобы сохранить его здесь!
     competition_form:
       #original_hash: 2b81984
       wcat: Команда Анонсов Соревнований WCA (WCAT)
@@ -3123,7 +3178,7 @@ ru:
       wfc:
         #original_hash: 9cb13de
         name: Финансовый Комитет WCA
-        #original_hash: 2d4807e
+        #original_hash: b4ed44b
         description: Эта команда ответственна за управление финансами WCA
       wec:
         #original_hash: 83bd1d0
@@ -3138,6 +3193,13 @@ ru:
           Зарегистрированным Спидкубером, имеющим доверие WEC. Этот комитет
           также играет роль апелляционного суда, если с решением WDC не согласен
           кто-то из замешанных лиц.
+      weat:
+        #original_hash: d1dbb86
+        name: Команда Помощников Директоров WCA
+        #original_hash: 889dd90
+        description: >-
+          Эта команда ответственна за административные задачи Совета Директоров
+          WCA.
       wqac:
         #original_hash: 8f32116
         name: Комитет по обеспечению качества WCA
@@ -3382,6 +3444,11 @@ ru:
       info_html: >-
         Этот комитет следит за тем, что весь Персонал WCA и Внешний Персонал
         соблюдает Этический Кодекс.
+    weat:
+      #original_hash: 889dd90
+      info_html: >-
+        Эта команда ответственна за административные задачи Совета Директоров
+        WCA.
     wqac:
       #original_hash: 0171b3b
       info_html: >-
