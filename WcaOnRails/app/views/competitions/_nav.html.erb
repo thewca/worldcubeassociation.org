@@ -211,7 +211,7 @@
     </div>
     <div id="competition-data">
       <h3>
-        <% if current_user %>
+        <% if current_user && @competition.upcoming? %>
           <span class="bookmark-icon" id="not-bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.bookmark') %>" <% if current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
             <%= icon('far', 'bookmark') %>
           </span>
