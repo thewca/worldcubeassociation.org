@@ -36,6 +36,7 @@ FactoryBot.define do
 
     trait :results_posted do
       results_posted_at { Time.now }
+      results_posted_by { FactoryBot.create(:user, :wrt_member).id }
     end
 
     trait :with_competitor_limit do
@@ -45,6 +46,7 @@ FactoryBot.define do
     end
 
     events { Event.where(id: event_ids) }
+    main_event_id { events.first.id if events.any? }
 
     venue { "My backyard" }
     venueAddress { "My backyard street" }

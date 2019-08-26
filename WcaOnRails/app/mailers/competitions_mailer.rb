@@ -32,9 +32,8 @@ class CompetitionsMailer < ApplicationMailer
     end
   end
 
-  def notify_organizers_of_announced_competition(competition, post)
+  def notify_organizers_of_announced_competition(competition)
     @competition = competition
-    @post = post
     if @competition.organizers.empty?
       nil
     else

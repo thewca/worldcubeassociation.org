@@ -72,6 +72,12 @@
         <% end %>
       </dd>
 
+      <dt><%= t '.main_event' %></dt>
+      <dd class="competition-events-list">
+        <% main_event = @competition.events.select { |event| event.id == @competition.main_event_id }.first %>
+        <%= cubing_icon main_event.id, data: { toggle: "tooltip", placement: "top", container: "body" }, title: main_event.name %>
+      </dd>
+
       <% if competition.results_posted? %>
         <dt><%= t 'competitions.nav.menu.competitors' %></dt>
         <dd><%= @competition.competitors.count %></dd>
@@ -115,9 +121,8 @@
         </dd>
       </dl>
     <% end %>
-
-
   </div>
+
   <div class="col-md-12">
     <dl class="dl-horizontal">
       <% if competition.registration_open.present? && competition.registration_close.present? %>
@@ -155,6 +160,22 @@
           <%= render "registration_requirements", show_links_to_register_page: true %>
         </div>
       </dd>
+      <% if competition.results_posted? %>
+        <dt><%= t '.highlights' %></dt>
+        <dd>
+          <div id="show_highlights">
+            <%= t('.click_to_display_highlights_html', link_here: link_to(t('common.here'), "#")) %>
+          </div>
+          <div id="hide_highlights">
+            <%= link_to(t('.hide_highlights'), "#") %>
+          </div>
+          <div class="collapse" id="highlights_text">
+            <p><%=md winners(competition, main_event) %></p>
+
+            <p><%=md records(competition) %></p>
+          </div>
+        </dd>
+      <% end %>
     </dl>
   </div>
 </div>
@@ -176,6 +197,28 @@
         $("#registration_requirements_text").collapse("hide");
         $("#hide_registration_requirements").hide();
         $("#show_registration_requirements").show();
+      });
+    });
+  </script>
+<% end %>
+
+<% if competition.results_posted? %>
+  <script>
+    $(function () {
+      $("#highlights_text").collapse({
+        toggle: true
+      });
+      $("#hide_highlights a").click(function (e) {
+        e.preventDefault();
+        $("#highlights_text").collapse("hide");
+        $("#hide_highlights").hide();
+        $("#show_highlights").show();
+      });
+      $("#show_highlights a").click(function (e) {
+        e.preventDefault();
+        $("#highlights_text").collapse("show");
+        $("#show_highlights").hide();
+        $("#hide_highlights").show();
       });
     });
   </script>

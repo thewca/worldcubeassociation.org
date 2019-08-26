@@ -16,6 +16,115 @@ module CompetitionsHelper
     messages.join(' ')
   end
 
+  def pretty_print_result(result, short: false)
+    event = result.event
+    sort_by = result.format.sort_by
+
+    # If the format for this round was to sort by average, but this particular
+    # result did not achieve an average, then switch to "best", and do not allow
+    # a short format (to make it clear what happened).
+    if sort_by == "average" && result.to_solve_time(:average).incomplete?
+      sort_by = "single"
+      short = false
+    end
+
+    solve_time = nil
+    a_win_by_word = nil
+    case sort_by
+    when "single"
+      solve_time = result.to_solve_time(:best)
+      if event.multiple_blindfolded?
+        a_win_by_word = t('competitions.competition_info.result')
+      else
+        a_win_by_word = t('competitions.competition_info.single')
+      end
+    when "average"
+      solve_time = result.to_solve_time(:average)
+      a_win_by_word = result.format.id == "a" ? t('competitions.competition_info.average') : t('competitions.competition_info.mean')
+    end
+
+    if short
+      solve_time.clock_format
+    else
+      t('competitions.competition_info.result_sentence', a_win_by_word: a_win_by_word, result: solve_time.clock_format_with_units)
+    end
+  end
+
+  def people_to_sentence(results)
+    results
+      .sort_by(&:personName)
+      .map { |result| "[#{result.personName}](#{person_url result.personId})" }
+      .to_sentence
+  end
+
+  def winners(competition, main_event)
+    top_three = competition.results.where(event: main_event).podium.order(:pos)
+    results_by_place = top_three.group_by(&:pos)
+    winners = results_by_place[1]
+
+    text = t('competitions.competition_info.winner', winner: people_to_sentence(winners),
+                                                     result_sentence: pretty_print_result(winners.first),
+                                                     event_name: main_event.name)
+    if results_by_place[2]
+      text += t('competitions.competition_info.first_runner_up', first_runner_up: people_to_sentence(results_by_place[2]),
+                                                                 first_runner_up_result: pretty_print_result(top_three.second, short: true))
+      if results_by_place[3]
+        text += t('competitions.competition_info.and')
+        text += t('competitions.competition_info.second_runner_up', second_runner_up: people_to_sentence(results_by_place[3]),
+                                                                    second_runner_up_result: pretty_print_result(top_three.third, short: true))
+      else
+        text += "."
+      end
+    elsif results_by_place[3]
+      text += t('competitions.competition_info.second_runner_up', second_runner_up: people_to_sentence(results_by_place[3]),
+                                                                  second_runner_up_result: pretty_print_result(top_three.third, short: true))
+    end
+
+    text
+  end
+
+  def records(competition)
+    text = ""
+    codes = ["WR", "AfR", "AsR", "OcR", "ER", "NAR", "SAR"]
+    codes.each do |code|
+      comp_records = competition.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', code: code)
+      unless comp_records.empty?
+        text += t("competitions.competition_info.records.#{code.downcase}")
+        text += ": "
+        record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
+          results_by_personId = results_for_name.group_by(&:personId).sort
+          results_by_personId.map do |personId, results|
+            if results_by_personId.length > 1
+              # Two or more people with the same name set records at this competition!
+              # Append their WCA IDs to distinguish between them.
+              uniqueName = "[#{personName} (#{personId})](#{person_url personId})"
+            else
+              uniqueName = "[#{personName}](#{person_url personId})"
+            end
+            record_strs = results.sort_by do |r|
+              round_type = RoundType.c_find(r.roundTypeId)
+              [Event.c_find(r.eventId).rank, round_type.rank]
+            end.map do |result|
+              event = Event.c_find(result.eventId)
+              record_strs = []
+              if result.regionalSingleRecord == code
+                record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best))
+              end
+              if result.regionalAverageRecord == code
+                record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average))
+              end
+              record_strs
+            end.flatten
+            "#{uniqueName}&lrm; #{record_strs.to_sentence}"
+          end
+        end
+        text += "#{record_strs.join("; ")}.  \n" # Trailing spaces for markdown give us a <br>
+      end
+    end
+
+    text
+  end
+
   private def days_before_competition(date, competition)
     date ? (competition.start_date - date.to_date).to_i : nil
   end
