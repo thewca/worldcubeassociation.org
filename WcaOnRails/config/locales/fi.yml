@@ -26,6 +26,8 @@ fi:
     KR: Etelä-Korea
     #original_hash: 673b1cf
     LC: Saint Lucia
+    #original_hash: e2ac50f
+    MK: Pohjois-Makedonia
     #original_hash: 928b7c4
     MM: Myanmar
     #original_hash: d887137
@@ -34,6 +36,8 @@ fi:
     PS: Palestiina
     #original_hash: 655191a
     ST: São Tomé ja Príncipe
+    #original_hash: 16cc7f8
+    SZ: Swazimaa
     #original_hash: 4d206a8
     TT: Trinidad ja Tobago
     #original_hash: 0f3f60b
@@ -477,6 +481,8 @@ fi:
           kilpailla
         #original_hash: 4bf194c
         event_restrictions_reason: Syy ja lisätiedot koskien lajiyhdistelmien rajoituksia
+        #original_hash: 3c24bd2
+        main_event_id: Päälaji
       registration:
         #original_hash: 3c23a67
         guests: Vierailijat
@@ -886,6 +892,8 @@ fi:
         event_restrictions_reason: >-
           Please elaborate here why you would like to restrict certain event
           combinations. Please fill this out in English!
+        #original_hash: 1067798
+        main_event_id: Tämän lajin voittaja ilmoitetaan kilpailun voittajaksi.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1394,6 +1402,21 @@ fi:
         header: 'Sinut poistettiin kilpailun %{competition} järjestäjän roolista'
         #original_hash: 66cb109
         information: '%{remover} poisti sinut kilpailun %{competition} järjestäjän roolista.'
+      registration_reminder_email:
+        #original_hash: 7d355cb
+        header: '%{competition}: rekisteröityminen avautuu pian'
+        #original_hash: c9d0561
+        intro: 'Hei %{name},'
+        #original_hash: a8f7e72
+        information_html: >-
+          Tämä on muistutus siitä, että rekisteröityminen kilpailuun <a
+          href=%{competition_url}>%{competition}</a> avautuu 24 tunnin kuluessa.
+        #original_hash: 2b93022
+        not_accepted_html: 'Olet rekisteröitynyt, mutta rekisteröitymistäsi ei ole hyväksytty.'
+        #original_hash: 3724e7c
+        more_info_html: >-
+          Lue rekisteröitymisvaatimukset ja muut tiedot <a
+          href=%{competition_url}>kilpailusivulta</a>.
     claim_wca_id:
       #original_hash: f28bf87
       title: Lunasta WCA ID
@@ -2008,6 +2031,13 @@ fi:
         verkkosivuilla.
       #original_hash: 94a2fc8
       past_competitions: Menneet kilpailut
+      #original_hash: ec7e697
+      bookmarked_title: Tallennetut kilpailut
+      #original_hash: e5665fb
+      bookmarked_explanation: >-
+        Kilpailut, jotka olet tallentanut WCA-sivustolla. Lähetämme
+        sähköpostitse muistutuksen 24 tuntia ennen rekisteröitymisen
+        avautumista.
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2113,6 +2143,12 @@ fi:
         range_past_html: >-
           Online-rekisteröityminen alkoi %{start_date_and_time} ja loppui
           %{end_date_and_time}.
+      #original_hash: 8eda7ac
+      bookmark: Tallenna tämä kilpailu
+      #original_hash: 4dfea97
+      is_bookmarked: Olet tallentanut tämän kilpailun
+      #original_hash: 74598a7
+      number_of_bookmarks: Kilpailun tallentaneiden määrä
     index:
       #original_hash: db98a68
       title: Kilpailut
@@ -2200,6 +2236,10 @@ fi:
       competitions_list: kilpailulista
       #original_hash: 9104a03
       no_past_competitions: Sinulla ei ole menneitä kilpailuja.
+      #original_hash: 43c3543
+      no_bookmarked_competitions: >-
+        Et ole tallentanut tulevia kilpailuja. Klikkaa kirjanmerkkikuvaketta
+        kilpailusivulla tallentaaksesi kilpailun tähän!
     competition_form:
       #original_hash: 2b81984
       wcat: WCA Competition Announcement Team
