@@ -160,7 +160,7 @@ $eventOptionsStr = implode("", array_map(function($eventId) {
 }, $eventIds));
 print "<li><p>Sanity Checks:</p>
          <ol type='a'>
-           <li><a href='/competitions/$compIdUrl' target='_blank' class='link-external external'>View the Public competition page</a></li>
+           <li><a href='/competitions/$compIdUrl/results/all?event=all' target='_blank' class='link-external external'>View the Public competition page</a></li>
            <li>
              Post the
              <a data-competition-id='$compIdUrl' href='#' id='post-results-link' target='_blank' class='link-external external'>

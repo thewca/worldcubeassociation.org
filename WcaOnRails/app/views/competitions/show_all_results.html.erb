@@ -1,17 +1,9 @@
 <% provide(:title, @competition.name) %>
 
 <%= render layout: 'results_nav' do %>
+  <%= tag :div, id: "selected-event", "data-selected": params[:event] %>
   <% cache @competition.result_cache_key("all_results") do %>
-    <div class="event-selector text-center">
-      <% @competition.events_with_round_types_with_results.each do |event, rounds_with_results| %>
-        <span class="event-radio">
-          <%= label_tag "radio-#{event.id}" do %>
-            <%= radio_button_tag "event", event.id, params[:event] == event.id, id: "radio-#{event.id}" %>
-            <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name %>
-          <% end %>
-        </span>
-      <% end %>
-    </div>
+    <%= render partial: "event_selector", locals: {competition: @competition, name: "top"} %>
     <% @competition.events_with_round_types_with_results.each do |event, rounds_with_results| %>
       <%= content_tag :div, class: ["event-#{event.id}", "one-event"] do %>
         <% rounds_with_results.each do |round, results| %>
@@ -22,6 +14,6 @@
         <% end %>
       <% end %>
     <% end %>
-
+    <%= render partial: "event_selector", locals: {competition: @competition, name: "bottom"} %>
   <% end %>
 <% end %>
