@@ -128,10 +128,6 @@ $(function() {
         }
       },
     });
-    // Workaround for https://github.com/Ionaru/easy-markdown-editor/pull/109/
-    editor.uploadImages = function(files, onSuccess, onError) {
-      this.uploadImagesUsingCustomFunction(editor.options.imageUploadFunction, files);
-    }
 
     // Trick to fix tab and shift+tab focus from:
     //  https://github.com/sparksuite/simplemde-markdown-editor/issues/122#issuecomment-176329907
