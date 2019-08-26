@@ -452,6 +452,8 @@ module DatabaseDumper
           wrc_incidents
           wdc_feedback_requested
           wdc_incidents
+          wrc_primary_user_id
+          wrc_secondary_user_id
         ),
       ),
     }.freeze,
