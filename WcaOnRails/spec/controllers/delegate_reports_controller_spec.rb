@@ -8,6 +8,7 @@ RSpec.describe DelegateReportsController do
   let!(:delegate_report1) { FactoryBot.create :delegate_report, competition: comp, schedule_url: "http://example.com" }
   let(:pre_delegate_reports_form_comp) { FactoryBot.create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
   let!(:delegate_report2) { FactoryBot.create :delegate_report, competition: pre_delegate_reports_form_comp, schedule_url: "http://example.com" }
+  let!(:wrc_members) { FactoryBot.create_list :user, 3, :wrc_member }
 
   context "not logged in" do
     it "redirects to sign in" do
@@ -92,6 +93,17 @@ RSpec.describe DelegateReportsController do
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newerer remarks" } }
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
+    end
+
+    it "posting report assigns two WRC users" do
+      expect(comp.delegate_report.wrc_primary_user).to be_nil
+      expect(comp.delegate_report.wrc_secondary_user).to be_nil
+      expect(CompetitionsMailer).to receive(:wrc_delegate_report_followup).with(comp).and_call_original
+      post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
+      comp.delegate_report.reload
+      expect(comp.delegate_report.wrc_primary_user).not_to be_nil
+      expect(comp.delegate_report.wrc_secondary_user).not_to be_nil
+      expect(comp.delegate_report.wrc_primary_user).not_to eq comp.delegate_report.wrc_secondary_user
     end
 
     it "posting report for an ancient competition doesn't send email notification" do

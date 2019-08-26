@@ -5,6 +5,8 @@ class DelegateReport < ApplicationRecord
 
   belongs_to :competition
   belongs_to :posted_by_user, class_name: "User"
+  belongs_to :wrc_primary_user, class_name: "User"
+  belongs_to :wrc_secondary_user, class_name: "User"
 
   attr_accessor :current_user
 
