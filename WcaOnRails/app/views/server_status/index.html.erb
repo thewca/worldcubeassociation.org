@@ -28,7 +28,7 @@
         <h3 class="panel-title">
           <span class="label label-<%= check.status %>"><%= check.label %></span>
           <% if check.description %>
-            <%= check.description %>
+            <pre><%= check.description %></pre>
           <% else %>
             Looking good!
           <% end %>
