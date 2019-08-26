@@ -374,7 +374,7 @@ de:
         notes: Anmerkungen
         #original_hash: 730db33
         receive_delegate_reports: >-
-          I möchte gerne Delegate Reports von WCA Competitions per E-Mail
+          Ich möchte gerne Delegate Reports von WCA Wettbewerben per E-Mail
           erhalten
         #original_hash: 57eaf24
         user_preferred_events: Favorisierte Disziplinen
@@ -584,7 +584,7 @@ de:
         competition_id: Passierte bei
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Competition
+        competitionId: Wettbewerb
         #original_hash: 3deb745
         type: Typ
         #original_hash: c3328c3
@@ -806,7 +806,7 @@ de:
         generate_website: ''
         #original_hash: b2af5f5
         external_registration_page: >-
-          Die Seite, auf der Teilnehmer sich für die Competition anmelden
+          Die Seite, auf der Teilnehmer sich für den Wettbewerb anmelden
           können. Dies muss eine gültige http(s) Adresse sein.
         #original_hash: 784879d
         base_entry_fee_lowest_denomination: >-
@@ -1251,7 +1251,7 @@ de:
       #original_hash: 3ad28c0
       teams: 'Teams, Kommitees, und Gremien'
       #original_hash: 02617c0
-      tutorial: Turniereinführungsveranstaltung
+      tutorial: Tutorial
       #original_hash: a34b69f
       contact: Kontakt
       #original_hash: 4fa8cc8
@@ -1553,7 +1553,7 @@ de:
           #original_hash: ff6d2e8
           '1': >-
             Das Profilbild muss dich zeigen und sollte dich in einer Art und
-            Weise darstellen, wie du bei einer Competition teilnehmen würdest.
+            Weise darstellen, wie du bei einem Wettbewerb teilnehmen würdest.
           #original_hash: 64ded69
           '2': >-
             Das Profilbild muss so umrahmt, geschnitten, justiert und beleuchtet
@@ -1629,7 +1629,7 @@ de:
       #original_hash: 8f785ea
       email_used_by_locked_account_html: >-
         wird bereits von einem anderen Account benutzt. Dieser wurde automatisch
-        als Ergebnis deiner Anmeldung für eine Competition über einen externen
+        als Ergebnis deiner Anmeldung für einen Wettbewerb über einen externen
         Service erstellt. Falls du der Besitzer der E-Mail-Adresse bist, kannst
         du dein Passwort <a href='/users/password/new'>hier</a> zurücksetzen.
     successes:
@@ -1930,7 +1930,7 @@ de:
     will_pay_here: Du wirst diese nach Abschicken der Registrierung zahlen
     #original_hash: b7ef562
     wont_pay_here: >-
-      Bitte lies die Informationen zur Competition, um mehr darüber zu erfahren,
+      Bitte lies die Informationen zum Wettbewerb, um mehr darüber zu erfahren,
       wie du bezahlen kannst
     refund_form:
       hints:
@@ -1990,7 +1990,7 @@ de:
       #original_hash: b52b179
       info: >-
         Dies wird eine bestätigte Anmeldung erstellen. Benutze dieses Formular
-        um spontane Anmeldungen während der Competition hinzuzufügen.
+        um spontane Anmeldungen während des Wettbewerbs hinzuzufügen.
       #original_hash: a11edb8
       add: Füge Anmeldung hinzu
   competitions:
@@ -2007,8 +2007,8 @@ de:
         bestätigst.
       #original_hash: a3aea56
       schedule_must_match_rounds: >-
-        Bitte stelle vor der Bestätigung der Compeition sicher, dass die
-        Competition mindestens eine Runde pro Event hat und dass der Zeitplan,
+        Bitte stelle vor der Bestätigung der Compeition sicher, dass der
+        Wettbewerb mindestens eine Runde pro Event hat und dass der Zeitplan,
         welchen du erstellt hast, alle Runden, die du angegeben hast, enthält.
       #original_hash: e390250
       create_success: Neuen Wettbewerb erfolgreich erstellt!
@@ -2253,7 +2253,7 @@ de:
       no_past_competitions: Du hast keine vergangenen Wettbewerbe.
     competition_form:
       #original_hash: 2b81984
-      wcat: WCA Wettbewerbsankündigungsteam
+      wcat: WCA Team für die Ankündigung von Wettbewerben
       #original_hash: f957dcb
       supports_md_html: >-
         Unterstützt <a
@@ -2261,7 +2261,7 @@ de:
         target='_blank'>Markdown</a>
       #original_hash: e5cbb13
       name_reason_html: >-
-        Eine kurze Erklärung des Namens der Competition. Der Name muss der <a
+        Eine kurze Erklärung des Namens des Wettbewerbs. Der Name muss der <a
         href='/documents/policies/external/Competition%20Name20Requirements.pdf'>WCA
         Competition Requirements Policy</a> entsprechen.
       #original_hash: 9d9126e
@@ -2282,7 +2282,7 @@ de:
       events: Disziplinen
       #original_hash: 09b819f
       deprecated_events: >-
-        Diese Competition hat Events, die nicht mehr offiziell sind. Die
+        Dieser Wettbewerb hat Events, die nicht mehr offiziell sind. Die
         Bearbeitung ist nicht möglich.
       #original_hash: cafc153
       public_and_locked_html: >-
@@ -2446,7 +2446,7 @@ de:
       schedule: Zeitplan
       #original_hash: 1060ed0
       no_schedule: >-
-        Diese Competition hat keinen Zeitplan, so dass das PDF nicht generiert
+        Dieser Wettbewerb hat keinen Zeitplan, so dass das PDF nicht generiert
         werden kann.
     events:
       time_limit_information:
@@ -2657,7 +2657,7 @@ de:
         #original_hash: e0f64f7
         citizen_of: Staatsbürger von
         #original_hash: 1917f4f
-        competition: Competition
+        competition: Wettbewerb
         #original_hash: e7f6fc5
         solves: Solves
         #original_hash: 0f21717
@@ -3027,13 +3027,13 @@ de:
     who_we_are_title: Wer wir sind
     #original_hash: 5924c26
     who_we_are_content_html: >-
-      <p>Die World Cube Association verwaltet Competitions für das Lösen von
+      <p>Die World Cube Association verwaltet Wettbewerbe im Lösen von
       mechanischen Puzzlen, die durch das Verdrehen von Gruppen an Teilen
       bedient werden, allgemein bekannt als "Drehpuzzle". Das bekannteste dieser
       Puzzle ist der Rubik's Cube, der von Professor Rubik aus Ungarn erfunden
       wurde. Eine Auswahl dieser Puzzle wurde als offizielle Events der WCA
       ausgewählt. </p> <p>Seit der Gründung der WCA im letzten Jahrzehnt haben
-      mehr als 100.000 Personen an unseren Competitions teilgenommen. Trotz
+      mehr als 100.000 Personen an unseren Wettbewerben teilgenommen. Trotz
       dieses Wachstums sind wir eine Organisation geblieben, die ausschliesslich
       von Freiwilligen geleitet wird - von lokalen Organisatoren, über
       Delegierte bis hin zum Vorstand. Wir sind dankbar über jeden, der sich die
@@ -3052,9 +3052,9 @@ de:
     #original_hash: 1ca8ac4
     our_goals_content_html: >-
       <p>Die World Cube Association möchte durch die steigende Erreichbarkeit
-      von Competitions jungen Menschen in aller Welt Möglichkeiten für die
+      von Wettbewerben jungen Menschen in aller Welt Möglichkeiten für die
       Community Mitgliedschaft und Leitung geben. Wir glauben, dass die
-      Erfahrungen, die junge Menschen bei Competitions und innerhalb unserer
+      Erfahrungen, die junge Menschen bei Wettbewerben und innerhalb unserer
       Community machen, Wachstumschancen für alle Beteiligten bietet und dass
       die Einführung von Veranstaltungen gegenüber neuen Gruppen von Personen es
       unserer gesamten Community erlaubt sich weiter zu stärken.</p>
@@ -3066,14 +3066,14 @@ de:
       Ländern und wir planen nicht, unser Wachstum bald zu verlangsamen! Die
       Cubing Community wächst kontinuierlich seitdem sie 2004 gegründet wurde
       und wir möchten dies in Zukunft unterstützen, indem wir die Erreichbarkeit
-      von Competitions in neuen Regionen erhöhen. In der Zukunft hoffen wir,
+      von Wettbewerben in neuen Regionen erhöhen. In der Zukunft hoffen wir,
       unsere Community auch durch Kooperationen mehr zu unterstützen und all die
       zu erreichen, die sich für Puzzle begeistern.</p>
     #original_hash: dc71704
     world_championship_title: Weltmeisterschaft
     #original_hash: 57cf7f7
     world_championship_content_html: >-
-      <p>Im Zweijahresturnus führen wir Competitions durch, bei denen
+      <p>Im Zweijahresturnus führen wir Wettbewerbe durch, bei denen
       schlußendlich der Weltmeister bestimmt wird. Diese Veranstaltungen
       bedürfen einer sehr sorgfältigen Planung durch Freiwillige, sowie einer
       großen finanziellen Verpflichtung, um den Veranstaltungsort zu reservieren
@@ -3101,7 +3101,7 @@ de:
         Die World Cube Association ist eine 501(c)(3) steuerbefreite
         Organisation. Als 100% von Freiwilligen geleitete
         Non-Profit-Organisation freuen wir uns über Spenden, die es uns helfen,
-        unsere Vision voranzutreiben und mehr erfolgreiche Competitions in der
+        unsere Vision voranzutreiben und mehr erfolgreiche Wettbewerbe in der
         ganzen Welt abzuhalten.
       #original_hash: 24c87db
       donate_credit: Per Kreditkarte spenden
@@ -3657,7 +3657,7 @@ de:
       #original_hash: 5aeb5bd
       content_html: >-
         Wähle die korrekte Wettbewerbs-ID durch Klick auf den
-        <em>Select...</em>-Knopf neben dem <em>Competition ID</em>-Feld aus.
+        <em>Select...</em>-Knopf neben dem <em>Wettbewerbs ID</em>-Feld aus.
       #original_hash: 3acf7d0
       content2_html: >-
         Ein Dialog mit einer Liste von zur Auswahl stehenden Wettbewerben wird
@@ -3811,7 +3811,7 @@ de:
       title: Fristen für die Ankündigung von Wettbewerben
       #original_hash: 3613823
       content_html: >-
-        Die Competition muss mindestens 28 Tage vor dem Termin angekündigt
+        Der Wettbewerb muss mindestens 28 Tage vor dem Termin angekündigt
         werden (siehe <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
         Requirements</a>).
@@ -3823,9 +3823,9 @@ de:
         WCA Wettbewerbe werden genehmigt wenn sie mindestens 100 km oder 19 Tage
         von jedem anderen Wettbewerb entfernt sind. Das WCA Board sollte einen
         Wettbewerb überprüfen, wenn die Distanz unter 200 km und die Zeitspanne
-        unter 26 Tagen liegt. Ein Delegierter, der eine Competition anfragt, der
+        unter 26 Tagen liegt. Ein Delegierter, der einen Wettbewerb anfragt, der
         diese Regeln nicht erfüllt, muss weitere Informationen angeben, warum
-        diese Competition trotzdem akzeptiert werden soll. Mögliche Gründe, die
+        diesen Wettbewerb trotzdem akzeptiert werden soll. Mögliche Gründe, die
         eine solche Entscheidung beeinflussen, sind folgende:
       olist1:
         #original_hash: de00462
@@ -3974,7 +3974,7 @@ de:
       media_guidelines:
         #original_hash: fd6984b
         '1': >-
-          Alle Medienberichte müssen für die ausgewählte Competition relevant
+          Alle Medienberichte müssen für den ausgewählten Wettbewerb relevant
           sein.
         #original_hash: 9821119
         '2': >-
