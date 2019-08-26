@@ -51,6 +51,7 @@
 //= require fullcalendar/lang/ru.js
 //= require fullcalendar/lang/sk.js
 //= require fullcalendar/lang/sl.js
+//= require fullcalendar/lang/th.js
 //= require fullcalendar/lang/vi.js
 //= require fullcalendar/lang/zh-cn.js
 //= require fullcalendar/lang/zh-tw.js
