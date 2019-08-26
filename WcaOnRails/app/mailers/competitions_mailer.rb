@@ -95,7 +95,18 @@ class CompetitionsMailer < ApplicationMailer
           (competition.delegate_report.wrc_feedback_requested ? ["regulations@worldcubeassociation.org"] : []) +
           (competition.delegate_report.wdc_feedback_requested ? ["disciplinary@worldcubeassociation.org"] : []),
         reply_to: competition.delegates.pluck(:email),
-        subject: "[wca-report] [#{competition.continent.name}] #{competition.name}",
+        subject: delegate_report_email_subject(competition),
+      )
+    end
+  end
+
+  def wrc_delegate_report_followup(competition)
+    I18n.with_locale :en do
+      @competition = competition
+      mail(
+        to: "regulations@worldcubeassociation.org",
+        reply_to: "regulations@worldcubeassociation.org",
+        subject: delegate_report_email_subject(competition),
       )
     end
   end
@@ -153,5 +164,9 @@ class CompetitionsMailer < ApplicationMailer
 
   private def delegates_to_senior_delegates_email(delegates)
     delegates.map { |delegate| delegate.senior_delegate&.email }.uniq.compact
+  end
+
+  private def delegate_report_email_subject(competition)
+    "[wca-report] [#{competition.continent.name}] #{competition.name}"
   end
 end

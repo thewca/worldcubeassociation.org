@@ -39,6 +39,7 @@ class DelegateReportsController < ApplicationController
         # See https://github.com/thewca/worldcubeassociation.org/issues/704 for details.
         if @competition.end_date >= DelegateReport::REPORTS_ENABLED_DATE
           CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
+          CompetitionsMailer.wrc_delegate_report_followup(@competition).deliver_later
           flash[:info] = "Your report has been posted and emailed!"
         else
           flash[:info] = "Your report has been posted but not emailed because it is for a pre June 2016 competition."
