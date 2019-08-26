@@ -17,6 +17,7 @@ class ServerStatusController < ApplicationController
       RegulationsCheck.new,
       CertificateCheck.new,
       StripeChargesCheck.new,
+      MysqlSettingsCheck.new,
     ]
   end
 end
@@ -136,6 +137,36 @@ class StripeChargesCheck < StatusCheck
       [:success, nil]
     else
       [:danger, "#{pluralize(unknown_stripe_charges_count, "Stripe charge")} with status 'unknown'."]
+    end
+  end
+end
+
+class MysqlSettingsCheck < StatusCheck
+  EXPECTED_MYSQL_SETTINGS = {
+    "@@innodb_ft_min_token_size" => 2,
+    "@@ft_min_word_len" => 2,
+  }.freeze
+
+  def label
+    "MySQL"
+  end
+
+  protected def _status_description
+    actual_mysql_settings = ActiveRecord::Base.connection.select_one("SELECT #{EXPECTED_MYSQL_SETTINGS.keys.join(", ")};")
+    mysql_settings_good = true
+    description = ""
+    EXPECTED_MYSQL_SETTINGS.each do |setting, expected_value|
+      actual_value = actual_mysql_settings[setting]
+      if actual_value != expected_value
+        mysql_settings_good = false
+        description += "#{setting}: expected #{expected_value} != actual #{actual_value}\n"
+      end
+    end
+
+    if mysql_settings_good
+      [:success, nil]
+    else
+      [:danger, description]
     end
   end
 end
