@@ -49,11 +49,10 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_organizer_of_announced_competition" do
-    let!(:post) { FactoryBot.create(:post, created_at: 1.hours.ago) }
     let(:delegate) { FactoryBot.create :delegate, name: "Adam Smith" }
     let(:organizer) { FactoryBot.create :user, name: "Will Johnson", preferred_locale: :en }
     let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate] }
-    let(:mail) { CompetitionsMailer.notify_organizer_of_announced_competition(competition, post, organizer) }
+    let(:mail) { CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer) }
 
     it "renders" do
       I18n.with_locale :fr do

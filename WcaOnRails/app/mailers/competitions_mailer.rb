@@ -30,9 +30,8 @@ class CompetitionsMailer < ApplicationMailer
                    reply_to: competition.delegates.pluck(:email)
   end
 
-  def notify_organizer_of_announced_competition(competition, post, organizer)
+  def notify_organizer_of_announced_competition(competition, organizer)
     @competition = competition
-    @post = post
 
     localized_mail organizer.preferred_locale || :en,
                    -> { I18n.t('users.mailer.competition_announcement_email.header', competition: competition.name) },

@@ -175,182 +175,47 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  private def create_post_and_redirect(post_attrs)
-    @post = Post.new(post_attrs)
-    if @post.save
-      flash[:success] = "Created new post"
-      redirect_to post_path(@post.slug)
-    else
-      render 'posts/new'
-    end
-    @post
-  end
-
-  private def editable_post_fields
-    [:title, :body, :sticky, :tags, :show_on_homepage]
-  end
-  helper_method :editable_post_fields
-
   def post_announcement
-    I18n.with_locale :en do
-      comp = Competition.find(params[:id])
-      date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long)
-      title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.country.name}"
-
-      body = "[#{comp.name}](#{competition_url(comp)})"
-      body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.country.name}."
-      unless comp.website.blank?
-        body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
-      end
-      full_post = nil
+    comp = competition_from_params
+    unless comp.announced?
       ActiveRecord::Base.transaction do
-        full_post = create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
         comp.update!(announced_at: Time.now, announced_by: current_user.id)
-      end
-      comp.organizers.each do |organizer|
-        CompetitionsMailer.notify_organizer_of_announced_competition(comp, full_post, organizer).deliver_later
+        comp.organizers.each do |organizer|
+          CompetitionsMailer.notify_organizer_of_announced_competition(comp, organizer).deliver_later
+        end
       end
     end
-  end
 
-  private def pretty_print_result(result, short: false)
-    event = result.event
-    sort_by = result.format.sort_by
-
-    # If the format for this round was to sort by average, but this particular
-    # result did not achieve an average, then switch to "best", and do not allow
-    # a short format (to make it clear what happened).
-    if sort_by == "average" && result.to_solve_time(:average).incomplete?
-      sort_by = "single"
-      short = false
-    end
-
-    solve_time = nil
-    a_win_by_word = nil
-    case sort_by
-    when "single"
-      solve_time = result.to_solve_time(:best)
-      if event.multiple_blindfolded?
-        a_win_by_word = "a result"
-      else
-        a_win_by_word = "a single solve"
-      end
-    when "average"
-      solve_time = result.to_solve_time(:average)
-      a_win_by_word = result.format.id == "a" ? "an average" : "a mean"
-    else
-      raise "Unrecognized sort_by #{sort_by}"
-    end
-
-    if short
-      solve_time.clock_format
-    else
-      "with #{a_win_by_word} of #{solve_time.clock_format_with_units}"
-    end
-  end
-
-  private def people_to_sentence(results, link:)
-    results
-      .sort_by(&:personName)
-      .map do |result|
-        link ? "[#{result.personName}](#{person_url result.personId})" : result.personName
-      end
-      .to_sentence
+    flash[:success] = t('competitions.messages.announced')
+    redirect_to admin_edit_competition_path(comp)
   end
 
   def post_results
+    comp = competition_from_params
     if ComputeAuxiliaryData.in_progress?
-      flash[:warning] = "Please wait until auxiliary data is computed."
-      return redirect_to admin_edit_competition_path(competition_from_params)
+      flash[:danger] = t('competitions.messages.computing_auxiliary_data')
+      return redirect_to admin_edit_competition_path(comp)
     end
 
-    I18n.with_locale :en do
-      comp = Competition.find(params[:id])
-      unless comp.results
-        return render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe
-      end
+    unless comp.results.any?
+      flash[:danger] = t('competitions.messages.no_results')
+      return redirect_to admin_edit_competition_path(comp)
+    end
 
-      event = Event.c_find(params[:event_id])
-      if event.nil?
-        title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.country.name} posted"
-        body = "Results of [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
-      else
-        top_three = comp.results.where(event: event).podium.order(:pos)
-        if top_three.empty?
-          return render html: "<div class='container'><div class='alert alert-warning'>Nobody competed in event: #{event.id}</div></div>".html_safe
-        else
-          results_by_place = top_three.group_by(&:pos)
-          winners = results_by_place[1]
+    unless comp.results.where(eventId: comp.main_event_id).any?
+      flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.events.select { |event| event.id == comp.main_event_id }.first.name)
+      return redirect_to admin_edit_competition_path(comp)
+    end
 
-          title = "#{people_to_sentence(winners, link: false)} #{winners.length > 1 ? "win" : "wins"} " \
-                  "#{comp.name}, in #{comp.cityName}, #{comp.country.name}"
-
-          body = "#{people_to_sentence(winners, link: true)} won [#{comp.name}](#{competition_url(comp)})" \
-                 " #{pretty_print_result(winners.first)}" # If there are more winners then their results are the same.
-          body += " in the #{event.name} event" if event.id != "333"
-          body += "."
-          if results_by_place[2]
-            body += " #{people_to_sentence(results_by_place[2], link: true)} finished second (#{pretty_print_result(top_three.second, short: true)})"
-            body += results_by_place[3] ? " and" : "."
-          end
-          if results_by_place[3]
-            body += " #{people_to_sentence(results_by_place[3], link: true)} finished third (#{pretty_print_result(top_three.third, short: true)})"
-            body += "."
-          end
-          body += "\n\n"
-        end
-      end
-
-      [
-        { code: "WR",  name: "World" },
-        { code: "AfR", name: "African" },
-        { code: "AsR", name: "Asian" },
-        { code: "OcR", name: "Oceanian" },
-        { code: "ER",  name: "European" },
-        { code: "NAR", name: "North American" },
-        { code: "SAR", name: "South American" },
-      ].each do |code_name|
-        code = code_name[:code]
-        region_name = code_name[:name]
-        comp_records = comp.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', code: code)
-        unless comp_records.empty?
-          body += "#{region_name} records: "
-          record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
-            results_by_personId = results_for_name.group_by(&:personId).sort
-            results_by_personId.map do |personId, results|
-              if results_by_personId.length > 1
-                # Two or more people with the same name set records at this competition!
-                # Append their WCA IDs to distinguish between them.
-                uniqueName = "#{personName} (#{personId})"
-              else
-                uniqueName = personName
-              end
-              record_strs = results.sort_by do |r|
-                round_type = RoundType.c_find(r.roundTypeId)
-                [Event.c_find(r.eventId).rank, round_type.rank]
-              end.map do |result|
-                event = Event.c_find(result.eventId)
-                record_strs = []
-                if result.regionalSingleRecord == code
-                  record_strs << "#{event.name} #{result.to_s :best} (single)"
-                end
-                if result.regionalAverageRecord == code
-                  record_strs << "#{event.name} #{result.to_s :average} (average)"
-                end
-                record_strs
-              end.flatten
-              "#{uniqueName}&lrm; #{record_strs.join(", ")}"
-            end
-          end
-          body += "#{record_strs.join(", ")}.  \n" # Trailing spaces for markdown give us a <br>
-        end
-      end
-      unless comp.results_posted?
+    unless comp.results_posted?
+      ActiveRecord::Base.transaction do
         comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id)
         comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
         comp.registrations.accepted.each { |registration| registration.user.notify_of_id_claim_possibility(comp) }
       end
-      create_post_and_redirect(title: title, body: body, author: current_user, tags: "results", world_readable: true)
+
+      flash[:success] = t('competitions.messages.results_posted')
+      redirect_to admin_edit_competition_path(comp)
     end
   end
 

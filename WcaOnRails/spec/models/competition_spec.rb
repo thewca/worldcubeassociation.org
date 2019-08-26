@@ -270,6 +270,20 @@ RSpec.describe Competition do
       expect(competition.warnings_for(nil)[:events]).to eq "Please add at least one event before confirming the competition."
     end
 
+    it "warns if competition is visible and hasn't been announced" do
+      competition = FactoryBot.create :competition, :confirmed, :visible, announced_at: nil, announced_by: nil
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:announcement]).to eq "This competition is visible to the public but hasn't been announced yet."
+    end
+
+    it "warns if competition has results and haven't been posted" do
+      competition = FactoryBot.create :competition, :confirmed, :visible, results_posted_at: nil, results_posted_by: nil
+      FactoryBot.create(:result, person: FactoryBot.create(:person), competitionId: competition.id)
+
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:results]).to eq "This competition's results are visible but haven't been posted yet."
+    end
+
     it "does not warn about other different championships" do
       # Different championship type
       FactoryBot.create :competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: ["_North America"]
@@ -306,6 +320,7 @@ RSpec.describe Competition do
       expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
       competition.results_posted_at = Time.now
+      competition.results_posted_by = FactoryBot.create(:user, :wrt_member).id
       expect(competition.in_progress?).to be false
       expect(competition.info_for(nil)[:in_progress]).to eq nil
     end
