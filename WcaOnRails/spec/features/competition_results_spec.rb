@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.feature "competition results" do
-  let(:competition) { FactoryBot.create :competition, :confirmed, :visible, events: Event.where(id: '333'), results_posted_at: 1.day.ago }
+  let(:competition) { FactoryBot.create :competition, :confirmed, :visible, :results_posted, events: Event.where(id: '333') }
   let(:person_1) { FactoryBot.create :person, name: "Fast Cuber", countryId: "USA" }
   let(:person_2) { FactoryBot.create :person, name: "Slow Cuber", countryId: "USA" }
 
@@ -14,7 +14,6 @@ RSpec.feature "competition results" do
     it "displays the winners for each event" do
       visit competition_path(competition)
       expect(page).to have_content(person_1.name)
-      expect(page).to_not have_content(person_2.name)
     end
   end
 

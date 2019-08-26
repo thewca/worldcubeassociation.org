@@ -177,6 +177,7 @@ class Competition < ApplicationRecord
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
   validates :qualification_results_reason, presence: true, if: :qualification_results?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
+  validates :main_event_id, presence: true, if: :confirmed_or_visible?
 
   NEARBY_DISTANCE_KM_WARNING = 250
   NEARBY_DISTANCE_KM_DANGER = 100
@@ -347,6 +348,14 @@ class Competition < ApplicationRecord
 
       if championship_warnings.any?
         warnings = championship_warnings.merge(warnings)
+      end
+    else
+      unless self.announced?
+        warnings[:announcement] = I18n.t('competitions.messages.not_announced')
+      end
+
+      if self.results.any? && !self.results_posted?
+        warnings[:results] = I18n.t('competitions.messages.results_not_posted')
       end
     end
 
@@ -915,8 +924,12 @@ class Competition < ApplicationRecord
     self.kilometers_to(c) < NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
 
+  def announced?
+    !announced_at.nil? && !announced_by.nil?
+  end
+
   def results_posted?
-    !results_posted_at.nil?
+    !results_posted_at.nil? && !results_posted_by.nil?
   end
 
   def confirmed?
