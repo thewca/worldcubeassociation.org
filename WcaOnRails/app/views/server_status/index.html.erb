@@ -21,72 +21,21 @@
     <%= alert :danger, "Check below, something may be wrong." %>
   <% end %>
 
-  <% kind_class = @oldest_job_that_should_have_run_by_now ? "danger" : "success" %>
-  <div class="panel panel-<%= kind_class %>">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <span class="label label-<%= kind_class %>">Jobs</span>
-
-        <% if @oldest_job_that_should_have_run_by_now %>
-          Uh oh!
-          Job <%= @oldest_job_that_should_have_run_by_now.id %> was created
-          <%= time_ago_in_words @oldest_job_that_should_have_run_by_now.created_at %>
-          ago and still has not run.
-          <%= @jobs_that_should_have_run_by_now.count %>
-          <%= "job".pluralize(@jobs_that_should_have_run_by_now.count) %>
-          <%= "is".pluralize(@jobs_that_should_have_run_by_now.count) %>
-          waiting to run.
-
-        <% else %>
-          Looking good!
-        <% end %>
-      </h3>
+  <% @checks.each do |check| %>
+    <% kind_class = check.is_passing? ? "success" : "danger" %>
+    <div class="panel panel-<%= kind_class %>">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span class="label label-<%= check.status %>"><%= check.label %></span>
+          <% if check.description %>
+            <%= check.description %>
+          <% else %>
+            Looking good!
+          <% end %>
+        </h3>
+      </div>
     </div>
-  </div>
-
-  <% kind_class = @regulations_load_error ? "danger" : "success" %>
-  <div class="panel panel-<%= kind_class %>">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <span class="label label-<%= kind_class %>">Regulations</span>
-        <% if @regulations_load_error %>
-          Error while loading regulations: <%= @regulations_load_error %>.
-        <% else %>
-          Looking good!
-        <% end %>
-      </h3>
-    </div>
-  </div>
-
-  <% kind_class = @certificate_good ? "success" : "danger" %>
-  <div class="panel panel-<%= kind_class %>">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <span class="label label-<%= kind_class %>">SSL Certificate</span>
-        <% if @expires_in.nil? %>
-          No certificate to check! (Certificate path was "<%= ServerStatusController::CERTIFICATE_PATH %>")
-        <% elsif @expires_in < 0 %>
-          Has expired <%= -@expires_in %> days ago!
-        <% else %>
-          Expires in <%= @expires_in %> days.
-        <% end %>
-      </h3>
-    </div>
-  </div>
-
-  <% kind_class = @unknown_stripe_charges_count == 0 ? "success" : "danger" %>
-  <div class="panel panel-<%= kind_class %>">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <span class="label label-<%= kind_class %>">Stripe Charges</span>
-        <% if @unknown_stripe_charges_count > 0 %>
-          <%= pluralize(@unknown_stripe_charges_count, "Stripe charge") %> with status "unknown".
-        <% else %>
-          Looking good!
-        <% end %>
-      </h3>
-    </div>
-  </div>
+  <% end %>
 
   <%= alert :info do
     sha1 = `git rev-parse HEAD`
