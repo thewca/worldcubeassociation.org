@@ -1,0 +1,25 @@
+<p>
+  Hello WRC members!
+</p>
+<hr>
+<p>
+  <span style="font-weight: bold">Primary for this thread is: <%= @competition.delegate_report.wrc_primary_user.name %></span><br>
+  Please respond to this thread at your earliest convenience.
+</p>
+<hr>
+<p>
+  <span style="font-weight: bold">Secondary for this thread is: <%= @competition.delegate_report.wrc_secondary_user.name %></span><br>
+  Please respond if the primary hasn't had a chance to handle this thread within 24 hours.
+</p>
+<hr>
+<p>
+  Feel free to use this thread for WRC-internal discussion, but make sure to send an email to the whole thread to let them know we're discussing!
+</p>
+<p>
+  If you need it, here's a link to <%= link_to "the Delegate report", delegate_report_url(@competition) %> on the WCA website.
+</p>
+<p>
+  Thanks!
+  <br>
+  🤖 Your friendly neighborhood WRC automation script.
+</p>

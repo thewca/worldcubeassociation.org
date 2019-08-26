@@ -31,14 +31,22 @@ class DelegateReportsController < ApplicationController
 
     @delegate_report = @competition.delegate_report
     @delegate_report.current_user = current_user
-    was_posted = @delegate_report.posted?
-    if @delegate_report.update_attributes(delegate_report_params)
+    was_previously_posted = @delegate_report.posted?
+
+    @delegate_report.assign_attributes(delegate_report_params)
+    is_posting = @delegate_report.posted? && !was_previously_posted
+    if is_posting
+      assign_wrc_users @delegate_report
+    end
+
+    if @delegate_report.save
       flash[:success] = "Updated report"
-      if @delegate_report.posted? && !was_posted
+      if is_posting
         # Don't email when posting old delegate reports.
         # See https://github.com/thewca/worldcubeassociation.org/issues/704 for details.
         if @competition.end_date >= DelegateReport::REPORTS_ENABLED_DATE
           CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
+          CompetitionsMailer.wrc_delegate_report_followup(@competition).deliver_later
           flash[:info] = "Your report has been posted and emailed!"
         else
           flash[:info] = "Your report has been posted but not emailed because it is for a pre June 2016 competition."
@@ -67,5 +75,15 @@ class DelegateReportsController < ApplicationController
       :wdc_feedback_requested,
       :wdc_incidents,
     )
+  end
+
+  private def assign_wrc_users(delegate_report)
+    # TODO(https://github.com/thewca/worldcubeassociation.org/issues/4535):
+    # We're reloading here as a workaround. This should be handled in a more
+    # general way.
+    Team.wrc.reload
+    wrc_primary_team_member, wrc_secondary_team_member = Team.wrc.current_members.sample 2
+    delegate_report.wrc_primary_user = wrc_primary_team_member.user
+    delegate_report.wrc_secondary_user = wrc_secondary_team_member.user
   end
 end

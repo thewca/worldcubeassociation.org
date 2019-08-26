@@ -6,6 +6,7 @@ RSpec.feature "Registration management" do
   let(:delegate) { FactoryBot.create :delegate, name: "Jeremy on Bart" }
   let(:competition) { FactoryBot.create :competition, :registration_open, delegates: [delegate], name: "Submit Report 2017" }
   let!(:delegate_report) { FactoryBot.create :delegate_report, competition: competition, schedule_url: "http://example.com" }
+  let!(:wrc_members) { FactoryBot.create_list :user, 3, :wrc_member }
 
   context "when signed in as competition delegate" do
     before :each do
