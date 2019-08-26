@@ -26,6 +26,8 @@ es:
     KR: República de Corea
     #original_hash: 673b1cf
     LC: Santa Lucía
+    #original_hash: e2ac50f
+    MK: Macedonia del Norte
     #original_hash: 928b7c4
     MM: Myanmar
     #original_hash: d887137
@@ -34,6 +36,8 @@ es:
     PS: Palestina
     #original_hash: 655191a
     ST: Santo Tomé y Príncipe
+    #original_hash: 16cc7f8
+    SZ: Esuatini
     #original_hash: 4d206a8
     TT: Trinidad y Tobago
     #original_hash: 0f3f60b
@@ -487,6 +491,8 @@ es:
           combinaciones de categorías
         #original_hash: 4bf194c
         event_restrictions_reason: Razón y detalles para restricciones de categorías
+        #original_hash: 3c24bd2
+        main_event_id: Categoría principal
       registration:
         #original_hash: 3c23a67
         guests: Acompañantes
@@ -905,6 +911,8 @@ es:
         event_restrictions_reason: >-
           Por favor explica aquí por que te gustaría restringir ciertas
           combinaciones de categorías. Por favor rellena esto en inglés
+        #original_hash: 1067798
+        main_event_id: El ganador de esta categoría será el ganador de la competición.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1424,6 +1432,22 @@ es:
         header: 'Has sido eliminado como organizador de %{competition}'
         #original_hash: 66cb109
         information: '%{remover} te eliminó como organizador de %{competition}.'
+      registration_reminder_email:
+        #original_hash: 7d355cb
+        header: 'El registro para %{competition} abrirá próximamente'
+        #original_hash: c9d0561
+        intro: 'Hola %{name},'
+        #original_hash: a8f7e72
+        information_html: >-
+          Esto es un recordatorio de que el registro para <a
+          href=%{competition_url}>%{competition}</a> abre en menos de 24 horas.
+        #original_hash: 2b93022
+        not_accepted_html: Te has registrado pero tu registro no ha sido aceptado.
+        #original_hash: 3724e7c
+        more_info_html: >-
+          Por favor dirígete a la  <a href=%{competition_url}>web del
+          campeonato</a>  para obtener más información sobre requisitos del
+          registro.
     claim_wca_id:
       #original_hash: f28bf87
       title: Reclamar tu WCA ID
@@ -2045,6 +2069,12 @@ es:
         competidores en la web externa de la competición.
       #original_hash: 94a2fc8
       past_competitions: Competiciones anteriores
+      #original_hash: ec7e697
+      bookmarked_title: Competiciones marcadas como favoritas
+      #original_hash: e5665fb
+      bookmarked_explanation: >-
+        Competiciones que has marcado como favoritas en la web de la WCA. Te
+        enviaremos un correo 24 horas antes de que abra el registro.
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2156,6 +2186,12 @@ es:
         range_past_html: >-
           El registro en línea se abrió el %{start_date_and_time} y se cerró el
           %{end_date_and_time}.
+      #original_hash: 8eda7ac
+      bookmark: Marcar esta competición como favorita
+      #original_hash: 4dfea97
+      is_bookmarked: Has marcado esta competición como favorita
+      #original_hash: 74598a7
+      number_of_bookmarks: Número de veces marcada como favorita
     index:
       #original_hash: db98a68
       title: Competiciones
@@ -2245,6 +2281,10 @@ es:
       competitions_list: lista de competiciones
       #original_hash: 9104a03
       no_past_competitions: No tienes competiciones anteriores.
+      #original_hash: 43c3543
+      no_bookmarked_competitions: >-
+        No has marcado ninguna competición próxima como favorita. Haz click en
+        el icono de favorito en la página de la competición para verla aquí.
     competition_form:
       #original_hash: 2b81984
       wcat: Equipo de Anuncio de Competiciones de la WCA
