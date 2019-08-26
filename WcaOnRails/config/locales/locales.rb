@@ -90,6 +90,10 @@ module Locales
       "flag_id": "si",
       "name": "Slovensko",
     },
+    "th": {
+      "flag_id": "th",
+      "name": "ภาษาไทย",
+    },
     "id": {
       "flag_id": "id",
       "name": "Bahasa Indonesia",

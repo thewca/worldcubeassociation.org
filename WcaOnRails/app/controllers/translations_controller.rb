@@ -71,6 +71,7 @@ class TranslationsController < ApplicationController
     "ru" => [140],
     "sk" => [7922],
     "sl" => [1381],
+    "th" => [21095],
     "vi" => [7158],
     "zh-CN" => [9],
     "zh-TW" => [38],
