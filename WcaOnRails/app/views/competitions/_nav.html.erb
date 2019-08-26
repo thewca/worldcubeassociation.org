@@ -174,7 +174,7 @@
                   <% nav_item[:tiny_children].each do |child_nav_item| %>
                     <%= link_to child_nav_item[:path],
                                 title: child_nav_item[:title],
-                                class: (child_nav_item[:active] ? " active" : ""),
+                                class: "nav_event" + (child_nav_item[:active] ? " active" : ""),
                                 data: {
                                   toggle: "tooltip",
                                   placement: "top",

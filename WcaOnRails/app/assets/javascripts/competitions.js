@@ -101,17 +101,25 @@ onPage('competitions#index', function() {
 });
 
 onPage("competitions#show_all_results", function() {
-  /* Show tbody for the given event. */
-  function showResultsFor(eventId) {
+  $('.event-selector input[type="radio"]').on('change', function() {
+    var eventId = $(this).val();
+
+    // Select both radio buttons on top and bottom.
+    $("#radio-" + eventId + "-top").prop("checked", "true");
+    $("#radio-" + eventId + "-bottom").prop("checked", "true");
+
+    // Also update the sidebar.
+    $(".nav_event.active").removeClass("active");
+    $(".nav_event .event-" + eventId).parent().addClass("active");
+
+    // Switch to the new event.
     var $results = $('.one-event');
     $results.hide();
     $results.filter('.event-' + eventId).show();
-  }
 
-  /* Handle events selector for results by event. */
-  $('.event-selector input[type="radio"]').on('change', function() {
-    var eventId = $(this).val();
-    showResultsFor(eventId);
+    // Scroll to the top.
+    document.getElementsByClassName('event-selector')[0].scrollIntoView();
+
     $.setUrlParams({ event:  eventId });
   });
 
@@ -120,12 +128,13 @@ onPage("competitions#show_all_results", function() {
        Hash is of the form #e444; hash.slice(2) strips the "#e" and leaves the eventId ("444"). */
     document.getElementById('radio-' + location.hash.slice(2)).click();
   } else {
-    var $checked = $('.event-selector input[checked="checked"]');
-    if ($checked.length != 0) {
-      showResultsFor($checked.val());
+    var selected = $('#selected-event').data('selected');
+    if (selected === 'all') {
+      $('.one-event').show();
+    } else if (selected) {
+      document.getElementById('radio-' + selected + '-top').click();
     } else {
-      var $toCheck = $('.event-selector input:first');
-      $toCheck.click();
+      $('.event-selector input:first').click();
     }
   }
 });
