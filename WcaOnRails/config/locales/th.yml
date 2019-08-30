@@ -200,7 +200,7 @@ th:
       cellName: รอบคัดเลือกรวม
   attempts:
     #original_hash: 17dae1e
-    attempt_name: 'แก้โจทย์ %{number} ครั้ง'
+    attempt_name: 'แก้โจทย์ครั้งที่ %{number}'
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
@@ -275,7 +275,7 @@ th:
       #original_hash: e0f64f7
       citizen_of: พลเมืองของ
     #original_hash: 3fc0ba1
-    all_regions: ทุกภูมืภาค
+    all_regions: ทุกภูมิภาค
     errors:
       #original_hash: 81f344a
       invalid: ผิด
@@ -358,13 +358,13 @@ th:
         #original_hash: ced7b30
         remember_me: จำฉันไว้
         #original_hash: 102efae
-        pending_avatar: อัปโหลดอวาตาร์ใหม่
+        pending_avatar: อัปโหลดรูปแทนตัวใหม่
         #original_hash: 58e0c56
-        remove_avatar: ลบอวาตาร์
+        remove_avatar: ลบรูปแทนตัว
         #original_hash: 9af9099
         results_notifications_enabled: ส่ง Email ให้ฉันเมื่อผลการแข่งขันของฉันถูกโพสต์
         #original_hash: de60ab8
-        delegate_status: สถานะผู้แทน
+        delegate_status: สถานะ Delegate
         #original_hash: 0f21717
         region: ภูมิภาค
         #original_hash: a10b651
@@ -451,7 +451,7 @@ th:
         #original_hash: 556fda0
         extra_registration_requirements: ข้อกำหนดการลงทะเบียนเพิ่มเติม
         #original_hash: 2529d04
-        on_the_spot_registration: รับสมัครที่การแข่งขัน
+        on_the_spot_registration: เปิดรับสมัครที่การแข่งขัน
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: ค่าสมัครขั้นต่ำเมื่อสมัครที่การแข่งขัน
         #original_hash: efbdbab
@@ -929,8 +929,8 @@ th:
         #original_hash: a4aebc8
         venue: >-
           พูดคุยเกี่ยวกับห้อง, แสง, การเข้าถึงสาธารณะ, การแบ่งสถานที่
-          (การแก้โจทย์, การตั้งโจทย์, waiting, กรอกคะแนน)
-          ถ้าคุณตั้งพื้นที่แก้โจทย์ที่ต่างกัน ปัญหาที่เกิดขึ้น (เช่นเสียง)
+          (การแก้โจทย์, การตั้งโจทย์, waiting, กรอกคะแนน) เช่น
+          ตั้งพื้นที่แก้โจทย์ที่ต่างจากปกติ ปัญหาที่เกิดขึ้น (เช่น เสียงรบกวน)
           และวิธีการที่คุณแก้ไข ...
           กรุณารัดกุมและไม่รายงานรายละเอียดที่ไม่เกี่ยวข้อง
           โปรดอัพโหลดรูปภาพของสถานที่ของคุณเพื่อแสดงแผนผังของสถานที่ตั้งโจทย์,
@@ -1293,7 +1293,7 @@ th:
   users:
     update_locale:
       #original_hash: 4cde9bc
-      success: อัปเดตสถานที่
+      success: เปลี่ยนภาษาแล้ว
       #original_hash: dcc2f49
       failure: ไม่สามารถแก้ไขโปรไฟล์ของคุณได้
       #original_hash: c29870c
@@ -1306,17 +1306,17 @@ th:
         welcome: 'ยินดีต้อนรับ %{user_email}!'
         #original_hash: da39d05
         confirm: >-
-          บัญชีของคุณถูกสร้างขึ้นและต้องเปิดใช้งานก่อนจึงจะสามารถใช้งานได้
-          โปรดยืนยันบัญชีของคุณผ่านลิงค์ด้านล่าง:
+          account คุณถูกสร้างขึ้นและต้องยืนยันก่อนจึงจะสามารถใช้งานได้
+          โปรดยืนยัน account ของคุณผ่านลิงค์ด้านล่าง:
         #original_hash: 776476a
-        confirmation_link: ยืนยันบัญชีของฉัน
+        confirmation_link: ยืนยัน account ของฉัน
         #original_hash: d484f70
         activate: 'หลังจากเปิดใช้งานคุณสามารถเข้าสู่เว็บไซต์ของ World Cube Association:'
         #original_hash: 333999b
         addendum: >-
-          อีเมลนี้สร้างขึ้นโดยอัตโนมัติ หากคุณไม่ได้ลงทะเบียนบัญชีในเว็บไซต์ของ
-          World Cube Association
-          และได้รับข้อความนี้โดยไม่ได้ตั้งใจโปรดเพิกเฉยและลบทิ้ง
+          อีเมลนี้สร้างขึ้นโดยอัตโนมัติ หากคุณไม่ได้ลงทะเบียนในเว็บไซต์ของ World
+          Cube Association และได้รับข้อความนี้โดยไม่ได้ตั้งใจ
+          ไม่ต้องสนใจและลบมันทิ้ง
         #original_hash: dbc2263
         questions: >-
           คุณมีคำถามเพิ่มเติมหรือไม่ เรายินดีที่จะตอบคำถามเหล่านี้!
@@ -1325,7 +1325,7 @@ th:
         #original_hash: f34029e
         welcome: 'สวัสดี %{user_email}!'
         #original_hash: 3095365
-        confirm: 'คุณสามารถยืนยัน email ของบัญชีใหม่ของคุณผ่านลิงค์ด้านล่าง:'
+        confirm: 'คุณสามารถยืนยัน email ของ account ใหม่ของคุณผ่านลิงค์ด้านล่าง:'
         #original_hash: 4900afe
         confirmation_link: ยืนยัน email
       competition_submission_email:
@@ -1388,8 +1388,8 @@ th:
       already_claimed_html: 'คุณได้รับ WCA ID %{wca_id} แล้ว กรุณาติดต่อ %{delegate} หากมีข้อสงสัย'
       #original_hash: 0660b5d
       info_competed_before: >-
-        หากคุณเคยเข้าแข่งขันมาก่อน คุณสามารถขอรับ WCA ID
-        เพิ่มเชื่อมกับบัญชีของคุณได้
+        หากคุณเคยเข้าแข่งขันมาก่อน คุณสามารถขอรับ WCA ID เพิ่มเชื่อมกับ account
+        ของคุณได้
       #original_hash: 7d605f8
       info_never_competed_html: >-
         ถ้าคุณไม่เคยเข้าแข่งขันมาก่อน ไปที่ %{comp}! WCA ID
@@ -1423,21 +1423,21 @@ th:
       #original_hash: 7b2c7f1
       approve: ยอมรับ
       #original_hash: 85de4b8
-      unconfirmed_email: 'email (%{email}) ของบัญชีนี้ยังไม่ได้รับการยืนยัน'
+      unconfirmed_email: 'email (%{email}) ของ account นี้ยังไม่ได้รับการยืนยัน'
       #original_hash: c03b949
       confirm_new_email: การเปลี่ยน email ของคุณจะต้องยืนยัน email ใหม่
       #original_hash: 8a770cf
-      pending_mail_confirmation: 'บัญชีนี้รอการยืนยัน email ใหม่ %{email}'
+      pending_mail_confirmation: 'account นี้รอการยืนยัน email ใหม่ %{email}'
       #original_hash: 0340b0b
-      pending_avatar_confirmation: บัญชีนี้รอการยืนยันรูปประจำตัวใหม่
+      pending_avatar_confirmation: account นี้รอการยืนยันรูปประจำตัวใหม่
       #original_hash: 7b06f03
-      pending_claim_confirmation_html: 'บัญชีนี้รอ %{delegate} เพื่อยืนยันการขอรับ WCA ID %{wca_id}'
+      pending_claim_confirmation_html: 'account นี้รอ %{delegate} เพื่อยืนยันการขอรับ WCA ID %{wca_id}'
       #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
         ผู้ใช้รายนี้ได้ขอรับ WCA ID %{wca_id} Delegate ของเขา %{delegate}
-        จะได้รับการแจ้งเตือนทันทีที่ email ของบัญชีนี้ได้รับการยืนยัน
+        จะได้รับการแจ้งเตือนทันทีที่ email ของ account นี้ได้รับการยืนยัน
       #original_hash: 1cde7e6
-      your_thumbnail: รูปย่อของบัญชีคุณ
+      your_thumbnail: รูปย่อของ account คุณ
       #original_hash: af18820
       edit_thumbnail: คลิกเพื่อแก้ไขรูปย่อ
       #original_hash: cf65c6e
@@ -1445,7 +1445,7 @@ th:
       #original_hash: 2d2ae5d
       have_no_wca_id_html: >-
         คุณยังไม่มี WCA ID หากคุณเคยแข่งขันมาก่อนแล้ว คุณสามารถขอรับ WCA ID
-        เพื่อเชื่อมต่อกับบัญชีของคุณที่นี่ %{here}!
+        เพื่อเชื่อมต่อกับ account ของคุณที่นี่ %{here}!
       #original_hash: 29e25b5
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       cannot_edit:
@@ -1474,15 +1474,17 @@ th:
         #original_hash: 255f28c
         '1': รูปแทนตัวทั้งหมดต้องเป็นบุคคลจริง
         #original_hash: 9126b0c
-        '2': บุคคลที่แสดงต้องเป็นคุณ
+        '2': บุคคลที่ในภาพต้องเป็นคุณ
         #original_hash: de9b742
-        '3': ถ้ามีบุคคลมากกว่า 1 คนในรูปแทนตัว ต้องเป็นที่แน่ชัดว่า คุณเป็นใครในรูป
+        '3': >-
+          ถ้ามีบุคคลมากกว่า 1 คนในรูปแทนตัว
+          ต้องสามารถแยกแยะได้ชัดเจนว่าคนไหนคือคุณ
         #original_hash: 4083c00
-        '4': หัวของคุณต้องเห็นชัดเจน แต่หน้าไม่จำเป็นต้องเต็มหน้า
+        '4': หัวของคุณต้องเห็นชัดเจน แต่หน้าไม่จำเป็นต้องเต็มใบหน้า
         #original_hash: ebbbf8a
         '5': รุปแทนตัวของคุณต้องไม่มีตัวอักษรนอกเหนือจากที่ปรากฎในภาพพื้นหลัง
         #original_hash: cc5f23a
-        '6': รูปแทนตัวจะต้องส่งในทิศทางที่ถูกต้อง
+        '6': รูปแทนตัวจะต้องหันในทิศทางที่ถูกต้อง
         #original_hash: 1a18831
         '7': รูปแทนตัวจะต้องไม่มีเนื้อหาที่ไม่เหมาะสม (เช่น ท่าทางที่ไม่เหมาะสม)
       delegate_avatar_guidelines:
@@ -1495,7 +1497,7 @@ th:
             แสดงถึงการแต่งกายของคุณที่จะเห็นได้ในการแข่งขัน
           #original_hash: 64ded69
           '2': >-
-            รูปแทนตัวต้องมีกรอบ ตัด ทำมุม และน่าสนใจ
+            รูปแทนตัวต้องมีกรอบ ตัด ทำมุม และเห็นได้ชัดเจน
             เพื่อที่ผู้เข้าแข่งขันหรือผู้เข้าชมที่การแข่งขันสามารถใช้เพื่อระบุตัวตนของคุณได้
           #original_hash: 13fab02
           '3': >-
@@ -1553,19 +1555,18 @@ th:
       avatar_requires_wca_id: ต้องการ WCA ID
       #original_hash: 8f785ea
       email_used_by_locked_account_html: >-
-        ได้ถุกใช้ไปแล้วโดยอีกบัญชีหนึ่ง
+        ได้ถูกใช้ไปแล้วโดยอีก account หนึ่ง
         มันถูกสร้างขึ้นโดยอัตโนมัติหลังจากที่ผลการแข่งขันของคุณที่ลงทะเบียนจากภายนอก
-        ถ้าคุณเป็นเจ้าของ email นี้
-        คุณสามารถใช้บัญชีนี้ได้หลังจากตั้งรหัสผ่านใหม่ <a
-        href='/users/password/new'>ที่นี่</a>.
+        ถ้าคุณเป็นเจ้าของ email นี้ คุณสามารถใช้ account
+        นี้ได้หลังจากตั้งรหัสผ่านใหม่ <a href='/users/password/new'>ที่นี่</a>.
     successes:
       messages:
         #original_hash: 31bd401
-        account_updated: บัญชีได้ถูกแก้ไขแล้ว
+        account_updated: account ได้ถูกแก้ไขแล้ว
         #original_hash: 49e5851
         wca_id_claimed: 'ขอรับ WCA ID %{wca_id} สำเร็จ ตรวจสอบ email และรอ %{user} ทำการยืนยัน'
         #original_hash: dc89669
-        account_updated_confirm: 'บัญชีได้ถูกแก้ไข email ไปที่ %{email} เพื่อยืนยัน email ใหม่ของคุณ'
+        account_updated_confirm: 'account ได้ถูกแก้ไข email ไปที่ %{email} เพื่อยืนยัน email ใหม่ของคุณ'
     select_nearby_delegate:
       #original_hash: 407c4f8
       select_delegate_html: >-
@@ -1574,7 +1575,7 @@ th:
         กรุณากรอกวันเกิดและเลือก Delegate ที่คิดว่ารู้จักคุณมากที่สุด
       #original_hash: 2564ee3
       already_assigned_html: >-
-        WCA ID %{link_id} ได้ถุกเชื่อมต่อกับบัญชีอื่นแล้ว
+        WCA ID %{link_id} ได้ถุกเชื่อมต่อกับ account อื่นแล้ว
         ถ้าคุณเชื่อว่านี่คือความผิดพลาด กรุณาติดต่อ<a href='%{link_delegate}'
         target='_blank'>WCA Delegate</a> ในพื้นที่ของคุณ
       #original_hash: d26bfdc
@@ -1749,7 +1750,7 @@ th:
       #original_hash: 8b9f726
       title: 'สมัครสำหรับ %{comp}'
     #original_hash: 7cae988
-    registered_with_account_html: 'บุคคลนี้สมัครด้วยบัญชี คุณสามารถแก้ไขข้อมูลส่วนตัวได้ที่ %{here}.'
+    registered_with_account_html: 'บุคคลนี้สมัครด้วย account คุณสามารถแก้ไขข้อมูลส่วนตัวได้ที่ %{here}.'
     #original_hash: ada2e9e
     sign_in: เข้าสู่ระบบ
     #original_hash: 5d45a00
@@ -1778,15 +1779,15 @@ th:
     closed_html: 'การสมัครปิดไปแล้ว <strong>%{days}</strong> วัน ที่ %{time}.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
-      %{sign_in} เพื่อตรวจสอบสถานะการสมัครของคุณ ถ้าคุณยังไม่มีบัญชีของ WCA
+      %{sign_in} เพื่อตรวจสอบสถานะการสมัครของคุณ ถ้าคุณยังไม่มี account ของ WCA
       คุณสามารถสร้างได้ที่ %{here} แต่ไม่ทันแล้วสำหรับสมัครการแข่งขันนี้
     #original_hash: 7753b2e
     please_sign_in_not_yet_open_html: >-
-      %{sign_in} เพื่อตรวจสอบสถานะการสมัครของคุณ ถ้าคุณยังไม่มีบัญชี WCA
+      %{sign_in} เพื่อตรวจสอบสถานะการสมัครของคุณ ถ้าคุณยังไม่มี WCA account
       คุณสามารถสร้างได้ที่ %{here} แต่การสมัครการแข่งขันนี้ยังไม่เปิด
     #original_hash: 4f84af0
     please_sign_in_html: >-
-      %{sign_in} เพื่อสมัครการแข่งขัน %{comp} ถ้าคุณยังไม่มีบัญชี WCA
+      %{sign_in} เพื่อสมัครการแข่งขัน %{comp} ถ้าคุณยังไม่มี WCA account
       คุณสามารถสร้างได้ที่ %{here}.
     #original_hash: 89b4e7f
     greeting: 'สวัสดี %{name}!'
@@ -1979,10 +1980,10 @@ th:
       #original_hash: ff722f0
       registration_requirements: ข้อกำหนดการสมัครการแข่งขัน
       #original_hash: 74d0bf1
-      create_wca_account_html: 'สร้างบัญชี WCA %{here} หากคุณไม่มี'
+      create_wca_account_html: 'สร้าง WCA account %{here} หากคุณไม่มี'
       #original_hash: a082288
       claim_wca_id_html: >-
-        ถ้านี่ไม่ใช่การแข่งขันครั้งแรกของคุณ เชื่อมโยง WCA ID กับบัญชี WCA
+        ถ้านี่ไม่ใช่การแข่งขันครั้งแรกของคุณ เชื่อมโยง WCA ID กับ WCA account
         ของคุณ %{here}
       #original_hash: 56fc229
       register_link_html: 'สมัครการแข่งขันนี้ %{here}'
@@ -1993,7 +1994,7 @@ th:
       #original_hash: 5101f65
       no_competitor_limit: ไม่มีการจำกัดจำนวนผู้เข้าแข่งขัน
       #original_hash: f979d5e
-      entry_fee_is: 'ฐานค่าสมัครของการแข่งขันครั้งนี้คือ %{base_entry_fee}'
+      entry_fee_is: 'ค่าสมัครขั้นต่ำของการแข่งขันครั้งนี้คือ %{base_entry_fee}'
       #original_hash: 5390a91
       no_entry_fee: สมัครการแข่งขันนี้ได้โดยไม่ต้องขำระค่าสมัคร
       #original_hash: 29af5c2
@@ -2003,7 +2004,7 @@ th:
       #original_hash: 16cd1ba
       refund_policy_html: >-
         ถ้าการสมัครของคุณถูกยกเลิกก่อน %{limit_date_and_time}
-        คุณจะได้รับค่าสมัครคืน %{refund_policy_percent} ของค่าสมัครการแข่งขัน
+        คุณจะได้รับค่าสมัครคืน %{refund_policy_percent}
       #original_hash: 4aca553
       no_refunds: ค่าสมัครจะไม่สามารถขอคืนได้ไม่ว่ากรณีใด ๆ
       #original_hash: cf7be5d
@@ -2013,7 +2014,7 @@ th:
       #original_hash: 1637bea
       on_the_spot_registration_free: ยอมการสมัครที่การแข่งขันโดยไม่เสียค่าใช้จ่าย
       #original_hash: f5f687d
-      no_on_the_spot_registration: ไม่ยอมรับการสมัครที่การแข่งขัน
+      no_on_the_spot_registration: ไม่รับสมัครที่การแข่งขัน
       #original_hash: 4df139d
       guests_pay: 'ผู้เข้าชมสามารถเข้าชมได้โดยชำระค่าเข้า %{guests_base_fee}'
       #original_hash: b6c863e
@@ -2184,7 +2185,7 @@ th:
       #original_hash: 8966fd0
       submit_create_value: สร้างการแข่งขัน
       #original_hash: 40b0dfd
-      submit_update_value: แก้ไขการแข่งขัน
+      submit_update_value: บันทึกการแข่งขัน
       #original_hash: 04a2122
       submit_confirm_value: ยืนยัน
       #original_hash: f6fdbe4
@@ -2340,9 +2341,9 @@ th:
           %{regulation_link})
         #original_hash: f571a30
         format_html: >-
-          รูปแบบนี้จะอธิบายวิธีการจัดอันดับของผู้แข่งขันโดยพิจารณาจากผลลัพธ์
-          รายการของรูปแบบที่อนุญาตต่อประเภทอธิบายไว้ใน %{link_to_9b} ดู
-          %{link_to_9f} สำหรับคำอธิบายของแต่ละรูปแบบ
+          รูปแบบนี้จะอธิบายวิธีการจัดอันดับของผู้แข่งขันโดยพิจารณาจากผลการแข่งขัน
+          รูปแบบที่อนุญาตต่อประเภทอธิบายไว้ใน %{link_to_9b} ดู %{link_to_9f}
+          สำหรับคำอธิบายของแต่ละรูปแบบ
       #original_hash: 041a5de
       format: รูปแบบ
       #original_hash: 0d1fcc3
@@ -2532,7 +2533,7 @@ th:
       unknown_show: 'ไม่รู้จักพารามิเตอร์นี้ ต้องเป็น "N คน", หรือ "โดยทวีป"'
   notifications:
     #original_hash: 10bcdbd
-    connect_wca_id: เชื่อมต่อ WCA ID กับบัญชีของคุณ
+    connect_wca_id: เชื่อมต่อ WCA ID กับ account ของคุณ
   persons:
     index:
       #original_hash: 5934b4c
@@ -2654,14 +2655,14 @@ th:
     #original_hash: 9100be3
     search_for_competition: ค้นหาการแข่งขันที่นี่
     #original_hash: cba12bc
-    already_logged_in: คุณได้เข้าสู่ระบบด้วยบัญชี WCA แล้ว
+    already_logged_in: คุณได้เข้าสู่ระบบด้วย WCA account แล้ว
     #original_hash: 5b7fa52
-    create_an_account: 'คุณสามารถสร้างบัญชีได้ที่ %{here}'
+    create_an_account: 'คุณสามารถสร้าง account ได้ที่ %{here}'
     #original_hash: f8c910c
     claim_your_wca_id: 'คุณสามารถขอรับ WCA ID %{here}'
     #original_hash: 4dfb4c7
     create_an_account_and_claim: >-
-      สร้างบัญชี %{here} หลังจากเข้าสู่ระบบด้วยบัญชีใหม่
+      สร้าง account %{here} หลังจากเข้าสู่ระบบด้วย account ใหม่
       คุณจะได้รับการแจ้งให้ขอรับ WCA ID
     answers:
       '1':
@@ -2683,11 +2684,11 @@ th:
         #original_hash: af6ad12
         title: >-
           ฉันสามารถสมัครแข่งได้อย่างไร?
-          ใครสามารถติดต่อใครได้หากฉันมีปัญหาในการสมัครแข่งขัน?
+          สามารถติดต่อใครได้หากฉันมีปัญหาในการสมัครแข่งขัน?
         content:
           #original_hash: 7b91db1
           '1': >-
-            การแข่งขันจำนวนมากที่สามารถสมัครได้ที่เว็บไซต์ของ WCA
+            มีการแข่งขันจำนวนมากที่สามารถสมัครได้ที่เว็บไซต์ของ WCA
             แต่บางการแข่งขันก็ใช้ระบบของตนเอง
             คุณควรติดต่อผู้จัดการแข่งขันที่คุณต้องการแข่งสำหรับข้อมูล
             %{comp_search_form}
@@ -2703,7 +2704,7 @@ th:
             แต่ผู้เข้าแข่งขันทุกคนต้องมีความเข้าใจใน <a
             href='https://www.worldcubeassociation.org/regulations/'>กติกาของ
             WCA</a>.
-            ถ้าภาษาอังกฤษไม่ใช่ภาษาแม่ของคุณและคุณมีปัญหาในการทำความเข้าใจมัน
+            ถ้าภาษาอังกฤษไม่ใช่ภาษาของคุณและคุณมีปัญหาในการทำความเข้าใจมัน
             กรุณาอ่าน <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>กติกาแปล</a>
       '5':
@@ -2735,7 +2736,7 @@ th:
       '6':
         #original_hash: 8005a61
         title: >-
-          บัญชีของ WCA มีเพื่ออะไร? ข้อแตกต่างของบัญชี WCA กับ WCA profiles
+          WCA account มีเพื่ออะไร? ข้อแตกต่างของ WCA account กับ WCA profiles
           คืออะไร?
         content:
           #original_hash: 57a3767
@@ -2744,7 +2745,7 @@ th:
             หลังจากที่ผลการแข่งขันครั้งแรกของคุณได้รับการยอมรับ
           #original_hash: c5ad7a3
           '2': >-
-            บัญชี WCA จะทำให้คุณสามารถพิสูจน์กับเราได้ว่าคุณคือใคร
+            WCA account จะทำให้คุณสามารถพิสูจน์กับเราได้ว่าคุณคือใคร
             นี่จะยอมให้คุณเพิ่มรูปของคุณใน WCA profile
             และยอมให้คุณสมัครการแข่งขัน
             นี่จะช่วยป้องกันคุณจากบุคคลที่จะแฝงตัวเป็นคุณ
@@ -2757,16 +2758,16 @@ th:
           #original_hash: e619524
           '1': >-
             อย่างแรก คุณต้อง <a
-            href='#how-do-i-connect-my-wca-account-with-my-wca-id'>สร้างบัญชี
-            WCA และเชื่อมต่อกับ WCA ID.</a>
+            href='#how-do-i-connect-my-wca-account-with-my-wca-id'>สร้าง WCA
+            account และเชื่อมต่อกับ WCA ID.</a>
           #original_hash: 56a8f26
           '2': >-
-            หลังจากที่คุณเชื่อมต่อบัญชี WCA กับ WCA ID แล้ว ไปที่<a
+            หลังจากที่คุณเชื่อมต่อ WCA account กับ WCA ID แล้ว ไปที่<a
             href='%{profile_edit_path}'>แก้ไข profile</a>
             เพื่อเปลี่ยนรูปแทนตัวของคุณ
       '8':
         #original_hash: 1d61217
-        title: ฉันสามารถเชื่อมต่อบัญชี WCA กับ WCA ID ได้อย่างไร?
+        title: ฉันสามารถเชื่อมต่อ WCA account กับ WCA ID ได้อย่างไร?
         content:
           #original_hash: 07bb6ec
           '1': '%{current_user_claim}'
@@ -2798,7 +2799,7 @@ th:
             ทั้งหมดนี้อาจจะใช้เวลาเป็นวันหรือสัปดาห์ กรุณาอดทน
           #original_hash: bf8adbe
           '3': >-
-            นอกจากนี้ ถ้าคุณเชื่อต่อบัญชี WCA กับ WCA ID แล้ว (ดูด้านล่าง)
+            นอกจากนี้ ถ้าคุณเชื่อต่อ WCA account กับ WCA ID แล้ว (ดูด้านล่าง)
             คุณสามารถรับการแจ้งเตือนทาง email เมื่อผลการแข่งขันของคุณถูกแสดง <a
             href='%{preferences_edit_path}'>ที่นี่</a>
       regulations1:
@@ -2861,10 +2862,10 @@ th:
       เชิงกลที่บิดชิ้นส่วนหรือที่รู้จักกันทั่วไปว่า 'twisty puzzles' Puzzle
       ที่มีชื่อเสียงคือ Rubik's Cube
       ที่ถูกคิดค้นขึ้นโดยศาสตราจารย์รูบิคจากประเทศฮังการี Puzzle
-      ที่ถูกเลือกจะเป็นการแข่งขันอย่างเป็นทางการของ WCA</p> <p>เWCA
+      ที่ถูกเลือกจะเป็นการแข่งขันอย่างเป็นทางการของ WCA</p> <p>WCA
       พัฒนาขึ้นมากในช่วงทศวรรษที่ผ่านมา มีผู้เข้าร่วมการแข่งขันของเรามากกว่า
-      100,000 คน
-      แม้จะมีการเติบโตเช่นนี้เรายังคงเป็นองค์กรที่ดำเนินการโดยอาสาสมัครทั้งหมดตั้งแต่ผู้จัดงานในท้องถิ่นไปจนถึง
+      100,000 คน แม้จะมีการเติบโตอย่างรวดเร็ว
+      แต่เรายังคงเป็นองค์กรที่ดำเนินการโดยอาสาสมัครทั้งหมดตั้งแต่ผู้จัดงานในท้องถิ่นไปจนถึง
       WCA Delegates หรือแม้แต่ WCA Board เราขอขอบคุณทุกคนที่สละเวลาเพื่อทำงานให้
       WCA
       ด้วยการสนับสนุนทางการเงินที่มากขึ้นเราหวังว่าจะนำระดับความเป็นมืออาชีพมาสู่การแข่งขันของเรามากขึ้นในขณะที่เรายังคงอนุมัติการแข่งขันต่าง
@@ -2889,9 +2890,10 @@ th:
     #original_hash: a08c67f
     whats_next_content_html: >-
       <p>สมาคมลูกบากศ์โลกมีผู้เข้าแข่งขันกว่า 100,000 รายใน 140
-      ประเทศและเราไม่ได้วางแผนที่จะชะลอตัวเร็ว ๆ นี้! ชุมชน cubing
+      ประเทศและยังเพิ่มขึ้นอย่างต่อเนื่อง! ชุมชน cubing
       มีการเติบโตอย่างต่อเนื่องตั้งแต่ก่อตั้งขึ้นในปี 2004
-      และเราต้องการที่จะสนับสนุนให้สิ่งนี้ดำเนินต่อไปในอนาคตโดยเพิ่มการเข้าถึงการแข่งขันไปยังพื้นที่ใหม่
+      และเราต้องการที่จะสนับสนุนให้สิ่งนี้ดำเนินต่อไปในอนาคต
+      โดยเพิ่มการเข้าถึงการแข่งขันไปยังพื้นที่ใหม่
       ในอนาคตเราหวังว่าจะสนับสนุนชุมชนของเรามากยิ่งขึ้นผ่านความร่วมมือและการเผยแพร่ต่อผู้ที่สนใจเกี่ยวกับกิจกรรมนี้</p>
     #original_hash: dc71704
     world_championship_title: ชิงแชมป์โลก
@@ -2928,7 +2930,7 @@ th:
       donate_other: บริจาคด้วยวิธีอื่น
     structure:
       #original_hash: 0d62207
-      teams_committees_councils: 'ทีม WCA, คณะกรรมการ, และสภา'
+      teams_committees_councils: 'ทีม WCA, คณะกรรมการ และสภา'
       #original_hash: 9482c5d
       title: โครงสร้าง
       board:
@@ -2938,7 +2940,7 @@ th:
         description: >-
           คณะกรรมการ WCA
           มีหน้าที่รับผิดชอบในการนำองค์กรโดยรวมและปฏิบัติหน้าที่ใด ๆ
-          ที่ไม่ได้ปฏิบัติตามโดยทีมงานคณะกรรมการและสภาอื่น ๆ
+          ที่ไม่ได้ปฏิบัติตามโดยทีมงาน, คณะกรรมการและสภา
       #original_hash: d54d953
       committees: >-
         ทีมและคณะกรรมการของ WCA
@@ -3007,10 +3009,8 @@ th:
         name: WCA Software Team
         #original_hash: ec961e4
         description: >-
-          103/5000
-
           ทีมนี้มีหน้าที่รับผิดชอบในการจัดการซอฟต์แวร์ของ WCA (เว็บไซต์,
-          scramblersm workbook, เครื่องมือสำหรับผู้ดูแลระบบ)
+          scramblers, workbook, เครื่องมือสำหรับผู้ดูแลระบบ)
       wct:
         #original_hash: 63a2388
         name: WCA Communication Team
@@ -3019,8 +3019,8 @@ th:
           WCA Communication Team (WCT)มีบทบาทในการดูแลและสนับสนุนการสื่อสารของ
           WCA กับชุมชนและประชาชนทั่วไป การสื่อสารของ WCA
           ควรมีส่วนร่วมในวัตถุประสงค์ของ WCA
-          และสนับสนุนวัฒนธรรมเชิงบวกทั่วไปของความเป็นมิตร, ความโปร่งใส,
-          ความละม้ายคล้ายคลึง, เปิดกว้าง, และการตอบโต้
+          และสนับสนุนวัฒนธรรมเชิงบวกของความเป็นมิตร, ความโปร่งใส,
+          ความละม้ายคล้ายคลึง, เปิดกว้าง, และการตอบสนอง
       wfc:
         #original_hash: 9cb13de
         name: WCA Financial Committee
@@ -3058,7 +3058,7 @@ th:
         #original_hash: f511502
         description: >-
           ทีมนี้มีบทบาทในการอนุมัติและประกาศการแข่งขัน WCA
-          และทำให้มั่นใจว่าการประกาศดังกล่าวเป็นไปตามมาตรฐานคุณภาพของ WCA
+          และทำให้มั่นใจว่าการประกาศดังกล่าวเป็นไปตามมาตรฐานของ WCA
       wmt:
         #original_hash: 2035811
         name: WCA Marketing Team
@@ -3090,12 +3090,12 @@ th:
         Delegate คือดูแลการแข่งขันในนามของ WCA. WCA Delegate
         รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA
         ทั้งหมดดำเนินการตามภารกิจวิญญาณและกติกาของ WCA. WCA ได้แยกบทบาทดังนี้
-        <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong>
-        และ<strong>WCA Candidate Delegates</strong>%{see_link}.</p>
-        <p>นอกเหนือจากหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates
+        <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates </strong>
+        และ<strong> WCA Candidate Delegates</strong>%{see_link}.</p>
+        <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates
         ยังมีหน้าที่ในการจัดการ WCA Delegates
         ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
-        <p>Delegates ใหม่จะถูกระบุเป็น WCA Candidate Delegates ในตอนแรก;
+        <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น WCA Candidate Delegates ก่อน
         หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน WCA
         ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates.</p>
       #original_hash: 27d18ac
@@ -3140,7 +3140,7 @@ th:
     empty: ปัจจุบันไม่มีองค์กรระดับภูมิภาคใดที่ WCA ยอมรับ
     how_to:
       #original_hash: b243b1f
-      title: ธีการเป็นองค์กรระดับภูมิภาคที่ได้รับการยอมรับจาก WCA
+      title: วิธีการเป็นองค์กรระดับภูมิภาคที่ได้รับการยอมรับจาก WCA
       #original_hash: f042a88
       description: >-
         WCA ยอมรับองค์กรระดับภูมิภาคหลายแห่งทั่วโลก
@@ -3294,7 +3294,7 @@ th:
       #original_hash: 61a471f
       info_html: >-
         คณะกรรมการนี้มีบทบาทในการอนุมัติและประกาศการแข่งขัน WCA
-        และทำให้มั่นใจว่าการประกาศดังกล่าวเป็นไปตามมาตรฐานคุณภาพของ WCA
+        และทำให้มั่นใจว่าการประกาศดังกล่าวเป็นไปตามมาตรฐานของ WCA
     wmt:
       #original_hash: f2a0140
       info_html: >-
