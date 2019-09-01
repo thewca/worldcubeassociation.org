@@ -109,8 +109,8 @@ onPage("competitions#show_all_results", function() {
     $("#radio-" + eventId + "-bottom").prop("checked", "true");
 
     // Also update the sidebar.
-    $(".nav_event.active").removeClass("active");
-    $(".nav_event .event-" + eventId).parent().addClass("active");
+    $(".nav-event.active").removeClass("active");
+    $(".nav-event .event-" + eventId).parent().addClass("active");
 
     // Switch to the new event.
     var $results = $('.one-event');
