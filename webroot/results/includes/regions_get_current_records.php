@@ -7,7 +7,7 @@ $results = dbQuery("
     UNION
     " . regionsGetCurrentRecordsQuery( 'average', 'Average' ) . ") helper
   ORDER BY
-    rank, type DESC, year, month, day, roundTypeId, personName
+    helper.rank, helper.type DESC, helper.year, helper.month, helper.day, helper.roundTypeId, helper.personName
 ");
 
 function regionsGetCurrentRecordsQuery ( $valueId, $valueName ) {
@@ -15,13 +15,16 @@ function regionsGetCurrentRecordsQuery ( $valueId, $valueName ) {
    "SELECT
       '$valueName'     type,
                        result.*,
-                       value,
+                       record.value,
       event.name       eventName,
       event.cellName   eventCellName,
-                       format,
+                       event.format,
       country.name     countryName,
       competition.cellName competitionName,
-                       rank, year, month, day
+                       event.rank,
+                       competition.year,
+                       competition.month,
+                       competition.day
     FROM
       (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
        FROM Concise{$valueName}Results
@@ -33,10 +36,10 @@ function regionsGetCurrentRecordsQuery ( $valueId, $valueName ) {
       Competitions competition
     WHERE " . randomDebug() . "
 
-      AND result.$valueId = value
+      AND result.$valueId = record.value
       " . regionCondition('result') . eventCondition() . yearCondition() . "
 
-      AND result.eventId = recordEventId
+      AND result.eventId = record.recordEventId
       AND event.id       = result.eventId
       AND country.id     = result.countryId
       AND competition.id = result.competitionId

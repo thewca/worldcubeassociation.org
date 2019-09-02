@@ -34,10 +34,10 @@ echo "<p></p>";
 
 #--- Define what to show in what order and with nice short names
 $events = dbQueryHandle("
-      SELECT id, name
-      FROM Events
-      WHERE rank < 900
-      ORDER BY rank
+      SELECT event.id, event.name
+      FROM Events event
+      WHERE event.rank < 900
+      ORDER BY event.rank
     ");
 
 $whats = [];

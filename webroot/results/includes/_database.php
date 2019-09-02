@@ -122,13 +122,13 @@ function dbCommand ( $command ) {
 #----------------------------------------------------------------------
 function getAllEvents () {
 #----------------------------------------------------------------------
-  return dbQuery("SELECT * FROM Events WHERE rank<990 ORDER BY rank");
+  return dbQuery("SELECT * FROM Events event WHERE event.rank<990 ORDER BY event.rank");
 }
 
 #----------------------------------------------------------------------
 function getAllRounds () {
 #----------------------------------------------------------------------
-  return dbQuery("SELECT * FROM RoundTypes ORDER BY rank");
+  return dbQuery("SELECT * FROM RoundTypes round_type ORDER BY round_type.rank");
 }
 
 #----------------------------------------------------------------------
@@ -196,7 +196,7 @@ function getAllUsedCountriesCompetitionIds () { return getAllIDs( getAllUsedCoun
 function getAllUsedContinentIds            () { return getAllIDs( getAllUsedContinents()            ); }
 
 function getAllEventIdsIncludingObsolete () {
-  return getAllIDs(dbQuery("SELECT id FROM Events WHERE rank<1000 ORDER BY rank"));
+  return getAllIDs(dbQuery("SELECT event.id FROM Events event WHERE event.rank<1000 ORDER BY event.rank"));
 }
 
 #----------------------------------------------------------------------
