@@ -48,6 +48,22 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   3. `bin/rspec` - Run tests.
 - [Mailcatcher](http://mailcatcher.me/) is a good tool for catching emails in development.
 
+## Run in Docker (WIP)
+
+- `cd WcaOnRails`
+- `make run`
+- `make shell` - Open a shell.
+- **Inside of the shell**: `bin/rake db:load:development` - Load the developer's database export. This will take a while!
+  - `bin/rake db:reset` - A bit faster than loading the developer's database
+    export, this should only take ~4 minutes, but it's not nearly as
+    interesting as the developer's database export.
+- **Inside of the shell**: `bin/rails server --binding=0.0.0.0`
+  - Note: Sometimes this will fail, complaining about dependencies. At this
+    point you could either rebuild the containers (`make build`), which can be
+    slow, or you could just run `bin/yarn` or a `bin/bundle` as needed.
+- **Optional, but will speed up Javascript development quite a bit**:
+  `bin/webpack-dev-server` in a new `make shell`.
+
 ## Run in Vagrant (gets everything working, but is very slow, recommended only if you need to run the PHP portions of the website)
 
 - Install [Vagrant](https://www.vagrantup.com/), which requires
