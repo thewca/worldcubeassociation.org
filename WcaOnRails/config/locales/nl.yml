@@ -1,5 +1,49 @@
 nl:
   countries:
+    #original_hash: 530670d
+    AG: Antigua en Bermuda
+    #original_hash: 62ac59b
+    BA: Bosnië en Herzegovina
+    #original_hash: f39d280
+    CD: Democratische Republiek Congo
+    #original_hash: 77f256b
+    CG: Congo
+    #original_hash: b218299
+    CI: Ivoorkust
+    #original_hash: 07dee45
+    CV: Kaapverdië
+    #original_hash: ee10075
+    FM: Micronesië
+    #original_hash: db871b0
+    GW: Guinee Bissau
+    #original_hash: 2f488ff
+    HK: Hong Kong
+    #original_hash: 3ad2dd8
+    KN: Saint Kitts en Nevis
+    #original_hash: 7184d1a
+    KP: Zuid-Korea
+    #original_hash: 4430b22
+    KR: Zuid-Korea
+    #original_hash: 673b1cf
+    LC: Saint Lucia
+    #original_hash: e2ac50f
+    MK: Noord Macedonië
+    #original_hash: 928b7c4
+    MM: Myanmar
+    #original_hash: d887137
+    MO: Macau
+    #original_hash: 05a15c1
+    PS: Palestina
+    #original_hash: 655191a
+    ST: Sao Tomé en Principe
+    #original_hash: 16cc7f8
+    SZ: Eswatini
+    #original_hash: 4d206a8
+    TT: Trinidad en Tobago
+    #original_hash: 0f3f60b
+    VA: Vaticaanstad
+    #original_hash: 3fa9b2d
+    VC: Saint Vincent en de Grenadinen
     #original_hash: 9af4622
     XF: Meerdere Landen (Afrika)
     #original_hash: 374ac0d
@@ -16,12 +60,6 @@ nl:
     XS: Meerdere landen (Zuid-Amerika)
     #original_hash: 9027fe6
     XW: Meerdere Landen (Wereld)
-    #original_hash: 918c53a
-    MO: Macao
-    #original_hash: 2f488ff
-    HK: Hong Kong
-    #original_hash: 4e8bd04
-    KR: Zuid-Korea
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Meerdere Continenten
@@ -165,17 +203,27 @@ nl:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
   advancement_condition:
-    #original_hash: 6e55337
+    short:
+      #original_hash: 6100c20
+      ranking: 'Top %{ranking}'
+      #original_hash: 0664a83
+      percent: 'Top %{percent}%'
+      attempt_result:
+        #original_hash: 482f137
+        time: 'Beste resultaat < %{time}'
+        #original_hash: 3faa63e
+        moves: 'Beste resultaat < %{moves}'
+        #original_hash: c3133c2
+        points: 'Beste resultaat > %{points}'
     ranking: 'Top %{ranking} naar volgende ronde'
-    #original_hash: 7ee969c
     percent: 'Top %{percent}% naar volgende ronde'
     attempt_result:
-      #original_hash: 1fb7fe1
-      time: 'Beste resultaat < %{time} naar volgende ronde'
-      #original_hash: 8254f3e
-      moves: 'Beste resultaat < %{moves} draaien naar volgende ronde'
-      #original_hash: daab86e
-      points: 'Beste resultaat > %{points} punten naar volgende ronde'
+      #original_hash: b3c8a02
+      time: 'Beste poging < %{time} naar volgende ronde'
+      #original_hash: 07bca6c
+      moves: 'Beste poging < %{moves} draaien naar volgende ronde'
+      #original_hash: 837083c
+      points: 'Beste poging > %{points} punten naar volgende ronde'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -203,6 +251,8 @@ nl:
     #original_hash: cc7d8bb
     333mbf: 10 minuten per kubus
   common:
+    #original_hash: 70c07ec
+    world: Wereld
     #original_hash: 2513cf0
     continent: Continent
     #original_hash: d523ebb
@@ -415,20 +465,18 @@ nl:
         refund_policy_limit_date: Uiterste datum voor teruggave
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Bezoekerskosten
-        #original_hash: 9e1008d
-        regulation_z1: >-
-          Ik wil dat deelnemers hun puzzels inleveren tijdens de registratie, op
-          basis van Reglement Z1)
-        #original_hash: 466aca7
-        regulation_z1_reason: Reden voor Z1)
-        #original_hash: 588c6a0
-        regulation_z3: >-
-          Ik wil deelnemers selecteren die zich rechtstreeks voor bepaalde
-          ronden van de bepaalde wedstrijdonderdelen kwalificeren, gebaseerd op
-          resultaten van specifieke eerdere wedstrijden, op basis van Reglement
-          Z3)
-        #original_hash: 18d9a8c
-        regulation_z3_reason: Reden voor Z3)
+        #original_hash: 723cad9
+        early_puzzle_submission: >-
+          Ik wil van deelnemers eisen dat ze hun puzzels op een specifiek
+          tijdstip voor het wedstrijdonderdeel inleveren
+        #original_hash: 78308cc
+        early_puzzle_submission_reason: Reden en detals voor het vroegtijdig inleveren van puzzels
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Ik wil graag kwalificatieresultaten gebruiken om te beperken wie kan
+          deelnemen aan bepaalde wedstrijdonderdelen
+        #original_hash: 1ec6dd4
+        qualification_results_reason: Reden en details voor kwalificatieresultaten
       registration:
         #original_hash: 3c23a67
         guests: Gasten
@@ -772,17 +820,11 @@ nl:
           via deze website regelen. Als het bedrag 0 is, dan wordt een zin
           getoond dat gasten gratis toegang hebben.
         #original_hash: da39a3e
-        regulation_z1: ''
-        #original_hash: d3872a2
-        regulation_z1_reason: >-
-          Licht hier toe waarom je Reglement Z1) wilt toepassen. Graag in het
-          Engels!
+        early_puzzle_submission: ''
         #original_hash: da39a3e
-        regulation_z3: ''
-        #original_hash: af960d9
-        regulation_z3_reason: >-
-          Licht hier toe waarom je Reglement Z3) wilt toepassen. Graag in het
-          Engels!
+        qualification_results: ''
+        #original_hash: da39a3e
+        event_restrictions: ''
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -820,6 +862,8 @@ nl:
         #original_hash: da39a3e
         sticky: ''
         #original_hash: da39a3e
+        unstick_at: ''
+        #original_hash: da39a3e
         title: ''
         #original_hash: da39a3e
         tags: ''
@@ -838,12 +882,14 @@ nl:
         equipment: >-
           Aantal en type timers en displays voor de wedstrijd. Verwijder de
           regels van de apparatuur die je niet hebt gebruikt.
-        #original_hash: 4658dd9
+        #original_hash: a4aebc8
         venue: >-
           Vertel over de ruimte, het licht, ruimte voor publiek, indeling van de
           wedstrijdlocatie (oplossen, scramblen, wachtruimte, computers),
           verschillende podia, problemen die er waren (bijv. geluidsoverlast) en
-          hoe je ze oploste. Wees beknopt ajb en noem geen irrelevante details.
+          hoe je ze oploste. Wees ajb beknopt en noem geen irrelevante details.
+          Upload ajb een foto van de wedstrijdlocatie om de lay-out te laten
+          zien van de scrambletafel, het wedstrijdgebied en de wedstrijdtafels.
         #original_hash: f8de509
         organization: >-
           Vertel over het organisatieteam en hoe er werd gewerkt tijdens de
@@ -858,6 +904,10 @@ nl:
           verwezen. Houd het concreet, geen algemene opmerkingen. Voel je vrij
           om andere delegates of de WRC om feedback te vragen. Als je een
           uitspraak van WRC verwacht, maak dat dan duidelijk.
+        #original_hash: da39a3e
+        wrc_feedback_requested: ''
+        #original_hash: da39a3e
+        wdc_feedback_requested: ''
         #original_hash: f30abdc
         remarks: >-
           Vermeld overige punten die je wilt delen (bijv. ontwikkeling in de
@@ -885,6 +935,8 @@ nl:
         person2_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: da39a3e
+        incorrect_wca_id_claim_count: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -928,6 +980,27 @@ nl:
         message: ''
         #original_hash: da39a3e
         confirm_information: ''
+      regional_organization:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        country: ''
+        #original_hash: da39a3e
+        address: ''
+        #original_hash: da39a3e
+        directors_and_officers: ''
+        #original_hash: da39a3e
+        area_description: ''
+        #original_hash: da39a3e
+        past_and_current_activities: ''
+        #original_hash: da39a3e
+        future_plans: ''
+        #original_hash: da39a3e
+        extra_information: ''
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        end_date: ''
     options:
       registration:
         status:
@@ -1361,13 +1434,13 @@ nl:
           De profielfoto moet geen offensieve inhoud bevatten (zoals offensieve
           gebaren).
       delegate_avatar_guidelines:
-        #original_hash: 35abf16
-        title: 'Aanvullende richtlijnen voor delegates:'
+        #original_hash: da9e6df
+        title: 'Aanvullende richtlijnen voor stafleden:'
         paragraphs:
-          #original_hash: 3cf91ed
+          #original_hash: ff6d2e8
           '1': >-
             De avatar moet een foto zijn waarop je te zien bent zoals je er ook
-            op een wedstrijd uit kunt zien.
+            op een wedstrijd uit kunt zien als een WCA-delegate.
           #original_hash: 64ded69
           '2': >-
             De foto in je avatar moet zo zijn genomen, omkaderd, uitgesneden en
@@ -1423,7 +1496,7 @@ nl:
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
-        Voor deze WCA-id hebben wij nog geen land gevuld. Stuur een e-mail aan
+        Voor deze WCA-id hebben wij nog geen land gevuld. Stuur een e-mail aan 
         <a href='mailto:results@worldcubeassociation.org'
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: c3839bc
@@ -1691,7 +1764,7 @@ nl:
       hebt, kun je deze  %{here} aanmaken.
     #original_hash: 89b4e7f
     greeting: 'Hoi, %{name}!'
-    #original_hash: fb34a17
+    #original_hash: 322f646
     please_fix_profile_html: >-
       Om je aan te melden voor deze %{comp}, moet je de volgende problemen in je
       %{profile} oplossen:
@@ -1900,11 +1973,6 @@ nl:
         krijg je %{refund_policy_percent} van het betaalde bedrag terug.
       #original_hash: 4aca553
       no_refunds: Aanmeldkosten worden niet terugbetaald.
-      #original_hash: b86fee2
-      on_the_spot_registration_html: >-
-        Nieuwe aanmeldingen op de wedstrijdlocatie worden geaccepteerd met een
-        basisaanmeldbedrag van %{on_the_spot_base_entry_fee}, als de
-        deelnemerslimiet nog niet is bereikt voor %{end_of_registration}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Aanmeldingen bij de deur worden geaccepteerd en zijn gratis.
       #original_hash: f5f687d
@@ -2033,11 +2101,11 @@ nl:
         Ondersteunt <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: a1b7d1b
+      #original_hash: e5cbb13
       name_reason_html: >-
         Een korte uitleg van de wedstrijdnaam. De naam moet voldoen aan de <a
-        href='/documents/policies/Competition%20Name.pdf'>WCA Competition Name
-        Policy</a>.
+        href='/documents/policies/external/Competition%20Name20Requirements.pdf'>WCA
+        Competition Requirements Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
         De locatie waar de wedstrijd plaatsvindt. %{md}. Bijvoorbeeld: [Cité des
@@ -2146,9 +2214,6 @@ nl:
       note_clone: >-
         Om een bestaande wedstrijd te klonen bezoek je de informatiepagina van
         die wedstrijd en klikt op 'Klonen' in het menu.
-    update_events:
-      #original_hash: 00204fa
-      update_success: Wedstrijdonderdelen aangepast.
     update:
       #original_hash: 5fb2f57
       save_success: Wedstrijd opgeslagen.
@@ -2232,7 +2297,7 @@ nl:
         cumulative_one_round_html: 'Er kan een %{cumulative_time_limit} gelden (zie %{regulation_link}).'
         #original_hash: c6190b6
         cumulative_across_rounds_html: >-
-          Er kan een %{cumulative_time_limit} gelden over meerdere rondes (zie
+          Er kan een %{cumulative_time_limit} gelden over meerdere rondes (zie 
           %{guideline_link}).
         #original_hash: e4e48c6
         cutoff_html: >-
@@ -2444,7 +2509,7 @@ nl:
     announcement_info_html: 'Aangekondigd door %{author_name} op %{date_time}'
   contacts:
     website:
-      #original_hash: ac2ac3d
+      #original_hash: 4ef2aad
       title: WCA-website contactformulier
       inquiries:
         #original_hash: 92ea7e8
@@ -2703,40 +2768,28 @@ nl:
   about:
     #original_hash: 9ac918a
     title: Over WCA
-    mission:
-      paragraphs:
-        #original_hash: c86d105
-        '1': >-
-          De World Cube Association is de internationale organisatie voor
-          wedstrijden voor puzzels die worden gebruikt door het draaien van
-          groepen stukjes, zogenoemde 'twisty puzzles' (draaipuzzels). De
-          beroemdste van deze puzzels is de Rubik's Kubus, uitgevonden door
-          professor Rubik uit Hongarije. Een selectie uit deze puzzels is
-          gekozen als officiële wedstrijdonderdelen van de WCA.
-        #original_hash: 22c3593
-        '2': >-
-          De World Cube Association organiseert wedstrijden over de hele wereld,
-          ondersteund door regionale organisaties die verantwoordelijk zijn voor
-          het organiseren van wedstrijden in hun landen.
-        #original_hash: 0902c4a
-        '3': >-
-          De Missie van de World Cube Association is <strong>meer wedstrijden in
-          meer landen met meer mensen en meer plezier, onder eerlijke en gelijke
-          omstandigheden</strong>.
-        #original_hash: 2b993c0
-        '4': >-
-          De Spirit van World Cube Association is that <strong>mensen van over
-          de hele wereld samen plezier hebben in een prettige atmosfeer, elkaar
-          helpen en zich sportief gedragen</strong>.
     structure:
       #original_hash: 9482c5d
       title: Structuur
       board:
         #original_hash: abd2828
         name: WCA Board (bestuur)
+        #original_hash: e0d37a2
         description: >-
-          De World Cube Association wordt geleid door the WCA
-          Board, bestaande uit de volgende leden:
+          De World Cube Association wordt geleid door the WCA Board, bestaande
+          uit de volgende leden:
+      #original_hash: d54d953
+      committees: >-
+        De volgende commissies zijn een integraal onderdeel van de organisatie
+        en voeren de dagelijkse werkzaamheden uit die nodig zijn om te blijven
+        functioneren. Deze commisses zijn samengesteld uit leden van de
+        WCA-community, inclusief WCA-delegates en deelnemers. Elke commissie
+        heeft een leider, wiens rol het is om te zorgen dat het goed
+        functioneert en om de andere teamleden aan te sturen. Raden zijn een
+        speciaal type teams die een adviesrol hebben aan de WCA-board en zijn
+        samengesteld uit leden van de community, not stafleden. Als er vacatures
+        zijn bij de commissies, teams en raden, wordt er informatie op de
+        hoofdpagina geplaatst over hoe je kunt solliciteren.
       chair:
         #original_hash: de34439
         name: WCA Voorzitter
@@ -2749,10 +2802,6 @@ nl:
       vice_chair:
         #original_hash: 0388b19
         name: WCA Vice-Voorzitter
-      #original_hash: b0c72a9
-      committees: >-
-        De volgende commissies zijn verantwoordelijk voor de operationele
-        activiteiten van de WCA:
       wdc:
         #original_hash: c97077a
         name: WCA Disciplinaire Commissie
@@ -2803,7 +2852,7 @@ nl:
       wfc:
         #original_hash: 9cb13de
         name: WCA Financiële Commissie
-        #original_hash: 2d4807e
+        #original_hash: b4ed44b
         description: Dit team is verantwoordelijk voor de financiën van de WCA.
       wec:
         #original_hash: 83bd1d0
@@ -2845,8 +2894,6 @@ nl:
           WCA Brand, het zoeken van sponsoren, het ondersteunen van de
           distributie van WCA wedstrijdmaterialen en het marketen van WCA
           merchandise.
-      #original_hash: a2c8ad3
-      councils: 'De volgende adviesraden hebben de rol om het WCA-bestuur te adviseren:'
       wac:
         #original_hash: 1ce7604
         name: WCA Adviesraad
@@ -2904,12 +2951,12 @@ nl:
   regional_organizations:
     #original_hash: 37b8fdc
     title: Regionale Organisaties
-    #original_hash: ba87c07
+    #original_hash: 15a06d6
     content: 'De WCA erkent de volgende regionale organisaties:'
     how_to:
-      #original_hash: fc3af12
-      title: Hoe een WCA Regionale Organisatie worden
-      #original_hash: cc1639d
+      #original_hash: b243b1f
+      title: Hoe een erkende WCA Regionale Organisatie worden
+      #original_hash: f042a88
       description: >-
         De WCA erkent verschillende regionale organisaties wereldwijd. Het doel
         van een WCA regionale organisatie is het organiseren van WCA-wedstrijden
@@ -2926,30 +2973,30 @@ nl:
         '1': >-
           Actief organiseren en ondersteunen van WCA-wedstrijden in de regio van
           de organisatie
-        #original_hash: 8c5a7fe
+        #original_hash: 63714d1
         '2': >-
-          Actief bijdragen aan de continentale WCA-wedstrijd in het continent
-          van de Regionale Organisatie
-        #original_hash: 8943714
+          Bijdragen aan de continentale WCA-wedstrijd in het continent van de
+          regionale organisatie, als dit wordt verwacht door het betreffende
+          organisatieteam
+        #original_hash: 3c07dd6
         '3': >-
           Respecteren en operationaliseren van de Doelstellingen in de Statuten
-          en Reglementen van de WCA
+          en Moties
         #original_hash: 0c3576b
         '4': Voldoen aan van toepassing zijnd WCA-wedstrijdreglement
-        #original_hash: 23cda60
-        '5': Accepteren en voldoen aan beslissingen van WCA-officials
-        #original_hash: efe2b55
+        #original_hash: 1a9e6c5
+        '5': Accepteren en voldoen aan beslissingen van WCA-stafleden
+        #original_hash: d4ae7c1
         '6': >-
-          Deponeren bij de WCA een kopie van haar Statuten en Reglementen in
-          elektronische vorm
+          Deponeren bij de WCA van een kopie van haar actuele Statuten, en
+          indien van toepassing de reglementen in elektronische vorm
     application_instructions:
       #original_hash: 4da829b
       title: Aanmeldinstructies
-      #original_hash: 7ed06ee
+      #original_hash: 7b7de7e
       description_html: >-
-        Vul het <a
-        href='https://docs.google.com/forms/d/e/1FAIpQLSfX2HbafvMbWw-9DTgIP0Zf7im1VMZEaRq1J-jXnyW2nVYzsg/viewform'>formulier</a>
-        in.
+        Vul om in aanmerking te komen voor erkenning <a
+        href='/regional-organizations/new>dit formulier</a> in.
   contact:
     #original_hash: a34b69f
     title: Contactinformatie
@@ -3369,16 +3416,12 @@ nl:
     paragraph3:
       #original_hash: 00d3bf8
       title: Deadline voor het aankondigen van de wedstrijd
-      #original_hash: 305cfb1
+      #original_hash: 3613823
       content_html: >-
-        De wedstrijd zou minstens een maand van tevoren moeten worden
-        aangekondigd (zie <a
-        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Richtlijn
-        8a4++</a>). Als er speciale redenen zijn waarom deze deadline niet kan
-        worden gehaald, mogen wedstrijden tot uiterlijk twee weken van tevoren
-        worden aangekondigd, te bepalen door de WCAT. Het is sterk aan te
-        bevelen om de WCAT van deze redenen op de hoogte te brengen om latere
-        weigering te voorkomen.
+        De wedstrijd zou minstens 28 dagen van tevoren moeten worden
+        aangekondigd voor de start van de wedstrijd (zie <a
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
+        Requirements</a>).
     paragraph4:
       #original_hash: b6dca56
       title: Nabijheidsbeleid
@@ -3429,24 +3472,21 @@ nl:
     paragraph-events:
       #original_hash: b16c5f1
       title: Wedstrijdonderdelen aankondigen
-      #original_hash: cee85f7
+      #original_hash: 7ad62c7
       content: >-
         Alle wedstrijdonderdelen die tijdens een wedstrijd worden gehouden
         moeten worden gespecificeerd door de WCA Delegate, bij het aanvragen van
-        een wedstrijd. Hieronder vallen ook de wedstrijdonderdelen die misschien
-        worden gehouden, d.w.z. wedstrijdonderdelen die afhangen van hoe soepel
-        de wedstrijd verloopt. Aanvullingen moeten worden goedgekeurd door de
-        WCAT.
+        een wedstrijd. Aanvullingen moeten worden goedgekeurd door de WCAT.
     paragraph5:
       #original_hash: 17d01de
       title: Maximumaantal Deelnemers
-      #original_hash: b4748cf
+      #original_hash: bd8e6ee
       content_html: >-
         Het aantal deelnemers kan worden beperkt per wedstrijdonderdeel of per
         wedstrijd (zie <a
-        href='https://www.worldcubeassociation.org/regulations/#Z4'>Reglement
-        Z4</a>). Zoals alle Reglementen in artikel Z, moet de WCA Delegate van
-        de wedstrijd goedkeuring krijgen van de WCAT. Maximumaantallen
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
+        Requirements</a>). De WCA Delegate van de wedstrijd moet goedkeuring
+        krijgen van het maximumaantal deelnemers van de WCAT. Maximumaantallen
         deelnemers moeten zorgvuldig woren gekozen en in lijn zijn met het
         verwachte aantal aanmeldingen. Het maximumaantal mag niet voor
         onbelangrijke reden laag worden ingesteld. Het bedoelde maximum moet al
