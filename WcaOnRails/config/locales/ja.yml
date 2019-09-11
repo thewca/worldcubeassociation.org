@@ -470,6 +470,8 @@ ja:
         event_restrictions: 特定の種目への同時参加を制限する。
         #original_hash: 4bf194c
         event_restrictions_reason: 特定種目への同時参加を制限する理由および詳細
+        #original_hash: 3c24bd2
+        main_event_id: メイン種目
       registration:
         #original_hash: 3c23a67
         guests: 見学者人数
@@ -829,6 +831,8 @@ ja:
         event_restrictions: ''
         #original_hash: d3329d7
         event_restrictions_reason: 特定種目への同時参加を制限する理由および詳細を記載してください (英語で)
+        #original_hash: 1067798
+        main_event_id: この種目の優勝者が本大会の優勝者となります。
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1280,6 +1284,19 @@ ja:
         header: 'あなたは%{competition}の運営から外されました。'
         #original_hash: 66cb109
         information: 'あなたは%{remover}により%{competition}の運営から外されました。'
+      registration_reminder_email:
+        #original_hash: 7d355cb
+        header: '%{competition} 参加申し込みはまもなく開始です'
+        #original_hash: c9d0561
+        intro: '%{name} 様'
+        #original_hash: a8f7e72
+        information_html: >-
+          <a href=%{competition_url}>%{competition}</a>
+          の参加申し込みが24時間以内に開始されることをお知らせします。
+        #original_hash: 2b93022
+        not_accepted_html: すでに参加申し込み済みですが、まだ承認されていません。
+        #original_hash: 3724e7c
+        more_info_html: '<a href=%{competition_url}>大会ページ</a> をご確認ください。詳細な情報や参加申し込み要件が記載されています。'
     claim_wca_id:
       #original_hash: f28bf87
       title: WCA ID 連携
@@ -1777,6 +1794,10 @@ ja:
       disclaimer: WCA 申し込みシステムを使用する大会のみここに表示されます。大会がここに表示されない場合、その大会の専用サイトをご覧ください。
       #original_hash: 94a2fc8
       past_competitions: 過去の大会
+      #original_hash: ec7e697
+      bookmarked_title: ブックマークした大会
+      #original_hash: e5665fb
+      bookmarked_explanation: WCA ウェブサイト上でブックマークした大会です。大会申込開始の24時間前にメールが送信されます。
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -1865,6 +1886,12 @@ ja:
         range_ongoing_html: '参加申し込み期間は %{start_date_and_time} から %{end_date_and_time} までです。'
         #original_hash: 7ac8349
         range_past_html: '参加申し込み期間は %{start_date_and_time} から %{end_date_and_time} までです。'
+      #original_hash: 8eda7ac
+      bookmark: この大会をブックマークする
+      #original_hash: 4dfea97
+      is_bookmarked: ブックマーク済みです
+      #original_hash: 74598a7
+      number_of_bookmarks: ブックマーク数
     index:
       #original_hash: db98a68
       title: 大会一覧
@@ -1952,6 +1979,8 @@ ja:
       competitions_list: 大会一覧
       #original_hash: 9104a03
       no_past_competitions: 過去に参加した大会はありません。
+      #original_hash: 43c3543
+      no_bookmarked_competitions: 開催前の大会がブックマークされていません。大会ページのブックマークアイコンをクリックしてここに保存しておきましょう！
     competition_form:
       #original_hash: 2b81984
       wcat: WCA 大会告知チーム
