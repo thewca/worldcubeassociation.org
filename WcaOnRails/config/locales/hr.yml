@@ -493,6 +493,8 @@ hr:
           kombinacije disciplina
         #original_hash: 4bf194c
         event_restrictions_reason: Razlozi i detalji za ograničenja disciplina
+        #original_hash: 3c24bd2
+        main_event_id: Glavna disciplina
       registration:
         #original_hash: 3c23a67
         guests: Gosti
@@ -906,6 +908,8 @@ hr:
         event_restrictions_reason: >-
           Ovdje objasnite zašto želite ograničiti neke kombinacije disciplina.
           Ispunite ovo na engleskom jeziku!
+        #original_hash: 1067798
+        main_event_id: Pobjednik u ovoj disciplini je ujedno i pobjednik natjecanja.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1423,6 +1427,22 @@ hr:
         information: >-
           %{remover} Vas je izbrisao s natjecanja %{competition} kao
           organizatora.
+      registration_reminder_email:
+        #original_hash: 7d355cb
+        header: 'Registracije za %{competition} se uskoro otvaraju'
+        #original_hash: c9d0561
+        intro: 'Pozdrav %{name},'
+        #original_hash: a8f7e72
+        information_html: >-
+          Ovo je obavijest da se registracije za <a
+          href=%{competition_url}>%{competition}</a>  otvaraju za manje od 24
+          sata.
+        #original_hash: 2b93022
+        not_accepted_html: 'Registrirali ste se, no registracija još nije prihvaćena.'
+        #original_hash: 3724e7c
+        more_info_html: >-
+          Pogledajte <a href=%{competition_url}>stranicu natjecanja</a> za više
+          informacija i za registracijske zahtjeve.
     claim_wca_id:
       #original_hash: f28bf87
       title: Zatražite WCA ID
@@ -2037,6 +2057,12 @@ hr:
         natjecatelja na web-stranici natjecanja.
       #original_hash: 94a2fc8
       past_competitions: Prošla natjecanja
+      #original_hash: ec7e697
+      bookmarked_title: Označena natjecanja
+      #original_hash: e5665fb
+      bookmarked_explanation: >-
+        Natjecanja koja ste označili na WCA stranici. Poslat ćemo Vam e-mail 24
+        sata prije nego se registracije otvore.
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2150,6 +2176,12 @@ hr:
         range_past_html: >-
           Online registracije su se otvorile %{start_date_and_time} i zatvorile
           %{end_date_and_time}.
+      #original_hash: 8eda7ac
+      bookmark: Označi ovo natjecanje
+      #original_hash: 4dfea97
+      is_bookmarked: Označili ste ovo natjecanje
+      #original_hash: 74598a7
+      number_of_bookmarks: Broj puta koliko je ovo natjecanje označeno
     index:
       #original_hash: db98a68
       title: Natjecanja
@@ -2239,6 +2271,10 @@ hr:
       competitions_list: lista natjecanja
       #original_hash: 9104a03
       no_past_competitions: Nemate prijašnjih natjecanja.
+      #original_hash: 43c3543
+      no_bookmarked_competitions: >-
+        Niste označili nijedno buduće natjecanje. Kliknite na ikonicu za
+        označavanje natjecanja na stranici natjecanja kako bi ga spremili ovdje!
     competition_form:
       #original_hash: 2b81984
       wcat: WCA Tim za objavljivanje natjecanja
