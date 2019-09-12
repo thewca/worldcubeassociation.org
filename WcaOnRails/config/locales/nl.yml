@@ -367,7 +367,7 @@ nl:
         #original_hash: 9af9099
         results_notifications_enabled: Stuur me een mail als de resultaten online staan.
         #original_hash: de60ab8
-        delegate_status: Status van WCA delegate
+        delegate_status: Status van WCA-delegate
         #original_hash: 0f21717
         region: Regio
         #original_hash: a10b651
@@ -416,7 +416,7 @@ nl:
         #original_hash: 28a6fbb
         currency_code: Valutacode
         #original_hash: 2e3ed8b
-        delegate_ids: WCA delegate(s)
+        delegate_ids: WCA-delegate(s)
         #original_hash: 958562e
         organizer_ids: Organisator(en)
         #original_hash: b37456c
@@ -777,7 +777,7 @@ nl:
           deelnemers en toeschouwers, en andere details die relevant zijn voor
           mensen die zijn geïnteresseerd om deel te nemen of te komen kijken.
         #original_hash: b4d020f
-        delegate_ids: WCA delegates van de wedstrijd.
+        delegate_ids: WCA-delegates van de wedstrijd.
         #original_hash: 517d376
         organizer_ids: >-
           Organisatoren (ze hebben een account nodig om op de lijst zichtbaar te
@@ -1231,7 +1231,7 @@ nl:
       #original_hash: ed97787
       documents: WCA-documenten
       #original_hash: d8fd3e4
-      delegates: WCA delegates
+      delegates: WCA-delegates
       #original_hash: 37b8fdc
       organizations: Regionale Organisaties
       #original_hash: d790b40
@@ -1639,13 +1639,13 @@ nl:
       #original_hash: 407c4f8
       select_delegate_html: >-
         Om je je WCA-id toe te kennen, moet een <a href='%{link_delegate}'
-        target='_blank'>WCA delegate</a> je identiteit bevestigen. Voer je
-        geboortedatum in en selecteer de WCA delegate die jou het beste kent.
+        target='_blank'>WCA-delegate</a> je identiteit bevestigen. Voer je
+        geboortedatum in en selecteer de WCA-delegate die jou het beste kent.
       #original_hash: 2564ee3
       already_assigned_html: >-
         WCA-id %{link_id} is al verbonden aan een andere account. Als jij denkt
         dat dit fout is, neem dan contact op met je lokale <a
-        href='%{link_delegate}' target='_blank'>WCA delegate</a>.
+        href='%{link_delegate}' target='_blank'>WCA-delegate</a>.
       #original_hash: d26bfdc
       missing_dob_html: 'WCA-id %{link_id} heeft nog geen geboortedatum ingevuld.'
       #original_hash: 5be6803
@@ -2073,9 +2073,9 @@ nl:
         other: Organisatoren
       #original_hash: 6afa61e
       delegate:
-        zero: WCA delegates
-        one: WCA delegate
-        other: WCA delegates
+        other: WCA-delegates
+        one: WCA-delegate
+        zero: WCA-delegates
       #original_hash: b37456c
       contact: Contact
       #original_hash: 0eb5ed5
@@ -2351,9 +2351,9 @@ nl:
         moet minimaal één ronde hebben, en alle rondes moeten in het tijdschema
         zijn opgenomen.
       #original_hash: 6e228b7
-      must_contain_delegate: moet minimaal één WCA delegate bevatten
+      must_contain_delegate: moet minimaal één WCA-delegate bevatten
       #original_hash: 8131fc2
-      not_all_delegates: zijn niet allen WCA delegates
+      not_all_delegates: zijn niet allen WCA-delegates
       #original_hash: 43a23c2
       registration_close_after_open: sluiten van de aanmelding moet na het openen van de aanmelding
       #original_hash: 8a3a4f6
@@ -2412,7 +2412,7 @@ nl:
       #original_hash: 709a232
       name: Naam
       #original_hash: adc24b7
-      delegates: WCA delegate(s)
+      delegates: WCA-delegate(s)
       #original_hash: eb9a4bc
       date: Datum
       #original_hash: d219c68
@@ -2866,10 +2866,10 @@ nl:
           '3': >-
             Daarna kunnen de organisatoren contact opnemen met een <a
             target='_blank'
-            href='https://www.worldcubeassociation.org/delegates'>WCA
-            delegate</a> dichtbij. Er moet een WCA delegate aanwezig zijn om de
-            wedstrijden officieel te maken voor WCA. De WCA delegate kan de
-            organisatoren helpen om een succesvolle wedstrijd te organiseren.
+            href='https://www.worldcubeassociation.org/delegates'>WCA-delegate</a>
+            dichtbij. Er moet een WCA-delegate aanwezig zijn om de wedstrijden
+            officieel te maken voor WCA. De WCA-delegate kan de organisatoren
+            helpen om een succesvolle wedstrijd te organiseren.
           #original_hash: 576c3b8
           '4': >-
             Bezoek <a target='_blank'
@@ -2936,16 +2936,16 @@ nl:
         content:
           #original_hash: 890d879
           '1': >-
-            Als een wedstrijd is afgelopen, zal de WCA delegate een aantal
+            Als een wedstrijd is afgelopen, zal de WCA-delegate een aantal
             controles uitvoeren op de resultaatbriefjes en persoonlijke
-            gegevens. Daarna verstuurt de WCA delegate de resultaten naar het
+            gegevens. Daarna verstuurt de WCA-delegate de resultaten naar het
             WCA Resultatenteam (WRT) dat verantwoordelijk is voor het posten en
             het onderhouden van de WCA-database. Het WRT post de resultaten zo
             snel als mogelijk.
           #original_hash: daf1cb1
           '2': >-
             Afhankelijk van de grootte van een wedstrijd en het tijdsbeslag van
-            de WCA delegate, kan dit een dag tot een week duren. Heb dus even
+            de WCA-delegate, kan dit een dag tot een week duren. Heb dus even
             geduld.
           #original_hash: bf8adbe
           '3': >-
@@ -3268,17 +3268,17 @@ nl:
         name: WCA-delegates met proeftijd
       #original_hash: 3d5b64b
       delegates_html: >-
-        <p><strong>WCA delegates</strong> zijn leden van de WCA die
+        <p><strong>WCA-delegates</strong> zijn leden van de WCA die
         verantwoordelijk zijn dat alle WCA-wedstrijden verlopen volgens de
         missie, wedstrijdreglement en spirit van de WCA. De WCA onderscheidt
-        <strong>WCA Senior delegates</strong>, <strong>WCA delegates</strong> en
-        <strong>WCA kandidaat delegates</strong> %{see_link}. Naast de taken van
-        een WCA delegate is een WCA Senior delegate verantwoordelijk voor het
-        managen van de WCA delegates in hun regio en kan deze door de community
-        worden benaderd over regionale zaken.</p> <p>Nieuwe WCA delegates worden
-        eerst benoemd als WCA kandidaat delegates en moeten aantonen dat zij in
+        <strong>WCA Senior delegates</strong>, <strong>WCA-delegates</strong> en
+        <strong>WCA-kandidaatdelegates</strong> %{see_link}. Naast de taken van
+        een WCA-delegate is een WCA Senior delegate verantwoordelijk voor het
+        managen van de WCA-delegates in hun regio en kan deze door de community
+        worden benaderd over regionale zaken.</p> <p>Nieuwe WCA-delegates worden
+        eerst benoemd als WCA-kandidaatdelegates en moeten aantonen dat zij in
         staat zijn om WCA-wedstrijden succesvol te laten verlopen, voordat ze
-        worden benoemd tot WCA delegate.</p>
+        worden benoemd tot WCA-delegate.</p>
       #original_hash: 27d18ac
       see_link_html: '(zie%{link})'
       #original_hash: 5b01fcc
@@ -3302,9 +3302,9 @@ nl:
     codeofethics: Ethische Code
   delegates_page:
     #original_hash: d8fd3e4
-    title: WCA delegates
+    title: WCA-delegates
     #original_hash: 77b819c
-    acknowledges: 'De WCA erkent de volgende leden als WCA delegates:'
+    acknowledges: 'De WCA erkent de volgende leden als WCA-delegates:'
     table:
       #original_hash: 709a232
       name: Naam
@@ -3662,7 +3662,7 @@ nl:
       #original_hash: ceeb6fe
       content3_html: >-
         Je kunt de lijst filteren door een deel van de naam in te toetsen van de
-        wedstrijd of de WCA delegate.
+        wedstrijd of de WCA-delegate.
       #original_hash: 5ca74eb
       content4_html: >-
         Initieel worden alleen de wedstrijden van de laatste week getoond of die
