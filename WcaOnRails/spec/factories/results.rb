@@ -76,6 +76,19 @@ FactoryBot.define do
       person { FactoryBot.create(:inbox_person, competitionId: competition.id) }
     end
 
+    trait :for_existing_person do
+      transient do
+        real_person { FactoryBot.create(:person) }
+      end
+      person {
+        FactoryBot.create(:inbox_person,
+                          competitionId: competition.id,
+                          name: real_person.name, wcaId: real_person.wca_id,
+                          gender: real_person.gender, dob: real_person.dob,
+                          countryId: real_person.country.iso2)
+      }
+    end
+
     personId { person.id }
   end
 

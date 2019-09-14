@@ -9,10 +9,12 @@ module ResultsValidators
     WRONG_PARENTHESIS_FORMAT_ERROR = "Opening parenthesis in '%{name}' must be preceeded by a space."
     DOB_0101_WARNING = "The date of birth of %{name} is on January 1st, please make sure it's correct."
     VERY_YOUNG_PERSON_WARNING = "%{name} seems to be less than 3 years old, please make sure it's correct."
+    NOT_SO_YOUNG_PERSON_WARNING = "%{name} seems to be around 100 years old, please make sure it's correct."
     SAME_PERSON_NAME_WARNING = "Person '%{name}' exists with one or multiple WCA IDs (%{wca_ids}) in the WCA database."\
       " A person in the uploaded results has the same name but has no WCA ID: please make sure they are different (and add a message about this to the WRT), or fix the results JSON."
     NON_MATCHING_DOB_WARNING = "Wrong birthdate for %{name} (%{wca_id}), expected '%{expected_dob}' got '%{dob}'."
     NON_MATCHING_GENDER_WARNING = "Wrong gender for %{name} (%{wca_id}), expected '%{expected_gender}' got '%{gender}'."
+    EMPTY_GENDER_WARNING = "Gender for newcomer %{name} is empty, please leave a comment to the WRT about this."
     NON_MATCHING_NAME_WARNING = "Wrong name for %{wca_id}, expected '%{expected_name}' got '%{name}'. If the competitor did not change their name then fix the name to the expected name."
     NON_MATCHING_COUNTRY_WARNING = "Wrong country for %{name} (%{wca_id}), expected '%{expected_country}' got '%{country}'. If this is an error, fix it. Otherwise, do leave a comment to the WRT about it."
 
@@ -67,14 +69,23 @@ module ResultsValidators
                                                DOB_0101_WARNING,
                                                name: p.name)
           end
-          # Competitor less than 3 years old are extremely rare, so we'd better check these birthdate are correct
-          # FIXME: use competition.year for compatibility with old competitions!
+          if p.gender.blank?
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               EMPTY_GENDER_WARNING,
+                                               name: p.name)
+          end
+          # Competitor less than 3 years old are extremely rare, so we'd better check these birthdate are correct.
           if p.dob.year >= Time.now.year - 3
             @warnings << ValidationWarning.new(:persons, competition_id,
                                                VERY_YOUNG_PERSON_WARNING,
                                                name: p.name)
           end
-          # Look for double whitespaces or leading/trailing whitespaces
+          if p.dob.year <= Time.now.year - 100
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               NOT_SO_YOUNG_PERSON_WARNING,
+                                               name: p.name)
+          end
+          # Look for double whitespaces or leading/trailing whitespaces.
           unless p.name.squeeze(" ").strip == p.name
             @errors << ValidationError.new(:persons, competition_id,
                                            WHITESPACE_IN_NAME_ERROR,
