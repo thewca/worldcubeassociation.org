@@ -19,4 +19,15 @@ class InboxPerson < ApplicationRecord
   def country
     Country.find_by_iso2(countryId)
   end
+
+  # NOTE: silly method overriding: we don't have an id on that table.
+  # Hopefully this necessary dirty hack will go away when we streamline posting
+  # results through WCIF.
+  def delete
+    InboxPerson.where(id: id, competitionId: competitionId).delete_all
+  end
+
+  def update(args)
+    InboxPerson.where(id: id, competitionId: competitionId).update_all(args)
+  end
 end
