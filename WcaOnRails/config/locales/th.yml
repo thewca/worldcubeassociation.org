@@ -698,9 +698,11 @@ th:
         dob: กรอกวันเกิดของคุณในรูปแบบ YYYY-MM-DD
         #original_hash: d0bb74a
         name: >-
-          กรอกชื่อเต็มของคุณให้ถูกต้อง ตัวอย่างเช่น <strong>ชนาธูป
-          สรงกระสัย</strong>, ไม่กรอกรูปแบบนี้ <strong>ช
-          สรงกระสัย</strong>.<br/>ชื่อกลาง (เต็มหรือย่อ) ไม่จำเป็น
+          กรอกชื่อเต็มของคุณให้ถูกต้อง
+          เป็นภาษาอังกฤษแล้วตามด้วยชื่อภาษาไทยในวงเล็บ ตัวอย่างเช่น
+          <strong>Chanatupe Songrasai (ชนาธูป สรงกระสัย)</strong>,
+          ไม่กรอกรูปแบบนี้ <strong>c songrasai</strong>.<br/>ชื่อกลาง
+          (เต็มหรือย่อ) ไม่จำเป็น
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -1618,8 +1620,8 @@ th:
         other: ผู้เข้าแข่งขันเก่า
       #original_hash: b7da17a
       person:
-        zero: บุคคล
-        other: บุคคล
+        other: คน
+        zero: คน
     flash:
       #original_hash: da7ec53
       not_using_wca: การแข่งขันนี้ไม่ได้ใช้การรับสมัครของ WCA
