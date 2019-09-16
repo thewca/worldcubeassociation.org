@@ -3,6 +3,20 @@
 require 'rails_helper'
 
 RSpec.describe RegistrationsController do
+  def new_payment_method(account, card = {})
+    default_card = {
+      number: "4242424242424242",
+      exp_month: 12,
+      exp_year: Time.now.year + 1,
+      cvc: "314",
+    }
+    default_card.merge!(card)
+    Stripe::PaymentMethod.create(
+      { type: "card", card: default_card },
+      stripe_account: account,
+    )
+  end
+
   def stripe_token_id(options = {})
     default_card = {
       number: "4242424242424242",
@@ -576,6 +590,28 @@ RSpec.describe RegistrationsController do
       psych_sheet = assigns(:psych_sheet)
       expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration.id]
       expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1]
+    end
+  end
+
+  describe 'POST test' do
+    context 'when signed in' do
+      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let!(:user) { FactoryBot.create(:user, :wca_id) }
+      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+
+      before :each do
+        sign_in user
+      end
+
+      it 'just tests stuff' do
+        pm = new_payment_method(competition.connected_stripe_account_id)
+        post :process_payment_intent, params: {
+          id: registration.id,
+          payment_method_id: pm.id,
+        }
+        # NOTE: fails because amount too low!
+        puts "coucou"
+      end
     end
   end
 
