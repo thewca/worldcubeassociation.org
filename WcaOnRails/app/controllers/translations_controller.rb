@@ -74,7 +74,7 @@ class TranslationsController < ApplicationController
     "th" => [21095],
     "vi" => [7158],
     "zh-CN" => [9],
-    "zh-TW" => [38],
+    "zh-TW" => [38, 77608],
   }.freeze
   # rubocop:enable Style/NumericLiterals
 
