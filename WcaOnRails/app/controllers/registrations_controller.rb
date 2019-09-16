@@ -18,7 +18,7 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :process_payment, :destroy, :update]
+                except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_success, :process_payment_intent, :process_payment, :destroy, :update]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event]
   private def competition_must_be_using_wca_registration!
@@ -374,6 +374,123 @@ class RegistrationsController < ApplicationController
     if current_user
       @registration = @competition.registrations.find_or_initialize_by(user_id: current_user.id, competition_id: @competition.id)
       @selected_events = @registration.saved_and_unsaved_events.empty? ? @registration.user.preferred_events : @registration.saved_and_unsaved_events
+    end
+  end
+
+  def payment_success
+    @competition = competition_from_params
+    flash[:success] = t("registrations.payment_form.payment_successful")
+    redirect_to competition_register_path(@competition)
+  end
+
+  # This method implements the synchronous workflow described here: https://stripe.com/docs/payments/payment-intents/web-manual
+  # It does:
+  #   - if payment method id is sent by Stripe, generate a payment intent
+  #     - if PI is successful, register the payment and say it's ok
+  #     - if card error, register the payment as failure
+  #     - if not, ask for extra action (ie: 3D secure) to the user
+  #   - if payment intent id is sent by Stripe, try confirm it
+  #     - if success, register the payment and say it's ok
+  #     - if not, register the payment as failure
+  def process_payment_intent
+    registration = Registration.includes(:user, :competition).find(params[:id])
+    user = registration&.user
+    unless user == current_user
+      render json: { error: { message: t("registrations.payment_form.errors.not_allowed") }, status: 403 }
+      return
+    end
+    amount = params[:amount].to_i
+    if registration.outstanding_entry_fees.cents <= 0
+      render json: { error: { message: t("registrations.payment_form.errors.already_paid") } }
+      return
+    end
+    intent = nil
+    stripe_charge = nil
+    competition = registration.competition
+    registration_metadata = {
+      name: user.name,
+      wca_id: user.wca_id,
+      email: user.email,
+      competition: competition.name,
+    }
+    begin
+      if params[:payment_method_id]
+        if amount < registration.outstanding_entry_fees.cents
+          render json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
+          return
+        end
+        payment_intent_args = {
+          payment_method: params[:payment_method_id],
+          amount: amount,
+          currency: registration.outstanding_entry_fees.currency.iso_code,
+          confirmation_method: "manual",
+          confirm: true,
+          description: "Registration payment for #{competition.name} by #{registration.user.name}",
+          metadata: registration_metadata,
+        }
+        # Log the payment attempt
+        stripe_charge = StripeCharge.create!(
+          metadata: payment_intent_args.to_json,
+          stripe_charge_id: nil,
+          status: "unknown",
+        )
+        # Create the PaymentIntent, overriding the stripe_account for the request
+        # by the connected stripe account for the competition.
+        intent = Stripe::PaymentIntent.create(
+          payment_intent_args,
+          stripe_account: registration.competition.connected_stripe_account_id,
+        )
+      elsif params[:payment_intent_id]
+        stripe_charge = StripeCharge.find_by(stripe_charge_id: params[:payment_intent_id])
+        # We should definitely find a StripeCharge for this PI, so show an error if we don't.
+        unless stripe_charge
+          render json: { error: { message: t("registrations.payment_form.errors.intent_not_found") } }
+          return
+        end
+        intent = Stripe::PaymentIntent.confirm(
+          params[:payment_intent_id],
+          {},
+          stripe_account: registration.competition.connected_stripe_account_id,
+        )
+      end
+    rescue Stripe::CardError => e
+      # Log and display error to client
+      stripe_charge.update!(status: "failure", error: e.message)
+      render json: { error: { message: e.message } }
+      return
+    end
+    status, response = generate_payment_response(registration, intent, stripe_charge)
+    render json: response, status: status
+  end
+
+  private def generate_payment_response(registration, intent, stripe_charge)
+    if intent&.status == "requires_action" &&
+       intent.next_action.type == "use_stripe_sdk"
+      stripe_charge.update!(
+        status: "payment_intent_registered",
+        stripe_charge_id: intent.id,
+      )
+      # Tell the client to handle the action
+      [200, { requires_action: true, payment_intent_client_secret: intent.client_secret }]
+    elsif intent&.status == "succeeded"
+      # FIXME: what if intent.charges.total_count is not 1?!
+      intent.charges.data.each do |charge|
+        registration.record_payment(
+          charge.amount,
+          charge.currency,
+          charge.id,
+        )
+        stripe_charge.update!(
+          status: "success",
+          stripe_charge_id: charge.id,
+        )
+      end
+      # The payment didn’t need any additional actions and is completed!
+      # Handle post-payment fulfillment
+      [200, { success: true }]
+    else
+      # Invalid status
+      [500, { error: "Invalid PaymentIntent status" }]
     end
   end
 

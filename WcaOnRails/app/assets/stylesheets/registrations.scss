@@ -41,3 +41,8 @@ table.registrations-table {
   color: #fff;
   padding-right: 10px;
 }
+
+/* Apply Bootstrap focused form control style to Stripe element */
+.StripeElement--focus {
+  @extend .form-control:focus;
+}
