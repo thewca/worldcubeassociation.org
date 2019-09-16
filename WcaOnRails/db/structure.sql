@@ -1180,7 +1180,7 @@ DROP TABLE IF EXISTS `stripe_charges`;
 CREATE TABLE `stripe_charges` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `metadata` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `stripe_charge_id` int(11) DEFAULT NULL,
+  `stripe_charge_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `error` text COLLATE utf8mb4_unicode_ci,
   `created_at` datetime NOT NULL,
@@ -1602,4 +1602,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190817193315'),
 ('20190818102517'),
 ('20190825095512'),
-('20190826005902');
+('20190826005902'),
+('20190916133253');

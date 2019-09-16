@@ -1,52 +1,133 @@
 <% provide(:include_auto_numeric, true) %>
-<%= horizontal_simple_form_for :payment, url: competition_process_payment_path(@competition), html: { id: :form_payment } do |f| %>
+<%= horizontal_simple_form_for :payment, url: "", html: { id: :form_payment } do |f| %>
   <%= render 'entry_fee', label: "Paid", money_amount: @registration.paid_entry_fees %>
   <%= f.input :stripe_token, as: :hidden, input_html: { id: :stripe_token } %>
-  <%= f.input :total_amount, as: :hidden, input_html: { id: :total_amount } %>
   <%= render 'entry_fee', label: "Remaining", money_amount: @registration.outstanding_entry_fees %>
   <% if @competition.enable_donations %>
     <%= f.input :donation, as: :money_amount, currency: @registration.outstanding_entry_fees.currency.iso_code, value: "0", label: t('registrations.payment_form.labels.donation'), hint: t('registrations.payment_form.hints.donation') %>
   <% end %>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <%= f.button :submit, value: t('registrations.payment_button_text'), id: :donate_button, class: 'btn btn-primary' %>
+  <div class="form-group" id="group-cardholder-name">
+    <label class="col-sm-2 control-label" for="cardholder-name"><%= t("registrations.payment_form.labels.cardholder_name") %></label>
+    <div class="col-sm-9">
+      <input class="form-control" id="cardholder-name" type="text" />
     </div>
   </div>
-  <script src="https://checkout.stripe.com/checkout.js"></script>
+  <div class="form-group" id="group-card-element">
+    <label class="col-sm-2 control-label" for="card-element"><%= t("registrations.payment_form.labels.card_information") %></label>
+    <div class="col-sm-9">
+      <div class="form-control" id="card-element"></div>
+      <p class="help-block"><%= t("registrations.payment_form.hints.card_information") %></p>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10 text-danger" id="card-error">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <%= f.button :button, t('registrations.payment_button_text'), id: :"card-button", class: 'btn btn-primary' %>
+    </div>
+  </div>
+  <script src="https://js.stripe.com/v3/"></script>
   <script>
-    (function () {
-      // As per the javascript suggested here: https://stripe.com/docs/recipes/variable-amount-checkout#javascript
-      var handler = StripeCheckout.configure({
-        key: '<%= ENVied.STRIPE_PUBLISHABLE_KEY %>',
-        locale: 'auto',
-        image: '<%= image_url("wca_logo.svg") %>',
-        email: <%= current_user.email.to_json.html_safe %>,
-        name: 'World Cube Association',
-        description: 'Registration fee',
-        currency: '<%= @registration.outstanding_entry_fees.currency.iso_code %>',
-        zipCode: true,
-        token: function(token) {
-          $('input#stripe_token').val(token.id);
-          $('#form_payment').submit();
-        }
-      });
+    // From https://stripe.com/docs/stripe-js/reference#checkout-options-locale
+    var supported_locales = ['da', 'de', 'en', 'es', 'fi', 'fr', 'it', 'ja', 'nb', 'nl', 'pl', 'pt', 'sv', 'zh'];
+    var wca_locale = '<%= I18n.locale %>';
+    var stripe = Stripe('<%= ENVied.STRIPE_PUBLISHABLE_KEY %>', {
+      locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
+      stripeAccount: '<%= @competition.connected_stripe_account_id %>',
+    });
+    var elements = stripe.elements();
+    var cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+    var cardholderName = document.getElementById('cardholder-name');
+    var $cardButton = $('#card-button');
 
-      $('#donate_button').on('click', function(e) {
-        e.preventDefault();
-        var registration_fees_to_pay = <%= @registration.outstanding_entry_fees.cents %>;
-        var donation = parseFloat($('#payment_donation').val() || 0);
-        var amount = parseFloat(registration_fees_to_pay+donation);
-        if (isNaN(amount)) {
-          alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
-        } else if (amount < registration_fees_to_pay) {
-          alert('<%= t("registrations.payment_form.alerts.amount_too_low") %>');
+    var setSaving = function() {
+      $cardButton.attr("disabled", true);
+      $cardButton.addClass("saving");
+    };
+    var unsetSaving = function() {
+      $cardButton.attr("disabled", false);
+      $cardButton.removeClass("saving");
+    };
+
+    function handleServerResponse(response) {
+      response.json().then(function (response_json) {
+        if (response_json.error) {
+          // Show error in payment form
+          $("#card-error").text(response_json.error.message);
+          unsetSaving();
+        } else if (response_json.requires_action) {
+          stripe.handleCardAction(
+            response_json.payment_intent_client_secret
+          ).then(function(result) {
+            if (result.error) {
+              $("#card-error").text(result.error.message);
+              unsetSaving();
+            } else {
+              // The card action has been handled
+              // The PaymentIntent can be confirmed again on the server
+              fetch('<%= registration_payment_intent_path(@registration) %>', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content
+                },
+                body: JSON.stringify({ payment_intent_id: result.paymentIntent.id })
+              }).then(handleServerResponse);
+            }
+          });
         } else {
-          $('#total_amount').val(amount);
-          handler.open({
-            amount: Math.round(amount)
-          })
+          // We got a successful payment, redirect to the registration page with a
+          // nice flash message.
+          window.location.replace('<%= competition_payment_success_path(@competition) %>');
         }
       });
-    })();
+    }
+
+    $cardButton.on('click', function(ev) {
+      ev.preventDefault();
+      setSaving();
+      var registration_fees_to_pay = <%= @registration.outstanding_entry_fees.cents %>;
+      var donation = parseFloat($('#payment_donation').val() || 0);
+      var amount = parseFloat(registration_fees_to_pay+donation);
+      if (isNaN(amount)) {
+        alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
+      } else if (amount < registration_fees_to_pay) {
+        alert('<%= t("registrations.payment_form.alerts.amount_too_low") %>');
+      } else {
+        stripe.createPaymentMethod('card', cardElement, {
+          billing_details: {
+            name: cardholderName.value,
+          }
+        }).then(function(result) {
+          if (result.error) {
+            // Stripe checks for a non-empty name, which is returned as a rather
+            // technical message, so we better override it.
+            if (result.error.param === "billing_details[name]") {
+              $("#group-card-element").removeClass("has-error");
+              $("#group-cardholder-name").addClass("has-error");
+              $("#card-error").text('<%= t("registrations.payment_form.errors.cardholder_name") %>');
+              unsetSaving();
+            } else {
+              $("#group-card-element").addClass("has-error");
+              $("#group-cardholder-name").removeClass("has-error");
+              $("#card-error").text(result.error.message);
+              unsetSaving();
+            }
+          } else {
+            $("#group-card-element").removeClass("has-error");
+            $("#group-cardholder-name").removeClass("has-error");
+            // Otherwise send paymentMethod.id to your server (see Step 2)
+            fetch('<%= registration_payment_intent_path(@registration) %>', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
+              body: JSON.stringify({ payment_method_id: result.paymentMethod.id, amount: amount })
+            }).then(handleServerResponse);
+          }
+        });
+      }
+    });
   </script>
 <% end %>

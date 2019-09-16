@@ -19,6 +19,7 @@ Rails.application.routes.draw do
              end
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
+  post 'registration/:id/process_payment_intent' => 'registrations#process_payment_intent', as: :registration_payment_intent
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
 
@@ -53,6 +54,7 @@ Rails.application.routes.draw do
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
+    get 'payment-success' => 'registrations#payment_success'
     post 'process_payment' => 'registrations#process_payment'
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
