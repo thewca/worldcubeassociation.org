@@ -396,7 +396,7 @@ class RegistrationsController < ApplicationController
     registration = Registration.includes(:user, :competition).find(params[:id])
     user = registration&.user
     unless user == current_user
-      render json: { error: { message: t("registrations.payment_form.errors.not_allowed") }, status: 403 }
+      render status: 403, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
       return
     end
     amount = params[:amount].to_i

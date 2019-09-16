@@ -430,6 +430,168 @@ RSpec.describe "registrations" do
       end
     end
   end
+
+  describe "POST #process_payment_intent" do
+    context "when not signed in" do
+      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      sign_out
+
+      it "redirects to the sign in page" do
+        # 1234 is just some random registration id
+        post registration_payment_intent_path(1234)
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context "when signed in" do
+      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let!(:user) { FactoryBot.create(:user, :wca_id) }
+      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+
+      before :each do
+        sign_in user
+      end
+
+      it "restricts access to the registration's owner" do
+        user2 = FactoryBot.create(:user, :wca_id)
+        registration2 = FactoryBot.create(:registration, competition: competition, user: user2)
+        post registration_payment_intent_path(registration2.id)
+        expect(response.status).to eq 403
+      end
+
+      context "with a valid credit card without SCA" do
+        let!(:card) { FactoryBot.create(:credit_card) }
+        let!(:pm) {
+          # This emulates the client side action from the user: when submitting a payment
+          # Stripe creates a payment method and POST its id to us.
+          Stripe::PaymentMethod.create(
+            { type: "card", card: card },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+        }
+
+        it "rejects insufficient payment with valid credit card" do
+          original_outstanding_fees = registration.outstanding_entry_fees
+          expect(original_outstanding_fees).to be > 0
+          payment_amount = registration.outstanding_entry_fees / 2
+          post registration_payment_intent_path(registration.id), params: {
+            payment_method_id: pm.id,
+            amount: payment_amount,
+          }
+          expect_error_to_be(response, I18n.t("registrations.payment_form.alerts.amount_too_low"))
+          expect(registration.outstanding_entry_fees).to eq original_outstanding_fees
+        end
+
+        it "processes payment with a valid credit card without SCA" do
+          expect(registration.outstanding_entry_fees).to be > 0
+          expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
+          post registration_payment_intent_path(registration.id), params: {
+            payment_method_id: pm.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          # NOTE: the #process_payment_intent endpoint doesn't redirect, it's
+          # the 'register' page which does.
+          expect(registration.reload.outstanding_entry_fees).to eq 0
+          expect(registration.paid_entry_fees).to eq competition.base_entry_fee
+          charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+          expect(charge.amount).to eq competition.base_entry_fee.cents
+          expect(charge.metadata.wca_id).to eq user.wca_id
+          expect(charge.metadata.email).to eq user.email
+          expect(charge.metadata.competition).to eq competition.name
+        end
+
+        it "processes payment with donation and valid credit card without SCA" do
+          expect(registration.outstanding_entry_fees).to be > 0
+          expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
+          donation_lowest_denomination = 100
+          payment_amount = registration.outstanding_entry_fees.cents + donation_lowest_denomination
+          post registration_payment_intent_path(registration.id), params: {
+            payment_method_id: pm.id,
+            amount: payment_amount,
+          }
+          expect(registration.reload.outstanding_entry_fees.cents).to eq(-donation_lowest_denomination)
+          expect(registration.paid_entry_fees.cents).to eq payment_amount
+          charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+          expect(charge.amount).to eq payment_amount
+        end
+      end
+
+      context "with a valid 3D-secure credit card" do
+        let!(:card) { FactoryBot.create(:credit_card, :sca_card) }
+        let!(:pm) {
+          # This emulates the client side action from the user: when submitting a payment
+          # Stripe creates a payment method and POST its id to us.
+          Stripe::PaymentMethod.create(
+            { type: "card", card: card },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+        }
+
+        it "asks for further action before recording payment" do
+          original_outstanding_fees = registration.outstanding_entry_fees
+          expect(original_outstanding_fees).to be > 0
+          post registration_payment_intent_path(registration.id), params: {
+            payment_method_id: pm.id,
+            amount: original_outstanding_fees.cents,
+          }
+          # The #process_payment_intent endpoint doesn't redirect, it's
+          # the 'register' page which does.
+          expect(registration.reload.outstanding_entry_fees).to eq original_outstanding_fees
+          expect(registration.paid_entry_fees).to eq 0
+          response_json = JSON.parse(response.body)
+          expect(response_json["requires_action"]).to be true
+          # That's as far as we can go, testing the authentication success/failure
+          # must be done by clicking on a modal.
+        end
+      end
+
+      # The tests below are to test that our endpoint correctly forwards errors,
+      # not to actually test Stripe's correctness...
+      context "rejected credit cards" do
+        it "rejects payment with declined credit card" do
+          original_outstanding_fees = registration.outstanding_entry_fees
+          expect(original_outstanding_fees).to be > 0
+          card = FactoryBot.create(:credit_card, :invalid)
+          pm = Stripe::PaymentMethod.create(
+            { type: "card", card: card },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+          post registration_payment_intent_path(registration.id), params: {
+            payment_method_id: pm.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          expect_error_to_be(response, "Your card was declined.")
+          expect(registration.outstanding_entry_fees).to eq original_outstanding_fees
+        end
+
+        it "rejects payment with expired credit card" do
+          card = FactoryBot.create(:credit_card, :expired)
+          pm = Stripe::PaymentMethod.create(
+            { type: "card", card: card },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+          post registration_payment_intent_path(registration.id), params: {
+            payment_method_id: pm.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          expect_error_to_be(response, "Your card has expired.")
+        end
+
+        it "rejects payment with incorrect cvc" do
+          card = FactoryBot.create(:credit_card, :incorrect_cvc)
+          pm = Stripe::PaymentMethod.create(
+            { type: "card", card: card },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+          post registration_payment_intent_path(registration.id), params: {
+            payment_method_id: pm.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          expect_error_to_be(response, "Your card's security code is incorrect.")
+        end
+      end
+    end
+  end
 end
 
 def csv_file(lines)
@@ -438,4 +600,9 @@ def csv_file(lines)
     lines.each { |line| csv << line }
   end
   Rack::Test::UploadedFile.new(temp_file.path, "text/csv")
+end
+
+def expect_error_to_be(response, message)
+  as_json = JSON.parse(response.body)
+  expect(as_json["error"]["message"]).to eq message
 end

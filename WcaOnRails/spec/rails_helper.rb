@@ -34,7 +34,12 @@ ActiveRecord::Migration.maintain_test_schema!
 # To debug feature specs using phantomjs, set `Capybara.javascript_driver = :poltergeist_debug`
 # and then call `page.driver.debug` in your feature spec.
 Capybara.register_driver :poltergeist_debug do |app|
-  Capybara::Poltergeist::Driver.new(app, inspector: true, phantomjs: Phantomjs.path, debug: true)
+  Capybara::Poltergeist::Driver.new(app, inspector: true, phantomjs: Phantomjs.path, debug: true, phantomjs_options: ['--ignore-ssl-errors=yes', '--ssl-protocol=any'])
+end
+
+# Required to test Stripe.js (which is loaded through ssl)
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, js_errors: true, phantomjs: Phantomjs.path, phantomjs_options: ["--ignore-ssl-errors=yes", "--ssl-protocol=any"])
 end
 
 Capybara.javascript_driver = :poltergeist
