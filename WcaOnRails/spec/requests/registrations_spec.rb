@@ -514,6 +514,19 @@ RSpec.describe "registrations" do
           charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
           expect(charge.amount).to eq payment_amount
         end
+
+        it "insert a success in the stripe journal" do
+          expect(StripeCharge.all.length).to eq 0
+          post registration_payment_intent_path(registration.id), params: {
+            payment_method_id: pm.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          stripe_charge_id = registration.registration_payments.first.stripe_charge_id
+          stripe_charge = StripeCharge.find_by(stripe_charge_id: stripe_charge_id)
+          expect(stripe_charge&.status).to eq "success"
+          metadata = JSON.parse(stripe_charge.metadata)["metadata"]
+          expect(metadata["wca_id"]).to eq registration.user.wca_id
+        end
       end
 
       context "with a valid 3D-secure credit card" do
@@ -542,6 +555,19 @@ RSpec.describe "registrations" do
           expect(response_json["requires_action"]).to be true
           # That's as far as we can go, testing the authentication success/failure
           # must be done by clicking on a modal.
+        end
+
+        it "inserts an 'intent registered' event in the stripe journal" do
+          expect(StripeCharge.all.length).to eq 0
+          post registration_payment_intent_path(registration.id), params: {
+            payment_method_id: pm.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          stripe_charge = StripeCharge.first
+          expect(stripe_charge&.status).to eq "payment_intent_registered"
+          metadata = JSON.parse(stripe_charge.metadata)
+          expect(metadata["payment_method"]).to eq pm.id
+          expect(metadata["metadata"]["wca_id"]).to eq registration.user.wca_id
         end
       end
 
@@ -588,6 +614,24 @@ RSpec.describe "registrations" do
             amount: registration.outstanding_entry_fees.cents,
           }
           expect_error_to_be(response, "Your card's security code is incorrect.")
+        end
+
+        it "records a failure in the stripe journal" do
+          expect(StripeCharge.all.length).to eq 0
+          card = FactoryBot.create(:credit_card, :invalid)
+          pm = Stripe::PaymentMethod.create(
+            { type: "card", card: card },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+          post registration_payment_intent_path(registration.id), params: {
+            payment_method_id: pm.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          stripe_charge = StripeCharge.first
+          expect(stripe_charge&.status).to eq "failure"
+          metadata = JSON.parse(stripe_charge.metadata)
+          expect(metadata["payment_method"]).to eq pm.id
+          expect(metadata["metadata"]["wca_id"]).to eq registration.user.wca_id
         end
       end
     end
