@@ -3,33 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe RegistrationsController do
-  def new_payment_method(account, card = {})
-    default_card = {
-      number: "4242424242424242",
-      exp_month: 12,
-      exp_year: Time.now.year + 1,
-      cvc: "314",
-    }
-    default_card.merge!(card)
-    Stripe::PaymentMethod.create(
-      { type: "card", card: default_card },
-      stripe_account: account,
-    )
-  end
-
-  def stripe_token_id(options = {})
-    default_card = {
-      number: "4242424242424242",
-      exp_month: 12,
-      exp_year: Time.now.year + 1,
-      cvc: "314",
-    }
-    default_card.merge!(options)
-    Stripe::Token.create(
-      card: default_card,
-    ).id
-  end
-
   context "signed in as organizer" do
     let(:organizer) { FactoryBot.create(:user) }
     let(:competition) { FactoryBot.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
@@ -593,159 +566,6 @@ RSpec.describe RegistrationsController do
     end
   end
 
-  describe 'POST test' do
-    context 'when signed in' do
-      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
-      let!(:user) { FactoryBot.create(:user, :wca_id) }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
-
-      before :each do
-        sign_in user
-      end
-
-      it 'just tests stuff' do
-        pm = new_payment_method(competition.connected_stripe_account_id)
-        post :process_payment_intent, params: {
-          id: registration.id,
-          payment_method_id: pm.id,
-        }
-        # NOTE: fails because amount too low!
-        puts "coucou"
-      end
-    end
-  end
-
-  describe 'POST #process_payment' do
-    context 'when not signed in' do
-      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
-      sign_out
-
-      it 'redirects to the sign in page' do
-        post :process_payment, params: { competition_id: competition.id }
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when signed in' do
-      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
-      let!(:user) { FactoryBot.create(:user, :wca_id) }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
-
-      before :each do
-        sign_in user
-      end
-
-      it 'processes payment with valid credit card' do
-        expect(registration.outstanding_entry_fees).to be > 0
-        expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
-        token_id = stripe_token_id
-        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
-        expect(flash[:success]).to eq "Your payment was successful."
-        expect(response).to redirect_to competition_register_path(competition)
-        expect(registration.reload.outstanding_entry_fees).to eq 0
-        expect(registration.paid_entry_fees).to eq competition.base_entry_fee
-        charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
-        expect(charge.amount).to eq competition.base_entry_fee.cents
-        expect(charge.metadata.wca_id).to eq user.wca_id
-        expect(charge.metadata.email).to eq user.email
-        expect(charge.metadata.competition).to eq competition.name
-      end
-
-      it 'processes payment with donation and valid credit card' do
-        expect(registration.outstanding_entry_fees).to be > 0
-        expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
-        token_id = stripe_token_id
-        donation_lowest_denomination = 100
-        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents + donation_lowest_denomination } }
-        expect(flash[:success]).to eq "Your payment was successful."
-        expect(registration.reload.outstanding_entry_fees.cents).to eq(-donation_lowest_denomination)
-        expect(registration.paid_entry_fees.cents).to eq(competition.base_entry_fee.cents + donation_lowest_denomination)
-        charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
-        expect(charge.amount).to eq(competition.base_entry_fee.cents + donation_lowest_denomination)
-      end
-
-      it 'rejects insufficient payment with valid credit card' do
-        expect(registration.outstanding_entry_fees).to be > 0
-        token_id = stripe_token_id
-        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: 500 } }
-        expect(flash[:danger]).to match "the amount to be charged was lower than the registration fees to pay"
-        expect(response).to redirect_to competition_register_path(competition)
-      end
-
-      it 'rejects payment with invalid credit card' do
-        token_id = stripe_token_id(number: "4000000000000002")
-        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
-        expect(flash[:danger]).to eq "Unsuccessful payment: Your card was declined."
-        expect(response).to redirect_to competition_register_path(competition)
-      end
-
-      context 'stripe journal' do
-        it 'records successes' do
-          expect(StripeCharge.all.length).to eq 0
-
-          pay_all_with(registration, stripe_token_id)
-
-          expect(StripeCharge.all.length).to eq 1
-          stripe_charge = StripeCharge.first
-          expect(stripe_charge.status).to eq "success"
-          expect(stripe_charge.stripe_charge_id).not_to be_nil
-          metadata = JSON.parse(stripe_charge.metadata)[0]["metadata"]
-          expect(metadata["wca_id"]).to eq registration.user.wca_id
-        end
-
-        it 'records failures' do
-          expect(StripeCharge.all.length).to eq 0
-
-          # Attempt payment with invalid credit card.
-          bad_card_token = stripe_token_id(number: "4000000000000002")
-          pay_all_with(registration, bad_card_token)
-
-          expect(StripeCharge.all.length).to eq 1
-          stripe_charge = StripeCharge.first
-          expect(stripe_charge.status).to eq "failure"
-          expect(stripe_charge.stripe_charge_id).to be_nil
-          expect(stripe_charge.error).to include "Stripe::CardError"
-          metadata = JSON.parse(stripe_charge.metadata)[0]["metadata"]
-          expect(metadata["wca_id"]).to eq registration.user.wca_id
-        end
-
-        it 'records attempts even if something weird happens' do
-          expect(StripeCharge.all.length).to eq 0
-
-          # Simulate some weird issue happening after we start talking to
-          # Stripe, and we never get around to recording the payment on our
-          # end, but maybe Stripe actually did charge the credit card.
-          stripe_double = class_double("Stripe::Charge").as_stubbed_const(transfer_nested_constants: true)
-          unexpected_error = "Uh oh!"
-          expect(stripe_double).to receive(:create).and_raise(unexpected_error)
-
-          expect {
-            pay_all_with(registration, stripe_token_id)
-          }.to raise_error(unexpected_error)
-
-          expect(StripeCharge.all.length).to eq 1
-          stripe_charge = StripeCharge.first
-          expect(stripe_charge.status).to eq "unknown"
-          expect(stripe_charge.stripe_charge_id).to be_nil
-          expect(stripe_charge.error).to include "RuntimeError: Uh oh"
-          metadata = JSON.parse(stripe_charge.metadata)[0]["metadata"]
-          expect(metadata["wca_id"]).to eq registration.user.wca_id
-        end
-
-        def pay_all_with(registration, stripe_token)
-          post :process_payment, params: {
-            competition_id: registration.competition.id,
-            payment: {
-              stripe_token: stripe_token,
-              total_amount:
-              registration.outstanding_entry_fees.cents,
-            },
-          }
-        end
-      end
-    end
-  end
-
   describe 'POST #refund_payment' do
     context 'when signed in as a competitor' do
       let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
@@ -768,8 +588,16 @@ RSpec.describe RegistrationsController do
       context "processes a payment" do
         before :each do
           sign_in organizer
-          token_id = stripe_token_id
-          post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
+          card = FactoryBot.create(:credit_card)
+          pm = Stripe::PaymentMethod.create(
+            { type: "card", card: card },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+          post :process_payment_intent, params: {
+            id: registration.id,
+            payment_method_id: pm.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
           @payment = registration.reload.registration_payments.first
         end
 

@@ -55,7 +55,6 @@ Rails.application.routes.draw do
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     get 'payment-success' => 'registrations#payment_success'
-    post 'process_payment' => 'registrations#process_payment'
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
