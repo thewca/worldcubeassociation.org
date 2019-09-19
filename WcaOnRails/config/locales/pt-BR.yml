@@ -491,6 +491,8 @@ pt-BR:
           competidores podem se inscrever
         #original_hash: 4bf194c
         event_restrictions_reason: Razões e detalhes para restrição de eventos
+        #original_hash: 3c24bd2
+        main_event_id: Evento principal
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
@@ -905,6 +907,8 @@ pt-BR:
         event_restrictions_reason: >-
           Por favor detalhe aqui os motivos para restrição de combinações de
           eventos. Por favor preencha em Inglês!
+        #original_hash: 1067798
+        main_event_id: O vencedor deste evento será o vencedor da competição.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1417,6 +1421,22 @@ pt-BR:
         header: 'Você foi removido dos organizadores de %{competition}'
         #original_hash: 66cb109
         information: '%{remover} removeu você dos organizadores de %{competition}.'
+      registration_reminder_email:
+        #original_hash: 7d355cb
+        header: 'As inscrições para %{competition} começam logo'
+        #original_hash: c9d0561
+        intro: 'Olá %{name},'
+        #original_hash: a8f7e72
+        information_html: >-
+          Este é um lembrete de que as inscrições para <a
+          href=%{competition_url}>%{competition}</a> começam em menos de 24
+          horas.
+        #original_hash: 2b93022
+        not_accepted_html: Você se inscreveu mas sua inscrição não foi aceita.
+        #original_hash: 3724e7c
+        more_info_html: >-
+          Por favor veja o the <a href=%{competition_url}>website da
+          competição</a> para mais informações e critérios de inscrição.
     claim_wca_id:
       #original_hash: f28bf87
       title: Conectar sua ID da WCA
@@ -1914,14 +1934,27 @@ pt-BR:
     payment_form:
       #original_hash: 4de825f
       title: Taxas de inscrição
+      #original_hash: d1569e6
+      payment_successful: >-
+        Seu pagamento foi feito com sucesso, e sua inscrição deve aparecer como
+        "paga" abaixo.
       hints:
         #original_hash: bf3a39e
         donation: Doação opcional que irá para a equipe de organização
+        #original_hash: 16cf92d
+        card_information: >-
+          As informações do seu cartão não chegam ao site da WCA. Elas são
+          enviadas de forma segura ao Stripe, que processa o pagamento e nos
+          informa depois.
       labels:
         #original_hash: 4de825f
         entry_fees: Taxas de inscrição
         #original_hash: 2c09302
         donation: Doação
+        #original_hash: 184150d
+        card_information: Informações do cartão
+        #original_hash: bc8091a
+        cardholder_name: Nome do titular
       alerts:
         #original_hash: a34940e
         not_a_number: Por favor entre uma quantia válida.
@@ -1929,6 +1962,18 @@ pt-BR:
         amount_too_low: >-
           A quantia total deve ser pelo menos igual às taxas de inscrição a
           serem pagas.
+      errors:
+        #original_hash: 166d48c
+        already_paid: A cobrança não foi feita porque as taxas de inscrição já estão pagas.
+        #original_hash: b2bc8ed
+        not_allowed: Você não pode pagar por esta inscrição
+        #original_hash: 630dbb9
+        intent_not_found: >-
+          Não pudemos encontrar o pagamento para confirmar em nosso servidor. O
+          processo de pagamento foi abortado e seu cartão não teve nenhuma
+          cobrança.
+        #original_hash: 63e0ec1
+        cardholder_name: Por favor verifique o nome do titular.
     #original_hash: 8607a87
     payment_button_text: Pague sua taxa de inscrição com cartão de crédito
     #original_hash: 4cf01a2
@@ -2024,6 +2069,12 @@ pt-BR:
         competição.
       #original_hash: 94a2fc8
       past_competitions: Competições passadas
+      #original_hash: ec7e697
+      bookmarked_title: Competições marcadas
+      #original_hash: e5665fb
+      bookmarked_explanation: >-
+        Competições que você marcou no site da WCA. Enviaremos um email pra você
+        24 horas antes das inscrições começarem.
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2128,6 +2179,12 @@ pt-BR:
         range_past_html: >-
           Inscrições pelo site começaram em %{start_date_and_time} e se
           encerraram em %{end_date_and_time}.
+      #original_hash: 8eda7ac
+      bookmark: Marcar esta competição
+      #original_hash: 4dfea97
+      is_bookmarked: Você marcou esta competição
+      #original_hash: 74598a7
+      number_of_bookmarks: Número de vezes que foi marcada
     index:
       #original_hash: db98a68
       title: Competições
@@ -2217,6 +2274,10 @@ pt-BR:
       competitions_list: lista de competições
       #original_hash: 9104a03
       no_past_competitions: Você não tem nenhuma competição passada.
+      #original_hash: 43c3543
+      no_bookmarked_competitions: >-
+        Você não tem nenhuma competição marcada. Clique no ícone e marcar na
+        página de uma competição para salvá-la aqui!
     competition_form:
       #original_hash: 2b81984
       wcat: Equipe de Anúncio de Competições da WCA
@@ -3710,6 +3771,36 @@ pt-BR:
       content2_html: >-
         Esse documento contém informações importantes e deve ser lido por todos
         os organizadores de competições.
+  regulations_translations:
+    #original_hash: 9493b8d
+    title: 'Regulamento e Orientações da WCA: Traduções'
+    #original_hash: 386ecc1
+    paragraph1: 'Se você fala outra língua além do Inglês, estas traduções podem ser úteis.'
+    #original_hash: 32b1132
+    paragraph2: >-
+      Por favor atente-se para o fato de que essa tradução não é uma versão
+      oficial (embora seja disponibilizada no site da WCA): ela pode ser útil,
+      mas não vem com nenhuma garantia. Se houver diferenças entre uma tradução
+      e a versão (atualmente oficial) em inglês, esta última deve ser usada.
+    #original_hash: 8ad8302
+    translations: Traduções
+    #original_hash: 4fc0e2b
+    current: Atual
+    #original_hash: fbb3c38
+    old: Antigas
+    table_elements:
+      #original_hash: 2da600b
+      version: Versão
+      #original_hash: 89b86ab
+      language: Língua
+    #original_hash: a916f93
+    translating: Traduzindo o Regulamento
+    #original_hash: 1b026e1
+    paragraph3_html: >-
+      Se você está interessado em adicionar/atualizar uma tradução, por favor
+      veja <a
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">as
+      instruções no repositório GitHub</a>.
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Orientações para Organizadores de Competições da WCA
