@@ -12,6 +12,7 @@ import {
 import { redMarker, blueMarker } from './markers';
 import { GeoSearchControl } from 'leaflet-geosearch';
 import { searchProvider, userTileProvider } from './providers.js';
+import railsEnv from 'wca/rails-env.js.erb'
 
 // Leaflet and webpacker are not good friend, we need to require the images for
 // the assets to be properly setup.
@@ -71,7 +72,10 @@ wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTrick = tr
     maxZoom: 19,
     attribution: provider.attribution,
   });
-  layer.addTo(map);
+  // To avoid timeout issue on *.tile.openstreetmap.org during tests,
+  // we don't add the actual tile layer in that environment.
+  if (railsEnv !== "test")
+    layer.addTo(map);
   if (iframeTrick) {
     // We create an invisible iframe that triggers an invalidate size when
     // resized (which includes bootstrap's collapse/hide/show events).

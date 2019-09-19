@@ -23,7 +23,7 @@ class InvisibleIFrame extends React.Component {
   }
 }
 
-export class VenueLocationInputImpl extends React.Component {
+export class VenueLocationInput extends React.Component {
 
   invalidateSize = () => {
     this.mapElem.leafletElement.invalidateSize(false);

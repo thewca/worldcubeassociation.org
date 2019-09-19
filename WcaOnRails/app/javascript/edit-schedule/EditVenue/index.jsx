@@ -10,7 +10,8 @@ import { EditRoom } from './EditRoom'
 import { Button, Panel, Row, Col } from 'react-bootstrap'
 import { timezoneData } from 'wca/timezoneData.js.erb'
 import countries from 'wca/countries.js.erb'
-import { VenueLocationInput } from './VenueLocationInput.jsx.erb'
+import railsEnv from 'wca/rails-env.js.erb'
+import { VenueLocationInput } from './VenueLocationInput'
 
 export class EditVenue extends React.Component {
 
@@ -86,11 +87,22 @@ export class EditVenue extends React.Component {
             </Panel.Heading>
             <Panel.Body>
               <NameInput name={venueWcif.name} actionHandler={this.handleNameChange}/>
-              <VenueLocationInput
-                lat={venueWcif.latitudeMicrodegrees}
-                lng={venueWcif.longitudeMicrodegrees}
-                actionHandler={this.handlePositionChange}
-              />
+              {/*
+                NOTE: Our headless browser PhantomJS doesn't support HTMLVideoElement.
+                Leaflet has a built-in video plugin and its code
+                do an "instanceOf(HTMLVideoElement)", which throws an error
+                during tests.
+                For this reason, we only import stuff from Leaflet
+                if we are not in test environment.
+                In test environment we simply don't include the VenueLocationInput.
+              */}
+              {railsEnv !== "test" && (
+                <VenueLocationInput
+                  lat={venueWcif.latitudeMicrodegrees}
+                  lng={venueWcif.longitudeMicrodegrees}
+                  actionHandler={this.handlePositionChange}
+                />
+              )}
               <CountryInput value={venueWcif.countryIso2} onChange={this.handleCountryChange} />
               <TimezoneInput
                 timezone={venueWcif.timezone}
