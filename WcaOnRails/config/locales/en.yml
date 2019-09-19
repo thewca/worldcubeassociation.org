@@ -1042,7 +1042,7 @@ en:
       payment_successful: "Your payment was successful, and your registration should show up paid below."
       hints:
         donation: "Optional donation that will go only to the organization team"
-        card_information: "Your card information never reach the WCA website. They are securely sent to Stripe which handles the payment process and gets back to us."
+        card_information: "Your card information never reaches the WCA website. It is securely sent to Stripe which handles the payment process and gets back to us."
       labels:
         entry_fees: "Registration fees"
         donation: "Donation"

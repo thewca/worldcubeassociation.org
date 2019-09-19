@@ -19,7 +19,7 @@ Rails.application.routes.draw do
              end
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
-  post 'registration/:id/process_payment_intent' => 'registrations#process_payment_intent', as: :registration_payment_intent
+  post 'registration/:id/process-payment-intent' => 'registrations#process_payment_intent', as: :registration_payment_intent
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
 
