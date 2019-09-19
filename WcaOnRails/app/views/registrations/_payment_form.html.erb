@@ -1,7 +1,6 @@
 <% provide(:include_auto_numeric, true) %>
 <%= horizontal_simple_form_for :payment, url: "", html: { id: :form_payment } do |f| %>
   <%= render 'entry_fee', label: "Paid", money_amount: @registration.paid_entry_fees %>
-  <%= f.input :stripe_token, as: :hidden, input_html: { id: :stripe_token } %>
   <%= render 'entry_fee', label: "Remaining", money_amount: @registration.outstanding_entry_fees %>
   <% if @competition.enable_donations %>
     <%= f.input :donation, as: :money_amount, currency: @registration.outstanding_entry_fees.currency.iso_code, value: "0", label: t('registrations.payment_form.labels.donation'), hint: t('registrations.payment_form.hints.donation') %>
@@ -43,55 +42,49 @@
     var cardholderName = document.getElementById('cardholder-name');
     var $cardButton = $('#card-button');
 
-    var setSaving = function() {
-      $cardButton.attr("disabled", true);
-      $cardButton.addClass("saving");
-    };
-    var unsetSaving = function() {
-      $cardButton.attr("disabled", false);
-      $cardButton.removeClass("saving");
-    };
+    var toggleSaving = function(saving) {
+      $cardButton.attr("disabled", saving);
+      $cardButton.toggleClass("saving", saving);
+    }
 
     function handleServerResponse(response) {
-      response.json().then(function (response_json) {
-        if (response_json.error) {
-          // Show error in payment form
-          $("#card-error").text(response_json.error.message);
-          unsetSaving();
-        } else if (response_json.requires_action) {
-          stripe.handleCardAction(
-            response_json.payment_intent_client_secret
-          ).then(function(result) {
-            if (result.error) {
-              $("#card-error").text(result.error.message);
-              unsetSaving();
-            } else {
-              // The card action has been handled
-              // The PaymentIntent can be confirmed again on the server
-              fetch('<%= registration_payment_intent_path(@registration) %>', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content
-                },
-                body: JSON.stringify({ payment_intent_id: result.paymentIntent.id })
-              }).then(handleServerResponse);
-            }
-          });
-        } else {
-          // We got a successful payment, redirect to the registration page with a
-          // nice flash message.
-          window.location.replace('<%= competition_payment_success_path(@competition) %>');
-        }
-      });
+      response_json = response.responseJSON;
+      if (response_json.error) {
+        // Show error in payment form
+        $("#card-error").text(response_json.error.message);
+        toggleSaving(false);
+      } else if (response_json.requires_action) {
+        stripe.handleCardAction(
+          response_json.payment_intent_client_secret
+        ).then(function(result) {
+          if (result.error) {
+            $("#card-error").text(result.error.message);
+            toggleSaving(false);
+          } else {
+            // The card action has been handled
+            // The PaymentIntent can be confirmed again on the server
+            wca.cancelPendingAjaxAndAjax('process-payment-confirmation', {
+              url: '<%= registration_payment_intent_path(@registration) %>',
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
+              data: JSON.stringify({ payment_intent_id: result.paymentIntent.id }),
+              complete: handleServerResponse,
+            });
+          }
+        });
+      } else {
+        // We got a successful payment, redirect to the registration page with a
+        // nice flash message.
+        window.location.replace('<%= competition_payment_success_path(@competition) %>');
+      }
     }
 
     $cardButton.on('click', function(ev) {
       ev.preventDefault();
-      setSaving();
+      toggleSaving(true);
       var registration_fees_to_pay = <%= @registration.outstanding_entry_fees.cents %>;
-      var donation = parseFloat($('#payment_donation').val() || 0);
-      var amount = parseFloat(registration_fees_to_pay+donation);
+      var donation = parseInt($('#payment_donation').val() || 0);
+      var amount = registration_fees_to_pay+donation;
       if (isNaN(amount)) {
         alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
       } else if (amount < registration_fees_to_pay) {
@@ -109,22 +102,24 @@
               $("#group-card-element").removeClass("has-error");
               $("#group-cardholder-name").addClass("has-error");
               $("#card-error").text('<%= t("registrations.payment_form.errors.cardholder_name") %>');
-              unsetSaving();
+              toggleSaving(false);
             } else {
               $("#group-card-element").addClass("has-error");
               $("#group-cardholder-name").removeClass("has-error");
               $("#card-error").text(result.error.message);
-              unsetSaving();
+              toggleSaving(false);
             }
           } else {
             $("#group-card-element").removeClass("has-error");
             $("#group-cardholder-name").removeClass("has-error");
             // Otherwise send paymentMethod.id to your server (see Step 2)
-            fetch('<%= registration_payment_intent_path(@registration) %>', {
+            wca.cancelPendingAjaxAndAjax('process-payment', {
+              url: '<%= registration_payment_intent_path(@registration) %>',
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
-              body: JSON.stringify({ payment_method_id: result.paymentMethod.id, amount: amount })
-            }).then(handleServerResponse);
+              data: JSON.stringify({ payment_method_id: result.paymentMethod.id, amount: amount }),
+              complete: handleServerResponse,
+            });
           }
         });
       }

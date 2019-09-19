@@ -459,13 +459,15 @@ class RegistrationsController < ApplicationController
       render json: { error: { message: e.message } }
       return
     end
-    status, response = generate_payment_response(registration, intent, stripe_charge)
+    status, response = generate_payment_response!(registration, intent, stripe_charge)
     render json: response, status: status
   end
 
-  private def generate_payment_response(registration, intent, stripe_charge)
-    if intent&.status == "requires_action" &&
+  private def generate_payment_response!(registration, intent, stripe_charge)
+    if intent && intent.status == "requires_action" &&
        intent.next_action.type == "use_stripe_sdk"
+      # For now, since we don't have a charge, we'll keep the intent id as the charge id
+      # to be able to match the log entry to an actual Stripe action.
       stripe_charge.update!(
         status: "payment_intent_registered",
         stripe_charge_id: intent.id,
