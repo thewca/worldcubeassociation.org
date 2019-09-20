@@ -231,12 +231,12 @@ zh-TW:
       other: '%{count}次還原 < %{time}'
     #original_hash: b49d930
     moves:
-      other: '%{count}次還原 < %{moves} 步'
       zero: '%{count}次還原 < %{moves} 步'
+      other: '%{count}次還原 < %{moves} 步'
     #original_hash: eba1b97
     points:
-      other: '%{count}次還原 > %{points} 點'
       zero: '%{count}次還原 > %{points} 點'
+      other: '%{count}次還原 > %{points} 點'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -279,8 +279,8 @@ zh-TW:
       invalid: 無效的
     #original_hash: 49d0140
     days:
-      other: '%{count}天'
       zero: 0天
+      other: '%{count}天'
     #original_hash: 203e1b3
     these_events:
       zero: 這個項目
@@ -694,8 +694,9 @@ zh-TW:
         name: >-
           請正確地輸入您的全名拼音，並和護照上拼音相同，若沒有護照，請參考外交部領事事務局
           外文姓名中譯英系統。禁止隨意輸入拼音，綽號，其他別名等。<br>例如<strong> 周杰倫 </strong>，請輸入<strong>
-          Chieh-Lun Chou </strong>。而不是<strong> Jay Chou、Chiehlun Chou或chiehlun
-          chou </strong>。<br/>若名字有中間名(middle name)，則可以不用輸入。
+          Chieh-Lun Chou </strong>。而不是<strong> Jay Chou（綽號）、Chou
+          Chieh-Lun（姓名相反）或chiehlun chou（沒有大寫） </strong>。<br/>若名字有中間名(middle
+          name)，則可以不用輸入。
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -1168,7 +1169,7 @@ zh-TW:
       #original_hash: 90ccd64
       history: 歷史
       #original_hash: 8ad8302
-      translations: 翻譯
+      translations: 翻譯版
       #original_hash: c420cb4
       disciplinary: 倫理事件日誌
       #original_hash: ecba5f4
@@ -1178,7 +1179,7 @@ zh-TW:
       #original_hash: b7ee3c4
       manage_users: 管理用戶
       #original_hash: 12ab214
-      delegate: 代表相關
+      delegate: 該比賽的WCA代表
       #original_hash: 2f4bd74
       panel: 佈告欄
       #original_hash: d3a928c
@@ -1500,16 +1501,16 @@ zh-TW:
       not_using_wca: 這場比賽不適用WCA報名系統
       #original_hash: d528030
       accepted_and_mailed:
-        other: 報名核准！電子郵件通知已寄出。
         zero: 報名核准！電子郵件通知已寄出。
+        other: 報名核准！電子郵件通知已寄出。
       #original_hash: 42ea8de
       rejected_and_mailed:
-        other: 報名移至候補名單
         zero: 報名移至候補名單
+        other: 報名移至候補名單
       #original_hash: a360b31
       deleted_and_mailed:
-        other: 報名已取消
         zero: 報名已取消
+        other: 報名已取消
       #original_hash: c3aa289
       single_deletion_and_mail: '取消報名和寄信給%{mail}'
       #original_hash: d8f067f
@@ -1578,8 +1579,8 @@ zh-TW:
       edit: 編輯
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count}國'
         zero: 0國
+        other: '%{count}國'
       #original_hash: 1feee0e
       export_csv: 下載CSV檔
       #original_hash: 84add5b
@@ -1679,19 +1680,36 @@ zh-TW:
     payment_form:
       #original_hash: 4de825f
       title: 報名費
+      #original_hash: d1569e6
+      payment_successful: 您的付款已完成，您的報名應該會在下面顯示已付款。
       hints:
         #original_hash: bf3a39e
         donation: 額外捐款僅限於主辦團隊使用
+        #original_hash: 16cf92d
+        card_information: 您的卡片諮詢並沒有傳送到WCA網站。卡片資訊只有加密地傳送到Stripe並在處理完費用後回傳資訊給我們。
       labels:
         #original_hash: 4de825f
         entry_fees: 報名費
         #original_hash: 2c09302
         donation: 捐款
+        #original_hash: 184150d
+        card_information: 卡片資訊
+        #original_hash: bc8091a
+        cardholder_name: 持卡人姓名
       alerts:
         #original_hash: a34940e
         not_a_number: 請輸入一個有效的金額。
         #original_hash: 707b9ca
         amount_too_low: 總金額必須不能少於報名費。
+      errors:
+        #original_hash: 166d48c
+        already_paid: 並沒有扣款費用，因為報名費已付過了。
+        #original_hash: b2bc8ed
+        not_allowed: 您無法為這一個報名付費。
+        #original_hash: 630dbb9
+        intent_not_found: 我們無法在伺服器確認您想要付費的資訊。付費已取消，您的卡片並沒有被扣款。
+        #original_hash: 63e0ec1
+        cardholder_name: 請確認持卡人姓名。
     #original_hash: 8607a87
     payment_button_text: 用卡片支付報名費
     #original_hash: 4cf01a2
@@ -1791,8 +1809,8 @@ zh-TW:
       website: 比賽網站
       #original_hash: 680567f
       organizer_plural:
-        other: 主辦團隊
         zero: 主辦團隊
+        other: 主辦團隊
       #original_hash: 6afa61e
       delegate:
         zero: WCA代表
@@ -1890,14 +1908,14 @@ zh-TW:
       #original_hash: ae79ea1
       to_date: 到
       #original_hash: 52c30f8
-      past_from: '%{year}之後'
+      past_from: '只顯示%{year}'
       #original_hash: 7cff459
       past_all: 過去所有年份
       titles:
         #original_hash: 69447c9
         in_progress: 正在進行的比賽
         #original_hash: 9e66032
-        past: '從%{year}年之後比賽'
+        past: '%{year}年的比賽'
         #original_hash: f628f0e
         past_all: 過去所有年份的比賽
         #original_hash: cbe8a54
@@ -2270,13 +2288,13 @@ zh-TW:
           #original_hash: 0977c76
           all_years: 所有年份
           #original_hash: 8737f09
-          only: 單純
+          only: 只看某年
           #original_hash: b3c0fe7
-          only_html: '只有%{year}'
+          only_html: '只看%{year}'
           #original_hash: 96bdb66
-          until: 直到
+          until: 某年為止
           #original_hash: fa23930
-          until_html: '直到%{year}'
+          until_html: '%{year}為止'
         show_selector:
           #original_hash: d97d1ee
           show: 顯示
@@ -2466,7 +2484,7 @@ zh-TW:
           '1': >-
             基本上，參加比賽沒有太多必備條件。但是所有參賽者應熟悉<a
             href='https://www.worldcubeassociation.org/regulations/'>WCA競賽規則</a>。如果英文不是您的母語且您看不太懂該內容，請閱讀<a
-            href='https://www.worldcubeassociation.org/regulations/translations/'>翻譯版本</a>。
+            href='https://www.worldcubeassociation.org/regulations/translations/'>翻譯版</a>。
       '5':
         #original_hash: 3b657aa
         title: 我可以在家鄉辦WCA比賽嗎？
@@ -2602,9 +2620,9 @@ zh-TW:
     #original_hash: dc71704
     world_championship_title: 世界錦標賽
     #original_hash: 57cf7f7
-    world_championship_content_html: '<p>每兩年一次, 我們認可一場能夠決定世界冠軍的比賽。這些比賽項目需要多為志願者極為仔細的計畫，對於場地預定的財物支出和其他必要的準備。</p>'
+    world_championship_content_html: '<p>每兩年一次, 我們認可一場能夠決定世界冠軍的比賽。這些比賽項目需要多位志願者極為仔細的計畫，對於場地預定的財物支出和其他必要的準備。</p>'
     #original_hash: 1aa5344
-    contributing_title: 對我們做出支援
+    contributing_title: 對我們做出協助
     #original_hash: e64beb7
     contributing_content_html: >-
       您可以透過信用卡在<a
@@ -2733,7 +2751,7 @@ zh-TW:
         #original_hash: 1ce7604
         name: WCA諮詢理事會
         #original_hash: fb6cd86
-        description: 該理事會負責建立和維護WCA社群與WCA工作人員之間的雙邊溝通。
+        description: 該理事會負責建立和維護WCA社群與WCA員工之間的雙邊溝通。
       banned:
         #original_hash: d30e2e5
         name: 禁賽名單
@@ -2900,7 +2918,7 @@ zh-TW:
     councils_html: 理事會
     wac:
       #original_hash: fb6cd86
-      info_html: 該理事會負責建立和維護WCA社群與WCA工作人員之間的雙邊溝通。
+      info_html: 該理事會負責建立和維護WCA社群與WCA員工之間的雙邊溝通。
   score_tools:
     #original_hash: ea9d41d
     title: WCA成績輸入工具
@@ -3071,13 +3089,13 @@ zh-TW:
         href="/regulations/guidelines.html">WCA指導方針</a>來做輔助，包含額外的釐清與解釋。
     panel2:
       #original_hash: 8ad8302
-      title: 翻譯版本
+      title: 翻譯版
       #original_hash: 7477d9b
       content1_html: >-
         WCA規則不僅有英文版本，WCA成員們已將規則翻譯為多國語言：<a
-        href="/regulations/translations/">翻譯版本</a>。
+        href="/regulations/translations/">翻譯版</a>。
       #original_hash: 6add7a3
-      content2_html: <strong>注意</strong>：儘管翻譯版本有助於理解規則，但它們並非官方版本。在比賽當中，必須以英文版本為主。
+      content2_html: <strong>注意</strong>：儘管翻譯版有助於理解規則，但它們並非官方版本。在比賽當中，必須以英文版本為主。
     panel3:
       #original_hash: 234fd4d
       title: 規則常見問題
@@ -3090,6 +3108,30 @@ zh-TW:
       content1_html: 如果您有興趣主辦比賽或是已經在準備當中，請閱讀我們的<a href="/organizer-guidelines">主辦團隊指導方針</a>。
       #original_hash: 5016669
       content2_html: 此文件包含重要資訊，所有比賽主辦團隊應詳閱。
+  regulations_translations:
+    #original_hash: 9493b8d
+    title: WCA規則與指導方針：翻譯版
+    #original_hash: 386ecc1
+    paragraph1: 如果您說的是英語以外的語言，這些翻譯應該對您會有幫助。
+    #original_hash: 32b1132
+    paragraph2: 請注意翻譯版並不視為官方版本，就算他們是在WCA網站取得，翻譯版本仍無法保證內容正確。如果翻譯版和（最新的）英文版有相異處，必須使用英文版。
+    #original_hash: 8ad8302
+    translations: 翻譯版
+    #original_hash: 4fc0e2b
+    current: 當前版本
+    #original_hash: fbb3c38
+    old: 過時版本
+    table_elements:
+      #original_hash: 2da600b
+      version: 版本
+      #original_hash: 89b86ab
+      language: 語言
+    #original_hash: a916f93
+    translating: 來翻譯規則
+    #original_hash: 1b026e1
+    paragraph3_html: >-
+      如果您有興趣新增或是更新翻譯版本，請到<a
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">Github倉庫上的翻譯說明</a>。
   organizer_guidelines:
     #original_hash: 7486ac4
     title: WCA比賽主辦團隊指導方針
