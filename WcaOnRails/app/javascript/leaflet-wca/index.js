@@ -64,7 +64,6 @@ wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTrick = tr
   let map = new LeafletMap(elementId, {
     zoom: 2,
     center: center,
-    scrollWheelZoom: false,
   });
   let provider = userTileProvider;
   let layer = new TileLayer(provider.url, {
