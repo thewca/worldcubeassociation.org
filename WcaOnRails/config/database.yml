@@ -1,4 +1,5 @@
 default: &default
+  url: <%= ENV['DATABASE_URL'] %>
   adapter: mysql2
   pool: 5
   timeout: 5000
