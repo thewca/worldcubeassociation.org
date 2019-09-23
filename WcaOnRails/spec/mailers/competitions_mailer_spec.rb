@@ -17,7 +17,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     it "renders in English" do
       expect(mail.to).to eq(["competitions@worldcubeassociation.org"])
       expect(mail.cc).to match_array(competition.delegates.pluck(:email) + [senior_delegate.email, third_delegate.senior_delegate.email])
-      expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
+      expect(mail.from).to eq(["competitions@worldcubeassociation.org"])
       expect(mail.reply_to).to eq([delegate.email])
 
       expect(mail.subject).to eq("#{competition.name} is confirmed")
@@ -198,7 +198,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
         expect(mail.to).to eq ["reports@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["regulations@worldcubeassociation.org"] + ["disciplinary@worldcubeassociation.org"]
-        expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+        expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
       end
 
@@ -218,7 +218,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
         expect(mail.to).to eq ["reports@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["disciplinary@worldcubeassociation.org"]
-        expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+        expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
       end
 
@@ -238,7 +238,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
         expect(mail.to).to eq ["reports@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email) + ["regulations@worldcubeassociation.org"]
-        expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+        expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
       end
 
@@ -254,7 +254,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
         expect(mail.to).to eq ["reports@worldcubeassociation.org"]
         expect(mail.cc).to match_array competition.delegates.pluck(:email)
-        expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+        expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
       end
 
@@ -311,7 +311,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.subject).to eq "Results for Comp of the future 2017"
       expect(mail.to).to eq ["results@worldcubeassociation.org"]
       expect(mail.cc).to match_array competition.delegates.pluck(:email)
-      expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+      expect(mail.from).to eq ["results@worldcubeassociation.org"]
       expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
     end
 
