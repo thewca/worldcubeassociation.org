@@ -116,6 +116,7 @@ class CompetitionsMailer < ApplicationMailer
   def submit_results_nag(competition)
     @competition = competition
     mail(
+      from: Team.weat.email,
       to: competition.delegates.pluck(:email),
       cc: ["results@worldcubeassociation.org", "assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: "results@worldcubeassociation.org",
@@ -126,6 +127,7 @@ class CompetitionsMailer < ApplicationMailer
   def submit_report_nag(competition)
     @competition = competition
     mail(
+      from: Team.weat.email,
       to: competition.delegates.pluck(:email),
       cc: ["assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: delegates_to_senior_delegates_email(competition.delegates),
