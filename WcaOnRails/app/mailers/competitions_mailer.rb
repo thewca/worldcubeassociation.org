@@ -11,6 +11,7 @@ class CompetitionsMailer < ApplicationMailer
       @competition = competition
       @confirmer = confirmer
       mail(
+        from: Team.wcat.email,
         to: Team.wcat.email,
         cc: competition.delegates.flat_map { |d| [d.email, d.senior_delegate&.email] }.compact.uniq,
         reply_to: confirmer.email,
@@ -90,6 +91,7 @@ class CompetitionsMailer < ApplicationMailer
     I18n.with_locale :en do
       @competition = competition
       mail(
+        from: "reports@worldcubeassociation.org",
         to: "reports@worldcubeassociation.org",
         cc: competition.delegates.pluck(:email) +
           (competition.delegate_report.wrc_feedback_requested ? ["regulations@worldcubeassociation.org"] : []) +
@@ -143,6 +145,7 @@ class CompetitionsMailer < ApplicationMailer
       }
     end
     mail(
+      from: "results@worldcubeassociation.org",
       to: "results@worldcubeassociation.org",
       cc: competition.delegates.pluck(:email),
       reply_to: competition.delegates.pluck(:email),
