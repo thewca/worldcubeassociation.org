@@ -80,6 +80,25 @@ RSpec.describe "Competition WCIF" do
             ],
           },
           {
+            "id" => "444",
+            "extensions" => [],
+            "rounds" => [
+              {
+                "id" => "444-r1",
+                "format" => "a",
+                "timeLimit" => {
+                  "centiseconds" => 10.minutes.in_centiseconds,
+                  "cumulativeRoundIds" => [],
+                },
+                "cutoff" => nil,
+                "advancementCondition" => nil,
+                "scrambleSetCount" => 1,
+                "results" => [],
+                "extensions" => [],
+              },
+            ],
+          },
+          {
             "id" => "333fm",
             "extensions" => [],
             "rounds" => [
@@ -116,25 +135,6 @@ RSpec.describe "Competition WCIF" do
                     },
                   },
                 ],
-              },
-            ],
-          },
-          {
-            "id" => "444",
-            "extensions" => [],
-            "rounds" => [
-              {
-                "id" => "444-r1",
-                "format" => "a",
-                "timeLimit" => {
-                  "centiseconds" => 10.minutes.in_centiseconds,
-                  "cumulativeRoundIds" => [],
-                },
-                "cutoff" => nil,
-                "advancementCondition" => nil,
-                "scrambleSetCount" => 1,
-                "results" => [],
-                "extensions" => [],
               },
             ],
           },
@@ -281,7 +281,7 @@ RSpec.describe "Competition WCIF" do
     end
 
     it "creates competition event when adding round to previously nonexistent event" do
-      wcif["events"] << {
+      wcif555 = {
         "id" => "555",
         "extensions" => [],
         "rounds" => [
@@ -300,6 +300,8 @@ RSpec.describe "Competition WCIF" do
           },
         ],
       }
+      # Add 5x5x5 after 4x4x4 to match the expected order.
+      wcif["events"].insert(2, wcif555)
 
       competition.set_wcif_events!(wcif["events"], delegate)
 

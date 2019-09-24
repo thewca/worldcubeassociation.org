@@ -1238,7 +1238,10 @@ class Competition < ApplicationRecord
       { rounds: [:competition_event, :wcif_extensions] },
       :wcif_extensions,
     ]
-    competition_events.includes(includes_associations).map(&:to_wcif)
+    competition_events
+      .includes(includes_associations)
+      .sort_by { |ce| ce.event.rank }
+      .map(&:to_wcif)
   end
 
   def schedule_wcif
