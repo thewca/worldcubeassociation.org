@@ -29,6 +29,21 @@ export class VenueLocationInput extends React.Component {
     this.mapElem.leafletElement.invalidateSize(false);
   }
 
+  componentDidMount() {
+    let map = this.mapElem.leafletElement;
+    wca.createSearchInput(map);
+    let handleGeoSearchResult = (result) => {
+      let marker = this.markerElem.leafletElement;
+      marker.setLatLng({
+        lat: result.location.y,
+        lng: result.location.x,
+      });
+      marker.bindPopup(result.location.label).openPopup();
+    }
+    map.on('geosearch/showlocation', handleGeoSearchResult);
+    map.zoomControl.setPosition("bottomright");
+  }
+
   render() {
     let { lat, lng, actionHandler } = this.props;
     let provider = userTileProvider;
@@ -49,7 +64,8 @@ export class VenueLocationInput extends React.Component {
             <Marker
               position={mapPosition}
               draggable={true}
-              onDragend={actionHandler}
+              onMove={actionHandler}
+              ref={m => { this.markerElem = m; }}
             />
           </Map>
         </Col>
