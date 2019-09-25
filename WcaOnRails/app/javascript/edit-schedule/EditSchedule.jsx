@@ -173,14 +173,12 @@ const VenuesList = ({venues, actionsHandlers, competitionInfo}) => (
         {/*
           Every venue col doesn't have the same height, so we need a clearfix depending on our index and viewport.
           In XS there is one venue per row, so no clearfix needed.
-          In MD there are two venues per row, so if we're last, we need a clearfix
-          In LG there are three venues per row, so if we're last, we need a clearfix
+          In MD there are two venues per row, so if we're last, we need a clearfix.
         */}
         {index % 2 === 1 && <Clearfix visibleMdBlock />}
-        {index % 3 === 2 && <Clearfix visibleLgBlock />}
       </React.Fragment>
     ))}
-    <Col xs={12} md={6} lg={4}>
+    <Col xs={12} md={6}>
       <NewVenue actionHandler={actionsHandlers.addVenue} />
     </Col>
   </Row>
