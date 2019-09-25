@@ -1,4 +1,13 @@
 #schedule-tab {
+  .venue-pills {
+    overflow-x: auto;
+    .venue-pill {
+      white-space: nowrap;
+      &:not(.active) a {
+        color: inherit;
+      }
+    }
+  }
   div.list-group {
     margin-top: 10px;
   }
