@@ -163,7 +163,7 @@ const VenuesList = ({venues, actionsHandlers, competitionInfo}) => (
   <Row>
     {venues.map((venueWcif, index) => (
       <React.Fragment key={index}>
-        <Col xs={12} md={6} lg={4}>
+        <Col xs={12} md={6}>
           <EditVenue
             venueWcif={venueWcif}
             removeVenueAction={e => actionsHandlers.removeVenue(e, index)}

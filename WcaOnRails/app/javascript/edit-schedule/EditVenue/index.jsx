@@ -37,9 +37,12 @@ export class EditVenue extends React.Component {
     let newLat = toMicrodegrees(pos.lat);
     let newLng = toMicrodegrees(pos.lng);
     // Update parent's WCIF
-    this.props.venueWcif.latitudeMicrodegrees = newLat;
-    this.props.venueWcif.longitudeMicrodegrees = newLng;
-    rootRender();
+    if (this.props.venueWcif.latitudeMicrodegrees !== newLat
+        || this.props.venueWcif.longitudeMicrodegrees !== newLng) {
+      this.props.venueWcif.latitudeMicrodegrees = newLat;
+      this.props.venueWcif.longitudeMicrodegrees = newLng;
+      rootRender();
+    }
   }
 
   render() {
