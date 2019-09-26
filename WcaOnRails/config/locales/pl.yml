@@ -26,6 +26,8 @@ pl:
     KR: Republika Korei
     #original_hash: 673b1cf
     LC: Saint Lucia
+    #original_hash: e2ac50f
+    MK: Macedonia Północna
     #original_hash: 928b7c4
     MM: Mjanma
     #original_hash: d887137
@@ -34,6 +36,8 @@ pl:
     PS: Palestyna
     #original_hash: 655191a
     ST: Wyspy Świętego Tomasza i Książęca
+    #original_hash: 16cc7f8
+    SZ: Eswatini
     #original_hash: 4d206a8
     TT: Trynidad i Tobago
     #original_hash: 0f3f60b
@@ -253,6 +257,8 @@ pl:
     #original_hash: cc7d8bb
     333mbf: '10 minut na kostkę, do 60:00.00'
   common:
+    #original_hash: 70c07ec
+    world: Świat
     #original_hash: 2513cf0
     continent: Kontynent
     #original_hash: d523ebb
@@ -475,19 +481,26 @@ pl:
         refund_policy_limit_date: Ostateczny termin zwracania płatności
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Wpisowe dla gości
-        #original_hash: 9e1008d
-        regulation_z1: >-
-          Chciałbym wymagać od zawodników dostarczenia układanek podczas
-          rejestracji zgodnie z Punktem Z1) Regulaminu
-        #original_hash: 466aca7
-        regulation_z1_reason: Powód dla zastosowania Z1)
-        #original_hash: 588c6a0
-        regulation_z3: >-
-          Chciałbym wyselekcjonować zawodników, którzy bezpośrednio kwalifikują
-          się do ustalonych rund ustalonych konkurencji, na podstawie wyników
-          konkretnych wcześniejszych zawodów zgodnie z Punktem Z3) Regulaminu
-        #original_hash: 18d9a8c
-        regulation_z3_reason: Powód dla zastosowania Z3)
+        #original_hash: 723cad9
+        early_puzzle_submission: >-
+          Chciałbym wymagać od zawodników dostarczenia układanek w określonym
+          czasie przed rozpoczęciem konkurencji
+        #original_hash: 78308cc
+        early_puzzle_submission_reason: Powód i szczegóły dotyczące wczesnego dostarczania układanek
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Chciałbym wykorzystać wyniki jako sposób kwalifikacji by ograniczyć
+          osoby mogące brać udział w danej konkurencji
+        #original_hash: 1ec6dd4
+        qualification_results_reason: Powód i szczegóły dotyczące wyników kwalifikujących
+        #original_hash: ac30de9
+        event_restrictions: >-
+          Chciałbym uniemożliwić zawodnikom rejestrowanie się na określone
+          kombinacje konkurencji
+        #original_hash: 4bf194c
+        event_restrictions_reason: Powód i szczegóły dotyczące ograniczenia konkurencji
+        #original_hash: 3c24bd2
+        main_event_id: Główna konkurencja
       registration:
         #original_hash: 3c23a67
         guests: Goście
@@ -889,17 +902,25 @@ pl:
           wyświetlone zdanie informujące o tym, że wstęp dla widzów jest
           darmowy.
         #original_hash: da39a3e
-        regulation_z1: ''
-        #original_hash: d3872a2
-        regulation_z1_reason: >-
-          Opisz dlaczego chciałbyś zastosować Punkt Z1) Regulaminu. Prosimy o
-          wypełnienie w języku angielskim.
+        early_puzzle_submission: ''
+        #original_hash: 4e8488b
+        early_puzzle_submission_reason: >-
+          Opisz dlaczego chciałbyś, aby zawodnicy dostarczyli układanki
+          wcześniej. Prosimy o wypełnienie w języku angielskim!
         #original_hash: da39a3e
-        regulation_z3: ''
-        #original_hash: af960d9
-        regulation_z3_reason: >-
-          Opisz dlaczego chciałbyś zastosować Punkt Z3) Regulaminu. Prosimy o
-          wypełnienie w języku angielskim.
+        qualification_results: ''
+        #original_hash: f859883
+        qualification_results_reason: >-
+          Opisz dlaczego chciałbyś użyć wyników kwalifikujących. Prosimy o
+          wypełnienie w języku angielskim!
+        #original_hash: da39a3e
+        event_restrictions: ''
+        #original_hash: d3329d7
+        event_restrictions_reason: >-
+          Opisz dlaczego chciałbyś uniemożliwić branie udziału w konkretnych
+          kombinacjach konkurencji. Prosimy o wypełnienie w języku angielskim!
+        #original_hash: 1067798
+        main_event_id: Zwycięzca tej konkurencji będzie zwycięzcą tych zawodów.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -958,14 +979,16 @@ pl:
         equipment: >-
           Liczba i rodzaj timerów oraz wyświetlaczy użytych na zawodach. Proszę
           usunąć te linie wyposażenia, które nie zostały użyte.
-        #original_hash: 4658dd9
+        #original_hash: a4aebc8
         venue: >-
           Opisz pomieszczenia, oświetlenie, dostępność dla publiczności,
           rozmieszczeniu stref (układania, mieszania, oczekiwania, rejestracji
           wyników), czy zostały przygotowane różne sceny przeznaczone do
           układania, problemy, które się pojawiły (np. hałas) i w jaki sposób je
           rozwiązałeś. Prosimy, bądź zwięzły i nie zgłaszaj nieistotnych
-          szczegółów.
+          szczegółów. Dodatkowo prosimy o dołączenie zdjęcia miejsca zawodów, w
+          celu pokazania rozmieszczenia stanowiska mieszaczy, zawodników oraz
+          strefy startowej.
         #original_hash: f8de509
         organization: >-
           Opisz zespół organizacyjny oraz w jaki sposób pracował on podczas
@@ -1410,6 +1433,22 @@ pl:
         header: 'Zostałeś usunięty z %{competition} jako organizator'
         #original_hash: 66cb109
         information: '%{remover} usunął cię z %{competition} jako organizatora.'
+      registration_reminder_email:
+        #original_hash: 7d355cb
+        header: 'Rejestracja na %{competition} rozpoczyna się wkrótce'
+        #original_hash: c9d0561
+        intro: 'Witaj %{name},'
+        #original_hash: a8f7e72
+        information_html: >-
+          Przypominamy, że rejestracja na <a
+          href=%{competition_url}>%{competition}</a> rozpoczyna się w ciągu
+          najbliższych 24 godzin.
+        #original_hash: 2b93022
+        not_accepted_html: 'Dokonałeś rejestracji, ale nie została ona jeszcze zaakceptowana.'
+        #original_hash: 3724e7c
+        more_info_html: >-
+          Odwiedź <a href=%{competition_url}>stronę zawodów</a> w celu uzyskania
+          więcej informacji oraz zapoznania się z wymaganiami rejestracyjnymi.
     claim_wca_id:
       #original_hash: f28bf87
       title: Podepnij WCA ID
@@ -1948,19 +1987,45 @@ pl:
     payment_form:
       #original_hash: 4de825f
       title: Wpisowe
+      #original_hash: d1569e6
+      payment_successful: >-
+        Płatność powiodła się, a twoja rejestracja powinna być widoczna poniżej
+        jako opłacona.
       hints:
         #original_hash: bf3a39e
         donation: 'Opcjonalna darowizna, która trafi wyłącznie do zespołu organizacyjnego'
+        #original_hash: 16cf92d
+        card_information: >-
+          Dane twojej karty nigdy nie docierają do strony WCA. Są one
+          bezpiecznie przesyłane do usługi Stripe, która obsługuje proces
+          płatności i przekazuje nam informacje zwrotną o jej statusie.
       labels:
         #original_hash: 4de825f
         entry_fees: Wpisowe
         #original_hash: 2c09302
         donation: Darowizna
+        #original_hash: 184150d
+        card_information: Dane karty
+        #original_hash: bc8091a
+        cardholder_name: Imię właściciela karty
       alerts:
         #original_hash: a34940e
         not_a_number: Prosimy o wprowadzenie poprawnej kwoty.
         #original_hash: 707b9ca
         amount_too_low: Całkowita kwota nie może być mniejsza niż wymagana opłata wpisowa.
+      errors:
+        #original_hash: 166d48c
+        already_paid: >-
+          Opłata nie została naliczona, ponieważ opłata rejestracyjna została
+          już dokonana.
+        #original_hash: b2bc8ed
+        not_allowed: Nie możesz opłacić tej rejestracji
+        #original_hash: 630dbb9
+        intent_not_found: >-
+          Nie możemy odnaleść zamiaru płatności, w celu potwierdzenia go. Proces
+          płatności został przerwany i twoja karta nie została obciążona.
+        #original_hash: 63e0ec1
+        cardholder_name: Proszę sprawdzić imię właściciela karty.
     #original_hash: 8607a87
     payment_button_text: Zapłać swoje wpisowe za pomocą karty
     #original_hash: 4cf01a2
@@ -2040,6 +2105,8 @@ pl:
         wpisowego na te zawody.
       #original_hash: 0a4bb53
       stripe_not_connected: Wystąpił problem i nie mogliśmy podłączyć twojego konta Stripe.
+      #original_hash: 724cf0d
+      championship_exists: 'Jest już %{championship_type} w roku %{year}'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Moje zawody
@@ -2050,6 +2117,12 @@ pl:
         zawodników na stronie internetowej danych zawodów.
       #original_hash: 94a2fc8
       past_competitions: Minione zawody
+      #original_hash: ec7e697
+      bookmarked_title: Zawody dodane do zakładek
+      #original_hash: e5665fb
+      bookmarked_explanation: >-
+        Zawody które dodałeś do zakładek na stronie WCA. Otrzymasz przypomnienie
+        mailowe 24 godziny przed rozpoczęciem rejestracji.
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2162,6 +2235,12 @@ pl:
         range_past_html: >-
           Rejestracja online rozpoczęła się %{start_date_and_time} i zakończyła
           się %{end_date_and_time}
+      #original_hash: 8eda7ac
+      bookmark: Dodaj do zakładek
+      #original_hash: 4dfea97
+      is_bookmarked: Dodałeś te zawody do zakładek
+      #original_hash: 74598a7
+      number_of_bookmarks: Dodano do zakładek
     index:
       #original_hash: db98a68
       title: Zawody
@@ -2251,6 +2330,10 @@ pl:
       competitions_list: listę zawodów
       #original_hash: 9104a03
       no_past_competitions: Nie masz minionych zawodów.
+      #original_hash: 43c3543
+      no_bookmarked_competitions: >-
+        Nie dodałeś do zakładek żadnych nadchodzących zawodów. Kliknij ikonę
+        zakładki na stronie zawodów by zapisać je tutaj!
     competition_form:
       #original_hash: 2b81984
       wcat: Zespół do Spraw Ogłaszania Zawodów
@@ -2356,6 +2439,8 @@ pl:
       not_all_delegates: nie wszyscy są Delegatami
       #original_hash: 43a23c2
       registration_close_after_open: rejestracja musi zostać zamknięta później niż otwarta
+      #original_hash: 8a3a4f6
+      start_date_must_be_28_days_in_advance: Data początkowa musi być odległa conajmniej 28 dni od obecnej.
       #original_hash: 43a83a9
       end_date_before_start: Data końcowa nie może być przed datą początkową.
       #original_hash: 0c507fa
@@ -2602,6 +2687,69 @@ pl:
     edit:
       #original_hash: 5f1f5b8
       edit_tab_title: 'Edytuj zakładkę %{tab_name}'
+  results:
+    rankings:
+      #original_hash: f5fe73c
+      title: Rankingi
+      form_elements:
+        #original_hash: ad8919a
+        event: Konkurencja
+        #original_hash: 0f21717
+        region: Region
+        type_selector:
+          #original_hash: 3deb745
+          type: Typ
+          #original_hash: dd11868
+          single: Najlepsze
+          #original_hash: 15f86c0
+          average: Średnia
+        years_selector:
+          #original_hash: 96f997b
+          years: Lata
+          #original_hash: 0977c76
+          all_years: Wszystkie lata
+          #original_hash: 8737f09
+          only: Tylko
+          #original_hash: b3c0fe7
+          only_html: 'Tylko %{year}'
+          #original_hash: 96bdb66
+          until: Do
+          #original_hash: fa23930
+          until_html: 'Do %{year}'
+        show_selector:
+          #original_hash: d97d1ee
+          show: Wyświetl
+          #original_hash: f3cf96e
+          persons: Osoby
+          #original_hash: 16d3376
+          persons_html: '%{quantity} osób'
+          #original_hash: 612e12d
+          results: Wyniki
+          #original_hash: f3baa4a
+          results_html: '%{quantity} wyników'
+          #original_hash: d46d2ee
+          by_region: Według regionu
+      table_elements:
+        #original_hash: 709a232
+        name: Imię
+        #original_hash: 5faa59d
+        result: Wynik
+        #original_hash: e0f64f7
+        citizen_of: Narodowość
+        #original_hash: 1917f4f
+        competition: Zawody
+        #original_hash: e7f6fc5
+        solves: Ułożenia
+        #original_hash: 0f21717
+        region: Region
+        #original_hash: 70c07ec
+        world: Świat
+      #original_hash: 65310e5
+      unknown_type: 'Nieznany parametr "type", musi przyjść wartość "single" lub "average"'
+      #original_hash: 01e188f
+      unknown_show: >-
+        Nieznany parametr "show", musi przyjść wartość "N persons", "N results"
+        lub "by region"
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Połącz swoje WCA ID ze swoim kontem!
@@ -2943,7 +3091,7 @@ pl:
     mission_footer: Deklaracja Misji WCA
     #original_hash: cdab446
     who_we_are_title: Kim jesteśmy
-    #original_hash: 5924c26
+    #original_hash: 9248dc4
     who_we_are_content_html: >-
       <p>World Cube Association zarządza zawodami w łamigłówkach mechanicznych
       manipulowanych poprzez przekręcanie grup elementów, szerzej znanych jako
@@ -2952,11 +3100,12 @@ pl:
       jako oficjalne konkurencje WCA.</p> <p>Wraz z rozwojem WCA przez ostatnią
       dekadę, ponad 100 000 osób wzięło udział w naszych zawodach. Pomimo tego
       wzrostu, pozostajemy organizacją w pełni prowadzoną przez wolontariuszy,
-      począwszy od lokalnych organizatorów i Delegatów, aż do członków Zarządu.
-      Jesteśmy niezmiernie wdzięczni każdemu, kto poświęca swój czas, by pomóc
-      WCA w funkcjonowaniu. Przy większym wsparciu finansowym, mamy nadzieję
-      zapewnić jeszcze większy poziom profesjonalizmu na naszych zawodach, w
-      miarę przeprowadzania większej liczby wydarzeń na całym świecie.</p>
+      począwszy od lokalnych organizatorów i Delegatów WCA, aż do członków
+      Zarządu. Jesteśmy niezmiernie wdzięczni każdemu, kto poświęca swój czas,
+      by pomóc WCA w funkcjonowaniu. Przy większym wsparciu finansowym, mamy
+      nadzieję zapewnić jeszcze większy poziom profesjonalizmu na naszych
+      zawodach, w miarę przeprowadzania większej liczby wydarzeń na całym
+      świecie.</p>
     #original_hash: bccd8c5
     spirit: >-
       W naszym duchu jest, aby ludzie z całego świata dobrze bawili się razem w
@@ -3032,17 +3181,18 @@ pl:
         description: >-
           World Cube Association jest kierowane przez Zarząd WCA, składający się
           z następujących członków:
-      #original_hash: bb562cf
+      #original_hash: d54d953
       committees: >-
         Zespoły oraz komitety WCA są kluczową częścią organizacji, odpowiadają
         za codzienne zadania niezbędne do jej funkcjonowania. Komitety te są
-        tworzone przez członków społeczności WCA, w szczególności Delegatów oraz
-        zawodników. Każdy zespół ma swego lidera, którego rolą jest zapewnianie
-        właściwego funkcjonowania zespołu oraz koordynowanie pracy pozostałych
-        członków. Rada jest specjalnym rodzajem zespołu, pełniącym rolę doradczą
-        dla Zarządu WCA i składa się z członków społeczności, a nie członków
-        personelu WCA. Gdy zostają otwarte nabory na członków zespołów,
-        informacje o sposobie aplikowania umieszczane są na stronie głównej.
+        tworzone przez członków społeczności WCA, w szczególności WCA Delegatów
+        oraz zawodników. Każdy zespół ma swego lidera, którego rolą jest
+        zapewnianie właściwego funkcjonowania zespołu oraz koordynowanie pracy
+        pozostałych członków. Rada jest specjalnym rodzajem zespołu, pełniącym
+        rolę doradczą dla Zarządu WCA i składa się z członków społeczności, a
+        nie członków Personelu WCA. Gdy zostają otwarte nabory na członków
+        zespołów, informacje o sposobie aplikowania umieszczane są na stronie
+        głównej.
       #original_hash: c366473
       senior_member: Starszy Członek
       #original_hash: e26c936
@@ -3115,7 +3265,7 @@ pl:
       wfc:
         #original_hash: 9cb13de
         name: Komitet Finansowy WCA (WFC)
-        #original_hash: 2d4807e
+        #original_hash: b4ed44b
         description: Ten zespół jest odpowiedzialny za zarządzanie finansami WCA
       wec:
         #original_hash: 83bd1d0
@@ -3129,8 +3279,15 @@ pl:
           wspomnianym Kodeksem Etycznym. Takie dochodzenia mogą być zażądane
           przez dowolnych Zarejestrowanych Speedcuberów, których powiernikiem
           jest WEC. Ten komitet pełni również funkcję odwoławczą, gdy ktokolwiek
-          zaangażowany nie zgadza się z decysją podjętą przez Komitet
+          zaangażowany nie zgadza się z decyzją podjętą przez Komitet
           Dyscyplinarny WCA.
+      weat:
+        #original_hash: d1dbb86
+        name: Zespół Asystentów Wykonawczych WCA
+        #original_hash: 889dd90
+        description: >-
+          Ten zespół odpowiada za przeprowadzanie zadań administracyjnych
+          Zarządu WCA.
       wqac:
         #original_hash: 8f32116
         name: Komitet Zapewniania Jakości WCA
@@ -3170,6 +3327,9 @@ pl:
       operations_html: 'Codzienne działania są sprawowane przez %{committees_and_teams} WCA.'
       #original_hash: 0e7a036
       teams_committees: Zespoły i Komitety
+      probation:
+        #original_hash: 1dd6e3b
+        name: Delegaci na Stażu
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>Delegat WCA</strong> to rola zdefiniowana we Wnioskach WCA
@@ -3369,6 +3529,11 @@ pl:
         Ten komitet ma za zadanie dopilnować, aby wszystkie procedury stosowane
         przez Personel WCA oraz Personel Zewnętrzny podlegały jego Kodeksowi
         Etycznemu.
+    weat:
+      #original_hash: 889dd90
+      info_html: >-
+        Ten zespół odpowiada za przeprowadzanie zadań administracyjnych Zarządu
+        WCA.
     wqac:
       #original_hash: 0171b3b
       info_html: >-
@@ -3660,6 +3825,38 @@ pl:
       content2_html: >-
         Ten dokument zawiera ważne informacje i powinien być przeczytany przez
         każdego organizatora zawodów.
+  regulations_translations:
+    #original_hash: 9493b8d
+    title: 'Regulamin WCA i Wytyczne: Tłumaczenia'
+    #original_hash: 386ecc1
+    paragraph1: >-
+      Jeżeli posługujesz się językiem innym niż angielski, następujące
+      tłumaczenia mogą okazać się przydatne.
+    #original_hash: 32b1132
+    paragraph2: >-
+      Pamiętaj, że tłumaczenia nie mają oficjalnego status, mimo że są
+      umieszczone na stronie WCA, nie niosą ze sobą gwarancji poprawności.
+      Jeżeli występuje różnica pomiędzy tłumaczeniem a obecną, oficjalną wersją
+      angielską, to ta wersja angielska musi zostać zastosowana.
+    #original_hash: 8ad8302
+    translations: Tłumaczenia
+    #original_hash: 4fc0e2b
+    current: Obecne
+    #original_hash: fbb3c38
+    old: Stare
+    table_elements:
+      #original_hash: 2da600b
+      version: Wersja
+      #original_hash: 89b86ab
+      language: Język
+    #original_hash: a916f93
+    translating: Tłumaczenie Regulaminu
+    #original_hash: 1b026e1
+    paragraph3_html: >-
+      Jeżeli jesteś zainteresowany dodaniem/zaktualizowaniem któregoś z
+      tlumaczeń, odwiedź <a
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">instrukcje
+      odnośnie tłumaczeń na stronie GitHub</a>.
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Wytyczne Dla Organizatora Zawodów WCA
