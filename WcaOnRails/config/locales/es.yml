@@ -1961,19 +1961,44 @@ es:
     payment_form:
       #original_hash: 4de825f
       title: Importe del registro
+      #original_hash: d1569e6
+      payment_successful: >-
+        Tu pago fue realizado con éxito y tu registro debería aparecer como
+        pagado abajo.
       hints:
         #original_hash: bf3a39e
         donation: Donativo opcional para el equipo organizador
+        #original_hash: 16cf92d
+        card_information: >-
+          La información de tu tarjeta nunca llega a la web de la WCA. Se envúa
+          de modo seguro a Stripe, que gestiona el proceso de pago y nos retorna
+          a nosotros.
       labels:
         #original_hash: 4de825f
         entry_fees: Precio del registro
         #original_hash: 2c09302
         donation: Donativo
+        #original_hash: 184150d
+        card_information: Información de la tarjeta
+        #original_hash: bc8091a
+        cardholder_name: Propietario de la tarjeta
       alerts:
         #original_hash: a34940e
         not_a_number: 'Por favor, introduce una cantidad válida'
         #original_hash: 707b9ca
         amount_too_low: El total pagado es menos que el importe del registro
+      errors:
+        #original_hash: 166d48c
+        already_paid: No se hizo ningún cargo porque la cuota de registro ya ha sido pagada.
+        #original_hash: b2bc8ed
+        not_allowed: No puedes pagar por ese registro
+        #original_hash: 630dbb9
+        intent_not_found: >-
+          No pudimos localizar el intento de pago a confirmar en nuestro
+          servidor. El proceso ha sido interrumpido y no se realizó ningún cargo
+          a tu tarjeta.
+        #original_hash: 63e0ec1
+        cardholder_name: por favor comprueba el nombre del propietario de la tarjeta.
     #original_hash: 8607a87
     payment_button_text: Paga tu registro con tarjeta
     #original_hash: 4cf01a2
@@ -3825,6 +3850,38 @@ es:
       content2_html: >-
         Este documento contiene información importante y debería ser leído por
         todos los organizadores de competiciones.
+  regulations_translations:
+    #original_hash: 9493b8d
+    title: Reglamento y Directrices de la WCA. Traducciones
+    #original_hash: 386ecc1
+    paragraph1: >-
+      Si hablas un idioma distinto del inglés, puede que encuentres estas
+      traducciones de utilidad.
+    #original_hash: 32b1132
+    paragraph2: >-
+      Por favor, ten en cuenta que las traducciones no son oficiales aunque se
+      muestren en la web de la WCA: no incorporan ninguna garantía. Si hay
+      alguna diferencia entre una traducción y la versión (actual oficial) en
+      inglés, la versión en inglés debe prevalecer.
+    #original_hash: 8ad8302
+    translations: Traducciones
+    #original_hash: 4fc0e2b
+    current: Actual
+    #original_hash: fbb3c38
+    old: Anterior
+    table_elements:
+      #original_hash: 2da600b
+      version: Versión
+      #original_hash: 89b86ab
+      language: Idioma
+    #original_hash: a916f93
+    translating: Traducir el Reglamento
+    #original_hash: 1b026e1
+    paragraph3_html: >-
+      Si estás interesado en añadir/actualizar una traducción, por favor echa un
+      vistazo a <a
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">las
+      instrucciones en el repositorio GitHub de traducciones</a>.
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Directrices para Organizadores de Competiciones de la WCA
