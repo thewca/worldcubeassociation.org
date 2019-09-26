@@ -16,7 +16,7 @@
               path: competition_results_all_path(@competition),
               fas_icon: "list",
               tiny_children: @competition.events.map do |event|
-                { text: event.id, path: competition_results_all_path(@competition, {:event => event.id}), cubing_icon: event.id, title: event.name }
+                { text: event.id, path: competition_results_all_path(@competition, event: event.id), cubing_icon: event.id, title: event.name }
               end
             },
             { text: t('.menu.by_person'), path: competition_results_by_person_path(@competition), fas_icon: "user" },
