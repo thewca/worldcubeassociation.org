@@ -112,7 +112,7 @@ else
   db['socket'] = socket
   db['password'] = secrets['mysql_password']
   mysql_service 'default' do
-    version '5.6'
+    version '8.0'
     initial_root_password secrets['mysql_password']
     # Force default socket to make rails happy
     socket socket
