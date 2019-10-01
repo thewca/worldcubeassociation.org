@@ -2,7 +2,7 @@
   <div class="col-md-6">
     <dl class="dl-horizontal compact">
       <dt><%= t '.date' %></dt>
-      <dd><%= wca_date_range(competition.start_date, competition.end_date) %></dd>
+      <dd><%= wca_date_range(competition.start_date, competition.end_date) %> (<%= link_to t('.add_to_calendar'), competition_download_ics_path(competition), format: :ics %>)</dd>
 
       <dt><%= t '.city' %></dt>
       <dd><%= competition.city_and_country %></dd>

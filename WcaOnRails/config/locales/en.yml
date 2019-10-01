@@ -1109,6 +1109,7 @@ en:
         cutoff: "Cutoff: %{short_cutoff}"
         download_html: "Download all the competition's details as PDF %{here}."
       date: "Date"
+      add_to_calendar: "Add to calendar"
       city: "City"
       venue: "Venue"
       address: "Address"

@@ -69,6 +69,8 @@ Rails.application.routes.draw do
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
   end
 
+  get 'competitions/:competition_id/download_ics' => 'competitions#download_ics', as: :competition_download_ics
+
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'

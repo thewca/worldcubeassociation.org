@@ -89,6 +89,7 @@ gem 'activestorage-validator'
 gem 'image_processing'
 gem 'rest-client'
 gem 'wicked_pdf'
+gem 'icalendar'
 
 group :development, :test do
   gem 'spring'
