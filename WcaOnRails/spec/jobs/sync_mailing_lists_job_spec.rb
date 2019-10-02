@@ -219,10 +219,10 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # )
 
     # delegates.europe-east-middle-east@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "delegates.europe-east-middle-east@worldcubeassociation.org",
-      a_collection_containing_exactly(europe_east_middle_east_delegate.email, europe_east_middle_east_delegate.senior_delegate.email),
-    )
+    # expect(GsuiteMailingLists).to receive(:sync_group).with(
+    #   "delegates.europe-east-middle-east@worldcubeassociation.org",
+    #   a_collection_containing_exactly(europe_east_middle_east_delegate.email, europe_east_middle_east_delegate.senior_delegate.email),
+    # )
 
     # delegates.europe-north-baltic-states@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
@@ -231,10 +231,10 @@ RSpec.describe SyncMailingListsJob, type: :job do
     )
 
     # delegates.europe-west@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "delegates.europe-west@worldcubeassociation.org",
-      a_collection_containing_exactly(europe_west_delegate.email, europe_west_delegate.senior_delegate.email),
-    )
+    # expect(GsuiteMailingLists).to receive(:sync_group).with(
+    #   "delegates.europe-west@worldcubeassociation.org",
+    #   a_collection_containing_exactly(europe_west_delegate.email, europe_west_delegate.senior_delegate.email),
+    # )
 
     # delegates.latin-america@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
