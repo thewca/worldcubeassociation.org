@@ -12,11 +12,14 @@ module WcaHelper
   end
 
   def self.get_secrets(recipe)
-    if recipe.node.chef_environment.start_with?("development")
+    if recipe.node.chef_environment == "development"
       recipe.data_bag_item("secrets", "development")
-    else
-      # Note that we use production secrets in staging mode.
+    elsif recipe.node.chef_environment == "staging"
+      recipe.data_bag_item("secrets", "staging")
+    elsif recipe.node.chef_environment == "production"
       recipe.data_bag_item("secrets", "production")
+    else
+      raise "Unrecognized chef_environment: #{recipe.node.chef_environment}"
     end
   end
 end

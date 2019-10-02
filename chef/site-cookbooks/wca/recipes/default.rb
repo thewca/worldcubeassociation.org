@@ -93,18 +93,20 @@ execute gen_auth_keys_path do
 end
 
 #### Mysql
+package 'mysql-client'
 db = {
   'user' => 'root',
 }
 if node.chef_environment == "production"
   # In production mode, we use Amazon RDS.
   db['host'] = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
-  package 'mysql-client'
+  db['password'] = secrets['mysql_password']
 else
   # If not in production, then we run a local mysql instance.
   socket = "/var/run/mysqld/mysqld.sock"
   db['host'] = 'localhost'
   db['socket'] = socket
+  db['password'] = secrets['mysql_password']
   mysql_service 'default' do
     version '5.6'
     initial_root_password secrets['mysql_password']
@@ -118,7 +120,7 @@ else
     action :create
   end
 end
-db_url = "mysql2://#{db['user']}:#{secrets['mysql_password']}@#{db['host']}/cubing"
+db_url = "mysql2://#{db['user']}:#{db['password']}@#{db['host']}/cubing"
 
 template "/etc/my.cnf" do
   source "my.cnf.erb"
@@ -183,8 +185,12 @@ if node.chef_environment != "production"
 end
 
 # Use HTTPS in non development mode
-https = !node.chef_environment.start_with?("development")
-server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
+https = (node.chef_environment != "development")
+server_name = {
+  "production" => "www.worldcubeassociation.org",
+  "staging" => "staging.worldcubeassociation.org",
+  "development" => "",
+}[node.chef_environment]
 
 # If /etc/ssh is not a symlink, back it up and create a symlink.
 unless File.symlink?("/etc/ssh")
@@ -317,6 +323,9 @@ end
 
 
 #### Rails secrets
+# Don't be confused by the name of this file! This is used by both our staging
+# and our prod environments (because staging runs in the rails "production"
+# mode).
 template "#{rails_root}/.env.production" do
   source "env.production.erb"
   mode 0644
@@ -401,7 +410,7 @@ execute "bundle install #{'--deployment --without development test' if rails_env
   })
 end
 
-if node.chef_environment.start_with?("development")
+if node.chef_environment == "development"
   db_setup_lockfile = '/tmp/rake-db-setup-run'
   execute "bundle exec rake db:setup" do
     cwd rails_root
