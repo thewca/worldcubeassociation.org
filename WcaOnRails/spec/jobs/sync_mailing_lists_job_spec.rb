@@ -211,10 +211,12 @@ RSpec.describe SyncMailingListsJob, type: :job do
     )
 
     # delegates.asia-west-india@ mailing list
-    expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "delegates.asia-west-india@worldcubeassociation.org",
-      a_collection_containing_exactly(asia_west_india_delegate.email, asia_west_india_delegate.senior_delegate.email),
-    )
+    # TODO: This is temporarily disabled as a workaround for
+    # https://github.com/thewca/worldcubeassociation.org/issues/4674.
+    # expect(GsuiteMailingLists).to receive(:sync_group).with(
+    #   "delegates.asia-west-india@worldcubeassociation.org",
+    #   a_collection_containing_exactly(asia_west_india_delegate.email, asia_west_india_delegate.senior_delegate.email),
+    # )
 
     # delegates.europe-east-middle-east@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(

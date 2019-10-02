@@ -20,10 +20,12 @@ class SyncMailingListsJob < SingletonApplicationJob
       mailing_list: "delegates.asia-southeast@worldcubeassociation.org",
       query: "%Asia Southeast%",
     },
-    {
-      mailing_list: "delegates.asia-west-india@worldcubeassociation.org",
-      query: "%Asia West & India%",
-    },
+    # TODO: This is temporarily disabled as a workaround for
+    # https://github.com/thewca/worldcubeassociation.org/issues/4674.
+    # {
+    #   mailing_list: "delegates.asia-west-india@worldcubeassociation.org",
+    #   query: "%Asia West & India%",
+    # },
     {
       mailing_list: "delegates.europe-east-middle-east@worldcubeassociation.org",
       query: "%Europe East & Middle East%",
