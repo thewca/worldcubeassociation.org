@@ -93,7 +93,7 @@ execute gen_auth_keys_path do
 end
 
 #### Mysql
-package 'mysql-client'
+package 'mysql-client-5.6'
 db = {
   'user' => 'root',
 }
