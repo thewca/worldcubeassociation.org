@@ -50,19 +50,41 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 
 ## Run in Docker (WIP)
 
-- `cd WcaOnRails`
-- `make run`
-- `make shell` - Open a shell.
-- **Inside of the shell**: `bin/rake db:load:development` - Load the developer's database export. This will take a while!
-  - `bin/rake db:reset` - A bit faster than loading the developer's database
-    export, this should only take ~4 minutes, but it's not nearly as
-    interesting as the developer's database export.
-- **Inside of the shell**: `bin/rails server --binding=0.0.0.0`
-  - Note: Sometimes this will fail, complaining about dependencies. At this
-    point you could either rebuild the containers (`make build`), which can be
-    slow, or you could just run `bin/yarn` or a `bin/bundle` as needed.
-- **Optional, but will speed up Javascript development quite a bit**:
-  `bin/webpack-dev-server` in a new `make shell`.
+    # Container Shell (leave running)
+    cd WcaOnRails
+    make run
+
+    # Server Shell (leave running)
+    cd WcaOnRails; make shell
+    # Load developer's database. You only have to do this the first time.
+    bin/rake db:reset
+    bin/rails server --binding=0.0.0.0
+
+    # Webpack Shell (optional; leave running)
+    cd WcaOnRails; make shell
+    bin/webpack-dev-server
+    # Now restart the server in the server shell.
+
+Then visit <http://localhost:3000> to view the site!
+
+### Server doesn't start?
+
+If the `bin/rails server` command is failing, you can either rebuild the containers:
+
+    # Rebuild the container (inc. dependencies)
+    cd WcaOnRails; make build
+
+If you can tell which particular tool failed, you can also just run one of the following :
+
+- `bin/yarn`
+- `bin/bundle`
+
+### Database Export
+
+Instead of (or after) `db:reset`, use:
+
+    # Load the WCA dabase export (this is slow!)
+    bin/rake db:load:development
 
 ## Run in Vagrant (gets everything working, but is very slow, recommended only if you need to run the PHP portions of the website)
 
