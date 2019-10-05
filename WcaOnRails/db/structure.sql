@@ -1100,6 +1100,7 @@ CREATE TABLE `registration_payments` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `refunded_registration_payment_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_registration_payments_on_stripe_charge_id` (`stripe_charge_id`),
   KEY `idx_reg_payments_on_refunded_registration_payment_id` (`refunded_registration_payment_id`)
@@ -1603,4 +1604,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190818102517'),
 ('20190825095512'),
 ('20190826005902'),
-('20190916133253');
+('20190916133253'),
+('20191005203556');

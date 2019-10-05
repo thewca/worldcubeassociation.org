@@ -127,11 +127,12 @@ class Registration < ApplicationRecord
     competition.registration_opened? || !(new_or_deleted?)
   end
 
-  def record_payment(amount, currency_code, stripe_charge_id)
+  def record_payment(amount, currency_code, stripe_charge_id, user_id)
     registration_payments.create!(
       amount_lowest_denomination: amount,
       currency_code: currency_code,
       stripe_charge_id: stripe_charge_id,
+      user_id: user_id,
     )
   end
 
@@ -139,13 +140,15 @@ class Registration < ApplicationRecord
     amount,
     currency_code,
     stripe_refund_id,
-    refunded_registration_payment_id
+    refunded_registration_payment_id,
+    user_id
   )
     registration_payments.create!(
       amount_lowest_denomination: amount * -1,
       currency_code: currency_code,
       stripe_charge_id: stripe_refund_id,
       refunded_registration_payment_id: refunded_registration_payment_id,
+      user_id: user_id,
     )
   end
 

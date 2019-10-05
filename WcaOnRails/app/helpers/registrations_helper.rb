@@ -41,4 +41,12 @@ module RegistrationsHelper
       [registration.created_at.to_date, registration.created_at]
     end
   end
+
+  def name_for_payment(registration_payment)
+    if registration_payment.user
+      link_to(registration_payment.user.name, edit_user_path(registration_payment.user))
+    else
+      "<unknown user>"
+    end
+  end
 end

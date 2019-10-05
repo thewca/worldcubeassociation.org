@@ -481,6 +481,7 @@ class RegistrationsController < ApplicationController
           charge.amount,
           charge.currency,
           charge.id,
+          current_user.id,
         )
         stripe_charge.update!(
           status: "success",
@@ -530,6 +531,7 @@ class RegistrationsController < ApplicationController
       refund.currency,
       refund.id,
       payment.id,
+      current_user.id,
     )
 
     flash[:success] = 'Payment was refunded'
