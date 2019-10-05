@@ -582,7 +582,12 @@ RSpec.describe RegistrationsController do
 
     context 'when signed in as organizer' do
       let(:organizer) { FactoryBot.create(:user) }
-      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+      let(:competition) {
+        FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open,
+                          organizers: [organizer],
+                          events: Event.where(id: %w(222 333)),
+                          starts: (ClearConnectedStripeAccount::DELAY_IN_DAYS + 1).days.ago)
+      }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: organizer) }
 
       context "processes a payment" do
@@ -643,6 +648,14 @@ RSpec.describe RegistrationsController do
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
           expect(flash[:danger]).to eq "You are not allowed to refund more than the competitor has paid."
+          expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
+        end
+
+        it "disallows a refund after clearing the Stripe account id" do
+          ClearConnectedStripeAccount.perform_now
+          post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: competition.base_entry_fee.cents } }
+          expect(response).to redirect_to edit_registration_path(registration)
+          expect(flash[:danger]).to eq "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
           expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
         end
       end

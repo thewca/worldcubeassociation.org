@@ -503,6 +503,12 @@ class RegistrationsController < ApplicationController
 
   def refund_payment
     registration = Registration.find(params[:id])
+    unless registration.competition.using_stripe_payments?
+      flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
+      redirect_to edit_registration_path(registration)
+      return
+    end
+
     payment = RegistrationPayment.find(params[:payment_id])
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
