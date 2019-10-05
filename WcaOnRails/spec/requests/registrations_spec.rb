@@ -497,6 +497,8 @@ RSpec.describe "registrations" do
           expect(charge.metadata.wca_id).to eq user.wca_id
           expect(charge.metadata.email).to eq user.email
           expect(charge.metadata.competition).to eq competition.name
+          # Check that the website actually records who made the charge
+          expect(registration.registration_payments.first.user).to eq user
         end
 
         it "processes payment with donation and valid credit card without SCA" do

@@ -610,6 +610,8 @@ RSpec.describe RegistrationsController do
           expect(refund.amount).to eq competition.base_entry_fee.cents
           expect(flash[:success]).to eq "Payment was refunded"
           expect(@payment.reload.amount_available_for_refund).to eq 0
+          # Check that the website actually records who made the refund
+          expect(registration.registration_payments.last.user).to eq organizer
         end
 
         it 'issues a 50% refund' do

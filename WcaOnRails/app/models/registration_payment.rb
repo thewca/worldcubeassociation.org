@@ -2,6 +2,7 @@
 
 class RegistrationPayment < ApplicationRecord
   belongs_to :registration
+  belongs_to :user
 
   monetize :amount_lowest_denomination,
            as: "amount",
