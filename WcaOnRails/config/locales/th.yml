@@ -1620,8 +1620,8 @@ th:
         other: ผู้เข้าแข่งขันเก่า
       #original_hash: b7da17a
       person:
-        other: คน
         zero: คน
+        other: คน
     flash:
       #original_hash: da7ec53
       not_using_wca: การแข่งขันนี้ไม่ได้ใช้การรับสมัครของ WCA
@@ -1835,27 +1835,49 @@ th:
     payment_form:
       #original_hash: 4de825f
       title: ค่าสมัครแข่งขัน
+      #original_hash: d1569e6
+      payment_successful: การชำระค่าสมัครของคุณสำเร็จแล้ว การสมัครของคุณจะแสดงว่าจ่ายแล้วด้านล่าง
       hints:
         #original_hash: bf3a39e
         donation: ทางเลือกการบริจาคให้ผู้จัดการแข่งขัน
+        #original_hash: 16cf92d
+        card_information: >-
+          ข้อมูลบัตรของคุณไม่เคยถูกใข้กับ WCA มาก่อน
+          มันจะถูกดำเนินการอย่างเป็นความลับด้วย Stripe
+          ซึ่งจะประมวลผลและส่งผลกลับมาให้เรา
       labels:
         #original_hash: 4de825f
         entry_fees: ค่าสมัครแข่งขัน
         #original_hash: 2c09302
         donation: บริจาค
+        #original_hash: 184150d
+        card_information: ข้อมูลบัตร
+        #original_hash: bc8091a
+        cardholder_name: ผู้ถือบัตร
       alerts:
         #original_hash: a34940e
         not_a_number: กรุณาใส่จำนวนให้ถูกต้อง
         #original_hash: 707b9ca
         amount_too_low: จำนวนต้องอย่างน้อยเท่ากับค่าสมัครการแข่งขัน
+      errors:
+        #original_hash: 166d48c
+        already_paid: การเปลี่ยนแปลงไม่สามารถทำได้ เนื่องจากค่าสมัครได้ถูกชำระแล้ว
+        #original_hash: b2bc8ed
+        not_allowed: คุณไม่สามารถชำระค่าสมัครการแข่งขันนั้นได้
+        #original_hash: 630dbb9
+        intent_not_found: >-
+          เราไม่พบหลักฐานการชำระค่าสมัครจากระบบ
+          การชำระค่าสมัครอาจเกิดความผิดพลาดหรือบัตรของคุณไม่ถูกเรียกเก็บค่าสมัคร
+        #original_hash: 63e0ec1
+        cardholder_name: กรุณาตรวจสอบผู้ถือบัตร
     #original_hash: 8607a87
     payment_button_text: ชำระค่าสมัครด้วยบัตร
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
-      เพื่อให้การสมัครครั้งต่อไปเร็วขึ้น
-      คุณสามารถเลือกประเภทการแข่งขันที่ชอบได้  %{link}
+      เพื่อให้การสมัครครั้งต่อไปเร็วขึ้น คุณสามารถเลือกประเภทการแข่งขันที่ชอบได้
+      %{link}
     #original_hash: 67d8734
-    preferred_events_populated_html: 'เราได่เติมประเภทที่คุณชอบโดยอัตโนมัติ คุณสามารถแก้ไขได้ที่ %{link}'
+    preferred_events_populated_html: 'เราได้เติมประเภทที่คุณชอบโดยอัตโนมัติ คุณสามารถแก้ไขได้ที่ %{link}'
     #original_hash: ee89a3e
     registration_requirements: ข้อกำหนดการสมัครการแข่งขัน
     import:
@@ -1955,6 +1977,8 @@ th:
         download_html: 'ดาวน์โหลดรายละเอียดการแข่งขันทั้งหมดเป็น PDF %{here}'
       #original_hash: eb9a4bc
       date: วันที่
+      #original_hash: 4f05cd6
+      add_to_calendar: เพิ่มลงในปฎิทิน
       #original_hash: 4271627
       city: เมือง
       #original_hash: 67cd406
@@ -3088,8 +3112,8 @@ th:
       #original_hash: 3d5b64b
       delegates_html: >-
         <p><strong>WCA Delegate</strong>
-        เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ WCA  หน้าที่หลักของ
-        Delegate คือดูแลการแข่งขันในนามของ WCA. WCA Delegate
+        เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ WCA หน้าที่หลักของ Delegate
+        คือดูแลการแข่งขันในนามของ WCA. WCA Delegate
         รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA
         ทั้งหมดดำเนินการตามภารกิจวิญญาณและกติกาของ WCA. WCA ได้แยกบทบาทดังนี้
         <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates </strong>
@@ -3553,6 +3577,34 @@ th:
         href="/organizer-guidelines">แนวทางการเป็นผู้จัดการแข่งขัน</a>
       #original_hash: 5016669
       content2_html: เอกสารฉบับนี้รวมข้อมูลที่จำเป็นและผู้จัดการแข่งขันทุกคนควรอ่าน
+  regulations_translations:
+    #original_hash: 9493b8d
+    title: 'กติกาและแนวทางของ WCA: Translations'
+    #original_hash: 386ecc1
+    paragraph1: หากคุณใช้ภาษาอื่นนอกที่ไม่ใช่ภาษาอังกฤษ คุณสามารถหาการแปลเหล่านี้ได้
+    #original_hash: 32b1132
+    paragraph2: >-
+      กรุณาจำไว้ว่าการแปลเหล่านี้ไม่มีสถานะเป็นทางการแม้ว่ามันจะอยู่บนเว็บ WCA:
+      ถ้ามันมีความแตกต่างเมื่อเทียบกับกติกาภาษาอังกฤษ,
+      กติกาภาษาอังกฤษจะถูกบังคับใช้
+    #original_hash: 8ad8302
+    translations: การแปล
+    #original_hash: 4fc0e2b
+    current: ปัจจุบัน
+    #original_hash: fbb3c38
+    old: เก่า
+    table_elements:
+      #original_hash: 2da600b
+      version: Version
+      #original_hash: 89b86ab
+      language: ภาษา
+    #original_hash: a916f93
+    translating: แปลกติกา
+    #original_hash: 1b026e1
+    paragraph3_html: >-
+      หากคุณต้องการที่จะเพิ่มหรือแก้ไขการแปล กรุณาดูที่ <a
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">the
+      instructions on the GitHub repository for translations</a>
   organizer_guidelines:
     #original_hash: 7486ac4
     title: แนวทางการเป็นผู้จัดการแข่งขัน WCA
