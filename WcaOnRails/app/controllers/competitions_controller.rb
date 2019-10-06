@@ -506,6 +506,10 @@ class CompetitionsController < ApplicationController
                  save_to_file: cached_path, disposition: "inline"
         end
       end
+      format.ics do
+        calendar = @competition.to_ics
+        render plain: calendar.to_ical, content_type: 'text/calendar'
+      end
     end
   end
 
@@ -623,12 +627,6 @@ class CompetitionsController < ApplicationController
   def for_senior
     @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || Date.today + 20.year }.reverse
-  end
-
-  def download_ics
-    competition = competition_from_params
-    calendar = competition_to_ics(competition)
-    render plain: calendar.to_ical, content_type: 'text/calendar'
   end
 
   private def competition_params

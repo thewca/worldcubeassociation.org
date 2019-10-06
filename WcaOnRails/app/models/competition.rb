@@ -1421,4 +1421,16 @@ class Competition < ApplicationRecord
       event_ids: events.map(&:id),
     }
   end
+
+  def to_ics
+    cal = Icalendar::Calendar.new
+    cal.event do |e|
+      e.dtstart = Icalendar::Values::Date.new(self.start_date)
+      e.dtend = Icalendar::Values::Date.new(self.end_date)
+      e.summary = self.name
+      e.url = self.website
+    end
+    cal.publish
+    cal
+  end
 end

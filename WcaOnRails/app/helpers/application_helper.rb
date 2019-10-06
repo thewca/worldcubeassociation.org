@@ -136,18 +136,6 @@ module ApplicationHelper
     end
   end
 
-  def competition_to_ics(competition)
-    cal = Icalendar::Calendar.new
-    cal.event do |e|
-      e.dtstart = Icalendar::Values::Date.new(competition.start_date)
-      e.dtend = Icalendar::Values::Date.new(competition.end_date)
-      e.summary = competition.name
-      e.url = competition.website
-    end
-    cal.publish
-    cal
-  end
-
   def alert(type, content = nil, note: false, &block)
     content = capture(&block) if block_given?
     if note
