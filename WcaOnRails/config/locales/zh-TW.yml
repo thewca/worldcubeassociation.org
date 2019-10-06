@@ -15,15 +15,15 @@ zh-TW:
     #original_hash: ee10075
     FM: 密克羅尼西亞
     #original_hash: db871b0
-    GW: 幾內亞比索共和國
+    GW: 幾內亞比索
     #original_hash: 2f488ff
     HK: 香港
     #original_hash: 3ad2dd8
-    KN: 聖克里斯多福及尼維斯
+    KN: 聖克里斯多福
     #original_hash: 7184d1a
-    KP: 朝鮮
+    KP: 朝鮮(北韓)
     #original_hash: 4430b22
-    KR: 韓國
+    KR: 韓國(南韓)
     #original_hash: 673b1cf
     LC: 聖露西亞
     #original_hash: e2ac50f
@@ -215,8 +215,8 @@ zh-TW:
         moves: '最佳成績優於 %{moves} 步'
         #original_hash: c3133c2
         points: '最佳成績優於 %{points} 點'
-    ranking: '前%{ranking}名晉級下一輪'
-    percent: '前%{percent}%晉級下一輪'
+    ranking: '前 %{ranking} 名晉級下一輪'
+    percent: '前 %{percent}% 晉級下一輪'
     attempt_result:
       #original_hash: b3c8a02
       time: '最佳成績優於 %{time}  晉級下一輪'
@@ -734,7 +734,7 @@ zh-TW:
         #original_hash: da39a3e
         notes: ''
         #original_hash: 8c266ea
-        receive_delegate_reports: 如果您是代表候選人、資深代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
+        receive_delegate_reports: 如果您是代表候選人、 高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1125,7 +1125,7 @@ zh-TW:
       #original_hash: d790b40
       faq: 常見問題
       #original_hash: 3ad28c0
-      teams: 團隊、委員會和諮詢會
+      teams: 團隊、委員會和理事會
       #original_hash: 02617c0
       tutorial: 比賽指南
       #original_hash: a34b69f
@@ -1179,9 +1179,9 @@ zh-TW:
       #original_hash: b7ee3c4
       manage_users: 管理用戶
       #original_hash: 12ab214
-      delegate: 該比賽的WCA代表
+      delegate: WCA代表相關
       #original_hash: 2f4bd74
-      panel: 佈告欄
+      panel: 知識欄
       #original_hash: d3a928c
       results_team: 成績組
       #original_hash: 4e7afeb
@@ -1686,7 +1686,7 @@ zh-TW:
         #original_hash: bf3a39e
         donation: 額外捐款僅限於主辦團隊使用
         #original_hash: 16cf92d
-        card_information: 您的卡片諮詢並沒有傳送到WCA網站。卡片資訊只有加密地傳送到Stripe並在處理完費用後回傳資訊給我們。
+        card_information: 您的卡片資訊並沒有傳送到WCA網站。卡片資訊只有加密地傳送到Stripe並在處理完費用後回傳資訊給我們。
       labels:
         #original_hash: 4de825f
         entry_fees: 報名費
@@ -1797,6 +1797,8 @@ zh-TW:
         download_html: '按%{here}下載本比賽所有細節(PDF)。'
       #original_hash: eb9a4bc
       date: 日期
+      #original_hash: 4f05cd6
+      add_to_calendar: 加入行事曆
       #original_hash: 4271627
       city: 城市
       #original_hash: 67cd406
