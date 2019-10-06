@@ -1645,6 +1645,8 @@ en:
         name: "WCA Vice-Chair"
       treasurer:
         name: "WCA Treasurer"
+      users:
+        profile: "%{user_name}'s profile"
       #context: WDC
       wdc:
         name: "WCA Disciplinary Committee"
