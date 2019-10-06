@@ -505,6 +505,10 @@ class CompetitionsController < ApplicationController
                  save_to_file: cached_path, disposition: "inline"
         end
       end
+      format.ics do
+        calendar = @competition.to_ics
+        render plain: calendar.to_ical, content_type: 'text/calendar'
+      end
     end
   end
 
