@@ -8,9 +8,13 @@
 .badge {
   &.team-member-badge {
     margin-right: 1em;
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
     color: $gray;
     background-color: $gray-lighter;
+    .avatar-thumbnail {
+      border-radius: 5px;
+    }
     @media (max-width: 576px) {
       display: block;
       width: max-content;
@@ -18,9 +22,10 @@
   }
 
   &.team-senior-member-badge {
-    background-color: $green;
+    background-color: $dark-green;
     color: white;
     padding-top: 6px;
+    padding-bottom: 6px;
     vertical-align: top;
     span.team-senior-member-subtext {
       font-style: oblique;
@@ -30,14 +35,16 @@
     }
     .avatar-thumbnail {
       vertical-align: top;
+      border-radius: 5px;
     }
   }
 
   &.team-leader-badge,
   &.officer-badge {
-    background-color: $bright-blue;
+    background-color: $dark-blue;
     color: white;
     padding-top: 6px;
+    padding-bottom: 6px;
     vertical-align: top;
     span.team-leader-subtext {
       font-style: oblique;
@@ -47,6 +54,7 @@
     }
     .avatar-thumbnail {
       vertical-align: top;
+      border-radius: 5px;
     }
   }
 
@@ -56,7 +64,6 @@
   }
 
   &.team-email {
-    background-color: $orange;
     a {
       color: white;
     }
