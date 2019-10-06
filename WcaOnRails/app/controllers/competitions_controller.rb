@@ -21,7 +21,6 @@ class CompetitionsController < ApplicationController
     :show_all_results,
     :show_results_by_person,
     :show_events,
-    :download_ics,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
     :post_announcement,
