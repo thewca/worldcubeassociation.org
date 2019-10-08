@@ -45,21 +45,21 @@ fi:
     #original_hash: 3fa9b2d
     VC: Saint Vincent ja Grenadiinit
     #original_hash: 9af4622
-    XF: Useita valtioita (Afrikka)
+    XF: Useita maita (Afrikka)
     #original_hash: 374ac0d
-    XM: Useita valtioita (Amerikka)
+    XM: Useita maita (Amerikka)
     #original_hash: 3f8c9de
-    XA: Useita valtioita (Aasia)
+    XA: Useita maita (Aasia)
     #original_hash: 090f3ce
-    XE: Useita valtioita (Eurooppa)
+    XE: Useita maita (Eurooppa)
     #original_hash: b50b7a5
-    XN: Useita valtioita (Pohjois-Amerikka)
+    XN: Useita maita (Pohjois-Amerikka)
     #original_hash: 428e7af
-    XO: Useita valtioita (Oseania)
+    XO: Useita maita (Oseania)
     #original_hash: 459f987
-    XS: Useita valtioita (Etelä-Amerikka)
+    XS: Useita maita (Etelä-Amerikka)
     #original_hash: 9027fe6
-    XW: Useita valtioita (Maailma)
+    XW: Useita maita (Maailma)
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Useita maanosia
@@ -216,7 +216,7 @@ fi:
         #original_hash: c3133c2
         points: 'Jos paras tulos > %{points}'
     ranking: '%{ranking} parasta jatkaa seuraavalle kierrokselle'
-    percent: '%{percent}% jatkaa seuraavalle kierrokselle'
+    percent: 'Parhaat %{percent}% jatkaa seuraavalle kierrokselle'
     attempt_result:
       #original_hash: b3c8a02
       time: 'Paras tulos < %{time} jatkaa seuraavalle kierrokselle'
@@ -245,7 +245,7 @@ fi:
       #original_hash: 9da5a3e
       one_round: '%{time} (kumulatiivinen)'
       #original_hash: c01adfa
-      across_rounds: 'yhteensä %{time} %{rounds} kierrokselle'
+      across_rounds: 'Yhteensä %{time} kierroksille %{rounds}'
     #original_hash: f030c3d
     333fm: 1 tunti
     #original_hash: cc7d8bb
@@ -256,7 +256,7 @@ fi:
     #original_hash: 2513cf0
     continent: Maanosa
     #original_hash: d523ebb
-    country: Valtio
+    country: Maa
     #original_hash: 0154c0d
     here: täällä
     #original_hash: 77003d0
@@ -394,7 +394,7 @@ fi:
         #original_hash: b649210
         cellName: Kilpailun lempinimi
         #original_hash: d523ebb
-        countryId: Valtio
+        countryId: Maa
         #original_hash: 25b7b06
         cityName: Kaupunki
         #original_hash: 67cd406
@@ -452,7 +452,7 @@ fi:
         #original_hash: 4baf44b
         championship_type: Alueellisen mestaruuskilpailun tyyppi
         #original_hash: 556fda0
-        extra_registration_requirements: Ylimääräiset rekisteröitymisvaatimukset
+        extra_registration_requirements: Muut rekisteröitymisohjeet
         #original_hash: 2529d04
         on_the_spot_registration: Paikan päällä rekisteröityminen
         #original_hash: 69780b5
@@ -770,7 +770,7 @@ fi:
         #original_hash: bce4589
         cityName: >-
           Kaupunki (ja osavaltio, jos olemassa), jossa kilpailu pidetään. Älä
-          sisällytä valtiota. Esimerkiksi "Helsinki" tai "San Francisco,
+          sisällytä maata. Esimerkiksi "Helsinki" tai "San Francisco,
           California".
         #original_hash: bb470cc
         information: >-
@@ -834,15 +834,13 @@ fi:
         use_wca_registration: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
-          Toistaiseksi tämä luku on vain informatiivinen, eikä vielä estä
-          enempää kilpailijoita rekisteröitymästä. Yritämme saada tämän
-          automaattiseksi, mutta se vaatii muiden asioiden hoitamista ensin.
+          Vaikka säännöt eivät vaadi osallistujarajan asettamista, se on
+          suositeltavaa.
         #original_hash: b7b599b
         competitor_limit: >-
-          Kilpailuun osallistuvien sallittu määrä. Toistaiseksi tämä luku on
-          vain informatiivinen, eikä vielä estä enempää kilpailijoita
-          rekisteröitymästä. Yritämme saada tämän automaattiseksi, mutta se
-          vaatii muiden asioiden hoitamista ensin.
+          Kilpailuun osallistuvien sallittu määrä. Rajan asettaminen ei vielä
+          estä enempää kilpailijoita rekisteröitymästä; siitä pitää huolehtia
+          manuaalisesti.
         #original_hash: 4bd7102
         competitor_limit_reason: Mikä on syy osallistujarajoitukselle? Täytä tämä osa englanniksi!
         #original_hash: da39a3e
@@ -851,11 +849,11 @@ fi:
         championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
-          Kerro tässä kaikista ylimääräisistä rekisteröitymisvaatimuksista,
-          joita ei ole käsitelty yläpuolella (esimerkiksi maksuohjeet).
-          <br/>Kirjoita tämä <b>englanniksi<b/> ja muilla kilpailijoiden
-          todennäköisesti puhumilla kielillä. Tämä näytetään kilpailusivun
-          Tietoa-osiossa sekä rekisteröitymissivulla, jos käytät sitä.
+          Kerro tässä kaikki ylimääräiset rekisteröitymisohjeet, joita ei ole
+          käsitelty yläpuolella (esimerkiksi maksuohjeet). <br/>Kirjoita tämä
+          <b>englanniksi<b/> ja muilla kilpailijoiden todennäköisesti puhumilla
+          kielillä. Tämä näytetään kilpailusivun Tietoa-osiossa sekä
+          rekisteröitymissivulla, jos käytät sitä.
         #original_hash: da39a3e
         on_the_spot_registration: ''
         #original_hash: 8c4fdf8
@@ -864,15 +862,15 @@ fi:
           rekisteröityminen on ilmaista.
         #original_hash: 180b7b3
         refund_policy_percent: >-
-          Toistaiseksi tämä numero on vain suuntaa antava, palautukset täytyy
+          Tämä numero ilmoitetaan kilpailusivulla, mutta palautukset täytyy
           käsitellä manuaalisesti. Jos arvoksi asetetaan 0, kilpailusivulla
           lukee, ettei osallistumismaksuja palauteta missään tilanteessa.
         #original_hash: f64d853
         refund_policy_limit_date: 'Päivä, jonka jälkeen osallistumismaksuja ei enää palauteta.'
         #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
-          Toistaiseksi tämä luku on vain suuntaa antava, vieraiden pääsymaksuja
-          ei voi hallita tämän sivuston kautta. Jos arvoksi asetetaan 0,
+          Tämä luku näytetään kilpailusivulla, mutta vieraiden pääsymaksuja ei
+          voi hallita tämän sivuston kautta. Jos arvoksi asetetaan 0,
           kilpailusivulla lukee, että katsojat pääsevät paikalle ilmaiseksi.
         #original_hash: da39a3e
         early_puzzle_submission: ''
@@ -1415,7 +1413,7 @@ fi:
         not_accepted_html: 'Olet rekisteröitynyt, mutta rekisteröitymistäsi ei ole hyväksytty.'
         #original_hash: 3724e7c
         more_info_html: >-
-          Lue rekisteröitymisvaatimukset ja muut tiedot <a
+          Lue rekisteröitymisohjeet ja muut tiedot <a
           href=%{competition_url}>kilpailusivulta</a>.
     claim_wca_id:
       #original_hash: f28bf87
@@ -1795,9 +1793,9 @@ fi:
       edit: Muokkaa
       #original_hash: 0ab725c
       country_plural:
-        zero: '%{count} valtiota'
-        one: 1 valtio
-        other: '%{count} valtiota'
+        zero: '%{count} maata'
+        one: 1 maa
+        other: '%{count} maata'
       #original_hash: 1feee0e
       export_csv: Vie CSV-tiedostona
       #original_hash: 84add5b
@@ -1921,14 +1919,24 @@ fi:
     payment_form:
       #original_hash: 4de825f
       title: Osallistumismaksu
+      #original_hash: d1569e6
+      payment_successful: 'Maksoit onnistuneesti: alla pitäisi näkyä, että olet maksanut.'
       hints:
         #original_hash: bf3a39e
         donation: 'Valinnainen lahjoitus, joka päätyy ainoastaan järjestäjäryhmälle'
+        #original_hash: 16cf92d
+        card_information: >-
+          Korttisi tiedot eivät päädy WCA-sivustolle. Ne lähetetään Stripelle,
+          joka käsittelee maksutapahtuman turvallisesti.
       labels:
         #original_hash: 4de825f
         entry_fees: Osallistumismaksu
         #original_hash: 2c09302
         donation: Lahjoitus
+        #original_hash: 184150d
+        card_information: Maksukortin tiedot
+        #original_hash: bc8091a
+        cardholder_name: Kortinhaltijan nimi
       alerts:
         #original_hash: a34940e
         not_a_number: Syötäthän kelvollisen luvun.
@@ -1936,6 +1944,17 @@ fi:
         amount_too_low: >-
           Kokonaismäärän tulee olla ainakin osallistumismaksun verran tullakseen
           maksetuksi.
+      errors:
+        #original_hash: 166d48c
+        already_paid: 'Veloitusta ei tehty, sillä osallistumismaksu on jo maksettu.'
+        #original_hash: b2bc8ed
+        not_allowed: Et voi maksaa tätä rekisteröitymistä
+        #original_hash: 630dbb9
+        intent_not_found: >-
+          Palvelin ei voinut varmistaa maksua. Maksutapahtuma keskeytetään ja
+          veloitusta ei tehdä.
+        #original_hash: 63e0ec1
+        cardholder_name: Tarkista kortinhaltijan nimi.
     #original_hash: 8607a87
     payment_button_text: Maksa maksukortilla
     #original_hash: 4cf01a2
@@ -1947,7 +1966,7 @@ fi:
       Täytimme tämän automaattisesti ensisijaisten lajiesi pohjalta. Voit
       muokata niitä %{link}.
     #original_hash: ee89a3e
-    registration_requirements: 'Kilpailun rekisteröitymisvaatimukset:'
+    registration_requirements: 'Kilpailun rekisteröitymisohjeet:'
     import:
       #original_hash: 5a394f3
       title: 'Tuo rekisteröitymiset kilpailuun %{comp}'
@@ -2052,6 +2071,8 @@ fi:
         download_html: 'Lataa kilpailun tiedot PDF-tiedostona %{here}.'
       #original_hash: eb9a4bc
       date: Päiväys
+      #original_hash: 4f05cd6
+      add_to_calendar: Lisää kalenteriin
       #original_hash: 4271627
       city: Kaupunki
       #original_hash: 67cd406
@@ -2079,7 +2100,7 @@ fi:
       #original_hash: c5497bc
       events: Lajit
       #original_hash: ff722f0
-      registration_requirements: Rekisteröitymisvaatimukset
+      registration_requirements: Tietoa rekisteröitymisestä
       #original_hash: 74d0bf1
       create_wca_account_html: 'Luo WCA-tili %{here} jos sinulla ei ole sellaista.'
       #original_hash: a082288
@@ -2113,7 +2134,9 @@ fi:
       #original_hash: 4aca553
       no_refunds: Osallistumismaksuja ei palauteta missään tilanteessa.
       #original_hash: cf7be5d
-      on_the_spot_registration_fee_html: 'Paikan päällä voi rekisteröityä hintaan %{on_the_spot_base_entry_fee}.'
+      on_the_spot_registration_fee_html: >-
+        Paikan päällä voi rekisteröityä. Osallistumismaksu on tällöin
+        %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
       on_the_spot_registration_free: Paikan päällä voi rekisteröityä ilmaiseksi.
       #original_hash: f5f687d
@@ -2125,9 +2148,9 @@ fi:
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Tämä kilpailu on ohi, klikkaa %{link_here} näyttääksesi käytössä olleet
-        rekisteröitymisvaatimukset.
+        rekisteröitymisohjeet.
       #original_hash: ff19a74
-      hide_requirements: Piilota rekisteröitymisvaatimukset.
+      hide_requirements: Piilota rekisteröitymisohjeet.
       registration_period:
         #original_hash: 6888733
         label: Rekisteröitymisaika
@@ -2673,9 +2696,9 @@ fi:
       personal_records: Omat ennätykset
       #original_hash: e631f13
       odd_rank_reason: >-
-        Puuttuva sijoitus tai se, että sijoitus valtiossa on huonompi kuin
-        sijoitus maanosassa, johtuu kansalaisuuden muutoksesta. Tuloksia
-        edelliseltä alueelta ei oteta huomioon nykyisen alueen rankingissa.
+        Puuttuva sijoitus tai se, että sijoitus maassa on huonompi kuin sijoitus
+        maanosassa, johtuu kansalaisuuden muutoksesta. Tuloksia edelliseltä
+        alueelta ei oteta huomioon nykyisen alueen rankingissa.
       #original_hash: a91508f
       championship_podiums: Palkintosijat mestaruuskilpailuissa
       championship_podium_levels:
@@ -3701,6 +3724,37 @@ fi:
       content2_html: >-
         Tämä asiakirja sisältää tärkeää tietoa, ja jokaisen kilpailun
         järjestäjän tulisi lukea se.
+  regulations_translations:
+    #original_hash: 9493b8d
+    title: 'WCA:n säännöt ja ohjesäännöt: Käännökset'
+    #original_hash: 386ecc1
+    paragraph1: >-
+      Jos puhut muuta kieltä kuin englantia, näistä käännöksistä voi olla
+      hyötyä.
+    #original_hash: 32b1132
+    paragraph2: >-
+      Huomioithan, että käännökset eivät ole virallisesti hyväksyttyjä, vaikka
+      ne löytyvät WCA-sivustolta (niiden oikeellisuus ei ole taattu). Jos
+      käännöksen ja virallisen, ajantasaisen englanninkielisen version välillä
+      on ristiriita, täytyy englanninkielistä versiota käyttää.
+    #original_hash: 8ad8302
+    translations: Käännökset
+    #original_hash: 4fc0e2b
+    current: Ajan tasalla
+    #original_hash: fbb3c38
+    old: Vanhentunut
+    table_elements:
+      #original_hash: 2da600b
+      version: Versio
+      #original_hash: 89b86ab
+      language: Kieli
+    #original_hash: a916f93
+    translating: Sääntöjen kääntäminen
+    #original_hash: 1b026e1
+    paragraph3_html: >-
+      Jos haluat päivittää käännöstä tai lisätä uuden, lue <a
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">ohjeet
+      GitHubissa</a>.
   organizer_guidelines:
     #original_hash: 7486ac4
     title: WCA-kilpailun järjestäjän ohjesäännöt
@@ -3918,7 +3972,7 @@ fi:
       #original_hash: 879e323
       year: Vuosi
       #original_hash: 573da9c
-      location: 'Valtio, kaupunki'
+      location: 'Maa, kaupunki'
       #original_hash: bb54db5
       accept: Hyväksy
       #original_hash: 66b69a8
