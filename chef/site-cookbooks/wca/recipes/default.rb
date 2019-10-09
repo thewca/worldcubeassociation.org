@@ -101,8 +101,12 @@ if node.chef_environment == "production"
   # In production mode, we use Amazon RDS.
   db['host'] = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['password'] = secrets['mysql_password']
+elsif node.chef_environment == "staging"
+  # In staging mode, we use Amazon RDS.
+  db['host'] = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  db['password'] = secrets['mysql_password']
 else
-  # If not in production, then we run a local mysql instance.
+  # If not in the cloud, then we run a local mysql instance.
   socket = "/var/run/mysqld/mysqld.sock"
   db['host'] = 'localhost'
   db['socket'] = socket
