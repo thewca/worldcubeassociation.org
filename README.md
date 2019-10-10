@@ -29,11 +29,11 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 
 ## Run directly with Ruby (lightweight, but only runs the Rails portions of the site)
 
-- Install either MySQL 5.6 or 5.7, and set it up with a user with username "root" with an empty password.
+- Install MySQL 8.0, and set it up with a user with username "root" with an empty password.
   If it poses problems, try the following:
   ```shell
-  # Install MySQL 5.6/5.7 if you haven't already.
-  # Using apt that would be: sudo apt install mysql-server-5.6
+  # Install MySQL 8.0 if you haven't already.
+  # Using apt that would be: sudo apt install mysql-server
   # Then run MySQL CLI as administrator and set an empty password for the root user:
   sudo mysql -u root
   ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
