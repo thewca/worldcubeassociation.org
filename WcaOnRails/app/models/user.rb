@@ -592,6 +592,10 @@ class User < ApplicationRecord
     admin? || board_member? || results_team?
   end
 
+  def can_admin_finances?
+    admin? || financial_committee?
+  end
+
   # Returns true if the user can perform every action for teams.
   def can_manage_teams?
     admin? || board_member? || results_team?
