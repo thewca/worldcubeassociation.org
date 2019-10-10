@@ -1,0 +1,7 @@
+<% provide(:title, "WFC Panel") %>
+
+<%= render layout: "nav" do %>
+  <h1><%= yield(:title) %></h1>
+
+  <%= alert(:info, "Sorry WFC, there is nothing to show here yet!") %>
+<% end %>

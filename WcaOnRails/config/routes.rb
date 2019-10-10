@@ -185,6 +185,9 @@ Rails.application.routes.draw do
   get '/relations' => 'relations#index'
   get '/relation' => 'relations#relation'
 
+  # WFC section
+  get '/wfc' => 'wfc#panel'
+
   scope :archive do
     # NOTE: This is meant for displaying old content of the phpBB forum. It is DEPRECATED!
     resources :forums, only: [:index, :show]
