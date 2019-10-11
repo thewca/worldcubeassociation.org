@@ -1,0 +1,14 @@
+<% require 'csv' %>
+<% headers = [
+  "Id", "Name", "Country", "Continent",
+  "Start", "End", "Announced", "Posted",
+  "Link on WCA", "Competitors", "Delegates",
+] %>
+<%= CSV.generate_line(headers).html_safe -%>
+<% @competitions.each do |c| %>
+  <%= CSV.generate_line([
+    c.id, c.name, c.country.iso2, c.continent.id,
+    c.start_date, c.end_date, c.announced_at, c.results_posted_at,
+    competition_url(c.id), c.num_competitors, c.delegates.map(&:name).join(","),
+  ]).html_safe -%>
+<% end %>
