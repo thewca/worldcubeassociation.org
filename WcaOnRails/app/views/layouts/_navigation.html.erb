@@ -62,6 +62,8 @@
             <%= icon('fas', 'list-ol') %> <%= t '.results' %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
+            <li><a href="https://live.worldcubeassociation.org"><%= icon('fa', 'sort-numeric-down') %>WCA Live</a></li>
+            <li class="divider"></li>
             <li><a href="<%= rankings_path("333", "single") %>"><%= icon('fas', 'signal', class: 'fa-rotate-90') %> <%= t '.rankings' %></a></li>
             <li><a href="/results/regions.php"><%= icon('fas', 'trophy') %> <%= t '.records' %></a></li>
             <li><a href="<%= persons_path %>"><%= icon('fas', 'users') %> <%= t '.persons' %></a></li>
