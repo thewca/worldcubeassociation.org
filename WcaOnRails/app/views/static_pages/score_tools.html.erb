@@ -1,15 +1,13 @@
 <% provide(:title, t('score_tools.title')) %>
 
-<% tools_variables = {
-  workbook_link: link_to("WCA Workbook Assistant", wca_workbook_assistant_path)
-} %>
-
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <% t('score_tools.paragraphs').values.each do |paragraph| %>
-    <p>
-      <%= raw paragraph % tools_variables %>
-    </p>
-  <% end %>
+  <ul class="list-group">
+    <% t('score_tools.paragraphs').values.each do |paragraph| %>
+      <li class="list-group-item">
+        <%= raw paragraph %>
+      </li>
+    <% end %>
+  </ul>
 </div>
