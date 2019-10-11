@@ -54,6 +54,10 @@ class Country < ApplicationRecord
   belongs_to :continent, foreign_key: :continentId
   has_many :competitions, foreign_key: :countryId
 
+  def continent
+    Continent.c_find(self.continentId)
+  end
+
   def self.find_by_iso2(iso2)
     c_all_by_id.values.select { |c| c.iso2 == iso2 }.first
   end

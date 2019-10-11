@@ -54,10 +54,13 @@
   <% end %>
 
 
-  <% if current_user.team_leader?(Team.wfc) || current_user.team_senior_member?(Team.wfc) %>
+  <% if current_user.can_admin_finances? %>
     <h2><%= Team.wfc.name %></h2>
 
     <ul>
+      <li>
+        <%= link_to "WFC panel", wfc_path %>
+      </li>
       <li>
         <%= link_to "Modify Delegates on Probation", edit_team_path(Team.probation) %>
       </li>
