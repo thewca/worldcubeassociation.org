@@ -738,6 +738,16 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "country_bands" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          number
+          iso2
+        ),
+      ),
+    }.freeze,
   }.freeze
 
   def self.development_dump(dump_filename)

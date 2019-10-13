@@ -1,0 +1,10 @@
+<% provide(:title, t("country_bands.title")) %>
+
+<div class="container">
+  <h1 class="text-center"><%= yield :title %></h1>
+  <div class="list-group">
+    <% CountryBand::BANDS.each do |number, data| %>
+      <%= render "show_band", number: number, data: data %>
+    <% end %>
+  </div>
+</div>

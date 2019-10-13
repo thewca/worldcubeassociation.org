@@ -3,6 +3,10 @@
 <%= render layout: "nav" do %>
   <h1><%= yield(:title) %></h1>
 
+  <h3>Country bands</h3>
+
+  <%= link_to "Go to country bands", country_bands_path %>
+
   <h3>Competitions export</h3>
 
   <%= horizontal_simple_form_for :export, url: "", html: { id: "wfc-export-form" } do |f| %>

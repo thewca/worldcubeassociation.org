@@ -781,6 +781,18 @@ CREATE TABLE `completed_jobs` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `country_bands`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `country_bands` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `number` int(11) NOT NULL,
+  `iso2` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_country_bands_on_iso2` (`iso2`),
+  KEY `index_country_bands_on_number` (`number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `delayed_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1605,4 +1617,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190825095512'),
 ('20190826005902'),
 ('20190916133253'),
-('20191005203556');
+('20191005203556'),
+('20191013211511');

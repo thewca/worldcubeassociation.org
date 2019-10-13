@@ -53,6 +53,7 @@ class Country < ApplicationRecord
 
   belongs_to :continent, foreign_key: :continentId
   has_many :competitions, foreign_key: :countryId
+  has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: "CountryBand"
 
   def continent
     Continent.c_find(self.continentId)

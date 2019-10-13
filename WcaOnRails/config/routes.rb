@@ -187,7 +187,10 @@ Rails.application.routes.draw do
 
   # WFC section
   get '/wfc' => 'wfc#panel'
-  get '/wfc/competitions_export' => 'wfc#competition_export', defaults: { format: :csv }
+  scope 'wfc' do
+    get '/competitions_export' => 'wfc#competition_export', defaults: { format: :csv }, as: :wfc_competitions_export
+    resources :country_bands, only: [:index, :update, :edit], path: '/country-bands'
+  end
 
   scope :archive do
     # NOTE: This is meant for displaying old content of the phpBB forum. It is DEPRECATED!

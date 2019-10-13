@@ -1,0 +1,38 @@
+<div class="container">
+  <%= link_to("Back to country bands", country_bands_path) %>
+  <h1 class="text-center">Editing Country Band <%= @number %></h1>
+  <%= simple_form_for :country_band, url: country_band_path(id: @number), method: :put do |f| %>
+    <%= f.input :number, as: :hidden %>
+    <%= simple_fields_for :countries do |c| %>
+      <%= c.input :iso2s, as: :string, label: false, input_html: { id: "iso2s" } %>
+    <% end %>
+    <%= f.button :submit, class: "btn-primary", value: "Save the country band" %>
+  <% end %>
+</div>
+<script>
+  const optionElement = '<div><%= flag_icon "%iso2" %> %name</div>';
+  const itemElement = '<div class="country"><div class="flag"><%= flag_icon "%iso2" %></div><div class="name">%name</div></div>';
+  $('#iso2s').selectize({
+    persist: false,
+    maxItems: null,
+    valueField: 'iso2',
+    labelField: 'name',
+    searchField: ['name', 'iso2'],
+    plugins: ['remove_button'],
+    options: <%= raw(@unused.to_json) %>,
+    items: <%= raw(@in_band.to_json) %>,
+    render: {
+      item: function(item, escape) {
+        console.log(item);
+        var el = itemElement.replace("%iso2", escape(item.iso2).toLowerCase());
+        el = el.replace("%name", escape(item.name));
+        return el;
+      },
+      option: function(item, escape) {
+        var el = optionElement.replace("%iso2", escape(item.iso2).toLowerCase());
+        el = el.replace("%name", escape(item.name));
+        return el;
+      }
+    },
+  });
+</script>
