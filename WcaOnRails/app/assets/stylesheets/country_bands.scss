@@ -1,0 +1,44 @@
+.common-country-styles {
+  padding: 5px 15px 5px 15px;
+  display: flex;
+  .flag {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 15px;
+    .flag-icon {
+      width: 30px;
+      height: 24px;
+    }
+  }
+  .name {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.country-band {
+  display: flex;
+  flex-wrap: wrap;
+  .title {
+    margin-bottom: 15px;
+  }
+  .country {
+    @extend .common-country-styles;
+    border: 2px solid #aaa;
+    border-radius: .25em;
+    margin: 0px -5px 7px -5px;
+    background-color: #eee;
+  }
+}
+
+.selectize-control {
+  .selectize-input.items {
+    display: flex;
+    flex-wrap: wrap;
+    & > .country {
+      @extend .common-country-styles;
+      border: 2px solid #aaa;
+    }
+  }
+}

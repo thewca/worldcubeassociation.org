@@ -62,6 +62,11 @@ en:
     "North America": "North America"
     Oceania: "Oceania"
     "South America": "South America"
+  #context: On the country bands page
+  country_bands:
+    title: "WCA Country Bands"
+    band_title: "Band %{number}"
+    due_value: "$%{value} per competitor per competition"
   #context: Event name
   events:
     "333": "3x3x3 Cube"

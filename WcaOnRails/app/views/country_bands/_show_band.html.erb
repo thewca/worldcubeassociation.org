@@ -1,0 +1,17 @@
+<div class="row list-group-item country-band">
+  <div class="col-xs-12 text-center title">
+    <%= t("country_bands.band_title", number: number) %>
+    (<%= t("country_bands.due_value", value: data[:value]) %>)
+    <% if current_user&.can_admin_finances? %>
+      <%= link_to(icon("fas", "pencil-alt"), edit_country_band_path(id: number)) %>
+    <% end %>
+  </div>
+  <% (@country_bands_by_number[number] || []).map(&:country).sort_by(&:name).each do |c| %>
+    <div class="col-xs-6 col-sm-4 col-md-3 col">
+      <div class="country">
+        <div class="flag"><%= flag_icon c.iso2 %></div>
+        <div class="name"><%= "#{c.name}" %></div>
+      </div>
+    </div>
+  <% end %>
+</div>
