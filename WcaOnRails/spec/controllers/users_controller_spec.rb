@@ -44,9 +44,9 @@ RSpec.describe UsersController do
     end
 
     it "cannot claim wca id if already has a wca id" do
-      other_person = FactoryBot.create :person
-      user.wca_id = other_person.wca_id
-      user.save!
+      other_person = FactoryBot.create(:person)
+      user.update!(wca_id: other_person.wca_id, name: other_person.name, country_iso2: other_person.country_iso2,
+                   dob: other_person.dob, gender: other_person.gender)
 
       patch :update, params: { id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id } }
       new_user = assigns(:user)
@@ -80,8 +80,10 @@ RSpec.describe UsersController do
       expect(user.delegate_to_handle_wca_id_claim).to be_nil
     end
 
-    it "can set id to something not claimed" do
-      person2 = FactoryBot.create :person
+    it "can set id to something not claimed if the details match" do
+      person2 = FactoryBot.create :person, name: user.name, countryId: user.country.id,
+                                           year: user.dob.year, month: user.dob.month,
+                                           day: user.dob.day, gender: user.gender
       patch :update, params: { id: user, user: { wca_id: person2.wca_id } }
       user.reload
       expect(user.wca_id).to eq person2.wca_id

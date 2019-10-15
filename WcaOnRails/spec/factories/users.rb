@@ -170,13 +170,22 @@ FactoryBot.define do
       end
     end
 
+    wca_id { person&.wca_id }
+
+    after(:build) do |user|
+      if user.person
+        user.name = user.person.name
+        user.country_iso2 = user.person.country_iso2
+        user.dob = user.person.dob
+        user.gender = user.person.gender
+      end
+    end
+
     trait :french_locale do
       after(:create) do |user|
         user.preferred_locale = :fr
       end
     end
-
-    wca_id { person&.wca_id }
 
     factory :user_with_wca_id, traits: [:wca_id]
 
