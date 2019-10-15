@@ -202,6 +202,12 @@ class RegistrationsController < ApplicationController
   private def user_for_registration!(registration_row)
     registration_row[:wca_id]&.upcase!
     registration_row[:email]&.downcase!
+    person_details = {
+      name: registration_row[:name],
+      country_iso2: Country.c_find(registration_row[:country]).iso2,
+      gender: registration_row[:gender],
+      dob: registration_row[:birth_date],
+    }
     if registration_row[:wca_id].present?
       unless Person.exists?(wca_id: registration_row[:wca_id])
         raise "Non-existent WCA ID given #{registration_row[:wca_id]}."
@@ -215,12 +221,13 @@ class RegistrationsController < ApplicationController
               raise "There is already a user with email #{registration_row[:email]}"\
                     ", but it has WCA ID of #{email_user.wca_id} instead of #{registration_row[:wca_id]}."
             else
-              email_user.update!(wca_id: registration_row[:wca_id]) # User hooks will also remove the dummy user account.
+              # User hooks will also remove the dummy user account.
+              email_user.update!(wca_id: registration_row[:wca_id], **person_details)
               [email_user, false]
             end
           else
             user.skip_reconfirmation!
-            user.update!(dummy_account: false, email: registration_row[:email])
+            user.update!(dummy_account: false, **person_details, email: registration_row[:email])
             [user, true]
           end
         else
@@ -233,7 +240,7 @@ class RegistrationsController < ApplicationController
             raise "There is already a user with email #{registration_row[:email]}"\
                   ", but it has unconfirmed WCA ID of #{email_user.unconfirmed_wca_id} instead of #{registration_row[:wca_id]}."
           else
-            email_user.update!(wca_id: registration_row[:wca_id])
+            email_user.update!(wca_id: registration_row[:wca_id], **person_details)
             [email_user, false]
           end
         else
@@ -248,12 +255,7 @@ class RegistrationsController < ApplicationController
         unless email_user.wca_id.present?
           # If this is just a user account with no WCA ID, update its data.
           # Given it's verified by organizers, it's more trustworthy/official data (if different at all).
-          email_user.update!(
-            name: registration_row[:name],
-            country_iso2: Country.c_find(registration_row[:country]).iso2,
-            gender: registration_row[:gender],
-            dob: registration_row[:birth_date],
-          )
+          email_user.update!(person_details)
         end
         [email_user, false]
       else

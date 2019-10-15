@@ -224,12 +224,34 @@ class User < ApplicationRecord
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
-    p = person || unconfirmed_person
+    # Note: copy data from the person only if the WCA ID has already been claimed
+    # or the user claims this WCA ID.
+    # Otherwise (when setting WCA ID directly) we want to validate
+    # that the user details matches the person details instead.
+    p = (wca_id_was.present? && person) || unconfirmed_person
     if p
       self.name = p.name
       self.dob = p.dob
       self.gender = p.gender
       self.country_iso2 = p.country_iso2
+    end
+  end
+
+  validate :must_look_like_the_corresponding_person
+  private def must_look_like_the_corresponding_person
+    if person
+      if self.name != person.name
+        errors.add(:name, I18n.t("users.errors.must_match_person"))
+      end
+      if self.country_iso2 != person.country_iso2
+        errors.add(:country_iso2, I18n.t("users.errors.must_match_person"))
+      end
+      if self.gender != person.gender
+        errors.add(:gender, I18n.t("users.errors.must_match_person"))
+      end
+      if self.dob != person.dob
+        errors.add(:dob, I18n.t("users.errors.must_match_person"))
+      end
     end
   end
 
@@ -729,10 +751,10 @@ class User < ApplicationRecord
   end
 
   def cannot_edit_data_reason_html(user_to_edit)
-    # Don't allow editing data if they have a WCA ID, or if they
+    # Don't allow editing data if they have a WCA ID assigned, or if they
     # have already registered for a competition. We do allow admins and delegates
     # who have registered for a competition to edit their own data.
-    cannot_edit_reason = if user_to_edit.wca_id
+    cannot_edit_reason = if user_to_edit.wca_id_was && user_to_edit.wca_id
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')

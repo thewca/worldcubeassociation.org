@@ -234,6 +234,18 @@ RSpec.describe User, type: :model do
       user2.wca_id = user.wca_id
       expect(user2).not_to be_valid
     end
+
+    it "does not allows assigning WCA ID if user and person details don't match" do
+      user = FactoryBot.create(:user, name: "Whatever", country_iso2: "US", dob: Date.new(1950, 12, 12), gender: "m")
+      person = FactoryBot.create(:person, name: "Else", countryId: "United Kingdom", year: 1900, gender: "f")
+      user.wca_id = person.wca_id
+      expect(user).to be_invalid_with_errors(
+        name: [I18n.t('users.errors.must_match_person')],
+        country_iso2: [I18n.t('users.errors.must_match_person')],
+        dob: [I18n.t('users.errors.must_match_person')],
+        gender: [I18n.t('users.errors.must_match_person')],
+      )
+    end
   end
 
   it "can create user with empty password" do

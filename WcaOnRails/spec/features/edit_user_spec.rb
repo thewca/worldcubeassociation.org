@@ -6,7 +6,10 @@ RSpec.feature "Edit user" do
   let(:admin) { FactoryBot.create(:admin) }
   let(:existing_user) { FactoryBot.create(:user_with_wca_id) }
   let(:new_person) { FactoryBot.create(:person) }
-  let(:new_user) { FactoryBot.create(:user) }
+  let(:new_user) do
+    FactoryBot.create(:user, name: new_person.name, country_iso2: new_person.country_iso2,
+                             dob: new_person.dob, gender: new_person.gender)
+  end
 
   def navigate_to_form(user)
     visit edit_user_path(user)

@@ -74,7 +74,7 @@ RSpec.describe "registrations" do
                     user = FactoryBot.create(:user, :wca_id)
                     file = csv_file [
                       ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                      ["a", "Sherlock Holmes", "United Kingdom", dummy_user.wca_id, "2000-01-01", "m", user.email, "1", "0"],
+                      ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
                     ]
                     expect {
                       post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
@@ -89,7 +89,7 @@ RSpec.describe "registrations" do
                     user = FactoryBot.create(:user)
                     file = csv_file [
                       ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                      ["a", "Sherlock Holmes", "United Kingdom", dummy_user.wca_id, "2000-01-01", "m", user.email, "1", "0"],
+                      ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
                     ]
                     expect {
                       post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
@@ -108,7 +108,7 @@ RSpec.describe "registrations" do
                   expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
                   file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                    ["a", "Sherlock Holmes", "United Kingdom", dummy_user.wca_id, "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+                    ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, "sherlock@example.com", "1", "0"],
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
@@ -128,7 +128,7 @@ RSpec.describe "registrations" do
                 user = FactoryBot.create(:user, :wca_id)
                 file = csv_file [
                   ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                  ["a", "Sherlock Holmes", "United Kingdom", user.wca_id, "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+                  ["a", user.name, user.country.id, user.wca_id, user.dob, user.gender, "sherlock@example.com", "1", "0"],
                 ]
                 expect {
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
@@ -153,7 +153,7 @@ RSpec.describe "registrations" do
                   )
                   file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                    ["a", "Sherlock Holmes", "United Kingdom", person.wca_id, "2000-01-01", "m", user.email, "1", "0"],
+                    ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
@@ -169,7 +169,7 @@ RSpec.describe "registrations" do
                   user = FactoryBot.create(:user)
                   file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                    ["a", "Sherlock Holmes", "United Kingdom", person.wca_id, "2000-01-01", "m", user.email, "1", "0"],
+                    ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
@@ -188,7 +188,7 @@ RSpec.describe "registrations" do
                   user = FactoryBot.create(:user)
                   file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                    ["a", "Sherlock Holmes", "United Kingdom", person.wca_id, "2000-01-01", "m", user.email, "1", "0"],
+                    ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
@@ -206,7 +206,7 @@ RSpec.describe "registrations" do
                 person = FactoryBot.create(:person)
                 file = csv_file [
                   ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                  ["a", "Sherlock Holmes", "United Kingdom", person.wca_id, "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+                  ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, "sherlock@example.com", "1", "0"],
                 ]
                 expect {
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
@@ -382,7 +382,7 @@ RSpec.describe "registrations" do
           expect {
             post competition_registrations_do_add_path(competition), params: {
               registration_data: {
-                name: user.name, country: user.country, birth_date: user.dob,
+                name: user.name, country: user.country.id, birth_date: user.dob,
                 gender: user.gender, email: user.email, event_ids: ["444"]
               },
             }
