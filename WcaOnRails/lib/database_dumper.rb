@@ -618,7 +618,6 @@ module DatabaseDumper
           delegate_status
           gender
           last_sign_in_at
-          location_description
           name
           region
           results_notifications_enabled
@@ -642,6 +641,7 @@ module DatabaseDumper
           current_sign_in_ip
           encrypted_password
           last_sign_in_ip
+          location_description
           notes
           pending_avatar
           phone_number
@@ -729,7 +729,7 @@ module DatabaseDumper
     "stripe_charges" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
     "bookmarked_competitions" => {
-      where_clause: "",
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
