@@ -121,14 +121,15 @@ class RegistrationsController < ApplicationController
     headers = CSV.read(file.path).first.compact.map(&:downcase)
     missing_headers = required_columns - headers
     if missing_headers.any?
-      raise "Missing columns: #{missing_headers.to_sentence}."
+      raise I18n.t("registrations.import.errors.missing_columns", columns: missing_headers.join(", "))
     end
     registration_rows = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
                            .map(&:to_hash)
                            .select { |registration_row| registration_row[:status] == "a" }
     if competition.competitor_limit_enabled? && registration_rows.length > competition.competitor_limit
-      raise "The given file includes #{registration_rows.length} accepted #{"registration".pluralize(registration_rows.length)}"\
-            ", which is more than the competitor limit of #{competition.competitor_limit}."
+      raise I18n.t("registrations.import.errors.over_competitor_limit",
+                   accepted_count: registration_rows.length,
+                   limit: competition.competitor_limit)
     end
     new_locked_users = []
     ActiveRecord::Base.transaction do
@@ -139,28 +140,32 @@ class RegistrationsController < ApplicationController
         end
       end
       registration_rows.each do |registration_row|
-        user, locked_account_created = user_for_registration!(registration_row)
-        new_locked_users << user if locked_account_created
-        registration = competition.registrations.find_or_initialize_by(user_id: user.id)
-        unless registration.accepted?
-          registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
-        end
-        registration.registration_competition_events = []
-        competition.competition_events.map do |competition_event|
-          value = registration_row[competition_event.event_id.to_sym]
-          if value == "1"
-            registration.registration_competition_events.build(competition_event_id: competition_event.id)
-          elsif value != "0"
-            raise "Event columns should include either 0 or 1, found #{value} in column #{competition_event.event_id}."
+        begin
+          user, locked_account_created = user_for_registration!(registration_row)
+          new_locked_users << user if locked_account_created
+          registration = competition.registrations.find_or_initialize_by(user_id: user.id)
+          unless registration.accepted?
+            registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
           end
+          registration.registration_competition_events = []
+          competition.competition_events.map do |competition_event|
+            value = registration_row[competition_event.event_id.to_sym]
+            if value == "1"
+              registration.registration_competition_events.build(competition_event_id: competition_event.id)
+            elsif value != "0"
+              raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
+            end
+          end
+          registration.save!
+        rescue StandardError => e
+          raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_row[:name], error: e))
         end
-        registration.save!
       end
     end
     new_locked_users.each do |user|
       RegistrationsMailer.notify_registrant_of_locked_account_creation(user, competition).deliver_later
     end
-    flash[:success] = "Successfully imported registrations!"
+    flash[:success] = I18n.t("registrations.flash.imported")
     redirect_to competition_registrations_import_url(competition)
   rescue StandardError => e
     flash[:danger] = e.to_s
@@ -174,14 +179,14 @@ class RegistrationsController < ApplicationController
   def do_add
     @competition = competition_from_params
     if @competition.registration_full?
-      flash[:danger] = "The competitor limit has been reached."
+      flash[:danger] = I18n.t("registrations.mailer.deleted.causes.registrations_full")
       redirect_to competition_path(@competition)
       return
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
-      raise "This person already has a registration." unless registration.new_record?
+      raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
       registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id)
       params[:registration_data][:event_ids]&.each do |event_id|
         competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
@@ -192,7 +197,7 @@ class RegistrationsController < ApplicationController
         RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later
       end
     end
-    flash[:success] = "Successfully added registration!"
+    flash[:success] = I18n.t("registrations.flash.added")
     redirect_to competition_registrations_add_url(@competition)
   rescue StandardError => e
     flash.now[:danger] = e.to_s
@@ -210,7 +215,7 @@ class RegistrationsController < ApplicationController
     }
     if registration_row[:wca_id].present?
       unless Person.exists?(wca_id: registration_row[:wca_id])
-        raise "Non-existent WCA ID given #{registration_row[:wca_id]}."
+        raise I18n.t("registrations.import.errors.non_existent_wca_id", wca_id: registration_row[:wca_id])
       end
       user = User.find_by(wca_id: registration_row[:wca_id])
       if user
@@ -218,8 +223,9 @@ class RegistrationsController < ApplicationController
           email_user = User.find_by(email: registration_row[:email])
           if email_user
             if email_user.wca_id.present?
-              raise "There is already a user with email #{registration_row[:email]}"\
-                    ", but it has WCA ID of #{email_user.wca_id} instead of #{registration_row[:wca_id]}."
+              raise I18n.t("registrations.import.errors.email_user_with_different_wca_id",
+                           email: registration_row[:email], user_wca_id: email_user.wca_id,
+                           registration_wca_id: registration_row[:wca_id])
             else
               # User hooks will also remove the dummy user account.
               email_user.update!(wca_id: registration_row[:wca_id], **person_details)
@@ -237,8 +243,9 @@ class RegistrationsController < ApplicationController
         email_user = User.find_by(email: registration_row[:email])
         if email_user
           if email_user.unconfirmed_wca_id.present? && email_user.unconfirmed_wca_id != registration_row[:wca_id]
-            raise "There is already a user with email #{registration_row[:email]}"\
-                  ", but it has unconfirmed WCA ID of #{email_user.unconfirmed_wca_id} instead of #{registration_row[:wca_id]}."
+            raise I18n.t("registrations.import.errors.email_user_with_different_unconfirmed_wca_id",
+                         email: registration_row[:email], unconfirmed_wca_id: email_user.unconfirmed_wca_id,
+                         registration_wca_id: registration_row[:wca_id])
           else
             email_user.update!(wca_id: registration_row[:wca_id], **person_details)
             [email_user, false]

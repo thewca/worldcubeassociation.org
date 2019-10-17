@@ -926,6 +926,8 @@ en:
       failed: "Could not update registration"
       deleted: "Successfully deleted your registration for %{comp}"
       registered: "Successfully registered!"
+      imported: "Successfully imported registrations!"
+      added: "Successfully added registration!"
     edit_registration:
       #context: the title for a specific registration to a competition
       title: "%{person} for %{comp}"
@@ -1067,10 +1069,20 @@ en:
       registrations_file_label: "Registrations file"
       registrations_file_hint: "CSV file with columns: Status, Name, Country, WCA ID, Birth Date, Gender, Email, and one column for each event."
       import: "Import"
+      errors:
+        error: "Error importing %{registration}: %{error}."
+        missing_columns: "Missing columns: %{columns}."
+        over_competitor_limit: "The given file includes %{accepted_count} accepted registrations, which is more than the competitor limit of %{limit}."
+        invalid_event_column: "Event columns should include either 0 or 1, found %{value} in column %{column}."
+        non_existent_wca_id: "The WCA ID %{wca_id} doesn't exist."
+        email_user_with_different_wca_id: "There is already a user with email %{email}, but it has WCA ID of %{user_wca_id} instead of %{registration_wca_id}."
+        email_user_with_different_unconfirmed_wca_id: "There is already a user with email %{email}, but it has unconfirmed WCA ID of %{unconfirmed_wca_id} instead of %{registration_wca_id}."
     add:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
       add: "Add registration"
+      errors:
+        already_registered: "This person already has a registration."
   #context: Key used when managing competitions
   competitions:
     #context: generic message

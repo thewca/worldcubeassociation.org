@@ -32,7 +32,7 @@ RSpec.describe "registrations" do
         ]
         post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
         follow_redirect!
-        expect(response.body).to include "Missing columns: country and 333."
+        expect(response.body).to include "Missing columns: country, 333."
       end
 
       it "renders an error when the number of accepted registrations exceeds competitor limit" do
@@ -61,7 +61,7 @@ RSpec.describe "registrations" do
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to_not change { competition.registrations.count }
             follow_redirect!
-            expect(response.body).to include "Non-existent WCA ID given 1000DARN99."
+            expect(response.body).to match(/The WCA ID 1000DARN99 doesn.*t exist/)
           end
 
           context "user exists with the given WCA ID" do
@@ -425,7 +425,7 @@ RSpec.describe "registrations" do
             }
           }.to_not change { competition.registrations.count }
           follow_redirect!
-          expect(response.body).to include "The competitor limit has been reached."
+          expect(response.body).to include "The competitor limit has been reached"
         end
       end
     end
