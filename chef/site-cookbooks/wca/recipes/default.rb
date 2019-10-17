@@ -78,6 +78,16 @@ rails_root = "#{repo_root}/WcaOnRails"
 # acces.sh depends on jq https://github.com/FatBoyXPC/acces.sh
 package 'jq'
 
+if node.chef_environment == "production"
+  extra_gh_users = []
+elsif node.chef_environment == "staging"
+  extra_gh_users = [
+    # Alex Friedman not yet a member of the WST, he is investigating upgrading to MySQL 8.0 on staging.
+    'tussosedan',
+  ]
+else
+  extra_gh_users = []
+end
 gen_auth_keys_path = "/home/#{username}/gen-authorized-keys.sh"
 template gen_auth_keys_path do
   source "gen-authorized-keys.sh.erb"
@@ -86,6 +96,7 @@ template gen_auth_keys_path do
   group username
   variables({
     secrets: secrets,
+    extra_gh_users: extra_gh_users,
   })
 end
 execute gen_auth_keys_path do

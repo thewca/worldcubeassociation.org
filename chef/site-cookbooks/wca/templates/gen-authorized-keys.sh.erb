@@ -9,11 +9,12 @@ if [ $# -gt 0 ]; then
   print_usage_and_exit
 fi
 
+<% keyfile = "/home/cubing/.ssh/authorized_keys" %>
 /home/cubing/worldcubeassociation.org/scripts/acces.sh \
   --gh-token <%= @secrets['GITHUB_LIST_MEMBERS_ACCESS_TOKEN'] %> \
   --gh-org thewca \
   --gh-team "Software Team" \
-  --keyfile /home/cubing/.ssh/authorized_keys
+  --keyfile <%= keyfile %>
 
 # Add keys used by Travis for deployment.
 # Note that we restrict Travis to running our deploy.sh script.
@@ -23,3 +24,14 @@ echo "" >> $authorized_keys_path
 echo "# Keys for WCA Documents - Travis" >> $authorized_keys_path
 travis_public_key=$(curl -s $wca_documents_key_url)
 echo 'command="/home/cubing/worldcubeassociation.org/scripts/deploy.sh update_docs"' $travis_public_key >> $authorized_keys_path
+
+# Add extra, non WST users. This should be used with caution, and we
+# should remember to either remove or promote these people.
+<% @extra_gh_users.each do |extra_gh_user| %>
+  user=<%= extra_gh_user %>
+  public_keys_url="https://github.com/$user.keys"
+
+  echo "" >> <%= keyfile %>
+  echo "# Keys for $user" >> <%= keyfile %>
+  curl -s $public_keys_url >> <%= keyfile %>
+<% end %>
