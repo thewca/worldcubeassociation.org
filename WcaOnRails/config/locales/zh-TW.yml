@@ -734,7 +734,7 @@ zh-TW:
         #original_hash: da39a3e
         notes: ''
         #original_hash: 8c266ea
-        receive_delegate_reports: 如果您是代表候選人、 高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
+        receive_delegate_reports: 如果您是代表候選人、高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1438,6 +1438,8 @@ zh-TW:
       email_used_by_locked_account_html: >-
         已經被其他帳號所使用。當您透過外部網站報名比賽時就已經自動被產生了。如果您是這個電子郵件的所有人，重新設定密碼後使用該帳號。您可以在<a
         href='/users/password/new'>這裡</a>重設密碼。
+      #original_hash: 50897d4
+      must_match_person: 必須跟WCA ID的個人資訊相符
     successes:
       messages:
         #original_hash: 31bd401
