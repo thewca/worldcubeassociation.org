@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class CountryBandsController < ApplicationController
+  before_action :authenticate_user!, except: :index
   before_action -> { redirect_to_root_unless_user(:can_admin_finances?) }, except: :index
 
   def index
