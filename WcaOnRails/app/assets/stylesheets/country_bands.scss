@@ -29,6 +29,9 @@
     border-radius: .25em;
     margin: 0px -5px 7px -5px;
     background-color: #eee;
+    &.highlighted {
+      border-color: $dark-green;
+    }
   }
 }
 
@@ -40,5 +43,15 @@
       @extend .common-country-styles;
       border: 2px solid #aaa;
     }
+  }
+}
+
+.filter-form {
+  text-align: center;
+  margin-bottom: 15px;
+  select.form-control {
+    margin-left: 5px;
+    display: inline-block;
+    width: auto;
   }
 }

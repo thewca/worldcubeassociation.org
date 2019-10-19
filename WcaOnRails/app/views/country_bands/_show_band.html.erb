@@ -8,7 +8,7 @@
   </div>
   <% (@country_bands_by_number[number] || []).map(&:country).sort_by(&:name).each do |c| %>
     <div class="col-xs-6 col-sm-4 col-md-3 col">
-      <div class="country">
+      <div class="country continent-<%= continent_id_as_class(c.continent.id) %>">
         <div class="flag"><%= flag_icon c.iso2 %></div>
         <div class="name"><%= "#{c.name}" %></div>
       </div>
