@@ -1635,6 +1635,8 @@ pt-BR:
         se inscreveu em uma competição por um site externo. Se você é o dono
         deste email, você pode usar a conta depois de redefinir sua senha <a
         href='/users/password/new'>aqui</a>.
+      #original_hash: 50897d4
+      must_match_person: devem ser iguais aos detalhes da pessoa correspondente à ID da WCA
     successes:
       messages:
         #original_hash: 31bd401
@@ -2089,6 +2091,8 @@ pt-BR:
         download_html: 'Baixe os detalhes da competição em PDF %{here}.'
       #original_hash: eb9a4bc
       date: Data
+      #original_hash: 4f05cd6
+      add_to_calendar: Adicionar ao calendário
       #original_hash: 4271627
       city: Cidade
       #original_hash: 67cd406
