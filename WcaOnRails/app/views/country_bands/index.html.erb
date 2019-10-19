@@ -2,9 +2,26 @@
 
 <div class="container">
   <h1 class="text-center"><%= yield :title %></h1>
+  <div class="row">
+    <div class="col-xs-12 filter-form">
+      <label for="filter_continent[id]">
+        Highlight countries from continent:
+      </label>
+      <%= select("filter_continent", "id",
+                 continent_options,
+                 {}, { class: "form-control" },
+                ) %>
+    </div>
+  </div>
   <div class="list-group">
     <% CountryBand::BANDS.each do |number, data| %>
       <%= render "show_band", number: number, data: data %>
     <% end %>
   </div>
 </div>
+<script>
+  $("#filter_continent_id").change(function(ev) {
+    $(".highlighted").removeClass("highlighted");
+    $(".continent-" + ev.target.value).addClass("highlighted");
+  });
+</script>
