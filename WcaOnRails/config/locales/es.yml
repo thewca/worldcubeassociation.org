@@ -400,7 +400,7 @@ es:
         #original_hash: 709a232
         name: Nombre
         #original_hash: f91b080
-        name_reason: Razón para el nomrbre
+        name_reason: Razón para el nombre
         #original_hash: b649210
         cellName: Nombre breve
         #original_hash: d523ebb
@@ -1658,6 +1658,8 @@ es:
         servicio externo. Si eres el dueño de este correo, puedes usar este
         correo tras establecer de nuevo la contraseña <a
         href='/users/password/new'>here</a>.
+      #original_hash: 50897d4
+      must_match_person: Debe coincidir con los detalles de la persona correspondientes al WCA ID
     successes:
       messages:
         #original_hash: 31bd401
@@ -2114,6 +2116,8 @@ es:
         download_html: 'Descarga %{here} todos los detalles de la competición en PDF.'
       #original_hash: eb9a4bc
       date: Fecha
+      #original_hash: 4f05cd6
+      add_to_calendar: Añadir al calendario
       #original_hash: 4271627
       city: Ciudad
       #original_hash: 67cd406
@@ -3578,31 +3582,32 @@ es:
     #original_hash: ea9d41d
     title: Herramientas para la captación de resultados
     paragraphs:
-      #original_hash: 2c5ad71
+      #original_hash: 305f7f8
       '1': >-
         La WCA recomienda encarecidamente el uso de <a
-        href="http://cubecomps.com">Cubecomps</a> antes y durante la celebración
-        de una competición. Cubecomps es un sistema en línea de resultados en
-        vivo con muchas opciones interesantes, como la impresión de las hojas de
-        tiempos y un sistema muy eficiente de entrada de datos multi-usuario.
-        Creado por Luis J. Iáñez bajo código abierto.
-      #original_hash: 7438b0d
+        href="https://live.worldcubeassociation.org">WCA Live</a> antes y
+        durante la celebración de una competición. WCA Live es una plataforma
+        para gestionar competiciones WCA y compartir resultados en vivo con el
+        resto del mundo.
+      #original_hash: 0867b38
       '2': >-
-        Los resultados y las mezclas deben procesarse y comprobarse utilizando
-        el %{workbook_link} antes de enviarlos al Equipo de Resultados de la
-        WCA.
+        Los resultados y las mezclas deben procesarse y comprobarse antes de
+        enviarlos al Equipo de Resultados de la WCA. Puedes usar <a
+        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
+        Matcher</a>,  un proyecto de código abierto creado por Philippe
+        Virouleau.
       #original_hash: 975e59b
       '3': >-
         La última versión de la Hoja de Puntuaciones de la WCA (en desuso si se
         utiliza Cubecomps u otra herramienta similar) puede descargarse aquí:<br
         /><a href="/files/results.xls" target="_blank">Hoja de Puntuaciones de
         la WCA</a>.
-      #original_hash: a5f2d25
+      #original_hash: c576675
       '4': >-
         También puedes usar <a
-        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> para
-        preparar grupos de competidores para una competición. Es una herramienta
-        cuyo objetivo es hacer exactamente eso por ti. Entre sus principales
+        href="https://groupifier.jonatanklosko.com">Groupifier</a> para preparar
+        grupos de competidores para una competición. Es una herramienta cuyo
+        objetivo es hacer exactamente eso por ti. Entre sus principales
         funcionalidades encontrarás ordenar competidores por ranking, asignar
         tareas (juzgar, mezclar), decidir cuantas mezclas son necesarias,
         generar hojas de tiempos, hojas personales y resúmenes. Es un proyecto
