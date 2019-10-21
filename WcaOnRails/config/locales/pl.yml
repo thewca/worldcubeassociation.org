@@ -1661,6 +1661,8 @@ pl:
         na skutek twojej rejstracji na zawody za pomocą zewnętrznego serwisu.
         Jeżeli jesteś właścicielem tego adresu email, możesz używać tego konta
         po zresetowaniu swojego hasła <a href='/users/password/new'>tutaj</a>.
+      #original_hash: 50897d4
+      must_match_person: musi zgadzać się z danymi osobowymi odpowiadającymi danemu WCA ID
     successes:
       messages:
         #original_hash: 31bd401
@@ -2137,6 +2139,8 @@ pl:
         download_html: 'Pobierz wszystkie szczegóły dotyczące zawodów w formacie PDF %{here}.'
       #original_hash: eb9a4bc
       date: Data
+      #original_hash: 4f05cd6
+      add_to_calendar: Dodaj do kalendarza
       #original_hash: 4271627
       city: Miasto
       #original_hash: 67cd406
@@ -3564,27 +3568,28 @@ pl:
     #original_hash: ea9d41d
     title: Narzędzia Operujące na Wynikach WCA
     paragraphs:
-      #original_hash: 2c5ad71
+      #original_hash: 305f7f8
       '1': >-
-        WCA wysoce poleca używanie <a href="http://cubecomps.com">Cube Comps</a>
-        zarówno przed, jak i w trakcie zawodów. Jest to system online,
-        posiadający możliwość wprowadzania wyników na żywo oraz wiele
-        interesujących funkcjonalności, takich jak drukowanie kart startowych i
-        bardzo efektywny system wprowadzania danych. Jego twórcą jest Luis J.
-        Iáñez i obecnie projekt jest otwartym oprogramowaniem (Open Source).
-      #original_hash: 7438b0d
+        WCA wysoce poleca używanie <a
+        href="https://live.worldcubeassociation.org">WCA Live</a> podczas
+        zawodów. WCA Live to platforma służąca do przeprowadzania zawodów oraz
+        udostępniania wyników na żywo ludziom z całego świata.
+      #original_hash: 0867b38
       '2': >-
         Arkusze wyników oraz algorytmy mieszające powinny być przetworzone i
-        sprawdzone pod względem poprawności przy użyciu %{workbook_link} przed
-        wysłaniem ich do Zespołu do Spraw Wyników.
+        sprawdzone pod względem poprawności przy użyciu przed wysłaniem ich do
+        Zespołu do Spraw Wyników. W tym celu możesz użyć narzędzia <a
+        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
+        Matcher</a>, wolnego oprogramowania (Open Source) stworzonego przez
+        Philippe Virouleau.
       #original_hash: 975e59b
       '3': >-
         Najnowsza wersja arkusza wyników z zawodów WCA może zostać pobrana <a
         href="/files/results.xls" target="_blank">tutaj</a>.
-      #original_hash: a5f2d25
+      #original_hash: c576675
       '4': >-
         Możesz również chcieć użyć narzędzia <a
-        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>, w celu
+        href="https://groupifier.jonatanklosko.com">Groupifier</a>, w celu
         przygotowania grup zawodników. Narzędzie to ma na celu zrobienie tego za
         ciebie. Pośród głównych funkcji znajdziesz: sortowanie zawodników na
         podstawie rankingów, przypisywanie zadań (sędziowanie, mieszanie),
