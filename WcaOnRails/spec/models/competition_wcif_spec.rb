@@ -710,7 +710,7 @@ RSpec.describe "Competition WCIF" do
     end
 
     it "allows adding assignments for newly added activities" do
-      registration = FactoryBot.create(:registration, competition: competition)
+      registration = FactoryBot.create(:registration, :accepted, competition: competition)
       activities = wcif["schedule"]["venues"][0]["rooms"][0]["activities"]
       activities << {
         "id" => 1000,

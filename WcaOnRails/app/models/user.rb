@@ -954,11 +954,15 @@ class User < ApplicationRecord
     json
   end
 
-  def to_wcif(competition, registration = nil, registrant_id = nil)
+  def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
     person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     roles = registration&.roles || []
     roles << "delegate" if competition.delegates.include?(self)
     roles << "organizer" if competition.organizers.include?(self)
+    authorized_fields = {
+      "birthdate" => dob.to_s,
+      "email" => email,
+    }
     {
       "name" => name,
       "wcaUserId" => id,
@@ -966,11 +970,7 @@ class User < ApplicationRecord
       "registrantId" => registrant_id,
       "countryIso2" => country_iso2,
       "gender" => gender,
-      # /wcif is restricted to users who can manage the competition,
-      # we can include private data
-      "birthdate" => dob.to_s,
-      "email" => email,
-      "registration" => registration&.to_wcif,
+      "registration" => registration&.to_wcif(authorized: authorized),
       "avatar" => {
         "url" => avatar.url,
         "thumbUrl" => avatar.url(:thumb),
@@ -978,7 +978,7 @@ class User < ApplicationRecord
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
       "personalBests" => person_pb.map(&:to_wcif),
-    }
+    }.merge(authorized ? authorized_fields : {})
   end
 
   def self.wcif_json_schema

@@ -46,7 +46,16 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params
     require_can_manage!(competition)
 
-    render json: competition.to_wcif
+    render json: competition.to_wcif(authorized: true)
+  end
+
+  def show_wcif_public
+    competition = competition_from_params
+
+    cache_key = "wcif/#{competition.id}"
+    render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
+      competition.to_wcif
+    }
   end
 
   def update_wcif

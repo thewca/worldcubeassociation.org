@@ -216,6 +216,7 @@ Rails.application.routes.draw do
       get '/geocoding/search' => 'geocoding#get_location_from_query'
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
+        get '/wcif/public' => 'competitions#show_wcif_public'
         get '/results' => 'competitions#results'
         get '/competitors' => 'competitions#competitors'
         get '/registrations' => 'competitions#registrations'

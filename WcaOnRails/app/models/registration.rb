@@ -166,7 +166,11 @@ class Registration < ApplicationRecord
     OpenStruct.new(index: index, length: pending_registrations.length)
   end
 
-  def to_wcif
+  def to_wcif(authorized: false)
+    authorized_fields = {
+      "guests" => guests,
+      "comments" => comments || '',
+    }
     {
       "wcaRegistrationId" => id,
       "eventIds" => events.map(&:id).sort,
@@ -177,9 +181,7 @@ class Registration < ApplicationRecord
                   else
                     'pending'
                   end,
-      "guests" => guests,
-      "comments" => comments || '',
-    }
+    }.merge(authorized ? authorized_fields : {})
   end
 
   def self.wcif_json_schema
