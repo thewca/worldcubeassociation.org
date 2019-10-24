@@ -1202,20 +1202,20 @@ class Competition < ApplicationRecord
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
-  def to_wcif
+  def to_wcif(authorized: false)
     {
       "formatVersion" => "1.0",
       "id" => id,
       "name" => name,
       "shortName" => cellName,
-      "persons" => persons_wcif,
+      "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
       "schedule" => schedule_wcif,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
-  def persons_wcif
+  def persons_wcif(authorized: false)
     managers = self.managers
     includes_associations = [
       :events,
@@ -1224,13 +1224,18 @@ class Competition < ApplicationRecord
         person: [:ranksSingle, :ranksAverage],
       },
     ]
-    persons_wcif = registrations.order(:id).includes(includes_associations).map.with_index(1) do |r, registrant_id|
-      managers.delete(r.user)
-      r.user.to_wcif(self, r, registrant_id)
-    end
+    persons_wcif = registrations.order(:id)
+                                .includes(includes_associations)
+                                .to_enum
+                                .with_index(1)
+                                .select { |r, registrant_id| authorized || r.accepted? }
+                                .map do |r, registrant_id|
+                                  managers.delete(r.user)
+                                  r.user.to_wcif(self, r, registrant_id, authorized: authorized)
+                                end
     # Note: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
-    persons_wcif + managers.map { |m| m.to_wcif(self) }
+    persons_wcif + managers.map { |m| m.to_wcif(self, authorized: authorized) }
   end
 
   def events_wcif

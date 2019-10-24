@@ -77,6 +77,76 @@ RSpec.describe "API Competitions" do
     end
   end
 
+  describe "GET #show_wcif" do
+    let(:competition) { FactoryBot.create(:competition, :visible) }
+
+    context "when not signed in" do
+      it "does not allow access" do
+        patch api_v0_competition_wcif_path(competition)
+        expect(response).to have_http_status(401)
+        response_json = JSON.parse(response.body)
+        expect(response_json["error"]).to eq "Not logged in"
+      end
+    end
+
+    context "when signed in as not a competition manager" do
+      sign_in { FactoryBot.create :user }
+
+      it "does not allow access" do
+        patch api_v0_competition_update_wcif_path(competition)
+        expect(response).to have_http_status(403)
+        response_json = JSON.parse(response.body)
+        expect(response_json["error"]).to eq "Not authorized to manage competition"
+      end
+    end
+
+    context "when signed in as a competition manager" do
+      before { sign_in competition.delegates.first }
+
+      let!(:registration) do
+        FactoryBot.create(:registration, :accepted, competition: competition, user: competition.delegates.first)
+      end
+
+      it "returns confidential person data" do
+        get api_v0_competition_wcif_path(competition)
+        response_json = JSON.parse(response.body)
+        expect(response_json["persons"][0].keys).to include "email"
+        expect(response_json["persons"][0].keys).to include "birthdate"
+      end
+
+      it "returns people with all registrations statues" do
+        FactoryBot.create(:registration, :deleted, competition: competition)
+        FactoryBot.create(:registration, :pending, competition: competition)
+        get api_v0_competition_wcif_path(competition)
+        response_json = JSON.parse(response.body)
+        expect(response_json["persons"].length).to eq 3
+      end
+    end
+  end
+
+  describe "GET #show_wcif_public" do
+    let!(:competition) { FactoryBot.create(:competition, :visible) }
+    let!(:registration) do
+      FactoryBot.create(:registration, :accepted, competition: competition, user: competition.delegates.first)
+    end
+
+    it "does not return confidential person data" do
+      get api_v0_competition_wcif_public_path(competition)
+      response_json = JSON.parse(response.body)
+      expect(response_json["persons"][0].keys).to_not include "email"
+      expect(response_json["persons"][0].keys).to_not include "birthdate"
+    end
+
+    it "returns people with accepted registrations only" do
+      FactoryBot.create(:registration, :deleted, competition: competition)
+      FactoryBot.create(:registration, :pending, competition: competition)
+      get api_v0_competition_wcif_public_path(competition)
+      response_json = JSON.parse(response.body)
+      expect(response_json["persons"].length).to eq 1
+      expect(response_json["persons"][0]["registration"]["status"]).to eq "accepted"
+    end
+  end
+
   describe "PATCH #update_wcif" do
     context "when not signed in" do
       let(:competition) { FactoryBot.create(:competition, :visible) }
@@ -193,8 +263,8 @@ RSpec.describe "API Competitions" do
 
     describe "persons" do
       let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, with_schedule: true) }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition) }
-      let!(:organizer_registration) { FactoryBot.create(:registration, competition: competition, user: competition.organizers.first) }
+      let!(:registration) { FactoryBot.create(:registration, :accepted, competition: competition) }
+      let!(:organizer_registration) { FactoryBot.create(:registration, :accepted, competition: competition, user: competition.organizers.first) }
 
       context "when signed in as a competition manager" do
         before { sign_in competition.organizers.first }
