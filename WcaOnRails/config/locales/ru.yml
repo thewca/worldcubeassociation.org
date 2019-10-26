@@ -1185,6 +1185,8 @@ ru:
       links:
         #original_hash: ada2e9e
         sign_in: Войти
+        #original_hash: 0b81497
+        sign_up: Создать WCA аккаунт
     failure:
       #original_hash: 1186218
       invalid: 'Неправильный email, WCA ID или пароль.'
@@ -1372,7 +1374,7 @@ ru:
         #original_hash: 776476a
         confirmation_link: Подтвердить мой аккаунт.
         #original_hash: d484f70
-        activate: Мосле активации вы сможете войти на сайт WCA.
+        activate: После активации вы сможете войти на сайт WCA.
         #original_hash: 333999b
         addendum: >-
           Это письмо отправлено автоматически. Если вы не регистрировались на
@@ -1637,6 +1639,8 @@ ru:
         регистрировались на соревнование на стороннем сервисе. Если вы владелец
         данного email, вы можете сбросить пароль <a
         href='/users/password/new'>здесь</a>.
+      #original_hash: 50897d4
+      must_match_person: не совпадает с данными в WCA ID
     successes:
       messages:
         #original_hash: 31bd401
@@ -1945,19 +1949,43 @@ ru:
     payment_form:
       #original_hash: 4de825f
       title: Взнос за участие
+      #original_hash: d1569e6
+      payment_successful: Оплата произведена успешно.
       hints:
         #original_hash: bf3a39e
         donation: 'Необязательный взнос, который пойдёт только команде организаторов'
+        #original_hash: 16cf92d
+        card_information: >-
+          Данные вашей кредитной карты никогда не попадают на сайт WCA. Они
+          надёжно передаются на сайт Stripe, который обрабатывает платёж и
+          посылает нам информацию о том, что платёж был успешно произведён.
       labels:
         #original_hash: 4de825f
         entry_fees: Взносы за участие
         #original_hash: 2c09302
         donation: Пожертвование
+        #original_hash: 184150d
+        card_information: Данные карты
+        #original_hash: bc8091a
+        cardholder_name: Владелец карты
       alerts:
         #original_hash: a34940e
         not_a_number: 'Пожалуйста, введите правильную сумму'
         #original_hash: 707b9ca
         amount_too_low: Нужно по меньшей мере оплатить взнос за участие.
+      errors:
+        #original_hash: 166d48c
+        already_paid: >-
+          Оплата не произведена, потому что взнос за участие уже был оплачен
+          ранее.
+        #original_hash: b2bc8ed
+        not_allowed: Вы не можете заплатить за эту регистрацию.
+        #original_hash: 630dbb9
+        intent_not_found: >-
+          Мы не смогли найти платёж на нашем сервере. Обработка платежа
+          прервана, с вашей карты деньги не были сняты.
+        #original_hash: 63e0ec1
+        cardholder_name: 'Пожалуйста, проверьте имя владельца карты.'
     #original_hash: 8607a87
     payment_button_text: Оплатить взнос с помощью карты
     #original_hash: 4cf01a2
@@ -2071,6 +2099,8 @@ ru:
         download_html: 'Скачать всю информацию о соревновании в виде PDF %{here}.'
       #original_hash: eb9a4bc
       date: Дата
+      #original_hash: 4f05cd6
+      add_to_calendar: Добавить в календарь
       #original_hash: 4271627
       city: Город
       #original_hash: 67cd406
@@ -2559,7 +2589,7 @@ ru:
         #original_hash: 4c9f914
         delegate_report: Отчёт Делегата
         #original_hash: b233e77
-        registration: Регистрация
+        registration: Войти на сайт
         #original_hash: 3f9176e
         import_registrations: Импорт регистраций
         #original_hash: d672995
@@ -3478,30 +3508,31 @@ ru:
     #original_hash: ea9d41d
     title: Утилиты для ввода результатов
     paragraphs:
-      #original_hash: 2c5ad71
+      #original_hash: 305f7f8
       '1': >-
-        WCA очень рекомендует использовать <a href="http://cubecomps.com">Cube
-        Comps</a> до и во время соревнования. Cube Comps &mdash; это онлайн
-        система для ввода результатов, с интересными возможностями, например,
-        печать карточек и результатов. Создана Luis J. Iáñez, имеет открытый
-        исходный код.
-      #original_hash: 7438b0d
+        WCA очень рекомендует использовать <a
+        href="https://live.worldcubeassociation.org">WCA Live</a> до и во время
+        соревнования. WCA Live &mdash; это платформа для проведения WCA
+        соревнований и ввода результатов.
+      #original_hash: 0867b38
       '2': >-
-        Карточки с результатами должны быть проверены, а затем, вместе со
-        скрамблами, обработаны %{workbook_link} и посланы WCA Results Team.
+        Нужно проверить карточки с результатами до того, как послать результаты
+        в WCA Results Team. Вы можете использовать <a
+        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
+        Matcher</a>, проект с открытым исходным кодом, созданный Philippe
+        Virouleau.
       #original_hash: 975e59b
       '3': >-
         Последняя версия файла для ввода результатов WCA соревнований может быть
         скачана <a href="/files/results.xls" target="_blank">здесь</a>.
-      #original_hash: a5f2d25
+      #original_hash: c576675
       '4': >-
         Можно также использовать <a
-        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> для
-        разбивки участников на группы. Это программа может также сортировать
-        участников по их рангу, назначать судей и скрамблёров, решать, сколько
-        нужно групп, генерировать карточки участников и индивидуальные
-        расписания. Это проект с открытым исходным кодом, созданный Джонатаном
-        Куоско (Jonatan Kłosko).
+        href="https://groupifier.jonatanklosko.com">Groupifier</a> для разбивки
+        участников на группы. Это программа может также сортировать участников
+        по их рангу, назначать судей и скрамблёров, решать, сколько нужно групп,
+        генерировать карточки участников и индивидуальные расписания. Это проект
+        с открытым исходным кодом, созданный Джонатаном Куоско (Jonatan Kłosko).
   logo:
     #original_hash: c72c969
     title: Логотип WCA
@@ -3716,6 +3747,37 @@ ru:
       content2_html: >-
         Этот документ содержит важную информацию, и каждому организатору
         соревнований следует его прочитать.
+  regulations_translations:
+    #original_hash: 9493b8d
+    title: 'Положения и Дополнения WCA: Переводы'
+    #original_hash: 386ecc1
+    paragraph1: >-
+      Если английский не является вашим родным языком, вы можете посмотреть
+      переводы.
+    #original_hash: 32b1132
+    paragraph2: >-
+      Обратите внимание, что переводы не являются официальными, хоть они и
+      расположены на сайте WCA. Они предоставляются без каких-либо гарантий.
+      Если перевод противоречит текущей официальной английской версии, последняя
+      имеет приоритет.
+    #original_hash: 8ad8302
+    translations: Переводы
+    #original_hash: 4fc0e2b
+    current: Текущие
+    #original_hash: fbb3c38
+    old: Старые
+    table_elements:
+      #original_hash: 2da600b
+      version: Версия
+      #original_hash: 89b86ab
+      language: Язык
+    #original_hash: a916f93
+    translating: Новые переводы Положений
+    #original_hash: 1b026e1
+    paragraph3_html: >-
+      Если вы хотите добавить или обновить перевод, пожалуйста, прочтите <a
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">инструкции
+      на GitHub</a>.
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Рекомендации организаторам соревнований
