@@ -1,0 +1,5 @@
+ru:
+  devise:
+    shared:
+      links:
+        sign_up: Создать WCA аккаунт
