@@ -485,6 +485,8 @@ pt:
           específica de eventos
         #original_hash: 4bf194c
         event_restrictions_reason: Razão e detalhe para restrições de eventos
+        #original_hash: 3c24bd2
+        main_event_id: Evento principal
       registration:
         #original_hash: 3c23a67
         guests: Convidados
@@ -895,6 +897,8 @@ pt:
         event_restrictions_reason: >-
           Por favor elabore aqui o porquê de restringir certas combinações de
           eventos. Por favor preencha em Inglês!
+        #original_hash: 1067798
+        main_event_id: O vencedor deste evento será o vencedor da competição.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1407,6 +1411,21 @@ pt:
         header: 'Foi removido de %{competition} enquanto organizador'
         #original_hash: 66cb109
         information: '%{remover} removeu-te de %{competition} enquanto organizador.'
+      registration_reminder_email:
+        #original_hash: 7d355cb
+        header: '%{competition} abre brevemente'
+        #original_hash: c9d0561
+        intro: 'Olá %{name},'
+        #original_hash: a8f7e72
+        information_html: >-
+          Este é um lembrete que o registo em <a
+          href=%{competition_url}>%{competition}</a> abre em menos de 24 horas.
+        #original_hash: 2b93022
+        not_accepted_html: Registou-se mas o seu registo não foi aceite.
+        #original_hash: 3724e7c
+        more_info_html: >-
+          Por favor veja o <a href=%{competition_url}>site da competição</a>
+          para mais informações e requisitos de registo.
     claim_wca_id:
       #original_hash: f28bf87
       title: Associar o seu ID da WCA
@@ -1608,6 +1627,8 @@ pt:
         se ter registado para uma competição usando um serviço externo. Se for o
         dono deste email, pode usar esta conta depois de redefinir a sua
         password <a href='/users/password/new'>aqui</a>.
+      #original_hash: 50897d4
+      must_match_person: deve corresponder aos detalhes da pessoa a que diz respeito o ID da WCA
     successes:
       messages:
         #original_hash: 31bd401
@@ -1907,19 +1928,44 @@ pt:
     payment_form:
       #original_hash: 4de825f
       title: Taxa de registo
+      #original_hash: d1569e6
+      payment_successful: >-
+        O pagamento foi bem sucedido e no registo, abaixo, deverá constar como
+        pago.
       hints:
         #original_hash: bf3a39e
         donation: Donativo opcional que irá apenas para a equipa de organização
+        #original_hash: 16cf92d
+        card_information: >-
+          A informação do cartão nunca chega ao site da WCA. É enviado de forma
+          segura para o Stripe que gere o processo de pagamento e que
+          posteriormente nos dá essa indicação.
       labels:
         #original_hash: 4de825f
         entry_fees: Taxas de registo
         #original_hash: 2c09302
         donation: Donativo
+        #original_hash: 184150d
+        card_information: Informação do cartão
+        #original_hash: bc8091a
+        cardholder_name: Nome no cartão
       alerts:
         #original_hash: a34940e
         not_a_number: Por favor introduza um montante válido.
         #original_hash: 707b9ca
         amount_too_low: O montante total deve ser pelo menos o montante da taxa de registo.
+      errors:
+        #original_hash: 166d48c
+        already_paid: O pagamento não foi realizado porque a taxa de registo já foi paga.
+        #original_hash: b2bc8ed
+        not_allowed: Não pode pagar para esse registo
+        #original_hash: 630dbb9
+        intent_not_found: >-
+          Não encontrámos informação de confirmação de pagamento no nosso
+          servidor. O processo de pagamento foi abortado e esse montante não foi
+          cobrado no cartão.
+        #original_hash: 63e0ec1
+        cardholder_name: Por favor verifique o nome da pessoa no cartão.
     #original_hash: 8607a87
     payment_button_text: Pagar a taxa de inscrição com cartão
     #original_hash: 4cf01a2
@@ -2013,6 +2059,12 @@ pt:
         competidores no website da competição.
       #original_hash: 94a2fc8
       past_competitions: Competições passadas
+      #original_hash: ec7e697
+      bookmarked_title: Competições assinaladas
+      #original_hash: e5665fb
+      bookmarked_explanation: >-
+        Competições que assinalou no site da WCA. Será enviado um email 24 horas
+        antes da abertura do registo.
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2027,6 +2079,8 @@ pt:
         download_html: 'Descarregar todos os detalhes da competição como PDF %{here}.'
       #original_hash: eb9a4bc
       date: Data
+      #original_hash: 4f05cd6
+      add_to_calendar: Adicionar ao calendário
       #original_hash: 4271627
       city: Cidade
       #original_hash: 67cd406
@@ -2118,6 +2172,12 @@ pt:
         range_past_html: >-
           Registo online abriu a %{start_date_and_time} a encerrou a
           %{end_date_and_time}.
+      #original_hash: 8eda7ac
+      bookmark: Assinalar esta competição
+      #original_hash: 4dfea97
+      is_bookmarked: Assinalou esta competição
+      #original_hash: 74598a7
+      number_of_bookmarks: Número de vezes que a competição foi assinalada
     index:
       #original_hash: db98a68
       title: Competições
@@ -2207,6 +2267,10 @@ pt:
       competitions_list: lista de competições
       #original_hash: 9104a03
       no_past_competitions: Não tem nenhuma competição passada.
+      #original_hash: 43c3543
+      no_bookmarked_competitions: >-
+        Não tem nenhuma competição assinalada. Clique no ícone de assinalar na
+        página de uma competição para a gravar aqui!
     competition_form:
       #original_hash: 2b81984
       wcat: Equipa de Anúncio de Competições da WCA
@@ -3445,30 +3509,30 @@ pt:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
     paragraphs:
-      #original_hash: 2c5ad71
+      #original_hash: 305f7f8
       '1': >-
-        A WCA recomenda o uso do <a href="http://cubecomps.com">Cube Comps</a>
-        antes e durante uma competição. Cube Comps é um sistema online com
-        resultados ao vivo e muitos recursos interessantes, como impressão de
-        folhas de resultados e um sistema bastante eficiente de entrada de dados
-        que suporta vários utilizadores simultâneos. Criado por Luis J. Iáñez e
-        agora em código aberto.
-      #original_hash: 7438b0d
+        A WCA recomenda o uso do <a
+        href="https://live.worldcubeassociation.org">WCA Live</a> antes e
+        durante uma competição. WCA Live é uma plataforma para gerir competições
+        da WCA e partilhar resultados em tempo real com o mundo.
+      #original_hash: 0867b38
       '2': >-
         Folhas de resultados e embaralhamentos devem ser processados e
-        verificados em busca de erros usando o %{workbook_link} antes de serem
-        enviados à Equipa de Resultados.
+        verificados em busca de erros antes de serem enviados à Equipa de
+        Resultados. Pode-se usar <a
+        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
+        Matcher</a>, um projeto em código aberto criado por Philippe Virouleau.
       #original_hash: 975e59b
       '3': >-
         A versão mais recente da Folha de Cálculo de Resultados da WCA pode ser
         descarregada aqui: <br /><a href="/files/results.xls"
         target="_blank">Folha de Cálculo de Resultados da WCA</a>.
-      #original_hash: a5f2d25
+      #original_hash: c576675
       '4': >-
         Também pode querer usar o <a
-        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> para
-        preparar grupos para uma competição. É uma ferramenta que tenta executar
-        esta tarefa automaticamente. Entre as características principais
+        href="https://groupifier.jonatanklosko.com">Groupifier</a> para preparar
+        grupos para uma competição. É uma ferramenta que tenta executar esta
+        tarefa automaticamente. Entre as características principais
         encontram-se: ordenação de competidores por ranking, atribuição de
         tarefas (ajuizamento, embaralhamento), decidir quantos grupos são
         necessários, gerar folhas de resultados, folhas pessoais e sumários. É
@@ -3701,6 +3765,38 @@ pt:
       content2_html: >-
         Este documento contém informação importante e deve ser lido por todos os
         organizadores de competições.
+  regulations_translations:
+    #original_hash: 9493b8d
+    title: 'Regulamentos e Orientações da WCA: Traduções'
+    #original_hash: 386ecc1
+    paragraph1: >-
+      Se fala outra língua para além do Inglês, pode achar estas traduções
+      úteis.
+    #original_hash: 32b1132
+    paragraph2: >-
+      Por favor note que estas traduções não têm caráter oficial, apesar de
+      serem disponibilizadas no site da WCA: elas não vêm com qualquer garantia.
+      Se houver uma diferença entre uma tradução e a versão inglesa (atual
+      oficial), a versão inglesa tem de ser usada.
+    #original_hash: 8ad8302
+    translations: Traduções
+    #original_hash: 4fc0e2b
+    current: Atuais
+    #original_hash: fbb3c38
+    old: Antigas
+    table_elements:
+      #original_hash: 2da600b
+      version: Versão
+      #original_hash: 89b86ab
+      language: Língua
+    #original_hash: a916f93
+    translating: Traduzir os Regulamentos
+    #original_hash: 1b026e1
+    paragraph3_html: >-
+      Se estiver interessado em adicionar/atualizar uma tradução, por favor veja
+      <a
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">as
+      instruções no repositório GitHub para traduções</a>.
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Orientações para Organizadores de Competições WCA
