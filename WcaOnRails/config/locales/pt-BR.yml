@@ -3520,28 +3520,27 @@ pt-BR:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
     paragraphs:
-      #original_hash: 2c5ad71
+      #original_hash: 305f7f8
       '1': >-
-        A WCA recomenda o uso do <a href="http://cubecomps.com">Cube Comps</a>
-        antes e durante uma competição. Cube Comps é um sistema online com
-        resultados ao vivo e muitos recursos interessantes, como impressão de
-        súmulas e um sistema bastante eficiente de entrada de dados que suporta
-        vários usuários. Criado por Luis J. Iáñez e agora em código aberto (Open
-        Source).
-      #original_hash: 7438b0d
+        A WCA recomenda o uso do <a
+        href="https://live.worldcubeassociation.org">WCA Live</a> antes e
+        durante uma competição. WCA Live é um sistema para gerenciar competições
+        da WCA e compartilhar os resultados ao vivo com o mundo.
+      #original_hash: 0867b38
       '2': >-
         Súmulas e embaralhamentos devem ser processados e verificados em busca
-        de erros usando o %{workbook_link} antes de serem enviados à Equipe de
-        Resultados.
+        de erros antes de serem enviados à Equipe de Resultados. Você pode usar
+        o <a href="https://viroulep.github.io/scrambles-matcher/">Scrambles
+        Matcher</a>, um projeto Open Source criado por Philippe Virouleau.
       #original_hash: 975e59b
       '3': >-
         A versão mais recente da Planilha de Resultados da WCA pode ser baixada
         aqui: <br /><a href="/files/results.xls" target="_blank">Planilha de
         Resultados da WCA</a>.
-      #original_hash: a5f2d25
+      #original_hash: c576675
       '4': >-
         Você também pode querer usar <a
-        href="https://jonatanklosko.github.io/groupifier">Groupifier</a> para
+        href="https://groupifier.jonatanklosko.comr">Groupifier</a> para
         preparar os grupos para uma competição. É uma ferramenta que faz
         justamente isso por você. Entre as principais características você
         encontrará: ordenar os competidores por ranking, atribuir tarefas (juiz,
