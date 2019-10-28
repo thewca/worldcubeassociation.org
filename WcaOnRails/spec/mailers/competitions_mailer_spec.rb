@@ -281,14 +281,22 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       competition.delegate_report.wrc_secondary_user = FactoryBot.create :user, :wrc_member, name: "Michel"
       competition
     end
-    let(:mail) do
+    let(:main_mail) do
+      CompetitionsMailer.notify_of_delegate_report_submission(competition)
+    end
+    let(:followup_mail) do
       CompetitionsMailer.wrc_delegate_report_followup(competition)
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match(/Hello WRC members/)
-      expect(mail.body.encoded).to match(competition.delegate_report.wrc_primary_user.name)
-      expect(mail.body.encoded).to match(competition.delegate_report.wrc_secondary_user.name)
+      # Check heuristics to ensure that GMail puts these emails in the same thread.
+      expect(followup_mail.from).to eq(main_mail.from)
+      expect(followup_mail.subject).to eq(main_mail.subject)
+
+      # Check content
+      expect(followup_mail.body.encoded).to match(/Hello WRC members/)
+      expect(followup_mail.body.encoded).to match(competition.delegate_report.wrc_primary_user.name)
+      expect(followup_mail.body.encoded).to match(competition.delegate_report.wrc_secondary_user.name)
     end
   end
 

@@ -106,6 +106,7 @@ class CompetitionsMailer < ApplicationMailer
     I18n.with_locale :en do
       @competition = competition
       mail(
+        from: "reports@worldcubeassociation.org",
         to: "regulations@worldcubeassociation.org",
         reply_to: "regulations@worldcubeassociation.org",
         subject: delegate_report_email_subject(competition),
