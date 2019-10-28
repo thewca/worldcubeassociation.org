@@ -15,7 +15,7 @@
     "@babel/preset-react": "^7.6.3",
     "@rails/webpacker": "^4.0.7",
     "autonumeric": "^4.5.10",
-    "autoprefixer": "^9.6.5",
+    "autoprefixer": "^9.7.0",
     "autosize": "^4.0.2",
     "babel-loader": "^8.0.6",
     "babel-plugin-lodash": "^3.3.4",
