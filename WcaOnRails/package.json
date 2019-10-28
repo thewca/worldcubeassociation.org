@@ -39,7 +39,7 @@
     "rails-erb-loader": "^5.5.2",
     "react": "^16.10.2",
     "react-bootstrap": "^0.32.4",
-    "react-dom": "^16.10.2",
+    "react-dom": "^16.11.0",
     "react-leaflet": "^2.5.0",
     "resolve-url-loader": "^3.1.0",
     "sass-loader": "^8.0.0",
