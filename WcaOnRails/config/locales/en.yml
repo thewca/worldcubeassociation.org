@@ -727,6 +727,7 @@ en:
       manage_users: "Manage users"
       delegate: "Delegate"
       panel: "Panel"
+      polls: "Polls"
       results_team: "Results team"
       results_admin: "Admin"
       results_phpmyadmin: "phpMyAdmin"
