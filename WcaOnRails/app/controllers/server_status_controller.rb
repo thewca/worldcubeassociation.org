@@ -145,6 +145,7 @@ class MysqlSettingsCheck < StatusCheck
   EXPECTED_MYSQL_SETTINGS = {
     "@@innodb_ft_min_token_size" => 2,
     "@@ft_min_word_len" => 2,
+    "@@character_set_server" => "latin1",
   }.freeze
 
   def label
