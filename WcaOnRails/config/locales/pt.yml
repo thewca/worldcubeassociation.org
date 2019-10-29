@@ -1305,6 +1305,8 @@ pt:
       delegate: Delegado
       #original_hash: 2f4bd74
       panel: Painel
+      #original_hash: db34e41
+      polls: Votações
       #original_hash: d3a928c
       results_team: Equipa de Resultados
       #original_hash: 4e7afeb
