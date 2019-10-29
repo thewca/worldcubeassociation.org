@@ -155,7 +155,7 @@
                 <li class="divider"></li>
                 <li><%= link_to t('.panel'), panel_path %></li>
               <% end %>
-              <% if current_user.can_wiew_polls? %>
+              <% if current_user.can_view_polls? %>
                 <li><%= link_to t('.polls'), polls_path %></li>
               <% end %>
 
