@@ -1182,6 +1182,8 @@ zh-TW:
       delegate: WCA代表相關
       #original_hash: 2f4bd74
       panel: 知識欄
+      #original_hash: db34e41
+      polls: 投票
       #original_hash: d3a928c
       results_team: 成績組
       #original_hash: 4e7afeb
@@ -2927,22 +2929,23 @@ zh-TW:
     #original_hash: ea9d41d
     title: WCA成績輸入工具
     paragraphs:
-      #original_hash: 2c5ad71
+      #original_hash: 305f7f8
       '1': >-
-        WCA強烈建議您在比賽前和比賽中使用<a href="http://cubecomps.com">Cube Comps</a>。Cube
-        Comps是一個顯示即時成績線上系統，它還有其他有趣功能像是列印成績單和非常有效率的多人成績輸入系統。由Luis J.
-        Iáñez所建立並開放原始碼。
-      #original_hash: 7438b0d
-      '2': '將比賽成績寄給WCA成績組之前，成績單和轉亂步驟應透過%{workbook_link}運算並檢查錯誤。'
+        WCA強烈建議您在比賽前和比賽中使用 <a href="https://live.worldcubeassociation.org">WCA
+        Live</a>。WCA Live 是一個能夠支援比賽且可以跟全世界即時分享比賽成績的平台。
+      #original_hash: 0867b38
+      '2': >-
+        成績單和轉亂內容應該要在傳給WCA成績組之前確認有無錯誤。你可以使用<a
+        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
+        Matcher</a>，這是一個由Philippe Virouleau建立的開源項目。
       #original_hash: 975e59b
       '3': >-
         最新版的WCA比賽成績單可以在這裡下載：<br /><a href="/files/results.xls"
         target="_blank">WCA比賽成績單</a>。
-      #original_hash: a5f2d25
+      #original_hash: c576675
       '4': >-
         您可能還想使用<a
-        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>幫比賽的參賽者分組，那麼您找對工具了。
-        其中主要功能包括：將參賽者按照成績排序、分配工作（裁判、轉亂）、決定需要多少轉亂步驟、產生成績單、個人賽程和總結表。這是一個由Jonatan
+        href="https://groupifier.jonatanklosko.com">Groupifier</a>幫比賽的參賽者分組，那麼您找對工具了。其中主要功能包括：將參賽者按照成績排序、分配工作（裁判、轉亂）、決定需要多少轉亂步驟、產生成績單、個人賽程和總結表。這是一個由Jonatan
         Kłosko建立的開源項目。
   logo:
     #original_hash: c72c969
