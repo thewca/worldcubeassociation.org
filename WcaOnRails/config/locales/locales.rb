@@ -2,6 +2,10 @@
 
 module Locales
   AVAILABLE = {
+    "en": {
+      "flag_id": "gb",
+      "name": "English",
+    },
     "cs": {
       "flag_id": "cz",
       "name": "Čeština",
@@ -13,10 +17,6 @@ module Locales
     "de": {
       "flag_id": "de",
       "name": "Deutsch",
-    },
-    "en": {
-      "flag_id": "gb",
-      "name": "English",
     },
     "es": {
       "flag_id": "es",
