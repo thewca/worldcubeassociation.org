@@ -791,12 +791,11 @@ pt:
         external_website: O website da competição. Deve ser uma hiperligação http(s) válida.
         #original_hash: 9965635
         registration_open: 'Nota: Abertura e fecho do registo está no fuso horário UTC'
-        #original_hash: bd402bf
-        remarks_html: >-
-          Informação adicional que queria passar para a Equipa de Competições da
-          WCA. Por exemplo, desenvolver as razões para esta competição ter sido
-          pedida com menos de quatro semanas de antecedência, ou se está a pedir
-          a aplicação de %{link}. Por favor, preencha em Inglês!
+        #original_hash: 9ea6021
+        remarks: >-
+          Informação adicional para passar para o WCAT. Por exemplo, se há algo
+          sobre o qual não se tem a certeza ou se há algum pedido especial para
+          o WCAT. Por favor, preencha em inglês!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -1305,6 +1304,8 @@ pt:
       delegate: Delegado
       #original_hash: 2f4bd74
       panel: Painel
+      #original_hash: db34e41
+      polls: Votações
       #original_hash: d3a928c
       results_team: Equipa de Resultados
       #original_hash: 4e7afeb
