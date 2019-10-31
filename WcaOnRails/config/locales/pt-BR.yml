@@ -799,13 +799,11 @@ pt-BR:
         external_website: Website da competição. Deve ser uma URL http(s) válida.
         #original_hash: 9965635
         registration_open: 'Nota: início e término das inscrições no fuso horário UTC.'
-        #original_hash: bd402bf
-        remarks_html: >-
+        #original_hash: 9ea6021
+        remarks: >-
           Alguma informação adicional que você queira passar para o WCAT. Por
-          exemplo, explique seus motivos caso esta competição competição tenha
-          sido solicitada solicitada com menos de quatro semanas de
-          antecedência, ou se você está solicitando a aplicação do %{link}. Por
-          favor preencha em inglês!
+          exemplo, se há algo sobre o qual você não tem certeza, ou algum pedido
+          especial. Por favor preencha em Inglês!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -1316,6 +1314,8 @@ pt-BR:
       delegate: Delegado
       #original_hash: 2f4bd74
       panel: Painel
+      #original_hash: db34e41
+      polls: Enquetes
       #original_hash: d3a928c
       results_team: Equipe de Resultados
       #original_hash: 4e7afeb
