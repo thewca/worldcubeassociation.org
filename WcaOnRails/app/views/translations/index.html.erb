@@ -1,7 +1,7 @@
 <% provide(:title, 'Translations Status') %>
 <div class="container">
   <h1><%= yield(:title) %></h1>
-
+  <%= link_to "Update Translation", translations_edit_path, class: "btn btn-info" %>
   <% (I18n.available_locales - [:en]).sort.each do |locale| %>
     <%
       bad_keys_by_type = @bad_i18n_keys[locale]
@@ -51,5 +51,4 @@
 
     </div>
   <% end %>
-  <%= link_to "Update Translation", translations_edit_path, class: "btn btn-info" %>
 </div>
