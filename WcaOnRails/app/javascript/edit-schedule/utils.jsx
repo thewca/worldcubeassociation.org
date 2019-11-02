@@ -28,6 +28,14 @@ export function newVenueId() { return ++currentElementsIds.venue; }
 export function newRoomId() { return ++currentElementsIds.room; }
 export function newActivityId() { return ++currentElementsIds.activity; }
 
+function withNestedActivities(activities) {
+  if (activities.length === 0) return [];
+  return [
+    ...activities,
+    ...withNestedActivities(_.flatMap(activities, 'childActivities'))
+  ];
+}
+
 export function convertVenueActivitiesToVenueTimezone(oldTZ, venueWcif) {
   // Called when a venue's timezone has been updated, to update all the activities times.
   // The WCA website expose times in UTC, so we need to do two steps:
@@ -35,7 +43,7 @@ export function convertVenueActivitiesToVenueTimezone(oldTZ, venueWcif) {
   //   - second, change the timezone without changing the actual time figure (eg: 4pm stays 4pm, but in a different timezone).
   let newTZ = venueWcif.timezone;
   venueWcif.rooms.forEach(room => {
-    room.activities.forEach(activity => {
+    withNestedActivities(room.activities).forEach(activity => {
       // Undocumented "keepTime" parameter (see here: https://stackoverflow.com/questions/28593304/same-date-in-different-time-zone/28615654#28615654)
       // This enables us to change the UTC offset without changing the *actual* time of the activity!
       activity.startTime = moment(activity.startTime).tz(oldTZ).tz(newTZ, true).format();
