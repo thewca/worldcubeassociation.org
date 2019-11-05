@@ -2,17 +2,22 @@
 
 module Locales
   AVAILABLE = {
+    # Ordered alphabetically by their local code, but with English first.
+    "en": {
+      "flag_id": "gb",
+      "name": "English",
+    },
     "cs": {
       "flag_id": "cz",
       "name": "Čeština",
     },
+    "da": {
+      "flag_id": "dk",
+      "name": "Dansk",
+    },
     "de": {
       "flag_id": "de",
       "name": "Deutsch",
-    },
-    "en": {
-      "flag_id": "gb",
-      "name": "English",
     },
     "es": {
       "flag_id": "es",
@@ -26,9 +31,17 @@ module Locales
       "flag_id": "fr",
       "name": "Français",
     },
+    "hr": {
+      "flag_id": "hr",
+      "name": "Hrvatski",
+    },
     "hu": {
       "flag_id": "hu",
       "name": "Magyar",
+    },
+    "id": {
+      "flag_id": "id",
+      "name": "Bahasa Indonesia",
     },
     "it": {
       "flag_id": "it",
@@ -42,6 +55,10 @@ module Locales
       "flag_id": "kr",
       "name": "한국어",
     },
+    "nl": {
+      "flag_id": "nl",
+      "name": "Nederlands",
+    },
     "pl": {
       "flag_id": "pl",
       "name": "Polski",
@@ -54,18 +71,6 @@ module Locales
       "flag_id": "br",
       "name": "Português Brasileiro",
     },
-    "zh-CN": {
-      "flag_id": "cn",
-      "name": "简体中文",
-    },
-    "zh-TW": {
-      "flag_id": "tw",
-      "name": "繁體中文",
-    },
-    "nl": {
-      "flag_id": "nl",
-      "name": "Nederlands",
-    },
     "ro": {
       "flag_id": "ro",
       "name": "Română",
@@ -73,14 +78,6 @@ module Locales
     "ru": {
       "flag_id": "ru",
       "name": "Русский",
-    },
-    "da": {
-      "flag_id": "dk",
-      "name": "Dansk",
-    },
-    "hr": {
-      "flag_id": "hr",
-      "name": "Hrvatski",
     },
     "sk": {
       "flag_id": "sk",
@@ -94,13 +91,17 @@ module Locales
       "flag_id": "th",
       "name": "ภาษาไทย",
     },
-    "id": {
-      "flag_id": "id",
-      "name": "Bahasa Indonesia",
-    },
     "vi": {
       "flag_id": "vn",
       "name": "Tiếng Việt",
+    },
+    "zh-CN": {
+      "flag_id": "cn",
+      "name": "简体中文",
+    },
+    "zh-TW": {
+      "flag_id": "tw",
+      "name": "繁體中文",
     },
   }.freeze
 end
