@@ -2,7 +2,7 @@
 
 module Locales
   AVAILABLE = {
-    # Ordered by English, then alphabetically by their local abbreviation.
+    # Ordered alphabetically by their local code, but with English first.
     "en": {
       "flag_id": "gb",
       "name": "English",
