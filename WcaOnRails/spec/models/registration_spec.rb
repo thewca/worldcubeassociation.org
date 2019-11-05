@@ -26,32 +26,42 @@ RSpec.describe Registration do
     expect(registration).to be_valid
   end
 
-  it "requires user on create" do
-    expect(FactoryBot.build(:registration, user_id: nil)).to be_invalid_with_errors(user: ["can't be blank"])
+  describe "on create" do
+    let(:registration) { FactoryBot.build :registration }
+
+    it "requires user on create" do
+      expect(FactoryBot.build(:registration, user_id: nil)).to be_invalid_with_errors(user: ["can't be blank"])
+    end
+
+    it "requires user country" do
+      user = FactoryBot.create(:user, country_iso2: nil)
+      registration.user = user
+      expect(registration).to be_invalid_with_errors(user_id: ["Need a country"])
+    end
+
+    it "requires user gender" do
+      user = FactoryBot.create(:user, gender: nil)
+      registration.user = user
+      expect(registration).to be_invalid_with_errors(user_id: ["Need a gender"])
+    end
+
+    it "requires user dob" do
+      user = FactoryBot.create(:user, dob: nil)
+      registration.user = user
+      expect(registration).to be_invalid_with_errors(user_id: ["Need a birthdate"])
+    end
+
+    it "requires user not banned" do
+      user = FactoryBot.create(:user, :banned)
+      registration.user = user
+      expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.banned_html').html_safe])
+    end
   end
 
-  it "requires country" do
-    user = FactoryBot.create(:user, country_iso2: nil)
-    registration.user = user
-    expect(registration).to be_invalid_with_errors(user_id: ["Need a country"])
-  end
-
-  it "requires gender" do
-    user = FactoryBot.create(:user, gender: nil)
-    registration.user = user
-    expect(registration).to be_invalid_with_errors(user_id: ["Need a gender"])
-  end
-
-  it "requires user not banned" do
+  it "doesn't invalidate existing registration when the competitor is banned" do
     user = FactoryBot.create(:user, :banned)
     registration.user = user
-    expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.banned_html').html_safe])
-  end
-
-  it "requires dob" do
-    user = FactoryBot.create(:user, dob: nil)
-    registration.user = user
-    expect(registration).to be_invalid_with_errors(user_id: ["Need a birthdate"])
+    expect(registration).to be_valid
   end
 
   it "requires at least one event" do

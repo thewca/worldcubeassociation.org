@@ -197,7 +197,11 @@ class Registration < ApplicationRecord
     }
   end
 
-  validate :user_can_register_for_competition
+  # Only run the validations when creating the registration as we don't want user changes
+  # to invalidate all the corresponding registrations (e.g. if the user gets banned).
+  # Instead the validations should be placed such that they ensure that a user
+  # change doesn't lead to an invalid state.
+  validate :user_can_register_for_competition, on: :create
   private def user_can_register_for_competition
     if user&.cannot_register_for_competition_reasons.present?
       errors.add(:user_id, user.cannot_register_for_competition_reasons.to_sentence)
