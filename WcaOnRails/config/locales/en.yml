@@ -1078,6 +1078,8 @@ en:
         non_existent_wca_id: "The WCA ID %{wca_id} doesn't exist."
         email_user_with_different_wca_id: "There is already a user with email %{email}, but it has WCA ID of %{user_wca_id} instead of %{registration_wca_id}."
         email_user_with_different_unconfirmed_wca_id: "There is already a user with email %{email}, but it has unconfirmed WCA ID of %{unconfirmed_wca_id} instead of %{registration_wca_id}."
+        email_duplicates: "Emails must be unique, fond the following duplicates: %{emails}."
+        wca_id_duplicates: "WCA IDs must be unique, fond the following duplicates: %{wca_ids}."
     add:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
