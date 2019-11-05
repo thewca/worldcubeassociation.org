@@ -49,6 +49,32 @@ RSpec.describe "registrations" do
         expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
       end
 
+      it "renders an error when there are email duplicates" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+          ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "1"],
+        ]
+        expect {
+          post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+        }.to_not change { competition.registrations.count }
+        follow_redirect!
+        expect(response.body).to include "Emails must be unique, fond the following duplicates: sherlock@example.com."
+      end
+
+      it "renders an error when there are WCA ID duplicates" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+          ["a", "John Watson", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "watson@example.com", "1", "1"],
+        ]
+        expect {
+          post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+        }.to_not change { competition.registrations.count }
+        follow_redirect!
+        expect(response.body).to include "WCA IDs must be unique, fond the following duplicates: 2019HOLM01."
+      end
+
       describe "registrations import" do
         context "registrant has WCA ID" do
           it "renders an error if the WCA ID doesn't exist" do

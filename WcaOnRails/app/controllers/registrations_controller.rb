@@ -131,11 +131,20 @@ class RegistrationsController < ApplicationController
                    accepted_count: registration_rows.length,
                    limit: competition.competitor_limit)
     end
+    emails = registration_rows.map { |registration_row| registration_row[:email] }
+    email_duplicates = emails.select { |email| emails.count(email) > 1 }.uniq
+    if email_duplicates.any?
+      raise I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", "))
+    end
+    wca_ids = registration_rows.map { |registration_row| registration_row[:wca_id] }
+    wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
+    if wca_id_duplicates.any?
+      raise I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", "))
+    end
     new_locked_users = []
     ActiveRecord::Base.transaction do
-      accepted_emails = registration_rows.map { |registration_row| registration_row[:email] }
       competition.registrations.accepted.each do |registration|
-        unless accepted_emails.include?(registration.user.email)
+        unless emails.include?(registration.user.email)
           registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
         end
       end
