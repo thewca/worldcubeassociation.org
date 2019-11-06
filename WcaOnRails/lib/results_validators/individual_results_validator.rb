@@ -13,7 +13,7 @@ module ResultsValidators
     RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit which is %{time_limit} for one solve. All solves over the time limit must be changed to DNF."
     RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit which is %{time_limit}."
     NO_ROUND_INFORMATION_WARNING = "[%{round_id}] Could not find information about cutoff and timelimit for this round, these validations have been skipped."
-    SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit and %{person_name} has at least one suspicious DNF solve given their results."
+    SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit and %{person_name} has at least one suspicious DNF result. Please let us know if the participant really started the DNF attempts irrespective of little time left. If the participant did not start one of the attempts because of too little time left, the result should be DNS instead."
 
     # Miscelaneous errors
     MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round \"%{wcif_id}\" for the cumulative time limit specified in the WCIF."\
@@ -254,8 +254,8 @@ module ResultsValidators
       # Check for any suspicious DNF
       # Compute avg time per solve for the competitor
       avg_per_solve = sum_of_times_for_rounds.to_f / completed_solves_for_rounds.size
-      # We want to issue a warning if the estimated time for all solves + DNFs goes roughly over the cumulative time limit by at least 10% (to reduce false positive).
-      if (number_of_dnf_solves + completed_solves_for_rounds.size) * avg_per_solve >= 1.1 * time_limit_for_round.centiseconds
+      # We want to issue a warning if the estimated time for all solves + DNFs goes roughly over the cumulative time limit by at least 20% (estimation tolerance to reduce false positive).
+      if (number_of_dnf_solves + completed_solves_for_rounds.size) * avg_per_solve >= 1.2 * time_limit_for_round.centiseconds
         @warnings << ValidationWarning.new(:results, competition_id,
                                            SUSPICIOUS_DNF_WARNING,
                                            round_ids: cumulative_round_ids.join(","),
