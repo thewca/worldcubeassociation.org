@@ -1786,6 +1786,10 @@ pl:
       deleted: 'Pomyślnie usunięto twoją rejestrację na %{comp}'
       #original_hash: 648424f
       registered: Pomyślnie zarejestrowano!
+      #original_hash: 82fed60
+      imported: Pomyślnie zaimportowano rejestracje!
+      #original_hash: 3614fd1
+      added: Pomyślnie dodano rejestrację!
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} na %{comp}'
@@ -2057,6 +2061,30 @@ pl:
         konkurencji.
       #original_hash: d6fbc9d
       import: Importuj
+      errors:
+        #original_hash: 0ef547d
+        error: 'Błąd w trakcie importu %{registration}: %{error}.'
+        #original_hash: 2f0950e
+        missing_columns: 'Brakujące kolumny: %{columns}.'
+        #original_hash: 2454f20
+        over_competitor_limit: >-
+          Przesłany plik zawiera %{accepted_count} zaakceptowanych rejestracji,
+          co przekracza limit zawodników ustawiony na %{limit}.
+        #original_hash: e6d3197
+        invalid_event_column: >-
+          Kolumny konkurencji powinny zawierać 0 albo 1, znaleziono %{value} w
+          kolumnie %{column}.
+        #original_hash: dcd2f6f
+        non_existent_wca_id: 'WCA ID %{wca_id} nie istnieje.'
+        #original_hash: b5c8591
+        email_user_with_different_wca_id: >-
+          Istnieje już użytkownik z adresem email %{email}, ale ma przypisane
+          WCA ID %{user_wca_id} zamiast %{registration_wca_id}.
+        #original_hash: c9586e9
+        email_user_with_different_unconfirmed_wca_id: >-
+          Istnieje już użytkownik z adresem email %{email}, ale ma
+          niepotwierdzone WCA ID %{unconfirmed_wca_id} zamiast
+          %{registration_wca_id}.
     add:
       #original_hash: 975275e
       title: 'Dodaj rejestrację dla %{comp}'
@@ -2066,6 +2094,9 @@ pl:
         rejestracji na miejscu podczas zawodów.
       #original_hash: a11edb8
       add: Dodaj rejestrację
+      errors:
+        #original_hash: d6dcf5c
+        already_registered: Ta osoba jest już zarejestrowana.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -3607,12 +3638,14 @@ pl:
         Logo WCA zaprojektował Justin Eastman podczas konkursu w styczniu 2005
         roku.<br />Spodobał nam się jego pomysł ze względu na swój design,
         kolorystykę i fakt, że nie ukazuje konkretnie Kostki 3x3x3.
-      #original_hash: f228da2
+      #original_hash: 916e3fc
       '2': >-
-        Posiadamy trzy różne wersje loga: <a href="/files/WCAlogo_XL.jpg">dużą
+        Posiadamy cztery różne wersje logo: <a href="/files/WCAlogo_XL.jpg">dużą
         wersję</a> (46 KB, 1756 x 1068 pikseli), <a
-        href="/files/WCAlogo.svg">wersję wektorową</a> oraz <a
-        href="/files/WCAlogo_notext.svg">wersję wektorową bez tekstu</a>.
+        href="/files/WCAlogo.svg">wersję wektorową</a>, <a
+        href="/files/WCAlogo_notext.svg">wersję wektorową bez tekstu</a> oraz <a
+        href="/files/WCAlogo_monochrome.svg">wersję wektorową
+        monochromatyczną</a>.
       #original_hash: dcb1ad6
       '3': >-
         Trójwymiarową wersję loga stworzył Vu Minh Tan z Vietnamu: <a
