@@ -215,7 +215,9 @@ pt:
         moves: 'Melhor resultado < %{moves}'
         #original_hash: c3133c2
         points: 'Melhor resultado > %{points}'
+    #original_hash: 6e55337
     ranking: 'Top %{ranking} avança para a próxima ronda'
+    #original_hash: 7ee969c
     percent: 'Top %{percent}% avança para a próxima ronda'
     attempt_result:
       #original_hash: b3c8a02
@@ -1729,6 +1731,10 @@ pt:
       deleted: 'Sua inscrição em %{comp} foi excluída com sucesso'
       #original_hash: 648424f
       registered: Inscrição realizada!
+      #original_hash: 82fed60
+      imported: Registos importados com sucesso!
+      #original_hash: 3614fd1
+      added: Registo adicionado com sucesso!
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} para %{comp}'
@@ -1994,6 +2000,29 @@ pt:
         Nascimento, Sexo, Email e uma coluna para cada evento.
       #original_hash: d6fbc9d
       import: Importar
+      errors:
+        #original_hash: 0ef547d
+        error: 'Erro a importar %{registration}: %{error}.'
+        #original_hash: 2f0950e
+        missing_columns: 'Colunas em falta: %{columns}.'
+        #original_hash: 2454f20
+        over_competitor_limit: >-
+          O ficheiro inclui %{accepted_count} registos aceites, que é superior
+          ao limite de competidores de %{limit}.
+        #original_hash: e6d3197
+        invalid_event_column: >-
+          Colunas dos eventos devem conter 0 ou 1, encontrado %{value} na coluna
+          %{column}.
+        #original_hash: dcd2f6f
+        non_existent_wca_id: 'O ID da WCA %{wca_id} não existe.'
+        #original_hash: b5c8591
+        email_user_with_different_wca_id: >-
+          Já existe um utilizador com o email %{email}, mas tem o ID da WCA de
+          %{user_wca_id} em vez de %{registration_wca_id}.
+        #original_hash: c9586e9
+        email_user_with_different_unconfirmed_wca_id: >-
+          Já existe um utilizador com o email %{email}, mas tem o ID da WCA não
+          confirmado de %{unconfirmed_wca_id} em vez de %{registration_wca_id}.
     add:
       #original_hash: 975275e
       title: 'Adicionar registo para %{comp}'
@@ -2003,6 +2032,9 @@ pt:
         registos feitos durante a competição.
       #original_hash: a11edb8
       add: Adicionar registo
+      errors:
+        #original_hash: d6dcf5c
+        already_registered: Esta pessoa já tinha um registo.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -3547,12 +3579,13 @@ pt:
         O logotipo da WCA foi desenhado por Justin Eastman, num concurso em
         Janeiro de 2005.<br />Gostámos do logótipo por causa do design, das
         cores e o facto de que não mostra especificamente um Cubo 3x3x3.
-      #original_hash: f228da2
+      #original_hash: 916e3fc
       '2': >-
-        Temos três versões do logotipo: uma <a
+        Temos quatro versões do logotipo: uma <a
         href="/files/WCAlogo_XL.jpg">versão grande</a> (46 KB, 1756 px por 1068
-        px), uma <a href="/files/WCAlogo.svg">versão vetorial</a> e uma <a
-        href="/files/WCAlogo_notext.svg">versão vetorial sem texto</a>.
+        px), uma <a href="/files/WCAlogo.svg">versão vetorial</a>, uma <a
+        href="/files/WCAlogo_notext.svg">versão vetorial sem texto</a> e uma <a
+        href="/files/WCAlogo_monochrome.svg">versão vetorial monocromática</a>..
       #original_hash: dcb1ad6
       '3': >-
         Versão 3D do logótipo, desenhada por Vu Mihn Tan, do Vietname: <a
