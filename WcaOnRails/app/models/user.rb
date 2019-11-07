@@ -53,9 +53,24 @@ class User < ApplicationRecord
 
   attr_accessor :current_user
 
-  devise :database_authenticatable, :registerable,
+  devise :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
+  devise :two_factor_authenticatable,
+         otp_secret_encryption_key: ENVied.OTP_ENCRYPTION_KEY
+  BACKUP_CODES_LENGTH = 8
+  NUMBER_OF_BACKUP_CODES = 10
+  devise :two_factor_backupable,
+         otp_backup_code_length: BACKUP_CODES_LENGTH,
+         otp_number_of_backup_codes: NUMBER_OF_BACKUP_CODES
+
+  # Backup OTP are stored as a string array in the db
+  serialize :otp_backup_codes
+
+  def two_factor_enabled?
+    otp_required_for_login
+  end
+
   # When creating an account, we actually don't mind if the user leaves their
   # name empty, so long as they're a returning competitor and are claiming their
   # wca id.

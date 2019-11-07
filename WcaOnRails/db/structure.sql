@@ -1312,6 +1312,12 @@ CREATE TABLE `users` (
   `competition_notifications_enabled` tinyint(1) DEFAULT NULL,
   `receive_delegate_reports` tinyint(1) NOT NULL DEFAULT '0',
   `dummy_account` tinyint(1) NOT NULL DEFAULT '0',
+  `encrypted_otp_secret` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `encrypted_otp_secret_iv` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `encrypted_otp_secret_salt` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `consumed_timestep` int(11) DEFAULT NULL,
+  `otp_required_for_login` tinyint(1) DEFAULT '0',
+  `otp_backup_codes` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1618,4 +1624,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190826005902'),
 ('20190916133253'),
 ('20191005203556'),
-('20191013211511');
+('20191013211511'),
+('20191107212356');

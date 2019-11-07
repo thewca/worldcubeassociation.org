@@ -37,6 +37,8 @@ gem 'devise'
 # See https://github.com/hisea/devise-bootstrap-views/issues/55 for more details.
 gem 'devise-i18n'
 gem 'devise-bootstrap-views'
+gem 'devise-two-factor'
+gem 'rqrcode'
 gem 'doorkeeper'
 gem 'doorkeeper-i18n'
 gem 'strip_attributes'

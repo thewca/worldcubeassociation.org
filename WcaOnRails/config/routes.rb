@@ -5,9 +5,9 @@ Rails.application.routes.draw do
     controllers applications: 'oauth/applications'
   end
 
-  # Prevent account deletion.
+  # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
-  devise_for :users, skip: :registrations
+  devise_for :users, skip: :registrations, controllers: { sessions: "sessions" }
   devise_scope :user do
     resource :registration,
              only: [:new, :create],
@@ -17,11 +17,14 @@ Rails.application.routes.draw do
              as: :user_registration do
                get :cancel
              end
+    post 'users/generate-email-otp' => 'sessions#generate_email_otp'
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   post 'registration/:id/process-payment-intent' => 'registrations#process_payment_intent', as: :registration_payment_intent
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
+  post 'profile/enable-2fa' => 'users#enable_2fa'
+  post 'profile/generate-2fa-backup' => 'users#regenerate_2fa_backup_codes'
 
   get 'profile/claim_wca_id' => 'users#claim_wca_id'
   get 'profile/claim_wca_id/select_nearby_delegate' => 'users#select_nearby_delegate'

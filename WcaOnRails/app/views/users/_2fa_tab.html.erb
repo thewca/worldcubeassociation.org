@@ -1,0 +1,81 @@
+
+<p>
+<%= t("devise.sessions.new.2fa.support_desc_html",
+      two_factor_link: link_to(t("devise.sessions.new.2fa.name"),
+                               "https://en.wikipedia.org/wiki/Multi-factor_authentication",
+                               target: "_blank")) %>
+</p>
+<ul>
+  <li><%= t("devise.sessions.new.2fa.options.app") %></li>
+  <li><%= t("devise.sessions.new.2fa.options.recovery") %></li>
+  <li><%= t("devise.sessions.new.2fa.options.email") %></li>
+</ul>
+
+<% status = @user.otp_required_for_login ? t("devise.sessions.new.2fa.enabled") : t("devise.sessions.new.2fa.disabled") %>
+<p><%= t("devise.sessions.new.2fa.status_html", status: raw("<b>#{status}</b>")) %></p>
+<% unless @user.otp_required_for_login %>
+  <%= link_to t("devise.sessions.new.2fa.enable"), profile_enable_2fa_path, class: "btn btn-primary", method: :post %>
+<% else %>
+  <p><%= t("devise.sessions.new.2fa.reset_if_needed") %></p>
+  <%= link_to t("devise.sessions.new.2fa.reset"), profile_enable_2fa_path, class: "btn btn-danger", method: :post %>
+  <p class="help-block"><%= t("devise.sessions.new.2fa.reset_warning") %></p>
+
+  <h2><%= t("devise.sessions.new.2fa.methods") %></h2>
+
+  <p><%= t("devise.sessions.new.2fa.methods_description") %></p>
+
+  <h3><%= t("devise.sessions.new.2fa.dedicated_app") %></h3>
+  <p><%= t("devise.sessions.new.2fa.dedicated_app_desc_html",
+           authy: link_to("Authy", "https://authy.com/download/"),
+           google: link_to("Google Authenticator", "https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"),
+           microsoft: link_to("Microsoft Authenticator", "https://www.microsoft.com/en-us/account/authenticator")) %></p>
+
+  <p><%= t("devise.sessions.new.2fa.scan_qrcode_html",
+           here: link_to(t("common.here"), otp_provisioning_uri_for_user(@user))) %></p>
+  <%= raw(qrcode_for_user(@user).as_svg(
+    offset: 0,
+    color: '000',
+    shape_rendering: 'crispEdges',
+    module_size: 4
+  )) %>
+
+  <h3><%= t("devise.sessions.new.2fa.backup_codes") %></h3>
+  <p><%= t("devise.sessions.new.2fa.backup_codes_desc") %></p>
+
+  <% if !@user.otp_backup_codes %>
+    <p><%= t("devise.sessions.new.2fa.no_backup_codes") %></p>
+  <% else %>
+    <p><%= t("devise.sessions.new.2fa.regenerate_backup_codes") %></p>
+  <% end %>
+
+  <%= link_to(t("devise.sessions.new.2fa.generate_backup_codes"), "#",
+              class: "btn btn-primary", id: "generate_2fa_backup") %>
+  <p class="help-block"><%= t("devise.sessions.new.2fa.backup_codes_warning") %></p>
+  <pre id="backup_codes" style="display: none;">
+  </pre>
+
+  <h3><%= t("devise.sessions.new.2fa.email_auth") %></h3>
+  <p><%= t("devise.sessions.new.2fa.email_auth_desc") %></p>
+
+  <script>
+    function handleServerResponse(response) {
+      response_json = response.responseJSON;
+      if (response_json.error) {
+        alert("Could not generate backup codes: " + response_json.error.message);
+      } else {
+        $("#backup_codes").show();
+        $("#backup_codes").text(response_json.codes.join("\n"));
+      }
+    }
+
+    $("#generate_2fa_backup").click(function(ev) {
+      ev.preventDefault();
+      wca.cancelPendingAjaxAndAjax('get-2fa-backup', {
+        url: '<%= profile_generate_2fa_backup_path %>',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
+        complete: handleServerResponse,
+      });
+    });
+  </script>
+<% end %>
