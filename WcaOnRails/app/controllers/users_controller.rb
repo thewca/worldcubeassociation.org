@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:search, :select_nearby_delegate]
+  before_action :authenticate_user!, except: [:select_nearby_delegate]
 
   def self.WCA_TEAMS
     %w(wst wrt wdc wrc wct)
@@ -50,6 +50,31 @@ class UsersController < ApplicationController
     User.find_by_id(params[:id] || current_user.id)
   end
 
+  def enable_2fa
+    # NOTE: current_user is not nil as authenticate_user! is called first
+    params[:section] = "2fa"
+    was_enabled = current_user.otp_required_for_login
+    current_user.otp_required_for_login = true
+    current_user.otp_secret = User.generate_otp_secret
+    current_user.save!
+    if was_enabled
+      flash[:success] = I18n.t("devise.sessions.new.2fa.regenerated_secret")
+    else
+      flash[:success] = I18n.t("devise.sessions.new.2fa.enabled_success")
+    end
+    @user = current_user
+    render :edit
+  end
+
+  def regenerate_2fa_backup_codes
+    unless current_user.otp_required_for_login
+      return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.not_enabled") } }
+    end
+    codes = current_user.generate_otp_backup_codes!
+    current_user.save!
+    render json: { codes: codes }
+  end
+
   def edit
     params[:section] ||= "general"
 
@@ -94,6 +119,7 @@ class UsersController < ApplicationController
         DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(@user, current_user).deliver_now
       end
       if current_user == @user
+        # TODO: for 2FA, log them out and explicitly ask for a re-login
         # Sign in the user, bypassing validation in case their password changed
         bypass_sign_in @user
       end

@@ -638,11 +638,17 @@ module DatabaseDumper
         db_default: %w(
           confirmation_sent_at
           confirmation_token
+          consumed_timestep
           current_sign_in_ip
+          encrypted_otp_secret
+          encrypted_otp_secret_iv
+          encrypted_otp_secret_salt
           encrypted_password
           last_sign_in_ip
           location_description
           notes
+          otp_backup_codes
+          otp_required_for_login
           pending_avatar
           phone_number
           preferred_locale

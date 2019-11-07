@@ -58,6 +58,7 @@
       <li><a href="#email" data-toggle="tab"><%= t '.email' %></a></li>
       <li><a href="#preferences" data-toggle="tab"><%= t '.preferences' %></a></li>
       <li><a href="#password" data-toggle="tab"><%= t '.password' %></a></li>
+      <li><a href="#2fa" data-toggle="tab">2FA</a></li>
     <% end %>
     <% if current_user.can_change_users_avatar?(@user) %>
       <li><a href="#avatar" data-toggle="tab">Avatar</a></li>
@@ -181,6 +182,10 @@
 
           <%= f.submit t('.save'), class: "btn btn-primary" %>
         <% end %>
+      </div>
+
+      <div class="tab-pane active" id="2fa">
+        <%= render "2fa_tab" %>
       </div>
     <% end %>
 

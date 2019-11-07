@@ -83,6 +83,8 @@ GEM
     api-pagination (4.8.2)
     arel (9.0.0)
     ast (2.4.0)
+    attr_encrypted (3.1.0)
+      encryptor (~> 3.0.0)
     autoprefixer-rails (9.4.7)
       execjs
     aws-eventstream (1.0.3)
@@ -141,6 +143,7 @@ GEM
       json (>= 1.7)
       mime-types (>= 1.16)
     childprocess (3.0.0)
+    chunky_png (1.3.11)
     cldr-plurals-runtime-rb (1.0.1)
     cliver (0.3.2)
     cocoon (1.2.14)
@@ -179,6 +182,12 @@ GEM
     devise-bootstrap-views (1.1.0)
     devise-i18n (1.9.0)
       devise (>= 4.7.1)
+    devise-two-factor (3.1.0)
+      activesupport (< 6.1)
+      attr_encrypted (>= 1.3, < 4, != 2)
+      devise (~> 4.0)
+      railties (< 6.1)
+      rotp (~> 2.0)
     diff-lcs (1.3)
     docile (1.3.1)
     domain_name (0.5.20190701)
@@ -191,6 +200,7 @@ GEM
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
       railties (>= 3.2, < 6.1)
+    encryptor (3.0.0)
     enum_help (0.0.17)
       activesupport (>= 3.0.0)
     envied (0.9.1)
@@ -469,6 +479,11 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     retriable (3.1.2)
+    rotp (2.1.2)
+    rqrcode (1.1.2)
+      chunky_png (~> 1.0)
+      rqrcode_core (~> 0.1)
+    rqrcode_core (0.1.1)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -630,6 +645,7 @@ DEPENDENCIES
   devise
   devise-bootstrap-views
   devise-i18n
+  devise-two-factor
   doorkeeper
   doorkeeper-i18n
   dotenv-rails
@@ -682,6 +698,7 @@ DEPENDENCIES
   recaptcha
   redcarpet
   rest-client
+  rqrcode
   rspec-rails
   rubocop
   sassc-rails
