@@ -16,14 +16,14 @@ RSpec.describe SyncMailingListsJob, type: :job do
     asia_japan_delegate.senior_delegate.update(region: "Asia Japan (Osaka, Japan)")
     asia_southeast_delegate = FactoryBot.create :delegate
     asia_southeast_delegate.senior_delegate.update(region: "Asia Southeast (Philippines)")
-    asia_west_india_delegate = FactoryBot.create :delegate
-    asia_west_india_delegate.senior_delegate.update(region: "Asia West & India (India)")
-    europe_east_middle_east_delegate = FactoryBot.create :delegate
-    europe_east_middle_east_delegate.senior_delegate.update(region: "Europe East & Middle East (Netherlands)")
+    asia_west_south_delegate = FactoryBot.create :delegate
+    asia_west_south_delegate.senior_delegate.update(region: "Asia West & South (India)")
+    europe_central_eurasia_delegate = FactoryBot.create :delegate
+    europe_central_eurasia_delegate.senior_delegate.update(region: "Central Eurasia (Ukraine)")
     europe_north_baltic_states_delegate = FactoryBot.create :delegate
     europe_north_baltic_states_delegate.senior_delegate.update(region: "Europe North & Baltic States (Denmark)")
-    europe_west_delegate = FactoryBot.create :delegate
-    europe_west_delegate.senior_delegate.update(region: "Europe West (Germany)")
+    europe_delegate = FactoryBot.create :delegate
+    europe_delegate.senior_delegate.update(region: "Europe (Germany)")
     latin_america_delegate = FactoryBot.create :delegate
     latin_america_delegate.senior_delegate.update(region: "Latin America (Peru)")
     oceania_delegate = FactoryBot.create :delegate
@@ -37,10 +37,10 @@ RSpec.describe SyncMailingListsJob, type: :job do
                                       delegate.email, delegate.senior_delegate.email, senior_delegate.email, africa_delegate.email,
                                       africa_delegate.senior_delegate.email, asia_east_delegate.email, asia_east_delegate.senior_delegate.email,
                                       asia_japan_delegate.email, asia_japan_delegate.senior_delegate.email, asia_southeast_delegate.email,
-                                      asia_southeast_delegate.senior_delegate.email, asia_west_india_delegate.email, asia_west_india_delegate.senior_delegate.email,
-                                      europe_east_middle_east_delegate.email, europe_east_middle_east_delegate.senior_delegate.email,
+                                      asia_southeast_delegate.senior_delegate.email, asia_west_south_delegate.email, asia_west_south_delegate.senior_delegate.email,
+                                      europe_central_eurasia_delegate.email, europe_central_eurasia_delegate.senior_delegate.email,
                                       europe_north_baltic_states_delegate.email, europe_north_baltic_states_delegate.senior_delegate.email,
-                                      europe_west_delegate.email, europe_west_delegate.senior_delegate.email, latin_america_delegate.email,
+                                      europe_delegate.email, europe_delegate.senior_delegate.email, latin_america_delegate.email,
                                       latin_america_delegate.senior_delegate.email, oceania_delegate.email, oceania_delegate.senior_delegate.email,
                                       usa_canada_delegate.email, usa_canada_delegate.senior_delegate.email),
     )
@@ -51,8 +51,8 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(candidate_delegate.senior_delegate.email, delegate.senior_delegate.email,
                                       senior_delegate.email, africa_delegate.senior_delegate.email, asia_east_delegate.senior_delegate.email,
                                       asia_japan_delegate.senior_delegate.email, asia_southeast_delegate.senior_delegate.email,
-                                      asia_west_india_delegate.senior_delegate.email, europe_east_middle_east_delegate.senior_delegate.email,
-                                      europe_north_baltic_states_delegate.senior_delegate.email, europe_west_delegate.senior_delegate.email,
+                                      asia_west_south_delegate.senior_delegate.email, europe_central_eurasia_delegate.senior_delegate.email,
+                                      europe_north_baltic_states_delegate.senior_delegate.email, europe_delegate.senior_delegate.email,
                                       latin_america_delegate.senior_delegate.email, oceania_delegate.senior_delegate.email, usa_canada_delegate.senior_delegate.email),
     )
 
@@ -210,19 +210,17 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(asia_southeast_delegate.email, asia_southeast_delegate.senior_delegate.email),
     )
 
-    # delegates.asia-west-india@ mailing list
-    # TODO: This is temporarily disabled as a workaround for
-    # https://github.com/thewca/worldcubeassociation.org/issues/4674.
-    # expect(GsuiteMailingLists).to receive(:sync_group).with(
-    #   "delegates.asia-west-india@worldcubeassociation.org",
-    #   a_collection_containing_exactly(asia_west_india_delegate.email, asia_west_india_delegate.senior_delegate.email),
-    # )
+    # delegates.asia-west-south@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "delegates.asia-west-south@worldcubeassociation.org",
+      a_collection_containing_exactly(asia_west_south_delegate.email, asia_west_south_delegate.senior_delegate.email),
+    )
 
-    # delegates.europe-east-middle-east@ mailing list
-    # expect(GsuiteMailingLists).to receive(:sync_group).with(
-    #   "delegates.europe-east-middle-east@worldcubeassociation.org",
-    #   a_collection_containing_exactly(europe_east_middle_east_delegate.email, europe_east_middle_east_delegate.senior_delegate.email),
-    # )
+    # delegates.central-eurasia@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "delegates.central-eurasia@worldcubeassociation.org",
+      a_collection_containing_exactly(europe_central_eurasia_delegate.email, europe_central_eurasia_delegate.senior_delegate.email),
+    )
 
     # delegates.europe-north-baltic-states@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
@@ -230,11 +228,11 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(europe_north_baltic_states_delegate.email, europe_north_baltic_states_delegate.senior_delegate.email),
     )
 
-    # delegates.europe-west@ mailing list
-    # expect(GsuiteMailingLists).to receive(:sync_group).with(
-    #   "delegates.europe-west@worldcubeassociation.org",
-    #   a_collection_containing_exactly(europe_west_delegate.email, europe_west_delegate.senior_delegate.email),
-    # )
+    # delegates.europe@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "delegates.europe@worldcubeassociation.org",
+      a_collection_containing_exactly(europe_delegate.email, europe_delegate.senior_delegate.email),
+    )
 
     # delegates.latin-america@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
