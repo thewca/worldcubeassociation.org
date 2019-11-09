@@ -69,7 +69,7 @@ module CompetitionsHelper
   end
 
   def results_content(competition)
-    days_results = days_after_competition(competition.results_posted_at, competition)
+    days_results = days_after_competition(competition.results_submitted_at, competition)
     if days_results
       "#{pluralize(days_results, "day")} after"
     else
