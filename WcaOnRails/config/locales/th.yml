@@ -217,7 +217,9 @@ th:
         moves: 'จำนวนครั้งที่ดีที่สุด < %{moves}'
         #original_hash: c3133c2
         points: 'คะแนนที่ดีที่สุด > %{points}'
+    #original_hash: 6e55337
     ranking: '%{ranking} อันดับแรก ผ่านเข้าสู่รอบถัดไป'
+    #original_hash: 7ee969c
     percent: '%{percent}% แรก ผ่านเข้าสู่รอบถัดไป'
     attempt_result:
       #original_hash: b3c8a02
@@ -771,11 +773,10 @@ th:
         external_website: website ของการแข่งขัน ต้องเป็น http(s) url ที่ถูกต้อง
         #original_hash: 9965635
         registration_open: เวลาเปิดและปิดรับสมัคร (UTC time)
-        #original_hash: bd402bf
-        remarks_html: >-
-          ข้อมูลเพิ่มเติมบางอย่างที่คุณต้องการส่งต่อไปยัง WCAT
-          ตัวอย่างเช่นอธิบายเหตุผลของคุณหากมีการร้องขอการแข่งขันน้อยกว่าสี่สัปดาห์หรือหากคุณกำลังร้องขอแอปพลิเคชัน
-          %{link}. กรุณากรอกเป็นภาษาอังกฤษ!
+        #original_hash: 9ea6021
+        remarks: >-
+          ข้อมูลบางอย่างที่คุณอยากส่งให้ WCAT เช่น บางอย่างที่คุณไม่มั่นใจกับมัน
+          หรือคำขอพิเศษที่จะส่งไปให้ WCAT กรุณากรอกเป็นภาษาอังกฤษ!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -1264,6 +1265,8 @@ th:
       delegate: Delegate
       #original_hash: 2f4bd74
       panel: Panel
+      #original_hash: db34e41
+      polls: การออกเสียงลงคะแนน
       #original_hash: d3a928c
       results_team: Results team
       #original_hash: 4e7afeb
@@ -1561,6 +1564,8 @@ th:
         มันถูกสร้างขึ้นโดยอัตโนมัติหลังจากที่ผลการแข่งขันของคุณที่ลงทะเบียนจากภายนอก
         ถ้าคุณเป็นเจ้าของ email นี้ คุณสามารถใช้ account
         นี้ได้หลังจากตั้งรหัสผ่านใหม่ <a href='/users/password/new'>ที่นี่</a>.
+      #original_hash: 50897d4
+      must_match_person: ต้องจับคู่บุคคลกับให้ถูกต้องกับ WCA ID
     successes:
       messages:
         #original_hash: 31bd401
@@ -1649,6 +1654,10 @@ th:
       deleted: 'ลบการสมัครการแข่งขัน %{comp} สำเร็จแล้ว'
       #original_hash: 648424f
       registered: สมัครการแข่งขันสำเร็จแล้ว
+      #original_hash: 82fed60
+      imported: นำเข้าการสมัครสำเร็จ
+      #original_hash: 3614fd1
+      added: เพิ่มการสมัครสำเร็จ
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} สำหรับ %{comp}'
@@ -1895,6 +1904,27 @@ th:
         และแต่ละคอลัมน์ของประเภทการแข่งขัน
       #original_hash: d6fbc9d
       import: นำเข้า
+      errors:
+        #original_hash: 0ef547d
+        error: 'มีข้อผิดพลาดในการนำเข้า %{registration}: %{error}'
+        #original_hash: 2f0950e
+        missing_columns: 'คอลัมน์ %{columns} หายไป'
+        #original_hash: 2454f20
+        over_competitor_limit: >-
+          ไฟล์ที่ส่งมามีจำนวนผู้สมัครที่ได้รับการยอมรับ %{accepted_count}
+          ซึ่งมากกว่าจำกัดจำนวนผู้เข้าแข่งขันที่ %{limit} คน
+        #original_hash: e6d3197
+        invalid_event_column: 'คอลัมน์ Event ควรมีแค่ 0 หรือ 1 พบ %{value} ในคอลัมน์ %{column}.'
+        #original_hash: dcd2f6f
+        non_existent_wca_id: 'ไม่พบ WCA ID %{wca_id}'
+        #original_hash: b5c8591
+        email_user_with_different_wca_id: >-
+          พบผู้ใช้งานที่มี email %{email} แต่มี WCA ID %{user_wca_id} ไม่ใช่
+          %{registration_wca_id}.
+        #original_hash: c9586e9
+        email_user_with_different_unconfirmed_wca_id: >-
+          พบผู้สมัครที่ใช้ email %{email} แต่มี WCA ID ยังไม่ได้ยืนยัน
+          %{unconfirmed_wca_id} ซึ่งไม่ใช่ %{registration_wca_id}.
     add:
       #original_hash: 975275e
       title: 'เพิ่มการสมัครของ %{comp}'
@@ -1904,6 +1934,9 @@ th:
         กรุณาใช้ฟอร์มนี้เพื่อเพิ่มการสมัครที่การแข่งขัน
       #original_hash: a11edb8
       add: เพิ่มการสมัคร
+      errors:
+        #original_hash: d6dcf5c
+        already_registered: ผู้สมัครรายนี้มีได้ทำการสมัครไปแล้ว
   competitions:
     messages:
       #original_hash: 7b80062
@@ -3338,25 +3371,26 @@ th:
     #original_hash: ea9d41d
     title: WCA Score Taking tools
     paragraphs:
-      #original_hash: 2c5ad71
+      #original_hash: 305f7f8
       '1': >-
-        WCA แนะนำให้ใช้ <a href="http://cubecomps.com">Cube Comps</a>
-        ก่อนและระหว่างการแข่งขัน Cube Comps
+        WCA แนะนำให้ใช้ <a href="https://live.worldcubeassociation.org">WCA
+        Live</a> ก่อนและระหว่างการแข่งขัน WCA Live
         เป็นระบบออนไลน์ที่มีการให้คะแนนแบบสดและคุณสมบัติที่น่าสนใจมากมายเช่นการพิมพ์แผ่นคะแนนและระบบป้อนข้อมูลผู้ใช้หลายคนที่มีประสิทธิภาพมาก
-        สร้างโดย Luis J. Iáñez และตอนนี้เป็น Open Source
-      #original_hash: 7438b0d
+      #original_hash: 0867b38
       '2': >-
-        ใบคะแนนและโจทย์ควรถูกจัดการและตรวจสอบโดยใช้ %{workbook_link}
-        ก่อนที่จะส่งให้ WCA Results Team
+        ใบคะแนนและโจทย์ควรถูกจัดการและตรวจสอบข้อผิดพลาดก่อนที่จะส่งให้ WCA
+        Results Team คุณสามารถใช้ <a
+        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
+        Matcher</a> ซึ่งเป็น Open Source สร้างโดย Philippe Virouleau
       #original_hash: 975e59b
       '3': >-
         คุณสามารถดาวน์โหลดใบคะแนนการแข่งขัน WCA เวอร์ชันล่าสุดได้ที่นี่ <br /><a
         href="/files/results.xls" target="_blank">WCA competition Score
         sheet</a>.
-      #original_hash: a5f2d25
+      #original_hash: c576675
       '4': >-
         คุณอาจต้องการใช้ <a
-        href="https://jonatanklosko.github.io/groupifier">Groupifier</a>
+        href="https://groupifier.jonatanklosko.github.io/groupifiercom">Groupifier</a>
         เพื่อจัดเตรียมกลุ่มผู้เข้าแข่งขัน
         มันเป็นเครื่องมือที่มีจุดมุ่งหมายที่จะทำสิ่งนี้ให้คุณ
         คุณสมบัติหลักที่คุณจะได้พบ: การเรียงลำดับผู้เข้าแข่งขันตามการจัดอันดับ,
@@ -3373,11 +3407,12 @@ th:
         ในการประกวดออกแบบในเดือนมกราคม 2005 <br />
         เราชอบโลโก้เนื่องจากการออกแบบ, สี, และมันไม่ได้แสดงลูกบาศก์ 3x3x3
         โดยเฉพาะ
-      #original_hash: f228da2
+      #original_hash: 916e3fc
       '2': >-
-        เรามีโลโก้สามรูปแบบ: <a href="/files/WCAlogo_XL.jpg">ขนาดใหญ่</a> (46
-        KB, 1756 px by 1068 px), <a href="/files/WCAlogo.svg">vector</a> และ <a
-        href="/files/WCAlogo_notext.svg">vector ที่ไม่มีตัวอักษร</a>.
+        เรามีโลโก้สี่รูปแบบ: <a href="/files/WCAlogo_XL.jpg">ขนาดใหญ่</a> (46
+        KB, 1756 px by 1068 px), <a href="/files/WCAlogo.svg">vector</a>, <a
+        href="/files/WCAlogo_notext.svg">vector ที่ไม่มีตัวอักษร</a> และ <a
+        href="/files/WCAlogo_monochrome.svg">monochrome vector</a>.
       #original_hash: dcb1ad6
       '3': >-
         โลโก้ 3 มิติออกแบบโดย Vu Minh Tan จากเวียดนาม: <a
