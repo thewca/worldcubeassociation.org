@@ -112,8 +112,7 @@ Rails.application.routes.draw do
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
 
   get 'panel' => 'panel#index'
-  get 'panel/delegate-crash-course' => 'panel#delegate_crash_course'
-  get 'panel/delegate-crash-course/edit' => 'panel#edit_delegate_crash_course'
+  get 'panel/delegate-crash-course', to: redirect('/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
   patch 'panel/delegate-crash-course' => 'panel#update_delegate_crash_course'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   get 'panel/seniors' => 'panel#seniors'
@@ -139,6 +138,7 @@ Rails.application.routes.draw do
   get 'about' => 'static_pages#about'
   get 'teams-committees' => 'static_pages#teams_committees'
   get 'documents' => 'static_pages#documents'
+  get 'education' => 'static_pages#education'
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
   get 'contact' => 'static_pages#contact'
@@ -150,7 +150,7 @@ Rails.application.routes.draw do
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
-  get 'tutorial' => redirect('/files/WCA_Competition_Tutorial.pdf', status: 302)
+  get 'tutorial' => redirect('/education', status: 302)
 
   resources :regional_organizations, only: [:new, :update, :edit], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
