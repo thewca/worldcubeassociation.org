@@ -762,7 +762,7 @@ en:
       faq: "Frequently Asked Questions"
       forum: "Forum"
       teams: "Teams, Committees, and Councils"
-      tutorial: "Competition Tutorial"
+      education: "Education resources"
       contact: "Contact Information"
       tools: "Tools"
       logo: "Logo"
@@ -1865,6 +1865,11 @@ en:
     minutes: "Minutes"
     policies: "WCA Policies"
     codeofethics: "Code of Ethics"
+  education:
+    title: "WCA Educational Documents"
+    description: "The WQAC and WMT has published several documents for the community, you can download them below."
+    competitor_tutorial: "Competitor tutorial"
+    competition_material: "Competition material (certificates, cube covers, ...)"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"

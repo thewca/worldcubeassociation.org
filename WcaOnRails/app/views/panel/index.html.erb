@@ -7,6 +7,9 @@
 
   <ul>
     <%= documents_list("policies/internal") %>
+    <li>
+      <%= link_to("Staff crash course", "/edudoc/staff-crash-course/staff_crash_course.pdf") %>
+    </li>
   </ul>
 
   <% if current_user&.can_view_delegate_crash_course? %>
