@@ -307,7 +307,7 @@ class CompetitionResultsValidator
         @errors[:persons] << format(WHITESPACE_IN_NAME_ERROR, name: p.name)
       end
       if /[[:alnum:]]\(/ =~ p.name
-        @errors[:persons] << format(WRONG_PARENTHETHIS_FORMAT_ERROR, name: p.name)
+        @errors[:persons] << format(WRONG_PARENTHESIS_FORMAT_ERROR, name: p.name)
       end
     end
     existing_person_by_wca_id = Hash[Person.current.where(wca_id: with_wca_id.map(&:wca_id)).map { |p| [p.wca_id, p] }]
