@@ -6,10 +6,13 @@
 }
 
 .badge {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+  margin-right: 6px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   &.team-member-badge {
-    margin-right: 1em;
-    margin-bottom: 0.5em;
-    margin-top: 0.5em;
+    vertical-align: top;
     color: $gray;
     background-color: $gray-lighter;
     .avatar-thumbnail {
@@ -27,8 +30,6 @@
   &.team-senior-member-badge {
     background-color: $dark-green;
     color: white;
-    padding-top: 6px;
-    padding-bottom: 6px;
     vertical-align: top;
     span.team-subtext {
       font-style: oblique;
@@ -49,8 +50,6 @@
   &.officer-badge {
     background-color: $dark-blue;
     color: white;
-    padding-top: 6px;
-    padding-bottom: 6px;
     vertical-align: top;
     span.team-subtext {
       font-style: oblique;
@@ -73,6 +72,15 @@
   }
 
   &.team-email {
+    a {
+      color: white;
+    }
+  }
+
+  &.delegate-badge {
+    background-color: $dark-red;
+    color: white;
+    vertical-align: top;
     a {
       color: white;
     }
