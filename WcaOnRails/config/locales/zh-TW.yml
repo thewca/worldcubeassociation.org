@@ -215,7 +215,9 @@ zh-TW:
         moves: '最佳成績優於 %{moves} 步'
         #original_hash: c3133c2
         points: '最佳成績優於 %{points} 點'
+    #original_hash: 6e55337
     ranking: '前 %{ranking} 名晉級下一輪'
+    #original_hash: 7ee969c
     percent: '前 %{percent}% 晉級下一輪'
     attempt_result:
       #original_hash: b3c8a02
@@ -431,7 +433,7 @@ zh-TW:
         #original_hash: 3c23a67
         guests_enabled: 陪同者
         #original_hash: 089cbfd
-        receive_registration_emails: 當有人報名這場比賽時，我要收到報名通知
+        receive_registration_emails: 當有人報名這場比賽時，我要收到關於報名的電子郵件通知。
         #original_hash: d4aeed9
         registration_open: 報名開始
         #original_hash: f8153a2
@@ -488,7 +490,7 @@ zh-TW:
         #original_hash: c5497bc
         registration_competition_events: 項目
         #original_hash: 84add5b
-        email: Email
+        email: 電子郵件
       competition_tab:
         #original_hash: 4f9be05
         content: 內容
@@ -598,7 +600,7 @@ zh-TW:
         #original_hash: 83fce83
         logo: 標誌
         #original_hash: 84add5b
-        email: Email
+        email: 電子郵件
         #original_hash: 82c42fb
         address: 官方地址
         #original_hash: 9855f80
@@ -1094,7 +1096,7 @@ zh-TW:
         #original_hash: d4003be
         dob: 連結您的生日
         #original_hash: 17aa24f
-        email: 連結您的email
+        email: 連結您的電子郵件
         #original_hash: e0d0654
         manage_competitions: 管理您負責的比賽
     devise:
@@ -1756,6 +1758,10 @@ zh-TW:
         email_user_with_different_unconfirmed_wca_id: >-
           已經有帳號是使用 %{email} 的電子郵件，但有未確認的 WCA ID %{unconfirmed_wca_id} 而不是導入中的
           %{registration_wca_id}。
+        #original_hash: 91a1582
+        email_duplicates: '一個電子郵件必須只能被用一次，以下為重複的電子郵件：%{emails}'
+        #original_hash: d3f3fd2
+        wca_id_duplicates: '一個WCA ID必須只能被用一次，以下為重複的WCA ID：%{wca_ids}。'
     add:
       #original_hash: 975275e
       title: '新增%{comp}的報名資料'
@@ -2716,6 +2722,9 @@ zh-TW:
       treasurer:
         #original_hash: 75e65d9
         name: WCA財務長
+      users:
+        #original_hash: 57bbaad
+        profile: '%{user_name}的個人資料。'
       wdc:
         #original_hash: c97077a
         name: WCA紀律委員會
