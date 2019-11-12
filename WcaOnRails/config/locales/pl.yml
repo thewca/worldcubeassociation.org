@@ -215,7 +215,9 @@ pl:
         moves: 'Najlepszy wynik < %{moves}'
         #original_hash: c3133c2
         points: 'Najlepszy wynik > %{points}'
+    #original_hash: 6e55337
     ranking: 'Najlepsze %{ranking} osób awansuje do następnej rundy'
+    #original_hash: 7ee969c
     percent: 'Najlepsze %{percent}% osób awansuje do następnej rundy'
     attempt_result:
       #original_hash: b3c8a02
@@ -2085,6 +2087,14 @@ pl:
           Istnieje już użytkownik z adresem email %{email}, ale ma
           niepotwierdzone WCA ID %{unconfirmed_wca_id} zamiast
           %{registration_wca_id}.
+        #original_hash: 91a1582
+        email_duplicates: >-
+          Adresy E-mail muszą być unikatowe, znaleziono następujące duplikaty:
+          %{emails}.
+        #original_hash: d3f3fd2
+        wca_id_duplicates: >-
+          WCA ID muszą być unikatowe, znaleziono następujące duplikaty:
+          %{wca_ids}.
     add:
       #original_hash: 975275e
       title: 'Dodaj rejestrację dla %{comp}'
@@ -3253,6 +3263,9 @@ pl:
       treasurer:
         #original_hash: 75e65d9
         name: Skarbnik WCA
+      users:
+        #original_hash: 57bbaad
+        profile: 'Profil %{user_name}'
       wdc:
         #original_hash: c97077a
         name: Komitet Dyscyplinarny WCA (WDC)
@@ -3354,7 +3367,7 @@ pl:
         name: Komitet Doradczy WCA
         #original_hash: fb6cd86
         description: >-
-          Ta rada jest odpowiedzialna za budowanie oraz utrzymwanie bustronnej
+          Ta rada jest odpowiedzialna za budowanie oraz utrzymywanie obustronnej
           komunikacji pomiędzy Społecznością WCA oraz Personelem WCA.
       banned:
         #original_hash: d30e2e5
@@ -3594,7 +3607,7 @@ pl:
     wac:
       #original_hash: fb6cd86
       info_html: >-
-        Ta rada jest odpowiedzialna za budowanie oraz utrzymwanie bustronnej
+        Ta rada jest odpowiedzialna za budowanie oraz utrzymywanie obustronnej
         komunikacji pomiędzy Społecznością WCA oraz Personelem WCA.
   score_tools:
     #original_hash: ea9d41d
