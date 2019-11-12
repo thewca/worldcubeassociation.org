@@ -300,7 +300,7 @@ RSpec.describe "registrations" do
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", user.name, user.country.name, "", user.dob, user.gender, user.email, "1", "0"],
+              ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "0"],
             ]
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
@@ -315,7 +315,7 @@ RSpec.describe "registrations" do
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", user.name, user.country.name, "", user.dob, user.gender, user.email, "1", "1"],
+              ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "1"],
             ]
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
@@ -331,7 +331,7 @@ RSpec.describe "registrations" do
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", user.name, user.country.name, "", user.dob, user.gender, user.email, "1", "0"],
+              ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "0"],
             ]
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
