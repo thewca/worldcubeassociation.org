@@ -215,7 +215,9 @@ es:
         moves: 'Mejor resultado < %{moves}'
         #original_hash: c3133c2
         points: 'Mejor resultado > %{points}'
+    #original_hash: 6e55337
     ranking: 'Los mejores %{ranking} pasan a la siguiente ronda'
+    #original_hash: 7ee969c
     percent: 'El %{percent}% mejor pasa a la siguiente ronda'
     attempt_result:
       #original_hash: b3c8a02
@@ -2056,6 +2058,14 @@ es:
         email_user_with_different_unconfirmed_wca_id: >-
           Ya existe un usuario con correo %{email}, pero tiene un WCA ID sin
           confirmar de %{unconfirmed_wca_id} en vez de %{registration_wca_id}.
+        #original_hash: 91a1582
+        email_duplicates: >-
+          Los Correos electrónicos deben ser únicos, Se encontraron los
+          siguientes duplicados: %{emails}.
+        #original_hash: d3f3fd2
+        wca_id_duplicates: >-
+          Los WCA ID deben ser únicos, se encontraron los siguientes duplicados:
+          %{wca_ids}.
     add:
       #original_hash: 975275e
       title: 'Añadir registros para %{comp}'
@@ -3249,6 +3259,9 @@ es:
       treasurer:
         #original_hash: 75e65d9
         name: Tesorero WCA
+      users:
+        #original_hash: 57bbaad
+        profile: 'Perfil de %{user_name}'
       wdc:
         #original_hash: c97077a
         name: Comité Disciplinario de la WCA
