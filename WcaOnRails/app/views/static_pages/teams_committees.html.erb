@@ -5,7 +5,7 @@
 
   <p><%= t("about.structure.committees") %></p>
 
-  <h3><%= t("about.structure.officers.name") %></h3>
+  <h3 id="officers"><%= t("about.structure.officers.name") %></h3>
   <p><%= t("about.structure.officers.description") %></p>
   <br />
 
@@ -21,7 +21,7 @@
   </div>
 
   <% ([Team.board] + Team.all_official + Team.all_councils).each do |team| %>
-    <h3><%= team.name %> <%= team != Team.board ? "(" + team.acronym + ")" : "" %> <span class="badge team-email"><%= mail_to team.email %></span></h3>
+    <h3 id="<%= team.acronym %>"><%= team.name %> <%= team != Team.board ? "(" + team.acronym + ")" : "" %> <span class="badge team-email"><%= mail_to team.email %></span></h3>
     <p><%= t("about.structure.#{team.friendly_id}.description") %></p>
     <br />
 

@@ -57,6 +57,10 @@ class Team < ApplicationRecord
     ]
   end
 
+  def self.all_official_and_councils
+    self.all_official + self.all_councils
+  end
+
   # Don't forget that the WFC Leader is an officer too, the WCA Treasurer!
   def self.all_officers
     [
