@@ -59,7 +59,7 @@ RSpec.describe "registrations" do
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
         }.to_not change { competition.registrations.count }
         follow_redirect!
-        expect(response.body).to include "Emails must be unique, fond the following duplicates: sherlock@example.com."
+        expect(response.body).to include "Email must be unique, found the following duplicates: sherlock@example.com."
       end
 
       it "renders an error when there are WCA ID duplicates" do
@@ -72,7 +72,7 @@ RSpec.describe "registrations" do
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
         }.to_not change { competition.registrations.count }
         follow_redirect!
-        expect(response.body).to include "WCA IDs must be unique, fond the following duplicates: 2019HOLM01."
+        expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
 
       describe "registrations import" do
