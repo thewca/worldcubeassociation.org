@@ -67,4 +67,43 @@ RSpec.describe "users" do
     expect(response).to be_successful
     expect(response.body).to include "It looks like you have not created a WCA website account yet"
   end
+
+  context "user without 2FA" do
+    let(:user) { FactoryBot.create(:user) }
+    before { sign_in user }
+
+    it 'can enable 2FA' do
+      post profile_enable_2fa_path
+      expect(response.body).to include "Successfully enabled two-factor"
+      expect(user.reload.otp_required_for_login).to be true
+    end
+
+    it 'does not generate backup codes for user without 2FA' do
+      expect {
+        post profile_generate_2fa_backup_path
+      }.to_not change { user.otp_backup_codes }
+      json = JSON.parse(response.body)
+      expect(json["error"]["message"]).to include "not enabled"
+    end
+  end
+
+  context "user with 2FA" do
+    let(:user) { FactoryBot.create(:user, :with_2fa) }
+    before { sign_in user }
+
+    it 'can reset 2FA' do
+      expect {
+        post profile_enable_2fa_path
+      }.to change { user.otp_secret }
+      expect(response.body).to include "Successfully regenerated"
+    end
+
+    it 'can (re)generate backup codes for user with 2FA' do
+      expect {
+        post profile_generate_2fa_backup_path
+      }.to change { user.otp_backup_codes }
+      json = JSON.parse(response.body)
+      expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
+    end
+  end
 end
