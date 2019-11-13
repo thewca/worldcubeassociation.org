@@ -2087,13 +2087,13 @@ pl:
           Istnieje już użytkownik z adresem email %{email}, ale ma
           niepotwierdzone WCA ID %{unconfirmed_wca_id} zamiast
           %{registration_wca_id}.
-        #original_hash: 91a1582
+        #original_hash: 4e32621
         email_duplicates: >-
-          Adresy E-mail muszą być unikatowe, znaleziono następujące duplikaty:
+          Adres E-mail musi być unikatowy, znaleziono następujące duplikaty:
           %{emails}.
-        #original_hash: d3f3fd2
+        #original_hash: bcd8e78
         wca_id_duplicates: >-
-          WCA ID muszą być unikatowe, znaleziono następujące duplikaty:
+          WCA ID musi być unikatowe, znaleziono następujące duplikaty:
           %{wca_ids}.
     add:
       #original_hash: 975275e
