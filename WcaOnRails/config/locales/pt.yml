@@ -957,31 +957,23 @@ pt:
         equipment: >-
           Número e tipo de timers e displays usados na competição. Remova a(s)
           linha(s) de equipamentos que não foram usados.
-        #original_hash: a4aebc8
+        #original_hash: 2822e8d
         venue: >-
-          Fale sobre salas, iluminação, acesso ao público, distribuição das
-          áreas (de competição, embaralhamento, espera), se foram usados espaços
-          diferentes de competição, problemas que ocorreram (barulho, por
-          exemplo) e como foram resolvidos. Seja breve e não reporte detalhes
-          irrelevantes. Carregue uma foto do espaço da competição para mostrar a
-          disposição da área de embaralhamento e de competição.
-        #original_hash: f8de509
+          Os pontos listados acima são apenas um guia para o relatório completo.
+          Use-os segundo o seu critério para o que acha que se enquadra. Por
+          favor remova as partes não utilizadas!
+        #original_hash: 2822e8d
         organization: >-
-          Fale sobre a equipa de organização e como trabalharam na competição;
-          se esteve envolvido na sua organizção, assim como experiências
-          anteriores e se observou progresso no seu trabalho; se foram
-          profissionais e ativos durante os dias da competição, problemas que
-          ocorreram (p. ex. atrasos no cronograma) e como foram resolvidos. Seja
-          breve e não reporte detalhes irrelevantes.
-        #original_hash: d003c1f
+          Os pontos listados acima são apenas um guia para um relatório
+          completo. Use-os segundo o seu critério para o que achar relevante.
+          Por favor remova o que não utilizar!
+        #original_hash: 74affff
         incidents: >-
-          Informe os incidentes que considere necessário mencionar. Numere-os
-          começando em 1, para que outros Delegados possam comentar usando os
-          números como referência. Por favor, mencione somente casos concretos,
-          não ocorrências genéricas (p. ex. casos de +2 ou DNF normais).
-          Sinta-se à vontade para pedir opiniões dos Delegados ou o feedback do
-          WRC em algum incidente. Se considerar necessário envolver a WDC em
-          algum deles, faça este pedido claramente.
+          Por favor informe todos os incidentes que sejam não triviais.
+          Numere-os começando em 1, para que outros Delegados possam comentar
+          usando os números como referência. Mesmo que tudo pareça genérico,
+          liste pelo menos os mais relevantes. Por favor assinale as caixas
+          apropriadas se precisar de obter feedback.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2023,6 +2015,14 @@ pt:
         email_user_with_different_unconfirmed_wca_id: >-
           Já existe um utilizador com o email %{email}, mas tem o ID da WCA não
           confirmado de %{unconfirmed_wca_id} em vez de %{registration_wca_id}.
+        #original_hash: 4e32621
+        email_duplicates: >-
+          Email tem que ser único, encontrados os seguintes duplicados:
+          %{emails}.
+        #original_hash: bcd8e78
+        wca_id_duplicates: >-
+          ID da WCA tem que ser único, encontrados os seguintes duplicados:
+          %{wca_ids}.
     add:
       #original_hash: 975275e
       title: 'Adicionar registo para %{comp}'
@@ -3191,6 +3191,9 @@ pt:
       treasurer:
         #original_hash: 75e65d9
         name: Tesoureiro da WCA
+      users:
+        #original_hash: 57bbaad
+        profile: 'Perfil de %{user_name}'
       wdc:
         #original_hash: c97077a
         name: Comité Disciplinar da WCA
