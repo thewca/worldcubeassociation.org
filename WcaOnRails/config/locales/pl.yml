@@ -980,33 +980,24 @@ pl:
         equipment: >-
           Liczba i rodzaj timerów oraz wyświetlaczy użytych na zawodach. Proszę
           usunąć te linie wyposażenia, które nie zostały użyte.
-        #original_hash: a4aebc8
+        #original_hash: 2822e8d
         venue: >-
-          Opisz pomieszczenia, oświetlenie, dostępność dla publiczności,
-          rozmieszczeniu stref (układania, mieszania, oczekiwania, rejestracji
-          wyników), czy zostały przygotowane różne sceny przeznaczone do
-          układania, problemy, które się pojawiły (np. hałas) i w jaki sposób je
-          rozwiązałeś. Prosimy, bądź zwięzły i nie zgłaszaj nieistotnych
-          szczegółów. Dodatkowo prosimy o dołączenie zdjęcia miejsca zawodów, w
-          celu pokazania rozmieszczenia stanowiska mieszaczy, zawodników oraz
-          strefy startowej.
-        #original_hash: f8de509
+          Wymienione powyżej punkty są jedynie wskazówką do przygotowania
+          kompletnego raportu. Używaj tych które uznasz za stosowne wedle
+          swojego uznania. Prosimy o usunięcie nieużywanych fragmentów!
+        #original_hash: 2822e8d
         organization: >-
-          Opisz zespół organizacyjny oraz w jaki sposób pracował on podczas
-          zawodów, ich doświadczenie i zauważalny postęp w ich pracy, jeżeli
-          takowy miał miejsce, ponadto czy zachowywali się oni profesjonalnie i
-          aktywnie. Napisz o problemach, które się pojawiły (np. opóźnienia w
-          harmonogramie) i w jaki sposób oni je rozwiązali. Prosimy, bądź
-          zwięzły i nie zgłaszaj nieistotnych szczegółów.
-        #original_hash: d003c1f
+          Wymienione powyżej punkty są jedynie wskazówką do przygotowania
+          kompletnego raportu. Używaj tych które uznasz za stosowne wedle
+          swojego uznania. Prosimy o usunięcie nieużywanych fragmentów!
+        #original_hash: 74affff
         incidents: >-
-          Zgłoś wszystkie incydenty, które uważasz za warte wspomnienia. Numeruj
-          incydenty poczynając od 1., co pozwoli innym Delegatom komentować,
-          odnosząc się do nich po odpowiednim numerze. Prosimy, wspominaj tylko
-          konkretne przypadki, nie ogólne zdarzenia (np. zwyczajne +2 i DNF).
-          Nie wahaj się pytać o zdanie innych Delegatów lub WRC na temat
-          któregokolwiek z nich. Jeżeli chciałbyś zaangażować WDC w dowolny z
-          nich, jasno zaznacz tę prośbę.
+          Zgłoś wszystkie incydenty, które są niestandardowymi przypadkami.
+          Numeruj incydenty poczynając od 1., co pozwoli innym Delegatom
+          komentować, odnosząc się do nich po odpowiednim numerze. Nawet jeżeli
+          wszystko wydawało się typowe, wymień chociaż najbardziej godne
+          odnotowania przypadki. Prosimy o zaznaczenie odpowiednich pól poniżej
+          jeżeli szukasz opinii.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
