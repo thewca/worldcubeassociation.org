@@ -170,6 +170,11 @@ FactoryBot.define do
       end
     end
 
+    trait :with_2fa do
+      otp_required_for_login { true }
+      otp_secret { User.generate_otp_secret }
+    end
+
     wca_id { person&.wca_id }
 
     after(:build) do |user|
