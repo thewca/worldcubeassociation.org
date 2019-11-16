@@ -872,15 +872,13 @@ zh-TW:
         schedule_url: '公開賽程的完整網址（例如：https://www.cubingusa.com/usnationals2016/schedule.php）'
         #original_hash: 1a68719
         equipment: 這場比賽使用的大顯、計時器數量和款式。請把您沒用到的器材該行刪掉。
-        #original_hash: a4aebc8
-        venue: >-
-          關於場地、燈光、交通、各區域的分配（比賽區，轉亂區，等待區，成績輸入區），如果有不同的設置方式而產生的問題（例如：噪音）以及您如何解決的。請簡明扼要，不相關的細節並不需要說明。請上傳有顯示場地分配的照片（包含：轉亂區、參賽者等待區、及比賽區）。
-        #original_hash: f8de509
-        organization: >-
-          比賽的主辦團隊以及他們如何處理比賽相關事宜的，如果您有參與其中的話，您可以提及他們過往的主辦經驗以及進步的部份、比賽當天的表現和積極度、遇到的問題（例如：賽程延誤）和怎麼解決問題的。請簡明扼要，不相關的細節並不需要說明。
-        #original_hash: d003c1f
+        #original_hash: 2822e8d
+        venue: 以上列出的例子只是完成報告用的指導內容。您可自由選擇那些適合寫入報告。請移除沒有用到的部分。
+        #original_hash: 2822e8d
+        organization: 以上列出的例子只是完成報告用的指導內容。您可自由選擇那些適合寫入報告。請移除沒有用到的部分。
+        #original_hash: 74affff
         incidents: >-
-          任何您認為值得報告意外事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。請提及重要的事件就好，而非一般的(例如：常見的+2或是DNF)。您可以請其他代表或WRC對這些事件做回饋。如果您想要請WDC參與討論，請確認您有清楚地寫出。
+          請報告所有非一般的事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。就算所有事物看起來都很類似，請列出那些最值得報告的事項。如果您需要意見回饋，請在下面適當的部分選擇做選擇。
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1092,7 +1090,7 @@ zh-TW:
             target="_blank">here</a> for a list of supported scopes.
       scopes:
         #original_hash: 1920e95
-        public: 連結您的公開資料（姓名、WCA ID、性別、國籍和照片）
+        public: 連結您的公開資料（姓名、WCA ID、性別、國籍和個人頁面的照片）
         #original_hash: d4003be
         dob: 連結您的生日
         #original_hash: 17aa24f
@@ -1219,7 +1217,7 @@ zh-TW:
       #original_hash: 4cde9bc
       success: 更新語言。
       #original_hash: dcc2f49
-      failure: 無法更新您的個人頁面。
+      failure: 無法更新您的個人檔案。
       #original_hash: c29870c
       unavailable: 語言無法使用。
     mailer:
@@ -1622,11 +1620,11 @@ zh-TW:
       #original_hash: 8b9f726
       title: '報名%{comp}'
     #original_hash: 7cae988
-    registered_with_account_html: '這個人用帳號報名了，您可以在%{here}編輯他的個人資料。'
+    registered_with_account_html: '這個人是用WCA帳號報名，您可以在%{here}編輯他的個人資料。'
     #original_hash: ada2e9e
     sign_in: 登入
     #original_hash: 5d45a00
-    profile: 個人頁面
+    profile: 個人檔案
     #original_hash: 801b3e9
     panel_title: 報名細節
     #original_hash: c0063c3
@@ -1758,9 +1756,9 @@ zh-TW:
         email_user_with_different_unconfirmed_wca_id: >-
           已經有帳號是使用 %{email} 的電子郵件，但有未確認的 WCA ID %{unconfirmed_wca_id} 而不是導入中的
           %{registration_wca_id}。
-        #original_hash: 91a1582
+        #original_hash: 4e32621
         email_duplicates: '一個電子郵件必須只能被用一次，以下為重複的電子郵件：%{emails}'
-        #original_hash: d3f3fd2
+        #original_hash: bcd8e78
         wca_id_duplicates: '一個WCA ID必須只能被用一次，以下為重複的WCA ID：%{wca_ids}。'
     add:
       #original_hash: 975275e
@@ -2724,7 +2722,7 @@ zh-TW:
         name: WCA財務長
       users:
         #original_hash: 57bbaad
-        profile: '%{user_name}的個人資料。'
+        profile: '%{user_name}的個人頁面。'
       wdc:
         #original_hash: c97077a
         name: WCA紀律委員會
