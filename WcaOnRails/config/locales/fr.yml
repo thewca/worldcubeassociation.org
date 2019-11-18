@@ -215,7 +215,9 @@ fr:
         moves: 'Meilleur résultat < %{moves}'
         #original_hash: c3133c2
         points: 'Meilleur résultat > %{points}'
+    #original_hash: 6e55337
     ranking: 'Les %{ranking} premiers avancent au tour suivant'
+    #original_hash: 7ee969c
     percent: 'Le top %{percent}% avance au tour suivant'
     attempt_result:
       #original_hash: b3c8a02
@@ -479,7 +481,7 @@ fr:
         early_puzzle_submission_reason: Raison et détails concernant la soumission avancée des puzzles
         #original_hash: 88da0ef
         qualification_results: >-
-          I souhaite utiliser des résultats de qualification pour limiter qui
+          Je souhaite utiliser des résultats de qualification pour limiter qui
           peut participer à certaines épreuves
         #original_hash: 1ec6dd4
         qualification_results_reason: Raison et détails pour les résultats de qualification
@@ -975,35 +977,23 @@ fr:
         equipment: >-
           Nombre et type de timers et afficheurs utilisés pendant la
           compétition. Merci de retirer la ou les ligne(s) non utilisée(s).
-        #original_hash: a4aebc8
+        #original_hash: 2822e8d
         venue: >-
-          Parlez de la salle, de la luminosité, de l'accès pour le public, de
-          comment elle était arrangée (zone de compétition, d'attente, etc.), de
-          si vous avez utilisé plusieurs zones de compétition, des différents
-          problèmes qui sont survenus (le bruit par exemple) et de comment vous
-          les avez résolus. Merci de rester concis et de ne pas rapporter des
-          détails inutiles. Merci de joindre une photo de votre salle pour avoir
-          un aperçu de la disposition de la zone de mélange, des stations, et de
-          la zone des compétiteurs.
-        #original_hash: f8de509
+          Les points indiqués ci-dessus sont simplement indicatifs pour un
+          rapport complet. Vous pouvez les utiliser à votre convenance si vous
+          les considérez pertinents. Merci de retirer les points non utilisés !
+        #original_hash: 2822e8d
         organization: >-
-          Parlez de l'équipe d'organisation et de comment elle a gérée la
-          compétition, de si vous y étiez impliqué, de leurs précédentes
-          expériences, de si vous avez constaté des progrès dans leur travail,
-          de s'ils ont été professionnels et actifs pendant la compétition, et
-          des problèmes qui sont survenus (Par exemple : avoir du retard) ainsi
-          de comment ils ont été résolus. Merci de rester concis et de ne pas
-          rapporter des détails inutiles.
-        #original_hash: d003c1f
+          Les points indiqués ci-dessus sont simplement indicatifs pour un
+          rapport complet. Vous pouvez les utiliser à votre convenance si vous
+          les considérez pertinents. Merci de retirer les points non utilisés !
+        #original_hash: 74affff
         incidents: >-
-          Rapportez tous les incidents qui méritent selon vous d'être
-          mentionnés. Numérotez les incidents de manière à ce que les autres
-          Délégués puissent commenter en se référant à eux via leur numéro.
-          Faites attention à ne mentionner que les cas concrets, pas les petits
-          incidents standard tels que les +2 et DNF. N'hésitez pas à demander un
-          retour de la part des délégués ou du WRC sur certains incidents. Si
-          vous souhaitez impliquer le WDC dans l'un d'entre eux, exprimer cette
-          requête clairement.
+          Merci de rapporter tous les incidents qui ne sont pas couverts par le
+          règlement. Numérotez les incidents à partir de 1., pour que les autres
+          Délégués puissent les référencer dans leurs commentaires. Même s'ils
+          semblent courants, listez au moins les incidents principaux. Merci de
+          cocher les cases ci-dessous si vous avez besoin d'un avis.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2084,6 +2074,14 @@ fr:
           Il y a déjà un utilisateur avec l'email %{email}, mais il a pour ID
           WCA non confirmé %{unconfirmed_wca_id} au lieu de
           %{registration_wca_id}.
+        #original_hash: 4e32621
+        email_duplicates: >-
+          L'adresse email doit être unique, les adresses suivantes sont
+          dupliquées : %{emails}.
+        #original_hash: bcd8e78
+        wca_id_duplicates: >-
+          Les ID WCA doivent être uniques, les suivant sont dupliqués :
+          %{wca_ids}.
     add:
       #original_hash: 975275e
       title: 'Ajouter une inscription au %{comp}'
@@ -3288,6 +3286,9 @@ fr:
       treasurer:
         #original_hash: 75e65d9
         name: Trésorier de la WCA
+      users:
+        #original_hash: 57bbaad
+        profile: 'Profil de %{user_name}'
       wdc:
         #original_hash: c97077a
         name: Comité Disciplinaire de la WCA
