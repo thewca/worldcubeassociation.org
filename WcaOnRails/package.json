@@ -13,7 +13,7 @@
     "@babel/polyfill": "^7.7.0",
     "@babel/preset-env": "^7.7.1",
     "@babel/preset-react": "^7.7.0",
-    "@rails/webpacker": "^4.0.7",
+    "@rails/webpacker": "^4.2.0",
     "autonumeric": "^4.5.10",
     "autoprefixer": "^9.7.1",
     "autosize": "^4.0.2",
