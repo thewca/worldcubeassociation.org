@@ -5,17 +5,6 @@ class CompetitionResultsValidator
 
   # List of all possible errors and warnings for the results
 
-  # General errors and warnings
-  UNEXPECTED_RESULTS_ERROR = "Unexpected results for %{event_id}. The event is present in the results but not listed as an official event."\
-    " Remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
-  MISSING_RESULTS_WARNING = "Missing results for %{event_id}. The event is not present in the results but listed as an official event."\
-    " If the event was held, correct the results. If the event was not held, leave a comment about that to the WRT."
-  UNEXPECTED_ROUND_RESULTS_ERROR = "Unexpected results for round %{round_id}. The round is present in the results but not created on the events tab. Edit the events tab to include the round."
-  MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}. There is an additional round in the events tab that is not present in the results. Edit the events tab to remove the round."
-  UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a combined round in the results. Please update the round's information in the competition's manage events page."
-  CHOOSE_MAIN_EVENT_WARNING = "Your results do not contain results for 3x3x3 Cube. Please tell WRT in the comments that there was 'no main event' if no event was treated as the main event at the competition."\
-  " Otherwise, if an event other than 3x3x3 Cube was treated as the main event, please name the main event in your comments to WRT and explain how that event was treated as the main event of the competition."
-
   # Person-related errors and warnings
   PERSON_WITHOUT_RESULTS_ERROR = "Person with id %{person_id} (%{person_name}) has no result"
   RESULTS_WITHOUT_PERSON_ERROR = "Results for unknown person with id %{person_id}"
@@ -96,16 +85,8 @@ class CompetitionResultsValidator
     I18n.with_locale(:en) do
       check_persons
 
-      check_events_match(@competition.events)
-
-      check_main_event
-
-      # Ensure retro-compatibility for "old" competitions without rounds.
-      if @competition.has_rounds?
-        check_rounds_match
-      end
-
       validator_classes = [
+        ResultsValidators::EventsRoundsValidator,
         ResultsValidators::PositionsValidator,
         ResultsValidators::IndividualResultsValidator,
         ResultsValidators::ScramblesValidator,
@@ -135,83 +116,6 @@ class CompetitionResultsValidator
     end
     @total_errors = @errors.values.sum(&:size)
     @total_warnings = @warnings.values.sum(&:size)
-  end
-
-  def results_similar_to(reference, reference_index, results)
-    # We do this programatically, but the original check_results.php used to do a big SQL query:
-    # https://github.com/thewca/worldcubeassociation.org/blob/b1ee87b318ff6e4f8658a711c19fd23a3ae51b9c/webroot/results/admin/check_results.php#L321-L353
-
-    similar_results = []
-    # Note that we don't want to treat a particular result as looking
-    # similar to itself, so we don't allow for results with matching ids.
-    # Further more, if a result A is similar to a result B, we don't want to
-    # return both (A, B) and (B, A) as matching pairs, it's sufficient to just
-    # return (A, B), which is why we require Result.id < h.resultId.
-    results.each_with_index do |r, index|
-      next if index >= reference_index
-      reference_solve_times = reference.solve_times
-      # We attribute 1 point for each similar solve_time, we then just have to count the points.
-      score = r.solve_times.each_with_index.count do |solve_time, solve_time_index|
-        solve_time.complete? && solve_time == reference_solve_times[solve_time_index]
-      end
-      # We have at least 3 matching values, consider this similar
-      if score > 2
-        similar_results << r
-      end
-    end
-    similar_results
-  end
-
-  def check_main_event
-    events_in_results = @results.map(&:eventId).uniq
-    unless events_in_results.include?("333")
-      @warnings[:events] << CHOOSE_MAIN_EVENT_WARNING
-    end
-  end
-
-  def check_events_match(competition_events)
-    # Check for missing/unexpected events
-    # As events must be validated by WCAT, any missing or unexpected event should lead to an error.
-    expected = competition_events.map(&:id)
-    real = @results.map(&:eventId).uniq
-    (real - expected).each do |event_id|
-      @errors[:events] << format(UNEXPECTED_RESULTS_ERROR, event_id: event_id)
-    end
-    (expected - real).each do |event_id|
-      @warnings[:events] << format(MISSING_RESULTS_WARNING, event_id: event_id)
-    end
-  end
-
-  def check_rounds_match
-    # Check that rounds match what was declared.
-    # This function automatically casts combined rounds to regular rounds if everyone has met the cutoff.
-    expected = @expected_rounds_by_ids.keys
-    real = @results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
-    unexpected = real - expected
-    missing = expected - real
-    missing.each do |round_id|
-      event_id, round_type_id = round_id.split("-")
-      equivalent_round_id = "#{event_id}-#{RoundType.toggle_cutoff(round_type_id)}"
-      if unexpected.include?(equivalent_round_id)
-        unexpected.delete(equivalent_round_id)
-        round = @expected_rounds_by_ids[round_id]
-        if round.round_type.combined?
-          # NOTE: we cannot know if everyone legitimately cleared the cutoff,
-          # or if the cutoff was removed during the competition and not
-          # updated on the website's schedule. So we just consider it fine,
-          # but we have to update the expected round information so that we have
-          # a valid round_info when checking individual results later.
-          @expected_rounds_by_ids[equivalent_round_id] = @expected_rounds_by_ids.delete(round_id)
-        else
-          @errors[:rounds] << format(UNEXPECTED_COMBINED_ROUND_ERROR, round_name: round.name)
-        end
-      else
-        @errors[:rounds] << format(MISSING_ROUND_RESULTS_ERROR, round_id: round_id)
-      end
-    end
-    unexpected.each do |round_id|
-      @errors[:rounds] << format(UNEXPECTED_ROUND_RESULTS_ERROR, round_id: round_id)
-    end
   end
 
   def check_persons
