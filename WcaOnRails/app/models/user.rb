@@ -65,6 +65,11 @@ class User < ApplicationRecord
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
 
+  # Very simple (and permissive) regexp, the goal is just to avoid silly typo
+  # like "aaa@bbb,com", or forgetting the '@'.
+  EMAIL_RE = /[\w.%+-]+@[\w.-]+\.\w+/.freeze
+  validates :email, format: { with: EMAIL_RE }
+
   # Virtual attribute for authenticating by WCA ID or email.
   attr_accessor :login
 

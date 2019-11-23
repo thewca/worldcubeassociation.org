@@ -44,6 +44,19 @@ RSpec.describe User, type: :model do
     expect(user).to be_valid
   end
 
+  it "allows valid fancy email" do
+    user = FactoryBot.build(:user, email: "aa124_qs.totof+topic@gmail.com")
+    expect(user).to be_valid
+  end
+
+  it "invalidates silly typos in email" do
+    user = FactoryBot.build(:user, email: "aa@bbb,com")
+    expect(user).to be_invalid_with_errors(email: ["is invalid"])
+
+    user = FactoryBot.build(:user, email: "aabbb.com")
+    expect(user).to be_invalid_with_errors(email: ["is invalid"])
+  end
+
   it "can confirm a user who has never competed before" do
     user = FactoryBot.build :user, unconfirmed_wca_id: ""
     user.confirm
