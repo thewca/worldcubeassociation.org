@@ -18,7 +18,7 @@ function personLink ( $id, $name ) {
 
 function eventLink ( $id, $name ) {
 #  $name = htmlEntities( $name );  # careful: can't do that because of multibld on person page in personal records table
-  return "<a class='e' href='" . pathToRoot() . "e.php?i=$id'>$name</a>";
+  return "<a class='e' href='" . pathToRoot() . "/rankings/$id'>$name</a>";
 }
 
 function eventAverageLink ( $id, $name ) {
