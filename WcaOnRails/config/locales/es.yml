@@ -971,33 +971,24 @@ es:
         equipment: >-
           Cantidad y tipo de timers y displays utilizados en la competición. Por
           favor, quita las líneas relativas a equipo que no hayas utilizado.
-        #original_hash: a4aebc8
+        #original_hash: 2822e8d
         venue: >-
-          Habla acerca de las salas, la luz, el acceso al local, la distribución
-          de las zonas (de competición, de mezclas, de espera, del ordenador),
-          si utilizaste diferentes zonas de competición, problemas que surgieron
-          (por ejemplo, ruido) y cómo los resolviste... Sé breve y no informes
-          sobre detalles irrelevantes. Por favor, sube alguna foto para mostrar
-          como están dispuestas la zona de mezclas, de competidores y de
-          resoluciones.
-        #original_hash: f8de509
+          Los puntos listados arriba son solo una guía para un informe completo.
+          Úsalos a tu discrección como creas oportuno. ¡Por favor elimina los
+          puntos no usados!
+        #original_hash: 2822e8d
         organization: >-
-          Habla acerca del equipo organizador y cómo trabajaron para la
-          competición, si te viste involucrado, su experiencia previa y si has
-          notado progreso en su trabajo, si estuvieron activos y fueron
-          profesionales los dias de competición, sobre los problemas que
-          surgieron (por ejemplo, atrasos respecto al horario) y cómo se
-          resolvieron... Por favor, sé breve y no des detalles irrelevantes.
-        #original_hash: d003c1f
+          Los puntos listados arriba son sólo para que sirvan de guía para un
+          informe completo. úsalos a tu discrección para lo que creas oportuno.
+          ¡Por favor elimina los puntos no usados!
+        #original_hash: 74affff
         incidents: >-
-          Informa sobre cualquier incidente que consideres digno de mención.
-          Numera los incidentes comenzando desde "1", de modo que otros
-          Delegados puedan referirse a ellos por el número. Por favor, menciona
-          sólo casos concretos y no genéricos (por ejemplo, los típicos +2 o
-          DNFs). Puedes pedir a los Delegados o al WRC su opinión sobre los
-          incidentes. Si quieres que el WDC valore iniciar alguna acción
-          derivada de alguno de tus incidentes, asegúrate de mencionarlo
-          claramente.
+          Por favor informa sobre todos los incidentes que sean casos no
+          estándar. Numera los incidentes empezando por 1., de modo que otros
+          delegados puedan comentar refiriéndose a ellos por sus números. Aunque
+          todo parezca genérico, lista por favor los casos más dignos de
+          mención. Por favor marca los cuadros apropiados si buscas activamente
+          opiniones.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2058,13 +2049,13 @@ es:
         email_user_with_different_unconfirmed_wca_id: >-
           Ya existe un usuario con correo %{email}, pero tiene un WCA ID sin
           confirmar de %{unconfirmed_wca_id} en vez de %{registration_wca_id}.
-        #original_hash: 91a1582
+        #original_hash: 4e32621
         email_duplicates: >-
-          Los Correos electrónicos deben ser únicos, Se encontraron los
-          siguientes duplicados: %{emails}.
-        #original_hash: d3f3fd2
+          El Correo electrónico debe ser único, se encontraron los siguientes
+          duplicados: %{emails}.
+        #original_hash: bcd8e78
         wca_id_duplicates: >-
-          Los WCA ID deben ser únicos, se encontraron los siguientes duplicados:
+          WCA ID debe ser único, se encontraron los siguientes duplicados:
           %{wca_ids}.
     add:
       #original_hash: 975275e
@@ -3038,7 +3029,7 @@ es:
           '1': >-
             Por favor contacta con el organizador. Puedes encontrar la
             información de contacto en la página web de la competición. Si no
-            sabes dónde encontrarla, busca en la <a href=‘/competitions’>lista
+            sabes dónde encontrarla, busca en la <a href='/competitions'>lista
             de competiciones</a>.
       results:
         #original_hash: 9aae576
@@ -3072,7 +3063,7 @@ es:
           #original_hash: 5ac78e4
           '1': >-
             Puedes encontrar la normativa sobre puzzles en el <a
-            href=“https://www.worldcubeassociation.org/regulations/#3’>Artículo
+            href='https://www.worldcubeassociation.org/regulations/#3’>Artículo
             3</a>. Todos los puzzles deben ser aprobados por un Delegado de la
             WCA. Si no estás seguro, pregunta al Delegado de tu competición.
             Para no arriesgarte, deberías traer un puzzle de repuesto por si no
@@ -3084,10 +3075,10 @@ es:
           #original_hash: 024ce81
           '1': >-
             Puedes utilizar puzzles magnéticos siempre y cuando cumplan el <a
-            target=‘_blank’
-            href=‘https://www.worldcubeassociation.org/regulations/‘>Reglamento
+            target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/'>Reglamento
             de la WCA</a>. Por favor, presta especial atención a la <a
-            href=‘https://www.worldcubeassociation.org/regulations/#3h’>Regla
+            href='https://www.worldcubeassociation.org/regulations/#3h'>Regla
             3h</a>.
       regulations3:
         #original_hash: c7460a5
@@ -3097,10 +3088,10 @@ es:
         content:
           #original_hash: 0d76323
           '1': >-
-            No puedes usar ese puzzle. Los puzzles no pdeben tener desperfectos
-            u otras diferencias que permitan distinguir claramente una pieza de
+            No puedes usar ese puzzle. Los puzzles no deben tener desperfectos u
+            otras diferencias que permitan distinguir claramente una pieza de
             otra similar (ver la <a
-            href=‘https://www.worldcubeassociation.org/regulations/#3j’>Regla
+            href='https://www.worldcubeassociation.org/regulations/#3j'>Regla
             3j</a>).
       regulations4:
         #original_hash: 43f9da8
@@ -3110,7 +3101,7 @@ es:
           '1': >-
             No hay una edad mínima. No obstante, deberías preguntarle a tus
             padres antes de inscribirte (ver la <a
-            href=‘https://www.worldcubeassociation.org/regulations/#2b’>Regla
+            href='https://www.worldcubeassociation.org/regulations/#2b'>Regla
             2b</a>).
   about:
     #original_hash: 9ac918a
@@ -3968,8 +3959,8 @@ es:
       #original_hash: 3613823
       content_html: >-
         Se debe anunciar la competición al 28 días antes del comienzo de la
-        misma (ver los <a href=‘
-        https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf’>Requisitos
+        misma (ver los <a
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisitos
         de Competiciones</a>).
     paragraph4:
       #original_hash: b6dca56
@@ -4035,8 +4026,8 @@ es:
       #original_hash: bd8e6ee
       content_html: >-
         El número de competidores puede ser limitado por prueba o por
-        competición (ver los <a href=‘
-        https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf’>Requisitos
+        competición (ver los <a
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisitos
         de Competiciones</a>). El Delegado de la competición debe obtener la
         aprobación del límite de competidores por parte del WCAT. Los límites de
         competidores deberían ser elegidos sabiamente y de acuerdo con el
