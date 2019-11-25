@@ -158,7 +158,7 @@ server {
   # Redirect /results/e.php to /results/events.php
   location /results/e.php {
     if ($arg_eventId = "") {
-      set $arg_eventId $arg_i;
+      set $args "${args}&eventId=${arg_i}";
     }
     return 302 /results/events.php$is_args$args;
   }
