@@ -150,13 +150,13 @@ class ResultsController < ApplicationController
           UNION
           #{current_records_query("average", "average")}) helper
         ORDER BY
-          rank, type DESC, year, month, day, roundTypeId, personName
+          `rank`, type DESC, year, month, day, roundTypeId, personName
       SQL
     else
       if @is_history
-        order = 'event.rank, type desc, value, year desc, month desc, day desc, roundType.rank desc'
+        order = 'event.`rank`, type desc, value, year desc, month desc, day desc, roundType.`rank` desc'
       else
-        order = 'year desc, month desc, day desc, event.rank, type desc, value, roundType.rank desc'
+        order = 'year desc, month desc, day desc, event.`rank`, type desc, value, roundType.`rank` desc'
       end
 
       @query = <<-SQL
@@ -186,7 +186,7 @@ class ResultsController < ApplicationController
           Competitions competition,
           Countries country
         WHERE event.id = eventId
-          AND event.rank < 1000
+          AND event.`rank` < 1000
           AND roundType.id = roundTypeId
           AND competition.id = competitionId
           AND country.id = result.countryId
@@ -210,7 +210,7 @@ class ResultsController < ApplicationController
                              format,
         country.name         countryName,
         competition.cellName competitionName,
-                             rank, year, month, day
+                             `rank`, year, month, day
       FROM
         (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
           FROM Concise#{type.capitalize}Results result
@@ -231,7 +231,7 @@ class ResultsController < ApplicationController
         AND event.id       = result.eventId
         AND country.id     = result.countryId
         AND competition.id = result.competitionId
-        AND event.rank < 990
+        AND event.`rank` < 990
     SQL
   end
 
