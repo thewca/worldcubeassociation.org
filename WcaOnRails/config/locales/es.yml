@@ -2701,65 +2701,94 @@ es:
     rankings:
       #original_hash: f5fe73c
       title: Clasificaciones
-      form_elements:
-        #original_hash: ad8919a
-        event: Categoría
-        #original_hash: 0f21717
-        region: Zona
-        type_selector:
-          #original_hash: 3deb745
-          type: Tipo
-          #original_hash: dd11868
-          single: Sencillo
-          #original_hash: 15f86c0
-          average: Media
-        years_selector:
-          #original_hash: 96f997b
-          years: Años
-          #original_hash: 0977c76
-          all_years: Todos los años
-          #original_hash: 8737f09
-          only: Solo
-          #original_hash: b3c0fe7
-          only_html: 'Solo %{year}'
-          #original_hash: 96bdb66
-          until: Hasta
-          #original_hash: fa23930
-          until_html: 'Hasta %{year}'
-        show_selector:
-          #original_hash: d97d1ee
-          show: Mostrar
-          #original_hash: f3cf96e
-          persons: Personas
-          #original_hash: 16d3376
-          persons_html: '%{quantity} personas'
-          #original_hash: 612e12d
-          results: Resultados
-          #original_hash: f3baa4a
-          results_html: '%{quantity} resultados'
-          #original_hash: d46d2ee
-          by_region: Por zona
-      table_elements:
-        #original_hash: 709a232
-        name: Nombre
-        #original_hash: 5faa59d
-        result: Resultado
-        #original_hash: e0f64f7
-        citizen_of: Ciudadano de
-        #original_hash: 1917f4f
-        competition: Competición
-        #original_hash: e7f6fc5
-        solves: Resoluciones
-        #original_hash: 0f21717
-        region: Zona
-        #original_hash: 70c07ec
-        world: Mundo
       #original_hash: 65310e5
       unknown_type: 'Parámetro de tipo desconocido, debe ser  "single" o "average"'
       #original_hash: 01e188f
       unknown_show: >-
         Parámetro de mostrar desconocido debe ser "N persons", "N results" o "by
         region"
+    records:
+      #original_hash: e51c552
+      title: Récords
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: Categoría
+        #original_hash: 3e83afa
+        all_events: Todas las categorías
+      #original_hash: 0f21717
+      region: Región
+      type_selector:
+        #original_hash: 3deb745
+        type: Tipo
+        #original_hash: dd11868
+        single: Single
+        #original_hash: 15f86c0
+        average: Media
+      years_selector:
+        #original_hash: 96f997b
+        years: Años
+        #original_hash: 0977c76
+        all_years: Todos los años
+        #original_hash: 8737f09
+        only: Solo
+        #original_hash: b3c0fe7
+        only_html: 'Solo %{year}'
+        #original_hash: 96bdb66
+        until: Hasta
+        #original_hash: fa23930
+        until_html: 'Hasta %{year}'
+      show_selector:
+        #original_hash: d97d1ee
+        show: Mostrar
+        #original_hash: f3cf96e
+        persons: Personas
+        #original_hash: 16d3376
+        persons_html: '%{quantity} personas'
+        #original_hash: 612e12d
+        results: Resultados
+        #original_hash: f3baa4a
+        results_html: '%{quantity} resultados'
+        #original_hash: d46d2ee
+        by_region: Por región
+        #original_hash: c0dcb86
+        mixed: Mezclados
+        #original_hash: 5ee371a
+        slim: Compacto
+        #original_hash: 8ccaae8
+        separate: Separado
+        #original_hash: 90ccd64
+        history: Histórico
+        #original_hash: e58bcf8
+        mixed_history: Histórico mezclado
+    table_elements:
+      #original_hash: 709a232
+      name: Nombre
+      #original_hash: 5faa59d
+      result: Resultado
+      #original_hash: e0f64f7
+      citizen_of: Ciudadano de
+      #original_hash: 1917f4f
+      competition: Competición
+      #original_hash: e7f6fc5
+      solves: Resoluciones
+      #original_hash: 0f21717
+      region: Región
+      #original_hash: 70c07ec
+      world: Mundo
+      type_options:
+        #original_hash: 3deb745
+        type: Tipo
+        #original_hash: dd11868
+        single: Single
+        #original_hash: 15f86c0
+        average: Media
+      #original_hash: ad8919a
+      event: Categoría
+      #original_hash: dcf8b56
+      date_circa: Fecha
+      #original_hash: 1c54132
+      record: Récord
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: ¡Vincula tu WCA ID a tu cuenta!
