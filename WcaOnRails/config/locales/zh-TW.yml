@@ -1167,7 +1167,7 @@ zh-TW:
       #original_hash: c4622c3
       scrambles: 轉亂程式
       #original_hash: 90ccd64
-      history: 歷史
+      history: 過去的版本
       #original_hash: 8ad8302
       translations: 翻譯版
       #original_hash: c420cb4
@@ -2306,63 +2306,92 @@ zh-TW:
     rankings:
       #original_hash: f5fe73c
       title: 排名
-      form_elements:
-        #original_hash: ad8919a
-        event: 比賽項目
-        #original_hash: 0f21717
-        region: 地區
-        type_selector:
-          #original_hash: 3deb745
-          type: 型式
-          #original_hash: dd11868
-          single: 單次
-          #original_hash: 15f86c0
-          average: 平均
-        years_selector:
-          #original_hash: 96f997b
-          years: 年份
-          #original_hash: 0977c76
-          all_years: 所有年份
-          #original_hash: 8737f09
-          only: 只看某年
-          #original_hash: b3c0fe7
-          only_html: '只看%{year}'
-          #original_hash: 96bdb66
-          until: 某年為止
-          #original_hash: fa23930
-          until_html: '%{year}為止'
-        show_selector:
-          #original_hash: d97d1ee
-          show: 顯示
-          #original_hash: f3cf96e
-          persons: 參賽者
-          #original_hash: 16d3376
-          persons_html: '%{quantity} 位參賽者'
-          #original_hash: 612e12d
-          results: 成績
-          #original_hash: f3baa4a
-          results_html: '前%{quantity} 個成績'
-          #original_hash: d46d2ee
-          by_region: 地區
-      table_elements:
-        #original_hash: 709a232
-        name: 姓名
-        #original_hash: 5faa59d
-        result: 成績
-        #original_hash: e0f64f7
-        citizen_of: 國籍
-        #original_hash: 1917f4f
-        competition: 比賽
-        #original_hash: e7f6fc5
-        solves: 成績
-        #original_hash: 0f21717
-        region: 地區
-        #original_hash: 70c07ec
-        world: 全世界
       #original_hash: 65310e5
       unknown_type: 未知的型式參數，必須要是"單次"或"平均"
       #original_hash: 01e188f
       unknown_show: 未知的顯示參數，必須要是"N persons"，"N results"或是"by region"
+    records:
+      #original_hash: e51c552
+      title: 紀錄
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: 項目
+        #original_hash: 3e83afa
+        all_events: 所有項目
+      #original_hash: 0f21717
+      region: 地區
+      type_selector:
+        #original_hash: 3deb745
+        type: 型式
+        #original_hash: dd11868
+        single: 單次
+        #original_hash: 15f86c0
+        average: 平均
+      years_selector:
+        #original_hash: 96f997b
+        years: 年份
+        #original_hash: 0977c76
+        all_years: 所有年份
+        #original_hash: 8737f09
+        only: 只看某年
+        #original_hash: b3c0fe7
+        only_html: '只看%{year}'
+        #original_hash: 96bdb66
+        until: 某年為止
+        #original_hash: fa23930
+        until_html: '%{year}為止'
+      show_selector:
+        #original_hash: d97d1ee
+        show: 顯示
+        #original_hash: f3cf96e
+        persons: 參賽者
+        #original_hash: 16d3376
+        persons_html: '%{quantity}位參賽者'
+        #original_hash: 612e12d
+        results: 成績
+        #original_hash: f3baa4a
+        results_html: '前%{quantity}個成績'
+        #original_hash: d46d2ee
+        by_region: 地區分別
+        #original_hash: c0dcb86
+        mixed: 混合顯示
+        #original_hash: 5ee371a
+        slim: 簡潔顯示
+        #original_hash: 8ccaae8
+        separate: 分開型式
+        #original_hash: 90ccd64
+        history: 更新歷史
+        #original_hash: e58bcf8
+        mixed_history: 混合更新歷史
+    table_elements:
+      #original_hash: 709a232
+      name: 名字
+      #original_hash: 5faa59d
+      result: 成績
+      #original_hash: e0f64f7
+      citizen_of: 國籍
+      #original_hash: 1917f4f
+      competition: 比賽
+      #original_hash: e7f6fc5
+      solves: 還原內容
+      #original_hash: 0f21717
+      region: 地區
+      #original_hash: 70c07ec
+      world: 全世界
+      type_options:
+        #original_hash: 3deb745
+        type: 型式
+        #original_hash: dd11868
+        single: 單次
+        #original_hash: 15f86c0
+        average: 平均
+      #original_hash: ad8919a
+      event: 項目
+      #original_hash: dcf8b56
+      date_circa: 日期
+      #original_hash: 1c54132
+      record: 紀錄
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: 將WCA帳號與WCA ID綁定！
@@ -3008,7 +3037,7 @@ zh-TW:
     #original_hash: cf1b916
     last_update: 最後更新
     #original_hash: feece00
-    version_history: 歷史版本
+    version_history: 版本歷史
     #original_hash: 8f3f4c0
     header: 在向WCA提交成績之前，如何處理成績和轉亂步驟
     step1:
