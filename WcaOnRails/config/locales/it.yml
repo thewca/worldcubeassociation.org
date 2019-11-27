@@ -215,7 +215,9 @@ it:
         moves: 'Miglior risultato < %{moves}'
         #original_hash: c3133c2
         points: 'Miglior risultato > %{points}'
+    #original_hash: 6e55337
     ranking: 'I migliori %{ranking} avanzano al round successivo'
+    #original_hash: 7ee969c
     percent: 'Il %{percent}% avanza al round successivo'
     attempt_result:
       #original_hash: b3c8a02
@@ -959,32 +961,24 @@ it:
         equipment: >-
           Numero e tipo di timer e display utilizzati per la competizione.
           Rimuovi le linee non utilizzate.
-        #original_hash: a4aebc8
+        #original_hash: 2822e8d
         venue: >-
-          Parla delle sale, della luce, dell'accessibilità, della distribuzione
-          dello spazio (postazioni, area scrambling, area partecipanti,
-          score-taking), se hai suddiviso le postazioni in più aree, problemi
-          che sono sorti (es. rumore) e come hai risolto... Sii breve e non
-          includere dettagli irrilevanti. Per favore carica un'immagine della
-          venue per mostrare la disposizione di area scrambling, area
-          partecipanti e postazioni.
-        #original_hash: f8de509
+          I punti elencati sopra sono soltanto una guida per un report
+          esaustivo. Usali a tua discrezione, in base a cosa ritieni utile
+          menzionare in ciascuno. Per favore rimuovi le parti inutilizzate!
+        #original_hash: 2822e8d
         organization: >-
-          Parla del team organizzativo e di come hanno gestito e organizzato la
-          competizione, se sei stato coinvolto, le loro precedenti esperienze
-          organizzative e se hai notato dei progressi, se sono stati
-          professionali e attivi nei giorni durante la competizione, parla dei
-          problemi che sono sorti (es, ritardo nel programma) e di come li hanno
-          risolti... Sii conciso e non riportare dettagli irrilevanti.
-        #original_hash: d003c1f
+          I punti elencati sopra sono soltanto una guida per un report
+          esaustivo. Usali a tua discrezione, in base a cosa ritieni utile
+          menzionare in ciascuno. Per favore rimuovi le parti inutilizzate!
+        #original_hash: 74affff
         incidents: >-
-          Riporta ogni incidente che consideri meritevole di essere menzionato.
+          Riporta tutti gli incidenti che rappresentano casi non ordinari.
           Numera gli incidenti iniziando da 1, così che gli altri delegati
-          possano commentare riferendosi a loro tramite i numeri. Fai attenzione
-          a menzionare solamente casi concreti e non eventi generici (es.
-          normali +2 e DNF). Sentiti libero di chiedere l'opinione degli altri
-          delegati o del WRC. In caso sia necessario coinvolgere il WDC,
-          assicurati di rendere il più chiaro possibile la richiesta.
+          possano commentare riferendosi a loro tramite i numeri. Se tutti gli
+          incidenti ti sembrano generici, riporta almeno il caso che ritieni più
+          rappresentativo o degno di nota. Assicurati di spuntare le caselle in
+          basso se desideri ricevere un feedback.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2064,6 +2058,14 @@ it:
           Esiste già un utente con l'indirizzo email %{email}, ma ha il WCA ID
           non confermato di %{unconfirmed_wca_id} invece di
           %{registration_wca_id}.
+        #original_hash: 4e32621
+        email_duplicates: >-
+          L'indirizzo email non può ripetersi. Riscontrati i seguenti duplicati:
+          %{emails}.
+        #original_hash: bcd8e78
+        wca_id_duplicates: >-
+          Il WCA ID non può ripetersi. Riscontrati i seguenti duplicati:
+          %{wca_ids}.
     add:
       #original_hash: 975275e
       title: 'Aggiungi registrazione per %{comp}'
@@ -2714,65 +2716,94 @@ it:
     rankings:
       #original_hash: f5fe73c
       title: Ranking
-      form_elements:
-        #original_hash: ad8919a
-        event: Evento
-        #original_hash: 0f21717
-        region: Regione
-        type_selector:
-          #original_hash: 3deb745
-          type: Tipo
-          #original_hash: dd11868
-          single: Singolo
-          #original_hash: 15f86c0
-          average: Media
-        years_selector:
-          #original_hash: 96f997b
-          years: Anni
-          #original_hash: 0977c76
-          all_years: Tutti gli anni
-          #original_hash: 8737f09
-          only: Solo
-          #original_hash: b3c0fe7
-          only_html: 'Solo %{year}'
-          #original_hash: 96bdb66
-          until: Fino al
-          #original_hash: fa23930
-          until_html: 'Fino al %{year}'
-        show_selector:
-          #original_hash: d97d1ee
-          show: Mostra
-          #original_hash: f3cf96e
-          persons: Persone
-          #original_hash: 16d3376
-          persons_html: '%{quantity} persone'
-          #original_hash: 612e12d
-          results: Risultati
-          #original_hash: f3baa4a
-          results_html: '%{quantity} risultati'
-          #original_hash: d46d2ee
-          by_region: Per regione
-      table_elements:
-        #original_hash: 709a232
-        name: Nome
-        #original_hash: 5faa59d
-        result: Risultato
-        #original_hash: e0f64f7
-        citizen_of: Cittadinanza
-        #original_hash: 1917f4f
-        competition: Competizione
-        #original_hash: e7f6fc5
-        solves: Risoluzioni
-        #original_hash: 0f21717
-        region: Regione
-        #original_hash: 70c07ec
-        world: Mondo
       #original_hash: 65310e5
       unknown_type: 'Parametro sconosciuto: deve essere "singolo" o "media"'
       #original_hash: 01e188f
       unknown_show: >-
         Parametro sconosciuto: deve essere "N persone", "N risultati" o "per
         regione"
+    records:
+      #original_hash: e51c552
+      title: Record
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: Evento
+        #original_hash: 3e83afa
+        all_events: Tutti gli eventi
+      #original_hash: 0f21717
+      region: Regione
+      type_selector:
+        #original_hash: 3deb745
+        type: Tipo
+        #original_hash: dd11868
+        single: Singolo
+        #original_hash: 15f86c0
+        average: Media
+      years_selector:
+        #original_hash: 96f997b
+        years: Anni
+        #original_hash: 0977c76
+        all_years: Tutti gli anni
+        #original_hash: 8737f09
+        only: Solo
+        #original_hash: b3c0fe7
+        only_html: 'Solo %{year}'
+        #original_hash: 96bdb66
+        until: Fino al
+        #original_hash: fa23930
+        until_html: 'Fino al %{year}'
+      show_selector:
+        #original_hash: d97d1ee
+        show: Formato
+        #original_hash: f3cf96e
+        persons: Persone
+        #original_hash: 16d3376
+        persons_html: '%{quantity} persone'
+        #original_hash: 612e12d
+        results: Risultati
+        #original_hash: f3baa4a
+        results_html: '%{quantity} risultati'
+        #original_hash: d46d2ee
+        by_region: Per regione
+        #original_hash: c0dcb86
+        mixed: Misto
+        #original_hash: 5ee371a
+        slim: Compatto
+        #original_hash: 8ccaae8
+        separate: Separato
+        #original_hash: 90ccd64
+        history: Storico
+        #original_hash: e58bcf8
+        mixed_history: Storico misto
+    table_elements:
+      #original_hash: 709a232
+      name: Nome
+      #original_hash: 5faa59d
+      result: Risultato
+      #original_hash: e0f64f7
+      citizen_of: Cittadinanza
+      #original_hash: 1917f4f
+      competition: Competizione
+      #original_hash: e7f6fc5
+      solves: Risoluzioni
+      #original_hash: 0f21717
+      region: Regione
+      #original_hash: 70c07ec
+      world: Mondo
+      type_options:
+        #original_hash: 3deb745
+        type: Tipo
+        #original_hash: dd11868
+        single: Singolo
+        #original_hash: 15f86c0
+        average: Media
+      #original_hash: ad8919a
+      event: Evento
+      #original_hash: dcf8b56
+      date_circa: Data
+      #original_hash: 1c54132
+      record: Record
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Connetti il tuo WCA ID con il tuo account!
@@ -3252,6 +3283,9 @@ it:
       treasurer:
         #original_hash: 75e65d9
         name: Tesoriere WCA
+      users:
+        #original_hash: 57bbaad
+        profile: 'Profilo di %{user_name}'
       wdc:
         #original_hash: c97077a
         name: WCA Disciplinary Committee
