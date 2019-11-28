@@ -29,6 +29,7 @@ RSpec.describe IRV do
       # MET_CUTOFF_MISSING_RESULTS_ERROR
       # RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR
       # MISSING_CUMULATIVE_ROUND_ID_ERROR
+      # WRONG_ATTEMPTS_FOR_CUTOFF_ERROR
 
       cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50*100)
       cutoff_fm = Cutoff.new(number_of_attempts: 2, attempt_result: 35)
@@ -54,8 +55,15 @@ RSpec.describe IRV do
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
         errs = []
-        # Creates a result which doesn't meet the cutoff
-        create_over_cutoff(result_kind, competition1, cutoff, "444")
+        # Creates a result which doesn't meet the cutoff and is missing values
+        # compared to the first phase expected number of attempts.
+        res_over_missing_value = create_over_cutoff(result_kind, competition1, cutoff, "444")
+        res_over_missing_value.update!(value2: 0)
+
+        errs << RV::ValidationError.new(:results, competition1.id,
+                                        IRV::WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
+                                        round_id: "444-c",
+                                        person_name: res_over_missing_value.personName)
 
         # Creates a result which doesn't meet the cutoff but yet has extra values
         res_over_with_results = create_over_cutoff(result_kind, competition1, cutoff, "444")

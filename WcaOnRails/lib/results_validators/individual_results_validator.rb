@@ -9,6 +9,7 @@ module ResultsValidators
 
     MET_CUTOFF_MISSING_RESULTS_ERROR = "[%{round_id}] %{person_name} has met the cutoff but is missing results for the second phase. Cutoff is %{cutoff}."
     DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = "[%{round_id}] %{person_name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is %{cutoff}."
+    WRONG_ATTEMPTS_FOR_CUTOFF_ERROR = "[%{round_id}] %{person_name} is missing at least one attempt for the cutoff phase."
     MISMATCHED_RESULT_FORMAT_ERROR = "[%{round_id}] Results for %{person_name} are in the wrong format: expected %{expected_format}, but got %{format}."
     RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit which is %{time_limit} for one solve. All solves over the time limit must be changed to DNF."
     RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit which is %{time_limit}."
@@ -180,6 +181,15 @@ module ResultsValidators
       maybe_qualifying_results = solve_times[0, number_of_attempts]
       # Get the remaining attempt according to the expected solve count given the format
       other_results = solve_times[number_of_attempts, round.format.expected_solve_count - number_of_attempts]
+
+      if maybe_qualifying_results.select(&:skipped?).any?
+        # There are at least one skipped results among those in the first phase.
+        @errors << ValidationError.new(:results, competition_id,
+                                       WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
+                                       round_id: round_id,
+                                       person_name: result.personName)
+      end
+
       qualifying_results = maybe_qualifying_results.select { |solve_time| solve_time < cutoff_result }
       skipped, unskipped = other_results.partition(&:skipped?)
       if qualifying_results.any?
