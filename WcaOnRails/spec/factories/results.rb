@@ -54,6 +54,20 @@ FactoryBot.define do
       average { -1 }
       value3 { -1 }
     end
+
+    trait :over_cutoff do
+      transient do
+        cutoff { nil }
+      end
+      value1 { cutoff.attempt_result + 100 }
+      value2 { cutoff.attempt_result + 200 }
+      value3 { 0 }
+      value4 { 0 }
+      value5 { 0 }
+      best { cutoff.attempt_result + 100 }
+      average { 0 }
+      roundTypeId { "c" }
+    end
   }
 
   factory :inbox_result do

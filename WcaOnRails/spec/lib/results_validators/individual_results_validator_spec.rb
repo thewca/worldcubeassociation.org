@@ -57,7 +57,9 @@ RSpec.describe IRV do
         errs = []
         # Creates a result which doesn't meet the cutoff and is missing values
         # compared to the first phase expected number of attempts.
-        res_over_missing_value = create_over_cutoff(result_kind, competition1, cutoff, "444")
+        res_over_missing_value = FactoryBot.create(result_kind, :over_cutoff,
+                                                   competition: competition1,
+                                                   cutoff: cutoff, eventId: "444")
         res_over_missing_value.update!(value2: 0)
 
         errs << RV::ValidationError.new(:results, competition1.id,
@@ -66,7 +68,9 @@ RSpec.describe IRV do
                                         person_name: res_over_missing_value.personName)
 
         # Creates a result which doesn't meet the cutoff but yet has extra values
-        res_over_with_results = create_over_cutoff(result_kind, competition1, cutoff, "444")
+        res_over_with_results = FactoryBot.create(result_kind, :over_cutoff,
+                                                  competition: competition1,
+                                                  cutoff: cutoff, eventId: "444")
         res_over_with_results.update!(value3: res_over_with_results.value2,
                                       value4: res_over_with_results.value2,
                                       value5: res_over_with_results.value2,
@@ -92,7 +96,9 @@ RSpec.describe IRV do
                                         time_limit: time_limit.to_s(round44))
 
         # Create a result which meets the cutoff but doesn't have all the necessary values
-        res_fm = create_over_cutoff(result_kind, competition2, cutoff_fm, "333fm")
+        res_fm = FactoryBot.create(result_kind, :over_cutoff,
+                                   competition: competition2, cutoff: cutoff_fm,
+                                   eventId: "333fm")
         res_fm.update(value1: 30, formatId: "m")
 
         errs << RV::ValidationError.new(:results, competition2.id,
@@ -236,22 +242,6 @@ RSpec.describe IRV do
       end
     end
   end
-end
-
-def create_over_cutoff(kind, competition, cutoff, event_id)
-  attributes = {
-    competition: competition,
-    eventId: event_id,
-    value1: cutoff.attempt_result + 100,
-    value2: cutoff.attempt_result + 200,
-    value3: 0,
-    value4: 0,
-    value5: 0,
-    best: cutoff.attempt_result + 100,
-    average: 0,
-    roundTypeId: "c",
-  }
-  FactoryBot.create(kind, attributes)
 end
 
 def person_for_result(result)
