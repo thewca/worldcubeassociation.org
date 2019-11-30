@@ -36,7 +36,7 @@
           <td class="event tied-previous"> <%= cubing_icon result.event.id %> <%= result.event.name %> </td>
         <% end %>
         <td class="result"> <%= SolveTime.new(result.event.id, type.to_sym, value).clock_format %> </td>
-        <td class="name"> <%= link_to result.personName, person_url(result.personId) %> </td>
+        <td class="name"> <%= link_to result.personName, person_path(result.personId) %> </td>
         <td class="country"> <%= flag_icon result.country.iso2 %> <%= result.country.name %> </td>
         <td class="competition"> <%= flag_icon competition.country.iso2 if competition.country.real? %> <%= link_to competition.name, competition_path(competition.id) %> </td>
         <% unless is_single %>
