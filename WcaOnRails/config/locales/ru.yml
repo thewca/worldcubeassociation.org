@@ -168,9 +168,9 @@ ru:
       cellName: B Финал
     c:
       #original_hash: b2d26f4
-      name: Комбинированный Первый
+      name: Комбинированный Финал
       #original_hash: b2d26f4
-      cellName: Комбинированный Первый
+      cellName: Комбинированный Финал
     d:
       #original_hash: c6136b1
       name: Комбинированный Первый раунд
@@ -2677,65 +2677,94 @@ ru:
     rankings:
       #original_hash: f5fe73c
       title: Рейтинги
-      form_elements:
-        #original_hash: ad8919a
-        event: Дисциплина
-        #original_hash: 0f21717
-        region: Регион
-        type_selector:
-          #original_hash: 3deb745
-          type: Тип
-          #original_hash: dd11868
-          single: Единичная попытка
-          #original_hash: 15f86c0
-          average: Среднее
-        years_selector:
-          #original_hash: 96f997b
-          years: Годы
-          #original_hash: 0977c76
-          all_years: Все года
-          #original_hash: 8737f09
-          only: Только
-          #original_hash: b3c0fe7
-          only_html: 'Только %{year}'
-          #original_hash: 96bdb66
-          until: До
-          #original_hash: fa23930
-          until_html: 'До %{year}'
-        show_selector:
-          #original_hash: d97d1ee
-          show: Показать
-          #original_hash: f3cf96e
-          persons: Люди
-          #original_hash: 16d3376
-          persons_html: '%{quantity} человек'
-          #original_hash: 612e12d
-          results: Результаты
-          #original_hash: f3baa4a
-          results_html: '%{quantity} результатов'
-          #original_hash: d46d2ee
-          by_region: По региону
-      table_elements:
-        #original_hash: 709a232
-        name: Имя
-        #original_hash: 5faa59d
-        result: Результат
-        #original_hash: e0f64f7
-        citizen_of: Гражданство
-        #original_hash: 1917f4f
-        competition: Соревнование
-        #original_hash: e7f6fc5
-        solves: Попытки
-        #original_hash: 0f21717
-        region: Регион
-        #original_hash: 70c07ec
-        world: Мир
       #original_hash: 65310e5
       unknown_type: 'Неизвестный параметр "type", должно быть либо "single", либо "average"'
       #original_hash: 01e188f
       unknown_show: >-
         Неизвестный параметр "show", должно быть либо "N persons", либо "N
         results", либо "by region"
+    records:
+      #original_hash: e51c552
+      title: Рекорды
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: Дисциплина
+        #original_hash: 3e83afa
+        all_events: Все дисциплины
+      #original_hash: 0f21717
+      region: Регион
+      type_selector:
+        #original_hash: 3deb745
+        type: Тип
+        #original_hash: dd11868
+        single: Лучшая
+        #original_hash: 15f86c0
+        average: Среднее
+      years_selector:
+        #original_hash: 96f997b
+        years: Годы
+        #original_hash: 0977c76
+        all_years: Всё время
+        #original_hash: 8737f09
+        only: Только
+        #original_hash: b3c0fe7
+        only_html: 'Только %{year}'
+        #original_hash: 96bdb66
+        until: До
+        #original_hash: fa23930
+        until_html: 'До %{year}'
+      show_selector:
+        #original_hash: d97d1ee
+        show: Показать
+        #original_hash: f3cf96e
+        persons: Участники
+        #original_hash: 16d3376
+        persons_html: '%{quantity} участников'
+        #original_hash: 612e12d
+        results: Результаты
+        #original_hash: f3baa4a
+        results_html: '%{quantity} результатов'
+        #original_hash: d46d2ee
+        by_region: По регионам
+        #original_hash: c0dcb86
+        mixed: По дисциплинам
+        #original_hash: 5ee371a
+        slim: В таблице
+        #original_hash: 8ccaae8
+        separate: По типам
+        #original_hash: 90ccd64
+        history: История
+        #original_hash: e58bcf8
+        mixed_history: Смешанная история
+    table_elements:
+      #original_hash: 709a232
+      name: Имя
+      #original_hash: 5faa59d
+      result: Результат
+      #original_hash: e0f64f7
+      citizen_of: Страна
+      #original_hash: 1917f4f
+      competition: Соревнование
+      #original_hash: e7f6fc5
+      solves: Сборки
+      #original_hash: 0f21717
+      region: Регион
+      #original_hash: 70c07ec
+      world: Мир
+      type_options:
+        #original_hash: 3deb745
+        type: Тип
+        #original_hash: dd11868
+        single: Лучшая
+        #original_hash: 15f86c0
+        average: Среднее
+      #original_hash: ad8919a
+      event: Дисциплина
+      #original_hash: dcf8b56
+      date_circa: Дата (примерно)
+      #original_hash: 1c54132
+      record: Рекорд
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Привяжите ваш WCA ID к вашему аккаунту!
