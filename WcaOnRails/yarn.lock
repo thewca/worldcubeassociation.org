@@ -8582,10 +8582,10 @@ stylehacks@^4.0.0:
     postcss "^7.0.0"
     postcss-selector-parser "^3.0.0"
 
-stylelint-config-recommended-scss@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/stylelint-config-recommended-scss/-/stylelint-config-recommended-scss-4.0.0.tgz#04bca39ba693941fc27500271093846bcd68574e"
-  integrity sha512-aEy0ENUrH4ASgFCu2mMcqBUAX0l4CPXg0XucJXdW+I7mdqJ7ICddkxP1eamBNBZ1QToc/wsuLmTQcalk3qYpsw==
+stylelint-config-recommended-scss@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/stylelint-config-recommended-scss/-/stylelint-config-recommended-scss-4.1.0.tgz#ff8f72f187833915640f8ab05fc57692c76a4bf5"
+  integrity sha512-4012ca0weVi92epm3RRBRZcRJIyl5vJjJ/tJAKng+Qat5+cnmuCwyOI2vXkKdjNfGd0gvzyKCKEkvTMDcbtd7Q==
   dependencies:
     stylelint-config-recommended "^3.0.0"
 
