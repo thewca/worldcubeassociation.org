@@ -843,7 +843,7 @@
     globals "^11.1.0"
     lodash "^4.17.13"
 
-"@babel/types@^7.0.0-beta.49", "@babel/types@^7.7.0", "@babel/types@^7.7.4":
+"@babel/types@^7.0.0-beta.49", "@babel/types@^7.7.4":
   version "7.7.4"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.7.4.tgz#516570d539e44ddf308c07569c258ff94fde9193"
   integrity sha512-cz5Ji23KCi4T+YIE/BolWosrJuSmoZeN1EFnRtBwF+KKLi8GG/Z2c2hOJJeCXPk4mwk4QFvTmwIodJowXgttRA==
@@ -3974,10 +3974,10 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hoist-non-react-statics@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.0.tgz#b09178f0122184fb95acf525daaecb4d8f45958b"
-  integrity sha512-0XsbTXxgiaCDYDIWFcwkmerZPSwywfUqYmwT4jzewKTQSWoE6FCMoUVOeBJWK3E/CrWbxRG3m5GzY4lnIwGRBA==
+hoist-non-react-statics@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#101685d3aff3b23ea213163f6e8e12f4f111e19f"
+  integrity sha512-wbg3bpgA/ZqWrZuMOeJi8+SKMhr7X9TesL/rXMjTzh0p0JUBo3II8DHboYbuIXWRlttrUFxwcu/5kygrCw8fJw==
   dependencies:
     react-is "^16.7.0"
 
@@ -7347,14 +7347,14 @@ react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.2.tgz#09891d324cad1cb0c1f2d91f70a71a4bee34df0f"
   integrity sha512-D+NxhSR2HUCjYky1q1DwpNUD44cDpUXzSmmFyC3ug1bClcU/iDNy0YNn1iwme28fn+NFhpA13IndOd42CrFb+Q==
 
-react-leaflet@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-2.5.0.tgz#834cc9fdf9385e2b30e90e6d71533e2f961d93f7"
-  integrity sha512-G7GPnXtiJIyTQg77RKzrPq2vnv4lsDz1/XHu5P8+eAAZILngVHzcYCG81G39Hcc0UL8Pqspk8b86OauDGqy0OA==
+react-leaflet@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-2.6.0.tgz#517348b6c8588ce9f33137021900d826e542ac55"
+  integrity sha512-FezC/YA2dBmky997BIDaxQmtISGq6VGFAhJHGRr4NkByOg7jD9xrzoilmEG3pMYwwgxi7Pctg2YpWRq3fQbdxg==
   dependencies:
-    "@babel/runtime" "^7.6.3"
+    "@babel/runtime" "^7.7.2"
     fast-deep-equal "^2.0.1"
-    hoist-non-react-statics "^3.3.0"
+    hoist-non-react-statics "^3.3.1"
     warning "^4.0.3"
 
 react-lifecycles-compat@^3.0.4:
