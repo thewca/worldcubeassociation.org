@@ -215,7 +215,9 @@ da:
         moves: 'Bedste resultat < %{moves}'
         #original_hash: c3133c2
         points: 'Bedste resultat > %{points}'
+    #original_hash: 6e55337
     ranking: 'Top %{ranking} kommer videre til næste runde'
+    #original_hash: 7ee969c
     percent: 'Top %{percent}% kommer videre til næste runde'
     attempt_result:
       #original_hash: b3c8a02
@@ -792,12 +794,11 @@ da:
         external_website: Konkurrencens hjemmeside. Skal være en gyldig http(s) url.
         #original_hash: 9965635
         registration_open: 'Note: Registreringens åbningstider og lukketider er i UTC-tid'
-        #original_hash: bd402bf
-        remarks_html: >-
-          Noget ekstra information som du vil give til WCAT. For eksempel,
-          forklar hvorfor denne konkurrence er efterspurgt mindre end fire uger
-          fra nu, eller hvis du efterspørger ansøgningen fra %{link}. Udfyld det
-          her på engelsk!
+        #original_hash: 9ea6021
+        remarks: >-
+          Ekstra information som du vil fortælle WCAT. For eksempel, hvis der er
+          noget som du er usikker på, eller hvis der er en speciel forespørgsel
+          til WCAT. Udfyld det her på engelsk!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -956,32 +957,21 @@ da:
         equipment: >-
           Numre og type af timere og displays brugt til konkurrencen. Fjern
           venligst linjerne af udstyr som i ikke brugte.
-        #original_hash: a4aebc8
+        #original_hash: 2822e8d
         venue: >-
-          Skriv om lokalerne, lys, om det var offentligt tilgængeligt, fordeling
-          af zonerne (løsning, blanding, vente, score-taking), hvis du satte op
-          forskellige løsnings stationer, problemer der opstod (eksempel, larm)
-          og hvordan du løste dem... Reporter venligst ikke irrelevante
-          detaljer. Upload gerne et billede af dit lokale for at vise
-          opsætningen af blanderbordet, venteområdet og andre 'solving
-          stations'.
-        #original_hash: f8de509
+          Punkter ovenfor er bare for assistance til at skrive en komplet
+          rapport. Brug dem som du føler passer bedst. Fjern de ubrugte dele!
+        #original_hash: 2822e8d
         organization: >-
-          Skriv om arrangør holdet og hvordan de arbejdede med konkurrencen,
-          hvis du involverede dig, deres tidligere erfaringer og hvis du
-          bemærkede fremskridtene af deres arbejde, hvis de var professionelle
-          og hjalp til i løbet af konkurrencen, problemer der opstod (eksempel,
-          komme bagud i tidsplanen) og hvordan de løste dem... Skriv venligst
-          kun relevante detaljer.
-        #original_hash: d003c1f
+          Punkter ovenfor er bare for assistance til at skrive en komplet
+          rapport. Brug dem som du føler passer. Fjern de ubrugte dele!
+        #original_hash: 74affff
         incidents: >-
-          Reporter alle detaljer du mener er vigtige at nævne. Numre af
-          hændelser som starter fra 1, så andre Delegerede kan referere til dem
-          ved deres numre. Vær sikker på kun at nævne konkrete situationer, ikke
-          normale situationer som for eksempel, normale +2 og DNF. Du altid kan
-          bare spørge om andre delegaters eller WRC's feedback. Hvis du gerne
-          vil have WDC til at involvere sig, så vær sikker på at gøre det
-          tydeligt.
+          Rapporter alle hændelser der ikke er normale situationer. Give
+          hændelser numre som starter fra 1, så andre Delegerede kan referere
+          til dem ved deres numre. Selv hvis alt virkede normalt, så nævn bare
+          det mest specielle situationer. Klik på de relevante bokse nedenfor
+          hvis der er nogle situationer du aktivt søger hjælp for.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1206,12 +1196,12 @@ da:
       scopes:
         #original_hash: 1920e95
         public: >-
-          Adgang til dine offentlige data (navn, WCA ID, køn, statsborgerskab,
-          og profilbillede)
+          Se dine offentlige data (navn, WCA ID, køn, statsborgerskab, og
+          profilbillede)
         #original_hash: d4003be
-        dob: Kunne se din fødselsdag
+        dob: Se din fødselsdato
         #original_hash: 17aa24f
-        email: Kunne se din email adresse
+        email: Se din emailadresse
         #original_hash: e0d0654
         manage_competitions: 'Se dine kommende konkurrencer, som du arrangerer'
     devise:
@@ -1337,7 +1327,7 @@ da:
   users:
     update_locale:
       #original_hash: 4cde9bc
-      success: Opdateret lokalt.
+      success: Sproget blev ændret.
       #original_hash: dcc2f49
       failure: Ude af stand til at opdatere din profil.
       #original_hash: c29870c
@@ -1415,7 +1405,7 @@ da:
         #original_hash: 7d355cb
         header: 'Tilmelding for %{competition} åbner snart'
         #original_hash: c9d0561
-        intro: 'Hej %{name},'
+        intro: 'Hej %{name}'
         #original_hash: a8f7e72
         information_html: >-
           Dette er en påmindelse om at tilmeldingen for <a
@@ -1425,7 +1415,7 @@ da:
         not_accepted_html: 'Du har tilmeldt dig, men din tilmelding er ikke blevet accepteret.'
         #original_hash: 3724e7c
         more_info_html: >-
-          Se <a href=%{competition_url}>se konkurrence hjemmesiden</a> for mere
+          Se <a href=%{competition_url}>konkurrencens hjemmeside</a> for mere
           information og tilmeldingskravene.
     claim_wca_id:
       #original_hash: f28bf87
@@ -1707,62 +1697,66 @@ da:
       not_using_wca: Denne konkurrence bruger ikke WCA registrering
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Registreringer accepteret! Email notifikationer sendt.
-        one: Registrering accepteret! Email notifikation sendt.
-        other: Registreringer accepteret! Email notifikationer sendt.
+        zero: Tilmeldinger blev accepteret! Email notifikationer blev sendt.
+        one: Tilmeldingen blev accepteret! En email notifikation blev sendt.
+        other: Tilmeldingerne blev accepteret! Email notifikationer blev sendt.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Registreringer flyttet til vente liste
-        one: Registrering flyttet til vente liste
-        other: Registreringer flyttet til vente liste
+        zero: Tilmeldinger blev flyttet til ventelisten.
+        one: Tilmeldingen blev flyttet til ventelisten.
+        other: Tilmeldingerne flyttet til ventelisten.
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Registreringer slettet
-        one: Registrering slettet
-        other: Registreringer slettet
+        zero: Tilmeldingerne blev slettet.
+        one: Tilmeldingen blev slettet.
+        other: Tilmeldingerne blev slettet.
       #original_hash: c3aa289
-      single_deletion_and_mail: 'Slettet registrering og emailed %{mail}'
+      single_deletion_and_mail: 'Tilmeldingen blev slettet og en email blev sendt til %{mail}'
       #original_hash: d8f067f
-      cannot_delete: Du kan ikke slette din registrering.
+      cannot_delete: Du kan ikke slette din tilmelding.
       #original_hash: 82b3899
-      updated: Opdateret registering
+      updated: Tilmeldingen blev opdateret.
       #original_hash: 856484a
-      failed: Kunne ikke opdatere registering
+      failed: Kunne ikke opdatere tilmeldingen.
       #original_hash: 016b4ae
-      deleted: 'Succesfyldt slettet din registrering fra %{comp}'
+      deleted: 'Din tilmelding blev succesfyldt slettet fra %{comp}'
       #original_hash: 648424f
-      registered: Succesfyldt tilmeldt!
+      registered: Din tilmelding var succesfuld!
+      #original_hash: 82fed60
+      imported: Importerede succesfuldt tilmeldingerne!
+      #original_hash: 3614fd1
+      added: Tilføjede succesfuldt tilmeldingen!
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} for %{comp}'
     mailer:
       #original_hash: 72e2180
-      regards_html: 'Hilsen, %{people}.'
+      regards_html: 'Hilsen %{people}.'
       new:
         #original_hash: a32db59
-        mail_subject: 'Din tilmelding til %{comp_name} er afsendt og venter på bekræftelse'
+        mail_subject: 'Din tilmelding til %{comp_name} er afsendt og afventer bekræftelse'
         #original_hash: 8374583
-        registered_html: 'Du har tilmeldt dig til %{comp_name}.'
+        registered_html: 'Du har tilmeldt dig %{comp_name}.'
         #original_hash: 13fabed
         awaits_approval: >-
-          Din tilmelding er blevet modtaget, og venter nu på at blive accepteret
+          Din tilmelding er blevet modtaget og venter nu på at blive accepteret
           af konkurrencens arrangører.
         #original_hash: 826045f
         approval_info_html: >-
-          Du vil modtage en email når din tilmelding er blevet godkendt. Læg
-          mærke til at tilmeldinger ikke bliver accepteret automatisk, så hav
-          tålmodig, hvis den ikke er accepteret med det samme. Der er muligvis
-          flere trin, som du skal følge, før din tilmelding kan blive
-          accepteret. For at se tilmeldings kriterierne, så besøg konkurrencens
-          hjemmeside eller kontakt arrangørene. Du kan også tjekke statussen af
-          din tilmelding %{here}.
+          Du vil modtage en e-mail, når din tilmelding er blevet godkendt. Læg
+          mærke til, at tilmeldinger ikke bliver accepteret automatisk, så hav
+          tålmodighed, hvis den ikke bliver accepteret med det samme. Der er
+          muligvis flere trin, som du skal følge, før din tilmelding kan blive
+          accepteret. For at se tilmeldingskriterierne, så besøg konkurrencens
+          hjemmeside, eller kontakt arrangørerne. Du kan også tjekke statussen
+          af din tilmelding %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Din tilmelding til %{comp_name} er blevet accepteret'
         #original_hash: 24d2883
         message_html: >-
           Din tilmelding til %{comp_name} er blevet accepteret. Du kan som altid
-          kan du tjekke statussen af din registrering %{here}.
+          tjekke statussen af din tilmelding %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'Vi ser frem til at se dig til %{comp_name}!'
       pending:
@@ -1845,7 +1839,7 @@ da:
     #original_hash: 5d45a00
     profile: profil
     #original_hash: 801b3e9
-    panel_title: Tilmeldings detaljer
+    panel_title: Tilmeldingsdetaljer
     #original_hash: c0063c3
     register: Tilmeld!
     #original_hash: f484f15
@@ -1991,6 +1985,34 @@ da:
         Email og en kolonne for hver disciplin.
       #original_hash: d6fbc9d
       import: Importer
+      errors:
+        #original_hash: 0ef547d
+        error: 'Der skete en fejl under importeringen af %{registration}: %{error}.'
+        #original_hash: 2f0950e
+        missing_columns: 'Manglende kolonner: %{columns}.'
+        #original_hash: 2454f20
+        over_competitor_limit: >-
+          Den givne fil indeholder %{accepted_count} accepterede tilmeldinger.
+          Dette er mere end deltagergrænsen på %{limit}.
+        #original_hash: e6d3197
+        invalid_event_column: >-
+          Disciplinernes kolonner skal enten have et 0 eller 1. Der blev fundet
+          %{value} i kolonne %{column}.
+        #original_hash: dcd2f6f
+        non_existent_wca_id: 'WCA ID''et %{wca_id} eksisterer ikke.'
+        #original_hash: b5c8591
+        email_user_with_different_wca_id: >-
+          Der er allerede en bruger med e-mailen %{email}, men den har WCA ID'et
+          %{user_wca_id} i stedet for %{registration_wca_id}.
+        #original_hash: c9586e9
+        email_user_with_different_unconfirmed_wca_id: >-
+          Der er allerede en bruger med e-mailen %{email}, men den har et
+          ubekræftet WCA ID. I stedet for %{registration_wca_id} har den dette
+          ubekræftede ID: %{unconfirmed_wca_id}.
+        #original_hash: 4e32621
+        email_duplicates: 'Email skal være unik. Der blev fundet kopier for følgende: %{emails}.'
+        #original_hash: bcd8e78
+        wca_id_duplicates: 'WCA ID''et skal være unikt. Fandt følgende kopier: %{wca_ids}.'
     add:
       #original_hash: 975275e
       title: 'Tilføj tilmelding for %{comp}'
@@ -2000,6 +2022,9 @@ da:
         tilføje tilmeldinger der er blevet godkendt i konkurrencelokalet.
       #original_hash: a11edb8
       add: Tilføj tilmelding
+      errors:
+        #original_hash: d6dcf5c
+        already_registered: Denne person er allerede tilmeldt.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -2629,59 +2654,6 @@ da:
     rankings:
       #original_hash: f5fe73c
       title: Ranglister
-      form_elements:
-        #original_hash: ad8919a
-        event: Disciplin
-        #original_hash: 0f21717
-        region: Region
-        type_selector:
-          #original_hash: 3deb745
-          type: Type
-          #original_hash: dd11868
-          single: Single
-          #original_hash: 15f86c0
-          average: Gennemsnit
-        years_selector:
-          #original_hash: 96f997b
-          years: År
-          #original_hash: 0977c76
-          all_years: Alle år
-          #original_hash: 8737f09
-          only: Kun
-          #original_hash: b3c0fe7
-          only_html: 'Kun %{year}'
-          #original_hash: 96bdb66
-          until: Indtil
-          #original_hash: fa23930
-          until_html: 'Indtil %{year}'
-        show_selector:
-          #original_hash: d97d1ee
-          show: Vis
-          #original_hash: f3cf96e
-          persons: Personer
-          #original_hash: 16d3376
-          persons_html: '%{quantity} personer'
-          #original_hash: 612e12d
-          results: Resultater
-          #original_hash: f3baa4a
-          results_html: 'Top %{quantity} resultater'
-          #original_hash: d46d2ee
-          by_region: Per region
-      table_elements:
-        #original_hash: 709a232
-        name: Navn
-        #original_hash: 5faa59d
-        result: Resultat
-        #original_hash: e0f64f7
-        citizen_of: Statsborgerskab
-        #original_hash: 1917f4f
-        competition: Konkurrence
-        #original_hash: e7f6fc5
-        solves: Tider
-        #original_hash: 0f21717
-        region: Region
-        #original_hash: 70c07ec
-        world: Verden
       #original_hash: 65310e5
       unknown_type: >-
         Ukendt type af parameter. Det skal være enten "single" eller
@@ -2690,6 +2662,88 @@ da:
       unknown_show: >-
         Ukendt parameter. Det skal være enten "N personer", "N resultater" eller
         "per region"
+    records:
+      #original_hash: e51c552
+      title: Rekorder
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: Disciplin
+        #original_hash: 3e83afa
+        all_events: Alle discipliner
+      #original_hash: 0f21717
+      region: Område
+      type_selector:
+        #original_hash: 3deb745
+        type: Type
+        #original_hash: dd11868
+        single: Single
+        #original_hash: 15f86c0
+        average: Gennemsnit
+      years_selector:
+        #original_hash: 96f997b
+        years: År
+        #original_hash: 0977c76
+        all_years: Alle år
+        #original_hash: 8737f09
+        only: Kun
+        #original_hash: b3c0fe7
+        only_html: 'Kun %{year}'
+        #original_hash: 96bdb66
+        until: Indtil
+        #original_hash: fa23930
+        until_html: 'Indtil %{year}'
+      show_selector:
+        #original_hash: d97d1ee
+        show: Vis
+        #original_hash: f3cf96e
+        persons: Personer
+        #original_hash: 16d3376
+        persons_html: '%{quantity} personer'
+        #original_hash: 612e12d
+        results: Resultater
+        #original_hash: f3baa4a
+        results_html: '%{quantity} resultater'
+        #original_hash: d46d2ee
+        by_region: Per område
+        #original_hash: c0dcb86
+        mixed: Blandet
+        #original_hash: 5ee371a
+        slim: Smal visning
+        #original_hash: 8ccaae8
+        separate: Separat
+        #original_hash: 90ccd64
+        history: Historie
+        #original_hash: e58bcf8
+        mixed_history: Blandet historie
+    table_elements:
+      #original_hash: 709a232
+      name: Navn
+      #original_hash: 5faa59d
+      result: Resultat
+      #original_hash: e0f64f7
+      citizen_of: Statsborgerskab
+      #original_hash: 1917f4f
+      competition: Konkurrence
+      #original_hash: e7f6fc5
+      solves: Resultater
+      #original_hash: 0f21717
+      region: Område
+      #original_hash: 70c07ec
+      world: Verden
+      type_options:
+        #original_hash: 3deb745
+        type: Type
+        #original_hash: dd11868
+        single: Single
+        #original_hash: 15f86c0
+        average: Gennemsnit
+      #original_hash: ad8919a
+      event: Disciplin
+      #original_hash: dcf8b56
+      date_circa: Dato (ca.)
+      #original_hash: 1c54132
+      record: Rekord
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Tilslut dit WCA ID til din konto!
@@ -3103,7 +3157,7 @@ da:
       #original_hash: 6253f90
       content: >-
         World Cube Association er en 501(c)(3) skatteundtaget organisation. Som
-        en 100% frivillig non-profit organisation, så er alle donation er
+        en 100% frivillig non-profit organisation, så er alle donationer er
         velkomne. Dette vil hjælpe med at få bedre konkurrencer over hele
         verden.
       #original_hash: 24c87db
@@ -3162,6 +3216,9 @@ da:
       treasurer:
         #original_hash: 75e65d9
         name: WCA's Kasserer
+      users:
+        #original_hash: 57bbaad
+        profile: '%{user_name}s profil'
       wdc:
         #original_hash: c97077a
         name: WCA Disciplinær Komité (WCA Disciplinary Committee)
@@ -3539,12 +3596,13 @@ da:
         WCA logoet var designet af Justin Eastman, i en konkurrence i Januar
         2005 <br />Vi kunne lide logoet på grund af dets design, farverne, og at
         det ikke nødvendigvis viser en 3x3x3 cube.
-      #original_hash: f228da2
+      #original_hash: 916e3fc
       '2': >-
-        Vi har tre forskellelige versioner af logoet a <a
-        href="/files/WCAlogo_XL.jpg">large version</a> (46 KB, 1756 px by 1068
-        px), a <a href="/files/WCAlogo.svg">vector version</a> and a <a
-        href="/files/WCAlogo_notext.svg">vector version without text</a>.
+        Vi har fire forskellelige versioner af logoet: En <a
+        href="/files/WCAlogo_XL.jpg">stor version</a> (46 KB, 1756 px by 1068
+        px), en <a href="/files/WCAlogo.svg">vector version</a>, a <a
+        href="/files/WCAlogo_notext.svg">vector version uden tekst</a> og en <a
+        href="/files/WCAlogo_monochrome.svg">monokrom vector version</a>.
       #original_hash: dcb1ad6
       '3': >-
         3D version af logoet designet af Vu Minh Tan fra Vietnam: <a
