@@ -181,10 +181,10 @@ Style/SymbolProc:
 Naming/PredicateName:
   Enabled: false
 
-Naming/UncommunicativeBlockParamName:
+Naming/BlockParameterName:
   Enabled: false
 
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Enabled: false
 
 Style/YodaCondition:
