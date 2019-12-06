@@ -16,7 +16,7 @@ module ResultsValidators
 
     def validate(competition_ids: [], model: Result, results: nil)
       reset_state
-      # Get all results if not provided
+      # Get all results if not provided.
       results ||= model.sorted_for_competitions(competition_ids)
 
       associations = {
@@ -58,7 +58,7 @@ module ResultsValidators
     end
 
     def check_events_match(competition, results)
-      # Check for missing/unexpected events
+      # Check for missing/unexpected events.
       # As events must be validated by WCAT, any missing or unexpected event should lead to an error.
       expected = competition.events.map(&:id)
       real = results.map(&:eventId).uniq
@@ -93,14 +93,7 @@ module ResultsValidators
         if unexpected.include?(equivalent_round_id)
           unexpected.delete(equivalent_round_id)
           round = expected_rounds_by_ids[round_id]
-          if round.round_type.combined?
-            # NOTE: we cannot know if everyone legitimately cleared the cutoff,
-            # or if the cutoff was removed during the competition and not
-            # updated on the website's schedule. So we just consider it fine,
-            # but we have to update the expected round information so that we have
-            # a valid round_info when checking individual results later.
-            expected_rounds_by_ids[equivalent_round_id] = expected_rounds_by_ids.delete(round_id)
-          else
+          unless round.round_type.combined?
             @errors << ValidationError.new(:rounds, competition.id,
                                            UNEXPECTED_COMBINED_ROUND_ERROR,
                                            round_name: round.name)
