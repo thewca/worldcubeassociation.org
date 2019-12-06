@@ -137,8 +137,8 @@ RSpec.describe PersonsHelper do
       FactoryBot.create(:team_member, team_id: Team.wec.id, user_id: busy_member.id, start_date: Date.today-1, team_senior_member: true)
       FactoryBot.create(:team_member, team_id: Team.wst.id, user_id: busy_member.id, start_date: Date.today-1, team_leader: true)
       string = all_user_badges(busy_member)
-      expect(string).to include("WEC")
-      expect(string).to include("WST")
+      expect(string).to include(Team.wec.acronym)
+      expect(string).to include(Team.wst.acronym)
     end
 
     it "Returns as many officers positions as the user has" do
@@ -146,6 +146,29 @@ RSpec.describe PersonsHelper do
       string = all_user_badges(officer_member)
       expect(string).to include(t('about.structure.executive_director.name'))
       expect(string).to include(t('about.structure.chair.name'))
+    end
+
+    it "Returns a delegate position to a delegate" do
+      delegate = FactoryBot.create :delegate
+      candidate_delegate = FactoryBot.create :candidate_delegate
+      string = all_user_badges(delegate)
+      expect(string).to include(t('enums.user.delegate_status.delegate'))
+      string = all_user_badges(candidate_delegate)
+      expect(string).to include(t('enums.user.delegate_status.candidate_delegate'))
+    end
+
+    it "returns different kinds of badges if the user has the requested positions" do
+      busy_delegate = FactoryBot.create :user, :vice_chair, name: "Idoit all"
+      FactoryBot.create(:team_member, team_id: Team.board.id, user_id: busy_delegate.id, start_date: Date.today-1)
+      FactoryBot.create(:team_member, team_id: Team.wec.id, user_id: busy_delegate.id, start_date: Date.today-1)
+      FactoryBot.create(:team_member, team_id: Team.wfc.id, user_id: busy_delegate.id, start_date: Date.today-1, team_leader: true)
+      busy_delegate.delegate_status = "senior_delegate"
+      string = all_user_badges(busy_delegate)
+      expect(string).to include(t('enums.user.delegate_status.senior_delegate'))
+      expect(string).to include(t('about.structure.vice_chair.name'))
+      expect(string).to include(Team.wec.acronym)
+      expect(string).to include(Team.wfc.acronym + " " + t('about.structure.leader'))
+      expect(string).to include(Team.board.acronym)
     end
   end
 end
