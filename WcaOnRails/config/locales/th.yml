@@ -929,30 +929,22 @@ th:
         equipment: >-
           จำนวนและประเภทของ timer และ display ที่ใช้ในการแข่งขัน
           โปรดลบบรรทัดของอุปกรณ์ที่คุณไม่ได้ใช้
-        #original_hash: a4aebc8
+        #original_hash: 2822e8d
         venue: >-
-          พูดคุยเกี่ยวกับห้อง, แสง, การเข้าถึงสาธารณะ, การแบ่งสถานที่
-          (การแก้โจทย์, การตั้งโจทย์, waiting, กรอกคะแนน) เช่น
-          ตั้งพื้นที่แก้โจทย์ที่ต่างจากปกติ ปัญหาที่เกิดขึ้น (เช่น เสียงรบกวน)
-          และวิธีการที่คุณแก้ไข ...
-          กรุณารัดกุมและไม่รายงานรายละเอียดที่ไม่เกี่ยวข้อง
-          โปรดอัพโหลดรูปภาพของสถานที่ของคุณเพื่อแสดงแผนผังของสถานที่ตั้งโจทย์,
-          พื้นที่ผู้เข้าแข่งขัน และสถานที่แก้โจทย์
-        #original_hash: f8de509
+          หัวข้อในข้างต้นเป็นแนวทางในการเขียนรายงาน
+          ใช้ดุลยพินิจของคุณสำหรับสิ่งที่คุณเห็นว่าเหมาะสม
+          โปรดลบส่วนที่ไม่ได้ใช้ออก
+        #original_hash: 2822e8d
         organization: >-
-          พูดคุยเกี่ยวกับผู้จัดการแข่งขันและวิธีการที่พวกเขาจัดการแข่งขัน
-          ถ้าคุณมีส่วนร่วมด้วย
-          รายงานเกี่ยวกับประสบการณ์ก่อนหน้านี้ของพวกเขาและถ้าคุณสังเกตพัฒนาการในการทำงานของพวกเขา
-          ความเป็นมืออาชีพและความตื่นตัวในงานแข่งขัน ปัญหาที่เกิดขึ้น (เช่น
-          เวลาล่าช้าจากตารางการแข่งขัน) และวิธีที่จะพวกเขาแก้ไข ...
-          โปรดกระชับและไม่รายงานรายละเอียดที่ไม่เกี่ยวข้อง
-        #original_hash: d003c1f
+          หัวข้อข้างต้นเป็นเพียงแนวทางในการเขียนรายงาน
+          ใช้ดุลยพินิจของคุณสำหรับสิ่งที่คุณเห็นว่าเหมาะสม
+          โปรดลบส่วนที่ไม่ได้ใช้ออก!
+        #original_hash: 74affff
         incidents: >-
-          รายงาน incident ใด ๆ ที่คุณคิดว่าควรค่าแก่การกล่าวถึง เลขของ incidents
+          รายงาน incident ที่ไม่ใช่เป็น incidents ทั่ว ๆ ไป เลขของ incidents
           เริ่มจาก 1 เพื่อให้ Delegate คนอื่นสามารถอ้างอิงได้
-          กรุณากล่าวถึงกรณีที่เป็นที่น่าสนใจ ไม่ใช่ทั่ว ๆ ไป (เช่น +2 หรือ DNF
-          ปกติ) สามารถาม Delegate หรือข้อเสนอแนะจาก WRC ได้ หากคุณต้องการ WDC
-          มีส่วนร่วมด้วย ตรวจสอบให้แน่ใจว่าได้ระบุคำขอนี้อย่างชัดเจน
+          แม้ว่าทุกอย่างจะดูปกติ แต่อย่างน้อยให้ระบุกรณีที่น่าจดจำที่สุด
+          โปรดทำเครื่องหมายในช่องที่เหมาะสมด้านล่างหากคุณกำลังรับข้อเสนอแนะ
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1925,6 +1917,10 @@ th:
         email_user_with_different_unconfirmed_wca_id: >-
           พบผู้สมัครที่ใช้ email %{email} แต่มี WCA ID ยังไม่ได้ยืนยัน
           %{unconfirmed_wca_id} ซึ่งไม่ใช่ %{registration_wca_id}.
+        #original_hash: 4e32621
+        email_duplicates: 'email ต้องไม่ซ้ำ พบการซ้ำกันของ: %{emails}.'
+        #original_hash: bcd8e78
+        wca_id_duplicates: 'WCA ID ต้องไม่ซ้ำ พบการซ้ำกันของ: %{wca_ids}.'
     add:
       #original_hash: 975275e
       title: 'เพิ่มการสมัครของ %{comp}'
@@ -1956,7 +1952,7 @@ th:
       #original_hash: afe3a23
       results_preview_alert: คุณกำลังดูผลการแข่งขันที่ยังไม่ได้แสดง
       #original_hash: 07de612
-      upload_results: การแข่งขันนี้สิ้นสุดแล้ว เราจะแสดงผลดารแข่งขันให้เร็วที่สุด!
+      upload_results: การแข่งขันนี้สิ้นสุดแล้ว เราจะแสดงผลการแข่งขันให้เร็วที่สุด!
       #original_hash: a0168ee
       in_progress: >-
         การแข่งขันนี้กำลังดำเนินการอยู่ กลับมาหลังวันที่ %{date}
@@ -2533,63 +2529,92 @@ th:
     rankings:
       #original_hash: f5fe73c
       title: การจัดอันดับ
-      form_elements:
-        #original_hash: ad8919a
-        event: ประเภท
-        #original_hash: 0f21717
-        region: ภูมิภาค
-        type_selector:
-          #original_hash: 3deb745
-          type: ชนิด
-          #original_hash: dd11868
-          single: เดี่ยว
-          #original_hash: 15f86c0
-          average: เฉลี่ย
-        years_selector:
-          #original_hash: 96f997b
-          years: ปี
-          #original_hash: 0977c76
-          all_years: ทุกปี
-          #original_hash: 8737f09
-          only: เฉพาะ
-          #original_hash: b3c0fe7
-          only_html: 'เฉพาะ %{year}'
-          #original_hash: 96bdb66
-          until: จนกระทั่ง
-          #original_hash: fa23930
-          until_html: 'จนกระทั่ง %{year}'
-        show_selector:
-          #original_hash: d97d1ee
-          show: แสดง
-          #original_hash: f3cf96e
-          persons: บุคคล
-          #original_hash: 16d3376
-          persons_html: '%{quantity} คน'
-          #original_hash: 612e12d
-          results: จำนวน
-          #original_hash: f3baa4a
-          results_html: '%{quantity} คน'
-          #original_hash: d46d2ee
-          by_region: ตามภูมิภาค
-      table_elements:
-        #original_hash: 709a232
-        name: ชื่อ
-        #original_hash: 5faa59d
-        result: เวลา
-        #original_hash: e0f64f7
-        citizen_of: สัญชาติ
-        #original_hash: 1917f4f
-        competition: การแข่งขัน
-        #original_hash: e7f6fc5
-        solves: แก้โจทย์
-        #original_hash: 0f21717
-        region: ภูมิภาค
-        #original_hash: 70c07ec
-        world: โลก
       #original_hash: 65310e5
       unknown_type: ไม่รู้จักรูปแบบนี้ ต้องเป็น "เดี่ยว" หรือ"เฉลี่ย"
       #original_hash: 01e188f
       unknown_show: 'ไม่รู้จักพารามิเตอร์นี้ ต้องเป็น "N คน", หรือ "โดยทวีป"'
+    records:
+      #original_hash: e51c552
+      title: ประวัติ
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: ประเภท
+        #original_hash: 3e83afa
+        all_events: ทุกประเภท
+      #original_hash: 0f21717
+      region: Region
+      type_selector:
+        #original_hash: 3deb745
+        type: ประเภท
+        #original_hash: dd11868
+        single: เดี่ยว
+        #original_hash: 15f86c0
+        average: เฉลี่ย
+      years_selector:
+        #original_hash: 96f997b
+        years: ปี
+        #original_hash: 0977c76
+        all_years: ทุกปี
+        #original_hash: 8737f09
+        only: เฉพาะ
+        #original_hash: b3c0fe7
+        only_html: 'เฉพาะ %{year}'
+        #original_hash: 96bdb66
+        until: จนกระทั่ง
+        #original_hash: fa23930
+        until_html: 'จนกระทั่ง %{year}'
+      show_selector:
+        #original_hash: d97d1ee
+        show: แสดง
+        #original_hash: f3cf96e
+        persons: บุคคล
+        #original_hash: 16d3376
+        persons_html: '%{quantity} คน'
+        #original_hash: 612e12d
+        results: ผล
+        #original_hash: f3baa4a
+        results_html: '%{quantity} ผล'
+        #original_hash: d46d2ee
+        by_region: แสดงตามภูมิภาค
+        #original_hash: c0dcb86
+        mixed: ผสม
+        #original_hash: 5ee371a
+        slim: ย่อ
+        #original_hash: 8ccaae8
+        separate: แยกประเภท
+        #original_hash: 90ccd64
+        history: ประวัติ
+        #original_hash: e58bcf8
+        mixed_history: ประวัติแบบผสม
+    table_elements:
+      #original_hash: 709a232
+      name: ชื่อ
+      #original_hash: 5faa59d
+      result: เวลา
+      #original_hash: e0f64f7
+      citizen_of: ผลเมืองของ
+      #original_hash: 1917f4f
+      competition: การแข่งขัน
+      #original_hash: e7f6fc5
+      solves: การแก้โจทย์
+      #original_hash: 0f21717
+      region: ภูมิภาค
+      #original_hash: 70c07ec
+      world: โลก
+      type_options:
+        #original_hash: 3deb745
+        type: ประเภท
+        #original_hash: dd11868
+        single: เดี่ยว
+        #original_hash: 15f86c0
+        average: เฉลี่ย
+      #original_hash: ad8919a
+      event: ประเภท
+      #original_hash: dcf8b56
+      date_circa: วันที่โดยประมาณ
+      #original_hash: 1c54132
+      record: ผลคะแนน
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: เชื่อมต่อ WCA ID กับ account ของคุณ
@@ -3040,6 +3065,9 @@ th:
       treasurer:
         #original_hash: 75e65d9
         name: เหรัญญิก WCA
+      users:
+        #original_hash: 57bbaad
+        profile: 'profile ของ %{user_name}'
       wdc:
         #original_hash: c97077a
         name: WCA Disciplinary Committee
