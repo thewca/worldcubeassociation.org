@@ -278,7 +278,7 @@ GEM
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.13, < 3)
     iniparse (1.4.4)
-    irb (1.1.0)
+    irb (1.2.0)
       reline (>= 0.0.1)
     iso (0.2.2)
       i18n
