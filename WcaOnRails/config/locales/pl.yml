@@ -2588,14 +2588,14 @@ pl:
           %{guideline_link}).
         #original_hash: e4e48c6
         cutoff_html: >-
-          Rezultat który należy pokonać, aby przejść do drugiej fazy rundy
+          Rezultat, który należy pokonać, aby przejść do drugiej fazy rundy
           kombinowanej (zobacz %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
           Format określa na jakiej podstawie ustalany jest ranking zawodników w
           oparciu o ich wyniki. Listę dopuszczalnych formatów dla każdej z
-          konkurencji opisje %{link_to_9b}. Zobacz %{link_to_9f} opisujący każdy
-          z formatów.
+          konkurencji opisuje %{link_to_9b}. Zobacz %{link_to_9f} opisujący
+          każdy z formatów.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
@@ -2632,7 +2632,7 @@ pl:
       #original_hash: 2896c7a
       venue_information_html: 'Widzisz harmonogram dla miejsca %{venue_name}.'
       #original_hash: b97e383
-      timezone_message: 'Harmonogram jest wyświetlany w strafie czasowej %{timezone}.'
+      timezone_message: 'Harmonogram jest wyświetlany w strefie czasowej %{timezone}.'
       #original_hash: 2ab94a0
       multiple_venues_available: >-
         Te zawody odbywają się w kilku miejscach, sprawdź również harmonogram
@@ -2728,65 +2728,94 @@ pl:
     rankings:
       #original_hash: f5fe73c
       title: Rankingi
-      form_elements:
-        #original_hash: ad8919a
-        event: Konkurencja
-        #original_hash: 0f21717
-        region: Region
-        type_selector:
-          #original_hash: 3deb745
-          type: Typ
-          #original_hash: dd11868
-          single: Najlepsze
-          #original_hash: 15f86c0
-          average: Średnia
-        years_selector:
-          #original_hash: 96f997b
-          years: Lata
-          #original_hash: 0977c76
-          all_years: Wszystkie lata
-          #original_hash: 8737f09
-          only: Tylko
-          #original_hash: b3c0fe7
-          only_html: 'Tylko %{year}'
-          #original_hash: 96bdb66
-          until: Do
-          #original_hash: fa23930
-          until_html: 'Do %{year}'
-        show_selector:
-          #original_hash: d97d1ee
-          show: Wyświetl
-          #original_hash: f3cf96e
-          persons: Osoby
-          #original_hash: 16d3376
-          persons_html: '%{quantity} osób'
-          #original_hash: 612e12d
-          results: Wyniki
-          #original_hash: f3baa4a
-          results_html: '%{quantity} wyników'
-          #original_hash: d46d2ee
-          by_region: Według regionu
-      table_elements:
-        #original_hash: 709a232
-        name: Imię
-        #original_hash: 5faa59d
-        result: Wynik
-        #original_hash: e0f64f7
-        citizen_of: Narodowość
-        #original_hash: 1917f4f
-        competition: Zawody
-        #original_hash: e7f6fc5
-        solves: Ułożenia
-        #original_hash: 0f21717
-        region: Region
-        #original_hash: 70c07ec
-        world: Świat
       #original_hash: 65310e5
       unknown_type: 'Nieznany parametr "type", musi przyjść wartość "single" lub "average"'
       #original_hash: 01e188f
       unknown_show: >-
         Nieznany parametr "show", musi przyjść wartość "N persons", "N results"
         lub "by region"
+    records:
+      #original_hash: e51c552
+      title: Rekordy
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: Konkurencja
+        #original_hash: 3e83afa
+        all_events: Wszystkie konkurencje
+      #original_hash: 0f21717
+      region: Region
+      type_selector:
+        #original_hash: 3deb745
+        type: Typ
+        #original_hash: dd11868
+        single: Najlepsze
+        #original_hash: 15f86c0
+        average: Średnia
+      years_selector:
+        #original_hash: 96f997b
+        years: Lata
+        #original_hash: 0977c76
+        all_years: Wszystkie lata
+        #original_hash: 8737f09
+        only: Tylko
+        #original_hash: b3c0fe7
+        only_html: 'Tylko %{year}'
+        #original_hash: 96bdb66
+        until: Do
+        #original_hash: fa23930
+        until_html: 'Do %{year}'
+      show_selector:
+        #original_hash: d97d1ee
+        show: Widok
+        #original_hash: f3cf96e
+        persons: Osoby
+        #original_hash: 16d3376
+        persons_html: '%{quantity} osób'
+        #original_hash: 612e12d
+        results: Wyniki
+        #original_hash: f3baa4a
+        results_html: '%{quantity} wyników'
+        #original_hash: d46d2ee
+        by_region: Według regionu
+        #original_hash: c0dcb86
+        mixed: Mieszany
+        #original_hash: 5ee371a
+        slim: Zwięzły
+        #original_hash: 8ccaae8
+        separate: Oddzielny
+        #original_hash: 90ccd64
+        history: Historia
+        #original_hash: e58bcf8
+        mixed_history: Historia mieszana
+    table_elements:
+      #original_hash: 709a232
+      name: Imię
+      #original_hash: 5faa59d
+      result: Wynik
+      #original_hash: e0f64f7
+      citizen_of: Narodowości
+      #original_hash: 1917f4f
+      competition: Zawody
+      #original_hash: e7f6fc5
+      solves: Ułożenia
+      #original_hash: 0f21717
+      region: Region
+      #original_hash: 70c07ec
+      world: Świat
+      type_options:
+        #original_hash: 3deb745
+        type: Typ
+        #original_hash: dd11868
+        single: Najlepsze
+        #original_hash: 15f86c0
+        average: Średnia
+      #original_hash: ad8919a
+      event: Konkurencja
+      #original_hash: dcf8b56
+      date_circa: Data
+      #original_hash: 1c54132
+      record: Rekord
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Połącz swoje WCA ID ze swoim kontem!
