@@ -210,8 +210,10 @@ RSpec.describe User, type: :model do
       end
 
       it "shows an appropriate error message" do
-        expected_message = %(is already used by "#{existing_user.name}" with #{existing_user.email})
-        expect(invalid_user).to be_invalid_with_errors wca_id: [expected_message]
+        expect(invalid_user).to be_invalid_with_errors(wca_id: [I18n.t('users.errors.unique_html',
+                                                                       used_name: existing_user.name,
+                                                                       used_email: existing_user.email,
+                                                                       used_edit_path: Rails.application.routes.url_helpers.edit_user_path(existing_user))])
       end
     end
 

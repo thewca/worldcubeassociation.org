@@ -103,9 +103,10 @@ class User < ApplicationRecord
       if user && !user.dummy_account?
         errors.add(
           :wca_id,
-          I18n.t('users.errors.unique',
+          I18n.t('users.errors.unique_html',
                  used_name: user.name,
-                 used_email: user.email),
+                 used_email: user.email,
+                 used_edit_path: Rails.application.routes.url_helpers.edit_user_path(user)),
         )
       end
     end
