@@ -1369,6 +1369,7 @@ es:
         confirmation_link: Confirmar mi cuenta.
         #original_hash: d484f70
         activate: 'Tras la activación, puedes identificarte en la web de la WCA:'
+        login_form: 'formulario de inicio de sesión'
         #original_hash: 333999b
         addendum: >-
           Este correo se genera automáticamente. Si no has registrado una cuenta
