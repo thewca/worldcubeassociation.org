@@ -1569,8 +1569,12 @@ da:
         matcher ikke vores database. Hvis du er sikker på at du giver den
         rigtige dato i den rigtige format (ÅÅÅÅ-MM-DD) så kontakt WCA Resultat
         Holdet <a href="%{dob_form_path}">med denne formel</a>.
-      #original_hash: 71b46b4
-      unique: 'er allerede brugt af "%{used_name}" med %{used_email}'
+      #original_hash: c9ae791
+      unique_html: >-
+        er allerede brugt af "%{used_name}" med denne email adresse:
+        %{used_email}. For at gøre WCA ID'et tilgængeligt, så kan du <a
+        href=%{used_edit_path} target='_blank'>opdatere kontoen</a> og fjerne
+        WCA ID'et fra den.
       #original_hash: 26f70ed
       dob_past: skal være i fortiden
       #original_hash: b320913
@@ -3221,7 +3225,7 @@ da:
         profile: '%{user_name}s profil'
       wdc:
         #original_hash: c97077a
-        name: WCA Disciplinær Komité (WCA Disciplinary Committee)
+        name: WCA's Disciplinærkomité
         #original_hash: 286fdf8
         description: >-
           Denne komité giver WCA Kommisionen råd i specielle tilfælde, som hvis
@@ -3229,45 +3233,45 @@ da:
           medlemmer der har problemer med WCA konkurrencer.
       wdpc:
         #original_hash: 70539cd
-        name: WCA Databeskyttelses Komité (WCA Data Protection Committee)
+        name: WCA Databeskyttelseskomité (WCA Data Protection Committee)
         #original_hash: 1f69829
         description: Denne komité er ansvarlig for alle emner vedrørende databeskyttelse.
       wrc:
         #original_hash: 3da1e85
-        name: WCA Regelsæt Komité (WCA Regulations Committee)
+        name: WCA's Regelsætkomité
         #original_hash: 13ada5b
         description: Denne komité er ansvarlig for WCA reglerne.
       wrt:
         #original_hash: 67be768
-        name: WCA Resultat Holdet (WCA Results Team)
+        name: WCA's Resultathold
         #original_hash: 439ffae
         description: >-
           Dette hold er ansvarlig for at holde styr på alle konkurrence
           resultater.
       wst:
         #original_hash: a14bc62
-        name: WCA Software Holdet (WCA Software Team)
+        name: WCA's Softwarehold
         #original_hash: ec961e4
         description: >-
-          Dette hold er ansvarlig for at WCAs software (hjemmeside, blandinger,
+          Dette hold er ansvarlig for at WCA's software (hjemmeside, blandinger,
           workbooks, admin redskaber).
       wct:
         #original_hash: 63a2388
-        name: WCA Kommunikations Holdet (WCA Communication Team)
+        name: WCA's Kommunikationshold
         #original_hash: 50fd091
         description: >-
-          WCA kommunikations holdet (WCT) har rollen at hjælpe kommunikationen
-          mellem WCA og kubingmiljøet. WCAs kommunikation er til for at nå WCAs
+          WCA's kommunikationshold (WCT) har rollen at hjælpe kommunikationen
+          mellem WCA og cubingmiljøet. WCAs kommunikation er til for at nå WCAs
           mål og hjælpe på den positive kultur af venlighed, gennemskuelighed,
           ansvar, rummelighed og åbenhed.
       wfc:
         #original_hash: 9cb13de
-        name: WCA Finansiel Komité (WCA Financial Committee)
+        name: WCA's Finanskomité
         #original_hash: b4ed44b
         description: Dette hold er ansvarlig for at holde styr over WCA's økonomi.
       wec:
         #original_hash: 83bd1d0
-        name: WCA Etik Komité (WCA Ethics Committee)
+        name: WCA's Etikkomité
         #original_hash: c304d57
         description: >-
           Denne komité har rollen at sikre sig, at alle procedurer fulgt af WCA
@@ -3278,16 +3282,14 @@ da:
           har tavshedspligt over for.
       weat:
         #original_hash: d1dbb86
-        name: >-
-          WCA's Hold af Administerende Assistenter (WCA Executive Assistants
-          Team)
+        name: WCA's Hold af Administerende Assistenter
         #original_hash: 889dd90
         description: >-
           Dette hold er ansvarlig for at fuldføre de administrative opgaver for
           WCA Bestyrelsen.
       wqac:
         #original_hash: 8f32116
-        name: WCA Kvalitetsforsikrings Komité (WCA Quality Assurance Committee)
+        name: WCA's Kvalitetsforsikringskomité
         #original_hash: 0171b3b
         description: >-
           Denne Komité har rollen at støtte og fremme kvalitets forbedring i
@@ -3296,14 +3298,14 @@ da:
           Personale.
       wcat:
         #original_hash: 2b81984
-        name: WCA Konkurrenceannonceringsholdet (WCA Competition Announcement Team)
+        name: WCA's Konkurrenceannonceringshold
         #original_hash: f511502
         description: >-
           Dette hold har rollen at godkende og annoncere WCA Konkurrencer, og
           sikre sig at de overholder WCA's standarder.
       wmt:
         #original_hash: 2035811
-        name: WCA Marketing Hold (WCA Marketing Team)
+        name: WCA's Marketinghold
         #original_hash: f2a0140
         description: >-
           Holdet er ansvarlig for at udvikle og håndtere WCA's Varemærke. Det
@@ -3311,7 +3313,7 @@ da:
           Konkurrence Udstyr og markedsføre WCA varer.
       wac:
         #original_hash: 1ce7604
-        name: WCA Rådgivnings Råd
+        name: WCA's Rådgivningsråd
         #original_hash: fb6cd86
         description: >-
           Dette råd er ansvarlig for at bygge og vedligeholde tosidig
