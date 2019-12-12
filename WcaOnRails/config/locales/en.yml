@@ -766,6 +766,7 @@ en:
         confirm: "Your account is created and must be activated before you can use it. Please confirm your account through the link below: "
         confirmation_link: "Confirm my account."
         activate: "After activation you may log in to the website of the World Cube Association: "
+        login_form: "login form"
         addendum: "This email is generated automatically. If you didn't register an account on the website of the World Cube Association and received this message by mistake, please ignore and delete it."
         questions: "Do you have more questions? We will be happy to answer them! Feel free to send a mail to %{contact_link}."
       #context: user changing mail address and receiving reconfirmation mail
