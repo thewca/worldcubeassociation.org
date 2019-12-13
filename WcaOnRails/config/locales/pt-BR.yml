@@ -966,32 +966,23 @@ pt-BR:
         equipment: >-
           Número e tipo de timers e displays usados na competição. Remova a(s)
           linha(s) de equipamentos que não foram usados.
-        #original_hash: a4aebc8
+        #original_hash: 2822e8d
         venue: >-
-          Fale sobre salas, iluminação, acesso ao público, distribuição das
-          áreas (de competição, embaralhamento, espera), se foram usados espaços
-          diferentes de competição, problemas que ocorreram (barulho, por
-          exemplo) e como foram resolvidos. Seja breve e não reporte detalhes
-          irrelevantes. Por favor inclua uma ou mais fotos do local para mostrar
-          a disposição da área de embaralhamento, de competidores e as estações
-          de resolução.
-        #original_hash: f8de509
+          Os pontos listados acima são apenas uma orientação para um relatório
+          completo. Use-os a seu critério como achar melhor. Por favor remova as
+          partes que não forem usadas!
+        #original_hash: 2822e8d
         organization: >-
-          Fale sobre a equipe de organização e como trabalharam durante a
-          competição; se você se envolveu na organização; as experiências
-          anteriores e se você observou progresso no trabalho deles; se foram
-          profissionais e ativos durante os dias da competição, problemas que
-          ocorreram (p. ex. atrasos no cronograma) e como foram resolvidos. Seja
-          breve e não reporte detalhes irrelevantes.
-        #original_hash: d003c1f
+          Os pontos listados acima são apenas orientações para um relatório
+          completo. Use-os a seu critério como achar melhor. Por favor remova as
+          partes que não forem usadas!
+        #original_hash: 74affff
         incidents: >-
-          Informe os incidentes que você considera necessário mencionar. Numere
-          os incidentes começando de 1, para que outros Delegados possam
-          comentar usando os números como referência. Por favor mencione somente
-          casos concretos, não ocorrências genéricas (p. ex. casos de +2 ou DNF
-          normais). Sinta-se à vontade para pedir opiniões dos delegados ou WRC
-          em algum incidente. Se você gostaria de envolver a WDC em algum deles,
-          faça este pedido claramente.
+          Por favor informe os incidentes que não são casos comuns. Numere os
+          incidentes começando de 1, para que outros Delegados possam comentar
+          usando os números como referência. Mesmo que tudo tenha sido genérico,
+          liste pelo menos os casos mais importantes. Por favor marque as caixas
+          abaixo se você precisa de retorno.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1589,8 +1580,11 @@ pt-BR:
         não corresponde ao nosso banco de dados. Se você informou a data de
         nascimento no formato correto (AAAA-MM-DD), por favor contate a Equipe
         de Resultados usando <a href="%{dob_form_path}">este formulário</a>.
-      #original_hash: 71b46b4
-      unique: 'já está em uso por "%{used_name}", com %{used_email}'
+      #original_hash: c9ae791
+      unique_html: >-
+        já está em uso por "%{used_name}" com o email %{used_email}. Para
+        liberar a ID da WCA, você pode <a href=%{used_edit_path}
+        target='_blank'>editar aquela conta</a> e remover a ID.
       #original_hash: 26f70ed
       dob_past: deve ser no passado
       #original_hash: b320913
@@ -2033,14 +2027,14 @@ pt-BR:
           Já existe um usuário com o e-mail %{email}, mas ele tem a ID da WCA
           %{unconfirmed_wca_id} ainda não confirmada, em vez de
           %{registration_wca_id}.
-        #original_hash: 91a1582
+        #original_hash: 4e32621
         email_duplicates: >-
           E-mails precisam ser únicos, e foram encontradas as seguintes
           duplicatas: %{emails}.
-        #original_hash: d3f3fd2
+        #original_hash: bcd8e78
         wca_id_duplicates: >-
-          IDs da WCA devem ser únicos, e foram encontradas as seguintes
-          duplicatas: %{wca_ids}.
+          ID da WCA deve ser único, e foram encontradas as seguintes duplicatas:
+          %{wca_ids}.
     add:
       #original_hash: 975275e
       title: 'Adicionar inscrição para %{comp}'
@@ -2679,65 +2673,94 @@ pt-BR:
     rankings:
       #original_hash: f5fe73c
       title: Rankings
-      form_elements:
-        #original_hash: ad8919a
-        event: Evento
-        #original_hash: 0f21717
-        region: Região
-        type_selector:
-          #original_hash: 3deb745
-          type: Tipo
-          #original_hash: dd11868
-          single: Tempo único
-          #original_hash: 15f86c0
-          average: Média
-        years_selector:
-          #original_hash: 96f997b
-          years: Anos
-          #original_hash: 0977c76
-          all_years: Todos os anos
-          #original_hash: 8737f09
-          only: Somente
-          #original_hash: b3c0fe7
-          only_html: 'Somente %{year}'
-          #original_hash: 96bdb66
-          until: Até
-          #original_hash: fa23930
-          until_html: 'Até %{year}'
-        show_selector:
-          #original_hash: d97d1ee
-          show: Mostrar
-          #original_hash: f3cf96e
-          persons: Pessoas
-          #original_hash: 16d3376
-          persons_html: '%{quantity} pessoas'
-          #original_hash: 612e12d
-          results: Resultados
-          #original_hash: f3baa4a
-          results_html: '%{quantity} resultados'
-          #original_hash: d46d2ee
-          by_region: Por região
-      table_elements:
-        #original_hash: 709a232
-        name: Nome
-        #original_hash: 5faa59d
-        result: Resultado
-        #original_hash: e0f64f7
-        citizen_of: Nacionalidade
-        #original_hash: 1917f4f
-        competition: Competição
-        #original_hash: e7f6fc5
-        solves: Tempos
-        #original_hash: 0f21717
-        region: Região
-        #original_hash: 70c07ec
-        world: Mundo
       #original_hash: 65310e5
       unknown_type: 'Parâmetro de tipo desconhecido, deve ser "tempo único" ou "média"'
       #original_hash: 01e188f
       unknown_show: >-
         Parâmetro de visualização desconhecido, deve ser "N pessoas", "Ne
         resultados" ou "por região"
+    records:
+      #original_hash: e51c552
+      title: Recordes
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: Evento
+        #original_hash: 3e83afa
+        all_events: Todos os eventos
+      #original_hash: 0f21717
+      region: Região
+      type_selector:
+        #original_hash: 3deb745
+        type: Tipo
+        #original_hash: dd11868
+        single: Tempo único
+        #original_hash: 15f86c0
+        average: Média
+      years_selector:
+        #original_hash: 96f997b
+        years: Anos
+        #original_hash: 0977c76
+        all_years: Todos os anos
+        #original_hash: 8737f09
+        only: Somente
+        #original_hash: b3c0fe7
+        only_html: 'Somente %{year}'
+        #original_hash: 96bdb66
+        until: Até
+        #original_hash: fa23930
+        until_html: 'Até %{year}'
+      show_selector:
+        #original_hash: d97d1ee
+        show: Mostrar
+        #original_hash: f3cf96e
+        persons: Pessoas
+        #original_hash: 16d3376
+        persons_html: '%{quantity} pessoas'
+        #original_hash: 612e12d
+        results: Resultados
+        #original_hash: f3baa4a
+        results_html: '%{quantity} resultados'
+        #original_hash: d46d2ee
+        by_region: Por região
+        #original_hash: c0dcb86
+        mixed: Mixed
+        #original_hash: 5ee371a
+        slim: Slim
+        #original_hash: 8ccaae8
+        separate: Separado
+        #original_hash: 90ccd64
+        history: História
+        #original_hash: e58bcf8
+        mixed_history: Mixed history
+    table_elements:
+      #original_hash: 709a232
+      name: Nome
+      #original_hash: 5faa59d
+      result: Resultado
+      #original_hash: e0f64f7
+      citizen_of: Cidadão de
+      #original_hash: 1917f4f
+      competition: Competição
+      #original_hash: e7f6fc5
+      solves: Resoluções
+      #original_hash: 0f21717
+      region: Região
+      #original_hash: 70c07ec
+      world: Mundo
+      type_options:
+        #original_hash: 3deb745
+        type: Tipo
+        #original_hash: dd11868
+        single: Tempo único
+        #original_hash: 15f86c0
+        average: Média
+      #original_hash: ad8919a
+      event: Evento
+      #original_hash: dcf8b56
+      date_circa: Data aproximada
+      #original_hash: 1c54132
+      record: Recorde
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Vincular sua ID da WCA à sua conta!
