@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RegistrationCompetitionEvent < ApplicationRecord
-  belongs_to :registration
+  belongs_to :registration, touch: true
 
   belongs_to :competition_event
   validates :competition_event, presence: true
