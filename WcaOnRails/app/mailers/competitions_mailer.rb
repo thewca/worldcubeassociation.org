@@ -20,30 +20,24 @@ class CompetitionsMailer < ApplicationMailer
     end
   end
 
-  def notify_organizers_of_confirmed_competition(confirmer, competition)
+  def notify_organizer_of_confirmed_competition(confirmer, competition, organizer)
     @competition = competition
     @confirmer = confirmer
-    if @competition.organizers.empty?
-      nil
-    else
-      localized_mail I18n.locale,
-                     -> { I18n.t('users.mailer.competition_submission_email.header', delegate_name: confirmer.name, competition: competition.name) },
-                     to: competition.organizers.pluck(:email),
-                     reply_to: competition.delegates.pluck(:email)
-    end
+
+    localized_mail organizer.preferred_locale || :en,
+                   -> { I18n.t('users.mailer.competition_submission_email.header', delegate_name: confirmer.name, competition: competition.name) },
+                   to: organizer.email,
+                   reply_to: competition.delegates.pluck(:email)
   end
 
-  def notify_organizers_of_announced_competition(competition, post)
+  def notify_organizer_of_announced_competition(competition, post, organizer)
     @competition = competition
     @post = post
-    if @competition.organizers.empty?
-      nil
-    else
-      localized_mail I18n.locale,
-                     -> { I18n.t('users.mailer.competition_announcement_email.header', competition: competition.name) },
-                     to: competition.organizers.pluck(:email),
-                     reply_to: competition.delegates.pluck(:email)
-    end
+
+    localized_mail organizer.preferred_locale || :en,
+                   -> { I18n.t('users.mailer.competition_announcement_email.header', competition: competition.name) },
+                   to: organizer.email,
+                   reply_to: competition.delegates.pluck(:email)
   end
 
   def notify_organizer_of_addition_to_competition(confirmer, competition, organizer)
@@ -51,7 +45,7 @@ class CompetitionsMailer < ApplicationMailer
     @confirmer = confirmer
     @organizer = organizer
 
-    localized_mail I18n.locale,
+    localized_mail organizer.preferred_locale || :en,
                    -> { I18n.t('users.mailer.organizer_addition_email.header', competition: competition.name) },
                    to: organizer.email,
                    reply_to: competition.delegates.pluck(:email)
@@ -62,7 +56,7 @@ class CompetitionsMailer < ApplicationMailer
     @remover = remover
     @organizer = organizer
 
-    localized_mail I18n.locale,
+    localized_mail organizer.preferred_locale || :en,
                    -> { I18n.t('users.mailer.organizer_removal_email.header', competition: competition.name) },
                    to: organizer.email,
                    reply_to: competition.delegates.pluck(:email)

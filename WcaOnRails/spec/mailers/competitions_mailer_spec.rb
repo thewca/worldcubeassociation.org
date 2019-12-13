@@ -31,74 +31,72 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
   end
 
-  describe "notify_organizers_of_confirmed_competition" do
+  describe "notify_organizer_of_confirmed_competition" do
     let(:delegate) { FactoryBot.create :delegate, name: "Adam Smith" }
-    let(:organizer) { FactoryBot.create :user, name: "Will Johnson" }
+    let(:organizer) { FactoryBot.create :user, name: "Will Johnson", preferred_locale: :en }
     let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate] }
-    let(:mail) { CompetitionsMailer.notify_organizers_of_confirmed_competition(delegate, competition) }
+    let(:mail) { CompetitionsMailer.notify_organizer_of_confirmed_competition(delegate, competition, organizer) }
 
     it "renders" do
-      expect(mail.to).to eq(competition.organizers.pluck(:email))
-      expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
-      expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
-      expect(mail.subject).to eq("#{delegate.name} confirmed #{competition.name}")
-      expect(mail.body.encoded).to match("Your competition Delegate #{delegate.name} confirmed #{competition.name} and sent the submission to the WCAT.")
-    end
-
-    it "sends no email if there are no organizers" do
-      competition.organizers = []
-      expect(mail.message).to be_kind_of ActionMailer::Base::NullMail
+      I18n.with_locale :fr do
+        expect(mail.to).to eq(competition.organizers.pluck(:email))
+        expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
+        expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
+        expect(mail.subject).to eq("#{delegate.name} confirmed #{competition.name}")
+        expect(mail.body.encoded).to match("Your competition Delegate #{delegate.name} confirmed #{competition.name} and sent the submission to the WCAT.")
+      end
     end
   end
 
-  describe "notify_organizers_of_announced_competition" do
+  describe "notify_organizer_of_announced_competition" do
     let!(:post) { FactoryBot.create(:post, created_at: 1.hours.ago) }
     let(:delegate) { FactoryBot.create :delegate, name: "Adam Smith" }
-    let(:organizer) { FactoryBot.create :user, name: "Will Johnson" }
+    let(:organizer) { FactoryBot.create :user, name: "Will Johnson", preferred_locale: :en }
     let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate] }
-    let(:mail) { CompetitionsMailer.notify_organizers_of_announced_competition(competition, post) }
+    let(:mail) { CompetitionsMailer.notify_organizer_of_announced_competition(competition, post, organizer) }
 
     it "renders" do
-      expect(mail.to).to eq(competition.organizers.pluck(:email))
-      expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
-      expect(mail.subject).to eq "The WCAT announced #{competition.name}"
-      expect(mail.body.encoded).to match("Dear organizers of #{competition.name}")
-      expect(mail.body.encoded).to match("The WCAT approved your competition and officially announced it to the public.")
-    end
-
-    it "sends no email if there are no organizers" do
-      competition.organizers = []
-      expect(mail.message).to be_kind_of ActionMailer::Base::NullMail
+      I18n.with_locale :fr do
+        expect(mail.to).to eq(competition.organizers.pluck(:email))
+        expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
+        expect(mail.subject).to eq "The WCAT announced #{competition.name}"
+        expect(mail.body.encoded).to match("Dear organizers of #{competition.name}")
+        expect(mail.body.encoded).to match("The WCAT approved your competition and officially announced it to the public.")
+      end
     end
   end
 
-  describe "notify_organizer_of_addition_to_competititon" do
+  describe "notify_organizer_of_addition_to_competition" do
     let(:delegate) { FactoryBot.create :delegate, name: "Adam Smith" }
-    let(:organizer) { FactoryBot.create :user, name: "Will Johnson" }
+    let(:organizer) { FactoryBot.create :user, name: "Will Johnson", preferred_locale: :en }
     let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate] }
     let(:mail) { CompetitionsMailer.notify_organizer_of_addition_to_competition(delegate, competition, organizer) }
 
     it "renders" do
-      expect(mail.to).to eq([organizer.email])
-      expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
-      expect(mail.subject).to eq "You were added to #{competition.name} as an organizer"
-      expect(mail.body.encoded).to match("Hello #{organizer.name}")
-      expect(mail.body.encoded).to match("#{delegate.name} added you to #{competition.name} as an organizer.")
+      I18n.with_locale :fr do
+        expect(mail.to).to eq([organizer.email])
+        expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
+        expect(mail.subject).to eq "You were added to #{competition.name} as an organizer"
+        expect(mail.body.encoded).to match("Hello #{organizer.name}")
+        expect(mail.body.encoded).to match("#{delegate.name} added you to #{competition.name} as an organizer.")
+      end
     end
   end
 
   describe "notify_organizer_of_removal_from_competition" do
     let(:delegate) { FactoryBot.create :delegate, name: "Adam Smith" }
-    let(:organizer) { FactoryBot.create :user, name: "Will Johnson" }
+    let(:organizer) { FactoryBot.create :user, name: "Will Johnson", preferred_locale: :en }
     let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate] }
     let(:mail) { CompetitionsMailer.notify_organizer_of_removal_from_competition(delegate, competition, organizer) }
 
     it "renders" do
-      expect(mail.to).to eq([organizer.email])
-      expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
-      expect(mail.subject).to eq "You were removed from #{competition.name} as an organizer"
-      expect(mail.body.encoded).to match("Hello #{organizer.name}")
-      expect(mail.body.encoded).to match("#{delegate.name} removed you from #{competition.name} as an organizer.")
+      I18n.with_locale :fr do
+        expect(mail.to).to eq([organizer.email])
+        expect(mail.reply_to).to eq(competition.delegates.pluck(:email))
+        expect(mail.subject).to eq "You were removed from #{competition.name} as an organizer"
+        expect(mail.body.encoded).to match("Hello #{organizer.name}")
+        expect(mail.body.encoded).to match("#{delegate.name} removed you from #{competition.name} as an organizer.")
+      end
     end
   end
 
