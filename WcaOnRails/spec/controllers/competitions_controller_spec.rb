@@ -553,8 +553,9 @@ RSpec.describe CompetitionsController do
       end
 
       it "can confirm a competition and expects wcat and organizers to receive a notification email" do
+        competition.organizers << organizer1
         competition.update_attributes(start_date: 5.week.from_now, end_date: 5.week.from_now)
-        expect(CompetitionsMailer).to receive(:notify_organizers_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
+        expect(CompetitionsMailer).to receive(:notify_organizer_of_confirmed_competition).with(competition.delegates.last, competition, organizer1).and_call_original
         expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
           patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
@@ -657,7 +658,7 @@ RSpec.describe CompetitionsController do
         competition.organizers << organizer
         expect(competition.announced_at).to be nil
         expect(competition.announced_by).to be nil
-        expect(CompetitionsMailer).to receive(:notify_organizers_of_announced_competition).with(competition, anything).and_call_original
+        expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, anything, organizer).and_call_original
         expect do
           get :post_announcement, params: { id: competition }
         end.to change { enqueued_jobs.size }.by(1)
