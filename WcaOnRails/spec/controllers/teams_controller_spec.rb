@@ -135,6 +135,27 @@ RSpec.describe TeamsController do
         expect(invalid_team).to be_invalid
       end
 
+      it 'cannot ban a user with non-deleted registrations of upcoming competitions' do
+        team = Team.banned
+        member = FactoryBot.create :user
+        competition = FactoryBot.create :competition, :future
+        FactoryBot.create :registration, user_id: member.id, competition_id: competition.id
+        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
+        invalid_team = assigns(:team)
+        expect(invalid_team).to be_invalid
+      end
+
+      it 'can ban a user with deleted registrations of upcoming competitions' do
+        team = Team.banned
+        member = FactoryBot.create :user
+        competition = FactoryBot.create :competition, :future
+        FactoryBot.create :registration, :deleted, user_id: member.id, competition_id: competition.id
+        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
+        expect(response).to redirect_to edit_team_path(team)
+        team.reload
+        expect(team.team_members.first.user.id).to eq member.id
+      end
+
       it 'cannot add overlapping membership periods for the same user' do
         member = FactoryBot.create :user
         patch :update, params: {
