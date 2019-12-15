@@ -1585,8 +1585,11 @@ ru:
         не такой, как в нашей базе данных. Если вы уверены, что правильно ввели
         день рождения (ГГГГ-ММ-ДД), пожалуйста, свяжитесь с WCA Results Team при
         помощи <a href="%{dob_form_path}">этой формы</a>.
-      #original_hash: 71b46b4
-      unique: 'уже используется "%{used_name}" с %{used_email}'
+      #original_hash: c9ae791
+      unique_html: >-
+        уже используется участником "%{used_name}" с %{used_email}. Чтобы
+        освободить WCA ID, вы можете a href=%{used_edit_path}
+        target='_blank'>отредактировать этот аккаунт</a> и открепить WCA ID.
       #original_hash: 26f70ed
       dob_past: должен быть в прошлом
       #original_hash: b320913
