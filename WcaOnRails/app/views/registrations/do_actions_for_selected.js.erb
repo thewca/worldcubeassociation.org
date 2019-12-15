@@ -15,6 +15,12 @@ var $pendingTable = $registrationsTable.filter('.pending');
 var $acceptedTable = $registrationsTable.filter('.accepted');
 var $deletedTable = $registrationsTable.filter('.deleted');
 
+$registrationsTable.each(function() {
+  <% @registration_error_ids.each do |registration_error_id| %>
+    $(this).bootstrapTable('uncheckBy', {field: '_id', values: ["registration-<%= registration_error_id %>"]});
+  <% end %>
+});
+
 var selectedRows = $pendingTable.bootstrapTable('getSelections').concat($acceptedTable.bootstrapTable('getSelections')).concat($deletedTable.bootstrapTable('getSelections'));
 var selectedRowIds = selectedRows.map(function(row) { return row._id }); // row._id contains <tr> id
 

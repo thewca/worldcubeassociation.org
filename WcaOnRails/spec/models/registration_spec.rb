@@ -64,6 +64,23 @@ RSpec.describe Registration do
     expect(registration).to be_valid
   end
 
+  it "allows deleting a registration of a banned competitor" do
+    user = FactoryBot.create(:user, :banned)
+    registration.user = user
+    registration.save!
+    registration.deleted_at = Time.now
+    expect(registration).to be_valid
+  end
+
+  it "doesn't allow undeleting a registration of a banned competitor" do
+    user = FactoryBot.create(:user, :banned)
+    registration.user = user
+    registration.deleted_at = Time.now
+    registration.save!
+    registration.deleted_at = nil
+    expect(registration).to be_invalid_with_errors(user_id: [I18n.t('registrations.errors.undelete_banned')])
+  end
+
   it "requires at least one event" do
     registration.registration_competition_events = []
     expect(registration).to be_invalid_with_errors(registration_competition_events: ["must register for at least one event"])

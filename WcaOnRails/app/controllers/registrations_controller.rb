@@ -295,33 +295,63 @@ class RegistrationsController < ApplicationController
     @show_events = params[:show_events] == "true"
     @competition = competition_from_params
     registrations = @competition.registrations.find(selected_registrations_ids)
+    count_success = 0
+    registration_errors = []
+    @registration_error_ids = []
 
     case params[:registrations_action]
     when "accept-selected"
       registrations.each do |registration|
         if !registration.accepted?
-          registration.update!(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
-          RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
+          if registration.update(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
+            count_success += 1
+            RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
+          else
+            @registration_error_ids << registration.id
+            registration_errors << "#{registration.user.name}: #{registration.errors.full_messages.join(', ')}"
+          end
         end
       end
-      flash.now[:success] = I18n.t('registrations.flash.accepted_and_mailed', count: registrations.length)
+      if count_success > 0
+        flash.now[:success] = I18n.t('registrations.flash.accepted_and_mailed', count: count_success)
+      end
     when "reject-selected"
       registrations.each do |registration|
         if !registration.pending?
-          registration.update!(accepted_at: nil, deleted_at: nil)
-          RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
+          if registration.update(accepted_at: nil, deleted_at: nil)
+            count_success += 1
+            RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
+          else
+            @registration_error_ids << registration.id
+            registration_errors << "#{registration.user.name}: #{registration.errors.full_messages.join(', ')}"
+          end
         end
       end
-      flash.now[:warning] = I18n.t('registrations.flash.rejected_and_mailed', count: registrations.length)
+      if count_success > 0
+        flash.now[:warning] = I18n.t('registrations.flash.rejected_and_mailed', count: count_success)
+      end
     when "delete-selected"
       registrations.each do |registration|
-        registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
-        RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_later
+        if !registration.deleted?
+          if registration.update(deleted_at: Time.now, deleted_by: current_user.id)
+            count_success += 1
+            RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_later
+          else
+            @registration_error_ids << registration.id
+            registration_errors << "#{registration.user.name}: #{registration.errors.full_messages.join(', ')}"
+          end
+        end
       end
-      flash.now[:warning] = I18n.t('registrations.flash.deleted_and_mailed', count: registrations.length)
+      if count_success > 0
+        flash.now[:warning] = I18n.t('registrations.flash.deleted_and_mailed', count: count_success)
+      end
     when "export-selected"
     else
       raise "Unrecognized action #{params[:registrations_action]}"
+    end
+
+    unless registration_errors.empty?
+      flash.now[:danger] = "Failed to update: #{registration_errors.join('; ')}"
     end
 
     respond_to do |format|

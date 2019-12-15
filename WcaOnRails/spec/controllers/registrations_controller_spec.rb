@@ -133,6 +133,52 @@ RSpec.describe RegistrationsController do
       expect(accepted_registration.reload.accepted?).to be true
     end
 
+    it "doesn't allow accepting a banned user" do
+      registration.update!(accepted_at: Time.now)
+      registration2 = FactoryBot.create(:registration, :pending, competition: competition)
+      deleted_registration = FactoryBot.create(:registration, :deleted, competition: competition)
+      banned_deleted_registration = FactoryBot.create(:registration, :deleted, competition: competition)
+      banned_user = FactoryBot.create(:user, :banned)
+      banned_deleted_registration.update!(user: banned_user)
+
+      expect do
+        patch :do_actions_for_selected, params: {
+          competition_id: competition.id,
+          registrations_action: "accept-selected",
+          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}",
+                                   "registration-#{deleted_registration.id}", "registration-#{banned_deleted_registration.id}"],
+        }, xhr: true
+      end.to change { enqueued_jobs.size }.by(2)
+      expect(registration.reload.accepted?).to be true
+      expect(registration2.reload.accepted?).to be true
+      expect(deleted_registration.reload.accepted?).to be true
+      expect(banned_deleted_registration.reload.deleted?).to be true
+      expect(flash[:danger]).to include I18n.t('registrations.errors.undelete_banned')
+    end
+
+    it "doesn't allow rejecting a banned user" do
+      registration.update!(accepted_at: Time.now)
+      registration2 = FactoryBot.create(:registration, :pending, competition: competition)
+      deleted_registration = FactoryBot.create(:registration, :deleted, competition: competition)
+      banned_deleted_registration = FactoryBot.create(:registration, :deleted, competition: competition)
+      banned_user = FactoryBot.create(:user, :banned)
+      banned_deleted_registration.update!(user: banned_user)
+
+      expect do
+        patch :do_actions_for_selected, params: {
+          competition_id: competition.id,
+          registrations_action: "reject-selected",
+          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}",
+                                   "registration-#{deleted_registration.id}", "registration-#{banned_deleted_registration.id}"],
+        }, xhr: true
+      end.to change { enqueued_jobs.size }.by(2)
+      expect(registration.reload.pending?).to be true
+      expect(registration2.reload.pending?).to be true
+      expect(deleted_registration.reload.pending?).to be true
+      expect(banned_deleted_registration.reload.deleted?).to be true
+      expect(flash[:danger]).to include I18n.t('registrations.errors.undelete_banned')
+    end
+
     describe "with views" do
       render_views
       it "does not update registration that changed" do

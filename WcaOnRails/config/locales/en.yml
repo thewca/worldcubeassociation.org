@@ -897,6 +897,7 @@ en:
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
+      undelete_banned: "is a banned competitor and cannot be undeleted"
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
