@@ -209,6 +209,13 @@ class Registration < ApplicationRecord
     end
   end
 
+  validate :cannot_be_undeleted_when_banned, if: :deleted_at_changed?
+  private def cannot_be_undeleted_when_banned
+    if user.banned? && deleted_at.nil?
+      errors.add(:user_id, I18n.t('registrations.errors.undelete_banned'))
+    end
+  end
+
   validate :must_register_for_gte_one_event
   private def must_register_for_gte_one_event
     if registration_competition_events.reject(&:marked_for_destruction?).empty?
