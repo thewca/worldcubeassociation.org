@@ -15,7 +15,7 @@ RSpec.describe DelegateStatusChangeMailer, type: :mailer do
 
       expect(mail.subject).to eq("Eddard Stark just changed the Delegate status of Jon Snow")
       expect(mail.to).to eq(["board@worldcubeassociation.org"])
-      expect(mail.cc).to eq(["assistants@worldcubeassociation.org", senior_delegate1.email, senior_delegate1.email])
+      expect(mail.cc).to eq(["assistants@worldcubeassociation.org", "finance@worldcubeassociation.org", senior_delegate1.email, senior_delegate1.email])
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
       expect(mail.reply_to).to eq([senior_delegate1.email])
     end
