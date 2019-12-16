@@ -47,6 +47,10 @@ class User < ApplicationRecord
     (team_leaders + senior_delegates).uniq
   end
 
+  def self.all_discourse_groups
+    Team.all_official_and_councils.map(&:friendly_id) + User.delegate_statuses.keys
+  end
+
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 
   strip_attributes only: [:wca_id, :country_iso2]

@@ -205,6 +205,8 @@ Rails.application.routes.draw do
     patch '/mark_as/:kind' => 'incidents#mark_as', as: :mark_as
   end
 
+  get '/sso-discourse' => 'users#sso_discourse'
+
   namespace :api do
     get '/', to: redirect('/api/v0', status: 302)
     namespace :v0 do
