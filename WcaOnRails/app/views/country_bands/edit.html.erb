@@ -10,8 +10,8 @@
   <% end %>
 </div>
 <script>
-  const optionElement = '<div><%= flag_icon "%iso2" %> %name</div>';
-  const itemElement = '<div class="country"><div class="flag"><%= flag_icon "%iso2" %></div><div class="name">%name</div></div>';
+  var optionElement = '<div><%= flag_icon "%iso2" %> %name</div>';
+  var itemElement = '<div class="country"><div class="flag"><%= flag_icon "%iso2" %></div><div class="name">%name</div></div>';
   $('#iso2s').selectize({
     persist: false,
     maxItems: null,
@@ -23,15 +23,12 @@
     items: <%= raw(@in_band.to_json) %>,
     render: {
       item: function(item, escape) {
-        console.log(item);
-        var el = itemElement.replace("%iso2", escape(item.iso2).toLowerCase());
-        el = el.replace("%name", escape(item.name));
-        return el;
+        return itemElement.replace("%iso2", escape(item.iso2).toLowerCase())
+          .replace("%name", escape(item.name));
       },
       option: function(item, escape) {
-        var el = optionElement.replace("%iso2", escape(item.iso2).toLowerCase());
-        el = el.replace("%name", escape(item.name));
-        return el;
+        return optionElement.replace("%iso2", escape(item.iso2).toLowerCase())
+          .replace("%name", escape(item.name));
       }
     },
   });
