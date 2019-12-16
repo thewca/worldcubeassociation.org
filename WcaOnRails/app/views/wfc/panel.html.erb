@@ -34,12 +34,12 @@
               to_date: to,
             },
           }).done(function(data) {
-            const fileUrl = URL.createObjectURL(new Blob([data], {type: 'text/csv'}));
+            const fileUrl = URL.createObjectURL(new Blob([data], {type: 'text/tab-separated-value'}));
             // Create a hidden link to generate the download
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = fileUrl;
-            a.download = `wfc-competitions-export-${from}-${to}.csv`;
+            a.download = `wfc-competitions-export-${from}-${to}.tsv`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(fileUrl);
