@@ -1,7 +1,6 @@
 dist: trusty
 sudo: false
 language: ruby
-bundler_args: --deployment --path $HOME/.bundle
 cache:
   directories:
     - $HOME/.phantomjs
@@ -14,8 +13,8 @@ env:
     - RACK_ENV=test
 before_install:
   # Workaround for https://github.com/travis-ci/travis-ci/issues/8978
-  - gem update --system
-  - gem update bundler
+  - yes | gem update --system
+  - yes | gem update bundler
 
   - nvm install 8
   - nvm use 8
