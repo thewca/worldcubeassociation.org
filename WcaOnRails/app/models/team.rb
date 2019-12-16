@@ -164,6 +164,14 @@ class Team < ApplicationRecord
     Team.all_official.include?(self)
   end
 
+  def council?
+    Team.all_councils.include?(self)
+  end
+
+  def official_or_council?
+    Team.all_official_and_councils.include?(self)
+  end
+
   def acronym
     friendly_id.upcase
   end
