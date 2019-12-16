@@ -17,7 +17,7 @@ gem 'therubyracer'
 
 # FIXME: to be removed when octokit has released a version addressing
 # https://github.com/octokit/octokit.rb/issues/1170
-gem 'faraday', "<=0.17.0"
+gem 'faraday', "<=0.18.0"
 
 gem 'sdoc', group: :doc
 gem 'dotenv-rails', require: 'dotenv/rails-now'
