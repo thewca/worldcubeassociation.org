@@ -5,13 +5,19 @@
   }
 }
 
-.badge {
+// We can't quite include this for all .badge since our navigation and some
+// other places on the website use badges, so we just extend from a common style.
+.common-badge-style {
   margin-bottom: 0.5em;
   margin-top: 0.5em;
   margin-right: 6px;
   padding-top: 6px;
   padding-bottom: 6px;
+}
+
+.badge {
   &.team-member-badge {
+    @extend .common-badge-style;
     vertical-align: top;
     color: $gray;
     background-color: $gray-lighter;
@@ -28,6 +34,7 @@
   }
 
   &.team-senior-member-badge {
+    @extend .common-badge-style;
     background-color: $dark-green;
     color: white;
     vertical-align: top;
@@ -48,6 +55,7 @@
 
   &.team-leader-badge,
   &.officer-badge {
+    @extend .common-badge-style;
     background-color: $dark-blue;
     color: white;
     vertical-align: top;
@@ -67,6 +75,7 @@
   }
 
   &.officer-badge {
+    @extend .common-badge-style;
     background-color: black;
     color: white;
   }
@@ -78,6 +87,7 @@
   }
 
   &.delegate-badge {
+    @extend .common-badge-style;
     background-color: $dark-red;
     color: white;
     vertical-align: top;
