@@ -1566,8 +1566,11 @@ fi:
         ei täsmää tietokantamme kanssa. Jos olet varma, että annat oikean
         päivämäärän oikeassa muodossaan (VVVV-KK-PP), ota yhteyttä WCA Results
         Teamiin käyttäen <a href="%{dob_form_path}">tätä lomaketta</a>.
-      #original_hash: 71b46b4
-      unique: 'on jo käyttäjän %{used_name} käytössä osoitteella %{used_email}'
+      #original_hash: c9ae791
+      unique_html: >-
+        is already used by "%{used_name}" with %{used_email}. To free up the WCA
+        ID, you can <a href=%{used_edit_path} target='_blank'>edit that
+        account</a> and unassign the WCA ID.
       #original_hash: 26f70ed
       dob_past: täytyy olla mennyt
       #original_hash: b320913
@@ -1670,6 +1673,8 @@ fi:
         You are banned. If you believe this is an error, please contact the <a
         href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
+      #original_hash: 8d07e7f
+      undelete_banned: on saanut bänät eikä häntä voi lisätä takaisin
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2650,65 +2655,94 @@ fi:
     rankings:
       #original_hash: f5fe73c
       title: Ranking
-      form_elements:
-        #original_hash: ad8919a
-        event: Laji
-        #original_hash: 0f21717
-        region: Alue
-        type_selector:
-          #original_hash: 3deb745
-          type: Tyyppi
-          #original_hash: dd11868
-          single: Paras ratkaisu
-          #original_hash: 15f86c0
-          average: Keskiarvo
-        years_selector:
-          #original_hash: 96f997b
-          years: Vuodet
-          #original_hash: 0977c76
-          all_years: Kaikki vuodet
-          #original_hash: 8737f09
-          only: Vain vuosi
-          #original_hash: b3c0fe7
-          only_html: 'Vain %{year}'
-          #original_hash: 96bdb66
-          until: Vuoteen asti
-          #original_hash: fa23930
-          until_html: 'Vuoteen %{year}'
-        show_selector:
-          #original_hash: d97d1ee
-          show: Näytä
-          #original_hash: f3cf96e
-          persons: Henkilöitä
-          #original_hash: 16d3376
-          persons_html: '%{quantity} henkilöä'
-          #original_hash: 612e12d
-          results: Tuloksia
-          #original_hash: f3baa4a
-          results_html: '%{quantity} tulosta'
-          #original_hash: d46d2ee
-          by_region: Alueittain
-      table_elements:
-        #original_hash: 709a232
-        name: Nimi
-        #original_hash: 5faa59d
-        result: Tulos
-        #original_hash: e0f64f7
-        citizen_of: Kansalaisuus
-        #original_hash: 1917f4f
-        competition: Kilpailu
-        #original_hash: e7f6fc5
-        solves: Ratkaisut
-        #original_hash: 0f21717
-        region: Alue
-        #original_hash: 70c07ec
-        world: Maailma
       #original_hash: 65310e5
       unknown_type: 'Unknown type parameter, must be either "single" or "average"'
       #original_hash: 01e188f
       unknown_show: >-
         Unknown show parameter, must be either "N persons", "N results", or "by
         region"
+    records:
+      #original_hash: e51c552
+      title: Ennätykset
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: Laji
+        #original_hash: 3e83afa
+        all_events: Kaikki lajit
+      #original_hash: 0f21717
+      region: Alue
+      type_selector:
+        #original_hash: 3deb745
+        type: Luokka
+        #original_hash: dd11868
+        single: Paras ratkaisu
+        #original_hash: 15f86c0
+        average: Keskiarvo
+      years_selector:
+        #original_hash: 96f997b
+        years: Vuodet
+        #original_hash: 0977c76
+        all_years: Kaikki vuodet
+        #original_hash: 8737f09
+        only: Tietty vuosi
+        #original_hash: b3c0fe7
+        only_html: 'Vain %{year}'
+        #original_hash: 96bdb66
+        until: Tiettyyn vuoteen asti
+        #original_hash: fa23930
+        until_html: 'Vuoteen %{year} asti'
+      show_selector:
+        #original_hash: d97d1ee
+        show: Näytä
+        #original_hash: f3cf96e
+        persons: Henkilöitä
+        #original_hash: 16d3376
+        persons_html: '%{quantity} henkilöä'
+        #original_hash: 612e12d
+        results: Tuloksia
+        #original_hash: f3baa4a
+        results_html: '%{quantity} tulosta'
+        #original_hash: d46d2ee
+        by_region: Alueittain
+        #original_hash: c0dcb86
+        mixed: Lajeittain
+        #original_hash: 5ee371a
+        slim: Yksi taulukko
+        #original_hash: 8ccaae8
+        separate: Tulosluokittain
+        #original_hash: 90ccd64
+        history: Historia lajeittain
+        #original_hash: e58bcf8
+        mixed_history: Yhdistetty historia
+    table_elements:
+      #original_hash: 709a232
+      name: Nimi
+      #original_hash: 5faa59d
+      result: Tulos
+      #original_hash: e0f64f7
+      citizen_of: Kansalaisuus
+      #original_hash: 1917f4f
+      competition: Kilpailu
+      #original_hash: e7f6fc5
+      solves: Ratkaisut
+      #original_hash: 0f21717
+      region: Alue
+      #original_hash: 70c07ec
+      world: Maailma
+      type_options:
+        #original_hash: 3deb745
+        type: Luokka
+        #original_hash: dd11868
+        single: Paras ratkaisu
+        #original_hash: 15f86c0
+        average: Keskiarvo
+      #original_hash: ad8919a
+      event: Laji
+      #original_hash: dcf8b56
+      date_circa: Päivä suunnilleen
+      #original_hash: 1c54132
+      record: Ennätys
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: 'Yhdistä WCA ID:si tiliisi!'
