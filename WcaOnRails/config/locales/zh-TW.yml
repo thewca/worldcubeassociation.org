@@ -75,6 +75,13 @@ zh-TW:
     Oceania: 大洋洲
     #original_hash: b1ffb4c
     South America: 南美洲
+  country_bands:
+    #original_hash: 2b5976e
+    title: WCA國家層級
+    #original_hash: df5f4ea
+    band_title: '層級%{number}'
+    #original_hash: 6521e5d
+    due_value: '每場比賽每位參賽者$%{value}'
   events:
     #original_hash: 3732390
     '222': 2x2x2方塊
@@ -987,6 +994,11 @@ zh-TW:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1402,8 +1414,10 @@ zh-TW:
       dob_incorrect_html: >-
         與WCA資料庫不相符。如果您確認您提供的日期以及格式(YYYY-MM-DD)是正確的，請使用<a
         href="%{dob_form_path}">此表單</a>聯絡WCA成績組。
-      #original_hash: 71b46b4
-      unique: '已經被「%{used_name}」的%{used_email}使用了'
+      #original_hash: c9ae791
+      unique_html: >-
+        已經被%{used_email}的"%{used_name}"所使用中。如要把WCA ID釋出，你可以 <a
+        href=%{used_edit_path} target='_blank'>編輯這個帳號</a> 來移除WCA ID。
       #original_hash: 26f70ed
       dob_past: 必須為過去的日期
       #original_hash: b320913
@@ -1487,6 +1501,8 @@ zh-TW:
       banned_html: >-
         您被禁賽了。如果你認為有錯誤，請聯絡<a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WCA紀律委員會</a>.
+      #original_hash: 8d07e7f
+      undelete_banned: 這位參賽者被禁賽且不能被反刪除。
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
