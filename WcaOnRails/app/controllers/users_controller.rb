@@ -119,7 +119,6 @@ class UsersController < ApplicationController
         DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(@user, current_user).deliver_now
       end
       if current_user == @user
-        # TODO: for 2FA, log them out and explicitly ask for a re-login
         # Sign in the user, bypassing validation in case their password changed
         bypass_sign_in @user
       end
