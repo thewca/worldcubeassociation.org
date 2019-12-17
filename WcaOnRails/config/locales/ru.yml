@@ -75,6 +75,13 @@ ru:
     Oceania: Океания
     #original_hash: b1ffb4c
     South America: Южная Америка
+  country_bands:
+    #original_hash: 2b5976e
+    title: Тарифы Стран WCA
+    #original_hash: df5f4ea
+    band_title: 'Тариф %{number}'
+    #original_hash: 6521e5d
+    due_value: '%{value} долларов за каждого участника на каждом соревновании'
   events:
     #original_hash: 3732390
     '222': Кубик 2x2x2
@@ -1109,6 +1116,11 @@ ru:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1693,6 +1705,8 @@ ru:
         Вас забанили. Если вы думаете, что это ошибка, пожалуйста, свяжитесь с
         <a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
+      #original_hash: 8d07e7f
+      undelete_banned: 'забанен(а), и его/её регистрация не может быть восстановлена'
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
