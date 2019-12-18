@@ -18,6 +18,11 @@ module Resultable
     belongs_to :format, foreign_key: :formatId
     validates :format, presence: true
 
+    # Forgetting to synchronize the results in WCA Live is a very common mistake,
+    # so this error message is hinting the user to check that, even if it's
+    # outside the scope of the WCA website.
+    validates_numericality_of :pos, message: "The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"
+
     # Order by event, then roundTypeId, then average if exists, then best if exists
     scope :sorted_for_competitions,
           ->(competition_ids) { includes(:format).where(competitionId: competition_ids).order(:competitionId, :eventId, :roundTypeId).order(Arel.sql("if(formatId in ('a','m') and average>0, average, 2147483647), if(best>0, best, 2147483647)")) }
@@ -46,10 +51,7 @@ module Resultable
 
     validate :validate_solve_count, if: :event
     def validate_solve_count
-      # We need to know the round_type and the format in order to validate the number of solves.
-      if round_type && format
-        errors.add(:base, invalid_solve_count_reason) if invalid_solve_count_reason
-      end
+      errors.add(:base, invalid_solve_count_reason) if invalid_solve_count_reason
     end
 
     validate :validate_average
@@ -70,7 +72,7 @@ module Resultable
   def invalid_solve_count_reason
     return "Invalid format" unless format
     return "Invalid round_type" unless round_type
-    return "Cannot skip all solves." if solve_times.all?(&:skipped?)
+    return "All solves cannot be DNS/skipped." if solve_times.all? { |s| s.dns? || s.skipped? }
 
     unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
       return "Skipped solves must all come at the end."

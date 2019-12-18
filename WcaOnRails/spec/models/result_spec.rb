@@ -51,13 +51,18 @@ RSpec.describe Result do
     end
 
     it "cannot skip all solves" do
-      result = FactoryBot.build :result, value1: 0, value2: 0, value3: 0, value4: 0, value5: 0
-      expect(result).to be_invalid_with_errors(base: ["Cannot skip all solves."])
+      result = FactoryBot.build :result, value1: -2, value2: -2, value3: 0, value4: 0, value5: 0, best: -2
+      expect(result).to be_invalid_with_errors(base: ["All solves cannot be DNS/skipped."])
     end
 
     it "values must all be >= -2" do
       result = FactoryBot.build :result, value1: 0, value2: -3, value3: 0, value4: 0, value5: 0
       expect(result).to be_invalid(value2: ["invalid"])
+    end
+
+    it "position must be a number" do
+      result = FactoryBot.build :result, pos: nil
+      expect(result).to be_invalid(pos: ["The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"])
     end
 
     it "correctly computes best" do
