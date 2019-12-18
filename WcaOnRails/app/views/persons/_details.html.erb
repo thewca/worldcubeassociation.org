@@ -12,9 +12,11 @@
         (<%= t 'persons.show.previously' %> <%= @previous_persons.map { |person| "#{person.name} - #{person.country.name}" }.join(', ') %>)
       </h4>
     <% end %>
-    <div class="positions-container">
-      <%= all_user_badges(@person.user) %>
-    </div>
+    <% if @person.user %>
+      <div class="positions-container">
+        <%= all_user_badges(@person.user) %>
+      </div>
+    <% end %>
     <% if @person.user&.avatar %>
       <%= image_tag @person.user.avatar.url, class: "avatar" %>
     <% end %>
