@@ -20,8 +20,8 @@ class WfcController < ApplicationController
                   .includes(:delegates)
                   .joins(:competitors)
                   .group("Competitions.id")
-                  .where("start_date >= ?", from)
-                  .where("end_date <= ?", to)
-                  .order(:start_date, :name)
+                  .where("results_posted_at >= ?", from)
+                  .where("results_posted_at <= ?", to)
+                  .order(:results_posted_at, :name)
   end
 end
