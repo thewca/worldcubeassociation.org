@@ -18,7 +18,7 @@ class WfcController < ApplicationController
     @competitions=Competition
                   .select(select_attributes)
                   .includes(:delegates)
-                  .joins(:competitors)
+                  .left_joins(:competitors)
                   .group("Competitions.id")
                   .where("results_posted_at >= ? and results_posted_at <= ?", from, to)
                   .order(:results_posted_at, :name)
