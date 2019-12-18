@@ -18,7 +18,7 @@ class WfcController < ApplicationController
     @competitions=Competition
                   .select(select_attributes)
                   .includes(:delegates)
-                  .joins(:competitors)
+                  .left_joins(:competitors)
                   .group("Competitions.id")
                   .where("start_date >= ?", from)
                   .where("end_date <= ?", to)
