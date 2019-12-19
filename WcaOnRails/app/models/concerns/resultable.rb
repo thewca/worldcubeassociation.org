@@ -123,7 +123,7 @@ module Resultable
     #    - 333fm legal formats changed from "123" to "123m".
     #  - December 9, 2013: https://github.com/thewca/wca-regulations/issues/109 and https://github.com/thewca/wca-regulations/commit/80ebf04e3ed0752df8047f4428277bf186f374c2
     #    - All events that allow "mean of 3" no longer allow "best of 3".
-    formatId == "a" || formatId == "m" || (formatId == "3" && %(333ft 333fm 333bf).include?(eventId))
+    formatId == "a" || formatId == "m" || (formatId == "3" && %w(333ft 333fm 333bf).include?(eventId))
   end
 
   def compute_correct_best
