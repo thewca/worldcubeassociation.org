@@ -9,6 +9,10 @@ class Result < ApplicationRecord
   belongs_to :country, foreign_key: :countryId
   validates :country, presence: true
 
+  def country
+    Country.c_find(self.countryId)
+  end
+
   scope :final, -> { where(roundTypeId: RoundType.final_rounds.map(&:id)) }
   scope :succeeded, -> { where("best > 0") }
   scope :podium, -> { final.succeeded.where(pos: [1..3]) }

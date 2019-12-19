@@ -257,9 +257,19 @@ class SolveTime
     end
   end
 
+  validate :time_centiseconds_must_not_be_nil
+  def time_centiseconds_must_not_be_nil
+    return if incomplete? || (!@event.timed_event? && !@event.multiple_blindfolded?)
+    # For 333mbo only, time_centiseconds may be nil to indicate an unknown time.
+    unless time_centiseconds || @event.id == "333mbo"
+      errors.add(:base, "time_centiseconds must not be nil")
+    end
+  end
+
   validate :times_over_10_minutes_must_be_rounded
   def times_over_10_minutes_must_be_rounded
-    return unless complete?
+    # See validation for nil time_centiseconds above
+    return if incomplete? || time_centiseconds.nil?
     if (@event.timed_event? || @event.multiple_blindfolded?) && time_minutes > 10 && time_centiseconds % 100 > 0
       errors.add(:base, "times over 10 minutes should be rounded")
     end
