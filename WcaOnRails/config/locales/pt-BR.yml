@@ -75,6 +75,13 @@ pt-BR:
     Oceania: Oceania
     #original_hash: b1ffb4c
     South America: América do Sul
+  country_bands:
+    #original_hash: 2b5976e
+    title: Faixas de Países da WCA
+    #original_hash: df5f4ea
+    band_title: 'Faixa %{number}'
+    #original_hash: 6521e5d
+    due_value: '$%{value} por competidor por competição'
   events:
     #original_hash: 3732390
     '222': Cubo 2x2x2
@@ -1101,6 +1108,11 @@ pt-BR:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1687,6 +1699,8 @@ pt-BR:
         Você está banido. Se você acredita que isso é um erro, por favor contate
         o <a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
+      #original_hash: 8d07e7f
+      undelete_banned: é um(a) competidor(a) banido(a) e não pode ser desfeita a exclusão
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
