@@ -127,7 +127,12 @@ module CompetitionsHelper
                  end
     last_activity = sorted_activities.last
     last_time = if last_activity
-                  last_activity.end_time.in_time_zone(timezone).strftime("%H:59:00")
+                  last_timestamp = last_activity.end_time.in_time_zone(timezone)
+                  if last_timestamp.hour == 0 && last_timestamp.min == 0
+                    "23:59:59"
+                  else
+                    last_timestamp.strftime("%H:59:59")
+                  end
                 else
                   "20:00:00"
                 end
