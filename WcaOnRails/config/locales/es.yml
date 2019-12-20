@@ -75,6 +75,13 @@ es:
     Oceania: Oceanía
     #original_hash: b1ffb4c
     South America: América del Sur
+  country_bands:
+    #original_hash: 2b5976e
+    title: Franjas de paises de la WCA
+    #original_hash: df5f4ea
+    band_title: 'Franja %{number}'
+    #original_hash: 6521e5d
+    due_value: '$%{value} por competidor por competición'
   events:
     #original_hash: 3732390
     '222': Cubo 2x2x2
@@ -1111,6 +1118,11 @@ es:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1599,8 +1611,11 @@ es:
         proporcionando la fecha correcta en el formato correcto (AAAA-MM-DD),
         ponte en contacto con el Equipo de Resultados mediante <a
         href="%{dob_form_path}">este formulario</a>.
-      #original_hash: 71b46b4
-      unique: 'está actualmente en uso por "%{used_name}" con %{used_email}'
+      #original_hash: c9ae791
+      unique_html: >-
+        Ya está siendo usado por "%{used_name}" con %{used_email}. para liberar
+        el WCA ID, puedes <a href=%{used_edit_path} target='_blank'>editar la
+        cuenta</a> y desasignar el WCA ID.
       #original_hash: 26f70ed
       dob_past: debe ser una fecha pasada
       #original_hash: b320913
@@ -1708,6 +1723,8 @@ es:
         Tienes denegado el acceso. Si crees que se trata de un error, por favor
         contacta con el  <a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
+      #original_hash: 8d07e7f
+      undelete_banned: es un competidor baneado y no se puede volver a añadir
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
