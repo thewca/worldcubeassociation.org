@@ -1,14 +1,14 @@
 <%
   force_collapse ||= false
   # NOTE: expect valid 'results_validator' variable
-  panel_style = class_for_panel(error: results_validator.total_errors > 0,
-                                warning: results_validator.total_warnings > 0)
-  collapse_panel = force_collapse || !results_validator.has_results
+  panel_style = class_for_panel(error: results_validator.has_errors?,
+                                warning: results_validator.has_warnings?)
+  collapse_panel = force_collapse || !results_validator.has_results?
 %>
 <div class="panel panel-<%= panel_style %>">
   <div class="panel-heading heading-as-link <%= "collapsed" if collapse_panel %>" data-toggle="collapse" data-target="#collapse-check-results">
     <h3 class="panel-title">
-      <% if results_validator.check_real_results %>
+      <% if results_validator.check_real_results? %>
         Check competition's results
       <% else %>
         Check imported results
@@ -18,9 +18,9 @@
   </div>
   <div id="collapse-check-results" class="panel-body collapse <%= "in" unless collapse_panel %>">
     <h3>Errors</h3>
-    <% if results_validator.total_errors > 0 %>
+    <% if results_validator.has_errors? %>
       <p>Please fix the errors below:</p>
-      <% results_validator.errors.each do |type, errors| %>
+      <% results_validator.errors.group_by(&:kind).each do |type, errors| %>
         <% if errors.any? %>
           <h4>Errors detected in <%= type %></h4>
           <ul>
@@ -30,9 +30,9 @@
           </ul>
         <% end %>
       <% end %>
-    <% elsif !results_validator.has_results %>
+    <% elsif !results_validator.has_results? %>
       <p class="text-danger">
-        <% if results_validator.check_real_results %>
+        <% if results_validator.check_real_results? %>
           No results for the competition yet.
         <% else %>
           No results submitted yet.
@@ -42,14 +42,14 @@
       <p>No error detected in the results.</p>
     <% end %>
     <h3>Warnings</h3>
-    <% if results_validator.total_warnings > 0 %>
+    <% if results_validator.has_warnings? %>
       <p>
         Please pay attention to the warnings below.
-        <% unless results_validator.check_real_results %>
+        <% unless results_validator.check_real_results? %>
           You may need to add a comment about them when submitting these results to the WRT!
         <% end %>
       </p>
-      <% results_validator.warnings.each do |type, warnings| %>
+      <% results_validator.warnings.group_by(&:kind).each do |type, warnings| %>
         <% if warnings.any? %>
           <h4>Warnings detected in <%= type %></h4>
           <ul>
@@ -59,9 +59,9 @@
           </ul>
         <% end %>
       <% end %>
-    <% elsif !results_validator.has_results %>
+    <% elsif !results_validator.has_results? %>
       <p class="text-danger">
-        <% if results_validator.check_real_results %>
+        <% if results_validator.check_real_results? %>
           No results for the competition yet.
         <% else %>
           No results submitted yet.

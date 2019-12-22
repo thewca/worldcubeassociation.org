@@ -35,12 +35,14 @@ class AdminController < ApplicationController
   def new_results
     @competition = competition_from_params
     @upload_json = UploadJson.new
-    @results_validator = CompetitionResultsValidator.new(@competition.id)
+    @results_validator = ResultsValidators::CompetitionsResultsValidator.new
+    @results_validator.validate(@competition.id)
   end
 
   def check_results
     @competition = competition_from_params
-    @results_validator = CompetitionResultsValidator.new(@competition.id, true)
+    @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
+    @results_validator.validate(@competition.id)
   end
 
   def clear_results_submission
@@ -71,7 +73,8 @@ class AdminController < ApplicationController
       flash[:success] = "JSON file has been imported."
       redirect_to competition_admin_upload_results_edit_path
     else
-      @results_validator = CompetitionResultsValidator.new(@competition.id)
+      @results_validator = ResultsValidators::CompetitionsResultsValidator.new
+      @results_validator.validate(@competition.id)
       render :new_results
     end
   end

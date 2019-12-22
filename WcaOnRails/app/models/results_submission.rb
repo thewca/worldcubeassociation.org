@@ -12,14 +12,14 @@ class ResultsSubmission
   validates :schedule_url, presence: true, url: true
 
   validate do
-    if results_validator.total_errors != 0
+    if results_validator.has_errors?
       # this shouldn't actually happen through a "normal" usage of the website
       errors.add(:message, "submitted results contain errors")
     end
   end
 
   def results_validator
-    @results_validator ||= CompetitionResultsValidator.new(competition_id)
+    @results_validator ||= ResultsValidators::CompetitionsResultsValidator.new.validate(competition_id)
   end
 
   # This is used in specs to compare two ResultsSubmission
