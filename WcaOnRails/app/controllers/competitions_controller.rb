@@ -684,6 +684,7 @@ class CompetitionsController < ApplicationController
         :on_the_spot_entry_fee_lowest_denomination,
         :refund_policy_percent,
         :refund_policy_limit_date,
+        :modify_registered_events,
         :early_puzzle_submission,
         :early_puzzle_submission_reason,
         :qualification_results,

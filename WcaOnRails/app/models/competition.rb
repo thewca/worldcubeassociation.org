@@ -125,6 +125,7 @@ class Competition < ApplicationRecord
     updated_at
     connected_stripe_account_id
     refund_policy_limit_date
+    modify_registered_events
     early_puzzle_submission
     early_puzzle_submission_reason
     qualification_results
@@ -850,6 +851,14 @@ class Competition < ApplicationRecord
     if refund_policy_limit_date? && refund_policy_limit_date > start_date
       errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start'))
     end
+
+    if modify_registered_events < registration_close
+      errors.add(:modify_registered_events, I18n.t('competitions.errors.event_modification_before_reg_close'))
+      end
+    
+    if on_the_spot_registration == true && modify_registered_events =! start_date
+      errors.add(:modify_registered_events, I18n.t('competitions.errors.event_modification_and_ots'))
+      end
   end
 
   # Since Competition.events only includes saved events
