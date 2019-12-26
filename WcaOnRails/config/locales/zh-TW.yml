@@ -1244,6 +1244,8 @@ zh-TW:
         confirmation_link: 確認我的帳號。
         #original_hash: d484f70
         activate: 您可以在帳號確認以後登入世界方塊協會的網站：
+        #original_hash: fb02586
+        login_form: 登入
         #original_hash: 333999b
         addendum: 此電子郵件為自動產生的。如果您沒有在世界方塊協會的網站申請帳號，請忽略此錯誤訊息並刪除之。
         #original_hash: dbc2263
