@@ -1382,6 +1382,8 @@ ru:
         confirmation_link: Подтвердить мой аккаунт.
         #original_hash: d484f70
         activate: После активации вы сможете войти на сайт WCA.
+        #original_hash: fb02586
+        login_form: форма логина
         #original_hash: 333999b
         addendum: >-
           Это письмо отправлено автоматически. Если вы не регистрировались на
@@ -2955,7 +2957,7 @@ ru:
         content:
           #original_hash: 3bb4e11
           '1': >-
-            Требований для участия не так много. Однако, стоит ознакомиться с <a
+            Требований для участия не так много. Однако стоит ознакомиться с <a
             href='https://www.worldcubeassociation.org/regulations/translations/russian'>Положениями
             WCA</a> (<a
             href='https://www.worldcubeassociation.org/regulations/'>оригинал на
@@ -3092,11 +3094,11 @@ ru:
             3j</a>).
       regulations4:
         #original_hash: 43f9da8
-        title: Со сколько лет можно участвовать в соревнованиях?
+        title: Со скольки лет можно участвовать в соревнованиях?
         content:
           #original_hash: 984704a
           '1': >-
-            Минимального возраста нет. Однако, несовершеннолетним участникам
+            Минимального возраста нет. Однако несовершеннолетним участникам
             сначала следует спросить разрешения родителей (см. <a
             href='https://www.worldcubeassociation.org/regulations/translations/russian/#2b'>Положение
             2b</a>).
