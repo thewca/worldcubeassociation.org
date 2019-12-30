@@ -151,14 +151,14 @@ function insertPerson( $person, $newName, $newCountry, $newId ) {
   $newName      = mysqlEscape( $newName );
   $newCountry   = mysqlEscape( $newCountry );
   $newId        = mysqlEscape( $newId );
-  $gender       = isset($person['gender']) ? mysqlEscape($person['gender']) : '';
+  $gender       = !empty($person['gender']) ? "'" . mysqlEscape($person['gender']) . "'" : 'NULL';
   $dob          = isset($person['dob']) ? $person['dob'] : '0000-0-0';
   list( $year, $month, $day ) = explode( '-', $dob );
 
   #--- Build the command.
   $command = "
     INSERT INTO Persons (id, subId, name, countryId, gender, year, month, day, comments)
-    VALUES ( '$newId', 1, '$newName', '$newCountry', '$gender', $year, $month, $day, '' )
+    VALUES ( '$newId', 1, '$newName', '$newCountry', $gender, $year, $month, $day, '' )
   ";
 
   #--- Show the command.
