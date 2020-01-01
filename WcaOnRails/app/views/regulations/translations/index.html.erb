@@ -10,11 +10,19 @@
 
   <% current_translations = [
     {
-      version: "2019-05-01",
+      version: "2020-01-01",
       language: "简体中文",
       language_english: "Chinese",
       url: "./chinese",
     },
+  ] %>
+
+  <h3><%= t("regulations_translations.current") %></h3>
+  <div class="regulations-translations-table-container">
+    <%= render 'regulations/translations/index_table', translations: current_translations %>
+  </div>
+
+  <% old_translations = [
     {
       version: "2019-05-01",
       language: "繁體中文",
@@ -33,14 +41,6 @@
       language_english: "Russian",
       url: "./russian",
     },
-  ] %>
-
-  <h3><%= t("regulations_translations.current") %></h3>
-  <div class="regulations-translations-table-container">
-    <%= render 'regulations/translations/index_table', translations: current_translations %>
-  </div>
-
-  <% old_translations = [
     {
       version: "2018-01-01",
       language: "Nederlands",
