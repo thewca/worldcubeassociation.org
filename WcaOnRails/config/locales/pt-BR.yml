@@ -1373,6 +1373,8 @@ pt-BR:
         activate: >-
           Depois da ativação você poderá fazer o log in no site da World Cube
           Association:
+        #original_hash: fb02586
+        login_form: formulário de login
         #original_hash: 333999b
         addendum: >-
           Esse email é gerado automaticamente. Se você não criou uma conta no
