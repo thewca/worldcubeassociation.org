@@ -1215,6 +1215,7 @@ class Competition < ApplicationRecord
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
       "schedule" => schedule_wcif,
+      "competitorLimit" => competitor_limit_enabled? ? competitor_limit : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
@@ -1402,6 +1403,7 @@ class Competition < ApplicationRecord
             "numberOfDays" => { "type" => "integer" },
           },
         },
+        "competitorLimit" => { "type" => ["integer", "null"] },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
