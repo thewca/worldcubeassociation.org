@@ -59,7 +59,7 @@ class SingleSignOn
   end
 
   def self.sso_url
-    "#{ENVied.DISCOURSE_URL}/session/sso_login"
+    "#{ENVied.DISCOURSE_URL}/session/sso_login?"
   end
 
   def self.parse(payload, sso_secret = nil)

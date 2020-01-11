@@ -106,4 +106,64 @@ RSpec.describe "users" do
       expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
     end
   end
+
+  context "Discourse SSO" do
+    let(:sso) { SingleSignOn.new }
+
+    it "authenticates WAC user and validates user attributes" do
+      user = FactoryBot.create(:user, :wac_member, :wca_id)
+      sign_in user
+      sso.nonce = 1234
+      get "#{sso_discourse_path}?#{sso.payload}"
+      expect(response.location).to match SingleSignOn.sso_url
+      answer_sso = SingleSignOn.parse(query_string_from_location(response.location))
+      expect(answer_sso.moderator).to be true
+      expect(answer_sso.external_id).to eq user.id.to_s
+      [:name, :email, :avatar_url].each do |a|
+        expect(answer_sso.send(a)).to eq user.send(a)
+      end
+      expect(answer_sso.add_groups).to eq "wac"
+      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wac"]).join(","))
+      expect(answer_sso.bio).to match user.wca_id
+    end
+
+    it "authenticates regular user" do
+      user = FactoryBot.create(:user)
+      sign_in user
+      sso.nonce = 1234
+      get "#{sso_discourse_path}?#{sso.payload}"
+      expect(response.location).to match SingleSignOn.sso_url
+      answer_sso = SingleSignOn.parse(query_string_from_location(response.location))
+      expect(answer_sso.moderator).to be false
+      expect(answer_sso.add_groups).to be_empty
+      expect(answer_sso.remove_groups).to eq User.all_discourse_groups.join(",")
+      expect(answer_sso.bio).to match "No WCA ID"
+    end
+
+    it "authenticates admin delegate" do
+      user = FactoryBot.create(:delegate, :wst_member)
+      sign_in user
+      sso.nonce = 1234
+      get "#{sso_discourse_path}?#{sso.payload}"
+      expect(response.location).to match SingleSignOn.sso_url
+      answer_sso = SingleSignOn.parse(query_string_from_location(response.location))
+      # WST is not moderator by default, admin status is granted manually in
+      # Discourse
+      expect(answer_sso.moderator).to be false
+      expect(answer_sso.add_groups).to eq "wst,delegate"
+      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wst", "delegate"]).join(","))
+    end
+
+    it "doesn't authenticate unconfirmed user" do
+      user = FactoryBot.create(:user, confirmed: false)
+      sign_in user
+      sso.nonce = 1234
+      get "#{sso_discourse_path}?#{sso.payload}"
+      expect(response).to redirect_to new_user_session_path
+    end
+  end
+
+  def query_string_from_location(location)
+    location.sub(SingleSignOn.sso_url, "")
+  end
 end
