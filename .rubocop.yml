@@ -7,6 +7,8 @@ AllCops:
     - 'WcaOnRails/node_modules/**/*'
     - 'WcaOnRails/bin/**/*'
     - 'WcaOnRails/vendor/**/*'
+    # This file is provided as-is by Discourse
+    - 'WcaOnRails/lib/single_sign_on.rb'
 
 Bundler/OrderedGems:
   Enabled: false
