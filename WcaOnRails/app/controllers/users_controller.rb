@@ -148,25 +148,10 @@ class UsersController < ApplicationController
     # (section "implementing SSO on your site")
     # Note that we do validate emails (as in: users can't log in until they have
     # validated their emails).
-    payload = params.require(:sso)
-    signature = params.require(:sig)
-    secret = ENVied.DISCOURSE_SECRET
 
-    # URL decode then base64 decode the payload
-    decoded_payload = CGI.unescape(payload)
-
-    digest = OpenSSL::Digest.new('sha256')
-    # Step 1, check signatures match
-    computed_signature = OpenSSL::HMAC.hexdigest(digest, secret, decoded_payload)
-    unless computed_signature == signature
-      return render json: { error: "Invalid signature for the payload" }, status: 403
-    end
-
-    # Base64 decode the payload
-    raw_payload = Base64.decode64(decoded_payload)
-
-    # Get the nonce from the payload
-    nonce = raw_payload.sub("nonce=", "")
+    # Use the 'SingleSignOn' lib provided by Discourse. Our secret and URL is
+    # already configured there.
+    sso = SingleSignOn.parse(request.query_string)
 
     # These are all the automated groups in Discourse (all teams, councils, and
     # Delegates statuses).
@@ -176,32 +161,22 @@ class UsersController < ApplicationController
     user_groups = current_user.current_teams.select(&:official_or_council?).map(&:friendly_id)
     user_groups << current_user.delegate_status if current_user.any_kind_of_delegate?
 
+    sso.external_id = current_user.id
+    sso.name = current_user.name
+    sso.email = current_user.email
+    sso.avatar_url = current_user.avatar_url
+    sso.moderator = current_user.wac_team?
+    sso.add_groups = user_groups.join(",")
+    sso.remove_groups = (all_groups - user_groups).join(",")
     # Build a nice response to discourse, so that the WCA profile is linked in
     # the user's profile.
-    wca_bio = if current_user.wca_id
+    sso.bio = if current_user.wca_id
                 "WCA profile: [#{current_user.wca_id}](#{person_url(current_user.wca_id)})."
               else
                 "No WCA ID."
               end
 
-    response = {
-      nonce: nonce,
-      name: current_user.name,
-      moderator: current_user.wac_team?,
-      external_id: current_user.id,
-      email: current_user.email,
-      bio: wca_bio,
-      add_groups: user_groups.join(","),
-      remove_groups: (all_groups - user_groups).join(","),
-      avatar_url: current_user.avatar_url,
-    }
-    response_payload = response.map { |k, v| "#{k}=#{v}" }.join('&')
-    base64_payload = Base64.strict_encode64(response_payload)
-    final_payload = CGI.escape(base64_payload)
-    sig = OpenSSL::HMAC.hexdigest(digest, secret, base64_payload)
-
-    discourse_url = ENVied.DISCOURSE_URL
-    redirect_to "#{discourse_url}/session/sso_login?sso=#{final_payload}&sig=#{sig}"
+    redirect_to sso.to_url
   end
 
   private def redirect_if_cannot_edit_user(user)
