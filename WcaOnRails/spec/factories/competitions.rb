@@ -123,6 +123,10 @@ FactoryBot.define do
       with_schedule { true }
     end
 
+    trait :world_championship do
+      championship_types { ["world"] }
+    end
+
     transient do
       championship_types { [] }
       with_rounds { false }
