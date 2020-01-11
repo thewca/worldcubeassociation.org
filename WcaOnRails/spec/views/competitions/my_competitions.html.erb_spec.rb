@@ -17,7 +17,7 @@ RSpec.describe "competitions/my_competitions" do
 
   it "shows upcoming competitions" do
     render
-    expect(rendered).to match '<td><a href="/competitions/MelbourneOpen2016">Melbourne Open 2016</a></td>'
+    expect(rendered).to match '<a href="/competitions/MelbourneOpen2016">Melbourne Open 2016</a>'
   end
 
   it "shows you are on the waiting list" do
@@ -28,6 +28,6 @@ RSpec.describe "competitions/my_competitions" do
 
   it "shows bookmarked competitions" do
     render
-    expect(rendered).to match '<td><a href="/competitions/CambridgeOpen2020">Cambridge Open 2020</a></td>'
+    expect(rendered).to match '<a href="/competitions/CambridgeOpen2020">Cambridge Open 2020</a>'
   end
 end
