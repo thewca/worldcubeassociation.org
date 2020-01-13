@@ -55,10 +55,10 @@
   <ul class="nav nav-tabs nav-justified">
     <li><a href="#general" data-toggle="tab"><%= t '.general' %></a></li>
     <% if @user == current_user %>
-      <li><a href="#email" data-toggle="tab"><%= t '.email' %></a></li>
+      <li><a href="<%= protected_tab("#email") %>" data-toggle="tab"><%= t '.email' %></a></li>
       <li><a href="#preferences" data-toggle="tab"><%= t '.preferences' %></a></li>
-      <li><a href="#password" data-toggle="tab"><%= t '.password' %></a></li>
-      <li><a href="#2fa" data-toggle="tab">2FA</a></li>
+      <li><a href="<%= protected_tab("#password") %>" data-toggle="tab"><%= t '.password' %></a></li>
+      <li><a href="<%= protected_tab("#2fa") %>" data-toggle="tab">2FA</a></li>
     <% end %>
     <% if current_user.can_change_users_avatar?(@user) %>
       <li><a href="#avatar" data-toggle="tab">Avatar</a></li>
@@ -144,17 +144,34 @@
     </div>
 
     <% if @user == current_user %>
-      <div class="tab-pane active" id="email">
-        <%= simple_form_for @user do |f| %>
-          <%= hidden_field_tag "section", "email" %>
-          <%= f.input :email, disabled: !editable_fields.include?(:email), hint: t('.confirm_new_email') %>
+      <%# The section below holds sensitivate data changes. For this we require %>
+      <%# the user to enter again their password or 2FA.  %>
+      <% if @recently_authenticated %>
+        <div class="tab-pane active" id="email">
+          <%= simple_form_for @user do |f| %>
+            <%= hidden_field_tag "section", "email" %>
+            <%= f.input :email, disabled: !editable_fields.include?(:email), hint: t('.confirm_new_email') %>
 
-          <%= f.input :current_password %>
+            <%= f.submit t('.save'), class: "btn btn-primary" %>
+          <% end %>
+        </div>
+        <div class="tab-pane active" id="password">
+          <%= simple_form_for @user do |f| %>
+            <%= hidden_field_tag "section", "password" %>
+            <%= f.input :password, autocomplete: "off", class: "form-control" %>
+            <%= f.input :password_confirmation, class: "form-control"  %>
 
-          <%= f.submit t('.save'), class: "btn btn-primary" %>
-        <% end %>
-      </div>
-
+            <%= f.submit t('.save'), class: "btn btn-primary" %>
+          <% end %>
+        </div>
+        <div class="tab-pane active" id="2fa">
+          <%= render "2fa_tab" %>
+        </div>
+      <% else %>
+        <div class="tab-pane active" id="2fa-check">
+          <%= render "2fa_confirm.html.erb" %>
+        </div>
+      <% end %>
       <div class="tab-pane active" id="preferences">
         <%= simple_form_for @user do |f| %>
           <%= hidden_field_tag "section", "preferences" %>
@@ -170,22 +187,6 @@
 
           <%= f.submit t('.save'), class: "btn btn-primary" %>
         <% end %>
-      </div>
-
-      <div class="tab-pane active" id="password">
-        <%= simple_form_for @user do |f| %>
-          <%= hidden_field_tag "section", "password" %>
-          <%= f.input :password, autocomplete: "off", class: "form-control" %>
-          <%= f.input :password_confirmation, class: "form-control"  %>
-
-          <%= f.input :current_password %>
-
-          <%= f.submit t('.save'), class: "btn btn-primary" %>
-        <% end %>
-      </div>
-
-      <div class="tab-pane active" id="2fa">
-        <%= render "2fa_tab" %>
       </div>
     <% end %>
 
@@ -240,6 +241,6 @@
     <% end %>
   </div>
   <script>
-    $('a[href="#<%=j params[:section] %>"]').tab('show');
+    $('a[href="#<%=j tab_to_show(params[:section]) %>"]').tab('show');
   </script>
 </div>

@@ -15,7 +15,7 @@ RSpec.feature "Sign in with 2FA" do
     end
   end
 
-  context '' do
+  context 'Signing in with 2FA' do
     let!(:user) { FactoryBot.create(:user, :with_2fa) }
 
     it 'works with an otp' do

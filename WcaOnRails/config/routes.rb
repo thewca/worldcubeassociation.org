@@ -18,6 +18,7 @@ Rails.application.routes.draw do
                get :cancel
              end
     post 'users/generate-email-otp' => 'sessions#generate_email_otp'
+    post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   post 'registration/:id/process-payment-intent' => 'registrations#process_payment_intent', as: :registration_payment_intent

@@ -248,7 +248,6 @@ en:
         gender: "Gender"
         email: "Email"
         password: "Password"
-        current_password: "Current password"
         password_confirmation: "Re-enter password"
         remember_me: "Remember me"
         pending_avatar: "Upload new avatar"
@@ -454,7 +453,6 @@ en:
         email: ""
         pending_avatar: "After uploading a new avatar, you will have to wait for the WCA Results Team to approve it."
         country_iso2: ""
-        current_password: ""
         delegate_status: ""
         dob_verification: ""
         gender: ""
@@ -676,8 +674,8 @@ en:
             unknown: "Unknown error when sending your email. Please contact the WST."
           otp_email:
             subject: "Your one-time password for the WCA"
-            2fa_attempt: "You are attempting to sign in the WCA website. You have two-factor authentication enabled and you just requested to be sent a one-time password by email. Please find it below:"
-            disclaimer: "If you did not request that authentication code, please contact the WST right away by replying to this email, and change your password as it is most likely compromized."
+            2fa_attempt: "You are attempting to authenticate on the WCA website. You have two-factor authentication enabled and you just requested to be sent a one-time password by email. Please find it below:"
+            disclaimer: "If you did not request that authentication code, please contact the WST right away by replying to this email: you may have an open session somewhere or your password may be compromized."
           name: "Two-Factor Authentication (2FA)"
           support_desc_html: "The WCA website supports %{two_factor_link} using a one-time password:"
           #context: describes the 2FA options
@@ -873,7 +871,7 @@ en:
       profile: "Profile"
       approve: "Approve"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
-      confirm_new_email: "Changing your email will require confirming the new email."
+      confirm_new_email: "Changing your email will require confirming the new email before being effective."
       pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
       pending_claim_confirmation_html: "This account is waiting for %{delegate} to confirm their claimed WCA ID %{wca_id}."
@@ -909,7 +907,13 @@ en:
           '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition."
           '2': "The avatar must be framed, cropped, angled, and lit, so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
           '3': "The thumbnail of the avatar is only a section of the avatar, and it will be used to represent your full avatar. The thumbnail must be adjusted, so you can be recognized from it alone, and it must contain your face."
-
+      #context: used on the tab where the user has to confirm its password/2fa to be able to edit their sensitive data
+      sensitive:
+        info: "This section enables you to edit sensitive data, to be able to do so please confirm your identity below."
+        success: "Successfully verified your identity"
+        failure: "Couldn't verify your identity"
+        confirm_proceed: "Confirm and proceed"
+        identity_error: "Cannot edit your data, please confirm your identity below before trying again."
     #context: when an error occured during the edition
     errors:
       not_found: "not found"
