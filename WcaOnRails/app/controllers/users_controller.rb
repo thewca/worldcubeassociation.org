@@ -2,6 +2,10 @@
 
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:select_nearby_delegate]
+  before_action :check_recent_authentication!, only: [:enable_2fa, :regenerate_2fa_backup_codes]
+  before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa]
+
+  RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
   def self.WCA_TEAMS
     %w(wst wrt wdc wrc wct)
@@ -75,6 +79,32 @@ class UsersController < ApplicationController
     render json: { codes: codes }
   end
 
+  def authenticate_user_for_sensitive_edit
+    action_params = params.require(:user).permit(:otp_attempt, :password)
+    # This methods store the current time in the "last_authenticated_at" session
+    # variable, if password matches, or if 2FA check matches.
+    on_success = -> do
+      flash[:success] = I18n.t("users.edit.sensitive.success")
+      session[:last_authenticated_at] = Time.now
+    end
+    on_failure = -> do
+      flash[:danger] = I18n.t("users.edit.sensitive.failure")
+    end
+    if current_user.two_factor_enabled?
+      if current_user.validate_and_consume_otp!(action_params[:otp_attempt]) ||
+         current_user.invalidate_otp_backup_code!(action_params[:otp_attempt])
+        on_success.call
+      else
+        on_failure.call
+      end
+    elsif current_user.valid_password?(action_params[:password])
+      on_success.call
+    else
+      on_failure.call
+    end
+    redirect_to edit_user_path(current_user)
+  end
+
   def edit
     params[:section] ||= "general"
 
@@ -111,9 +141,13 @@ class UsersController < ApplicationController
     @user.current_user = current_user
     return if redirect_if_cannot_edit_user(@user)
 
-    old_confirmation_sent_at = @user.confirmation_sent_at
     dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
-    if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
+    if dangerous_change
+      return unless check_recent_authentication!
+    end
+
+    old_confirmation_sent_at = @user.confirmation_sent_at
+    if @user.update_attributes(user_params)
       if @user.saved_change_to_delegate_status
         # TODO: See https://github.com/thewca/worldcubeassociation.org/issues/2969.
         DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(@user, current_user).deliver_now
@@ -193,5 +227,22 @@ class UsersController < ApplicationController
         user_params[:wca_id] = user_params[:wca_id].upcase
       end
     end
+  end
+
+  private def has_recent_authentication?
+    session[:last_authenticated_at] && session[:last_authenticated_at] > RECENT_AUTHENTICATION_DURATION.ago
+  end
+
+  private def set_recent_authentication!
+    @recently_authenticated = has_recent_authentication?
+  end
+
+  private def check_recent_authentication!
+    unless has_recent_authentication?
+      flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
+      redirect_to profile_edit_path(section: "2fa-check")
+      return false
+    end
+    true
   end
 end

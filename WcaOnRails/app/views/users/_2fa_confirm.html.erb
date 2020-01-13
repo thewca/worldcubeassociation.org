@@ -1,0 +1,10 @@
+<%= alert(:info, t("users.edit.sensitive.info")) %>
+
+<% if @user.two_factor_enabled? %>
+  <%= render "devise/sessions/2fa_form", form_object: @user, form_object_name: "user", form_url: users_authenticate_sensitive_path %>
+<% else %>
+  <%= simple_form_for(@user, as: "user", url: users_authenticate_sensitive_path, method: :post) do |f| %>
+    <%= f.input :password, autocomplete: "off", class: "form-control" %>
+    <%= f.submit t("users.edit.sensitive.confirm_proceed"), class: "btn btn-primary" %>
+  <% end %>
+<% end %>

@@ -23,6 +23,22 @@ RSpec.describe "users" do
     expect(response.body).to include(I18n.t('devise.confirmations.send_instructions'))
   end
 
+  it 'cannot change password when not recently authenticated' do
+    user = FactoryBot.create :user
+
+    # sign in
+    post user_session_path, params: { 'user[login]' => user.email, 'user[password]' => user.password }
+    follow_redirect!
+    expect(response).to be_successful
+    get profile_edit_path
+    expect(response).to be_successful
+
+    new_password = 'new_password'
+    put user_path(user), params: { 'user[email]' => user.email, 'user[password]' => new_password, 'user[password_confirmation]' => new_password }
+    follow_redirect!
+    expect(response.body).to include(I18n.t('users.edit.sensitive.identity_error'))
+  end
+
   it 'can change password' do
     user = FactoryBot.create :user
 
@@ -33,6 +49,12 @@ RSpec.describe "users" do
     get profile_edit_path
     expect(response).to be_successful
 
+    # confirm identity
+    post users_authenticate_sensitive_path, params: { 'user[password]' => user.password }
+    follow_redirect!
+    expect(response.body).to include(I18n.t('users.edit.sensitive.success'))
+
+    # set password
     new_password = 'new_password'
     put user_path(user), params: { 'user[email]' => user.email, 'user[password]' => new_password, 'user[password_confirmation]' => new_password, 'user[current_password]' => user.password }
     follow_redirect!
@@ -72,38 +94,61 @@ RSpec.describe "users" do
     let(:user) { FactoryBot.create(:user) }
     before { sign_in user }
 
-    it 'can enable 2FA' do
-      post profile_enable_2fa_path
-      expect(response.body).to include "Successfully enabled two-factor"
-      expect(user.reload.otp_required_for_login).to be true
+    context "recently authenticated" do
+      before { post users_authenticate_sensitive_path, params: { 'user[password]': user.password } }
+      it 'can enable 2FA' do
+        post profile_enable_2fa_path
+        expect(response.body).to include "Successfully enabled two-factor"
+        expect(user.reload.otp_required_for_login).to be true
+      end
+
+      it 'does not generate backup codes for user without 2FA' do
+        expect {
+          post profile_generate_2fa_backup_path
+        }.to_not change { user.otp_backup_codes }
+        json = JSON.parse(response.body)
+        expect(json["error"]["message"]).to include "not enabled"
+      end
     end
 
-    it 'does not generate backup codes for user without 2FA' do
-      expect {
-        post profile_generate_2fa_backup_path
-      }.to_not change { user.otp_backup_codes }
-      json = JSON.parse(response.body)
-      expect(json["error"]["message"]).to include "not enabled"
+    context "not recently authenticated" do
+      it 'cannot enable 2FA' do
+        post profile_enable_2fa_path
+        follow_redirect!
+        expect(response.body).to include I18n.t('users.edit.sensitive.identity_error')
+        expect(user.reload.otp_required_for_login).to be false
+      end
+
+      it 'does not generate backup codes for user without 2FA' do
+        expect {
+          post profile_generate_2fa_backup_path
+          follow_redirect!
+        }.to_not change { user.otp_backup_codes }
+        expect(response.body).to include I18n.t('users.edit.sensitive.identity_error')
+      end
     end
   end
 
   context "user with 2FA" do
     let(:user) { FactoryBot.create(:user, :with_2fa) }
     before { sign_in user }
-
-    it 'can reset 2FA' do
-      expect {
+    context "recently authenticated" do
+      before { post users_authenticate_sensitive_path, params: { 'user[otp_attempt]': user.current_otp } }
+      it 'can reset 2FA' do
+        secret_before = user.otp_secret
         post profile_enable_2fa_path
-      }.to change { user.otp_secret }
-      expect(response.body).to include "Successfully regenerated"
-    end
+        secret_after = user.reload.otp_secret
+        expect(response.body).to include "Successfully regenerated"
+        expect(secret_before).to_not eq secret_after
+      end
 
-    it 'can (re)generate backup codes for user with 2FA' do
-      expect {
+      it 'can (re)generate backup codes for user with 2FA' do
+        expect(user.otp_backup_codes).to eq nil
         post profile_generate_2fa_backup_path
-      }.to change { user.otp_backup_codes }
-      json = JSON.parse(response.body)
-      expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
+        expect(user.reload.otp_backup_codes).to_not eq nil
+        json = JSON.parse(response.body)
+        expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
+      end
     end
   end
 

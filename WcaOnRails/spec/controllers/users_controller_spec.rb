@@ -112,13 +112,27 @@ RSpec.describe UsersController do
     let(:user) { FactoryBot.create(:user) }
     let(:delegate) { FactoryBot.create(:delegate) }
 
-    it "user can change email" do
-      sign_in user
-      expect(user.confirmation_sent_at).to eq nil
-      patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com", current_password: "wca" } }
-      user.reload
-      expect(user.unconfirmed_email).to eq "newemail@newemail.com"
-      expect(user.confirmation_sent_at).not_to eq nil
+    context "recently authenticated" do
+      it "user can change email" do
+        sign_in user
+        expect(user.confirmation_sent_at).to eq nil
+        post :authenticate_user_for_sensitive_edit, params: { user: { password: "wca" } }
+        patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
+        user.reload
+        expect(user.unconfirmed_email).to eq "newemail@newemail.com"
+        expect(user.confirmation_sent_at).not_to eq nil
+      end
+    end
+
+    context "not recently authenticated" do
+      it "cannot change email" do
+        sign_in user
+        patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
+        user.reload
+        expect(user.unconfirmed_email).to eq nil
+        expect(user.confirmation_sent_at).to eq nil
+        expect(flash[:danger]).to eq I18n.t("users.edit.sensitive.identity_error")
+      end
     end
 
     it "user can change name" do
