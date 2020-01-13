@@ -124,7 +124,7 @@ RSpec.describe "users" do
       end
       expect(answer_sso.add_groups).to eq "wac"
       expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wac"]).join(","))
-      expect(answer_sso.bio).to match user.wca_id
+      expect(answer_sso.custom_fields["wca_id"]).to match user.wca_id
     end
 
     it "authenticates regular user" do
@@ -137,7 +137,7 @@ RSpec.describe "users" do
       expect(answer_sso.moderator).to be false
       expect(answer_sso.add_groups).to be_empty
       expect(answer_sso.remove_groups).to eq User.all_discourse_groups.join(",")
-      expect(answer_sso.bio).to match "No WCA ID"
+      expect(answer_sso.custom_fields["wca_id"]).to eq ""
     end
 
     it "authenticates admin delegate" do
