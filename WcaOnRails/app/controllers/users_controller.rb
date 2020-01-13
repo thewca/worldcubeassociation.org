@@ -166,15 +166,11 @@ class UsersController < ApplicationController
     sso.email = current_user.email
     sso.avatar_url = current_user.avatar_url
     sso.moderator = current_user.wac_team?
+    sso.locale = current_user.locale
+    sso.locale_force_update = true
     sso.add_groups = user_groups.join(",")
     sso.remove_groups = (all_groups - user_groups).join(",")
-    # Build a nice response to discourse, so that the WCA profile is linked in
-    # the user's profile.
-    sso.bio = if current_user.wca_id
-                "WCA profile: [#{current_user.wca_id}](#{person_url(current_user.wca_id)})."
-              else
-                "No WCA ID."
-              end
+    sso.custom_fields["wca_id"] = current_user.wca_id || ""
 
     redirect_to sso.to_url
   end
