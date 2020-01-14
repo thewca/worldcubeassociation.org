@@ -237,6 +237,7 @@ Rails.application.routes.draw do
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
       get '/records' => "api#records"
+      get '/anonymous-age-rankings' => 'api#anonymous_age_rankings'
     end
   end
 end

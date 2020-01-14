@@ -149,6 +149,61 @@ class Api::V0::ApiController < ApplicationController
     render json: json
   end
 
+  def anonymous_age_rankings
+    concise_results_date = Timestamp.find_by(name: "compute_auxiliary_data_end").date
+    cache_key = "records/#{concise_results_date.iso8601}"
+    # This query doesn't actually depend on the results of compute auxiliary
+    # data, but the timestamp is still a good proxy for "when did results last
+    # get uploaded?"
+    json = Rails.cache.fetch(cache_key) do
+      average_groups = self.get_anonymous_age_rankings "average"
+      single_groups = self.get_anonymous_age_rankings "single"
+      {
+        average: average_groups,
+        single: single_groups,
+      }
+    end
+    render json: json
+  end
+
+  private def get_anonymous_age_rankings(result_type)
+    raise unless ["single", "average"].include?(result_type)
+
+    column_name = result_type == "single" ? "best" : result_type
+
+    ActiveRecord::Base.connection.exec_query <<-SQL
+        SELECT eventId AS event_id, age_category, group_number, COUNT(*) AS group_size, IF(COUNT(*) >= 4, FLOOR(AVG(best)), NULL) AS group_average
+        FROM
+        (
+          SELECT personId, eventId, age_category, best,
+                 FLOOR((ROW_NUMBER() OVER (PARTITION BY eventId, age_category ORDER BY best) - 1) / 6) AS group_number
+          FROM
+          (
+            SELECT personId, eventId, age_category, MIN(#{column_name}) AS best
+            FROM
+            (
+              SELECT r.personId, r.eventId, r.#{column_name}, TIMESTAMPDIFF(YEAR,
+                DATE_FORMAT(CONCAT(p.year, '-', p.month, '-', p.day), '%Y-%m-%d'),
+                DATE_FORMAT(CONCAT(c.year, '-', c.month, '-', c.day), '%Y-%m-%d')) AS age_at_comp
+              FROM Persons AS p USE INDEX()
+              JOIN Results AS r ON r.personId = p.id AND #{column_name} > 0
+              JOIN Competitions AS c ON c.id = r.competitionId
+              WHERE p.year > 0 AND p.year <= YEAR(CURDATE()) - 40
+              AND p.subid = 1
+              HAVING age_at_comp >= 40
+            ) AS senior_results
+            JOIN
+            (
+              SELECT 40 AS age_category
+              UNION ALL SELECT 50 UNION ALL SELECT 60 UNION ALL SELECT 70 UNION ALL SELECT 80 UNION ALL SELECT 90 UNION ALL SELECT 100
+            ) AS age_categories ON age_category <= age_at_comp
+            GROUP BY personId, eventId, age_category
+          ) AS senior_bests
+        ) AS group_bests
+        GROUP BY eventId, age_category, group_number
+    SQL
+  end
+
   def export_public
     sql_zips = Dir.glob(Rails.root.join("../webroot/results/misc/*.sql.zip")).sort!
     tsv_zips = Dir.glob(Rails.root.join("../webroot/results/misc/*.tsv.zip")).sort!
