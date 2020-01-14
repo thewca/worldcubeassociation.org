@@ -796,7 +796,7 @@ module DatabaseDumper
 
   def self.mysql_cli_creds
     config = ActiveRecord::Base.connection_config
-    "--user=#{config[:username]} --password=#{config[:password] || "''"} --host=#{config[:host]}"
+    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]}"
   end
 
   def self.mysql(command, database = nil)
