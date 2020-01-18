@@ -43,7 +43,7 @@ class SessionsController < Devise::SessionsController
        user.invalidate_otp_backup_code!(user_params[:otp_attempt])
       # Remove any lingering user data from login
       session.delete(:otp_user_id)
-      user.remember_me! if user_params[:remember_me] == '1'
+      user.remember_me = 1 if user_params[:remember_me] == '1'
       user.save!
       sign_in(user, event: :authentication)
     else
