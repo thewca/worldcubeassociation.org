@@ -6,7 +6,7 @@
       </div>
       <div class="panel-body">
         <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: { role: "form" }, method: :post) do |f| %>
-          <%= f.input :remember_me, as: :hidden, value: resource_params.fetch(:remember_me, 0) %>
+          <%= f.input :remember_me, as: :hidden, input_html: { value: resource_params.fetch(:remember_me, 0) } %>
           <%= f.input :otp_attempt, autofocus: true, class: "form-control" %>
           <%= f.submit t('devise.sessions.new.2fa.confirm'), class: "btn btn-primary", tabindex: "3" %>
         <% end %>
