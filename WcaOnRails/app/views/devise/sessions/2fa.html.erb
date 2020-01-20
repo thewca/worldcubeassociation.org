@@ -10,8 +10,8 @@
           <%= f.input :otp_attempt, autofocus: true, class: "form-control" %>
           <%= f.submit t('devise.sessions.new.2fa.confirm'), class: "btn btn-primary", tabindex: "3" %>
         <% end %>
-        <h3><%= t("devise.sessions.new.2fa.email_authentication") %></h3>
-        <p><%= t("devise.sessions.new.2fa.email_auth_desc") %></p>
+        <h3><%= t("devise.sessions.new.2fa.email_auth") %></h3>
+        <p><%= t("devise.sessions.new.2fa.get_by_email_desc") %></p>
         <%= link_to(t("devise.sessions.new.2fa.get_by_email"), "#", class: "btn btn-primary", id: "request_2fa_email") %>
       </div>
     </div>

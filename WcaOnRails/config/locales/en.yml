@@ -665,9 +665,9 @@ en:
           confirm: "Confirm code"
           regenerated_secret: "Successfully regenerated your two-factor authentication secret."
           enabled_success: "Successfully enabled two-factor authentication."
-          email_authentication: "Email authentification"
-          email_auth_desc: "If you can't access your device or access codes, you can also click the button below to get a one-time password by email. Copy and paste it in the above input to sign in."
+          email_auth: "Email authentication"
           get_by_email: "Get a code by email"
+          get_by_email_desc: "If you can't access your device or access codes, you can also click the button below to get a one-time password by email. Copy and paste it in the above input to sign in."
           email_sent: "You have been sent a code by email. The code is valid for 2 minutes. You may ask for a new code in 2 minutes."
           errors:
             cant_send_email: "You can't generate an email now"
@@ -704,7 +704,6 @@ en:
           regenerate_backup_codes: "You have generated some backup codes. If you already used or lost these codes, you can generate new ones using the button below. Beware that any existing backup codes will be invalidated if you do this."
           generate_backup_codes: "Generate backup codes"
           backup_codes_warning: "The backup codes will be displayed below. Make sure to write/save them right away: they are store encrypted in our database and can't be shown again later."
-          email_auth: "Email authentication"
           email_auth_desc: "You can ask for a one-time password by email when you attempt to sign in."
     shared:
       links:
