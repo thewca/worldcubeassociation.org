@@ -282,6 +282,8 @@ es:
     average: Media
     #original_hash: e7f6fc5
     solves: Resultados
+    #original_hash: c9d0561
+    hello: 'Hola %{name},'
     date:
       #original_hash: acb6273
       no_date: Sin fecha
@@ -399,6 +401,8 @@ es:
           correo electrónico
         #original_hash: 57eaf24
         user_preferred_events: Pruebas favoritas
+        #original_hash: e632fbf
+        otp_attempt: 'Introduce tu código de autenticación de dos factores:'
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -781,6 +785,10 @@ es:
           Si eres un Candidato a Delegado, Delegado Senior, Delegado, o Miembro
           del WRC o del WQAC, recibes los Informes de Delegados por defecto. El
           cambio puede tardar hasta una hora en estar operativo.
+        #original_hash: 0627e5c
+        otp_attempt: >-
+          Comprueba tu aplicación de móvil configurada para una contraseña de un
+          sólo uso, o introduce uno de los códigos de recuperación.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1190,6 +1198,133 @@ es:
       new:
         #original_hash: ada2e9e
         sign_in: Iniciar sesión
+        2fa:
+          #original_hash: b274c38
+          verify: 'Para iniciar sesión, verifica que eres tú'
+          #original_hash: ec44d52
+          confirm: Confirma el código
+          #original_hash: 912516c
+          regenerated_secret: Secreto de autenticación de dos factores regenerado con éxito.
+          #original_hash: 1b0c44f
+          enabled_success: autenticación de dos factores habilitada con éxito.
+          #original_hash: 9515157
+          email_auth: Autenticación por correo
+          #original_hash: d305ccb
+          get_by_email: Obtén un código por correo electrónico
+          #original_hash: 4e644aa
+          get_by_email_desc: >-
+            Si no puedes acceder a tu dispositivo o a tus códigos de acceso,
+            puedes hacer click en el botón inferior para obtener una contraseña
+            de un sólo uso por correo electrónico. Copia y pega en el hueco de
+            encima para iniciar sesión.
+          #original_hash: b243ac5
+          email_sent: >-
+            Se te ha enviado un código por correo electrónico. El código es
+            válido durante 2 minutos. Puedes solicitar otro código en 2 minutos.
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: No puedes generar un correo electrónico ahora
+            #original_hash: c0d4fc2
+            invalid_otp: código de dos factores no válido.
+            #original_hash: c2f5347
+            not_enabled: autenticación de dos factores no habilitada
+            #original_hash: 14d294b
+            unknown: >-
+              Error desconocido al enviar tu correo. Por favor ponte en contacto
+              con el WST.
+          otp_email:
+            #original_hash: a20e037
+            subject: Tu contraseña de un sólo uso para la WCA
+            #original_hash: e820d08
+            2fa_attempt: >-
+              Estás intentando iniciar sesión en la web de la WCA. Tienes
+              autenticación de dos factores habilitada y has solicitado que se
+              te envíe una contraseña de un sólo uso por correo. La tienes a
+              continuación:
+            #original_hash: 2daca82
+            disclaimer: >-
+              Si no has solicitado un código de autenticación, por favor ponte
+              en contacto con el WST contestando a este correo, y cambia tu
+              contraseña ya que probablemente esté comprometida.
+          #original_hash: 8c13694
+          name: Autenticación de dos factores (A2F)
+          #original_hash: d28c3b6
+          support_desc_html: >-
+            La web de la WCA soporta %{two_factor_link} usando una contraseña de
+            un sólo uso:
+          options:
+            #original_hash: 4f9dcb8
+            app: >-
+              generado por una aplicación A2F en tu smartphone (como Authy o
+              Google Authenticator, por ejemplo).
+            #original_hash: 34a7572
+            recovery: obtenido de los códigos de recuperación generados al activar A2F.
+            #original_hash: eaee403
+            email: Enviado a tu correo electrónico cuando inicias sesión.
+          #original_hash: 7ae99ae
+          status_html: 'La autenticación de dos factores está %{status} para ti.'
+          #original_hash: 3ea3f98
+          enabled: habilitada
+          #original_hash: 07596f1
+          disabled: deshabilitada
+          #original_hash: 5f225b0
+          enable: habilitada A2F
+          #original_hash: b2a3d7e
+          reset: Resetear secreto A2F
+          #original_hash: 14b7bfd
+          reset_if_needed: >-
+            si uno de tus dispositivos ha estado comprometido, o quieres
+            eliminar el acceso desde tus dispositivos, puedes resetear tus
+            secretos de autenticación de dos factores debajo:
+          #original_hash: 69100a3
+          reset_warning: Necesitarás reconfigurar todos tus dispositivos A2F.
+          #original_hash: a8d11db
+          methods: métodos de dos factores
+          #original_hash: 0fd248d
+          methods_description: >-
+            Puedes usar varios métodos para obtener una contraseña de un sólo
+            uso al iniciar sesión, se describen a continuación.
+          #original_hash: 4442f0e
+          dedicated_app: Usar una aplicación de dos factores dedicada.
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            El WST recomienda usar %{authy} en tu(s) dispositivo(s) personal(es)
+            para obtener tu contraseña de un sólo uso cuando inicies
+            sesión.<br/>Otras alternativas incluyen %{google} y %{microsoft}.
+          #original_hash: f1b2ec2
+          scan_qrcode_html: >-
+            Escanea el código QR siguiente cuando se te solicite desde tu
+            aplicación A2F (o haz click %{here} si estás en un dispositivo
+            móvil).
+          #original_hash: e7cba1a
+          backup_codes: Códigos de respaldo
+          #original_hash: fa62416
+          backup_codes_desc: >-
+            Los códigos de respaldo pueden ser utilizados como contraseñas de un
+            sólo uso en caso de que no tengas acceso a tu dispositivo con tu
+            aplicación de autenticación de dos factores. Cada código puede ser
+            usado sólo una vez. ¡Asegúrate de guardarlos en algún lugar seguro!
+          #original_hash: 087cb72
+          no_backup_codes: >-
+            No has generado códigos de respaldo todavía. Haz click en el botón
+            de abajo para generar tus códigos de respaldo.
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            Has generado algúnos códigos de respaldo. Si has usado o perdido
+            algunos de estos códigos, puedes generar nuevos usando el botón de
+            abajo. Ten en cuenta que cualquier código de respaldo existente
+            dejará de ser válido si haces esto.
+          #original_hash: 2ee4aca
+          generate_backup_codes: Generar códigos de respaldo
+          #original_hash: a69dd5b
+          backup_codes_warning: >-
+            Los códigos de respaldo se mostrarán abajo. Asegúrate de
+            escribirlos/salvarlos  ahora mismo: se almacenan encriptados en
+            nuestra base de datos y no pueden ser mostrados de nuevo más tarde.
+          #original_hash: b5e3ad8
+          email_auth_desc: >-
+            Puedes solicitar que se te envíe una contraseña de un sólo uso por
+            correo electrónico cuando intentes iniciar sesión.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1381,7 +1516,8 @@ es:
         confirmation_link: Confirmar mi cuenta.
         #original_hash: d484f70
         activate: 'Tras la activación, puedes identificarte en la web de la WCA:'
-        login_form: 'formulario de inicio de sesión'
+        #original_hash: fb02586
+        login_form: formulario de inicio de sesión
         #original_hash: 333999b
         addendum: >-
           Este correo se genera automáticamente. Si no has registrado una cuenta
