@@ -46,12 +46,16 @@ module ResultsValidators
             last_result = result
 
             if expected_pos != result.pos
-              @errors << ValidationError.new(:results, competition_id,
-                                             WRONG_POSITION_IN_RESULTS_ERROR,
-                                             round_id: round_id,
-                                             person_name: result.personName,
-                                             expected_pos: expected_pos,
-                                             pos: result.pos)
+              if @apply_fixes
+                result.update_attributes(pos: expected_pos)
+              else
+                @errors << ValidationError.new(:results, competition_id,
+                                               WRONG_POSITION_IN_RESULTS_ERROR,
+                                               round_id: round_id,
+                                               person_name: result.personName,
+                                               expected_pos: expected_pos,
+                                               pos: result.pos)
+              end
             end
           end
         end
