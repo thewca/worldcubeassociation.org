@@ -57,6 +57,17 @@ RSpec.describe ResultsValidators::PositionsValidator do
           expect(pv.errors).to match_array(expected_errors[arg[:model].to_s])
         end
       end
+
+      it "fixes messed up positions in given competitions when requested to" do
+        [InboxResult, Result].each do |model|
+          model.where(pos: 1, eventId: "333oh").update(pos: 2)
+          model.where(pos: 5, eventId: "222").update(pos: 7)
+        end
+        validator_args.each do |arg|
+          pv = ResultsValidators::PositionsValidator.new(apply_fixes: true).validate(arg)
+          expect(pv.has_errors?).to eq false
+        end
+      end
     end
 
     context "tied results" do
