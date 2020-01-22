@@ -6,6 +6,10 @@ module ResultsValidators
 
     @@desc = "This validator checks that positions stored in results are correct with regard to the actual results."
 
+    def self.has_automated_fix?
+      true
+    end
+
     def validate(competition_ids: [], model: Result, results: nil)
       reset_state
       # Get all results if not provided

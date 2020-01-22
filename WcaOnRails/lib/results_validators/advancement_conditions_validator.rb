@@ -11,6 +11,10 @@ module ResultsValidators
 
     @@desc = "This validator checks that advancement between rounds is correct according to the regulations."
 
+    def self.has_automated_fix?
+      false
+    end
+
     def validate(competition_ids: [], model: Result, results: nil)
       reset_state
       # Get all results if not provided

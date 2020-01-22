@@ -20,6 +20,10 @@ module ResultsValidators
 
     @@desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
 
+    def self.has_automated_fix?
+      false
+    end
+
     def validate(competition_ids: [], model: Result, results: nil)
       reset_state
       # Get all results if not provided

@@ -35,14 +35,29 @@ class AdminController < ApplicationController
   def new_results
     @competition = competition_from_params
     @upload_json = UploadJson.new
-    @results_validator = ResultsValidators::CompetitionsResultsValidator.new
+    @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
     @results_validator.validate(@competition.id)
   end
 
   def check_results
     @competition = competition_from_params
+    # For this view, we just build an empty validator: the WRT will decide what
+    # to actually run (by default all validators will be selected).
     @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
+  end
+
+  def run_validators
+    action_params = params.require(:results_validation).permit(:competition_ids, :validators, :apply_fixes)
+    # NOTE: for now only one competition is supported, we plan to extend this
+    # endpoint to support an arbitrary set of competitions (we'll need to
+    # render a different view in this case).
+
+    @competition = Competition.find(action_params[:competition_ids])
+    validator_classes = action_params[:validators].split(",").map { |v| ResultsValidators::Utils.validator_class_from_name(v) }.compact
+    apply_fixes = ActiveModel::Type::Boolean.new.cast(action_params[:apply_fixes])
+    @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true, validators: validator_classes, apply_fixes: apply_fixes)
     @results_validator.validate(@competition.id)
+    render :check_results
   end
 
   def clear_results_submission
@@ -73,7 +88,7 @@ class AdminController < ApplicationController
       flash[:success] = "JSON file has been imported."
       redirect_to competition_admin_upload_results_edit_path
     else
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.new
+      @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
       @results_validator.validate(@competition.id)
       render :new_results
     end

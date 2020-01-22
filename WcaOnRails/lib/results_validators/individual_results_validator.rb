@@ -23,6 +23,10 @@ module ResultsValidators
 
     @@desc = "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."
 
+    def self.has_automated_fix?
+      false
+    end
+
     def validate(competition_ids: [], model: Result, results: nil)
       reset_state
       # Get all results if not provided

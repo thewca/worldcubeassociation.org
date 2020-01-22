@@ -14,6 +14,10 @@ module ResultsValidators
 
     @@desc = "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
 
+    def self.has_automated_fix?
+      false
+    end
+
     def validate(competition_ids: [], model: Result, results: nil)
       reset_state
       # Get all results if not provided.

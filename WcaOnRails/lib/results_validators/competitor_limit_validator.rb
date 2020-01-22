@@ -7,6 +7,10 @@ module ResultsValidators
 
     @@desc = "For competition with a competitor limit, this validator checks that this limit is respected."
 
+    def self.has_automated_fix?
+      false
+    end
+
     def validate(competition_ids: [], model: Result, results: nil)
       reset_state
 

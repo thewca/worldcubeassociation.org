@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module ResultsSubmissionHelper
-  def class_for_panel(error:, warning:)
+  def class_for_panel(error:, warning:, no_validator: false)
     if error
       "danger"
-    elsif warning
+    elsif warning || no_validator
       "warning"
     else
       "success"

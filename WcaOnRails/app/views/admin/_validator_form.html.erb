@@ -1,0 +1,27 @@
+<% results_validator ||= ResultsValidators::CompetitionsResultsValidator.new %>
+<% competition ||= nil %>
+<% all_validators = ResultsValidators::Utils::ALL_VALIDATORS %>
+<% selected_validators = results_validator.validators.empty? ? all_validators : results_validator.validators %>
+<div class="panel panel-default">
+  <div class="panel-heading">Configure validations to run</div>
+  <div class="panel-body">
+    <%= simple_form_for :results_validation, url: admin_run_validators_path do |f| %>
+      <%= f.input :validators, as: :string, label: false, input_html: { id: "validators" } %>
+      <%= f.input :apply_fixes, as: :boolean, label: apply_fixes_label, hint: apply_fixes_hint, input_html: { checked: results_validator.apply_fixes } %>
+      <%= f.input :competition_ids, as: :string, readonly: !competition.nil?, input_html: { value: competition&.id }, label: "Competition ID(s)" %>
+      <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
+    <% end %>
+  </div>
+</div>
+<script>
+  $('#validators').selectize({
+    persist: false,
+    maxItems: null,
+    valueField: 'name',
+    labelField: 'name',
+    searchField: ['name'],
+    plugins: ['remove_button'],
+    options: <%= raw(all_validators.map(&:serialize).to_json) %>,
+    items: <%= raw(selected_validators.map(&:class_name).to_json) %>,
+  });
+</script>
