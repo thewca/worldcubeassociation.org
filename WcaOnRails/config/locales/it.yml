@@ -75,6 +75,13 @@ it:
     Oceania: Oceania
     #original_hash: b1ffb4c
     South America: Sud America
+  country_bands:
+    #original_hash: 2b5976e
+    title: Fasce Paesi WCA
+    #original_hash: df5f4ea
+    band_title: 'Fascia %{number}'
+    #original_hash: 6521e5d
+    due_value: '$%{value} per partecipante per competizione'
   events:
     #original_hash: 3732390
     '222': Cubo 2x2x2
@@ -269,6 +276,8 @@ it:
     average: Media
     #original_hash: e7f6fc5
     solves: Risoluzioni
+    #original_hash: c9d0561
+    hello: 'Ciao %{name},'
     date:
       #original_hash: acb6273
       no_date: Nessuna data
@@ -382,6 +391,8 @@ it:
         receive_delegate_reports: Voglio ricevere i Report dei Delegati sulle Competizioni WCA via email
         #original_hash: 57eaf24
         user_preferred_events: Eventi preferiti
+        #original_hash: e632fbf
+        otp_attempt: 'Inserisci il tuo codice di autenticazione a due fattori:'
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -760,6 +771,10 @@ it:
           Se sei un Candidato Delegato, Delegato Senior, o membro del WRC o
           WQAC, riceverai i Report dei Delegati di default. Nota: la modifica
           potrebbe richiedere fino a un'ora per avere effetto.
+        #original_hash: 0627e5c
+        otp_attempt: >-
+          Controlla la tua applicazione mobile per una password temporanea, o
+          inserisci uno dei tuoi codici di recupero.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1101,6 +1116,11 @@ it:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1168,6 +1188,139 @@ it:
       new:
         #original_hash: ada2e9e
         sign_in: Accedi
+        2fa:
+          #original_hash: b274c38
+          verify: Conferma la tua identità per accedere
+          #original_hash: ec44d52
+          confirm: Conferma codice
+          #original_hash: 912516c
+          regenerated_secret: >-
+            Il tuo segreto di autenticazione a due fattori è stato rigenerato
+            con successo.
+          #original_hash: 1b0c44f
+          enabled_success: L'autenticazione a due fattori è stata attivata con successo.
+          #original_hash: 9515157
+          email_auth: Autenticazione email
+          #original_hash: d305ccb
+          get_by_email: Ricevi un codice via email
+          #original_hash: 4e644aa
+          get_by_email_desc: >-
+            Se non riesci ad accedere col tuo dispositivo o con i tuoi codici di
+            accesso, puoi cliccare qui sotto per ricevere una password
+            temporanea via email. Copiala e incollala nella casella qui sopra
+            per accedere.
+          #original_hash: b243ac5
+          email_sent: >-
+            Ti abbiamo inviato un codice via email. Il codice è valido per 2
+            minuti, Puoi richiederne un altro tra 2 minuti.
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: Non puoi generare un'email adesso.
+            #original_hash: c0d4fc2
+            invalid_otp: Codice a due fattori non valido.
+            #original_hash: c2f5347
+            not_enabled: Autenticazione a due fattori non attiva.
+            #original_hash: 14d294b
+            unknown: >-
+              Errore sconosciuto in fase di invio email. Per favore contatta il
+              WST (WCA Software Team).
+          otp_email:
+            #original_hash: a20e037
+            subject: La tua password temporanea per il sito WCA
+            #original_hash: e820d08
+            2fa_attempt: >-
+              Stai tentato di accedere al sito web WCA. L'autenticazione a due
+              fattori è attiva e hai appena richiesto una password temporanea da
+              ricevere via email. La puoi trovare qui sotto:
+            #original_hash: 2daca82
+            disclaimer: >-
+              Se non hai richiesto tu il codice di autenticazione, contatta
+              immediatamente il WST (WCA Software Team) rispondendo a questa
+              email. Ti consigliamo di cambiare la tua password, poiché quella
+              corrente potrebbe essere stata violata.
+          #original_hash: 8c13694
+          name: Autenticazione a due fattori (2FA)
+          #original_hash: d28c3b6
+          support_desc_html: >-
+            Il sito web WCA supporta %{two_factor_link} attraverso una password
+            temporanea:
+          options:
+            #original_hash: 4f9dcb8
+            app: >-
+              generato da un'applicazione 2FA dedicata sul tuo smartphone (come
+              Authy o Google Authenticator).
+            #original_hash: 34a7572
+            recovery: >-
+              preso dai codici di recupero generati in fase di attivazione della
+              2FA.
+            #original_hash: eaee403
+            email: inviato alla tua email quando effettui il log-in.
+          #original_hash: 7ae99ae
+          status_html: 'L''autenticazione a due fattori è %{status} per il tuo account.'
+          #original_hash: 3ea3f98
+          enabled: abilitata
+          #original_hash: 07596f1
+          disabled: disabilitata
+          #original_hash: 5f225b0
+          enable: Attiva 2FA
+          #original_hash: b2a3d7e
+          reset: Reimposta segreto 2FA
+          #original_hash: 14b7bfd
+          reset_if_needed: >-
+            Se un tuo dispositivo è stato violato, o desideri revocare l'accesso
+            da un dispositivo, puoi reimpostare il tuo segreto di autenticazione
+            a due fattori qui sotto:
+          #original_hash: 69100a3
+          reset_warning: >-
+            Ti verrà richiesta la riconfigurazione di tutti i tuoi dispositivi
+            2FA.
+          #original_hash: a8d11db
+          methods: Metodi a due fattori
+          #original_hash: 0fd248d
+          methods_description: >-
+            Puoi utilizzare i diversi metodi elencati qui sotto per ottenere una
+            password temporanea per l'accesso.
+          #original_hash: 4442f0e
+          dedicated_app: Utilizzando un'applicazione 2FA dedicata
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            Il WST (WCA Software Team) consiglia l'utilizzo di %{authy} sul tuo
+            dispositivo personale per ricevere password temporanee per
+            l'accesso.<br/>In alternativa puoi usare %{google} o %{microsoft}.
+          #original_hash: f1b2ec2
+          scan_qrcode_html: >-
+            Scansiona il codice QR qui sotto quando verrà richiesto dalla tua
+            applicazione 2FA (o clicca %{here} se stai navigando da mobile).
+          #original_hash: e7cba1a
+          backup_codes: Codici di backup
+          #original_hash: fa62416
+          backup_codes_desc: >-
+            I codici di backup possono essere usati al posto della password
+            temporanea, nel caso in cui non dovessi avere accesso al tuo
+            dispositivo su cui hai installato l'applicazione 2FA. Ciascun codice
+            può essere usato soltanto una volta. Accertati di conservarli in un
+            luogo sicuro!
+          #original_hash: 087cb72
+          no_backup_codes: >-
+            Non hai ancora generato codici di backup. Clicca qui sotto per
+            generare i tuoi codici.
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            Hai generato dei codici di backup. Se hai già utilizzato questi
+            codici o li hai persi, puoi generarne di nuovi cliccando qui sotto.
+            Attenzione: con questa operazione qualsiasi codice preesistente
+            verrà invalidato.
+          #original_hash: 2ee4aca
+          generate_backup_codes: Genera codici di backup
+          #original_hash: a69dd5b
+          backup_codes_warning: >-
+            I codici di backup verranno visualizzati qui sotto. Assicurati di
+            scriverli/salvarli al più presto: i codici sono stati criptati nel
+            nostro database e non potranno essere mostrati nuovamente.
+          #original_hash: b5e3ad8
+          email_auth_desc: >-
+            Puoi richiedere una password temporanea via email se non riesci ad
+            accedere.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1363,6 +1516,8 @@ it:
         activate: >-
           Dopo l'attivazione sarà possibile accedere al sito web della World
           Cube Association:
+        #original_hash: fb02586
+        login_form: modulo di log-in
         #original_hash: 333999b
         addendum: >-
           Questa email è generata automaticamente. Se non hai registrato un
@@ -1595,8 +1750,11 @@ it:
         non combacia con il valore presente nel database. Se sei sicuro di aver
         inserito la data di nascita nel formato corretto (AAAA-MM-GG), contatta
         il WCA Results Team usando <a href="%{dob_form_path}">questo form</a>.
-      #original_hash: 71b46b4
-      unique: 'è già utilizzato da "%{used_name}" con %{used_email}'
+      #original_hash: c9ae791
+      unique_html: >-
+        è già utilizzato da "%{used_name}" con %{used_email}. Per liberare il
+        WCA ID, puoi <a href=%{used_edit_path} target='_blank'>modificare
+        quell'account</a> e dissociare il WCA ID.
       #original_hash: 26f70ed
       dob_past: deve essere nel passato
       #original_hash: b320913
@@ -1700,9 +1858,11 @@ it:
       must_register: è necessario registrarsi almeno a un evento
       #original_hash: e78eec3
       banned_html: >-
-        Sei attualmente bannato. Se ritieni che questo sia un errore, contatta
-        il <a href='mailto:disciplinary@worldcubeassociation.org'
+        Sei attualmente squalificato. Se ritieni che questo sia un errore,
+        contatta il <a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
+      #original_hash: 8d07e7f
+      undelete_banned: è un partecipante squalificato e non può essere ripristinato
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
