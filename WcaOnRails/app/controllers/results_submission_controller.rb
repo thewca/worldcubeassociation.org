@@ -8,7 +8,7 @@ class ResultsSubmissionController < ApplicationController
 
   def new
     @competition = competition_from_params
-    @results_validator = ResultsValidators::CompetitionsResultsValidator.new
+    @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
     @results_validator.validate(@competition.id)
   end
 
@@ -29,7 +29,7 @@ class ResultsSubmissionController < ApplicationController
       @competition.uploaded_jsons.create(json_str: @upload_json.results_json_str)
       redirect_to competition_submit_results_edit_path
     else
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.new
+      @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
       @results_validator.validate(@competition.id)
       render :new
     end

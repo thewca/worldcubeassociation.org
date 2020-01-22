@@ -4,26 +4,25 @@ module ResultsValidators
   class CompetitionsResultsValidator < GenericValidator
     @@desc = "This validator is an aggregate of an arbitrary set of other validators, running on an arbitrary set of competitions."
 
-    attr_reader :results, :persons
-    ALL_VALIDATORS = [
-      EventsRoundsValidator,
-      PositionsValidator,
-      IndividualResultsValidator,
-      ScramblesValidator,
-      CompetitorLimitValidator,
-      AdvancementConditionsValidator,
-      PersonsValidator,
-    ].freeze
+    def self.has_automated_fix?
+      false
+    end
+
+    attr_reader :results, :persons, :validators
 
     # Takes a list of validator classes, and if it should process real results
     # or not.
-    def initialize(validators: [], check_real_results: false)
-      super()
+    def initialize(validators: [], check_real_results: false, apply_fixes: false)
+      super(apply_fixes: apply_fixes)
       # If no validator is given, assume we should apply all.
-      @validators = validators.empty? ? ALL_VALIDATORS : validators
+      @validators = validators
       @check_real_results = check_real_results
       @results = []
       @persons = []
+    end
+
+    def self.create_full_validation
+      new(validators: ResultsValidators::Utils::ALL_VALIDATORS)
     end
 
     def check_real_results?
@@ -68,7 +67,7 @@ module ResultsValidators
       # Ensure any call to localizable name (eg: round names) is made in English,
       # as all errors and warnings are in English.
       I18n.with_locale(:en) do
-        merge(@validators.map { |v| v.new.validate(results: @results, model: result_model) })
+        merge(@validators.map { |v| v.new(apply_fixes: @apply_fixes).validate(results: @results, model: result_model) })
       end
       self
     end

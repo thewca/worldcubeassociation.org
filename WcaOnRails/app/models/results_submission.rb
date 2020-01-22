@@ -19,7 +19,7 @@ class ResultsSubmission
   end
 
   def results_validator
-    @results_validator ||= ResultsValidators::CompetitionsResultsValidator.new.validate(competition_id)
+    @results_validator ||= ResultsValidators::CompetitionsResultsValidator.create_full_validation.validate(competition_id)
   end
 
   # This is used in specs to compare two ResultsSubmission

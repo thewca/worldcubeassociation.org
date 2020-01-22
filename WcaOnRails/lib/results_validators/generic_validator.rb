@@ -2,10 +2,12 @@
 
 module ResultsValidators
   class GenericValidator
-    attr_reader :errors, :warnings
+    attr_reader :errors, :warnings, :apply_fixes
+
     @@desc = "Please override that class variable with a proper description when you inherit the class."
 
-    def initialize
+    def initialize(apply_fixes: false)
+      @apply_fixes = apply_fixes
       reset_state
     end
 
@@ -26,6 +28,16 @@ module ResultsValidators
 
     def description
       @@desc
+    end
+
+    def self.class_name
+      self.name.split('::').last
+    end
+
+    def self.serialize
+      {
+        name: class_name,
+      }
     end
 
     private
