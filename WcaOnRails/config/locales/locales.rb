@@ -91,6 +91,10 @@ module Locales
       "flag_id": "th",
       "name": "ภาษาไทย",
     },
+    "uk": {
+      "flag_id": "ua",
+      "name": "Українська",
+    },
     "vi": {
       "flag_id": "vn",
       "name": "Tiếng Việt",
