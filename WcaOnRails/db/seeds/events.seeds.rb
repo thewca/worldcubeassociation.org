@@ -10,7 +10,7 @@ sql = "INSERT INTO `Events` (`id`, `name`, `rank`, `format`, `cellName`) VALUES
 ('333bf', '3x3x3 Blindfolded', 70, 'time', '3x3x3 Blindfolded'),
 ('333fm', '3x3x3 Fewest Moves', 80, 'number', '3x3x3 Fewest Moves'),
 ('333oh', '3x3x3 One-Handed', 90, 'time', '3x3x3 One-Handed'),
-('333ft', '3x3x3 With Feet', 100, 'time', '3x3x3 With Feet'),
+('333ft', '3x3x3 With Feet', 996, 'time', '3x3x3 With Feet'),
 ('clock', 'Clock', 110, 'time', 'Clock'),
 ('minx', 'Megaminx', 120, 'time', 'Megaminx'),
 ('pyram', 'Pyraminx', 130, 'time', 'Pyraminx'),
