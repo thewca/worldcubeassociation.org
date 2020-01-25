@@ -1298,7 +1298,6 @@ en:
       venue_details_html: "Details about the venue (e.g., On the first floor far in the back, follow the signs). %{md}"
       contact_html: "Optional contact information. If you do not fill this in, organizer emails will be shown to the public. %{md}. Example: [Text to display](mailto:some@email.com)"
       events: "Events"
-      deprecated_events: "This competition has events that are no longer official, we do not support editing them."
       public_and_locked_html: "This competition is publicly visible and locked for editing. If you need to make a change, please reply to the email thread where the competition was confirmed."
       confirmed_but_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{contact} to make it visible."
       is_visible: "This competition is publicly visible, any changes you make will show up to the public!"
