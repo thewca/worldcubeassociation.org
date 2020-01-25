@@ -10,7 +10,7 @@
       <%# This is most likely a bug and the cleanest workaround I could find was to explicitly set the hint here. %>
       <%= f.input :validators, as: :string, label: false, hint: false, input_html: { id: "validators" } %>
       <%= f.input :apply_fixes, as: :boolean, label: apply_fixes_label, hint: apply_fixes_hint, input_html: { checked: results_validator.apply_fixes } %>
-      <%= f.input :competition_ids, as: :string, readonly: !competition.nil?, hint: false, input_html: { value: competition&.id }, label: "Competition ID(s)" %>
+      <%= f.input :competition_ids, as: :string, readonly: competition.present?, hint: false, input_html: { value: competition&.id }, label: "Competition ID(s)" %>
       <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
     <% end %>
   </div>
