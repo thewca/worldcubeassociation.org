@@ -10,7 +10,6 @@ sql = "INSERT INTO `Events` (`id`, `name`, `rank`, `format`, `cellName`) VALUES
 ('333bf', '3x3x3 Blindfolded', 70, 'time', '3x3x3 Blindfolded'),
 ('333fm', '3x3x3 Fewest Moves', 80, 'number', '3x3x3 Fewest Moves'),
 ('333oh', '3x3x3 One-Handed', 90, 'time', '3x3x3 One-Handed'),
-('333ft', '3x3x3 With Feet', 100, 'time', '3x3x3 With Feet'),
 ('clock', 'Clock', 110, 'time', 'Clock'),
 ('minx', 'Megaminx', 120, 'time', 'Megaminx'),
 ('pyram', 'Pyraminx', 130, 'time', 'Pyraminx'),
@@ -19,6 +18,7 @@ sql = "INSERT INTO `Events` (`id`, `name`, `rank`, `format`, `cellName`) VALUES
 ('444bf', '4x4x4 Blindfolded', 160, 'time', '4x4x4 Blindfolded'),
 ('555bf', '5x5x5 Blindfolded', 170, 'time', '5x5x5 Blindfolded'),
 ('333mbf', '3x3x3 Multi-Blind', 180, 'multi', '3x3x3 Multi-Blind'),
+('333ft', '3x3x3 With Feet', 996, 'time', '3x3x3 With Feet'),
 ('magic', 'Magic', 997, 'time', 'Magic'),
 ('mmagic', 'Master Magic', 998, 'time', 'Master Magic'),
 ('333mbo', '3x3x3 Multi-Blind Old Style', 999, 'multi', '3x3x3 Multi-Blind Old Style');"
