@@ -7,6 +7,20 @@
   <% end %>
   The results of the validations are below.
 </p>
+<% if results_validator.has_infos? %>
+  <%# NOTE: this can be only visible to the WRT when they apply automatic fixes. %>
+  <h3>Infos</h3>
+  <% results_validator.infos.group_by(&:kind).each do |type, infos| %>
+    <% if infos.any? %>
+      <h4>Information for <%= type %></h4>
+      <ul>
+        <% infos.each do |info| %>
+          <li><%= info %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+<% end %>
 <h3>Errors</h3>
 <% if results_validator.has_errors? %>
   <p>Please fix the errors below:</p>

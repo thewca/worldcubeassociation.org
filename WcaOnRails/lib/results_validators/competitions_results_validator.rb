@@ -81,6 +81,7 @@ module ResultsValidators
       other_validators.each do |v|
         @errors.concat(v.errors)
         @warnings.concat(v.warnings)
+        @infos.concat(v.infos)
       end
     end
   end

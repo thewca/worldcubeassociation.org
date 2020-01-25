@@ -49,8 +49,8 @@ RSpec.describe ResultsValidators::PositionsValidator do
             create_result_error(competition1.id, "333oh-f", personName1, 1, 2),
             create_result_error(competition2.id, "222-f", personName2, 5, 7),
           ]
-          model.where(pos: 1, eventId: "333oh").update(pos: 2)
-          model.where(pos: 5, eventId: "222").update(pos: 7)
+          model.where(pos: 1, eventId: "333oh").first.update!(pos: 2)
+          model.where(pos: 5, eventId: "222").first.update!(pos: 7)
         end
         validator_args.each do |arg|
           pv = ResultsValidators::PositionsValidator.new.validate(arg)
@@ -59,13 +59,37 @@ RSpec.describe ResultsValidators::PositionsValidator do
       end
 
       it "fixes messed up positions in given competitions when requested to" do
+        expected_infos = {}
         [InboxResult, Result].each do |model|
-          model.where(pos: 1, eventId: "333oh").update(pos: 2)
-          model.where(pos: 5, eventId: "222").update(pos: 7)
+          table_results = results[model.to_s]
+          personName1 = table_results[0].first.personName
+          personName2 = table_results[1].last.personName
+          expected_infos[model.to_s] = [
+            ResultsValidators::ValidationInfo.new(:results, competition1.id,
+                                                  ResultsValidators::PositionsValidator::POSITION_FIXED_INFO,
+                                                  round_id: "333oh-f",
+                                                  person_name: personName1,
+                                                  expected_pos: 1,
+                                                  pos: 2),
+            ResultsValidators::ValidationInfo.new(:results, competition2.id,
+                                                  ResultsValidators::PositionsValidator::POSITION_FIXED_INFO,
+                                                  round_id: "222-f",
+                                                  person_name: personName2,
+                                                  expected_pos: 5,
+                                                  pos: 7),
+          ]
         end
         validator_args.each do |arg|
+          # This is a bit tricky: we have to create the wrong results here,
+          # because we run the validation twice on each model (once by loading
+          # the results through the competition id, once by loading directly
+          # the results). Therefore results are fixed on the first validation
+          # and no fix is reported on the subsequent one.
+          arg[:model].where(pos: 1, eventId: "333oh").update(pos: 2)
+          arg[:model].where(pos: 5, eventId: "222").update(pos: 7)
           pv = ResultsValidators::PositionsValidator.new(apply_fixes: true).validate(arg)
           expect(pv.has_errors?).to eq false
+          expect(pv.infos).to match_array(expected_infos[arg[:model].to_s])
         end
       end
     end

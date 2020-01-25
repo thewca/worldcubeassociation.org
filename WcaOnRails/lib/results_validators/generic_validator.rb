@@ -2,7 +2,7 @@
 
 module ResultsValidators
   class GenericValidator
-    attr_reader :errors, :warnings, :apply_fixes
+    attr_reader :errors, :warnings, :infos, :apply_fixes
 
     @@desc = "Please override that class variable with a proper description when you inherit the class."
 
@@ -17,6 +17,10 @@ module ResultsValidators
 
     def has_warnings?
       @warnings.any?
+    end
+
+    def has_infos?
+      @infos.any?
     end
 
     # User must provide either:
@@ -45,6 +49,7 @@ module ResultsValidators
     def reset_state
       @errors = []
       @warnings = []
+      @infos = []
     end
 
     protected
