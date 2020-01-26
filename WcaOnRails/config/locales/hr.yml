@@ -282,6 +282,8 @@ hr:
     average: Prosječno
     #original_hash: e7f6fc5
     solves: Slaganja
+    #original_hash: c9d0561
+    hello: 'Pozdrav %{name},'
     date:
       #original_hash: acb6273
       no_date: Bez datuma
@@ -399,6 +401,8 @@ hr:
         receive_delegate_reports: Htio bi primati Delegatove izvještaje s WCA Natjecanja preko e-maila
         #original_hash: 57eaf24
         user_preferred_events: Preferirane discipline
+        #original_hash: e632fbf
+        otp_attempt: 'Unesi dvofaktorski autentifikacijski kod:'
       competition:
         #original_hash: 89f89c0
         id: Identifikacija
@@ -775,6 +779,10 @@ hr:
         receive_delegate_reports: >-
           Ukoliko si Kandidat Delegat, Senior Delegat, član WRC ili WQAC,
           svakako primaš Delegatove izvještaje.
+        #original_hash: 0627e5c
+        otp_attempt: >-
+          Provjeri odabranu mobilnu aplikaciju za jednokratnu lozinku ili unesi
+          jedan od kodova za oporavak.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1182,6 +1190,129 @@ hr:
       new:
         #original_hash: ada2e9e
         sign_in: Prijavi se
+        2fa:
+          #original_hash: b274c38
+          verify: 'Kako bi se prijavili, potrebna je verifikacija'
+          #original_hash: ec44d52
+          confirm: Potvrdi kod
+          #original_hash: 912516c
+          regenerated_secret: Uspješno obnovljena dvofaktorska autentifikacija.
+          #original_hash: 1b0c44f
+          enabled_success: Uspješno aktivirana dvofaktorska autentifikacija.
+          #original_hash: 9515157
+          email_auth: Verifikacija email-a
+          #original_hash: d305ccb
+          get_by_email: Pošalji kod na e-mail
+          #original_hash: 4e644aa
+          get_by_email_desc: >-
+            Ukoliko ne možete doći do svog uređaja ili pristupnih kodova,
+            kliknite ispod za jednokratnu lozinku koja će se dostaviti mailom.
+            Kopirajte i zalijepite lozinku iznad kako bi se prijavili.
+          #original_hash: b243ac5
+          email_sent: >-
+            Kod je poslan na email. Vrijedi 2 minute. Novi kod može biti
+            generiran nakon 2 minute.
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: Trenutno se ne može generirati email
+            #original_hash: c0d4fc2
+            invalid_otp: Netočan dvofaktorski kod.
+            #original_hash: c2f5347
+            not_enabled: Dvofaktorska autentifikacija nije omogućena.
+            #original_hash: 14d294b
+            unknown: Nepoznata greška prilikom slanja emaila. Kontaktirajte WST.
+          otp_email:
+            #original_hash: a20e037
+            subject: Jednokratna lozinka za WCA
+            #original_hash: e820d08
+            2fa_attempt: >-
+              Pokušaj prijave na WCA stranicu. Uključena je dvofaktorska
+              autentifikacija i poslana je jednokratna lozinka na email.
+              Pogledajte ispod:
+            #original_hash: 2daca82
+            disclaimer: >-
+              Ukoliko niste zatražili autentifikacijski kod, kontaktirajte WST
+              odmah odgovorom na ovaj mail i promijenite lozinku jer je račun
+              vjerojatno ugrožen.
+          #original_hash: 8c13694
+          name: Dvofaktorska autentifikacija (2FA)
+          #original_hash: d28c3b6
+          support_desc_html: >-
+            WCA stranica podržava %{two_factor_link} koristeći jednokratne
+            lozinke:
+          options:
+            #original_hash: 4f9dcb8
+            app: >-
+              generirane od strane 2FA aplikacije na smartphoneu (poput Authy
+              ili Google Authenticator).
+            #original_hash: 34a7572
+            recovery: >-
+              preuzeto iz kodova za oporavak koji se generiraju pri aktiviranju
+              2FA.
+            #original_hash: eaee403
+            email: poslano emailom prilikom prijave.
+          #original_hash: 7ae99ae
+          status_html: 'Dvofaktorska autentifikacija je %{status}.'
+          #original_hash: 3ea3f98
+          enabled: uključena
+          #original_hash: 07596f1
+          disabled: isključena
+          #original_hash: 5f225b0
+          enable: Uključi 2FA
+          #original_hash: b2a3d7e
+          reset: Resetiraj 2FA
+          #original_hash: 14b7bfd
+          reset_if_needed: >-
+            Ukoliko je jedan od uređaja ugrožen, ili želite opozvati pristup
+            svih uređaja, možete ponovno resetirati dvofaktorsku autentifikaciju
+            ispod:
+          #original_hash: 69100a3
+          reset_warning: Treba rekonfigurirati sve 2FA uređaje.
+          #original_hash: a8d11db
+          methods: Dvofaktorske metode
+          #original_hash: 0fd248d
+          methods_description: >-
+            Možete koristiti nekoliko metoda kako bi dobili jednokratne lozinke
+            prilikom prijave, kao opisano ispod.
+          #original_hash: 4442f0e
+          dedicated_app: Korištenje posebne dvofaktorske aplikacije
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            WST preporuča korištenje %{authy} na osobnim uređajima kako bi
+            dobili jednokratnu lozinku prilikom prijave. <br/>Ostale alternative
+            su %{google} i %{microsoft}.
+          #original_hash: f1b2ec2
+          scan_qrcode_html: >-
+            Skeniraj QR kod kada to zahtijeva 2FA aplikacija (ili klikni %{here}
+            ako je preko mobitela).
+          #original_hash: e7cba1a
+          backup_codes: Rezervni kodovi
+          #original_hash: fa62416
+          backup_codes_desc: >-
+            Rezervni kodovi se mogu koristiti umjesto jednokratne lozinke u
+            slučaju da nemate pristup uređaju s aplikacijom dvofaktorske
+            autentifikacije. Svaki kod se može koristiti samo jednom. Spremite
+            ga negdje na sigurno!
+          #original_hash: 087cb72
+          no_backup_codes: >-
+            Još niste generirali rezervne kodove. Klikni dolje za generiranje
+            rezervnih kodova.
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            Generirani su neki rezervni kodovi. Ukoliko su
+            iskorišteni/izgubljeni, mogu se generirati novi klikom ispod. Uzmite
+            u obzir da će prethodni kodovi biti nevažeći ukoliko ovo napravite.
+          #original_hash: 2ee4aca
+          generate_backup_codes: Generiraj rezervne kodove
+          #original_hash: a69dd5b
+          backup_codes_warning: >-
+            Rezervni kodovi će se prikazati ispod. Negdje ih odmah
+            zapišite/spremite: enkriptirani su u našoj bazi i ne mogu se ponovno
+            prikazati kasnije.
+          #original_hash: b5e3ad8
+          email_auth_desc: >-
+            Možete tražiti jednokratne lozinke emailom kada se pokušate
+            prijaviti.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1377,6 +1508,8 @@ hr:
         activate: >-
           Nakon aktivacije možeš se prijaviti na web-stranicu World Cube
           Association:
+        #original_hash: fb02586
+        login_form: obrazac za prijavu
         #original_hash: 333999b
         addendum: >-
           Ovaj e-mail je automatski generiran. Ukoliko nisi napravio/la račun na
@@ -2367,10 +2500,6 @@ hr:
         display](mailto:some@email.com)
       #original_hash: c5497bc
       events: Discipline
-      #original_hash: 09b819f
-      deprecated_events: >-
-        Ovo natjecanje ima discipline koje nisu više službene, ne podržavamo
-        uređivanje takvih.
       #original_hash: cafc153
       public_and_locked_html: >-
         Ovo natjecanje je javno vidljivo i zaključano za uređivanje. Ukoliko
