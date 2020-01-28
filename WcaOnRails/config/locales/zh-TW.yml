@@ -1127,7 +1127,7 @@ zh-TW:
           #original_hash: b2a3d7e
           reset: 重設二步驟驗證
           #original_hash: 14b7bfd
-          reset_if_needed: 如果您有某個裝置已無法使用，或是您想要解除裝置的連結，您可以在這邊重設您的二步驟認證金鑰：
+          reset_if_needed: 如果您有某個裝置已無法使用，或是您想要解除裝置的連結，您可以在這邊重設您的二步驟驗證金鑰：
           #original_hash: 69100a3
           reset_warning: 您需要重設所有有二步驟驗證的裝置
           #original_hash: a8d11db
@@ -2128,8 +2128,6 @@ zh-TW:
       contact_html: '可任意選擇聯絡資訊。若您未填寫，主辦人的電子郵件將會被公開。%{md} 範例：[顯示內容](mailto:some@email.com)'
       #original_hash: c5497bc
       events: 項目
-      #original_hash: 09b819f
-      deprecated_events: 這場比賽有些項目已經不被官方認可，我們無法幫您編輯。
       #original_hash: cafc153
       public_and_locked_html: 這場比賽已經公開並且不得編輯內容。若您需要修改內容，請回覆申請比賽的郵件。
       #original_hash: e00a339
