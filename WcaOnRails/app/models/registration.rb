@@ -103,7 +103,11 @@ class Registration < ApplicationRecord
 
   def paid_entry_fees
     Money.new(
-      registration_payments.sum(:amount_lowest_denomination),
+      # NOTE: we do *not* sum on the association, as it bypasses any clean
+      # registration.includes(:registration_payments) that may exist.
+      # It's fine to turn the associated records to an array and sum on ithere,
+      # as it's usually just a couple of rows.
+      registration_payments.map(&:amount_lowest_denomination).sum,
       competition.currency_code,
     )
   end
