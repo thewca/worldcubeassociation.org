@@ -2548,10 +2548,6 @@ pl:
         [Tekst do wyświetlenia](mailto:ktoś@email.com)
       #original_hash: c5497bc
       events: Konkurencje
-      #original_hash: 09b819f
-      deprecated_events: >-
-        Te zawody mają konkurencje, które nie są już oficjalne, nie obsługujemy
-        edytowania ich.
       #original_hash: cafc153
       public_and_locked_html: >-
         Te zawody są widoczne publicznie i edycja jest zablokowana. Jeżeli
