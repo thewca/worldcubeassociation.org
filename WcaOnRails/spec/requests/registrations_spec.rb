@@ -546,7 +546,7 @@ RSpec.describe "registrations" do
             payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          stripe_charge_id = registration.registration_payments.first.stripe_charge_id
+          stripe_charge_id = registration.reload.registration_payments.first.stripe_charge_id
           stripe_charge = StripeCharge.find_by(stripe_charge_id: stripe_charge_id)
           expect(stripe_charge&.status).to eq "success"
           metadata = JSON.parse(stripe_charge.metadata)["metadata"]
