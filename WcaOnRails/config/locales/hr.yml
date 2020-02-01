@@ -3267,14 +3267,16 @@ hr:
     spirit_footer: WCA Spirit
     #original_hash: c1781ee
     our_goals_title: Naši ciljevi
-    #original_hash: 1ca8ac4
+    #original_hash: caf6bf2
     our_goals_content_html: >-
       <p>World Cube Association želi otvoriti nove mogućnosti za članstvo u
       zajednici i vodstvo svim mladima diljem svijeta kroz veću pristupačnost
       natjecanjima diljem svijeta. Vjerujemo da iskustva na natjecanjima i
       unutar zajednice kreiraju prilike za rast za mlade ljude i da se
       pokazivanjem mozgalica novim grupama ljudi pruža veliku priliku za rast
-      zajednice.</p>
+      zajednice. Dokument koji sadrži Viziju i Strategiju WCA Upravnog odbora
+      može se pronaći <a
+      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">ovdje</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Što je slijedeće za WCA?
     #original_hash: a08c67f
