@@ -75,6 +75,13 @@ ja:
     Oceania: オセアニア
     #original_hash: b1ffb4c
     South America: 南アメリカ
+  country_bands:
+    #original_hash: 2b5976e
+    title: WCA国バンド
+    #original_hash: df5f4ea
+    band_title: 'バンド%{number}'
+    #original_hash: 6521e5d
+    due_value: '1大会1競技者あたり%{value}米ドル'
   events:
     #original_hash: 3732390
     '222': 2x2x2 キューブ
@@ -266,6 +273,8 @@ ja:
     average: 平均
     #original_hash: e7f6fc5
     solves: 内訳
+    #original_hash: c9d0561
+    hello: '%{name} 様'
     date:
       #original_hash: acb6273
       no_date: 未定
@@ -377,6 +386,8 @@ ja:
         receive_delegate_reports: 代理人レポートをメールで受け取る。
         #original_hash: 57eaf24
         user_preferred_events: お気に入り種目
+        #original_hash: e632fbf
+        otp_attempt: '二段階認証パスワードを入力してください:'
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -737,6 +748,8 @@ ja:
         receive_delegate_reports: >-
           代理人候補、上級代理人、または WCA 規則委員会や WCA
           品質保証委員会のメンバーである場合、デフォルトでは代理人レポートを受信する設定になっています。変更する場合、反映に 1 時間ほどかかります。
+        #original_hash: 0627e5c
+        otp_attempt: 設定済みの携帯端末でワンタイムパスワードを確認するか、復旧コードを入力してください。
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -993,6 +1006,11 @@ ja:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1060,6 +1078,94 @@ ja:
       new:
         #original_hash: ada2e9e
         sign_in: ログイン
+        2fa:
+          #original_hash: b274c38
+          verify: ログインするには本人確認をしてください。
+          #original_hash: ec44d52
+          confirm: パスワードを確定
+          #original_hash: 912516c
+          regenerated_secret: 二段階認証を設定しました。
+          #original_hash: 1b0c44f
+          enabled_success: 二段階認証を有効化しました。
+          #original_hash: 9515157
+          email_auth: メール認証
+          #original_hash: d305ccb
+          get_by_email: ワンタイムパスワードをメールで受け取る
+          #original_hash: 4e644aa
+          get_by_email_desc: >-
+            携帯端末でアクセスコードが取得できない場合は、以下のボタンからメールにてワンタイムパスワードを取得することができます。その場合、ログインするにはワンタイムパスワードを上記欄内にコピー・貼り付けしてください。
+          #original_hash: b243ac5
+          email_sent: メールにてワンタイムパスワードを送信しました。パスワードは2分間有効です。2分以内でも、新たにパスワードを発行することはできます。
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: 現在メールを送信することができません
+            #original_hash: c0d4fc2
+            invalid_otp: 二段階認証パスワードが誤っています。
+            #original_hash: c2f5347
+            not_enabled: 二段階認証が無効です
+            #original_hash: 14d294b
+            unknown: メール送信時にエラーが発生しました。WSTに連絡を取ってください。
+          otp_email:
+            #original_hash: a20e037
+            subject: あなたのワンタイムパスワード
+            #original_hash: e820d08
+            2fa_attempt: >-
+              あなたはWCAウェブサイトにログインしようとしてます。二段階認証が有効化されており、ワンタイムパスワードのメール発行がリクエストされています。以下がワンタイムパスワードとなります：
+            #original_hash: 2daca82
+            disclaimer: もしこのワンタイムパスワードをリクエストしていない場合は、このメールへの返信ですぐにWSTに連絡し、パスワードを変更してください。
+          #original_hash: 8c13694
+          name: 二段階認証（2FA）
+          #original_hash: d28c3b6
+          support_desc_html: 'WCAウェブサイトはワンタイムパスワードによる%{two_factor_link}に対応しています。'
+          options:
+            #original_hash: 4f9dcb8
+            app: 設定された二段階認証アプリケーションで生成されます（Authy、Google Authenticator等）
+            #original_hash: 34a7572
+            recovery: taken from the recovery codes generated when activating 2FA.
+            #original_hash: eaee403
+            email: ログイン時にメールにて送られています。
+          #original_hash: 7ae99ae
+          status_html: '二段階認証は%{status}です。'
+          #original_hash: 3ea3f98
+          enabled: 有効
+          #original_hash: 07596f1
+          disabled: 無効
+          #original_hash: 5f225b0
+          enable: 二段階認証を有効化する。
+          #original_hash: b2a3d7e
+          reset: 二段階認証をリセットする。
+          #original_hash: 14b7bfd
+          reset_if_needed: 'もし携帯端末を紛失したり、携帯端末からのアクセスを破棄したい場合は、以下により二段階認証をリセットできます:'
+          #original_hash: 69100a3
+          reset_warning: 二段階認証に使用する端末を再設定してください。
+          #original_hash: a8d11db
+          methods: 二段階認証方法
+          #original_hash: 0fd248d
+          methods_description: ワンタイムパスワードの取得方法は選択できます。以下のようになっています。
+          #original_hash: 4442f0e
+          dedicated_app: 専用の二段階認証アプリケーションを使用する
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            WSTは各個人の端末に%{authy}をインストールしてワンタイムパスワードを管理することを推奨します。<br/>ほかには%{google}や%{microsoft}等があります。
+          #original_hash: f1b2ec2
+          scan_qrcode_html: >-
+            二段階認証アプリケーションを使用する場合は、以下のQRコードを読み込んでください。（携帯端末の場合は、%{here}をタップしてください）
+          #original_hash: e7cba1a
+          backup_codes: バックアップコード
+          #original_hash: fa62416
+          backup_codes_desc: >-
+            バックアップコードは、二段階認証アプリケーションをインストールした端末を使用できない場合にワンタイムパスワードの代わりに使用することができます。1つのバックアップコードは1度しか使用できません。安全な場所で保管してください。
+          #original_hash: 087cb72
+          no_backup_codes: まだバックアップコードを発行しておりません。バックアップコードを発行するには以下のボタンを押してください。
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            すでにバックアップコードを発行しています。すでに使用したか紛失した場合は、以下のボタンで再発行することができます。その場合、現在のバックアップコードは無効になるので注意してください。
+          #original_hash: 2ee4aca
+          generate_backup_codes: バックアップコードを発行する。
+          #original_hash: a69dd5b
+          backup_codes_warning: バックアップコードは以下に表示されています。すぐに記録してください。これは暗号化され、再度表示することはできません。
+          #original_hash: b5e3ad8
+          email_auth_desc: ログイン時にワンタイムパスワードをメールにて発行することができます。
     shared:
       links:
         #original_hash: ada2e9e
@@ -1242,6 +1348,8 @@ ja:
         confirmation_link: アカウント認証
         #original_hash: d484f70
         activate: アカウント有効化後、WCA ウェブサイトへのログインが可能となります。
+        #original_hash: fb02586
+        login_form: ログインフォーム
         #original_hash: 333999b
         addendum: このメールは自動配信です。WCA ウェブサイトに登録しておらず、このメールが誤送信と思われる場合は、無視して削除してください。
         #original_hash: dbc2263
@@ -1419,8 +1527,10 @@ ja:
       dob_incorrect_html: >-
         データベースと一致しません。正しい日付を正しい形式 (YYYY-MM-DD) で入力したにもかかわらずこのエラーが出る場合は、WCA
         Results Team に <a href="%{dob_form_path}">専用フォーム</a> よりお問い合わせください。
-      #original_hash: 71b46b4
-      unique: 'は既に"%{used_name}"(%{used_email})により使用されています。'
+      #original_hash: c9ae791
+      unique_html: >-
+        はすでに%{used_email}の%{used_name}によって使用されています。WCA IDの連携を解除するには、<a
+        href=%{used_edit_path} target='_blank'>アカウントを編集</a>してください。
       #original_hash: 26f70ed
       dob_past: 過去の日付を入力してください
       #original_hash: b320913
@@ -1510,6 +1620,8 @@ ja:
         あなたは出場停止処分を受けています。誤りと思われる場合は、<a
         href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WCA
         懲罰委員会 (WDC) </a>に連絡してください。
+      #original_hash: 8d07e7f
+      undelete_banned: は出場停止されている競技者で、削除できません。
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2052,8 +2164,6 @@ ja:
         display](mailto:some@email.com)
       #original_hash: c5497bc
       events: 競技種目
-      #original_hash: 09b819f
-      deprecated_events: この大会は非公式競技を含みます。
       #original_hash: cafc153
       public_and_locked_html: この大会は公開されており、編集はロックされています。変更する場合は、大会告知メールのスレッドに返信して申請してください。
       #original_hash: e00a339
@@ -2725,10 +2835,11 @@ ja:
     spirit_footer: WCAの精神
     #original_hash: c1781ee
     our_goals_title: 我々の目標
-    #original_hash: 1ca8ac4
+    #original_hash: caf6bf2
     our_goals_content_html: >-
       <p>世界キューブ協会 (WCA)
-      は、我々の「回転パズル」の大会により参加しやすくすることで、世界中の若者にコミュニティでのメンバーシップおよびリーダーシップを発揮する機会を提供しようとしています。大会およびコミュニティでの経験は若者にとっての成長の機会を創出し、また新たな人々にパズルイベントをもたらすことは、我々のコミュニティ全体をより強固にすると信じています。</p>
+      は、我々の「回転パズル」の大会により参加しやすくすることで、世界中の若者にコミュニティでのメンバーシップおよびリーダーシップを発揮する機会を提供しようとしています。大会およびコミュニティでの経験は若者にとっての成長の機会を創出し、また新たな人々にパズルイベントをもたらすことは、我々のコミュニティ全体をより強固にすると信じています。WCAにおける理事のビジョンおよび戦略などの文書は<a
+      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">こちら</a>よりご覧いただけます。</p>
     #original_hash: f64ccc7
     whats_next_title: WCA の今後
     #original_hash: a08c67f
