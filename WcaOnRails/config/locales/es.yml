@@ -2528,10 +2528,6 @@ es:
         Ejemplo: [Javier Pérez](mailto:javier@perez.com).
       #original_hash: c5497bc
       events: Pruebas
-      #original_hash: 09b819f
-      deprecated_events: >-
-        Esta competición tiene pruebas que ya no son oficiales, no admitimos
-        editarlas.
       #original_hash: cafc153
       public_and_locked_html: >-
         Esta competición es visible públicamente y no puede ser editada. Si
@@ -3321,7 +3317,7 @@ es:
     spirit_footer: Espíritu de la WCA
     #original_hash: c1781ee
     our_goals_title: Nuestros objetivos
-    #original_hash: 1ca8ac4
+    #original_hash: caf6bf2
     our_goals_content_html: >-
       <p>La Organización Mundial del Cubo quiere brindar oportunidades para
       pertenecer y liderar comunidades a gente joven alrededor del mundo
@@ -3329,7 +3325,11 @@ es:
       "puzzles secuenciales". Creemos que las experiencias en las competiciones
       y dentro de nuestra comunidad genera oportunidades de crecimiento para
       gente joven involucrada y que introducir estos eventos a nuevos grupos de
-      gente permite fortalecerse a nuestra comunidad general.</p>
+      gente permite fortalecerse a nuestra comunidad general. Se puede encontrar
+      <a
+      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">aquí</a>
+      un documento que contiene la visión y estrategia de la junta para la WCA
+      .</p>
     #original_hash: f64ccc7
     whats_next_title: ¿Qué es lo próximo para la WCA?
     #original_hash: a08c67f
