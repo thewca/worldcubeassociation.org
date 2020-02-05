@@ -1158,6 +1158,7 @@ en:
       not_announced: "This competition is visible to the public but hasn't been announced yet."
       announced: "Successfully announced competition!"
       results_not_posted: "This competition's results are visible but haven't been posted yet."
+      results_already_posted: "The results have already been posted."
       results_posted: "Successfully posted results!"
       results_preview_alert: "You are viewing results that have not been posted yet."
       upload_results: "This competition is over, we are working to upload the results as soon as possible!"

@@ -925,11 +925,11 @@ class Competition < ApplicationRecord
   end
 
   def announced?
-    !announced_at.nil? && !announced_by.nil?
+    announced_at.present? && announced_by.present?
   end
 
   def results_posted?
-    !results_posted_at.nil? && !results_posted_by.nil?
+    results_posted_at.present? && results_posted_by.present?
   end
 
   def confirmed?
