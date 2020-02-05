@@ -82,7 +82,7 @@
 
       <dt><%= t '.main_event' %></dt>
       <dd class="competition-events-list">
-        <% main_event = @competition.events.select { |event| event.id == @competition.main_event_id }.first %>
+        <% main_event = @competition.events.find { |event| event.id == @competition.main_event_id } %>
         <%= cubing_icon main_event.id, data: { toggle: "tooltip", placement: "top", container: "body" }, title: main_event.name %>
       </dd>
 

@@ -203,20 +203,23 @@ class CompetitionsController < ApplicationController
     end
 
     unless comp.results.where(eventId: comp.main_event_id).any?
-      flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.events.select { |event| event.id == comp.main_event_id }.first.name)
+      flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.events.find { |event| event.id == comp.main_event_id }.name)
       return redirect_to admin_edit_competition_path(comp)
     end
 
-    unless comp.results_posted?
-      ActiveRecord::Base.transaction do
-        comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id)
-        comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
-        comp.registrations.accepted.each { |registration| registration.user.notify_of_id_claim_possibility(comp) }
-      end
-
-      flash[:success] = t('competitions.messages.results_posted')
-      redirect_to admin_edit_competition_path(comp)
+    if comp.results_posted?
+      flash[:danger] = t('competitions.messages.results_already_posted')
+      return redirect_to admin_edit_competition_path(comp)
     end
+
+    ActiveRecord::Base.transaction do
+      comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id)
+      comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
+      comp.registrations.accepted.each { |registration| registration.user.notify_of_id_claim_possibility(comp) }
+    end
+
+    flash[:success] = t('competitions.messages.results_posted')
+    redirect_to admin_edit_competition_path(comp)
   end
 
   def show_events

@@ -33,11 +33,11 @@ module CompetitionsHelper
     case sort_by
     when "single"
       solve_time = result.to_solve_time(:best)
-      if event.multiple_blindfolded?
-        a_win_by_word = t('competitions.competition_info.result')
-      else
-        a_win_by_word = t('competitions.competition_info.single')
-      end
+      a_win_by_word = if event.multiple_blindfolded?
+                        t('competitions.competition_info.result')
+                      else
+                        t('competitions.competition_info.single')
+                      end
     when "average"
       solve_time = result.to_solve_time(:average)
       a_win_by_word = result.format.id == "a" ? t('competitions.competition_info.average') : t('competitions.competition_info.mean')
