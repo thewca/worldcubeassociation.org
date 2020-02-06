@@ -27,6 +27,7 @@ class Competition < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :bookmarked_competitions, dependent: :delete_all
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
+  belongs_to :main_event, class_name: "Event"
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -177,7 +178,7 @@ class Competition < ApplicationRecord
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
   validates :qualification_results_reason, presence: true, if: :qualification_results?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
-  validates :main_event_id, presence: true, if: :confirmed_or_visible?
+  validates :main_event, presence: true, allow_nil: true, if: :confirmed_or_visible?
 
   NEARBY_DISTANCE_KM_WARNING = 250
   NEARBY_DISTANCE_KM_DANGER = 100
@@ -302,6 +303,10 @@ class Competition < ApplicationRecord
 
   def continent
     country.continent
+  end
+
+  def main_event_id=(event_id)
+    super(event_id || nil)
   end
 
   # Enforce that the users marked as delegates for this competition are

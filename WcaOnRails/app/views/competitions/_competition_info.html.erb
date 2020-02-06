@@ -80,11 +80,13 @@
         <% end %>
       </dd>
 
-      <dt><%= t '.main_event' %></dt>
-      <dd class="competition-events-list">
-        <% main_event = @competition.events.find { |event| event.id == @competition.main_event_id } %>
-        <%= cubing_icon main_event.id, data: { toggle: "tooltip", placement: "top", container: "body" }, title: main_event.name %>
-      </dd>
+      <% main_event = @competition.main_event %>
+      <% if main_event.present? %>
+        <dt><%= t '.main_event' %></dt>
+        <dd class="competition-events-list">
+          <%= cubing_icon main_event.id, data: { toggle: "tooltip", placement: "top", container: "body" }, title: main_event.name %>
+        </dd>
+      <% end %>
 
       <% if competition.results_posted? %>
         <dt><%= t 'competitions.nav.menu.competitors' %></dt>
@@ -178,7 +180,9 @@
             <%= link_to(t('.hide_highlights'), "#") %>
           </div>
           <div class="collapse" id="highlights_text">
-            <p><%=md winners(competition, main_event) %></p>
+            <% if main_event.present? %>
+              <p><%=md winners(competition, main_event) %></p>
+            <% end %>
 
             <p><%=md records(competition) %></p>
           </div>
