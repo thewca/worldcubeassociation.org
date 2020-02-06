@@ -27,7 +27,6 @@ class Competition < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :bookmarked_competitions, dependent: :delete_all
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
-  belongs_to :main_event, class_name: "Event"
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -178,7 +177,15 @@ class Competition < ApplicationRecord
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
   validates :qualification_results_reason, presence: true, if: :qualification_results?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
-  validates :main_event, presence: true, allow_nil: true, if: :confirmed_or_visible?
+  validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
+
+  # Dirty old trick to deal with competition id changes (see other methods using
+  # 'with_old_id' for more details).
+  def persisted_events_id
+    with_old_id do
+      self.competition_events.map(&:event_id)
+    end
+  end
 
   NEARBY_DISTANCE_KM_WARNING = 250
   NEARBY_DISTANCE_KM_DANGER = 100
@@ -268,6 +275,10 @@ class Competition < ApplicationRecord
     (end_date + 1).to_time.change(offset: "-12:00")
   end
 
+  def main_event
+    Event.c_find(main_event_id)
+  end
+
   def with_old_id
     new_id = self.id
     self.id = id_was
@@ -306,7 +317,7 @@ class Competition < ApplicationRecord
   end
 
   def main_event_id=(event_id)
-    super(event_id || nil)
+    super(event_id.blank? ? nil : event_id)
   end
 
   # Enforce that the users marked as delegates for this competition are
@@ -429,8 +440,6 @@ class Competition < ApplicationRecord
         when 'tabs'
           # Clone tabs in the clone_associations callback after the competition is saved.
           clone.clone_tabs = true
-        when 'main_event'
-          clone.main_event = main_event
         else
           raise "Cloning behavior for Competition.#{association_name} is not defined. See Competition#build_clone."
         end

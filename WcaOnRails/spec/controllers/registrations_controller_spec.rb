@@ -426,6 +426,7 @@ RSpec.describe RegistrationsController do
 
     it "redirects psych sheet to highest ranked event if no 333" do
       competition.events = [Event.find("222"), Event.find("444")]
+      competition.main_event_id = "444"
       competition.save!
 
       get :psych_sheet, params: { competition_id: competition.id }
