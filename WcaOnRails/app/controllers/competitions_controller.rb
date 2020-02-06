@@ -202,8 +202,8 @@ class CompetitionsController < ApplicationController
       return redirect_to admin_edit_competition_path(comp)
     end
 
-    unless comp.results.where(eventId: comp.main_event_id).any?
-      flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.events.find { |event| event.id == comp.main_event_id }.name)
+    if comp.main_event_id && comp.results.where(eventId: comp.main_event_id).empty?
+      flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.main_event.name)
       return redirect_to admin_edit_competition_path(comp)
     end
 
