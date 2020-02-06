@@ -2216,12 +2216,28 @@ hr:
         potvrđivanja natjecanja.
       #original_hash: e390250
       create_success: Uspješno kreirano novo natjecanje!
+      #original_hash: ba067f0
+      not_announced: 'Ovo natjecanje je javno vidljivo, no nije još najavljeno.'
+      #original_hash: ab61991
+      announced: Uspješno najavljeno natjecanje!
+      #original_hash: 8ad5e67
+      results_not_posted: 'Rezultati ovog natjecanja su vidljivi, ali još nisu objavljeni.'
+      #original_hash: e205d73
+      results_already_posted: Rezultati su već objavljeni.
+      #original_hash: 376f461
+      results_posted: Uspješno objavljeni rezultati!
       #original_hash: afe3a23
       results_preview_alert: Gledaš rezultate koji još nisu objavljeni.
       #original_hash: 07de612
       upload_results: >-
         Ovo natjecanje je završilo, radimo na tome da objavimo rezultate što je
         prije moguće!
+      #original_hash: 68dd436
+      computing_auxiliary_data: Pričekajte dok se ne izračunaju pomoćni podaci.
+      #original_hash: 8ebe272
+      no_results: Nema rezultata.
+      #original_hash: 79e8b95
+      no_main_event_results: 'Nema rezultata glavne discipline (%{event_name}).'
       #original_hash: a0168ee
       in_progress: 'Ovo natjecanje je u tijeku. Dođi nakon %{date} vidjeti rezultate!'
       #original_hash: 3322400
@@ -2306,6 +2322,8 @@ hr:
       information: Informacije
       #original_hash: c5497bc
       events: Discipline
+      #original_hash: 3c24bd2
+      main_event: Glavna disciplina
       #original_hash: ff722f0
       registration_requirements: Zahtjevi registracije
       #original_hash: 74d0bf1
@@ -2375,6 +2393,49 @@ hr:
         range_past_html: >-
           Online registracije su se otvorile %{start_date_and_time} i zatvorile
           %{end_date_and_time}.
+      #original_hash: 1f9c9c4
+      highlights: Naglasci
+      #original_hash: 945f917
+      click_to_display_highlights_html: 'Klikni %{link_here} za prikaz naglasaka s ovog natjecanja.'
+      #original_hash: dc5c597
+      hide_highlights: Sakrij naglaske.
+      #original_hash: f691bf2
+      result: rezultat
+      #original_hash: acab754
+      single: pojedinačno slaganje
+      #original_hash: e78d7c2
+      average: prosjek
+      #original_hash: 083c83e
+      mean: srednja vrijednost
+      #original_hash: 22bee3a
+      result_sentence: 's %{a_win_by_word} od %{result}'
+      #original_hash: 6c3b236
+      winner: '%{winner} je pobjednik %{result_sentence} u %{event_name} disciplini.'
+      #original_hash: 4daa7df
+      first_runner_up: '%{first_runner_up} je drugoplasiran (%{first_runner_up_result})'
+      #original_hash: d96b040
+      and: i
+      #original_hash: e9e9d2e
+      second_runner_up: '%{second_runner_up} je trećeplasiran (%{second_runner_up_result}).'
+      records:
+        #original_hash: 0658e11
+        wr: Svjetski rekordi
+        #original_hash: 9d940bb
+        afr: Afrički rekordi
+        #original_hash: 56c95a8
+        asr: Azijski rekordi
+        #original_hash: 4cf3c13
+        ocr: Rekordi Oceanije
+        #original_hash: 1b9111e
+        er: Europski rekordi
+        #original_hash: d26cf99
+        nar: Sjevernoamerički rekordi
+        #original_hash: 270c007
+        sar: Južnoamerički rekordi
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} %{result} (pojedinačno)'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} %{result} (prosječno)'
       #original_hash: 8eda7ac
       bookmark: Označi ovo natjecanje
       #original_hash: 4dfea97
@@ -2647,10 +2708,16 @@ hr:
       competitors: Natjecatelji
     #original_hash: 06b01c4
     announcements: Najave
-    #original_hash: 5b9523f
+    #original_hash: a2b80b0
+    post_announcement: Najavi natjecanje
+    #original_hash: b462eac
+    announced_by_html: 'Najavio/la %{announcer_name} na dan %{date_time}'
+    #original_hash: 9a42672
     upload_results: Pošalji rezultate
-    #original_hash: 47dfd90
-    post_announcement: Najave nakon natjecanja
+    #original_hash: 01de5ee
+    post_results: Objavi rezultate
+    #original_hash: b6513f1
+    results_posted_by_html: 'Objavljeno %{poster_name} na dan %{date_time}'
     show:
       #original_hash: b0fe391
       general_info: Općenite informacije
