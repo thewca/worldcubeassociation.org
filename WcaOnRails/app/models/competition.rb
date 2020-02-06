@@ -429,6 +429,8 @@ class Competition < ApplicationRecord
         when 'tabs'
           # Clone tabs in the clone_associations callback after the competition is saved.
           clone.clone_tabs = true
+        when 'main_event'
+          clone.main_event = main_event
         else
           raise "Cloning behavior for Competition.#{association_name} is not defined. See Competition#build_clone."
         end
