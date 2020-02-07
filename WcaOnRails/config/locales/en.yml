@@ -834,7 +834,6 @@ en:
       competition_announcement_email:
         header: "The WCAT announced %{competition}"
         announced: "The WCAT approved your competition and officially announced it to the public."
-        link: "Please follow the link to get to the competition announcement: "
       #context: notification to users after they were added to a competition as organizers
       organizer_addition_email:
         header: "You were added to %{competition} as an organizer"
