@@ -27,10 +27,7 @@ RSpec.feature "Edit user" do
     fill_in "WCA ID", with: existing_user.wca_id
     submit_form
 
-    expect(page).to have_text I18n.t('users.errors.unique_html',
-                                     used_name: existing_user.name,
-                                     used_email: existing_user.email,
-                                     used_edit_path: Rails.application.routes.url_helpers.edit_user_path(existing_user))
+    expect(page).to have_text "WCA ID is already used by #{existing_user.name}"
 
     # Entering a valid wca id
     fill_in "WCA ID", with: new_person.wca_id
