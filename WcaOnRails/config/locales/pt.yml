@@ -1720,10 +1720,10 @@ pt:
         data de nascimento no formato correto (AAAA-MM-DD), por favor contacte a
         Equipa de Resultados da WCA usando <a href="%{dob_form_path}">este
         formulário próprio</a>.
-      #original_hash: c9ae791
+      #original_hash: c3ce070
       unique_html: >-
-        já está a ser usado por "%{used_name}" com %{used_email}. Para liberar o
-        ID da WCA, pode <a href=%{used_edit_path} target='_blank'>editar essa
+        já está a ser usado por %{used_name} com %{used_email}. Para liberar o
+        ID da WCA, pode <a href="%{used_edit_path}" target="_blank">editar essa
         conta</a> e desassociar o ID da WCA.
       #original_hash: 26f70ed
       dob_past: deve ser no passado
