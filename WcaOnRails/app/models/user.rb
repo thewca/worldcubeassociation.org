@@ -889,6 +889,20 @@ class User < ApplicationRecord
     end
   end
 
+  def maybe_assign_wca_id_by_results(competition, notify = true)
+    if !wca_id && !unconfirmed_wca_id
+      matches = []
+      unless country.nil?
+        matches = competition.competitors.where(name: name, year: dob.year, month: dob.month, day: dob.day, gender: gender, countryId: country.id).to_a
+      end
+      if matches.size == 1 && matches.first.user.nil?
+        update(wca_id: matches.first.wca_id)
+      elsif notify
+        notify_of_id_claim_possibility(competition)
+      end
+    end
+  end
+
   def notify_of_id_claim_possibility(competition)
     if !wca_id && !unconfirmed_wca_id
       CompetitionsMailer.notify_users_of_id_claim_possibility(self, competition).deliver_later
