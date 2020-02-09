@@ -701,6 +701,51 @@ RSpec.describe CompetitionsController do
           post :post_results, params: { id: competition }
         end.to change { enqueued_jobs.size }.by(2)
       end
+
+      it "assigns wca id when user matches one person in results" do
+        competition = FactoryBot.create(:competition, :registration_open)
+        reg = FactoryBot.create(:registration, :accepted, competition: competition)
+        FactoryBot.create(:result, competition: competition, person: reg.person, eventId: "333")
+
+        wca_id = reg.user.wca_id
+        reg.user.update(wca_id: nil)
+
+        post :post_results, params: { id: competition }
+
+        expect(reg.user.reload.wca_id).to eq wca_id
+      end
+
+      it "does not assign wca id when user matches several persons in results" do
+        competition = FactoryBot.create(:competition, :registration_open)
+        user = FactoryBot.create(:user_with_wca_id)
+        person = user.person
+        FactoryBot.create(:registration, :accepted, competition: competition, user: user)
+        FactoryBot.create(:result, competition: competition, person: person, eventId: "333")
+        another_person = FactoryBot.create(:person, name: person.name, countryId: person.countryId, gender: person.gender, year: person.year, month: person.month, day: person.day)
+        FactoryBot.create(:result, competition: competition, person: another_person, eventId: "333")
+
+        user.update(wca_id: nil)
+
+        post :post_results, params: { id: competition }
+
+        expect(user.reload.wca_id).to be_nil
+      end
+
+      it "does not assign wca id when user matches results but wca id is already assigned" do
+        competition = FactoryBot.create(:competition, :registration_open)
+        user = FactoryBot.create(:user_with_wca_id)
+        user2 = FactoryBot.create(:user_with_wca_id)
+        FactoryBot.create(:registration, :accepted, competition: competition, user: user)
+        FactoryBot.create(:result, competition: competition, person: user.person, eventId: "333")
+
+        wca_id = user.wca_id
+        user.update(wca_id: nil)
+        user2.update(wca_id: wca_id)
+
+        post :post_results, params: { id: competition }
+
+        expect(user.reload.wca_id).to be_nil
+      end
     end
   end
 

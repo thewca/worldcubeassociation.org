@@ -215,7 +215,7 @@ class CompetitionsController < ApplicationController
     ActiveRecord::Base.transaction do
       comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id)
       comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
-      comp.registrations.accepted.each { |registration| registration.user.notify_of_id_claim_possibility(comp) }
+      comp.registrations.accepted.each { |registration| registration.user.maybe_assign_wca_id_by_results(comp) }
     end
 
     flash[:success] = t('competitions.messages.results_posted')
