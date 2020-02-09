@@ -75,6 +75,13 @@ pt:
     Oceania: Oceânia
     #original_hash: b1ffb4c
     South America: América do Sul
+  country_bands:
+    #original_hash: 2b5976e
+    title: Bandas de Países da WCA
+    #original_hash: df5f4ea
+    band_title: 'Banda %{number}'
+    #original_hash: 6521e5d
+    due_value: '$%{value} por competidor por competição'
   events:
     #original_hash: 3732390
     '222': Cubo 2x2x2
@@ -269,6 +276,8 @@ pt:
     average: Média
     #original_hash: e7f6fc5
     solves: Resoluções
+    #original_hash: c9d0561
+    hello: 'Olá %{name},'
     date:
       #original_hash: acb6273
       no_date: Sem data
@@ -382,6 +391,8 @@ pt:
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 57eaf24
         user_preferred_events: Eventos preferidos
+        #original_hash: e632fbf
+        otp_attempt: 'Insira o seu código de autenticação de dois fatores:'
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -763,6 +774,10 @@ pt:
           Se for Delegado Candidato, Delegado Sénior ou membro do WRC ou do
           WQAC, recebe Relatórios de Delegados por defeito. Nota: a alteração
           pode levar até uma hora a tomar efeito.
+        #original_hash: 0627e5c
+        otp_attempt: >-
+          Verifique a aplicação móvel configurada para uma password ou insira um
+          dos seus códigos de recuperação.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1092,6 +1107,11 @@ pt:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1159,6 +1179,132 @@ pt:
       new:
         #original_hash: ada2e9e
         sign_in: Entrar
+        2fa:
+          #original_hash: b274c38
+          verify: 'Para entrar, verifique que é você'
+          #original_hash: ec44d52
+          confirm: Código de confirmação
+          #original_hash: 912516c
+          regenerated_secret: Regenerou com sucesso o seu segredo da autenticação de dois fatores.
+          #original_hash: 1b0c44f
+          enabled_success: Autenticação de dois fatores ativada com sucesso.
+          #original_hash: 9515157
+          email_auth: Autenticação por email
+          #original_hash: d305ccb
+          get_by_email: Obter um código por email
+          #original_hash: 4e644aa
+          get_by_email_desc: >-
+            Se não puder aceder ao seu dispositivo ou códigos de acesso, também
+            poderá clicar no botão abaixo para obter uma password única por
+            email. Copie e cole-a na entrada acima para entrar.
+          #original_hash: b243ac5
+          email_sent: >-
+            Foi enviado um código por email. O código é válido por 2 minutos.
+            Pode solicitar um novo código em 2 minutos.
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: Não pode gerar um email de momento
+            #original_hash: c0d4fc2
+            invalid_otp: Código de dois fatores inválido.
+            #original_hash: c2f5347
+            not_enabled: Autenticação de dois fatores não ativada
+            #original_hash: 14d294b
+            unknown: >-
+              Erro desconhecido ao enviar o seu email. Entre em contacto com o
+              WST.
+          otp_email:
+            #original_hash: a20e037
+            subject: A sua password de uso único para a WCA
+            #original_hash: e820d08
+            2fa_attempt: >-
+              Está a tentar entrar no site da WCA. Tem a autenticação de dois
+              fatores ativada e solicitou apenas o envio de uma senha de
+              utilização única por email. Encontre-o abaixo:
+            #original_hash: 2daca82
+            disclaimer: >-
+              Se não solicitou este código de autenticação, entre em contacto
+              imediatamente com o WST, respondendo a este email e altere a sua
+              password, pois ela provavelmente estará comprometida.
+          #original_hash: 8c13694
+          name: Autenticação de Dois Fatores (2FA)
+          #original_hash: d28c3b6
+          support_desc_html: >-
+            O site da WCA suporta %{two_factor_link} usando uma password de
+            utilização única:
+          options:
+            #original_hash: 4f9dcb8
+            app: >-
+              gerada por uma aplicação 2FA no seu smartphone (como Authy ou
+              Google Authenticator, por exemplo).
+            #original_hash: 34a7572
+            recovery: tirados dos códigos de recuperação gerados ao ativar o 2FA.
+            #original_hash: eaee403
+            email: enviado para si por email ao fazer login.
+          #original_hash: 7ae99ae
+          status_html: 'A Autenticação de Dois Fatores está %{status} para si.'
+          #original_hash: 3ea3f98
+          enabled: ativa
+          #original_hash: 07596f1
+          disabled: inativa
+          #original_hash: 5f225b0
+          enable: Ativar 2FA
+          #original_hash: b2a3d7e
+          reset: Redefinir segredo 2FA
+          #original_hash: 14b7bfd
+          reset_if_needed: >-
+            Se um dos seus dispositivos foi comprometido ou você deseja revogar
+            o acesso a partir dos seus dispositivos, pode redefinir o seu
+            segredo de autenticação de dois fatores abaixo:
+          #original_hash: 69100a3
+          reset_warning: |-
+            51/5000
+            Precisará reconfigurar todos os seus dispositivos 2FA.
+          #original_hash: a8d11db
+          methods: Métodos de Dois Fatores
+          #original_hash: 0fd248d
+          methods_description: >-
+            Pode usar vários métodos para obter uma password de utilização única
+            ao entrar. São descritos abaixo.
+          #original_hash: 4442f0e
+          dedicated_app: Usando uma aplicação de dois fatores dedicada
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            O WST recomenda o uso de%{authy} no(s) seu(s) dispositivo(s) para
+            obter a sua password de utilização única ao entrar.<br/>Outras
+            alternativas incluem %{google} e %{microsoft}.
+          #original_hash: f1b2ec2
+          scan_qrcode_html: >-
+            Digitalize o código QR abaixo quando solicitado na sua aplicação 2FA
+            (ou clique %{here} se estiver no smartphone).
+          #original_hash: e7cba1a
+          backup_codes: Códigos de backup
+          #original_hash: fa62416
+          backup_codes_desc: >-
+            Os códigos de backup podem ser usados como passwords de utilização
+            única, caso você não tenha acesso ao seu dispositivo com a aplicação
+            de autenticação de dois fatores. Cada código pode ser usado apenas
+            uma vez. Guarde-os em algum lugar seguro!
+          #original_hash: 087cb72
+          no_backup_codes: >-
+            Ainda não gerou códigos de backup. Clique no botão abaixo para gerar
+            os seus códigos de backup.
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            Gerou alguns códigos de backup. Se já usou ou perdeu esses códigos,
+            pode gerar novos usando o botão abaixo. Lembre-se de que qualquer
+            código de backup existente será invalidado se fizer isso.
+          #original_hash: 2ee4aca
+          generate_backup_codes: Gerar códigos de backup
+          #original_hash: a69dd5b
+          backup_codes_warning: >-
+            Os códigos de backup serão exibidos abaixo. Certifique-se de
+            gravá-los/escrevê-los imediatamente: eles são armazenados
+            encriptados na nossa base de dados e não podem ser exibidos mais
+            tarde.
+          #original_hash: b5e3ad8
+          email_auth_desc: >-
+            Pode solicitar uma password de utilização única por e-mail quando
+            tentar entrar.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1352,6 +1498,8 @@ pt:
         activate: >-
           Após a ativação, poderá entrar na sua conta no website da World Cube
           Association.
+        #original_hash: fb02586
+        login_form: formulário de login
         #original_hash: 333999b
         addendum: >-
           Este email é gerado automaticamente. Se não registou uma conta no
@@ -1390,8 +1538,6 @@ pt:
         announced: >-
           A Equipa de Competições da WCA aprovou a sua competição e anunciou-a
           oficialmente ao público.
-        #original_hash: 1c20919
-        link: 'Por favor visite o link para aceder ao anúncio oficial da competição:'
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Foi adicionado a %{competition} como organizador'
@@ -1574,8 +1720,11 @@ pt:
         data de nascimento no formato correto (AAAA-MM-DD), por favor contacte a
         Equipa de Resultados da WCA usando <a href="%{dob_form_path}">este
         formulário próprio</a>.
-      #original_hash: 71b46b4
-      unique: 'já é utilizado por "%{used_name}" com %{used_email}'
+      #original_hash: c9ae791
+      unique_html: >-
+        já está a ser usado por "%{used_name}" com %{used_email}. Para liberar o
+        ID da WCA, pode <a href=%{used_edit_path} target='_blank'>editar essa
+        conta</a> e desassociar o ID da WCA.
       #original_hash: 26f70ed
       dob_past: deve ser no passado
       #original_hash: b320913
@@ -1677,6 +1826,8 @@ pt:
         Está banido. Se acreditar que se trata de um erro, por favor contacte o
         <a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
+      #original_hash: 8d07e7f
+      undelete_banned: é um competidor banido e não pode ser recuperado
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2052,12 +2203,30 @@ pt:
         confirmar a competição.
       #original_hash: e390250
       create_success: Competição criada com sucesso!
+      #original_hash: ba067f0
+      not_announced: 'Esta competição é visível para o público, mas ainda não foi anunciada.'
+      #original_hash: ab61991
+      announced: Competição anunciada com sucesso!
+      #original_hash: 8ad5e67
+      results_not_posted: >-
+        Os resultados desta competição são visíveis, mas ainda não foram
+        publicados.
+      #original_hash: e205d73
+      results_already_posted: Os resultados já foram publicados.
+      #original_hash: 376f461
+      results_posted: Resultados publicados com sucesso!
       #original_hash: afe3a23
       results_preview_alert: Está a visualizar resultados que ainda não foram publicados.
       #original_hash: 07de612
       upload_results: >-
         Esta competição já terminou, estamos a trabalhar para publicar os
         resultados o mais rápido possível!
+      #original_hash: 68dd436
+      computing_auxiliary_data: Por favor aguarde enquanto dados auxiliares são processados.
+      #original_hash: 8ebe272
+      no_results: Não há resultados.
+      #original_hash: 79e8b95
+      no_main_event_results: 'Não há resultados para o evento principal (%{event_name}).'
       #original_hash: a0168ee
       in_progress: >-
         Esta competição está em andamento. Volte após %{date} para ver os
@@ -2140,6 +2309,8 @@ pt:
       information: Informação
       #original_hash: c5497bc
       events: Eventos
+      #original_hash: 3c24bd2
+      main_event: Evento principal
       #original_hash: ff722f0
       registration_requirements: Requisitos de registo
       #original_hash: 74d0bf1
@@ -2205,6 +2376,49 @@ pt:
         range_past_html: >-
           Registo online abriu a %{start_date_and_time} a encerrou a
           %{end_date_and_time}.
+      #original_hash: 1f9c9c4
+      highlights: Momentos altos
+      #original_hash: 945f917
+      click_to_display_highlights_html: 'Clique %{link_here} para mostrar os momentos altos da competição.'
+      #original_hash: dc5c597
+      hide_highlights: Esconder momentos altos.
+      #original_hash: f691bf2
+      result: um resultado
+      #original_hash: acab754
+      single: uma única resolução
+      #original_hash: e78d7c2
+      average: uma média
+      #original_hash: 083c83e
+      mean: uma média de 3
+      #original_hash: 22bee3a
+      result_sentence: 'com %{a_win_by_word} de %{result}'
+      #original_hash: 6c3b236
+      winner: '%{winner} ganhou %{result_sentence} no evento %{event_name}.'
+      #original_hash: 4daa7df
+      first_runner_up: '%{first_runner_up} acabou em segundo (%{first_runner_up_result})'
+      #original_hash: d96b040
+      and: e
+      #original_hash: e9e9d2e
+      second_runner_up: '%{second_runner_up} ficou em terceiro (%{second_runner_up_result}).'
+      records:
+        #original_hash: 0658e11
+        wr: Recordes mundiais
+        #original_hash: 9d940bb
+        afr: Recordes africanos
+        #original_hash: 56c95a8
+        asr: Recordes asiáticos
+        #original_hash: 4cf3c13
+        ocr: Recordes da Oceânia
+        #original_hash: 1b9111e
+        er: Recordes europeus
+        #original_hash: d26cf99
+        nar: Recordes norte-americanos
+        #original_hash: 270c007
+        sar: Recordes sul-americanos
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} %{result} (singular)'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} %{result} (média)'
       #original_hash: 8eda7ac
       bookmark: Assinalar esta competição
       #original_hash: 4dfea97
@@ -2331,10 +2545,6 @@ pt:
         mostrado](mailto:alguem@email.com)
       #original_hash: c5497bc
       events: Eventos
-      #original_hash: 09b819f
-      deprecated_events: >-
-        Esta competição tem modalidades que já não são oficiais, editá-las não é
-        suportado.
       #original_hash: cafc153
       public_and_locked_html: >-
         Esta competição é visível publicamente e está bloqueada para edição. Se
@@ -2481,10 +2691,16 @@ pt:
       competitors: Competidores
     #original_hash: 06b01c4
     announcements: Anúncios
-    #original_hash: 5b9523f
-    upload_results: Carregar resultados
-    #original_hash: 47dfd90
-    post_announcement: Postar anúncio de competição
+    #original_hash: a2b80b0
+    post_announcement: Anúncio de competição
+    #original_hash: b462eac
+    announced_by_html: 'Anunciado por %{announcer_name} em %{date_time}'
+    #original_hash: 9a42672
+    upload_results: Carregar os resultados
+    #original_hash: 01de5ee
+    post_results: Submeter os resultados
+    #original_hash: b6513f1
+    results_posted_by_html: 'Colocado por %{poster_name} em %{date_time}'
     show:
       #original_hash: b0fe391
       general_info: Informações gerais
@@ -2654,65 +2870,94 @@ pt:
     rankings:
       #original_hash: f5fe73c
       title: Rankings
-      form_elements:
-        #original_hash: ad8919a
-        event: Evento
-        #original_hash: 0f21717
-        region: Região
-        type_selector:
-          #original_hash: 3deb745
-          type: Tipo
-          #original_hash: dd11868
-          single: Singular
-          #original_hash: 15f86c0
-          average: Média
-        years_selector:
-          #original_hash: 96f997b
-          years: Anos
-          #original_hash: 0977c76
-          all_years: Todos
-          #original_hash: 8737f09
-          only: Apenas
-          #original_hash: b3c0fe7
-          only_html: 'Apenas %{year}'
-          #original_hash: 96bdb66
-          until: Até
-          #original_hash: fa23930
-          until_html: 'Até %{year}'
-        show_selector:
-          #original_hash: d97d1ee
-          show: Mostrar
-          #original_hash: f3cf96e
-          persons: Pessoas
-          #original_hash: 16d3376
-          persons_html: '%{quantity} pessoas'
-          #original_hash: 612e12d
-          results: Resultados
-          #original_hash: f3baa4a
-          results_html: '%{quantity} resultados'
-          #original_hash: d46d2ee
-          by_region: Por região
-      table_elements:
-        #original_hash: 709a232
-        name: Nome
-        #original_hash: 5faa59d
-        result: Resultado
-        #original_hash: e0f64f7
-        citizen_of: Cidadão de
-        #original_hash: 1917f4f
-        competition: Competição
-        #original_hash: e7f6fc5
-        solves: Resoluções
-        #original_hash: 0f21717
-        region: Região
-        #original_hash: 70c07ec
-        world: Mundo
       #original_hash: 65310e5
       unknown_type: 'Tipo de parâmetro desconhecido, tem de ser "Singular" ou "Média"'
       #original_hash: 01e188f
       unknown_show: >-
         Parâmetro desconhecido, tem de ser "N pessoas", "N resultados", ou "por
         região"
+    records:
+      #original_hash: e51c552
+      title: Recordes
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: Evento
+        #original_hash: 3e83afa
+        all_events: Todos os eventos
+      #original_hash: 0f21717
+      region: Região
+      type_selector:
+        #original_hash: 3deb745
+        type: Tipo
+        #original_hash: dd11868
+        single: Singular
+        #original_hash: 15f86c0
+        average: Média
+      years_selector:
+        #original_hash: 96f997b
+        years: Anos
+        #original_hash: 0977c76
+        all_years: Todos os anos
+        #original_hash: 8737f09
+        only: Apenas
+        #original_hash: b3c0fe7
+        only_html: 'Apenas %{year}'
+        #original_hash: 96bdb66
+        until: Até
+        #original_hash: fa23930
+        until_html: 'Até %{year}'
+      show_selector:
+        #original_hash: d97d1ee
+        show: Mostrar
+        #original_hash: f3cf96e
+        persons: Pessoas
+        #original_hash: 16d3376
+        persons_html: '%{quantity} pessoas'
+        #original_hash: 612e12d
+        results: Resultados
+        #original_hash: f3baa4a
+        results_html: '%{quantity} resultados'
+        #original_hash: d46d2ee
+        by_region: Por região
+        #original_hash: c0dcb86
+        mixed: Misto
+        #original_hash: 5ee371a
+        slim: Compacto
+        #original_hash: 8ccaae8
+        separate: Separado
+        #original_hash: 90ccd64
+        history: História
+        #original_hash: e58bcf8
+        mixed_history: História Mista
+    table_elements:
+      #original_hash: 709a232
+      name: Nome
+      #original_hash: 5faa59d
+      result: Resultado
+      #original_hash: e0f64f7
+      citizen_of: Cidadão de
+      #original_hash: 1917f4f
+      competition: Competição
+      #original_hash: e7f6fc5
+      solves: Resoluções
+      #original_hash: 0f21717
+      region: Região
+      #original_hash: 70c07ec
+      world: Mundo
+      type_options:
+        #original_hash: 3deb745
+        type: Tipo
+        #original_hash: dd11868
+        single: Singular
+        #original_hash: 15f86c0
+        average: Média
+      #original_hash: ad8919a
+      event: Evento
+      #original_hash: dcf8b56
+      date_circa: Data aproximada
+      #original_hash: 1c54132
+      record: Recorde
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Associe o seu ID da WCA à sua conta!
@@ -3079,7 +3324,7 @@ pt:
     spirit_footer: Espírito da WCA
     #original_hash: c1781ee
     our_goals_title: Os nossos objetivos
-    #original_hash: 1ca8ac4
+    #original_hash: caf6bf2
     our_goals_content_html: >-
       <p>A World Cube Association quer trazer oportunidades de participação da
       comunidade e de liderança para jovens de todo o mundo, através do aumento
@@ -3087,7 +3332,9 @@ pt:
       que experiências em competições e dentro de nossa comunidade criam
       oportunidades de crescimento para os jovens envolvidos e que a introdução
       de eventos de quebra-cabeças em novos grupos de pessoas permite que nossa
-      comunidade em geral se fortaleça.</p>
+      comunidade em geral se fortaleça. Um documento contendo a Visão e
+      Estratégia do Conselho da WCA pode ser encontrado <a
+      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">aqui</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: O que vem a seguir para a WCA?
     #original_hash: a08c67f
