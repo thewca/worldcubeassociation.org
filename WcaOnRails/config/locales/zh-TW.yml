@@ -1360,8 +1360,6 @@ zh-TW:
         header: 'WCAT公告%{competition}'
         #original_hash: 0d3d10c
         announced: WCAT審核通過您的比賽並且正式公布了。
-        #original_hash: 1c20919
-        link: 請依照連結查看比賽公告：
       organizer_addition_email:
         #original_hash: dc6f415
         header: '您已經被新增為%{competition}的主辦團隊'
@@ -1504,10 +1502,10 @@ zh-TW:
       dob_incorrect_html: >-
         與WCA資料庫不相符。如果您確認您提供的日期以及格式(YYYY-MM-DD)是正確的，請使用<a
         href="%{dob_form_path}">此表單</a>聯絡WCA成績組。
-      #original_hash: c9ae791
+      #original_hash: c3ce070
       unique_html: >-
-        已經被%{used_email}的"%{used_name}"所使用中。如要把WCA ID釋出，你可以 <a
-        href=%{used_edit_path} target='_blank'>編輯這個帳號</a> 來移除WCA ID。
+        已經被%{used_email}的%{used_name}所使用中。如要把WCA ID釋出，你可以 <a
+        href="%{used_edit_path}" target=”_blank"'>編輯這個帳號</a> 來移除WCA ID。
       #original_hash: 26f70ed
       dob_past: 必須為過去的日期
       #original_hash: b320913
@@ -1888,10 +1886,26 @@ zh-TW:
       schedule_must_match_rounds: 請在申請比賽之前確保每個項目皆至少有一輪，同時您製作的賽程需包含所有您所規劃的輪次。
       #original_hash: e390250
       create_success: 成功申請一場新的比賽！
+      #original_hash: ba067f0
+      not_announced: 這場比賽已是公開狀態，但尚未公告。
+      #original_hash: ab61991
+      announced: 已成功公告比賽！
+      #original_hash: 8ad5e67
+      results_not_posted: 這場比賽的成績已公開，但尚未公告。
+      #original_hash: e205d73
+      results_already_posted: 成績已被公告。
+      #original_hash: 376f461
+      results_posted: 已成功公布成績！
       #original_hash: afe3a23
       results_preview_alert: 您正在瀏覽尚未公布的成績。
       #original_hash: 07de612
       upload_results: 比賽已經結束了，我們正盡快地上傳成績！
+      #original_hash: 68dd436
+      computing_auxiliary_data: 輔助數據正在計算中，請稍後。。。
+      #original_hash: 8ebe272
+      no_results: 沒有成績。
+      #original_hash: 79e8b95
+      no_main_event_results: '主要比賽項目(%{event_name})並沒有成績。'
       #original_hash: a0168ee
       in_progress: '比賽正在進行當中，過%{date}以後再回來看成績吧！'
       #original_hash: 3322400
@@ -1963,6 +1977,8 @@ zh-TW:
       information: 比賽資訊
       #original_hash: c5497bc
       events: 項目
+      #original_hash: 3c24bd2
+      main_event: 主要項目
       #original_hash: ff722f0
       registration_requirements: 報名條件
       #original_hash: 74d0bf1
@@ -2012,6 +2028,49 @@ zh-TW:
         range_ongoing_html: '網路報名已從%{start_date_and_time}開始，將會在%{end_date_and_time}截止。'
         #original_hash: 7ac8349
         range_past_html: '網路報名已從%{start_date_and_time}開始到，已在%{end_date_and_time}截止。'
+      #original_hash: 1f9c9c4
+      highlights: 精彩回顧
+      #original_hash: 945f917
+      click_to_display_highlights_html: '按%{link_here} 來顯示這場比賽的精彩回顧。'
+      #original_hash: dc5c597
+      hide_highlights: 隱藏精彩回顧。
+      #original_hash: f691bf2
+      result: 成績
+      #original_hash: acab754
+      single: 單次
+      #original_hash: e78d7c2
+      average: 五次平均
+      #original_hash: 083c83e
+      mean: 平均
+      #original_hash: 22bee3a
+      result_sentence: '%{a_win_by_word} ，%{result}。'
+      #original_hash: 6c3b236
+      winner: '%{winner}在%{event_name} 項目中以%{result_sentence}贏得第一名。'
+      #original_hash: 4daa7df
+      first_runner_up: '第二名%{first_runner_up}(%{first_runner_up_result})。'
+      #original_hash: d96b040
+      and: 和
+      #original_hash: e9e9d2e
+      second_runner_up: '第三名%{second_runner_up}(%{second_runner_up_result})。'
+      records:
+        #original_hash: 0658e11
+        wr: 世界紀錄
+        #original_hash: 9d940bb
+        afr: 非洲紀錄
+        #original_hash: 56c95a8
+        asr: 亞洲紀錄
+        #original_hash: 4cf3c13
+        ocr: 大洋洲紀錄
+        #original_hash: 1b9111e
+        er: 歐洲紀錄
+        #original_hash: d26cf99
+        nar: 北美洲紀錄
+        #original_hash: 270c007
+        sar: 南美洲紀錄
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} %{result} (單次)'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} %{result} (平均)'
       #original_hash: 8eda7ac
       bookmark: 將這個比賽加入書籤
       #original_hash: 4dfea97
@@ -2250,10 +2309,16 @@ zh-TW:
       competitors: 人數
     #original_hash: 06b01c4
     announcements: 公告
-    #original_hash: 5b9523f
+    #original_hash: a2b80b0
+    post_announcement: 公告比賽
+    #original_hash: b462eac
+    announced_by_html: '由%{announcer_name} 在%{date_time}公告。'
+    #original_hash: 9a42672
     upload_results: 上傳成績
-    #original_hash: 47dfd90
-    post_announcement: 公告比賽消息
+    #original_hash: 01de5ee
+    post_results: 公告成績
+    #original_hash: b6513f1
+    results_posted_by_html: '由%{poster_name}在%{date_time}公告。'
     show:
       #original_hash: b0fe391
       general_info: 基本資訊
