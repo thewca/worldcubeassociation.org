@@ -586,7 +586,7 @@ RSpec.describe User, type: :model do
     let(:user) { FactoryBot.create(:user, password: "wca") }
 
     context "when the password is not given in the params" do
-      it "updates the attributes if the current_password matches" do
+      it "updates the unconfirmed email" do
         user.update(email: "new@email.com")
         expect(user.reload.unconfirmed_email).to eq "new@email.com"
       end
