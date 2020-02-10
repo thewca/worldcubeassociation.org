@@ -294,9 +294,8 @@ GEM
     iso (0.2.2)
       i18n
     jaro_winkler (1.5.4)
-    jbuilder (2.9.1)
-      activesupport (>= 4.2.0)
-      multi_json (>= 1.2)
+    jbuilder (2.10.0)
+      activesupport (>= 5.0.0)
     jmespath (1.4.0)
     jquery-rails (4.3.5)
       rails-dom-testing (>= 1, < 3)
