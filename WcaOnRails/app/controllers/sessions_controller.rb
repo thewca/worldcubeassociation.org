@@ -23,6 +23,15 @@ class SessionsController < Devise::SessionsController
     render json: { status: "ok" }
   end
 
+  def create
+    # Overrides Devise's create sign in method and pass it a block executed
+    # after sign in, to mark use as recently authenticated upon sign in.
+    # See https://www.rubydoc.info/github/plataformatec/devise/Devise/SessionsController#create-instance_method
+    super do |resource|
+      session[:last_authenticated_at] = Time.now
+    end
+  end
+
   private
 
   def two_factor_enabled?

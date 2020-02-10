@@ -26,10 +26,9 @@ RSpec.describe "users" do
   it 'cannot change password when not recently authenticated' do
     user = FactoryBot.create :user
 
-    # sign in
-    post user_session_path, params: { 'user[login]' => user.email, 'user[password]' => user.password }
-    follow_redirect!
-    expect(response).to be_successful
+    # Using sign_in here instead of the post action, as it does *not* trigger setting the
+    # recently_authenticated_at session variable.
+    sign_in user
     get profile_edit_path
     expect(response).to be_successful
 
