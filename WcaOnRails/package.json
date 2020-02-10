@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "jshint": "^2.11.0",
-    "stylelint": "^12.0.1",
+    "stylelint": "^13.1.0",
     "stylelint-config-recommended-scss": "^4.2.0",
     "stylelint-scss": "^3.14.2",
     "webpack-bundle-analyzer": "^3.6.0",
