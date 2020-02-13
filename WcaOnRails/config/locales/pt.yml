@@ -365,8 +365,6 @@ pt:
         email: Email
         #original_hash: 8be3c94
         password: Senha
-        #original_hash: 19dff4d
-        current_password: Senha atual
         #original_hash: aefce7f
         password_confirmation: Reintroduza a password
         #original_hash: ced7b30
@@ -739,8 +737,6 @@ pt:
           Equipa de Resultados da WCA.
         #original_hash: da39a3e
         country_iso2: ''
-        #original_hash: da39a3e
-        current_password: ''
         #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
@@ -1215,16 +1211,16 @@ pt:
           otp_email:
             #original_hash: a20e037
             subject: A sua password de uso único para a WCA
-            #original_hash: e820d08
+            #original_hash: f82488f
             2fa_attempt: >-
-              Está a tentar entrar no site da WCA. Tem a autenticação de dois
-              fatores ativada e solicitou apenas o envio de uma senha de
+              Está a tentar autenticar-se no site da WCA. Tem a autenticação de
+              dois fatores ativada e solicitou apenas o envio de uma senha de
               utilização única por email. Encontre-o abaixo:
-            #original_hash: 2daca82
+            #original_hash: e27e540
             disclaimer: >-
               Se não solicitou este código de autenticação, entre em contacto
-              imediatamente com o WST, respondendo a este email e altere a sua
-              password, pois ela provavelmente estará comprometida.
+              imediatamente com o WST, respondendo a este email: pode ter uma
+              sessão aberta algures e a sua password poderá estar comprometida.
           #original_hash: 8c13694
           name: Autenticação de Dois Fatores (2FA)
           #original_hash: d28c3b6
@@ -1621,8 +1617,10 @@ pt:
       approve: Aprovar
       #original_hash: 85de4b8
       unconfirmed_email: 'O endereço de email desta conta (%{email}) não foi confirmado.'
-      #original_hash: c03b949
-      confirm_new_email: Mudar de email requer a confirmação do novo email.
+      #original_hash: 7069007
+      confirm_new_email: >-
+        Mudar de email requer a confirmação do novo email antes de se tornar
+        efetivo.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Está pendente a confirmação do novo email (%{email}) para esta conta.'
       #original_hash: 0340b0b
@@ -1709,6 +1707,21 @@ pt:
             representar a imagem completa. A miniatura deve ser ajustada por
             forma a que possa ser reconhecido dessa forma apenas, devendo conter
             o rosto.
+      sensitive:
+        #original_hash: 267ac87
+        info: >-
+          Esta secção permite editar informação sensível, para poder fazê-lo por
+          favor confirme a sua identidade abaixo.
+        #original_hash: f19af51
+        success: Verificação de identidade realizada com sucesso
+        #original_hash: 52ebf9c
+        failure: Não foi possível verificar a sua identidade
+        #original_hash: 4324c73
+        confirm_proceed: Confirmar e prosseguir
+        #original_hash: d395f1f
+        identity_error: >-
+          Não é possível editar os seus dados, por favor confirme a sua
+          identidade antes de tentar de novo.
     errors:
       #original_hash: 094b763
       not_found: não encontrado
@@ -2335,7 +2348,7 @@ pt:
       use_stripe_link_html: 'Taxas de registo têm que ser pagas via Stripe %{here} após o registo.'
       #original_hash: cea0eb4
       use_stripe_below_html: A taxa de registo tem que ser paga via Stripe abaixo após o registo.
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: >-
         Se o seu registo for cancelado antes de %{limit_date_and_time} será
         reembolsado %{refund_policy_percent} da sua taxa de registo.
