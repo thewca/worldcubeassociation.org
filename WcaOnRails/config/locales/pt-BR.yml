@@ -371,8 +371,6 @@ pt-BR:
         email: Email
         #original_hash: 8be3c94
         password: Senha
-        #original_hash: 19dff4d
-        current_password: Senha atual
         #original_hash: aefce7f
         password_confirmation: Confirme a senha
         #original_hash: ced7b30
@@ -747,8 +745,6 @@ pt-BR:
           Resultados da WCA aprová-lo.
         #original_hash: da39a3e
         country_iso2: ''
-        #original_hash: da39a3e
-        current_password: ''
         #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
@@ -1226,16 +1222,17 @@ pt-BR:
           otp_email:
             #original_hash: a20e037
             subject: Sua senha temporária para a WCA
-            #original_hash: e820d08
+            #original_hash: f82488f
             2fa_attempt: >-
               Você está tentando entrar no site da WCA. Você tem a autenticação
               de dois fatores ativada, e pediu uma senha temporária por email.
               Sua senha está abaixo:
-            #original_hash: 2daca82
+            #original_hash: e27e540
             disclaimer: >-
               Se você não solicitou esse código de autenticação, por favor
-              contate o WST imediatamente, respondendo a este email, e mude sua
-              senha no site, pois provavelmente ela está comprometida.
+              contate o WST imediatamente, respondendo a este email: você pode
+              ter uma sessão aberta em outro local ou sua senha pode estar
+              comprometida.
           #original_hash: 8c13694
           name: Autenticação de Dois Fatores (2FA)
           #original_hash: d28c3b6
@@ -1544,8 +1541,6 @@ pt-BR:
         announced: >-
           O WCAT aprovou sua competição e a anunciou oficialmente para o
           público.
-        #original_hash: 1c20919
-        link: 'Por favor use o link para ver o anúncio da competição:'
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Você foi adicionado a %{competition} como um organizador'
@@ -1630,7 +1625,7 @@ pt-BR:
       approve: Aprovar
       #original_hash: 85de4b8
       unconfirmed_email: 'O endereço de email desta conta (%{email}) não foi confirmado.'
-      #original_hash: c03b949
+      #original_hash: 7069007
       confirm_new_email: >-
         Será necessário confirmar o novo email se você alterar seu email
         cadastrado.
@@ -1716,6 +1711,21 @@ pt-BR:
             representar sua foto completa. A miniatura deve ser ajustada de
             forma que você possa ser reconhecido(a) apenas por ela, e deve
             conter seu rosto.
+      sensitive:
+        #original_hash: 267ac87
+        info: >-
+          Esta seção permite que você altere dados sensíveis; para isso, por
+          favor confirme sua identidade abaixo.
+        #original_hash: f19af51
+        success: Identidade verificada com sucesso
+        #original_hash: 52ebf9c
+        failure: Não foi possível verificar sua identidade
+        #original_hash: 4324c73
+        confirm_proceed: Confirmar e prosseguir
+        #original_hash: d395f1f
+        identity_error: >-
+          Não foi possível editar seus dados, por favor confirme sua identidade
+          abaixo antes de tentar novamente.
     errors:
       #original_hash: 094b763
       not_found: não encontrado
@@ -1726,11 +1736,11 @@ pt-BR:
         não corresponde ao nosso banco de dados. Se você informou a data de
         nascimento no formato correto (AAAA-MM-DD), por favor contate a Equipe
         de Resultados usando <a href="%{dob_form_path}">este formulário</a>.
-      #original_hash: c9ae791
+      #original_hash: c3ce070
       unique_html: >-
-        já está em uso por "%{used_name}" com o email %{used_email}. Para
-        liberar a ID da WCA, você pode <a href=%{used_edit_path}
-        target='_blank'>editar aquela conta</a> e remover a ID.
+        já está em uso por %{used_name} com o email %{used_email}. Para liberar
+        a ID da WCA, você pode <a href="%{used_edit_path}"
+        target="_blank">editar aquela conta</a> e remover a ID.
       #original_hash: 26f70ed
       dob_past: deve ser no passado
       #original_hash: b320913
@@ -2346,7 +2356,7 @@ pt-BR:
       use_stripe_link_html: 'A taxa de inscrição deve ser paga pelo Stripe %{here} após a inscrição.'
       #original_hash: cea0eb4
       use_stripe_below_html: A taxa de inscrição deve ser paga pelo Stripe abaixo após a inscrição.
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: >-
         Se sua inscrição for cancelada antes de %{limit_date_and_time} você
         receberá uma devolução de %{refund_policy_percent}% de sua taxa de
