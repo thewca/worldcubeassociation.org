@@ -360,8 +360,6 @@ zh-TW:
         email: 電子郵件
         #original_hash: 8be3c94
         password: 密碼
-        #original_hash: 19dff4d
-        current_password: 現在密碼
         #original_hash: aefce7f
         password_confirmation: 重新輸入密碼
         #original_hash: ced7b30
@@ -716,8 +714,6 @@ zh-TW:
         pending_avatar: 上傳新的頭像之後，必須等待WCA成績組的審核。
         #original_hash: da39a3e
         country_iso2: ''
-        #original_hash: da39a3e
-        current_password: ''
         #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
@@ -1101,10 +1097,10 @@ zh-TW:
           otp_email:
             #original_hash: a20e037
             subject: 您的WCA一次性密碼。
-            #original_hash: e820d08
-            2fa_attempt: 您正嘗試登入WCA網站。您有啟用兩步驟驗證且您剛要求了傳送一個一次性密碼到電子郵件。請往下尋找您的一次性密碼：
-            #original_hash: 2daca82
-            disclaimer: 如果您沒有要求驗證碼，請立即回覆這封電子郵件來連絡WCA軟體組，並且立即更改您的密碼，因為您的密碼可能已被他人取得。
+            #original_hash: f82488f
+            2fa_attempt: 您正嘗試認證WCA網站。您有啟用兩步驟驗證且您剛要求了傳送一個一次性密碼到電子郵件。請往下尋找您的一次性密碼：
+            #original_hash: e27e540
+            disclaimer: 如果您沒有要求驗證碼，請立即回覆這封電子郵件來連絡WCA軟體組，您可能有另一個地方正在登入中，或是您的密碼可能已被他人取得。
           #original_hash: 8c13694
           name: 二步驟驗證（2FA）
           #original_hash: d28c3b6
@@ -1426,7 +1422,7 @@ zh-TW:
       approve: 確認
       #original_hash: 85de4b8
       unconfirmed_email: '這個帳號的電子郵件(%{email})尚未確認。'
-      #original_hash: c03b949
+      #original_hash: 7069007
       confirm_new_email: 您必須確認新的電子郵件才能修改。
       #original_hash: 8a770cf
       pending_mail_confirmation: '這個帳號的新電子郵件%{email}正在等待確認。'
@@ -1493,6 +1489,17 @@ zh-TW:
           '2': 頭像必須為原照片中正確範圍作適當裁切、沒有歪斜且亮度正常，以便比賽中的任何參賽者或觀眾都可以在比賽場地中明確識別您的身份。
           #original_hash: 13fab02
           '3': 頭像的縮圖只是頭像的一部分，它將用來表示您的完整頭像。縮圖必須被調整過，讓人可以單獨地識別您，並且縮圖必須包含您的臉。
+      sensitive:
+        #original_hash: 267ac87
+        info: 這裡可以修訂您的個人敏感信息，請先在這裡確認您是本人。
+        #original_hash: f19af51
+        success: 已成功確認您的身份。
+        #original_hash: 52ebf9c
+        failure: 無法確認您的身份。
+        #original_hash: 4324c73
+        confirm_proceed: 確認並繼續
+        #original_hash: d395f1f
+        identity_error: 無法修訂您的資料，請先確認身份後再嘗試。
     errors:
       #original_hash: 094b763
       not_found: 找不到
@@ -1556,7 +1563,7 @@ zh-TW:
       #original_hash: 407c4f8
       select_delegate_html: >-
         為了確認您的WCA ID我們需要一位<a href='%{link_delegate}'
-        target='_blank'>WCA代表</a>幫您確認身分。請輸入您的生日並選取您認為最了解您的代表。
+        target='_blank'>WCA代表</a>幫您確認身份。請輸入您的生日並選取您認為最了解您的代表。
       #original_hash: 2564ee3
       already_assigned_html: >-
         WCA ID %{link_id}已經被其他帳號使用了。如果您認為有錯誤，請聯絡您當地的<a href='%{link_delegate}'
@@ -2001,7 +2008,7 @@ zh-TW:
       use_stripe_link_html: '一旦報名後，報名費必須透過Stripe在%{here}支付。'
       #original_hash: cea0eb4
       use_stripe_below_html: 一旦報名後，報名費必須透過Stripe在底下支付。
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: '如果您在%{limit_date_and_time}之前取消報名，我們將會退還您報名費的%{refund_policy_percent}。'
       #original_hash: 4aca553
       no_refunds: 報名費在任何情況下皆不退費。
@@ -2029,11 +2036,11 @@ zh-TW:
         #original_hash: 7ac8349
         range_past_html: '網路報名已從%{start_date_and_time}開始到，已在%{end_date_and_time}截止。'
       #original_hash: 1f9c9c4
-      highlights: 精彩回顧
+      highlights: 比賽摘要
       #original_hash: 945f917
-      click_to_display_highlights_html: '按%{link_here} 來顯示這場比賽的精彩回顧。'
+      click_to_display_highlights_html: '按%{link_here} 來顯示這場比賽的比賽摘要。'
       #original_hash: dc5c597
-      hide_highlights: 隱藏精彩回顧。
+      hide_highlights: 隱藏比賽摘要。
       #original_hash: f691bf2
       result: 成績
       #original_hash: acab754
@@ -2041,17 +2048,17 @@ zh-TW:
       #original_hash: e78d7c2
       average: 五次平均
       #original_hash: 083c83e
-      mean: 平均
+      mean: 三次平均
       #original_hash: 22bee3a
-      result_sentence: '%{a_win_by_word} ，%{result}。'
+      result_sentence: '%{a_win_by_word} ：%{result}'
       #original_hash: 6c3b236
-      winner: '%{winner}在%{event_name} 項目中以%{result_sentence}贏得第一名。'
+      winner: '%{winner}在 %{event_name} 項目中以%{result_sentence}贏得第一名。'
       #original_hash: 4daa7df
-      first_runner_up: '第二名%{first_runner_up}(%{first_runner_up_result})。'
+      first_runner_up: '第二名%{first_runner_up}：%{first_runner_up_result}，'
       #original_hash: d96b040
-      and: 和
+      and: 以及
       #original_hash: e9e9d2e
-      second_runner_up: '第三名%{second_runner_up}(%{second_runner_up_result})。'
+      second_runner_up: '第三名%{second_runner_up}：%{second_runner_up_result}。'
       records:
         #original_hash: 0658e11
         wr: 世界紀錄
