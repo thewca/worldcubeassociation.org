@@ -371,8 +371,6 @@ es:
         email: Correo electrónico
         #original_hash: 8be3c94
         password: Clave
-        #original_hash: 19dff4d
-        current_password: Clave actual
         #original_hash: aefce7f
         password_confirmation: Introduce de nuevo la contraseña
         #original_hash: ced7b30
@@ -750,8 +748,6 @@ es:
           Resultados lo apruebe.
         #original_hash: da39a3e
         country_iso2: ''
-        #original_hash: da39a3e
-        current_password: ''
         #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
@@ -1235,17 +1231,18 @@ es:
           otp_email:
             #original_hash: a20e037
             subject: Tu contraseña de un sólo uso para la WCA
-            #original_hash: e820d08
+            #original_hash: f82488f
             2fa_attempt: >-
-              Estás intentando iniciar sesión en la web de la WCA. Tienes
+              Estás intentando autenticarte en la web de la WCA. Tienes
               autenticación de dos factores habilitada y has solicitado que se
               te envíe una contraseña de un sólo uso por correo. La tienes a
               continuación:
-            #original_hash: 2daca82
+            #original_hash: e27e540
             disclaimer: >-
               Si no has solicitado un código de autenticación, por favor ponte
-              en contacto con el WST contestando a este correo, y cambia tu
-              contraseña ya que probablemente esté comprometida.
+              en contacto con el WST contestando a este correo, puede que tengas
+              una sesión abierta en algun lado  o que tu contraseña esté
+              comprometida.
           #original_hash: 8c13694
           name: Autenticación de dos factores (A2F)
           #original_hash: d28c3b6
@@ -1557,10 +1554,6 @@ es:
         announced: >-
           El WCAT ha aprobado tu competición y será anunciada oficialmente al
           público.
-        #original_hash: 1c20919
-        link: >-
-          Por favor siga el siguiente enlace para ver el anuncio de la
-          competición:
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Has sido añadido a %{competition} como organizador'
@@ -1644,10 +1637,10 @@ es:
       approve: Aprobar
       #original_hash: 85de4b8
       unconfirmed_email: 'El correo electrónico de esta cuenta (%{email}) no está confirmado.'
-      #original_hash: c03b949
+      #original_hash: 7069007
       confirm_new_email: >-
-        Esta dirección tendrá que ser validada siguiendo las instrucciones en un
-        correo que te enviaremos.
+        Cambiar tu correo requerirá que se confirme el nuevo correo antes de que
+        el cambio sea efectivo.
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
         Esta cuenta tiene pendiente confirmar una nueva dirección de correo
@@ -1737,6 +1730,21 @@ es:
             para representar tu avatar completo, el thumbnail debe ser ajustado
             para que se te pueda reconocer a través de el, y debe contener tu
             cara.
+      sensitive:
+        #original_hash: 267ac87
+        info: >-
+          Esta sección te permite editar datos sensibles, para hacerlo por favor
+          confirma tu identidad abajo.
+        #original_hash: f19af51
+        success: Identidad verificada con éxito
+        #original_hash: 52ebf9c
+        failure: No se pudo verificar tu identidad
+        #original_hash: 4324c73
+        confirm_proceed: Confirma y continua
+        #original_hash: d395f1f
+        identity_error: >-
+          No puedes editar tus datos, por favor confirma tu identidad abajo
+          antes de intentarlo de nuevo.
     errors:
       #original_hash: 094b763
       not_found: no encontrado
@@ -1748,10 +1756,10 @@ es:
         proporcionando la fecha correcta en el formato correcto (AAAA-MM-DD),
         ponte en contacto con el Equipo de Resultados mediante <a
         href="%{dob_form_path}">este formulario</a>.
-      #original_hash: c9ae791
+      #original_hash: c3ce070
       unique_html: >-
-        Ya está siendo usado por "%{used_name}" con %{used_email}. para liberar
-        el WCA ID, puedes <a href=%{used_edit_path} target='_blank'>editar la
+        Ya está siendo usado por %{used_name} con %{used_email}. para liberar el
+        WCA ID, puedes <a href="%{used_edit_path}" target="_blank">editar la
         cuenta</a> y desasignar el WCA ID.
       #original_hash: 26f70ed
       dob_past: debe ser una fecha pasada
@@ -2242,12 +2250,34 @@ es:
         que declaraste antes de confirmar la competición.
       #original_hash: e390250
       create_success: ¡La competición se ha creado satisfactoriamente!
+      #original_hash: ba067f0
+      not_announced: >-
+        Esta competición es visible por el público pero no ha sido anunciada
+        todavía.
+      #original_hash: ab61991
+      announced: ¡Competición anunciada con éxito!
+      #original_hash: 8ad5e67
+      results_not_posted: >-
+        Los resultados de esta competición son visibles pero todavía no han sido
+        cargados.
+      #original_hash: e205d73
+      results_already_posted: Los resultados ya han sido cargados.
+      #original_hash: 376f461
+      results_posted: ¡Resultados cargados con éxito!
       #original_hash: afe3a23
       results_preview_alert: Estás consultando resultados que no se han publicado aún.
       #original_hash: 07de612
       upload_results: >-
         Esta competición ya se ha celebrado. Estamos trabajando para publicar
         sus resultados cuanto antes.
+      #original_hash: 68dd436
+      computing_auxiliary_data: >-
+        Por favor espera hasta que los datos complementarios hayan sido
+        calculados.
+      #original_hash: 8ebe272
+      no_results: No hay resultados.
+      #original_hash: 79e8b95
+      no_main_event_results: 'No hay resultados para la categoría principal (%{event_name}).'
       #original_hash: a0168ee
       in_progress: >-
         Esta competición se está celebrando ahora. Vuelve después de %{date}
@@ -2330,6 +2360,8 @@ es:
       information: Información
       #original_hash: c5497bc
       events: Pruebas
+      #original_hash: 3c24bd2
+      main_event: Categoría principal
       #original_hash: ff722f0
       registration_requirements: Requisitos de registro
       #original_hash: 74d0bf1
@@ -2360,7 +2392,7 @@ es:
       use_stripe_below_html: >-
         La cuota de registro ha de ser pagada mediante Stripe aquí debajo una
         vez registrado.
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: >-
         Si tu registro se cancela antes de %{limit_date_and_time} se te
         reembolsará un %{refund_policy_percent} de tu cuota de registro.
@@ -2401,6 +2433,49 @@ es:
         range_past_html: >-
           El registro en línea se abrió el %{start_date_and_time} y se cerró el
           %{end_date_and_time}.
+      #original_hash: 1f9c9c4
+      highlights: Destacados
+      #original_hash: 945f917
+      click_to_display_highlights_html: 'Haz click %{link_here} para mostrar lo más destacado de la competición.'
+      #original_hash: dc5c597
+      hide_highlights: Ocultar destacados
+      #original_hash: f691bf2
+      result: un resultado
+      #original_hash: acab754
+      single: una única resolución
+      #original_hash: e78d7c2
+      average: una media
+      #original_hash: 083c83e
+      mean: una media
+      #original_hash: 22bee3a
+      result_sentence: 'con %{a_win_by_word} de %{result}'
+      #original_hash: 6c3b236
+      winner: '%{winner} ganó %{result_sentence} en la categoría de %{event_name}'
+      #original_hash: 4daa7df
+      first_runner_up: '%{first_runner_up} acabó segundo (%{first_runner_up_result})'
+      #original_hash: d96b040
+      and: 'y'
+      #original_hash: e9e9d2e
+      second_runner_up: '%{second_runner_up} acabó tercero (%{second_runner_up_result}).'
+      records:
+        #original_hash: 0658e11
+        wr: Records del mundo
+        #original_hash: 9d940bb
+        afr: Records de África
+        #original_hash: 56c95a8
+        asr: Records de Asia
+        #original_hash: 4cf3c13
+        ocr: Records de Oceanía
+        #original_hash: 1b9111e
+        er: Records de Europa
+        #original_hash: d26cf99
+        nar: Records de Norte América
+        #original_hash: 270c007
+        sar: Records de Sudamérica
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} %{result} (single)'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} %{result} (media)'
       #original_hash: 8eda7ac
       bookmark: Marcar esta competición como favorita
       #original_hash: 4dfea97
@@ -2676,10 +2751,16 @@ es:
       competitors: Competidores
     #original_hash: 06b01c4
     announcements: Anuncios
-    #original_hash: 5b9523f
-    upload_results: Subir resultados
-    #original_hash: 47dfd90
-    post_announcement: Publicar el anuncio de la competición
+    #original_hash: a2b80b0
+    post_announcement: Anunciar la competición
+    #original_hash: b462eac
+    announced_by_html: 'Anunciado por %{announcer_name} en %{date_time}'
+    #original_hash: 9a42672
+    upload_results: Cargar los resultados
+    #original_hash: 01de5ee
+    post_results: Publicar los resultados
+    #original_hash: b6513f1
+    results_posted_by_html: 'Publicado por %{poster_name} en %{date_time}'
     show:
       #original_hash: b0fe391
       general_info: Información general
