@@ -75,6 +75,13 @@ fi:
     Oceania: Oseania
     #original_hash: b1ffb4c
     South America: Etelä-Amerikka
+  country_bands:
+    #original_hash: 2b5976e
+    title: WCA Country Bands
+    #original_hash: df5f4ea
+    band_title: 'Band %{number}'
+    #original_hash: 6521e5d
+    due_value: '$%{value} per competitor per competition'
   events:
     #original_hash: 3732390
     '222': 2x2x2-kuutio
@@ -269,6 +276,8 @@ fi:
     average: Keskiarvo
     #original_hash: e7f6fc5
     solves: Ratkaisut
+    #original_hash: c9d0561
+    hello: 'Hei %{name},'
     date:
       #original_hash: acb6273
       no_date: Ei päiväystä
@@ -356,8 +365,6 @@ fi:
         email: Sähköposti
         #original_hash: 8be3c94
         password: Salasana
-        #original_hash: 19dff4d
-        current_password: Nykyinen salasana
         #original_hash: aefce7f
         password_confirmation: Vahvista salasana
         #original_hash: ced7b30
@@ -382,6 +389,8 @@ fi:
         receive_delegate_reports: I would like to receive Delegate Reports of WCA Competitions by email
         #original_hash: 57eaf24
         user_preferred_events: Ensisijaiset lajit
+        #original_hash: e632fbf
+        otp_attempt: 'Syötä vahvistuskoodi:'
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -724,8 +733,6 @@ fi:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        current_password: ''
-        #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
         dob_verification: ''
@@ -758,6 +765,10 @@ fi:
           If you are a Candidate Delegate, Senior Delegate, or Member of the WRC
           or the WQAC, you receive Delegate Reports by default. Note: the change
           may take up to an hour to take effect.
+        #original_hash: 0627e5c
+        otp_attempt: >-
+          Tarkista määritetty mobiilisovelluksesi saadaksesi kertakäyttöisen
+          salasanan tai syötä palautuskoodi.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1087,6 +1098,11 @@ fi:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1154,6 +1170,127 @@ fi:
       new:
         #original_hash: ada2e9e
         sign_in: Kirjaudu sisään
+        2fa:
+          #original_hash: b274c38
+          verify: 'Kirjautuaksesi sisään, todenna henkilöllisyytesi'
+          #original_hash: ec44d52
+          confirm: Vahvista koodi
+          #original_hash: 912516c
+          regenerated_secret: Successfully regenerated your two-factor authentication secret.
+          #original_hash: 1b0c44f
+          enabled_success: Kaksivaiheinen vahvistus otettu käyttöön onnistuneesti.
+          #original_hash: 9515157
+          email_auth: Sähköpostivahvistus
+          #original_hash: d305ccb
+          get_by_email: Lähetä koodi sähköpostitse
+          #original_hash: 4e644aa
+          get_by_email_desc: >-
+            Jos sinulla ei ole pääsyä laitteeseesi tai pääsykoodeihin, voit
+            klikata alla olevaa painiketta saadaksesi kertakäyttöisen salasanan
+            sähköpostitse. Liitä se yllä olevaan kenttään kirjautuaksesi sisään.
+          #original_hash: b243ac5
+          email_sent: >-
+            Sinulle on lähetetty koodi sähköpostitse. Koodi on voimassa 2
+            minuuttia, tämän jälkeen voit pyytää uutta koodia.
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: You can't generate an email now
+            #original_hash: c0d4fc2
+            invalid_otp: Koodi ei kelpaa.
+            #original_hash: c2f5347
+            not_enabled: Kaksivaiheista vahvistusta ei ole otettu käyttöön
+            #original_hash: 14d294b
+            unknown: >-
+              Tuntematon virhe sähköpostia lähetettäessä. Otathan yhteyttä
+              WST:hen.
+          otp_email:
+            #original_hash: a20e037
+            subject: Kertakäyttöinen salasanasi WCA-sivustolle
+            #original_hash: f82488f
+            2fa_attempt: >-
+              Yrität suorittaa todennusta WCA-sivustolla. Olet asettanut
+              kaksivaiheisen vahvistuksen käyttöön ja äskettäin pyysit
+              kertakäyttöistä salasanaa sähköpostitse. Löydät sen alapuolelta:
+            #original_hash: e27e540
+            disclaimer: >-
+              Jos et pyytänyt vahvistuskoodia, otathan välittömästi yhteyttä
+              WST:hen vastaamalla tähän viestiin (sinulla saattaa olla avoin
+              istunto jossakin tai salasanasi voi olla vaarassa).
+          #original_hash: 8c13694
+          name: Kaksivaiheinen vahvistus (2FA)
+          #original_hash: d28c3b6
+          support_desc_html: 'WCA-sivusto tukee kertakäyttöistä salasanaa (%{two_factor_link}):'
+          options:
+            #original_hash: 4f9dcb8
+            app: >-
+              luodaan älypuhelimen 2FA-sovelluksella (kuten Authy tai Google
+              Authenticator).
+            #original_hash: 34a7572
+            recovery: 'käytetään yhtä palautuskoodeista, jotka luodaan aktivoidessa 2FA.'
+            #original_hash: eaee403
+            email: lähetetään sinulle sähköpostitse sisään kirjautuessa.
+          #original_hash: 7ae99ae
+          status_html: 'Kaksivaiheinen vahvistus on %{status}'
+          #original_hash: 3ea3f98
+          enabled: päällä
+          #original_hash: 07596f1
+          disabled: pois päältä
+          #original_hash: 5f225b0
+          enable: Ota 2FA käyttöön
+          #original_hash: b2a3d7e
+          reset: Reset 2FA secret
+          #original_hash: 14b7bfd
+          reset_if_needed: >-
+            If one of your devices has been compromised, or you want to revoke
+            access from your devices, you can reset your two-factor
+            authentication secret below:
+          #original_hash: 69100a3
+          reset_warning: Sinun täytyy konfiguroida kaikki 2FA-laitteesi uudestaan.
+          #original_hash: a8d11db
+          methods: Vahvistustavat
+          #original_hash: 0fd248d
+          methods_description: >-
+            Voit käyttää useita tapoja kertakäyttöisen salasanan saamiseen; ne
+            on lueteltu alla.
+          #original_hash: 4442f0e
+          dedicated_app: Todennussovelluksen käyttäminen
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            Kertakäyttöisen salasanan saamiseksi WST suosittelee %{authy}n
+            käyttöä omassa laitteessasi. <br/>Muita vaihtoehtoja ovat %{google}
+            ja %{microsoft}.
+          #original_hash: f1b2ec2
+          scan_qrcode_html: >-
+            Skannaa alla oleva QR-koodi, kun saat kehotuksen sovelluksestasi
+            (tai klikkaa %{here}, jos käytät mobiililaitetta).
+          #original_hash: e7cba1a
+          backup_codes: Varakoodit
+          #original_hash: fa62416
+          backup_codes_desc: >-
+            Varakoodeja voi käyttää kertakäyttöisen salasanan sijaan
+            tapauksissa, joissa sinulla ei ole pääsyä todennussovelluksen
+            sisältävään laitteeseesi. Jokaisen koodin voi käyttää vain kerran.
+            Pidäthän ne turvassa!
+          #original_hash: 087cb72
+          no_backup_codes: >-
+            Et ole vielä luonut varakoodeja. Klikkaa allaolevaa painiketta
+            tehdäksesi tämän.
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            Olet jo luonut varakoodeja. Jos ne on jo käytetty tai olet
+            kadottanut ne, voit luoda uudet alla olevasta painikkeesta. Ota
+            huomioon, että kaikki olemassa olevat koodit poistuvat käytöstä
+            luotuasi uudet.
+          #original_hash: 2ee4aca
+          generate_backup_codes: Luo varakoodit
+          #original_hash: a69dd5b
+          backup_codes_warning: >-
+            Varakoodit näkyvät alla. Tallenna/kirjoita ne muistiin välittömästi:
+            niitä ei saa enää uudestaan näkyviin.
+          #original_hash: b5e3ad8
+          email_auth_desc: >-
+            Voit pyytää kertakäyttöistä salasanaa (lähetetään sähköpostitse),
+            kun yrität kirjautua sisään.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1343,6 +1480,8 @@ fi:
         activate: >-
           Aktivoinnin jälkeen voit kirjautua World Cube Associationin
           sivustolle:
+        #original_hash: fb02586
+        login_form: login form
         #original_hash: 333999b
         addendum: >-
           Tämä on automaattisesti luotu sähköpostiviesti. Jos et tehnyt tiliä
@@ -1380,8 +1519,6 @@ fi:
         header: 'WCAT julkisti kilpailun %{competition}'
         #original_hash: 0d3d10c
         announced: WCAT hyväksyi kilpailusi ja julkisti sen yleisesti nähtäväksi.
-        #original_hash: 1c20919
-        link: 'Linkki kilpailun ilmoitukseen:'
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Sinut lisättiin järjestäjäksi kilpailuun %{competition}'
@@ -1464,8 +1601,8 @@ fi:
       approve: Hyväksy
       #original_hash: 85de4b8
       unconfirmed_email: 'Tämän tilin sähköpostiosoitetta (%{email}) ei ole vahvistettu.'
-      #original_hash: c03b949
-      confirm_new_email: Sähköpostiosoitteen vaihtaminen vaatii uuden osoitteen vahvistamista.
+      #original_hash: 7069007
+      confirm_new_email: Uusi sähköpostiosoite tulee vahvistaa astuakseen voimaan.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Tämä tili odottaa uuden sähköpostiosoitteen (%{email}) vahvistamista.'
       #original_hash: 0340b0b
@@ -1556,6 +1693,21 @@ fi:
             Pikkukuva on profiilikuvan pieni osa ja se edustaa koko
             profiilikuvaa. Pikkukuvan tulee olla rajattu niin, että sinut voi
             tunnistaa pelkästään sen perusteella (sen tulee sisältää kasvosi).
+      sensitive:
+        #original_hash: 267ac87
+        info: >-
+          Tämä osio mahdollistaa henkilökohtaisten tietojen muuttamisen.
+          Todennathan henkilöllisyytesi alla.
+        #original_hash: f19af51
+        success: Henkilöllisyys todennettu onnistuneesti
+        #original_hash: 52ebf9c
+        failure: Ei voitu todentaa henkilöllisyyttä
+        #original_hash: 4324c73
+        confirm_proceed: Vahvista ja jatka
+        #original_hash: d395f1f
+        identity_error: >-
+          Ei voitu muokata tietoja, todennathan henkilöllisyytesi alla ennen
+          kuin yrität uudelleen.
     errors:
       #original_hash: 094b763
       not_found: ei löydetty
@@ -1566,10 +1718,10 @@ fi:
         ei täsmää tietokantamme kanssa. Jos olet varma, että annat oikean
         päivämäärän oikeassa muodossaan (VVVV-KK-PP), ota yhteyttä WCA Results
         Teamiin käyttäen <a href="%{dob_form_path}">tätä lomaketta</a>.
-      #original_hash: c9ae791
+      #original_hash: c3ce070
       unique_html: >-
-        is already used by "%{used_name}" with %{used_email}. To free up the WCA
-        ID, you can <a href=%{used_edit_path} target='_blank'>edit that
+        is already used by %{used_name} with %{used_email}. To free up the WCA
+        ID, you can <a href="%{used_edit_path}" target="_blank">edit that
         account</a> and unassign the WCA ID.
       #original_hash: 26f70ed
       dob_past: täytyy olla mennyt
@@ -1911,7 +2063,7 @@ fi:
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Olet maksanut %{paid}, mikä kattaa koko osallistumismaksun.'
     #original_hash: 2e5d1b9
-    will_pay_here: 'Maksat ne vasta, kun olet lähettänyt rekisteröitymisesi'
+    will_pay_here: 'Maksat sen vasta, kun olet lähettänyt rekisteröitymisesi'
     #original_hash: b7ef562
     wont_pay_here: Tarkista maksamisohjeet kilpailun tiedoista
     refund_form:
@@ -2050,12 +2202,30 @@ fi:
         ilmoitit ennen kilpailun vahvistamista.
       #original_hash: e390250
       create_success: Uusi kilpailu luotu onnistuneesti!
+      #original_hash: ba067f0
+      not_announced: >-
+        Tämä kilpailu on nähtävillä julkisesti, mutta sitä ei ole vielä
+        ilmoitettu.
+      #original_hash: ab61991
+      announced: Kilpailu ilmoitettu onnistuneesti!
+      #original_hash: 8ad5e67
+      results_not_posted: 'Kilpailun tulokset ovat nähtävillä, mutta niitä ei ole vielä julkaistu.'
+      #original_hash: e205d73
+      results_already_posted: Tulokset on jo julkaistu.
+      #original_hash: 376f461
+      results_posted: Tulokset julkaistu onnistuneesti!
       #original_hash: afe3a23
       results_preview_alert: 'Tarkastelet tuloksia, joita ei ole vielä julkaistu.'
       #original_hash: 07de612
       upload_results: >-
         Tämä kilpailu on päättynyt, ja yritämme julkaista tulokset
         mahdollisimman pian!
+      #original_hash: 68dd436
+      computing_auxiliary_data: Please wait until auxiliary data is computed.
+      #original_hash: 8ebe272
+      no_results: Tuloksia ei ole.
+      #original_hash: 79e8b95
+      no_main_event_results: 'Päälajiin (%{event_name}) ei ole tuloksia.'
       #original_hash: a0168ee
       in_progress: >-
         Tämä kilpailu on käynnissä. Tule takaisin %{date} jälkeen nähdäksesi
@@ -2141,6 +2311,8 @@ fi:
       information: Tietoa
       #original_hash: c5497bc
       events: Lajit
+      #original_hash: 3c24bd2
+      main_event: Päälaji
       #original_hash: ff722f0
       registration_requirements: Tietoa rekisteröitymisestä
       #original_hash: 74d0bf1
@@ -2169,7 +2341,7 @@ fi:
       use_stripe_below_html: >-
         Osallistumismaksu täytyy maksaa Stripen kautta (alla) rekisteröitymisen
         jälkeen.
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: >-
         Jos perut rekisteröitymisesi ennen takarajaa (%{limit_date_and_time}),
         sinulle palautetaan %{refund_policy_percent} osallistumismaksustasi.
@@ -2208,6 +2380,49 @@ fi:
         range_past_html: >-
           Online-rekisteröityminen alkoi %{start_date_and_time} ja loppui
           %{end_date_and_time}.
+      #original_hash: 1f9c9c4
+      highlights: Kohokohdat
+      #original_hash: 945f917
+      click_to_display_highlights_html: 'Klikkaa %{link_here} näyttääksesi kilpailun kohokohdat.'
+      #original_hash: dc5c597
+      hide_highlights: Piilota kohokohdat.
+      #original_hash: f691bf2
+      result: tulos
+      #original_hash: acab754
+      single: paras ratkaisu
+      #original_hash: e78d7c2
+      average: keskiarvo
+      #original_hash: 083c83e
+      mean: keskiarvo
+      #original_hash: 22bee3a
+      result_sentence: 'tuloksella %{result} (%{a_win_by_word})'
+      #original_hash: 6c3b236
+      winner: '%{winner} voitti %{result_sentence} lajissa %{event_name}.'
+      #original_hash: 4daa7df
+      first_runner_up: '%{first_runner_up} tuli toiseksi (%{first_runner_up_result})'
+      #original_hash: d96b040
+      and: ja
+      #original_hash: e9e9d2e
+      second_runner_up: '%{second_runner_up} kolmanneksi (%{second_runner_up_result}).'
+      records:
+        #original_hash: 0658e11
+        wr: Maailmanennätykset
+        #original_hash: 9d940bb
+        afr: Afrikan ennätykset
+        #original_hash: 56c95a8
+        asr: Aasian ennätykset
+        #original_hash: 4cf3c13
+        ocr: Oseanian ennätykset
+        #original_hash: 1b9111e
+        er: Euroopan ennätykset
+        #original_hash: d26cf99
+        nar: Pohjois-Amerikan ennätykset
+        #original_hash: 270c007
+        sar: Etelä-Amerikan ennätykset
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} %{result} (paras ratkaisu)'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} %{result} (keskiarvo)'
       #original_hash: 8eda7ac
       bookmark: Tallenna tämä kilpailu
       #original_hash: 4dfea97
@@ -2332,10 +2547,6 @@ fi:
         [Näytettävä teksti](mailto:esim@email.com)
       #original_hash: c5497bc
       events: Lajit
-      #original_hash: 09b819f
-      deprecated_events: >-
-        Tässä kilpailussa on lajeja, jotka eivät ole enää virallisia. Meillä ei
-        ole tukea niiden muokkaamiselle.
       #original_hash: cafc153
       public_and_locked_html: >-
         Tämä kilpailu on julkisesti nähtävillä ja sen muokkaaminen on lukittu.
@@ -2482,10 +2693,16 @@ fi:
       competitors: Kilpailijat
     #original_hash: 06b01c4
     announcements: Ilmoitukset
-    #original_hash: 5b9523f
+    #original_hash: a2b80b0
+    post_announcement: Ilmoita kilpailu
+    #original_hash: b462eac
+    announced_by_html: 'Ilmoitettu %{date_time} (ilmoittaja %{announcer_name})'
+    #original_hash: 9a42672
     upload_results: Lataa tulokset
-    #original_hash: 47dfd90
-    post_announcement: Julkaise kilpailuilmoitus
+    #original_hash: 01de5ee
+    post_results: Julkaise tulokset
+    #original_hash: b6513f1
+    results_posted_by_html: 'Julkaistu %{date_time} (julkaisija %{poster_name})'
     show:
       #original_hash: b0fe391
       general_info: Yleistä tietoa
@@ -3093,14 +3310,16 @@ fi:
     spirit_footer: 'WCA:n henki'
     #original_hash: c1781ee
     our_goals_title: Päämäärämme
-    #original_hash: 1ca8ac4
+    #original_hash: caf6bf2
     our_goals_content_html: >-
       <p>World Cube Association haluaa tarjota yhteenkuuluvuuden tunteen
       nuorille ympäri maailmaa kilpailujen saavutettavuutta lisäämällä. Uskomme,
       että kilpailujen ja yhteisön tarjoamat kokemukset vahvistavat mukana
       olevien nuorten henkistä kasvua. Uskomme myös, että uusien ryhmien
       tutustuttaminen pulmapelien maailmaan mahdollistaa yhteisöllisyyden
-      vahvistumisen.</p>
+      vahvistumisen. WCA Boardin strategiasta löytyy lisätietoa <a
+      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">tästä</a>
+      asiakirjasta.</p>
     #original_hash: f64ccc7
     whats_next_title: Mitä seuraavaksi?
     #original_hash: a08c67f
