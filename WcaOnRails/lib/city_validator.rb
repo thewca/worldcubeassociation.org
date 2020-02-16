@@ -38,6 +38,7 @@ class CountryCityValidator
 end
 
 class CityCommaRegionValidator < CountryCityValidator
+  attr_reader :valid_regions
   def initialize(type_of_region:, valid_regions:)
     @type_of_region = type_of_region
     @valid_regions = valid_regions
