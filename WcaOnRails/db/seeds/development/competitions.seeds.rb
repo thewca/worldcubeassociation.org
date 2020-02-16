@@ -16,6 +16,15 @@ after "development:users" do
       end
       r
     end
+
+    def random_city(country)
+      city = Faker::Address.city
+      state_validator = CityValidator.get_validator_for_country(country.iso2)
+      if state_validator
+        city += ", #{state_validator.valid_regions.to_a.sample}"
+      end
+      city
+    end
   end
 
   countries = Country.all
@@ -27,13 +36,14 @@ after "development:users" do
   # Create some past competitions with results
   2.times do |i|
     day = i.days.ago
+    country = countries.sample
 
     competition = Competition.new(
       id: "My#{i}ResultsComp#{day.year}",
       name: "My #{i} Comp With Results #{day.year}",
       cellName: "My #{i} Comp With Results #{day.year}",
-      cityName: Faker::Address.city,
-      countryId: countries.sample.id,
+      cityName: random_city(country),
+      countryId: country.id,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
@@ -89,12 +99,14 @@ after "development:users" do
   # Past competitions
   500.times do |i|
     day = i.days.ago
+    country = countries.sample
+
     competition = Competition.new(
       id: "My#{i}Comp#{day.year}",
       name: "My #{i} Best Comp #{day.year}",
       cellName: "My #{i} Comp #{day.year}",
-      cityName: Faker::Address.city,
-      countryId: countries.sample.id,
+      cityName: random_city(country),
+      countryId: country.id,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
@@ -140,13 +152,14 @@ after "development:users" do
     start_day = (i+1).days.from_now
     end_day = start_day + (0..5).to_a.sample.days
     end_day = start_day if start_day.year != end_day.year
+    country = countries.sample
 
     competition = Competition.new(
       id: "MyComp#{i+1}#{start_day.year}",
       name: "My #{i+1} Comp #{start_day.year}",
       cellName: "My #{i+1} Comp #{start_day.year}",
-      cityName: Faker::Address.city,
-      countryId: countries.sample.id,
+      cityName: random_city(country),
+      countryId: country.id,
       information: "Information!",
       start_date: start_day.strftime("%F"),
       end_date: end_day.strftime("%F"),

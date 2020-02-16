@@ -15,7 +15,7 @@ after :teams do
 
   # Create board members
   8.times do
-    FactoryBot.create(:board_member)
+    FactoryBot.create(:user, :board_member)
   end
 
   # Create senior delegates and their subordinate delegates
@@ -39,7 +39,7 @@ after :teams do
     leader = FactoryBot.create(:user)
     FactoryBot.create(:team_member, user_id: leader.id, team_id: team_id, team_leader: true)
     # The team name isn't a valid email, but it's so much easier to type.
-    leader.update_column(:email, "#{team_friendly_id}_team")
+    leader.update_column(:email, "#{team_friendly_id}_team@valid.domain")
 
     3.times do
       member = FactoryBot.create(:user)
