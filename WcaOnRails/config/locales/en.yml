@@ -215,6 +215,11 @@ en:
     datetime_placeholder: "YYYY-MM-DD HH:MM"
     #context: the time format in the schedule table. Please set this to *exactly* "12h" to use am/pm time, or "24h" for 24 hours time (do not translate the 'h' or anything).
     time_format: "12h"
+    #context: used to phrase a result, e.g. 24.45 seconds, 25.66 moves
+    solve_time:
+      unit_seconds: "seconds"
+      unit_moves: "moves"
+
   #context: Key used in the OAuth part of the site (checkout the /oauth/applications page for more details)
   oauth:
     applications:

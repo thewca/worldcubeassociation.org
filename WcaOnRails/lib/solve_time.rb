@@ -222,9 +222,9 @@ class SolveTime
     if incomplete?
       ""
     elsif @event.timed_event?
-      time_minutes >= 1 ? "" : " seconds"
+      time_minutes >= 1 ? "" : " #{I18n.t("common.solve_time.unit_seconds")}"
     elsif @event.fewest_moves?
-      " moves"
+      " #{I18n.t("common.solve_time.unit_moves")}"
     elsif @event.multiple_blindfolded?
       ""
     else
