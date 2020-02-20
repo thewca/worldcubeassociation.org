@@ -818,7 +818,7 @@ class User < ApplicationRecord
         email preferred_events results_notifications_enabled subscriptions
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
-      fields << { subscriptions_attributes: [:id, :latitude, :longitude, :distance_km, :region_id, :championship, :event_id, :start_date, :end_date, :email_on_creation, :bookmark_on_creation, :_destroy] }
+      fields << { subscriptions_attributes: [:id, :latitude_degrees, :longitude_degrees, :distance_km, :region_id, :championship, :event_id, :start_date, :end_date, :email_on_creation, :bookmark_on_creation, :has_region_filter, :has_location_filter, :has_championship_filter, :has_date_filter, :has_event_filter, :_destroy] }
       if user.staff?
         fields += %i(receive_delegate_reports)
       end

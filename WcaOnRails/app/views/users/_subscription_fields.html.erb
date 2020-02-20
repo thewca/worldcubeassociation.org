@@ -3,31 +3,31 @@ filters = [
   {
     name: "region",
     text: t('.country_or_continent'),
-    is_active: f.object.has_region_filter?,
+    active_field: :has_region_filter,
     block: :region,
   },
   {
     name: "location",
     text: t('.location'),
-    is_active: f.object.has_location_filter?,
+    active_field: :has_location_filter,
     block: :location,
   },
   {
     name: "championship",
     text: t('.championship'),
-    is_active: f.object.has_championship_filter?,
+    active_field: :has_championship_filter,
     block: :championship,
   },
   {
     name: "date",
     text: t('.competition_date'),
-    is_active: f.object.has_date_filter?,
+    active_field: :has_date_filter,
     block: :date,
   },
   {
     name: "event",
     text: t('.event'),
-    is_active: f.object.has_event_filter?,
+    active_field: :has_event_filter,
     block: :event,
   },
 ]
@@ -56,7 +56,7 @@ filters = [
     </span>
   </div>
   <div class="col-location col-sm-offset-3 col-sm-9 col-xs-12">
-    <div id="location-map-wrapper">
+    <div class="location-map-wrapper">
       <div class="location-map"></div>
     </div>
     <span class="form-group form-inline">
@@ -109,7 +109,8 @@ filters = [
     <% filters.each do |fi| %>
       <%= content_tag :div,
           class: "form-group filter-#{fi[:name]} row",
-          style: ("display: none;" unless fi[:is_active]) do %>
+          style: ("display: none;" unless f.object.public_send(fi[:active_field])) do %>
+        <%= f.input fi[:active_field], as: :hidden, input_html: { class: "active-input" } %>
         <div class="col-sm-3 col-xs-12">
           <%= button_tag(
                 icon("fas", "times"),
@@ -131,7 +132,7 @@ filters = [
                 type: "button",
                 class: ["btn", "btn-default", "filter-button-add"],
                 value: fi[:name],
-                style: ("display: none;" if fi[:is_active])) %>
+                style: ("display: none;" if f.object.public_send(fi[:active_field]))) %>
         <% end %>
       </div>
     </div>

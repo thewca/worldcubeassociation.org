@@ -171,6 +171,8 @@ class UsersController < ApplicationController
                                  user: @user.delegate_to_handle_wca_id_claim.name)
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_later
         redirect_to profile_claim_wca_id_path
+      elsif user_params.key? :subscriptions_attributes
+        redirect_to subscriptions_url
       else
         redirect_to edit_user_url(@user, params.permit(:section))
       end

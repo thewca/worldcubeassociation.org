@@ -120,19 +120,21 @@ onPage('users#show_subscriptions', function() {
   numMapsAdded = 0;
 
   $('.location-map').each(function() {
-    this.attr('id', 'map-' + numMapsAdded);
-    wca.setupSubscriptionMap(this.attr('id'), this.parent('col-location').find('.subscription-latitude'), this.parent('col-location').find('.subscription-longitude'));
+    $(this).attr('id', 'map-' + numMapsAdded);
+    wca.setupSubscriptionMap($(this).attr('id'), $(this).closest('.col-location').find('.subscription-latitude'), $(this).closest('.col-location').find('.subscription-longitude'));
     numMapsAdded++;
   });
 
   function showFilter($container, name) {
     $container.find('.filter-button-add[value="' + name + '"]').hide();
     $container.find('.filter-' + name).show();
+    $container.find('.filter-' + name + ' .active-input').val(true);
   };
 
   function hideFilter($container, name) {
     $container.find('.filter-button-add[value="' + name + '"]').show();
     $container.find('.filter-' + name).hide();
+    $container.find('.filter-' + name + ' .active-input').val(false);
   };
 
   $('.container').on('click', '.filter-button-add', function() {
