@@ -400,6 +400,9 @@ en:
         extra_file: "Any extra file?"
         start_date: "Acknowledged since"
         end_date: "Acknowledged until"
+      subscription:
+        email_on_creation: "Email me"
+        bookmark_on_creation: "Bookmark the competition"
   enums:
     user:
       gender:
@@ -798,6 +801,7 @@ en:
       api: "API"
       manage_app: "Manage your applications"
       manage_auth_app: "Manage authorized applications"
+      competition_subscriptions: "Competition Subscriptions"
   #context: Key used in the context of editing a user profile
   users:
     #context: when updating their locale (language)
@@ -947,6 +951,35 @@ en:
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned."
       contact_results_team_html: "Please contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
+    #context: when viewing subscriptions to competitions
+    show_subscriptions:
+      title: "Competition Subscriptions"
+      info: "You can subscribe to notifications about upcoming competitions. We can send you an email or bookmark when we announce competitions based on your searches below. Please note that we may not be able to notify you for some special cases like multi-location competiitons."
+      new_subscription: "New Subscription"
+      save_button: "Save"
+    #context: when creating a subscription for competition notifications
+    subscription_fields:
+      country_or_continent: "Country / Continent"
+      location: "Location"
+      championship_type: "Championship Type"
+      competition_date: "Date"
+      event: "Event"
+      filters: "Filters"
+      notifications: "Notifications"
+      notifications_explanation: "When there is a new competition matching these filters:"
+      delete: "Delete"
+      within_distance: "Within"
+      kilometers_abbreviation: "km"
+      of_location: "of"
+      latitude: "Latitude"
+      longitude: "Longitude"
+      email_on_creation: "Send me an email"
+      bookmark_on_creation: "Bookmark the competition"
+      championship_types:
+        world_championship: "World Championship"
+        continental_championship: "Continental Championship"
+        greater_china_championship: "Greater China Championship"
+        national_championship: "National Championship"
   #context: Key used when dealing with registration to a competition
   registrations:
     #context: and when an error is found

@@ -42,3 +42,28 @@ input[type="radio"].center-vertically {
 #avatar-img {
   max-height: 400px;
 }
+
+.subscriptions-page {
+  .filter-button-remove {
+  }
+  .filter-name {
+    font-weight: bold;
+  }
+
+  .delete-subscription {
+    float: right;
+  }
+
+  .location-map {
+    height: 400px;
+  }
+
+  .event-radio label, .event-radio span.radio {
+    padding: 0px;
+    margin: 0px;
+  }
+
+  input[type="checkbox"] {
+    width: 13px;
+  }
+}

@@ -17,4 +17,8 @@ class Continent < ApplicationRecord
   def self.country_iso2s(continent_id)
     c_all_by_id[continent_id]&.countries&.map(&:iso2)
   end
+
+  def select_options
+    [[I18n.t('common.all_regions'), self.id]] + self.countries.map{ |country| [country.name, country.id] }
+  end
 end

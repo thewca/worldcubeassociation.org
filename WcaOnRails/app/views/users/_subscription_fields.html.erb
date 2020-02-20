@@ -1,0 +1,146 @@
+<%
+filters = [
+  {
+    name: "region",
+    text: t('.country_or_continent'),
+    is_active: f.object.has_region_filter?,
+    block: :region,
+  },
+  {
+    name: "location",
+    text: t('.location'),
+    is_active: f.object.has_location_filter?,
+    block: :location,
+  },
+  {
+    name: "championship",
+    text: t('.championship'),
+    is_active: f.object.has_championship_filter?,
+    block: :championship,
+  },
+  {
+    name: "date",
+    text: t('.competition_date'),
+    is_active: f.object.has_date_filter?,
+    block: :date,
+  },
+  {
+    name: "event",
+    text: t('.event'),
+    is_active: f.object.has_event_filter?,
+    block: :event,
+  },
+]
+%>
+
+<% blocks.define :region do |f| %>
+  <div class="col-sm-6 col-xs-12">
+    <%= f.input :region_id, as: :grouped_select,
+        collection: Continent.all_sorted_by(I18n.locale, real:true),
+        group_method: :select_options,
+        label: false, class: 'form-control' %>
+  </div>
+<% end %>
+
+<% blocks.define :location do |f| %>
+  <div class="col-location col-sm-9 col-xs-12">
+    <span class="form-group form-inline">
+      <%= t('.within_distance') %>
+      <span class="input-group">
+        <%= f.input :distance_km, label: false, input_html: { value: f.object.distance_km || 200 } %>
+        <span class="input-group-addon">
+          <%= t('.kilometers_abbreviation') %>
+        </span>
+      </span>
+      <%= t('.of_location') %>
+    </span>
+  </div>
+  <div class="col-location col-sm-offset-3 col-sm-9 col-xs-12">
+    <div id="location-map-wrapper">
+      <div class="location-map"></div>
+    </div>
+    <span class="form-group form-inline">
+      <span class="input-group">
+        <span class="input-group-addon"><%= t('.latitude') %></span>
+        <%= f.input :latitude_degrees, label: false, input_html: { value: f.object.latitude_degrees || 0, class: "subscription-latitude" } %>
+        <span class="input-group-addon"><%= t('.longitude') %></span>
+        <%= f.input :longitude_degrees, label: false, input_html: { value: f.object.longitude_degrees || 0, class: "subscription-longitude" } %>
+      </span>
+    </span>
+  </div>
+<% end %>
+
+<% blocks.define :championship do |f| %>
+  <div class="col-sm-6 col-xs-12">
+    <%= f.input :championship, as: :select, collection: [
+            ['world', t('.championship_types.world_championship')],
+            ['continental', t('.championship_types.continental_championship')],
+            ['greater_china', t('.championship_types.greater_china_championship')],
+            ['national', t('.championship_types.national_championship')]],
+        label_method: :second, value_method: :first,
+        label: false %>
+  </div>
+<% end %>
+
+<% blocks.define :date do |f| %>
+  <div class="col-sm-9 col-xs-12">
+    <div class="row datetimerange">
+      <%= f.input :start_date, as: :date_picker, wrapper: :ranged_datetime %>
+      <%= f.input :end_date, as: :date_picker, wrapper: :ranged_datetime %>
+    </div>
+  </div>
+<% end %>
+
+<% blocks.define :event do |f| %>
+  <div class="col-sm-9 col-xs-12">
+    <span class="event-radio">
+      <%= f.input :event_id, as: :radio_buttons, collection: Event.official.map { |e| [ cubing_icon(e.id), e.id ] }, label_method: :first, value_method: :second, item_wrapper_class: "radio-inline", label: false %>
+    </span>
+  </div>
+<% end %>
+
+<div class="nested-fields">
+  <hr>
+  <h3>
+    <%= t('.filters') %>
+    <%= link_to_remove_association button_tag(icon("fas", "times", t('.delete')), type: "button", class: "btn btn-danger delete-subscription"), f %>
+  </h3>
+  <fieldset>
+    <% filters.each do |fi| %>
+      <%= content_tag :div,
+          class: "form-group filter-#{fi[:name]} row",
+          style: ("display: none;" unless fi[:is_active]) do %>
+        <div class="col-sm-3 col-xs-12">
+          <%= button_tag(
+                icon("fas", "times"),
+                type: "button",
+                class: ["btn", "filter-button-remove"],
+                value: fi[:name]) %>
+          <span class="filter-name">
+            <%= fi[:text] %>
+          </span>
+        </div>
+        <%= blocks.render fi[:block], f %>
+      <% end %>
+    <% end %>
+    <div class="form-group">
+      <div class="col-sm-12" class="filters">
+        <% filters.each do |fi| %>
+          <%= button_tag(
+                icon("fas", "plus", fi[:text]),
+                type: "button",
+                class: ["btn", "btn-default", "filter-button-add"],
+                value: fi[:name],
+                style: ("display: none;" if fi[:is_active])) %>
+        <% end %>
+      </div>
+    </div>
+  </fieldset>
+  <h3>
+    <%= t('.notifications_explanation') %>
+  </h3>
+  <fieldset>
+    <%= f.input :email_on_creation, wrapper: :horizontal_boolean_left_align %>
+    <%= f.input :bookmark_on_creation, wrapper: :horizontal_boolean_left_align %>
+  </fieldset>
+</div>

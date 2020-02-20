@@ -23,6 +23,8 @@ class User < ApplicationRecord
   has_many :preferred_events, through: :user_preferred_events, source: :event
   has_many :bookmarked_competitions, dependent: :destroy
   has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
+  has_many :subscriptions, dependent: :destroy
+  accepts_nested_attributes_for :subscriptions, allow_destroy: true
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
@@ -812,10 +814,11 @@ class User < ApplicationRecord
     end
     if user == self
       fields += %i(
-        password password_confirmation
-        email preferred_events results_notifications_enabled
+        current_password password password_confirmation
+        email preferred_events results_notifications_enabled subscriptions
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
+      fields << { subscriptions_attributes: [:id, :latitude, :longitude, :distance_km, :region_id, :championship, :event_id, :start_date, :end_date, :email_on_creation, :bookmark_on_creation, :_destroy] }
       if user.staff?
         fields += %i(receive_delegate_reports)
       end

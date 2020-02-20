@@ -94,6 +94,17 @@ SimpleForm.setup do |config|
     end
   end
 
+  config.wrappers :horizontal_boolean_left_align, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
+    b.use :html5
+    b.use :readonly
+
+    b.wrapper tag: 'div', class: 'col-sm-12' do |ba|
+      ba.use :label_input, wrap_with: { tag: 'div', class: 'checkbox' }
+      ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
+      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    end
+  end
+
   config.wrappers :horizontal_radio_and_checkboxes, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
     b.use :html5
     b.use :readonly

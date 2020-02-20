@@ -115,3 +115,39 @@ onPage('users#index', function() {
     $.setUrlParams(params);
   });
 });
+
+onPage('users#show_subscriptions', function() {
+  numMapsAdded = 0;
+
+  $('.location-map').each(function() {
+    this.attr('id', 'map-' + numMapsAdded);
+    wca.setupSubscriptionMap(this.attr('id'), this.parent('col-location').find('.subscription-latitude'), this.parent('col-location').find('.subscription-longitude'));
+    numMapsAdded++;
+  });
+
+  function showFilter($container, name) {
+    $container.find('.filter-button-add[value="' + name + '"]').hide();
+    $container.find('.filter-' + name).show();
+  };
+
+  function hideFilter($container, name) {
+    $container.find('.filter-button-add[value="' + name + '"]').show();
+    $container.find('.filter-' + name).hide();
+  };
+
+  $('.container').on('click', '.filter-button-add', function() {
+    showFilter($(this).parents('.nested-fields'), $(this).val());
+  });
+  $('.container').on('click', '.filter-button-remove', function() {
+    hideFilter($(this).parents('.nested-fields'), $(this).val());
+  });
+
+  $('.container').on('cocoon:after-insert', function(e, added) {
+    added.find('.location-map').attr('id', 'map-' + numMapsAdded);
+    wca.setupSubscriptionMap('map-' + numMapsAdded, added.find('.subscription-latitude'), added.find('.subscription-longitude'));
+    numMapsAdded++;
+    wca.datetimepicker();
+  });
+
+  wca.datetimepicker();
+});

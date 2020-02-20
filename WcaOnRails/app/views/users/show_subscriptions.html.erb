@@ -1,0 +1,22 @@
+<% provide(:title, t('.title')) %>
+
+<div class="container subscriptions-page">
+  <h1 class="text-center">
+    <%= t('.title') %>
+  </h1>
+  <p>
+    <%= t('.info') %>
+  </p>
+
+  <%= horizontal_simple_form_for @user do |f| %>
+    <div class="subscriptions">
+      <%= f.simple_fields_for :subscriptions, @user.subscriptions do |f2| %>
+        <%= render "subscription_fields", f: f2 %>
+      <% end %>
+    </div>
+    <hr>
+    <%= link_to_add_association button_tag(icon("fas", "plus", t('.new_subscription')), type: "button", class: "btn btn-default"), f, :subscriptions,
+      data: { association_insertion_node: '.subscriptions', association_insertion_method: 'append' } %>
+    <%= f.button :submit, t('.save_button'), class: "btn-primary" %>
+  <% end %>
+</div>

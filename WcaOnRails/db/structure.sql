@@ -1202,6 +1202,28 @@ CREATE TABLE `stripe_charges` (
   KEY `index_stripe_charges_on_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `subscriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `subscriptions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `latitude` int(11) DEFAULT NULL,
+  `longitude` int(11) DEFAULT NULL,
+  `distance_km` int(11) DEFAULT NULL,
+  `region_id` varchar(191) DEFAULT NULL,
+  `championship` int(11) DEFAULT NULL,
+  `event_id` varchar(191) DEFAULT NULL,
+  `start_date` date DEFAULT '1970-01-01',
+  `end_date` date DEFAULT '9999-12-31',
+  `email_on_creation` tinyint(1) DEFAULT '0',
+  `bookmark_on_creation` tinyint(1) DEFAULT '0',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_subscriptions_on_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `team_members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1622,6 +1644,7 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20190818102517'),
 ('20190825095512'),
 ('20190826005902'),
+('20190827221017'),
 ('20190916133253'),
 ('20191005203556'),
 ('20191013211511'),

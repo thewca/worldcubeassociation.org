@@ -48,7 +48,7 @@ wca.searchAndPlaceOnMap = (map, query) => {
 
 // Create a search input, removing any marker/popup added: we'll handle this ourselves
 // with the existing marker
-wca.createSearchInput = map => {
+wca.createSearchInput = (map, marker) => {
   let searchControl = new GeoSearchControl({
     provider: searchProvider,
     showMarker: false,
@@ -59,6 +59,16 @@ wca.createSearchInput = map => {
     searchLabel: 'Enter an address',
   });
   map.addControl(searchControl);
+
+  let handleGeoSearchResult = (result) => {
+    console.log(result);
+    marker.setLatLng({
+      lat: result.location.y,
+      lng: result.location.x,
+    });
+    marker.bindPopup(result.location.label).openPopup()
+  }
+  map.on('geosearch/showlocation', handleGeoSearchResult);
 };
 
 wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTrick = true) => {
@@ -127,6 +137,49 @@ function roundToMicrodegrees(val) {
   return Math.trunc(parseFloat(val)*1e6) / 1e6;
 }
 
+function createMarker(map, $lat, $lng, disabled, onchange) {
+  let latLng = { lat: $lat.val(), lng: $lng.val() };
+  // Create competition marker
+  let marker = new Marker(latLng, {
+    draggable: !disabled,
+  }).addTo(map);
+
+  let updateElementsPositions = () => {
+    let newPos = marker.getLatLng();
+    $lat.val(roundToMicrodegrees(newPos.lat));
+    $lng.val(roundToMicrodegrees(newPos.lng));
+    map.panTo(newPos);
+    if (onchange !== null) {
+      onchange(newPos);
+    }
+  };
+
+  let inputChangeHandler = () => {
+    $lat.val(roundToMicrodegrees($lat.val()));
+    $lng.val(roundToMicrodegrees($lng.val()));
+    marker.setLatLng({
+      lat: $lat.val(),
+      lng: $lng.val(),
+    });
+    // Elements position will be updated by the "move" handler
+  }
+
+  let updateOnExternalChange = ev => {
+    if (ev.originalEvent) {
+      // This filters out mouse event, that are handled ondragend
+      return;
+    }
+    updateElementsPositions();
+  }
+  // Takes care of changes through setLatLng (change in input, or search result)
+  marker.on('move', updateOnExternalChange);
+  marker.on('dragend', updateElementsPositions);
+  $lat.change(inputChangeHandler);
+  $lng.change(inputChangeHandler);
+
+  return marker;
+};
+
 var nearbyCompetitionsById = {};
 
 
@@ -146,54 +199,18 @@ wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled
     fill: false,
     color: '#f0ad4e', // @brand-warning
   }).addTo(map);
-  // Create competition marker
-  let compMarker = new Marker(latLng, {
-    draggable: !disabled,
-  }).addTo(map);
-  let updateElementsPositions = () => {
-    let newPos = compMarker.getLatLng();
+
+  let compMarker = createMarker(map, $lat, $lng, disabled, (newPos) => {
     circleDanger.setLatLng(newPos);
     circleWarning.setLatLng(newPos);
-    $lat.val(roundToMicrodegrees(newPos.lat));
-    $lng.val(roundToMicrodegrees(newPos.lng));
-    map.panTo(newPos);
     wca.fetchNearbyCompetitions();
-  };
+  });
 
-  let inputChangeHandler = () => {
-    $lat.val(roundToMicrodegrees($lat.val()));
-    $lng.val(roundToMicrodegrees($lng.val()));
-    compMarker.setLatLng({
-      lat: $lat.val(),
-      lng: $lng.val(),
-    });
-    // Elements position will be updated by the "move" handler
-  }
-  let updateOnExternalChange = ev => {
-    if (ev.originalEvent) {
-      // This filters out mouse event, that are handled ondragend
-      return;
-    }
-    updateElementsPositions();
-  }
-  // Takes care of changes through setLatLng (change in input, or search result)
-  compMarker.on('move', updateOnExternalChange);
-  compMarker.on('dragend', updateElementsPositions);
-  $lat.change(inputChangeHandler);
-  $lng.change(inputChangeHandler);
   // Center the view
   map.setView(latLng, 8);
   map.zoomControl.setPosition("topright");
   if (!disabled) {
-    wca.createSearchInput(map);
-    let handleGeoSearchResult = (result) => {
-      compMarker.setLatLng({
-        lat: result.location.y,
-        lng: result.location.x,
-      });
-      compMarker.bindPopup(result.location.label).openPopup()
-    }
-    map.on('geosearch/showlocation', handleGeoSearchResult);
+    wca.createSearchInput(map, compMarker);
   }
   return map;
 }
@@ -226,3 +243,14 @@ wca.setNearbyCompetitions = (nearbyCompetitions) => {
     nearbyCompetitionsById[id] = c;
   });
 }
+
+wca.setupSubscriptionMap = (elem, $lat, $lng) => {
+  let map = wca.createCompetitionsMapLeaflet(elem, [0,0], false);
+  let latLng = { lat: $lat.val(), lng: $lng.val() };
+
+  map.setView(latLng, 8);
+  map.zoomControl.setPosition("topright");
+
+  let compMarker = createMarker(map, $lat, $lng, false, null);
+  wca.createSearchInput(map, compMarker);
+};

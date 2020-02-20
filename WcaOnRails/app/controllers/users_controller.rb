@@ -136,6 +136,10 @@ class UsersController < ApplicationController
     render :edit_avatar_thumbnail
   end
 
+  def show_subscriptions
+    @user = current_user
+  end
+
   def update
     @user = user_to_edit
     @user.current_user = current_user
