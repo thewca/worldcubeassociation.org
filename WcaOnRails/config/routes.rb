@@ -144,6 +144,7 @@ Rails.application.routes.draw do
   get 'faq' => 'static_pages#faq'
   get 'score-tools' => 'static_pages#score_tools'
   get 'logo' => 'static_pages#logo'
+  get 'media-instagram' => 'static_pages#media_instagram'
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'

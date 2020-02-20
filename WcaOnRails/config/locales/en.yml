@@ -803,6 +803,7 @@ en:
       api: "API"
       manage_app: "Manage your applications"
       manage_auth_app: "Manage authorized applications"
+      media_submission: "Media Submission"
   #context: Key used in the context of editing a user profile
   users:
     #context: when updating their locale (language)
@@ -2131,3 +2132,30 @@ en:
       accept: Accept
       confirm_accept: Are you sure you want to accept this media?
       edit: Edit
+  media_and_instagram:
+    general_media_submission:
+      title: General Media Submission
+      body_html: 'The WCA shares articles and images from competitions provided by the community on our <a href="/media">media page</a>. If you have something you would like to share, please fill out our <a href="/media/new">general media submission form</a>!'
+    instagram_submission:
+      title: Instagram submission
+      paragraph1_html: 'As you may have seen, the WCA has an <a href="https://www.instagram.com/thewcaofficial/">active Instagram</a>! To best reflect the global cubing community, we post content submitted to us by cubers from around the world.'
+      paragraph2: 'If you have high-quality photos or videos you would like us to post, please click the button below and fill out the form! In order us to post your content, you must own it and must give the WCA permission to post it. Due to the large number of submissions we receive, we can not post everything, but here are some tips to get your content posted:'
+      photo_quality: Make sure the photo/video quality is good. It doesn't have to be professionally shot but the quality shouldn't detract from the photo or video.
+      photo_interest: Try to make your content interesting to a broad audience. Content that is only interesting for a few people does not belong here.
+      wca_related: Post photos and videos that have to do with the WCA, as this is what our account is all about! We love to see cubers having fun!
+      submit_instagram_content: Submit Instagram content
+    instagram_hosting:
+      title: Instagram Hosting
+      paragraph1_html: 'Sometimes, we will allow community members to host the official WCA Instagram story with a competition they are attending! If you&#39;re interested, please click the button and fill out the form below.  The WCA Communication Team will reach out to you after all information has been submitted if you are approved for hosting. If you have any questions, please <a href="https://www.worldcubeassociation.org/contact/website">contact us</a>.'
+      paragraph2: Our goal is to share a little personal side of every cuber and of every competition. This is not supposed to be a huge burden over the weekend and, of course, we want you to enjoy the competition first and then be able to share it.
+      paragraph3: 'The role of a host can be summarized as follows:'
+      short_intro: Make a short introduction, talk about yourself and the competition
+      venue_feel: Get some clips to get a feeling of the venue and the people, this could be just a shot from the competitor area and solving area
+      people_solving: Try to get some shots of people solving (fast people at their main events preferably)
+      mini_interviews: You could try to get mini interviews of people (organizers, delegates, etc...) saying what they are feeling about the competition
+      pictures_too: You can also send pictures, it doesn't have to be only videos
+      paragraph4: 'Our communications throughout the weekend typically go through a WhatsApp group. Please ensure that you are familiar with this messaging platform or let us know if you are not able to use it so that we can arrange other plans.'
+      apply_to_host: Apply to host
+    other_suggestions:
+      title: Other suggestions?
+      body_html: 'Do you have other suggestions for Instagram or other social media content? <a href="https://www.worldcubeassociation.org/contact/website">Let us know</a>!'
