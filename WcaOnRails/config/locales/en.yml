@@ -2128,8 +2128,9 @@ en:
       confirm_accept: Are you sure you want to accept this media?
       edit: Edit
   media_and_instagram:
+    page_title: Media and Instagram submission
     general_media_submission:
-      title: General Media Submission
+      title: General media submission
       body_html: 'The WCA shares articles and images from competitions provided by the community on our <a href="/media">media page</a>. If you have something you would like to share, please fill out our <a href="/media/new">general media submission form</a>!'
     instagram_submission:
       title: Instagram submission
@@ -2140,7 +2141,7 @@ en:
       wca_related: Post photos and videos that have to do with the WCA, as this is what our account is all about! We love to see cubers having fun!
       submit_instagram_content: Submit Instagram content
     instagram_hosting:
-      title: Instagram Hosting
+      title: Instagram hosting
       paragraph1_html: 'Sometimes, we will allow community members to host the official WCA Instagram story with a competition they are attending! If you&#39;re interested, please click the button and fill out the form below.  The WCA Communication Team will reach out to you after all information has been submitted if you are approved for hosting. If you have any questions, please <a href="https://www.worldcubeassociation.org/contact/website">contact us</a>.'
       paragraph2: Our goal is to share a little personal side of every cuber and of every competition. This is not supposed to be a huge burden over the weekend and, of course, we want you to enjoy the competition first and then be able to share it.
       paragraph3: 'The role of a host can be summarized as follows:'
