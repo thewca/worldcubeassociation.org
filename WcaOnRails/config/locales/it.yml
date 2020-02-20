@@ -313,6 +313,11 @@ it:
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
     #original_hash: 7136e3b
     time_format: 24h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: secondi
+      #original_hash: 9d86b0d
+      unit_moves: mosse
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -365,8 +370,6 @@ it:
         email: Email
         #original_hash: 8be3c94
         password: Password
-        #original_hash: 19dff4d
-        current_password: Password corrente
         #original_hash: aefce7f
         password_confirmation: Conferma password
         #original_hash: ced7b30
@@ -736,8 +739,6 @@ it:
           Results Team lo approvi.
         #original_hash: da39a3e
         country_iso2: ''
-        #original_hash: da39a3e
-        current_password: ''
         #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
@@ -1227,17 +1228,18 @@ it:
           otp_email:
             #original_hash: a20e037
             subject: La tua password temporanea per il sito WCA
-            #original_hash: e820d08
+            #original_hash: f82488f
             2fa_attempt: >-
-              Stai tentato di accedere al sito web WCA. L'autenticazione a due
-              fattori è attiva e hai appena richiesto una password temporanea da
-              ricevere via email. La puoi trovare qui sotto:
-            #original_hash: 2daca82
+              Stai tentato di autenticarti al sito web WCA. L'autenticazione a
+              due fattori è attiva e hai appena richiesto una password
+              temporanea da ricevere via email. La puoi trovare qui sotto:
+            #original_hash: e27e540
             disclaimer: >-
               Se non hai richiesto tu il codice di autenticazione, contatta
               immediatamente il WST (WCA Software Team) rispondendo a questa
-              email. Ti consigliamo di cambiare la tua password, poiché quella
-              corrente potrebbe essere stata violata.
+              email. Potresti avere una sessione di navigazione aperta su un
+              altro dispositivo, o la tua password potrebbe essere stata
+              violata.
           #original_hash: 8c13694
           name: Autenticazione a due fattori (2FA)
           #original_hash: d28c3b6
@@ -1557,8 +1559,6 @@ it:
         announced: >-
           Il WCAT ha approvato la tua competizione ed è stata annunciata
           ufficialmente al pubblico.
-        #original_hash: 1c20919
-        link: 'Segui il link per mostrare l''annuncio della competizione:'
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Sei stato aggiunto alla competizione %{competition} come organizzatore'
@@ -1644,8 +1644,8 @@ it:
       approve: Approva
       #original_hash: 85de4b8
       unconfirmed_email: 'L''indirizzo email (%{email}) di questo account non è confermato.'
-      #original_hash: c03b949
-      confirm_new_email: Per cambiare la tua email è necessario confermare il nuovo indirizzo.
+      #original_hash: 7069007
+      confirm_new_email: Per cambiare la tua email sarà necessario confermare il nuovo indirizzo.
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
         Questo account è in attesa di conferma del nuovo indirizzo email
@@ -1740,6 +1740,21 @@ it:
             utilizzata per rappresentare l'avatar completo. La thumbnail deve
             essere regolata, in modo che tu possa essere riconosciuta da essa
             sola e deve contenere il tuo viso.
+      sensitive:
+        #original_hash: 267ac87
+        info: >-
+          In questa sezione puoi modificare i tuoi dati sensibili. Per farlo,
+          conferma la tua identità qui sotto.
+        #original_hash: f19af51
+        success: La tua identità è stata verificata con successo
+        #original_hash: 52ebf9c
+        failure: Impossibile verificare la tua identità
+        #original_hash: 4324c73
+        confirm_proceed: Conferma e procedi
+        #original_hash: d395f1f
+        identity_error: >-
+          Impossibile modificare i tuoi dati. Per favore conferma la tua
+          identità qui sotto prima di riprovare.
     errors:
       #original_hash: 094b763
       not_found: non trovato
@@ -1750,10 +1765,10 @@ it:
         non combacia con il valore presente nel database. Se sei sicuro di aver
         inserito la data di nascita nel formato corretto (AAAA-MM-GG), contatta
         il WCA Results Team usando <a href="%{dob_form_path}">questo form</a>.
-      #original_hash: c9ae791
+      #original_hash: c3ce070
       unique_html: >-
-        è già utilizzato da "%{used_name}" con %{used_email}. Per liberare il
-        WCA ID, puoi <a href=%{used_edit_path} target='_blank'>modificare
+        è già utilizzato da %{used_name} con %{used_email}. Per liberare il WCA
+        ID, puoi <a href="%{used_edit_path}" target="_blank">modificare
         quell'account</a> e dissociare il WCA ID.
       #original_hash: 26f70ed
       dob_past: deve essere nel passato
@@ -2255,12 +2270,32 @@ it:
         di confermare la competizione.
       #original_hash: e390250
       create_success: Competizione creata correttamente!
+      #original_hash: ba067f0
+      not_announced: >-
+        Questa competizione è visibile al pubblico ma non è stata ancora
+        annunciata.
+      #original_hash: ab61991
+      announced: Competizione annunciata con successo!
+      #original_hash: 8ad5e67
+      results_not_posted: >-
+        I risultati di questa competizione sono visibili ma non sono stati
+        ancora postati.
+      #original_hash: e205d73
+      results_already_posted: I risultati sono stati già postati.
+      #original_hash: 376f461
+      results_posted: Risultati postati con successo!
       #original_hash: afe3a23
       results_preview_alert: Stai visualizzando risultati che non sono ancora stati pubblicati.
       #original_hash: 07de612
       upload_results: >-
         Questa competizione è finita, stiamo lavorando per pubblicare i
         risultati il più presto possibile!
+      #original_hash: 68dd436
+      computing_auxiliary_data: Per favore attendi che i dati accessori siano calcolati.
+      #original_hash: 8ebe272
+      no_results: Nessun risultato.
+      #original_hash: 79e8b95
+      no_main_event_results: 'Nessun risultato per il main event (%{event_name}).'
       #original_hash: a0168ee
       in_progress: >-
         Questa competizione è in corso di svolgimento. Torna dopo il %{date} per
@@ -2345,6 +2380,8 @@ it:
       information: Informazioni
       #original_hash: c5497bc
       events: Eventi
+      #original_hash: 3c24bd2
+      main_event: Main event
       #original_hash: ff722f0
       registration_requirements: Requisiti per la registrazione
       #original_hash: 74d0bf1
@@ -2375,7 +2412,7 @@ it:
       use_stripe_below_html: >-
         La quota di iscrizione deve essere pagata tramite Stripe di seguito una
         volta registrato.
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: >-
         Se la tua registrazione viene cancellata prima di %{limit_date_and_time}
         ti verrà rimborsato il %{refund_policy_percent} della tua quota di
@@ -2417,6 +2454,49 @@ it:
         range_past_html: >-
           Le registrazioni online sono state aperte da %{start_date_and_time} a
           %{end_date_and_time}.
+      #original_hash: 1f9c9c4
+      highlights: Highlights
+      #original_hash: 945f917
+      click_to_display_highlights_html: 'Clocca %{link_here} per visualizzare gli highlights della competizione.'
+      #original_hash: dc5c597
+      hide_highlights: Nascondi highlights.
+      #original_hash: f691bf2
+      result: un risultato
+      #original_hash: acab754
+      single: un singolo
+      #original_hash: e78d7c2
+      average: una media
+      #original_hash: 083c83e
+      mean: una media
+      #original_hash: 22bee3a
+      result_sentence: 'con %{a_win_by_word} di %{result}'
+      #original_hash: 6c3b236
+      winner: '%{winner} vince %{result_sentence} nell''evento %{event_name}.'
+      #original_hash: 4daa7df
+      first_runner_up: '%{first_runner_up} termina secondo (%{first_runner_up_result})'
+      #original_hash: d96b040
+      and: e
+      #original_hash: e9e9d2e
+      second_runner_up: '%{second_runner_up} termina terzo (%{second_runner_up_result}).'
+      records:
+        #original_hash: 0658e11
+        wr: Record Mondiali
+        #original_hash: 9d940bb
+        afr: Record Africani
+        #original_hash: 56c95a8
+        asr: Record Asiatici
+        #original_hash: 4cf3c13
+        ocr: Record d'Oceania
+        #original_hash: 1b9111e
+        er: Record Europei
+        #original_hash: d26cf99
+        nar: Record Nordamericani
+        #original_hash: 270c007
+        sar: Record Sudamericani
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} %{result} (singolo)'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} %{result} (media)'
       #original_hash: 8eda7ac
       bookmark: Salva competizione
       #original_hash: 4dfea97
@@ -2546,10 +2626,6 @@ it:
         [CubingItaly](mailto:cubingitaly@gmail.com)
       #original_hash: c5497bc
       events: Eventi
-      #original_hash: 09b819f
-      deprecated_events: >-
-        Questa competizione ha eventi non più ufficiali, pertanto non è
-        possibile modificarli.
       #original_hash: cafc153
       public_and_locked_html: >-
         Questa competizione è pubblicamente visibile e bloccata per la modifica.
@@ -2699,10 +2775,16 @@ it:
       competitors: Partecipanti
     #original_hash: 06b01c4
     announcements: Annunci
-    #original_hash: 5b9523f
-    upload_results: Carica risultati
-    #original_hash: 47dfd90
-    post_announcement: Pubblica annuncio competizione
+    #original_hash: a2b80b0
+    post_announcement: Annuncia competizione
+    #original_hash: b462eac
+    announced_by_html: 'Annunciato da %{announcer_name} il %{date_time}'
+    #original_hash: 9a42672
+    upload_results: Carica i risultati
+    #original_hash: 01de5ee
+    post_results: Posta i risultati
+    #original_hash: b6513f1
+    results_posted_by_html: 'Postato da %{poster_name} il %{date_time}'
     show:
       #original_hash: b0fe391
       general_info: Informazioni generali
@@ -3331,7 +3413,7 @@ it:
     spirit_footer: Spirito WCA
     #original_hash: c1781ee
     our_goals_title: I nostri obiettivi
-    #original_hash: 1ca8ac4
+    #original_hash: caf6bf2
     our_goals_content_html: >-
       <p>La World Cube Association intende dare ai giovani di tutto il mondo
       l'opportunità di partecipare e contribuire alla community, attraverso la
@@ -3339,7 +3421,9 @@ it:
       Crediamo che le esperienze alle competizioni e all'interno della nostra
       community siano opportunità di crescita per i giovani coinvolti, e che
       l'offerta dei nostri eventi a nuovi gruppi di persone consenta alla nostra
-      community di rafforzarsi.</p>
+      community di rafforzarsi. È possibile trovare un documento con gli
+      obiettivi e le strategie del Board per la WCA <a
+      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">qui</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Prospettive future per la WCA?
     #original_hash: a08c67f
