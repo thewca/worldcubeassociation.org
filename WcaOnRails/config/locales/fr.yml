@@ -1350,7 +1350,7 @@ fr:
       manage_app: Gérer vos applications
       #original_hash: 0e8b212
       manage_auth_app: Gérer vos applications authentifiées
-      media_submission: Soumission aux médias
+      media_submission: Partager des photos et vidéos
   users:
     update_locale:
       #original_hash: 4cde9bc
