@@ -1491,7 +1491,7 @@ es:
       manage_app: Controlar tus aplicaciones
       #original_hash: 0e8b212
       manage_auth_app: Controlar aplicaciones autorizadas
-      media_submission: "Entrega de medios"
+      media_submission: "Enviar material audiovisual"
   users:
     update_locale:
       #original_hash: 4cde9bc
