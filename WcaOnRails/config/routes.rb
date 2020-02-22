@@ -186,7 +186,7 @@ Rails.application.routes.draw do
   get '/relations' => 'relations#index'
   get '/relation' => 'relations#relation'
 
-  get '/.well-known/.change-password' => redirect('/profile/edit?section=password', status: 302)
+  get '/.well-known/change-password' => redirect('/profile/edit?section=password', status: 302)
 
   # WFC section
   get '/wfc' => 'wfc#panel'
