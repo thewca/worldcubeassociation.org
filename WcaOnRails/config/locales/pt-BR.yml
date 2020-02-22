@@ -319,6 +319,11 @@ pt-BR:
     datetime_placeholder: 'AAAA-MM-DD HH:MM'
     #original_hash: 7136e3b
     time_format: 24h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: segundos
+      #original_hash: 9d86b0d
+      unit_moves: movimentos
   oauth:
     applications:
       #original_hash: 0c4ea38
