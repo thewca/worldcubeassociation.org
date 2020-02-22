@@ -215,7 +215,7 @@ GEM
       railties (>= 4.2.0)
     faker (2.10.2)
       i18n (>= 1.6, < 2)
-    faraday (0.17.0)
+    faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
     ffi (1.11.3)
     font-awesome-sass (5.12.0)
@@ -653,7 +653,7 @@ DEPENDENCIES
   envied (= 0.9.1)
   factory_bot_rails
   faker
-  faraday (<= 0.17.0)
+  faraday
   font-awesome-sass
   fullcalendar-rails
   google-api-client
