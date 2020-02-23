@@ -907,4 +907,11 @@ RSpec.describe Competition do
       expect(competition.has_defined_dates?).to eq true
     end
   end
+
+  it "cannot add organizers with missing data" do
+    organizer = FactoryBot.create :user, country_iso2: nil
+    competition = FactoryBot.build :competition, organizers: [organizer]
+    expect(competition).not_to be_valid
+    expect(competition.errors.messages[:organizer_ids].first).to match "Need a country"
+  end
 end

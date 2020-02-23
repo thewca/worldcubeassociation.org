@@ -779,6 +779,15 @@ class User < ApplicationRecord
     end
   end
 
+  def cannot_organize_competition_reasons
+    [].tap do |reasons|
+      reasons << I18n.t('registrations.errors.need_name') if name.blank?
+      reasons << I18n.t('registrations.errors.need_gender') if gender.blank?
+      reasons << I18n.t('registrations.errors.need_dob') if dob.blank?
+      reasons << I18n.t('registrations.errors.need_country') if country_iso2.blank?
+    end
+  end
+
   def cannot_edit_data_reason_html(user_to_edit)
     # Don't allow editing data if they have a WCA ID assigned, or if they
     # have already registered for a competition. We do allow admins and delegates

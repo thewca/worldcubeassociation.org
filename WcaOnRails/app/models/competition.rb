@@ -604,6 +604,15 @@ class Competition < ApplicationRecord
     end
   end
 
+  validate :organizers_can_organize_competition
+  private def organizers_can_organize_competition
+    organizers.each do |organizer|
+      if organizer&.cannot_organize_competition_reasons.present?
+        errors.add(:organizer_ids, "#{organizer.name}: #{organizer.cannot_organize_competition_reasons.to_sentence}")
+      end
+    end
+  end
+
   validate :registration_must_close_after_it_opens
   def registration_must_close_after_it_opens
     if registration_open && registration_close && !(registration_open < registration_close)
