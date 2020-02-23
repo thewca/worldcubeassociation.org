@@ -557,7 +557,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    strip_attributes (1.9.0)
+    strip_attributes (1.9.2)
       activemodel (>= 3.0, < 7.0)
     stripe (5.15.0)
     term-ansicolor (1.7.1)
