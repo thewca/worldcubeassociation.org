@@ -286,6 +286,8 @@ ru:
     average: Среднее
     #original_hash: e7f6fc5
     solves: Сборки
+    #original_hash: c9d0561
+    hello: 'Здравствуйте, %{name}!'
     date:
       #original_hash: acb6273
       no_date: Нет даты
@@ -325,6 +327,11 @@ ru:
     datetime_placeholder: 'ГГГГ-ММ-ДД ЧЧ:ММ'
     #original_hash: 7136e3b
     time_format: 24h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: сек.
+      #original_hash: 9d86b0d
+      unit_moves: ходов
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -377,8 +384,6 @@ ru:
         email: Email
         #original_hash: 8be3c94
         password: Пароль
-        #original_hash: 19dff4d
-        current_password: Текущий пароль
         #original_hash: aefce7f
         password_confirmation: Подтверждение пароля
         #original_hash: ced7b30
@@ -403,6 +408,8 @@ ru:
         receive_delegate_reports: Хочу получать отчёты Делегатов о WCA соревнованиях по email
         #original_hash: 57eaf24
         user_preferred_events: Предпочитаемые дисциплины
+        #original_hash: e632fbf
+        otp_attempt: 'Введите код двухфакторной аутентификации:'
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -751,8 +758,6 @@ ru:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        current_password: ''
-        #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
         dob_verification: ''
@@ -785,6 +790,10 @@ ru:
           Если вы Кандидат в Делегаты, Старший Делегат или член WRC или WQAC, вы
           уже получаете отчёты по умолчанию. Внимание: изменение вступит в силу
           в течение часа.
+        #original_hash: 0627e5c
+        otp_attempt: >-
+          Откройте настроенное приложение, чтобы получить одноразовый пароль,
+          или введите один из ваших кодов восстановления.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -1188,6 +1197,134 @@ ru:
       new:
         #original_hash: ada2e9e
         sign_in: Войти
+        2fa:
+          #original_hash: b274c38
+          verify: 'Мы должны проверить, что это действительно вы'
+          #original_hash: ec44d52
+          confirm: Код подтверждения
+          #original_hash: 912516c
+          regenerated_secret: Секретный код двухфакторной аутентификации успешно сгенерирован.
+          #original_hash: 1b0c44f
+          enabled_success: Двухфакторная аутентификация успешно включена
+          #original_hash: 9515157
+          email_auth: Аутентификация по емейлу
+          #original_hash: d305ccb
+          get_by_email: Получить код по емейлу
+          #original_hash: 4e644aa
+          get_by_email_desc: >-
+            Если у вас нет доступа к кодам доступа или к вашему устройству, вы
+            можете нажать на кнопку внизу, чтобы получить одноразовый пароль по
+            емейлу. Скопируйте и вставьте его в поле сверху.
+          #original_hash: b243ac5
+          email_sent: >-
+            Код был отправлен по емейлу. Код действителен в течение 2 минут. Вы
+            можете запросить новый код через 2 минуты.
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: Сейчас вы не можете сгенерировать новый емейл
+            #original_hash: c0d4fc2
+            invalid_otp: Неправильный код двухфакторной аутентификации.
+            #original_hash: c2f5347
+            not_enabled: Двухфакторная аутентификация выключена
+            #original_hash: 14d294b
+            unknown: >-
+              При отправке емейла произошла неизвестная ошибка. Пожалуйста,
+              свяжитесь с WST.
+          otp_email:
+            #original_hash: a20e037
+            subject: Ваш одноразовый пароль для WCA
+            #original_hash: f82488f
+            2fa_attempt: >-
+              Вы пытаетесь авторизоваться на сайте WCA. У вас включена
+              двухфакторная аутентификация, и вы запросили одноразовый пароль по
+              емейлу. Вот он:
+            #original_hash: e27e540
+            disclaimer: >-
+              Если вы не запрашивали код аутентификации, пожалуйста, немедленно
+              свяжитесь с WST, ответив на этот емейл: возможно, у вас осталась
+              где-то открытая сессия, или ваш пароль скомпрометирован.
+          #original_hash: 8c13694
+          name: двухфакторную аутентификацию (2FA)
+          #original_hash: d28c3b6
+          support_desc_html: >-
+            Сайт WCA поддерживает %{two_factor_link} при помощи одноразового
+            пароля:
+          options:
+            #original_hash: 4f9dcb8
+            app: >-
+              сгенерировать с помощью специального приложения 2FA на вашем
+              смартфоне (например, Authy или Google Authenticator).
+            #original_hash: 34a7572
+            recovery: >-
+              ввести один из кодов восстановления, который был получен при
+              активации 2FA.
+            #original_hash: eaee403
+            email: отправить код по емейлу.
+          #original_hash: 7ae99ae
+          status_html: 'Двухфакторная аутентификация %{status}.'
+          #original_hash: 3ea3f98
+          enabled: включена
+          #original_hash: 07596f1
+          disabled: выключена
+          #original_hash: 5f225b0
+          enable: Включить 2FA
+          #original_hash: b2a3d7e
+          reset: Сбросить секретный код 2FA
+          #original_hash: 14b7bfd
+          reset_if_needed: >-
+            Если ваше устройство было скомпрометировано или вы хотите отозвать
+            доступ с устройства, вы можете сбросить секретный код двухфакторной
+            аутентификации ниже:
+          #original_hash: 69100a3
+          reset_warning: Вам придётся перенастроить все ваши устройства 2FA.
+          #original_hash: a8d11db
+          methods: Методы двухфакторной аутентификации
+          #original_hash: 0fd248d
+          methods_description: >-
+            Вы можете использовать несколько методов, чтобы получить одноразовый
+            пароль при входе на сайт, они описаны ниже.
+          #original_hash: 4442f0e
+          dedicated_app: >-
+            Использование соответствующего приложения двухфакторной
+            аутентификации
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            WST рекомендует использовать %{authy} на вашем личном устройстве для
+            генерации одноразовых паролей при входе на сайт.<br/>Другими
+            вариантами являются %{google} и %{microsoft}.
+          #original_hash: f1b2ec2
+          scan_qrcode_html: >-
+            Отсканируйте QR-код внизу, когда об этом попросит ваше приложение
+            2FA (или нажмите %{here}, если вы открыли эту страницу на телефоне).
+          #original_hash: e7cba1a
+          backup_codes: Коды восстановления
+          #original_hash: fa62416
+          backup_codes_desc: >-
+            Коды восстановления можно использовать вместо одноразовых паролей в
+            случае, если у вас не будет доступа к вашему устройству с
+            приложением двухфакторной аутентификации. Каждый код можно
+            использовать только один раз. Храните их в надёжном месте!
+          #original_hash: 087cb72
+          no_backup_codes: >-
+            Пока вы не создали коды восстановления. Нажмите на кнопку снизу,
+            чтобы создать их.
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            Вы уже создали коды восстановления. Если вы их все использовали или
+            потеряли, вы можете создать их заново, нажав на кнопку внизу.
+            Обратите внимание, что старые коды восстановления при этом станут
+            недействительными.
+          #original_hash: 2ee4aca
+          generate_backup_codes: Сгенерировать коды восстановления
+          #original_hash: a69dd5b
+          backup_codes_warning: >-
+            Коды восстановления отображены ниже. Запишите или сохраните их в
+            надёжном месте прямо сейчас: они хранятся в нашей базе данных в
+            зашифрованном виде, и мы не сможем показать их вам ещё раз.
+          #original_hash: b5e3ad8
+          email_auth_desc: >-
+            Вы можете запросить одноразовый пароль по емейлу, когда вы
+            попытаетесь зайти на сайт.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1419,8 +1556,6 @@ ru:
         header: 'WCAT одобрила %{competition}'
         #original_hash: 0d3d10c
         announced: 'WCAT одобрила ваше соревнование, и теперь оно доступно широким массам.'
-        #original_hash: 1c20919
-        link: 'Объявление о соревновании доступно по следующей ссылке:'
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Вас добавили в список организаторов %{competition}'
@@ -1504,8 +1639,10 @@ ru:
       approve: Подтвердить
       #original_hash: 85de4b8
       unconfirmed_email: 'Email-адрес этого аккаунта (%{email}) не подтверждён.'
-      #original_hash: c03b949
-      confirm_new_email: При изменении вашего email потребуется подтвердить новый email.
+      #original_hash: 7069007
+      confirm_new_email: >-
+        При изменении вашего email потребуется подтвердить новый email, чтобы
+        изменения вступили в силу.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Этот аккаунт ожидает подтверждения нового email-адреса %{email}.'
       #original_hash: 0340b0b
@@ -1589,6 +1726,21 @@ ru:
           '3': >-
             Миниатюру аватарки нужно выбрать так, чтобы вас можно было узнать с
             её помощью, и она должна содержать ваше лицо.
+      sensitive:
+        #original_hash: 267ac87
+        info: >-
+          В этом разделе вы сможете редактировать конфиденциальные данные. Перед
+          этим нам надо убедиться, что вы &mdash; владелец этого аккаунта.
+        #original_hash: f19af51
+        success: Владение аккаунтом успешно подтверждено.
+        #original_hash: 52ebf9c
+        failure: Владение аккаунтом не подтверждено.
+        #original_hash: 4324c73
+        confirm_proceed: Подтвердить и продолжить
+        #original_hash: d395f1f
+        identity_error: >-
+          Невозможно редактировать эти данные, пожалуйста, подтвердите ниже, что
+          вы &mdash; владелец этого аккаунта.
     errors:
       #original_hash: 094b763
       not_found: не найдено
@@ -1599,11 +1751,11 @@ ru:
         не такой, как в нашей базе данных. Если вы уверены, что правильно ввели
         день рождения (ГГГГ-ММ-ДД), пожалуйста, свяжитесь с WCA Results Team при
         помощи <a href="%{dob_form_path}">этой формы</a>.
-      #original_hash: c9ae791
+      #original_hash: c3ce070
       unique_html: >-
-        уже используется участником "%{used_name}" с %{used_email}. Чтобы
-        освободить WCA ID, вы можете a href=%{used_edit_path}
-        target='_blank'>отредактировать этот аккаунт</a> и открепить WCA ID.
+        уже используется участником %{used_name} с %{used_email}. Чтобы
+        освободить WCA ID, вы можете a href="%{used_edit_path}"
+        target="_blank">отредактировать этот аккаунт</a> и открепить WCA ID.
       #original_hash: 26f70ed
       dob_past: должен быть в прошлом
       #original_hash: b320913
@@ -2092,10 +2244,26 @@ ru:
         расписании присутствуют все раунды.
       #original_hash: e390250
       create_success: Соревнование успешно создано!
+      #original_hash: ba067f0
+      not_announced: 'Это соревнование доступно общественности, но ещё не анонсировано.'
+      #original_hash: ab61991
+      announced: Соревнование успешно анонсировано!
+      #original_hash: 8ad5e67
+      results_not_posted: 'Результаты соревнования доступны, но ещё не опубликованы.'
+      #original_hash: e205d73
+      results_already_posted: Результаты уже были опубликованы.
+      #original_hash: 376f461
+      results_posted: Результаты успешно опубликованы!
       #original_hash: afe3a23
       results_preview_alert: Эти результаты ещё не опубликованы.
       #original_hash: 07de612
       upload_results: 'Соревнование закончено, мы скоро выложим результаты!'
+      #original_hash: 68dd436
+      computing_auxiliary_data: 'Пожалуйста, подождите, пока вычисляются вспомогательные данные.'
+      #original_hash: 8ebe272
+      no_results: Нет результатов.
+      #original_hash: 79e8b95
+      no_main_event_results: 'Нет результатов для главной дисциплины (%{event_name}).'
       #original_hash: a0168ee
       in_progress: >-
         Соревнование ещё не закончилось. Результаты будут выложены не ранее
@@ -2182,6 +2350,8 @@ ru:
       information: Информация
       #original_hash: c5497bc
       events: Дисциплины
+      #original_hash: 3c24bd2
+      main_event: Главная дисциплина
       #original_hash: ff722f0
       registration_requirements: Требования к регистрации
       #original_hash: 74d0bf1
@@ -2206,7 +2376,7 @@ ru:
       use_stripe_link_html: 'Взнос за участие нужно оплатить через Stripe %{here} после регистрации.'
       #original_hash: cea0eb4
       use_stripe_below_html: Взнос за участие надо оплатить через Stripe ниже после регистрации.
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: >-
         Если вы отмените вашу регистрацию до %{limit_date_and_time}, вам будет
         возвращено %{refund_policy_percent} от вашего взноса.
@@ -2245,6 +2415,49 @@ ru:
         range_past_html: >-
           Онлайн-регистрация открылась в %{start_date_and_time} и закрылась в
           %{end_date_and_time}.
+      #original_hash: 1f9c9c4
+      highlights: Главные результаты
+      #original_hash: 945f917
+      click_to_display_highlights_html: 'Нажмите %{link_here}, чтобы посмотреть главные результаты соревнования.'
+      #original_hash: dc5c597
+      hide_highlights: Скрыть главные результаты.
+      #original_hash: f691bf2
+      result: с результатом
+      #original_hash: acab754
+      single: с лучшей попыткой
+      #original_hash: e78d7c2
+      average: со средним временем
+      #original_hash: 083c83e
+      mean: со средним временем
+      #original_hash: 22bee3a
+      result_sentence: '%{a_win_by_word} %{result}'
+      #original_hash: 6c3b236
+      winner: '%{winner} выиграл(а) %{result_sentence} в дисциплине %{event_name}.'
+      #original_hash: 4daa7df
+      first_runner_up: 'На втором месте %{first_runner_up} (%{first_runner_up_result})'
+      #original_hash: d96b040
+      and: и
+      #original_hash: e9e9d2e
+      second_runner_up: 'на третьем %{second_runner_up} (%{second_runner_up_result})'
+      records:
+        #original_hash: 0658e11
+        wr: Мировые рекорды
+        #original_hash: 9d940bb
+        afr: Рекорды Африки
+        #original_hash: 56c95a8
+        asr: Рекорды Азии
+        #original_hash: 4cf3c13
+        ocr: Рекорды Океании
+        #original_hash: 1b9111e
+        er: Рекорды Европы
+        #original_hash: d26cf99
+        nar: Рекорды Северной Америки
+        #original_hash: 270c007
+        sar: Рекорды Южной Америки
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} %{result} (лучшая)'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} %{result} (среднее)'
       #original_hash: 8eda7ac
       bookmark: Пометить это соревнование
       #original_hash: 4dfea97
@@ -2372,10 +2585,6 @@ ru:
         обнародованы. %{md}. Например: [Вася Пупкин](mailto:vasya@pupkin.ru)
       #original_hash: c5497bc
       events: Дисциплины
-      #original_hash: 09b819f
-      deprecated_events: >-
-        Некоторые дисциплины этого соревнования больше не являются официальными,
-        их редактирование невозможно.
       #original_hash: cafc153
       public_and_locked_html: >-
         Это соревнование доступно широким массам, и его нельзя редактировать.
@@ -2522,10 +2731,16 @@ ru:
       competitors: Участники
     #original_hash: 06b01c4
     announcements: Объявления
-    #original_hash: 5b9523f
+    #original_hash: a2b80b0
+    post_announcement: Объявить соревнование
+    #original_hash: b462eac
+    announced_by_html: 'Анонсировано %{announcer_name} %{date_time}'
+    #original_hash: 9a42672
     upload_results: Загрузить результаты
-    #original_hash: 47dfd90
-    post_announcement: Опубликовать объявление о соревновании
+    #original_hash: 01de5ee
+    post_results: Опубликовать результаты
+    #original_hash: b6513f1
+    results_posted_by_html: 'Опубликовано %{poster_name} %{date_time}'
     show:
       #original_hash: b0fe391
       general_info: Общая информация
@@ -3136,13 +3351,15 @@ ru:
     spirit_footer: Дух WCA
     #original_hash: c1781ee
     our_goals_title: Наши цели
-    #original_hash: 1ca8ac4
+    #original_hash: caf6bf2
     our_goals_content_html: >-
       <p>WCA, улучшая доступность наших соревнований, хочет давать возможность
       молодёжи по всему миру участвовать и вести наше сообщество. Мы верим, что
       переживания и впечатления на соревнованиях и внутри нашего сообщества
       создают возможности развития для вовлечённой молодёжи, а приобщение новых
-      групп людей к головоломкам делает сообщество сильнее.</p>
+      групп людей к головоломкам делает сообщество сильнее. Документ, содержащий
+      Видение и Стратегию Руководства WCA, можно найти <a
+      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">здесь</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Что дальше для WCA?
     #original_hash: a08c67f
