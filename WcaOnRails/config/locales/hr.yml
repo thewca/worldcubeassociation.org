@@ -323,6 +323,11 @@ hr:
     datetime_placeholder: 'GODINA-MJESEC-DAN SAT:MINUTA'
     #original_hash: 7136e3b
     time_format: 12h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: sekundi
+      #original_hash: 9d86b0d
+      unit_moves: poteza
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -375,8 +380,6 @@ hr:
         email: E-mail
         #original_hash: 8be3c94
         password: Lozinka
-        #original_hash: 19dff4d
-        current_password: Trenutna lozinka
         #original_hash: aefce7f
         password_confirmation: Ponovno unesi lozinku
         #original_hash: ced7b30
@@ -745,8 +748,6 @@ hr:
           rezultate.
         #original_hash: da39a3e
         country_iso2: ''
-        #original_hash: da39a3e
-        current_password: ''
         #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
@@ -1224,16 +1225,16 @@ hr:
           otp_email:
             #original_hash: a20e037
             subject: Jednokratna lozinka za WCA
-            #original_hash: e820d08
+            #original_hash: f82488f
             2fa_attempt: >-
-              Pokušaj prijave na WCA stranicu. Uključena je dvofaktorska
+              Pokušaj autentifikacije na WCA stranicu. Uključena je dvofaktorska
               autentifikacija i poslana je jednokratna lozinka na email.
               Pogledajte ispod:
-            #original_hash: 2daca82
+            #original_hash: e27e540
             disclaimer: >-
               Ukoliko niste zatražili autentifikacijski kod, kontaktirajte WST
-              odmah odgovorom na ovaj mail i promijenite lozinku jer je račun
-              vjerojatno ugrožen.
+              odmah odgovorom na ovaj mail: možda ste otvorili više sesija ili
+              je lozinka ugrožena.
           #original_hash: 8c13694
           name: Dvofaktorska autentifikacija (2FA)
           #original_hash: d28c3b6
@@ -1484,6 +1485,8 @@ hr:
       manage_app: Upravljaj svojim aplikacijama
       #original_hash: 0e8b212
       manage_auth_app: Upravljaj autoriziranim aplikacijama
+      #original_hash: acac109
+      media_submission: Prilaganje datoteka
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1547,8 +1550,6 @@ hr:
         header: 'WCAT je najavio natjecanje %{competition}'
         #original_hash: 0d3d10c
         announced: WCAT je odobrio tvoje natjecanje i službeno ga je objavio javnosti.
-        #original_hash: 1c20919
-        link: 'Prati poveznicu kako bi došao/la do objave natjecanja:'
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Dodan/a si kao organizator natjecanja %{competition}'
@@ -1634,8 +1635,10 @@ hr:
       approve: Prihvati
       #original_hash: 85de4b8
       unconfirmed_email: 'E-mail adresa (%{email}) ovog korisničkog računa nije potvrđena.'
-      #original_hash: c03b949
-      confirm_new_email: Mijenjanje e-mail adrese zahtjeva potvrdu nove adrese.
+      #original_hash: 7069007
+      confirm_new_email: >-
+        Mijenjanje e-mail adrese zahtjeva potvrdu nove adrese prije nego bude u
+        efektu.
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Ovaj korisnički račun čeka odobrenje nove e-mail adrese %{email}.'
       #original_hash: 0340b0b
@@ -1718,6 +1721,21 @@ hr:
             koristit će se kako bi prezentirala puni avatar. Umanjena sličica
             mora biti namještena kako bi se prepoznala bez punog uvećavanja i
             mora sadržavati tvoje lice.
+      sensitive:
+        #original_hash: 267ac87
+        info: >-
+          Ovaj dio omogućuje uređivanje osjetljivih podataka, a kako bi se moglo
+          uređivati, potrebna je potvrda identiteta.
+        #original_hash: f19af51
+        success: Uspješno verificiran identitet
+        #original_hash: 52ebf9c
+        failure: Nije moguće verificirati identitet
+        #original_hash: 4324c73
+        confirm_proceed: Potvrdi i nastavi
+        #original_hash: d395f1f
+        identity_error: >-
+          Nije moguće uređivanje podataka. Pokušajte ponovno potvrditi svoj
+          identitet.
     errors:
       #original_hash: 094b763
       not_found: nije pronađeno
@@ -1728,10 +1746,10 @@ hr:
         ne podudara se s našom bazom podataka. Ukoliko si siguran/na da pišete
         točan datum u točnom formatu (YYYY-MM-DD) kontaktiraj WCA Tim za
         rezultate koristeći <a href="%{dob_form_path}">ovaj obrazac</a>
-      #original_hash: c9ae791
+      #original_hash: c3ce070
       unique_html: >-
-        već je iskorišten od "%{used_name}" s %{used_email}. Kako bi WCA ID bio
-        oslobođen, možeš <a href=%{used_edit_path} target='_blank'>urediti
+        već je iskorišten od %{used_name} s %{used_email}. Kako bi WCA ID bio
+        oslobođen, možeš <a href="%{used_edit_path}" target="_blank">urediti
         račun</a> i odspojiti WCA ID:
       #original_hash: 26f70ed
       dob_past: mora biti u prošlosti
@@ -2354,7 +2372,7 @@ hr:
       use_stripe_below_html: >-
         Kotizacija se mora platiti preko servisa Stripe ispod nakon
         registracije.
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: >-
         Ako je tvoja registracija otkazana prije %{limit_date_and_time}, dobit
         ćeš povrat novca %{refund_policy_percent} od kotizacije.
@@ -4290,3 +4308,100 @@ hr:
       confirm_accept: Jeste li sigurni da želite prihvatiti?
       #original_hash: 5301648
       edit: Uredite
+  media_and_instagram:
+    #original_hash: 1e9793e
+    page_title: Medijsko i Instagram prilaganje
+    general_media_submission:
+      #original_hash: 2b4c8c8
+      title: Generalno medijsko prilaganje
+      #original_hash: 670a1a8
+      body_html: >-
+        WCA dijeli članke i fotografije s natjecanja koje su zaprimljene od
+        zajednice na naškoj <a href="/media">medijskoj stranici</a>. Ukoliko
+        želite nešto podijeliti, ispunite našu <a href="/media/new">formu za
+        prilaganje datoteka</a>!
+    instagram_submission:
+      #original_hash: e01c612
+      title: Instagram podnošenje
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        Kao što se već može vidjeti, WCA ima <a
+        href="https://www.instagram.com/thewcaofficial/">aktivan Instagram</a>!
+        Kako bismo najbolje odražavali globalnu zajednicu cubera, objavljujemo
+        sadržaj koji su nam poslali cuberi iz cijelog svijeta.
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        Ako imate kvalitetne fotografije ili video zapise koje želite da
+        objavimo, kliknite donji gumb i ispunite obrazac! Da bismo mogli
+        objaviti vaš sadržaj, morate ga posjedovati i morate WCA-u dati dozvolu
+        za njegovo objavljivanje. Zbog velikog broja zaprimljenih prijava, ne
+        možemo sve objaviti, ali evo nekoliko savjeta za objavu vašeg sadržaja:
+      #original_hash: cf5c955
+      photo_quality: >-
+        Provjerite je li kvaliteta fotografija/videa dobra. Ne mora biti
+        profesionalno snimljeno, ali kvaliteta ne bi trebala krivo prikazivati
+        fotografiju ili videozapis.
+      #original_hash: 0742378
+      photo_interest: >-
+        Pokušajte učiniti svoj sadržaj zanimljivim širokoj publici. Sadržaj koji
+        je interesantan samo za nekoliko ljudi ne pripada ovdje.
+      #original_hash: 497bc27
+      wca_related: >-
+        Objavite fotografije i videozapise koji imaju veze sa WCA, jer o tome i
+        ovisi naš profil! Volimo vidjeti cubere kako se zabavljaju!
+      #original_hash: af882f2
+      submit_instagram_content: Podnesi Instagram sadržaj
+    instagram_hosting:
+      #original_hash: 5156783
+      title: Instagram hosting
+      #original_hash: 541106b
+      paragraph1_html: >-
+        Ponekad ćemo članovima zajednice omogućiti da objavljuju službene WCA
+        Instagram priče s natjecanja na kojem sudjeluju! Ako vas to zanima,
+        kliknite gumb i ispunite donji obrazac. WCA Komunikacijski tim javit će
+        vam se nakon što budu poslane sve informacije i ako budete odobreni za
+        hosting. Ako imate bilo kakvih pitanja, molimo <a
+        href="https://www.worldcubeassociation.org/contact/website">kontaktirajte
+        nas</a>.
+      #original_hash: aca6c32
+      paragraph2: >-
+        Naš je cilj podijeliti osobna iskustva svakog cubera i svakog
+        natjecanja. Ovo ne bi trebao predstavljati veliki teret tijekom vikenda
+        i, naravno, želimo da prvo uživate u natjecanju, a zatim da budete u
+        mogućnosti dijeliti nešto s njega.
+      #original_hash: af023ed
+      paragraph3: 'Uloga domaćina WCA Instagram priča može se sažeti na sljedeći način:'
+      #original_hash: 21efafe
+      short_intro: 'Ukratko se predstavite, razgovarajte o sebi i natjecanju'
+      #original_hash: a053b5a
+      venue_feel: >-
+        Snimite nekoliko isječaka kako biste osjetili mjesto i ljude, ovo bi
+        mogao biti samo snimak iz natjecateljskog područja i područja za
+        slaganje
+      #original_hash: d17fb2f
+      people_solving: >-
+        Snimite kadrove gdje ljudi slažu (preferirani su brzi ljudi u svojim
+        glavnim disciplinama)
+      #original_hash: 76d2358
+      mini_interviews: >-
+        Mogli biste napraviti mini intervjue (organizatora, delegata, itd ...)
+        ispitujući ih općenito o natjecanju
+      #original_hash: 6003b20
+      pictures_too: 'Možete i slati fotografije, ne moraju to biti samo videozapisi'
+      #original_hash: 8813619
+      paragraph4: >-
+        Naša komunikacija tijekom vikenda obično prolazi kroz WhatsApp grupu.
+        Provjerite jeste li upoznati s ovom platformom za razmjenu poruka ili
+        nam javite ako je ne možete koristiti kako bismo mogli organizirati
+        druga rješenja.
+      #original_hash: 38191c1
+      apply_to_host: Prijavi se za hosta
+    other_suggestions:
+      #original_hash: 730873b
+      title: Ostali prijedlozi?
+      #original_hash: aa7ab5c
+      body_html: >-
+        Imate li druge prijedloge za Instagram ili drugi sadržaj na društvenim
+        mrežama? <a
+        href="https://www.worldcubeassociation.org/contact/website">Javite nam
+        se</a>!
