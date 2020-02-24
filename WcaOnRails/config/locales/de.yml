@@ -312,7 +312,7 @@ de:
     #original_hash: 52249b5
     datetime_placeholder: 'JJJJ-MM-TT SS:MM'
     #original_hash: 7136e3b
-    time_format: 12h
+    time_format: 24h
     solve_time:
       #original_hash: 7febce0
       unit_seconds: Sekunden
