@@ -308,6 +308,11 @@ zh-TW:
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
     #original_hash: 7136e3b
     time_format: 24h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: 秒
+      #original_hash: 9d86b0d
+      unit_moves: 步
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1308,6 +1313,8 @@ zh-TW:
       manage_app: 管理您的應用程式
       #original_hash: 0e8b212
       manage_auth_app: 管理被授權的應用程式
+      #original_hash: acac109
+      media_submission: 上傳媒體
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2038,9 +2045,9 @@ zh-TW:
       #original_hash: 1f9c9c4
       highlights: 比賽摘要
       #original_hash: 945f917
-      click_to_display_highlights_html: '按%{link_here} 來顯示這場比賽的比賽摘要。'
+      click_to_display_highlights_html: '按%{link_here}來顯示這場比賽的比賽摘要。'
       #original_hash: dc5c597
-      hide_highlights: 隱藏比賽摘要。
+      hide_highlights: 隱藏比賽摘要
       #original_hash: f691bf2
       result: 成績
       #original_hash: acab754
@@ -2050,7 +2057,7 @@ zh-TW:
       #original_hash: 083c83e
       mean: 三次平均
       #original_hash: 22bee3a
-      result_sentence: '%{a_win_by_word} ：%{result}'
+      result_sentence: '%{a_win_by_word}：%{result}'
       #original_hash: 6c3b236
       winner: '%{winner}在 %{event_name} 項目中以%{result_sentence}贏得第一名。'
       #original_hash: 4daa7df
@@ -3534,3 +3541,63 @@ zh-TW:
       confirm_accept: 您確定要接受此媒體？
       #original_hash: 5301648
       edit: 編輯
+  media_and_instagram:
+    #original_hash: 1e9793e
+    page_title: 上傳媒體和Instagram
+    general_media_submission:
+      #original_hash: 2b4c8c8
+      title: 上傳一般媒體
+      #original_hash: 670a1a8
+      body_html: >-
+        WCA代替社群在<a href="/media">媒體頁面</a>中分享來自比賽的精彩照片及文章。如果您有一些東西想要分享，請使用<a
+        href="/media/new">一般媒體用表單</a>！
+    instagram_submission:
+      #original_hash: e01c612
+      title: 上傳I
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        如您所看到的，WCA有一個<a
+        href="https://www.instagram.com/thewcaofficial/">Instagram帳號</a>！藉由世界各地玩家的上傳給我們的內容，我們會發佈最能呈現全球方塊社群的內容。
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        如果您有高品質的照片或是影片且您希望我們能發佈，請按下面的按鈕並填寫表單。為了能讓WCA發佈這個內容，您必須是這些媒體的版權所有者並且必須要授權給WCA發佈使用。由於上傳的數量很多，我們無法發佈每一個收到的內容，但這裡有些提示能讓您的內容被發佈：
+      #original_hash: cf5c955
+      photo_quality: 確認照片或影片的品質是好的。並不需要是專業攝影，但盡量不要讓照片或影片的品質損失。
+      #original_hash: 0742378
+      photo_interest: 嘗試著讓您的內容能讓廣泛的群眾感到有興趣。只會讓少數人覺得有興趣的內容可能不適合這裡。
+      #original_hash: 497bc27
+      wca_related: 發佈跟WCA有關的照片和影片，就是我們帳號的目的。我們樂於見到玩家們開心。
+      #original_hash: af882f2
+      submit_instagram_content: 上傳Instagram內容
+    instagram_hosting:
+      #original_hash: 5156783
+      title: 主持I
+      #original_hash: 541106b
+      paragraph1_html: >-
+        有時候，我們會讓參加比賽的社群成員主持WCA的官方Instagram限時動態！如果您有興趣，請按下面的按鈕並填入表單。如果在訊息都填入並被准許，WCA傳播組會連絡您。如果您有任何問題，請<a
+        href="https://www.worldcubeassociation.org/contact/website">聯絡我們</a>。
+      #original_hash: aca6c32
+      paragraph2: 我們的目的是分享一些玩家的個人故事和比賽內容。這不應該是週末的沉重負擔，所以我們希望您要先享受比賽再來分享。
+      #original_hash: af023ed
+      paragraph3: 當一位主持的角色總結如下：
+      #original_hash: 21efafe
+      short_intro: 做個簡短介紹，分享您自己以及比賽。
+      #original_hash: a053b5a
+      venue_feel: 拍一些短片讓大家對比賽和玩家有感覺，可以是比賽在區域或是參賽者預備區拍攝的內容
+      #original_hash: d17fb2f
+      people_solving: 試著拍一些正在比賽的玩家（可以的話，拍攝主要項目中的速解較強的玩家）
+      #original_hash: 76d2358
+      mini_interviews: 您可以試著拍些迷你訪問（主辦單位，代表等等），問一些對於比賽的想法
+      #original_hash: 6003b20
+      pictures_too: 您也可以寄送照片，不用一定要影片
+      #original_hash: 8813619
+      paragraph4: 我們在週末的溝通通常都是使用WhatsApp的群組。請確認您熟悉這個軟體平台，或是告訴我們您無法使用這個軟體，我們才好作其他安排。
+      #original_hash: 38191c1
+      apply_to_host: 申請主持
+    other_suggestions:
+      #original_hash: 730873b
+      title: 其他建議？
+      #original_hash: aa7ab5c
+      body_html: >-
+        您有其他對於Instagram或是其他社群媒體上面內容的意見？<a
+        href="https://www.worldcubeassociation.org/contact/website">讓我們知道</a>！
