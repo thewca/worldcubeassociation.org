@@ -3,16 +3,20 @@
 $solves = polishMostSolvesAttempts( "
   SELECT    personId,
             competitionId whereId,
-            count(value1>0 or null)+
-            count(value2>0 or null)+
-            count(value3>0 or null)+
-            count(value4>0 or null)+
-            count(value5>0 or null) solves,
-            count(value1 and value1<>-2 or null)+
-            count(value2 and value2<>-2 or null)+
-            count(value3 and value3<>-2 or null)+
-            count(value4 and value4<>-2 or null)+
-            count(value5 and value5<>-2 or null) attempts
+            sum(
+              IF(value1 > 0, 1, 0) +
+              IF(value2 > 0, 1, 0) +
+              IF(value3 > 0, 1, 0) +
+              IF(value4 > 0, 1, 0) +
+              IF(value5 > 0, 1, 0)
+            ) solves,
+            sum(
+              IF(value1 != -2 and value1 != 0, 1, 0) +
+              IF(value2 != -2 and value2 != 0, 1, 0) +
+              IF(value3 != -2 and value3 != 0, 1, 0) +
+              IF(value4 != -2 and value4 != 0, 1, 0) +
+              IF(value5 != -2 and value5 != 0, 1, 0)
+            ) attempts
   FROM      Results
   GROUP BY  personId, competitionId
   ORDER BY  solves DESC, attempts
@@ -22,16 +26,20 @@ $solves = polishMostSolvesAttempts( "
 $attempts = polishMostSolvesAttempts( "
   SELECT    personId,
             year whereId,
-            count(value1>0 or null)+
-            count(value2>0 or null)+
-            count(value3>0 or null)+
-            count(value4>0 or null)+
-            count(value5>0 or null) solves,
-            count(value1 and value1<>-2 or null)+
-            count(value2 and value2<>-2 or null)+
-            count(value3 and value3<>-2 or null)+
-            count(value4 and value4<>-2 or null)+
-            count(value5 and value5<>-2 or null) attempts
+            sum(
+              IF(value1 > 0, 1, 0) +
+              IF(value2 > 0, 1, 0) +
+              IF(value3 > 0, 1, 0) +
+              IF(value4 > 0, 1, 0) +
+              IF(value5 > 0, 1, 0)
+            ) solves,
+            sum(
+              IF(value1 != -2 and value1 != 0, 1, 0) +
+              IF(value2 != -2 and value2 != 0, 1, 0) +
+              IF(value3 != -2 and value3 != 0, 1, 0) +
+              IF(value4 != -2 and value4 != 0, 1, 0) +
+              IF(value5 != -2 and value5 != 0, 1, 0)
+            ) attempts
   FROM      Results, Competitions competition
   WHERE     competition.id = competitionId
   GROUP BY  personId, year
@@ -42,16 +50,20 @@ $attempts = polishMostSolvesAttempts( "
 $allTime = polishMostSolvesAttempts( "
   SELECT    personId,
             '' whereId,
-            count(value1>0 or null)+
-            count(value2>0 or null)+
-            count(value3>0 or null)+
-            count(value4>0 or null)+
-            count(value5>0 or null) solves,
-            count(value1 and value1<>-2 or null)+
-            count(value2 and value2<>-2 or null)+
-            count(value3 and value3<>-2 or null)+
-            count(value4 and value4<>-2 or null)+
-            count(value5 and value5<>-2 or null) attempts
+            sum(
+              IF(value1 > 0, 1, 0) +
+              IF(value2 > 0, 1, 0) +
+              IF(value3 > 0, 1, 0) +
+              IF(value4 > 0, 1, 0) +
+              IF(value5 > 0, 1, 0)
+            ) solves,
+            sum(
+              IF(value1 != -2 and value1 != 0, 1, 0) +
+              IF(value2 != -2 and value2 != 0, 1, 0) +
+              IF(value3 != -2 and value3 != 0, 1, 0) +
+              IF(value4 != -2 and value4 != 0, 1, 0) +
+              IF(value5 != -2 and value5 != 0, 1, 0)
+            ) attempts
   FROM      Results
   GROUP BY  personId
   ORDER BY  solves DESC, attempts
