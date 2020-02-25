@@ -313,6 +313,11 @@ fi:
     datetime_placeholder: 'VVVV-KK-PP TT:MM'
     #original_hash: 7136e3b
     time_format: 24h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: sekuntia
+      #original_hash: 9d86b0d
+      unit_moves: siirtoa
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1456,6 +1461,8 @@ fi:
       manage_app: Hallitse sovelluksiasi
       #original_hash: 0e8b212
       manage_auth_app: Hallitse valtuutettuja sovelluksia
+      #original_hash: acac109
+      media_submission: Median lähetys
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -4272,3 +4279,97 @@ fi:
       confirm_accept: 'Oletko varma, että haluat hyväksyä tämän median?'
       #original_hash: 5301648
       edit: Muokkaa
+  media_and_instagram:
+    #original_hash: 1e9793e
+    page_title: Media- ja Instagram-sisällön lähetys
+    general_media_submission:
+      #original_hash: 2b4c8c8
+      title: Median lähetys
+      #original_hash: 670a1a8
+      body_html: >-
+        WCA jakaa yhteisön lähettämiä artikkeleita ja kuvia kilpailuista <a
+        href="/media">mediasivulla</a>. Jos sinulla on jaettavaa mediasisältöä,
+        täytäthän <a href="/media/new">tämän lomakkeen</a>!
+    instagram_submission:
+      #original_hash: e01c612
+      title: Instagram-julkaisut
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        Olet saattanut huomata, että WCA:lla on <a
+        href="https://www.instagram.com/thewcaofficial/">aktiivinen
+        Instagram</a>! Paras tapa edustaa maailmanlaajuista yhteisöämme on
+        tietysti julkaista WCA-jäsenten ympäri maailmaa lähettämää sisältöä.
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        Jos sinulla on korkealaatuisia kuvia tai videoita, joita haluaisit
+        meidän julkaisevan, klikkaa alla olevaa linkkiä ja täytä aukeava lomake.
+        Vaatimuksena on, että omistat lähettämäsi sisällön ja annat WCA:lle
+        luvan sen julkaisuun. Meille lähetetään niin paljon sisältöä, että emme
+        voi julkaista aivan kaikkea, mutta alla on vinkkejä, joilla parannat
+        mahdollisuuksiasi lähettämäsi sisällön julkaisuun:
+      #original_hash: cf5c955
+      photo_quality: >-
+        Varmista, että kuvan/videon laatu on korkea. Sen ei tarvitse olla
+        ammattimaisesti kuvattu, mutta laatu ei saa olla selkeästi havaittavan
+        heikko.
+      #original_hash: 0742378
+      photo_interest: >-
+        Yritä luoda sisältöä, joka kiinnostaa laajaa katselijakuntaa. Vain
+        pienelle ryhmälle tarkoitettu sisältö ei kuulu tänne.
+      #original_hash: 497bc27
+      wca_related: >-
+        Lähetä kuvia ja videoita, jotka liittyvät WCA:han, sillä sitä varten
+        tilimme on olemassa. On mahtavaa nähdä, kun harrastajilla on hauskaa!
+      #original_hash: af882f2
+      submit_instagram_content: Lähetä Instagram-sisältöä
+    instagram_hosting:
+      #original_hash: 5156783
+      title: Instagram-hostaaminen
+      #original_hash: 541106b
+      paragraph1_html: >-
+        Silloin tällöin annamme yhteisön jäsenten hostata WCA:n virallista
+        Instagram-tarinaa sisällöllä kilpailusta, jossa he ovat mukana! Jos olet
+        kiinnostunut, klikkaa alla olevaa linkkiä ja täytä aukeava lomake. WCA
+        Communication Team ottaa sinuun yhteyttä, jos sinut hyväksytään
+        hostaamaan. Jos sinulla on kysyttävää, <a
+        href="https://www.worldcubeassociation.org/contact/website">otathan
+        yhteyttä</a>.
+      #original_hash: aca6c32
+      paragraph2: >-
+        Tavoitteenamme on jakaa jokaisesta kilpailusta ja osallistujasta ripaus
+        yksilöllistä puolta. Tarinan päivittämisen ei tulisi olla erityisen
+        suuri työtaakka, toki olet ensisijaisesti nauttimassa itse kilpailusta.
+      #original_hash: af023ed
+      paragraph3: 'Hostaajan rooli on suurinpiirtein seuraavanlainen:'
+      #original_hash: 21efafe
+      short_intro: Esittäydy ja puhu hieman itsestäsi ja kilpailusta
+      #original_hash: a053b5a
+      venue_feel: >-
+        Kuvaa kilpailupaikan tunnelmaa ja kilpailijoita (voi olla esimerkiksi
+        video kilpailijoiden alueesta ja ratkaisupaikoista)
+      #original_hash: d17fb2f
+      people_solving: >-
+        Yritä saada videoita kilpailijoista kilpailemassa (mieluiten nopeita
+        ratkaisijoita päälajeissaan)
+      #original_hash: 76d2358
+      mini_interviews: >-
+        Voit haastatella ihmisiä (esimerkiksi järjestäjiä tai delegaatteja)
+        heidän tunnelmistaan kilpailua koskien
+      #original_hash: 6003b20
+      pictures_too: 'Kaiken ei tarvitse olla videota: voit jakaa myös kuvia'
+      #original_hash: 8813619
+      paragraph4: >-
+        Yhteydenpito viikonlopun aikana tapahtuu tyypillisesti
+        WhatsApp-ryhmässä. Varmistathan siis, että osaat käyttää WhatsAppia tai
+        kerrot, jos tämä ei ole mahdollista (tällöin voidaan tehdä muu
+        suunnitelma).
+      #original_hash: 38191c1
+      apply_to_host: Hae mukaan
+    other_suggestions:
+      #original_hash: 730873b
+      title: Muita ehdotuksia?
+      #original_hash: aa7ab5c
+      body_html: >-
+        Onko sinulla muita ehdotuksia koskien WCA:n sosiaalisen median sisältöä?
+        <a href="https://www.worldcubeassociation.org/contact/website">Otathan
+        yhteyttä</a>!
