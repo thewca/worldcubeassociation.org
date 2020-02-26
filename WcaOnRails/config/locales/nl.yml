@@ -313,6 +313,11 @@ nl:
     datetime_placeholder: 'JJJJ-MM-DD UU:MM'
     #original_hash: 7136e3b
     time_format: 24h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: seconden
+      #original_hash: 9d86b0d
+      unit_moves: draaien
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -928,7 +933,7 @@ nl:
         #original_hash: c6d8a97
         document: >-
           Om je identiteit en je correcte geboortedatum aan te tonen, kun je een
-          foto  opsturen van een legitimatiebewijs (identiteitskaart, rijbewijs,
+          foto opsturen van een legitimatiebewijs (identiteitskaart, rijbewijs,
           studentenkaart, paspoort, geboortecertificaat) met je naam en
           geboortedatum zichtbaar en begrijpbaar voor iemand die Engels spreekt
           (of je neemt contact op met je lokale WCA-delegate als je niet zo'n
@@ -1468,6 +1473,8 @@ nl:
       manage_app: Beheren applicaties
       #original_hash: 0e8b212
       manage_auth_app: Beheren geautoriseerde applicaties
+      #original_hash: acac109
+      media_submission: Media Insturen
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2284,7 +2291,7 @@ nl:
       disclaimer: >-
         Hier zijn alleen wedstrijden zichtbaar die de aanmeldingen via de
         WCA-website verwerken. Als je wedstrijd hier niet bij staat, kijk dan op
-        de website van de website of er een aanmeldingenlijst is.
+        de website van de wedstrijd of er een aanmeldingenlijst is.
       #original_hash: 94a2fc8
       past_competitions: Wedstrijden uit het verleden
       #original_hash: ec7e697
@@ -2580,8 +2587,8 @@ nl:
       events: Wedstrijdonderdelen
       #original_hash: cafc153
       public_and_locked_html: >-
-        De competition is publiek zichtbaar en kan niet worden bewerkt. Als je
-        een wijziging nodig hebt, antwoord dan in de oorspronkelijke maildraad
+        De wedstrijd is publiek zichtbaar en kan niet worden bewerkt. Als je een
+        wijziging nodig hebt, antwoord dan in de oorspronkelijke maildraad
         waarin de wedstrijd is bevestigd.
       #original_hash: e00a339
       confirmed_but_not_visible_html: >-
@@ -4374,3 +4381,103 @@ nl:
       confirm_accept: Weet je zeker dat je deze Media wilt accepteren?
       #original_hash: 5301648
       edit: Bewerken
+  media_and_instagram:
+    #original_hash: 1e9793e
+    page_title: Media en Instagram insturen
+    general_media_submission:
+      #original_hash: 2b4c8c8
+      title: Algemene media insturen
+      #original_hash: 670a1a8
+      body_html: >-
+        De WCA deelt artikelen en afbeeldingen van wedstrijden die door de
+        community worden aangeboden op onze <a href="/media">mediapagina</a>.
+        Als u iets hebt wat u wilt delen, vul dan ons <a
+        href="/media/new">algemene formulier voor het indienen van media</a> in!
+    instagram_submission:
+      #original_hash: e01c612
+      title: Instagram insturen
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        Zoals je misschien hebt gezien, heeft de WCA een <a
+        href="https://www.instagram.com/thewcaofficial/">actieve Instagram</a>!
+        Om de wereldwijde kubusgemeenschap het best weer te geven, plaatsen we
+        inhoud die door kubussers van over de hele wereld aan ons is ingestuurd.
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        Als je foto's of video's van hoge kwaliteit heeft die je door ons wilt
+        laten plaatsen, klik dan op onderstaande knop en vul het formulier in!
+        Om je inhoud te kunnen plaatsen, moet je eigenaar zijn en de WCA
+        toestemming geven om deze te plaatsen. Vanwege het grote aantal
+        inzendingen dat we ontvangen, kunnen we niet alles posten, maar hier
+        zijn enkele tips om uw inhoud te plaatsen:
+      #original_hash: cf5c955
+      photo_quality: >-
+        Zorg ervoor dat de foto- / videokwaliteit goed is. Het hoeft niet
+        professioneel te zijn opgenomen, maar de kwaliteit mag geen afbreuk doen
+        aan de foto of video.
+      #original_hash: 0742378
+      photo_interest: >-
+        Probeer de inhoud interessant te maken voor een breed publiek. Inhoud
+        die alleen voor een paar mensen interessant is, hoort hier niet thuis.
+      #original_hash: 497bc27
+      wca_related: >-
+        Plaats foto's en video's die te maken hebben met de WCA, want daar
+        draait het allemaal om in onze account! We zien graag kubussers plezier
+        hebben!
+      #original_hash: af882f2
+      submit_instagram_content: Instagram content insturen
+    instagram_hosting:
+      #original_hash: 5156783
+      title: Instagram hosting
+      #original_hash: 541106b
+      paragraph1_html: >-
+        Soms laten we communityleden het officiële WCA Instagram-verhaal hosten
+        met een wedstrijd waaraan ze deelnemen! Als je interesse hebt, klik dan
+        op de knop en vul het onderstaande formulier in. Het
+        WCA-communicatieteam neemt contact met je op nadat alle informatie is
+        verzonden als je bent goedgekeurd voor hosting. Als je vragen hebt, neem
+        dan <a
+        href="https://www.worldcubeassociation.org/contact/website">contact met
+        ons op</a>.
+      #original_hash: aca6c32
+      paragraph2: >-
+        Ons doel is om een enigszins persoonlijke kant te delen van elke
+        kubussers en van elke wedstrijd. Dit wordt niet verondersteld een enorme
+        last te zijn tijdens het weekend en we willen natuurlijk dat je eerst
+        van de wedstrijd geniet en deze vervolgens kunt delen.
+      #original_hash: af023ed
+      paragraph3: 'De rol van een host van als volgt worden samengevat:'
+      #original_hash: 21efafe
+      short_intro: 'Maak een korte introductie, vertel over jezelf en de wedstrijd'
+      #original_hash: a053b5a
+      venue_feel: >-
+        Maak enkele clips om een idee te krijgen van de locatie en de mensen,
+        dit kan slechts een shot zijn van de wedstrijdruimte en de
+        wedstrijdtafels
+      #original_hash: d17fb2f
+      people_solving: >-
+        Probeer een aantal shots te maken van mensen die oplossen (bij voorkeur
+        snelle mensen bij hun belangrijkste evenementen)
+      #original_hash: 76d2358
+      mini_interviews: >-
+        Je zou kunnen proberen mini-interviews te krijgen met mensen
+        (organisatoren, afgevaardigden, enz ...) die zeggen wat ze vinden van de
+        wedstrijd
+      #original_hash: 6003b20
+      pictures_too: 'Je kunt ook foto''s insturen, het hoeven niet alleen video''s te zijn'
+      #original_hash: 8813619
+      paragraph4: >-
+        Onze communicatie gedurende het weekend verloopt meestal via een
+        WhatsApp-groep. Zorg ervoor dat je bekend bent met dit berichtenplatform
+        of laat het ons weten als je het niet kunt gebruiken, zodat we andere
+        plannen kunnen regelen.
+      #original_hash: 38191c1
+      apply_to_host: Aanmelden als host
+    other_suggestions:
+      #original_hash: 730873b
+      title: Andere suggesties?
+      #original_hash: aa7ab5c
+      body_html: >-
+        Heb je andere suggesties voor Instagram of andere sociale media-inhoud?
+        <a href="https://www.worldcubeassociation.org/contact/website">Laat het
+        ons weten</a>!
