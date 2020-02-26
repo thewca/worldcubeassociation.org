@@ -356,7 +356,7 @@ pl:
     attributes:
       user:
         #original_hash: eeb6920
-        name: Pełne imię
+        name: Pełne imię i nazwisko
         #original_hash: 603a218
         wca_id: WCA ID
         #original_hash: cb77bea
@@ -524,7 +524,7 @@ pl:
         #original_hash: bae7d5b
         status: Status
         #original_hash: 709a232
-        name: Imię
+        name: Imię i nazwisko
         #original_hash: a6b9d69
         birthday: Data urodzenia
         #original_hash: c5497bc
@@ -573,7 +573,7 @@ pl:
         #original_hash: 8a754c6
         gender: Płeć
         #original_hash: 709a232
-        name: Imię
+        name: Imię i nazwisko
         #original_hash: c6bc0f4
         incorrect_wca_id_claim_count: Liczba nieudanych prób podpięcia WCA ID
       poll:
@@ -627,7 +627,7 @@ pl:
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Imię zgłaszającego
+        submitterName: Imię i nazwisko zgłaszającego
         #original_hash: 78cdfee
         submitterEmail: Email zgłaszającego
         #original_hash: 0d31f23
@@ -746,7 +746,7 @@ pl:
         dob: Wprowadź swoją datę urodzenia w formacie RRRR-MM-DD
         #original_hash: d0bb74a
         name: >-
-          Wprowadź swoje pełne imię poprawnie, na przykład <strong>Jan
+          Wprowadź swoje pełne imię i nazwisko poprawnie, na przykład <strong>Jan
           Kowalski</strong>. Nie zdrobniale jak <strong>j kowalski</strong>.
         #original_hash: da39a3e
         email: ''
@@ -962,7 +962,7 @@ pl:
           Aby potwierdzić swoją tożsamość i poprawną datę urodzenia, musisz
           załączyć zdjęcie jakiegokolwiek legalnego dokumentu (dowodu
           osobistego, prawa jazdy, legitymacji studenckiej lub szkolnej,
-          paszportu, aktu urodzenia, ...), na którym zarówno twoje imię jak i
+          paszportu, aktu urodzenia, ...), na którym zarówno twoje imię, nazwisko jak i
           data urodzenia są widoczne i zrozumiałe dla osoby posługującej się
           językiem angielskim (lub skontaktuj się z lokalnym Delegatem WCA,
           jeżeli nie posiadasz takiego dokumentu).
@@ -1170,7 +1170,7 @@ pl:
         #original_hash: 1917f4f
         competition_id: Zawody
         #original_hash: 709a232
-        name: Imię
+        name: Imię i nazwisko
         #original_hash: 3fa6f5f
         your_email: Twój adres email
       website_contact:
@@ -1368,7 +1368,7 @@ pl:
       scopes:
         #original_hash: 1920e95
         public: >-
-          Mieć dostęp do twoich publicznych danych (imię, WCA ID, płeć,
+          Mieć dostęp do twoich publicznych danych (imię i nazwisko, WCA ID, płeć,
           obywatelstwo i zdjęcie profilowe)
         #original_hash: d4003be
         dob: Mieć dostęp do twojej daty urodzin
@@ -1760,7 +1760,7 @@ pl:
         Nie można zmienić kraju na taki, który dana osoba wcześniej
         reprezentowała.
       #original_hash: b589014
-      must_have_a_change: 'Imię lub kraj musi zostać zmienione, aby zaktualizować daną osobę.'
+      must_have_a_change: 'Imię i nazwisko lub kraj musi zostać zmienione, aby zaktualizować daną osobę.'
       #original_hash: 012f032
       must_be_senior: musi być Starszym Delegatem
       #original_hash: 2e582eb
@@ -2156,7 +2156,7 @@ pl:
         #original_hash: 184150d
         card_information: Dane karty
         #original_hash: bc8091a
-        cardholder_name: Imię właściciela karty
+        cardholder_name: Imię i nazwisko właściciela karty
       alerts:
         #original_hash: a34940e
         not_a_number: Prosimy o wprowadzenie poprawnej kwoty.
@@ -2174,7 +2174,7 @@ pl:
           Nie możemy odnaleść zamiaru płatności, w celu potwierdzenia go. Proces
           płatności został przerwany i twoja karta nie została obciążona.
         #original_hash: 63e0ec1
-        cardholder_name: Proszę sprawdzić imię właściciela karty.
+        cardholder_name: Proszę sprawdzić imię i nazwisko właściciela karty.
     #original_hash: 8607a87
     payment_button_text: Zapłać swoje wpisowe za pomocą karty
     #original_hash: 4cf01a2
@@ -2832,7 +2832,7 @@ pl:
       #original_hash: ec7b598
       round: Runda
       #original_hash: 709a232
-      name: Imię
+      name: Imię i nazwisko
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -2935,7 +2935,7 @@ pl:
         mixed_history: Historia mieszana
     table_elements:
       #original_hash: 709a232
-      name: Imię
+      name: Imię i nazwisko
       #original_hash: 5faa59d
       result: Wynik
       #original_hash: e0f64f7
@@ -2969,7 +2969,7 @@ pl:
       #original_hash: 5934b4c
       name_or_wca_id: Części imienia lub WCA ID
       #original_hash: 709a232
-      name: Imię
+      name: Imię i nazwisko
       #original_hash: d523ebb
       country: Państwo
       #original_hash: 02ae2bd
@@ -3072,7 +3072,7 @@ pl:
       important_message_html: >-
         <span class="text-danger">WAŻNE</span>: Załącz zdjęcie jakiegokolwiek
         <u>legalnego dokumentu</u>  (dowodu osobistego, prawa jazdy,
-        paszportu...) na którym widać twoje imię oraz datę urodzenia.
+        paszportu...) na którym widać twoje imię i nazwisko oraz datę urodzenia.
       #original_hash: 19c17ec
       submit: Poproś o zmianę
     messages:
@@ -3587,7 +3587,7 @@ pl:
     acknowledges: 'WCA uznaje następujących Delegatów WCA:'
     table:
       #original_hash: 709a232
-      name: Imię
+      name: Imię i nazwisko
       #original_hash: c3f104d
       role: Rola
       #original_hash: 0f21717
