@@ -646,7 +646,7 @@ zh-TW:
         o: 其他
       delegate_status:
         #original_hash: 28ec02d
-        candidate_delegate: 代表候選人
+        candidate_delegate: 初級代表
         #original_hash: 12ab214
         delegate: 代表
         #original_hash: d463c23
@@ -748,7 +748,7 @@ zh-TW:
         #original_hash: da39a3e
         notes: ''
         #original_hash: 8c266ea
-        receive_delegate_reports: 如果您是代表候選人、高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
+        receive_delegate_reports: 如果您是初級代表、高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
         #original_hash: 0627e5c
         otp_attempt: 請開啟您的行動裝置上的應用程式來取得一次性的密碼，或是輸入您其中一個備用碼。
       competition:
@@ -3016,9 +3016,9 @@ zh-TW:
         name: 觀察名單中的WCA代表
       #original_hash: 3d5b64b
       delegates_html: >-
-        <p><strong>WCA代表</strong>是WCA動議中定義的角色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的任務、精神和規則。WCA將代表區別成<strong>WCA高級代表</strong>、<strong>WCA代表</strong>和<strong>WCA代表候選人</strong>%{see_link}。</p>
+        <p><strong>WCA代表</strong>是WCA動議中定義的角色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的任務、精神和規則。WCA將代表區別成<strong>WCA高級代表</strong>、<strong>WCA代表</strong>和<strong>WCA初級代表</strong>%{see_link}。</p>
         <p>跟WCA代表職責不同的是，WCA高級代表需額外負責管理該地區的代表以及當有社群成員聯絡時處理該地區社群的事務。</p>
-        <p>新上任的代表會先列為WCA代表候選人，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為WCA代表。</p>
+        <p>新上任的代表會先列為WCA初級代表，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為WCA代表。</p>
       #original_hash: 27d18ac
       see_link_html: '（參見%{link}）'
       #original_hash: 5b01fcc
@@ -3553,11 +3553,11 @@ zh-TW:
         href="/media/new">一般媒體用表單</a>！
     instagram_submission:
       #original_hash: e01c612
-      title: 上傳I
+      title: 上傳Instagram
       #original_hash: 1acd0d2
       paragraph1_html: >-
-        如您所看到的，WCA有一個<a
-        href="https://www.instagram.com/thewcaofficial/">Instagram帳號</a>！藉由世界各地玩家的上傳給我們的內容，我們會發佈最能呈現全球方塊社群的內容。
+        如您所見，WCA有一個<a
+        href="https://www.instagram.com/thewcaofficial/">Instagram帳號</a>！藉由世界各地玩家上傳給我們的媒體，我們會發佈最能呈現全球方塊社群的內容。
       #original_hash: 9b6abcd
       paragraph2: >-
         如果您有高品質的照片或是影片且您希望我們能發佈，請按下面的按鈕並填寫表單。為了能讓WCA發佈這個內容，您必須是這些媒體的版權所有者並且必須要授權給WCA發佈使用。由於上傳的數量很多，我們無法發佈每一個收到的內容，但這裡有些提示能讓您的內容被發佈：
@@ -3571,10 +3571,10 @@ zh-TW:
       submit_instagram_content: 上傳Instagram內容
     instagram_hosting:
       #original_hash: 5156783
-      title: 主持I
+      title: 主持Instagram
       #original_hash: 541106b
       paragraph1_html: >-
-        有時候，我們會讓參加比賽的社群成員主持WCA的官方Instagram限時動態！如果您有興趣，請按下面的按鈕並填入表單。如果在訊息都填入並被准許，WCA傳播組會連絡您。如果您有任何問題，請<a
+        有時候，我們會讓參加比賽的社群成員主持WCA的官方Instagram限時動態！如果您有興趣，請按下面的按鈕並填入表單。如果在訊息都填入後並且被核准，WCA傳播組會連絡您。如果您有任何問題，請<a
         href="https://www.worldcubeassociation.org/contact/website">聯絡我們</a>。
       #original_hash: aca6c32
       paragraph2: 我們的目的是分享一些玩家的個人故事和比賽內容。這不應該是週末的沉重負擔，所以我們希望您要先享受比賽再來分享。
@@ -3583,7 +3583,7 @@ zh-TW:
       #original_hash: 21efafe
       short_intro: 做個簡短介紹，分享您自己以及比賽。
       #original_hash: a053b5a
-      venue_feel: 拍一些短片讓大家對比賽和玩家有感覺，可以是比賽在區域或是參賽者預備區拍攝的內容
+      venue_feel: 拍一些短片讓大家對比賽和玩家有感覺，可以是在比賽區域或是參賽者預備區拍攝的內容
       #original_hash: d17fb2f
       people_solving: 試著拍一些正在比賽的玩家（可以的話，拍攝主要項目中的速解較強的玩家）
       #original_hash: 76d2358
