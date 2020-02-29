@@ -892,7 +892,7 @@ class User < ApplicationRecord
   def maybe_assign_wca_id_by_results(competition, notify = true)
     if !wca_id && !unconfirmed_wca_id
       matches = []
-      unless country.nil?
+      unless country.nil? || dob.nil?
         matches = competition.competitors.where(name: name, year: dob.year, month: dob.month, day: dob.day, gender: gender, countryId: country.id).to_a
       end
       if matches.size == 1 && matches.first.user.nil?
