@@ -29,7 +29,7 @@ RSpec.describe DelegateStatusChangeMailer, type: :mailer do
       expect(mail.body.encoded).to match(edit_user_url(user))
     end
 
-    it "promoting a candidate delegate to a delegate" do
+    it "promoting a Junior delegate to a delegate" do
       delegate.update!(delegate_status: "delegate")
       mail = DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(delegate, senior_delegate1)
 
@@ -38,7 +38,7 @@ RSpec.describe DelegateStatusChangeMailer, type: :mailer do
       expect(mail.body.encoded).to match(edit_user_url(delegate))
     end
 
-    it "demoting a candidate delegate to a registered speedcuber" do
+    it "demoting a Junior delegate to a registered speedcuber" do
       delegate.update!(delegate_status: nil, senior_delegate: nil)
       mail = DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(delegate, senior_delegate1)
 

@@ -316,7 +316,7 @@ RSpec.describe Api::V0::ApiController do
       end
     end
 
-    context 'signed in as candidate delegate' do
+    context 'signed in as Junior delegate' do
       before :each do
         api_sign_in_as(FactoryBot.create(:candidate_delegate))
       end
