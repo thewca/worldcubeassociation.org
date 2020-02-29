@@ -473,6 +473,7 @@ class RegistrationsController < ApplicationController
           currency: registration.outstanding_entry_fees.currency.iso_code,
           confirmation_method: "manual",
           confirm: true,
+          receipt_email: user.email,
           description: "Registration payment for #{competition.name} by #{registration.user.name}",
           metadata: registration_metadata,
         }

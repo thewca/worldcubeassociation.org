@@ -525,6 +525,7 @@ RSpec.describe "registrations" do
           expect(registration.paid_entry_fees).to eq competition.base_entry_fee
           charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
           expect(charge.amount).to eq competition.base_entry_fee.cents
+          expect(charge.receipt_email).to eq user.email
           expect(charge.metadata.wca_id).to eq user.wca_id
           expect(charge.metadata.email).to eq user.email
           expect(charge.metadata.competition).to eq competition.name
