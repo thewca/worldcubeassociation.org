@@ -319,6 +319,11 @@ es:
     datetime_placeholder: 'AAAA-MM-DD HH:MM'
     #original_hash: 7136e3b
     time_format: 12h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: segundos
+      #original_hash: 9d86b0d
+      unit_moves: movimientos
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -667,8 +672,8 @@ es:
         #original_hash: 6e6a6f2
         o: Otro
       delegate_status:
-        #original_hash: 28ec02d
-        candidate_delegate: Candidato a Delegado
+        #original_hash: 9b97968
+        candidate_delegate: Delegado Junior
         #original_hash: 12ab214
         delegate: Delegado
         #original_hash: d463c23
@@ -776,10 +781,10 @@ es:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
-        #original_hash: 8c266ea
+        #original_hash: d5ccc15
         receive_delegate_reports: >-
-          Si eres un Candidato a Delegado, Delegado Senior, Delegado, o Miembro
-          del WRC o del WQAC, recibes los Informes de Delegados por defecto. El
+          Si eres un Delegado Junior, Delegado Senior, Delegado, o Miembro del
+          WRC o del WQAC, recibes los Informes de Delegados por defecto. El
           cambio puede tardar hasta una hora en estar operativo.
         #original_hash: 0627e5c
         otp_attempt: >-
@@ -1491,7 +1496,8 @@ es:
       manage_app: Controlar tus aplicaciones
       #original_hash: 0e8b212
       manage_auth_app: Controlar aplicaciones autorizadas
-      media_submission: "Enviar material audiovisual"
+      #original_hash: acac109
+      media_submission: Enviar material audiovisual
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2412,7 +2418,7 @@ es:
         Los espectadores pueden asistir pagando una entrada de
         %{guests_base_fee}.
       #original_hash: b6c863e
-      guests_free: Los espectadores pueden asistir de forma gratuita
+      guests_free: Los espectadores pueden asistir de forma gratuita.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         La competición ha finalizado, haz click %{link_here} para mostrar los
@@ -2451,7 +2457,7 @@ es:
       #original_hash: 22bee3a
       result_sentence: 'con %{a_win_by_word} de %{result}'
       #original_hash: 6c3b236
-      winner: '%{winner} ganó %{result_sentence} en la categoría de %{event_name}'
+      winner: '%{winner} ganó %{result_sentence} en la categoría de %{event_name}.'
       #original_hash: 4daa7df
       first_runner_up: '%{first_runner_up} acabó segundo (%{first_runner_up_result})'
       #original_hash: d96b040
@@ -3634,20 +3640,15 @@ es:
       probation:
         #original_hash: 1dd6e3b
         name: Delegados en período de prueba
-      #original_hash: 3d5b64b
+      #original_hash: 7e849d2
       delegates_html: >-
-        Los <strong>Delegados de la WCA</strong> son miembros de la WCA que se
-        responsabilizan de asegurar que todas las competiciones de la WCA se
+        <p>Los <strong>Delegados de la WCA</strong> son miembros de la WCA que
+        se responsabilizan de asegurar que todas las competiciones de la WCA se
         llevan a término de acuerdo a los objetivos, el reglamento y el espíritu
         de la WCA. La WCA diferencia entre <strong>Delegados Senior</strong>,
-        <strong>Delegados</strong> y <strong>Candidatos
-        Delegados</strong>%{see_link}. Además de las responsabilidades de
-        Delegado, un Delegado Senior es responsable de controlar y coordinar los
-        Delegados de su área. Cualquier miembro de la comunidad puede ponerse en
-        contacto con ellos por cuestiones relacionadas con su región. Los
-        Delegados recién incorporados ostenta el título de Candidatos Delegados
-        hasta que muestran ser capaces de administrar las competiciones
-        satisfactoriamente y adquieren el título de Delegados de la WCA.
+        <strong>Delegados Regionales</strong>, <strong>Delegados</strong>,
+        <strong>Delegados Junior</strong> y 
+         <strong>Delegados en prácticas</strong>%{see_link}.</p> <p>Además de las responsabilidades de Delegado, un Delegado Senior o un Delegado regional es responsable de controlar y coordinar los Delegados de su área. Cualquier miembro de la comunidad puede ponerse en contacto con ellos por cuestiones relacionadas con su región. Los Delegados recién incorporados ostenta el título de Delegados Junior hasta que muestran ser capaces de administrar las competiciones satisfactoriamente y adquieren el título de Delegados de la WCA.</p> <p>Los Delegados en prácticas están siendo entrenados para ser Delegados y solo pueden revisar competiciones en las que un Delegado WCA está presente.</p>
       #original_hash: 27d18ac
       see_link_html: '(ver %{link})'
       #original_hash: 5b01fcc
@@ -4430,3 +4431,103 @@ es:
       confirm_accept: ¿Seguro que quiere aceptar estas fotos o videos?
       #original_hash: 5301648
       edit: Editar
+  media_and_instagram:
+    #original_hash: 1e9793e
+    page_title: Entrega de multimedia e Instagram
+    general_media_submission:
+      #original_hash: 2b4c8c8
+      title: Entrega general de multimedia
+      #original_hash: 670a1a8
+      body_html: >-
+        La WCA comparte artículos e imágenes de competiciones aportadas por la
+        comunidad en nuestra <a href="/media">página de multimedia</a>. Si
+        tienes algo que te gustaría compartir, por favor rellena nuestra <a
+        href="/media/new">Entrega general de multimedia</a>.
+    instagram_submission:
+      #original_hash: e01c612
+      title: Entrega de Instagram
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        Como puedes haber visto, la WCA tiene un <a
+        href="https://www.instagram.com/thewcaofficial/">Instagram activo</a>.
+        Para reflejar de la mejor manera posible la comunidad cubera, publicamos
+        contenido que nos proponen cuberos de alrededor de todo el mundo.
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        Si tienes fotos o videos de alta calidad que te gustaría publicar, por
+        favor haz click en el botón inferior y rellena el formulario. Para que
+        podamos publicar tu contenido, tiene que ser de tu propiedad y debes dar
+        permiso a la WCA para que lo publique. Debido al gran número de
+        peticiónes que recibimos, no podemos publicar todo, pero aquí tienes
+        algunos consejos para que tu contenido se publique.
+      #original_hash: cf5c955
+      photo_quality: >-
+        Asegúrate de que la calidad de la foto o video sea buena. No tiene que
+        ser profesional pero la calidad no debía desmerecer la foto o el vídeo.
+      #original_hash: 0742378
+      photo_interest: >-
+        Intenta hacer que tu contenido sea interesante para una amplia
+        audiencia. Contenido que sólo interesa a unos pocos no pertenece a esta
+        sección.
+      #original_hash: 497bc27
+      wca_related: >-
+        Publica fotos o vídeos relacionados con la WCA, ya que es de lo que va
+        nuestra cuenta. ¡Nos encanta ver cuberos pasándoselo bien!
+      #original_hash: af882f2
+      submit_instagram_content: Entregar contenido de Instagram
+    instagram_hosting:
+      #original_hash: 5156783
+      title: Alojamiento de Instagram
+      #original_hash: 541106b
+      paragraph1_html: >-
+        A veces, permitimosa miembros de la comunidad a ser anfitriones de las
+        historias de la cuenta oficial de Instagram de la WCA en una 
+        competición en la que estén participando. Si estás interesado, por favor
+        haz click en el botón inferior y rellena el formulario. El Equipo de
+        comunicación de la WCA (WCT) se pondrá en contacto contigo después de
+        que entregues la información si se te aprueba para hacer de anfitrión.
+        Si tienes alguna pregunta, por favor, <a
+        href="https://www.worldcubeassociation.org/contact/website">contacta con
+        nosotros</a>.
+      #original_hash: aca6c32
+      paragraph2: >-
+        Nuestro objetivo es compartir un pequeño lado personal de cada cubero y
+        de cada competición. Esto no debería ser una gran carga durante el fin
+        de semana y, por supuesto, queremos que primero disfrutes de la
+        competición y despues puedas compartirlo.
+      #original_hash: af023ed
+      paragraph3: 'El rol de un anfitrión puede ser resumido del siguiente modo:'
+      #original_hash: 21efafe
+      short_intro: 'Haz una breve introducción, habla sobre ti y sobre la competición'
+      #original_hash: a053b5a
+      venue_feel: >-
+        Haz unos pequeños videos para hacernos una idea del sitio y de la gente,
+        esto puede ser simplemente una foto del área de competidores y el área
+        de resolución.
+      #original_hash: d17fb2f
+      people_solving: >-
+        Intenta obtener alguna foto de gente resolviendo (Génte rápida en sus
+        categorías principales preferiblemente)
+      #original_hash: 76d2358
+      mini_interviews: >-
+        Puedes intentar hacer mini entrevistas de gente (organizadores,
+        Delegados, etc...) contándonos lo que piensan de como va la competición
+      #original_hash: 6003b20
+      pictures_too: 'También puedes mandar fotos, no tienen que ser sólo vídeos'
+      #original_hash: 8813619
+      paragraph4: >-
+        Nuestras comunicaciones durante el fin de semana normalmente van a
+        través de un grupo de WhatsApp. Asegúrate de que te es familiar esta
+        plataforma de mensajería o haznos saber si no puedes usarla para que
+        podamos planificar una alternativa.
+      #original_hash: 38191c1
+      apply_to_host: Aplicación a anfitrión
+    other_suggestions:
+      #original_hash: 730873b
+      title: ¿Otras sugerencias?
+      #original_hash: aa7ab5c
+      body_html: >-
+        ¿Tienes otras sugerencas para Instagram u otro contenido de redes
+        sociales? ¡<a
+        href="https://www.worldcubeassociation.org/contact/website">Háznoslo
+        saber</a>!
