@@ -693,6 +693,7 @@ en:
           enabled: "enabled"
           disabled: "disabled"
           enable: "Enable 2FA"
+          disable: "Disable 2FA"
           reset: "Reset 2FA secret"
           reset_if_needed: "If one of your devices has been compromised, or you want to revoke access from your devices, you can reset your two-factor authentication secret below:"
           reset_warning: "You will need to reconfigure all your 2FA devices."
@@ -708,6 +709,10 @@ en:
           generate_backup_codes: "Generate backup codes"
           backup_codes_warning: "The backup codes will be displayed below. Make sure to write/save them right away: they are store encrypted in our database and can't be shown again later."
           email_auth_desc: "You can ask for a one-time password by email when you attempt to sign in."
+          disable_section_title: "Disable two-factor"
+          disable_section_content: "The WST strongly advise you to not disable 2FA, but you can by clicking the button below. Please note that if you reactivate 2FA you will have to reconfigure your device(s)."
+          disabled_success: "Successfully disabled two-factor authentication."
+          disabled_failed: "Couldn't disable 2FA, please see errors below."
     shared:
       links:
         sign_in: "Sign in"

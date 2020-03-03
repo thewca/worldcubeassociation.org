@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
+  post 'profile/disable-2fa' => 'users#disable_2fa'
   post 'profile/generate-2fa-backup' => 'users#regenerate_2fa_backup_codes'
 
   get 'profile/claim_wca_id' => 'users#claim_wca_id'

@@ -141,6 +141,12 @@ RSpec.describe "users" do
         expect(secret_before).to_not eq secret_after
       end
 
+      it 'can disable 2FA' do
+        post profile_disable_2fa_path
+        expect(response.body).to include "Successfully disabled two-factor"
+        expect(user.reload.otp_required_for_login).to be false
+      end
+
       it 'can (re)generate backup codes for user with 2FA' do
         expect(user.otp_backup_codes).to eq nil
         post profile_generate_2fa_backup_path

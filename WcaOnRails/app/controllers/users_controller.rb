@@ -2,8 +2,8 @@
 
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:select_nearby_delegate]
-  before_action :check_recent_authentication!, only: [:enable_2fa, :regenerate_2fa_backup_codes]
-  before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa]
+  before_action :check_recent_authentication!, only: [:enable_2fa, :disable_2fa, :regenerate_2fa_backup_codes]
+  before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa, :disable_2fa]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
@@ -65,6 +65,27 @@ class UsersController < ApplicationController
       flash[:success] = I18n.t("devise.sessions.new.2fa.regenerated_secret")
     else
       flash[:success] = I18n.t("devise.sessions.new.2fa.enabled_success")
+    end
+    @user = current_user
+    render :edit
+  end
+
+  def disable_2fa
+    # NOTE: current_user is not nil as authenticate_user! is called first
+    disable_params = {
+      otp_required_for_login: false,
+      otp_secret: nil,
+    }
+    if current_user.update_attributes(disable_params)
+      flash[:success] = I18n.t("devise.sessions.new.2fa.disabled_success")
+      params[:section] = "2fa"
+    else
+      # Hopefully at some point we'll make it mandatory for admin-like
+      # accounts to have 2FA (like on github).
+      # NOTE: we reload the user to revert the assignment of disable_params above.
+      current_user.reload
+      flash[:danger] = I18n.t("devise.sessions.new.2fa.disabled_failed")
+      params[:section] = "general"
     end
     @user = current_user
     render :edit
