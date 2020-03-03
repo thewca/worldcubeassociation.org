@@ -57,6 +57,11 @@
   <h3><%= t("devise.sessions.new.2fa.email_auth") %></h3>
   <p><%= t("devise.sessions.new.2fa.email_auth_desc") %></p>
 
+  <h2><%= t("devise.sessions.new.2fa.disable_section_title") %></h2>
+
+  <p><%= t("devise.sessions.new.2fa.disable_section_content") %></p>
+  <%= link_to t("devise.sessions.new.2fa.disable"), profile_disable_2fa_path, class: "btn btn-danger", method: :post %>
+
   <script>
     function handleServerResponse(response) {
       response_json = response.responseJSON;
