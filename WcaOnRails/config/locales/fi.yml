@@ -656,7 +656,7 @@ fi:
         #original_hash: 6e6a6f2
         o: Muu
       delegate_status:
-        #original_hash: 28ec02d
+        #original_hash: 9b97968
         candidate_delegate: Delegaattikokelas
         #original_hash: 12ab214
         delegate: Delegaatti
@@ -765,7 +765,7 @@ fi:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
-        #original_hash: 8c266ea
+        #original_hash: d5ccc15
         receive_delegate_reports: >-
           If you are a Candidate Delegate, Senior Delegate, or Member of the WRC
           or the WQAC, you receive Delegate Reports by default. Note: the change
@@ -1242,6 +1242,8 @@ fi:
           disabled: pois päältä
           #original_hash: 5f225b0
           enable: Ota 2FA käyttöön
+          #original_hash: 2e35cd9
+          disable: Poista 2FA käytöstä
           #original_hash: b2a3d7e
           reset: Reset 2FA secret
           #original_hash: 14b7bfd
@@ -1296,6 +1298,18 @@ fi:
           email_auth_desc: >-
             Voit pyytää kertakäyttöistä salasanaa (lähetetään sähköpostitse),
             kun yrität kirjautua sisään.
+          #original_hash: dd991ab
+          disable_section_title: Poista 2-vaiheinen vahvistus käytöstä
+          #original_hash: 4569d81
+          disable_section_content: >-
+            WST ei suosittele 2FA:n poistamista käytöstä, mutta voit tehdä sen
+            klikkaamalla alla olevasta painikkeesta. Ota huomioon, että jos otat
+            2FA:n uudelleen käyttöön myöhemmin, sinun täytyy myös määrittää
+            käyttämäsi laitteesi uudestaan.
+          #original_hash: ab1b77d
+          disabled_success: 2-vaiheinen vahvistus poistettu käytöstä onnistuneesti.
+          #original_hash: c36d556
+          disabled_failed: 'Ei voitu poistaa vahvistusta käytöstä, ks. alapuolella.'
     shared:
       links:
         #original_hash: ada2e9e
@@ -3536,21 +3550,24 @@ fi:
       probation:
         #original_hash: 1dd6e3b
         name: Delegates on Probation
-      #original_hash: 3d5b64b
+      #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA-delegaatti</strong> on WCA-säännöissä esitelty rooli,
-        joka määritellään WCA-asiakirjoissa. Delegaatin pääasiallinen
-        velvollisuus on valvoa kilpailuja WCA:n ohella. WCA-delegaattien
-        vastuulla on varmistaa, että kaikki WCA-kilpailut sujuvat WCA:n
-        päämäärien, sääntöjen ja hengen mukaan. WCA erottelee toisistaan
-        <strong>WCA:n vastaavat delegaatit</strong>,
-        <strong>WCA-delegaatit</strong> ja <strong>WCA:n
-        delegaattikokelaat</strong> %{see_link}. Delegaatin tehtävien lisäksi
-        vastaava delegaatti on vastuussa oman alueensa delegaattien hallinnasta,
-        ja myös yhteisön jäsenet voivat ottaa häneen yhteyttä alueellisissa
-        seikoissa. Uudet delegaatit nimetään aluksi delegaattikokelaiksi, ja
-        heidän tulee osoittaa olevansa päteviä hallitsemaan kilpailuja
-        onnistuneesti ennen WCA-delegaatiksi nimeämistä.</p>
+        joka määritellään WCA-asiakirjoissa. Delegaatin pääasiallinen tehtävä on
+        valvoa kilpailuja WCA:n nimissä. WCA-delegaattien vastuulla on
+        varmistaa, että kaikki WCA-kilpailut sujuvat WCA:n päämäärien, sääntöjen
+        ja hengen mukaan. WCA erottelee toisistaan <strong>vastaavat
+        delegaatit</strong>, <strong>alueelliset delegaatit</strong>,
+        <strong>delegaatit</strong>, <strong>delegaattikokelaat</strong> ja
+        <strong>delegaattiharjoittelijat</strong> %{see_link}.</p> <p>Delegaatin
+        tehtävien lisäksi vastaavat delegaatit ja alueelliset delegaatit ovat
+        vastuussa alueensa muiden delegaattien hallinnasta, ja yhteisön jäsenet
+        voivat ottaa heihin yhteyttä alueellisissa seikoissa.</p> <p>Uudet
+        delegaatit nimetään aluksi delegaattikokelaiksi, ja heidän tulee
+        osoittaa olevansa päteviä hallitsemaan kilpailuja onnistuneesti ennen
+        WCA-delegaatiksi nimeämistä.</p> <p>Delegaattiharjoittelijoita
+        koulutetaan delegaatin asemaan, ja he voivat valvoa vain kilpailuja,
+        joissa on myös WCA-delegaatti paikalla.</p>
       #original_hash: 27d18ac
       see_link_html: '(ks. %{link})'
       #original_hash: 5b01fcc
