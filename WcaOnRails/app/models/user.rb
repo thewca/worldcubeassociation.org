@@ -840,7 +840,7 @@ class User < ApplicationRecord
         fields += %i(notes)
       end
     end
-    if admin? || any_kind_of_delegate?
+    if admin? || any_kind_of_delegate? || results_team?
       fields += %i(
         wca_id unconfirmed_wca_id
         avatar avatar_cache
