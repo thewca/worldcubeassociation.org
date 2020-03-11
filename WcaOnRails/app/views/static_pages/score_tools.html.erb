@@ -1,13 +1,82 @@
-<% provide(:title, t('score_tools.title')) %>
+<% provide(:title, t("score_tools.title")) %>
 
-<div class="container">
+<% tools = {
+  before: {
+    age: {
+      url: "https://goosly.github.io/AGE/",
+      src_url: "https://github.com/Goosly/AGE",
+      guide_url: "https://github.com/Goosly/AGE/wiki",
+      maintainer: "Manu Vereecken",
+      wst: false,
+    }.merge(t("score_tools.tools.age")),
+    groupifier: {
+      url: "https://groupifier.jonatanklosko.com/",
+      src_url: "https://github.com/jonatanklosko/groupifier",
+      guide_url: "https://github.com/jonatanklosko/groupifier/wiki/Guide",
+      maintainer: "Jonatan Kłosko",
+      wst: false,
+    }.merge(t("score_tools.tools.groupifier")),
+    tnoodle: {
+      url: "https://www.worldcubeassociation.org/regulations/scrambles/",
+      guide_url: "https://www.worldcubeassociation.org/regulations/scrambles/",
+      src_url: "https://github.com/thewca/tnoodle",
+      maintainer: "WCA Software Team",
+      wst: true,
+    }.merge(t("score_tools.tools.tnoodle")),
+  },
+  during: {
+    live: {
+      url: "https://live.worldcubeassociation.org/",
+      src_url: "https://github.com/thewca/wca-live",
+      guide_url: "https://github.com/thewca/wca-live/wiki/Guide",
+      maintainer: "WCA Software Team",
+      wst: true,
+    }.merge(t("score_tools.tools.live")),
+    certificates: {
+      url: "https://goosly.github.io/wca-certificates/",
+      src_url: "https://github.com/Goosly/wca-certificates",
+      guide_url: "https://github.com/Goosly/wca-certificates/wiki",
+      maintainer: "Manu Vereecken",
+      wst: false,
+    }.merge(t("score_tools.tools.certificates")),
+    scorecards: {
+      url: "https://goosly.github.io/wca-scorecards/",
+      src_url: "https://github.com/Goosly/wca-scorecards",
+      guide_url: "https://github.com/Goosly/wca-scorecards/wiki",
+      maintainer: "Manu Vereecken",
+      wst: false,
+    }.merge(t("score_tools.tools.scorecards")),
+    nightmare: {
+      download_url: "https://www.worldcubeassociation.org/files/results.xls",
+      wst: true,
+    }.merge(t("score_tools.tools.nightmare")),
+  },
+  after: {
+    matcher: {
+      url: "https://viroulep.github.io/scrambles-matcher/",
+      src_url: "https://github.com/viroulep/scrambles-matcher/",
+      maintainer: "Philippe Virouleau",
+      wst: false,
+    }.merge(t("score_tools.tools.matcher")),
+  },
+} %>
+
+<div class="container" id="software-tools">
   <h1><%= yield(:title) %></h1>
 
-  <ul class="list-group">
-    <% t('score_tools.paragraphs').values.each do |paragraph| %>
-      <li class="list-group-item">
-        <%= raw paragraph %>
-      </li>
-    <% end %>
-  </ul>
+  <p><%= t("score_tools.intro.desc") %></p>
+  <p><%= t("score_tools.intro.disclaimer") %></p>
+  <p><%= t("score_tools.intro.used") %></p>
+
+  <h2><%= t("score_tools.before.title") %></h2>
+  <p><%= t("score_tools.before.desc") %></p>
+  <%= render "software_list", tools: tools[:before] %>
+
+  <h2><%= t("score_tools.during.title") %></h2>
+  <p><%= t("score_tools.during.desc") %></p>
+  <%= render "software_list", tools: tools[:during] %>
+
+  <h2><%= t("score_tools.after.title") %></h2>
+  <p><%= t("score_tools.after.desc") %></p>
+  <%= render "software_list", tools: tools[:after] %>
 </div>
