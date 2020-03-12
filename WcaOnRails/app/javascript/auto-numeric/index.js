@@ -11,15 +11,15 @@ function getCurrencyInfo(isoCode) {
 // 'action' can be either "init" or "update"
 // '$element' is a jquery element for the targeted input field
 function applyCurrencyMask(action, $element, currencyIsoCode) {
-  let entry = getCurrencyInfo(currencyIsoCode);
+  const entry = getCurrencyInfo(currencyIsoCode);
   let currentVal;
 
   // Get current val
-  if (action == "update") {
+  if (action == 'update') {
     currentVal = getValueInCurrency($element);
-  } else if (action == "init") {
+  } else if (action == 'init') {
     currentVal = $element.val();
-    if (currentVal === "") {
+    if (currentVal === '') {
       currentVal = null;
     }
   } else {
@@ -27,8 +27,8 @@ function applyCurrencyMask(action, $element, currencyIsoCode) {
   }
 
   // Reconfigure
-  $.data($element[0], "current_subunit_to_unit", entry.subunitToUnit);
-  let maskOptions = {
+  $.data($element[0], 'current_subunit_to_unit', entry.subunitToUnit);
+  const maskOptions = {
     currencySymbol: entry.symbol,
     currencySymbolPlacement: entry.symbolFirst ? 'p' : 's',
     // If the currency has no subunit (subunit_to_unit is 1), then we don't need
@@ -38,25 +38,25 @@ function applyCurrencyMask(action, $element, currencyIsoCode) {
     modifyValueOnWheel: false,
   };
 
-  let autoNumericObject = $element.data("autoNumericObject");
+  let autoNumericObject = $element.data('autoNumericObject');
 
   if (autoNumericObject) {
     autoNumericObject.update(maskOptions);
   } else {
     autoNumericObject = new AutoNumeric($element[0], maskOptions);
-    $element.data("autoNumericObject", autoNumericObject);
+    $element.data('autoNumericObject', autoNumericObject);
   }
 
   // Set new val
-  autoNumericObject.set(currentVal === null ? null : currentVal/entry.subunitToUnit);
+  autoNumericObject.set(currentVal === null ? null : currentVal / entry.subunitToUnit);
 }
 
 // Retrieve the real value, in the currency's lowest denomination
 // Assumes autoNumeric is running on element, and the number of subunit_to_unit has been set in data
 function getValueInCurrency($element) {
-  let currentVal = $element.data("autoNumericObject").getNumber();
-  let multiplier = $.data($element[0], "current_subunit_to_unit");
-  if($element.data("autoNumericObject").getNumericString() === "") {
+  const currentVal = $element.data('autoNumericObject').getNumber();
+  const multiplier = $.data($element[0], 'current_subunit_to_unit');
+  if ($element.data('autoNumericObject').getNumericString() === '') {
     return null;
   }
   // Set back the value to the "lowest denomination" in the currency
@@ -65,13 +65,13 @@ function getValueInCurrency($element) {
 
 // Setup the mask for the selected element
 function setupCurrencyMask($element) {
-  let currencyIsoCode = $element.data("currency");
-  let targetElemId = $element.data("target");
+  const currencyIsoCode = $element.data('currency');
+  const targetElemId = $element.data('target');
 
   applyCurrencyMask('init', $element, currencyIsoCode);
 
   // Populate the actual hidden field on change
-  $element.change(function() {
+  $element.change(() => {
     $(targetElemId).val(getValueInCurrency($element));
   });
 }
@@ -82,7 +82,7 @@ $(() => {
     const $currencySelector = $($element.data('currencySelector'));
 
     setupCurrencyMask($element);
-    $currencySelector.change(function() {
+    $currencySelector.change(() => {
       applyCurrencyMask('update', $element, $currencySelector.val());
     });
   });

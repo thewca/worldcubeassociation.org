@@ -7,14 +7,14 @@ $(() => {
     $input.on('change', () => {
       loadImage(
         $input[0].files[0],
-        img => {
-          if(img.type === 'error') {
+        (img) => {
+          if (img.type === 'error') {
             console.error(img);
           } else {
             $container.empty().append(img);
           }
         },
-        $container.data() /* Options passed as data attribues, see the list https://github.com/blueimp/JavaScript-Load-Image#options */
+        $container.data(), /* Options passed as data attribues, see the list https://github.com/blueimp/JavaScript-Load-Image#options */
       );
     });
   });
