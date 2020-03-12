@@ -9,10 +9,10 @@ import {
   Popup,
   Icon,
 } from 'leaflet';
-import { redMarker, blueMarker } from './markers';
 import { GeoSearchControl } from 'leaflet-geosearch';
+import railsEnv from 'wca/rails-env.js.erb';
+import { redMarker, blueMarker } from './markers';
 import { searchProvider, userTileProvider } from './providers.js';
-import railsEnv from 'wca/rails-env.js.erb'
 
 // Leaflet and webpacker are not good friend, we need to require the images for
 // the assets to be properly setup.
@@ -26,10 +26,10 @@ Icon.Default.mergeOptions({
 wca.searchAndPlaceOnMap = (map, query) => {
   searchProvider
     .search({ query })
-    .then(function(allResults) {
+    .then((allResults) => {
       if (allResults.length > 0) {
         // Assume first result will be ok
-        let result = allResults[0];
+        const result = allResults[0];
         new Marker({
           lat: result.y,
           lng: result.x,
@@ -40,16 +40,16 @@ wca.searchAndPlaceOnMap = (map, query) => {
       } else {
         new Popup()
           .setLatLng([0, 0])
-          .setContent("No location found for your query. Try with GPS coordinates.")
+          .setContent('No location found for your query. Try with GPS coordinates.')
           .openOn(map);
       }
     });
-}
+};
 
 // Create a search input, removing any marker/popup added: we'll handle this ourselves
 // with the existing marker
-wca.createSearchInput = map => {
-  let searchControl = new GeoSearchControl({
+wca.createSearchInput = (map) => {
+  const searchControl = new GeoSearchControl({
     provider: searchProvider,
     showMarker: false,
     showPopup: false,
@@ -62,28 +62,27 @@ wca.createSearchInput = map => {
 };
 
 wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTrick = true) => {
-  let map = new LeafletMap(elementId, {
+  const map = new LeafletMap(elementId, {
     zoom: 2,
-    center: center,
+    center,
   });
-  let provider = userTileProvider;
-  let layer = new TileLayer(provider.url, {
+  const provider = userTileProvider;
+  const layer = new TileLayer(provider.url, {
     maxZoom: 19,
     attribution: provider.attribution,
   });
   // To avoid timeout issue on *.tile.openstreetmap.org during tests,
   // we don't add the actual tile layer in that environment.
-  if (railsEnv !== "test")
-    layer.addTo(map);
+  if (railsEnv !== 'test') layer.addTo(map);
   if (iframeTrick) {
     // We create an invisible iframe that triggers an invalidate size when
     // resized (which includes bootstrap's collapse/hide/show events).
-    let iframe = $('<iframe src="about:blank" class="invisible-iframe-map" />');
+    const iframe = $('<iframe src="about:blank" class="invisible-iframe-map" />');
 
     $(`#${elementId}`).append(iframe);
 
     iframe.ready(() => {
-      iframe[0].contentWindow.addEventListener("resize", () => {
+      iframe[0].contentWindow.addEventListener('resize', () => {
         map.invalidateSize();
       });
       map.invalidateSize();
@@ -93,15 +92,15 @@ wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTrick = tr
 };
 
 wca.removeMapMarkersLeaflet = (map) => {
-  map.eachLayer(layer => {
+  map.eachLayer((layer) => {
     if (layer instanceof Marker) {
       map.removeLayer(layer);
     }
   });
 };
 
-wca.addCompetitionsToMapLeaflet = function(map, competitions) {
-  competitions.forEach(function(c) {
+wca.addCompetitionsToMapLeaflet = function (map, competitions) {
+  competitions.forEach((c) => {
     let iconImage;
     if (c.is_probably_over) {
       iconImage = blueMarker;
@@ -109,8 +108,8 @@ wca.addCompetitionsToMapLeaflet = function(map, competitions) {
       iconImage = redMarker;
     }
 
-    let competitionDesc = "<a href=" + c.url + ">" + c.name + "</a><br />" + c.marker_date + " - " + c.cityName;
-    let marker = new Marker({
+    const competitionDesc = `<a href=${c.url}>${c.name}</a><br />${c.marker_date} - ${c.cityName}`;
+    const marker = new Marker({
       lat: c.latitude_degrees,
       lng: c.longitude_degrees,
     }, {
@@ -124,34 +123,34 @@ function roundToMicrodegrees(val) {
   val = val || 0;
   // To prevent are you sure? from firing even when nothing has changed,
   // explicitly round coordinates to an integer number of microdegrees.
-  return Math.trunc(parseFloat(val)*1e6) / 1e6;
+  return Math.trunc(parseFloat(val) * 1e6) / 1e6;
 }
 
-var nearbyCompetitionsById = {};
+let nearbyCompetitionsById = {};
 
 
 wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled) => {
   nearbyCompetitionsById = {};
-  let map = wca.createCompetitionsMapLeaflet(elem, [0,0], false);
+  const map = wca.createCompetitionsMapLeaflet(elem, [0, 0], false);
   wca._venue_map = map;
-  let latLng = { lat: $lat.val(), lng: $lng.val() };
+  const latLng = { lat: $lat.val(), lng: $lng.val() };
   // Create warning and danger circles
-  let circleDanger = new Circle(latLng, {
+  const circleDanger = new Circle(latLng, {
     radius: radiusDangerKm * 1000,
     fill: false,
     color: '#d9534f', // @brand-danger
   }).addTo(map);
-  let circleWarning = new Circle(latLng, {
+  const circleWarning = new Circle(latLng, {
     radius: radiusWarningKm * 1000,
     fill: false,
     color: '#f0ad4e', // @brand-warning
   }).addTo(map);
   // Create competition marker
-  let compMarker = new Marker(latLng, {
+  const compMarker = new Marker(latLng, {
     draggable: !disabled,
   }).addTo(map);
-  let updateElementsPositions = () => {
-    let newPos = compMarker.getLatLng();
+  const updateElementsPositions = () => {
+    const newPos = compMarker.getLatLng();
     circleDanger.setLatLng(newPos);
     circleWarning.setLatLng(newPos);
     $lat.val(roundToMicrodegrees(newPos.lat));
@@ -160,7 +159,7 @@ wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled
     wca.fetchNearbyCompetitions();
   };
 
-  let inputChangeHandler = () => {
+  const inputChangeHandler = () => {
     $lat.val(roundToMicrodegrees($lat.val()));
     $lng.val(roundToMicrodegrees($lng.val()));
     compMarker.setLatLng({
@@ -168,14 +167,14 @@ wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled
       lng: $lng.val(),
     });
     // Elements position will be updated by the "move" handler
-  }
-  let updateOnExternalChange = ev => {
+  };
+  const updateOnExternalChange = (ev) => {
     if (ev.originalEvent) {
       // This filters out mouse event, that are handled ondragend
       return;
     }
     updateElementsPositions();
-  }
+  };
   // Takes care of changes through setLatLng (change in input, or search result)
   compMarker.on('move', updateOnExternalChange);
   compMarker.on('dragend', updateElementsPositions);
@@ -183,40 +182,40 @@ wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled
   $lng.change(inputChangeHandler);
   // Center the view
   map.setView(latLng, 8);
-  map.zoomControl.setPosition("topright");
+  map.zoomControl.setPosition('topright');
   if (!disabled) {
     wca.createSearchInput(map);
-    let handleGeoSearchResult = (result) => {
+    const handleGeoSearchResult = (result) => {
       compMarker.setLatLng({
         lat: result.location.y,
         lng: result.location.x,
       });
-      compMarker.bindPopup(result.location.label).openPopup()
-    }
+      compMarker.bindPopup(result.location.label).openPopup();
+    };
     map.on('geosearch/showlocation', handleGeoSearchResult);
   }
   return map;
-}
+};
 
 wca.setNearbyCompetitions = (nearbyCompetitions) => {
-  let map = wca._venue_map;
-  let desiredNearbyCompetitionById = _.keyBy(nearbyCompetitions, 'id');
+  const map = wca._venue_map;
+  const desiredNearbyCompetitionById = _.keyBy(nearbyCompetitions, 'id');
 
-  let desiredIds = Object.keys(desiredNearbyCompetitionById);
-  let currentIds = Object.keys(nearbyCompetitionsById);
-  let idsToAdd = _.difference(desiredIds, currentIds);
-  let idsToRemove = _.difference(currentIds, desiredIds);
+  const desiredIds = Object.keys(desiredNearbyCompetitionById);
+  const currentIds = Object.keys(nearbyCompetitionsById);
+  const idsToAdd = _.difference(desiredIds, currentIds);
+  const idsToRemove = _.difference(currentIds, desiredIds);
 
   // First, remove all uneeded markers.
-  idsToRemove.forEach(id => {
+  idsToRemove.forEach((id) => {
     map.removeLayer(nearbyCompetitionsById[id].marker);
     delete nearbyCompetitionsById[id];
   });
 
 
   // Now create all the new markers.
-  idsToAdd.forEach(id => {
-    let c = desiredNearbyCompetitionById[id];
+  idsToAdd.forEach((id) => {
+    const c = desiredNearbyCompetitionById[id];
     c.marker = new Marker({
       lat: c.latitude_degrees,
       lng: c.longitude_degrees,
@@ -225,4 +224,4 @@ wca.setNearbyCompetitions = (nearbyCompetitions) => {
     }).addTo(map);
     nearbyCompetitionsById[id] = c;
   });
-}
+};

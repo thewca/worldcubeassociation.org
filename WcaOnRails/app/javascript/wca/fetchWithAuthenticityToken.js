@@ -1,11 +1,11 @@
 function fetchWithAuthenticityToken(url, fetchOptions) {
-  if(!fetchOptions) {
+  if (!fetchOptions) {
     fetchOptions = {};
   }
-  if(!fetchOptions.headers) {
+  if (!fetchOptions.headers) {
     fetchOptions.headers = {};
   }
-  fetchOptions.headers["X-CSRF-Token"] = getAuthenticityToken();
+  fetchOptions.headers['X-CSRF-Token'] = getAuthenticityToken();
   return fetch(url, fetchOptions);
 }
 

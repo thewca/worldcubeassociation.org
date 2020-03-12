@@ -15,6 +15,6 @@ import 'leaflet-wca';
 import autosize from 'autosize';
 
 // Setting up autosize
-$(function() {
+$(() => {
   autosize($('textarea:not(.no-autosize)'));
 });
