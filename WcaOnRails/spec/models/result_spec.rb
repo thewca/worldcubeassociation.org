@@ -78,7 +78,7 @@ RSpec.describe Result do
         let(:eventId) { "333" }
         let(:formatId) { "a" }
 
-        context "combined round" do
+        context "cutoff round" do
           let(:roundTypeId) { "c" }
 
           it "all solves" do
@@ -98,7 +98,7 @@ RSpec.describe Result do
           end
         end
 
-        context "uncombined round" do
+        context "uncutoff round" do
           let(:roundTypeId) { "1" }
 
           it "all solves with average below 10 minutes" do
@@ -143,7 +143,7 @@ RSpec.describe Result do
         context "777" do
           let(:eventId) { "777" }
 
-          context "combined round" do
+          context "cutoff round" do
             let(:roundTypeId) { "c" }
 
             it "all solves" do
@@ -171,7 +171,7 @@ RSpec.describe Result do
             end
           end
 
-          context "uncombined round" do
+          context "uncutoff round" do
             let(:roundTypeId) { "1" }
 
             it "all solves with average below 10 minutes" do
@@ -217,7 +217,7 @@ RSpec.describe Result do
           end
         end
 
-        context "333fm uncombined round" do
+        context "333fm uncutoff round" do
           let(:eventId) { "333fm" }
           let(:roundTypeId) { "1" }
 
@@ -332,7 +332,7 @@ RSpec.describe Result do
         result
       end
 
-      context "non-combined rounds" do
+      context "non-cutoff rounds" do
         it "format 1" do
           result = result_with_n_solves(2, roundTypeId: "1", formatId: "1")
           expect(result).to be_invalid_with_errors(base: ["Expected 1 solve, but found 2."])
@@ -359,7 +359,7 @@ RSpec.describe Result do
         end
       end
 
-      context "combined rounds" do
+      context "cutoff rounds" do
         it "format 2" do
           result = result_with_n_solves(3, roundTypeId: "c", formatId: "2")
           expect(result).to be_invalid_with_errors(base: ["Expected at most 2 solves, but found 3."])

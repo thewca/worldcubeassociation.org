@@ -289,7 +289,7 @@ function checkRoundNames ( $roundInfos, $competitionId, $eventId ) {
     #--- Check for round "combined-ness"
     if(( ! $isNotCombined ) xor $listCombined[$roundTypeId] ){
       echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $roundTypeId</a></p>";
-      echo "<p>Round $roundCellName should ". ( $isNotCombined?"not ":"" ) . "be a combined round</p>";
+      echo "<p>Round $roundCellName should ". ( $isNotCombined?"not ":"" ) . "be a cutoff round</p>";
       $roundTypeId = $switchCombined[$roundTypeId];
       $nbErrors += 1;
     }

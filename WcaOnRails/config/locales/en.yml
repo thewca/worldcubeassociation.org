@@ -160,7 +160,7 @@ en:
       time: "Best result < %{time} advances to next round"
       moves: "Best result < %{moves} moves advances to next round"
       points: "Best result > %{points} points advances to next round"
-  #context: Words used to describe combined round cutoffs
+  #context: Words used to describe cutoff round cutoffs
   cutoff:
     time:
       one: "%{count} attempt to get < %{time}"
@@ -1435,7 +1435,7 @@ en:
         cumulative_time_limit: "cumulative time limit"
         cumulative_one_round_html: "A %{cumulative_time_limit} may be enforced (see %{regulation_link})."
         cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{guideline_link})."
-        cutoff_html: "The result to beat to proceed to the second phase of a combined round (see %{regulation_link})."
+        cutoff_html: "The result to beat to proceed to the second phase of a cutoff round (see %{regulation_link})."
         format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
       format: "Format"
       time_limit: "Time limit"

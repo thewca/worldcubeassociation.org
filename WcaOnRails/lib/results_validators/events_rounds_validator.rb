@@ -10,7 +10,7 @@ module ResultsValidators
     MISSING_RESULTS_WARNING = "Missing results for %{event_id}. The event is not present in the results but listed as an official event."\
       " If the event was held, correct the results. If the event was not held, leave a comment about that to the WRT."
     MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}. There is an additional round in the events tab that is not present in the results. Edit the events tab to remove the round."
-    UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a combined round in the results. Please update the round's information in the competition's manage events page."
+    UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a cutoff round in the results. Please update the round's information in the competition's manage events page."
 
     @@desc = "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
 
@@ -82,7 +82,7 @@ module ResultsValidators
 
     def check_rounds_match(competition, results)
       # Check that rounds match what was declared.
-      # This function automatically casts combined rounds to regular rounds if everyone has met the cutoff.
+      # This function automatically casts cutoff rounds to regular rounds if everyone has met the cutoff.
 
       expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
 
