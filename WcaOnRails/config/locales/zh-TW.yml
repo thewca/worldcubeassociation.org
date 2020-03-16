@@ -1125,6 +1125,8 @@ zh-TW:
           disabled: 未啟用
           #original_hash: 5f225b0
           enable: 啟用二步驟驗證
+          #original_hash: 2e35cd9
+          disable: 關閉二步驟驗證
           #original_hash: b2a3d7e
           reset: 重設二步驟驗證
           #original_hash: 14b7bfd
@@ -1155,6 +1157,14 @@ zh-TW:
           backup_codes_warning: 備用碼將會顯示在下面。請務必要立刻抄寫或儲存下來。備用碼會加密儲存在資料庫中，且無法再次顯示。
           #original_hash: b5e3ad8
           email_auth_desc: 您可以要求使用電子郵件傳送一次性密碼來登入。
+          #original_hash: dd991ab
+          disable_section_title: 關閉二步驟驗證
+          #original_hash: 4569d81
+          disable_section_content: 下面的按鈕能關閉二步驟驗證，但WCA軟體組強烈建議您不要關閉二步驟驗證。請留意如果您重新啟動二步驟驗證，您需要重新設置您的裝置。
+          #original_hash: ab1b77d
+          disabled_success: 已成功關閉二步驟驗證。
+          #original_hash: c36d556
+          disabled_failed: 無法關閉二步驟驗證，請見以下的錯誤訊息。
     shared:
       links:
         #original_hash: ada2e9e
@@ -1280,7 +1290,7 @@ zh-TW:
       #original_hash: b7ee3c4
       manage_users: 管理用戶
       #original_hash: 12ab214
-      delegate: WCA代表相關
+      delegate: 代表
       #original_hash: 2f4bd74
       panel: 知識欄
       #original_hash: db34e41
