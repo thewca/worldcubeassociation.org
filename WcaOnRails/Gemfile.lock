@@ -458,7 +458,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    rdoc (6.0.1)
+    rdoc (6.2.1)
     recaptcha (5.2.1)
       json
     redcarpet (3.5.0)
@@ -530,7 +530,7 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    sdoc (1.0.0)
+    sdoc (1.1.0)
       rdoc (>= 5.0)
     seedbank (0.4.0)
     shellany (0.0.1)
