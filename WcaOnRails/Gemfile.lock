@@ -271,7 +271,7 @@ GEM
       railties (>= 5.0)
     i18n-spec (0.6.0)
       iso
-    i18n-tasks (0.9.30)
+    i18n-tasks (0.9.31)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
@@ -396,7 +396,7 @@ GEM
       childprocess (>= 0.6.3, < 4)
       iniparse (~> 1.4)
     parallel (1.18.0)
-    parser (2.7.0.2)
+    parser (2.7.0.4)
       ast (~> 2.4.0)
     phantomjs (2.1.1.0)
     poltergeist (1.18.1)
