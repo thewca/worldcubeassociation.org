@@ -1454,6 +1454,8 @@ class Competition < ApplicationRecord
       longitude_degrees: longitude_degrees,
       country_iso2: country&.iso2,
       start_date: start_date,
+      registration_open: registration_open,
+      registration_close: registration_close,
       announced_at: announced_at,
       end_date: end_date,
       delegates: delegates,
