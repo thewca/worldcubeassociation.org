@@ -1460,6 +1460,7 @@ class Competition < ApplicationRecord
       end_date: end_date,
       delegates: delegates,
       organizers: organizers,
+      competitor_limit: competitor_limit,
       event_ids: events.map(&:id),
     }
   end
