@@ -58,7 +58,7 @@ class Round < ApplicationRecord
     elsif number == 2
       cutoff ? "e" : "2"
     else
-      # Combined third round/Semi Final
+      # Cutoff third round/Semi Final
       cutoff ? "g" : "3"
     end
   end

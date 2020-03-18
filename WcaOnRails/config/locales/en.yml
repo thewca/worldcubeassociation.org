@@ -122,20 +122,20 @@ en:
       name: "B Final"
       cellName: "B Final"
     "c":
-      name: "Combined Final"
-      cellName: "Combined Final"
+      name: "Cutoff Final"
+      cellName: "Cutoff Final"
     "d":
-      name: "Combined First round"
-      cellName: "Combined First"
+      name: "Cutoff First round"
+      cellName: "Cutoff First"
     "e":
-      name: "Combined Second round"
-      cellName: "Combined Second"
+      name: "Cutoff Second round"
+      cellName: "Cutoff Second"
     "f":
       name: "Final"
       cellName: "Final"
     "g":
-      name: "Combined Third round"
-      cellName: "Combined Third"
+      name: "Cutoff Third round"
+      cellName: "Cutoff Third"
     "h":
       name: "Combined qualification"
       cellName: "Combined qualification"
@@ -143,7 +143,7 @@ en:
   attempts:
     attempt_name: "Attempt %{number}"
   round:
-    #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Combined First round"
+    #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Cutoff First round"
     name: "%{event_name} %{round_name}"
   #context: Words used to describe the requirement to advance to the next round
   advancement_condition:
