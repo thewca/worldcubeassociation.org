@@ -668,8 +668,8 @@ pt-BR:
         #original_hash: 6e6a6f2
         o: Outro
       delegate_status:
-        #original_hash: 28ec02d
-        candidate_delegate: Delegado Candidato
+        #original_hash: 9b97968
+        candidate_delegate: Delegado Junior
         #original_hash: 12ab214
         delegate: Delegado
         #original_hash: d463c23
@@ -778,9 +778,9 @@ pt-BR:
         phone_number: ''
         #original_hash: da39a3e
         notes: ''
-        #original_hash: 8c266ea
+        #original_hash: d5ccc15
         receive_delegate_reports: >-
-          Se você é um Delegado Candidato, Delegado Senior ou Membro do WRC ou
+          Se você é um Delegado Junior, Delegado Sênior ou Membro do WRC ou
           WQAC, você receberá os Relatórios do Delegado por padrão. Nota: a
           mudança pode demorar até uma hora para ter efeito.
         #original_hash: 0627e5c
@@ -1261,6 +1261,8 @@ pt-BR:
           disabled: desativado
           #original_hash: 5f225b0
           enable: Ativar 2FA
+          #original_hash: 2e35cd9
+          disable: Desabilitar 2FA
           #original_hash: b2a3d7e
           reset: Redefinir o segredo 2FA
           #original_hash: 14b7bfd
@@ -1314,6 +1316,17 @@ pt-BR:
             banco de dados e não podem ser exibidos novamente depois.
           #original_hash: b5e3ad8
           email_auth_desc: Você pode pedir uma senha temporária por email quando tentar entrar.
+          #original_hash: dd991ab
+          disable_section_title: Desabilitar autenticação em duas etapas
+          #original_hash: 4569d81
+          disable_section_content: >-
+            O WST recomenda fortemente que você não desabilite a 2FA, mas você
+            pode fazê-lo clicando no botão abaixo. Observe que se você reativar
+            a 2FA você precisará reconfigurar seu(s) dispositivo(s).
+          #original_hash: ab1b77d
+          disabled_success: Autenticação em duas etapas desativada com sucesso.
+          #original_hash: c36d556
+          disabled_failed: 'Não foi possível desativar a 2FA, veja os erros abaixo.'
     shared:
       links:
         #original_hash: ada2e9e
@@ -1483,6 +1496,8 @@ pt-BR:
       manage_app: Gerenciar seus aplicativos
       #original_hash: 0e8b212
       manage_auth_app: Gerenciar aplicativos autorizados
+      #original_hash: acac109
+      media_submission: Envio de Mídia
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -3579,21 +3594,24 @@ pt-BR:
       probation:
         #original_hash: 1dd6e3b
         name: Delegados em "Probation"
-      #original_hash: 3d5b64b
+      #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>Delegado da WCA</strong> é uma função definida nas Moções
         daWCA e descrita no Regulamento da WCA. A principal tarefa de um
         Delegado é supervisionar as competições em nome da WCA. Ele é
         responsável por garantir que todas as competições da WCA aconteçam de
         acordo com a Missão, Espírito e Regulamento da WCA. Eles são
-        diferenciados entre <strong>Delegados Sênior</strong>,
-        <strong>Delegados</strong> e <strong>Delegados Candidatos
-        </strong>%{see_link}.</p> <p> Além das tarefas de um Delegado, um
-        Delegado Sênior é responsável por gerenciar os Delegados em sua área, e
-        também pode ser contatado pela comunidade para assuntos pertinentes à
-        região.</p> <p>Novos Delegados são listados inicialmente como Delegados
-        Candidatos, e devem mostrar que são capazes de conduzir competições
-        adequadamente antes de serem considerados Delegados.</p>
+        diferenciados entre <strong>Delegados Sênior</strong>, <strong>Delegados
+        Regionais</strong>, <strong>Delegados Junior</strong> e
+        <strong>Delegados Trainee%{see_link}.</p> <p> Além das tarefas de um
+        Delegado, um Delegado Sênior é responsável por gerenciar os Delegados em
+        sua área, e também pode ser contatado pela comunidade para assuntos
+        pertinentes à região.</p> <p>Novos Delegados são listados inicialmente
+        como Delegados Junior, e devem mostrar que são capazes de conduzir
+        competições adequadamente antes de serem considerados Delegados.</p>
+        <p>Delegados Trainee estão em treinamento para a posição de Delegado da
+        WCA e somente podem supervisionar competições nas quais um outro
+        Delegado estiver presente.</p>
       #original_hash: 27d18ac
       see_link_html: '(veja %{link})'
       #original_hash: 5b01fcc
@@ -4336,3 +4354,101 @@ pt-BR:
       confirm_accept: Tem certeza que deseja aceitar esta mídia?
       #original_hash: 5301648
       edit: Editar
+  media_and_instagram:
+    #original_hash: 1e9793e
+    page_title: Envio de Mídia e Instagram
+    general_media_submission:
+      #original_hash: 2b4c8c8
+      title: Envio de mídia em geral
+      #original_hash: 670a1a8
+      body_html: >-
+        A WCA compartilha artigos e imagens de competições enviados pela
+        comunidade na nossa <a href="/media">página de mídia</a>. Se você tem
+        algo que gostaria de compartilhar, por favor preencha nosso <a
+        href="/media/new">formulário de envio de mídia</a>!
+    instagram_submission:
+      #original_hash: e01c612
+      title: Envio - Instagram
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        Como você deve ter visto, a WCA tem um <a
+        href="https://www.instagram.com/thewcaofficial/">perfil no
+        Instagram</a>! Para representar melhor a comunidade global, nós postamos
+        conteúdo enviado pelos cubistas de todo o mundo.
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        Se você tem fotos ou vídeos em alta qualidade que gostaria que
+        publicássemos, por favor clique no botão abaixo e preencha o formulário!
+        Para que possamos publicar seu conteúdo, você deve ser o proprietário e
+        deve conceder permissão à WCA para a publicação. Por causa do grande
+        número de mídia que recebemos, não conseguimos publicar tudo, mas aqui
+        estão algumas dicas para que seu conteúdo seja postado:
+      #original_hash: cf5c955
+      photo_quality: >-
+        Verifique se a qualidade da foto/vídeo é boa. Não precisa ser feito
+        profissionalmente, mas a qualidade não deve prejudicar a foto ou vídeo.
+      #original_hash: 0742378
+      photo_interest: >-
+        Tente tornar seu conteúdo interessante para um público amplo. Conteúdo
+        que só interessa a algumas pessoas não será publicado aqui.
+      #original_hash: 497bc27
+      wca_related: >-
+        Envie fotos e vídeos que tenham a ver com a WCA, pois é disso que trata
+        nossa conta! Nós amamos ver os cubistas se divertindo!
+      #original_hash: af882f2
+      submit_instagram_content: Enviar conteúdo para o Instagram
+    instagram_hosting:
+      #original_hash: 5156783
+      title: '"Hosting" do Instagram'
+      #original_hash: 541106b
+      paragraph1_html: >-
+        Algumas vezes nós autorizamos membros da comunidade a fazerem a "story"
+        oficial do Instragram da WCA em uma competição da qual estão
+        participando! Se você está interessado, por favor clique no botão e
+        preencha o formulário abaixo. A Equipe de Comunicação da WCA entrará em
+        contato com você caso seja aprovado. Se você tem alguma dúvida, por
+        favor <a
+        href="https://www.worldcubeassociation.org/contact/website">entre em
+        contato</a>.
+      #original_hash: aca6c32
+      paragraph2: >-
+        Nosso objetivo é compartilhar um pouco do lado pessoal de cada cubista e
+        cada competição. Isto não deve ser um grande peso durante o fim de
+        semana e, obviamente, nós queremos que você primeiro aproveite a
+        competição e então possa compartilhar.
+      #original_hash: af023ed
+      paragraph3: 'O papel do "host" pode ser resumido da seguinte forma:'
+      #original_hash: 21efafe
+      short_intro: 'Faça uma pequena introdução, fale sobre você e a competição'
+      #original_hash: a053b5a
+      venue_feel: >-
+        Mostre alguns vídeos para dar uma ideia do local e das pessoas. Pode ser
+        apenas uma foto da área de competidores e de competição.
+      #original_hash: d17fb2f
+      people_solving: >-
+        Tente fazer algumas fotos das pessoas competindo (pessoas rápidas em
+        seus eventos, de preferência)
+      #original_hash: 76d2358
+      mini_interviews: >-
+        Você pode tentar fazer minientrevistas com algumas pessoas
+        (organizadores, delegados, etc) sobre como estão se sentindo com a
+        competição
+      #original_hash: 6003b20
+      pictures_too: 'Você também pode enviar fotos, não precisa ser somente vídeos'
+      #original_hash: 8813619
+      paragraph4: >-
+        Nossa comunicação durante o fim de semana geralmente é feita por um
+        grupo de WhatsApp. Certifique-se de que está familiarizado com essa
+        plataforma ou nos informe caso não possa usá-la, para que procuremos
+        outra forma.
+      #original_hash: 38191c1
+      apply_to_host: Candidatar-se a "host"
+    other_suggestions:
+      #original_hash: 730873b
+      title: Outras sugestões?
+      #original_hash: aa7ab5c
+      body_html: >-
+        Você tem alguma sugestão para o conteúdo do Instagram ou outras mídias
+        sociais? <a
+        href="https://www.worldcubeassociation.org/contact/website">Nos
+        conte</a>!
