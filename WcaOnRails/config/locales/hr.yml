@@ -1260,6 +1260,8 @@ hr:
           disabled: isključena
           #original_hash: 5f225b0
           enable: Uključi 2FA
+          #original_hash: 2e35cd9
+          disable: Isključi 2FA
           #original_hash: b2a3d7e
           reset: Resetiraj 2FA
           #original_hash: 14b7bfd
@@ -1314,6 +1316,17 @@ hr:
           email_auth_desc: >-
             Možete tražiti jednokratne lozinke emailom kada se pokušate
             prijaviti.
+          #original_hash: dd991ab
+          disable_section_title: Onemogući dvofaktorsku autentifikaciju
+          #original_hash: 4569d81
+          disable_section_content: >-
+            WST strogo savjetuje da ne isključujet 2FA, no ukoliko želite to
+            možete učiniti klikom ispod. Zapamtite da ukoliko reaktivirate 2FA,
+            morate rekonfigurirati svoje uređaje.
+          #original_hash: ab1b77d
+          disabled_success: Uspješno isključena dvofaktorska autentifikacija.
+          #original_hash: c36d556
+          disabled_failed: 'Nije moguće isključiti 2FA, pogledajte izvješće ispod.'
     shared:
       links:
         #original_hash: ada2e9e
@@ -2592,10 +2605,10 @@ hr:
       is_visible: >-
         Ovo natjecanje je javno vidljivo, bilo koje promjene će biti javno
         vidljive!
-      #original_hash: f99b3f7
+      #original_hash: 1039850
       pending_confirmation_html: >-
-        Ispuni sva polja i pritisni Potvrdi kada si spreman/a da %{contact}
-        potvrdi ovo natjecanje.
+        Ispuni sva polja i reci svom Delegatu da pritisne Potvrdi kada ste
+        spremni da %{contact} potvrdi ovo natjecanje.
       #original_hash: 8966fd0
       submit_create_value: Kreiraj natjecanje
       #original_hash: 40b0dfd
