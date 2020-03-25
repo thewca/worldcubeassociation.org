@@ -47,7 +47,7 @@
             <td><%= wca_date_range(competition.start_date, competition.end_date) %></td>
             <td>
               <% if registration %>
-                <%= icon("fas", registration.accepted? ? "calendar-check" : "hourglass-half") %>
+                <%= icon("fas", registration.accepted? ? "calendar-check" : "hourglass-half") unless not-visible %>
               <% end %>
             </td>
             <td>
