@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import _ from 'lodash';
 
 import EditEvents from './EditEvents'
 import events from 'wca/events.js.erb'

@@ -1,6 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 // https://github.com/smeijer/leaflet-geosearch/issues/151#issuecomment-347967474
 import 'leaflet-geosearch/assets/css/leaflet.css';
+import _ from 'lodash';
 import {
   Map as LeafletMap,
   TileLayer,

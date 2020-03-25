@@ -1,6 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import ReactDOM from 'react-dom'
+import _ from 'lodash';
 
 import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'

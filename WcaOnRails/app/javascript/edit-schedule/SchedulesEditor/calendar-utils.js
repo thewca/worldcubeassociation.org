@@ -1,4 +1,5 @@
 import { rootRender } from 'edit-schedule';
+import _ from 'lodash';
 import {
   roomWcifFromId,
   venueWcifFromRoomId,

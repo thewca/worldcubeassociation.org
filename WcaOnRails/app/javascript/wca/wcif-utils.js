@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import events from './events.js.erb';
 import fetchWithAuthenticityToken from './fetchWithAuthenticityToken';
 

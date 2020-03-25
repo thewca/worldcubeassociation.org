@@ -101,7 +101,7 @@ onPage('users#index', function() {
   }
 
   $('#region').on('change', reloadUsers);
-  $('#search').on('input', _.debounce(reloadUsers, TEXT_INPUT_DEBOUNCE_MS));
+  $('#search').on('input', wca.lodashDebounce(reloadUsers, TEXT_INPUT_DEBOUNCE_MS));
 
   $table.on('load-success.bs.table', function(e, data) {
     $('#search-box i').removeClass('fa-spinner fa-spin').addClass('fa-search');

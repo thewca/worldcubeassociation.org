@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Modal } from 'react-bootstrap'
+import _ from 'lodash';
 import {
   addActivityToCalendar,
   eventModifiedInCalendar,
