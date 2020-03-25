@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { parseActivityCode } from 'wca/wcif-utils'
 
 export function toMicrodegrees(coord) {

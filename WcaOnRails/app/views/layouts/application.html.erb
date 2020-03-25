@@ -11,6 +11,9 @@
   <meta name="og:image" content='<%= asset_url("og-wca_logo.png") %>'/>
 
   <title><%= full_title(yield(:title)) %></title>
+  <%# NOTE: we need to import this first, because it's used in our non-webpack application.js %>
+  <%= javascript_pack_tag 'lodash_utils' %>
+
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
 

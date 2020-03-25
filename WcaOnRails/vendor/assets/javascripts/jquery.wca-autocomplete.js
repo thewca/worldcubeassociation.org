@@ -15,7 +15,7 @@
       var posts_search = $(that).hasClass("wca-autocomplete-posts_search");
 
       var delimiter = ',';
-      var searchFields = _.uniq([
+      var searchFields = wca.lodashUniq([
         'wca_id', 'name', // user search fields
         'id', 'cellName', 'cityName', 'countryId', 'name', // competition search fields
         'title', 'body', // post search fields
@@ -160,7 +160,7 @@
           }
           $.ajax({
             url: url,
-            data: _.extend({}, defaultSearchData, { q: query, email: true }),
+            data: wca.lodashExtend({}, defaultSearchData, { q: query, email: true }),
             type: 'GET',
             error: function() {
               callback();

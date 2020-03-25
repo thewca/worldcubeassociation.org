@@ -6,6 +6,7 @@ import {
   Row,
   Tooltip,
 } from 'react-bootstrap'
+import _ from 'lodash';
 import cn from 'classnames'
 import events from 'wca/events.js.erb'
 import { parseActivityCode, roundIdToString } from 'wca/wcif-utils'

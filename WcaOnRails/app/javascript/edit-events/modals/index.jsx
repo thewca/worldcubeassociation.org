@@ -3,6 +3,7 @@ import cn from 'classnames'
 import Modal from 'react-bootstrap/lib/Modal'
 import Button from 'react-bootstrap/lib/Button'
 import Checkbox from 'react-bootstrap/lib/Checkbox'
+import _ from 'lodash';
 
 import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'

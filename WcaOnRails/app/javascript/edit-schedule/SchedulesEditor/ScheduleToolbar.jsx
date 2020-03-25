@@ -8,6 +8,7 @@ import {
   Row,
   Tooltip,
 } from 'react-bootstrap'
+import _ from 'lodash';
 import { scheduleElementSelector } from './fullcalendar'
 
 export class ScheduleToolbar extends React.Component {
