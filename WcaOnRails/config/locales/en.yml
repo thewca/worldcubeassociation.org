@@ -122,23 +122,23 @@ en:
       name: "B Final"
       cellName: "B Final"
     "c":
-      name: "Cutoff Final"
+      name: "Final"
       cellName: "Cutoff Final"
     "d":
-      name: "Cutoff First round"
+      name: "First round"
       cellName: "Cutoff First"
     "e":
-      name: "Cutoff Second round"
+      name: "Second round"
       cellName: "Cutoff Second"
     "f":
       name: "Final"
       cellName: "Final"
     "g":
-      name: "Cutoff Third round"
+      name: "Third round"
       cellName: "Cutoff Third"
     "h":
-      name: "Combined qualification"
-      cellName: "Combined qualification"
+      name: "Cutoff qualification"
+      cellName: "Cutoff qualification"
   #context: attempt name
   attempts:
     attempt_name: "Attempt %{number}"
