@@ -1,5 +1,5 @@
 import { GoogleProvider } from 'leaflet-geosearch';
-import fetchWithAuthenticityToken from 'wca/fetchWithAuthenticityToken';
+import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
 
 export class WCAProvider extends GoogleProvider {
   endpoint({ query } = {}) {

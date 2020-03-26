@@ -1,4 +1,4 @@
-import fetchWithAuthenticityToken from 'wca/fetchWithAuthenticityToken';
+import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
 
 import EasyMDE from "easymde";
 // For some reason, the SimpleMDE css file in the src directory does not seem to work,

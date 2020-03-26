@@ -1,5 +1,5 @@
 import events from './events.js.erb';
-import fetchWithAuthenticityToken from './fetchWithAuthenticityToken';
+import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken'
 
 function promiseSaveWcif(competitionId, data) {
   let url = `/api/v0/competitions/${competitionId}/wcif`;
