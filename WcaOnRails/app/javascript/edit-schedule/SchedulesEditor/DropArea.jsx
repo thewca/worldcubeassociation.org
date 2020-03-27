@@ -1,23 +1,23 @@
-import React from 'react'
+import React from 'react';
 
-export const dropAreaSelector = "#drop-event-area";
+export const dropAreaSelector = '#drop-event-area';
 
 export const DropArea = () => (
   <div id="drop-event-area" className="bg-danger text-danger text-center">
-    <i className="fas fa-trash fa-lg pull-left"></i>
+    <i className="fas fa-trash fa-lg pull-left" />
     Drop an event here to remove it from the schedule.
-    <i className="fas fa-trash fa-lg pull-right"></i>
+    <i className="fas fa-trash fa-lg pull-right" />
   </div>
 );
 
 export function isEventOverDropArea(jsEvent) {
-  let trashElem = $(dropAreaSelector);
+  const trashElem = $(dropAreaSelector);
 
   // Base trash position
-  let trashPosition = trashElem.offset();
+  const trashPosition = trashElem.offset();
 
   // Fix the trash position with vertical scroll
-  let scrolled = $(window).scrollTop();
+  const scrolled = $(window).scrollTop();
   trashPosition.top -= scrolled;
 
   // Compute remaining coordinates
@@ -32,9 +32,8 @@ export function isEventOverDropArea(jsEvent) {
 
 export function dropAreaMouseMoveHandler(jsEvent) {
   if (isEventOverDropArea(jsEvent)) {
-    $(dropAreaSelector).addClass("event-on-top");
+    $(dropAreaSelector).addClass('event-on-top');
   } else {
-    $(dropAreaSelector).removeClass("event-on-top");
+    $(dropAreaSelector).removeClass('event-on-top');
   }
 }
-

@@ -6,11 +6,33 @@ import {
   selectedEventInCalendar,
   singleSelectEvent,
 } from './calendar-utils';
-import { scheduleElementSelector } from './fullcalendar';
-import { schedulesEditPanelSelector } from '../EditSchedule';
+import { scheduleElementSelector, schedulesEditPanelSelector } from './ses';
 
 export const keyboardHandlers = [];
 
+function trySetSelectedEvent(direction) {
+  let currentEventSelected = selectedEventInCalendar();
+  if (!currentEventSelected) {
+    return;
+  }
+  const allEvents = _.sortBy($(scheduleElementSelector).fullCalendar('clientEvents'), ['start', 'end']);
+  // groupBy preserve sorting
+  const allGroupedEvents = _.groupBy(allEvents, (value) => value.start.day());
+  if (direction === 'up' || direction === 'down') {
+    const eventsForDay = allGroupedEvents[currentEventSelected.start.day()];
+    // it must exist
+    let index = _.findIndex(eventsForDay, { id: currentEventSelected.id });
+    index += (direction === 'up') ? -1 : +1;
+    // '%' can return negative numbers, but 'nth' deals with them
+    currentEventSelected = _.nth(eventsForDay, index % eventsForDay.length);
+  } else if (direction === 'right' || direction === 'left') {
+    const daySelected = currentEventSelected.start.day().toString();
+    const allDays = Object.keys(allGroupedEvents);
+    const newDayIndex = allDays.indexOf(daySelected) + (direction === 'left' ? -1 : 1);
+    [currentEventSelected] = allGroupedEvents[_.nth(allDays, newDayIndex % allDays.length)];
+  }
+  singleSelectEvent(currentEventSelected);
+}
 
 export function editScheduleKeyboardHandler(event, activityPicker) {
   const startDate = $.fullCalendar.moment(activityPicker.props.scheduleWcif.startDate);
@@ -25,7 +47,9 @@ export function editScheduleKeyboardHandler(event, activityPicker) {
     return true;
   }
   const currentEventSelected = selectedEventInCalendar();
+  const $elemSelected = $('.selected-activity');
   switch (event.which) {
+    /* eslint no-fallthrough: "off" */
     case 72: // h
     // intentionally omitting the break
     case 37: // arrow left
@@ -104,8 +128,7 @@ export function editScheduleKeyboardHandler(event, activityPicker) {
       break;
       // enter
     case 13:
-      const $elemSelected = $('.selected-activity');
-      if ($elemSelected.size() == 1) {
+      if ($elemSelected.size() === 1) {
         addActivityToCalendar($elemSelected.data('event'));
       }
       break;
@@ -119,29 +142,4 @@ export function editScheduleKeyboardHandler(event, activityPicker) {
       return true;
   }
   return false;
-}
-
-
-function trySetSelectedEvent(direction) {
-  let currentEventSelected = selectedEventInCalendar();
-  if (!currentEventSelected) {
-    return;
-  }
-  const allEvents = _.sortBy($(scheduleElementSelector).fullCalendar('clientEvents'), ['start', 'end']);
-  // groupBy preserve sorting
-  const allGroupedEvents = _.groupBy(allEvents, (value) => value.start.day());
-  if (direction === 'up' || direction === 'down') {
-    const eventsForDay = allGroupedEvents[currentEventSelected.start.day()];
-    // it must exist
-    let index = _.findIndex(eventsForDay, { id: currentEventSelected.id });
-    index += (direction === 'up') ? -1 : +1;
-    // '%' can return negative numbers, but 'nth' deals with them
-    currentEventSelected = _.nth(eventsForDay, index % eventsForDay.length);
-  } else if (direction === 'right' || direction === 'left') {
-    const daySelected = currentEventSelected.start.day().toString();
-    const allDays = Object.keys(allGroupedEvents);
-    const newDayIndex = allDays.indexOf(daySelected) + (direction === 'left' ? -1 : 1);
-    currentEventSelected = allGroupedEvents[_.nth(allDays, newDayIndex % allDays.length)][0];
-  }
-  singleSelectEvent(currentEventSelected);
 }

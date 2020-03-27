@@ -1,71 +1,81 @@
-import React from 'react'
+import React from 'react';
+import { Row, Col } from 'react-bootstrap';
 // Import leaflet, and the fix for the icon url
-import 'leaflet-wca';
-import { Map, TileLayer, Marker } from "react-leaflet"
-import { userTileProvider } from 'leaflet-wca/providers.js';
-import { toDegrees } from '../utils'
-import { Row, Col } from 'react-bootstrap'
+import { Map, TileLayer, Marker } from 'react-leaflet';
+import '../../leaflet-wca';
+import { userTileProvider } from '../../leaflet-wca/providers';
+import { toDegrees } from '../utils';
+
+/* eslint react/prop-types: "off" */
+/* eslint max-classes-per-file: "off" */
 
 class InvisibleIFrame extends React.Component {
-
   componentDidMount() {
-    this.iframe.contentWindow.addEventListener('resize', this.props.onResizeAction);
+    const { onResizeAction } = this.props;
+    this.iframe.contentWindow.addEventListener('resize', onResizeAction);
   }
 
   componentWillUnmount() {
-    this.iframe.contentWindow.removeEventListener('resize', this.props.onResizeAction);
+    const { onResizeAction } = this.props;
+    this.iframe.contentWindow.removeEventListener('resize', onResizeAction);
   }
 
   render() {
     return (
-      <iframe src="about:blank" className="invisible-iframe-map" ref={m => { this.iframe = m }} />
+      <iframe
+        title="invisibleIFrame"
+        src="about:blank"
+        className="invisible-iframe-map"
+        ref={(m) => { this.iframe = m; }}
+      />
     );
   }
 }
 
-export class VenueLocationInput extends React.Component {
-
-  invalidateSize = () => {
-    this.mapElem.leafletElement.invalidateSize(false);
-  }
-
+export default class VenueLocationInput extends React.Component {
   componentDidMount() {
-    let map = this.mapElem.leafletElement;
-    wca.createSearchInput(map);
-    let handleGeoSearchResult = (result) => {
-      let marker = this.markerElem.leafletElement;
+    const map = this.mapElem.leafletElement;
+    window.wca.createSearchInput(map);
+    const handleGeoSearchResult = (result) => {
+      const marker = this.markerElem.leafletElement;
       marker.setLatLng({
         lat: result.location.y,
         lng: result.location.x,
       });
       marker.bindPopup(result.location.label).openPopup();
-    }
+    };
     map.on('geosearch/showlocation', handleGeoSearchResult);
-    map.zoomControl.setPosition("bottomright");
+    map.zoomControl.setPosition('bottomright');
   }
 
   render() {
-    let { lat, lng, actionHandler } = this.props;
-    let provider = userTileProvider;
-    let mapPosition = { lat: toDegrees(lat), lng: toDegrees(lng) };
+    const { lat, lng, actionHandler } = this.props;
+    const provider = userTileProvider;
+    const mapPosition = { lat: toDegrees(lat), lng: toDegrees(lng) };
+
+    const invalidateSize = () => {
+      this.mapElem.leafletElement.invalidateSize(false);
+    };
+
     return (
       <Row>
         <Col xs={12}>
           <span className="venue-form-label control-label">Please pick the venue location below:</span>
         </Col>
         <Col xs={12} className="venue-map">
-          <Map center={mapPosition}
-               zoom={16}
-               scrollWheelZoom={false}
-               ref={m => { this.mapElem = m; }}
+          <Map
+            center={mapPosition}
+            zoom={16}
+            scrollWheelZoom={false}
+            ref={(m) => { this.mapElem = m; }}
           >
-            <InvisibleIFrame onResizeAction={this.invalidateSize} />
-            <TileLayer url={provider.url} attribution={provider.attribution}/>
+            <InvisibleIFrame onResizeAction={invalidateSize} />
+            <TileLayer url={provider.url} attribution={provider.attribution} />
             <Marker
               position={mapPosition}
-              draggable={true}
+              draggable
               onMove={actionHandler}
-              ref={m => { this.markerElem = m; }}
+              ref={(m) => { this.markerElem = m; }}
             />
           </Map>
         </Col>
