@@ -33,11 +33,11 @@ function findRounds(wcifEvents, roundIds) {
 }
 
 class EditRoundAttribute extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.reset();
   }
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.reset();
   }
 
