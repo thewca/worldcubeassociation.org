@@ -2,7 +2,6 @@ let incidentsBootstrapTable = null;
 let $incidentsTagsInput = null;
 let $incidentsSearchInput = null;
 
-
 function updateUrlParams($searchInput, $tagsInput) {
   // Update params in the url.
   const params = {
@@ -32,19 +31,20 @@ function customIncidentsSearch(text) {
     // See here: https://github.com/wenzhixin/bootstrap-table/blob/22ca907e623ab696fd9711f497989cd30abb5d23/src/bootstrap-table.js#L2395-L2398
     this.searchText = ' ';
   }
-  const tags_value = $incidentsTagsInput ? $incidentsTagsInput.val() : '';
-  const filter_tags = tags_value.length > 0 ? tags_value.split(',') : [];
+  const tagsValue = $incidentsTagsInput ? $incidentsTagsInput.val() : '';
+  const filterTags = tagsValue.length > 0 ? tagsValue.split(',') : [];
   this.data = this.options.data.filter((item) => {
     // item[1] is the incidents' tags
+    /* eslint no-underscore-dangle: "off" */
     const tags = item._1_data.tags.split(',');
-    const filtered = tags.filter((tag) => filter_tags.includes(tag));
-    if (filter_tags.length > 0 && filtered.length === 0) {
+    const filtered = tags.filter((tag) => filterTags.includes(tag));
+    if (filterTags.length > 0 && filtered.length === 0) {
       return false;
     }
     // item[0] is actually a link with the title, so we need to turn it into an element
     // then take its text.
-    const incident_title = $(item[0]).text();
-    return incident_title.indexOf(text) != -1;
+    const incidentTitle = $(item[0]).text();
+    return incidentTitle.indexOf(text) !== -1;
   });
 }
 
@@ -52,7 +52,8 @@ function activatePopover() {
   $('[data-toggle="popover"]').popover();
 }
 
-wca.initIncidentsLogTable = function (selectizeOptions, $table, $searchInput, $tagsInput) {
+window.wca.initIncidentsLogTable = function init(options, $table, $searchInput, $tagsInput) {
+  const selectizeOptions = options;
   $incidentsTagsInput = $tagsInput;
   $incidentsSearchInput = $searchInput;
   $table.bootstrapTable('refreshOptions', { customSearch: customIncidentsSearch });
@@ -68,7 +69,7 @@ wca.initIncidentsLogTable = function (selectizeOptions, $table, $searchInput, $t
 
   // It's a search filter input, so there is no point to allow user to create tags
   delete selectizeOptions.create;
-  selectizeOptions.onChange = function (value) {
+  selectizeOptions.onChange = function change() {
     // Hack to force refresh
     if (incidentsBootstrapTable) {
       incidentsBootstrapTable.searchText = ' ';
@@ -83,7 +84,7 @@ wca.initIncidentsLogTable = function (selectizeOptions, $table, $searchInput, $t
   $table.bootstrapTable('resetSearch', params.search);
 };
 
-wca.searchIncidentsForTag = function (e, tag) {
+window.wca.searchIncidentsForTag = function search(e, tag) {
   e.preventDefault();
   $incidentsSearchInput.val('');
   const { selectize } = $incidentsTagsInput[0];

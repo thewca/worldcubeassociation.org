@@ -16,7 +16,7 @@ const fullCalendarOptions = {
   defaultTimedEventDuration: '00:30:00',
 };
 
-export function fullCalendarDefaultOptions(day, numberOfDays) {
+export default (day, numberOfDays) => {
   const options = _.cloneDeep(fullCalendarOptions);
   _.assign(options, {
     defaultDate: day,
@@ -30,4 +30,4 @@ export function fullCalendarDefaultOptions(day, numberOfDays) {
     },
   });
   return options;
-}
+};

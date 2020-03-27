@@ -1,1 +1,1 @@
-import 'show-schedule';
+import '../show-schedule';

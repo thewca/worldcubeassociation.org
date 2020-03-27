@@ -1,1 +1,1 @@
-import 'markdown-editor';
+import '../markdown-editor';

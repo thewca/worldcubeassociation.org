@@ -1,12 +1,14 @@
-import fetchWithAuthenticityToken from 'wca/fetchWithAuthenticityToken';
-
 import EasyMDE from 'easymde';
 // For some reason, the SimpleMDE css file in the src directory does not seem to work,
 // fortunately, the one in the dist directory *does*.
 // See https://github.com/Ionaru/easy-markdown-editor/issues/108
 // import "easymde/src/css/easymde.css";
 import 'easymde/dist/easymde.min.css';
+
+import fetchWithAuthenticityToken from '../wca/fetchWithAuthenticityToken';
 import './style.scss';
+
+window.wca = window.wca || {};
 
 $(() => {
   function insertText(editor, markup, promptText) {
@@ -19,7 +21,7 @@ $(() => {
     const text = (somethingSelected ? cm.getSelection() : prompt(promptText));
 
     if (!text) {
-      return false;
+      return;
     }
 
     cm.replaceSelection(markup.build(text));
@@ -33,19 +35,19 @@ $(() => {
     cm.focus();
   }
 
-  $('input[name="delegate_report[wrc_feedback_requested]"]').on('change', function () {
-    const feedback_requested = this.checked;
-    $('div.delegate_report_wrc_incidents').toggle(feedback_requested);
-    $('input#delegate_report_wrc_incidents').prop('disabled', !feedback_requested);
+  $('input[name="delegate_report[wrc_feedback_requested]"]').on('change', function toggleInput() {
+    const feedbackRequested = this.checked;
+    $('div.delegate_report_wrc_incidents').toggle(feedbackRequested);
+    $('input#delegate_report_wrc_incidents').prop('disabled', !feedbackRequested);
   }).trigger('change');
 
-  $('input[name="delegate_report[wdc_feedback_requested]"]').on('change', function () {
-    const feedback_requested = this.checked;
-    $('div.delegate_report_wdc_incidents').toggle(feedback_requested);
-    $('input#delegate_report_wdc_incidents').prop('disabled', !feedback_requested);
+  $('input[name="delegate_report[wdc_feedback_requested]"]').on('change', function toggleInput() {
+    const feedbackRequested = this.checked;
+    $('div.delegate_report_wdc_incidents').toggle(feedbackRequested);
+    $('input#delegate_report_wdc_incidents').prop('disabled', !feedbackRequested);
   }).trigger('change');
 
-  $('.markdown-editor').each(function () {
+  $('.markdown-editor').each(function toggleInput() {
     const textFormattings = ['bold', 'italic', 'heading'];
     const textStructures = ['quote', 'unordered-list', 'ordered-list', 'table'];
     const allowImageUploads = this.classList.contains('markdown-editor-image-upload');
@@ -101,15 +103,16 @@ $(() => {
       promptURLs: true,
       toolbar,
       previewRender(plainText, preview) {
+        const previewTarget = preview;
         if (this.markdownReqest) {
           clearTimeout(this.markdownReqest);
         }
 
         this.markdownReqest = setTimeout(() => {
-          wca.renderMarkdownRequest(plainText).done((result) => {
-            preview.innerHTML = result;
+          window.wca.renderMarkdownRequest(plainText).done((result) => {
+            previewTarget.innerHTML = result;
           });
-        }, TEXT_INPUT_DEBOUNCE_MS);
+        }, window.wca.TEXT_INPUT_DEBOUNCE_MS);
 
         return 'Waiting...';
       },

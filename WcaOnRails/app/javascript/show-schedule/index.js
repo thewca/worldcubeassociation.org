@@ -1,31 +1,13 @@
 import _ from 'lodash';
-import events from 'wca/events.js.erb';
+import events from '../wca/events.js.erb';
 
 const dataByVenueId = {
 };
 
-wca.registerVenueData = (id, venueData) => {
+window.wca = window.wca || {};
+
+window.wca.registerVenueData = (id, venueData) => {
   dataByVenueId[id] = venueData;
-};
-
-wca.setupCalendarAndFilter = (popoverContentBuilder, locale, startDate, numberOfDays) => {
-  // Setup click action on calendar links
-  $('.schedule-calendar-link').click(_.partial(onClickCalencarLinkAction,
-    popoverContentBuilder,
-    locale,
-    startDate,
-    numberOfDays));
-  $('.schedule-table-link').click(onClickTableLinkAction);
-
-  // Setup events filter actions
-  $('.events-filter .event-all').click(onClickAllAction);
-  $('.events-filter span.cubing-icon').click(onClickEventIconAction);
-
-  // Setup rooms filter action
-  $('.toggle-room').click(onClickOnRoomAction);
-
-  // Hide popovers with round's information whenever we click somewhere
-  $('body').click(() => $('.has-popover').popover('hide'));
 };
 
 const getCalendarElemId = (venueId) => `#calendar-venue-${venueId}`;
@@ -39,10 +21,76 @@ const toggleScheduleView = (venueId, showTable) => {
   $scheduleElem.find('.schedule-calendar-link').toggleClass('active', !showTable);
 };
 
-// Setup click event on "table" links (one for each venue)
-const onClickTableLinkAction = (e) => {
-  e.preventDefault();
-  toggleScheduleView($(e.currentTarget).data('venue'), true);
+// fullCalendar's events fetcher function.
+// 'callback' must be called passing all events that should be rendered on the calendar
+const fetchCalendarEvents = (venueId, start, end, timezone, callback) => {
+  // We don't really care about timezone or start/end as we only have events for
+  // a specific competition and venue.
+  const allEvents = dataByVenueId[venueId].events;
+  const rooms = $(`#room-list-${venueId}`).find('.selected');
+  let calendarEvents = _.flatMap(rooms, (room) => _.filter(allEvents, { roomId: $(room).data('room') }));
+  const selectedEvents = _.map($(`#schedule-venue-${venueId} .events-filter > span.selected`),
+    (e) => $(e).data('event').toString());
+  // Filter events by id only if they are WCA events
+  // (we don't want to filter custom activities for which event_id is "other").
+  const filterableEventIds = Object.keys(events.byId);
+  calendarEvents = _.filter(calendarEvents,
+    (e) => selectedEvents.includes(e.activityDetails.event_id)
+      || !filterableEventIds.includes(e.activityDetails.event_id));
+  callback(calendarEvents);
+};
+
+const initFullCalendar = ($elem, calendarParams) => {
+  const venueData = dataByVenueId[calendarParams.venueId];
+  const options = {
+    events: _.partial(fetchCalendarEvents, calendarParams.venueId),
+    eventDataTransform: (eventData) => {
+      const ev = eventData;
+      if (ev.activityDetails.event_id.startsWith('other')) {
+        ev.color = '#666';
+      }
+      return ev;
+    },
+    eventRender: (event, element) => {
+      const popoverContent = calendarParams.popoverContentBuilder(event);
+      const $element = $(element);
+      if (!popoverContent) {
+        return;
+      }
+      $element.addClass('has-popover');
+      $element.click((e) => {
+        // Hide other popovers to only have one at once.
+        $('.has-popover').popover('hide');
+        $(e.currentTarget).popover('toggle');
+        e.stopPropagation();
+      });
+      $element.popover({
+        title: `<strong>${event.title}</strong>`,
+        container: 'body',
+        html: true,
+        content: `<div class="round-info-popover">${popoverContent}</div>`,
+        trigger: 'manual',
+        placement: 'top',
+      });
+    },
+    defaultView: 'agendaForComp',
+    header: false,
+    allDaySlot: false,
+    locale: calendarParams.locale,
+    minTime: venueData.minTime,
+    maxTime: venueData.maxTime,
+    slotDuration: '00:15:00',
+    height: 'auto',
+    defaultDate: calendarParams.startDate,
+    views: {
+      agendaForComp: {
+        type: 'agenda',
+        duration: { days: calendarParams.numberOfDays },
+        buttonText: 'Calendar',
+      },
+    },
+  };
+  $elem.fullCalendar(options);
 };
 
 const onClickCalencarLinkAction = (popoverContentBuilder, locale, startDate, numberOfDays, e) => {
@@ -57,6 +105,23 @@ const onClickCalencarLinkAction = (popoverContentBuilder, locale, startDate, num
     });
   } else {
     $calendar.fullCalendar('refetchEvents');
+  }
+};
+
+// Setup click event on "table" links (one for each venue)
+const onClickTableLinkAction = (e) => {
+  e.preventDefault();
+  toggleScheduleView($(e.currentTarget).data('venue'), true);
+};
+
+const maybeRefreshEvents = (venueId) => {
+  const $calendar = $(getCalendarElemId(venueId));
+  const idSelector = getScheduleElemId(venueId);
+  // Refetch event only if calendar is visible
+  if ($(`${idSelector} .schedule-calendar-link`).hasClass('active')) {
+    if ($calendar.hasClass('initialized')) {
+      $calendar.fullCalendar('refetchEvents');
+    }
   }
 };
 
@@ -129,80 +194,22 @@ const onClickOnRoomAction = (e) => {
   maybeRefreshEvents(venueId);
 };
 
-const maybeRefreshEvents = (venueId) => {
-  const $calendar = $(getCalendarElemId(venueId));
-  const idSelector = getScheduleElemId(venueId);
-  // Refetch event only if calendar is visible
-  if ($(`${idSelector} .schedule-calendar-link`).hasClass('active')) {
-    if ($calendar.hasClass('initialized')) {
-      $calendar.fullCalendar('refetchEvents');
-    }
-  }
-};
+window.wca.setupCalendarAndFilter = (popoverContentBuilder, locale, startDate, numberOfDays) => {
+  // Setup click action on calendar links
+  $('.schedule-calendar-link').click(_.partial(onClickCalencarLinkAction,
+    popoverContentBuilder,
+    locale,
+    startDate,
+    numberOfDays));
+  $('.schedule-table-link').click(onClickTableLinkAction);
 
-const initFullCalendar = ($elem, calendarParams) => {
-  const venueData = dataByVenueId[calendarParams.venueId];
-  const options = {
-    events: _.partial(fetchCalendarEvents, calendarParams.venueId),
-    eventDataTransform: (eventData) => {
-      if (eventData.activityDetails.event_id.startsWith('other')) {
-        eventData.color = '#666';
-      }
-      return eventData;
-    },
-    eventRender: (event, element) => {
-      const popoverContent = calendarParams.popoverContentBuilder(event);
-      const $element = $(element);
-      if (!popoverContent) {
-        return;
-      }
-      $element.addClass('has-popover');
-      $element.click((e) => {
-        // Hide other popovers to only have one at once.
-        $('.has-popover').popover('hide');
-        $(e.currentTarget).popover('toggle');
-        e.stopPropagation();
-      });
-      $element.popover({
-        title: `<strong>${event.title}</strong>`,
-        container: 'body',
-        html: true,
-        content: `<div class="round-info-popover">${popoverContent}</div>`,
-        trigger: 'manual',
-        placement: 'top',
-      });
-    },
-    defaultView: 'agendaForComp',
-    header: false,
-    allDaySlot: false,
-    locale: calendarParams.locale,
-    minTime: venueData.minTime,
-    maxTime: venueData.maxTime,
-    slotDuration: '00:15:00',
-    height: 'auto',
-    defaultDate: calendarParams.startDate,
-    views: {
-      agendaForComp: {
-        type: 'agenda',
-        duration: { days: calendarParams.numberOfDays },
-        buttonText: 'Calendar',
-      },
-    },
-  };
-  $elem.fullCalendar(options);
-};
+  // Setup events filter actions
+  $('.events-filter .event-all').click(onClickAllAction);
+  $('.events-filter span.cubing-icon').click(onClickEventIconAction);
 
+  // Setup rooms filter action
+  $('.toggle-room').click(onClickOnRoomAction);
 
-// fullCalendar's events fetcher function.
-// 'callback' must be called passing all events that should be rendered on the calendar
-const fetchCalendarEvents = (venueId, start, end, timezone, callback) => {
-  // We don't really care about timezone or start/end as we only have events for a specific competition and venue.
-  const allEvents = dataByVenueId[venueId].events;
-  const rooms = $(`#room-list-${venueId}`).find('.selected');
-  let calendarEvents = _.flatMap(rooms, (room) => _.filter(allEvents, { roomId: $(room).data('room') }));
-  const selectedEvents = _.map($(`#schedule-venue-${venueId} .events-filter > span.selected`), (e) => $(e).data('event').toString());
-  // Filter events by id only if they are WCA events (we don't want to filter custom activities for which event_id is "other").
-  const filterableEventIds = Object.keys(events.byId);
-  calendarEvents = _.filter(calendarEvents, (e) => selectedEvents.includes(e.activityDetails.event_id) || !filterableEventIds.includes(e.activityDetails.event_id));
-  callback(calendarEvents);
+  // Hide popovers with round's information whenever we click somewhere
+  $('body').click(() => $('.has-popover').popover('hide'));
 };

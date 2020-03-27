@@ -11,20 +11,26 @@ import {
   Icon,
 } from 'leaflet';
 import { GeoSearchControl } from 'leaflet-geosearch';
-import railsEnv from 'wca/rails-env.js.erb';
+import iconMarker2x from 'leaflet/dist/images/marker-icon-2x.png';
+import iconMarker from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import railsEnv from '../wca/rails-env.js.erb';
 import { redMarker, blueMarker } from './markers';
-import { searchProvider, userTileProvider } from './providers.js';
+import { searchProvider, userTileProvider } from './providers';
+
+window.wca = window.wca || {};
 
 // Leaflet and webpacker are not good friend, we need to require the images for
 // the assets to be properly setup.
+/* eslint no-underscore-dangle: "off" */
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+  iconRetinaUrl: iconMarker2x,
+  iconUrl: iconMarker,
+  shadowUrl: iconShadow,
 });
 
-wca.searchAndPlaceOnMap = (map, query) => {
+window.wca.searchAndPlaceOnMap = (map, query) => {
   searchProvider
     .search({ query })
     .then((allResults) => {
@@ -49,7 +55,7 @@ wca.searchAndPlaceOnMap = (map, query) => {
 
 // Create a search input, removing any marker/popup added: we'll handle this ourselves
 // with the existing marker
-wca.createSearchInput = (map) => {
+window.wca.createSearchInput = (map) => {
   const searchControl = new GeoSearchControl({
     provider: searchProvider,
     showMarker: false,
@@ -62,7 +68,7 @@ wca.createSearchInput = (map) => {
   map.addControl(searchControl);
 };
 
-wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTrick = true) => {
+window.wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTrick = true) => {
   const map = new LeafletMap(elementId, {
     zoom: 2,
     center,
@@ -92,7 +98,7 @@ wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTrick = tr
   return map;
 };
 
-wca.removeMapMarkersLeaflet = (map) => {
+window.wca.removeMapMarkersLeaflet = (map) => {
   map.eachLayer((layer) => {
     if (layer instanceof Marker) {
       map.removeLayer(layer);
@@ -100,7 +106,7 @@ wca.removeMapMarkersLeaflet = (map) => {
   });
 };
 
-wca.addCompetitionsToMapLeaflet = function (map, competitions) {
+window.wca.addCompetitionsToMapLeaflet = function addCompToMap(map, competitions) {
   competitions.forEach((c) => {
     let iconImage;
     if (c.is_probably_over) {
@@ -110,7 +116,7 @@ wca.addCompetitionsToMapLeaflet = function (map, competitions) {
     }
 
     const competitionDesc = `<a href=${c.url}>${c.name}</a><br />${c.marker_date} - ${c.cityName}`;
-    const marker = new Marker({
+    new Marker({
       lat: c.latitude_degrees,
       lng: c.longitude_degrees,
     }, {
@@ -120,8 +126,8 @@ wca.addCompetitionsToMapLeaflet = function (map, competitions) {
   });
 };
 
-function roundToMicrodegrees(val) {
-  val = val || 0;
+function roundToMicrodegrees(toRound) {
+  const val = toRound || 0;
   // To prevent are you sure? from firing even when nothing has changed,
   // explicitly round coordinates to an integer number of microdegrees.
   return Math.trunc(parseFloat(val) * 1e6) / 1e6;
@@ -130,10 +136,10 @@ function roundToMicrodegrees(val) {
 let nearbyCompetitionsById = {};
 
 
-wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled) => {
+window.wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled) => {
   nearbyCompetitionsById = {};
-  const map = wca.createCompetitionsMapLeaflet(elem, [0, 0], false);
-  wca._venue_map = map;
+  const map = window.wca.createCompetitionsMapLeaflet(elem, [0, 0], false);
+  window.wca._venue_map = map;
   const latLng = { lat: $lat.val(), lng: $lng.val() };
   // Create warning and danger circles
   const circleDanger = new Circle(latLng, {
@@ -157,7 +163,7 @@ wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled
     $lat.val(roundToMicrodegrees(newPos.lat));
     $lng.val(roundToMicrodegrees(newPos.lng));
     map.panTo(newPos);
-    wca.fetchNearbyCompetitions();
+    window.wca.fetchNearbyCompetitions();
   };
 
   const inputChangeHandler = () => {
@@ -185,7 +191,7 @@ wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled
   map.setView(latLng, 8);
   map.zoomControl.setPosition('topright');
   if (!disabled) {
-    wca.createSearchInput(map);
+    window.wca.createSearchInput(map);
     const handleGeoSearchResult = (result) => {
       compMarker.setLatLng({
         lat: result.location.y,
@@ -198,8 +204,8 @@ wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled
   return map;
 };
 
-wca.setNearbyCompetitions = (nearbyCompetitions) => {
-  const map = wca._venue_map;
+window.wca.setNearbyCompetitions = (nearbyCompetitions) => {
+  const map = window.wca._venue_map;
   const desiredNearbyCompetitionById = _.keyBy(nearbyCompetitions, 'id');
 
   const desiredIds = Object.keys(desiredNearbyCompetitionById);

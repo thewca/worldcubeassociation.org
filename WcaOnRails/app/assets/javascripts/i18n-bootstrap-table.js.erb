@@ -13,7 +13,7 @@ $.each($.fn.bootstrapTable.locales, function(locale, value) {
   }
 });
 
-var missing = wca.lodashDiff(wcaLocaleCodes, Object.keys($.fn.bootstrapTable.locales));
+var missing = window.wca.lodashDiff(wcaLocaleCodes, Object.keys($.fn.bootstrapTable.locales));
 
 // Alias missing locales to English (otherwise it defaults to Chinese)
 $.each(missing, function(index, locale) {

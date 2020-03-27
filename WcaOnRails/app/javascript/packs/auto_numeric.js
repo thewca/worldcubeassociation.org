@@ -1,1 +1,1 @@
-import 'auto-numeric';
+import '../auto-numeric';
