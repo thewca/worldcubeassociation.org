@@ -34,7 +34,7 @@ export default class EditEvents extends React.Component {
     }
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({ savedWcifEvents: _.cloneDeep(this.props.wcifEvents) });
   }
 
