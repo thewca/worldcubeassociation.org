@@ -1,1 +1,1 @@
-import 'edit-schedule';
+import '../edit-schedule';

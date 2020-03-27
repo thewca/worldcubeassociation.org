@@ -1,1 +1,1 @@
-import 'edit-events';
+import '../edit-events';

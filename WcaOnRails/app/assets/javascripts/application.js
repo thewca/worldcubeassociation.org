@@ -62,12 +62,11 @@
 //= require_self
 //= require_tree .
 
-// Global variables
-var TEXT_INPUT_DEBOUNCE_MS = 250;
-
-
 // Dumping ground for... stuff
 window.wca = window.wca || {};
+
+// Global variables
+window.wca.TEXT_INPUT_DEBOUNCE_MS = 250;
 
 wca._pendingAjaxById = {};
 wca.cancelPendingAjaxAndAjax = function(id, options) {
@@ -294,7 +293,7 @@ Math.trunc = Math.trunc || function(x) {
 
 // Bootstrap-table default options
 $.extend($.fn.bootstrapTable.defaults, {
-  searchTimeOut: TEXT_INPUT_DEBOUNCE_MS,
+  searchTimeOut: window.wca.TEXT_INPUT_DEBOUNCE_MS,
   trimOnSearch: false
 });
 

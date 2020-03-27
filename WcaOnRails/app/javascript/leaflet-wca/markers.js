@@ -1,9 +1,9 @@
 import {
   Icon,
-} from 'leaflet/dist/leaflet.js';
-import markerRed from 'images/leaflet/marker-icon-red.png';
+} from 'leaflet/dist/leaflet';
 import markerBlue from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import markerRed from './marker-icon-red.png';
 
 export const redMarker = new Icon({
   iconUrl: markerRed,

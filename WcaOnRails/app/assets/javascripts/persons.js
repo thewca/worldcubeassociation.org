@@ -34,7 +34,7 @@ onPage('persons#index', function() {
   $table.bootstrapTable('refresh');
 
   $('#region').on('change', reloadPersons);
-  $('#search').on('input', wca.lodashDebounce(reloadPersons, TEXT_INPUT_DEBOUNCE_MS));
+  $('#search').on('input', window.wca.lodashDebounce(reloadPersons, window.wca.TEXT_INPUT_DEBOUNCE_MS));
 
   $table.on('load-success.bs.table', function(e, data) {
     $('#search-box i').removeClass('fa-spinner fa-spin').addClass('fa-search');

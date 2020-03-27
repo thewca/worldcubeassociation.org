@@ -13,5 +13,6 @@ const tileProviders = {
   },
 };
 
-// FIXME: OSM gives tile in local names, ESRI gives them in English. We could make this a user option.
+// FIXME: OSM gives tile in local names, ESRI gives them in English.
+// We could make this a user option.
 export const userTileProvider = tileProviders.osm;
