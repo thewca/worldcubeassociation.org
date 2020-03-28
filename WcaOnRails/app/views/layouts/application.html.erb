@@ -11,14 +11,14 @@
   <meta name="og:image" content='<%= asset_url("og-wca_logo.png") %>'/>
 
   <title><%= full_title(yield(:title)) %></title>
+
   <%# NOTE: we need to import this first, because it's used in our non-webpack application.js %>
   <script>
     window.wca = {};
   </script>
   <%= javascript_packs_with_chunks_tag 'lodash_utils' %>
-
-  <%= stylesheet_link_tag 'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
+  <% js_assets = ['application'] %>
+  <% css_assets = ['application'] %>
 
   <% js_packs = ['application'] %>
   <% css_packs = ['application'] %>
@@ -39,6 +39,8 @@
 
   <% if content_for :include_schedule_editor %>
     <% js_packs << 'edit_schedule' %>
+    <% js_assets << 'fullcalendar/fullcalendar_wca' %>
+    <% css_assets << 'fullcalendar_wca' %>
   <% end %>
 
   <% if content_for :include_events_editor %>
@@ -47,8 +49,19 @@
 
   <% if content_for :include_schedule_viewer %>
     <% js_packs << 'show_schedule' %>
+    <% js_assets << 'fullcalendar/fullcalendar_wca' %>
+    <% css_assets << 'fullcalendar_wca' %>
   <% end %>
 
+  <%# Our sprockets assets %>
+  <% css_assets.uniq.each do |a| %>
+    <%= stylesheet_link_tag a, media: 'all' %>
+  <% end %>
+  <% js_assets.uniq.each do |a| %>
+    <%= javascript_include_tag a %>
+  <% end %>
+
+  <%# Our webpacker packs (automatically split in chunks) %>
   <%= stylesheet_packs_with_chunks_tag *css_packs %>
   <%= javascript_packs_with_chunks_tag *js_packs %>
 
