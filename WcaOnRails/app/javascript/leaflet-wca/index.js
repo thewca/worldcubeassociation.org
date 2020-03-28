@@ -9,7 +9,7 @@ import {
   Circle,
   Popup,
   Icon,
-} from 'leaflet';
+} from 'leaflet/dist/leaflet';
 import { GeoSearchControl } from 'leaflet-geosearch';
 import iconMarker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import iconMarker from 'leaflet/dist/images/marker-icon.png';
@@ -82,16 +82,23 @@ window.wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTri
   if (iframeTrick) {
     // We create an invisible iframe that triggers an invalidate size when
     // resized (which includes bootstrap's collapse/hide/show events).
-    const iframe = $('<iframe src="about:blank" class="invisible-iframe-map" />');
-
-    $(`#${elementId}`).append(iframe);
-
-    iframe.ready(() => {
-      iframe[0].contentWindow.addEventListener('resize', () => {
+    const iframe = document.createElement('iframe');
+    iframe.className = 'invisible-iframe-map';
+    iframe.src = 'about:blank';
+    document.getElementById(`${elementId}`).appendChild(iframe);
+    const listener = () => {
+      iframe.contentWindow.addEventListener('resize', () => {
         map.invalidateSize();
       });
       map.invalidateSize();
-    });
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      // Call on next tick
+      setTimeout(listener, 1);
+    } else {
+      document.addEventListener("DOMContentLoaded", listener);
+    }
   }
   return map;
 };
