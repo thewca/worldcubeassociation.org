@@ -53,6 +53,13 @@
     <% css_assets << 'fullcalendar_wca' %>
   <% end %>
 
+  <% if I18n.locale != :en %>
+    <% js_assets << "locales/#{I18n.locale}.js" %>
+    <% if js_assets.include?('fullcalendar/fullcalendar_wca') %>
+      <% js_assets << "fullcalendar/locales/#{I18n.locale}.js" %>
+    <% end %>
+  <% end %>
+
   <%# Our sprockets assets %>
   <% css_assets.uniq.each do |a| %>
     <%= stylesheet_link_tag a, media: 'all' %>
