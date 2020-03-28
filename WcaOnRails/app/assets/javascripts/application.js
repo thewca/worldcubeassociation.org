@@ -34,6 +34,8 @@
 //= require jquery-ui/widgets/draggable
 //= require jquery.slick
 //= require_self
+// We don't require_tree here, because we don't want fullcalendar and locales
+// to be included.
 //= require_directory
 
 // Global variables
