@@ -12,6 +12,9 @@
 
   <title><%= full_title(yield(:title)) %></title>
   <%# NOTE: we need to import this first, because it's used in our non-webpack application.js %>
+  <script>
+    window.wca = {};
+  </script>
   <%= javascript_packs_with_chunks_tag 'lodash_utils' %>
 
   <%= stylesheet_link_tag 'application', media: 'all' %>
