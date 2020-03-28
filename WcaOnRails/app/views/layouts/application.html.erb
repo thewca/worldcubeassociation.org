@@ -28,6 +28,11 @@
     <% js_packs << 'markdown_editor' %>
   <% end %>
 
+  <% if content_for :include_maps %>
+    <% css_packs << 'wca_maps' %>
+    <% js_packs << 'wca_maps' %>
+  <% end %>
+
   <% if content_for :include_auto_numeric %>
     <% js_packs << 'auto_numeric' %>
   <% end %>
