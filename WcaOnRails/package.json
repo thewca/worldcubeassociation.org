@@ -60,7 +60,7 @@
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "^2.4.0",
     "jshint": "^2.11.0",
-    "stylelint": "^12.0.1",
+    "stylelint": "^13.2.1",
     "stylelint-config-recommended-scss": "^4.2.0",
     "stylelint-scss": "^3.16.0",
     "webpack-bundle-analyzer": "^3.6.1",
