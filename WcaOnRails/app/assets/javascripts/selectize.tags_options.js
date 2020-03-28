@@ -1,6 +1,6 @@
 window.wca = window.wca || {};
 
-wca.defaultSelectizeOptions = function(select_options) {
+window.wca.defaultSelectizeOptions = function(select_options) {
   return {
     plugins: ['remove_button'],
     delimiter: ',',

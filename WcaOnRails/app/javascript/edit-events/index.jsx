@@ -27,7 +27,7 @@ function normalizeWcifEvents(wcifEvents) {
   return ret.concat(wcifEvents);
 }
 
-wca.initializeEventsForm = (competitionId, canAddAndRemoveEvents, wcifEvents) => {
+window.wca.initializeEventsForm = (competitionId, canAddAndRemoveEvents, wcifEvents) => {
   state.competitionId = competitionId;
   state.canAddAndRemoveEvents = canAddAndRemoveEvents;
   state.wcifEvents = normalizeWcifEvents(wcifEvents);

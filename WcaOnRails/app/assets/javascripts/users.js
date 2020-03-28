@@ -67,7 +67,7 @@ var usersTableAjax = {
     });
   },
   doAjax: function(options) {
-    return wca.cancelPendingAjaxAndAjax('users-index', options);
+    return window.wca.cancelPendingAjaxAndAjax('users-index', options);
   },
 };
 

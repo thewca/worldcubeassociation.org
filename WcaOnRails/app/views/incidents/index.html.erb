@@ -61,8 +61,8 @@
       }
     }
     $(function() {
-      var opts = wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>);
-      wca.initIncidentsLogTable(opts, $('.incidents-log-table'), $('.search input'), $('input#incident-tags'));
+      var opts = window.wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>);
+      window.wca.initIncidentsLogTable(opts, $('.incidents-log-table'), $('.search input'), $('input#incident-tags'));
     });
   </script>
 

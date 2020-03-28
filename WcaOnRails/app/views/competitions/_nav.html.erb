@@ -288,7 +288,7 @@
     });
 
     $('#not-bookmarked').click(function() {
-      wca.cancelPendingAjaxAndAjax('bookmark', {
+      window.wca.cancelPendingAjaxAndAjax('bookmark', {
         url: '<%= bookmark_path %>',
         method: 'POST',
         data: {
@@ -301,7 +301,7 @@
       });
     });
     $('#bookmarked').click(function() {
-      wca.cancelPendingAjaxAndAjax('bookmark', {
+      window.wca.cancelPendingAjaxAndAjax('bookmark', {
         url: '<%= unbookmark_path %>',
         method: 'POST',
         data: {

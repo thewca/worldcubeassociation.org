@@ -14,7 +14,7 @@ onPage('admin#edit_person, admin#update_person', function() {
       $personFields.not('[type="submit"]').val('');
     } else {
       $personFields.attr('disabled', false);
-      wca.cancelPendingAjaxAndAjax('grab_person_data', {
+      window.wca.cancelPendingAjaxAndAjax('grab_person_data', {
         url: '/admin/person_data',
         data: {
           'person_wca_id': $(this).val(),
