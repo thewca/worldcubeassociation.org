@@ -13,3 +13,5 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += %w(oms.js)
 Rails.application.config.assets.precompile += %w(email.css)
 Rails.application.config.assets.precompile += %w(pdf.css)
+Rails.application.config.assets.precompile += %w(fullcalendar/fullcalendar_wca.js)
+Rails.application.config.assets.precompile += %w(fullcalendar_wca.css)
