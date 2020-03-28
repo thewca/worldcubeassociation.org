@@ -23,7 +23,6 @@ import { scheduleElementSelector } from './SchedulesEditor/ses';
 
 const state = {};
 let setupCalendarHandlers = () => {};
-window.wca = window.wca || {};
 
 /* eslint import/no-cycle: "off" */
 /* eslint no-alert: "off" */

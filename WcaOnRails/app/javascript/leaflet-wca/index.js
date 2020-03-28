@@ -18,8 +18,6 @@ import railsEnv from '../wca/rails-env.js.erb';
 import { redMarker, blueMarker } from './markers';
 import { searchProvider, userTileProvider } from './providers';
 
-window.wca = window.wca || {};
-
 // Leaflet and webpacker are not good friend, we need to require the images for
 // the assets to be properly setup.
 /* eslint no-underscore-dangle: "off" */

@@ -62,9 +62,6 @@
 //= require_self
 //= require_tree .
 
-// Dumping ground for... stuff
-window.wca = window.wca || {};
-
 // Global variables
 window.wca.TEXT_INPUT_DEBOUNCE_MS = 250;
 

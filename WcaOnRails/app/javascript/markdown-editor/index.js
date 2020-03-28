@@ -8,8 +8,6 @@ import 'easymde/dist/easymde.min.css';
 import fetchWithAuthenticityToken from '../wca/fetchWithAuthenticityToken';
 import './style.scss';
 
-window.wca = window.wca || {};
-
 $(() => {
   function insertText(editor, markup, promptText) {
     const cm = editor.codemirror;

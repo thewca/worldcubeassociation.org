@@ -8,8 +8,6 @@ import _ from 'lodash';
 // (because it has jquery...).
 // Therefore we have a few helper here, until we port everything to webpacker.
 
-window.wca = window.wca || {};
-
 window.wca.lodashDiff = (a, b) => _.difference(a, b);
 
 window.wca.lodashDebounce = (a, b) => _.debounce(a, b);
