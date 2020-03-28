@@ -65,14 +65,14 @@
         <script>
           (function() {
             var form_disabled = <%= disable_form.to_json %>;
-            wca.setupVenueMap("map",
+            window.wca.setupVenueMap("map",
                 $("#competition_latitude"),
                 $("#competition_longitude"),
                 <%= Competition::NEARBY_DISTANCE_KM_DANGER %>,
                 <%= Competition::NEARBY_DISTANCE_KM_WARNING %>,
                 form_disabled);
 
-            wca.fetchNearbyCompetitions = function() {
+            window.wca.fetchNearbyCompetitions = function() {
               if (form_disabled) {
                 // The user isn't allowed to change the location of the
                 // competition, so there's no need to bother recomputing the nearby
@@ -82,7 +82,7 @@
               $("#nearby-competitions").addClass('loading');
               var obj = $("#competition-form").serializeJSON();
 
-              wca.cancelPendingAjaxAndAjax('render_nearby_competitions', {
+              window.wca.cancelPendingAjaxAndAjax('render_nearby_competitions', {
                 url: '<%= nearby_competitions_path %>',
                 data: {
                   <% if @competition_admin_view %>
@@ -99,7 +99,7 @@
                   $("#nearby-competitions").removeClass('loading');
                 }
               });
-              wca.cancelPendingAjaxAndAjax('render_time_until_competition', {
+              window.wca.cancelPendingAjaxAndAjax('render_time_until_competition', {
                 url: '<%= time_until_competition_path %>',
                 data: {
                   'competition[id]': obj['competition[id]'],
@@ -129,7 +129,7 @@
 
         <script>
           $(".datetimepicker").on("dp.change", function(e) {
-            wca.fetchNearbyCompetitions();
+            window.wca.fetchNearbyCompetitions();
           });
         </script>
 

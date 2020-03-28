@@ -2,7 +2,7 @@
 <script>
   $(function() {
     var competitions = <%= competitions_json_for_markers @person.competitions %>
-    var map = wca.createCompetitionsMapLeaflet('competitions-map');
-    wca.addCompetitionsToMapLeaflet(map, competitions);
+    var map = window.wca.createCompetitionsMapLeaflet('competitions-map');
+    window.wca.addCompetitionsToMapLeaflet(map, competitions);
   });
 </script>

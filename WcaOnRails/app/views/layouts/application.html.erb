@@ -12,22 +12,37 @@
 
   <title><%= full_title(yield(:title)) %></title>
   <%# NOTE: we need to import this first, because it's used in our non-webpack application.js %>
-  <%= javascript_pack_tag 'lodash_utils' %>
+  <%= javascript_packs_with_chunks_tag 'lodash_utils' %>
 
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
 
-  <%= stylesheet_pack_tag 'application' %>
-  <%= javascript_pack_tag 'application' %>
+  <% js_packs = ['application'] %>
+  <% css_packs = ['application'] %>
 
   <% if content_for :include_markdown_editor %>
-    <%= stylesheet_pack_tag 'markdown_editor' %>
-    <%= javascript_pack_tag 'markdown_editor' %>
+    <% css_packs << 'markdown_editor' %>
+    <% js_packs << 'markdown_editor' %>
   <% end %>
 
   <% if content_for :include_auto_numeric %>
-    <%= javascript_pack_tag 'auto_numeric' %>
+    <% js_packs << 'auto_numeric' %>
   <% end %>
+
+  <% if content_for :include_schedule_editor %>
+    <% js_packs << 'edit_schedule' %>
+  <% end %>
+
+  <% if content_for :include_events_editor %>
+    <% js_packs << 'edit_events' %>
+  <% end %>
+
+  <% if content_for :include_schedule_viewer %>
+    <% js_packs << 'show_schedule' %>
+  <% end %>
+
+  <%= stylesheet_packs_with_chunks_tag *css_packs %>
+  <%= javascript_packs_with_chunks_tag *js_packs %>
 
   <%= csrf_meta_tags %>
   <%= auto_discovery_link_tag(:rss, rss_url(format: :xml)) %>

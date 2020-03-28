@@ -13,7 +13,7 @@ var personsTableAjax = {
   },
   doAjax: function(options) {
     $('.pagination li').addClass('disabled');
-    return wca.cancelPendingAjaxAndAjax('persons-index', options);
+    return window.wca.cancelPendingAjaxAndAjax('persons-index', options);
   },
 };
 

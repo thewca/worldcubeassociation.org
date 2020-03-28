@@ -13,7 +13,7 @@
     <hr/>
     <%= f.input :tags %>
     <script>
-      $('input#incident_tags').selectize(wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>));
+      $('input#incident_tags').selectize(window.wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>));
     </script>
     <hr/>
     <div class="incident-competitions">

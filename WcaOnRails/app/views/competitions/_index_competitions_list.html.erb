@@ -35,11 +35,11 @@
       var competitions = <%= competitions_json_for_markers competitions %>;
       /* This file may be rendered in response to an Ajax request in order to replace the existing competitions list.
          We take this into account and prevent from creating the map twice. */
-      if(wca._competitionsIndexMap === undefined) {
-        wca._competitionsIndexMap = wca.createCompetitionsMapLeaflet('competitions-map');
+      if(window.wca._competitionsIndexMap === undefined) {
+        window.wca._competitionsIndexMap = window.wca.createCompetitionsMapLeaflet('competitions-map');
       }
-      wca.removeMapMarkersLeaflet(wca._competitionsIndexMap);
-      wca.addCompetitionsToMapLeaflet(wca._competitionsIndexMap, competitions);
+      window.wca.removeMapMarkersLeaflet(window.wca._competitionsIndexMap);
+      window.wca.addCompetitionsToMapLeaflet(window.wca._competitionsIndexMap, competitions);
     });
   </script>
 <% else %>

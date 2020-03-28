@@ -68,35 +68,35 @@ window.wca = window.wca || {};
 // Global variables
 window.wca.TEXT_INPUT_DEBOUNCE_MS = 250;
 
-wca._pendingAjaxById = {};
-wca.cancelPendingAjaxAndAjax = function(id, options) {
-  if(wca._pendingAjaxById[id]) {
-    wca._pendingAjaxById[id].abort();
+window.wca._pendingAjaxById = {};
+window.wca.cancelPendingAjaxAndAjax = function(id, options) {
+  if(window.wca._pendingAjaxById[id]) {
+    window.wca._pendingAjaxById[id].abort();
   }
-  wca._pendingAjaxById[id] = $.ajax(options).always(function() {
-    delete wca._pendingAjaxById[id];
+  window.wca._pendingAjaxById[id] = $.ajax(options).always(function() {
+    delete window.wca._pendingAjaxById[id];
   });
-  return wca._pendingAjaxById[id];
+  return window.wca._pendingAjaxById[id];
 };
 
-wca._googleMapsLoaded = false;
-wca._onGoogleMapsLoaded = function() {
-  wca._googleMapsLoaded = true;
-  wca._googleMapsLoadedListeners.forEach(function(listener) {
+window.wca._googleMapsLoaded = false;
+window.wca._onGoogleMapsLoaded = function() {
+  window.wca._googleMapsLoaded = true;
+  window.wca._googleMapsLoadedListeners.forEach(function(listener) {
     listener();
   });
-  wca._googleMapsLoadedListeners = null;
+  window.wca._googleMapsLoadedListeners = null;
 };
-wca._googleMapsLoadedListeners = [];
-wca.addGoogleMapsLoadedListener = function(listener) {
-  if(wca._googleMapsLoaded) {
+window.wca._googleMapsLoadedListeners = [];
+window.wca.addGoogleMapsLoadedListener = function(listener) {
+  if(window.wca._googleMapsLoaded) {
     listener();
   } else {
-    wca._googleMapsLoadedListeners.push(listener);
+    window.wca._googleMapsLoadedListeners.push(listener);
   }
 };
 
-wca.addCompetitionsToMap = function(map, competitions) {
+window.wca.addCompetitionsToMap = function(map, competitions) {
   competitions.forEach(function(c) {
     if (c.is_probably_over) {
       iconImage = 'https://maps.google.com/mapfiles/ms/icons/blue.png';
@@ -120,7 +120,7 @@ wca.addCompetitionsToMap = function(map, competitions) {
   });
 };
 
-wca.createCompetitionsMap = function(element) {
+window.wca.createCompetitionsMap = function(element) {
   var map = new google.maps.Map(element, {
     zoom: 2,
     center: { lat: 0, lng: 0 },
@@ -136,15 +136,15 @@ wca.createCompetitionsMap = function(element) {
   return map;
 };
 
-wca.removeMarkers = function(map) {
+window.wca.removeMarkers = function(map) {
   map.overlappingMarkerSpiderfier.getMarkers().forEach(function(marker) {
     marker.setMap(null);
   });
   map.overlappingMarkerSpiderfier.clearMarkers();
 };
 
-wca.renderMarkdownRequest = function(markdownContent) {
-  return wca.cancelPendingAjaxAndAjax('render_markdown', {
+window.wca.renderMarkdownRequest = function(markdownContent) {
+  return window.wca.cancelPendingAjaxAndAjax('render_markdown', {
     url: '/render_markdown',
     method: 'POST',
     data: {
@@ -153,11 +153,11 @@ wca.renderMarkdownRequest = function(markdownContent) {
   });
 };
 
-wca.stripHtmlTags = function(text) {
+window.wca.stripHtmlTags = function(text) {
   return $("<div/>").html(text).text();
 };
 
-wca.datetimepicker = function(){
+window.wca.datetimepicker = function(){
   // Copied (and modified by jfly) from
   // https://github.com/zpaulovics/datetimepicker-rails
   // We're using keepOpen: true here to allow the user to
@@ -210,7 +210,7 @@ $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
 
-  wca.datetimepicker();
+  window.wca.datetimepicker();
 
   $('.datetimerange').each(function() {
     var $inputGroups = $(this).find('.date_picker.form-control');

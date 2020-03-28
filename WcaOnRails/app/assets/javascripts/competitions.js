@@ -80,7 +80,7 @@ onPage('competitions#index', function() {
       // unfortunately it does not trigger our iframe resize trick...
       // Google maps somehow did make this work, so if you're motivated,
       // you could look at their source code to try to figure out how they detect and handle this situation.
-      wca._competitionsIndexMap.invalidateSize();
+      window.wca._competitionsIndexMap.invalidateSize();
       if ($(window).innerWidth() > 800) {
         var formTop = $('#competition-query-form').offset().top;
         $('html, body').animate({ scrollTop: formTop - 5 }, 300);

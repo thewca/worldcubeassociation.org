@@ -6,8 +6,8 @@
   <title>Map</title>
   <%= javascript_include_tag 'application' %>
   <%= stylesheet_link_tag 'application' %>
-  <%= stylesheet_pack_tag 'application' %>
-  <%= javascript_pack_tag 'application' %>
+  <%= stylesheet_packs_with_chunks_tag 'application' %>
+  <%= javascript_packs_with_chunks_tag 'application' %>
   <%= csrf_meta_tags %>
   <style>
     body {
@@ -28,8 +28,8 @@
   <script>
 $(function() {
   let query = "<%= @query %>";
-  let map = wca.createCompetitionsMapLeaflet("map");
-  wca.searchAndPlaceOnMap(map, query);
+  let map = window.wca.createCompetitionsMapLeaflet("map");
+  window.wca.searchAndPlaceOnMap(map, query);
 });
   </script>
 </body>

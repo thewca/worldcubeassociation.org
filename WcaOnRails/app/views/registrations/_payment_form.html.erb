@@ -63,7 +63,7 @@
           } else {
             // The card action has been handled
             // The PaymentIntent can be confirmed again on the server
-            wca.cancelPendingAjaxAndAjax('process-payment-confirmation', {
+            window.wca.cancelPendingAjaxAndAjax('process-payment-confirmation', {
               url: '<%= registration_payment_intent_path(@registration) %>',
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
@@ -113,7 +113,7 @@
             $("#group-card-element").removeClass("has-error");
             $("#group-cardholder-name").removeClass("has-error");
             // Otherwise send paymentMethod.id to your server (see Step 2)
-            wca.cancelPendingAjaxAndAjax('process-payment', {
+            window.wca.cancelPendingAjaxAndAjax('process-payment', {
               url: '<%= registration_payment_intent_path(@registration) %>',
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
