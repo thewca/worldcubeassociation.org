@@ -1,6 +1,6 @@
 import {
   Icon,
-} from 'leaflet/dist/leaflet';
+} from 'leaflet';
 import markerBlue from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import markerRed from './marker-icon-red.png';
