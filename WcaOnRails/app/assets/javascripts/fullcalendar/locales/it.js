@@ -1,1 +1,1 @@
-//= require fullcalendar/lang/it.js
+//= require fc_locales/it.js

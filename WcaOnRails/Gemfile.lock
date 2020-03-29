@@ -6,19 +6,18 @@ GIT
       railties (>= 3.1)
 
 GIT
-  remote: https://github.com/jfly/carrierwave-crop.git
-  revision: 3a91399a45428631d61ff81ea988e17bcdd74e06
-  specs:
-    carrierwave-crop (0.1.2)
-      carrierwave (>= 0.8.0, < 0.11.0)
-      jquery-rails
-      rails (>= 3.2)
-
-GIT
   remote: https://github.com/jfly/selectize-rails.git
   revision: fe39d6e08934c0ebc602a166d88de3b22c3aaf49
   specs:
     selectize-rails (0.12.1)
+
+GIT
+  remote: https://github.com/thewca/carrierwave-crop.git
+  revision: 86dba128c01ca38b7b7415edb01ecaa51bc3579a
+  specs:
+    carrierwave-crop (0.1.2)
+      carrierwave (>= 0.8.0, < 0.11.0)
+      rails (>= 3.2)
 
 GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails.git
@@ -221,10 +220,6 @@ GEM
     font-awesome-sass (5.12.0)
       sassc (>= 1.11)
     formatador (0.2.5)
-    fullcalendar-rails (3.9.0.0)
-      jquery-rails (>= 4.0.5, < 5.0.0)
-      jquery-ui-rails (>= 5.0.2)
-      momentjs-rails (>= 2.9.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     google-api-client (0.37.2)
@@ -297,14 +292,6 @@ GEM
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
-    jquery-rails (4.3.5)
-      rails-dom-testing (>= 1, < 3)
-      railties (>= 4.2.0)
-      thor (>= 0.14, < 2.0)
-    jquery-slick-rails (1.9.0)
-      railties (>= 3.1)
-    jquery-ui-rails (6.0.1)
-      railties (>= 3.2.16)
     json (2.3.0)
     json-schema (2.8.1)
       addressable (>= 2.4)
@@ -653,7 +640,6 @@ DEPENDENCIES
   faker
   faraday
   font-awesome-sass
-  fullcalendar-rails
   google-api-client
   guard-rspec
   high_voltage
@@ -665,9 +651,6 @@ DEPENDENCIES
   image_processing
   irb
   jbuilder
-  jquery-rails
-  jquery-slick-rails
-  jquery-ui-rails
   json-schema
   kaminari
   kaminari-i18n

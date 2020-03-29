@@ -10,8 +10,6 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
 //= require bootstrap-sprockets
 //= require bootstrap-hover-dropdown
 //= require jquery.are-you-sure
@@ -22,6 +20,7 @@
 //= require jquery.jcrop
 //= require jquery.wca-autocomplete
 //= require jquery.floatThead.js
+//= require slick.min
 //= require cocoon
 //= require moment
 //= require moment-timezone-with-data
@@ -30,9 +29,6 @@
 //= require bootstrap-table-locale-all
 //= require extensions/bootstrap-table-mobile
 //= require jquery_plugins
-//= require jquery-ui/position
-//= require jquery-ui/widgets/draggable
-//= require jquery.slick
 //= require_self
 // We don't require_tree here, because we don't want fullcalendar and locales
 // to be included.

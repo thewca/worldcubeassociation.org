@@ -966,6 +966,11 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
+"@rails/ujs@^6.0.2-2":
+  version "6.0.2-2"
+  resolved "https://registry.yarnpkg.com/@rails/ujs/-/ujs-6.0.2-2.tgz#7a28774789ca3f4a8e95e58e5a19dbaa9d6c0feb"
+  integrity sha512-JtDia3bpMbk4WeI4TwGzBfO9ahe6JeNaVE5d6qt1dS0c2KSSXxtKG4YpdiSQLZbutKAiakJPLZ3ZeoD6wRRIXg==
+
 "@rails/webpacker@4.2.2":
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@rails/webpacker/-/webpacker-4.2.2.tgz#b9dd3235fdf4d0badbda8e33f6ebee742a9f3abb"
@@ -5066,6 +5071,11 @@ jest-worker@^25.1.0:
   dependencies:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
+
+jquery@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
+  integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
 
 js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.5.2"
