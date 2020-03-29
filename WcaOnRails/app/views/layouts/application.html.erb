@@ -60,6 +60,10 @@
     <% end %>
   <% end %>
 
+  <%# Our webpacker packs (automatically split in chunks) %>
+  <%= stylesheet_packs_with_chunks_tag *css_packs %>
+  <%= javascript_packs_with_chunks_tag *js_packs %>
+
   <%# Our sprockets assets %>
   <% css_assets.uniq.each do |a| %>
     <%= stylesheet_link_tag a, media: 'all' %>
@@ -68,9 +72,6 @@
     <%= javascript_include_tag a %>
   <% end %>
 
-  <%# Our webpacker packs (automatically split in chunks) %>
-  <%= stylesheet_packs_with_chunks_tag *css_packs %>
-  <%= javascript_packs_with_chunks_tag *js_packs %>
 
   <%= csrf_meta_tags %>
   <%= auto_discovery_link_tag(:rss, rss_url(format: :xml)) %>

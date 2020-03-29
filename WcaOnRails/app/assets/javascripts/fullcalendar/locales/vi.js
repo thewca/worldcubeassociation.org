@@ -1,1 +1,1 @@
-//= require fullcalendar/lang/vi.js
+//= require fc_locales/vi.js

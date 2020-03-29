@@ -89,7 +89,7 @@ onPage('competitions#index', function() {
   });
 
   // Necessary hack because Safari fires a popstate event on document load
-  $(window).load(function() {
+  $(window).on('load', function() {
     setTimeout(function() {
       // When back/forward is clicked the url changes since we use pushState,
       // but the content is not reloaded so we have to do this manually.
