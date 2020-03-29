@@ -1,5 +1,6 @@
 <% provide(:title, "Manage schedule for #{@competition.name}") %>
 <% provide(:include_schedule_editor, true) %>
+<% provide(:include_maps, true) %>
 
 <%= render layout: 'nav' do %>
   <% if !@competition.has_defined_dates? %>

@@ -9,7 +9,7 @@ import {
   Circle,
   Popup,
   Icon,
-} from 'leaflet/dist/leaflet';
+} from 'leaflet';
 import { GeoSearchControl } from 'leaflet-geosearch';
 import iconMarker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import iconMarker from 'leaflet/dist/images/marker-icon.png';
