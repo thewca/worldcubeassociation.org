@@ -30,16 +30,16 @@ table.table {
         cursor: pointer;
       }
       &::after {
-        font-family: FontAwesome;
-        content: $fa-var-sort;
+        font-family: Icons;
+        content: "\f0dc";
         margin-left: 5px;
       }
       &.asc::after {
-        content: $fa-var-sort-up;
+        content: "\f0de";
         color: $blue;
       }
       &.desc::after {
-        content: $fa-var-sort-down;
+        content: "\f0dd";
         color: $blue;
       }
     }

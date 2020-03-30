@@ -52,13 +52,18 @@
       <% end %>
 
       <div class="links">
-        <%= link_to_add_association button_tag(icon("fas", "plus", "Add member"), type: "button", class: "btn btn-primary add"), f, :team_members,
-                                    data: { association_insertion_node: '.team-members:not(.floatThead-table)', association_insertion_method: 'append' } %>
+        <%= link_to_add_association(
+          button_tag(raw("#{ui_icon("plus")} Add member"), type: "button", class: "btn btn-primary add"),
+          f,
+          :team_members,
+          data: { association_insertion_node: '.team-members:not(.floatThead-table)', association_insertion_method: 'append' }) %>
       </div>
     </div>
 
     <div class="form-group form-actions">
-      <%= link_to icon("fas", "undo", "Back to Teams"), teams_path, class: "btn btn-default teams-home" %>
+      <%= link_to teams_path, class: "btn btn-default teams-home" do %>
+        <%= ui_icon("undo") %> Back to Teams
+      <% end %>
       <%= f.button :submit, class: "btn btn-primary" %>
     </div>
   <% end %>

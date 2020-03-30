@@ -29,6 +29,8 @@
   <%= render @delegate_report %>
 
   <% if current_user.can_edit_delegate_report?(@competition.delegate_report) %>
-    <%= link_to icon("fas", "pencil-alt", "Edit Report"), delegate_report_edit_path(@competition), class: "btn btn-default" %>
+    <%= link_to delegate_report_edit_path(@competition), class: "btn btn-default" do %>
+      <%= ui_icon("pencil alt") %> Edit Report
+    <% end %>
   <% end %>
 <% end %>

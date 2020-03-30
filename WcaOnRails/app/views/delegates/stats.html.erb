@@ -23,7 +23,7 @@
         <tr class="<%= delegate.delegate_status %>">
           <td class="delegate" data-toggle="tooltip" data-placement="top" data-container="body">
             <%= delegate.name %>
-            <%= mail_to delegate.email, icon("fas", "envelope"), target: "_blank", class: "hide-new-window-icon" %>
+            <%= mail_to delegate.email, ui_icon("envelope"), target: "_blank", class: "hide-new-window-icon" %>
           </td>
           <td class="position"><%= delegate.delegate_status.humanize %></td>
           <td class="region"><%= delegate.region %></td>

@@ -13,26 +13,26 @@
           <p><%= hash[:description] %></p>
           <% if hash[:url] %>
             <p>
-              <%= icon("fas", "link") %>
+              <%= ui_icon("linkify") %>
               <%= link_to("Website", hash[:url], target: "_blank") %>
             </p>
           <% end %>
           <% if hash[:guide_url] %>
             <p>
-              <%= icon("fas", "question-circle") %>
+              <%= ui_icon("question circle") %>
               <%= link_to("Guide", hash[:guide_url], target: "_blank") %>
             </p>
           <% end %>
           <% if hash[:src_url] %>
             <p>
-              <%= icon("fab", "github") %>
+              <%= ui_icon("github") %>
               <%= link_to("Sources", hash[:src_url], target: "_blank") %>
               (<%= hash[:maintainer] %>)
             </p>
           <% end %>
           <% if hash[:download_url] %>
             <p>
-              <%= icon("fas", "download") %>
+              <%= ui_icon("download") %>
               <%= link_to("Download", hash[:download_url], target: "_blank") %>
             </p>
           <% end %>

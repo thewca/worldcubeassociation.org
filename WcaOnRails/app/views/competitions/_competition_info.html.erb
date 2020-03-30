@@ -4,7 +4,7 @@
       <dt><%= t '.date' %></dt>
       <dd>
         <%= wca_date_range(competition.start_date, competition.end_date) %>
-        <%= link_to(icon("far", "calendar-plus"), competition_path(competition, format: :ics),
+        <%= link_to(ui_icon("calendar plus"), competition_path(competition, format: :ics),
                     title: t('.add_to_calendar'),
                     data: {
                       toggle: "tooltip",
@@ -55,7 +55,7 @@
 
     <% if @competition.has_schedule? %>
       <dl class="dl-horizontal">
-        <dt><%= icon("fas", "print") %></dt>
+        <dt><%= ui_icon("print") %></dt>
         <dd>
           <%= t("competitions.competition_info.pdf.download_html",
                 here: link_to(t("common.here"),

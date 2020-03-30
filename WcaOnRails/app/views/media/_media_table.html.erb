@@ -75,17 +75,17 @@
                             params: { "competition_medium[status]" => "accepted" },
                             data: { confirm: t('.confirm_accept') } do
               %>
-                <%= icon("fas", "check") %>
+                <%= ui_icon("check") %>
               <% end %>
             <% end %>
-            <%= link_to icon("fas", "pencil-alt"), edit_medium_path(medium), title: t('.edit') %>
+            <%= link_to ui_icon("pencil alt"), edit_medium_path(medium), title: t('.edit') %>
             <%= button_to medium_path(medium),
                           title: t('common.delete'),
                           class: "btn btn-link",
                           method: :delete,
                           data: { confirm: t('media.common.confirm_delete') } do
             %>
-              <%= icon("fas", "trash") %>
+              <%= ui_icon("trash") %>
             <% end %>
           </td>
         <% end %>

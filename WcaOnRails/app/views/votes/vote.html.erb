@@ -47,7 +47,9 @@
         <%= f.input :comment, required: false %>
       <% end %>
 
-      <%= link_to icon("fas", "undo", "Back to Polls"), polls_path, class: "btn btn-default" %>
+      <%= link_to polls_path, class: "btn btn-default" do %>
+        <%= ui_icon("undo") %> Back to Polls
+      <% end %>
 
       <% if @poll.confirmed? %>
         <button type="submit" class="btn btn-success">

@@ -72,7 +72,7 @@
               <div class="events-filter" data-venue="<%= venue.id %>">
                 <div class="event-all selected">ALL</div>
                 <% competition.events.each do |e| %>
-                  <span data-event="<%= e.id %>" class="cubing-icon fa-fw selected event-<%= e.id %>"></span>
+                  <%= cubing_icon(e.id, class: "selected", data: { event: e.id }) %>
                 <% end %>
               </div>
             </div>

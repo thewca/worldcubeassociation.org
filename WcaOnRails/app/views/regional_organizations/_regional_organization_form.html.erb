@@ -46,7 +46,9 @@
 
   <div class="form-group form-actions">
     <% if @current_user.can_manage_regional_organizations? %>
-      <%= link_to icon("fas", "undo", "Back to Regional Organizations list"), admin_regional_organizations_path, class: "btn btn-default" %>
+      <%= link_to admin_regional_organizations_path, class: "btn btn-default" do %>
+        <%= ui_icon("undo") %> Back to Regional Organizations list
+      <% end %>
     <% end %>
     <%= f.button :submit, class: "btn btn-primary" %>
   </div>

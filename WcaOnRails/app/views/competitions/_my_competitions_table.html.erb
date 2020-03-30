@@ -40,7 +40,7 @@
               <%= link_to competition.display_name, competition_path(competition) %>
               <% if competition.championships.any? %>
                 <span class="championship-trophy" data-toggle="tooltip" data-placement="bottom" title="<%= competition.championships.sort.map { |championship| championship.name }.join(", ") %>">
-                  <%= icon('fas', 'trophy') %>
+                  <%= ui_icon('trophy') %>
                 </span>
               <% end %>
             </td>
@@ -48,14 +48,14 @@
             <td><%= wca_date_range(competition.start_date, competition.end_date) %></td>
             <td>
               <% if registration %>
-                <%= icon("fas", registration.accepted? ? "calendar-check" : "hourglass-half") %>
+                <%= ui_icon(registration.accepted? ? "calendar check" : "hourglass half") %>
               <% end %>
             </td>
             <td>
               <% if !past && current_user.can_manage_competition?(competition) %>
                 <%= link_to t('.edit'), edit_competition_path(competition) %>
               <% elsif competition.results_posted? %>
-                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= t '.results_up' %>"></span>
+                <%= ui_icon("check circle", data: { toggle: "tooltip", placement: "top", container: "body" }, title: t('.results_up')) %>
               <% end %>
             </td>
             <td>
@@ -68,13 +68,13 @@
                 <%= competition.delegates.map(&:name).join(", ") %>
               <% else %>
                 <% if current_user.can_view_delegate_report?(competition.delegate_report) %>
-                  <%= link_to icon("fas", 'file-alt'), delegate_report_path(competition), title: t('.report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
+                  <%= link_to ui_icon('file alt'), delegate_report_path(competition), title: t('.report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
                 <% end %>
                 <% if current_user.can_edit_delegate_report?(competition.delegate_report) %>
-                  <%= link_to icon("fas", 'edit'), delegate_report_edit_path(competition), title: t('.edit_report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
+                  <%= link_to ui_icon('edit'), delegate_report_edit_path(competition), title: t('.edit_report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
                 <% end %>
                 <% if competition.user_should_post_delegate_report?(current_user) %>
-                  <%= icon('warning', title: t('.missing_report'), data: { 'toggle': 'tooltip', 'container': 'body' }) %>
+                  <%= ui_icon('warning', title: t('.missing_report'), data: { 'toggle': 'tooltip', 'container': 'body' }) %>
                 <% end %>
               <% end %>
             </td>
