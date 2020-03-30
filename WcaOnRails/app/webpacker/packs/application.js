@@ -7,9 +7,9 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
+import 'flag-icon-css/css/flag-icon.css';
 import '../javascript/image-preview';
 import '../javascript/polyfills';
-import 'flag-icon-css/css/flag-icon.css';
 import '../javascript/incidents-log';
 import autosize from 'autosize';
 import {
@@ -27,6 +27,30 @@ require('jquery');
 window.wca = window.wca || {};
 window.wca.components = {};
 window.wca.attachComponentToElem = attachComponentToElem;
+
+// FIXME: refactor?
+// NOTE: We *need* to import only the components we want to use.
+// The full Semantic/Fomantic UI css is 1.6 MB minified at the time of writing.
+// There is no way it's reasonable to add that to our frontpage, given we use
+// only a small subset of components.
+// The goal is to "import" (which for CSS is actually "declare to webpacker
+// we want to use that dependency) the components used site-wide, and import
+// other components on a need-per-pack basis.
+// Webpacker will then do the maths and chunk that appropriately.
+import '../stylesheets/semantic/components/site.css';
+import '../stylesheets/semantic/components/site.js';
+import '../stylesheets/semantic/components/container.css';
+import '../stylesheets/semantic/components/header.css';
+import '../stylesheets/semantic/components/list.css';
+import '../stylesheets/semantic/components/item.css';
+import '../stylesheets/semantic/components/image.css';
+import '../stylesheets/semantic/components/icon.css';
+import '../stylesheets/semantic/components/grid.css';
+import '../stylesheets/semantic/components/reset.css';
+import '../stylesheets/semantic/components/segment.css';
+import '../stylesheets/semantic/components/button.css';
+import '../stylesheets/override.scss';
+import '../stylesheets/homepage.scss';
 
 // Setting up autosize
 $(() => {
