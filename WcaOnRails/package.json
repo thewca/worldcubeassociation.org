@@ -42,7 +42,7 @@
     "prop-types": "^15.7.2",
     "rails-erb-loader": "^5.5.2",
     "react": "^16.13.1",
-    "react-bootstrap": "^0.33.1",
+    "react-bootstrap": "^1.0.0",
     "react-dom": "^16.13.0",
     "react-leaflet": "^2.6.3",
     "regenerator-runtime": "^0.13.5",
