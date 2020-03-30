@@ -2,7 +2,7 @@ import React from 'react'
 
 import AttemptResultInput from './AttemptResultInput'
 import { attemptResultToString, matchResult } from './utils'
-import { roundIdToString } from 'wca/wcif-utils'
+import { roundIdToString } from '../../wca/wcif-utils'
 
 const MIN_ADVANCE_PERCENT = 1;
 const MAX_ADVANCE_PERCENT = 75;

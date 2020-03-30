@@ -1,6 +1,6 @@
 import React from 'react'
 
-import events from 'wca/events.js.erb'
+import events from '../../wca/events.js.erb'
 import {
   MINUTE_IN_CS,
   SECOND_IN_CS,

@@ -3,12 +3,12 @@ import cn from 'classnames'
 import ReactDOM from 'react-dom'
 import _ from 'lodash';
 
-import events from 'wca/events.js.erb'
-import formats from 'wca/formats.js.erb'
-import { rootRender } from 'edit-events'
-import { pluralize } from 'edit-events/modals/utils'
-import { buildActivityCode, saveWcif, roundIdToString } from 'wca/wcif-utils'
-import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from 'edit-events/modals'
+import events from '../wca/events.js.erb'
+import formats from '../wca/formats.js.erb'
+import { rootRender } from '.'
+import { pluralize } from './modals/utils'
+import { buildActivityCode, saveWcif, roundIdToString } from '../wca/wcif-utils'
+import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from './modals'
 
 export default class EditEvents extends React.Component {
   save = e => {
