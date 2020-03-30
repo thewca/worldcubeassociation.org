@@ -3,7 +3,7 @@
     <%= t("country_bands.band_title", number: number) %>
     (<%= t("country_bands.due_value", value: data[:value]) %>)
     <% if current_user&.can_admin_finances? %>
-      <%= link_to(icon("fas", "pencil-alt"), edit_country_band_path(id: number)) %>
+      <%= link_to(ui_icon("pencil alt"), edit_country_band_path(id: number)) %>
     <% end %>
   </div>
   <% (@country_bands_by_number[number] || []).map(&:country).sort_by(&:name).each do |c| %>

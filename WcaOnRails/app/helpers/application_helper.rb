@@ -204,14 +204,23 @@ module ApplicationHelper
 
   def cubing_icon(event, html_options = {})
     html_options[:class] ||= ""
-    html_options[:class] += " cubing-icon event-#{event}"
-    content_tag :span, "", html_options
+    # We use 'icon' which is the default Semantic-UI class for icons.
+    # It applies fixed-width and inline block on them.
+    html_options[:class] += " cubing-icon icon event-#{event}"
+    content_tag :i, "", html_options
   end
 
   def flag_icon(iso2, html_options = {})
     html_options[:class] ||= ""
     html_options[:class] += " flag-icon flag-icon-#{iso2.downcase}"
     content_tag :span, "", html_options
+  end
+
+  def ui_icon(name, html_options = {})
+    opts = html_options.merge({
+      class: "icon #{name} " + html_options[:class].to_s,
+    })
+    content_tag(:i, "", opts)
   end
 
   def format_money(money)

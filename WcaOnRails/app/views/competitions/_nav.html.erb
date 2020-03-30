@@ -8,47 +8,47 @@
         nav_items << {
           text: t('.menu.results'),
           path: competition_path(@competition),
-          fas_icon: "trophy",
+          icon: "trophy",
           children: [
-            { text: t('.menu.podiums'), path: competition_results_podiums_path(@competition), fas_icon: "cubes" },
+            { text: t('.menu.podiums'), path: competition_results_podiums_path(@competition), icon: "cubes" },
             {
               text: t('.menu.all'),
               path: competition_results_all_path(@competition),
-              fas_icon: "list",
+              icon: "list",
               tiny_children: @competition.events.map do |event|
                 { text: event.id, path: competition_results_all_path(@competition, event: event.id), cubing_icon: event.id, title: event.name }
               end
             },
-            { text: t('.menu.by_person'), path: competition_results_by_person_path(@competition), fas_icon: "user" },
+            { text: t('.menu.by_person'), path: competition_results_by_person_path(@competition), icon: "user" },
           ],
         }
       else
         nav_items << {
           text: t('.menu.info'),
           path: competition_path(@competition),
-          fas_icon: "info-circle",
+          icon: "info circle",
         }
       end
       if current_user&.can_manage_competition?(@competition)
         nav_items << {
           text: t('.menu.edit'),
-          fas_icon: "lock",
+          icon: "lock",
           collapsible: true,
           children: [
-            { text: t('.menu.orga_view'), path: edit_competition_path(@competition), fas_icon: "lock" },
-            { text: t('.menu.event_view'), path: edit_events_path(@competition), fas_icon: "cubes" },
-            { text: t('.menu.schedule_view'), path: edit_schedule_path(@competition), fas_icon: "calendar" },
-            { text: t('.menu.payment_view'), path: competitions_payment_setup_path(@competition), fab_icon: "cc-stripe" },
+            { text: t('.menu.orga_view'), path: edit_competition_path(@competition), icon: "lock" },
+            { text: t('.menu.event_view'), path: edit_events_path(@competition), icon: "cubes" },
+            { text: t('.menu.schedule_view'), path: edit_schedule_path(@competition), icon: "calendar" },
+            { text: t('.menu.payment_view'), path: competitions_payment_setup_path(@competition), icon: "cc stripe" },
           ] +
           (current_user.can_admin_competitions? ? [
-            { text: t('.menu.admin_view'), path: admin_edit_competition_path(@competition), fas_icon: "lock" },
+            { text: t('.menu.admin_view'), path: admin_edit_competition_path(@competition), icon: "lock" },
           ] : [])
         }
         if @competition.use_wca_registration?
           nav_items << {
             text: t('.menu.registration'),
             path: competition_edit_registrations_path(@competition),
-            fas_icon: "list-ul",
+            icon: "list ul",
             notification_count: @competition.registrations.pending.count,
             children: [{
               hidden: true,
@@ -61,7 +61,7 @@
           nav_items << {
             text: t('.menu.import_registrations'),
             path: competition_registrations_import_path(@competition),
-            fas_icon: "upload",
+            icon: "upload",
           }
         end
       end
@@ -69,27 +69,27 @@
         nav_items << {
           text: t('.menu.clone'),
           path: clone_competition_path(@competition),
-          fas_icon: "clone",
+          icon: "clone",
         }
       end
       if current_user&.can_upload_competition_results?(@competition)
         nav_items << {
           text: t('.menu.submit_results'),
           path: competition_submit_results_edit_path(@competition),
-          fas_icon: "cloud-upload-alt",
+          icon: "cloud upload alt",
         }
       end
       if current_user&.can_admin_results?
         nav_items << {
           text: "Admin results",
           collapsible: true,
-          fas_icon: "cogs",
+          icon: "cogs",
           children: [
-            { text: "Upload and check results", path: competition_admin_upload_results_edit_path(@competition), fas_icon: "check" },
+            { text: "Upload and check results", path: competition_admin_upload_results_edit_path(@competition), icon: "check" },
             {
               text: "Check existing results",
               path: competition_admin_check_existing_results_path(@competition),
-              fas_icon: "check",
+              icon: "check",
               is_active: lambda do
                 controller.is_a?(AdminController) && ["check_results", "run_validators"].include?(action_name)
               end,
@@ -101,10 +101,10 @@
         nav_items << {
           text: t('.menu.delegate_report'),
           path: delegate_report_path(@competition),
-          fas_icon: if current_user.can_edit_delegate_report?(@competition.delegate_report)
+          icon: if current_user.can_edit_delegate_report?(@competition.delegate_report)
                      "edit"
                    else
-                     "file-alt"
+                     "file alt"
                    end
         }
       end
@@ -112,7 +112,7 @@
         nav_items << {
           text: t('.menu.tabs'),
           path: competition_tabs_path(@competition),
-          fas_icon: "align-left",
+          icon: "align left",
         }
       end
       unless @competition.results_posted?
@@ -120,14 +120,14 @@
           nav_items << {
             text: t('.menu.register'),
             path: competition_register_path(@competition),
-            fas_icon: "sign-in-alt"
+            icon: "sign in alt"
           }
         end
         if @competition.registrations.any?
           nav_items << {
             text: t('.menu.competitors'),
             path: competition_registrations_path(@competition),
-            fas_icon: "users",
+            icon: "users",
             tiny_children: @competition.events.map do |event|
               { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
             end
@@ -144,14 +144,11 @@
       <% end %>
 
       <% blocks.define :nav_icon do |nav_item| %>
-        <% if nav_item[:fas_icon] %>
-          <span class="fa-fw fas fa-<%= nav_item[:fas_icon] %>"></span>
-        <% end %>
-        <% if nav_item[:fab_icon] %>
-          <span class="fa-fw fab fa-<%= nav_item[:fab_icon] %>"></span>
+        <% if nav_item[:icon] %>
+          <%= ui_icon(nav_item[:icon]) %>
         <% end %>
         <% if nav_item[:cubing_icon] %>
-          <span class="cubing-icon fa-fw event-<%= nav_item[:cubing_icon] %>"></span>
+          <%= cubing_icon(nav_item[:cubing_icon]) %>
         <% end %>
       <% end %>
 
@@ -220,15 +217,15 @@
       <h3>
         <% if current_user && @competition.upcoming? %>
           <span class="bookmark-icon" id="not-bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.bookmark') %>" <% if current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
-            <%= icon('far', 'bookmark') %>
+            <%= ui_icon('bookmark') %>
           </span>
           <span class="bookmark-icon" id="bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.is_bookmarked') %>" <% if !current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
-            <%= icon('fa', 'bookmark') %>
+            <%= ui_icon('bookmark') %>
           </span>
         <% end %>
         <% if @competition.championships.any? %>
           <span class="championship-trophy" data-toggle="tooltip" data-placement="bottom" title="<%= @competition.championships.sort.map { |championship| championship.name }.join(", ") %>">
-            <%= icon('fas', 'trophy') %>
+            <%= ui_icon('trophy') %>
           </span>
         <% end %>
         <%= @competition.display_name %>

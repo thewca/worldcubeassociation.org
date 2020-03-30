@@ -11,16 +11,16 @@
       <span class="date">
         <% if competition.is_probably_over? %>
           <% if competition.results_posted? %>
-            <%= icon('fas', 'check-circle', title: t('competitions.index.tooltips.hourglass.posted'), class: "results-posted-indicator", data: { toggle: "tooltip" }) %>
+            <%= ui_icon('check circle', title: t('competitions.index.tooltips.hourglass.posted'), class: "results-posted-indicator", data: { toggle: "tooltip" }) %>
           <% else %>
-            <%= icon('fas', 'hourglass-end', title: t('competitions.index.tooltips.hourglass.ended', days: t('common.days', count:(Date.today - competition.end_date).to_i)), data: { toggle: "tooltip" }) %>
+            <%= ui_icon('hourglass end', title: t('competitions.index.tooltips.hourglass.ended', days: t('common.days', count:(Date.today - competition.end_date).to_i)), data: { toggle: "tooltip" }) %>
           <% end %>
         <% elsif competition.in_progress? %>
-          <%= icon('fas', 'hourglass-half', title: t('competitions.index.tooltips.hourglass.in_progress'), data: { toggle: "tooltip" }) %>
+          <%= ui_icon('hourglass half', title: t('competitions.index.tooltips.hourglass.in_progress'), data: { toggle: "tooltip" }) %>
         <% elsif @by_announcement_selected %>
-          <%= icon('fas', 'hourglass-start', title: t('competitions.index.tooltips.hourglass.announced_on', announcement_date: competition.announced_at.strftime(" %F %H:%M:%S")), data: { toggle: "tooltip" }) %>
+          <%= ui_icon('hourglass start', title: t('competitions.index.tooltips.hourglass.announced_on', announcement_date: competition.announced_at.strftime(" %F %H:%M:%S")), data: { toggle: "tooltip" }) %>
         <% else %>
-          <%= icon('fas', 'hourglass-start', title: t('competitions.index.tooltips.hourglass.starts_in', days: t('common.days', count:(competition.start_date - Date.today).to_i)), data: { toggle: "tooltip" }) %>
+          <%= ui_icon('hourglass start', title: t('competitions.index.tooltips.hourglass.starts_in', days: t('common.days', count:(competition.start_date - Date.today).to_i)), data: { toggle: "tooltip" }) %>
         <% end %>
         <%= wca_date_range(competition.start_date, competition.end_date) %>
       </span>

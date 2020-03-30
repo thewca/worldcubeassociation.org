@@ -9,7 +9,8 @@
     <span class="event-checkbox">
       <%= label_tag "checkbox-#{event.id}" do %>
         <%= check_box_tag "event_ids[]", event.id, params[:event_ids].include?(event.id), id: "checkbox-#{event.id}" %>
-        <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name %>
+        <%# Not using cubing_icon here, because the selector js code uses span %>
+        <%= content_tag :span, "", class: "event-#{event.id} cubing-icon", data: { toggle: "tooltip", placement: "top" }, title: event.name %>
       <% end %>
     </span>
     <% end %>
@@ -27,7 +28,7 @@
     <div class="input-group">
       <span class="input-group-addon" data-toggle="tooltip" data-placement="top"
             title="<%= t 'competitions.index.tooltips.search' %>">
-        <%= icon("fas", 'search') %>
+        <%= ui_icon('search') %>
       </span>
       <%= text_field_tag "search", params[:search], class: "form-control" %>
     </div>
@@ -121,16 +122,16 @@
   <div class="btn-group btn-group-justified" data-toggle="buttons">
     <label id="display-list" class="btn btn-info">
       <%= radio_button_tag "display", "list" %>
-      <i class="glyphicon glyphicon-list"></i> <%= t 'competitions.index.list' %>
+      <%= ui_icon("list ul") %> <%= t 'competitions.index.list' %>
     </label>
     <label id="display-map" class="btn btn-info">
       <%= radio_button_tag "display", "map" %>
-      <i class="glyphicon glyphicon-map-marker"></i> <%= t 'competitions.index.map' %>
+      <%= ui_icon("map marker alternate") %> <%= t 'competitions.index.map' %>
     </label>
     <% if current_user&.can_see_admin_competitions? %>
       <label id="display-admin" class="btn btn-info">
         <%= radio_button_tag "display", "admin" %>
-        <%= icon("fas", "user-secret", "Admin") %>
+        <%= ui_icon("user secret") %> Admin
       </label>
     <% end %>
   </div>

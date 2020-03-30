@@ -2,15 +2,23 @@
 
 <%= render layout: 'nav' do %>
   <% if @show_events %>
-    <%= link_to icon("fas", "minus", "Hide events"), competition_edit_registrations_path(@competition), class: "btn btn-primary" %>
+    <%= link_to competition_edit_registrations_path(@competition), class: "btn btn-primary" do %>
+      <%= ui_icon("minus") %> Hide events
+    <% end %>
   <% else %>
-    <%= link_to icon("fas", "plus", "Show events"), competition_edit_registrations_path(@competition, show_events: "true"), class: "btn btn-primary" %>
+    <%= link_to competition_edit_registrations_path(@competition, show_events: "true"), class: "btn btn-primary" do %>
+      <%= ui_icon("plus") %> Show events
+    <% end %>
   <% end %>
 
   <% if @show_full_mail %>
-    <%= link_to icon("fas", "minus", "Hide Emails"), competition_edit_registrations_path(@competition), class: "btn btn-primary" %>
+    <%= link_to competition_edit_registrations_path(@competition), class: "btn btn-primary" do %>
+      <%= ui_icon("minus") %> Hide Emails
+    <% end %>
   <% else %>
-    <%= link_to icon("fas", "plus", "Show Emails"), competition_edit_registrations_path(@competition, show_email: "true"), class: "btn btn-primary" %>
+    <%= link_to competition_edit_registrations_path(@competition, show_email: "true"), class: "btn btn-primary" do %>
+      <%= ui_icon("plus") %> Show Emails
+    <% end %>
   <% end %>
 
   <%= form_for @competition, url: competition_registrations_do_actions_for_selected_path(@competition), remote: true do |f| %>
@@ -110,7 +118,7 @@
                 <% end %>
               <% else %>
                 <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
-                  <span class="glyphicon glyphicon-envelope"></span>
+                  <%= ui_icon("envelope") %>
                 <% end %>
               <% end %>
               </td>
@@ -127,19 +135,19 @@
 
     <div id="registrations-actions" class="btn-group" role="group">
       <button type="submit" class="btn btn-info selected-registrations-actions" name="registrations_action" value="export-selected">
-        <%= icon 'fas', 'download', t('registrations.list.export_csv') %>
+        <%= ui_icon 'download' %> <%= t('registrations.list.export_csv') %>
       </button>
       <a href="#" id="email-selected" target="_blank" class="btn btn-info selected-registrations-actions">
-        <%= icon 'fas', 'envelope', t('registrations.list.email') %>
+        <%= ui_icon 'envelope' %> <%= t('registrations.list.email') %>
       </a>
       <button type="submit" class="btn btn-success selected-pending-deleted-registrations-actions" name="registrations_action" value="accept-selected">
-        <%= icon 'fas', 'check', t('registrations.list.approve') %>
+        <%= ui_icon 'check' %> <%= t('registrations.list.approve') %>
       </button>
       <button type="submit" class="btn btn-warning selected-approved-deleted-registrations-actions" name="registrations_action" value="reject-selected">
-        <%= icon 'fas', 'times', t('registrations.list.reject') %>
+        <%= ui_icon 'times' %> <%= t('registrations.list.reject') %>
       </button>
       <button type="submit" class="btn btn-danger selected-pending-approved-registrations-actions" name="registrations_action" value="delete-selected">
-        <%= icon 'fas', 'trash', t('registrations.list.delete') %>
+        <%= ui_icon 'trash' %> <%= t('registrations.list.delete') %>
       </button>
     </div>
   <% end %>

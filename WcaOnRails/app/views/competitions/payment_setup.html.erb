@@ -21,7 +21,9 @@
       Connecting your Stripe account gives the WCA website the ability to
       create charges, and issue refunds directly on your Stripe account.
     </p>
-    <%= link_to icon("fab", "cc-stripe", "Connect with Stripe"), @authorize_url, class: "btn btn-primary" %>
+    <%= link_to @authorize_url, class: "btn btn-primary" do %>
+      <%= ui_icon("cc stripe") %> Connect with Stripe
+    <% end %>
 
   <% else %>
     <p>

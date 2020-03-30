@@ -2,6 +2,6 @@
   <%= f.input :championship_type do %>
     <%= f.select :championship_type, championship_option_tags(selected: f.object.championship_type), {},
                                      { class: "form-control championship-type" } %>
-    <%= link_to_remove_association button_tag(icon("fas", "times"), type: "button", class: "btn btn-danger"), f %>
+    <%= link_to_remove_association button_tag(ui_icon("times"), type: "button", class: "btn btn-danger"), f %>
   <% end %>
 </div>

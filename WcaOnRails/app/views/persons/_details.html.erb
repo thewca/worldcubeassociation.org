@@ -3,7 +3,7 @@
     <h2>
       <%= @person.name %>
       <% if @person.user && current_user&.can_edit_user?(@person.user) %>
-        <%= link_to icon("fas", "edit"), edit_user_path(@person.user) %>
+        <%= link_to ui_icon("edit"), edit_user_path(@person.user) %>
       <% end %>
     </h2>
     <!-- Handle multiple sub ids. -->

@@ -24,7 +24,7 @@
     </div>
     <div class="row">
       <div class="col-sm-offset-2 col-sm-9">
-        <%= link_to_add_association button_tag(icon("fas", "plus", "Link a competition"), type: "button", class: "btn btn-default"), f, :incident_competitions,
+        <%= link_to_add_association button_tag(raw("#{ui_icon("plus")} Link a competition"), type: "button", class: "btn btn-default"), f, :incident_competitions,
           data: { association_insertion_node: '.incident-competitions', association_insertion_method: 'append' } %>
       </div>
     </div>

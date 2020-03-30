@@ -8,7 +8,7 @@ module PersonsHelper
   end
 
   def odd_rank_reason
-    icon("fas", "question-circle", title: t("persons.show.odd_rank_reason"), data: { toggle: "tooltip" })
+    ui_icon("question circle", title: t("persons.show.odd_rank_reason"), data: { toggle: "tooltip" })
   end
 
   def odd_rank_reason_needed?(rank_single, rank_average)

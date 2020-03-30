@@ -20,19 +20,30 @@
           <tr>
             <th><%= tab.name %></th>
             <th>
-              <%= link_to icon("fas", "edit", t('competition_tabs.form_elements.edit')), edit_competition_tab_path(@competition, tab), class: "btn btn-xs btn-success" %>
+              <%= link_to edit_competition_tab_path(@competition, tab), class: "btn btn-xs btn-success" do %>
+                <%= ui_icon("edit") %>
+                <%= t('competition_tabs.form_elements.edit') %>
+              <% end %>
             </th>
             <th>
-              <%= link_to icon("fas", "trash", t('competition_tabs.form_elements.delete')), competition_tab_path(@competition, tab), method: :delete, class: "btn btn-xs btn-danger",
-                                                   data: { confirm: t('competition_tabs.form_elements.confirm_delete', tab_name: tab.name) } %>
+              <%= link_to competition_tab_path(@competition, tab),
+                method: :delete,
+                class: "btn btn-xs btn-danger",
+                data: { confirm: t('competition_tabs.form_elements.confirm_delete', tab_name: tab.name) } do %>
+                <%= ui_icon("trash") %>
+                <%= t('competition_tabs.form_elements.delete') %>
+              <% end %>
             </th>
-            <th><%= link_to icon("fas", "arrow-circle-up"), competition_tab_reorder_path(@competition, tab, direction: "up"), remote: true, class: "reorder-up" %></th>
-            <th><%= link_to icon("fas", "arrow-circle-down"), competition_tab_reorder_path(@competition, tab, direction: "down"), remote: true, class: "reorder-down" %></th>
+            <th><%= link_to ui_icon("arrow-circle-up"), competition_tab_reorder_path(@competition, tab, direction: "up"), remote: true, class: "reorder-up" %></th>
+            <th><%= link_to ui_icon("arrow-circle-down"), competition_tab_reorder_path(@competition, tab, direction: "down"), remote: true, class: "reorder-down" %></th>
           </tr>
         <% end %>
       </tbody>
     </table>
   <% end %>
 
-  <%= link_to icon("fas", :plus, t('competition_tabs.form_elements.new_tab')), new_competition_tab_path, class: "btn btn-primary" %>
+  <%= link_to new_competition_tab_path, class: "btn btn-primary" do %>
+    <%= ui_icon("plus") %>
+    <%= t('competition_tabs.form_elements.new_tab') %>
+  <% end %>
 <% end %>

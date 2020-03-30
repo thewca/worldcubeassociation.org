@@ -29,7 +29,7 @@ const fetchCalendarEvents = (venueId, start, end, timezone, callback) => {
   const allEvents = dataByVenueId[venueId].events;
   const rooms = $(`#room-list-${venueId}`).find('.selected');
   let calendarEvents = _.flatMap(rooms, (room) => _.filter(allEvents, { roomId: $(room).data('room') }));
-  const selectedEvents = _.map($(`#schedule-venue-${venueId} .events-filter > span.selected`),
+  const selectedEvents = _.map($(`#schedule-venue-${venueId} .events-filter > i.selected`),
     (e) => $(e).data('event').toString());
   // Filter events by id only if they are WCA events
   // (we don't want to filter custom activities for which event_id is "other").
@@ -205,7 +205,7 @@ window.wca.setupCalendarAndFilter = (popoverContentBuilder, locale, startDate, n
 
   // Setup events filter actions
   $('.events-filter .event-all').click(onClickAllAction);
-  $('.events-filter span.cubing-icon').click(onClickEventIconAction);
+  $('.events-filter i.cubing-icon').click(onClickEventIconAction);
 
   // Setup rooms filter action
   $('.toggle-room').click(onClickOnRoomAction);

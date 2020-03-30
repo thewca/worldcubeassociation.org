@@ -5,7 +5,9 @@
     <%= yield(:title) %>
 
     <% if current_user.can_create_poll? %>
-      <%= link_to icon("fas", "plus", "New"), new_poll_path, class: "btn btn-primary" %>
+      <%= link_to new_poll_path, class: "btn btn-primary" do %>
+        <%= ui_icon("plus") %> New
+      <% end %>
     <% end %>
   </h1>
 
