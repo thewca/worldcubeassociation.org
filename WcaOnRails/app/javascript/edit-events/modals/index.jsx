@@ -5,14 +5,14 @@ import Button from 'react-bootstrap/lib/Button'
 import Checkbox from 'react-bootstrap/lib/Checkbox'
 import _ from 'lodash';
 
-import events from 'wca/events.js.erb'
-import formats from 'wca/formats.js.erb'
-import { rootRender } from 'edit-events'
+import events from '../../wca/events.js.erb'
+import formats from '../../wca/formats.js.erb'
+import { rootRender } from '..'
 
 import CutoffComponents from './Cutoff'
 import TimeLimitComponents from './TimeLimit'
 import AdvancementConditionComponents from './AdvancementCondition'
-import ButtonActivatedModal from 'edit-events/ButtonActivatedModal'
+import ButtonActivatedModal from '../ButtonActivatedModal'
 
 let RoundAttributeComponents = {
   timeLimit: TimeLimitComponents,

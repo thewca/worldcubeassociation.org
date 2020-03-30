@@ -45,9 +45,9 @@ RSpec.feature "Competition events management" do
       scenario "close with unsaved changes prompts user before discarding changes", js: true do
         within_round("333", 1) { find("[name=timeLimit]").click }
 
-        page.accept_confirm "Are you sure you want to discard your changes?" do
+        page.accept_confirm "Are you sure you want to discard your changes?", wait: 10 do
           within_modal do
-            fill_in "minutes", with: "4"
+            wca_fill_in("minutes", "4")
             click_button "Close"
           end
         end
@@ -66,7 +66,7 @@ RSpec.feature "Competition events management" do
       end
 
       scenario "change scramble group count to 42", js: true do
-        within_round("333", 1) { fill_in("scrambleSetCount", with: 42) }
+        within_round("333", 1) { wca_fill_in("scrambleSetCount", "42") }
         save
         expect(round_333_1.reload.scramble_set_count).to eq 42
       end
@@ -75,7 +75,7 @@ RSpec.feature "Competition events management" do
         within_round("333", 1) { find("[name=timeLimit]").click }
 
         within_modal do
-          fill_in "minutes", with: "5"
+          wca_fill_in "minutes", "5"
           click_button "Ok"
         end
         save
@@ -88,7 +88,7 @@ RSpec.feature "Competition events management" do
 
         within_modal do
           select "Best of 2", from: "Cutoff format"
-          fill_in "minutes", with: "2"
+          wca_fill_in "minutes", "2"
           click_button "Ok"
         end
         save
@@ -104,7 +104,7 @@ RSpec.feature "Competition events management" do
 
         within_modal do
           select "Ranking", from: "Type"
-          fill_in "Ranking", with: "12"
+          wca_fill_in "Ranking", "12"
           click_button "Ok"
         end
         save

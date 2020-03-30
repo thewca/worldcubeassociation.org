@@ -1,7 +1,7 @@
 import React from 'react'
 
-import events from 'wca/events.js.erb'
-import formats from 'wca/formats.js.erb'
+import events from '../../wca/events.js.erb'
+import formats from '../../wca/formats.js.erb'
 import AttemptResultInput from './AttemptResultInput'
 import {
   pluralize,
@@ -11,7 +11,7 @@ import {
 import {
   roundIdToString,
   parseActivityCode,
-} from 'wca/wcif-utils'
+} from '../../wca/wcif-utils'
 
 function roundCutoffToString(wcifRound, { short } = {}) {
   let cutoff = wcifRound.cutoff;

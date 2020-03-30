@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import _ from 'lodash';
 
 import EditEvents from './EditEvents'
-import events from 'wca/events.js.erb'
+import events from '../wca/events.js.erb'
 
 let state = {};
 export function rootRender() {

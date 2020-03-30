@@ -4,12 +4,12 @@ import ReactDOM from 'react-dom'
 import Modal from 'react-bootstrap/lib/Modal'
 import Radio from 'react-bootstrap/lib/Radio'
 
-import events from 'wca/events.js.erb'
-import formats from 'wca/formats.js.erb'
+import events from '../../wca/events.js.erb'
+import formats from '../../wca/formats.js.erb'
 import AttemptResultInput from './AttemptResultInput'
 import { centisecondsToString } from './utils'
-import { roundIdToString, parseActivityCode } from 'wca/wcif-utils'
-import ButtonActivatedModal from 'edit-events/ButtonActivatedModal'
+import { roundIdToString, parseActivityCode } from '../../wca/wcif-utils'
+import ButtonActivatedModal from '../ButtonActivatedModal'
 
 class RadioGroup extends React.Component {
   get value() {
