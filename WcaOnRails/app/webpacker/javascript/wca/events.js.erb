@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import formats from '../wca/formats.js.erb';
+import formats from './formats.js.erb';
 
 export default {
   official: <%= Event.official.to_json.html_safe %>.map(extend),

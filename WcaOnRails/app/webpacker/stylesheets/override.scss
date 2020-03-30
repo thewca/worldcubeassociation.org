@@ -1,0 +1,19 @@
+body, html {
+  // This implements sticky footer, by making the main content extend as needed.
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  main {
+    flex: 1;
+  }
+
+  .icon {
+    text-decoration: none;
+  }
+  .navbar-brand {
+    .icon {
+      margin: 0;
+      width: auto;
+    }
+  }
+}

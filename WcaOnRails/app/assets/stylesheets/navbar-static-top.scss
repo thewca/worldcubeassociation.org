@@ -1,5 +1,7 @@
 .navbar-static-top {
-  margin-bottom: 19px;
+  margin-bottom: 15px;
+  // Override bootstrap default, flexbox is taking care of this.
+  min-height: auto;
 
   .navbar-nav > .active > a {
     background-color: #ccc;
