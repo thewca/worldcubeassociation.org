@@ -367,7 +367,7 @@
         },
         {
           "info": "",
-          "name": "Democratic People\u2019s Republic of Korea",
+          "name": "Democratic People's Republic of Korea",
           "continent_id": "_Asia",
           "class": "state",
           "iso2": "KP",
@@ -604,14 +604,6 @@
           "class": "state",
           "iso2": "HT",
           "id": "Haiti"
-        },
-        {
-          "info": "",
-          "name": "Holy See",
-          "continent_id": "_Europe",
-          "class": "state",
-          "iso2": "VA",
-          "id": "Holy See"
         },
         {
           "info": "",
@@ -1559,6 +1551,14 @@
         },
         {
           "info": "",
+          "name": "Vatican City",
+          "continent_id": "_Europe",
+          "class": "state",
+          "iso2": "VA",
+          "id": "Vatican City"
+        },
+        {
+          "info": "",
           "name": "Venezuela",
           "continent_id": "_South America",
           "class": "state",
@@ -1601,6 +1601,6 @@
       "title": ""
     }
   ],
-  "version": "Version: August 03, 2019",
+  "version": "Version: March 06, 2020",
   "version_hash": "cd0e6f0"
 }
