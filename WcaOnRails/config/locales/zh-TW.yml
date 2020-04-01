@@ -41,7 +41,7 @@ zh-TW:
     #original_hash: 4d206a8
     TT: 千里達
     #original_hash: 0f3f60b
-    VA: 教廷
+    VA: 梵諦岡
     #original_hash: 3fa9b2d
     VC: 聖文森國
     #original_hash: 9af4622
@@ -1235,6 +1235,8 @@ zh-TW:
       organizations: 區域組織
       #original_hash: d790b40
       faq: 常見問題
+      #original_hash: cf1d2c9
+      forum: 討論區
       #original_hash: 3ad28c0
       teams: 團隊、委員會和理事會
       #original_hash: 02617c0
@@ -2217,8 +2219,8 @@ zh-TW:
       confirmed_but_not_visible_html: '您已經確認了這場比賽但尚未公開。請等待%{contact}的公開。'
       #original_hash: e94cba8
       is_visible: 這場比賽已經公開了，因此任何改變將會被公開！
-      #original_hash: f99b3f7
-      pending_confirmation_html: '當您準備請%{contact}許可這場比賽時，請確實填寫所有表格並點選確認。'
+      #original_hash: 1039850
+      pending_confirmation_html: '當您準備請%{contact}許可這場比賽時，請確實填寫所有表格並請代表點選確認。'
       #original_hash: 8966fd0
       submit_create_value: 申請比賽
       #original_hash: 40b0dfd
@@ -3182,27 +3184,78 @@ zh-TW:
       #original_hash: fb6cd86
       info_html: 該理事會負責建立和維護WCA社群與WCA員工之間的雙邊溝通。
   score_tools:
-    #original_hash: ea9d41d
-    title: WCA成績輸入工具
-    paragraphs:
-      #original_hash: 305f7f8
-      '1': >-
-        WCA強烈建議您在比賽前和比賽中使用 <a href="https://live.worldcubeassociation.org">WCA
-        Live</a>。WCA Live 是一個能夠支援比賽且可以跟全世界即時分享比賽成績的平台。
-      #original_hash: 0867b38
-      '2': >-
-        成績單和轉亂內容應該要在傳給WCA成績組之前確認有無錯誤。你可以使用<a
-        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
-        Matcher</a>，這是一個由Philippe Virouleau建立的開源項目。
-      #original_hash: 975e59b
-      '3': >-
-        最新版的WCA比賽成績單可以在這裡下載：<br /><a href="/files/results.xls"
-        target="_blank">WCA比賽成績單</a>。
-      #original_hash: c576675
-      '4': >-
-        您可能還想使用<a
-        href="https://groupifier.jonatanklosko.com">Groupifier</a>幫比賽的參賽者分組，那麼您找對工具了。其中主要功能包括：將參賽者按照成績排序、分配工作（裁判、轉亂）、決定需要多少轉亂步驟、產生成績單、個人賽程和總結表。這是一個由Jonatan
-        Kłosko建立的開源項目。
+    #original_hash: 4fc2133
+    title: WCA比賽用軟體工具
+    #original_hash: 6d2fe37
+    wca_icon_text: 由WCA軟體組發開與維護
+    intro:
+      #original_hash: 0c5fab5
+      desc: 這一頁大概地列出一些對WCA比賽的主辦團隊有用的工具。
+      #original_hash: 479b542
+      disclaimer: '在這頁面上的工具並非所有都是由WCA軟體組維護，但其實別擔心！是因為我們沒有足夠人力來管理所有WCA相關的軟體 :)'
+      #original_hash: 80f97b9
+      used: >-
+        所有列在這裡的程式都有在WCA比賽中被使用過，且已經與WCA網站做整合：您能夠用WCA帳號登入並且能夠載入或是上傳即將舉行的比賽資料。每一個程式的維護者會清楚地記載。
+    before:
+      #original_hash: 9850344
+      title: 比賽之前
+      #original_hash: 576e2f4
+      desc: 參賽者的報名資料能夠直接在WCA網站上面管理。由於手動管理分組和工作人員有可能會很費時，您可以考慮選用以下其中一個軟體。
+    during:
+      #original_hash: 9934200
+      title: 比賽進行中
+      #original_hash: 2b0a6f6
+      desc: 在這裡您可以找到能夠在比賽進行中讓您管理比賽成績的工具。
+    after:
+      #original_hash: d81b949
+      title: 比賽結束後
+      #original_hash: b898460
+      desc: 雖然成績確認會在網站上面執行，您仍要使用一些工具來載入由TNoodle產生的轉亂內容，這樣才能把最後成績上傳到WCA網站。
+    tools:
+      age:
+        #original_hash: 4aaae5b
+        title: AGE
+        #original_hash: 2e4832d
+        description: 產生和編輯WCA的比賽分組以及比賽任務分派的工具
+      certificates:
+        #original_hash: b3e4eb0
+        title: 獎狀
+        #original_hash: f1a0731
+        description: 用WCA Live來列印WCA比賽的獎狀
+      groupifier:
+        #original_hash: 8f55355
+        title: Groupifier
+        #original_hash: 24d4736
+        description: >-
+          WCA比賽主辦團隊可用的分組以及分派工作的管理工具。在主要的功能中你能找到：用排名來排列參賽者、分派工作（裁判、轉亂）、決定需要的轉亂數量、產生成績單、個人單子，以及改要...更多內容請參考網頁。
+      scorecards:
+        #original_hash: aa1b64d
+        title: 成績單
+        #original_hash: 2b8e373
+        description: 用WCA Live來列印WCA比賽的成績單
+      tnoodle:
+        #original_hash: ba336a1
+        title: TNoodle （轉亂程式）
+        #original_hash: 0a38b22
+        description: TNoodle是用在WCA比賽的官方轉亂程式。通常都是由WCA代表在比賽前使用，但它的介面也能夠讓任何人為所有的WCA比賽項目產生轉亂內容。
+      live:
+        #original_hash: c66444f
+        title: WCA Live
+        #original_hash: f122015
+        description: 能管理WCA比賽且能即時向全世界分享比賽成績的平台
+      nightmare:
+        #original_hash: eebde3b
+        title: 成績用表格
+        #original_hash: 466f4c2
+        description: 問題難免都會發生......如果您沒有網路連線，您就必須要使用舊的表單系統。
+      matcher:
+        #original_hash: cc59bc9
+        title: 轉亂自動配對
+        #original_hash: a352bd1
+        description: >-
+          能把TNoodle產生的轉亂內容對應到成績。當使用WCA
+          Live時，從WCA網站載入成績，可以是EXCEL表格或是一個單獨的WCIF檔案。從不只一個TNoodle
+          json檔案來載入轉亂內容。輸出適當的成績檔案格式來作為成績上傳。
   logo:
     #original_hash: c72c969
     title: WCA標誌
