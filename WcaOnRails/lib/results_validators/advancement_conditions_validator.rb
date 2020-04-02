@@ -2,12 +2,12 @@
 
 module ResultsValidators
   class AdvancementConditionsValidator < GenericValidator
-    REGULATION_9M_ERROR = "Event %{event_id} has more than four rounds, which must not happen per Regulation 9m."
-    REGULATION_9M1_ERROR = "Round %{round_id} has 99 competitors or less but has at least three subsequents rounds, which must not happen per Regulation 9m1."
-    REGULATION_9M2_ERROR = "Round %{round_id} has 15 competitors or less but has at least two subsequents rounds, which must not happen per Regulation 9m2."
-    REGULATION_9M3_ERROR = "Round %{round_id} has 7 competitors or less but has at least one subsequent round, which must not happen per Regulation 9m3."
-    REGULATION_9P1_ERROR = "Round %{round_id}: there was not 25%% of competitors eliminated, which is needed per Regulation 9p1."
-    OLD_REGULATION_9P_ERROR = "Round %{round_id}: there must be at least one competitor eliminated, which is required per Regulation 9p (competitions before April 2010)."
+    REGULATION_9M_ERROR = "Event %{event_id} has more than four rounds, which is not permitted as per Regulation 9m."
+    REGULATION_9M1_ERROR = "Round %{round_id} has 99 or fewer competitors but has more than two subsequent rounds, which is not permitted as per Regulation 9m1."
+    REGULATION_9M2_ERROR = "Round %{round_id} has 15 or fewer competitors but has more than one subsequent round, which is not permitted as per Regulation 9m2."
+    REGULATION_9M3_ERROR = "Round %{round_id} has 7 or fewer competitors but has at least one subsequent round, which is not permitted as per Regulation 9m3."
+    REGULATION_9P1_ERROR = "Round %{round_id}: Fewer than 25%% of competitors were eliminated, which is not permitted as per Regulation 9p1."
+    OLD_REGULATION_9P_ERROR = "Round %{round_id}: There must be at least one competitor eliminated, which is required as per Regulation 9p (competitions before April 2010)."
 
     @@desc = "This validator checks that advancement between rounds is correct according to the regulations."
 
