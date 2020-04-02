@@ -7,8 +7,8 @@ ERV = RV::EventsRoundsValidator
 
 RSpec.describe ERV do
   context "on InboxResult and Result" do
-    let!(:competition1) { FactoryBot.create(:competition, :past, event_ids: ["333", "333oh"]) }
-    let!(:competition2) { FactoryBot.create(:competition, :past, event_ids: ["222", "555"]) }
+    let!(:competition1) { FactoryBot.create(:competition, :past, event_ids: ["333", "333oh"], main_event_id: nil) }
+    let!(:competition2) { FactoryBot.create(:competition, :past, event_ids: ["222", "555"], main_event_id: "222") }
 
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.
@@ -24,7 +24,8 @@ RSpec.describe ERV do
 
     it "triggers events-related errors and warnings" do
       # Triggers:
-      # CHOOSE_MAIN_EVENT_WARNING
+      # NOT_333_MAIN_EVENT_WARNING
+      # NO_MAIN_EVENT_WARNING
       # UNEXPECTED_RESULTS_ERROR
       # MISSING_RESULTS_WARNING
       # UNEXPECTED_COMBINED_ROUND_ERROR
@@ -37,9 +38,10 @@ RSpec.describe ERV do
 
       expected_warnings = [
         RV::ValidationWarning.new(:events, competition1.id,
-                                  ERV::CHOOSE_MAIN_EVENT_WARNING),
+                                  ERV::NO_MAIN_EVENT_WARNING),
         RV::ValidationWarning.new(:events, competition2.id,
-                                  ERV::CHOOSE_MAIN_EVENT_WARNING),
+                                  ERV::NOT_333_MAIN_EVENT_WARNING,
+                                  main_event_id: "222"),
         RV::ValidationWarning.new(:events, competition2.id,
                                   ERV::MISSING_RESULTS_WARNING,
                                   event_id: "555"),
@@ -63,7 +65,8 @@ RSpec.describe ERV do
 
     it "triggers rounds-related errors and warnings" do
       # Triggers:
-      # CHOOSE_MAIN_EVENT_WARNING
+      # NOT_333_MAIN_EVENT_WARNING
+      # NO_MAIN_EVENT_WARNING
       # UNEXPECTED_ROUND_RESULTS_ERROR
       # MISSING_ROUND_RESULTS_ERROR
       cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50*100)
@@ -105,8 +108,11 @@ RSpec.describe ERV do
       ]
 
       expected_warnings = [
+        RV::ValidationWarning.new(:events, competition1.id,
+                                  ERV::NO_MAIN_EVENT_WARNING),
         RV::ValidationWarning.new(:events, competition2.id,
-                                  ERV::CHOOSE_MAIN_EVENT_WARNING),
+                                  ERV::NOT_333_MAIN_EVENT_WARNING,
+                                  main_event_id: "222"),
       ]
       validator_args.each do |arg|
         erv = ERV.new.validate(arg)

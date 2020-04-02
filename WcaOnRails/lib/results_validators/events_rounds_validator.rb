@@ -2,8 +2,8 @@
 
 module ResultsValidators
   class EventsRoundsValidator < GenericValidator
-    CHOOSE_MAIN_EVENT_WARNING = "Your results do not contain results for 3x3x3 Cube. Please tell WRT in the comments that there was 'no main event' if no event was treated as the main event at the competition."\
-      " Otherwise, if an event other than 3x3x3 Cube was treated as the main event, please name the main event in your comments to WRT and explain how that event was treated as the main event of the competition."
+    NOT_333_MAIN_EVENT_WARNING = "The selected main event for this competition is %{main_event_id}. Please give WRT an explanation of how that event was treated as the main event of the competition."
+    NO_MAIN_EVENT_WARNING = "There is no selected main event for this competition. Please let WRT know that this is correct."
     UNEXPECTED_RESULTS_ERROR = "Results are present for %{event_id}, however it is not listed as an official event."\
       " Please remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
     UNEXPECTED_ROUND_RESULTS_ERROR = "The round %{round_id} is present in the results but was not created on the events tab. Please include the round's information in the competition's manage events page."
@@ -54,9 +54,15 @@ module ResultsValidators
     private
 
     def check_main_event(competition, results)
-      unless results.map(&:eventId).uniq.include?("333")
+      if competition.main_event
+        if competition.main_event_id != "333"
+          @warnings << ValidationWarning.new(:events, competition.id,
+                                             NOT_333_MAIN_EVENT_WARNING,
+                                             main_event_id: competition.main_event_id)
+        end
+      else
         @warnings << ValidationWarning.new(:events, competition.id,
-                                           CHOOSE_MAIN_EVENT_WARNING)
+                                           NO_MAIN_EVENT_WARNING)
       end
     end
 
