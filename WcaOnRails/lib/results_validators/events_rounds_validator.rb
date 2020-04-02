@@ -4,13 +4,12 @@ module ResultsValidators
   class EventsRoundsValidator < GenericValidator
     CHOOSE_MAIN_EVENT_WARNING = "Your results do not contain results for 3x3x3 Cube. Please tell WRT in the comments that there was 'no main event' if no event was treated as the main event at the competition."\
       " Otherwise, if an event other than 3x3x3 Cube was treated as the main event, please name the main event in your comments to WRT and explain how that event was treated as the main event of the competition."
-    UNEXPECTED_RESULTS_ERROR = "Unexpected results for %{event_id}. The event is present in the results but not listed as an official event."\
-      " Remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
-    UNEXPECTED_ROUND_RESULTS_ERROR = "Unexpected results for round %{round_id}. The round is present in the results but not created on the events tab. Edit the events tab to include the round."
-    MISSING_RESULTS_WARNING = "Missing results for %{event_id}. The event is not present in the results but listed as an official event."\
-      " If the event was held, correct the results. If the event was not held, leave a comment about that to the WRT."
-    MISSING_ROUND_RESULTS_ERROR = "Missing results for round %{round_id}. There is an additional round in the events tab that is not present in the results. Edit the events tab to remove the round."
-    UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a combined round in the results. Please update the round's information in the competition's manage events page."
+    UNEXPECTED_RESULTS_ERROR = "Results are present for %{event_id}, however it is not listed as an official event."\
+      " Please remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
+    UNEXPECTED_ROUND_RESULTS_ERROR = "The round %{round_id} is present in the results but was not created on the events tab. Please include the round's information in the competition's manage events page."
+    MISSING_RESULTS_WARNING = "There are no results for %{event_id}, but it is listed as an official event. If the event was held, please reupload your JSON with the results included. If the event was not held, leave a comment for the WRT."
+    MISSING_ROUND_RESULTS_ERROR = "There are no results for round %{round_id} but it is listed in the events tab. If this round was not held, please remove the round in the competition's manage events page."
+    UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a cutoff round in the results. Please update the round's information in the competition's manage events page."
 
     @@desc = "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
 
