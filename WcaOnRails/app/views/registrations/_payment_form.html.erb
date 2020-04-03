@@ -66,7 +66,7 @@
             window.wca.cancelPendingAjaxAndAjax('process-payment-confirmation', {
               url: '<%= registration_payment_intent_path(@registration) %>',
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
+              headers: { 'Content-Type': 'application/json' },
               data: JSON.stringify({ payment_intent_id: result.paymentIntent.id }),
               complete: handleServerResponse,
             });
@@ -116,7 +116,7 @@
             window.wca.cancelPendingAjaxAndAjax('process-payment', {
               url: '<%= registration_payment_intent_path(@registration) %>',
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
+              headers: { 'Content-Type': 'application/json' },
               data: JSON.stringify({ payment_method_id: result.paymentMethod.id, amount: amount }),
               complete: handleServerResponse,
             });

@@ -34,7 +34,6 @@
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        <%= raw("'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content,") unless Rails.env.test? %>
       },
       complete: handleServerResponse,
     });
