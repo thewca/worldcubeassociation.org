@@ -42,6 +42,12 @@ window.wca.cancelPendingAjaxAndAjax = function(id, options) {
   if(window.wca._pendingAjaxById[id]) {
     window.wca._pendingAjaxById[id].abort();
   }
+  // Get the authenticity token.
+  options.headers = options.headers || {};
+  var csrfTokenElement = document.querySelector('meta[name=csrf-token]');
+  if (csrfTokenElement) {
+    options.headers['X-CSRF-Token'] = csrfTokenElement.content;
+  }
   window.wca._pendingAjaxById[id] = $.ajax(options).always(function() {
     delete window.wca._pendingAjaxById[id];
   });

@@ -128,7 +128,7 @@ export function editScheduleKeyboardHandler(event, activityPicker) {
       break;
       // enter
     case 13:
-      if ($elemSelected.size() === 1) {
+      if ($elemSelected.length === 1) {
         addActivityToCalendar($elemSelected.data('event'));
       }
       break;
