@@ -42,7 +42,14 @@ RSpec.describe ResultsSubmissionController, type: :request do
     describe "Seeing results submission page" do
       it "returns http success" do
         get competition_submit_results_edit_path(comp.id)
-        expect(response.successful?)
+        # Checking the response status: we want a successful get without redirect.
+        expect(response.status).to eq(200)
+      end
+
+      it "redirects to homepage if competition is not announced" do
+        comp.update!(announced_at: nil)
+        get competition_submit_results_edit_path(comp.id)
+        expect(response).to redirect_to(root_url)
       end
     end
 
@@ -85,6 +92,12 @@ RSpec.describe ResultsSubmissionController, type: :request do
 
         expect(flash[:success]).not_to be_empty
         expect(response).to redirect_to(competition_path(comp))
+      end
+
+      it "redirects to homepage if competition is not announced" do
+        comp.update!(announced_at: nil)
+        post competition_submit_results_path(comp.id), params: { results_submission: results_submission_params }
+        expect(response).to redirect_to(root_url)
       end
     end
   end

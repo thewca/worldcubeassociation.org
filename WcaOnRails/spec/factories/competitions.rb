@@ -80,6 +80,7 @@ FactoryBot.define do
     registration_close { 1.week.ago.change(usec: 0) }
 
     trait :with_valid_submitted_results do
+      announced
       with_rounds { true }
       after(:create) do |competition|
         person = FactoryBot.create(:inbox_person, competitionId: competition.id)
@@ -110,6 +111,12 @@ FactoryBot.define do
     trait :visible do
       with_delegate
       showAtAll { true }
+    end
+
+    trait :announced do
+      visible
+      announced_at { start_date }
+      announced_by { FactoryBot.create(:user, :wcat_member).id }
     end
 
     trait :stripe_connected do
