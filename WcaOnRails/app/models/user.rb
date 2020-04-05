@@ -699,7 +699,7 @@ class User < ApplicationRecord
   def can_submit_competition_results?(competition)
     appropriate_role = can_admin_results? || competition.delegates.include?(self)
     appropriate_time = competition.in_progress? || competition.is_probably_over?
-    appropriate_role && appropriate_time && !competition.results_posted?
+    competition.announced? && appropriate_role && appropriate_time && !competition.results_posted?
   end
 
   def can_create_poll?
