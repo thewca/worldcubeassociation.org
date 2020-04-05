@@ -1,5 +1,6 @@
 <% provide(:title, "Results submission") %>
-<% provide(:include_markdown_editor, true) %>
+<% add_to_packs("markdown_editor") %>
+
 <%= render layout: 'nav' do %>
   <h1><%= yield(:title) %></h1>
 

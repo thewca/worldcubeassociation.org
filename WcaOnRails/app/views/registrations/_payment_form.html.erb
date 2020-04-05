@@ -1,4 +1,4 @@
-<% provide(:include_auto_numeric, true) %>
+<% add_to_packs("auto_numeric") %>
 <%= horizontal_simple_form_for :payment, url: "", html: { id: :form_payment } do |f| %>
   <%= render 'entry_fee', label: "Paid", money_amount: @registration.paid_entry_fees %>
   <%= render 'entry_fee', label: "Remaining", money_amount: @registration.outstanding_entry_fees %>
