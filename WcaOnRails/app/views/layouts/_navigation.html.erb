@@ -60,7 +60,9 @@
         </li>
         <li class="dropdown <%= Set['results', 'persons', 'media'].include?(params[:controller]) ? 'active' : '' %>">
           <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= icon('fas', 'list-ol') %> <%= t '.results' %> <span class="caret"></span>
+            <%= icon('fas', 'list-ol') %>
+            <span class="hidden-sm"><%= t '.results' %></span>
+            <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="https://live.worldcubeassociation.org"><%= icon('fa', 'sort-numeric-down') %>WCA Live</a></li>
@@ -95,7 +97,10 @@
           </ul>
         </li>
         <li>
-          <a href="https://forum.worldcubeassociation.org/" target="_blank" class="hide-new-window-icon"><%= icon('fas', 'comments') %> <%= t '.forum' %></a>
+          <a href="https://forum.worldcubeassociation.org/" target="_blank" class="hide-new-window-icon">
+            <%= icon('fas', 'comments') %>
+            <span class="hidden-sm"><%= t '.forum' %></span>
+          </a>
         </li>
       </ul>
 
@@ -107,7 +112,8 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
             <% active_locale_info = Locales::AVAILABLE[I18n.locale] %>
-            <span class="hidden-sm"><%= active_locale_info[:name] %></span>
+            <%= icon('fas', 'language') %>
+            <span class="visible-lg-inline visible-xs-inline"><%= active_locale_info[:name] %></span>
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" id="locale-selector" role="menu">
