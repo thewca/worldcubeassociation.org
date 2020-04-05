@@ -1,6 +1,7 @@
 <%# Generate round informations for the competition %>
 <% rounds_by_wcif_id = Hash[competition.rounds.map { |r| [r.wcif_id, r.to_string_map] }] %>
-<% provide(:include_schedule_viewer, true) %>
+<% add_to_packs("show_schedule") %>
+<% add_fullcalendar_to_packs %>
 
 <div class="tab-content" id="schedule-tab">
   <ul class="nav nav-pills nav-justified venue-pills">

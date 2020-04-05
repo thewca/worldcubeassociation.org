@@ -1,5 +1,5 @@
 <% provide(:title, @competition.name) %>
-<% provide(:include_events_editor, true) %>
+<% add_to_packs("edit_events") %>
 
 <%= render layout: 'nav' do %>
   <div id="events-edit-area"></div>

@@ -1,5 +1,5 @@
 <%# We request maps assets no matter what, it can be needed upon tab change %>
-<% provide(:include_maps, true) %>
+<% add_to_packs("wca_maps") %>
 <% if @display == "list" %>
   <% if competitions.empty? %>
     <%= render 'no_competitions_found' %>

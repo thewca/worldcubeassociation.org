@@ -16,59 +16,30 @@
   <script>
     window.wca = {};
   </script>
-  <%= javascript_packs_with_chunks_tag 'lodash_utils' %>
-  <% js_assets = ['application'] %>
-  <% css_assets = ['application'] %>
 
-  <% js_packs = ['application'] %>
-  <% css_packs = ['application'] %>
+  <% add_to_packs("lodash_utils") %>
 
-  <% if content_for :include_markdown_editor %>
-    <% css_packs << 'markdown_editor' %>
-    <% js_packs << 'markdown_editor' %>
-  <% end %>
-
-  <% if content_for :include_maps %>
-    <% css_packs << 'wca_maps' %>
-    <% js_packs << 'wca_maps' %>
-  <% end %>
-
-  <% if content_for :include_auto_numeric %>
-    <% js_packs << 'auto_numeric' %>
-  <% end %>
-
-  <% if content_for :include_schedule_editor %>
-    <% js_packs << 'edit_schedule' %>
-    <% js_assets << 'fullcalendar/fullcalendar_wca' %>
-    <% css_assets << 'fullcalendar_wca' %>
-  <% end %>
-
-  <% if content_for :include_events_editor %>
-    <% js_packs << 'edit_events' %>
-  <% end %>
-
-  <% if content_for :include_schedule_viewer %>
-    <% js_packs << 'show_schedule' %>
-    <% js_assets << 'fullcalendar/fullcalendar_wca' %>
-    <% css_assets << 'fullcalendar_wca' %>
-  <% end %>
-
-  <% if I18n.locale != :en %>
-    <% js_assets << "locales/#{I18n.locale}.js" %>
-    <% if js_assets.include?('fullcalendar/fullcalendar_wca') %>
-      <% js_assets << "fullcalendar/locales/#{I18n.locale}.js" %>
-    <% end %>
-  <% end %>
-
-  <%# Our webpacker packs (automatically split in chunks) %>
-  <%= stylesheet_packs_with_chunks_tag *css_packs %>
-  <%= javascript_packs_with_chunks_tag *js_packs %>
+  <%#
+    Our webpacker packs (automatically split in chunks).
+    Always *prepend* application, so that we load jquery first.
+    We can't just add_to_packs application, because the yielded block will be
+    evaluated first, and any pack added (like schedule) will be loaded before application.
+  %>
+  <% packs_to_include = @all_packs.split(",").uniq.unshift("application") %>
+  <%= stylesheet_packs_with_chunks_tag *packs_to_include %>
+  <%= javascript_packs_with_chunks_tag *packs_to_include %>
 
   <%# Our sprockets assets %>
-  <% css_assets.uniq.each do |a| %>
+  <% css_assets = (@all_css_assets || "").split(",").uniq.unshift("application") %>
+  <% css_assets.each do |a| %>
     <%= stylesheet_link_tag a, media: 'all' %>
   <% end %>
-  <% js_assets.uniq.each do |a| %>
+  <% js_assets = (@all_js_assets || "").split(",").uniq %>
+  <% if I18n.locale != :en %>
+    <% js_assets = js_assets.unshift("locales/#{I18n.locale}.js") %>
+  <% end %>
+  <% js_assets = js_assets.unshift("application") %>
+  <% js_assets.each do |a| %>
     <%= javascript_include_tag a %>
   <% end %>
 

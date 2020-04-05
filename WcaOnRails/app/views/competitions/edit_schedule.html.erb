@@ -1,6 +1,7 @@
 <% provide(:title, "Manage schedule for #{@competition.name}") %>
-<% provide(:include_schedule_editor, true) %>
-<% provide(:include_maps, true) %>
+<% add_to_packs("wca_maps") %>
+<% add_to_packs("edit_schedule") %>
+<% add_fullcalendar_to_packs %>
 
 <%= render layout: 'nav' do %>
   <% if !@competition.has_defined_dates? %>

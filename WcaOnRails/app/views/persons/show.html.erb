@@ -1,5 +1,5 @@
 <% provide(:title, @person.name) %>
-<% provide(:include_maps, true) %>
+<% add_to_packs("wca_maps") %>
 
 <div class="container" id="person">
   <%= render "details" %>
