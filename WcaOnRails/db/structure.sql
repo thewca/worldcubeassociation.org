@@ -787,7 +787,7 @@ DROP TABLE IF EXISTS `country_bands`;
 CREATE TABLE `country_bands` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `number` int(11) NOT NULL,
-  `iso2` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `iso2` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_country_bands_on_iso2` (`iso2`),
   KEY `index_country_bands_on_number` (`number`)
@@ -1312,12 +1312,12 @@ CREATE TABLE `users` (
   `competition_notifications_enabled` tinyint(1) DEFAULT NULL,
   `receive_delegate_reports` tinyint(1) NOT NULL DEFAULT '0',
   `dummy_account` tinyint(1) NOT NULL DEFAULT '0',
-  `encrypted_otp_secret` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `encrypted_otp_secret_iv` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `encrypted_otp_secret_salt` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `encrypted_otp_secret` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `encrypted_otp_secret_iv` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `encrypted_otp_secret_salt` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `consumed_timestep` int(11) DEFAULT NULL,
   `otp_required_for_login` tinyint(1) DEFAULT '0',
-  `otp_backup_codes` text COLLATE utf8mb4_unicode_ci,
+  `otp_backup_codes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1627,4 +1627,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20191013211511'),
 ('20191107212356'),
 ('20200125180554'),
-('20200206012756');
+('20200206012756'),
+('20200331082313');
