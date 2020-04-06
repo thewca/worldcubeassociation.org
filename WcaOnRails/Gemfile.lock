@@ -542,7 +542,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    strip_attributes (1.9.2)
+    strip_attributes (1.11.0)
       activemodel (>= 3.0, < 7.0)
     stripe (5.17.0)
     term-ansicolor (1.7.1)
@@ -565,7 +565,7 @@ GEM
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.0)
       tzinfo
-    tzinfo (1.2.6)
+    tzinfo (1.2.7)
       thread_safe (~> 0.1)
     uber (0.1.0)
     uglifier (4.2.0)
