@@ -20,7 +20,7 @@ pt-BR:
     HK: Hong Kong
     #original_hash: 3ad2dd8
     KN: São Cristóvão e Névis
-    #original_hash: 7184d1a
+    #original_hash: 5c34abb
     KP: Coreia do Norte
     #original_hash: 4430b22
     KR: Coréia
@@ -40,8 +40,6 @@ pt-BR:
     SZ: Suazilândia
     #original_hash: 4d206a8
     TT: Trindade e Tobago
-    #original_hash: 0f3f60b
-    VA: Santa Sé
     #original_hash: 3fa9b2d
     VC: São Vicente e Granadinas
     #original_hash: 9af4622
@@ -945,14 +943,16 @@ pt-BR:
         wca_id: ''
         #original_hash: 8723825
         dob: Sua data de nascimento no formato AAAA-MM-DD
-        #original_hash: c6d8a97
+        #original_hash: 49ee4af
         document: >-
           Para provar sua identidade e sua data de nascimento correta para nós,
           anexe uma foto de algum documento legal (carteira de identidade, CNH,
           carteira de estudante, passaporte, certidão de nascimento, ...) no
           qual seu nome e data de nascimento esteja visíveis e compreensíveis
           para alguém que fale inglês (ou contate um Delegado da WCA em seu país
-          se você não tem um documento desse).
+          se você não tem um documento desse). Na identificação nós precisamos
+          no mínimo de seu nome e data de nascimento; você pode apagar/cobrir
+          outras informações pessoais, se quiser.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -1408,6 +1408,8 @@ pt-BR:
       organizations: Organizações Regionais
       #original_hash: d790b40
       faq: Perguntas Frequentes
+      #original_hash: cf1d2c9
+      forum: Fórum
       #original_hash: 3ad28c0
       teams: 'Equipes, Comitês e Conselhos'
       #original_hash: 02617c0
@@ -2602,10 +2604,11 @@ pt-BR:
       is_visible: >-
         Esta competição está visível publicamente, qualquer mudança que você
         fizer será exibida ao público!
-      #original_hash: f99b3f7
+      #original_hash: 1039850
       pending_confirmation_html: >-
-        Preencha todos os campos e clique em Confirmar quando você estiver
-        pronto para pedir à %{contact}% que aprove a competição.
+        Preencha todos os campos e peça ao Delegado para clicar em Confirmar
+        quando você estiver pronto para pedir à %{contact}% que aprove a
+        competição.
       #original_hash: 8966fd0
       submit_create_value: Criar Competição
       #original_hash: 40b0dfd
@@ -3113,11 +3116,12 @@ pt-BR:
       description: >-
         Use este formulário se a data de nascimento registrada em nosso banco de
         dados está diferente da data real.
-      #original_hash: 563d056
+      #original_hash: 0ac13b9
       important_message_html: >-
         <span class="text-danger">IMPORTANTE</span>: Anexe uma foto de um
         <u>documento legal</u> (carteira de identidade, de habilitação,
-        passaporte...) que mostre seu nome e data de nascimento.
+        passaporte...) que mostre seu nome e data de nascimento. Você pode
+        apagar/cobrir outras informações pessoais, se quiser.
       #original_hash: 19c17ec
       submit: Solicitar alteração
     messages:
@@ -3834,36 +3838,108 @@ pt-BR:
         Esse conselho é responsável por construir e manter comunicação bilateral
         entre a Comunidade da WCA e a Equipe da WCA.
   score_tools:
-    #original_hash: ea9d41d
-    title: Ferramentas de Resultados da WCA
-    paragraphs:
-      #original_hash: 305f7f8
-      '1': >-
-        A WCA recomenda o uso do <a
-        href="https://live.worldcubeassociation.org">WCA Live</a> antes e
-        durante uma competição. WCA Live é um sistema para gerenciar competições
-        da WCA e compartilhar os resultados ao vivo com o mundo.
-      #original_hash: 0867b38
-      '2': >-
-        Súmulas e embaralhamentos devem ser processados e verificados em busca
-        de erros antes de serem enviados à Equipe de Resultados. Você pode usar
-        o <a href="https://viroulep.github.io/scrambles-matcher/">Scrambles
-        Matcher</a>, um projeto Open Source criado por Philippe Virouleau.
-      #original_hash: 975e59b
-      '3': >-
-        A versão mais recente da Planilha de Resultados da WCA pode ser baixada
-        aqui: <br /><a href="/files/results.xls" target="_blank">Planilha de
-        Resultados da WCA</a>.
-      #original_hash: c576675
-      '4': >-
-        Você também pode querer usar <a
-        href="https://groupifier.jonatanklosko.comr">Groupifier</a> para
-        preparar os grupos para uma competição. É uma ferramenta que faz
-        justamente isso por você. Entre as principais características você
-        encontrará: ordenar os competidores por ranking, atribuir tarefas (juiz,
-        embaralhador), decidir quantos embaralhamentos são necessários, gerar
-        súmulas, cartões pessoais e resumos. É um projeto Open Source criado por
-        Jonatan Kłosko.
+    #original_hash: 4fc2133
+    title: Ferramentas para competições da WCA
+    #original_hash: 6d2fe37
+    wca_icon_text: Desenvolvido e mantido pelo WST
+    intro:
+      #original_hash: 0c5fab5
+      desc: >-
+        Esta página é uma lista não exaustiva das ferramentas conhecidas para
+        ajudar na organização de competições da WCA.
+      #original_hash: 479b542
+      disclaimer: >-
+        Nem todas as ferramentas são mantidas pelo WST: não há problema! Não
+        temos o pessoal necessário para gerenciar todos os softwares
+        relacionados à WCA :)
+      #original_hash: 80f97b9
+      used: >-
+        Todos os programas nesta lista foram usados durante competições reais da
+        WCA e se integram com o site da WCA: eles permitem que você faça o login
+        com sua conta da WCA para poder importar (e algumas vezes atualizar) as
+        informações de suas próximas competições. Para cada um deles, o
+        responsável será indicado.
+    before:
+      #original_hash: 9850344
+      title: Antes da competição
+      #original_hash: 576e2f4
+      desc: >-
+        Você pode gerenciar as inscrições diretamente no site da WCA. Como
+        ajustar os grupos e o staff manualmente pode levar bastante tempo, você
+        pode querer usar uma das ferramentas abaixo.
+    during:
+      #original_hash: 9934200
+      title: Durante a competição
+      #original_hash: 2b0a6f6
+      desc: >-
+        Aqui você vai encontrar ferramentas que te permitem gerenciar os
+        resultados da competição enquanto ela acontece.
+    after:
+      #original_hash: d81b949
+      title: Depois da competição
+      #original_hash: b898460
+      desc: >-
+        A validação de resultados ocorre aqui no site, mas você precisará usar
+        alguma ferramenta para unir os scrambles gerados pelo TNoodle aos
+        resultados enviados para o site da WCA.
+    tools:
+      age:
+        #original_hash: 4aaae5b
+        title: AGE
+        #original_hash: 2e4832d
+        description: Ferramenta para gerar e editar grupos/tarefas para competições da WCA
+      certificates:
+        #original_hash: b3e4eb0
+        title: Certificados
+        #original_hash: f1a0731
+        description: Imprima certificados de competições que usam o WCA Live
+      groupifier:
+        #original_hash: 8f55355
+        title: Groupifier
+        #original_hash: 24d4736
+        description: >-
+          Gerenciamento de grupos e tarefas para organizadores de competições da
+          WCA. Entre os principais recursos você encontrará: ordenar os
+          competidores por ranking, atribuir tarefas (juiz, embaralhador),
+          decidir quantos embaralhamentos são necessários, gerar súmulas,
+          cartões personalizados e resumos... Veja os site para mais
+          informações.
+      scorecards:
+        #original_hash: aa1b64d
+        title: Súmulas
+        #original_hash: 2b8e373
+        description: Imprima súmulas para competições que usam o WCA Live
+      tnoodle:
+        #original_hash: ba336a1
+        title: TNoodle (Embaralhamentos)
+        #original_hash: 0a38b22
+        description: >-
+          TNoodle é o programa oficial de embaralhamentos usado para as
+          competições da WCA. É geralmente usado pelos Delegados da WCA antes
+          das competições, mas sua interface permite que qualquer um possa gerar
+          embaralhamentos para todos os eventos da WCA.
+      live:
+        #original_hash: c66444f
+        title: WCA Live
+        #original_hash: f122015
+        description: >-
+          Plataforma para computar os resultados e compartilhar ao vivo com o
+          mundo.
+      nightmare:
+        #original_hash: 466f4c2
+        description: >-
+          Às vezes coisas acontecem... Se você não tiver acesso à internet,
+          precisará usar a boa e velha planilha.
+      matcher:
+        #original_hash: cc59bc9
+        title: Scrambles Matcher
+        #original_hash: a352bd1
+        description: >-
+          Pode ser usado para atribuir embaralhamentos gerados pelo TNoodle aos
+          resultados. Importe resultados do site da WCA (se estiver usando WCA
+          Live), uma planilha ou um arquivo WCIF. Importe os embaralhamentos de
+          um ou mais arquivos json do TNoodle. Exporte resultados no formato
+          apropriado para enviar à WCA.
   logo:
     #original_hash: c72c969
     title: Logotipo da WCA
