@@ -20,7 +20,7 @@ es:
     HK: Hong Kong
     #original_hash: 3ad2dd8
     KN: San Cristóbal y Nieves
-    #original_hash: 7184d1a
+    #original_hash: 5c34abb
     KP: República Democrática Popular de Corea
     #original_hash: 4430b22
     KR: República de Corea
@@ -40,8 +40,6 @@ es:
     SZ: Esuatini
     #original_hash: 4d206a8
     TT: Trinidad y Tobago
-    #original_hash: 0f3f60b
-    VA: Santa Sede
     #original_hash: 3fa9b2d
     VC: San Vicente y las Granadinas
     #original_hash: 9af4622
@@ -950,13 +948,15 @@ es:
         wca_id: ''
         #original_hash: 8723825
         dob: Tu fecha de nacimiento correcta en formato AAAA-MM-DD
-        #original_hash: c6d8a97
+        #original_hash: 49ee4af
         document: >-
           Para demostrar tu identidad y probar tu fecha de nacimiento, tienes
           que adjuntar una foto de algún documento legal (DNI, carnet de
           conducir, carnet de estudiante, pasaporte, certificado de
           nacimiento,...) donde tu nombre completo y tu fecha de nacimiento sean
-          visibles.
+          visibles. Para la identificación necesitamos como mínimo tu nombre y
+          tu fecha de nacimiento. Puedes desenfocar u ocultar el resto de datos
+          si así lo deseas.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -1271,6 +1271,8 @@ es:
           disabled: deshabilitada
           #original_hash: 5f225b0
           enable: habilitada A2F
+          #original_hash: 2e35cd9
+          disable: Deshabilitar A2F
           #original_hash: b2a3d7e
           reset: Resetear secreto A2F
           #original_hash: 14b7bfd
@@ -1327,6 +1329,20 @@ es:
           email_auth_desc: >-
             Puedes solicitar que se te envíe una contraseña de un sólo uso por
             correo electrónico cuando intentes iniciar sesión.
+          #original_hash: dd991ab
+          disable_section_title: Deshabilitar dos-factores
+          #original_hash: 4569d81
+          disable_section_content: >-
+            El WST te recomienda encarecidamente no deshabilitar A2F, pero
+            puedes hacerlo pulsando en el botón inferior. Por favor ten en
+            cuenta que si reactivas A2F tendrás que volver a configurar tu(s)
+            dispositivo(s).
+          #original_hash: ab1b77d
+          disabled_success: Autenticación de dos factores deshabilitada satisfactoriamente.
+          #original_hash: c36d556
+          disabled_failed: >-
+            No se pudo deshabilitar A2F, por favor mira los errores a
+            continuación.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1406,9 +1422,10 @@ es:
       delegates: Delegados de la WCA
       #original_hash: 37b8fdc
       organizations: Organizaciones Nacionales
-      forum: Foro
       #original_hash: d790b40
       faq: Preguntas Más Frecuentes
+      #original_hash: cf1d2c9
+      forum: Foro
       #original_hash: 3ad28c0
       teams: 'Comités, Equipos y Consejos'
       #original_hash: 02617c0
@@ -2624,10 +2641,10 @@ es:
       is_visible: >-
         ¡Esta competición es visible! Cualquier cambio que hagas se mostrará
         públicamente.
-      #original_hash: f99b3f7
+      #original_hash: 1039850
       pending_confirmation_html: >-
-        Rellena todos los campos y haz click en Confirmar cuando estés listo
-        para que el %{contact} apruebe esta competición .
+        Rellena todos los campos y haz que tu Delegado haga click en Confirmar
+        cuando estés listo para que el %{contact} apruebe esta competición .
       #original_hash: 8966fd0
       submit_create_value: Crear una Competición
       #original_hash: 40b0dfd
@@ -3140,11 +3157,13 @@ es:
       description: >-
         Utiliza este formulario si tu fecha de nacimiento almacenada en nuestra
         base de datos es incorrecta.
-      #original_hash: 563d056
+      #original_hash: 0ac13b9
       important_message_html: >-
         <span class=“text-danger”>IMPORTANTE</span>: Adjunta una imagen de un
         <u>documento legal</u> (carné identificativo, carné de conducir,
-        pasaporte...) que nuestre tu nombre Y tu fecha de nacimiento.
+        pasaporte...) que nuestre tu nombre Y tu fecha de nacimiento. Puedes
+        desenfocar / ocultar el resto de datos personales en la identificación
+        si así lo deseas.
       #original_hash: 19c17ec
       submit: Solicitar el cambio
     messages:
@@ -3881,39 +3900,113 @@ es:
         Este consejo es responsable de fomentar y mantener comunicación
         bilateral entre la Comunidad WCA y el Staff WCA.
   score_tools:
-    #original_hash: ea9d41d
-    title: Herramientas para la captación de resultados
-    paragraphs:
-      #original_hash: 305f7f8
-      '1': >-
-        La WCA recomienda encarecidamente el uso de <a
-        href="https://live.worldcubeassociation.org">WCA Live</a> antes y
-        durante la celebración de una competición. WCA Live es una plataforma
-        para gestionar competiciones WCA y compartir resultados en vivo con el
-        resto del mundo.
-      #original_hash: 0867b38
-      '2': >-
-        Los resultados y las mezclas deben procesarse y comprobarse antes de
-        enviarlos al Equipo de Resultados de la WCA. Puedes usar <a
-        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
-        Matcher</a>,  un proyecto de código abierto creado por Philippe
-        Virouleau.
-      #original_hash: 975e59b
-      '3': >-
-        La última versión de la Hoja de Puntuaciones de la WCA (en desuso si se
-        utiliza Cubecomps u otra herramienta similar) puede descargarse aquí:<br
-        /><a href="/files/results.xls" target="_blank">Hoja de Puntuaciones de
-        la WCA</a>.
-      #original_hash: c576675
-      '4': >-
-        También puedes usar <a
-        href="https://groupifier.jonatanklosko.com">Groupifier</a> para preparar
-        grupos de competidores para una competición. Es una herramienta cuyo
-        objetivo es hacer exactamente eso por ti. Entre sus principales
-        funcionalidades encontrarás ordenar competidores por ranking, asignar
-        tareas (juzgar, mezclar), decidir cuantas mezclas son necesarias,
-        generar hojas de tiempos, hojas personales y resúmenes. Es un proyecto
-        de código abierto creado por Jonatan Klosko.
+    #original_hash: 4fc2133
+    title: Herramientas software para las competiciones WCA
+    #original_hash: 6d2fe37
+    wca_icon_text: Desarrollado y mantenido  por el WST
+    intro:
+      #original_hash: 0c5fab5
+      desc: >-
+        Esta página contiene una lista no exhaustiva de herramientas usadas para
+        ayudar en la organización de competiciones WCA.
+      #original_hash: 479b542
+      disclaimer: >-
+        No todas las herramientas en la página se mantienen por el WST: ¡Está
+        bien! No tenemos personal suficiente para gestionar todo el software
+        relacionado con la WCA que existe por ahí :)
+      #original_hash: 80f97b9
+      used: >-
+        Todos los programas de esta lista han sido usados durante competiciones
+        WCA reales y se integran con la web de la WCA: te dejan iniciar sesión
+        con tu cuenta WCA para permitirte importar (y a veces actualizar) los
+        datos de tus competiciones próximas. Para cada una de ellas los
+        mantenedores estarán claramente especificados.
+    before:
+      #original_hash: 9850344
+      title: Antes de la competición
+      #original_hash: 576e2f4
+      desc: >-
+        Las gestiones de registros de competidores pueden hacerse directamente
+        en la web de la WCA. Como gestionar los grupos y el staff manualmente
+        puede ser tedioso, puede que quieras considerar utilizar alguna de estas
+        herramientas.
+    during:
+      #original_hash: 9934200
+      title: Durante la competición
+      #original_hash: 2b0a6f6
+      desc: >-
+        Encontrarás aquí herramientas que te permiten gestionar los resultados
+        de la competición mientras está sucediendo.
+    after:
+      #original_hash: d81b949
+      title: Después de la competición
+      #original_hash: b898460
+      desc: >-
+        Mientras la validación de resultados se lleva a cabo en la web,
+        necesitarás utilizar alguna herramienta para asignar las mezclas
+        generadas por TNoodle a los resultados cargados en la web de la WCA.
+    tools:
+      age:
+        #original_hash: 4aaae5b
+        title: AGE
+        #original_hash: 2e4832d
+        description: >-
+          Herramienta para generar y editar grupos/asignaciones de tareas para
+          competiciones WCA
+      certificates:
+        #original_hash: b3e4eb0
+        title: Certificados
+        #original_hash: f1a0731
+        description: Imprimir certificados para competiciones WCA que usen WCA Live
+      groupifier:
+        #original_hash: 8f55355
+        title: Groupifier
+        #original_hash: 24d4736
+        description: >-
+          Herramienta de gestión de tareas y grupos para organizadores de
+          competiciones WCA. Entre sus principales funcionalidades encontrarás:
+          Ordenar competidores por su ranking, asignar tareas (Hacer de juez,
+          mezclar), decidir cuantas mezclas son necesarias, generar hojas de
+          tiempos, horarios personalizados, resúmenes... Visita la web para
+          averiguar más.
+      scorecards:
+        #original_hash: aa1b64d
+        title: Scorecards
+        #original_hash: 2b8e373
+        description: Imprime hojas de tiempos para competiciones WCA que usen WCA Live
+      tnoodle:
+        #original_hash: ba336a1
+        title: TNoodle (Mezclas)
+        #original_hash: 0a38b22
+        description: >-
+          TNoodle es el programa de mezclas oficial que se usa para las
+          competiciones WCA. Normalmente es usado por Delegados antes de las
+          competiciones WCA, pero su interfaz de usuario permite a cualquier
+          genera cualquier tipo de mezclas para todas las categorías WCA.
+      live:
+        #original_hash: c66444f
+        title: WCA Live
+        #original_hash: f122015
+        description: >-
+          Plataforma para llevar competiciones WCA y compartir resultados en
+          directo con el mundo.
+      nightmare:
+        #original_hash: eebde3b
+        title: Hoja de cálculo de resultados
+        #original_hash: 466f4c2
+        description: >-
+          A veces suceden cosas... Si no tienes acceso a internet, necesitarás
+          usar la vieja hoja de cálculo.
+      matcher:
+        #original_hash: cc59bc9
+        title: Scrambles Matcher
+        #original_hash: a352bd1
+        description: >-
+          Se puede usar para asignar mezclas generadas por TNoodle a resultados.
+          Importar resultados de la web de la WCA (Cuando se use WCA Live), de
+          una hoja de cálculo o de un archivo WCIF independiente. Importa
+          mezclas de uno o más archivos json de TNoodle. Exporta resultados al
+          formato correcto para la carga de resultados WCA.
   logo:
     #original_hash: c72c969
     title: Logotipo de la WCA
