@@ -13,7 +13,6 @@ gem 'rails-i18n'
 gem 'activerecord-import'
 gem 'sassc-rails'
 gem 'uglifier'
-gem 'therubyracer'
 gem 'faraday'
 gem 'sdoc', group: :doc
 gem 'dotenv-rails', require: 'dotenv/rails-now'
