@@ -3158,10 +3158,10 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
-easymde@^2.10.0:
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/easymde/-/easymde-2.10.0.tgz#d83fbdc4386e41d84e2bbb9c58908cd0c3c05eeb"
-  integrity sha512-0xq5BRedHLg0nUJoR4pERPwoXFvimeutjyA+GFVd6T16sqNO9A2yGwK1jyY0gdwJBbbHLvDg6jneYO/7ef3rvg==
+easymde@^2.10.1:
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/easymde/-/easymde-2.10.1.tgz#671836ed08033def1a4379bfa2d193994c46471d"
+  integrity sha512-khKYfB18ZYbkJAGEeQXaV2ZZ1QS7BavNj2xdcPGpO8GXi30qA9bVxzswGW8QNZQRmPtaXiQDG236Yv/BQY7P2A==
   dependencies:
     codemirror "^5.52.2"
     codemirror-spell-checker "1.1.2"
