@@ -71,7 +71,7 @@ class CompetitionsController < ApplicationController
     # Default params
     params[:event_ids] ||= []
     params[:region] ||= "all"
-    unless %w(past present recent custom).include? params[:state]
+    unless %w(past present recent by_announcement custom).include? params[:state]
       params[:state] = "present"
     end
     params[:year] ||= "all years"
@@ -87,6 +87,7 @@ class CompetitionsController < ApplicationController
     @past_selected = params[:state] == "past"
     @present_selected = params[:state] == "present"
     @recent_selected = params[:state] == "recent"
+    @by_announcement_selected = params[:state] == "by_announcement"
     @custom_selected = params[:state] == "custom"
 
     @years = ["all years"] + Competition.non_future_years
@@ -97,9 +98,15 @@ class CompetitionsController < ApplicationController
     else
       @competitions = Competition
     end
-    @competitions = @competitions.includes(:country).where(showAtAll: true).order_by_date
 
-    if @present_selected
+    @competitions = @competitions.includes(:country).where(showAtAll: true)
+    @competitions = if @by_announcement_selected
+                      @competitions.order_by_announcement_date
+                    else
+                      @competitions.order_by_date
+                    end
+
+    if @present_selected || @by_announcement_selected
       @competitions = @competitions.not_over
     elsif @recent_selected
       @competitions = @competitions.where("end_date between ? and ?", (Date.today - Competition::RECENT_DAYS), Date.today).reverse_order

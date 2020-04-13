@@ -63,6 +63,10 @@
         <% end %>
       </span>
     </label>
+    <label id="by_announcement" class="btn btn-primary" data-toggle="tooltip" title="<%= t 'competitions.index.sort_by_announcement' %>">
+      <%= radio_button_tag "state", "by_announcement" %>
+      <span class="caption"><%= t 'competitions.index.by_announcement' %></span>
+    </label>
     <label id="custom" class="btn btn-primary">
       <%= radio_button_tag "state", "custom" %>
       <span class="caption"><%= t 'competitions.index.custom' %></span>
@@ -133,6 +137,10 @@
   });
 
   $('#recent').on('click', function() {
+    $('#past .caption').html("<%= t('competitions.index.past') %>");
+  });
+
+  $('#by_announcement').on('click', function() {
     $('#past .caption').html("<%= t('competitions.index.past') %>");
   });
 

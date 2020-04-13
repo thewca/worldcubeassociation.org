@@ -13,6 +13,10 @@
       <div class="col-md-12" id="past-comps">
         <%= render 'index_table', competitions: competitions, title: t('competitions.index.titles.recent', count: Competition::RECENT_DAYS) %>
       </div>
+    <% elsif @by_announcement_selected %>
+      <div class="col-md-12" id="past-comps">
+        <%= render 'index_table', competitions: competitions, title: t('competitions.index.titles.by_announcement') %>
+      </div>
     <% elsif @custom_selected %>
       <div class="col-md-12" id="past-comps">
         <%= render 'index_table', competitions: competitions, title: t('competitions.index.titles.custom') %>
@@ -53,6 +57,8 @@
         <%= render 'admin_index_table', id: "distant-comps", competitions: competitions, title: "Past competitions" %>
       <% elsif @recent_selected %>
         <%= render 'admin_index_table', id: "recent-comps", competitions: competitions, title: "Competitions within the last #{Competition::RECENT_DAYS} days" %>
+      <% elsif @by_announcement_selected %>
+        <%= render 'admin_index_table', id: "by-announcement-comps", competitions: competitions, title: t('competitions.index.titles.by_announcement') %>
       <% else %>
         <%= render 'admin_index_table', id: "ongoing-and-upcoming-comps", competitions: competitions, title: "Ongoing and upcoming competitions" %>
       <% end %>
