@@ -16,7 +16,7 @@
     "@rails/ujs": "^6.0.2-2",
     "@rails/webpacker": "4.2.2",
     "autonumeric": "^4.5.13",
-    "autoprefixer": "^9.7.4",
+    "autoprefixer": "^9.7.6",
     "autosize": "^4.0.2",
     "babel-loader": "^8.1.0",
     "babel-plugin-lodash": "^3.3.4",
