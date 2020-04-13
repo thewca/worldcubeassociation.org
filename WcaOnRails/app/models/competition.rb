@@ -68,6 +68,7 @@ class Competition < ApplicationRecord
       ).group(:id)
   }
   scope :order_by_date, -> { order(:start_date, :end_date) }
+  scope :order_by_announcement_date, -> { order(announced_at: :desc) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
@@ -1219,7 +1220,7 @@ class Competition < ApplicationRecord
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
-    orderable_fields = %i(name start_date end_date)
+    orderable_fields = %i(name start_date end_date announced_at)
     if params[:sort]
       order = params[:sort].split(',')
                            .map do |part|

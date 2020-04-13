@@ -1292,6 +1292,8 @@ en:
       recent: "Recent"
       past: "Past"
       custom: "Custom"
+      by_announcement: "By announcement"
+      sort_by_announcement: "Sort by announcement"
       from_date: "From"
       to_date: "To"
       #context: selecting a specific year ('year' is a number)
@@ -1306,6 +1308,7 @@ en:
         recent: "Recent competitions (last %{count} days)"
         upcoming: "Upcoming competitions"
         custom: "Competitions in the selected period of time"
+        by_announcement: "Competitions sorted by announcement date, newest on top"
       no_access: "You don't have access to this page!"
       #context: tooltip displayed when hovering
       tooltips:
@@ -1315,6 +1318,7 @@ en:
           in_progress: "In progress!"
           posted: "Results are posted!"
           starts_in: "Starts in %{days}"
+          announced_on: "Announced on %{announcement_date}"
         #context: the "search" button
         search: "Name or city"
         #context: the "recent" button

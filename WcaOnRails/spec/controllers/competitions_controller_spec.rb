@@ -39,7 +39,7 @@ RSpec.describe CompetitionsController do
       end
     end
 
-    describe "selecting present/past/recent/custom competitions" do
+    describe "selecting present/past/recent/by_announcement/custom competitions" do
       let!(:past_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: 1.year.ago) }
       let!(:past_comp2) { FactoryBot.create(:competition, :confirmed, :visible, starts: 3.years.ago) }
       let!(:in_progress_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: Date.today, ends: 1.day.from_now) }
@@ -85,6 +85,18 @@ RSpec.describe CompetitionsController do
 
         it "shows in progress competition that ends today" do
           expect(assigns(:competitions)).to match_array [in_progress_comp2]
+        end
+      end
+
+      context "when by_announcement is selected" do
+        before do
+          get :index, params: { state: :by_announcement }
+          upcoming_comp1.update_column(:announced_at, 2.month.ago)
+          upcoming_comp2.update_column(:announced_at, 1.month.ago)
+        end
+
+        it "competitions are sorted by announcement_date" do
+          expect(assigns(:competitions).first(2)).to eq [upcoming_comp2, upcoming_comp1]
         end
       end
 
