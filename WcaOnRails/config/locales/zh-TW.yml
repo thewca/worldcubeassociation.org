@@ -20,7 +20,7 @@ zh-TW:
     HK: 香港
     #original_hash: 3ad2dd8
     KN: 聖克里斯多福
-    #original_hash: 7184d1a
+    #original_hash: 5c34abb
     KP: 朝鮮(北韓)
     #original_hash: 4430b22
     KR: 韓國(南韓)
@@ -40,8 +40,6 @@ zh-TW:
     SZ: 史瓦帝尼
     #original_hash: 4d206a8
     TT: 千里達
-    #original_hash: 0f3f60b
-    VA: 梵諦岡
     #original_hash: 3fa9b2d
     VC: 聖文森國
     #original_hash: 9af4622
@@ -862,9 +860,9 @@ zh-TW:
         wca_id: ''
         #original_hash: 8723825
         dob: 將您的生日填成YYYY-MM-DD的格式
-        #original_hash: c6d8a97
+        #original_hash: 49ee4af
         document: >-
-          為了證明您的身份和您正確的生日，您必須附件一張有您的姓名和生日的合法證件（身份證、駕照、學生證、護照等）且能夠讓英語人士明白的照片以供辨識（若您無法提供上述證件，請聯絡您當地的WCA代表）。
+          為了證明您的身份和您正確的生日，您必須附件一張有您的姓名和生日的合法證件（身份證、駕照、學生證、護照等）且能夠讓英語人士明白的照片以供辨識（若您無法提供上述證件，請聯絡您當地的WCA代表）。在證件上面，至少要有您的名字和出生日期；其他的任何個人資訊部分可以遮蓋或是模糊處理。
       post:
         #original_hash: 53c16eb
         body: >-
@@ -1658,7 +1656,7 @@ zh-TW:
       #original_hash: 648424f
       registered: 報名成功！
       #original_hash: 82fed60
-      imported: 成功導入報名資料！
+      imported: 成功載入報名資料！
       #original_hash: 3614fd1
       added: 成功追加報名資料！
     edit_registration:
@@ -1869,7 +1867,7 @@ zh-TW:
       import: 載入
       errors:
         #original_hash: 0ef547d
-        error: '導入 %{registration} 錯誤：%{error}。'
+        error: '載入 %{registration} 錯誤：%{error}。'
         #original_hash: 2f0950e
         missing_columns: '遺失欄位：%{columns}。'
         #original_hash: 2454f20
@@ -1880,11 +1878,11 @@ zh-TW:
         non_existent_wca_id: '這個WCA ID %{wca_id}  並不存在。'
         #original_hash: b5c8591
         email_user_with_different_wca_id: >-
-          已經有帳號是使用 %{email} 的電子郵件，但WCA ID 是 %{user_wca_id} 而不是導入中的
+          已經有帳號是使用 %{email} 的電子郵件，但WCA ID 是 %{user_wca_id} 而不是載入中的
           %{registration_wca_id}。
         #original_hash: c9586e9
         email_user_with_different_unconfirmed_wca_id: >-
-          已經有帳號是使用 %{email} 的電子郵件，但有未確認的 WCA ID %{unconfirmed_wca_id} 而不是導入中的
+          已經有帳號是使用 %{email} 的電子郵件，但有未確認的 WCA ID %{unconfirmed_wca_id} 而不是載入中的
           %{registration_wca_id}。
         #original_hash: 4e32621
         email_duplicates: '一個電子郵件必須只能被用一次，以下為重複的電子郵件：%{emails}'
@@ -2449,7 +2447,7 @@ zh-TW:
         #original_hash: b233e77
         registration: 報名資料
         #original_hash: 3f9176e
-        import_registrations: 導入報名資料
+        import_registrations: 載入報名資料
         #original_hash: d672995
         register: 報名
         #original_hash: 855bd26
@@ -2685,10 +2683,10 @@ zh-TW:
       title: 請求更改生日表單
       #original_hash: 8a4ced5
       description: 若您的生日與我們記錄當中的資料不符時，請使用此表單。
-      #original_hash: 563d056
+      #original_hash: 0ac13b9
       important_message_html: >-
         <span
-        class="text-danger">重要</span>：請附件一個有您的姓名和生日的<u>合法證件</u>（身份證、駕照、護照等）。
+        class="text-danger">重要</span>：請附件一個有您的姓名和生日的<u>合法證件</u>（身份證、駕照、護照等）。其他的個人資訊部分可以遮蓋或是模糊處理。
       #original_hash: 19c17ec
       submit: 請求更改
     messages:
