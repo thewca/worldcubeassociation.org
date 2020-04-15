@@ -318,7 +318,9 @@ CREATE TABLE `Results` (
   KEY `index_Results_on_eventId_and_value2` (`eventId`,`value2`),
   KEY `index_Results_on_eventId_and_value3` (`eventId`,`value3`),
   KEY `index_Results_on_eventId_and_value4` (`eventId`,`value4`),
-  KEY `index_Results_on_eventId_and_value5` (`eventId`,`value5`)
+  KEY `index_Results_on_eventId_and_value5` (`eventId`,`value5`),
+  KEY `index_Results_on_regionalSingleRecord_and_eventId` (`regionalSingleRecord`,`eventId`),
+  KEY `index_Results_on_regionalAverageRecord_and_eventId` (`regionalAverageRecord`,`eventId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `RoundTypes`;
@@ -1628,4 +1630,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20191107212356'),
 ('20200125180554'),
 ('20200206012756'),
-('20200331082313');
+('20200331082313'),
+('20200415151734');
