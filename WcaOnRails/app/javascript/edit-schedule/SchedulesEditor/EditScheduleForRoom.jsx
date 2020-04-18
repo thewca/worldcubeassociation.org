@@ -33,6 +33,7 @@ export default class EditScheduleForRoom extends React.Component {
       actionDetails: modeDetails.create,
     };
     this.handleShowModal = this.handleShowModal.bind(this);
+    this.eventFetcher = this.eventFetcher.bind(this);
   }
 
   componentDidMount() {
@@ -44,16 +45,7 @@ export default class EditScheduleForRoom extends React.Component {
       eventColor: room.color,
     };
 
-    const eventFetcher = (start, end, timezone, callback) => {
-      // Create a deep clone, otherwise FC will add some extra attributes that
-      // will make the parent component think some changes have been made...
-      callback(_.cloneDeep(
-        roomWcifFromId(scheduleWcif, selectedRoom).activities,
-      ));
-    };
-
-
-    generateCalendar(eventFetcher, this.handleShowModal, scheduleWcif, additionalOptions);
+    generateCalendar(this.eventFetcher, this.handleShowModal, scheduleWcif, additionalOptions);
     singleSelectLastEvent(scheduleWcif, selectedRoom);
   }
 
@@ -65,6 +57,15 @@ export default class EditScheduleForRoom extends React.Component {
       $(scheduleElementSelector).fullCalendar('option', 'eventColor', room.color);
       singleSelectLastEvent(scheduleWcif, selectedRoom);
     }
+  }
+
+  eventFetcher(start, end, timezone, callback) {
+    // Create a deep clone, otherwise FC will add some extra attributes that
+    // will make the parent component think some changes have been made...
+    const { scheduleWcif, selectedRoom } = this.props;
+    callback(_.cloneDeep(
+      roomWcifFromId(scheduleWcif, selectedRoom).activities,
+    ));
   }
 
   handleShowModal(eventProps, mode) {
