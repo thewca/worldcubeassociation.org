@@ -594,10 +594,6 @@ class User < ApplicationRecord
     self == user || can_view_all_users? || organizer_for?(user)
   end
 
-  def can_edit_notes_of_user?(user)
-    user.senior_delegate == self || admin? || board_member?
-  end
-
   def can_change_users_avatar?(user)
     user.wca_id.present? && self.editable_fields_of_user(user).include?(:remove_avatar)
   end
@@ -831,14 +827,6 @@ class User < ApplicationRecord
     end
     if admin? || board_member? || senior_delegate?
       fields += %i(delegate_status senior_delegate_id region)
-    end
-    if user.any_kind_of_delegate?
-      if user == self
-        fields += %i(location_description phone_number)
-      end
-      if self.can_edit_notes_of_user?(user)
-        fields += %i(notes)
-      end
     end
     if admin? || any_kind_of_delegate? || results_team?
       fields += %i(
