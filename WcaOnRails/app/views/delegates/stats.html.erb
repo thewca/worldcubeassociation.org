@@ -22,13 +22,10 @@
         <tr class="<%= delegate.delegate_status %>">
           <td class="delegate" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= delegate.notes %>">
             <%= delegate.name %>
-            <% if current_user&.can_edit_notes_of_user?(delegate) %>
-              <%= link_to icon("fas", "pencil-alt"), edit_user_path(delegate) %>
-            <% end %>
             <%= mail_to delegate.email, icon("fas", "envelope"), target: "_blank", class: "hide-new-window-icon" %>
           </td>
           <td class="position"><%= delegate.delegate_status.humanize %></td>
-          <td class="region"><%= delegate.region %> (<%= delegate.location_description %>)</td>
+          <td class="region"><%= delegate.region %></td>
           <td class="last"><%= competitions&.last&.start_date %></td>
           <td class="first"><%= competitions&.first&.start_date %></td>
           <td class="total"><%= competitions&.count %></td>

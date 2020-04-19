@@ -645,12 +645,9 @@ module DatabaseDumper
           encrypted_otp_secret_salt
           encrypted_password
           last_sign_in_ip
-          location_description
-          notes
           otp_backup_codes
           otp_required_for_login
           pending_avatar
-          phone_number
           preferred_locale
           remember_created_at
           reset_password_sent_at
