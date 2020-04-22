@@ -388,12 +388,6 @@ pt-BR:
         delegate_status: Status de delegado
         #original_hash: 0f21717
         region: Região
-        #original_hash: a10b651
-        location_description: Descrição do local
-        #original_hash: 8961d3b
-        phone_number: Número de telefone
-        #original_hash: 7044004
-        notes: Detalhes
         #original_hash: 730db33
         receive_delegate_reports: >-
           Eu quero receber os Relatórios do Delegado das competições da WCA por
@@ -770,12 +764,6 @@ pt-BR:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
         #original_hash: d5ccc15
         receive_delegate_reports: >-
           Se você é um Delegado Junior, Delegado Sênior ou Membro do WRC ou
@@ -3926,6 +3914,8 @@ pt-BR:
           Plataforma para computar os resultados e compartilhar ao vivo com o
           mundo.
       nightmare:
+        #original_hash: eebde3b
+        title: Planilha de resultados
         #original_hash: 466f4c2
         description: >-
           Às vezes coisas acontecem... Se você não tiver acesso à internet,
