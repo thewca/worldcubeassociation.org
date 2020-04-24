@@ -540,6 +540,7 @@ class CompetitionsController < ApplicationController
         :end_date,
         :information,
         :delegate_ids,
+        :trainee_delegate_ids,
         :organizer_ids,
         :contact,
         :generate_website,

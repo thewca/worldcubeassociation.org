@@ -282,6 +282,7 @@ en:
         base_entry_fee_lowest_denomination: "Base registration fee"
         currency_code: "Currency code"
         delegate_ids: "WCA Delegate(s)"
+        trainee_delegate_ids: "WCA Trainee Delegate(s)"
         organizer_ids: "Organizer(s)"
         contact: "Contact"
         information: "Information"
@@ -408,6 +409,7 @@ en:
         f: "Female"
         o: "Other"
       delegate_status:
+        trainee_delegate: "Trainee Delegate"
         candidate_delegate: "Junior Delegate"
         delegate: "Delegate"
         senior_delegate: "Senior Delegate"
@@ -474,6 +476,7 @@ en:
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
         delegate_ids: "WCA Delegates for the competition."
+        trainee_delegate_ids: "WCA Trainee Delegates for the competition."
         organizer_ids: "Competition organizers (they need an account to be listed here)."
         external_website: "The website of the competition. Must be a valid http(s) url."
         registration_open: "Note: Registration open and close are in UTC time"

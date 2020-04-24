@@ -7,6 +7,7 @@ onPage('users#edit, users#update', function() {
     var delegateStatus = this.value;
     var seniorDelegateRequired = {
       "": false,
+      trainee_delegate: true,
       candidate_delegate: true,
       delegate: true,
       senior_delegate: false,

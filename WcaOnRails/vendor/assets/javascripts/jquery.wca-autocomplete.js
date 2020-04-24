@@ -29,10 +29,14 @@
       } else if(users_search) {
         url = '/api/v0/search/users';
         var only_delegates = $(that).hasClass("wca-autocomplete-only_delegates");
+        var only_trainee_delegates = $(that).hasClass("wca-autocomplete-only_trainee_delegates");
         var persons_table = $(that).hasClass("wca-autocomplete-persons_table");
 
         if(only_delegates) {
           defaultSearchData.only_delegates = true;
+        }
+        if(only_trainee_delegates) {
+          defaultSearchData.only_trainee_delegates = true;
         }
         if(persons_table) {
           defaultSearchData.persons_table = true;

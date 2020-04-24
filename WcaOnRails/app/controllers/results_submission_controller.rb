@@ -4,7 +4,7 @@ require 'fileutils'
 
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_submit_competition_results?, competition_from_params) }
+  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }
 
   def new
     @competition = competition_from_params
