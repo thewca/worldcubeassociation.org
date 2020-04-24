@@ -20,11 +20,13 @@
       results_validator: @results_validator,
       force_collapse: @results_submission
     %>
-    <%= render "results_submission_panel",
-      competition: @competition,
-      has_errors: @results_validator.has_errors?,
-      results_submission: @results_submission
-    %>
+    <% if @current_user.can_submit_competition_results?(@competition) %>
+      <%= render "results_submission_panel",
+        competition: @competition,
+        has_errors: @results_validator.has_errors?,
+        results_submission: @results_submission
+      %>
+    <% end %>
   <% end %>
 
 <% end %>

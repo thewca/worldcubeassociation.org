@@ -107,6 +107,7 @@ class User < ApplicationRecord
   end
 
   enum delegate_status: {
+    trainee_delegate: "trainee_delegate",
     candidate_delegate: "candidate_delegate",
     delegate: "delegate",
     senior_delegate: "senior_delegate",
@@ -401,6 +402,7 @@ class User < ApplicationRecord
     {
       nil => false,
       "" => false,
+      "trainee_delegate" => true,
       "candidate_delegate" => true,
       "delegate" => true,
       "senior_delegate" => false,
@@ -517,7 +519,7 @@ class User < ApplicationRecord
   end
 
   def staff?
-    any_kind_of_delegate? || member_of_any_official_team? || board_member? || officer?
+    any_kind_of_delegate? && !trainee_delegate? || member_of_any_official_team? || board_member? || officer?
   end
 
   def staff_with_voting_rights?
@@ -564,6 +566,10 @@ class User < ApplicationRecord
 
   def any_kind_of_delegate?
     delegate_status.present?
+  end
+
+  def trainee_delegate?
+    delegate_status == "trainee_delegate"
   end
 
   def full_delegate?
@@ -666,7 +672,15 @@ class User < ApplicationRecord
   alias_method :can_announce_competitions?, :can_admin_competitions?
 
   def can_manage_competition?(competition)
-    can_admin_competitions? || competition.organizers.include?(self) || competition.delegates.include?(self) || wrc_team? || competition.delegates.map(&:senior_delegate).compact.include?(self) || ethics_committee?
+    (
+      can_admin_competitions? ||
+      competition.organizers.include?(self) ||
+      competition.delegates.include?(self) ||
+      competition.trainee_delegates.include?(self) ||
+      wrc_team? ||
+      competition.delegates.map(&:senior_delegate).compact.include?(self) ||
+      ethics_committee?
+    )
   end
 
   def can_manage_any_not_over_competitions?
@@ -692,8 +706,17 @@ class User < ApplicationRecord
     can_admin_competitions? || (can_manage_competition?(competition) && !competition.confirmed?)
   end
 
-  def can_submit_competition_results?(competition)
-    appropriate_role = can_admin_results? || competition.delegates.include?(self)
+  def can_upload_competition_results?(competition)
+    can_submit_competition_results?(competition, upload_only: true)
+  end
+
+  def can_submit_competition_results?(competition, upload_only: false)
+    allowed_delegate = if upload_only
+                         competition.delegates.include?(self) || competition.trainee_delegates.include?(self)
+                       else
+                         competition.delegates.include?(self)
+                       end
+    appropriate_role = can_admin_results? || allowed_delegate
     appropriate_time = competition.in_progress? || competition.is_probably_over?
     competition.announced? && appropriate_role && appropriate_time && !competition.results_posted?
   end
@@ -730,13 +753,22 @@ class User < ApplicationRecord
     if delegate_report.posted?
       can_view_delegate_matters?
     else
-      delegate_report.competition.delegates.include?(self) || can_admin_results? || ethics_committee?
+      can_edit_delegate_report?(delegate_report) || ethics_committee?
     end
   end
 
   def can_edit_delegate_report?(delegate_report)
+    can_post_delegate_report?(delegate_report, edit_only: true)
+  end
+
+  def can_post_delegate_report?(delegate_report, edit_only: false)
     competition = delegate_report.competition
-    can_admin_results? || (competition.delegates.include?(self) && !delegate_report.posted?)
+    allowed_delegate = if edit_only
+                         competition.delegates.include?(self) || competition.trainee_delegates.include?(self)
+                       else
+                         competition.delegates.include?(self)
+                       end
+    can_admin_results? || (allowed_delegate && !delegate_report.posted?)
   end
 
   def can_see_admin_competitions?
@@ -931,7 +963,11 @@ class User < ApplicationRecord
       search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_delegates])
-        users = users.where.not(delegate_status: nil)
+        users = users.where(delegate_status: ["candidate_delegate", "delegate", "senior_delegate"])
+      end
+
+      if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])
+        users = users.where(delegate_status: "trainee_delegate")
       end
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_with_wca_ids])

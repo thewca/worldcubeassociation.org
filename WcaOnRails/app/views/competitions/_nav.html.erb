@@ -72,7 +72,7 @@
           fas_icon: "clone",
         }
       end
-      if current_user&.can_submit_competition_results?(@competition)
+      if current_user&.can_upload_competition_results?(@competition)
         nav_items << {
           text: t('.menu.submit_results'),
           path: competition_submit_results_edit_path(@competition),
