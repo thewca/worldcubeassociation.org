@@ -29,7 +29,29 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def results
     competition = competition_from_params
-    render json: competition.results
+    event = Event.c_find(params[:event_id])
+    if event
+      results_by_round = competition.results
+                                    .where(eventId: event.id)
+                                    .group_by(&:round_type)
+                                    .sort_by { |round_type, _| -round_type.rank }
+      rounds = results_by_round.map do |round_type, results|
+        {
+          id: round_type.id,
+          # Also include the (localized) name here, we don't have i18n in js yet.
+          name: round_type.name,
+          results: results.sort_by { |r| [r.pos, r.personName] },
+        }
+      end
+      render json: {
+        id: event.id,
+        # Also include the (localized) name here, we don't have i18n in js yet.
+        name: event.name,
+        rounds: rounds,
+      }
+    else
+      render json: competition.results
+    end
   end
 
   def competitors
