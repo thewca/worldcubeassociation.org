@@ -20,7 +20,7 @@ pt:
     HK: Hong Kong
     #original_hash: 3ad2dd8
     KN: São Cristóvão e Névis
-    #original_hash: 7184d1a
+    #original_hash: 5c34abb
     KP: Coreia do Norte
     #original_hash: 4430b22
     KR: Coreia do Sul
@@ -40,8 +40,6 @@ pt:
     SZ: Suazilândia
     #original_hash: 4d206a8
     TT: Trinidad e Tobago
-    #original_hash: 0f3f60b
-    VA: Vaticano
     #original_hash: 3fa9b2d
     VC: São Vicente e Granadinas
     #original_hash: 9af4622
@@ -384,12 +382,6 @@ pt:
         delegate_status: Estatuto de delegado
         #original_hash: 0f21717
         region: Região
-        #original_hash: a10b651
-        location_description: Descrição do local
-        #original_hash: 8961d3b
-        phone_number: Número de telefone
-        #original_hash: 7044004
-        notes: Notas
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 57eaf24
@@ -662,8 +654,8 @@ pt:
         #original_hash: 6e6a6f2
         o: Outro
       delegate_status:
-        #original_hash: 28ec02d
-        candidate_delegate: Delegado Candidato
+        #original_hash: 9b97968
+        candidate_delegate: Delegado Júnior
         #original_hash: 12ab214
         delegate: Delegado
         #original_hash: d463c23
@@ -764,17 +756,11 @@ pt:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
-        #original_hash: 8c266ea
+        #original_hash: d5ccc15
         receive_delegate_reports: >-
-          Se for Delegado Candidato, Delegado Sénior ou membro do WRC ou do
-          WQAC, recebe Relatórios de Delegados por defeito. Nota: a alteração
-          pode levar até uma hora a tomar efeito.
+          Se for Delegado Júnior, Delegado Sénior ou membro do WRC ou do WQAC,
+          recebe Relatórios de Delegados por defeito. Nota: a alteração pode
+          levar até uma hora a tomar efeito.
         #original_hash: 0627e5c
         otp_attempt: >-
           Verifique a aplicação móvel configurada para uma password ou insira um
@@ -936,14 +922,16 @@ pt:
         wca_id: ''
         #original_hash: 8723825
         dob: A sua data de nascimento válida no formato AAAA-MM-DD
-        #original_hash: c6d8a97
+        #original_hash: 49ee4af
         document: >-
           Para nos provar a sua identidade e data de nascimento, deve anexar uma
           fotografia de um documento legal (cartão de cidadão, bilhete de
           identidade, passaporte, carta de condução, ... ) onde o seu nome e
           data de nascimento sejam visíveis e entendíveis por alguém que entenda
           inglês (ou contacte um Delegado da WCA local se não tiver tal
-          documento).
+          documento). Na identificação é necessário pelo menos o nome e a data
+          de nascimento; é possível desfocar/esconder outra informação pessoal
+          na identificação.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -1249,6 +1237,8 @@ pt:
           disabled: inativa
           #original_hash: 5f225b0
           enable: Ativar 2FA
+          #original_hash: 2e35cd9
+          disable: Desabilitar 2FA
           #original_hash: b2a3d7e
           reset: Redefinir segredo 2FA
           #original_hash: 14b7bfd
@@ -1306,6 +1296,17 @@ pt:
           email_auth_desc: >-
             Pode solicitar uma password de utilização única por e-mail quando
             tentar entrar.
+          #original_hash: dd991ab
+          disable_section_title: Desabilitar autenticação dois fatores
+          #original_hash: 4569d81
+          disable_section_content: >-
+            A WST recomenda vivamente que não seja desativada a 2FA, mas é
+            possível, clicando no botão abaixo. Por favor note que se reativar
+            2FA terá que reconfigurar o(s) dispositivo(s).
+          #original_hash: ab1b77d
+          disabled_success: Desabilitada autenticação de dois fatores com sucesso.
+          #original_hash: c36d556
+          disabled_failed: 'Não foi possível desabilitar 2FA, por favor veja os erros abaixo.'
     shared:
       links:
         #original_hash: ada2e9e
@@ -1387,6 +1388,8 @@ pt:
       organizations: Organizações Regionais
       #original_hash: d790b40
       faq: Perguntas Frequentes
+      #original_hash: cf1d2c9
+      forum: Fórum
       #original_hash: 3ad28c0
       teams: 'Equipas, Comités e Conselhos'
       #original_hash: 02617c0
@@ -1475,6 +1478,8 @@ pt:
       manage_app: Gerir as suas aplicações
       #original_hash: 0e8b212
       manage_auth_app: Gerir aplicações autorizadas
+      #original_hash: acac109
+      media_submission: Submissão de média
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2470,6 +2475,10 @@ pt:
       past: Passadas
       #original_hash: 081ae3f
       custom: Genérico
+      #original_hash: 73cf180
+      by_announcement: Por anúncio
+      #original_hash: b3946b2
+      sort_by_announcement: Ordenar por anúncio
       #original_hash: 3f66052
       from_date: De
       #original_hash: ae79ea1
@@ -2491,6 +2500,8 @@ pt:
         upcoming: Competições futuras
         #original_hash: 8b57693
         custom: Competições no período de tempo selecionado
+        #original_hash: 0933739
+        by_announcement: 'Competições ordenadas por data de anúncio, mais recente no topo'
       #original_hash: 6684214
       no_access: Não tem acesso a esta página!
       tooltips:
@@ -2503,6 +2514,8 @@ pt:
           posted: Resultados publicados!
           #original_hash: 89bcc37
           starts_in: 'Começa em %{days}'
+          #original_hash: 97b061a
+          announced_on: 'Anunciada a %{announcement_date}'
         #original_hash: ccd2db9
         search: Nome ou Cidade
         #original_hash: 3bc8082
@@ -2576,10 +2589,10 @@ pt:
       is_visible: >-
         Esta competição está visível publicamente. Qualquer mudança que fizer
         será exibida ao público!
-      #original_hash: f99b3f7
+      #original_hash: 1039850
       pending_confirmation_html: >-
-        Preencha todos os campos e clique Confirmar quando estiver pronto que
-        %{contact} aprove esta competição.
+        Preencha todos os campos e peça ao Delegado que clique em Confirmar
+        quando estiver pronto que %{contact} aprove esta competição.
       #original_hash: 8966fd0
       submit_create_value: Criar Competição
       #original_hash: 40b0dfd
@@ -3083,11 +3096,12 @@ pt:
       description: >-
         Use este formulário se a data de nascimento guardada na base de dados é
         diferente da real.
-      #original_hash: 563d056
+      #original_hash: 0ac13b9
       important_message_html: >-
         <span class="text-danger">IMPORTANTE</span>: Anexe uma fotografia de um
         <u>documento legal</u> (cartão de cidadão, bilhete de identidade, carta
-        de condução, passaporte...) mostrando o seu nome E data de nascimento.
+        de condução, passaporte...) mostrando o seu nome E data de nascimento; É
+        possível desfocar/esconder outra informação pessoal da identificação.
       #original_hash: 19c17ec
       submit: Pedir alteração
     messages:
@@ -3573,21 +3587,24 @@ pt:
       probation:
         #original_hash: 1dd6e3b
         name: Delegados em Provação
-      #original_hash: 3d5b64b
+      #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>Delegado da WCA</strong> é o papel definido nas Moções da WCA
         e retratado nos Regulamentos da WCA. O dever principal de um Delegado é
         o de supervisionar competições em nome da WCA. Um Delegado da WCA é
         responsável por garantir que todas as competições da WCA decorram de
         acordo com a Missão, Espírito e Regulamento da WCA. A WCA distingue
-        entre <strong>Delegados Sénior</strong>, <strong>Delegados</strong> e
-        <strong>Delegados Candidatos</strong>%{see_link}.</p> <p> Além das
-        tarefas de um Delegado, um Delegado Sénior é responsável por gerir os
-        Delegados da sua área, e também pode ser contactado pela comunidade para
-        assuntos pertinentes à região.</p> <p>Novos Delegados são listados
-        inicialmente como Delegados Candidatos e devem mostrar que são capazes
-        de conduzir competições adequadamente antes de serem considerados
-        Delegados.</p>
+        entre <strong>Delegados Sénior</strong>, <strong>Delegados
+        Regionais</strong>, <strong>Delegados</strong>, <strong>Delegados
+        Júnior</strong> e <strong>Delegados em treino</strong>%{see_link}.</p>
+        <p> Além das tarefas de um Delegado, um Delegado Sénior é responsável
+        por gerir os Delegados da sua área, e também pode ser contactado pela
+        comunidade para assuntos pertinentes à região.</p> <p>Novos Delegados
+        são listados inicialmente como Delegados Júnior e devem mostrar que são
+        capazes de conduzir competições adequadamente antes de serem
+        considerados Delegados.</p><p>Delegados em treino estão a ser treinados
+        para a posição de Delegado da WCA e apenas podem supervisionar
+        competições em que um Delegado da WCA esteja presente.</p>
       #original_hash: 27d18ac
       see_link_html: '(ver %{link})'
       #original_hash: 5b01fcc
@@ -3807,37 +3824,109 @@ pt:
         Este Conselho é responsável por criar e manter comunicação bilateral
         entre a Comunidade WCA e o Staff da WCA.
   score_tools:
-    #original_hash: ea9d41d
-    title: Ferramentas de Resultados da WCA
-    paragraphs:
-      #original_hash: 305f7f8
-      '1': >-
-        A WCA recomenda o uso do <a
-        href="https://live.worldcubeassociation.org">WCA Live</a> antes e
-        durante uma competição. WCA Live é uma plataforma para gerir competições
-        da WCA e partilhar resultados em tempo real com o mundo.
-      #original_hash: 0867b38
-      '2': >-
-        Folhas de resultados e embaralhamentos devem ser processados e
-        verificados em busca de erros antes de serem enviados à Equipa de
-        Resultados. Pode-se usar <a
-        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
-        Matcher</a>, um projeto em código aberto criado por Philippe Virouleau.
-      #original_hash: 975e59b
-      '3': >-
-        A versão mais recente da Folha de Cálculo de Resultados da WCA pode ser
-        descarregada aqui: <br /><a href="/files/results.xls"
-        target="_blank">Folha de Cálculo de Resultados da WCA</a>.
-      #original_hash: c576675
-      '4': >-
-        Também pode querer usar o <a
-        href="https://groupifier.jonatanklosko.com">Groupifier</a> para preparar
-        grupos para uma competição. É uma ferramenta que tenta executar esta
-        tarefa automaticamente. Entre as características principais
-        encontram-se: ordenação de competidores por ranking, atribuição de
-        tarefas (ajuizamento, embaralhamento), decidir quantos grupos são
-        necessários, gerar folhas de resultados, folhas pessoais e sumários. É
-        um projeto em código aberto, criado por Jonatan Kłosko.
+    #original_hash: 4fc2133
+    title: Ferramentas de Software para Competições da WCA
+    #original_hash: 6d2fe37
+    wca_icon_text: Desenvolvido e mantido pela WST
+    intro:
+      #original_hash: 0c5fab5
+      desc: >-
+        Esta página é uma lista não exaustiva de ferramentas conhecidas a ser
+        usadas na organização de competições da WCA.
+      #original_hash: 479b542
+      disclaimer: >-
+        Nem todas as ferramentas nesta página são mantidas pela WST: é normal!
+        Não temos gente suficiente para gerir todo o software relacionado com a
+        WCA :)
+      #original_hash: 80f97b9
+      used: >-
+        Todos os programas desta lista foram usados durante competições da WCA
+        reais e integram-se com o site da WCA: permitem autenticação com a conta
+        da WCA e permitem importar (e por vezes atualizar) dados de competições
+        futuras. Para cada um, o seu gestor estará claramente visível.
+    before:
+      #original_hash: 9850344
+      title: Antes da competição
+      #original_hash: 576e2f4
+      desc: >-
+        Gerir registos de competidores pode ser feito diretamente no site da
+        WCA. Uma vez que gerir grupos e staff manualmente pode consumir muito
+        tempo, deve considerar usar uma das ferramentas abaixo.
+    during:
+      #original_hash: 9934200
+      title: Durante a competição
+      #original_hash: 2b0a6f6
+      desc: >-
+        Aqui irá encontrar ferramentas que permitem gerir os resultados de uma
+        competição enquanto esta decorre.
+    after:
+      #original_hash: d81b949
+      title: Depois da competição
+      #original_hash: b898460
+      desc: >-
+        Enquanto decorre a validação dos resultados no site, tem que se usar uma
+        ferramenta que permita associar os embaralhamentos gerados pelo TNoodle
+        aos resultados submetidos no site da WCA.
+    tools:
+      age:
+        #original_hash: 4aaae5b
+        title: IDADE
+        #original_hash: 2e4832d
+        description: Ferramenta para gerar e editar grupos/tarefas para competições da WCA
+      certificates:
+        #original_hash: b3e4eb0
+        title: Certificados
+        #original_hash: f1a0731
+        description: Imprimir certificados para competições WCA usando WCA Live
+      groupifier:
+        #original_hash: 8f55355
+        title: Groupifier
+        #original_hash: 24d4736
+        description: >-
+          Ferramenta de gestão de tarefas e de grupos para organizadores de
+          competições WCA. Entre as suas funcionalidades: ordenar competidores
+          por ranking, atribuir tarefas (ajuizar, embaralhar), decidir quandos
+          embaralhamentos são necessários, gerar folhas de resultados, folhas
+          individuais, sumários... Consulte o site da ferramenta para mais
+          informação.
+      scorecards:
+        #original_hash: aa1b64d
+        title: Folhas de resultados
+        #original_hash: 2b8e373
+        description: Imprimir folhas de resultados para competições WCA usando WCA Live
+      tnoodle:
+        #original_hash: ba336a1
+        title: TNoodle (Embaralhamentos)
+        #original_hash: 0a38b22
+        description: >-
+          TNoodle é o programa oficial de embaralhamento usado em competições
+          WCA. É tipicamente usado por Delegados da WCA antes de competições,
+          mas o seu interface também permite a qualquer pessoa gerar qualquer
+          tipo de embaralhamentos para todos os eventos da WCA.
+      live:
+        #original_hash: c66444f
+        title: WCA Live
+        #original_hash: f122015
+        description: >-
+          Plataforma de gestão de competições WCA e partilha de resultados em
+          direto com o mundo.
+      nightmare:
+        #original_hash: eebde3b
+        title: Folha de cálculo de resultados
+        #original_hash: 466f4c2
+        description: >-
+          Por vezes coisas acontecem... Se não houver internet, terá que se usar
+          uma folha de cálculo.
+      matcher:
+        #original_hash: cc59bc9
+        title: Scrambles Matcher
+        #original_hash: a352bd1
+        description: >-
+          Pode ser usado para atribuir embaralhamentos gerados pelo TNoodle aos
+          resultados. Importa resultados do site da WCA (quando se usa WCA
+          Live), uma folha de cálculo ou um ficheiro WCIF isolado. Importa
+          embaralhamentos de um ou mais ficheiros json do TNoodle. Exporta
+          resultados para o formato apropriado para a submissão à WCA.
   logo:
     #original_hash: c72c969
     title: Logótipo da WCA
@@ -4342,3 +4431,101 @@ pt:
       confirm_accept: Tem a certeza que quer aceitar este média?
       #original_hash: 5301648
       edit: Editar
+  media_and_instagram:
+    #original_hash: 1e9793e
+    page_title: Submissão de Media e Instagram
+    general_media_submission:
+      #original_hash: 2b4c8c8
+      title: Submissão de média geral
+      #original_hash: 670a1a8
+      body_html: >-
+        A WCA partilha artigos e imagens de competições partilhadas pela
+        comunidade na nossa <a href="/media">página de média</a>. Se tem alguma
+        coisa que queira partilhar, por favor preencha o <a
+        href="/media/new">formulário de submissão de média geral</a>!
+    instagram_submission:
+      #original_hash: e01c612
+      title: Submissão Instagram
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        Como pode ter visto, a WCA tem um <a
+        href="https://www.instagram.com/thewcaofficial/">Instagram</a>! Para
+        melhor refletir a comunidade mundial, colocamos conteúdo submetido por
+        competidores de todo o mundo.
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        Se tem fotografias de alta qualidade ou vídeos que queira partilhar, por
+        favor clique no botão abaixo e preencha o formulário! De forma a que
+        possamos partilhar o conteúdo, deve ser seu e deve dar autorização à WCA
+        para o partilhar. Devido ao elevado número de submissões que recebemos,
+        podemos não publicar tudo, mas aqui ficam algumas dicas para que o seu
+        conteúdo seja publicado:
+      #original_hash: cf5c955
+      photo_quality: >-
+        Certifique-se que a qualidade da fotografia/vídeo é boa. Não tem que ser
+        filmado profissionalmente mas a qualidade não deve prejudicar a foto ou
+        o vídeo.
+      #original_hash: 0742378
+      photo_interest: >-
+        Tente que o conteúdo seja interessante para um público alargado.
+        Conteúdo que é interessante apenas para algumas pessoas não pertence
+        aqui.
+      #original_hash: 497bc27
+      wca_related: >-
+        Partilhe fotos e vídeos relacionados com a WCA, pois é disso que trata a
+        nossa conta! Adoramos ver os competidores a divertirem-se!
+      #original_hash: af882f2
+      submit_instagram_content: Submeter conteúdo Instagram
+    instagram_hosting:
+      #original_hash: 5156783
+      title: Instagram hosting
+      #original_hash: 541106b
+      paragraph1_html: >-
+        Por vezes, permitiremos que membros da comunidade hospedem a story
+        oficial do Instagram da WCA com uma competição em que participem! Se
+        estiver interessado, clique no botão e preencha o formulário abaixo. A
+        Equipa de Comunicação da WCA entrará em contacto consigo após todas as
+        informações terem sido enviadas, se for aprovado para hospedagem. Se
+        tiver alguma dúvida, <a
+        href="https://www.worldcubeassociation.org/contact/website">entre em
+        contacto conosco</a>.
+      #original_hash: aca6c32
+      paragraph2: >-
+        O nosso objetivo é compartilhar um pouco do lado pessoal de cada
+        competidor e das competições. Isso não deve ser um fardo enorme no fim
+        de semana e, é claro, queremos que aproveite a competição primeiro e
+        depois possa compartilhá-la.
+      #original_hash: af023ed
+      paragraph3: 'A função de um host pode ser resumida da seguinte forma:'
+      #original_hash: 21efafe
+      short_intro: 'Fazer uma breve introdução, falar sobre si e a competição'
+      #original_hash: a053b5a
+      venue_feel: >-
+        Obter alguns clipes para se ter uma ideia do local e das pessoas, isso
+        pode ser apenas uma foto da área de competição e da área de resolução
+      #original_hash: d17fb2f
+      people_solving: >-
+        Tentar obter algumas fotos de competidores a participar
+        (preferencialmente competidores rápidos no seu evento principal)
+      #original_hash: 76d2358
+      mini_interviews: >-
+        Pode tentar obter pequenas entrevistas com pessoas (organizadores,
+        delegados, etc...) dizendo o que sentem sobre a competição
+      #original_hash: 6003b20
+      pictures_too: 'Pode também enviar fotografias, não tem que ser apenas vídeos'
+      #original_hash: 8813619
+      paragraph4: >-
+        As nossas comunicações durante o fim de semana geralmente passam por um
+        grupo do WhatsApp. Verifique se está familiarizado com esta plataforma
+        de mensagens ou informe-nos se não puder usá-la, para que possamos
+        organizar outros planos.
+      #original_hash: 38191c1
+      apply_to_host: Propor-me como host
+    other_suggestions:
+      #original_hash: 730873b
+      title: Outras sugestões?
+      #original_hash: aa7ab5c
+      body_html: >-
+        Tem outras sugestões para Instagram ou outro conteúdo de média social?
+        <a
+        href="https://www.worldcubeassociation.org/contact/website">Diga-nos</a>!
