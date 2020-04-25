@@ -390,12 +390,6 @@ es:
         delegate_status: Condición de Delegado
         #original_hash: 0f21717
         region: Región
-        #original_hash: a10b651
-        location_description: Provincia / Población
-        #original_hash: 8961d3b
-        phone_number: Número de teléfono
-        #original_hash: 7044004
-        notes: Notas
         #original_hash: 730db33
         receive_delegate_reports: >-
           Me gustaría recibir los informes de delegados de Competiciones WCA por
@@ -773,12 +767,6 @@ es:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
         #original_hash: d5ccc15
         receive_delegate_reports: >-
           Si eres un Delegado Junior, Delegado Senior, Delegado, o Miembro del
@@ -2534,6 +2522,10 @@ es:
       past: Anteriores
       #original_hash: 081ae3f
       custom: Filtro
+      #original_hash: 73cf180
+      by_announcement: Por anuncio
+      #original_hash: b3946b2
+      sort_by_announcement: Ordenar por fecha de anuncio
       #original_hash: 3f66052
       from_date: Desde
       #original_hash: ae79ea1
@@ -2555,6 +2547,8 @@ es:
         upcoming: Próximas competiciones
         #original_hash: 8b57693
         custom: Competiciones que cumplen el filtro
+        #original_hash: 0933739
+        by_announcement: 'Competiciones ordenadas por fecha de anuncio, más recientes arriba'
       #original_hash: 6684214
       no_access: ¡No tienes acceso a esta página!
       tooltips:
@@ -2567,6 +2561,8 @@ es:
           posted: ¡Los resultados están publicados!
           #original_hash: 89bcc37
           starts_in: 'Comienza dentro de %{days}'
+          #original_hash: 97b061a
+          announced_on: 'Anunciado en %{announcement_date}'
         #original_hash: ccd2db9
         search: Nombre o ciudad
         #original_hash: 3bc8082
