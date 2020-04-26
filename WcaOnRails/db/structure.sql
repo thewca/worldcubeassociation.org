@@ -755,9 +755,9 @@ CREATE TABLE `competition_trainee_delegates` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `competition_id` varchar(191) DEFAULT NULL,
   `trainee_delegate_id` int(11) DEFAULT NULL,
+  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `index_competition_trainee_delegates_on_competition_id` (`competition_id`),
   KEY `index_competition_trainee_delegates_on_trainee_delegate_id` (`trainee_delegate_id`)
@@ -1642,8 +1642,7 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20191107212356'),
 ('20200125180554'),
 ('20200206012756'),
+('20200304044931'),
 ('20200331082313'),
 ('20200415151734'),
-('20200419133415'),
-('20200304044931'),
-('20200313132215');
+('20200419133415');
