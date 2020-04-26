@@ -4,7 +4,9 @@ require "fileutils"
 
 class User < ApplicationRecord
   has_many :competition_delegates, foreign_key: "delegate_id"
+  has_many :competition_trainee_delegates, foreign_key: "trainee_delegate_id"
   has_many :delegated_competitions, through: :competition_delegates, source: "competition"
+  has_many :trainee_delegated_competitions, through: :competition_trainee_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id"
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :votes

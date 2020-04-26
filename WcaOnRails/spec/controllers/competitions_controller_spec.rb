@@ -446,7 +446,7 @@ RSpec.describe CompetitionsController do
 
       it 'cannot confirm competition' do
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
-        expect(response.status).to redirect_to edit_competition_path(competition)
+        expect(response.status).to redirect_to root_url
         expect(competition.reload.confirmed?).to eq false
       end
 
@@ -680,10 +680,9 @@ RSpec.describe CompetitionsController do
       it "cannot confirm a competition" do
         competition.organizers << organizer1
         competition.update_attributes(start_date: 5.week.from_now, end_date: 5.week.from_now)
-        expect do
-          patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
-        end.to change { enqueued_jobs.size }.by(2)
-        expect(response).to redirect_to edit_competition_path(competition)
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
+        expect(response).to redirect_to root_url
+        expect(flash[:danger]).to eq "You are not allowed to confirm competition"
         expect(competition.reload.confirmed?).to eq false
       end
 
