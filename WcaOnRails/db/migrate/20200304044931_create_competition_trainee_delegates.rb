@@ -5,6 +5,7 @@ class CreateCompetitionTraineeDelegates < ActiveRecord::Migration[5.2]
     create_table :competition_trainee_delegates do |t|
       t.string :competition_id
       t.integer :trainee_delegate_id
+      t.boolean :receive_registration_emails, default: true, null: false
 
       t.timestamps
     end
