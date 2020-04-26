@@ -59,8 +59,10 @@ module PersonsHelper
         badges.push(delegate_badge("senior_delegate"))
       elsif user.full_delegate?
         badges.push(delegate_badge("delegate"))
-      else
+      elsif user.candidate_delegate?
         badges.push(delegate_badge("candidate_delegate"))
+      else
+        badges.push(delegate_badge("trainee_delegate"))
       end
     end
 
