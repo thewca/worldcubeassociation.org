@@ -20,7 +20,7 @@
       <% @delegates.each do |delegate| %>
         <% competitions = delegate.delegated_competitions.order_by_date.select{ |c| c.confirmed_or_visible? && c.is_probably_over? } %>
         <tr class="<%= delegate.delegate_status %>">
-          <td class="delegate" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= delegate.notes %>">
+          <td class="delegate" data-toggle="tooltip" data-placement="top" data-container="body">
             <%= delegate.name %>
             <%= mail_to delegate.email, icon("fas", "envelope"), target: "_blank", class: "hide-new-window-icon" %>
           </td>
