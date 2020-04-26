@@ -40,6 +40,8 @@ class CompetitionsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup]
 
+  before_action -> { redirect_to_root_unless_user(:can_confirm_competition?, competition_from_params) }, only: [:update], if: :confirming?
+
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
@@ -311,7 +313,11 @@ class CompetitionsController < ApplicationController
     competition_to_clone = competition_from_params
     @competition = competition_to_clone.build_clone
     if current_user.any_kind_of_delegate?
-      @competition.delegates |= [current_user]
+      if current_user.trainee_delegate?
+        @competition.trainee_delegates |= [current_user]
+      else
+        @competition.delegates |= [current_user]
+      end
     end
     render :new
   end
@@ -460,7 +466,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, @competition, removed_organizer).deliver_later
       end
 
-      if params[:commit] == "Confirm"
+      if confirming?
         CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
         @competition.organizers.each do |organizer|
           CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, @competition, organizer).deliver_later
@@ -483,6 +489,7 @@ class CompetitionsController < ApplicationController
   def my_competitions
     competition_ids = current_user.organized_competitions.pluck(:competition_id)
     competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
+    competition_ids.concat(current_user.trainee_delegated_competitions.pluck(:competition_id))
     registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
     registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
     @registered_for_by_competition_id = Hash[registrations.uniq.map do |r|
@@ -505,6 +512,10 @@ class CompetitionsController < ApplicationController
   def for_senior
     @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || Date.today + 20.year }.reverse
+  end
+
+  private def confirming?
+    params[:commit] == "Confirm"
   end
 
   private def competition_params
@@ -580,7 +591,7 @@ class CompetitionsController < ApplicationController
     end
 
     params.require(:competition).permit(*permitted_competition_params).tap do |competition_params|
-      if params[:commit] == "Confirm" && current_user.can_confirm_competition?(@competition)
+      if confirming? && current_user.can_confirm_competition?(@competition)
         competition_params[:confirmed] = true
       end
       competition_params[:editing_user_id] = current_user.id

@@ -135,15 +135,10 @@ RSpec.describe DelegateReportsController do
     end
 
     it "cannot post the report" do
-      # Update comp to be in the future.
-      comp.start_date = 1.day.from_now.strftime("%F")
-      comp.end_date = 1.day.from_now.strftime("%F")
-      comp.save!
-      expect(comp.is_probably_over?).to eq false
-
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
       comp.reload
       expect(comp.delegate_report.posted?).to eq false
+      expect(response).to redirect_to(root_url)
     end
   end
 end

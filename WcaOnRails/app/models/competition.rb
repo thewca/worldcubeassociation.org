@@ -529,6 +529,10 @@ class Competition < ApplicationRecord
     end
   end
 
+  def all_delegates
+    delegates + trainee_delegates
+  end
+
   def has_defined_dates?
     self.start_date.present? && self.end_date.present?
   end
@@ -662,7 +666,7 @@ class Competition < ApplicationRecord
       return true
     end
     competition_trainee_delegate = competition_trainee_delegates.find_by_trainee_delegate_id(user_id)
-    if competition_trainee_delegate
+    if competition_trainee_delegate&.receive_registration_emails
       return true
     end
     competition_organizer = competition_organizers.find_by_organizer_id(user_id)
@@ -674,6 +678,10 @@ class Competition < ApplicationRecord
   end
 
   def can_receive_registration_emails?(user_id)
+    competition_trainee_delegate = competition_trainee_delegates.find_by_trainee_delegate_id(user_id)
+    if competition_trainee_delegate
+      return true
+    end
     competition_delegate = competition_delegates.find_by_delegate_id(user_id)
     if competition_delegate
       return true
@@ -1100,7 +1108,7 @@ class Competition < ApplicationRecord
   end
 
   def organizers_or_delegates
-    self.organizers.empty? ? self.delegates : self.organizers
+    self.organizers.empty? ? self.all_delegates : self.organizers
   end
 
   SortedRegistration = Struct.new(:registration, :tied_previous, :pos, keyword_init: true)
