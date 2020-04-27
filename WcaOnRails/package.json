@@ -34,7 +34,7 @@
     "leaflet": "^1.6.0",
     "leaflet-geosearch": "^2.6.0",
     "lodash": "^4.17.15",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.0",
     "path-complete-extname": "^1.0.0",
     "postcss-loader": "^3.0.0",
     "postcss-smart-import": "^0.7.6",
