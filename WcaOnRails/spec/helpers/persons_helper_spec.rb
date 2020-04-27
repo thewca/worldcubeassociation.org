@@ -42,12 +42,20 @@ RSpec.describe PersonsHelper do
                            t("enums.user.delegate_status.senior_delegate") + "</a></span>"
     end
 
-    it "Returns a Junior Delegate badge when passed candadate_delegate" do
+    it "Returns a Junior Delegate badge when passed candidate_delegate" do
       string = helper.delegate_badge("candidate_delegate")
       expect(string).to eq "<span class=\"badge delegate-badge\"><a title=\"" +
                            t("enums.user.delegate_status.candidate_delegate") +
                            "\" data-toggle=\"tooltip\" data-placement=\"bottom\" href=\"/delegates\">" +
                            t("enums.user.delegate_status.candidate_delegate") + "</a></span>"
+    end
+
+    it "Returns a Trainee Delegate badge when passed trainee_delegate" do
+      string = helper.delegate_badge("trainee_delegate")
+      expect(string).to eq "<span class=\"badge delegate-badge\"><a title=\"" +
+                           t("enums.user.delegate_status.trainee_delegate") +
+                           "\" data-toggle=\"tooltip\" data-placement=\"bottom\" href=\"/delegates\">" +
+                           t("enums.user.delegate_status.trainee_delegate") + "</a></span>"
     end
 
     it "links to the delegates page" do
