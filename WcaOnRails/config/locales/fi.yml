@@ -20,7 +20,7 @@ fi:
     HK: Hong Kong
     #original_hash: 3ad2dd8
     KN: Saint Kitts ja Nevis
-    #original_hash: 7184d1a
+    #original_hash: 5c34abb
     KP: Pohjois-Korea
     #original_hash: 4430b22
     KR: Etelä-Korea
@@ -40,8 +40,6 @@ fi:
     SZ: Swazimaa
     #original_hash: 4d206a8
     TT: Trinidad ja Tobago
-    #original_hash: 0f3f60b
-    VA: Pyhä istuin
     #original_hash: 3fa9b2d
     VC: Saint Vincent ja Grenadiinit
     #original_hash: 9af4622
@@ -384,12 +382,6 @@ fi:
         delegate_status: Delegaattistatus
         #original_hash: 0f21717
         region: Alue
-        #original_hash: a10b651
-        location_description: Sijainnin kuvaus
-        #original_hash: 8961d3b
-        phone_number: Puhelinnumero
-        #original_hash: 7044004
-        notes: Huomioita
         #original_hash: 730db33
         receive_delegate_reports: I would like to receive Delegate Reports of WCA Competitions by email
         #original_hash: 57eaf24
@@ -433,6 +425,8 @@ fi:
         currency_code: Valuuttatunnus
         #original_hash: 2e3ed8b
         delegate_ids: WCA-delegaatti/delegaatit
+        #original_hash: c0ddcd6
+        trainee_delegate_ids: Delegaattiharjoittelijat
         #original_hash: 958562e
         organizer_ids: Järjestäjä(t)
         #original_hash: b37456c
@@ -656,6 +650,8 @@ fi:
         #original_hash: 6e6a6f2
         o: Muu
       delegate_status:
+        #original_hash: 621101a
+        trainee_delegate: Delegaattiharjoittelija
         #original_hash: 9b97968
         candidate_delegate: Delegaattikokelas
         #original_hash: 12ab214
@@ -759,12 +755,6 @@ fi:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
         #original_hash: d5ccc15
         receive_delegate_reports: >-
           If you are a Candidate Delegate, Senior Delegate, or Member of the WRC
@@ -797,6 +787,8 @@ fi:
           todennäköisesti puhumilla kielillä.
         #original_hash: b4d020f
         delegate_ids: Kilpailun WCA-delegaatit.
+        #original_hash: cb9882c
+        trainee_delegate_ids: Kilpailun delegaattiharjoittelijat
         #original_hash: 517d376
         organizer_ids: >-
           Kilpailun järjestäjät (heillä pitää olla tili, jotta voit lisätä
@@ -930,14 +922,15 @@ fi:
         wca_id: ''
         #original_hash: 8723825
         dob: Oikea syntymäpäiväsi muodossa VVVV-KK-PP
-        #original_hash: c6d8a97
+        #original_hash: 49ee4af
         document: >-
           Todistaaksesi henkilöllisyytesi ja oikean syntymäaikasi, sinun tulee
           liittää kuva jostakin virallisesta asiakirjasta (henkilökortti,
           ajokortti, opiskelijakortti, passi, syntymätodistus tms.), josta käy
           ilmi nimesi sekä syntymäpäiväsi englantia puhuvalle ymmärrettävällä
           tavalla. Ota yhteyttä lähimpään WCA-delegaattiisi, jos sinulla ei ole
-          tällaista asiakirjaa.
+          tällaista asiakirjaa. Voit halutessasi peittää muut kuvassa näkyvät
+          henkilötiedot; ainoastaan nimi ja syntymäaika tarvitaan.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -1387,6 +1380,8 @@ fi:
       organizations: Alueelliset järjestöt
       #original_hash: d790b40
       faq: Usein kysytyt kysymykset
+      #original_hash: cf1d2c9
+      forum: Foorumi
       #original_hash: 3ad28c0
       teams: Toimikunnat ja valtuustot
       #original_hash: 02617c0
@@ -2003,6 +1998,8 @@ fi:
       payment_requested_on: 'Maksua pyydetty %{date}'
       #original_hash: b25928c
       total: Yhteensä
+      #original_hash: df036fe
+      n_events: Lajien lukumäärä
     new_registration:
       #original_hash: 8b9f726
       title: 'Rekisteröidy kilpailuun %{comp}'
@@ -2313,7 +2310,7 @@ fi:
       #original_hash: d70f93d
       address: Osoite
       #original_hash: dc3decb
-      details: Yksityiskohdat
+      details: Lisätiedot
       #original_hash: 2e8a57c
       website: Verkkosivusto
       #original_hash: 680567f
@@ -2477,6 +2474,10 @@ fi:
       past: Menneet
       #original_hash: 081ae3f
       custom: Mukautettu
+      #original_hash: 73cf180
+      by_announcement: Ilmoituspäivän mukaan
+      #original_hash: b3946b2
+      sort_by_announcement: Järjestä ilmoituspäivän mukaan
       #original_hash: 3f66052
       from_date: Mistä
       #original_hash: ae79ea1
@@ -2498,6 +2499,8 @@ fi:
         upcoming: Tulevat kilpailut
         #original_hash: 8b57693
         custom: Kilpailut valitulla ajanjaksolla
+        #original_hash: 0933739
+        by_announcement: 'Kilpailut ilmoituspäivän mukaan järjestettynä, uusin ylimpänä'
       #original_hash: 6684214
       no_access: Sinulla ei ole oikeutta tälle sivulle pääsyyn!
       tooltips:
@@ -2510,6 +2513,8 @@ fi:
           posted: Tulokset on julkaistu!
           #original_hash: 89bcc37
           starts_in: 'Alkuun %{days}'
+          #original_hash: 97b061a
+          announced_on: 'Ilmoitettu %{announcement_date}'
         #original_hash: ccd2db9
         search: Nimi tai kaupunki
         #original_hash: 3bc8082
@@ -2581,10 +2586,10 @@ fi:
       is_visible: >-
         Tämä kilpailu on julkisesti nähtävillä, ja kaikki tekemäsi muutokset
         näkyvät julkisesti!
-      #original_hash: f99b3f7
+      #original_hash: 1039850
       pending_confirmation_html: >-
-        Täytä kaikki kentät ja paina Vahvista, kun olet valmis siihen, että
-        %{contact} hyväksyy tämän kilpailun.
+        Täytä kaikki kentät ja anna delegaatin painaa 'Vahvista', kun olet
+        valmis siihen, että %{contact} hyväksyy tämän kilpailun.
       #original_hash: 8966fd0
       submit_create_value: Luo kilpailu
       #original_hash: 40b0dfd
@@ -3088,11 +3093,12 @@ fi:
       description: >-
         Käytä tätä lomaketta, jos tietokannassamme oleva syntymäaika on eri kuin
         oikea syntymäaikasi.
-      #original_hash: 563d056
+      #original_hash: 0ac13b9
       important_message_html: >-
         <span class="text-danger">TÄRKEÄÄ</span>: Liitä mukaan kuva
-        <u>virallisesta asiakirjasta</u> (helkilökortti, ajokortti, passi tms.),
-        josta käy ilmi nimesi SEKÄ syntymäaikasi.
+        <u>virallisesta asiakirjasta</u> (henkilökortti, ajokortti, passi tms.),
+        josta käy ilmi nimesi SEKÄ syntymäaikasi (muut kuvassa näkyvät
+        henkilötiedot voit halutessasi peittää).
       #original_hash: 19c17ec
       submit: Pyydä muutosta
     messages:
@@ -3783,36 +3789,107 @@ fi:
         Tämän valtuuston vastuulla on WCA-yhteisön ja toimihenkilöiden välisen
         viestinnän kehittäminen ja ylläpitäminen.
   score_tools:
-    #original_hash: ea9d41d
-    title: 'WCA:n tulostyökalut'
-    paragraphs:
-      #original_hash: 305f7f8
-      '1': >-
-        WCA suosittelee vahvasti <a
-        href="https://live.worldcubeassociation.org">WCA Liven</a> käyttöä
-        kilpailun aikana ja sitä ennen. WCA Live on WCA-kilpailujen
-        reaaliaikaisten tulosten jakamiseen luotu alusta.
-      #original_hash: 0867b38
-      '2': >-
-        Tuloskortit ja sekoitussarjat tulisi käsitellä ja tarkistaa virheiden
-        varalta ennen niiden lähettämistä WCA Results Teamille. Tähän voi
-        käyttää Philippe Virouleaun luomaa <a
-        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
-        Matcheria</a>.
-      #original_hash: 975e59b
-      '3': >-
-        WCA:n kilpailutulostaulukon viimeisimmän version voi ladata tästä: <br
-        /><a href="/files/results.xls" target="_blank">WCA competition Score
-        sheet</a>.
-      #original_hash: c576675
-      '4': >-
-        Saatat haluta käyttää <a
-        href="https://groupifier.jonatanklosko.com">Groupifier</a>-työkalua
-        kilpailun ryhmien valmisteluun. Sen tärkeimpiin ominaisuuksiin kuuluu
-        kilpailijoiden järjestely rankingin mukaan, tehtävien (tuomarointi,
-        sekoittaminen) osoittaminen, tarvittavien sekoitussarjojen määrän
-        päättäminen sekä tuloskorttien teko. Kyseessä on Jonatan Kłoskon luoma
-        avoimen lähdekoodin projekti.
+    #original_hash: 4fc2133
+    title: Ohjelmistotyökaluja WCA-kilpailuihin
+    #original_hash: 6d2fe37
+    wca_icon_text: 'WST:n kehittämä ja ylläpitämä'
+    intro:
+      #original_hash: 0c5fab5
+      desc: >-
+        Tälle sivulle on listattu työkaluja, joita käytetään apuna
+        WCA-kilpailujen järjestämisessä.
+      #original_hash: 479b542
+      disclaimer: >-
+        Kaikki työkalut/sovellukset eivät ole WST:n hallinnoimia, mikä ei
+        haittaa ollenkaan! WST ei millään ehdi ylläpitämään kaikkia hyödyllisiä
+        WCA-sovelluksia.
+      #original_hash: 80f97b9
+      used: >-
+        Kaikkia listan ohjelmia on käytetty WCA-kilpailuissa ja ne ovat
+        yhteydessä WCA-sivustoon siten, että voit kirjautua sisään WCA-tililläsi
+        ja tuoda ohjelmaan tietoja järjestämistäsi kilpailuista. Kaikkien
+        ohjelmien ylläpitäjä(t) on kirjattu.
+    before:
+      #original_hash: 9850344
+      title: Ennen kilpailua
+      #original_hash: 576e2f4
+      desc: >-
+        Kilpailun rekisteröitymisiä voi hallita suoraan WCA-sivuston kautta,
+        mutta ryhmien jakoon voi käyttää alla olevia työkaluja.
+    during:
+      #original_hash: 9934200
+      title: Kilpailun aikana
+      #original_hash: 2b0a6f6
+      desc: >-
+        Nämä työkalut auttavat hoitamaan tuloksia kilpailun yhä ollessa
+        käynnissä.
+    after:
+      #original_hash: d81b949
+      title: Kilpailun jälkeen
+      #original_hash: b898460
+      desc: >-
+        Vaikka tulokset vahvistetaan lopulta täällä WCA-sivustolla, täytyy
+        TNoodlen luomat sekoitussarjat liittää kilpailutuloksiin ennen niiden
+        lähettämistä.
+    tools:
+      age:
+        #original_hash: 4aaae5b
+        title: AGE
+        #original_hash: 2e4832d
+        description: >-
+          Tällä ohjelmalla voi luoda ja muokata WCA-kilpailujen ryhmä- ja
+          tehtäväjakoja.
+      certificates:
+        #original_hash: b3e4eb0
+        title: Kunniakirjat
+        #original_hash: f1a0731
+        description: 'Tulosta kunniakirjoja kilpailuihin, jotka käyttävät WCA Liveä'
+      groupifier:
+        #original_hash: 8f55355
+        title: Groupifier
+        #original_hash: 24d4736
+        description: >-
+          Työkalu, jolla kilpailun järjestäjä voi hoitaa ryhmä- ja tehtäväjaot.
+          Ominaisuuksiin kuuluu muun muassa ryhmien jakaminen kilpailijoiden
+          ranking-sijojen perusteella, tehtävien (kuten tuomarointi ja
+          sekoittaminen) jakaminen, tarvittavien sekoitussarjojen lukumäärän
+          arviointi sekä tuloskorttien ja henkilökohtaisten aikataulujen
+          luominen. Lisätiedot verkkosivustolla.
+      scorecards:
+        #original_hash: aa1b64d
+        title: Tuloskortit
+        #original_hash: 2b8e373
+        description: 'Tulosta tuloskortteja kilpailuihin, jotka käyttävät WCA Liveä.'
+      tnoodle:
+        #original_hash: ba336a1
+        title: TNoodle (Sekoitussarjat)
+        #original_hash: 0a38b22
+        description: >-
+          TNoodle on WCA-kilpailujen virallinen sekoitusohjelma. WCA-delegaatit
+          käyttävät sitä ennen kilpailuja, mutta sen käyttöliittymä sallii kenen
+          tahansa luoda sekoitussarjoja WCA:n kilpailulajeihin.
+      live:
+        #original_hash: c66444f
+        title: WCA Live
+        #original_hash: f122015
+        description: Alusta WCA-kilpailujen reaaliaikaisten tulosten julkaisuun.
+      nightmare:
+        #original_hash: eebde3b
+        title: Tulostaulukko
+        #original_hash: 466f4c2
+        description: >-
+          Jos internetyhteyttä ei ole, voi olla, että täytyy turvautua vanhaan
+          kunnon laskentataulukkoon.
+      matcher:
+        #original_hash: cc59bc9
+        title: Scrambles Matcher
+        #original_hash: a352bd1
+        description: >-
+          Can be used to assign scrambles generated by TNoodle to results.
+          Import results from the WCA website (when using WCA Live), a
+          spreadsheet, or a standalone WCIF file. Import scrambles from one or
+          more TNoodle json file(s). Export results to the appropriate format
+          for WCA submission.
   logo:
     #original_hash: c72c969
     title: 'WCA:n logo'
