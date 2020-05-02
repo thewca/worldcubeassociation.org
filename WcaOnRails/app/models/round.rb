@@ -35,7 +35,16 @@ class Round < ApplicationRecord
   validates_numericality_of :number,
                             only_integer: true,
                             greater_than_or_equal_to: 1,
-                            less_than_or_equal_to: MAX_NUMBER
+                            less_than_or_equal_to: MAX_NUMBER,
+                            unless: :old_type
+
+  # Qualification rounds/b-final are handled weirdly, they have round number 0
+  # and do not count towards the total amount of rounds.
+  OLD_TYPES=["0", "b"].freeze
+  validates_inclusion_of :old_type, in: OLD_TYPES, allow_nil: true
+  after_validation(if: :old_type) do
+    self.number = 0
+  end
 
   validate do
     unless event.preferred_formats.find_by_format_id(format_id)
@@ -57,6 +66,10 @@ class Round < ApplicationRecord
       cutoff ? "d" : "1"
     elsif number == 2
       cutoff ? "e" : "2"
+    elsif old_type == "0"
+      cutoff ? "h" : "0"
+    elsif old_type == "b"
+      "b"
     else
       # Combined third round/Semi Final
       cutoff ? "g" : "3"

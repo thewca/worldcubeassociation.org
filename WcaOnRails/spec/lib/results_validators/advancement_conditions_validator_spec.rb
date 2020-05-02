@@ -45,6 +45,25 @@ RSpec.describe ACV do
       end
     end
 
+    it "ignores b-final" do
+      # Using a single fake person for all the results for better performance.
+      fake_person = build_person(:result, competition1)
+      # Collecting all the results and using bulk import for better performance.
+      results = []
+      results += FactoryBot.build_list(:result, 100, competition: competition1, eventId: "333oh", roundTypeId: "1", person: fake_person)
+      results += FactoryBot.build_list(:result, 8, competition: competition1, eventId: "333oh", roundTypeId: "b", person: fake_person)
+      results += FactoryBot.build_list(:result, 32, competition: competition1, eventId: "333oh", roundTypeId: "f", person: fake_person)
+      Result.import(results)
+
+      validator_args.each do |arg|
+        acv = ACV.new.validate(arg)
+        # If it wouldn't ignore b-final, it would complain about competitors not
+        # being eliminated.
+        expect(acv.warnings).to be_empty
+        expect(acv.errors).to be_empty
+      end
+    end
+
     # Triggers:
     # REGULATION_9M_ERROR
     # REGULATION_9M1_ERROR

@@ -9,6 +9,10 @@ module ResultsValidators
     REGULATION_9P1_ERROR = "Round %{round_id}: Fewer than 25%% of competitors were eliminated, which is not permitted as per Regulation 9p1."
     OLD_REGULATION_9P_ERROR = "Round %{round_id}: There must be at least one competitor eliminated, which is required as per Regulation 9p (competitions before April 2010)."
 
+    # These are the old "(combined) qualification" and "b-final" rounds.
+    # They are not taken into account in advancement conditions.
+    IGNORE_ROUND_TYPES = ["0", "h", "b"].freeze
+
     @@desc = "This validator checks that advancement between rounds is correct according to the regulations."
 
     def self.has_automated_fix?
@@ -36,7 +40,10 @@ module ResultsValidators
         end
         ordered_round_type_ids = RoundType.order(:rank).all.map(&:id)
         results_by_event_id.each do |event_id, results_by_round_type_id|
-          remaining_number_of_rounds = results_by_round_type_id.keys.size
+          round_types_in_results = results_by_round_type_id.keys.reject do |round_type_id|
+            IGNORE_ROUND_TYPES.include?(round_type_id)
+          end
+          remaining_number_of_rounds = round_types_in_results.size
           if remaining_number_of_rounds > 4
             # https://www.worldcubeassociation.org/regulations/#9m: Events must have at most four rounds.
             # Should not happen as we already have a validation to create rounds, but who knows...
@@ -45,7 +52,7 @@ module ResultsValidators
                                            event_id: event_id)
           end
           number_of_people_in_previous_round = nil
-          (ordered_round_type_ids & results_by_round_type_id.keys).each do |round_type_id|
+          (ordered_round_type_ids & round_types_in_results).each do |round_type_id|
             remaining_number_of_rounds -= 1
             number_of_people_in_round = results_by_round_type_id[round_type_id].size
             round_id = "#{event_id}-#{round_type_id}"
