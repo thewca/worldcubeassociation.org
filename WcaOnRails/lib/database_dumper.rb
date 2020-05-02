@@ -295,6 +295,7 @@ module DatabaseDumper
           round_results
           created_at
           updated_at
+          old_type
         ),
       ),
     }.freeze,
