@@ -2053,6 +2053,7 @@ en:
       title: "Regulations"
       content1_html: 'All competitions must follow the <a href="/regulations/">WCA Regulations</a>. It is important for competitors to read these regulations before attending their first competition.'
       content2_html: 'The WCA Regulations are supplemented by the <a href="/regulations/guidelines.html">WCA Guidelines</a>, which contain additional clarifications and explanations.'
+      content3_html: 'Important decisions about incidents that happened in competitions that were resolved by the WCA Regulations Committee are found in the <a href="/incidents">Incidents Log</a>.'
     panel2:
       title: "Translations"
       content1_html: 'The WCA Regulations are not only available in English, but WCA members have translated them into several languages: <a href="/regulations/translations/">Translations</a>.'
