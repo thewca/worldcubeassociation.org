@@ -1,9 +1,5 @@
-<h3>Dear Cuber</h3>,
+<h3> <%= t 'users.mailer.id_claim_possibility_email.intro' %></h3>,
 
 <p>
-  You registered for <%= link_to @competition.name, competition_url(@competition) %>.
-  We just uploaded results for this competition, and created WCA IDs for all first time competitors.
-  If you actually took part in this competition and it was your first one,
-  then you should claim your WCA ID (link it with your WCA account).
-  In order to do this, please visit <%= link_to "this page", profile_claim_wca_id_url %>.
+  <%= t 'users.mailer.id_claim_possibility_email.information_html', competition: @competition.name, competition_url: competition_url(@competition), claim_url: profile_claim_wca_id_url %>
 </p>

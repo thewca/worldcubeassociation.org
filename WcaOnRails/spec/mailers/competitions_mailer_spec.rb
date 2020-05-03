@@ -107,15 +107,14 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:competitor_user) { FactoryBot.create :user, :wca_id }
     let(:mail) { CompetitionsMailer.notify_users_of_results_presence(competitor_user, competition) }
 
-    it "renders the headers" do
-      expect(mail.subject).to eq "The results of #{competition.name} are posted"
-      expect(mail.to).to eq [competitor_user.email]
-      expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
-      expect(mail.reply_to).to match_array competition.all_delegates.pluck(:email)
-    end
-
-    it "renders the body" do
-      expect(mail.body.encoded).to match(/Your results at .+ have just been posted./)
+    it "renders" do
+      I18n.with_locale :fr do
+        expect(mail.to).to eq [competitor_user.email]
+        expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+        expect(mail.reply_to).to match_array competition.all_delegates.pluck(:email)
+        expect(mail.subject).to eq "The results of #{competition.name} are posted"
+        expect(mail.body.encoded).to match(/Your results at .+ have just been posted./)
+      end
     end
   end
 
@@ -124,16 +123,14 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:newcomer_user) { FactoryBot.create :user }
     let(:mail) { CompetitionsMailer.notify_users_of_id_claim_possibility(newcomer_user, competition) }
 
-    it "renders the headers" do
-      expect(mail.subject).to eq "Please link your WCA ID with your account"
-      expect(mail.to).to eq [newcomer_user.email]
-      expect(mail.reply_to).to match_array competition.all_delegates.pluck(:email)
-      expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
-    end
-
-    it "renders the body" do
-      expect(mail.body.encoded).to match competition.name
-      expect(mail.body.encoded).to match profile_claim_wca_id_url
+    it "renders" do
+      I18n.with_locale :fr do
+        expect(mail.to).to eq [newcomer_user.email]
+        expect(mail.reply_to).to match_array competition.all_delegates.pluck(:email)
+        expect(mail.subject).to eq "Please link your WCA ID with your account"
+        expect(mail.body.encoded).to match competition.name
+        expect(mail.body.encoded).to match profile_claim_wca_id_url
+      end
     end
   end
 
