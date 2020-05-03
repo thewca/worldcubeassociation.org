@@ -487,6 +487,8 @@ GEM
       rspec-expectations (~> 3.8.0)
       rspec-mocks (~> 3.8.0)
       rspec-support (~> 3.8.0)
+    rspec-retry (0.6.2)
+      rspec-core (> 3.3)
     rspec-support (3.8.0)
     rubocop (0.76.0)
       jaro_winkler (~> 1.5.1)
@@ -677,6 +679,7 @@ DEPENDENCIES
   rest-client
   rqrcode
   rspec-rails
+  rspec-retry
   rubocop
   sassc-rails
   sdoc
