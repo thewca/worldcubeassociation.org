@@ -1,5 +1,5 @@
 <h3> <%= t 'users.mailer.id_claim_possibility_email.intro' %></h3>,
 
 <p>
-  <%= t 'users.mailer.id_claim_possibility_email.information_html', competition: @competition.name, competition_url: competition_url(@competition), claim_url: profile_claim_wca_id_url %>
+  <%= t 'users.mailer.id_claim_possibility_email.information_html', competition_link: raw(link_to @competition.name, competition_url(@competition)), claim_url: profile_claim_wca_id_url %>
 </p>

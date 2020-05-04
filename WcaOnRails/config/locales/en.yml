@@ -844,7 +844,7 @@ en:
         header: "Please link your WCA ID with your account"
         intro: "Dear Cuber"
         information_html: >-
-          You registered for <a href=%{competition_url}>%{competition}</a>.
+          You registered for %{competition_link}.
           We just uploaded results for this competition, and created WCA IDs for all first time competitors.
           If you actually took part in this competition and it was your first one,
           then you should claim your WCA ID (link it with your WCA account).
@@ -866,10 +866,10 @@ en:
       #context: notification to users after a competition results have been posted
       results_presence_email:
         header: "The results of %{competition} are posted"
-        intro_html: "Your results at <a href=%{competition_url}>%{competition}</a> have just been posted."
-        information_html: "Check out all your results <a href=%{result_url}>here</a>."
-        more_info_html: "You can manage your email preferences <a href=%{preferences_url}>here</a>."
-        regards_html: "Regards,</br>The WCA Results Team on behalf of ${managers}"
+        intro_html: "Your results at %{competition_link} have just been posted."
+        information_html: "Check out all your results %{result_link}."
+        more_info_html: "You can manage your email preferences %{preferences_link}."
+        regards_html: "Regards,<br/>The WCA Results Team on behalf of ${managers}."
     #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"
