@@ -88,10 +88,16 @@ RSpec::Matchers.define_negated_matcher :not_change, :change
 # We use a unmaintained and most probably deprecated capybara driver (poltergeist)
 # We run into this for some of our tests: https://github.com/teamcapybara/capybara/issues/2105
 # Therefore this is a fix by going the "send_keys" way instead of the "fill_in"
-def wca_fill_in(selector, value)
-  elem = find_field(selector)
+def wca_fill_in(selector, value, **options)
+  elem = if selector
+           find_field(selector, **options)
+         else
+           find_field(**options)
+         end
   unless elem.value.blank?
-    elem.native.send_keys(*Array.new(elem.value.length, :backspace))
+    elem.value.length.times do
+      elem.native.send_keys(:backspace)
+    end
   end
   elem.native.send_keys(*value.split(''))
 end

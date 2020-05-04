@@ -120,7 +120,7 @@ onPage("competitions#show_all_results", function() {
     // Scroll to the top.
     document.getElementsByClassName('event-selector')[0].scrollIntoView();
 
-    $.setUrlParams({ event:  eventId });
+    window.wca.setUrlParams({ event:  eventId });
   });
 
   if(location.hash) {

@@ -141,7 +141,7 @@
 <script>
   $(function() {
     $('#region').bind('change', function () {
-      var params = $.getUrlParams();
+      var params = window.wca.getUrlParams();
       params.region = $(this).val();
       window.location.search = $.param(params);
     });

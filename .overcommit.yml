@@ -41,11 +41,11 @@ PreCommit:
     required_executable: 'WcaOnRails/bin/yarn'
     enabled: true
     include:
-      - 'WcaOnRails/app/javascript/**/*.js[x]'
+      - 'WcaOnRails/app/webpacker/**/*.js'
     exclude:
       # FIXME: we could fix it, but it's long and it's legacy code anyway...
-      - 'WcaOnRails/app/javascript/edit-events/**/*.js[x]'
-    command: ['WcaOnRails/bin/yarn', 'run', 'eslint', '-c', '.eslintrc.json', '-f', 'compact']
+      - 'WcaOnRails/app/webpacker/javascript/edit-events/**/*'
+    command: ['WcaOnRails/bin/yarn', '--silent', 'run', 'eslint', '-c', '.eslintrc.json', '-f', 'compact']
 
   RuboCop:
     enabled: true

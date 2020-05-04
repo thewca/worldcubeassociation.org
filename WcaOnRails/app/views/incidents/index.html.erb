@@ -62,7 +62,7 @@
     }
     $(function() {
       var opts = window.wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>);
-      window.wca.initIncidentsLogTable(opts, $('.incidents-log-table'), $('.search input'), $('input#incident-tags'));
+      window.wca.initIncidentsLogTable(opts, $('.incidents-log-table'), '.search input', $('input#incident-tags'));
     });
   </script>
 
