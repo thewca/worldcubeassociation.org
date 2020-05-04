@@ -435,6 +435,8 @@ pt-BR:
         currency_code: Código da moeda do país
         #original_hash: 2e3ed8b
         delegate_ids: Delegado(s) da WCA
+        #original_hash: c0ddcd6
+        trainee_delegate_ids: Delegado Trainee da WCA
         #original_hash: 958562e
         organizer_ids: Organizador(es)
         #original_hash: b37456c
@@ -660,6 +662,8 @@ pt-BR:
         #original_hash: 6e6a6f2
         o: Outro
       delegate_status:
+        #original_hash: 621101a
+        trainee_delegate: Delegado Trainee
         #original_hash: 9b97968
         candidate_delegate: Delegado Junior
         #original_hash: 12ab214
@@ -795,6 +799,8 @@ pt-BR:
           <b>em Inglês</b> e quaisquer outras línguas que os competidores falam.
         #original_hash: b4d020f
         delegate_ids: Delegado(s) da WCA da competição.
+        #original_hash: cb9882c
+        trainee_delegate_ids: Delegados Trainees da WCA para a competição.
         #original_hash: 517d376
         organizer_ids: >-
           Organizador(es) da competição (é necessário que possuam uma conta no
@@ -2009,6 +2015,8 @@ pt-BR:
       payment_requested_on: 'Pagamento solicitado em: %{date}'
       #original_hash: b25928c
       total: Total
+      #original_hash: df036fe
+      n_events: Número de eventos
     new_registration:
       #original_hash: 8b9f726
       title: 'Inscrever em %{comp}'
@@ -2484,6 +2492,10 @@ pt-BR:
       past: Passadas
       #original_hash: 081ae3f
       custom: Personalizado
+      #original_hash: 73cf180
+      by_announcement: Por data de anúncio
+      #original_hash: b3946b2
+      sort_by_announcement: Ordenar pela data de anúncio
       #original_hash: 3f66052
       from_date: De
       #original_hash: ae79ea1
@@ -2505,6 +2517,8 @@ pt-BR:
         upcoming: Competições futuras
         #original_hash: 8b57693
         custom: Competições no período de tempo selecionado
+        #original_hash: 0933739
+        by_announcement: 'Competições ordenadas pela data de anúncio, as mais recentes no topo'
       #original_hash: 6684214
       no_access: Você não tem acesso a esta página!
       tooltips:
@@ -2517,6 +2531,8 @@ pt-BR:
           posted: Resultados publicados!
           #original_hash: 89bcc37
           starts_in: 'Começa em %{days}'
+          #original_hash: 97b061a
+          announced_on: 'Anunciada em %{announcement_date}'
         #original_hash: ccd2db9
         search: Nome ou cidade
         #original_hash: 3bc8082
@@ -4128,6 +4144,11 @@ pt-BR:
         O Regulamento da WCA é complementado pelas <a
         href="/regulations/guidelines.html">Orientações da WCA</a>, que contém
         esclarecimentos e explicações adicionais.
+      #original_hash: c8e1783
+      content3_html: >-
+        Decisões importantes sobre incidentes que aconteceram em competições e
+        que foram resolvidos pelo Comitê do Regulamento da WCA podem ser
+        encontradas no <a href="/incidents">Registro de incidentes</a>.
     panel2:
       #original_hash: 8ad8302
       title: Traduções
