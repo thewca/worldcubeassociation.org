@@ -435,6 +435,8 @@ es:
         currency_code: Moneda
         #original_hash: 2e3ed8b
         delegate_ids: Delegado(s) de la WCA
+        #original_hash: c0ddcd6
+        trainee_delegate_ids: Delegado(s) en prácticas
         #original_hash: 958562e
         organizer_ids: Organizador(es)
         #original_hash: b37456c
@@ -664,6 +666,8 @@ es:
         #original_hash: 6e6a6f2
         o: Otro
       delegate_status:
+        #original_hash: 621101a
+        trainee_delegate: Delegado en prácticas
         #original_hash: 9b97968
         candidate_delegate: Delegado Junior
         #original_hash: 12ab214
@@ -799,6 +803,8 @@ es:
           competidores.
         #original_hash: b4d020f
         delegate_ids: Delegados de la WCA para la competición.
+        #original_hash: cb9882c
+        trainee_delegate_ids: Delegado en prácticas de la WCA para la competición.
         #original_hash: 517d376
         organizer_ids: >-
           Organizadores de la competición. (Tienen que tener cuenta para poder
@@ -2038,6 +2044,8 @@ es:
       payment_requested_on: 'Pago requerido el %{date}'
       #original_hash: b25928c
       total: Total
+      #original_hash: df036fe
+      n_events: Número de categorías
     new_registration:
       #original_hash: 8b9f726
       title: 'Registrado para %{comp}'
@@ -4216,6 +4224,11 @@ es:
         El Reglamento de la WCA está complementado por las <a
         href="/regulations/guidelines.html">Directrices de la WCA</a>, que
         contienen aclaraciones y explicaciones adicionales.
+      #original_hash: c8e1783
+      content3_html: >-
+        Decisiones importantes acerca de incidentes que sucedieron en
+        competiciones que fueron resueltos por el Comité de Reglamento de la WCA
+        se pueden encontrar en el <a href="/incidents">Log de incidentes</a>.
     panel2:
       #original_hash: 8ad8302
       title: Traducciones
