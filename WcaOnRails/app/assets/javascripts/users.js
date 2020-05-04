@@ -46,7 +46,7 @@ onPage('users#edit, users#update', function() {
   // Change the 'section' parameter when a tab is switched.
   $('a[data-toggle="tab"]').on('show.bs.tab', function() {
     var section = $(this).attr('href').slice(1);
-    $.setUrlParams({ section: section });
+    window.wca.setUrlParams({ section: section });
   });
   // Require the user to confirm reading guidelines.
   $('#upload-avatar-form input[type="submit"]').on('click', function(event) {
@@ -86,7 +86,7 @@ onPage('users#index', function() {
   };
 
   // Set the table options from the url params.
-  var urlParams = $.getUrlParams();
+  var urlParams = window.wca.getUrlParams();
   $.extend(options, {
     pageNumber: parseInt(urlParams.page) || options.pageNumber,
     sortOrder: urlParams.order || options.sortOrder,
@@ -113,6 +113,6 @@ onPage('users#index', function() {
       order: options.sortOrder,
       sort: options.sortName
     });
-    $.setUrlParams(params);
+    window.wca.setUrlParams(params);
   });
 });

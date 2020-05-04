@@ -234,9 +234,9 @@ module ApplicationHelper
     end
   end
 
-  def add_to_js_assets(name)
+  def add_to_js_assets(*names)
     @all_js_assets = capture do
-      [@all_js_assets, name].compact.join(",")
+      [@all_js_assets, *names].compact.join(",")
     end
   end
 

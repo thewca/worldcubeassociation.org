@@ -4,7 +4,7 @@ onPage('admin#edit_person, admin#update_person', function() {
     // Update person wca id in the url.
     var personWcaId = $('#person_wca_id').val();
     if(personWcaId !== '') {
-      $.setUrlParams({ 'person[wca_id]': personWcaId });
+      window.wca.setUrlParams({ 'person[wca_id]': personWcaId });
     }
 
     // Clear or fill all the other fields.

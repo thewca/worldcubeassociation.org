@@ -17,6 +17,15 @@
     window.wca = {};
   </script>
 
+  <%#
+    Our sprockets assets. Loaded first, because our js packs below contains the
+    css overriding stuff imported in sprockets!
+  %>
+  <% css_assets = (@all_css_assets || "").split(",").uniq.unshift("application") %>
+  <% css_assets.each do |a| %>
+    <%= stylesheet_link_tag a, media: 'all' %>
+  <% end %>
+
   <% add_to_packs("lodash_utils") %>
 
   <%#
@@ -24,16 +33,11 @@
     Always *prepend* application, so that we load jquery first.
     We can't just add_to_packs application, because the yielded block will be
     evaluated first, and any pack added (like schedule) will be loaded before application.
+    These javascript packs *do* include the css imported in them!
   %>
   <% packs_to_include = @all_packs.split(",").uniq.unshift("application") %>
-  <%= stylesheet_packs_with_chunks_tag *packs_to_include %>
   <%= javascript_packs_with_chunks_tag *packs_to_include %>
 
-  <%# Our sprockets assets %>
-  <% css_assets = (@all_css_assets || "").split(",").uniq.unshift("application") %>
-  <% css_assets.each do |a| %>
-    <%= stylesheet_link_tag a, media: 'all' %>
-  <% end %>
   <% js_assets = (@all_js_assets || "").split(",").uniq %>
   <% if I18n.locale != :en %>
     <% js_assets = js_assets.unshift("locales/#{I18n.locale}.js") %>
@@ -42,7 +46,6 @@
   <% js_assets.each do |a| %>
     <%= javascript_include_tag a %>
   <% end %>
-
 
   <%= csrf_meta_tags %>
   <%= auto_discovery_link_tag(:rss, rss_url(format: :xml)) %>
