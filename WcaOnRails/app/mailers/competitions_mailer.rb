@@ -64,20 +64,20 @@ class CompetitionsMailer < ApplicationMailer
   def notify_users_of_results_presence(user, competition)
     @competition = competition
     @user = user
-    mail(
-      to: user.email,
-      subject: "The results of #{competition.name} are posted",
-      reply_to: competition.all_delegates.pluck(:email),
-    )
+
+    localized_mail user.locale || :en,
+                   -> { I18n.t('users.mailer.results_presence_email.header', competition: competition.name) },
+                   to: user.email,
+                   reply_to: competition.all_delegates.pluck(:email)
   end
 
   def notify_users_of_id_claim_possibility(user, competition)
     @competition = competition
-    mail(
-      to: user.email,
-      reply_to: competition.all_delegates.pluck(:email),
-      subject: "Please link your WCA ID with your account",
-    )
+
+    localized_mail user.locale || :en,
+                   -> { I18n.t('users.mailer.id_claim_possibility_email.header') },
+                   to: user.email,
+                   reply_to: competition.all_delegates.pluck(:email)
   end
 
   def notify_of_delegate_report_submission(competition)

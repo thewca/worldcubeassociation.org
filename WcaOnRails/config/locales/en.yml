@@ -840,6 +840,15 @@ en:
       competition_announcement_email:
         header: "The WCAT announced %{competition}"
         announced: "The WCAT approved your competition and officially announced it to the public."
+      id_claim_possibility_email:
+        header: "Please link your WCA ID with your account"
+        intro: "Dear Cuber"
+        information_html: >-
+          You registered for %{competition_link}.
+          We just uploaded results for this competition, and created WCA IDs for all first time competitors.
+          If you actually took part in this competition and it was your first one,
+          then you should claim your WCA ID (link it with your WCA account).
+          You can do this %{claim_link}.
       #context: notification to users after they were added to a competition as organizers
       organizer_addition_email:
         header: "You were added to %{competition} as an organizer"
@@ -854,6 +863,13 @@ en:
         information_html: "This is a reminder that registration for <a href=%{competition_url}>%{competition}</a> opens in less than 24 hours."
         not_accepted_html: "You have registered but your registration has not been accepted."
         more_info_html: "Please see the <a href=%{competition_url}>competition website</a> for more information and registration requirements."
+      #context: notification to users after a competition results have been posted
+      results_presence_email:
+        header: "The results of %{competition} are posted"
+        intro_html: "Your results at %{competition_link} have just been posted."
+        information_html: "Check out all your results %{result_link}."
+        more_info_html: "You can manage your email preferences %{preferences_link}."
+        regards_html: "Regards,<br/>The WCA Results Team on behalf of ${managers}."
     #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"

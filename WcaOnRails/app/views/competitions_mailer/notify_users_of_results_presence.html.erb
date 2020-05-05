@@ -1,16 +1,15 @@
 <p>
-  Your results at <%= link_to @competition.name, competition_url(@competition) %> have just been posted.
+  <%= t 'users.mailer.results_presence_email.intro_html', competition_link: raw(link_to @competition.name, competition_url(@competition)) %>
 </p>
 
 <p>
-  Check out all your results <%= link_to "here", competition_results_by_person_url(@competition, anchor: @user.wca_id) %>.
+  <%= t 'users.mailer.results_presence_email.information_html', result_link: raw(link_to t('common.here'), competition_results_by_person_url(@competition, anchor: @user.wca_id)) %>
 </p>
 
 <p>
-  You can manage your email preferences <%= link_to "here", profile_edit_url(section: :preferences) %>.
+  <%= t 'users.mailer.results_presence_email.more_info_html', preferences_link: raw(link_to t('common.here'), profile_edit_url(section: :preferences)) %>
 </p>
 
 <p>
-  Regards,
-  The WCA Results Team on behalf of <%= users_to_sentence @competition.managers %>.
+  <%= t 'users.mailer.results_presence_email.regards_html', managers: users_to_sentence(@competition.managers) %>
 </p>
