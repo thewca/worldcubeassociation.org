@@ -1550,6 +1550,18 @@ pt:
         announced: >-
           A Equipa de Competições da WCA aprovou a sua competição e anunciou-a
           oficialmente ao público.
+      id_claim_possibility_email:
+        #original_hash: 20e9d09
+        header: Por favor ligue o seu ID da WCA à sua conta
+        #original_hash: 5665910
+        intro: Caro Participante
+        #original_hash: 61650f4
+        information_html: >-
+          Registou-se em%{competition_link}. Acabámos de submeter os resultados
+          para esta competição e criámos IDs da WCA para todos os competidores
+          iniciantes. Se realmente participou nesta competição e foi a sua
+          primeira, deve reivindicar o seu ID da WCA (vincule-o à sua conta
+          WCA). Pode fazer isso %{claim_link}.
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Foi adicionado a %{competition} como organizador'
@@ -1579,6 +1591,17 @@ pt:
         more_info_html: >-
           Por favor veja o <a href=%{competition_url}>site da competição</a>
           para mais informações e requisitos de registo.
+      results_presence_email:
+        #original_hash: 7ce2558
+        header: 'Os resultados de %{competition} foram publicados'
+        #original_hash: 150446e
+        intro_html: 'Os seus resultados de %{competition_link} acabaram de ser publicados.'
+        #original_hash: 78edca3
+        information_html: 'Veja todos os seus resultados %{result_link}.'
+        #original_hash: a585fca
+        more_info_html: 'Pode gerir as suas preferências de email %{preferences_link}.'
+        #original_hash: 60d1a54
+        regards_html: 'Cumprimentos,<br/>Equipa de Resultados da WCA em nome de ${managers}.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Associar o seu ID da WCA
