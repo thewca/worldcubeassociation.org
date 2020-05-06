@@ -46,11 +46,19 @@ class CompetitionsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
 
+  private def assign_delegate(competition)
+    if current_user.any_kind_of_delegate?
+      if current_user.trainee_delegate?
+        competition.trainee_delegates |= [current_user]
+      else
+        competition.delegates |= [current_user]
+      end
+    end
+  end
+
   def new
     @competition = Competition.new
-    if current_user.any_kind_of_delegate?
-      @competition.delegates = [current_user]
-    end
+    assign_delegate(@competition)
   end
 
   # Normalizes the params that old links to index still work.
@@ -312,13 +320,7 @@ class CompetitionsController < ApplicationController
   def clone_competition
     competition_to_clone = competition_from_params
     @competition = competition_to_clone.build_clone
-    if current_user.any_kind_of_delegate?
-      if current_user.trainee_delegate?
-        @competition.trainee_delegates |= [current_user]
-      else
-        @competition.delegates |= [current_user]
-      end
-    end
+    assign_delegate(@competition)
     render :new
   end
 
