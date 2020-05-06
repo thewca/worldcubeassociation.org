@@ -49,7 +49,11 @@ class CompetitionsController < ApplicationController
   def new
     @competition = Competition.new
     if current_user.any_kind_of_delegate?
-      @competition.delegates = [current_user]
+      if current_user.trainee_delegate?
+        @competition.trainee_delegates = [current_user]
+      else
+        @competition.delegates = [current_user]
+      end
     end
   end
 
