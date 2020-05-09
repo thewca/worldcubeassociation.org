@@ -1665,38 +1665,54 @@ en:
         title: "How do I obtain a WCA ID and a WCA profile?"
         #context: Answer to "How do I obtain a WCA ID..."
         content:
-          '1': "If you have never competed before, go to a <a href='/competitions'>competition</a>!  A WCA ID and WCA profile will be created for you when the results from your first competition are published."
+          '1': "The only way, if you have never competed before, is to go to a <a href='/competitions'>competition</a>! A WCA ID and WCA profile will be created for you when the results from your first competition are published."
       '2':
         #context: Answer to "How can I find a WCA competition"
         title: "How can I find a WCA competition?"
         content:
-          '1': "Check out our list of <a href='/competitions'>competitions</a>"
+          '1': "Check out our list of <a href='/competitions'>competitions</a>. In the region drop down menu, you can select your country to make the browsing process easier. Make sure to check back often as new competitions are announced everyday!"
       '3':
         #context: Answer to "How can I register for a competition? ..."
         title: "How can I register for a competition? Who can I refer to if I have problems registering for a competition?"
         content:
-          '1': "Many competitions do registration right here on the WCA website, but some use their own systems. You should contact the organizers of the competition you want to compete in for more details. %{comp_search_form}"
+          '1': "Many competitions do registration right here on the WCA website, but some use their own systems. You should contact the organizers of the competition you want to compete in for more details. You can find the contact information for the organizers on the competition’s website or choose the competition you are attending in our <a href='/contact/website'>Contact Form</a>.  %{comp_search_form}"
       '4':
-        title: "What are the requirements for attending a WCA competition? What do I need to know before attending a WCA competition?"
-        #context: Answer to "What are the requirements for attending a WCA competitions? ..."
+        title: "What are the requirements for attending a WCA competition?"
+        #context: Answer to "What are the requirements for attending a WCA competitions?"
         content:
-          '1': "In general, there are not many requirements for a person to participate at a WCA competition. However, all participants of a competition are expected to have a good understanding of the <a href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. If English is not your first language and you have trouble understanding the document, please read the <a href='https://www.worldcubeassociation.org/regulations/translations/'>Translations</a>."
+          '1': "In general, there are not many requirements for a person to participate at a WCA competition. However, you need to be able to solve a puzzle within the time limit of the event which will be listed on the individual competitions’ websites. For an event such as 3x3 the time limit is often 10 minutes to make the event accessible to first time competitors but make sure to check the competition’s website to make yourself aware of the time limits for that specific competition. There are no age limits or age categories used to split competitors and everyone in the same group of a round receives the same scrambles."
       '5':
+        title: "What do I need to know before attending a WCA competition?"
+        #context: Answer to "What do I need to know before attending a WCA competition?"
+        content:
+          '1': "All participants of a competition are expected to have a good understanding of the <a href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. If English is not your first language and you have trouble understanding the document, please read the <a href='https://www.worldcubeassociation.org/regulations/translations/'>Translations</a>.To get an overview of information about competitions, you can read through our <a href='/files/WCA_Competition_Tutorial.pdf'>Competition Tutorial</a>."
+      '6':
+        title: "I missed the registration deadline. Is it still possible for me to compete?"
+        #context: Answer to "I missed the registration deadline. Is it still possible for me to compete?"
+        content:
+          '1': "Unfortunately, the WCA has a strict policy about not allowing competitors register after the registration period has ended. Sometimes competitions have on the spot registration which allows competitors to register on the day of the event if the competition has not reached the competitor limit. You can see if a competition has on the spot registration on the competition’s website."
+      '7':
+        title: "Is it possible to go to spectate a competition without competing?"
+        #context: Answer to "Is it possible to go to spectate a competition without competing?"
+        content:
+          '1': "Most competitions allow spectators, but there might be limits or fees associated with spectating depending on the competition and venue. You can look for information about it on the competition’s website."
+      '8':
         title: "How can I have a WCA Competition in my hometown?"
         #context: Paragraph of the answer to "How can I have a WCA competition in my hometown?"
         content:
-          '1': "If you are interested in organizing a competition, it's highly recommended to attend at least one or two competitions as a competitor to learn from the experience."
-          '2': "WCA Competitions must follow the <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. The organization team doesn't have to know the regulations by heart, however, a deep knowledge of the basics of the regulations would definitely help in correctly organizing the competition."
+          '1': "The location of where competitions are held is based on where there are people who want to organize. If you are interested in organizing a competition, it's highly recommended to attend at least one or two competitions as a competitor to learn from the experience."
+          '2': "WCA Competitions must follow the <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. The organization team doesn't have to know the regulations by heart, however, a basic knowledge of the regulations would definitely help in correctly organizing the competition. It is suggested that potential organizers scope out venue options and get an idea for some dates when it would be best to hold the competition in their local area."
           '3': "After that, the organization team must contact a nearby <a target='_blank' href='https://www.worldcubeassociation.org/delegates'>WCA Delegate</a>. The supervision of a WCA Delegate is required in order to make a competition officially sanctioned by the WCA. The WCA Delegate will help guide the organization on how to host a successful competition."
           '4': "Visit the <a target='_blank' href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA Competition Organizer Guidelines</a> for further information."
-      '6':
+      '9':
         title: "What are the WCA accounts for? What is the difference between WCA accounts and WCA profiles?"
         #context: Paragraph of the answer to "What are the WCA accounts for? ..."
         content:
-          '1': "You are assigned a WCA ID when the results from your first WCA sanctioned competition are published."
-          '2': "WCA accounts allow you to prove to us who you are. This allows you to add a picture to your WCA profile, and allows you to register for competitions. This will protect you from other people pretending to be you."
-          #context: Yup, nothing to translate here! Just hit "Use the original version"
-          '3': "%{current_user_status}"
+          '1': "You are assigned a WCA ID when the results from your first WCA sanctioned competition are published. The WCA ID will be associated with your WCA Profile page and will be tied to all of our results."
+          '2': "WCA accounts are tied to your preferred email address and allow you to prove to us who you are. This allows you to add a picture to your WCA profile, and allows you to register for competitions. This will protect you from other people pretending to be you."
+          '3': "The account you use to register for your first WCA competition will be automatically connected with your WCA ID and profile once the results have been submitted from the competition. Be sure to use an email address that you check often so that any competition communications will reach you when needed."
+		  #context: Yup, nothing to translate here! Just hit "Use the original version"
+          '4': "%{current_user_status}"
       'results':
         title: "When are the results of a WCA competition uploaded to the WCA website?"
         #context: Paragraph of the answer to "When are the results of a WCA competition uploaded?"
@@ -1704,33 +1720,34 @@ en:
           '1': "After a competition has ended, the WCA Delegate has to double-check all score sheets and person data to eliminate possible errors. Once this is done, the results are sent to the WCA Results Team (WRT), which is responsible for uploading competition results and maintaining the WCA database. The WRT finally uploads the results to the WCA database as soon as possible."
           '2': "Depending on the size of the competition and the Delegate's personal schedule, all this can take only a day or up to a week. Please be patient."
           '3': "Additionally, if you have connected your WCA account with your WCA ID (see below), you can enable email notifications about your results submission <a href='%{preferences_edit_path}'>here</a>."
-      '7':
+          '4': "If it is your first competition you will have to wait for the results to be uploaded before you will be assigned a WCA ID."
+      '10':
         title: "How do I change my profile picture?"
         #context: Paragraph of the answer to "How do I change my profile picture?"
         content:
           '1': "First, you need to <a href='#how-do-i-connect-my-wca-account-with-my-wca-id'>create a WCA account and connect it to your WCA ID.</a>"
           '2': "After you have connected your WCA account and your WCA ID, go to your <a href='%{profile_edit_path}'>edit profile page</a> to change your profile picture."
-      '8':
-        title: "How do I connect my WCA account with my WCA ID?"
+      '11':
+        title: "How do I know what my WCA ID is? How do I connect my WCA account with my WCA ID?"
         #context: Answer to "How do I connect my WCA account ...?"
         content:
           #context: Yup, nothing to translate here! Just hit "Use the original version"
-          '1': "%{current_user_claim}"
-      '9':
+          '1': "After you have competed in your first competition and the results have been published you can go to the competition website to find your results. When you then click your name it will take you to your WCA profile page where your WCA ID will be listed. %{current_user_claim}"
+      '12':
         title: "I am registered for a competition and want to sign up for an additional event, what should I do? Can I bring guests?"
         #context: Answer to "I want to sign up for an additional event ...?"
         content:
-          '1': "Please contact the organizer. You can find the contact information on the competition website. If you are unsure where to find it, check the <a href='/competitions'>list of competitions</a>."
+          '1': "Please contact the organizer. You can find the contact information on the competition website. If you are unsure where to find it, check the <a href='/competitions'>list of competitions</a> or choose the competition you are attending in our <a href='/contact/website'>Contact Form</a>"
       'regulations1':
         title: "Is my puzzle competition legal?"
         #context: Answer to "Is my puzzle competition legal?"
         content:
           '1': "You can find the regulations regarding puzzles in <a href='https://www.worldcubeassociation.org/regulations/#3'>Article 3</a>. All puzzles have to be approved by a WCA Delegate. If you are unsure, please ask the Delegate of your competition. To be on the safe side, you should bring a replacement puzzle in case you are not allowed to use it."
       'regulations2':
-        title: "May I use a magnetic puzzle in an official WCA competition?"
-        #context: Answer to "May I use a magnetic puzzle in an official WCA competition?"
+        title: "May I use a magnetic or stickerless puzzle in an official WCA competition?"
+        #context: Answer to "May I use a magnetic or stickerless puzzle in an official WCA competition?"
         content:
-          '1': "You are allowed to use magnetic puzzles as long as they comply with the <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. Please pay particular attention to <a href='https://www.worldcubeassociation.org/regulations/#3h'>Regulation 3h</a>."
+          '1': "You are allowed to use magnetic and stickerless puzzles as long as they comply with the <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. Please pay particular attention to <a href='https://www.worldcubeassociation.org/regulations/#3h'>Regulation 3h</a>."
       'regulations3':
         title: "I lost a center cap or a piece of my puzzle. Am I still allowed to use it?"
         #context: Answer to "Am I allowed to use damaged puzzles?"
