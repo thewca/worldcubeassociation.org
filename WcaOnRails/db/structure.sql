@@ -896,6 +896,25 @@ CREATE TABLE `delegate_reports` (
   UNIQUE KEY `index_delegate_reports_on_competition_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `delegates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `delegates` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `status` varchar(191) NOT NULL,
+  `region_id` bigint NOT NULL,
+  `country_iso2` varchar(191) DEFAULT NULL,
+  `location` varchar(191) DEFAULT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_delegates_on_user_id` (`user_id`),
+  KEY `index_delegates_on_region_id` (`region_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `eligible_country_iso2s_for_championship`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1810,6 +1829,7 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20200415151734'),
 ('20200419133415'),
 ('20200502095048'),
+('20200505175327'),
 ('20200522095030'),
 ('20200522125145'),
 ('20200607140007'),
