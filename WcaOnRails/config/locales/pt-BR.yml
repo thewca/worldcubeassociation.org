@@ -1557,6 +1557,18 @@ pt-BR:
         announced: >-
           O WCAT aprovou sua competição e a anunciou oficialmente para o
           público.
+      id_claim_possibility_email:
+        #original_hash: 20e9d09
+        header: Por favor vincule sua ID da WCA com sua conta
+        #original_hash: 5665910
+        intro: Caro Cubista
+        #original_hash: 61650f4
+        information_html: >-
+          Você se inscreveu para %{competition_link}. Nós já postamos os
+          resultados desta competição, e criamos IDs da WCA para todos os
+          competidores estreantes. Se você participou mesmo desta competição e
+          foi sua primeira, você deve conectar sua ID da WCA (vinculá-la com sua
+          conta no site). Você pode fazer isso %{claim_link}.
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Você foi adicionado a %{competition} como um organizador'
@@ -1587,6 +1599,17 @@ pt-BR:
         more_info_html: >-
           Por favor veja o the <a href=%{competition_url}>website da
           competição</a> para mais informações e critérios de inscrição.
+      results_presence_email:
+        #original_hash: 7ce2558
+        header: 'Os resultados de %{competition} estão postados'
+        #original_hash: 150446e
+        intro_html: 'Seus resultados em %{competition_link} já foram postados.'
+        #original_hash: 78edca3
+        information_html: 'Veja todos os seus resultados %{result_link}.'
+        #original_hash: a585fca
+        more_info_html: 'Você pode gerenciar suas opções de email %{preferences_link}.'
+        #original_hash: 60d1a54
+        regards_html: 'Saudações,<br/>Equipe de Resultados da WCA em nome de ${managers}.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Conectar sua ID da WCA
