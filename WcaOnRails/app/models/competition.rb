@@ -1005,7 +1005,7 @@ class Competition < ApplicationRecord
   end
 
   def user_can_view_results?(user)
-    results_posted? || (user&.can_admin_results? && !results.empty?)
+    (results_posted? || user&.can_admin_results?) && !results.empty?
   end
 
   def in_progress?
