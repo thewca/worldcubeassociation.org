@@ -170,7 +170,7 @@
           <%= render "registration_requirements", show_links_to_register_page: true %>
         </div>
       </dd>
-      <% if competition.results_posted? %>
+      <% if competition.user_can_view_results?(current_user) %>
         <% records = records(competition) %>
         <% if main_event.present? || records.present? %>
           <dt><%= t '.highlights' %></dt>
@@ -214,7 +214,7 @@
   </script>
 <% end %>
 
-<% if competition.results_posted? %>
+<% if competition.user_can_view_results?(current_user) %>
   <script>
     $(function () {
       $("#highlights_text").collapse({
