@@ -33,13 +33,18 @@ class TimeLimit
     self.to_wcif.hash
   end
 
+  UNDEF_TL = TimeLimit.new(centiseconds: 0).freeze
+
   def self.load(json)
+    # ActiveRecord uses this to create a "default value" by passing "nil".
+    # Because updating our codebase to support nil TimeLimit would be extremely
+    # tedious, we use a TL of '0' to represent an unknown (null in the db) TL.
+    # See https://github.com/thewca/worldcubeassociation.org/issues/5460
+    return UNDEF_TL.dup if json.nil?
     TimeLimit.new.tap do |time_limit|
-      unless json.nil?
-        json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
-        time_limit.cumulative_round_ids = json_obj['cumulativeRoundIds']
-        time_limit.centiseconds = json_obj['centiseconds']
-      end
+      json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
+      time_limit.cumulative_round_ids = json_obj['cumulativeRoundIds']
+      time_limit.centiseconds = json_obj['centiseconds']
     end
   end
 
@@ -58,6 +63,7 @@ class TimeLimit
   end
 
   def to_s(round)
+    return "" if self == UNDEF_TL
     time_str = SolveTime.new(round.event.id, :best, self.centiseconds).clock_format
     case self.cumulative_round_ids.length
     when 0
