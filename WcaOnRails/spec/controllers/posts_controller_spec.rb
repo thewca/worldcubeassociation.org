@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe PostsController do
   let!(:post1) { FactoryBot.create(:post, created_at: 1.hours.ago) }
-  let!(:hidden_post) { FactoryBot.create(:post, created_at: 1.hours.ago, world_readable: false) }
   let!(:sticky_post) { FactoryBot.create(:post, sticky: true, created_at: 2.hours.ago) }
   let!(:wdc_post) { FactoryBot.create(:post, created_at: 3.hours.ago, tags: "wdc,othertag", show_on_homepage: false) }
 
@@ -52,10 +51,6 @@ RSpec.describe PostsController do
         get :show, params: { id: post1.slug }
         expect(assigns(:post)).to eq post1
       end
-
-      it "cannot find not world_readable posts" do
-        expect { get :show, params: { id: hidden_post.slug } }.to raise_exception(ActiveRecord::RecordNotFound)
-      end
     end
 
     describe "GET #new" do
@@ -89,7 +84,6 @@ RSpec.describe PostsController do
         p = Post.find_by_slug("Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
-        expect(p.world_readable).to eq true
       end
     end
   end
@@ -111,7 +105,6 @@ RSpec.describe PostsController do
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
         expect(p.tags_array).to match_array %w(wdc notes)
-        expect(p.world_readable).to eq true
       end
     end
   end

@@ -1043,14 +1043,13 @@ CREATE TABLE `posts` (
   `author_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `world_readable` tinyint(1) NOT NULL DEFAULT '0',
   `show_on_homepage` tinyint(1) NOT NULL DEFAULT '1',
   `unstick_at` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_posts_on_slug` (`slug`),
-  KEY `index_posts_on_world_readable_and_sticky_and_created_at` (`world_readable`,`sticky`,`created_at`),
-  KEY `index_posts_on_world_readable_and_created_at` (`world_readable`,`created_at`),
-  KEY `idx_show_wr_sticky_created_at` (`show_on_homepage`,`world_readable`,`sticky`,`created_at`)
+  KEY `index_posts_on_world_readable_and_sticky_and_created_at` (`sticky`,`created_at`),
+  KEY `index_posts_on_world_readable_and_created_at` (`created_at`),
+  KEY `idx_show_wr_sticky_created_at` (`show_on_homepage`,`sticky`,`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `preferred_formats`;
@@ -1648,4 +1647,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20200415151734'),
 ('20200419133415'),
 ('20200502095048'),
-('20200522095030');
+('20200522095030'),
+('20200522125145');

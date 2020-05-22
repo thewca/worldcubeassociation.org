@@ -482,7 +482,7 @@ module DatabaseDumper
     "poll_options" => :skip_all_rows,
     "polls" => :skip_all_rows,
     "posts" => {
-      where_clause: "WHERE world_readable = TRUE",
+      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -494,13 +494,12 @@ module DatabaseDumper
           unstick_at
           title
           updated_at
-          world_readable
           show_on_homepage
         ),
       ),
     }.freeze,
     "post_tags" => {
-      where_clause: "JOIN posts ON posts.id=post_tags.post_id WHERE world_readable = TRUE",
+      where_clause: "JOIN posts ON posts.id=post_tags.post_id",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id

@@ -41,39 +41,8 @@ class Post < ApplicationRecord
     self.slug = title.parameterize
   end
 
-  CRASH_COURSE_POST_SLUG = "delegate-crash-course"
-
-  def self.delegate_crash_course_post
-    Post.find_or_create_by!(slug: CRASH_COURSE_POST_SLUG) do |post|
-      post.title = "Delegate crash course"
-      post.body = "Nothing here yet"
-      post.show_on_homepage = false
-      post.world_readable = false
-    end
-  end
-
-  def deletable
-    persisted? && !is_delegate_crash_course_post?
-  end
-
-  def edit_path
-    if is_delegate_crash_course_post?
-      Rails.application.routes.url_helpers.panel_delegate_crash_course_edit_path
-    else
-      Rails.application.routes.url_helpers.edit_post_path(slug)
-    end
-  end
-
-  def update_path
-    if is_delegate_crash_course_post?
-      Rails.application.routes.url_helpers.panel_delegate_crash_course_path
-    else
-      Rails.application.routes.url_helpers.post_path(self)
-    end
-  end
-
   def self.search(query, params: {})
-    posts = Post.where(world_readable: true)
+    posts = Post
     query&.split&.each do |part|
       posts = posts.where("title LIKE :part OR body LIKE :part", part: "%#{part}%")
     end
@@ -92,9 +61,5 @@ class Post < ApplicationRecord
     }
 
     json
-  end
-
-  private def is_delegate_crash_course_post?
-    slug == CRASH_COURSE_POST_SLUG
   end
 end

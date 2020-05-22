@@ -646,10 +646,6 @@ class User < ApplicationRecord
     can_admin_results? || any_kind_of_delegate?
   end
 
-  def can_view_delegate_crash_course?
-    can_view_delegate_matters? || communication_team?
-  end
-
   def can_create_posts?
     wdc_team? || wrc_team? || communication_team? || can_announce_competitions?
   end
@@ -657,14 +653,9 @@ class User < ApplicationRecord
   def can_upload_images?
     (
       can_create_posts? ||
-      can_update_delegate_crash_course? ||
       any_kind_of_delegate? || # Delegates are allowed to upload photos when writing a delegate report.
       can_manage_any_not_over_competitions? # Competition managers may want to upload photos to their competition tabs.
     )
-  end
-
-  def can_update_delegate_crash_course?
-    can_admin_competitions? || quality_assurance_committee?
   end
 
   def can_admin_competitions?
@@ -736,7 +727,7 @@ class User < ApplicationRecord
   end
 
   def can_view_delegate_matters?
-    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee? || competition_announcement_team? || weat_team?
+    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee? || competition_announcement_team? || weat_team? || communication_team?
   end
 
   def can_manage_incidents?
