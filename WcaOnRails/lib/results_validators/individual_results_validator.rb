@@ -15,6 +15,7 @@ module ResultsValidators
     RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit for the round, which is %{time_limit} per attempt. All solves over the time limit must be changed to DNF."
     RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit, which was %{time_limit}."
     NO_ROUND_INFORMATION_WARNING = "[%{round_id}] There is no information about the cutoff and time limit for this round. These validations have been skipped. Please update the round's information in the competition's Manage Events page."
+    UNDEF_TL_WARNING = "[%{round_id}] The time limit for this round is undefined, time limit validations have been skipped. This is expected only for competitions before 2013."
     SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit, and extrapolating based on %{person_name}'s successful solves, they would have had very little time left for at least one of their DNFs."\
     " Please ensure that every DNF and DNS is indeed correct. If the competitor did not start an attempt or did not have any remaining time before starting an attempt, it must be entered as DNS."
 
@@ -70,6 +71,16 @@ module ResultsValidators
           end
 
           time_limit_for_round = round_info.time_limit
+          if time_limit_for_round == TimeLimit::UNDEF_TL
+            # This situation may happen with "old" competitions, where time limit
+            # were possibly not enforced at the discretion of the WCA Delegate.
+            # In which case we let the TL undefined, and no errors should be
+            # generated.
+            @warnings << ValidationWarning.new(:results, competition_id,
+                                               UNDEF_TL_WARNING,
+                                               round_id: round_id)
+          end
+
           cutoff_for_round = round_info.cutoff
 
           results_for_round.each_with_index do |result, index|
@@ -86,6 +97,9 @@ module ResultsValidators
             check_results_for_cutoff(context, cutoff_for_round) if cutoff_for_round
 
             completed_solves = all_solve_times.select(&:complete?)
+
+            # Below are checks for time limits, skip them if the time limit is undefined
+            next if time_limit_for_round == TimeLimit::UNDEF_TL
 
             # Checks for time limits if it can be user-specified
             if !["333mbf", "333fm"].include?(result.eventId)

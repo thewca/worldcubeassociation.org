@@ -58,6 +58,18 @@ class Round < ApplicationRecord
     end
   end
 
+  def initialize(attributes = nil)
+    # Overrides the default constructor to setup the default time limit if not
+    # set explicitly.
+    # We do want to let the opportunity to the user to specify the 'undefined'
+    # time limit represented as null in the db (TimeLimit::UNDEF_TL)
+    attributes ||= {}
+    # Note there is a subtle difference between using '||=' and 'key?'.
+    # We do want to allow specifying a 'nil' value for the :time_limit attribute.
+    attributes[:time_limit] = TimeLimit.new unless attributes.key?(:time_limit)
+    super(attributes)
+  end
+
   # Compute a round type id from round information
   def round_type_id
     if number == total_number_of_rounds
