@@ -44,14 +44,6 @@ RSpec.describe Api::V0::ApiController do
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
     end
-
-    it "does not find non world readable post" do
-      post.update_column(:world_readable, false)
-      get :posts_search, params: { q: "post title" }
-      expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 0
-    end
   end
 
   describe 'GET #users_search' do

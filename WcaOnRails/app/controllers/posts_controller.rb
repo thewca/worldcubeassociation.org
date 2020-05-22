@@ -12,7 +12,7 @@ class PostsController < ApplicationController
     else
       @posts = Post.where(show_on_homepage: true)
     end
-    @posts = @posts.where(world_readable: true).order(sticky: :desc, created_at: :desc).includes(:author).page(params[:page])
+    @posts = @posts.order(sticky: :desc, created_at: :desc).includes(:author).page(params[:page])
   end
 
   def rss
@@ -22,7 +22,7 @@ class PostsController < ApplicationController
     else
       @posts = Post
     end
-    @posts = @posts.where(world_readable: true).order(created_at: :desc).includes(:author).page(params[:page])
+    @posts = @posts.order(created_at: :desc).includes(:author).page(params[:page])
 
     # Force responding with xml, regardless of the given HTTP_ACCEPT headers.
     request.format = :xml
@@ -39,7 +39,6 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    @post.world_readable = true
     @post.author = current_user
     if @post.save
       flash[:success] = "Created new post"
@@ -90,7 +89,7 @@ class PostsController < ApplicationController
     #  +------+
     #  1 row in set, 1 warning (0.00 sec)
     post = Post.find_by_slug(params[:id]) || Post.find_by_id(params[:id])
-    if !post || !post.world_readable
+    if !post
       raise ActiveRecord::RecordNotFound.new("Couldn't find post")
     end
     post
