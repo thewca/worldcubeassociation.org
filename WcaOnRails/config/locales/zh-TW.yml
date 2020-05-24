@@ -1484,7 +1484,7 @@ zh-TW:
         '6': 頭像的方向必須正確。
         #original_hash: 1a18831
         '7': 頭像不得含有冒犯他人內容（例如：無禮的手勢）
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 針對WCA 員工的指導方針：
         paragraphs:

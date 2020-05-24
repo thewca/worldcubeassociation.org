@@ -1707,7 +1707,7 @@ uk:
         '7': >-
           Аватар не повинен містити непристойний вміст (наприклад, образливі
           жести).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Додаткові вказівки для Персоналу WCA:'
         paragraphs:

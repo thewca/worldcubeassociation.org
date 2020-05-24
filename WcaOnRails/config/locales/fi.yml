@@ -1691,7 +1691,7 @@ fi:
         '7': >-
           Profiilikuvassa ei saa olla hyökkäävää sisältöä (kuten tällaista
           elekieltä).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Additional guidelines for Staff Members:'
         paragraphs:

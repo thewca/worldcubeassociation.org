@@ -925,7 +925,7 @@ en:
         '5': "The avatar should not include overlay texts or unnatural filters, including borders."
         '6': "The avatar must be submitted in correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         title: "Additional guidelines for Staff Members:"
         paragraphs:
           '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition."
