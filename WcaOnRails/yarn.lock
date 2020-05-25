@@ -5317,13 +5317,12 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
-leaflet-geosearch@^2.6.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/leaflet-geosearch/-/leaflet-geosearch-2.7.0.tgz#0f7b319486ea344b00639b84b338b4087bf6b839"
-  integrity sha512-6rZIZ5mp9Ifp3R37DKe7ipHV6/qnUY5kP1gNDz3oMT4hp5FqKyB2V4enoTDT1iziE8yrn0hy/OP9oI4HG1dKEw==
-  dependencies:
-    lodash.debounce "^4.0.8"
-    nodent-runtime "^3.0.4"
+leaflet-geosearch@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/leaflet-geosearch/-/leaflet-geosearch-3.0.1.tgz#20a15afcfa388bd056231561e2e649b0eb8b337c"
+  integrity sha512-0FDCTz2qnLo5+lm7YrEAOGnwdXOerylBoy1lclf8ihkpwu9C83vh3OMGPiDczHseflAvoCFwV/vz0GKxiGsHHA==
+  optionalDependencies:
+    leaflet "^1.6.0"
 
 leaflet@^1.6.0:
   version "1.6.0"
@@ -5435,11 +5434,6 @@ lodash._reinterpolate@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
   integrity sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=
-
-lodash.debounce@^4.0.8:
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
-  integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
 
 lodash.defaults@^4.2.0:
   version "4.2.0"
@@ -6080,11 +6074,6 @@ node-sass@^4.13.1, node-sass@^4.14.1:
     sass-graph "2.2.5"
     stdout-stream "^1.4.0"
     "true-case-path" "^1.0.2"
-
-nodent-runtime@^3.0.4:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/nodent-runtime/-/nodent-runtime-3.2.1.tgz#9e2755d85e39f764288f0d4752ebcfe3e541e00e"
-  integrity sha512-7Ws63oC+215smeKJQCxzrK21VFVlCFBkwl0MOObt0HOpVQXs3u483sAmtkF33nNqZ5rSOQjB76fgyPBmAUrtCA==
 
 "nopt@2 || 3":
   version "3.0.6"
