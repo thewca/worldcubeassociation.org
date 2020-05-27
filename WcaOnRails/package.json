@@ -30,7 +30,7 @@
     "flag-icon-css": "viroulep/flag-icon-css#3.2.1-xk",
     "glob": "^7.1.6",
     "jquery": "3.4.1",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^3.14.0",
     "leaflet": "^1.6.0",
     "leaflet-geosearch": "^2.6.0",
     "lodash": "^4.17.15",
