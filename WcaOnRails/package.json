@@ -32,7 +32,7 @@
     "jquery": "3.4.1",
     "js-yaml": "^3.13.1",
     "leaflet": "^1.6.0",
-    "leaflet-geosearch": "^3.0.1",
+    "leaflet-geosearch": "^2.6.0",
     "lodash": "^4.17.15",
     "node-sass": "^4.14.1",
     "path-complete-extname": "^1.0.0",
