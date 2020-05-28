@@ -296,18 +296,18 @@ GEM
     json-schema (2.8.1)
       addressable (>= 2.4)
     jwt (2.2.1)
-    kaminari (1.2.0)
+    kaminari (1.2.1)
       activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.2.0)
-      kaminari-activerecord (= 1.2.0)
-      kaminari-core (= 1.2.0)
-    kaminari-actionview (1.2.0)
+      kaminari-actionview (= 1.2.1)
+      kaminari-activerecord (= 1.2.1)
+      kaminari-core (= 1.2.1)
+    kaminari-actionview (1.2.1)
       actionview
-      kaminari-core (= 1.2.0)
-    kaminari-activerecord (1.2.0)
+      kaminari-core (= 1.2.1)
+    kaminari-activerecord (1.2.1)
       activerecord
-      kaminari-core (= 1.2.0)
-    kaminari-core (1.2.0)
+      kaminari-core (= 1.2.1)
+    kaminari-core (1.2.1)
     kaminari-i18n (0.5.0)
       kaminari
       rails
