@@ -1514,7 +1514,7 @@ vi:
         '7': >-
           Hình ảnh đại diện không được chứa nội dung phản cảm (v.d. cử chỉ phản
           cảm).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Hướng dẫn bổ sung cho Nhân viên:'
         paragraphs:

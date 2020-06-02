@@ -1587,7 +1587,7 @@ fr:
         '7': >-
           La photo de profil ne doit pas contenir de contenu offensant (par
           exemple : gestes offensant).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Recommandations additionnelles pour les membres du Staff :'
         paragraphs:

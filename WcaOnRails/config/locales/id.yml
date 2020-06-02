@@ -1347,7 +1347,7 @@ id:
         '7': >-
           Avatar tidak boleh memuat konten yang menyinggung (contoh:
           gerakan/isyarat yang menyinggung).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: 35abf16
         title: 'Pedoman tambahan untuk Delegate:'
         paragraphs:

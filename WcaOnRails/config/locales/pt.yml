@@ -1726,7 +1726,7 @@ pt:
         '6': O avatar deve ser submetido na orientação correta.
         #original_hash: 1a18831
         '7': O avatar não pode apresentar conteúdo ofensivo (ex. gestos ofensivos).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Orientações adicionais para Membros de Staff:'
         paragraphs:

@@ -1709,7 +1709,7 @@ ru:
         '7': >-
           Аватарка не должна быть оскорбительной (например, содержать
           оскорбительные жесты).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Дополнительные указания для Сотрудников:'
         paragraphs:

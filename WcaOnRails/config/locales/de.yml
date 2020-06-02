@@ -1733,7 +1733,7 @@ de:
         '6': Das Bild muss in korrekter Ausrichtung eingeschickt werden.
         #original_hash: 1a18831
         '7': Der Avatar darf keine offensiven Inhalte haben (z.B. offensive Gesten)
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Zusätzliche Richtlinien für Mitarbeiter:'
         paragraphs:

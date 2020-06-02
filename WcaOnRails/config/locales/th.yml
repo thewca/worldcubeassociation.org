@@ -1484,7 +1484,7 @@ th:
         '6': รูปแทนตัวจะต้องหันในทิศทางที่ถูกต้อง
         #original_hash: 1a18831
         '7': รูปแทนตัวจะต้องไม่มีเนื้อหาที่ไม่เหมาะสม (เช่น ท่าทางที่ไม่เหมาะสม)
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: แนวทางเพิ่มเติมสำหรับ Staff
         paragraphs:

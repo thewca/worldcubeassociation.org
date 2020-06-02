@@ -1715,7 +1715,7 @@ pl:
         '7': >-
           Zdjęcie profilowe nie może zawierać żadnych obraźliwych treści (np.
           obraźliwych gestów).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Dodatkowe wytyczne dla Członków Personelu:'
         paragraphs:

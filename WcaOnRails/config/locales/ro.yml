@@ -1583,7 +1583,7 @@ ro:
         '7': >-
           Avatarul nu trebuie să aibă conținut ofensiv (de exemplu, gesturi
           ofensive).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Îndrumări adiționale pentru Staff:'
         paragraphs:

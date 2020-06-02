@@ -1540,7 +1540,7 @@ da:
         '7': >-
           Avataren må ikke indeholde noget offensivt (f.eks. offensive
           håndbevægelser).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Yderligere retningslinjer for WCA Personale:'
         paragraphs:
