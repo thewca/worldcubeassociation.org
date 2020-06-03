@@ -372,7 +372,7 @@ zh-TW:
         #original_hash: 58e0c56
         remove_avatar: 刪除頭像
         #original_hash: 9af9099
-        results_notifications_enabled: 當比賽成績上傳時，用電子郵件通知我。
+        results_notifications_enabled: 當比賽成績公告時，用電子郵件通知我。
         #original_hash: de60ab8
         delegate_status: WCA代表狀態
         #original_hash: 0f21717
@@ -420,6 +420,8 @@ zh-TW:
         currency_code: 貨幣代碼
         #original_hash: 2e3ed8b
         delegate_ids: WCA代表
+        #original_hash: c0ddcd6
+        trainee_delegate_ids: WCA 代表實習生
         #original_hash: 958562e
         organizer_ids: 主辦人ID
         #original_hash: b37456c
@@ -637,6 +639,8 @@ zh-TW:
         #original_hash: 6e6a6f2
         o: 其他
       delegate_status:
+        #original_hash: 621101a
+        trainee_delegate: 代表實習生
         #original_hash: 9b97968
         candidate_delegate: 初級代表
         #original_hash: 12ab214
@@ -750,6 +754,8 @@ zh-TW:
         information: 參賽者須知的重要資訊，將會顯示在比賽主頁面。<br/>請用 <b>英文</b> 和您當地參賽者使用的語言填寫此欄。
         #original_hash: b4d020f
         delegate_ids: 本場比賽的WCA代表。
+        #original_hash: cb9882c
+        trainee_delegate_ids: 比賽的WCA代表實習生。
         #original_hash: 517d376
         organizer_ids: 比賽的主辦團隊（他們需要建立WCA帳號才能列在這裡）。
         #original_hash: cabe7fb
@@ -1361,6 +1367,16 @@ zh-TW:
         header: 'WCAT公告%{competition}'
         #original_hash: 0d3d10c
         announced: WCAT審核通過您的比賽並且正式公布了。
+      id_claim_possibility_email:
+        #original_hash: 20e9d09
+        header: 請將您的WCA ID與您的帳號做連結
+        #original_hash: 5665910
+        intro: 親愛的方塊玩家
+        #original_hash: 61650f4
+        information_html: >-
+          您報名了%{competition_link}。我們剛上傳了這場比賽的成績，且產生了WCA
+          ID給所有的初次參賽者。如果您參加這場比賽時是初次參賽者，您應該要去取得您的WCA
+          ID（和您的WCA帳號做連結）。按以下連結來進行連結。%{claim_link}
       organizer_addition_email:
         #original_hash: dc6f415
         header: '您已經被新增為%{competition}的主辦團隊'
@@ -1384,6 +1400,17 @@ zh-TW:
         not_accepted_html: 您已經報名，但您的報名尚未被確認。
         #original_hash: 3724e7c
         more_info_html: '請參考 <a href=%{competition_url}>competition website</a> 來得知更多的訊息及報名條件。'
+      results_presence_email:
+        #original_hash: 7ce2558
+        header: '%{competition} 的成績已經公告'
+        #original_hash: 150446e
+        intro_html: '您在%{competition_link}的成績已經被公告'
+        #original_hash: 78edca3
+        information_html: '看您所有的比賽成績%{result_link}。'
+        #original_hash: a585fca
+        more_info_html: '您可以管理您的電子郵件偏好設定%{preferences_link}。'
+        #original_hash: 60d1a54
+        regards_html: '謹代表WCA成績組${managers}最誠摯的問候。'
     claim_wca_id:
       #original_hash: f28bf87
       title: 取得WCA ID
@@ -1478,8 +1505,8 @@ zh-TW:
         '3': 如果頭像上有超過一個人，應該要能讓人輕易辨認哪一個是您。
         #original_hash: 4083c00
         '4': 必須有本人的頭部出現，但是不需要全臉入鏡。
-        #original_hash: ebbbf8a
-        '5': 頭像不得有正常背景以外的文字。
+        #original_hash: 7c0aab3
+        '5': 頭像包含照片邊界的部分都不應該有重疊的文字，或不自然照片濾鏡效果。
         #original_hash: cc5f23a
         '6': 頭像的方向必須正確。
         #original_hash: 1a18831
@@ -1732,6 +1759,8 @@ zh-TW:
       payment_requested_on: '於%{date}提出付款請求'
       #original_hash: b25928c
       total: 總共
+      #original_hash: df036fe
+      n_events: 比賽項目數
     new_registration:
       #original_hash: 8b9f726
       title: '報名%{comp}'
@@ -2116,6 +2145,10 @@ zh-TW:
       past: 過去
       #original_hash: 081ae3f
       custom: 自訂
+      #original_hash: 73cf180
+      by_announcement: 公告日期
+      #original_hash: b3946b2
+      sort_by_announcement: 由公告日排列
       #original_hash: 3f66052
       from_date: 從
       #original_hash: ae79ea1
@@ -2137,6 +2170,8 @@ zh-TW:
         upcoming: 即將舉行的比賽
         #original_hash: 8b57693
         custom: 選取時間內的比賽
+        #original_hash: 0933739
+        by_announcement: 以公告日期來排列的比賽，最新的在最上面
       #original_hash: 6684214
       no_access: 您沒有此頁面的權限！
       tooltips:
@@ -2149,6 +2184,8 @@ zh-TW:
           posted: 成績已經公布！
           #original_hash: 89bcc37
           starts_in: '%{days}後舉行'
+          #original_hash: 97b061a
+          announced_on: '在%{announcement_date}公告'
         #original_hash: ccd2db9
         search: 比賽名稱或城市
         #original_hash: 3bc8082
@@ -3390,6 +3427,8 @@ zh-TW:
       content2_html: >-
         WCA規則有一份<a
         href="/regulations/guidelines.html">WCA指導方針</a>來做輔助，包含額外的釐清與解釋。
+      #original_hash: c8e1783
+      content3_html: 在比賽發生的意外事件以及由WCA規則委員會所做出的解決作法可以在<a href="/incidents">意外事件</a>裡閱覽。
     panel2:
       #original_hash: 8ad8302
       title: 翻譯版
