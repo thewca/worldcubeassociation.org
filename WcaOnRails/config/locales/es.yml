@@ -1573,6 +1573,18 @@ es:
         announced: >-
           El WCAT ha aprobado tu competición y será anunciada oficialmente al
           público.
+      id_claim_possibility_email:
+        #original_hash: 20e9d09
+        header: Por favor enlaza tu WCA ID con tu cuenta
+        #original_hash: 5665910
+        intro: Estimado Cubero
+        #original_hash: 61650f4
+        information_html: >-
+          Te registrate para %{competition_link}. Acabamos de cargar los
+          resultados de esta competición y creado WCA IDs para todos los que
+          compiten por primera vez. Si competiste en esta competición y era la
+          primera, deberías solicitar tu WCA ID (enlazarlo con tu cuenta WCA).
+          Puedes hacer esto %{claim_link}.
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Has sido añadido a %{competition} como organizador'
@@ -1603,6 +1615,19 @@ es:
           Por favor dirígete a la  <a href=%{competition_url}>web del
           campeonato</a>  para obtener más información sobre requisitos del
           registro.
+      results_presence_email:
+        #original_hash: 7ce2558
+        header: 'Los resultados de %{competition} se han publicado'
+        #original_hash: 150446e
+        intro_html: 'Tus resultados en %{competition_link} acaban de ser publicados.'
+        #original_hash: 78edca3
+        information_html: 'Comprueba tus resultados %{result_link}.'
+        #original_hash: a585fca
+        more_info_html: 'Puedes gestionar tus preferencias de correo %{preferences_link}.'
+        #original_hash: 60d1a54
+        regards_html: >-
+          Atentamente, <br/> El Equipo de Resultados de la WCA en nombre de
+          ${managers}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Reclamar tu WCA ID
@@ -1722,10 +1747,10 @@ es:
         '3': 'Si hay más de una persona en la foto, debe quedar claro quién eres tú.'
         #original_hash: 4083c00
         '4': 'Tu cabeza, aunque no necesariamente la cara entera, debe ser visible.'
-        #original_hash: ebbbf8a
+        #original_hash: 7c0aab3
         '5': >-
-          La foto no puede contener más textos que los que de forma natural
-          puedan aparecer en el fondo.
+          La foto no debe contener textos superpuestos o filtros artificiales,
+          incluyendo bordes.
         #original_hash: cc5f23a
         '6': La foto tiene que tener la orientación correcta.
         #original_hash: 1a18831
