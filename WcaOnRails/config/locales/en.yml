@@ -1185,6 +1185,11 @@ en:
       create_success: "Successfully created new competition!"
       not_announced: "This competition is visible to the public but hasn't been announced yet."
       announced: "Successfully announced competition!"
+      cancelled: "This competition has been cancelled. Please checkout the information section for more details."
+      cancel_success: "Successfully cancelled competition!"
+      cancel_failure: "Cannot cancel the competition."
+      uncancel_success: "Successfully uncancelled competition!"
+      uncancel_failure: "Cannot uncancel the competition."
       results_not_posted: "This competition's results are visible but haven't been posted yet."
       results_already_posted: "The results have already been posted."
       results_posted: "Successfully posted results!"
@@ -1227,6 +1232,8 @@ en:
       address: "Address"
       details: "Details"
       website: "Website"
+      #context: Used to display an explicit tag when the competition is cancelled
+      display_name: "[Cancelled] %{name}"
       #context: Pluralization of the "Organizer" label for a competition form
       organizer_plural:
         one: "Organizer"
@@ -1432,9 +1439,15 @@ en:
     announcements: "Announcements"
     post_announcement: "Announce the competition"
     announced_by_html: "Announced by %{announcer_name} on %{date_time}"
+    cancel: "Cancel the competition"
+    uncancel: "Uncancel the competition"
+    cancelled_by_html: "Cancelled by %{name} on %{date_time}"
+    cancel_confirm: "Are you sure you want to cancel that competition?"
     upload_results: "Upload the results"
     post_results: "Post the results"
     results_posted_by_html: "Posted by %{poster_name} on %{date_time}"
+    cancel_mistake: "Made a mistake?"
+    note_before_cancel: "Note: only confirmed competitions can be cancelled."
     show:
       general_info: "General info"
       events: "Events"

@@ -39,6 +39,7 @@ class Competition < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
 
+  scope :not_cancelled, -> { where(cancelled_at: nil) }
   scope :visible, -> { where(showAtAll: true) }
   scope :not_visible, -> { where(showAtAll: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
@@ -124,6 +125,7 @@ class Competition < ApplicationRecord
     results_nag_sent_at
     registration_reminder_sent_at
     announced_at
+    cancelled_at
     created_at
     updated_at
     connected_stripe_account_id
@@ -135,6 +137,7 @@ class Competition < ApplicationRecord
     event_restrictions
     event_restrictions_reason
     announced_by
+    cancelled_by
     results_posted_by
     main_event_id
   ).freeze
@@ -338,11 +341,11 @@ class Competition < ApplicationRecord
   end
 
   def user_should_post_delegate_report?(user)
-    persisted? && is_probably_over? && !delegate_report.posted? && delegates.include?(user)
+    persisted? && is_probably_over? && !cancelled? && !delegate_report.posted? && delegates.include?(user)
   end
 
   def user_should_post_competition_results?(user)
-    persisted? && is_probably_over? && !self.results_submitted? && delegates.include?(user)
+    persisted? && is_probably_over? && !cancelled? && !self.results_submitted? && delegates.include?(user)
   end
 
   def warnings_for(user)
@@ -394,10 +397,10 @@ class Competition < ApplicationRecord
 
   def info_for(user)
     info = {}
-    if !self.results_posted? && self.is_probably_over?
+    if !self.results_posted? && self.is_probably_over? && !self.cancelled?
       info[:upload_results] = I18n.t('competitions.messages.upload_results')
     end
-    if self.in_progress?
+    if self.in_progress? && !self.cancelled?
       info[:in_progress] = I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
     end
     info
@@ -719,7 +722,7 @@ class Competition < ApplicationRecord
   end
 
   def registration_opened?
-    use_wca_registration? && !registration_not_yet_opened? && !registration_past?
+    use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
   end
 
   def registration_not_yet_opened?
@@ -977,6 +980,23 @@ class Competition < ApplicationRecord
 
   def announced?
     announced_at.present? && announced_by.present?
+  end
+
+  def cancelled?
+    cancelled_at.present? && cancelled_by.present?
+  end
+
+  def can_be_cancelled?
+    confirmed? && announced? && !cancelled?
+  end
+
+  def display_name(short: false)
+    data = short ? cellName : name
+    if cancelled?
+      I18n.t("competitions.competition_info.display_name", name: data)
+    else
+      data
+    end
   end
 
   def results_posted?
@@ -1492,6 +1512,7 @@ class Competition < ApplicationRecord
       registration_open: registration_open,
       registration_close: registration_close,
       announced_at: announced_at,
+      cancelled_at: cancelled_at,
       end_date: end_date,
       delegates: delegates,
       trainee_delegates: trainee_delegates,

@@ -109,6 +109,7 @@ Rails.application.routes.draw do
   resources :votes, only: [:create, :update]
 
   post 'competitions/:id/post_announcement' => 'competitions#post_announcement', as: :competition_post_announcement
+  post 'competitions/:id/cancel' => 'competitions#cancel_competition', as: :competition_cancel
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
 
   get 'panel' => 'panel#index'

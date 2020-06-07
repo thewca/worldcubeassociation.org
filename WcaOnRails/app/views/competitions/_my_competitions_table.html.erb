@@ -31,12 +31,13 @@
           <% registration = registrations_by_competition_id[competition.id] %>
           <% tr_classes = [ competition.confirmed? ? "confirmed" : "not-confirmed",
                           competition.showAtAll? ? "visible" : "not-visible",
+                          competition.cancelled? ? "cancelled" : "",
                           past ? "past" : "not-past" ].join(' ') %>
           <tr class="<%= tr_classes %>"
               data-toggle="tooltip" data-placement="bottom" data-container="body"
               title="<%= competition_message_for_user(competition, current_user) unless past %>">
             <td>
-              <%= link_to competition.name, competition_path(competition) %>
+              <%= link_to competition.display_name, competition_path(competition) %>
               <% if competition.championships.any? %>
                 <span class="championship-trophy" data-toggle="tooltip" data-placement="bottom" title="<%= competition.championships.sort.map { |championship| championship.name }.join(", ") %>">
                   <%= icon('fas', 'trophy') %>

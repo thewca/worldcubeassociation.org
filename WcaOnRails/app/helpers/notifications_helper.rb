@@ -62,10 +62,12 @@ module NotificationsHelper
     user.delegated_competitions.visible.over.order_by_date
         .includes(:delegate_report).where(delegate_reports: { posted_at: nil })
         .each do |competition|
-          notifications << {
-            text: "The delegate report for #{competition.name} has not been submitted.",
-            url: delegate_report_path(competition),
-          }
+          if competition.user_should_post_delegate_report?(user)
+            notifications << {
+              text: "The delegate report for #{competition.name} has not been submitted.",
+              url: delegate_report_path(competition),
+            }
+          end
         end
 
     user.delegated_competitions.visible.over.order_by_date

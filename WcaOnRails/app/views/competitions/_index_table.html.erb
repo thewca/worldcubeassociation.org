@@ -4,7 +4,10 @@
     <% if index > 0 && competition.year != competitions[index - 1].year && params[:event_ids].empty? %>
       <li class="list-group-item break"><%= competition.year %></li>
     <% end %>
-    <li class="list-group-item <%= competition.is_probably_over? ? "past" : "not-past" %>">
+    <% li_classes = ["list-group-item"] %>
+    <% li_classes << competition.is_probably_over? ? "past" : "not-past" %>
+    <% li_classes << "cancelled" if competition.cancelled? %>
+    <li class="<%= li_classes.join(' ') %>">
       <span class="date">
         <% if competition.is_probably_over? %>
           <% if competition.results_posted? %>
@@ -24,7 +27,7 @@
       <span class="competition-info">
         <div class="competition-link">
           <%= flag_icon competition.country.iso2 %>
-          <%= link_to competition.cellName, competition_path(competition) %>
+          <%= link_to competition.display_name(short: true), competition_path(competition) %>
         </div>
         <div class="location">
           <strong><%= competition.country.name %></strong>, <%= competition.cityName %>

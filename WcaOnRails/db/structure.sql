@@ -73,11 +73,14 @@ CREATE TABLE `Competitions` (
   `announced_by` int(11) DEFAULT NULL,
   `results_posted_by` int(11) DEFAULT NULL,
   `main_event_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cancelled_at` datetime DEFAULT NULL,
+  `cancelled_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
   KEY `index_Competitions_on_start_date` (`start_date`),
-  KEY `index_Competitions_on_end_date` (`end_date`)
+  KEY `index_Competitions_on_end_date` (`end_date`),
+  KEY `index_Competitions_on_cancelled_at` (`cancelled_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `CompetitionsMedia`;
@@ -1648,4 +1651,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20200419133415'),
 ('20200502095048'),
 ('20200522095030'),
-('20200522125145');
+('20200522125145'),
+('20200607140007');
