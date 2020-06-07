@@ -123,6 +123,13 @@ FactoryBot.define do
       announced_by { FactoryBot.create(:user, :wcat_member).id }
     end
 
+    trait :cancelled do
+      announced
+      confirmed
+      cancelled_at { Time.now }
+      cancelled_by { FactoryBot.create(:user, :wcat_member).id }
+    end
+
     trait :stripe_connected do
       # This is an actual test stripe account set up
       # for testing Stripe payments, and is connected

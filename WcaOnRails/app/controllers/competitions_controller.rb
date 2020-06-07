@@ -24,6 +24,7 @@ class CompetitionsController < ApplicationController
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
     :post_announcement,
+    :cancel_competition,
     :admin_edit,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
@@ -75,7 +76,9 @@ class CompetitionsController < ApplicationController
     params[:years] = nil
   end
 
-  def index
+  # Rubocop is unhappy about all the things we do in this controller action,
+  # which is understandable.
+  def index # rubocop:disable Metrics/PerceivedComplexity
     support_old_links!
 
     # Default params
@@ -99,6 +102,7 @@ class CompetitionsController < ApplicationController
     @recent_selected = params[:state] == "recent"
     @by_announcement_selected = params[:state] == "by_announcement"
     @custom_selected = params[:state] == "custom"
+    @show_cancelled = params[:show_cancelled] == "on"
 
     @years = ["all years"] + Competition.non_future_years
 
@@ -107,6 +111,10 @@ class CompetitionsController < ApplicationController
       @competitions = delegate.delegated_competitions
     else
       @competitions = Competition
+    end
+
+    unless @show_cancelled
+      @competitions = @competitions.not_cancelled
     end
 
     @competitions = @competitions.includes(:country).where(showAtAll: true)
@@ -204,6 +212,27 @@ class CompetitionsController < ApplicationController
     end
 
     flash[:success] = t('competitions.messages.announced')
+    redirect_to admin_edit_competition_path(comp)
+  end
+
+  def cancel_competition
+    comp = competition_from_params
+    undo = params[:undo].present?
+    if undo
+      if comp.cancelled?
+        comp.update!(cancelled_at: nil, cancelled_by: nil)
+        flash[:success] = t('competitions.messages.uncancel_success')
+      else
+        flash[:danger] = t('competitions.messages.uncancel_failure')
+      end
+    else
+      if comp.can_be_cancelled?
+        comp.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
+        flash[:success] = t('competitions.messages.cancel_success')
+      else
+        flash[:danger] = t('competitions.messages.cancel_failure')
+      end
+    end
     redirect_to admin_edit_competition_path(comp)
   end
 

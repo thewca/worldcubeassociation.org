@@ -31,6 +31,27 @@
           </ul>
         <% end %>
       </li>
+      <li>
+        <%= button_to competition_cancel_path, class: 'btn btn-danger', disabled: !@competition.can_be_cancelled?, method: :post, data: { confirm: t('competitions.cancel_confirm') } do %>
+          <%= t 'competitions.cancel' %>
+        <% end %>
+        <% if !@competition.can_be_cancelled? && !@competition.cancelled? %>
+          <%= t 'competitions.note_before_cancel' %>
+        <% end %>
+        <% if @competition.cancelled? %>
+          <ul>
+            <li>
+              <%= t 'competitions.cancelled_by_html', name: User.find(@competition.cancelled_by).name, date_time: wca_local_time(@competition.cancelled_at) %>
+            </li>
+            <li>
+              <%= t 'competitions.cancel_mistake' %>
+              <%= button_to competition_cancel_path(undo: true), class: 'btn', method: :post do %>
+                <%= t 'competitions.uncancel' %>
+              <% end %>
+            </li>
+          </ul>
+        <% end %>
+      </li>
     </ul>
     <hr>
   <% end %>

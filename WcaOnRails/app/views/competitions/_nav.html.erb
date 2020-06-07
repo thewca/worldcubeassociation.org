@@ -231,9 +231,15 @@
             <%= icon('fas', 'trophy') %>
           </span>
         <% end %>
-        <%= @competition.name %>
+        <%= @competition.display_name %>
       </h3>
       <hr />
+
+      <% if @competition.cancelled? %>
+        <%= alert :danger, note: true do %>
+          <%= t('competitions.messages.cancelled') %>
+        <% end %>
+      <% end %>
 
       <% if @competition.user_should_post_delegate_report?(current_user) %>
         <%= alert :warning, note: true do %>

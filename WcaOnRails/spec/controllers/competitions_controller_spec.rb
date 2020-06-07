@@ -779,6 +779,64 @@ RSpec.describe CompetitionsController do
     end
   end
 
+  describe 'POST #cancel_competition' do
+    let(:competition) { FactoryBot.create(:competition, :confirmed, :announced) }
+    context 'when signed in as WCAT' do
+      let(:wcat_member) { FactoryBot.create(:user, :wcat_member) }
+      before :each do
+        sign_in wcat_member
+      end
+
+      it "cannot cancel unconfirmed competition" do
+        comp = FactoryBot.create(:competition, :announced)
+        patch :cancel_competition, params: { id: comp }
+        expect(response).to redirect_to admin_edit_competition_path(comp)
+        expect(comp.reload.cancelled?).to eq false
+      end
+
+      it "cannot cancel unannounced competition" do
+        comp = FactoryBot.create(:competition, :confirmed)
+        patch :cancel_competition, params: { id: comp }
+        expect(response).to redirect_to admin_edit_competition_path(comp)
+        expect(comp.reload.cancelled?).to eq false
+      end
+
+      it "can cancel competition" do
+        patch :cancel_competition, params: { id: competition }
+        expect(response).to redirect_to admin_edit_competition_path(competition)
+        expect(competition.reload.cancelled?).to eq true
+      end
+
+      it "can uncancel competition" do
+        cancelled_competition = FactoryBot.create(:competition, :cancelled)
+        patch :cancel_competition, params: { id: cancelled_competition, undo: true }
+        expect(response).to redirect_to admin_edit_competition_path(cancelled_competition)
+        expect(cancelled_competition.reload.cancelled?).to eq false
+      end
+    end
+
+    context 'when signed in as orga' do
+      let(:orga) { FactoryBot.create(:user) }
+      before :each do
+        sign_in orga
+      end
+
+      it 'cannot cancel competition' do
+        competition.organizers << orga
+        patch :cancel_competition, params: { id: competition }
+        expect(response).to redirect_to root_url
+        expect(competition.reload.cancelled?).to eq false
+      end
+
+      it 'cannot uncancel competition' do
+        cancelled_competition = FactoryBot.create(:competition, :cancelled, organizers: [orga])
+        patch :cancel_competition, params: { id: cancelled_competition }
+        expect(response).to redirect_to root_url
+        expect(cancelled_competition.reload.cancelled?).to eq true
+      end
+    end
+  end
+
   describe 'POST #post_results' do
     context 'when signed in as results team member' do
       let(:wrt_member) { FactoryBot.create(:user, :wrt_member) }
