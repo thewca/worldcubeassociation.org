@@ -12,7 +12,7 @@
     "@babel/plugin-syntax-import-meta": "^7.8.3",
     "@babel/polyfill": "^7.10.1",
     "@babel/preset-env": "^7.10.2",
-    "@babel/preset-react": "^7.9.1",
+    "@babel/preset-react": "^7.10.1",
     "@rails/ujs": "^6.0.3",
     "@rails/webpacker": "5.1.1",
     "autonumeric": "^4.6.0",
