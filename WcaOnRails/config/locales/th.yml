@@ -20,7 +20,7 @@ th:
     HK: ฮ่องกง
     #original_hash: 3ad2dd8
     KN: สหพันธรัฐเซนต์คิตส์และเนวิส
-    #original_hash: 7184d1a
+    #original_hash: 5c34abb
     KP: สาธารณรัฐประชาธิปไตยประชาชนเกาหลี
     #original_hash: 4430b22
     KR: สาธารณรัฐเกาหลี
@@ -42,8 +42,6 @@ th:
     SZ: ราชอาณาจักรเอสวาตีนี
     #original_hash: 4d206a8
     TT: สาธารณรัฐตรินิแดดและโตเบโก
-    #original_hash: 0f3f60b
-    VA: นครรัฐวาติกัน
     #original_hash: 3fa9b2d
     VC: เซนต์วินเซนต์และเกรนาดีนส์
     #original_hash: 9af4622
@@ -77,6 +75,13 @@ th:
     Oceania: โอเชียเนีย
     #original_hash: b1ffb4c
     South America: อเมริกาใต้
+  country_bands:
+    #original_hash: 2b5976e
+    title: กลุ่มประเทศของ WCA
+    #original_hash: df5f4ea
+    band_title: 'กลุ่มที่ %{number}'
+    #original_hash: 6521e5d
+    due_value: '$%{value} ต่อผู้เข้าแข่งขันต่อการแข่งขัน'
   events:
     #original_hash: 3732390
     '222': 2x2x2 Cube
@@ -268,6 +273,8 @@ th:
     average: เวลาเฉลี่ย
     #original_hash: e7f6fc5
     solves: แก้โจทย์
+    #original_hash: c9d0561
+    hello: 'สวัสดี %{name},'
     date:
       #original_hash: acb6273
       no_date: ไม่มีกำหนดวัน
@@ -301,6 +308,11 @@ th:
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
     #original_hash: 7136e3b
     time_format: 24h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: วินาที
+      #original_hash: 9d86b0d
+      unit_moves: ครั้ง
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -353,8 +365,6 @@ th:
         email: Email
         #original_hash: 8be3c94
         password: รหัสผ่าน
-        #original_hash: 19dff4d
-        current_password: รหัสผ่านปัจจุบัน
         #original_hash: aefce7f
         password_confirmation: ป้อนรหัสผ่านอีกครั้ง
         #original_hash: ced7b30
@@ -369,16 +379,12 @@ th:
         delegate_status: สถานะ Delegate
         #original_hash: 0f21717
         region: ภูมิภาค
-        #original_hash: a10b651
-        location_description: คำอธิบายสถานที่
-        #original_hash: 8961d3b
-        phone_number: หมายเลขโทรศัพท์
-        #original_hash: 7044004
-        notes: หมายเหตุ
         #original_hash: 730db33
         receive_delegate_reports: ฉันต้องการรับ email รายงานการแข่งขันของ WCA
         #original_hash: 57eaf24
         user_preferred_events: ประเภทการแข่งขันที่ชอบ
+        #original_hash: e632fbf
+        otp_attempt: กรอกรหัสการยืนยันตัวตนผ่านสองขั้นตอนของคุณ
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -416,6 +422,8 @@ th:
         currency_code: สกุลเงิน
         #original_hash: 2e3ed8b
         delegate_ids: WCA Delegate(s)
+        #original_hash: c0ddcd6
+        trainee_delegate_ids: WCA Trainee Delegate
         #original_hash: 958562e
         organizer_ids: ผู้จัดการแข่งขัน
         #original_hash: b37456c
@@ -633,8 +641,10 @@ th:
         #original_hash: 6e6a6f2
         o: อื่น ๆ
       delegate_status:
-        #original_hash: 28ec02d
-        candidate_delegate: Candidate Delegate
+        #original_hash: 621101a
+        trainee_delegate: Trainee Delegate
+        #original_hash: 9b97968
+        candidate_delegate: Junior Delegate
         #original_hash: 12ab214
         delegate: Delegate
         #original_hash: d463c23
@@ -712,8 +722,6 @@ th:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        current_password: ''
-        #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
         dob_verification: ''
@@ -735,17 +743,15 @@ th:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
-        #original_hash: 8c266ea
+        #original_hash: d5ccc15
         receive_delegate_reports: >-
-          ถ้าคุณเป็น Candidate Delegate, Senior Delegate, หรือ สมาชิกของ WRC
-          หรือ WQAC คุณจะได้รับ Delegate Reports เป็นค่าตั้งต้น หมายเหตุ:
+          ถ้าคุณเป็น Junior Delegate, Senior Delegate, หรือ สมาชิกของ WRC หรือ
+          WQAC คุณจะได้รับ Delegate Reports เป็นค่าตั้งต้น หมายเหตุ:
           การแก้ไขอาจใช้เวลาประมาณ 1 ชั่วโมงเพื่อให้มีผล
+        #original_hash: 0627e5c
+        otp_attempt: >-
+          ตรวจสอบโทรศัพท์มือถือของคุณสำหรับ one-time password หรือ ใส่ recovery
+          codes
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -767,6 +773,8 @@ th:
           <br/>กรุณากรอกเป็น <b>ภาษาอังกฤษ</b> และภาษาอื่นที่ผู้เข้าแข่งขันใช้.
         #original_hash: b4d020f
         delegate_ids: WCA Delegates สำหรับการแข่งขัน
+        #original_hash: cb9882c
+        trainee_delegate_ids: WCA Trainee Delegates สำหรับการแข่งขัน
         #original_hash: 517d376
         organizer_ids: ผู้จัดการแข่งขัน (ต้องมี account ถึงจะมีชื่อได้)
         #original_hash: cabe7fb
@@ -893,7 +901,7 @@ th:
         wca_id: ''
         #original_hash: 8723825
         dob: วันเกิดของคุณในรูปแบบ YYYY-MM-DD
-        #original_hash: c6d8a97
+        #original_hash: 49ee4af
         document: >-
           เพื่อพิสูจน์ตัวตนและวันเดือนปีเกิดที่ถูกต้องของคุณ
           คุณต้องแนบรูปภาพของเอกสารทางกฎหมายใด ๆ (บัตรประชาชน, ใบขับขี่,
@@ -901,6 +909,8 @@ th:
           ที่แสดงชื่อและวันเดือนปีเกิดของคุณอบ่างชัดเจน
           และวสมารถเข้าใจได้สำหรับผู้ใช้ภาษาอังกฤษ (หรือติดต่อ WCA Delegate
           หากคุณไม่มีเอกสารดังกล่าว)
+          ในการระบุตัวตนเราต้องการชื่อและวันเกิดของคุณเป็นอย่างน้อย
+          คุณสามารถปกปิดข้อมูลส่วนตัวอื่นๆได้
       post:
         #original_hash: 53c16eb
         body: >-
@@ -1056,6 +1066,11 @@ th:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1123,6 +1138,127 @@ th:
       new:
         #original_hash: ada2e9e
         sign_in: เข้าสู่ระบบ
+        2fa:
+          #original_hash: b274c38
+          verify: กรุณายืนยันตัวตนก่อนเข้าใช้
+          #original_hash: ec44d52
+          confirm: รหัสยืนยัน
+          #original_hash: 912516c
+          regenerated_secret: สร้างการยืนยันตัวตนผ่านสองขั้นตอนสำเร็จแล้ว
+          #original_hash: 1b0c44f
+          enabled_success: เปิดการใช้งานการยืนยันตัวตนผ่านสองขั้นตอนสำเร็จ
+          #original_hash: 9515157
+          email_auth: รับรอง email
+          #original_hash: d305ccb
+          get_by_email: รับรหัสผ่านทาง email
+          #original_hash: 4e644aa
+          get_by_email_desc: >-
+            ถ้าคุณไม่สามารถเข้าถึงโทรศัพท์หรือรหัสของคุณ
+            คุณสามารถกดปุ่มด้านล่างเพื่อรับ one-time password ด้วย email
+          #original_hash: b243ac5
+          email_sent: >-
+            รหัสผ่านส่งไปทาง email แล้ว ต้องใช้รหัสภายใน 2 นาที หากเกิน 2 นาที
+            คุณต้องของรหัสใหม่
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: คุณไม่สามารถสร้าง email ตอนนี้ได้
+            #original_hash: c0d4fc2
+            invalid_otp: การยืนยันตัวตนสองขั้นตอนผิด
+            #original_hash: c2f5347
+            not_enabled: การยืนยันตัวตนผ่านสองขั้นตอนไม่สามารถใช้ได้
+            #original_hash: 14d294b
+            unknown: เกิดข้อผิดพลาดในการส่ง email ให้คุณ กรุณาติดต่อ WST
+          otp_email:
+            #original_hash: a20e037
+            subject: one-time password ของคุณสำหรับ WCA
+            #original_hash: f82488f
+            2fa_attempt: >-
+              คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              กรุณาดูด้านล่าง
+            #original_hash: e27e540
+            disclaimer: >-
+              ถ้าคุณไม่ได้ขอรหัสยืนยันตัวตน กรุณาติดต่อ WST ด้วยการตอบกลับ email
+              นี้ คุณอาจจะเปิดเซสชั่นที่ไหนสักแห่งหรือรหัสผ่านของคุณอาจถูกบุกรุก
+          #original_hash: 8c13694
+          name: การยืนยันตัวตนสองขั้นตอน (2FA)
+          #original_hash: d28c3b6
+          support_desc_html: 'เว็บไซต์ WCA รองรับ %{two_factor_link} ในการใช้ one-time password:'
+          options:
+            #original_hash: 4f9dcb8
+            app: >-
+              สร้างโดยแอปพลิเคชันเฉพาะ 2FA บนสมาร์ทโฟนของคุณ (เช่น Authy หรือ
+              Google Authenticator เป็นต้น)
+            #original_hash: 34a7572
+            recovery: นำมาจากรหัสกู้คืนที่สร้างขึ้นเมื่อเปิดใช้งาน 2FA
+            #original_hash: eaee403
+            email: ส่งถึงคุณทางอีเมลเมื่อคุณเข้าสู่ระบบ
+          #original_hash: 7ae99ae
+          status_html: 'การยืนยันตัวตนสองขั้นตอนมีสถานะ %{status} สำหรับคุณ'
+          #original_hash: 3ea3f98
+          enabled: เปิดการใช้งาน
+          #original_hash: 07596f1
+          disabled: ปิดการใช้งาน
+          #original_hash: 5f225b0
+          enable: เปิดการใช้งาน F2P
+          #original_hash: 2e35cd9
+          disable: ปิดการใช้งาน 2FA
+          #original_hash: b2a3d7e
+          reset: Reset 2FA secret
+          #original_hash: 14b7bfd
+          reset_if_needed: >-
+            หากหนึ่งในอุปกรณ์ของคุณถูกบุกรุกหรือคุณต้องการเพิกถอนการเข้าถึงจากอุปกรณ์ของคุณคุณสามารถรีเซ็ตความลับการตรวจสอบสิทธิ์แบบสองปัจจัยด้านล่าง:
+          #original_hash: 69100a3
+          reset_warning: คุณจะต้องกำหนดค่าอุปกรณ์ 2FA ทั้งหมดใหม่อีกครั้ง
+          #original_hash: a8d11db
+          methods: Two-factor methods
+          #original_hash: 0fd248d
+          methods_description: >-
+            คุณสามารถใช้หลายวิธีในการรับรหัสผ่านครั้งเดียวเมื่อลงชื่อเข้าใช้ซึ่งจะอธิบายไว้ด้านล่าง
+          #original_hash: 4442f0e
+          dedicated_app: ใช้ two-factor application
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            WST แนะนำให้ใช้ %{authy} สำหรับอุปกรณ์ของคุณ เพื่อรับ one-time
+            password ตอนที่ลงชื่อเข้าใช้ <br/>รวมไปถึง %{google} และ
+            %{microsoft}.
+          #original_hash: f1b2ec2
+          scan_qrcode_html: >-
+            Scan QR Code ด้านล่าง เมื่อคุณได้รับ 2FA application (หรือคลิก
+            %{here} ถ้าคุณใช้โทรศัพท์มือถือ)
+          #original_hash: e7cba1a
+          backup_codes: รหัสสำรอง
+          #original_hash: fa62416
+          backup_codes_desc: >-
+            รหัสสำรองสามารถใช้แทนรหัสผ่านแบบใช้ครั้งเดียวได้ในกรณีที่คุณไม่สามารถเข้าถึงอุปกรณ์ของคุณด้วยแอปพลิเคชันการตรวจสอบสิทธิ์แบบสองปัจจัย
+            แต่ละรหัสสามารถใช้ได้ครั้งเดียวเท่านั้น อย่าลืมเก็บไว้ในที่ปลอดภัย!
+          #original_hash: 087cb72
+          no_backup_codes: คุณยังไม่ได้สร้างรหัสสำรอง คลิกปุ่มด้านล่างเพื่อสร้างรหัสสำรอง
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            คุณสร้างรหัสสำรองบางส่วนแล้ว
+            หากคุณใช้หรือทำรหัสเหล่านี้สูญหายคุณสามารถสร้างรหัสใหม่โดยใช้ปุ่มด้านล่าง
+            ระวังว่ารหัสสำรองที่มีอยู่จะถูกยกเลิกหากคุณทำเช่นนี้
+          #original_hash: 2ee4aca
+          generate_backup_codes: สร้างรหัสสำรอง
+          #original_hash: a69dd5b
+          backup_codes_warning: >-
+            รหัสสำรองจะแสดงด้านล่าง ตรวจสอบให้แน่ใจว่าได้เก็บหรือจำไว้แล้ว:
+            รหัสสำรองจะถูกเก็บไว้ในฐานข้อมูลของเราและไม่สามารถแสดงได้อีกในภายหลัง
+          #original_hash: b5e3ad8
+          email_auth_desc: คุณสามารถขอรหัสผ่านครั้งเดียวได้ทางอีเมลเมื่อคุณลงชื่อเข้าใช้
+          #original_hash: dd991ab
+          disable_section_title: ปิดการใช้งาน two-factor
+          #original_hash: 4569d81
+          disable_section_content: >-
+            WST แนะนำไม่ให้คุณปิดการใช้งานของ 2FA
+            แต่คุณสามารถทำได้โดยกดที่ปุ่มด้านล่าง
+            กรุณาจำไว้ว่าถ้าคุณเปิดการใช้งาน 2FA อีกครั้ง
+            คุณต้องตั้งค่าในอุปกรณ์ของคุณใหม่
+          #original_hash: ab1b77d
+          disabled_success: ปิดการทำงาน two-factor authentication แล้ว
+          #original_hash: c36d556
+          disabled_failed: ไม่สามารถปิดการทำงานของ 2FA ได้ กรุณาดูข้อผิดพลาดด้านล่าง
     shared:
       links:
         #original_hash: ada2e9e
@@ -1199,10 +1335,12 @@ th:
       organizations: องค์กรระดับภูมิภาค
       #original_hash: d790b40
       faq: คำถามที่พบบ่อย
+      #original_hash: cf1d2c9
+      forum: Forum
       #original_hash: 3ad28c0
       teams: 'ทีม, คณะกรรมการและสภา'
-      #original_hash: 02617c0
-      tutorial: การแนะนำการแข่งขัน
+      #original_hash: a979ffc
+      education: แหล่งข้อมูลศึกษา
       #original_hash: a34b69f
       contact: ข้อมูลติดต่อ
       #original_hash: 4fa8cc8
@@ -1287,6 +1425,8 @@ th:
       manage_app: จัดการแอปพลิเคชันของคุณ
       #original_hash: 0e8b212
       manage_auth_app: จัดการแอปพลิเคชันที่ได้รับอนุญาต
+      #original_hash: acac109
+      media_submission: Media Submission
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1309,6 +1449,8 @@ th:
         confirmation_link: ยืนยัน account ของฉัน
         #original_hash: d484f70
         activate: 'หลังจากเปิดใช้งานคุณสามารถเข้าสู่เว็บไซต์ของ World Cube Association:'
+        #original_hash: fb02586
+        login_form: แบบฟอร์มเข้าสู่ระบบ
         #original_hash: 333999b
         addendum: >-
           อีเมลนี้สร้างขึ้นโดยอัตโนมัติ หากคุณไม่ได้ลงทะเบียนในเว็บไซต์ของ World
@@ -1342,8 +1484,19 @@ th:
         header: 'WCAT ได้ประกาศ %{competition}'
         #original_hash: 0d3d10c
         announced: WCAT ได้รับรองการแข่งขันของคุณและประกาศเป็นสาธารณะแล้ว
-        #original_hash: 1c20919
-        link: กรุณาตามลิงค์เพื่อไปยังหารประกาศการแข่งขัน
+      id_claim_possibility_email:
+        #original_hash: 20e9d09
+        header: กรุณาเชื่อมต่อ WCA ID กับ account ของคุณ
+        #original_hash: 5665910
+        intro: เรียน Cuber
+        #original_hash: 61650f4
+        information_html: >-
+          คุณได้สมัครการแข่งขัน %{competition_link}
+          เราได้ทำการอัปโหลดผลการแข่งขันของการแข่งขันนี้แล้ว และได้ทำการสร้าง
+          WCA ID ให้กับผู้เข้าแข่งขันใหม่ทุกคน
+          ถ้าคุณได้เข้าร่วมการแข่งขันนี้และนี่เป็นการแข่งขันครั้งแรกของคุณ
+          กรุณาขอรับ WCA ID (เพื่อเชื่อมต่อกับ WCA Account) คุณสามารถทำได้ที่นี่
+          %{claim_link}
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'คุณได้ถูกเพิ่มเข้าไปในรายชื่อผู้จัดการแข่งขัน %{competition}'
@@ -1374,6 +1527,17 @@ th:
         more_info_html: >-
           กรูณาดูที่<a
           href=%{competition_url}>เว็บไซต์ของการแข่งขัน</a>สำหรับข้อมูลเพิ่มเติมและข้อกำหนดการแข่งขัน
+      results_presence_email:
+        #original_hash: 7ce2558
+        header: 'ผลการแข่งขันของ %{competition} ได้ทำการโพสต์แล้ว'
+        #original_hash: 150446e
+        intro_html: 'ผลการแข่งขันของคุณที่ %{competition_link} ได้ถูกโพสต์แล้ว'
+        #original_hash: 78edca3
+        information_html: 'ตรวจสอบผลการแข่งขันทั้งหมดได้ที่ %{result_link}'
+        #original_hash: a585fca
+        more_info_html: 'คุณสามารถจัดการการตั้งค่าสำหรับ email ได้ที่ %{preferences_link}'
+        #original_hash: 60d1a54
+        regards_html: 'ด้วยความนับถือ <br/>The WCA Results Team ในนามของ ${managers}'
     claim_wca_id:
       #original_hash: f28bf87
       title: ขอรับ WCA ID
@@ -1421,8 +1585,10 @@ th:
       approve: ยอมรับ
       #original_hash: 85de4b8
       unconfirmed_email: 'email (%{email}) ของ account นี้ยังไม่ได้รับการยืนยัน'
-      #original_hash: c03b949
-      confirm_new_email: การเปลี่ยน email ของคุณจะต้องยืนยัน email ใหม่
+      #original_hash: 7069007
+      confirm_new_email: >-
+        การเปลี่ยน email ของคุณจะต้องยืนยัน email ใหม่
+        เพื่อให้การเปลี่ยนแปลงมีผล
       #original_hash: 8a770cf
       pending_mail_confirmation: 'account นี้รอการยืนยัน email ใหม่ %{email}'
       #original_hash: 0340b0b
@@ -1478,7 +1644,7 @@ th:
           ต้องสามารถแยกแยะได้ชัดเจนว่าคนไหนคือคุณ
         #original_hash: 4083c00
         '4': หัวของคุณต้องเห็นชัดเจน แต่หน้าไม่จำเป็นต้องเต็มใบหน้า
-        #original_hash: ebbbf8a
+        #original_hash: 7c0aab3
         '5': รุปแทนตัวของคุณต้องไม่มีตัวอักษรนอกเหนือจากที่ปรากฎในภาพพื้นหลัง
         #original_hash: cc5f23a
         '6': รูปแทนตัวจะต้องหันในทิศทางที่ถูกต้อง
@@ -1501,6 +1667,21 @@ th:
             รูปย่อของรูปแทนตัวต้องเป็นส่วนของรูปแทนตัว
             และใช้เพื่อแทนรูปแทนตัวฉบับเต็ม รูปย่อต้องปรับแต่ง
             เพิ่อที่จะแสดงคุณเพียงคนเดียวและต้องมีใบหน้าของคุณ
+      sensitive:
+        #original_hash: 267ac87
+        info: >-
+          ส่วนนี้ช่วยให้คุณสามารถแก้ไขข้อมูลที่ละเอียดอ่อนได้.
+          โปรดยืนยันตัวตนของคุณด้านล่างเพื่อทำการแก้ไข
+        #original_hash: f19af51
+        success: ยืนยันตัวตนของคุณสำเร็จแล้ว
+        #original_hash: 52ebf9c
+        failure: ไม่สามารถยืนยันตัวตนของคุณได้
+        #original_hash: 4324c73
+        confirm_proceed: ยืนยันและดำเนินการต่อ
+        #original_hash: d395f1f
+        identity_error: >-
+          ไม่สามารถแก้ไขข้อมูลของคุณได้
+          โปรดยืนยันตัวตนของคุณด้านล่างเพื่อลองอีกครั้ง
     errors:
       #original_hash: 094b763
       not_found: ไม่พบ
@@ -1511,8 +1692,11 @@ th:
         ไม่พบในระบบข้อมูลของเรา ถ้าึุณมั่นใจว่าให้วันเกิดในรูปแบบที่ถูกต้อง
         (YYYY-MM-DD) กรุณาติดต่อทีม WCA Result โดย<a
         href="%{dob_form_path}">แบบฟอร์มเฉพาะนี้</a>
-      #original_hash: 71b46b4
-      unique: 'ได้ถูกใช้โดย "%{used_name}" ด้วย %{used_email}'
+      #original_hash: c3ce070
+      unique_html: >-
+        ได้ถูกใช้กับ %{used_name} ด้วย %{used_email} หากต้องการแก้ไขให้กด <a
+        href="%{used_edit_path}" target='_blank'>แก้ไขบัญชีนั้น</a> และยกเลิก
+        WCA ID
       #original_hash: 26f70ed
       dob_past: ต้องเป็นอดีต
       #original_hash: b320913
@@ -1606,6 +1790,8 @@ th:
         คุณถูกแบน ถ้าคุณเชื่อว่านี่คือข้อผิดพลาด กรุณาติดต่อ <a
         href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>
+      #original_hash: 8d07e7f
+      undelete_banned: เป็นผู้เข้าแข่งขันที่ถูกแบนและไม่สามารถยกเลิกการลบได้
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1749,6 +1935,8 @@ th:
       payment_requested_on: 'ชำระเงินตามที่ร้องขอ: %{date}'
       #original_hash: b25928c
       total: ทั้งหมด
+      #original_hash: df036fe
+      n_events: จำนวน Events
     new_registration:
       #original_hash: 8b9f726
       title: 'สมัครสำหรับ %{comp}'
@@ -1949,10 +2137,26 @@ th:
         รอบและตารางการแข่งขันที่คุณสร้างมาต้องมีทุกรอบของการแข่งขันก่อนที่จะยืนยัน
       #original_hash: e390250
       create_success: สร้างการแข่งขันใหม่สำเร็จแล้ว
+      #original_hash: ba067f0
+      not_announced: การแข่งขันนี้ปรากฏต่อสาธารณชน แต่ยังไม่ได้ประกาศ
+      #original_hash: ab61991
+      announced: ประกาศผลการแข่งขันสำเร็จแล้ว!
+      #original_hash: 8ad5e67
+      results_not_posted: ผลของการแข่งขันนี้สามารถมองเห็นได้ แต่ยังไม่ได้ถูกโพสต์
+      #original_hash: e205d73
+      results_already_posted: ผลการแข่งขันได้รับการโพสต์แล้ว
+      #original_hash: 376f461
+      results_posted: โพสต์ผลการแข่งขันสำเร็จ!
       #original_hash: afe3a23
       results_preview_alert: คุณกำลังดูผลการแข่งขันที่ยังไม่ได้แสดง
       #original_hash: 07de612
       upload_results: การแข่งขันนี้สิ้นสุดแล้ว เราจะแสดงผลการแข่งขันให้เร็วที่สุด!
+      #original_hash: 68dd436
+      computing_auxiliary_data: โปรดรอจนกว่าจะมีการคำนวณข้อมูลเสริม
+      #original_hash: 8ebe272
+      no_results: ไม่มีผลการแข่งขัน
+      #original_hash: 79e8b95
+      no_main_event_results: 'ไม่มีผลการแข่งขันของ event หลัก (%{event_name}).'
       #original_hash: a0168ee
       in_progress: >-
         การแข่งขันนี้กำลังดำเนินการอยู่ กลับมาหลังวันที่ %{date}
@@ -2032,6 +2236,8 @@ th:
       information: ข้อมูล
       #original_hash: c5497bc
       events: ประเภท
+      #original_hash: 3c24bd2
+      main_event: Main event
       #original_hash: ff722f0
       registration_requirements: ข้อกำหนดการสมัครการแข่งขัน
       #original_hash: 74d0bf1
@@ -2056,7 +2262,7 @@ th:
       use_stripe_link_html: 'การชำระค่าสมัครทำได้โดยผ่าน Stripe %{here} เมิ่อสมัครการแข่งขันแล้ว'
       #original_hash: cea0eb4
       use_stripe_below_html: การชำระค่าสมัครชำระผ่านทาง Stripe ด้านล่างหลังจากทำการสมัครแล้ว
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: >-
         ถ้าการสมัครของคุณถูกยกเลิกก่อน %{limit_date_and_time}
         คุณจะได้รับค่าสมัครคืน %{refund_policy_percent}
@@ -2095,6 +2301,49 @@ th:
         range_past_html: >-
           การสมัครออนไลน์เปิดตั้งแต่ %{start_date_and_time} และปิด
           %{end_date_and_time}
+      #original_hash: 1f9c9c4
+      highlights: Highlights
+      #original_hash: 945f917
+      click_to_display_highlights_html: 'กด %{link_here} เพื่อแสดงไฮไลท์ของการแข่งขัน'
+      #original_hash: dc5c597
+      hide_highlights: ซ่อน highlights
+      #original_hash: f691bf2
+      result: ผลการแข่งขัน
+      #original_hash: acab754
+      single: การแก้โจทย์เวลาเดี่ยว
+      #original_hash: e78d7c2
+      average: เวลาเฉลี่ย
+      #original_hash: 083c83e
+      mean: a mean
+      #original_hash: 22bee3a
+      result_sentence: 'with %{a_win_by_word} of %{result}'
+      #original_hash: 6c3b236
+      winner: '%{winner} ชนะในการแข่งขัน %{result_sentence} ในประเภท %{event_name}'
+      #original_hash: 4daa7df
+      first_runner_up: '%{first_runner_up} ได้รองชนะเลิศอันดับหนึ่ง (%{first_runner_up_result})'
+      #original_hash: d96b040
+      and: และ
+      #original_hash: e9e9d2e
+      second_runner_up: '%{second_runner_up} ได้รองชนะเลิศอันดับสอง (%{second_runner_up_result}).'
+      records:
+        #original_hash: 0658e11
+        wr: สถิติโลก
+        #original_hash: 9d940bb
+        afr: สถิติทวีปแอฟริกา
+        #original_hash: 56c95a8
+        asr: สถิติทวีปเอเชีย
+        #original_hash: 4cf3c13
+        ocr: สถิติทวีปโอเชียเนีย
+        #original_hash: 1b9111e
+        er: สถิติทวีปยุโรป
+        #original_hash: d26cf99
+        nar: สถิติทวีปอเมริกาเหนือ
+        #original_hash: 270c007
+        sar: สถิติทวีปอเมริกาใต้
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} %{result} (เวลาเดี่ยว)'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} %{result} (average)'
       #original_hash: 8eda7ac
       bookmark: บุ๊คมาร์คการแข่งขันนี้
       #original_hash: 4dfea97
@@ -2128,6 +2377,10 @@ th:
       past: อดีต
       #original_hash: 081ae3f
       custom: กำหนดเอง
+      #original_hash: 73cf180
+      by_announcement: By announcement
+      #original_hash: b3946b2
+      sort_by_announcement: เรียงตามการประกาศ
       #original_hash: 3f66052
       from_date: จาก
       #original_hash: ae79ea1
@@ -2149,6 +2402,8 @@ th:
         upcoming: การแข่งขันที่จะเกิดขึ้น
         #original_hash: 8b57693
         custom: การแข่งขันในช่วงเวลาที่เลือก
+        #original_hash: 0933739
+        by_announcement: การแข่งขันเรียงตามการประกาศ การแข่งขันที่ใหม่กว่าอยู่ด้านบน
       #original_hash: 6684214
       no_access: คุณไม่มีสิทธิ์เข้าถึงหน้านี้!
       tooltips:
@@ -2161,6 +2416,8 @@ th:
           posted: ผลการแข่งขันได้ถูกโพสต์แล้ว
           #original_hash: 89bcc37
           starts_in: 'เริ่มใน %{days} วัน'
+          #original_hash: 97b061a
+          announced_on: 'ประกาศเมื่อ %{announcement_date}'
         #original_hash: ccd2db9
         search: ชื่อหรือเมือง
         #original_hash: 3bc8082
@@ -2219,10 +2476,6 @@ th:
         display](mailto:some@email.com)
       #original_hash: c5497bc
       events: ประเภท
-      #original_hash: 09b819f
-      deprecated_events: >-
-        การแข่งขันนี้มีประเภทการแข่งขันที่ไม่เป็นทางการอีกต่อไปแล้ว
-        เราไม่ให้แก้ไขมัน
       #original_hash: cafc153
       public_and_locked_html: >-
         การแข่งขันนี้แสดงต่อสาธารณะและไม่ให้แก้ไขแล้ว ถ้าคุณต้องการแก้ไข
@@ -2233,10 +2486,10 @@ th:
         เพื่อให้ปรากฎต่อสาธารณะ
       #original_hash: e94cba8
       is_visible: การแข่งขันนี้ปรากฎต่อสาธารณะ การแก้ไขจะแสดงเป็นสาธารณะ
-      #original_hash: f99b3f7
+      #original_hash: 1039850
       pending_confirmation_html: >-
-        เติมลงทุกช่องและคลิกยืนยันเมื่อคุณพร้อมให้ %{contact}
-        ยินยันการแข่งขันนี้
+        เติมลงทุกช่องและให้ Delegate คลิกยืนยันเมื่อคุณพร้อมให้ %{contact}
+        ยืนยันการแข่งขันนี้
       #original_hash: 8966fd0
       submit_create_value: สร้างการแข่งขัน
       #original_hash: 40b0dfd
@@ -2359,10 +2612,16 @@ th:
       competitors: ผู้เข้าแข่งขัน
     #original_hash: 06b01c4
     announcements: ประกาศ
-    #original_hash: 5b9523f
-    upload_results: อัพโหลดผลการแข่งขัน
-    #original_hash: 47dfd90
+    #original_hash: a2b80b0
     post_announcement: ประกาศการแข่งขัน
+    #original_hash: b462eac
+    announced_by_html: 'ประกาศโดย %{announcer_name} เมื่อ %{date_time}'
+    #original_hash: 9a42672
+    upload_results: อัพโหลดผลการแข่งขัน
+    #original_hash: 01de5ee
+    post_results: โพสต์ผลการแข่งขัน
+    #original_hash: b6513f1
+    results_posted_by_html: 'โพสต์โดย %{poster_name} เมื่อ %{date_time}'
     show:
       #original_hash: b0fe391
       general_info: ข้อมูลทั่วไป
@@ -2717,11 +2976,11 @@ th:
       title: ฟอร์มการขอเปลี่ยนวันเกิด
       #original_hash: 8a4ced5
       description: ใช้ฟอร์มนี้ถ้าวันเกิดของคุณที่อยู่ในฐานข้อมูลไม่ตรงกับความเป็นจริง
-      #original_hash: 563d056
+      #original_hash: 0ac13b9
       important_message_html: >-
         <span class="text-danger">สำคัญ</span>: แนบรูปของ <u>เอกสารทางกฎหมาย</u>
         (บัตรประจำตัวประชาชน, ใบขับขี่, หนังสือเดินทาง ...)
-        ที่แสดงชื่อและวันเกิดของคุณ
+        ที่แสดงชื่อและวันเกิดของคุณ คุณสามารถปกปิดข้อมูลส่วนตัวอื่นๆได้
       #original_hash: 19c17ec
       submit: ขอเปลี่ยน
     messages:
@@ -2962,13 +3221,16 @@ th:
     spirit_footer: จิตวิญญาณของ WCA
     #original_hash: c1781ee
     our_goals_title: เป้าหมายของเรา
-    #original_hash: 1ca8ac4
+    #original_hash: caf6bf2
     our_goals_content_html: >-
       <p>สมาคมลูกบากศ์โลก
       ต้องการที่จะนำโอกาสในการเป็นสมาชิกชุมชนและความเป็นผู้นำให้กับคนหนุ่มสาวทั่วโลกด้วยการเพิ่มการเข้าถึงการแข่งขัน
       'twisty puzzle'
       เราเชื่อว่าประสบการณ์ในการแข่งขันและในชุมชนของเราสร้างโอกาสการเติบโตสำหรับคนหนุ่มสาวที่เกี่ยวข้องและการแนะนำกิจกรรมนี้ให้กับกลุ่มคนใหม่
-      ๆ ทำให้ชุมชนโดยรวมของเราแข็งแกร่งขึ้น</p>
+      ๆ ทำให้ชุมชนโดยรวมของเราแข็งแกร่งขึ้น
+      เอกสารแสดงวิสัยทัศน์และกลยุทธ์ของคณะกรรมการ WCA สามารถอ่านได้ <a
+      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">
+      ที่นี่ </a></p>
     #original_hash: f64ccc7
     whats_next_title: ก้าวต่อไปของ WCA
     #original_hash: a08c67f
@@ -3170,21 +3432,24 @@ th:
       probation:
         #original_hash: 1dd6e3b
         name: Delegate ที่ถูกคุมประพฤติ
-      #original_hash: 3d5b64b
+      #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA Delegate</strong>
         เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ WCA หน้าที่หลักของ Delegate
         คือดูแลการแข่งขันในนามของ WCA. WCA Delegate
         รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA
         ทั้งหมดดำเนินการตามภารกิจวิญญาณและกติกาของ WCA. WCA ได้แยกบทบาทดังนี้
-        <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates </strong>
-        และ<strong> WCA Candidate Delegates</strong>%{see_link}.</p>
+        <strong>Senior Delegates</strong>,  <strong>Regional Delegates</strong>,
+        <strong>Full Delegates </strong>, <strong>Junior Delegates</strong>, และ
+        <strong>Trainee Delegates</strong>%{see_link}.</p>
         <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates
         ยังมีหน้าที่ในการจัดการ WCA Delegates
         ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
         <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น WCA Candidate Delegates ก่อน
         หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน WCA
-        ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates.</p>
+        ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates.</p><p>Trainee
+        Delegates จะได้รับการฝึกสอนเพื่อที่จะเป็น WCA Delegate
+        และสามารถดูแลได้แค่การแข่งขันที่มี WCA Delegate คนอื่นด้วยเท่านั้น</p>
       #original_hash: 27d18ac
       see_link_html: '(ดู%{link})'
       #original_hash: 5b01fcc
@@ -3206,6 +3471,17 @@ th:
     policies: WCA Policies
     #original_hash: 91ac873
     codeofethics: Code of Ethics
+  education:
+    #original_hash: 41701c2
+    title: เอกสารการศึกษาของ WCA
+    #original_hash: aa562a7
+    description: >-
+      WQAC และ WMT ได้ทำเผยแพร่เอกสารหลายฉบับ
+      คุณสามารถดาวน์โหลดมันได้ที่ด้านล่าง
+    #original_hash: d0a3812
+    competitor_tutorial: แนะนำผู้เข้าแข่งขัน
+    #original_hash: 815938f
+    competition_material: 'อุปกรณ์ในการแข่งขัน (ใบประกาศ, cube, ที่ปิด, ...)'
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegates
@@ -3396,35 +3672,105 @@ th:
         สภานี้มีหน้าที่รับผิดชอบในการสร้างและบำรุงรักษาการสื่อสารทวิภาคีระหว่างชุมชน
         WCA และเจ้าหน้าที่ WCA
   score_tools:
-    #original_hash: ea9d41d
-    title: WCA Score Taking tools
-    paragraphs:
-      #original_hash: 305f7f8
-      '1': >-
-        WCA แนะนำให้ใช้ <a href="https://live.worldcubeassociation.org">WCA
-        Live</a> ก่อนและระหว่างการแข่งขัน WCA Live
-        เป็นระบบออนไลน์ที่มีการให้คะแนนแบบสดและคุณสมบัติที่น่าสนใจมากมายเช่นการพิมพ์แผ่นคะแนนและระบบป้อนข้อมูลผู้ใช้หลายคนที่มีประสิทธิภาพมาก
-      #original_hash: 0867b38
-      '2': >-
-        ใบคะแนนและโจทย์ควรถูกจัดการและตรวจสอบข้อผิดพลาดก่อนที่จะส่งให้ WCA
-        Results Team คุณสามารถใช้ <a
-        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
-        Matcher</a> ซึ่งเป็น Open Source สร้างโดย Philippe Virouleau
-      #original_hash: 975e59b
-      '3': >-
-        คุณสามารถดาวน์โหลดใบคะแนนการแข่งขัน WCA เวอร์ชันล่าสุดได้ที่นี่ <br /><a
-        href="/files/results.xls" target="_blank">WCA competition Score
-        sheet</a>.
-      #original_hash: c576675
-      '4': >-
-        คุณอาจต้องการใช้ <a
-        href="https://groupifier.jonatanklosko.github.io/groupifiercom">Groupifier</a>
-        เพื่อจัดเตรียมกลุ่มผู้เข้าแข่งขัน
-        มันเป็นเครื่องมือที่มีจุดมุ่งหมายที่จะทำสิ่งนี้ให้คุณ
-        คุณสมบัติหลักที่คุณจะได้พบ: การเรียงลำดับผู้เข้าแข่งขันตามการจัดอันดับ,
-        กำหนดหน้าที่ (กรรมการ, ผู้ตั้งโจทย์),
-        การตัดสินใจว่าจะใช้ผู้ตั้งโจทย์กี่คน, สร้างใบคะแนน, ใบส่วนตัวและสรุป
-        เป็น open source ที่สร้างโดย Jonatan Kłosko
+    #original_hash: 4fc2133
+    title: Software tools สำหรับการแข่งขัน WCA
+    #original_hash: 6d2fe37
+    wca_icon_text: Developed and maintained by the WST
+    intro:
+      #original_hash: 0c5fab5
+      desc: >-
+        หน้านี้เป็นรายการเครื่องมือที่ไม่ละเอียดซึ่งทราบว่าใช้เพื่อช่วยในการจัดการแข่งขัน
+        WCA
+      #original_hash: 479b542
+      disclaimer: >-
+        เครื่องมือบางอย่างในหน้านั้นได้รับการดูแลโดย WST: ไม่ต้องกังวล!
+        เราไม่มีกำลังคนในการจัดการซอฟต์แวร์ทั้งหมดที่เกี่ยวข้องกับ WCA :)
+      #original_hash: 80f97b9
+      used: >-
+        โปรแกรมทั้งหมดในรายการนี้ถูกใช้ระหว่างการแข่งขัน WCA
+        จริงและรวมเข้ากับเว็บไซต์ WCA: พวกเขาให้คุณลงชื่อเข้าใช้ด้วยบัญชี WCA
+        ของคุณเพื่อที่จะสามารถนำเข้า (และปรับปรุงบางครั้ง)
+        ข้อมูลการแข่งขันที่จะเกิดขึ้น ผู้ดูแลแต่ละคนจะเขียนอย่างชัดเจน
+    before:
+      #original_hash: 9850344
+      title: ก่อนการแข่งขัน
+      #original_hash: 576e2f4
+      desc: >-
+        จัดการการลงทะเบียนผู้เข้าแข่งขันสามารถทำได้โดยตรงที่เว็บไซต์ WCA
+        เนื่องจากการจัดการกลุ่มและ staff
+        ด้วยตนเองอาจใช้เวลานานคุณอาจต้องการพิจารณาใช้หนึ่งในเครื่องมือด้านล่าง
+    during:
+      #original_hash: 9934200
+      title: ระหว่างการแข่งขัน
+      #original_hash: 2b0a6f6
+      desc: >-
+        คุณจะพบเครื่องมือที่จะช่วให้คุณจัดการผลลัพธ์ของการแข่งขันในขณะที่การแข่งขันดำเนินอยู่
+    after:
+      #original_hash: d81b949
+      title: หลังจบการแข่งขัน
+      #original_hash: b898460
+      desc: >-
+        ในขณะที่การตรวจสอบผลลัพธ์เกิดขึ้นที่นั่นบนเว็บไซต์
+        คุณจะต้องใช้เครื่องมือบางอย่างในการกำหนด scramble ที่สร้างโดย TNoodle
+        ไปยังผลลัพธ์จริงที่ส่งไปยังเว็บไซต์ WCA
+    tools:
+      age:
+        #original_hash: 4aaae5b
+        title: AGE
+        #original_hash: 2e4832d
+        description: >-
+          เครื่องมือสำหรับการสร้างและแก้ไข กลุ่ม / งานที่มอบหมาย
+          สำหรับการแข่งขัน WCA
+      certificates:
+        #original_hash: b3e4eb0
+        title: ประกาศนียบัตร
+        #original_hash: f1a0731
+        description: พิมพ์ประกาศนียบัตรสำหรับการแข่งขัน WCA โดยใช้ WCA Live
+      groupifier:
+        #original_hash: 8f55355
+        title: Groupifier
+        #original_hash: 24d4736
+        description: >-
+          เครื่องมือการจัดการงานและกลุ่มสำหรับผู้จัดการแข่งขัน WCA
+          คุณสมบัติหลักที่คุณจะได้พบ: การเรียงลำดับผู้เข้าแข่งขันตามการอันดับ,
+          การมอบหมายงาน (judging, scrambling) ตัดสินใจว่าต้องใช้ scrambles กี่คน
+          สร้างแผ่นคะแนน, แผ่นส่วนตัวและสรุป ...
+          ตรวจสอบเว็บไซต์เพื่อหาข้อมูลเพิ่มเติม
+      scorecards:
+        #original_hash: aa1b64d
+        title: ใบคะแนน
+        #original_hash: 2b8e373
+        description: พิมพ์ใบคะแนนสำหรับการแข่งขัน WCA โดยใช้ WCA Live
+      tnoodle:
+        #original_hash: ba336a1
+        title: TNoodle (Scrambles)
+        #original_hash: 0a38b22
+        description: >-
+          TNoodle เป็นโปรแกรมการ scramble อย่างเป็นทางการซึ่งใช้สำหรับการแข่งขัน
+          WCA. โดยทั่วไปจะถูกใช้โดย WCA Delegates ก่อนการแข่งขัน WCA.
+          แต่ส่วนติดต่อผู้ใช้ยังอนุญาตให้ทุกคนสร้าง scrambles ใด ๆ สำหรับกิจกรรม
+          WCA ทั้งหมด
+      live:
+        #original_hash: c66444f
+        title: WCA Live
+        #original_hash: f122015
+        description: แพลตฟอร์มสำหรับการแข่งขัน WCA และเผยแพร่ผลการแข่งขันแบบสดไปทั่วโลกโลก
+      nightmare:
+        #original_hash: eebde3b
+        title: Results spreadsheet
+        #original_hash: 466f4c2
+        description: >-
+          บางครั้งเหตุการณ์ไม่คาดฝันอาจจะเกิดขึ้น ...
+          หากคุณเข้าถึงอินเตอร์เน็ตไม่ได้ คุณจะต้องใช้ spreadsheet นี้
+      matcher:
+        #original_hash: cc59bc9
+        title: Scrambles Matcher
+        #original_hash: a352bd1
+        description: >-
+          สามารถใช้ในจับคู่ scrambles ที่สร้างโดย TNoodle กับผลการแข่งขัน
+          นำเข้าผลการแข่งขันจากเว็บไซต์ WCA (เมื่อใช้ WCA Live), spreadsheet
+          หรือไฟล์ WCIF. นำเข้า scrambles จากไฟล์ json ของ TNoodle
+          หนึ่งไฟล์ขึ้นไป. ส่งออกผลลัพธ์เป็นรูปแบบที่เหมาะสมสำหรับการส่ง WCA
   logo:
     #original_hash: c72c969
     title: WCA Logo
@@ -3613,6 +3959,11 @@ th:
         กติกาของ WCA มีส่วนเสริมคือ<a
         href="/regulations/guidelines.html">แนวทางของ WCA</a>
         ซึ่งมีคำอธิบายเพิ่มเติม
+      #original_hash: c8e1783
+      content3_html: >-
+        การตัดสินใจเกี่ยวกับ Incident
+        ที่สำคัญที่เกิดขึ้นในการแข่งขันและถูกแก้ไขโดย WCA Regulations Committee
+        สามารถหาได้ที่ <a href="/incidents">Incidents Log</a>
     panel2:
       #original_hash: 8ad8302
       title: การแปล
@@ -3885,3 +4236,93 @@ th:
       confirm_accept: คุณแน่ใจหรือไม่ว่าต้องการยอมรับสื่อนี้?
       #original_hash: 5301648
       edit: แก้ไข
+  media_and_instagram:
+    #original_hash: 1e9793e
+    page_title: การส่ง Media และ Instagram
+    general_media_submission:
+      #original_hash: 2b4c8c8
+      title: การส่ง Media ทั่วไป
+      #original_hash: 670a1a8
+      body_html: >-
+        WCA แบ่งปันบทความและภาพจากการแข่งขันที่จัดทำโดยชุมชนใน <a href="/media">
+        หน้าสื่อ </a> ของเรา หากคุณมีสิ่งที่คุณต้องการแบ่งปัน โปรดกรอก <a
+        href="/media/new">แบบฟอร์มการส่งสื่อทั่วไป</a> ของเรา!
+    instagram_submission:
+      #original_hash: e01c612
+      title: การส่ง Instagram
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        คุณอาจทราบว่า WCA มี <a
+        href="https://www.instagram.com/thewcaofficial/">Instagram</a>!
+        เพื่อแสดงสังคม cubing เราโพสต์เนื้อหาที่ส่งถึงเราโดย cubers จากทั่วโลก
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        หากคุณมีภาพถ่ายหรือวิดีโอคุณภาพสูงที่คุณต้องการให้เราโพสต์
+        โปรดคลิกที่ปุ่มด้านล่างและกรอกแบบฟอร์ม! ในการโพสต์เนื้อหาของคุณ
+        คุณต้องเป็นเจ้าของและต้องให้สิทธิ์ WCA ในการโพสต์
+        เนื่องจากมีการส่งจำนวนมากเราจึงไม่สามารถโพสต์ทุกสิ่ง
+        แต่นี่คือเคล็ดลับบางประการเพื่อให้เนื้อหาของคุณถูกโพสต์:
+      #original_hash: cf5c955
+      photo_quality: >-
+        ตรวจสอบให้แน่ใจว่าคุณภาพของภาพถ่าย / วิดีโอ มีคุณภาพดี
+        ไม่จำเป็นต้องถ่ายอย่างมืออาชีพ แต่คุณภาพไม่ควรแย่จนเกินไป
+      #original_hash: 0742378
+      photo_interest: >-
+        พยายามทำให้เนื้อหาของคุณน่าสนใจสำหรับผู้ชมทั่วไป
+        เนื้อหาที่น่าสนใจสำหรับคนไม่กี่คนเท่านั้นไม่ได้อยู่ที่นั้น
+      #original_hash: 497bc27
+      wca_related: >-
+        โพสต์รูปภาพและวิดีโอที่เกี่ยวข้องกับ WCA
+        เพราะนี่คือสิ่งที่บัญชีของเรามีอยู่! เราชอบที่จะเห็น cuber
+        มีความสนุกสนาน!
+      #original_hash: af882f2
+      submit_instagram_content: ส่งเนื้อหา Instagram
+    instagram_hosting:
+      #original_hash: 5156783
+      title: เจ้าของ Instagram
+      #original_hash: 541106b
+      paragraph1_html: >-
+        บางครั้ง เรายอมให้สมาชิกบางคนมาถ่ายทอดสดผ่านทาง story ที่ Instagram ของ
+        WCA ในการแข่งขันที่พวกเขาเข้าแข่งขัน ถ้าคุณสนใจ
+        กรุณาคลิกปุ่มและกรอกฟอร์มด้านล่าง ทีมการสื่อสารของ WCA
+        จะติดต่อกลับไปหาคุณเมื่อได้รับข้อมูลของคุณและคุณได้รับการยอมรับ
+        ถ้าคุณมีข้อสงสัยสามารถติดต่อได้ <a
+        href="https://www.worldcubeassociation.org/contact/website">ที่นี่</a>
+      #original_hash: aca6c32
+      paragraph2: >-
+        เป้าหมายของเราคือการแบ่งปันด้านส่วนตัวเล็กน้อยของทุก cuber
+        และทุกการแข่งขัน
+        นี่ไม่น่าจะเป็นภาระอย่างใหญ่หลวงในช่วงสุดสัปดาห์และแน่นอนเราต้องการให้คุณสนุกกับการแข่งขันก่อนแล้วจึงจะสามารถแบ่งปันได้
+      #original_hash: af023ed
+      paragraph3: 'บทบาทของโฮสต์สามารถสรุปได้ดังนี้:'
+      #original_hash: 21efafe
+      short_intro: ทำการแนะนำสั้น ๆ พูดคุยเกี่ยวกับตัวคุณและการแข่งขัน
+      #original_hash: a053b5a
+      venue_feel: >-
+        แสดงคลิปบางส่วนเพื่อให้รู้สึกถึงสถานที่และผู้คน
+        นี่อาจเป็นเพียงภาพจากพื้นที่ผู้เข้าแข่งขันและพื้นที่แก้โจทย์
+      #original_hash: d17fb2f
+      people_solving: >-
+        พยายามถ่ายผู้เข้าแข่งขันแก้โจทย์
+        (หากเป็นผู้เข้าแข่งขันที่แก้โจทย์เร็วจะดีมาก)
+      #original_hash: 76d2358
+      mini_interviews: >-
+        คุณสามารถลองสัมภาษณ์คนที่มาร่วมงาน (ผู้จัดงาน, delegate ฯลฯ ... )
+        โดยบอกว่าพวกเขารู้สึกอย่างไรกับการแข่งขันนี้
+      #original_hash: 6003b20
+      pictures_too: คุณสามารถส่งรูปภาพด้วยก็ได้ ไม่จำเป็นต้องเป็น vdo เสมอไป
+      #original_hash: 8813619
+      paragraph4: >-
+        การสื่อสารของเราตลอดสุดสัปดาห์มักจะผ่านกลุ่ม WhatsApp
+        กรุณาแน่ใจว่าคุณคุ้นเคยกับแพลตฟอร์มการส่งข้อความแบบนี้หรือแจ้งให้เราทราบหากคุณไม่สามารถใช้งานได้เพื่อที่เราจะได้จัดทำแผนอื่น
+        ๆ
+      #original_hash: 38191c1
+      apply_to_host: สมัครเป็น host
+    other_suggestions:
+      #original_hash: 730873b
+      title: ข้อเสนอแนะอื่น ๆ
+      #original_hash: aa7ab5c
+      body_html: >-
+        คุณมีคำแนะนำอื่น ๆ สำหรับ Instagram หรือเนื้อหาโซเชียลมีเดียอื่น ๆ
+        หรือไม่? <a
+        href="https://www.worldcubeassociation.org/contact/website">แจ้งให้เราทราบ</a>!
