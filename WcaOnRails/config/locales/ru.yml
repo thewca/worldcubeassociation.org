@@ -21,7 +21,7 @@ ru:
     #original_hash: 3ad2dd8
     KN: Сент-Китс и Невис
     #original_hash: 5c34abb
-    KP: Корейская Народная Демократическая Республика
+    KP: Корейская Народно-Демократическая Республика
     #original_hash: 4430b22
     KR: Республика Корея
     #original_hash: 673b1cf
@@ -1422,8 +1422,8 @@ ru:
       forum: Форум
       #original_hash: 3ad28c0
       teams: 'Команды, Комитеты и Консультативный Совет'
-      #original_hash: 02617c0
-      tutorial: Руководство для участников
+      #original_hash: a979ffc
+      education: Обучающие ресурсы
       #original_hash: a34b69f
       contact: Контактная информация
       #original_hash: 4fa8cc8
@@ -1738,8 +1738,10 @@ ru:
           них вы.
         #original_hash: 4083c00
         '4': 'Ваша голова, но необязательно всё лицо, должна быть видна.'
-        #original_hash: ebbbf8a
-        '5': На аватарке не должно быть добавленных надписей.
+        #original_hash: 7c0aab3
+        '5': >-
+          На аватарке не должно быть добавленных надписей или неестественных
+          фильтров, включая границы.
         #original_hash: cc5f23a
         '6': Аватарка должна быть правильно ориентирована.
         #original_hash: 1a18831
@@ -3658,6 +3660,17 @@ ru:
     policies: WCA Политики
     #original_hash: 91ac873
     codeofethics: Кодекс этики
+  education:
+    #original_hash: 41701c2
+    title: Обучающие документы WCA
+    #original_hash: aa562a7
+    description: >-
+      WQAC и WMT опубликовали несколько документов для сообщества, вы можете
+      скачать их ниже.
+    #original_hash: d0a3812
+    competitor_tutorial: Руководство участника
+    #original_hash: 815938f
+    competition_material: 'Материалы для соревнований (сертификаты, крышки для кубов и т.д.)'
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Делегаты
