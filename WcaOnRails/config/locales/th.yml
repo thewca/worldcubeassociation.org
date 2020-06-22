@@ -1174,7 +1174,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
