@@ -1275,9 +1275,9 @@ en:
       mean: "a mean"
       result_sentence: "with %{a_win_by_word} of %{result}"
       winner: "%{winner} won %{result_sentence} in the %{event_name} event."
-      first_runner_up: " %{first_runner_up} finished second (%{first_runner_up_result})"
-      and: " and"
-      second_runner_up: " %{second_runner_up} finished third (%{second_runner_up_result})."
+      first_runner_up: "%{first_runner_up} finished second (%{first_runner_up_result})"
+      and: "and"
+      second_runner_up: "%{second_runner_up} finished third (%{second_runner_up_result})."
       records:
         wr: "World records"
         afr: "African records"
