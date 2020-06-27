@@ -669,6 +669,7 @@ module DatabaseDumper
           reset_password_token
           sign_in_count
           unconfirmed_email
+          session_validity_token
         ),
         fake_values: {
           "dob" => "'1954-12-04'",
