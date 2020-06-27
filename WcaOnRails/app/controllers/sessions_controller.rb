@@ -32,6 +32,17 @@ class SessionsController < Devise::SessionsController
     end
   end
 
+  def destroy_other
+    # Override old validity token with a new one.
+    # This way we invalidate all other sessions, while maintaining the current one.
+    new_token = Devise.friendly_token
+    current_user.update_attribute(:session_validity_token, new_token)
+    warden.raw_session["validity_token"] = new_token
+
+    flash[:success] = I18n.t("devise.sessions.destroy_other.success")
+    redirect_to root_url
+  end
+
   private
 
   def two_factor_enabled?

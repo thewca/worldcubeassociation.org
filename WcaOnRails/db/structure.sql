@@ -1335,6 +1335,7 @@ CREATE TABLE `users` (
   `consumed_timestep` int(11) DEFAULT NULL,
   `otp_required_for_login` tinyint(1) DEFAULT '0',
   `otp_backup_codes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `session_validity_token` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1652,4 +1653,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20200502095048'),
 ('20200522095030'),
 ('20200522125145'),
-('20200607140007');
+('20200607140007'),
+('20200627195628');

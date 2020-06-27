@@ -709,6 +709,8 @@ en:
           disable_section_content: "The WST strongly advise you to not disable 2FA, but you can by clicking the button below. Please note that if you reactivate 2FA you will have to reconfigure your device(s)."
           disabled_success: "Successfully disabled two-factor authentication."
           disabled_failed: "Couldn't disable 2FA, please see errors below."
+      destroy_other:
+        success: "Successfully signed out of other devices."
     shared:
       links:
         sign_in: "Sign in"
@@ -914,6 +916,8 @@ en:
       guidelines_confirmation: "I confirm that my avatar fulfills all avatar guidelines."
       confirm_guidelines: "Make sure to read avatar guidelines and submit a valid picture."
       save: "Save"
+      actions: "Actions"
+      sign_out_of_devices: "Sign out of other devices"
       remove_avatar: "Remove avatar"
       remove_avatar_confirm: "Are you sure you want to delete your avatar?"
       guidelines: "Guidelines"
