@@ -1406,8 +1406,8 @@ pt-BR:
       forum: Fórum
       #original_hash: 3ad28c0
       teams: 'Equipes, Comitês e Conselhos'
-      #original_hash: 02617c0
-      tutorial: Tutorial de Competição
+      #original_hash: a979ffc
+      education: Recursos educacionais
       #original_hash: a34b69f
       contact: Informação de contato
       #original_hash: 4fa8cc8
@@ -2457,11 +2457,11 @@ pt-BR:
       result_sentence: 'com %{a_win_by_word} de %{result}'
       #original_hash: 6c3b236
       winner: '%{winner} venceu %{result_sentence} no evento %{event_name}.'
-      #original_hash: 4daa7df
+      #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} ficou em segundo lugar (%{first_runner_up_result})'
-      #original_hash: d96b040
+      #original_hash: cffa50a
       and: e
-      #original_hash: e9e9d2e
+      #original_hash: 67d285c
       second_runner_up: >-
         %{second_runner_up} ficou em terceiro lugar
         (%{second_runner_up_result}).
@@ -3666,6 +3666,17 @@ pt-BR:
     policies: Políticas da WCA
     #original_hash: 91ac873
     codeofethics: Código de Ética
+  education:
+    #original_hash: 41701c2
+    title: Documentos Educacionais da WCA
+    #original_hash: aa562a7
+    description: >-
+      O WQAC e a WMT publicaram vários documentos para a comunidade, que você
+      pode baixar a seguir.
+    #original_hash: d0a3812
+    competitor_tutorial: Tutorial de competidor
+    #original_hash: 815938f
+    competition_material: 'Material de competição (certificados, potes, ...)'
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
