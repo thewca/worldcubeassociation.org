@@ -5,7 +5,7 @@ da:
     #original_hash: 62ac59b
     BA: Bosnien-Herzegovina
     #original_hash: f39d280
-    CD: Den demokratiske republik Congo
+    CD: Den Demokratiske Republik Congo
     #original_hash: 77f256b
     CG: Republikken Congo
     #original_hash: b218299
@@ -430,7 +430,7 @@ da:
         #original_hash: 2e3ed8b
         delegate_ids: WCA Delegeret/Delegerede
         #original_hash: c0ddcd6
-        trainee_delegate_ids: WCA Delegerede under oplæring
+        trainee_delegate_ids: WCA Lærlingdelegerede
         #original_hash: 958562e
         organizer_ids: Arrangør(er)
         #original_hash: b37456c
@@ -657,13 +657,13 @@ da:
         o: Andet
       delegate_status:
         #original_hash: 621101a
-        trainee_delegate: WCA Delegeret under oplæring
+        trainee_delegate: WCA Lærlingdelegeret
         #original_hash: 9b97968
-        candidate_delegate: Junior Delegeret
+        candidate_delegate: Juniordelegeret
         #original_hash: 12ab214
         delegate: Delegeret
         #original_hash: d463c23
-        senior_delegate: Senior Delegeret
+        senior_delegate: Seniordelegeret
     person:
       gender:
         #original_hash: 3f3a489
@@ -762,9 +762,9 @@ da:
         wca_id: ''
         #original_hash: d5ccc15
         receive_delegate_reports: >-
-          Hvis du er Junior Delegeret, Senior Delegeret eller medlem af WRC
-          eller WQAC, så modtager du rapporter fra Delegerede allerede. Noter:
-          Der går op til en time før ændringen tager effekt.
+          Hvis du er Juniordelegeret, Seniordelegeret eller medlem af WRC eller
+          WQAC, så modtager du rapporter fra Delegerede allerede. Noter: Der går
+          op til en time før ændringen tager effekt.
         #original_hash: 0627e5c
         otp_attempt: >-
           Check your configured mobile application for a one-time password, or
@@ -793,7 +793,7 @@ da:
         #original_hash: b4d020f
         delegate_ids: WCA Delegerede for konkurrencen.
         #original_hash: cb9882c
-        trainee_delegate_ids: WCA Delegerede under oplæring for konkurrencen.
+        trainee_delegate_ids: WCA Lærlingdelegerede for konkurrencen.
         #original_hash: 517d376
         organizer_ids: >-
           Konkurrence arrangører (de har brug for en konto for at være skrevet
@@ -1306,6 +1306,9 @@ da:
           disabled_success: Successfully disabled two-factor authentication.
           #original_hash: c36d556
           disabled_failed: 'Couldn''t disable 2FA, please see errors below.'
+      destroy_other:
+        #original_hash: a768ea6
+        success: Loggede succesfuldt ud af andre enheder.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1697,6 +1700,10 @@ da:
       confirm_guidelines: Vær sikker på at læse kravene og at opgive et passende billede.
       #original_hash: efc007a
       save: Gem
+      #original_hash: c3cd636
+      actions: Handlinger
+      #original_hash: 8356b72
+      sign_out_of_devices: Log ud af andre enheder.
       #original_hash: 58e0c56
       remove_avatar: Fjern billede
       #original_hash: 4bd25cf
@@ -1787,11 +1794,11 @@ da:
         Navnet eller landet skal være anderledes end før, for at opdatere
         personen.
       #original_hash: 012f032
-      must_be_senior: skal være en Senior Delegeret
+      must_be_senior: skal være en Seniordelegeret
       #original_hash: 2e582eb
       must_not_be_present: må ikke være nuværende
       #original_hash: 5b4eac9
-      senior_has_delegate: kan ikke degradere en Senior Delegeret med underordnede Delegerede
+      senior_has_delegate: kan ikke degradere en Seniordelegeret med underordnede Delegerede
       #original_hash: 48653a9
       already_have_id: >-
         kan ikke gøre krav på et WCA ID, fordi du allerede har et WCA ID
@@ -2255,6 +2262,18 @@ da:
         annonceret endnu.
       #original_hash: ab61991
       announced: Annoncerede konkurrencen!
+      #original_hash: a582c89
+      cancelled: >-
+        Denne konkurrence er aflyst. Læs diverse faner på konkurrencesiden for
+        flere detaljer og tjek eventuelt din email.
+      #original_hash: b4aa5ee
+      cancel_success: Konkurrencen blev aflyst!
+      #original_hash: d0478cf
+      cancel_failure: Kan ikke aflyse konkurrencen.
+      #original_hash: 09df36b
+      uncancel_success: Konkurrencen er ikke længere aflyst.
+      #original_hash: ead4a9e
+      uncancel_failure: Kan ikke fjerne aflysningen af konkurrencen.
       #original_hash: 8ad5e67
       results_not_posted: >-
         Konkurrencens resultater er synlige, men er ikke blevet annonceret
@@ -2341,6 +2360,8 @@ da:
       details: Detaljer
       #original_hash: 2e8a57c
       website: Hjemmeside
+      #original_hash: 2260929
+      display_name: '[Aflyst] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: Arrangører
@@ -2448,11 +2469,11 @@ da:
       result_sentence: 'med %{a_win_by_word} på %{result}'
       #original_hash: 6c3b236
       winner: '%{winner} vandt %{result_sentence} i disciplinen %{event_name}.'
-      #original_hash: 4daa7df
+      #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} fik andenplads (%{first_runner_up_result})'
-      #original_hash: d96b040
+      #original_hash: cffa50a
       and: og
-      #original_hash: e9e9d2e
+      #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} fik tredje (%{second_runner_up_result}).'
       records:
         #original_hash: 0658e11
@@ -2758,12 +2779,24 @@ da:
     post_announcement: Annoncer konkurrencen
     #original_hash: b462eac
     announced_by_html: 'Annonceret af %{announcer_name} %{date_time}'
+    #original_hash: 375e17f
+    cancel: Aflys konkurrencen
+    #original_hash: 7628a51
+    uncancel: Fjern aflysningen af konkurrencen
+    #original_hash: 9122a6c
+    cancelled_by_html: 'Aflyst af %{name} den %{date_time}'
+    #original_hash: 25e68c3
+    cancel_confirm: Er du sikker på at du vil aflyse konkurrencen?
     #original_hash: 9a42672
     upload_results: Upload resultaterne
     #original_hash: 01de5ee
     post_results: Upload resultaterne
     #original_hash: b6513f1
     results_posted_by_html: 'Uploadet af %{poster_name} %{date_time}'
+    #original_hash: a6b5efe
+    cancel_mistake: Lavede du en fejl?
+    #original_hash: 0fb43d5
+    note_before_cancel: 'Note: Kun bekræftede konkurrencer kan blive aflyst.'
     show:
       #original_hash: b0fe391
       general_info: General info
@@ -3456,7 +3489,7 @@ da:
       title: Strukturen
       board:
         #original_hash: abd2828
-        name: WCA's Bestyrelse
+        name: WCA Bestyrelsen
         #original_hash: e0d37a2
         description: >-
           World Cube Association bliver ledt af WCA Bestyrelsen, som består af
@@ -3616,18 +3649,17 @@ da:
         delegeret er at holde øje med konkurrencer på vegne af WCA. En WCA
         Delegeret er ansvarlig for at sikre sig at alle WCA konkurrencer
         forløber korrekt efter WCA's mål, ånd, og regelsæt. WCA skelner mellem
-        <strong>Senior Delegerede</strong>, <strong>Regionale
-        Delegerede</strong> <strong>Delegerede</strong>, <strong>Junior
-        Delegates</strong>, og <strong>Delegerede under
-        oplæring</strong>%{see_link}.</p> <p>I forlængelse til deres pligter som
-        WCA Delegerede, så er en Senior Delegeret ansvarlig for at holde styr
-        over WCA Delegerede i sit område, og kan blive kontaktet, hvis der er
-        nogle regionale problemer.</p> <p>Nye Delegerede er først skrevet op som
-        WCA Junior Delegerede. Derefter skal de vise at de kan finde ud af at
-        holde styr over WCA konkurrencer, før at de kan blive forfremmet til WCA
-        Delegerede.</p> <p>Delegerede under oplæring er ved at blive klargjort
-        til at være WCA Delegeret, og kan kun være Delegeret for en konkurrence,
-        hvor der er en WCA Delegeret til stede.</p>
+        <strong>Seniordelegerede</strong>, <strong>Regionale Delegerede</strong>
+        <strong>Delegerede</strong>, <strong>Juniordelgerede</strong>, og
+        <strong>Lærlingdelerede</strong>%{see_link}.</p> <p>I forlængelse til
+        deres pligter som WCA Delegerede, så er en Seniordelegeret ansvarlig for
+        at holde styr over WCA Delegerede i sit område, og kan blive kontaktet,
+        hvis der er nogle regionale problemer.</p> <p>Nye Delegerede er først
+        skrevet op som WCA Juniordelegerede. Derefter skal de vise at de kan
+        finde ud af at holde styr over WCA konkurrencer, før at de kan blive
+        forfremmet til WCA Delegerede.</p> <p>Delegerede under oplæring er ved
+        at blive klargjort til at være WCA Delegeret, og kan kun være Delegeret
+        for en konkurrence, hvor der er en WCA Delegeret til stede.</p>
       #original_hash: 27d18ac
       see_link_html: ' (see %{link})'
       #original_hash: 5b01fcc
@@ -4240,7 +4272,7 @@ da:
         nærmeste delegerede. De vil give dig mere information, og hjælpe med at
         finde en god dato for konkurrencen, siden de ved hvornår andre
         konkurrencer er planlagt. Hvis der ikke er nogen delegeret i nærheden
-        dit område, så kontakt den Senior Delegerede i din region.
+        dit område, så kontakt den Seniordelegerede i din region.
     paragraph2:
       #original_hash: f20dd3b
       title: Forventede omkostninger for at arrangere en konkurrence
