@@ -421,7 +421,7 @@ zh-TW:
         #original_hash: 2e3ed8b
         delegate_ids: WCA代表
         #original_hash: c0ddcd6
-        trainee_delegate_ids: WCA 代表實習生
+        trainee_delegate_ids: WCA 實習代表
         #original_hash: 958562e
         organizer_ids: 主辦人ID
         #original_hash: b37456c
@@ -640,7 +640,7 @@ zh-TW:
         o: 其他
       delegate_status:
         #original_hash: 621101a
-        trainee_delegate: 代表實習生
+        trainee_delegate: 實習代表
         #original_hash: 9b97968
         candidate_delegate: 初級代表
         #original_hash: 12ab214
@@ -755,7 +755,7 @@ zh-TW:
         #original_hash: b4d020f
         delegate_ids: 本場比賽的WCA代表。
         #original_hash: cb9882c
-        trainee_delegate_ids: 比賽的WCA代表實習生。
+        trainee_delegate_ids: 比賽的WCA實習代表。
         #original_hash: 517d376
         organizer_ids: 比賽的主辦團隊（他們需要建立WCA帳號才能列在這裡）。
         #original_hash: cabe7fb
@@ -1231,8 +1231,8 @@ zh-TW:
       forum: 討論區
       #original_hash: 3ad28c0
       teams: 團隊、委員會和理事會
-      #original_hash: 02617c0
-      tutorial: 比賽指南
+      #original_hash: a979ffc
+      education: 學習資源
       #original_hash: a34b69f
       contact: 聯絡資訊
       #original_hash: 4fa8cc8
@@ -2087,11 +2087,11 @@ zh-TW:
       result_sentence: '%{a_win_by_word}：%{result}'
       #original_hash: 6c3b236
       winner: '%{winner}在 %{event_name} 項目中以%{result_sentence}贏得第一名。'
-      #original_hash: 4daa7df
+      #original_hash: ec7f18a
       first_runner_up: '第二名%{first_runner_up}：%{first_runner_up_result}，'
-      #original_hash: d96b040
+      #original_hash: cffa50a
       and: 以及
-      #original_hash: e9e9d2e
+      #original_hash: 67d285c
       second_runner_up: '第三名%{second_runner_up}：%{second_runner_up_result}。'
       records:
         #original_hash: 0658e11
@@ -3073,6 +3073,15 @@ zh-TW:
     policies: WCA政策
     #original_hash: 91ac873
     codeofethics: 倫理規範
+  education:
+    #original_hash: 41701c2
+    title: WCA教育文獻
+    #original_hash: aa562a7
+    description: WCA品質保證委員會與WCA行銷組已為社群發布許多文件，您可以在下面下載這些文件。
+    #original_hash: d0a3812
+    competitor_tutorial: 參賽者教程
+    #original_hash: 815938f
+    competition_material: 比賽用材料（獎狀，蓋子）
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
