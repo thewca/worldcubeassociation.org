@@ -1337,6 +1337,9 @@ es:
           disabled_failed: >-
             No se pudo deshabilitar A2F, por favor mira los errores a
             continuación.
+      destroy_other:
+        #original_hash: a768ea6
+        success: Desconectado con éxito de otros dispositivos
     shared:
       links:
         #original_hash: ada2e9e
@@ -1422,9 +1425,8 @@ es:
       forum: Foro
       #original_hash: 3ad28c0
       teams: 'Comités, Equipos y Consejos'
+      #original_hash: a979ffc
       education: Recursos educativos
-      #original_hash: 02617c0
-      tutorial: Tutorial de Competición
       #original_hash: a34b69f
       contact: Información de Contacto
       #original_hash: 4fa8cc8
@@ -1733,6 +1735,10 @@ es:
         válida.
       #original_hash: efc007a
       save: Guardar
+      #original_hash: c3cd636
+      actions: Acciones
+      #original_hash: 8356b72
+      sign_out_of_devices: Desconectar de otros dispositivos
       #original_hash: 58e0c56
       remove_avatar: Eliminar avatar
       #original_hash: 4bd25cf
@@ -2303,6 +2309,18 @@ es:
         todavía.
       #original_hash: ab61991
       announced: ¡Competición anunciada con éxito!
+      #original_hash: a582c89
+      cancelled: >-
+        La competición ha sido cancelada. Por favor revisa la sección de
+        información para obtener más detalles.
+      #original_hash: b4aa5ee
+      cancel_success: ¡Competición cancelada con éxito!
+      #original_hash: d0478cf
+      cancel_failure: No se ha podido cancelar la competición.
+      #original_hash: 09df36b
+      uncancel_success: ¡Competición no cancelada con éxito!
+      #original_hash: ead4a9e
+      uncancel_failure: No se ha podido quitar la cancelación de la competición.
       #original_hash: 8ad5e67
       results_not_posted: >-
         Los resultados de esta competición son visibles pero todavía no han sido
@@ -2391,6 +2409,8 @@ es:
       details: Detalles
       #original_hash: 2e8a57c
       website: Web
+      #original_hash: 2260929
+      display_name: '[Cancelado] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: Organizadores
@@ -2498,11 +2518,11 @@ es:
       result_sentence: 'con %{a_win_by_word} de %{result}'
       #original_hash: 6c3b236
       winner: '%{winner} ganó %{result_sentence} en la categoría de %{event_name}.'
-      #original_hash: 4daa7df
+      #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} acabó segundo (%{first_runner_up_result})'
-      #original_hash: d96b040
+      #original_hash: cffa50a
       and: 'y'
-      #original_hash: e9e9d2e
+      #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} acabó tercero (%{second_runner_up_result}).'
       records:
         #original_hash: 0658e11
@@ -2810,12 +2830,24 @@ es:
     post_announcement: Anunciar la competición
     #original_hash: b462eac
     announced_by_html: 'Anunciado por %{announcer_name} en %{date_time}'
+    #original_hash: 375e17f
+    cancel: Cancelar la competición
+    #original_hash: 7628a51
+    uncancel: Quitar la cancelación de la competición
+    #original_hash: 9122a6c
+    cancelled_by_html: 'Cancelado por by %{name} en %{date_time}'
+    #original_hash: 25e68c3
+    cancel_confirm: ¿Estás seguro de que quieres cancelar la competición?
     #original_hash: 9a42672
     upload_results: Cargar los resultados
     #original_hash: 01de5ee
     post_results: Publicar los resultados
     #original_hash: b6513f1
     results_posted_by_html: 'Publicado por %{poster_name} en %{date_time}'
+    #original_hash: a6b5efe
+    cancel_mistake: ¿Cometiste un error?
+    #original_hash: 0fb43d5
+    note_before_cancel: 'Nota: Sólo se pueden cancelar competiciones confirmadas.'
     show:
       #original_hash: b0fe391
       general_info: Información general
@@ -3720,6 +3752,17 @@ es:
     policies: Políticas WCA
     #original_hash: 91ac873
     codeofethics: Código de Ética
+  education:
+    #original_hash: 41701c2
+    title: Documentos Educativos de la WCA
+    #original_hash: aa562a7
+    description: >-
+      WQAC y WMT han publicado varios documentos para la comunidad, puedes
+      descargarlos a continuación.
+    #original_hash: d0a3812
+    competitor_tutorial: Tutorial de competidor
+    #original_hash: 815938f
+    competition_material: 'Material de competición (certificados, tapa cubos, ...)'
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
