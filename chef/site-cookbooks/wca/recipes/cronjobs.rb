@@ -12,6 +12,11 @@ backup_command = "#{dump_db_command} && #{dump_gh_command}"
 if node.chef_environment == "production"
   backup_command += " && #{repo_root}/scripts/backup.sh"
 end
+
+# Wrap the backup command to prepend a clear "FAILURE" message in case it fails.
+tmp_logfile = "/tmp/cron-backup.log"
+backup_command = "(#{backup_command})>#{tmp_logfile} 2>&1 || echo \"FAILURE of the backup script, see below for the error log:\"; cat #{tmp_logfile}"
+
 unless node.chef_environment.start_with?("development")
   execute "pip2 install github-backup"
 
