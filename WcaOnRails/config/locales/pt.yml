@@ -1313,6 +1313,9 @@ pt:
           disabled_success: Desabilitada autenticação de dois fatores com sucesso.
           #original_hash: c36d556
           disabled_failed: 'Não foi possível desabilitar 2FA, por favor veja os erros abaixo.'
+      destroy_other:
+        #original_hash: a768ea6
+        success: Desconectou-se com sucesso de outros dispositivos.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1398,8 +1401,8 @@ pt:
       forum: Fórum
       #original_hash: 3ad28c0
       teams: 'Equipas, Comités e Conselhos'
-      #original_hash: 02617c0
-      tutorial: Tutorial de Competições
+      #original_hash: a979ffc
+      education: Recursos educativos
       #original_hash: a34b69f
       contact: Informação de Contacto
       #original_hash: 4fa8cc8
@@ -1705,6 +1708,10 @@ pt:
         válida.
       #original_hash: efc007a
       save: Guardar
+      #original_hash: c3cd636
+      actions: Ações
+      #original_hash: 8356b72
+      sign_out_of_devices: Desconectar de outros dispositivos
       #original_hash: 58e0c56
       remove_avatar: Remover avatar
       #original_hash: 4bd25cf
@@ -1720,32 +1727,33 @@ pt:
         '3': 'Se há mais de uma pessoa na foto, deve estar claro qual delas você é.'
         #original_hash: 4083c00
         '4': 'A sua cabeça, mas não necessariamente toda a face, deve estar visível.'
-        #original_hash: ebbbf8a
-        '5': O avatar não pode incluir texto além de textos de fundo normais.
+        #original_hash: 7c0aab3
+        '5': >-
+          O avatar não deve incluir texto sobreposto ou filtros não naturais,
+          incluindo bordas.
         #original_hash: cc5f23a
         '6': O avatar deve ser submetido na orientação correta.
         #original_hash: 1a18831
         '7': O avatar não pode apresentar conteúdo ofensivo (ex. gestos ofensivos).
       staff_avatar_guidelines:
         #original_hash: da9e6df
-        title: 'Orientações adicionais para Membros de Staff:'
+        title: 'Orientações adicionais para membros de Staff:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
-            A imagem deve ser de si próprio,  apresentado-se do mesmo modo em
-            que se apresentaria numa competição.
+            O avatar deve ser de si atualmente, representado da mesma forma que
+            apareceria numa competição.
           #original_hash: 64ded69
           '2': >-
-            A imagem deve estar enquadrado, recortada, orientada e iluminada
-            para que qualquer competidor ou espectador numa competição poderem
-            fazer uso dela de forma a identificá-lo de forma inequívoca num
-            local de competição.
+            O avatar deve ser ajustado, cortado, inclinado e iluminado, para que
+            qualquer competidor ou espectador de uma competição possa usá-lo
+            para o identificar de maneira inequívoca no local de competição.
           #original_hash: 13fab02
           '3': >-
-            A miniatura é apenas uma secção da imagem e que será usada para
-            representar a imagem completa. A miniatura deve ser ajustada por
-            forma a que possa ser reconhecido dessa forma apenas, devendo conter
-            o rosto.
+            A miniatura do avatar é apenas uma secção do avatar e será usada
+            para representar o seu avatar completo. A miniatura deve ser
+            ajustada, para que possa ser reconhecido somente com ela e deve
+            conter o seu rosto.
       sensitive:
         #original_hash: 267ac87
         info: >-
@@ -2261,6 +2269,18 @@ pt:
       not_announced: 'Esta competição é visível para o público, mas ainda não foi anunciada.'
       #original_hash: ab61991
       announced: Competição anunciada com sucesso!
+      #original_hash: a582c89
+      cancelled: >-
+        Esta competição foi cancelada. Por favor verifique a seção de informação
+        para mais detalhes.
+      #original_hash: b4aa5ee
+      cancel_success: Competição cancelada com sucesso!
+      #original_hash: d0478cf
+      cancel_failure: Não é possível cancelar competição.
+      #original_hash: 09df36b
+      uncancel_success: Competição descancelada com sucesso!
+      #original_hash: ead4a9e
+      uncancel_failure: Não é possível descancelar a competição.
       #original_hash: 8ad5e67
       results_not_posted: >-
         Os resultados desta competição são visíveis, mas ainda não foram
@@ -2347,6 +2367,8 @@ pt:
       details: Detalhes
       #original_hash: 2e8a57c
       website: Website
+      #original_hash: 2260929
+      display_name: '[Cancelado] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: Organizadores
@@ -2448,11 +2470,11 @@ pt:
       result_sentence: 'com %{a_win_by_word} de %{result}'
       #original_hash: 6c3b236
       winner: '%{winner} ganhou %{result_sentence} no evento %{event_name}.'
-      #original_hash: 4daa7df
+      #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} acabou em segundo (%{first_runner_up_result})'
-      #original_hash: d96b040
+      #original_hash: cffa50a
       and: e
-      #original_hash: e9e9d2e
+      #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} ficou em terceiro (%{second_runner_up_result}).'
       records:
         #original_hash: 0658e11
@@ -2757,12 +2779,24 @@ pt:
     post_announcement: Anúncio de competição
     #original_hash: b462eac
     announced_by_html: 'Anunciado por %{announcer_name} em %{date_time}'
+    #original_hash: 375e17f
+    cancel: Cancelar a competição
+    #original_hash: 7628a51
+    uncancel: Descancelar a competição
+    #original_hash: 9122a6c
+    cancelled_by_html: 'Cancelado por %{name} em %{date_time}'
+    #original_hash: 25e68c3
+    cancel_confirm: Tem a certeza que pretende cancelar a competição?
     #original_hash: 9a42672
     upload_results: Carregar os resultados
     #original_hash: 01de5ee
     post_results: Submeter os resultados
     #original_hash: b6513f1
     results_posted_by_html: 'Colocado por %{poster_name} em %{date_time}'
+    #original_hash: a6b5efe
+    cancel_mistake: Cometeu um erro?
+    #original_hash: 0fb43d5
+    note_before_cancel: 'Nota: apenas competições confirmadas podem ser canceladas.'
     show:
       #original_hash: b0fe391
       general_info: Informações gerais
@@ -3657,6 +3691,17 @@ pt:
     policies: Políticas da WCA
     #original_hash: 91ac873
     codeofethics: Código de Ética
+  education:
+    #original_hash: 41701c2
+    title: Documentos Educacionais da WCA
+    #original_hash: aa562a7
+    description: >-
+      O WQAC e a WMT publicaram vários documentos para a comunidade, que podem
+      ser descarregados abaixo.
+    #original_hash: d0a3812
+    competitor_tutorial: Tutorial de competidor
+    #original_hash: 815938f
+    competition_material: 'Materiais de competição (certificados, tapa cubos, ...)'
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
