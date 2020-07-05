@@ -18,7 +18,7 @@
     </thead>
     <tbody>
       <% @delegates.each do |delegate| %>
-        <% competitions = delegate.delegated_competitions.order_by_date.select{ |c| c.confirmed_or_visible? && c.is_probably_over? } %>
+        <% competitions = delegate.delegated_competitions.order_by_date.select{ |c| c.confirmed_or_visible? && c.is_probably_over? && !c.cancelled? } %>
         <tr class="<%= delegate.delegate_status %>">
           <td class="delegate" data-toggle="tooltip" data-placement="top" data-container="body">
             <%= delegate.name %>
