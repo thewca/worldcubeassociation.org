@@ -1321,6 +1321,9 @@ hr:
           disabled_success: Uspješno isključena dvofaktorska autentifikacija.
           #original_hash: c36d556
           disabled_failed: 'Nije moguće isključiti 2FA, pogledajte izvješće ispod.'
+      destroy_other:
+        #original_hash: a768ea6
+        success: Uspješna odjava s ostalih uređaja.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1408,8 +1411,8 @@ hr:
       forum: Forum
       #original_hash: 3ad28c0
       teams: 'Timovi, Odbori, Vijeća'
-      #original_hash: 02617c0
-      tutorial: Natjecateljski tutorijal
+      #original_hash: a979ffc
+      education: Edukacijski resursi
       #original_hash: a34b69f
       contact: Kontakt informacije
       #original_hash: 4fa8cc8
@@ -1713,6 +1716,10 @@ hr:
       confirm_guidelines: Pročitaj upute za prilaganje avatara i priloži valjanu sliku.
       #original_hash: efc007a
       save: Spremi
+      #original_hash: c3cd636
+      actions: Akcije
+      #original_hash: 8356b72
+      sign_out_of_devices: Odjava s ostalih uređaja
       #original_hash: 58e0c56
       remove_avatar: Obriši avatar
       #original_hash: 4bd25cf
@@ -2274,6 +2281,18 @@ hr:
       not_announced: 'Ovo natjecanje je javno vidljivo, no nije još najavljeno.'
       #original_hash: ab61991
       announced: Uspješno najavljeno natjecanje!
+      #original_hash: a582c89
+      cancelled: >-
+        Ovo natjecanje je otkazano. Molimo pogledajte sekciju s informacijama za
+        više detalja.
+      #original_hash: b4aa5ee
+      cancel_success: Uspješno otkazano natjecanje!
+      #original_hash: d0478cf
+      cancel_failure: Nemoguće otkazivanje natjecanja.
+      #original_hash: 09df36b
+      uncancel_success: Uspješno poništeno otkazivanje natjecanja!
+      #original_hash: ead4a9e
+      uncancel_failure: Nemoguće poništiti otkazivanje natjecanja.
       #original_hash: 8ad5e67
       results_not_posted: 'Rezultati ovog natjecanja su vidljivi, ali još nisu objavljeni.'
       #original_hash: e205d73
@@ -2356,6 +2375,8 @@ hr:
       details: Detalji
       #original_hash: 2e8a57c
       website: Web-stranica
+      #original_hash: 2260929
+      display_name: '[Otkazano] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: Organizatora
@@ -2465,11 +2486,11 @@ hr:
       result_sentence: 's %{a_win_by_word} od %{result}'
       #original_hash: 6c3b236
       winner: '%{winner} je pobjednik %{result_sentence} u %{event_name} disciplini.'
-      #original_hash: 4daa7df
+      #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} je drugoplasiran (%{first_runner_up_result})'
-      #original_hash: d96b040
+      #original_hash: cffa50a
       and: i
-      #original_hash: e9e9d2e
+      #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} je trećeplasiran (%{second_runner_up_result}).'
       records:
         #original_hash: 0658e11
@@ -2774,12 +2795,24 @@ hr:
     post_announcement: Najavi natjecanje
     #original_hash: b462eac
     announced_by_html: 'Najavio/la %{announcer_name} na dan %{date_time}'
+    #original_hash: 375e17f
+    cancel: Otkaži natjecanje
+    #original_hash: 7628a51
+    uncancel: Poništi otkazivanje natjecanja
+    #original_hash: 9122a6c
+    cancelled_by_html: 'Otkazao %{name} dana %{date_time}'
+    #original_hash: 25e68c3
+    cancel_confirm: Sigurno želite otkazati ovo natjecanje?
     #original_hash: 9a42672
     upload_results: Pošalji rezultate
     #original_hash: 01de5ee
     post_results: Objavi rezultate
     #original_hash: b6513f1
     results_posted_by_html: 'Objavljeno %{poster_name} na dan %{date_time}'
+    #original_hash: a6b5efe
+    cancel_mistake: Napravljena pogreška?
+    #original_hash: 0fb43d5
+    note_before_cancel: 'Bilješka: moguće je otkazati samo već potvrđena natjecanja.'
     show:
       #original_hash: b0fe391
       general_info: Općenite informacije
@@ -3651,6 +3684,17 @@ hr:
     policies: WCA Politike
     #original_hash: 91ac873
     codeofethics: Etički kodeks
+  education:
+    #original_hash: 41701c2
+    title: WCA Edukacijski dokumenti
+    #original_hash: aa562a7
+    description: >-
+      WQAC i WMT su objavili nekoliko dokumenata za zajednicu, moguće ih je
+      skinuti ovdje.
+    #original_hash: d0a3812
+    competitor_tutorial: Natjecateljski tutorijal
+    #original_hash: 815938f
+    competition_material: 'Materijali za natjecanja (certifikati, cube coveri, ...)'
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegati
