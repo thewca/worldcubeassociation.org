@@ -1157,6 +1157,9 @@ zh-TW:
           disabled_success: 已成功關閉二步驟驗證。
           #original_hash: c36d556
           disabled_failed: 無法關閉二步驟驗證，請見以下的錯誤訊息。
+      destroy_other:
+        #original_hash: a768ea6
+        success: 已成功將其他裝置登出。
     shared:
       links:
         #original_hash: ada2e9e
@@ -1490,6 +1493,10 @@ zh-TW:
       confirm_guidelines: 請確保您已詳閱頭像的指導方針並提交有效的照片。
       #original_hash: efc007a
       save: 儲存
+      #original_hash: c3cd636
+      actions: 操作
+      #original_hash: 8356b72
+      sign_out_of_devices: 登出其他裝置
       #original_hash: 58e0c56
       remove_avatar: 移除頭像
       #original_hash: 4bd25cf
@@ -1931,6 +1938,16 @@ zh-TW:
       not_announced: 這場比賽已是公開狀態，但尚未公告。
       #original_hash: ab61991
       announced: 已成功公告比賽！
+      #original_hash: a582c89
+      cancelled: 這場比賽已被取消。比賽資訊處有取消細節。
+      #original_hash: b4aa5ee
+      cancel_success: 已成功取消比賽！
+      #original_hash: d0478cf
+      cancel_failure: 無法取消比賽。
+      #original_hash: 09df36b
+      uncancel_success: 已成功恢復比賽！
+      #original_hash: ead4a9e
+      uncancel_failure: 無法恢復比賽。
       #original_hash: 8ad5e67
       results_not_posted: 這場比賽的成績已公開，但尚未公告。
       #original_hash: e205d73
@@ -2004,6 +2021,8 @@ zh-TW:
       details: 場地細節
       #original_hash: 2e8a57c
       website: 比賽網站
+      #original_hash: 2260929
+      display_name: '[已取消] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: 主辦團隊
@@ -2362,12 +2381,24 @@ zh-TW:
     post_announcement: 公告比賽
     #original_hash: b462eac
     announced_by_html: '由%{announcer_name} 在%{date_time}公告。'
+    #original_hash: 375e17f
+    cancel: 取消比賽
+    #original_hash: 7628a51
+    uncancel: 恢復比賽
+    #original_hash: 9122a6c
+    cancelled_by_html: '已於 %{date_time} 被 %{name} 取消'
+    #original_hash: 25e68c3
+    cancel_confirm: 您確定要取消這場比賽嗎？
     #original_hash: 9a42672
     upload_results: 上傳成績
     #original_hash: 01de5ee
     post_results: 公告成績
     #original_hash: b6513f1
     results_posted_by_html: '由%{poster_name}在%{date_time}公告。'
+    #original_hash: a6b5efe
+    cancel_mistake: 弄錯了嗎？
+    #original_hash: 0fb43d5
+    note_before_cancel: 備註：只有已確認的比賽才能被取消。
     show:
       #original_hash: b0fe391
       general_info: 基本資訊
