@@ -63,8 +63,8 @@ class CompetitionEvent < ApplicationRecord
       "properties" => {
         "id" => { "type" => "string" },
         "rounds" => { "type" => ["array", "null"], "items" => Round.wcif_json_schema },
-        "competitorLimit" => { "type" => "integer" },
-        "qualification" => { "type" => "object" }, # TODO: expand on this
+        "competitorLimit" => { "type" => ["integer", "null"] },
+        "qualification" => { "type" => ["object", "null"] }, # TODO: expand on this
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
