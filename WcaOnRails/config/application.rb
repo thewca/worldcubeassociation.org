@@ -66,6 +66,10 @@ module WcaOnRails
     # Setup available locales
     I18n.available_locales = Locales::AVAILABLE.keys
 
+    # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+    # the I18n.default_locale when a translation cannot be found).
+    config.i18n.fallbacks = [:en]
+
     config.middleware.use Middlewares::FixAcceptHeader
     config.middleware.use Middlewares::WardenUserLogger, logger: ->(s) { Rails.logger.info(s) }
 
