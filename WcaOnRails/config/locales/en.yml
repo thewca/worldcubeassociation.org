@@ -871,7 +871,7 @@ en:
         intro_html: "Your results at %{competition_link} have just been posted."
         information_html: "Check out all your results %{result_link}."
         more_info_html: "You can manage your email preferences %{preferences_link}."
-        regards_html: "Regards,<br/>The WCA Results Team on behalf of ${managers}."
+        regards_html: "Regards,<br/>The WCA Results Team on behalf of %{managers}."
     #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"
