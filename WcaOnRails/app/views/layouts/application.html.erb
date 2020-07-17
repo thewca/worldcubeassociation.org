@@ -40,7 +40,7 @@
 
   <% js_assets = (@all_js_assets || "").split(",").uniq %>
   <% if I18n.locale != :en %>
-    <% js_assets = js_assets.unshift("locales/#{I18n.locale}.js") %>
+    <% js_assets = js_assets.unshift("locales/#{I18n.locale.downcase}.js") %>
   <% end %>
   <% js_assets = js_assets.unshift("application") %>
   <% js_assets.each do |a| %>

@@ -16,6 +16,6 @@ Rails.application.config.assets.precompile += %w(pdf.css)
 Rails.application.config.assets.precompile += %w(fullcalendar/fullcalendar_wca.js)
 Rails.application.config.assets.precompile += %w(fullcalendar_wca.css)
 (I18n.available_locales - [:en]).each do |locale|
-  Rails.application.config.assets.precompile += ["locales/#{locale}.js"]
-  Rails.application.config.assets.precompile += ["fullcalendar/locales/#{locale}.js"]
+  Rails.application.config.assets.precompile += ["locales/#{locale.downcase}.js"]
+  Rails.application.config.assets.precompile += ["fullcalendar/locales/#{locale.downcase}.js"]
 end
