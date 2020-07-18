@@ -5,7 +5,12 @@ require "fileutils"
 class User < ApplicationRecord
   has_many :competition_delegates, foreign_key: "delegate_id"
   has_many :competition_trainee_delegates, foreign_key: "trainee_delegate_id"
+  # This gives all the competitions where the user is marked as a Delegate,
+  # regardless of the competition's status.
   has_many :delegated_competitions, through: :competition_delegates, source: "competition"
+  # This gives all the competitions which actually happened and where the user
+  # was a Delegate.
+  has_many :actually_delegated_competitions, -> { over.visible.not_cancelled }, through: :competition_delegates, source: "competition"
   has_many :trainee_delegated_competitions, through: :competition_trainee_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id"
   has_many :organized_competitions, through: :competition_organizers, source: "competition"

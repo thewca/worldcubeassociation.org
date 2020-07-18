@@ -17,8 +17,9 @@
       </tr>
     </thead>
     <tbody>
+      <% user_can_see_history = current_user&.can_see_admin_competitions? %>
       <% @delegates.each do |delegate| %>
-        <% competitions = delegate.delegated_competitions.order_by_date.select{ |c| c.confirmed_or_visible? && c.is_probably_over? } %>
+        <% competitions = delegate.actually_delegated_competitions.sort_by(&:start_date) %>
         <tr class="<%= delegate.delegate_status %>">
           <td class="delegate" data-toggle="tooltip" data-placement="top" data-container="body">
             <%= delegate.name %>
@@ -26,13 +27,11 @@
           </td>
           <td class="position"><%= delegate.delegate_status.humanize %></td>
           <td class="region"><%= delegate.region %></td>
-          <td class="last"><%= competitions&.last&.start_date %></td>
-          <td class="first"><%= competitions&.first&.start_date %></td>
-          <td class="total"><%= competitions&.count %></td>
+          <td class="last"><%= competitions.last&.start_date %></td>
+          <td class="first"><%= competitions.first&.start_date %></td>
+          <td class="total"><%= competitions.size %></td>
           <td>
-            <% if current_user&.can_see_admin_competitions? %>
-              <%= link_to "History", competitions_path(display: "admin", years: "all", delegate: delegate.id) %>
-            <% end %>
+            <%= link_to "History", competitions_path(display: "admin", years: "all", delegate: delegate.id) if user_can_see_history %>
           </td>
         </tr>
       <% end %>
