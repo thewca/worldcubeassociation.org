@@ -96,7 +96,7 @@ CREATE TABLE `CompetitionsMedia` (
   `submitterComment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `submitterEmail` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `timestampSubmitted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `timestampDecided` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `timestampDecided` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
