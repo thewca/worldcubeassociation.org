@@ -35,7 +35,16 @@ class Round < ApplicationRecord
   validates_numericality_of :number,
                             only_integer: true,
                             greater_than_or_equal_to: 1,
-                            less_than_or_equal_to: MAX_NUMBER
+                            less_than_or_equal_to: MAX_NUMBER,
+                            unless: :old_type
+
+  # Qualification rounds/b-final are handled weirdly, they have round number 0
+  # and do not count towards the total amount of rounds.
+  OLD_TYPES=["0", "b"].freeze
+  validates_inclusion_of :old_type, in: OLD_TYPES, allow_nil: true
+  after_validation(if: :old_type) do
+    self.number = 0
+  end
 
   validate do
     unless event.preferred_formats.find_by_format_id(format_id)
@@ -49,6 +58,18 @@ class Round < ApplicationRecord
     end
   end
 
+  def initialize(attributes = nil)
+    # Overrides the default constructor to setup the default time limit if not
+    # set explicitly.
+    # We do want to let the opportunity to the user to specify the 'undefined'
+    # time limit represented as null in the db (TimeLimit::UNDEF_TL)
+    attributes ||= {}
+    # Note there is a subtle difference between using '||=' and 'key?'.
+    # We do want to allow specifying a 'nil' value for the :time_limit attribute.
+    attributes[:time_limit] = TimeLimit.new unless attributes.key?(:time_limit)
+    super(attributes)
+  end
+
   # Compute a round type id from round information
   def round_type_id
     if number == total_number_of_rounds
@@ -57,6 +78,10 @@ class Round < ApplicationRecord
       cutoff ? "d" : "1"
     elsif number == 2
       cutoff ? "e" : "2"
+    elsif old_type == "0"
+      cutoff ? "h" : "0"
+    elsif old_type == "b"
+      "b"
     else
       # Cutoff third round/Semi Final
       cutoff ? "g" : "3"

@@ -27,7 +27,11 @@ class DelegateReportsController < ApplicationController
 
   def update
     @competition = competition_from_params
-    redirect_to_root_unless_user(:can_edit_delegate_report?, @competition.delegate_report) && return
+    if (params[:delegate_report]) && (params[:delegate_report][:posted])
+      redirect_to_root_unless_user(:can_post_delegate_report?, @competition.delegate_report) && return
+    else
+      redirect_to_root_unless_user(:can_edit_delegate_report?, @competition.delegate_report) && return
+    end
 
     @delegate_report = @competition.delegate_report
     @delegate_report.current_user = current_user

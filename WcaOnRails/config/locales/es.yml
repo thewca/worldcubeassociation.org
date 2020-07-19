@@ -20,7 +20,7 @@ es:
     HK: Hong Kong
     #original_hash: 3ad2dd8
     KN: San Cristóbal y Nieves
-    #original_hash: 7184d1a
+    #original_hash: 5c34abb
     KP: República Democrática Popular de Corea
     #original_hash: 4430b22
     KR: República de Corea
@@ -40,8 +40,6 @@ es:
     SZ: Esuatini
     #original_hash: 4d206a8
     TT: Trinidad y Tobago
-    #original_hash: 0f3f60b
-    VA: Santa Sede
     #original_hash: 3fa9b2d
     VC: San Vicente y las Granadinas
     #original_hash: 9af4622
@@ -392,12 +390,6 @@ es:
         delegate_status: Condición de Delegado
         #original_hash: 0f21717
         region: Región
-        #original_hash: a10b651
-        location_description: Provincia / Población
-        #original_hash: 8961d3b
-        phone_number: Número de teléfono
-        #original_hash: 7044004
-        notes: Notas
         #original_hash: 730db33
         receive_delegate_reports: >-
           Me gustaría recibir los informes de delegados de Competiciones WCA por
@@ -443,6 +435,8 @@ es:
         currency_code: Moneda
         #original_hash: 2e3ed8b
         delegate_ids: Delegado(s) de la WCA
+        #original_hash: c0ddcd6
+        trainee_delegate_ids: Delegado(s) en prácticas
         #original_hash: 958562e
         organizer_ids: Organizador(es)
         #original_hash: b37456c
@@ -672,6 +666,8 @@ es:
         #original_hash: 6e6a6f2
         o: Otro
       delegate_status:
+        #original_hash: 621101a
+        trainee_delegate: Delegado en prácticas
         #original_hash: 9b97968
         candidate_delegate: Delegado Junior
         #original_hash: 12ab214
@@ -775,12 +771,6 @@ es:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
         #original_hash: d5ccc15
         receive_delegate_reports: >-
           Si eres un Delegado Junior, Delegado Senior, Delegado, o Miembro del
@@ -813,6 +803,8 @@ es:
           competidores.
         #original_hash: b4d020f
         delegate_ids: Delegados de la WCA para la competición.
+        #original_hash: cb9882c
+        trainee_delegate_ids: Delegado en prácticas de la WCA para la competición.
         #original_hash: 517d376
         organizer_ids: >-
           Organizadores de la competición. (Tienen que tener cuenta para poder
@@ -950,13 +942,15 @@ es:
         wca_id: ''
         #original_hash: 8723825
         dob: Tu fecha de nacimiento correcta en formato AAAA-MM-DD
-        #original_hash: c6d8a97
+        #original_hash: 49ee4af
         document: >-
           Para demostrar tu identidad y probar tu fecha de nacimiento, tienes
           que adjuntar una foto de algún documento legal (DNI, carnet de
           conducir, carnet de estudiante, pasaporte, certificado de
           nacimiento,...) donde tu nombre completo y tu fecha de nacimiento sean
-          visibles.
+          visibles. Para la identificación necesitamos como mínimo tu nombre y
+          tu fecha de nacimiento. Puedes desenfocar u ocultar el resto de datos
+          si así lo deseas.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -1271,6 +1265,8 @@ es:
           disabled: deshabilitada
           #original_hash: 5f225b0
           enable: habilitada A2F
+          #original_hash: 2e35cd9
+          disable: Deshabilitar A2F
           #original_hash: b2a3d7e
           reset: Resetear secreto A2F
           #original_hash: 14b7bfd
@@ -1327,6 +1323,23 @@ es:
           email_auth_desc: >-
             Puedes solicitar que se te envíe una contraseña de un sólo uso por
             correo electrónico cuando intentes iniciar sesión.
+          #original_hash: dd991ab
+          disable_section_title: Deshabilitar dos-factores
+          #original_hash: 4569d81
+          disable_section_content: >-
+            El WST te recomienda encarecidamente no deshabilitar A2F, pero
+            puedes hacerlo pulsando en el botón inferior. Por favor ten en
+            cuenta que si reactivas A2F tendrás que volver a configurar tu(s)
+            dispositivo(s).
+          #original_hash: ab1b77d
+          disabled_success: Autenticación de dos factores deshabilitada satisfactoriamente.
+          #original_hash: c36d556
+          disabled_failed: >-
+            No se pudo deshabilitar A2F, por favor mira los errores a
+            continuación.
+      destroy_other:
+        #original_hash: a768ea6
+        success: Desconectado con éxito de otros dispositivos
     shared:
       links:
         #original_hash: ada2e9e
@@ -1408,10 +1421,12 @@ es:
       organizations: Organizaciones Nacionales
       #original_hash: d790b40
       faq: Preguntas Más Frecuentes
+      #original_hash: cf1d2c9
+      forum: Foro
       #original_hash: 3ad28c0
       teams: 'Comités, Equipos y Consejos'
-      #original_hash: 02617c0
-      tutorial: Tutorial de Competición
+      #original_hash: a979ffc
+      education: Recursos educativos
       #original_hash: a34b69f
       contact: Información de Contacto
       #original_hash: 4fa8cc8
@@ -1561,6 +1576,18 @@ es:
         announced: >-
           El WCAT ha aprobado tu competición y será anunciada oficialmente al
           público.
+      id_claim_possibility_email:
+        #original_hash: 20e9d09
+        header: Por favor enlaza tu WCA ID con tu cuenta
+        #original_hash: 5665910
+        intro: Estimado Cubero
+        #original_hash: 61650f4
+        information_html: >-
+          Te registrate para %{competition_link}. Acabamos de cargar los
+          resultados de esta competición y creado WCA IDs para todos los que
+          compiten por primera vez. Si competiste en esta competición y era la
+          primera, deberías solicitar tu WCA ID (enlazarlo con tu cuenta WCA).
+          Puedes hacer esto %{claim_link}.
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Has sido añadido a %{competition} como organizador'
@@ -1591,6 +1618,19 @@ es:
           Por favor dirígete a la  <a href=%{competition_url}>web del
           campeonato</a>  para obtener más información sobre requisitos del
           registro.
+      results_presence_email:
+        #original_hash: 7ce2558
+        header: 'Los resultados de %{competition} se han publicado'
+        #original_hash: 150446e
+        intro_html: 'Tus resultados en %{competition_link} acaban de ser publicados.'
+        #original_hash: 78edca3
+        information_html: 'Comprueba tus resultados %{result_link}.'
+        #original_hash: a585fca
+        more_info_html: 'Puedes gestionar tus preferencias de correo %{preferences_link}.'
+        #original_hash: 60d1a54
+        regards_html: >-
+          Atentamente, <br/> El Equipo de Resultados de la WCA en nombre de
+          ${managers}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Reclamar tu WCA ID
@@ -1695,6 +1735,10 @@ es:
         válida.
       #original_hash: efc007a
       save: Guardar
+      #original_hash: c3cd636
+      actions: Acciones
+      #original_hash: 8356b72
+      sign_out_of_devices: Desconectar de otros dispositivos
       #original_hash: 58e0c56
       remove_avatar: Eliminar avatar
       #original_hash: 4bd25cf
@@ -1710,15 +1754,15 @@ es:
         '3': 'Si hay más de una persona en la foto, debe quedar claro quién eres tú.'
         #original_hash: 4083c00
         '4': 'Tu cabeza, aunque no necesariamente la cara entera, debe ser visible.'
-        #original_hash: ebbbf8a
+        #original_hash: 7c0aab3
         '5': >-
-          La foto no puede contener más textos que los que de forma natural
-          puedan aparecer en el fondo.
+          La foto no debe contener textos superpuestos o filtros artificiales,
+          incluyendo bordes.
         #original_hash: cc5f23a
         '6': La foto tiene que tener la orientación correcta.
         #original_hash: 1a18831
         '7': La foto no debe contener contenido ofensivo (p.e. gestos ofensivos).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Directrices adicionales para Personal WCA:'
         paragraphs:
@@ -2032,6 +2076,8 @@ es:
       payment_requested_on: 'Pago requerido el %{date}'
       #original_hash: b25928c
       total: Total
+      #original_hash: df036fe
+      n_events: Número de categorías
     new_registration:
       #original_hash: 8b9f726
       title: 'Registrado para %{comp}'
@@ -2263,6 +2309,18 @@ es:
         todavía.
       #original_hash: ab61991
       announced: ¡Competición anunciada con éxito!
+      #original_hash: a582c89
+      cancelled: >-
+        La competición ha sido cancelada. Por favor revisa la sección de
+        información para obtener más detalles.
+      #original_hash: b4aa5ee
+      cancel_success: ¡Competición cancelada con éxito!
+      #original_hash: d0478cf
+      cancel_failure: No se ha podido cancelar la competición.
+      #original_hash: 09df36b
+      uncancel_success: ¡Competición no cancelada con éxito!
+      #original_hash: ead4a9e
+      uncancel_failure: No se ha podido quitar la cancelación de la competición.
       #original_hash: 8ad5e67
       results_not_posted: >-
         Los resultados de esta competición son visibles pero todavía no han sido
@@ -2351,6 +2409,8 @@ es:
       details: Detalles
       #original_hash: 2e8a57c
       website: Web
+      #original_hash: 2260929
+      display_name: '[Cancelado] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: Organizadores
@@ -2458,11 +2518,11 @@ es:
       result_sentence: 'con %{a_win_by_word} de %{result}'
       #original_hash: 6c3b236
       winner: '%{winner} ganó %{result_sentence} en la categoría de %{event_name}.'
-      #original_hash: 4daa7df
+      #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} acabó segundo (%{first_runner_up_result})'
-      #original_hash: d96b040
+      #original_hash: cffa50a
       and: 'y'
-      #original_hash: e9e9d2e
+      #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} acabó tercero (%{second_runner_up_result}).'
       records:
         #original_hash: 0658e11
@@ -2516,6 +2576,10 @@ es:
       past: Anteriores
       #original_hash: 081ae3f
       custom: Filtro
+      #original_hash: 73cf180
+      by_announcement: Por anuncio
+      #original_hash: b3946b2
+      sort_by_announcement: Ordenar por fecha de anuncio
       #original_hash: 3f66052
       from_date: Desde
       #original_hash: ae79ea1
@@ -2537,6 +2601,8 @@ es:
         upcoming: Próximas competiciones
         #original_hash: 8b57693
         custom: Competiciones que cumplen el filtro
+        #original_hash: 0933739
+        by_announcement: 'Competiciones ordenadas por fecha de anuncio, más recientes arriba'
       #original_hash: 6684214
       no_access: ¡No tienes acceso a esta página!
       tooltips:
@@ -2549,6 +2615,8 @@ es:
           posted: ¡Los resultados están publicados!
           #original_hash: 89bcc37
           starts_in: 'Comienza dentro de %{days}'
+          #original_hash: 97b061a
+          announced_on: 'Anunciado en %{announcement_date}'
         #original_hash: ccd2db9
         search: Nombre o ciudad
         #original_hash: 3bc8082
@@ -2623,10 +2691,10 @@ es:
       is_visible: >-
         ¡Esta competición es visible! Cualquier cambio que hagas se mostrará
         públicamente.
-      #original_hash: f99b3f7
+      #original_hash: 1039850
       pending_confirmation_html: >-
-        Rellena todos los campos y haz click en Confirmar cuando estés listo
-        para que el %{contact} apruebe esta competición .
+        Rellena todos los campos y haz que tu Delegado haga click en Confirmar
+        cuando estés listo para que el %{contact} apruebe esta competición .
       #original_hash: 8966fd0
       submit_create_value: Crear una Competición
       #original_hash: 40b0dfd
@@ -2762,12 +2830,24 @@ es:
     post_announcement: Anunciar la competición
     #original_hash: b462eac
     announced_by_html: 'Anunciado por %{announcer_name} en %{date_time}'
+    #original_hash: 375e17f
+    cancel: Cancelar la competición
+    #original_hash: 7628a51
+    uncancel: Quitar la cancelación de la competición
+    #original_hash: 9122a6c
+    cancelled_by_html: 'Cancelado por by %{name} en %{date_time}'
+    #original_hash: 25e68c3
+    cancel_confirm: ¿Estás seguro de que quieres cancelar la competición?
     #original_hash: 9a42672
     upload_results: Cargar los resultados
     #original_hash: 01de5ee
     post_results: Publicar los resultados
     #original_hash: b6513f1
     results_posted_by_html: 'Publicado por %{poster_name} en %{date_time}'
+    #original_hash: a6b5efe
+    cancel_mistake: ¿Cometiste un error?
+    #original_hash: 0fb43d5
+    note_before_cancel: 'Nota: Sólo se pueden cancelar competiciones confirmadas.'
     show:
       #original_hash: b0fe391
       general_info: Información general
@@ -3139,11 +3219,13 @@ es:
       description: >-
         Utiliza este formulario si tu fecha de nacimiento almacenada en nuestra
         base de datos es incorrecta.
-      #original_hash: 563d056
+      #original_hash: 0ac13b9
       important_message_html: >-
         <span class=“text-danger”>IMPORTANTE</span>: Adjunta una imagen de un
         <u>documento legal</u> (carné identificativo, carné de conducir,
-        pasaporte...) que nuestre tu nombre Y tu fecha de nacimiento.
+        pasaporte...) que nuestre tu nombre Y tu fecha de nacimiento. Puedes
+        desenfocar / ocultar el resto de datos personales en la identificación
+        si así lo deseas.
       #original_hash: 19c17ec
       submit: Solicitar el cambio
     messages:
@@ -3670,6 +3752,17 @@ es:
     policies: Políticas WCA
     #original_hash: 91ac873
     codeofethics: Código de Ética
+  education:
+    #original_hash: 41701c2
+    title: Documentos Educativos de la WCA
+    #original_hash: aa562a7
+    description: >-
+      WQAC y WMT han publicado varios documentos para la comunidad, puedes
+      descargarlos a continuación.
+    #original_hash: d0a3812
+    competitor_tutorial: Tutorial de competidor
+    #original_hash: 815938f
+    competition_material: 'Material de competición (certificados, tapa cubos, ...)'
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
@@ -3880,39 +3973,113 @@ es:
         Este consejo es responsable de fomentar y mantener comunicación
         bilateral entre la Comunidad WCA y el Staff WCA.
   score_tools:
-    #original_hash: ea9d41d
-    title: Herramientas para la captación de resultados
-    paragraphs:
-      #original_hash: 305f7f8
-      '1': >-
-        La WCA recomienda encarecidamente el uso de <a
-        href="https://live.worldcubeassociation.org">WCA Live</a> antes y
-        durante la celebración de una competición. WCA Live es una plataforma
-        para gestionar competiciones WCA y compartir resultados en vivo con el
-        resto del mundo.
-      #original_hash: 0867b38
-      '2': >-
-        Los resultados y las mezclas deben procesarse y comprobarse antes de
-        enviarlos al Equipo de Resultados de la WCA. Puedes usar <a
-        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
-        Matcher</a>,  un proyecto de código abierto creado por Philippe
-        Virouleau.
-      #original_hash: 975e59b
-      '3': >-
-        La última versión de la Hoja de Puntuaciones de la WCA (en desuso si se
-        utiliza Cubecomps u otra herramienta similar) puede descargarse aquí:<br
-        /><a href="/files/results.xls" target="_blank">Hoja de Puntuaciones de
-        la WCA</a>.
-      #original_hash: c576675
-      '4': >-
-        También puedes usar <a
-        href="https://groupifier.jonatanklosko.com">Groupifier</a> para preparar
-        grupos de competidores para una competición. Es una herramienta cuyo
-        objetivo es hacer exactamente eso por ti. Entre sus principales
-        funcionalidades encontrarás ordenar competidores por ranking, asignar
-        tareas (juzgar, mezclar), decidir cuantas mezclas son necesarias,
-        generar hojas de tiempos, hojas personales y resúmenes. Es un proyecto
-        de código abierto creado por Jonatan Klosko.
+    #original_hash: 4fc2133
+    title: Herramientas software para las competiciones WCA
+    #original_hash: 6d2fe37
+    wca_icon_text: Desarrollado y mantenido  por el WST
+    intro:
+      #original_hash: 0c5fab5
+      desc: >-
+        Esta página contiene una lista no exhaustiva de herramientas usadas para
+        ayudar en la organización de competiciones WCA.
+      #original_hash: 479b542
+      disclaimer: >-
+        No todas las herramientas en la página se mantienen por el WST: ¡Está
+        bien! No tenemos personal suficiente para gestionar todo el software
+        relacionado con la WCA que existe por ahí :)
+      #original_hash: 80f97b9
+      used: >-
+        Todos los programas de esta lista han sido usados durante competiciones
+        WCA reales y se integran con la web de la WCA: te dejan iniciar sesión
+        con tu cuenta WCA para permitirte importar (y a veces actualizar) los
+        datos de tus competiciones próximas. Para cada una de ellas los
+        mantenedores estarán claramente especificados.
+    before:
+      #original_hash: 9850344
+      title: Antes de la competición
+      #original_hash: 576e2f4
+      desc: >-
+        Las gestiones de registros de competidores pueden hacerse directamente
+        en la web de la WCA. Como gestionar los grupos y el staff manualmente
+        puede ser tedioso, puede que quieras considerar utilizar alguna de estas
+        herramientas.
+    during:
+      #original_hash: 9934200
+      title: Durante la competición
+      #original_hash: 2b0a6f6
+      desc: >-
+        Encontrarás aquí herramientas que te permiten gestionar los resultados
+        de la competición mientras está sucediendo.
+    after:
+      #original_hash: d81b949
+      title: Después de la competición
+      #original_hash: b898460
+      desc: >-
+        Mientras la validación de resultados se lleva a cabo en la web,
+        necesitarás utilizar alguna herramienta para asignar las mezclas
+        generadas por TNoodle a los resultados cargados en la web de la WCA.
+    tools:
+      age:
+        #original_hash: 4aaae5b
+        title: AGE
+        #original_hash: 2e4832d
+        description: >-
+          Herramienta para generar y editar grupos/asignaciones de tareas para
+          competiciones WCA
+      certificates:
+        #original_hash: b3e4eb0
+        title: Certificados
+        #original_hash: f1a0731
+        description: Imprimir certificados para competiciones WCA que usen WCA Live
+      groupifier:
+        #original_hash: 8f55355
+        title: Groupifier
+        #original_hash: 24d4736
+        description: >-
+          Herramienta de gestión de tareas y grupos para organizadores de
+          competiciones WCA. Entre sus principales funcionalidades encontrarás:
+          Ordenar competidores por su ranking, asignar tareas (Hacer de juez,
+          mezclar), decidir cuantas mezclas son necesarias, generar hojas de
+          tiempos, horarios personalizados, resúmenes... Visita la web para
+          averiguar más.
+      scorecards:
+        #original_hash: aa1b64d
+        title: Scorecards
+        #original_hash: 2b8e373
+        description: Imprime hojas de tiempos para competiciones WCA que usen WCA Live
+      tnoodle:
+        #original_hash: ba336a1
+        title: TNoodle (Mezclas)
+        #original_hash: 0a38b22
+        description: >-
+          TNoodle es el programa de mezclas oficial que se usa para las
+          competiciones WCA. Normalmente es usado por Delegados antes de las
+          competiciones WCA, pero su interfaz de usuario permite a cualquier
+          genera cualquier tipo de mezclas para todas las categorías WCA.
+      live:
+        #original_hash: c66444f
+        title: WCA Live
+        #original_hash: f122015
+        description: >-
+          Plataforma para llevar competiciones WCA y compartir resultados en
+          directo con el mundo.
+      nightmare:
+        #original_hash: eebde3b
+        title: Hoja de cálculo de resultados
+        #original_hash: 466f4c2
+        description: >-
+          A veces suceden cosas... Si no tienes acceso a internet, necesitarás
+          usar la vieja hoja de cálculo.
+      matcher:
+        #original_hash: cc59bc9
+        title: Scrambles Matcher
+        #original_hash: a352bd1
+        description: >-
+          Se puede usar para asignar mezclas generadas por TNoodle a resultados.
+          Importar resultados de la web de la WCA (Cuando se use WCA Live), de
+          una hoja de cálculo o de un archivo WCIF independiente. Importa
+          mezclas de uno o más archivos json de TNoodle. Exporta resultados al
+          formato correcto para la carga de resultados WCA.
   logo:
     #original_hash: c72c969
     title: Logotipo de la WCA
@@ -4126,6 +4293,11 @@ es:
         El Reglamento de la WCA está complementado por las <a
         href="/regulations/guidelines.html">Directrices de la WCA</a>, que
         contienen aclaraciones y explicaciones adicionales.
+      #original_hash: c8e1783
+      content3_html: >-
+        Decisiones importantes acerca de incidentes que sucedieron en
+        competiciones que fueron resueltos por el Comité de Reglamento de la WCA
+        se pueden encontrar en el <a href="/incidents">Log de incidentes</a>.
     panel2:
       #original_hash: 8ad8302
       title: Traducciones

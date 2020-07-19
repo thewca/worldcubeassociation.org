@@ -2,24 +2,26 @@
 
 module ResultsValidators
   class IndividualResultsValidator < GenericValidator
-    MBF_RESULT_OVER_TIME_LIMIT_WARNING = "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please make sure it is the consequence of +2 penalties before sending the results, or fix the result to DNF."
+    MBF_RESULT_OVER_TIME_LIMIT_WARNING = "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please ensure this is due to time penalties before sending the results, or fix the result to DNF."
 
-    RESULT_AFTER_DNS_WARNING = "[%{round_id}] %{person_name} has at least one DNS results followed by a valid result. Please make sure it is indeed a DNS and not a DNF."
-    SIMILAR_RESULTS_WARNING = "[%{round_id}] Results for %{person_name} are similar to the results for %{similar_person_name}."
+    RESULT_AFTER_DNS_WARNING = "[%{round_id}] %{person_name} has at least one DNS result followed by a valid result. Please ensure it is indeed a DNS and if so, explain what happened to WRT."
+    SIMILAR_RESULTS_WARNING = "[%{round_id}] Results for %{person_name} are similar to the results for %{similar_person_name}. Please ensure that these results are correctly recorded for both competitors."
 
-    MET_CUTOFF_MISSING_RESULTS_ERROR = "[%{round_id}] %{person_name} has met the cutoff but is missing results for the second phase. Cutoff is %{cutoff}."
-    DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = "[%{round_id}] %{person_name} has at least one result for the second phase but didn't meet the cutoff. Cutoff is %{cutoff}."
-    WRONG_ATTEMPTS_FOR_CUTOFF_ERROR = "[%{round_id}] %{person_name} is missing at least one attempt for the cutoff phase."
+    MET_CUTOFF_MISSING_RESULTS_ERROR = "[%{round_id}] %{person_name} met the cutoff but is missing results for the second phase of the round. The cutoff was %{cutoff}."
+    DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = "[%{round_id}] %{person_name} has at least one result for the second phase of the round but didn't meet the cutoff. The cutoff was %{cutoff}."
+    WRONG_ATTEMPTS_FOR_CUTOFF_ERROR = "[%{round_id}] %{person_name} is missing at least one attempt for the cutoff phase."\
+    " Please edit the result to include the missing attempt(s) or update the round's information in the competition's Manage Events page."
     MISMATCHED_RESULT_FORMAT_ERROR = "[%{round_id}] Results for %{person_name} are in the wrong format: expected %{expected_format}, but got %{format}."
-    RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit which is %{time_limit} for one solve. All solves over the time limit must be changed to DNF."
-    RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit which is %{time_limit}."
-    NO_ROUND_INFORMATION_WARNING = "[%{round_id}] Could not find information about cutoff and timelimit for this round, these validations have been skipped."
-    SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit, and extrapolating based on %{person_name}'s successful solves, they would have had very little time left for at least one"\
-    " of their DNFs. Please make sure every DNF and DNS is indeed correct. If the competitor did not start an attempt or did not have any remaining time before starting an attempt, it must be entered as DNS."
+    RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit for the round, which is %{time_limit} per attempt. All solves over the time limit must be changed to DNF."
+    RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit, which was %{time_limit}."
+    NO_ROUND_INFORMATION_WARNING = "[%{round_id}] There is no information about the cutoff and time limit for this round. These validations have been skipped. Please update the round's information in the competition's Manage Events page."
+    UNDEF_TL_WARNING = "[%{round_id}] The time limit for this round is undefined, time limit validations have been skipped. This is expected only for competitions before 2013."
+    SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit, and extrapolating based on %{person_name}'s successful solves, they would have had very little time left for at least one of their DNFs."\
+    " Please ensure that every DNF and DNS is indeed correct. If the competitor did not start an attempt or did not have any remaining time before starting an attempt, it must be entered as DNS."
 
     # Miscelaneous errors
-    MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round \"%{wcif_id}\" for the cumulative time limit specified in the WCIF."\
-    " Please go to the manage events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
+    MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round \%{wcif_id}\ for the cumulative time limit specified in the WCIF."\
+    " Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
 
     @@desc = "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."
 
@@ -69,6 +71,16 @@ module ResultsValidators
           end
 
           time_limit_for_round = round_info.time_limit
+          if time_limit_for_round == TimeLimit::UNDEF_TL
+            # This situation may happen with "old" competitions, where time limit
+            # were possibly not enforced at the discretion of the WCA Delegate.
+            # In which case we let the TL undefined, and no errors should be
+            # generated.
+            @warnings << ValidationWarning.new(:results, competition_id,
+                                               UNDEF_TL_WARNING,
+                                               round_id: round_id)
+          end
+
           cutoff_for_round = round_info.cutoff
 
           results_for_round.each_with_index do |result, index|
@@ -85,6 +97,9 @@ module ResultsValidators
             check_results_for_cutoff(context, cutoff_for_round) if cutoff_for_round
 
             completed_solves = all_solve_times.select(&:complete?)
+
+            # Below are checks for time limits, skip them if the time limit is undefined
+            next if time_limit_for_round == TimeLimit::UNDEF_TL
 
             # Checks for time limits if it can be user-specified
             if !["333mbf", "333fm"].include?(result.eventId)

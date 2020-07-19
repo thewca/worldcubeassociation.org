@@ -1,6 +1,7 @@
 <%# Generate round informations for the competition %>
 <% rounds_by_wcif_id = Hash[competition.rounds.map { |r| [r.wcif_id, r.to_string_map] }] %>
-<%= javascript_pack_tag 'show_schedule' %>
+<% add_to_packs("show_schedule") %>
+<% add_fullcalendar_to_packs %>
 
 <div class="tab-content" id="schedule-tab">
   <ul class="nav nav-pills nav-justified venue-pills">
@@ -19,7 +20,7 @@
       activities.map!{ |a| a.to_event(rounds_by_wcif_id) }
     %>
     <script>
-      wca.registerVenueData("<%= venue.id %>", {
+      window.wca.registerVenueData("<%= venue.id %>", {
         events: <%= raw(activities.to_json) %>,
         minTime: "<%= min_time %>",
         maxTime: "<%= max_time %>",
@@ -116,7 +117,7 @@
   }
 
   $(() => {
-    wca.setupCalendarAndFilter(popoverContentFromData, "<%= I18n.locale %>",
+    window.wca.setupCalendarAndFilter(popoverContentFromData, "<%= I18n.locale %>",
         "<%= competition.start_date %>",
         <%= competition.number_of_days %>);
   });

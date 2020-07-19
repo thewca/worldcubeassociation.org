@@ -10,8 +10,6 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
 //= require bootstrap-sprockets
 //= require bootstrap-hover-dropdown
 //= require jquery.are-you-sure
@@ -20,9 +18,9 @@
 //= require selectize.do_not_clear_on_blur
 //= require selectize.tags_options
 //= require jquery.jcrop
-//= require lodash
 //= require jquery.wca-autocomplete
 //= require jquery.floatThead.js
+//= require slick.min
 //= require cocoon
 //= require moment
 //= require moment-timezone-with-data
@@ -30,75 +28,50 @@
 //= require bootstrap-table
 //= require bootstrap-table-locale-all
 //= require extensions/bootstrap-table-mobile
-//= require fullcalendar
-//= require fullcalendar/lang/cs.js
-//= require fullcalendar/lang/da.js
-//= require fullcalendar/lang/de.js
-//= require fullcalendar/lang/es.js
-//= require fullcalendar/lang/fi.js
-//= require fullcalendar/lang/fr.js
-//= require fullcalendar/lang/hr.js
-//= require fullcalendar/lang/hu.js
-//= require fullcalendar/lang/id.js
-//= require fullcalendar/lang/it.js
-//= require fullcalendar/lang/ja.js
-//= require fullcalendar/lang/ko.js
-//= require fullcalendar/lang/nl.js
-//= require fullcalendar/lang/pl.js
-//= require fullcalendar/lang/pt-br.js
-//= require fullcalendar/lang/pt.js
-//= require fullcalendar/lang/ro.js
-//= require fullcalendar/lang/ru.js
-//= require fullcalendar/lang/sk.js
-//= require fullcalendar/lang/sl.js
-//= require fullcalendar/lang/th.js
-//= require fullcalendar/lang/uk.js
-//= require fullcalendar/lang/vi.js
-//= require fullcalendar/lang/zh-cn.js
-//= require fullcalendar/lang/zh-tw.js
 //= require jquery_plugins
-//= require jquery-ui/position
-//= require jquery-ui/widgets/draggable
-//= require jquery.slick
 //= require_self
-//= require_tree .
+// We don't require_tree here, because we don't want fullcalendar and locales
+// to be included.
+//= require_directory
 
 // Global variables
-var TEXT_INPUT_DEBOUNCE_MS = 250;
+window.wca.TEXT_INPUT_DEBOUNCE_MS = 250;
 
-
-// Dumping ground for... stuff
-window.wca = window.wca || {};
-
-wca._pendingAjaxById = {};
-wca.cancelPendingAjaxAndAjax = function(id, options) {
-  if(wca._pendingAjaxById[id]) {
-    wca._pendingAjaxById[id].abort();
+window.wca._pendingAjaxById = {};
+window.wca.cancelPendingAjaxAndAjax = function(id, options) {
+  if(window.wca._pendingAjaxById[id]) {
+    window.wca._pendingAjaxById[id].abort();
   }
-  wca._pendingAjaxById[id] = $.ajax(options).always(function() {
-    delete wca._pendingAjaxById[id];
+  // Get the authenticity token.
+  options.headers = options.headers || {};
+  var csrfTokenElement = document.querySelector('meta[name=csrf-token]');
+  if (csrfTokenElement) {
+    options.headers['X-CSRF-Token'] = csrfTokenElement.content;
+  }
+  window.wca._pendingAjaxById[id] = $.ajax(options).always(function() {
+    delete window.wca._pendingAjaxById[id];
   });
-  return wca._pendingAjaxById[id];
+  return window.wca._pendingAjaxById[id];
 };
 
-wca._googleMapsLoaded = false;
-wca._onGoogleMapsLoaded = function() {
-  wca._googleMapsLoaded = true;
-  wca._googleMapsLoadedListeners.forEach(function(listener) {
+window.wca._googleMapsLoaded = false;
+window.wca._onGoogleMapsLoaded = function() {
+  window.wca._googleMapsLoaded = true;
+  window.wca._googleMapsLoadedListeners.forEach(function(listener) {
     listener();
   });
-  wca._googleMapsLoadedListeners = null;
+  window.wca._googleMapsLoadedListeners = null;
 };
-wca._googleMapsLoadedListeners = [];
-wca.addGoogleMapsLoadedListener = function(listener) {
-  if(wca._googleMapsLoaded) {
+window.wca._googleMapsLoadedListeners = [];
+window.wca.addGoogleMapsLoadedListener = function(listener) {
+  if(window.wca._googleMapsLoaded) {
     listener();
   } else {
-    wca._googleMapsLoadedListeners.push(listener);
+    window.wca._googleMapsLoadedListeners.push(listener);
   }
 };
 
-wca.addCompetitionsToMap = function(map, competitions) {
+window.wca.addCompetitionsToMap = function(map, competitions) {
   competitions.forEach(function(c) {
     if (c.is_probably_over) {
       iconImage = 'https://maps.google.com/mapfiles/ms/icons/blue.png';
@@ -122,7 +95,7 @@ wca.addCompetitionsToMap = function(map, competitions) {
   });
 };
 
-wca.createCompetitionsMap = function(element) {
+window.wca.createCompetitionsMap = function(element) {
   var map = new google.maps.Map(element, {
     zoom: 2,
     center: { lat: 0, lng: 0 },
@@ -138,15 +111,15 @@ wca.createCompetitionsMap = function(element) {
   return map;
 };
 
-wca.removeMarkers = function(map) {
+window.wca.removeMarkers = function(map) {
   map.overlappingMarkerSpiderfier.getMarkers().forEach(function(marker) {
     marker.setMap(null);
   });
   map.overlappingMarkerSpiderfier.clearMarkers();
 };
 
-wca.renderMarkdownRequest = function(markdownContent) {
-  return wca.cancelPendingAjaxAndAjax('render_markdown', {
+window.wca.renderMarkdownRequest = function(markdownContent) {
+  return window.wca.cancelPendingAjaxAndAjax('render_markdown', {
     url: '/render_markdown',
     method: 'POST',
     data: {
@@ -155,11 +128,11 @@ wca.renderMarkdownRequest = function(markdownContent) {
   });
 };
 
-wca.stripHtmlTags = function(text) {
+window.wca.stripHtmlTags = function(text) {
   return $("<div/>").html(text).text();
 };
 
-wca.datetimepicker = function(){
+window.wca.datetimepicker = function(){
   // Copied (and modified by jfly) from
   // https://github.com/zpaulovics/datetimepicker-rails
   // We're using keepOpen: true here to allow the user to
@@ -208,11 +181,15 @@ wca.datetimepicker = function(){
   });
 };
 
+window.wca.reloadPopover = function() {
+  $('[data-toggle="popover"]').popover();
+};
+
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
 
-  wca.datetimepicker();
+  window.wca.datetimepicker();
 
   $('.datetimerange').each(function() {
     var $inputGroups = $(this).find('.date_picker.form-control');
@@ -230,7 +207,7 @@ $(function() {
   });
 
   $('[data-toggle="tooltip"]').tooltip();
-  $('[data-toggle="popover"]').popover();
+  window.wca.reloadPopover();
   $('input.wca-autocomplete').wcaAutocomplete();
 
   var $tablesToFloatHeaders = $('table.floatThead');
@@ -295,7 +272,7 @@ Math.trunc = Math.trunc || function(x) {
 
 // Bootstrap-table default options
 $.extend($.fn.bootstrapTable.defaults, {
-  searchTimeOut: TEXT_INPUT_DEBOUNCE_MS,
+  searchTimeOut: window.wca.TEXT_INPUT_DEBOUNCE_MS,
   trimOnSearch: false
 });
 
@@ -368,24 +345,6 @@ function onPage(controllersWithActions, fun) {
     }
   });
 }
-
-$(function() {
-  $('.wca-local-time').each(function() {
-    var data = $(this).data();
-    var date = new Date(data.utcTime);
-    var formatted;
-    if(typeof(Intl) !== "undefined") {
-      formatted = new Intl.DateTimeFormat(data.locale, {
-        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short'
-      }).format(date);
-    } else {
-      // Workaround for https://github.com/thewca/worldcubeassociation.org/issues/3228.
-      // We can remove this once we consider Safari 9 to be "dead enough".
-      formatted = date.toString();
-    }
-    $(this).text(formatted);
-  });
-});
 
 // Handler for locale changes.
 $(function() {

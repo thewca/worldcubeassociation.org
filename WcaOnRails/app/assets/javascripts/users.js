@@ -7,6 +7,7 @@ onPage('users#edit, users#update', function() {
     var delegateStatus = this.value;
     var seniorDelegateRequired = {
       "": false,
+      trainee_delegate: true,
       candidate_delegate: true,
       delegate: true,
       senior_delegate: false,
@@ -45,7 +46,7 @@ onPage('users#edit, users#update', function() {
   // Change the 'section' parameter when a tab is switched.
   $('a[data-toggle="tab"]').on('show.bs.tab', function() {
     var section = $(this).attr('href').slice(1);
-    $.setUrlParams({ section: section });
+    window.wca.setUrlParams({ section: section });
   });
   // Require the user to confirm reading guidelines.
   $('#upload-avatar-form input[type="submit"]').on('click', function(event) {
@@ -67,7 +68,7 @@ var usersTableAjax = {
     });
   },
   doAjax: function(options) {
-    return wca.cancelPendingAjaxAndAjax('users-index', options);
+    return window.wca.cancelPendingAjaxAndAjax('users-index', options);
   },
 };
 
@@ -85,7 +86,7 @@ onPage('users#index', function() {
   };
 
   // Set the table options from the url params.
-  var urlParams = $.getUrlParams();
+  var urlParams = window.wca.getUrlParams();
   $.extend(options, {
     pageNumber: parseInt(urlParams.page) || options.pageNumber,
     sortOrder: urlParams.order || options.sortOrder,
@@ -101,7 +102,7 @@ onPage('users#index', function() {
   }
 
   $('#region').on('change', reloadUsers);
-  $('#search').on('input', _.debounce(reloadUsers, TEXT_INPUT_DEBOUNCE_MS));
+  $('#search').on('input', window.wca.lodashDebounce(reloadUsers, window.wca.TEXT_INPUT_DEBOUNCE_MS));
 
   $table.on('load-success.bs.table', function(e, data) {
     $('#search-box i').removeClass('fa-spinner fa-spin').addClass('fa-search');
@@ -112,6 +113,6 @@ onPage('users#index', function() {
       order: options.sortOrder,
       sort: options.sortName
     });
-    $.setUrlParams(params);
+    window.wca.setUrlParams(params);
   });
 });

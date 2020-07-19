@@ -33,8 +33,9 @@ module PersonsHelper
   end
 
   def delegate_badge(kind)
-    content_tag(:span, class: "badge delegate-badge") do
-      link_to(t("enums.user.delegate_status." + kind), "/delegates", title: t("enums.user.delegate_status." + kind), data: { toggle: "tooltip", placement: "bottom" })
+    title = t("enums.user.delegate_status." + kind)
+    content_tag(:span, class: "badge delegate-badge", data: { toggle: "tooltip", placement: "bottom" }, title: title) do
+      kind == "trainee_delegate" ? title : link_to(title, "/delegates")
     end
   end
 
@@ -59,8 +60,10 @@ module PersonsHelper
         badges.push(delegate_badge("senior_delegate"))
       elsif user.full_delegate?
         badges.push(delegate_badge("delegate"))
-      else
+      elsif user.candidate_delegate?
         badges.push(delegate_badge("candidate_delegate"))
+      else
+        badges.push(delegate_badge("trainee_delegate"))
       end
     end
 

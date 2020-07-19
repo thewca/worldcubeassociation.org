@@ -36,7 +36,7 @@
             <li><a href="<%= organizations_path %>"><%= icon('fas', 'flag') %> <%= t '.organizations' %></a></li>
             <li class="divider"></li>
             <li><a href="<%= faq_path %>"><%= icon('fas', 'question-circle') %> <%= t '.faq' %></a></li>
-            <li><a href="<%= tutorial_path %>"><%= icon('fas', 'graduation-cap') %> <%= t '.tutorial' %></a></li>
+            <li><a href="<%= education_path %>"><%= icon('fas', 'graduation-cap') %> <%= t '.education' %></a></li>
             <li><a href="<%= contact_website_path %>"><%= icon('fas', 'envelope') %> <%= t '.contact' %></a></li>
             <li><a href="<%= media_instagram_path %>"><%= icon('fas', 'camera') %> <%= t '.media_submission' %></a></li>
             <li><a href="<%= privacy_path %>"><%= icon('fas', 'user-secret') %> Privacy</a></li>
@@ -60,7 +60,9 @@
         </li>
         <li class="dropdown <%= Set['results', 'persons', 'media'].include?(params[:controller]) ? 'active' : '' %>">
           <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= icon('fas', 'list-ol') %> <%= t '.results' %> <span class="caret"></span>
+            <%= icon('fas', 'list-ol') %>
+            <span class="hidden-sm"><%= t '.results' %></span>
+            <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="https://live.worldcubeassociation.org"><%= icon('fa', 'sort-numeric-down') %>WCA Live</a></li>
@@ -94,6 +96,12 @@
             <li><a href="/regulations/translations/"><%= icon('fas', 'language') %> <%= t '.translations' %></a></li>
           </ul>
         </li>
+        <li>
+          <a href="https://forum.worldcubeassociation.org/" target="_blank" class="hide-new-window-icon">
+            <%= icon('fas', 'comments') %>
+            <span class="hidden-sm"><%= t '.forum' %></span>
+          </a>
+        </li>
       </ul>
 
       <form class="navbar-form navbar-left" role="search">
@@ -104,14 +112,15 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
             <% active_locale_info = Locales::AVAILABLE[I18n.locale] %>
-            <%= flag_icon active_locale_info[:flag_id] %> <span class="hidden-sm"><%= active_locale_info[:name] %></span>
+            <%= icon('fas', 'language') %>
+            <span class="visible-lg-inline visible-xs-inline"><%= active_locale_info[:name] %></span>
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" id="locale-selector" role="menu">
             <% Locales::AVAILABLE.each do |l, data| %>
               <li class="<%= l == I18n.locale ? "active" : "" %>">
                 <%= link_to update_locale_path(l) do %>
-                  <%= flag_icon data[:flag_id] %> <%= data[:name] %>
+                  <%= data[:name] %>
                 <% end %>
               </li>
             <% end %>

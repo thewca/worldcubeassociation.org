@@ -59,7 +59,7 @@
 <script>
   (function() {
     $('[data-toggle="tooltip"]').tooltip();
-    wca.setNearbyCompetitions(<%= @nearby_competitions.map do |c|
+    window.wca.setNearbyCompetitions(<%= @nearby_competitions.map do |c|
         {
           id: c.id,
           name: c.name,

@@ -8,7 +8,7 @@
   <% delegate_sort_order = { region: :asc, name: :asc } %>
 
   <% @senior_delegates.order(delegate_sort_order).each do |senior_delegate| %>
-    <%= render partial: "delegates_in_region_table", locals: { delegates: [senior_delegate] + senior_delegate.subordinate_delegates.order(delegate_sort_order) } %>
+    <%= render partial: "delegates_in_region_table", locals: { delegates: [senior_delegate] + senior_delegate.subordinate_delegates.order(delegate_sort_order).reject(&:trainee_delegate?) } %>
   <% end %>
 
   <%= render partial: "delegates_in_region_table", locals: { delegates: @delegates_without_senior_delegates.order(delegate_sort_order) } %>

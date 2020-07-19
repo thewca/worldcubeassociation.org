@@ -50,6 +50,10 @@ class DelegateReport < ApplicationRecord
     !!posted_at
   end
 
+  def can_submit_delegate_report?(current_user)
+    !posted? && competition.delegates.include?(current_user)
+  end
+
   def posted=(new_posted)
     new_posted = ActiveRecord::Type::Boolean.new.cast(new_posted)
     self.posted_at = (new_posted ? Time.now : nil)

@@ -1,3 +1,13 @@
-// Place all the styles related to the StaticPages controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+#software-tools {
+  .wca-tool-icon {
+    width: 32px;
+  }
+  .tools-list {
+    .panel-body {
+      i {
+        margin-right: 10px;
+      }
+    }
+    margin-top: 15px;
+  }
+}

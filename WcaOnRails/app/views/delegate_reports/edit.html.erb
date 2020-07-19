@@ -1,6 +1,7 @@
 <% provide(:title, "Report for #{@competition.name}") %>
 <% provide(:editing_delegate_report, true) %>
-<% provide(:include_markdown_editor, true) %>
+
+<% add_to_packs("markdown_editor") %>
 
 <%= render layout: 'nav' do %>
   <h2>Editing Delegate Report for <%= @competition.name%></h2>
@@ -25,8 +26,8 @@
     <%= f.input :remarks, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
 
     <%= f.button :submit, class: "btn-primary" %>
-    <% is_actually_posted = DelegateReport.find(@delegate_report.id).posted? %>
-    <% if !is_actually_posted %>
+    <% can_submit_delegate_report = DelegateReport.find(@delegate_report.id).can_submit_delegate_report?(@current_user) %>
+    <% if can_submit_delegate_report %>
       <%= button_tag(type: 'submit',
                      name: "delegate_report[posted]",
                      value: true,

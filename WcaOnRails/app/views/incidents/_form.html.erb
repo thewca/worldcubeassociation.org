@@ -1,4 +1,5 @@
-<% provide(:include_markdown_editor, true) %>
+<% add_to_packs("markdown_editor") %>
+
 <%= horizontal_simple_form_for(@incident, html: { class: "incident-form" }) do |f| %>
 
   <div class="form-inputs">
@@ -13,7 +14,7 @@
     <hr/>
     <%= f.input :tags %>
     <script>
-      $('input#incident_tags').selectize(wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>));
+      $('input#incident_tags').selectize(window.wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>));
     </script>
     <hr/>
     <div class="incident-competitions">

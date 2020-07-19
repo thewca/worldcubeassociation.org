@@ -1736,7 +1736,7 @@ it:
         '6': L'avatar deve essere caricato nella corretta orientamento.
         #original_hash: 1a18831
         '7': L'avatar non deve contenere contenuti offensivi (es. gesti offensivi).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Ulteriori linee guida per i membri dello Staff:'
         paragraphs:

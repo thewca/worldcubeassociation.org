@@ -221,4 +221,30 @@ module ApplicationHelper
   def embedded_map_url(query)
     "#{ENVied.ROOT_URL}/map?q=#{URI.encode_www_form_component(CGI.unescapeHTML(query))}"
   end
+
+  def add_to_packs(name)
+    @all_packs = capture do
+      [@all_packs, name].compact.join(",")
+    end
+  end
+
+  def add_to_css_assets(name)
+    @all_css_assets = capture do
+      [@all_css_assets, name].compact.join(",")
+    end
+  end
+
+  def add_to_js_assets(*names)
+    @all_js_assets = capture do
+      [@all_js_assets, *names].compact.join(",")
+    end
+  end
+
+  def add_fullcalendar_to_packs
+    add_to_js_assets('fullcalendar/fullcalendar_wca')
+    add_to_css_assets('fullcalendar_wca')
+    if I18n.locale != :en
+      add_to_js_assets("fullcalendar/locales/#{I18n.locale}.js")
+    end
+  end
 end

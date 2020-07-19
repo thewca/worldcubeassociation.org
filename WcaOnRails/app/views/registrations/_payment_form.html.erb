@@ -1,4 +1,4 @@
-<% provide(:include_auto_numeric, true) %>
+<% add_to_packs("auto_numeric") %>
 <%= horizontal_simple_form_for :payment, url: "", html: { id: :form_payment } do |f| %>
   <%= render 'entry_fee', label: "Paid", money_amount: @registration.paid_entry_fees %>
   <%= render 'entry_fee', label: "Remaining", money_amount: @registration.outstanding_entry_fees %>
@@ -63,10 +63,10 @@
           } else {
             // The card action has been handled
             // The PaymentIntent can be confirmed again on the server
-            wca.cancelPendingAjaxAndAjax('process-payment-confirmation', {
+            window.wca.cancelPendingAjaxAndAjax('process-payment-confirmation', {
               url: '<%= registration_payment_intent_path(@registration) %>',
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
+              headers: { 'Content-Type': 'application/json' },
               data: JSON.stringify({ payment_intent_id: result.paymentIntent.id }),
               complete: handleServerResponse,
             });
@@ -113,10 +113,10 @@
             $("#group-card-element").removeClass("has-error");
             $("#group-cardholder-name").removeClass("has-error");
             // Otherwise send paymentMethod.id to your server (see Step 2)
-            wca.cancelPendingAjaxAndAjax('process-payment', {
+            window.wca.cancelPendingAjaxAndAjax('process-payment', {
               url: '<%= registration_payment_intent_path(@registration) %>',
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
+              headers: { 'Content-Type': 'application/json' },
               data: JSON.stringify({ payment_method_id: result.paymentMethod.id, amount: amount }),
               complete: handleServerResponse,
             });

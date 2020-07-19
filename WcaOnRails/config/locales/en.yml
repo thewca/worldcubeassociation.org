@@ -32,7 +32,7 @@ en:
     GW: "Guinea Bissau"
     HK: "Hong Kong"
     KN: "Saint Kitts and Nevis"
-    KP: "Democratic People’s Republic of Korea"
+    KP: "Democratic People's Republic of Korea"
     KR: "Republic of Korea"
     LC: "Saint Lucia"
     MK: "North Macedonia"
@@ -42,7 +42,6 @@ en:
     ST: "São Tomé and Príncipe"
     SZ: "Eswatini"
     TT: "Trinidad and Tobago"
-    VA: "Holy See"
     VC: "Saint Vincent and the Grenadines"
 
     XF: "Multiple Countries (Africa)"
@@ -260,9 +259,6 @@ en:
         results_notifications_enabled: "Email me when my results are posted."
         delegate_status: "Delegate status"
         region: "Region"
-        location_description: "Location description"
-        phone_number: "Phone number"
-        notes: "Notes"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"
@@ -286,6 +282,7 @@ en:
         base_entry_fee_lowest_denomination: "Base registration fee"
         currency_code: "Currency code"
         delegate_ids: "WCA Delegate(s)"
+        trainee_delegate_ids: "WCA Trainee Delegate(s)"
         organizer_ids: "Organizer(s)"
         contact: "Contact"
         information: "Information"
@@ -412,6 +409,7 @@ en:
         f: "Female"
         o: "Other"
       delegate_status:
+        trainee_delegate: "Trainee Delegate"
         candidate_delegate: "Junior Delegate"
         delegate: "Delegate"
         senior_delegate: "Senior Delegate"
@@ -469,9 +467,6 @@ en:
         results_notifications_enabled: ""
         unconfirmed_wca_id: ""
         wca_id: ""
-        location_description: ""
-        phone_number: ""
-        notes: ""
         receive_delegate_reports: "If you are a Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
       #context: for a competition
@@ -481,6 +476,7 @@ en:
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
         delegate_ids: "WCA Delegates for the competition."
+        trainee_delegate_ids: "WCA Trainee Delegates for the competition."
         organizer_ids: "Competition organizers (they need an account to be listed here)."
         external_website: "The website of the competition. Must be a valid http(s) url."
         registration_open: "Note: Registration open and close are in UTC time"
@@ -530,7 +526,7 @@ en:
         your_email: ""
         wca_id: ""
         dob: "Your correct day of birth in the format YYYY-MM-DD"
-        document: "To prove your identity and your correct date of birth to us, you have to attach a picture of any legal document (identity card, driver license, student card, passport, birth certificate, ...) where your name and date of birth are visible and understandable for an English speaker (or contact your local WCA Delegate if you don't have such a document)."
+        document: "To prove your identity and your correct date of birth to us, you have to attach a picture of any legal document (identity card, driver license, student card, passport, birth certificate, ...) where your name and date of birth are visible and understandable for an English speaker (or contact your local WCA Delegate if you don't have such a document). On the identification we need at minimum your name and date of birth; feel free to blur-out/obfuscate any other personal data on the identification."
       #context: for a post
       post:
         body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
@@ -713,6 +709,8 @@ en:
           disable_section_content: "The WST strongly advise you to not disable 2FA, but you can by clicking the button below. Please note that if you reactivate 2FA you will have to reconfigure your device(s)."
           disabled_success: "Successfully disabled two-factor authentication."
           disabled_failed: "Couldn't disable 2FA, please see errors below."
+      destroy_other:
+        success: "Successfully signed out of other devices."
     shared:
       links:
         sign_in: "Sign in"
@@ -764,8 +762,9 @@ en:
       delegates: "WCA Delegates"
       organizations: "Regional Organizations"
       faq: "Frequently Asked Questions"
+      forum: "Forum"
       teams: "Teams, Committees, and Councils"
-      tutorial: "Competition Tutorial"
+      education: "Education resources"
       contact: "Contact Information"
       tools: "Tools"
       logo: "Logo"
@@ -843,6 +842,15 @@ en:
       competition_announcement_email:
         header: "The WCAT announced %{competition}"
         announced: "The WCAT approved your competition and officially announced it to the public."
+      id_claim_possibility_email:
+        header: "Please link your WCA ID with your account"
+        intro: "Dear Cuber"
+        information_html: >-
+          You registered for %{competition_link}.
+          We just uploaded results for this competition, and created WCA IDs for all first time competitors.
+          If you actually took part in this competition and it was your first one,
+          then you should claim your WCA ID (link it with your WCA account).
+          You can do this %{claim_link}.
       #context: notification to users after they were added to a competition as organizers
       organizer_addition_email:
         header: "You were added to %{competition} as an organizer"
@@ -857,6 +865,13 @@ en:
         information_html: "This is a reminder that registration for <a href=%{competition_url}>%{competition}</a> opens in less than 24 hours."
         not_accepted_html: "You have registered but your registration has not been accepted."
         more_info_html: "Please see the <a href=%{competition_url}>competition website</a> for more information and registration requirements."
+      #context: notification to users after a competition results have been posted
+      results_presence_email:
+        header: "The results of %{competition} are posted"
+        intro_html: "Your results at %{competition_link} have just been posted."
+        information_html: "Check out all your results %{result_link}."
+        more_info_html: "You can manage your email preferences %{preferences_link}."
+        regards_html: "Regards,<br/>The WCA Results Team on behalf of %{managers}."
     #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"
@@ -901,6 +916,8 @@ en:
       guidelines_confirmation: "I confirm that my avatar fulfills all avatar guidelines."
       confirm_guidelines: "Make sure to read avatar guidelines and submit a valid picture."
       save: "Save"
+      actions: "Actions"
+      sign_out_of_devices: "Sign out of other devices"
       remove_avatar: "Remove avatar"
       remove_avatar_confirm: "Are you sure you want to delete your avatar?"
       guidelines: "Guidelines"
@@ -909,10 +926,10 @@ en:
         '2': "The person shown must be you."
         '3': "If there is more than one person on the avatar, it should be clear who of them is you."
         '4': "Your head, but not necessarily the full face, should be visible."
-        '5': "The avatar must not include texts other than regular background texts."
+        '5': "The avatar should not include overlay texts or unnatural filters, including borders."
         '6': "The avatar must be submitted in correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         title: "Additional guidelines for Staff Members:"
         paragraphs:
           '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition."
@@ -1078,6 +1095,7 @@ en:
       #context: date is the registration creation date, eg: "2016-12-01 16:18:56 UTC"
       payment_requested_on: "Payment requested on: %{date}"
       total: "Total"
+      n_events: "Number of events"
     new_registration:
       title: "Register for %{comp}"
     registered_with_account_html: "This person registered with an account. You can edit their personal information %{here}."
@@ -1171,6 +1189,11 @@ en:
       create_success: "Successfully created new competition!"
       not_announced: "This competition is visible to the public but hasn't been announced yet."
       announced: "Successfully announced competition!"
+      cancelled: "This competition has been cancelled. Please checkout the information section for more details."
+      cancel_success: "Successfully cancelled competition!"
+      cancel_failure: "Cannot cancel the competition."
+      uncancel_success: "Successfully uncancelled competition!"
+      uncancel_failure: "Cannot uncancel the competition."
       results_not_posted: "This competition's results are visible but haven't been posted yet."
       results_already_posted: "The results have already been posted."
       results_posted: "Successfully posted results!"
@@ -1213,6 +1236,8 @@ en:
       address: "Address"
       details: "Details"
       website: "Website"
+      #context: Used to display an explicit tag when the competition is cancelled
+      display_name: "[Cancelled] %{name}"
       #context: Pluralization of the "Organizer" label for a competition form
       organizer_plural:
         one: "Organizer"
@@ -1261,9 +1286,9 @@ en:
       mean: "a mean"
       result_sentence: "with %{a_win_by_word} of %{result}"
       winner: "%{winner} won %{result_sentence} in the %{event_name} event."
-      first_runner_up: " %{first_runner_up} finished second (%{first_runner_up_result})"
-      and: " and"
-      second_runner_up: " %{second_runner_up} finished third (%{second_runner_up_result})."
+      first_runner_up: "%{first_runner_up} finished second (%{first_runner_up_result})"
+      and: "and"
+      second_runner_up: "%{second_runner_up} finished third (%{second_runner_up_result})."
       records:
         wr: "World records"
         afr: "African records"
@@ -1292,6 +1317,8 @@ en:
       recent: "Recent"
       past: "Past"
       custom: "Custom"
+      by_announcement: "By announcement"
+      sort_by_announcement: "Sort by announcement"
       from_date: "From"
       to_date: "To"
       #context: selecting a specific year ('year' is a number)
@@ -1306,6 +1333,7 @@ en:
         recent: "Recent competitions (last %{count} days)"
         upcoming: "Upcoming competitions"
         custom: "Competitions in the selected period of time"
+        by_announcement: "Competitions sorted by announcement date, newest on top"
       no_access: "You don't have access to this page!"
       #context: tooltip displayed when hovering
       tooltips:
@@ -1315,6 +1343,7 @@ en:
           in_progress: "In progress!"
           posted: "Results are posted!"
           starts_in: "Starts in %{days}"
+          announced_on: "Announced on %{announcement_date}"
         #context: the "search" button
         search: "Name or city"
         #context: the "recent" button
@@ -1346,7 +1375,7 @@ en:
       public_and_locked_html: "This competition is publicly visible and locked for editing. If you need to make a change, please reply to the email thread where the competition was confirmed."
       confirmed_but_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{contact} to make it visible."
       is_visible: "This competition is publicly visible, any changes you make will show up to the public!"
-      pending_confirmation_html: "Fill in all the fields and click Confirm when you're ready for the %{contact} to approve this competition."
+      pending_confirmation_html: "Fill in all the fields and make your Delegate click 'Confirm' when you're ready for the %{contact} to approve this competition."
       submit_create_value: "Create Competition"
       submit_update_value: "Update Competition"
       submit_confirm_value: "Confirm"
@@ -1414,9 +1443,15 @@ en:
     announcements: "Announcements"
     post_announcement: "Announce the competition"
     announced_by_html: "Announced by %{announcer_name} on %{date_time}"
+    cancel: "Cancel the competition"
+    uncancel: "Uncancel the competition"
+    cancelled_by_html: "Cancelled by %{name} on %{date_time}"
+    cancel_confirm: "Are you sure you want to cancel that competition?"
     upload_results: "Upload the results"
     post_results: "Post the results"
     results_posted_by_html: "Posted by %{poster_name} on %{date_time}"
+    cancel_mistake: "Made a mistake?"
+    note_before_cancel: "Note: only confirmed competitions can be cancelled."
     show:
       general_info: "General info"
       events: "Events"
@@ -1626,7 +1661,7 @@ en:
     dob:
       title: "Birthdate Change Request Form"
       description: "Use this form if your birthdate stored in our database is different from the real one."
-      important_message_html: '<span class="text-danger">IMPORTANT</span>: Attach a picture of a <u>legal document</u> (identity card, driver license, passport...) showing your name AND date of birth.'
+      important_message_html: '<span class="text-danger">IMPORTANT</span>: Attach a picture of a <u>legal document</u> (identity card, driver license, passport...) showing your name AND date of birth; feel free to blur-out/obfuscate any other personal data on the identification.'
       submit: "Request change"
     messages:
       success: "Thank you for your message. We will contact you soon!"
@@ -1847,6 +1882,11 @@ en:
     minutes: "Minutes"
     policies: "WCA Policies"
     codeofethics: "Code of Ethics"
+  education:
+    title: "WCA Educational Documents"
+    description: "The WQAC and WMT has published several documents for the community, you can download them below."
+    competitor_tutorial: "Competitor tutorial"
+    competition_material: "Competition material (certificates, cube covers, ...)"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
@@ -1922,20 +1962,52 @@ en:
     councils_html: "Councils"
     wac:
       info_html: "This council is responsible for building and maintaining bilateral communication between the WCA Community and the WCA Staff."
+  #context: On the page describing software tools for WCA competitions
   score_tools:
-    title: "WCA Score Taking tools"
-    paragraphs:
-      '1': 'The WCA highly recommends the use of <a href="https://live.worldcubeassociation.org">WCA Live</a> before and during a competition. WCA Live is a platform for running WCA competitions and sharing live results with the world.'
-      '2': 'Score sheets and scrambles should be processed and checked for errors before sending them to the WCA Results Team. You can use <a href="https://viroulep.github.io/scrambles-matcher/">Scrambles Matcher</a>, an Open Source project created by Philippe Virouleau.'
-      '3': 'The latest version of the WCA competition Score sheet can be downloaded here:<br /><a href="/files/results.xls" target="_blank">WCA competition Score sheet</a>.'
-      '4': >-
-        You may also want to use <a href="https://groupifier.jonatanklosko.com">Groupifier</a>
-        for preparing competitor groups for a competition. It's a tool that aims to do exactly this for you.
-        Among the main features you will find: sorting competitors by rankings,
-        assigning tasks (judging, scrambling), deciding how many scrambles are needed,
-        generating score sheets, personal sheets, and summaries.
-        It's an Open Source project created by Jonatan Kłosko.
-
+    title: "Software tools for WCA competitions"
+    wca_icon_text: "Developed and maintained by the WST"
+    intro:
+      desc: "This page is a non exhaustive list of tools which are known to be used to help with the organization of WCA competitions."
+      disclaimer: "Not all tools on that page are maintained by the WST: it's definitely fine! We don't have the manpower to manage all the WCA-related software out there :)"
+      used: "All the programs on this list have been used during real WCA competitions and integrate with the WCA website: they let you sign in with your WCA account to be able to import (and sometimes update) your upcoming competitions data. For each of them the maintainer(s) will be clearly written."
+    #context: tools used before the competition
+    before:
+      title: "Before the competition"
+      desc: "Managing competitors registrations can be done directly on the WCA website. Since managing groups and staff manually can be time-consuming, you may want to consider using one of the tools below."
+    #context: tools used during the competition
+    during:
+      title: "During the competition"
+      desc: "You will find here tools that let you manage the results of the competition while it's going on."
+    #context: tools used after the competition
+    after:
+      title: "After the competition"
+      desc: "While results validation occurs right there on the website, you will have to use some tool to assign scrambles generated by TNoodle to the actual results submitted to the WCA website."
+    #context: part of the description of a program
+    tools:
+      age:
+        title: "AGE"
+        description: "Tool for generating and editing groups/task assignments for WCA competitions"
+      certificates:
+        title: "Certificates"
+        description: "Print certificates for WCA competitions using WCA Live"
+      groupifier:
+        title: "Groupifier"
+        description: "Task and group management tool for WCA competition organizers. Among the main features you will find: sorting competitors by rankings, assigning tasks (judging, scrambling), deciding how many scrambles are needed, generating score sheets, personal sheets, and summaries... Check out the website to find out more."
+      scorecards:
+        title: "Scorecards"
+        description: "Print scorecards for WCA competitions using WCA Live"
+      tnoodle:
+        title: "TNoodle (Scrambles)"
+        description: "TNoodle is the official scramble program which is used for WCA competitions. It is typically used by WCA Delegates prior to WCA competitions, but its user interface also allows anyone to generate any kind of scrambles for all WCA events."
+      live:
+        title: "WCA Live"
+        description: "Platform for running WCA competitions and sharing live results with the world."
+      nightmare:
+        title: "Results spreadsheet"
+        description: "Sometimes things happen... If you don't have network access, you will have to use the good old spreadsheet."
+      matcher:
+        title: "Scrambles Matcher"
+        description: "Can be used to assign scrambles generated by TNoodle to results. Import results from the WCA website (when using WCA Live), a spreadsheet, or a standalone WCIF file. Import scrambles from one or more TNoodle json file(s). Export results to the appropriate format for WCA submission."
   logo:
     title: 'WCA Logo'
     paragraphs:
@@ -2019,6 +2091,7 @@ en:
       title: "Regulations"
       content1_html: 'All competitions must follow the <a href="/regulations/">WCA Regulations</a>. It is important for competitors to read these regulations before attending their first competition.'
       content2_html: 'The WCA Regulations are supplemented by the <a href="/regulations/guidelines.html">WCA Guidelines</a>, which contain additional clarifications and explanations.'
+      content3_html: 'Important decisions about incidents that happened in competitions that were resolved by the WCA Regulations Committee are found in the <a href="/incidents">Incidents Log</a>.'
     panel2:
       title: "Translations"
       content1_html: 'The WCA Regulations are not only available in English, but WCA members have translated them into several languages: <a href="/regulations/translations/">Translations</a>.'

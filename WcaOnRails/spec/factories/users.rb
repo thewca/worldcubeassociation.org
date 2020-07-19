@@ -204,6 +204,11 @@ FactoryBot.define do
       delegate_status { "candidate_delegate" }
     end
 
+    factory :trainee_delegate, traits: [:wca_id] do
+      association :senior_delegate
+      delegate_status { "trainee_delegate" }
+    end
+
     factory :senior_delegate, traits: [:wca_id] do
       delegate_status { "senior_delegate" }
     end

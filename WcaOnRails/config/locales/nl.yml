@@ -1696,7 +1696,7 @@ nl:
         '7': >-
           De profielfoto moet geen offensieve inhoud bevatten (zoals offensieve
           gebaren).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Aanvullende richtlijnen voor stafleden:'
         paragraphs:

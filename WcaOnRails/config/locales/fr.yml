@@ -1260,6 +1260,8 @@ fr:
       delegates: Délégués WCA
       #original_hash: 37b8fdc
       organizations: Organisations Régionales
+      education: Ressources éducatives
+      forum: Forum
       #original_hash: d790b40
       faq: Questions Fréquentes
       #original_hash: 3ad28c0
@@ -1586,7 +1588,7 @@ fr:
         '7': >-
           La photo de profil ne doit pas contenir de contenu offensant (par
           exemple : gestes offensant).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Recommandations additionnelles pour les membres du Staff :'
         paragraphs:

@@ -36,7 +36,7 @@
     var onUnconfirmedWcaId = function(unconfirmed_wca_id) {
       clearExtraInfo();
 
-      wca.cancelPendingAjaxAndAjax('render_select_nearby_delegate', {
+      window.wca.cancelPendingAjaxAndAjax('render_select_nearby_delegate', {
         url: '<%= profile_claim_wca_id_select_nearby_delegate_path %>',
         data: {
           'user[unconfirmed_wca_id]': unconfirmed_wca_id,

@@ -29,12 +29,11 @@
   $("#request_2fa_email").click(function(ev) {
     ev.preventDefault();
     $("#request_2fa_email").toggleClass("disabled", true);
-    wca.cancelPendingAjaxAndAjax('get-2fa-backup', {
+    window.wca.cancelPendingAjaxAndAjax('get-2fa-backup', {
       url: '<%= users_generate_email_otp_path %>',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        <%= raw("'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content,") unless Rails.env.test? %>
       },
       complete: handleServerResponse,
     });

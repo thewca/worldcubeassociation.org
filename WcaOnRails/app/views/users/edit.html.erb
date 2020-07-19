@@ -117,13 +117,6 @@
           <%= f.input :delegate_status, disabled: !editable_fields.include?(:senior_delegate_id) %>
           <%= f.association :senior_delegate, disabled: !editable_fields.include?(:senior_delegate_id) %>
           <%= f.input :region, disabled: !editable_fields.include?(:region) %>
-
-          <% if @user.any_kind_of_delegate? %>
-            <h3>Additional delegate information</h3>
-            <%= f.input :location_description, disabled: !editable_fields.include?(:location_description) %>
-            <%= f.input :phone_number, disabled: !editable_fields.include?(:phone_number) %>
-            <%= f.input :notes, as: :text, disabled: !editable_fields.include?(:notes) %>
-          <% end %>
         <% end %>
 
         <% unless @user.current_teams.reject(&:hidden?).empty? %>
@@ -163,6 +156,10 @@
 
             <%= f.submit t('.save'), class: "btn btn-primary" %>
           <% end %>
+
+          <h3><%= t('.actions') %></h3>
+          <%= link_to(t('.sign_out_of_devices'), destroy_other_user_sessions_path,
+                      method: :delete, class: "btn btn-danger") %>
         </div>
         <div class="tab-pane active" id="2fa">
           <%= render "2fa_tab" %>
@@ -204,9 +201,9 @@
                   <% end %>
                 </ul>
                 <% if @user.staff? %>
-                  <br /><strong><%= t('.delegate_avatar_guidelines.title') %></strong>
+                  <br /><strong><%= t('.staff_avatar_guidelines.title') %></strong>
                   <ul>
-                    <% t('.delegate_avatar_guidelines.paragraphs').values.each do |guideline| %>
+                    <% t('.staff_avatar_guidelines.paragraphs').values.each do |guideline| %>
                       <li><%= guideline %></li>
                     <% end %>
                   </ul>

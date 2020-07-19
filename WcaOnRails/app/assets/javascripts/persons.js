@@ -13,7 +13,7 @@ var personsTableAjax = {
   },
   doAjax: function(options) {
     $('.pagination li').addClass('disabled');
-    return wca.cancelPendingAjaxAndAjax('persons-index', options);
+    return window.wca.cancelPendingAjaxAndAjax('persons-index', options);
   },
 };
 
@@ -28,13 +28,13 @@ onPage('persons#index', function() {
   }
 
   // Set the table options from the url params.
-  options.pageNumber = parseInt($.getUrlParams().page) || options.pageNumber;
+  options.pageNumber = parseInt(window.wca.getUrlParams().page) || options.pageNumber;
   // Load the data using the options set above.
   personsTableAjax.queriesOK = true;
   $table.bootstrapTable('refresh');
 
   $('#region').on('change', reloadPersons);
-  $('#search').on('input', _.debounce(reloadPersons, TEXT_INPUT_DEBOUNCE_MS));
+  $('#search').on('input', window.wca.lodashDebounce(reloadPersons, window.wca.TEXT_INPUT_DEBOUNCE_MS));
 
   $table.on('load-success.bs.table', function(e, data) {
     $('#search-box i').removeClass('fa-spinner fa-spin').addClass('fa-search');
@@ -44,7 +44,7 @@ onPage('persons#index', function() {
       // Extended with region and search params.
       page: options.pageNumber
     });
-    $.setUrlParams(params);
+    window.wca.setUrlParams(params);
   });
 });
 
@@ -66,7 +66,7 @@ onPage('persons#show', function() {
   $('.event-selector input[type="radio"]').on('change', function() {
     var eventId = $(this).val();
     showResultsFor(eventId);
-    $.setUrlParams({ event:  eventId });
+    window.wca.setUrlParams({ event:  eventId });
     scrollToTabs();
   });
 
@@ -78,7 +78,7 @@ onPage('persons#show', function() {
     showResultsFor($('.event-selector input[checked="checked"]').val());
   }
 
-  var currentTab = $.getUrlParams().tab || 'results-by-event';
+  var currentTab = window.wca.getUrlParams().tab || 'results-by-event';
   $('a[href="#' + currentTab + '"]').tab('show');
 
   $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
@@ -86,7 +86,7 @@ onPage('persons#show', function() {
     if(tab === 'map') {
       $('#competitions-map').trigger('map-shown');
     }
-    $.setUrlParams({ tab: tab });
+    window.wca.setUrlParams({ tab: tab });
     scrollToTabs();
   });
 

@@ -37,6 +37,16 @@ PreCommit:
       - '**/*.jar'
       - '**/*.svg'
 
+  EsLint:
+    required_executable: 'WcaOnRails/bin/yarn'
+    enabled: true
+    include:
+      - 'WcaOnRails/app/webpacker/**/*.js'
+    exclude:
+      # FIXME: we could fix it, but it's long and it's legacy code anyway...
+      - 'WcaOnRails/app/webpacker/javascript/edit-events/**/*'
+    command: ['WcaOnRails/bin/yarn', '--silent', 'run', 'eslint', '-c', '.eslintrc.json', '-f', 'compact']
+
   RuboCop:
     enabled: true
     on_warn: fail # Treat all warnings as failures
@@ -46,6 +56,9 @@ PreCommit:
 
   JsHint:
     enabled: true
+    include:
+      # Others are handled by EsLint
+      'WcaOnRails/app/assets'
     required_executable: 'WcaOnRails/bin/yarn'
     flags: ['run', '-s', 'jshint', '--verbose']
 

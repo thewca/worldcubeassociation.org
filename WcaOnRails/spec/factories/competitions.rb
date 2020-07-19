@@ -65,6 +65,10 @@ FactoryBot.define do
       delegates { [FactoryBot.create(:delegate)] }
     end
 
+    trait :with_trainee_delegate do
+      delegates { [FactoryBot.create(:trainee_delegate)] }
+    end
+
     trait :with_organizer do
       organizers { [FactoryBot.create(:user)] }
     end
@@ -80,6 +84,7 @@ FactoryBot.define do
     registration_close { 1.week.ago.change(usec: 0) }
 
     trait :with_valid_submitted_results do
+      announced
       with_rounds { true }
       after(:create) do |competition|
         person = FactoryBot.create(:inbox_person, competitionId: competition.id)
@@ -110,6 +115,19 @@ FactoryBot.define do
     trait :visible do
       with_delegate
       showAtAll { true }
+    end
+
+    trait :announced do
+      visible
+      announced_at { start_date }
+      announced_by { FactoryBot.create(:user, :wcat_member).id }
+    end
+
+    trait :cancelled do
+      announced
+      confirmed
+      cancelled_at { Time.now }
+      cancelled_by { FactoryBot.create(:user, :wcat_member).id }
     end
 
     trait :stripe_connected do

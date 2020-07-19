@@ -120,7 +120,7 @@ $venue-map-wrapper-height: 400px;
       background-color: $state-success-bg;
     }
 
-    &.not-confirmed {
+    &.not-confirmed, &.cancelled {
       background-color: $state-danger-bg;
     }
   }
@@ -182,6 +182,10 @@ $venue-map-wrapper-height: 400px;
     display: inline-block;
     width: 300px;
   }
+
+  .cancel-selector {
+    display: block;
+  }
 }
 
 .same-line {
@@ -237,6 +241,10 @@ $venue-map-wrapper-height: 400px;
       &.break {
         text-align: center;
         font-weight: bold;
+      }
+
+      &.cancelled {
+        background-color: $state-danger-bg;
       }
     }
 

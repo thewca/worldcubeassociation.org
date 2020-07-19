@@ -2,11 +2,11 @@
 
 module ResultsValidators
   class ScramblesValidator < GenericValidator
-    MISSING_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Missing scrambles. Use the workbook assistant to add the correct scrambles to the round."
-    MISSING_SCRAMBLES_FOR_COMPETITION_ERROR = "Missing scrambles for the competition. Use the workbook assistant to add scrambles."
-    UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Too many scrambles. Use the workbook assistant to uncheck the unused scrambles."
+    MISSING_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Missing scrambles. Use Scrambles Matcher to add the correct scrambles to the round."
+    MISSING_SCRAMBLES_FOR_COMPETITION_ERROR = "Missing scrambles for the competition. Use Scrambles Matcher to add scrambles."
+    UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Too many scrambles. Use Scrambles Matcher to uncheck the unused scrambles."
     MISSING_SCRAMBLES_FOR_GROUP_ERROR = "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
-    MISSING_SCRAMBLES_FOR_MULTI_ERROR = "[%{round_id}] While you may have multiple groups in Multiple Blindfolded, at least one of the groups must contain scrambles for all attempts."
+    MISSING_SCRAMBLES_FOR_MULTI_ERROR = "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
 
     @@desc = "This validator checks that all results have matching scrambles, and if possible, checks that the scrambles have the correct number of attempts compared to the expected round format."
 

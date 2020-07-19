@@ -24,6 +24,7 @@ class CompetitionsController < ApplicationController
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
     :post_announcement,
+    :cancel_competition,
     :admin_edit,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
@@ -40,15 +41,25 @@ class CompetitionsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup]
 
+  before_action -> { redirect_to_root_unless_user(:can_confirm_competition?, competition_from_params) }, only: [:update], if: :confirming?
+
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
 
+  private def assign_delegate(competition)
+    if current_user.any_kind_of_delegate?
+      if current_user.trainee_delegate?
+        competition.trainee_delegates |= [current_user]
+      else
+        competition.delegates |= [current_user]
+      end
+    end
+  end
+
   def new
     @competition = Competition.new
-    if current_user.any_kind_of_delegate?
-      @competition.delegates = [current_user]
-    end
+    assign_delegate(@competition)
   end
 
   # Normalizes the params that old links to index still work.
@@ -65,13 +76,15 @@ class CompetitionsController < ApplicationController
     params[:years] = nil
   end
 
-  def index
+  # Rubocop is unhappy about all the things we do in this controller action,
+  # which is understandable.
+  def index # rubocop:disable Metrics/PerceivedComplexity
     support_old_links!
 
     # Default params
     params[:event_ids] ||= []
     params[:region] ||= "all"
-    unless %w(past present recent custom).include? params[:state]
+    unless %w(past present recent by_announcement custom).include? params[:state]
       params[:state] = "present"
     end
     params[:year] ||= "all years"
@@ -87,7 +100,9 @@ class CompetitionsController < ApplicationController
     @past_selected = params[:state] == "past"
     @present_selected = params[:state] == "present"
     @recent_selected = params[:state] == "recent"
+    @by_announcement_selected = params[:state] == "by_announcement"
     @custom_selected = params[:state] == "custom"
+    @show_cancelled = params[:show_cancelled] == "on"
 
     @years = ["all years"] + Competition.non_future_years
 
@@ -97,9 +112,19 @@ class CompetitionsController < ApplicationController
     else
       @competitions = Competition
     end
-    @competitions = @competitions.includes(:country).where(showAtAll: true).order_by_date
 
-    if @present_selected
+    unless @show_cancelled
+      @competitions = @competitions.not_cancelled
+    end
+
+    @competitions = @competitions.includes(:country).where(showAtAll: true)
+    @competitions = if @by_announcement_selected
+                      @competitions.order_by_announcement_date
+                    else
+                      @competitions.order_by_date
+                    end
+
+    if @present_selected || @by_announcement_selected
       @competitions = @competitions.not_over
     elsif @recent_selected
       @competitions = @competitions.where("end_date between ? and ?", (Date.today - Competition::RECENT_DAYS), Date.today).reverse_order
@@ -187,6 +212,27 @@ class CompetitionsController < ApplicationController
     end
 
     flash[:success] = t('competitions.messages.announced')
+    redirect_to admin_edit_competition_path(comp)
+  end
+
+  def cancel_competition
+    comp = competition_from_params
+    undo = params[:undo].present?
+    if undo
+      if comp.cancelled?
+        comp.update!(cancelled_at: nil, cancelled_by: nil)
+        flash[:success] = t('competitions.messages.uncancel_success')
+      else
+        flash[:danger] = t('competitions.messages.uncancel_failure')
+      end
+    else
+      if comp.can_be_cancelled?
+        comp.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
+        flash[:success] = t('competitions.messages.cancel_success')
+      else
+        flash[:danger] = t('competitions.messages.cancel_failure')
+      end
+    end
     redirect_to admin_edit_competition_path(comp)
   end
 
@@ -303,9 +349,7 @@ class CompetitionsController < ApplicationController
   def clone_competition
     competition_to_clone = competition_from_params
     @competition = competition_to_clone.build_clone
-    if current_user.any_kind_of_delegate?
-      @competition.delegates |= [current_user]
-    end
+    assign_delegate(@competition)
     render :new
   end
 
@@ -453,7 +497,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, @competition, removed_organizer).deliver_later
       end
 
-      if params[:commit] == "Confirm"
+      if confirming?
         CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
         @competition.organizers.each do |organizer|
           CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, @competition, organizer).deliver_later
@@ -476,6 +520,7 @@ class CompetitionsController < ApplicationController
   def my_competitions
     competition_ids = current_user.organized_competitions.pluck(:competition_id)
     competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
+    competition_ids.concat(current_user.trainee_delegated_competitions.pluck(:competition_id))
     registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
     registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
     @registered_for_by_competition_id = Hash[registrations.uniq.map do |r|
@@ -498,6 +543,10 @@ class CompetitionsController < ApplicationController
   def for_senior
     @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || Date.today + 20.year }.reverse
+  end
+
+  private def confirming?
+    params[:commit] == "Confirm"
   end
 
   private def competition_params
@@ -533,6 +582,7 @@ class CompetitionsController < ApplicationController
         :end_date,
         :information,
         :delegate_ids,
+        :trainee_delegate_ids,
         :organizer_ids,
         :contact,
         :generate_website,
@@ -572,7 +622,7 @@ class CompetitionsController < ApplicationController
     end
 
     params.require(:competition).permit(*permitted_competition_params).tap do |competition_params|
-      if params[:commit] == "Confirm" && current_user.can_confirm_competition?(@competition)
+      if confirming? && current_user.can_confirm_competition?(@competition)
         competition_params[:confirmed] = true
       end
       competition_params[:editing_user_id] = current_user.id

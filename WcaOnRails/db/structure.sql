@@ -406,6 +406,21 @@ CREATE TABLE `competition_tabs` (
   UNIQUE KEY `index_competition_tabs_on_display_order_and_competition_id` (`display_order`,`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `competition_trainee_delegates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `competition_trainee_delegates` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `competition_id` varchar(191) DEFAULT NULL,
+  `trainee_delegate_id` int(11) DEFAULT NULL,
+  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_competition_trainee_delegates_on_competition_id` (`competition_id`),
+  KEY `index_competition_trainee_delegates_on_trainee_delegate_id` (`trainee_delegate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `competition_venues`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -592,8 +607,8 @@ DROP TABLE IF EXISTS `country_bands`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `country_bands` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `number` int NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `number` int(11) NOT NULL,
   `iso2` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_country_bands_on_iso2` (`iso2`),
@@ -924,14 +939,13 @@ CREATE TABLE `posts` (
   `author_id` int DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `world_readable` tinyint(1) NOT NULL DEFAULT '0',
   `show_on_homepage` tinyint(1) NOT NULL DEFAULT '1',
   `unstick_at` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_posts_on_slug` (`slug`),
-  KEY `index_posts_on_world_readable_and_sticky_and_created_at` (`world_readable`,`sticky`,`created_at`),
-  KEY `index_posts_on_world_readable_and_created_at` (`world_readable`,`created_at`),
-  KEY `idx_show_wr_sticky_created_at` (`show_on_homepage`,`world_readable`,`sticky`,`created_at`)
+  KEY `index_posts_on_world_readable_and_sticky_and_created_at` (`sticky`,`created_at`),
+  KEY `index_posts_on_world_readable_and_created_at` (`created_at`),
+  KEY `idx_show_wr_sticky_created_at` (`show_on_homepage`,`sticky`,`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `preferred_formats`;
@@ -1126,7 +1140,8 @@ CREATE TABLE `rounds` (
   `advancement_condition` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `scramble_set_count` int NOT NULL DEFAULT '1',
   `round_results` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `total_number_of_rounds` int NOT NULL,
+  `total_number_of_rounds` int(11) NOT NULL,
+  `old_type` varchar(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_rounds_on_competition_event_id_and_number` (`competition_event_id`,`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1305,9 +1320,6 @@ CREATE TABLE `users` (
   `gender` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `country_iso2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `results_notifications_enabled` tinyint(1) DEFAULT '0',
-  `location_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `notes` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `preferred_locale` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `competition_notifications_enabled` tinyint(1) DEFAULT NULL,
   `receive_delegate_reports` tinyint(1) NOT NULL DEFAULT '0',
@@ -1315,9 +1327,10 @@ CREATE TABLE `users` (
   `encrypted_otp_secret` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `encrypted_otp_secret_iv` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `encrypted_otp_secret_salt` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `consumed_timestep` int DEFAULT NULL,
+  `consumed_timestep` int(11) DEFAULT NULL,
   `otp_required_for_login` tinyint(1) DEFAULT '0',
   `otp_backup_codes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `session_validity_token` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1628,4 +1641,13 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20191107212356'),
 ('20200125180554'),
 ('20200206012756'),
+('20200304044931'),
 ('20200319193625');
+('20200331082313'),
+('20200415151734'),
+('20200419133415'),
+('20200502095048'),
+('20200522095030'),
+('20200522125145'),
+('20200607140007'),
+('20200627195628');

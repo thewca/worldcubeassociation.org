@@ -1506,7 +1506,7 @@ ja:
         '6': プロフィール画像は正しい向きでアップロードしなければいけません。
         #original_hash: 1a18831
         '7': 'プロフィール画像は攻撃的な内容 (例 : 攻撃的なジェスチャー) を含んではいけません。'
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: WCA スタッフのアバターの追加ガイドライン
         paragraphs:

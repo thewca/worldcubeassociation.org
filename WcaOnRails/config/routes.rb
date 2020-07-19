@@ -19,6 +19,7 @@ Rails.application.routes.draw do
              end
     post 'users/generate-email-otp' => 'sessions#generate_email_otp'
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
+    delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   post 'registration/:id/process-payment-intent' => 'registrations#process_payment_intent', as: :registration_payment_intent
@@ -109,11 +110,11 @@ Rails.application.routes.draw do
   resources :votes, only: [:create, :update]
 
   post 'competitions/:id/post_announcement' => 'competitions#post_announcement', as: :competition_post_announcement
+  post 'competitions/:id/cancel' => 'competitions#cancel_competition', as: :competition_cancel
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
 
   get 'panel' => 'panel#index'
-  get 'panel/delegate-crash-course' => 'panel#delegate_crash_course'
-  get 'panel/delegate-crash-course/edit' => 'panel#edit_delegate_crash_course'
+  get 'panel/delegate-crash-course', to: redirect('/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
   patch 'panel/delegate-crash-course' => 'panel#update_delegate_crash_course'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   get 'panel/seniors' => 'panel#seniors'
@@ -139,6 +140,7 @@ Rails.application.routes.draw do
   get 'about' => 'static_pages#about'
   get 'teams-committees' => 'static_pages#teams_committees'
   get 'documents' => 'static_pages#documents'
+  get 'education' => 'static_pages#education'
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
   get 'contact' => 'static_pages#contact'
@@ -150,7 +152,7 @@ Rails.application.routes.draw do
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
-  get 'tutorial' => redirect('/files/WCA_Competition_Tutorial.pdf', status: 302)
+  get 'tutorial' => redirect('/education', status: 302)
 
   resources :regional_organizations, only: [:new, :update, :edit], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'

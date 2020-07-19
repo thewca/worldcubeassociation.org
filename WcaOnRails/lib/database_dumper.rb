@@ -3,6 +3,7 @@
 module DatabaseDumper
   JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id=competition_id WHERE showAtAll=1"
   DUMP_TIMESTAMP_NAME = "developer_dump_exported_at"
+  VISIBLE_ACTIVITY_IDS = "SELECT A.id FROM schedule_activities AS A JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type='VenueRoom') JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}"
 
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
@@ -86,6 +87,8 @@ module DatabaseDumper
           announced_by
           results_posted_by
           main_event_id
+          cancelled_at
+          cancelled_by
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -294,6 +297,7 @@ module DatabaseDumper
           round_results
           created_at
           updated_at
+          old_type
         ),
       ),
     }.freeze,
@@ -335,6 +339,19 @@ module DatabaseDumper
           competition_id
           created_at
           delegate_id
+          receive_registration_emails
+          updated_at
+        ),
+      ),
+    }.freeze,
+    "competition_trainee_delegates" => {
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          competition_id
+          created_at
+          trainee_delegate_id
           receive_registration_emails
           updated_at
         ),
@@ -408,8 +425,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "schedule_activities" => {
-      # FIXME: this does not handle nested activities, which will be omitted!
-      where_clause: "JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type = \"VenueRoom\") JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
+      where_clause: "WHERE (holder_type=\"ScheduleActivity\" AND holder_id IN (#{VISIBLE_ACTIVITY_IDS}) or id in (#{VISIBLE_ACTIVITY_IDS}))",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -468,7 +484,7 @@ module DatabaseDumper
     "poll_options" => :skip_all_rows,
     "polls" => :skip_all_rows,
     "posts" => {
-      where_clause: "WHERE world_readable = TRUE",
+      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -480,13 +496,12 @@ module DatabaseDumper
           unstick_at
           title
           updated_at
-          world_readable
           show_on_homepage
         ),
       ),
     }.freeze,
     "post_tags" => {
-      where_clause: "JOIN posts ON posts.id=post_tags.post_id WHERE world_readable = TRUE",
+      where_clause: "JOIN posts ON posts.id=post_tags.post_id",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -645,18 +660,16 @@ module DatabaseDumper
           encrypted_otp_secret_salt
           encrypted_password
           last_sign_in_ip
-          location_description
-          notes
           otp_backup_codes
           otp_required_for_login
           pending_avatar
-          phone_number
           preferred_locale
           remember_created_at
           reset_password_sent_at
           reset_password_token
           sign_in_count
           unconfirmed_email
+          session_validity_token
         ),
         fake_values: {
           "dob" => "'1954-12-04'",

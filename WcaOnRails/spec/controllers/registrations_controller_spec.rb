@@ -351,6 +351,13 @@ RSpec.describe RegistrationsController do
       patch :update, params: { id: registration.id, registration: { accepted_at: Time.now } }
       expect(registration.reload.accepted?).to eq false
     end
+
+    it "cannot register for cancelled competitions" do
+      competition.update!(cancelled_at: Time.now, cancelled_by: FactoryBot.create(:user, :wcat_member).id)
+      post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", status: :accepted } }
+      expect(response).to redirect_to(competition_path(competition))
+      expect(flash[:danger]).to match "You cannot register for this competition"
+    end
   end
 
   context "register" do

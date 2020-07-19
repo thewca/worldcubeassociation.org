@@ -63,6 +63,10 @@
         <% end %>
       </span>
     </label>
+    <label id="by_announcement" class="btn btn-primary" data-toggle="tooltip" title="<%= t 'competitions.index.sort_by_announcement' %>">
+      <%= radio_button_tag "state", "by_announcement" %>
+      <span class="caption"><%= t 'competitions.index.by_announcement' %></span>
+    </label>
     <label id="custom" class="btn btn-primary">
       <%= radio_button_tag "state", "custom" %>
       <span class="caption"><%= t 'competitions.index.custom' %></span>
@@ -108,6 +112,11 @@
                                  data: { data: User.where(id: params[:delegate]).to_json } %>
 </div>
 
+<div id="cancelled" class="form-group cancel-selector">
+  <%= check_box_tag(:show_cancelled, params[:show_cancelled], params[:show_cancelled] == "on") %>
+  <%= label_tag("Show cancelled competitions") %>
+</div>
+
 <div id="display" class="form-group">
   <div class="btn-group btn-group-justified" data-toggle="buttons">
     <label id="display-list" class="btn btn-info">
@@ -133,6 +142,10 @@
   });
 
   $('#recent').on('click', function() {
+    $('#past .caption').html("<%= t('competitions.index.past') %>");
+  });
+
+  $('#by_announcement').on('click', function() {
     $('#past .caption').html("<%= t('competitions.index.past') %>");
   });
 

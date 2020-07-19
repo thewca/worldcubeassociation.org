@@ -256,6 +256,75 @@ RSpec.describe Result do
             expect(result.compute_correct_average).to eq 1000
             expect(result).to be_invalid_with_errors(average: ["should be 1000"])
           end
+
+          it "leaves average for 333bf as skipped if one of three solves is skipped" do
+            result = build_result(value1: 3000, value2: 3000,
+                                  value3: SolveTime::SKIPPED_VALUE,
+                                  value4: SolveTime::SKIPPED_VALUE,
+                                  value5: SolveTime::SKIPPED_VALUE)
+            expect(result.compute_correct_average).to eq SolveTime::SKIPPED_VALUE
+          end
+
+          it "sets DNF average for 333bf if one of three solves is either DNF or DNS" do
+            result_dns = build_result(value1: 3000, value2: 3000,
+                                      value3: SolveTime::DNS_VALUE,
+                                      value4: SolveTime::SKIPPED_VALUE,
+                                      value5: SolveTime::SKIPPED_VALUE)
+            result_dnf = build_result(value1: 3000, value2: 3000,
+                                      value3: SolveTime::DNF_VALUE,
+                                      value4: SolveTime::SKIPPED_VALUE,
+                                      value5: SolveTime::SKIPPED_VALUE)
+            expect(result_dnf.compute_correct_average).to eq SolveTime::DNF_VALUE
+            expect(result_dns.compute_correct_average).to eq SolveTime::DNF_VALUE
+          end
+
+          # https://www.worldcubeassociation.org/regulations/#9f2
+          it "rounds averages for 333bf over 10 minutes down to nearest second for x.49" do
+            over10 = (10.minutes + 10.49.seconds) * 100 # In centiseconds.
+            result = build_result(value1: over10,
+                                  value2: over10,
+                                  value3: over10,
+                                  value4: SolveTime::SKIPPED_VALUE,
+                                  value5: SolveTime::SKIPPED_VALUE)
+            expect(result.compute_correct_average).to eq((10.minutes + 10.seconds) * 100)
+          end
+
+          # https://www.worldcubeassociation.org/regulations/#9f2
+          it "rounds averages for 333bf over 10 minutes up to nearest second for x.50" do
+            over10 = (10.minutes + 10.50.seconds) * 100 # In centiseconds.
+            result = build_result(value1: over10,
+                                  value2: over10,
+                                  value3: over10,
+                                  value4: SolveTime::SKIPPED_VALUE,
+                                  value5: SolveTime::SKIPPED_VALUE)
+            expect(result.compute_correct_average).to eq((10.minutes + 11.seconds) * 100)
+          end
+        end
+
+        context "444bf" do
+          let(:eventId) { "444bf" }
+
+          it "sets a valid average for 444bf if all three solves are completed" do
+            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
+            expect(result).to be_valid
+
+            result.average = 33
+            expect(result.compute_correct_average).to eq 1000
+            expect(result).to be_invalid_with_errors(average: ["should be 1000"])
+          end
+        end
+
+        context "555bf" do
+          let(:eventId) { "555bf" }
+
+          it "sets a valid average for 555bf if all three solves are completed" do
+            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
+            expect(result).to be_valid
+
+            result.average = 33
+            expect(result.compute_correct_average).to eq 1000
+            expect(result).to be_invalid_with_errors(average: ["should be 1000"])
+          end
         end
 
         context "333fm" do

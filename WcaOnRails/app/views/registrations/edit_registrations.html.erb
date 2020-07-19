@@ -43,6 +43,7 @@
             <th class="registration-date" data-sortable="true" data-sorter="comparePaymentDate" data-field="registration-date">
               <%= @competition.using_stripe_payments? ? t('registrations.list.registered.with_stripe') : t('registrations.list.registered.without_stripe') %>
             </th>
+            <th class="events" data-sortable="true"><%= t 'registrations.list.n_events' %></th>
             <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
             <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
             <% if @competition.using_stripe_payments? %>
@@ -86,6 +87,7 @@
                   <%= registered_date %>
                 </span>
               </td>
+              <td class="events"><%= registration.events.length %></td>
               <td class="guests">
                 <%= registration.guests %>
               </td>

@@ -11,19 +11,40 @@
   <meta name="og:image" content='<%= asset_url("og-wca_logo.png") %>'/>
 
   <title><%= full_title(yield(:title)) %></title>
-  <%= stylesheet_link_tag 'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
 
-  <%= stylesheet_pack_tag 'application' %>
-  <%= javascript_pack_tag 'application' %>
+  <%# NOTE: we need to import this first, because it's used in our non-webpack application.js %>
+  <script>
+    window.wca = {};
+  </script>
 
-  <% if content_for :include_markdown_editor %>
-    <%= stylesheet_pack_tag 'markdown_editor' %>
-    <%= javascript_pack_tag 'markdown_editor' %>
+  <%#
+    Our sprockets assets. Loaded first, because our js packs below contains the
+    css overriding stuff imported in sprockets!
+  %>
+  <% css_assets = (@all_css_assets || "").split(",").uniq.unshift("application") %>
+  <% css_assets.each do |a| %>
+    <%= stylesheet_link_tag a, media: 'all' %>
   <% end %>
 
-  <% if content_for :include_auto_numeric %>
-    <%= javascript_pack_tag 'auto_numeric' %>
+  <% add_to_packs("lodash_utils") %>
+
+  <%#
+    Our webpacker packs (automatically split in chunks).
+    Always *prepend* application, so that we load jquery first.
+    We can't just add_to_packs application, because the yielded block will be
+    evaluated first, and any pack added (like schedule) will be loaded before application.
+    These javascript packs *do* include the css imported in them!
+  %>
+  <% packs_to_include = @all_packs.split(",").uniq.unshift("application") %>
+  <%= javascript_packs_with_chunks_tag *packs_to_include %>
+
+  <% js_assets = (@all_js_assets || "").split(",").uniq %>
+  <% if I18n.locale != :en %>
+    <% js_assets = js_assets.unshift("locales/#{I18n.locale.downcase}.js") %>
+  <% end %>
+  <% js_assets = js_assets.unshift("application") %>
+  <% js_assets.each do |a| %>
+    <%= javascript_include_tag a %>
   <% end %>
 
   <%= csrf_meta_tags %>
