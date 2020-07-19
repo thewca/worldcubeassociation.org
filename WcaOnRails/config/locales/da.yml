@@ -51,11 +51,11 @@ da:
     #original_hash: 090f3ce
     XE: Flere Lande (Europa)
     #original_hash: b50b7a5
-    XN: Flere Lande (Nord Amerika)
+    XN: Flere Lande (Nordamerika)
     #original_hash: 428e7af
     XO: Flere Lande (Oceanien)
     #original_hash: 459f987
-    XS: Flere Lande (Syd Amerika)
+    XS: Flere Lande (Sydamerika)
     #original_hash: 9027fe6
     XW: Flere Lande (Verden)
   continents:
@@ -68,11 +68,11 @@ da:
     #original_hash: 576347e
     Europe: Europa
     #original_hash: 247ce5d
-    North America: Nord Amerika
+    North America: Nordamerika
     #original_hash: 3642950
     Oceania: Oceanien
     #original_hash: b1ffb4c
-    South America: Syd Amerika
+    South America: Sydamerika
   country_bands:
     #original_hash: 2b5976e
     title: WCA's Landegrupper for Regninger
@@ -149,18 +149,18 @@ da:
     '0':
       #original_hash: 4d618bb
       name: Kvalificerende runde
-      #original_hash: 2ffe44e
-      cellName: Kvalifikation
+      #original_hash: 4d618bb
+      cellName: Kvalifikationsrunde
     '1':
       #original_hash: 1e725b6
       name: Første runde
-      #original_hash: 916a78d
-      cellName: Første
+      #original_hash: 1e725b6
+      cellName: Første runde
     '2':
       #original_hash: 985c8d0
       name: Anden runde
-      #original_hash: 2a4bcae
-      cellName: Anden
+      #original_hash: 985c8d0
+      cellName: Anden runde
     '3':
       #original_hash: e2f74d2
       name: Semi Finale
@@ -172,35 +172,35 @@ da:
       #original_hash: 327c999
       cellName: B Finale
     c:
-      #original_hash: b2d26f4
-      name: Kombineret Finale
-      #original_hash: b2d26f4
-      cellName: Kombineret Finale
+      #original_hash: 672b22c
+      name: Finale
+      #original_hash: 672b22c
+      cellName: Finale
     d:
-      #original_hash: c6136b1
-      name: Kombineret Første runde
-      #original_hash: dffa9ea
-      cellName: Kombineret Første
+      #original_hash: 1e725b6
+      name: Første runde
+      #original_hash: 1e725b6
+      cellName: Første runde
     e:
-      #original_hash: 659c53f
-      name: Kombineret Anden runde
-      #original_hash: b6e1e1c
-      cellName: Kombineret Anden
+      #original_hash: 985c8d0
+      name: Anden runde
+      #original_hash: 985c8d0
+      cellName: Anden runde
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
       cellName: Finale
     g:
-      #original_hash: e861dcf
-      name: Kombineret Tredje runde
-      #original_hash: 86f4b05
-      cellName: Kombineret Tredje
+      #original_hash: ccf6f8e
+      name: Tredje runde
+      #original_hash: ccf6f8e
+      cellName: Tredje runde
     h:
-      #original_hash: 4c66ad0
-      name: Kombineret kvalifikation
-      #original_hash: 4c66ad0
-      cellName: Kombineret kvalifikation
+      #original_hash: 4d618bb
+      name: Kvalifikationsrunde
+      #original_hash: 4d618bb
+      cellName: Kvalifikationsrunde
   attempts:
     #original_hash: 17dae1e
     attempt_name: '%{number}. forsøg'
@@ -1598,8 +1598,8 @@ da:
         more_info_html: >-
           Du kan ændre indstillingerne for hvornår du får emails fra os
           %{preferences_link}.
-        #original_hash: 60d1a54
-        regards_html: 'Hilsen,<br/>WCA''s Resultathold på vegne af ${managers}.'
+        #original_hash: 7594a32
+        regards_html: 'Hilsen,<br/>WCA''s Resultathold på vegne af %{managers}.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Gør krav på dit WCA ID
@@ -2343,7 +2343,7 @@ da:
         #original_hash: 55dc8bc
         abbr_description: '%{short_name}: %{long_name}'
         #original_hash: a1984e1
-        cutoff: 'Cutoff: %{short_cutoff}'
+        cutoff: 'Tidskrav: %{short_cutoff}'
         #original_hash: a8b6fe6
         download_html: 'Download alle konkurrencens detaljer som PDF %{here}.'
       #original_hash: eb9a4bc
@@ -2827,10 +2827,10 @@ da:
         cumulative_across_rounds_html: >-
           En %{cumulative_time_limit} kan blive brugt over forskelige runder (se
           %{guideline_link}).
-        #original_hash: e4e48c6
+        #original_hash: e8d17df
         cutoff_html: >-
           Resultatet skal være bedre end tidskravet, for at komme videre til den
-          anden del af den kombinerede runde (se %{regulation_link}).
+          anden del af en tidskravrunde (se %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
           Formatet bestemmer hvordan deltagernes rangeringen skal opgøres ud fra
@@ -3330,12 +3330,12 @@ da:
         content:
           #original_hash: 890d879
           '1': >-
-            Efter konkurrencen er slut, vil WCA Delegaten double-tjekke alle
-            score sheets og personlige data for at fikse alle mulige fejl. Når
-            det er gjort, vil resultaterne blive sent til WCA Resultat Holdet
-            (WRT), som er ansvarlige for at uploade konkurrence resultaterne og
-            vedligeholde WCA databasen. WRT uploader så resultaterne til WCA
-            databasen så snart som muligt.
+            Efter konkurrencen er slut, vil den WCA Delegerede double-tjekke
+            alle score sheets og personlige data for at fikse alle potentielle
+            fejl. Når det er gjort, vil resultaterne blive sendt til WCA
+            Resultathold (WRT), som er ansvarlige for at uploade
+            konkurrenceresultaterne og vedligeholde WCA databasen. WRT uploader
+            så resultaterne til WCA databasen så snart som muligt.
           #original_hash: daf1cb1
           '2': >-
             Afhængeligt af størrelsen på konkurrencen og den Delegeredes
@@ -3560,8 +3560,8 @@ da:
         name: WCA's Resultathold
         #original_hash: 439ffae
         description: >-
-          Dette hold er ansvarlig for at holde styr på alle konkurrence
-          resultater.
+          Dette hold er ansvarlig for at holde styr på alle
+          konkurrenceresultater.
       wst:
         #original_hash: a14bc62
         name: WCA's Softwarehold
@@ -3830,13 +3830,13 @@ da:
       #original_hash: 45b0c09
       info_html: >-
         WRT er ansvarlige for at styre alt data i WCA's database, og vigtigst af
-        alt, konkurrence resultater og personlig data. De ligger resultaterne
-        fra WCA konkurrencer op på WCA's hjemmeside, når den ansvarlige WCA
-        delegerede har indsendt dem. Udover at ligge konkurrence resultater op,
-        er de også ansvarlige for at lave rettelser på konkurrence resultater
-        hvis der er behov, og de styrer alle WCA profil sider. Dette inkludere
-        at ændre bruger data, som fødselsdage efter bekræftede efterspørgsler,
-        og profil billeder.
+        alt, konkurrenceresultater og personlig data. De lægger resultaterne fra
+        WCA konkurrencer op på WCA's hjemmeside, når den ansvarlige WCA
+        Delegerede har indsendt dem. Udover at lægge konkurrenceresultater op,
+        er de også ansvarlige for at lave rettelser i konkurrenceresultater,
+        hvis der er behov, og de styrer alle WCA profilsider. Dette inkludere at
+        ændre brugerdata, som fødselsdage efter bekræftede efterspørgsler, og
+        profilbilleder.
     wst:
       #original_hash: 7de6222
       info_html: >-
