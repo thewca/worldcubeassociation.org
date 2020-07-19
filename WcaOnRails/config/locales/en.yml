@@ -108,13 +108,13 @@ en:
   rounds:
     "0":
       name: "Qualification round"
-      cellName: "Qualification"
+      cellName: "Qualification round"
     "1":
       name: "First round"
-      cellName: "First"
+      cellName: "First round"
     "2":
       name: "Second round"
-      cellName: "Second"
+      cellName: "Second round"
     "3":
       name: "Semi Final"
       cellName: "Semi Final"
@@ -123,22 +123,22 @@ en:
       cellName: "B Final"
     "c":
       name: "Final"
-      cellName: "Cutoff Final"
+      cellName: "Final"
     "d":
       name: "First round"
-      cellName: "Cutoff First"
+      cellName: "First round"
     "e":
       name: "Second round"
-      cellName: "Cutoff Second"
+      cellName: "Second round"
     "f":
       name: "Final"
       cellName: "Final"
     "g":
       name: "Third round"
-      cellName: "Cutoff Third"
+      cellName: "Third round"
     "h":
-      name: "Cutoff qualification"
-      cellName: "Cutoff qualification"
+      name: "Qualification round"
+      cellName: "Qualification round"
   #context: attempt name
   attempts:
     attempt_name: "Attempt %{number}"
