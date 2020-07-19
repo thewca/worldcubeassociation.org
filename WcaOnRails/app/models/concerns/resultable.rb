@@ -99,7 +99,7 @@ module Resultable
 
   def should_compute_average?
     # Average of 5 and Mean of 3 rounds should definitely attempt to compute the average (the average
-    # may still be empty because of combined rounds).
+    # may still be empty because of cutoff rounds).
     # Best of 3 is weird. We actually do want to populate the average column for best of 3 with:
     #  - 333fm was changed from allowing best of 3 (and disallowing mean of 3) to allowing mean of 3 (and disallowing best of 3).
     #    See "Relevant regulations changes" below.

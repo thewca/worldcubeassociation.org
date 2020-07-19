@@ -30,14 +30,14 @@ RSpec.describe LightResult do
       expect(result.trimmed_indices).to eq []
     end
 
-    it "handles combined rounds" do
+    it "handles cutoff rounds" do
       result = build_result "eventId" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "formatId" => "a"
       expect(result.trimmed_indices).to eq []
     end
   end
 
   describe "solves" do
-    it "combined round and didn't make cutoff" do
+    it "cutoff round and didn't make cutoff" do
       result = build_result "eventId" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "formatId" => "a"
       expect(result.format.expected_solve_count).to eq 5
       expect(result.solve_times).to eq [

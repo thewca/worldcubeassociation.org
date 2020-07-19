@@ -38,10 +38,10 @@ Procedure to check one row of the Results table:
 ----------------------------------------------------------------------
  9) Compare the computed best and average with the stored ones
 ----------------------------------------------------------------------
-10) For non-combined rounds, check that there is the right number of
+10) For non-cutoff rounds, check that there is the right number of
     zero-values according to the format.
 ----------------------------------------------------------------------
-11) For combined rounds, check that the number of zero-values is
+11) For cutoff rounds, check that the number of zero-values is
     higher than the number according to the format.
 ----------------------------------------------------------------------
 12) Check that times over 10 minutes are rounded

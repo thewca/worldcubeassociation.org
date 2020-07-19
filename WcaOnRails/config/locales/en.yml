@@ -107,13 +107,13 @@ en:
   rounds:
     "0":
       name: "Qualification round"
-      cellName: "Qualification"
+      cellName: "Qualification round"
     "1":
       name: "First round"
-      cellName: "First"
+      cellName: "First round"
     "2":
       name: "Second round"
-      cellName: "Second"
+      cellName: "Second round"
     "3":
       name: "Semi Final"
       cellName: "Semi Final"
@@ -121,28 +121,28 @@ en:
       name: "B Final"
       cellName: "B Final"
     "c":
-      name: "Combined Final"
-      cellName: "Combined Final"
+      name: "Final"
+      cellName: "Final"
     "d":
-      name: "Combined First round"
-      cellName: "Combined First"
+      name: "First round"
+      cellName: "First round"
     "e":
-      name: "Combined Second round"
-      cellName: "Combined Second"
+      name: "Second round"
+      cellName: "Second round"
     "f":
       name: "Final"
       cellName: "Final"
     "g":
-      name: "Combined Third round"
-      cellName: "Combined Third"
+      name: "Third round"
+      cellName: "Third round"
     "h":
-      name: "Combined qualification"
-      cellName: "Combined qualification"
+      name: "Qualification round"
+      cellName: "Qualification round"
   #context: attempt name
   attempts:
     attempt_name: "Attempt %{number}"
   round:
-    #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Combined First round"
+    #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Cutoff First round"
     name: "%{event_name} %{round_name}"
   #context: Words used to describe the requirement to advance to the next round
   advancement_condition:
@@ -159,7 +159,7 @@ en:
       time: "Best result < %{time} advances to next round"
       moves: "Best result < %{moves} moves advances to next round"
       points: "Best result > %{points} points advances to next round"
-  #context: Words used to describe combined round cutoffs
+  #context: Words used to describe cutoff round cutoffs
   cutoff:
     time:
       one: "%{count} attempt to get < %{time}"
@@ -1470,7 +1470,7 @@ en:
         cumulative_time_limit: "cumulative time limit"
         cumulative_one_round_html: "A %{cumulative_time_limit} may be enforced (see %{regulation_link})."
         cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{guideline_link})."
-        cutoff_html: "The result to beat to proceed to the second phase of a combined round (see %{regulation_link})."
+        cutoff_html: "The result to beat to proceed to the second phase of a cutoff round (see %{regulation_link})."
         format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
       format: "Format"
       time_limit: "Time limit"

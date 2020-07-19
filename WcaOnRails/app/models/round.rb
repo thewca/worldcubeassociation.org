@@ -83,7 +83,7 @@ class Round < ApplicationRecord
     elsif old_type == "b"
       "b"
     else
-      # Combined third round/Semi Final
+      # Cutoff third round/Semi Final
       cutoff ? "g" : "3"
     end
   end

@@ -87,7 +87,7 @@ module ResultsValidators
 
     def check_rounds_match(competition, results)
       # Check that rounds match what was declared.
-      # This function automatically casts combined rounds to regular rounds if everyone has met the cutoff.
+      # This function automatically casts cutoff rounds to regular rounds if everyone has met the cutoff.
 
       expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
 

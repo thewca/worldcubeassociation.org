@@ -90,7 +90,7 @@ RSpec.describe ERV do
                           cutoff: cutoff)
         FactoryBot.create(result_kind, competition: competition1, eventId: "333")
         # This creates results below the cutoff for 5x5, which effectively turns
-        # it into a "regular" round instead of a combined round.
+        # it into a "regular" round instead of a cutoff round.
         FactoryBot.create(result_kind, competition: competition2, eventId: "555")
         FactoryBot.create(result_kind,
                           competition: competition2, eventId: "222", roundTypeId: "c")
