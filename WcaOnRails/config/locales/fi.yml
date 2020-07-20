@@ -149,17 +149,17 @@ fi:
     '0':
       #original_hash: 4d618bb
       name: Karsintakierros
-      #original_hash: 2ffe44e
+      #original_hash: 4d618bb
       cellName: Karsintakierros
     '1':
       #original_hash: 1e725b6
       name: Ensimmäinen kierros
-      #original_hash: 916a78d
+      #original_hash: 1e725b6
       cellName: 1. kierros
     '2':
       #original_hash: 985c8d0
       name: Toinen kierros
-      #original_hash: 2a4bcae
+      #original_hash: 985c8d0
       cellName: 2. kierros
     '3':
       #original_hash: e2f74d2
@@ -172,35 +172,35 @@ fi:
       #original_hash: 327c999
       cellName: B-finaali
     c:
-      #original_hash: b2d26f4
-      name: Yhdistetty finaali
-      #original_hash: b2d26f4
-      cellName: Yhdistetty finaali
+      #original_hash: 672b22c
+      name: Finaali
+      #original_hash: 672b22c
+      cellName: Finaali
     d:
-      #original_hash: c6136b1
-      name: Yhdistetty ensimmäinen kierros
-      #original_hash: dffa9ea
-      cellName: Yhdistetty 1. kierros
+      #original_hash: 1e725b6
+      name: Ensimmäinen kierros
+      #original_hash: 1e725b6
+      cellName: 1. kierros
     e:
-      #original_hash: 659c53f
-      name: Yhdistetty toinen kierros
-      #original_hash: b6e1e1c
-      cellName: Yhdistetty 2. kierros
+      #original_hash: 985c8d0
+      name: Toinen kierros
+      #original_hash: 985c8d0
+      cellName: 2. kierros
     f:
       #original_hash: 672b22c
       name: Finaali
       #original_hash: 672b22c
       cellName: Finaali
     g:
-      #original_hash: e861dcf
-      name: Yhdistetty kolmas kierros
-      #original_hash: 86f4b05
-      cellName: Yhdistetty 3. kierros
+      #original_hash: ccf6f8e
+      name: Kolmas kierros
+      #original_hash: ccf6f8e
+      cellName: 3. kierros
     h:
-      #original_hash: 4c66ad0
-      name: Yhdistetty karsintakierros
-      #original_hash: 4c66ad0
-      cellName: Yhdistetty karsintakierros
+      #original_hash: 4d618bb
+      name: Karsintakierros
+      #original_hash: 4d618bb
+      cellName: Karsintakierros
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Yritys %{number}'
@@ -1588,8 +1588,8 @@ fi:
         information_html: 'Näet kaikki kilpailutuloksesi %{result_link}.'
         #original_hash: a585fca
         more_info_html: 'Voit muuttaa sähköpostiasetuksiasi %{preferences_link}.'
-        #original_hash: 60d1a54
-        regards_html: 'Terveisin,<br/>WCA Results Team sekä ${managers}.'
+        #original_hash: 7594a32
+        regards_html: 'Terveisin,<br/>WCA Results Team sekä %{managers}.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Lunasta WCA ID
@@ -2810,9 +2810,9 @@ fi:
         cumulative_across_rounds_html: >-
           %{cumulative_time_limit} voidaan määrittää useamman kierroksen ajalle
           (ks. %{guideline_link}).
-        #original_hash: e4e48c6
+        #original_hash: e8d17df
         cutoff_html: >-
-          Yhdistetyn kierroksen toiseen vaiheeseen pääsyyn vaadittava tulos (ks.
+          Cutoff-kierroksen toiseen vaiheeseen pääsyyn vaadittava tulos (ks.
           %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
