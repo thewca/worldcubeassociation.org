@@ -5,7 +5,7 @@
       <li class="list-group-item break"><%= competition.year %></li>
     <% end %>
     <% li_classes = ["list-group-item"] %>
-    <% li_classes << competition.is_probably_over? ? "past" : "not-past" %>
+    <% li_classes << (competition.is_probably_over? ? "past" : "not-past") %>
     <% li_classes << "cancelled" if competition.cancelled? %>
     <li class="<%= li_classes.join(' ') %>">
       <span class="date">
