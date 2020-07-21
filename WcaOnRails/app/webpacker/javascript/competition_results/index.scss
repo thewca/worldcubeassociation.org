@@ -1,0 +1,21 @@
+.competition-results {
+    .events-list {
+        display: flex;
+        justify-content: center;
+        .cubing-icon {
+            cursor: pointer;
+            font-size: 2em;
+            padding: .2em;
+        };
+        .popup {
+            background-color: #000;
+            color: #fff;
+        };
+        .cubing-icon:hover {
+            color: '#808080'
+        }
+        .selected {
+            color: #fc4a0a ;
+        }
+    }
+}
