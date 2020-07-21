@@ -3,10 +3,13 @@ import useLoadedData from "../requests/loadable";
 import { registerComponent } from "../wca/react-utils";
 import Loading from "../requests/Loading";
 import Errored from "../requests/Errored";
+import { formatAttemptResult } from '../wca-live/attempts';
 import { useState } from "react";
 import classnames from "classnames";
 import "./index.scss";
 import { Table, Popup } from "semantic-ui-react";
+import EventIcon from '../wca/EventIcon';
+import CountryFlag from '../wca/CountryFlag';
 
 const CompetitionResultsNavigation = ({ events, selected, onSelect }) => {
   return (
@@ -16,14 +19,11 @@ const CompetitionResultsNavigation = ({ events, selected, onSelect }) => {
           key={event}
           content={`${event}`}
           trigger={
-            <span
+            <EventIcon
               key={event}
+              id={event}
               onClick={() => onSelect(index)}
-              className={classnames(
-                "cubing-icon",
-                `event-${event}`,
-                selected === index && "selected"
-              )}
+              className={classnames(selected === index && "selected")}
             />
           }
           inverted={true}
@@ -33,7 +33,7 @@ const CompetitionResultsNavigation = ({ events, selected, onSelect }) => {
   );
 };
 
-const RoundResultsTable = ({ round, eventName }) => {
+const RoundResultsTable = ({ round, eventName, eventId }) => {
   return (
     <>
       <h2>{`${eventName} ${round.name}`}</h2>
@@ -56,10 +56,10 @@ const RoundResultsTable = ({ round, eventName }) => {
               <Table.Cell>
                 <a href={`/persons/${result.wca_id}`}>{`${result.name}`}</a>
               </Table.Cell>
-              <Table.Cell>{result.best}</Table.Cell>
-              <Table.Cell>{result.average}</Table.Cell>
-              <Table.Cell>{result.country_iso2}</Table.Cell>
-              <Table.Cell>{result.attempts.join("\t\t")}</Table.Cell>
+              <Table.Cell>{formatAttemptResult(result.best, eventId)}</Table.Cell>
+              <Table.Cell>{formatAttemptResult(result.average, eventId, true)}</Table.Cell>
+              <Table.Cell><CountryFlag iso2={result.country_iso2} /></Table.Cell>
+              <Table.Cell>{result.attempts.map(a => formatAttemptResult(a, eventId)).join("\t\t")}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
@@ -78,7 +78,7 @@ const EventResults = ({ competitionId, eventId }) => {
   return (
     <div className="event-results">
       {data.rounds.map((round) => (
-        <RoundResultsTable round={round} eventName={data.name} />
+        <RoundResultsTable key={round.id} round={round} eventName={data.name} eventId={data.id} />
       ))}
     </div>
   );

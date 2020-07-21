@@ -13,6 +13,7 @@ import 'semantic-css/list';
 import 'semantic-css/menu';
 import 'semantic-css/message';
 import 'semantic-css/placeholder';
+import 'semantic-css/popup';
 import 'semantic-css/reset';
 import 'semantic-css/segment';
 import 'semantic-css/site';
