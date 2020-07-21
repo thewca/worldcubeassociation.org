@@ -149,18 +149,18 @@ pt:
     '0':
       #original_hash: 4d618bb
       name: Ronda de qualificação
-      #original_hash: 2ffe44e
-      cellName: Qualificação
+      #original_hash: 4d618bb
+      cellName: Ronda de Qualificação
     '1':
       #original_hash: 1e725b6
       name: Primeira ronda
-      #original_hash: 916a78d
-      cellName: Primeira
+      #original_hash: 1e725b6
+      cellName: Primeira ronda
     '2':
       #original_hash: 985c8d0
       name: Segunda Ronda
-      #original_hash: 2a4bcae
-      cellName: Segunda
+      #original_hash: 985c8d0
+      cellName: Segunda ronda
     '3':
       #original_hash: e2f74d2
       name: Semifinal
@@ -172,35 +172,35 @@ pt:
       #original_hash: 327c999
       cellName: Final B
     c:
-      #original_hash: b2d26f4
-      name: Final Combinada
-      #original_hash: b2d26f4
-      cellName: Final Combinada
+      #original_hash: 672b22c
+      name: Final
+      #original_hash: 672b22c
+      cellName: Final
     d:
-      #original_hash: c6136b1
-      name: Primeira ronda combinada
-      #original_hash: dffa9ea
-      cellName: Primeira (combinada)
+      #original_hash: 1e725b6
+      name: Primeira ronda
+      #original_hash: 1e725b6
+      cellName: Primeira ronda
     e:
-      #original_hash: 659c53f
-      name: Segunda ronda combinada
-      #original_hash: b6e1e1c
-      cellName: Segunda (combinada)
+      #original_hash: 985c8d0
+      name: Segunda ronda
+      #original_hash: 985c8d0
+      cellName: Segunda ronda
     f:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
       cellName: Final
     g:
-      #original_hash: e861dcf
-      name: Terceira ronda combinada
-      #original_hash: 86f4b05
-      cellName: Terceira (combinada)
+      #original_hash: ccf6f8e
+      name: Terceira ronda
+      #original_hash: ccf6f8e
+      cellName: Terceira ronda
     h:
-      #original_hash: 4c66ad0
-      name: Qualificação combinada
-      #original_hash: 4c66ad0
-      cellName: Qualificação combinada
+      #original_hash: 4d618bb
+      name: Ronda de qualificação
+      #original_hash: 4d618bb
+      cellName: Ronda de qualificação
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Tentativa %{number}'
@@ -1603,8 +1603,8 @@ pt:
         information_html: 'Veja todos os seus resultados %{result_link}.'
         #original_hash: a585fca
         more_info_html: 'Pode gerir as suas preferências de email %{preferences_link}.'
-        #original_hash: 60d1a54
-        regards_html: 'Cumprimentos,<br/>Equipa de Resultados da WCA em nome de ${managers}.'
+        #original_hash: 7594a32
+        regards_html: 'Cumprimentos,<br/>Equipa de Resultados da WCA em nome de %{managers}.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Associar o seu ID da WCA
@@ -2824,10 +2824,10 @@ pt:
         cumulative_across_rounds_html: >-
           Pode ser imposto um %{cumulative_time_limit} em todas as rondas (ver
           %{guideline_link}).
-        #original_hash: e4e48c6
+        #original_hash: e8d17df
         cutoff_html: >-
-          O resultado a bater para seguir para a segunda fase de uma ronda
-          combinada (ver %{regulation_link}).
+          O resultado a bater para seguir para a segunda fase de uma ronda de
+          corte (ver %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
           O formato descreve como se determina o ranking de competidores com
