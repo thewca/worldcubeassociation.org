@@ -27,4 +27,11 @@ class CompetitionMedium < ApplicationRecord
       "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
     )
   }
+
+  before_save :set_timestamp_decided
+  private def set_timestamp_decided
+    if status_change && status == "accepted"
+      self.timestampDecided = Time.now
+    end
+  end
 end
