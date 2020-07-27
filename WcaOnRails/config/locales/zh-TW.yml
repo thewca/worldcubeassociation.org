@@ -149,18 +149,18 @@ zh-TW:
     '0':
       #original_hash: 4d618bb
       name: 資格賽
-      #original_hash: 2ffe44e
+      #original_hash: 4d618bb
       cellName: 資格賽
     '1':
       #original_hash: 1e725b6
-      name: 初賽
-      #original_hash: 916a78d
-      cellName: 初賽
+      name: 首輪
+      #original_hash: 1e725b6
+      cellName: 首輪
     '2':
       #original_hash: 985c8d0
-      name: 複賽
-      #original_hash: 2a4bcae
-      cellName: 複賽
+      name: 第二輪
+      #original_hash: 985c8d0
+      cellName: 第二輪
     '3':
       #original_hash: e2f74d2
       name: 準決賽
@@ -172,35 +172,35 @@ zh-TW:
       #original_hash: 327c999
       cellName: B組決賽
     c:
-      #original_hash: b2d26f4
-      name: 門檻制決賽
-      #original_hash: b2d26f4
-      cellName: 門檻制決賽
+      #original_hash: 672b22c
+      name: 決賽
+      #original_hash: 672b22c
+      cellName: 決賽
     d:
-      #original_hash: c6136b1
-      name: 門檻制初賽
-      #original_hash: dffa9ea
-      cellName: 門檻制初賽
+      #original_hash: 1e725b6
+      name: 首輪
+      #original_hash: 1e725b6
+      cellName: 首輪
     e:
-      #original_hash: 659c53f
-      name: 門檻制複賽
-      #original_hash: b6e1e1c
-      cellName: 門檻制複賽
+      #original_hash: 985c8d0
+      name: 第二輪
+      #original_hash: 985c8d0
+      cellName: 第二輪
     f:
       #original_hash: 672b22c
       name: 決賽
       #original_hash: 672b22c
       cellName: 決賽
     g:
-      #original_hash: e861dcf
-      name: 門檻制準決賽
-      #original_hash: 86f4b05
-      cellName: 門檻制準決賽
+      #original_hash: ccf6f8e
+      name: 第三輪
+      #original_hash: ccf6f8e
+      cellName: 第三輪
     h:
-      #original_hash: 4c66ad0
-      name: 門檻制資格賽
-      #original_hash: 4c66ad0
-      cellName: 門檻制資格賽
+      #original_hash: 4d618bb
+      name: 資格賽
+      #original_hash: 4d618bb
+      cellName: 資格賽
   attempts:
     #original_hash: 17dae1e
     attempt_name: '第%{number}次還原'
@@ -1412,8 +1412,8 @@ zh-TW:
         information_html: '看您所有的比賽成績%{result_link}。'
         #original_hash: a585fca
         more_info_html: '您可以管理您的電子郵件偏好設定%{preferences_link}。'
-        #original_hash: 60d1a54
-        regards_html: '謹代表WCA成績組${managers}最誠摯的問候。'
+        #original_hash: 7594a32
+        regards_html: '謹代表WCA成績組%{managers}最誠摯的問候。'
     claim_wca_id:
       #original_hash: f28bf87
       title: 取得WCA ID
@@ -2422,7 +2422,7 @@ zh-TW:
         cumulative_one_round_html: '可能採用%{cumulative_time_limit}（參見%{regulation_link}）。'
         #original_hash: c6190b6
         cumulative_across_rounds_html: '可能於不同輪共同採用%{cumulative_time_limit}（參見%{guideline_link}）。'
-        #original_hash: e4e48c6
+        #original_hash: e8d17df
         cutoff_html: '在門檻制比賽中，進入第二階段的秒數門檻（參見%{regulation_link}）。'
         #original_hash: f571a30
         format_html: >-
@@ -3513,7 +3513,7 @@ zh-TW:
     #original_hash: 1b026e1
     paragraph3_html: >-
       如果您有興趣新增或是更新翻譯版本，請到<a
-      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">Github倉庫上的翻譯說明</a>。
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">GitHub倉庫上的翻譯說明</a>。
   organizer_guidelines:
     #original_hash: 7486ac4
     title: WCA比賽主辦團隊指導方針
