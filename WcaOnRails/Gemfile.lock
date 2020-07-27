@@ -81,7 +81,7 @@ GEM
     ansi (1.5.0)
     api-pagination (4.8.2)
     arel (9.0.0)
-    ast (2.4.0)
+    ast (2.4.1)
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
     autoprefixer-rails (9.4.7)
@@ -370,7 +370,7 @@ GEM
     octokit (4.18.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
-    oga (3.2)
+    oga (3.3)
       ast
       ruby-ll (~> 2.1)
     openssl (2.2.0)
