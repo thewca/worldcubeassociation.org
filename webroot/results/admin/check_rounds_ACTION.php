@@ -32,11 +32,51 @@ function showUpdateSQL () {
       $updateRounds[$competitionId][$eventId]['confirm'] = 1; // 'confirm' should not be a valid roundTypeId
     }
 
+    if (preg_match('/^removeevent(\w*)\/(\w*)$/', $key, $match)) {
+      $competitionId = $match[1];
+      $eventId = $match[2];
+      $removeEvents[$competitionId][] = $eventId;
+    }
+
+    if (preg_match('/^addevent(\w*)\/(\w*)$/', $key, $match)) {
+      $competitionId = $match[1];
+      $eventId = $match[2];
+      $addEvents[$competitionId][] = $eventId;
+    }
+
     if( preg_match( '/^deleteres([1-9]\d*)$/', $key, $match )){
       $id = $match[1];
       $command = "DELETE FROM Results WHERE id=$id";
       echo "$command\n";
       dbCommand( $command );
+    }
+  }
+
+  foreach( $removeEvents as $competitionId => $eventIds ){
+    foreach( $eventIds as $eventId ) {
+      $competitionEventId = dbValue("SELECT id FROM competition_events WHERE competition_id='$competitionId' AND event_id = '$eventId'");
+      if( $competitionEventId ){
+        $command = "DELETE FROM competition_events WHERE id=$competitionEventId";
+        echo "$command\n";
+        dbCommand($command);
+        $command = "DELETE FROM rounds WHERE competition_event_id=$competitionEventId";
+        echo "$command\n";
+        dbCommand($command);
+        $command = "DELETE FROM registration_competition_events WHERE competition_event_id=$competitionEventId";
+        echo "$command\n";
+        dbCommand($command);
+        $command = "DELETE FROM wcif_extensions WHERE extendable_type = 'CompetitionEvent' and extendable_id=$competitionEventId";
+        echo "$command\n";
+        dbCommand($command);
+      }
+    }
+  }
+
+  foreach ($addEvents as $competitionId => $eventIds) {
+    foreach ($eventIds as $eventId) {
+      $command = "INSERT INTO competition_events (id, competition_id, event_id) VALUES (NULL, '$competitionId', '$eventId')";
+      echo "$command\n";
+      dbCommand($command);
     }
   }
 

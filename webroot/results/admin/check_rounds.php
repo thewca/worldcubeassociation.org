@@ -10,6 +10,9 @@ adminHeadline( 'Check rounds/events' );
 showDescription();
 showChoices();
 
+global $wrongs;
+$wrongs = 0;
+
 if( $chosenShow ) {
   checkRounds();
   checkEvents();
@@ -52,7 +55,7 @@ function showChoices () {
 #----------------------------------------------------------------------
 function checkRounds () {
 #----------------------------------------------------------------------
-  global $competitionCondition, $competitionDescription;
+  global $competitionCondition, $competitionDescription, $wrongs;
 
   echo "<hr /><p>Checking <b> rounds for $competitionDescription</b>... (wait for the result message box at the end)</p>\n";
 
@@ -86,7 +89,6 @@ function checkRounds () {
   echo "<form action='check_rounds_ACTION.php' method='post'>\n";
 
   $prevEvent = '';
-  $wrongs = 0;
   foreach( $roundRows as $i => $roundRow ){
     list( $nbPersons, $competitionId, $year, $month, $day, $eventId, $roundTypeId, $roundCellName, $formatId, $isNotCombined ) = $roundRow;
     $event = "$competitionId|$eventId";
@@ -258,13 +260,6 @@ function checkRounds () {
     ."UPDATE Results SET pos=333 WHERE id=33333\n"
     ."</pre>"
   );
-
-  #--- If differences were found, offer to fix them.
-  if( $wrongs )
-    echo "<center><input type='submit' value='Execute the agreed changes!' /></center>\n";
-
-  #--- Finish the form.
-  echo "</form>\n";
 }
 
 #----------------------------------------------------------------------
@@ -287,9 +282,9 @@ function checkRoundNames ( $roundInfos, $competitionId, $eventId ) {
     $backRoundId = $roundTypeId;
 
     #--- Check for round "combined-ness"
-    if(( ! $isNotCombined ) xor $listCombined[$roundTypeId] ){
+    if( !$isNotCombined && !$listCombined[$roundTypeId] ){
       echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $roundTypeId</a></p>";
-      echo "<p>Round $roundCellName should ". ( $isNotCombined?"not ":"" ) . "be a cutoff round</p>";
+      echo "<p>Round $roundCellName should be a cutoff round</p>";
       $roundTypeId = $switchCombined[$roundTypeId];
       $nbErrors += 1;
     }
@@ -573,7 +568,7 @@ function getCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
 #----------------------------------------------------------------------
 function checkEvents () {
 #----------------------------------------------------------------------
-  global $competitionCondition, $competitionDescription;
+  global $competitionCondition, $competitionDescription, $wrongs;
 
   echo "<hr /><p>Checking <b> events for $competitionDescription</b>... (wait for the result message box at the end)</p>\n";
 
@@ -605,6 +600,7 @@ function checkEvents () {
 
     if( $arrayEventsResults[$competitionId] != $arrayEventsCompetition[$competitionId] ){
       $ok = false;
+      $wrongs++;
       echo "<p>Update competition $competitionId.<br />\n";
       $intersect = array_intersect( $arrayEventsResults[$competitionId], $arrayEventsCompetition[$competitionId] );
       $resultsOnly = array_diff( $arrayEventsResults[$competitionId], $arrayEventsCompetition[$competitionId] );
@@ -612,15 +608,24 @@ function checkEvents () {
       echo "  Old events list: ".implode(' ', $intersect)." <b style='color:#F00'>".implode(' ',$competitionOnly)."</b><br />\n";
       echo "  New events list: ".implode(' ', $intersect)." <b style='color:#3C3'>".implode(' ',$resultsOnly)."</b><br />\n";
       foreach($competitionOnly as $event) {
-        dbCommand("DELETE from competition_events where competition_id='$competitionId' and event_id = '$event'");
+        $checkbox = "<input type='checkbox' name='removeevent$competitionId/$event' value='1' />";
+        echo "$checkbox Remove $event<br/>";
       }
       foreach($resultsOnly as $event) {
-        dbCommand("INSERT INTO competition_events (id, competition_id, event_id) VALUES (NULL, '$competitionId', '$event')");
+        $checkbox = "<input type='checkbox' name='addevent$competitionId/$event' value='1' />";
+        echo "$checkbox Add $event<br/>";
       }
     }
   }
 
-  noticeBox2( $ok, 'No mistakes found in the database', 'Some errors were fixed, you *should* check what has been updated' );
+  noticeBox2( $ok, 'No mistakes found in the database', 'Some errors need to be fixed, you *should* check what has to be updated' );
+
+  #--- If differences were found, offer to fix them.
+  if ($wrongs)
+  echo "<center><input type='submit' value='Execute the agreed changes!' /></center>\n";
+
+  #--- Finish the form.
+  echo "</form>\n";
 
 }
 ?>
