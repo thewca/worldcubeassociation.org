@@ -91,7 +91,7 @@ class EditRoundAttribute extends React.Component {
   }
 
   render() {
-    let { wcifEvents, wcifEvent, roundNumber, attribute } = this.props;
+    let { wcifEvents, wcifEvent, roundNumber, attribute, disabled } = this.props;
     let wcifRound = this.getWcifRound();
     let Show = RoundAttributeComponents[attribute].Show;
     let Input = RoundAttributeComponents[attribute].Input;
@@ -107,6 +107,7 @@ class EditRoundAttribute extends React.Component {
         reset={this.reset}
         hasUnsavedChanges={this.hasUnsavedChanges}
         ref={c => this._modal = c}
+        disabled={disabled}
       >
         <Modal.Header closeButton>
           <Modal.Title><Title wcifRound={wcifRound} /></Modal.Title>

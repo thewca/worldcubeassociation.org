@@ -8,7 +8,7 @@ import events from '../wca/events.js.erb'
 let state = {};
 export function rootRender() {
   ReactDOM.render(
-    <EditEvents competitionId={state.competitionId} canAddAndRemoveEvents={state.canAddAndRemoveEvents} wcifEvents={state.wcifEvents} />,
+    <EditEvents competitionId={state.competitionId} canAddAndRemoveEvents={state.canAddAndRemoveEvents} canUpdateEvents={state.canUpdateEvents} wcifEvents={state.wcifEvents} />,
     document.getElementById('events-edit-area'),
   )
 }
@@ -27,9 +27,10 @@ function normalizeWcifEvents(wcifEvents) {
   return ret.concat(wcifEvents);
 }
 
-window.wca.initializeEventsForm = (competitionId, canAddAndRemoveEvents, wcifEvents) => {
+window.wca.initializeEventsForm = (competitionId, canAddAndRemoveEvents, canUpdateEvents, wcifEvents) => {
   state.competitionId = competitionId;
   state.canAddAndRemoveEvents = canAddAndRemoveEvents;
+  state.canUpdateEvents = canUpdateEvents;
   state.wcifEvents = normalizeWcifEvents(wcifEvents);
   rootRender();
 }

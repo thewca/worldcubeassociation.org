@@ -47,7 +47,7 @@ export default class EditEvents extends React.Component {
   }
 
   render() {
-    let { competitionId, canAddAndRemoveEvents, wcifEvents } = this.props;
+    let { competitionId, canAddAndRemoveEvents, canUpdateEvents, wcifEvents } = this.props;
     let unsavedChanges = null;
     if(this.unsavedChanges()) {
       unsavedChanges = (
@@ -69,7 +69,7 @@ export default class EditEvents extends React.Component {
           {wcifEvents.map(wcifEvent => {
             return (
               <div key={wcifEvent.id} className="col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                <EventPanel wcifEvents={wcifEvents} wcifEvent={wcifEvent} canAddAndRemoveEvents={canAddAndRemoveEvents} />
+                <EventPanel wcifEvents={wcifEvents} wcifEvent={wcifEvent} canAddAndRemoveEvents={canAddAndRemoveEvents} canUpdateEvents={canUpdateEvents} />
               </div>
             );
           })}
@@ -80,7 +80,7 @@ export default class EditEvents extends React.Component {
   }
 }
 
-function RoundsTable({ wcifEvents, wcifEvent }) {
+function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
   let event = events.byId[wcifEvent.id];
   return (
     <div className="table-responsive">
@@ -127,27 +127,27 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
               <tr key={roundNumber} className={`round-${roundNumber}`}>
                 <td>{roundNumber}</td>
                 <td>
-                  <select name="format" className="form-control input-xs" value={wcifRound.format} onChange={roundFormatChanged}>
+                  <select name="format" className="form-control input-xs" value={wcifRound.format} onChange={roundFormatChanged} disabled={disabled}>
                     {event.formats().map(format => <option key={format.id} value={format.id}>{abbreviate(format.name)}</option>)}
                   </select>
                 </td>
 
                 <td className="text-center">
-                  <input name="scrambleSetCount" className="form-control input-xs" type="number" min={1} value={wcifRound.scrambleSetCount} onChange={scrambleSetCountChanged} />
+                  <input name="scrambleSetCount" className="form-control input-xs" type="number" min={1} value={wcifRound.scrambleSetCount} onChange={scrambleSetCountChanged} disabled={disabled} />
                 </td>
 
                 {event.canChangeTimeLimit && (
                   <td className="text-center">
-                    <EditTimeLimitButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} />
+                    <EditTimeLimitButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} disabled={disabled} />
                   </td>
                 )}
 
                 <td className="text-center">
-                  <EditCutoffButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} />
+                  <EditCutoffButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} disabled={disabled} />
                 </td>
 
                 <td className="text-center">
-                  {!isLastRound && <EditAdvancementConditionButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} />}
+                  {!isLastRound && <EditAdvancementConditionButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} disabled={disabled} />}
                 </td>
               </tr>
             );
@@ -158,7 +158,7 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
   );
 }
 
-function EventPanel({ wcifEvents, canAddAndRemoveEvents, wcifEvent }) {
+function EventPanel({ wcifEvents, canAddAndRemoveEvents, canUpdateEvents, wcifEvent }) {
   let event = events.byId[wcifEvent.id];
 
   let removeEvent = () => {
@@ -195,6 +195,7 @@ function EventPanel({ wcifEvents, canAddAndRemoveEvents, wcifEvent }) {
   };
 
   let roundsCountSelector = null;
+  let disabled = !canUpdateEvents;
   if(wcifEvent.rounds) {
     let disableRemove = !canAddAndRemoveEvents;
     roundsCountSelector = (
@@ -204,6 +205,7 @@ function EventPanel({ wcifEvents, canAddAndRemoveEvents, wcifEvent }) {
           name="selectRoundCount"
           value={wcifEvent.rounds.length}
           onChange={e => setRoundCount(parseInt(e.target.value))}
+          disabled={disabled}
         >
           <option value={0}># of rounds?</option>
           <option disabled="disabled">────────</option>
@@ -251,7 +253,7 @@ function EventPanel({ wcifEvents, canAddAndRemoveEvents, wcifEvent }) {
 
       {wcifEvent.rounds && (
         <div className="panel-body">
-          <RoundsTable wcifEvents={wcifEvents} wcifEvent={wcifEvent} />
+          <RoundsTable wcifEvents={wcifEvents} wcifEvent={wcifEvent} disabled={disabled} />
         </div>
       )}
     </div>

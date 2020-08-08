@@ -24,7 +24,7 @@ export default class ButtonActivatedModal extends React.Component {
 
   render() {
     return (
-      <button type="button" name={this.props.name} className={cn("btn", this.props.buttonClass)} onClick={this.open}>
+      <button type="button" name={this.props.name} className={cn("btn", this.props.buttonClass)} onClick={this.open} disabled={this.props.disabled}>
         {this.props.buttonValue}
         <Modal show={this.state.showModal} onHide={this.close}>
           <form className={this.props.formClass}
