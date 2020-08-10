@@ -162,6 +162,38 @@ RSpec.feature "Competition events management" do
       expect(competition.events.map(&:id)).to match_array %w(444)
     end
   end
+
+  context "competition with results posted" do
+    let(:competition) { FactoryBot.create :competition, :confirmed, :visible, :results_posted, event_ids: Event.where(id: '333') }
+    let(:competition_event) { competition.competition_events.find_by_event_id("333") }
+
+    scenario "delegate cannot update events", js: true, retry: 3 do
+      FactoryBot.create :round, number: 2, format_id: 'a', competition_event: competition_event, total_number_of_rounds: 2
+      sign_in competition.delegates.first
+      visit "/competitions/#{competition.id}/events/edit"
+      within_event_panel("333") do
+        expect(find("[name=selectRoundCount]").disabled?).to eq true
+      end
+      within_round("333", 1) do
+        expect(find("[name=format]").disabled?).to eq true
+        expect(find("[name=cutoff]").disabled?).to eq true
+        expect(find("[name=timeLimit]").disabled?).to eq true
+        expect(find("[name=advancementCondition]").disabled?).to eq true
+      end
+    end
+
+    scenario "board member can update events", js: true do
+      sign_in FactoryBot.create(:user, :board_member)
+      visit "/competitions/#{competition.id}/events/edit"
+      within_event_panel("333") do
+        select("2 rounds", from: "selectRoundCount")
+      end
+      save
+      competition.reload
+
+      expect(competition_event.rounds.length).to eq 2
+    end
+  end
 end
 
 def within_event_panel(event_id, &block)
