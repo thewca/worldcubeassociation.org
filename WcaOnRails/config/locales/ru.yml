@@ -21,7 +21,7 @@ ru:
     #original_hash: 3ad2dd8
     KN: Сент-Китс и Невис
     #original_hash: 5c34abb
-    KP: Корейская Народно-Демократическая Республика
+    KP: Корейская Народная Демократическая Республика
     #original_hash: 4430b22
     KR: Республика Корея
     #original_hash: 673b1cf
@@ -149,18 +149,18 @@ ru:
     '0':
       #original_hash: 4d618bb
       name: Квалификационных раунд
-      #original_hash: 2ffe44e
-      cellName: Квалификация
+      #original_hash: 4d618bb
+      cellName: Квалификационный раунд
     '1':
       #original_hash: 1e725b6
       name: Первый раунд
-      #original_hash: 916a78d
-      cellName: Первый
+      #original_hash: 1e725b6
+      cellName: Первый раунд
     '2':
       #original_hash: 985c8d0
       name: Второй раунд
-      #original_hash: 2a4bcae
-      cellName: Второй
+      #original_hash: 985c8d0
+      cellName: Второй раунд
     '3':
       #original_hash: e2f74d2
       name: Полуфинал
@@ -172,35 +172,35 @@ ru:
       #original_hash: 327c999
       cellName: B Финал
     c:
-      #original_hash: b2d26f4
-      name: Комбинированный Финал
-      #original_hash: b2d26f4
-      cellName: Комбинированный Финал
+      #original_hash: 672b22c
+      name: Финал
+      #original_hash: 672b22c
+      cellName: Финал
     d:
-      #original_hash: c6136b1
-      name: Комбинированный Первый раунд
-      #original_hash: dffa9ea
-      cellName: Комбинированный Первый
+      #original_hash: 1e725b6
+      name: Первый раунд
+      #original_hash: 1e725b6
+      cellName: Первый раунд
     e:
-      #original_hash: 659c53f
-      name: Комбинированный Второй раунд
-      #original_hash: b6e1e1c
-      cellName: Комбинированный Второй
+      #original_hash: 985c8d0
+      name: Второй раунд
+      #original_hash: 985c8d0
+      cellName: Второй раунд
     f:
       #original_hash: 672b22c
       name: Финал
       #original_hash: 672b22c
       cellName: Финал
     g:
-      #original_hash: e861dcf
-      name: Комбинированный Третий раунд
-      #original_hash: 86f4b05
-      cellName: Комбинированный Третий
+      #original_hash: ccf6f8e
+      name: Третий раунд
+      #original_hash: ccf6f8e
+      cellName: Третий раунд
     h:
-      #original_hash: 4c66ad0
-      name: Комбинированная квалификация
-      #original_hash: 4c66ad0
-      cellName: Комбинированная квалификация
+      #original_hash: 4d618bb
+      name: Квалификационный раунд
+      #original_hash: 4d618bb
+      cellName: Квалификационный раунд
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Попытка %{number}'
@@ -1335,6 +1335,9 @@ ru:
           disabled_failed: >-
             Не получилось отключить двухфакторную аутентификацию, смотрите
             ошибки ниже.
+      destroy_other:
+        #original_hash: a768ea6
+        success: Вы успешно вышли из своего аккаунта на других устройствах.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1621,8 +1624,8 @@ ru:
         information_html: 'Проверьте ваши результаты: %{result_link}.'
         #original_hash: a585fca
         more_info_html: 'Вы можете управлять своими предпочтениями %{preferences_link}.'
-        #original_hash: 60d1a54
-        regards_html: 'С уважением,<br/>Команда результатов WCA от имени ${managers}.'
+        #original_hash: 7594a32
+        regards_html: 'С уважением,<br/>Команда результатов WCA от имени %{managers}.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Затребовать WCA ID
@@ -1721,6 +1724,10 @@ ru:
         фотографию.
       #original_hash: efc007a
       save: Сохранить
+      #original_hash: c3cd636
+      actions: Действия
+      #original_hash: 8356b72
+      sign_out_of_devices: Выйти из аккаунта на других устройствах
       #original_hash: 58e0c56
       remove_avatar: Удалить аватарку
       #original_hash: 4bd25cf
@@ -2289,6 +2296,18 @@ ru:
       not_announced: 'Это соревнование доступно общественности, но ещё не анонсировано.'
       #original_hash: ab61991
       announced: Соревнование успешно анонсировано!
+      #original_hash: a582c89
+      cancelled: >-
+        Эти соревнования были отменены. Проверьте вкладку «Информация», чтобы
+        узнать больше.
+      #original_hash: b4aa5ee
+      cancel_success: Соревнования успешно отменены!
+      #original_hash: d0478cf
+      cancel_failure: Не получается отменить соревнования.
+      #original_hash: 09df36b
+      uncancel_success: Соревнования успешно восстановлены!
+      #original_hash: ead4a9e
+      uncancel_failure: Не получается восстановить соревнования.
       #original_hash: 8ad5e67
       results_not_posted: 'Результаты соревнования доступны, но ещё не опубликованы.'
       #original_hash: e205d73
@@ -2371,6 +2390,8 @@ ru:
       details: Подробности
       #original_hash: 2e8a57c
       website: Сайт
+      #original_hash: 2260929
+      display_name: '[Отменено] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: Организаторов
@@ -2474,12 +2495,12 @@ ru:
       result_sentence: '%{a_win_by_word} %{result}'
       #original_hash: 6c3b236
       winner: '%{winner} выиграл(а) %{result_sentence} в дисциплине %{event_name}.'
-      #original_hash: 4daa7df
+      #original_hash: ec7f18a
       first_runner_up: 'На втором месте %{first_runner_up} (%{first_runner_up_result})'
-      #original_hash: d96b040
+      #original_hash: cffa50a
       and: и
-      #original_hash: e9e9d2e
-      second_runner_up: 'на третьем %{second_runner_up} (%{second_runner_up_result})'
+      #original_hash: 67d285c
+      second_runner_up: 'на третьем %{second_runner_up} (%{second_runner_up_result}).'
       records:
         #original_hash: 0658e11
         wr: Мировые рекорды
@@ -2784,12 +2805,24 @@ ru:
     post_announcement: Объявить соревнование
     #original_hash: b462eac
     announced_by_html: 'Анонсировано %{announcer_name} %{date_time}'
+    #original_hash: 375e17f
+    cancel: Отменить соревнования
+    #original_hash: 7628a51
+    uncancel: Восстановить соревнования
+    #original_hash: 9122a6c
+    cancelled_by_html: 'Отменено %{name} %{date_time}'
+    #original_hash: 25e68c3
+    cancel_confirm: 'Вы уверены, что хотите отменить эти соревнования?'
     #original_hash: 9a42672
     upload_results: Загрузить результаты
     #original_hash: 01de5ee
     post_results: Опубликовать результаты
     #original_hash: b6513f1
     results_posted_by_html: 'Опубликовано %{poster_name} %{date_time}'
+    #original_hash: a6b5efe
+    cancel_mistake: Сделали ошибку?
+    #original_hash: 0fb43d5
+    note_before_cancel: 'Внимание: только подтверждённые соревнования могут быть отменены.'
     show:
       #original_hash: b0fe391
       general_info: Общая информация
@@ -2819,10 +2852,10 @@ ru:
         cumulative_across_rounds_html: >-
           Может быть установлен %{cumulative_time_limit} для нескольких раундов
           (см. %{guideline_link})
-        #original_hash: e4e48c6
+        #original_hash: e8d17df
         cutoff_html: >-
-          Лимит, который нужно преодолеть, чтобы попасть во вторую часть
-          комбинированного раунда (см. %{regulation_link}).
+          Лимит, который нужно преодолеть, чтобы попасть во вторую часть раунда
+          с катоффом (см. %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
           Формат определяет ранжирование участников на основе их результатов.
