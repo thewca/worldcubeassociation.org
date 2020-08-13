@@ -71,7 +71,8 @@ module ResultsValidators
           end
 
           time_limit_for_round = round_info.time_limit
-          if time_limit_for_round == TimeLimit::UNDEF_TL
+
+          if round_info.has_undef_tl?
             # This situation may happen with "old" competitions, where time limit
             # were possibly not enforced at the discretion of the WCA Delegate.
             # In which case we let the TL undefined, and no errors should be
@@ -99,7 +100,7 @@ module ResultsValidators
             completed_solves = all_solve_times.select(&:complete?)
 
             # Below are checks for time limits, skip them if the time limit is undefined
-            next if time_limit_for_round == TimeLimit::UNDEF_TL
+            next if round_info.has_undef_tl?
 
             # Checks for time limits if it can be user-specified
             if !["333mbf", "333fm"].include?(result.eventId)
