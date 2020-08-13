@@ -133,18 +133,22 @@ class Round < ApplicationRecord
     advancement_condition ? advancement_condition.to_s(self, short: short) : ""
   end
 
+  def has_undef_tl?
+    can_change_time_limit? && time_limit == TimeLimit::UNDEF_TL
+  end
+
   def self.parse_wcif_id(wcif_id)
     event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
     round_number = round_number.to_i
     { event_id: event_id, round_number: round_number }
   end
 
-  def self.wcif_to_round_attributes(wcif, round_number, total_rounds)
+  def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
     {
       number: round_number,
       total_number_of_rounds: total_rounds,
       format_id: wcif["format"],
-      time_limit: TimeLimit.load(wcif["timeLimit"]),
+      time_limit: event.can_change_time_limit? ? TimeLimit.load(wcif["timeLimit"]) : nil,
       cutoff: Cutoff.load(wcif["cutoff"]),
       advancement_condition: AdvancementCondition.load(wcif["advancementCondition"]),
       scramble_set_count: wcif["scrambleSetCount"],
