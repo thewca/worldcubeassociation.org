@@ -10,11 +10,32 @@
 
   <% current_translations = [
     {
-      version: "2020-01-01",
+      version: "2020-08-01",
       language: "简体中文",
       language_english: "Chinese",
       url: "./chinese",
     },
+    {
+      version: "2020-08-01",
+      language: "Suomi",
+      language_english: "Finnish",
+      url: "./finnish",
+    },
+    {
+      version: "2020-08-01",
+      language: "Português Brasileiro",
+      language_english: "Portuguese, Brazil",
+      url: "./portuguese-brazilian",
+    },
+   
+  ] %>
+
+  <h3><%= t("regulations_translations.current") %></h3>
+  <div class="regulations-translations-table-container">
+    <%= render 'regulations/translations/index_table', translations: current_translations %>
+  </div>
+
+  <% old_translations = [
     {
       version: "2020-01-01",
       language: "繁體中文",
@@ -39,25 +60,11 @@
       language_english: "Kazakh",
       url: "./kazakh",
     },
-  ] %>
-
-  <h3><%= t("regulations_translations.current") %></h3>
-  <div class="regulations-translations-table-container">
-    <%= render 'regulations/translations/index_table', translations: current_translations %>
-  </div>
-
-  <% old_translations = [
     {
       version: "2018-01-01",
       language: "Nederlands",
       language_english: "Dutch",
       url: "./dutch",
-    },
-    {
-      version: "2018-01-01",
-      language: "Suomi",
-      language_english: "Finnish",
-      url: "./finnish",
     },
     {
       version: "2018-01-01",
@@ -82,12 +89,6 @@
       language: "Italiano",
       language_english: "Italian",
       url: "./italian",
-    },
-    {
-      version: "2018-01-01",
-      language: "Português Brasileiro",
-      language_english: "Portuguese, Brazil",
-      url: "./portuguese-brazilian",
     },
     {
       version: "2018-01-01",
