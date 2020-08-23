@@ -356,8 +356,8 @@ class Competition < ApplicationRecord
       if self.name.length > 32
         warnings[:name] = I18n.t('competitions.messages.name_too_long')
       end
-      
-      if (self.registration_open - Time.now) > 172800
+
+      if (self.registration_open - Time.now) > 172_800
         warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
       end
 
@@ -379,11 +379,11 @@ class Competition < ApplicationRecord
       unless self.announced?
         warnings[:announcement] = I18n.t('competitions.messages.not_announced')
       end
-      
-      if (self.registration_open - self.announced_at) > 172800
+
+      if (self.registration_open - self.announced_at) > 172_800
         warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
       end
-      
+
       if self.results.any? && !self.results_posted?
         warnings[:results] = I18n.t('competitions.messages.results_not_posted')
       end
