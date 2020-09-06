@@ -1,0 +1,80 @@
+// Override the navbar border bottom just for the homepage.
+.navbar.navbar-static-top {
+  border: 0;
+}
+
+// Override the body background color so that the homepage content looks alright.
+body {
+  background-color: #f8f8f8;
+}
+
+// Override the footer alignment as we don't have the same container width as
+// on other pages.
+footer {
+  .container.footer-links {
+    text-align: center;
+  }
+}
+
+#homepage {
+  // NOTE:
+  //   - We set top/bottom negative margins because on the rest of the website
+  //   we have a margin between the navigation and the actual content.
+  //   - We set right/left margins to auto to center the content on wide screens.
+  margin-top: -15px;
+  margin-bottom: -10px;
+  #cover-homepage {
+    background: url('../images/homepage_banner.svg') no-repeat center center fixed;
+    background-color: #f8f8f8;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    min-height: 500px;
+    width: 100%;
+    padding: 1em 0em;
+    // Make the title + 3 cards vertically centered.
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .ui.huge.header#welcome {
+      font-size: 3em;
+      text-align: center;
+      text-shadow: 0 0 5px black;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+  }
+
+  #content-homepage {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+    .ui.inverted {
+      &.raised {
+        box-shadow: none;
+      }
+    }
+
+    .ui.vertical.stripe.news-content {
+      padding: 5em 1em;
+      background-color: #f8f8f8;
+      .post-content {
+        max-width: 700px;
+      }
+    }
+
+    .ui.container.cover-segments {
+      margin-top: 2em;
+    }
+
+    .ui.segment.inverted {
+      &.yellow, &.red {
+        &, & > .ui.header, & > .ui.button, & > p > a {
+          color: black;
+        }
+      }
+    }
+  }
+}
