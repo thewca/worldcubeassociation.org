@@ -1,0 +1,21 @@
+<% post ||= Post.new %>
+<div class="ui items post-content">
+  <div class="item">
+    <div class="content">
+      <h3 class="ui header">
+        <%= link_to post.title, post_path(post.slug) %>
+      </h3>
+      <% if post.author %>
+        <div class="extra">
+          <%= t('posts.announcement_info_html',
+                author_name: post.author.name,
+                date_time: wca_local_time(post.created_at)) %>
+        </div>
+      <% end %>
+      <div class="description">
+        <%= md post.body_teaser %>
+      </div>
+    </div>
+  </div>
+</div>
+<%= link_to "Learn more", post_path(post.slug), class: "ui button primary center" %>

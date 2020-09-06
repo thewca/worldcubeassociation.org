@@ -10,7 +10,7 @@ RSpec.feature "competition results" do
 
     visit competition_registrations_path(competition)
 
-    table_headers = all('th span')
+    table_headers = all('th i')
     expect(table_headers[0][:class]).to include("event-333")
     expect(table_headers[1][:class]).to include("event-222")
   end

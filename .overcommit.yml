@@ -26,6 +26,7 @@ PreCommit:
       - 'WcaOnRails/tmp/**/*'
       - 'WcaOnRails/db/structure.sql'
       - 'WcaOnRails/node_modules/**/*'
+      - 'WcaOnRails/app/webpacker/stylesheets/semantic/**/*'
       - 'chef/**/*'
       - '.gitmodules'
       - '**/*.pdf'
@@ -45,6 +46,8 @@ PreCommit:
     exclude:
       # FIXME: we could fix it, but it's long and it's legacy code anyway...
       - 'WcaOnRails/app/webpacker/javascript/edit-events/**/*'
+      # Semantic UI stuff, we need to re-exclude that here.
+      - 'WcaOnRails/app/webpacker/stylesheets/semantic/**/*'
     command: ['WcaOnRails/bin/yarn', '--silent', 'run', 'eslint', '-c', '.eslintrc.json', '-f', 'compact']
 
   RuboCop:

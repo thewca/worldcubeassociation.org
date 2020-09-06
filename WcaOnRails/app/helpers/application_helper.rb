@@ -217,9 +217,9 @@ module ApplicationHelper
   end
 
   def ui_icon(name, html_options = {})
-    opts = html_options.merge({
+    opts = html_options.merge(
       class: "icon #{name} " + html_options[:class].to_s,
-    })
+    )
     content_tag(:i, "", opts)
   end
 
@@ -231,9 +231,9 @@ module ApplicationHelper
     "#{ENVied.ROOT_URL}/map?q=#{URI.encode_www_form_component(CGI.unescapeHTML(query))}"
   end
 
-  def add_to_packs(name)
+  def add_to_packs(*names)
     @all_packs = capture do
-      [@all_packs, name].compact.join(",")
+      [@all_packs, *names].compact.join(",")
     end
   end
 
@@ -255,5 +255,19 @@ module ApplicationHelper
     if I18n.locale != :en
       add_to_js_assets("fullcalendar/locales/#{I18n.locale}.js")
     end
+  end
+
+  ATTACH_COMPONENT_STR="window.wca.attachComponentToElem('%{c}', '%{id}', {%{opts}});"
+  def render_react_component(name, id: nil, options: {})
+    id ||= name
+    options_string = options.map do |k, v|
+      "'#{k}': JSON.parse(#{v.to_json})"
+    end
+    component_container = content_tag(:div, nil, id: id)
+    script_tag = javascript_tag(format(ATTACH_COMPONENT_STR,
+                                       c: name,
+                                       id: id,
+                                       opts: options_string.join(",")))
+    component_container + script_tag
   end
 end

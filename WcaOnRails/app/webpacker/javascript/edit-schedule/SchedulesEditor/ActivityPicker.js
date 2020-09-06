@@ -70,7 +70,6 @@ export default class ActivityPicker extends React.Component {
     const $pickerElem = $(activityPickerElementSelector);
     const $panelElem = $(schedulesEditPanelSelector);
 
-
     // The activity picker has a specific behavior when scrolling the window:
     // it stays affixed to the top of the viewport when scrolling goes below its topmost position.
     // It also shrinks to a minimum height when reaching the bottom of the viewport.

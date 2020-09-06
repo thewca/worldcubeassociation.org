@@ -91,7 +91,6 @@ export default class EditSchedule extends React.Component {
       }, onSuccess, onFailure);
     };
 
-
     const actionsHandlers = {
       addVenue: (e) => {
         e.preventDefault();

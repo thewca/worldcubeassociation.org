@@ -1,17 +1,26 @@
-<footer class="footer">
-  <div class="container">
-    <p class="text-muted">
-      <%= link_to "FAQ", faq_path %>
-      |
-      <%= link_to "Contact", contact_website_path %>
-      |
-      <%= link_to "Privacy", privacy_path %>
-      |
-      <%= link_to "Disclaimer", disclaimer_path %>
-      |
-      <a href="https://github.com/thewca/worldcubeassociation.org" target="_blank" class="hide-new-window-icon">
-        <%= ui_icon("github") %>
-      </a>
-    </p>
+<footer class="footer ui vertical segment">
+  <div class="ui container footer-links">
+    <div class="ui horizontal divided list">
+      <div class="item">
+        <%= link_to "About", about_path %>
+      </div>
+      <div class="item">
+        <%= link_to "FAQ", faq_path %>
+      </div>
+      <div class="item">
+        <%= link_to "Contact", contact_website_path %>
+      </div>
+      <div class="item">
+        <a href="https://github.com/thewca/worldcubeassociation.org" target="_blank" class="hide-new-window-icon">
+          <%= ui_icon("github") %> GitHub
+        </a>
+      </div>
+      <div class="item">
+        <%= link_to "Privacy", privacy_path %>
+      </div>
+      <div class="item">
+        <%= link_to "Disclaimer", disclaimer_path %>
+      </div>
+    </div>
   </div>
 </footer>

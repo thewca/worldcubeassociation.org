@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
+  include MarkdownHelper
   belongs_to :author, class_name: "User"
   has_many :post_tags, autosave: true, dependent: :destroy
   include Taggable
+
+  scope :visible, -> { where(world_readable: true) }
 
   validates :title, presence: true, uniqueness: true
   validates :body, presence: true
@@ -29,11 +32,7 @@ class Post < ApplicationRecord
 
   def body_teaser
     split = body.split(BREAK_TAG_RE)
-    teaser = split.first
-    if split.length > 1
-      teaser += "\n\n[Read more....](" + Rails.application.routes.url_helpers.post_path(slug) + ")"
-    end
-    teaser
+    split.first
   end
 
   before_validation :compute_slug
@@ -52,13 +51,22 @@ class Post < ApplicationRecord
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
-
       id: id,
-      title: title,
-      body: body,
       slug: slug,
+      url: Rails.application.routes.url_helpers.post_path(slug),
+      title: title,
       author: author,
+      sticky: sticky?,
+      createdAt: created_at.iso8601,
     }
+    if options[:teaser_only]
+      json[:teaser] = md(body_teaser)
+    else
+      json[:body] = body
+    end
+    if options[:can_manage]
+      json[:edit_url] = Rails.application.routes.url_helpers.edit_post_path(slug)
+    end
 
     json
   end

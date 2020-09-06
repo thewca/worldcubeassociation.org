@@ -140,7 +140,6 @@ function roundToMicrodegrees(toRound) {
 
 let nearbyCompetitionsById = {};
 
-
 window.wca.setupVenueMap = (elem, $lat, $lng, radiusDangerKm, radiusWarningKm, disabled) => {
   nearbyCompetitionsById = {};
   const map = window.wca.createCompetitionsMapLeaflet(elem, [0, 0], false);
@@ -223,7 +222,6 @@ window.wca.setNearbyCompetitions = (nearbyCompetitions) => {
     map.removeLayer(nearbyCompetitionsById[id].marker);
     delete nearbyCompetitionsById[id];
   });
-
 
   // Now create all the new markers.
   idsToAdd.forEach((id) => {

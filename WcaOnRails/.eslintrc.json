@@ -26,6 +26,9 @@
     ],
     "rules": {
         "react/prop-types": 0,
-        "react/jsx-filename-extension": 0
+        "react/jsx-filename-extension": 0,
+        "import/no-unresolved": [2, {
+            "ignore": ["semantic-css/"]
+        }]
     }
 }

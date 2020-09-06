@@ -8,8 +8,6 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-# TODO:
-#https://github.com/reactjs/react-rails
 gem 'rails'
 gem 'rails-i18n'
 gem 'activerecord-import'

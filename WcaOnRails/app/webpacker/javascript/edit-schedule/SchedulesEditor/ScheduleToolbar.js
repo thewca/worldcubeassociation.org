@@ -8,6 +8,7 @@ import {
   Row,
   Tooltip,
 } from 'react-bootstrap';
+import { Icon } from 'semantic-ui-react';
 import _ from 'lodash';
 import { scheduleElementSelector } from './ses';
 
@@ -95,7 +96,7 @@ export class ScheduleToolbar extends React.Component {
           overlay={<CalendarHelp />}
           placement="bottom"
         >
-          <Button><i className="fas fa-question-circle" /></Button>
+          <Button><Icon name="question circle" /></Button>
         </OverlayTrigger>
         <OverlayTrigger
           trigger="click"
@@ -109,12 +110,12 @@ export class ScheduleToolbar extends React.Component {
 )}
         >
           <OverlayTrigger overlay={tooltipSettings} placement="top">
-            <Button><i className="fas fa-cog" /></Button>
+            <Button><Icon name="cog" /></Button>
           </OverlayTrigger>
         </OverlayTrigger>
         <OverlayTrigger overlay={<TooltipKeyboard enabled={keyboardEnabled} />} placement="top">
           <Button onClick={handleKeyboardChange} active={keyboardEnabled}>
-            <i className="fas fa-keyboard" />
+            <Icon name="keyboard" />
           </Button>
         </OverlayTrigger>
       </ButtonToolbar>
@@ -128,7 +129,7 @@ const CalendarHelp = ({ ...props }) => (
   <Popover id="calendar-help-popover" title="Keyboard shortcuts help" {...props}>
     <dl className="row">
       <dt className="col-xs-4">
-        <i className="fas fa-keyboard" />
+        <Icon name="keyboard" />
         {' '}
         or
         <br />
@@ -170,7 +171,6 @@ const TooltipKeyboard = ({ enabled, ...props }) => (
     keyboard shortcuts
   </Tooltip>
 );
-
 
 const CalendarSettingsOption = ({ selected, optionName, handlePropChange }) => {
   const optionProps = calendarOptionsInfo[optionName];
