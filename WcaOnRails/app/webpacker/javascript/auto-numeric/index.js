@@ -2,7 +2,6 @@
 import AutoNumeric from 'autonumeric/dist/autoNumeric';
 import currenciesData from '../wca/currenciesData.js.erb';
 
-
 function getCurrencyInfo(isoCode) {
   return currenciesData.byIso[isoCode] || currenciesData.byIso.USD;
 }

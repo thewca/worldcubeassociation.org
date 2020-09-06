@@ -79,7 +79,6 @@ export default class EditScheduleForRoom extends React.Component {
     );
   }
 
-
   render() {
     const {
       keyboardEnabled,

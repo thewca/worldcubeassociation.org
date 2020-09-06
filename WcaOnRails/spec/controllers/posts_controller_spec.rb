@@ -10,12 +10,12 @@ RSpec.describe PostsController do
   context "not logged in" do
     describe "GET #index" do
       it "populates an array of posts with sticky posts first" do
-        get :index
+        get :index, format: :json
         expect(assigns(:posts)).to eq [sticky_post, post1]
       end
 
       it "filters by tag" do
-        get :index, params: { tag: "wdc" }
+        get :index, params: { tag: "wdc" }, format: :json
         expect(assigns(:posts)).to eq [wdc_post]
       end
     end

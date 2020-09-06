@@ -70,7 +70,6 @@ export function convertVenueActivitiesToVenueTimezone(oldTZ, venueWcif) {
   });
 }
 
-
 export function defaultDurationFromActivityCode(activityCode) {
   const { eventId } = parseActivityCode(activityCode);
   if (eventId === '333fm' || eventId === '333mbf'

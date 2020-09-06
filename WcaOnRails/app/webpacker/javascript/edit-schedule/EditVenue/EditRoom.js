@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from 'semantic-ui-react';
 import rootRender from '..';
 
 /* eslint react/prop-types: "off" */
@@ -50,7 +51,9 @@ export default class EditRoom extends React.Component {
           />
         </div>
         <div className="col-xs-3">
-          <a href="#" onClick={removeRoomAction} className="btn btn-danger pull-right"><i className="fas fa-trash" /></a>
+          <a href="#" onClick={removeRoomAction} className="btn btn-danger pull-right">
+            <Icon name="trash" />
+          </a>
         </div>
         <div className="col-xs-9 room-color-cell">
           <input

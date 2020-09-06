@@ -34,7 +34,7 @@
     evaluated first, and any pack added (like schedule) will be loaded before application.
     These javascript packs *do* include the css imported in them!
   %>
-  <% packs_to_include = @all_packs.split(",").uniq.unshift("application") %>
+  <% packs_to_include = @all_packs.split(",").uniq.unshift("application", "global_styles") %>
   <%= javascript_packs_with_chunks_tag *packs_to_include %>
 
   <% js_assets = (@all_js_assets || "").split(",").uniq %>
@@ -68,8 +68,10 @@
     <%= render 'layouts/navigation' %>
   <% end %>
 
-  <%= render 'layouts/flash' %>
-  <%= yield %>
+  <main>
+    <%= render 'layouts/flash' %>
+    <%= yield %>
+  </main>
 
   <% if !hide_wca_navbars %>
     <%= render 'layouts/footer' %>

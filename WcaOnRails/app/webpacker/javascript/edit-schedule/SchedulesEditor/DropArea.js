@@ -1,12 +1,13 @@
 import React from 'react';
+import { Icon } from 'semantic-ui-react';
 
 export const dropAreaSelector = '#drop-event-area';
 
 export const DropArea = () => (
   <div id="drop-event-area" className="bg-danger text-danger text-center">
-    <i className="fas fa-trash fa-lg pull-left" />
+    <Icon className="pull-left" name="trash" />
     Drop an event here to remove it from the schedule.
-    <i className="fas fa-trash fa-lg pull-right" />
+    <Icon className="pull-right" name="trash" />
   </div>
 );
 

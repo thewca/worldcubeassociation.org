@@ -1,4 +1,6 @@
+<% add_to_packs("posts_widget") %>
 <div class="container">
-  <%= render @posts, render_permalink: true, render_teaser: true, render_toc: false %>
-  <%= paginate @posts %>
+  <%= render_react_component("PostsWidget", id: "posts_widget", options: {
+    initialPage: @current_page,
+  }) %>
 </div>

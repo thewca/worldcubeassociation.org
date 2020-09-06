@@ -1,11 +1,10 @@
 <div class="navbar navbar-default navbar-static-top" role="navigation">
-  <div class="container">
+  <div class="ui container">
     <div class="navbar-brand">
       <a href="<%= root_path %>"><%= image_tag "wca_logo.svg" %></a>
       <span>
         <a href="<%= root_path %>">World Cube Association</a>
         <br>
-<%#file:///home/pvirouleau/tmp/wca-dummy/index.html%>
         <%= link_to(ui_icon("instagram"), "https://www.instagram.com/thewcaofficial/", target: "_blank", class: "hide-new-window-icon") %>
         <%= link_to(ui_icon("facebook square"), "https://www.facebook.com/WorldCubeAssociation/", target: "_blank", class: "hide-new-window-icon") %>
         <%= link_to(ui_icon("twitter"), "https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") %>
@@ -15,14 +14,12 @@
         <%= link_to(ui_icon("youtube"), "https://www.youtube.com/channel/UC5OUMUnS8PvY1RvtB1pQZ0g", target: "_blank", class: "hide-new-window-icon") %>
       </span>
     </div>
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
     <div class="navbar-collapse collapse disabled">
       <ul class="nav navbar-nav">
         <li class="dropdown <%= Set['static_pages', 'posts'].include?(params[:controller]) ? 'active' : '' %>">
@@ -61,7 +58,7 @@
         </li>
         <li class="dropdown <%= Set['results', 'persons', 'media'].include?(params[:controller]) ? 'active' : '' %>">
           <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= ui_icon('list-ol') %>
+            <%= ui_icon('list ol') %>
             <span class="hidden-sm"><%= t '.results' %></span>
             <span class="caret"></span>
           </a>
@@ -112,7 +109,7 @@
         <li>
           <a href="https://forum.worldcubeassociation.org/" target="_blank" class="hide-new-window-icon">
             <%= ui_icon('comments') %>
-            <span class="hidden-sm"><%= t '.forum' %></span>
+            <span class="visible-lg-inline visible-xs-inline"><%= t '.forum' %></span>
           </a>
         </li>
       </ul>
