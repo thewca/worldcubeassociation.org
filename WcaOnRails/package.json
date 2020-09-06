@@ -23,7 +23,7 @@
     "blueimp-load-image": "^5.14.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "classnames": "^2.2.6",
-    "compression-webpack-plugin": "^4.0.0",
+    "compression-webpack-plugin": "^5.0.2",
     "core-js": "^3.6.5",
     "css-loader": "^3.6.0",
     "easymde": "^2.11.0",
