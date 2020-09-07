@@ -27,7 +27,7 @@
     "core-js": "^3.6.5",
     "css-loader": "^3.6.0",
     "easymde": "^2.11.0",
-    "file-loader": "^6.0.0",
+    "file-loader": "^6.1.0",
     "flag-icon-css": "viroulep/flag-icon-css#3.2.1-xk",
     "glob": "^7.1.6",
     "jquery": "3.4.1",
