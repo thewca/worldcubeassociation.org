@@ -1,47 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import classnames from 'classnames';
-import { Table, Popup } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import useLoadedData from '../requests/loadable';
 import { registerComponent } from '../wca/react-utils';
 import Loading from '../requests/Loading';
 import Errored from '../requests/Errored';
 import { formatAttemptResult } from '../wca-live/attempts';
-
-import EventIcon from '../wca/EventIcon';
 import CountryFlag from '../wca/CountryFlag';
-import events from '../wca/events.js.erb';
 import './index.scss';
-
-const CompetitionResultsNavigation = ({ eventIds, selected, onSelect }) => (
-  <div className="events-list">
-    {eventIds.map((event, index) => (
-      <Popup
-        key={event}
-        content={events.byId[event].name}
-        trigger={(
-          <EventIcon
-            key={event}
-            id={event}
-            onClick={() => onSelect(index)}
-            className={classnames(selected === index && 'selected')}
-          />
-          )}
-        inverted
-      />
-    ))}
-  </div>
-);
+import EventNavigation from '../event_navigation';
+import { getUrlParams, setUrlParams } from '../wca/utils';
+import { personUrl } from '../requests/routes.js.erb';
 
 const RoundResultsTable = ({ round, eventName, eventId }) => (
   <>
     <h2>{`${eventName} ${round.name}`}</h2>
-    <Table>
+    <Table striped>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>#</Table.HeaderCell>
-          <Table.HeaderCell>Name</Table.HeaderCell>
-          <Table.HeaderCell>Best</Table.HeaderCell>
-          <Table.HeaderCell>Average</Table.HeaderCell>
+          <Table.HeaderCell width={1}>#</Table.HeaderCell>
+          <Table.HeaderCell width={4}>Name</Table.HeaderCell>
+          <Table.HeaderCell width={2}>Best</Table.HeaderCell>
+          <Table.HeaderCell width={2}>Average</Table.HeaderCell>
           <Table.HeaderCell>Citizen Of</Table.HeaderCell>
           <Table.HeaderCell>Solves</Table.HeaderCell>
         </Table.Row>
@@ -51,7 +30,7 @@ const RoundResultsTable = ({ round, eventName, eventId }) => (
           <Table.Row key={result.id}>
             <Table.Cell>{result.pos}</Table.Cell>
             <Table.Cell>
-              <a href={`/persons/${result.wca_id}`}>{`${result.name}`}</a>
+              <a href={personUrl(result.wca_id)}>{`${result.name}`}</a>
             </Table.Cell>
             <Table.Cell>{formatAttemptResult(result.best, eventId)}</Table.Cell>
             <Table.Cell>{formatAttemptResult(result.average, eventId, true)}</Table.Cell>
@@ -85,26 +64,30 @@ const CompetitionResults = ({ competitionId }) => {
     `/api/v0/competitions/${competitionId}/`,
   );
   const [selectedEvent, setSelectedEvent] = useState();
-  const params = new URLSearchParams(window.location.search);
   useEffect(() => {
     if (data) {
-      const eventParam = params.get('event');
-      const index = eventParam ? data.event_ids.indexOf(eventParam) : 0;
-      setSelectedEvent(index);
+      const params = getUrlParams();
+      const event = params.event || data.event_ids[0];
+      setSelectedEvent(event);
     }
   }, [data]);
+  useEffect(() => {
+    if (selectedEvent) {
+      setUrlParams({ event: selectedEvent });
+    }
+  }, [selectedEvent]);
   if (loading || selectedEvent === undefined) return <Loading />;
   if (error) return <Errored />;
   return (
     <div className="competition-results">
-      <CompetitionResultsNavigation
+      <EventNavigation
         eventIds={data.event_ids}
         selected={selectedEvent}
-        onSelect={(eventIndex) => setSelectedEvent(eventIndex)}
+        onSelect={(eventId) => setSelectedEvent(eventId)}
       />
       <EventResults
         competitionId={competitionId}
-        eventId={data.event_ids[selectedEvent]}
+        eventId={selectedEvent}
       />
     </div>
   );

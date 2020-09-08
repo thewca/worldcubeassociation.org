@@ -17,6 +17,7 @@ import 'semantic-css/popup';
 import 'semantic-css/reset';
 import 'semantic-css/segment';
 import 'semantic-css/site';
+import 'semantic-css/table';
 // NOTE: This is the js, wouldn't go fine through our module-resolver!
 import '../stylesheets/semantic/components/site.min';
 
