@@ -14,7 +14,7 @@
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
     "@rails/ujs": "^6.0.3",
-    "@rails/webpacker": "5.1.1",
+    "@rails/webpacker": "5.2.1",
     "autonumeric": "^4.6.0",
     "autoprefixer": "^9.8.6",
     "autosize": "^4.0.2",
