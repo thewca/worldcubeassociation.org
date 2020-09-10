@@ -210,6 +210,9 @@ class Competition < ApplicationRecord
 
   # 1. on https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
   MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 28
+    
+  # Time in seconds from 6.2.1 in https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
+  REGISTRATION_OPENING_EARLIEST = 172_800
 
   validates :cityName, city: true
 
@@ -357,10 +360,6 @@ class Competition < ApplicationRecord
         warnings[:name] = I18n.t('competitions.messages.name_too_long')
       end
 
-      if (self.registration_open - Time.now) > 172_800
-        warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
-      end
-
       if no_events?
         warnings[:events] = I18n.t('competitions.messages.must_have_events')
       end
@@ -380,10 +379,6 @@ class Competition < ApplicationRecord
         warnings[:announcement] = I18n.t('competitions.messages.not_announced')
       end
 
-      if (self.registration_open - self.announced_at) > 172_800
-        warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
-      end
-
       if self.results.any? && !self.results_posted?
         warnings[:results] = I18n.t('competitions.messages.results_not_posted')
       end
@@ -391,6 +386,22 @@ class Competition < ApplicationRecord
 
     warnings
   end
+
+  def reg_warnings(user)
+    warnings = {}
+    if registration_range_specified? && !registration_past?
+      if self.announced?
+        if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
+          warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
+        end
+      else
+        if (self.registration_open - Time.now) < REGISTRATION_OPENING_EARLIEST
+          warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
+        end
+      end
+      
+      warnings
+    end
 
   def championship_warnings
     warnings = {}
@@ -739,6 +750,10 @@ class Competition < ApplicationRecord
 
   def registration_past?
     registration_close && registration_close < Time.now
+  end
+
+  def registration_range_specified?
+    registration_open.present? && registration_close.present?
   end
 
   def longitude_degrees
