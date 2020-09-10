@@ -210,7 +210,7 @@ class Competition < ApplicationRecord
 
   # 1. on https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
   MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 28
-    
+
   # Time in seconds from 6.2.1 in https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
   REGISTRATION_OPENING_EARLIEST = 172_800
 
@@ -399,7 +399,7 @@ class Competition < ApplicationRecord
           warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
         end
       end
-      
+
       warnings
     end
 
@@ -973,8 +973,9 @@ class Competition < ApplicationRecord
     latitude.present? && longitude.present?
   end
 
+  # The division is to convert the end result from secods to days. .to_date removed some hours from the subtraction
   def days_until
-    start_date ? (start_date - Time.now.utc.to_date).to_i : nil
+    start_date ? ((start_date - Time.now.utc)/(86_400)).to_i : nil
   end
 
   def has_date_errors?
