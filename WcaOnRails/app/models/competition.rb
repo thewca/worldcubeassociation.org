@@ -211,6 +211,9 @@ class Competition < ApplicationRecord
   # 1. on https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
   MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 28
 
+  # Time in seconds from 6.2.1 in https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
+  REGISTRATION_OPENING_EARLIEST = 172_800
+
   validates :cityName, city: true
 
   # We have stricter validations for confirming a competition
@@ -378,6 +381,26 @@ class Competition < ApplicationRecord
 
       if self.results.any? && !self.results_posted?
         warnings[:results] = I18n.t('competitions.messages.results_not_posted')
+      end
+    end
+    if reg_warnings.any?
+      warnings = reg_warnings.merge(warnings)
+    end
+
+    warnings
+  end
+
+  def reg_warnings
+    warnings = {}
+    if registration_range_specified? && !registration_past?
+      if self.announced?
+        if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
+          warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
+        end
+      else
+        if (self.registration_open - Time.now.utc) < REGISTRATION_OPENING_EARLIEST
+          warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
+        end
       end
     end
 
@@ -733,6 +756,10 @@ class Competition < ApplicationRecord
     registration_close && registration_close < Time.now
   end
 
+  def registration_range_specified?
+    registration_open.present? && registration_close.present?
+  end
+
   def longitude_degrees
     longitude_microdegrees ? longitude_microdegrees / 1e6 : nil
   end
@@ -950,8 +977,9 @@ class Competition < ApplicationRecord
     latitude.present? && longitude.present?
   end
 
+  # The division is to convert the end result from secods to days. .to_date removed some hours from the subtraction
   def days_until
-    start_date ? (start_date - Time.now.utc.to_date).to_i : nil
+    start_date ? ((start_date.to_time(:utc) - Time.now.utc)/(86_400)).to_i : nil
   end
 
   def has_date_errors?

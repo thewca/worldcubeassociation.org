@@ -1203,6 +1203,7 @@ en:
       no_results: "There are no results."
       no_main_event_results: "There are no results for the main event (%{event_name})."
       in_progress: "This competition is ongoing. Come back after %{date} to see the results!"
+      reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       tooltip_registered: "You are registered."
       tooltip_waiting_list: "You are currently on the waiting list."
       confirmed_visible: "This competition is confirmed and visible"
