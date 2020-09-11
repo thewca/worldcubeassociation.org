@@ -402,9 +402,9 @@ class Competition < ApplicationRecord
           warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
         end
       end
-
-      warnings
     end
+
+    warnings
   end
 
   def championship_warnings
