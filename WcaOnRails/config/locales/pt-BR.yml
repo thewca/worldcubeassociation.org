@@ -149,18 +149,18 @@ pt-BR:
     '0':
       #original_hash: 4d618bb
       name: Rodada de qualificação
-      #original_hash: 2ffe44e
-      cellName: Qualificação
+      #original_hash: 4d618bb
+      cellName: Rodada de Qualificação
     '1':
       #original_hash: 1e725b6
       name: Primeira rodada
-      #original_hash: 916a78d
-      cellName: Primeira
+      #original_hash: 1e725b6
+      cellName: Primeira Rodada
     '2':
       #original_hash: 985c8d0
       name: Segunda rodada
-      #original_hash: 2a4bcae
-      cellName: Segunda
+      #original_hash: 985c8d0
+      cellName: Segunda Rodada
     '3':
       #original_hash: e2f74d2
       name: Semifinal
@@ -172,35 +172,35 @@ pt-BR:
       #original_hash: 327c999
       cellName: Final B
     c:
-      #original_hash: b2d26f4
-      name: Final Combinada
-      #original_hash: b2d26f4
-      cellName: Final Combinada
+      #original_hash: 672b22c
+      name: Final
+      #original_hash: 672b22c
+      cellName: Final
     d:
-      #original_hash: c6136b1
-      name: Primeira rodada combinada
-      #original_hash: dffa9ea
-      cellName: Primeira (combinada)
+      #original_hash: 1e725b6
+      name: Primeira Rodada
+      #original_hash: 1e725b6
+      cellName: Primeira Rodada
     e:
-      #original_hash: 659c53f
-      name: Segunda rodada combinada
-      #original_hash: b6e1e1c
-      cellName: Segunda (combinada)
+      #original_hash: 985c8d0
+      name: Segunda Rodada
+      #original_hash: 985c8d0
+      cellName: Segunda Rodada
     f:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
       cellName: Final
     g:
-      #original_hash: e861dcf
-      name: Terceira rodada combinada
-      #original_hash: 86f4b05
-      cellName: Terceira (combinada)
+      #original_hash: ccf6f8e
+      name: Terceira Rodada
+      #original_hash: ccf6f8e
+      cellName: Terceira Rodada
     h:
-      #original_hash: 4c66ad0
-      name: Qualificação combinada
-      #original_hash: 4c66ad0
-      cellName: Qualificação combinada
+      #original_hash: 4d618bb
+      name: Rodada de Qualificação
+      #original_hash: 4d618bb
+      cellName: Rodada de Qualificação
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Tentativa %{number}'
@@ -1321,6 +1321,9 @@ pt-BR:
           disabled_success: Autenticação em duas etapas desativada com sucesso.
           #original_hash: c36d556
           disabled_failed: 'Não foi possível desativar a 2FA, veja os erros abaixo.'
+      destroy_other:
+        #original_hash: a768ea6
+        success: Saída de outros dispositivos feita com sucesso.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1608,8 +1611,8 @@ pt-BR:
         information_html: 'Veja todos os seus resultados %{result_link}.'
         #original_hash: a585fca
         more_info_html: 'Você pode gerenciar suas opções de email %{preferences_link}.'
-        #original_hash: 60d1a54
-        regards_html: 'Saudações,<br/>Equipe de Resultados da WCA em nome de ${managers}.'
+        #original_hash: 7594a32
+        regards_html: 'Saudações,<br/>Equipe de Resultados da WCA em nome de %{managers}.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Conectar sua ID da WCA
@@ -1710,6 +1713,10 @@ pt-BR:
       confirm_guidelines: Certifique-se de ler os requisitos e de enviar uma foto válida.
       #original_hash: efc007a
       save: Salvar
+      #original_hash: c3cd636
+      actions: Ações
+      #original_hash: 8356b72
+      sign_out_of_devices: Sair de outros dispositivos
       #original_hash: 58e0c56
       remove_avatar: Remover foto
       #original_hash: 4bd25cf
@@ -2271,6 +2278,18 @@ pt-BR:
       not_announced: Essa competição está visível para o público mas ainda não foi anunciada.
       #original_hash: ab61991
       announced: Competição anunciada com sucesso!
+      #original_hash: a582c89
+      cancelled: >-
+        Esta competição foi cancelada. Por favor verifique a seção de
+        informações para mais detalhes.
+      #original_hash: b4aa5ee
+      cancel_success: Competição cancelada com sucesso!
+      #original_hash: d0478cf
+      cancel_failure: Não foi possível cancelar a competição.
+      #original_hash: 09df36b
+      uncancel_success: Competição restaurada com sucesso!
+      #original_hash: ead4a9e
+      uncancel_failure: Não foi possível restaurar a competição.
       #original_hash: 8ad5e67
       results_not_posted: >-
         Os resultados desta competição estão visíveis mas ainda não foram
@@ -2295,6 +2314,10 @@ pt-BR:
       in_progress: >-
         Esta competição está em andamento. Volte após %{date} para ver os
         resultados!
+      #original_hash: 8ab1548
+      reg_opens_too_early: >-
+        As inscrições estão previstas para começar em menos do que as 48 horas
+        necessárias.
       #original_hash: 3322400
       tooltip_registered: Você está inscrito.
       #original_hash: f2d092f
@@ -2357,6 +2380,8 @@ pt-BR:
       details: Detalhes
       #original_hash: 2e8a57c
       website: Website
+      #original_hash: 2260929
+      display_name: '[Cancelada] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: Organizador
@@ -2774,12 +2799,24 @@ pt-BR:
     post_announcement: Anunciar a competição
     #original_hash: b462eac
     announced_by_html: 'Anunciada por %{announcer_name} em %{date_time}'
+    #original_hash: 375e17f
+    cancel: Cancelar a competição
+    #original_hash: 7628a51
+    uncancel: Restaurar a competição
+    #original_hash: 9122a6c
+    cancelled_by_html: 'Cancelada por %{name} em %{date_time}'
+    #original_hash: 25e68c3
+    cancel_confirm: Você tem certeza que quer cancelar a competição?
     #original_hash: 9a42672
     upload_results: Publicar os resultados
     #original_hash: 01de5ee
     post_results: Postar os resultados
     #original_hash: b6513f1
     results_posted_by_html: 'Postado por %{poster_name} on %{date_time}'
+    #original_hash: a6b5efe
+    cancel_mistake: Cometeu um erro?
+    #original_hash: 0fb43d5
+    note_before_cancel: 'Nota: somente competições confirmadas podem ser canceladas.'
     show:
       #original_hash: b0fe391
       general_info: Informações gerais
@@ -2809,10 +2846,10 @@ pt-BR:
         cumulative_across_rounds_html: >-
           Um %{cumulative_time_limit} pode ser aplicado em várias rodadas (veja
           %{guideline_link}).
-        #original_hash: e4e48c6
+        #original_hash: e8d17df
         cutoff_html: >-
           O resultado a ser batido para prosseguir para a segunda fase de uma
-          rodada combinada (veja %{regulation_link}).
+          rodada com corte (veja %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
           O formato descreve como é determinado o ranking dos competidores
