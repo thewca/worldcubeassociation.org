@@ -383,11 +383,14 @@ class Competition < ApplicationRecord
         warnings[:results] = I18n.t('competitions.messages.results_not_posted')
       end
     end
+    if reg_warnings.any?
+      warnings = reg_warnings.merge(warnings)
+    end
 
     warnings
   end
 
-  def reg_warnings(user)
+  def reg_warnings
     warnings = {}
     if registration_range_specified? && !registration_past?
       if self.announced?
@@ -395,13 +398,14 @@ class Competition < ApplicationRecord
           warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
         end
       else
-        if (self.registration_open - Time.now) < REGISTRATION_OPENING_EARLIEST
+        if (self.registration_open - Time.now.utc) < REGISTRATION_OPENING_EARLIEST
           warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
         end
       end
 
       warnings
     end
+  end
 
   def championship_warnings
     warnings = {}
@@ -975,7 +979,7 @@ class Competition < ApplicationRecord
 
   # The division is to convert the end result from secods to days. .to_date removed some hours from the subtraction
   def days_until
-    start_date ? ((start_date - Time.now.utc)/(86_400)).to_i : nil
+    start_date ? ((start_date.to_time(:utc) - Time.now.utc)/(86_400)).to_i : nil
   end
 
   def has_date_errors?
