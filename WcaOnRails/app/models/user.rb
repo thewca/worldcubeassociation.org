@@ -55,7 +55,7 @@ class User < ApplicationRecord
   end
 
   def self.all_discourse_groups
-    Team.all_official_and_councils.map(&:friendly_id) + User.delegate_statuses.keys
+    Team.all_official_and_councils.map(&:friendly_id) + User.delegate_statuses.keys + [Team.board.friendly_id]
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true

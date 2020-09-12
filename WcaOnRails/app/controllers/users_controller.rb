@@ -215,6 +215,9 @@ class UsersController < ApplicationController
     # Get the teams/councils/Delegate status for user
     user_groups = current_user.current_teams.select(&:official_or_council?).map(&:friendly_id)
     user_groups << current_user.delegate_status if current_user.any_kind_of_delegate?
+    # Board is (expectedly) not included in "current_teams", so we have to add
+    # it manually.
+    user_groups << Team.board.friendly_id if current_user.board_member?
 
     sso.external_id = current_user.id
     sso.name = current_user.name
