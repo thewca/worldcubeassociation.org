@@ -438,7 +438,7 @@ da:
         #original_hash: 0eb5ed5
         information: Information
         #original_hash: 87b7d5f
-        use_wca_registration: Jeg vil gerne bruge WCA hjemmesiden til registrering
+        use_wca_registration: Jeg vil gerne bruge WCA hjemmesiden til tilmelding
         #original_hash: 8020e88
         external_registration_page: Tilmeldingsside
         #original_hash: 9bb1965
@@ -1461,7 +1461,7 @@ da:
       #original_hash: aee74b8
       new_post: Nyt opslag
       #original_hash: 0d67445
-      team_leader: Hold leder
+      team_leader: Holdleder
       #original_hash: 37b8fdc
       regional_organizations: Regionale Organisationer
       #original_hash: 6568fa0
@@ -2298,6 +2298,8 @@ da:
       in_progress: >-
         Denne konkurrence er i gang. Kom tilbage efter den %{date} for at se
         resultaterne!
+      #original_hash: 8ab1548
+      reg_opens_too_early: Tilmelding er sat til at åbne tidligere end de påkrævede 48 timer.
       #original_hash: 3322400
       tooltip_registered: Du er tilmeldt.
       #original_hash: f2d092f
@@ -2913,7 +2915,7 @@ da:
         #original_hash: 4c9f914
         delegate_report: Den Delegeredes rapport
         #original_hash: b233e77
-        registration: Tilmelding
+        registration: Tilmeldingspanel
         #original_hash: 3f9176e
         import_registrations: Importer tilmeldinger
         #original_hash: d672995
@@ -3650,8 +3652,8 @@ da:
         Delegeret er ansvarlig for at sikre sig at alle WCA konkurrencer
         forløber korrekt efter WCA's mål, ånd, og regelsæt. WCA skelner mellem
         <strong>Seniordelegerede</strong>, <strong>Regionale Delegerede</strong>
-        <strong>Delegerede</strong>, <strong>Juniordelgerede</strong>, og
-        <strong>Lærlingdelerede</strong>%{see_link}.</p> <p>I forlængelse til
+        <strong>Delegerede</strong>, <strong>Juniordelegerede</strong>, og
+        <strong>Lærlingdelegerede</strong>%{see_link}.</p> <p>I forlængelse til
         deres pligter som WCA Delegerede, så er en Seniordelegeret ansvarlig for
         at holde styr over WCA Delegerede i sit område, og kan blive kontaktet,
         hvis der er nogle regionale problemer.</p> <p>Nye Delegerede er først
