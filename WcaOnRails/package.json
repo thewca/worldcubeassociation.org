@@ -57,7 +57,7 @@
     "whatwg-fetch": "^3.2.0"
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
+    "eslint": "^7.9.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jquery": "^1.5.1",
