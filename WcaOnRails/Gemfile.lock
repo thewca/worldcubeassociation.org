@@ -287,7 +287,7 @@ GEM
     iso (0.2.2)
       i18n
     jaro_winkler (1.5.4)
-    jbuilder (2.10.0)
+    jbuilder (2.10.1)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
     json (2.3.0)
@@ -336,7 +336,7 @@ GEM
     mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.14.1)
+    minitest (5.14.2)
     monetize (1.9.2)
       money (~> 6.12)
     money (6.13.4)
