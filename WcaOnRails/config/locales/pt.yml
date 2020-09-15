@@ -2305,6 +2305,8 @@ pt:
       in_progress: >-
         Esta competição está em andamento. Volte após %{date} para ver os
         resultados!
+      #original_hash: 8ab1548
+      reg_opens_too_early: Registo está definido começar antes das necessárias 48 horas.
       #original_hash: 3322400
       tooltip_registered: Está registado.
       #original_hash: f2d092f
