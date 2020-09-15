@@ -1568,4 +1568,11 @@ class Competition < ApplicationRecord
     cal.publish
     cal
   end
+
+  validate :advancement_condition_must_be_present_for_all_non_final_rounds, if: :confirmed_or_visible?
+  def advancement_condition_must_be_present_for_all_non_final_rounds
+    unless rounds.all?(&:advancement_condition_is_valid?)
+      errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds'))
+    end
+  end
 end

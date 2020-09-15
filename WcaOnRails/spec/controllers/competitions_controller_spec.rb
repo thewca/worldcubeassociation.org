@@ -582,6 +582,52 @@ RSpec.describe CompetitionsController do
         expect(competition.reload.confirmed?).to eq false
       end
 
+      it "can confirm a competition that is having advancement conditions" do
+        competition.update_attributes(start_date: 29.day.from_now, end_date: 29.day.from_now)
+        competition.competition_events[0].rounds.destroy_all!
+        competition.competition_events[0].rounds.create!(
+          format: competition.competition_events[0].event.preferred_formats.first.format,
+          number: 1,
+          advancement_condition: RankingCondition.new(4),
+          total_number_of_rounds: 2,
+        )
+        round_two = competition.competition_events[0].rounds.create!(
+          format: competition.competition_events[0].event.preferred_formats.first.format,
+          number: 2,
+          total_number_of_rounds: 2,
+          scramble_set_count: 1,
+        )
+        start_time = Time.zone.local_to_utc(competition.start_time)
+        end_time = start_time
+        room = competition.competition_venues.last.venue_rooms.first
+        room.schedule_activities.create!(
+          wcif_id: 5,
+          name: "Great round",
+          activity_code: round_two.wcif_id,
+          start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
+          end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
+        )
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
+        expect(competition.reload.confirmed?).to eq true
+      end
+
+      it "cannot confirm a competition that is not having advancement conditions" do
+        competition.competition_events[0].rounds.destroy_all!
+        competition.competition_events[0].rounds.create!(
+          format: competition.competition_events[0].event.preferred_formats.first.format,
+          number: 1,
+          total_number_of_rounds: 2,
+        )
+        competition.competition_events[0].rounds.create!(
+          format: competition.competition_events[0].event.preferred_formats.first.format,
+          number: 2,
+          total_number_of_rounds: 2,
+          scramble_set_count: 1,
+        )
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
+        expect(competition.reload.confirmed?).to eq false
+      end
+
       it "cannot delete not confirmed, but visible competition" do
         competition.update_attributes(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we only allow
