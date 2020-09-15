@@ -2328,6 +2328,8 @@ ru:
       in_progress: >-
         Соревнование ещё не закончилось. Результаты будут выложены не ранее
         %{date}.
+      #original_hash: 8ab1548
+      reg_opens_too_early: 'Время начала регистрации указано ранее, чем через 48 часов.'
       #original_hash: 3322400
       tooltip_registered: Вы зарегистрированы.
       #original_hash: f2d092f
