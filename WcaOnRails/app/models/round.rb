@@ -137,6 +137,10 @@ class Round < ApplicationRecord
     can_change_time_limit? && time_limit == TimeLimit::UNDEF_TL
   end
 
+  def advancement_condition_is_valid?
+    final_round? || advancement_condition
+  end
+
   def self.parse_wcif_id(wcif_id)
     event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
     round_number = round_number.to_i

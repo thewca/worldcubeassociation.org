@@ -1407,6 +1407,7 @@ en:
       refund_date_after_start: "Refund limit date cannot be after start date."
       span_too_many_days: "Competition cannot last more than %{max_days} days."
       invalid_currency_code: "Selected currency code is invalid"
+      advancement_condition_must_be_present_for_all_non_final_rounds: "must have an advancement condition to all non final rounds."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
