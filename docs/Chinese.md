@@ -85,6 +85,6 @@
 
 
 
-## 引进
+## 项目部署与上线
 
 请参见 [Spinning up a new server](https://github.com/thewca/worldcubeassociation.org/wiki/Spinning-up-a-new-server) 和 [Merging and deploying](https://github.com/thewca/worldcubeassociation.org/wiki/Merging-and-deploying).
