@@ -19,6 +19,10 @@ module Locales
       "flag_id": "de",
       "name": "Deutsch",
     },
+    "eo": {
+      "flag_id": "eo",
+      "name": "Esperanto",
+    },
     "es": {
       "flag_id": "es",
       "name": "Español",
