@@ -51,7 +51,7 @@
     "sass-loader": "^10.0.2",
     "semantic-ui-react": "^0.88.2",
     "style-loader": "^1.2.1",
-    "webpack": "^4.43.0",
+    "webpack": "^4.44.2",
     "webpack-manifest-plugin": "^2.2.0",
     "webpack-merge": "^5.1.4",
     "whatwg-fetch": "^3.4.1"
