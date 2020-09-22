@@ -792,7 +792,12 @@ zh-CN:
       organizations: 地区性组织
       #original_hash: d790b40
       faq: 常见问题
+      forum: 论坛
+      teams: 团队、委员会与代表
       #original_hash: a34b69f
+      education: 教育资源
+      privacy: 隐私
+      disclaimer: 免责声明
       contact: 联系信息
       #original_hash: 4fa8cc8
       tools: 工具
@@ -834,6 +839,8 @@ zh-CN:
       history: 历史
       #original_hash: 8ad8302
       translations: 翻译
+      disciplinary: 纪律记录
+      incidents: 事件记录
       #original_hash: b8be3d1
       administration: 管理
       #original_hash: b7ee3c4
