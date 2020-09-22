@@ -1,6 +1,6 @@
 # worldcubeassociation.org [![Build Status](https://travis-ci.org/thewca/worldcubeassociation.org.svg?branch=master)](https://travis-ci.org/thewca/worldcubeassociation.org) [![Coverage Status](https://coveralls.io/repos/github/thewca/worldcubeassociation.org/badge.svg?branch=master)](https://coveralls.io/github/thewca/worldcubeassociation.org?branch=master)
 
-##### Languages: [English](https://github.com/thewca/worldcubeassociation.org) | [简体中文](https://github.com/thewca/worldcubeassociation.org/tree/master/docs/Chinese.md)
+##### Languages: [English](https://github.com/thewca/worldcubeassociation.org/blob/master/README.md) | [简体中文](https://github.com/thewca/worldcubeassociation.org/tree/master/docs/Chinese.md)
 
 
 
