@@ -1966,6 +1966,8 @@ zh-TW:
       no_main_event_results: '主要比賽項目(%{event_name})並沒有成績。'
       #original_hash: a0168ee
       in_progress: '比賽正在進行當中，過%{date}以後再回來看成績吧！'
+      #original_hash: 8ab1548
+      reg_opens_too_early: 開始報名的時間短於規定的48小時。
       #original_hash: 3322400
       tooltip_registered: 您已經報名了。
       #original_hash: f2d092f
