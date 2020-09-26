@@ -20,6 +20,16 @@ GIT
       rails (>= 3.2)
 
 GIT
+  remote: https://github.com/viroulep/twitter-cldr-rb.git
+  revision: a72a1931c274d4e240534ae97a47249c762337e7
+  branch: add-eo
+  specs:
+    twitter_cldr (6.1.0)
+      camertron-eprun
+      cldr-plurals-runtime-rb (~> 1.0)
+      tzinfo
+
+GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails.git
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
   branch: master
@@ -559,10 +569,6 @@ GEM
     tins (1.20.2)
     translighterate (0.2.2)
       actionview (>= 4.0, < 6.0)
-    twitter_cldr (6.1.0)
-      camertron-eprun
-      cldr-plurals-runtime-rb (~> 1.0)
-      tzinfo
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     uber (0.1.0)
@@ -692,7 +698,7 @@ DEPENDENCIES
   time_will_tell
   timecop
   translighterate
-  twitter_cldr
+  twitter_cldr!
   uglifier
   unicorn
   valid_email
