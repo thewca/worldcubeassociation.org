@@ -10,7 +10,7 @@
       <%= label_tag "checkbox-#{event.id}" do %>
         <%= check_box_tag "event_ids[]", event.id, params[:event_ids].include?(event.id), id: "checkbox-#{event.id}" %>
         <%# Not using cubing_icon here, because the selector js code uses span %>
-        <%= content_tag :span, "", class: "event-#{event.id} cubing-icon", data: { toggle: "tooltip", placement: "top" }, title: event.name %>
+        <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name %>
       <% end %>
     </span>
     <% end %>
