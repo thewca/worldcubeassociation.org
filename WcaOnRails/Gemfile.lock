@@ -21,7 +21,7 @@ GIT
 
 GIT
   remote: https://github.com/viroulep/twitter-cldr-rb.git
-  revision: a72a1931c274d4e240534ae97a47249c762337e7
+  revision: c86fa9a7041110fd56d861fae96ae23cec8d47e2
   branch: add-eo
   specs:
     twitter_cldr (6.1.0)
