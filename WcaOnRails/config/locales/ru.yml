@@ -1513,6 +1513,66 @@ ru:
       manage_auth_app: Управление авторизованными приложениями
       #original_hash: acac109
       media_submission: Отправка медиа
+  homepage:
+    #original_hash: 824d76b
+    learn_more: Узнать больше
+    #original_hash: d8f3ae6
+    title: Добро пожаловать во Всемирную Ассоциацию Кубика
+    #original_hash: d133986
+    latest_news: Последние новости
+    #original_hash: 06b01c4
+    announcements: Анонсы
+    about_us:
+      #original_hash: 3ffb811
+      title: О нас
+      #original_hash: ed77e4c
+      text: >-
+        Всемирная Ассоциация Кубика управляет соревнованиями по сборке
+        механических головоломок, которые решаются с помощью перестановок групп
+        элементов, также известными как "twisty puzzles".
+    competitions:
+      #original_hash: db98a68
+      title: Соревнования
+      #original_hash: 0ac88bc
+      text_html: >-
+        Узнайте о соревнованиях рядом с вами или о результатах соревнований.
+        Хотите узнать результаты соревнований, которые проходят прямо сейчас?
+        Переходите на %{wca_live_link}!
+    records:
+      #original_hash: e51c552
+      title: Рекорды
+      #original_hash: 3681af0
+      text: Посмотрите текущие и прошлые рекорды всех официальных дисциплин WCA.
+    faq:
+      #original_hash: 03688ba
+      title: FAQ
+      #original_hash: 1e0206f
+      text: >-
+        Взгляните на наш список часто задаваемых вопросов, если вам нужна
+        помощь. Здесь уже есть ответы на многие вопросы.
+    contact:
+      #original_hash: b37456c
+      title: Контакты
+      #original_hash: 5c254b6
+      text_html: >-
+        Если вы хотите связаться с нами, вы можете сделать это через контактную
+        форму. Если у вас есть другие вопросы, связанные с WCA, убедитесь, что
+        вы посмотрели наш %{faq_link}!
+      #original_hash: d790b40
+      faq: список частых вопросов
+      #original_hash: 392f358
+      button: Открыть Контактную форму WCA
+    support:
+      #original_hash: 610edba
+      title: Поддержать WCA
+      #original_hash: 6253f90
+      text: >-
+        Всемирная Ассоциация Кубика — это организация, освобождённая от налогов
+        501(c)(3). Как 100% добровольческая некоммерческая организация, мы будем
+        рады вашим пожертвованиям, которые помогут нам в нашем видении о более
+        приятных соревнованиях по всему миру.
+      #original_hash: 65c84ec
+      button: 'Узнать больше о том, как поддержать WCA'
   users:
     update_locale:
       #original_hash: 4cde9bc
