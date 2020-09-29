@@ -69,7 +69,7 @@ class TranslationsController < ApplicationController
     "pt" => [331],
     "pt-BR" => [18],
     "ro" => [11918],
-    "ru" => [140],
+    "ru" => [140, 1492],
     "sk" => [7922],
     "sl" => [1381],
     "th" => [21095],
