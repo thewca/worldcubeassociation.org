@@ -1322,6 +1322,53 @@ zh-TW:
       manage_auth_app: 管理被授權的應用程式
       #original_hash: acac109
       media_submission: 上傳媒體
+  homepage:
+    #original_hash: 824d76b
+    learn_more: 了解更多
+    #original_hash: d8f3ae6
+    title: 歡迎來到世界方塊協會
+    #original_hash: d133986
+    latest_news: 最新消息
+    #original_hash: 06b01c4
+    announcements: 公告
+    about_us:
+      #original_hash: 3ffb811
+      title: 關於我們
+      #original_hash: ed77e4c
+      text: 世界方塊協會掌管方塊比賽，這些方塊是透過轉動一部份的零件來操控，通常稱之為「魔術方塊」（twisty puzzles）。
+    competitions:
+      #original_hash: db98a68
+      title: 比賽
+      #original_hash: 0ac88bc
+      text_html: '尋找鄰近的比賽或是比賽成績。正在比賽中且想要知道比賽成績嗎？可以來看看%{wca_live_link}！'
+    records:
+      #original_hash: e51c552
+      title: 紀錄
+      #original_hash: 3681af0
+      text: 查看現在以及過去所有WCA認證比賽項目的紀錄。
+    faq:
+      #original_hash: 03688ba
+      title: 常見問題
+      #original_hash: 1e0206f
+      text: 如果您需要任何幫助，查看我們列出的常見問題。很多疑問可以在這找到答案。
+    contact:
+      #original_hash: b37456c
+      title: 聯絡
+      #original_hash: 5c254b6
+      text_html: '如果您想要聯絡我們，您可以透過聯絡表單來取得聯繫。如果您對於WCA各種流程有疑問，別忘了可以參考我們的%{faq_link}！'
+      #original_hash: d790b40
+      faq: 常見問題
+      #original_hash: 392f358
+      button: 請帶我前往WCA聯絡表單
+    support:
+      #original_hash: 610edba
+      title: 幫助WCA
+      #original_hash: 6253f90
+      text: >-
+        世界方塊協會是美利堅合眾國
+        501(c)(3)免稅組織。由於我們是一個100%志願者經營的非營利團體，我們歡迎您的捐款，這讓我們能夠拓展我們的願景，並幫助全世界舉辦更讓人樂於其中的比賽。
+      #original_hash: 65c84ec
+      button: 我還想知道有哪些方法能幫助WCA
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2321,6 +2368,8 @@ zh-TW:
       span_too_many_days: '比賽不得多於%{max_days}天。'
       #original_hash: cdcd288
       invalid_currency_code: 選取的貨幣代碼無效
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: 如果不是最後一輪，必須要設定晉級條件。
     new:
       #original_hash: 1208df7
       create_competition: 申請比賽
