@@ -72,9 +72,7 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'i18n-country-translations'
 gem 'http_accept_language'
-# FIXME: we can fall back to the original source when
-# https://github.com/twitter/twitter-cldr-rb/pull/238 is merged.
-gem 'twitter_cldr', github: 'viroulep/twitter-cldr-rb', branch: 'add-eo'
+gem 'twitter_cldr'
 gem 'webpacker'
 gem 'json-schema'
 gem 'translighterate'
