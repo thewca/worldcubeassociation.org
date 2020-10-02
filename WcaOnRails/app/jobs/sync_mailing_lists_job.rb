@@ -13,10 +13,6 @@ class SyncMailingListsJob < SingletonApplicationJob
       query: "%Asia East%",
     },
     {
-      mailing_list: "delegates.asia-japan@worldcubeassociation.org",
-      query: "%Asia Japan%",
-    },
-    {
       mailing_list: "delegates.asia-southeast@worldcubeassociation.org",
       query: "%Asia Southeast%",
     },
