@@ -1489,6 +1489,66 @@ pt:
       manage_auth_app: Gerir aplicações autorizadas
       #original_hash: acac109
       media_submission: Submissão de média
+  homepage:
+    #original_hash: 824d76b
+    learn_more: Saber mais
+    #original_hash: d8f3ae6
+    title: Bem-vindo à World Cube Association
+    #original_hash: d133986
+    latest_news: Últimas notícias
+    #original_hash: 06b01c4
+    announcements: Anúncios
+    about_us:
+      #original_hash: 3ffb811
+      title: Sobre a WCA
+      #original_hash: ed77e4c
+      text: >-
+        A World Cube Association rege as competições de puzzles mecânicos que
+        são operados por rotação de grupos de peças, geralmente conhecidos como
+        'twisty puzzles'.
+    competitions:
+      #original_hash: db98a68
+      title: Competições
+      #original_hash: 0ac88bc
+      text_html: >-
+        Veja resultados ou competições perto de si. Está numa competição agora e
+        quer ver os resultados? Veja em %{wca_live_link}!
+    records:
+      #original_hash: e51c552
+      title: Recordes
+      #original_hash: 3681af0
+      text: Veja os recordes atuais e passados de todos os eventos oficiais da WCA.
+    faq:
+      #original_hash: 03688ba
+      title: Perguntas Frequentes
+      #original_hash: 1e0206f
+      text: >-
+        Veja a nossa lista de Perguntas Frequentes se precisar de ajuda com
+        alguma coisa. Muitas questões que tenha provavelmente têm uma resposta
+        lá.
+    contact:
+      #original_hash: b37456c
+      title: Contacto
+      #original_hash: 5c254b6
+      text_html: >-
+        Se quiser entrar em contacto, use o nosso formulário de contacto. Se tem
+        alguma questão sobre os diferentes processos da WCA, veja as nossas
+        %{faq_link}!
+      #original_hash: d790b40
+      faq: Perguntas Frequentes
+      #original_hash: 392f358
+      button: Ir para o Formulário de Contacto da WCA
+    support:
+      #original_hash: 610edba
+      title: Ajude a WCA
+      #original_hash: 6253f90
+      text: >-
+        A World Cube Association é uma organização 501(c)(3) isenta de impostos.
+        Sendo uma organização sem fins lucrativos, 100% voluntária, agradecemos
+        donativos para nos ajudar a promover a nossa visão de ter competições
+        mais agradáveis em todo o mundo.
+      #original_hash: 65c84ec
+      button: Saiba mais sobre como pode ajudar a WCA
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2714,6 +2774,8 @@ pt:
       span_too_many_days: 'A competição não pode durar mais que %{max_days} dias.'
       #original_hash: cdcd288
       invalid_currency_code: Código de moeda selecionado é inválido
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: deve ter uma condição de avanço para todas as rondas não finais.
     new:
       #original_hash: 1208df7
       create_competition: Criar competição
