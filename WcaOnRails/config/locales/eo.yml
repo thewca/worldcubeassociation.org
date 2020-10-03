@@ -1483,6 +1483,67 @@ eo:
       manage_auth_app: Administri aprobitajn aplikaĵojn
       #original_hash: acac109
       media_submission: Sendado de aŭdvidaĵoj kaj artikoloj
+  homepage:
+    #original_hash: 824d76b
+    learn_more: Lernu pli
+    #original_hash: d8f3ae6
+    title: Bonvenon ĉe la World Cube Association
+    #original_hash: d133986
+    latest_news: Lastaj novaĵoj
+    #original_hash: 06b01c4
+    announcements: Anoncoj
+    about_us:
+      #original_hash: 3ffb811
+      title: Pri ni
+      #original_hash: ed77e4c
+      text: >-
+        La World Cube Association regas konkursojn de mekanikaj puzloj kiuj
+        estas manipulitaj per rotacioj de grupoj da pecoj, ofte konataj kiel
+        "twisty puzzles".
+    competitions:
+      #original_hash: db98a68
+      title: Konkursoj
+      #original_hash: 0ac88bc
+      text_html: >-
+        Trovu konkursojn apud vi aŭ rezultoj de konkursoj. Ĉu vi ĉeestas
+        konkurson nuntempe kaj volas vidi ĝiajn rezultojn? Kontrolu
+        %{wca_live_link}!
+    records:
+      #original_hash: e51c552
+      title: Rekordoj
+      #original_hash: 3681af0
+      text: >-
+        Kontrolu la nunajn kaj estintajn rekordojn de ĉiuj oficialaj konkurseroj
+        de la WCA.
+    faq:
+      #original_hash: 03688ba
+      title: Plej Oftaj Demandoj
+      #original_hash: 1e0206f
+      text: >-
+        Legu nian liston de Plej Oftaj Demandoj se vi bezonas ian helpon. Multaj
+        el viaj demandoj eble havas respondojn tie.
+    contact:
+      #original_hash: b37456c
+      title: Kontakto
+      #original_hash: 5c254b6
+      text_html: >-
+        Se vi bezonas kontakti nin, vi povas fari tion per nia kontakta
+        formularo. Se vi havas demandon pri la procedoj de la WCA, bonvolu iri
+        al niaj %{faq_link}!
+      #original_hash: d790b40
+      faq: Plej Oftaj Demandoj
+      #original_hash: 392f358
+      button: Montru min la kontakta formularo de la WCA
+    support:
+      #original_hash: 610edba
+      title: Subteni la WCA
+      #original_hash: 6253f90
+      text: >-
+        La World Cube Association estas asocio 501(c)(3) registrita en Usono.
+        Kiel cent-elcenta volontula senprofitcela organizo, ni bonvenigas viajn
+        donaciojn por helpi nin havi pli da konkursoj ĉirkaŭ la mondo.
+      #original_hash: 65c84ec
+      button: Lernu pli pri kiel vi povas subteni la WCA
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2690,6 +2751,8 @@ eo:
       span_too_many_days: 'Konkurso ne povas daŭri pli ol %{max_days} tagoj.'
       #original_hash: cdcd288
       invalid_currency_code: Elektita valutkodo estas nevalida
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: devas havi kvalifikajn kondiĉojn por ĉiuj ne-finalaj raŭndoj.
     new:
       #original_hash: 1208df7
       create_competition: Krei konkurson
@@ -3375,17 +3438,17 @@ eo:
     #original_hash: 9248dc4
     who_we_are_content_html: >-
       <p>La World Cube Association regas konkursojn de mekanikaj puzloj kiuj
-      estas manipulitaj per rotacioj de grupoj da pecoj. La plej fama el tiuj
-      puzloj estas la Kubo de Rubik (internacie konata kiel "Rubik's Cube"),
-      inventita de profesoro Rubik el Hungario. Kelkaj el tiuj puzloj estas
-      elektitaj kiel oficialaj konkurseroj de la WCA.</p> <p>Dum la evoluo de la
-      WCA dum tiu lasta jardeko, pli ol 100 000 homoj konkursis en niaj
-      konkursoj. Malgraŭ tiu kreskado, ni restas organizo kiu tute funkcias
-      danke al volontuloj, ĉu lokaj organizantoj ĉu WCA-Delegitoj kaj eĉ la
-      WCA-Estraro. Ni estas ege dankemaj al ĉiuj kiuj donas tempon de iliaj
-      vivoj por permesi funkciadon de la WCA. Kun pli da financa subteno, ni
-      esperas alporti eĉ pli grandan nivelon de profesieco al niaj konkursoj
-      kiuj ĉiam estas pli nombraj ĉirkaŭ la mondo.</p>
+      estas manipulitaj per rotacioj de grupoj da pecoj, ofte konataj kiel
+      "twisty puzzles". La plej fama el tiuj puzloj estas la Kubo de Rubik
+      (internacie konata kiel "Rubik's Cube"), inventita de profesoro Rubik el
+      Hungario. Kelkaj el tiuj puzloj estas elektitaj kiel oficialaj konkurseroj
+      de la WCA.</p> <p>Dum la evoluo de la WCA dum tiu lasta jardeko, pli ol
+      100 000 homoj konkursis en niaj konkursoj. Malgraŭ tiu kreskado, ni restas
+      organizo kiu tute funkcias danke al volontuloj, ĉu lokaj organizantoj ĉu
+      WCA-Delegitoj kaj eĉ la WCA-Estraro. Ni estas ege dankemaj al ĉiuj kiuj
+      donas tempon de iliaj vivoj por permesi funkciadon de la WCA. Kun pli da
+      financa subteno, ni esperas alporti eĉ pli grandan nivelon de profesieco
+      al niaj konkursoj kiuj ĉiam estas pli nombraj ĉirkaŭ la mondo.</p>
     #original_hash: bccd8c5
     spirit: >-
       Nia spirito estas ke homoj ĉirkaŭ la mondo amuziĝu kune en amikeca etoso,
@@ -3442,8 +3505,8 @@ eo:
       #original_hash: 6253f90
       content: >-
         La World Cube Association estas asocio 501(c)(3) registrita en Usono.
-        Kiel senprofitcela organizo, ni bonvenigas viajn donaciojn por helpi nin
-        havi pli da konkursoj ĉirkaŭ la mondo.
+        Kiel cent-elcenta volontula senprofitcela organizo, ni bonvenigas viajn
+        donaciojn por helpi nin havi pli da konkursoj ĉirkaŭ la mondo.
       #original_hash: 24c87db
       donate_credit: Donacii per kreditkarto
       #original_hash: 96d77f3
