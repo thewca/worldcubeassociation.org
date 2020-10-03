@@ -149,18 +149,18 @@ hr:
     '0':
       #original_hash: 4d618bb
       name: Kvalifikacijska runda
-      #original_hash: 2ffe44e
-      cellName: Kvalifikacije
+      #original_hash: 4d618bb
+      cellName: Kvalifikacijska runda
     '1':
       #original_hash: 1e725b6
       name: Prva runda
-      #original_hash: 916a78d
-      cellName: Prva
+      #original_hash: 1e725b6
+      cellName: Prva runda
     '2':
       #original_hash: 985c8d0
       name: Druga runda
-      #original_hash: 2a4bcae
-      cellName: Druga
+      #original_hash: 985c8d0
+      cellName: Druga runda
     '3':
       #original_hash: e2f74d2
       name: Polufinale
@@ -172,35 +172,35 @@ hr:
       #original_hash: 327c999
       cellName: B Finale
     c:
-      #original_hash: b2d26f4
-      name: Kombinirano finale
-      #original_hash: b2d26f4
-      cellName: Kombinirano finale
+      #original_hash: 672b22c
+      name: Finale
+      #original_hash: 672b22c
+      cellName: Finale
     d:
-      #original_hash: c6136b1
-      name: Kombinirana prva runda
-      #original_hash: dffa9ea
-      cellName: Kombinirana prva
+      #original_hash: 1e725b6
+      name: Prva runda
+      #original_hash: 1e725b6
+      cellName: Prva runda
     e:
-      #original_hash: 659c53f
-      name: Kombinirana druga runda
-      #original_hash: b6e1e1c
-      cellName: Kombinirana druga
+      #original_hash: 985c8d0
+      name: Druga runda
+      #original_hash: 985c8d0
+      cellName: Druga runda
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
       cellName: Finale
     g:
-      #original_hash: e861dcf
-      name: Kombinirana treća runda
-      #original_hash: 86f4b05
-      cellName: Kombinirana treća
+      #original_hash: ccf6f8e
+      name: Treća runda
+      #original_hash: ccf6f8e
+      cellName: Treća runda
     h:
-      #original_hash: 4c66ad0
-      name: Kombinirane kvalifikacije
-      #original_hash: 4c66ad0
-      cellName: Kombinirane kvalifikacije
+      #original_hash: 4d618bb
+      name: Kvalifikacijska runda
+      #original_hash: 4d618bb
+      cellName: Kvalifikacijska runda
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Pokušaj %{number}'
@@ -1499,6 +1499,65 @@ hr:
       manage_auth_app: Upravljaj autoriziranim aplikacijama
       #original_hash: acac109
       media_submission: Prilaganje datoteka
+  homepage:
+    #original_hash: 824d76b
+    learn_more: Prouči više
+    #original_hash: d8f3ae6
+    title: Dobrodošli na stranicu World Cube Association
+    #original_hash: d133986
+    latest_news: Najnovije vijesti
+    #original_hash: 06b01c4
+    announcements: Najave
+    about_us:
+      #original_hash: 3ffb811
+      title: O nama
+      #original_hash: ed77e4c
+      text: >-
+        World Cube Association upravlja natjecanjima za mehaničke mozgalice koje
+        se koriste okretanjem grupe dijelova, poznatije kao "twisty puzzles".
+    competitions:
+      #original_hash: db98a68
+      title: Natjecanja
+      #original_hash: 0ac88bc
+      text_html: >-
+        Pogledaj natjecanja blizu tebe ili rezultate natjecanja. Trenutno si na
+        natjecanju i želiš vidjeti rezultate? Pogledaj %{wca_live_link}!
+    records:
+      #original_hash: e51c552
+      title: Rekordi
+      #original_hash: 3681af0
+      text: Provjeri trenutne i prošle rekorde svih službenih WCA disciplina.
+    faq:
+      #original_hash: 03688ba
+      title: FAQ
+      #original_hash: 1e0206f
+      text: >-
+        Pogledaj našu listu Najčešće postavljanih pitanja ukoliko ti je potrebna
+        pomoć s nečime. Većina pitanja koja te zanimaju tamo mogu imati svoje
+        odgovore.
+    contact:
+      #original_hash: b37456c
+      title: Kontakt
+      #original_hash: 5c254b6
+      text_html: >-
+        Ukoliko nas želiš kontaktirati, možeš to napraviti preko našeg kontakt
+        obrasca. Ukoliko imaš pitanja o različitim WCA procesima, provjeri našu
+        sekciju %{faq_link}!
+      #original_hash: d790b40
+      faq: Najčešće postavljena pitanja
+      #original_hash: 392f358
+      button: Otvori WCA Kontakt formu
+    support:
+      #original_hash: 610edba
+      title: Podrži WCA
+      #original_hash: 6253f90
+      text: >-
+        World Cube Association je 501(c)(3) organizacija oslobođena od poreza.
+        Kao 100% volontersko neprofitna organizacija, prihvaćamo donacije koje
+        bi nam mogle pomoći u ostvarivanju naše vizije organiziranja više
+        natjecanja diljem svijeta.
+      #original_hash: 65c84ec
+      button: Prouči više o tome kako možeš podržati WCA
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1615,8 +1674,8 @@ hr:
         information_html: 'Provjeri sve svoje rezultate %{result_link}.'
         #original_hash: a585fca
         more_info_html: 'Možete uređivati svoje email preference %{preferences_link}.'
-        #original_hash: 60d1a54
-        regards_html: 'Lijep pozdrav, <br/>WCA Tim za rezultate u ime ${managers}.'
+        #original_hash: 7594a32
+        regards_html: 'Lijep pozdrav, <br/>WCA Tim za rezultate u ime %{managers}.'
     claim_wca_id:
       #original_hash: f28bf87
       title: Zatraži WCA ID
@@ -2313,6 +2372,8 @@ hr:
       no_main_event_results: 'Nema rezultata glavne discipline (%{event_name}).'
       #original_hash: a0168ee
       in_progress: 'Ovo natjecanje je u tijeku. Dođi nakon %{date} vidjeti rezultate!'
+      #original_hash: 8ab1548
+      reg_opens_too_early: Registracija je postavljena s početkom manjim od potrebnih 48 sati.
       #original_hash: 3322400
       tooltip_registered: Registriran/a si.
       #original_hash: f2d092f
@@ -2726,6 +2787,8 @@ hr:
       span_too_many_days: 'Natjecanje ne može trajati duže od %{max_days} dana.'
       #original_hash: cdcd288
       invalid_currency_code: Odabrana valuta nije važeća
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: mora imati napredne uvjete za sve ne-finalne runde.
     new:
       #original_hash: 1208df7
       create_competition: Kreiraj natjecanje
@@ -2842,9 +2905,9 @@ hr:
         cumulative_across_rounds_html: >-
           %{cumulative_time_limit} se može primijeniti kroz sve runde (vidi
           %{guideline_link}).
-        #original_hash: e4e48c6
+        #original_hash: e8d17df
         cutoff_html: >-
-          Rezultat potreban za prolazak u slijedeću fazu kombinirane runde (vidi
+          Rezultat potreban za prolazak u slijedeću fazu cutoff runde (vidi
           %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
