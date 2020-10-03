@@ -1475,6 +1475,62 @@ fi:
       manage_auth_app: Hallitse valtuutettuja sovelluksia
       #original_hash: acac109
       media_submission: Median lähetys
+  homepage:
+    #original_hash: 824d76b
+    learn_more: Lue lisää
+    #original_hash: d8f3ae6
+    title: Tervetuloa Word Cube Associationiin
+    #original_hash: d133986
+    latest_news: Viimeisimmät uutiset
+    #original_hash: 06b01c4
+    announcements: Tiedotteet
+    about_us:
+      #original_hash: 3ffb811
+      title: Meistä
+      #original_hash: ed77e4c
+      text: >-
+        World Cube Association on maailman johtava toimija mekaanisten
+        pulmapelien (tunnetuimpana Rubikin kuutio) kilpailutoiminnassa.
+    competitions:
+      #original_hash: db98a68
+      title: Kilpailut
+      #original_hash: 0ac88bc
+      text_html: >-
+        Löydä lähelläsi järjestettävät kilpailut ja näe reaaliaikaiset tulokset
+        omista kilpailuistasi: %{wca_live_link}!
+    records:
+      #original_hash: e51c552
+      title: Ennätykset
+      #original_hash: 3681af0
+      text: Tutki kaikkien kilpailulajien nykyisiä ja entisiä ennätyksiä.
+    faq:
+      #original_hash: 03688ba
+      title: UKK
+      #original_hash: 1e0206f
+      text: >-
+        Jos etsit lisätietoja, lue ensin Usein kysytyt kysymykset. Osio sisältää
+        vastaukset yleisimpiin WCA:n kilpailutoimintaa koskeviin kysymyksiin.
+    contact:
+      #original_hash: b37456c
+      title: Ota yhteyttä
+      #original_hash: 5c254b6
+      text_html: >-
+        Jos haluat ottaa meihin yhteyttä, voit käyttää valmista
+        yhteydenottolomaketta. Muistathan lukea %{faq_link} ensin!
+      #original_hash: d790b40
+      faq: Usein kysytyt kysymykset
+      #original_hash: 392f358
+      button: Lomakkeeseen
+    support:
+      #original_hash: 610edba
+      title: 'Tue WCA:ta'
+      #original_hash: 6253f90
+      text: >-
+        World Cube Association toimii täysin vapaaehtoisten varassa; kaikki
+        lahjoitukset auttavat meitä kehittämään kilpailutoimintaamme ympäri
+        maailmaa!
+      #original_hash: 65c84ec
+      button: Lisätietoa tukemismahdollisuuksista
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2288,6 +2344,8 @@ fi:
       in_progress: >-
         Tämä kilpailu on käynnissä. Tule takaisin %{date} jälkeen nähdäksesi
         tulokset!
+      #original_hash: 8ab1548
+      reg_opens_too_early: Rekisteröitymisen alkamiseen on vähemmän aikaa kuin vaadittu 48 tuntia.
       #original_hash: 3322400
       tooltip_registered: Olet rekisteröitynyt.
       #original_hash: f2d092f
@@ -2698,6 +2756,8 @@ fi:
       span_too_many_days: 'Kilpailu ei voi kestää enempää kuin %{max_days} päivää.'
       #original_hash: cdcd288
       invalid_currency_code: Valittu valuuttatunnus ei kelpaa
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: täytyy asettaa jatkoonpääsyvaatimus kaikille paitsi finaalikierroksille.
     new:
       #original_hash: 1208df7
       create_competition: Luo kilpailu
@@ -2760,7 +2820,7 @@ fi:
       #original_hash: 855bd26
       competitors: Kilpailijat
     #original_hash: 06b01c4
-    announcements: Ilmoitukset
+    announcements: Tiedotteet
     #original_hash: a2b80b0
     post_announcement: Ilmoita kilpailu
     #original_hash: b462eac
@@ -3362,43 +3422,44 @@ fi:
     title: 'Tietoa WCA:sta'
     #original_hash: af00571
     mission_statement: >-
-      Tavoitteenamme on saada useampia kilpailuja useampiin maihin useampien
-      kilpailijoiden ulottuville sekä edistää kilpailujen reiluutta ja
-      yhdenvertaisuutta.
+      WCA:n tavoitteena on kasvattaa kilpailujen määrää ja levittää niitä yhä
+      useampiin maihin ja näin useamman kilpailijan saataville, edistäen samalla
+      kilpailujen reiluutta ja yhdenvertaisuutta.
     #original_hash: e627278
     mission_footer: WCA Mission Statement
     #original_hash: cdab446
     who_we_are_title: Keitä me olemme
     #original_hash: 9248dc4
     who_we_are_content_html: >-
-      <p>World Cube Association on mekaanisten pulmapelien kilpailujen
-      kattojärjestö. Kuuluisin tällainen pulmapeli on Rubikin kuutio,
-      unkarilaisen professori Rubikin keksintö. Valikoima tällaisia pulmapelejä
-      kuuluu WCA:n virallisiin kilpailulajeihin.</p> <p>Kuluneen vuosikymmenen
-      aikana WCA on kehittynyt merkittävästi ja yli 100 000 kilpailijaa on
-      kilpaillut kilpailuissamme. Kasvusta huolimatta olemme edelleen järjestö,
-      joka toimii täysin vapaaehtoistoiminnan varassa. Olemme erittäin
-      kiitollisia jokaiselle, joka käyttää omaa aikaansa pitääkseen WCA:n
-      toiminnassa. Kasvavan taloudellisen tuen myötä toivomme, että yhä
-      laajemmalle levittäytyvissä WCA-kilpailuissa näkyy entistä suurempi
-      ammattimaisuus.</p>
+      <p>World Cube Association on kattojärjestö mekaanisten pulmapelien
+      kilpailutoiminnassa. Kuuluisin näistä on Rubikin kuutio, unkarilaisen
+      professori Rubikin keksintö. Valikoima pulmapelejä on valittu WCA:n
+      virallisiksi kilpailulajeiksi.</p> <p>Kuluneen vuosikymmenen aikana WCA on
+      kehittynyt merkittävästi: yli 100 000 kilpailijaa on kilpaillut
+      kilpailuissamme. Kasvusta huolimatta järjestö toimii edelleen täysin
+      vapaaehtoistoiminnan varassa; kilpailujen järjestäjät, WCA-delegaatit sekä
+      WCA:n hallituksen ja toimikuntien jäsenet ovat kaikki elintärkeitä
+      järjestön toiminnan kannalta. Kasvavan taloudellisen tuen myötä toivomme,
+      että jatkuvasti laajemmalle levittäytyvissä WCA-kilpailuissa näkyy
+      tulevaisuudessa myös entistä suurempi ammattimaisuus.</p>
     #original_hash: bccd8c5
     spirit: >-
-      Henkeemme kuuluu, että ihmiset kaikkialta maailmasta voivat pitää hauskaa
-      yhdessä, nauttia ystävällisestä ilmapiiristä, auttaa toisiaan ja
-      käyttäytyä urheilijamaisesti.
+      Henkeemme kuuluu ystävällinen ilmapiiri, jossa ihmiset kaikkialta
+      maailmasta pitävät hauskaa yhdessä, auttavat toisiaan ja käyttäytyvät
+      urheilijamaisesti.
     #original_hash: 69131cc
-    spirit_footer: 'WCA:n henki'
+    spirit_footer: WCA Spirit
     #original_hash: c1781ee
     our_goals_title: Päämäärämme
     #original_hash: caf6bf2
     our_goals_content_html: >-
-      <p>World Cube Association haluaa tarjota yhteenkuuluvuuden tunteen
-      nuorille ympäri maailmaa kilpailujen saavutettavuutta lisäämällä. Uskomme,
-      että kilpailujen ja yhteisön tarjoamat kokemukset vahvistavat mukana
-      olevien nuorten henkistä kasvua. Uskomme myös, että uusien ryhmien
-      tutustuttaminen pulmapelien maailmaan mahdollistaa yhteisöllisyyden
-      vahvistumisen. WCA Boardin strategiasta löytyy lisätietoa <a
+      <p>World Cube Association haluaa tarjota erityisesti nuorille
+      mahdollisuuden kuulua maailmanlaajuiseen yhteisöön, kilpailujen
+      saavutettavuutta lisäämällä. Uskomme, että kilpailumme ja
+      maailmanlaajuinen yhteisömme jättää jälkeensä kokemuksia, jotka
+      vahvistavat nuorten henkistä kasvua. Uskomme myös, että yhteenkuuluvuuden
+      tunne vahvistuu entisestään, kun kilpailuja levitetään uusien ihmisten
+      saataville. WCA Boardin strategiasta löytyy lisätietoa <a
       href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">tästä</a>
       asiakirjasta.</p>
     #original_hash: f64ccc7
@@ -3406,8 +3467,8 @@ fi:
     #original_hash: a08c67f
     whats_next_content_html: >-
       <p>World Cube Associationin kilpailuissa on kilpaillut yli 100 000
-      kilpailijaa 140:stä eri maasta, ja suunnitelmissa ei ole hidastaa tahtia!
-      Cubing-yhteisö on kasvanut tasaisesti WCA:n perustamisvuodesta 2004
+      kilpailijaa 140:stä eri maasta, eikä tahtia olla hidastamassa!
+      "Cubing"-yhteisö on kasvanut tasaisesti WCA:n perustamisvuodesta 2004
       lähtien ja haluamme rohkaista tätä kasvua lisäämällä kilpailujen
       saatavuutta uusilla alueilla. Yhteistyökumppanien avulla toivomme, että
       tulevaisuudessa voimme tukea yhteisöä entistä enemmän ja saavuttaa kaikki
@@ -3416,11 +3477,10 @@ fi:
     world_championship_title: Maailmanmestaruuskilpailut
     #original_hash: 57cf7f7
     world_championship_content_html: >-
-      <p>Kahden vuoden välein sanktioimme kilpailun, jossa panoksena on
-      maailmanmestaruus. Nämä kilpailut vaativat erittäin huolellista
-      suunnittelua lukuisten vapaaehtoisten toimesta sekä suurta taloudellista
-      panostusta kilpailupaikan varaamiseen ja muihin välttämättömiin
-      valmisteluihin.</p>
+      <p>Kahden vuoden välein panokseksi asetetaan maailmanmestaruus.
+      MM-kilpailut vaativat erittäin huolellista suunnittelua, lukuisia
+      vapaaehtoisia sekä suuren taloudellisen panoksen kilpailupaikan varaamisen
+      ja muiden välttämättömien valmistelujen kattamiseksi.</p>
     #original_hash: 1aa5344
     contributing_title: Anna oma panoksesi
     #original_hash: e64beb7
@@ -3434,17 +3494,16 @@ fi:
     other_help_title: Muita tapoja auttaa
     #original_hash: cb228f6
     other_help_content_html: >-
-      <p>Jos uskot, että sinulla on jotain tarjottavaa World Cube
-      Associationille (lahjoitusten lisäksi), kuulisimme mielellämme sinusta!
-      Voit ottaa yhteyttä sähköpostiosoitteeseen <a
+      <p>Jos uskot, että sinulla on tarjottavaa World Cube Associationille
+      muuten kuin taloudellisesti, kuulisimme mielellämme sinusta! Voit ottaa
+      yhteyttä sähköpostiosoitteeseen <a
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>
     donation_banner:
       #original_hash: 6253f90
       content: >-
-        The World Cube Association is a 501(c)(3) tax-exempt organization. As a
-        100% volunteer-run nonprofit, we welcome your donations to help us
-        further our vision of having more enjoyable competitions all over the
-        world.
+        World Cube Association on Yhdysvaltoihin rekisteröity yleishyödyllinen
+        järjestö, joka toimii täysin vapaaehtoisten varassa; kaikki lahjoitukset
+        auttavat meitä kehittämään kilpailutoimintaamme ympäri maailmaa!
       #original_hash: 24c87db
       donate_credit: Tee lahjoitus luottokortilla
       #original_hash: 96d77f3
@@ -4377,7 +4436,7 @@ fi:
         #original_hash: 03aea46
         '1': Ilmoittautumispisteen hoitaminen
         #original_hash: c4388f3
-        '2': Kuulutusten tekeminen
+        '2': Kuuluttaminen
         #original_hash: 45c78ae
         '3': Ryhmien kutsuminen ja tuloskorttien asettelu pöydälle
         #original_hash: 0b31986
