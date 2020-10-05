@@ -1,15 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
-import {
-  Col,
-  Row,
-} from 'react-bootstrap';
+import { Col, Row, Alert } from 'react-bootstrap';
 
 import { friendlyTimezoneName } from '../../wca/timezoneData.js.erb';
-import {
-  roomWcifFromId,
-  venueWcifFromRoomId,
-} from '../../wca/wcif-utils';
+import { roomWcifFromId, venueWcifFromRoomId } from '../../wca/wcif-utils';
 import {
   removeEventFromCalendar,
   singleSelectLastEvent,
@@ -45,7 +39,12 @@ export default class EditScheduleForRoom extends React.Component {
       eventColor: room.color,
     };
 
-    generateCalendar(this.eventFetcher, this.handleShowModal, scheduleWcif, additionalOptions);
+    generateCalendar(
+      this.eventFetcher,
+      this.handleShowModal,
+      scheduleWcif,
+      additionalOptions,
+    );
     singleSelectLastEvent(scheduleWcif, selectedRoom);
   }
 
@@ -54,7 +53,11 @@ export default class EditScheduleForRoom extends React.Component {
     if (prevProps.selectedRoom !== selectedRoom) {
       const room = roomWcifFromId(scheduleWcif, selectedRoom);
       $(scheduleElementSelector).fullCalendar('refetchEvents');
-      $(scheduleElementSelector).fullCalendar('option', 'eventColor', room.color);
+      $(scheduleElementSelector).fullCalendar(
+        'option',
+        'eventColor',
+        room.color,
+      );
       singleSelectLastEvent(scheduleWcif, selectedRoom);
     }
   }
@@ -63,9 +66,9 @@ export default class EditScheduleForRoom extends React.Component {
     // Create a deep clone, otherwise FC will add some extra attributes that
     // will make the parent component think some changes have been made...
     const { scheduleWcif, selectedRoom } = this.props;
-    callback(_.cloneDeep(
-      roomWcifFromId(scheduleWcif, selectedRoom).activities,
-    ));
+    callback(
+      _.cloneDeep(roomWcifFromId(scheduleWcif, selectedRoom).activities),
+    );
   }
 
   handleShowModal(eventProps, mode) {
@@ -101,15 +104,18 @@ export default class EditScheduleForRoom extends React.Component {
     };
 
     const handleHideModal = () => {
-      this.setState({
-        showModal: false,
-        eventProps: {},
-      }, () => $(window).keydown(keyboardHandlers.activityPicker));
+      this.setState(
+        {
+          showModal: false,
+          eventProps: {},
+        },
+        () => $(window).keydown(keyboardHandlers.activityPicker),
+      );
     };
 
     const { showModal, eventProps, actionDetails } = this.state;
 
-    return (
+    return venueWcif.timezone ? (
       <Row id="schedule-editor">
         <Col xs={2}>
           <ScheduleToolbar
@@ -134,6 +140,14 @@ export default class EditScheduleForRoom extends React.Component {
           actionDetails={actionDetails}
         />
       </Row>
+    ) : (
+      <Alert bsStyle="warning">
+        Please add a timezone to the venue `&apos;`
+        {' '}
+        {venueWcif.name}
+        {' '}
+        `&apos;`
+      </Alert>
     );
   }
 }

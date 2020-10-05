@@ -1,17 +1,10 @@
 import React from 'react';
 import _ from 'lodash';
 import {
-  Col,
-  Panel,
-  Row,
+  Col, Panel, Row, Alert,
 } from 'react-bootstrap';
-import {
-  activityCodeListFromWcif,
-  roomWcifFromId,
-} from '../../wca/wcif-utils';
-import {
-  setupConvertHandlers,
-} from './calendar-utils';
+import { activityCodeListFromWcif, roomWcifFromId } from '../../wca/wcif-utils';
+import { setupConvertHandlers } from './calendar-utils';
 import ActivityPicker from './ActivityPicker';
 import { schedulesEditPanelSelector } from './ses';
 import EditScheduleForRoom from './EditScheduleForRoom';
@@ -34,8 +27,9 @@ export default class SchedulesEditor extends React.Component {
   componentDidMount() {
     // We cannot handle well changes (such as room color) when fullCalendar's element is hidden.
     // So we unselect the room when our panel becomes hidden, to avoid running into any visual bug.
-    $(schedulesEditPanelSelector).find('.panel-collapse').on('hidden.bs.collapse',
-      () => this.setState({ selectedRoom: '' }));
+    $(schedulesEditPanelSelector)
+      .find('.panel-collapse')
+      .on('hidden.bs.collapse', () => this.setState({ selectedRoom: '' }));
   }
 
   /* eslint camelcase: ["error", {allow: ["UNSAFE_componentWillReceiveProps"]}] */
@@ -44,7 +38,9 @@ export default class SchedulesEditor extends React.Component {
     if (!roomWcifFromId(nextProps.scheduleWcif, selectedRoom)) {
       this.setState({ selectedRoom: '' });
     }
-    this.setState({ usedActivityCodeList: activityCodeListFromWcif(nextProps.scheduleWcif) });
+    this.setState({
+      usedActivityCodeList: activityCodeListFromWcif(nextProps.scheduleWcif),
+    });
   }
 
   render() {
@@ -60,7 +56,6 @@ export default class SchedulesEditor extends React.Component {
     };
 
     const { keyboardEnabled, selectedRoom, usedActivityCodeList } = this.state;
-
     return (
       <Row>
         <Col xs={3}>
@@ -72,28 +67,37 @@ export default class SchedulesEditor extends React.Component {
           />
         </Col>
         <Col xs={9}>
-          <Panel>
-            <Panel.Heading>
-              <RoomSelector
-                scheduleWcif={scheduleWcif}
-                selectedRoom={selectedRoom}
-                handleRoomChange={handleRoomChange}
-              />
-            </Panel.Heading>
-            <Panel.Body>
-              {selectedRoom.length === 0 ? (
-                <div>Please select a room to edit its schedule</div>
-              ) : (
-                <EditScheduleForRoom
-                  scheduleWcif={scheduleWcif}
-                  locale={locale}
-                  keyboardEnabled={keyboardEnabled}
-                  handleKeyboardChange={handleToggleKeyboardEnabled}
-                  selectedRoom={selectedRoom}
-                />
-              )}
-            </Panel.Body>
-          </Panel>
+          {scheduleWcif === null
+          || scheduleWcif.venues === null
+          || scheduleWcif.venues.length === 0 ? (
+            <Alert bsStyle="warning">
+              Please add a venue in the `&apos;`Edit venues information`&apos;`
+              section above
+            </Alert>
+            ) : (
+              <Panel>
+                <Panel.Heading>
+                  <RoomSelector
+                    scheduleWcif={scheduleWcif}
+                    selectedRoom={selectedRoom}
+                    handleRoomChange={handleRoomChange}
+                  />
+                </Panel.Heading>
+                <Panel.Body>
+                  {selectedRoom.length === 0 ? (
+                    <div>Please select a room to edit its schedule</div>
+                  ) : (
+                    <EditScheduleForRoom
+                      scheduleWcif={scheduleWcif}
+                      locale={locale}
+                      keyboardEnabled={keyboardEnabled}
+                      handleKeyboardChange={handleToggleKeyboardEnabled}
+                      selectedRoom={selectedRoom}
+                    />
+                  )}
+                </Panel.Body>
+              </Panel>
+            )}
         </Col>
       </Row>
     );
@@ -121,18 +125,15 @@ const RoomSelector = ({ scheduleWcif, selectedRoom, handleRoomChange }) => (
         value={selectedRoom}
       >
         {[<option key="0" value="" />].concat(
-          _.flatMap(scheduleWcif.venues, (venue) => _.map(
-            venue.rooms,
-            (room) => (
-              <option key={room.id} value={room.id}>
-                &quot;
-                {room.name}
-                &quot; in &quot;
-                {venue.name}
-                &quot;
-              </option>
-            ),
-          )),
+          _.flatMap(scheduleWcif.venues, (venue) => _.map(venue.rooms, (room) => (
+            <option key={room.id} value={room.id}>
+              &quot;
+              {room.name}
+              &quot; in &quot;
+              {venue.name}
+              &quot;
+            </option>
+          ))),
         )}
       </select>
     </Col>
