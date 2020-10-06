@@ -1622,6 +1622,11 @@ en:
         separate: "Separate"
         history: "History"
         mixed_history: "Mixed history"
+      gender_selector:
+        gender: "Gender"
+        gender_all: "All"
+        male: "Male"
+        female: "Female"
     table_elements:
       name: "Name"
       result: "Result"

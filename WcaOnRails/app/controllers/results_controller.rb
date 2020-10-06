@@ -8,6 +8,7 @@ class ResultsController < ApplicationController
     params[:region] ||= "world"
     params[:years] ||= "all years"
     params[:show] ||= "100 persons"
+    params[:gender] ||= "All"
 
     shared_constants_and_conditions
 
@@ -36,11 +37,13 @@ class ResultsController < ApplicationController
         FROM (
           SELECT MIN(valueAndId) valueAndId
           FROM Concise#{capitalized_type_param}Results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
           WHERE 1
             #{@event_condition}
             AND #{value} > 0
             #{@years_condition}
             #{@region_condition}
+            #{@gender_condition}
           GROUP BY personId
           ORDER BY valueAndId
           #{limit_condition}
@@ -55,12 +58,14 @@ class ResultsController < ApplicationController
             result.*,
             average value
           FROM Results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
           #{@years_condition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
           WHERE 1
             #{@event_condition}
             AND average > 0
             #{@years_condition}
             #{@region_condition}
+            #{@gender_condition}
           ORDER BY
             average
           #{limit_condition}
@@ -77,12 +82,14 @@ class ResultsController < ApplicationController
               result.*,
               value#{i} value
             FROM Results result
+            #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
             #{@years_condition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
             WHERE 1
               #{@event_condition}
               AND value#{i} > 0
               #{@years_condition}
               #{@region_condition}
+              #{@gender_condition}
             ORDER BY value
             #{limit_condition}
           SQL
@@ -257,6 +264,15 @@ class ResultsController < ApplicationController
     else
       @region_condition = ""
       @region_condition += "AND recordName = 'WR'" if @is_histories
+    end
+
+    @gender = params[:gender]
+    if params[:gender] == "Male"
+      @gender_condition = "AND gender = 'm'"
+    elsif params[:gender] == "Female"
+      @gender_condition = "AND gender = 'f'"
+    else
+      @gender_condition = ""
     end
 
     @is_all_years = params[:years] == "all years"
