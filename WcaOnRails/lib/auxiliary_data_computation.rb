@@ -38,7 +38,6 @@ module AuxiliaryDataComputation
             JOIN Competitions competition ON competition.id = competitionId
             JOIN Countries country ON country.id = result.countryId
             JOIN Events event ON event.id = eventId
-            WHERE event.rank < 990
         SQL
       end
     end
