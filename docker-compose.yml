@@ -17,7 +17,7 @@ services:
         echo "Waiting for MySQL to be ready" && sleep 5 ;
       done &&
       echo "MySQL is ready!" &&
-      if [[ "`mysqlshow --user=root --host=wca_db wca_test`" =~ "wca_test" ]] ;
+      if ! [[ "`mysqlshow --user=root --host=wca_db wca_development`" =~ "wca_development" ]] ;
         then echo "Populating development db, this will take a while" && bin/rake db:load:development ;
       fi &&
       bin/rails server -b 0.0.0.0'
@@ -31,6 +31,7 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    command: --default-authentication-plugin=mysql_native_password
     expose:
       - "3306"
     volumes:

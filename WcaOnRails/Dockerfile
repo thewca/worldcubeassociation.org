@@ -26,3 +26,5 @@ RUN apt-get update && apt-get install -y \
   tzdata \
   # Fix for https://github.com/ariya/phantomjs/issues/14433
   libfontconfig
+
+RUN gem update --system && gem install bundler
