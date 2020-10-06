@@ -7,6 +7,11 @@ services:
       - 3000:3000
     environment:
       DATABASE_HOST: wca_db
+    working_dir: /app/WcaOnRails
+    volumes:
+      - .:/app
+      - gems_volume:/usr/local/bundle
+    tty: true
     # First, install Ruby and Node dependencies
     # Next, wait for the database to be ready for queries via https://stackoverflow.com/a/53717981/2558618
     # Load the database if it does not exist yet
@@ -17,13 +22,10 @@ services:
         echo "Waiting for MySQL to be ready" && sleep 5 ;
       done &&
       echo "MySQL is ready!" &&
-      if ! [[ "`mysqlshow --user=root --host=wca_db wca_development`" =~ "wca_development" ]] ;
+      if ! [[ "`mysqlshow --user=root --host=wca_db wca_development`" =~ "Tables" ]] ;
         then echo "Populating development db, this will take a while" && bin/rake db:load:development ;
       fi &&
       bin/rails server -b 0.0.0.0'
-    volumes:
-      - ./WcaOnRails:/app
-    tty: true
     depends_on:
       - wca_db
 
@@ -42,4 +44,6 @@ services:
 
 volumes:
   wca_db_volume:
+    driver: local
+  gems_volume:
     driver: local

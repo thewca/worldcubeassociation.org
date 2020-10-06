@@ -87,9 +87,8 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-
   # Whitelist any IPs when we're in Docker (meaning local dev environment)
   if File.read('/proc/1/cgroup').include?('docker')
-    config.web_console.whitelisted_ips = %w( 0.0.0.0/0 ::/0 )
+    config.web_console.whitelisted_ips = %w(0.0.0.0/0 ::/0)
   end
 end
