@@ -151,17 +151,17 @@ th:
     '0':
       #original_hash: 4d618bb
       name: รอบคัดเลือก
-      #original_hash: 2ffe44e
-      cellName: คัดเลือก
+      #original_hash: 4d618bb
+      cellName: รอบคัดเลือก
     '1':
       #original_hash: 1e725b6
       name: รอบแรก
-      #original_hash: 916a78d
+      #original_hash: 1e725b6
       cellName: รอบแรก
     '2':
       #original_hash: 985c8d0
       name: รอบที่สอง
-      #original_hash: 2a4bcae
+      #original_hash: 985c8d0
       cellName: รอบที่สอง
     '3':
       #original_hash: e2f74d2
@@ -174,35 +174,35 @@ th:
       #original_hash: 327c999
       cellName: รอบชิงชนะเลิศ
     c:
-      #original_hash: b2d26f4
-      name: รอบชิงชนะเลิศรวม
-      #original_hash: b2d26f4
-      cellName: รอบชิงชนะเลิศรวม
+      #original_hash: 672b22c
+      name: รอบชิงชนะเลิศ
+      #original_hash: 672b22c
+      cellName: รอบชิงชนะเลิศ
     d:
-      #original_hash: c6136b1
-      name: รอบแรกรวม
-      #original_hash: dffa9ea
-      cellName: รอบแรกรวม
+      #original_hash: 1e725b6
+      name: รอบแรก
+      #original_hash: 1e725b6
+      cellName: รอบแรก
     e:
-      #original_hash: 659c53f
-      name: รอบที่สองรวม
-      #original_hash: b6e1e1c
-      cellName: รอบที่สองรวม
+      #original_hash: 985c8d0
+      name: รอบที่สอง
+      #original_hash: 985c8d0
+      cellName: รอบที่สอง
     f:
       #original_hash: 672b22c
       name: รอบชิงชนะเลิศ
       #original_hash: 672b22c
       cellName: รอบชิงชนะเลิศ
     g:
-      #original_hash: e861dcf
-      name: รอบที่สามรวม
-      #original_hash: 86f4b05
-      cellName: รอบที่สามรวม
+      #original_hash: ccf6f8e
+      name: รอบที่สาม
+      #original_hash: ccf6f8e
+      cellName: รอบที่สาม
     h:
-      #original_hash: 4c66ad0
-      name: รอบคัดเลือกรวม
-      #original_hash: 4c66ad0
-      cellName: รอบคัดเลือกรวม
+      #original_hash: 4d618bb
+      name: รอบคัดเลือก
+      #original_hash: 4d618bb
+      cellName: รอบคัดเลือก
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'แก้โจทย์ครั้งที่ %{number}'
@@ -1174,7 +1174,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1259,6 +1259,9 @@ th:
           disabled_success: ปิดการทำงาน two-factor authentication แล้ว
           #original_hash: c36d556
           disabled_failed: ไม่สามารถปิดการทำงานของ 2FA ได้ กรุณาดูข้อผิดพลาดด้านล่าง
+      destroy_other:
+        #original_hash: a768ea6
+        success: ทำการออกจากระบบที่อุปกรณ์อื่นสำเร็จ
     shared:
       links:
         #original_hash: ada2e9e
@@ -1319,7 +1322,7 @@ th:
       #original_hash: 669fb57
       welcome: >-
         ยินดีต้อนรับ! ก่อนที่คุณจะสามารถแข่งขันในการแข่งขัน WCA ครั้งแรกของคุณ
-        เราต้องการข้อมูลเพิ่มเติมบางอย่างสำหรับการเก็บบันทึก
+        เราต้องการข้อมูลเพิ่มเติมบางอย่าง
         โปรดทราบว่าวันเกิดของคุณจะไม่ถูกเปิดเผยโดยไม่ได้รับอนุญาตจากคุณ
   layouts:
     navigation:
@@ -1360,7 +1363,7 @@ th:
       #original_hash: f5fe73c
       rankings: อันดับ
       #original_hash: e51c552
-      records: ประวัติ
+      records: สถิติ
       #original_hash: f3cf96e
       persons: บุคคล
       #original_hash: 5b72b5a
@@ -1427,6 +1430,63 @@ th:
       manage_auth_app: จัดการแอปพลิเคชันที่ได้รับอนุญาต
       #original_hash: acac109
       media_submission: Media Submission
+  homepage:
+    #original_hash: 824d76b
+    learn_more: เรียนรู้เพิ่มเติม
+    #original_hash: d8f3ae6
+    title: ยินดีต้อนรับเข้าสู้สมาคมลูกบาศก์โลก
+    #original_hash: d133986
+    latest_news: ข่าวล่าสุด
+    #original_hash: 06b01c4
+    announcements: ประกาศ
+    about_us:
+      #original_hash: 3ffb811
+      title: เกี่ยวกับเรา
+      #original_hash: ed77e4c
+      text: >-
+        สมาคมลูกบาศก์โลกมีหน้าที่ควบคุมการแข่งขันปริศนาเชิงกลซึ่งมีการบิดกลุ่มของชิ้นส่วนต่าง
+        ๆ หรือที่เรียกกันทั่วไปว่า 'twisty puzzles'
+    competitions:
+      #original_hash: db98a68
+      title: การแข่งขัน
+      #original_hash: 0ac88bc
+      text_html: >-
+        ค้นหาการแข่งขันที่อยู่ใกล้คุณหรือตรวจสอบผลการแข่งขัน
+        หากคุณอยู่ที่การแข่งขันแล้วอยากดูผลการแข่งขัน สามารถดูได้ที่
+        %{wca_live_link}!
+    records:
+      #original_hash: e51c552
+      title: สถิติ
+      #original_hash: 3681af0
+      text: ตรวจสอบสถิติอดีตและปัจจุบันของการแข่งขันอย่างเป็นทางการของ WCA
+    faq:
+      #original_hash: 03688ba
+      title: FAQ
+      #original_hash: 1e0206f
+      text: >-
+        ตรวจสอบคำถามที่พบได้บ่อยหากคุณต้องการความช่วยเหลือ
+        ข้อสงสัยหลายข้อสามารถหาคำตอบได้ในนั้น
+    contact:
+      #original_hash: b37456c
+      title: ติดต่อ
+      #original_hash: 5c254b6
+      text_html: >-
+        หากคุณต้องการติดต่อเรา คุณสามารถใช้แบบฟอร์มติดต่อได้ หากคุณมีคำถามใด ๆ
+        เกี่ยวกับกระบวนการต่างๆของ WCA โปรดอ่าน %{faq_link} ของเรา
+      #original_hash: d790b40
+      faq: คำถามที่พบบ่อย
+      #original_hash: 392f358
+      button: พาฉันไปยังแบบฟอร์มของ WCA
+    support:
+      #original_hash: 610edba
+      title: สนับสนุน WCA
+      #original_hash: 6253f90
+      text: >-
+        สมาคมลูกบาศก์โลกเป็นองค์กรที่ได้รับการยกเว้นภาษีประเภท 501(c)(3)
+        ในฐานะองค์กรไม่แสวงหาผลกำไรที่ดำเนินการโดยอาสาสมัคร 100%
+        เรายินดีรับการบริจาคของคุณเพื่อช่วยให้เรามีวิสัยทัศน์ในการจัดการแข่งขันที่สนุกสนานมากขึ้นทั่วโลก
+      #original_hash: 65c84ec
+      button: เรียนรู้เกี่ยวกับการสนับสนุน WCA
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1536,8 +1596,8 @@ th:
         information_html: 'ตรวจสอบผลการแข่งขันทั้งหมดได้ที่ %{result_link}'
         #original_hash: a585fca
         more_info_html: 'คุณสามารถจัดการการตั้งค่าสำหรับ email ได้ที่ %{preferences_link}'
-        #original_hash: 60d1a54
-        regards_html: 'ด้วยความนับถือ <br/>The WCA Results Team ในนามของ ${managers}'
+        #original_hash: 7594a32
+        regards_html: 'ด้วยความนับถือ <br/>The WCA Results Team ในนามของ %{managers}'
     claim_wca_id:
       #original_hash: f28bf87
       title: ขอรับ WCA ID
@@ -1627,6 +1687,10 @@ th:
       confirm_guidelines: กรุณาอ่านแนวทางของรูปแทนตัวและส่งรูปภาพที่ถูกต้อง
       #original_hash: efc007a
       save: บันทึก
+      #original_hash: c3cd636
+      actions: Actions
+      #original_hash: 8356b72
+      sign_out_of_devices: ออกจากระบบในอุปกรณ์อื่น ๆ
       #original_hash: 58e0c56
       remove_avatar: ลบรูปแทนตัว
       #original_hash: 4bd25cf
@@ -2141,6 +2205,18 @@ th:
       not_announced: การแข่งขันนี้ปรากฏต่อสาธารณชน แต่ยังไม่ได้ประกาศ
       #original_hash: ab61991
       announced: ประกาศผลการแข่งขันสำเร็จแล้ว!
+      #original_hash: a582c89
+      cancelled: >-
+        การแข่งขันนี้ถูกยกเลิก
+        หากต้องการทราบรายละเอียดเพิ่มเติมกรุณาตรวจสอบที่ส่วนข้อมูล
+      #original_hash: b4aa5ee
+      cancel_success: ยกเลิกการแข่งขันสำเร็จแล้ว
+      #original_hash: d0478cf
+      cancel_failure: ไม่สามารถยกเลิกการแข่งขันได้
+      #original_hash: 09df36b
+      uncancel_success: ยกเลิกการยกเลิกการแข่งขันสำเร็จแล้ว
+      #original_hash: ead4a9e
+      uncancel_failure: ไม่สามารถยกเลิกการยกเลิกการแข่งขันได้
       #original_hash: 8ad5e67
       results_not_posted: ผลของการแข่งขันนี้สามารถมองเห็นได้ แต่ยังไม่ได้ถูกโพสต์
       #original_hash: e205d73
@@ -2161,6 +2237,8 @@ th:
       in_progress: >-
         การแข่งขันนี้กำลังดำเนินการอยู่ กลับมาหลังวันที่ %{date}
         เพื่อดูผลการแข่งขัน
+      #original_hash: 8ab1548
+      reg_opens_too_early: การรับสมัครถูกตั้งค่าให้เริ่มน้อยกว่าที่กำหนด 48 ชั่วโมง
       #original_hash: 3322400
       tooltip_registered: คุณได้สมัครแล้ว
       #original_hash: f2d092f
@@ -2222,6 +2300,8 @@ th:
       details: รายละเอียด
       #original_hash: 2e8a57c
       website: Website
+      #original_hash: 2260929
+      display_name: '[Cancelled] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: ผู้จัดการแข่งขัน
@@ -2319,11 +2399,11 @@ th:
       result_sentence: 'with %{a_win_by_word} of %{result}'
       #original_hash: 6c3b236
       winner: '%{winner} ชนะในการแข่งขัน %{result_sentence} ในประเภท %{event_name}'
-      #original_hash: 4daa7df
+      #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} ได้รองชนะเลิศอันดับหนึ่ง (%{first_runner_up_result})'
-      #original_hash: d96b040
+      #original_hash: cffa50a
       and: และ
-      #original_hash: e9e9d2e
+      #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} ได้รองชนะเลิศอันดับสอง (%{second_runner_up_result}).'
       records:
         #original_hash: 0658e11
@@ -2552,6 +2632,8 @@ th:
       span_too_many_days: 'การแข่งขันไม่สามารถยาวนานกว่า %{max_days} วันได้'
       #original_hash: cdcd288
       invalid_currency_code: สกุลเงินที่เลือกไม่ถูกต้อง
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: ต้องมีเงื่อนไขการเลื่อนชั้นไปยังรอบที่ไม่ใช่รอบสุดท้ายทั้งหมด
     new:
       #original_hash: 1208df7
       create_competition: สร้างการแข่งขัน
@@ -2616,12 +2698,24 @@ th:
     post_announcement: ประกาศการแข่งขัน
     #original_hash: b462eac
     announced_by_html: 'ประกาศโดย %{announcer_name} เมื่อ %{date_time}'
+    #original_hash: 375e17f
+    cancel: ยกเลิกการแข่งขัน
+    #original_hash: 7628a51
+    uncancel: ยกเลิกการยกเลิกการแข่งขัน
+    #original_hash: 9122a6c
+    cancelled_by_html: 'ยกเลิกโดย %{name} เมื่อ %{date_time}'
+    #original_hash: 25e68c3
+    cancel_confirm: คุณแน่ใจที่จะยกเลิกการแข่งขันใช่หรือไม่?
     #original_hash: 9a42672
     upload_results: อัพโหลดผลการแข่งขัน
     #original_hash: 01de5ee
     post_results: โพสต์ผลการแข่งขัน
     #original_hash: b6513f1
     results_posted_by_html: 'โพสต์โดย %{poster_name} เมื่อ %{date_time}'
+    #original_hash: a6b5efe
+    cancel_mistake: ทำผิดพลาดหรือไม่?
+    #original_hash: 0fb43d5
+    note_before_cancel: 'Note: การแข่งขันที่ได้รับการยืนยันแล้วเท่านั้นที่ถูกยกเลิกได้'
     show:
       #original_hash: b0fe391
       general_info: ข้อมูลทั่วไป
@@ -2649,10 +2743,10 @@ th:
         cumulative_across_rounds_html: >-
           %{cumulative_time_limit} อาจจะถูกบังคับใช้ข้ามรอบได้
           (ดู%{guideline_link})
-        #original_hash: e4e48c6
+        #original_hash: e8d17df
         cutoff_html: >-
-          ผลการแข่งขันที่ต้องทำให้ได้เพื่อที่จะได้เข้าสู่ช่วงที่สองของรอบรวม (ดู
-          %{regulation_link})
+          ผลการแข่งขันอย่างน้อยที่สุดที่ต้องทำให้ได้เพื่อที่จะได้เข้าสู่ช่วงที่สองของรอบ
+          cutoff (ดู %{regulation_link})
         #original_hash: f571a30
         format_html: >-
           รูปแบบนี้จะอธิบายวิธีการจัดอันดับของผู้แข่งขันโดยพิจารณาจากผลการแข่งขัน
@@ -2794,7 +2888,7 @@ th:
       unknown_show: 'ไม่รู้จักพารามิเตอร์นี้ ต้องเป็น "N คน", หรือ "โดยทวีป"'
     records:
       #original_hash: e51c552
-      title: ประวัติ
+      title: สถิติ
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -2938,7 +3032,7 @@ th:
       #original_hash: 2d36a49
       continental_records: ประวัติสถิติทวีป
       #original_hash: 3ce631e
-      national_records: ประวัติสถิติชาติ
+      national_records: ประวัติสถิติประเทศ
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: คุณแน่ใจที่จะลบโพสต์นี้? การกระทำนี้ไม่สามารถย้อนกลับได้
