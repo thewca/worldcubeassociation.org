@@ -22,10 +22,11 @@ RSpec.describe ApplicationHelper do
 
     it "includes email" do
       users = []
-      users << FactoryBot.create(:user, name: "Jonatan O'Klosko", email: "jonatan@worldcubeassociation.org")
-      users << FactoryBot.create(:user, name: "Jeremy", email: "jfly@worldcubeassociation.org")
-      string = helper.users_to_sentence(users, include_email: true)
-      expect(string).to eq '<a href="mailto:jfly@worldcubeassociation.org">Jeremy</a> and <a href="mailto:jonatan@worldcubeassociation.org">Jonatan O&#39;Klosko</a>'
+      users << FactoryBot.create(:person, name: "Jonatan O'Klosko", wca_id: "2013KOSK01")
+      users << FactoryBot.create(:user_with_wca_id, name: "Jonatan O'Klosko", wca_id: "2013KOSK01")
+      users << FactoryBot.create(:user, name: "Jeremy")
+      string = helper.users_to_sentence(users, include_profile: true)
+      expect(string).to eq 'Jeremy and <a href="/persons/2013KOSK01">Jonatan O&#39;Klosko</a>'
     end
   end
 

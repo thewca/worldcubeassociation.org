@@ -34,13 +34,13 @@
       <% if competition.organizers.length > 0 %>
         <dt><%= t('.organizer_plural', count: competition.organizers.length) %></dt>
         <dd>
-          <%= users_to_sentence competition.organizers, include_email: false %>
+          <%= users_to_sentence competition.organizers, include_profile: true %>
         </dd>
       <% end %>
 
       <dt><%= t('.delegate', count: competition.delegates.length + competition.trainee_delegates.length) %></dt>
       <dd>
-        <%= users_to_sentence competition.delegates + competition.trainee_delegates, include_email: true %>
+        <%= users_to_sentence competition.delegates + competition.trainee_delegates, include_profile: true %>
       </dd>
 
       <dt><%= t '.contact' %></dt>
