@@ -31,6 +31,15 @@
         <dd><%= link_to "#{competition.name} website", competition.website, target: "_blank" %></dd>
       <% end %>
 
+      <dt><%= t '.contact' %></dt>
+      <dd>
+        <% if competition.contact.present? %>
+          <%=md competition.contact %>
+        <% else %>
+          <%= link_to t('.organization_team'), contact_website_path(competitionId: competition.id) %>
+        <% end %>
+      </dd>
+
       <% if competition.organizers.length > 0 %>
         <dt><%= t('.organizer_plural', count: competition.organizers.length) %></dt>
         <dd>
@@ -41,15 +50,6 @@
       <dt><%= t('.delegate', count: competition.delegates.length + competition.trainee_delegates.length) %></dt>
       <dd>
         <%= users_to_sentence competition.delegates + competition.trainee_delegates, include_email: true %>
-      </dd>
-
-      <dt><%= t '.contact' %></dt>
-      <dd>
-        <% if competition.contact.present? %>
-          <%=md competition.contact %>
-        <% else %>
-          <%= mail_to competition.managers.map(&:email).join(","), competition.managers.map(&:email).join(", "), subject: "Question about #{competition.name}", target: "_blank", class: "hide-new-window-icon" %>
-        <% end %>
       </dd>
     </dl>
 
