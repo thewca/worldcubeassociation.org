@@ -2461,6 +2461,8 @@ ru:
         few: Организаторы
         many: Организаторы
         other: WTF
+      #original_hash: 53a9522
+      organization_team: Команда организаторов
       #original_hash: 6afa61e
       delegate:
         zero: WCA Делегаты
@@ -2711,10 +2713,12 @@ ru:
       venue_details_html: >-
         Детали помещения (например, главный вход, второй этаж, следуйте
         указателям). %{md}
-      #original_hash: b727e58
+      #original_hash: 447814d
       contact_html: >-
-        Контактный email. Если вы его не заполните, email'ы организаторов будут
-        обнародованы. %{md}. Например: [Вася Пупкин](mailto:vasya@pupkin.ru)
+        Контактная информация. Если вы её не заполните, запросы будут
+        обрабатываться через специальную контактную форму без показа электронных
+        адресов организаторов. %{md}. Например: [Вася
+        Пупкин](mailto:vasya@pupkin.ru)
       #original_hash: c5497bc
       events: Дисциплины
       #original_hash: cafc153
