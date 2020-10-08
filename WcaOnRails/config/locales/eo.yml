@@ -1999,7 +1999,7 @@ eo:
         registered_html: 'Vi ĵus registriĝis por %{comp_name}.'
         #original_hash: 13fabed
         awaits_approval: >-
-          Ni ricevis vian registriĝon kaj ĝi atendas aprobon de la organiza
+          Ni ricevis vian registriĝon kaj ĝi atendas aprobon de la organizanta
           teamo.
         #original_hash: 826045f
         approval_info_html: >-
@@ -2414,6 +2414,8 @@ eo:
         zero: Organizanto
         one: Organizanto
         other: Organizantoj
+      #original_hash: 53a9522
+      organization_team: Organizanta teamo
       #original_hash: 6afa61e
       delegate:
         zero: WCA-Delegito
@@ -2661,11 +2663,11 @@ eo:
       venue_details_html: >-
         Detaloj pri la konkursejo (ekz., Je la unua etaĝo, funde, sekvu la
         ŝildojn). %{md}
-      #original_hash: b727e58
+      #original_hash: 447814d
       contact_html: >-
-        Fakultativa kontakta informo. Se vi ne plenigas ĝin, retpoŝtadresoj de
-        la organizantoj publike videblos. %{md}. Ekzemple: [Videbla
-        teksto](mailto:iu@retpoŝto.com)
+        Nedeviga kontakta informo. Se vi ne plenigas ĝin, kontaktdemandoj estos
+        senditaj per formularo kiu ne konigos la retpoŝtadresojn de la
+        organizantoj. %{md}. Ekzemple: [Videbla teksto](mailto:iu@retpoŝto.com)
       #original_hash: c5497bc
       events: Konkurseroj
       #original_hash: cafc153
@@ -3767,7 +3769,7 @@ eo:
         '2': >-
           Kontribui al la Kontinentaj Konkursoj de la WCA kiuj okazas en la
           kontinento de la Regiona Organizo, se postulita de la respondanta
-          Organiza Teamo
+          Organizanta Teamo
         #original_hash: 3c07dd6
         '3': >-
           Respekti kaj realigi la Celojn difinitaj en la Statuto kaj Rezolucioj
