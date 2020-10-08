@@ -146,7 +146,7 @@ module ApplicationHelper
 
   def users_to_sentence(users, include_profile: false)
     "".html_safe + users.sort_by(&:name).map do |user|
-      include_profile && user.wca_id ? link_to(user.name, person_path(user.wca_id)) : user.name
+      include_profile && user.wca_id ? link_to(html_escape(user.name), person_path(user.wca_id)) : html_escape(user.name)
     end.xss_aware_to_sentence
   end
 
