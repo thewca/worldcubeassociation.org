@@ -27,6 +27,7 @@ PreCommit:
       - 'WcaOnRails/db/structure.sql'
       - 'WcaOnRails/node_modules/**/*'
       - 'WcaOnRails/app/webpacker/stylesheets/semantic/**/*'
+      - 'WcaOnRails/config/locales/*.yml'
       - 'chef/**/*'
       - '.gitmodules'
       - '**/*.pdf'
