@@ -2446,6 +2446,8 @@ pt-BR:
         zero: Organizador
         one: Organizador
         other: Organizadores
+      #original_hash: 53a9522
+      organization_team: Equipe de organização
       #original_hash: 6afa61e
       delegate:
         zero: Delegado da WCA
@@ -2697,10 +2699,11 @@ pt-BR:
       venue_details_html: >-
         Detalhes do local (p. ex. No primeiro andar, ao fundo. Siga as placas).
         %{md}
-      #original_hash: b727e58
+      #original_hash: 447814d
       contact_html: >-
-        Informação de contato opcional. Se você não preencher este campo, os
-        emails dos organizadores serão mostrados. %{md}. Exemplo: [Texto
+        Informação de contato opcional. Se você não preencher este campo,
+        pedidos de contato serão enviados por um formulário sem revelar os
+        emails dos organizadores. %{md}. Exemplo: [Texto
         mostrado](mailto:alguem@email.com)
       #original_hash: c5497bc
       events: Eventos
