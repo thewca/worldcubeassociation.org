@@ -1513,6 +1513,70 @@ es:
       manage_auth_app: Controlar aplicaciones autorizadas
       #original_hash: acac109
       media_submission: Enviar material audiovisual
+  homepage:
+    #original_hash: 824d76b
+    learn_more: Saber más
+    #original_hash: d8f3ae6
+    title: Bienvenidos a la World Cube Association
+    #original_hash: d133986
+    latest_news: Últimas noticias
+    #original_hash: 06b01c4
+    announcements: Anuncios
+    about_us:
+      #original_hash: 3ffb811
+      title: Sobre nosotros
+      #original_hash: ed77e4c
+      text: >-
+        La World Cube Association regula competiciones de puzzles mecánicos que
+        son operados girando grupos de piezas, comúnmente conocidos como 'twisty
+        puzzles'.
+    competitions:
+      #original_hash: db98a68
+      title: Competiciones
+      #original_hash: 0ac88bc
+      text_html: >-
+        Descubre competiciones cerca de ti o resultados de competiciones. ¿Estás
+        en una competición ahora y quieres ver los resultados? ¡Mira en
+        %{wca_live_link}!
+    records:
+      #original_hash: e51c552
+      title: Records
+      #original_hash: 3681af0
+      text: >-
+        Descubre los récords actuales y anteriores de todas las categorías WCA
+        oficiales.
+    faq:
+      #original_hash: 03688ba
+      title: FAQ
+      #original_hash: 1e0206f
+      text: >-
+        Échale un vistazo a nuestra lista de preguntas más frecuentes si
+        necesitas ayuda con cualquier cosa. Muchas preguntas que tengas pueden
+        tener respuesta allí.
+    contact:
+      #original_hash: b37456c
+      title: Contacto
+      #original_hash: 5c254b6
+      text_html: >-
+        Si deseas ponerte en contacto con nosotros, puedes hacerlo a través de
+        nuestro formulario de contacto. Si tienes alguna pregunta sobre los
+        distintos procesos de la WCA, ¡asegúrate de revisar nuestro %{faq_link}!
+      #original_hash: d790b40
+      faq: Preguntas más frecuentes
+      #original_hash: 392f358
+      button: Llévame al fomulario de Contacto de la WCA
+    support:
+      #original_hash: 610edba
+      title: Apoya a la WCA
+      #original_hash: 6253f90
+      text: >-
+        La World Cube Association es una organización 501(c)(3) exenta de
+        impuestos. Al ser 100% mantenida por voluntarios y sin ánimo de lucro,
+        agradecemos vuestras donaciones para ayudarnos a que nuestra visión
+        llegue más lejos y a que se disfrute más en competiciones por todo el
+        mundo.
+      #original_hash: 65c84ec
+      button: Saber más sobre como puedes apoyar a la WCA
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2347,6 +2411,8 @@ es:
       in_progress: >-
         Esta competición se está celebrando ahora. Vuelve después de %{date}
         para consultar sus resultados.
+      #original_hash: 8ab1548
+      reg_opens_too_early: El registro comenzará en menos de las 48 horas requeridas.
       #original_hash: 3322400
       tooltip_registered: Estás registrado.
       #original_hash: f2d092f
@@ -2416,6 +2482,8 @@ es:
         zero: Organizadores
         one: Organizador
         other: Organizadores
+      #original_hash: 53a9522
+      organization_team: Equipo organizador
       #original_hash: 6afa61e
       delegate:
         zero: Delegados de la WCA
@@ -2673,11 +2741,12 @@ es:
       venue_details_html: >-
         Detalles sobre el local (por ejemplo, "primera planta" o "sigue los
         carteles"). %{md}
-      #original_hash: b727e58
+      #original_hash: 447814d
       contact_html: >-
-        Información de contacto opcional. Si se rellena, las direcciones de
-        correo de los organizadores no se motrarán y se mostrará esto. %{md}.
-        Ejemplo: [Javier Pérez](mailto:javier@perez.com).
+        Información de contacto opcional. Si no se rellena, las peticiones de
+        contacto serán enviadas mediante un formulario sin revelar los correos
+        de los organizadores. %{md}. Ejemplo: [Textp a
+        mostrar](mailto:algun@correo.com).
       #original_hash: c5497bc
       events: Pruebas
       #original_hash: cafc153
@@ -2765,6 +2834,8 @@ es:
       span_too_many_days: 'La competición no puede durar más de %{max_days} días.'
       #original_hash: cdcd288
       invalid_currency_code: El código de moneda seleccionado no es válido
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: debe tener una condición de avance en todas las rondas no finales.
     new:
       #original_hash: 1208df7
       create_competition: Crear competición
