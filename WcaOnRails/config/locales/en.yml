@@ -815,6 +815,7 @@ en:
     title: "Welcome to the World Cube Association"
     latest_news: "Latest news"
     announcements: "Announcements"
+    see_all_announcements: "See all announcements"
     #context: "About us" box
     about_us:
       title: "About us"
@@ -2277,3 +2278,7 @@ en:
     other_suggestions:
       title: Other suggestions?
       body_html: 'Do you have other suggestions for Instagram or other social media content? <a href="https://www.worldcubeassociation.org/contact/website">Let us know</a>!'
+  footer:
+    privacy: Privacy
+    disclaimer: Disclaimer
+    

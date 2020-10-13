@@ -40,7 +40,7 @@
             <%= render_react_component("PostsWidget", id: "posts_widget", options: {
               titleOnly: true,
             }) %>
-            <%= link_to "See all announcements", posts_path, class: "ui blue button" %>
+            <%= link_to(t('homepage.see_all_announcements'), posts_path, class: "ui blue button") %>
           </div>
         </div>
       </div>
