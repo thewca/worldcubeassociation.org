@@ -2,13 +2,13 @@
   <div class="ui container footer-links">
     <div class="ui horizontal divided list">
       <div class="item">
-        <%= link_to "About", about_path %>
+        <%= link_to(t('homepage.about_us.title'), about_path) %>
       </div>
       <div class="item">
-        <%= link_to "FAQ", faq_path %>
+        <%= link_to(t('homepage.faq.title'), faq_path) %>
       </div>
       <div class="item">
-        <%= link_to "Contact", contact_website_path %>
+        <%= link_to(t('homepage.contact.title'), contact_website_path) %>
       </div>
       <div class="item">
         <a href="https://github.com/thewca/worldcubeassociation.org" target="_blank" class="hide-new-window-icon">
@@ -16,10 +16,10 @@
         </a>
       </div>
       <div class="item">
-        <%= link_to "Privacy", privacy_path %>
+        <%= link_to(t('footer.privacy'), privacy_path) %>
       </div>
       <div class="item">
-        <%= link_to "Disclaimer", disclaimer_path %>
+        <%= link_to(t('footer.disclaimer'), disclaimer_path) %>
       </div>
     </div>
   </div>
