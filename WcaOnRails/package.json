@@ -27,7 +27,7 @@
     "core-js": "^3.6.5",
     "css-loader": "^4.3.0",
     "easymde": "^2.12.1",
-    "file-loader": "^6.1.0",
+    "file-loader": "^6.1.1",
     "flag-icon-css": "^3.5.0",
     "glob": "^7.1.6",
     "jquery": "3.4.1",
