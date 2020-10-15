@@ -1331,6 +1331,8 @@ zh-TW:
     latest_news: 最新消息
     #original_hash: 06b01c4
     announcements: 公告
+    #original_hash: f0cbb3e
+    see_all_announcements: 查看所有公告
     about_us:
       #original_hash: 3ffb811
       title: 關於我們
@@ -2076,6 +2078,8 @@ zh-TW:
       organizer_plural:
         zero: 主辦團隊
         other: 主辦團隊
+      #original_hash: 53a9522
+      organization_team: 主辦團隊
       #original_hash: 6afa61e
       delegate:
         zero: WCA代表
@@ -2300,8 +2304,10 @@ zh-TW:
         University](https://www.ntnu.edu.tw/)
       #original_hash: 2651d1a
       venue_details_html: '場地的細節（例如：一樓的正後方，跟隨指標走）%{md}'
-      #original_hash: b727e58
-      contact_html: '可任意選擇聯絡資訊。若您未填寫，主辦人的電子郵件將會被公開。%{md} 範例：[顯示內容](mailto:some@email.com)'
+      #original_hash: 447814d
+      contact_html: >-
+        可任意選擇聯絡資訊。若您未填寫，聯繫請求內容會由表格方式送出，主辦人的電子郵件將不會被顯示。%{md}
+        範例：[顯示內容](mailto:some@email.com)
       #original_hash: c5497bc
       events: 項目
       #original_hash: cafc153
@@ -3780,3 +3786,8 @@ zh-TW:
       body_html: >-
         您有其他對於Instagram或是其他社群媒體上面內容的意見？<a
         href="https://www.worldcubeassociation.org/contact/website">讓我們知道</a>！
+  footer:
+    #original_hash: cf01481
+    privacy: 隱私權
+    #original_hash: 4c4a2e8
+    disclaimer: 免責聲明
