@@ -1522,6 +1522,8 @@ es:
     latest_news: Últimas noticias
     #original_hash: 06b01c4
     announcements: Anuncios
+    #original_hash: f0cbb3e
+    see_all_announcements: Ver todos los anuncios
     about_us:
       #original_hash: 3ffb811
       title: Sobre nosotros
@@ -4776,3 +4778,8 @@ es:
         sociales? ¡<a
         href="https://www.worldcubeassociation.org/contact/website">Háznoslo
         saber</a>!
+  footer:
+    #original_hash: cf01481
+    privacy: Privacidad
+    #original_hash: 4c4a2e8
+    disclaimer: Descargo de responsabilidad
