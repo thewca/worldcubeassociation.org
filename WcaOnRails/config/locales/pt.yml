@@ -1498,6 +1498,8 @@ pt:
     latest_news: Últimas notícias
     #original_hash: 06b01c4
     announcements: Anúncios
+    #original_hash: f0cbb3e
+    see_all_announcements: Ver todos os anúncios
     about_us:
       #original_hash: 3ffb811
       title: Sobre a WCA
@@ -2436,6 +2438,8 @@ pt:
         zero: Organizadores
         one: Organizador
         other: Organizadores
+      #original_hash: 53a9522
+      organization_team: Equipa de organização
       #original_hash: 6afa61e
       delegate:
         zero: Delegados da WCA
@@ -2684,10 +2688,11 @@ pt:
       venue_details_html: >-
         Detalhes do local (p. ex. No primeiro andar, ao fundo. Siga as placas).
         %{md}
-      #original_hash: b727e58
+      #original_hash: 447814d
       contact_html: >-
-        Informação de contacto opcional. Se não preencher este campo, os emails
-        dos organizadores serão mostrados ao público. %{md}. Exemplo: [Texto
+        Informação de contacto opcional. Se não preencher este campo, questões
+        de contacto serão submetidas através de um formulário sem revelar o
+        email dos organizadores. %{md}. Exemplo: [Texto
         mostrado](mailto:alguem@email.com)
       #original_hash: c5497bc
       events: Eventos
@@ -4674,3 +4679,8 @@ pt:
         Tem outras sugestões para Instagram ou outro conteúdo de média social?
         <a
         href="https://www.worldcubeassociation.org/contact/website">Diga-nos</a>!
+  footer:
+    #original_hash: cf01481
+    privacy: Privacidade
+    #original_hash: 4c4a2e8
+    disclaimer: Aviso legal
