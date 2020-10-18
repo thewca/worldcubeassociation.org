@@ -63,6 +63,7 @@ class TranslationsController < ApplicationController
     "id" => [1285],
     "it" => [19667],
     "ja" => [32229, 1118],
+    "kk" => [201680],
     "ko" => [14],
     "nl" => [1, 41519],
     "pl" => [6008, 1686],

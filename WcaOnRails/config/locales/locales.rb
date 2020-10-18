@@ -55,6 +55,10 @@ module Locales
       "flag_id": "jp",
       "name": "日本語",
     },
+    "kk": {
+      "flag_id": "kz",
+      "name": "қазақша",
+    },
     "ko": {
       "flag_id": "kr",
       "name": "한국어",
