@@ -9,6 +9,9 @@ module ResultsValidators
     MISSING_SCRAMBLES_FOR_MULTI_ERROR = "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
     MULTIPLE_FMC_GROUPS_WARNING = "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused "\
       "scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
+    # , detected %{actual} instead of %{expected}
+    WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR = "[%{round_id}] Has a different number of scrambles than specified on the Edit Events tab. "\
+      "Please adjust the number of scramble sets in the Edit Events tab to the number of attempts that were used."
 
     @@desc = "This validator checks that all results have matching scrambles, and if possible, checks that the scrambles have the correct number of attempts compared to the expected round format."
 
@@ -83,6 +86,14 @@ module ResultsValidators
                                                       actual: actual_number_of_scrambles,
                                                       expected: expected_number_of_scrambles)
             end
+          end
+          # Check if the number of groups match the number of scramble sets specified.
+          if scrambles_by_group_id.size != rounds_info_by_ids[round_id].scramble_set_count
+            errors_for_round << ValidationError.new(:scrambles, competition_id,
+                                                    WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
+                                                    round_id: round_id)
+                                                    # actual: rounds_info_by_ids[round_id].scramble_set_count
+                                                    # expected: scrambles_by_group_id.size)
           end
           if round_id.start_with?("333fm") && scrambles_by_group_id.size > 1
             @warnings << ValidationWarning.new(:scrambles, competition_id,
