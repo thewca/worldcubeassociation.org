@@ -133,7 +133,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
-    capybara-screenshot (1.0.24)
+    capybara-screenshot (1.0.25)
       capybara (>= 1.0, < 4)
       launchy
     carrierwave (0.10.0)
@@ -445,7 +445,7 @@ GEM
     recaptcha (5.5.0)
       json
     redcarpet (3.5.0)
-    regexp_parser (1.7.1)
+    regexp_parser (1.8.2)
     reline (0.1.5)
       io-console (~> 0.5)
     representable (3.0.4)
