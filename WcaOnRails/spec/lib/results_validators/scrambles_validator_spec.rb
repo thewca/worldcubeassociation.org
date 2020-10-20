@@ -86,6 +86,32 @@ RSpec.describe SV do
         end
       end
 
+      it "correctly (in)validates scramble sets not matching" do
+        [Result, InboxResult].each do |model|
+          result_kind = model.model_name.singular.to_sym
+          FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
+        end
+
+        FactoryBot.create(:round, competition: competition1, event_id: "333oh", scramble_set_count: 2)
+
+        # Create three groups of scrambles:
+        create_scramble_set(5, competitionId: competition1.id, eventId: "333oh", groupId: "A")
+        create_scramble_set(5, competitionId: competition1.id, eventId: "333oh", groupId: "B")
+        create_scramble_set(5, competitionId: competition1.id, eventId: "333oh", groupId: "C")
+
+        expected_errors = [
+          RV::ValidationError.new(:scrambles, competition1.id,
+                                    SV::WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
+                                    round_id: "333oh-f"),
+        ]
+
+        validator_args.each do |arg|
+          sv = SV.new.validate(arg)
+          expect(sv.errors).to match_array(expected_errors)
+          expect(sv.warnings).to be_empty
+        end
+      end
+
       it "correctly (in)validates multiple groups for 333fm" do
         FactoryBot.create(:round, competition: competition3, event_id: "333fm", format_id: "m", scramble_set_count: 2)
 
@@ -107,7 +133,6 @@ RSpec.describe SV do
         validator_args.each do |arg|
           sv = SV.new.validate(arg)
           expect(sv.warnings).to match_array(expected_warnings)
-          puts sv.errors
           expect(sv.errors).to be_empty
         end
       end
