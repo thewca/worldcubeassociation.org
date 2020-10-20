@@ -1179,6 +1179,38 @@ CREATE TABLE `rounds` (
   UNIQUE KEY `index_rounds_on_competition_event_id_and_number` (`competition_event_id`,`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sanity_check_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sanity_check_categories` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sanity_check_exclusions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sanity_check_exclusions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `sanity_check_id` int(11) DEFAULT NULL,
+  `exclusion` json DEFAULT NULL,
+  `comments` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sanity_checks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sanity_checks` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `sanity_check_category_id` int(11) DEFAULT NULL,
+  `topic` varchar(191) DEFAULT NULL,
+  `comments` text,
+  `query` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `schedule_activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1656,4 +1688,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20200607140007'),
 ('20200627195628'),
 ('20200319193625'),
-('20200725152218');
+('20200725152218'),
+('20201020193829');
