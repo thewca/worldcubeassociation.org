@@ -462,7 +462,7 @@ eo:
         #original_hash: c5497bc
         competition_events: Konkurseroj
         #original_hash: 71c8461
-        enable_donations: 'Mi volas ebligi donaciojn, aldone al la baza registriĝkosto'
+        enable_donations: 'Mi volas ebligi donacojn, aldone al la baza registriĝkosto'
         #original_hash: 4baf44b
         championship_type: Tipo de ĉampionado
         #original_hash: 556fda0
@@ -1492,6 +1492,8 @@ eo:
     latest_news: Lastaj novaĵoj
     #original_hash: 06b01c4
     announcements: Anoncoj
+    #original_hash: f0cbb3e
+    see_all_announcements: Vidi ĉiujn anoncojn
     about_us:
       #original_hash: 3ffb811
       title: Pri ni
@@ -1541,7 +1543,7 @@ eo:
       text: >-
         La World Cube Association estas asocio 501(c)(3) registrita en Usono.
         Kiel cent-elcenta volontula senprofitcela organizo, ni bonvenigas viajn
-        donaciojn por helpi nin havi pli da konkursoj ĉirkaŭ la mondo.
+        donacojn por helpi nin havi pli da konkursoj ĉirkaŭ la mondo.
       #original_hash: 65c84ec
       button: Lernu pli pri kiel vi povas subteni la WCA
   users:
@@ -2189,7 +2191,7 @@ eo:
         malsupre.
       hints:
         #original_hash: bf3a39e
-        donation: Fakultativa donacio kiu iros nur al la organizanta teamo
+        donation: Fakultativa donaco kiu iros nur al la organizanta teamo
         #original_hash: 16cf92d
         card_information: >-
           La datumoj de via karto neniam atingas la retejo de la WCA. Ili estas
@@ -2198,7 +2200,7 @@ eo:
         #original_hash: 4de825f
         entry_fees: Registriĝkosto
         #original_hash: 2c09302
-        donation: Donacio
+        donation: Donaco
         #original_hash: 184150d
         card_information: Datumoj de karto
         #original_hash: bc8091a
@@ -3491,11 +3493,11 @@ eo:
     contributing_title: Kontribui
     #original_hash: e64beb7
     contributing_content_html: >-
-      Vi povas donacii per kreditkarto uzante Guidestar <a
+      Vi povas donaci per kreditkarto uzante Guidestar <a
       href="https://www.nfggive.com/guidestar/82-3825954">tie</a>. Se vi
       preferas skribi ĉekon, vi povas skribi al:
     #original_hash: 2af9b71
-    tax_deductible_note: Donacioj estas imposte subtraheblaj en Usono.
+    tax_deductible_note: Donacoj estas imposte subtraheblaj en Usono.
     #original_hash: 6026d35
     other_help_title: Helpi alimaniere
     #original_hash: cb228f6
@@ -3508,11 +3510,11 @@ eo:
       content: >-
         La World Cube Association estas asocio 501(c)(3) registrita en Usono.
         Kiel cent-elcenta volontula senprofitcela organizo, ni bonvenigas viajn
-        donaciojn por helpi nin havi pli da konkursoj ĉirkaŭ la mondo.
+        donacojn por helpi nin havi pli da konkursoj ĉirkaŭ la mondo.
       #original_hash: 24c87db
-      donate_credit: Donacii per kreditkarto
+      donate_credit: Donaci per kreditkarto
       #original_hash: 96d77f3
-      donate_other: Donacii alimaniere
+      donate_other: Donaci alimaniere
     structure:
       #original_hash: 0d62207
       teams_committees_councils: 'Teamoj, Komitatoj kaj Konsilioj de la WCA'
@@ -4619,3 +4621,8 @@ eo:
         Ĉu vi havas aliajn sugestojn por Instagram aŭ aliaj sociaj retejoj? <a
         href="https://www.worldcubeassociation.org/contact/website">Diru al
         ni</a>!
+  footer:
+    #original_hash: cf01481
+    privacy: Privateco
+    #original_hash: 4c4a2e8
+    disclaimer: Malpretendo
