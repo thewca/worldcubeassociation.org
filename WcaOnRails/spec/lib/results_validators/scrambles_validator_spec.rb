@@ -87,7 +87,7 @@ RSpec.describe SV do
       end
 
       it "correctly (in)validates multiple groups for 333fm" do
-        FactoryBot.create(:round, competition: competition3, event_id: "333fm", format_id: "m")
+        FactoryBot.create(:round, competition: competition3, event_id: "333fm", format_id: "m", scramble_set_count: 2)
 
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
@@ -113,8 +113,8 @@ RSpec.describe SV do
       end
 
       it "correctly (in)validates multiple groups for 333mbf" do
-        FactoryBot.create(:round, competition: competition1, event_id: "333mbf", format_id: "3")
-        FactoryBot.create(:round, competition: competition2, event_id: "333mbf", format_id: "3")
+        FactoryBot.create(:round, competition: competition1, event_id: "333mbf", format_id: "3", scramble_set_count: 2)
+        FactoryBot.create(:round, competition: competition2, event_id: "333mbf", format_id: "3", scramble_set_count: 2)
 
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
