@@ -1506,6 +1506,8 @@ pt-BR:
     latest_news: Últimas notícias
     #original_hash: 06b01c4
     announcements: Anúncios
+    #original_hash: f0cbb3e
+    see_all_announcements: Ver todos os anúncios
     about_us:
       #original_hash: 3ffb811
       title: Sobre a WCA
@@ -4676,3 +4678,8 @@ pt-BR:
         sociais? <a
         href="https://www.worldcubeassociation.org/contact/website">Nos
         conte</a>!
+  footer:
+    #original_hash: cf01481
+    privacy: Privacidade
+    #original_hash: 4c4a2e8
+    disclaimer: Aviso legal
