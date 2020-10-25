@@ -1522,6 +1522,8 @@ ru:
     latest_news: Последние новости
     #original_hash: 06b01c4
     announcements: Анонсы
+    #original_hash: f0cbb3e
+    see_all_announcements: Смотреть все объявления
     about_us:
       #original_hash: 3ffb811
       title: О нас
@@ -4659,3 +4661,8 @@ ru:
         социальных сетей? <a
         href="https://www.worldcubeassociation.org/contact/website">Расскажите
         нам об этом</a>!
+  footer:
+    #original_hash: cf01481
+    privacy: Политика конфиденциальности
+    #original_hash: 4c4a2e8
+    disclaimer: Отказ от ответственности
