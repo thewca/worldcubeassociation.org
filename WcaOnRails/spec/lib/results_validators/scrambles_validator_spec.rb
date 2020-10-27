@@ -101,8 +101,8 @@ RSpec.describe SV do
 
         expected_errors = [
           RV::ValidationError.new(:scrambles, competition1.id,
-                                    SV::WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
-                                    round_id: "333oh-f"),
+                                  SV::WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
+                                  round_id: "333oh-f"),
         ]
 
         validator_args.each do |arg|
