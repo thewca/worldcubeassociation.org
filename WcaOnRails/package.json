@@ -42,7 +42,7 @@
     "precss": "^4.0.0",
     "prop-types": "^15.7.2",
     "rails-erb-loader": "^5.5.2",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-bootstrap": "^0.33.1",
     "react-dom": "^16.13.0",
     "react-leaflet": "^2.7.0",
