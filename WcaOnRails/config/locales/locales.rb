@@ -57,7 +57,7 @@ module Locales
     },
     "kk": {
       "flag_id": "kz",
-      "name": "қазақша",
+      "name": "Қазақша",
     },
     "ko": {
       "flag_id": "kr",
