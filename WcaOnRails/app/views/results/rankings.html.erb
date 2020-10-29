@@ -6,7 +6,7 @@
   <div id="results-selector" class="results-select form-inline">
     <%= render 'results_selector', show_rankings_options: true %>
   </div>
-  <% ranking_params = params.permit(:event_id, :type, :region, :years, :show).to_hash.values %>
+  <% ranking_params = params.permit(:event_id, :type, :region, :gender, :years, :show).to_hash.values %>
   <% ranking_timestamp = Timestamp.find_by(name: "compute_auxiliary_data_end") %>
   <% cache_if ranking_timestamp.present?, ["rankings", *ranking_params, ranking_timestamp&.date, I18n.locale] do %>
     <%
