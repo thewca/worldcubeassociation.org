@@ -3154,6 +3154,15 @@ es:
         history: Histórico
         #original_hash: e58bcf8
         mixed_history: Histórico mezclado
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: Género
+        #original_hash: 6a72085
+        gender_all: Todos
+        #original_hash: 3f3a489
+        male: Masculino
+        #original_hash: b7c17e9
+        female: Femenino
     table_elements:
       #original_hash: 709a232
       name: Nombre
