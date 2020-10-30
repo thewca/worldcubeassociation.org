@@ -3073,6 +3073,15 @@ eo:
         history: Historio
         #original_hash: e58bcf8
         mixed_history: Miksita historio
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: Genro
+        #original_hash: 6a72085
+        gender_all: Ĉiuj
+        #original_hash: 3f3a489
+        male: Iĉa
+        #original_hash: b7c17e9
+        female: Ina
     table_elements:
       #original_hash: 709a232
       name: Nomo
