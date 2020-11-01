@@ -1926,6 +1926,7 @@ en:
     minutes: "Minutes"
     policies: "WCA Policies"
     codeofethics: "Code of Ethics"
+    codeofconduct: "Code of Conduct"
   education:
     title: "WCA Educational Documents"
     description: "The WQAC and WMT has published several documents for the community, you can download them below."
@@ -2286,4 +2287,3 @@ en:
   footer:
     privacy: Privacy
     disclaimer: Disclaimer
-    
