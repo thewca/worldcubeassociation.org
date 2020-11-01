@@ -16,6 +16,15 @@
     <div class="panel panel-default">
       <div class="panel-heading heading-as-link">
         <h4 class="panel-title">
+          <%= link_to "/documents/Code of Conduct.pdf", class: "full-space" do %>
+            <%= ui_icon("file alt") %> <%= t('documents.codeofconduct') %>
+          <% end %>
+        </h4>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading heading-as-link">
+        <h4 class="panel-title">
           <%= link_to "/documents/Code of Ethics.pdf", class: "full-space" do %>
             <%= ui_icon("file alt") %> <%= t('documents.codeofethics') %>
           <% end %>
