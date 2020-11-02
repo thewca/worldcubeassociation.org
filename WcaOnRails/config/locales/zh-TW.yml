@@ -2670,6 +2670,15 @@ zh-TW:
         history: 更新歷史
         #original_hash: e58bcf8
         mixed_history: 混合更新歷史
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: 性別
+        #original_hash: 6a72085
+        gender_all: 所有
+        #original_hash: 3f3a489
+        male: 男性
+        #original_hash: b7c17e9
+        female: 女性
     table_elements:
       #original_hash: 709a232
       name: 名字
@@ -3161,6 +3170,8 @@ zh-TW:
     policies: WCA政策
     #original_hash: 91ac873
     codeofethics: 倫理規範
+    #original_hash: 2643980
+    codeofconduct: 行為準則
   education:
     #original_hash: 41701c2
     title: WCA教育文獻
