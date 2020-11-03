@@ -1,4 +1,4 @@
-dist: trusty
+dist: focal
 language: ruby
 os: linux
 cache:
