@@ -3113,6 +3113,15 @@ pt-BR:
         history: História
         #original_hash: e58bcf8
         mixed_history: Mixed history
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: Gênero
+        #original_hash: 6a72085
+        gender_all: Todos
+        #original_hash: 3f3a489
+        male: Masculino
+        #original_hash: b7c17e9
+        female: Feminino
     table_elements:
       #original_hash: 709a232
       name: Nome
@@ -3769,6 +3778,8 @@ pt-BR:
     policies: Políticas da WCA
     #original_hash: 91ac873
     codeofethics: Código de Ética
+    #original_hash: 2643980
+    codeofconduct: Código de Conduta
   education:
     #original_hash: 41701c2
     title: Documentos Educacionais da WCA
