@@ -109,19 +109,23 @@ class ResultsController < ApplicationController
           result.#{value} value
         FROM (
           SELECT
-            countryId recordCountryId,
+            result.countryId recordCountryId,
             MIN(#{value}) recordValue
           FROM Concise#{capitalized_type_param}Results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
           WHERE 1
             #{@event_condition}
             #{@years_condition}
-          GROUP BY countryId
+            #{@gender_condition}
+          GROUP BY result.countryId
         ) record
         JOIN Results result ON result.#{value} = recordValue AND result.countryId = recordCountryId
         JOIN Competitions competition on competition.id = competitionId
+        #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
         WHERE 1
           #{@event_condition}
           #{@years_condition}
+          #{@gender_condition}
         ORDER BY value, countryId, start_date, personName
       SQL
     else
