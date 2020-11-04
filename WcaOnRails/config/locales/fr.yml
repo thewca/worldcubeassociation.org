@@ -20,7 +20,7 @@ fr:
     HK: Hong Kong
     #original_hash: 3ad2dd8
     KN: Saint-Christophe-et-Niévès
-    #original_hash: 7184d1a
+    #original_hash: 5c34abb
     KP: République populaire démocratique de Corée
     #original_hash: 4430b22
     KR: République de Corée
@@ -40,8 +40,6 @@ fr:
     SZ: Eswatini
     #original_hash: 4d206a8
     TT: Trinité-et-Tobago
-    #original_hash: 0f3f60b
-    VA: État de la Cité du Vatican
     #original_hash: 3fa9b2d
     VC: Saint-Vincent-et-les-Grenadines
     #original_hash: 9af4622
@@ -75,6 +73,13 @@ fr:
     Oceania: Océanie
     #original_hash: b1ffb4c
     South America: Amérique du Sud
+  country_bands:
+    #original_hash: 2b5976e
+    title: Catégories des Pays de la WCA
+    #original_hash: df5f4ea
+    band_title: 'Catégorie %{number}'
+    #original_hash: 6521e5d
+    due_value: '%{value}$ par compétiteur par compétition'
   events:
     #original_hash: 3732390
     '222': Cube 2x2x2
@@ -144,18 +149,18 @@ fr:
     '0':
       #original_hash: 4d618bb
       name: Tour de qualification
-      #original_hash: 2ffe44e
-      cellName: Qualification
+      #original_hash: 4d618bb
+      cellName: Tour de qualification
     '1':
       #original_hash: 1e725b6
       name: Premier tour
-      #original_hash: 916a78d
-      cellName: Premier
+      #original_hash: 1e725b6
+      cellName: Premier tour
     '2':
       #original_hash: 985c8d0
       name: Deuxième tour
-      #original_hash: 2a4bcae
-      cellName: Deuxième
+      #original_hash: 985c8d0
+      cellName: Deuxième tour
     '3':
       #original_hash: e2f74d2
       name: Demi Finale
@@ -167,35 +172,35 @@ fr:
       #original_hash: 327c999
       cellName: Finale B
     c:
-      #original_hash: b2d26f4
-      name: Finale combinée
-      #original_hash: b2d26f4
-      cellName: Finale combinée
+      #original_hash: 672b22c
+      name: Finale
+      #original_hash: 672b22c
+      cellName: Finale
     d:
-      #original_hash: c6136b1
-      name: Premier tour combiné
-      #original_hash: dffa9ea
-      cellName: Premier combiné
+      #original_hash: 1e725b6
+      name: Premier tour
+      #original_hash: 1e725b6
+      cellName: Premier tour
     e:
-      #original_hash: 659c53f
-      name: Deuxième tour combiné
-      #original_hash: b6e1e1c
-      cellName: Deuxième combiné
+      #original_hash: 985c8d0
+      name: Deuxième tour
+      #original_hash: 985c8d0
+      cellName: Deuxième tour
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
       cellName: Finale
     g:
-      #original_hash: e861dcf
-      name: Troisième tour combiné
-      #original_hash: 86f4b05
-      cellName: Troisième combiné
+      #original_hash: ccf6f8e
+      name: Troisième tour
+      #original_hash: ccf6f8e
+      cellName: Troisième tour
     h:
-      #original_hash: 4c66ad0
-      name: Qualification combinée
-      #original_hash: 4c66ad0
-      cellName: Qualification combinée
+      #original_hash: 4d618bb
+      name: Tour de qualification
+      #original_hash: 4d618bb
+      cellName: Tour de qualification
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Essai %{number}'
@@ -271,6 +276,8 @@ fr:
     average: Moyenne
     #original_hash: e7f6fc5
     solves: Résolutions
+    #original_hash: c9d0561
+    hello: 'Bonjour %{name},'
     date:
       #original_hash: acb6273
       no_date: Pas de date
@@ -306,6 +313,11 @@ fr:
     datetime_placeholder: 'AAAA-MM-JJ HH:MM'
     #original_hash: 7136e3b
     time_format: 24h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: secondes
+      #original_hash: 9d86b0d
+      unit_moves: mouvements
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -358,8 +370,6 @@ fr:
         email: Adresse email
         #original_hash: 8be3c94
         password: Mot de passe
-        #original_hash: 19dff4d
-        current_password: Mot de passe actuel
         #original_hash: aefce7f
         password_confirmation: Ressaisissez le mot de passe
         #original_hash: ced7b30
@@ -374,16 +384,12 @@ fr:
         delegate_status: Statut de Délégué
         #original_hash: 0f21717
         region: Région
-        #original_hash: a10b651
-        location_description: Localisation
-        #original_hash: 8961d3b
-        phone_number: Numéro de téléphone
-        #original_hash: 7044004
-        notes: Notes
         #original_hash: 730db33
         receive_delegate_reports: Je souhaite recevoir les rapports des compétitions WCA par email
         #original_hash: 57eaf24
         user_preferred_events: Épreuves préférées
+        #original_hash: e632fbf
+        otp_attempt: 'Entrez votre code d''authentification à deux facteurs :'
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -423,6 +429,8 @@ fr:
         currency_code: Monnaie
         #original_hash: 2e3ed8b
         delegate_ids: Délégué(s) WCA
+        #original_hash: c0ddcd6
+        trainee_delegate_ids: Délégué(es) WCA Stagiaire(s)
         #original_hash: 958562e
         organizer_ids: Organisateur(s)
         #original_hash: b37456c
@@ -652,8 +660,10 @@ fr:
         #original_hash: 6e6a6f2
         o: Autre
       delegate_status:
-        #original_hash: 28ec02d
-        candidate_delegate: Candidat Délégué
+        #original_hash: 621101a
+        trainee_delegate: Délégué Stagiaire
+        #original_hash: 9b97968
+        candidate_delegate: Délégué Junior
         #original_hash: 12ab214
         delegate: Délégué
         #original_hash: d463c23
@@ -737,8 +747,6 @@ fr:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        current_password: ''
-        #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
         dob_verification: ''
@@ -760,17 +768,15 @@ fr:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
-        #original_hash: 8c266ea
+        #original_hash: d5ccc15
         receive_delegate_reports: >-
-          Si vous êtes Candidat Délégué, Délégué Senior, ou membre du WRC ou du
+          Si vous êtes Délégué Junior, Délégué Senior, ou membre du WRC ou du
           WQAC, vous recevez les rapports des Délégués par défaut. Note : un
           changement peut prendre jusqu'à une heure pour prendre effet.
+        #original_hash: 0627e5c
+        otp_attempt: >-
+          Consultez l'application mobile que vous avez configuré pour obtenir un
+          code à usage unique, ou utilisez l'un de vos codes de secours.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -795,6 +801,8 @@ fr:
           vos compétiteurs parlent.
         #original_hash: b4d020f
         delegate_ids: Délégué(s) WCA pour la compétition.
+        #original_hash: cb9882c
+        trainee_delegate_ids: Délégués WCA Stagiaire pour la compétition.
         #original_hash: 517d376
         organizer_ids: >-
           Organisateur(s) de la compétition (ils doivent avoir un compte pour
@@ -940,14 +948,17 @@ fr:
         wca_id: ''
         #original_hash: 8723825
         dob: Votre date de naissance au format AAAA-MM-JJ
-        #original_hash: c6d8a97
+        #original_hash: 49ee4af
         document: >-
           Pour nous prouver votre identité et votre date de naissance, vous
           devez joindre une photo d'un document légal (carte d'identité, permis
           de conduire, carte étudiant, passeport, certificat de naissance, ...)
           où vos noms et date de naissance sont visibles et compréhensible pour
           un Anglophone (ou bien contactez votre Délégué WCA local si vous
-          n'avez pas un tel document).
+          n'avez pas un tel document). Nous avons besoin de voir au moins votre
+          nom et votre date de naissance sur votre document d'identité ; vous
+          pouvez cacher toute autre information personnelle si vous le
+          souhaitez.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -1111,6 +1122,11 @@ fr:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1178,6 +1194,160 @@ fr:
       new:
         #original_hash: ada2e9e
         sign_in: Connexion
+        2fa:
+          #original_hash: b274c38
+          verify: 'Pour vous connecter, confirmez votre identité'
+          #original_hash: ec44d52
+          confirm: Soumettre le code
+          #original_hash: 912516c
+          regenerated_secret: >-
+            Le secret pour votre authentification à deux facteurs a été régénéré
+            avec succès.
+          #original_hash: 1b0c44f
+          enabled_success: L'authentification à deux facteurs a été activée avec succès.
+          #original_hash: 9515157
+          email_auth: Authentification par email
+          #original_hash: d305ccb
+          get_by_email: Obtenir un code par email
+          #original_hash: 4e644aa
+          get_by_email_desc: >-
+            Si vous ne pouvez pas accéder votre appareil ou vos codes de
+            secours, vous pouvez aussi cliquer sur le bouton ci-dessous pour
+            obtenir un code à usage unique par email. Copier coller le
+            ci-dessous pour vous connecter.
+          #original_hash: b243ac5
+          email_sent: >-
+            Un code vous a été adressé par email. Ce code est valide pour 2
+            minutes. Vous pourrez demander un nouveau code dans 2 minutes.
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: Vous ne pouvez pas générer un email pour le moment
+            #original_hash: c0d4fc2
+            invalid_otp: Code à usage unique invalide.
+            #original_hash: c2f5347
+            not_enabled: L'authentification à deux facteurs n'est pas activée
+            #original_hash: 14d294b
+            unknown: >-
+              Une erreur inconnue s'est produite pendant l'envoi de votre email.
+              Merci de contacter l'équipe logicielle de la WCA (WST).
+          otp_email:
+            #original_hash: a20e037
+            subject: Votre code à usage unique pour le site internet de la WCA
+            #original_hash: f82488f
+            2fa_attempt: >-
+              Vous être en train de vous connecter sur le site de la WCA.
+              L'authentification à deux facteur est activée pour votre compte,
+              et vous venez de demander que l'on vous envoie un mot de passe à
+              usage unique par email. Vous le trouverez ci-dessous :
+            #original_hash: e27e540
+            disclaimer: >-
+              Si vous n'avez pas demandé ce code, merci de contacter l'équipe
+              logicielle de la WCA immédiatement en répondant à cet email : vous
+              avez peut être une session ouverte quelque part ou votre mot de
+              passe est peut être compromis.
+          #original_hash: 8c13694
+          name: Authentification à deux facteurs (2FA)
+          #original_hash: d28c3b6
+          support_desc_html: >-
+            Le site internet de la WCA supporte %{two_factor_link} avec un code
+            à usage unique :
+          options:
+            #original_hash: 4f9dcb8
+            app: >-
+              généré par une application 2FA dédiée sur votre téléphone (comme
+              Authy ou Google Authenticator par exemple).
+            #original_hash: 34a7572
+            recovery: >-
+              pris dans la liste des codes de secours générés lors de
+              l'activation du 2FA.
+            #original_hash: eaee403
+            email: envoyé par email lorsque que vous vous connectez.
+          #original_hash: 7ae99ae
+          status_html: 'L''authentification à deux facteurs est %{status} pour vous.'
+          #original_hash: 3ea3f98
+          enabled: activée
+          #original_hash: 07596f1
+          disabled: désactivée
+          #original_hash: 5f225b0
+          enable: Activer 2FA
+          #original_hash: 2e35cd9
+          disable: Désactiver 2FA
+          #original_hash: b2a3d7e
+          reset: Régénérer le secret 2FA
+          #original_hash: 14b7bfd
+          reset_if_needed: >-
+            Si l'un de vos appareils a été compromis, ou si vous souhaitez
+            révoquer l'accès depuis vos appareils, vous pouvez régénérer
+            ci-dessous le secret utilisé pour l'authentification à deux
+            facteurs.
+          #original_hash: 69100a3
+          reset_warning: Vous devrez reconfigurer tous les appareils utilisés pour le 2FA.
+          #original_hash: a8d11db
+          methods: Méthodes d'authentification
+          #original_hash: 0fd248d
+          methods_description: >-
+            Vous pouvez utiliser plusieurs méthodes pour obtenir un code à usage
+            unique lorsque vous vous connectez, elles sont détaillées
+            ci-dessous.
+          #original_hash: 4442f0e
+          dedicated_app: >-
+            En utilisant une application dédié pour l'authentification à deux
+            facteurs
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            L'équipe logicielle de la WST recommande d'utiliser %{authy} sur vos
+            appareils pour obtenir un code à usage unique.<br/>Alternativement,
+            vous pouvez utiliser %{google} ou %{microsoft}.
+          #original_hash: f1b2ec2
+          scan_qrcode_html: >-
+            Scannez le QR code ci-dessous lorsque demandé par votre application
+            2FA (ou cliquez %{here} si vous êtes sur mobile).
+          #original_hash: e7cba1a
+          backup_codes: Codes de secours
+          #original_hash: fa62416
+          backup_codes_desc: >-
+            Les codes de secours peuvent être utilisés en lieu et place d'un
+            code à usage unique si vous n'avez pas accès à votre appareil équipé
+            de l'application 2FA. Chaque code ne peut être utilisé qu'une fois.
+            Faites attention à les stocker dans un endroit sûr.
+          #original_hash: 087cb72
+          no_backup_codes: >-
+            Vous n'avez pas encore généré de code de secours. Cliquez sur le
+            bouton ci-dessous pour les générer.
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            You avez déjà généré des codes de secours. Si vous avez déjà utilisé
+            ou si vous avez perdu ces codes, vous pouvez en générer de nouveau à
+            l'aide du bouton ci-dessous. Les codes existant seront invalidés si
+            vous en générez de nouveaux.
+          #original_hash: 2ee4aca
+          generate_backup_codes: Générer des codes de secours
+          #original_hash: a69dd5b
+          backup_codes_warning: >-
+            Les codes de secours seront affichés ci-dessous. Écrivez les
+            immédiatement : ils sont stockés chiffrés dans notre base de données
+            et ne peuvent pas être affichés une nouvelle fois plus tard.
+          #original_hash: b5e3ad8
+          email_auth_desc: >-
+            Vous pouvez demander un code à usage unique par email lorsque vous
+            vous connectez.
+          #original_hash: dd991ab
+          disable_section_title: Désactiver l'authentification à deux facteurs
+          #original_hash: 4569d81
+          disable_section_content: >-
+            L'équipe logicielle de la WCA recommande fortement de ne pas
+            désactiver le 2FA, mais vous pouvez le faire en cliquant le bouton
+            ci-dessous. Si vous réactivez 2FA, vous devrez reconfigurer tous vos
+            appareils.
+          #original_hash: ab1b77d
+          disabled_success: L'authentification à deux facteurs a été désactivée avec succès.
+          #original_hash: c36d556
+          disabled_failed: >-
+            Impossible de désactiver le 2FA, merci de consulter l'erreur
+            ci-dessous.
+      destroy_other:
+        #original_hash: a768ea6
+        success: Vos autres appareils ont été déconnectés avec succès.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1260,14 +1430,14 @@ fr:
       delegates: Délégués WCA
       #original_hash: 37b8fdc
       organizations: Organisations Régionales
-      education: Ressources éducatives
-      forum: Forum
       #original_hash: d790b40
       faq: Questions Fréquentes
+      #original_hash: cf1d2c9
+      forum: Forum
       #original_hash: 3ad28c0
       teams: 'Équipes, Comités, et Conseils'
-      #original_hash: 02617c0
-      tutorial: Tutoriel pour les compétitions
+      #original_hash: a979ffc
+      education: Ressources éducatives
       #original_hash: a34b69f
       contact: Informations de Contact
       #original_hash: 4fa8cc8
@@ -1352,7 +1522,72 @@ fr:
       manage_app: Gérer vos applications
       #original_hash: 0e8b212
       manage_auth_app: Gérer vos applications authentifiées
+      #original_hash: acac109
       media_submission: Partager des photos et vidéos
+  homepage:
+    #original_hash: 824d76b
+    learn_more: En savoir plus
+    #original_hash: d8f3ae6
+    title: Bienvenue à la World Cube Association
+    #original_hash: d133986
+    latest_news: Dernières informations
+    #original_hash: 06b01c4
+    announcements: Annonces
+    #original_hash: f0cbb3e
+    see_all_announcements: Voir toutes les annonces
+    about_us:
+      #original_hash: 3ffb811
+      title: À propos de nous
+      #original_hash: ed77e4c
+      text: >-
+        La World Cube Association gouverne les compétitions pour tous les
+        casse-têtes manipulés à travers des rotations de groupe de pièces.
+    competitions:
+      #original_hash: db98a68
+      title: Compétitions
+      #original_hash: 0ac88bc
+      text_html: >-
+        Découvrez les compétitions proches de vous ou les résultats de
+        compétitions. Vous êtes en ce moment à une compétition et voulez
+        consulter les résultats ? Direction %{wca_live_link} !
+    records:
+      #original_hash: e51c552
+      title: Records
+      #original_hash: 3681af0
+      text: >-
+        Retrouvez les records actuels et passés pour toutes les épreuves
+        officielles de la WCA.
+    faq:
+      #original_hash: 03688ba
+      title: FAQ
+      #original_hash: 1e0206f
+      text: >-
+        Consultez notre Foire Aux Questions si vous avez besoin d'aide
+        concernant la WCA. Vous y trouverez les réponses à beaucoup de vos
+        questions.
+    contact:
+      #original_hash: b37456c
+      title: Contact
+      #original_hash: 5c254b6
+      text_html: >-
+        Si vous souhaitez nous contacter, vous pouvez utiliser notre formulaire
+        de contact. Si vous avez des questions à propos de la WCA, n'hésitez pas
+        à consulter notre %{faq_link} !
+      #original_hash: d790b40
+      faq: Foire Aux Questions
+      #original_hash: 392f358
+      button: Aller au formulaire de contact de la WCA
+    support:
+      #original_hash: 610edba
+      title: Supporter la WCA
+      #original_hash: 6253f90
+      text: >-
+        La World Cube Association est une association 501(c)(3) enregistrée aux
+        États-Unis. En tant qu'association à but non lucratif entièrement gérée
+        par des bénévoles, vos contributions seraient les bienvenues pour nous
+        aider à avoir plus de compétitions à travers le monde.
+      #original_hash: 65c84ec
+      button: En savoir plus sur les moyens de supporter la WCA
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1378,6 +1613,8 @@ fr:
         activate: >-
           Après l'activation, vous pourrez vous connecter sur le site internet
           de la World Cube Association :
+        #original_hash: fb02586
+        login_form: formulaire de connexion
         #original_hash: 333999b
         addendum: >-
           Cet email est envoyé automatiquement. Si vous n'avez pas créé de
@@ -1418,8 +1655,19 @@ fr:
         announced: >-
           Le WCAT vient d'approuver votre compétition et a effectué l'annonce
           publique officielle.
-        #original_hash: 1c20919
-        link: 'Merci de cliquer sur ce lien pour voir l''annonce de la compétition :'
+      id_claim_possibility_email:
+        #original_hash: 20e9d09
+        header: Merci d'associer votre ID WCA avec votre compte
+        #original_hash: 5665910
+        intro: Bonjour
+        #original_hash: 61650f4
+        information_html: >-
+          Vous vous êtes inscrit(e) pour %{competition_link}. Nous venons tout
+          juste de publier les résultats pour cette compétition, et nous avons
+          créé les ID WCAs pour tous les nouveaux participants. Si vous avez
+          participé à cette compétition et que c'était votre première
+          compétition, vous pouvez associer votre ID WCA à votre compte. Vous
+          pouvez le faire %{claim_link}.
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Vous avez été ajouté au %{competition} en tant qu''organisateur'
@@ -1453,6 +1701,23 @@ fr:
           Merci de lire le <a href=%{competition_url}>site internet de la
           compétition</a> pour plus d'informations et les conditions
           d'inscription.
+      results_presence_email:
+        #original_hash: 7ce2558
+        header: 'Les résultats de la compétition %{competition} sont postés'
+        #original_hash: 150446e
+        intro_html: >-
+          Vos résultats à la compétition %{competition_link} viennent juste
+          d'être postés.
+        #original_hash: 78edca3
+        information_html: 'Retrouvez tous vos résultats %{result_link}.'
+        #original_hash: a585fca
+        more_info_html: >-
+          Vous pouvez gérer vos préférences pour les notifications
+          %{preferences_link}.
+        #original_hash: 7594a32
+        regards_html: >-
+          Cordialement,<br/>L'Équipe des Résultats de la WCA au nom de
+          %{managers}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Réclamer un ID WCA
@@ -1507,8 +1772,10 @@ fr:
       approve: Approuver
       #original_hash: 85de4b8
       unconfirmed_email: 'L''adresse email (%{email}) de ce compte n''est pas confirmée.'
-      #original_hash: c03b949
-      confirm_new_email: 'Si vous changez votre adresse email, vous devrez la confirmer.'
+      #original_hash: 7069007
+      confirm_new_email: >-
+        Si vous changez votre adresse email, vous devrez la confirmer avant
+        qu'elle puisse être effective.
       #original_hash: 8a770cf
       pending_mail_confirmation: >-
         Ce compte est en attente de confirmation de la nouvelle adresse email
@@ -1559,6 +1826,10 @@ fr:
         soumettre une image valide.
       #original_hash: efc007a
       save: Sauvegarder
+      #original_hash: c3cd636
+      actions: Actions
+      #original_hash: 8356b72
+      sign_out_of_devices: Déconnecter les autres appareils
       #original_hash: 58e0c56
       remove_avatar: Retirer la photo de profil
       #original_hash: 4bd25cf
@@ -1578,10 +1849,10 @@ fr:
         '4': >-
           Votre tête, mais pas nécessairement tout votre visage, devrait être
           visible.
-        #original_hash: ebbbf8a
+        #original_hash: 7c0aab3
         '5': >-
-          La photo ne doit pas avoir d'autres textes que ceux présents en
-          arrière plan.
+          Il ne devrait pas y avoir de textes, filtres, ou bordures appliqués
+          sur la photo.
         #original_hash: cc5f23a
         '6': La photo doit être soumise dans la bonne orientation.
         #original_hash: 1a18831
@@ -1607,6 +1878,21 @@ fr:
             de profil, et pourra être utilisée à la place de la photo de profil.
             La miniature doit être ajustée de manière à ce que vous puissiez
             être reconnu grace à elle, et doit donc contenir votre visage.
+      sensitive:
+        #original_hash: 267ac87
+        info: >-
+          Cette section vous permet d'éditer des données sensibles, pour pouvoir
+          y accéder merci de confirmer votre identité ci-dessous.
+        #original_hash: f19af51
+        success: Identité vérifiée avec succès
+        #original_hash: 52ebf9c
+        failure: Impossible de vérifier votre identité
+        #original_hash: 4324c73
+        confirm_proceed: Confirmer
+        #original_hash: d395f1f
+        identity_error: >-
+          Impossible d'éditer vos informations, merci de confirmer votre
+          identité ci-dessous avant de recommencer.
     errors:
       #original_hash: 094b763
       not_found: introuvable
@@ -1618,8 +1904,11 @@ fr:
         d'avoir rentré la date au bon format (AAAA-MM-JJ) merci de contacter
         l'équipe des résultats WCA en utilisant <a href="%{dob_form_path}">ce
         formulaire dédié</a>.
-      #original_hash: 71b46b4
-      unique: 'est déjà utilisé par "%{used_name}" avec l''adresse %{used_email}'
+      #original_hash: c3ce070
+      unique_html: >-
+        est déjà utilisé par %{used_name} with %{used_email}. Pour libérer cet
+        ID WCA, vous pouvez <a href="%{used_edit_path}" target="_blank">editer
+        ce compte</a> et désassocier l'ID WCA.
       #original_hash: 26f70ed
       dob_past: doit être dans le passé
       #original_hash: b320913
@@ -1726,6 +2015,8 @@ fr:
         Vous êtes banni. Si vous pensez que c'est une erreur, merci de contacter
         le <a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
+      #original_hash: 8d07e7f
+      undelete_banned: est une personne actuellement bannie et ne peut pas être acceptée
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1885,6 +2176,8 @@ fr:
       payment_requested_on: 'Paiement demandé le %{date}'
       #original_hash: b25928c
       total: Total
+      #original_hash: df036fe
+      n_events: Nombre d'épreuves
     new_registration:
       #original_hash: 8b9f726
       title: 'S''inscrire pour %{comp}'
@@ -2114,16 +2407,50 @@ fr:
         inclue tous les tours que vous avez déclaré.
       #original_hash: e390250
       create_success: Nouvelle compétition créée avec succès !
+      #original_hash: ba067f0
+      not_announced: >-
+        Cette compétition est visible publiquement mais n'a pas encore été
+        annoncée.
+      #original_hash: ab61991
+      announced: Compétition annoncée avec succès !
+      #original_hash: a582c89
+      cancelled: >-
+        Cette compétition a été annulée. Merci de consulter la section
+        "informations" pour plus de détails.
+      #original_hash: b4aa5ee
+      cancel_success: Compétition annulée avec succès !
+      #original_hash: d0478cf
+      cancel_failure: Impossible d'annuler la compétition.
+      #original_hash: 09df36b
+      uncancel_success: Compétition restaurée avec succès !
+      #original_hash: ead4a9e
+      uncancel_failure: Impossible de restaurer la compétition.
+      #original_hash: 8ad5e67
+      results_not_posted: >-
+        Les résultats de cette compétition sont visibles mais n'ont pas encore
+        été postés.
+      #original_hash: e205d73
+      results_already_posted: Les résultats ont déjà été postés.
+      #original_hash: 376f461
+      results_posted: Résultats postés avec succès !
       #original_hash: afe3a23
       results_preview_alert: Vous visualisez des résultats qui n'ont pas encore été postés.
       #original_hash: 07de612
       upload_results: >-
         Cette compétition est terminée, nous travaillons à mettre les résultats
         en ligne dès que possible !
+      #original_hash: 68dd436
+      computing_auxiliary_data: Merci de patienter jusqu'à ce que CAD soit terminée.
+      #original_hash: 8ebe272
+      no_results: Il n'y a pas de résultats.
+      #original_hash: 79e8b95
+      no_main_event_results: 'Il n''y a pas de résultats pour l''épreuve principale (%{event_name}).'
       #original_hash: a0168ee
       in_progress: >-
         Cette compétition est en cours. Revenez après le %{date} pour voir les
         résultats !
+      #original_hash: 8ab1548
+      reg_opens_too_early: Les inscriptions ouvrent avant la fin du délai de 48 heures requis.
       #original_hash: 3322400
       tooltip_registered: Vous êtes inscrit.
       #original_hash: f2d092f
@@ -2189,11 +2516,15 @@ fr:
       details: Détails
       #original_hash: 2e8a57c
       website: Site internet
+      #original_hash: 2260929
+      display_name: '[Annulée] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: Organisateur
         one: Organisateur
         other: Organisateurs
+      #original_hash: 53a9522
+      organization_team: Équipe d'organisation
       #original_hash: 6afa61e
       delegate:
         zero: Délégués WCA
@@ -2205,6 +2536,8 @@ fr:
       information: Information
       #original_hash: c5497bc
       events: Épreuves
+      #original_hash: 3c24bd2
+      main_event: Épreuve principale
       #original_hash: ff722f0
       registration_requirements: Conditions d'inscription
       #original_hash: 74d0bf1
@@ -2235,7 +2568,7 @@ fr:
       use_stripe_below_html: >-
         Les frais d'inscriptions doivent être réglés via Stripe ci-dessous une
         fois l'inscription soumise.
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: >-
         Si votre inscription est annulée avant le %{limit_date_and_time} vous
         serez remboursé à hauteur de %{refund_policy_percent} de vos frais
@@ -2277,6 +2610,51 @@ fr:
         range_past_html: >-
           Les inscriptions en ligne étaient ouvertes du %{start_date_and_time}
           au %{end_date_and_time}.
+      #original_hash: 1f9c9c4
+      highlights: Faits marquants
+      #original_hash: 945f917
+      click_to_display_highlights_html: >-
+        Cliquez %{link_here} pour afficher les faits marquants de la
+        compétition.
+      #original_hash: dc5c597
+      hide_highlights: Cacher les faits marquants.
+      #original_hash: f691bf2
+      result: un résultat
+      #original_hash: acab754
+      single: un meilleur score
+      #original_hash: e78d7c2
+      average: une moyenne
+      #original_hash: 083c83e
+      mean: une moyenne
+      #original_hash: 22bee3a
+      result_sentence: 'avec %{a_win_by_word} de %{result}'
+      #original_hash: 6c3b236
+      winner: '%{winner} a gagné %{result_sentence} dans l''épreuve du %{event_name}.'
+      #original_hash: ec7f18a
+      first_runner_up: '%{first_runner_up} a terminé second (%{first_runner_up_result})'
+      #original_hash: cffa50a
+      and: et
+      #original_hash: 67d285c
+      second_runner_up: '%{second_runner_up} a terminé troisième (%{second_runner_up_result}).'
+      records:
+        #original_hash: 0658e11
+        wr: Records du Monde
+        #original_hash: 9d940bb
+        afr: Records d'Afrique
+        #original_hash: 56c95a8
+        asr: Records d'Asie
+        #original_hash: 4cf3c13
+        ocr: Records d'Océanie
+        #original_hash: 1b9111e
+        er: Records d'Europe
+        #original_hash: d26cf99
+        nar: Records d'Amérique du Nord
+        #original_hash: 270c007
+        sar: Records d'Amérique du Sud
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} %{result} (single)'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} %{result} (moyenne)'
       #original_hash: 8eda7ac
       bookmark: Ajouter cette compétition aux favoris
       #original_hash: 4dfea97
@@ -2310,6 +2688,10 @@ fr:
       past: Terminées
       #original_hash: 081ae3f
       custom: Personnalisé
+      #original_hash: 73cf180
+      by_announcement: Par date d'annonce
+      #original_hash: b3946b2
+      sort_by_announcement: Trier par date d'annonce
       #original_hash: 3f66052
       from_date: Du
       #original_hash: ae79ea1
@@ -2331,6 +2713,10 @@ fr:
         upcoming: Compétitions à venir
         #original_hash: 8b57693
         custom: Compétitions pour l'intervalle sélectionné
+        #original_hash: 0933739
+        by_announcement: >-
+          Compétitions triées par date d'annonce, en commençant par la plus
+          récente
       #original_hash: 6684214
       no_access: Vous n'avez pas accès à cette page !
       tooltips:
@@ -2343,6 +2729,8 @@ fr:
           posted: Résultats en ligne !
           #original_hash: 89bcc37
           starts_in: 'Démarre dans %{days}'
+          #original_hash: 97b061a
+          announced_on: 'Annoncée le %{announcement_date}'
         #original_hash: ccd2db9
         search: Nom ou ville
         #original_hash: 3bc8082
@@ -2399,17 +2787,14 @@ fr:
       venue_details_html: >-
         Détails concernant la salle (Par exemple, au première étage au fond à
         gauche, suivez les panneaux). %{md}
-      #original_hash: b727e58
+      #original_hash: 447814d
       contact_html: >-
         Information de contact (optionnel). Si vous ne remplissez pas ce champ,
-        les adresses email des organisateurs seront affichées publiquement.
-        %{md}. Exemple : [Texte à afficher](mailto:un@email.com)
+        les demandes de contact seront envoyées à travers un formulaire ne
+        révélant pas les adresses email des organisateurs. %{md}. Exemple :
+        [Texte à afficher](mailto:un@email.com)
       #original_hash: c5497bc
       events: Épreuves
-      #original_hash: 09b819f
-      deprecated_events: >-
-        Cette compétition a des épreuves qui ne sont plus officielles, on ne
-        peut plus les éditer.
       #original_hash: cafc153
       public_and_locked_html: >-
         Cette compétition est visible publiquement et son édition est
@@ -2423,10 +2808,11 @@ fr:
       is_visible: >-
         Cette compétition est visible publiquement, chaque modification que vous
         ferez sera visible par le public !
-      #original_hash: f99b3f7
+      #original_hash: 1039850
       pending_confirmation_html: >-
-        Remplissez tous les champs et cliquez sur Confirmer quand vous êtes près
-        à ce que l'%{contact} approuve cette compétition.
+        Remplissez tous les champs et demandez à votre Délégué(e) de cliquer sur
+        Confirmer quand vous êtes près à ce que %{contact} approuve cette
+        compétition.
       #original_hash: 8966fd0
       submit_create_value: Créer la compétition
       #original_hash: 40b0dfd
@@ -2493,6 +2879,10 @@ fr:
       span_too_many_days: 'La compétition ne peut pas durer plus de %{max_days} jours.'
       #original_hash: cdcd288
       invalid_currency_code: Le code de monnaie sélectionnée est invalid
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: >-
+        doit avoir une condition de qualification pour tous les tours qui ne
+        sont pas une finale.
     new:
       #original_hash: 1208df7
       create_competition: Créer une compétition
@@ -2558,10 +2948,28 @@ fr:
       competitors: Compétiteurs
     #original_hash: 06b01c4
     announcements: Annonces
-    #original_hash: 5b9523f
+    #original_hash: a2b80b0
+    post_announcement: Annoncer la compétition
+    #original_hash: b462eac
+    announced_by_html: 'Annoncée par %{announcer_name} le %{date_time}'
+    #original_hash: 375e17f
+    cancel: Annuler la compétition
+    #original_hash: 7628a51
+    uncancel: Restaurer la compétition
+    #original_hash: 9122a6c
+    cancelled_by_html: 'Annulée par %{name} le %{date_time}'
+    #original_hash: 25e68c3
+    cancel_confirm: Êtes vous sûr de vouloir annuler cette compétition ?
+    #original_hash: 9a42672
     upload_results: Publier les résultats
-    #original_hash: 47dfd90
-    post_announcement: Poster l'annonce de la compétition
+    #original_hash: 01de5ee
+    post_results: Poster les résultats
+    #original_hash: b6513f1
+    results_posted_by_html: 'Postés par %{poster_name} le %{date_time}'
+    #original_hash: a6b5efe
+    cancel_mistake: Vous avez fait une erreur ?
+    #original_hash: 0fb43d5
+    note_before_cancel: 'Note : seules les compétitions confirmées peuvent être annulées.'
     show:
       #original_hash: b0fe391
       general_info: Informations générales
@@ -2591,10 +2999,10 @@ fr:
         cumulative_across_rounds_html: >-
           Une %{cumulative_time_limit} peut être imposée sur un ensemble de
           tours (voir la %{guideline_link}).
-        #original_hash: e4e48c6
+        #original_hash: e8d17df
         cutoff_html: >-
-          Le score à atteindre pour passer à la deuxième phase d'un tour combiné
-          (voir la %{regulation_link}).
+          Le score à atteindre pour passer à la deuxième phase d'un tour avec
+          cutoff (voir la %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
           Le format décrit la manière de déterminer le classement des
@@ -2733,65 +3141,103 @@ fr:
     rankings:
       #original_hash: f5fe73c
       title: Classements
-      form_elements:
-        #original_hash: ad8919a
-        event: Épreuve
-        #original_hash: 0f21717
-        region: Région
-        type_selector:
-          #original_hash: 3deb745
-          type: Type de résultat
-          #original_hash: dd11868
-          single: Unique
-          #original_hash: 15f86c0
-          average: Moyenne
-        years_selector:
-          #original_hash: 96f997b
-          years: Années
-          #original_hash: 0977c76
-          all_years: Toutes
-          #original_hash: 8737f09
-          only: Seulement
-          #original_hash: b3c0fe7
-          only_html: 'Seulement %{year}'
-          #original_hash: 96bdb66
-          until: Jusqu'à
-          #original_hash: fa23930
-          until_html: 'Jusqu''à %{year}'
-        show_selector:
-          #original_hash: d97d1ee
-          show: Afficher
-          #original_hash: f3cf96e
-          persons: Personnes
-          #original_hash: 16d3376
-          persons_html: '%{quantity} personnes'
-          #original_hash: 612e12d
-          results: Résultats
-          #original_hash: f3baa4a
-          results_html: '%{quantity} résultats'
-          #original_hash: d46d2ee
-          by_region: Par région
-      table_elements:
-        #original_hash: 709a232
-        name: Nom
-        #original_hash: 5faa59d
-        result: Résultat
-        #original_hash: e0f64f7
-        citizen_of: Nationalité
-        #original_hash: 1917f4f
-        competition: Compétition
-        #original_hash: e7f6fc5
-        solves: Résolutions
-        #original_hash: 0f21717
-        region: Région
-        #original_hash: 70c07ec
-        world: Monde
       #original_hash: 65310e5
       unknown_type: 'Type non reconnu, doit être soit "single" soit "average"'
       #original_hash: 01e188f
       unknown_show: >-
         Paramètre show non reconnu, doit être soit "N persons", "N results", ou
         "by region"
+    records:
+      #original_hash: e51c552
+      title: Records
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: Épreuve
+        #original_hash: 3e83afa
+        all_events: Toutes les épreuves
+      #original_hash: 0f21717
+      region: Région
+      type_selector:
+        #original_hash: 3deb745
+        type: Type
+        #original_hash: dd11868
+        single: Meilleur
+        #original_hash: 15f86c0
+        average: Moyenne
+      years_selector:
+        #original_hash: 96f997b
+        years: Années
+        #original_hash: 0977c76
+        all_years: Toutes les années
+        #original_hash: 8737f09
+        only: Seulement
+        #original_hash: b3c0fe7
+        only_html: 'Seulement %{year}'
+        #original_hash: 96bdb66
+        until: Jusqu'à
+        #original_hash: fa23930
+        until_html: 'Jusqu''à %{year}'
+      show_selector:
+        #original_hash: d97d1ee
+        show: Afficher
+        #original_hash: f3cf96e
+        persons: Personnes
+        #original_hash: 16d3376
+        persons_html: '%{quantity} personnes'
+        #original_hash: 612e12d
+        results: Résultats
+        #original_hash: f3baa4a
+        results_html: '%{quantity} résultats'
+        #original_hash: d46d2ee
+        by_region: Par région
+        #original_hash: c0dcb86
+        mixed: Tous
+        #original_hash: 5ee371a
+        slim: Résumé
+        #original_hash: 8ccaae8
+        separate: Séparément
+        #original_hash: 90ccd64
+        history: Historique
+        #original_hash: e58bcf8
+        mixed_history: Historique par date
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: Genre
+        #original_hash: 6a72085
+        gender_all: Tous
+        #original_hash: 3f3a489
+        male: Homme
+        #original_hash: b7c17e9
+        female: Femme
+    table_elements:
+      #original_hash: 709a232
+      name: Nom
+      #original_hash: 5faa59d
+      result: Résultat
+      #original_hash: e0f64f7
+      citizen_of: Pays
+      #original_hash: 1917f4f
+      competition: Compétition
+      #original_hash: e7f6fc5
+      solves: Résultats
+      #original_hash: 0f21717
+      region: Région
+      #original_hash: 70c07ec
+      world: Monde
+      type_options:
+        #original_hash: 3deb745
+        type: Type
+        #original_hash: dd11868
+        single: Meilleur
+        #original_hash: 15f86c0
+        average: Moyenne
+      #original_hash: ad8919a
+      event: Épreuve
+      #original_hash: dcf8b56
+      date_circa: Date circa
+      #original_hash: 1c54132
+      record: Record
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Associez votre ID WCA à votre compte !
@@ -2902,11 +3348,12 @@ fr:
       description: >-
         Utilisez ce formulaire si votre date de naissance enregistrée dans notre
         base de données est différente de la vraie.
-      #original_hash: 563d056
+      #original_hash: 0ac13b9
       important_message_html: >-
         <span class="text-danger">IMPORTANT</span> : joignez une image d'un
         <u>document officiel</u> (carte d'identité, permis de conduire,
-        passeport...) montrant votre nom ET votre date de naissance.
+        passeport...) montrant votre nom ET votre date de naissance ; si vous le
+        souhaitez vous pouvez cacher toute autre information personnelle.
       #original_hash: 19c17ec
       submit: Demander le changement
     messages:
@@ -3174,7 +3621,7 @@ fr:
     spirit_footer: Esprit de la WCA
     #original_hash: c1781ee
     our_goals_title: Nos objectifs
-    #original_hash: 1ca8ac4
+    #original_hash: caf6bf2
     our_goals_content_html: >-
       <p>La World Cube Association veut apporter l'opportunité aux personnes à
       travers le monde de faire partie d'une communauté et de l'aider à la faire
@@ -3183,7 +3630,10 @@ fr:
       compétition et au sein de notre communauté peut aider les jeunes personnes
       impliquées à grandir, et que l'introduction d'événements autour de nos
       casse-têtes dans de nouveaux groupes de personnes ne peut qu'améliorer les
-      forces de notre communauté.</p>
+      forces de notre communauté. Un document contenant la vision et la
+      stratégie du Bureau pour le futur de la WCA peut être consulté <a
+      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">ici</a>
+      (en anglais).</p>
     #original_hash: f64ccc7
     whats_next_title: Le futur pour la WCA ?
     #original_hash: a08c67f
@@ -3408,22 +3858,25 @@ fr:
       probation:
         #original_hash: 1dd6e3b
         name: Délégués en Probation
-      #original_hash: 3d5b64b
+      #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>Délégués WCA</strong> est un rôle défini dans les statuts de
         la WCA et décrit dans le Règlement WCA. Le devoir principal d'un Délégué
         est de superviser les compétitions au nom de la WCA. Le Délégué WCA est
         responsable de s'assurer que les compétitions WCA se déroulent selon la
         mission, le règlement, et l'esprit de la WCA. La WCA distingue les
-        statuts suivants : <strong>Délégués WCA Senior</strong>,
-        <strong>Délégués WCA</strong>, et <strong>Candidats Délégués
-        WCA</strong> %{see_link}.</p><p>En plus des devoirs d'un Délégué WCA, un
-        Délégué WCA Senior est responsable de la gestion des Délégués dans sa
-        zone, et peut également être contacté par la communauté pour des
+        statuts suivants : <strong>Délégués Senior</strong>, <strong>Délégués
+        Régionaux</strong>, <strong>Délégués</strong>, <strong>Délégués
+        Junior</strong>, et <strong>Délégué Stagiaire</strong>
+        %{see_link}.</p><p>En plus des devoirs d'un Délégué WCA, un Délégué
+        Senior ou un Délégué régional est responsable de la gestion des Délégués
+        dans sa zone, et peut également être contacté par la communauté pour des
         affaires régionales.</p><p>Les nouveaux Délégués sont d'abord listés en
-        tant que Candidats Délégués WCA, et doivent montrer qu'ils sont capables
-        de gérer des compétitions avec succès avant d'être listés comme Délégués
-        WCA.</p>
+        tant que Délégués Junior, et doivent montrer qu'ils sont capables de
+        gérer des compétitions avec succès avant d'être listés comme Délégués
+        WCA.</p> <p>Les Délégués Stagiaires sont en formation pour devenir
+        Délégué WCA and ne peuvent superviser que des compétitions où au moins
+        une personne avec le statut de Délégué WCA est présente.</p>
       #original_hash: 27d18ac
       see_link_html: '(voir %{link})'
       #original_hash: 5b01fcc
@@ -3446,6 +3899,19 @@ fr:
     policies: Politiques de la WCA
     #original_hash: 91ac873
     codeofethics: Code d'Éthique
+    #original_hash: 2643980
+    codeofconduct: Code de Conduite
+  education:
+    #original_hash: 41701c2
+    title: Documents Éducatifs de la WCA
+    #original_hash: aa562a7
+    description: >-
+      Le WQAC et la WMT ont publié plusieurs documents pour la communauté, vous
+      pouvez les télécharger ci dessous.
+    #original_hash: d0a3812
+    competitor_tutorial: Tutoriel pour les compétitrices et compétiteurs
+    #original_hash: 815938f
+    competition_material: 'Matériel pour les compétitions (certificats, cache-cubes, ...)'
   delegates_page:
     #original_hash: d8fd3e4
     title: Délégués WCA
@@ -3658,36 +4124,121 @@ fr:
         Ce Conseil est responsable de créer et maintenir une communication
         bilatérale entre la communauté de la WCA et le Staff de la WCA.
   score_tools:
-    #original_hash: ea9d41d
-    title: Outils WCA pour la saisie des résultats
-    paragraphs:
-      #original_hash: 305f7f8
-      '1': >-
-        La WCA recommande fortement l'utilisation de <a
-        href="https://live.worldcubeassociation.org">WCA Live</a> avant et
-        pendant la compétition. WCA Live est une plateforme permettant la
-        gestion et le partage de résultats en ligne et en direct.
-      #original_hash: 0867b38
-      '2': >-
-        Les résultats et mélanges devraient être analysés et vérifiés avant
-        d'être envoyés à l'équipe des résultats de la WCA. Vous pouvez utiliser
-        <a href="https://viroulep.github.io/scrambles-matcher/">Scrambles
-        Matcher</a>, un programme Open Source créé par Philippe Virouleau.
-      #original_hash: 975e59b
-      '3': >-
-        La dernière version de la feuille de résultats de la WCA peut être
-        téléchargée ici :<br /><a href="/files/results.xls"
-        target="_blank">Feuille de résultats de la WCA</a>.
-      #original_hash: c576675
-      '4': >-
-        Vous pourriez également vouloir utiliser <a
-        href="https://groupifier.jonatanklosko.com">Groupifier</a> pour préparer
-        les groupes de compétiteurs pour une compétition. C'est un outil dont le
-        but est de faire exactement ça pour vous. Parmi les fonctionnalités il y
-        a : grouper les compétiteurs par classement, assigner des tâches (juger,
-        mélanger), décider combien de mélanges sont nécessaires, générer des
-        feuilles de scores, des cartes individuelles, et des résumés des
-        groupes. C'est un projet Open Source créé par Jonatan Kłosko.
+    #original_hash: 4fc2133
+    title: Outils logiciels pour les compétitions WCA
+    #original_hash: 6d2fe37
+    wca_icon_text: Développés et maintenus par la WST
+    intro:
+      #original_hash: 0c5fab5
+      desc: >-
+        Cette page est une liste non exhaustive des outils connus et utilisés
+        lors de l'organisation de compétitions WCA.
+      #original_hash: 479b542
+      disclaimer: >-
+        Tous les outils sur cette page ne sont pas maintenus par la WST : c'est
+        tout à fait normal ! Nous n'avons pas les moyens humains de gérer et
+        maintenir tous les logiciels existants liés à la WCA :)
+      #original_hash: 80f97b9
+      used: >-
+        Tous les logiciels sur cette liste ont été utilisés lors de compétitions
+        WCA, et s'intègre avec le site internet de la WCA : ils peuvent vous
+        permettre de vous connecter avec votre compte WCA afin d'importer (et
+        parfois modifier) les informations de vos compétitions à venir. Pour
+        chacun d'entre eux, les personnes en charge de la maintenance seront
+        clairement indiquées.
+    before:
+      #original_hash: 9850344
+      title: Avant la compétition
+      #original_hash: 576e2f4
+      desc: >-
+        La gestion des inscriptions des compétiteurs peut être faite directement
+        sur le site de la WCA. Étant donné que la gestion des groupes et des
+        bénévoles peut prendre du temps, vous pourriez vouloir utiliser l'un des
+        outils ci-dessous pour vous aider.
+    during:
+      #original_hash: 9934200
+      title: Pendant la compétition
+      #original_hash: 2b0a6f6
+      desc: >-
+        Ici sont regroupés les outils permettant de gérer les résultats de la
+        compétition pendant qu'elle a lieu.
+    after:
+      #original_hash: d81b949
+      title: Après la compétition
+      #original_hash: b898460
+      desc: >-
+        Bien que la validation des résultats ait lieu directement via le site
+        internet, vous aurez besoin d'un outil pour associer les mélanges
+        générés par TNoodle aux résultats à soumettre.
+    tools:
+      age:
+        #original_hash: 4aaae5b
+        title: AGE
+        #original_hash: 2e4832d
+        description: >-
+          Outil pour générer et éditer les groupes et l'affectation des tâches
+          lors des compétitions WCA
+      certificates:
+        #original_hash: b3e4eb0
+        title: Certificats
+        #original_hash: f1a0731
+        description: >-
+          Imprimer les certificats pour les compétitions WCA qui utilisent WCA
+          Live
+      groupifier:
+        #original_hash: 8f55355
+        title: Groupifier
+        #original_hash: 24d4736
+        description: >-
+          Outil permettant aux organisateurs de compétition WCA de gérer les
+          tâches et les groupes. Les fonctionnalités principales sont : tri des
+          compétiteurs par classement, affectation des tâches (juges,
+          mélangeurs), choix du nombre de mélanges nécessaire, génération des
+          feuilles de score, planning personnel, et résumé général...
+          Rendez-vous sur le site pour le reste !
+      scorecards:
+        #original_hash: aa1b64d
+        title: Feuilles de score
+        #original_hash: 2b8e373
+        description: >-
+          Imprimer des feuilles de score pour les compétitions WCA qui utilisent
+          WCA Live
+      tnoodle:
+        #original_hash: ba336a1
+        title: TNoodle (Mélanges)
+        #original_hash: 0a38b22
+        description: >-
+          TNoodle est le programme officiel pour générer les mélanges utilisés
+          pendant les compétitions WCA. Il est principalement utilisé par les
+          Délégués WCA avant les compétitions, mais son interface utilisateur
+          permet à n'importe qui de générer des mélanges pour toutes les
+          épreuves WCA.
+      live:
+        #original_hash: c66444f
+        title: WCA Live
+        #original_hash: f122015
+        description: >-
+          Plateforme pour gérer les compétitions WCA en direct, et partager
+          leurs résultats avec le monde entier.
+      nightmare:
+        #original_hash: eebde3b
+        title: Feuille de calcul pour les résultats
+        #original_hash: 466f4c2
+        description: >-
+          Parfois tout ne tourne pas rond... Si vous n'avez pas d'accès à
+          internet et que vous n'avez pas de solution locale, vous devrez
+          utiliser la bonne vieille feuille de calcul.
+      matcher:
+        #original_hash: cc59bc9
+        title: Scrambles Matcher
+        #original_hash: a352bd1
+        description: >-
+          Il peut être utilisé pour faire correspondre les mélanges générés par
+          TNoodle aux résultats de la compétition. Importez les résultats depuis
+          le site internet de la WCA (si vous utilisez WCA Live), une feuille de
+          calcul, ou un fichier WCIF. Importez les mélanges depuis un ou
+          plusieurs json fournis par TNoodle. Exportez les résultats au format
+          attendu pour la soumission sur le site de la WCA.
   logo:
     #original_hash: c72c969
     title: Logo de la WCA
@@ -3891,6 +4442,12 @@ fr:
         Le Règlement WCA est complémenté par les <a
         href="/regulations/guidelines.html">Recommandations WCA</a>, qui
         contient des explications et clarifications additionnelles.
+      #original_hash: c8e1783
+      content3_html: >-
+        Les décisions importantes à propos des incidents qui surviennent aux
+        compétitions, et qui ont été validées par le Comité Réglementaire de la
+        WCA, peuvent être consultés dans le <a href="/incidents">journal des
+        incidents</a>.
     panel2:
       #original_hash: 8ad8302
       title: Traductions
@@ -4203,3 +4760,112 @@ fr:
       confirm_accept: Êtes-vous sûr(e) de vouloir accepter ce media ?
       #original_hash: 5301648
       edit: Éditer
+  media_and_instagram:
+    #original_hash: 1e9793e
+    page_title: Soumission de media et de contenu Instagram
+    general_media_submission:
+      #original_hash: 2b4c8c8
+      title: Soumission de media généraux
+      #original_hash: 670a1a8
+      body_html: >-
+        La WCA partage des articles et des images de compétitions qui ont été
+        fournis par la communauté sur notre <a href="/media">page media</a>. Si
+        vous avez quelque chose que vous aimeriez partager, merci de compléter
+        <a href="/media/new">ce formulaire</a> !
+    instagram_submission:
+      #original_hash: e01c612
+      title: Soumission Instagram
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        Vous l'avez sans doute remarqué, la WCA dispose d'un compte <a
+        href="https://www.instagram.com/thewcaofficial/">Instagram actif</a> !
+        Pour refléter au mieux la communauté dans son ensemble, nous postons du
+        contenu qui nous est soumis par les cubeurs du monde entier.
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        Si vous avez des photos ou vidéos de haute qualité que vous souhaiteriez
+        que l'on partage, merci de cliquer sur le bouton ci-dessous et de
+        compléter le formulaire ! Afin de pouvoir poster votre contenu, vous
+        devez en être propriétaire et donner l'autorisation à la WCA de le
+        poster. Compte tenu du nombre très élevé de soumissions que nous
+        recevons nous ne pouvons pas toutes les poster ; voici quelques conseils
+        afin de maximiser vos chances :
+      #original_hash: cf5c955
+      photo_quality: >-
+        Assurez vous que la qualité de la photo ou de la vidéo est bonne. Elle
+        n'a pas besoin d'être de qualité professionnelle, mais elle ne doit pas
+        décourager de vouloir regarder le contenu.
+      #original_hash: 0742378
+      photo_interest: >-
+        Essayez de rendre votre contenu intéressant pour une audience large. Le
+        contenu qui n'est pertinent que pour certaines personnes n'a pas sa
+        place ici.
+      #original_hash: 497bc27
+      wca_related: >-
+        Envoyez des photos et vidéos qui ont un lien avec la WCA, puisque c'est
+        tout le sujet de notre compte. On adore voir des cubeurs s'amuser !
+      #original_hash: af882f2
+      submit_instagram_content: Soumettre le contenu Instagram
+    instagram_hosting:
+      #original_hash: 5156783
+      title: Hébergement Instagram
+      #original_hash: 541106b
+      paragraph1_html: >-
+        Parfois nous acceptons que certains membres de la communauté puisse
+        héberger les stories de l'Instagram officiel de la WCA concernant une
+        compétition à laquelle ils sont présents ! Si vous êtes intéressé, merci
+        de remplir le formulaire ci-dessous. L'Équipe Communication de la WCA
+        vous contactera une fois que toutes les informations seront envoyées si
+        vous avez été approuvé. Si vous avez des questions, merci de <a
+        href="https://www.worldcubeassociation.org/contact/website">nous
+        contacter</a>.
+      #original_hash: aca6c32
+      paragraph2: >-
+        Notre but est de partager un peu de point de vue personnel de chaque
+        cubeur et chaque compétition. Cela n'est pas supposé représenter une
+        grosse charge sur la durée de la compétition, et nous souhaitons bien
+        sûr avant tout que vous puissiez profiter de la compétition.
+      #original_hash: af023ed
+      paragraph3: 'Le rôle d''un hôte peut être résumé comme suit :'
+      #original_hash: 21efafe
+      short_intro: 'Faire une présentation rapide, parlez de vous et de la compétition'
+      #original_hash: a053b5a
+      venue_feel: >-
+        Filmez quelques vidéos courtes pour avoir un aperçu de l'ambiance de la
+        salle et des personnes, cela peut par exemple être une vue de la zone de
+        compétition et du public
+      #original_hash: d17fb2f
+      people_solving: >-
+        Essayez de filmez quelques scènes de personnes en cours de résolution
+        (de préférence des personnes à l'aise dans leur épreuve principale)
+      #original_hash: 76d2358
+      mini_interviews: >-
+        Vous pouvez essayer de faire des interviews courtes de personnes
+        (organisateurs, délégué(e)s, etc...) décrivant leur ressenti par rapport
+        à la compétition
+      #original_hash: 6003b20
+      pictures_too: >-
+        Vous pouvez aussi envoyer des photos, nous n'acceptons pas seulement les
+        vidéos
+      #original_hash: 8813619
+      paragraph4: >-
+        Notre communications durant le weekend se passe typiquement à travers un
+        groupe WhatsApp. Merci de vous assurer que vous êtes à l'aise avec cette
+        plateforme, dans le cas contraire merci de nous l'indiquer afin que nous
+        puissions nous arranger autrement.
+      #original_hash: 38191c1
+      apply_to_host: Soumettre ma candidature
+    other_suggestions:
+      #original_hash: 730873b
+      title: D'autres suggestions ?
+      #original_hash: aa7ab5c
+      body_html: >-
+        Vous avez d'autres suggestions pour notre Instagram ou nos autres
+        réseaux sociaux ?<a
+        href="https://www.worldcubeassociation.org/contact/website">Dites le
+        nous</a> !
+  footer:
+    #original_hash: cf01481
+    privacy: Confidentialité
+    #original_hash: 4c4a2e8
+    disclaimer: Avertissement
