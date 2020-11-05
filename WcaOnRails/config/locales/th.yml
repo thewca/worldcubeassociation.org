@@ -1174,7 +1174,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1434,11 +1434,13 @@ th:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
     #original_hash: d8f3ae6
-    title: ยินดีต้อนรับเข้าสู้สมาคมลูกบาศก์โลก
+    title: ยินดีต้อนรับเข้าสู่สมาคมลูกบาศก์โลก
     #original_hash: d133986
     latest_news: ข่าวล่าสุด
     #original_hash: 06b01c4
     announcements: ประกาศ
+    #original_hash: f0cbb3e
+    see_all_announcements: ดูประกาศทั้งหมด
     about_us:
       #original_hash: 3ffb811
       title: เกี่ยวกับเรา
@@ -2306,6 +2308,8 @@ th:
       organizer_plural:
         zero: ผู้จัดการแข่งขัน
         other: ผู้จัดการแข่งขัน
+      #original_hash: 53a9522
+      organization_team: ผู้จัดการแข่งขัน
       #original_hash: 6afa61e
       delegate:
         zero: WCA Delegate
@@ -2549,7 +2553,7 @@ th:
         l'Industrie](http://www.cite-sciences.fr)
       #original_hash: 2651d1a
       venue_details_html: 'รายละเอียดเกี่ยวกับสถานที่ (เช่น ชั้นที่ 1 ด้านหลัง ตามป้าย) %{md}'
-      #original_hash: b727e58
+      #original_hash: 447814d
       contact_html: >-
         ทางเลือกการติดต่อ หากคุณไม่ใส่ email
         ของผู้จัดการแข่งขันจะถูกแสดงเป็นสาธารณะ %{md}. เช่น: [Text to
@@ -2940,6 +2944,15 @@ th:
         history: ประวัติ
         #original_hash: e58bcf8
         mixed_history: ประวัติแบบผสม
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: เพศ
+        #original_hash: 6a72085
+        gender_all: ทั้งหมด
+        #original_hash: 3f3a489
+        male: ชาย
+        #original_hash: b7c17e9
+        female: หญิง
     table_elements:
       #original_hash: 709a232
       name: ชื่อ
@@ -3565,6 +3578,8 @@ th:
     policies: WCA Policies
     #original_hash: 91ac873
     codeofethics: Code of Ethics
+    #original_hash: 2643980
+    codeofconduct: จรรยาบรรณ
   education:
     #original_hash: 41701c2
     title: เอกสารการศึกษาของ WCA
@@ -4420,3 +4435,8 @@ th:
         คุณมีคำแนะนำอื่น ๆ สำหรับ Instagram หรือเนื้อหาโซเชียลมีเดียอื่น ๆ
         หรือไม่? <a
         href="https://www.worldcubeassociation.org/contact/website">แจ้งให้เราทราบ</a>!
+  footer:
+    #original_hash: cf01481
+    privacy: ความเป็นส่วนตัว
+    #original_hash: 4c4a2e8
+    disclaimer: ข้อจำกัดความรับผิดชอบ
