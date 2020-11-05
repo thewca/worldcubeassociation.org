@@ -1,6 +1,8 @@
 dist: focal
 language: ruby
 os: linux
+services:
+  - mysql
 cache:
   directories:
     - $HOME/.phantomjs
