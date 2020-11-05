@@ -3123,6 +3123,15 @@ ru:
         history: История
         #original_hash: e58bcf8
         mixed_history: Смешанная история
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: Пол
+        #original_hash: 6a72085
+        gender_all: Все
+        #original_hash: 3f3a489
+        male: Мужской
+        #original_hash: b7c17e9
+        female: Женский
     table_elements:
       #original_hash: 709a232
       name: Имя
@@ -3733,7 +3742,7 @@ ru:
         с Миссией, Духом и Положениями WCA. Существуют <strong>Старшие
         Делегаты</strong>, <strong>Региональные Делегаты</strong>,
         <strong>Делегаты</strong>, <strong>Младшие Делегаты</strong> и
-        <strong>Делегаты-стажёры</strong>%{see_link}.</p> <p>Старшие Делегаты и
+        <strong>Делегаты-стажёры</strong> %{see_link}.</p> <p>Старшие Делегаты и
         Региональные Делегаты, помимо обязанностей обычного Делегата, ещё и
         управляют Делегатами в своём регионе, к ним также могут обращаться
         сообщества по региональным вопросам.</p> <p>Новые Делегаты становятся
@@ -3763,6 +3772,8 @@ ru:
     policies: WCA Политики
     #original_hash: 91ac873
     codeofethics: Кодекс этики
+    #original_hash: 2643980
+    codeofconduct: Кодекс поведения
   education:
     #original_hash: 41701c2
     title: Обучающие документы WCA
