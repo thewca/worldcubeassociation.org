@@ -68,7 +68,7 @@
     "stylelint": "^13.7.2",
     "stylelint-config-recommended-scss": "^4.2.0",
     "stylelint-scss": "^3.18.0",
-    "webpack-bundle-analyzer": "^3.9.0",
+    "webpack-bundle-analyzer": "^4.1.0",
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
