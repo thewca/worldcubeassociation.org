@@ -48,7 +48,7 @@
     "react-leaflet": "^2.8.0",
     "regenerator-runtime": "^0.13.5",
     "resolve-url-loader": "^3.1.2",
-    "sass-loader": "^10.0.4",
+    "sass-loader": "^10.0.5",
     "semantic-ui-react": "^2.0.1",
     "style-loader": "^2.0.0",
     "webpack": "^4.44.2",
