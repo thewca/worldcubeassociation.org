@@ -1929,9 +1929,10 @@ en:
     codeofconduct: "Code of Conduct"
   education:
     title: "WCA Educational Documents"
-    description: "The WQAC and WMT has published several documents for the community, you can download them below."
+    description: "The WQAC has published several documents for the community, you can download them below."
     competitor_tutorial: "Competitor tutorial"
-    competition_material: "Competition material (certificates, cube covers, ...)"
+    certificates: "WCT's certificate templates"
+    orga_guidelines: "Organizer guidelines"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
