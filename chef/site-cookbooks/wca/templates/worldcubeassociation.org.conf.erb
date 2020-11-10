@@ -355,7 +355,7 @@ server {
 
 <% if @rails_env != "development" %>
   # http://vladigleba.com/blog/2014/03/27/deploying-rails-apps-part-4-configuring-nginx/
-  location ^~ /assets/ {
+  location ~* /(assets|packs)/ {
     # From http://stackoverflow.com/a/5132440 (with tweaks by jfly)
     gzip_static on;
     gzip_vary on;

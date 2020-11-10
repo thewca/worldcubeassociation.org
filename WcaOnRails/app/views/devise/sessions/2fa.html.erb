@@ -1,0 +1,17 @@
+<div class="container">
+  <%= render layout: "devise/conversion_message", locals: { user: resource } do %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4><%= t('devise.sessions.new.2fa.verify') %></h4>
+      </div>
+      <div class="panel-body">
+        <%= render "devise/sessions/2fa_form", {
+          form_object: resource,
+          form_object_name: resource_name,
+          form_url: session_path(resource_name),
+          resource_params: resource_params,
+        } %>
+      </div>
+    </div>
+  <% end %>
+</div>

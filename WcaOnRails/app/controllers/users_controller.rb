@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:search, :select_nearby_delegate]
+  before_action :authenticate_user!, except: [:select_nearby_delegate]
+  before_action :check_recent_authentication!, only: [:enable_2fa, :disable_2fa, :regenerate_2fa_backup_codes]
+  before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa, :disable_2fa]
+
+  RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
   def self.WCA_TEAMS
     %w(wst wrt wdc wrc wct)
@@ -50,6 +54,78 @@ class UsersController < ApplicationController
     User.find_by_id(params[:id] || current_user.id)
   end
 
+  def enable_2fa
+    # NOTE: current_user is not nil as authenticate_user! is called first
+    params[:section] = "2fa"
+    was_enabled = current_user.otp_required_for_login
+    current_user.otp_required_for_login = true
+    current_user.otp_secret = User.generate_otp_secret
+    current_user.save!
+    if was_enabled
+      flash[:success] = I18n.t("devise.sessions.new.2fa.regenerated_secret")
+    else
+      flash[:success] = I18n.t("devise.sessions.new.2fa.enabled_success")
+    end
+    @user = current_user
+    render :edit
+  end
+
+  def disable_2fa
+    # NOTE: current_user is not nil as authenticate_user! is called first
+    disable_params = {
+      otp_required_for_login: false,
+      otp_secret: nil,
+    }
+    if current_user.update_attributes(disable_params)
+      flash[:success] = I18n.t("devise.sessions.new.2fa.disabled_success")
+      params[:section] = "2fa"
+    else
+      # Hopefully at some point we'll make it mandatory for admin-like
+      # accounts to have 2FA (like on github).
+      # NOTE: we reload the user to revert the assignment of disable_params above.
+      current_user.reload
+      flash[:danger] = I18n.t("devise.sessions.new.2fa.disabled_failed")
+      params[:section] = "general"
+    end
+    @user = current_user
+    render :edit
+  end
+
+  def regenerate_2fa_backup_codes
+    unless current_user.otp_required_for_login
+      return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.not_enabled") } }
+    end
+    codes = current_user.generate_otp_backup_codes!
+    current_user.save!
+    render json: { codes: codes }
+  end
+
+  def authenticate_user_for_sensitive_edit
+    action_params = params.require(:user).permit(:otp_attempt, :password)
+    # This methods store the current time in the "last_authenticated_at" session
+    # variable, if password matches, or if 2FA check matches.
+    on_success = -> do
+      flash[:success] = I18n.t("users.edit.sensitive.success")
+      session[:last_authenticated_at] = Time.now
+    end
+    on_failure = -> do
+      flash[:danger] = I18n.t("users.edit.sensitive.failure")
+    end
+    if current_user.two_factor_enabled?
+      if current_user.validate_and_consume_otp!(action_params[:otp_attempt]) ||
+         current_user.invalidate_otp_backup_code!(action_params[:otp_attempt])
+        on_success.call
+      else
+        on_failure.call
+      end
+    elsif current_user.valid_password?(action_params[:password])
+      on_success.call
+    else
+      on_failure.call
+    end
+    redirect_to edit_user_path(current_user)
+  end
+
   def edit
     params[:section] ||= "general"
 
@@ -86,9 +162,13 @@ class UsersController < ApplicationController
     @user.current_user = current_user
     return if redirect_if_cannot_edit_user(@user)
 
-    old_confirmation_sent_at = @user.confirmation_sent_at
     dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
-    if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
+    if dangerous_change
+      return unless check_recent_authentication!
+    end
+
+    old_confirmation_sent_at = @user.confirmation_sent_at
+    if @user.update_attributes(user_params)
       if @user.saved_change_to_delegate_status
         # TODO: See https://github.com/thewca/worldcubeassociation.org/issues/2969.
         DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(@user, current_user).deliver_now
@@ -118,6 +198,41 @@ class UsersController < ApplicationController
     end
   end
 
+  def sso_discourse
+    # This implements https://meta.discourse.org/t/official-single-sign-on-for-discourse-sso/13045
+    # (section "implementing SSO on your site")
+    # Note that we do validate emails (as in: users can't log in until they have
+    # validated their emails).
+
+    # Use the 'SingleSignOn' lib provided by Discourse. Our secret and URL is
+    # already configured there.
+    sso = SingleSignOn.parse(request.query_string)
+
+    # These are all the automated groups in Discourse (all teams, councils, and
+    # Delegates statuses).
+    all_groups = User.all_discourse_groups
+
+    # Get the teams/councils/Delegate status for user
+    user_groups = current_user.current_teams.select(&:official_or_council?).map(&:friendly_id)
+    user_groups << current_user.delegate_status if current_user.any_kind_of_delegate?
+    # Board is (expectedly) not included in "current_teams", so we have to add
+    # it manually.
+    user_groups << Team.board.friendly_id if current_user.board_member?
+
+    sso.external_id = current_user.id
+    sso.name = current_user.name
+    sso.email = current_user.email
+    sso.avatar_url = current_user.avatar_url
+    sso.moderator = current_user.wac_team?
+    sso.locale = current_user.locale
+    sso.locale_force_update = true
+    sso.add_groups = user_groups.join(",")
+    sso.remove_groups = (all_groups - user_groups).join(",")
+    sso.custom_fields["wca_id"] = current_user.wca_id || ""
+
+    redirect_to sso.to_url
+  end
+
   private def redirect_if_cannot_edit_user(user)
     unless current_user&.can_edit_user?(user)
       flash[:danger] = "You cannot edit this user"
@@ -136,5 +251,22 @@ class UsersController < ApplicationController
         user_params[:wca_id] = user_params[:wca_id].upcase
       end
     end
+  end
+
+  private def has_recent_authentication?
+    session[:last_authenticated_at] && session[:last_authenticated_at] > RECENT_AUTHENTICATION_DURATION.ago
+  end
+
+  private def set_recent_authentication!
+    @recently_authenticated = has_recent_authentication?
+  end
+
+  private def check_recent_authentication!
+    unless has_recent_authentication?
+      flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
+      redirect_to profile_edit_path(section: "2fa-check")
+      return false
+    end
+    true
   end
 end

@@ -30,16 +30,16 @@ table.table {
         cursor: pointer;
       }
       &::after {
-        font-family: FontAwesome;
-        content: $fa-var-sort;
+        font-family: Icons;
+        content: "\f0dc";
         margin-left: 5px;
       }
       &.asc::after {
-        content: $fa-var-sort-up;
+        content: "\f0de";
         color: $blue;
       }
       &.desc::after {
-        content: $fa-var-sort-down;
+        content: "\f0dd";
         color: $blue;
       }
     }
@@ -208,6 +208,9 @@ table.wca-results {
     &.round {
     }
     &.name {
+      max-width: 250px;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
     &.wca-id {
       vertical-align: middle;
@@ -379,6 +382,8 @@ textarea {
 .event-radio {
   .cubing-icon {
     font-size: 2em;
+    margin: 0;
+    width: auto;
   }
 
   label {
@@ -387,10 +392,10 @@ textarea {
   input[type="checkbox"],
   input[type="radio"] {
     display: none;
-    + span.cubing-icon {
+    + i.cubing-icon {
       color: #ccc;
     }
-    &:checked + span.cubing-icon {
+    &:checked + i.cubing-icon {
       color: black;
     }
   }

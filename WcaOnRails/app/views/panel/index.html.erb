@@ -7,9 +7,12 @@
 
   <ul>
     <%= documents_list("policies/internal") %>
+    <li>
+      <%= link_to("Staff crash course", "/edudoc/staff-crash-course/staff_crash_course.pdf") %>
+    </li>
   </ul>
 
-  <% if current_user&.can_view_delegate_crash_course? %>
+  <% if current_user&.can_view_delegate_matters? %>
     <h2>Delegates</h2>
 
     <ul>
@@ -25,6 +28,12 @@
       <li>
         <%= link_to "Gear Order Form", "https://docs.google.com/forms/d/e/1FAIpQLSfyOMy9TtOIeIz7N8_4hPXNA6ScKVIzi11BmLWVx0-ovQnsWQ/viewform?usp=sf_link" %>
       </li>
+      <li>
+        <%= link_to "Travel Reimbursement Form", "https://docs.google.com/forms/d/12tz2I_EeBORm14kQO6ZB5TOp321YbXkIXvrxUNIHxN0/viewform" %>
+      </li>
+      <li>
+        <%= link_to "Equipment Funding Form", "https://docs.google.com/forms/d/e/1FAIpQLSeglibvXYG6Z2CzIPbxu2LTpAuXkJPK-vi4GuOnBFx1756ufA/viewform" %>
+      </li>
     </ul>
   <% end %>
 
@@ -33,10 +42,10 @@
 
     <ul>
       <li>
-        <%= link_to "WCA Candidate Delegate Nomination form", "https://docs.google.com/forms/d/e/1FAIpQLSfji_fOKEKcqS1Fb9fpu3qsBx-O8LiSJu_fG0TU7DJnR9Yj8g/viewform" %>
+        <%= link_to "WCA Delegate Nomination form", "https://docs.google.com/forms/d/e/1FAIpQLSfji_fOKEKcqS1Fb9fpu3qsBx-O8LiSJu_fG0TU7DJnR9Yj8g/viewform" %>
       </li>
       <li>
-        <%= link_to "WCA Candidate Delegate Promotion form", "https://docs.google.com/forms/d/e/1FAIpQLScq0JIOq1-2PHJoty5IE_uln_1Uq26Isp4mr3bqpfXKELQoqQ/viewform" %>
+        <%= link_to "WCA Delegate Promotion form", "https://docs.google.com/forms/d/e/1FAIpQLScq0JIOq1-2PHJoty5IE_uln_1Uq26Isp4mr3bqpfXKELQoqQ/viewform" %>
       </li>
       <li>
         <%= link_to "WCA Delegate Demotion form", "https://docs.google.com/forms/d/e/1FAIpQLSf5BnccDL656ZPD3zl72Xgz7LmzLjFeTtjXKqvupo9Tn_VIRg/viewform" %>

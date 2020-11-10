@@ -3,6 +3,10 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  config.warden do |manager|
+    manager.default_strategies(scope: :user).unshift(:two_factor_authenticatable, :two_factor_backupable)
+  end
+
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
@@ -260,4 +264,21 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
+end
+
+# Add session validity token on first sign in and check it on every authenticated request.
+# This way updating user's validity token invalidates all the sessions at once.
+# Based on https://stackoverflow.com/a/29214116
+
+Warden::Manager.after_set_user except: :fetch do |user, warden, opts|
+  if user.session_validity_token.nil?
+    user.update_attribute(:session_validity_token, Devise.friendly_token)
+  end
+  warden.raw_session["validity_token"] = user.session_validity_token
+end
+
+Warden::Manager.after_fetch do |user, warden, opts|
+  unless user.session_validity_token == warden.raw_session["validity_token"]
+    warden.logout
+  end
 end

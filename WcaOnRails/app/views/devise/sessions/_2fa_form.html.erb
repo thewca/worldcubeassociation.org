@@ -1,0 +1,41 @@
+<% resource_params ||= {} %>
+<%= simple_form_for(form_object, as: form_object_name, url: form_url, html: { role: "form" }, method: :post) do |f| %>
+  <%= f.input :remember_me, as: :hidden, input_html: { value: resource_params.fetch(:remember_me, 0) } %>
+  <%= f.input :otp_attempt, autofocus: true, class: "form-control" %>
+  <%= f.submit t('devise.sessions.new.2fa.confirm'), class: "btn btn-primary", tabindex: "3" %>
+<% end %>
+<h3><%= t("devise.sessions.new.2fa.email_auth") %></h3>
+<p><%= t("devise.sessions.new.2fa.get_by_email_desc") %></p>
+<%= link_to(t("devise.sessions.new.2fa.get_by_email"), "#", class: "btn btn-primary", id: "request_2fa_email") %>
+<script>
+  function restoreButton() {
+    $("#request_2fa_email").toggleClass("disabled", false);
+  }
+
+  function handleServerResponse(response) {
+    response_json = response.responseJSON;
+    if (response_json.error) {
+      alert(response_json.error.message);
+      restoreButton();
+    } else if (response_json.status === "ok") {
+      alert("<%= t('devise.sessions.new.2fa.email_sent') %>");
+      setTimeout(restoreButton, 120000);
+    } else {
+      alert("<%= t('devise.sessions.new.2fa.errors.unknown') %>");
+      restoreButton();
+    }
+  }
+
+  $("#request_2fa_email").click(function(ev) {
+    ev.preventDefault();
+    $("#request_2fa_email").toggleClass("disabled", true);
+    window.wca.cancelPendingAjaxAndAjax('get-2fa-backup', {
+      url: '<%= users_generate_email_otp_path %>',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      complete: handleServerResponse,
+    });
+  });
+</script>

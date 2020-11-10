@@ -61,8 +61,6 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
-  # One can activate/test the fallback to English using:
-  config.i18n.fallbacks = [:en]
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
@@ -88,4 +86,9 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # Whitelist any IPs when we're in Docker (meaning local dev environment)
+  if File.file?('/proc/1/cgroup') && File.read('/proc/1/cgroup').include?('docker')
+    config.web_console.whitelisted_ips = %w(0.0.0.0/0 ::/0)
+  end
 end

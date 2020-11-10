@@ -56,7 +56,7 @@ if(!isset($_SESSION['anticsrf_key'])) {
 <p>After fixing your results, you must run these scripts to ensure that the changes are sound.</p>
 <ol>
     <li><a id="check-results" href="#" target="_blank">Check results</a> (needed once for each round to fix rankings and to check for consistency)</li>
-    <li><a id="check-rounds" href="#" target="_blank">Check rounds</a> (only needed if the round type was changed, e.g. "Final" &lt;-&gt; "Combined Final")</li>
+    <li><a id="check-rounds" href="#" target="_blank">Check rounds</a> (only needed if the round type was changed, e.g. "Final" &lt;-&gt; "Cutoff Final")</li>
     <li><a id="compute-aux-data" href="#" target="_blank">Compute auxiliary data</a> (only needed if best or average were affected and only once in the end when fixing multiple results)</li>
 </ol>
 

@@ -32,7 +32,7 @@ en:
     GW: "Guinea Bissau"
     HK: "Hong Kong"
     KN: "Saint Kitts and Nevis"
-    KP: "Democratic People’s Republic of Korea"
+    KP: "Democratic People's Republic of Korea"
     KR: "Republic of Korea"
     LC: "Saint Lucia"
     MK: "North Macedonia"
@@ -42,7 +42,6 @@ en:
     ST: "São Tomé and Príncipe"
     SZ: "Eswatini"
     TT: "Trinidad and Tobago"
-    VA: "Holy See"
     VC: "Saint Vincent and the Grenadines"
 
     XF: "Multiple Countries (Africa)"
@@ -108,13 +107,13 @@ en:
   rounds:
     "0":
       name: "Qualification round"
-      cellName: "Qualification"
+      cellName: "Qualification round"
     "1":
       name: "First round"
-      cellName: "First"
+      cellName: "First round"
     "2":
       name: "Second round"
-      cellName: "Second"
+      cellName: "Second round"
     "3":
       name: "Semi Final"
       cellName: "Semi Final"
@@ -122,28 +121,28 @@ en:
       name: "B Final"
       cellName: "B Final"
     "c":
-      name: "Combined Final"
-      cellName: "Combined Final"
+      name: "Final"
+      cellName: "Final"
     "d":
-      name: "Combined First round"
-      cellName: "Combined First"
+      name: "First round"
+      cellName: "First round"
     "e":
-      name: "Combined Second round"
-      cellName: "Combined Second"
+      name: "Second round"
+      cellName: "Second round"
     "f":
       name: "Final"
       cellName: "Final"
     "g":
-      name: "Combined Third round"
-      cellName: "Combined Third"
+      name: "Third round"
+      cellName: "Third round"
     "h":
-      name: "Combined qualification"
-      cellName: "Combined qualification"
+      name: "Qualification round"
+      cellName: "Qualification round"
   #context: attempt name
   attempts:
     attempt_name: "Attempt %{number}"
   round:
-    #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Combined First round"
+    #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Cutoff First round"
     name: "%{event_name} %{round_name}"
   #context: Words used to describe the requirement to advance to the next round
   advancement_condition:
@@ -160,7 +159,7 @@ en:
       time: "Best result < %{time} advances to next round"
       moves: "Best result < %{moves} moves advances to next round"
       points: "Best result > %{points} points advances to next round"
-  #context: Words used to describe combined round cutoffs
+  #context: Words used to describe cutoff round cutoffs
   cutoff:
     time:
       one: "%{count} attempt to get < %{time}"
@@ -189,6 +188,8 @@ en:
     single: "Single"
     average: "Average"
     solves: "Solves"
+    #context: Used as an introduction in emails
+    hello: "Hello %{name},"
     #context: Key used when we want to show a date, but the date is missing. For example, a competition that has been created, but has not had a start and end date assigned yet.
     date:
       no_date: "No date"
@@ -213,6 +214,11 @@ en:
     datetime_placeholder: "YYYY-MM-DD HH:MM"
     #context: the time format in the schedule table. Please set this to *exactly* "12h" to use am/pm time, or "24h" for 24 hours time (do not translate the 'h' or anything).
     time_format: "12h"
+    #context: used to phrase a result, e.g. 24.45 seconds, 25.66 moves
+    solve_time:
+      unit_seconds: "seconds"
+      unit_moves: "moves"
+
   #context: Key used in the OAuth part of the site (checkout the /oauth/applications page for more details)
   oauth:
     applications:
@@ -246,7 +252,6 @@ en:
         gender: "Gender"
         email: "Email"
         password: "Password"
-        current_password: "Current password"
         password_confirmation: "Re-enter password"
         remember_me: "Remember me"
         pending_avatar: "Upload new avatar"
@@ -254,11 +259,9 @@ en:
         results_notifications_enabled: "Email me when my results are posted."
         delegate_status: "Delegate status"
         region: "Region"
-        location_description: "Location description"
-        phone_number: "Phone number"
-        notes: "Notes"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         user_preferred_events: "Preferred events"
+        otp_attempt: "Enter your two-factor authentication code:"
       #context: a competition
       competition:
         id: "ID"
@@ -279,6 +282,7 @@ en:
         base_entry_fee_lowest_denomination: "Base registration fee"
         currency_code: "Currency code"
         delegate_ids: "WCA Delegate(s)"
+        trainee_delegate_ids: "WCA Trainee Delegate(s)"
         organizer_ids: "Organizer(s)"
         contact: "Contact"
         information: "Information"
@@ -405,7 +409,8 @@ en:
         f: "Female"
         o: "Other"
       delegate_status:
-        candidate_delegate: "Candidate Delegate"
+        trainee_delegate: "Trainee Delegate"
+        candidate_delegate: "Junior Delegate"
         delegate: "Delegate"
         senior_delegate: "Senior Delegate"
     person:
@@ -451,7 +456,6 @@ en:
         email: ""
         pending_avatar: "After uploading a new avatar, you will have to wait for the WCA Results Team to approve it."
         country_iso2: ""
-        current_password: ""
         delegate_status: ""
         dob_verification: ""
         gender: ""
@@ -463,10 +467,8 @@ en:
         results_notifications_enabled: ""
         unconfirmed_wca_id: ""
         wca_id: ""
-        location_description: ""
-        phone_number: ""
-        notes: ""
-        receive_delegate_reports: "If you are a Candidate Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
+        receive_delegate_reports: "If you are a Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
+        otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
       #context: for a competition
       competition:
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
@@ -474,6 +476,7 @@ en:
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
         delegate_ids: "WCA Delegates for the competition."
+        trainee_delegate_ids: "WCA Trainee Delegates for the competition."
         organizer_ids: "Competition organizers (they need an account to be listed here)."
         external_website: "The website of the competition. Must be a valid http(s) url."
         registration_open: "Note: Registration open and close are in UTC time"
@@ -523,7 +526,7 @@ en:
         your_email: ""
         wca_id: ""
         dob: "Your correct day of birth in the format YYYY-MM-DD"
-        document: "To prove your identity and your correct date of birth to us, you have to attach a picture of any legal document (identity card, driver license, student card, passport, birth certificate, ...) where your name and date of birth are visible and understandable for an English speaker (or contact your local WCA Delegate if you don't have such a document)."
+        document: "To prove your identity and your correct date of birth to us, you have to attach a picture of any legal document (identity card, driver license, student card, passport, birth certificate, ...) where your name and date of birth are visible and understandable for an English speaker (or contact your local WCA Delegate if you don't have such a document). On the identification we need at minimum your name and date of birth; feel free to blur-out/obfuscate any other personal data on the identification."
       #context: for a post
       post:
         body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
@@ -655,6 +658,59 @@ en:
     sessions:
       new:
         sign_in: "Sign in"
+        #context: used when handling two-factor authentication for a user
+        2fa:
+          verify: "To sign in, verify it's you"
+          confirm: "Confirm code"
+          regenerated_secret: "Successfully regenerated your two-factor authentication secret."
+          enabled_success: "Successfully enabled two-factor authentication."
+          email_auth: "Email authentication"
+          get_by_email: "Get a code by email"
+          get_by_email_desc: "If you can't access your device or access codes, you can also click the button below to get a one-time password by email. Copy and paste it in the above input to sign in."
+          email_sent: "You have been sent a code by email. The code is valid for 2 minutes. You may ask for a new code in 2 minutes."
+          errors:
+            cant_send_email: "You can't generate an email now"
+            invalid_otp: "Invalid two-factor code."
+            not_enabled: "Two-factor authentication not enabled"
+            unknown: "Unknown error when sending your email. Please contact the WST."
+          otp_email:
+            subject: "Your one-time password for the WCA"
+            2fa_attempt: "You are attempting to authenticate on the WCA website. You have two-factor authentication enabled and you just requested to be sent a one-time password by email. Please find it below:"
+            disclaimer: "If you did not request that authentication code, please contact the WST right away by replying to this email: you may have an open session somewhere or your password may be compromized."
+          name: "Two-Factor Authentication (2FA)"
+          support_desc_html: "The WCA website supports %{two_factor_link} using a one-time password:"
+          #context: describes the 2FA options
+          options:
+            app: "generated by a dedicated 2FA application on your smartphone (such as Authy or Google Authenticator for instance)."
+            recovery: "taken from the recovery codes generated when activating 2FA."
+            email: "sent to you by email when you log in."
+          #context: status is either "enabled" or "disabled"
+          status_html: "Two-Factor Authentication is %{status} for you."
+          enabled: "enabled"
+          disabled: "disabled"
+          enable: "Enable 2FA"
+          disable: "Disable 2FA"
+          reset: "Reset 2FA secret"
+          reset_if_needed: "If one of your devices has been compromised, or you want to revoke access from your devices, you can reset your two-factor authentication secret below:"
+          reset_warning: "You will need to reconfigure all your 2FA devices."
+          methods: "Two-factor methods"
+          methods_description: "You can use several methods to get a one-time password when signing in, they are described below."
+          dedicated_app: "Using a dedicated two-factor application"
+          dedicated_app_desc_html: "The WST recommend using %{authy} on your personal device(s) to obtain your one-time password when signing in.<br/>Other alternatives include %{google} and %{microsoft}."
+          scan_qrcode_html: "Scan the QR code below when prompted from your 2FA application (or click %{here} if you're on mobile)."
+          backup_codes: "Backup codes"
+          backup_codes_desc: "Backup codes can be used instead as one-time password in case you don't have access to your device with your two-factor authentication application. Each code can only be used once. Make sure to store them somewhere safe!"
+          no_backup_codes: "You have not generated backup codes yet. Click the button below to generate your backup codes."
+          regenerate_backup_codes: "You have generated some backup codes. If you already used or lost these codes, you can generate new ones using the button below. Beware that any existing backup codes will be invalidated if you do this."
+          generate_backup_codes: "Generate backup codes"
+          backup_codes_warning: "The backup codes will be displayed below. Make sure to write/save them right away: they are store encrypted in our database and can't be shown again later."
+          email_auth_desc: "You can ask for a one-time password by email when you attempt to sign in."
+          disable_section_title: "Disable two-factor"
+          disable_section_content: "The WST strongly advise you to not disable 2FA, but you can by clicking the button below. Please note that if you reactivate 2FA you will have to reconfigure your device(s)."
+          disabled_success: "Successfully disabled two-factor authentication."
+          disabled_failed: "Couldn't disable 2FA, please see errors below."
+      destroy_other:
+        success: "Successfully signed out of other devices."
     shared:
       links:
         sign_in: "Sign in"
@@ -706,8 +762,9 @@ en:
       delegates: "WCA Delegates"
       organizations: "Regional Organizations"
       faq: "Frequently Asked Questions"
+      forum: "Forum"
       teams: "Teams, Committees, and Councils"
-      tutorial: "Competition Tutorial"
+      education: "Education resources"
       contact: "Contact Information"
       tools: "Tools"
       logo: "Logo"
@@ -750,6 +807,43 @@ en:
       api: "API"
       manage_app: "Manage your applications"
       manage_auth_app: "Manage authorized applications"
+      media_submission: "Media Submission"
+  #context: Key used on the website homepage
+  homepage:
+    #context: the "Learn more" button
+    learn_more: "Learn more"
+    title: "Welcome to the World Cube Association"
+    latest_news: "Latest news"
+    announcements: "Announcements"
+    see_all_announcements: "See all announcements"
+    #context: "About us" box
+    about_us:
+      title: "About us"
+      text: "The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'."
+    #context: "Competitions" box
+    competitions:
+      title: "Competitions"
+      text_html: "Find out about competitions near you or competition results. At a competition now and want to see the results? Check out %{wca_live_link}!"
+    #context: "Records" box
+    records:
+      title: "Records"
+      text: "Check out the current and past records of all official WCA events."
+    #context: "FAQ" box
+    faq:
+      title: "FAQ"
+      text: "Take a look at our list of Frequently Asked Questions if you need help with anything. Many questions you have might have an answer there."
+    #context: "Contact" bottom box
+    contact:
+      title: "Contact"
+      text_html: "If you wish to contact us, you can do so through our contact form. If you have any questions about the different processes of the WCA, make sure to go through our %{faq_link}!"
+      #context: The text used when linking the FAQ: "make sure to go through our [FAQ]"
+      faq: "Frequently Asked Questions"
+      button: "Take me to the WCA Contact form"
+    #context: "Support the WCA" bottom box
+    support:
+      title: "Support the WCA"
+      text: "The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-run nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world."
+      button: "Learn more about how you can support the WCA"
   #context: Key used in the context of editing a user profile
   users:
     #context: when updating their locale (language)
@@ -766,6 +860,7 @@ en:
         confirm: "Your account is created and must be activated before you can use it. Please confirm your account through the link below: "
         confirmation_link: "Confirm my account."
         activate: "After activation you may log in to the website of the World Cube Association: "
+        login_form: "login form"
         addendum: "This email is generated automatically. If you didn't register an account on the website of the World Cube Association and received this message by mistake, please ignore and delete it."
         questions: "Do you have more questions? We will be happy to answer them! Feel free to send a mail to %{contact_link}."
       #context: user changing mail address and receiving reconfirmation mail
@@ -783,7 +878,15 @@ en:
       competition_announcement_email:
         header: "The WCAT announced %{competition}"
         announced: "The WCAT approved your competition and officially announced it to the public."
-        link: "Please follow the link to get to the competition announcement: "
+      id_claim_possibility_email:
+        header: "Please link your WCA ID with your account"
+        intro: "Dear Cuber"
+        information_html: >-
+          You registered for %{competition_link}.
+          We just uploaded results for this competition, and created WCA IDs for all first time competitors.
+          If you actually took part in this competition and it was your first one,
+          then you should claim your WCA ID (link it with your WCA account).
+          You can do this %{claim_link}.
       #context: notification to users after they were added to a competition as organizers
       organizer_addition_email:
         header: "You were added to %{competition} as an organizer"
@@ -798,6 +901,13 @@ en:
         information_html: "This is a reminder that registration for <a href=%{competition_url}>%{competition}</a> opens in less than 24 hours."
         not_accepted_html: "You have registered but your registration has not been accepted."
         more_info_html: "Please see the <a href=%{competition_url}>competition website</a> for more information and registration requirements."
+      #context: notification to users after a competition results have been posted
+      results_presence_email:
+        header: "The results of %{competition} are posted"
+        intro_html: "Your results at %{competition_link} have just been posted."
+        information_html: "Check out all your results %{result_link}."
+        more_info_html: "You can manage your email preferences %{preferences_link}."
+        regards_html: "Regards,<br/>The WCA Results Team on behalf of %{managers}."
     #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"
@@ -823,7 +933,7 @@ en:
       profile: "Profile"
       approve: "Approve"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
-      confirm_new_email: "Changing your email will require confirming the new email."
+      confirm_new_email: "Changing your email will require confirming the new email before being effective."
       pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
       pending_claim_confirmation_html: "This account is waiting for %{delegate} to confirm their claimed WCA ID %{wca_id}."
@@ -842,6 +952,8 @@ en:
       guidelines_confirmation: "I confirm that my avatar fulfills all avatar guidelines."
       confirm_guidelines: "Make sure to read avatar guidelines and submit a valid picture."
       save: "Save"
+      actions: "Actions"
+      sign_out_of_devices: "Sign out of other devices"
       remove_avatar: "Remove avatar"
       remove_avatar_confirm: "Are you sure you want to delete your avatar?"
       guidelines: "Guidelines"
@@ -850,22 +962,28 @@ en:
         '2': "The person shown must be you."
         '3': "If there is more than one person on the avatar, it should be clear who of them is you."
         '4': "Your head, but not necessarily the full face, should be visible."
-        '5': "The avatar must not include texts other than regular background texts."
+        '5': "The avatar should not include overlay texts or unnatural filters, including borders."
         '6': "The avatar must be submitted in correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         title: "Additional guidelines for Staff Members:"
         paragraphs:
           '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition."
           '2': "The avatar must be framed, cropped, angled, and lit, so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
           '3': "The thumbnail of the avatar is only a section of the avatar, and it will be used to represent your full avatar. The thumbnail must be adjusted, so you can be recognized from it alone, and it must contain your face."
-
+      #context: used on the tab where the user has to confirm its password/2fa to be able to edit their sensitive data
+      sensitive:
+        info: "This section enables you to edit sensitive data, to be able to do so please confirm your identity below."
+        success: "Successfully verified your identity"
+        failure: "Couldn't verify your identity"
+        confirm_proceed: "Confirm and proceed"
+        identity_error: "Cannot edit your data, please confirm your identity below before trying again."
     #context: when an error occured during the edition
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
       dob_incorrect_html: "does not match our database. If you're sure you're providing the correct date in the correct format (YYYY-MM-DD) please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
-      unique_html: "is already used by \"%{used_name}\" with %{used_email}. To free up the WCA ID, you can <a href=%{used_edit_path} target='_blank'>edit that account</a> and unassign the WCA ID."
+      unique_html: "is already used by %{used_name} with %{used_email}. To free up the WCA ID, you can <a href=\"%{used_edit_path}\" target=\"_blank\">edit that account</a> and unassign the WCA ID."
       dob_past: "must be in the past"
       dob_recent: "must be at least two years old"
       already_represented_country: "Cannot change the country to a country the person has already represented in the past."
@@ -1013,6 +1131,7 @@ en:
       #context: date is the registration creation date, eg: "2016-12-01 16:18:56 UTC"
       payment_requested_on: "Payment requested on: %{date}"
       total: "Total"
+      n_events: "Number of events"
     new_registration:
       title: "Register for %{comp}"
     registered_with_account_html: "This person registered with an account. You can edit their personal information %{here}."
@@ -1104,9 +1223,23 @@ en:
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
       create_success: "Successfully created new competition!"
+      not_announced: "This competition is visible to the public but hasn't been announced yet."
+      announced: "Successfully announced competition!"
+      cancelled: "This competition has been cancelled. Please checkout the information section for more details."
+      cancel_success: "Successfully cancelled competition!"
+      cancel_failure: "Cannot cancel the competition."
+      uncancel_success: "Successfully uncancelled competition!"
+      uncancel_failure: "Cannot uncancel the competition."
+      results_not_posted: "This competition's results are visible but haven't been posted yet."
+      results_already_posted: "The results have already been posted."
+      results_posted: "Successfully posted results!"
       results_preview_alert: "You are viewing results that have not been posted yet."
       upload_results: "This competition is over, we are working to upload the results as soon as possible!"
+      computing_auxiliary_data: "Please wait until auxiliary data is computed."
+      no_results: "There are no results."
+      no_main_event_results: "There are no results for the main event (%{event_name})."
       in_progress: "This competition is ongoing. Come back after %{date} to see the results!"
+      reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       tooltip_registered: "You are registered."
       tooltip_waiting_list: "You are currently on the waiting list."
       confirmed_visible: "This competition is confirmed and visible"
@@ -1140,10 +1273,13 @@ en:
       address: "Address"
       details: "Details"
       website: "Website"
+      #context: Used to display an explicit tag when the competition is cancelled
+      display_name: "[Cancelled] %{name}"
       #context: Pluralization of the "Organizer" label for a competition form
       organizer_plural:
         one: "Organizer"
         other: "Organizers"
+      organization_team: "Organization team"
       #context: Pluralization of the "Delegate" label for a competition form
       delegate:
         one: "WCA Delegate"
@@ -1151,6 +1287,7 @@ en:
       contact: "Contact"
       information: "Information"
       events: "Events"
+      main_event: "Main event"
       registration_requirements: "Registration requirements"
       create_wca_account_html: "Create a WCA account %{here} if you don't have one."
       claim_wca_id_html: "If this is not your first competition, associate your WCA ID to your WCA account %{here}."
@@ -1162,7 +1299,7 @@ en:
       no_entry_fee: "Registering for this competition is free."
       use_stripe_link_html: "The registration fee has to be paid through Stripe %{here} once registered."
       use_stripe_below_html: "The registration fee has to be paid through Stripe below once registered."
-      refund_policy_html: "If your registration is cancelled before %{limit_date_and_time} you will be refunded a %{refund_policy_percent} of your registration fee."
+      refund_policy_html: "If your registration is cancelled before %{limit_date_and_time} you will be refunded %{refund_policy_percent} of your registration fee."
       no_refunds: "Registration fees won't be refunded under any circumstance."
       on_the_spot_registration_fee_html: "On the spot registrations will be accepted with a base registration fee of %{on_the_spot_base_entry_fee}."
       on_the_spot_registration_free: "On the spot registrations will be accepted for free."
@@ -1178,6 +1315,28 @@ en:
         range_future_html: "Online registration will be open from %{start_date_and_time} to %{end_date_and_time}."
         range_ongoing_html: "Online registration opened %{start_date_and_time} and will close %{end_date_and_time}."
         range_past_html: "Online registration opened %{start_date_and_time} and closed %{end_date_and_time}."
+      highlights: "Highlights"
+      click_to_display_highlights_html: "Click %{link_here} to display the highlights of the competition."
+      hide_highlights: "Hide highlights."
+      result: "a result"
+      single: "a single solve"
+      average: "an average"
+      mean: "a mean"
+      result_sentence: "with %{a_win_by_word} of %{result}"
+      winner: "%{winner} won %{result_sentence} in the %{event_name} event."
+      first_runner_up: "%{first_runner_up} finished second (%{first_runner_up_result})"
+      and: "and"
+      second_runner_up: "%{second_runner_up} finished third (%{second_runner_up_result})."
+      records:
+        wr: "World records"
+        afr: "African records"
+        asr: "Asian records"
+        ocr: "Oceanian records"
+        er: "European records"
+        nar: "North American records"
+        sar: "South American records"
+      regional_single_record: "%{event_name} %{result} (single)"
+      regional_average_record: "%{event_name} %{result} (average)"
       bookmark: "Bookmark this competition"
       is_bookmarked: "You've bookmarked this competition"
       number_of_bookmarks: "Number of times bookmarked"
@@ -1196,6 +1355,8 @@ en:
       recent: "Recent"
       past: "Past"
       custom: "Custom"
+      by_announcement: "By announcement"
+      sort_by_announcement: "Sort by announcement"
       from_date: "From"
       to_date: "To"
       #context: selecting a specific year ('year' is a number)
@@ -1210,6 +1371,7 @@ en:
         recent: "Recent competitions (last %{count} days)"
         upcoming: "Upcoming competitions"
         custom: "Competitions in the selected period of time"
+        by_announcement: "Competitions sorted by announcement date, newest on top"
       no_access: "You don't have access to this page!"
       #context: tooltip displayed when hovering
       tooltips:
@@ -1219,6 +1381,7 @@ en:
           in_progress: "In progress!"
           posted: "Results are posted!"
           starts_in: "Starts in %{days}"
+          announced_on: "Announced on %{announcement_date}"
         #context: the "search" button
         search: "Name or city"
         #context: the "recent" button
@@ -1245,13 +1408,12 @@ en:
       name_reason_html: "A brief explanation of the competition name. The name must comply with the <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA Competition Requirements Policy</a>."
       venue_html: "The venue where the competition takes place. %{md}. For example: [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
       venue_details_html: "Details about the venue (e.g., On the first floor far in the back, follow the signs). %{md}"
-      contact_html: "Optional contact information. If you do not fill this in, organizer emails will be shown to the public. %{md}. Example: [Text to display](mailto:some@email.com)"
+      contact_html: "Optional contact information. If you do not fill this in, contact inquiries will be submitted through a form without revealing organizers' emails. %{md}. Example: [Text to display](mailto:some@email.com)"
       events: "Events"
-      deprecated_events: "This competition has events that are no longer official, we do not support editing them."
       public_and_locked_html: "This competition is publicly visible and locked for editing. If you need to make a change, please reply to the email thread where the competition was confirmed."
       confirmed_but_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{contact} to make it visible."
       is_visible: "This competition is publicly visible, any changes you make will show up to the public!"
-      pending_confirmation_html: "Fill in all the fields and click Confirm when you're ready for the %{contact} to approve this competition."
+      pending_confirmation_html: "Fill in all the fields and make your Delegate click 'Confirm' when you're ready for the %{contact} to approve this competition."
       submit_create_value: "Create Competition"
       submit_update_value: "Update Competition"
       submit_confirm_value: "Confirm"
@@ -1282,6 +1444,7 @@ en:
       refund_date_after_start: "Refund limit date cannot be after start date."
       span_too_many_days: "Competition cannot last more than %{max_days} days."
       invalid_currency_code: "Selected currency code is invalid"
+      advancement_condition_must_be_present_for_all_non_final_rounds: "must have an advancement condition to all non final rounds."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
@@ -1317,8 +1480,17 @@ en:
       limit: "Limit"
       competitors: "Competitors"
     announcements: "Announcements"
-    upload_results: "Upload results"
-    post_announcement: "Post competition announcement"
+    post_announcement: "Announce the competition"
+    announced_by_html: "Announced by %{announcer_name} on %{date_time}"
+    cancel: "Cancel the competition"
+    uncancel: "Uncancel the competition"
+    cancelled_by_html: "Cancelled by %{name} on %{date_time}"
+    cancel_confirm: "Are you sure you want to cancel that competition?"
+    upload_results: "Upload the results"
+    post_results: "Post the results"
+    results_posted_by_html: "Posted by %{poster_name} on %{date_time}"
+    cancel_mistake: "Made a mistake?"
+    note_before_cancel: "Note: only confirmed competitions can be cancelled."
     show:
       general_info: "General info"
       events: "Events"
@@ -1337,7 +1509,7 @@ en:
         cumulative_time_limit: "cumulative time limit"
         cumulative_one_round_html: "A %{cumulative_time_limit} may be enforced (see %{regulation_link})."
         cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{guideline_link})."
-        cutoff_html: "The result to beat to proceed to the second phase of a combined round (see %{regulation_link})."
+        cutoff_html: "The result to beat to proceed to the second phase of a cutoff round (see %{regulation_link})."
         format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
       format: "Format"
       time_limit: "Time limit"
@@ -1452,6 +1624,11 @@ en:
         separate: "Separate"
         history: "History"
         mixed_history: "Mixed history"
+      gender_selector:
+        gender: "Gender"
+        gender_all: "All"
+        male: "Male"
+        female: "Female"
     table_elements:
       name: "Name"
       result: "Result"
@@ -1528,7 +1705,7 @@ en:
     dob:
       title: "Birthdate Change Request Form"
       description: "Use this form if your birthdate stored in our database is different from the real one."
-      important_message_html: '<span class="text-danger">IMPORTANT</span>: Attach a picture of a <u>legal document</u> (identity card, driver license, passport...) showing your name AND date of birth.'
+      important_message_html: '<span class="text-danger">IMPORTANT</span>: Attach a picture of a <u>legal document</u> (identity card, driver license, passport...) showing your name AND date of birth; feel free to blur-out/obfuscate any other personal data on the identification.'
       submit: "Request change"
     messages:
       success: "Thank you for your message. We will contact you soon!"
@@ -1636,7 +1813,7 @@ en:
     spirit: Our spirit is that people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.
     spirit_footer: WCA Spirit
     our_goals_title: Our goals
-    our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen.</p>
+    our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen. A document containing the Board's Vision and Strategy for the WCA can be found <a href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">here</a>.</p>
     whats_next_title: What's next for the WCA?
     whats_next_content_html: <p>The World Cube Association has had over 100,000 unique competitors across 140 different countries and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
     world_championship_title: World Championship
@@ -1734,9 +1911,10 @@ en:
       #context: Hidden team for list of Delegates on Probation
       probation:
         name: "Delegates on Probation"
-      delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Mission, Spirit, and Regulations of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong>%{see_link}.</p>
-<p>In addition to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
-<p>New Delegates are listed as WCA Candidate Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>"
+      delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Mission, Spirit, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
+<p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
+<p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>
+<p>Trainee Delegates are being trained for the position of WCA Delegate and can only oversee competitions in which a WCA Delegate is present.</p>"
       see_link_html: " (see %{link})"
       members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
   documents:
@@ -1748,6 +1926,12 @@ en:
     minutes: "Minutes"
     policies: "WCA Policies"
     codeofethics: "Code of Ethics"
+    codeofconduct: "Code of Conduct"
+  education:
+    title: "WCA Educational Documents"
+    description: "The WQAC and WMT has published several documents for the community, you can download them below."
+    competitor_tutorial: "Competitor tutorial"
+    competition_material: "Competition material (certificates, cube covers, ...)"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
@@ -1823,20 +2007,52 @@ en:
     councils_html: "Councils"
     wac:
       info_html: "This council is responsible for building and maintaining bilateral communication between the WCA Community and the WCA Staff."
+  #context: On the page describing software tools for WCA competitions
   score_tools:
-    title: "WCA Score Taking tools"
-    paragraphs:
-      '1': 'The WCA highly recommends the use of <a href="https://live.worldcubeassociation.org">WCA Live</a> before and during a competition. WCA Live is a platform for running WCA competitions and sharing live results with the world.'
-      '2': 'Score sheets and scrambles should be processed and checked for errors before sending them to the WCA Results Team. You can use <a href="https://viroulep.github.io/scrambles-matcher/">Scrambles Matcher</a>, an Open Source project created by Philippe Virouleau.'
-      '3': 'The latest version of the WCA competition Score sheet can be downloaded here:<br /><a href="/files/results.xls" target="_blank">WCA competition Score sheet</a>.'
-      '4': >-
-        You may also want to use <a href="https://groupifier.jonatanklosko.com">Groupifier</a>
-        for preparing competitor groups for a competition. It's a tool that aims to do exactly this for you.
-        Among the main features you will find: sorting competitors by rankings,
-        assigning tasks (judging, scrambling), deciding how many scrambles are needed,
-        generating score sheets, personal sheets, and summaries.
-        It's an Open Source project created by Jonatan Kłosko.
-
+    title: "Software tools for WCA competitions"
+    wca_icon_text: "Developed and maintained by the WST"
+    intro:
+      desc: "This page is a non exhaustive list of tools which are known to be used to help with the organization of WCA competitions."
+      disclaimer: "Not all tools on that page are maintained by the WST: it's definitely fine! We don't have the manpower to manage all the WCA-related software out there :)"
+      used: "All the programs on this list have been used during real WCA competitions and integrate with the WCA website: they let you sign in with your WCA account to be able to import (and sometimes update) your upcoming competitions data. For each of them the maintainer(s) will be clearly written."
+    #context: tools used before the competition
+    before:
+      title: "Before the competition"
+      desc: "Managing competitors registrations can be done directly on the WCA website. Since managing groups and staff manually can be time-consuming, you may want to consider using one of the tools below."
+    #context: tools used during the competition
+    during:
+      title: "During the competition"
+      desc: "You will find here tools that let you manage the results of the competition while it's going on."
+    #context: tools used after the competition
+    after:
+      title: "After the competition"
+      desc: "While results validation occurs right there on the website, you will have to use some tool to assign scrambles generated by TNoodle to the actual results submitted to the WCA website."
+    #context: part of the description of a program
+    tools:
+      age:
+        title: "AGE"
+        description: "Tool for generating and editing groups/task assignments for WCA competitions"
+      certificates:
+        title: "Certificates"
+        description: "Print certificates for WCA competitions using WCA Live"
+      groupifier:
+        title: "Groupifier"
+        description: "Task and group management tool for WCA competition organizers. Among the main features you will find: sorting competitors by rankings, assigning tasks (judging, scrambling), deciding how many scrambles are needed, generating score sheets, personal sheets, and summaries... Check out the website to find out more."
+      scorecards:
+        title: "Scorecards"
+        description: "Print scorecards for WCA competitions using WCA Live"
+      tnoodle:
+        title: "TNoodle (Scrambles)"
+        description: "TNoodle is the official scramble program which is used for WCA competitions. It is typically used by WCA Delegates prior to WCA competitions, but its user interface also allows anyone to generate any kind of scrambles for all WCA events."
+      live:
+        title: "WCA Live"
+        description: "Platform for running WCA competitions and sharing live results with the world."
+      nightmare:
+        title: "Results spreadsheet"
+        description: "Sometimes things happen... If you don't have network access, you will have to use the good old spreadsheet."
+      matcher:
+        title: "Scrambles Matcher"
+        description: "Can be used to assign scrambles generated by TNoodle to results. Import results from the WCA website (when using WCA Live), a spreadsheet, or a standalone WCIF file. Import scrambles from one or more TNoodle json file(s). Export results to the appropriate format for WCA submission."
   logo:
     title: 'WCA Logo'
     paragraphs:
@@ -1920,6 +2136,7 @@ en:
       title: "Regulations"
       content1_html: 'All competitions must follow the <a href="/regulations/">WCA Regulations</a>. It is important for competitors to read these regulations before attending their first competition.'
       content2_html: 'The WCA Regulations are supplemented by the <a href="/regulations/guidelines.html">WCA Guidelines</a>, which contain additional clarifications and explanations.'
+      content3_html: 'Important decisions about incidents that happened in competitions that were resolved by the WCA Regulations Committee are found in the <a href="/incidents">Incidents Log</a>.'
     panel2:
       title: "Translations"
       content1_html: 'The WCA Regulations are not only available in English, but WCA members have translated them into several languages: <a href="/regulations/translations/">Translations</a>.'
@@ -2039,3 +2256,34 @@ en:
       accept: Accept
       confirm_accept: Are you sure you want to accept this media?
       edit: Edit
+  media_and_instagram:
+    page_title: Media and Instagram submission
+    general_media_submission:
+      title: General media submission
+      body_html: 'The WCA shares articles and images from competitions provided by the community on our <a href="/media">media page</a>. If you have something you would like to share, please fill out our <a href="/media/new">general media submission form</a>!'
+    instagram_submission:
+      title: Instagram submission
+      paragraph1_html: 'As you may have seen, the WCA has an <a href="https://www.instagram.com/thewcaofficial/">active Instagram</a>! To best reflect the global cubing community, we post content submitted to us by cubers from around the world.'
+      paragraph2: 'If you have high-quality photos or videos you would like us to post, please click the button below and fill out the form! In order us to post your content, you must own it and must give the WCA permission to post it. Due to the large number of submissions we receive, we can not post everything, but here are some tips to get your content posted:'
+      photo_quality: Make sure the photo/video quality is good. It doesn't have to be professionally shot but the quality shouldn't detract from the photo or video.
+      photo_interest: Try to make your content interesting to a broad audience. Content that is only interesting for a few people does not belong here.
+      wca_related: Post photos and videos that have to do with the WCA, as this is what our account is all about! We love to see cubers having fun!
+      submit_instagram_content: Submit Instagram content
+    instagram_hosting:
+      title: Instagram hosting
+      paragraph1_html: 'Sometimes, we will allow community members to host the official WCA Instagram story with a competition they are attending! If you&#39;re interested, please click the button and fill out the form below.  The WCA Communication Team will reach out to you after all information has been submitted if you are approved for hosting. If you have any questions, please <a href="https://www.worldcubeassociation.org/contact/website">contact us</a>.'
+      paragraph2: Our goal is to share a little personal side of every cuber and of every competition. This is not supposed to be a huge burden over the weekend and, of course, we want you to enjoy the competition first and then be able to share it.
+      paragraph3: 'The role of a host can be summarized as follows:'
+      short_intro: Make a short introduction, talk about yourself and the competition
+      venue_feel: Get some clips to get a feeling of the venue and the people, this could be just a shot from the competitor area and solving area
+      people_solving: Try to get some shots of people solving (fast people at their main events preferably)
+      mini_interviews: You could try to get mini interviews of people (organizers, delegates, etc...) saying what they are feeling about the competition
+      pictures_too: You can also send pictures, it doesn't have to be only videos
+      paragraph4: 'Our communications throughout the weekend typically go through a WhatsApp group. Please ensure that you are familiar with this messaging platform or let us know if you are not able to use it so that we can arrange other plans.'
+      apply_to_host: Apply to host
+    other_suggestions:
+      title: Other suggestions?
+      body_html: 'Do you have other suggestions for Instagram or other social media content? <a href="https://www.worldcubeassociation.org/contact/website">Let us know</a>!'
+  footer:
+    privacy: Privacy
+    disclaimer: Disclaimer

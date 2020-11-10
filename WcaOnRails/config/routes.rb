@@ -5,9 +5,9 @@ Rails.application.routes.draw do
     controllers applications: 'oauth/applications'
   end
 
-  # Prevent account deletion.
+  # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
-  devise_for :users, skip: :registrations
+  devise_for :users, skip: :registrations, controllers: { sessions: "sessions" }
   devise_scope :user do
     resource :registration,
              only: [:new, :create],
@@ -17,11 +17,17 @@ Rails.application.routes.draw do
              as: :user_registration do
                get :cancel
              end
+    post 'users/generate-email-otp' => 'sessions#generate_email_otp'
+    post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
+    delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   post 'registration/:id/process-payment-intent' => 'registrations#process_payment_intent', as: :registration_payment_intent
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
+  post 'profile/enable-2fa' => 'users#enable_2fa'
+  post 'profile/disable-2fa' => 'users#disable_2fa'
+  post 'profile/generate-2fa-backup' => 'users#regenerate_2fa_backup_codes'
 
   get 'profile/claim_wca_id' => 'users#claim_wca_id'
   get 'profile/claim_wca_id/select_nearby_delegate' => 'users#select_nearby_delegate'
@@ -68,6 +74,7 @@ Rails.application.routes.draw do
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
   end
+  post 'admin/check-existing-results' => "admin#run_validators", as: :admin_run_validators
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
@@ -102,21 +109,18 @@ Rails.application.routes.draw do
 
   resources :votes, only: [:create, :update]
 
-  # TODO: These are vulnerable to CSRF. We should be able to change these to
-  # POSTs once check_comp_data.php has been ported to Rails.
-  # See https://github.com/thewca/worldcubeassociation.org/issues/161
-  get 'competitions/:id/post/announcement' => 'competitions#post_announcement', as: :competition_post_announcement
-  get 'competitions/:id/post/results' => 'competitions#post_results', as: :competition_post_results
+  post 'competitions/:id/post_announcement' => 'competitions#post_announcement', as: :competition_post_announcement
+  post 'competitions/:id/cancel' => 'competitions#cancel_competition', as: :competition_cancel
+  post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
 
   get 'panel' => 'panel#index'
-  get 'panel/delegate-crash-course' => 'panel#delegate_crash_course'
-  get 'panel/delegate-crash-course/edit' => 'panel#edit_delegate_crash_course'
+  get 'panel/delegate-crash-course', to: redirect('/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
   patch 'panel/delegate-crash-course' => 'panel#update_delegate_crash_course'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   get 'panel/seniors' => 'panel#seniors'
   resources :notifications, only: [:index]
 
-  root 'posts#index'
+  root 'posts#homepage'
   resources :posts
   get 'rss' => 'posts#rss'
 
@@ -136,6 +140,7 @@ Rails.application.routes.draw do
   get 'about' => 'static_pages#about'
   get 'teams-committees' => 'static_pages#teams_committees'
   get 'documents' => 'static_pages#documents'
+  get 'education' => 'static_pages#education'
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
   get 'contact' => 'static_pages#contact'
@@ -143,10 +148,11 @@ Rails.application.routes.draw do
   get 'faq' => 'static_pages#faq'
   get 'score-tools' => 'static_pages#score_tools'
   get 'logo' => 'static_pages#logo'
+  get 'media-instagram' => 'static_pages#media_instagram'
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
-  get 'tutorial' => redirect('/files/WCA_Competition_Tutorial.pdf', status: 302)
+  get 'tutorial' => redirect('/education', status: 302)
 
   resources :regional_organizations, only: [:new, :update, :edit], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
@@ -185,6 +191,8 @@ Rails.application.routes.draw do
   get '/relations' => 'relations#index'
   get '/relation' => 'relations#relation'
 
+  get '/.well-known/change-password' => redirect('/profile/edit?section=password', status: 302)
+
   # WFC section
   get '/wfc' => 'wfc#panel'
   scope 'wfc' do
@@ -201,6 +209,8 @@ Rails.application.routes.draw do
   resources :incidents do
     patch '/mark_as/:kind' => 'incidents#mark_as', as: :mark_as
   end
+
+  get '/sso-discourse' => 'users#sso_discourse'
 
   namespace :api do
     get '/', to: redirect('/api/v0', status: 302)

@@ -20,7 +20,7 @@ zh-TW:
     HK: 香港
     #original_hash: 3ad2dd8
     KN: 聖克里斯多福
-    #original_hash: 7184d1a
+    #original_hash: 5c34abb
     KP: 朝鮮(北韓)
     #original_hash: 4430b22
     KR: 韓國(南韓)
@@ -40,8 +40,6 @@ zh-TW:
     SZ: 史瓦帝尼
     #original_hash: 4d206a8
     TT: 千里達
-    #original_hash: 0f3f60b
-    VA: 教廷
     #original_hash: 3fa9b2d
     VC: 聖文森國
     #original_hash: 9af4622
@@ -151,18 +149,18 @@ zh-TW:
     '0':
       #original_hash: 4d618bb
       name: 資格賽
-      #original_hash: 2ffe44e
+      #original_hash: 4d618bb
       cellName: 資格賽
     '1':
       #original_hash: 1e725b6
-      name: 初賽
-      #original_hash: 916a78d
-      cellName: 初賽
+      name: 首輪
+      #original_hash: 1e725b6
+      cellName: 首輪
     '2':
       #original_hash: 985c8d0
-      name: 複賽
-      #original_hash: 2a4bcae
-      cellName: 複賽
+      name: 第二輪
+      #original_hash: 985c8d0
+      cellName: 第二輪
     '3':
       #original_hash: e2f74d2
       name: 準決賽
@@ -174,35 +172,35 @@ zh-TW:
       #original_hash: 327c999
       cellName: B組決賽
     c:
-      #original_hash: b2d26f4
-      name: 門檻制決賽
-      #original_hash: b2d26f4
-      cellName: 門檻制決賽
+      #original_hash: 672b22c
+      name: 決賽
+      #original_hash: 672b22c
+      cellName: 決賽
     d:
-      #original_hash: c6136b1
-      name: 門檻制初賽
-      #original_hash: dffa9ea
-      cellName: 門檻制初賽
+      #original_hash: 1e725b6
+      name: 首輪
+      #original_hash: 1e725b6
+      cellName: 首輪
     e:
-      #original_hash: 659c53f
-      name: 門檻制複賽
-      #original_hash: b6e1e1c
-      cellName: 門檻制複賽
+      #original_hash: 985c8d0
+      name: 第二輪
+      #original_hash: 985c8d0
+      cellName: 第二輪
     f:
       #original_hash: 672b22c
       name: 決賽
       #original_hash: 672b22c
       cellName: 決賽
     g:
-      #original_hash: e861dcf
-      name: 門檻制準決賽
-      #original_hash: 86f4b05
-      cellName: 門檻制準決賽
+      #original_hash: ccf6f8e
+      name: 第三輪
+      #original_hash: ccf6f8e
+      cellName: 第三輪
     h:
-      #original_hash: 4c66ad0
-      name: 門檻制資格賽
-      #original_hash: 4c66ad0
-      cellName: 門檻制資格賽
+      #original_hash: 4d618bb
+      name: 資格賽
+      #original_hash: 4d618bb
+      cellName: 資格賽
   attempts:
     #original_hash: 17dae1e
     attempt_name: '第%{number}次還原'
@@ -273,6 +271,8 @@ zh-TW:
     average: 平均
     #original_hash: e7f6fc5
     solves: 成績
+    #original_hash: c9d0561
+    hello: '嗨，%{name}！'
     date:
       #original_hash: acb6273
       no_date: 尚無日期
@@ -306,6 +306,11 @@ zh-TW:
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
     #original_hash: 7136e3b
     time_format: 24h
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: 秒
+      #original_hash: 9d86b0d
+      unit_moves: 步
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -323,7 +328,7 @@ zh-TW:
       #original_hash: c3cd636
       actions: Actions
       #original_hash: f4e7a87
-      secret: Secret
+      secret: 金鑰
       #original_hash: c23540e
       scopes: Scopes
       #original_hash: 3b0d449
@@ -358,8 +363,6 @@ zh-TW:
         email: 電子郵件
         #original_hash: 8be3c94
         password: 密碼
-        #original_hash: 19dff4d
-        current_password: 現在密碼
         #original_hash: aefce7f
         password_confirmation: 重新輸入密碼
         #original_hash: ced7b30
@@ -369,21 +372,17 @@ zh-TW:
         #original_hash: 58e0c56
         remove_avatar: 刪除頭像
         #original_hash: 9af9099
-        results_notifications_enabled: 當比賽成績上傳時，用電子郵件通知我。
+        results_notifications_enabled: 當比賽成績公告時，用電子郵件通知我。
         #original_hash: de60ab8
         delegate_status: WCA代表狀態
         #original_hash: 0f21717
         region: 地區
-        #original_hash: a10b651
-        location_description: 所在地描述
-        #original_hash: 8961d3b
-        phone_number: 電話號碼
-        #original_hash: 7044004
-        notes: 備註
         #original_hash: 730db33
         receive_delegate_reports: 我希望透過收到電子郵件收到WCA比賽報告
         #original_hash: 57eaf24
         user_preferred_events: 喜好項目
+        #original_hash: e632fbf
+        otp_attempt: 請輸入兩步驟驗證碼：
       competition:
         #original_hash: 89f89c0
         id: 比賽ID
@@ -421,6 +420,8 @@ zh-TW:
         currency_code: 貨幣代碼
         #original_hash: 2e3ed8b
         delegate_ids: WCA代表
+        #original_hash: c0ddcd6
+        trainee_delegate_ids: WCA 實習代表
         #original_hash: 958562e
         organizer_ids: 主辦人ID
         #original_hash: b37456c
@@ -638,8 +639,10 @@ zh-TW:
         #original_hash: 6e6a6f2
         o: 其他
       delegate_status:
-        #original_hash: 28ec02d
-        candidate_delegate: 代表候選人
+        #original_hash: 621101a
+        trainee_delegate: 實習代表
+        #original_hash: 9b97968
+        candidate_delegate: 初級代表
         #original_hash: 12ab214
         delegate: 代表
         #original_hash: d463c23
@@ -713,8 +716,6 @@ zh-TW:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        current_password: ''
-        #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
         dob_verification: ''
@@ -736,14 +737,10 @@ zh-TW:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
-        #original_hash: 8c266ea
-        receive_delegate_reports: 如果您是代表候選人、高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
+        #original_hash: d5ccc15
+        receive_delegate_reports: 如果您是初級代表、高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
+        #original_hash: 0627e5c
+        otp_attempt: 請開啟您的行動裝置上的應用程式來取得一次性的密碼，或是輸入您其中一個備用碼。
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -757,6 +754,8 @@ zh-TW:
         information: 參賽者須知的重要資訊，將會顯示在比賽主頁面。<br/>請用 <b>英文</b> 和您當地參賽者使用的語言填寫此欄。
         #original_hash: b4d020f
         delegate_ids: 本場比賽的WCA代表。
+        #original_hash: cb9882c
+        trainee_delegate_ids: 比賽的WCA實習代表。
         #original_hash: 517d376
         organizer_ids: 比賽的主辦團隊（他們需要建立WCA帳號才能列在這裡）。
         #original_hash: cabe7fb
@@ -855,9 +854,9 @@ zh-TW:
         wca_id: ''
         #original_hash: 8723825
         dob: 將您的生日填成YYYY-MM-DD的格式
-        #original_hash: c6d8a97
+        #original_hash: 49ee4af
         document: >-
-          為了證明您的身份和您正確的生日，您必須附件一張有您的姓名和生日的合法證件（身份證、駕照、學生證、護照等）且能夠讓英語人士明白的照片以供辨識（若您無法提供上述證件，請聯絡您當地的WCA代表）。
+          為了證明您的身份和您正確的生日，您必須附件一張有您的姓名和生日的合法證件（身份證、駕照、學生證、護照等）且能夠讓英語人士明白的照片以供辨識（若您無法提供上述證件，請聯絡您當地的WCA代表）。在證件上面，至少要有您的名字和出生日期；其他的任何個人資訊部分可以遮蓋或是模糊處理。
       post:
         #original_hash: 53c16eb
         body: >-
@@ -1066,6 +1065,101 @@ zh-TW:
       new:
         #original_hash: ada2e9e
         sign_in: 登入
+        2fa:
+          #original_hash: b274c38
+          verify: 登入前要確認是本人
+          #original_hash: ec44d52
+          confirm: 確認驗證碼
+          #original_hash: 912516c
+          regenerated_secret: 已成功重新產生您的二步驟驗證金鑰。
+          #original_hash: 1b0c44f
+          enabled_success: 已成功啟用二步驟驗證。
+          #original_hash: 9515157
+          email_auth: 電子郵件驗證
+          #original_hash: d305ccb
+          get_by_email: 由電子郵件取得驗證碼
+          #original_hash: 4e644aa
+          get_by_email_desc: 如果您無法使用您的裝置或是沒有驗證碼，您也可以按下面的按鈕，由電子郵件取得一次性密碼。複製貼上到上面的欄位登入。
+          #original_hash: b243ac5
+          email_sent: 已經傳送一個驗證碼到電子郵件。這個驗證碼有效性只有兩分鐘。您可以在兩分鐘後再次要求一個新的驗證碼。
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: 現在無法產生驗證電子郵件。
+            #original_hash: c0d4fc2
+            invalid_otp: 無效的二步驟驗證碼。
+            #original_hash: c2f5347
+            not_enabled: 未啟用二步驟驗證。
+            #original_hash: 14d294b
+            unknown: 傳送電子郵件時發生未知錯誤。請聯絡WCA軟體組。
+          otp_email:
+            #original_hash: a20e037
+            subject: 您的WCA一次性密碼。
+            #original_hash: f82488f
+            2fa_attempt: 您正嘗試認證WCA網站。您有啟用兩步驟驗證且您剛要求了傳送一個一次性密碼到電子郵件。請往下尋找您的一次性密碼：
+            #original_hash: e27e540
+            disclaimer: 如果您沒有要求驗證碼，請立即回覆這封電子郵件來連絡WCA軟體組，您可能有另一個地方正在登入中，或是您的密碼可能已被他人取得。
+          #original_hash: 8c13694
+          name: 二步驟驗證（2FA）
+          #original_hash: d28c3b6
+          support_desc_html: 'WCA網站支援%{two_factor_link} 並使用一次性密碼：'
+          options:
+            #original_hash: 4f9dcb8
+            app: 由行動裝置上的2FA應用程式產生（例如Authy或Google身份驗證器）。
+            #original_hash: 34a7572
+            recovery: 使用二步驟驗證啟用時所產生的備用碼。
+            #original_hash: eaee403
+            email: 登入帳號時用電子郵件傳送給您。
+          #original_hash: 7ae99ae
+          status_html: '您的二步驟驗證：%{status}'
+          #original_hash: 3ea3f98
+          enabled: 已啟用
+          #original_hash: 07596f1
+          disabled: 未啟用
+          #original_hash: 5f225b0
+          enable: 啟用二步驟驗證
+          #original_hash: 2e35cd9
+          disable: 關閉二步驟驗證
+          #original_hash: b2a3d7e
+          reset: 重設二步驟驗證
+          #original_hash: 14b7bfd
+          reset_if_needed: 如果您有某個裝置已無法使用，或是您想要解除裝置的連結，您可以在這邊重設您的二步驟驗證金鑰：
+          #original_hash: 69100a3
+          reset_warning: 您需要重設所有有二步驟驗證的裝置
+          #original_hash: a8d11db
+          methods: 二步驟驗證方法
+          #original_hash: 0fd248d
+          methods_description: 登入時，您可以用很多種方法來取得一次性密碼，方法如下：
+          #original_hash: 4442f0e
+          dedicated_app: 使用專門的二步驟驗證應用程式
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: 'WCA軟體組建議在私人的裝置上使用%{authy} 取得一次性密碼來登入。其他的選擇有%{google} 和%{microsoft}。'
+          #original_hash: f1b2ec2
+          scan_qrcode_html: '當被二步驟驗證應用程式提醒時，掃描底下的QR碼。（如果您用行動裝置，可以按%{here} ）'
+          #original_hash: e7cba1a
+          backup_codes: 備用碼
+          #original_hash: fa62416
+          backup_codes_desc: 沒法使用二步驟驗證應用程式的裝置時，可以使用備用碼當作一次性密碼。每一個備用碼只能被使用一次。請確保您有把備用碼存放在安全的地方。
+          #original_hash: 087cb72
+          no_backup_codes: 您還沒有產生備用碼。請按底下的按鈕來產生備用碼。
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: 您已產生過備用碼。如果您已經用掉或是遺失備用碼，您可以用下面的按鈕產生新的備用碼。請注意任何之前產生過的備用碼都會變無效。
+          #original_hash: 2ee4aca
+          generate_backup_codes: 產生備用碼
+          #original_hash: a69dd5b
+          backup_codes_warning: 備用碼將會顯示在下面。請務必要立刻抄寫或儲存下來。備用碼會加密儲存在資料庫中，且無法再次顯示。
+          #original_hash: b5e3ad8
+          email_auth_desc: 您可以要求使用電子郵件傳送一次性密碼來登入。
+          #original_hash: dd991ab
+          disable_section_title: 關閉二步驟驗證
+          #original_hash: 4569d81
+          disable_section_content: 下面的按鈕能關閉二步驟驗證，但WCA軟體組強烈建議您不要關閉二步驟驗證。請留意如果您重新啟動二步驟驗證，您需要重新設置您的裝置。
+          #original_hash: ab1b77d
+          disabled_success: 已成功關閉二步驟驗證。
+          #original_hash: c36d556
+          disabled_failed: 無法關閉二步驟驗證，請見以下的錯誤訊息。
+      destroy_other:
+        #original_hash: a768ea6
+        success: 已成功將其他裝置登出。
     shared:
       links:
         #original_hash: ada2e9e
@@ -1136,10 +1230,12 @@ zh-TW:
       organizations: 區域組織
       #original_hash: d790b40
       faq: 常見問題
+      #original_hash: cf1d2c9
+      forum: 討論區
       #original_hash: 3ad28c0
       teams: 團隊、委員會和理事會
-      #original_hash: 02617c0
-      tutorial: 比賽指南
+      #original_hash: a979ffc
+      education: 學習資源
       #original_hash: a34b69f
       contact: 聯絡資訊
       #original_hash: 4fa8cc8
@@ -1191,7 +1287,7 @@ zh-TW:
       #original_hash: b7ee3c4
       manage_users: 管理用戶
       #original_hash: 12ab214
-      delegate: WCA代表相關
+      delegate: 代表
       #original_hash: 2f4bd74
       panel: 知識欄
       #original_hash: db34e41
@@ -1224,6 +1320,57 @@ zh-TW:
       manage_app: 管理您的應用程式
       #original_hash: 0e8b212
       manage_auth_app: 管理被授權的應用程式
+      #original_hash: acac109
+      media_submission: 上傳媒體
+  homepage:
+    #original_hash: 824d76b
+    learn_more: 了解更多
+    #original_hash: d8f3ae6
+    title: 歡迎來到世界方塊協會
+    #original_hash: d133986
+    latest_news: 最新消息
+    #original_hash: 06b01c4
+    announcements: 公告
+    #original_hash: f0cbb3e
+    see_all_announcements: 查看所有公告
+    about_us:
+      #original_hash: 3ffb811
+      title: 關於我們
+      #original_hash: ed77e4c
+      text: 世界方塊協會掌管方塊比賽，這些方塊是透過轉動一部份的零件來操控，通常稱之為「魔術方塊」（twisty puzzles）。
+    competitions:
+      #original_hash: db98a68
+      title: 比賽
+      #original_hash: 0ac88bc
+      text_html: '尋找鄰近的比賽或是比賽成績。正在比賽中且想要知道比賽成績嗎？可以來看看%{wca_live_link}！'
+    records:
+      #original_hash: e51c552
+      title: 紀錄
+      #original_hash: 3681af0
+      text: 查看現在以及過去所有WCA認證比賽項目的紀錄。
+    faq:
+      #original_hash: 03688ba
+      title: 常見問題
+      #original_hash: 1e0206f
+      text: 如果您需要任何幫助，查看我們列出的常見問題。很多疑問可以在這找到答案。
+    contact:
+      #original_hash: b37456c
+      title: 聯絡
+      #original_hash: 5c254b6
+      text_html: '如果您想要聯絡我們，您可以透過聯絡表單來取得聯繫。如果您對於WCA各種流程有疑問，別忘了可以參考我們的%{faq_link}！'
+      #original_hash: d790b40
+      faq: 常見問題
+      #original_hash: 392f358
+      button: 請帶我前往WCA聯絡表單
+    support:
+      #original_hash: 610edba
+      title: 幫助WCA
+      #original_hash: 6253f90
+      text: >-
+        世界方塊協會是美利堅合眾國
+        501(c)(3)免稅組織。由於我們是一個100%志願者經營的非營利團體，我們歡迎您的捐款，這讓我們能夠拓展我們的願景，並幫助全世界舉辦更讓人樂於其中的比賽。
+      #original_hash: 65c84ec
+      button: 我還想知道有哪些方法能幫助WCA
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1244,6 +1391,8 @@ zh-TW:
         confirmation_link: 確認我的帳號。
         #original_hash: d484f70
         activate: 您可以在帳號確認以後登入世界方塊協會的網站：
+        #original_hash: fb02586
+        login_form: 登入
         #original_hash: 333999b
         addendum: 此電子郵件為自動產生的。如果您沒有在世界方塊協會的網站申請帳號，請忽略此錯誤訊息並刪除之。
         #original_hash: dbc2263
@@ -1270,8 +1419,16 @@ zh-TW:
         header: 'WCAT公告%{competition}'
         #original_hash: 0d3d10c
         announced: WCAT審核通過您的比賽並且正式公布了。
-        #original_hash: 1c20919
-        link: 請依照連結查看比賽公告：
+      id_claim_possibility_email:
+        #original_hash: 20e9d09
+        header: 請將您的WCA ID與您的帳號做連結
+        #original_hash: 5665910
+        intro: 親愛的方塊玩家
+        #original_hash: 61650f4
+        information_html: >-
+          您報名了%{competition_link}。我們剛上傳了這場比賽的成績，且產生了WCA
+          ID給所有的初次參賽者。如果您參加這場比賽時是初次參賽者，您應該要去取得您的WCA
+          ID（和您的WCA帳號做連結）。按以下連結來進行連結。%{claim_link}
       organizer_addition_email:
         #original_hash: dc6f415
         header: '您已經被新增為%{competition}的主辦團隊'
@@ -1295,6 +1452,17 @@ zh-TW:
         not_accepted_html: 您已經報名，但您的報名尚未被確認。
         #original_hash: 3724e7c
         more_info_html: '請參考 <a href=%{competition_url}>competition website</a> 來得知更多的訊息及報名條件。'
+      results_presence_email:
+        #original_hash: 7ce2558
+        header: '%{competition} 的成績已經公告'
+        #original_hash: 150446e
+        intro_html: '您在%{competition_link}的成績已經被公告'
+        #original_hash: 78edca3
+        information_html: '看您所有的比賽成績%{result_link}。'
+        #original_hash: a585fca
+        more_info_html: '您可以管理您的電子郵件偏好設定%{preferences_link}。'
+        #original_hash: 7594a32
+        regards_html: '謹代表WCA成績組%{managers}最誠摯的問候。'
     claim_wca_id:
       #original_hash: f28bf87
       title: 取得WCA ID
@@ -1338,7 +1506,7 @@ zh-TW:
       approve: 確認
       #original_hash: 85de4b8
       unconfirmed_email: '這個帳號的電子郵件(%{email})尚未確認。'
-      #original_hash: c03b949
+      #original_hash: 7069007
       confirm_new_email: 您必須確認新的電子郵件才能修改。
       #original_hash: 8a770cf
       pending_mail_confirmation: '這個帳號的新電子郵件%{email}正在等待確認。'
@@ -1374,6 +1542,10 @@ zh-TW:
       confirm_guidelines: 請確保您已詳閱頭像的指導方針並提交有效的照片。
       #original_hash: efc007a
       save: 儲存
+      #original_hash: c3cd636
+      actions: 操作
+      #original_hash: 8356b72
+      sign_out_of_devices: 登出其他裝置
       #original_hash: 58e0c56
       remove_avatar: 移除頭像
       #original_hash: 4bd25cf
@@ -1389,13 +1561,13 @@ zh-TW:
         '3': 如果頭像上有超過一個人，應該要能讓人輕易辨認哪一個是您。
         #original_hash: 4083c00
         '4': 必須有本人的頭部出現，但是不需要全臉入鏡。
-        #original_hash: ebbbf8a
-        '5': 頭像不得有正常背景以外的文字。
+        #original_hash: 7c0aab3
+        '5': 頭像包含照片邊界的部分都不應該有重疊的文字，或不自然照片濾鏡效果。
         #original_hash: cc5f23a
         '6': 頭像的方向必須正確。
         #original_hash: 1a18831
         '7': 頭像不得含有冒犯他人內容（例如：無禮的手勢）
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 針對WCA 員工的指導方針：
         paragraphs:
@@ -1405,6 +1577,17 @@ zh-TW:
           '2': 頭像必須為原照片中正確範圍作適當裁切、沒有歪斜且亮度正常，以便比賽中的任何參賽者或觀眾都可以在比賽場地中明確識別您的身份。
           #original_hash: 13fab02
           '3': 頭像的縮圖只是頭像的一部分，它將用來表示您的完整頭像。縮圖必須被調整過，讓人可以單獨地識別您，並且縮圖必須包含您的臉。
+      sensitive:
+        #original_hash: 267ac87
+        info: 這裡可以修訂您的個人敏感信息，請先在這裡確認您是本人。
+        #original_hash: f19af51
+        success: 已成功確認您的身份。
+        #original_hash: 52ebf9c
+        failure: 無法確認您的身份。
+        #original_hash: 4324c73
+        confirm_proceed: 確認並繼續
+        #original_hash: d395f1f
+        identity_error: 無法修訂您的資料，請先確認身份後再嘗試。
     errors:
       #original_hash: 094b763
       not_found: 找不到
@@ -1414,10 +1597,10 @@ zh-TW:
       dob_incorrect_html: >-
         與WCA資料庫不相符。如果您確認您提供的日期以及格式(YYYY-MM-DD)是正確的，請使用<a
         href="%{dob_form_path}">此表單</a>聯絡WCA成績組。
-      #original_hash: c9ae791
+      #original_hash: c3ce070
       unique_html: >-
-        已經被%{used_email}的"%{used_name}"所使用中。如要把WCA ID釋出，你可以 <a
-        href=%{used_edit_path} target='_blank'>編輯這個帳號</a> 來移除WCA ID。
+        已經被%{used_email}的%{used_name}所使用中。如要把WCA ID釋出，你可以 <a
+        href="%{used_edit_path}" target=”_blank"'>編輯這個帳號</a> 來移除WCA ID。
       #original_hash: 26f70ed
       dob_past: 必須為過去的日期
       #original_hash: b320913
@@ -1468,7 +1651,7 @@ zh-TW:
       #original_hash: 407c4f8
       select_delegate_html: >-
         為了確認您的WCA ID我們需要一位<a href='%{link_delegate}'
-        target='_blank'>WCA代表</a>幫您確認身分。請輸入您的生日並選取您認為最了解您的代表。
+        target='_blank'>WCA代表</a>幫您確認身份。請輸入您的生日並選取您認為最了解您的代表。
       #original_hash: 2564ee3
       already_assigned_html: >-
         WCA ID %{link_id}已經被其他帳號使用了。如果您認為有錯誤，請聯絡您當地的<a href='%{link_delegate}'
@@ -1544,7 +1727,7 @@ zh-TW:
       #original_hash: 648424f
       registered: 報名成功！
       #original_hash: 82fed60
-      imported: 成功導入報名資料！
+      imported: 成功載入報名資料！
       #original_hash: 3614fd1
       added: 成功追加報名資料！
     edit_registration:
@@ -1632,6 +1815,8 @@ zh-TW:
       payment_requested_on: '於%{date}提出付款請求'
       #original_hash: b25928c
       total: 總共
+      #original_hash: df036fe
+      n_events: 比賽項目數
     new_registration:
       #original_hash: 8b9f726
       title: '報名%{comp}'
@@ -1755,7 +1940,7 @@ zh-TW:
       import: 載入
       errors:
         #original_hash: 0ef547d
-        error: '導入 %{registration} 錯誤：%{error}。'
+        error: '載入 %{registration} 錯誤：%{error}。'
         #original_hash: 2f0950e
         missing_columns: '遺失欄位：%{columns}。'
         #original_hash: 2454f20
@@ -1766,11 +1951,11 @@ zh-TW:
         non_existent_wca_id: '這個WCA ID %{wca_id}  並不存在。'
         #original_hash: b5c8591
         email_user_with_different_wca_id: >-
-          已經有帳號是使用 %{email} 的電子郵件，但WCA ID 是 %{user_wca_id} 而不是導入中的
+          已經有帳號是使用 %{email} 的電子郵件，但WCA ID 是 %{user_wca_id} 而不是載入中的
           %{registration_wca_id}。
         #original_hash: c9586e9
         email_user_with_different_unconfirmed_wca_id: >-
-          已經有帳號是使用 %{email} 的電子郵件，但有未確認的 WCA ID %{unconfirmed_wca_id} 而不是導入中的
+          已經有帳號是使用 %{email} 的電子郵件，但有未確認的 WCA ID %{unconfirmed_wca_id} 而不是載入中的
           %{registration_wca_id}。
         #original_hash: 4e32621
         email_duplicates: '一個電子郵件必須只能被用一次，以下為重複的電子郵件：%{emails}'
@@ -1798,12 +1983,40 @@ zh-TW:
       schedule_must_match_rounds: 請在申請比賽之前確保每個項目皆至少有一輪，同時您製作的賽程需包含所有您所規劃的輪次。
       #original_hash: e390250
       create_success: 成功申請一場新的比賽！
+      #original_hash: ba067f0
+      not_announced: 這場比賽已是公開狀態，但尚未公告。
+      #original_hash: ab61991
+      announced: 已成功公告比賽！
+      #original_hash: a582c89
+      cancelled: 這場比賽已被取消。比賽資訊處有取消細節。
+      #original_hash: b4aa5ee
+      cancel_success: 已成功取消比賽！
+      #original_hash: d0478cf
+      cancel_failure: 無法取消比賽。
+      #original_hash: 09df36b
+      uncancel_success: 已成功恢復比賽！
+      #original_hash: ead4a9e
+      uncancel_failure: 無法恢復比賽。
+      #original_hash: 8ad5e67
+      results_not_posted: 這場比賽的成績已公開，但尚未公告。
+      #original_hash: e205d73
+      results_already_posted: 成績已被公告。
+      #original_hash: 376f461
+      results_posted: 已成功公布成績！
       #original_hash: afe3a23
       results_preview_alert: 您正在瀏覽尚未公布的成績。
       #original_hash: 07de612
       upload_results: 比賽已經結束了，我們正盡快地上傳成績！
+      #original_hash: 68dd436
+      computing_auxiliary_data: 輔助數據正在計算中，請稍後。。。
+      #original_hash: 8ebe272
+      no_results: 沒有成績。
+      #original_hash: 79e8b95
+      no_main_event_results: '主要比賽項目(%{event_name})並沒有成績。'
       #original_hash: a0168ee
       in_progress: '比賽正在進行當中，過%{date}以後再回來看成績吧！'
+      #original_hash: 8ab1548
+      reg_opens_too_early: 開始報名的時間短於規定的48小時。
       #original_hash: 3322400
       tooltip_registered: 您已經報名了。
       #original_hash: f2d092f
@@ -1859,10 +2072,14 @@ zh-TW:
       details: 場地細節
       #original_hash: 2e8a57c
       website: 比賽網站
+      #original_hash: 2260929
+      display_name: '[已取消] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: 主辦團隊
         other: 主辦團隊
+      #original_hash: 53a9522
+      organization_team: 主辦團隊
       #original_hash: 6afa61e
       delegate:
         zero: WCA代表
@@ -1873,6 +2090,8 @@ zh-TW:
       information: 比賽資訊
       #original_hash: c5497bc
       events: 項目
+      #original_hash: 3c24bd2
+      main_event: 主要項目
       #original_hash: ff722f0
       registration_requirements: 報名條件
       #original_hash: 74d0bf1
@@ -1895,7 +2114,7 @@ zh-TW:
       use_stripe_link_html: '一旦報名後，報名費必須透過Stripe在%{here}支付。'
       #original_hash: cea0eb4
       use_stripe_below_html: 一旦報名後，報名費必須透過Stripe在底下支付。
-      #original_hash: 16cd1ba
+      #original_hash: d6bab8f
       refund_policy_html: '如果您在%{limit_date_and_time}之前取消報名，我們將會退還您報名費的%{refund_policy_percent}。'
       #original_hash: 4aca553
       no_refunds: 報名費在任何情況下皆不退費。
@@ -1922,6 +2141,49 @@ zh-TW:
         range_ongoing_html: '網路報名已從%{start_date_and_time}開始，將會在%{end_date_and_time}截止。'
         #original_hash: 7ac8349
         range_past_html: '網路報名已從%{start_date_and_time}開始到，已在%{end_date_and_time}截止。'
+      #original_hash: 1f9c9c4
+      highlights: 比賽摘要
+      #original_hash: 945f917
+      click_to_display_highlights_html: '按%{link_here}來顯示這場比賽的比賽摘要。'
+      #original_hash: dc5c597
+      hide_highlights: 隱藏比賽摘要
+      #original_hash: f691bf2
+      result: 成績
+      #original_hash: acab754
+      single: 單次
+      #original_hash: e78d7c2
+      average: 五次平均
+      #original_hash: 083c83e
+      mean: 三次平均
+      #original_hash: 22bee3a
+      result_sentence: '%{a_win_by_word}：%{result}'
+      #original_hash: 6c3b236
+      winner: '%{winner}在 %{event_name} 項目中以%{result_sentence}贏得第一名。'
+      #original_hash: ec7f18a
+      first_runner_up: '第二名%{first_runner_up}：%{first_runner_up_result}，'
+      #original_hash: cffa50a
+      and: 以及
+      #original_hash: 67d285c
+      second_runner_up: '第三名%{second_runner_up}：%{second_runner_up_result}。'
+      records:
+        #original_hash: 0658e11
+        wr: 世界紀錄
+        #original_hash: 9d940bb
+        afr: 非洲紀錄
+        #original_hash: 56c95a8
+        asr: 亞洲紀錄
+        #original_hash: 4cf3c13
+        ocr: 大洋洲紀錄
+        #original_hash: 1b9111e
+        er: 歐洲紀錄
+        #original_hash: d26cf99
+        nar: 北美洲紀錄
+        #original_hash: 270c007
+        sar: 南美洲紀錄
+      #original_hash: 43d56f3
+      regional_single_record: '%{event_name} %{result} (單次)'
+      #original_hash: 2444261
+      regional_average_record: '%{event_name} %{result} (平均)'
       #original_hash: 8eda7ac
       bookmark: 將這個比賽加入書籤
       #original_hash: 4dfea97
@@ -1955,6 +2217,10 @@ zh-TW:
       past: 過去
       #original_hash: 081ae3f
       custom: 自訂
+      #original_hash: 73cf180
+      by_announcement: 公告日期
+      #original_hash: b3946b2
+      sort_by_announcement: 由公告日排列
       #original_hash: 3f66052
       from_date: 從
       #original_hash: ae79ea1
@@ -1976,6 +2242,8 @@ zh-TW:
         upcoming: 即將舉行的比賽
         #original_hash: 8b57693
         custom: 選取時間內的比賽
+        #original_hash: 0933739
+        by_announcement: 以公告日期來排列的比賽，最新的在最上面
       #original_hash: 6684214
       no_access: 您沒有此頁面的權限！
       tooltips:
@@ -1988,6 +2256,8 @@ zh-TW:
           posted: 成績已經公布！
           #original_hash: 89bcc37
           starts_in: '%{days}後舉行'
+          #original_hash: 97b061a
+          announced_on: '在%{announcement_date}公告'
         #original_hash: ccd2db9
         search: 比賽名稱或城市
         #original_hash: 3bc8082
@@ -2034,20 +2304,20 @@ zh-TW:
         University](https://www.ntnu.edu.tw/)
       #original_hash: 2651d1a
       venue_details_html: '場地的細節（例如：一樓的正後方，跟隨指標走）%{md}'
-      #original_hash: b727e58
-      contact_html: '可任意選擇聯絡資訊。若您未填寫，主辦人的電子郵件將會被公開。%{md} 範例：[顯示內容](mailto:some@email.com)'
+      #original_hash: 447814d
+      contact_html: >-
+        可任意選擇聯絡資訊。若您未填寫，聯繫請求內容會由表格方式送出，主辦人的電子郵件將不會被顯示。%{md}
+        範例：[顯示內容](mailto:some@email.com)
       #original_hash: c5497bc
       events: 項目
-      #original_hash: 09b819f
-      deprecated_events: 這場比賽有些項目已經不被官方認可，我們無法幫您編輯。
       #original_hash: cafc153
       public_and_locked_html: 這場比賽已經公開並且不得編輯內容。若您需要修改內容，請回覆申請比賽的郵件。
       #original_hash: e00a339
       confirmed_but_not_visible_html: '您已經確認了這場比賽但尚未公開。請等待%{contact}的公開。'
       #original_hash: e94cba8
       is_visible: 這場比賽已經公開了，因此任何改變將會被公開！
-      #original_hash: f99b3f7
-      pending_confirmation_html: '當您準備請%{contact}許可這場比賽時，請確實填寫所有表格並點選確認。'
+      #original_hash: 1039850
+      pending_confirmation_html: '當您準備請%{contact}許可這場比賽時，請確實填寫所有表格並請代表點選確認。'
       #original_hash: 8966fd0
       submit_create_value: 申請比賽
       #original_hash: 40b0dfd
@@ -2104,6 +2374,8 @@ zh-TW:
       span_too_many_days: '比賽不得多於%{max_days}天。'
       #original_hash: cdcd288
       invalid_currency_code: 選取的貨幣代碼無效
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: 如果不是最後一輪，必須要設定晉級條件。
     new:
       #original_hash: 1208df7
       create_competition: 申請比賽
@@ -2162,10 +2434,28 @@ zh-TW:
       competitors: 人數
     #original_hash: 06b01c4
     announcements: 公告
-    #original_hash: 5b9523f
+    #original_hash: a2b80b0
+    post_announcement: 公告比賽
+    #original_hash: b462eac
+    announced_by_html: '由%{announcer_name} 在%{date_time}公告。'
+    #original_hash: 375e17f
+    cancel: 取消比賽
+    #original_hash: 7628a51
+    uncancel: 恢復比賽
+    #original_hash: 9122a6c
+    cancelled_by_html: '已於 %{date_time} 被 %{name} 取消'
+    #original_hash: 25e68c3
+    cancel_confirm: 您確定要取消這場比賽嗎？
+    #original_hash: 9a42672
     upload_results: 上傳成績
-    #original_hash: 47dfd90
-    post_announcement: 公告比賽消息
+    #original_hash: 01de5ee
+    post_results: 公告成績
+    #original_hash: b6513f1
+    results_posted_by_html: '由%{poster_name}在%{date_time}公告。'
+    #original_hash: a6b5efe
+    cancel_mistake: 弄錯了嗎？
+    #original_hash: 0fb43d5
+    note_before_cancel: 備註：只有已確認的比賽才能被取消。
     show:
       #original_hash: b0fe391
       general_info: 基本資訊
@@ -2189,7 +2479,7 @@ zh-TW:
         cumulative_one_round_html: '可能採用%{cumulative_time_limit}（參見%{regulation_link}）。'
         #original_hash: c6190b6
         cumulative_across_rounds_html: '可能於不同輪共同採用%{cumulative_time_limit}（參見%{guideline_link}）。'
-        #original_hash: e4e48c6
+        #original_hash: e8d17df
         cutoff_html: '在門檻制比賽中，進入第二階段的秒數門檻（參見%{regulation_link}）。'
         #original_hash: f571a30
         format_html: >-
@@ -2270,7 +2560,7 @@ zh-TW:
         #original_hash: b233e77
         registration: 報名資料
         #original_hash: 3f9176e
-        import_registrations: 導入報名資料
+        import_registrations: 載入報名資料
         #original_hash: d672995
         register: 報名
         #original_hash: 855bd26
@@ -2380,6 +2670,15 @@ zh-TW:
         history: 更新歷史
         #original_hash: e58bcf8
         mixed_history: 混合更新歷史
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: 性別
+        #original_hash: 6a72085
+        gender_all: 所有
+        #original_hash: 3f3a489
+        male: 男性
+        #original_hash: b7c17e9
+        female: 女性
     table_elements:
       #original_hash: 709a232
       name: 名字
@@ -2506,10 +2805,10 @@ zh-TW:
       title: 請求更改生日表單
       #original_hash: 8a4ced5
       description: 若您的生日與我們記錄當中的資料不符時，請使用此表單。
-      #original_hash: 563d056
+      #original_hash: 0ac13b9
       important_message_html: >-
         <span
-        class="text-danger">重要</span>：請附件一個有您的姓名和生日的<u>合法證件</u>（身份證、駕照、護照等）。
+        class="text-danger">重要</span>：請附件一個有您的姓名和生日的<u>合法證件</u>（身份證、駕照、護照等）。其他的個人資訊部分可以遮蓋或是模糊處理。
       #original_hash: 19c17ec
       submit: 請求更改
     messages:
@@ -2690,9 +2989,10 @@ zh-TW:
     spirit_footer: WCA精神
     #original_hash: c1781ee
     our_goals_title: 我們的目標
-    #original_hash: 1ca8ac4
+    #original_hash: caf6bf2
     our_goals_content_html: >-
-      <p>世界方塊協會希望藉由增加參加「魔術方塊」比賽的方式，讓全世界更多的年輕人能夠有參與社群跟領導社群的機會。我們相信比賽經驗以及社群經驗可以讓年輕人有成長機會，並藉由新的方塊比賽項目接觸到更多的人群，能夠讓整個社群成長茁壯。</p>
+      <p>世界方塊協會希望藉由增加參加「魔術方塊」比賽的方式，讓全世界更多的年輕人能夠有參與社群跟領導社群的機會。我們相信比賽經驗以及社群經驗可以讓年輕人有成長機會，並藉由新的方塊比賽項目接觸到更多的人群，能夠讓整個社群成長茁壯。關於董事會對於WCA願景與策略的文件可以在<a
+      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">這裡</a>閱覽。</p>
     #original_hash: f64ccc7
     whats_next_title: WCA的下一步是甚麼？
     #original_hash: a08c67f
@@ -2846,11 +3146,11 @@ zh-TW:
       probation:
         #original_hash: 1dd6e3b
         name: 觀察名單中的WCA代表
-      #original_hash: 3d5b64b
+      #original_hash: 7e849d2
       delegates_html: >-
-        <p><strong>WCA代表</strong>是WCA動議中定義的角色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的任務、精神和規則。WCA將代表區別成<strong>WCA高級代表</strong>、<strong>WCA代表</strong>和<strong>WCA代表候選人</strong>%{see_link}。</p>
-        <p>跟WCA代表職責不同的是，WCA高級代表需額外負責管理該地區的代表以及當有社群成員聯絡時處理該地區社群的事務。</p>
-        <p>新上任的代表會先列為WCA代表候選人，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為WCA代表。</p>
+        <p><strong>WCA代表</strong>是WCA動議中定義的角色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的任務、精神和規則。WCA將代表區別成<strong>高級代表</strong>、<strong>區域代表</strong>、<strong>一般代表</strong>、<strong>初級代表</strong>和<strong>實習代表</strong>%{see_link}。</p>
+        <p>跟一般代表職責不同的是，高級代表或是區域代表需額外負責管理該地區的代表以及當有社群成員聯絡時處理該地區社群的事務。</p>
+        <p>新上任的代表會先列為初級代表，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為一般代表。</p><p>實習代表是用來訓練成WCA代表的職位，在有其他WCA代表同時在場的時候才能監督一場比賽。</p>
       #original_hash: 27d18ac
       see_link_html: '（參見%{link}）'
       #original_hash: 5b01fcc
@@ -2870,6 +3170,17 @@ zh-TW:
     policies: WCA政策
     #original_hash: 91ac873
     codeofethics: 倫理規範
+    #original_hash: 2643980
+    codeofconduct: 行為準則
+  education:
+    #original_hash: 41701c2
+    title: WCA教育文獻
+    #original_hash: aa562a7
+    description: WCA品質保證委員會與WCA行銷組已為社群發布許多文件，您可以在下面下載這些文件。
+    #original_hash: d0a3812
+    competitor_tutorial: 參賽者教程
+    #original_hash: 815938f
+    competition_material: 比賽用材料（獎狀，蓋子）
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
@@ -3004,27 +3315,78 @@ zh-TW:
       #original_hash: fb6cd86
       info_html: 該理事會負責建立和維護WCA社群與WCA員工之間的雙邊溝通。
   score_tools:
-    #original_hash: ea9d41d
-    title: WCA成績輸入工具
-    paragraphs:
-      #original_hash: 305f7f8
-      '1': >-
-        WCA強烈建議您在比賽前和比賽中使用 <a href="https://live.worldcubeassociation.org">WCA
-        Live</a>。WCA Live 是一個能夠支援比賽且可以跟全世界即時分享比賽成績的平台。
-      #original_hash: 0867b38
-      '2': >-
-        成績單和轉亂內容應該要在傳給WCA成績組之前確認有無錯誤。你可以使用<a
-        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
-        Matcher</a>，這是一個由Philippe Virouleau建立的開源項目。
-      #original_hash: 975e59b
-      '3': >-
-        最新版的WCA比賽成績單可以在這裡下載：<br /><a href="/files/results.xls"
-        target="_blank">WCA比賽成績單</a>。
-      #original_hash: c576675
-      '4': >-
-        您可能還想使用<a
-        href="https://groupifier.jonatanklosko.com">Groupifier</a>幫比賽的參賽者分組，那麼您找對工具了。其中主要功能包括：將參賽者按照成績排序、分配工作（裁判、轉亂）、決定需要多少轉亂步驟、產生成績單、個人賽程和總結表。這是一個由Jonatan
-        Kłosko建立的開源項目。
+    #original_hash: 4fc2133
+    title: WCA比賽用軟體工具
+    #original_hash: 6d2fe37
+    wca_icon_text: 由WCA軟體組發開與維護
+    intro:
+      #original_hash: 0c5fab5
+      desc: 這一頁大概地列出一些對WCA比賽的主辦團隊有用的工具。
+      #original_hash: 479b542
+      disclaimer: '在這頁面上的工具並非所有都是由WCA軟體組維護，但其實別擔心！是因為我們沒有足夠人力來管理所有WCA相關的軟體 :)'
+      #original_hash: 80f97b9
+      used: >-
+        所有列在這裡的程式都有在WCA比賽中被使用過，且已經與WCA網站做整合：您能夠用WCA帳號登入並且能夠載入或是上傳即將舉行的比賽資料。每一個程式的維護者會清楚地記載。
+    before:
+      #original_hash: 9850344
+      title: 比賽之前
+      #original_hash: 576e2f4
+      desc: 參賽者的報名資料能夠直接在WCA網站上面管理。由於手動管理分組和工作人員有可能會很費時，您可以考慮選用以下其中一個軟體。
+    during:
+      #original_hash: 9934200
+      title: 比賽進行中
+      #original_hash: 2b0a6f6
+      desc: 在這裡您可以找到能夠在比賽進行中讓您管理比賽成績的工具。
+    after:
+      #original_hash: d81b949
+      title: 比賽結束後
+      #original_hash: b898460
+      desc: 雖然成績確認會在網站上面執行，您仍要使用一些工具來載入由TNoodle產生的轉亂內容，這樣才能把最後成績上傳到WCA網站。
+    tools:
+      age:
+        #original_hash: 4aaae5b
+        title: AGE
+        #original_hash: 2e4832d
+        description: 產生和編輯WCA的比賽分組以及比賽任務分派的工具
+      certificates:
+        #original_hash: b3e4eb0
+        title: 獎狀
+        #original_hash: f1a0731
+        description: 用WCA Live來列印WCA比賽的獎狀
+      groupifier:
+        #original_hash: 8f55355
+        title: Groupifier
+        #original_hash: 24d4736
+        description: >-
+          WCA比賽主辦團隊可用的分組以及分派工作的管理工具。在主要的功能中你能找到：用排名來排列參賽者、分派工作（裁判、轉亂）、決定需要的轉亂數量、產生成績單、個人單子，以及改要...更多內容請參考網頁。
+      scorecards:
+        #original_hash: aa1b64d
+        title: 成績單
+        #original_hash: 2b8e373
+        description: 用WCA Live來列印WCA比賽的成績單
+      tnoodle:
+        #original_hash: ba336a1
+        title: TNoodle （轉亂程式）
+        #original_hash: 0a38b22
+        description: TNoodle是用在WCA比賽的官方轉亂程式。通常都是由WCA代表在比賽前使用，但它的介面也能夠讓任何人為所有的WCA比賽項目產生轉亂內容。
+      live:
+        #original_hash: c66444f
+        title: WCA Live
+        #original_hash: f122015
+        description: 能管理WCA比賽且能即時向全世界分享比賽成績的平台
+      nightmare:
+        #original_hash: eebde3b
+        title: 成績用表格
+        #original_hash: 466f4c2
+        description: 問題難免都會發生......如果您沒有網路連線，您就必須要使用舊的表單系統。
+      matcher:
+        #original_hash: cc59bc9
+        title: 轉亂自動配對
+        #original_hash: a352bd1
+        description: >-
+          能把TNoodle產生的轉亂內容對應到成績。當使用WCA
+          Live時，從WCA網站載入成績，可以是EXCEL表格或是一個單獨的WCIF檔案。從不只一個TNoodle
+          json檔案來載入轉亂內容。輸出適當的成績檔案格式來作為成績上傳。
   logo:
     #original_hash: c72c969
     title: WCA標誌
@@ -3173,6 +3535,8 @@ zh-TW:
       content2_html: >-
         WCA規則有一份<a
         href="/regulations/guidelines.html">WCA指導方針</a>來做輔助，包含額外的釐清與解釋。
+      #original_hash: c8e1783
+      content3_html: 在比賽發生的意外事件以及由WCA規則委員會所做出的解決作法可以在<a href="/incidents">意外事件</a>裡閱覽。
     panel2:
       #original_hash: 8ad8302
       title: 翻譯版
@@ -3217,7 +3581,7 @@ zh-TW:
     #original_hash: 1b026e1
     paragraph3_html: >-
       如果您有興趣新增或是更新翻譯版本，請到<a
-      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">Github倉庫上的翻譯說明</a>。
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">GitHub倉庫上的翻譯說明</a>。
   organizer_guidelines:
     #original_hash: 7486ac4
     title: WCA比賽主辦團隊指導方針
@@ -3373,3 +3737,68 @@ zh-TW:
       confirm_accept: 您確定要接受此媒體？
       #original_hash: 5301648
       edit: 編輯
+  media_and_instagram:
+    #original_hash: 1e9793e
+    page_title: 上傳媒體和Instagram
+    general_media_submission:
+      #original_hash: 2b4c8c8
+      title: 上傳一般媒體
+      #original_hash: 670a1a8
+      body_html: >-
+        WCA代替社群在<a href="/media">媒體頁面</a>中分享來自比賽的精彩照片及文章。如果您有一些東西想要分享，請使用<a
+        href="/media/new">一般媒體用表單</a>！
+    instagram_submission:
+      #original_hash: e01c612
+      title: 上傳Instagram
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        如您所見，WCA有一個<a
+        href="https://www.instagram.com/thewcaofficial/">Instagram帳號</a>！藉由世界各地玩家上傳給我們的媒體，我們會發佈最能呈現全球方塊社群的內容。
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        如果您有高品質的照片或是影片且您希望我們能發佈，請按下面的按鈕並填寫表單。為了能讓WCA發佈這個內容，您必須是這些媒體的版權所有者並且必須要授權給WCA發佈使用。由於上傳的數量很多，我們無法發佈每一個收到的內容，但這裡有些提示能讓您的內容被發佈：
+      #original_hash: cf5c955
+      photo_quality: 確認照片或影片的品質是好的。並不需要是專業攝影，但盡量不要讓照片或影片的品質損失。
+      #original_hash: 0742378
+      photo_interest: 嘗試著讓您的內容能讓廣泛的群眾感到有興趣。只會讓少數人覺得有興趣的內容可能不適合這裡。
+      #original_hash: 497bc27
+      wca_related: 發佈跟WCA有關的照片和影片，就是我們帳號的目的。我們樂於見到玩家們開心。
+      #original_hash: af882f2
+      submit_instagram_content: 上傳Instagram內容
+    instagram_hosting:
+      #original_hash: 5156783
+      title: 主持Instagram
+      #original_hash: 541106b
+      paragraph1_html: >-
+        有時候，我們會讓參加比賽的社群成員主持WCA的官方Instagram限時動態！如果您有興趣，請按下面的按鈕並填入表單。如果在訊息都填入後並且被核准，WCA傳播組會連絡您。如果您有任何問題，請<a
+        href="https://www.worldcubeassociation.org/contact/website">聯絡我們</a>。
+      #original_hash: aca6c32
+      paragraph2: 我們的目的是分享一些玩家的個人故事和比賽內容。這不應該是週末的沉重負擔，所以我們希望您要先享受比賽再來分享。
+      #original_hash: af023ed
+      paragraph3: 當一位主持的角色總結如下：
+      #original_hash: 21efafe
+      short_intro: 做個簡短介紹，分享您自己以及比賽。
+      #original_hash: a053b5a
+      venue_feel: 拍一些短片讓大家對比賽和玩家有感覺，可以是在比賽區域或是參賽者預備區拍攝的內容
+      #original_hash: d17fb2f
+      people_solving: 試著拍一些正在比賽的玩家（可以的話，拍攝主要項目中的速解較強的玩家）
+      #original_hash: 76d2358
+      mini_interviews: 您可以試著拍些迷你訪問（主辦單位，代表等等），問一些對於比賽的想法
+      #original_hash: 6003b20
+      pictures_too: 您也可以寄送照片，不用一定要影片
+      #original_hash: 8813619
+      paragraph4: 我們在週末的溝通通常都是使用WhatsApp的群組。請確認您熟悉這個軟體平台，或是告訴我們您無法使用這個軟體，我們才好作其他安排。
+      #original_hash: 38191c1
+      apply_to_host: 申請主持
+    other_suggestions:
+      #original_hash: 730873b
+      title: 其他建議？
+      #original_hash: aa7ab5c
+      body_html: >-
+        您有其他對於Instagram或是其他社群媒體上面內容的意見？<a
+        href="https://www.worldcubeassociation.org/contact/website">讓我們知道</a>！
+  footer:
+    #original_hash: cf01481
+    privacy: 隱私權
+    #original_hash: 4c4a2e8
+    disclaimer: 免責聲明

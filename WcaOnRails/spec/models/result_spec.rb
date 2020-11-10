@@ -51,13 +51,18 @@ RSpec.describe Result do
     end
 
     it "cannot skip all solves" do
-      result = FactoryBot.build :result, value1: 0, value2: 0, value3: 0, value4: 0, value5: 0
-      expect(result).to be_invalid_with_errors(base: ["Cannot skip all solves."])
+      result = FactoryBot.build :result, value1: -2, value2: -2, value3: 0, value4: 0, value5: 0, best: -2
+      expect(result).to be_invalid_with_errors(base: ["All solves cannot be DNS/skipped."])
     end
 
     it "values must all be >= -2" do
       result = FactoryBot.build :result, value1: 0, value2: -3, value3: 0, value4: 0, value5: 0
       expect(result).to be_invalid(value2: ["invalid"])
+    end
+
+    it "position must be a number" do
+      result = FactoryBot.build :result, pos: nil
+      expect(result).to be_invalid(pos: ["The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"])
     end
 
     it "correctly computes best" do
@@ -73,7 +78,7 @@ RSpec.describe Result do
         let(:eventId) { "333" }
         let(:formatId) { "a" }
 
-        context "combined round" do
+        context "cutoff round" do
           let(:roundTypeId) { "c" }
 
           it "all solves" do
@@ -93,7 +98,7 @@ RSpec.describe Result do
           end
         end
 
-        context "uncombined round" do
+        context "uncutoff round" do
           let(:roundTypeId) { "1" }
 
           it "all solves with average below 10 minutes" do
@@ -138,7 +143,7 @@ RSpec.describe Result do
         context "777" do
           let(:eventId) { "777" }
 
-          context "combined round" do
+          context "cutoff round" do
             let(:roundTypeId) { "c" }
 
             it "all solves" do
@@ -166,7 +171,7 @@ RSpec.describe Result do
             end
           end
 
-          context "uncombined round" do
+          context "uncutoff round" do
             let(:roundTypeId) { "1" }
 
             it "all solves with average below 10 minutes" do
@@ -212,7 +217,7 @@ RSpec.describe Result do
           end
         end
 
-        context "333fm uncombined round" do
+        context "333fm uncutoff round" do
           let(:eventId) { "333fm" }
           let(:roundTypeId) { "1" }
 
@@ -244,6 +249,75 @@ RSpec.describe Result do
           let(:eventId) { "333bf" }
 
           it "does compute average" do
+            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
+            expect(result).to be_valid
+
+            result.average = 33
+            expect(result.compute_correct_average).to eq 1000
+            expect(result).to be_invalid_with_errors(average: ["should be 1000"])
+          end
+
+          it "leaves average for 333bf as skipped if one of three solves is skipped" do
+            result = build_result(value1: 3000, value2: 3000,
+                                  value3: SolveTime::SKIPPED_VALUE,
+                                  value4: SolveTime::SKIPPED_VALUE,
+                                  value5: SolveTime::SKIPPED_VALUE)
+            expect(result.compute_correct_average).to eq SolveTime::SKIPPED_VALUE
+          end
+
+          it "sets DNF average for 333bf if one of three solves is either DNF or DNS" do
+            result_dns = build_result(value1: 3000, value2: 3000,
+                                      value3: SolveTime::DNS_VALUE,
+                                      value4: SolveTime::SKIPPED_VALUE,
+                                      value5: SolveTime::SKIPPED_VALUE)
+            result_dnf = build_result(value1: 3000, value2: 3000,
+                                      value3: SolveTime::DNF_VALUE,
+                                      value4: SolveTime::SKIPPED_VALUE,
+                                      value5: SolveTime::SKIPPED_VALUE)
+            expect(result_dnf.compute_correct_average).to eq SolveTime::DNF_VALUE
+            expect(result_dns.compute_correct_average).to eq SolveTime::DNF_VALUE
+          end
+
+          # https://www.worldcubeassociation.org/regulations/#9f2
+          it "rounds averages for 333bf over 10 minutes down to nearest second for x.49" do
+            over10 = (10.minutes + 10.49.seconds) * 100 # In centiseconds.
+            result = build_result(value1: over10,
+                                  value2: over10,
+                                  value3: over10,
+                                  value4: SolveTime::SKIPPED_VALUE,
+                                  value5: SolveTime::SKIPPED_VALUE)
+            expect(result.compute_correct_average).to eq((10.minutes + 10.seconds) * 100)
+          end
+
+          # https://www.worldcubeassociation.org/regulations/#9f2
+          it "rounds averages for 333bf over 10 minutes up to nearest second for x.50" do
+            over10 = (10.minutes + 10.50.seconds) * 100 # In centiseconds.
+            result = build_result(value1: over10,
+                                  value2: over10,
+                                  value3: over10,
+                                  value4: SolveTime::SKIPPED_VALUE,
+                                  value5: SolveTime::SKIPPED_VALUE)
+            expect(result.compute_correct_average).to eq((10.minutes + 11.seconds) * 100)
+          end
+        end
+
+        context "444bf" do
+          let(:eventId) { "444bf" }
+
+          it "sets a valid average for 444bf if all three solves are completed" do
+            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
+            expect(result).to be_valid
+
+            result.average = 33
+            expect(result.compute_correct_average).to eq 1000
+            expect(result).to be_invalid_with_errors(average: ["should be 1000"])
+          end
+        end
+
+        context "555bf" do
+          let(:eventId) { "555bf" }
+
+          it "sets a valid average for 555bf if all three solves are completed" do
             result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
             expect(result).to be_valid
 
@@ -327,7 +401,7 @@ RSpec.describe Result do
         result
       end
 
-      context "non-combined rounds" do
+      context "non-cutoff rounds" do
         it "format 1" do
           result = result_with_n_solves(2, roundTypeId: "1", formatId: "1")
           expect(result).to be_invalid_with_errors(base: ["Expected 1 solve, but found 2."])
@@ -354,7 +428,7 @@ RSpec.describe Result do
         end
       end
 
-      context "combined rounds" do
+      context "cutoff rounds" do
         it "format 2" do
           result = result_with_n_solves(3, roundTypeId: "c", formatId: "2")
           expect(result).to be_invalid_with_errors(base: ["Expected at most 2 solves, but found 3."])

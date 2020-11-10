@@ -26,6 +26,8 @@ PreCommit:
       - 'WcaOnRails/tmp/**/*'
       - 'WcaOnRails/db/structure.sql'
       - 'WcaOnRails/node_modules/**/*'
+      - 'WcaOnRails/app/webpacker/stylesheets/semantic/**/*'
+      - 'WcaOnRails/config/locales/*.yml'
       - 'chef/**/*'
       - '.gitmodules'
       - '**/*.pdf'
@@ -37,6 +39,18 @@ PreCommit:
       - '**/*.jar'
       - '**/*.svg'
 
+  EsLint:
+    required_executable: 'WcaOnRails/bin/yarn'
+    enabled: true
+    include:
+      - 'WcaOnRails/app/webpacker/**/*.js'
+    exclude:
+      # FIXME: we could fix it, but it's long and it's legacy code anyway...
+      - 'WcaOnRails/app/webpacker/javascript/edit-events/**/*'
+      # Semantic UI stuff, we need to re-exclude that here.
+      - 'WcaOnRails/app/webpacker/stylesheets/semantic/**/*'
+    command: ['WcaOnRails/bin/yarn', '--silent', 'run', 'eslint', '-c', '.eslintrc.json', '-f', 'compact']
+
   RuboCop:
     enabled: true
     on_warn: fail # Treat all warnings as failures
@@ -46,6 +60,9 @@ PreCommit:
 
   JsHint:
     enabled: true
+    include:
+      # Others are handled by EsLint
+      'WcaOnRails/app/assets'
     required_executable: 'WcaOnRails/bin/yarn'
     flags: ['run', '-s', 'jshint', '--verbose']
 

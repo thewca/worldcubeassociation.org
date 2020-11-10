@@ -19,7 +19,7 @@
             Report posted
           </th>
           <th class="admin-date">
-            Results submitted <%= icon('fas', 'exclamation-circle', title: 'For competitions before January 2019, this is the date when results were posted', data: { toggle: "tooltip" }) %>
+            Results submitted <%= ui_icon('exclamation circle', title: 'For competitions before January 2019, this is the date when results were posted', data: { toggle: "tooltip" }) %>
           </th>
           <th class="admin-button">
           </th>
@@ -29,7 +29,7 @@
         <% competitions.each_with_index do |competition, index| %>
           <tr>
             <td>
-              <%= flag_icon competition.country.iso2 %><%= link_to competition.cellName, competition_path(competition) %>
+              <%= flag_icon competition.country.iso2 %><%= link_to competition.display_name(short: true), competition_path(competition) %>
               <br /><strong><%= competition.country.name_in(:en) %></strong>, <%= competition.cityName %>
             </td>
             <td class="admin-delegate">

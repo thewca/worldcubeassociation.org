@@ -28,26 +28,38 @@ RSpec.describe PersonsHelper do
   describe "#delegate_badge" do
     it "Returns a Delegate badge when passed delegate" do
       string = helper.delegate_badge("delegate")
-      expect(string).to eq "<span class=\"badge delegate-badge\"><a title=\"" +
+      expect(string).to eq "<span class=\"badge delegate-badge\" data-toggle=\"tooltip\" " \
+                           "data-placement=\"bottom\" title=\"" +
                            t("enums.user.delegate_status.delegate") +
-                           "\" data-toggle=\"tooltip\" data-placement=\"bottom\" href=\"/delegates\">" +
+                           "\"><a href=\"/delegates\">" +
                            t("enums.user.delegate_status.delegate") + "</a></span>"
     end
 
     it "Returns a Senior Delegate badge when passed senior_delegate" do
       string = helper.delegate_badge("senior_delegate")
-      expect(string).to eq "<span class=\"badge delegate-badge\"><a title=\"" +
+      expect(string).to eq "<span class=\"badge delegate-badge\" data-toggle=\"tooltip\" " \
+                           "data-placement=\"bottom\" title=\"" +
                            t("enums.user.delegate_status.senior_delegate") +
-                           "\" data-toggle=\"tooltip\" data-placement=\"bottom\" href=\"/delegates\">" +
+                           "\"><a href=\"/delegates\">" +
                            t("enums.user.delegate_status.senior_delegate") + "</a></span>"
     end
 
-    it "Returns a Candidate Delegate badge when passed candadate_delegate" do
+    it "Returns a Junior Delegate badge when passed candidate_delegate" do
       string = helper.delegate_badge("candidate_delegate")
-      expect(string).to eq "<span class=\"badge delegate-badge\"><a title=\"" +
+      expect(string).to eq "<span class=\"badge delegate-badge\" data-toggle=\"tooltip\" " \
+                           "data-placement=\"bottom\" title=\"" +
                            t("enums.user.delegate_status.candidate_delegate") +
-                           "\" data-toggle=\"tooltip\" data-placement=\"bottom\" href=\"/delegates\">" +
+                           "\"><a href=\"/delegates\">" +
                            t("enums.user.delegate_status.candidate_delegate") + "</a></span>"
+    end
+
+    it "Returns a Trainee Delegate badge when passed trainee_delegate" do
+      string = helper.delegate_badge("trainee_delegate")
+      expect(string).to eq "<span class=\"badge delegate-badge\" data-toggle=\"tooltip\" " \
+                           "data-placement=\"bottom\" title=\"" +
+                           t("enums.user.delegate_status.trainee_delegate") + "\">" +
+                           t("enums.user.delegate_status.trainee_delegate") +
+                           "</span>"
     end
 
     it "links to the delegates page" do

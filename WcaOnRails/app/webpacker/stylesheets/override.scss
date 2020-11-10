@@ -1,0 +1,40 @@
+body, html {
+  // This implements sticky footer, by making the main content extend as needed.
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  main {
+    flex: 1;
+  }
+
+  .icon {
+    text-decoration: none;
+  }
+  .navbar-brand {
+    .icon {
+      margin: 0;
+      width: auto;
+    }
+  }
+  // FIXME: the two rules below are to override conflicting bootstrap/semantic ui definition
+  .container {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  @media only screen and (max-width: 768px) {
+    div.navbar-static-top > div.ui.ui.ui.container:not(.fluid) {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  footer.ui.segment.vertical {
+    border-top: 1px solid #ddd;
+    // Our main content spreads a bit too close from the footer.
+    margin-top: 10px;
+    background-color: #f8f8f8;
+    a {
+      color: black;
+    }
+  }
+}

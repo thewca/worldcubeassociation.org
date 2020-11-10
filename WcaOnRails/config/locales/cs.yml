@@ -1369,7 +1369,7 @@ cs:
         '7': >-
           Součástí avataru nesmí být ofenzivní obsah (napřiklad pohoršující
           gesta).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: 35abf16
         title: 'Doplňkové instrukce pro Delegáty:'
         paragraphs:

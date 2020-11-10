@@ -36,6 +36,7 @@ FactoryBot.define do
 
     trait :results_posted do
       results_posted_at { Time.now }
+      results_posted_by { FactoryBot.create(:user, :wrt_member).id }
     end
 
     trait :with_competitor_limit do
@@ -45,6 +46,7 @@ FactoryBot.define do
     end
 
     events { Event.where(id: event_ids) }
+    main_event_id { events.first.id if events.any? }
 
     venue { "My backyard" }
     venueAddress { "My backyard street" }
@@ -63,6 +65,10 @@ FactoryBot.define do
       delegates { [FactoryBot.create(:delegate)] }
     end
 
+    trait :with_trainee_delegate do
+      delegates { [FactoryBot.create(:trainee_delegate)] }
+    end
+
     trait :with_organizer do
       organizers { [FactoryBot.create(:user)] }
     end
@@ -78,6 +84,7 @@ FactoryBot.define do
     registration_close { 1.week.ago.change(usec: 0) }
 
     trait :with_valid_submitted_results do
+      announced
       with_rounds { true }
       after(:create) do |competition|
         person = FactoryBot.create(:inbox_person, competitionId: competition.id)
@@ -110,6 +117,19 @@ FactoryBot.define do
       showAtAll { true }
     end
 
+    trait :announced do
+      visible
+      announced_at { start_date }
+      announced_by { FactoryBot.create(:user, :wcat_member).id }
+    end
+
+    trait :cancelled do
+      announced
+      confirmed
+      cancelled_at { Time.now }
+      cancelled_by { FactoryBot.create(:user, :wcat_member).id }
+    end
+
     trait :stripe_connected do
       # This is an actual test stripe account set up
       # for testing Stripe payments, and is connected
@@ -121,6 +141,10 @@ FactoryBot.define do
     trait :with_valid_schedule do
       with_rounds { true }
       with_schedule { true }
+    end
+
+    trait :world_championship do
+      championship_types { ["world"] }
     end
 
     transient do

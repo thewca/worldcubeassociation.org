@@ -8,7 +8,7 @@ FactoryBot.define do
     cvc { "314" }
 
     trait :sca_card do
-      number { "4000000000003220" }
+      number { "4000002760003184" }
     end
 
     trait :expired do

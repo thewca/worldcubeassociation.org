@@ -2,12 +2,17 @@
 
 <%= render layout: 'competitions/nav' do %>
   <% buttons = capture do %>
-    <%= link_to icon("fas", "eye", t('competition_tabs.form_elements.goto_button', tab_name: @competition_tab.name)),
-                competition_path(@competition, anchor: @competition_tab.slug),
-                target: "_blnk", class: "btn btn-info" %>
-    <%= link_to icon("fas", "trash", t('competition_tabs.form_elements.delete')), competition_tab_path(@competition, @competition_tab),
+    <%= link_to competition_path(@competition, anchor: @competition_tab.slug),
+                target: "_blnk", class: "btn btn-info" do %>
+      <%= ui_icon("eye") %>
+      <%= t('competition_tabs.form_elements.goto_button', tab_name: @competition_tab.name) %>
+    <% end %>
+    <%= link_to competition_tab_path(@competition, @competition_tab),
                 method: :delete, class: "btn btn-danger",
-                data: { confirm: t('competition_tabs.form_elements.confirm_delete', tab_name: @competition_tab.name) } %>
+                data: { confirm: t('competition_tabs.form_elements.confirm_delete', tab_name: @competition_tab.name) } do %>
+      <%= ui_icon("trash") %>
+      <%= t('competition_tabs.form_elements.delete') %>
+    <% end %>
   <% end %>
 
   <%= render "competition_tab_form", submit_text: t('competition_tabs.form_elements.update'), submit_url: competition_tab_path(@competition, @competition_tab), buttons: buttons %>

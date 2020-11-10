@@ -11,7 +11,7 @@ $(function() {
   $('.clear-all-events').on('click', checkboxesSetter(false));
 
   function updateEventsSelectedCount($eventsFormGroup) {
-    var count = $eventsFormGroup.find('input[type="checkbox"]:checked').size();
+    var count = $eventsFormGroup.find('input[type="checkbox"]:checked').length;
     var $eventsSelectedCount = $eventsFormGroup.find('.associated-events-label .events-selected-count');
     $eventsSelectedCount.text(count);
   }

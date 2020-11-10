@@ -1,0 +1,18 @@
+<% provide(:title, t('education.title')) %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <p><%= t('education.description') %></p>
+
+  <div class="list-group">
+    <%= link_to "/edudoc/competitor-tutorial/tutorial.pdf", class: "list-group-item" do %>
+      <%= ui_icon("file alt") %>
+      <%= t('education.competitor_tutorial') %>
+    <% end %>
+    <%= link_to "https://drive.google.com/drive/folders/1jrMWgOgNscPDqoxzgnEQ1bnV9D4FDzLj", class: "list-group-item" do %>
+      <%= ui_icon("copy") %>
+      <%= t('education.competition_material') %>
+    <% end %>
+  </div>
+</div>

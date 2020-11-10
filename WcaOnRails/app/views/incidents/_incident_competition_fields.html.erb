@@ -1,5 +1,5 @@
 <div class="nested-fields">
-  <%= f.input :competition_id, as: :incident_competition_id, only_one: true, input_html: { class: "competition-selector" }, link_html: link_to_remove_association(button_tag(icon("fas", "times"), type: "button", class: "btn btn-danger"), f) %>
+  <%= f.input :competition_id, as: :incident_competition_id, only_one: true, input_html: { class: "competition-selector" }, link_html: link_to_remove_association(button_tag(ui_icon("times"), type: "button", class: "btn btn-danger"), f) %>
   <script>
     $('input.wca-autocomplete').wcaAutocomplete();
   </script>

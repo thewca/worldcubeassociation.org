@@ -39,8 +39,7 @@ class RegistrationsController < ApplicationController
     @show_events = params[:show_events] == "true"
     @show_full_mail = params[:show_email] == "true"
     @competition = competition_from_params
-    @registrations = @competition.registrations.includes(:user, :registration_payments)
-    @registrations = @registrations.includes(:events) if @show_events
+    @registrations = @competition.registrations.includes(:user, :registration_payments, :events)
   end
 
   def psych_sheet
@@ -473,6 +472,7 @@ class RegistrationsController < ApplicationController
           currency: registration.outstanding_entry_fees.currency.iso_code,
           confirmation_method: "manual",
           confirm: true,
+          receipt_email: user.email,
           description: "Registration payment for #{competition.name} by #{registration.user.name}",
           metadata: registration_metadata,
         }

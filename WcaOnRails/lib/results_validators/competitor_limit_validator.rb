@@ -3,9 +3,13 @@
 module ResultsValidators
   class CompetitorLimitValidator < GenericValidator
     COMPETITOR_LIMIT_WARNING = "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit})."\
-      " Unless a specific agreement was made when announcing the competition (such as a per-day competitor limit), the results of the competitors registered after the competitor limit was reached must be removed."
+      " The results of the competitors registered after the competitor limit was reached must be removed."
 
     @@desc = "For competition with a competitor limit, this validator checks that this limit is respected."
+
+    def self.has_automated_fix?
+      false
+    end
 
     def validate(competition_ids: [], model: Result, results: nil)
       reset_state

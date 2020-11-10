@@ -5,7 +5,11 @@ class RegistrationsMailer < ApplicationMailer
 
   def notify_organizers_of_new_registration(registration)
     @registration = registration
-    organizer_user_ids = (registration.competition.competition_organizers.select(&:receive_registration_emails).map(&:organizer_id) + registration.competition.competition_delegates.select(&:receive_registration_emails).map(&:delegate_id))
+    organizer_user_ids = (
+      registration.competition.competition_organizers.select(&:receive_registration_emails).map(&:organizer_id) +
+      registration.competition.competition_delegates.select(&:receive_registration_emails).map(&:delegate_id) +
+      registration.competition.competition_trainee_delegates.select(&:receive_registration_emails).map(&:trainee_delegate_id)
+    )
     to = User.where(id: organizer_user_ids).map(&:email)
     if to.empty?
       nil
@@ -20,7 +24,11 @@ class RegistrationsMailer < ApplicationMailer
 
   def notify_organizers_of_deleted_registration(registration)
     @registration = registration
-    organizer_user_ids = (registration.competition.competition_organizers.select(&:receive_registration_emails).map(&:organizer_id) + registration.competition.competition_delegates.select(&:receive_registration_emails).map(&:delegate_id))
+    organizer_user_ids = (
+      registration.competition.competition_organizers.select(&:receive_registration_emails).map(&:organizer_id) +
+      registration.competition.competition_delegates.select(&:receive_registration_emails).map(&:delegate_id) +
+      registration.competition.competition_trainee_delegates.select(&:receive_registration_emails).map(&:trainee_delegate_id)
+    )
     to = User.where(id: organizer_user_ids).map(&:email)
     if to.empty?
       nil

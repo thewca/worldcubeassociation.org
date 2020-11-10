@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
       :gender,
       :country_iso2,
     ] + User::CLAIM_WCA_ID_PARAMS)
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:login])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:login, :otp_attempt])
     devise_parameter_sanitizer.permit(:account_update, keys: [:name, :email])
   end
 

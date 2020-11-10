@@ -75,6 +75,13 @@ pl:
     Oceania: Oceania
     #original_hash: b1ffb4c
     South America: Ameryka Południowa
+  country_bands:
+    #original_hash: 2b5976e
+    title: Grupy Państw WCA
+    #original_hash: df5f4ea
+    band_title: 'Grupa %{number}'
+    #original_hash: 6521e5d
+    due_value: '$%{value} za jednego zawodnika na jedne zawody'
   events:
     #original_hash: 3732390
     '222': Kostka 2x2x2
@@ -275,6 +282,8 @@ pl:
     average: Średnia
     #original_hash: e7f6fc5
     solves: Ułożenia
+    #original_hash: c9d0561
+    hello: 'Witaj %{name},'
     date:
       #original_hash: acb6273
       no_date: Brak daty
@@ -347,7 +356,7 @@ pl:
     attributes:
       user:
         #original_hash: eeb6920
-        name: Pełne imię
+        name: Pełne imię i nazwisko
         #original_hash: 603a218
         wca_id: WCA ID
         #original_hash: cb77bea
@@ -394,6 +403,8 @@ pl:
         receive_delegate_reports: Chciałbym otrzymywać Raporty Delegata z Zawodów WCA drogą mailową
         #original_hash: 57eaf24
         user_preferred_events: Preferowane konkurencje
+        #original_hash: e632fbf
+        otp_attempt: 'Podaj swój kod uwierzytelniania dwuetapowego:'
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -513,7 +524,7 @@ pl:
         #original_hash: bae7d5b
         status: Status
         #original_hash: 709a232
-        name: Imię
+        name: Imię i nazwisko
         #original_hash: a6b9d69
         birthday: Data urodzenia
         #original_hash: c5497bc
@@ -562,7 +573,7 @@ pl:
         #original_hash: 8a754c6
         gender: Płeć
         #original_hash: 709a232
-        name: Imię
+        name: Imię i nazwisko
         #original_hash: c6bc0f4
         incorrect_wca_id_claim_count: Liczba nieudanych prób podpięcia WCA ID
       poll:
@@ -616,7 +627,7 @@ pl:
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Imię zgłaszającego
+        submitterName: Imię i nazwisko zgłaszającego
         #original_hash: 78cdfee
         submitterEmail: Email zgłaszającego
         #original_hash: 0d31f23
@@ -735,7 +746,7 @@ pl:
         dob: Wprowadź swoją datę urodzenia w formacie RRRR-MM-DD
         #original_hash: d0bb74a
         name: >-
-          Wprowadź swoje pełne imię poprawnie, na przykład <strong>Jan
+          Wprowadź swoje pełne imię i nazwisko poprawnie, na przykład <strong>Jan
           Kowalski</strong>. Nie zdrobniale jak <strong>j kowalski</strong>.
         #original_hash: da39a3e
         email: ''
@@ -780,6 +791,10 @@ pl:
           Jeżeli jesteś Kandydatem na Delegata, Starszym Delegatem, Członkiem
           WRC lub WQAC, otrzymujesz Raporty Delegata domyślnie. Uwaga: zmiana
           przyniesie skutek do godziny.
+        #original_hash: 0627e5c
+        otp_attempt: >-
+          Sprawdź swoje skonfigurowane urządzenie mobilne, w celu pozyskania
+          jednorazowego hasła, lub podaj jeden z kodów odzyskiwania.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -947,7 +962,7 @@ pl:
           Aby potwierdzić swoją tożsamość i poprawną datę urodzenia, musisz
           załączyć zdjęcie jakiegokolwiek legalnego dokumentu (dowodu
           osobistego, prawa jazdy, legitymacji studenckiej lub szkolnej,
-          paszportu, aktu urodzenia, ...), na którym zarówno twoje imię jak i
+          paszportu, aktu urodzenia, ...), na którym zarówno twoje imię, nazwisko jak i
           data urodzenia są widoczne i zrozumiałe dla osoby posługującej się
           językiem angielskim (lub skontaktuj się z lokalnym Delegatem WCA,
           jeżeli nie posiadasz takiego dokumentu).
@@ -1117,6 +1132,11 @@ pl:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
+      wfc:
+        #original_hash: da39a3e
+        from_date: ''
+        #original_hash: da39a3e
+        to_date: ''
     options:
       registration:
         status:
@@ -1150,7 +1170,7 @@ pl:
         #original_hash: 1917f4f
         competition_id: Zawody
         #original_hash: 709a232
-        name: Imię
+        name: Imię i nazwisko
         #original_hash: 3fa6f5f
         your_email: Twój adres email
       website_contact:
@@ -1184,6 +1204,128 @@ pl:
       new:
         #original_hash: ada2e9e
         sign_in: Zaloguj się
+        2fa:
+          #original_hash: b274c38
+          verify: "Aby się\_zalogować, potwierdź swoją tożsamość"
+          #original_hash: ec44d52
+          confirm: Potwierdź kod
+          #original_hash: 912516c
+          regenerated_secret: Pomyślnie wygenerowano twój klucz uwierzytelniania dwuetapowego.
+          #original_hash: 1b0c44f
+          enabled_success: Pomyślnie aktywowano uwierzytelnianie dwuetapowe.
+          #original_hash: 9515157
+          email_auth: Uwierzytelnianie emailowe
+          #original_hash: d305ccb
+          get_by_email: Pozyskaj kod drogą mailową
+          #original_hash: 4e644aa
+          get_by_email_desc: >-
+            Jeżeli nie masz dostępu do swojego urządzenia lub kodów dostępu,
+            możesz użyć poniższego przycisku w celu uzyskania jednorazowego
+            hasła emailem. Skopiuj go i wklej w powyższe pole, aby się
+            zalogować.
+          #original_hash: b243ac5
+          email_sent: >-
+            Kod został wysłany na twojego emaila i będzie ważny przez 2 minuty.
+            Możesz uzyskać nowy kod w ciągu 2 minut.
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: Nie możesz wygenerować jednorazowego hasła teraz
+            #original_hash: c0d4fc2
+            invalid_otp: Niepoprawny kod.
+            #original_hash: c2f5347
+            not_enabled: Uwierzytelnianie dwuetapowe nie jest aktywowane.
+            #original_hash: 14d294b
+            unknown: >-
+              Wystąpił nieznany błąd podczas wysyłania maila, skontaktuj się z
+              WST.
+          otp_email:
+            #original_hash: a20e037
+            subject: Twoje jednorazowe hasło do konta WCA
+            #original_hash: e820d08
+            2fa_attempt: >-
+              Próbujesz zalogować się na stronie WCA. Masz aktywowane
+              uwierzytelnianie dwuetapowe i właśnie zażądałeś jednorazowego
+              hasła. Znajduje się ono poniżej:
+            #original_hash: 2daca82
+            disclaimer: "Jeżeli nie zażądałeś kodu uwierzytelniającego, prosimy o natchmiastowy kontakt z WST poprzez odpowiedź na ten mail oraz zmianę swojego hasła, ponieważ\_prawdopodobnie zostało przechwycone."
+          #original_hash: 8c13694
+          name: Uwierzytelnianie Dwuetapowe (2FA)
+          #original_hash: d28c3b6
+          support_desc_html: 'WCA obsługuje %{two_factor_link} przy użyciu jednorazowego hasła.'
+          options:
+            #original_hash: 4f9dcb8
+            app: >-
+              wygenerowanego przez dedykowaną aplikacje 2FA na swoim urządzeniu
+              mobilnym (np. Authy lub Google Authenticator).
+            #original_hash: 34a7572
+            recovery: >-
+              wybranego spośród kodów odzyskiwania, wygenerowanych podczas
+              aktywowania 2FA.
+            #original_hash: eaee403
+            email: wysłanego na twój email podczas logowania
+          #original_hash: 7ae99ae
+          status_html: 'Uwierzytelnianie Dwuetapowe jest %{status}.'
+          #original_hash: 3ea3f98
+          enabled: włączone
+          #original_hash: 07596f1
+          disabled: wyłączone
+          #original_hash: 5f225b0
+          enable: Aktywuj 2FA
+          #original_hash: b2a3d7e
+          reset: Resetuj klucz 2FA
+          #original_hash: 14b7bfd
+          reset_if_needed: >-
+            Jeżeli któreś z twoich urządzeń zostało przechwycone lub chcesz
+            cofnąć dostęp ze swoich urządzeń, możesz zresetować swój klucz
+            uwierzytelniania dwuetapowego poniżej:
+          #original_hash: 69100a3
+          reset_warning: Będziesz musiał ponownie skonfigurować swoje urządzenia.
+          #original_hash: a8d11db
+          methods: Metody uwierzytelniania dwuetapowego
+          #original_hash: 0fd248d
+          methods_description: >-
+            Podczas logowania możesz skorzystać z kilku metod pozyskiwania
+            jednorazowego hasła opisanych poniżej:
+          #original_hash: 4442f0e
+          dedicated_app: Wykorzystując dedykowaną aplikację uwierzytelniania dwuetapowego
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            WST zaleca używanie %{authy} na swoim urządzeniu/urządzeniach w celu
+            pozyskiwania jednorazowego hasła podczas
+            logowania.<br/>Alternatywnymi rozwiązaniami są m.in. %{google} oraz
+            %{microsoft}.
+          #original_hash: f1b2ec2
+          scan_qrcode_html: >-
+            Zeskanuj poniższy kod QR przy pomocy wybranej aplikacji 2FA (lub
+            kliknij %{here}, jeżeli korzystasz obecnie z urządzenia mobilnego).
+          #original_hash: e7cba1a
+          backup_codes: Kody zapasowe
+          #original_hash: fa62416
+          backup_codes_desc: >-
+            Kody zapasowe mogą być użyte zamiast hasła jednorazowego, jeżeli nie
+            masz dostępu do swojego urządzenia z aplikacją 2FA. Każdy kod może
+            zostać użyty wyłącznie raz. Przechowuj je w bezpiecznym miejscu!
+          #original_hash: 087cb72
+          no_backup_codes: >-
+            Jeszcze nie wygenerowałeś kodów zapasowych, kliknij poniższy
+            przycisk aby to zrobić.
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            Wygenerowałeś kilka kodów zapasowych. Jeżeli już wykorzystałeś, lub
+            zgubiłes te kody, możesz wygenerować nowe klikając poniższy
+            przycisk. Jeżeli to zrobisz, wszystkie istniejące kody zapasowe
+            zostaną unieważnione.
+          #original_hash: 2ee4aca
+          generate_backup_codes: Wygeneruj kody zapsowe
+          #original_hash: a69dd5b
+          backup_codes_warning: >-
+            Kody zapasowe zostaną wyświetlone poniżej. Zapisz je niezwłocznie,
+            ponieważ są przechowywane w postaci zaszyfrowanej w bazie i nie mogą
+            być zobaczone ponownie.
+          #original_hash: b5e3ad8
+          email_auth_desc: >-
+            Podczas logowania możesz zarządać wysłania jednorazowego hasła
+            emailem.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1226,7 +1368,7 @@ pl:
       scopes:
         #original_hash: 1920e95
         public: >-
-          Mieć dostęp do twoich publicznych danych (imię, WCA ID, płeć,
+          Mieć dostęp do twoich publicznych danych (imię i nazwisko, WCA ID, płeć,
           obywatelstwo i zdjęcie profilowe)
         #original_hash: d4003be
         dob: Mieć dostęp do twojej daty urodzin
@@ -1376,6 +1518,8 @@ pl:
         activate: >-
           Po aktywowaniu konta możesz zalogować się na stronę World Cube
           Association:
+        #original_hash: fb02586
+        login_form: formularz logowania
         #original_hash: 333999b
         addendum: >-
           Ten mail został wygenerowany automatycznie. Jeżeli nie utworzyłeś
@@ -1571,7 +1715,7 @@ pl:
         '7': >-
           Zdjęcie profilowe nie może zawierać żadnych obraźliwych treści (np.
           obraźliwych gestów).
-      delegate_avatar_guidelines:
+      staff_avatar_guidelines:
         #original_hash: da9e6df
         title: 'Dodatkowe wytyczne dla Członków Personelu:'
         paragraphs:
@@ -1602,8 +1746,11 @@ pl:
         podajesz popraną datę we właściwym formacie (RRR-MM-DD), prosimy o
         kontakt z Zespołem do Spraw Wyników przy użyciu <a
         href="%{dob_form_path}">tego specjalnego formularza</a>.
-      #original_hash: 71b46b4
-      unique: "jest już\_używane przez \"%{used_name}\" o adresie email %{used_email}"
+      #original_hash: c9ae791
+      unique_html: >-
+        jest już używane przez "%{used_name}" z %{used_email}. Aby zwolnić WCA
+        ID, możesz <a href=%{used_edit_path} target='_blank'>edytować to
+        konto</a> i cofnąć przypisanie WCA ID.
       #original_hash: 26f70ed
       dob_past: musi być w przeszłości
       #original_hash: b320913
@@ -1613,7 +1760,7 @@ pl:
         Nie można zmienić kraju na taki, który dana osoba wcześniej
         reprezentowała.
       #original_hash: b589014
-      must_have_a_change: 'Imię lub kraj musi zostać zmienione, aby zaktualizować daną osobę.'
+      must_have_a_change: 'Imię i nazwisko lub kraj musi zostać zmienione, aby zaktualizować daną osobę.'
       #original_hash: 012f032
       must_be_senior: musi być Starszym Delegatem
       #original_hash: 2e582eb
@@ -1711,6 +1858,8 @@ pl:
         Jesteś zablokowany. Jeżeli uważasz że to błąd, skontaktuj się z <a
         href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
+      #original_hash: 8d07e7f
+      undelete_banned: 'jest zablokowanym zawodnikiem, więc nie można cofnąć anulacji'
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2007,7 +2156,7 @@ pl:
         #original_hash: 184150d
         card_information: Dane karty
         #original_hash: bc8091a
-        cardholder_name: Imię właściciela karty
+        cardholder_name: Imię i nazwisko właściciela karty
       alerts:
         #original_hash: a34940e
         not_a_number: Prosimy o wprowadzenie poprawnej kwoty.
@@ -2025,7 +2174,7 @@ pl:
           Nie możemy odnaleść zamiaru płatności, w celu potwierdzenia go. Proces
           płatności został przerwany i twoja karta nie została obciążona.
         #original_hash: 63e0ec1
-        cardholder_name: Proszę sprawdzić imię właściciela karty.
+        cardholder_name: Proszę sprawdzić imię i nazwisko właściciela karty.
     #original_hash: 8607a87
     payment_button_text: Zapłać swoje wpisowe za pomocą karty
     #original_hash: 4cf01a2
@@ -2399,10 +2548,6 @@ pl:
         [Tekst do wyświetlenia](mailto:ktoś@email.com)
       #original_hash: c5497bc
       events: Konkurencje
-      #original_hash: 09b819f
-      deprecated_events: >-
-        Te zawody mają konkurencje, które nie są już oficjalne, nie obsługujemy
-        edytowania ich.
       #original_hash: cafc153
       public_and_locked_html: >-
         Te zawody są widoczne publicznie i edycja jest zablokowana. Jeżeli
@@ -2687,7 +2832,7 @@ pl:
       #original_hash: ec7b598
       round: Runda
       #original_hash: 709a232
-      name: Imię
+      name: Imię i nazwisko
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -2790,7 +2935,7 @@ pl:
         mixed_history: Historia mieszana
     table_elements:
       #original_hash: 709a232
-      name: Imię
+      name: Imię i nazwisko
       #original_hash: 5faa59d
       result: Wynik
       #original_hash: e0f64f7
@@ -2824,7 +2969,7 @@ pl:
       #original_hash: 5934b4c
       name_or_wca_id: Części imienia lub WCA ID
       #original_hash: 709a232
-      name: Imię
+      name: Imię i nazwisko
       #original_hash: d523ebb
       country: Państwo
       #original_hash: 02ae2bd
@@ -2927,7 +3072,7 @@ pl:
       important_message_html: >-
         <span class="text-danger">WAŻNE</span>: Załącz zdjęcie jakiegokolwiek
         <u>legalnego dokumentu</u>  (dowodu osobistego, prawa jazdy,
-        paszportu...) na którym widać twoje imię oraz datę urodzenia.
+        paszportu...) na którym widać twoje imię i nazwisko oraz datę urodzenia.
       #original_hash: 19c17ec
       submit: Poproś o zmianę
     messages:
@@ -3442,7 +3587,7 @@ pl:
     acknowledges: 'WCA uznaje następujących Delegatów WCA:'
     table:
       #original_hash: 709a232
-      name: Imię
+      name: Imię i nazwisko
       #original_hash: c3f104d
       role: Rola
       #original_hash: 0f21717

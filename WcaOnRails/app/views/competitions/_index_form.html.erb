@@ -9,6 +9,7 @@
     <span class="event-checkbox">
       <%= label_tag "checkbox-#{event.id}" do %>
         <%= check_box_tag "event_ids[]", event.id, params[:event_ids].include?(event.id), id: "checkbox-#{event.id}" %>
+        <%# Not using cubing_icon here, because the selector js code uses span %>
         <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name %>
       <% end %>
     </span>
@@ -27,7 +28,7 @@
     <div class="input-group">
       <span class="input-group-addon" data-toggle="tooltip" data-placement="top"
             title="<%= t 'competitions.index.tooltips.search' %>">
-        <%= icon("fas", 'search') %>
+        <%= ui_icon('search') %>
       </span>
       <%= text_field_tag "search", params[:search], class: "form-control" %>
     </div>
@@ -62,6 +63,10 @@
           <%= t 'competitions.index.past' %>
         <% end %>
       </span>
+    </label>
+    <label id="by_announcement" class="btn btn-primary" data-toggle="tooltip" title="<%= t 'competitions.index.sort_by_announcement' %>">
+      <%= radio_button_tag "state", "by_announcement" %>
+      <span class="caption"><%= t 'competitions.index.by_announcement' %></span>
     </label>
     <label id="custom" class="btn btn-primary">
       <%= radio_button_tag "state", "custom" %>
@@ -108,20 +113,25 @@
                                  data: { data: User.where(id: params[:delegate]).to_json } %>
 </div>
 
+<div id="cancelled" class="form-group cancel-selector">
+  <%= check_box_tag(:show_cancelled, params[:show_cancelled], params[:show_cancelled] == "on") %>
+  <%= label_tag("Show cancelled competitions") %>
+</div>
+
 <div id="display" class="form-group">
   <div class="btn-group btn-group-justified" data-toggle="buttons">
     <label id="display-list" class="btn btn-info">
       <%= radio_button_tag "display", "list" %>
-      <i class="glyphicon glyphicon-list"></i> <%= t 'competitions.index.list' %>
+      <%= ui_icon("list ul") %> <%= t 'competitions.index.list' %>
     </label>
     <label id="display-map" class="btn btn-info">
       <%= radio_button_tag "display", "map" %>
-      <i class="glyphicon glyphicon-map-marker"></i> <%= t 'competitions.index.map' %>
+      <%= ui_icon("map marker alternate") %> <%= t 'competitions.index.map' %>
     </label>
     <% if current_user&.can_see_admin_competitions? %>
       <label id="display-admin" class="btn btn-info">
         <%= radio_button_tag "display", "admin" %>
-        <%= icon("fas", "user-secret", "Admin") %>
+        <%= ui_icon("user secret") %> Admin
       </label>
     <% end %>
   </div>
@@ -133,6 +143,10 @@
   });
 
   $('#recent').on('click', function() {
+    $('#past .caption').html("<%= t('competitions.index.past') %>");
+  });
+
+  $('#by_announcement').on('click', function() {
     $('#past .caption').html("<%= t('competitions.index.past') %>");
   });
 

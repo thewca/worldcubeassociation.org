@@ -33,9 +33,9 @@ function getRanks ( $sourceName, $regionId = '' ) {
   #--- Build query for the requested region
   $query = "SELECT eventId, personId, worldRank FROM Ranks$sourceName";
   if (in_array($regionId, getAllUsedCountriesIds()))
-    $query = "SELECT eventId, personId, countryRank FROM Ranks$sourceName, Persons WHERE Persons.id=personId AND subId=1 AND countryId='$regionId'";
+    $query = "SELECT eventId, personId, countryRank FROM Ranks$sourceName, Persons WHERE Persons.id=personId AND subId=1 AND countryId='$regionId' AND countryRank != 0";
   if (in_array($regionId, getAllUsedContinentIds()))
-    $query = "SELECT eventId, personId, continentRank FROM Ranks$sourceName, Persons, Countries WHERE Persons.id=personId AND subId=1 AND Countries.id=countryId AND continentId='$regionId'";
+    $query = "SELECT eventId, personId, continentRank FROM Ranks$sourceName, Persons, Countries WHERE Persons.id=personId AND subId=1 AND Countries.id=countryId AND continentId='$regionId' AND continentRank != 0";
 
   #--- Process the personal records, build ranks[event][person]
   foreach( dbQuery( $query ) as $row )

@@ -61,6 +61,10 @@ namespace :db do
   namespace :load do
     desc 'Download and import the publicly accessible database dump from the production server'
     task development: :environment do
+      if ENVied.WCA_LIVE_SITE
+        abort "This actions is disabled for the production server!"
+      end
+
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
           dev_db_dump_url = "https://www.worldcubeassociation.org/wst/wca-developer-database-dump.zip"

@@ -16,12 +16,13 @@ RSpec.describe "Locale files content" do
   end
 end
 
-RSpec.describe "Momentjs activation" do
-  let(:file_content) { File.read(Rails.root.join('app', 'assets', 'javascripts', 'application.js')) }
-
+RSpec.describe "Momentjs/fullcalendar activation" do
   (I18n.available_locales - [:en]).each do |locale|
     context "for #{locale} the app/assets/javascripts/application.js file" do
-      it { expect(file_content).to include("//= require fullcalendar/lang/#{locale.downcase}.js") }
+      moment_content = File.read(Rails.root.join('app', 'assets', 'javascripts', 'locales', "#{locale.downcase}.js"))
+      it { expect(moment_content).to include("//= require moment/#{locale.downcase}.js") }
+      fc_content = File.read(Rails.root.join('app', 'assets', 'javascripts', 'fullcalendar', 'locales', "#{locale.downcase}.js"))
+      it { expect(fc_content).to include("//= require fc_locales/#{locale.downcase}.js") }
     end
   end
 end

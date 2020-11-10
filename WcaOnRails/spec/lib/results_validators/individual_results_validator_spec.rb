@@ -146,11 +146,24 @@ RSpec.describe IRV do
                                   IRV::NO_ROUND_INFORMATION_WARNING,
                                   round_id: "333oh-f"),
       ]
-      validator_args.each do |arg|
-        irv = IRV.new.validate(arg)
-        expect(irv.errors).to be_empty
-        expect(irv.warnings).to match_array(expected_warnings)
-      end
+      expect(irv.errors).to be_empty
+      expect(irv.warnings).to match_array(expected_warnings)
+    end
+
+    it "triggers undef time limit warning" do
+      # Triggers UNDEF_TL_WARNING
+
+      FactoryBot.create(:result, competition: competition1, eventId: "333oh")
+      FactoryBot.create(:round, competition: competition1, event_id: "333oh", format_id: "a", time_limit: nil)
+      irv = IRV.new.validate(competition_ids: competition1.id)
+
+      expected_warnings = [
+        RV::ValidationWarning.new(:results, competition1.id,
+                                  IRV::UNDEF_TL_WARNING,
+                                  round_id: "333oh-f"),
+      ]
+      expect(irv.errors).to be_empty
+      expect(irv.warnings).to match_array(expected_warnings)
     end
 
     it "triggers mismatched result format error" do

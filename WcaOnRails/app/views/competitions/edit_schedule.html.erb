@@ -1,5 +1,7 @@
 <% provide(:title, "Manage schedule for #{@competition.name}") %>
-<%= javascript_pack_tag 'edit_schedule' %>
+<% add_to_packs("wca_maps") %>
+<% add_to_packs("edit_schedule") %>
+<% add_fullcalendar_to_packs %>
 
 <%= render layout: 'nav' do %>
   <% if !@competition.has_defined_dates? %>
@@ -29,7 +31,7 @@
           scheduleWcif: <%= @competition.schedule_wcif.to_json.html_safe %>,
           eventsWcif: <%= @competition.events_wcif.to_json.html_safe %>,
         }
-        wca.initializeScheduleForm(
+        window.wca.initializeScheduleForm(
           competition_info,
           <%= I18n.locale.to_json.html_safe %>
         );

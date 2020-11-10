@@ -1,12 +1,13 @@
 .navbar-static-top {
-  margin-bottom: 19px;
+  margin-bottom: 15px;
+  // Override bootstrap default, flexbox is taking care of this.
+  min-height: auto;
 
   .navbar-nav > .active > a {
     background-color: #ccc;
   }
 
   .dropdown-menu i {
-    @extend .fa-fw;
     margin-right: 10px;
   }
 
@@ -77,14 +78,16 @@
     }
   }
 
-  .navbar-nav > li > a.top-nav:hover {
-    background: #f0f0f0;
+  .navbar-nav > li > a {
+    padding-left: 10px;
+    padding-right: 10px;
+    &.top-nav:hover {
+      background: #f0f0f0;
+    }
   }
 
   .navbar-toggle {
-    margin: 10px;
     margin-top: 20px;
-    margin-right: 20px;
   }
 }
 

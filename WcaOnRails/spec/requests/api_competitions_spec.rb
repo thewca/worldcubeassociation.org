@@ -214,6 +214,18 @@ RSpec.describe "API Competitions" do
             expect(competition.reload.events.map(&:id)).to match_array %w(333)
           end
         end
+
+        context "competition with results posted" do
+          let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
+
+          it "allows adding rounds to an event" do
+            competition.competition_events.find_by_event_id("333").rounds.delete_all
+            expect(competition.competition_events.find_by_event_id("333").rounds.length).to eq 0
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(222 333)).to_json, headers: headers
+            expect(response).to be_successful
+            expect(competition.competition_events.find_by_event_id("333").rounds.length).to eq 1
+          end
+        end
       end
 
       context "when signed in as competition delegate" do
@@ -234,14 +246,14 @@ RSpec.describe "API Competitions" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333 333oh 222)).to_json, headers: headers
             expect(response).to have_http_status(422)
             response_json = JSON.parse(response.body)
-            expect(response_json["error"]).to eq "Cannot add events to a confirmed competition"
+            expect(response_json["error"]).to eq "Cannot add events"
           end
 
           it "does not allow removing events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
             expect(response).to have_http_status(422)
             response_json = JSON.parse(response.body)
-            expect(response_json["error"]).to eq "Cannot remove events from a confirmed competition"
+            expect(response_json["error"]).to eq "Cannot remove events"
           end
         end
 
@@ -256,6 +268,17 @@ RSpec.describe "API Competitions" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
             expect(response).to have_http_status(200)
             expect(competition.reload.events.map(&:id)).to match_array %w(333)
+          end
+        end
+
+        context "competition with results posted" do
+          let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
+
+          it "does not allow updating events" do
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(222 333)).to_json, headers: headers
+            expect(response).to have_http_status(422)
+            response_json = JSON.parse(response.body)
+            expect(response_json["error"]).to eq "Cannot update events"
           end
         end
       end

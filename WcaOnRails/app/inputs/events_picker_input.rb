@@ -18,7 +18,7 @@ class EventsPickerInput < SimpleForm::Inputs::Base
               :label,
               (
                 check_box.render +
-                template.content_tag(:span, "", class: "cubing-icon event-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name)
+                template.cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name)
               ),
               for: check_box.send(:tag_id),
             ),

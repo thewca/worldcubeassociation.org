@@ -21,10 +21,14 @@ RSpec.feature "Strong Customer Authentification payment" do
     end
 
     scenario "user pays with a 3D secure enabled card", js: true do
+      # See https://github.com/thewca/worldcubeassociation.org/issues/5554
+      pending("support for a more recent js driver")
       fill_confirm_and_expect(card, "test-source-authorize-3ds", "Your payment was successful")
     end
 
     it "user fails to complete the 3D secure challenge", js: true do
+      # See https://github.com/thewca/worldcubeassociation.org/issues/5554
+      pending("support for a more recent js driver")
       fill_confirm_and_expect(card, "test-source-fail-3ds", "We are unable to authenticate your payment method")
     end
   end

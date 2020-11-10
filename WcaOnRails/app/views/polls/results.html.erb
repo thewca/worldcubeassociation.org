@@ -13,7 +13,7 @@
         <tr>
           <td>
             <% if @vote && option.id.in?(@vote.poll_option_ids) %>
-              <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="You voted for this option"></span>
+              <%= ui_icon("check circle", data: { toggle: "tooltip", placement: "top", container: "body" }, title: "You voted for this option") %>
             <% end %>
           </td>
           <td><%= option.description %></td>
@@ -45,5 +45,7 @@
       in <%= distance_of_time_in_words_to_now(@poll.deadline) %> to see the results.
     <% end %>
   <% end %>
-  <%= link_to icon("fas", "undo", "Back to Polls"), polls_path, class: "btn btn-default" %>
+  <%= link_to polls_path, class: "btn btn-default" do %>
+    <%= ui_icon("undo") %> Back to Polls
+  <% end %>
 </div>

@@ -1,5 +1,7 @@
-<% provide(:include_markdown_editor, true) %>
-<% provide(:include_auto_numeric, true) %>
+<% add_to_packs("markdown_editor") %>
+<% add_to_packs("auto_numeric") %>
+<% add_to_packs("wca_maps") %>
+
 <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).confirmed? : false %>
 <%= horizontal_simple_form_for @competition, html: { class: 'are-you-sure no-submit-on-enter', id: 'competition-form' } do |f| %>
   <% if @competition.persisted? %>
@@ -65,14 +67,14 @@
         <script>
           (function() {
             var form_disabled = <%= disable_form.to_json %>;
-            wca.setupVenueMap("map",
+            window.wca.setupVenueMap("map",
                 $("#competition_latitude"),
                 $("#competition_longitude"),
                 <%= Competition::NEARBY_DISTANCE_KM_DANGER %>,
                 <%= Competition::NEARBY_DISTANCE_KM_WARNING %>,
                 form_disabled);
 
-            wca.fetchNearbyCompetitions = function() {
+            window.wca.fetchNearbyCompetitions = function() {
               if (form_disabled) {
                 // The user isn't allowed to change the location of the
                 // competition, so there's no need to bother recomputing the nearby
@@ -82,7 +84,7 @@
               $("#nearby-competitions").addClass('loading');
               var obj = $("#competition-form").serializeJSON();
 
-              wca.cancelPendingAjaxAndAjax('render_nearby_competitions', {
+              window.wca.cancelPendingAjaxAndAjax('render_nearby_competitions', {
                 url: '<%= nearby_competitions_path %>',
                 data: {
                   <% if @competition_admin_view %>
@@ -99,7 +101,7 @@
                   $("#nearby-competitions").removeClass('loading');
                 }
               });
-              wca.cancelPendingAjaxAndAjax('render_time_until_competition', {
+              window.wca.cancelPendingAjaxAndAjax('render_time_until_competition', {
                 url: '<%= time_until_competition_path %>',
                 data: {
                   'competition[id]': obj['competition[id]'],
@@ -129,7 +131,7 @@
 
         <script>
           $(".datetimepicker").on("dp.change", function(e) {
-            wca.fetchNearbyCompetitions();
+            window.wca.fetchNearbyCompetitions();
           });
         </script>
 
@@ -139,6 +141,7 @@
 
         <%= f.input :information, input_html: { class: disable_form ? "" : "markdown-editor" } %>
         <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
+        <%= f.input :trainee_delegate_ids, as: :user_ids, only_trainee_delegates: true %>
         <%= f.input :organizer_ids, as: :user_ids %>
         <%= f.input :contact, hint: t('.contact_html', md: t('.supports_md_html')) %>
 
@@ -154,7 +157,7 @@
         </div>
         <div class="row">
           <div class="col-sm-offset-2 col-sm-9">
-            <%= link_to_add_association button_tag(icon("fas", "plus", t('.add_championship')), type: "button", class: "btn btn-default"), f, :championships,
+            <%= link_to_add_association button_tag(raw("#{ui_icon("plus")} #{t('.add_championship')}"), type: "button", class: "btn btn-default"), f, :championships,
               data: { association_insertion_node: '.championships', association_insertion_method: 'append' } %>
           </div>
         </div>
@@ -216,7 +219,7 @@
         <%= f.input :event_restrictions %>
         <%= f.input :event_restrictions_reason %>
 
-        <% if @competition.events.any? %>
+        <% if !@competition.being_cloned_from.present? && @competition.events.any? %>
           <hr>
           <%= f.input :main_event_id do %>
             <%= f.select :main_event_id, options_for_select(@competition.events.map { |event| [event.name, event.id] }, @competition.main_event_id), { include_blank: "" }, { class: "form-control main-event" } %>
@@ -251,7 +254,7 @@
           <% if @competition.persisted? %>
             <% unless current_user.get_cannot_delete_competition_reason(@competition) %>
               <%= button_tag(type: 'submit', name: "commit", value: "Delete", class: "btn btn-danger", data: { confirm: t('.submit_delete') }) do %>
-                <i class="glyphicon glyphicon-trash"></i> <%= t '.submit_delete_value' %>
+                <%= ui_icon("trash") %> <%= t '.submit_delete_value' %>
             <% end %>
           <% end %>
         <% end %>

@@ -2,17 +2,41 @@
 
 class PostsController < ApplicationController
   include TagsHelper
-  before_action :authenticate_user!, except: [:index, :rss, :show]
-  before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: [:index, :rss, :show]
+  before_action :authenticate_user!, except: [:homepage, :index, :rss, :show]
+  before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: [:homepage, :index, :rss, :show]
+  POSTS_PER_PAGE = 10
 
   def index
-    tag = params[:tag]
-    if tag
-      @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
-    else
-      @posts = Post.where(show_on_homepage: true)
+    respond_to do |format|
+      format.json do
+        tag = params[:tag]
+        if tag
+          @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
+        else
+          @posts = Post.where(show_on_homepage: true)
+        end
+        @posts = @posts
+                 .order(sticky: :desc, created_at: :desc)
+                 .includes(:author)
+                 .page(params[:page])
+                 .per(POSTS_PER_PAGE)
+        render json: {
+          totalPages: @posts.total_pages,
+          posts: @posts.as_json(
+            can_manage: current_user&.can_create_posts?,
+            teaser_only: true,
+          ),
+        }
+      end
+      format.html do
+        @current_page = (params[:page] || 1).to_i
+        render :index
+      end
     end
-    @posts = @posts.where(world_readable: true).order(sticky: :desc, created_at: :desc).includes(:author).page(params[:page])
+  end
+
+  def homepage
+    @latest_post = Post.order(sticky: :desc, created_at: :desc).first
   end
 
   def rss
@@ -22,7 +46,7 @@ class PostsController < ApplicationController
     else
       @posts = Post
     end
-    @posts = @posts.where(world_readable: true).order(created_at: :desc).includes(:author).page(params[:page])
+    @posts = @posts.order(created_at: :desc).includes(:author).page(params[:page])
 
     # Force responding with xml, regardless of the given HTTP_ACCEPT headers.
     request.format = :xml
@@ -39,7 +63,6 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    @post.world_readable = true
     @post.author = current_user
     if @post.save
       flash[:success] = "Created new post"
@@ -90,7 +113,7 @@ class PostsController < ApplicationController
     #  +------+
     #  1 row in set, 1 warning (0.00 sec)
     post = Post.find_by_slug(params[:id]) || Post.find_by_id(params[:id])
-    if !post || !post.world_readable
+    if !post
       raise ActiveRecord::RecordNotFound.new("Couldn't find post")
     end
     post

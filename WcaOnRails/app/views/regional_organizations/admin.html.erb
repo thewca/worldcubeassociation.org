@@ -23,6 +23,8 @@
   <% end %>
 
   <div class="links">
-    <%= link_to icon("fas", "plus", "Add Regional Organization"), new_regional_organization_path, class: "btn btn-primary add" %>
+    <%= link_to new_regional_organization_path, class: "btn btn-primary add" do %>
+      <%= ui_icon("plus") %> Add Regional Organization
+    <% end %>
   </div>
 </div>

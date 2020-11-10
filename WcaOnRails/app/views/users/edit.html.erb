@@ -55,9 +55,10 @@
   <ul class="nav nav-tabs nav-justified">
     <li><a href="#general" data-toggle="tab"><%= t '.general' %></a></li>
     <% if @user == current_user %>
-      <li><a href="#email" data-toggle="tab"><%= t '.email' %></a></li>
+      <li><a href="<%= protected_tab("#email") %>" data-toggle="tab"><%= t '.email' %></a></li>
       <li><a href="#preferences" data-toggle="tab"><%= t '.preferences' %></a></li>
-      <li><a href="#password" data-toggle="tab"><%= t '.password' %></a></li>
+      <li><a href="<%= protected_tab("#password") %>" data-toggle="tab"><%= t '.password' %></a></li>
+      <li><a href="<%= protected_tab("#2fa") %>" data-toggle="tab">2FA</a></li>
     <% end %>
     <% if current_user.can_change_users_avatar?(@user) %>
       <li><a href="#avatar" data-toggle="tab">Avatar</a></li>
@@ -116,13 +117,6 @@
           <%= f.input :delegate_status, disabled: !editable_fields.include?(:senior_delegate_id) %>
           <%= f.association :senior_delegate, disabled: !editable_fields.include?(:senior_delegate_id) %>
           <%= f.input :region, disabled: !editable_fields.include?(:region) %>
-
-          <% if @user.any_kind_of_delegate? %>
-            <h3>Additional delegate information</h3>
-            <%= f.input :location_description, disabled: !editable_fields.include?(:location_description) %>
-            <%= f.input :phone_number, disabled: !editable_fields.include?(:phone_number) %>
-            <%= f.input :notes, as: :text, disabled: !editable_fields.include?(:notes) %>
-          <% end %>
         <% end %>
 
         <% unless @user.current_teams.reject(&:hidden?).empty? %>
@@ -143,17 +137,38 @@
     </div>
 
     <% if @user == current_user %>
-      <div class="tab-pane active" id="email">
-        <%= simple_form_for @user do |f| %>
-          <%= hidden_field_tag "section", "email" %>
-          <%= f.input :email, disabled: !editable_fields.include?(:email), hint: t('.confirm_new_email') %>
+      <%# The section below holds sensitivate data changes. For this we require %>
+      <%# the user to enter again their password or 2FA.  %>
+      <% if @recently_authenticated %>
+        <div class="tab-pane active" id="email">
+          <%= simple_form_for @user do |f| %>
+            <%= hidden_field_tag "section", "email" %>
+            <%= f.input :email, disabled: !editable_fields.include?(:email), hint: t('.confirm_new_email') %>
 
-          <%= f.input :current_password %>
+            <%= f.submit t('.save'), class: "btn btn-primary" %>
+          <% end %>
+        </div>
+        <div class="tab-pane active" id="password">
+          <%= simple_form_for @user do |f| %>
+            <%= hidden_field_tag "section", "password" %>
+            <%= f.input :password, autocomplete: "off", class: "form-control" %>
+            <%= f.input :password_confirmation, class: "form-control"  %>
 
-          <%= f.submit t('.save'), class: "btn btn-primary" %>
-        <% end %>
-      </div>
+            <%= f.submit t('.save'), class: "btn btn-primary" %>
+          <% end %>
 
+          <h3><%= t('.actions') %></h3>
+          <%= link_to(t('.sign_out_of_devices'), destroy_other_user_sessions_path,
+                      method: :delete, class: "btn btn-danger") %>
+        </div>
+        <div class="tab-pane active" id="2fa">
+          <%= render "2fa_tab" %>
+        </div>
+      <% else %>
+        <div class="tab-pane active" id="2fa-check">
+          <%= render "2fa_confirm.html.erb" %>
+        </div>
+      <% end %>
       <div class="tab-pane active" id="preferences">
         <%= simple_form_for @user do |f| %>
           <%= hidden_field_tag "section", "preferences" %>
@@ -166,18 +181,6 @@
           <div id="notifications">
             <%= f.input :results_notifications_enabled %>
           </div>
-
-          <%= f.submit t('.save'), class: "btn btn-primary" %>
-        <% end %>
-      </div>
-
-      <div class="tab-pane active" id="password">
-        <%= simple_form_for @user do |f| %>
-          <%= hidden_field_tag "section", "password" %>
-          <%= f.input :password, autocomplete: "off", class: "form-control" %>
-          <%= f.input :password_confirmation, class: "form-control"  %>
-
-          <%= f.input :current_password %>
 
           <%= f.submit t('.save'), class: "btn btn-primary" %>
         <% end %>
@@ -198,9 +201,9 @@
                   <% end %>
                 </ul>
                 <% if @user.staff? %>
-                  <br /><strong><%= t('.delegate_avatar_guidelines.title') %></strong>
+                  <br /><strong><%= t('.staff_avatar_guidelines.title') %></strong>
                   <ul>
-                    <% t('.delegate_avatar_guidelines.paragraphs').values.each do |guideline| %>
+                    <% t('.staff_avatar_guidelines.paragraphs').values.each do |guideline| %>
                       <li><%= guideline %></li>
                     <% end %>
                   </ul>
@@ -235,6 +238,6 @@
     <% end %>
   </div>
   <script>
-    $('a[href="#<%=j params[:section] %>"]').tab('show');
+    $('a[href="#<%=j tab_to_show(params[:section]) %>"]').tab('show');
   </script>
 </div>

@@ -170,6 +170,11 @@ FactoryBot.define do
       end
     end
 
+    trait :with_2fa do
+      otp_required_for_login { true }
+      otp_secret { User.generate_otp_secret }
+    end
+
     wca_id { person&.wca_id }
 
     after(:build) do |user|
@@ -197,6 +202,11 @@ FactoryBot.define do
     factory :candidate_delegate, traits: [:wca_id] do
       association :senior_delegate
       delegate_status { "candidate_delegate" }
+    end
+
+    factory :trainee_delegate, traits: [:wca_id] do
+      association :senior_delegate
+      delegate_status { "trainee_delegate" }
     end
 
     factory :senior_delegate, traits: [:wca_id] do

@@ -23,7 +23,7 @@ class RoundType < ApplicationRecord
 
   # Returns the equivalent round_type_id with cutoff (or without cutoff)
   def self.toggle_cutoff(round_type_id)
-    [%w(c f), %w(d 1), %w(e 2), %w(g 3)]
+    [%w(c f), %w(d 1), %w(e 2), %w(g 3), %w(h 0)]
       .flat_map { |pair| [pair, pair.reverse] }
       .to_h[round_type_id]
   end

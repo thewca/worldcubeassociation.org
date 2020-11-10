@@ -9,7 +9,7 @@
     <%= f.input :guests, disabled: disabled %>
   <% end %>
 
-  <%= f.input :comments, disabled: disabled %>
+  <%= f.input :comments, disabled: disabled, input_html: { class: "char-counter",  maxlength: 280 } %>
 
   <%# If the user has to pay fee here, this information will already be in the payment form %>
   <%# If there are no entry fees, no need to display this information %>

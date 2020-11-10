@@ -4,7 +4,8 @@ require 'rails_helper'
 
 RSpec.describe DelegateReportsController do
   let(:delegate) { FactoryBot.create :delegate }
-  let(:comp) { FactoryBot.create(:competition, delegates: [delegate], starts: 2.days.ago) }
+  let(:trainee_delegate) { FactoryBot.create :trainee_delegate }
+  let(:comp) { FactoryBot.create(:competition, delegates: [delegate], trainee_delegates: [trainee_delegate], starts: 2.days.ago) }
   let!(:delegate_report1) { FactoryBot.create :delegate_report, competition: comp, schedule_url: "http://example.com" }
   let(:pre_delegate_reports_form_comp) { FactoryBot.create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
   let!(:delegate_report2) { FactoryBot.create :delegate_report, competition: pre_delegate_reports_form_comp, schedule_url: "http://example.com" }
@@ -112,6 +113,32 @@ RSpec.describe DelegateReportsController do
       expect(response).to redirect_to(delegate_report_path(pre_delegate_reports_form_comp))
       expect(flash[:info]).to eq "Your report has been posted but not emailed because it is for a pre June 2016 competition."
       assert_enqueued_jobs 0
+    end
+  end
+
+  context "logged in as THE trainee delegate" do
+    let(:user) { comp.trainee_delegates.first }
+    before :each do
+      sign_in user
+    end
+
+    it "can view edit page" do
+      get :edit, params: { competition_id: comp.id }
+      expect(response.status).to eq 200
+    end
+
+    it "can edit report" do
+      post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My new remarks" } }
+      expect(response).to redirect_to delegate_report_edit_path(comp)
+      comp.reload
+      expect(comp.delegate_report.remarks).to eq "My new remarks"
+    end
+
+    it "cannot post the report" do
+      post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
+      comp.reload
+      expect(comp.delegate_report.posted?).to eq false
+      expect(response).to redirect_to(root_url)
     end
   end
 end

@@ -144,9 +144,9 @@ module ApplicationHelper
     content_tag :div, content, class: "alert alert-#{type}"
   end
 
-  def users_to_sentence(users, include_email: false)
+  def users_to_sentence(users, include_profile: false)
     "".html_safe + users.sort_by(&:name).map do |user|
-      include_email ? mail_to(user.email, user.name) : user.name
+      include_profile && user.wca_id ? link_to(ERB::Util.html_escape(user.name), person_path(user.wca_id)) : ERB::Util.html_escape(user.name)
     end.xss_aware_to_sentence
   end
 
@@ -204,8 +204,10 @@ module ApplicationHelper
 
   def cubing_icon(event, html_options = {})
     html_options[:class] ||= ""
-    html_options[:class] += " cubing-icon event-#{event}"
-    content_tag :span, "", html_options
+    # We use 'icon' which is the default Semantic-UI class for icons.
+    # It applies fixed-width and inline block on them.
+    html_options[:class] += " cubing-icon icon event-#{event}"
+    content_tag :i, "", html_options
   end
 
   def flag_icon(iso2, html_options = {})
@@ -214,11 +216,58 @@ module ApplicationHelper
     content_tag :span, "", html_options
   end
 
+  def ui_icon(name, html_options = {})
+    opts = html_options.merge(
+      class: "icon #{name} " + html_options[:class].to_s,
+    )
+    content_tag(:i, "", opts)
+  end
+
   def format_money(money)
     "#{humanized_money_with_symbol(money)} (#{money.currency.name})"
   end
 
   def embedded_map_url(query)
     "#{ENVied.ROOT_URL}/map?q=#{URI.encode_www_form_component(CGI.unescapeHTML(query))}"
+  end
+
+  def add_to_packs(*names)
+    @all_packs = capture do
+      [@all_packs, *names].compact.join(",")
+    end
+  end
+
+  def add_to_css_assets(name)
+    @all_css_assets = capture do
+      [@all_css_assets, name].compact.join(",")
+    end
+  end
+
+  def add_to_js_assets(*names)
+    @all_js_assets = capture do
+      [@all_js_assets, *names].compact.join(",")
+    end
+  end
+
+  def add_fullcalendar_to_packs
+    add_to_js_assets('fullcalendar/fullcalendar_wca')
+    add_to_css_assets('fullcalendar_wca')
+    if I18n.locale != :en
+      add_to_js_assets("fullcalendar/locales/#{I18n.locale}.js")
+    end
+  end
+
+  ATTACH_COMPONENT_STR="window.wca.attachComponentToElem('%{c}', '%{id}', {%{opts}});"
+  def render_react_component(name, id: nil, options: {})
+    id ||= name
+    options_string = options.map do |k, v|
+      "'#{k}': JSON.parse(#{v.to_json})"
+    end
+    component_container = content_tag(:div, nil, id: id)
+    script_tag = javascript_tag(format(ATTACH_COMPONENT_STR,
+                                       c: name,
+                                       id: id,
+                                       opts: options_string.join(",")))
+    component_container + script_tag
   end
 end

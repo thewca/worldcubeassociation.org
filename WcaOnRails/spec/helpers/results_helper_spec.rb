@@ -36,7 +36,6 @@ RSpec.describe ResultsHelper do
       combined_final = RoundType.find("c")
       results = []
       results << FactoryBot.create(:result, person: person, best: SolveTime::DNF_VALUE, average: SolveTime::SKIPPED_VALUE, round_type: combined_final)
-      results << FactoryBot.create(:result, person: person, best: SolveTime::DNS_VALUE, average: SolveTime::SKIPPED_VALUE, round_type: combined_final)
 
       pb_markers = helper.historical_pb_markers results
       expect(pb_markers).to eq({})

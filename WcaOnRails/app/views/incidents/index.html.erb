@@ -61,14 +61,16 @@
       }
     }
     $(function() {
-      var opts = wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>);
-      wca.initIncidentsLogTable(opts, $('.incidents-log-table'), $('.search input'), $('input#incident-tags'));
+      var opts = window.wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>);
+      window.wca.initIncidentsLogTable(opts, $('.incidents-log-table'), '.search input', $('input#incident-tags'));
     });
   </script>
 
   <br>
   <% if current_user&.can_manage_incidents? %>
-    <%= link_to icon("fas", 'plus', 'New Incident'), new_incident_path, class: "btn btn-success" %>
+    <%= link_to new_incident_path, class: "btn btn-success" do %>
+      <%= ui_icon('plus') %> New Incident
+    <% end %>
   <% end %>
 
 <% end %>

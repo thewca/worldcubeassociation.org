@@ -5,6 +5,8 @@
     Check existing results for the competition.
   </p>
 
+  <%= render "validator_form", results_validator: @results_validator, competition: @competition %>
+
   <%= render "results_submission/check_results_panel", results_validator: @results_validator %>
 
   <%= render "results_submission/results_preview_panel", results_validator: @results_validator %>

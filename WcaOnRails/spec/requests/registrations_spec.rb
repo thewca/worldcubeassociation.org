@@ -192,7 +192,12 @@ RSpec.describe "registrations" do
               context "the user has unconfirmed WCA ID same as the given WCA ID" do
                 it "claims the WCA ID and registers the user" do
                   person = FactoryBot.create(:person)
-                  user = FactoryBot.create(:user)
+                  user = FactoryBot.create(
+                    :user,
+                    unconfirmed_wca_id: person.wca_id,
+                    dob_verification: person.dob,
+                    delegate_to_handle_wca_id_claim: User.delegates.first,
+                  )
                   file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                     ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
@@ -520,6 +525,7 @@ RSpec.describe "registrations" do
           expect(registration.paid_entry_fees).to eq competition.base_entry_fee
           charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
           expect(charge.amount).to eq competition.base_entry_fee.cents
+          expect(charge.receipt_email).to eq user.email
           expect(charge.metadata.wca_id).to eq user.wca_id
           expect(charge.metadata.email).to eq user.email
           expect(charge.metadata.competition).to eq competition.name
@@ -546,7 +552,7 @@ RSpec.describe "registrations" do
             payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          stripe_charge_id = registration.registration_payments.first.stripe_charge_id
+          stripe_charge_id = registration.reload.registration_payments.first.stripe_charge_id
           stripe_charge = StripeCharge.find_by(stripe_charge_id: stripe_charge_id)
           expect(stripe_charge&.status).to eq "success"
           metadata = JSON.parse(stripe_charge.metadata)["metadata"]

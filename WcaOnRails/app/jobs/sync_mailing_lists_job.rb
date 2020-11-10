@@ -13,10 +13,6 @@ class SyncMailingListsJob < SingletonApplicationJob
       query: "%Asia East%",
     },
     {
-      mailing_list: "delegates.asia-japan@worldcubeassociation.org",
-      query: "%Asia Japan%",
-    },
-    {
       mailing_list: "delegates.asia-southeast@worldcubeassociation.org",
       query: "%Asia Southeast%",
     },
@@ -33,10 +29,6 @@ class SyncMailingListsJob < SingletonApplicationJob
       # NOTE: Adding the '(' as 'Europe' matches 'Europe North' too, and all
       # Seniors have a more specific region anyway.
       query: "%Europe (%",
-    },
-    {
-      mailing_list: "delegates.europe-north-baltic-states@worldcubeassociation.org",
-      query: "%Europe North & Baltic States%",
     },
     {
       mailing_list: "delegates.latin-america@worldcubeassociation.org",

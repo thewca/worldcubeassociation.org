@@ -1,0 +1,72 @@
+<% add_to_packs("homepage", "posts_widget") %>
+<div id="homepage">
+  <div class="ui fluid container" id="cover-homepage">
+    <div class="ui fluid container">
+      <h1 class="ui huge header inverted" id="welcome">
+        <%= t('homepage.title') %>
+      </h1>
+    </div>
+
+    <div class="ui container cover-segments">
+      <div class="ui four column stackable cards">
+        <%= render "box", title: t('homepage.about_us.title'), path: about_path do %>
+          <%= t('homepage.about_us.text') %>
+        <% end %>
+        <%= render "box", title: t('homepage.competitions.title'), path: competitions_path do %>
+          <%= t('homepage.competitions.text_html',
+                wca_live_link: raw(link_to("WCA Live", "https://live.worldcubeassociation.org"))) %>
+        <% end %>
+        <%= render "box", title: t('homepage.records.title'), path: records_path do %>
+          <%= t('homepage.records.text') %>
+        <% end %>
+        <%= render "box", title: t('homepage.faq.title'), path: faq_path do %>
+          <%= t('homepage.faq.text') %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div id="content-homepage">
+    <div class="ui vertical stripe segment news-content">
+      <div class="ui equal width stackable internally centered grid">
+        <div class="row">
+          <div class="column">
+            <h2 class="ui header"><%= t('homepage.latest_news') %></h2>
+            <div class="ui divider"></div>
+            <%= render("post_content", post: @latest_post) if @latest_post %>
+          </div>
+          <div class="column">
+            <h2 class="ui header"><%= t('homepage.announcements') %></h2>
+            <div class="ui divider"></div>
+            <%= render_react_component("PostsWidget", id: "posts_widget", options: {
+              titleOnly: true,
+            }) %>
+            <%= link_to(t('homepage.see_all_announcements'), posts_path, class: "ui blue button") %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui container fluid">
+      <div class="ui equal width stackable grid centered padded">
+        <div class="column red">
+          <div class="ui raised center aligned segment red inverted">
+            <h2 class="ui header inverted"><%= t('homepage.contact.title') %></h2>
+            <p>
+            <%= t('homepage.contact.text_html',
+                  faq_link: link_to(t('homepage.contact.faq'), faq_path)) %>
+            </p>
+            <%= link_to(t('homepage.contact.button'), contact_path, class: "ui red button") %>
+          </div>
+        </div>
+
+        <div class="column yellow">
+          <div class="ui raised center aligned segment yellow inverted">
+            <h2 class="ui header"><%= t('homepage.support.title') %></h2>
+            <p><%= t('homepage.support.text') %></p>
+            <%= link_to(t('homepage.support.button'), about_path(anchor: "contribute"), class: "ui yellow button") %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

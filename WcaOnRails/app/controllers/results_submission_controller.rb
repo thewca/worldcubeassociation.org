@@ -4,11 +4,12 @@ require 'fileutils'
 
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_submit_competition_results?, competition_from_params) }
+  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }
 
   def new
     @competition = competition_from_params
-    @results_validator = CompetitionResultsValidator.new(@competition.id)
+    @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
+    @results_validator.validate(@competition.id)
   end
 
   def upload_json
@@ -28,7 +29,8 @@ class ResultsSubmissionController < ApplicationController
       @competition.uploaded_jsons.create(json_str: @upload_json.results_json_str)
       redirect_to competition_submit_results_edit_path
     else
-      @results_validator = CompetitionResultsValidator.new(@competition.id)
+      @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
+      @results_validator.validate(@competition.id)
       render :new
     end
   end

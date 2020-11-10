@@ -9,6 +9,7 @@ RSpec.describe SV do
   context "on InboxResult and Result" do
     let!(:competition1) { FactoryBot.create(:competition, :past, event_ids: ["333oh", "333mbf"]) }
     let!(:competition2) { FactoryBot.create(:competition, :past, event_ids: ["222", "333bf", "333mbf"]) }
+    let!(:competition3) { FactoryBot.create(:competition, :past, event_ids: ["333fm"]) }
 
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.
@@ -16,8 +17,8 @@ RSpec.describe SV do
     let(:validator_args) {
       [InboxResult, Result].flat_map { |model|
         [
-          { competition_ids: [competition1.id, competition2.id], model: model },
-          { results: model.sorted_for_competitions([competition1.id, competition2.id]), model: model },
+          { competition_ids: [competition1.id, competition2.id, competition3.id], model: model },
+          { results: model.sorted_for_competitions([competition1.id, competition2.id, competition3.id]), model: model },
         ]
       }
     }
@@ -82,6 +83,32 @@ RSpec.describe SV do
           sv = SV.new.validate(arg)
           expect(sv.warnings).to be_empty
           expect(sv.errors).to match_array(expected_errors)
+        end
+      end
+
+      it "correctly (in)validates multiple groups for 333fm" do
+        FactoryBot.create(:round, competition: competition3, event_id: "333fm", format_id: "m")
+
+        [Result, InboxResult].each do |model|
+          result_kind = model.model_name.singular.to_sym
+          FactoryBot.create(result_kind, :fm, competition: competition3)
+        end
+
+        # Create two groups in fmc:
+        create_scramble_set(3, competitionId: competition3.id, eventId: "333fm", groupId: "A")
+        create_scramble_set(3, competitionId: competition3.id, eventId: "333fm", groupId: "B")
+
+        expected_warnings = [
+          RV::ValidationWarning.new(:scrambles, competition3.id,
+                                    SV::MULTIPLE_FMC_GROUPS_WARNING,
+                                    round_id: "333fm-f"),
+        ]
+
+        validator_args.each do |arg|
+          sv = SV.new.validate(arg)
+          expect(sv.warnings).to match_array(expected_warnings)
+          puts sv.errors
+          expect(sv.errors).to be_empty
         end
       end
 

@@ -35,7 +35,10 @@
     <% if @persons.present? %>
       <h2>
         <%= anchorable t('.people') %> |
-        <%= link_to icon("fas", "search", t('.advanced_search')), persons_path(search: params[:q]), class: "advanved-search" %>
+        <%= link_to persons_path(search: params[:q]), class: "advanved-search" do %>
+          <%= ui_icon("search") %>
+          <%= t('.advanced_search') %>
+        <% end %>
       </h2>
       <table class="table table-nonfluid table-vertical-align-middle">
         <tbody>

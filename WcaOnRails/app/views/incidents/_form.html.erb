@@ -1,4 +1,5 @@
-<% provide(:include_markdown_editor, true) %>
+<% add_to_packs("markdown_editor") %>
+
 <%= horizontal_simple_form_for(@incident, html: { class: "incident-form" }) do |f| %>
 
   <div class="form-inputs">
@@ -13,7 +14,7 @@
     <hr/>
     <%= f.input :tags %>
     <script>
-      $('input#incident_tags').selectize(wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>));
+      $('input#incident_tags').selectize(window.wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>));
     </script>
     <hr/>
     <div class="incident-competitions">
@@ -23,7 +24,7 @@
     </div>
     <div class="row">
       <div class="col-sm-offset-2 col-sm-9">
-        <%= link_to_add_association button_tag(icon("fas", "plus", "Link a competition"), type: "button", class: "btn btn-default"), f, :incident_competitions,
+        <%= link_to_add_association button_tag(raw("#{ui_icon("plus")} Link a competition"), type: "button", class: "btn btn-default"), f, :incident_competitions,
           data: { association_insertion_node: '.incident-competitions', association_insertion_method: 'append' } %>
       </div>
     </div>

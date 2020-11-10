@@ -1,0 +1,11 @@
+<div class="ui card">
+  <div class="content">
+    <h3 class="center aligned header"><%= title %></h3>
+    <div class="center aligned description"><%= yield %></div>
+  </div>
+  <div class="extra content">
+    <div class="center aligned">
+      <%= link_to(t('homepage.learn_more'), path, class: "ui button primary") %>
+    </div>
+  </div>
+</div>

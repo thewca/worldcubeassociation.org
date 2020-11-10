@@ -23,9 +23,15 @@ RSpec.describe Round do
   context "time limit" do
     let(:competition) { FactoryBot.create :competition, event_ids: %w(333 444bf 555bf) }
     let(:round) { FactoryBot.create :round, competition: competition, event_id: "333" }
+    let(:round_undef) { FactoryBot.create :round, competition: competition, event_id: "333", time_limit: nil }
 
     let!(:four_blind_round) { FactoryBot.create :round, competition: competition, event_id: "444bf", format_id: "3" }
     let!(:five_blind_round) { FactoryBot.create :round, competition: competition, event_id: "555bf", format_id: "3" }
+
+    it "supports undefined time limit" do
+      expect(round_undef.time_limit).to eq(TimeLimit::UNDEF_TL)
+      expect(round_undef.time_limit_to_s).to eq ""
+    end
 
     it "defaults to 10 minutes" do
       expect(round.time_limit).to eq(TimeLimit.new(centiseconds: 10.minutes.in_centiseconds, cumulative_round_ids: []))

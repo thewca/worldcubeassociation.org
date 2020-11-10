@@ -1,19 +1,21 @@
 <% provide(:title, @competition.name) %>
-<%= javascript_pack_tag 'edit_events' %>
+<% add_to_packs("edit_events") %>
 
 <%= render layout: 'nav' do %>
-  <% if @competition.events.deprecated.count > 0 %>
-    <%= t('competitions.competition_form.deprecated_events') %>
-  <% else %>
-    <div id="events-edit-area"></div>
-    <script>
-      $(function() {
-        wca.initializeEventsForm(
-          <%= @competition.id.to_json.html_safe %>,
-          <%= current_user.can_add_and_remove_events?(@competition).to_json.html_safe %>,
-          <%= @competition.events_wcif.to_json.html_safe %>
-        );
-      });
-    </script>
+  <% if !current_user.can_update_events?(@competition) %>
+    <%= alert :warning, note: true do %>
+      Events management has been locked after results being posted. Please contact WRT if you want to edit them.
+    <% end %>
   <% end %>
+  <div id="events-edit-area"></div>
+  <script>
+    $(function() {
+      window.wca.initializeEventsForm(
+        <%= @competition.id.to_json.html_safe %>,
+        <%= current_user.can_add_and_remove_events?(@competition).to_json.html_safe %>,
+        <%= current_user.can_update_events?(@competition).to_json.html_safe %>,
+        <%= @competition.events_wcif.to_json.html_safe %>
+      );
+    });
+  </script>
 <% end %>

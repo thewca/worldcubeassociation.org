@@ -126,13 +126,14 @@ rebuild_regs() {
 }
 
 update_docs() {
-  documents_folder=WcaOnRails/public/documents
+  public_dir=WcaOnRails/public
   tmp_dir=/tmp/wca-documents-clone
 
   rm -rf $tmp_dir
   git clone --depth=1 --branch=build https://github.com/thewca/wca-documents.git $tmp_dir
-  rm -rf $documents_folder
-  mv $tmp_dir $documents_folder
+  rm -rf $public_dir/documents
+  rm -rf $public_dir/edudoc
+  mv $tmp_dir/documents $tmp_dir/edudoc $public_dir
 }
 
 restart_dj() {
@@ -145,13 +146,22 @@ rebuild_rails() {
     cd WcaOnRails
 
     bundle install
-    bundle exec rake assets:clean assets:precompile
+    # We used to run 'assets:clean' as part of the command below, but for some
+    # reason rake would clean *up-to-date* assets and not recompile them, leading
+    # to the website being simply broken...
+    # See https://github.com/thewca/worldcubeassociation.org/issues/5370
+    bundle exec rake assets:precompile
 
     # Note that we are intentionally not automating database migrations.
   )
 
   restart_dj
   restart_app
+
+  echo "/!\\ Cleaning assets automatically has been disabled /!\\"
+  echo "Once in a while (preferably when low traffic) we need to clear the "
+  echo "public/packs directory and recompile them."
+  echo "If you're performing the weekly dependencies updates, I suggest you to do that."
 }
 
 cd "$(dirname "$0")"/..

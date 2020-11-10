@@ -7,6 +7,9 @@ class UserIdsInput < SimpleForm::Inputs::Base
     if @options[:only_delegates]
       merged_input_options[:class] << "wca-autocomplete-only_delegates"
     end
+    if @options[:only_trainee_delegates]
+      merged_input_options[:class] << "wca-autocomplete-only_trainee_delegates"
+    end
     if @options[:persons_table]
       merged_input_options[:class] << "wca-autocomplete-persons_table"
       persons = (@builder.object.send(attribute_name) || "").split(",").map { |wca_id| Person.find_by_wca_id(wca_id) }

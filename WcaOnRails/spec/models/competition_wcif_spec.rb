@@ -7,6 +7,7 @@ RSpec.describe "Competition WCIF" do
     FactoryBot.create(
       :competition,
       :with_delegate,
+      :with_competitor_limit,
       id: "TestComp2014",
       name: "Test Comp 2014",
       cellName: "Test 2014",
@@ -16,6 +17,7 @@ RSpec.describe "Competition WCIF" do
       showAtAll: true,
       event_ids: %w(333 444 333fm 333mbf),
       with_schedule: true,
+      competitor_limit: 50,
     )
   }
   let(:delegate) { competition.delegates.first }
@@ -236,6 +238,7 @@ RSpec.describe "Competition WCIF" do
             },
           ],
         },
+        "competitorLimit" => 50,
         "extensions" => [],
       )
     end

@@ -9,6 +9,6 @@
   <%= CSV.generate_line([
     c.id, c.name, c.country.iso2, c.continent.id,
     c.start_date, c.end_date, c.announced_at, c.results_posted_at,
-    competition_url(c.id), c.num_competitors, c.delegates.map(&:name).join(","),
+    competition_url(c.id), c.num_competitors, c.delegates.map(&:name).sort.join(","),
   ], col_sep: "\t").html_safe -%>
 <% end %>

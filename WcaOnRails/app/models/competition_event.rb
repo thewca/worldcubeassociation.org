@@ -43,10 +43,15 @@ class CompetitionEvent < ApplicationRecord
   end
 
   def load_wcif!(wcif)
+    if self.rounds.pluck(:old_type).compact.any?
+      raise WcaExceptions::BadApiParameter.new(
+        "Cannot edit rounds for a competition which has qualification rounds or b-finals. Please contact WRT or WST if you need to make change to this competition.",
+      )
+    end
     self.rounds.destroy_all!
     total_rounds = wcif["rounds"].size
     wcif["rounds"].each_with_index do |wcif_round, index|
-      round = self.rounds.create!(Round.wcif_to_round_attributes(wcif_round, index+1, total_rounds))
+      round = self.rounds.create!(Round.wcif_to_round_attributes(self.event, wcif_round, index+1, total_rounds))
       WcifExtension.update_wcif_extensions!(round, wcif_round["extensions"]) if wcif_round["extensions"]
     end
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
@@ -58,8 +63,8 @@ class CompetitionEvent < ApplicationRecord
       "properties" => {
         "id" => { "type" => "string" },
         "rounds" => { "type" => ["array", "null"], "items" => Round.wcif_json_schema },
-        "competitorLimit" => { "type" => "integer" },
-        "qualification" => { "type" => "object" }, # TODO: expand on this
+        "competitorLimit" => { "type" => ["integer", "null"] },
+        "qualification" => { "type" => ["object", "null"] }, # TODO: expand on this
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }

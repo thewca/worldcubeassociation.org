@@ -62,9 +62,9 @@ onPage('competitions#index', function() {
     $form.trigger('submit.rails');
   }
 
-  $form.on('change', '#events, #region, #state, #display, #status, #delegate', submitForm)
+  $form.on('change', '#events, #region, #state, #display, #status, #delegate, #cancelled', submitForm)
        .on('click', '#clear-all-events, #select-all-events', submitForm)
-       .on('input', '#search', _.debounce(submitForm, TEXT_INPUT_DEBOUNCE_MS))
+       .on('input', '#search', window.wca.lodashDebounce(submitForm, window.wca.TEXT_INPUT_DEBOUNCE_MS))
        .on('dp.change','#from_date, #to_date', submitForm);
 
   $('#competition-query-form').on('ajax:send', function() {
@@ -80,7 +80,7 @@ onPage('competitions#index', function() {
       // unfortunately it does not trigger our iframe resize trick...
       // Google maps somehow did make this work, so if you're motivated,
       // you could look at their source code to try to figure out how they detect and handle this situation.
-      wca._competitionsIndexMap.invalidateSize();
+      window.wca._competitionsIndexMap.invalidateSize();
       if ($(window).innerWidth() > 800) {
         var formTop = $('#competition-query-form').offset().top;
         $('html, body').animate({ scrollTop: formTop - 5 }, 300);
@@ -89,7 +89,7 @@ onPage('competitions#index', function() {
   });
 
   // Necessary hack because Safari fires a popstate event on document load
-  $(window).load(function() {
+  $(window).on('load', function() {
     setTimeout(function() {
       // When back/forward is clicked the url changes since we use pushState,
       // but the content is not reloaded so we have to do this manually.
@@ -120,7 +120,7 @@ onPage("competitions#show_all_results", function() {
     // Scroll to the top.
     document.getElementsByClassName('event-selector')[0].scrollIntoView();
 
-    $.setUrlParams({ event:  eventId });
+    window.wca.setUrlParams({ event:  eventId });
   });
 
   if(location.hash) {

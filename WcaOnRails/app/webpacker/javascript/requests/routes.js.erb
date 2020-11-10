@@ -1,0 +1,4 @@
+export const postsUrl = (page, format='json') => {
+  // In this case id holds the page number ;)
+  return `<%= URI.decode(Rails.application.routes.url_helpers.posts_path(format: "${format}")) %>?page=${page}`;
+};

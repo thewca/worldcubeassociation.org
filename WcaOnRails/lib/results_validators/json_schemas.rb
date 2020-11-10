@@ -6,7 +6,7 @@ module ResultsValidators
       "type" => "object",
       "properties" => {
         "personId" => { "type" => "number" },
-        "position" => { "type" => "number" },
+        "position" => { "type" => ["number", "null"] },
         "results" => {
           "type" => "array",
           "items" => { "type" => "number" },

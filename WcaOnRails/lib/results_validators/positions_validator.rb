@@ -2,9 +2,14 @@
 
 module ResultsValidators
   class PositionsValidator < GenericValidator
-    WRONG_POSITION_IN_RESULTS_ERROR = "[%{round_id}] Result for %{person_name} has a wrong position: expected %{expected_pos} and got %{pos}."
+    WRONG_POSITION_IN_RESULTS_ERROR = "[%{round_id}] %{person_name} is in the wrong position: expected %{expected_pos}, but got %{pos}."
+    POSITION_FIXED_INFO = "[%{round_id}] Automatically fixed the position of %{person_name} from %{pos} to %{expected_pos}."
 
     @@desc = "This validator checks that positions stored in results are correct with regard to the actual results."
+
+    def self.has_automated_fix?
+      true
+    end
 
     def validate(competition_ids: [], model: Result, results: nil)
       reset_state
@@ -42,12 +47,22 @@ module ResultsValidators
             last_result = result
 
             if expected_pos != result.pos
-              @errors << ValidationError.new(:results, competition_id,
-                                             WRONG_POSITION_IN_RESULTS_ERROR,
+              if @apply_fixes
+                @infos << ValidationInfo.new(:results, competition_id,
+                                             POSITION_FIXED_INFO,
                                              round_id: round_id,
                                              person_name: result.personName,
                                              expected_pos: expected_pos,
                                              pos: result.pos)
+                result.update_attributes!(pos: expected_pos)
+              else
+                @errors << ValidationError.new(:results, competition_id,
+                                               WRONG_POSITION_IN_RESULTS_ERROR,
+                                               round_id: round_id,
+                                               person_name: result.personName,
+                                               expected_pos: expected_pos,
+                                               pos: result.pos)
+              end
             end
           end
         end

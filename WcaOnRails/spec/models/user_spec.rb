@@ -580,34 +580,29 @@ RSpec.describe User, type: :model do
     expect(user.name).to eq 'test user'
   end
 
-  describe "#update_with_password" do
+  describe "#update" do
+    # NOTE: users are required to verify authentication recently to be able
+    # to use controller's action which allow for updating attributes.
     let(:user) { FactoryBot.create(:user, password: "wca") }
 
     context "when the password is not given in the params" do
-      it "updates the attributes if the current_password matches" do
-        user.update_with_password(email: "new@email.com", current_password: "wca")
+      it "updates the unconfirmed email" do
+        user.update(email: "new@email.com")
         expect(user.reload.unconfirmed_email).to eq "new@email.com"
       end
 
-      it "does not update the attributes if the current_password does not match" do
-        user.update_with_password(email: "new@email.com", current_password: "wrong")
-        expect(user.reload.unconfirmed_email).to_not eq "new@email.com"
-      end
-    end
-
-    context "when the password is given in the params" do
-      it "updates the password if the current_password matches" do
-        user.update_with_password(password: "new", password_confirmation: "new", current_password: "wca")
+      it "updates the password if the password_confirmation matches" do
+        user.update(password: "new", password_confirmation: "new")
         expect(user.reload.valid_password?("new")).to eq true
       end
 
-      it "does not update the password if the current_password does not match" do
-        user.update_with_password(password: "new", password_confirmation: "new", current_password: "wrong")
+      it "does not update the password if the password_confirmation does not match" do
+        user.update(password: "new", password_confirmation: "wrong")
         expect(user.reload.valid_password?("new")).to eq false
       end
 
       it "does not allow blank password" do
-        user.update_with_password(password: " ", password_confirmation: " ", current_password: "wca")
+        user.update(password: " ", password_confirmation: " ")
         expect(user.errors.full_messages).to include "Password can't be blank"
       end
     end

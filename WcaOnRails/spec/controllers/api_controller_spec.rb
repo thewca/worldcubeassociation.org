@@ -44,14 +44,6 @@ RSpec.describe Api::V0::ApiController do
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
     end
-
-    it "does not find non world readable post" do
-      post.update_column(:world_readable, false)
-      get :posts_search, params: { q: "post title" }
-      expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json["result"].length).to eq 0
-    end
   end
 
   describe 'GET #users_search' do
@@ -272,7 +264,9 @@ RSpec.describe Api::V0::ApiController do
       get :scramble_program
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["current"]["name"]).to eq "TNoodle-WCA-0.15.0"
+      expect(json["current"]["name"]).to eq "TNoodle-WCA-1.0.1"
+      # the actual key resides in regulations-data, so in the test environment it will simply prompt "false"
+      expect(json["publicKeyBytes"]).to eq false
     end
   end
 
@@ -316,7 +310,7 @@ RSpec.describe Api::V0::ApiController do
       end
     end
 
-    context 'signed in as candidate delegate' do
+    context 'signed in as Junior delegate' do
       before :each do
         api_sign_in_as(FactoryBot.create(:candidate_delegate))
       end

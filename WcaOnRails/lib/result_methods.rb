@@ -43,7 +43,7 @@ module ResultMethods
 
   def trimmed_indices
     if missed_combined_round_cutoff?
-      # When you miss the cutoff for a combined round, you don't
+      # When you miss the cutoff for a cutoff round, you don't
       # get an average, therefore none of the solves were trimmed.
       []
     else

@@ -19,6 +19,10 @@ module Locales
       "flag_id": "de",
       "name": "Deutsch",
     },
+    "eo": {
+      "flag_id": "eo",
+      "name": "Esperanto",
+    },
     "es": {
       "flag_id": "es",
       "name": "Español",
@@ -50,6 +54,10 @@ module Locales
     "ja": {
       "flag_id": "jp",
       "name": "日本語",
+    },
+    "kk": {
+      "flag_id": "kz",
+      "name": "Қазақша",
     },
     "ko": {
       "flag_id": "kr",
@@ -90,6 +98,10 @@ module Locales
     "th": {
       "flag_id": "th",
       "name": "ภาษาไทย",
+    },
+    "uk": {
+      "flag_id": "ua",
+      "name": "Українська",
     },
     "vi": {
       "flag_id": "vn",

@@ -64,7 +64,7 @@ function checkResult ( $result, &$countryIdSet, &$competitionIdSet, &$eventIdSet
   if( $result['best']    != $best    ) return    "'best' should be $best";
   if( $result['average'] != $average ) return "'average' should be $average";
 
-  #--- 10) check number of zero-values for non-combined rounds
+  #--- 10) check number of zero-values for non-cutoff rounds
   $round = $result['roundTypeId'];
   if( $round != 'c'  &&  $round != 'd'  &&  $round != 'e'  &&  $round != 'g' && $round != 'h' ){
     if( $format == '1'  &&  $zer != 4 ) return "should have one non-zero value";
@@ -73,7 +73,7 @@ function checkResult ( $result, &$countryIdSet, &$competitionIdSet, &$eventIdSet
     if( $format == 'm'  &&  $zer != 2 ) return "should have three non-zero values";
     if( $format == 'a'  &&  $zer != 0 ) return "shouldn't have zero-values";
   }
-  #--- 11) same for combined rounds
+  #--- 11) same for cutoff rounds
   else {
     if( $format == '2'  &&  $zer < 3 ) return "should have at most two non-zero values";
     if( $format == '3'  &&  $zer < 2 ) return "should have at most three non-zero values";
