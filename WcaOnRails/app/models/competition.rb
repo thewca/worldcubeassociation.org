@@ -244,6 +244,13 @@ class Competition < ApplicationRecord
     end
   end
 
+  validate :advancement_condition_must_be_present_for_all_non_final_rounds, if: :confirmed_at_changed?, on: :update
+  def advancement_condition_must_be_present_for_all_non_final_rounds
+    unless rounds.all?(&:advancement_condition_is_valid?)
+      errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds'))
+    end
+  end
+
   def has_any_round_per_event?
     competition_events.map(&:rounds).none?(&:empty?)
   end
@@ -371,6 +378,10 @@ class Competition < ApplicationRecord
         warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds')
       end
 
+      unless rounds.all?(&:advancement_condition_is_valid?)
+        warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
+      end
+
       if championship_warnings.any?
         warnings = championship_warnings.merge(warnings)
       end
@@ -383,6 +394,7 @@ class Competition < ApplicationRecord
         warnings[:results] = I18n.t('competitions.messages.results_not_posted')
       end
     end
+
     if reg_warnings.any?
       warnings = reg_warnings.merge(warnings)
     end
@@ -1567,12 +1579,5 @@ class Competition < ApplicationRecord
     end
     cal.publish
     cal
-  end
-
-  validate :advancement_condition_must_be_present_for_all_non_final_rounds, if: :confirmed_or_visible?
-  def advancement_condition_must_be_present_for_all_non_final_rounds
-    unless rounds.all?(&:advancement_condition_is_valid?)
-      errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds'))
-    end
   end
 end
