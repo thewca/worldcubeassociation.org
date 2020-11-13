@@ -2305,6 +2305,8 @@ eo:
         Bonvolu atenti ke la konkurso havas almenaŭ unu raŭndon po konkursero
         kaj ke la horplano kiun vi kreis enhavas ĉiujn raŭndojn kiujn vi
         deklaris antaŭ ol konfirmi la konkurson.
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: Bonvolu atenti ke ĉiuj nefinalaj raŭndoj havu kvalifikajn kondiĉojn.
       #original_hash: e390250
       create_success: Nova konkurso sukcese kreiĝis!
       #original_hash: ba067f0
@@ -2756,7 +2758,7 @@ eo:
       #original_hash: cdcd288
       invalid_currency_code: Elektita valutkodo estas nevalida
       #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: devas havi kvalifikajn kondiĉojn por ĉiuj ne-finalaj raŭndoj.
+      advancement_condition_must_be_present_for_all_non_final_rounds: devas havi kvalifikajn kondiĉojn por ĉiuj nefinalaj raŭndoj.
     new:
       #original_hash: 1208df7
       create_competition: Krei konkurson
