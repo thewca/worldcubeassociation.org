@@ -517,7 +517,7 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    sdoc (2.0.0)
+    sdoc (2.0.2)
       rdoc (>= 5.0)
     seedbank (0.4.0)
     semantic_range (2.3.0)
