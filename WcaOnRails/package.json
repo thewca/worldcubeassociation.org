@@ -53,7 +53,7 @@
     "style-loader": "^2.0.0",
     "webpack": "^4.44.2",
     "webpack-manifest-plugin": "^2.2.0",
-    "webpack-merge": "^5.3.0",
+    "webpack-merge": "^5.4.0",
     "whatwg-fetch": "^3.5.0"
   },
   "devDependencies": {
