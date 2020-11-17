@@ -1,17 +1,17 @@
 <% provide(:title, t("organizer_guidelines.title")) %>
 <div class="container">
   <h1><%= yield(:title)  %></h1>
-  
+
   <p><%= t('full_organizer_guidelines.description') %></p>
   <p><%= t('full_organizer_guidelines.disclaimer_html') %></p>
-  
+
   <p><%= t('full_organizer_guidelines.essential.description') %></p>
   <div class="list-group">
     <%= link_to "/edudoc/organizer-guidelines/finding-venue.pdf", class: "list-group-item" do %>
       <%= ui_icon("file alt") %>
       <%= t('full_organizer_guidelines.essential.finding-venue') %>
     <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/orga-team-delegate.pdf"", class: "list-group-item" do %>
+    <%= link_to "/edudoc/organizer-guidelines/orga-team-delegate.pdf", class: "list-group-item" do %>
       <%= ui_icon("file alt") %>
       <%= t('full_organizer_guidelines.essential.orga-team-delegate') %>
     <% end %>
@@ -46,7 +46,7 @@
       <%= ui_icon("file alt") %>
       <%= t('full_organizer_guidelines.recommended.staff') %>
     <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/emails.pdf"", class: "list-group-item" do %>
+    <%= link_to "/edudoc/organizer-guidelines/emails.pdf", class: "list-group-item" do %>
       <%= ui_icon("file alt") %>
       <%= t('full_organizer_guidelines.recommended.emails') %>
     <% end %>
@@ -67,7 +67,7 @@
       <%= t('full_organizer_guidelines.recommended.reflection') %>
     <% end %>
   </div>
-  
+
   <%
     def translate_with_structure(key)
       data_english = t(key, locale: :en)
