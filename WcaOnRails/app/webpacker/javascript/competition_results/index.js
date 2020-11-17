@@ -9,7 +9,7 @@ import CountryFlag from '../wca/CountryFlag';
 import './index.scss';
 import EventNavigation from '../event_navigation';
 import { getUrlParams, setUrlParams } from '../wca/utils';
-import { personUrl } from '../requests/routes.js.erb';
+import { personUrl, competitionApiUrl, competitionResultsApiUrl } from '../requests/routes.js.erb';
 
 const RoundResultsTable = ({ round, eventName, eventId }) => (
   <>
@@ -44,9 +44,7 @@ const RoundResultsTable = ({ round, eventName, eventId }) => (
 );
 
 const EventResults = ({ competitionId, eventId }) => {
-  const { loading, error, data } = useLoadedData(
-    `/api/v0/competitions/${competitionId}/results/${eventId}`,
-  );
+  const { loading, error, data } = useLoadedData(competitionResultsApiUrl(competitionId, eventId));
 
   if (loading) return <Loading />;
   if (error) return <Errored />;
@@ -60,9 +58,7 @@ const EventResults = ({ competitionId, eventId }) => {
 };
 
 const CompetitionResults = ({ competitionId }) => {
-  const { loading, error, data } = useLoadedData(
-    `/api/v0/competitions/${competitionId}/`,
-  );
+  const { loading, error, data } = useLoadedData(competitionApiUrl(competitionId));
   const [selectedEvent, setSelectedEvent] = useState();
   useEffect(() => {
     if (data) {
@@ -88,6 +84,11 @@ const CompetitionResults = ({ competitionId }) => {
       <EventResults
         competitionId={competitionId}
         eventId={selectedEvent}
+      />
+      <EventNavigation
+        eventIds={data.event_ids}
+        selected={selectedEvent}
+        onSelect={(eventId) => setSelectedEvent(eventId)}
       />
     </div>
   );
