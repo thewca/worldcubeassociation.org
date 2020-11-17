@@ -2201,6 +2201,9 @@ th:
       schedule_must_match_rounds: >-
         กรุณามั่นใจว่าการแข่งขันแต่ละประเภทมีรอบอย่างน้อย 1
         รอบและตารางการแข่งขันที่คุณสร้างมาต้องมีทุกรอบของการแข่งขันก่อนที่จะยืนยัน
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: >-
+        โปรดตรวจสอบให้แน่ใจว่าทุกรอบที่ไม่ใช่รอบชิงชนะเลิศมีเงื่อนไขการผ่านเข้ารอบระบุไว้
       #original_hash: e390250
       create_success: สร้างการแข่งขันใหม่สำเร็จแล้ว
       #original_hash: ba067f0
