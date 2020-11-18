@@ -7,64 +7,21 @@
 
   <p><%= t('full_organizer_guidelines.essential.description') %></p>
   <div class="list-group">
-    <%= link_to "/edudoc/organizer-guidelines/finding-venue.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.essential.finding-venue') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/orga-team-delegate.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.essential.orga-team-delegate') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/budget.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.essential.budget') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/schedule.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.essential.schedule') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/checklist.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.essential.checklist') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/registration.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.essential.registration') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/venue-setup.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.essential.venue-setup') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/work-during-comp.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.essential.work-during-comp') %>
+    <% %w(finding-venue orga-team-delegate budget schedule checklist registration venue-setup work-during-comp).each do |doc| %>
+      <%= link_to "/edudoc/organizer-guidelines/#{doc}.pdf", class: "list-group-item" do %>
+        <%= ui_icon("file alt") %>
+        <%= t("full_organizer_guidelines.essential.#{doc}") %>
+      <% end %>
     <% end %>
   </div>
+
   <p><%= t('full_organizer_guidelines.recommended.title') %></p>
   <div class="list-group">
-    <%= link_to "/edudoc/organizer-guidelines/staff.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.recommended.staff') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/emails.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.recommended.emails') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/running-systems.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.recommended.running-systems') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/new-competitors.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.recommended.new-competitors') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/enhancing-experience.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.recommended.enhancing-experience') %>
-    <% end %>
-    <%= link_to "/edudoc/organizer-guidelines/reflection.pdf", class: "list-group-item" do %>
-      <%= ui_icon("file alt") %>
-      <%= t('full_organizer_guidelines.recommended.reflection') %>
+    <% %w(staff emails running-systems new-competitors enhancing-experience reflection).each do |doc| %>
+      <%= link_to "/edudoc/organizer-guidelines/#{doc}.pdf", class: "list-group-item" do %>
+        <%= ui_icon("file alt") %>
+        <%= t("full_organizer_guidelines.recommended.#{doc}") %>
+      <% end %>
     <% end %>
   </div>
 
