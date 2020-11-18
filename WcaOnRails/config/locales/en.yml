@@ -2186,21 +2186,21 @@ en:
       reflection: "Organizer reflection"
   organizer_guidelines:
     title: "WCA Competition Organizer Guidelines"
-    paragraph1:
+    paragraph0:
       title: "Short version"
       content: "Below you can find a short summary of key points for getting an idea of how to organize a competition. If you think this is something for you, please take a look at the documents above!"
-    paragraph2:
+    paragraph1:
       title: "How to organize a competition"
       content: "All WCA competitions must be attended and overseen by a WCA Delegate. If you are interested in organizing your own competition, please contact your nearest WCA Delegate. They will be able to give you more information on the local practices and can
       help you with finding a suitable date as they know if there are any other competitions planned in the same time frame. If there is no WCA Delegate near your area, please get in touch with the Senior Delegate for your region."
-    paragraph3:
+    paragraph2:
       title: "Expected expenses for organizing a competition"
       content: "The expected expenses differ greatly from country to country and are determined by several factors like the size of the venue and other general conditions. Recouping all expenses with registration fees is possible. However, to keep these as low as possible,
       it is highly recommended to search for sponsors. Although WCA Delegates are volunteers and do not receive a salary for their work, organizers should consider paying compensation for their travel expenses."
-    paragraph4:
+    paragraph3:
       title: "Deadlines for the announcement of the competition"
       content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>)."
-    paragraph5:
+    paragraph4:
       title: "Proximity policy"
       content1: "WCA competitions will be accepted if they are at least 100 km or 19 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 100 km and the time between them is less than 19 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
