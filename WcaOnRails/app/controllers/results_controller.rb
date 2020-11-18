@@ -285,9 +285,9 @@ class ResultsController < ApplicationController
     @is_until = splitted_years_param[0] == "until"
     @year = splitted_years_param[1].to_i
     if @is_only
-      @years_condition = "AND year = #{@year}"
+      @years_condition = "AND result.year = #{@year}"
     elsif @is_until
-      @years_condition = "AND year <= #{@year}"
+      @years_condition = "AND result.year <= #{@year}"
     else
       @years_condition = ""
     end
