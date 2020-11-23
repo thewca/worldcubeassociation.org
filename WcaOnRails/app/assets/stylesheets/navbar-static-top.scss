@@ -144,10 +144,16 @@
 /* make space for the border-top-left-radius */
       // padding-left: 15px;
 
-      form.navbar-form[role="search"] {
-        position: absolute;
-        right: 0;
-        top: -60px;
+      // form.navbar-form[role="search"] {
+      //   position: absolute;
+      //   right: 0;
+      //   top: -60px;
+      // }
+      li.search{
+        margin-top: 10px;
+        form{
+          display: inline;
+        }
       }
     }
 
