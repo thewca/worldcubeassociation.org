@@ -18,35 +18,44 @@
     }
   }
 
-  .navbar-brand {
-    padding: 0;
-    padding-top: 16px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-
-    span {
-      display: inline-block;
-      margin-top: -10px;
-      vertical-align: top;
-      white-space: nowrap;
-      font-size: 0.9em;
-      .hide-new-window-icon {
-        font-size: initial;
-      }
-    }
-    i {
-      font-size: 15px;
-    }
-    img {
-      height: 50px;
-      float: left;
-      display: inline;
-      vertical-align: top;
-      margin-top: -15px;
-      margin-left: 10px;
-      margin-right: 5px;
-    }
+  .logo{
+    display: none;
   }
+
+  .social-media{
+    position: absolute;
+    padding: 0;
+    background-color:#ddd;
+  }
+  // .navbar-brand {
+  //   padding: 0;
+  //   // padding-top: 16px;
+  //   // margin-bottom: 10px;
+  //   // margin-top: 10px;
+
+  //   span {
+  //     display: inline-block;
+  //     margin-top: -10px;
+  //     vertical-align: top;
+  //     white-space: nowrap;
+  //     font-size: 0.9em;
+  //     .hide-new-window-icon {
+  //       font-size: initial;
+  //     }
+  //   }
+  //   i {
+  //     font-size: 15px;
+  //   }
+  //   img {
+  //     height: 20px;
+  //     float: left;
+  //     display: inline;
+  //     vertical-align: top;
+  //     margin-top: -15px;
+  //     margin-left: 10px;
+  //     margin-right: 5px;
+  //   }
+  // }
 
   $nav-avatar-thumbnail-size: 40px;
   a.top-nav > .avatar-thumbnail {
@@ -64,6 +73,7 @@
     $omni-search-sm-width: 230px;
     $omni-search-md-width: 450px;
     $omni-search-lg-width: 500px;
+
 
     form.navbar-form[role="search"] .wca-autocomplete-omni + .selectize-control .selectize-input {
       @media (min-width: $screen-sm-min) {
@@ -93,37 +103,46 @@
 
 @media (min-width: $screen-sm-min) {
   .navbar-static-top {
-    .navbar-brand {
-      height: 110px;
-      margin-bottom: -50px;
-      img {
-        height: 100px;
-        float: left;
-        display: inline;
-        margin-top: -15px;
-        margin-left: 35px;
-        margin-right: 20px;
-      }
-      span {
-        display: inline-block;
-        margin-top: -10px;
-        vertical-align: top;
-        white-space: nowrap;
-        font-size: 30px;
-        font-variant: small-caps;
-      }
-      i {
-        font-size: 15px;
+    .logo {
+      display: block;
+      height: 100%;
+      a{
+        padding: 0 10px;
+        img{
+          height: 50px;
+        }
       }
     }
+    // .navbar-brand {
+    //   height: 110px;
+    //   margin-bottom: -50px;
+    //   img {
+    //     height: 100px;
+    //     float: left;
+    //     display: inline;
+    //     margin-top: -15px;
+    //     margin-left: 35px;
+    //     margin-right: 20px;
+    //   }
+    //   span {
+    //     display: inline-block;
+    //     margin-top: -10px;
+    //     vertical-align: top;
+    //     white-space: nowrap;
+    //     font-size: 30px;
+    //     font-variant: small-caps;
+    //   }
+    //   i {
+    //     font-size: 15px;
+    //   }
+    // }
 
     .navbar-collapse {
       position: relative;
       border-top-left-radius: 8px;
-      margin-left: 140px;
 
-      /* make space for the border-top-left-radius */
-      padding-left: 15px;
+/* make space for the border-top-left-radius */
+      // padding-left: 15px;
 
       form.navbar-form[role="search"] {
         position: absolute;
