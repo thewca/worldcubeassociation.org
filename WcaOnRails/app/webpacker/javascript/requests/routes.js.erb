@@ -7,4 +7,4 @@ export const postsUrl = (page, format = 'json') => {
 
 export const competitionApiUrl = (id) => `<%= URI.decode(Rails.application.routes.url_helpers.api_v0_competition_path("${id}"))%>`;
 
-export const competitionResultsApiUrl = (id, eventId) => `<%= URI.decode(Rails.application.routes.url_helpers.api_v0_competition_results_path("${id}", "${eventId}")) %>`;
+export const competitionEventResultsApiUrl = (id, eventId) => `<%= URI.decode(Rails.application.routes.url_helpers.api_v0_competition_event_results_path("${id}", "${eventId}")) %>`;

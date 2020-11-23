@@ -7,17 +7,17 @@ import './index.scss';
 
 const EventNavigation = ({ selected, eventIds, onSelect }) => (
   <Menu text>
-    {eventIds.map((event, index) => (
+    {eventIds.map((eventId, index) => (
       <Popup
-        key={event}
-        content={events.byId[event].name}
+        key={eventId}
+        content={events.byId[eventId].name}
         trigger={(
           <Menu.Item>
             <EventIcon
-              key={event}
-              id={event}
-              onClick={() => onSelect(eventIds[index], index)}
-              className={classnames(selected === event && 'selected')}
+              key={eventId}
+              id={eventId}
+              onClick={() => onSelect(eventId, index)}
+              className={classnames(selected === eventId && 'selected')}
             />
           </Menu.Item>
             )}

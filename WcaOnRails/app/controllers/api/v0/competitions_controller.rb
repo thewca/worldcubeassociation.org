@@ -29,6 +29,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def results
     competition = competition_from_params
+    render json: competition
+  end
+
+  def event_results
+    competition = competition_from_params
     event = Event.c_find(params[:event_id])
     if event
       results_by_round = competition.results

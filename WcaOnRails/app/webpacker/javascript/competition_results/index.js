@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'semantic-ui-react';
-import useLoadedData from '../requests/loadable';
+import useLoadedData from '../requests/useLoadedData';
 import { registerComponent } from '../wca/react-utils';
 import Loading from '../requests/Loading';
 import Errored from '../requests/Errored';
@@ -9,7 +9,7 @@ import CountryFlag from '../wca/CountryFlag';
 import './index.scss';
 import EventNavigation from '../event_navigation';
 import { getUrlParams, setUrlParams } from '../wca/utils';
-import { personUrl, competitionApiUrl, competitionResultsApiUrl } from '../requests/routes.js.erb';
+import { personUrl, competitionApiUrl, competitionEventResultsApiUrl } from '../requests/routes.js.erb';
 
 const RoundResultsTable = ({ round, eventName, eventId }) => (
   <>
@@ -44,7 +44,9 @@ const RoundResultsTable = ({ round, eventName, eventId }) => (
 );
 
 const EventResults = ({ competitionId, eventId }) => {
-  const { loading, error, data } = useLoadedData(competitionResultsApiUrl(competitionId, eventId));
+  const { loading, error, data } = useLoadedData(
+    competitionEventResultsApiUrl(competitionId, eventId),
+  );
 
   if (loading) return <Loading />;
   if (error) return <Errored />;
@@ -59,7 +61,7 @@ const EventResults = ({ competitionId, eventId }) => {
 
 const CompetitionResults = ({ competitionId }) => {
   const { loading, error, data } = useLoadedData(competitionApiUrl(competitionId));
-  const [selectedEvent, setSelectedEvent] = useState();
+  const [selectedEvent, setSelectedEvent] = useState(null);
   useEffect(() => {
     if (data) {
       const params = getUrlParams();
@@ -72,7 +74,7 @@ const CompetitionResults = ({ competitionId }) => {
       setUrlParams({ event: selectedEvent });
     }
   }, [selectedEvent]);
-  if (loading || selectedEvent === undefined) return <Loading />;
+  if (loading || !selectedEvent) return <Loading />;
   if (error) return <Errored />;
   return (
     <div className="competition-results">
