@@ -18,44 +18,14 @@
     }
   }
 
-  .logo{
-    display: none;
-  }
 
-  .social-media{
+  .brand{
     position: absolute;
     padding: 0;
-    background-color:#ddd;
+    img{
+      height: 62px;
+    }
   }
-  // .navbar-brand {
-  //   padding: 0;
-  //   // padding-top: 16px;
-  //   // margin-bottom: 10px;
-  //   // margin-top: 10px;
-
-  //   span {
-  //     display: inline-block;
-  //     margin-top: -10px;
-  //     vertical-align: top;
-  //     white-space: nowrap;
-  //     font-size: 0.9em;
-  //     .hide-new-window-icon {
-  //       font-size: initial;
-  //     }
-  //   }
-  //   i {
-  //     font-size: 15px;
-  //   }
-  //   img {
-  //     height: 20px;
-  //     float: left;
-  //     display: inline;
-  //     vertical-align: top;
-  //     margin-top: -15px;
-  //     margin-left: 10px;
-  //     margin-right: 5px;
-  //   }
-  // }
 
   $nav-avatar-thumbnail-size: 40px;
   a.top-nav > .avatar-thumbnail {
@@ -111,6 +81,13 @@
         img{
           height: 50px;
         }
+      }
+    }
+
+    .brand{
+      background-color:#ddd;
+      img{
+        display: none;
       }
     }
     // .navbar-brand {
