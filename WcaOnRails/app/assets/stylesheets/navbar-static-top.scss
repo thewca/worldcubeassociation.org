@@ -71,7 +71,7 @@
     clear: both;
 
     $omni-search-sm-width: 230px;
-    $omni-search-md-width: 450px;
+    $omni-search-md-width: 300px;
     $omni-search-lg-width: 500px;
 
 
@@ -79,10 +79,10 @@
       @media (min-width: $screen-sm-min) {
         width: $omni-search-sm-width;
       }
-      @media (min-width: $screen-md-min) {
+      @media (min-width: 1000) {
         width: $omni-search-md-width;
       }
-      @media (min-width: $screen-lg-min) {
+      @media (min-width: 1400px) {
         width: $omni-search-lg-width;
       }
     }
