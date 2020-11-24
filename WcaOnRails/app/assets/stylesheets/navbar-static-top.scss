@@ -24,6 +24,7 @@
 
   .brand{
     position: absolute;
+    top: 0;
     padding: 0;
     img{
       height: 62px;
@@ -89,6 +90,7 @@
 
     .brand{
       background-color:#ddd;
+      top: 50px;
       img{
         display: none;
       }
