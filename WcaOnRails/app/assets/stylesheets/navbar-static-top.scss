@@ -18,6 +18,9 @@
     }
   }
 
+  .logo{
+    display: none;
+  }
 
   .brand{
     position: absolute;
@@ -90,42 +93,11 @@
         display: none;
       }
     }
-    // .navbar-brand {
-    //   height: 110px;
-    //   margin-bottom: -50px;
-    //   img {
-    //     height: 100px;
-    //     float: left;
-    //     display: inline;
-    //     margin-top: -15px;
-    //     margin-left: 35px;
-    //     margin-right: 20px;
-    //   }
-    //   span {
-    //     display: inline-block;
-    //     margin-top: -10px;
-    //     vertical-align: top;
-    //     white-space: nowrap;
-    //     font-size: 30px;
-    //     font-variant: small-caps;
-    //   }
-    //   i {
-    //     font-size: 15px;
-    //   }
-    // }
 
     .navbar-collapse {
       position: relative;
       border-top-left-radius: 8px;
 
-/* make space for the border-top-left-radius */
-      // padding-left: 15px;
-
-      // form.navbar-form[role="search"] {
-      //   position: absolute;
-      //   right: 0;
-      //   top: -60px;
-      // }
       li.search{
         margin-top: 10px;
         form{

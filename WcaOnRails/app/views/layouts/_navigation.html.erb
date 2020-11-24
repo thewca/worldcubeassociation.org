@@ -1,5 +1,17 @@
 <div class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="ui-container">
+    <div class="brand">
+      <a href="<%= root_path %>"><%= image_tag "wca_logo.svg" %></a>
+      <span>
+        <%= link_to(ui_icon("instagram"), "https://www.instagram.com/thewcaofficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(ui_icon("facebook square"), "https://www.facebook.com/WorldCubeAssociation/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(ui_icon("twitter"), "https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(ui_icon("reddit"), "https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(ui_icon("twitch"), "https://www.twitch.tv/worldcubeassociation/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(ui_icon("weibo"), "https://www.weibo.com/theWCA/", target: "_blank", class: "hide-new-window-icon") %>
+        <%= link_to(ui_icon("youtube"), "https://www.youtube.com/channel/UC5OUMUnS8PvY1RvtB1pQZ0g", target: "_blank", class: "hide-new-window-icon") %>
+      </span>
+    </div>
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
       <span class="sr-only">Toggle navigation</span>
       <span class="icon-bar"></span>
@@ -244,17 +256,5 @@
         </li>
       </ul>
     </div><!--/.nav-collapse -->
-    <div class="brand">
-      <a href="<%= root_path %>"><%= image_tag "wca_logo.svg" %></a>
-      <span>
-        <%= link_to(ui_icon("instagram"), "https://www.instagram.com/thewcaofficial/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(ui_icon("facebook square"), "https://www.facebook.com/WorldCubeAssociation/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(ui_icon("twitter"), "https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(ui_icon("reddit"), "https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(ui_icon("twitch"), "https://www.twitch.tv/worldcubeassociation/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(ui_icon("weibo"), "https://www.weibo.com/theWCA/", target: "_blank", class: "hide-new-window-icon") %>
-        <%= link_to(ui_icon("youtube"), "https://www.youtube.com/channel/UC5OUMUnS8PvY1RvtB1pQZ0g", target: "_blank", class: "hide-new-window-icon") %>
-      </span>
-    </div>
   </div>
 </div>
