@@ -1,19 +1,11 @@
+<% add_to_packs("competition_results") %>
 <% provide(:title, @competition.name) %>
 
 <%= render layout: 'results_nav' do %>
   <%= tag :div, id: "selected-event", "data-selected": params[:event] %>
   <% cache @competition.result_cache_key("all_results") do %>
-    <%= render partial: "event_selector", locals: {competition: @competition, name: "top"} %>
-    <% @competition.events_with_round_types_with_results.each do |event, rounds_with_results| %>
-      <%= content_tag :div, class: ["event-#{event.id}", "one-event"] do %>
-        <% rounds_with_results.each do |round, results| %>
-          <h3>
-            <%= cubing_icon event.id %> <%= "#{event.name} #{round.name}" %>
-          </h3>
-          <%= render "results_table", results: results, hide_event: true, hide_round: true %>
-        <% end %>
-      <% end %>
-    <% end %>
-    <%= render partial: "event_selector", locals: {competition: @competition, name: "bottom"} %>
+      <%= render_react_component("CompetitionResults", id: "competition_results", options: {
+        competitionId: @competition.id
+      }) %>
   <% end %>
 <% end %>

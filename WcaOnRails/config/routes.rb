@@ -235,7 +235,8 @@ Rails.application.routes.draw do
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'
-        get '/results' => 'competitions#results'
+        get '/results' => 'competitions#results', as: :results
+        get '/results/:event_id' => 'competitions#event_results', as: :event_results
         get '/competitors' => 'competitions#competitors'
         get '/registrations' => 'competitions#registrations'
         get '/schedule' => 'competitions#schedule'

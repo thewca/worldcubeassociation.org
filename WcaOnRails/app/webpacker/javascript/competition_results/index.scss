@@ -1,0 +1,11 @@
+.competition-results {
+  .events-list {
+    display: flex;
+    justify-content: center;
+  }
+  .event-results {
+    .table-cell-solves {
+      word-spacing: 0.5em;
+    }
+  }
+}
