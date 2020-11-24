@@ -3,9 +3,7 @@
 
 <%= render layout: 'results_nav' do %>
   <%= tag :div, id: "selected-event", "data-selected": params[:event] %>
-  <% cache @competition.result_cache_key("all_results") do %>
-      <%= render_react_component("CompetitionResults", id: "competition_results", options: {
-        competitionId: @competition.id
-      }) %>
-  <% end %>
+  <%= render_react_component("CompetitionResults", id: "competition_results", options: {
+    competitionId: @competition.id
+  }) %>
 <% end %>
