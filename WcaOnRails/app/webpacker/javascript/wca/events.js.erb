@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import formats from './formats.js.erb';
+import I18n from '../i18n'
 
 export default {
   official: <%= Event.official.to_json.html_safe %>.map(extend),
@@ -10,10 +11,11 @@ function extend(rawEvent) {
   rawEvent = _.mapKeys(rawEvent, (v, k) => _.camelCase(k));
   return {
     ...rawEvent,
+    name: I18n.t(`events.${rawEvent.id}`),
     formats() {
       return rawEvent.formatIds.map(formatId => formats.byId[formatId]);
     },
-    recommentedFormat() {
+    recommendedFormat() {
       return this.formats()[0];
     },
   }

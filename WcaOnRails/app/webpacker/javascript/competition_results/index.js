@@ -10,6 +10,7 @@ import './index.scss';
 import EventNavigation from '../event_navigation';
 import { getUrlParams, setUrlParams } from '../wca/utils';
 import { personUrl, competitionApiUrl, competitionEventResultsApiUrl } from '../requests/routes.js.erb';
+import I18n from '../i18n';
 
 const RoundResultsTable = ({ round, eventName, eventId }) => (
   <>
@@ -18,11 +19,13 @@ const RoundResultsTable = ({ round, eventName, eventId }) => (
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell width={1}>#</Table.HeaderCell>
-          <Table.HeaderCell width={4}>Name</Table.HeaderCell>
-          <Table.HeaderCell width={2}>Best</Table.HeaderCell>
-          <Table.HeaderCell width={2}>Average</Table.HeaderCell>
-          <Table.HeaderCell>Citizen Of</Table.HeaderCell>
-          <Table.HeaderCell>Solves</Table.HeaderCell>
+          <Table.HeaderCell width={4}>
+            {I18n.t('competitions.results_table.name')}
+          </Table.HeaderCell>
+          <Table.HeaderCell width={2}>{I18n.t('common.best')}</Table.HeaderCell>
+          <Table.HeaderCell width={2}>{I18n.t('common.average')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('common.user.citizen_of')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('common.solves')}</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
