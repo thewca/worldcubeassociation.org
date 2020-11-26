@@ -1,9 +1,14 @@
 import _ from 'lodash';
+import I18n from '../i18n'
 
 export default {
   byId: _.mapValues(<%= Format.all.index_by(&:id).to_json.html_safe %>, extend),
 };
 
 function extend(rawFormat) {
-  return _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
+  rawFormat = _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
+  return {
+    ...rawFormat,
+    name: I18n.t(`formats.${rawFormat.id}`),
+  };
 }

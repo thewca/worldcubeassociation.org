@@ -83,6 +83,11 @@ Rails.application.configure do
     Bullet.add_whitelist type: :unused_eager_loading, class_name: "CompetitionEvent", association: :rounds
   end
 
+  # Add i18n-js to the middleware
+  # We already run i18n:js:export when using webpack(-dev-server), but it wouldn't
+  # get ran if using only bin/rails s
+  config.middleware.use I18n::JS::Middleware
+
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker

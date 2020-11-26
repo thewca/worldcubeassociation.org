@@ -269,6 +269,8 @@ GEM
     httpclient (2.8.3)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
+    i18n-js (3.8.0)
+      i18n (>= 0.6.6)
     i18n-spec (0.6.0)
       iso
     i18n-tasks (0.9.31)
@@ -650,6 +652,7 @@ DEPENDENCIES
   high_voltage
   http_accept_language
   i18n-country-translations!
+  i18n-js
   i18n-spec
   i18n-tasks
   icalendar
