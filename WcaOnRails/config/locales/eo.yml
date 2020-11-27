@@ -1790,7 +1790,7 @@ eo:
           gestoj).
       staff_avatar_guidelines:
         #original_hash: da9e6df
-        title: 'Pluaj gvidlinioj por WCA-Laborantoj:'
+        title: 'Pluaj gvidlinioj por Stabomembroj:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -3548,7 +3548,7 @@ eo:
         ke la teamo bone funkcias kaj gvidi la aliajn membrojn de la teamo.
         Konsilioj estas speciala tipo de teamo kiuj konsilas la Estraro de la
         WCA kaj kiuj estas konstituitaj de komunumaj membroj, ne de
-        WCA-Laborantoj. Kiam tiuj komitatoj, teamoj kaj konsilioj serĉas
+        WCA-Stabomembroj. Kiam tiuj komitatoj, teamoj kaj konsilioj serĉas
         membrojn, informoj pri kiel kandidatiĝi estas anoncitaj ĉe la hejmpaĝo.
       #original_hash: c366473
       senior_member: Altranga Membro
@@ -3635,8 +3635,8 @@ eo:
         #original_hash: c304d57
         description: >-
           Tiu komitato devas certigi ke ĉiuj proceduroj en kiuj engaĝiĝas la
-          WCA-Laborantojn kaj Eksteraj Laborantoj sekvas ĝian Etikan Kodon kaj
-          ĝi faras sendependajn enketojn se la konduto de iuj el tiuj membroj ne
+          WCA-Stabo kaj Ekstera-Stabo sekvas ĝian Etikan Kodon kaj ĝi faras
+          sendependajn enketojn se la konduto de iuj el tiuj membroj ne
           konformas kun tiu Etika Kodo. Tiuj enketoj povas esti petitaj de iuj
           Registritaj Rapidkubantoj, por kiuj la WEC estas konfidulo. Tiu
           komitato ankaŭ funkcias kiel apelacia kortumo se koncernata homo
@@ -3655,8 +3655,8 @@ eo:
         description: >-
           Tiu komitato devas subteni kaj promocii permanentan plibonigon de
           kvalito ene de la WCA, kaj monda aplikado de koheraj altkvalitaj
-          normoj rilate al procesoj, WCA-Laborantoj, Regionaj Organizoj,
-          Organizantoj de konkursoj kaj Konkursaj Laborantoj.
+          normoj rilate al procesoj, WCA-Stabo, Regionaj Organizoj, Organizantoj
+          de konkursoj kaj Konkursaj Taskfarantoj.
       wcat:
         #original_hash: 2b81984
         name: Anonca Teamo de Konkursoj de la WCA
@@ -3678,7 +3678,7 @@ eo:
         #original_hash: fb6cd86
         description: >-
           Tiu konsilio respondecas pri kreado kaj prizorgo de ambaŭflanka
-          komunikado inter la WCA-Komunumo kaj la WCA-Laborantoj.
+          komunikado inter la WCA-Komunumo kaj la WCA-Stabo
       banned:
         #original_hash: d30e2e5
         name: Forbaritaj Konkursantoj
@@ -3733,14 +3733,16 @@ eo:
   education:
     #original_hash: 41701c2
     title: Edukaj Dokumentoj de la WCA
-    #original_hash: aa562a7
+    #original_hash: 081d65d
     description: >-
-      La WQAC kaj la WMT eldonis plurajn dokumentojn por la komunumo, vi povas
-      elŝuti ilin malsupre.
+      La WQAC eldonis plurajn dokumentojn por la komunumo, vi povas elŝuti ilin
+      malsupre.
     #original_hash: d0a3812
     competitor_tutorial: Instruilo por konkursantoj
-    #original_hash: 815938f
-    competition_material: 'Materialo por konkursoj (diplomoj, kubkovraĵoj, …)'
+    #original_hash: 5ca0558
+    certificates: Modelo de diplomo de la WCT
+    #original_hash: f580987
+    orga_guidelines: Gvidlinioj por organizantoj
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-Delegitoj
@@ -3792,7 +3794,7 @@ eo:
         #original_hash: 0c3576b
         '4': Konformiĝi al ĉiuj aplikeblaj Reguloj de la WCA
         #original_hash: 1a9e6c5
-        '5': Akcepti kaj konformiĝi al ĉiuj decidoj de la WCA-Laborantoj
+        '5': Akcepti kaj konformiĝi al ĉiuj decidoj de la WCA-Stabo
         #original_hash: d4ae7c1
         '6': >-
           Konservi en dosiero ĉe la WCA kopio de ĝia nuna statuto kaj, se
@@ -3904,8 +3906,8 @@ eo:
     wec:
       #original_hash: ec2b9c3
       info_html: >-
-        Tiu komitato devas certigi ke ĉiuj proceduroj sekvataj de la
-        WCA-Laborantoj kaj Eksteraj-Laborantoj sekvas la Etikan Kodon.
+        Tiu komitato devas certigi ke ĉiuj proceduroj sekvataj de la WCA-Stabo
+        kaj Ekstera-Stabo sekvas la Etikan Kodon.
     weat:
       #original_hash: 889dd90
       info_html: >-
@@ -3916,7 +3918,7 @@ eo:
       info_html: >-
         Tiu komitato devas subteni kaj promocii permanentan plibonigon de
         kvalito ene de la WCA, kaj monda aplikado de koheraj altkvalitaj normoj
-        rilate al procesoj, WCA-Laborantoj, Regionaj Organizoj, Organizantoj de
+        rilate al procesoj, WCA-Stabo, Regionaj Organizoj, Organizantoj de
         konkursoj kaj Konkursaj Laborantoj.
     wcat:
       #original_hash: 61a471f
@@ -3935,7 +3937,7 @@ eo:
       #original_hash: fb6cd86
       info_html: >-
         Tiu konsilio respondecas pri kreado kaj prizorgo de ambaŭflanka
-        komunikado inter la WCA-Komunumo kaj la WCA-Laborantoj.
+        komunikado inter la WCA-Komunumo kaj la WCA-Stabo.
   score_tools:
     #original_hash: 4fc2133
     title: Programaraj iloj por WCA-Konkursoj
@@ -3963,8 +3965,8 @@ eo:
       #original_hash: 576e2f4
       desc: >-
         Administri konkursantojn povas esti farita rekte ĉe la retejo de la WCA.
-        Tial ke permana administrado de grupoj kaj laborantoj povas esti
-        temporaba, vi eble volus uzi unu el tiuj iloj malsupre.
+        Pro tio ke permana administrado de grupoj kaj taskfarantoj povas esti
+        temporaba, vi eble ŝatus uzi unu el tiuj iloj malsupre.
     during:
       #original_hash: 9934200
       title: Dum la konkurso
@@ -4193,7 +4195,7 @@ eo:
         #original_hash: f85194e
         was_at: Ĉeestis
         #original_hash: 8c00243
-        together_with: Kune kun
+        together_with: Kun
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: Bonvolu doni du malsamajn validajn WCA-ID-jn.
@@ -4307,9 +4309,65 @@ eo:
       Se aldoni aŭ ĝisdatigi tradukon interesas vin, bonvolu rigardi <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">la
       instrukciojn ĉe la Github deponejo por tradukoj</a>.
+  full_organizer_guidelines:
+    #original_hash: 5d602df
+    description: >-
+      Bonvenon ĉe la aro de Gvidlinioj por organizantoj. Se vi pripensas fariĝi
+      organizanton, ni ege rekomendas vin legi tiujn dokumentojn. Ili estas
+      apartigitaj inter la fundamentaj kaj la ege rekomenditaj dokumentoj.
+      Bonvolu alkutimiĝi al tiuj informoj ĉar ili iĝos vin kapabla organizi
+      altkvalitan kaj ĝueblan konkurson!
+    #original_hash: e6f7d36
+    disclaimer_html: >-
+      <strong>Averto</strong>: La WCA ne organizas konkursojn. Kiel organizanto
+      de konkurso aprobita de la WCA vi <strong>devas nenion</strong> subskribi
+      nome de la WCA. Vi devus provi kontakti taŭgan regionan aŭ nacian
+      kubumadan asocion kiu ja organizas aŭ helpas organizi konkursojn.
+    essential:
+      #original_hash: 44bd0ba
+      description: Fundamentaj dokumentoj
+      #original_hash: 1cf87ad
+      finding-venue: Trovi konkursejon
+      #original_hash: 3ce0d9c
+      orga-team-delegate: Krei vian organizantan teamon kaj alproksimiĝi Delegiton
+      #original_hash: d3c693b
+      budget: Buĝeti konkurson
+      #original_hash: b1429a7
+      schedule: Horplani
+      #original_hash: beea57d
+      checklist: Konkursa kontrololisto
+      #original_hash: 9defcf1
+      registration: Trakti registriĝojn
+      #original_hash: e298a56
+      venue-setup: Konkurseja aranĝo
+      #original_hash: 2b6a5dd
+      work-during-comp: Organizanta laboro dum la konkurso
+    recommended:
+      #original_hash: 6b843f3
+      title: Rekomenditaj dokumentoj
+      #original_hash: bfbd4bb
+      staff: Atribui taskfarantojn
+      #original_hash: c346846
+      emails: Strukturo de antaŭkonkursa retmesaĝo
+      #original_hash: 3212cc7
+      running-systems: Konkursaj sistemoj
+      #original_hash: 2b31c89
+      new-competitors: Sinteno kun novaj konkursantoj
+      #original_hash: 3408054
+      enhancing-experience: Plibonigi spertojn de konkursantoj kaj taskfarantoj
+      #original_hash: 2345aaa
+      reflection: Organizantaj pripensoj
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Gvidlinioj de la WCA por Organizantoj de Konkursoj
+    paragraph0:
+      #original_hash: ee36904
+      title: Mallonga versio
+      #original_hash: 60d9532
+      content: >-
+        Malsupre vi povas trovi mallongan resumon de esencaj aferoj por havi
+        bazan ideon pri kiel organizi konkurson. Se vi pensas ke vi taŭgas por
+        tio, bonvolu kontroli la dokumentojn supre!
     paragraph1:
       #original_hash: e5f5329
       title: Kiel organizi konkurson
@@ -4358,10 +4416,6 @@ eo:
         '1': La du konkursoj ne havas komunajn konkurserojn.
         #original_hash: f7bacc5
         '2': La du konkursoj okazas en malsamaj landoj.
-        #original_hash: 7b2c099
-        '3': >-
-          Dum la lastaj 12 monatoj, malpli da 16 konkursoj okazis en rondo de
-          100 km ĉirkaŭ la konkurso.
       #original_hash: 5c5cf04
       content2: >-
         "Samtempaj konkursoj de 3x3x3 Optimigitaj Solvoj" estas WCA-konkursoj
