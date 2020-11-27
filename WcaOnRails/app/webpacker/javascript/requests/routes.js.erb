@@ -1,4 +1,4 @@
-export const personUrl = (wcaId) => `<%= URI.decode(Rails.application.routes.url_helpers.person_path("wca_id: ${wcaId}"))%>`;
+export const personUrl = (wcaId) => `<%= URI.decode(Rails.application.routes.url_helpers.person_path("${wcaId}"))%>`;
 
 export const postsUrl = (page, format = 'json') => {
   // In this case id holds the page number ;)
