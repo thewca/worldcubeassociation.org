@@ -3,9 +3,6 @@
   // Override bootstrap default, flexbox is taking care of this.
   min-height: auto;
 
-  .navbar-nav > .active > a {
-    background-color: #ccc;
-  }
 
   .dropdown-menu i {
     margin-right: 10px;
@@ -40,7 +37,6 @@
   }
 
   .navbar-collapse {
-    background: #ddd;
     margin: 0;
     clear: both;
 
@@ -89,7 +85,6 @@
     }
 
     .brand{
-      background-color:#ddd;
       top: 50px;
       img{
         display: none;
