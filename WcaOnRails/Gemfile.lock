@@ -20,6 +20,14 @@ GIT
       rails (>= 3.2)
 
 GIT
+  remote: https://github.com/thewca/i18n-country-translations.git
+  revision: e6706abe0eaa65729c1acb698be08b91dd2b6fde
+  specs:
+    i18n-country-translations (1.4.1)
+      i18n (>= 0.9.3, < 2)
+      railties (>= 5.0)
+
+GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails.git
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
   branch: master
@@ -261,9 +269,6 @@ GEM
     httpclient (2.8.3)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
-    i18n-country-translations (1.4.1)
-      i18n (>= 0.9.3, < 2)
-      railties (>= 5.0)
     i18n-spec (0.6.0)
       iso
     i18n-tasks (0.9.31)
@@ -644,7 +649,7 @@ DEPENDENCIES
   guard-rspec
   high_voltage
   http_accept_language
-  i18n-country-translations
+  i18n-country-translations!
   i18n-spec
   i18n-tasks
   icalendar
