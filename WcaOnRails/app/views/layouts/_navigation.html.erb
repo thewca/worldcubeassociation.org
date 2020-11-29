@@ -1,6 +1,6 @@
 <div class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="brand">
-    <a href="<%= root_path %>" ><%= image_tag "wca_logo.svg" %></a>
+    <a href="<%= root_path %>" ><%= image_tag "WCA Logo 2020.svg" %></a>
   </div>
   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
     <span class="icon-bar"></span>
@@ -10,7 +10,7 @@
   <div class="navbar-collapse collapse disabled">
     <ul class="nav navbar-nav">
       <li class="top-nav logo">
-        <a href="<%= root_path %>"><%= image_tag "wca_logo.svg" %></a>
+        <a href="<%= root_path %>"><%= image_tag "WCA Logo 2020.svg" %></a>
       </li>
       <li class="dropdown <%= Set['static_pages', 'posts'].include?(params[:controller]) ? 'active' : '' %>">
         <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
@@ -36,7 +36,8 @@
       </li>
       <li class="dropdown <%= Set['competitions', 'delegate_reports', 'results_submission'].include?(params[:controller]) ? 'active' : '' %>">
         <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= ui_icon('cube') %> <%= t '.competitions' %> <span class="caret"></span>
+            <%= ui_icon('cube') %><span class="hidden-sm hidden-md"> <%= t '.competitions' %></span> 
+            <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
           <li><a href="<%= competitions_path %>"><%= ui_icon('globe') %> <%= t '.all' %></a></li>
