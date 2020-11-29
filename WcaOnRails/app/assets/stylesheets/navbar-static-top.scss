@@ -36,9 +36,13 @@
     margin-bottom: -($nav-avatar-thumbnail-size - 20px) / 2;
   }
 
+  .navbar-right{
+    display: flex;
+    align-items: center;
+  }
+
   .search-container{
     width: 100%;
-    padding: 10px;
   }
 
 
@@ -46,8 +50,8 @@
     margin: 0;
     clear: both;
 
-    $omni-search-sm-width: 230px;
-    $omni-search-md-width: 300px;
+    $omni-search-sm-width: 120px;
+    $omni-search-md-width: 270px;
     $omni-search-lg-width: 500px;
 
 
@@ -55,7 +59,7 @@
       @media (min-width: $screen-sm-min) {
         width: $omni-search-sm-width;
       }
-      @media (min-width: 1000) {
+      @media (min-width: 1200px) {
         width: $omni-search-md-width;
       }
       @media (min-width: 1400px) {
@@ -102,7 +106,6 @@
       border-top-left-radius: 8px;
 
       li.search-container{
-        // margin-top: 10px;
         width: auto;
         form{
           display: inline;
