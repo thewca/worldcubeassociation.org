@@ -24,7 +24,7 @@
     top: 0;
     padding: 0;
     img{
-      height: 62px;
+      height: 56px;
     }
   }
 
@@ -35,6 +35,12 @@
     margin-top: -($nav-avatar-thumbnail-size - 20px) / 2;
     margin-bottom: -($nav-avatar-thumbnail-size - 20px) / 2;
   }
+
+  .search-container{
+    width: 100%;
+    padding: 10px;
+  }
+
 
   .navbar-collapse {
     margin: 0;
@@ -67,7 +73,7 @@
   }
 
   .navbar-toggle {
-    margin-top: 20px;
+    margin-top: 15px;
   }
 }
 
@@ -96,7 +102,8 @@
       border-top-left-radius: 8px;
 
       li.search-container{
-        margin-top: 10px;
+        // margin-top: 10px;
+        width: auto;
         form{
           display: inline;
         }
