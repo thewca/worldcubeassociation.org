@@ -1,6 +1,6 @@
 <div class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="brand">
-    <a href="<%= root_path %>"><%= image_tag "wca_logo.svg" %></a>
+    <a href="<%= root_path %>" ><%= image_tag "wca_logo.svg" %></a>
   </div>
   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
     <span class="icon-bar"></span>
@@ -9,12 +9,12 @@
   </button>
   <div class="navbar-collapse collapse disabled">
     <ul class="nav navbar-nav">
-      <li class="logo">
+      <li class="top-nav logo">
         <a href="<%= root_path %>"><%= image_tag "wca_logo.svg" %></a>
       </li>
       <li class="dropdown <%= Set['static_pages', 'posts'].include?(params[:controller]) ? 'active' : '' %>">
         <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-          <%= ui_icon('info circle') %> <span class="hidden-sm"><%= t '.information' %></span> <span class="caret"></span>
+          <%= ui_icon('info circle') %> <span class="hidden-sm hidden-md"><%= t '.information' %></span> <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
           <li><a href="<%= about_path %>"><%= ui_icon('file alternate') %> <%= t '.about' %></a></li>
@@ -49,7 +49,7 @@
       <li class="dropdown <%= Set['results', 'persons', 'media'].include?(params[:controller]) ? 'active' : '' %>">
         <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <%= ui_icon('list ol') %>
-          <span class="hidden-sm"><%= t '.results' %></span>
+          <span class="hidden-sm hidden-md"><%= t '.results' %></span>
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
@@ -73,7 +73,7 @@
       </li>
       <li class="dropdown <%= Set['incidents', 'regulations', 'wdc'].include?(params[:controller]) ? 'active' : '' %>">
         <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-          <%= ui_icon('book') %> <span class="hidden-sm"><%= t '.regulations' %></span> <span class="caret"></span>
+          <%= ui_icon('book') %> <span class="hidden-sm hidden-md"><%= t '.regulations' %></span> <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
           <li><a href="/regulations/about"><%= ui_icon('info circle') %> <%= t '.about_regulations' %></a></li>
@@ -99,7 +99,7 @@
 
       <li class="dropdown">
             <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-              <%= ui_icon('paper plane') %> <span class="hidden-sm">Find us</span> <span class="caret"></span>
+              <%= ui_icon('paper plane') %> <span class="hidden-sm hidden-md">Find us</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
               <li>
@@ -141,7 +141,7 @@
       </li>
 
       <li>
-        <a href="https://forum.worldcubeassociation.org/" target="_blank" class="hide-new-window-icon">
+        <a href="https://forum.worldcubeassociation.org/" target="_blank" class="top-nav hide-new-window-icon">
           <%= ui_icon('comments') %>
           <span class="visible-lg-inline visible-xs-inline"><%= t '.forum' %></span>
         </a>

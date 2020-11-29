@@ -86,6 +86,9 @@
     .logo {
       display: block;
       height: 100%;
+      &:hover{
+        background: #f0f0f0;
+      }
       a{
         padding: 0 10px;
         img{
