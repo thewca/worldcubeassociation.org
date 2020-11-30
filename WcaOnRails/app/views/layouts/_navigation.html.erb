@@ -12,7 +12,7 @@
       <li class="top-nav logo">
         <a href="<%= root_path %>"><%= image_tag "WCA Logo 2020.svg" %></a>
       </li>
-      <li class="dropdown <%= Set['static_pages', 'posts'].include?(params[:controller]) ? 'active' : '' %>">
+      <li class="dropdown <%= Set['static_pages', 'posts'].include?(params[:controller]) ? '' : '' %>">
         <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <%= ui_icon('info circle') %> <span class="hidden-sm hidden-md"><%= t '.information' %></span> <span class="caret"></span>
         </a>
