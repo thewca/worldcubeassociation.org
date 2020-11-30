@@ -37,10 +37,6 @@
     margin-bottom: -($nav-avatar-thumbnail-size - 20px) / 2;
   }
 
-  .navbar-right{
-    display: flex;
-    align-items: center;
-  }
 
   .search-container{
     width: 100%;
@@ -96,6 +92,11 @@
           height: 50px;
         }
       }
+    }
+
+    .navbar-right{
+      display: flex;
+      align-items: center;
     }
 
     .brand{
