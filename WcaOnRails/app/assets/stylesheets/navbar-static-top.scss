@@ -21,9 +21,10 @@
   }
 
   .brand{
-    position: absolute;
     top: 0;
     padding: 0;
+    width: fit-content;
+    display: inline-block;
     img{
       height: 56px;
     }
@@ -72,10 +73,6 @@
     &.top-nav:hover {
       background: #f0f0f0;
     }
-  }
-
-  .navbar-toggle {
-    margin-top: 15px;
   }
 }
 
