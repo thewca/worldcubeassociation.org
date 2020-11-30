@@ -41,7 +41,7 @@
 
   .search-container{
     width: 100%;
-    padding: 0 10px;
+    // padding: 0 10px;
   }
 
 
@@ -98,10 +98,7 @@
     }
 
     .brand{
-      top: 50px;
-      img{
-        display: none;
-      }
+      display: none;
     }
 
     .navbar-collapse {
