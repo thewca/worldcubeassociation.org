@@ -35,8 +35,8 @@
         </ul>
       </li>
       <li class="dropdown <%= Set['competitions', 'delegate_reports', 'results_submission'].include?(params[:controller]) ? 'active' : '' %>">
-        <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= ui_icon('cube') %><span class="hidden-sm hidden-md"> <%= t '.competitions' %></span> 
+        <a class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+            <%= ui_icon('cube') %><span class="hidden-sm hidden-md"> <%= t '.competitions' %></span>
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
