@@ -3,10 +3,9 @@
   // Override bootstrap default, flexbox is taking care of this.
   min-height: auto;
 
-  .navbar-nav > .active > a {
-    background-color: #ccc;
+  .navbar-toggle{
+    margin-top: 16px;
   }
-
   .dropdown-menu i {
     margin-right: 10px;
   }
@@ -18,33 +17,18 @@
     }
   }
 
-  .navbar-brand {
-    padding: 0;
-    padding-top: 16px;
-    margin-bottom: 10px;
-    margin-top: 10px;
+  .logo{
+    display: none;
+  }
 
-    span {
-      display: inline-block;
-      margin-top: -10px;
-      vertical-align: top;
-      white-space: nowrap;
-      font-size: 0.9em;
-      .hide-new-window-icon {
-        font-size: initial;
-      }
-    }
-    i {
-      font-size: 15px;
-    }
-    img {
-      height: 50px;
-      float: left;
-      display: inline;
-      vertical-align: top;
-      margin-top: -15px;
-      margin-left: 10px;
-      margin-right: 5px;
+  .brand{
+    top: 0;
+    padding: 0;
+    margin: 5px 0;
+    width: fit-content;
+    display: inline-block;
+    img{
+      height: 56px;
     }
   }
 
@@ -56,23 +40,30 @@
     margin-bottom: -($nav-avatar-thumbnail-size - 20px) / 2;
   }
 
+
+  .search-container{
+    width: 100%;
+    padding: 0 7px;
+  }
+
+
   .navbar-collapse {
-    background: #ddd;
     margin: 0;
     clear: both;
 
     $omni-search-sm-width: 230px;
-    $omni-search-md-width: 450px;
+    $omni-search-md-width: 230px;
     $omni-search-lg-width: 500px;
+
 
     form.navbar-form[role="search"] .wca-autocomplete-omni + .selectize-control .selectize-input {
       @media (min-width: $screen-sm-min) {
         width: $omni-search-sm-width;
       }
-      @media (min-width: $screen-md-min) {
+      @media (min-width: 1200px) {
         width: $omni-search-md-width;
       }
-      @media (min-width: $screen-lg-min) {
+      @media (min-width: 1500px) {
         width: $omni-search-lg-width;
       }
     }
@@ -85,50 +76,43 @@
       background: #f0f0f0;
     }
   }
-
-  .navbar-toggle {
-    margin-top: 20px;
-  }
 }
 
 @media (min-width: $screen-sm-min) {
   .navbar-static-top {
-    .navbar-brand {
-      height: 110px;
-      margin-bottom: -50px;
-      img {
-        height: 100px;
-        float: left;
-        display: inline;
-        margin-top: -15px;
-        margin-left: 35px;
-        margin-right: 20px;
+    padding: 5px 0;
+    .logo {
+      display: block;
+      height: 100%;
+      &:hover{
+        background: #f0f0f0;
       }
-      span {
-        display: inline-block;
-        margin-top: -10px;
-        vertical-align: top;
-        white-space: nowrap;
-        font-size: 30px;
-        font-variant: small-caps;
+      a{
+        padding: 0 10px;
+        img{
+          height: 50px;
+        }
       }
-      i {
-        font-size: 15px;
-      }
+    }
+
+    .navbar-right{
+      display: flex;
+      align-items: center;
+    }
+
+    .brand{
+      display: none;
     }
 
     .navbar-collapse {
       position: relative;
       border-top-left-radius: 8px;
-      margin-left: 140px;
 
-      /* make space for the border-top-left-radius */
-      padding-left: 15px;
-
-      form.navbar-form[role="search"] {
-        position: absolute;
-        right: 0;
-        top: -60px;
+      li.search-container{
+        width: auto;
+        form{
+          display: inline;
+        }
       }
     }
 
