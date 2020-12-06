@@ -2,7 +2,6 @@
   margin-bottom: 15px;
   // Override bootstrap default, flexbox is taking care of this.
   min-height: auto;
-  padding: 5px 0;
 
 
   .dropdown-menu i {
@@ -23,6 +22,7 @@
   .brand{
     top: 0;
     padding: 0;
+    margin: 5px 0;
     width: fit-content;
     display: inline-block;
     img{
@@ -78,6 +78,7 @@
 
 @media (min-width: $screen-sm-min) {
   .navbar-static-top {
+    padding: 5px 0;
     .logo {
       display: block;
       height: 100%;
