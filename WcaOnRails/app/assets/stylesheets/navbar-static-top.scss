@@ -3,7 +3,9 @@
   // Override bootstrap default, flexbox is taking care of this.
   min-height: auto;
 
-
+  .navbar-toggle{
+    margin-top: 16px;
+  }
   .dropdown-menu i {
     margin-right: 10px;
   }
