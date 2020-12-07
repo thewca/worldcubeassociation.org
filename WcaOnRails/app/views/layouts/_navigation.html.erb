@@ -13,7 +13,7 @@
         <a href="<%= root_path %>"><%= image_tag "WCA Logo 2020.svg" %></a>
       </li>
       <li class="dropdown <%= (params[:controller] == 'static_pages' && params[:action] != 'homepage') ? 'active' : '' %>">
-        <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+        <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <%= ui_icon('info circle') %> <span class="hidden-sm hidden-md"><%= t '.information' %></span> <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
@@ -35,9 +35,9 @@
         </ul>
       </li>
       <li class="dropdown <%= Set['competitions', 'delegate_reports', 'results_submission'].include?(params[:controller]) ? 'active' : '' %>">
-        <a class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= ui_icon('cube') %><span class="hidden-sm hidden-md"> <%= t '.competitions' %></span>
-            <span class="caret"></span>
+        <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+          <%= ui_icon('cube') %><span class="hidden-sm hidden-md"> <%= t '.competitions' %></span>
+          <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
           <li><a href="<%= competitions_path %>"><%= ui_icon('globe') %> <%= t '.all' %></a></li>
@@ -48,7 +48,7 @@
         </ul>
       </li>
       <li class="dropdown <%= Set['results', 'persons', 'media'].include?(params[:controller]) ? 'active' : '' %>">
-        <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+        <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <%= ui_icon('list ol') %>
           <span class="hidden-sm hidden-md"><%= t '.results' %></span>
           <span class="caret"></span>
@@ -73,7 +73,7 @@
         </ul>
       </li>
       <li class="dropdown <%= Set['incidents', 'regulations', 'wdc'].include?(params[:controller]) ? 'active' : '' %>">
-        <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+        <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <%= ui_icon('book') %> <span class="hidden-sm hidden-md"><%= t '.regulations' %></span> <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
@@ -99,48 +99,47 @@
       </li>
 
       <li class="dropdown">
-            <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-              <%= ui_icon('paper plane') %> <span class="hidden-sm hidden-md">Find us</span> <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <li>
-                <%= link_to("https://www.instagram.com/thewcaofficial/", target: "_blank", class: "hide-new-window-icon") do %>
-                  <%= ui_icon("instagram") %> Instagram
-                <% end %>
-              </li>
-              <li>
-                <%= link_to("https://www.facebook.com/WorldCubeAssociation/", target: "_blank", class: "hide-new-window-icon") do %>
-                  <%= ui_icon("facebook square") %> Facebook
-                <% end %>
-              </li>
-              <li>
-                <%= link_to("https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") do %>
-                  <%= ui_icon("twitter") %> Twitter
-                <% end %>
-              </li>
-              <li>
-                <%= link_to("https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") do %>
-                  <%= ui_icon("reddit") %> Reddit
-                <% end %>
-              </li>
-              <li>
-                <%= link_to("https://www.twitch.tv/worldcubeassociation/", target: "_blank", class: "hide-new-window-icon") do %>
-                  <%= ui_icon("twitch") %> Twitch
-                <%end%>
-              </li>
-              <li>
-                <%= link_to("https://www.weibo.com/theWCA/", target: "_blank", class: "hide-new-window-icon") do %>
-                  <%= ui_icon("weibo") %> Weibo
-                <% end %>
-              </li>
-              <li>
-                <%= link_to("https://www.youtube.com/channel/UC5OUMUnS8PvY1RvtB1pQZ0g", target: "_blank", class: "hide-new-window-icon") do %>
-                  <%= ui_icon("youtube") %> YouTube
-                <% end %>
-              </li>
-            </ul>
+        <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+          <%= ui_icon('paper plane') %> <span class="hidden-sm hidden-md">Find us</span> <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <li>
+            <%= link_to("https://www.instagram.com/thewcaofficial/", target: "_blank", class: "hide-new-window-icon") do %>
+              <%= ui_icon("instagram") %> Instagram
+            <% end %>
+          </li>
+          <li>
+            <%= link_to("https://www.facebook.com/WorldCubeAssociation/", target: "_blank", class: "hide-new-window-icon") do %>
+              <%= ui_icon("facebook square") %> Facebook
+            <% end %>
+          </li>
+          <li>
+            <%= link_to("https://www.twitter.com/theWCAofficial/", target: "_blank", class: "hide-new-window-icon") do %>
+              <%= ui_icon("twitter") %> Twitter
+            <% end %>
+          </li>
+          <li>
+            <%= link_to("https://www.reddit.com/r/TheWCAOfficial/", target: "_blank", class: "hide-new-window-icon") do %>
+              <%= ui_icon("reddit") %> Reddit
+            <% end %>
+          </li>
+          <li>
+            <%= link_to("https://www.twitch.tv/worldcubeassociation/", target: "_blank", class: "hide-new-window-icon") do %>
+              <%= ui_icon("twitch") %> Twitch
+            <%end%>
+          </li>
+          <li>
+            <%= link_to("https://www.weibo.com/theWCA/", target: "_blank", class: "hide-new-window-icon") do %>
+              <%= ui_icon("weibo") %> Weibo
+            <% end %>
+          </li>
+          <li>
+            <%= link_to("https://www.youtube.com/channel/UC5OUMUnS8PvY1RvtB1pQZ0g", target: "_blank", class: "hide-new-window-icon") do %>
+              <%= ui_icon("youtube") %> YouTube
+            <% end %>
+          </li>
+        </ul>
       </li>
-
       <li>
         <a href="https://forum.worldcubeassociation.org/" target="_blank" class="top-nav hide-new-window-icon">
           <%= ui_icon('comments') %>
