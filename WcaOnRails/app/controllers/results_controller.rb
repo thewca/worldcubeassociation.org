@@ -38,10 +38,9 @@ class ResultsController < ApplicationController
           SELECT MIN(valueAndId) valueAndId
           FROM Concise#{capitalized_type_param}Results result
           #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
-          WHERE 1
+          WHERE #{value} > 0
             #{@event_condition}
-            AND #{value} > 0
-            #{@years_condition}
+            #{@years_condition_result}
             #{@region_condition}
             #{@gender_condition}
           GROUP BY personId
@@ -53,27 +52,21 @@ class ResultsController < ApplicationController
       SQL
     elsif @is_results
       if @is_average
-        subquery = <<-SQL
+        @query = <<-SQL
           SELECT
             result.*,
             average value
           FROM Results result
           #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
-          #{@years_condition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
-          WHERE 1
+          #{@years_condition_competition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
+          WHERE average > 0
             #{@event_condition}
-            AND average > 0
-            #{@years_condition}
+            #{@years_condition_competition}
             #{@region_condition}
             #{@gender_condition}
           ORDER BY
-            average
+            average, personName, competitionId, roundTypeId
           #{limit_condition}
-        SQL
-        @query = <<-SQL
-          SELECT *
-          FROM (#{subquery}) result
-          ORDER BY average, personName, competitionId, roundTypeId
         SQL
       else
         subqueries = (1..5).map do |i|
@@ -83,11 +76,10 @@ class ResultsController < ApplicationController
               value#{i} value
             FROM Results result
             #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
-            #{@years_condition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
-            WHERE 1
+            #{@years_condition_competition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
+            WHERE value#{i} > 0
               #{@event_condition}
-              AND value#{i} > 0
-              #{@years_condition}
+              #{@years_condition_competition}
               #{@region_condition}
               #{@gender_condition}
             ORDER BY value
@@ -115,7 +107,7 @@ class ResultsController < ApplicationController
           #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
           WHERE 1
             #{@event_condition}
-            #{@years_condition}
+            #{@years_condition_result}
             #{@gender_condition}
           GROUP BY result.countryId
         ) record
@@ -124,7 +116,7 @@ class ResultsController < ApplicationController
         #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
         WHERE 1
           #{@event_condition}
-          #{@years_condition}
+          #{@years_condition_competition}
           #{@gender_condition}
         ORDER BY value, countryId, start_date, personName
       SQL
@@ -203,7 +195,7 @@ class ResultsController < ApplicationController
           AND country.id = result.countryId
           #{@region_condition}
           #{@event_condition}
-          #{@years_condition}
+          #{@years_condition_competition}
         ORDER BY
           #{order}
       SQL
@@ -228,7 +220,7 @@ class ResultsController < ApplicationController
           WHERE 1
           #{@event_condition}
           #{@region_condition}
-          #{@years_condition}
+          #{@years_condition_result}
           GROUP BY eventId) record,
         Results result,
         Events event,
@@ -237,7 +229,7 @@ class ResultsController < ApplicationController
       WHERE result.#{value} = value
         #{@event_condition}
         #{@region_condition}
-        #{@years_condition}
+        #{@years_condition_competition}
         AND result.eventId = recordEventId
         AND event.id       = result.eventId
         AND country.id     = result.countryId
@@ -284,12 +276,16 @@ class ResultsController < ApplicationController
     @is_only = splitted_years_param[0] == "only"
     @is_until = splitted_years_param[0] == "until"
     @year = splitted_years_param[1].to_i
+
     if @is_only
-      @years_condition = "AND result.year = #{@year}"
+      @years_condition_competition = "AND competition.year = #{@year}"
+      @years_condition_result = "AND result.year = #{@year}"
     elsif @is_until
-      @years_condition = "AND result.year <= #{@year}"
+      @years_condition_competition = "AND competition.year <= #{@year}"
+      @years_condition_result = "AND result.year <= #{@year}"
     else
-      @years_condition = ""
+      @years_condition_competition = ""
+      @years_condition_result = ""
     end
   end
 
