@@ -16,4 +16,53 @@ RSpec.describe UploadJson do
     upload_json.results_json_str = "this is invalid json"
     expect(upload_json).to be_invalid_with_errors(results_file: ["must be a JSON file from the Workbook Assistant"])
   end
+
+  it "fixes roundTypeId in case it doesn't match the actual competition round data" do
+    round = FactoryBot.create(:round, number: 1, event_id: "333", cutoff: nil)
+    competition = round.competition
+
+    results_json = {
+      "formatVersion" => "WCA Competition 0.3",
+      "competitionId" => competition.id,
+      "persons" => [
+        {
+          "id": 1,
+          "name": "Sherlock Holmes",
+          "wcaId": "2020HOLM01",
+          "countryId": "GB",
+          "gender": "m",
+          "dob": "2000-01-01",
+        },
+      ],
+      "events" => [
+        {
+          "eventId" => "333",
+          "rounds" => [
+            {
+              "roundId" => "c", # Says combined, even though there should be no cutoff.
+              "formatId" => "a",
+              "results" => [
+                {
+                  "personId" => 1,
+                  "position" => 1,
+                  "results" => [900, 900, 800, 1000, 900],
+                  "best" => 800,
+                  "average" => 900,
+                },
+              ],
+              "groups": [],
+            },
+          ],
+        },
+      ],
+    }.to_json
+
+    upload_json = FactoryBot.build(:upload_json, competition_id: competition.id, results_json_str: results_json)
+
+    expect(upload_json.import_to_inbox).to eq true
+    expect(InboxResult.count).to eq 1
+    inbox_result = InboxResult.first
+    # There is no cutoff, so the incoming roundTypeId "c" should be converted to "f"
+    expect(inbox_result.roundTypeId).to eq "f"
+  end
 end

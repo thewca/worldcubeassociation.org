@@ -38,7 +38,7 @@ class UploadJson
   def import_to_inbox
     # This makes sure the json structure is valid!
     if valid?
-      competition = Competition.find(competition_id)
+      competition = Competition.includes(competition_events: [:rounds]).find(competition_id)
       persons_to_import = []
       parsed_json["persons"].each do |p|
         new_person_attributes = p.merge(competitionId: competition_id)
@@ -47,7 +47,16 @@ class UploadJson
       results_to_import = []
       scrambles_to_import = []
       parsed_json["events"].each do |event|
+        competition_event = competition.competition_events.find { |ce| ce.event_id == event["eventId"] }
         event["rounds"].each do |round|
+          # Find the corresponding competition round and get the actual roundTypeId
+          # (in case the incoming one doesn't correspond to cutoff presence).
+          incoming_round_type_id = round["roundId"]
+          competition_round = competition_event.rounds.find do |cr|
+            [incoming_round_type_id, RoundType.toggle_cutoff(incoming_round_type_id)].include?(cr.round_type_id)
+          end
+          round_type_id = competition_round&.round_type_id || incoming_round_type_id
+
           # Import results for round
           round["results"].each do |result|
             individual_results = result["results"]
@@ -57,7 +66,7 @@ class UploadJson
               personId: result["personId"],
               pos: result["position"],
               eventId: event["eventId"],
-              roundTypeId: round["roundId"],
+              roundTypeId: round_type_id,
               formatId: round["formatId"],
               best: result["best"],
               average: result["average"],
