@@ -83,10 +83,19 @@ const CompetitionResults = ({ competitionId }) => {
         selected={selectedEvent}
         onSelect={(eventId) => setSelectedEvent(eventId)}
       />
-      <EventResults
-        competitionId={competitionId}
-        eventId={selectedEvent}
-      />
+      {selectedEvent === 'all'
+        ? (
+          <>
+            {data.event_ids.map((eventId) => (
+              <EventResults key={eventId} competitionId={competitionId} eventId={eventId} />))}
+          </>
+        )
+        : (
+          <EventResults
+            competitionId={competitionId}
+            eventId={selectedEvent}
+          />
+        )}
       <EventNavigation
         eventIds={data.event_ids}
         selected={selectedEvent}
