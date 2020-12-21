@@ -11,7 +11,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-syntax-import-meta": "^7.10.4",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.7",
     "@rails/ujs": "^6.1.0",
     "@rails/webpacker": "5.2.1",
