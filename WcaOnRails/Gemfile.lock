@@ -450,7 +450,7 @@ GEM
     rdoc (6.2.1)
     recaptcha (5.5.0)
       json
-    redcarpet (3.5.0)
+    redcarpet (3.5.1)
     regexp_parser (1.8.2)
     reline (0.1.5)
       io-console (~> 0.5)
