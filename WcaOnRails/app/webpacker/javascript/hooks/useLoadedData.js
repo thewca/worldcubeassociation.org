@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchJsonOrError } from './fetchWithAuthenticityToken';
+import { fetchJsonOrError } from '../requests/fetchWithAuthenticityToken';
 
 // This is a hook that can be used to get a data from the website (as json)
 // It assumes that 'url' is a valid, GET-able, url.

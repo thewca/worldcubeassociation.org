@@ -56,7 +56,7 @@
     $omni-search-lg-width: 500px;
 
 
-    form.navbar-form[role="search"] .wca-autocomplete-omni + .selectize-control .selectize-input {
+    #omnisearch-form {
       @media (min-width: $screen-sm-min) {
         width: $omni-search-sm-width;
       }

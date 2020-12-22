@@ -3,7 +3,7 @@ import {
   Button, Card, Icon, List, Pagination,
 } from 'semantic-ui-react';
 
-import useLoadedData from '../requests/useLoadedData';
+import useLoadedData from '../hooks/useLoadedData';
 import { postsUrl } from '../requests/routes.js.erb';
 import { registerComponent } from '../wca/react-utils';
 import Loading from '../requests/Loading';

@@ -36,7 +36,7 @@
     evaluated first, and any pack added (like schedule) will be loaded before application.
     These javascript packs *do* include the css imported in them!
   %>
-  <% packs_to_prepend = ["application", "global_styles", "i18n"] %>
+  <% packs_to_prepend = ["application", "global_styles", "i18n", "search_widget"] %>
   <%# This loads our main locale(s) files %>
   <% [:en, I18n.locale].uniq.map { |l| packs_to_prepend << "generated_locales/#{l}" } %>
 
