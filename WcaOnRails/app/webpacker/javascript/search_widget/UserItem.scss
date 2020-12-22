@@ -1,0 +1,12 @@
+.omnisearch-item-user {
+  display: flex;
+  .details {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .wca-id {
+      font-size: 0.9em;
+    }
+  }
+}

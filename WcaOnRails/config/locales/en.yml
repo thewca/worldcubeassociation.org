@@ -2121,8 +2121,11 @@ en:
       advanced_search: "Advanced search"
       posts: "Posts"
       regulations_and_guidelines: "Regulations and Guidelines"
+      #context: Used in the homepage's omnisearch
+      search_for: "Search for <b>%{search_string}</b>"
       #context: Used when there are no search results. E.g. "No people found for *Sherlock Holmes*".
       not_found:
+        generic: "No results found"
         competitions: "No competitions found for"
         people: "No people found for"
         posts: "No posts found for"
@@ -2167,7 +2170,7 @@ en:
   full_organizer_guidelines:
     description: "Welcome to the WQAC’s collection of Organizer Guidelines. If you’re considering being an organizer then it is highly recommended that you read these documents. They have been divided into essential and highly recommended documents. Make sure you are familiar with the information given as this will allow you to run a high-quality and enjoyable competition!"
     disclaimer_html: "<strong>Disclaimer</strong>: The WCA does not organize competitions. As an organizer of a WCA sanctioned competition you <strong>must not</strong> sign anything on behalf of the WCA. You should try reaching out to a relevant regional or national cubing association who do organize or assist with organizing competitions."
-    essential: 
+    essential:
       description: "Essential documents"
       finding-venue: "Finding a venue"
       orga-team-delegate: "Creating your organization team and approaching a Delegate"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'semantic-ui-react';
-import useLoadedData from '../requests/useLoadedData';
+import useLoadedData from '../hooks/useLoadedData';
 import { registerComponent } from '../wca/react-utils';
 import Loading from '../requests/Loading';
 import Errored from '../requests/Errored';

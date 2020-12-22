@@ -150,10 +150,8 @@
 
 
     <ul class="nav navbar-nav navbar-right">
-      <li class="search-container">
-        <form class="navbar-form form-inline my-2 my-lg-0" role="search">
-          <%= wca_omni_search %>
-        </form>
+      <li class="search-container my-2 my-lg-0">
+        <%= render_react_component("SearchWidget", id: "omnisearch-form") %>
       </li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
