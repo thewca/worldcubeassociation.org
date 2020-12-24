@@ -3513,7 +3513,11 @@ zh-TW:
       posts: 文章
       #original_hash: 9d7ea9c
       regulations_and_guidelines: 規則與指導方針
+      #original_hash: db683b3
+      search_for: '搜尋<b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: 未找到相符成績
         #original_hash: b8a7006
         competitions: 未找到相符比賽
         #original_hash: 99d4290
