@@ -1417,7 +1417,7 @@ th:
       #original_hash: 411bbca
       new_regional_organization: องค์กรระดับภูมิภาคใหม่
       #original_hash: dc1649a
-      sign_out: ออกจากระบบ
+      sign_out: ออกจากระบบบ
       #original_hash: 753a22b
       notifications: การแจ้งเตือน
       #original_hash: 15141ea
@@ -4044,7 +4044,11 @@ th:
       posts: โพสต์
       #original_hash: 9d7ea9c
       regulations_and_guidelines: กติกาและแนวทาง
+      #original_hash: db683b3
+      search_for: 'ผลการค้นหาสำหรับ <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: ไม่พบผลการค้นหา
         #original_hash: b8a7006
         competitions: ไม่พบการแข่งขันสำหรับ
         #original_hash: 99d4290
