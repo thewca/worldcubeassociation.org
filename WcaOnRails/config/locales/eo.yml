@@ -379,7 +379,7 @@ eo:
         #original_hash: 9af9099
         results_notifications_enabled: Retpoŝtu min kiam miaj rezultoj estas enretaj.
         #original_hash: de60ab8
-        delegate_status: Delegita stato
+        delegate_status: Delegita statuso
         #original_hash: 0f21717
         region: Regiono
         #original_hash: 730db33
@@ -503,7 +503,7 @@ eo:
         #original_hash: dc9d458
         paid_entry_fees: Pagita
         #original_hash: bae7d5b
-        status: Statuso
+        status: Stato
         #original_hash: 709a232
         name: Nomo
         #original_hash: a6b9d69
@@ -610,7 +610,7 @@ eo:
         #original_hash: 0d31f23
         submitterComment: Komento de la sendanto
         #original_hash: bae7d5b
-        status: Statuso
+        status: Stato
       regional_organization:
         #original_hash: 709a232
         name: Nomo
@@ -619,7 +619,7 @@ eo:
         #original_hash: 2e8a57c
         website: Retejo
         #original_hash: 83fce83
-        logo: Emblemo
+        logo: Logotipo
         #original_hash: 84add5b
         email: Retpoŝtadreso
         #original_hash: 82c42fb
@@ -671,7 +671,7 @@ eo:
     competition_medium:
       status:
         #original_hash: 61a0572
-        accepted: Akceptita
+        accepted: Akceptata
         #original_hash: 96f608c
         pending: Pritraktata
       type:
@@ -1071,9 +1071,7 @@ eo:
         #original_hash: 72448d6
         website: Devas esti valida http(s) reteja adreso. HTTPS estas rekomendita.
         #original_hash: 2ace571
-        logo: >-
-          Devas esti en la dosierformo PNG, en bona kvalito kaj kun travidebla
-          fono
+        logo: 'Devas esti PNG-dosiero, bonkvalite kaj kun travidebla fono'
         #original_hash: da54ab5
         email: Devus esti dissendolisto kiu enhavas ĉiujn Direktorojn kaj Oficistojn
         #original_hash: da39a3e
@@ -1107,7 +1105,7 @@ eo:
       registration:
         status:
           #original_hash: 61a0572
-          accepted: Akceptita
+          accepted: Akceptata
           #original_hash: a6b2452
           pending: Atendolisto
           #original_hash: 441bda6
@@ -1402,7 +1400,7 @@ eo:
       #original_hash: 4fa8cc8
       tools: Iloj
       #original_hash: 83fce83
-      logo: Emblemo
+      logo: Logotipo
       #original_hash: db98a68
       competitions: Konkursoj
       #original_hash: 6a72085
@@ -2010,14 +2008,14 @@ eo:
           tuje akceptita. Eblas ke vi devos fari pliajn agojn antaŭ la aprobon
           de via registriĝo. Por vidi la aprobajn kriteriojn, vizitu la
           konkursan retejon aŭ retpoŝtu la organizantojn. Vi ankaŭ povas
-          kontroli la statuson de via registriĝo %{here}.
+          kontroli la staton de via registriĝo %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Via registriĝo por %{comp_name} ĵus estis akceptita.'
         #original_hash: 24d2883
         message_html: >-
           Via registriĝo por %{comp_name} ĵus estis akceptita. Kiel ĉiam, vi
-          povas kontroli la statuson de via registriĝo %{here}
+          povas kontroli la staton de via registriĝo %{here}
         #original_hash: 1852cbf
         see_you_soon: 'Ni antaŭĝojas vidi vin ĉe %{comp_name}!'
       pending:
@@ -2063,7 +2061,7 @@ eo:
         one: 1 lando
         other: '%{count} landoj'
       #original_hash: 1feee0e
-      export_csv: Eksporti al CSV
+      export_csv: Eksporti al CSV-dosiero
       #original_hash: 84add5b
       email: Retpoŝti
       #original_hash: 7b2c7f1
@@ -2126,12 +2124,12 @@ eo:
     closed_html: 'Registriĝperiodo fermiĝis antaŭ <strong>%{days}</strong> je %{time}.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
-      %{sign_in} por kontroli vian registriĝan statuson. Se vi ankoraŭ ne havas
+      %{sign_in} por kontroli vian registriĝan staton. Se vi ankoraŭ ne havas
       WCA-konton, vi povas krei ĝin %{here}, sed estas tro malfrue por
       registriĝi por tiu konkurso.
     #original_hash: 7753b2e
     please_sign_in_not_yet_open_html: >-
-      %{sign_in} por kontroli vian registriĝan statuson. Se vi ankoraŭ ne havas
+      %{sign_in} por kontroli vian registriĝan staton. Se vi ankoraŭ ne havas
       WCA-konton, vi povas krei ĝin %{here}, sed registriĝperiodo ankoraŭ ne
       estas malferma.
     #original_hash: 4f84af0
@@ -2843,7 +2841,7 @@ eo:
     #original_hash: a6b5efe
     cancel_mistake: Ĉu vi eraris?
     #original_hash: 0fb43d5
-    note_before_cancel: 'Rimarko: nur konfirmitaj konkursoj povas esti nuligitaj.'
+    note_before_cancel: 'Noto: nur konfirmitaj konkursoj povas esti nuligitaj.'
     show:
       #original_hash: b0fe391
       general_info: Ĝeneralaj informoj
@@ -3723,7 +3721,7 @@ eo:
     #original_hash: fdceb44
     motions: Rezolucioj
     #original_hash: 092f99e
-    minutes: Raportoj
+    minutes: Protokoloj
     #original_hash: 6db524a
     policies: Politikoj de la WCA
     #original_hash: 91ac873
@@ -4046,29 +4044,29 @@ eo:
           formato por submetiĝo al la WCA.
   logo:
     #original_hash: c72c969
-    title: Emblemo de la WCA
+    title: Logotipo de la WCA
     paragraphs:
       #original_hash: 44cfe8d
       '1': >-
-        La emblemo de la WCA estis kreita de Justin Eastman, dum desegna
-        kontesto en Januaro 2005.<br />Ni ŝatis la emblemon pro ĝia designaĵo,
+        La logotipo de la WCA estis kreita de Justin Eastman, dum desegna
+        kontesto en Januaro 2005.<br />Ni ŝatis la logotipon pro ĝia designaĵo,
         koloroj kaj la fakto ke ĝi ne specife montras kubon 3x3x3.
       #original_hash: 916e3fc
       '2': >-
-        Ni havas kvar malsamajn versiojn de la emblemo: <a
+        Ni havas kvar malsamajn versiojn de la logotipo: <a
         href="/files/WCAlogo_XL.jpg">granda versio</a> (46 KB, 1756 px per 1068
         px), <a href="/files/WCAlogo.svg">vektora versio</a>, <a
         href="/files/WCAlogo_notext.svg">vektora versio sen teksto</a> kaj <a
         href="/files/WCAlogo_monochrome.svg">unukolora vektora versio</a>.
       #original_hash: dcb1ad6
       '3': >-
-        3D-versio de la emblemo, kreita de Vu Minh Tan from Vietnam: <a
+        3D-versio de la logotipo, kreita de Vu Minh Tan from Vietnam: <a
         href="/files/WCALogo3D.png">PNG-versio</a> (2.1 MB), <a
         href="/files/WCALogo3Dsmall.png">malgranda PNG-versio</a> (0.25 MB).
       #original_hash: e5df1bf
       '4': >-
-        Akcepteblaj uzoj de la emblemo de la WCA estas difinitaj en la politiko
-        pri la Uzo de la WCA Emblemo kiu aperas ĉe la <a href="/documents">paĝo
+        Akcepteblaj uzoj de la logotipo de la WCA estas difinitaj en la politiko
+        pri la Uzo de la WCA Logotipo kiu aperas ĉe la <a href="/documents">paĝo
         de Dokumentoj de la WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
@@ -4211,7 +4209,11 @@ eo:
       posts: Afiŝoj
       #original_hash: 9d7ea9c
       regulations_and_guidelines: Reguloj kaj Gvidlinioj
+      #original_hash: db683b3
+      search_for: 'Serĉovortoj: <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: Neniu rezulto
         #original_hash: b8a7006
         competitions: Neniu konkurso trovita por
         #original_hash: 99d4290
@@ -4287,8 +4289,8 @@ eo:
       tradukojn utilajn.
     #original_hash: 32b1132
     paragraph2: >-
-      Atentu ke kvankam la tradukoj estas disponigitaj en la retejo de la WCA,
-      ili ne estas oficialaj: ili garantias nenion. Se ekzistas diferenco inter
+      Atentu ke kvankam la tradukoj disponeblas en la retejo de la WCA, ili ne
+      estas oficialaj do ili garantias nenion. Se ekzistas diferenco inter
       traduko kaj la (nuna oficiala) angla versio, la angla versio devas esti
       uzata.
     #original_hash: 8ad8302
