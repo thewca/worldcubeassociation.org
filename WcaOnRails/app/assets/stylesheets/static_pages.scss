@@ -11,3 +11,17 @@
     margin-top: 15px;
   }
 }
+
+#speedcubing-history {
+  .image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2em 0;
+
+    .image-description {
+      margin-top: 8px;
+      font-size: 0.9em;
+    }
+  }
+}
