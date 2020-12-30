@@ -766,6 +766,7 @@ en:
       teams: "Teams, Committees, and Councils"
       education: "Education resources"
       contact: "Contact Information"
+      speedcubing_history: "Speedcubing History"
       tools: "Tools"
       logo: "Logo"
       competitions: "Competitions"
@@ -1918,6 +1919,8 @@ en:
 <p>Trainee Delegates are being trained for the position of WCA Delegate and can only oversee competitions in which a WCA Delegate is present.</p>"
       see_link_html: " (see %{link})"
       members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
+  speedcubing_history:
+    title: "History‌ ‌of‌ ‌the‌ ‌Speedcubing‌ ‌Community‌ ‌&‌ ‌WCA‌"
   documents:
     title: "Documents"
     #context: The letter from the US Internal Revenue Service confirming that we are exempt from federal income tax

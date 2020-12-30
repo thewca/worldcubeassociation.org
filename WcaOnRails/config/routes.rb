@@ -144,6 +144,7 @@ Rails.application.routes.draw do
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
   get 'contact' => 'static_pages#contact'
+  get 'speedcubing-history' => 'static_pages#speedcubing_history'
   get 'privacy' => 'static_pages#privacy'
   get 'faq' => 'static_pages#faq'
   get 'score-tools' => 'static_pages#score_tools'
