@@ -1184,9 +1184,9 @@ DROP TABLE IF EXISTS `sanity_check_categories`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sanity_check_categories` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) DEFAULT NULL,
+  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sanity_check_exclusions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1195,9 +1195,9 @@ CREATE TABLE `sanity_check_exclusions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `sanity_check_id` int(11) DEFAULT NULL,
   `exclusion` json DEFAULT NULL,
-  `comments` text,
+  `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sanity_checks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1205,11 +1205,11 @@ DROP TABLE IF EXISTS `sanity_checks`;
 CREATE TABLE `sanity_checks` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `sanity_check_category_id` int(11) DEFAULT NULL,
-  `topic` varchar(191) DEFAULT NULL,
-  `comments` text,
-  `query` text,
+  `topic` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `query` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `schedule_activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
