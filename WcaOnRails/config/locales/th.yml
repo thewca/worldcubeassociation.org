@@ -1174,7 +1174,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1317,8 +1317,8 @@ th:
       let_us_know: กรุณาแจ้งให้เราทราบหากคุณแคยแข่งขันการแข่งขัน WCA มาก่อน
       #original_hash: f9f512b
       welcome_back: >-
-        ยินดีต้อนรับกลับ! ในการสร้าง account ของเว็บไซต์ WCA เราต้องการทราบ WCA
-        ID ที่คุณใช้แข่งขัน
+        ยินดีต้อนรับกลับมา! ในการสร้าง account ของเว็บไซต์ WCA เราต้องการทราบ
+        WCA ID ที่คุณใช้แข่งขัน
       #original_hash: 669fb57
       welcome: >-
         ยินดีต้อนรับ! ก่อนที่คุณจะสามารถแข่งขันในการแข่งขัน WCA ครั้งแรกของคุณ
@@ -1417,7 +1417,7 @@ th:
       #original_hash: 411bbca
       new_regional_organization: องค์กรระดับภูมิภาคใหม่
       #original_hash: dc1649a
-      sign_out: ออกจากระบบ
+      sign_out: ออกจากระบบบ
       #original_hash: 753a22b
       notifications: การแจ้งเตือน
       #original_hash: 15141ea
@@ -1434,11 +1434,13 @@ th:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
     #original_hash: d8f3ae6
-    title: ยินดีต้อนรับเข้าสู้สมาคมลูกบาศก์โลก
+    title: ยินดีต้อนรับเข้าสู่สมาคมลูกบาศก์โลก
     #original_hash: d133986
     latest_news: ข่าวล่าสุด
     #original_hash: 06b01c4
     announcements: ประกาศ
+    #original_hash: f0cbb3e
+    see_all_announcements: ดูประกาศทั้งหมด
     about_us:
       #original_hash: 3ffb811
       title: เกี่ยวกับเรา
@@ -2199,6 +2201,9 @@ th:
       schedule_must_match_rounds: >-
         กรุณามั่นใจว่าการแข่งขันแต่ละประเภทมีรอบอย่างน้อย 1
         รอบและตารางการแข่งขันที่คุณสร้างมาต้องมีทุกรอบของการแข่งขันก่อนที่จะยืนยัน
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: >-
+        โปรดตรวจสอบให้แน่ใจว่าทุกรอบที่ไม่ใช่รอบชิงชนะเลิศมีเงื่อนไขการผ่านเข้ารอบระบุไว้
       #original_hash: e390250
       create_success: สร้างการแข่งขันใหม่สำเร็จแล้ว
       #original_hash: ba067f0
@@ -2306,6 +2311,8 @@ th:
       organizer_plural:
         zero: ผู้จัดการแข่งขัน
         other: ผู้จัดการแข่งขัน
+      #original_hash: 53a9522
+      organization_team: ผู้จัดการแข่งขัน
       #original_hash: 6afa61e
       delegate:
         zero: WCA Delegate
@@ -2549,7 +2556,7 @@ th:
         l'Industrie](http://www.cite-sciences.fr)
       #original_hash: 2651d1a
       venue_details_html: 'รายละเอียดเกี่ยวกับสถานที่ (เช่น ชั้นที่ 1 ด้านหลัง ตามป้าย) %{md}'
-      #original_hash: b727e58
+      #original_hash: 447814d
       contact_html: >-
         ทางเลือกการติดต่อ หากคุณไม่ใส่ email
         ของผู้จัดการแข่งขันจะถูกแสดงเป็นสาธารณะ %{md}. เช่น: [Text to
@@ -2940,6 +2947,15 @@ th:
         history: ประวัติ
         #original_hash: e58bcf8
         mixed_history: ประวัติแบบผสม
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: เพศ
+        #original_hash: 6a72085
+        gender_all: ทั้งหมด
+        #original_hash: 3f3a489
+        male: ชาย
+        #original_hash: b7c17e9
+        female: หญิง
     table_elements:
       #original_hash: 709a232
       name: ชื่อ
@@ -3565,17 +3581,21 @@ th:
     policies: WCA Policies
     #original_hash: 91ac873
     codeofethics: Code of Ethics
+    #original_hash: 2643980
+    codeofconduct: จรรยาบรรณ
   education:
     #original_hash: 41701c2
     title: เอกสารการศึกษาของ WCA
-    #original_hash: aa562a7
+    #original_hash: 081d65d
     description: >-
       WQAC และ WMT ได้ทำเผยแพร่เอกสารหลายฉบับ
       คุณสามารถดาวน์โหลดมันได้ที่ด้านล่าง
     #original_hash: d0a3812
     competitor_tutorial: แนะนำผู้เข้าแข่งขัน
-    #original_hash: 815938f
-    competition_material: 'อุปกรณ์ในการแข่งขัน (ใบประกาศ, cube, ที่ปิด, ...)'
+    #original_hash: 5ca0558
+    certificates: แม่แบบประกาศนียบัตรของ WCT
+    #original_hash: f580987
+    orga_guidelines: แนวทางการเป็นผู้จัดการแข่งขัน
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegates
@@ -4024,7 +4044,11 @@ th:
       posts: โพสต์
       #original_hash: 9d7ea9c
       regulations_and_guidelines: กติกาและแนวทาง
+      #original_hash: db683b3
+      search_for: 'ผลการค้นหาสำหรับ <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: ไม่พบผลการค้นหา
         #original_hash: b8a7006
         competitions: ไม่พบการแข่งขันสำหรับ
         #original_hash: 99d4290
@@ -4113,9 +4137,65 @@ th:
       หากคุณต้องการที่จะเพิ่มหรือแก้ไขการแปล กรุณาดูที่ <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">the
       instructions on the GitHub repository for translations</a>
+  full_organizer_guidelines:
+    #original_hash: 5d602df
+    description: >-
+      ยินดีต้อนรับสู่คอลเล็กชันแนวทางผู้จัดการแข่งขันของ WQAC
+      หากคุณกำลังพิจารณาที่จะเป็นผู้จัดการแข่งขันแล้วละก็
+      เราแนะนำเป็นอย่างยิ่งให้คุณอ่านเอกสารเหล่านี้
+      โดยจะแบ่งเป็นเอกสารที่จำเป็นและเอกสารที่แนะนำ
+      โปรดมั่นใจว่าคุณได้ทำความคุ้นเคยกับข้อมูลที่เราได้ให้ไปเนื่องจากมันจะช่วยให้คุณจัดการการแข่งขันที่มีคุณภาพและสนุกอีกด้วย
+    #original_hash: e6f7d36
+    disclaimer_html: >-
+      <strong>ข้อจำกัดความรับผิดชอบ</strong>: WCA ไม่ได้เป็นผู้จัดการแข่งขัน
+      ในฐานะผู้จัดงานการแข่งขันตามทำนองคลองธรรมของ WCA
+      คุณ<strong>ต้องไม่</strong>เซ็นสัญญาใดก็ตามในนามของ WCA
+      คุณควรติดต่อกับสมาคมท้องถิ่นระดับภูมิภาคหรือระดับชาติหรือช่วยเหลือในการแข่งขัน
+    essential:
+      #original_hash: 44bd0ba
+      description: เอกสารสำคัญ
+      #original_hash: 1cf87ad
+      finding-venue: การหาสถานที่
+      #original_hash: 3ce0d9c
+      orga-team-delegate: การสร้างทีมจัดการแข่งขันและหา Delegate
+      #original_hash: d3c693b
+      budget: การจัดงบประมาณการแข่งขัน
+      #original_hash: b1429a7
+      schedule: การจัดการตารางการแข่งขัน
+      #original_hash: beea57d
+      checklist: รายการตรวจสอบการแข่งขัน
+      #original_hash: 9defcf1
+      registration: การจัดการการลงทะเบียน
+      #original_hash: e298a56
+      venue-setup: การเตรียมสถานที่
+      #original_hash: 2b6a5dd
+      work-during-comp: งานของผู้จัดการแข่งขันในระหว่างการแข่งขัน
+    recommended:
+      #original_hash: 6b843f3
+      title: เอกสารแนะนำ
+      #original_hash: bfbd4bb
+      staff: การจัดตั้ง staff
+      #original_hash: c346846
+      emails: โครงร่าง email ก่อนการแข่งขัน
+      #original_hash: 3212cc7
+      running-systems: Running systems
+      #original_hash: 2b31c89
+      new-competitors: ทัศนคติต่อผู้เข้าแข่งขันใหม่
+      #original_hash: 3408054
+      enhancing-experience: การเพิ่มพูนประสบการณ์ของผู้เข้าแข่งขันและ staff
+      #original_hash: 2345aaa
+      reflection: ผลของการจัดการแข่งขัน
   organizer_guidelines:
     #original_hash: 7486ac4
     title: แนวทางการเป็นผู้จัดการแข่งขัน WCA
+    paragraph0:
+      #original_hash: ee36904
+      title: แบบย่อ
+      #original_hash: 60d9532
+      content: >-
+        ด้านล่างนี้คุณสามารถดูสรุปประเด็นสำคัญสั้น ๆ
+        เพื่อรับแนวคิดเกี่ยวกับวิธีจัดการแข่งขัน
+        หากคุณคิดว่านี่คือสิ่งที่เหมาะสำหรับคุณ โปรดดูเอกสารด้านบน!
     paragraph1:
       #original_hash: e5f5329
       title: วิธีการจัดการแข่งขัน
@@ -4162,10 +4242,6 @@ th:
         '1': การแข่งขัน 2 ครั้งนั้นไม่มีประเภทการแข่งขันที่ซ้ำกัน
         #original_hash: f7bacc5
         '2': การแข่งขัน 2 ครั้งนั้นจัดในประเทศที่ต่างกัน
-        #original_hash: 7b2c099
-        '3': >-
-          ในช่วง 12 เดือนที่ผ่านมา มีการแข่งขันน้อยกว่า 16 ครั้งในรัศมี 100
-          กิโลเมตรของการแข่งขันครั้งนั้น
       #original_hash: 5c5cf04
       content2: >-
         การแข่งขัน “3x3x3 Fewest Moves simultaneous competitions”
@@ -4420,3 +4496,8 @@ th:
         คุณมีคำแนะนำอื่น ๆ สำหรับ Instagram หรือเนื้อหาโซเชียลมีเดียอื่น ๆ
         หรือไม่? <a
         href="https://www.worldcubeassociation.org/contact/website">แจ้งให้เราทราบ</a>!
+  footer:
+    #original_hash: cf01481
+    privacy: ความเป็นส่วนตัว
+    #original_hash: 4c4a2e8
+    disclaimer: ข้อจำกัดความรับผิดชอบ

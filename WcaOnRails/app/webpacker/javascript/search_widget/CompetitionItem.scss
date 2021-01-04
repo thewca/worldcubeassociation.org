@@ -1,0 +1,12 @@
+.omnisearch-item-competition {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.1em;
+  .extra-details {
+    font-size: 0.9em;
+    margin-top: 5px;
+    .flag-icon {
+      margin-right: 5px;
+    }
+  }
+}

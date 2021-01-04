@@ -1,0 +1,12 @@
+.omnisearch-item-reg {
+  display: flex;
+  .reg-id {
+    margin-right: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  .reg-text {
+    text-align: justify;
+  }
+}

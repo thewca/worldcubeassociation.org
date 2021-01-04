@@ -728,7 +728,7 @@ class User < ApplicationRecord
   end
 
   def can_vote_in_poll?
-    any_kind_of_delegate?
+    staff?
   end
 
   def can_view_poll?

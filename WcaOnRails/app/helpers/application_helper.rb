@@ -257,17 +257,14 @@ module ApplicationHelper
     end
   end
 
-  ATTACH_COMPONENT_STR="window.wca.attachComponentToElem('%{c}', '%{id}', {%{opts}});"
+  ATTACH_COMPONENT_STR="window.wca.attachComponentToElem('%{c}', '%{id}', %{opts});"
   def render_react_component(name, id: nil, options: {})
     id ||= name
-    options_string = options.map do |k, v|
-      "'#{k}': JSON.parse(#{v.to_json})"
-    end
     component_container = content_tag(:div, nil, id: id)
     script_tag = javascript_tag(format(ATTACH_COMPONENT_STR,
                                        c: name,
                                        id: id,
-                                       opts: options_string.join(",")))
+                                       opts: options.to_json))
     component_container + script_tag
   end
 end

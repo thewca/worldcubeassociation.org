@@ -1522,6 +1522,8 @@ ru:
     latest_news: Последние новости
     #original_hash: 06b01c4
     announcements: Анонсы
+    #original_hash: f0cbb3e
+    see_all_announcements: Смотреть все объявления
     about_us:
       #original_hash: 3ffb811
       title: О нас
@@ -2350,6 +2352,10 @@ ru:
         Перед тем, как подтвердить соревнование, пожалуйста, убедитесь, что у
         каждой заявленной дисциплины есть хотя бы один раунд, и что в вашем
         расписании присутствуют все раунды.
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: >-
+        Пожалуйста, убедитесь что все раунды, кроме финальных, имеют
+        установленные условия прохода в следующий раунд.
       #original_hash: e390250
       create_success: Соревнование успешно создано!
       #original_hash: ba067f0
@@ -3121,6 +3127,15 @@ ru:
         history: История
         #original_hash: e58bcf8
         mixed_history: Смешанная история
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: Пол
+        #original_hash: 6a72085
+        gender_all: Все
+        #original_hash: 3f3a489
+        male: Мужской
+        #original_hash: b7c17e9
+        female: Женский
     table_elements:
       #original_hash: 709a232
       name: Имя
@@ -3731,7 +3746,7 @@ ru:
         с Миссией, Духом и Положениями WCA. Существуют <strong>Старшие
         Делегаты</strong>, <strong>Региональные Делегаты</strong>,
         <strong>Делегаты</strong>, <strong>Младшие Делегаты</strong> и
-        <strong>Делегаты-стажёры</strong>%{see_link}.</p> <p>Старшие Делегаты и
+        <strong>Делегаты-стажёры</strong> %{see_link}.</p> <p>Старшие Делегаты и
         Региональные Делегаты, помимо обязанностей обычного Делегата, ещё и
         управляют Делегатами в своём регионе, к ним также могут обращаться
         сообщества по региональным вопросам.</p> <p>Новые Делегаты становятся
@@ -3761,17 +3776,21 @@ ru:
     policies: WCA Политики
     #original_hash: 91ac873
     codeofethics: Кодекс этики
+    #original_hash: 2643980
+    codeofconduct: Кодекс поведения
   education:
     #original_hash: 41701c2
     title: Обучающие документы WCA
-    #original_hash: aa562a7
+    #original_hash: 081d65d
     description: >-
-      WQAC и WMT опубликовали несколько документов для сообщества, вы можете
-      скачать их ниже.
+      WQAC опубликовал несколько документов для сообщества, вы можете скачать их
+      ниже.
     #original_hash: d0a3812
     competitor_tutorial: Руководство участника
-    #original_hash: 815938f
-    competition_material: 'Материалы для соревнований (сертификаты, крышки для кубов и т.д.)'
+    #original_hash: 5ca0558
+    certificates: Шаблоны сертификатов WCT
+    #original_hash: f580987
+    orga_guidelines: Руководство организатора
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Делегаты
@@ -4234,7 +4253,11 @@ ru:
       posts: Посты
       #original_hash: 9d7ea9c
       regulations_and_guidelines: Положения и Дополнения
+      #original_hash: db683b3
+      search_for: 'Искать <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: Ничего не найдено
         #original_hash: b8a7006
         competitions: Не найдены соревнования с
         #original_hash: 99d4290
@@ -4331,9 +4354,67 @@ ru:
       Если вы хотите добавить или обновить перевод, пожалуйста, прочтите <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">инструкции
       на GitHub</a>.
+  full_organizer_guidelines:
+    #original_hash: 5d602df
+    description: >-
+      Добро пожаловать в коллекцию обучающих материалов WQAC для организаторов.
+      Если вы собираетесь быть организатором, то мы рекомендуем вам ознакомиться
+      с этими документами. Документы были разделены на необходимые и
+      рекомендуемые к изучению. Убедитесь, что вы знакомы с приведённой
+      информацией — это поможет вам провести высококачественные и приносящие
+      удовольствие соревнования.
+    #original_hash: e6f7d36
+    disclaimer_html: >-
+      <strong>Отказ от ответственности</strong>: WCA не организует соревнования.
+      Как организатор соревнований, одобренных WCA вы <strong>не можете</strong>
+      подписывать что-то от имени WCA. Вам стоит связаться с соответствующей
+      региональной или национальной организацией, которая организует или
+      помогает организовывать соревнования.
+    essential:
+      #original_hash: 44bd0ba
+      description: Необходимые документы
+      #original_hash: 1cf87ad
+      finding-venue: Поиск помещения
+      #original_hash: 3ce0d9c
+      orga-team-delegate: Создание команды организаторов и обращение к Делегату
+      #original_hash: d3c693b
+      budget: Бюджет соревнований
+      #original_hash: b1429a7
+      schedule: Составление расписания
+      #original_hash: beea57d
+      checklist: Чек-лист соревнований
+      #original_hash: 9defcf1
+      registration: Приём регистраций
+      #original_hash: e298a56
+      venue-setup: Расстановка в помещении
+      #original_hash: 2b6a5dd
+      work-during-comp: Работа организатора во время соревнований
+    recommended:
+      #original_hash: 6b843f3
+      title: Рекомендуемые документы
+      #original_hash: bfbd4bb
+      staff: Назначение обязанностей
+      #original_hash: c346846
+      emails: Электронные письма перед соревнованиями
+      #original_hash: 3212cc7
+      running-systems: Системы раннеров и судей
+      #original_hash: 2b31c89
+      new-competitors: Работа с новыми участниками
+      #original_hash: 3408054
+      enhancing-experience: Улучшение опыта участников и помощников
+      #original_hash: 2345aaa
+      reflection: Рефлексия организатора
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Рекомендации организаторам соревнований
+    paragraph0:
+      #original_hash: ee36904
+      title: Короткая версия
+      #original_hash: 60d9532
+      content: >-
+        Ниже вы можете прочитать краткое содержание основных пунктов, чтобы
+        понять, как организовывать соревнования. Если вам кажется, что это для
+        вас, пожалуйста, прочитайте документы выше.
     paragraph1:
       #original_hash: e5f5329
       title: Как организовать соревнование
@@ -4379,10 +4460,6 @@ ru:
         '1': На этих двух соревнований нет общих дисциплин.
         #original_hash: f7bacc5
         '2': Эти соревнования проходят в разных странах.
-        #original_hash: 7b2c099
-        '3': >-
-          В последние 12 месяцев было меньше 16 соревнований в зоне 100 км от
-          места проведения этого соревнования.
       #original_hash: 5c5cf04
       content2: >-
         Одновременные соревнования по сборке на количество ходов &mdash; это
@@ -4659,3 +4736,8 @@ ru:
         социальных сетей? <a
         href="https://www.worldcubeassociation.org/contact/website">Расскажите
         нам об этом</a>!
+  footer:
+    #original_hash: cf01481
+    privacy: Политика конфиденциальности
+    #original_hash: 4c4a2e8
+    disclaimer: Отказ от ответственности

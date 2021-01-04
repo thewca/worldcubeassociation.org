@@ -379,7 +379,7 @@ eo:
         #original_hash: 9af9099
         results_notifications_enabled: Retpoŝtu min kiam miaj rezultoj estas enretaj.
         #original_hash: de60ab8
-        delegate_status: Delegita stato
+        delegate_status: Delegita statuso
         #original_hash: 0f21717
         region: Regiono
         #original_hash: 730db33
@@ -503,7 +503,7 @@ eo:
         #original_hash: dc9d458
         paid_entry_fees: Pagita
         #original_hash: bae7d5b
-        status: Statuso
+        status: Stato
         #original_hash: 709a232
         name: Nomo
         #original_hash: a6b9d69
@@ -610,7 +610,7 @@ eo:
         #original_hash: 0d31f23
         submitterComment: Komento de la sendanto
         #original_hash: bae7d5b
-        status: Statuso
+        status: Stato
       regional_organization:
         #original_hash: 709a232
         name: Nomo
@@ -619,7 +619,7 @@ eo:
         #original_hash: 2e8a57c
         website: Retejo
         #original_hash: 83fce83
-        logo: Emblemo
+        logo: Logotipo
         #original_hash: 84add5b
         email: Retpoŝtadreso
         #original_hash: 82c42fb
@@ -671,7 +671,7 @@ eo:
     competition_medium:
       status:
         #original_hash: 61a0572
-        accepted: Akceptita
+        accepted: Akceptata
         #original_hash: 96f608c
         pending: Pritraktata
       type:
@@ -1071,9 +1071,7 @@ eo:
         #original_hash: 72448d6
         website: Devas esti valida http(s) reteja adreso. HTTPS estas rekomendita.
         #original_hash: 2ace571
-        logo: >-
-          Devas esti en la dosierformo PNG, en bona kvalito kaj kun travidebla
-          fono
+        logo: 'Devas esti PNG-dosiero, bonkvalite kaj kun travidebla fono'
         #original_hash: da54ab5
         email: Devus esti dissendolisto kiu enhavas ĉiujn Direktorojn kaj Oficistojn
         #original_hash: da39a3e
@@ -1107,7 +1105,7 @@ eo:
       registration:
         status:
           #original_hash: 61a0572
-          accepted: Akceptita
+          accepted: Akceptata
           #original_hash: a6b2452
           pending: Atendolisto
           #original_hash: 441bda6
@@ -1402,7 +1400,7 @@ eo:
       #original_hash: 4fa8cc8
       tools: Iloj
       #original_hash: 83fce83
-      logo: Emblemo
+      logo: Logotipo
       #original_hash: db98a68
       competitions: Konkursoj
       #original_hash: 6a72085
@@ -1790,7 +1788,7 @@ eo:
           gestoj).
       staff_avatar_guidelines:
         #original_hash: da9e6df
-        title: 'Pluaj gvidlinioj por WCA-Laborantoj:'
+        title: 'Pluaj gvidlinioj por Stabomembroj:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -2010,14 +2008,14 @@ eo:
           tuje akceptita. Eblas ke vi devos fari pliajn agojn antaŭ la aprobon
           de via registriĝo. Por vidi la aprobajn kriteriojn, vizitu la
           konkursan retejon aŭ retpoŝtu la organizantojn. Vi ankaŭ povas
-          kontroli la statuson de via registriĝo %{here}.
+          kontroli la staton de via registriĝo %{here}.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Via registriĝo por %{comp_name} ĵus estis akceptita.'
         #original_hash: 24d2883
         message_html: >-
           Via registriĝo por %{comp_name} ĵus estis akceptita. Kiel ĉiam, vi
-          povas kontroli la statuson de via registriĝo %{here}
+          povas kontroli la staton de via registriĝo %{here}
         #original_hash: 1852cbf
         see_you_soon: 'Ni antaŭĝojas vidi vin ĉe %{comp_name}!'
       pending:
@@ -2063,7 +2061,7 @@ eo:
         one: 1 lando
         other: '%{count} landoj'
       #original_hash: 1feee0e
-      export_csv: Eksporti al CSV
+      export_csv: Eksporti al CSV-dosiero
       #original_hash: 84add5b
       email: Retpoŝti
       #original_hash: 7b2c7f1
@@ -2126,12 +2124,12 @@ eo:
     closed_html: 'Registriĝperiodo fermiĝis antaŭ <strong>%{days}</strong> je %{time}.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
-      %{sign_in} por kontroli vian registriĝan statuson. Se vi ankoraŭ ne havas
+      %{sign_in} por kontroli vian registriĝan staton. Se vi ankoraŭ ne havas
       WCA-konton, vi povas krei ĝin %{here}, sed estas tro malfrue por
       registriĝi por tiu konkurso.
     #original_hash: 7753b2e
     please_sign_in_not_yet_open_html: >-
-      %{sign_in} por kontroli vian registriĝan statuson. Se vi ankoraŭ ne havas
+      %{sign_in} por kontroli vian registriĝan staton. Se vi ankoraŭ ne havas
       WCA-konton, vi povas krei ĝin %{here}, sed registriĝperiodo ankoraŭ ne
       estas malferma.
     #original_hash: 4f84af0
@@ -2305,6 +2303,8 @@ eo:
         Bonvolu atenti ke la konkurso havas almenaŭ unu raŭndon po konkursero
         kaj ke la horplano kiun vi kreis enhavas ĉiujn raŭndojn kiujn vi
         deklaris antaŭ ol konfirmi la konkurson.
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: Bonvolu atenti ke ĉiuj nefinalaj raŭndoj havu kvalifikajn kondiĉojn.
       #original_hash: e390250
       create_success: Nova konkurso sukcese kreiĝis!
       #original_hash: ba067f0
@@ -2756,7 +2756,7 @@ eo:
       #original_hash: cdcd288
       invalid_currency_code: Elektita valutkodo estas nevalida
       #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: devas havi kvalifikajn kondiĉojn por ĉiuj ne-finalaj raŭndoj.
+      advancement_condition_must_be_present_for_all_non_final_rounds: devas havi kvalifikajn kondiĉojn por ĉiuj nefinalaj raŭndoj.
     new:
       #original_hash: 1208df7
       create_competition: Krei konkurson
@@ -2841,7 +2841,7 @@ eo:
     #original_hash: a6b5efe
     cancel_mistake: Ĉu vi eraris?
     #original_hash: 0fb43d5
-    note_before_cancel: 'Rimarko: nur konfirmitaj konkursoj povas esti nuligitaj.'
+    note_before_cancel: 'Noto: nur konfirmitaj konkursoj povas esti nuligitaj.'
     show:
       #original_hash: b0fe391
       general_info: Ĝeneralaj informoj
@@ -3073,6 +3073,15 @@ eo:
         history: Historio
         #original_hash: e58bcf8
         mixed_history: Miksita historio
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: Genro
+        #original_hash: 6a72085
+        gender_all: Ĉiuj
+        #original_hash: 3f3a489
+        male: Iĉa
+        #original_hash: b7c17e9
+        female: Ina
     table_elements:
       #original_hash: 709a232
       name: Nomo
@@ -3537,7 +3546,7 @@ eo:
         ke la teamo bone funkcias kaj gvidi la aliajn membrojn de la teamo.
         Konsilioj estas speciala tipo de teamo kiuj konsilas la Estraro de la
         WCA kaj kiuj estas konstituitaj de komunumaj membroj, ne de
-        WCA-Laborantoj. Kiam tiuj komitatoj, teamoj kaj konsilioj serĉas
+        WCA-Stabomembroj. Kiam tiuj komitatoj, teamoj kaj konsilioj serĉas
         membrojn, informoj pri kiel kandidatiĝi estas anoncitaj ĉe la hejmpaĝo.
       #original_hash: c366473
       senior_member: Altranga Membro
@@ -3624,8 +3633,8 @@ eo:
         #original_hash: c304d57
         description: >-
           Tiu komitato devas certigi ke ĉiuj proceduroj en kiuj engaĝiĝas la
-          WCA-Laborantojn kaj Eksteraj Laborantoj sekvas ĝian Etikan Kodon kaj
-          ĝi faras sendependajn enketojn se la konduto de iuj el tiuj membroj ne
+          WCA-Stabo kaj Ekstera-Stabo sekvas ĝian Etikan Kodon kaj ĝi faras
+          sendependajn enketojn se la konduto de iuj el tiuj membroj ne
           konformas kun tiu Etika Kodo. Tiuj enketoj povas esti petitaj de iuj
           Registritaj Rapidkubantoj, por kiuj la WEC estas konfidulo. Tiu
           komitato ankaŭ funkcias kiel apelacia kortumo se koncernata homo
@@ -3644,8 +3653,8 @@ eo:
         description: >-
           Tiu komitato devas subteni kaj promocii permanentan plibonigon de
           kvalito ene de la WCA, kaj monda aplikado de koheraj altkvalitaj
-          normoj rilate al procesoj, WCA-Laborantoj, Regionaj Organizoj,
-          Organizantoj de konkursoj kaj Konkursaj Laborantoj.
+          normoj rilate al procesoj, WCA-Stabo, Regionaj Organizoj, Organizantoj
+          de konkursoj kaj Konkursaj Taskfarantoj.
       wcat:
         #original_hash: 2b81984
         name: Anonca Teamo de Konkursoj de la WCA
@@ -3667,7 +3676,7 @@ eo:
         #original_hash: fb6cd86
         description: >-
           Tiu konsilio respondecas pri kreado kaj prizorgo de ambaŭflanka
-          komunikado inter la WCA-Komunumo kaj la WCA-Laborantoj.
+          komunikado inter la WCA-Komunumo kaj la WCA-Stabo
       banned:
         #original_hash: d30e2e5
         name: Forbaritaj Konkursantoj
@@ -3712,22 +3721,26 @@ eo:
     #original_hash: fdceb44
     motions: Rezolucioj
     #original_hash: 092f99e
-    minutes: Raportoj
+    minutes: Protokoloj
     #original_hash: 6db524a
     policies: Politikoj de la WCA
     #original_hash: 91ac873
     codeofethics: Etika Kodo
+    #original_hash: 2643980
+    codeofconduct: Konduta Kodo
   education:
     #original_hash: 41701c2
     title: Edukaj Dokumentoj de la WCA
-    #original_hash: aa562a7
+    #original_hash: 081d65d
     description: >-
-      La WQAC kaj la WMT eldonis plurajn dokumentojn por la komunumo, vi povas
-      elŝuti ilin malsupre.
+      La WQAC eldonis plurajn dokumentojn por la komunumo, vi povas elŝuti ilin
+      malsupre.
     #original_hash: d0a3812
     competitor_tutorial: Instruilo por konkursantoj
-    #original_hash: 815938f
-    competition_material: 'Materialo por konkursoj (diplomoj, kubkovraĵoj, …)'
+    #original_hash: 5ca0558
+    certificates: Modelo de diplomo de la WCT
+    #original_hash: f580987
+    orga_guidelines: Gvidlinioj por organizantoj
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-Delegitoj
@@ -3779,7 +3792,7 @@ eo:
         #original_hash: 0c3576b
         '4': Konformiĝi al ĉiuj aplikeblaj Reguloj de la WCA
         #original_hash: 1a9e6c5
-        '5': Akcepti kaj konformiĝi al ĉiuj decidoj de la WCA-Laborantoj
+        '5': Akcepti kaj konformiĝi al ĉiuj decidoj de la WCA-Stabo
         #original_hash: d4ae7c1
         '6': >-
           Konservi en dosiero ĉe la WCA kopio de ĝia nuna statuto kaj, se
@@ -3891,8 +3904,8 @@ eo:
     wec:
       #original_hash: ec2b9c3
       info_html: >-
-        Tiu komitato devas certigi ke ĉiuj proceduroj sekvataj de la
-        WCA-Laborantoj kaj Eksteraj-Laborantoj sekvas la Etikan Kodon.
+        Tiu komitato devas certigi ke ĉiuj proceduroj sekvataj de la WCA-Stabo
+        kaj Ekstera-Stabo sekvas la Etikan Kodon.
     weat:
       #original_hash: 889dd90
       info_html: >-
@@ -3903,7 +3916,7 @@ eo:
       info_html: >-
         Tiu komitato devas subteni kaj promocii permanentan plibonigon de
         kvalito ene de la WCA, kaj monda aplikado de koheraj altkvalitaj normoj
-        rilate al procesoj, WCA-Laborantoj, Regionaj Organizoj, Organizantoj de
+        rilate al procesoj, WCA-Stabo, Regionaj Organizoj, Organizantoj de
         konkursoj kaj Konkursaj Laborantoj.
     wcat:
       #original_hash: 61a471f
@@ -3922,7 +3935,7 @@ eo:
       #original_hash: fb6cd86
       info_html: >-
         Tiu konsilio respondecas pri kreado kaj prizorgo de ambaŭflanka
-        komunikado inter la WCA-Komunumo kaj la WCA-Laborantoj.
+        komunikado inter la WCA-Komunumo kaj la WCA-Stabo.
   score_tools:
     #original_hash: 4fc2133
     title: Programaraj iloj por WCA-Konkursoj
@@ -3950,8 +3963,8 @@ eo:
       #original_hash: 576e2f4
       desc: >-
         Administri konkursantojn povas esti farita rekte ĉe la retejo de la WCA.
-        Tial ke permana administrado de grupoj kaj laborantoj povas esti
-        temporaba, vi eble volus uzi unu el tiuj iloj malsupre.
+        Pro tio ke permana administrado de grupoj kaj taskfarantoj povas esti
+        temporaba, vi eble ŝatus uzi unu el tiuj iloj malsupre.
     during:
       #original_hash: 9934200
       title: Dum la konkurso
@@ -4031,29 +4044,29 @@ eo:
           formato por submetiĝo al la WCA.
   logo:
     #original_hash: c72c969
-    title: Emblemo de la WCA
+    title: Logotipo de la WCA
     paragraphs:
       #original_hash: 44cfe8d
       '1': >-
-        La emblemo de la WCA estis kreita de Justin Eastman, dum desegna
-        kontesto en Januaro 2005.<br />Ni ŝatis la emblemon pro ĝia designaĵo,
+        La logotipo de la WCA estis kreita de Justin Eastman, dum desegna
+        kontesto en Januaro 2005.<br />Ni ŝatis la logotipon pro ĝia designaĵo,
         koloroj kaj la fakto ke ĝi ne specife montras kubon 3x3x3.
       #original_hash: 916e3fc
       '2': >-
-        Ni havas kvar malsamajn versiojn de la emblemo: <a
+        Ni havas kvar malsamajn versiojn de la logotipo: <a
         href="/files/WCAlogo_XL.jpg">granda versio</a> (46 KB, 1756 px per 1068
         px), <a href="/files/WCAlogo.svg">vektora versio</a>, <a
         href="/files/WCAlogo_notext.svg">vektora versio sen teksto</a> kaj <a
         href="/files/WCAlogo_monochrome.svg">unukolora vektora versio</a>.
       #original_hash: dcb1ad6
       '3': >-
-        3D-versio de la emblemo, kreita de Vu Minh Tan from Vietnam: <a
+        3D-versio de la logotipo, kreita de Vu Minh Tan from Vietnam: <a
         href="/files/WCALogo3D.png">PNG-versio</a> (2.1 MB), <a
         href="/files/WCALogo3Dsmall.png">malgranda PNG-versio</a> (0.25 MB).
       #original_hash: e5df1bf
       '4': >-
-        Akcepteblaj uzoj de la emblemo de la WCA estas difinitaj en la politiko
-        pri la Uzo de la WCA Emblemo kiu aperas ĉe la <a href="/documents">paĝo
+        Akcepteblaj uzoj de la logotipo de la WCA estas difinitaj en la politiko
+        pri la Uzo de la WCA Logotipo kiu aperas ĉe la <a href="/documents">paĝo
         de Dokumentoj de la WCA</a>.
   workbook_assistant:
     #original_hash: e442ea4
@@ -4180,7 +4193,7 @@ eo:
         #original_hash: f85194e
         was_at: Ĉeestis
         #original_hash: 8c00243
-        together_with: Kune kun
+        together_with: Kun
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: Bonvolu doni du malsamajn validajn WCA-ID-jn.
@@ -4196,7 +4209,11 @@ eo:
       posts: Afiŝoj
       #original_hash: 9d7ea9c
       regulations_and_guidelines: Reguloj kaj Gvidlinioj
+      #original_hash: db683b3
+      search_for: 'Serĉovortoj: <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: Neniu rezulto
         #original_hash: b8a7006
         competitions: Neniu konkurso trovita por
         #original_hash: 99d4290
@@ -4272,8 +4289,8 @@ eo:
       tradukojn utilajn.
     #original_hash: 32b1132
     paragraph2: >-
-      Atentu ke kvankam la tradukoj estas disponigitaj en la retejo de la WCA,
-      ili ne estas oficialaj: ili garantias nenion. Se ekzistas diferenco inter
+      Atentu ke kvankam la tradukoj disponeblas en la retejo de la WCA, ili ne
+      estas oficialaj do ili garantias nenion. Se ekzistas diferenco inter
       traduko kaj la (nuna oficiala) angla versio, la angla versio devas esti
       uzata.
     #original_hash: 8ad8302
@@ -4294,9 +4311,65 @@ eo:
       Se aldoni aŭ ĝisdatigi tradukon interesas vin, bonvolu rigardi <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">la
       instrukciojn ĉe la Github deponejo por tradukoj</a>.
+  full_organizer_guidelines:
+    #original_hash: 5d602df
+    description: >-
+      Bonvenon ĉe la aro de Gvidlinioj por organizantoj. Se vi pripensas fariĝi
+      organizanton, ni ege rekomendas vin legi tiujn dokumentojn. Ili estas
+      apartigitaj inter la fundamentaj kaj la ege rekomenditaj dokumentoj.
+      Bonvolu alkutimiĝi al tiuj informoj ĉar ili iĝos vin kapabla organizi
+      altkvalitan kaj ĝueblan konkurson!
+    #original_hash: e6f7d36
+    disclaimer_html: >-
+      <strong>Averto</strong>: La WCA ne organizas konkursojn. Kiel organizanto
+      de konkurso aprobita de la WCA vi <strong>devas nenion</strong> subskribi
+      nome de la WCA. Vi devus provi kontakti taŭgan regionan aŭ nacian
+      kubumadan asocion kiu ja organizas aŭ helpas organizi konkursojn.
+    essential:
+      #original_hash: 44bd0ba
+      description: Fundamentaj dokumentoj
+      #original_hash: 1cf87ad
+      finding-venue: Trovi konkursejon
+      #original_hash: 3ce0d9c
+      orga-team-delegate: Krei vian organizantan teamon kaj alproksimiĝi Delegiton
+      #original_hash: d3c693b
+      budget: Buĝeti konkurson
+      #original_hash: b1429a7
+      schedule: Horplani
+      #original_hash: beea57d
+      checklist: Konkursa kontrololisto
+      #original_hash: 9defcf1
+      registration: Trakti registriĝojn
+      #original_hash: e298a56
+      venue-setup: Konkurseja aranĝo
+      #original_hash: 2b6a5dd
+      work-during-comp: Organizanta laboro dum la konkurso
+    recommended:
+      #original_hash: 6b843f3
+      title: Rekomenditaj dokumentoj
+      #original_hash: bfbd4bb
+      staff: Atribui taskfarantojn
+      #original_hash: c346846
+      emails: Strukturo de antaŭkonkursa retmesaĝo
+      #original_hash: 3212cc7
+      running-systems: Konkursaj sistemoj
+      #original_hash: 2b31c89
+      new-competitors: Sinteno kun novaj konkursantoj
+      #original_hash: 3408054
+      enhancing-experience: Plibonigi spertojn de konkursantoj kaj taskfarantoj
+      #original_hash: 2345aaa
+      reflection: Organizantaj pripensoj
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Gvidlinioj de la WCA por Organizantoj de Konkursoj
+    paragraph0:
+      #original_hash: ee36904
+      title: Mallonga versio
+      #original_hash: 60d9532
+      content: >-
+        Malsupre vi povas trovi mallongan resumon de esencaj aferoj por havi
+        bazan ideon pri kiel organizi konkurson. Se vi pensas ke vi taŭgas por
+        tio, bonvolu kontroli la dokumentojn supre!
     paragraph1:
       #original_hash: e5f5329
       title: Kiel organizi konkurson
@@ -4345,10 +4418,6 @@ eo:
         '1': La du konkursoj ne havas komunajn konkurserojn.
         #original_hash: f7bacc5
         '2': La du konkursoj okazas en malsamaj landoj.
-        #original_hash: 7b2c099
-        '3': >-
-          Dum la lastaj 12 monatoj, malpli da 16 konkursoj okazis en rondo de
-          100 km ĉirkaŭ la konkurso.
       #original_hash: 5c5cf04
       content2: >-
         "Samtempaj konkursoj de 3x3x3 Optimigitaj Solvoj" estas WCA-konkursoj

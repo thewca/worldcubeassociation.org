@@ -31,10 +31,6 @@ class SyncMailingListsJob < SingletonApplicationJob
       query: "%Europe (%",
     },
     {
-      mailing_list: "delegates.europe-north-baltic-states@worldcubeassociation.org",
-      query: "%Europe North & Baltic States%",
-    },
-    {
       mailing_list: "delegates.latin-america@worldcubeassociation.org",
       query: "%Latin America%",
     },

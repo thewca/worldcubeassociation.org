@@ -1,4 +1,14 @@
-export const postsUrl = (page, format='json') => {
+export const personUrl = (wcaId) => `<%= URI.decode(Rails.application.routes.url_helpers.person_path("${wcaId}"))%>`;
+
+export const postsUrl = (page, format = 'json') => {
   // In this case id holds the page number ;)
   return `<%= URI.decode(Rails.application.routes.url_helpers.posts_path(format: "${format}")) %>?page=${page}`;
 };
+
+export const competitionApiUrl = (id) => `<%= URI.decode(Rails.application.routes.url_helpers.api_v0_competition_path("${id}"))%>`;
+
+export const competitionEventResultsApiUrl = (id, eventId) => `<%= URI.decode(Rails.application.routes.url_helpers.api_v0_competition_event_results_path("${id}", "${eventId}")) %>`;
+
+export const omnisearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_path %>?q=${query}`;
+
+export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;

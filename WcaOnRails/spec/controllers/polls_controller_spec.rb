@@ -36,6 +36,15 @@ RSpec.describe PollsController do
     end
   end
 
+  context "logged in as a staff member" do
+    sign_in { FactoryBot.create :user, :wrt_member }
+    it "shows poll results" do
+      poll = FactoryBot.create(:poll)
+      get :results, params: { id: poll.id }
+      expect(response).to render_template("results")
+    end
+  end
+
   context "logged in as board member" do
     let(:board_member) { FactoryBot.create :user, :board_member }
     before :each do

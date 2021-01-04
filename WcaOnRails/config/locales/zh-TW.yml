@@ -1981,6 +1981,8 @@ zh-TW:
       must_have_events: 請您在確認比賽之前輸入至少一項比賽項目。
       #original_hash: a3aea56
       schedule_must_match_rounds: 請在申請比賽之前確保每個項目皆至少有一輪，同時您製作的賽程需包含所有您所規劃的輪次。
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: 請確認所有非決賽的項目有晉級條件
       #original_hash: e390250
       create_success: 成功申請一場新的比賽！
       #original_hash: ba067f0
@@ -2670,6 +2672,15 @@ zh-TW:
         history: 更新歷史
         #original_hash: e58bcf8
         mixed_history: 混合更新歷史
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: 性別
+        #original_hash: 6a72085
+        gender_all: 所有
+        #original_hash: 3f3a489
+        male: 男性
+        #original_hash: b7c17e9
+        female: 女性
     table_elements:
       #original_hash: 709a232
       name: 名字
@@ -3161,15 +3172,19 @@ zh-TW:
     policies: WCA政策
     #original_hash: 91ac873
     codeofethics: 倫理規範
+    #original_hash: 2643980
+    codeofconduct: 行為準則
   education:
     #original_hash: 41701c2
     title: WCA教育文獻
-    #original_hash: aa562a7
-    description: WCA品質保證委員會與WCA行銷組已為社群發布許多文件，您可以在下面下載這些文件。
+    #original_hash: 081d65d
+    description: WCA品質保證委員已為社群發布許多文件，您可以在下面下載這些文件。
     #original_hash: d0a3812
     competitor_tutorial: 參賽者教程
-    #original_hash: 815938f
-    competition_material: 比賽用材料（獎狀，蓋子）
+    #original_hash: 5ca0558
+    certificates: WCA傳播組的獎狀範本
+    #original_hash: f580987
+    orga_guidelines: 主辦團隊指導方針
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
@@ -3498,7 +3513,11 @@ zh-TW:
       posts: 文章
       #original_hash: 9d7ea9c
       regulations_and_guidelines: 規則與指導方針
+      #original_hash: db683b3
+      search_for: '搜尋<b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: 未找到相符成績
         #original_hash: b8a7006
         competitions: 未找到相符比賽
         #original_hash: 99d4290
@@ -3571,9 +3590,56 @@ zh-TW:
     paragraph3_html: >-
       如果您有興趣新增或是更新翻譯版本，請到<a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">GitHub倉庫上的翻譯說明</a>。
+  full_organizer_guidelines:
+    #original_hash: 5d602df
+    description: >-
+      歡迎來到WCA品質保證委員會所彙編的主辦團隊指導方針。如果您正在考慮成為主辦團隊，那非常建議要閱讀這些文件。這些文件被分成必讀文件和推薦文件。確保您對於這些資訊都熟悉，因為這些內容能使比賽令人愈快並保有高品質。
+    #original_hash: e6f7d36
+    disclaimer_html: >-
+      <strong>免責聲明</strong>：WCA不主辦比賽。身為WCA認證比賽的主辦人<strong>禁止</strong>代替WCA簽訂任何事物。您應該試著聯絡能協助主辦或比賽相關事宜的區域組織
+      。
+    essential:
+      #original_hash: 44bd0ba
+      description: 必讀文件
+      #original_hash: 1cf87ad
+      finding-venue: 尋找場地
+      #original_hash: 3ce0d9c
+      orga-team-delegate: 成立您的主辦團隊並接洽一位WCA代表
+      #original_hash: d3c693b
+      budget: 做比賽成本計算
+      #original_hash: b1429a7
+      schedule: 安排時間表
+      #original_hash: beea57d
+      checklist: 比賽確認清單
+      #original_hash: 9defcf1
+      registration: 處理報名
+      #original_hash: e298a56
+      venue-setup: 比賽佈置
+      #original_hash: 2b6a5dd
+      work-during-comp: 主辦團隊在比賽中的工作
+    recommended:
+      #original_hash: 6b843f3
+      title: 推薦文件
+      #original_hash: bfbd4bb
+      staff: 指定工作人員
+      #original_hash: c346846
+      emails: 比賽前的電子郵件格式
+      #original_hash: 3212cc7
+      running-systems: 比賽流動系統
+      #original_hash: 2b31c89
+      new-competitors: 對於新參賽者的態度
+      #original_hash: 3408054
+      enhancing-experience: 增進參賽者及工作人員的比賽體驗
+      #original_hash: 2345aaa
+      reflection: 比賽借鏡
   organizer_guidelines:
     #original_hash: 7486ac4
     title: WCA比賽主辦團隊指導方針
+    paragraph0:
+      #original_hash: ee36904
+      title: 簡易版本
+      #original_hash: 60d9532
+      content: 底下可以找到簡易的整理重點讓您有想法如何舉辦一場比賽。如果您認為這是您想要找資訊的，請看參考網頁上方的文件內容！
     paragraph1:
       #original_hash: e5f5329
       title: 如何主辦比賽
@@ -3604,8 +3670,6 @@ zh-TW:
         '1': 兩場比賽沒有相同的項目。
         #original_hash: f7bacc5
         '2': 兩場比賽在不同國家舉行。
-        #original_hash: 7b2c099
-        '3': 在過去的12個月當中，比賽地點的方圓100公里以內少於16場比賽。
       #original_hash: 5c5cf04
       content2: 「多地同時的3x3x3最少步數解比賽」為僅有3x3x3最少步數解項目且同時在多個不同場地舉行的WCA比賽。
       olist2:

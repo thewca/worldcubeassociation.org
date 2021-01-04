@@ -266,7 +266,7 @@ function addRoundToEvent(wcifEvent) {
   let nextRoundNumber = wcifEvent.rounds.length + 1;
   wcifEvent.rounds.push({
     id: buildActivityCode({ eventId: wcifEvent.id, roundNumber: nextRoundNumber }),
-    format: event.recommentedFormat().id,
+    format: event.recommendedFormat().id,
     timeLimit: DEFAULT_TIME_LIMIT,
     cutoff: null,
     advancementCondition: null,

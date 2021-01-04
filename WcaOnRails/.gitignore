@@ -20,6 +20,9 @@
 # More rails stuff
 public/assets/**
 
+# Ignore js-specific generated locales (they are rebuilt whenever we compile assets)
+app/webpacker/packs/generated_locales/*.js
+
 # Environment configuration
 .env*
 
