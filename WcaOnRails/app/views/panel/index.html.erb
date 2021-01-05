@@ -6,10 +6,10 @@
   <h2>Staff</h2>
 
   <ul>
-    <%= documents_list("policies/internal") %>
     <li>
       <%= link_to("Staff crash course", "/edudoc/staff-crash-course/staff_crash_course.pdf") %>
     </li>
+    <%= documents_list("policies/internal") %>
   </ul>
 
   <% if current_user&.can_view_delegate_matters? %>
@@ -33,6 +33,24 @@
       </li>
       <li>
         <%= link_to "Equipment Funding Form", "https://docs.google.com/forms/d/e/1FAIpQLSeglibvXYG6Z2CzIPbxu2LTpAuXkJPK-vi4GuOnBFx1756ufA/viewform" %>
+      </li>
+      <li>
+        <%= link_to "Groupifier", "https://groupifier.jonatanklosko.com/" %>
+      </li>
+      <li>
+        <%= link_to "WCA Scrambles Matcher", "https://scrambles-matcher.worldcubeassociation.org/" %>
+      </li>
+      <li>
+        <%= link_to "Results Workbook Template", "https://www.worldcubeassociation.org/files/results.xls" %>
+      </li>
+      <li>
+        <%= link_to "Delegates Google Group", "https://groups.google.com/a/worldcubeassociation.org/forum/#!forum/delegates" %>
+      </li>
+      <li>
+        <%= link_to "Delegate Reports Google Group", "https://groups.google.com/a/worldcubeassociation.org/forum/#!forum/reports" %>
+      </li>
+      <li>
+        <%= link_to "Old Delegates Google Group", "https://groups.google.com/forum/#!forum/wca-delegates" %>
       </li>
     </ul>
   <% end %>
