@@ -2367,6 +2367,10 @@ es:
         Por favor, asegúrate de que la competición tiene al menos una ronda por
         categoría  y  que el horario que has creado contiene todas las rondas
         que declaraste antes de confirmar la competición.
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: >-
+        Por favor, asegúrate de que se han especificado condiciones de avance
+        para todas las rondas no finales.
       #original_hash: e390250
       create_success: ¡La competición se ha creado satisfactoriamente!
       #original_hash: ba067f0
@@ -3841,14 +3845,16 @@ es:
   education:
     #original_hash: 41701c2
     title: Documentos Educativos de la WCA
-    #original_hash: aa562a7
+    #original_hash: 081d65d
     description: >-
-      WQAC y WMT han publicado varios documentos para la comunidad, puedes
-      descargarlos a continuación.
+      WQAC ha publicado varios documentos para la comunidad, puedes descargarlos
+      a continuación.
     #original_hash: d0a3812
     competitor_tutorial: Tutorial de competidor
-    #original_hash: 815938f
-    competition_material: 'Material de competición (certificados, tapa cubos, ...)'
+    #original_hash: 5ca0558
+    certificates: Plantillas de certificados del WCT
+    #original_hash: f580987
+    orga_guidelines: Guía para organizadores
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
@@ -4348,7 +4354,11 @@ es:
       posts: Publicaciones
       #original_hash: 9d7ea9c
       regulations_and_guidelines: Reglamento y Directrices
+      #original_hash: db683b3
+      search_for: 'Buscar  <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: No se han encontrado resultados
         #original_hash: b8a7006
         competitions: Ninguna competición encontrada como
         #original_hash: 99d4290
@@ -4448,9 +4458,66 @@ es:
       vistazo a <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">las
       instrucciones en el repositorio GitHub de traducciones</a>.
+  full_organizer_guidelines:
+    #original_hash: 5d602df
+    description: >-
+      Bienvenidos a la colección de guías de organización del WQAC. Si te estás
+      planteando ser un organizador es muy recomendable que te leas estos
+      documentos. Han sido divididos en esenciales y muy recomendables.
+      Asegúrate de que la información te es familiar ya que te permitirá
+      organizar una divertida competición de alta calidad.
+    #original_hash: e6f7d36
+    disclaimer_html: >-
+      <strong>Descargo de responsabilidad</strong>: La WCA no organiza
+      competiciones. Como organizador de una competición sancionada por la WCA
+      <strong>no debes</strong> firmar nada en nombre de la WCA. Deberías
+      intentar contactar tu asociación regional o nacional adecuada que organiza
+      o ayuda a organizar competiciones.
+    essential:
+      #original_hash: 44bd0ba
+      description: Documentos esenciales
+      #original_hash: 1cf87ad
+      finding-venue: Encontrar un local
+      #original_hash: 3ce0d9c
+      orga-team-delegate: Crear tu equipo organizador y contactar con un Delegado
+      #original_hash: d3c693b
+      budget: Presupuestar una competición
+      #original_hash: b1429a7
+      schedule: Hacer el horario
+      #original_hash: beea57d
+      checklist: Lista de tareas de una competición
+      #original_hash: 9defcf1
+      registration: Manejar el registro
+      #original_hash: e298a56
+      venue-setup: Montaje del local
+      #original_hash: 2b6a5dd
+      work-during-comp: Trabajo de organizadores durante la competición
+    recommended:
+      #original_hash: 6b843f3
+      title: Documentos recomendados
+      #original_hash: bfbd4bb
+      staff: Asignar Staff
+      #original_hash: c346846
+      emails: Estructura del correo previo a la competición
+      #original_hash: 3212cc7
+      running-systems: Sistemas de runners
+      #original_hash: 2b31c89
+      new-competitors: Actitud hacia nuevos competidores
+      #original_hash: 3408054
+      enhancing-experience: Mejorando la experiencia de los competidores y staff
+      #original_hash: 2345aaa
+      reflection: Reflexiones de los organizadores
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Directrices para Organizadores de Competiciones de la WCA
+    paragraph0:
+      #original_hash: ee36904
+      title: Versión reducida
+      #original_hash: 60d9532
+      content: >-
+        A continuación puedes encontrar un pequeño resumen de puntos clave para
+        hacerte una idea de como organizar una competición. Si crees que esto te
+        vale, por favor echa un vistazo a los documentos anteriores.
     paragraph1:
       #original_hash: e5f5329
       title: Cómo organizar una competición
@@ -4504,10 +4571,6 @@ es:
         '1': Las dos competiciones no tienen pruebas en común.
         #original_hash: f7bacc5
         '2': Las dos competiciones tienen lugar en países distintos.
-        #original_hash: 7b2c099
-        '3': >-
-          En los últimos 12 meses, ha habido menos de 16 competiciones en un
-          radio de 100 km alrededor de la competición.
       #original_hash: 5c5cf04
       content2: >-
         Las competiciones de 3x3x3 Menos Movimientos simultáneas son
