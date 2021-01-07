@@ -115,7 +115,20 @@ RSpec.describe Competition do
     expect(competition.is_probably_over?).to be false
     expect(competition.started?).to be false
     expect(competition.in_progress?).to be false
+    expect(competition.has_date?).to be false
     expect(competition.dangerously_close_to?(competition2)).to be false
+  end
+
+  it "calculates the correct days until another future competition" do
+    competition = FactoryBot.build :competition, start_date: Date.parse("2021-01-01"), end_date: Date.parse("2021-01-03")
+    competition2 = FactoryBot.build :competition, start_date: Date.parse("2021-02-01"), end_date: Date.parse("2021-02-02")
+    expect(competition.days_until_competition?(competition2)).to be 29
+  end
+
+  it "calculates the correct days until another past competition" do
+    competition = FactoryBot.build :competition, start_date: Date.parse("2021-02-01"), end_date: Date.parse("2021-02-02")
+    competition2 = FactoryBot.build :competition, start_date: Date.parse("2021-01-01"), end_date: Date.parse("2021-01-03")
+    expect(competition.days_until_competition?(competition2)).to be(-29)
   end
 
   it "requires that registration_open be before registration_close" do

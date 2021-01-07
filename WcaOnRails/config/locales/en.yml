@@ -1477,6 +1477,8 @@ en:
       distance: "Distance"
       before: "before"
       after: "after"
+      starts_on: "starts on"
+      ends_on: "ends on"
       limit: "Limit"
       competitors: "Competitors"
     announcements: "Announcements"
