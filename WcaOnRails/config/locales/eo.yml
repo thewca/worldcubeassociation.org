@@ -1397,6 +1397,8 @@ eo:
       education: Edukaj rimedoj
       #original_hash: a34b69f
       contact: Kontakto
+      #original_hash: 8e12c09
+      speedcubing_history: Rapidkubumada Historio
       #original_hash: 4fa8cc8
       tools: Iloj
       #original_hash: 83fce83
@@ -3711,6 +3713,9 @@ eo:
       members_html: >-
         Ĉiuj konkursantoj aŭtomate devenas <strong>membroj</strong> de la WCA
         dum ilia unua konkurso de la WCA.
+  speedcubing_history:
+    #original_hash: 431e667
+    title: Historio de la Rapidkubumada Komunumo kaj de la WCA
   documents:
     #original_hash: 687c828
     title: Dokumentoj
