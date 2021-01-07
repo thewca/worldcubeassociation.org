@@ -218,6 +218,7 @@ class Competition < ApplicationRecord
 
   # We have stricter validations for confirming a competition
   validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+  validates :competitor_limit, :competitor_limit_reason, presence: true, if: :confirmed_or_visible? && :competitor_limit_required?
   validates :name_reason, presence: true, if: :name_reason_required?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
@@ -519,6 +520,11 @@ class Competition < ApplicationRecord
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
     end
+  end
+
+  before_validation :set_competitor_limit_enabled
+  def set_competitor_limit_enabled
+    self.competitor_limit_enabled = !competitor_limit.blank?
   end
 
   attr_writer :delegate_ids, :organizer_ids, :trainee_delegate_ids
@@ -850,7 +856,11 @@ class Competition < ApplicationRecord
   end
 
   def competitor_limit_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 9, 1)
+    created_at.present? && created_at > Date.new(2018, 9, 1) && 
+
+    # The different venues may have different competitor limits. It's better for
+    # people to leave this blank than to set an incorrect value here.
+    country.present? && !country.multiple_countries?
   end
 
   def on_the_spot_registration_required?

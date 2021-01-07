@@ -38,7 +38,7 @@
         <% end %>
         <%= f.input :name_reason, hint: t('.name_reason_html') %>
 
-        <%= f.input :countryId, collection: Country.all_sorted_by(I18n.locale), label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
+        <%= f.input :countryId, collection: Country.all_sorted_by(I18n.locale), label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id } %>
         <%= f.input :cityName %>
         <%= f.input :venue, hint: t('.venue_html', md: t('.supports_md_html')) %>
         <%= f.input :venueDetails, hint: t('.venue_details_html', md: t('.supports_md_html')) %>
@@ -191,11 +191,8 @@
           </div>
         </div>
 
-        <%= f.input :competitor_limit_enabled, collection: [ :true, :false ] %>
-        <div class="wca-competitor-limit-options">
-          <%= f.input :competitor_limit %>
-          <%= f.input :competitor_limit_reason %>
-        </div>
+        <%= f.input :competitor_limit %>
+        <%= f.input :competitor_limit_reason %>
 
         <% disable_money_input = !@competition.can_edit_registration_fees? %>
         <%= f.input :currency_code, collection: Money::Currency.table.values, label_method: lambda { |c| "#{c[:name]} (#{c[:iso_code]})" }, value_method: lambda { |c| c[:iso_code] }, disabled: disable_money_input  %>
