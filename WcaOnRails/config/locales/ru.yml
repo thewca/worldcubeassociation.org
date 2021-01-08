@@ -1429,6 +1429,8 @@ ru:
       education: Обучающие ресурсы
       #original_hash: a34b69f
       contact: Контактная информация
+      #original_hash: 8e12c09
+      speedcubing_history: История спидкубинга
       #original_hash: 4fa8cc8
       tools: Программы
       #original_hash: 83fce83
@@ -3761,6 +3763,9 @@ ru:
       members_html: >-
         Все участники соревнований автоматически становятся <strong>участниками
         WCA</strong> во время их первого соревнования.
+  speedcubing_history:
+    #original_hash: 431e667
+    title: История сообщества спидкубинга и WCA
   documents:
     #original_hash: 687c828
     title: Документы
