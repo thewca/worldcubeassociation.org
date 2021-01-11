@@ -1415,6 +1415,8 @@ hr:
       education: Edukacijski resursi
       #original_hash: a34b69f
       contact: Kontakt informacije
+      #original_hash: 8e12c09
+      speedcubing_history: Povijest speedcubinga
       #original_hash: 4fa8cc8
       tools: Alati
       #original_hash: 83fce83
@@ -2856,6 +2858,10 @@ hr:
       before: prije
       #original_hash: 405906c
       after: nakon
+      #original_hash: e1978a9
+      starts_on: počinje u
+      #original_hash: 964aedc
+      ends_on: završava u
       #original_hash: 24d948e
       limit: Ograničenje
       #original_hash: 855bd26
@@ -3749,6 +3755,9 @@ hr:
       members_html: >-
         Svi natjecatelji automatski postaju <strong>članovi</strong> WCA na
         svojim prvim WCA Natjecanjima.
+  speedcubing_history:
+    #original_hash: 431e667
+    title: Povijest speedcubing zajednice i WCA
   documents:
     #original_hash: 687c828
     title: Dokumenti
