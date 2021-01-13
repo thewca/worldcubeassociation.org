@@ -1238,6 +1238,8 @@ zh-TW:
       education: 學習資源
       #original_hash: a34b69f
       contact: 聯絡資訊
+      #original_hash: 8e12c09
+      speedcubing_history: 方塊速解歷史
       #original_hash: 4fa8cc8
       tools: 工具
       #original_hash: 83fce83
@@ -2430,6 +2432,10 @@ zh-TW:
       before: 之前
       #original_hash: 405906c
       after: 之後
+      #original_hash: e1978a9
+      starts_on: 開始日期
+      #original_hash: 964aedc
+      ends_on: 結束日期
       #original_hash: 24d948e
       limit: 上限
       #original_hash: 855bd26
@@ -3157,6 +3163,9 @@ zh-TW:
       see_link_html: '（參見%{link}）'
       #original_hash: 5b01fcc
       members_html: 所有參賽者在參加第一場WCA比賽時自動成為WCA<strong>成員</strong>。
+  speedcubing_history:
+    #original_hash: 431e667
+    title: 方塊速解以及WCA的歷史
   documents:
     #original_hash: 687c828
     title: 文件
@@ -3517,7 +3526,7 @@ zh-TW:
       search_for: '搜尋<b>%{search_string}</b>'
       not_found:
         #original_hash: 658e79f
-        generic: 未找到相符成績
+        generic: 未找到相符的
         #original_hash: b8a7006
         competitions: 未找到相符比賽
         #original_hash: 99d4290
