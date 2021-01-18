@@ -24,7 +24,7 @@
     "blueimp-load-image": "^5.14.0",
     "classnames": "^2.2.6",
     "compression-webpack-plugin": "^6.1.1",
-    "core-js": "^3.8.1",
+    "core-js": "^3.8.2",
     "css-loader": "^5.0.1",
     "easymde": "^2.13.0",
     "file-loader": "^6.2.0",
