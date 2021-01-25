@@ -3,6 +3,10 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
+  <div style="background-color: #ff0000 ; padding: 5px; border: 1px solid red; color:white;">
+    <h4><%= t('.disclaimer') %></h4>
+  </div>
+
   <%= form_tag competitions_path, method: :get, remote: true, class: "competition-select form-inline #{@display}", id: "competition-query-form" do %>
     <%= render 'index_form' %>
   <% end %>
