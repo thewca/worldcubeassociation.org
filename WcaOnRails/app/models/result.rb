@@ -31,6 +31,8 @@ class Result < ApplicationRecord
       wca_id: personId,
       attempts: [value1, value2, value3, value4, value5],
       best: best,
+      best_index: best_index,
+      worst_index: worst_index,
       average: average,
       regional_single_record: regionalSingleRecord,
       regional_average_record: regionalAverageRecord,
