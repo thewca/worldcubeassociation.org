@@ -1345,6 +1345,7 @@ en:
     #context: on the competition's index page
     index:
       title: "Competitions"
+      disclaimer: "Please note that due to the COVID-19 pandemic, many countries are currently unable to host competitions."
       all_events: "All"
       all_years: "All Years"
       clear: "Clear"
