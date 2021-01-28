@@ -20,6 +20,7 @@ module ResultsValidators
     NON_MATCHING_COUNTRY_WARNING = "The country '%{country}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_country}')."\
     " If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
     MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR = "There are multiple new competitors with the exact same name: %{name}. Due to a bug in the code, we cannot upload the Results. Please contact the Results Team with your JSON (free of all other errors) to help upload the results."
+    WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character in '%{name}', please replace it with a space and regular parenthesis."
 
     @@desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
 
@@ -104,6 +105,11 @@ module ResultsValidators
                                            WRONG_PARENTHESIS_FORMAT_ERROR,
                                            name: p.name)
           end
+          if /[（）]/ =~ p.name
+            @errors << ValidationError.new(:persons, competition_id,
+                                           WRONG_PARENTHESIS_TYPE_ERROR,
+                                           name: p.name)
+          end
           # Look for if 2 new competitors that share the exact same name
           if without_wca_id.select{ |p2| p2.name == p.name }.length > 1 && !newcomersWithSameName.include?(p.name)
             newcomersWithSameName << p.name
@@ -112,7 +118,7 @@ module ResultsValidators
         newcomersWithSameName.each do |name|
           @errors << ValidationError.new(:persons, competition_id,
                                          MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR,
-                                         name)
+                                         name: name)
         end
         existing_person_by_wca_id = Hash[Person.current.where(wca_id: with_wca_id.map(&:wca_id)).map { |p| [p.wca_id, p] }]
         with_wca_id.each do |p|
