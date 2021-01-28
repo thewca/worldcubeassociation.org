@@ -126,6 +126,8 @@ RSpec.describe PV do
       # NOT_SO_YOUNG_PERSON_WARNING
       # EMPTY_GENDER_WARNING
       # WHITESPACE_IN_NAME_ERROR
+      # WRONG_PARENTHESIS_TYPE_ERROR
+      # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR
       it "validates person data" do
         FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
         res1 = FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
@@ -148,6 +150,18 @@ RSpec.describe PV do
                                            competition: competition1,
                                            eventId: "333oh")
         res_whitespace.person.update(name: "Hey(  There)", gender: nil)
+        res_bad_parenthesis = FactoryBot.create(:inbox_result,
+                                           competition: competition1,
+                                           eventId: "333oh")
+        res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
+        res_same_name1 = FactoryBot.create(:inbox_result,
+                                           competition: competition1,
+                                           eventId: "333oh")
+        res_same_name1.person.update(name: "Tester")
+        res_same_name2 = FactoryBot.create(:inbox_result,
+                                           competition: competition1,
+                                           eventId: "333oh")
+        res_same_name2.person.update(name: "Tester")
         res_wrong_wca_id = FactoryBot.create(:inbox_result,
                                              competition: competition1,
                                              eventId: "333oh")
@@ -168,6 +182,12 @@ RSpec.describe PV do
           RV::ValidationError.new(:persons, competition1.id,
                                   PV::WRONG_PARENTHESIS_FORMAT_ERROR,
                                   name: res_whitespace.person.name),
+          RV::ValidationError.new(:persons, competition1.id,
+                                  PV::WRONG_PARENTHESIS_TYPE_ERROR,
+                                  name: res_bad_parenthesis.person.name),
+          RV::ValidationError.new(:persons, competition1.id,
+                                  PV::MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR,
+                                  name: res_same_name1.person.name),
         ]
         expected_warnings = [
           RV::ValidationWarning.new(:persons, competition1.id,
