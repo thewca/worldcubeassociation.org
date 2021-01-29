@@ -1195,7 +1195,7 @@ DROP TABLE IF EXISTS `sanity_check_exclusions`;
 CREATE TABLE `sanity_check_exclusions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `sanity_check_id` bigint(20) NOT NULL,
-  `exclusion` json DEFAULT NULL,
+  `exclusion` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `fk_rails_c9112973d2` (`sanity_check_id`),

@@ -16,6 +16,8 @@ class AddSanityCheckTablesConstraints < ActiveRecord::Migration[5.2]
 
     change_column :sanity_check_exclusions, :sanity_check_id, :bigint, null: false
     add_foreign_key :sanity_check_exclusions, :sanity_checks
+
+    change_column :sanity_check_exclusions, :exclusion, :text, null: false
   end
 
   def down
@@ -33,5 +35,7 @@ class AddSanityCheckTablesConstraints < ActiveRecord::Migration[5.2]
 
     remove_foreign_key :sanity_check_exclusions, :sanity_checks
     change_column :sanity_check_exclusions, :sanity_check_id, :int, null: true
+
+    change_column :sanity_check_exclusions, :exclusion, :json, null: true
   end
 end
