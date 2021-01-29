@@ -1184,8 +1184,9 @@ DROP TABLE IF EXISTS `sanity_check_categories`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sanity_check_categories` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_sanity_check_categories_on_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sanity_check_exclusions`;
@@ -1193,10 +1194,12 @@ DROP TABLE IF EXISTS `sanity_check_exclusions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sanity_check_exclusions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `sanity_check_id` int(11) DEFAULT NULL,
+  `sanity_check_id` bigint(20) NOT NULL,
   `exclusion` json DEFAULT NULL,
   `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_rails_c9112973d2` (`sanity_check_id`),
+  CONSTRAINT `fk_rails_c9112973d2` FOREIGN KEY (`sanity_check_id`) REFERENCES `sanity_checks` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sanity_checks`;
@@ -1204,11 +1207,15 @@ DROP TABLE IF EXISTS `sanity_checks`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sanity_checks` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `sanity_check_category_id` int(11) DEFAULT NULL,
-  `topic` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sanity_check_category_id` bigint(20) NOT NULL,
+  `topic` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `query` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  PRIMARY KEY (`id`)
+  `query` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_sanity_checks_on_topic` (`topic`),
+  UNIQUE KEY `index_sanity_checks_on_query` (`query`),
+  KEY `fk_rails_fddad5fbb5` (`sanity_check_category_id`),
+  CONSTRAINT `fk_rails_fddad5fbb5` FOREIGN KEY (`sanity_check_category_id`) REFERENCES `sanity_check_categories` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `schedule_activities`;
@@ -1689,4 +1696,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20200627195628'),
 ('20200319193625'),
 ('20200725152218'),
-('20201020193829');
+('20201020193829'),
+('20210129181657');
