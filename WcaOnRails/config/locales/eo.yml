@@ -2548,6 +2548,10 @@ eo:
     index:
       #original_hash: db98a68
       title: Konkursoj
+      #original_hash: 63254de
+      disclaimer: >-
+        Atentu ke pro la KOVIM-19 pandemio, multe da landoj ne povas organizi
+        konkursojn nuntempe.
       #original_hash: 6a72085
       all_events: Ĉiuj
       #original_hash: 6d76b81
@@ -2816,6 +2820,10 @@ eo:
       before: antaŭ
       #original_hash: 405906c
       after: post
+      #original_hash: e1978a9
+      starts_on: komenciĝas la
+      #original_hash: 964aedc
+      ends_on: finiĝas la
       #original_hash: 24d948e
       limit: Limo
       #original_hash: 855bd26
