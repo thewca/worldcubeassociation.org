@@ -8,8 +8,7 @@ class AddSanityCheckTablesConstraints < ActiveRecord::Migration[5.2]
     change_column :sanity_checks, :topic, :string, null: false
     add_index :sanity_checks, :topic, unique: true
 
-    change_column :sanity_checks, :query, :string, limit: 500, null: false
-    add_index :sanity_checks, :query, unique: true
+    change_column :sanity_checks, :query, :text, null: false
 
     change_column :sanity_check_categories, :name, :string, null: false
     add_index :sanity_check_categories, :name, unique: true
@@ -27,7 +26,6 @@ class AddSanityCheckTablesConstraints < ActiveRecord::Migration[5.2]
     remove_index :sanity_checks, :topic
     change_column :sanity_checks, :topic, :string, null: true
 
-    remove_index :sanity_checks, :query
     change_column :sanity_checks, :query, :text, null: true
 
     remove_index :sanity_check_categories, :name

@@ -1210,10 +1210,9 @@ CREATE TABLE `sanity_checks` (
   `sanity_check_category_id` bigint(20) NOT NULL,
   `topic` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `query` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `query` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_sanity_checks_on_topic` (`topic`),
-  UNIQUE KEY `index_sanity_checks_on_query` (`query`),
   KEY `fk_rails_fddad5fbb5` (`sanity_check_category_id`),
   CONSTRAINT `fk_rails_fddad5fbb5` FOREIGN KEY (`sanity_check_category_id`) REFERENCES `sanity_check_categories` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
