@@ -73,7 +73,7 @@ module ResultsValidators
                                                wca_ids: persons.map(&:wca_id).join(", "))
           end
         end
-        newcomersWithSameName = [];
+        duplicate_newcomer_names = [];
         without_wca_id.each do |p|
           if p.dob.month == 1 && p.dob.day == 1
             @warnings << ValidationWarning.new(:persons, competition_id,
@@ -113,11 +113,11 @@ module ResultsValidators
                                            name: p.name)
           end
           # Look for if 2 new competitors that share the exact same name
-          if without_wca_id.select{ |p2| p2.name == p.name }.length > 1 && !newcomersWithSameName.include?(p.name)
-            newcomersWithSameName << p.name
+          if without_wca_id.select{ |p2| p2.name == p.name }.length > 1 && !duplicate_newcomer_names.include?(p.name)
+            duplicate_newcomer_names << p.name
           end
         end
-        newcomersWithSameName.each do |name|
+        duplicate_newcomer_names.each do |name|
           @errors << ValidationError.new(:persons, competition_id,
                                          MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR,
                                          name: name)
