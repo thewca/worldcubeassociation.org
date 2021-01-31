@@ -151,8 +151,8 @@ RSpec.describe PV do
                                            eventId: "333oh")
         res_whitespace.person.update(name: "Hey(  There)", gender: nil)
         res_bad_parenthesis = FactoryBot.create(:inbox_result,
-                                           competition: competition1,
-                                           eventId: "333oh")
+                                                competition: competition1,
+                                                eventId: "333oh")
         res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
         res_same_name1 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
