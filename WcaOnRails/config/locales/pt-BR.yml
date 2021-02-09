@@ -1413,6 +1413,8 @@ pt-BR:
       education: Recursos educacionais
       #original_hash: a34b69f
       contact: Informação de contato
+      #original_hash: 8e12c09
+      speedcubing_history: História do Speedcubing
       #original_hash: 4fa8cc8
       tools: Ferramentas
       #original_hash: 83fce83
@@ -2585,6 +2587,10 @@ pt-BR:
     index:
       #original_hash: db98a68
       title: Competições
+      #original_hash: 63254de
+      disclaimer: >-
+        Por favor observe que, devido à pandemia de COVID-19, muitos países não
+        podem organizar competições no momento.
       #original_hash: 6a72085
       all_events: Todos
       #original_hash: 6d76b81
@@ -2859,6 +2865,10 @@ pt-BR:
       before: antes
       #original_hash: 405906c
       after: depois
+      #original_hash: e1978a9
+      starts_on: começa em
+      #original_hash: 964aedc
+      ends_on: termina em
       #original_hash: 24d948e
       limit: Limite
       #original_hash: 855bd26
@@ -3767,6 +3777,9 @@ pt-BR:
       members_html: >-
         Todos os competidores automaticamente se tornam <strong>membros</strong>
         da WCA em sua primeira competição oficial.
+  speedcubing_history:
+    #original_hash: 431e667
+    title: História da Comunidade do Speedcubing e da WCA
   documents:
     #original_hash: 687c828
     title: Documentos
@@ -4270,7 +4283,11 @@ pt-BR:
       posts: Posts
       #original_hash: 9d7ea9c
       regulations_and_guidelines: Regulamento e Orientações
+      #original_hash: db683b3
+      search_for: 'Procurar por <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: Nenhum resultado encontrado
         #original_hash: b8a7006
         competitions: Nenhuma competição encontrada para
         #original_hash: 99d4290
