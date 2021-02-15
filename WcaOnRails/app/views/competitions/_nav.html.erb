@@ -22,6 +22,11 @@
             { text: t('.menu.by_person'), path: competition_results_by_person_path(@competition), icon: "user" },
           ],
         }
+        nav_items << {
+          text: t('.menu.scrambles'),
+          path: competition_scrambles_path(@competition),
+          icon: "cubing-icon unofficial-333mts",
+        }
       else
         nav_items << {
           text: t('.menu.info'),

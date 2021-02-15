@@ -48,6 +48,7 @@ Rails.application.routes.draw do
     get 'results/podiums' => 'competitions#show_podiums'
     get 'results/all' => 'competitions#show_all_results'
     get 'results/by_person' => 'competitions#show_results_by_person'
+    get 'scrambles' => 'competitions#show_scrambles'
 
     patch 'registrations/selected' => 'registrations#do_actions_for_selected', as: :registrations_do_actions_for_selected
     post 'registrations/export' => 'registrations#export', as: :registrations_export
@@ -241,6 +242,8 @@ Rails.application.routes.draw do
         get '/competitors' => 'competitions#competitors'
         get '/registrations' => 'competitions#registrations'
         get '/schedule' => 'competitions#schedule'
+        get '/scrambles' => 'competitions#scrambles', as: :scrambles
+        get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
       get '/records' => "api#records"

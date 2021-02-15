@@ -10,4 +10,8 @@ class Scramble < ApplicationRecord
   validates_presence_of :scramble
   validates_numericality_of :scrambleNum, presence: true, greater_than: 0
   validates_inclusion_of :isExtra, presence: true, in: [true, false]
+
+  def round_type
+    RoundType.c_find(roundTypeId)
+  end
 end

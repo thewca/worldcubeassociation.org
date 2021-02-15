@@ -12,3 +12,5 @@ export const competitionEventResultsApiUrl = (id, eventId) => `<%= URI.decode(Ra
 export const omnisearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_path %>?q=${query}`;
 
 export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
+
+export const competitionEventScramblesApiUrl = (id, eventId) => `<%= URI.decode(Rails.application.routes.url_helpers.api_v0_competition_event_scrambles_path("${id}", "${eventId}")) %>`;

@@ -1564,11 +1564,15 @@ en:
         import_registrations: "Import registrations"
         register: "Register"
         competitors: "Competitors"
+        scrambles: "Scrambles"
     results_table:
       wca_profile: "WCA profile"
       event: "Event"
       round: "Round"
       name: "Name"
+    scrambles_table:
+      group: "Group"
+      scramble: "Scramble"
   #context: Competition's tabs management
   competition_tabs:
     headers:

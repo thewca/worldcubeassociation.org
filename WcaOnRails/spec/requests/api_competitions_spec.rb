@@ -52,6 +52,18 @@ RSpec.describe "API Competitions" do
     end
   end
 
+  describe "GET #scrambles" do
+    let!(:competition) { FactoryBot.create :competition, :visible }
+    let!(:scramble) { FactoryBot.create :scramble, competition: competition }
+
+    it "renders properly" do
+      get api_v0_competition_scrambles_path(competition)
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json[0]["scrambleId"]).to eq scramble.scrambleId
+    end
+  end
+
   describe "GET #competitors" do
     let!(:competition) { FactoryBot.create :competition, :visible }
     let!(:result) { FactoryBot.create :result, competition: competition }
