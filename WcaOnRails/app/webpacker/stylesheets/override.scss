@@ -9,7 +9,11 @@ body, html {
 
   .icon {
     text-decoration: none;
+    &.cubing-icon {
+      vertical-align: baseline;
+    }
   }
+
   .navbar-brand {
     .icon {
       margin: 0;

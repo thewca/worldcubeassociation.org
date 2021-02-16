@@ -6,7 +6,11 @@
 Rails.application.config.assets.version = '1.0'
 
 # Add additional assets to the asset load path
-# Rails.application.config.assets.paths << Emoji.images_path
+# This is used exclusively to make cubing icons available for the wicked_pdf
+# helper!
+# wicked_pdf's helpers can't handle "packs_with_chunks" and therefore cannot
+# properly inline our packs :(
+Rails.application.config.assets.paths << Rails.root.join("node_modules", "@cubing", "icons", "www", "css")
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
