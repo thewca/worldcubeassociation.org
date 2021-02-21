@@ -119,10 +119,11 @@ RSpec.describe Api::V0::CompetitionsController do
     context 'managed_by' do
       let(:delegate1) { FactoryBot.create(:delegate) }
       let(:delegate2) { FactoryBot.create(:delegate) }
+      let(:trainee_delegate1) { FactoryBot.create(:trainee_delegate) }
       let(:organizer1) { FactoryBot.create(:user) }
       let(:organizer2) { FactoryBot.create(:user) }
       let!(:competition) {
-        FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2])
+        FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], trainee_delegates: [trainee_delegate1], organizers: [organizer1, organizer2])
       }
       let!(:other_comp) { FactoryBot.create(:competition) }
 
@@ -130,6 +131,18 @@ RSpec.describe Api::V0::CompetitionsController do
         scopes = Doorkeeper::OAuth::Scopes.new
         scopes.add("manage_competitions")
         api_sign_in_as(delegate1, scopes: scopes)
+
+        get :index, params: { managed_by_me: "true" }
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+        expect(json.length).to eq 1
+        expect(json[0]["id"]).to eq competition.id
+      end
+
+      it 'managed_by includes trainee delegate' do
+        scopes = Doorkeeper::OAuth::Scopes.new
+        scopes.add("manage_competitions")
+        api_sign_in_as(trainee_delegate1, scopes: scopes)
 
         get :index, params: { managed_by_me: "true" }
         expect(response.status).to eq 200
