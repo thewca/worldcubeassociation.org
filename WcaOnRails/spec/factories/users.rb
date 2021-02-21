@@ -116,6 +116,12 @@ FactoryBot.define do
       end
     end
 
+    trait :wct_china_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wct_china.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
     trait :wqac_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wqac.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
