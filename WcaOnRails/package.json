@@ -55,7 +55,7 @@
     "webpack": "^4.44.2",
     "webpack-manifest-plugin": "^3.0.0",
     "webpack-merge": "^5.7.3",
-    "whatwg-fetch": "^3.5.0"
+    "whatwg-fetch": "^3.6.1"
   },
   "devDependencies": {
     "eslint": "^7.20.0",
