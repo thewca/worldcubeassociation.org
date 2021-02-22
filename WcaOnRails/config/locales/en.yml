@@ -1911,6 +1911,9 @@ en:
       #context: Hidden team for list of banned competitors
       banned:
         name: "Banned Competitors"
+      #context: Hidden team for WCT China members
+      wct_china:
+        name: "WCT China"
       operations_html: "The day to day operations are run by the WCA's %{committees_and_teams}."
       teams_committees: "Teams and Committees"
       #context: Hidden team for list of Delegates on Probation
