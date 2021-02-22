@@ -104,6 +104,10 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wct')
   end
 
+  def self.wct_china
+    Team.c_find_by_friendly_id!('wct_china')
+  end
+
   def self.wdc
     Team.c_find_by_friendly_id!('wdc')
   end
