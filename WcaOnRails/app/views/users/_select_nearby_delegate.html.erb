@@ -11,8 +11,7 @@
   </p>
 <% elsif !@user.unconfirmed_person.dob %>
   <p>
-    <%= t '.missing_dob_html', link_id: link_id %>
-    <%= t '.contact_results_team_html' %>
+    <%= t '.missing_dob_html', link_id: link_id, dob_form_path: contact_dob_path %>
   </p>
 <% else %>
   <p>
