@@ -56,7 +56,7 @@ RSpec.feature "Claim WCA ID" do
 
       fill_in_selectize "WCA ID", with: person_without_dob.wca_id
 
-      expect(page.find("#select-nearby-delegate-area")).to have_content "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact the WCA Results Team to resolve this."
+      expect(page.find("#select-nearby-delegate-area")).to have_content "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact with WCA Results Team using this dedicated form."
     end
 
     it 'tells you to contact Results team if you WCA ID has been incorrectly claimed too many times' do
