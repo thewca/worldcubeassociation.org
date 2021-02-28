@@ -1009,8 +1009,7 @@ en:
     select_nearby_delegate:
       select_delegate_html: "In order to assign you your WCA ID, we need a <a href='%{link_delegate}' target='_blank'>WCA Delegate</a> to confirm your identify. Please enter your birthdate and select the Delegate you think knows you best."
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
-      missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned."
-      contact_results_team_html: "Please contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
+      missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
   #context: Key used when dealing with registration to a competition
   registrations:
