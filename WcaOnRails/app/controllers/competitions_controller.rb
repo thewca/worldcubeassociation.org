@@ -21,6 +21,7 @@ class CompetitionsController < ApplicationController
     :show_all_results,
     :show_results_by_person,
     :show_events,
+    :show_scrambles,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
     :post_announcement,
@@ -435,6 +436,10 @@ class CompetitionsController < ApplicationController
   end
 
   def show_results_by_person
+    @competition = competition_from_params
+  end
+
+  def show_scrambles
     @competition = competition_from_params
   end
 

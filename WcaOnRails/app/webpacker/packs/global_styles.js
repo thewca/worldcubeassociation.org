@@ -1,4 +1,5 @@
 import 'flag-icon-css/css/flag-icon.css';
+import '@cubing/icons';
 
 import 'semantic-css/button';
 import 'semantic-css/card';
