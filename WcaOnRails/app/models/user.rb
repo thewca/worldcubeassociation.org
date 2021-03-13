@@ -1124,6 +1124,6 @@ class User < ApplicationRecord
   # These includes any teams, organizers, delegates
   # Note: Someone can Delegate a competition without ever being a Delegate.
   def is_special_account?
-    return self.teams.any?() || !self.organized_competitions.empty?|| any_kind_of_delegate? || !delegated_competitions.empty? || !trainee_delegated_competitions.empty?
+    self.teams.any? || !self.organized_competitions.empty?|| any_kind_of_delegate? || !delegated_competitions.empty? || !trainee_delegated_competitions.empty?
   end
 end
