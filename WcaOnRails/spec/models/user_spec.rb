@@ -673,6 +673,42 @@ RSpec.describe User, type: :model do
       expect(senior_delegate.can_edit_user?(user)).to eq true
       expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :senior_delegate_id, :region)
     end
+
+    it "disallows delegates to edit WCA IDs of special accounts" do
+      board_member = FactoryBot.create :user, :board_member
+      delegate = FactoryBot.create :delegate
+      expect(delegate.can_edit_user?(board_member)).to eq true
+      expect(delegate.editable_fields_of_user(board_member).to_a).not_to include(:wca_id)
+    end
+  end
+
+  describe "#is_special_account" do
+    it "returns false for a normal user" do
+      user = FactoryBot.create :user
+      expect(user.is_special_account?).to eq false
+    end
+
+    it "returns true for users on a team" do
+      board_member = FactoryBot.create :user, :board_member
+      banned_person = FactoryBot.create :user, :banned
+      expect(board_member.is_special_account?).to eq true
+      expect(banned_person.is_special_account?).to eq true
+    end
+
+    it "returns true for users that are delegates" do
+      senior_delegate = FactoryBot.create :user, :senior_delegate
+      expect(senior_delegate.is_special_account?).to eq true
+    end
+
+    it "returns true for users who organized or delegated a competition" do
+      organizer = FactoryBot.create :user
+      delegate = FactoryBot.create :user # Intentionally not assigning a Delegate role as it is possible to Delegate a competition without being a current Delegate
+      trainee_delegate = FactoryBot.create :user
+      competition = FactoryBot.create :competition, organizers: [organizer], delegates: [delegate], trainee_delegates: [trainee_delegate]
+      expect(organizer.is_special_account?).to eq true
+      expect(delegate.is_special_account?).to eq true
+      expect(trainee_delegate.is_special_account?).to eq true
+    end
   end
 
   describe "birthdate validations" do
