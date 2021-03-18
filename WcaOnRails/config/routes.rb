@@ -183,6 +183,9 @@ Rails.application.routes.draw do
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/update_statistics' => 'admin#update_statistics'
+  get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'
+  get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id'
+  post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id'
 
   get '/search' => 'search_results#index'
 
