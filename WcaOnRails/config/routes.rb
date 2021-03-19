@@ -183,6 +183,8 @@ Rails.application.routes.draw do
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/update_statistics' => 'admin#update_statistics'
+  get '/admin/anonymize_person' => 'admin#anonymize_person'
+  post '/admin/anonymize_person' => 'admin#do_anonymize_person'
 
   get '/search' => 'search_results#index'
 

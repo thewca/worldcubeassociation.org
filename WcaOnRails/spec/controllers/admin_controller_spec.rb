@@ -42,6 +42,24 @@ RSpec.describe AdminController, type: :controller do
       expect(response).to render_template :merge_people
       expect(flash.now[:success]).to eq "Successfully merged #{person2.wca_id} into #{person1.wca_id}!"
     end
+  end 
+  
+  describe 'anonymize_person' do
+    sign_in { FactoryBot.create :admin }
+
+    let(:person) { FactoryBot.create(:person_who_has_competed_once) }
+
+    it 'can anonymize person' do
+      get :anonymize_person
+      post :do_anonymize_person, params: { anonymize_person: { person_wca_id: person.wca_id } }
+      expect(response.status).to eq 200
+      expect(response).to render_template :anonymize_person
+
+      post :do_anonymize_person, params: { anonymize_person: { person_wca_id: person.wca_id } }
+      expect(response.status).to eq 200
+      expect(response).to render_template :anonymize_person
+      expect(flash.now[:success]).to eq "Successfully anonymized 2016ALTM01 to 2016ANON01! Don't forget to run Compute Auxilery Data and Export Public."
+    end
   end
 
   describe 'PATCH #update person' do

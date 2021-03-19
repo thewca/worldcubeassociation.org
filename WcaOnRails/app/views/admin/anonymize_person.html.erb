@@ -1,0 +1,56 @@
+<% provide(:title, 'Anonymize Person') %>
+
+<div class="container">
+  <%= render layout: "nav" do %>
+    <h1><%= yield(:title) %></h1>
+
+    <p>This process will take you through the steps required to anonymize a WCA Profile. This action is IRREVERSIBLE and any future results they earn through official competitions will result in a new WCA ID assignment and will not be linked to any previous official results earned before the removal of their data.</p>
+    <p>Before processing any anonymization requests, WRT must recieve verification with a picture/copy of an official ID verification (passport, driver's license, etc.) with a minimum of their name and birthday (any other information may be blured-out/obfuscated).</p>
+    <p>After going through the initial steps of requesting data removal from data processors, by clicking confirm:</p>
+    <p>- A new WCAID will be generated (removing any form of the persons name from the WCAID).</p>
+    <p>- PII in the users, Results, and Persons tables will be anonymized.</p>
+    <p>- This PII includes: name, DOB, email, avatar, gender, and IP addresses).</p>
+
+    <%= simple_form_for @anonymize_person, url: admin_anonymize_person_path do |f| %>
+      <% if @anonymize_person.current_step == "enter_wca_id" %>
+        <%= f.input :person_wca_id, as: :user_ids, persons_table: true, only_one: true, label: "Person to Anonymize" %>
+      <% elsif @anonymize_person.current_step = "request_data_removal" %>
+        <h4>Request Data Removal from data processors</h4>
+        <div>1. Recently competed competitions (Past 3 months). Verify with the delegates that there is nothing outstanding regarding the competitor's involvement in these WCA competitions:</div>
+        <% recent_competitions = @anonymize_person.person.competitions.select{ |c| c.start_date > (Date.today - 3.month) } %>
+        <% if recent_competitions.any? %>
+          <% recent_competitions.each do |c| %>
+            <div><%= link_to c.display_name(short: true), competition_path(c) %> - <%= mail_to c.delegates.map(&:email).join(", "), name = c.delegates.map(&:name).join(", ") %></div>
+          <% end %>
+        <% else %>
+          <div>No recent competitions to check.</div>
+        <% end %>
+        <br>
+        <% if @anonymize_person.account %>
+          <div>2. Request data anonymization from WCA Forum by <%= mail_to Team.wac.current_members.select(&:team_leader).map(&:user).map(&:email)[0], name = "Emailing the WAC Leader", subject: "Anonymization Request", body: "Hello WAC Leader,
+WCA has received an anonymization request for #{@anonymize_person.account.email}. Can you please search active users ( https://forum.worldcubeassociation.org/admin/users/list/active) for any users using this email. If there are any can you please anonymize the user's data.
+Thanks!" %>.</div>
+        <% else %>
+          <div>2. Request data anonymization from WCA Forum (Skip - the WCA ID does not have an account associated with it)</div>
+        <% end %>
+        <br>
+        <div>3. Inspect external websites of competitions for data usage. If so, instruct the website to remove the person's data.</div>
+        <% competitions_with_external = @anonymize_person.person.competitions.select{ |c| c.external_website } %>
+        <% if competitions_with_external.any? %>
+          <% competitions_with_external.each do |c| %>
+            <div><%= link_to c.display_name(short: true), competition_path(c) %> - <%= link_to c.external_website %> - <%= mail_to c.delegates.map(&:email).join(", "), name = c.delegates.map(&:name).join(", ") %></div>
+          <% end %>
+        <% else %>
+          <div>No Competitions with external websites to check.</div>
+        <% end %>
+      <% end %>
+      <br>
+
+      <div>
+        <%= f.submit "Back", :class => "btn btn-primary", :name => "back_button" unless @anonymize_person.first_step? %>
+        <%= f.submit "Next Step", :class => "btn btn-primary" unless @anonymize_person.last_step? %>
+        <%= f.submit "Confirm", :class => "btn btn-success", :confirm => "Are you sure you want to anonymize this person? All personal data will be removed from WCA once confirmed." if @anonymize_person.last_step? %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

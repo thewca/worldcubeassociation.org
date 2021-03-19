@@ -1116,4 +1116,11 @@ class User < ApplicationRecord
       user.preferred_locale = session[:locale]
     end
   end
+
+  # Special Accounts are accounts where the WCA ID and user account should always be connected
+  # These includes any teams, organizers, delegates
+  # Note: Someone can Delegate a competition without ever being a Delegate.
+  def is_special_account?
+    self.teams.any? || !self.organized_competitions.empty?|| any_kind_of_delegate? || !delegated_competitions.empty? || !trainee_delegated_competitions.empty?
+  end
 end
