@@ -17,15 +17,15 @@ class AnonymizePerson
   def current_step
     @current_step || steps.first
   end
-  
+
   def steps
     %w[enter_wca_id request_data_removal]
   end
-  
+
   def next_step
     self.current_step = steps[steps.index(current_step)+1]
   end
-  
+
   def previous_step
     self.current_step = steps[steps.index(current_step)-1]
   end
@@ -33,7 +33,7 @@ class AnonymizePerson
   def first_step?
     current_step == steps.first
   end
-  
+
   def last_step?
     current_step == steps.last
   end
@@ -64,7 +64,7 @@ class AnonymizePerson
                                      dob: "1954-12-04",
                                      gender: "o",
                                      current_sign_in_ip: nil,
-                                     last_sign_in_ip: nil,)
+                                     last_sign_in_ip: nil)
       end
 
       # Anonymize person's data in Results
@@ -77,7 +77,7 @@ class AnonymizePerson
         previous_persons = Person.where(wca_id: person_wca_id).where.not(subId: 1).order(:subId)
         current_sub_id = 1
         current_country_id = person.countryId
-        previous_persons.each  do |p|
+        previous_persons.each do |p|
           if p.countryId != current_country_id
             current_sub_id += 1
             p.update(wca_id: @new_wca_id, name: "Anonymous", gender: "o", year: 1954, month: 12, day: 4, subId: current_sub_id)
@@ -90,14 +90,14 @@ class AnonymizePerson
       person.update(wca_id: @new_wca_id, name: "Anonymous", gender: "o", year: 1954, month: 12, day: 4)
     end
 
-    return {}
+    {}
   end
 
   def generate_new_wca_id
     # generate new wcaid
     semiId = person_wca_id[0..3] + "ANON"
     similarWcaIds = Person.where("wca_id LIKE ?", semiId + '%')
-    for i in 1..99
+    (1..99).each do |i|
       if !similarWcaIds.where(wca_id: semiId + i.to_s.rjust(2, "0")).any?
         @new_wca_id = semiId + i.to_s.rjust(2, "0")
         return true

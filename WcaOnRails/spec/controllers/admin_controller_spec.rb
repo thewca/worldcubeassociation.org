@@ -42,8 +42,8 @@ RSpec.describe AdminController, type: :controller do
       expect(response).to render_template :merge_people
       expect(flash.now[:success]).to eq "Successfully merged #{person2.wca_id} into #{person1.wca_id}!"
     end
-  end 
-  
+  end
+
   describe 'anonymize_person' do
     sign_in { FactoryBot.create :admin }
 

@@ -39,7 +39,7 @@ RSpec.describe AnonymizePerson do
   end
 
   it "can anonymize account data" do
-    result = FactoryBot.create(:result, person: user.person)
+    FactoryBot.create(:result, person: user.person)
 
     response = anonymize_person2.do_anonymize_person
     expect(!!response).to eq true

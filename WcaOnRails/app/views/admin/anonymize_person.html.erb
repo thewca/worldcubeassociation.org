@@ -49,7 +49,7 @@ Thanks!" %>.</div>
       <div>
         <%= f.submit "Back", :class => "btn btn-primary", :name => "back_button" unless @anonymize_person.first_step? %>
         <%= f.submit "Next Step", :class => "btn btn-primary" unless @anonymize_person.last_step? %>
-        <%= f.submit "Confirm", :class => "btn btn-success", :confirm => "Are you sure you want to anonymize this person? All personal data will be removed from WCA once confirmed." if @anonymize_person.last_step? %>
+        <%= f.submit "Confirm", :class => "btn btn-success", data: { confirm: "Are you sure you want to anonymize this person? All personal data will be removed from WCA once confirmed." } if @anonymize_person.last_step? %>
       </div>
     <% end %>
   <% end %>
