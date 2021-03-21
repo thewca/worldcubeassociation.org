@@ -8,7 +8,7 @@
     <p>Before processing any anonymization requests, WRT must recieve verification with a picture/copy of an official ID verification (passport, driver's license, etc.) with a minimum of their name and birthday (any other information may be blured-out/obfuscated).</p>
     <p>After going through the initial steps of requesting data removal from data processors, by clicking confirm:</p>
     <p>- A new WCAID will be generated (removing any form of the persons name from the WCAID).</p>
-    <p>- PII in the users, Results, and Persons tables will be anonymized.</p>
+    <p>- Personally identifiable information (PII) in the users, Results, and Persons tables will be anonymized.</p>
     <p>- This PII includes: name, DOB, email, avatar, gender, and IP addresses).</p>
 
     <%= simple_form_for @anonymize_person, url: admin_anonymize_person_path do |f| %>

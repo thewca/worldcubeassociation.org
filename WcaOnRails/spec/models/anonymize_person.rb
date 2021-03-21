@@ -33,9 +33,9 @@ RSpec.describe AnonymizePerson do
     expect(person.reload.wca_id).to eq "2020ANON01"
     expect(person.reload.name).to eq "Anonymous"
     expect(person.reload.gender).to eq "o"
-    expect(person.reload.year).to eq 1954
-    expect(person.reload.month).to eq 12
-    expect(person.reload.day).to eq 4
+    expect(person.reload.year).to eq 0
+    expect(person.reload.month).to eq 0
+    expect(person.reload.day).to eq 0
   end
 
   it "can anonymize account data" do
@@ -46,7 +46,7 @@ RSpec.describe AnonymizePerson do
     expect(user.reload.wca_id).to eq nil
     expect(user.reload.email).to eq user.id.to_s + "@worldcubeassociation.org"
     expect(user.reload.name).to eq "Anonymous"
-    expect(user.reload.dob.strftime("%Y-%m-%d")).to eq "1954-12-04"
+    expect(user.reload.dob).to eq nil
     expect(user.reload.gender).to eq "o"
   end
 end

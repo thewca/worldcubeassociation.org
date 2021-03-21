@@ -61,7 +61,7 @@ class AnonymizePerson
                                      name: "Anonymous",
                                      unconfirmed_wca_id: nil,
                                      delegate_id_to_handle_wca_id_claim: nil,
-                                     dob: "1954-12-04",
+                                     dob: nil,
                                      gender: "o",
                                      current_sign_in_ip: nil,
                                      last_sign_in_ip: nil)
@@ -80,14 +80,14 @@ class AnonymizePerson
         previous_persons.each do |p|
           if p.countryId != current_country_id
             current_sub_id += 1
-            p.update(wca_id: @new_wca_id, name: "Anonymous", gender: "o", year: 1954, month: 12, day: 4, subId: current_sub_id)
+            p.update(wca_id: @new_wca_id, name: "Anonymous", gender: "o", year: 0, month: 0, day: 0, subId: current_sub_id)
           else
             p.delete
           end
         end
       end
       # Anonymize person's data in Persons for subid 1
-      person.update(wca_id: @new_wca_id, name: "Anonymous", gender: "o", year: 1954, month: 12, day: 4)
+      person.update(wca_id: @new_wca_id, name: "Anonymous", gender: "o", year: 0, month: 0, day: 0)
     end
 
     {}
