@@ -85,7 +85,7 @@ class AdminController < ApplicationController
 
     # This makes sure the json structure is valid!
     if @upload_json.import_to_inbox
-      if @competition.results_submitted_at == nil
+      if @competition.results_submitted_at.nil?
         @competition.update!(results_submitted_at: Time.now)
       end
       flash[:success] = "JSON file has been imported."
