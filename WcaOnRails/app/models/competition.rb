@@ -368,6 +368,10 @@ class Competition < ApplicationRecord
         warnings[:name] = I18n.t('competitions.messages.name_too_long')
       end
 
+      if !/[[:upper:]]/.match(self.id[0,1])
+        warnings[:id] = I18n.t('competitions.messages.id_starts_with_lowercase')
+      end
+
       if no_events?
         warnings[:events] = I18n.t('competitions.messages.must_have_events')
       end
@@ -381,6 +385,26 @@ class Competition < ApplicationRecord
 
       unless rounds.all?(&:advancement_condition_is_valid?)
         warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
+      end
+
+      if rounds.any?(&:cutoff_is_greater_than_time_limit?)
+        warnings[:cutoff_is_greater_than_time_limit] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit')
+      end
+
+      if rounds.any?(&:cutoff_is_too_fast?)
+        warnings[:cutoff_is_too_fast] = I18n.t('competitions.messages.cutoff_is_too_fast')
+      end
+
+      if rounds.any?(&:cutoff_is_too_slow?)
+        warnings[:cutoff_is_too_slow] = I18n.t('competitions.messages.cutoff_is_too_slow')
+      end
+
+      if rounds.any?(&:time_limit_is_too_fast?)
+        warnings[:time_limit_is_too_fast] = I18n.t('competitions.messages.time_limit_is_too_fast')
+      end
+
+      if rounds.any?(&:time_limit_is_too_slow?)
+        warnings[:time_limit_is_too_slow] = I18n.t('competitions.messages.time_limit_is_too_slow')
       end
 
       if championship_warnings.any?

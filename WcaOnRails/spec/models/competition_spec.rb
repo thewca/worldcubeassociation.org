@@ -259,6 +259,8 @@ RSpec.describe Competition do
   end
 
   context "warnings_for" do
+    let(:competition) { FactoryBot.create(:competition) }
+
     it "warns if competition name is greater than 32 characters and it's not publicly visible" do
       competition = FactoryBot.build :competition, name: "A really long competition name 2016", showAtAll: false
       expect(competition).to be_valid
@@ -314,6 +316,55 @@ RSpec.describe Competition do
       competition = FactoryBot.create :competition, starts: Date.new(2019, 10, 1), championship_types: ["world"]
       expect(competition).to be_valid
       expect(competition.championship_warnings["world"]).to eq "There is already a World Championship in 2019"
+    end
+
+    it "warns if competition id starts with a lowercase" do
+      competition = FactoryBot.build :competition, id: "lowercase2021"
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:id]).to eq I18n.t('competitions.messages.id_starts_with_lowercase')
+    end
+
+    it "warns if advancement condition isn't present for a non final round" do
+      FactoryBot.create :round, competition: competition, event_id: "333", number: 1
+      FactoryBot.create :round, competition: competition, event_id: "333", number: 2
+
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:advancement_conditions]).to eq I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
+    end
+
+    it "warns if the cutoff is greater than the time limit for any round" do
+      round = FactoryBot.create :round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 5.minutes.in_centiseconds), cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 6.minutes.in_centiseconds)
+
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:cutoff_is_greater_than_time_limit]).to eq I18n.t('competitions.messages.cutoff_is_greater_than_time_limit')
+    end
+
+    it "warns if the cutoff is very fast" do
+      round = FactoryBot.create :round, competition: competition, event_id: "333", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 4.seconds.in_centiseconds)
+
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:cutoff_is_too_fast]).to eq I18n.t('competitions.messages.cutoff_is_too_fast')
+    end
+
+    it "warns if the cutoff is very slow" do
+      round = FactoryBot.create :round, competition: competition, event_id: "333", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 11.minutes.in_centiseconds)
+
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:cutoff_is_too_slow]).to eq I18n.t('competitions.messages.cutoff_is_too_slow')
+    end
+
+    it "warns if the time limit is very fast" do
+      round = FactoryBot.create :round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 9.seconds.in_centiseconds)
+
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:time_limit_is_too_fast]).to eq I18n.t('competitions.messages.time_limit_is_too_fast')
+    end
+
+    it "warns if the time limit is very slow" do
+      round = FactoryBot.create :round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 11.minutes.in_centiseconds)
+
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:time_limit_is_too_slow]).to eq I18n.t('competitions.messages.time_limit_is_too_slow')
     end
   end
 
