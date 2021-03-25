@@ -97,6 +97,10 @@ $venue-map-wrapper-height: 400px;
   &.loading .progress {
     display: inline;
   }
+
+  .wca-nearby-competitions-show-events {
+    display: none;
+  }
 }
 
 .modal-wide {

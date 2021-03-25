@@ -7,6 +7,7 @@
     <td><%= t 'competitions.nearby_competitions.distance' %></td>
     <td><%= t 'competitions.nearby_competitions.limit' %></td>
     <td><%= t 'competitions.nearby_competitions.competitors' %></td>
+    <td class="wca-nearby-competitions-show-events"><%= t 'competitions.nearby_competitions.events' %></td>
   </tr>
   <% nearby_competitions.each do |c| %>
     <tr class="<%= @competition.dangerously_close_to?(c) ? "danger" : "warning" %>">
@@ -32,6 +33,11 @@
       </td>
       <td class="text-center"><%= c.competitor_limit if c.competitor_limit_enabled %></td>
       <td class="text-center"><%= c.competitors.count if c.is_probably_over? %></td>
+      <td class="wca-nearby-competitions-show-events">
+        <% c.events.each do |event| %>
+          <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "bottom", container: "body" }, title: event.name %>
+        <% end %>
+      </td>
     </tr>
   <% end %>
 </table>

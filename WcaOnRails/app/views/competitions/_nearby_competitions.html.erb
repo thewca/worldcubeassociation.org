@@ -7,6 +7,13 @@
 <div class="form-group">
   <label class="col-sm-2 control-label">
     <%= t '.label', days: Competition::NEARBY_DAYS_WARNING, kms: Competition::NEARBY_DISTANCE_KM_WARNING %>
+    <br>
+    <div class="wca-nearby-competitions-hide-events">
+      <button type="button" id="wca-nearby-competitions-show-events-button" class="btn btn-primary btn-xs"><%= t 'show_events' %></button>
+    </div>
+    <div class="wca-nearby-competitions-show-events">
+      <button type="button" id="wca-nearby-competitions-hide-events-button" class="btn btn-primary btn-xs"><%= t 'hide_events' %></button>
+    </div>
   </label>
   <div class="col-sm-9">
     <% if @competition.has_date? && @competition.has_location? %>
