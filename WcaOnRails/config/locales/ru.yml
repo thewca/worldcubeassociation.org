@@ -1939,13 +1939,11 @@ ru:
         WCA ID %{link_id} уже привязан к другому аккаунту. Если вы думаете, что
         это было сделано по ошибке, свяжитесь с вашим <a href='%{link_delegate}'
         target='_blank'>WCA Делегатом</a>.
-      #original_hash: d26bfdc
-      missing_dob_html: 'У WCA ID %{link_id} не установлен день рождения.'
-      #original_hash: 5be6803
-      contact_results_team_html: >-
-        Пожалуйста, свяжитесь с <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a>.
+      #original_hash: 498dc1e
+      missing_dob_html: >-
+        У WCA ID %{link_id} не задан день рождения. Пожалуйста, свяжитесь с
+        Командой Результатов WCA, через <a href="%{dob_form_path}">контактную
+        форму</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} не существует.'
   registrations:
@@ -2601,6 +2599,10 @@ ru:
     index:
       #original_hash: db98a68
       title: Соревнования
+      #original_hash: 63254de
+      disclaimer: >-
+        Обратите внимание: из-за пандемии COVID-19, многие страны не могут
+        проводить соревнования.
       #original_hash: 6a72085
       all_events: Все
       #original_hash: 6d76b81
@@ -2871,6 +2873,10 @@ ru:
       before: до
       #original_hash: 405906c
       after: после
+      #original_hash: e1978a9
+      starts_on: начинается
+      #original_hash: 964aedc
+      ends_on: заканчивается
       #original_hash: 24d948e
       limit: Лимит
       #original_hash: 855bd26
@@ -3020,6 +3026,8 @@ ru:
         register: Зарегистрироваться
         #original_hash: 855bd26
         competitors: Участники
+        #original_hash: c4622c3
+        scrambles: Скрамблы
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: Профиль WCA
@@ -3029,6 +3037,11 @@ ru:
       round: Раунд
       #original_hash: 709a232
       name: Имя
+    scrambles_table:
+      #original_hash: 171a060
+      group: Группа
+      #original_hash: b7126cd
+      scramble: Скрамбл
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3732,6 +3745,9 @@ ru:
       banned:
         #original_hash: d30e2e5
         name: Забаненные участники
+      wct_china:
+        #original_hash: ed5b65a
+        name: WCT Китай
       #original_hash: f8c3f3c
       operations_html: '%{committees_and_teams} WCA выполняют повседневные операции.'
       #original_hash: 0e7a036
