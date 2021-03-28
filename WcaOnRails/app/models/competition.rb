@@ -240,7 +240,7 @@ class Competition < ApplicationRecord
   # The only exception to this is within tests, in which case we actually don't want to run this validation.
   validate :schedule_must_match_rounds, if: :confirmed_at_changed?, on: :update
   def schedule_must_match_rounds
-    unless has_any_round_per_event? && schedule_includes_rounds? && created_at > Date.new(2016, 12, 31)
+    unless has_any_round_per_event? && schedule_includes_rounds? && created_at < Date.new(2019, 12, 31)
       errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
     end
   end
@@ -375,7 +375,7 @@ class Competition < ApplicationRecord
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
-      unless has_any_round_per_event? && schedule_includes_rounds?
+      unless has_any_round_per_event? && schedule_includes_rounds? && created_at < Date.new(2019, 12, 31)
         warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds')
       end
 
