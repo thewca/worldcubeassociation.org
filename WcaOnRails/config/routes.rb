@@ -183,6 +183,9 @@ Rails.application.routes.draw do
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/update_statistics' => 'admin#update_statistics'
+  get '/admin/add_new_result' => 'admin#add_new_result'
+  post '/admin/add_new_result' => 'admin#do_add_new_result'
+  get '/admin/competition_data' => 'admin#competition_data'
 
   get '/search' => 'search_results#index'
 

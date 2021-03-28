@@ -1,0 +1,61 @@
+<% provide(:title, 'Add New Result') %>
+
+<div class="container">
+  <%= render layout: "nav" do %>
+    <h1><%= yield(:title) %></h1>
+
+    <p>
+      Please fill out the form below to add a new result.
+    </p>
+
+    <p>
+      Checking the new competitor field will also create a new person with the personal data. The new generated person id will be given whenever the script has successfully executed.
+    </p>
+
+    <p>
+      After adding a new result, you must run these scripts to ensure that the changes are sound:
+      <ol>
+        <li><%= link_to "Check Records", "/results/admin/check_regional_record_markers.php" %> (if needed - add or remove any record markers this result affects)</li>
+        <li>Check Competition Validators</li>
+        <li><%= link_to "Run Compute Auxillery Data", admin_compute_auxiliary_data_path %></li>
+      </ol>
+    </p>
+
+    <%= simple_form_for @add_new_result, url: admin_add_new_result_path, method: :post do |f| %>
+      <%= f.input :is_new_competitor, as: :boolean, inline_label: "The competitor is a new competitor" %>
+      <%= f.input :competitor_id, as: :user_ids, persons_table: true, only_one: true, class: "returning-competitor" %>
+      <div class="new-person-fields">
+        <%= f.input :name %>
+        <%= f.input :country_id, collection: Country.real, value_method: lambda { |c| c.id }, label_method: lambda { |c| c.name } %>
+        <%= f.input :gender do %>
+          <%= f.select :gender, options_for_select([["Male", "m"], ["Female", "f"], ["Other", "o"]], f.object.gender), { include_blank: "" }, { class: "form-control" } %>
+        <% end %>
+        <%= f.input :dob, as: :date_picker %>
+      </div>
+      <%= f.input :competition_id, as: :competition_id, only_one: true %>
+      <div class="new-person-fields">
+        <div>This is the WCAID without the ending numbers (Autofilled after Name and competition fields are filled in)</div>
+        <%= f.input :semi_id %>
+      </div>
+      <%= f.input :event_id do %>
+        <%= f.collection_select :event_id, Event.all, :id, :name, { :include_blank => true }, { class: "form-control", :disabled => "disabled" } %>
+      <% end %>
+      <%= f.input :round_id do %>
+        <%= f.select :round_id, [@add_new_result.round_id], {}, { class: "form-control", :disabled => "disabled" } %>
+      <% end %>
+      <div>Note: These values are entered as they appear on the database. Ie. 1:30.48 should be inputted as 90048, 59 in FMC inputted as 59, and MBLD values as 0DDTTTTTMM. -1 for DNF. -2 for DNS. 0 or blank for blank</div>
+      <br>
+      <div class="value-fields">
+        <%= f.input :value1, :disabled => true %>
+        <%= f.input :value2, :disabled => true %>
+        <%= f.input :value3, :disabled => true %>
+        <%= f.input :value4, :disabled => true %>
+        <%= f.input :value5, :disabled => true %>
+      </div>
+
+      <button type="submit" class="btn btn-success">
+        <%= ui_icon("plus") %> Add new result
+      </button>
+    <% end %>
+  <% end %>
+</div>

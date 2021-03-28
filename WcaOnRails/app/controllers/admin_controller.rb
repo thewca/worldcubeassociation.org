@@ -32,6 +32,28 @@ class AdminController < ApplicationController
     render 'merge_people'
   end
 
+  def add_new_result
+    @add_new_result = AddNewResult.new
+  end
+
+  def do_add_new_result
+    add_new_result_params = params.require(:add_new_result).permit(:is_new_competitor, :competitor_id, :name, :country_id, :dob, :gender, :semi_id, :competition_id, :event_id, :round_id, :value1, :value2, :value3, :value4, :value5)
+    @add_new_result = AddNewResult.new(add_new_result_params)
+    add_new_result_reponse = @add_new_result.do_add_new_result
+    if add_new_result_reponse && !add_new_result_reponse[:error]
+      flash.now[:success] = "Successfully added new result for #{view_context.link_to(add_new_result_reponse[:wca_id], person_path(add_new_result_reponse[:wca_id]))}! 
+        Please make sure to: 
+        1. #{view_context.link_to("Check Records", "/results/admin/check_regional_record_markers.php?competitionId=#{@add_new_result.competition_id}&show=Show")}. 
+        2. #{view_context.link_to("Check Competition Validators", competition_admin_check_existing_results_path(@add_new_result.competition_id))}.
+        1. #{view_context.link_to("Run Compute Auxillery Data", admin_compute_auxiliary_data_path)}. 
+        ".html_safe
+      @add_new_result = AddNewResult.new
+    else
+      flash.now[:danger] = add_new_result_reponse[:error] || "Error adding new result"
+    end
+    render 'add_new_result'
+  end
+
   def new_results
     @competition = competition_from_params
     @upload_json = UploadJson.new
@@ -139,6 +161,17 @@ class AdminController < ApplicationController
       gender: @person.gender,
       dob: @person.dob,
       incorrect_wca_id_claim_count: @person.incorrect_wca_id_claim_count,
+    }
+  end
+
+  def competition_data
+    @competition = Competition.find_by!(id: params[:competition_id])
+
+    render json: {
+      name: @competition.name,
+      events: @competition.events,
+      competition_events: @competition.competition_events,
+      rounds: @competition.rounds
     }
   end
 

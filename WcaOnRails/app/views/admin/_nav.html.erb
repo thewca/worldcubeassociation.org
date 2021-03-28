@@ -26,6 +26,7 @@
         { text: "Server status", path: server_status_path, fa_icon: "info" },
         { text: "WCA All Voting Members", path: eligible_voters_path, fa_icon: "download" },
         { text: "WCA Leaders and Seniors", path: leader_senior_voters_path, fa_icon: "download" },
+        { text: "Add New Result", path: admin_add_new_result_path, fa_icon: "plus" },
       ].each do |nav_item| %>
         <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
           <%= ui_icon(nav_item[:fa_icon]) %> <%= nav_item[:text] %>
