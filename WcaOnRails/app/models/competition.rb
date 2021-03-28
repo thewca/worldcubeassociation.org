@@ -915,6 +915,10 @@ class Competition < ApplicationRecord
     self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
   end
 
+  def has_event_change_deadline_date?
+    created_at > Date.new(2021, 4, 1)
+  end
+
   private def unpack_dates
     if start_date
       self.year = start_date.year
