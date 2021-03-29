@@ -44,6 +44,47 @@ RSpec.describe AdminController, type: :controller do
     end
   end
 
+  describe 'add_new_result' do
+    sign_in { FactoryBot.create :admin }
+
+    let(:person) { FactoryBot.create(:person) }
+    let(:competition) { FactoryBot.create(:competition, :with_results) }
+    let(:round) { FactoryBot.create(:round, competition: competition, event_id: "333") }
+
+    it 'can add new result' do
+      post :do_add_new_result, params: { 
+        add_new_result: {
+          is_new_competitor: "0",
+          competitor_id: person.wca_id,
+          competition_id: competition.id,
+          event_id: "333",
+          round_id: round.id,
+          value1: "1200",
+          value2: "1400",
+          value3: "1400",
+          value4: "1400",
+          value5: "1400"
+        } 
+      }
+      
+      expect(response.status).to eq 200
+      expect(response).to render_template :add_new_result
+      expect(flash.now[:success]).to eq "Successfully added new result for <a href=\"/persons/#{person.wca_id}\">#{person.wca_id}</a>! \n        Please make sure to: \n        1. <a href=\"/results/admin/check_regional_record_markers.php?competitionId=#{competition.id}&amp;show=Show\">Check Records</a>. \n        2. <a href=\"/competitions/#{competition.id}/admin/check-existing-results\">Check Competition Validators</a>.\n        3. <a href=\"/admin/compute_auxiliary_data\">Run Compute Auxillery Data</a>.\n        \n        "
+    end
+  end
+
+  describe 'competition_data' do
+    sign_in { FactoryBot.create :admin }
+
+    let(:competition) { FactoryBot.create(:competition) }
+
+    it 'can get competition data' do
+      get :competition_data, params: { competition_id: competition.id }
+      expect(response.status).to eq 200
+      expect(JSON.parse(response.body)["name"]).to eq competition.name
+    end
+  end
+
   describe 'PATCH #update person' do
     sign_in { FactoryBot.create :admin }
 

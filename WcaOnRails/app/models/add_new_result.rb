@@ -55,21 +55,33 @@ class AddNewResult
   end
 
   def value2=(value2)
+    if value2.nil? || value2 == ""
+      value2 = "0"
+    end
     @value2 = value2
     @value2_solve_time = SolveTime.new(event_id, :best, value2.to_i)
   end
 
   def value3=(value3)
+    if value3.nil? || value3 == ""
+      value3 = "0"
+    end
     @value3 = value3
     @value3_solve_time = SolveTime.new(event_id, :best, value3.to_i)
   end
 
   def value4=(value4)
+    if value4.nil? || value4 == ""
+      value4 = "0"
+    end
     @value4 = value4
     @value4_solve_time = SolveTime.new(event_id, :best, value4.to_i)
   end
 
   def value5=(value5)
+    if value5.nil? || value5 == ""
+      value5 = "0"
+    end
     @value5 = value5
     @value5_solve_time = SolveTime.new(event_id, :best, value5.to_i)
   end
@@ -83,9 +95,8 @@ class AddNewResult
   def require_valid_competitor_id_if_returning_competitor
     if is_new_competitor.to_i == 0 
       if competitor_id.nil? || competitor_id == ""
-        errors.add(:competitor_id, "Cannot be Blank")
-      end
-      if !Person.find_by_wca_id(competitor_id)
+        errors.add(:competitor_id, "can't be blank")
+      elsif !Person.find_by_wca_id(competitor_id)
         errors.add(:competitor_id, "Not found")
       end
     end
@@ -94,7 +105,7 @@ class AddNewResult
   validate :require_valid_name_if_new_competitor
   def require_valid_name_if_new_competitor
     if is_new_competitor.to_i == 1 && (name.nil? || name == "")
-      errors.add(:name, "Cannot be Blank")
+      errors.add(:name, "can't be blank")
     end
   end
   
@@ -102,7 +113,7 @@ class AddNewResult
   def require_valid_country_id_if_new_competitor
     if is_new_competitor.to_i == 1
       if country_id.nil? || country_id == ""
-        errors.add(:country_id, "Cannot be Blank")
+        errors.add(:country_id, "can't be blank")
       elsif !Country.c_find(country_id)
         errors.add(:country_id, "Not found")
       end
@@ -113,7 +124,7 @@ class AddNewResult
   def require_valid_gender_if_new_competitor
     if is_new_competitor.to_i == 1
       if gender.nil? || gender == ""
-        errors.add(:gender, "Cannot be Blank")
+        errors.add(:gender, "can't be blank")
       elsif !['m', 'f', 'o'].include?(gender)
         errors.add(:gender, "Not found")
       end
@@ -151,17 +162,16 @@ class AddNewResult
   def require_valid_semi_id_if_new_competitor
     if is_new_competitor.to_i == 1 
       if (semi_id.nil? || semi_id == "")
-        errors.add(:semi_id, "Cannot be Blank")
-        return
-      end
-      if !semi_id.match?(/[\d]{4}[A-Z]{4}/)
-        errors.add(:semi_id, "Invalid Semi ID YYYYLAST")
+        errors.add(:semi_id, "can't be blank")
+      elsif !semi_id.match?(/[\d]{4}[A-Z]{4}/)
+        errors.add(:semi_id, "Invalid. Must be YYYYLAST")
       end
     end
   end
   
   validate :require_valid_competition_id
   def require_valid_competition_id
+    return unless errors.blank?
     if !Competition.find_by_id(competition_id)
       errors.add(:competition_id, "Not found")
     end
@@ -269,83 +279,23 @@ class AddNewResult
     end
 
     ActiveRecord::Base.transaction do
-      # create new competitor if needed and set wca_id, name, and country_id needed for the result row
-      if is_new_competitor.to_i == 1
-        if !generate_new_wca_id
-          return { error: "Error with subId: SubIds " + semi_id + "00 to " + semi_id + "99 are already taken." }
-        end
-        @new_person = Person.create(:wca_id => @new_wca_id, :name => name, :countryId => country_id, :gender => gender, :year => @year, :month => @month, :day => @day)
-        @use_wca_id = @new_wca_id
-        @use_name = name
-        @use_country_id = country_id
-      else
-        @use_wca_id = competitor_id
-        person = Person.find_by_wca_id(competitor_id)
-        @use_name = person.name
-        @use_country_id = person.countryId
+      new_person_res = create_new_person
+      if !new_person_res.nil? && new_person_res[:error]
+        return new_person_res
       end
 
-      # Create Result
-      new_result = Result.new(:personId => @use_wca_id, 
-                          :personName => @use_name, 
-                          :countryId => @use_country_id, 
-                          :competitionId => competition_id, 
-                          :eventId => event_id, 
-                          :roundTypeId => @round_type_id, 
-                          :formatId => @format_id, 
-                          :value1 => value1, 
-                          :value2 => value2, 
-                          :value3 => value3, 
-                          :value4 => value4, 
-                          :value5 => value5)
-      new_result.update(:best => new_result.compute_correct_best, :average => new_result.compute_correct_average)
-      if !new_result.valid?
-        if !@new_person.nil?
-          @new_person.destroy
-        end
-        new_result.destroy
-        return { error: "Error in creatining result: " + new_result.errors.messages.to_s }
+      new_result_res = create_new_result
+      if !new_result_res.nil? && new_result_res[:error]
+        return new_result_res
       end
-      new_result.save
 
-      # Fix pos
-      results_to_fix_position = Competition.find_by_id(competition_id).results.where(eventId: event_id, roundTypeId: @round_type_id).order(Arel.sql("if(formatId in ('a','m') and average>0, average, 2147483647), if(best>0, best, 2147483647)"))
-      current_position = 0
-      last_result = nil
-      number_of_tied = 0
-      results_to_fix_position.each do |result, index|
-        # Unless we find two exact same results, we increase the expected position
-        tied = false
-        if last_result
-          if ["a", "m"].include?(result.formatId)
-            # If the ranking is based on average, look at both average and best.
-            tied = result.average == last_result.average && result.best == last_result.best
-          else
-            # else we just compare the bests
-            tied = result.best == last_result.best
-          end
-        end
-        if tied
-          number_of_tied += 1
-        else
-          current_position += 1
-          current_position += number_of_tied
-          number_of_tied = 0
-        end
-        last_result = result
-
-        # Fix position
-        if current_position != result.pos
-          result.update(:pos => current_position)
-        end
-      end
+      fix_positions
     end
     
     { wca_id: @use_wca_id }
-    # { success: "Successfully added new result for #{view_context.link_to(@use_wca_id, person_path(@use_wca_id))}!".html_safe }
   end
 
-  def generate_new_wca_id
+  private def generate_new_wca_id
     # generate new wcaid
     similarWcaIds = Person.where("wca_id LIKE ?", semi_id + '%')
     (1..99).each do |i|
@@ -357,5 +307,91 @@ class AddNewResult
 
     # Semi Id doesn't work
     false
+  end
+
+  # create new competitor if needed and set wca_id, name, and country_id needed for the result row
+  def create_new_person
+    if is_new_competitor.to_i == 1
+      if !generate_new_wca_id
+        return { error: "Error with subId: SubIds " + semi_id + "00 to " + semi_id + "99 are already taken." }
+      end
+      @new_person = Person.create(:wca_id => @new_wca_id, :name => name, :countryId => country_id, :gender => gender, :year => @year, :month => @month, :day => @day)
+      @use_wca_id = @new_wca_id
+      @use_name = name
+      @use_country_id = country_id
+    else
+      @use_wca_id = competitor_id
+      person = Person.find_by_wca_id(competitor_id)
+      @use_name = person.name
+      @use_country_id = person.countryId
+    end
+    {}
+  end
+
+  # Create Result and handle error
+  def create_new_result
+    new_result = Result.new(:personId => @use_wca_id,
+                            :personName => @use_name,
+                            :countryId => @use_country_id,
+                            :competitionId => competition_id,
+                            :eventId => event_id,
+                            :roundTypeId => @round_type_id,
+                            :formatId => @format_id,
+                            :value1 => value1,
+                            :value2 => value2,
+                            :value3 => value3,
+                            :value4 => value4,
+                            :value5 => value5)
+    # compute best and average
+    new_result.update(:best => new_result.compute_correct_best, :average => new_result.compute_correct_average)
+
+    # handle validation error
+    if !new_result.valid?
+      if !@new_person.nil?
+        @new_person.destroy
+      end
+      new_result.destroy
+      return { error: "Error in creating result: " + new_result.errors.messages.to_s }
+    end
+
+    new_result.save
+    {}
+  end
+
+  # Fix Positions of all results in round
+  def fix_positions
+    results_to_fix_position = Competition.find_by_id(competition_id)
+      .results
+      .where(eventId: event_id, roundTypeId: @round_type_id)
+      .order(Arel.sql("if(formatId in ('a','m') and average>0, average, 2147483647), if(best>0, best, 2147483647)"))
+    current_position = 0
+    last_result = nil
+    number_of_tied = 0
+    results_to_fix_position.each do |result, index|
+      # Unless we find two exact same results, we increase the expected position
+      tied = false
+      if last_result
+        if ["a", "m"].include?(result.formatId)
+          # If the ranking is based on average, look at both average and best.
+          tied = result.average == last_result.average && result.best == last_result.best
+        else
+          # else we just compare the bests
+          tied = result.best == last_result.best
+        end
+      end
+      if tied
+        number_of_tied += 1
+      else
+        current_position += 1
+        current_position += number_of_tied
+        number_of_tied = 0
+      end
+      last_result = result
+
+      # Fix position
+      if current_position != result.pos
+        result.update(:pos => current_position)
+      end
+    end
   end
 end

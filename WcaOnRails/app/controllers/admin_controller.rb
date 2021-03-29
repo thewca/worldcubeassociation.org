@@ -39,18 +39,24 @@ class AdminController < ApplicationController
   def do_add_new_result
     add_new_result_params = params.require(:add_new_result).permit(:is_new_competitor, :competitor_id, :name, :country_id, :dob, :gender, :semi_id, :competition_id, :event_id, :round_id, :value1, :value2, :value3, :value4, :value5)
     @add_new_result = AddNewResult.new(add_new_result_params)
+
     add_new_result_reponse = @add_new_result.do_add_new_result
     if add_new_result_reponse && !add_new_result_reponse[:error]
+      # show success message with helpful reminders of remaining steps after a successful insert of a new result
       flash.now[:success] = "Successfully added new result for #{view_context.link_to(add_new_result_reponse[:wca_id], person_path(add_new_result_reponse[:wca_id]))}! 
         Please make sure to: 
         1. #{view_context.link_to("Check Records", "/results/admin/check_regional_record_markers.php?competitionId=#{@add_new_result.competition_id}&show=Show")}. 
         2. #{view_context.link_to("Check Competition Validators", competition_admin_check_existing_results_path(@add_new_result.competition_id))}.
-        1. #{view_context.link_to("Run Compute Auxillery Data", admin_compute_auxiliary_data_path)}. 
+        3. #{view_context.link_to("Run Compute Auxillery Data", admin_compute_auxiliary_data_path)}.
+        #{@add_new_result.is_new_competitor.to_i == 1 ? "4. Notify WFC of the additional competitor.": ""}
         ".html_safe
       @add_new_result = AddNewResult.new
     else
+      puts "Jacobe1"
+      puts @add_new_result.errors.full_messages.to_s
       flash.now[:danger] = add_new_result_reponse[:error] || "Error adding new result"
     end
+
     render 'add_new_result'
   end
 

@@ -45,6 +45,12 @@ FactoryBot.define do
       competitor_limit_reason { "The hall only fits 100 competitors." }
     end
 
+    trait :with_results do
+      after(:create) do |competition|
+        competition.results = [FactoryBot.create(:result, competitionId: competition.id)] 
+      end
+    end
+
     events { Event.where(id: event_ids) }
     main_event_id { events.first.id if events.any? }
 
