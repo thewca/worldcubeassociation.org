@@ -52,8 +52,6 @@ class AdminController < ApplicationController
         ".html_safe
       @add_new_result = AddNewResult.new
     else
-      puts "Jacobe1"
-      puts @add_new_result.errors.full_messages.to_s
       flash.now[:danger] = add_new_result_reponse[:error] || "Error adding new result"
     end
 
