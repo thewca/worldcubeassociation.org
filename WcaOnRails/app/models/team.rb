@@ -35,7 +35,6 @@ class Team < ApplicationRecord
       Team.wct,
       Team.wcat,
       Team.wdc,
-      Team.wdpc,
       Team.wec,
       Team.weat,
       Team.wfc,
