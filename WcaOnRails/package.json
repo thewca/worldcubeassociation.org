@@ -27,7 +27,7 @@
     "compression-webpack-plugin": "^6.1.1",
     "core-js": "^3.8.1",
     "css-loader": "^5.0.1",
-    "easymde": "^2.13.0",
+    "easymde": "^2.14.0",
     "file-loader": "^6.2.0",
     "flag-icon-css": "^3.5.0",
     "glob": "^7.1.6",
