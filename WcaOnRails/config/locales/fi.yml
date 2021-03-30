@@ -1391,6 +1391,8 @@ fi:
       education: Koulutusmateriaalit
       #original_hash: a34b69f
       contact: Yhteystiedot
+      #original_hash: 8e12c09
+      speedcubing_history: Speedcubing History
       #original_hash: 4fa8cc8
       tools: Työkalut
       #original_hash: 83fce83
@@ -1900,12 +1902,10 @@ fi:
         WCA ID %{link_id} on jo liitetty toiseen tiliin. Jos uskot, että
         kyseessä on virhe, ota yhteyttä paikalliseen <a href='%{link_delegate}'
         target='_blank'>WCA-delegaattiisi</a>.
-      #original_hash: d26bfdc
-      missing_dob_html: 'WCA ID:hen %{link_id} ei ole liitetty syntymäaikaa.'
-      #original_hash: 5be6803
-      contact_results_team_html: >-
-        Ota yhteyttä <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Teamiin</a> ratkaistaksesi tämän.
+      #original_hash: 498dc1e
+      missing_dob_html: >-
+        WCA ID:hen %{link_id} ei ole liitetty syntymäaikaa. Ota yhteyttä WCA
+        Results Teamiin <a href="%{dob_form_path}">tällä lomakkeella</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID:tä %{link_id} ei ole olemassa.'
   registrations:
@@ -2558,6 +2558,10 @@ fi:
     index:
       #original_hash: db98a68
       title: Kilpailut
+      #original_hash: 63254de
+      disclaimer: >-
+        Huomaathan, että COVID-19-pandemian vuoksi kilpailuja ei tällä hetkellä
+        voi järjestää suuressa osassa maailmaa.
       #original_hash: 6a72085
       all_events: Kaikki
       #original_hash: 6d76b81
@@ -2824,6 +2828,10 @@ fi:
       before: ennen
       #original_hash: 405906c
       after: jälkeen
+      #original_hash: e1978a9
+      starts_on: alkaa
+      #original_hash: 964aedc
+      ends_on: loppuu
       #original_hash: 24d948e
       limit: Raja
       #original_hash: 855bd26
@@ -2972,6 +2980,8 @@ fi:
         register: Rekisteröidy
         #original_hash: 855bd26
         competitors: Kilpailijat
+        #original_hash: c4622c3
+        scrambles: Sekoitussarjat
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA-profiili
@@ -2981,6 +2991,11 @@ fi:
       round: Kierros
       #original_hash: 709a232
       name: Nimi
+    scrambles_table:
+      #original_hash: 171a060
+      group: Ryhmä
+      #original_hash: b7126cd
+      scramble: Sekoitussarja
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3440,9 +3455,9 @@ fi:
     title: 'Tietoa WCA:sta'
     #original_hash: af00571
     mission_statement: >-
-      WCA:n tavoitteena on kasvattaa kilpailujen määrää ja levittää niitä yhä
-      useampiin maihin ja näin useamman kilpailijan saataville, edistäen samalla
-      kilpailujen reiluutta ja yhdenvertaisuutta.
+      WCA:n tavoitteena on saada yhä lisää kilpailuja yhä useampaan maahan ja
+      useamman kilpailijan saataville mukavassa, reilussa ja tasa-arvoisessa
+      ilmapiirissä.
     #original_hash: e627278
     mission_footer: WCA Mission Statement
     #original_hash: cdab446
@@ -3458,8 +3473,8 @@ fi:
       vapaaehtoistoiminnan varassa; kilpailujen järjestäjät, WCA-delegaatit sekä
       WCA:n hallituksen ja toimikuntien jäsenet ovat kaikki elintärkeitä
       järjestön toiminnan kannalta. Kasvavan taloudellisen tuen myötä toivomme,
-      että jatkuvasti laajemmalle levittäytyvissä WCA-kilpailuissa näkyy
-      tulevaisuudessa myös entistä suurempi ammattimaisuus.</p>
+      että tulevaisuudessa myös entistä suurempi ammattimaisuus näkyy
+      kilpailuissamme.</p>
     #original_hash: bccd8c5
     spirit: >-
       Henkeemme kuuluu ystävällinen ilmapiiri, jossa ihmiset kaikkialta
@@ -3472,12 +3487,12 @@ fi:
     #original_hash: caf6bf2
     our_goals_content_html: >-
       <p>World Cube Association haluaa tarjota erityisesti nuorille
-      mahdollisuuden kuulua maailmanlaajuiseen yhteisöön, kilpailujen
-      saavutettavuutta lisäämällä. Uskomme, että kilpailumme ja
-      maailmanlaajuinen yhteisömme jättää jälkeensä kokemuksia, jotka
-      vahvistavat nuorten henkistä kasvua. Uskomme myös, että yhteenkuuluvuuden
-      tunne vahvistuu entisestään, kun kilpailuja levitetään uusien ihmisten
-      saataville. WCA Boardin strategiasta löytyy lisätietoa <a
+      mahdollisuuden kuulua maailmanlaajuiseen yhteisöön kilpailujen
+      saavutettavuutta lisäämällä. Uskomme, että kilpailumme ja yhteisömme
+      jättävät jälkeensä kokemuksia, jotka vahvistavat erityisesti nuorten
+      henkistä kasvua. Uskomme myös, että yhteisömme vahvistuu entisestään, kun
+      kilpailuja levitetään uusille alueille. WCA Boardin strategiasta löytyy
+      lisätietoa <a
       href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">tästä</a>
       asiakirjasta.</p>
     #original_hash: f64ccc7
@@ -3680,6 +3695,9 @@ fi:
       banned:
         #original_hash: d30e2e5
         name: Banned Competitors
+      wct_china:
+        #original_hash: ed5b65a
+        name: WCT China
       #original_hash: f8c3f3c
       operations_html: 'Päivittäisiä toimia hoitavat WCA:n %{committees_and_teams}.'
       #original_hash: 0e7a036
@@ -3690,27 +3708,30 @@ fi:
       #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA-delegaatti</strong> on WCA-säännöissä esitelty rooli,
-        joka määritellään WCA-asiakirjoissa. Delegaatin pääasiallinen tehtävä on
-        valvoa kilpailuja WCA:n nimissä. WCA-delegaattien vastuulla on
+        joka määritellään tarkemmin WCA Motionsissa. Delegaattien pääasiallinen
+        tehtävä on valvoa kilpailuja WCA:n edustajana. Heidän vastuullaan on
         varmistaa, että kaikki WCA-kilpailut sujuvat WCA:n päämäärien, sääntöjen
         ja hengen mukaan. WCA erottelee toisistaan <strong>vastaavat
         delegaatit</strong>, <strong>alueelliset delegaatit</strong>,
         <strong>delegaatit</strong>, <strong>delegaattikokelaat</strong> ja
         <strong>delegaattiharjoittelijat</strong> %{see_link}.</p> <p>Delegaatin
         tehtävien lisäksi vastaavat delegaatit ja alueelliset delegaatit ovat
-        vastuussa alueensa muiden delegaattien hallinnasta, ja yhteisön jäsenet
-        voivat ottaa heihin yhteyttä alueellisissa seikoissa.</p> <p>Uudet
-        delegaatit nimetään aluksi delegaattikokelaiksi, ja heidän tulee
-        osoittaa olevansa päteviä hallitsemaan kilpailuja onnistuneesti ennen
-        WCA-delegaatiksi nimeämistä.</p> <p>Delegaattiharjoittelijoita
-        koulutetaan delegaatin asemaan, ja he voivat valvoa vain kilpailuja,
-        joissa on myös WCA-delegaatti paikalla.</p>
+        vastuussa alueensa muista delegaateista, ja yhteisön jäsenet voivat
+        ottaa heihin yhteyttä alueellisissa seikoissa.</p> <p>Uudet delegaatit
+        nimetään aluksi delegaattikokelaiksi, ja heidän tulee osoittaa olevansa
+        päteviä hallitsemaan kilpailuja onnistuneesti ennen WCA-delegaatiksi
+        nimeämistä.</p> <p>Delegaattiharjoittelijoita koulutetaan delegaatin
+        asemaan, ja he voivat valvoa vain kilpailuja, joissa on myös
+        WCA-delegaatti paikalla.</p>
       #original_hash: 27d18ac
       see_link_html: '(ks. %{link})'
       #original_hash: 5b01fcc
       members_html: >-
         Kaikista kilpailijoista tulee automaattisesti WCA:n
         <strong>jäseniä</strong> ensimmäisessä WCA-kilpailussaan.
+  speedcubing_history:
+    #original_hash: 431e667
+    title: History‌ ‌of‌ ‌the‌ ‌Speedcubing‌ ‌Community‌ ‌&‌ ‌WCA‌
   documents:
     #original_hash: 687c828
     title: Asiakirjat
@@ -3719,7 +3740,7 @@ fi:
     #original_hash: 9855f80
     bylaws: Järjestön säännöt
     #original_hash: fdceb44
-    motions: Muut säännöt
+    motions: Motions
     #original_hash: 092f99e
     minutes: Pöytäkirjat
     #original_hash: 6db524a
@@ -4204,7 +4225,11 @@ fi:
       posts: Julkaisut
       #original_hash: 9d7ea9c
       regulations_and_guidelines: Säännöt ja ohjesäännöt
+      #original_hash: db683b3
+      search_for: 'Etsi hakusanalla <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: Ei hakutuloksia
         #original_hash: b8a7006
         competitions: Ei löydetty kilpailuja hakusanalla
         #original_hash: 99d4290
@@ -4604,8 +4629,8 @@ fi:
       #original_hash: cf5c955
       photo_quality: >-
         Varmista, että kuvan/videon laatu on korkea. Sen ei tarvitse olla
-        ammattimaisesti kuvattu, mutta laatu ei saa olla selkeästi havaittavan
-        heikko.
+        ammattimaisesti kuvattu, mutta laatu ei saa olla kuvaa/videota selkeästi
+        huonontava tekijä.
       #original_hash: 0742378
       photo_interest: >-
         Yritä luoda sisältöä, joka kiinnostaa laajaa katselijakuntaa. Vain
