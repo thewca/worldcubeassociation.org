@@ -51,7 +51,7 @@
     "regenerator-runtime": "^0.13.5",
     "resolve-url-loader": "^3.1.2",
     "sass-loader": "^10.1.1",
-    "semantic-ui-react": "^2.0.1",
+    "semantic-ui-react": "^2.0.3",
     "style-loader": "^2.0.0",
     "webpack": "^4.44.2",
     "webpack-manifest-plugin": "^3.0.0",
