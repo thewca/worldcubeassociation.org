@@ -31,8 +31,7 @@ class ReassignWcaId
 
   validate :require_different_people
   def require_different_people
-    return unless errors.blank?
-    if account1 == account2
+    if account1_user && account2_user && account1 == account2
       errors.add(:account2, "Cannot transfer a WCA ID of an account with itself!")
     end
   end
