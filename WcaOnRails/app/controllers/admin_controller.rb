@@ -182,4 +182,33 @@ class AdminController < ApplicationController
   private def competition_from_params
     Competition.find_by_id!(params[:competition_id])
   end
+
+  def reassign_wca_id
+    @reassign_wca_id = ReassignWcaId.new
+    @reassign_wca_id_validated = false
+  end
+
+  def validate_reassign_wca_id
+    reassign_params = params.require(:reassign_wca_id).permit(:account1, :account2)
+    @reassign_wca_id = ReassignWcaId.new(reassign_params)
+    if @reassign_wca_id.valid?
+      @reassign_wca_id_validated = true
+    else
+      flash.now[:danger] = "Error reassigning WCA ID"
+    end
+    render 'reassign_wca_id'
+  end
+
+  def do_reassign_wca_id
+    reassign_params = params.require(:reassign_wca_id).permit(:account1, :account2)
+    @reassign_wca_id = ReassignWcaId.new(reassign_params)
+    if @reassign_wca_id.do_reassign_wca_id
+      flash.now[:success] = "Successfully reassigned #{@reassign_wca_id.account1_user.wca_id} from account #{@reassign_wca_id.account1_user.id} to #{@reassign_wca_id.account2_user.id}!"
+      @reassign_wca_id = ReassignWcaId.new
+    else
+      @reassign_wca_id_validated = false
+      flash.now[:danger] = "Error reassigning WCA ID"
+    end
+    render 'reassign_wca_id'
+  end
 end
