@@ -6,7 +6,7 @@ import events from '../wca/events.js.erb';
 import './index.scss';
 
 const EventNavigation = ({ selected, eventIds, onSelect }) => (
-  <Menu text>
+  <Menu text className="event-menu-bar">
     {eventIds.map((eventId, index) => (
       <Popup
         key={eventId}

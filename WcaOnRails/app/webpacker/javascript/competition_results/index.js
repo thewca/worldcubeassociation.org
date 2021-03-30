@@ -1,16 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'semantic-ui-react';
+import cn from 'classnames';
 import useLoadedData from '../hooks/useLoadedData';
 import { registerComponent } from '../wca/react-utils';
 import Loading from '../requests/Loading';
 import Errored from '../requests/Errored';
-import { formatAttemptResult } from '../wca-live/attempts';
+import {
+  formatAttemptResult,
+  formatAttemptsForResult,
+} from '../wca-live/attempts';
 import CountryFlag from '../wca/CountryFlag';
 import './index.scss';
 import EventNavigation from '../event_navigation';
 import { getUrlParams, setUrlParams } from '../wca/utils';
 import { personUrl, competitionApiUrl, competitionEventResultsApiUrl } from '../requests/routes.js.erb';
 import I18n from '../i18n';
+
+const getRecordClass = (record) => {
+  switch (record) {
+    case null:
+      return '';
+    case 'WR': // Intentional fallthrough
+    case 'NR':
+      return record;
+    default:
+      return 'CR';
+  }
+};
 
 const RoundResultsTable = ({ round, eventName, eventId }) => (
   <>
@@ -22,23 +38,35 @@ const RoundResultsTable = ({ round, eventName, eventId }) => (
           <Table.HeaderCell width={4}>
             {I18n.t('competitions.results_table.name')}
           </Table.HeaderCell>
-          <Table.HeaderCell width={2}>{I18n.t('common.best')}</Table.HeaderCell>
-          <Table.HeaderCell width={2}>{I18n.t('common.average')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('common.best')}</Table.HeaderCell>
+          <Table.HeaderCell />
+          <Table.HeaderCell>{I18n.t('common.average')}</Table.HeaderCell>
+          <Table.HeaderCell />
           <Table.HeaderCell>{I18n.t('common.user.citizen_of')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('common.solves')}</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {round.results.map((result) => (
+        {round.results.map((result, index, results) => (
           <Table.Row key={result.id}>
-            <Table.Cell>{result.pos}</Table.Cell>
+            <Table.Cell className={cn({ 'text-muted': index > 0 && results[index - 1].pos === result.pos })}>
+              {result.pos}
+            </Table.Cell>
             <Table.Cell>
               <a href={personUrl(result.wca_id)}>{`${result.name}`}</a>
             </Table.Cell>
-            <Table.Cell>{formatAttemptResult(result.best, eventId)}</Table.Cell>
-            <Table.Cell>{formatAttemptResult(result.average, eventId, true)}</Table.Cell>
+            <Table.Cell className={getRecordClass(result.regional_single_record)}>
+              {formatAttemptResult(result.best, eventId)}
+            </Table.Cell>
+            <Table.Cell>{result.regional_single_record}</Table.Cell>
+            <Table.Cell className={getRecordClass(result.regional_average_record)}>
+              {formatAttemptResult(result.average, eventId)}
+            </Table.Cell>
+            <Table.Cell>{result.regional_average_record}</Table.Cell>
             <Table.Cell><CountryFlag iso2={result.country_iso2} /></Table.Cell>
-            <Table.Cell className="table-cell-solves">{result.attempts.map((a) => formatAttemptResult(a, eventId)).join(' ')}</Table.Cell>
+            <Table.Cell className="table-cell-solves">
+              {formatAttemptsForResult(result, eventId)}
+            </Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
