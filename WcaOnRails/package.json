@@ -36,7 +36,7 @@
     "js-yaml": "^4.0.0",
     "leaflet": "^1.7.1",
     "leaflet-geosearch": "^2.6.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "node-sass": "^5.0.0",
     "path-complete-extname": "^1.0.0",
     "postcss-loader": "^3.0.0",
