@@ -21,16 +21,17 @@ class ReassignWcaId
 
   validate :require_valid_accounts
   def require_valid_accounts
-    if !account1
+    if !@account1_user
       errors.add(:account1, "Not found")
     end
-    if !account2
+    if !@account2_user
       errors.add(:account2, "Not found")
     end
   end
 
   validate :require_different_people
   def require_different_people
+    return unless errors.blank?
     if account1 == account2
       errors.add(:account2, "Cannot transfer a WCA ID of an account with itself!")
     end
@@ -38,9 +39,9 @@ class ReassignWcaId
 
   validate :require_valid_wca_ids
   def require_valid_wca_ids
-    account1_wca_id = @account1_user ? @account1_user.wca_id : nil
-    account2_wca_id = @account2_user ? @account2_user.wca_id : nil
-    if !account1_wca_id
+    account1_wca_id = @account1_user&.wca_id
+    account2_wca_id = @account2_user&.wca_id
+    unless account1_wca_id
       errors.add(:account1, "Account 1 must have a WCA ID assigned")
     end
     if account2_wca_id
@@ -51,23 +52,23 @@ class ReassignWcaId
   validate :must_look_like_the_same_person
   def must_look_like_the_same_person
     if account1_user && account2_user
-      if account1_user.name != account2_user.name
+      unless account1_user.name == account2_user.name
         errors.add(:account2, "Names don't match")
       end
-      if account1_user.country_iso2 != account2_user.country_iso2
+      unless account1_user.country_iso2 == account2_user.country_iso2
         errors.add(:account2, "Countries don't match")
       end
-      if account1_user.gender != account2_user.gender
+      unless account1_user.gender == account2_user.gender
         errors.add(:account2, "Genders don't match")
       end
-      if account1_user.dob != account2_user.dob
+      unless account1_user.dob == account2_user.dob
         errors.add(:account2, "Birthdays don't match")
       end
     end
   end
 
   def do_reassign_wca_id
-    if !valid?
+    unless valid?
       return false
     end
 
