@@ -956,7 +956,10 @@ class Competition < ApplicationRecord
     if number_of_days > MAX_SPAN_DAYS
       errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS))
     end
+  end
 
+  validate :registration_dates_must_be_valid
+  private def registration_dates_must_be_valid
     if refund_policy_limit_date? && refund_policy_limit_date > start_date
       errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start'))
     end
@@ -964,7 +967,10 @@ class Competition < ApplicationRecord
     if registration_period_required? && registration_open? && registration_close? && (registration_open >= start_date || registration_close >= start_date)
       errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
     end
+  end
 
+  validate :waiting_list_dates_must_be_valid
+  private def waiting_list_dates_must_be_valid
     if waiting_list_deadline_date?
       if waiting_list_deadline_date < registration_close
         errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close'))
@@ -976,17 +982,20 @@ class Competition < ApplicationRecord
         errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_start'))
       end
     end
+  end
 
+  validate :event_change_dates_must_be_valid
+  private def event_change_dates_must_be_valid
     if event_change_deadline_date?
       if event_change_deadline_date < registration_close
         errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close'))
-      end 
+      end
       if on_the_spot_registration? && event_change_deadline_date < start_date
         errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots'))
-      end 
+      end
       if event_change_deadline_date > end_date.to_datetime.end_of_day
         errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date'))
-      end 
+      end
     end
   end
 

@@ -972,14 +972,14 @@ RSpec.describe CompetitionsController do
   describe 'GET #my_competitions' do
     let(:delegate) { FactoryBot.create(:delegate) }
     let(:organizer) { FactoryBot.create(:user) }
-    let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition2) { FactoryBot.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition3) { FactoryBot.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition4) { FactoryBot.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition1) { FactoryBot.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition2) { FactoryBot.create(:competition, :registration_open, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition3) { FactoryBot.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition4) { FactoryBot.create(:competition, :registration_open, :results_posted, starts: 4.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 5.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition2) { FactoryBot.create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition3) { FactoryBot.create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition4) { FactoryBot.create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition1) { FactoryBot.create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition2) { FactoryBot.create(:competition, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition3) { FactoryBot.create(:competition, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition4) { FactoryBot.create(:competition, :results_posted, starts: 4.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:unscheduled_competition1) { FactoryBot.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333)), year: "0") }
     let(:registered_user) { FactoryBot.create :user, name: "Jan-Ove Waldner" }
     let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: future_competition1, user: registered_user) }
