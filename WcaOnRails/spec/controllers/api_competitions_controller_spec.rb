@@ -262,7 +262,6 @@ RSpec.describe Api::V0::CompetitionsController do
       FactoryBot.create(
         :competition,
         :with_delegate,
-        :registration_open,
         id: "TestComp2014",
         name: "Test Comp 2014",
         start_date: "2014-02-03",
