@@ -231,7 +231,7 @@ class Competition < ApplicationRecord
   # just added.
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   private def must_have_at_least_one_event
-    if no_events? && created_at > Date.new(2019, 12, 31)
+    if no_events? && is_modern_competition?
       errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event'))
     end
   end
@@ -240,7 +240,7 @@ class Competition < ApplicationRecord
   # The only exception to this is within tests, in which case we actually don't want to run this validation.
   validate :schedule_must_match_rounds, if: :confirmed_at_changed?, on: :update
   def schedule_must_match_rounds
-    if created_at > Date.new(2019, 12, 31)
+    if is_modern_competition?
       unless has_any_round_per_event? && schedule_includes_rounds?
         errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
       end
@@ -839,7 +839,14 @@ class Competition < ApplicationRecord
   end
 
   def external_registration_page_required?
-    confirmed? && !use_wca_registration && created_at.present? && created_at > Date.new(2018, 12, 31)
+    confirmed? && !use_wca_registration && created_at.present? && is_modern_competition?
+  end
+
+  # This check will be used to avoid errors when updating old competitions
+  # Every time a new required field to the competition form is added, this date should be updated
+  # And this check should be added to function to see if it required
+  def is_modern_competition?
+    created_at > Date.new(2019, 12, 31)
   end
 
   def has_rounds?
@@ -852,7 +859,7 @@ class Competition < ApplicationRecord
 
   def entry_fee_required?
     (
-      confirmed? && created_at.present? && created_at > Date.new(2018, 7, 17) &&
+      confirmed? && created_at.present? && is_modern_competition? &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
@@ -865,11 +872,11 @@ class Competition < ApplicationRecord
   end
 
   def competitor_limit_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 9, 1)
+    confirmed? && created_at.present? && is_modern_competition?
   end
 
   def on_the_spot_registration_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22)
+    confirmed? && created_at.present? && is_modern_competition?
   end
 
   def on_the_spot_entry_fee_required?
@@ -884,7 +891,7 @@ class Competition < ApplicationRecord
 
   def refund_policy_percent_required?
     (
-      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+      confirmed? && created_at.present? && created_at > is_modern_competition? &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
@@ -894,7 +901,7 @@ class Competition < ApplicationRecord
 
   def guests_entry_fee_required?
     (
-      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+      confirmed? && created_at.present? && created_at > is_modern_competition? &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
@@ -903,11 +910,11 @@ class Competition < ApplicationRecord
   end
 
   def registration_period_required?
-    use_wca_registration? || (confirmed? && created_at.present? && created_at > Date.new(2018, 9, 13))
+    use_wca_registration? || (confirmed? && created_at.present? && is_modern_competition?)
   end
 
   def name_reason_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 10, 20)
+    confirmed? && created_at.present? && is_modern_competition?
   end
 
   def pending_results_or_report(days)
