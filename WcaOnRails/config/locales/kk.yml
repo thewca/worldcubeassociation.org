@@ -257,6 +257,7 @@ kk:
     333fm: 1 сағат
     #original_hash: cc7d8bb
     333mbf: 'Текшеге 10 минут, 60:00.00 дейін'
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: Әлем
@@ -765,7 +766,7 @@ kk:
         wca_id: ''
         #original_hash: d5ccc15
         receive_delegate_reports: >-
-          Егер сіз кіші Делегат, аға Делегат немесе WRC немесе WQAC мүшесі 
+          Егер сіз кіші Делегат, аға Делегат немесе WRC немесе WQAC мүшесі
           болсаңыз, сіз делегаттардың әдепкі есептерін аласыз. Ескерту: өзгеріс
           бір сағат ішінде күшіне енеді.
         #original_hash: 0627e5c
@@ -1351,7 +1352,7 @@ kk:
           #original_hash: 62a0113
           scopes_html: >-
             Scopes бос орындармен бөлінеді. Әдепкі scope пайдалану үшін бос
-            қалдырыңыз. Қараңыз <a 
+            қалдырыңыз. Қараңыз <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">здесь</a> қолдау көрсетілетін scopes тізімі.
       scopes:
@@ -4279,7 +4280,7 @@ kk:
       #original_hash: 3613823
       content_html: >-
         Жарыс басталғанға дейін кемінде 28 күн бұрын жариялануы керек (қараңыз
-        <a     
+        <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Жарыстарға
         қойылатын талаптар</a>).
     paragraph4:
@@ -4337,7 +4338,7 @@ kk:
       #original_hash: bd8e6ee
       content_html: >-
         Пәнге немесе бүкіл жарысқа қатысушылардың саны шектеулі болуы мүмкін
-        (қараңыз <a   
+        (қараңыз <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Жарыстарға
         қойылатын талаптар</a>). Жарыс делегаты мұндай шектеу үшін WCAT
         мақұлдауын алуы керек. Қатысушылар санына Лимит қатысушылардың күтілетін

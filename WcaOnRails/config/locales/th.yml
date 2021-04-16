@@ -256,6 +256,7 @@ th:
     333fm: 1 ชั่วโมง
     #original_hash: cc7d8bb
     333mbf: '10:00.00 ต่อลูก, ไม่เกิน 60:00.00'
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: โลก
@@ -1174,7 +1175,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-

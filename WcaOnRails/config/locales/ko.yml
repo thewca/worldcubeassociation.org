@@ -191,6 +191,7 @@ ko:
     333fm: 1시간
     #original_hash: cc7d8bb
     333mbf: '큐브당 10분, 최대 60분'
+    333mbo: ''
   common:
     #original_hash: 2513cf0
     continent: 대륙

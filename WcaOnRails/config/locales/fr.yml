@@ -259,6 +259,7 @@ fr:
     333fm: 1 heure
     #original_hash: cc7d8bb
     333mbf: '10:00.00 par cube, au plus 60:00.00'
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: Monde
