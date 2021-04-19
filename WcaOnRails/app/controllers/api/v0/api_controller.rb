@@ -42,11 +42,11 @@ class Api::V0::ApiController < ApplicationController
 
     render json: {
       "current" => {
-        "name" => "TNoodle-WCA-1.0.1",
+        "name" => "TNoodle-WCA-1.1.0",
         "information" => "#{root_url}regulations/scrambles/",
-        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-1.0.1.jar",
+        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-1.1.0.jar",
       },
-      "allowed" => ["TNoodle-WCA-1.0.1"],
+      "allowed" => ["TNoodle-WCA-1.1.0"],
       "publicKeyBytes" => public_key,
       "history" => [
         "TNoodle-0.7.4",
@@ -72,6 +72,7 @@ class Api::V0::ApiController < ApplicationController
         "TNoodle-WCA-0.15.0",
         "TNoodle-WCA-0.15.1",
         "TNoodle-WCA-1.0.1",
+        "TNoodle-WCA-1.1.0",
       ],
     }
   end
