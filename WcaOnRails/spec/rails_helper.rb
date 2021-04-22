@@ -40,7 +40,7 @@ end
 
 # Phantomjs' options are required to test Stripe.js (to load their script from a non https server)
 Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, js_errors: false, phantomjs: Phantomjs.path, phantomjs_options: ["--ignore-ssl-errors=yes", "--ssl-protocol=any"])
+  Capybara::Poltergeist::Driver.new(app, js_errors: true, phantomjs: Phantomjs.path, phantomjs_options: ["--ignore-ssl-errors=yes", "--ssl-protocol=any"])
 end
 
 Capybara.javascript_driver = :poltergeist
