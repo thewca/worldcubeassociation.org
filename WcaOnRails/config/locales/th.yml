@@ -1346,6 +1346,8 @@ th:
       education: แหล่งข้อมูลศึกษา
       #original_hash: a34b69f
       contact: ข้อมูลติดต่อ
+      #original_hash: 8e12c09
+      speedcubing_history: ประวัติ Speedcubing
       #original_hash: 4fa8cc8
       tools: เครื่องมือ
       #original_hash: 83fce83
@@ -1417,7 +1419,7 @@ th:
       #original_hash: 411bbca
       new_regional_organization: องค์กรระดับภูมิภาคใหม่
       #original_hash: dc1649a
-      sign_out: ออกจากระบบบ
+      sign_out: ออกจากระบบ
       #original_hash: 753a22b
       notifications: การแจ้งเตือน
       #original_hash: 15141ea
@@ -1673,6 +1675,11 @@ th:
         เพื่อเชื่อมต่อกับ account ของคุณที่นี่ %{here}!
       #original_hash: 29e25b5
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
+      #original_hash: bf654e1
+      account_is_special: >-
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
+        delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
+        มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -1827,12 +1834,10 @@ th:
         WCA ID %{link_id} ได้ถุกเชื่อมต่อกับ account อื่นแล้ว
         ถ้าคุณเชื่อว่านี่คือความผิดพลาด กรุณาติดต่อ<a href='%{link_delegate}'
         target='_blank'>WCA Delegate</a> ในพื้นที่ของคุณ
-      #original_hash: d26bfdc
-      missing_dob_html: 'WCA ID %{link_id} ไม่มีวันเกิดตั้งไว้'
-      #original_hash: 5be6803
-      contact_results_team_html: >-
-        กรุณาติดต่อ <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> เพื่อแก้ไข
+      #original_hash: 498dc1e
+      missing_dob_html: >-
+        WCA ID %{link_id} ไม่มีวันเกิด กรุณาติดต่อ WCA Results Team ด้วย<a
+        href="%{dob_form_path}">แบบฟอร์มเฉพาะนี้</a>
       #original_hash: 92aa857
       unknown_wca_id_html: 'ไม่มี WCA ID %{link_id}'
   registrations:
@@ -2440,6 +2445,10 @@ th:
     index:
       #original_hash: db98a68
       title: การแข่งขัน
+      #original_hash: 63254de
+      disclaimer: >-
+        โปรดทราบว่า อันเนื่องมาจากการระบาดของ COVID-19
+        ทำให้ในหลายประเทศไม่สามารถจัดการแข่งขันได้
       #original_hash: 6a72085
       all_events: ทั้งหมด
       #original_hash: 6d76b81
@@ -2695,6 +2704,10 @@ th:
       before: ก่อน
       #original_hash: 405906c
       after: หลัง
+      #original_hash: e1978a9
+      starts_on: เริ่มเมื่อ
+      #original_hash: 964aedc
+      ends_on: สิ้นสุดเมื่อ
       #original_hash: 24d948e
       limit: จำกัด
       #original_hash: 855bd26
@@ -2842,6 +2855,8 @@ th:
         register: สมัครการแข่งขัน
         #original_hash: 855bd26
         competitors: ผู้เข้าแข่งขัน
+        #original_hash: c4622c3
+        scrambles: โจทย์
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA profile
@@ -2851,6 +2866,11 @@ th:
       round: รอบ
       #original_hash: 709a232
       name: ชื่อ
+    scrambles_table:
+      #original_hash: 171a060
+      group: กลุ่ม
+      #original_hash: b7126cd
+      scramble: โจทย์
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3535,6 +3555,9 @@ th:
       banned:
         #original_hash: d30e2e5
         name: Banned Competitors
+      wct_china:
+        #original_hash: ed5b65a
+        name: WCT China
       #original_hash: f8c3f3c
       operations_html: 'การดำเนินงานแบบวันต่อวันดำเนินการโดย %{committees_and_teams} ของ WCA'
       #original_hash: 0e7a036
@@ -3566,6 +3589,9 @@ th:
       members_html: >-
         ผู้เข้าแข่งขันทุกคนจะกลายเป็น<strong>สมาชิก</strong>ของ WCA ในการแข่งขัน
         WCA ครั้งแรกโดยอัตโนมัติ
+  speedcubing_history:
+    #original_hash: 431e667
+    title: ประวัติของชุมชน Speedcubing‌ และ WCA
   documents:
     #original_hash: 687c828
     title: เอกสาร
