@@ -521,6 +521,10 @@ class User < ApplicationRecord
     team_member?(Team.wst)
   end
 
+  def software_team_admin?
+    team_member?(Team.wst_admin)
+  end
+
   def wac_team?
     team_member?(Team.wac)
   end
@@ -569,6 +573,8 @@ class User < ApplicationRecord
 
   def admin?
     software_team?
+    # TODO: GB enable once the software admin team has been populated on the website
+    # Rails.env.production? ? software_team_admin? : software_team?
   end
 
   def any_kind_of_delegate?

@@ -31,8 +31,10 @@ FactoryBot.define do
       name { "Mr. Admin" }
       email { "admin@worldcubeassociation.org" }
       after(:create) do |user|
-        software_team = Team.wst
-        FactoryBot.create(:team_member, team_id: software_team.id, user_id: user.id, team_leader: true)
+        software_admin_team = Team.wst
+        # TODO: GB enable once the software admin team is enabled as per user.rb:576
+        # software_admin_team = Team.wst_admin
+        FactoryBot.create(:team_member, team_id: software_admin_team.id, user_id: user.id, team_leader: true)
       end
     end
 
@@ -161,6 +163,12 @@ FactoryBot.define do
     trait :wst_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wst.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      end
+    end
+
+    trait :wst_admin_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:team_member, team_id: Team.wst_admin.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
       end
     end
 
