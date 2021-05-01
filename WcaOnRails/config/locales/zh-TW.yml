@@ -1528,6 +1528,10 @@ zh-TW:
       have_no_wca_id_html: '您尚未有WCA ID。如果您曾經參加過比賽，請在%{here}將您的WCA帳號與WCA ID綁定！'
       #original_hash: 29e25b5
       have_wca_id_html: '您的WCA ID是%{link_id}。'
+      #original_hash: bf654e1
+      account_is_special: >-
+        這個WCA ID 和帳號
+        有連結到WCA的特殊職位(例如：代表，主辦團隊，團隊成員)，所以無法被移除。請用電子郵件聯絡WCA成績組來協助修改WCA ID到另一個帳號。
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
