@@ -560,7 +560,7 @@ GEM
       sprockets (>= 3.0.0)
     strip_attributes (1.11.0)
       activemodel (>= 3.0, < 7.0)
-    stripe (5.29.1)
+    stripe (5.32.1)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
     terminal-table (2.0.0)
