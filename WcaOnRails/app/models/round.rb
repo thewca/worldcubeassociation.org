@@ -152,7 +152,7 @@ class Round < ApplicationRecord
 
   # cutoffs are too slow if they are more than 10 minutes
   def cutoff_is_too_slow?
-    cutoff && self.event.timed_event? && cutoff.attempt_result > 60000
+    cutoff && self.event.timed_event? && cutoff.attempt_result > 60_000
   end
 
   # time limits are too fast if they are less than 10 seconds
@@ -162,7 +162,7 @@ class Round < ApplicationRecord
 
   # time limits are too slow if they are more than 10 minutes in fast events
   def time_limit_is_too_slow?
-    time_limit != TimeLimit::UNDEF_TL && time_limit.cumulative_round_ids.empty? && ['333', '222', '444', '333oh', 'clock', 'mega', 'pyram', 'skewb', 'sq1'].include?(self.event.id) && time_limit.centiseconds > 60000
+    time_limit != TimeLimit::UNDEF_TL && time_limit.cumulative_round_ids.empty? && self.event.fast_event? && time_limit.centiseconds > 60_000
   end
 
   def self.parse_wcif_id(wcif_id)
