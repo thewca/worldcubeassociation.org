@@ -849,6 +849,18 @@ class User < ApplicationRecord
       # That's the only field we want to be able to edit for these accounts
       return %i(remove_avatar)
     end
+    fields += editable_personal_preference_fields(user)
+    fields += editable_competitor_info_fields(user)
+    fields += editable_avatar_fields(user)
+    # Delegate Status Fields
+    if admin? || board_member? || senior_delegate?
+      fields += %i(delegate_status senior_delegate_id region)
+    end
+    fields
+  end
+
+  private def editable_personal_preference_fields(user)
+    fields = Set.new
     if user == self
       fields += %i(
         password password_confirmation
@@ -859,33 +871,44 @@ class User < ApplicationRecord
         fields += %i(receive_delegate_reports)
       end
     end
-    if admin? || board_member? || senior_delegate?
-      fields += %i(delegate_status senior_delegate_id region)
-    end
-    if admin? || any_kind_of_delegate? || results_team?
-      fields += %i(
-        unconfirmed_wca_id
-        avatar avatar_cache
-      )
-      if !user.is_special_account?
-        fields += %i(wca_id)
-      end
-    end
-    if user == self || admin? || any_kind_of_delegate? || results_team?
+    fields
+  end
+
+  private def editable_competitor_info_fields(user)
+    fields = Set.new
+    if user == self || admin? || any_kind_of_delegate? || results_team? || communication_team?
       cannot_edit_data = !!cannot_edit_data_reason_html(user)
       if !cannot_edit_data
         fields += %i(name dob gender country_iso2)
       end
       fields += CLAIM_WCA_ID_PARAMS
+    end
+    if user.wca_id.blank? && organizer_for?(user)
+      fields << :name
+    end
+    if admin? || any_kind_of_delegate? || results_team? || communication_team?
+      fields += %i(
+        unconfirmed_wca_id
+      )
+      unless user.is_special_account?
+        fields += %i(wca_id)
+      end
+    end
+    fields
+  end
+
+  private def editable_avatar_fields(user)
+    fields = Set.new
+    if admin? || results_team?
+      fields += %i(avatar avatar_cache)
+    end
+    if user == self || admin? || results_team?
       fields += %i(
         pending_avatar pending_avatar_cache remove_pending_avatar
         avatar_crop_x avatar_crop_y avatar_crop_w avatar_crop_h
         pending_avatar_crop_x pending_avatar_crop_y pending_avatar_crop_w pending_avatar_crop_h
         remove_avatar
       )
-    end
-    if user.wca_id.blank? && organizer_for?(user)
-      fields << :name
     end
     fields
   end
