@@ -3,14 +3,14 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script data-ad-client="ca-pub-8682718775826560" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
   <%= favicon_link_tag 'wca.ico' %>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="icon" href='<%= asset_path("android-touch-icon.png") %>'/>
   <link rel="apple-touch-icon" href='<%= asset_path("apple-touch-icon.png") %>'/>
 
   <meta name="og:image" content='<%= asset_url("og-wca_logo.png") %>'/>
+
+  <meta name="description" content="The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'. The most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA.">
 
   <title><%= full_title(yield(:title)) %></title>
   <%# NOTE: we need to create our global wca object first, because it's used in our non-webpack application.js %>
@@ -38,9 +38,10 @@
     evaluated first, and any pack added (like schedule) will be loaded before application.
     These javascript packs *do* include the css imported in them!
   %>
-  <% packs_to_prepend = ["application", "global_styles", "i18n", "search_widget"] %>
+  <% packs_to_prepend = ["application", "global_styles", "i18n"] %>
   <%# This loads our main locale(s) files %>
   <% [:en, I18n.locale].uniq.map { |l| packs_to_prepend << "generated_locales/#{l}" } %>
+  <% packs_to_prepend << "search_widget" %>
 
   <% packs_to_include = @all_packs.split(",").uniq.unshift(*packs_to_prepend) %>
   <%= javascript_packs_with_chunks_tag *packs_to_include %>
@@ -58,6 +59,7 @@
   <%= csrf_meta_tags %>
   <%= auto_discovery_link_tag(:rss, rss_url(format: :xml)) %>
   <% if ENVied.WCA_LIVE_SITE %>
+    <script data-ad-client="ca-pub-8682718775826560" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

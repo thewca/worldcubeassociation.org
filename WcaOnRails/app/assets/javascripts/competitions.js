@@ -30,6 +30,16 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
   $('input[name="competition[event_restrictions]"]').on('change', function() {
     $('.competition_event_restrictions_reason').toggle(this.checked);
   }).trigger('change');
+
+  $('#nearby-competitions').on('click', "#wca-nearby-competitions-show-events-button", function() {
+    $('#nearby-competitions .wca-nearby-competitions-show-events').show();
+    $('#nearby-competitions .wca-nearby-competitions-hide-events').hide();
+  });
+
+  $('#nearby-competitions').on('click', "#wca-nearby-competitions-hide-events-button", function() {
+    $('#nearby-competitions .wca-nearby-competitions-show-events').hide();
+    $('#nearby-competitions .wca-nearby-competitions-hide-events').show();
+  });
 });
 
 // Sets map container height.

@@ -1429,6 +1429,8 @@ es:
       education: Recursos educativos
       #original_hash: a34b69f
       contact: Información de Contacto
+      #original_hash: 8e12c09
+      speedcubing_history: Historia del Speedcubing
       #original_hash: 4fa8cc8
       tools: Herramientas
       #original_hash: 83fce83
@@ -1781,6 +1783,12 @@ es:
         conectar tu WCA ID a tu cuenta %{here}.
       #original_hash: 29e25b5
       have_wca_id_html: 'Tu WCA ID es %{link_id}.'
+      #original_hash: bf654e1
+      account_is_special: >-
+        El ID WCA y la cuenta están conectados a roles específicos dentro de la
+        WCA (Delegados, organizadores, miembros de equipo...) y no pueden ser
+        eliminados. Por favor cotacta el Equipo de Resultaados de la WCA para
+        que te ayude a cambiar el ID WCA a alguna cuenta distinta.
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -1955,13 +1963,11 @@ es:
         El WCA ID %{link_id} ya está asignado a otra cuenta. Si crees que esto
         se debe a un error, ponte en contacto con algún <a
         href='%{link_delegate}' target='_blank'>Delegado</a> de tu zona o país.
-      #original_hash: d26bfdc
-      missing_dob_html: 'El WCA ID %{link_id} no tiene asociada una fecha de nacimiento.'
-      #original_hash: 5be6803
-      contact_results_team_html: >-
-        Por favor, ponte en contacto con el <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>Equipo de
-        Resultados de la WCA</a> para resolver esto.
+      #original_hash: 498dc1e
+      missing_dob_html: >-
+        El WCA ID %{link_id} no tiene asociada una fecha de nacimiento. Por
+        favor contacta al Equipo de Resultados de la WCA usando <a
+        href="%{dob_form_path}">este formulario</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'El WCA ID %{link_id} no existe.'
   registrations:
@@ -2628,6 +2634,10 @@ es:
     index:
       #original_hash: db98a68
       title: Competiciones
+      #original_hash: 63254de
+      disclaimer: >-
+        Por favor, ten en cuenta que debido a la pandemia del COVID-19, muchos
+        paises no pueden celebrar competiciones actualmente.
       #original_hash: 6a72085
       all_events: Todas
       #original_hash: 6d76b81
@@ -2899,6 +2909,10 @@ es:
       before: antes
       #original_hash: 405906c
       after: después
+      #original_hash: e1978a9
+      starts_on: Comienza en
+      #original_hash: 964aedc
+      ends_on: Finaliza en
       #original_hash: 24d948e
       limit: Límite
       #original_hash: 855bd26
@@ -3049,6 +3063,8 @@ es:
         register: Registrarse
         #original_hash: 855bd26
         competitors: Competidores
+        #original_hash: c4622c3
+        scrambles: Mezclas
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: Perfil WCA
@@ -3058,6 +3074,11 @@ es:
       round: Ronda
       #original_hash: 709a232
       name: Nombre
+    scrambles_table:
+      #original_hash: 171a060
+      group: Grupo
+      #original_hash: b7126cd
+      scramble: Mezcla
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3801,6 +3822,9 @@ es:
       banned:
         #original_hash: d30e2e5
         name: Competiciones no Autorizadas
+      wct_china:
+        #original_hash: ed5b65a
+        name: WCT China
       #original_hash: f8c3f3c
       operations_html: >-
         Las operaciones del día a día son realizadas por los
@@ -3825,6 +3849,9 @@ es:
       members_html: >-
         Todos los competidores se convierten automáticamente en <strong>miembros
         de la WCA</strong> en su primera competición oficial.
+  speedcubing_history:
+    #original_hash: 431e667
+    title: Historia de la Comuniad de Speedcubing y de la WCA
   documents:
     #original_hash: 687c828
     title: Documentos
