@@ -1,3 +1,5 @@
+@import "../../stylesheets/variables.scss";
+
 .competition-results {
   .events-list {
     display: flex;
@@ -6,6 +8,15 @@
   .event-results {
     .table-cell-solves {
       word-spacing: 0.5em;
+    }
+    .WR {
+      color : $wr-color;
+    }
+    .CR {
+      color : $cr-color;
+    }
+    .NR {
+      color : $nr-color;
     }
   }
 }

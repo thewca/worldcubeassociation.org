@@ -592,7 +592,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wdc_team? || wdpc_team? || any_kind_of_delegate?
+    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate?
   end
 
   def can_view_senior_delegate_material?
@@ -864,9 +864,12 @@ class User < ApplicationRecord
     end
     if admin? || any_kind_of_delegate? || results_team?
       fields += %i(
-        wca_id unconfirmed_wca_id
+        unconfirmed_wca_id
         avatar avatar_cache
       )
+      if !user.is_special_account?
+        fields += %i(wca_id)
+      end
     end
     if user == self || admin? || any_kind_of_delegate? || results_team?
       cannot_edit_data = !!cannot_edit_data_reason_html(user)

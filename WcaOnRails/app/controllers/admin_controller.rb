@@ -85,6 +85,9 @@ class AdminController < ApplicationController
 
     # This makes sure the json structure is valid!
     if @upload_json.import_to_inbox
+      if @competition.results_submitted_at.nil?
+        @competition.update!(results_submitted_at: Time.now)
+      end
       flash[:success] = "JSON file has been imported."
       redirect_to competition_admin_upload_results_edit_path
     else
@@ -208,5 +211,34 @@ class AdminController < ApplicationController
       session[:anonymize_step] = @anonymize_person.current_step
     end
     render 'anonymize_person'
+  end
+
+  def reassign_wca_id
+    @reassign_wca_id = ReassignWcaId.new
+    @reassign_wca_id_validated = false
+  end
+
+  def validate_reassign_wca_id
+    reassign_params = params.require(:reassign_wca_id).permit(:account1, :account2)
+    @reassign_wca_id = ReassignWcaId.new(reassign_params)
+    if @reassign_wca_id.valid?
+      @reassign_wca_id_validated = true
+    else
+      flash.now[:danger] = "Error reassigning WCA ID"
+    end
+    render 'reassign_wca_id'
+  end
+
+  def do_reassign_wca_id
+    reassign_params = params.require(:reassign_wca_id).permit(:account1, :account2)
+    @reassign_wca_id = ReassignWcaId.new(reassign_params)
+    if @reassign_wca_id.do_reassign_wca_id
+      flash.now[:success] = "Successfully reassigned #{@reassign_wca_id.account1_user.wca_id} from account #{@reassign_wca_id.account1_user.id} to #{@reassign_wca_id.account2_user.id}!"
+      @reassign_wca_id = ReassignWcaId.new
+    else
+      @reassign_wca_id_validated = false
+      flash.now[:danger] = "Error reassigning WCA ID"
+    end
+    render 'reassign_wca_id'
   end
 end

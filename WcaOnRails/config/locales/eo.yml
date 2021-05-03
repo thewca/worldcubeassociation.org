@@ -1909,10 +1909,11 @@ eo:
         La WCA-ID %{link_id} jam estas atribuata al alia konto. Se vi pensas ke
         tio estas eraro, kontaktu vian lokan <a href='%{link_delegate}'
         target='_blank'>WCA-Delegito</a>.
-      #original_hash: d26bfdc
-      missing_dob_html: 'La WCA-ID %{link_id} ne havas asignitan naskiĝdaton.'
-      #original_hash: 5be6803
-      contact_results_team_html: Bonvolu kontakti la Rezultan Teamon de la WCA por solvi tion.
+      #original_hash: 498dc1e
+      missing_dob_html: >-
+        La WCA-ID %{link_id} ne havas asignitan naskiĝdaton. Bonvolu kontakti la
+        Rezultan Teamon de la WCA per <a href="%{dob_form_path}">tiu
+        formularo</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'La WCA-ID %{link_id} ne ekzistas.'
   registrations:
@@ -2974,6 +2975,8 @@ eo:
         register: Registriĝi
         #original_hash: 855bd26
         competitors: Konkursantoj
+        #original_hash: c4622c3
+        scrambles: Miksoj
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA-profilo
@@ -2983,6 +2986,11 @@ eo:
       round: Raŭndo
       #original_hash: 709a232
       name: Nomo
+    scrambles_table:
+      #original_hash: 171a060
+      group: Grupo
+      #original_hash: b7126cd
+      scramble: Mikso
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3690,6 +3698,9 @@ eo:
       banned:
         #original_hash: d30e2e5
         name: Forbaritaj Konkursantoj
+      wct_china:
+        #original_hash: ed5b65a
+        name: WCT Ĉinio
       #original_hash: f8c3f3c
       operations_html: 'La %{committees_and_teams} okupiĝas pri la ĉiutagaj taskoj.'
       #original_hash: 0e7a036
@@ -3953,7 +3964,7 @@ eo:
     #original_hash: 4fc2133
     title: Programaraj iloj por WCA-Konkursoj
     #original_hash: 6d2fe37
-    wca_icon_text: Disvolvitaj kaj subtenitaj de la WST
+    wca_icon_text: Disvolvita kaj subtenita de la WST
     intro:
       #original_hash: 0c5fab5
       desc: >-
@@ -3990,8 +4001,8 @@ eo:
       title: Post la konkurso
       #original_hash: b898460
       desc: >-
-        Kvankam la kontrolo de rezultoj okazas tie en la retejo, vi devos uzi
-        aliajn ilojn por asigni miksoj generitaj per TNoodle kun la realaj
+        Kvankam kontrolo de rezultoj okazas en ĉi tiu retejo, vi devos uzi
+        aliajn ilojn por asigni miksojn generitajn per TNoodle kun la realaj
         rezultoj submetitaj al la retejo de la WCA.
     tools:
       age:
@@ -4043,8 +4054,8 @@ eo:
         title: Kalkultabelo de rezultoj
         #original_hash: 466f4c2
         description: >-
-          Kelkfoje io okazas… Se vi ne havas retaliron, vi devos uzi la bonan
-          malnovan kalkultabelo.
+          Kelkfoje okazas problemoj… Se vi ne havas retaliron, vi devos uzi la
+          bonan malnovan kalkultabelo.
       matcher:
         #original_hash: cc59bc9
         title: Scrambles Matcher

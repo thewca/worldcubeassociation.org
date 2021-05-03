@@ -170,7 +170,7 @@ const CountryInput = ({ value, onChange }) => (
         value={value}
         onChange={onChange}
       >
-        {countries.map((country) => (
+        {countries.real.map((country) => (
           <option key={country.iso2} value={country.iso2}>
             {country.name}
           </option>

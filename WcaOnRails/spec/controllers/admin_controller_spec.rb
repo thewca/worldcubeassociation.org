@@ -62,6 +62,26 @@ RSpec.describe AdminController, type: :controller do
     end
   end
 
+  describe 'reassign_wca_id' do
+    sign_in { FactoryBot.create :admin }
+
+    let(:user1) { FactoryBot.create(:user_with_wca_id) }
+    let(:user2) { FactoryBot.create(:user, user1.attributes.symbolize_keys!.slice(:name, :country_iso2, :gender, :dob)) }
+
+    it 'can validate reassign wca id' do
+      get :validate_reassign_wca_id, params: { reassign_wca_id: { account1: user1, account2: user2 } }
+      expect(response.status).to eq 200
+      expect(response).to render_template :reassign_wca_id
+    end
+
+    it 'can reassign wca id' do
+      post :do_reassign_wca_id, params: { reassign_wca_id: { account1: user1, account2: user2 } }
+      expect(response.status).to eq 200
+      expect(response).to render_template :reassign_wca_id
+      expect(flash.now[:success]).to eq "Successfully reassigned #{user1.wca_id} from account #{user1.id} to #{user2.id}!"
+    end
+  end
+
   describe 'PATCH #update person' do
     sign_in { FactoryBot.create :admin }
 

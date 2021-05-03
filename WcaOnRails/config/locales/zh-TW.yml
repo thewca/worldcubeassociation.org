@@ -1528,6 +1528,10 @@ zh-TW:
       have_no_wca_id_html: '您尚未有WCA ID。如果您曾經參加過比賽，請在%{here}將您的WCA帳號與WCA ID綁定！'
       #original_hash: 29e25b5
       have_wca_id_html: '您的WCA ID是%{link_id}。'
+      #original_hash: bf654e1
+      account_is_special: >-
+        這個WCA ID 和帳號
+        有連結到WCA的特殊職位(例如：代表，主辦團隊，團隊成員)，所以無法被移除。請用電子郵件聯絡WCA成績組來協助修改WCA ID到另一個帳號。
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -1658,12 +1662,10 @@ zh-TW:
       already_assigned_html: >-
         WCA ID %{link_id}已經被其他帳號使用了。如果您認為有錯誤，請聯絡您當地的<a href='%{link_delegate}'
         target='_blank'>WCA代表</a>。
-      #original_hash: d26bfdc
-      missing_dob_html: 'WCA ID %{link_id}目前沒有輸入生日。'
-      #original_hash: 5be6803
-      contact_results_team_html: >-
-        請寄信至<a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA成績組</a>處理。
+      #original_hash: 498dc1e
+      missing_dob_html: >-
+        WCA ID %{link_id}目前沒有輸入生日。請使用<a
+        href="%{dob_form_path}">這個專用表格</a>.來聯絡WCA成績組。
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id}不存在。'
   registrations:
@@ -2575,6 +2577,8 @@ zh-TW:
         register: 報名
         #original_hash: 855bd26
         competitors: 參賽者
+        #original_hash: c4622c3
+        scrambles: 轉亂步驟內容
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA個人頁面
@@ -2584,6 +2588,11 @@ zh-TW:
       round: 輪數
       #original_hash: 709a232
       name: 姓名
+    scrambles_table:
+      #original_hash: 171a060
+      group: 組別
+      #original_hash: b7126cd
+      scramble: 轉亂步驟
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3149,6 +3158,9 @@ zh-TW:
       banned:
         #original_hash: d30e2e5
         name: 禁賽名單
+      wct_china:
+        #original_hash: ed5b65a
+        name: WCA中國區傳播組
       #original_hash: f8c3f3c
       operations_html: 'WCA的日常事務由 %{committees_and_teams}來處理。'
       #original_hash: 0e7a036
