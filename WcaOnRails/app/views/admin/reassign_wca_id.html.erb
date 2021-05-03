@@ -64,6 +64,18 @@
                 <%= @reassign_wca_id.account1_user.trainee_delegated_competitions.map(&:name).join(",") %>
               <% end %>
             </div>
+            <div>
+              <% if Competition.where(results_posted_by: @reassign_wca_id.account1_user.id).any? %>
+                <b>Posted Results for Competitions:</b>
+                <%= Competition.where(results_posted_by: @reassign_wca_id.account1_user.id).map(&:name).join(",") %>
+              <% end %>
+            </div>
+            <div>
+              <% if Competition.where(announced_by: @reassign_wca_id.account1_user.id).any? %>
+                <b>Announced Competitions:</b>
+                <%= Competition.where(announced_by: @reassign_wca_id.account1_user.id).map(&:name).join(",") %>
+              <% end %>
+            </div>
           </div>
           <div class="col-sm-6">
             <%= form.input :account2, as: :user_ids, users_table: true, only_one: true, label: "Account 2"  %>
