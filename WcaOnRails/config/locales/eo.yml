@@ -1738,6 +1738,12 @@ eo:
         ligon de via WCA-ID al via konto %{here}!
       #original_hash: 29e25b5
       have_wca_id_html: 'Via WCA-ID estas %{link_id}.'
+      #original_hash: bf654e1
+      account_is_special: >-
+        Tiu WCA-ID kaj tiu konto estas ligitaj al specialaj roloj de la WCA
+        (ekz. Delegitoj, organizantoj, teamaj membroj) kaj ili ne povas esti
+        forigitaj. Bonvolu kontakti la Rezulta Teamo de la WCA por helpi vin
+        ligi tiun WCA-ID al malsama konto.
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -2829,6 +2835,12 @@ eo:
       limit: Limo
       #original_hash: 855bd26
       competitors: Konkursantoj
+      #original_hash: c5497bc
+      events: Konkurseroj
+      #original_hash: 50cb854
+      show_events: Montri konkurserojn
+      #original_hash: 0df66f7
+      hide_events: Kaŝi konkurserojn
     #original_hash: 06b01c4
     announcements: Anoncoj
     #original_hash: a2b80b0
