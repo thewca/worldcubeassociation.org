@@ -6,7 +6,12 @@
     <p class="lead"><%= t('about.donation_banner.content') %></p>
     <hr class="my-4">
 
-    <a class="btn btn-primary btn-lg" href="https://www.nfggive.com/guidestar/82-3825954" role="button"><%= t('about.donation_banner.donate_credit') %></a>
+    <a class="btn btn-primary btn-lg" href="<%= StaticPagesController::DONATE_GUIDESTAR_URL %>" role="button">
+      <%= t('about.donation_banner.donate_credit') %>
+    </a>
+    <a class="btn btn-primary btn-lg" href="<%= StaticPagesController::DONATE_PAYPAL_URL %>" role="button">
+      <%= t('about.donation_banner.donate_paypal') %>
+    </a>
     <a class="btn btn-primary btn-lg" href="#contribute" role="button"><%= t('about.donation_banner.donate_other') %></a>
   </div>
 
@@ -72,7 +77,9 @@
 
   <h2 id="contribute"><%= t('about.contributing_title') %></h2>
   <p>
-  <%= t('about.contributing_content_html') %>
+  <%= t('about.contributing_content_html',
+        here_credit: link_to(t('common.here'), StaticPagesController::DONATE_GUIDESTAR_URL),
+        here_paypal: link_to(t('common.here'), StaticPagesController::DONATE_PAYPAL_URL)) %>
     <em>
       <br />
       <br />
