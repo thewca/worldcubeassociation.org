@@ -3,7 +3,7 @@ updates:
 - package-ecosystem: bundler
   directory: "/WcaOnRails"
   schedule:
-    interval: weekly
+    interval: monthly
   open-pull-requests-limit: 10
   ignore:
   - dependency-name: envied
@@ -34,7 +34,7 @@ updates:
 - package-ecosystem: npm
   directory: "/WcaOnRails"
   schedule:
-    interval: weekly
+    interval: monthly
   open-pull-requests-limit: 10
   ignore:
   - dependency-name: jquery
