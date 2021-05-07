@@ -567,7 +567,7 @@ GEM
     timecop (0.9.4)
     translighterate (0.2.2)
       actionview (>= 4.0, < 6.0)
-    twitter_cldr (6.4.0)
+    twitter_cldr (6.6.0)
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.1)
       tzinfo
