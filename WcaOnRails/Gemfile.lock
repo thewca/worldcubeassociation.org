@@ -161,7 +161,12 @@ GEM
     css_parser (1.7.1)
       addressable
     daemons (1.4.0)
-    database_cleaner (1.8.5)
+    database_cleaner (2.0.1)
+      database_cleaner-active_record (~> 2.0.0)
+    database_cleaner-active_record (2.0.0)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     debug_inspector (1.0.0)
     declarative (0.0.20)
     delayed_job (4.1.9)
