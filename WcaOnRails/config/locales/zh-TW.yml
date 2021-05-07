@@ -2444,6 +2444,12 @@ zh-TW:
       limit: 上限
       #original_hash: 855bd26
       competitors: 人數
+      #original_hash: c5497bc
+      events: 項目
+      #original_hash: 50cb854
+      show_events: 顯示比賽項目
+      #original_hash: 0df66f7
+      hide_events: 隱藏比賽項目
     #original_hash: 06b01c4
     announcements: 公告
     #original_hash: a2b80b0
@@ -3023,10 +3029,8 @@ zh-TW:
     world_championship_content_html: '<p>每兩年一次, 我們認可一場能夠決定世界冠軍的比賽。這些比賽項目需要多位志願者極為仔細的計畫，對於場地預定的財物支出和其他必要的準備。</p>'
     #original_hash: 1aa5344
     contributing_title: 對我們做出協助
-    #original_hash: e64beb7
-    contributing_content_html: >-
-      您可以透過信用卡在<a
-      href="https://www.nfggive.com/guidestar/82-3825954">Guidestar</a>平台捐款。如果您希望用支票，請寄到：
+    #original_hash: 538a82f
+    contributing_content_html: '您可以透過信用卡在Guidestar %{here_credit}或是Paypal %{here_paypal}平台捐款。如果您希望用支票，請寄到：'
     #original_hash: 2af9b71
     tax_deductible_note: 捐款在美國可以抵稅。
     #original_hash: 6026d35
@@ -3044,6 +3048,8 @@ zh-TW:
         501(c)(3)免稅組織。由於我們是一個100%志願者經營的非營利團體，我們歡迎您的捐款，這讓我們能夠拓展我們的願景，並幫助全世界舉辦更讓人樂於其中的比賽。
       #original_hash: 24c87db
       donate_credit: 用信用卡捐款
+      #original_hash: 0e5a9c3
+      donate_paypal: 用Paypal捐款
       #original_hash: 96d77f3
       donate_other: 其他方式的協助
     structure:
