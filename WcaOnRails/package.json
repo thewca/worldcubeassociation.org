@@ -24,7 +24,7 @@
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-module-resolver": "^4.0.0",
     "blueimp-load-image": "^5.14.0",
-    "classnames": "^2.2.6",
+    "classnames": "^2.3.1",
     "compression-webpack-plugin": "^6.1.1",
     "core-js": "^3.11.1",
     "css-loader": "^5.2.4",
