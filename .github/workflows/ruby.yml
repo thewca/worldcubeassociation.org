@@ -1,0 +1,55 @@
+name: Ruby
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: mysql2://root:root@127.0.0.1:3306/wca_test
+      RACK_ENV: test
+    defaults:
+      run:
+        working-directory: WcaOnRails
+    steps:
+      - uses: actions/checkout@v2
+      - uses: fregante/setup-git-user@v1 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
+      - name: Activate MySQL # as per https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#mysql
+        run: |
+          sudo systemctl start mysql.service
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: WcaOnRails
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - uses: actions/setup-node@v2 # this also includes Yarn
+        with:
+          node-version: '12'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules
+      - uses: actions/cache@v2
+        with:
+          path: '~/.cache/yarn'
+          key: ${{ runner.os }}-yarn
+      - uses: actions/cache@v2
+        with:
+          path: '~/.phantomjs'
+          key: ${{ runner.os }}-phantomjs
+      - name: Populate database with seeds
+        run: bundle exec rake db:reset
+      - name: Pre-compile assets for frontend tests
+        env:
+          DISABLE_SPRING: 1
+        run: bundle exec rake assets:precompile
+      - name: Run Overcommit commit hooks
+        run: bundle exec overcommit --sign && bundle exec overcommit --sign pre-commit && (cd .. && BUNDLE_GEMFILE=WcaOnRails/Gemfile bundle exec overcommit --run)
+      - name: Run tests
+        run: bundle exec rake
