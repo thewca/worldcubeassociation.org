@@ -53,3 +53,9 @@ jobs:
         run: bundle exec overcommit --sign && bundle exec overcommit --sign pre-commit && (cd .. && BUNDLE_GEMFILE=WcaOnRails/Gemfile bundle exec overcommit --run)
       - name: Run tests
         run: bundle exec rake
+      - name: Push coverage data to Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: 'WcaOnRails/coverage/lcov/WcaOnRails.lcov'
+          base-path: 'WcaOnRails'
