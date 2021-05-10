@@ -119,6 +119,6 @@ RSpec.describe "RegulationsCheck" do
     status, description = check.status_description
 
     expect(status).to eq :danger
-    expect(description).to eq "Error while loading regulations: 783: unexpected token at 'i am definitely not json'"
+    expect(description).to eq "Error while loading regulations: 809: unexpected token at 'i am definitely not json'"
   end
 end
