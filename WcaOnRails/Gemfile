@@ -17,7 +17,7 @@ gem 'uglifier'
 gem 'faraday'
 gem 'sdoc', group: :doc
 gem 'dotenv-rails', require: 'dotenv/rails-now'
-gem 'envied', '0.9.1' # https://github.com/thewca/worldcubeassociation.org/issues/4455
+gem 'envied', '0.9.3' # https://github.com/thewca/worldcubeassociation.org/issues/4455
 gem 'seedbank'
 gem 'jbuilder'
 gem 'bootstrap-sass'
@@ -123,7 +123,8 @@ group :test do
   gem 'rails-controller-testing'
   gem 'poltergeist'
   gem 'phantomjs', require: 'phantomjs/poltergeist'
-  gem 'coveralls', require: false
+  gem 'simplecov', require: false
+  gem 'simplecov-lcov', require: false
   gem 'timecop'
 end
 

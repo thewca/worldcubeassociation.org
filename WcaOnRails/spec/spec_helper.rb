@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
-# Enable Coveralls. See https://docs.travis-ci.com/user/coveralls/
-require 'coveralls'
-Coveralls.wear!
+# Enable SimpleCov as per https://github.com/fortissimo1997/simplecov-lcov#output-report-as-single-file
+require 'simplecov'
+require 'simplecov-lcov'
+SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
+SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
+SimpleCov.start
 
 # Include rspec/retry for the few randomly failing tests
 require 'rspec/retry'
