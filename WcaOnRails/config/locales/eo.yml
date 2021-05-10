@@ -1738,6 +1738,12 @@ eo:
         ligon de via WCA-ID al via konto %{here}!
       #original_hash: 29e25b5
       have_wca_id_html: 'Via WCA-ID estas %{link_id}.'
+      #original_hash: bf654e1
+      account_is_special: >-
+        Tiu WCA-ID kaj tiu konto estas ligitaj al specialaj roloj de la WCA
+        (ekz. Delegitoj, organizantoj, teamaj membroj) kaj ili ne povas esti
+        forigitaj. Bonvolu kontakti la Rezulta Teamo de la WCA por helpi vin
+        ligi tiun WCA-ID al malsama konto.
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -2829,6 +2835,12 @@ eo:
       limit: Limo
       #original_hash: 855bd26
       competitors: Konkursantoj
+      #original_hash: c5497bc
+      events: Konkurseroj
+      #original_hash: 50cb854
+      show_events: Montri konkurserojn
+      #original_hash: 0df66f7
+      hide_events: Kaŝi konkurserojn
     #original_hash: 06b01c4
     announcements: Anoncoj
     #original_hash: a2b80b0
@@ -3518,11 +3530,10 @@ eo:
       fari necesan preparadon.
     #original_hash: 1aa5344
     contributing_title: Kontribui
-    #original_hash: e64beb7
+    #original_hash: 538a82f
     contributing_content_html: >-
-      Vi povas donaci per kreditkarto uzante Guidestar <a
-      href="https://www.nfggive.com/guidestar/82-3825954">tie</a>. Se vi
-      preferas skribi ĉekon, vi povas skribi al:
+      Vi povas donaci per kreditkarto uzante Guidestar %{here_credit} aŭ per
+      Paypal %{here_paypal}. Se vi preferas skribi ĉekon, vi povas skribi al:
     #original_hash: 2af9b71
     tax_deductible_note: Donacoj estas imposte subtraheblaj en Usono.
     #original_hash: 6026d35
@@ -3540,6 +3551,8 @@ eo:
         donacojn por helpi nin havi pli da konkursoj ĉirkaŭ la mondo.
       #original_hash: 24c87db
       donate_credit: Donaci per kreditkarto
+      #original_hash: 0e5a9c3
+      donate_paypal: Donaci per Paypal
       #original_hash: 96d77f3
       donate_other: Donaci alimaniere
     structure:
