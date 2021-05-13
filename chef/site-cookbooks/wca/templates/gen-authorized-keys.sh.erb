@@ -12,10 +12,8 @@ fi
 /home/cubing/worldcubeassociation.org/scripts/acces.sh \
   --gh-token <%= @secrets['GITHUB_LIST_MEMBERS_ACCESS_TOKEN'] %> \
   --gh-org thewca \
-  --gh-team "Software Team" \
+  --gh-team "<%= node.chef_environment == "production" ? "WST Admin" : "Software Team" %>" \
   --keyfile /home/cubing/.ssh/authorized_keys
-# TODO: GB enable once the software admin team has been populated on the website
-# --gh-team "<%= node.chef_environment == "production" ? "WST Admin" : "Software Team" %>" \
 
 # Add keys used by Travis for deployment.
 # Note that we restrict Travis to running our deploy.sh script.
