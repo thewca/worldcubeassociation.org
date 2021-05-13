@@ -31,9 +31,7 @@ FactoryBot.define do
       name { "Mr. Admin" }
       email { "admin@worldcubeassociation.org" }
       after(:create) do |user|
-        software_admin_team = Team.wst
-        # TODO: GB enable once the software admin team is enabled as per user.rb:576
-        # software_admin_team = Team.wst_admin
+        software_admin_team = Rails.env.production? ? Team.wst_admin : Team.wst
         FactoryBot.create(:team_member, team_id: software_admin_team.id, user_id: user.id, team_leader: true)
       end
     end
