@@ -522,6 +522,7 @@ select.input-xs {
 .heading-as-link {
   &:hover {
     cursor: pointer;
+    pointer-events: auto;
     .panel-info > & {
       @extend a, .list-group-item-info, :hover;
     }
