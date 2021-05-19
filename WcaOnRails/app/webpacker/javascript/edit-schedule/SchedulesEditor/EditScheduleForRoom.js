@@ -59,15 +59,6 @@ export default class EditScheduleForRoom extends React.Component {
     }
   }
 
-  eventFetcher(start, end, timezone, callback) {
-    // Create a deep clone, otherwise FC will add some extra attributes that
-    // will make the parent component think some changes have been made...
-    const { scheduleWcif, selectedRoom } = this.props;
-    callback(_.cloneDeep(
-      roomWcifFromId(scheduleWcif, selectedRoom).activities,
-    ));
-  }
-
   handleShowModal(eventProps, mode) {
     this.setState(
       {
@@ -77,6 +68,15 @@ export default class EditScheduleForRoom extends React.Component {
       },
       () => $(window).off('keydown', keyboardHandlers.activityPicker),
     );
+  }
+
+  eventFetcher(start, end, timezone, callback) {
+    // Create a deep clone, otherwise FC will add some extra attributes that
+    // will make the parent component think some changes have been made...
+    const { scheduleWcif, selectedRoom } = this.props;
+    callback(_.cloneDeep(
+      roomWcifFromId(scheduleWcif, selectedRoom).activities,
+    ));
   }
 
   render() {
