@@ -40,9 +40,6 @@ updates:
   - dependency-name: jquery
     versions:
     - "> 3.4.1"
-  - dependency-name: leaflet-geosearch
-    versions:
-    - "> 3.0.1"
   - dependency-name: react-bootstrap
     versions:
     - "> 0.33.1"
