@@ -38,7 +38,7 @@ Capybara.register_driver :apparition_debug do |app|
 end
 
 Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, js_errors: true, headless: false)
+  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true)
 end
 
 Capybara.javascript_driver = :apparition
