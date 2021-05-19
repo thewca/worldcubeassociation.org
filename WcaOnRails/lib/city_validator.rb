@@ -57,4 +57,4 @@ class CityCommaRegionValidator < CountryCityValidator
 end
 
 # Load all the country city validators.
-Dir[File.join(__dir__, 'country_city_validators', '*.rb')].each { |file| require file }
+Dir[File.join(__dir__, 'country_city_validators', '*.rb')].sort.each { |file| require file }
