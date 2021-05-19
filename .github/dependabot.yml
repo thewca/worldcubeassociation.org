@@ -18,6 +18,10 @@ updates:
   - dependency-name: rspec-rails
     versions:
     - "> 3.8.2"
+  # compatibility with Ruby 2.5.3
+  - dependency-name: rubocop
+    versions:
+      - "> 0.81"
   # https://github.com/thewca/worldcubeassociation.org/pull/3644
   - dependency-name: seedbank
     versions:
