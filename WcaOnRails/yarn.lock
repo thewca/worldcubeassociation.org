@@ -5416,10 +5416,10 @@ last-call-webpack-plugin@^3.0.0:
     lodash "^4.17.5"
     webpack-sources "^1.1.0"
 
-leaflet-geosearch@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/leaflet-geosearch/-/leaflet-geosearch-3.0.1.tgz#20a15afcfa388bd056231561e2e649b0eb8b337c"
-  integrity sha512-0FDCTz2qnLo5+lm7YrEAOGnwdXOerylBoy1lclf8ihkpwu9C83vh3OMGPiDczHseflAvoCFwV/vz0GKxiGsHHA==
+leaflet-geosearch@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/leaflet-geosearch/-/leaflet-geosearch-3.3.2.tgz#d1a8a35e4e6f29083d46978214d2de73f126f5c3"
+  integrity sha512-Kb3NCiG0xWxadRJ0FyNOhFlpN0VT33l1zSpBfWPob6fUfN9bCg6d3XyWTa6KBIQrVRjg30Sp0Cnn+jJWRiFPDA==
   optionalDependencies:
     leaflet "^1.6.0"
 
