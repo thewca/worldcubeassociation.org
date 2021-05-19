@@ -47,6 +47,14 @@ Capybara.javascript_driver = :poltergeist
 Capybara.server = :webrick
 
 RSpec.configure do |config|
+  # enforce consistent locale behaviour across OSes, especially Linux
+  # see https://github.com/ariya/phantomjs/issues/13166 to understand why this is necessaryqq
+  config.before(:each) do
+    if defined? page.driver.add_header
+      page.driver.add_header("Accept-Language", "en-US", permanent: true)
+    end
+  end
+
   # We're using database_cleaner instead of rspec-rails's implicit wrapping of
   # tests in database transactions.
   # See http://devblog.avdi.org/2012/08/31/configuring-database_cleaner-with-rails-rspec-capybara-and-selenium/
