@@ -122,7 +122,7 @@ class ResultsController < ApplicationController
       SQL
     else
       flash[:danger] = t(".unknown_show")
-      return redirect_to rankings_path
+      redirect_to rankings_path
     end
   end
 
