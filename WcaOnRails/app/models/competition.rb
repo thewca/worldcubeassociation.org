@@ -106,6 +106,7 @@ class Competition < ApplicationRecord
     extra_registration_requirements
     on_the_spot_registration
     on_the_spot_entry_fee_lowest_denomination
+    allow_registration_edits
     refund_policy_percent
     guests_entry_fee_lowest_denomination
     free_guest_entry_status
@@ -181,6 +182,7 @@ class Competition < ApplicationRecord
   validates :refund_policy_limit_date, presence: true, if: :refund_policy_percent?
   validates_inclusion_of :on_the_spot_registration, in: [true, false], if: :on_the_spot_registration_required?
   validates_numericality_of :on_the_spot_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :on_the_spot_entry_fee_required?
+  validates_inclusion_of :allow_registration_edits, in: [true, false]
   monetize :on_the_spot_entry_fee_lowest_denomination,
            as: "on_the_spot_base_entry_fee",
            allow_nil: true,

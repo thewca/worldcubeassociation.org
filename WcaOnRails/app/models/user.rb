@@ -710,7 +710,7 @@ class User < ApplicationRecord
 
   def can_edit_registration?(registration)
     # A registration can be edited by a user if it hasn't been accepted yet, and if registrations are open.
-    editable_by_user = !registration.accepted? && registration.competition.registration_opened?
+    editable_by_user = (!registration.accepted? || registration.competition.allow_registration_edits) && registration.competition.registration_opened?
     can_manage_competition?(registration.competition) || (registration.user_id == self.id && editable_by_user)
   end
 

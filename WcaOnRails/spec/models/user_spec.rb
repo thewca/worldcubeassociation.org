@@ -755,4 +755,38 @@ RSpec.describe User, type: :model do
       expect(manager_past_only.can_manage_any_not_over_competitions?).to be false
     end
   end
+
+  describe "can edit registration" do
+    let!(:competitor) { FactoryBot.create :user }
+    let!(:organizer) { FactoryBot.create :user }
+    let!(:competition) { FactoryBot.create :competition, :registration_open, organizers: [organizer] }
+    let!(:registration) { FactoryBot.create :registration, user: competitor, competition: competition }
+
+    it "if they are an organizer" do
+      expect(organizer.can_edit_registration?(registration)).to be true
+    end
+
+    it "if their registration is pending" do
+      registration.accepted_at = nil
+      expect(competitor.can_edit_registration?(registration)).to be true
+    end
+
+    it "unless their registration is accepted" do
+      registration.accepted_at = Time.now
+      expect(competitor.can_edit_registration?(registration)).to be false
+    end
+
+    it "if registration edits are allowed" do
+      registration.accepted_at = Time.now
+      competition.allow_registration_edits = true
+      expect(competitor.can_edit_registration?(registration)).to be true
+    end
+
+    it "unless registration is closed" do
+      registration.accepted_at = Time.now
+      competition.registration_close = 2.weeks.ago
+      competition.allow_registration_edits = true
+      expect(competitor.can_edit_registration?(registration)).to be false
+    end
+  end
 end
