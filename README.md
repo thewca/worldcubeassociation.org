@@ -32,6 +32,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - Install [Docker](https://docs.docker.com/get-docker/) (remember to complete the [Linux post-install steps](https://docs.docker.com/engine/install/linux-postinstall/) if you're on Linux)
 - Install docker-compose. The best way to get an up-to-date version is to get it from their [releases page](https://github.com/docker/compose/releases)
 - Navigate into the repository's main directory (`worldcubeassociation.org`)
+- Note if you are running an `ARM` based computer like the M1 Macbooks, you will need add the following to your mysql image installation: `platform: linux/amd64` after [this line](https://github.com/thewca/worldcubeassociation.org/blob/master/docker-compose.yml#L33)
 - To start the server at `http://localhost:3000`, run `docker-compose up` and to bring it down, `docker-compose down` (or just press ctrl + c in the same terminal)
 - To run tests, run `docker-compose exec wca_on_rails bash -c "RAILS_ENV=test bin/rake db:reset && RAILS_ENV=test bin/rake assets:precompile && bin/rspec"`
 - If you're using Visual Studio Code to develop, you can [attach it to the Docker container](https://code.visualstudio.com/docs/remote/containers) so that your extensions can take advantage of the Ruby environment and so the terminal runs from inside the container
