@@ -51,7 +51,7 @@
       <div id="motions" class="panel-collapse collapse">
         <div class="panel-body">
           <ul>
-            <%= documents_list("motions") %>
+            <%= documents_list("documents/motions") %>
           </ul>
         </div>
       </div>
@@ -68,7 +68,7 @@
         <div class="panel-body">
           <ul>
             <li><%= link_to "WCA Minutes Log", "https://docs.google.com/spreadsheets/d/1SeojQM8xYhQFmZcyM13T67mQU1TBdgvghpuMhrFxGPo/edit?usp=sharing" %></li>
-            <%= documents_list("minutes") %>
+            <%= documents_list("documents/minutes") %>
           </ul>
         </div>
       </div>
@@ -84,7 +84,23 @@
       <div id="policies" class="panel-collapse collapse">
         <div class="panel-body">
           <ul>
-            <%= documents_list("policies/external") %>
+            <%= documents_list("documents/policies/external") %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading  heading-as-link">
+        <h4 class="panel-title">
+          <%= link_to "#finances", data: { toggle: "collapse", parent: "#accordion" } do %>
+            <%= ui_icon("list ul") %> <%= "Finances" %>
+          <% end %>
+        </h4>
+      </div>
+      <div id="finances" class="panel-collapse collapse">
+        <div class="panel-body">
+          <ul>
+            <%= documents_list("files/finances") %>
           </ul>
         </div>
       </div>
