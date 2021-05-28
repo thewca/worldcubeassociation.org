@@ -587,6 +587,10 @@ class User < ApplicationRecord
     delegate_status == "senior_delegate"
   end
 
+  def is_senior_delegate_for?(user)
+    user.senior_delegate == self
+  end
+
   def banned?
     current_teams.include?(Team.banned)
   end
@@ -902,7 +906,7 @@ class User < ApplicationRecord
     if admin? || results_team?
       fields += %i(avatar avatar_cache)
     end
-    if user == self || admin? || results_team?
+    if user == self || admin? || results_team? || is_senior_delegate_for?(user)
       fields += %i(
         pending_avatar pending_avatar_cache remove_pending_avatar
         avatar_crop_x avatar_crop_y avatar_crop_w avatar_crop_h
