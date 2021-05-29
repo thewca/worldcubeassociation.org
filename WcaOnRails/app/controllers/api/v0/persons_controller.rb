@@ -16,7 +16,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
 
   def show
     person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(params[:wca_id])
-    render json: person_to_json(person)
+    render json: person_to_json(person, params["competitions"] == "true")
   end
 
   def results
@@ -24,8 +24,8 @@ class Api::V0::PersonsController < Api::V0::ApiController
     render json: person.results
   end
 
-  private def person_to_json(person)
-    {
+  private def person_to_json(person, show_competitions)
+    person_json = {
       person: person.serializable_hash.slice(:wca_id, :name, :url, :gender, :country_iso2, :delegate_status, :teams, :avatar),
       competition_count: person.competitions.count,
       personal_records: person.ranksSingle.each_with_object({}) do |rank_single, ranks|
@@ -37,6 +37,10 @@ class Api::V0::PersonsController < Api::V0::ApiController
       medals: person.medals,
       records: person.records,
     }
+    if show_competitions == true
+      person_json["competitions"] = person.competitions
+    end
+    return person_json
   end
 
   private def rank_to_json(rank)
