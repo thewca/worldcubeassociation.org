@@ -835,7 +835,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.12.13"
 
-"@babel/plugin-transform-runtime@^7.13.15", "@babel/plugin-transform-runtime@^7.14.3":
+"@babel/plugin-transform-runtime@^7.14.3":
   version "7.14.3"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-runtime/-/plugin-transform-runtime-7.14.3.tgz#1fd885a2d0de1d3c223795a4e9be72c2db4515cf"
   integrity sha512-t960xbi8wpTFE623ef7sd+UpEC5T6EEguQlTBJDEO05+XwnIWVfuqLw/vdLWY6IdFmtZE+65CZAfByT39zRpkg==
@@ -1831,10 +1831,10 @@ autoprefixer@^9.6.1, autoprefixer@^9.8.6:
     postcss "^7.0.32"
     postcss-value-parser "^4.1.0"
 
-autosize@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/autosize/-/autosize-4.0.4.tgz#924f13853a466b633b9309330833936d8bccce03"
-  integrity sha512-5yxLQ22O0fCRGoxGfeLSNt3J8LB1v+umtpMnPW6XjkTWXKoN0AmXAIhelJcDtFT/Y/wYWmfE+oqU10Q0b8FhaQ==
+autosize@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/autosize/-/autosize-5.0.0.tgz#4fbe4d263182fab405f5c8148b33398940403c44"
+  integrity sha512-sZz3VVgbU2VY1EZnNf3GBHNmsO8LE679RvDb/yPgB+i6Q89YX+dJTjtRfTirM1/iCP/brOXoSzwusRg3yjNTdw==
 
 axe-core@^4.0.2:
   version "4.0.2"
