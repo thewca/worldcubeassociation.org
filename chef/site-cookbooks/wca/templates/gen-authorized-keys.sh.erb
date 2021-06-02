@@ -15,11 +15,24 @@ fi
   --gh-team "<%= node.chef_environment == "production" ? "WST Admin" : "Software Team" %>" \
   --keyfile /home/cubing/.ssh/authorized_keys
 
-# Add keys used by Travis for deployment.
-# Note that we restrict Travis to running our deploy.sh script.
 authorized_keys_path=/home/cubing/.ssh/authorized_keys
+
+# Add keys used by Travis for documents deployment.
+# Note that we restrict Travis to running our deploy.sh script.
 wca_documents_key_url="https://raw.githubusercontent.com/thewca/wca-documents/master/keys/deploy_rsa.pub"
 echo "" >> $authorized_keys_path
 echo "# Keys for WCA Documents - Travis" >> $authorized_keys_path
-travis_public_key=$(curl -s $wca_documents_key_url)
-echo 'command="/home/cubing/worldcubeassociation.org/scripts/deploy.sh update_docs"' $travis_public_key >> $authorized_keys_path
+travis_public_key=$(curl -s "$wca_documents_key_url")
+echo 'command="/home/cubing/worldcubeassociation.org/scripts/deploy.sh update_docs"' "$travis_public_key" >> $authorized_keys_path
+
+machine="<%= node.chef_environment %>"
+if [ "$machine" == "staging" ] || [ "$machine" == "production" ]; then
+  # Add keys used by GitHub for Rails deployment.
+  # Note that we restrict GitHub to running our deploy.sh script.
+  github_token="<%= @secrets['GITHUB_READ_DEPLOY_REPOSITORY_TOKEN'] %>"
+  wca_deploy_key_url="https://$github_token@raw.githubusercontent.com/thewca/deploy/master/keys/$machine.pub"
+  echo "" >> $authorized_keys_path
+  echo "# Keys for WCA GitHub Deployment - $machine" >> $authorized_keys_path
+  github_deploy_public_key=$(curl -s "$wca_deploy_key_url")
+  echo 'command="worldcubeassociation.org/scripts/deploy.sh pull_latest rebuild_regs rebuild_rails"' "$github_deploy_public_key" >> $authorized_keys_path
+fi
