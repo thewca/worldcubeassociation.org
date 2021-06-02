@@ -34,8 +34,8 @@ module ResultsValidators
       # Get all results if not provided
       results ||= model.sorted_for_competitions(competition_ids)
       results_by_round_id_by_competition_id = Hash[
-        results.group_by(&:competitionId).map do |competition_id, results_for_comp|
-          [competition_id, results_for_comp.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }]
+        results.group_by(&:competitionId).transform_values do |results_for_comp|
+          results_for_comp.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
         end
       ]
 
