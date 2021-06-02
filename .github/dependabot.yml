@@ -10,15 +10,11 @@ updates:
   - dependency-name: envied
     versions:
     - "> 0.9.1"
-  # compatibility with Ruby 2.5.3
+  # compatibility with Ruby 2.6
   - dependency-name: rails
     versions:
     - "> 5.2"
-  # compatibility with Ruby 2.5.3
-  - dependency-name: rspec-rails
-    versions:
-    - "> 3.8.2"
-  # compatibility with Ruby 2.5.3
+  # compatibility with Ruby 2.6
   - dependency-name: rubocop
     versions:
       - "> 0.81"
