@@ -40,7 +40,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
     if show_competitions == true
       person_json["competitions"] = person.competitions
     end
-    return person_json
+    person_json
   end
 
   private def rank_to_json(rank)
