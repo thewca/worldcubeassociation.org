@@ -93,14 +93,14 @@
       <div class="panel-heading  heading-as-link">
         <h4 class="panel-title">
           <%= link_to "#finances", data: { toggle: "collapse", parent: "#accordion" } do %>
-            <%= ui_icon("list ul") %> <%= "Finances" %>
+            <%= ui_icon("list ul") %> <%= t("documents.finances") %>
           <% end %>
         </h4>
       </div>
       <div id="finances" class="panel-collapse collapse">
         <div class="panel-body">
           <ul>
-            <%= documents_list("files/finances") %>
+            <%= documents_list("documents/finances") %>
           </ul>
         </div>
       </div>
