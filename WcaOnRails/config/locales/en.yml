@@ -901,7 +901,7 @@ en:
         intro: "Hello %{name},"
         information_html: "This is a reminder that registration for <a href=%{competition_url}>%{competition}</a> opens in less than 24 hours."
         not_accepted_html: "You have registered but your registration has not been accepted."
-        more_info_html: "Please see the <a href=%{competition_url}>competition website</a> for more information and registration requirements."
+        more_info_html: "Please see the <a href=%{competition_url}>competition WCA page</a> for more information and registration requirements."
       #context: notification to users after a competition results have been posted
       results_presence_email:
         header: "The results of %{competition} are posted"
