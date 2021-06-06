@@ -148,26 +148,24 @@ class RegistrationsController < ApplicationController
         end
       end
       registration_rows.each do |registration_row|
-        begin
-          user, locked_account_created = user_for_registration!(registration_row)
-          new_locked_users << user if locked_account_created
-          registration = competition.registrations.find_or_initialize_by(user_id: user.id)
-          unless registration.accepted?
-            registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
-          end
-          registration.registration_competition_events = []
-          competition.competition_events.map do |competition_event|
-            value = registration_row[competition_event.event_id.to_sym]
-            if value == "1"
-              registration.registration_competition_events.build(competition_event_id: competition_event.id)
-            elsif value != "0"
-              raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
-            end
-          end
-          registration.save!
-        rescue StandardError => e
-          raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_row[:name], error: e))
+        user, locked_account_created = user_for_registration!(registration_row)
+        new_locked_users << user if locked_account_created
+        registration = competition.registrations.find_or_initialize_by(user_id: user.id)
+        unless registration.accepted?
+          registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
         end
+        registration.registration_competition_events = []
+        competition.competition_events.map do |competition_event|
+          value = registration_row[competition_event.event_id.to_sym]
+          if value == "1"
+            registration.registration_competition_events.build(competition_event_id: competition_event.id)
+          elsif value != "0"
+            raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
+          end
+        end
+        registration.save!
+      rescue StandardError => e
+        raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_row[:name], error: e))
       end
     end
     new_locked_users.each do |user|
