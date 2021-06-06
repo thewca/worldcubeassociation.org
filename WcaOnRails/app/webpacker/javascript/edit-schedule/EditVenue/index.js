@@ -7,7 +7,6 @@ import { Icon } from 'semantic-ui-react';
 import rootRender from '..';
 import { timezoneData } from '../../wca/timezoneData.js.erb';
 import countries from '../../wca/countries.js.erb';
-import railsEnv from '../../wca/rails-env.js.erb';
 import EditRoom from './EditRoom';
 import { defaultRoomColor } from './constants.js.erb';
 import {
@@ -117,22 +116,11 @@ export default class EditVenue extends React.Component {
             </Panel.Heading>
             <Panel.Body>
               <NameInput name={venueWcif.name} actionHandler={handleNameChange} />
-              {/*
-                NOTE: Our headless browser PhantomJS doesn't support HTMLVideoElement.
-                Leaflet has a built-in video plugin and its code
-                do an "instanceOf(HTMLVideoElement)", which throws an error
-                during tests.
-                For this reason, we only import stuff from Leaflet
-                if we are not in test environment.
-                In test environment we simply don't include the VenueLocationInput.
-              */}
-              {railsEnv !== 'test' && (
-                <VenueLocationInput
-                  lat={venueWcif.latitudeMicrodegrees}
-                  lng={venueWcif.longitudeMicrodegrees}
-                  actionHandler={handlePositionChange}
-                />
-              )}
+              <VenueLocationInput
+                lat={venueWcif.latitudeMicrodegrees}
+                lng={venueWcif.longitudeMicrodegrees}
+                actionHandler={handlePositionChange}
+              />
               <CountryInput value={venueWcif.countryIso2} onChange={handleCountryChange} />
               <TimezoneInput
                 timezone={venueWcif.timezone}
