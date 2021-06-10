@@ -764,7 +764,7 @@ en:
       faq: "Frequently Asked Questions"
       forum: "Forum"
       teams: "Teams, Committees, and Councils"
-      education: "Education resources"
+      education: "Educational resources"
       contact: "Contact Information"
       speedcubing_history: "Speedcubing History"
       tools: "Tools"
@@ -1952,7 +1952,7 @@ en:
     title: "WCA Educational Documents"
     description: "The WQAC has published several documents for the community, you can download them below."
     competitor_tutorial: "Competitor tutorial"
-    judge_tutorial: "Judge tutorial"
+    judge_tutorial: "Judge tutorial for newcomers"
     certificates: "WCT's certificate templates"
     orga_guidelines: "Organizer guidelines"
   #context: Delegates page
