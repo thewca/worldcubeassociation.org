@@ -9,6 +9,9 @@
         <th><%= link_to t("competitions.events.cutoff"), "#cutoff" %></th>
       <% end %>
       <th><%= t("competitions.events.proceed") %></th>
+      <% if @competition.uses_qualification? %>
+        <th><%= link_to t("competitions.events.qualification"), "#qualification" %></th>
+      <% end %>
     </tr>
   <thead>
 
@@ -37,6 +40,13 @@
             <td><%= round.cutoff_to_s %></td>
           <% end %>
           <td><%= round.advancement_condition_to_s %></td>
+          <% if @competition.uses_qualification? %>
+            <% if round.number == 1 %>
+              <td><%= competition_event.qualification_to_s %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+          <% end %>
         </tr>
       <% end %>
     <% end %>

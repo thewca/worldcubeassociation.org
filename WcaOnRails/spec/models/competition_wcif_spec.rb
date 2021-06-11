@@ -80,6 +80,7 @@ RSpec.describe "Competition WCIF" do
                 "extensions" => [],
               },
             ],
+            "qualification" => nil,
           },
           {
             "id" => "444",
@@ -99,6 +100,7 @@ RSpec.describe "Competition WCIF" do
                 "extensions" => [],
               },
             ],
+            "qualification" => nil,
           },
           {
             "id" => "333fm",
@@ -115,6 +117,7 @@ RSpec.describe "Competition WCIF" do
                 "extensions" => [],
               },
             ],
+            "qualification" => nil,
           },
           {
             "id" => "333mbf",
@@ -139,6 +142,7 @@ RSpec.describe "Competition WCIF" do
                 ],
               },
             ],
+            "qualification" => nil,
           },
         ],
         "schedule" => {
@@ -302,6 +306,7 @@ RSpec.describe "Competition WCIF" do
             "extensions" => [],
           },
         ],
+        "qualification" => nil,
       }
       # Add 5x5x5 after 4x4x4 to match the expected order.
       wcif["events"].insert(2, wcif555)
@@ -440,6 +445,19 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       wcif_333mbf_event["rounds"][0]["extensions"] = extensions
+      expect(competition.to_wcif["events"]).to eq(wcif["events"])
+    end
+
+    it "can set event qualifications" do
+      wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+      wcif_333_event["qualification"] = {
+        "type" => "average",
+        "whenDate" => "2021-07-01",
+        "level" => 6000,
+      }
+
+      competition.set_wcif_events!(wcif["events"], delegate)
+
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
   end

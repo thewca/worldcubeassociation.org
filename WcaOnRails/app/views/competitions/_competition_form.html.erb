@@ -306,11 +306,10 @@
         <%= f.input :extra_registration_requirements, input_html: { class: disable_form ? "" : "markdown-editor" } %>
 
         <hr>
+        <%= f.input :qualification_results_reason %>
+
         <%= f.input :early_puzzle_submission %>
         <%= f.input :early_puzzle_submission_reason %>
-
-        <%= f.input :qualification_results %>
-        <%= f.input :qualification_results_reason %>
 
         <%= f.input :event_restrictions %>
         <%= f.input :event_restrictions_reason %>

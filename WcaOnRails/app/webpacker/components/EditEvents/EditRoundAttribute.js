@@ -13,11 +13,16 @@ import CutoffComponents from './Cutoff'
 import TimeLimitComponents from './TimeLimit'
 import AdvancementConditionComponents from './AdvancementCondition'
 import ButtonActivatedModal from './ButtonActivatedModal'
+import QualificationComponents from './Qualification'
 
 let RoundAttributeComponents = {
   timeLimit: TimeLimitComponents,
   cutoff: CutoffComponents,
   advancementCondition: AdvancementConditionComponents,
+};
+
+let EventAttributeComponents = {
+  qualification: QualificationComponents,
 };
 
 /**
@@ -147,4 +152,71 @@ export function EditCutoffButton(props) {
 
 export function EditAdvancementConditionButton(props) {
   return <EditRoundAttribute {...props} attribute="advancementCondition" />;
+};
+
+class EditEventAttribute extends React.Component {
+  UNSAFE_componentWillMount() {
+    this.reset();
+  }
+
+  UNSAFE_componentWillReceiveProps() {
+    this.reset();
+  }
+
+  getSavedValue() {
+    let { wcifEvent, attribute } = this.props;
+    return wcifEvent[attribute];
+  }
+
+  hasUnsavedChanges = () => {
+    return !_.isEqual(this.getSavedValue(), this.state.value);
+  }
+
+  onChange = (value) => {
+    this.setState({ value });
+  }
+
+  onOk = () => {
+    let { wcifEvent, attribute } = this.props;
+    wcifEvent[attribute] = this.state.value;
+
+    this._modal.close({ skipUnsavedChangesCheck: true });
+    rootRender();
+  }
+
+  reset = () => {
+    this.setState({ value: this.getSavedValue() });
+  }
+
+  render() {
+    let { wcifEvent, attribute, disabled } = this.props;
+    let Show = EventAttributeComponents[attribute].Show;
+    let Input = EventAttributeComponents[attribute].Input;
+    let Title = EventAttributeComponents[attribute].Title;
+
+    return (
+      <ButtonActivatedModal
+        buttonValue={<Show value={this.getSavedValue()} wcifEvent={wcifEvent} />}
+        name={attribute}
+        buttonClass="btn-default btn-xs"
+        formClass="form-horizontal"
+        onOk={this.onOk}
+        reset={this.reset}
+        hasUnsavedChanges={this.hasUnsavedChanges}
+        ref={c => this._modal = c}
+        disabled={disabled}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title><Title wcifEvent={wcifEvent} /></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Input value={this.state.value} wcifEvent={wcifEvent} onChange={this.onChange} autoFocus />
+        </Modal.Body>
+      </ButtonActivatedModal>
+    );
+  }
+}
+
+export function EditQualificationButton(props) {
+  return <EditEventAttribute {...props} attribute="qualification" />;
 };

@@ -178,6 +178,17 @@ en:
     333fm: "1 hour"
     333mbf: "10:00.00 per cube, up to 60:00.00"
     333mbo: ""
+  #context: Words used to describe qualification limits.
+  qualification:
+    ranking: "Top %{ranking} registered competitors"
+    single:
+      time: "Single solve under %{time}"
+      moves: "Single solve under %{moves} moves"
+      points: "Single solve under %{points} points"
+    average:
+      time: "Average under %{time}"
+      moves: "Average under %{moves} moves"
+      points: "Average under %{points} points"
   #context: Common word used in multiple places on the website
   common:
     world: "World"
@@ -314,7 +325,6 @@ en:
         free_guest_entry_status: "Display message for free guest entry"
         early_puzzle_submission: "I would like to require competitors to submit puzzles at a specific time before an event is scheduled to begin"
         early_puzzle_submission_reason: "Reason and details for submitting puzzles early"
-        qualification_results: "I would like to use qualification results to limit who can compete in certain events"
         qualification_results_reason: "Reason and details for qualification results"
         event_restrictions: "I would like to restrict competitors from registering for specific combinations of events"
         event_restrictions_reason: "Reason and details for event restrictions"
@@ -526,7 +536,6 @@ en:
         free_guest_entry_status: ""
         early_puzzle_submission: ""
         early_puzzle_submission_reason: "Please elaborate here why you would like to require competitors to submit puzzles early. Please fill this out in English!"
-        qualification_results: ""
         qualification_results_reason: "Please elaborate here why you would like to use qualification times. Please fill this out in English!"
         event_restrictions: ""
         event_restrictions_reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
@@ -1577,10 +1586,14 @@ en:
         cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{guideline_link})."
         cutoff_html: "The result to beat to proceed to the second phase of a cutoff round (see %{regulation_link})."
         format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
+        qualification_html: "Qualification times must be set in other WCA competitions in order to compete."
+        qualification_all_events_html: "The deadline for setting qualification times is <b>%{date}</b>."
+        qualification_some_events_html: "The deadline for setting qualification times in %{events} is <b>%{date}</b>."
       format: "Format"
       time_limit: "Time limit"
       cutoff: "Cutoff"
       proceed: "Proceed"
+      qualification: "Qualification"
     #context: competition's schedule tab
     schedule:
       #context: when selecting the kind of schedule to display

@@ -9,7 +9,7 @@ import rootRender from '../../lib/edit-events'
 import { pluralize } from '../../lib/utils/edit-events'
 import { buildActivityCode, saveWcif, roundIdToString } from '../../lib/utils/wcif'
 import { removeRoundsFromSharedTimeLimits } from "./EditRoundAttribute"
-import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from './EditRoundAttribute'
+import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton, EditQualificationButton } from './EditRoundAttribute'
 
 export default class EditEvents extends React.Component {
   save = e => {
@@ -154,6 +154,9 @@ function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
           })}
         </tbody>
       </table>
+      <h5>
+        Qualification: <EditQualificationButton wcifEvent={wcifEvent} disabled={disabled} />
+      </h5>
     </div>
   );
 }
