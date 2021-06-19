@@ -7,7 +7,7 @@ const fullCalendarOptions = {
   locale: 'en',
   minTime: '8:00:00',
   maxTime: '20:00:00',
-  slotDuration: '00:30:00',
+  slotDuration: '00:15:00',
   // Without this, fullcalendar doesn't set the "end" time.
   forceEventDuration: true,
   dragRevertDuration: 0,
