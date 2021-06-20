@@ -37,7 +37,7 @@ RSpec.describe Person, type: :model do
 
     context "fixing the person" do
       it "fixing countryId fails if there exists an old person with the same wca id, greater subId and the same countryId" do
-        Person.create(wca_id: person.wca_id, subId: 2, name: person.name, countryId: "New Zealand")
+        FactoryBot.create(:person, wca_id: person.wca_id, subId: 2, name: person.name, countryId: "New Zealand")
         person.countryId = "New Zealand"
         expect(person).to be_invalid_with_errors(countryId: ["Cannot change the country to a country the person has already represented in the past."])
       end
@@ -151,8 +151,8 @@ RSpec.describe Person, type: :model do
 
     it "ignores DNF results on the podium" do
       expect do
-        FactoryBot.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, eventId: "555bf",
-                                   best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE
+        FactoryBot.create :result, :blind_dnf_mo3, person: us_competitor, competition: us_nationals2017,
+                                                   pos: 2, eventId: "555bf", best: SolveTime::DNF_VALUE
       end.to_not change { us_competitor.championship_podiums[:national] }
     end
 

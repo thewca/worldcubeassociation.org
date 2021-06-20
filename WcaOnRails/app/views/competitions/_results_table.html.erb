@@ -61,6 +61,9 @@
             <% classes << " tied-previous" %>
           <% end %>
           <td class="<%= classes %>">
+            <% if current_user&.can_admin_results? %>
+              <%= link_to(ui_icon("pencil alt"), edit_result_path(result.id)) %>
+            <% end %>
             <%= result.pos %>
           </td>
         <% end %>

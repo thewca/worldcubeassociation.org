@@ -11,8 +11,10 @@ RSpec.describe "AuxiliaryDataComputation" do
     let(:competition_2017) { FactoryBot.create :competition, starts: Date.parse("2017-08-08") }
 
     it "creates tables containing best results data for each person per event per year" do
-      FactoryBot.create :result, eventId: "333", best: 700, average: 800, competition: competition_2016, person: person
-      FactoryBot.create :result, eventId: "333", best: 750, average: 850, competition: competition_2016, person: person
+      FactoryBot.create :round, competition: competition_2016, total_number_of_rounds: 2
+      FactoryBot.create :round, competition: competition_2016, total_number_of_rounds: 2, number: 2
+      FactoryBot.create :result, eventId: "333", best: 750, average: 800, competition: competition_2016, person: person, roundTypeId: "1"
+      FactoryBot.create :result, eventId: "333", best: 700, average: 850, competition: competition_2016, person: person, roundTypeId: "f"
       FactoryBot.create :result, eventId: "333", best: 800, average: 900, competition: competition_2017, person: person
       FactoryBot.create :result, eventId: "222", best: 100, average: 150, competition: competition_2017, person: person
       AuxiliaryDataComputation.compute_concise_results

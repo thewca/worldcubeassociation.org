@@ -2,22 +2,102 @@ export const SKIPPED_VALUE = 0;
 export const DNF_VALUE = -1;
 export const DNS_VALUE = -2;
 
+function isComplete(attemptResult) {
+  return attemptResult > 0;
+}
+
+function isSkipped(attemptResult) {
+  return attemptResult === SKIPPED_VALUE;
+}
+
+function compareAttemptResults(attemptResult1, attemptResult2) {
+  if (!isComplete(attemptResult1) && !isComplete(attemptResult2)) return 0;
+  if (!isComplete(attemptResult1) && isComplete(attemptResult2)) return 1;
+  if (isComplete(attemptResult1) && !isComplete(attemptResult2)) return -1;
+  return attemptResult1 - attemptResult2;
+}
+
+function mean(x, y, z) {
+  return Math.round((x + y + z) / 3);
+}
+
+function meanOf3(attemptResults) {
+  if (!attemptResults.every(isComplete)) return DNF_VALUE;
+  return mean(...attemptResults);
+}
+
+function averageOf5(attemptResults) {
+  const [, x, y, z] = attemptResults.slice().sort(compareAttemptResults);
+  return meanOf3([x, y, z]);
+}
+
+/* See: https://www.worldcubeassociation.org/regulations/#9f2 */
+function roundOver10Mins(value) {
+  if (!isComplete(value)) return value;
+  if (value <= 10 * 6000) return value;
+  return Math.round(value / 100) * 100;
+}
+
 /**
- * Converts centiseconds to a human-friendly string.
+ * Returns the best attempt result from the given list.
+ *
+ * @example
+ * best([900, -1, 700]); // => 700
  */
-function centisecondsToClockFormat(centiseconds) {
-  if (centiseconds == null) {
-    return '?:??:??';
+export function best(attemptResults) {
+  const nonSkipped = attemptResults.filter((attempt) => !isSkipped(attempt));
+  const completeAttempts = attemptResults.filter(isComplete);
+
+  if (nonSkipped.length === 0) return SKIPPED_VALUE;
+  if (completeAttempts.length === 0) return Math.max(...nonSkipped);
+  return Math.min(...completeAttempts);
+}
+
+/**
+ * Returns the average of the given attempt results.
+ *
+ * Calculates either Mean of 3 or Average of 5 depending on
+ * the number of the given attempt results.
+ *
+ * @example
+ * average([900, -1, 700, 800, 900], '333'); // => 800
+ * average([900, -1, 700, 800, -1], '333'); // => -1
+ */
+export function average(attemptResults, eventId) {
+  if (!eventId) {
+    /* If eventId is omitted, the average is still calculated correctly except for FMC
+       and that may be a hard to spot bug, so better enforce explicity here. */
+    throw new Error('Missing argument: eventId');
   }
-  if (!Number.isFinite(centiseconds)) {
-    throw new Error(
-      `Invalid centiseconds, expected positive number, got ${centiseconds}.`,
-    );
+
+  if (eventId === '333mbf' || eventId === '333mbo') return SKIPPED_VALUE;
+
+  if (attemptResults.some(isSkipped)) return SKIPPED_VALUE;
+
+  if (eventId === '333fm') {
+    const scaled = attemptResults.map((attemptResult) => attemptResult * 100);
+    switch (attemptResults.length) {
+      case 3:
+        return meanOf3(scaled);
+      case 5:
+        return averageOf5(scaled);
+      default:
+        throw new Error(
+          `Invalid number of attempt results, expected 3 or 5, given ${attemptResults.length}.`,
+        );
+    }
   }
-  return new Date(centiseconds * 10)
-    .toISOString()
-    .substr(11, 11)
-    .replace(/^[0:]*(?!\.)/g, '');
+
+  switch (attemptResults.length) {
+    case 3:
+      return roundOver10Mins(meanOf3(attemptResults));
+    case 5:
+      return roundOver10Mins(averageOf5(attemptResults));
+    default:
+      throw new Error(
+        `Invalid number of attempt results, expected 3 or 5, given ${attemptResults.length}.`,
+      );
+  }
 }
 
 /**
@@ -26,7 +106,7 @@ function centisecondsToClockFormat(centiseconds) {
  * @example
  * decodeMbldAttemptResult(900348002); // => { solved: 11, attempted: 13, centiseconds: 348000 }
  */
-function decodeMbldAttemptResult(value) {
+export function decodeMbldAttemptResult(value) {
   if (value <= 0) return { solved: 0, attempted: 0, centiseconds: value };
   // Old-style results, written as a 10-digit number, start with a '1'.
   // New-style results start with a '0'.
@@ -45,6 +125,40 @@ function decodeMbldAttemptResult(value) {
   const attempted = solved + missed;
   const centiseconds = seconds === 99999 ? null : seconds * 100;
   return { solved, attempted, centiseconds };
+}
+
+/**
+ * Returns a MBLD attempt result based on the given object representation.
+ *
+ * @example
+ * encodeMbldAttemptResult({ solved: 11, attempted: 13, centiseconds: 348000 }); // => 900348002
+ */
+export function encodeMbldAttemptResult({ solved, attempted, centiseconds }) {
+  if (centiseconds <= 0) return centiseconds;
+  const missed = attempted - solved;
+  const points = solved - missed;
+  const seconds = Math.round(
+    (centiseconds || 9999900) / 100,
+  ); /* 99999 seconds is used for unknown time. */
+  return (99 - points) * 1e7 + seconds * 1e2 + missed;
+}
+
+/**
+ * Converts centiseconds to a human-friendly string.
+ */
+export function centisecondsToClockFormat(centiseconds) {
+  if (centiseconds == null) {
+    return '?:??:??';
+  }
+  if (!Number.isFinite(centiseconds)) {
+    throw new Error(
+      `Invalid centiseconds, expected positive number, got ${centiseconds}.`,
+    );
+  }
+  return new Date(centiseconds * 10)
+    .toISOString()
+    .substr(11, 11)
+    .replace(/^[0:]*(?!\.)/g, '');
 }
 
 function formatMbldAttemptResult(attemptResult) {

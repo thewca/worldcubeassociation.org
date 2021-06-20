@@ -40,6 +40,18 @@ module Resultable
       Format.c_find(formatId)
     end
 
+    def round
+      Round.find_for(competitionId, eventId, roundTypeId, formatId)
+    end
+
+    validate :belongs_to_a_round
+    def belongs_to_a_round
+      if round.blank?
+        errors.add(:round_type,
+                   "Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.")
+      end
+    end
+
     validate :validate_each_solve, if: :event
     def validate_each_solve
       solve_times.each_with_index do |solve_time, i|
