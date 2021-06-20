@@ -267,6 +267,8 @@ ru:
     333fm: 1 час
     #original_hash: cc7d8bb
     333mbf: '10 минут на куб, до 60:00.00'
+    #original_hash: da39a3e
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: Мир
@@ -744,7 +746,9 @@ ru:
           rostovikov</strong>, <strong>Антон Ростовиков</strong>,
           <strong>Antoshka Rostovikov</strong>, <strong>ANTON
           ROSTOVIKOV</strong>. Если у вас есть заграничный паспорт, введите имя
-          в соответствии с ним.
+          в соответствии с ним. При желании, можно написать в скобках вариант
+          имени на местном языке, например, <strong>Anton Rostovikov (Антон
+          Ростовиков)</strong>
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -1425,7 +1429,7 @@ ru:
       forum: Форум
       #original_hash: 3ad28c0
       teams: 'Команды, Комитеты и Консультативный Совет'
-      #original_hash: a979ffc
+      #original_hash: 7981fb3
       education: Обучающие ресурсы
       #original_hash: a34b69f
       contact: Контактная информация
@@ -1675,7 +1679,7 @@ ru:
           24 часа.
         #original_hash: 2b93022
         not_accepted_html: 'Вы зарегистрировались, но ваша регистрация не была одобрена.'
-        #original_hash: 3724e7c
+        #original_hash: d4087ee
         more_info_html: >-
           Пожалуйста, проверьте требования к регистрации на <a
           href=%{competition_url}>странице соревнования</a>.
@@ -2606,7 +2610,7 @@ ru:
       title: Соревнования
       #original_hash: 63254de
       disclaimer: >-
-        Обратите внимание: из-за пандемии COVID-19, многие страны не могут
+        Обратите внимание: из-за пандемии COVID-19 многие страны не могут
         проводить соревнования.
       #original_hash: 6a72085
       all_events: Все
@@ -2886,6 +2890,12 @@ ru:
       limit: Лимит
       #original_hash: 855bd26
       competitors: Участники
+      #original_hash: c5497bc
+      events: Дисциплины
+      #original_hash: 50cb854
+      show_events: Показать дисциплины
+      #original_hash: 0df66f7
+      hide_events: Скрыть дисциплины
     #original_hash: 06b01c4
     announcements: Объявления
     #original_hash: a2b80b0
@@ -3566,11 +3576,10 @@ ru:
       других необходимых для организации вещей.</p>
     #original_hash: 1aa5344
     contributing_title: Внести пожертвование
-    #original_hash: e64beb7
+    #original_hash: 538a82f
     contributing_content_html: >-
       Вы можете внести пожертвование с помощью кредитной карты, используя
-      Guidestar <a
-      href="https://www.nfggive.com/guidestar/82-3825954">здесь</a>. Если вы
+      Guidestar %{here_credit} или через Paypal %{here_paypal}. Если вы
       предпочитаете выписать чек, адрес следующий:
     #original_hash: 2af9b71
     tax_deductible_note: Пожертвования можно вычесть из налогов в США.
@@ -3590,6 +3599,8 @@ ru:
         соревнований во всём мире.
       #original_hash: 24c87db
       donate_credit: Внести пожертвование с помощью кредитной карты
+      #original_hash: 0e5a9c3
+      donate_paypal: Пожертвовать с помощью Paypal
       #original_hash: 96d77f3
       donate_other: Другие способы внести пожертвование
     structure:
@@ -3760,6 +3771,9 @@ ru:
       probation:
         #original_hash: 1dd6e3b
         name: Делегаты на испытательном сроке
+      wst_admin:
+        #original_hash: d4112d2
+        name: Администраторы программного обеспечения
       #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>Делегат WCA</strong> — это роль, определяемая Дополнениями к
@@ -3804,15 +3818,19 @@ ru:
     codeofethics: Кодекс этики
     #original_hash: 2643980
     codeofconduct: Кодекс поведения
+    #original_hash: 4f05e8f
+    finances: Финансы
   education:
-    #original_hash: 41701c2
-    title: Обучающие документы WCA
+    #original_hash: 746e863
+    title: Обучающие ресурсы WCA
     #original_hash: 081d65d
     description: >-
       WQAC опубликовал несколько документов для сообщества, вы можете скачать их
       ниже.
     #original_hash: d0a3812
     competitor_tutorial: Руководство участника
+    #original_hash: 9561bfc
+    judge_tutorial: Учебное пособие для новичков по судейству
     #original_hash: 5ca0558
     certificates: Шаблоны сертификатов WCT
     #original_hash: f580987
@@ -4420,9 +4438,9 @@ ru:
       title: Рекомендуемые документы
       #original_hash: bfbd4bb
       staff: Назначение обязанностей
-      #original_hash: c346846
-      emails: Электронные письма перед соревнованиями
-      #original_hash: 3212cc7
+      #original_hash: 4735583
+      emails: Электронные письма
+      #original_hash: 8e7ca09
       running-systems: Системы раннеров и судей
       #original_hash: 2b31c89
       new-competitors: Работа с новыми участниками
@@ -4466,12 +4484,17 @@ ru:
     paragraph3:
       #original_hash: 00d3bf8
       title: Крайний срок объявления соревнования
-      #original_hash: 3613823
+      #original_hash: 66bf437
       content_html: >-
         Соревнование необходимо объявить минимум за 28 дней до начала
         соревнования (см. <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Требования
-        к Соревнованиям</a>).
+        к Соревнованиям</a>). Однако, этого времени обычно не хватает. Вы должны
+        продумать все аспекты организации вашего соревнования и дать себе
+        достаточно времени для подготовки. Кроме того, WCAT потребуется время,
+        чтобы просмотреть ваше соревнование, прежде чем объявить его.
+        Проконсультируйтесь со своим делегатом, если вы не уверены в том,
+        сколько времени потребуется.
     paragraph4:
       #original_hash: b6dca56
       title: Правила близлежащих соревнований
