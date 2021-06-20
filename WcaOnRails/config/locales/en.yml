@@ -150,15 +150,15 @@ en:
       ranking: "Top %{ranking}"
       percent: "Top %{percent}%"
       attempt_result:
-        time: "Best result < %{time}"
-        moves: "Best result < %{moves}"
-        points: "Best result > %{points}"
+        time: " < %{time}"
+        moves: " < %{moves}"
+        points: " > %{points}"
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
     attempt_result:
-      time: "Best result < %{time} advances to next round"
-      moves: "Best result < %{moves} moves advances to next round"
-      points: "Best result > %{points} points advances to next round"
+      time: " < %{time} advances to next round"
+      moves: " < %{moves} moves advances to next round"
+      points: " > %{points} points advances to next round"
   #context: Words used to describe cutoff round cutoffs
   cutoff:
     time:
