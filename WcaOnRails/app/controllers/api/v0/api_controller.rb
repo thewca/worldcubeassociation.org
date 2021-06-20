@@ -8,6 +8,10 @@ class Api::V0::ApiController < ApplicationController
     render status: e.status, json: { error: e.to_s }
   end
 
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render status: :not_found, json: { error: e.to_s }
+  end
+
   DEFAULT_API_RESULT_LIMIT = 20
   TNOODLE_PUBLIC_KEY_PATH = "#{Rails.root}/app/views/regulations/scrambles/tnoodle/TNoodle-WCA.pem".freeze
 

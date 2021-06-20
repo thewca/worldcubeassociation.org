@@ -4,7 +4,6 @@ require "rails_helper"
 
 RSpec.feature "Sign up" do
   let!(:person) { FactoryBot.create(:person_who_has_competed_once, year: 1988, month: 2, day: 3) }
-  let!(:person_without_dob) { FactoryBot.create :person, year: 0, month: 0, day: 0 }
   let!(:custom_delegate) { FactoryBot.create(:delegate) }
 
   before :each do
@@ -225,9 +224,10 @@ RSpec.feature "Sign up" do
 
       click_on "I have competed in a WCA competition."
       click_button "Sign up"
-      expect(page).to have_selector(".alert.alert-danger li", count: 2)
+      expect(page).to have_selector(".alert.alert-danger li", count: 3)
       expect(page.find(".alert.alert-danger")).to have_content "Delegate id to handle wca id claim required"
       expect(page.find(".alert.alert-danger")).to have_content "Unconfirmed WCA ID required"
+      expect(page.find(".alert.alert-danger")).to have_content "Unconfirmed WCA ID is invalid"
     end
   end
 

@@ -14,6 +14,25 @@ body, html {
     }
   }
 
+  // The FUI's basic style doesn't have the '!important' tag, and hovering
+  // an icon doesn't look as good as it should.
+  // I suspect this is fixed in more recent version of the stylesheets, as it
+  // is fixed in the online documentation.
+  i.link.icon:hover,
+  i.link.icons:hover {
+    opacity: 1 !important;
+  }
+
+  // FIXME: yet another bootstrap conflict override :(
+  .ui.modal {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    overflow: visible;
+    outline: none;
+  }
+
   .navbar-brand {
     .icon {
       margin: 0;

@@ -78,6 +78,7 @@ Rails.application.routes.draw do
     get '/admin/check-existing-results' => "admin#check_results", as: :admin_check_existing_results
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
+    get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
   post 'admin/check-existing-results' => "admin#run_validators", as: :admin_run_validators
 
@@ -102,10 +103,18 @@ Rails.application.routes.draw do
   get 'results/rankings/:event_id/:type' => 'results#rankings', as: :rankings
   get 'results/records' => 'results#records', as: :records
 
+  scope '/admin' do
+    resources :results, except: [:index, :new], controller: 'admin/results'
+    post 'results' => 'admin/results#create'
+    get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
+  end
+
   get "media/validate" => 'media#validate', as: :validate_media
   resources :media, only: [:index, :new, :create, :edit, :update, :destroy]
 
+  get 'persons/new_id' => 'admin/persons#generate_ids'
   resources :persons, only: [:index, :show]
+  post 'persons' => 'admin/persons#create'
 
   resources :polls, only: [:edit, :new, :vote, :create, :update, :index, :destroy]
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'

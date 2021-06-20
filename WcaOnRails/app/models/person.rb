@@ -21,7 +21,14 @@ class Person < ApplicationRecord
   }
 
   validates :name, presence: true
-  validates :countryId, presence: true
+  validates_inclusion_of :countryId, in: Country.real.map(&:id).freeze
+
+  # If creating a brand new person (ie: with subId equal to 1), then the
+  # WCA ID must be unique.
+  # Note: in general WCA ID are not unique in the table, as one person with
+  # the same WCA ID may have multiple subIds (eg: if they changed nationality).
+  validates_uniqueness_of :wca_id, if: -> { new_record? && subId == 1 }, case_sensitive: true
+  validates_format_of :wca_id, with: User::WCA_ID_RE
 
   before_validation :unpack_dob
   private def unpack_dob
@@ -41,6 +48,18 @@ class Person < ApplicationRecord
         errors.add(:dob, I18n.t('errors.messages.invalid'))
         false
       end
+    end
+  end
+
+  # After checking with the WRT there are still missing dob in the db.
+  # Therefore we'll enforce dob validation only for new records.
+  # If we absolutely need to add a person for which we don't know the dob,
+  # a workaround to this validation would be to create them with any dob,
+  # then fix them to a blank dob.
+  validate :dob_must_be_valid
+  private def dob_must_be_valid
+    if new_record? && !dob
+      errors.add(:dob, I18n.t('errors.messages.invalid'))
     end
   end
 

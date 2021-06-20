@@ -150,7 +150,7 @@ RSpec.describe User, type: :model do
 
   describe "WCA ID" do
     let(:user) { FactoryBot.create :user_with_wca_id }
-    let(:birthdayless_person) { FactoryBot.create :person, :missing_dob }
+    let(:birthdayless_person) { FactoryBot.create :person, :missing_dob, :skip_validation }
     let(:genderless_person) { FactoryBot.create :person, :missing_gender }
 
     it "validates WCA ID" do
@@ -399,7 +399,7 @@ RSpec.describe User, type: :model do
                                dob_verification: "1990-01-2")
     end
 
-    let!(:person_without_dob) { FactoryBot.create :person, year: 0, month: 0, day: 0 }
+    let!(:person_without_dob) { FactoryBot.create :person, :skip_validation, year: 0, month: 0, day: 0 }
     let!(:person_without_gender) { FactoryBot.create :person, gender: nil }
     let!(:user_with_wca_id) { FactoryBot.create :user_with_wca_id }
 
@@ -431,7 +431,7 @@ RSpec.describe User, type: :model do
 
     it "requires unconfirmed_wca_id" do
       user.unconfirmed_wca_id = ""
-      expect(user).to be_invalid_with_errors(unconfirmed_wca_id: ['required'])
+      expect(user).to be_invalid_with_errors(unconfirmed_wca_id: ['is invalid', 'required'])
     end
 
     it "requires dob verification" do
