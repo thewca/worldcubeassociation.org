@@ -257,6 +257,8 @@ pt:
     333fm: 1 hora
     #original_hash: cc7d8bb
     333mbf: '10:00.00 por cubo, até 60:00.00'
+    #original_hash: da39a3e
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: Mundo
@@ -1401,10 +1403,12 @@ pt:
       forum: Fórum
       #original_hash: 3ad28c0
       teams: 'Equipas, Comités e Conselhos'
-      #original_hash: a979ffc
+      #original_hash: 7981fb3
       education: Recursos educativos
       #original_hash: a34b69f
       contact: Informação de Contacto
+      #original_hash: 8e12c09
+      speedcubing_history: História de Speedcubing
       #original_hash: 4fa8cc8
       tools: Ferramentas
       #original_hash: 83fce83
@@ -1652,9 +1656,9 @@ pt:
           href=%{competition_url}>%{competition}</a> abre em menos de 24 horas.
         #original_hash: 2b93022
         not_accepted_html: Registou-se mas o seu registo não foi aceite.
-        #original_hash: 3724e7c
+        #original_hash: d4087ee
         more_info_html: >-
-          Por favor veja o <a href=%{competition_url}>site da competição</a>
+          Por favor veja o <a href=%{competition_url}>site WCA da competição</a>
           para mais informações e requisitos de registo.
       results_presence_email:
         #original_hash: 7ce2558
@@ -1750,6 +1754,12 @@ pt:
         o seu ID da WCA seja ligado à sua conta %{here}!
       #original_hash: 29e25b5
       have_wca_id_html: 'O seu ID da WCA é %{link_id}.'
+      #original_hash: bf654e1
+      account_is_special: >-
+        O ID da WCA e a conta estão ligados a funções especiais no WCA (por
+        exemplo, delegados, organizadores, membros da equipa) e não podem ser
+        removidos. Envie um email para a Equipa de Resultados da WCA para ajudar
+        a mudar o ID da WCA para uma conta diferente.
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -1919,12 +1929,11 @@ pt:
         ID da WCA %{link_id} já está vinculado a outra conta. Se acredita que
         isso foi feito incorretamente, entre em contacto com seu <a
         href='%{link_delegate}' target='_blank'>Delegado da WCA</a>.
-      #original_hash: d26bfdc
-      missing_dob_html: 'ID da WCA %{link_id} não tem uma data de nascimento registada.'
-      #original_hash: 5be6803
-      contact_results_team_html: >-
-        Por favor contacte a <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Equipa de Resultados da WCA</a> para resolver isto.
+      #original_hash: 498dc1e
+      missing_dob_html: >-
+        ID da WCA %{link_id} não tem uma data de nascimento registada. Por favor
+        contacte a Equipa de Resultados da WCA usando <a
+        href="%{dob_form_path}">este formulário</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'ID da WCA %{link_id} não existe.'
   registrations:
@@ -2325,6 +2334,10 @@ pt:
         Por favor garanta que a competição tem pelo menos uma ronda por evento e
         que o horário que criou inclui todas as rondas que declarou antes de
         confirmar a competição.
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: >-
+        Por favor garanta que todas as rondas não finais têm regras de avanço
+        especificadas.
       #original_hash: e390250
       create_success: Competição criada com sucesso!
       #original_hash: ba067f0
@@ -2570,6 +2583,10 @@ pt:
     index:
       #original_hash: db98a68
       title: Competições
+      #original_hash: 63254de
+      disclaimer: >-
+        Note que, devido à pandemia COVID-19, muitos países não podem ter
+        competições.
       #original_hash: 6a72085
       all_events: Todos
       #original_hash: 6d76b81
@@ -2838,10 +2855,20 @@ pt:
       before: antes
       #original_hash: 405906c
       after: depois
+      #original_hash: e1978a9
+      starts_on: começa a
+      #original_hash: 964aedc
+      ends_on: termina a
       #original_hash: 24d948e
       limit: Limite
       #original_hash: 855bd26
       competitors: Competidores
+      #original_hash: c5497bc
+      events: Eventos
+      #original_hash: 50cb854
+      show_events: Mostrar eventos
+      #original_hash: 0df66f7
+      hide_events: Esconder eventos
     #original_hash: 06b01c4
     announcements: Anúncios
     #original_hash: a2b80b0
@@ -2986,6 +3013,8 @@ pt:
         register: Inscrever
         #original_hash: 855bd26
         competitors: Competidores
+        #original_hash: c4622c3
+        scrambles: Embaralhamentos
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: Perfil da WCA
@@ -2995,6 +3024,11 @@ pt:
       round: Ronda
       #original_hash: 709a232
       name: Nome
+    scrambles_table:
+      #original_hash: 171a060
+      group: Grupo
+      #original_hash: b7126cd
+      scramble: Embaralhamento
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3531,11 +3565,11 @@ pt:
       para reservar o local e fazer os preparativos necessários.</p>
     #original_hash: 1aa5344
     contributing_title: Fazer uma contribuição
-    #original_hash: e64beb7
+    #original_hash: 538a82f
     contributing_content_html: >-
-      Pode efetuar um donativo com cartão de crédito usando o Guidestar <a
-      href="https://www.nfggive.com/guidestar/82-3825954">aqui</a>. Se preferir
-      passar um cheque, poderá passar para:
+      Pode efetuar um donativo com cartão de crédito usando o Guidestar
+      %{here_credit}, or via Paypal %{here_paypal}. Se preferir passar um
+      cheque, poderá passar para:
     #original_hash: 2af9b71
     tax_deductible_note: As doações são dedutíveis nos Estados Unidos.
     #original_hash: 6026d35
@@ -3556,6 +3590,8 @@ pt:
         mais agradáveis em todo o mundo.
       #original_hash: 24c87db
       donate_credit: Doar via cartão de crédito
+      #original_hash: 0e5a9c3
+      donate_paypal: Doar via Paypal
       #original_hash: 96d77f3
       donate_other: Outras formas de doar
     structure:
@@ -3721,6 +3757,9 @@ pt:
       banned:
         #original_hash: d30e2e5
         name: Competidores Banidos
+      wct_china:
+        #original_hash: ed5b65a
+        name: WCT China
       #original_hash: f8c3f3c
       operations_html: >-
         As operações do dia a dia são realizadas pelos %{committees_and_teams}
@@ -3730,6 +3769,9 @@ pt:
       probation:
         #original_hash: 1dd6e3b
         name: Delegados em Provação
+      wst_admin:
+        #original_hash: d4112d2
+        name: Administradores de software
       #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>Delegado da WCA</strong> é o papel definido nas Moções da WCA
@@ -3754,6 +3796,9 @@ pt:
       members_html: >-
         Todos os competidores tornam-se automaticamente <strong>membros</strong>
         da WCA na sua primeira competição oficial.
+  speedcubing_history:
+    #original_hash: 431e667
+    title: História da Comunidade de Speedcubing & WCA
   documents:
     #original_hash: 687c828
     title: Documentos
@@ -3771,17 +3816,23 @@ pt:
     codeofethics: Código de Ética
     #original_hash: 2643980
     codeofconduct: Código de Conduta
+    #original_hash: 4f05e8f
+    finances: Finanças
   education:
-    #original_hash: 41701c2
-    title: Documentos Educacionais da WCA
-    #original_hash: aa562a7
+    #original_hash: 746e863
+    title: Recursos Educativos da WCA
+    #original_hash: 081d65d
     description: >-
-      O WQAC e a WMT publicaram vários documentos para a comunidade, que podem
-      ser descarregados abaixo.
+      O WQAC publicou vários documentos para a comunidade, que podem ser
+      descarregados abaixo.
     #original_hash: d0a3812
     competitor_tutorial: Tutorial de competidor
-    #original_hash: 815938f
-    competition_material: 'Materiais de competição (certificados, tapa cubos, ...)'
+    #original_hash: 9561bfc
+    judge_tutorial: Tutorial de ajuizamento para iniciantes
+    #original_hash: 5ca0558
+    certificates: Modelos de Certificados da WCT
+    #original_hash: f580987
+    orga_guidelines: Orientações para organizadores
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
@@ -4250,7 +4301,11 @@ pt:
       posts: Artigos
       #original_hash: 9d7ea9c
       regulations_and_guidelines: Regulamentos e Orientações
+      #original_hash: db683b3
+      search_for: 'Procurar por <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: Nenhum resultado encontrado
         #original_hash: b8a7006
         competitions: Não foram encontradas competições para
         #original_hash: 99d4290
@@ -4349,9 +4404,67 @@ pt:
       <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">as
       instruções no repositório GitHub para traduções</a>.
+  full_organizer_guidelines:
+    #original_hash: 5d602df
+    description: >-
+      Bem-vindo à coleção de Orientações para Organizadores do WQAC. Se você
+      está a pensar ser organizador, é altamente recomendável que leia estes
+      documentos. Estes foram divididos em documentos essenciais e altamente
+      recomendados. Certifique-se de estar familiarizado com as informações
+      fornecidas, pois isso permitirá que realize uma competição divertida e de
+      alta qualidade!
+    #original_hash: e6f7d36
+    disclaimer_html: >-
+      <strong>Nota Importante</strong>: A WCA não organiza competições. Enquanto
+      organizador de uma competição sancionada pela WCA, <strong>não
+      pode</strong> assinar nada em nome da WCA. Deve tentar contactar com a
+      associação de cubing regional ou nacional que organiza ou assista na
+      organização de competições.
+    essential:
+      #original_hash: 44bd0ba
+      description: Documentos essenciais
+      #original_hash: 1cf87ad
+      finding-venue: Encontrar um local
+      #original_hash: 3ce0d9c
+      orga-team-delegate: Criar a sua equipa de organização e contactar um Delegado
+      #original_hash: d3c693b
+      budget: Orçamentar uma competição
+      #original_hash: b1429a7
+      schedule: Agendamento
+      #original_hash: beea57d
+      checklist: Checklist da competição
+      #original_hash: 9defcf1
+      registration: Processamento de registos
+      #original_hash: e298a56
+      venue-setup: Configuração do local
+      #original_hash: 2b6a5dd
+      work-during-comp: Trabalho do organizador durante a competição
+    recommended:
+      #original_hash: 6b843f3
+      title: Documentos recomendados
+      #original_hash: bfbd4bb
+      staff: Atribuição de staff
+      #original_hash: 4735583
+      emails: Emails
+      #original_hash: 8e7ca09
+      running-systems: Sistemas de transporte e ajuizamento
+      #original_hash: 2b31c89
+      new-competitors: Comportamentos para novos competidores
+      #original_hash: 3408054
+      enhancing-experience: Melhorar experiência para staff e competidores
+      #original_hash: 2345aaa
+      reflection: Reflexão de organizador
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Orientações para Organizadores de Competições WCA
+    paragraph0:
+      #original_hash: ee36904
+      title: Versão curta
+      #original_hash: 60d9532
+      content: >-
+        Em baixo encontrará um breve resumo dos pontos-chave para se ter uma
+        ideia de como organizar uma competição. Se achar que isso é algo para
+        si, dê uma olhada aos documentos acima!
     paragraph1:
       #original_hash: e5f5329
       title: Como organizar uma competição
@@ -4381,12 +4494,17 @@ pt:
     paragraph3:
       #original_hash: 00d3bf8
       title: Prazos para o anúncio de uma competição
-      #original_hash: 3613823
+      #original_hash: 66bf437
       content_html: >-
         Uma competição tem que ser anunciada pelo menos 28 dias antes do início
         da competição (ver <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisitos
-        de Competições</a>).
+        de Competições</a>). No entanto, raramente é tempo suficiente. Deve
+        considerar tudo o que será necessário para organizar a competição e dar
+        a si mesmo tempo suficiente para se preparar. Além disso, o WCAT
+        precisará de tempo para rever a competição antes de ser anunciada.
+        Consulte o seu delegado se não tiver certeza de quanto tempo será
+        necessário.
     paragraph4:
       #original_hash: b6dca56
       title: Política de proximidade
@@ -4405,10 +4523,6 @@ pt:
         '1': As duas competições não têm eventos comuns.
         #original_hash: f7bacc5
         '2': As duas competições ocorrem em países diferentes.
-        #original_hash: 7b2c099
-        '3': >-
-          Nos últimos 12 meses, existiram menos que 16 competições num raio de
-          100 km do local da competição.
       #original_hash: 5c5cf04
       content2: >-
         "Competições simultâneas de Resolução 3x3 em Menos Movimentos" são
