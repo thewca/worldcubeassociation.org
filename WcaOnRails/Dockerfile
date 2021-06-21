@@ -1,5 +1,5 @@
 
-FROM ruby:2.5.3
+FROM ruby:2.6.7
 EXPOSE 3000
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -23,8 +23,6 @@ RUN apt-get update && apt-get install -y \
   nodejs \
   mariadb-client-10.1 \
   libssl-dev \
-  tzdata \
-  # Fix for https://github.com/ariya/phantomjs/issues/14433
-  libfontconfig
+  tzdata
 
 RUN gem update --system && gem install bundler

@@ -177,6 +177,7 @@ en:
       across_rounds: "%{time} total for %{rounds}"
     333fm: "1 hour"
     333mbf: "10:00.00 per cube, up to 60:00.00"
+    333mbo: ""
   #context: Common word used in multiple places on the website
   common:
     world: "World"
@@ -768,7 +769,7 @@ en:
       faq: "Frequently Asked Questions"
       forum: "Forum"
       teams: "Teams, Committees, and Councils"
-      education: "Education resources"
+      education: "Educational resources"
       contact: "Contact Information"
       speedcubing_history: "Speedcubing History"
       tools: "Tools"
@@ -905,7 +906,7 @@ en:
         intro: "Hello %{name},"
         information_html: "This is a reminder that registration for <a href=%{competition_url}>%{competition}</a> opens in less than 24 hours."
         not_accepted_html: "You have registered but your registration has not been accepted."
-        more_info_html: "Please see the <a href=%{competition_url}>competition website</a> for more information and registration requirements."
+        more_info_html: "Please see the <a href=%{competition_url}>competition WCA page</a> for more information and registration requirements."
       #context: notification to users after a competition results have been posted
       results_presence_email:
         header: "The results of %{competition} are posted"
@@ -1941,6 +1942,9 @@ en:
       #context: Hidden team for list of Delegates on Probation
       probation:
         name: "Delegates on Probation"
+      #context: Hidden team for Software administrators
+      wst_admin:
+        name: "Software admins"
       delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Mission, Spirit, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
 <p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
 <p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>
@@ -1959,10 +1963,12 @@ en:
     policies: "WCA Policies"
     codeofethics: "Code of Ethics"
     codeofconduct: "Code of Conduct"
+    finances: "Finances"
   education:
-    title: "WCA Educational Documents"
+    title: "WCA Educational Resources"
     description: "The WQAC has published several documents for the community, you can download them below."
     competitor_tutorial: "Competitor tutorial"
+    judge_tutorial: "Judging tutorial for newcomers"
     certificates: "WCT's certificate templates"
     orga_guidelines: "Organizer guidelines"
   #context: Delegates page
@@ -2214,8 +2220,8 @@ en:
     recommended:
       title: "Recommended documents"
       staff: "Assigning staff"
-      emails: "Pre-competition email structure"
-      running-systems: "Running systems"
+      emails: "Emails"
+      running-systems: "Running and judging systems"
       new-competitors: "Attitude to new competitors"
       enhancing-experience: "Enhancing competitor and staff experience"
       reflection: "Organizer reflection"
@@ -2234,7 +2240,7 @@ en:
       it is highly recommended to search for sponsors. Although WCA Delegates are volunteers and do not receive a salary for their work, organizers should consider paying compensation for their travel expenses."
     paragraph3:
       title: "Deadlines for the announcement of the competition"
-      content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>)."
+      content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). However, this is rarely enough time. You should consider everything that will go into organizing your competition, and give yourself enough time to prepare. Also, the WCAT will need time to review your competition before it is announced. Consult with your delegate if you are unsure about how much time will be needed."
     paragraph4:
       title: "Proximity policy"
       content1: "WCA competitions will be accepted if they are at least 100 km or 19 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 100 km and the time between them is less than 19 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"

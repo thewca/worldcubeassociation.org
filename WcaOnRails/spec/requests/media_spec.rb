@@ -173,8 +173,8 @@ RSpec.describe "media" do
   describe "PATCH #update" do
     let(:patch_medium) do
       lambda do |attributes|
-        patch medium_path(medium), params: (attributes.map do |key, value|
-          ["competition_medium[#{key}]", value]
+        patch medium_path(medium), params: (attributes.transform_keys do |key|
+          "competition_medium[#{key}]"
         end.to_h)
       end
     end

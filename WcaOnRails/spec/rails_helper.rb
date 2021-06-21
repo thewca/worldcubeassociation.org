@@ -10,7 +10,7 @@ require 'rspec/rails'
 # From http://everydayrails.com/2012/04/24/testing-series-rspec-requests.html
 require "capybara/rspec"
 require 'capybara-screenshot/rspec'
-require 'capybara/poltergeist'
+require 'capybara/apparition'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -25,28 +25,35 @@ require 'capybara/poltergeist'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-# To debug feature specs using phantomjs, set `Capybara.javascript_driver = :poltergeist_debug`
+# To debug feature specs using apparition, set `Capybara.javascript_driver = :apparition_debug`
 # and then call `page.driver.debug` in your feature spec.
-# Phantomjs' options are required to test Stripe.js (to load their script from a non https server)
-Capybara.register_driver :poltergeist_debug do |app|
-  Capybara::Poltergeist::Driver.new(app, inspector: true, phantomjs: Phantomjs.path, debug: true, phantomjs_options: ['--ignore-ssl-errors=yes', '--ssl-protocol=any'])
+Capybara.register_driver :apparition_debug do |app|
+  Capybara::Apparition::Driver.new(app, inspector: true, debug: true, headless: false)
 end
 
-# Phantomjs' options are required to test Stripe.js (to load their script from a non https server)
-Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, js_errors: true, phantomjs: Phantomjs.path, phantomjs_options: ["--ignore-ssl-errors=yes", "--ssl-protocol=any"])
+Capybara.register_driver :apparition do |app|
+  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true)
 end
 
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :apparition
 Capybara.server = :webrick
 
 RSpec.configure do |config|
+  # enforce consistent locale behaviour across OSes, especially Linux
+  # depending on the test driver, this might not be necessary but we want
+  # consistent tests regardless of which driver we may end up using in the future
+  config.before(:each) do
+    if defined? page.driver.add_header
+      page.driver.add_header("Accept-Language", "en-US", permanent: true)
+    end
+  end
+
   # We're using database_cleaner instead of rspec-rails's implicit wrapping of
   # tests in database transactions.
   # See http://devblog.avdi.org/2012/08/31/configuring-database_cleaner-with-rails-rspec-capybara-and-selenium/
@@ -83,21 +90,3 @@ end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
 RSpec::Matchers.define_negated_matcher :not_change, :change
-
-# Assumes value to be a string
-# We use a unmaintained and most probably deprecated capybara driver (poltergeist)
-# We run into this for some of our tests: https://github.com/teamcapybara/capybara/issues/2105
-# Therefore this is a fix by going the "send_keys" way instead of the "fill_in"
-def wca_fill_in(selector, value, **options)
-  elem = if selector
-           find_field(selector, **options)
-         else
-           find_field(**options)
-         end
-  unless elem.value.blank?
-    elem.value.length.times do
-      elem.native.send_keys(:backspace)
-    end
-  end
-  elem.native.send_keys(*value.split(''))
-end

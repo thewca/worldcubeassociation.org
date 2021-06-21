@@ -15,21 +15,23 @@ namespace :db do
       Rails.application.eager_load!
 
       error_count = 0
+      # rubocop:disable Layout/RescueEnsureAlignment
+      # There is a bug in RuboCop which wants to move the "rescue" to align with "ActiveRecord" at the beginning of the line
+      # Haven't found a workaround yet other than upgrading, which we cannot do because of our old infrastructure
       ActiveRecord::Base.subclasses
                         .reject { |type| type.to_s.include?('::') || type.to_s == "WiceGridSerializedQuery" }
                         .each do |type|
-                          begin
-                            type.find_each do |record|
-                              unless record.valid?
-                                puts "#<#{type} id: #{record.id}, errors: #{record.errors.full_messages}>"
-                                error_count += 1
-                              end
+                          type.find_each do |record|
+                            unless record.valid?
+                              puts "#<#{type} id: #{record.id}, errors: #{record.errors.full_messages}>"
+                              error_count += 1
                             end
-                          rescue StandardError => e
-                            puts "An exception occurred: #{e.message}"
-                            error_count += 1
                           end
+                        rescue StandardError => e
+                          puts "An exception occurred: #{e.message}"
+                          error_count += 1
                         end
+      # rubocop:enable Layout/RescueEnsureAlignment
 
       ActiveRecord::Base.logger.level = original_log_level
 

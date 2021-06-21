@@ -1,7 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.6
   DisplayCopNames: true
   Exclude:
     - 'WcaOnRails/node_modules/**/*'
@@ -87,7 +87,7 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 25
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 245
 
 Metrics/MethodLength:
@@ -183,10 +183,10 @@ Style/SymbolProc:
 Naming/PredicateName:
   Enabled: false
 
-Naming/UncommunicativeBlockParamName:
+Naming/BlockParameterName:
   Enabled: false
 
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Enabled: false
 
 Style/YodaCondition:
@@ -197,3 +197,18 @@ Style/FormatStringToken:
 
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true

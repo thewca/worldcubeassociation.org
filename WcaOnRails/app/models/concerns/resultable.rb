@@ -81,11 +81,11 @@ module Resultable
     unskipped_count = solve_times.count(&:unskipped?)
     if round_type.combined?
       if unskipped_count > format.expected_solve_count
-        return "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
+        "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
       end
     else
       if unskipped_count != format.expected_solve_count
-        return "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
+        "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
       end
     end
   end

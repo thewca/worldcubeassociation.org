@@ -18,9 +18,9 @@ RSpec.feature "Competition events management" do
 
     scenario "can add a venue and a room", js: true do
       click_link "Add a venue"
-      wca_fill_in(nil, "Venue", class: "venue-name-input")
+      fill_in(nil, with: "Venue", class: "venue-name-input")
       click_on "Add room"
-      wca_fill_in(nil, "Youpitralala", class: "room-name-input")
+      fill_in(nil, with: "Youpitralala", class: "room-name-input")
       within('.venue-timezone-input') do
         select "Pacific Time (US & Canada)"
       end
