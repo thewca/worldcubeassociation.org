@@ -18,6 +18,19 @@
             <%= ui_icon("edit") %> Manage
           <% end %>
         </td>
+        <td>
+        <% if ro.start_date == nil %>
+            <%= button_to regional_organization_path(ro),
+                          title: t('common.delete'),
+                          class: "btn btn-danger",
+                          method: :delete,
+                          data: { confirm: t('regional_organizations.delete.confirm_delete') } do
+            %>
+              <%= ui_icon("delete") %>
+              <%= t('common.delete') %>
+            <% end %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>

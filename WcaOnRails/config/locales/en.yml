@@ -1993,6 +1993,8 @@ en:
       end_date_after_start_date: "cannot be after Acknowledged until"
     create:
       create_success: "Application successfully submitted! Please check your email, and wait for the WCA Board of Directors to review it"
+    delete:
+      confirm_delete: "Are you sure you want to delete this Regional Organization?"
   #context: Contact page
   contact:
     title: "Contact Information"

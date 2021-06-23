@@ -156,9 +156,10 @@ Rails.application.routes.draw do
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
   get 'tutorial' => redirect('/education', status: 302)
 
-  resources :regional_organizations, only: [:new, :update, :edit], path: '/regional-organizations'
+  resources :regional_organizations, only: [:new, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
   get 'admin/regional-organizations' => 'regional_organizations#admin'
+  delete 'admin/regional-organizations' => 'regional_organizations#destroy'
   patch 'regional-organizations/:id/edit' => 'regional_organizations#update'
   post 'regional-organizations/new' => 'regional_organizations#create'
 
