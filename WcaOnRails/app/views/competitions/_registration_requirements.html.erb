@@ -68,6 +68,21 @@
   <br>
 <% end %>
 
+<% if @competition.waiting_list_deadline_date?  %>
+  <%= t('competitions.competition_info.waiting_list_deadline_html', waiting_list_deadline: wca_local_time(@competition.waiting_list_deadline_date)) %>
+  <br>
+<% end %>
+
+<% if @competition.has_event_change_deadline_date? %>
+  <% if @competition.event_change_deadline_date?  %>
+    <%= t('competitions.competition_info.event_change_deadline_html', event_change_deadline: wca_local_time(@competition.event_change_deadline_date)) %>
+    <br>
+  <% else %>
+    <%= t('competitions.competition_info.event_change_deadline_default_html') %>
+    <br>
+  <% end %>
+<% end %>
+
 <% if @competition.on_the_spot_registration.nil? %>
 <% elsif @competition.on_the_spot_registration? %>
   <% if @competition.on_the_spot_entry_fee_lowest_denomination? %>

@@ -89,6 +89,8 @@ module DatabaseDumper
           main_event_id
           cancelled_at
           cancelled_by
+          waiting_list_deadline_date
+          event_change_deadline_date
         ),
         db_default: %w(
           connected_stripe_account_id
