@@ -30,6 +30,8 @@ class User < ApplicationRecord
   has_many :preferred_events, through: :user_preferred_events, source: :event
   has_many :bookmarked_competitions, dependent: :destroy
   has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
+  has_many :competitions_announced, foreign_key: "announced_by", class_name: "Competition"
+  has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
@@ -1154,6 +1156,12 @@ class User < ApplicationRecord
   # These includes any teams, organizers, delegates
   # Note: Someone can Delegate a competition without ever being a Delegate.
   def is_special_account?
-    self.teams.any? || !self.organized_competitions.empty?|| any_kind_of_delegate? || !delegated_competitions.empty? || !trainee_delegated_competitions.empty?
+    self.teams.any? ||
+      !self.organized_competitions.empty? ||
+      any_kind_of_delegate? ||
+      !delegated_competitions.empty? ||
+      !trainee_delegated_competitions.empty? ||
+      !competitions_announced.empty? ||
+      !competitions_results_posted.empty?
   end
 end
