@@ -161,6 +161,8 @@ GEM
       descendants_tracker (~> 0.0.1)
     colorize (0.8.1)
     concurrent-ruby (1.1.8)
+    cookies_eu (1.7.7)
+      js_cookie_rails (~> 2.2.0)
     crass (1.0.6)
     css_parser (1.7.1)
       addressable
@@ -322,6 +324,8 @@ GEM
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
+    js_cookie_rails (2.2.0)
+      railties (>= 3.1)
     json (2.5.1)
     json-schema (2.8.1)
       addressable (>= 2.4)
@@ -652,6 +656,7 @@ DEPENDENCIES
   carrierwave
   carrierwave-crop!
   cocoon
+  cookies_eu
   daemons
   database_cleaner
   datetimepicker-rails!
@@ -733,4 +738,4 @@ DEPENDENCIES
   wicked_pdf
 
 BUNDLED WITH
-   2.1.4
+   2.2.20

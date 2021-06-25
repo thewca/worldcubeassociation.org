@@ -10,6 +10,7 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require cookies_eu
 //= require bootstrap-sprockets
 //= require bootstrap-hover-dropdown
 //= require jquery.are-you-sure
@@ -365,3 +366,5 @@ $(function() {
     form.submit();
   });
 });
+
+cookiesEu.init()
