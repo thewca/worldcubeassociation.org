@@ -65,15 +65,15 @@
               <% end %>
             </div>
             <div>
-              <% if Competition.where(results_posted_by: @reassign_wca_id.account1_user.id).any? %>
-                <b>Posted Results for Competitions:</b>
-                <%= Competition.where(results_posted_by: @reassign_wca_id.account1_user.id).map(&:name).join(",") %>
+              <% if @reassign_wca_id.account1_user.competitions_announced.any? %>
+                <b>Announced Competitions:</b>
+                <%= @reassign_wca_id.account1_user.competitions_announced.map(&:name).join(",") %>
               <% end %>
             </div>
             <div>
-              <% if Competition.where(announced_by: @reassign_wca_id.account1_user.id).any? %>
-                <b>Announced Competitions:</b>
-                <%= Competition.where(announced_by: @reassign_wca_id.account1_user.id).map(&:name).join(",") %>
+              <% if @reassign_wca_id.account1_user.competitions_results_posted.any? %>
+                <b>Posted Results for Competitions:</b>
+                <%= @reassign_wca_id.account1_user.competitions_results_posted.map(&:name).join(",") %>
               <% end %>
             </div>
           </div>
@@ -111,6 +111,18 @@
               <% if @reassign_wca_id.account2_user.trainee_delegated_competitions.any? %>
                 <b>Delegated Competitions:</b>
                 <%= @reassign_wca_id.account2_user.trainee_delegated_competitions.map(&:name).join(", ") %>
+              <% end %>
+            </div>
+            <div>
+              <% if @reassign_wca_id.account2_user.competitions_announced.any? %>
+                <b>Announced Competitions:</b>
+                <%= @reassign_wca_id.account2_user.competitions_announced.map(&:name).join(",") %>
+              <% end %>
+            </div>
+            <div>
+              <% if @reassign_wca_id.account2_user.competitions_results_posted.any? %>
+                <b>Posted Results for Competitions:</b>
+                <%= @reassign_wca_id.account2_user.competitions_results_posted.map(&:name).join(",") %>
               <% end %>
             </div>
           </div>
