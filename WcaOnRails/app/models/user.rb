@@ -881,8 +881,7 @@ class User < ApplicationRecord
   private def editable_competitor_info_fields(user)
     fields = Set.new
     if user == self || admin? || any_kind_of_delegate? || results_team? || communication_team?
-      cannot_edit_data = !!cannot_edit_data_reason_html(user)
-      if !cannot_edit_data
+      unless cannot_edit_data_reason_html(user)
         fields += %i(name dob gender country_iso2)
       end
       fields += CLAIM_WCA_ID_PARAMS
