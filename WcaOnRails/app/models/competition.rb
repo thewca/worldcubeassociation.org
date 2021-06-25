@@ -916,7 +916,7 @@ class Competition < ApplicationRecord
   end
 
   def has_event_change_deadline_date?
-    created_at > Date.new(2021, 4, 1)
+    created_at.present? && created_at > Date.new(2021, 6, 24)
   end
 
   private def unpack_dates
