@@ -141,6 +141,8 @@ class Competition < ApplicationRecord
     cancelled_by
     results_posted_by
     main_event_id
+    waiting_list_deadline_date
+    event_change_deadline_date
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/.freeze
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/.freeze
@@ -213,6 +215,7 @@ class Competition < ApplicationRecord
   MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 28
 
   # Time in seconds from 6.2.1 in https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
+  # 48 hours
   REGISTRATION_OPENING_EARLIEST = 172_800
 
   validates :cityName, city: true
@@ -912,6 +915,10 @@ class Competition < ApplicationRecord
     self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
   end
 
+  def has_event_change_deadline_date?
+    created_at.present? && created_at > Date.new(2021, 6, 24)
+  end
+
   private def unpack_dates
     if start_date
       self.year = start_date.year
@@ -949,9 +956,46 @@ class Competition < ApplicationRecord
     if number_of_days > MAX_SPAN_DAYS
       errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS))
     end
+  end
 
+  validate :registration_dates_must_be_valid
+  private def registration_dates_must_be_valid
     if refund_policy_limit_date? && refund_policy_limit_date > start_date
       errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start'))
+    end
+
+    if registration_period_required? && registration_open? && registration_close? && (registration_open >= start_date || registration_close >= start_date)
+      errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
+    end
+  end
+
+  validate :waiting_list_dates_must_be_valid
+  private def waiting_list_dates_must_be_valid
+    if waiting_list_deadline_date?
+      if waiting_list_deadline_date < registration_close
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close'))
+      end
+      if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date'))
+      end
+      if waiting_list_deadline_date >= start_date
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_start'))
+      end
+    end
+  end
+
+  validate :event_change_dates_must_be_valid
+  private def event_change_dates_must_be_valid
+    if event_change_deadline_date?
+      if event_change_deadline_date < registration_close
+        errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close'))
+      end
+      if on_the_spot_registration? && event_change_deadline_date < start_date
+        errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots'))
+      end
+      if event_change_deadline_date > end_date.to_datetime.end_of_day
+        errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date'))
+      end
     end
   end
 

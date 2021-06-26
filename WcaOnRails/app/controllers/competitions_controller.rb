@@ -615,6 +615,8 @@ class CompetitionsController < ApplicationController
         :event_restrictions_reason,
         :guests_entry_fee_lowest_denomination,
         :main_event_id,
+        :waiting_list_deadline_date,
+        :event_change_deadline_date,
         competition_events_attributes: [:id, :event_id, :_destroy],
         championships_attributes: [:id, :championship_type, :_destroy],
       ]

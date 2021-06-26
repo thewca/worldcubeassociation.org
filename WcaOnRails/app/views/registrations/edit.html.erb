@@ -6,8 +6,10 @@
     <%= hidden_field_tag :from_admin_view, "1" %>
     <%= f.hidden_field :updated_at %>
 
-    <%= alert :info do %>
-      <%= t('registrations.registered_with_account_html', here: link_to(t('common.here'), edit_user_path(@registration.user))) %>
+    <% if current_user&.can_edit_user?(@registration.user) %>
+      <%= alert :info do %>
+        <%= t('registrations.registered_with_account_html', here: link_to(t('common.here'), edit_user_path(@registration.user))) %>
+      <% end %>
     <% end %>
     <h4><%= @registration.name %></h4>
 

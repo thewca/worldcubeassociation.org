@@ -31,6 +31,12 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     $('.competition_event_restrictions_reason').toggle(this.checked);
   }).trigger('change');
 
+  $('input[name="competition[refund_policy_limit_date]"]').on('change dp.change', function() {
+    if($('input[name="competition[waiting_list_deadline_date]"]').val() === "") {
+      $('input[name="competition[waiting_list_deadline_date]"]').val(this.value);
+    }
+  }).trigger('change');
+
   $('#nearby-competitions').on('click', "#wca-nearby-competitions-show-events-button", function() {
     $('#nearby-competitions .wca-nearby-competitions-show-events').show();
     $('#nearby-competitions .wca-nearby-competitions-hide-events').hide();
