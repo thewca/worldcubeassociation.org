@@ -30,6 +30,9 @@ module ResultsHelper
   end
 
   def compute_rankings_by_region(rows, continent, country)
+    if rows.empty?
+      return [[], 0, 0]
+    end
     best_value_of_world = rows.first["value"]
     best_values_of_continents = {}
     best_values_of_countries = {}
