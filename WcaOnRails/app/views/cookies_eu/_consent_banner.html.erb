@@ -1,0 +1,15 @@
+<% if cookies.kind_of? ActionDispatch::Cookies::CookieJar %>
+  <% if cookies && cookies['cookie_eu_consented'] != 'true' %>
+    <div class="cookies-eu js-cookies-eu" <%= "dir=rtl" if I18n.exists?('cookies_eu.direction', I18n.locale) && I18n.t("cookies_eu.direction") == "rtl"  %>>
+      <span class="cookies-eu-content-holder"><%= t('cookies_eu.cookies_text') %></span>
+      <span class="cookies-eu-button-holder">
+      <button class="cookies-eu-ok js-cookies-eu-ok"> <%= t('cookies_eu.ok') %> </button>
+      <% if defined?(link).present? %>
+        <a href="<%= link %>" class="cookies-eu-link" target="<%= defined?(target).present? ? target : '' %>"> <%= t('cookies_eu.learn_more') %> </a>
+      <% end %>
+      </span>
+    </div>
+  <% end %>
+<% else %>
+  <% raise Exception.new "'cookies' is a reserved Rails class, please rename your method" %>
+<% end %>
