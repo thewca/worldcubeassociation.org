@@ -588,7 +588,7 @@ GEM
     trailblazer-option (0.1.1)
     translighterate (0.2.2)
       actionview (>= 4.0, < 6.0)
-    twitter_cldr (6.6.0)
+    twitter_cldr (6.6.1)
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.1)
       tzinfo
