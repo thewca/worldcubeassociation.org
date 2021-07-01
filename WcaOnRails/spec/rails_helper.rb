@@ -90,3 +90,9 @@ end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
 RSpec::Matchers.define_negated_matcher :not_change, :change
+
+RSpec.feature "Hide Cookie Banner" do
+  before :all do
+    find(:css, 'body > div.cookies-eu.js-cookies-eu > span.cookies-eu-button-holder > button').click
+  end
+end

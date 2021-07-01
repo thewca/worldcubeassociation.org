@@ -157,7 +157,6 @@ RSpec.feature "Competition management" do
 
         expect(page).not_to have_selector(".bootstrap-datetimepicker-widget .datepicker")
         expect(page).not_to have_selector(".bootstrap-datetimepicker-widget .timepicker")
-        find(:css, 'body > div.cookies-eu.js-cookies-eu > span.cookies-eu-button-holder > button').click
         find('#competition_registration_open').click
         expect(page).to have_selector(".bootstrap-datetimepicker-widget .datepicker")
         expect(page).to have_selector(".bootstrap-datetimepicker-widget .timepicker")

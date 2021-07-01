@@ -104,7 +104,6 @@ RSpec.feature "Sign up" do
 
     it "remembers their selected wca id and custom delegate on validation error" do
       visit "/users/sign_up"
-      find(:css, 'body > div.cookies-eu.js-cookies-eu > span.cookies-eu-button-holder > button').click
       click_on "I have competed in a WCA competition."
       # They have not selected a valid WCA ID yet, so don't show the birthdate verification
       # field.
