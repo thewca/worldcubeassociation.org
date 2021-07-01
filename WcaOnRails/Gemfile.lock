@@ -576,7 +576,7 @@ GEM
       sprockets (>= 3.0.0)
     strip_attributes (1.11.0)
       activemodel (>= 3.0, < 7.0)
-    stripe (5.34.0)
+    stripe (5.35.0)
     terminal-table (3.0.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (0.20.3)
