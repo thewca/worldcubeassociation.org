@@ -214,23 +214,23 @@ pt:
       #original_hash: 0664a83
       percent: 'Top %{percent}%'
       attempt_result:
-        #original_hash: 482f137
-        time: 'Melhor resultado < %{time}'
-        #original_hash: 3faa63e
-        moves: 'Melhor resultado < %{moves}'
-        #original_hash: c3133c2
-        points: 'Melhor resultado > %{points}'
+        #original_hash: ac6a282
+        time: '%{round_format} < %{time}'
+        #original_hash: 45db130
+        moves: '%{round_format} < %{moves}'
+        #original_hash: 076911b
+        points: '%{round_format} > %{points}'
     #original_hash: 6e55337
     ranking: 'Top %{ranking} avança para a próxima ronda'
     #original_hash: 7ee969c
     percent: 'Top %{percent}% avança para a próxima ronda'
     attempt_result:
-      #original_hash: b3c8a02
-      time: 'Melhor resultado < %{time} avança para a próxima ronda'
-      #original_hash: 07bca6c
-      moves: 'Melhor resultado < %{moves} movimentos avança para a próxima ronda'
-      #original_hash: 837083c
-      points: 'Melhor resultado > %{points} pontos avança para a próxima ronda'
+      #original_hash: 6173090
+      time: '%{round_format} < %{time} avança para a próxima ronda'
+      #original_hash: 581709d
+      moves: '%{round_format} < %{moves} movimentos avança para a próxima ronda'
+      #original_hash: e9f0c92
+      points: '%{round_format} > %{points} pontos avança para a próxima ronda'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -477,6 +477,12 @@ pt:
         refund_policy_percent: Percentagem a ser reembolsado
         #original_hash: b332299
         refund_policy_limit_date: Data limite para reembolsos
+        #original_hash: 16cf9a4
+        waiting_list_deadline_date: Prazo limite para aceitar competidores da lista de espera
+        #original_hash: 99a9169
+        event_change_deadline_date: >-
+          Prazo limite para os competidores atualizarem os eventos em que estão
+          registados
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de entrada para público
         #original_hash: 723cad9
@@ -885,6 +891,20 @@ pt:
           circunstância.
         #original_hash: f64d853
         refund_policy_limit_date: Data após a qual não serão realizados mais reembolsos.
+        #original_hash: 664db64
+        waiting_list_deadline_date: >-
+          A data a partir da qual registos em lista de espera não serão aceites.
+          Se tem um prazo limite para reembolsos, o prazo limite para ser aceite
+          não deve ser antes do prazo para reembolsos.
+        #original_hash: 75e6c1f
+        event_change_deadline_date: >-
+          Competidores registados têm o direito de atualizar os eventos em que
+          se registam até esta altura contactando a equipa de organização. Este
+          prazo limite não pode ser para uma altura antes do registo estar
+          definido para fechar. Deixar este campo em branco significa que
+          competidores podem adicionar-se a um evento até esse evento decorrer.
+          Se tiver registos no local, este valor deve ser o mesmo dia da
+          competição.
         #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
           Por agora este número é apenas informativo, taxas para público não
@@ -2496,6 +2516,20 @@ pt:
         reembolsado %{refund_policy_percent} da sua taxa de registo.
       #original_hash: 4aca553
       no_refunds: Taxas de registo não serão reembolsadas em nenhuma circunstância.
+      #original_hash: b016d2f
+      waiting_list_deadline_html: >-
+        Registos na lista de espera poderão ser integrados na lista de
+        competidores até %{waiting_list_deadline}.
+      #original_hash: 14c5699
+      event_change_deadline_html: >-
+        Se for um competidor registado, pode alterar os eventos a que está
+        inscrito até %{event_change_deadline} contactando a equipa de
+        organização.
+      #original_hash: eff3594
+      event_change_deadline_default_html: >-
+        Encorajamos todos a se inscreverem nos eventos em que desejam competir
+        através do registo online. No entanto, pode adicionar eventos ao seu
+        registo até ao início do evento.
       #original_hash: cf7be5d
       on_the_spot_registration_fee_html: >-
         Registos no local da competição serão aceites com uma taxa base de
@@ -2798,6 +2832,28 @@ pt:
       invalid_currency_code: Código de moeda selecionado é inválido
       #original_hash: 902a278
       advancement_condition_must_be_present_for_all_non_final_rounds: deve ter uma condição de avanço para todas as rondas não finais.
+      #original_hash: da17c99
+      registration_period_after_start: Período de registo não pode ser depois da data de início.
+      #original_hash: f6b244b
+      waiting_list_deadline_before_registration_close: >-
+        Prazo limite de lista de espera não pode ser antes da data de fecho de
+        registo.
+      #original_hash: ececa98
+      waiting_list_deadline_before_refund_date: >-
+        Prazo limite de lista de espera não pode ser antes da data limite para
+        reembolsos.
+      #original_hash: 44d9902
+      waiting_list_deadline_after_start: Prazo limite de lista de espera tem que ser antes da data de início.
+      #original_hash: c3eb1be
+      event_change_deadline_before_registration_close: >-
+        Prazo limite para atualizar eventos não pode ser antes da data de fecho
+        de registos.
+      #original_hash: bc1ca0f
+      event_change_deadline_after_end_date: Prazo limite para atualizar eventos não pode ser depois da competição.
+      #original_hash: a2e4fc9
+      event_change_deadline_with_ots: >-
+        Prazo limite para atualizar eventos tem que ser durante a competição se
+        forem aceites registos no local da competição.
     new:
       #original_hash: 1208df7
       create_competition: Criar competição
