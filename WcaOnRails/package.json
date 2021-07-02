@@ -50,7 +50,7 @@
     "react-leaflet": "^2.8.0",
     "regenerator-runtime": "^0.13.5",
     "resolve-url-loader": "^4.0.0",
-    "sass": "^1.34.1",
+    "sass": "^1.35.1",
     "sass-loader": "^10.1.1",
     "semantic-ui-react": "^2.0.3",
     "style-loader": "^2.0.0",
