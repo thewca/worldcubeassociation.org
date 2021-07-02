@@ -52,6 +52,9 @@ RSpec.configure do |config|
     if defined? page.driver.add_header
       page.driver.add_header("Accept-Language", "en-US", permanent: true)
     end
+    if (defined? page) && page.has_css?("button #cookies-eu-ok")
+      click_on(class: 'cookies-eu-ok')
+    end
   end
 
   # We're using database_cleaner instead of rspec-rails's implicit wrapping of
