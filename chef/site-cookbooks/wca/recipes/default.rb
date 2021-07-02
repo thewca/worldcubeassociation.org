@@ -1,4 +1,4 @@
-require 'fileutils'
+equire 'fileutils'
 require 'shellwords'
 require 'securerandom'
 
@@ -90,15 +90,14 @@ template gen_auth_keys_path do
   owner username
   group username
   variables({
-    secrets: secrets,
-  })
+              secrets: secrets,
+            })
 end
 execute gen_auth_keys_path do
   user username
 end
 
 #### Mysql
-package 'mysql-client-5.6'
 db = {
   'user' => 'root',
 }
@@ -137,9 +136,9 @@ template "/etc/my.cnf" do
   owner 'root'
   group 'root'
   variables({
-    secrets: secrets,
-    db: db,
-  })
+              secrets: secrets,
+              db: db,
+            })
 end
 
 
@@ -227,7 +226,6 @@ end
 # Nginx dependencies copied from http://www.rackspace.com/knowledge_center/article/ubuntu-and-debian-installing-nginx-from-source
 package 'libc6'
 package 'libpcre3'
-package 'libssl0.9.8'
 package 'zlib1g'
 package 'lsb-base'
 # http://stackoverflow.com/a/14046228
@@ -239,13 +237,13 @@ bash "build nginx" do
   code <<-EOH
     set -e # exit on error
     cd /tmp
-    wget http://nginx.org/download/nginx-1.11.8.tar.gz
-    tar xvf nginx-1.11.8.tar.gz
-    cd nginx-1.11.8
+    wget http://nginx.org/download/nginx-1.19.6.tar.gz
+    tar xvf nginx-1.19.6.tar.gz
+    cd nginx-1.19.6
     ./configure --sbin-path=/usr/local/sbin --with-http_ssl_module --with-http_auth_request_module --with-http_gzip_static_module --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log
     make
     sudo make install
-    EOH
+  EOH
 
   # Don't build nginx if we've already built it.
   not_if { ::File.exists?('/usr/local/sbin/nginx') }
@@ -253,8 +251,8 @@ end
 template "/etc/nginx/fcgi.conf" do
   source "fcgi.conf.erb"
   variables({
-    username: username,
-  })
+              username: username,
+            })
   notifies :run, 'execute[reload-nginx]', :delayed
 end
 template "/etc/init.d/nginx" do
@@ -270,8 +268,8 @@ template "/etc/nginx/nginx.conf" do
   owner 'root'
   group 'root'
   variables({
-    username: username,
-  })
+              username: username,
+            })
   notifies :run, 'execute[reload-nginx]', :delayed
 end
 directory "/etc/nginx/conf.d" do
@@ -293,13 +291,13 @@ template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
   owner 'root'
   group 'root'
   variables({
-    username: username,
-    rails_root: rails_root,
-    repo_root: repo_root,
-    rails_env: rails_env,
-    https: https,
-    server_name: server_name,
-  })
+              username: username,
+              rails_root: rails_root,
+              repo_root: repo_root,
+              rails_env: rails_env,
+              https: https,
+              server_name: server_name,
+            })
   notifies :run, 'execute[reload-nginx]', :delayed
 end
 template "/etc/nginx/wca_https.conf" do
@@ -308,13 +306,13 @@ template "/etc/nginx/wca_https.conf" do
   owner 'root'
   group 'root'
   variables({
-    username: username,
-    rails_root: rails_root,
-    repo_root: repo_root,
-    rails_env: rails_env,
-    https: https,
-    server_name: server_name,
-  })
+              username: username,
+              rails_root: rails_root,
+              repo_root: repo_root,
+              rails_env: rails_env,
+              https: https,
+              server_name: server_name,
+            })
   notifies :run, 'execute[reload-nginx]', :delayed
 end
 # Start nginx if it's not already running.
@@ -341,9 +339,9 @@ template "#{rails_root}/.env.production" do
   owner username
   group username
   variables({
-    secrets: secrets,
-    db_url: db_url,
-  })
+              secrets: secrets,
+              db_url: db_url,
+            })
 end
 
 #### phpMyAdmin
@@ -355,15 +353,15 @@ bash 'install phpMyAdmin' do
     wget https://files.phpmyadmin.net/phpMyAdmin/4.7.6/phpMyAdmin-4.7.6-english.tar.gz
     tar xvf phpMyAdmin-4.7.6-english.tar.gz
     mv phpMyAdmin-4.7.6-english #{pma_path}
-    EOH
+  EOH
   not_if { ::File.exist?(pma_path) }
 end
 template "#{repo_root}/webroot/results/admin/phpMyAdmin/config.inc.php" do
   source "phpMyAdmin_config.inc.php.erb"
   variables({
-    secrets: secrets,
-    db: db,
-  })
+              secrets: secrets,
+              db: db,
+            })
 end
 
 #### Legacy PHP results system
@@ -371,6 +369,14 @@ PHP_MEMORY_LIMIT = '768M'
 PHP_IDLE_TIMEOUT_SECONDS = 120
 PHP_POST_MAX_SIZE = '20M'
 PHP_MAX_INPUT_VARS = 5000
+
+#### For Ubuntu 20.04 you need to get php5 from a ppa
+apt_repository 'php' do
+  uri 'http://ppa.launchpad.net/ondrej/php/ubuntu'
+  components ['focal', 'main']
+  key 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x14aa40ec0831756756d7f66c4f4ea0aae5267a6c'
+end
+
 package 'php5-cli'
 include_recipe 'php-fpm::install'
 php_fpm_pool "www" do
@@ -405,9 +411,9 @@ template "#{repo_root}/webroot/results/includes/_config.php" do
   owner username
   group username
   variables({
-    secrets: secrets,
-    db: db,
-  })
+              secrets: secrets,
+              db: db,
+            })
 end
 
 #### Initialize rails gems/database
@@ -415,8 +421,8 @@ execute "bundle install #{'--deployment --without development test' if rails_env
   user username
   cwd rails_root
   environment({
-    "RACK_ENV" => rails_env,
-  })
+                "RACK_ENV" => rails_env,
+              })
 end
 
 if node.chef_environment == "development"
@@ -424,9 +430,9 @@ if node.chef_environment == "development"
   execute "bundle exec rake db:setup" do
     cwd rails_root
     environment({
-      "DATABASE_URL" => db_url,
-      "RACK_ENV" => rails_env,
-    })
+                  "DATABASE_URL" => db_url,
+                  "RACK_ENV" => rails_env,
+                })
     not_if { ::File.exists?(db_setup_lockfile) }
   end
   file db_setup_lockfile do
@@ -438,9 +444,9 @@ elsif node.chef_environment == "staging"
     cwd rails_root
     user username
     environment({
-      "DATABASE_URL" => db_url,
-      "RACK_ENV" => rails_env,
-    })
+                  "DATABASE_URL" => db_url,
+                  "RACK_ENV" => rails_env,
+                })
     not_if { ::File.exists?(db_setup_lockfile) }
   end
   file db_setup_lockfile do
@@ -467,11 +473,11 @@ template "/home/#{username}/wca.screenrc" do
   owner username
   group username
   variables({
-    rails_root: rails_root,
-    rails_env: rails_env,
-    db_url: db_url,
-    secrets: secrets,
-  })
+              rails_root: rails_root,
+              rails_env: rails_env,
+              db_url: db_url,
+              secrets: secrets,
+            })
 end
 template "/home/#{username}/startall" do
   source "startall.erb"
@@ -495,6 +501,6 @@ template "/etc/rc.local" do
   owner 'root'
   group 'root'
   variables({
-    username: username,
-  })
+              username: username,
+            })
 end
