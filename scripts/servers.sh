@@ -189,11 +189,12 @@ new() {
   if [ "$staging" = true ]; then
     temp_new_server_name=${TEMP_NEW_STAGING_SERVER_NAME}
     host=staging.worldcubeassociation.org
-    instance_type=t2.medium
+    instance_type=t3.medium
+  else
   else
     temp_new_server_name=${TEMP_NEW_PROD_SERVER_NAME}
     host=www.worldcubeassociation.org
-    instance_type=t2.large
+    instance_type=t3.large
   fi
 
   get_pem_filename pem_filename ${keyname}
