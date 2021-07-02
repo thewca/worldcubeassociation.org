@@ -12,7 +12,9 @@ fi
 
 environment=$1
 if [ "$environment" == "development" ] || [ "$environment" == "staging" ] || [ "$environment" == "production" ]; then
-  git_branch=master
+  # Optional Branch argument when we want to deploy from a different branch
+  # https://stackoverflow.com/questions/9332802/how-to-write-a-bash-script-that-takes-optional-input-arguments
+  git_branch=${2:-master}
 else
   echo "Unrecognized environment: $environment"
   print_usage_and_exit

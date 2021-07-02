@@ -194,12 +194,12 @@ new() {
 
   # Spin up a new EC2 instance.
   json=`aws ec2 run-instances \
-    --image-id ami-7c22b41c \
+    --image-id ami-03d5c68bab01f3496 \
     --count 1 \
     --instance-type $instance_type \
     --key-name $keyname \
-    --security-groups "allow all incoming" \
-    --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 32, "VolumeType": "standard" } } ]'`
+    --security-groups "SSH + HTTP + HTTPS" \
+    --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 60, "VolumeType": "gp3" } } ]'`
   instance_id=`echo $json | jq --raw-output '.Instances[0].InstanceId'`
   aws ec2 create-tags --resources ${instance_id} --tags Key=Name,Value=${temp_new_server_name}
   echo "Allocated new server with instance id: $instance_id and named it ${temp_new_server_name}."
