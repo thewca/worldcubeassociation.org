@@ -1,4 +1,4 @@
-equire 'fileutils'
+require 'fileutils'
 require 'shellwords'
 require 'securerandom'
 
