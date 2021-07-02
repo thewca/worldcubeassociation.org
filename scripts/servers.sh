@@ -149,7 +149,7 @@ get_pem_filename() {
 
 new() {
   print_command_usage_and_exit() {
-    echo "Usage: $0 new [--staging] [20.04/14.04]" >> /dev/stderr
+    echo "Usage: $0 new [--staging] [keyname] [20.04/14.04]" >> /dev/stderr
     echo "For example: $0 new jfly-kaladin-arch" >> /dev/stderr
     echo "Or, to spin up a new staging server: $0 new --staging jfly-kaladin-arch" >> /dev/stderr
 
@@ -172,6 +172,9 @@ new() {
   if [ $# -ne 1 ]; then
     print_command_usage_and_exit
   fi
+
+  keyname=$1
+  shift
 
   if ["$1" != "20.04"]; then
     ami=ami-7c22b41c
@@ -201,6 +204,7 @@ new() {
   json=`aws ec2 run-instances \
     --image-id $ami \
     --count 1 \
+    --key-name $keyname \
     --instance-type $instance_type \
     --security-groups "SSH + HTTP + HTTPS" \
     --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 60, "VolumeType": "gp3" } } ]'`
