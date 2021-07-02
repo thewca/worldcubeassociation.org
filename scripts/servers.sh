@@ -149,7 +149,7 @@ get_pem_filename() {
 
 new() {
   print_command_usage_and_exit() {
-    echo "Usage: $0 new [--staging] [keyname]" >> /dev/stderr
+    echo "Usage: $0 new [--staging] [20.04/14.04]" >> /dev/stderr
     echo "For example: $0 new jfly-kaladin-arch" >> /dev/stderr
     echo "Or, to spin up a new staging server: $0 new --staging jfly-kaladin-arch" >> /dev/stderr
 
@@ -173,8 +173,13 @@ new() {
     print_command_usage_and_exit
   fi
 
-  keyname=$1
-  shift
+  if ["$1" != "20.04"]; then
+    ami=ami-7c22b41c
+    branch=master
+  else
+    ami=ami-03d5c68bab01f3496
+    branch=Ubuntu20.04
+  fi
 
   check_deps
 
@@ -194,10 +199,9 @@ new() {
 
   # Spin up a new EC2 instance.
   json=`aws ec2 run-instances \
-    --image-id ami-03d5c68bab01f3496 \
+    --image-id $ami \
     --count 1 \
     --instance-type $instance_type \
-    --key-name $keyname \
     --security-groups "SSH + HTTP + HTTPS" \
     --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 60, "VolumeType": "gp3" } } ]'`
   instance_id=`echo $json | jq --raw-output '.Instances[0].InstanceId'`
@@ -208,7 +212,7 @@ new() {
   aws ec2 wait instance-status-ok --instance-ids ${instance_id}
   echo " done!"
 
-  bootstrap ${keyname} ${temp_new_server_name}
+  bootstrap ${keyname} ${temp_new_server_name} ${branch}
 }
 
 bootstrap() {
@@ -216,6 +220,9 @@ bootstrap() {
   shift
 
   server_name=$1
+  shift
+
+  branch=$1
   shift
 
   if [ "${server_name}" == "${TEMP_NEW_STAGING_SERVER_NAME}" ]; then
@@ -247,7 +254,7 @@ bootstrap() {
   # https://alestic.com/2012/04/ec2-ssh-host-key/ for better solutions than
   # setting StrictHostKeyChecking=no.
   scp -i ${pem_filename} -o StrictHostKeyChecking=no ./wca-bootstrap.sh ubuntu@${domain_name}:/tmp/wca-bootstrap.sh
-  ${ssh_command} "sudo -E bash /tmp/wca-bootstrap.sh ${environment}"
+  ${ssh_command} "sudo -E bash /tmp/wca-bootstrap.sh ${environment} ${branch}"
 
   # After bootstrapping the new server, it will have a new host key. To avoid future errors like
   #
