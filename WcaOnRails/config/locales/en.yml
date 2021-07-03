@@ -1136,6 +1136,7 @@ en:
         with_stripe: "Paid on"
       #context: date is the registration creation date, eg: "2016-12-01 16:18:56 UTC"
       payment_requested_on: "Payment requested on: %{date}"
+      payment_completed_on: "Payment completed on: %{date}"
       total: "Total"
       n_events: "Number of events"
     new_registration:
