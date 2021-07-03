@@ -896,7 +896,7 @@ RSpec.describe CompetitionsController do
 
       it "sends the notification emails to users that competed" do
         FactoryBot.create_list(:user_with_wca_id, 4, results_notifications_enabled: true).each do |user|
-          FactoryBot.create_list(:result, 2, person: user.person, competitionId: competition.id, eventId: "333")
+          FactoryBot.create(:result, person: user.person, competitionId: competition.id, eventId: "333")
         end
 
         expect(competition.results_posted_at).to be nil
@@ -916,7 +916,7 @@ RSpec.describe CompetitionsController do
         FactoryBot.create_list(:registration, 3, :pending, :newcomer, competition: competition)
         FactoryBot.create_list(:registration, 4, :accepted, competition: competition)
         FactoryBot.create_list(:user_with_wca_id, 4).each do |user|
-          FactoryBot.create_list(:result, 2, person: user.person, competitionId: competition.id, eventId: "333")
+          FactoryBot.create(:result, person: user.person, competitionId: competition.id, eventId: "333")
         end
 
         expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
