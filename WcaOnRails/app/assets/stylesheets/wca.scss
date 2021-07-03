@@ -553,3 +553,6 @@ img.about-page-image {
   // Stick the banner to page bottom on all screen sizes
   position: fixed !important;
 }
+.leaflet-container {
+  user-select: none;
+}
