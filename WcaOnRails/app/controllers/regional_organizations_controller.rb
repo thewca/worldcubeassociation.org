@@ -2,7 +2,7 @@
 
 class RegionalOrganizationsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-  before_action -> { redirect_to_root_unless_user(:can_manage_regional_organizations?) }, except: [:index, :new, :create, :destroy]
+  before_action -> { redirect_to_root_unless_user(:can_manage_regional_organizations?) }, except: [:index, :new, :create]
 
   def admin
     @regional_organizations = RegionalOrganization.all.order(country: :asc)
@@ -33,21 +33,16 @@ class RegionalOrganizationsController < ApplicationController
 
   def destroy
     @regional_organization = regional_organization_from_params
-    if current_user.can_manage_regional_organizations?
-      if @regional_organization.start_date.nil?
-        if @regional_organization.destroy
-          flash[:success] = "Successfully deleted Regional Organization!"
-        else
-          flash[:danger] = "Unable to delete Regional Organization"
-        end
+    if @regional_organization.is_pending?
+      if @regional_organization.destroy
+        flash[:success] = "Successfully deleted Regional Organization!"
       else
-        flash[:danger] = "Unable to delete Regional Organization because it is not pending"
+        flash[:danger] = "Unable to delete Regional Organization"
       end
-      redirect_to admin_regional_organizations_path
     else
-      flash[:danger] = "You do not have permission to delete Regional Organizations"
-      redirect_to organizations_path
+      flash[:danger] = "Unable to delete Regional Organization because it is not pending"
     end
+    redirect_to admin_regional_organizations_path
   end
 
   def create

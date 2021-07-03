@@ -26,4 +26,8 @@ class RegionalOrganization < ApplicationRecord
       errors.add(:start_date, I18n.t('regional_organizations.errors.end_date_after_start_date'))
     end
   end
+
+  def is_pending?
+    start_date.nil?
+  end
 end

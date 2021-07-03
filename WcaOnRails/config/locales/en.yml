@@ -1994,7 +1994,7 @@ en:
     create:
       create_success: "Application successfully submitted! Please check your email, and wait for the WCA Board of Directors to review it"
     delete:
-      confirm_delete: "Are you sure you want to delete this Regional Organization?"
+      confirm_delete: "Are you sure you want to delete this Regional Organization request?"
   #context: Contact page
   contact:
     title: "Contact Information"
