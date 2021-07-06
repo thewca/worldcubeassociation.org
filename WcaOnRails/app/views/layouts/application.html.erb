@@ -87,5 +87,6 @@
   <% if !hide_wca_navbars %>
     <%= render 'layouts/footer' %>
   <% end %>
+  <%= render 'cookies_eu/consent_banner' if Rails.env.production? %>
 </body>
 </html>

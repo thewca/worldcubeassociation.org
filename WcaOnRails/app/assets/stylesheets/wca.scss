@@ -549,6 +549,10 @@ img.about-page-image {
   width: 100%;
 }
 
+.cookies-eu {
+  // Stick the banner to page bottom on all screen sizes
+  position: fixed !important;
+}
 .leaflet-container {
   user-select: none;
 }
