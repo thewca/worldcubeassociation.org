@@ -379,7 +379,7 @@ class Competition < ApplicationRecord
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
       # Competitions after 2018-7-24 will have this check, date set to avoid errors at old competitions
-      if start_date.present? && start_date > Date.new(2018, 7, 24)
+      if start_date.present? && start_date > Date.new(2018, 7, 30)
         unless has_any_round_per_event? && schedule_includes_rounds?
           warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds')
         end
