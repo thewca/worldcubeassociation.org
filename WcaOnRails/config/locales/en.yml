@@ -1591,7 +1591,7 @@ en:
       name: "Name"
       rank:
         national: "National rank"
-        continent: "Continent rank"
+        continent: "Continental rank"
         world: "World rank"
     scrambles_table:
       group: "Group"
