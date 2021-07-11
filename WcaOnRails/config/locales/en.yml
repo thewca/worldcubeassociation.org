@@ -1590,9 +1590,9 @@ en:
       round: "Round"
       name: "Name"
       rank:
-        national: "National rank"
-        continent: "Continental rank"
-        world: "World rank"
+        national: "National Rank"
+        continent: "Continental Rank"
+        world: "World Rank"
     scrambles_table:
       group: "Group"
       scramble: "Scramble"
