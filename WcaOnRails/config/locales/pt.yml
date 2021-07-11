@@ -2130,6 +2130,8 @@ pt:
         with_stripe: Pago em
       #original_hash: ce53c71
       payment_requested_on: 'Pagamento pedido em: %{date}'
+      #original_hash: f5b1b34
+      payment_completed_on: 'Pagamento completo a: %{date}'
       #original_hash: b25928c
       total: Total
       #original_hash: df036fe
