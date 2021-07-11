@@ -242,9 +242,10 @@ class Competition < ApplicationRecord
   # Only validate on update: nobody can confirm competition on creation.
   # The only exception to this is within tests, in which case we actually don't want to run this validation.
   validate :schedule_must_match_rounds, if: :confirmed_at_changed?, on: :update
-  # Competitions after 2018-7-24 will have this check, date set to avoid errors at old competitions
+  # Competitions after 2018-12-31 will have this check. All comps from 2019 onwards required a schedule.
+  # Check added per "Support for cancelled competitions" and adding some old cancelled competitions to the website without a schedule.
   def schedule_must_match_rounds
-    if start_date.present? && start_date > Date.new(2018, 7, 30)
+    if start_date.present? && start_date > Date.new(2018, 12, 31)
       unless has_any_round_per_event? && schedule_includes_rounds?
         errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
       end
