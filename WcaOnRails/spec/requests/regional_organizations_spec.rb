@@ -134,7 +134,6 @@ RSpec.describe "Regional Organizations management", type: :request do
     context "when signed in as a board member and with invalid params" do
       it "renders the new regional organization form" do
         sign_in board_member
-        post new_regional_organization_path, params: { regional_organization: valid_attributes }
         expect {
           post new_regional_organization_path, params: { regional_organization: invalid_attributes }
         }.to change(RegionalOrganization, :count).by(0)
