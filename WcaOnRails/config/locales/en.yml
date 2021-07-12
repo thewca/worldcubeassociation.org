@@ -1590,6 +1590,10 @@ en:
       event: "Event"
       round: "Round"
       name: "Name"
+      rank:
+        national: "National Rank"
+        continent: "Continental Rank"
+        world: "World Rank"
     scrambles_table:
       group: "Group"
       scramble: "Scramble"
