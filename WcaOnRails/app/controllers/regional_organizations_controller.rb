@@ -31,6 +31,20 @@ class RegionalOrganizationsController < ApplicationController
     end
   end
 
+  def destroy
+    @regional_organization = regional_organization_from_params
+    if @regional_organization.is_pending?
+      if @regional_organization.destroy
+        flash[:success] = "Successfully deleted Regional Organization!"
+      else
+        flash[:danger] = "Unable to delete Regional Organization"
+      end
+    else
+      flash[:danger] = "Unable to delete Regional Organization because it is not pending"
+    end
+    redirect_to admin_regional_organizations_path
+  end
+
   def create
     @regional_organization = RegionalOrganization.new(regional_organization_params)
 
