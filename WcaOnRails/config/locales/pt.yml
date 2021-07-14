@@ -3082,6 +3082,13 @@ pt:
       round: Ronda
       #original_hash: 709a232
       name: Nome
+      rank:
+        #original_hash: d4840ff
+        national: Ranking Nacional
+        #original_hash: ca3ff98
+        continent: Ranking Continental
+        #original_hash: f6bcce7
+        world: Ranking Mundial
     scrambles_table:
       #original_hash: 171a060
       group: Grupo
@@ -3970,6 +3977,9 @@ pt:
       create_success: >-
         Aplicação submetida com sucesso! Esteja atento ao seu email e espere
         pela revisão do Conselho da WCA
+    delete:
+      #original_hash: 6588652
+      confirm_delete: Tem a certeza que quer apagar este pedido de Organização Regional?
   contact:
     #original_hash: a34b69f
     title: Informações de Contacto
