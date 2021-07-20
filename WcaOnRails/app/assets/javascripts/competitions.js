@@ -11,6 +11,12 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     $('.competition_external_registration_page').toggle(!registrationWca);
   }).trigger('change');
 
+  $('input[name="guests_entry_fee_lowest_denomination"]').on('change', function() {
+    if($('input[name="competition[guests_entry_fee_lowest_denomination]"]').val() === "0"){
+      window.alert('hello');
+    }
+  }).trigger('change');
+
   $('select[name="competition[competitor_limit_enabled]"]').on('change', function() {
     $('.wca-competitor-limit-options').toggle(this.value === "true");
   }).trigger('change');

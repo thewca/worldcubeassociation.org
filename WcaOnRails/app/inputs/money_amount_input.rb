@@ -30,6 +30,7 @@ class MoneyAmountInput < SimpleForm::Inputs::Base
                                         value: value,
                                         id: input_id,
                                         type: "text",
+                                        name: attribute_name,
                                         data: {
                                           'target': "##{@builder.object_name}_#{attribute_name}",
                                           'currency': currency,
