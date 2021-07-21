@@ -614,6 +614,7 @@ class CompetitionsController < ApplicationController
         :event_restrictions,
         :event_restrictions_reason,
         :guests_entry_fee_lowest_denomination,
+        :free_entry_text,
         :main_event_id,
         :waiting_list_deadline_date,
         :event_change_deadline_date,

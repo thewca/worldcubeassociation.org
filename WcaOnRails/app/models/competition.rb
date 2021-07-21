@@ -102,6 +102,7 @@ class Competition < ApplicationRecord
     on_the_spot_entry_fee_lowest_denomination
     refund_policy_percent
     guests_entry_fee_lowest_denomination
+    free_entry_text
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id

@@ -12,9 +12,8 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
   }).trigger('change');
 
   $('input[name="guests_entry_fee_lowest_denomination"]').on('change', function() {
-    if($('input[name="competition[guests_entry_fee_lowest_denomination]"]').val() === "0"){
-      window.alert('hello');
-    }
+    var entryIsFree = $('input[name="competition[guests_entry_fee_lowest_denomination]"]').val() === "0"
+    $('.guest-no-entry-fee-options').toggle(entryIsFree);
   }).trigger('change');
 
   $('select[name="competition[competitor_limit_enabled]"]').on('change', function() {
