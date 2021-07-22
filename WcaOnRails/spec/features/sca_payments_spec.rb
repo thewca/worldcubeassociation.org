@@ -21,10 +21,12 @@ RSpec.feature "Strong Customer Authentification payment" do
     end
 
     scenario "user pays with a 3D secure enabled card", js: true do
+      pending("figure out why iframes suddenly don't get rendered in headless mode any more")
       fill_confirm_and_expect(card, "test-source-authorize-3ds", "Your payment was successful")
     end
 
     it "user fails to complete the 3D secure challenge", js: true do
+      pending("figure out why iframes suddenly don't get rendered in headless mode any more")
       fill_confirm_and_expect(card, "test-source-fail-3ds", "We are unable to authenticate your payment method")
     end
   end
