@@ -634,7 +634,7 @@ en:
           "false": "On the spot registrations WILL NOT be accepted"
         free_entry_text:
           "none": "Do not display anything"
-          "anyone": "\"Spectators can attend for free\""
+          "anyone": "\"Any spectator can attend for free\""
           "restricted": "\"Spectators are only permitted as companions of competitors\""
   mail_form:
     #context: This key is used as a label for contact form attributes
@@ -1322,7 +1322,9 @@ en:
       on_the_spot_registration_free: "On the spot registrations will be accepted for free."
       no_on_the_spot_registration: "No on the spot registrations will be accepted."
       guests_pay: "Spectators can attend paying an entry fee of %{guests_base_fee}."
-      guests_free: "Spectators can attend for free."
+      guests_free: 
+        anyone: "Any spectator can attend for free."
+        restricted: "Spectators are only permitted as companions of competitors."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
       click_to_display_requirements_html: "This competition is over, click %{link_here} to display the registration requirements it used."
       hide_requirements: "Hide registration requirements."

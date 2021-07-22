@@ -908,6 +908,14 @@ class Competition < ApplicationRecord
     )
   end
 
+  def all_guests_allowed?
+    free_entry_text == "anyone"
+  end
+
+  def some_guests_allowed?
+    free_entry_text == "restricted"
+  end
+
   def registration_period_required?
     use_wca_registration? || (confirmed? && created_at.present? && created_at > Date.new(2018, 9, 13))
   end
