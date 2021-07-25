@@ -156,9 +156,23 @@ package 'libmysqlclient-dev'
 package 'imagemagick'
 package 'poppler-utils' # Required by ActiveStorage built-in PDF previewer.
 
-ruby_version = File.read("#{repo_root}/.ruby-version").match(/\d+\.\d+/)[0]
-node.default['brightbox-ruby']['version'] = ruby_version
-include_recipe "brightbox-ruby"
+rbenv_user_install username
+ruby_version = File.read("#{rails_root}/.ruby-version").strip
+rbenv_ruby ruby_version do
+  user username
+end
+# Set current Ruby version as user-wide default. Useful as a fallback if we do version upgrades.
+rbenv_global ruby_version do
+  user username
+end
+
+bundler_version = File.read("#{rails_root}/Gemfile.lock").strip.match(/\d+(?:\.\d+)+$/)[0]
+rbenv_gem 'bundler' do
+  user username
+  version bundler_version
+  rbenv_version ruby_version
+end
+
 chef_env_to_rails_env = {
   "development" => "development",
   "staging" => "production",
