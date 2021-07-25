@@ -315,7 +315,9 @@ class User < ApplicationRecord
     if wca_id_change && wca_id.present?
       dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
       if dummy_user
-        _mounter(:avatar).uploader.override_column_value = dummy_user.read_attribute :avatar
+        _mounter(:avatar).uploaders.each do |uploader|
+          uploader.override_column_value = dummy_user.read_attribute :avatar
+        end
         dummy_user.destroy!
       end
     end
