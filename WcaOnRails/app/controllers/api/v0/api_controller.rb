@@ -46,10 +46,7 @@ class Api::V0::ApiController < ApplicationController
         "information" => "#{root_url}regulations/scrambles/",
         "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-1.1.1.jar",
       },
-      "allowed" => [
-        "TNoodle-WCA-1.1.0",
-        "TNoodle-WCA-1.1.1",
-      ],
+      "allowed" => ["TNoodle-WCA-1.1.1"],
       "publicKeyBytes" => public_key,
       "history" => [
         "TNoodle-0.7.4",
