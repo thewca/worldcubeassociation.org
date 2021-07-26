@@ -1828,6 +1828,8 @@ zh-TW:
         with_stripe: 付款於
       #original_hash: ce53c71
       payment_requested_on: '於%{date}提出付款請求'
+      #original_hash: f5b1b34
+      payment_completed_on: '已在 %{date} 完成付款。'
       #original_hash: b25928c
       total: 總共
       #original_hash: df036fe
@@ -2625,6 +2627,13 @@ zh-TW:
       round: 輪數
       #original_hash: 709a232
       name: 姓名
+      rank:
+        #original_hash: d4840ff
+        national: 國家排名
+        #original_hash: ca3ff98
+        continent: 洲排名
+        #original_hash: f6bcce7
+        world: 世界排名
     scrambles_table:
       #original_hash: 171a060
       group: 組別
@@ -3313,6 +3322,9 @@ zh-TW:
     create:
       #original_hash: 60cdccc
       create_success: 申請已成功送出！請確認您的電子郵件，並等待WCA董事會的評閱。
+    delete:
+      #original_hash: 6588652
+      confirm_delete: 您確定要刪除這個區域組織請求嗎？
   contact:
     #original_hash: a34b69f
     title: 聯絡資訊

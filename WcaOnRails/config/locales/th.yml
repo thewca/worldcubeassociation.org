@@ -216,23 +216,23 @@ th:
       #original_hash: 0664a83
       percent: '%{percent}% แรก'
       attempt_result:
-        #original_hash: 482f137
-        time: 'เวลาที่ดีที่สุด < %{time}'
-        #original_hash: 3faa63e
-        moves: 'จำนวนครั้งที่ดีที่สุด < %{moves}'
-        #original_hash: c3133c2
-        points: 'คะแนนที่ดีที่สุด > %{points}'
+        #original_hash: ac6a282
+        time: '%{round_format} < %{time}'
+        #original_hash: 45db130
+        moves: '%{round_format} < %{moves}'
+        #original_hash: 076911b
+        points: '%{round_format} > %{points}'
     #original_hash: 6e55337
     ranking: '%{ranking} อันดับแรก ผ่านเข้าสู่รอบถัดไป'
     #original_hash: 7ee969c
     percent: '%{percent}% แรก ผ่านเข้าสู่รอบถัดไป'
     attempt_result:
-      #original_hash: b3c8a02
-      time: 'เวลาที่ดีที่สุด < %{time} ผ่านเข้าสู่รอบถัดไป'
-      #original_hash: 07bca6c
-      moves: 'จำนวนครั้งที่ดีที่สุด < %{moves} ผ่านเข้าสู่รอบถัดไป'
-      #original_hash: 837083c
-      points: 'คะแนนที่ดีที่สุด > %{points} ผ่านเข้าสู่รอบถัดไป'
+      #original_hash: 6173090
+      time: '%{round_format} < %{time} ผ่านเข้าสู่รอบถัดไป'
+      #original_hash: 581709d
+      moves: '%{round_format} < %{moves} ผ่านเข้าสู่รอบถัดไป'
+      #original_hash: e9f0c92
+      points: '%{round_format} > %{points} ผ่านเข้าสู่รอบถัดไป'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -256,6 +256,8 @@ th:
     333fm: 1 ชั่วโมง
     #original_hash: cc7d8bb
     333mbf: '10:00.00 ต่อลูก, ไม่เกิน 60:00.00'
+    #original_hash: da39a3e
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: โลก
@@ -468,6 +470,10 @@ th:
         refund_policy_percent: เงินที่จะได้รับคืนเป็นเปอร์เซ็นต์
         #original_hash: b332299
         refund_policy_limit_date: ปิดรับค่าสมัครคืนไม่เกิน
+        #original_hash: 16cf9a4
+        waiting_list_deadline_date: วันที่สุดท้ายของการยอมรับผู้เข้าแข่งขันใน waiting list
+        #original_hash: 99a9169
+        event_change_deadline_date: วันสุดท้ายของผู้เข้าแข่งขันที่จะแก้ไขประเภทการแข่งขัน
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: ค่าเข้าชมการแข่งขัน
         #original_hash: 723cad9
@@ -856,6 +862,18 @@ th:
           ค่าสมัครการแข่งขันจะไม่สามารถขอคืนได้ในทุกกรณี
         #original_hash: f64d853
         refund_policy_limit_date: วันที่สุดท้ายที่จะสามารถคืนค่าสมัครได้
+        #original_hash: 664db64
+        waiting_list_deadline_date: >-
+          วันที่ผู้เข้าแข่งขันที่อยู่ใน waitlisted registrants
+          จะไม่ได้รับการยอมรับการสมัคร ถ้าคุณมีกำหนดวันสุดท้ายของการคืนเงิน
+          วันสุดท้ายของการยอมรับผู้สมัครไม่ควรจะอยู่ก่อนวันสุดท้ายที่จะได้รับการคืนเงิน
+        #original_hash: 75e6c1f
+        event_change_deadline_date: >-
+          ผู้เข้าแข่งขันที่สมัครการแข่งขันแล้วมีสิทธิ์ทำการอัปเดตประเภทการแข่งขันที่สมัครไว้ได้จนถึงเวลานี้โดยการติดต่อทีมจัดการแข่งขัน
+          วันสุดท้ายจะต้องไม่เป็นก่อนวันที่จะปิดรับสมัครการแข่งขัน
+          เว้นว่างไว้หากผู้เข้าแข่งขันสามารถเพิ่มประเภทการแข่งขันได้จนถึงวันแข่งขัน
+          หากคุณมีการรับสมัครที่การแข่งขัน
+          จะต้องตั้งเป็นวันเดียวกับวันที่แข่งขัน
         #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
           สำหรับตอนนี้ตัวเลขนี้เป็นข้อมูลเท่านั้น
@@ -1342,7 +1360,7 @@ th:
       forum: Forum
       #original_hash: 3ad28c0
       teams: 'ทีม, คณะกรรมการและสภา'
-      #original_hash: a979ffc
+      #original_hash: 7981fb3
       education: แหล่งข้อมูลศึกษา
       #original_hash: a34b69f
       contact: ข้อมูลติดต่อ
@@ -1587,10 +1605,10 @@ th:
           ชั่วโมง
         #original_hash: 2b93022
         not_accepted_html: คุณได้ทำการสมัครแล้ว แต่การสมัครรของคุณยังไม่ได้รับการยืนยัน
-        #original_hash: 3724e7c
+        #original_hash: d4087ee
         more_info_html: >-
-          กรูณาดูที่<a
-          href=%{competition_url}>เว็บไซต์ของการแข่งขัน</a>สำหรับข้อมูลเพิ่มเติมและข้อกำหนดการแข่งขัน
+          กรูณาดูที่ <a href=%{competition_url}>เว็บไซต์ของการแข่งขัน WCA</a>
+          สำหรับข้อมูลเพิ่มเติมและข้อกำหนดการแข่งขัน
       results_presence_email:
         #original_hash: 7ce2558
         header: 'ผลการแข่งขันของ %{competition} ได้ทำการโพสต์แล้ว'
@@ -2004,6 +2022,8 @@ th:
         with_stripe: จ่ายวันที่
       #original_hash: ce53c71
       payment_requested_on: 'ชำระเงินตามที่ร้องขอ: %{date}'
+      #original_hash: f5b1b34
+      payment_completed_on: 'การชำระเงินสำเร็จเมื่อวันที่: %{date}'
       #original_hash: b25928c
       total: ทั้งหมด
       #original_hash: df036fe
@@ -2360,6 +2380,20 @@ th:
         คุณจะได้รับค่าสมัครคืน %{refund_policy_percent}
       #original_hash: 4aca553
       no_refunds: ค่าสมัครจะไม่สามารถขอคืนได้ไม่ว่ากรณีใด ๆ
+      #original_hash: b016d2f
+      waiting_list_deadline_html: >-
+        ผู้สมัครที่อยู่ใน waiting list
+        สามารถได้รับการยอมรับไปยังรายชื่อผู้เข้าแข่งขันได้จนกระทั่ง
+        %{waiting_list_deadline}.
+      #original_hash: 14c5699
+      event_change_deadline_html: >-
+        หากคุณเป็นผู้สมัครการแข่งขัน
+        คุณสามารถเปลี่ยนประเภทการแข่งขันได้จนกระทั่ง %{event_change_deadline}
+        โดยติดต่อทีมงานจัดการแข่งขัน
+      #original_hash: eff3594
+      event_change_deadline_default_html: >-
+        เราแนะนำให้ทุกท่านสมัครประเภทที่คุณต้องการแข่งขันผ่านการสมัครออนไลน์
+        อย่างไรก็ตาม คุณสามารถเพิ่มประเภทการแข่งขันได้จนกว่าการแข่งขันจะเรื่ม
       #original_hash: cf7be5d
       on_the_spot_registration_fee_html: >-
         ยอมรับการสมัครที่การแข่งขัน ด้วยการชำระค่าสมัคร
@@ -2650,6 +2684,25 @@ th:
       invalid_currency_code: สกุลเงินที่เลือกไม่ถูกต้อง
       #original_hash: 902a278
       advancement_condition_must_be_present_for_all_non_final_rounds: ต้องมีเงื่อนไขการเลื่อนชั้นไปยังรอบที่ไม่ใช่รอบสุดท้ายทั้งหมด
+      #original_hash: da17c99
+      registration_period_after_start: เวลาการสมัครการแข่งขันไม่สามารถเกิดขึ้นหลังวันแข่งขันได้
+      #original_hash: f6b244b
+      waiting_list_deadline_before_registration_close: วันสุดท้ายของ Waiting list ไม่สามารถอยู่ก่อนวันปิดรับสมัครการแข่งขันได้
+      #original_hash: ececa98
+      waiting_list_deadline_before_refund_date: >-
+        วันสุดท้ายของ Waiting list
+        ไม่สามารถอยู่ก่อนวันสุดท้ายที่จะได้รับเงินคืนได้
+      #original_hash: 44d9902
+      waiting_list_deadline_after_start: วันสุดท้ายของ Waiting list ต้องอยู่ก่อนวันเริ่มการแข่งขัน
+      #original_hash: c3eb1be
+      event_change_deadline_before_registration_close: >-
+        วันสุดท้ายของการแก้ไขประเภทการแข่งขันไม่สามารถอยู่ก่อนวันปิดรับสมัครการแข่งขันได้
+      #original_hash: bc1ca0f
+      event_change_deadline_after_end_date: วันสุดท้ายของการแก้ไขประเภทการแข่งขันไม่สามารถอยู่หลังวันแข่งขันได้
+      #original_hash: a2e4fc9
+      event_change_deadline_with_ots: >-
+        วันสุดท้ายของการแก้ไขประเภทการแข่งขันต้องอยู่ในช่วงเวลาการแข่งขัน
+        หากคุณรับสมัครการแข่งขันที่การแข่งขัน
     new:
       #original_hash: 1208df7
       create_competition: สร้างการแข่งขัน
@@ -2712,6 +2765,12 @@ th:
       limit: จำกัด
       #original_hash: 855bd26
       competitors: ผู้เข้าแข่งขัน
+      #original_hash: c5497bc
+      events: ประเภทการแข่งขัน
+      #original_hash: 50cb854
+      show_events: แสดงประเภทการแข่งขัน
+      #original_hash: 0df66f7
+      hide_events: ซ่อนประเภทการแข่งขัน
     #original_hash: 06b01c4
     announcements: ประกาศ
     #original_hash: a2b80b0
@@ -2866,6 +2925,13 @@ th:
       round: รอบ
       #original_hash: 709a232
       name: ชื่อ
+      rank:
+        #original_hash: d4840ff
+        national: อันดับประเทศ
+        #original_hash: ca3ff98
+        continent: อันดับทวีป
+        #original_hash: f6bcce7
+        world: อันดับโลก
     scrambles_table:
       #original_hash: 171a060
       group: กลุ่ม
@@ -3380,11 +3446,11 @@ th:
       รวมถึงความมุ่งมั่นทางการเงินจำนวนมากเพื่อจองสถานที่และเตรียมการที่จำเป็น</p>
     #original_hash: 1aa5344
     contributing_title: เงินสมทบ
-    #original_hash: e64beb7
+    #original_hash: 538a82f
     contributing_content_html: >-
-      คุณสามารถบริจาคโดยบัตรเครดิตด้วย Guidestar <a
-      href="https://www.nfggive.com/guidestar/82-3825954">ที่นี่</a>
-      หากคุณต้องการเขียนเช็คคุณสามารถเขียนถึง:
+      คุณสามารถบริจาคโดยบัตรเครดิตด้วย Guidestar <a%{here_credit},
+      href="https://www.nfggive.com/guidestar/82-3825954">ที่นี่</a> หรือโดย
+      Paypal %{here_paypal} หากคุณต้องการเขียนเช็คคุณสามารถเขียนถึง:
     #original_hash: 2af9b71
     tax_deductible_note: การบริจาคลดหย่อนภาษีได้ในสหรัฐอเมริกา
     #original_hash: 6026d35
@@ -3402,6 +3468,8 @@ th:
         เรายินดีต้อนรับการบริจาคของคุณเพื่อช่วยให้เรามีวิสัยทัศน์ในการแข่งขันที่สนุกสนานมากขึ้นทั่วโลก
       #original_hash: 24c87db
       donate_credit: บริจาคด้วยบัตรเครดิต
+      #original_hash: 0e5a9c3
+      donate_paypal: บริจาคโดย Paypal
       #original_hash: 96d77f3
       donate_other: บริจาคด้วยวิธีอื่น
     structure:
@@ -3565,6 +3633,9 @@ th:
       probation:
         #original_hash: 1dd6e3b
         name: Delegate ที่ถูกคุมประพฤติ
+      wst_admin:
+        #original_hash: d4112d2
+        name: ผู้ดูแลระบบซอฟต์แวร์
       #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA Delegate</strong>
@@ -3609,8 +3680,10 @@ th:
     codeofethics: Code of Ethics
     #original_hash: 2643980
     codeofconduct: จรรยาบรรณ
+    #original_hash: 4f05e8f
+    finances: การเงิน
   education:
-    #original_hash: 41701c2
+    #original_hash: 746e863
     title: เอกสารการศึกษาของ WCA
     #original_hash: 081d65d
     description: >-
@@ -3618,6 +3691,8 @@ th:
       คุณสามารถดาวน์โหลดมันได้ที่ด้านล่าง
     #original_hash: d0a3812
     competitor_tutorial: แนะนำผู้เข้าแข่งขัน
+    #original_hash: 9561bfc
+    judge_tutorial: แนะนำการตัดสินสำหรับผู้แข่งขันใหม่
     #original_hash: 5ca0558
     certificates: แม่แบบประกาศนียบัตรของ WCT
     #original_hash: f580987
@@ -3700,6 +3775,9 @@ th:
       create_success: >-
         ส่งใบสมัครเรียบร้อยแล้ว! โปรดตรวจสอบอีเมลของคุณและรอให้คณะกรรมการ WCA
         ทำการตรวจสอบ
+    delete:
+      #original_hash: 6588652
+      confirm_delete: คุณแน่ใจหรือไม่ที่จะทำการลบคำขอขององค์กรระดับภูมิภาคนี้
   contact:
     #original_hash: a34b69f
     title: ข้อมูลติดต่อ
@@ -4201,10 +4279,10 @@ th:
       title: เอกสารแนะนำ
       #original_hash: bfbd4bb
       staff: การจัดตั้ง staff
-      #original_hash: c346846
-      emails: โครงร่าง email ก่อนการแข่งขัน
-      #original_hash: 3212cc7
-      running-systems: Running systems
+      #original_hash: 4735583
+      emails: Emails
+      #original_hash: 8e7ca09
+      running-systems: Running and judging systems
       #original_hash: 2b31c89
       new-competitors: ทัศนคติต่อผู้เข้าแข่งขันใหม่
       #original_hash: 3408054
@@ -4247,11 +4325,16 @@ th:
     paragraph3:
       #original_hash: 00d3bf8
       title: กำหนดเวลาสำหรับการประกาศการแข่งขัน
-      #original_hash: 3613823
+      #original_hash: 66bf437
       content_html: >-
-        การประกาศการแข่งขันจำเป็นต้องทำล่วงหน้าอย่างน้อย 1
-        เดือนก่อนการแข่งขันจะเริ่ม (ดู<a
+        การประกาศการแข่งขันจำเป็นต้องทำล่วงหน้าอย่างน้อย 28
+        วันก่อนการแข่งขันจะเริ่ม (ดู<a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>ข้อกำหนดการแข่งขัน</a>).
+        อย่างไรก็ตาม จำนวนวันดังกล่าวมักจะไม่ค่อยเพียงพอ
+        คุณควรพิจารณาทุกอย่างที่คุณจะนำไปใช้ในการแข่งขัน
+        และให้เวลาตัวคุณเองในการเตรียมตัว นอกจากนี้ WCAT
+        ยังต้องใช้เวลาในการตรวจสอบการแข่งขันก่อนที่จะทำการประกาศการแข่งขัน
+        ปรึกษา Delegate เพื่อให้แน่ใจว่าคุณต้องใช้เวลาเท่าไหร่ถึงจะเหมาะสม
     paragraph4:
       #original_hash: b6dca56
       title: Proximity policy
