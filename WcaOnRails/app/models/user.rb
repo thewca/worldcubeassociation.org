@@ -238,6 +238,12 @@ class User < ApplicationRecord
     end
   end
 
+  # workaround / very nasty hotfix for https://github.com/rails/rails/issues/36965
+  after_validation do
+    # we have to do _some_ non-zero modifications to the model, otherwise after_rollback won't trigger
+    self.touch if self.claiming_wca_id && self.was_incorrect_wca_id_claim && persisted? && !destroyed?
+  end
+
   after_rollback do
     # This is a bit of a mess. If the user makes an incorrect WCA ID claim,
     # then we want to incrememnt our count of incorrect claims. We can't update
