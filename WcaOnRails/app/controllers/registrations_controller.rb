@@ -375,7 +375,7 @@ class RegistrationsController < ApplicationController
     end
     was_accepted = @registration.accepted?
     was_deleted = @registration.deleted?
-    if current_user.can_edit_registration?(@registration) && @registration.update_attributes(registration_attributes)
+    if current_user.can_edit_registration?(@registration) && @registration.update(registration_attributes)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)
         mailer.deliver_later
