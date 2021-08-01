@@ -77,7 +77,7 @@ CREATE TABLE `Competitions` (
   `cancelled_by` int(11) DEFAULT NULL,
   `waiting_list_deadline_date` datetime DEFAULT NULL,
   `event_change_deadline_date` datetime DEFAULT NULL,
-  `free_entry_text` varchar(191) DEFAULT 'none',
+  `free_entry_status` int DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1704,4 +1704,4 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20210301002636'),
 ('20210325202019'),
 ('20210501213332'),
-('20210721135845');
+('20210801044007');

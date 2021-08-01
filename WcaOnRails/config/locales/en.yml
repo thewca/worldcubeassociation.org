@@ -309,7 +309,7 @@ en:
         waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
         event_change_deadline_date: "Deadline for competitors to update their registered events"
         guests_entry_fee_lowest_denomination: "Entry fee for guests"
-        free_entry_text: "Display message for free entry"
+        free_entry_status: "Display message for free entry"
         early_puzzle_submission: "I would like to require competitors to submit puzzles at a specific time before an event is scheduled to begin"
         early_puzzle_submission_reason: "Reason and details for submitting puzzles early"
         qualification_results: "I would like to use qualification results to limit who can compete in certain events"
@@ -430,6 +430,11 @@ en:
         report: "Report"
         article: "Article"
         multimedia: "Multimedia"
+    competition:
+      free_entry_status:
+        unclear: "Do not display anything (and perhaps elaborate in the \"Extra registration requirements\" section)"
+        anyone: "\"Any spectator can attend for free\""
+        restricted: "\"Spectators are only permitted as companions of competitors\""
   #context: This key is an element of a form on the website
   simple_form:
     "yes": "Yes"
@@ -492,8 +497,7 @@ en:
         external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
         base_entry_fee_lowest_denomination: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free.'
         currency_code: "The currency code for fees."
-        guests_enabled: ""
-        free_entry_text: ""
+        guests_enabled: ""        
         enable_donations: ""
         id: ""
         confirmed: ""
@@ -631,11 +635,7 @@ en:
           "false": "I DON'T WANT to specify a competitor limit"
         on_the_spot_registration:
           "true": "On the spot registrations will be accepted"
-          "false": "On the spot registrations WILL NOT be accepted"
-        free_entry_text:
-          "none": "Do not display anything"
-          "anyone": "\"Any spectator can attend for free\""
-          "restricted": "\"Spectators are only permitted as companions of competitors\""
+          "false": "On the spot registrations WILL NOT be accepted"        
   mail_form:
     #context: This key is used as a label for contact form attributes
     attributes:
