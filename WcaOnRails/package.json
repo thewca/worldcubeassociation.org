@@ -48,7 +48,7 @@
     "react-bootstrap": "^0.33.1",
     "react-dom": "^16.14.0",
     "react-leaflet": "^2.8.0",
-    "regenerator-runtime": "^0.13.5",
+    "regenerator-runtime": "^0.13.9",
     "resolve-url-loader": "^4.0.0",
     "sass": "^1.35.1",
     "sass-loader": "^10.1.1",
