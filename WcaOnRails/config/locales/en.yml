@@ -519,6 +519,7 @@ en:
         waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
         event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
         guests_entry_fee_lowest_denomination: "For now this number is informational only, guest fees cannot be managed through this website. If this is set to 0, a sentence of your choice will be displayed about the spectator policy."
+        free_entry_status: ""
         early_puzzle_submission: ""
         early_puzzle_submission_reason: "Please elaborate here why you would like to require competitors to submit puzzles early. Please fill this out in English!"
         qualification_results: ""
