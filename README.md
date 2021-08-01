@@ -54,7 +54,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   3. `bundle install && bin/yarn`
   4. `bin/rake db:load:development` - Download and import the [developer's database export](https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export). Depending on your computer it may take a long time. Alternatively you can run `bin/rake db:reset` which will create the database and seed it with random data (it's way faster, but less representative of our website content).
   5. `bin/rails server` - Run rails. The server will be accessible at localhost:3000
-- Run tests. Setup instructions follow `before_script` in `.travis.yml`.
+- Run tests.
   1. `RAILS_ENV=test bin/rake db:reset` - Set up test database.
   2. `RAILS_ENV=test bin/rake assets:precompile` - Compile some assets needed for tests to run.
   3. `bin/rspec` - Run tests.
