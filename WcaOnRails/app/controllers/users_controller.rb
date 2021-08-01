@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:select_nearby_delegate]
+  before_action :authenticate_user!, except: [:select_nearby_delegate, :acknowledge_cookies]
   before_action :check_recent_authentication!, only: [:enable_2fa, :disable_2fa, :regenerate_2fa_backup_codes]
   before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa, :disable_2fa]
 
@@ -231,6 +231,13 @@ class UsersController < ApplicationController
     sso.custom_fields["wca_id"] = current_user.wca_id || ""
 
     redirect_to sso.to_url
+  end
+
+  def acknowledge_cookies
+    return render status: 401, json: { ok: false } if current_user.nil?
+
+    current_user.update!(cookies_acknowledged: true)
+    render json: { ok: true }
   end
 
   private def redirect_if_cannot_edit_user(user)

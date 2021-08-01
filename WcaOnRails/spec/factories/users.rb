@@ -9,6 +9,7 @@ FactoryBot.define do
     dob { Date.new(1980, 1, 1) }
     password { "wca" }
     password_confirmation { "wca" }
+    cookies_acknowledged { true }
 
     transient do
       preferred_event_ids { [] }

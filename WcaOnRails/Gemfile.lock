@@ -164,7 +164,7 @@ GEM
       descendants_tracker (~> 0.0.1)
     colorize (0.8.1)
     concurrent-ruby (1.1.9)
-    cookies_eu (1.7.7)
+    cookies_eu (1.7.8)
       js_cookie_rails (~> 2.2.0)
     crass (1.0.6)
     css_parser (1.7.1)
