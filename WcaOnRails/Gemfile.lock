@@ -471,7 +471,7 @@ GEM
       thor (>= 0.19.0, < 2.0)
     rainbow (3.0.0)
     raindrops (0.19.1)
-    rake (13.0.3)
+    rake (13.0.6)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
@@ -596,7 +596,7 @@ GEM
     trailblazer-option (0.1.1)
     translighterate (0.2.2)
       actionview (>= 4.0, < 6.0)
-    twitter_cldr (6.6.1)
+    twitter_cldr (6.7.0)
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.1)
       tzinfo
