@@ -309,7 +309,7 @@ en:
         waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
         event_change_deadline_date: "Deadline for competitors to update their registered events"
         guests_entry_fee_lowest_denomination: "Entry fee for guests"
-        free_guest_entry_status: "Display message for free entry"
+        free_guest_entry_status: "Display message for free guest entry"
         early_puzzle_submission: "I would like to require competitors to submit puzzles at a specific time before an event is scheduled to begin"
         early_puzzle_submission_reason: "Reason and details for submitting puzzles early"
         qualification_results: "I would like to use qualification results to limit who can compete in certain events"
