@@ -77,7 +77,7 @@ CREATE TABLE `Competitions` (
   `cancelled_by` int(11) DEFAULT NULL,
   `waiting_list_deadline_date` datetime DEFAULT NULL,
   `event_change_deadline_date` datetime DEFAULT NULL,
-  `free_entry_status` int DEFAULT '0',
+  `free_guest_entry_status` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),

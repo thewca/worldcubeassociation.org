@@ -76,7 +76,7 @@ class Competition < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
-  enum free_entry_status: {
+  enum free_guest_entry_status: {
     unclear: 0,
     anyone: 1,
     restricted: 2,
@@ -108,7 +108,7 @@ class Competition < ApplicationRecord
     on_the_spot_entry_fee_lowest_denomination
     refund_policy_percent
     guests_entry_fee_lowest_denomination
-    free_entry_status
+    free_guest_entry_status
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -915,11 +915,11 @@ class Competition < ApplicationRecord
   end
 
   def all_guests_allowed?
-    free_entry_status_anyone?
+    free_guest_entry_status_anyone?
   end
 
   def some_guests_allowed?
-    free_entry_status_restricted?
+    free_guest_entry_status_restricted?
   end
 
   def registration_period_required?

@@ -185,7 +185,7 @@
         <%= f.input :guests_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
 
         <div class="guest-no-entry-fee-options">
-          <%= f.input :free_entry_status, include_blank: false %>
+          <%= f.input :free_guest_entry_status, include_blank: false %>
         </div>
 
         <div class="col-sm-offset-2 col-sm-9">
