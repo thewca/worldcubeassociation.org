@@ -24,3 +24,7 @@ execute "pip3 install wrc --upgrade"
 execute "#{repo_root}/scripts/deploy.sh rebuild_regs" do
   user username
 end
+
+execute "#{repo_root}/scripts/deploy.sh update_docs" do
+  user username
+end
