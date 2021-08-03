@@ -20,10 +20,10 @@ RSpec.describe NotificationsHelper do
       it "shows WCA ID claims for confirmed accounts, but not for unconfirmed accounts" do
         person = FactoryBot.create :person
         user = FactoryBot.create :user
-        user.update_attributes!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
+        user.update!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
         unconfirmed_user = FactoryBot.create :user, confirmed: false
-        unconfirmed_user.update_attributes!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
+        unconfirmed_user.update!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
         notifications = helper.notifications_for_user(delegate)
         expect(notifications).to eq [

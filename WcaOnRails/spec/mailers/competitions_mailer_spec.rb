@@ -191,7 +191,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
                                       trainee_delegates: [trainee_delegate],
                                       starts: Date.new(2016, 2, 1),
                                       ends: Date.new(2016, 2, 2))
-      competition.delegate_report.update_attributes!(remarks: "This was a great competition")
+      competition.delegate_report.update!(remarks: "This was a great competition")
       competition
     end
     let(:mail) do
@@ -202,7 +202,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     context "wrc & wdc feedback requested" do
       before(:each) do
-        competition.delegate_report.update_attributes!(wrc_feedback_requested: true, wrc_incidents: "1, 2, 3", wdc_feedback_requested: true, wdc_incidents: "4, 5, 6")
+        competition.delegate_report.update!(wrc_feedback_requested: true, wrc_incidents: "1, 2, 3", wdc_feedback_requested: true, wdc_incidents: "4, 5, 6")
       end
 
       it "renders the headers" do
@@ -222,7 +222,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     context "wdc feedback requested" do
       before(:each) do
-        competition.delegate_report.update_attributes!(wdc_feedback_requested: true, wdc_incidents: "4, 5, 6")
+        competition.delegate_report.update!(wdc_feedback_requested: true, wdc_incidents: "4, 5, 6")
       end
 
       it "renders the headers" do
@@ -242,7 +242,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     context "wrc feedback requested" do
       before(:each) do
-        competition.delegate_report.update_attributes!(wrc_feedback_requested: true, wrc_incidents: "1, 2, 3")
+        competition.delegate_report.update!(wrc_feedback_requested: true, wrc_incidents: "1, 2, 3")
       end
 
       it "renders the headers" do
@@ -285,7 +285,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   describe "wrc_delegate_report_followup" do
     let(:competition) do
       competition = FactoryBot.create(:competition, :with_delegate_report, countryId: "Australia", cityName: "Perth, Western Australia", name: "Comp of the Future 2016", starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
-      competition.delegate_report.update_attributes!(remarks: "This was a great competition")
+      competition.delegate_report.update!(remarks: "This was a great competition")
       competition.delegate_report.wrc_primary_user = FactoryBot.create :user, :wrc_member, name: "Jean"
       competition.delegate_report.wrc_secondary_user = FactoryBot.create :user, :wrc_member, name: "Michel"
       competition

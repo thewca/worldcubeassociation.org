@@ -11,6 +11,7 @@ import '../javascript/image-preview';
 import '../javascript/polyfills';
 import '../javascript/incidents-log';
 import autosize from 'autosize';
+import Rails from '@rails/ujs';
 import {
   getUrlParams,
   setUrlParams,
@@ -19,7 +20,7 @@ import {
 
 import { attachComponentToElem } from '../javascript/wca/react-utils';
 
-require('@rails/ujs').start();
+Rails.start();
 require('jquery');
 
 // Build up the window.wca environment, which we use to store our components.

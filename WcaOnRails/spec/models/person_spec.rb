@@ -43,20 +43,20 @@ RSpec.describe Person, type: :model do
       end
 
       it "updates personName and countryId columns in the results table" do
-        person.update_attributes!(name: "New Name", countryId: "New Zealand")
+        person.update!(name: "New Name", countryId: "New Zealand")
         expect(person.results.pluck(:personName).uniq).to eq ["New Name"]
         expect(person.results.pluck(:countryId).uniq).to eq ["New Zealand"]
       end
 
       it "doesn't update personName and countryId columns in the results table if they differ from the current ones" do
         FactoryBot.create(:person_who_has_competed_once, wca_id: person.wca_id, subId: 2, name: "Old Name", countryId: "France")
-        person.update_attributes!(name: "New Name", countryId: "New Zealand")
+        person.update!(name: "New Name", countryId: "New Zealand")
         expect(person.results.pluck(:personName).uniq).to match_array ["Old Name", "New Name"]
         expect(person.results.pluck(:countryId).uniq).to match_array ["France", "New Zealand"]
       end
 
       it "updates the associated user" do
-        person.update_attributes!(name: "New Name", countryId: "New Zealand", dob: "1990-10-10")
+        person.update!(name: "New Name", countryId: "New Zealand", dob: "1990-10-10")
         expect(user.reload.name).to eq "New Name"
         expect(user.country_iso2).to eq "NZ"
         expect(user.dob).to eq Date.new(1990, 10, 10)
@@ -96,7 +96,7 @@ RSpec.describe Person, type: :model do
     context "updating country and then fixing name" do
       it "does not affect old results" do
         person.update_using_sub_id!(countryId: "New Zealand")
-        person.update_attributes!(name: "Felix Zemdegs")
+        person.update!(name: "Felix Zemdegs")
         expect(person.results.pluck(:personName).uniq).to eq ["Feliks Zemdegs"]
         expect(person.results.pluck(:countryId).uniq).to eq ["Australia"]
       end
@@ -105,7 +105,7 @@ RSpec.describe Person, type: :model do
     context "updating name and then fixing country" do
       it "does not affect old results" do
         person.update_using_sub_id!(name: "Felix Zemdegs")
-        person.update_attributes!(countryId: "New Zealand")
+        person.update!(countryId: "New Zealand")
         expect(person.results.pluck(:personName).uniq).to eq ["Feliks Zemdegs"]
         expect(person.results.pluck(:countryId).uniq).to eq ["Australia"]
       end

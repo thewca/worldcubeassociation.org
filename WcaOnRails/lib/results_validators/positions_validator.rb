@@ -54,7 +54,7 @@ module ResultsValidators
                                              person_name: result.personName,
                                              expected_pos: expected_pos,
                                              pos: result.pos)
-                result.update_attributes!(pos: expected_pos)
+                result.update!(pos: expected_pos)
               else
                 @errors << ValidationError.new(:results, competition_id,
                                                WRONG_POSITION_IN_RESULTS_ERROR,

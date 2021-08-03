@@ -8,9 +8,9 @@ class Post < ApplicationRecord
 
   scope :visible, -> { where(world_readable: true) }
 
-  validates :title, presence: true, uniqueness: true
+  validates :title, presence: true, uniqueness: { case_sensitive: true }
   validates :body, presence: true
-  validates :slug, presence: true, uniqueness: true
+  validates :slug, presence: true, uniqueness: { case_sensitive: true }
 
   validate :unstick_at_must_be_in_the_future, if: :unstick_at
   private def unstick_at_must_be_in_the_future

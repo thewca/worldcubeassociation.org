@@ -30,7 +30,7 @@ class WcifExtension < ApplicationRecord
   end
 
   def load_wcif!(wcif)
-    update_attributes!(WcifExtension.wcif_to_attributes(wcif))
+    update!(WcifExtension.wcif_to_attributes(wcif))
     self
   end
 

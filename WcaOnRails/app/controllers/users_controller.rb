@@ -76,7 +76,7 @@ class UsersController < ApplicationController
       otp_required_for_login: false,
       otp_secret: nil,
     }
-    if current_user.update_attributes(disable_params)
+    if current_user.update(disable_params)
       flash[:success] = I18n.t("devise.sessions.new.2fa.disabled_success")
       params[:section] = "2fa"
     else
@@ -168,7 +168,7 @@ class UsersController < ApplicationController
     end
 
     old_confirmation_sent_at = @user.confirmation_sent_at
-    if @user.update_attributes(user_params)
+    if @user.update(user_params)
       if @user.saved_change_to_delegate_status
         # TODO: See https://github.com/thewca/worldcubeassociation.org/issues/2969.
         DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(@user, current_user).deliver_now

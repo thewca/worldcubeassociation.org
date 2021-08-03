@@ -22,7 +22,7 @@ class VotesController < ApplicationController
   def update
     @vote = Vote.find(params[:id])
     @poll = @vote.poll
-    if @vote.update_attributes(vote_params)
+    if @vote.update(vote_params)
       flash[:success] = "Vote updated"
       redirect_to polls_vote_path(@vote.poll.id)
     else
