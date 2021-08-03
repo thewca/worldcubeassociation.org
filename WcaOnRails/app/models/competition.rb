@@ -699,7 +699,7 @@ class Competition < ApplicationRecord
   end
 
   def internal_website
-    Rails.application.routes.url_helpers.competition_url(self, host: ENVied.ROOT_URL)
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
   end
 
   def managers
@@ -1603,7 +1603,7 @@ class Competition < ApplicationRecord
   def serializable_hash(options = nil)
     {
       class: self.class.to_s.downcase,
-      url: Rails.application.routes.url_helpers.competition_url(self, host: ENVied.ROOT_URL),
+      url: Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL),
 
       id: id,
       name: name,

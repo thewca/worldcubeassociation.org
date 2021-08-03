@@ -270,7 +270,7 @@ class Person < ApplicationRecord
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
-      url: Rails.application.routes.url_helpers.person_url(self.wca_id, host: ENVied.ROOT_URL),
+      url: Rails.application.routes.url_helpers.person_url(self.wca_id, host: EnvVars.ROOT_URL),
 
       id: self.wca_id,
       wca_id: self.wca_id,

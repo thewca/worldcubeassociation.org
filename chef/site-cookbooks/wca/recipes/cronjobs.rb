@@ -45,7 +45,7 @@ unless node.chef_environment.start_with?("development")
   end
 end
 
-html_format_envvars = {
+html_format_EnvVars. = {
   "CONTENT_TYPE" => "text/html",
   "CONTENT_TRANSFER_ENCODING" => "utf8",
 }
@@ -59,7 +59,7 @@ unless node.chef_environment.start_with?("development")
 
     path path
     mailto admin_email
-    environment html_format_envvars
+    environment html_format_EnvVars.
     user username
     command init_php_commands.last
   end
