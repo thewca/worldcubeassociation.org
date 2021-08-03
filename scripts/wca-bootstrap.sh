@@ -34,6 +34,9 @@ fi
 if ! command -v git &> /dev/null; then
   apt-get install -y git
 fi
+if ! command -v gcc &> /dev/null; then
+  apt-get install -y build-essential
+fi
 
 if [ -d /vagrant ]; then
   repo_root=/vagrant
@@ -81,15 +84,22 @@ if [ "$environment" != "development" ]; then
 fi
 
 # Install chef client
-if ! command -v chef-solo &> /dev/null || ! chef-solo --version | grep 12.3.0 &> /dev/null; then
-  curl -Ls https://www.opscode.com/chef/install.sh | bash -s -- -v 12.3.0-1
-  /opt/chef/embedded/bin/gem install librarian-chef
+if ! command -v chef-solo &> /dev/null || ! chef-solo --version | grep 16.13.16 &> /dev/null; then
+  curl -Ls https://omnitruck.chef.io/install.sh | bash -s -- -v 16.13.16
+  /opt/chef/embedded/bin/gem install berkshelf -v "7.2.2"
 fi
+
+berks_lib_file=$(/opt/chef/embedded/bin/gem which berkshelf)
+berks_lib_dir=$(dirname "$berks_lib_file")
+berks_root_dir=$(dirname "$berks_lib_dir")
+
+berks_executable="$berks_root_dir/bin/berks"
 
 # Install cookbooks from Cheffile
 (
   cd $repo_root/chef
-  /opt/chef/embedded/bin/ruby /opt/chef/embedded/lib/ruby/gems/2.1.0/gems/librarian-chef-0.0.4/bin/librarian-chef install
+  /opt/chef/embedded/bin/ruby "$berks_executable" install
+  /opt/chef/embedded/bin/ruby "$berks_executable" vendor "$repo_root/chef/cookbooks"
 )
 
 mkdir -p /etc/chef
@@ -107,5 +117,7 @@ encrypted_data_bag_secret "$repo_root/secrets/my_secret_key"
 log_level :info
 verbose_logging false
 local_mode true
+chef_license "accept"
+ohai.optional_plugins << :Passwd
 EOL
-chef-solo -o 'role[wca]'
+chef-solo --legacy-mode --config "/etc/chef/solo.rb" -o 'role[wca]'
