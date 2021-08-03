@@ -18,12 +18,12 @@ tmp_logfile = "/tmp/cron-backup.log"
 backup_command = "(#{backup_command})>#{tmp_logfile} 2>&1 || echo \"FAILURE of the backup script, see below for the error log:\"; cat #{tmp_logfile}"
 
 unless node.chef_environment.start_with?("development")
-  execute "pip2 install github-backup"
+  execute "pip3 install github-backup"
 
   cron "backup" do
     minute '0'
     hour '0'
-    weekday 'MON'
+    weekday '1'
 
     path path
     mailto admin_email
@@ -82,7 +82,7 @@ unless node.chef_environment.start_with?("development")
   cron "clear rails cache" do
     minute '0'
     hour '5'
-    weekday 'MON,WED,SAT'
+    weekday '1,3,6'
 
     path path
     mailto admin_email

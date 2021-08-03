@@ -78,7 +78,7 @@ class PostsController < ApplicationController
 
   def update
     @post = find_post
-    if @post.update_attributes(post_params)
+    if @post.update(post_params)
       flash[:success] = "Updated post"
       redirect_to post_path(@post.slug)
     else

@@ -25,10 +25,11 @@
         "jquery"
     ],
     "rules": {
-        "react/prop-types": 0,
-        "react/jsx-filename-extension": 0,
-        "import/no-unresolved": [2, {
+        "react/prop-types": "off",
+        "react/jsx-filename-extension": "off",
+        "import/no-unresolved": ["error", {
             "ignore": ["semantic-css/"]
-        }]
+        }],
+        "no-console": ["error", { "allow": ["warn", "error"] }]
     }
 }

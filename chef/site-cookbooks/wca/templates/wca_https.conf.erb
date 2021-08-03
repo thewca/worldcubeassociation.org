@@ -4,7 +4,9 @@
 ###
 
 # Enable SSL
-ssl on;
+# The 'ssl' option has been deprecated in favor of 'listen ... ssl'
+# which we were already using anyways. So it's safe to assume commenting this out will work
+#ssl on;
 
 # Private key (should be generated locally and not by our CA)
 ssl_certificate_key <%= @repo_root %>/secrets/https/<%= @server_name %>.key;

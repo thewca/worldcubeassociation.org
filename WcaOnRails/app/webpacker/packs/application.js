@@ -1,4 +1,3 @@
-/* eslint no-console:0 */
 // This file is automatically compiled by Webpack, along with any other files
 // present in this directory. You're encouraged to place your actual application logic in
 // a relevant structure within app/javascript and only use these pack files to reference
@@ -11,15 +10,17 @@ import '../javascript/image-preview';
 import '../javascript/polyfills';
 import '../javascript/incidents-log';
 import autosize from 'autosize';
+import Rails from '@rails/ujs';
 import {
   getUrlParams,
   setUrlParams,
   formattedTextForDate,
 } from '../javascript/wca/utils';
+import '../javascript/acknowledge-cookies';
 
 import { attachComponentToElem } from '../javascript/wca/react-utils';
 
-require('@rails/ujs').start();
+Rails.start();
 require('jquery');
 
 // Build up the window.wca environment, which we use to store our components.

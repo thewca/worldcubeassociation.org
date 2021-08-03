@@ -37,7 +37,7 @@ class PollsController < ApplicationController
 
   def update
     @poll = Poll.find(params[:id])
-    if @poll.update_attributes(poll_params)
+    if @poll.update(poll_params)
       if params[:commit] == "Confirm"
         flash[:success] = "Poll confirmed and open to voting"
       else

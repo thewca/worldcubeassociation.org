@@ -238,6 +238,13 @@ class User < ApplicationRecord
     end
   end
 
+  # workaround / very nasty hotfix for Rails 6 issue with rollback triggers.
+  # TODO: remove once https://github.com/rails/rails/issues/36965 is fixed.
+  after_validation do
+    # we have to do _some_ non-zero modifications to the model, otherwise after_rollback won't trigger
+    self.touch if self.claiming_wca_id && self.was_incorrect_wca_id_claim && persisted? && !destroyed?
+  end
+
   after_rollback do
     # This is a bit of a mess. If the user makes an incorrect WCA ID claim,
     # then we want to incrememnt our count of incorrect claims. We can't update
@@ -315,7 +322,9 @@ class User < ApplicationRecord
     if wca_id_change && wca_id.present?
       dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
       if dummy_user
-        _mounter(:avatar).uploader.override_column_value = dummy_user.read_attribute :avatar
+        _mounter(:avatar).uploaders.each do |uploader|
+          uploader.override_column_value = dummy_user.read_attribute :avatar
+        end
         dummy_user.destroy!
       end
     end

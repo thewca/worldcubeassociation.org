@@ -95,7 +95,7 @@ class Person < ApplicationRecord
       return false
     end
     old_attributes = self.attributes
-    if update_attributes(attributes)
+    if update(attributes)
       Person.where(wca_id: wca_id).where.not(subId: 1).order(subId: :desc).update_all("subId = subId + 1")
       Person.create(old_attributes.merge!(subId: 2))
       true

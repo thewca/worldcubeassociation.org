@@ -481,8 +481,8 @@ class CompetitionsController < ApplicationController
         flash[:success] = t('.delete_success', id: @competition.id)
         redirect_to root_url
       end
-    elsif @competition.update_attributes(comp_params_minus_id)
-      if new_id && !@competition.update_attributes(id: new_id)
+    elsif @competition.update(comp_params_minus_id)
+      if new_id && !@competition.update(id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
         # code, just revert the attempted id change. The user will have to deal with

@@ -334,7 +334,7 @@ RSpec.describe Competition do
 
     it "does not warn for posted reports" do
       competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 2.days.ago
-      competition.delegate_report.update_attributes!(schedule_url: "http://example.com", posted: true)
+      competition.delegate_report.update!(schedule_url: "http://example.com", posted: true)
       delegate = competition.delegates.first
       expect(competition.user_should_post_delegate_report?(delegate)).to eq false
     end
@@ -571,7 +571,7 @@ RSpec.describe Competition do
       competition.reload
 
       old_events = competition.events
-      competition.update_attributes!(
+      competition.update!(
         id: "MyerComp2016",
         competition_events_attributes: [
           { "id"=> comp_events[0].id, "event_id"=>comp_events[0].event_id, "_destroy"=>"0" },

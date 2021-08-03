@@ -28,7 +28,7 @@ class Oauth::ApplicationsController < ApplicationController
   end
 
   def update
-    if @application.update_attributes(application_params)
+    if @application.update(application_params)
       flash[:notice] = I18n.t(:notice, scope: [:doorkeeper, :flash, :applications, :update])
       redirect_to oauth_application_url(@application)
     else

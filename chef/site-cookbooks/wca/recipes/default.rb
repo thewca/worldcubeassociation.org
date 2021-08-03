@@ -3,9 +3,10 @@ require 'shellwords'
 require 'securerandom'
 
 include_recipe "wca::base"
+
 apt_repository 'nodejs' do
   uri 'https://deb.nodesource.com/node_12.x'
-  components ['trusty', 'main']
+  components %w[main]
   key 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
 end
 package 'nodejs' do
@@ -14,10 +15,10 @@ end
 
 apt_repository 'yarn' do
   uri 'https://dl.yarnpkg.com/debian/'
-  components ['stable', 'main']
+  components %w[main]
+  distribution "stable"
   key 'https://dl.yarnpkg.com/debian/pubkey.gpg'
 end
-
 package 'yarn' do
   version '1.22.4-1'
 end
@@ -30,11 +31,11 @@ if username == "cubing"
   cmd = ["openssl", "passwd", "-1", secrets['cubing_password']].shelljoin
   hashed_pw = `#{cmd}`.strip
   user username do
-    supports :manage_home => true
+    manage_home true
     home "/home/#{username}"
     shell '/bin/bash'
     password hashed_pw
-    not_if { ::File.exists?(user_lockfile) }
+    not_if { ::File.exist?(user_lockfile) }
   end
 
   # Trick to run code immediately and last copied from:
@@ -45,14 +46,14 @@ if username == "cubing"
       puts "# Created user #{username} with password #{secrets['cubing_password']}"
       puts "#"*80
     end
-    not_if { ::File.exists?(user_lockfile) }
+    not_if { ::File.exist?(user_lockfile) }
   end
   ruby_block 'notify' do
     block do
       true
     end
     notifies :run, 'ruby_block[last]', :delayed
-    not_if { ::File.exists?(user_lockfile) }
+    not_if { ::File.exist?(user_lockfile) }
   end
 
   file user_lockfile do
@@ -60,7 +61,7 @@ if username == "cubing"
   end
 
   ssh_known_hosts_entry 'github.com'
-  if !Dir.exists? repo_root
+  unless Dir.exist? repo_root
     branch = "master"
     git repo_root do
       repository "https://github.com/thewca/worldcubeassociation.org.git"
@@ -90,15 +91,15 @@ template gen_auth_keys_path do
   owner username
   group username
   variables({
-    secrets: secrets,
-  })
+              secrets: secrets,
+            })
 end
 execute gen_auth_keys_path do
   user username
 end
 
 #### Mysql
-package 'mysql-client-5.6'
+package 'mysql-client-8.0'
 db = {
   'user' => 'root',
 }
@@ -118,6 +119,8 @@ else
   db['password'] = secrets['mysql_password']
   mysql_service 'default' do
     version '8.0'
+    charset 'utf8mb4'
+    bind_address '127.0.0.1'
     initial_root_password secrets['mysql_password']
     # Force default socket to make rails happy
     socket socket
@@ -125,6 +128,7 @@ else
   end
   mysql_config 'default' do
     source 'mysql-wca.cnf.erb'
+    instance 'default'
     notifies :restart, 'mysql_service[default]'
     action :create
   end
@@ -137,9 +141,9 @@ template "/etc/my.cnf" do
   owner 'root'
   group 'root'
   variables({
-    secrets: secrets,
-    db: db,
-  })
+              secrets: secrets,
+              db: db,
+            })
 end
 
 
@@ -152,9 +156,23 @@ package 'libmysqlclient-dev'
 package 'imagemagick'
 package 'poppler-utils' # Required by ActiveStorage built-in PDF previewer.
 
-ruby_version = File.read("#{repo_root}/.ruby-version").match(/\d+\.\d+/)[0]
-node.default['brightbox-ruby']['version'] = ruby_version
-include_recipe "brightbox-ruby"
+rbenv_user_install username
+ruby_version = File.read("#{rails_root}/.ruby-version").strip
+rbenv_ruby ruby_version do
+  user username
+end
+# Set current Ruby version as user-wide default. Useful as a fallback if we do version upgrades.
+rbenv_global ruby_version do
+  user username
+end
+
+bundler_version = File.read("#{rails_root}/Gemfile.lock").strip.match(/\d+(?:\.\d+)+$/)[0]
+rbenv_gem 'bundler' do
+  user username
+  version bundler_version
+  rbenv_version ruby_version
+end
+
 chef_env_to_rails_env = {
   "development" => "development",
   "staging" => "production",
@@ -224,37 +242,37 @@ end
 # Unfortunately, we have to compile nginx from source to get the auth request module
 # See: https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1323387
 
-# Nginx dependencies copied from http://www.rackspace.com/knowledge_center/article/ubuntu-and-debian-installing-nginx-from-source
-package 'libc6'
+# Nginx dependencies copied from https://www.alibabacloud.com/blog/how-to-build-nginx-from-source-on-ubuntu-20-04-lts_597793
 package 'libpcre3'
-package 'libssl0.9.8'
-package 'zlib1g'
-package 'lsb-base'
-# http://stackoverflow.com/a/14046228
 package 'libpcre3-dev'
-# http://serverfault.com/a/416573
+package 'zlib1g'
+package 'zlib1g-dev'
 package 'libssl-dev'
+package 'libgd-dev'
+package 'libxml2'
+package 'libxml2-dev'
+package 'uuid-dev'
 
 bash "build nginx" do
   code <<-EOH
     set -e # exit on error
     cd /tmp
-    wget http://nginx.org/download/nginx-1.11.8.tar.gz
-    tar xvf nginx-1.11.8.tar.gz
-    cd nginx-1.11.8
+    wget http://nginx.org/download/nginx-1.21.1.tar.gz
+    tar xvf nginx-1.21.1.tar.gz
+    cd nginx-1.21.1
     ./configure --sbin-path=/usr/local/sbin --with-http_ssl_module --with-http_auth_request_module --with-http_gzip_static_module --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log
     make
     sudo make install
-    EOH
+  EOH
 
   # Don't build nginx if we've already built it.
-  not_if { ::File.exists?('/usr/local/sbin/nginx') }
+  not_if { ::File.exist?('/usr/local/sbin/nginx') }
 end
 template "/etc/nginx/fcgi.conf" do
   source "fcgi.conf.erb"
   variables({
-    username: username,
-  })
+              username: username,
+            })
   notifies :run, 'execute[reload-nginx]', :delayed
 end
 template "/etc/init.d/nginx" do
@@ -270,8 +288,8 @@ template "/etc/nginx/nginx.conf" do
   owner 'root'
   group 'root'
   variables({
-    username: username,
-  })
+              username: username,
+            })
   notifies :run, 'execute[reload-nginx]', :delayed
 end
 directory "/etc/nginx/conf.d" do
@@ -293,13 +311,13 @@ template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
   owner 'root'
   group 'root'
   variables({
-    username: username,
-    rails_root: rails_root,
-    repo_root: repo_root,
-    rails_env: rails_env,
-    https: https,
-    server_name: server_name,
-  })
+              username: username,
+              rails_root: rails_root,
+              repo_root: repo_root,
+              rails_env: rails_env,
+              https: https,
+              server_name: server_name,
+            })
   notifies :run, 'execute[reload-nginx]', :delayed
 end
 template "/etc/nginx/wca_https.conf" do
@@ -308,13 +326,13 @@ template "/etc/nginx/wca_https.conf" do
   owner 'root'
   group 'root'
   variables({
-    username: username,
-    rails_root: rails_root,
-    repo_root: repo_root,
-    rails_env: rails_env,
-    https: https,
-    server_name: server_name,
-  })
+              username: username,
+              rails_root: rails_root,
+              repo_root: repo_root,
+              rails_env: rails_env,
+              https: https,
+              server_name: server_name,
+            })
   notifies :run, 'execute[reload-nginx]', :delayed
 end
 # Start nginx if it's not already running.
@@ -341,9 +359,9 @@ template "#{rails_root}/.env.production" do
   owner username
   group username
   variables({
-    secrets: secrets,
-    db_url: db_url,
-  })
+              secrets: secrets,
+              db_url: db_url,
+            })
 end
 
 #### phpMyAdmin
@@ -352,18 +370,18 @@ bash 'install phpMyAdmin' do
   cwd ::File.dirname("/tmp")
   code <<-EOH
     cd /tmp
-    wget https://files.phpmyadmin.net/phpMyAdmin/4.7.6/phpMyAdmin-4.7.6-english.tar.gz
-    tar xvf phpMyAdmin-4.7.6-english.tar.gz
-    mv phpMyAdmin-4.7.6-english #{pma_path}
-    EOH
+    wget https://files.phpmyadmin.net/phpMyAdmin/4.9.7/phpMyAdmin-4.9.7-english.tar.gz
+    tar xvf phpMyAdmin-4.9.7-english.tar.gz
+    mv phpMyAdmin-4.9.7-english #{pma_path}
+  EOH
   not_if { ::File.exist?(pma_path) }
 end
 template "#{repo_root}/webroot/results/admin/phpMyAdmin/config.inc.php" do
   source "phpMyAdmin_config.inc.php.erb"
   variables({
-    secrets: secrets,
-    db: db,
-  })
+              secrets: secrets,
+              db: db,
+            })
 end
 
 #### Legacy PHP results system
@@ -371,52 +389,71 @@ PHP_MEMORY_LIMIT = '768M'
 PHP_IDLE_TIMEOUT_SECONDS = 120
 PHP_POST_MAX_SIZE = '20M'
 PHP_MAX_INPUT_VARS = 5000
-package 'php5-cli'
+apt_repository 'legacy-php' do
+  uri 'ppa:ondrej/php'
+end
+package 'php5.6-cli'
+node.default['php-fpm']['skip_repository_install'] = true
+node.default['php-fpm']['package_name'] = 'php5.6-fpm'
+node.default['php-fpm']['conf_dir'] = '/etc/php/5.6/fpm/conf.d'
+node.default['php-fpm']['pool_conf_dir'] = '/etc/php/5.6/fpm/pool.d'
+node.default['php-fpm']['conf_file'] = '/etc/php/5.6/fpm/php-fpm.conf'
+node.default['php-fpm']['error_log'] = '/var/log/php5.6-fpm.log'
+node.default['php-fpm']['pid'] = '/var/run/php/php5.6-fpm.pid'
 include_recipe 'php-fpm::install'
 php_fpm_pool "www" do
-  listen "/var/run/php5-fpm.#{username}.sock"
+  listen "/var/run/php/php5.6-fpm.#{username}.sock"
   user username
   group username
   process_manager "dynamic"
   max_children 9
   min_spare_servers 2
   max_spare_servers 4
+  start_servers 3
   max_requests 200
   php_options 'php_admin_flag[log_errors]' => 'on', 'php_admin_value[memory_limit]' => PHP_MEMORY_LIMIT
 end
-execute "sed -i -r 's/(; *)?memory_limit = .*/memory_limit = #{PHP_MEMORY_LIMIT}/g' /etc/php5/fpm/php.ini" do
-  not_if "grep '^memory_limit = #{PHP_MEMORY_LIMIT}' /etc/php5/fpm/php.ini"
+execute "sed -i -r 's/(; *)?memory_limit = .*/memory_limit = #{PHP_MEMORY_LIMIT}/g' /etc/php/5.6/fpm/php.ini" do
+  not_if "grep '^memory_limit = #{PHP_MEMORY_LIMIT}' /etc/php/5.6/fpm/php.ini"
 end
-execute "sed -i -r 's/(; *)?max_execution_time = .*/max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}/g' /etc/php5/fpm/php.ini" do
-  not_if "grep '^max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}' /etc/php5/fpm/php.ini"
+execute "sed -i -r 's/(; *)?max_execution_time = .*/max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}/g' /etc/php/5.6/fpm/php.ini" do
+  not_if "grep '^max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}' /etc/php/5.6/fpm/php.ini"
 end
-execute "sed -i -r 's/(; *)?post_max_size = .*/post_max_size = #{PHP_POST_MAX_SIZE}/g' /etc/php5/fpm/php.ini" do
-  not_if "grep '^post_max_size = #{PHP_POST_MAX_SIZE}' /etc/php5/fpm/php.ini"
+execute "sed -i -r 's/(; *)?post_max_size = .*/post_max_size = #{PHP_POST_MAX_SIZE}/g' /etc/php/5.6/fpm/php.ini" do
+  not_if "grep '^post_max_size = #{PHP_POST_MAX_SIZE}' /etc/php/5.6/fpm/php.ini"
 end
-execute "sed -i -r 's/(; *)?max_input_vars = .*/max_input_vars = #{PHP_MAX_INPUT_VARS}/g' /etc/php5/fpm/php.ini" do
-  not_if "grep '^max_input_vars = #{PHP_MAX_INPUT_VARS}' /etc/php5/fpm/php.ini"
+execute "sed -i -r 's/(; *)?max_input_vars = .*/max_input_vars = #{PHP_MAX_INPUT_VARS}/g' /etc/php/5.6/fpm/php.ini" do
+  not_if "grep '^max_input_vars = #{PHP_MAX_INPUT_VARS}' /etc/php/5.6/fpm/php.ini"
 end
 # Install mysqli for php. See:
 #  http://stackoverflow.com/a/22525205
-package "php5-mysqlnd"
+package "php5.6-mysql"
+package "php5.6-mysqlnd-ms"
 template "#{repo_root}/webroot/results/includes/_config.php" do
   source "results_config.php.erb"
   mode 0644
   owner username
   group username
   variables({
-    secrets: secrets,
-    db: db,
-  })
+              secrets: secrets,
+              db: db,
+            })
 end
 
 #### Initialize rails gems/database
-execute "bundle install #{'--deployment --without development test' if rails_env == 'production'} --path /home/#{username}/.bundle" do
+execute "bundle config set --local path '/home/#{username}/.bundle'" do
   user username
   cwd rails_root
   environment({
     "RACK_ENV" => rails_env,
   })
+end
+execute "bundle install #{'--deployment --without development test' if rails_env == 'production'}" do
+  user username
+  cwd rails_root
+  environment({
+                "RACK_ENV" => rails_env,
+              })
 end
 
 if node.chef_environment == "development"
@@ -424,10 +461,10 @@ if node.chef_environment == "development"
   execute "bundle exec rake db:setup" do
     cwd rails_root
     environment({
-      "DATABASE_URL" => db_url,
-      "RACK_ENV" => rails_env,
-    })
-    not_if { ::File.exists?(db_setup_lockfile) }
+                  "DATABASE_URL" => db_url,
+                  "RACK_ENV" => rails_env,
+                })
+    not_if { ::File.exist?(db_setup_lockfile) }
   end
   file db_setup_lockfile do
     action :create_if_missing
@@ -438,10 +475,10 @@ elsif node.chef_environment == "staging"
     cwd rails_root
     user username
     environment({
-      "DATABASE_URL" => db_url,
-      "RACK_ENV" => rails_env,
-    })
-    not_if { ::File.exists?(db_setup_lockfile) }
+                  "DATABASE_URL" => db_url,
+                  "RACK_ENV" => rails_env,
+                })
+    not_if { ::File.exist?(db_setup_lockfile) }
   end
   file db_setup_lockfile do
     action :create_if_missing
@@ -467,11 +504,11 @@ template "/home/#{username}/wca.screenrc" do
   owner username
   group username
   variables({
-    rails_root: rails_root,
-    rails_env: rails_env,
-    db_url: db_url,
-    secrets: secrets,
-  })
+              rails_root: rails_root,
+              rails_env: rails_env,
+              db_url: db_url,
+              secrets: secrets,
+            })
 end
 template "/home/#{username}/startall" do
   source "startall.erb"
@@ -495,6 +532,6 @@ template "/etc/rc.local" do
   owner 'root'
   group 'root'
   variables({
-    username: username,
-  })
+              username: username,
+            })
 end
