@@ -183,7 +183,6 @@ new() {
     host=staging.worldcubeassociation.org
     instance_type=t3.medium
   else
-  else
     temp_new_server_name=${TEMP_NEW_PROD_SERVER_NAME}
     host=www.worldcubeassociation.org
     instance_type=t3.large
