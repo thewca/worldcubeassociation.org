@@ -7,6 +7,13 @@ RSpec.feature "Sign up" do
   let!(:person_without_dob) { FactoryBot.create :person, year: 0, month: 0, day: 0 }
   let!(:custom_delegate) { FactoryBot.create(:delegate) }
 
+  before :each do
+    # The cookie banner just gets in the way of these tests, and is already
+    # tested elsewhere. Set a cookie that prevents the cookie banner from
+    # appearing.
+    page.driver.set_cookie('cookie_eu_consented', 'true')
+  end
+
   context 'when signing up as a returning competitor', js: true do
     it 'disables sign up button until the user selects "have competed"' do
       visit "/users/sign_up"

@@ -221,7 +221,7 @@ RSpec.describe User, type: :model do
       dummy_user = FactoryBot.create :dummy_user
       person_for_dummy = dummy_user.person
       expect(dummy_user).to be_valid
-      dummy_user.update_attributes!(
+      dummy_user.update!(
         avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
         avatar_crop_x: 40,
         avatar_crop_y: 40,
@@ -270,12 +270,12 @@ RSpec.describe User, type: :model do
   it "saves crop coordinates" do
     user = FactoryBot.create :user_with_wca_id
 
-    user.update_attributes!(
+    user.update!(
       pending_avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
     )
     expect(user.read_attribute(:pending_avatar)).not_to be_nil
 
-    user.update_attributes!(
+    user.update!(
       pending_avatar_crop_x: 40,
       pending_avatar_crop_y: 50,
       pending_avatar_crop_w: 60,
@@ -299,7 +299,7 @@ RSpec.describe User, type: :model do
 
   it "clearing avatar clears cropping area" do
     user = FactoryBot.create :user_with_wca_id
-    user.update_attributes!(
+    user.update!(
       avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
       avatar_crop_x: 40,
       avatar_crop_y: 40,
@@ -331,7 +331,7 @@ RSpec.describe User, type: :model do
 
   it "approving pending avatar moves crop coordinates" do
     user = FactoryBot.create :user_with_wca_id
-    user.update_attributes!(
+    user.update!(
       pending_avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
       pending_avatar_crop_x: 40,
       pending_avatar_crop_y: 50,
@@ -557,7 +557,7 @@ RSpec.describe User, type: :model do
   it 'former members of the results team are not considered current members' do
     wrt_member = FactoryBot.create :user, :wrt_member
     team_member = wrt_member.team_members.first
-    team_member.update_attributes!(end_date: 1.day.ago)
+    team_member.update!(end_date: 1.day.ago)
 
     expect(wrt_member.reload.team_member?(Team.wrt)).to eq false
   end
@@ -565,8 +565,8 @@ RSpec.describe User, type: :model do
   it 'former leaders of the results team are not considered current leaders' do
     wrt_leader = FactoryBot.create :user, :wrt_member
     team_member = wrt_leader.team_members.first
-    team_member.update_attributes!(team_leader: true)
-    team_member.update_attributes!(end_date: 1.day.ago)
+    team_member.update!(team_leader: true)
+    team_member.update!(end_date: 1.day.ago)
 
     expect(wrt_leader.reload.team_leader?(Team.wrt)).to eq false
 
@@ -575,7 +575,7 @@ RSpec.describe User, type: :model do
 
   it "removes whitespace around names" do
     user = FactoryBot.create :user
-    user.update_attributes!(name: '  test user  ')
+    user.update!(name: '  test user  ')
 
     expect(user.name).to eq 'test user'
   end

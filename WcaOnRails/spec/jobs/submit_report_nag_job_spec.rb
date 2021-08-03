@@ -9,10 +9,10 @@ RSpec.describe SubmitReportNagJob, type: :job do
     old_competition_missing_report = FactoryBot.create :competition, :visible, starts: 3.weeks.ago
     _very_old_competition_missing_report = FactoryBot.create :competition, :visible, starts: (DelegateReport::REPORTS_ENABLED_DATE - 1.year)
     _older_competition_missing_report_but_already_nagged = FactoryBot.create(:competition, :visible, starts: 3.weeks.ago).tap do |competition|
-      competition.delegate_report.update_attributes(nag_sent_at: 1.day.ago)
+      competition.delegate_report.update(nag_sent_at: 1.day.ago)
     end
     older_competition_missing_report_nagged_a_long_time_ago = FactoryBot.create(:competition, :visible, starts: 3.weeks.ago).tap do |competition|
-      competition.delegate_report.update_attributes(nag_sent_at: 8.days.ago)
+      competition.delegate_report.update(nag_sent_at: 8.days.ago)
     end
 
     expect(CompetitionsMailer).to receive(:submit_report_nag).with(old_competition_missing_report).and_call_original

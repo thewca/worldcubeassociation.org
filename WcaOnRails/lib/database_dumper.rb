@@ -660,6 +660,7 @@ module DatabaseDumper
           confirmation_sent_at
           confirmation_token
           consumed_timestep
+          cookies_acknowledged
           current_sign_in_ip
           encrypted_otp_secret
           encrypted_otp_secret_iv

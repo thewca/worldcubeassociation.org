@@ -5,7 +5,7 @@ class EligibleCountryIso2ForChampionship < ApplicationRecord
 
   belongs_to :championship, foreign_key: :championship_type, primary_key: :championship_type
 
-  validates :eligible_country_iso2, uniqueness: { scope: :championship_type },
+  validates :eligible_country_iso2, uniqueness: { scope: :championship_type, case_sensitive: false },
                                     inclusion: { in: Country.all.map(&:iso2) }
 
   def self.championship_types

@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   post 'profile/enable-2fa' => 'users#enable_2fa'
   post 'profile/disable-2fa' => 'users#disable_2fa'
   post 'profile/generate-2fa-backup' => 'users#regenerate_2fa_backup_codes'
+  post 'profile/acknowledge-cookies' => 'users#acknowledge_cookies'
 
   get 'profile/claim_wca_id' => 'users#claim_wca_id'
   get 'profile/claim_wca_id/select_nearby_delegate' => 'users#select_nearby_delegate'

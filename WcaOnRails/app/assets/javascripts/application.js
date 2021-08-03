@@ -366,4 +366,3 @@ $(function() {
     form.submit();
   });
 });
-cookiesEu.init()

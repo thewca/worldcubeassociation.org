@@ -54,7 +54,7 @@ class VenueRoom < ApplicationRecord
   end
 
   def load_wcif!(wcif)
-    update_attributes!(VenueRoom.wcif_to_attributes(wcif))
+    update!(VenueRoom.wcif_to_attributes(wcif))
     new_activities = wcif["activities"].map do |activity_wcif|
       activity = schedule_activities.find { |a| a.wcif_id == activity_wcif["id"] } || schedule_activities.build
       activity.load_wcif!(activity_wcif)
