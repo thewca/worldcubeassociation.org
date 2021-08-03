@@ -30,11 +30,14 @@ RSpec.feature "Eligible voters csv" do
     sign_in board_member
   end
 
+  # See https://github.com/rails/rails/pull/33829 to find about the crazy UTF-8 mangled filenames in Content-Disposition
+  # (Spoiler: This is actually proper RFC that has been implemented only in Rails 6. Looks ugly but for browsers it's a good feature!)
+
   describe "all voters" do
     it 'includes all voters' do
       visit "/admin/all-voters.csv"
 
-      expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="all-wca-voters-2016-05-05T10:05:03Z.csv"'
+      expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="all-wca-voters-2016-05-05T10%3A05%3A03Z.csv"; filename*=UTF-8\'\'all-wca-voters-2016-05-05T10%3A05%3A03Z.csv'
       expect(CSV.parse(page.body)).to match_array [
         [team_leader.id.to_s, team_leader.email, team_leader.name],
         [team_senior_member.id.to_s, team_senior_member.email, team_senior_member.name],
@@ -51,7 +54,7 @@ RSpec.feature "Eligible voters csv" do
     it "includes team leaders and senior delegates only" do
       visit "/admin/leader-senior-voters.csv"
 
-      expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="leader-senior-wca-voters-2016-05-05T10:05:03Z.csv"'
+      expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="leader-senior-wca-voters-2016-05-05T10%3A05%3A03Z.csv"; filename*=UTF-8\'\'leader-senior-wca-voters-2016-05-05T10%3A05%3A03Z.csv'
       expect(CSV.parse(page.body)).to match_array [
         [team_leader.id.to_s, team_leader.email, team_leader.name],
         [delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],

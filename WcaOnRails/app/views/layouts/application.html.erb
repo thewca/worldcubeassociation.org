@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <%= favicon_link_tag 'wca.ico' %>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -57,6 +57,7 @@
   <% end %>
 
   <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
   <%= auto_discovery_link_tag(:rss, rss_url(format: :xml)) %>
   <% if ENVied.WCA_LIVE_SITE %>
     <script data-ad-client="ca-pub-8682718775826560" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -87,6 +88,6 @@
   <% if !hide_wca_navbars %>
     <%= render 'layouts/footer' %>
   <% end %>
-  <%= render 'cookies_eu/consent_banner' if Rails.env.production? %>
+  <%= render 'cookies_eu/consent_banner' unless current_user&.cookies_acknowledged? %>
 </body>
 </html>

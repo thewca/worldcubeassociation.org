@@ -23,7 +23,7 @@ class RegionalOrganizationsController < ApplicationController
   def update
     @regional_organization = regional_organization_from_params
 
-    if @regional_organization.update_attributes(regional_organization_params)
+    if @regional_organization.update(regional_organization_params)
       flash[:success] = "Successfully updated Regional Organization!"
       redirect_to edit_regional_organization_path(@regional_organization)
     else

@@ -55,7 +55,7 @@ class MediaController < ApplicationController
 
   def update
     @medium = find_medium
-    if @medium.update_attributes(medium_params)
+    if @medium.update(medium_params)
       flash[:success] = "Updated medium"
       redirect_to edit_medium_path(@medium)
     else

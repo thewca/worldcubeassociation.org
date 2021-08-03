@@ -214,4 +214,38 @@ RSpec.describe UsersController do
       expect(sql).to match(/order by .+ desc/i)
     end
   end
+
+  describe "POST #acknowledge_cookies" do
+    context 'not signed in' do
+      it 'requires authentication' do
+        post :acknowledge_cookies
+        expect(response.status).to eq 401
+        response_json = JSON.parse(response.body)
+        expect(response_json['ok']).to eq false
+      end
+    end
+
+    context 'signed in' do
+      let(:admin) { FactoryBot.create :admin, cookies_acknowledged: false }
+
+      before :each do
+        sign_in admin
+      end
+
+      it "records acknowledgement and is idempotent" do
+        expect(admin.reload.cookies_acknowledged).to be false
+        post :acknowledge_cookies
+        response_json = JSON.parse(response.body)
+        expect(response_json['ok']).to eq true
+        expect(admin.reload.cookies_acknowledged).to be true
+
+        # Do the same thing again. This shouldn't clear their cookies acknowledged
+        # state.
+        post :acknowledge_cookies
+        response_json = JSON.parse(response.body)
+        expect(response_json['ok']).to eq true
+        expect(admin.reload.cookies_acknowledged).to be true
+      end
+    end
+  end
 end
