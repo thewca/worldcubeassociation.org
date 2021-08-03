@@ -219,9 +219,6 @@ bootstrap() {
   server_name=$1
   shift
 
-  branch=$1
-  shift
-
   if [ "${server_name}" == "${TEMP_NEW_STAGING_SERVER_NAME}" ]; then
     environment=staging
     host=staging.worldcubeassociation.org
@@ -251,7 +248,7 @@ bootstrap() {
   # https://alestic.com/2012/04/ec2-ssh-host-key/ for better solutions than
   # setting StrictHostKeyChecking=no.
   scp -i ${pem_filename} -o StrictHostKeyChecking=no ./wca-bootstrap.sh ubuntu@${domain_name}:/tmp/wca-bootstrap.sh
-  ${ssh_command} "sudo -E bash /tmp/wca-bootstrap.sh ${environment} ${branch}"
+  ${ssh_command} "sudo -E bash /tmp/wca-bootstrap.sh ${environment}"
 
   # After bootstrapping the new server, it will have a new host key. To avoid future errors like
   #
