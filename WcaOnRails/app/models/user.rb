@@ -238,7 +238,8 @@ class User < ApplicationRecord
     end
   end
 
-  # workaround / very nasty hotfix for https://github.com/rails/rails/issues/36965
+  # workaround / very nasty hotfix for Rails 6 issue with rollback triggers.
+  # TODO: remove once https://github.com/rails/rails/issues/36965 is fixed.
   after_validation do
     # we have to do _some_ non-zero modifications to the model, otherwise after_rollback won't trigger
     self.touch if self.claiming_wca_id && self.was_incorrect_wca_id_claim && persisted? && !destroyed?
