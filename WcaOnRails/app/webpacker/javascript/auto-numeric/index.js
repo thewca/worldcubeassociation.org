@@ -71,7 +71,7 @@ function setupCurrencyMask($element) {
 
   // Populate the actual hidden field on change
   $element.change(() => {
-    $(targetElemId).val(getValueInCurrency($element));
+    $(targetElemId).val(getValueInCurrency($element)).trigger('change');
   });
 }
 
