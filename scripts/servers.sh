@@ -149,7 +149,7 @@ get_pem_filename() {
 
 new() {
   print_command_usage_and_exit() {
-    echo "Usage: $0 new [--staging] [keyname] [20.04/14.04]" >> /dev/stderr
+    echo "Usage: $0 new [--staging] [keyname]" >> /dev/stderr
     echo "For example: $0 new jfly-kaladin-arch" >> /dev/stderr
     echo "Or, to spin up a new staging server: $0 new --staging jfly-kaladin-arch" >> /dev/stderr
 
@@ -176,14 +176,6 @@ new() {
   keyname=$1
   shift
 
-  if ["$1" != "20.04"]; then
-    ami=ami-7c22b41c
-    branch=master
-  else
-    ami=ami-03d5c68bab01f3496
-    branch=Ubuntu20.04
-  fi
-
   check_deps
 
   if [ "$staging" = true ]; then
@@ -203,7 +195,7 @@ new() {
 
   # Spin up a new EC2 instance.
   json=`aws ec2 run-instances \
-    --image-id $ami \
+    --image-id ami-03d5c68bab01f3496 \
     --count 1 \
     --key-name $keyname \
     --instance-type $instance_type \
@@ -217,7 +209,7 @@ new() {
   aws ec2 wait instance-status-ok --instance-ids ${instance_id}
   echo " done!"
 
-  bootstrap ${keyname} ${temp_new_server_name} ${branch}
+  bootstrap ${keyname} ${temp_new_server_name}
 }
 
 bootstrap() {
