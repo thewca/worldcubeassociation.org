@@ -89,7 +89,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
 
-  if EnvVars.WCA_LIVE_SITE
+  if EnvVars.WCA_LIVE_SITE?
     config.action_mailer.smtp_settings = {
       address: "email-smtp.us-west-2.amazonaws.com",
       port: 587,

@@ -63,7 +63,7 @@ namespace :db do
   namespace :load do
     desc 'Download and import the publicly accessible database dump from the production server'
     task development: :environment do
-      if EnvVars.WCA_LIVE_SITE
+      if EnvVars.WCA_LIVE_SITE?
         abort "This actions is disabled for the production server!"
       end
 
