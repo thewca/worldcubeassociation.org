@@ -24,7 +24,9 @@ public/assets/**
 app/webpacker/packs/generated_locales/*.js
 
 # Environment configuration
-.env*
+.env.development.local
+.env.test.local
+.env.production
 
 # Unicorn pid
 pids/*.pid
