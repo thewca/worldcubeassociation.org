@@ -1,24 +1,11 @@
 # frozen_string_literal: true
 
-EnvVars = Env::Vars.new(
-  env: {
-    "DISABLE_BULLET" => false,
-    "WCA_LIVE_SITE" => false,
-    "GOOGLE_MAPS_API_KEY" => 'AIzaSyDYBIU04Tv_j914utSX9OJhJDxi7eiZ84w',
-    "GITHUB_CREATE_PR_ACCESS_TOKEN" => '',
-    "STRIPE_API_KEY" => 'sk_test_CY2eQJchZKUrPGQtJ3Z60ycA',
-    "STRIPE_PUBLISHABLE_KEY" => 'pk_test_N0KdZIOedIrP8C4bD5XLUxOY',
-    "STRIPE_CLIENT_ID" => 'ca_A2YDwmyOll0aORNYiOA41dzEWn4xIDS2',
-    "OTP_ENCRYPTION_KEY" => 'abcdefghijklmnopqrstuvwxyz1234567890',
-    "DISCOURSE_SECRET" => 'myawesomesharedsecret',
-    "DISCOURSE_URL" => 'https://forum.worldcubeassociation.org',
-  },
-) do
+EnvVars = Env::Vars.new do
   if Rails.env.production?
-    optional :SECRET_KEY_BASE, string
-    optional :DATABASE_URL, string
-    optional :SMTP_USERNAME, string
-    optional :SMTP_PASSWORD, string
+    mandatory :SECRET_KEY_BASE, string
+    mandatory :DATABASE_URL, string
+    mandatory :SMTP_USERNAME, string
+    mandatory :SMTP_PASSWORD, string
   end
 
   if Rails.env.development?
