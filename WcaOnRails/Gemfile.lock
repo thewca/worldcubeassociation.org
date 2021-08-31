@@ -599,7 +599,7 @@ GEM
     ssrf_filter (1.0.7)
     strip_attributes (1.11.0)
       activemodel (>= 3.0, < 7.0)
-    stripe (5.37.0)
+    stripe (5.38.0)
     terminal-table (3.0.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (1.1.0)
