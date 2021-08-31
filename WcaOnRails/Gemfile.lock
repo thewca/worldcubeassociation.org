@@ -228,9 +228,7 @@ GEM
     encryptor (3.0.0)
     enum_help (0.0.17)
       activesupport (>= 3.0.0)
-    envied (0.9.1)
-      coercible (~> 1.0)
-      thor (~> 0.15)
+    env_vars (1.1.0)
     erubi (1.10.0)
     execjs (2.7.0)
     factory_bot (6.2.0)
@@ -695,7 +693,7 @@ DEPENDENCIES
   doorkeeper-i18n
   dotenv-rails
   enum_help
-  envied (= 0.9.1)
+  env_vars
   factory_bot_rails
   faker
   faraday

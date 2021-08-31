@@ -228,7 +228,7 @@ module ApplicationHelper
   end
 
   def embedded_map_url(query)
-    "#{ENVied.ROOT_URL}/map?q=#{URI.encode_www_form_component(CGI.unescapeHTML(query))}"
+    "#{EnvVars.ROOT_URL}/map?q=#{URI.encode_www_form_component(CGI.unescapeHTML(query))}"
   end
 
   def add_to_packs(*names)
