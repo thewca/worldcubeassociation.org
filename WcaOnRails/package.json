@@ -73,7 +73,7 @@
     "stylelint-config-recommended-scss": "^4.3.0",
     "stylelint-scss": "^3.20.1",
     "webpack-bundle-analyzer": "^4.4.2",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.1.0"
   },
   "scripts": {
     "webpack:analyze": "mkdir -p public/packs && RACK_ENV=test NODE_ENV=production webpack --config config/webpack/production.js --profile --json > public/packs/stats.json && webpack-bundle-analyzer public/packs/stats.json"
