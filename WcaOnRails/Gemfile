@@ -17,7 +17,6 @@ gem 'uglifier'
 gem 'faraday'
 gem 'sdoc', group: :doc
 gem 'dotenv-rails', require: 'dotenv/rails-now'
-gem 'envied', '0.9.1' # https://github.com/thewca/worldcubeassociation.org/issues/4455
 gem 'seedbank'
 gem 'jbuilder'
 gem 'bootstrap-sass'
@@ -47,6 +46,7 @@ gem 'oauth2'
 gem 'openssl'
 gem 'wca_i18n'
 gem 'cookies_eu'
+gem 'env_vars'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953

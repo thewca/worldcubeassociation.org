@@ -133,7 +133,7 @@ class Chef
         # Remove the data bag entry for a pending node.
         def remove_pending_node(fqdn)
           n = nodes.find("fqdn:#{fqdn}").first
-          n.set.delete('tarsnap_pending')
+          n.normal.delete('tarsnap_pending') # gregorbg
           n.save
         end
 

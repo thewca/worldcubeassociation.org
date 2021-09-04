@@ -214,23 +214,23 @@ eo:
       #original_hash: 0664a83
       percent: 'Unuaj %{percent}%'
       attempt_result:
-        #original_hash: 482f137
-        time: 'Plej bona rezulto < %{time}'
-        #original_hash: 3faa63e
-        moves: 'Plej bona rezulto < %{moves}'
-        #original_hash: c3133c2
-        points: 'Plej bona rezulto > %{points}'
+        #original_hash: ac6a282
+        time: '%{round_format} < %{time}'
+        #original_hash: 45db130
+        moves: '%{round_format} < %{moves}'
+        #original_hash: 076911b
+        points: '%{round_format} > %{points}'
     #original_hash: 6e55337
     ranking: 'La unuaj %{ranking} kvalifikas en la sekva raŭndo'
     #original_hash: 7ee969c
     percent: 'La unuaj %{percent}% kvalifikas en la sekva raŭndo'
     attempt_result:
-      #original_hash: b3c8a02
-      time: 'Plej bona resulto < %{time} kvalifikas en la sekva raŭndo'
-      #original_hash: 07bca6c
-      moves: 'Plej bona resulto < %{moves} movoj kvalifikas en la sekva raŭndo'
-      #original_hash: 837083c
-      points: 'Plej bona resulto > %{points} poentoj kvalifikas en la sekva raŭndo'
+      #original_hash: 6173090
+      time: '%{round_format} < %{time} kvalifikas por la sekva raŭndo'
+      #original_hash: 581709d
+      moves: '%{round_format} < %{moves} movoj kvalifikas por la sekva raŭndo'
+      #original_hash: e9f0c92
+      points: '%{round_format} > %{points} poentoj kvalifikas por la sekva raŭndo'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -450,7 +450,7 @@ eo:
         #original_hash: 4a8b6f1
         competitor_limit_reason: Kialo por tiu limo de konkursantoj
         #original_hash: 3c23a67
-        guests_enabled: Gastoj
+        guests_enabled: Akompanantoj
         #original_hash: 089cbfd
         receive_registration_emails: Sciigu min per retmesaĝo kiam iu registriĝas por tiu konkurso
         #original_hash: d4aeed9
@@ -477,6 +477,10 @@ eo:
         refund_policy_percent: Repagota procento
         #original_hash: b332299
         refund_policy_limit_date: Limdato por repagoj
+        #original_hash: 16cf9a4
+        waiting_list_deadline_date: Limdato por akcepti konkursantojn de la atendolisto.
+        #original_hash: 99a9169
+        event_change_deadline_date: Limdato por ĝisdatigo de la konkurseroj de konkursantoj
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Enira kosto por akompanantoj
         #original_hash: 723cad9
@@ -883,6 +887,19 @@ eo:
           repagotaj.
         #original_hash: f64d853
         refund_policy_limit_date: Dato post kiam ne plu eblos repagoj.
+        #original_hash: 664db64
+        waiting_list_deadline_date: >-
+          La dato post kiam oni ne plu akceptos registriĝoj de la atendolisto.
+          Se vi havas limdaton por repagoj, la limdato por esti akceptata ne
+          povas esti antaŭ la limdato por repagoj.
+        #original_hash: 75e6c1f
+        event_change_deadline_date: >-
+          Registritaj konkursantoj povas ĝisdatigi iliajn konkurserojn ĝis tiu
+          tempo kontaktante la organizanta teamo. Tiu limdato ne povas esti
+          antaŭ la limdato por registriĝi. Se vi ne plenumas tiun kampon, tio
+          signifas ke konkursantoj povas aldoni konkurseron ĝis kiam tiu
+          konkursero okazas. Se vi havas surlokajn registriĝojn, vi devas enigi
+          la tagon de la konkurso.
         #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
           Nun, tiu nombro estas nur sciiga, pagoj de akompanantoj ne povas esti
@@ -2096,6 +2113,8 @@ eo:
         with_stripe: Pagita
       #original_hash: ce53c71
       payment_requested_on: 'Pago petita la: %{date}'
+      #original_hash: f5b1b34
+      payment_completed_on: 'Pago efektivigita je: %{date}'
       #original_hash: b25928c
       total: Sumo
       #original_hash: df036fe
@@ -2472,6 +2491,19 @@ eo:
         repagata %{refund_policy_percent} de via registriĝpago.
       #original_hash: 4aca553
       no_refunds: Registriĝpagoj nenial estos repagataj.
+      #original_hash: b016d2f
+      waiting_list_deadline_html: >-
+        Registriĝoj en la atendolisto povas esti akceptitaj ĝis la
+        %{waiting_list_deadline}.
+      #original_hash: 14c5699
+      event_change_deadline_html: >-
+        Se vi estas registrita konkursanto vi povas ŝanĝi viajn konkurserojn ĝis
+        la %{event_change_deadline} kontaktante la organizanta teamo.
+      #original_hash: eff3594
+      event_change_deadline_default_html: >-
+        Ni instigas ĉiujn registriĝi por la konkurseroj en kiuj ili volas
+        partopreni per via enreta registriĝo. Tamen, vi povas aldoni
+        konkurserojn al via registriĝo ĝis kiam la konkursero komencos.
       #original_hash: cf7be5d
       on_the_spot_registration_fee_html: >-
         Surlokaj registriĝoj estos akceptitaj kun baza registriĝkosto de
@@ -2772,6 +2804,24 @@ eo:
       invalid_currency_code: Elektita valutkodo estas nevalida
       #original_hash: 902a278
       advancement_condition_must_be_present_for_all_non_final_rounds: devas havi kvalifikajn kondiĉojn por ĉiuj nefinalaj raŭndoj.
+      #original_hash: da17c99
+      registration_period_after_start: Registriĝperiodo ne povas esti post la komencdato.
+      #original_hash: f6b244b
+      waiting_list_deadline_before_registration_close: Limdato de la atendolisto ne povas esti antaŭ fermiĝo de la registriĝoj.
+      #original_hash: ececa98
+      waiting_list_deadline_before_refund_date: Limdato de la atendolisto ne povas esti antaŭ limdato de repagoj.
+      #original_hash: 44d9902
+      waiting_list_deadline_after_start: Limdato de la atendolisto devas esti antaŭ la komencdato.
+      #original_hash: c3eb1be
+      event_change_deadline_before_registration_close: >-
+        Limdato por ĝisdatigi konkurserojn ne povas esti antaŭ fermiĝo de
+        registriĝoj.
+      #original_hash: bc1ca0f
+      event_change_deadline_after_end_date: Limdato por ĝisdatigi konkurserojn ne povas esti post la konkurso.
+      #original_hash: a2e4fc9
+      event_change_deadline_with_ots: >-
+        Limdato por ĝisdatigi konkurserojn devas esti dum la konkurso se
+        surlokaj registriĝoj eblas.
     new:
       #original_hash: 1208df7
       create_competition: Krei konkurson
@@ -3000,6 +3050,13 @@ eo:
       round: Raŭndo
       #original_hash: 709a232
       name: Nomo
+      rank:
+        #original_hash: d4840ff
+        national: Nacia Rango
+        #original_hash: ca3ff98
+        continent: Kontinenta Rango
+        #original_hash: f6bcce7
+        world: Monda Rango
     scrambles_table:
       #original_hash: 171a060
       group: Grupo
@@ -3867,6 +3924,9 @@ eo:
       create_success: >-
         Kandidatiĝo sukcese submetita! Bonvolu kontroli vian retpoŝtadreson kaj
         atendi ekzamenon de la Estraro de la WCA
+    delete:
+      #original_hash: 6588652
+      confirm_delete: Ĉu vi certas ke vi volas forigi tiun peton de Regiona Organizo?
   contact:
     #original_hash: a34b69f
     title: Kontakta informo

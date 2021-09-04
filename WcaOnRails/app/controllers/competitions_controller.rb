@@ -314,7 +314,7 @@ class CompetitionsController < ApplicationController
     client = create_stripe_oauth_client
     oauth_params = {
       scope: 'read_write',
-      redirect_uri: ENVied.ROOT_URL + competitions_stripe_connect_path,
+      redirect_uri: EnvVars.ROOT_URL + competitions_stripe_connect_path,
       state: @competition.id,
     }
     @authorize_url = client.auth_code.authorize_url(oauth_params)
@@ -344,7 +344,7 @@ class CompetitionsController < ApplicationController
       token_url: '/oauth/token',
     }
 
-    OAuth2::Client.new(ENVied.STRIPE_CLIENT_ID, ENVied.STRIPE_API_KEY, options)
+    OAuth2::Client.new(EnvVars.STRIPE_CLIENT_ID, EnvVars.STRIPE_API_KEY, options)
   end
 
   def clone_competition

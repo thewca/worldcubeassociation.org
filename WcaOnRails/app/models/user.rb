@@ -70,7 +70,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
   devise :two_factor_authenticatable,
-         otp_secret_encryption_key: ENVied.OTP_ENCRYPTION_KEY
+         otp_secret_encryption_key: EnvVars.OTP_ENCRYPTION_KEY
   BACKUP_CODES_LENGTH = 8
   NUMBER_OF_BACKUP_CODES = 10
   devise :two_factor_backupable,
@@ -1031,7 +1031,7 @@ class User < ApplicationRecord
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
-      url: self.wca_id ? Rails.application.routes.url_helpers.person_url(self.wca_id, host: ENVied.ROOT_URL) : "",
+      url: self.wca_id ? Rails.application.routes.url_helpers.person_url(self.wca_id, host: EnvVars.ROOT_URL) : "",
 
       id: self.id,
       wca_id: self.wca_id,
