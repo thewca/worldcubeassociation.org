@@ -6,6 +6,9 @@ export const DNS_VALUE = -2;
  * Converts centiseconds to a human-friendly string.
  */
 function centisecondsToClockFormat(centiseconds) {
+  if (centiseconds == null) {
+    return '?:??:??';
+  }
   if (!Number.isFinite(centiseconds)) {
     throw new Error(
       `Invalid centiseconds, expected positive number, got ${centiseconds}.`,
@@ -25,11 +28,19 @@ function centisecondsToClockFormat(centiseconds) {
  */
 function decodeMbldAttemptResult(value) {
   if (value <= 0) return { solved: 0, attempted: 0, centiseconds: value };
-  const missed = value % 100;
-  const seconds = Math.floor(value / 100) % 1e5;
-  const points = 99 - (Math.floor(value / 1e7) % 100);
-  const solved = points + missed;
-  const attempted = solved + missed;
+  if (value < 1e9) { // New-style result.
+    const missed = value % 100;
+    const seconds = Math.floor(value / 100) % 1e5;
+    const points = 99 - (Math.floor(value / 1e7) % 100);
+    const solved = points + missed;
+    const attempted = solved + missed;
+    const centiseconds = seconds === 99999 ? null : seconds * 100;
+    return { solved, attempted, centiseconds };
+  }
+  // Old-style result.
+  const seconds = value % 1e5;
+  const attempted = Math.floor(value / 1e5) % 100;
+  const solved = 99 - (Math.floor(value / 1e7) % 100);
   const centiseconds = seconds === 99999 ? null : seconds * 100;
   return { solved, attempted, centiseconds };
 }
