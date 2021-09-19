@@ -76,6 +76,12 @@ class Competition < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
+  enum free_guest_entry_status: {
+    unclear: 0,
+    anyone: 1,
+    restricted: 2,
+  }, _prefix: true
+
   CLONEABLE_ATTRIBUTES = %w(
     cityName
     countryId
@@ -102,6 +108,7 @@ class Competition < ApplicationRecord
     on_the_spot_entry_fee_lowest_denomination
     refund_policy_percent
     guests_entry_fee_lowest_denomination
+    free_guest_entry_status
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -905,6 +912,14 @@ class Competition < ApplicationRecord
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
     )
+  end
+
+  def all_guests_allowed?
+    free_guest_entry_status_anyone?
+  end
+
+  def some_guests_allowed?
+    free_guest_entry_status_restricted?
   end
 
   def registration_period_required?

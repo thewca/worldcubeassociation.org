@@ -102,7 +102,11 @@
   <%= t('competitions.competition_info.guests_pay', guests_base_fee: format_money(@competition.guests_base_fee)) %>
   <br>
 <% else %>
-  <%= t('competitions.competition_info.guests_free') %>
+  <% if @competition.all_guests_allowed? %>
+    <%= t('competitions.competition_info.guests_free.anyone') %>
+  <% elsif @competition.some_guests_allowed? %>
+    <%= t('competitions.competition_info.guests_free.restricted') %>
+  <% end %>
   <br>
 <% end %>
 

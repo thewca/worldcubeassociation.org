@@ -101,6 +101,36 @@ RSpec.feature "Competition management" do
       expect(c).not_to be_nil
       expect(c.name).to eq "Name that does end in 2016"
     end
+
+    scenario "change guest entry fee to zero" do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 0)
+      visit edit_competition_path(competition)
+
+      expect(page).to have_text("Display message for free guest entry")
+    end
+
+    scenario "change guest entry fee to non-zero", js: true do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 666)
+      visit edit_competition_path(competition)
+
+      expect(page).not_to have_text("Display message for free guest entry")
+    end
+
+    scenario "select anyone free guest entry status" do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", free_guest_entry_status: 1)
+      visit competition_path(competition)
+      find('div', id: 'show_registration_requirements').click_link('here')
+
+      expect(page).to have_text("Any spectator can attend for free.")
+    end
+
+    scenario "select restricted free guest entry status" do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", free_guest_entry_status: 2)
+      visit competition_path(competition)
+      find('div', id: 'show_registration_requirements').click_link('here')
+
+      expect(page).to have_text("Spectators are only permitted as companions of competitors.")
+    end
   end
 
   context "when signed in as delegate" do

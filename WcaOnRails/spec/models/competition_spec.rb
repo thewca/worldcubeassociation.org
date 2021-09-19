@@ -71,6 +71,19 @@ RSpec.describe Competition do
     expect(competition.guests_entry_fee_required?).to be false
   end
 
+  it "handles free guest entry status" do
+    competition = FactoryBot.create :competition
+
+    # According to the property's enum definition, 1 means anyone and 2 means restricted
+    competition.free_guest_entry_status = 1
+    expect(competition.all_guests_allowed?).to be true
+    expect(competition.some_guests_allowed?).to be false
+
+    competition.free_guest_entry_status = 2
+    expect(competition.all_guests_allowed?).to be false
+    expect(competition.some_guests_allowed?).to be true
+  end
+
   context "when competition has a competitor limit" do
     it "requires competitor limit to be a number" do
       competition = FactoryBot.build :competition, competitor_limit_enabled: true
