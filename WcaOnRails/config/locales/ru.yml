@@ -491,6 +491,8 @@ ru:
         event_change_deadline_date: Крайний срок изменения списка дисциплин
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Взнос для зрителей
+        #original_hash: bb16247
+        free_guest_entry_status: Отображаемое сообщение о бесплатном входе гостей
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Я хочу, чтобы участники сдали головоломки в специальное время до
@@ -697,6 +699,16 @@ ru:
         article: Статья
         #original_hash: 82dabd0
         multimedia: Мультимедиа
+    competition:
+      free_guest_entry_status:
+        #original_hash: 7e54323
+        unclear: >-
+          Ничего не отображать (укажите подробнее в Дополнительных требованиях к
+          регистрации)
+        #original_hash: 694bce4
+        anyone: '"Зрители могут посетить соревнование бесплатно"'
+        #original_hash: 762c509
+        restricted: '"Разрешено приходить только гостям, сопровождающим участников"'
   simple_form:
     #original_hash: 5397e05
     'yes': Да
@@ -919,11 +931,14 @@ ru:
           первого раунда этой дисциплины. Если у вас есть регистрация на месте,
           то срок изменения списка дисциплин должен включать дни регистрации на
           месте.
-        #original_hash: 25a1324
+        #original_hash: 0419547
         guests_entry_fee_lowest_denomination: >-
           Пока что это число только для информации, на этом сайте нельзя
-          принимать взносы для гостей. Если здесь стоит 0, участникам будет
-          показано, что зрители могут прийти бесплатно.
+          принимать взносы для гостей. Если здесь стоит 0, на странице
+          соревнований будет показано выбранное сообщение о политике в отношении
+          гостей.
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2562,8 +2577,11 @@ ru:
       no_on_the_spot_registration: Зарегистрироваться на месте нельзя.
       #original_hash: 4df139d
       guests_pay: 'Взнос для зрителей составляет %{guests_base_fee}.'
-      #original_hash: b6c863e
-      guests_free: Зрители могут прийти бесплатно.
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: Зрители могут посетить соревнование бесплатно.
+        #original_hash: f1e6aef
+        restricted: 'Разрешено приходить только гостям, сопровождающим участников.'
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Соревнование окончено, посмотрите %{link_here}, какие были требования к
