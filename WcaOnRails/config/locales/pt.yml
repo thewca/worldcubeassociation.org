@@ -485,6 +485,8 @@ pt:
           registados
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de entrada para público
+        #original_hash: bb16247
+        free_guest_entry_status: Mensagem visível para entrada gratuita de público
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Quero pedir a competidores que submetam puzzles a uma hora específica
@@ -693,6 +695,16 @@ pt:
         article: Artigo
         #original_hash: 82dabd0
         multimedia: Multimédia
+    competition:
+      free_guest_entry_status:
+        #original_hash: 7e54323
+        unclear: >-
+          Não mostrar nada (e talvez elaborar na seção "Requisitos Extra de
+          Registo")
+        #original_hash: 694bce4
+        anyone: '"Qualquer espectador pode comparecer gratuitamente"'
+        #original_hash: 762c509
+        restricted: '"Espectadores só são permitidos como companhia de competidores"'
   simple_form:
     #original_hash: 5397e05
     'yes': Sim
@@ -905,11 +917,14 @@ pt:
           competidores podem adicionar-se a um evento até esse evento decorrer.
           Se tiver registos no local, este valor deve ser o mesmo dia da
           competição.
-        #original_hash: 25a1324
+        #original_hash: 0419547
         guests_entry_fee_lowest_denomination: >-
           Por agora este número é apenas informativo, taxas para público não
           podem ser geridas por este website. Se isto for colocado a 0, uma
-          frase será mostrada dizendo que público pode aceder gratuitamente.
+          frase à sua escolha será mostrada sobre as regras definidas para o
+          público.
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2544,8 +2559,11 @@ pt:
       guests_pay: >-
         Espetadores podem comparecer pagando uma taxa de entrada de
         %{guests_base_fee}.
-      #original_hash: b6c863e
-      guests_free: Espetadores podem comparecer gratuitamente.
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: Qualquer espectador pode comparecer gratuitamente.
+        #original_hash: f1e6aef
+        restricted: Espectadores só são permitidos como companhia para competidores.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         A competição terminou, clique %{link_here} para mostrar os requisitos de
