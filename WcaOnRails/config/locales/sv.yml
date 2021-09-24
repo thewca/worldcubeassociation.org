@@ -481,6 +481,8 @@ sv:
         event_change_deadline_date: Deadline för tävlande att uppdatera vilka grenar de är anmälda till
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Inträdesavgift för gäster
+        #original_hash: bb16247
+        free_guest_entry_status: Text som ska visas för gratis avgift för gäster
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Jag vill kräva att tävlande lämnar in pussel vid en viss tidpunkt
@@ -687,6 +689,14 @@ sv:
         article: Artikel
         #original_hash: 82dabd0
         multimedia: Multimedia
+    competition:
+      free_guest_entry_status:
+        #original_hash: 7e54323
+        unclear: Visa ingen text (utveckla eventuellt under "Extra anmälningskrav")
+        #original_hash: 694bce4
+        anyone: '"Alla åskådare är välkomna gratis"'
+        #original_hash: 762c509
+        restricted: '"Åskådare är endast tillåtna tillsammans med tävlande"'
   simple_form:
     #original_hash: 5397e05
     'yes': Ja
@@ -898,11 +908,13 @@ sv:
           tomt innebär att tävlande kan lägga till grenar till sin anmälan fram
           tills den grenen hålls. Om ni tillåter anmälningar på plats måste
           detta sättas till samma dag som tävlingen.
-        #original_hash: 25a1324
+        #original_hash: 0419547
         guests_entry_fee_lowest_denomination: >-
           För närvarande är detta nummer endast informativt, gästavgifter kan
           inte hanteras via denna hemsida. Om detta är satt till 0 visas en text
-          som säger att åskådare kan delta gratis.
+          som du väljer om policyn för åskådare.
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2115,6 +2127,8 @@ sv:
         with_stripe: Betalat den
       #original_hash: ce53c71
       payment_requested_on: 'Betalning begärd den: %{date}'
+      #original_hash: f5b1b34
+      payment_completed_on: 'Betalning slutförd: %{date}'
       #original_hash: b25928c
       total: Totalt
       #original_hash: df036fe
@@ -2511,8 +2525,11 @@ sv:
       no_on_the_spot_registration: Inga anmälningar på plats accepteras.
       #original_hash: 4df139d
       guests_pay: 'Åskådare kan delta mot en avgift på %{guests_base_fee}.'
-      #original_hash: b6c863e
-      guests_free: Åskådare kan delta gratis.
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: Alla åskådare är välkomna gratis
+        #original_hash: f1e6aef
+        restricted: Åskådare är endast tillåtna tillsammans med tävlande.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Tävlingen är över, klicka %{link_here} för att visa anmälningskraven som
@@ -3046,6 +3063,13 @@ sv:
       round: Omgång
       #original_hash: 709a232
       name: Namn
+      rank:
+        #original_hash: d4840ff
+        national: Nationell Ranking
+        #original_hash: ca3ff98
+        continent: Kontinent-ranking
+        #original_hash: f6bcce7
+        world: Världsranking
     scrambles_table:
       #original_hash: 171a060
       group: Grupp
@@ -3906,6 +3930,11 @@ sv:
       create_success: >-
         Ansökan har skickats! Kolla din e-post och vänta tills WCA:s styrelse
         granskar ansökan
+    delete:
+      #original_hash: 6588652
+      confirm_delete: >-
+        Är du säker på att du vill radera den här förfrågan om en Regional
+        Organization?
   contact:
     #original_hash: a34b69f
     title: Kontaktinformation
