@@ -1117,6 +1117,7 @@ en:
         message_html: "Your registration for %{comp_name} has been deleted. Possible causes are:"
         #context: this key is one of the reasons explaining why a registration could be deleted
         causes:
+          competition_cancelled: "The competition has been cancelled"
           missing_info: "You did not submit all the required details"
           incomplete: "You didn't meet the registration criteria (for example, paying the registration fee in advance or meeting the qualifying times for events)"
           registrations_full: "The competitor limit has been reached and there are no more spots available"
