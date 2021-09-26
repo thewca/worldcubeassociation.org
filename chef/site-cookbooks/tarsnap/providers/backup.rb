@@ -30,7 +30,7 @@ action :create do
   existing_entry = lookup_node_entry('backups', new_resource.name)
 
   if existing_entry.nil? || backup_entry != existing_entry
-    node.set['tarsnap']['backups'][new_resource.name] = backup_entry
+    node.normal['tarsnap']['backups'][new_resource.name] = backup_entry # gregorbg
     new_resource.updated_by_last_action(true)
     node.save unless Chef::Config[:solo]
     update_config_file

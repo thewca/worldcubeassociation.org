@@ -117,8 +117,8 @@ after "development:users" do
       delegates: [delegate],
       organizers: User.all.sample(2),
       use_wca_registration: true,
-      registration_open: 2.weeks.ago,
-      registration_close: 1.week.ago,
+      registration_open: 2.weeks.before(day),
+      registration_close: 1.week.before(day),
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
     )

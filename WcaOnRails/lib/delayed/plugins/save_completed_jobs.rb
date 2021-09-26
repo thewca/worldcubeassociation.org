@@ -5,13 +5,11 @@ module Delayed
     class SaveCompletedJobs < Delayed::Plugin
       callbacks do |lifecycle|
         lifecycle.around(:invoke_job) do |job, *args, &block|
-          begin
-            block.call(job, *args)
-            Delayed::Plugins::SaveCompletedJobs.save_completed_job(job)
-          rescue Exception => e # rubocop:disable Lint/RescueException
-            JobFailureMailer.notify_admin_of_job_failure(job, e).deliver_now
-            raise e
-          end
+          block.call(job, *args)
+          Delayed::Plugins::SaveCompletedJobs.save_completed_job(job)
+        rescue Exception => e # rubocop:disable Lint/RescueException
+          JobFailureMailer.notify_admin_of_job_failure(job, e).deliver_now
+          raise e
         end
       end
 

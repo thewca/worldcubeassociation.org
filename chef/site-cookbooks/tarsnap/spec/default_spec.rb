@@ -23,7 +23,7 @@ describe 'tarsnap::default' do
     ChefSpec::ChefRunner.new(run_options) do |node|
       node.automatic_attrs['platform'] = 'debian'
       node.automatic_attrs['platform_version'] = '7.0'
-      node.set['tarsnap']['install_packages'] = [ 'source_dependency' ]
+      node.normal['tarsnap']['install_packages'] = [ 'source_dependency' ] # gregorbg
     end
   end
   let(:chef_run) do

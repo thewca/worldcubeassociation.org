@@ -522,6 +522,7 @@ select.input-xs {
 .heading-as-link {
   &:hover {
     cursor: pointer;
+    pointer-events: auto;
     .panel-info > & {
       @extend a, .list-group-item-info, :hover;
     }
@@ -546,4 +547,12 @@ select.input-xs {
 
 img.about-page-image {
   width: 100%;
+}
+
+.cookies-eu {
+  // Stick the banner to page bottom on all screen sizes
+  position: fixed !important;
+}
+.leaflet-container {
+  user-select: none;
 }

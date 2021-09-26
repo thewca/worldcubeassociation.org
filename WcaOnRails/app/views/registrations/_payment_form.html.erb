@@ -32,7 +32,7 @@
     // From https://stripe.com/docs/stripe-js/reference#checkout-options-locale
     var supported_locales = ['da', 'de', 'en', 'es', 'fi', 'fr', 'it', 'ja', 'nb', 'nl', 'pl', 'pt', 'sv', 'zh'];
     var wca_locale = '<%= I18n.locale %>';
-    var stripe = Stripe('<%= ENVied.STRIPE_PUBLISHABLE_KEY %>', {
+    var stripe = Stripe('<%= EnvVars.STRIPE_PUBLISHABLE_KEY %>', {
       locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
       stripeAccount: '<%= @competition.connected_stripe_account_id %>',
     });

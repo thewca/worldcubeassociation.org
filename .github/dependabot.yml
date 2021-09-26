@@ -6,93 +6,29 @@ updates:
     interval: monthly
   open-pull-requests-limit: 10
   ignore:
-  - dependency-name: envied
-    versions:
-    - "> 0.9.3, < 0.10"
-  - dependency-name: font-awesome-sass
-    versions:
-    - "> 5.12.0"
+  # compatibility with Ruby 2.6
   - dependency-name: rails
     versions:
-    - "> 5.2.3"
-  - dependency-name: rspec-rails
+    - "> 5.2"
+  # compatibility with Ruby 2.6
+  - dependency-name: rubocop
     versions:
-    - "> 3.8.2"
-  - dependency-name: stripe
+      - "> 0.81"
+  # https://github.com/thewca/worldcubeassociation.org/pull/3644
+  - dependency-name: seedbank
     versions:
-    - 5.29.0
-    - 5.31.0
-  - dependency-name: money-rails
-    versions:
-    - 1.13.4
-  - dependency-name: irb
-    versions:
-    - 1.3.2
-  - dependency-name: recaptcha
-    versions:
-    - 5.6.0
+    - 0.5.0
 - package-ecosystem: npm
   directory: "/WcaOnRails"
   schedule:
     interval: monthly
   open-pull-requests-limit: 10
   ignore:
-  - dependency-name: jquery
-    versions:
-    - "> 3.4.1"
-  - dependency-name: leaflet-geosearch
-    versions:
-    - "> 3.0.1"
+  # We plan on migrating to Fomantic anyways, so no need to bother upgrading bootstrap.
   - dependency-name: react-bootstrap
     versions:
-    - "> 0.33.1"
-  - dependency-name: css-loader
-    versions:
-    - 5.2.0
-    - 5.2.1
+    - ">= 1.0.0"
+  # We're staying on Webpack 4 for the time being.
   - dependency-name: webpack
     versions:
-    - 5.17.0
-    - 5.19.0
-    - 5.21.2
-    - 5.22.0
-    - 5.23.0
-    - 5.24.2
-    - 5.24.3
-    - 5.25.1
-    - 5.27.1
-    - 5.28.0
-    - 5.30.0
-    - 5.31.2
-  - dependency-name: core-js
-    versions:
-    - 3.10.0
-    - 3.10.1
-    - 3.8.3
-    - 3.9.0
-    - 3.9.1
-  - dependency-name: "@babel/preset-env"
-    versions:
-    - 7.13.12
-  - dependency-name: stylelint
-    versions:
-    - 13.10.0
-    - 13.11.0
-    - 13.12.0
-    - 13.9.0
-  - dependency-name: y18n
-    versions:
-    - 4.0.1
-  - dependency-name: "@babel/plugin-proposal-json-strings"
-    versions:
-    - 7.12.13
-  - dependency-name: whatwg-fetch
-    versions:
-    - 3.6.1
-  - dependency-name: eslint
-    versions:
-    - 7.18.0
-    - 7.19.0
-  - dependency-name: "@rails/ujs"
-    versions:
-    - 6.1.1
+    - ">= 5.0.0"

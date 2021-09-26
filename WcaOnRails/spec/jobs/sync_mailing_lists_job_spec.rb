@@ -68,6 +68,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wrt_leader = FactoryBot.create :user, :wrt_member, team_leader: true
     wrt_member = FactoryBot.create :user, :wrt_member, team_leader: false
     wst_member = FactoryBot.create :user, :wst_member, team_leader: false
+    wst_admin_member = FactoryBot.create :user, :wst_admin_member, team_leader: false
     wac_member = FactoryBot.create :user, :wac_member, team_leader: false
     wac_leader = FactoryBot.create :user, :wac_member, team_leader: true
     expect(GsuiteMailingLists).to receive(:sync_group).with(
@@ -157,6 +158,12 @@ RSpec.describe SyncMailingListsJob, type: :job do
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "software@worldcubeassociation.org",
       a_collection_containing_exactly(wst_member.email),
+    )
+
+    # software-admin@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "software-admin@worldcubeassociation.org",
+      a_collection_containing_exactly(wst_admin_member.email),
     )
 
     stub_const "TranslationsController::VERIFIED_TRANSLATORS_BY_LOCALE", ({

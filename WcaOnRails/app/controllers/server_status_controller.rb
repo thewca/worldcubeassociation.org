@@ -89,7 +89,7 @@ class RegulationsCheck < StatusCheck
 end
 
 class CertificateCheck < StatusCheck
-  CERTIFICATE_PATH = "#{Rails.root}/../secrets/https/#{URI.parse(ENVied.ROOT_URL).host}.chained.crt"
+  CERTIFICATE_PATH = "#{Rails.root}/../secrets/https/#{URI.parse(EnvVars.ROOT_URL).host}.chained.crt"
   # We want to be warned 10 days before certificate's renewal
   CERTIFICATE_RENEW_DELAY = 10
 

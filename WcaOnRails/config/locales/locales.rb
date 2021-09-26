@@ -95,6 +95,10 @@ module Locales
       "flag_id": "si",
       "name": "Slovensko",
     },
+    "sv": {
+      "flag_id": "se",
+      "name": "Svenska",
+    },
     "th": {
       "flag_id": "th",
       "name": "ภาษาไทย",

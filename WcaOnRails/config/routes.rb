@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   post 'profile/enable-2fa' => 'users#enable_2fa'
   post 'profile/disable-2fa' => 'users#disable_2fa'
   post 'profile/generate-2fa-backup' => 'users#regenerate_2fa_backup_codes'
+  post 'profile/acknowledge-cookies' => 'users#acknowledge_cookies'
 
   get 'profile/claim_wca_id' => 'users#claim_wca_id'
   get 'profile/claim_wca_id/select_nearby_delegate' => 'users#select_nearby_delegate'
@@ -156,9 +157,10 @@ Rails.application.routes.draw do
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
   get 'tutorial' => redirect('/education', status: 302)
 
-  resources :regional_organizations, only: [:new, :update, :edit], path: '/regional-organizations'
+  resources :regional_organizations, only: [:new, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
   get 'admin/regional-organizations' => 'regional_organizations#admin'
+  delete 'admin/regional-organizations' => 'regional_organizations#destroy'
   patch 'regional-organizations/:id/edit' => 'regional_organizations#update'
   post 'regional-organizations/new' => 'regional_organizations#create'
 

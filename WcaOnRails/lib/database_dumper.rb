@@ -78,6 +78,7 @@ module DatabaseDumper
           refund_policy_percent
           refund_policy_limit_date
           guests_entry_fee_lowest_denomination
+          free_guest_entry_status
           early_puzzle_submission
           early_puzzle_submission_reason
           qualification_results
@@ -89,6 +90,8 @@ module DatabaseDumper
           main_event_id
           cancelled_at
           cancelled_by
+          waiting_list_deadline_date
+          event_change_deadline_date
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -657,6 +660,7 @@ module DatabaseDumper
           confirmation_sent_at
           confirmation_token
           consumed_timestep
+          cookies_acknowledged
           current_sign_in_ip
           encrypted_otp_secret
           encrypted_otp_secret_iv

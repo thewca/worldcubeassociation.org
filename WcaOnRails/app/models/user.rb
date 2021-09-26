@@ -30,6 +30,8 @@ class User < ApplicationRecord
   has_many :preferred_events, through: :user_preferred_events, source: :event
   has_many :bookmarked_competitions, dependent: :destroy
   has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
+  has_many :competitions_announced, foreign_key: "announced_by", class_name: "Competition"
+  has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
@@ -68,7 +70,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
   devise :two_factor_authenticatable,
-         otp_secret_encryption_key: ENVied.OTP_ENCRYPTION_KEY
+         otp_secret_encryption_key: EnvVars.OTP_ENCRYPTION_KEY
   BACKUP_CODES_LENGTH = 8
   NUMBER_OF_BACKUP_CODES = 10
   devise :two_factor_backupable,
@@ -236,6 +238,13 @@ class User < ApplicationRecord
     end
   end
 
+  # workaround / very nasty hotfix for Rails 6 issue with rollback triggers.
+  # TODO: remove once https://github.com/rails/rails/issues/36965 is fixed.
+  after_validation do
+    # we have to do _some_ non-zero modifications to the model, otherwise after_rollback won't trigger
+    self.touch if self.claiming_wca_id && self.was_incorrect_wca_id_claim && persisted? && !destroyed?
+  end
+
   after_rollback do
     # This is a bit of a mess. If the user makes an incorrect WCA ID claim,
     # then we want to incrememnt our count of incorrect claims. We can't update
@@ -313,7 +322,9 @@ class User < ApplicationRecord
     if wca_id_change && wca_id.present?
       dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
       if dummy_user
-        _mounter(:avatar).uploader.override_column_value = dummy_user.read_attribute :avatar
+        _mounter(:avatar).uploaders.each do |uploader|
+          uploader.override_column_value = dummy_user.read_attribute :avatar
+        end
         dummy_user.destroy!
       end
     end
@@ -521,6 +532,10 @@ class User < ApplicationRecord
     team_member?(Team.wst)
   end
 
+  def software_team_admin?
+    team_member?(Team.wst_admin)
+  end
+
   def wac_team?
     team_member?(Team.wac)
   end
@@ -568,7 +583,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    software_team?
+    Rails.env.production? ? software_team_admin? : software_team?
   end
 
   def any_kind_of_delegate?
@@ -585,6 +600,10 @@ class User < ApplicationRecord
 
   def senior_delegate?
     delegate_status == "senior_delegate"
+  end
+
+  def is_senior_delegate_for?(user)
+    user.senior_delegate == self
   end
 
   def banned?
@@ -849,6 +868,18 @@ class User < ApplicationRecord
       # That's the only field we want to be able to edit for these accounts
       return %i(remove_avatar)
     end
+    fields += editable_personal_preference_fields(user)
+    fields += editable_competitor_info_fields(user)
+    fields += editable_avatar_fields(user)
+    # Delegate Status Fields
+    if admin? || board_member? || senior_delegate?
+      fields += %i(delegate_status senior_delegate_id region)
+    end
+    fields
+  end
+
+  private def editable_personal_preference_fields(user)
+    fields = Set.new
     if user == self
       fields += %i(
         password password_confirmation
@@ -859,33 +890,43 @@ class User < ApplicationRecord
         fields += %i(receive_delegate_reports)
       end
     end
-    if admin? || board_member? || senior_delegate?
-      fields += %i(delegate_status senior_delegate_id region)
-    end
-    if admin? || any_kind_of_delegate? || results_team?
-      fields += %i(
-        unconfirmed_wca_id
-        avatar avatar_cache
-      )
-      if !user.is_special_account?
-        fields += %i(wca_id)
-      end
-    end
-    if user == self || admin? || any_kind_of_delegate? || results_team?
-      cannot_edit_data = !!cannot_edit_data_reason_html(user)
-      if !cannot_edit_data
+    fields
+  end
+
+  private def editable_competitor_info_fields(user)
+    fields = Set.new
+    if user == self || admin? || any_kind_of_delegate? || results_team? || communication_team?
+      unless cannot_edit_data_reason_html(user)
         fields += %i(name dob gender country_iso2)
       end
       fields += CLAIM_WCA_ID_PARAMS
+    end
+    if user.wca_id.blank? && organizer_for?(user)
+      fields << :name
+    end
+    if admin? || any_kind_of_delegate? || results_team? || communication_team?
+      fields += %i(
+        unconfirmed_wca_id
+      )
+      unless user.is_special_account?
+        fields += %i(wca_id)
+      end
+    end
+    fields
+  end
+
+  private def editable_avatar_fields(user)
+    fields = Set.new
+    if admin? || results_team?
+      fields += %i(avatar avatar_cache)
+    end
+    if user == self || admin? || results_team? || is_senior_delegate_for?(user)
       fields += %i(
         pending_avatar pending_avatar_cache remove_pending_avatar
         avatar_crop_x avatar_crop_y avatar_crop_w avatar_crop_h
         pending_avatar_crop_x pending_avatar_crop_y pending_avatar_crop_w pending_avatar_crop_h
         remove_avatar
       )
-    end
-    if user.wca_id.blank? && organizer_for?(user)
-      fields << :name
     end
     fields
   end
@@ -990,7 +1031,7 @@ class User < ApplicationRecord
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
-      url: self.wca_id ? Rails.application.routes.url_helpers.person_url(self.wca_id, host: ENVied.ROOT_URL) : "",
+      url: self.wca_id ? Rails.application.routes.url_helpers.person_url(self.wca_id, host: EnvVars.ROOT_URL) : "",
 
       id: self.id,
       wca_id: self.wca_id,
@@ -1124,6 +1165,12 @@ class User < ApplicationRecord
   # These includes any teams, organizers, delegates
   # Note: Someone can Delegate a competition without ever being a Delegate.
   def is_special_account?
-    self.teams.any? || !self.organized_competitions.empty?|| any_kind_of_delegate? || !delegated_competitions.empty? || !trainee_delegated_competitions.empty?
+    self.teams.any? ||
+      !self.organized_competitions.empty? ||
+      any_kind_of_delegate? ||
+      !delegated_competitions.empty? ||
+      !trainee_delegated_competitions.empty? ||
+      !competitions_announced.empty? ||
+      !competitions_results_posted.empty?
   end
 end

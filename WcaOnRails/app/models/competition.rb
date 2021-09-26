@@ -76,6 +76,12 @@ class Competition < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
+  enum free_guest_entry_status: {
+    unclear: 0,
+    anyone: 1,
+    restricted: 2,
+  }, _prefix: true
+
   CLONEABLE_ATTRIBUTES = %w(
     cityName
     countryId
@@ -102,6 +108,7 @@ class Competition < ApplicationRecord
     on_the_spot_entry_fee_lowest_denomination
     refund_policy_percent
     guests_entry_fee_lowest_denomination
+    free_guest_entry_status
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -141,6 +148,8 @@ class Competition < ApplicationRecord
     cancelled_by
     results_posted_by
     main_event_id
+    waiting_list_deadline_date
+    event_change_deadline_date
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/.freeze
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/.freeze
@@ -152,7 +161,7 @@ class Competition < ApplicationRecord
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
-  validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH },
+  validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                  format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
@@ -213,6 +222,7 @@ class Competition < ApplicationRecord
   MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 28
 
   # Time in seconds from 6.2.1 in https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
+  # 48 hours
   REGISTRATION_OPENING_EARLIEST = 172_800
 
   validates :cityName, city: true
@@ -239,9 +249,13 @@ class Competition < ApplicationRecord
   # Only validate on update: nobody can confirm competition on creation.
   # The only exception to this is within tests, in which case we actually don't want to run this validation.
   validate :schedule_must_match_rounds, if: :confirmed_at_changed?, on: :update
+  # Competitions after 2018-12-31 will have this check. All comps from 2019 onwards required a schedule.
+  # Check added per "Support for cancelled competitions" and adding some old cancelled competitions to the website without a schedule.
   def schedule_must_match_rounds
-    unless has_any_round_per_event? && schedule_includes_rounds?
-      errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
+    if start_date.present? && start_date > Date.new(2018, 12, 31)
+      unless has_any_round_per_event? && schedule_includes_rounds?
+        errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
+      end
     end
   end
 
@@ -716,7 +730,7 @@ class Competition < ApplicationRecord
   end
 
   def internal_website
-    Rails.application.routes.url_helpers.competition_url(self, host: ENVied.ROOT_URL)
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
   end
 
   def managers
@@ -924,6 +938,14 @@ class Competition < ApplicationRecord
     )
   end
 
+  def all_guests_allowed?
+    free_guest_entry_status_anyone?
+  end
+
+  def some_guests_allowed?
+    free_guest_entry_status_restricted?
+  end
+
   def registration_period_required?
     use_wca_registration? || (confirmed? && created_at.present? && created_at > Date.new(2018, 9, 13))
   end
@@ -934,6 +956,10 @@ class Competition < ApplicationRecord
 
   def pending_results_or_report(days)
     self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
+  end
+
+  def has_event_change_deadline_date?
+    start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
   private def unpack_dates
@@ -973,9 +999,46 @@ class Competition < ApplicationRecord
     if number_of_days > MAX_SPAN_DAYS
       errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS))
     end
+  end
 
+  validate :registration_dates_must_be_valid
+  private def registration_dates_must_be_valid
     if refund_policy_limit_date? && refund_policy_limit_date > start_date
       errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start'))
+    end
+
+    if registration_period_required? && registration_open? && registration_close? && (registration_open >= start_date || registration_close >= start_date)
+      errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
+    end
+  end
+
+  validate :waiting_list_dates_must_be_valid
+  private def waiting_list_dates_must_be_valid
+    if waiting_list_deadline_date?
+      if waiting_list_deadline_date < registration_close
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close'))
+      end
+      if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date'))
+      end
+      if waiting_list_deadline_date >= start_date
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_start'))
+      end
+    end
+  end
+
+  validate :event_change_dates_must_be_valid
+  private def event_change_dates_must_be_valid
+    if event_change_deadline_date?
+      if event_change_deadline_date < registration_close
+        errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close'))
+      end
+      if on_the_spot_registration? && event_change_deadline_date < start_date
+        errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots'))
+      end
+      if event_change_deadline_date > end_date.to_datetime.end_of_day
+        errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date'))
+      end
     end
   end
 
@@ -1579,7 +1642,7 @@ class Competition < ApplicationRecord
   def serializable_hash(options = nil)
     {
       class: self.class.to_s.downcase,
-      url: Rails.application.routes.url_helpers.competition_url(self, host: ENVied.ROOT_URL),
+      url: Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL),
 
       id: id,
       name: name,

@@ -257,6 +257,8 @@ it:
     333fm: 1 ora
     #original_hash: cc7d8bb
     333mbf: '10:00.00 a cubo, fino a 60:00.00'
+    #original_hash: da39a3e
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: Mondo
@@ -1419,7 +1421,7 @@ it:
       forum: Forum
       #original_hash: 3ad28c0
       teams: 'Team, Committee e Council'
-      #original_hash: a979ffc
+      #original_hash: 7981fb3
       education: Guide per l'apprendimento
       #original_hash: a34b69f
       contact: Contatti
@@ -1679,7 +1681,7 @@ it:
         not_accepted_html: >-
           Ti sei registrato, ma la tua registrazione non è stata ancora
           accettata.
-        #original_hash: 3724e7c
+        #original_hash: d4087ee
         more_info_html: >-
           Per favore, visita il <a href=%{competition_url}>sito web della
           competizione</a> per maggiori informazioni e requisiti di
@@ -1777,6 +1779,12 @@ it:
         %{here}!
       #original_hash: 29e25b5
       have_wca_id_html: 'Il tuo WCA ID è %{link_id}.'
+      #original_hash: bf654e1
+      account_is_special: >-
+        L'account e il WCA ID sono collegati a uno o più ruoli speciali WCA (es.
+        delegati, organizzatori, team members) e non possono essere cancellati.
+        Contatta il WCA Results Team per trasferire il WCA ID ad un altro
+        account.
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -1952,12 +1960,11 @@ it:
         Il WCA ID %{link_id} è già assegnato a un altro account. Se credi sia
         stato assegnato erroneamente, contatta il <a href='%{link_delegate}'
         target='_blank'>delegato WCA</a> della tua zona.
-      #original_hash: d26bfdc
-      missing_dob_html: 'Il WCA ID %{link_id} non ha alcuna data di nascita assegnata.'
-      #original_hash: 5be6803
-      contact_results_team_html: >-
-        Contatta il <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> per risolvere il problema.
+      #original_hash: 498dc1e
+      missing_dob_html: >-
+        Il WCA ID %{link_id} non ha alcuna data di nascita assegnata. Contatta
+        il WCA Results Team tramite <a href="%{dob_form_path}">questo
+        modulo</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'Il WCA ID %{link_id} non esiste.'
   registrations:
@@ -2639,6 +2646,10 @@ it:
     index:
       #original_hash: db98a68
       title: Competizioni
+      #original_hash: 63254de
+      disclaimer: >-
+        Ricorda che a causa della pandemia di COVID-19, in molti paesi non è
+        ancora possibile organizzare competizioni.
       #original_hash: 6a72085
       all_events: Tutti
       #original_hash: 6d76b81
@@ -2923,6 +2934,12 @@ it:
       limit: Limite
       #original_hash: 855bd26
       competitors: Partecipanti
+      #original_hash: c5497bc
+      events: Eventi
+      #original_hash: 50cb854
+      show_events: Mostra eventi
+      #original_hash: 0df66f7
+      hide_events: Nascondi eventi
     #original_hash: 06b01c4
     announcements: Annunci
     #original_hash: a2b80b0
@@ -3073,6 +3090,8 @@ it:
         register: Registrati
         #original_hash: 855bd26
         competitors: Partecipanti
+        #original_hash: c4622c3
+        scrambles: Scramble
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: Profilo WCA
@@ -3082,6 +3101,11 @@ it:
       round: Round
       #original_hash: 709a232
       name: Nome
+    scrambles_table:
+      #original_hash: 171a060
+      group: Group
+      #original_hash: b7126cd
+      scramble: Scramble
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3621,11 +3645,11 @@ it:
       preparativi necessari .</p>
     #original_hash: 1aa5344
     contributing_title: Dare un contributo
-    #original_hash: e64beb7
+    #original_hash: 538a82f
     contributing_content_html: >-
-      Puoi effettuare una donazione tramite carta di credito via Guidestar <a
-      href="https://www.nfggive.com/guidestar/82-3825954">qui</a>. Se preferisci
-      scriverci un assegno, puoi scrivere a:
+      Puoi effettuare una donazione tramite carta di credito via Guidestar
+      %{here_credit}, o tramite Paypal %{here_paypal}. Se preferisci scriverci
+      un assegno, puoi scrivere a:
     #original_hash: 2af9b71
     tax_deductible_note: Negli Stati Uniti le donazioni sono detraibili dalle tasse.
     #original_hash: 6026d35
@@ -3644,6 +3668,8 @@ it:
         avere competizioni sempre più piacevoli in tutto il mondo.
       #original_hash: 24c87db
       donate_credit: Dona tramite carta di credito
+      #original_hash: 0e5a9c3
+      donate_paypal: Dona tramite PayPal
       #original_hash: 96d77f3
       donate_other: Altri metodi di donazione
     structure:
@@ -3813,6 +3839,9 @@ it:
       banned:
         #original_hash: d30e2e5
         name: Partecipanti Squalificati
+      wct_china:
+        #original_hash: ed5b65a
+        name: WCT China
       #original_hash: f8c3f3c
       operations_html: 'Le operazioni quotidiane sono gestite dai %{committees_and_teams} WCA.'
       #original_hash: 0e7a036
@@ -3820,6 +3849,9 @@ it:
       probation:
         #original_hash: 1dd6e3b
         name: Delegati sotto osservazione
+      wst_admin:
+        #original_hash: d4112d2
+        name: Software admins
       #original_hash: 7e849d2
       delegates_html: >-
         <p>Il <strong>Delegato WCA</strong> è un ruolo definito nelle WCA
@@ -3866,15 +3898,19 @@ it:
     codeofethics: Codice Etico
     #original_hash: 2643980
     codeofconduct: Codice di Condotta
+    #original_hash: 4f05e8f
+    finances: Finanze
   education:
-    #original_hash: 41701c2
-    title: Documenti WCA per l'apprendimento
+    #original_hash: 746e863
+    title: Guide WCA per l'apprendimento
     #original_hash: 081d65d
     description: >-
       Il WQAC ha pubblicato per la community vari documenti che puoi scaricare
       qui sotto.
     #original_hash: d0a3812
     competitor_tutorial: Tutorial per partecipanti
+    #original_hash: 9561bfc
+    judge_tutorial: Tutorial per i nuovi giudici
     #original_hash: 5ca0558
     certificates: Template per attestati WCT
     #original_hash: f580987
@@ -4509,9 +4545,9 @@ it:
       title: Documenti raccomandati
       #original_hash: bfbd4bb
       staff: Creazione dello staff
-      #original_hash: c346846
-      emails: Invio delle email pre-competizione
-      #original_hash: 3212cc7
+      #original_hash: 4735583
+      emails: Email
+      #original_hash: 8e7ca09
       running-systems: Gestione di runner e giudici
       #original_hash: 2b31c89
       new-competitors: Accogliere partecipanti alla prima gara
@@ -4560,12 +4596,17 @@ it:
     paragraph3:
       #original_hash: 00d3bf8
       title: Termine massimo per l'annuncio di una competizione
-      #original_hash: 3613823
+      #original_hash: 66bf437
       content_html: >-
         La competizione deve essere annunciata almeno 28 giorni prima
         dell'inizio della stessa (vedi <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisiti
-        Competizione</a>).
+        Competizione</a>). Un preavviso di soli 30 giorni è spesso
+        insufficiente. Prendi in considerazione tutte le operazioni necessarie
+        per una buona organizzazione, e calcola il giusto tempo per portarle a
+        termine. Inoltre il WCAT avrà bisogno di tempo per valutare la tua
+        competizione prima di annunciarla. Rivolgiti al tuo delegato se non sei
+        sicuro di quanto tempo sia necessario per la tua competizione.
     paragraph4:
       #original_hash: b6dca56
       title: Criterio di prossimità

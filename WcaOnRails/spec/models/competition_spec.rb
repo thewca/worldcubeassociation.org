@@ -71,6 +71,19 @@ RSpec.describe Competition do
     expect(competition.guests_entry_fee_required?).to be false
   end
 
+  it "handles free guest entry status" do
+    competition = FactoryBot.create :competition
+
+    # According to the property's enum definition, 1 means anyone and 2 means restricted
+    competition.free_guest_entry_status = 1
+    expect(competition.all_guests_allowed?).to be true
+    expect(competition.some_guests_allowed?).to be false
+
+    competition.free_guest_entry_status = 2
+    expect(competition.all_guests_allowed?).to be false
+    expect(competition.some_guests_allowed?).to be true
+  end
+
   context "when competition has a competitor limit" do
     it "requires competitor limit to be a number" do
       competition = FactoryBot.build :competition, competitor_limit_enabled: true
@@ -132,7 +145,7 @@ RSpec.describe Competition do
   end
 
   it "requires that registration_open be before registration_close" do
-    competition = FactoryBot.build :competition, name: "Foo Test 2015", registration_open: 1.week.ago, registration_close: 2.weeks.ago, use_wca_registration: true
+    competition = FactoryBot.build :competition, name: "Foo Test 2015", starts: 1.month.from_now, ends: 1.month.from_now, registration_open: 1.week.ago, registration_close: 2.weeks.ago, use_wca_registration: true
     expect(competition).to be_invalid_with_errors(registration_close: ["registration close must be after registration open"])
   end
 
@@ -224,6 +237,100 @@ RSpec.describe Competition do
     )
   end
 
+  it "requires the registration period to be before the competition" do
+    competition = FactoryBot.build :competition, name: "Foo Test 2015", starts: 1.month.from_now, ends: 1.month.from_now, registration_open: 2.months.from_now, registration_close: 3.months.from_now, use_wca_registration: true
+    expect(competition).to be_invalid_with_errors(
+      registration_close: [I18n.t('competitions.errors.registration_period_after_start')],
+    )
+  end
+
+  it "requires the waiting list deadline to be after the registration close" do
+    competition = FactoryBot.build :competition,
+                                   name: "Foo Test 2015",
+                                   starts: 1.month.from_now,
+                                   ends: 1.month.from_now,
+                                   registration_open: 1.month.ago,
+                                   registration_close: 1.week.from_now,
+                                   use_wca_registration: true,
+                                   waiting_list_deadline_date: 1.day.from_now
+    expect(competition).to be_invalid_with_errors(
+      waiting_list_deadline_date: [I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')],
+    )
+  end
+
+  it "requires the waiting list deadline to be after the refund deadline" do
+    competition = FactoryBot.build :competition,
+                                   name: "Foo Test 2015",
+                                   starts: 1.month.from_now,
+                                   ends: 1.month.from_now,
+                                   registration_open: 1.month.ago,
+                                   registration_close: 1.week.from_now,
+                                   use_wca_registration: true,
+                                   waiting_list_deadline_date: 2.weeks.from_now,
+                                   refund_policy_limit_date: 3.weeks.from_now
+    expect(competition).to be_invalid_with_errors(
+      waiting_list_deadline_date: [I18n.t('competitions.errors.waiting_list_deadline_before_refund_date')],
+    )
+  end
+
+  it "requires the waiting list deadline to be before the competition start" do
+    competition = FactoryBot.build :competition,
+                                   name: "Foo Test 2015",
+                                   starts: 1.month.from_now,
+                                   ends: 1.month.from_now,
+                                   registration_open: 1.month.ago,
+                                   registration_close: 1.week.from_now,
+                                   use_wca_registration: true,
+                                   waiting_list_deadline_date: 2.months.from_now
+    expect(competition).to be_invalid_with_errors(
+      waiting_list_deadline_date: [I18n.t('competitions.errors.waiting_list_deadline_after_start')],
+    )
+  end
+
+  it "requires the event change deadline to be after the registration close" do
+    competition = FactoryBot.build :competition,
+                                   name: "Foo Test 2015",
+                                   starts: 1.month.from_now,
+                                   ends: 1.month.from_now,
+                                   registration_open: 1.month.ago,
+                                   registration_close: 1.week.from_now,
+                                   use_wca_registration: true,
+                                   event_change_deadline_date: 1.day.from_now
+    expect(competition).to be_invalid_with_errors(
+      event_change_deadline_date: [I18n.t('competitions.errors.event_change_deadline_before_registration_close')],
+    )
+  end
+
+  it "requires the event change deadline to be before the competition ends" do
+    competition = FactoryBot.build :competition,
+                                   name: "Foo Test 2015",
+                                   starts: 1.month.from_now,
+                                   ends: 1.month.from_now,
+                                   registration_open: 1.month.ago,
+                                   registration_close: 1.week.from_now,
+                                   use_wca_registration: true,
+                                   event_change_deadline_date: 2.months.from_now
+    expect(competition).to be_invalid_with_errors(
+      event_change_deadline_date: [I18n.t('competitions.errors.event_change_deadline_after_end_date')],
+    )
+  end
+
+  it "requires the event change deadline to be during the competition if OTS is required" do
+    competition = FactoryBot.build :competition,
+                                   name: "Foo Test 2015",
+                                   starts: 1.month.from_now,
+                                   ends: 1.month.from_now,
+                                   registration_open: 1.month.ago,
+                                   registration_close: 1.week.from_now,
+                                   use_wca_registration: true,
+                                   event_change_deadline_date: 2.weeks.from_now,
+                                   on_the_spot_registration: true,
+                                   on_the_spot_entry_fee_lowest_denomination: 0
+    expect(competition).to be_invalid_with_errors(
+      event_change_deadline_date: [I18n.t('competitions.errors.event_change_deadline_with_ots')],
+    )
+  end
+
   it "requires competition name is not greater than 50 characters" do
     competition = FactoryBot.build :competition, name: "A really long competition name that is greater than 50 characters 2016"
     expect(competition).to be_invalid_with_errors(
@@ -240,7 +347,7 @@ RSpec.describe Competition do
 
     it "does not warn for posted reports" do
       competition = FactoryBot.create :competition, :visible, :with_delegate, starts: 2.days.ago
-      competition.delegate_report.update_attributes!(schedule_url: "http://example.com", posted: true)
+      competition.delegate_report.update!(schedule_url: "http://example.com", posted: true)
       delegate = competition.delegates.first
       expect(competition.user_should_post_delegate_report?(delegate)).to eq false
     end
@@ -528,7 +635,7 @@ RSpec.describe Competition do
       competition.reload
 
       old_events = competition.events
-      competition.update_attributes!(
+      competition.update!(
         id: "MyerComp2016",
         competition_events_attributes: [
           { "id"=> comp_events[0].id, "event_id"=>comp_events[0].event_id, "_destroy"=>"0" },

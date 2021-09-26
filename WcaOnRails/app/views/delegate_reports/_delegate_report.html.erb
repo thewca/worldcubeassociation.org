@@ -47,6 +47,12 @@
     <strong>Delegates</strong>
     <%= competition.delegates.pluck(:name).to_sentence %>
   </div>
+  <% if competition.trainee_delegates.length > 0 %>
+    <div>
+      <strong>Trainee Delegates</strong>
+      <%= competition.trainee_delegates.pluck(:name).to_sentence %>
+    </div>
+  <% end %>
   <% if competition.organizers.length > 0 %>
     <div>
       <strong>Organisers</strong>
