@@ -401,24 +401,24 @@ class Competition < ApplicationRecord
         warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
       end
 
-      if rounds.any?(&:cutoff_is_greater_than_time_limit?)
-        warnings[:cutoff_is_greater_than_time_limit] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit')
+      rounds.select(&:cutoff_is_greater_than_time_limit?).each do |round|
+        warnings['cutoff_is_greater_than_time_limit' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t('events.' + round.event.id))
       end
 
-      if rounds.any?(&:cutoff_is_too_fast?)
-        warnings[:cutoff_is_too_fast] = I18n.t('competitions.messages.cutoff_is_too_fast')
+      rounds.select(&:cutoff_is_too_fast?).each do |round|
+        warnings['cutoff_is_too_fast' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_too_fast', round_number: round.number, event: I18n.t('events.' + round.event.id))
       end
 
-      if rounds.any?(&:cutoff_is_too_slow?)
-        warnings[:cutoff_is_too_slow] = I18n.t('competitions.messages.cutoff_is_too_slow')
+      rounds.select(&:cutoff_is_too_slow?).each do |round|
+        warnings['cutoff_is_too_slow' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_too_slow', round_number: round.number, event: I18n.t('events.' + round.event.id))
       end
 
-      if rounds.any?(&:time_limit_is_too_fast?)
-        warnings[:time_limit_is_too_fast] = I18n.t('competitions.messages.time_limit_is_too_fast')
+      rounds.select(&:time_limit_is_too_fast?).each do |round|
+        warnings['time_limit_is_too_fast' + round.id.to_s] = I18n.t('competitions.messages.time_limit_is_too_fast', round_number: round.number, event: I18n.t('events.' + round.event.id))
       end
 
-      if rounds.any?(&:time_limit_is_too_slow?)
-        warnings[:time_limit_is_too_slow] = I18n.t('competitions.messages.time_limit_is_too_slow')
+      rounds.select(&:time_limit_is_too_slow?).each do |round|
+        warnings['time_limit_is_too_slow' + round.id.to_s] = I18n.t('competitions.messages.time_limit_is_too_slow', round_number: round.number, event: I18n.t('events.' + round.event.id))
       end
 
       if championship_warnings.any?
