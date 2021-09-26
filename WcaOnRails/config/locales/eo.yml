@@ -106,7 +106,7 @@ eo:
     #original_hash: d542376
     minx: Megaminkso
     #original_hash: 8216a66
-    pyram: Pyraminkso
+    pyram: Piraminkso
     #original_hash: 64a56a2
     skewb: Skjubo
     #original_hash: 1551a2c
@@ -483,6 +483,8 @@ eo:
         event_change_deadline_date: Limdato por ĝisdatigo de la konkurseroj de konkursantoj
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Enira kosto por akompanantoj
+        #original_hash: bb16247
+        free_guest_entry_status: Videbla mesaĝo rilate al senpaga eniro de akompanantoj
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Mi ŝatus devigi konkursantojn submetiĝi puzloj je specifa tempo antaŭ
@@ -687,6 +689,16 @@ eo:
         article: Artikolo
         #original_hash: 82dabd0
         multimedia: Plurmedio
+    competition:
+      free_guest_entry_status:
+        #original_hash: 7e54323
+        unclear: >-
+          Montru nenion (kaj eble detalu en la sekcio "Aldonaj registriĝaj
+          postuloj")
+        #original_hash: 694bce4
+        anyone: '"Ĉiuj spektantoj povas veni senpage"'
+        #original_hash: 762c509
+        restricted: '"Spektantoj estas permesataj nur kiel akompanantoj de konkursantoj"'
   simple_form:
     #original_hash: 5397e05
     'yes': Jes
@@ -771,7 +783,7 @@ eo:
         #original_hash: 0627e5c
         otp_attempt: >-
           Kontrolu vian konfigurintan poŝtelefonan apon por unufoja pasvorto, aŭ
-          eniru unu el viaj restaŭrkopiaj kodoj.
+          enigu unu el viaj restaŭrkopiaj kodoj.
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -878,12 +890,12 @@ eo:
         on_the_spot_registration: ''
         #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: >-
-          Se vi eniras 0, videblos frazo dirante ke surlokaj registriĝoj estas
+          Se vi enigas 0, videblos frazo dirante ke surlokaj registriĝoj estas
           senpagaj.
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Nun, tiu nombro estas nur sciiga, repagoj devos esti farita permane.
-          Se vi eniras 0, videblos frazo dirante ke registriĝkostoj nenial estos
+          Se vi enigas 0, videblos frazo dirante ke registriĝkostoj nenial estos
           repagotaj.
         #original_hash: f64d853
         refund_policy_limit_date: Dato post kiam ne plu eblos repagoj.
@@ -900,11 +912,13 @@ eo:
           signifas ke konkursantoj povas aldoni konkurseron ĝis kiam tiu
           konkursero okazas. Se vi havas surlokajn registriĝojn, vi devas enigi
           la tagon de la konkurso.
-        #original_hash: 25a1324
+        #original_hash: 0419547
         guests_entry_fee_lowest_denomination: >-
-          Nun, tiu nombro estas nur sciiga, pagoj de akompanantoj ne povas esti
-          faritaj per tiu retejo. Se vi eniras 0, videblos frazo dirante ke
-          spektantoj povas veni senpage.
+          Nuntempe, tiu nombro estas nur sciiga ĉar pagoj de akompanantoj ne
+          povas esti faritaj per tiu retejo. Se vi enigas 0, vi povos elekti
+          frazon pri kiel vi traktos spektantojn.
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1854,7 +1868,7 @@ eo:
       already_assigned: jam atribuita al alia uzanto
       #original_hash: 51650d2
       dob_incorrect_html: >-
-        ne kongruas kun nia datumbazo. Se vi certas ke vi eniris la ĝustan daton
+        ne kongruas kun nia datumbazo. Se vi certas ke vi enigis la ĝustan daton
         ĝuste skribita (JJJJ-MM-TT) bonvolu retpoŝti la Rezultan Teamon de la
         WCA pere de <a href="%{dob_form_path}">tiu dediĉita formularo</a>.
       #original_hash: c3ce070
@@ -2514,8 +2528,11 @@ eo:
       no_on_the_spot_registration: Surlokaj registriĝoj ne eblos.
       #original_hash: 4df139d
       guests_pay: 'Spektantoj estos akceptataj kaj devos pagi %{guests_base_fee}.'
-      #original_hash: b6c863e
-      guests_free: Spektantoj estos akceptataj senpage.
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: Ĉiuj spektantoj povas veni senpage.
+        #original_hash: f1e6aef
+        restricted: Spektantoj estas permesataj nur kiel akompanantoj de konkursantoj.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Tiu konkurso finiĝis, alklaku %{link_here} por vidi la uzitajn
@@ -3032,7 +3049,7 @@ eo:
         #original_hash: 4c9f914
         delegate_report: Delegitraporto
         #original_hash: b233e77
-        registration: Registriĝo
+        registration: Registriĝoj
         #original_hash: 3f9176e
         import_registrations: Importi registriĝojn
         #original_hash: d672995
