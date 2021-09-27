@@ -2092,6 +2092,8 @@ sv:
             platser tillgängliga
           #original_hash: 0d4cce9
           multiple_registrations: Du anmälde dig två gånger eller fler gånger
+          #original_hash: 70b1e2c
+          competition_canceled: Tävlingen har ställts in
     list:
       #original_hash: 8b7631c
       title: 'Anmälningar för %{comp}'
@@ -2714,8 +2716,7 @@ sv:
         target='_blank'>Markdown</a>
       #original_hash: e5cbb13
       name_reason_html: >-
-        En kort förklaring av tävlingsnamnet. Namnet måste överensstämma följa
-        <a
+        En kort förklaring av tävlingsnamnet. Namnet måste överensstämma med <a
         href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
         Competition Requirements Policy</a>.
       #original_hash: 9d9126e
