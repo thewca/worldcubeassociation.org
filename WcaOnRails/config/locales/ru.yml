@@ -2132,6 +2132,8 @@ ru:
           registrations_full: 'Лимит участников был достигнут, и больше нет свободных мест'
           #original_hash: 0d4cce9
           multiple_registrations: Вы отправили заявку дважды
+          #original_hash: 70b1e2c
+          competition_canceled: Соревнование было отменено
     list:
       #original_hash: 8b7631c
       title: 'Регистрации на %{comp}'
@@ -3911,6 +3913,8 @@ ru:
     competitor_tutorial: Руководство участника
     #original_hash: 9561bfc
     judge_tutorial: Учебное пособие для новичков по судейству
+    #original_hash: 12e47a3
+    competition_templates: Шаблоны для соревнований
     #original_hash: 5ca0558
     certificates: Шаблоны сертификатов WCT
     #original_hash: f580987
