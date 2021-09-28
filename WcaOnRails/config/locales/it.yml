@@ -214,23 +214,23 @@ it:
       #original_hash: 0664a83
       percent: 'Top %{percent}%'
       attempt_result:
-        #original_hash: 482f137
-        time: 'Miglior risultato < %{time}'
-        #original_hash: 3faa63e
-        moves: 'Miglior risultato < %{moves}'
-        #original_hash: c3133c2
-        points: 'Miglior risultato > %{points}'
+        #original_hash: ac6a282
+        time: '%{round_format} < %{time}'
+        #original_hash: 45db130
+        moves: '%{round_format} < %{moves}'
+        #original_hash: 076911b
+        points: '%{round_format} > %{points}'
     #original_hash: 6e55337
     ranking: 'I migliori %{ranking} avanzano al round successivo'
     #original_hash: 7ee969c
     percent: 'Il %{percent}% avanza al round successivo'
     attempt_result:
-      #original_hash: b3c8a02
-      time: 'Miglior risultato < %{time} per passare al turno successivo'
-      #original_hash: 07bca6c
-      moves: 'Miglior risultato < %{moves} mosse per passare al turno successivo'
-      #original_hash: 837083c
-      points: 'Miglior risultato > %{points} punti per passare al turno successivo'
+      #original_hash: 6173090
+      time: '%{round_format} < %{time} per passare al turno successivo'
+      #original_hash: 581709d
+      moves: '%{round_format} < %{moves} mosse per passare al turno successivo'
+      #original_hash: e9f0c92
+      points: '%{round_format} > %{points} punti per passare al turno successivo'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -473,8 +473,14 @@ it:
         refund_policy_percent: Percentuale da rimborsare
         #original_hash: b332299
         refund_policy_limit_date: Termine per i rimborsi
+        #original_hash: 16cf9a4
+        waiting_list_deadline_date: Data limite per accettare partecipanti dalla lista d'attesa
+        #original_hash: 99a9169
+        event_change_deadline_date: Data limite dei partecipanti per modificare i propri eventi
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Tassa per gli spettatori
+        #original_hash: bb16247
+        free_guest_entry_status: Visualizza messaggio per l'ingresso gratuito agli spettatori
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Voglio richiedere ai partecipanti di consegnare i propri puzzle a uno
@@ -683,6 +689,16 @@ it:
         article: Articolo
         #original_hash: 82dabd0
         multimedia: Media
+    competition:
+      free_guest_entry_status:
+        #original_hash: 7e54323
+        unclear: >-
+          Non mostrare nulla (si consiglia di elaborare nella sezione "Altri
+          requisiti di registrazione")
+        #original_hash: 694bce4
+        anyone: '"Gli spettatori possono entrare gratuitamente"'
+        #original_hash: 762c509
+        restricted: '"Gli spettatori sono ammessi solo se accompagnano un partecipante"'
   simple_form:
     #original_hash: 5397e05
     'yes': Sì
@@ -887,12 +903,27 @@ it:
           nessun caso.
         #original_hash: f64d853
         refund_policy_limit_date: Termine oltre il quale non sarà più possibile ottenere un rimborso.
-        #original_hash: 25a1324
+        #original_hash: 664db64
+        waiting_list_deadline_date: >-
+          La data limite oltre la quale gli iscritti in lista d'attesa non
+          potranno più essere accettati. Questa data non dovrebbe essere
+          precedente ad un'eventuale data limite per i rimborsi.
+        #original_hash: 75e6c1f
+        event_change_deadline_date: >-
+          I partecipanti iscritti hanno diritto a modificare i propri eventi
+          fino a questa data, contattando il team organizzativo. Questa data non
+          deve precedere la data di chiusura delle iscrizioni. Lasciando questo
+          campo bianco, i partecipanti potranno modificare i propri eventi fino
+          al giorno della competizione. Se sono previste iscrizioni in loco, il
+          limite deve essere posto al giorno stesso della competizione.
+        #original_hash: 0419547
         guests_entry_fee_lowest_denomination: >-
           Per ora questo numero è solo informativo, le tasse degli spettatori
-          non possono essere gestite attraverso questo sito. Se è impostato su
-          0, verrà visualizzata una frase che dice che gli spettatori possono
-          partecipare gratuitamente.
+          non possono essere gestite attraverso questo sito. Se è impostato a 0,
+          verrà visualizzato un messaggio personalizzato relativo alle
+          restrizioni per gli spettatori.
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2116,6 +2147,8 @@ it:
             disponibili
           #original_hash: 0d4cce9
           multiple_registrations: Ti sei registrato due o più volte
+          #original_hash: 70b1e2c
+          competition_canceled: La competizione è stata cancellata
     list:
       #original_hash: 8b7631c
       title: 'Registrazioni per la competizione %{comp}'
@@ -2151,6 +2184,8 @@ it:
         with_stripe: Pagato il
       #original_hash: ce53c71
       payment_requested_on: 'Richiesta di pagamento il: %{date}'
+      #original_hash: f5b1b34
+      payment_completed_on: 'Pagamento effettuato il: %{date}'
       #original_hash: b25928c
       total: Totale
       #original_hash: df036fe
@@ -2559,6 +2594,19 @@ it:
         iscrizione.
       #original_hash: 4aca553
       no_refunds: La quota di registrazione non sarà rimborsata in nessun caso.
+      #original_hash: b016d2f
+      waiting_list_deadline_html: >-
+        Gli iscritti in lista d'attesa potranno essere accettati in lista
+        partecipanti entro il %{waiting_list_deadline}.
+      #original_hash: 14c5699
+      event_change_deadline_html: >-
+        Se sei un partecipante iscritto, puoi modificare i tuoi eventi entro il
+        %{event_change_deadline} contattando il team organizzativo.
+      #original_hash: eff3594
+      event_change_deadline_default_html: >-
+        Ti consigliamo di specificare in fase di iscrizione gli eventi a cui
+        vuoi partecipare. Potrai comunque modificare gli eventi fino al giorno
+        della competizione.
       #original_hash: cf7be5d
       on_the_spot_registration_fee_html: >-
         La registrazione in loco sarà disponibile ad un prezzo base di
@@ -2571,8 +2619,11 @@ it:
       guests_pay: >-
         Gli spettatori possono assistere pagando una quota d'ingresso di
         %{guests_base_fee}.
-      #original_hash: b6c863e
-      guests_free: Gli spettatori possono assistere gratis.
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: Gli spettatori possono entrare gratuitamente.
+        #original_hash: f1e6aef
+        restricted: Sono ammessi solo gli spettatori che accompagnano un partecipante.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         La competizione è terminata, clicca %{link_here} per visualizzare i
@@ -2869,6 +2920,32 @@ it:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         deve possedere delle condizioni di avanzamento per tutti i round non
         finali.
+      #original_hash: da17c99
+      registration_period_after_start: Le registrazioni non possono avvenire dopo la data d'inizio.
+      #original_hash: f6b244b
+      waiting_list_deadline_before_registration_close: >-
+        La data limite per la lista d'attesa non può essere precedente alla
+        chiusura delle iscrizioni.
+      #original_hash: ececa98
+      waiting_list_deadline_before_refund_date: >-
+        La data limite per la lista d'attesa non può essere precedente alla data
+        limite per i rimborsi.
+      #original_hash: 44d9902
+      waiting_list_deadline_after_start: >-
+        La data limite per la lista d'attesa deve essere precedente all'inizio
+        della competizione.
+      #original_hash: c3eb1be
+      event_change_deadline_before_registration_close: >-
+        La data limite per aggiornare gli eventi non deve essere precedente alla
+        chiusura delle iscrizioni.
+      #original_hash: bc1ca0f
+      event_change_deadline_after_end_date: >-
+        La data limite per modificare gli eventi non può essere successiva alla
+        competizione.
+      #original_hash: a2e4fc9
+      event_change_deadline_with_ots: >-
+        Se sono previste iscrizioni in loco, la data limite per modificare gli
+        eventi deve essere compresa nei giorni della competizione.
     new:
       #original_hash: 1208df7
       create_competition: Crea competizione
@@ -3101,6 +3178,13 @@ it:
       round: Round
       #original_hash: 709a232
       name: Nome
+      rank:
+        #original_hash: d4840ff
+        national: Rank Nazionale
+        #original_hash: ca3ff98
+        continent: Rank Continentale
+        #original_hash: f6bcce7
+        world: Rank Mondiale
     scrambles_table:
       #original_hash: 171a060
       group: Group
@@ -3911,6 +3995,8 @@ it:
     competitor_tutorial: Tutorial per partecipanti
     #original_hash: 9561bfc
     judge_tutorial: Tutorial per i nuovi giudici
+    #original_hash: 12e47a3
+    competition_templates: Template per competizioni
     #original_hash: 5ca0558
     certificates: Template per attestati WCT
     #original_hash: f580987
@@ -3995,6 +4081,11 @@ it:
       create_success: >-
         Richiesta inviata con successo! Per favore controlla la tua email, e
         attendi che il WCA Board ne prenda visione
+    delete:
+      #original_hash: 6588652
+      confirm_delete: >-
+        Sei sicuro di voler cancellare questa richiesta di Organizzazione
+        Regionale?
   contact:
     #original_hash: a34b69f
     title: Contatti
