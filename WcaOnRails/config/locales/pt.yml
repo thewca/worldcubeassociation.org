@@ -2110,6 +2110,8 @@ pt:
             disponíveis
           #original_hash: 0d4cce9
           multiple_registrations: Registou-se duas ou mais vezes
+          #original_hash: 70b1e2c
+          competition_canceled: A competição foi cancelada
     list:
       #original_hash: 8b7631c
       title: 'Inscrições para %{comp}'
@@ -3912,6 +3914,8 @@ pt:
     competitor_tutorial: Tutorial de competidor
     #original_hash: 9561bfc
     judge_tutorial: Tutorial de ajuizamento para iniciantes
+    #original_hash: 12e47a3
+    competition_templates: Modelos de competição
     #original_hash: 5ca0558
     certificates: Modelos de Certificados da WCT
     #original_hash: f580987
