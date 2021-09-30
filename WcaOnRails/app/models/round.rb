@@ -141,6 +141,30 @@ class Round < ApplicationRecord
     final_round? || advancement_condition
   end
 
+  def cutoff_is_greater_than_time_limit?
+    cutoff && time_limit != TimeLimit::UNDEF_TL && time_limit.cumulative_round_ids.empty? ? cutoff.attempt_result >= time_limit.centiseconds : false
+  end
+
+  # cutoffs are too fast if they are less than 5 seconds
+  def cutoff_is_too_fast?
+    cutoff && self.event.timed_event? && cutoff.attempt_result < 500
+  end
+
+  # cutoffs are too slow if they are more than 10 minutes
+  def cutoff_is_too_slow?
+    cutoff && self.event.timed_event? && cutoff.attempt_result > 60_000
+  end
+
+  # time limits are too fast if they are less than 10 seconds
+  def time_limit_is_too_fast?
+    time_limit != TimeLimit::UNDEF_TL && time_limit.centiseconds < 1000
+  end
+
+  # time limits are too slow if they are more than 10 minutes in fast events
+  def time_limit_is_too_slow?
+    time_limit != TimeLimit::UNDEF_TL && time_limit.cumulative_round_ids.empty? && self.event.fast_event? && time_limit.centiseconds > 60_000
+  end
+
   def self.parse_wcif_id(wcif_id)
     event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
     round_number = round_number.to_i
