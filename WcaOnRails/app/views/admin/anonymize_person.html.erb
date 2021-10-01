@@ -35,9 +35,9 @@
           <br>
 
           <% if @anonymize_person.account %>
-            <li>Request data anonymization from WCA Forum by <%= mail_to Team.wac.current_members.select(&:team_leader).map(&:user).map(&:email)[0], name = "Emailing the WAC Leader", subject: "Anonymization Request", body: "Hello WAC Leader,
+            <li>Request data anonymization from WCA Forum by <%= mail_to Team.wac.current_members.select(&:team_leader).map(&:user).map(&:email)[0], name = "Emailing the WAC Leader", cc: Team.wrt.email, subject: "Anonymization Request", body: "Hello WAC Leader,
   WCA has received an anonymization request for #{@anonymize_person.account.email}. Can you please search active users ( https://forum.worldcubeassociation.org/admin/users/list/active) for any users using this email. If there are any can you please anonymize the user's data.
-  Thanks!" %>.</li>
+  Thanks - WCA Results Team" %>.</li>
           <% else %>
             <li>Request data anonymization from WCA Forum (Skip - the WCA ID does not have an account associated with it)</li>
           <% end %>
@@ -49,7 +49,7 @@
           <% if competitions_with_external.any? %>
 
             <% competitions_with_external.each do |c| %>
-              <div><%= link_to c.display_name(short: true), competition_path(c) %> - <%= link_to c.external_website %> - <%= mail_to c.delegates.map(&:email).join(", "), name = c.delegates.map(&:name).join(", "), subject: "Anonymization Request" %></div>
+              <div><%= link_to c.display_name(short: true), competition_path(c) %> - <%= link_to c.external_website %> - <%= mail_to c.delegates.map(&:email).join(", "), name = c.delegates.map(&:name).join(", "), cc: Team.wrt.email, subject: "Anonymization Request" %></div>
             <% end %>
 
           <% else %>
