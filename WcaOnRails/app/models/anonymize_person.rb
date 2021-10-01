@@ -59,10 +59,10 @@ class AnonymizePerson
         account_to_update = User.where('id = ? OR unconfirmed_wca_id = ?', account.id, person_wca_id)
 
         # If the account associated with the WCA ID is a special account (delegate, organizer, team member) then we want to keep the link between the Person and the account
-        if !account.is_special_account?
-          account_to_update.update_all(wca_id: nil, country_iso2: "US")
-        else
+        if account.is_special_account?
           account_to_update.update_all(wca_id: new_wca_id, avatar: nil)
+        else
+          account_to_update.update_all(wca_id: nil, country_iso2: "US")
         end
 
         account_to_update.update_all(email: account.id.to_s + "@worldcubeassociation.org",
