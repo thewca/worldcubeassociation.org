@@ -52,11 +52,13 @@ class AnonymizePerson
       if account
         # If the account associated with the WCA ID is a special account (delegate, organizer, team member) then we want to keep the link between the Person and the account
         account_to_update = User.where('id = ? OR unconfirmed_wca_id = ?', account.id, person_wca_id)
+
         if !account.is_special_account?
           account_to_update.update_all(wca_id: nil, country_iso2: "US")
         else
           account_to_update.update_all(wca_id: @new_wca_id, avatar: nil)
         end
+
         account_to_update.update_all(email: account.id.to_s + "@worldcubeassociation.org",
                                      name: "Anonymous",
                                      unconfirmed_wca_id: nil,
@@ -77,6 +79,7 @@ class AnonymizePerson
         previous_persons = Person.where(wca_id: person_wca_id).where.not(subId: 1).order(:subId)
         current_sub_id = 1
         current_country_id = person.countryId
+
         previous_persons.each do |p|
           if p.countryId != current_country_id
             current_sub_id += 1
@@ -85,7 +88,9 @@ class AnonymizePerson
             p.delete
           end
         end
+
       end
+
       # Anonymize person's data in Persons for subid 1
       person.update(wca_id: @new_wca_id, name: "Anonymous", gender: "o", year: 0, month: 0, day: 0)
     end
@@ -97,6 +102,7 @@ class AnonymizePerson
     # generate new wcaid
     semiId = person_wca_id[0..3] + "ANON"
     similarWcaIds = Person.where("wca_id LIKE ?", semiId + '%')
+
     (1..99).each do |i|
       if !similarWcaIds.where(wca_id: semiId + i.to_s.rjust(2, "0")).any?
         @new_wca_id = semiId + i.to_s.rjust(2, "0")
