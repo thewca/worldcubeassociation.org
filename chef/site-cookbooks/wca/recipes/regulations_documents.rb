@@ -2,7 +2,7 @@ username, repo_root = WcaHelper.get_username_and_repo_root(self)
 
 #### Regulations dependencies
 package "git"
-package "python-pip"
+package "python3-pip"
 package "fonts-unfonts-core"
 package "fonts-wqy-microhei"
 package "fonts-ipafont"
@@ -19,8 +19,12 @@ bash "install_wkhtmltopdf" do
   EOH
 end
 
-execute "pip install wrc --upgrade"
+execute "pip3 install wrc --upgrade"
 
 execute "#{repo_root}/scripts/deploy.sh rebuild_regs" do
+  user username
+end
+
+execute "#{repo_root}/scripts/deploy.sh update_docs" do
   user username
 end

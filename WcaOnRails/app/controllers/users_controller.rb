@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:select_nearby_delegate]
+  before_action :authenticate_user!, except: [:select_nearby_delegate, :acknowledge_cookies]
   before_action :check_recent_authentication!, only: [:enable_2fa, :disable_2fa, :regenerate_2fa_backup_codes]
   before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa, :disable_2fa]
 
@@ -76,7 +76,7 @@ class UsersController < ApplicationController
       otp_required_for_login: false,
       otp_secret: nil,
     }
-    if current_user.update_attributes(disable_params)
+    if current_user.update(disable_params)
       flash[:success] = I18n.t("devise.sessions.new.2fa.disabled_success")
       params[:section] = "2fa"
     else
@@ -168,7 +168,7 @@ class UsersController < ApplicationController
     end
 
     old_confirmation_sent_at = @user.confirmation_sent_at
-    if @user.update_attributes(user_params)
+    if @user.update(user_params)
       if @user.saved_change_to_delegate_status
         # TODO: See https://github.com/thewca/worldcubeassociation.org/issues/2969.
         DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(@user, current_user).deliver_now
@@ -231,6 +231,13 @@ class UsersController < ApplicationController
     sso.custom_fields["wca_id"] = current_user.wca_id || ""
 
     redirect_to sso.to_url
+  end
+
+  def acknowledge_cookies
+    return render status: 401, json: { ok: false } if current_user.nil?
+
+    current_user.update!(cookies_acknowledged: true)
+    render json: { ok: true }
   end
 
   private def redirect_if_cannot_edit_user(user)

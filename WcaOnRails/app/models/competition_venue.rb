@@ -14,7 +14,7 @@ class CompetitionVenue < ApplicationRecord
   validates_inclusion_of :timezone_id, in: VALID_TIMEZONES
 
   def load_wcif!(wcif)
-    update_attributes!(CompetitionVenue.wcif_to_attributes(wcif))
+    update!(CompetitionVenue.wcif_to_attributes(wcif))
     new_rooms = wcif["rooms"].map do |room_wcif|
       room = venue_rooms.find { |r| r.wcif_id == room_wcif["id"] } || venue_rooms.build
       room.load_wcif!(room_wcif)

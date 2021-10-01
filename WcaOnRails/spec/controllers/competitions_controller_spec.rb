@@ -297,9 +297,9 @@ RSpec.describe CompetitionsController do
 
       it 'clones a competition' do
         # Set some attributes we don't want cloned.
-        competition.update_attributes(confirmed: true,
-                                      results_posted_at: Time.now,
-                                      showAtAll: true)
+        competition.update(confirmed: true,
+                           results_posted_at: Time.now,
+                           showAtAll: true)
 
         user1 = FactoryBot.create(:delegate)
         user2 = FactoryBot.create(:user)
@@ -513,13 +513,13 @@ RSpec.describe CompetitionsController do
       end
 
       it "board member can delete a non-visible competition" do
-        competition.update_attributes(showAtAll: false)
+        competition.update(showAtAll: false)
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
         expect(Competition.find_by_id(competition.id)).to be_nil
       end
 
       it "board member cannot delete a visible competition" do
-        competition.update_attributes(showAtAll: true)
+        competition.update(showAtAll: true)
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
         expect(flash[:danger]).to eq "Cannot delete a competition that is publicly visible."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
@@ -566,7 +566,7 @@ RSpec.describe CompetitionsController do
 
       it "can confirm a competition and expects wcat and organizers to receive a notification email" do
         competition.organizers << organizer1
-        competition.update_attributes(start_date: 5.week.from_now, end_date: 5.week.from_now)
+        competition.update(start_date: 5.week.from_now, end_date: 5.week.from_now)
         expect(CompetitionsMailer).to receive(:notify_organizer_of_confirmed_competition).with(competition.delegates.last, competition, organizer1).and_call_original
         expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
@@ -577,13 +577,13 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot confirm a competition that is not at least 28 days in the future" do
-        competition.update_attributes(start_date: 26.day.from_now, end_date: 26.day.from_now)
+        competition.update(start_date: 26.day.from_now, end_date: 26.day.from_now)
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         expect(competition.reload.confirmed?).to eq false
       end
 
       it "can confirm a competition that is having advancement conditions" do
-        competition.update_attributes(start_date: 29.day.from_now, end_date: 29.day.from_now)
+        competition.update(start_date: 29.day.from_now, end_date: 29.day.from_now)
         competition.competition_events[0].rounds.destroy_all!
         competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
@@ -629,7 +629,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot delete not confirmed, but visible competition" do
-        competition.update_attributes(confirmed: false, showAtAll: true)
+        competition.update(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we only allow
         # deletion of (not confirmed and not visible) competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -638,7 +638,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot delete confirmed competition" do
-        competition.update_attributes(confirmed: true, showAtAll: false)
+        competition.update(confirmed: true, showAtAll: false)
         # Attempt to delete competition. This should not work, because we only let
         # delegates deleting unconfirmed competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -647,7 +647,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can delete not confirmed and not visible competition" do
-        competition.update_attributes(confirmed: false, showAtAll: false)
+        competition.update(confirmed: false, showAtAll: false)
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -658,7 +658,7 @@ RSpec.describe CompetitionsController do
       it "cannot change registration open/close of locked competition" do
         old_open = 2.days.from_now.change(sec: 0)
         old_close = 4.weeks.from_now.change(sec: 0)
-        competition.update_attributes(confirmed: true, registration_open: old_open, registration_close: old_close)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
 
         new_open = 1.week.from_now.change(sec: 0)
         new_close = 2.weeks.from_now.change(sec: 0)
@@ -725,7 +725,7 @@ RSpec.describe CompetitionsController do
 
       it "cannot confirm a competition" do
         competition.organizers << organizer1
-        competition.update_attributes(start_date: 5.week.from_now, end_date: 5.week.from_now)
+        competition.update(start_date: 5.week.from_now, end_date: 5.week.from_now)
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         expect(response).to redirect_to root_url
         expect(flash[:danger]).to eq "You are not allowed to confirm competition"
@@ -733,7 +733,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot delete not confirmed, but visible competition" do
-        competition.update_attributes(confirmed: false, showAtAll: true)
+        competition.update(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we only allow
         # deletion of (not confirmed and not visible) competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -742,7 +742,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot delete confirmed competition" do
-        competition.update_attributes(confirmed: true, showAtAll: false)
+        competition.update(confirmed: true, showAtAll: false)
         # Attempt to delete competition. This should not work, because we only let
         # delegates deleting unconfirmed competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -751,7 +751,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can delete not confirmed and not visible competition" do
-        competition.update_attributes(confirmed: false, showAtAll: false)
+        competition.update(confirmed: false, showAtAll: false)
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -762,7 +762,7 @@ RSpec.describe CompetitionsController do
       it "cannot change registration open/close of locked competition" do
         old_open = 2.days.from_now.change(sec: 0)
         old_close = 4.weeks.from_now.change(sec: 0)
-        competition.update_attributes(confirmed: true, registration_open: old_open, registration_close: old_close)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
 
         new_open = 1.week.from_now.change(sec: 0)
         new_close = 2.weeks.from_now.change(sec: 0)
@@ -794,7 +794,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot delete competition they are not delegating" do
-        competition.update_attributes(confirmed: false, showAtAll: true)
+        competition.update(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we're
         # not the delegate for this competition.
         patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
@@ -809,7 +809,7 @@ RSpec.describe CompetitionsController do
 
       it 'announces and expects organizers to receive a notification email' do
         sign_in wcat_member
-        competition.update_attributes(start_date: "2011-12-04", end_date: "2011-12-05")
+        competition.update(start_date: "2011-12-04", end_date: "2011-12-05")
         organizer = FactoryBot.create :user
         competition.organizers << organizer
         expect(competition.announced_at).to be nil
@@ -972,14 +972,14 @@ RSpec.describe CompetitionsController do
   describe 'GET #my_competitions' do
     let(:delegate) { FactoryBot.create(:delegate) }
     let(:organizer) { FactoryBot.create(:user) }
-    let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition2) { FactoryBot.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition3) { FactoryBot.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition4) { FactoryBot.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition1) { FactoryBot.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition2) { FactoryBot.create(:competition, :registration_open, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition3) { FactoryBot.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition4) { FactoryBot.create(:competition, :registration_open, :results_posted, starts: 4.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 5.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition2) { FactoryBot.create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition3) { FactoryBot.create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition4) { FactoryBot.create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition1) { FactoryBot.create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition2) { FactoryBot.create(:competition, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition3) { FactoryBot.create(:competition, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition4) { FactoryBot.create(:competition, :results_posted, starts: 4.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:unscheduled_competition1) { FactoryBot.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333)), year: "0") }
     let(:registered_user) { FactoryBot.create :user, name: "Jan-Ove Waldner" }
     let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: future_competition1, user: registered_user) }

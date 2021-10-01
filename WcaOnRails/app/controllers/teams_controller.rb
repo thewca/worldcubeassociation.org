@@ -15,7 +15,7 @@ class TeamsController < ApplicationController
 
   def update
     @team = team_from_params
-    if @team.update_attributes(team_params)
+    if @team.update(team_params)
       flash[:success] = "Updated team"
       redirect_to edit_team_path(@team)
     else

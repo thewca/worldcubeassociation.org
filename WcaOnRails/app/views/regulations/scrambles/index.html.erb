@@ -1,7 +1,7 @@
 <% provide(:title, 'WCA Scrambles') %>
 <div class="container">
   <h1>WCA Scrambles</h1>
-  <% latest_version = "TNoodle-WCA-1.1.0" %>
+  <% latest_version = "TNoodle-WCA-1.1.1" %>
   <% latest_jarfilename = "#{latest_version}.jar" %>
   <p>The current official scramble programs is <em><%= latest_version %></em>. It generates high-quality scramble sequences for all the events of a competition at once.</p>
   <center>
@@ -10,13 +10,13 @@
       <strong><%= link_to latest_jarfilename, "./tnoodle/#{latest_jarfilename}" %></strong>
     </span>
     <br/>
-    Last official change: April 19th, 2021
+    Last official change: July 7th, 2021
   </center>
   <h2>Important Notes for Delegates</h2>
   <ul>
     <li>Official competitions must always use a current version of the official scramble program (see <%= link_to "Regulation 4f", "../#4f" %>).</li>
     <li>Delegates should download TNoodle to run it on a computer. They should not use TNoodle running on a public server (for security reasons).</li>
-    <li>Delegates must save all scramble sequences generated for an official competition, and send them with the results (see the <a href="https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf">WCA Competition Requirements Policy</a>).</li>
+    <li>Delegates must save all scramble sequences generated for an official competition, and send them with the results (see the <%= link_to "WCA Competition Requirements Policy", "/documents/policies/external/Competition%20Requirements.pdf" %>).</li>
   </ul>
   <h3 id="scramble-secrecy">Scramble Secrecy</h3>
     <ul>
@@ -28,6 +28,7 @@
         <li>Give passcodes to scramblers when the corresponding groups begin but <b>not any earlier</b>. (In particular, do not give the passcodes for all the scramble sets in a round to scramblers at the beginning of that round.)</li>
         <li>Don't put someone else in charge of the passcodes unless absolutely necessary, and only give them the minimum amount of passcodes needed.</li>
       </ul>
+      <li>Additional precautions are outlined in the <%= link_to "Scramble Accountability Policy", "/documents/policies/external/Scramble%20Accountability.pdf" %>.</li>
     </ul>
   <h2>Detailed Instructions for TNoodle</h2>
   <p>TNoodle requires <%= link_to "Java", "https://www.java.com/en/" %> to be installed on your computer.</p>
@@ -72,7 +73,8 @@
     <li><%= link_to "TNoodle-WCA-0.14.0", "./tnoodle/old/TNoodle-WCA-0.14.0.jar" %> (2018-12-03)</li>
     <li><%= link_to "TNoodle-WCA-0.15.0", "./tnoodle/old/TNoodle-WCA-0.15.0.jar" %> (2019-07-14)</li>
     <li><%= link_to "TNoodle-WCA-0.15.1", "./tnoodle/old/TNoodle-WCA-0.15.1.jar" %> (2020-01-01)</li>
-    <li><%= link_to "TNoodle-WCA-1.0.1", "./tnoodle/TNoodle-WCA-1.0.1.jar" %> (2020-08-17)</li>
+    <li><%= link_to "TNoodle-WCA-1.0.1", "./tnoodle/old/TNoodle-WCA-1.0.1.jar" %> (2020-08-17)</li>
     <li><%= link_to "TNoodle-WCA-1.1.0", "./tnoodle/TNoodle-WCA-1.1.0.jar" %> (2021-04-19)</li>
+    <li><%= link_to "TNoodle-WCA-1.1.1", "./tnoodle/TNoodle-WCA-1.1.1.jar" %> (2021-07-07)</li>
   </ul>
 </div>

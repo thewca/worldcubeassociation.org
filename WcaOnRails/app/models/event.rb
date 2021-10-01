@@ -62,6 +62,11 @@ class Event < ApplicationRecord
     !fewest_moves? && !multiple_blindfolded?
   end
 
+  # Events that are generally fast enough to never need to go over the default 10 minute time limit
+  def fast_event?
+    ['333', '222', '444', '333oh', 'clock', 'mega', 'pyram', 'skewb', 'sq1'].include?(self.id)
+  end
+
   def serializable_hash(options = nil)
     {
       id: self.id,

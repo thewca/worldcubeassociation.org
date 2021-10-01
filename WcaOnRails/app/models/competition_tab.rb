@@ -4,7 +4,7 @@ class CompetitionTab < ApplicationRecord
   belongs_to :competition
 
   validates :name, presence: true
-  validates :display_order, uniqueness: { scope: :competition_id }
+  validates :display_order, uniqueness: { scope: :competition_id, case_sensitive: false }
 
   CLONEABLE_ATTRIBUTES = %w(
     name

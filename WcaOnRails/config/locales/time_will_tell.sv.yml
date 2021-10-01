@@ -1,0 +1,38 @@
+sv:
+  time_will_tell:
+    date_range:
+      #original_hash: a09b2b5
+      different_months_same_year: '%{from_day} %{from_month} %{sep} %{to_day} %{to_month}'
+      #original_hash: ed5bf53
+      different_years: >-
+        %{from_day} %{from_month}, %{from_year} %{sep} %{to_day} %{to_month},
+        %{to_year}
+      #original_hash: f86cd93
+      same_month: '%{from_day} %{sep} %{to_day} %{month}'
+      #original_hash: 1edfe23
+      same_date: '%{from_day} %{month}'
+      #original_hash: d880c59
+      with_year: '%{date_range}, %{year}'
+    distance_in_words:
+      #original_hash: 2a39c2d
+      template: '%{count} %{unit}'
+      #original_hash: 560b88d
+      template_long: '%{rest} och %{last}'
+      units:
+        #original_hash: 352f782
+        second: sekund
+        #original_hash: 04987fc
+        minute: minut
+        #original_hash: 52ab86a
+        hour: timme
+        #original_hash: a2620cb
+        day: dag
+        #original_hash: 021710f
+        month: månad
+        #original_hash: 4ff0b15
+        year: år
+      special:
+        #original_hash: bbce7c8
+        half_an_hour: en halvtimme
+        #original_hash: 51ea0a1
+        and_a_half: och en halv

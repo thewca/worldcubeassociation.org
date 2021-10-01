@@ -12,12 +12,11 @@ gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
-gem 'sassc-rails'
+gem 'sass-rails'
 gem 'uglifier'
 gem 'faraday'
 gem 'sdoc', group: :doc
 gem 'dotenv-rails', require: 'dotenv/rails-now'
-gem 'envied', '0.9.3' # https://github.com/thewca/worldcubeassociation.org/issues/4455
 gem 'seedbank'
 gem 'jbuilder'
 gem 'bootstrap-sass'
@@ -46,6 +45,8 @@ gem 'stripe'
 gem 'oauth2'
 gem 'openssl'
 gem 'wca_i18n'
+gem 'cookies_eu'
+gem 'env_vars'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -105,7 +106,8 @@ end
 
 group :development do
   gem 'overcommit', require: false
-  gem 'rubocop', require: false
+  # RuboCop only supports our infrastructure until 0.81
+  gem 'rubocop', "~>0.81.0", require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
@@ -121,8 +123,7 @@ group :test do
   gem 'oga' # XML parsing library introduced for testing RSS feed
   gem 'database_cleaner'
   gem 'rails-controller-testing'
-  gem 'poltergeist'
-  gem 'phantomjs', require: 'phantomjs/poltergeist'
+  gem 'apparition'
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false
   gem 'timecop'

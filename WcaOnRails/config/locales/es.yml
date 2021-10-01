@@ -214,29 +214,23 @@ es:
       #original_hash: 0664a83
       percent: '%{percent}% Mejor'
       attempt_result:
-        #original_hash: 482f137
-        time: 'Mejor resultado < %{time}'
-        #original_hash: 3faa63e
-        moves: 'Mejor resultado < %{moves}'
-        #original_hash: c3133c2
-        points: 'Mejor resultado > %{points}'
+        #original_hash: ac6a282
+        time: '%{round_format} < %{time}'
+        #original_hash: 45db130
+        moves: '%{round_format} < %{moves}'
+        #original_hash: 076911b
+        points: '%{round_format} > %{points}'
     #original_hash: 6e55337
     ranking: 'Los mejores %{ranking} pasan a la siguiente ronda'
     #original_hash: 7ee969c
     percent: 'El %{percent}% mejor pasa a la siguiente ronda'
     attempt_result:
-      #original_hash: b3c8a02
-      time: >-
-        Aquellos con mejor resultado en menos de %{time} pasan a la siguiente
-        ronda
-      #original_hash: 07bca6c
-      moves: >-
-        Aquellos con mejor resultado en menos de %{moves} movimientos pasan a la
-        siguiente ronda
-      #original_hash: 837083c
-      points: >-
-        Aquellos con mejor resultado de más de %{points} puntos pasan a la
-        siguiente ronda
+      #original_hash: 6173090
+      time: '%{round_format} < %{time} pasan a la siguiente ronda'
+      #original_hash: 581709d
+      moves: '%{round_format} < %{moves} movimientos pasan a la siguiente ronda'
+      #original_hash: e9f0c92
+      points: '%{round_format} > %{points} puntos pasan a la siguiente ronda'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -263,6 +257,8 @@ es:
     333fm: 1 hora
     #original_hash: cc7d8bb
     333mbf: '10:00.00 por cubo, hasta 60:00.00'
+    #original_hash: da39a3e
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: Mundo
@@ -481,6 +477,12 @@ es:
         refund_policy_percent: Porcentaje a reembolsar
         #original_hash: b332299
         refund_policy_limit_date: Fecha límite para reembolsos
+        #original_hash: 16cf9a4
+        waiting_list_deadline_date: Fecha límite para aceptar competidores de la lista de espera
+        #original_hash: 99a9169
+        event_change_deadline_date: >-
+          Fecha límite para permitir a los competidores actualizar las
+          categorías en las que participan
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Precio de entrada de acompañantes
         #original_hash: 723cad9
@@ -895,6 +897,20 @@ es:
           las cuotas de registro no se reembolsarán bajo ninguna circunstancia.
         #original_hash: f64d853
         refund_policy_limit_date: Fecha tras la cual no se efectuarán más reembolsos.
+        #original_hash: 664db64
+        waiting_list_deadline_date: >-
+          Fecha a partir de la cual los competidores en lista de espera dejarán
+          de ser aceptados. Si tienes fecha límite par reembolsos, la fecha
+          límite para ser aceptado no debería ser anterior a la de reembolsos.
+        #original_hash: 75e6c1f
+        event_change_deadline_date: >-
+          Los competidores registrados tienen el derecho de actualizar las
+          categorías a las que se han apuntado hasta esta fecha poniéndose en
+          contacto con el equipo organizador. Esta fecha límite no debe ser
+          anterior a la fecha de cierre del registro. Dejar este campo en blanco
+          quiere decir que los competidores pueden añadir categorías hasta que
+          empiecen esas categorías. Si tiene registro in situ ha de ponerse la
+          fecha en la que ocurra la competición.
         #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
           Por el momento esta cifra es solamente informativa, los precios de
@@ -1425,8 +1441,8 @@ es:
       forum: Foro
       #original_hash: 3ad28c0
       teams: 'Comités, Equipos y Consejos'
-      #original_hash: a979ffc
-      education: Recursos educativos
+      #original_hash: 7981fb3
+      education: Recursos educacionales
       #original_hash: a34b69f
       contact: Información de Contacto
       #original_hash: 8e12c09
@@ -1681,9 +1697,9 @@ es:
           href=%{competition_url}>%{competition}</a> abre en menos de 24 horas.
         #original_hash: 2b93022
         not_accepted_html: Te has registrado pero tu registro no ha sido aceptado.
-        #original_hash: 3724e7c
+        #original_hash: d4087ee
         more_info_html: >-
-          Por favor dirígete a la  <a href=%{competition_url}>web del
+          Por favor dirígete a la  <a href=%{competition_url}>página WCA del
           campeonato</a>  para obtener más información sobre requisitos del
           registro.
       results_presence_email:
@@ -2146,6 +2162,8 @@ es:
         with_stripe: Pagado en
       #original_hash: ce53c71
       payment_requested_on: 'Pago requerido el %{date}'
+      #original_hash: f5b1b34
+      payment_completed_on: 'Pago completado en: %{date}'
       #original_hash: b25928c
       total: Total
       #original_hash: df036fe
@@ -2522,7 +2540,7 @@ es:
       #original_hash: 45834fd
       register_below_html: Regístrate para esta competición aquí debajo.
       #original_hash: 196725e
-      competitor_limit_is: 'Hay un límite de competidores de %{competitor_limit} competidores.'
+      competitor_limit_is: 'Hay un límite de %{competitor_limit} competidores.'
       #original_hash: 5101f65
       no_competitor_limit: No hay límite de competidores.
       #original_hash: f979d5e
@@ -2545,6 +2563,21 @@ es:
         reembolsará un %{refund_policy_percent} de tu cuota de registro.
       #original_hash: 4aca553
       no_refunds: Las cuotas de registro no se reembolsarán bajo ninguna circunstancia.
+      #original_hash: b016d2f
+      waiting_list_deadline_html: >-
+        Los competidores registrados en la lista de espera pueden ser aceptados
+        en la lista de competidores hasta %{waiting_list_deadline}.
+      #original_hash: 14c5699
+      event_change_deadline_html: >-
+        Si eres un competidor registrado puedes cambiar las categorías en las
+        que te has registrado hasta %{event_change_deadline}  poniéndonte en
+        contacto con el equipo organizador.
+      #original_hash: eff3594
+      event_change_deadline_default_html: >-
+        Os pedimos a todos que os registréis para las categorías en las que
+        queréis competir medianto el formulario online de registro, sin embargo,
+        podrás añadir categorías a tu registro hasta que la categoría haya
+        comenzado.
       #original_hash: cf7be5d
       on_the_spot_registration_fee_html: >-
         Se aceptarán registros in situ con una cuota base de registro de
@@ -2852,6 +2885,32 @@ es:
       invalid_currency_code: El código de moneda seleccionado no es válido
       #original_hash: 902a278
       advancement_condition_must_be_present_for_all_non_final_rounds: debe tener una condición de avance en todas las rondas no finales.
+      #original_hash: da17c99
+      registration_period_after_start: El periodo de registro no puede ser posterior a la fecha de comienzo.
+      #original_hash: f6b244b
+      waiting_list_deadline_before_registration_close: >-
+        La fecha límite de la lista de espera no puede ser anterior a la fecha
+        de cierre del registro.
+      #original_hash: ececa98
+      waiting_list_deadline_before_refund_date: >-
+        La fecha límite de la lista de espera no puede ser anterior a la fecha
+        límite para reintegros.
+      #original_hash: 44d9902
+      waiting_list_deadline_after_start: >-
+        La fecha límite de la lista de espera debe ser anterior a la fecha de
+        comienzo.
+      #original_hash: c3eb1be
+      event_change_deadline_before_registration_close: >-
+        La fecha límite para actualizar categorías no puede ser anterior a la
+        fecha de cierre de registro.
+      #original_hash: bc1ca0f
+      event_change_deadline_after_end_date: >-
+        La fecha límite para actualizar categorías no puede ser posterior a la
+        competición.
+      #original_hash: a2e4fc9
+      event_change_deadline_with_ots: >-
+        La fecha límite para actualizar categorías debe ser durante la
+        competición si se aceptan los registros in situ.
     new:
       #original_hash: 1208df7
       create_competition: Crear competición
@@ -2917,6 +2976,12 @@ es:
       limit: Límite
       #original_hash: 855bd26
       competitors: Competidores
+      #original_hash: c5497bc
+      events: Categorías
+      #original_hash: 50cb854
+      show_events: Mostrar categorías
+      #original_hash: 0df66f7
+      hide_events: Ocultar categorías
     #original_hash: 06b01c4
     announcements: Anuncios
     #original_hash: a2b80b0
@@ -3074,6 +3139,13 @@ es:
       round: Ronda
       #original_hash: 709a232
       name: Nombre
+      rank:
+        #original_hash: d4840ff
+        national: Ranking nacional
+        #original_hash: ca3ff98
+        continent: Ranking Continental
+        #original_hash: f6bcce7
+        world: Ranking Mundial
     scrambles_table:
       #original_hash: 171a060
       group: Grupo
@@ -3631,11 +3703,11 @@ es:
       necesarias.</p>
     #original_hash: 1aa5344
     contributing_title: Contribuir
-    #original_hash: e64beb7
+    #original_hash: 538a82f
     contributing_content_html: >-
-      Puedes donar mediante tarjeta de crédito usando Guidestar <a
-      href="https://www.nfggive.com/guidestar/82-3825954">aquí</a>. Si prefiere
-      enviarnos un cheque puede hacerlo a:
+      Puedes donar mediante tarjeta de crédito usando Guidestar %{here_credit},
+      o por Paypal %{here_paypal}. Si prefiere enviarnos un cheque puede hacerlo
+      a:
     #original_hash: 2af9b71
     tax_deductible_note: Las donaciones pueden ser  desgravadas en los Estados Unidos.
     #original_hash: 6026d35
@@ -3655,6 +3727,8 @@ es:
         visión de tener más competiciones agradables a lo largo del mundo.
       #original_hash: 24c87db
       donate_credit: Donar con tarjeta de crédito
+      #original_hash: 0e5a9c3
+      donate_paypal: Donar mediante PayPal
       #original_hash: 96d77f3
       donate_other: Otras maneras de donar
     structure:
@@ -3834,6 +3908,9 @@ es:
       probation:
         #original_hash: 1dd6e3b
         name: Delegados en período de prueba
+      wst_admin:
+        #original_hash: d4112d2
+        name: Administradores del software
       #original_hash: 7e849d2
       delegates_html: >-
         <p>Los <strong>Delegados de la WCA</strong> son miembros de la WCA que
@@ -3869,15 +3946,19 @@ es:
     codeofethics: Código de Ética
     #original_hash: 2643980
     codeofconduct: Código de Conducta
+    #original_hash: 4f05e8f
+    finances: Finanzas
   education:
-    #original_hash: 41701c2
-    title: Documentos Educativos de la WCA
+    #original_hash: 746e863
+    title: Recursos Educativos de la WCA
     #original_hash: 081d65d
     description: >-
       WQAC ha publicado varios documentos para la comunidad, puedes descargarlos
       a continuación.
     #original_hash: d0a3812
     competitor_tutorial: Tutorial de competidor
+    #original_hash: 9561bfc
+    judge_tutorial: Tutorial de hacer de jueces para novatos
     #original_hash: 5ca0558
     certificates: Plantillas de certificados del WCT
     #original_hash: f580987
@@ -3966,6 +4047,11 @@ es:
       create_success: >-
         ¡Aplicación entregada correctamente! Por favor comprueba tu correo, y
         espera a que la Junta Directiva de la WCA lo revise
+    delete:
+      #original_hash: 6588652
+      confirm_delete: >-
+        Estás seguro de que deseas eliminar esta petición de Organización
+        Regional?
   contact:
     #original_hash: a34b69f
     title: Información de Contacto
@@ -4524,10 +4610,10 @@ es:
       title: Documentos recomendados
       #original_hash: bfbd4bb
       staff: Asignar Staff
-      #original_hash: c346846
-      emails: Estructura del correo previo a la competición
-      #original_hash: 3212cc7
-      running-systems: Sistemas de runners
+      #original_hash: 4735583
+      emails: Correos
+      #original_hash: 8e7ca09
+      running-systems: Sistemas de runners y jueces
       #original_hash: 2b31c89
       new-competitors: Actitud hacia nuevos competidores
       #original_hash: 3408054
@@ -4574,12 +4660,16 @@ es:
     paragraph3:
       #original_hash: 00d3bf8
       title: Fecha límite para anunciar la competición
-      #original_hash: 3613823
+      #original_hash: 66bf437
       content_html: >-
         Se debe anunciar la competición al 28 días antes del comienzo de la
         misma (ver los <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisitos
-        de Competiciones</a>).
+        de Competiciones</a>). Sin embargo, rara vez este tiempo es suficiente.
+        Deberías considerar todo lo que implicará organizar tu competición y
+        darte tiempo suficiente para prepararlo. Además, el WCAT necesitará
+        tiempo para revisar tu competición antes de ser anunciado. Consulta con
+        tu Delegado is no estás seguro de cuanto tiempo vas a necesitar.
     paragraph4:
       #original_hash: b6dca56
       title: Política de Proximidad

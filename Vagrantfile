@@ -1,5 +1,5 @@
 Vagrant.configure(2) do |config|
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/focal64"
   config.vm.network :forwarded_port, host: 2331, guest: 2331
   # Mailcatcher runs on port 1080 inside the VM.
   config.vm.network :forwarded_port, host: 2332, guest: 1080

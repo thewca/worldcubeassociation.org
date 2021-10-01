@@ -16,8 +16,8 @@
 
 
 # source install options
-default['tarsnap']['version'] = "1.0.35"
-default['tarsnap']['sha256'] = "6c9f6756bc43bc225b842f7e3a0ec7204e0cf606e10559d27704e1cc33098c9a"
+default['tarsnap']['version'] = "1.0.39" # gregorbg
+default['tarsnap']['sha256'] = "5613218b2a1060c730b6c4a14c2b34ce33898dd19b38fb9ea0858c5517e42082" # gregorbg
 
 # tarsnap options
 default['tarsnap']['bin_path'] = '/usr/local/bin'

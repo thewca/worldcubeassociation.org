@@ -37,11 +37,11 @@ action :create do
       content key_item['key']
     end
     # ...and destroy any pending data bag placeholder
-    node.set.delete('tarsnap_pending')
+    node.normal.delete('tarsnap_pending') # gregorbg
     node.save unless Chef::Config[:solo]
   rescue Net::HTTPServerException => e
     # Register the node as pending
-    node.set_unless['tarsnap_pending'] = true
+    node.normal_unless['tarsnap_pending'] = true # gregorbg
     node.save unless Chef::Config[:solo]
   #JFLY rescue Chef::Exceptions::ValidationFailed => e
     #JFLY Chef::Log.warn("Unable to retrieve the tarsnap key from the data bag!!!")

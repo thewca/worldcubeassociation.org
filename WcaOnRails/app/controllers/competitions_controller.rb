@@ -314,7 +314,7 @@ class CompetitionsController < ApplicationController
     client = create_stripe_oauth_client
     oauth_params = {
       scope: 'read_write',
-      redirect_uri: ENVied.ROOT_URL + competitions_stripe_connect_path,
+      redirect_uri: EnvVars.ROOT_URL + competitions_stripe_connect_path,
       state: @competition.id,
     }
     @authorize_url = client.auth_code.authorize_url(oauth_params)
@@ -344,7 +344,7 @@ class CompetitionsController < ApplicationController
       token_url: '/oauth/token',
     }
 
-    OAuth2::Client.new(ENVied.STRIPE_CLIENT_ID, ENVied.STRIPE_API_KEY, options)
+    OAuth2::Client.new(EnvVars.STRIPE_CLIENT_ID, EnvVars.STRIPE_API_KEY, options)
   end
 
   def clone_competition
@@ -481,8 +481,8 @@ class CompetitionsController < ApplicationController
         flash[:success] = t('.delete_success', id: @competition.id)
         redirect_to root_url
       end
-    elsif @competition.update_attributes(comp_params_minus_id)
-      if new_id && !@competition.update_attributes(id: new_id)
+    elsif @competition.update(comp_params_minus_id)
+      if new_id && !@competition.update(id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
         # code, just revert the attempted id change. The user will have to deal with
@@ -614,7 +614,10 @@ class CompetitionsController < ApplicationController
         :event_restrictions,
         :event_restrictions_reason,
         :guests_entry_fee_lowest_denomination,
+        :free_guest_entry_status,
         :main_event_id,
+        :waiting_list_deadline_date,
+        :event_change_deadline_date,
         competition_events_attributes: [:id, :event_id, :_destroy],
         championships_attributes: [:id, :championship_type, :_destroy],
       ]

@@ -34,7 +34,7 @@ RSpec.feature "Claim WCA ID" do
 
       # First, intentionally fill in the incorrect birthdate,
       # to test out our validations.
-      fill_in "Birthdate", with: "1900-01-01"
+      fill_in("Birthdate", with: "1900-01-01").send_keys(:enter)
       click_button "Claim WCA ID"
 
       # Make sure we inform the user of the incorrect birthdate they just
@@ -42,7 +42,7 @@ RSpec.feature "Claim WCA ID" do
       expect(person.reload.incorrect_wca_id_claim_count).to eq 1
       expect(page.find(".alert.alert-danger")).to have_content("Birthdate does not match our database.")
       # Now enter the correct birthdate and submit the form!
-      fill_in "Birthdate", with: "1988-02-03"
+      fill_in("Birthdate", with: "1988-02-03").send_keys(:enter)
       click_button "Claim WCA ID"
 
       user.reload
@@ -74,7 +74,7 @@ RSpec.feature "Claim WCA ID" do
       5.times do |i|
         # First, intentionally fill in the incorrect birthdate,
         # to test out our validations.
-        fill_in "Birthdate", with: "1900-01-01"
+        fill_in("Birthdate", with: "1900-01-01").send_keys(:enter)
         click_button "Claim WCA ID"
 
         # Make sure we inform the user of the incorrect birthdate they just
@@ -84,7 +84,7 @@ RSpec.feature "Claim WCA ID" do
       end
 
       # Now enter the correct birthdate and submit the form!
-      fill_in "Birthdate", with: "1988-02-03"
+      fill_in("Birthdate", with: "1988-02-03").send_keys(:enter)
       click_button "Claim WCA ID"
 
       # Based on WRT request here: https://github.com/thewca/worldcubeassociation.org/pull/3666#discussion_r253315031,

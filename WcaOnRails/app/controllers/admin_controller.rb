@@ -66,7 +66,7 @@ class AdminController < ApplicationController
     @competition = competition_from_params
 
     if @competition.results_submitted? && !@competition.results_posted?
-      @competition.update_attributes(results_submitted_at: nil)
+      @competition.update(results_submitted_at: nil)
       flash[:success] = "Results submission cleared."
     else
       flash[:danger] = "Could not clear the results submission. Maybe results are alredy posted, or there is no submission."
@@ -110,7 +110,7 @@ class AdminController < ApplicationController
       person_params = params.require(:person).permit(:name, :countryId, :gender, :dob, :incorrect_wca_id_claim_count)
       case params[:method]
       when "fix"
-        if @person.update_attributes(person_params)
+        if @person.update(person_params)
           flash.now[:success] = "Successfully fixed #{@person.name}."
           if @person.saved_change_to_countryId?
             flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run

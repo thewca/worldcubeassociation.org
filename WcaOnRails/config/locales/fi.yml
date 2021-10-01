@@ -257,6 +257,8 @@ fi:
     333fm: 1 tunti
     #original_hash: cc7d8bb
     333mbf: '10:00.00/kuutio, max. 60:00:00'
+    #original_hash: da39a3e
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: Maailma
@@ -1387,8 +1389,8 @@ fi:
       forum: Foorumi
       #original_hash: 3ad28c0
       teams: Toimikunnat ja valtuustot
-      #original_hash: a979ffc
-      education: Koulutusmateriaalit
+      #original_hash: 7981fb3
+      education: Opetusmateriaalit
       #original_hash: a34b69f
       contact: Yhteystiedot
       #original_hash: 8e12c09
@@ -1635,7 +1637,7 @@ fi:
           href=%{competition_url}>%{competition}</a> avautuu 24 tunnin kuluessa.
         #original_hash: 2b93022
         not_accepted_html: 'Olet rekisteröitynyt, mutta rekisteröitymistäsi ei ole hyväksytty.'
-        #original_hash: 3724e7c
+        #original_hash: d4087ee
         more_info_html: >-
           Lue rekisteröitymisohjeet ja muut tiedot <a
           href=%{competition_url}>kilpailusivulta</a>.
@@ -1730,6 +1732,11 @@ fi:
         aikaisemmin, pyydä WCA ID:n liittämistä tiliisi %{here}!
       #original_hash: 29e25b5
       have_wca_id_html: 'WCA ID:si on %{link_id}.'
+      #original_hash: bf654e1
+      account_is_special: >-
+        WCA ID ja käyttäjätili on yhdistetty erityistehtäviin (esim. delegaatti,
+        järjestäjä, toimikunnan jäsen), eikä niitä voi poistaa. Ota yhteyttä WCA
+        Results Teamiin WCA ID:n siirtämiseksi toiselle tilille.
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -2836,6 +2843,12 @@ fi:
       limit: Raja
       #original_hash: 855bd26
       competitors: Kilpailijat
+      #original_hash: c5497bc
+      events: Lajit
+      #original_hash: 50cb854
+      show_events: Näytä lajit
+      #original_hash: 0df66f7
+      hide_events: Piilota lajit
     #original_hash: 06b01c4
     announcements: Tiedotteet
     #original_hash: a2b80b0
@@ -3516,11 +3529,10 @@ fi:
       ja muiden välttämättömien valmistelujen kattamiseksi.</p>
     #original_hash: 1aa5344
     contributing_title: Anna oma panoksesi
-    #original_hash: e64beb7
+    #original_hash: 538a82f
     contributing_content_html: >-
-      Voit tehdä lahjoituksia luottokortilla <a
-      href="https://www.nfggive.com/guidestar/82-3825954">Guidestarin</a>
-      kautta. Jos haluat kirjoittaa shekin, osoite on seuraava:
+      Voit tehdä lahjoituksia Guidestarin (%{here_credit}) tai Paypalin
+      (%{here_paypal}) kautta. Jos haluat kirjoittaa shekin, osoite on seuraava:
     #original_hash: 2af9b71
     tax_deductible_note: Lahjoitukset ovat Yhdysvaltojen verovähennysten piirissä.
     #original_hash: 6026d35
@@ -3539,6 +3551,8 @@ fi:
         auttavat meitä kehittämään kilpailutoimintaamme ympäri maailmaa!
       #original_hash: 24c87db
       donate_credit: Tee lahjoitus luottokortilla
+      #original_hash: 0e5a9c3
+      donate_paypal: Lahjoita Paypalilla
       #original_hash: 96d77f3
       donate_other: Muut lahjoitustavat
     structure:
@@ -3705,6 +3719,9 @@ fi:
       probation:
         #original_hash: 1dd6e3b
         name: Delegates on Probation
+      wst_admin:
+        #original_hash: d4112d2
+        name: Software admins
       #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA-delegaatti</strong> on WCA-säännöissä esitelty rooli,
@@ -3749,15 +3766,19 @@ fi:
     codeofethics: Code of Ethics
     #original_hash: 2643980
     codeofconduct: Code of Conduct
+    #original_hash: 4f05e8f
+    finances: Talous
   education:
-    #original_hash: 41701c2
-    title: 'WCA:n koulutusmateriaalit'
+    #original_hash: 746e863
+    title: 'WCA:n opetusmateriaalit'
     #original_hash: 081d65d
     description: >-
       WQAC on julkaissut materiaaleja yhteisön käyttöön, voit ladata niitä
       alapuolelta.
     #original_hash: d0a3812
     competitor_tutorial: Kilpailuohjeet (englanniksi)
+    #original_hash: 9561bfc
+    judge_tutorial: Tuomarointiohje ensikertalaisille
     #original_hash: 5ca0558
     certificates: 'WCT:n kunniakirjapohjat'
     #original_hash: f580987
@@ -4361,10 +4382,10 @@ fi:
       title: Suositellut asiakirjat
       #original_hash: bfbd4bb
       staff: Kilpailun toimihenkilöt
-      #original_hash: c346846
-      emails: Sähköpostiviestintä ennen kilpailua
-      #original_hash: 3212cc7
-      running-systems: Runnerien toiminta
+      #original_hash: 4735583
+      emails: Sähköpostiviestintä
+      #original_hash: 8e7ca09
+      running-systems: Runnerien ja tuomareiden toiminta
       #original_hash: 2b31c89
       new-competitors: Uusien kilpailijoiden kohtelu
       #original_hash: 3408054
@@ -4408,11 +4429,15 @@ fi:
     paragraph3:
       #original_hash: 00d3bf8
       title: Kilpailun ilmoittamisen takarajat
-      #original_hash: 3613823
+      #original_hash: 66bf437
       content_html: >-
         Kilpailu täytyy ilmoittaa vähintään 28 päivää ennen sen alkua (ks. <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>kilpailun
-        vaatimukset</a>).
+        vaatimukset</a>). Tämä ei usein kuitenkaan riitä. Muista ottaa huomioon
+        kaikki, mitä kilpailun järjestämiseen kuuluu ja anna itsellesi tarpeeksi
+        valmistautumisaikaa. WCAT:in täytyy myös käydä kilpailusi läpi ennen sen
+        julkistamista. Keskustele delegaattisi kanssa, jos olet epävarma
+        tarvitsemastasi ajasta.
     paragraph4:
       #original_hash: b6dca56
       title: Etäisyyskäytännöt
@@ -4527,7 +4552,7 @@ fi:
       #original_hash: ee2e9c6
       content: >-
         Kilpailun järjestäjän tulisi keskustella WCA-delegaatin kanssa
-        tehtävistään kilpailussa. Tyypillisiä tehtäviä (niitä voi delegoida
+        tehtävistään kilpailussa. Tyypillisiä tehtäviä (näitä voi delegoida
         muillekin luotettaville henkilöille):
       list:
         #original_hash: 03aea46

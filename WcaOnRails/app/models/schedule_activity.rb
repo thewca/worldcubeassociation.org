@@ -115,7 +115,7 @@ class ScheduleActivity < ApplicationRecord
   end
 
   def load_wcif!(wcif)
-    update_attributes!(ScheduleActivity.wcif_to_attributes(wcif))
+    update!(ScheduleActivity.wcif_to_attributes(wcif))
     new_child_activities = wcif["childActivities"].map do |activity_wcif|
       activity = child_activities.find { |a| a.wcif_id == activity_wcif["id"] } || child_activities.build
       activity.load_wcif!(activity_wcif)

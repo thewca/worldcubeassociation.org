@@ -39,7 +39,7 @@ class Person < ApplicationRecord
       self.year, self.month, self.day = @dob.split("-").map(&:to_i)
       unless Date.valid_date? self.year, self.month, self.day
         errors.add(:dob, I18n.t('errors.messages.invalid'))
-        return false
+        false
       end
     end
   end
@@ -95,10 +95,10 @@ class Person < ApplicationRecord
       return false
     end
     old_attributes = self.attributes
-    if update_attributes(attributes)
+    if update(attributes)
       Person.where(wca_id: wca_id).where.not(subId: 1).order(subId: :desc).update_all("subId = subId + 1")
       Person.create(old_attributes.merge!(subId: 2))
-      return true
+      true
     end
   ensure
     @updating_using_sub_id = false
@@ -270,7 +270,7 @@ class Person < ApplicationRecord
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
-      url: Rails.application.routes.url_helpers.person_url(self.wca_id, host: ENVied.ROOT_URL),
+      url: Rails.application.routes.url_helpers.person_url(self.wca_id, host: EnvVars.ROOT_URL),
 
       id: self.wca_id,
       wca_id: self.wca_id,

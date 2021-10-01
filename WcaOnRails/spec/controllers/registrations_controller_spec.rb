@@ -637,9 +637,10 @@ RSpec.describe RegistrationsController do
     context 'when signed in as organizer' do
       let(:organizer) { FactoryBot.create(:user) }
       let(:competition) {
-        FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open,
+        FactoryBot.create(:competition, :stripe_connected, :visible,
                           organizers: [organizer],
                           events: Event.where(id: %w(222 333)),
+                          use_wca_registration: true,
                           starts: (ClearConnectedStripeAccount::DELAY_IN_DAYS + 1).days.ago)
       }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: organizer) }

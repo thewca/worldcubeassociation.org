@@ -80,8 +80,8 @@ FactoryBot.define do
     end
 
     use_wca_registration { false }
-    registration_open { 2.weeks.ago.change(usec: 0) }
-    registration_close { 1.week.ago.change(usec: 0) }
+    registration_open { 54.weeks.ago.change(usec: 0) }
+    registration_close { 53.weeks.ago.change(usec: 0) }
 
     trait :with_valid_submitted_results do
       announced
@@ -97,6 +97,8 @@ FactoryBot.define do
     end
 
     trait :registration_open do
+      starts { 1.month.from_now }
+      ends { starts }
       use_wca_registration { true }
       registration_open { 2.weeks.ago.change(usec: 0) }
       registration_close { 2.weeks.from_now.change(usec: 0) }

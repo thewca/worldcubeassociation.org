@@ -150,15 +150,15 @@ en:
       ranking: "Top %{ranking}"
       percent: "Top %{percent}%"
       attempt_result:
-        time: "Best result < %{time}"
-        moves: "Best result < %{moves}"
-        points: "Best result > %{points}"
+        time: "%{round_format} < %{time}"
+        moves: "%{round_format} < %{moves}"
+        points: "%{round_format} > %{points}"
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
     attempt_result:
-      time: "Best result < %{time} advances to next round"
-      moves: "Best result < %{moves} moves advances to next round"
-      points: "Best result > %{points} points advances to next round"
+      time: "%{round_format} < %{time} advances to next round"
+      moves: "%{round_format} < %{moves} moves advances to next round"
+      points: "%{round_format} > %{points} points advances to next round"
   #context: Words used to describe cutoff round cutoffs
   cutoff:
     time:
@@ -177,6 +177,7 @@ en:
       across_rounds: "%{time} total for %{rounds}"
     333fm: "1 hour"
     333mbf: "10:00.00 per cube, up to 60:00.00"
+    333mbo: ""
   #context: Common word used in multiple places on the website
   common:
     world: "World"
@@ -305,7 +306,10 @@ en:
         on_the_spot_entry_fee_lowest_denomination: "On the spot base registration fee"
         refund_policy_percent: "Percent to be refunded"
         refund_policy_limit_date: "Limit date for refunds"
+        waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
+        event_change_deadline_date: "Deadline for competitors to update their registered events"
         guests_entry_fee_lowest_denomination: "Entry fee for guests"
+        free_guest_entry_status: "Display message for free guest entry"
         early_puzzle_submission: "I would like to require competitors to submit puzzles at a specific time before an event is scheduled to begin"
         early_puzzle_submission_reason: "Reason and details for submitting puzzles early"
         qualification_results: "I would like to use qualification results to limit who can compete in certain events"
@@ -426,6 +430,11 @@ en:
         report: "Report"
         article: "Article"
         multimedia: "Multimedia"
+    competition:
+      free_guest_entry_status:
+        unclear: "Do not display anything (and perhaps elaborate in the \"Extra registration requirements\" section)"
+        anyone: "\"Any spectator can attend for free\""
+        restricted: "\"Spectators are only permitted as companions of competitors\""
   #context: This key is an element of a form on the website
   simple_form:
     "yes": "Yes"
@@ -507,7 +516,10 @@ en:
         on_the_spot_entry_fee_lowest_denomination: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
         refund_policy_percent: "For now this number is informational only, refunds will have to be issued manually. If this is set to 0, a sentence will be displayed saying that registration fees won't be refunded under any circumstance."
         refund_policy_limit_date: "Date after which no more refunds will be issued."
-        guests_entry_fee_lowest_denomination: "For now this number is informational only, guest fees cannot be managed through this website. If this is set to 0, a sentence will be displayed saying that spectators can attend for free."
+        waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
+        event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
+        guests_entry_fee_lowest_denomination: "For now this number is informational only, guest fees cannot be managed through this website. If this is set to 0, a sentence of your choice will be displayed about the spectator policy."
+        free_guest_entry_status: ""
         early_puzzle_submission: ""
         early_puzzle_submission_reason: "Please elaborate here why you would like to require competitors to submit puzzles early. Please fill this out in English!"
         qualification_results: ""
@@ -764,7 +776,7 @@ en:
       faq: "Frequently Asked Questions"
       forum: "Forum"
       teams: "Teams, Committees, and Councils"
-      education: "Education resources"
+      education: "Educational resources"
       contact: "Contact Information"
       speedcubing_history: "Speedcubing History"
       tools: "Tools"
@@ -901,7 +913,7 @@ en:
         intro: "Hello %{name},"
         information_html: "This is a reminder that registration for <a href=%{competition_url}>%{competition}</a> opens in less than 24 hours."
         not_accepted_html: "You have registered but your registration has not been accepted."
-        more_info_html: "Please see the <a href=%{competition_url}>competition website</a> for more information and registration requirements."
+        more_info_html: "Please see the <a href=%{competition_url}>competition WCA page</a> for more information and registration requirements."
       #context: notification to users after a competition results have been posted
       results_presence_email:
         header: "The results of %{competition} are posted"
@@ -1109,6 +1121,7 @@ en:
           incomplete: "You didn't meet the registration criteria (for example, paying the registration fee in advance or meeting the qualifying times for events)"
           registrations_full: "The competitor limit has been reached and there are no more spots available"
           multiple_registrations: "You registered twice or more times"
+          competition_canceled: "The competition has been canceled"
     #context: on the registrations list
     list:
       title: "Registrations for %{comp}"
@@ -1131,6 +1144,7 @@ en:
         with_stripe: "Paid on"
       #context: date is the registration creation date, eg: "2016-12-01 16:18:56 UTC"
       payment_requested_on: "Payment requested on: %{date}"
+      payment_completed_on: "Payment completed on: %{date}"
       total: "Total"
       n_events: "Number of events"
     new_registration:
@@ -1221,9 +1235,15 @@ en:
     messages:
       not_visible: "This competition is not visible to the public."
       name_too_long: "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+      id_starts_with_lowercase: "The competition id starts with a lowercase letter. We prefer to have it start with an uppercase."
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
       advancement_condition_must_be_present_for_all_non_final_rounds: "Please make sure that all non final rounds have advancement condition specified."
+      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit, Please make sure the cutoff is less than the time limit."
+      cutoff_is_too_fast: "Round %{round_number} in %{event} has a cutoff less than 5 seconds. Please make sure that it is correct."
+      cutoff_is_too_slow: "Round %{round_number} in %{event} has a cutoff more than 10 minutes. Please make sure that it is correct."
+      time_limit_is_too_fast: "Round %{round_number} in %{event} has a time limit less than 10 seconds. Please make sure that it is correct."
+      time_limit_is_too_slow: "Round %{round_number} in %{event} has a time limit more than 10 minutes in a fast event. Please make sure that it is correct."
       create_success: "Successfully created new competition!"
       not_announced: "This competition is visible to the public but hasn't been announced yet."
       announced: "Successfully announced competition!"
@@ -1303,11 +1323,16 @@ en:
       use_stripe_below_html: "The registration fee has to be paid through Stripe below once registered."
       refund_policy_html: "If your registration is cancelled before %{limit_date_and_time} you will be refunded %{refund_policy_percent} of your registration fee."
       no_refunds: "Registration fees won't be refunded under any circumstance."
+      waiting_list_deadline_html: "Registrants on the waiting list may be accepted onto the competitor list until %{waiting_list_deadline}."
+      event_change_deadline_html: "If you are a registered competitor you may change your registered events until %{event_change_deadline} by contacting the organization team."
+      event_change_deadline_default_html: "We encourage everyone to register for the events they want to compete in via your online registration, however you may add events to your registration up until the event has started."
       on_the_spot_registration_fee_html: "On the spot registrations will be accepted with a base registration fee of %{on_the_spot_base_entry_fee}."
       on_the_spot_registration_free: "On the spot registrations will be accepted for free."
       no_on_the_spot_registration: "No on the spot registrations will be accepted."
       guests_pay: "Spectators can attend paying an entry fee of %{guests_base_fee}."
-      guests_free: "Spectators can attend for free."
+      guests_free: 
+        anyone: "Any spectator can attend for free."
+        restricted: "Spectators are only permitted as companions of competitors."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
       click_to_display_requirements_html: "This competition is over, click %{link_here} to display the registration requirements it used."
       hide_requirements: "Hide registration requirements."
@@ -1448,6 +1473,13 @@ en:
       span_too_many_days: "Competition cannot last more than %{max_days} days."
       invalid_currency_code: "Selected currency code is invalid"
       advancement_condition_must_be_present_for_all_non_final_rounds: "must have an advancement condition to all non final rounds."
+      registration_period_after_start: "Registration period cannot be after start date."
+      waiting_list_deadline_before_registration_close: "Wailting list deadline cannot be before registration close date."
+      waiting_list_deadline_before_refund_date: "Waiting list deadline cannot be before limit date for refunds."
+      waiting_list_deadline_after_start: "Waiting list deadline must be before start date."
+      event_change_deadline_before_registration_close: "Deadline for updating events cannot be before registration close date."
+      event_change_deadline_after_end_date: "Deadline for updating events cannot be after the competition."
+      event_change_deadline_with_ots: "Deadline for updating events must be during the competition if on the spot registrations are accepted."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
@@ -1574,6 +1606,10 @@ en:
       event: "Event"
       round: "Round"
       name: "Name"
+      rank:
+        national: "National Rank"
+        continent: "Continental Rank"
+        world: "World Rank"
     scrambles_table:
       group: "Group"
       scramble: "Scramble"
@@ -1927,6 +1963,9 @@ en:
       #context: Hidden team for list of Delegates on Probation
       probation:
         name: "Delegates on Probation"
+      #context: Hidden team for Software administrators
+      wst_admin:
+        name: "Software admins"
       delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Mission, Spirit, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
 <p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
 <p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>
@@ -1945,10 +1984,13 @@ en:
     policies: "WCA Policies"
     codeofethics: "Code of Ethics"
     codeofconduct: "Code of Conduct"
+    finances: "Finances"
   education:
-    title: "WCA Educational Documents"
+    title: "WCA Educational Resources"
     description: "The WQAC has published several documents for the community, you can download them below."
     competitor_tutorial: "Competitor tutorial"
+    judge_tutorial: "Judging tutorial for newcomers"
+    competition_templates: "Competition templates"
     certificates: "WCT's certificate templates"
     orga_guidelines: "Organizer guidelines"
   #context: Delegates page
@@ -1987,6 +2029,8 @@ en:
       end_date_after_start_date: "cannot be after Acknowledged until"
     create:
       create_success: "Application successfully submitted! Please check your email, and wait for the WCA Board of Directors to review it"
+    delete:
+      confirm_delete: "Are you sure you want to delete this Regional Organization request?"
   #context: Contact page
   contact:
     title: "Contact Information"
@@ -2200,8 +2244,8 @@ en:
     recommended:
       title: "Recommended documents"
       staff: "Assigning staff"
-      emails: "Pre-competition email structure"
-      running-systems: "Running systems"
+      emails: "Emails"
+      running-systems: "Running and judging systems"
       new-competitors: "Attitude to new competitors"
       enhancing-experience: "Enhancing competitor and staff experience"
       reflection: "Organizer reflection"
@@ -2220,7 +2264,7 @@ en:
       it is highly recommended to search for sponsors. Although WCA Delegates are volunteers and do not receive a salary for their work, organizers should consider paying compensation for their travel expenses."
     paragraph3:
       title: "Deadlines for the announcement of the competition"
-      content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>)."
+      content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). However, this is rarely enough time. You should consider everything that will go into organizing your competition, and give yourself enough time to prepare. Also, the WCAT will need time to review your competition before it is announced. Consult with your delegate if you are unsure about how much time will be needed."
     paragraph4:
       title: "Proximity policy"
       content1: "WCA competitions will be accepted if they are at least 100 km or 19 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 100 km and the time between them is less than 19 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"

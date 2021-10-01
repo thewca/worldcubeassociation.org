@@ -19,7 +19,12 @@ RSpec.describe "registrations/register" do
   end
 
   it "shows message about registration being past" do
-    competition = FactoryBot.create(:competition, use_wca_registration: true, registration_open: 1.week.ago, registration_close: Time.now.yesterday)
+    competition = FactoryBot.create(:competition,
+                                    use_wca_registration: true,
+                                    registration_open: 1.week.ago,
+                                    registration_close: Time.now.yesterday,
+                                    starts: 1.month.from_now,
+                                    ends: 1.month.from_now)
 
     assign(:competition, competition)
 
@@ -28,7 +33,12 @@ RSpec.describe "registrations/register" do
   end
 
   it "shows message about registration not yet being open" do
-    competition = FactoryBot.create(:competition, use_wca_registration: true, registration_open: 1.week.from_now, registration_close: 2.weeks.from_now)
+    competition = FactoryBot.create(:competition,
+                                    use_wca_registration: true,
+                                    registration_open: 1.week.from_now,
+                                    registration_close: 2.weeks.from_now,
+                                    starts: 1.month.from_now,
+                                    ends: 1.month.from_now)
 
     assign(:competition, competition)
 
