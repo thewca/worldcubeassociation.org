@@ -3,8 +3,12 @@
 class AnonymizePerson
   include ActiveModel::Model
 
+  ANONYMIZED_NAME = "Anonymous"
+  STEP_1 = "enter_wca_id"
+  STEP_2 = "request_data_removal"
+
   attr_writer :current_step
-  attr_reader :person_wca_id, :new_wca_id, :person, :account
+  attr_reader :person_wca_id, :person, :account
 
   def person_wca_id=(wca_id)
     @person_wca_id = wca_id
@@ -19,15 +23,15 @@ class AnonymizePerson
   end
 
   def steps
-    %w[enter_wca_id request_data_removal]
+    [STEP_1, STEP_2]
   end
 
-  def next_step
-    self.current_step = steps[steps.index(current_step)+1]
+  def next_step!
+    self.current_step = steps[steps.index(current_step)+1 % steps.length]
   end
 
-  def previous_step
-    self.current_step = steps[steps.index(current_step)-1]
+  def previous_step!
+    self.current_step = steps[steps.index(current_step)-1 % steps.length]
   end
 
   def first_step?
@@ -39,28 +43,30 @@ class AnonymizePerson
   end
 
   def do_anonymize_person
-    if !valid?
-      return { error: "invalid forum" }
+    unless valid?
+      return { error: "invalid form" }
     end
 
-    if !generate_new_wca_id
-      return { error: "Error anonymizing: SubIds " + person_wca_id[0..3] + "ANON00 to " + person_wca_id[0..3] + "ANON99 are already taken." }
+    new_wca_id = generate_new_wca_id
+    unless new_wca_id
+      wca_id_year = person_wca_id[0..3]
+      return { error: "Error anonymizing: SubIds " + wca_id_year + "ANON00 to " + wca_id_year + "ANON99 are already taken." }
     end
 
     ActiveRecord::Base.transaction do
       # Anonymize data on Account
       if account
-        # If the account associated with the WCA ID is a special account (delegate, organizer, team member) then we want to keep the link between the Person and the account
         account_to_update = User.where('id = ? OR unconfirmed_wca_id = ?', account.id, person_wca_id)
 
+        # If the account associated with the WCA ID is a special account (delegate, organizer, team member) then we want to keep the link between the Person and the account
         if !account.is_special_account?
           account_to_update.update_all(wca_id: nil, country_iso2: "US")
         else
-          account_to_update.update_all(wca_id: @new_wca_id, avatar: nil)
+          account_to_update.update_all(wca_id: new_wca_id, avatar: nil)
         end
 
         account_to_update.update_all(email: account.id.to_s + "@worldcubeassociation.org",
-                                     name: "Anonymous",
+                                     name: ANONYMIZED_NAME,
                                      unconfirmed_wca_id: nil,
                                      delegate_id_to_handle_wca_id_claim: nil,
                                      dob: nil,
@@ -70,7 +76,7 @@ class AnonymizePerson
       end
 
       # Anonymize person's data in Results
-      person.results.update_all(personId: @new_wca_id, personName: "Anonymous")
+      person.results.update_all(personId: new_wca_id, personName: ANONYMIZED_NAME)
 
       # Anonymize person's data in Persons
       if person.sub_ids.length > 1
@@ -83,7 +89,8 @@ class AnonymizePerson
         previous_persons.each do |p|
           if p.countryId != current_country_id
             current_sub_id += 1
-            p.update(wca_id: @new_wca_id, name: "Anonymous", gender: "o", year: 0, month: 0, day: 0, subId: current_sub_id)
+            current_country_id = p.countryId
+            p.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", year: 0, month: 0, day: 0, subId: current_sub_id)
           else
             p.delete
           end
@@ -92,10 +99,10 @@ class AnonymizePerson
       end
 
       # Anonymize person's data in Persons for subid 1
-      person.update(wca_id: @new_wca_id, name: "Anonymous", gender: "o", year: 0, month: 0, day: 0)
+      person.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", year: 0, month: 0, day: 0)
     end
 
-    {}
+    { new_wca_id: new_wca_id }
   end
 
   def generate_new_wca_id
@@ -104,13 +111,12 @@ class AnonymizePerson
     similarWcaIds = Person.where("wca_id LIKE ?", semiId + '%')
 
     (1..99).each do |i|
-      if !similarWcaIds.where(wca_id: semiId + i.to_s.rjust(2, "0")).any?
-        @new_wca_id = semiId + i.to_s.rjust(2, "0")
-        return true
+      unless similarWcaIds.where(wca_id: semiId + i.to_s.rjust(2, "0")).any?
+        return semiId + i.to_s.rjust(2, "0")
       end
     end
 
     # Semi Id doesn't work
-    false
+    nil
   end
 end

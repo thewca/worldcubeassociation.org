@@ -198,19 +198,19 @@ class AdminController < ApplicationController
     if @anonymize_person.valid?
 
       if params[:back_button]
-        @anonymize_person.previous_step
+        @anonymize_person.previous_step!
       elsif @anonymize_person.last_step?
         do_anonymize_person_response = @anonymize_person.do_anonymize_person
 
-        if do_anonymize_person_response && !do_anonymize_person_response[:error]
-          flash.now[:success] = "Successfully anonymized #{@anonymize_person.person_wca_id} to #{@anonymize_person.new_wca_id}! Don't forget to run Compute Auxilery Data and Export Public."
+        if do_anonymize_person_response && !do_anonymize_person_response[:error] && do_anonymize_person_response[:new_wca_id]
+          flash.now[:success] = "Successfully anonymized #{@anonymize_person.person_wca_id} to #{do_anonymize_person_response[:new_wca_id]}! Don't forget to run Compute Auxiliary Data and Export Public."
           @anonymize_person = AnonymizePerson.new
         else
           flash.now[:danger] = do_anonymize_person_response[:error] || "Error anonymizing"
         end
 
       else
-        @anonymize_person.next_step
+        @anonymize_person.next_step!
       end
 
       session[:anonymize_step] = @anonymize_person.current_step

@@ -58,7 +58,7 @@ RSpec.describe AdminController, type: :controller do
       post :do_anonymize_person, params: { anonymize_person: { person_wca_id: person.wca_id } }
       expect(response.status).to eq 200
       expect(response).to render_template :anonymize_person
-      expect(flash.now[:success]).to eq "Successfully anonymized #{person.wca_id} to #{person.wca_id[0..3]}ANON01! Don't forget to run Compute Auxilery Data and Export Public."
+      expect(flash.now[:success]).to eq "Successfully anonymized #{person.wca_id} to #{person.wca_id[0..3]}ANON01! Don't forget to run Compute Auxiliary Data and Export Public."
     end
   end
 
