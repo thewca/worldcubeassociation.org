@@ -640,7 +640,7 @@ en:
           "true": "On the spot registrations will be accepted"
           "false": "On the spot registrations WILL NOT be accepted"
         allow_registration_edits:
-          "true": "Competitors may edit their registration until registration closes"
+          "true": "Competitors may edit their registration until the deadline for updating events"
           "false": "Competitors may NOT edit their registration once it has been accepted"
   mail_form:
     #context: This key is used as a label for contact form attributes
