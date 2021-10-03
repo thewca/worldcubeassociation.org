@@ -35,7 +35,7 @@
           <br>
 
           <% if @anonymize_person.account %>
-            <li>Request data anonymization from WCA Forum by <%= mail_to Team.wac.current_members.select(&:team_leader).map(&:user).map(&:email)[0], name = "Emailing the WAC Leader", cc: Team.wrt.email, subject: "Anonymization Request", body: "Hello WAC Leader,
+            <li>Request data anonymization from WCA Forum by <%= mail_to Team.wac.leader.user.email[0], name = "Emailing the WAC Leader", cc: Team.wrt.email, subject: "Anonymization Request", body: "Hello " + Team.wac.leader.user.name + ",
   WCA has received an anonymization request for #{@anonymize_person.account.email}. Can you please search active users ( https://forum.worldcubeassociation.org/admin/users/list/active) for any users using this email. If there are any can you please anonymize the user's data.
   Thanks - WCA Results Team" %>.</li>
           <% else %>
