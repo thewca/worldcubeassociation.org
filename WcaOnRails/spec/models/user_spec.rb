@@ -776,16 +776,17 @@ RSpec.describe User, type: :model do
       expect(competitor.can_edit_registration?(registration)).to be false
     end
 
-    it "if registration edits are allowed" do
+    it "if event edit deadline is in the future" do
       registration.accepted_at = Time.now
       competition.allow_registration_edits = true
+      competition.event_change_deadline_date = 2.weeks.from_now
       expect(competitor.can_edit_registration?(registration)).to be true
     end
 
-    it "unless registration is closed" do
+    it "unless event edit deadline has passed" do
       registration.accepted_at = Time.now
-      competition.registration_close = 2.weeks.ago
       competition.allow_registration_edits = true
+      competition.event_change_deadline_date = 2.weeks.ago
       expect(competitor.can_edit_registration?(registration)).to be false
     end
   end

@@ -964,6 +964,10 @@ class Competition < ApplicationRecord
     start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
+  def registration_edits_allowed?
+    self.allow_registration_edits && (!has_event_change_deadline_date? || event_change_deadline_date > DateTime.now)
+  end
+
   private def unpack_dates
     if start_date
       self.year = start_date.year
