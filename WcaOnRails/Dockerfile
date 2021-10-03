@@ -1,4 +1,3 @@
-
 FROM ruby:2.6.7
 EXPOSE 3000
 
@@ -7,9 +6,9 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y curl gnupg
 
-# Install Node 10
+# Install Node 14 LTS
 # From: https://github.com/nodesource/distributions
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 
 # Add PPA needed to install yarn.
 # From: https://yarnpkg.com/en/docs/install#debian-stable
@@ -21,7 +20,7 @@ RUN apt-get update && apt-get install -y \
   yarn \
   build-essential \
   nodejs \
-  mariadb-client-10.1 \
+  mariadb-client \
   libssl-dev \
   tzdata
 
