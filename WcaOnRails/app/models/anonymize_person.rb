@@ -113,7 +113,7 @@ class AnonymizePerson
     (1..99).each do |i|
       new_wca_id = semiId + i.to_s.rjust(2, "0")
 
-      unless similarWcaIds.where(new_wca_id).any?
+      unless similarWcaIds.where(wca_id: new_wca_id).any?
         return new_wca_id
       end
     end
