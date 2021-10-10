@@ -29,12 +29,15 @@
       height: 25px;
       line-height: 25px;
       background-color: $link-color;
+
       &:hover {
         background-color: $link-hover-color;
       }
+
       &.active {
         background-color: $blue;
       }
+
       &.active:hover {
         background-color: $blue;
       }
@@ -44,6 +47,6 @@
 
 #search-results {
   .cubing-icon {
-    vertical-align: middle;
+    vertical-align: baseline;
   }
 }
