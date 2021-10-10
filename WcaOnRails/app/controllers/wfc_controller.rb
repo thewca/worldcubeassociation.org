@@ -17,11 +17,11 @@ class WfcController < ApplicationController
     from = params.require(:from_date)
     to = params.require(:to_date)
     @competitions = Competition
-                      .select(select_attributes)
-                      .includes(:delegates)
-                      .left_joins(:competitors)
-                      .group("Competitions.id")
-                      .where("results_posted_at >= ? and results_posted_at <= ?", from, to)
-                      .order(:results_posted_at, :name)
+                    .select(select_attributes)
+                    .includes(:delegates)
+                    .left_joins(:competitors)
+                    .group("Competitions.id")
+                    .where("results_posted_at >= ? and results_posted_at <= ?", from, to)
+                    .order(:results_posted_at, :name)
   end
 end
