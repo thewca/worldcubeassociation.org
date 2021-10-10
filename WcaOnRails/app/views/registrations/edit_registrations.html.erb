@@ -1,4 +1,5 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
+<% add_to_packs("delete_registration") %>
 
 <%= render layout: 'nav' do %>
   <% if @show_events %>
@@ -146,9 +147,7 @@
       <button type="submit" class="btn btn-warning selected-approved-deleted-registrations-actions" name="registrations_action" value="reject-selected">
         <%= ui_icon 'times' %> <%= t('registrations.list.reject') %>
       </button>
-      <button type="submit" class="btn btn-danger selected-pending-approved-registrations-actions" name="registrations_action" value="delete-selected">
-        <%= ui_icon 'trash' %> <%= t('registrations.list.delete') %>
-      </button>
+      <%= render_react_component("DeleteRegistration") %>
     </div>
   <% end %>
 
