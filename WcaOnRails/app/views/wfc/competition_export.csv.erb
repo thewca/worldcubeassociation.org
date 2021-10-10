@@ -7,11 +7,10 @@
 ] %>
 <%= CSV.generate_line(headers, col_sep: "\t").html_safe -%>
 <% @competitions.each do |c| %>
-  <%= entry_fee = Money.from_cents(c.base_entry_fee_lowest_denomination, c.currency_code) %>
   <%= CSV.generate_line([
     c.id, c.name, c.country.iso2, c.continent.id,
     c.start_date, c.end_date, c.announced_at, c.results_posted_at,
     competition_url(c.id), c.num_competitors, c.delegates.map(&:name).sort.join(","),
-    entry_fee.currency, entry_fee.cents, Money::Currency.new(c.currency_code).subunit_to_unit,
+    c.currency_code, c.base_entry_fee_lowest_denomination, Money::Currency.new(c.currency_code).subunit_to_unit,
   ], col_sep: "\t").html_safe -%>
 <% end %>
