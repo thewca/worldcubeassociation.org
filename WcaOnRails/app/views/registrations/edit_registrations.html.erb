@@ -1,5 +1,5 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
-<% add_to_packs("delete_registration") %>
+<% add_to_packs("registration_actions") %>
 
 <%= render layout: 'nav' do %>
   <% if @show_events %>
@@ -134,21 +134,7 @@
       <% end %>
     <% end %>
 
-    <div id="registrations-actions" class="btn-group" role="group">
-      <button type="submit" class="btn btn-info selected-registrations-actions" name="registrations_action" value="export-selected">
-        <%= ui_icon 'download' %> <%= t('registrations.list.export_csv') %>
-      </button>
-      <a href="#" id="email-selected" target="_blank" class="btn btn-info selected-registrations-actions">
-        <%= ui_icon 'envelope' %> <%= t('registrations.list.email') %>
-      </a>
-      <button type="submit" class="btn btn-success selected-pending-deleted-registrations-actions" name="registrations_action" value="accept-selected">
-        <%= ui_icon 'check' %> <%= t('registrations.list.approve') %>
-      </button>
-      <button type="submit" class="btn btn-warning selected-approved-deleted-registrations-actions" name="registrations_action" value="reject-selected">
-        <%= ui_icon 'times' %> <%= t('registrations.list.reject') %>
-      </button>
-      <%= render_react_component("DeleteRegistration") %>
-    </div>
+    <%= render_react_component("RegistrationActions") %>
   <% end %>
 
 <% end %>
