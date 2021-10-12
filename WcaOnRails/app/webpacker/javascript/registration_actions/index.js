@@ -18,6 +18,7 @@ function RegistrationActions() {
         centered="true"
         show={show}
         onHide={closeModal}
+        id="delete-reasons-modal"
       >
         <Modal.Header closeButton>
           <Modal.Title> Causes for Deleteion </Modal.Title>
@@ -27,7 +28,7 @@ function RegistrationActions() {
         </Modal.Body>
         <Modal.Footer>
           <button type="submit" className="btn btn-warning" onClick={closeModal}>Close</button>
-          <button type="submit" className="btn btn-danger">Delete</button>
+          <button type="submit" className="btn btn-danger" name="registrations_action" value="delete-selected">Delete</button>
         </Modal.Footer>
       </Modal>
       <div id="registrations-actions" className="btn-group" role="group">
@@ -47,7 +48,7 @@ function RegistrationActions() {
           <Icon name="times" />
           {I18n.t('registrations.list.reject')}
         </button>
-        <button type="submit" className="btn btn-danger selected-pending-approved-registrations-actions" value="delete-selected" name="registrations_action" onClick={openModal}>
+        <button type="submit" className="btn btn-danger selected-pending-approved-registrations-actions" name="registrations_action" onClick={openModal}>
           <Icon name="trash" />
           {I18n.t('registrations.list.delete')}
         </button>
