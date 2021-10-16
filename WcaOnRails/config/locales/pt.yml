@@ -2366,6 +2366,10 @@ pt:
       name_too_long: >-
         O nome da competição tem mais de 32 caracteres. Preferimos nomes mais
         curtos e agradecemos se puder alterá-lo.
+      #original_hash: af27396
+      id_starts_with_lowercase: >-
+        O Identificador da competição começa com letra minúscula. Preferimos que
+        comece com uma letra maiúscula.
       #original_hash: 1a20fae
       must_have_events: Por favor adicione pelo menos um evento antes de confirmar a competição.
       #original_hash: a3aea56
@@ -2377,6 +2381,27 @@ pt:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Por favor garanta que todas as rondas não finais têm regras de avanço
         especificadas.
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: >-
+        Ronda %{round_number} de %{event} tem tempo de corte superior ao tempo
+        limite. Faça alterações de forma a que o tempo de corte seja inferior ao
+        tempo limite.
+      #original_hash: c1580b1
+      cutoff_is_too_fast: >-
+        Ronda %{round_number} em %{event} tem tempo de corte inferior a 5
+        segundos. Verifique se isto está correto.
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: >-
+        Ronda %{round_number} em %{event} tem tempo de corte superior a 10
+        minutos. Verifique se isto está correto.
+      #original_hash: af976ad
+      time_limit_is_too_fast: >-
+        Ronda %{round_number} em %{event} tem tempo limite inferior a 10
+        segundos. Verifique se isto está correto.
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: >-
+        Ronda %{round_number} em %{event} tem tempo limite superior a 10 minutos
+        num evento rápido. Verifique se isto está correto.
       #original_hash: e390250
       create_success: Competição criada com sucesso!
       #original_hash: ba067f0
