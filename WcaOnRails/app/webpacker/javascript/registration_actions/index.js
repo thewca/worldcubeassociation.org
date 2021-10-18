@@ -48,7 +48,7 @@ function RegistrationActions() {
           <Icon name="times" />
           {I18n.t('registrations.list.reject')}
         </button>
-        <button type="submit" className="btn btn-danger selected-pending-approved-registrations-actions" name="registrations_action" onClick={openModal}>
+        <button type="button" className="btn btn-danger selected-pending-approved-registrations-actions" onClick={openModal}>
           <Icon name="trash" />
           {I18n.t('registrations.list.delete')}
         </button>
