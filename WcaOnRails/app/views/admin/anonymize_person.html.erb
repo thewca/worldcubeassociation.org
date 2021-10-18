@@ -19,12 +19,12 @@
       <% elsif @anonymize_person.current_step == AnonymizePerson::STEP_2 %>
         <h4>Request Data Removal from data processors</h4>
         <ol>
-          <li>Recently competed competitions (Past 3 months). Verify with the delegates that there is nothing outstanding regarding the competitor's involvement in these WCA competitions:</li>
-          <% recent_competitions = @anonymize_person.person.competitions.select{ |c| c.start_date > (Date.today - 3.month) } %>
+          <li>For recently competed competitions (Past 3 months), verify with the delegates that there is nothing outstanding regarding the competitor's involvement in these WCA competitions:</li>
+          <% recent_competitions_3_months = @anonymize_person.person.competitions.select{ |c| c.start_date > (Date.today - 3.month) } %>
 
-          <% if recent_competitions.any? %>
+          <% if recent_competitions_3_months.any? %>
 
-            <% recent_competitions.each do |c| %>
+            <% recent_competitions_3_months.each do |c| %>
               <div>Contact <%= link_to c.display_name(short: true), competition_path(c) %> - <%= mail_to c.delegates.map(&:email).join(", "), name = c.delegates.map(&:name).join(", ") %></div>
             <% end %>
 
@@ -54,6 +54,20 @@
 
           <% else %>
             <div>No Competitions with external websites to check.</div>
+          <% end %>
+
+          <br>
+          <li>For recently competed competitions (Past 1 month), after anonymizing the person's data, synchrozie the results on <%= link_to "WCA Live", "https://live.worldcubeassociation.org" %>:</li>
+          <% recent_competitions_1_month = @anonymize_person.person.competitions.select{ |c| c.start_date > (Date.today - 1.month) } %>
+
+          <% if recent_competitions_1_month.any? %>
+
+            <% recent_competitions_1_month.each do |c| %>
+              <div><%= link_to c.display_name(short: true), competition_path(c) %></div>
+            <% end %>
+
+          <% else %>
+            <div>No recent competitions to sync.</div>
           <% end %>
 
         </ol>
