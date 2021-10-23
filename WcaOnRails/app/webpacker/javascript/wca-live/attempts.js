@@ -53,7 +53,7 @@ function formatMbldAttemptResult(attemptResult) {
   );
   const clockFormat = centisecondsToClockFormat(centiseconds);
   const shortClockFormat = clockFormat.replace(/\.00$/, '');
-  return `${solved}/${attempted} ${shortClockFormat}`;
+  return `${solved}/${attempted}\u2002${shortClockFormat}`;
 }
 
 function formatFmAttemptResult(attemptResult) {
