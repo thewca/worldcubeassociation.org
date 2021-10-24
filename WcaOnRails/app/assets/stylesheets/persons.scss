@@ -39,12 +39,12 @@
     .cubing-icon {
       font-size: 1.3em;
       line-height: normal;
-      vertical-align: middle;
     }
 
     td,
     th {
       vertical-align: middle;
+
       &.single,
       &.average {
         text-align: right;
@@ -104,7 +104,8 @@
       th,
       td {
         &.event {
-          width: 1px;
+          display: flex;
+          width: 100%;
           cursor: pointer;
 
           &:hover {
@@ -179,15 +180,15 @@
         }
 
         &.wr {
-          color : $wr-color;
+          color: $wr-color;
         }
 
         &.cr {
-          color : $cr-color;
+          color: $cr-color;
         }
 
         &.nr {
-          color : $nr-color;
+          color: $nr-color;
         }
       }
 
