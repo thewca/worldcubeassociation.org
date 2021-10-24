@@ -64,7 +64,7 @@ const RoundResultsTable = ({ round, eventName, eventId }) => (
             </Table.Cell>
             <Table.Cell>{result.regional_average_record}</Table.Cell>
             <Table.Cell><CountryFlag iso2={result.country_iso2} /></Table.Cell>
-            <Table.Cell className={eventId === '333mbf' ? 'table-cell-solves-mbf' : 'table-cell-solves'}>
+            <Table.Cell className={(eventId === '333mbf' || eventId === '333mbo') ? 'table-cell-solves-mbf' : 'table-cell-solves'}>
               {formatAttemptsForResult(result, eventId)}
             </Table.Cell>
           </Table.Row>
