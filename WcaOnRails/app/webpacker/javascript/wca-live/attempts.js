@@ -53,6 +53,9 @@ function formatMbldAttemptResult(attemptResult) {
   );
   const clockFormat = centisecondsToClockFormat(centiseconds);
   const shortClockFormat = clockFormat.replace(/\.00$/, '');
+  // u2002 is a special space character
+  // using it here allows us to expand space between mbf results without
+  //  expanding the spaces within the individual results
   return `${solved}/${attempted}\u2002${shortClockFormat}`;
 }
 
