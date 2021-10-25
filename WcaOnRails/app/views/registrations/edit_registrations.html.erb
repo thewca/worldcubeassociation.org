@@ -134,7 +134,9 @@
       <% end %>
     <% end %>
 
-    <%= render_react_component("RegistrationActions") %>
+    <%= render_react_component("RegistrationActions", options: {
+      competitionId: @competition.id
+    }) %>
   <% end %>
 
 <% end %>

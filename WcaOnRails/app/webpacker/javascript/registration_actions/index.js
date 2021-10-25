@@ -7,10 +7,16 @@ import {
 import { registerComponent } from '../wca/react-utils';
 import I18n from '../i18n';
 
-function RegistrationActions() {
+function RegistrationActions({ competitionId }) {
   const [show, setShow] = useState(false);
   const closeModal = () => setShow(false);
   const openModal = () => setShow(true);
+
+  const handleSubmit = () => {
+    alert($('table.registrations-table:not(.floatThead-table)').find('tr.selected').length);
+  };
+
+  // TODO: Figure out the path to submit post/patch requets to rails controllers
 
   return (
     <div>
@@ -20,16 +26,25 @@ function RegistrationActions() {
         onHide={closeModal}
         id="delete-reasons-modal"
       >
-        <Modal.Header closeButton>
-          <Modal.Title> Causes for Deleteion </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h1>Hello</h1>
-        </Modal.Body>
-        <Modal.Footer>
-          <button type="submit" className="btn btn-warning" onClick={closeModal}>Close</button>
-          <button type="submit" className="btn btn-danger" name="registrations_action" value="delete-selected">Delete</button>
-        </Modal.Footer>
+        <form
+          className="edit_competition"
+          action="http://localhost:3000/competitions/XDXD2022/registrations/selected"
+          method="post"
+          data-remote="true"
+          acceptCharset="UTF-8"
+          onSubmit={handleSubmit}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title> Causes for Deleteion </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h1>{ competitionId }</h1>
+          </Modal.Body>
+          <Modal.Footer>
+            <button type="button" className="btn btn-warning" onClick={closeModal}>Close</button>
+            <button type="submit" className="btn btn-danger selected-pending-approved-registrations-actions" name="registrations_action" value="delete-selected">Delete</button>
+          </Modal.Footer>
+        </form>
       </Modal>
       <div id="registrations-actions" className="btn-group" role="group">
         <button type="submit" className="btn btn-info selected-registrations-actions" name="registrations_action" value="export-selected">
