@@ -781,7 +781,7 @@ en:
       speedcubing_history: "Speedcubing History"
       tools: "Tools"
       logo: "Logo"
-      competitions: "Competitions"
+      competitions: "Competitions" 
       all: "All"
       my_competitions: "My Competitions"
       new_competition: "New Competition"
@@ -836,8 +836,12 @@ en:
     #context: "Competitions" box
     competitions:
       title: "Competitions"
-      text_html: "Find out about competitions near you or competition results. At a competition now and want to see the results? Check out %{wca_live_link}!"
-    #context: "Records" box
+      text_html: "Find out about competitions near you or competition results. At a competition now and want to see the results? Check out %{wca_live_link}!" 
+    #context: "Merchandise" box 
+    merchandise:
+      title: "Merchandise"
+      text_html: "Check out our newly launched official merchandise which includes a selection of apparels ranging from T-shirts to Hoodies."
+    #context: "Records" box 
     records:
       title: "Records"
       text: "Check out the current and past records of all official WCA events."

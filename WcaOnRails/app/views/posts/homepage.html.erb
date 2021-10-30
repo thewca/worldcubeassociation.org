@@ -8,13 +8,16 @@
     </div>
 
     <div class="ui container cover-segments">
-      <div class="ui four column stackable cards">
+      <div class="ui five column stackable cards">
         <%= render "box", title: t('homepage.about_us.title'), path: about_path do %>
           <%= t('homepage.about_us.text') %>
         <% end %>
         <%= render "box", title: t('homepage.competitions.title'), path: competitions_path do %>
           <%= t('homepage.competitions.text_html',
                 wca_live_link: raw(link_to("WCA Live", "https://live.worldcubeassociation.org"))) %>
+        <% end %>
+        <%= render "specialbox", title: (t('homepage.merchandise.title') + "<span class=\"blink\"><sup style=\"color: #ff0000;font-size: 10px;\">NEW</sup></span>").html_safe, path: "https://shop.worldcubeassociation.org" do %>
+          <%= t('homepage.merchandise.text_html') %>
         <% end %>
         <%= render "box", title: t('homepage.records.title'), path: records_path do %>
           <%= t('homepage.records.text') %>
