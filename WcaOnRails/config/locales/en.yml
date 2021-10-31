@@ -840,6 +840,8 @@ en:
     #context: "Merchandise" box
     merchandise:
       title: "Merchandise"
+      #context: Indicate that the feature is new (like an advertisement)
+      ad_new: "New"
       text_html: "Check out our newly launched official merchandise which includes a selection of apparels ranging from T-shirts to Hoodies."
       link_title: "Link to shop"
     #context: "Records" box

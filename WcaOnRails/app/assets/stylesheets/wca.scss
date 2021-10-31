@@ -565,7 +565,7 @@ sup {
   }
 
   &.advertisement-blink {
-    animation: blink 1s steps(1, end) infinite;
+    animation: blink 1s ease-in-out infinite;
   }
 
   @keyframes blink {
