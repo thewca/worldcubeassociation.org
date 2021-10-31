@@ -781,7 +781,7 @@ en:
       speedcubing_history: "Speedcubing History"
       tools: "Tools"
       logo: "Logo"
-      competitions: "Competitions" 
+      competitions: "Competitions"
       all: "All"
       my_competitions: "My Competitions"
       new_competition: "New Competition"
@@ -1335,7 +1335,7 @@ en:
       on_the_spot_registration_free: "On the spot registrations will be accepted for free."
       no_on_the_spot_registration: "No on the spot registrations will be accepted."
       guests_pay: "Spectators can attend paying an entry fee of %{guests_base_fee}."
-      guests_free: 
+      guests_free:
         anyone: "Any spectator can attend for free."
         restricted: "Spectators are only permitted as companions of competitors."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
