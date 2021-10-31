@@ -12,6 +12,13 @@ GIT
     selectize-rails (0.12.1)
 
 GIT
+  remote: https://github.com/starburstgem/starburst.git
+  revision: ff8fd1f8fbb7b466580a0f9484849c4de207e111
+  specs:
+    starburst (2.0.0.rc0)
+      rails (>= 4.2.0, < 6.1)
+
+GIT
   remote: https://github.com/thewca/carrierwave-crop.git
   revision: 0ada1914e8f3d3c875004a7063b7b822323e2295
   specs:
@@ -746,6 +753,7 @@ DEPENDENCIES
   simplecov-lcov
   spring
   spring-commands-rspec
+  starburst!
   strip_attributes
   stripe
   time_will_tell

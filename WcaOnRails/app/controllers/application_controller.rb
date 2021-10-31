@@ -82,4 +82,7 @@ class ApplicationController < ActionController::Base
     end
     redirecting
   end
+
+  # Starburst announcements, see https://github.com/starburstgem/starburst#installation
+  helper Starburst::AnnouncementsHelper
 end

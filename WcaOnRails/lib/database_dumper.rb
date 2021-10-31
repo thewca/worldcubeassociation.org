@@ -585,6 +585,8 @@ module DatabaseDumper
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
     "schema_migrations" => :skip_all_rows, # This is populated when loading our schema dump
+    "starburst_announcement_views" => :skip_all_rows,
+    "starburst_announcements" => :skip_all_rows,
     "team_members" => {
       where_clause: "JOIN teams ON teams.id=team_id WHERE NOT teams.hidden",
       column_sanitizers: actions_to_column_sanitizers(
