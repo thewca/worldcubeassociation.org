@@ -53,7 +53,11 @@ function formatMbldAttemptResult(attemptResult) {
   );
   const clockFormat = centisecondsToClockFormat(centiseconds);
   const shortClockFormat = clockFormat.replace(/\.00$/, '');
-  return `${solved}/${attempted} ${shortClockFormat}`;
+  // u2002 is a special space character
+  // using it here allows us to expand space between mbf results without
+  //  expanding the spaces within the individual results
+  // see https://github.com/thewca/worldcubeassociation.org/issues/6375
+  return `${solved}/${attempted}\u2002${shortClockFormat}`;
 }
 
 function formatFmAttemptResult(attemptResult) {
