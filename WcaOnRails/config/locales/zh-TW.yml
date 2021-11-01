@@ -1368,6 +1368,15 @@ zh-TW:
       title: 比賽
       #original_hash: 0ac88bc
       text_html: '尋找鄰近的比賽或是比賽成績。正在比賽中且想要知道比賽成績嗎？可以來看看%{wca_live_link}！'
+    merchandise:
+      #original_hash: 698cfc8
+      title: 商品
+      #original_hash: 6403f2b
+      ad_new: 最新商品
+      #original_hash: 9ad68ce
+      text_html: 來看看我們的最新官方商品，包含T卹和帽T。
+      #original_hash: b0fc6c4
+      link_title: 商店連結
     records:
       #original_hash: e51c552
       title: 紀錄
@@ -1806,6 +1815,8 @@ zh-TW:
           registrations_full: 比賽限制人數已經額滿且沒有其他空缺
           #original_hash: 0d4cce9
           multiple_registrations: 您報名了兩次以上
+          #original_hash: 70b1e2c
+          competition_canceled: 這場比賽已被取消了
     list:
       #original_hash: 8b7631c
       title: '%{comp}的報名'
@@ -2006,12 +2017,24 @@ zh-TW:
       not_visible: 這個比賽尚未公開。
       #original_hash: c1d4926
       name_too_long: 比賽名稱超過32個字元，我們希望您盡可能的將比賽名稱縮短。
+      #original_hash: af27396
+      id_starts_with_lowercase: 這個比賽ID是小寫字母開頭。我們希望能夠由大寫字母開頭。
       #original_hash: 1a20fae
       must_have_events: 請您在確認比賽之前輸入至少一項比賽項目。
       #original_hash: a3aea56
       schedule_must_match_rounds: 請在申請比賽之前確保每個項目皆至少有一輪，同時您製作的賽程需包含所有您所規劃的輪次。
       #original_hash: aeb5f2a
       advancement_condition_must_be_present_for_all_non_final_rounds: 請確認所有非決賽的項目有晉級條件
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: '%{event}項目的第%{round_number} 輪的門檻成績比時間限制還久，請確認門檻成績比時間限制還短。'
+      #original_hash: c1580b1
+      cutoff_is_too_fast: '%{event}項目的第%{round_number} 輪的門檻小於5秒鐘，請確認是否正確。'
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: '%{event}項目的第%{round_number} 輪的門檻成績大於10分鐘，請確認是否正確。'
+      #original_hash: af976ad
+      time_limit_is_too_fast: '%{event}項目的第%{round_number} 輪的門檻小於10秒鐘，請確認是否正確。'
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: '%{event}項目的第%{round_number} 輪的門檻大於10分鐘，且是個較快完成的比賽項目，請確認是否正確。'
       #original_hash: e390250
       create_success: 成功申請一場新的比賽！
       #original_hash: ba067f0
@@ -3094,8 +3117,6 @@ zh-TW:
     other_help_content_html: >-
       <p>如果您相信您能夠用非金援方式協助世界方塊協會，我們感到很高興！請寄信到<a
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>與我們聯絡。</p>
-
-      Translation
     donation_banner:
       #original_hash: 6253f90
       content: >-
@@ -3272,6 +3293,8 @@ zh-TW:
     competitor_tutorial: 參賽者教程
     #original_hash: 9561bfc
     judge_tutorial: 給新手參賽者的裁判教學
+    #original_hash: 12e47a3
+    competition_templates: 比賽模板
     #original_hash: 5ca0558
     certificates: WCA傳播組的獎狀範本
     #original_hash: f580987
