@@ -4130,10 +4130,10 @@ findup-sync@^3.0.0:
     micromatch "^3.0.4"
     resolve-dir "^1.0.1"
 
-flag-icon-css@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-3.5.0.tgz#430747d5cb91e60babf85494de99173c16dc7cf2"
-  integrity sha512-pgJnJLrtb0tcDgU1fzGaQXmR8h++nXvILJ+r5SmOXaaL/2pocunQo2a8TAXhjQnBpRLPtZ1KCz/TYpqeNuE2ew==
+flag-icon-css@^4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-4.1.4.tgz#a31fd41187acb28d1333a23b10f31391e5690982"
+  integrity sha512-C1zP1/LYS5LUL5JGDGI1tOLQDS/NfwJA457lGkylHQCAUjPGzZQWp5br9q/WpcCa0Z45Tf2dadwHWENuWvaRKg==
 
 flat-cache@^3.0.4:
   version "3.0.4"
