@@ -1543,6 +1543,17 @@ eo:
         Trovu konkursojn apud vi aŭ rezultoj de konkursoj. Ĉu vi ĉeestas
         konkurson nuntempe kaj volas vidi ĝiajn rezultojn? Kontrolu
         %{wca_live_link}!
+    merchandise:
+      #original_hash: 698cfc8
+      title: Butiko
+      #original_hash: 6403f2b
+      ad_new: Nova
+      #original_hash: 9ad68ce
+      text_html: >-
+        Iru al nia nova oficiala butiko kiu enhavas selekton da vestaĵoj kiel
+        t-ĉemizoj kaj kapuĉpuloveroj.
+      #original_hash: b0fc6c4
+      link_title: Ligilo al butiko
     records:
       #original_hash: e51c552
       title: Rekordoj
@@ -2370,12 +2381,12 @@ eo:
         minutoj. Bonvolu certigi ke tio ĝustas.
       #original_hash: af976ad
       time_limit_is_too_fast: >-
-        Raŭndo %{round_number} en %{event} havas interromptempon sub 10
-        sekundoj. Bonvolu certigi ke tio ĝustas.
+        Raŭndo %{round_number} en %{event} havas tempolimon sub 10 sekundoj.
+        Bonvolu certigi ke tio ĝustas.
       #original_hash: 5dfa8f2
       time_limit_is_too_slow: >-
-        Raŭndo %{round_number} en %{event} havas interromptempon super 10
-        minutoj. Bonvolu certigi ke tio ĝustas.
+        Raŭndo %{round_number} en %{event} havas tempolimon super 10 minutoj.
+        Bonvolu certigi ke tio ĝustas.
       #original_hash: e390250
       create_success: Nova konkurso sukcese kreiĝis!
       #original_hash: ba067f0
