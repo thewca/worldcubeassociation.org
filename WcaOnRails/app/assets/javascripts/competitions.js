@@ -16,8 +16,7 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
   }).trigger('change');
 
   $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
-    $('.dues-block').toggle(this.value === "0");
-    //find something inside
+    $('.help-block').toggle(this.value === "0"); //change val
   }).trigger('change');
 
   $('select[name="competition[competitor_limit_enabled]"]').on('change', function() {
