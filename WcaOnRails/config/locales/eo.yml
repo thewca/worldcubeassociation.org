@@ -2092,6 +2092,8 @@ eo:
             pozicioj
           #original_hash: 0d4cce9
           multiple_registrations: Vi registriĝis dufoje aŭ pli
+          #original_hash: 70b1e2c
+          competition_canceled: Tiu konkurso estis nuligita
     list:
       #original_hash: 8b7631c
       title: 'Registriĝoj por %{comp}'
@@ -2340,6 +2342,10 @@ eo:
       name_too_long: >-
         La nomo de la konkurso havas pli ol 32 karakterojn. Ni preferas pli
         mallongajn nomojn kaj ni ŝatus ke vi ŝanĝu ĝin.
+      #original_hash: af27396
+      id_starts_with_lowercase: >-
+        La identigilo (ID) de la konkurso komencas kun minuskla litero. Ni
+        preferus ke ĝi komencu kun majuskla litero.
       #original_hash: 1a20fae
       must_have_events: Bonvolu aldoni almenaŭ unu konkurseron antaŭ ol konfirmi la konkurson.
       #original_hash: a3aea56
@@ -2349,6 +2355,27 @@ eo:
         deklaris antaŭ ol konfirmi la konkurson.
       #original_hash: aeb5f2a
       advancement_condition_must_be_present_for_all_non_final_rounds: Bonvolu atenti ke ĉiuj nefinalaj raŭndoj havu kvalifikajn kondiĉojn.
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: >-
+        Raŭndo %{round_number} en %{event} havas interromptempon kiu estas pli
+        alta ol la tempolimo. Bonvolu ŝanĝi ĝin por ke ĝi estu pli malalta ol la
+        tempolimo.
+      #original_hash: c1580b1
+      cutoff_is_too_fast: >-
+        Raŭndo %{round_number} en %{event} havas interromptempon sub 5 sekundoj.
+        Bonvolu certigi ke tio ĝustas.
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: >-
+        Raŭndo %{round_number} en %{event} havas interromptempon super 10
+        minutoj. Bonvolu certigi ke tio ĝustas.
+      #original_hash: af976ad
+      time_limit_is_too_fast: >-
+        Raŭndo %{round_number} en %{event} havas interromptempon sub 10
+        sekundoj. Bonvolu certigi ke tio ĝustas.
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: >-
+        Raŭndo %{round_number} en %{event} havas interromptempon super 10
+        minutoj. Bonvolu certigi ke tio ĝustas.
       #original_hash: e390250
       create_success: Nova konkurso sukcese kreiĝis!
       #original_hash: ba067f0
@@ -3857,6 +3884,8 @@ eo:
     competitor_tutorial: Instruilo por konkursantoj
     #original_hash: 9561bfc
     judge_tutorial: Lernilo pri juĝado por novaj partoprenantoj
+    #original_hash: 12e47a3
+    competition_templates: Konkursaj ŝablonoj
     #original_hash: 5ca0558
     certificates: Modelo de diplomo de la WCT
     #original_hash: f580987

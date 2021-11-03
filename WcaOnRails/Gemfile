@@ -85,6 +85,7 @@ gem 'image_processing'
 gem 'rest-client'
 gem 'wicked_pdf'
 gem 'icalendar'
+gem 'starburst', github: 'starburstgem/starburst'
 
 group :development, :test do
   gem 'spring'

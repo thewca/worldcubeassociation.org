@@ -12,6 +12,13 @@ GIT
     selectize-rails (0.12.1)
 
 GIT
+  remote: https://github.com/starburstgem/starburst.git
+  revision: ff8fd1f8fbb7b466580a0f9484849c4de207e111
+  specs:
+    starburst (2.0.0.rc0)
+      rails (>= 4.2.0, < 6.1)
+
+GIT
   remote: https://github.com/thewca/carrierwave-crop.git
   revision: 0ada1914e8f3d3c875004a7063b7b822323e2295
   specs:
@@ -90,8 +97,8 @@ GEM
       activejob (= 6.0.4.1)
       activerecord (= 6.0.4.1)
       marcel (~> 1.0.0)
-    activestorage-validator (0.1.4)
-      rails (>= 5.2.0)
+    activestorage-validator (0.2.0)
+      rails (>= 6.0.4.1)
     activesupport (6.0.4.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
@@ -111,17 +118,17 @@ GEM
     autoprefixer-rails (9.4.7)
       execjs
     aws-eventstream (1.2.0)
-    aws-partitions (1.509.0)
-    aws-sdk-core (3.121.1)
+    aws-partitions (1.521.0)
+    aws-sdk-core (3.121.5)
       aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.239.0)
+      aws-partitions (~> 1, >= 1.520.1)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.48.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-kms (1.50.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.103.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-s3 (1.104.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.4.0)
@@ -149,8 +156,9 @@ GEM
     call_with_params (0.0.2)
       activesupport (>= 3.0.0)
     camertron-eprun (1.1.1)
-    capybara (3.35.3)
+    capybara (3.36.0)
       addressable
+      matrix
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
       rack (>= 1.6.0)
@@ -201,7 +209,7 @@ GEM
       responders
       warden (~> 1.2.3)
     devise-bootstrap-views (1.1.0)
-    devise-i18n (1.10.0)
+    devise-i18n (1.10.1)
       devise (>= 4.8.0)
     devise-two-factor (4.0.1)
       activesupport (< 6.2)
@@ -332,6 +340,7 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     iniparse (1.5.0)
     io-console (0.5.9)
+    ipaddr (1.2.3)
     irb (1.3.7)
       reline (>= 0.2.7)
     iso (0.2.2)
@@ -376,14 +385,15 @@ GEM
     mail_form (1.9.0)
       actionmailer (>= 5.2)
       activemodel (>= 5.2)
-    marcel (1.0.1)
+    marcel (1.0.2)
+    matrix (0.4.2)
     memoist (0.16.2)
     method_source (1.0.0)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2021.0704)
     mini_magick (4.11.0)
-    mini_mime (1.1.1)
+    mini_mime (1.1.2)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
     monetize (1.11.0)
@@ -421,7 +431,8 @@ GEM
     oga (3.3)
       ast
       ruby-ll (~> 2.1)
-    openssl (2.2.0)
+    openssl (2.2.1)
+      ipaddr
     orm_adapter (0.5.0)
     os (1.1.1)
     overcommit (0.58.0)
@@ -442,7 +453,7 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (4.0.6)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
@@ -601,7 +612,7 @@ GEM
     ssrf_filter (1.0.7)
     strip_attributes (1.11.0)
       activemodel (>= 3.0, < 7.0)
-    stripe (5.38.0)
+    stripe (5.39.0)
     terminal-table (3.0.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (1.1.0)
@@ -656,7 +667,7 @@ GEM
       activesupport
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.1)
 
 PLATFORMS
   ruby
@@ -746,6 +757,7 @@ DEPENDENCIES
   simplecov-lcov
   spring
   spring-commands-rspec
+  starburst!
   strip_attributes
   stripe
   time_will_tell
