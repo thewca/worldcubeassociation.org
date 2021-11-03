@@ -1585,6 +1585,17 @@ pl:
       text_html: >-
         Znajdź zawody niedaleko Ciebie lub wyniki zawodów. Jesteś na zawodach i
         chcesz sprawdzić wyniki? Sprawdź %{wca_live_link}!
+    merchandise:
+      #original_hash: 698cfc8
+      title: Produkty
+      #original_hash: 6403f2b
+      ad_new: Nowe
+      #original_hash: 9ad68ce
+      text_html: >-
+        Sprawdź nasze nowo wprowadzone oficjalne produkty, które obejmują odzież
+        od koszulek T-shirt po bluzy z kapturem.
+      #original_hash: b0fc6c4
+      link_title: Link do sklepu
     records:
       #original_hash: e51c552
       title: Rekordy

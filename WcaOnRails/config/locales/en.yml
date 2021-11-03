@@ -837,6 +837,13 @@ en:
     competitions:
       title: "Competitions"
       text_html: "Find out about competitions near you or competition results. At a competition now and want to see the results? Check out %{wca_live_link}!"
+    #context: "Merchandise" box
+    merchandise:
+      title: "Merchandise"
+      #context: Indicate that the feature is new (like an advertisement)
+      ad_new: "New"
+      text_html: "Check out our newly launched official merchandise which includes a selection of apparels ranging from T-shirts to Hoodies."
+      link_title: "Link to shop"
     #context: "Records" box
     records:
       title: "Records"
@@ -1330,7 +1337,7 @@ en:
       on_the_spot_registration_free: "On the spot registrations will be accepted for free."
       no_on_the_spot_registration: "No on the spot registrations will be accepted."
       guests_pay: "Spectators can attend paying an entry fee of %{guests_base_fee}."
-      guests_free: 
+      guests_free:
         anyone: "Any spectator can attend for free."
         restricted: "Spectators are only permitted as companions of competitors."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
