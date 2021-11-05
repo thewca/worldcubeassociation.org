@@ -215,7 +215,7 @@
             <% countryBand = CountryBand.where(iso2: iso2).map(&:number)[0] %>
             <% pricePerCompetitor = 0 %>
 
-            <% if countryBand > 0 %>
+            <% if !countryBand.nil? && countryBand > 0 %>
               <% pricePerCompetitor = CountryBand::BANDS[countryBand][:value] %>
 
               //Need a way to convert whatever the currency is to USD
