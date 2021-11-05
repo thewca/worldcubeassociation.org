@@ -15,10 +15,6 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     $('.guest-no-entry-fee-options').toggle(this.value === "0");
   }).trigger('change');
 
-  $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
-    $('.help-block').toggle(this.value === "0"); //change val
-  }).trigger('change');
-
   $('select[name="competition[competitor_limit_enabled]"]').on('change', function() {
     $('.wca-competitor-limit-options').toggle(this.value === "true");
   }).trigger('change');

@@ -205,6 +205,34 @@
         <%= f.input :currency_code, collection: Money::Currency.table.values, label_method: lambda { |c| "#{c[:name]} (#{c[:iso_code]})" }, value_method: lambda { |c| c[:iso_code] }, disabled: disable_money_input  %>
         <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input, currency_selector: "#competition_currency_code" %>
 
+        <script>
+          $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
+            if(!$('#due_estimate').length){
+              $(this).siblings('.help-block').append('<br><p id="due_estimate"><b>XDXD</b></p>');
+            }
+
+            <% iso2 = Country.where(id: @competition.countryId).map(&:iso2) %>
+            <% countryBand = CountryBand.where(iso2: iso2).map(&:number)[0] %>
+            <% pricePerCompetitor = 0 %>
+
+            <% if countryBand > 0 %>
+              <% pricePerCompetitor = CountryBand::BANDS[countryBand][:value] %>
+
+              //Need a way to convert whatever the currency is to USD
+              <% pricePerCompetitor = [pricePerCompetitor, @competition.base_entry_fee_lowest_denomination / 100 * 0.05].max %>
+            <% end %>
+
+            //Need better formatting of currency
+            <% if @competition.competitor_limit? && @competition.competitor_limit_enabled %>
+              <% estimateDues = pricePerCompetitor * @competition.competitor_limit %>
+              $('#due_estimate').html("<b>The estimated WCA dues for " + <%= @competition.competitor_limit %> + " competitors are " +  <%= estimateDues.round(2) %> + ".<b>")
+            <% else %>
+              $('#due_estimate').html("<b>The estimated WCA dues per competitor are " +  <%= pricePerCompetitor.round(2) %> + ".<b>")
+            <% end %>
+
+          }).trigger('change');
+        </script>
+
         <%= f.input :refund_policy_percent %>
         <%= f.input :refund_policy_limit_date, as: :datetime_picker %>
 
