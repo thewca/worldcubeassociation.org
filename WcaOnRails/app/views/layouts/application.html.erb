@@ -56,6 +56,10 @@
     <%= javascript_include_tag a %>
   <% end %>
 
+  <% if content_for? :robots_head %>
+    <%= yield :robots_head %>
+  <% end %>
+
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= auto_discovery_link_tag(:rss, rss_url(format: :xml)) %>
