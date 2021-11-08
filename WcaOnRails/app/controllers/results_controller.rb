@@ -4,6 +4,13 @@ class ResultsController < ApplicationController
   def rankings
     support_old_links!
 
+    lower_user_agent = request.user_agent.to_s.downcase
+    evil_bots = %w(baidu petalbot)
+
+    if evil_bots.any? { |infix| lower_user_agent.include?(infix) }
+      return head(:forbidden)
+    end
+
     @skip_robot_indexing = !request.query_parameters.empty?
 
     # Default params
