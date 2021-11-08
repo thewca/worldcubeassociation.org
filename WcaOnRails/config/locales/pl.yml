@@ -2754,10 +2754,10 @@ pl:
     index:
       #original_hash: db98a68
       title: Zawody
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
-        Prosimy odnotować, że ze względu na pandemię COVID-19 wiele krajów nie
-        może obecnie organizować zawodów.
+        Prosimy odnotować, że ze względu na pandemię COVID-19 niektóre kraje nie
+        mogą obecnie organizować zawodów.
       #original_hash: 6a72085
       all_events: Wszystkie
       #original_hash: 6d76b81
