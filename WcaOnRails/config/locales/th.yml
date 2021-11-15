@@ -466,6 +466,8 @@ th:
         on_the_spot_registration: เปิดรับสมัครที่การแข่งขัน
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: ค่าสมัครขั้นต่ำเมื่อสมัครที่การแข่งขัน
+        #original_hash: 7e53b96
+        allow_registration_edits: แก้ไขการสมัคร
         #original_hash: efbdbab
         refund_policy_percent: เงินที่จะได้รับคืนเป็นเปอร์เซ็นต์
         #original_hash: b332299
@@ -476,6 +478,8 @@ th:
         event_change_deadline_date: วันสุดท้ายของผู้เข้าแข่งขันที่จะแก้ไขประเภทการแข่งขัน
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: ค่าเข้าชมการแข่งขัน
+        #original_hash: bb16247
+        free_guest_entry_status: แสดงข้อความให้ผู้เข้าชมการแข่งขันเข้าได้โดยไม่เสียค่าใช้จ่าย
         #original_hash: 723cad9
         early_puzzle_submission: ฉันต้องการให้ผู้เข้าแข่งขันส่ง puzzle ก่อนที่การแข่งขันจะเริ่มขึ้น
         #original_hash: 78308cc
@@ -676,6 +680,17 @@ th:
         article: บทความ
         #original_hash: 82dabd0
         multimedia: มัลติมีเดีย
+    competition:
+      free_guest_entry_status:
+        #original_hash: 7e54323
+        unclear: >-
+          ไม่ต้องแสดงอะไรทั้งสิ้น (และอาจอธิบายให้ละเอียดในส่วน
+          "ข้อกำหนดเพิ่มเติมในการลงทะเบียน")
+        #original_hash: 694bce4
+        anyone: ผู้เข้าชมการแข่งขันสามารถเข้าชมได้โดยไม่เสียค่าใช้จ่าย
+        #original_hash: 762c509
+        restricted: >-
+          เฉพาะผู้ที่เดินทางมากับผู้เข้าแข่งขันเท่านั้นที่สามารถเข้ารับชมการแข่งขันได้
   simple_form:
     #original_hash: 5397e05
     'yes': ใช่
@@ -855,6 +870,8 @@ th:
         on_the_spot_entry_fee_lowest_denomination: >-
           ถ้าตั้งเป็น 0 จะแสดงประโยค
           การสมัครที่การแข่งขันสามารถสมัครได้โดยไม่เสียค่าใช้จ่าย
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           สำหรับตอนนี้ตัวเลขนี้เป็นข้อมูลเท่านั้น
@@ -874,11 +891,13 @@ th:
           เว้นว่างไว้หากผู้เข้าแข่งขันสามารถเพิ่มประเภทการแข่งขันได้จนถึงวันแข่งขัน
           หากคุณมีการรับสมัครที่การแข่งขัน
           จะต้องตั้งเป็นวันเดียวกับวันที่แข่งขัน
-        #original_hash: 25a1324
+        #original_hash: 0419547
         guests_entry_fee_lowest_denomination: >-
           สำหรับตอนนี้ตัวเลขนี้เป็นข้อมูลเท่านั้น
           ค่าเข้าชมการแข่งขันไม่สามารถจัดการผ่าน website นี้ได้ หากตั้งเป็น 0
-          จะแสดงข้อความว่าสามารถเข้าชมการแข่งขันได้โดยไม่เสียค่าใช้จ่าย
+          จะแสดงข้อความที่คุณเลือกเกี่ยวกับนโยบอยของผู้เข้าชมการแข่งขัน
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1114,6 +1133,13 @@ th:
           'true': สามารถสมัครการแข่งขันที่การแข่งขันได้
           #original_hash: 0f236df
           'false': ไม่สามารถสมัครการแข่งขันที่การแข่งขันได้
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            ผู้เข้าแข่งขันสามารถแก้ไขการสมัครการแข่งขันได้จนกระทั่งวันสุดท้ายของการแก้ไขประเภทการแข่งขัน
+          #original_hash: 2cbb80e
+          'false': >-
+            ผู้เข้าแข่งขันไม่สามารถแก้ไขการสมัครได้เมื่อการสมัครได้รับการยอมรับแล้ว
   mail_form:
     attributes:
       contact_form:
@@ -1476,6 +1502,17 @@ th:
         ค้นหาการแข่งขันที่อยู่ใกล้คุณหรือตรวจสอบผลการแข่งขัน
         หากคุณอยู่ที่การแข่งขันแล้วอยากดูผลการแข่งขัน สามารถดูได้ที่
         %{wca_live_link}!
+    merchandise:
+      #original_hash: 698cfc8
+      title: สินค้า
+      #original_hash: 6403f2b
+      ad_new: ใหม่
+      #original_hash: 9ad68ce
+      text_html: >-
+        ตรวจสอบสินค้าอย่างเป็นทางการที่เพิ่งเปิดตัวใหม่ของเรา
+        ซึ่งมีเสื้อผ้าให้เลือกมากมายตั้งแต่เสื้อยืดไปจนถึงเสื้อฮู้ด
+      #original_hash: b0fc6c4
+      link_title: ลิ้งค์ร้านค้า
     records:
       #original_hash: e51c552
       title: สถิติ
@@ -1988,6 +2025,8 @@ th:
           registrations_full: จำนวนผู้เข้าแข่งขันครบแล้ว และไม่มีที่ว่างเหลือ
           #original_hash: 0d4cce9
           multiple_registrations: คุณสมัครการแข่งขันซ้ำซ้อน
+          #original_hash: 70b1e2c
+          competition_canceled: การแข่งขันถูกยกเลิก
     list:
       #original_hash: 8b7631c
       title: 'การสมัครการแข่งขัน %{comp}'
@@ -2220,6 +2259,10 @@ th:
       name_too_long: >-
         ชื่อการแข่งขันยาวเกิน 32 ตัวอักษร เราแนะนำให้ใช้ชื่อที่สั้นกว่านี้
         และเรายินดีหากคุณเปลี่ยน
+      #original_hash: af27396
+      id_starts_with_lowercase: >-
+        Competition Id ขึ้นต้นด้วยด้วยตัวอักษรตัวเล็ก
+        เราแนะนำให้ขึ้นต้นด้วยตัวอักษรตัวใหญ่
       #original_hash: 1a20fae
       must_have_events: กรุณาเพิ่มประเภทการแข่งขันอย่างน้อย 1 ประเภทก่อนยืนยันการแข่งขัน
       #original_hash: a3aea56
@@ -2229,6 +2272,26 @@ th:
       #original_hash: aeb5f2a
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         โปรดตรวจสอบให้แน่ใจว่าทุกรอบที่ไม่ใช่รอบชิงชนะเลิศมีเงื่อนไขการผ่านเข้ารอบระบุไว้
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: >-
+        รอบที่ %{round_number} ในประเภท %{event} มีเวลา cutoff มากกว่า time
+        limit กรุณาแน่ใจว่าเวลา cutoff นั้นน้อยกว่า time limit
+      #original_hash: c1580b1
+      cutoff_is_too_fast: >-
+        รอบที่ %{round_number} ในประเภท %{event} มีเวลา cutoff น้อยกว่า 5 วินาที
+        กรุณาแน่ใจว่าเวลานั้นถูกต้องแล้ว
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: >-
+        รอบที่ %{round_number} ของประเภท %{event} มีเวลา cutoff มากกว่า 10 นาที
+        กรุณาแน่ใจว่าเวลาถูกต้องแล้ว
+      #original_hash: af976ad
+      time_limit_is_too_fast: >-
+        รอบที่ %{round_number} ในประเภท %{event} มี time limit น้อยกว่า 10
+        วินาที กรุณาแน่ใจว่าเวลานั้นถูกต้องแล้ว
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: >-
+        รอบที่ %{round_number} ในประเภท %{event} มี time limit มากกว่า 10
+        นาทีในประเภทการแข่งขันที่ใช้เวลาน้อย กรุณาแน่ใจว่าเวลานั้นถูกต้อง
       #original_hash: e390250
       create_success: สร้างการแข่งขันใหม่สำเร็จแล้ว
       #original_hash: ba067f0
@@ -2404,8 +2467,12 @@ th:
       no_on_the_spot_registration: ไม่รับสมัครที่การแข่งขัน
       #original_hash: 4df139d
       guests_pay: 'ผู้เข้าชมสามารถเข้าชมได้โดยชำระค่าเข้า %{guests_base_fee}'
-      #original_hash: b6c863e
-      guests_free: ผู้เข้าชมสามารถเข้าชมได้โดยไม่เสียค่าใช้จ่าย
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: ผู้เข้าชมการแข่งขันสามารถรับชมได้โดยไม่มีค่าใช้จ่าย
+        #original_hash: f1e6aef
+        restricted: >-
+          เฉพาะผู้ที่เดินทางมากับผู้เข้าแข่งขันเท่านั้นจึงจะสามารถรับชมการแข่งขันได้
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         การแข่งขันสิ้นสุดแล้ว คลิก %{link_here}
@@ -2479,10 +2546,10 @@ th:
     index:
       #original_hash: db98a68
       title: การแข่งขัน
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
         โปรดทราบว่า อันเนื่องมาจากการระบาดของ COVID-19
-        ทำให้ในหลายประเทศไม่สามารถจัดการแข่งขันได้
+        ทำให้ในบางประเทศไม่สามารถจัดการแข่งขันได้
       #original_hash: 6a72085
       all_events: ทั้งหมด
       #original_hash: 6d76b81
@@ -3693,6 +3760,8 @@ th:
     competitor_tutorial: แนะนำผู้เข้าแข่งขัน
     #original_hash: 9561bfc
     judge_tutorial: แนะนำการตัดสินสำหรับผู้แข่งขันใหม่
+    #original_hash: 12e47a3
+    competition_templates: แม่แบบการแข่งขัน
     #original_hash: 5ca0558
     certificates: แม่แบบประกาศนียบัตรของ WCT
     #original_hash: f580987
