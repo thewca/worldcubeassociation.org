@@ -1804,6 +1804,12 @@ nl:
         %{here}!
       #original_hash: 29e25b5
       have_wca_id_html: 'Je WCA-id is %{link_id}.'
+      #original_hash: bf654e1
+      account_is_special: >-
+        De WCA-id en -account zijn verbonden aan speciale rollen binnen de WCA
+        (bijv. delegates, organisatoren, teamleden) en kan niet worden
+        verwijderd. Stuur een mail aan het WCA-resultatenteam om de WCA-id over
+        te zetten naar een ander account.
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -1823,6 +1829,10 @@ nl:
         inzendt.
       #original_hash: efc007a
       save: Opslaan
+      #original_hash: c3cd636
+      actions: Acties
+      #original_hash: 8356b72
+      sign_out_of_devices: Log uit op andere devices
       #original_hash: 58e0c56
       remove_avatar: Verwijder profielfoto
       #original_hash: 4bd25cf
@@ -2125,6 +2135,8 @@ nl:
             geen plekken meer vrij
           #original_hash: 0d4cce9
           multiple_registrations: Je hebt je twee of meer keer aangemeld
+          #original_hash: 70b1e2c
+          competition_canceled: De wedstrijd is geannuleerd
     list:
       #original_hash: 8b7631c
       title: 'Aanmeldingen voor %{comp}'
@@ -2160,8 +2172,12 @@ nl:
         with_stripe: Betaald op
       #original_hash: ce53c71
       payment_requested_on: 'Betaalverzoek op: %{date}'
+      #original_hash: f5b1b34
+      payment_completed_on: 'Betaling afgerond op: %{date}'
       #original_hash: b25928c
       total: Totaal
+      #original_hash: df036fe
+      n_events: Aantal wedstrijdonderdelen
     new_registration:
       #original_hash: 8b9f726
       title: 'Aanmelden voor %{comp}'
@@ -2376,6 +2392,10 @@ nl:
       name_too_long: >-
         De wedstrijdnaam is langer dan 32 tekens. We hebben de voorkeur voor
         kortere namen en vragen je om de naam aan te passen.
+      #original_hash: af27396
+      id_starts_with_lowercase: >-
+        De wedstrijd-id start met een kleine letter. We hebben de voorkeur dat
+        de naam start met een hoofdletter.
       #original_hash: 1a20fae
       must_have_events: Voeg minimaal één onderdeel toe voor je de wedstrijd bevestigt.
       #original_hash: a3aea56
@@ -2383,6 +2403,30 @@ nl:
         Zorg dat de wedstrijd tenminste één ronde per wedstrijdonderdeel heeft
         en dat het tijdschema dat je hebt gemaakt alle rondes bevat die zijn
         vastgesteld, voordat je de wedstrijd bevestigt.
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: >-
+        Zorg dat alle niet-finalerondes gespecificeerd hebben wat de condities
+        zijn om door te gaan.
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: >-
+        Ronde %{round_number} van %{event} heeft een cutoff groter dan de
+        tijdslimiet. Zorg dat de cutoff kleiner is dan de tijdslimiet.
+      #original_hash: c1580b1
+      cutoff_is_too_fast: >-
+        Ronde %{round_number} van %{event} heeft een cutoff lager dan 5
+        seconden. Check of dat correct is.
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: >-
+        Ronde %{round_number} van %{event} heeft een cutoff hoger dan 10
+        minuten. Check of dat correct is.
+      #original_hash: af976ad
+      time_limit_is_too_fast: >-
+        Ronde %{round_number} van %{event} heeft een tijdlimiet lager dan 10
+        seconden. Check of dat correct is.
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: >-
+        Ronde %{round_number} van %{event} heeft een tijdlimiet hoger dan 10
+        minuten in een snel wedstrijdonderdeel. Check of dat correct is.
       #original_hash: e390250
       create_success: Nieuwe wedstrijd succesvol aangemaakt!
       #original_hash: ba067f0
@@ -2391,6 +2435,16 @@ nl:
         aangekondigd.
       #original_hash: ab61991
       announced: Wedstrijd succesvol aangekondigd!
+      #original_hash: a582c89
+      cancelled: De wedstrijd is geannuleerd. Zie de Informatie-sectie voor meer details.
+      #original_hash: b4aa5ee
+      cancel_success: Succesvol de wedstrijd geannuleerd!
+      #original_hash: d0478cf
+      cancel_failure: Kan de wedstrijd niet annuleren.
+      #original_hash: 09df36b
+      uncancel_success: Succesvol de wedstrijdannulering teruggedraaid!
+      #original_hash: ead4a9e
+      uncancel_failure: Kan de wedstrijdannulering niet terugdraaien.
       #original_hash: 8ad5e67
       results_not_posted: >-
         De resultaten van deze wedstrijd zijn zichtbaar maar nog niet
@@ -2417,6 +2471,8 @@ nl:
       in_progress: >-
         De wedstrijd is nog gaande. Kom na %{date} terug om de resultaten te
         bekijken!
+      #original_hash: 8ab1548
+      reg_opens_too_early: Aanmelding start in minder dan de vereiste 48 uur.
       #original_hash: 3322400
       tooltip_registered: Je bent aangemeld.
       #original_hash: f2d092f
@@ -2479,11 +2535,15 @@ nl:
       details: Details
       #original_hash: 2e8a57c
       website: Website
+      #original_hash: 2260929
+      display_name: '[Geannuleerd] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: Organisatoren
         one: Organisator
         other: Organisatoren
+      #original_hash: 53a9522
+      organization_team: Organisatieteam
       #original_hash: 6afa61e
       delegate:
         zero: WCA-delegates
@@ -2531,6 +2591,21 @@ nl:
         krijg je %{refund_policy_percent} van het betaalde bedrag terug.
       #original_hash: 4aca553
       no_refunds: Aanmeldkosten worden niet terugbetaald.
+      #original_hash: b016d2f
+      waiting_list_deadline_html: >-
+        Geregistreerden op de wachtlijst mogen worden geaccepteerd als deelnemer
+        tot %{waiting_list_deadline}.
+      #original_hash: 14c5699
+      event_change_deadline_html: >-
+        Als je een geregistreerde deelnemer bent mag je je geregistreerde
+        wedstrijdonderdelen aanpassen tot %{event_change_deadline} door contact
+        op te nemen met het organisatieteam.
+      #original_hash: eff3594
+      event_change_deadline_default_html: >-
+        We moedigen iedereen aan om zich in te schrijven voor de
+        wedstrijdonderdelen waaraan ze willen deelnemen via je online
+        registratie, maar je kunt wedstrijdonderdelen aan je registratie
+        toevoegen totdat het wedstrijdonderdeel is begonnen.
       #original_hash: cf7be5d
       on_the_spot_registration_fee_html: >-
         Aanmeldingen op de dag van de wedstrijd worden geaccepteerd voor een
@@ -2543,6 +2618,11 @@ nl:
       guests_pay: >-
         Toeschouwers zijn welkom, zij betalen een toegangsprijs van
         %{guests_base_fee}.
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: Iedere gast heeft gratis toegang.
+        #original_hash: f1e6aef
+        restricted: Gasten zijn alleen toegestaan als begeleider van deelnemers.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         De wedstrijd is voorbij, klik %{link_here} om de aanmeldingseisen die
@@ -2618,6 +2698,10 @@ nl:
     index:
       #original_hash: db98a68
       title: Wedstrijden
+      #original_hash: 63254de
+      disclaimer: >-
+        Houd er rekening mee dat vanwege de COVID-19-pandemie veel landen
+        momenteel geen wedstrijden kunnen organiseren.
       #original_hash: 6a72085
       all_events: Alle
       #original_hash: 6d76b81
@@ -2642,6 +2726,10 @@ nl:
       past: Verleden
       #original_hash: 081ae3f
       custom: Maatwerk
+      #original_hash: 73cf180
+      by_announcement: Per aankondiging
+      #original_hash: b3946b2
+      sort_by_announcement: Sorteer per aankondiging
       #original_hash: 3f66052
       from_date: Vanaf
       #original_hash: ae79ea1
@@ -2663,6 +2751,8 @@ nl:
         upcoming: Aankomende wedstrijden
         #original_hash: 8b57693
         custom: Wedstrijden in de geselecteerde tijdsperiode
+        #original_hash: 0933739
+        by_announcement: 'Wedstrijden gesorteerd op aankondigingsdatum, nieuwste bovenaan'
       #original_hash: 6684214
       no_access: Je hebt geen toegang tot deze pagina!
       tooltips:
@@ -2675,6 +2765,8 @@ nl:
           posted: Resultaten zijn gepost!
           #original_hash: 89bcc37
           starts_in: 'Start in %{days}'
+          #original_hash: 97b061a
+          announced_on: 'Aangekondigd op %{announcement_date}'
         #original_hash: ccd2db9
         search: 'Naam, stad, wedstrijdlocatie, land of maand'
         #original_hash: 3bc8082
@@ -2821,6 +2913,34 @@ nl:
       span_too_many_days: 'Wedstrijd kan niet langer duren dan %{max_days} dagen.'
       #original_hash: cdcd288
       invalid_currency_code: De geselecteerde valutacode is onjuist
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: >-
+        moet een voorwaarde hebben voor doorgaan naar volgende ronde voor alle
+        niet-finale rondes.
+      #original_hash: da17c99
+      registration_period_after_start: Aanmeldingsperiode kan niet na de startdatum zijn.
+      #original_hash: f6b244b
+      waiting_list_deadline_before_registration_close: >-
+        Deadline voor de wachtlijst kan niet voor sluitingsdatum voor aanmelding
+        zijn.
+      #original_hash: ececa98
+      waiting_list_deadline_before_refund_date: >-
+        Deadline voor wachtlijst kan niet voor de uiterste datum voor refunds
+        zijn.
+      #original_hash: 44d9902
+      waiting_list_deadline_after_start: Deadline voor wachtlijst kan niet voor de startdatum zijn.
+      #original_hash: c3eb1be
+      event_change_deadline_before_registration_close: >-
+        De deadline voor het bijwerken van wedstrijdonderdelen kan niet vóór de
+        sluitingsdatum van de aanmelding zijn.
+      #original_hash: bc1ca0f
+      event_change_deadline_after_end_date: >-
+        Deadline voor aanpassing van wedstrijdonderdelen kan niet na de
+        wedstrijd zijn.
+      #original_hash: a2e4fc9
+      event_change_deadline_with_ots: >-
+        Deadline voor aanpassing van wedstrijdonderdelen moet tijdens de
+        wedstrijd zijn als aanmelding op locatie is toegestaan.
     new:
       #original_hash: 1208df7
       create_competition: Maak wedstrijd
@@ -2878,22 +2998,44 @@ nl:
       before: voor
       #original_hash: 405906c
       after: na
+      #original_hash: e1978a9
+      starts_on: begint op
+      #original_hash: 964aedc
+      ends_on: eindigt op
       #original_hash: 24d948e
       limit: Limiet
       #original_hash: 855bd26
       competitors: Deelnemers
+      #original_hash: c5497bc
+      events: Wedstrijdonderdelen
+      #original_hash: 50cb854
+      show_events: Toon wedstrijdonderdelen
+      #original_hash: 0df66f7
+      hide_events: Verberg wedstrijdonderdelen
     #original_hash: 06b01c4
     announcements: Competitie aankondigen
     #original_hash: a2b80b0
     post_announcement: Wedstrijd aankondigen
     #original_hash: b462eac
     announced_by_html: 'Aangekondigd door %{announcer_name} op %{date_time}'
+    #original_hash: 375e17f
+    cancel: Annuleer de wedstrijd
+    #original_hash: 7628a51
+    uncancel: Draai annulering van wedstrijd terug
+    #original_hash: 9122a6c
+    cancelled_by_html: 'Geannuleerd door %{name} op %{date_time}'
+    #original_hash: 25e68c3
+    cancel_confirm: Weet je zeker dat je de wedstrijd wilt annuleren?
     #original_hash: 9a42672
     upload_results: Resultaten uploaden
     #original_hash: 01de5ee
     post_results: De resultaten posten
     #original_hash: b6513f1
     results_posted_by_html: 'Gepost door %{poster_name} op %{date_time}'
+    #original_hash: a6b5efe
+    cancel_mistake: Heb je een fout gemaakt?
+    #original_hash: 0fb43d5
+    note_before_cancel: 'Let op: alleen bevestigde wedstrijden kunnen worden geannuleerd.'
     show:
       #original_hash: b0fe391
       general_info: Algemene informatie
@@ -3016,6 +3158,8 @@ nl:
         register: Aanmelden
         #original_hash: 855bd26
         competitors: Deelnemers
+        #original_hash: c4622c3
+        scrambles: Scrambles
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA-profiel
@@ -3025,6 +3169,18 @@ nl:
       round: Ronde
       #original_hash: 709a232
       name: Naam
+      rank:
+        #original_hash: d4840ff
+        national: Nationale Ranking
+        #original_hash: ca3ff98
+        continent: Continentale Ranking
+        #original_hash: f6bcce7
+        world: Wereld Ranking
+    scrambles_table:
+      #original_hash: 171a060
+      group: Groep
+      #original_hash: b7126cd
+      scramble: Scramble
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3125,6 +3281,15 @@ nl:
         history: Geschiedenis
         #original_hash: e58bcf8
         mixed_history: Gemengde geschiedenis
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: Geslacht
+        #original_hash: 6a72085
+        gender_all: Alle
+        #original_hash: 3f3a489
+        male: Mannelijk
+        #original_hash: b7c17e9
+        female: Vrouwelijk
     table_elements:
       #original_hash: 709a232
       name: Naam
@@ -3586,6 +3751,8 @@ nl:
         te hebben over de hele wereld.
       #original_hash: 24c87db
       donate_credit: Doneren via creditcard
+      #original_hash: 0e5a9c3
+      donate_paypal: Doneer via Paypal
       #original_hash: 96d77f3
       donate_other: Andere manieren om te doneren
     structure:
@@ -3754,6 +3921,9 @@ nl:
       banned:
         #original_hash: d30e2e5
         name: Geschorste deelnemers
+      wct_china:
+        #original_hash: ed5b65a
+        name: WCT China
       #original_hash: f8c3f3c
       operations_html: >-
         De dagelijkse operatie wordt uitgevoerd door de %{committees_and_teams}
@@ -3763,6 +3933,9 @@ nl:
       probation:
         #original_hash: 1dd6e3b
         name: WCA-delegates met proeftijd
+      wst_admin:
+        #original_hash: d4112d2
+        name: Software Admins
       #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA-delegates</strong> zijn leden van de WCA die
@@ -3782,6 +3955,9 @@ nl:
       members_html: >-
         Alle deelnemers worden automatisch <strong>lid</strong> van WCA in hun
         eerste WCA-wedstrijd.
+  speedcubing_history:
+    #original_hash: 431e667
+    title: Geschiedenis van de Speedcubing Community & WCA
   documents:
     #original_hash: 687c828
     title: Documenten
@@ -3797,6 +3973,27 @@ nl:
     policies: WCA Beleidsdocumenten
     #original_hash: 91ac873
     codeofethics: Ethische Code
+    #original_hash: 2643980
+    codeofconduct: Gedragscode
+    #original_hash: 4f05e8f
+    finances: Financiën
+  education:
+    #original_hash: 746e863
+    title: WCA Educatieve bronnen
+    #original_hash: 081d65d
+    description: >-
+      De WQAC heeft verschillende documenten voor de community gepubliceerd,
+      deze kunt u hieronder downloaden.
+    #original_hash: d0a3812
+    competitor_tutorial: Tutorial voor deelnemers
+    #original_hash: 9561bfc
+    judge_tutorial: Judging tutorial voor nieuwkomers
+    #original_hash: 12e47a3
+    competition_templates: Westrijdsjablonen
+    #original_hash: 5ca0558
+    certificates: WCT's certificaatsjablonen
+    #original_hash: f580987
+    orga_guidelines: Richtlijnen voor organisatoren
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-delegates
@@ -3877,6 +4074,11 @@ nl:
       create_success: >-
         Aanmelding succesvol ingestuurd! Controleer je e-mail en wacht op de
         review door het WCA-Bestuur.
+    delete:
+      #original_hash: 6588652
+      confirm_delete: >-
+        Weet je zeker dat je het verzoek voor deze Regionale Organisatie wilt
+        verwijderen?
   contact:
     #original_hash: a34b69f
     title: Contactinformatie
@@ -4003,6 +4205,116 @@ nl:
   score_tools:
     #original_hash: 4fc2133
     title: Softwaretools voor WCA-wedstrijden
+    #original_hash: 6d2fe37
+    wca_icon_text: Ontwikkeld en onderhouden door de WST
+    intro:
+      #original_hash: 0c5fab5
+      desc: >-
+        Deze pagina is een niet-uitputtende lijst van tools waarvan bekend is
+        dat ze worden gebruikt om te helpen bij de organisatie van
+        WCA-wedstrijden.
+      #original_hash: 479b542
+      disclaimer: >-
+        Niet alle tools op die pagina worden onderhouden door de WST: dat is
+        zeker goed! We hebben niet de mankracht om alle WCA-gerelateerde
+        software te beheren :)
+      #original_hash: 80f97b9
+      used: >-
+        Alle programma's op deze lijst zijn gebruikt tijdens echte
+        WCA-competities en zijn geïntegreerd met de WCA-website: ze laten je
+        inloggen met je WCA-account om je aankomende competitiegegevens te
+        kunnen importeren (en soms bijwerken). Voor elk van hen zullen de
+        beheerder(s) duidelijk worden beschreven.
+    before:
+      #original_hash: 9850344
+      title: Voor de wedstrijd
+      #original_hash: 576e2f4
+      desc: >-
+        Het beheren van deelnemersregistraties kan direct op de WCA-website
+        worden gedaan. Aangezien het handmatig beheren van groepen en personeel
+        tijdrovend kan zijn, kunt u overwegen een van de onderstaande tools te
+        gebruiken.
+    during:
+      #original_hash: 9934200
+      title: Tijdens de wedstrijd
+      #original_hash: 2b0a6f6
+      desc: >-
+        Je vindt hier tools waarmee je de resultaten van de wedstrijd kunt
+        beheren terwijl deze aan de gang is.
+    after:
+      #original_hash: d81b949
+      title: Na de wedstrijd
+      #original_hash: b898460
+      desc: >-
+        Hoewel de validatie van de resultaten op de website plaatsvindt, moet je
+        een tool gebruiken om door TNoodle gegenereerde scrambles toe te wijzen
+        aan de daadwerkelijke resultaten die naar de WCA-website zijn verzonden.
+    tools:
+      age:
+        #original_hash: 4aaae5b
+        title: Leeftijd
+        #original_hash: 2e4832d
+        description: >-
+          Tool voor het genereren en bewerken van groepen/taaktoewijzingen voor
+          WCA-wedstrijden
+      certificates:
+        #original_hash: b3e4eb0
+        title: Certificaten
+        #original_hash: f1a0731
+        description: Print certificaten voor WCA-wedstrijden met WCA Live
+      groupifier:
+        #original_hash: 8f55355
+        title: Groupifier
+        #original_hash: 24d4736
+        description: >-
+          Tool voor taak- en groepsbeheer voor organisatoren van
+          WCA-wedstrijden. Tot de belangrijkste kenmerken behoren: het sorteren
+          van deelnemers op ranking, het toewijzen van taken (jureren,
+          scrambling), beslissen hoeveel scrambles nodig zijn, het genereren van
+          scorebladen, persoonlijke bladen en samenvattingen... Bekijk de
+          website voor meer informatie.
+      scorecards:
+        #original_hash: aa1b64d
+        title: Wedstrijdbriefjes
+        #original_hash: 2b8e373
+        description: Print wedstrijdbriefjes voor WCA-wedstrijden met WCA Live
+      tnoodle:
+        #original_hash: ba336a1
+        title: TNoodle (Scrambles)
+        #original_hash: 0a38b22
+        description: >-
+          TNoodle is het officiële scramble-programma dat wordt gebruikt voor
+          WCA-wedstrijden. Het wordt meestal gebruikt door WCA-afgevaardigden
+          voorafgaand aan WCA-wedstrijden, maar dankzij de gebruikersinterface
+          kan iedereen allerlei soorten scrambles genereren voor alle
+          WCA-wedstrijdonderdelen.
+
+          Vertaling
+      live:
+        #original_hash: c66444f
+        title: WCA Live
+        #original_hash: f122015
+        description: >-
+          Platform voor het houden van WCA-wedstrijden en het delen van live
+          resultaten met de wereld.
+      nightmare:
+        #original_hash: eebde3b
+        title: Resultatenwerkblad
+        #original_hash: 466f4c2
+        description: >-
+          Soms gebeuren er dingen... Als je geen netwerktoegang hebt, moet je de
+          good old spreadsheet gebruiken.
+      matcher:
+        #original_hash: cc59bc9
+        title: Scrambles Matcher
+        #original_hash: a352bd1
+        description: >-
+          Kan worden gebruikt om door TNoodle gegenereerde scrambles toe te
+          wijzen aan resultaten. Importeer resultaten van de WCA-website (bij
+          gebruik van WCA Live), een spreadsheet of een zelfstandig
+          WCIF-bestand. Importeer scrambles uit een of meer TNoodle
+          json-bestand(en). Exporteer resultaten naar het juiste formaat voor
+          insturen van resultaten naar WCA.
   logo:
     #original_hash: c72c969
     title: WCA-logo
@@ -4178,7 +4490,11 @@ nl:
       posts: Berichten
       #original_hash: 9d7ea9c
       regulations_and_guidelines: Wedstrijdreglement en richtlijnen
+      #original_hash: db683b3
+      search_for: 'Zoek naar <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: Geen resultaten gevonden
         #original_hash: b8a7006
         competitions: Geen wedstrijden gevonden voor
         #original_hash: 99d4290
@@ -4209,6 +4525,11 @@ nl:
         Het WCA-wedstrijdreglement is aangevuld met de <a
         href="/regulations/guidelines.html">WCA Richtlijnen</a>, die aanvullende
         verduidelijkingen en toelichtingen bevatten.
+      #original_hash: c8e1783
+      content3_html: >-
+        Belangrijke beslissingen over incidenten die zich hebben voorgedaan
+        tijdens wedstrijden die zijn opgelost door de WCA-reglementencommissie
+        zijn te vinden in het <a href="/incidents">Incidents-logboek</a>.
     panel2:
       #original_hash: 8ad8302
       title: Vertalingen
@@ -4273,9 +4594,67 @@ nl:
       kijk dan naar de <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">instructies
       op de GitHub repository voor vertalingen</a>.
+  full_organizer_guidelines:
+    #original_hash: 5d602df
+    description: >-
+      Welkom bij de verzameling organisatorrichtlijnen van de WQAC. Als je
+      overweegt om organisator te worden, is het ten zeerste aan te raden deze
+      documenten te lezen. Ze zijn onderverdeeld in essentiële en sterk
+      aanbevolen documenten. Zorg ervoor dat u bekend bent met de gegeven
+      informatie, want hierdoor kunt u een kwalitatief hoogstaande en plezierige
+      wedstrijd houden!
+    #original_hash: e6f7d36
+    disclaimer_html: >-
+      <strong>Disclaimer</strong>: de WCA organiseert geen wedstrijden. Als
+      organisator van een door de WCA goedgekeurde wedstrijd <strong>mag u
+      niets</strong> ondertekenen namens de WCA. U moet proberen contact op te
+      nemen met een relevante regionale of nationale bond die wel wedstrijden
+      organiseert of helpt bij het organiseren ervan.
+    essential:
+      #original_hash: 44bd0ba
+      description: Essentiële documenten
+      #original_hash: 1cf87ad
+      finding-venue: Het vinden van een wedstrijdlocatie
+      #original_hash: 3ce0d9c
+      orga-team-delegate: Je organisatieteam maken en een Delegate benaderen
+      #original_hash: d3c693b
+      budget: Het budgetteren van een wedstrijd
+      #original_hash: b1429a7
+      schedule: Tijdschema
+      #original_hash: beea57d
+      checklist: Checklist voor wedstrijden
+      #original_hash: 9defcf1
+      registration: Afhandelen van aanmeldingen
+      #original_hash: e298a56
+      venue-setup: Opzetten van de wedstrijdlocatie
+      #original_hash: 2b6a5dd
+      work-during-comp: Organisatorwerk tijdens de wedstrijd
+    recommended:
+      #original_hash: 6b843f3
+      title: Aanbevolen documenten
+      #original_hash: bfbd4bb
+      staff: Taken toewijzen aan staff
+      #original_hash: 4735583
+      emails: E-mails
+      #original_hash: 8e7ca09
+      running-systems: Systemen voor running en judging
+      #original_hash: 2b31c89
+      new-competitors: Houding naar nieuwe deelnemers
+      #original_hash: 3408054
+      enhancing-experience: Ervaring van deelnemers en staff verbeteren
+      #original_hash: 2345aaa
+      reflection: Reflectie door organisator
   organizer_guidelines:
     #original_hash: 7486ac4
     title: WCA Wedstrijdorganisatorrichtlijnen
+    paragraph0:
+      #original_hash: ee36904
+      title: Korte versie
+      #original_hash: 60d9532
+      content: >-
+        Hieronder vind je een korte samenvatting van de belangrijkste punten om
+        een idee te krijgen hoe je een wedstrijd organiseert. Denk je dat dit
+        iets voor jou is, kijk dan eens naar bovenstaande documenten!
     paragraph1:
       #original_hash: e5f5329
       title: Hoe een wedstrijd organiseren
@@ -4607,3 +4986,8 @@ nl:
         Heb je andere suggesties voor Instagram of andere sociale media-inhoud?
         <a href="https://www.worldcubeassociation.org/contact/website">Laat het
         ons weten</a>!
+  footer:
+    #original_hash: cf01481
+    privacy: Privacy
+    #original_hash: 4c4a2e8
+    disclaimer: Disclaimer
