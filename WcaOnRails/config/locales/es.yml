@@ -473,6 +473,8 @@ es:
         on_the_spot_registration: Registros in situ
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Cuota básica de registro in situ
+        #original_hash: 7e53b96
+        allow_registration_edits: Modificaciones de registro
         #original_hash: efbdbab
         refund_policy_percent: Porcentaje a reembolsar
         #original_hash: b332299
@@ -902,6 +904,8 @@ es:
         on_the_spot_entry_fee_lowest_denomination: >-
           Si esto se pone a 0, se mostrará una frase indicando que se aceptan
           los registros in situ de forma gratuita.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Por ahora esta cifra es informativa, los reembolsos deberán realizarse
@@ -1181,6 +1185,15 @@ es:
           'true': Se aceptan registros in situ
           #original_hash: 0f236df
           'false': NO se aceptarán registros in situ
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Los competidores pueden modificar su registro hasta la fecha límite
+            para actualizar categorías
+          #original_hash: 2cbb80e
+          'false': >-
+            Los competidores NO podrán modificar su registro una vez haya sido
+            aceptado
   mail_form:
     attributes:
       contact_form:
@@ -2723,9 +2736,9 @@ es:
     index:
       #original_hash: db98a68
       title: Competiciones
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
-        Por favor, ten en cuenta que debido a la pandemia del COVID-19, muchos
+        Por favor, ten en cuenta que debido a la pandemia del COVID-19, algunos
         paises no pueden celebrar competiciones actualmente.
       #original_hash: 6a72085
       all_events: Todas
