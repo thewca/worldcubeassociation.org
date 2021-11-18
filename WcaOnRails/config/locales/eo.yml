@@ -473,6 +473,8 @@ eo:
         on_the_spot_registration: Surlokaj registriĝoj
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Baza surloka registriĝkosto
+        #original_hash: 7e53b96
+        allow_registration_edits: Redaktoj de registriĝoj
         #original_hash: efbdbab
         refund_policy_percent: Repagota procento
         #original_hash: b332299
@@ -892,6 +894,8 @@ eo:
         on_the_spot_entry_fee_lowest_denomination: >-
           Se vi enigas 0, videblos frazo dirante ke surlokaj registriĝoj estas
           senpagaj.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Nun, tiu nombro estas nur sciiga, repagoj devos esti farita permane.
@@ -1159,6 +1163,15 @@ eo:
           'true': Surlokaj registriĝoj eblos
           #original_hash: 0f236df
           'false': Surlokaj registriĝoj NE eblos
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Konkursantoj povas redakti siajn registriĝojn ĝis la limdato por
+            redakti konkurserojn
+          #original_hash: 2cbb80e
+          'false': >-
+            Konkursantoj NE povas redakti siajn registriĝojn kiam ĝi estas
+            akceptata
   mail_form:
     attributes:
       contact_form:
@@ -2644,9 +2657,9 @@ eo:
     index:
       #original_hash: db98a68
       title: Konkursoj
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
-        Atentu ke pro la KOVIM-19 pandemio, multe da landoj ne povas organizi
+        Atentu ke pro la KOVIM-19 pandemio, kelkaj landoj ne povas organizi
         konkursojn nuntempe.
       #original_hash: 6a72085
       all_events: Ĉiuj
