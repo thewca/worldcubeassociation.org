@@ -487,6 +487,8 @@ pl:
         on_the_spot_registration: Rejestracja na miejscu
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Bazowe wpisowe na miejscu
+        #original_hash: 7e53b96
+        allow_registration_edits: Edytowanie rejestracji
         #original_hash: efbdbab
         refund_policy_percent: Zwracany procent płatności
         #original_hash: b332299
@@ -917,6 +919,8 @@ pl:
         on_the_spot_entry_fee_lowest_denomination: >-
           Jeżeli wynosi 0, zostanie wyświetlone zdanie informujące o tym, że
           rejestracja na miejscu będzie możliwa za darmo.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Obecnie liczba ta pełni jedynie rolę informacyjną, zwroty płatności
@@ -1196,6 +1200,13 @@ pl:
           'true': Rejestracja na miejscu będzie możliwa
           #original_hash: 0f236df
           'false': Rejestracja na miejscu NIE będzie możliwa
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Zawodnicy mogą edytować swoje rejestracje do terminu zmian w
+            konkurencjach.
+          #original_hash: 2cbb80e
+          'false': Zawodnicy nie mogą edytować swoich rejestracji po ich zaakceptowaniu
   mail_form:
     attributes:
       contact_form:
