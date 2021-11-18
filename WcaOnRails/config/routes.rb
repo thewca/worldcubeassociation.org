@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     controllers applications: 'oauth/applications'
   end
 
+  # Starburst announcements, see https://github.com/starburstgem/starburst#installation
+  mount Starburst::Engine => '/starburst'
+
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
   devise_for :users, skip: :registrations, controllers: { sessions: "sessions" }

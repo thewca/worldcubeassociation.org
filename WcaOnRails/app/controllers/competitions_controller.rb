@@ -605,6 +605,7 @@ class CompetitionsController < ApplicationController
         :extra_registration_requirements,
         :on_the_spot_registration,
         :on_the_spot_entry_fee_lowest_denomination,
+        :allow_registration_edits,
         :refund_policy_percent,
         :refund_policy_limit_date,
         :early_puzzle_submission,

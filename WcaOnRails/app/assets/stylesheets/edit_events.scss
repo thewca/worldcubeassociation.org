@@ -10,12 +10,17 @@
       align-items: center;
 
       $cubing-icon-size: 55px;
+
       .img-thumbnail.cubing-icon {
         font-size: 40px;
         position: absolute;
         top: -5px;
         height: $cubing-icon-size;
         z-index: 1;
+
+        &::before {
+          vertical-align: 0;
+        }
       }
 
       .title {

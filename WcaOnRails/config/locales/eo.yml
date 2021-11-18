@@ -473,6 +473,8 @@ eo:
         on_the_spot_registration: Surlokaj registriĝoj
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Baza surloka registriĝkosto
+        #original_hash: 7e53b96
+        allow_registration_edits: Redaktoj de registriĝoj
         #original_hash: efbdbab
         refund_policy_percent: Repagota procento
         #original_hash: b332299
@@ -892,6 +894,8 @@ eo:
         on_the_spot_entry_fee_lowest_denomination: >-
           Se vi enigas 0, videblos frazo dirante ke surlokaj registriĝoj estas
           senpagaj.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Nun, tiu nombro estas nur sciiga, repagoj devos esti farita permane.
@@ -1159,6 +1163,15 @@ eo:
           'true': Surlokaj registriĝoj eblos
           #original_hash: 0f236df
           'false': Surlokaj registriĝoj NE eblos
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Konkursantoj povas redakti siajn registriĝojn ĝis la limdato por
+            redakti konkurserojn
+          #original_hash: 2cbb80e
+          'false': >-
+            Konkursantoj NE povas redakti siajn registriĝojn kiam ĝi estas
+            akceptata
   mail_form:
     attributes:
       contact_form:
@@ -1543,6 +1556,17 @@ eo:
         Trovu konkursojn apud vi aŭ rezultoj de konkursoj. Ĉu vi ĉeestas
         konkurson nuntempe kaj volas vidi ĝiajn rezultojn? Kontrolu
         %{wca_live_link}!
+    merchandise:
+      #original_hash: 698cfc8
+      title: Butiko
+      #original_hash: 6403f2b
+      ad_new: Nova
+      #original_hash: 9ad68ce
+      text_html: >-
+        Iru al nia nova oficiala butiko kiu enhavas selekton da vestaĵoj kiel
+        t-ĉemizoj kaj kapuĉpuloveroj.
+      #original_hash: b0fc6c4
+      link_title: Ligilo al butiko
     records:
       #original_hash: e51c552
       title: Rekordoj
@@ -2092,6 +2116,8 @@ eo:
             pozicioj
           #original_hash: 0d4cce9
           multiple_registrations: Vi registriĝis dufoje aŭ pli
+          #original_hash: 70b1e2c
+          competition_canceled: Tiu konkurso estis nuligita
     list:
       #original_hash: 8b7631c
       title: 'Registriĝoj por %{comp}'
@@ -2340,6 +2366,10 @@ eo:
       name_too_long: >-
         La nomo de la konkurso havas pli ol 32 karakterojn. Ni preferas pli
         mallongajn nomojn kaj ni ŝatus ke vi ŝanĝu ĝin.
+      #original_hash: af27396
+      id_starts_with_lowercase: >-
+        La identigilo (ID) de la konkurso komencas kun minuskla litero. Ni
+        preferus ke ĝi komencu kun majuskla litero.
       #original_hash: 1a20fae
       must_have_events: Bonvolu aldoni almenaŭ unu konkurseron antaŭ ol konfirmi la konkurson.
       #original_hash: a3aea56
@@ -2349,6 +2379,27 @@ eo:
         deklaris antaŭ ol konfirmi la konkurson.
       #original_hash: aeb5f2a
       advancement_condition_must_be_present_for_all_non_final_rounds: Bonvolu atenti ke ĉiuj nefinalaj raŭndoj havu kvalifikajn kondiĉojn.
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: >-
+        Raŭndo %{round_number} en %{event} havas interromptempon kiu estas pli
+        alta ol la tempolimo. Bonvolu ŝanĝi ĝin por ke ĝi estu pli malalta ol la
+        tempolimo.
+      #original_hash: c1580b1
+      cutoff_is_too_fast: >-
+        Raŭndo %{round_number} en %{event} havas interromptempon sub 5 sekundoj.
+        Bonvolu certigi ke tio ĝustas.
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: >-
+        Raŭndo %{round_number} en %{event} havas interromptempon super 10
+        minutoj. Bonvolu certigi ke tio ĝustas.
+      #original_hash: af976ad
+      time_limit_is_too_fast: >-
+        Raŭndo %{round_number} en %{event} havas tempolimon sub 10 sekundoj.
+        Bonvolu certigi ke tio ĝustas.
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: >-
+        Raŭndo %{round_number} en %{event} havas tempolimon super 10 minutoj.
+        Bonvolu certigi ke tio ĝustas.
       #original_hash: e390250
       create_success: Nova konkurso sukcese kreiĝis!
       #original_hash: ba067f0
@@ -2606,9 +2657,9 @@ eo:
     index:
       #original_hash: db98a68
       title: Konkursoj
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
-        Atentu ke pro la KOVIM-19 pandemio, multe da landoj ne povas organizi
+        Atentu ke pro la KOVIM-19 pandemio, kelkaj landoj ne povas organizi
         konkursojn nuntempe.
       #original_hash: 6a72085
       all_events: Ĉiuj
@@ -3857,6 +3908,8 @@ eo:
     competitor_tutorial: Instruilo por konkursantoj
     #original_hash: 9561bfc
     judge_tutorial: Lernilo pri juĝado por novaj partoprenantoj
+    #original_hash: 12e47a3
+    competition_templates: Konkursaj ŝablonoj
     #original_hash: 5ca0558
     certificates: Modelo de diplomo de la WCT
     #original_hash: f580987

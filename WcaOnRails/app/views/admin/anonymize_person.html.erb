@@ -40,7 +40,7 @@
   Thanks - WCA Results Team" %>.</li>
             <br>
             <li>Request data removal from OAuth Access Grants.</li>
-            <% access_grants = @anonymize_person.account.oauth_access_grants %>
+            <% access_grants = @anonymize_person.account.oauth_access_grants.select { |access_grant| !access_grant.revoked_at.nil? } %>
 
             <% if access_grants.any? %>
 

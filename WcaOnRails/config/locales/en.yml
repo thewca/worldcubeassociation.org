@@ -304,6 +304,7 @@ en:
         extra_registration_requirements: "Extra registration requirements"
         on_the_spot_registration: "On the spot registrations"
         on_the_spot_entry_fee_lowest_denomination: "On the spot base registration fee"
+        allow_registration_edits: "Registration edits"
         refund_policy_percent: "Percent to be refunded"
         refund_policy_limit_date: "Limit date for refunds"
         waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
@@ -514,6 +515,7 @@ en:
         extra_registration_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
         on_the_spot_registration: ""
         on_the_spot_entry_fee_lowest_denomination: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
+        allow_registration_edits: ""
         refund_policy_percent: "For now this number is informational only, refunds will have to be issued manually. If this is set to 0, a sentence will be displayed saying that registration fees won't be refunded under any circumstance."
         refund_policy_limit_date: "Date after which no more refunds will be issued."
         waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
@@ -638,6 +640,9 @@ en:
         on_the_spot_registration:
           "true": "On the spot registrations will be accepted"
           "false": "On the spot registrations WILL NOT be accepted"
+        allow_registration_edits:
+          "true": "Competitors may edit their registration until the deadline for updating events"
+          "false": "Competitors may NOT edit their registration once it has been accepted"
   mail_form:
     #context: This key is used as a label for contact form attributes
     attributes:
@@ -838,6 +843,13 @@ en:
     competitions:
       title: "Competitions"
       text_html: "Find out about competitions near you or competition results. At a competition now and want to see the results? Check out %{wca_live_link}!"
+    #context: "Merchandise" box
+    merchandise:
+      title: "Merchandise"
+      #context: Indicate that the feature is new (like an advertisement)
+      ad_new: "New"
+      text_html: "Check out our newly launched official merchandise which includes a selection of apparels ranging from T-shirts to Hoodies."
+      link_title: "Link to shop"
     #context: "Records" box
     records:
       title: "Records"
@@ -1331,7 +1343,7 @@ en:
       on_the_spot_registration_free: "On the spot registrations will be accepted for free."
       no_on_the_spot_registration: "No on the spot registrations will be accepted."
       guests_pay: "Spectators can attend paying an entry fee of %{guests_base_fee}."
-      guests_free: 
+      guests_free:
         anyone: "Any spectator can attend for free."
         restricted: "Spectators are only permitted as companions of competitors."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
@@ -1371,7 +1383,7 @@ en:
     #context: on the competition's index page
     index:
       title: "Competitions"
-      disclaimer: "Please note that due to the COVID-19 pandemic, many countries are currently unable to host competitions."
+      disclaimer: "Please note that due to the COVID-19 pandemic, some countries are currently unable to host competitions."
       all_events: "All"
       all_years: "All Years"
       clear: "Clear"

@@ -473,6 +473,8 @@ es:
         on_the_spot_registration: Registros in situ
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Cuota básica de registro in situ
+        #original_hash: 7e53b96
+        allow_registration_edits: Modificaciones de registro
         #original_hash: efbdbab
         refund_policy_percent: Porcentaje a reembolsar
         #original_hash: b332299
@@ -485,6 +487,8 @@ es:
           categorías en las que participan
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Precio de entrada de acompañantes
+        #original_hash: bb16247
+        free_guest_entry_status: Mostrar mensaje para acceso gratuito de invitados
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Me gustaría requerir que los competidores entreguen sus puzzles a una
@@ -697,6 +701,16 @@ es:
         article: Artículo
         #original_hash: 82dabd0
         multimedia: Multimedia
+    competition:
+      free_guest_entry_status:
+        #original_hash: 7e54323
+        unclear: >-
+          No mostrar nada (y quizás ampliar la información en la sección de
+          "Requisistos adicionales de registro")
+        #original_hash: 694bce4
+        anyone: '"Cualquier espectador puede asistir de manera gratuita"'
+        #original_hash: 762c509
+        restricted: '"Sólo se permiten espectadores como acompañantes de competidores"'
   simple_form:
     #original_hash: 5397e05
     'yes': Sí
@@ -890,6 +904,8 @@ es:
         on_the_spot_entry_fee_lowest_denomination: >-
           Si esto se pone a 0, se mostrará una frase indicando que se aceptan
           los registros in situ de forma gratuita.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Por ahora esta cifra es informativa, los reembolsos deberán realizarse
@@ -911,12 +927,14 @@ es:
           quiere decir que los competidores pueden añadir categorías hasta que
           empiecen esas categorías. Si tiene registro in situ ha de ponerse la
           fecha en la que ocurra la competición.
-        #original_hash: 25a1324
+        #original_hash: 0419547
         guests_entry_fee_lowest_denomination: >-
           Por el momento esta cifra es solamente informativa, los precios de
           entrada de espectadores no se pueden gestionar desde este sitio web.
-          Si se pone a 0, se mostrará una frase indicando que los espectadores
-          pueden asistir de forma gratuita.
+          Si se pone a 0, se mostrará una frase de su elección indicando la
+          política de espectadores elegida.
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1167,6 +1185,15 @@ es:
           'true': Se aceptan registros in situ
           #original_hash: 0f236df
           'false': NO se aceptarán registros in situ
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Los competidores pueden modificar su registro hasta la fecha límite
+            para actualizar categorías
+          #original_hash: 2cbb80e
+          'false': >-
+            Los competidores NO podrán modificar su registro una vez haya sido
+            aceptado
   mail_form:
     attributes:
       contact_form:
@@ -1558,6 +1585,17 @@ es:
         Descubre competiciones cerca de ti o resultados de competiciones. ¿Estás
         en una competición ahora y quieres ver los resultados? ¡Mira en
         %{wca_live_link}!
+    merchandise:
+      #original_hash: 698cfc8
+      title: Productos oficiales
+      #original_hash: 6403f2b
+      ad_new: Novedad
+      #original_hash: 9ad68ce
+      text_html: >-
+        Comprueba nuestro reciente lanzamiento de productos oficiales que
+        incluye una selección de ropa desde camisetas a sudaderas.
+      #original_hash: b0fc6c4
+      link_title: Enlace a la tienda
     records:
       #original_hash: e51c552
       title: Records
@@ -2127,6 +2165,8 @@ es:
             disponibles
           #original_hash: 0d4cce9
           multiple_registrations: Te registraste más de una vez
+          #original_hash: 70b1e2c
+          competition_canceled: La competición ha sido cancelada
     list:
       #original_hash: 8b7631c
       title: 'Registros para %{comp}'
@@ -2382,6 +2422,10 @@ es:
       name_too_long: >-
         El nombre de esta competición tiene más de 32 caracteres. Preferimos
         nombres más cortos y agradeceríamos que lo redujeras.
+      #original_hash: af27396
+      id_starts_with_lowercase: >-
+        El identificador de competición empieza con minúsculas. Preferimos que
+        empiece con mayúsculas.
       #original_hash: 1a20fae
       must_have_events: >-
         Por favor, selecciona al menos una prueba antes de confirmar la
@@ -2395,6 +2439,28 @@ es:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Por favor, asegúrate de que se han especificado condiciones de avance
         para todas las rondas no finales.
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: >-
+        La ronda %{round_number} en %{event} tiene un tiempo de corte mayor que
+        el tiempo límite. Por favor asegúrate de que el tiempo de corte es menor
+        que el tiempo límite.
+      #original_hash: c1580b1
+      cutoff_is_too_fast: >-
+        La ronda %{round_number} en %{event} tiene un tiempo de corte inferior a
+        5 segundos. Por favor asegúrate de que es correcto.
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: >-
+        La ronda %{round_number} en %{event}  tiene un tiempo de corte de más de
+        10 minutos. Por favor asegúrate de que es correcto.
+      #original_hash: af976ad
+      time_limit_is_too_fast: >-
+        La ronda %{round_number} en %{event} tiene un tiempo límite de menos de
+        10 segundos. Por favor asegúrate de que es correcto.
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: >-
+        La ronda %{round_number} en %{event}  tiene un tiempo límite de más de
+        10 minutos en una categoría rápida. Por favor asegúrate de que es
+        correcto.
       #original_hash: e390250
       create_success: ¡La competición se ha creado satisfactoriamente!
       #original_hash: ba067f0
@@ -2590,8 +2656,11 @@ es:
       guests_pay: >-
         Los espectadores pueden asistir pagando una entrada de
         %{guests_base_fee}.
-      #original_hash: b6c863e
-      guests_free: Los espectadores pueden asistir de forma gratuita.
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: Cualquier espectador puede asistir de manera gratuita
+        #original_hash: f1e6aef
+        restricted: Los espectadores sólo se permiten como acompañantes de competidores.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         La competición ha finalizado, haz click %{link_here} para mostrar los
@@ -2667,9 +2736,9 @@ es:
     index:
       #original_hash: db98a68
       title: Competiciones
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
-        Por favor, ten en cuenta que debido a la pandemia del COVID-19, muchos
+        Por favor, ten en cuenta que debido a la pandemia del COVID-19, algunos
         paises no pueden celebrar competiciones actualmente.
       #original_hash: 6a72085
       all_events: Todas
@@ -3959,6 +4028,8 @@ es:
     competitor_tutorial: Tutorial de competidor
     #original_hash: 9561bfc
     judge_tutorial: Tutorial de hacer de jueces para novatos
+    #original_hash: 12e47a3
+    competition_templates: Plantillas de competición
     #original_hash: 5ca0558
     certificates: Plantillas de certificados del WCT
     #original_hash: f580987
