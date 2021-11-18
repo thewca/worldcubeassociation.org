@@ -471,6 +471,8 @@ nl:
         on_the_spot_registration: Ik wil aanmeldingen bij binnenkomst op locatie accepteren.
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Deelnamekosten bij nieuwe aanmelding op locatie
+        #original_hash: 7e53b96
+        allow_registration_edits: Aanpassingen in aanmeldingen
         #original_hash: efbdbab
         refund_policy_percent: Teruggave percentage
         #original_hash: b332299
@@ -892,6 +894,8 @@ nl:
         on_the_spot_entry_fee_lowest_denomination: >-
           Als dit bedrag 0 is, dan wordt een zin getoond dat aanmelding bij
           binnenkomst gratis is.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Dit getal is slechts ter informatie, teruggaves moeten handmatig
@@ -1165,6 +1169,15 @@ nl:
           'true': Registratie op wedstrijdlocatie toegestaan
           #original_hash: 0f236df
           'false': Nieuwe aanmeldingen op de wedstrijdlocatie worden NIET toegestaan
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Deelnemers mogen hun registratie aanpassen tot de deadline voor het
+            aanpassen van wedstrijdonderdelen
+          #original_hash: 2cbb80e
+          'false': >-
+            Deelnemers mogen hun registratie NIET aanpassen zodra ze zijn
+            geaccepteerd
   mail_form:
     attributes:
       contact_form:
@@ -2698,9 +2711,9 @@ nl:
     index:
       #original_hash: db98a68
       title: Wedstrijden
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
-        Houd er rekening mee dat vanwege de COVID-19-pandemie veel landen
+        Houd er rekening mee dat vanwege de COVID-19-pandemie sommige landen
         momenteel geen wedstrijden kunnen organiseren.
       #original_hash: 6a72085
       all_events: Alle
