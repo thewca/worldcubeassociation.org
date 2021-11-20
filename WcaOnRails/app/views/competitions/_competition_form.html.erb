@@ -208,26 +208,29 @@
         <script>
           $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
             if(!$('#due_estimate').length){
-              $(this).siblings('.help-block').append('<br><p id="due_estimate"><b>XDXD</b></p>');
+              $(this).siblings('.help-block').append('<br><p id="due_estimate"><b></b></p>');
             }
 
             <% iso2 = Country.where(id: @competition.countryId).map(&:iso2) %>
             <% countryBand = CountryBand.where(iso2: iso2).map(&:number)[0] %>
-            <% pricePerCompetitor = 0 %>
+
+            var pricePerCompetitor = 0;
 
             <% if !countryBand.nil? && countryBand > 0 %>
-              <% pricePerCompetitor = CountryBand::BANDS[countryBand][:value] %>
+              pricePerCompetitor = <%= CountryBand::BANDS[countryBand][:value] %>;
 
               //Need a way to convert whatever the currency is to USD
-              <% pricePerCompetitor = [pricePerCompetitor, @competition.base_entry_fee_lowest_denomination / 100 * 0.05].max %>
+              var feeDues = this.value / 100 * 0.05;
+              console.log(feeDues);
+              pricePerCompetitor = Math.max(pricePerCompetitor, feeDues);
             <% end %>
 
             //Need better formatting of currency
             <% if @competition.competitor_limit? && @competition.competitor_limit_enabled %>
-              <% estimateDues = pricePerCompetitor * @competition.competitor_limit %>
-              $('#due_estimate').html("<b>The estimated WCA dues for " + <%= @competition.competitor_limit %> + " competitors are " +  <%= estimateDues.round(2) %> + ".<b>")
+              var comp_limit = <%= @competition.competitor_limit %>;
+              $('#due_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: comp_limit, estimate: (comp_limit * pricePerCompetitor).toFixed(2)}) + "</b>");
             <% else %>
-              $('#due_estimate').html("<b>The estimated WCA dues per competitor are " +  <%= pricePerCompetitor.round(2) %> + ".<b>")
+              $('#due_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: pricePerCompetitor.toFixed(2)}) + "</b>")
             <% end %>
 
           }).trigger('change');

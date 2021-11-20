@@ -1468,6 +1468,9 @@ en:
         national: "National Championship: %{country}"
         greater_china: "Greater China Championship"
         generic: "Championship: %{type}"
+      dues_estimate:
+        calculated: "The estimated WCA dues for %{limit} competitors are %{estimate}."
+        per_competitor: "The estimated WCA dues per competitor are %{estimate}."
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
