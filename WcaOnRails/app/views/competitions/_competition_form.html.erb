@@ -206,33 +206,51 @@
         <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input, currency_selector: "#competition_currency_code" %>
 
         <script>
-          $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
-            if(!$('#due_estimate').length){
-              $(this).siblings('.help-block').append('<br><p id="due_estimate"><b></b></p>');
-            }
+          var bandFee = 0;
+          var baseFee = 0;
+          var compLimit = null;
+          var tempLimit = null;
 
-            <% iso2 = Country.where(id: @competition.countryId).map(&:iso2) %>
-            <% countryBand = CountryBand.where(iso2: iso2).map(&:number)[0] %>
+          <% iso2 = Country.where(id: @competition.countryId).map(&:iso2) %>
+          <% countryBand = CountryBand.where(iso2: iso2).map(&:number)[0] %>
+          <% if !countryBand.nil? && countryBand > 0 %>
+            bandFee = <%= CountryBand::BANDS[countryBand][:value] %>;
+            console.log(bandFee);
+          <% end %>
 
-            var pricePerCompetitor = 0;
-
-            <% if !countryBand.nil? && countryBand > 0 %>
-              pricePerCompetitor = <%= CountryBand::BANDS[countryBand][:value] %>;
-
-              //Need a way to convert whatever the currency is to USD
-              var feeDues = this.value / 100 * 0.05;
-              console.log(feeDues);
-              pricePerCompetitor = Math.max(pricePerCompetitor, feeDues);
-            <% end %>
-
+          function UpdateDues(){
             //Need better formatting of currency
-            <% if @competition.competitor_limit? && @competition.competitor_limit_enabled %>
-              var comp_limit = <%= @competition.competitor_limit %>;
-              $('#due_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: comp_limit, estimate: (comp_limit * pricePerCompetitor).toFixed(2)}) + "</b>");
-            <% else %>
-              $('#due_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: pricePerCompetitor.toFixed(2)}) + "</b>")
-            <% end %>
+            var pricePerCompetitor = Math.max(bandFee, baseFee);
+            if(compLimit != null)
+              $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: (compLimit * pricePerCompetitor).toFixed(2)}) + "</b>");
+            else
+              $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: pricePerCompetitor.toFixed(2)}) + "</b>");
+          }
 
+          $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
+            if(!$('#dues_estimate').length){
+              $(this).siblings('.help-block').append('<br><p id="dues_estimate"><b></b></p>');
+            }
+            baseFee = this.value / 100 * 0.05;
+            UpdateDues();
+          }).trigger('change');
+
+          $('select[name="competition[competitor_limit_enabled]"]').on('change', function() {
+            if(this.value === "false"){
+              tempLimit = compLimit;
+              compLimit = null;
+            }
+            else if(tempLimit != null){
+              compLimit = tempLimit;
+              tempLimit = null;
+            }
+            UpdateDues();
+          }).trigger('change');
+
+          //order of callbacks matter!
+          $('input[name="competition[competitor_limit]"]').on('change', function() {
+            compLimit = this.value;
+            UpdateDues();
           }).trigger('change');
         </script>
 
