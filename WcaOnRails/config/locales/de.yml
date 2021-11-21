@@ -484,7 +484,7 @@ de:
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Ich möchte festlegen, dass Teilnehmer ihre Puzzle zu einem bestimmten
-          Zeitpunkt vor dem eigentlich Beginn des Events abgeben.
+          Zeitpunkt vor dem eigentlichen Beginn des Events abgeben.
         #original_hash: 78308cc
         early_puzzle_submission_reason: 'Grund und Details dafür, die Puzzle früher abzugeben'
         #original_hash: 88da0ef
@@ -2961,7 +2961,7 @@ de:
       time_limit_information:
         #original_hash: 88c5f1a
         time_limit_html: >-
-          Wenn du das Zeitlimit während deines Lösungsversuches erreichts, wird
+          Wenn du das Zeitlimit während deines Lösungsversuches erreichst, wird
           der Schiedsrichter dich anhalten und dein Ergebnis wird DNF sein
           (siehe %{regulation_link}).
         #original_hash: 83d204f
@@ -3498,7 +3498,7 @@ de:
           #original_hash: daf1cb1
           '2': >-
             Abhängig von der Größe des Wettbewerbs und dem persönlichen
-            Terminkalender des WCA-Delegierten, kann dies nur einen Tage oder
+            Terminkalender des WCA-Delegierten, kann dies nur einen Tag oder
             bis zu einer Woche in Anspruch nehmen. Bitte übe dich in Geduld.
           #original_hash: bf8adbe
           '3': >-
@@ -4097,7 +4097,7 @@ de:
       used: >-
         Alle Programme auf dieser Liste wurden bei realen WCA Wettbewerben
         genutzt und integrieren sich in die WCA Webseite: sie lassen dich mit
-        deinem WCA Account anemlden und ermöglichen so den Import der Daten von
+        deinem WCA Account anmelden und ermöglichen so den Import der Daten von
         zukünftigen Wettbewerben. Für jedes einzelne wird der Autor benannt.
     before:
       #original_hash: 9850344
@@ -4728,7 +4728,7 @@ de:
         Wenn du qualitativ hochwertige Fotos oder Videos hast, die wir auf
         Instagram hochladen sollen, klicke bitte den Button unten und fülle das
         Formular aus. Um die Inhalte zu veröffentlichen, musst du diese besitzen
-        nund der WCA das Recht geben, diese zu veröffentlichen. Aufgrund der
+        und der WCA das Recht geben, diese zu veröffentlichen. Aufgrund der
         hohen Anzahl an Einreichungen können wir nicht alles veröffentlichen.
         Hier sind aber einige Tipps:
       #original_hash: cf5c955
@@ -4755,7 +4755,7 @@ de:
       paragraph1_html: >-
         Manchmal erlauben wir Mitgliedern der Community die offizielle WCA
         Instagram Story mit Inhalte von iner Competition zu füllen. Falls du
-        Interese hast, klicke den Button und fülle das Formular aus. Das WCA
+        Interesse hast, klicke den Button und fülle das Formular aus. Das WCA
         Communication Team wird sich mit dir in Verbindung setzen nachdem du
         alle Informationen eingereicht hast und du geeignet erscheinst. Falls du
         Fragen hast, <a
@@ -4765,7 +4765,7 @@ de:
       paragraph2: >-
         Unser Ziel ist es, persönliche Beiträge von jedem Cuber und jedem
         Turnier zu zeigen. Dies soll natürlich keine zu große Hürde an einem
-        Wochenende sein und du solltest vorallem des Turnier geniessen und
+        Wochenende sein und du solltest vorallem das Turnier geniessen und
         danach in der Lage sein, deine Erlebnisse zu teilen.
       #original_hash: af023ed
       paragraph3: 'Die Rolle des Hosts kann so zusammenegfasst werden:'
