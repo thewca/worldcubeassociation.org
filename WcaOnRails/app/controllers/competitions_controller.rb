@@ -372,6 +372,13 @@ class CompetitionsController < ApplicationController
     }
   end
 
+  def dues_formatting
+    converted = Money.us_dollar(params[:value]).exchange_to(params[:to_currency])
+    render json: {
+      html: converted.format,
+    }
+  end
+
   def show
     associations = {
       competition_venues: {

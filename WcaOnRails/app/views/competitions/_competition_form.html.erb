@@ -214,23 +214,31 @@
           <% countryBand = CountryBand.where(iso2: @competition.serializable_hash[:country_iso2]).map(&:number)[0] %>
           <% if !countryBand.nil? && countryBand > 0 %>
             bandFee = <%= CountryBand::BANDS[countryBand][:value] %>;
-            console.log(bandFee);
           <% end %>
 
           function UpdateDues(){
-            //Need better formatting of currency
-            var pricePerCompetitor = Math.max(bandFee, baseFee);
-            if(compLimit != null)
-              $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: (compLimit * pricePerCompetitor).toFixed(2)}) + "</b>");
-            else
-              $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: pricePerCompetitor.toFixed(2)}) + "</b>");
+            var pricePerCompetitor = Math.max(bandFee, baseFee) * 100;
+            window.wca.cancelPendingAjaxAndAjax('dues_formatting', {
+              url: '<%= dues_formatting_path %>',
+              data: {
+                value: compLimit == null ? pricePerCompetitor : pricePerCompetitor * compLimit,
+                to_currency: "<%= @competition.currency_code %>",
+              },
+              success: function(data) {
+                var dues = data.html;
+                if(compLimit != null)
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: dues}) + "</b>");
+                else
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: dues}) + "</b>");
+              }
+            });
           }
 
           $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
             if(!$('#dues_estimate').length){
               $(this).siblings('.help-block').append('<br><p id="dues_estimate"><b></b></p>');
             }
-            baseFee = this.value / 100 * 0.05;
+            baseFee = this.value / 100 * 0.05; //TODO: check our currency subunit_to_unit
             UpdateDues();
           }).trigger('change');
 

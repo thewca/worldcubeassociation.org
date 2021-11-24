@@ -234,6 +234,9 @@ GEM
       activesupport (>= 3.0.0)
     env_vars (1.1.0)
     erubi (1.10.0)
+    eu_central_bank (1.7.0)
+      money (~> 6.13, >= 6.13.6)
+      nokogiri (~> 1.9)
     execjs (2.7.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
@@ -704,6 +707,7 @@ DEPENDENCIES
   dotenv-rails
   enum_help
   env_vars
+  eu_central_bank
   factory_bot_rails
   faker
   faraday
