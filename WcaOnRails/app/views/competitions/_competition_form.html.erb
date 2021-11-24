@@ -211,8 +211,7 @@
           var compLimit = null;
           var tempLimit = null;
 
-          <% iso2 = Country.where(id: @competition.countryId).map(&:iso2) %>
-          <% countryBand = CountryBand.where(iso2: iso2).map(&:number)[0] %>
+          <% countryBand = CountryBand.where(iso2: @competition.serializable_hash[:country_iso2]).map(&:number)[0] %>
           <% if !countryBand.nil? && countryBand > 0 %>
             bandFee = <%= CountryBand::BANDS[countryBand][:value] %>;
             console.log(bandFee);
