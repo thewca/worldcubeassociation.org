@@ -175,7 +175,7 @@ de:
       #original_hash: 672b22c
       name: Kombiniertes Finale
       #original_hash: 672b22c
-      cellName: Kombiniertes Fimale
+      cellName: Kombiniertes Finale
     d:
       #original_hash: 1e725b6
       name: Kombinierte Erste Runde
@@ -213,24 +213,10 @@ de:
       ranking: 'Top %{ranking}'
       #original_hash: 0664a83
       percent: 'Top %{percent}%'
-      attempt_result:
-        #original_hash: 482f137
-        time: 'Bestes Ergebnis < %{time}'
-        #original_hash: 3faa63e
-        moves: 'Bestes Ergebnis < %{moves}'
-        #original_hash: c3133c2
-        points: 'Bestes Ergebnis > %{points}'
     #original_hash: 6e55337
     ranking: 'Die obersten %{ranking} kommen in die nächste Runde'
     #original_hash: 7ee969c
     percent: 'Die obersten %{percent}% kommen in die nächste Runde'
-    attempt_result:
-      #original_hash: b3c8a02
-      time: 'Das beste Ergebnis < %{time} um in die nächste Runde zu kommen'
-      #original_hash: 07bca6c
-      moves: 'Bestes Ergebnis < %{moves} Zügen um in die nächste Runde zu kommen'
-      #original_hash: 837083c
-      points: 'Bestes Ergebnis  > %{points} Punkten um in die nächste Runde zu kommen'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -257,6 +243,8 @@ de:
     333fm: 1 Stunde
     #original_hash: cc7d8bb
     333mbf: '10:00.00 Minuten pro Würfel, bis zu 60:00.00'
+    #original_hash: da39a3e
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: Welt
@@ -484,7 +472,7 @@ de:
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Ich möchte festlegen, dass Teilnehmer ihre Puzzle zu einem bestimmten
-          Zeitpunkt vor dem eigentlich Beginn des Events abgeben.
+          Zeitpunkt vor dem eigentlichen Beginn des Events abgeben.
         #original_hash: 78308cc
         early_puzzle_submission_reason: 'Grund und Details dafür, die Puzzle früher abzugeben'
         #original_hash: 88da0ef
@@ -882,6 +870,8 @@ de:
         on_the_spot_entry_fee_lowest_denomination: >-
           Wenn dies auf 0 gesetzt wird, wird ein Satz angezeigt dass
           Vor-Ort-Registrierung kostenlos möglich ist.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Aktuell dient diese Angabe nur zur Information und Rückerstattungen
@@ -890,12 +880,8 @@ de:
           erstattet werden.
         #original_hash: f64d853
         refund_policy_limit_date: 'Datum, nachdem keine Rückerstattungen mehr erfolgen'
-        #original_hash: 25a1324
-        guests_entry_fee_lowest_denomination: >-
-          Aktuell dient diese Angabe nur zur Information, da Eintrittsgebühren
-          für Gäste nicht über die Webseite verwaltet werden können. Wenn dies
-          auf 0 gesetzt wird, wird ein Satz angezeigt dass Zuschauer freien
-          Eintritt haben.
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1433,8 +1419,6 @@ de:
       forum: Forum
       #original_hash: 3ad28c0
       teams: 'Teams, Kommitees, und Gremien'
-      #original_hash: a979ffc
-      education: Lernmaterialien
       #original_hash: a34b69f
       contact: Kontakt
       #original_hash: 4fa8cc8
@@ -1686,10 +1670,6 @@ de:
           öffnet.
         #original_hash: 2b93022
         not_accepted_html: 'Du hast dich angemeldet, aber die Anmeldung wurde nicht akzeptiert.'
-        #original_hash: 3724e7c
-        more_info_html: >-
-          Bitte besuche die <a href=%{competition_url}>Webseite der
-          Competition</a> für weitere Informationen und die Anmeldebedingungen.
       results_presence_email:
         #original_hash: 7ce2558
         header: 'Die Ergebnisse von %{competition} wurden veröffentlicht.'
@@ -1973,14 +1953,6 @@ de:
         verknüpft. Wenn Du glaubst dass hier ein Fehler vorliegt, kontaktiere
         deinen lokalen <a href='%{link_delegate}'
         target='_blank'>WCA-Delegierten</a>.
-      #original_hash: d26bfdc
-      missing_dob_html: >-
-        Die WCA-ID %{link_id} hat kein hinterlegtes Geburtsdatum. Bitte
-        kontaktiere das %{link_result_team} um das zu beheben.
-      #original_hash: 5be6803
-      contact_results_team_html: >-
-        Bitte kontaktiere das <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a>, um dieses Problem zu lösen.
       #original_hash: 92aa857
       unknown_wca_id_html: 'Die WCA-ID %{link_id} existiert nicht.'
   registrations:
@@ -2572,8 +2544,6 @@ de:
       no_on_the_spot_registration: Vor-Ort-Anmeldungen sind nicht möglich.
       #original_hash: 4df139d
       guests_pay: 'Zuschauer können für eine Gebühr von %{guests_base_fee} zusehen.'
-      #original_hash: b6c863e
-      guests_free: Zuschauer haben freien Eintritt.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Dieser Wettbewerb ist beendet. Klicke %{link_here} um die
@@ -2768,11 +2738,6 @@ de:
       venue_details_html: >-
         Details über den Veranstaltungsort (z.B. Im hinteren Teil des ersten
         Stocks, Beschilderung folgen). %{md}
-      #original_hash: b727e58
-      contact_html: >-
-        Optionale Kontaktinformationen. Wenn Du das nicht ausfüllst, werden die
-        E-Mail-Adressen der Organisatoren veröffentlicht. %{md}. Beispiel: [Text
-        zum Anzeigen](mailto:some@email.com)
       #original_hash: c5497bc
       events: Disziplinen
       #original_hash: cafc153
@@ -2961,7 +2926,7 @@ de:
       time_limit_information:
         #original_hash: 88c5f1a
         time_limit_html: >-
-          Wenn du das Zeitlimit während deines Lösungsversuches erreichts, wird
+          Wenn du das Zeitlimit während deines Lösungsversuches erreichst, wird
           der Schiedsrichter dich anhalten und dein Ergebnis wird DNF sein
           (siehe %{regulation_link}).
         #original_hash: 83d204f
@@ -3498,8 +3463,8 @@ de:
           #original_hash: daf1cb1
           '2': >-
             Abhängig von der Größe des Wettbewerbs und dem persönlichen
-            Terminkalender des WCA-Delegierten, kann dies nur einen Tage oder
-            bis zu einer Woche in Anspruch nehmen. Bitte übe dich in Geduld.
+            Terminkalender des WCA-Delegierten, kann dies nur einen Tag oder bis
+            zu einer Woche in Anspruch nehmen. Bitte übe dich in Geduld.
           #original_hash: bf8adbe
           '3': >-
             Zusätzlich kannst Du, sofern dein WCA-Benutzerkonto mit deiner
@@ -3621,11 +3586,6 @@ de:
       Vorbereitungen durchzuführen.</p>
     #original_hash: 1aa5344
     contributing_title: Einen Beitrag leisten
-    #original_hash: e64beb7
-    contributing_content_html: >-
-      Du kannst <a href="https://www.nfggive.com/guidestar/82-3825954">hier</a>
-      über Guidestar per Kreditkarte spenden. Wenn du es vorziehst, einen Scheck
-      auszustellen, kannst du diese Adresse nutzen:
     #original_hash: 2af9b71
     tax_deductible_note: Spenden sind in den Vereinigten Staaten von der Steuer absetzbar
     #original_hash: 6026d35
@@ -3862,16 +3822,8 @@ de:
     #original_hash: 91ac873
     codeofethics: Code of Ethics
   education:
-    #original_hash: 41701c2
-    title: WCA Anleitungen und Tutorials
-    #original_hash: aa562a7
-    description: >-
-      Das WQAC und WMT haben mehrere Dokumente veröffentlicht, die du unten
-      herunterladen kannst.
     #original_hash: d0a3812
     competitor_tutorial: Teilnehmer Tutorial
-    #original_hash: 815938f
-    competition_material: 'Materialien für Wettbewerbe (Urkunden, Würfel Abdeckungen, ...)'
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-Delegierte
@@ -4097,7 +4049,7 @@ de:
       used: >-
         Alle Programme auf dieser Liste wurden bei realen WCA Wettbewerben
         genutzt und integrieren sich in die WCA Webseite: sie lassen dich mit
-        deinem WCA Account anemlden und ermöglichen so den Import der Daten von
+        deinem WCA Account anmelden und ermöglichen so den Import der Daten von
         zukünftigen Wettbewerben. Für jedes einzelne wird der Autor benannt.
     before:
       #original_hash: 9850344
@@ -4496,12 +4448,6 @@ de:
     paragraph3:
       #original_hash: 00d3bf8
       title: Fristen für die Ankündigung von Wettbewerben
-      #original_hash: 3613823
-      content_html: >-
-        Die Competition muss mindestens 28 Tage vor dem Termin angekündigt
-        werden (siehe <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
-        Requirements</a>).
     paragraph4:
       #original_hash: b6dca56
       title: Abstandsregel
@@ -4519,10 +4465,6 @@ de:
         '1': Die beiden Wettbewerbe haben keine gemeinsamen Events.
         #original_hash: f7bacc5
         '2': Die beiden Wettbewerbe finden in verschiedenen Ländern statt.
-        #original_hash: 7b2c099
-        '3': >-
-          In einem Radius von 100km um den Ort des Wettbewerbs herum gab es in
-          den letzten 12 Monaten weniger als 16 Wettbewerbe.
       #original_hash: 5c5cf04
       content2: >-
         Simultane FMC Wettbewerbe sind Wettbewerbe, die nur die Kategorie 3x3x3
@@ -4728,7 +4670,7 @@ de:
         Wenn du qualitativ hochwertige Fotos oder Videos hast, die wir auf
         Instagram hochladen sollen, klicke bitte den Button unten und fülle das
         Formular aus. Um die Inhalte zu veröffentlichen, musst du diese besitzen
-        nund der WCA das Recht geben, diese zu veröffentlichen. Aufgrund der
+        und der WCA das Recht geben, diese zu veröffentlichen. Aufgrund der
         hohen Anzahl an Einreichungen können wir nicht alles veröffentlichen.
         Hier sind aber einige Tipps:
       #original_hash: cf5c955
@@ -4754,8 +4696,8 @@ de:
       #original_hash: 541106b
       paragraph1_html: >-
         Manchmal erlauben wir Mitgliedern der Community die offizielle WCA
-        Instagram Story mit Inhalte von iner Competition zu füllen. Falls du
-        Interese hast, klicke den Button und fülle das Formular aus. Das WCA
+        Instagram Story mit Inhalten von einer Competition zu füllen. Falls du
+        Interesse hast, klicke den Button und fülle das Formular aus. Das WCA
         Communication Team wird sich mit dir in Verbindung setzen nachdem du
         alle Informationen eingereicht hast und du geeignet erscheinst. Falls du
         Fragen hast, <a
@@ -4765,7 +4707,7 @@ de:
       paragraph2: >-
         Unser Ziel ist es, persönliche Beiträge von jedem Cuber und jedem
         Turnier zu zeigen. Dies soll natürlich keine zu große Hürde an einem
-        Wochenende sein und du solltest vorallem des Turnier geniessen und
+        Wochenende sein und du solltest vor allem das Turnier genießen und
         danach in der Lage sein, deine Erlebnisse zu teilen.
       #original_hash: af023ed
       paragraph3: 'Die Rolle des Hosts kann so zusammenegfasst werden:'
