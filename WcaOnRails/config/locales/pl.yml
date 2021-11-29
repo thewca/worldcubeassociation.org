@@ -2668,6 +2668,11 @@ pl:
         Jeżeli jesteś na liście zawodników możesz zmieniać konkurencje w swojej
         rejestracji do %{event_change_deadline} poprzez skontaktowanie się z
         zespołem organizacyjnym.
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: >-
+        Jeżeli jesteś zarejestrowanym zawodnikiem możesz zmieniać konkurencje na
+        które się zarejestrowałeś do %{event_change_deadline} w zakładce
+        %{register}.
       #original_hash: eff3594
       event_change_deadline_default_html: >-
         Zachęcamy wszystkich do rejestracji do wszystkich konkurencji w których
