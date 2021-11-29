@@ -36,13 +36,13 @@ RSpec.feature "Eligible voters csv" do
 
       expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="all-wca-voters-2016-05-05T10:05:03Z.csv"'
       expect(CSV.parse(page.body)).to match_array [
-        [team_leader.id.to_s, team_leader.email, team_leader.name],
-        [team_senior_member.id.to_s, team_senior_member.email, team_senior_member.name],
-        [delegate.id.to_s, delegate.email, delegate.name],
-        [delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
-        [senior_delegate.id.to_s, senior_delegate.email, senior_delegate.name],
-        [board_member.id.to_s, board_member.email, board_member.name],
-        [officer.id.to_s, officer.email, officer.name],
+        ["password", team_leader.id.to_s, team_leader.email, team_leader.name],
+        ["password", team_senior_member.id.to_s, team_senior_member.email, team_senior_member.name],
+        ["password", delegate.id.to_s, delegate.email, delegate.name],
+        ["password", delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
+        ["password", senior_delegate.id.to_s, senior_delegate.email, senior_delegate.name],
+        ["password", board_member.id.to_s, board_member.email, board_member.name],
+        ["password", officer.id.to_s, officer.email, officer.name],
       ]
     end
   end
@@ -53,9 +53,9 @@ RSpec.feature "Eligible voters csv" do
 
       expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="leader-senior-wca-voters-2016-05-05T10:05:03Z.csv"'
       expect(CSV.parse(page.body)).to match_array [
-        [team_leader.id.to_s, team_leader.email, team_leader.name],
-        [delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
-        [senior_delegate.id.to_s, senior_delegate.email, senior_delegate.name],
+        ["password", team_leader.id.to_s, team_leader.email, team_leader.name],
+        ["password", delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
+        ["password", senior_delegate.id.to_s, senior_delegate.email, senior_delegate.name],
       ]
     end
   end
