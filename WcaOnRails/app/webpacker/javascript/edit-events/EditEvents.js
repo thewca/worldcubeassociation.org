@@ -91,7 +91,7 @@ function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
             <th className="text-center">Format</th>
             <th className="text-center">Scramble Sets</th>
             {event.canChangeTimeLimit && <th className="text-center">Time Limit</th>}
-            <th className="text-center">Cutoff</th>
+            {event.canChangeTimeLimit && <th className="text-center">Cutoff</th>}
             <th className="text-center">To Advance</th>
           </tr>
         </thead>
@@ -142,9 +142,11 @@ function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
                   </td>
                 )}
 
-                <td className="text-center">
-                  <EditCutoffButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} disabled={disabled} />
-                </td>
+                {event.canChangeTimeLimit && (
+                  <td className="text-center">
+                    <EditCutoffButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} disabled={disabled} />
+                  </td>
+                )}
 
                 <td className="text-center">
                   {!isLastRound && <EditAdvancementConditionButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} disabled={disabled} />}
