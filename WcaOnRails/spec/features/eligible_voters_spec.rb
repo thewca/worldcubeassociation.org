@@ -57,6 +57,7 @@ RSpec.feature "Eligible voters csv" do
         ["password", delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
         ["password", senior_delegate.id.to_s, senior_delegate.email, senior_delegate.name],
       ]
+      # "password" does not refer to actual passwords. They are related to a voter type that must be specified
     end
   end
 end
