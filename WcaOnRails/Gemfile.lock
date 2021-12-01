@@ -346,7 +346,7 @@ GEM
     iso (0.2.2)
       i18n
     jaro_winkler (1.5.4)
-    jbuilder (2.11.2)
+    jbuilder (2.11.3)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
     js_cookie_rails (2.2.0)
