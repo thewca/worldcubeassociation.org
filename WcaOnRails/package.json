@@ -30,7 +30,7 @@
     "css-loader": "^5.2.7",
     "easymde": "^2.15.0",
     "file-loader": "^6.2.0",
-    "flag-icon-css": "^3.5.0",
+    "flag-icon-css": "^4.1.6",
     "glob": "^7.2.0",
     "i18n-js": "^3.8.0",
     "jquery": "3.4.1",

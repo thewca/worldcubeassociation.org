@@ -4215,10 +4215,10 @@ findup-sync@^3.0.0:
     micromatch "^3.0.4"
     resolve-dir "^1.0.1"
 
-flag-icon-css@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-3.5.0.tgz#430747d5cb91e60babf85494de99173c16dc7cf2"
-  integrity sha512-pgJnJLrtb0tcDgU1fzGaQXmR8h++nXvILJ+r5SmOXaaL/2pocunQo2a8TAXhjQnBpRLPtZ1KCz/TYpqeNuE2ew==
+flag-icon-css@^4.1.6:
+  version "4.1.6"
+  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-4.1.6.tgz#d9730b82567afe0f4ab2a2ba2ec6f0f8eb9e0999"
+  integrity sha512-3VJPAZJg9x3/Av1Gv6T+hznRcag+mlIThp7Ku1oI2F8yxAGfLwuTI5VMEdw5m2M8mbFMZO2F66Cix5bQ8m2Xag==
 
 flat-cache@^3.0.4:
   version "3.0.4"
