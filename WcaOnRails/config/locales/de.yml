@@ -914,7 +914,7 @@ de:
         refund_policy_limit_date: 'Datum, nachdem keine Rückerstattungen mehr erfolgen'
         #original_hash: 664db64
         waiting_list_deadline_date: >-
-          Der Zeitpunkt ab welchem Personen auf der Warteliste nicht mehr
+          Der Zeitpunkt, ab welchem Personen auf der Warteliste nicht mehr
           akzeptiert werden. Wenn du eine Deadline für Rückerstattungen
           angegeben hast, sollte die Deadline für das Akzeptieren der Teilnahme
           nicht vor der Deadline für Rückerstattungen liegen.
@@ -931,8 +931,8 @@ de:
         guests_entry_fee_lowest_denomination: >-
           Aktuell dient diese Angabe nur zur Information, da Eintrittsgebühren
           für Gäste nicht über die Webseite verwaltet werden können. Wenn dies
-          auf 0 gesetzt wird, wird ein von dir festgelegter Satz bezüglich der
-          Registrierung für Gäste angezeigt.
+          auf 0 gesetzt wird, wird ein im Folgenden auswählbarer Satz bezüglich
+          der Registrierung für Gäste angezeigt.
         #original_hash: da39a3e
         free_guest_entry_status: ''
         #original_hash: da39a3e
@@ -1486,7 +1486,7 @@ de:
       #original_hash: a34b69f
       contact: Kontakt
       #original_hash: 8e12c09
-      speedcubing_history: Speedcubing-Geschichte
+      speedcubing_history: Geschichte des Speedcubings
       #original_hash: 4fa8cc8
       tools: Werkzeuge
       #original_hash: 83fce83
@@ -2046,8 +2046,8 @@ de:
       #original_hash: 498dc1e
       missing_dob_html: >-
         Die WCA-ID %{link_id} hat kein hinterlegtes Geburtsdatum. Bitte
-        kontaktiere das WCA Results Team über <a href="%{dob_form_path}" >dieses
-        spezielle Formular</a> um das zu beheben.
+        kontaktiere das WCA Results Team über <a href="%{dob_form_path}">dieses
+        spezielle Formular</a>, um das zu beheben.
       #original_hash: 92aa857
       unknown_wca_id_html: 'Die WCA-ID %{link_id} existiert nicht.'
   registrations:
@@ -2460,8 +2460,8 @@ de:
         Namen und würden uns sehr freuen, wenn Du ihn anpasst.
       #original_hash: af27396
       id_starts_with_lowercase: >-
-        Die Competition-Id beginnt mit einem Kleinbuchstaben. Wir bevorzugen den
-        Beginn mit einem Großbuchstaben.
+        Die Competition-ID beginnt mit einem Kleinbuchstaben. Wir bevorzugen
+        einen Großbuchstaben am Wortbeginn.
       #original_hash: 1a20fae
       must_have_events: >-
         Bitte füge mindestens eine Disziplin hinzu, bevor Du den Wettbewerb
@@ -2478,7 +2478,7 @@ de:
       #original_hash: b73c67a
       cutoff_is_greater_than_time_limit: >-
         Runde %{round_number} in %{event} hat ein größeres Cutoff als das
-        Zeitlimit, stelle sicher, dass das Cutoff unter dem Zeitlimit liegt.
+        Zeitlimit. Stelle sicher, dass das Cutoff unter dem Zeitlimit liegt.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
         Runde %{round_number} in %{event} hat ein Cutoff von weniger als 5
@@ -2680,7 +2680,7 @@ de:
         verändern.
       #original_hash: eff3594
       event_change_deadline_default_html: >-
-        Wir bitten alle Teilnehmer bereits bei der Online-Anmeldung die Events
+        Wir bitten alle Teilnehmer, bereits bei der Online-Anmeldung die Events
         anzugeben, in welchen sie teilnehmen möchten, allerdings darfst du
         deiner Anmeldung Disziplinen hinzufügen, bis die jeweilige Disziplin
         begonnen hat.
@@ -3252,11 +3252,11 @@ de:
       name: Name
       rank:
         #original_hash: d4840ff
-        national: National Rank
+        national: Nationale Ranglistenplatzierung (engl. National Rank / Record)
         #original_hash: ca3ff98
-        continent: Continental Rank
+        continent: Kontinentale Ranglistenplatzierung (engl. Continental Rank / Record)
         #original_hash: f6bcce7
-        world: World Rank
+        world: Weltweite Ranglistenplatzierung (engl. World Rank / Record)
     scrambles_table:
       #original_hash: 171a060
       group: Gruppe
@@ -3689,8 +3689,9 @@ de:
           #original_hash: daf1cb1
           '2': >-
             Abhängig von der Größe des Wettbewerbs und dem persönlichen
-            Terminkalender des WCA-Delegierten, kann dies nur einen Tag oder bis
-            zu einer Woche in Anspruch nehmen. Bitte übe dich in Geduld.
+            Terminkalender des WCA-Delegierten, kann dies eine Zeitspanne von
+            nur einem Tag bis zu einer Woche in Anspruch nehmen. Bitte übe dich
+            in Geduld.
           #original_hash: bf8adbe
           '3': >-
             Zusätzlich kannst Du, sofern dein WCA-Benutzerkonto mit deiner
@@ -4018,7 +4019,7 @@ de:
         name: Delegates auf Bewährung
       wst_admin:
         #original_hash: d4112d2
-        name: Software admins
+        name: Software Admins
       #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA Delegate</strong> ist eine Rolle die in den WCA Motions
@@ -4077,13 +4078,13 @@ de:
     #original_hash: d0a3812
     competitor_tutorial: Teilnehmer Tutorial
     #original_hash: 9561bfc
-    judge_tutorial: Judging tutorial for newcomers
+    judge_tutorial: Judging Tutorial für Neulinge
     #original_hash: 12e47a3
-    competition_templates: Competition templates
+    competition_templates: Competition Vorlagen
     #original_hash: 5ca0558
-    certificates: WCT's certificate templates
+    certificates: Vordrucke des WCT (Zertifikate)
     #original_hash: f580987
-    orga_guidelines: Organizer guidelines
+    orga_guidelines: Leitfaden für Organisatoren
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-Delegierte
@@ -4708,7 +4709,7 @@ de:
       #original_hash: 1cf87ad
       finding-venue: Eine Venue finden
       #original_hash: 3ce0d9c
-      orga-team-delegate: Ein Organisations-Team erstellen und einen Delegate ansprechen
+      orga-team-delegate: Ein Organisations-Team zusammenstellen und einen Delegate ansprechen
       #original_hash: d3c693b
       budget: Budgetplanung einer Competition
       #original_hash: b1429a7
@@ -4725,7 +4726,7 @@ de:
       #original_hash: 6b843f3
       title: Empfohlene Dokumente
       #original_hash: bfbd4bb
-      staff: Assigning staff
+      staff: Helfer zuordnen (Judges / Scrambler / Runner / Score-Taker)
       #original_hash: 4735583
       emails: Emails
       #original_hash: 8e7ca09
@@ -4735,7 +4736,7 @@ de:
       #original_hash: 3408054
       enhancing-experience: Erfahrungen von Teilnehmern und Helfern verbessern
       #original_hash: 2345aaa
-      reflection: Organizer reflection
+      reflection: Nachbetrachtung / Reflexion des Organisators
   organizer_guidelines:
     #original_hash: 7486ac4
     title: WCA Leitfaden für Organisatoren
