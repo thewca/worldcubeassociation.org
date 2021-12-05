@@ -373,9 +373,13 @@ class CompetitionsController < ApplicationController
   end
 
   def dues_formatting
+    if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < Time.now - 1.days
+      Money.default_bank.update_rates
+    end
+
     converted = Money.us_dollar(params[:value]).exchange_to(params[:to_currency])
     render json: {
-      html: converted.format,
+      value: converted.format,
     }
   end
 

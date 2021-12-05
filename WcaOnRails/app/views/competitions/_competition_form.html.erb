@@ -225,7 +225,7 @@
                 to_currency: "<%= @competition.currency_code %>",
               },
               success: function(data) {
-                var dues = data.html;
+                var dues = data.value;
                 if(compLimit != null)
                   $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: dues}) + "</b>");
                 else
