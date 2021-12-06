@@ -62,6 +62,10 @@ class Event < ApplicationRecord
     !fewest_moves? && !multiple_blindfolded?
   end
 
+  def can_have_cutoff?
+    self.id != "333bf" && self.id != "444bf" && self.id != "555bf"
+  end
+
   # Events that are generally fast enough to never need to go over the default 10 minute time limit
   def fast_event?
     ['333', '222', '444', '333oh', 'clock', 'mega', 'pyram', 'skewb', 'sq1'].include?(self.id)
@@ -73,6 +77,7 @@ class Event < ApplicationRecord
       name: self.name,
       format_ids: self.formats.map(&:id),
       can_change_time_limit: self.can_change_time_limit?,
+      can_have_cutoff: self.can_have_cutoff?,
       is_timed_event: self.timed_event?,
       is_fewest_moves: self.fewest_moves?,
       is_multiple_blindfolded: self.multiple_blindfolded?,
