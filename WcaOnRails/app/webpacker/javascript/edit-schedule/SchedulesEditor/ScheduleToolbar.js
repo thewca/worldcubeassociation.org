@@ -16,7 +16,7 @@ import { scheduleElementSelector } from './ses';
 // The errors below are bahavior caused by our usage of react-bootstrap
 /* eslint react/jsx-props-no-spreading: "off" */
 
-const hours = _.fromPairs(_.times(24, (i) => [i, `${i}:00:00`]));
+const hours = _.fromPairs(_.times(25, (i) => [i, `${i}:00:00`]));
 
 export const calendarOptionsInfo = {
   slotDuration: {
