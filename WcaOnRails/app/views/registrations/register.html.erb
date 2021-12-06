@@ -98,7 +98,7 @@
               <% elsif @registration.accepted? %>
                 <%= t('registrations.accepted') %>
               <% elsif @registration.pending? %>
-                <%= t('registrations.waiting_list') %>
+                <%= t('registrations.waiting_list', index: @registration.waiting_list_info.index) %>
               <% end %>
             </p>
             <hr/>
