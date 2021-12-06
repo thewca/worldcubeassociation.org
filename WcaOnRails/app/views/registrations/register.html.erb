@@ -12,7 +12,7 @@
 
   <% if @competition.registration_not_yet_opened? %>
     <%= alert :info, t('registrations.will_open_html', days: opens_in_days, time: wca_local_time(@competition.registration_open)) %>
-  <%# Don't show this alert if we're showing the registration's details: this message is included in it! %>
+  <% # Don't show this alert if we're showing the registration's details: this message is included in it! %>
   <% elsif @competition.registration_past? && !@registration&.show_details? %>
     <%= alert :danger, t('registrations.closed_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
   <% end %>
@@ -98,7 +98,8 @@
               <% elsif @registration.accepted? %>
                 <%= t('registrations.accepted') %>
               <% elsif @registration.pending? %>
-                <%= t('registrations.waiting_list', index: @registration.waiting_list_info.index) %>
+                <% # Display the waitlist message and pass it an ordinal of the competitor's position on the list %>
+                <%= t('registrations.waiting_list', index: int_to_ordinal(@registration.waiting_list_info.index)) %>
               <% end %>
             </p>
             <hr/>

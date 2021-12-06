@@ -267,4 +267,29 @@ module ApplicationHelper
                                        opts: options.to_json))
     component_container + script_tag
   end
+
+  # Converts given integer to ordinal number as string (e.g. 1 to "1st", 2 to "2nd", 6 to "6th", etc.)
+  def int_to_ordinal(num)
+    result = num.to_s
+    last_two_digits = num % 100
+
+    # Special case for 11th, 12th and 13th
+    if last_two_digits >= 11 && last_two_digits <= 13
+      result += "th"
+    else
+      last_digit = num % 10
+
+      if last_digit == 1
+        result += "st"
+      elsif last_digit == 2
+        result += "nd"
+      elsif last_digit == 3
+        result += "rd"
+      else
+        result += "th"
+      end
+    end
+
+    return result
+  end
 end
