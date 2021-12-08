@@ -1188,6 +1188,7 @@ en:
     waiting_list: "Your registration is pending. You are currently %{index} on the waiting list. For approval, you may need to pay a registration fee. Check the competition website for details."
     accepted: "Your registration has been accepted!"
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
+    entry_fees_not_paid: "Registration fees not yet fully paid. You are not on the waiting list."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check competition's information for instruction about how to pay"
     refund_form:

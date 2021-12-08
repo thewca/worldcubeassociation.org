@@ -171,6 +171,12 @@ class Registration < ApplicationRecord
     OpenStruct.new(index: index, length: pending_registrations.length)
   end
 
+  def paid_waiting_list_info
+    pending_paid_registrations = competition.registrations.pending.order(:last_payment_date)
+    index = pending_paid_registrations.index(self)
+    OpenStruct.new(index: index, length: pending_paid_registrations.length)
+  end
+
   def to_wcif(authorized: false)
     authorized_fields = {
       "guests" => guests,
