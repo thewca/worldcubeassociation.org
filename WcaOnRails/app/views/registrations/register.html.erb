@@ -101,12 +101,12 @@
                 <% # Display the waitlist message and pass it an ordinal of the competitor's position on the list. If the competition uses Stripe, they'll see their position on the list of competitors who have paid. If they haven't paid, they will see a different message, telling them to do so. %>
                 <% if @competition.using_stripe_payments? %>
                   <% if @registration.outstanding_entry_fees == 0 %>
-                    <%= t('registrations.waiting_list', index: @registration.paid_waiting_list_info.index.ordinalize) %>
+                    <%= t('registrations.waiting_list', index: (@registration.paid_waiting_list_info.index + 1).ordinalize) %>
                   <% else %>
                     <%= t('registrations.entry_fees_not_paid') %>
                   <% end %>
                 <% else %>
-                  <%= t('registrations.waiting_list', index: @registration.waiting_list_info.index.ordinalize) %>
+                  <%= t('registrations.waiting_list', index: (@registration.waiting_list_info.index + 1).ordinalize) %>
                 <% end %>
               <% end %>
             </p>
