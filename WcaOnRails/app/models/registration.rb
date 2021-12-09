@@ -172,7 +172,7 @@ class Registration < ApplicationRecord
   end
 
   def paid_waiting_list_info
-    pending_paid_registrations = competition.registrations.pending.order(:last_payment_date)
+    pending_paid_registrations = competition.registrations.pending.order(registration_payments.map(&:created_at).max)
     index = pending_paid_registrations.index(self)
     OpenStruct.new(index: index, length: pending_paid_registrations.length)
   end
