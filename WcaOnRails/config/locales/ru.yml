@@ -481,6 +481,8 @@ ru:
         on_the_spot_registration: Регистрации на месте
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Базовый взнос за регистрацию на месте
+        #original_hash: 7e53b96
+        allow_registration_edits: Изменения в регистрации
         #original_hash: efbdbab
         refund_policy_percent: Возвращаемая доля
         #original_hash: b332299
@@ -910,6 +912,8 @@ ru:
         on_the_spot_entry_fee_lowest_denomination: >-
           Если в этом поле стоит 0, участникам будет указано, что регистрация на
           месте бесплатная.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Пока что это поле только для информации, вы должны сами возвращать
@@ -1182,6 +1186,15 @@ ru:
           'true': Можно зарегистрироваться на месте
           #original_hash: 0f236df
           'false': На месте зарегистрироваться НЕЛЬЗЯ
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Участники могут редактировать свои регистрации до наступления
+            крайнего срока изменения списка дисциплин
+          #original_hash: 2cbb80e
+          'false': >-
+            Участники НЕ могут редактировать свои регистрации с момента, как
+            только регистрация была принята
   mail_form:
     attributes:
       contact_form:
@@ -2600,6 +2613,10 @@ ru:
       event_change_deadline_html: >-
         Зарегистрированные участники могут изменить свой список дисциплин до
         %{event_change_deadline}, связавшись с командой организаторов.
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: >-
+        Если вы зарегистрированы, вы можете изменить список своих дисциплин до
+        %{event_change_deadline} на вкладке «%{register}».
       #original_hash: eff3594
       event_change_deadline_default_html: >-
         Мы просим вас регистрироваться на те дисциплины, в которых вы
@@ -2693,9 +2710,9 @@ ru:
     index:
       #original_hash: db98a68
       title: Соревнования
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
-        Обратите внимание: из-за пандемии COVID-19 многие страны не могут
+        Обратите внимание: из-за пандемии COVID-19 некоторые страны не могут
         проводить соревнования.
       #original_hash: 6a72085
       all_events: Все
