@@ -207,7 +207,7 @@
 
         <script>
           var bandFeeUSD = 0;
-          var baseFeeUSD = 0;
+          var baseFeeUSD = -1;
           var compLimit = null;
           var tempLimit = null;
 
@@ -218,6 +218,20 @@
 
           function UpdateDues(){
             var pricePerCompetitor = Math.max(bandFeeUSD, baseFeeUSD) * 100;
+
+            /*
+              Currently, if base fee is -1 then there was an error while converting
+              our base fee to USD, which would cause band fee to always be larger
+              and we would display a wrong dues estimate based on band fee. We
+              would rather display zero in that case (perhaps we should use another
+              locale here).
+              This error is only expected upon loading up the page, when the ajax
+              requests are somehow aborted.
+            */
+            if(baseFeeUSD == -1){
+              pricePerCompetitor = 0;
+            }
+
             window.wca.cancelPendingAjaxAndAjax('currency_convert', {
               url: '<%= currency_convert_path %>',
               data: {
@@ -240,9 +254,11 @@
               $(this).siblings('.help-block').append('<br><br><p id="dues_estimate"><b></b></p>');
             }
 
-            //Different currencies keep different decimal points, and this.value only gives
-            //a raw number without decimals, so we need to divide this.value by the
-            //currency's subunit to convert it into actual value.
+            /*
+              Different currencies keep different decimal points, and this.value only gives
+              a raw number without decimals, so we need to divide this.value by the
+              currency's subunit to convert it into actual value.
+            */
             var subunit = <%= Money::Currency.new(@competition.currency_code).subunit_to_unit %>;
             var moneyValue = this.value / subunit;
 
