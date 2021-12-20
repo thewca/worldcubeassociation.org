@@ -93,7 +93,7 @@ Rails.application.routes.draw do
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
   get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
-  get 'competitions/edit/dues_formatting' => 'competitions#dues_formatting', as: :dues_formatting
+  get 'competitions/edit/currency_convert' => 'competitions#currency_convert', as: :currency_convert
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
