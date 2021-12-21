@@ -127,7 +127,7 @@ RSpec.describe PV do
       # EMPTY_GENDER_WARNING
       # WHITESPACE_IN_NAME_ERROR
       # WRONG_PARENTHESIS_TYPE_ERROR
-      # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR
+      # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING
       it "validates person data" do
         FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
         res1 = FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
@@ -200,7 +200,7 @@ RSpec.describe PV do
                                     PV::EMPTY_GENDER_WARNING,
                                     name: res_whitespace.person.name),
           RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR,
+                                    PV::MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
                                     name: res_same_name1.person.name),
         ]
         validator_args = [
