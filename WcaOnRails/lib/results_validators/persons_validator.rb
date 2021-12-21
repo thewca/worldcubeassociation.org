@@ -19,9 +19,8 @@ module ResultsValidators
     NON_MATCHING_NAME_WARNING = "The name '%{name}' provided for %{wca_id} does not match the current record in the WCA database ('%{expected_name}'). "
     NON_MATCHING_COUNTRY_WARNING = "The country '%{country}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_country}')."\
     " If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
-    MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR = "There are multiple new competitors with the exact same name: %{name}. Due to a limitation in the current posting procedure, this will prevent WRT from uploading the results."\
-    " Please temporarily rename these newcomers to unique names (e.g. by adding numbers) and explain what you did in your submission mail, so that WRT will reinstate the original names after uploading the results."\
-    " If you need any assistance please contact WRT."
+    MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR = "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors"\
+    " and that all results are correctly seperated by their corresponding id."
     WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
 
     @@desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
@@ -118,9 +117,9 @@ module ResultsValidators
           end
         end
         duplicate_newcomer_names.each do |name|
-          @errors << ValidationError.new(:persons, competition_id,
-                                         MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR,
-                                         name: name)
+          @warnings << ValidationWarning.new(:persons, competition_id,
+                                             MULTIPLE_NEWCOMERS_WITH_SAME_NAME_ERROR,
+                                             name: name)
         end
         existing_person_by_wca_id = Hash[Person.current.where(wca_id: with_wca_id.map(&:wca_id)).map { |p| [p.wca_id, p] }]
         with_wca_id.each do |p|
