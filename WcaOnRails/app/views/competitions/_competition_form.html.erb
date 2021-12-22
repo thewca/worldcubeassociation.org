@@ -218,20 +218,6 @@
 
           function UpdateDues(){
             var pricePerCompetitor = Math.max(bandFeeUSD, baseFeeUSD) * 100;
-
-            /*
-              Currently, if base fee is -1 then there was an error while converting
-              our base fee to USD, which would cause band fee to always be larger
-              and we would display a wrong dues estimate based on band fee. We
-              would rather display zero in that case (perhaps we should use another
-              locale here).
-              This error is only expected upon loading up the page, when the ajax
-              requests are somehow aborted.
-            */
-            if(baseFeeUSD == -1){
-              pricePerCompetitor = 0;
-            }
-
             window.wca.cancelPendingAjaxAndAjax('currency_convert', {
               url: '<%= currency_convert_path %>',
               data: {
@@ -241,10 +227,24 @@
               },
               success: function(data) {
                 var dues = data.formatted;
-                if(compLimit != null)
-                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
-                else
-                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
+
+                /*
+                  Currently, if base fee is -1 then there was an error while converting
+                  our base fee to USD, which would cause band fee to always be larger
+                  and we would display a wrong dues estimate based on band fee. We
+                  would rather show an error than a wrong estimate.
+                  This error is only expected upon loading up the page, when the ajax
+                  requests are somehow aborted.
+                */
+                if(baseFeeUSD == -1){
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
+                }
+                else{
+                  if(compLimit != null)
+                    $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
+                  else
+                    $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
+                }
               }
             });
           }

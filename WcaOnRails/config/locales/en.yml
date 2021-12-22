@@ -1471,6 +1471,7 @@ en:
       dues_estimate:
         calculated: "The estimated WCA Dues for %{limit} competitors are %{estimate}"
         per_competitor: "The estimated WCA Dues per competitor are %{estimate}"
+        ajax_error: "There is an error with Dues estimation, please set to zero and re-enter the base registration fee"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
