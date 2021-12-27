@@ -290,7 +290,7 @@ RSpec.describe "Competition WCIF" do
         "rounds" => [
           {
             "id" => "555-r1",
-            "format" => "3",
+            "format" => "a",
             "timeLimit" => {
               "centiseconds" => 3*60*100,
               "cumulativeRoundIds" => [],
@@ -344,9 +344,9 @@ RSpec.describe "Competition WCIF" do
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
 
-    it "can change round format to '3'" do
+    it "can change round format to 'a'" do
       wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
-      wcif_333_event["rounds"][0]["format"] = '3'
+      wcif_333_event["rounds"][0]["format"] = 'a'
 
       competition.set_wcif_events!(wcif["events"], delegate)
 
