@@ -21,8 +21,8 @@ class Format < ApplicationRecord
     {
       "1" => [],
       "2" => ["1"],
-      "3" => ["1", "2"],
-      "m" => ["1", "2"],
+      "3" => ["1"],
+      "m" => ["1"],
       "a" => ["2"], # https://www.worldcubeassociation.org/regulations/#9b1
     }[self.id]
   end
