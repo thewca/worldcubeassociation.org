@@ -464,6 +464,8 @@ zh-TW:
         on_the_spot_registration: 現場報名
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: 現場報名費
+        #original_hash: 7e53b96
+        allow_registration_edits: 編輯報名
         #original_hash: efbdbab
         refund_policy_percent: 退費百分比
         #original_hash: b332299
@@ -830,6 +832,8 @@ zh-TW:
         on_the_spot_registration: ''
         #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: 如果此處設為0，會有一個句子表示現場報名為免費的。
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: 目前這個數字僅供顯示資訊用，退費還是由人工處理。如果此處設為0，會有一個句子表示報名費在任何情況下皆不退費。
         #original_hash: f64d853
@@ -1046,6 +1050,11 @@ zh-TW:
           'true': 接受現場報名
           #original_hash: 0f236df
           'false': 不接受現場報名
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': 參賽者可以修改他們的報名資訊直到修改比賽項目的截止日為止
+          #original_hash: 2cbb80e
+          'false': 參賽者無法在成功報名後修改報名內容
   mail_form:
     attributes:
       contact_form:
@@ -2176,6 +2185,8 @@ zh-TW:
       waiting_list_deadline_html: '在候補名單的報名在 %{waiting_list_deadline} 之前都可以變成正式報名參賽者。'
       #original_hash: 14c5699
       event_change_deadline_html: '如果您是正式報名參賽者，您可以在 %{event_change_deadline} 之前聯絡主辦團隊來更改報名的參賽項目。'
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: '如果您是正式報名參賽者，您可以在 %{event_change_deadline} 之前在%{register}項目中來更改報名的參賽項目。'
       #original_hash: eff3594
       event_change_deadline_default_html: 我們鼓勵所有人線上報名他們想參加的比賽項目，但您可以在該比賽項目開始前增加比賽報名項目。
       #original_hash: cf7be5d
@@ -2256,8 +2267,8 @@ zh-TW:
     index:
       #original_hash: db98a68
       title: 比賽
-      #original_hash: 63254de
-      disclaimer: 請注意：由於COVID-19全球流行疫情的影響，很多國家目前無法舉辦比賽。
+      #original_hash: f483b9c
+      disclaimer: 請注意：由於COVID-19全球流行疫情的影響，有些國家目前無法舉辦比賽。
       #original_hash: 6a72085
       all_events: 所有項目
       #original_hash: 6d76b81
