@@ -471,6 +471,8 @@ sv:
         on_the_spot_registration: Anmälan på plats
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Basanmälningsavgift för anmälan på plats
+        #original_hash: 7e53b96
+        allow_registration_edits: Ändringar i anmälan
         #original_hash: efbdbab
         refund_policy_percent: Procent som återbetalas
         #original_hash: b332299
@@ -887,6 +889,8 @@ sv:
         on_the_spot_entry_fee_lowest_denomination: >-
           Om detta sätts till 0 visas en text som säger att anmälningar på plats
           accepteras gratis.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           För närvarande är detta nummer endast informativt, återbetalningar
@@ -1161,6 +1165,15 @@ sv:
           'true': Anmälningar på plats kommer accepteras
           #original_hash: 0f236df
           'false': Anmälningar på plats kommer INTE accepteras
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Tävlande får ändra sin anmälan fram till deadline för att uppdatera
+            grenar
+          #original_hash: 2cbb80e
+          'false': >-
+            Tävlande får INTE ändra sin anmälan fram till deadline för att
+            uppdatera grenar
   mail_form:
     attributes:
       contact_form:
@@ -1542,6 +1555,17 @@ sv:
       text_html: >-
         Läs mer om tävlingar nära dig eller tävlingsresultat. Är du på en
         tävling nu och vill se resultaten? Kolla in %{wca_live_link}!
+    merchandise:
+      #original_hash: 698cfc8
+      title: Merch
+      #original_hash: 6403f2b
+      ad_new: Ny
+      #original_hash: 9ad68ce
+      text_html: >-
+        Kolla in vår nyligen lanserade officiella merch som innehåller ett urval
+        av kläder, från T-shirts till huvtröjor.
+      #original_hash: b0fc6c4
+      link_title: Länk till butik
     records:
       #original_hash: e51c552
       title: Rekord
@@ -2339,6 +2363,10 @@ sv:
       name_too_long: >-
         Tävlingsnamnet är längre än 32 tecken. Vi föredrar kortare och vi vore
         glada om ni ändrar det.
+      #original_hash: af27396
+      id_starts_with_lowercase: >-
+        Tävlings-ID:t startar med en liten bokstav. Vi skulle föredra att det
+        börjar med en stor bokstav.
       #original_hash: 1a20fae
       must_have_events: Lägg till minst en gren innan ni bekräftar tävlingen.
       #original_hash: a3aea56
@@ -2350,6 +2378,26 @@ sv:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Se till att alla icke-finalomgångar har ett specificerat villkor för
         vilka som går vidare.
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: >-
+        Omgång %{round_number} i %{event} har en cutoff som är högre än
+        tidsgränsen, vänligen se till att cutoffen är lägre än tidsgränsen.
+      #original_hash: c1580b1
+      cutoff_is_too_fast: >-
+        Omgång %{round_number} i %{event} har en cutoff under 5 sekunder.
+        Vänligen kontrollera att det är korrekt.
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: >-
+        Omgång %{round_number} i %{event} har en cutoff på över 10 minuter.
+        Vänligen kontrollera att det är korrekt.
+      #original_hash: af976ad
+      time_limit_is_too_fast: >-
+        Omgång %{round_number} i %{event} har en tidsgräns under 10 sekunder.
+        Vänligen kontrollera att det är korrekt.
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: >-
+        Omgång %{round_number} i %{event} har en tidsgräns på över 10 minuter.
+        Vänligen kontrollera att det är korrekt.
       #original_hash: e390250
       create_success: Ny tävling skapad!
       #original_hash: ba067f0
@@ -2512,6 +2560,10 @@ sv:
       event_change_deadline_html: >-
         Om du är en anmäld tävlande kan du ändra grenarna du är anmäld till
         t.o.m. %{event_change_deadline} genom att kontakta arrangörsteamet.
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: >-
+        Om du är anmäld kan du ändra vilka grenar du är anmäld till fram till
+        %{event_change_deadline} på fliken %{register}.
       #original_hash: eff3594
       event_change_deadline_default_html: >-
         Vi uppmuntrar alla att anmäla sig till de genar de vill tävla i via
@@ -2605,9 +2657,9 @@ sv:
     index:
       #original_hash: db98a68
       title: Tävlingar
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
-        Observera att på grund av COVID-19-pandemin kan många länder för
+        Observera att på grund av COVID-19-pandemin kan vissa länder för
         närvarande inte hålla tävlingar.
       #original_hash: 6a72085
       all_events: Alla
@@ -3851,6 +3903,8 @@ sv:
     competitor_tutorial: Deltagarinstruktion
     #original_hash: 9561bfc
     judge_tutorial: Domarinstruktioner för nybörjare
+    #original_hash: 12e47a3
+    competition_templates: Tävlingsmallar
     #original_hash: 5ca0558
     certificates: 'WCT:s certifikatmallar'
     #original_hash: f580987
