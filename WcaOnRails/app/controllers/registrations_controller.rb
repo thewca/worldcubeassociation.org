@@ -37,7 +37,9 @@ class RegistrationsController < ApplicationController
 
   def edit_registrations
     @show_events = params[:show_events] == "true"
-    @show_full_mail = params[:show_email] == "true"
+    @show_full_emails = params[:show_full_emails] == "true"
+    @show_birthdays = params[:show_birthdays] == "true"
+
     @competition = competition_from_params
     @registrations = @competition.registrations.includes(:user, :registration_payments, :events)
   end
@@ -290,6 +292,8 @@ class RegistrationsController < ApplicationController
 
   def do_actions_for_selected
     @show_events = params[:show_events] == "true"
+    @show_full_emails = params[:show_full_emails] == "true"
+    @show_birthdays = params[:show_birthdays] == "true"
     @competition = competition_from_params
     registrations = @competition.registrations.find(selected_registrations_ids)
     count_success = 0

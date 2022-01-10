@@ -2,24 +2,35 @@
 
 <%= render layout: 'nav' do %>
   <% if @show_events %>
-    <%= link_to competition_edit_registrations_path(@competition), class: "btn btn-primary" do %>
-      <%= ui_icon("minus") %> Hide events
+    <%= link_to competition_edit_registrations_path(@competition, show_events: "false", show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
+      <%= ui_icon("minus") %> Hide Events
     <% end %>
   <% else %>
-    <%= link_to competition_edit_registrations_path(@competition, show_events: "true"), class: "btn btn-primary" do %>
-      <%= ui_icon("plus") %> Show events
+    <%= link_to competition_edit_registrations_path(@competition, show_events: "true", show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
+      <%= ui_icon("plus") %> Show Events
     <% end %>
   <% end %>
 
-  <% if @show_full_mail %>
-    <%= link_to competition_edit_registrations_path(@competition), class: "btn btn-primary" do %>
+  <% if @show_full_emails %>
+    <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: "false", show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
       <%= ui_icon("minus") %> Hide Emails
     <% end %>
   <% else %>
-    <%= link_to competition_edit_registrations_path(@competition, show_email: "true"), class: "btn btn-primary" do %>
+    <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: "true", show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
       <%= ui_icon("plus") %> Show Emails
     <% end %>
   <% end %>
+
+  <% if @show_birthdays %>
+    <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: "false"), class: "btn btn-primary" do %>
+      <%= ui_icon("minus") %> Hide Birthdays
+    <% end %>
+  <% else %>
+    <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: "true"), class: "btn btn-primary" do %>
+      <%= ui_icon("plus") %> Show Birthdays
+    <% end %>
+  <% end %>
+
 
   <%= form_for @competition, url: competition_registrations_do_actions_for_selected_path(@competition), remote: true do |f| %>
     <% [:pending, :accepted, :deleted].each do |status| %>
@@ -40,7 +51,9 @@
             <th class="wca-id" data-sortable="true"><%= t 'common.user.wca_id' %></th>
             <th class="name" data-sortable="true"><%= t 'activerecord.attributes.registration.name' %></th>
             <th class="countryId" data-sortable="true"><%= t 'common.user.citizen_of' %></th>
-            <th class="birthday" data-sortable="true"><%= t 'activerecord.attributes.registration.birthday' %></th>
+            <% if @show_birthdays %>
+              <th class="birthday" data-sortable="true"><%= t 'activerecord.attributes.registration.birthday' %></th>
+            <% end %>
             <% if @show_events %>
               <% @competition.events.each do |event| %>
                 <th>
@@ -79,7 +92,9 @@
 
               <td class="name"><%= registration.name %></td>
               <td class="countryId"><%= registration.country.name %></td>
-              <td class="birthday"><%= registration.birthday %></td>
+              <% if @show_birthdays %>
+                <td class="birthday"><%= registration.birthday %></td>
+              <% end %>
               <% if @show_events %>
                 <% @competition.events.each do |event| %>
                   <td>
@@ -112,7 +127,7 @@
                 </td>
               <% end %>
               <td>
-              <% if @show_full_mail %>
+              <% if @show_full_emails %>
                 <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
                   <%= registration.email %>
                 <% end %>
