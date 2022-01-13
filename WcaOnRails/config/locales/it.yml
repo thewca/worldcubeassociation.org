@@ -1,3 +1,12 @@
+
+translate Internationalize
+Damiano Di Paola
+
+
+
+1583/1583
+done Everything translated
+Raw data
 it:
   countries:
     #original_hash: 530670d
@@ -469,6 +478,8 @@ it:
         on_the_spot_registration: Registrazioni in loco
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Tassa di iscrizione base per le registrazioni in loco
+        #original_hash: 7e53b96
+        allow_registration_edits: Modifiche alle registrazioni
         #original_hash: efbdbab
         refund_policy_percent: Percentuale da rimborsare
         #original_hash: b332299
@@ -895,6 +906,8 @@ it:
         on_the_spot_entry_fee_lowest_denomination: >-
           Se questo è impostato su 0, verrà visualizzata una frase che dice che
           le registrazioni in loco saranno accettate gratuitamente.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Per ora questo numero è solo informativo, i rimborsi dovranno essere
@@ -1174,6 +1187,15 @@ it:
           'true': Le registrazioni in loco sono accettate
           #original_hash: 0f236df
           'false': Le registrazioni in loco NON SONO accettate
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            I partecipanti possono apportare modifiche alla propria
+            registrazione entro la data di scadenza per la modifica degli eventi
+          #original_hash: 2cbb80e
+          'false': >-
+            I partecipanti NON possono apportare modifiche alla propria
+            registrazione una volta che questa è stata accettata
   mail_form:
     attributes:
       contact_form:
@@ -1569,13 +1591,24 @@ it:
         Scopri le prossime competizioni vicino a te, o vedi i risultati delle
         competizioni passate. Sei a una competizione e vuoi vedere i risultati?
         Dai un'occhiata a %{wca_live_link}!
+    merchandise:
+      #original_hash: 698cfc8
+      title: Merchandising
+      #original_hash: 6403f2b
+      ad_new: Nuovo
+      #original_hash: 9ad68ce
+      text_html: >-
+        Dai un'occhiata al nostro nuovo merchandising ufficiale che include capi
+        di abbigliamento dalle T-shirt alle felpe con cappuccio.
+      #original_hash: b0fc6c4
+      link_title: Vai al negozio
     records:
       #original_hash: e51c552
       title: Record
       #original_hash: 3681af0
       text: >-
-        Dai un'occhiata ai record attuali e storici per tutte le discipline
-        ufficiali WCA.
+        Consulta i record attuali e storici per tutte le discipline ufficiali
+        WCA.
     faq:
       #original_hash: 03688ba
       title: Domande Frequenti
@@ -2412,6 +2445,10 @@ it:
       name_too_long: >-
         Il nome di questa competizione è più lungo di 32 caratteri. Ti saremmo
         grati se lo cambiassi con uno più corto.
+      #original_hash: af27396
+      id_starts_with_lowercase: >-
+        L'ID della competizione inizia con una lettera minuscola. È preferibile
+        che inizi con una maiuscola.
       #original_hash: 1a20fae
       must_have_events: Aggiungi almeno un evento prima di confermare la competizione.
       #original_hash: a3aea56
@@ -2423,6 +2460,26 @@ it:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Assicurati che siano specificate le condizioni di avanzamento per tutti
         i round non finali.
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: >-
+        Il round %{round_number} di %{event} ha un tempo di cutoff più alto del
+        time limit. Assicurati che il cutoff sia più basso del time limit.
+      #original_hash: c1580b1
+      cutoff_is_too_fast: >-
+        Il round %{round_number} di %{event} ha un cutoff minore di 5 secondi.
+        Assicurati che il valore sia corretto.
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: >-
+        Il round %{round_number} di %{event} ha un cutoff maggiore di 10 minuti.
+        Assicurati che il valore sia corretto.
+      #original_hash: af976ad
+      time_limit_is_too_fast: >-
+        Il round %{round_number} di %{event} ha un time limit minore di 10
+        secondi. Assicurati che il valore sia corretto.
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: >-
+        Il round %{round_number} di %{event} ha un time limit maggiore di 10
+        minuti in un evento veloce. Assicurati che il valore sia corretto.
       #original_hash: e390250
       create_success: Competizione creata correttamente!
       #original_hash: ba067f0
@@ -2602,6 +2659,10 @@ it:
       event_change_deadline_html: >-
         Se sei un partecipante iscritto, puoi modificare i tuoi eventi entro il
         %{event_change_deadline} contattando il team organizzativo.
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: >-
+        Se sei un partecipante registrato puoi modificare gli eventi a cui sei
+        iscritto entro il %{event_change_deadline} alla scheda %{register}.
       #original_hash: eff3594
       event_change_deadline_default_html: >-
         Ti consigliamo di specificare in fase di iscrizione gli eventi a cui
@@ -2697,9 +2758,9 @@ it:
     index:
       #original_hash: db98a68
       title: Competizioni
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
-        Ricorda che a causa della pandemia di COVID-19, in molti paesi non è
+        Ricorda che a causa della pandemia di COVID-19, in alcuni paesi non è
         ancora possibile organizzare competizioni.
       #original_hash: 6a72085
       all_events: Tutti
