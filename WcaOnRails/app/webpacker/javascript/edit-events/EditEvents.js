@@ -180,8 +180,19 @@ function EventPanel({ wcifEvents, canAddAndRemoveEvents, canUpdateEvents, wcifEv
       if(!confirm(`Are you sure you want to remove ${pluralize(roundsToRemoveCount, "round")} of ${event.name}?`)) {
         return;
       }
+      // We have too many rounds
 
-      // We have too many rounds, remove the extras.
+      // Rounds to remove may have been part of shared cumulative time limits,
+      // so remove these rounds from those groupings
+      _.compact(_.flatMap(wcifEvents, 'rounds')).forEach(otherWcifRound => {
+        _.pull(
+          otherWcifRound.timeLimit.cumulativeRoundIds,
+          ...wcifEvent.rounds.filter((_, index) => index >= newRoundCount).map(round => round.id)
+        )
+      });
+
+      // Remove the extra rounds themselves
+      // Note: do this after dealing with cumulative time limits above
       wcifEvent.rounds = _.take(wcifEvent.rounds, newRoundCount);
 
       // Final rounds must not have an advance to next round requirement.
