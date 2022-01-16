@@ -8,6 +8,7 @@ import formats from '../wca/formats.js.erb'
 import { rootRender } from '.'
 import { pluralize } from './modals/utils'
 import { buildActivityCode, saveWcif, roundIdToString } from '../wca/wcif-utils'
+import { removeRoundsFromSharedTimeLimits } from "./modals/index.js"
 import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from './modals'
 
 export default class EditEvents extends React.Component {
@@ -172,12 +173,7 @@ function EventPanel({ wcifEvents, canAddAndRemoveEvents, canUpdateEvents, wcifEv
 
     // before removing all rounds of the event, remove those rounds from any
     // shared cumulative time limits
-    _.compact(_.flatMap(wcifEvents, 'rounds')).forEach(otherWcifRound => {
-      _.pull(
-        otherWcifRound.timeLimit.cumulativeRoundIds,
-        ...wcifEvent.rounds.map(round => round.id)
-      )
-    });
+    removeRoundsFromSharedTimeLimits(wcifEvents, wcifEvent.rounds.map(round => round.id));
 
     // remove the rounds themselves
     wcifEvent.rounds = null;
@@ -195,12 +191,10 @@ function EventPanel({ wcifEvents, canAddAndRemoveEvents, canUpdateEvents, wcifEv
 
       // Rounds to remove may have been part of shared cumulative time limits,
       // so remove these rounds from those groupings
-      _.compact(_.flatMap(wcifEvents, 'rounds')).forEach(otherWcifRound => {
-        _.pull(
-          otherWcifRound.timeLimit.cumulativeRoundIds,
-          ...wcifEvent.rounds.filter((_, index) => index >= newRoundCount).map(round => round.id)
-        )
-      });
+      removeRoundsFromSharedTimeLimits(
+        wcifEvents,
+        wcifEvent.rounds.filter((_, index) => index >= newRoundCount).map(round => round.id)
+      );
 
       // Remove the extra rounds themselves
       // Note: do this after dealing with cumulative time limits above
