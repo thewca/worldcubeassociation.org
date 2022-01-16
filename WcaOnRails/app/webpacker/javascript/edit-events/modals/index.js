@@ -62,22 +62,30 @@ class EditRoundAttribute extends React.Component {
     let wcifRound = this.getWcifRound();
     wcifRound[this.props.attribute] = this.state.value;
 
+    // TODO: still need to remove from other rounds if selecting per solve
+    // TODO: still need to remove from other rounds if deleting round/event
+
     // This is gross. timeLimit is special because of cross round cumulative time limits.
     // If you set a time limit for 3x3x3 round 1 shared with 2x2x2 round 1, then we need
     // to make sure the same timeLimit gets set for both of the rounds.
     if(this.props.attribute == "timeLimit") {
-      let timeLimit = this.state.value;
+      // the new time limit for this round
+      // we just want timeLimit = this.state.value, however the ids are required in the
+      // second step but modified in the first step; so make a copy of them
+      const centiseconds = this.state.value.centiseconds;
+      const cumulativeRoundIds = [...this.state.value.cumulativeRoundIds];
+      const timeLimit = { centiseconds, cumulativeRoundIds };
 
-      // First, remove this round from all other rounds that previously shared
-      // a time limit with this round.
-      findRoundsSharingTimeLimitWithRound(this.props.wcifEvents, wcifRound).forEach(otherWcifRound => {
-        _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, wcifRound.id);
+      // First, remove all rounds which appear in cumulativeRoundIds from everywhere.
+      // (although, this only affects those which previously shared a time limit with this round)
+      _.compact(_.flatMap(this.props.wcifEvents, 'rounds')).forEach(otherWcifRound => {
+          _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, ...cumulativeRoundIds);
       });
 
       // Second, clobber the time limits for all rounds that this round now shares a time limit with.
       if(timeLimit) {
-        findRounds(this.props.wcifEvents, timeLimit.cumulativeRoundIds).forEach(wcifRound => {
-          wcifRound.timeLimit = timeLimit;
+        findRounds(this.props.wcifEvents, cumulativeRoundIds).forEach(otherWcifRound => {
+          otherWcifRound.timeLimit = timeLimit;
         });
       }
     }
