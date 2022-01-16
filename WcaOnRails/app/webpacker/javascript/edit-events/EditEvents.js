@@ -170,9 +170,20 @@ function EventPanel({ wcifEvents, canAddAndRemoveEvents, canUpdateEvents, wcifEv
       return;
     }
 
+    // before removing all rounds of the event, remove those rounds from any
+    // shared cumulative time limits
+    _.compact(_.flatMap(wcifEvents, 'rounds')).forEach(otherWcifRound => {
+      _.pull(
+        otherWcifRound.timeLimit.cumulativeRoundIds,
+        ...wcifEvent.rounds.map(round => round.id)
+      )
+    });
+
+    // remove the rounds themselves
     wcifEvent.rounds = null;
     rootRender();
   };
+
   let setRoundCount = newRoundCount => {
     wcifEvent.rounds = wcifEvent.rounds || [];
     let roundsToRemoveCount = wcifEvent.rounds.length - newRoundCount;

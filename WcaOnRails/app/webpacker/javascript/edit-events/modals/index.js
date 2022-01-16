@@ -63,7 +63,6 @@ class EditRoundAttribute extends React.Component {
     wcifRound[this.props.attribute] = this.state.value;
 
     // TODO: still need to remove from other rounds if selecting per solve
-    // TODO: still need to remove from other rounds if deleting event
 
     // This is gross. timeLimit is special because of cross round cumulative time limits.
     // If you set a time limit for 3x3x3 round 1 shared with 2x2x2 round 1, then we need
