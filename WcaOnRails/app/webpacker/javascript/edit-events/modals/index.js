@@ -62,8 +62,6 @@ class EditRoundAttribute extends React.Component {
     let wcifRound = this.getWcifRound();
     wcifRound[this.props.attribute] = this.state.value;
 
-    // TODO: still need to remove from other rounds if selecting per solve
-
     // This is gross. timeLimit is special because of cross round cumulative time limits.
     // If you set a time limit for 3x3x3 round 1 shared with 2x2x2 round 1, then we need
     // to make sure the same timeLimit gets set for both of the rounds.
@@ -78,7 +76,10 @@ class EditRoundAttribute extends React.Component {
       // First, remove all rounds which appear in cumulativeRoundIds from everywhere.
       // (although, this only affects those which previously shared a time limit with this round)
       _.compact(_.flatMap(this.props.wcifEvents, 'rounds')).forEach(otherWcifRound => {
-          _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, ...cumulativeRoundIds);
+          // if time limit is changed to 'per solve', cumulativeRoundIds will be empty,
+          // but we still (potentially) need to remove the round from other cumulative time limits
+          // which is why that (wcifRound.id) is added on the end here
+          _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, ...cumulativeRoundIds, wcifRound.id);
       });
 
       // Second, clobber the time limits for all rounds that this round now shares a time limit with.
