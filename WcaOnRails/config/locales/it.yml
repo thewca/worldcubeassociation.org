@@ -3747,7 +3747,7 @@ it:
     spirit_footer: Spirito WCA
     #original_hash: c1781ee
     our_goals_title: I nostri obiettivi
-    #original_hash: caf6bf2
+    #original_hash: 743ca74
     our_goals_content_html: >-
       <p>La World Cube Association intende dare ai giovani di tutto il mondo
       l'opportunità di partecipare e contribuire alla community, attraverso la
@@ -4036,6 +4036,8 @@ it:
     codeofconduct: Codice di Condotta
     #original_hash: 4f05e8f
     finances: Finanze
+    #original_hash: d1b1406
+    vision_and_strategy: Obiettivi e strategie
   education:
     #original_hash: 746e863
     title: Guide WCA per l'apprendimento
