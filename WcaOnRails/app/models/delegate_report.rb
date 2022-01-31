@@ -51,6 +51,10 @@ class DelegateReport < ApplicationRecord
   end
 
   def can_submit_delegate_report?(current_user)
+    !posted? && competition.delegates.include?(current_user) && !competition.results_submitted_at.nil?
+  end
+
+  def can_see_delegate_report_submit_button?(current_user)
     !posted? && competition.delegates.include?(current_user)
   end
 
