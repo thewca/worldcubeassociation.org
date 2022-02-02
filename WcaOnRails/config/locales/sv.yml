@@ -3624,7 +3624,7 @@ sv:
     spirit_footer: 'WCA:s Anda'
     #original_hash: c1781ee
     our_goals_title: Våra mål
-    #original_hash: caf6bf2
+    #original_hash: 743ca74
     our_goals_content_html: >-
       <p>World Cube Association vill ge möjligheter till delaktighet och
       ledarskap för ungdomar runt om i världen genom att öka tillgängligheten
@@ -3894,6 +3894,8 @@ sv:
     codeofconduct: Uppförandekod
     #original_hash: 4f05e8f
     finances: Finanser
+    #original_hash: d1b1406
+    vision_and_strategy: Vision och Strategi
   education:
     #original_hash: 746e863
     title: 'WCA:s Utbildningsresurser'
