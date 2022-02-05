@@ -10,6 +10,9 @@ EnvVars = Env::Vars.new do
 
   if Rails.env.development?
     mandatory :DISABLE_BULLET, :bool
+
+    optional :AWS_ACCESS_KEY_ID, :string, ''
+    optional :AWS_SECRET_ACCESS_KEY, :string, ''
   end
 
   # Set WCA_LIVE_SITE to enable Google Analytics
@@ -45,4 +48,7 @@ EnvVars = Env::Vars.new do
   mandatory :OTP_ENCRYPTION_KEY, :string
   mandatory :DISCOURSE_SECRET, :string
   mandatory :DISCOURSE_URL, :string
+  mandatory :S3_AVATARS_BUCKET, :string
+  mandatory :S3_AVATARS_ASSET_HOST, :string
+  mandatory :S3_AVATARS_REGION, :string
 end

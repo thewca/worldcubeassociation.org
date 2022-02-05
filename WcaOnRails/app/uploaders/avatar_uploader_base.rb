@@ -16,8 +16,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   end
 
   # Choose what kind of storage to use for this uploader:
-  storage :file
-  # storage :fog
+  storage :aws
 
   configure do |config|
     config.remove_previously_stored_files_after_update = false
