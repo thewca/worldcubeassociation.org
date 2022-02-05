@@ -39,6 +39,7 @@ EnvVars = Env::Vars.new do
   optional :RECAPTCHA_PUBLIC_KEY, :string, ''
   optional :RECAPTCHA_PRIVATE_KEY, :string, ''
   optional :NEW_RELIC_LICENSE_KEY, :string, ''
+  optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
 
   mandatory :GOOGLE_MAPS_API_KEY, :string
   mandatory :GITHUB_CREATE_PR_ACCESS_TOKEN, :string

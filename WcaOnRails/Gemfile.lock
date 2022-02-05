@@ -119,6 +119,9 @@ GEM
       execjs
     aws-eventstream (1.2.0)
     aws-partitions (1.553.0)
+    aws-sdk-cloudfront (1.60.0)
+      aws-sdk-core (~> 3, >= 3.122.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-core (3.126.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
@@ -683,6 +686,7 @@ DEPENDENCIES
   activestorage-validator
   api-pagination
   apparition
+  aws-sdk-cloudfront
   aws-sdk-s3
   better_errors
   binding_of_caller
