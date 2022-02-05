@@ -945,6 +945,8 @@ en:
       submit_value: "Claim WCA ID"
     #context: related to editing the avatar thumbnail
     edit_avatar_thumbnail:
+      cdn_explanation: "All avatar images are stored in the Cloud, so any changes to the thumbnail can take several minutes to be displayed correctly."
+      cdn_warning: "Please do not be confused if your thumbnail does not immediately update after saving!"
       current: "Current thumbnail:"
       new: "New thumbnail:"
       save: "Save"
