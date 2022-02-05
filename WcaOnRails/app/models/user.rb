@@ -348,24 +348,35 @@ class User < ApplicationRecord
   crop_uploaded :avatar
   validates :avatar, AVATAR_PARAMETERS
 
-  def old_avatar_filenames
-    avatar_uploader = AvatarUploader.new(self)
-    store_dir = "public/#{avatar_uploader.store_dir}"
-    filenames = Dir.glob("#{store_dir}/*[0-9].{#{avatar_uploader.extension_white_list.join(",")}}").sort
-    filenames.select do |f|
-      (!pending_avatar.path || !File.identical?(pending_avatar.path, f)) && (!avatar.path || !File.identical?(avatar.path, f))
+  def old_avatar_files
+    # CarrierWave doesn't have a general "list uploaded files" feature
+    # so we have to hijack the class-private storage engine to make direct S3 API calls
+    avatar_storage = avatar.send(:storage)
+    s3_client = avatar_storage.connection
+
+    # query underlying AWS S3 API directly
+    s3_bucket = s3_client.bucket(avatar.aws_bucket)
+
+    files = s3_bucket.objects({ prefix: avatar.store_dir })
+                     .select { |obj| !obj.key.include?('thumb') } # filter out thumbnails
+                     .map { |obj| obj.key.rpartition('/').last } # only take the filename itself, not the folder path
+                     .map { |key| avatar_storage.retrieve!(key) } # read the filename through CarrierWave for convenience
+
+    files.select do |f|
+      (!pending_avatar.url || pending_avatar.url != f.url) && (!avatar.url || avatar.url != f.url)
     end
   end
 
   before_save :stash_rejected_avatar
   def stash_rejected_avatar
     if ActiveRecord::Type::Boolean.new.cast(remove_pending_avatar) && pending_avatar_was
-      avatar_uploader = AvatarUploader.new(self)
-      store_dir = "public/#{avatar_uploader.store_dir}"
-      filename = "#{store_dir}/#{pending_avatar_was}"
-      rejected_filename = "#{store_dir}/rejected/#{pending_avatar_was}"
-      FileUtils.mkdir_p Pathname.new(rejected_filename).parent.to_path
-      FileUtils.mv filename, rejected_filename
+      # hijacking internal S3 storage engine, see method `old_avatar_files` above
+      avatar_storage = avatar.send(:storage)
+
+      file = avatar_storage.retrieve!(pending_avatar_was)
+      rejected_filename = "#{avatar.store_dir}/rejected/#{pending_avatar_was}"
+
+      file.move_to rejected_filename
     end
   end
 
