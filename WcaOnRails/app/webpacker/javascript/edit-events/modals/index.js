@@ -20,6 +20,8 @@ let RoundAttributeComponents = {
   advancementCondition: AdvancementConditionComponents,
 };
 
+// NOTE: this helper function modifies wcifEvents in place, and is used in other
+// React components, meaning it modifies their state/props for them
 export function removeRoundsFromSharedTimeLimits(wcifEvents, wcifRounds) {
   _.compact(_.flatMap(wcifEvents, 'rounds')).forEach(otherWcifRound =>
     _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, ...wcifRounds)
