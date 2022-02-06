@@ -1057,6 +1057,8 @@ eo:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -2564,6 +2566,11 @@ eo:
       event_change_deadline_html: >-
         Se vi estas registrita konkursanto vi povas ŝanĝi viajn konkurserojn ĝis
         la %{event_change_deadline} kontaktante la organizanta teamo.
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: >-
+        Se vi estas registrita kiel konkursanto vi povas ŝanĝi viajn
+        registritajn konkurserojn ĝis %{event_change_deadline} je la %{register}
+        langeto.
       #original_hash: eff3594
       event_change_deadline_default_html: >-
         Ni instigas ĉiujn registriĝi por la konkurseroj en kiuj ili volas
@@ -3627,7 +3634,7 @@ eo:
     spirit_footer: Spirito de la WCA
     #original_hash: c1781ee
     our_goals_title: Niaj celoj
-    #original_hash: caf6bf2
+    #original_hash: 743ca74
     our_goals_content_html: >-
       <p>La World Cube Association volas alporti eblecojn al homoj ĉirkaŭ la
       mondo esti parto de komunumo kaj helpi ĝin kreskigi per plialtiĝo de
@@ -3897,6 +3904,8 @@ eo:
     codeofconduct: Konduta Kodo
     #original_hash: 4f05e8f
     finances: Financoj
+    #original_hash: d1b1406
+    vision_and_strategy: Vizio kaj Strategio
   education:
     #original_hash: 746e863
     title: Edukaj Rimedoj de la WCA
