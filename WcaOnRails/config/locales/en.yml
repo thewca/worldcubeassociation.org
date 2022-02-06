@@ -576,6 +576,7 @@ en:
         person2_wca_id: ""
         wca_id: ""
         incorrect_wca_id_claim_count: ""
+        person_wca_id: ""
       poll:
         comment: ""
         multiple: ""

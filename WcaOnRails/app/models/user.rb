@@ -26,6 +26,7 @@ class User < ApplicationRecord
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
+  has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
   has_many :bookmarked_competitions, dependent: :destroy
