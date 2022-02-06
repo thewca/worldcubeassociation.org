@@ -83,11 +83,11 @@ Rails.application.configure do
 
     # See https://github.com/thewca/worldcubeassociation.org/pull/1452. This seems to be something
     # Bullet asks us to include, but isn't necessary, and including it causes a huge performance problem.
-    Bullet.add_whitelist type: :n_plus_one_query, class_name: "Registration", association: :competition_events
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Registration", association: :competition_events
 
     # When loading the edit events page for a competition, Bullet erroneously warns that we are
     # not using the rounds association.
-    Bullet.add_whitelist type: :unused_eager_loading, class_name: "CompetitionEvent", association: :rounds
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "CompetitionEvent", association: :rounds
   end
 
   # Add i18n-js to the middleware
