@@ -36,7 +36,7 @@ GIT
 
 GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails.git
-  revision: 36d21cec5da7f5b214925804f60e63c61c747023
+  revision: 7a4640cb932e55866500a86c4f78808a4fca46e6
   branch: master
   submodules: true
   specs:
@@ -197,10 +197,10 @@ GEM
     database_cleaner-core (2.0.1)
     debug_inspector (1.0.0)
     declarative (0.0.20)
-    delayed_job (4.1.9)
-      activesupport (>= 3.0, < 6.2)
-    delayed_job_active_record (4.1.6)
-      activerecord (>= 3.0, < 6.2)
+    delayed_job (4.1.10)
+      activesupport (>= 3.0, < 8.0)
+    delayed_job_active_record (4.1.7)
+      activerecord (>= 3.0, < 8.0)
       delayed_job (>= 3.0, < 5)
     devise (4.8.1)
       bcrypt (~> 3.0)
@@ -242,25 +242,29 @@ GEM
       railties (>= 5.0.0)
     faker (2.19.0)
       i18n (>= 1.6, < 2)
-    faraday (1.8.0)
+    faraday (1.9.3)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
-      faraday-httpclient (~> 1.0.1)
+      faraday-httpclient (~> 1.0)
+      faraday-multipart (~> 1.0)
       faraday-net_http (~> 1.0)
-      faraday-net_http_persistent (~> 1.1)
+      faraday-net_http_persistent (~> 1.0)
       faraday-patron (~> 1.0)
       faraday-rack (~> 1.0)
-      multipart-post (>= 1.2, < 3)
+      faraday-retry (~> 1.0)
       ruby2_keywords (>= 0.0.4)
     faraday-em_http (1.0.0)
     faraday-em_synchrony (1.0.0)
     faraday-excon (1.1.0)
     faraday-httpclient (1.0.1)
+    faraday-multipart (1.0.3)
+      multipart-post (>= 1.2, < 3)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
+    faraday-retry (1.0.3)
     ffi (1.15.3)
     formatador (0.3.0)
     gems (1.2.0)
@@ -340,7 +344,6 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     iniparse (1.5.0)
     io-console (0.5.11)
-    ipaddr (1.2.3)
     irb (1.4.1)
       reline (>= 0.3.0)
     iso (0.2.2)
@@ -432,8 +435,7 @@ GEM
     oga (3.3)
       ast
       ruby-ll (~> 2.1)
-    openssl (2.2.1)
-      ipaddr
+    openssl (3.0.0)
     orm_adapter (0.5.0)
     os (1.1.1)
     overcommit (0.58.0)
