@@ -1155,10 +1155,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/sass-import-resolve/-/sass-import-resolve-1.0.0.tgz#32c3cdb2f7af3cd8f0dca357b592e7271f3831b5"
   integrity sha512-pH4KCsbtBLLe7eqUrw8brcuFO8IZlN36JjdKlOublibVdAIPHCzEnpBWOVUXK5sCf+DpBi8ZtuWtjF0srybdeA==
 
-"@cubing/icons@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@cubing/icons/-/icons-1.0.4.tgz#de05687a31ef241e120c13390dbea9cc38d723cb"
-  integrity sha512-pvOeyIiFeVLjqPFLDPJZBjUIO/Ya+P7POCS/idfXUJh/fDrzQ3AvZ4hsBbUzIs5DZjI+goIv3JKZVCet7/lw+w==
+"@cubing/icons@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@cubing/icons/-/icons-1.0.6.tgz#c05fa19fb2036eea6d38a468a11c1c426400eded"
+  integrity sha512-V9iLA0H4iRQlrXzyr6xx8lCmO+Ur25DSOxHN+cZi1Uvb4i7TZe2zzt3YfdSVkYsxyBZmQ0RKdr8WSAf803JJFg==
 
 "@eslint/eslintrc@^0.4.3":
   version "0.4.3"
