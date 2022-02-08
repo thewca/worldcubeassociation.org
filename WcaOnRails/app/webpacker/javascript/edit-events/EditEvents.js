@@ -8,7 +8,6 @@ import formats from '../wca/formats.js.erb'
 import { rootRender } from '.'
 import { pluralize } from './modals/utils'
 import { buildActivityCode, saveWcif, roundIdToString } from '../wca/wcif-utils'
-// NOTE: removeRoundsFromSharedTimeLimits will modify this component's state/props (specifically, wcifEvents)
 import { removeRoundsFromSharedTimeLimits } from "./modals/index.js"
 import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from './modals'
 
