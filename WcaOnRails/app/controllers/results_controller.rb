@@ -60,6 +60,13 @@ class ResultsController < ApplicationController
         ORDER BY value, personName
       SQL
     elsif @is_results
+      # emergency remedy to avoid breaking our own neck
+      # see https://docs.google.com/document/d/1epN2l3HcgbQHME4U2GT7zDGjAeulqiEbcslFeyfGX4I/edit# for reference
+      if @show > 100
+        flash[:danger] = t(".unknown_show")
+        return redirect_to rankings_path
+      end
+
       if @is_average
         @query = <<-SQL
           SELECT
