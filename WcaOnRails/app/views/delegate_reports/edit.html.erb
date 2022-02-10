@@ -26,8 +26,8 @@
     <%= f.input :remarks, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
 
     <%= f.button :submit, class: "btn-primary" %>
-    <% can_see_delegate_report_submit_button = DelegateReport.find(@delegate_report.id).can_see_delegate_report_submit_button?(@current_user) %>
-    <% can_submit_delegate_report = DelegateReport.find(@delegate_report.id).can_submit_delegate_report?(@current_user) %>
+    <% can_see_delegate_report_submit_button = @delegate_report.can_see_delegate_report_submit_button?(@current_user) %>
+    <% can_submit_delegate_report = @delegate_report.can_submit_delegate_report?(@current_user) %>
     <% if can_see_delegate_report_submit_button %>
       <%= button_tag(type: 'submit',
                      name: "delegate_report[posted]",
