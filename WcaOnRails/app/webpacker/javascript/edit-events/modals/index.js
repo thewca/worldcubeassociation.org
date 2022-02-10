@@ -28,9 +28,12 @@ let RoundAttributeComponents = {
  * @param {Array}      wcifRounds Rounds to be removed from all cumulativeRoundIds.
  */
 export function removeRoundsFromSharedTimeLimits(wcifEvents, wcifRounds) {
-  _.compact(_.flatMap(wcifEvents, 'rounds')).forEach(otherWcifRound =>
-    _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, ...wcifRounds)
-  );
+  _.compact(_.flatMap(wcifEvents, 'rounds')).forEach(otherWcifRound => {
+    // fmc and mbf don't have timelimits
+    if (otherWcifRound.timeLimit) {
+      _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, ...wcifRounds)
+    }
+  });
 }
 
 function findRounds(wcifEvents, roundIds) {
