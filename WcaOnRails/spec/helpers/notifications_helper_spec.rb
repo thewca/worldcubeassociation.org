@@ -70,7 +70,7 @@ RSpec.describe NotificationsHelper do
         notifications = helper.notifications_for_user(wcat_member)
         expect(notifications).to eq [
           {
-            text: "#{competition.name} is pending announcement. The competition is happening in #{competition.days_until} days.",
+            text: "#{confirmed_competition.name} is pending announcement. The competition is happening in #{competition.days_until} days.",
             url: admin_edit_competition_path(confirmed_competition),
           },
           {
