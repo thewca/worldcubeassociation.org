@@ -1566,7 +1566,7 @@ class Competition < ApplicationRecord
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
       # Note: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if registration && wcif_person["roles"]
-        roles = wcif_person["roles"] - ["delegate", "trainee_delegate", "organizer"] # These three are added on the fly.
+        roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
         registration.update!(roles: roles)
       end
       if registration && wcif_person["assignments"]
