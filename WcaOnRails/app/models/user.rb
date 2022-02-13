@@ -1081,7 +1081,7 @@ class User < ApplicationRecord
     person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     roles = registration&.roles || []
     roles << "delegate" if competition.delegates.include?(self)
-    roles << "trainee_delegate" if competition.trainee_delegates.include?(self)
+    roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
     roles << "organizer" if competition.organizers.include?(self)
     authorized_fields = {
       "birthdate" => dob.to_s,
