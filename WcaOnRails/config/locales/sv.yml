@@ -777,11 +777,11 @@ sv:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          Om du är Junior-Delegat, Senior-Delegat eller medlem i WRC eller WQAC,
-          får du Delegatrapporter som standard. Obs: ändringen kan ta upp till
-          en timme att träda i kraft.
+          Om du är Trainee-Delegat, Junior-Delegat, Senior-Delegat eller medlem
+          i WRC eller WQAC, får du Delegatrapporter som standard. Obs: ändringen
+          kan ta upp till en timme att träda i kraft.
         #original_hash: 0627e5c
         otp_attempt: >-
           Se din konfigurerade mobilapplikation för ett engångslösenord eller
@@ -1057,6 +1057,8 @@ sv:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1733,6 +1735,14 @@ sv:
       #original_hash: f28bf87
       submit_value: Gör anspråk på WCA-ID
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        Alla profilbilder sparas i Molnet, så ändringar kan ta ett antal minuter
+        att visas korrekt.
+      #original_hash: cc1d51b
+      cdn_warning: >-
+        Bli inte förvirrad om din bild inte uppdateras omedelbart efter att du
+        sparar!
       #original_hash: 79f14eb
       current: 'Nuvarande miniatyrbild:'
       #original_hash: b42ba27
