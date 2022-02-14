@@ -477,7 +477,7 @@ en:
         results_notifications_enabled: ""
         unconfirmed_wca_id: ""
         wca_id: ""
-        receive_delegate_reports: "If you are a Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
+        receive_delegate_reports: "If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
       #context: for a competition
       competition:
