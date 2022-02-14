@@ -262,6 +262,7 @@ class User < ApplicationRecord
   end
 
   scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
+  scope :trainee_delegates, -> { where(delegate_status: "trainee_delegate") }
   scope :delegates, -> { where.not(delegate_status: nil) }
   scope :senior_delegates, -> { where(delegate_status: "senior_delegate") }
 
@@ -603,6 +604,10 @@ class User < ApplicationRecord
     delegate_status == "senior_delegate"
   end
 
+  def staff_or_any_delegate?
+    staff? || trainee_delegate?
+  end
+
   def is_senior_delegate_for?(user)
     user.senior_delegate == self
   end
@@ -887,7 +892,7 @@ class User < ApplicationRecord
         email preferred_events results_notifications_enabled
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
-      if user.staff?
+      if user.staff_or_any_delegate?
         fields += %i(receive_delegate_reports)
       end
     end
@@ -932,22 +937,23 @@ class User < ApplicationRecord
     fields
   end
 
-  def self.clear_receive_delegate_reports_if_not_staff
-    User.where(receive_delegate_reports: true).reject(&:staff?).map { |u| u.update(receive_delegate_reports: false) }
+  def self.clear_receive_delegate_reports_if_not_eligible
+    User.where(receive_delegate_reports: true).reject(&:staff_or_any_delegate?).map { |u| u.update(receive_delegate_reports: false) }
   end
 
-  # This method is only called in sync_mailing_lists_job.rb, right after clear_receive_delegate_reports_if_not_staff.
-  # If used without calling clear_receive_delegate_reports_if_not_staff it might return non-current Staff members.
-  # The reason why clear_receive_delegate_reports_if_not_staff is needed is because there's no automatic code that
+  # This method is only called in sync_mailing_lists_job.rb, right after clear_receive_delegate_reports_if_not_eligible.
+  # If used without calling clear_receive_delegate_reports_if_not_eligible it might return non-current eligible members.
+  # The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
   # runs once a user is no longer a team member, we just schedule their end date.
   def self.delegate_reports_receivers_emails
     candidate_delegates = User.candidate_delegates
+    trainee_delegates = User.trainee_delegates
     other_staff = User.where(receive_delegate_reports: true)
     (%w(
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    ) + candidate_delegates.map(&:email) + other_staff.map(&:email)).uniq
+    ) + candidate_delegates.map(&:email) + trainee_delegates.map(&:email) + other_staff.map(&:email)).uniq
   end
 
   def notify_of_results_posted(competition)
