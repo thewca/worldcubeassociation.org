@@ -782,11 +782,11 @@ pt:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          Se for Delegado Júnior, Delegado Sénior ou membro do WRC ou do WQAC,
-          recebe Relatórios de Delegados por defeito. Nota: a alteração pode
-          levar até uma hora a tomar efeito.
+          Se for Delegado em Treino, Delegado Júnior, Delegado Sénior ou membro
+          do WRC ou do WQAC, recebe Relatórios de Delegados por defeito. Nota: a
+          alteração pode levar até uma hora a tomar efeito.
         #original_hash: 0627e5c
         otp_attempt: >-
           Verifique a aplicação móvel configurada para uma password ou insira um
@@ -1067,6 +1067,8 @@ pt:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1751,6 +1753,15 @@ pt:
       #original_hash: f28bf87
       submit_value: Associar um ID da WCA
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        Todas as imagens de avatar são armazenadas na Nuvem, por isso qualquer
+        alteração à miniatura pode demorar vários minutos a ser apresentada
+        corretamente.
+      #original_hash: cc1d51b
+      cdn_warning: >-
+        Por favor não se confunda se a sua imagem miniatura não for atualizada
+        imediatamente após gravar!
       #original_hash: 79f14eb
       current: 'Miniatura atual:'
       #original_hash: b42ba27
