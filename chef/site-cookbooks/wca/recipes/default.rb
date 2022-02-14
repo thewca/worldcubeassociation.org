@@ -385,6 +385,7 @@ apt_repository 'legacy-php' do
   uri 'ppa:ondrej/php'
 end
 package 'php5.6-cli'
+package 'php5.6-mbstring' # gregorbg necessary for results posting when competitors have non-ASCII names
 node.default['php-fpm']['skip_repository_install'] = true
 node.default['php-fpm']['package_name'] = 'php5.6-fpm'
 node.default['php-fpm']['conf_dir'] = '/etc/php/5.6/fpm/conf.d'
