@@ -229,7 +229,7 @@ RSpec.describe User, type: :model do
         avatar_crop_h: 40,
       )
       avatar = dummy_user.reload.read_attribute(:avatar)
-      expect(File).to exist("public/uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
+      expect(dummy_user.avatar.file.path).to eq("uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
 
       # Assigning a WCA ID to user should copy over the name from the Persons table.
       expect(user.name).to eq user.person.name
@@ -240,7 +240,7 @@ RSpec.describe User, type: :model do
       # Check that the dummy account was deleted, and we inherited its avatar.
       expect(User.find_by_id(dummy_user.id)).to be_nil
       expect(user.reload.read_attribute(:avatar)).to eq avatar
-      expect(File).to exist("public/uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
+      expect(dummy_user.avatar.file.path).to eq("uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
     end
 
     it "does not allow duplicate WCA IDs" do

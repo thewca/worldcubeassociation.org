@@ -8,6 +8,11 @@
 <% provide(:title, (pending_avatar ? "Pending " : "") + "Avatar Thumbnail | #{@user.name}") %>
 
 <div class="container">
+  <%= alert :warning do %>
+    <%= t '.cdn_explanation' %>
+    <br>
+    <b><%= t '.cdn_warning' %></b>
+  <% end %>
   <%= simple_form_for @user, html: { class: 'are-you-sure' } do |f| %>
     <div class="row">
       <div class="col-md-6">

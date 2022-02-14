@@ -1,7 +1,37 @@
 # frozen_string_literal: true
 
+require 'aws-sdk-cloudfront'
+
 class AvatarUploaderBase < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
+
+  def self.connection_cache
+    @connection_cache ||= {}
+  end
+
+  def cloudfront_sdk
+    @cloudfront_sdk ||= begin
+      conn_cache = self.class.connection_cache
+      conn_cache[storage.credentials] ||= ::Aws::CloudFront::Client.new(*storage.credentials)
+    end
+  end
+
+  def invalidate_cdn_cache(reference)
+    if EnvVars.CDN_AVATARS_DISTRIBUTION_ID.present?
+      # the hash keys and structure are per Amazon AWS' documentation
+      # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/CloudFront/Client.html#create_invalidation-instance_method
+      cloudfront_sdk.create_invalidation({
+                                           distribution_id: EnvVars.CDN_AVATARS_DISTRIBUTION_ID,
+                                           invalidation_batch: {
+                                             paths: {
+                                               quantity: 1,
+                                               items: ["/#{store_path}"], # AWS SDK throws an error if the path doesn't start with "/"
+                                             },
+                                             caller_reference: reference,
+                                           },
+                                         })
+    end
+  end
 
   # Copied from https://makandracards.com/makandra/12323-carrierwave-auto-rotate-tagged-jpegs.
   process :auto_orient
@@ -16,8 +46,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   end
 
   # Choose what kind of storage to use for this uploader:
-  storage :file
-  # storage :fog
+  storage :aws
 
   configure do |config|
     config.remove_previously_stored_files_after_update = false

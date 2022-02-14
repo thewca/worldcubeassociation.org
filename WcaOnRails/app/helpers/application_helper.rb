@@ -42,10 +42,6 @@ module ApplicationHelper
     competition_url(comp, anchor: "competition-schedule")
   end
 
-  def filename_to_url(filename)
-    "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
-  end
-
   def anchorable(pretty_text, id = nil)
     id ||= pretty_text.parameterize
     "<span id='#{id}' class='anchorable'><a href='##{id}'><span class='glyphicon glyphicon-link'></span></a> #{pretty_text}</span>".html_safe
