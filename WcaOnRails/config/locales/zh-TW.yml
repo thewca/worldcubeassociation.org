@@ -755,8 +755,8 @@ zh-TW:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
-        receive_delegate_reports: 如果您是初級代表、高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
+        #original_hash: 81a76a3
+        receive_delegate_reports: 如果您是實習代表、初級代表、高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
         #original_hash: 0627e5c
         otp_attempt: 請開啟您的行動裝置上的應用程式來取得一次性的密碼，或是輸入您其中一個備用碼。
       competition:
@@ -946,6 +946,8 @@ zh-TW:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1522,6 +1524,10 @@ zh-TW:
       #original_hash: f28bf87
       submit_value: 取得WCA ID
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: 所有的個人頭像照片都是儲存在雲端，任何頭像縮圖的變更會需要幾分鐘後才能正常顯示。
+      #original_hash: cc1d51b
+      cdn_warning: 如果您的頭像縮圖在儲存後沒有立即更新，請不要感到困惑！
       #original_hash: 79f14eb
       current: 目前的縮圖：
       #original_hash: b42ba27
@@ -3103,7 +3109,7 @@ zh-TW:
     spirit_footer: WCA精神
     #original_hash: c1781ee
     our_goals_title: 我們的目標
-    #original_hash: caf6bf2
+    #original_hash: 743ca74
     our_goals_content_html: >-
       <p>世界方塊協會希望藉由增加參加「魔術方塊」比賽的方式，讓全世界更多的年輕人能夠有參與社群跟領導社群的機會。我們相信比賽經驗以及社群經驗可以讓年輕人有成長機會，並藉由新的方塊比賽項目接觸到更多的人群，能夠讓整個社群成長茁壯。關於董事會對於WCA願景與策略的文件可以在<a
       href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">這裡</a>閱覽。</p>
@@ -3295,6 +3301,8 @@ zh-TW:
     codeofconduct: 行為準則
     #original_hash: 4f05e8f
     finances: 財政
+    #original_hash: d1b1406
+    vision_and_strategy: 願景與戰略
   education:
     #original_hash: 746e863
     title: WCA教育資源
