@@ -14,12 +14,13 @@ CarrierWave.configure do |config|
 
   aws_credentials = {
     region: EnvVars.S3_AVATARS_REGION,
-    stub_responses: Rails.env.test?, # Optional, avoid hitting S3 actual during tests
   }
 
   # only development needs explicit credentials to access AWS.
   # in production, access is derived implicitly through the IAM role of the machine
-  if Rails.env.development?
+  if EnvVars.AWS_ACCESS_KEY_ID.blank? || EnvVars.AWS_SECRET_ACCESS_KEY.blank?
+    aws_credentials[:stub_responses] = true
+  else
     aws_credentials['access_key_id'] = EnvVars.AWS_ACCESS_KEY_ID
     aws_credentials['secret_access_key'] = EnvVars.AWS_SECRET_ACCESS_KEY
   end

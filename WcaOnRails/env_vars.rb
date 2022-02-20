@@ -8,7 +8,7 @@ EnvVars = Env::Vars.new do
     mandatory :SMTP_PASSWORD, string
   end
 
-  if Rails.env.development?
+  unless Rails.env.production?
     mandatory :DISABLE_BULLET, :bool
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
