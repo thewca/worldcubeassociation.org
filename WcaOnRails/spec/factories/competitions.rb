@@ -86,6 +86,7 @@ FactoryBot.define do
     trait :with_valid_submitted_results do
       announced
       with_rounds { true }
+      results_submitted_at { Time.now }
       after(:create) do |competition|
         person = FactoryBot.create(:inbox_person, competitionId: competition.id)
         rounds = competition.competition_events.map(&:rounds).flatten
