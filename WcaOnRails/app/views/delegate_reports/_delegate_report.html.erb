@@ -40,10 +40,8 @@
 
   <div>
     <strong>Events</strong>
-
-    <% competition.events.each do |event| %>
-      <%= cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name) %>
-    <% end %>
+    (<%= competition.events.count %>)
+    <%= competition.events.map { |event| event.name }.join(", ") %>
   </div>
 
   <div>
