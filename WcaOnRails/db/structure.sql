@@ -386,8 +386,21 @@ CREATE TABLE `active_storage_blobs` (
   `byte_size` bigint(20) NOT NULL,
   `checksum` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
+  `service_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_active_storage_blobs_on_key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `active_storage_variant_records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `active_storage_variant_records` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `blob_id` bigint(20) NOT NULL,
+  `variation_digest` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_active_storage_variant_records_uniqueness` (`blob_id`,`variation_digest`),
+  CONSTRAINT `fk_rails_993965df05` FOREIGN KEY (`blob_id`) REFERENCES `active_storage_blobs` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ar_internal_metadata`;
@@ -1742,4 +1755,6 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20211031152616'),
 ('20211031152617'),
 ('20211031154101'),
-('20211210100657');
+('20211210100657'),
+('20220223163446'),
+('20220223163447');
