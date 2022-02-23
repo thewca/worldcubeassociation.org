@@ -20,7 +20,7 @@ class Team < ApplicationRecord
         first_period = first.start_date..(first.end_date || Date::Infinity.new)
         second_period = second.start_date..(second.end_date || Date::Infinity.new)
         if first_period.overlaps? second_period
-          errors[:base] << "Membership periods overlap for user #{user.name}"
+          errors.add(:base, message: "Membership periods overlap for user #{user.name}")
           break # One overlapping period for the user is found, skip to the next one
         end
       end

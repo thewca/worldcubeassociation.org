@@ -17,22 +17,22 @@ class DelegateReport < ApplicationRecord
 
   before_create :equipment_default
   def equipment_default
-    self.equipment = ActionController::Base.new.render_to_string(template: "delegate_reports/_equipment_default.md")
+    self.equipment = ActionController::Base.new.render_to_string(template: "delegate_reports/_equipment_default", formats: :md)
   end
 
   before_create :venue_default
   def venue_default
-    self.venue = ActionController::Base.new.render_to_string(template: "delegate_reports/_venue_default.md")
+    self.venue = ActionController::Base.new.render_to_string(template: "delegate_reports/_venue_default", formats: :md)
   end
 
   before_create :organization_default
   def organization_default
-    self.organization = ActionController::Base.new.render_to_string(template: "delegate_reports/_organization_default.md")
+    self.organization = ActionController::Base.new.render_to_string(template: "delegate_reports/_organization_default", formats: :md)
   end
 
   before_create :incidents_default
   def incidents_default
-    self.incidents = ActionController::Base.new.render_to_string(template: "delegate_reports/_incidents_default.md")
+    self.incidents = ActionController::Base.new.render_to_string(template: "delegate_reports/_incidents_default", formats: :md)
   end
 
   validates :schedule_url, presence: true, if: :schedule_and_disussion_urls_required?

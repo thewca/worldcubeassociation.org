@@ -91,7 +91,7 @@ class Person < ApplicationRecord
     attributes = attributes.to_h
     @updating_using_sub_id = true
     if attributes.slice(:name, :countryId).all? { |k, v| v.nil? || v == self.send(k) }
-      errors[:base] << I18n.t('users.errors.must_have_a_change')
+      errors.add(:base, message: I18n.t('users.errors.must_have_a_change'))
       return false
     end
     old_attributes = self.attributes

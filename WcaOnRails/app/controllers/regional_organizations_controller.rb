@@ -60,7 +60,7 @@ class RegionalOrganizationsController < ApplicationController
         redirect_to root_url
       end
     else
-      @regional_organization.errors[:name].concat(@regional_organization.errors[:id])
+      @regional_organization.errors[:id].each { |error| @regional_organization.errors.add(:name, error) }
       render :new
     end
   end

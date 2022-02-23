@@ -63,8 +63,8 @@ class IncidentsController < ApplicationController
       flash[:success] = "Successfully updated incident."
     else
       flash[:danger] = "Couldn't mark the incident as sent."
-      @incident.errors.each do |key, message|
-        flash[:danger] += " #{key} #{message}"
+      @incident.errors.each do |error|
+        flash[:danger] += " #{error.attribute} #{error.message}"
       end
     end
     redirect_to @incident

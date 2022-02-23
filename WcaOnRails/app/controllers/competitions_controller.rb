@@ -195,7 +195,7 @@ class CompetitionsController < ApplicationController
     else
       # Show id errors under name, since we don't actually show an
       # id field to the user, so they wouldn't see any id errors.
-      @competition.errors[:name].concat(@competition.errors[:id])
+      @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
       @nearby_competitions = get_nearby_competitions(@competition)
       render :new
     end
