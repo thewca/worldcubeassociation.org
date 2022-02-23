@@ -35,6 +35,15 @@ GIT
       railties (>= 5.0)
 
 GIT
+  remote: https://github.com/twalpole/apparition.git
+  revision: ca86be4d54af835d531dbcd2b86e7b2c77f85f34
+  branch: master
+  specs:
+    apparition (0.6.0)
+      capybara (~> 3.13, < 4)
+      websocket-driver (>= 0.6.5)
+
+GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails.git
   revision: 7a4640cb932e55866500a86c4f78808a4fca46e6
   branch: master
@@ -109,9 +118,6 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     ansi (1.5.0)
     api-pagination (4.8.2)
-    apparition (0.6.0)
-      capybara (~> 3.13, < 4)
-      websocket-driver (>= 0.6.5)
     ast (2.4.2)
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
@@ -685,7 +691,7 @@ DEPENDENCIES
   activerecord-import
   activestorage-validator
   api-pagination
-  apparition
+  apparition!
   aws-sdk-cloudfront
   aws-sdk-s3
   better_errors

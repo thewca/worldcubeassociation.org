@@ -127,7 +127,7 @@ group :test do
   gem 'oga' # XML parsing library introduced for testing RSS feed
   gem 'database_cleaner'
   gem 'rails-controller-testing'
-  gem 'apparition'
+  gem 'apparition', github: 'twalpole/apparition', branch: 'master'
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false
   gem 'timecop'
