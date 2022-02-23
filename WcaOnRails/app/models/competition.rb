@@ -1182,7 +1182,11 @@ class Competition < ApplicationRecord
   end
 
   def in_progress?
-    !results_posted? && (start_date..end_date).cover?(Date.today)
+    # starting from Ruby 2.7, (nil..nil) is interpreted as an "endless range",
+    # so if either date is nil then (start_date..end_date).cover? will always return true.
+    # But in the WCA database, a competition with nil dates is undefined in the sense that it is *not* including today.
+    # That's why the two extra nil? checks are absolutely necessary.
+    !results_posted? && !start_date.nil? && !end_date.nil? && (start_date..end_date).cover?(Date.today)
   end
 
   def uses_cutoff?
