@@ -18,11 +18,13 @@ CarrierWave.configure do |config|
 
   # only development needs explicit credentials to access AWS.
   # in production, access is derived implicitly through the IAM role of the machine
-  if EnvVars.AWS_ACCESS_KEY_ID.blank? || EnvVars.AWS_SECRET_ACCESS_KEY.blank?
-    aws_credentials[:stub_responses] = true
-  else
-    aws_credentials['access_key_id'] = EnvVars.AWS_ACCESS_KEY_ID
-    aws_credentials['secret_access_key'] = EnvVars.AWS_SECRET_ACCESS_KEY
+  unless Rails.env.production?
+    if EnvVars.AWS_ACCESS_KEY_ID.blank? || EnvVars.AWS_SECRET_ACCESS_KEY.blank?
+      aws_credentials[:stub_responses] = true
+    else
+      aws_credentials['access_key_id'] = EnvVars.AWS_ACCESS_KEY_ID
+      aws_credentials['secret_access_key'] = EnvVars.AWS_SECRET_ACCESS_KEY
+    end
   end
 
   config.aws_credentials = aws_credentials
