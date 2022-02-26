@@ -41,7 +41,7 @@
   <div>
     <strong>Events</strong>
     (<%= competition.events.count %>)
-    <%= competition.events.map { |event| event.name }.join(", ") %>
+    <%= competition.events.map(&:name).join(", ") %>
   </div>
 
   <div>
