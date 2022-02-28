@@ -201,7 +201,7 @@ server_name = {
 }[node.chef_environment]
 
 # If /etc/ssh is not a symlink, back it up and create a symlink.
-unless File.symlink?("/etc/ssh")
+unless node.chef_environment == "development" || File.symlink?("/etc/ssh")
   FileUtils.mv "/etc/ssh", "/etc/ssh-backup"
   FileUtils.ln_s "#{repo_root}/secrets/etc_ssh-#{server_name}", "/etc/ssh"
   service "ssh" do

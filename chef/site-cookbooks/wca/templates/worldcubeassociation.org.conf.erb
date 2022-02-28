@@ -9,7 +9,7 @@ upstream app {
 <% end %>
 }
 
-<% if node.chef_environment != "production" %>
+<% if node.chef_environment == "staging" %>
   # Serve mailcatcher at https://staging.worldcubeassociation.org:444
   server {
     server_name staging.worldcubeassociation.org;
