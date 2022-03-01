@@ -1,4 +1,4 @@
-FROM ruby:2.6.7
+FROM ruby:3.1.2
 EXPOSE 3000
 
 ENV DEBIAN_FRONTEND noninteractive
