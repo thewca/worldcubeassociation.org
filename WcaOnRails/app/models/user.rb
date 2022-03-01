@@ -596,7 +596,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    Rails.env.production? ? software_team_admin? : software_team?
+    Rails.env.production? && EnvVars.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end
 
   def any_kind_of_delegate?
