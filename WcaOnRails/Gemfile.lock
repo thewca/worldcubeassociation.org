@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/derekprior/momentjs-rails.git
-  revision: e2b2dd166b121ded02cdcc54f49fa1f0146c7094
+  revision: b7ff0d1a6da70cce64bddb5311cf09bbbaa9286d
   specs:
-    momentjs-rails (2.20.1)
+    momentjs-rails (2.29.1.1)
       railties (>= 3.1)
 
 GIT
@@ -37,7 +37,6 @@ GIT
 GIT
   remote: https://github.com/twalpole/apparition.git
   revision: ca86be4d54af835d531dbcd2b86e7b2c77f85f34
-  branch: master
   specs:
     apparition (0.6.0)
       capybara (~> 3.13, < 4)
@@ -46,7 +45,6 @@ GIT
 GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails.git
   revision: 7a4640cb932e55866500a86c4f78808a4fca46e6
-  branch: master
   submodules: true
   specs:
     datetimepicker-rails (4.7.16)

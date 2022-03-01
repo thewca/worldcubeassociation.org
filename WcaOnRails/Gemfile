@@ -69,7 +69,7 @@ gem 'premailer-rails'
 gem 'nokogiri'
 gem 'cocoon'
 gem 'momentjs-rails', github: 'derekprior/momentjs-rails'
-gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', submodules: true
 gem 'blocks'
 gem 'rack-cors', require: 'rack/cors'
 gem 'api-pagination'
@@ -127,7 +127,7 @@ group :test do
   gem 'oga' # XML parsing library introduced for testing RSS feed
   gem 'database_cleaner'
   gem 'rails-controller-testing'
-  gem 'apparition', github: 'twalpole/apparition', branch: 'master'
+  gem 'apparition', github: 'twalpole/apparition'
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false
   gem 'timecop'
