@@ -39,6 +39,12 @@
   </div>
 
   <div>
+    <strong>Events</strong>
+    (<%= competition.events.count %>)
+    <%= competition.events.map(&:name).join(", ") %>
+  </div>
+
+  <div>
     <strong>Equipment</strong>
     <%=md delegate_report.equipment %>
   </div>
