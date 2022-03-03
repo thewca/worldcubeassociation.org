@@ -214,23 +214,23 @@ da:
       #original_hash: 0664a83
       percent: 'Top %{percent}%'
       attempt_result:
-        #original_hash: 482f137
-        time: 'Bedste resultat < %{time}'
-        #original_hash: 3faa63e
-        moves: 'Bedste resultat < %{moves}'
-        #original_hash: c3133c2
-        points: 'Bedste resultat > %{points}'
+        #original_hash: ac6a282
+        time: '%{round_format} < %{time}'
+        #original_hash: 45db130
+        moves: '%{round_format} < %{moves}'
+        #original_hash: 076911b
+        points: '%{round_format} > %{points}'
     #original_hash: 6e55337
     ranking: 'Top %{ranking} kommer videre til næste runde'
     #original_hash: 7ee969c
     percent: 'Top %{percent}% kommer videre til næste runde'
     attempt_result:
-      #original_hash: b3c8a02
-      time: 'Bedste resultat < %{time} kommer videre til næste runde'
-      #original_hash: 07bca6c
-      moves: 'Bedste resultat < %{moves} træk kommer videre til næste runde'
-      #original_hash: 837083c
-      points: 'Bedste resultat > %{points} point kommer videre til næste runde'
+      #original_hash: 6173090
+      time: '%{round_format} < %{time} kommer videre til næste runde'
+      #original_hash: 581709d
+      moves: '%{round_format} < %{moves} kommer videre til næste runde'
+      #original_hash: e9f0c92
+      points: '%{round_format} > %{points} kommer videre til næste runde'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -257,6 +257,8 @@ da:
     333fm: 1 time
     #original_hash: cc7d8bb
     333mbf: '10:00.00 per terning op til 60:00.00'
+    #original_hash: da39a3e
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: Verden
@@ -473,12 +475,20 @@ da:
         on_the_spot_registration: Tilmeldinger i konkurrencelokalet
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Deltagergebyret for tilmelding i konkurrencelokalet
+        #original_hash: 7e53b96
+        allow_registration_edits: Redigering af tilmeldinger
         #original_hash: efbdbab
         refund_policy_percent: Procent der vil blive tilbagebetalt
         #original_hash: b332299
         refund_policy_limit_date: Sidste frist for tilbagebetaling
+        #original_hash: 16cf9a4
+        waiting_list_deadline_date: Deadline for accepting competitors from the waiting list
+        #original_hash: 99a9169
+        event_change_deadline_date: Deadline for competitors to update their registered events
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Indgangsgebyr for tilskuere
+        #original_hash: bb16247
+        free_guest_entry_status: Vis tekst om at det er gratis for gæster
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Jeg vil gerne have at deltagerne skal aflevere deres terninger på et
@@ -685,6 +695,16 @@ da:
         article: Artikel
         #original_hash: 82dabd0
         multimedia: Multimedia
+    competition:
+      free_guest_entry_status:
+        #original_hash: 7e54323
+        unclear: >-
+          Vis ikke noget (du burde uddybe hvorfor i sektionen om tilmeldingskrav
+          nedenfor)
+        #original_hash: 694bce4
+        anyone: '"Alle tilskuere kan se med gratis"'
+        #original_hash: 762c509
+        restricted: '"Tilskuere er kun tilladte som ledsagere af en deltager"'
   simple_form:
     #original_hash: 5397e05
     'yes': Ja
@@ -735,7 +755,7 @@ da:
         #original_hash: 8a91e53
         pending_avatar: >-
           Efter at du har uploaded en ny avatar, bliver du nød til at vente på
-          at WCA Resultat Holdet accepterer den.
+          at WCA's Resultathold accepterer den.
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
@@ -760,11 +780,11 @@ da:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          Hvis du er Juniordelegeret, Seniordelegeret eller medlem af WRC eller
-          WQAC, så modtager du rapporter fra Delegerede allerede. Noter: Der går
-          op til en time før ændringen tager effekt.
+          If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or
+          Member of the WRC or the WQAC, you receive Delegate Reports by
+          default. Note: the change may take up to an hour to take effect.
         #original_hash: 0627e5c
         otp_attempt: >-
           Check your configured mobile application for a one-time password, or
@@ -873,6 +893,8 @@ da:
         on_the_spot_entry_fee_lowest_denomination: >-
           Hvis den bliver sat til 0, så vil en sætning blive vist, der siger at
           tilmelding i lokalet vil være gratis.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           For nu, er dette tal kun for information. Refunderinger skal stadig
@@ -882,12 +904,27 @@ da:
         refund_policy_limit_date: >-
           Datoen hvorefter at der ikke vil blive tilbagebetalt nogle
           deltagergebyrer.
-        #original_hash: 25a1324
+        #original_hash: 664db64
+        waiting_list_deadline_date: >-
+          The date when waitlisted registrants will no longer be accepted. If
+          you have a deadline for refunds, the deadline for being accepted
+          should not be before the deadline for refunds.
+        #original_hash: 75e6c1f
+        event_change_deadline_date: >-
+          Registered competitors have the right to update their registered
+          events until this time by contacting the organization team. This
+          deadline must not be set to a time before registration is set to
+          close. Leaving this field blank means that competitors may add an
+          event to their registered events up until that event is held. If you
+          have on the spot registration, this must be set to the same day as the
+          competition.
+        #original_hash: 0419547
         guests_entry_fee_lowest_denomination: >-
-          For nu er dette tal kun for information. Betaling for gæster kan ikke
-          blive håndteret gennem denne hjemmeside. Hvis det er sat til 0, så vil
-          en sætning blive tilføjet, der vil sige, at det er gratis for
-          tilskuere.
+          For now this number is informational only, guest fees cannot be
+          managed through this website. If this is set to 0, a sentence of your
+          choice will be displayed about the spectator policy.
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1021,6 +1058,8 @@ da:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1129,6 +1168,15 @@ da:
           'true': Tilmelding i lokalet vil være muligt
           #original_hash: 0f236df
           'false': Tilmelding i lokalet VIL IKKE være muligt
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Competitors may edit their registration until the deadline for
+            updating events
+          #original_hash: 2cbb80e
+          'false': >-
+            Competitors may NOT edit their registration once it has been
+            accepted
   mail_form:
     attributes:
       contact_form:
@@ -1394,10 +1442,12 @@ da:
       forum: Forum
       #original_hash: 3ad28c0
       teams: 'Hold, komitéer og råd'
-      #original_hash: a979ffc
+      #original_hash: 7981fb3
       education: Uddannelsesmaterialer
       #original_hash: a34b69f
       contact: Kontakt Information
+      #original_hash: 8e12c09
+      speedcubing_history: Speedcubing-historien
       #original_hash: 4fa8cc8
       tools: Værktøjer
       #original_hash: 83fce83
@@ -1453,7 +1503,7 @@ da:
       #original_hash: db34e41
       polls: Meningsmålinger
       #original_hash: d3a928c
-      results_team: Resultat holdet
+      results_team: WCA's Resultathold
       #original_hash: 4e7afeb
       results_admin: Admin
       #original_hash: f158a5a
@@ -1482,6 +1532,78 @@ da:
       manage_auth_app: Administrer autoriserede applikationer
       #original_hash: acac109
       media_submission: Media Submission
+  homepage:
+    #original_hash: 824d76b
+    learn_more: Se mere
+    #original_hash: d8f3ae6
+    title: Velkommen til World Cube Association
+    #original_hash: d133986
+    latest_news: Seneste nyheder
+    #original_hash: 06b01c4
+    announcements: Annonceringer
+    #original_hash: f0cbb3e
+    see_all_announcements: Se alle annonceringer
+    about_us:
+      #original_hash: 3ffb811
+      title: Om os
+      #original_hash: ed77e4c
+      text: >-
+        The World Cube Association governs competitions for mechanical puzzles
+        that are operated by twisting groups of pieces, commonly known as
+        'twisty puzzles'.
+    competitions:
+      #original_hash: db98a68
+      title: Konkurrencer
+      #original_hash: 0ac88bc
+      text_html: >-
+        Se mere om konkurrencer nær dig eller konkurrenceresultater. Hvis du er
+        til en konkurrence nu, kan du se resultaterne på %{wca_live_link}!
+    merchandise:
+      #original_hash: 698cfc8
+      title: Merchandise
+      #original_hash: 6403f2b
+      ad_new: Nyt
+      #original_hash: 9ad68ce
+      text_html: >-
+        Check out our newly launched official merchandise which includes a
+        selection of apparels ranging from T-shirts to Hoodies.
+      #original_hash: b0fc6c4
+      link_title: Link to shop
+    records:
+      #original_hash: e51c552
+      title: Rekorder
+      #original_hash: 3681af0
+      text: Se de nuværende og tidligere rekorder for alle WCA discipliner.
+    faq:
+      #original_hash: 03688ba
+      title: FAQ
+      #original_hash: 1e0206f
+      text: >-
+        Take a look at our list of Frequently Asked Questions if you need help
+        with anything. Many questions you have might have an answer there.
+    contact:
+      #original_hash: b37456c
+      title: Kontakt
+      #original_hash: 5c254b6
+      text_html: >-
+        If you wish to contact us, you can do so through our contact form. If
+        you have any questions about the different processes of the WCA, make
+        sure to go through our %{faq_link}!
+      #original_hash: d790b40
+      faq: Ofte stillede spørgsmål
+      #original_hash: 392f358
+      button: Take me to the WCA Contact form
+    support:
+      #original_hash: 610edba
+      title: Støt WCA
+      #original_hash: 6253f90
+      text: >-
+        The World Cube Association is a 501(c)(3) tax-exempt organization. As a
+        100% volunteer-run nonprofit, we welcome your donations to help us
+        further our vision of having more enjoyable competitions all over the
+        world.
+      #original_hash: 65c84ec
+      button: Learn more about how you can support the WCA
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1583,10 +1705,10 @@ da:
           timer.
         #original_hash: 2b93022
         not_accepted_html: 'Du har tilmeldt dig, men din tilmelding er ikke blevet accepteret.'
-        #original_hash: 3724e7c
+        #original_hash: d4087ee
         more_info_html: >-
-          Se <a href=%{competition_url}>konkurrencens hjemmeside</a> for mere
-          information og tilmeldingskravene.
+          Se <a href=%{competition_url}>konkurrencens WCA side</a> for mere
+          information om tilmeldingskravene
       results_presence_email:
         #original_hash: 7ce2558
         header: 'Resultaterne for %{competition} er nu på konkurrencesiden.'
@@ -1623,6 +1745,14 @@ da:
       #original_hash: f28bf87
       submit_value: Gør krav på dit WCA ID
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        Alle avatare er gemt på en anden server. Derfor kan det tage et par
+        minutter inden man kan se ændringer af miniaturebilleder.
+      #original_hash: cc1d51b
+      cdn_warning: >-
+        Please do not be confused if your thumbnail does not immediately update
+        after saving!
       #original_hash: 79f14eb
       current: 'Nuværende miniaturebillede:'
       #original_hash: b42ba27
@@ -1683,6 +1813,12 @@ da:
         spørg om at få dit WCA ID tilknyttet til din konto %{here}!
       #original_hash: 29e25b5
       have_wca_id_html: 'Dit WCA ID er %{link_id}.'
+      #original_hash: bf654e1
+      account_is_special: >-
+        Dette WCA ID er tilkoblet en konto med specielle roller i WCA (f.eks.
+        delegeret, arrangør, medlem af et hold) og kan derfor ikke fjernes. Du
+        kan sende en mail til WCA's Resultathold hvis du har brug for hjælp til
+        at rykke WCA ID'et til en anden konto.
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -1773,8 +1909,8 @@ da:
       #original_hash: 51650d2
       dob_incorrect_html: >-
         matcher ikke vores database. Hvis du er sikker på at du giver den
-        rigtige dato i den rigtige format (ÅÅÅÅ-MM-DD) så kontakt WCA Resultat
-        Holdet <a href="%{dob_form_path}">med denne formel</a>.
+        rigtige dato i den rigtige format (ÅÅÅÅ-MM-DD) så kontakt WCA's
+        Resultathold <a href="%{dob_form_path}">med denne formel</a>.
       #original_hash: c3ce070
       unique_html: >-
         er allerede brugt af %{used_name} med denne email adresse:
@@ -1810,18 +1946,18 @@ da:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Vi har ikke et køn tilknyttet til dette WCA ID. Email <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Resultat Holdet</a> for at løse det.
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA's
+        Resultathold</a> for at løse det.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Vi har ikke en nationalitet tilknyttet til dette WCA ID. Email <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Resultat Holdet</a> for at løse det.
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA's
+        Resultathold</a> for at løse det.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Vi har ikke et navn tilknyttet til dette WCA ID. Email <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Resultat Holdet</a> for at løse det.
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA's
+        Resultathold</a> for at løse det.
       #original_hash: d02c03b
       avatar_requires_wca_id: har brug for et WCA ID tildelt
       #original_hash: 8f785ea
@@ -1857,12 +1993,11 @@ da:
         WCA IDet %{link_id} er allerede tildelt til en anden konto. Hvis du tror
         det var en fejl så kontakt din lokale <a href='%{link_delegate}'
         target='_blank'>WCA Delegerede</a>.
-      #original_hash: d26bfdc
-      missing_dob_html: 'WCA ID %{link_id} har ikke en fødselsdag tilknyttet.'
-      #original_hash: 5be6803
-      contact_results_team_html: >-
-        Kontakt <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Resultat Holdet</a> for at løse det.
+      #original_hash: 498dc1e
+      missing_dob_html: >-
+        WCA ID'et %{link_id} har ikke nogen fødselsdag tilknyttet. Du kan
+        kontakte WCA's Resultathold gennem <a href="%{dob_form_path}">denne
+        formular</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} eksisterer ikke.'
   registrations:
@@ -1982,7 +2117,7 @@ da:
           #original_hash: eadfc0d
           accepted: Din tilmelding var ved en fejl blevet accepteret
           #original_hash: 2ac6d84
-          withdrawal: Du spurgte om en tilbagekaldelse
+          withdrawal: Du aflyste din tilmelding
         #original_hash: 8f7358f
         email_if_error: 'Hvis du tror det er en fejl, så send et svar til denne email.'
       deleted:
@@ -1999,9 +2134,11 @@ da:
             adgangsgebyret i forvejen, eller du mødte ikke kvalifikationstiderne
             for disciplinerne)
           #original_hash: 1e225f0
-          registrations_full: Deltagerbegrænsningen er nået og der er ikke flere ledige pladser
+          registrations_full: Deltagergrænsen er nået og der er ikke flere ledige pladser
           #original_hash: 0d4cce9
           multiple_registrations: Du tilmeldte dig to eller flere gange
+          #original_hash: 70b1e2c
+          competition_canceled: Konkurrence er blevet aflyst
     list:
       #original_hash: 8b7631c
       title: 'Tilmeldinger til %{comp}'
@@ -2037,6 +2174,8 @@ da:
         with_stripe: Betalt på
       #original_hash: ce53c71
       payment_requested_on: 'Betaling efterspurgt inden: %{date}'
+      #original_hash: f5b1b34
+      payment_completed_on: 'Betaling fuldendt den %{date}'
       #original_hash: b25928c
       total: Total
       #original_hash: df036fe
@@ -2247,6 +2386,10 @@ da:
       name_too_long: >-
         Konkurrencens navn er længere end 32 tegn. Vi ville foretrække hvis du
         lavede det kortere.
+      #original_hash: af27396
+      id_starts_with_lowercase: >-
+        The competition id starts with a lowercase letter. We prefer to have it
+        start with an uppercase.
       #original_hash: 1a20fae
       must_have_events: Tilføj mindst en event før du bekræfter konkurrencen.
       #original_hash: a3aea56
@@ -2254,6 +2397,30 @@ da:
         Sørg venligst for at konkurrencen har mindst en runde af hver disciplin
         og at tidsskemaet som du har oprettet indeholder alle runder, som du har
         angivet. inden du bekræfter konkurrencen.
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: >-
+        Please make sure that all non final rounds have advancement condition
+        specified.
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: >-
+        Round %{round_number} in %{event} has a cutoff greater than the time
+        limit, Please make sure the cutoff is less than the time limit.
+      #original_hash: c1580b1
+      cutoff_is_too_fast: >-
+        Round %{round_number} in %{event} has a cutoff less than 5 seconds.
+        Please make sure that it is correct.
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: >-
+        Round %{round_number} in %{event} has a cutoff more than 10 minutes.
+        Please make sure that it is correct.
+      #original_hash: af976ad
+      time_limit_is_too_fast: >-
+        Round %{round_number} in %{event} has a time limit less than 10 seconds.
+        Please make sure that it is correct.
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: >-
+        Round %{round_number} in %{event} has a time limit more than 10 minutes
+        in a fast event. Please make sure that it is correct.
       #original_hash: e390250
       create_success: Succesfuldt oprettet en ny konkurrence!
       #original_hash: ba067f0
@@ -2369,6 +2536,8 @@ da:
         zero: Arrangører
         one: Arrangør
         other: Arrangører
+      #original_hash: 53a9522
+      organization_team: Arrangørholdet
       #original_hash: 6afa61e
       delegate:
         zero: WCA Delegerede
@@ -2418,6 +2587,23 @@ da:
       no_refunds: >-
         Tilmeldingsgebyrer vil ikke blive tilbagebetalt under nogen
         omstændigheder.
+      #original_hash: b016d2f
+      waiting_list_deadline_html: >-
+        Tilmeldte på ventelisten kan senest blive accepteret
+        %{waiting_list_deadline}.
+      #original_hash: 14c5699
+      event_change_deadline_html: >-
+        Hvis du er en tilmeldt deltager kan du indtil %{event_change_deadline}
+        ændre disciplinerne i din tilmelding ved at kontakte arrangørholdet.
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: >-
+        Hvis du er en tilmeldt deltager kan du indtil %{event_change_deadline}
+        ændre disciplinerne i din tilmelding gennem %{register} fanen.
+      #original_hash: eff3594
+      event_change_deadline_default_html: >-
+        Alle bør tilmelde sig de discipliner som de ønsker at deltage i på
+        forhånd. Men, du kan tilføje discipliner til din tilmelding op til
+        runden af disciplinen er startet ved at tage fat i en arrangør.
       #original_hash: cf7be5d
       on_the_spot_registration_fee_html: >-
         Tilmeldinger i lokalet vil blive accepteret med et grundgebyr på
@@ -2430,8 +2616,11 @@ da:
         være tilmeldt på forhånd!
       #original_hash: 4df139d
       guests_pay: 'Det koster %{guests_base_fee} for tilskuere.'
-      #original_hash: b6c863e
-      guests_free: Det er gratis at være tilskuer til konkurrencen.
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: Enhver tilskuere kan se med gratis
+        #original_hash: f1e6aef
+        restricted: Tilskuere er kun tilladte som ledsagere af en deltager
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Konkurrencen er slut, klik %{link_here} for at vise tilmeldingskravene
@@ -2505,6 +2694,10 @@ da:
     index:
       #original_hash: db98a68
       title: Konkurrencer
+      #original_hash: f483b9c
+      disclaimer: >-
+        Hvis du leder efter konkurrencer i bestemte lande, så læg mærke til at
+        corona stadig kan have en indflydelse.
       #original_hash: 6a72085
       all_events: Alle
       #original_hash: 6d76b81
@@ -2623,11 +2816,11 @@ da:
       venue_details_html: >-
         Detaljer om lokalet (eksempel, På første sal lagt bagved, følg
         skiltene). %{md}
-      #original_hash: b727e58
+      #original_hash: 447814d
       contact_html: >-
-        Frivillig kontakt information. Hvis du ikke vil udfylde det, vil
-        arrangørenes emails blive vist offentligt. %{md}. Eksempel: [Tekst at
-        vise](mailto:some@email.com)
+        Optional contact information. If you do not fill this in, contact
+        inquiries will be submitted through a form without revealing organizers'
+        emails. %{md}. Example: [Text to display](mailto:some@email.com)
       #original_hash: c5497bc
       events: Discipliner
       #original_hash: cafc153
@@ -2714,6 +2907,24 @@ da:
       span_too_many_days: 'Konkurrencer kan ikke vare mere end %{max_days} dage.'
       #original_hash: cdcd288
       invalid_currency_code: Valgte valuta kode er ikke gyldig
+      #original_hash: 902a278
+      advancement_condition_must_be_present_for_all_non_final_rounds: must have an advancement condition to all non final rounds.
+      #original_hash: da17c99
+      registration_period_after_start: Registration period cannot be after start date.
+      #original_hash: f6b244b
+      waiting_list_deadline_before_registration_close: Wailting list deadline cannot be before registration close date.
+      #original_hash: ececa98
+      waiting_list_deadline_before_refund_date: Waiting list deadline cannot be before limit date for refunds.
+      #original_hash: 44d9902
+      waiting_list_deadline_after_start: Waiting list deadline must be before start date.
+      #original_hash: c3eb1be
+      event_change_deadline_before_registration_close: Deadline for updating events cannot be before registration close date.
+      #original_hash: bc1ca0f
+      event_change_deadline_after_end_date: Deadline for updating events cannot be after the competition.
+      #original_hash: a2e4fc9
+      event_change_deadline_with_ots: >-
+        Deadline for updating events must be during the competition if on the
+        spot registrations are accepted.
     new:
       #original_hash: 1208df7
       create_competition: Opret konkurrence
@@ -2771,10 +2982,20 @@ da:
       before: Før
       #original_hash: 405906c
       after: Efter
+      #original_hash: e1978a9
+      starts_on: starter den
+      #original_hash: 964aedc
+      ends_on: slutter den
       #original_hash: 24d948e
       limit: Grænse
       #original_hash: 855bd26
       competitors: Deltagere
+      #original_hash: c5497bc
+      events: Discipliner
+      #original_hash: 50cb854
+      show_events: Vis discipliner
+      #original_hash: 0df66f7
+      hide_events: Skjul discipliner
     #original_hash: 06b01c4
     announcements: Annonceringer
     #original_hash: a2b80b0
@@ -2922,6 +3143,8 @@ da:
         register: Tilmelding
         #original_hash: 855bd26
         competitors: Deltagere
+        #original_hash: c4622c3
+        scrambles: Blandinger
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA profil
@@ -2931,6 +3154,18 @@ da:
       round: Runde
       #original_hash: 709a232
       name: Navn
+      rank:
+        #original_hash: d4840ff
+        national: National Rangering
+        #original_hash: ca3ff98
+        continent: Kontinental Rangering
+        #original_hash: f6bcce7
+        world: Verdens Rangering
+    scrambles_table:
+      #original_hash: 171a060
+      group: Gruppe
+      #original_hash: b7126cd
+      scramble: Blanding
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3033,6 +3268,15 @@ da:
         history: Historie
         #original_hash: e58bcf8
         mixed_history: Blandet historie
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: Køn
+        #original_hash: 6a72085
+        gender_all: Alle
+        #original_hash: 3f3a489
+        male: Mand
+        #original_hash: b7c17e9
+        female: Kvinde
     table_elements:
       #original_hash: 709a232
       name: Navn
@@ -3429,16 +3673,17 @@ da:
     spirit_footer: WCA Ånden
     #original_hash: c1781ee
     our_goals_title: Vores mål
-    #original_hash: caf6bf2
+    #original_hash: 743ca74
     our_goals_content_html: >-
-      <p>World Cube Association vil give muligheder for medlemskab og lederskab
-      til unge personer rundt i verden gennem øget tilgængelighed af vores
-      'twisty puzzle' konkurrencer. Vi mener at erfaringer fra konkurrencer og
-      inden for vores samfund skaber muligheder for at vokse, som mennesker, for
-      unger personer involveret, og at introducere konkurrencer til nye grupper
-      af personer vil styrke vores samfund. Et dokument der indeholder WCA
-      Bestyrelsens vision og strategi for WCA kan du se <a
-      href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">her</a>.</p>
+      <p>The World Cube Association wants to bring opportunities for community
+      membership and leadership to young people around the world through
+      increasing the accessibility of our 'twisty puzzle' competitions. We
+      believe that experiences at competitions and within our community create
+      growth opportunities for the young people involved and that introducing
+      puzzle events to new groups of people allows for our overall community to
+      strengthen. A document containing the Board's Vision and Strategy for the
+      WCA can be found <a
+      href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">here</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Hvad er det næste for WCA?
     #original_hash: a08c67f
@@ -3459,11 +3704,10 @@ da:
       lokale og andre nødvendigheder.</p>
     #original_hash: 1aa5344
     contributing_title: Donationer
-    #original_hash: e64beb7
+    #original_hash: 538a82f
     contributing_content_html: >-
-      Du kan donere med kreditkort over Guidestar <a
-      href="https://www.nfggive.com/guidestar/82-3825954">her</a>. Hvis du
-      foretrækker kan du skrive en tjek, som du kan skrive til:
+      You can donate by credit card using Guidestar %{here_credit}, or by Paypal
+      %{here_paypal}. If you prefer to write a check, you can write to:
     #original_hash: 2af9b71
     tax_deductible_note: Du bedes selv undersøge om dette kan trækkes fra i skat.
     #original_hash: 6026d35
@@ -3482,6 +3726,8 @@ da:
         verden.
       #original_hash: 24c87db
       donate_credit: Donationer med kreditkort
+      #original_hash: 0e5a9c3
+      donate_paypal: Doner gennem Paypal
       #original_hash: 96d77f3
       donate_other: Andre måder at donere
     structure:
@@ -3637,6 +3883,9 @@ da:
       banned:
         #original_hash: d30e2e5
         name: Banlyste Deltagere
+      wct_china:
+        #original_hash: ed5b65a
+        name: WCT Kina
       #original_hash: f8c3f3c
       operations_html: 'Dag til dag arbejde er gjort af WCA''s %{committees_and_teams}.'
       #original_hash: 0e7a036
@@ -3644,6 +3893,9 @@ da:
       probation:
         #original_hash: 1dd6e3b
         name: Delegerede på Prøvetid
+      wst_admin:
+        #original_hash: d4112d2
+        name: Software administratorer
       #original_hash: 7e849d2
       delegates_html: >-
         <strong>WCA Delegerede</strong> har rollen som er beskrevet i WCA's
@@ -3668,6 +3920,9 @@ da:
       members_html: >-
         Alle deltagere bliver automatisk <strong>medlem</strong> af WCA efter
         deres første konkurrence.
+  speedcubing_history:
+    #original_hash: 431e667
+    title: Historien om speedcubing samfundet & WCA
   documents:
     #original_hash: 687c828
     title: Dokumenter
@@ -3683,17 +3938,29 @@ da:
     policies: WCA Politikker
     #original_hash: 91ac873
     codeofethics: Etiske Regler
+    #original_hash: 2643980
+    codeofconduct: Adfærdsprincipper
+    #original_hash: 4f05e8f
+    finances: Økonomi
+    #original_hash: d1b1406
+    vision_and_strategy: Vision og strategi
   education:
-    #original_hash: 41701c2
-    title: WCA's Uddannelsesmaterialer
-    #original_hash: aa562a7
+    #original_hash: 746e863
+    title: WCA's Uddannelsesmateriale
+    #original_hash: 081d65d
     description: >-
-      The WQAC and WMT has published several documents for the community, you
-      can download them below.
+      WQAC har udgivet adskillige dokumenter for samfundet som du kan downloade
+      nedenfor.
     #original_hash: d0a3812
     competitor_tutorial: Deltager introduktion
-    #original_hash: 815938f
-    competition_material: Konkurrencemateriale (diplomer)
+    #original_hash: 9561bfc
+    judge_tutorial: Hvordan man dømmer (rettet mod nye deltagere)
+    #original_hash: 12e47a3
+    competition_templates: Skabeloner til konkurrencer
+    #original_hash: 5ca0558
+    certificates: WCT's diplomskabeloner
+    #original_hash: f580987
+    orga_guidelines: Arrangørretningslinjer
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegerede
@@ -3776,6 +4043,9 @@ da:
       create_success: >-
         Ansøgningen blev indsendt! Tjek din email og vent på at WCA Bestyrelsen
         vurderer den.
+    delete:
+      #original_hash: 6588652
+      confirm_delete: Are you sure you want to delete this Regional Organization request?
   contact:
     #original_hash: a34b69f
     title: Kontakt information
@@ -4162,7 +4432,11 @@ da:
       posts: Opslag
       #original_hash: 9d7ea9c
       regulations_and_guidelines: Regelsæt og Retningslinjer
+      #original_hash: db683b3
+      search_for: 'Søg efter <b>%{search_string}</b>'
       not_found:
+        #original_hash: 658e79f
+        generic: Søgningen gav ingen resultater
         #original_hash: b8a7006
         competitions: Ingen konkurrencer fundet for
         #original_hash: 99d4290
@@ -4261,9 +4535,67 @@ da:
       <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">instruktionerne
       på GitHub for oversættelser</a>.
+  full_organizer_guidelines:
+    #original_hash: 5d602df
+    description: >-
+      Welcome to the WQAC’s collection of Organizer Guidelines. If you’re
+      considering being an organizer then it is highly recommended that you read
+      these documents. They have been divided into essential and highly
+      recommended documents. Make sure you are familiar with the information
+      given as this will allow you to run a high-quality and enjoyable
+      competition!
+    #original_hash: e6f7d36
+    disclaimer_html: >-
+      <strong>Disclaimer</strong>: The WCA does not organize competitions. As an
+      organizer of a WCA sanctioned competition you <strong>must not</strong>
+      sign anything on behalf of the WCA. You should try reaching out to a
+      relevant regional or national cubing association who do organize or assist
+      with organizing competitions.
+    essential:
+      #original_hash: 44bd0ba
+      description: Essential documents
+      #original_hash: 1cf87ad
+      finding-venue: Finding a venue
+      #original_hash: 3ce0d9c
+      orga-team-delegate: Creating your organization team and approaching a Delegate
+      #original_hash: d3c693b
+      budget: Budgeting a competition
+      #original_hash: b1429a7
+      schedule: Scheduling
+      #original_hash: beea57d
+      checklist: Competition checklist
+      #original_hash: 9defcf1
+      registration: Handling registration
+      #original_hash: e298a56
+      venue-setup: Venue setup
+      #original_hash: 2b6a5dd
+      work-during-comp: Organizer work during the competition
+    recommended:
+      #original_hash: 6b843f3
+      title: Recommended documents
+      #original_hash: bfbd4bb
+      staff: Assigning staff
+      #original_hash: 4735583
+      emails: Emails
+      #original_hash: 8e7ca09
+      running-systems: Running and judging systems
+      #original_hash: 2b31c89
+      new-competitors: Attitude to new competitors
+      #original_hash: 3408054
+      enhancing-experience: Enhancing competitor and staff experience
+      #original_hash: 2345aaa
+      reflection: Organizer reflection
   organizer_guidelines:
     #original_hash: 7486ac4
     title: WCA Konkurrence Arrangør Retningslinjerne
+    paragraph0:
+      #original_hash: ee36904
+      title: Korte version
+      #original_hash: 60d9532
+      content: >-
+        Below you can find a short summary of key points for getting an idea of
+        how to organize a competition. If you think this is something for you,
+        please take a look at the documents above!
     paragraph1:
       #original_hash: e5f5329
       title: Hvordan arrangere man en konkurrence
@@ -4290,11 +4622,16 @@ da:
     paragraph3:
       #original_hash: 00d3bf8
       title: Sidste frist for at annoncere konkurrencen
-      #original_hash: 3613823
+      #original_hash: 66bf437
       content_html: >-
-        Konkurrencer skal være annonceret mindst 28 dage før dens start (se <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>kravene
-        for en konkurrence</a>).
+        The competition must be announced at least 28 days before the start of
+        the competition (see <a
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
+        Requirements</a>). However, this is rarely enough time. You should
+        consider everything that will go into organizing your competition, and
+        give yourself enough time to prepare. Also, the WCAT will need time to
+        review your competition before it is announced. Consult with your
+        delegate if you are unsure about how much time will be needed.
     paragraph4:
       #original_hash: b6dca56
       title: Nærhedpolitik
@@ -4312,10 +4649,6 @@ da:
         '1': De to konkurrencer har ikke discipliner tilfælles.
         #original_hash: f7bacc5
         '2': De to konkurrencer finder sted i to forskellige lande.
-        #original_hash: 7b2c099
-        '3': >-
-          At der i de sidste 12 måneder, har været færre end 16 konkurrencer, i
-          det område 100 km rundt om konkurrencen.
       #original_hash: 5c5cf04
       content2: >-
         "3x3x3 i Færreste Træk samtidige konkurrencer" er WCA konkurrencer som
@@ -4586,3 +4919,8 @@ da:
         content? <a
         href="https://www.worldcubeassociation.org/contact/website">Let us
         know</a>!
+  footer:
+    #original_hash: cf01481
+    privacy: Privatliv
+    #original_hash: 4c4a2e8
+    disclaimer: Disclaimer
