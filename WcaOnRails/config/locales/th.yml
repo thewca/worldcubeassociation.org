@@ -764,11 +764,11 @@ th:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          ถ้าคุณเป็น Junior Delegate, Senior Delegate, หรือ สมาชิกของ WRC หรือ
-          WQAC คุณจะได้รับ Delegate Reports เป็นค่าตั้งต้น หมายเหตุ:
-          การแก้ไขอาจใช้เวลาประมาณ 1 ชั่วโมงเพื่อให้มีผล
+          ถ้าคุณเป็น Trainee Delegate, Junior Delegate, Senior Delegate, หรือ
+          สมาชิกของ WRC หรือ WQAC คุณจะได้รับ Delegate Reports เป็นค่าตั้งต้น
+          หมายเหตุ: การแก้ไขอาจใช้เวลาประมาณ 1 ชั่วโมงเพื่อให้มีผล
         #original_hash: 0627e5c
         otp_attempt: >-
           ตรวจสอบโทรศัพท์มือถือของคุณสำหรับ one-time password หรือ ใส่ recovery
@@ -1029,6 +1029,8 @@ th:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1677,6 +1679,12 @@ th:
       #original_hash: f28bf87
       submit_value: ขอรับ WCA ID
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        รูปประจำตัวทั้งหมดจะถูกเก็บไว้ในคลาวด์ ดังนั้นการเปลี่ยนแปลงใด ๆ
+        กับภาพอาจใช้เวลาหลายนาทีก่อนที่รูปจะแสดงได้ถูกต้อง
+      #original_hash: cc1d51b
+      cdn_warning: ไม่ต้องตกใจหากภาพของคุณไม่อัปเดตทันทีหลังจากทำการบันทึก!
       #original_hash: 79f14eb
       current: 'ภาพย่อปัจจุบัน:'
       #original_hash: b42ba27
@@ -2453,6 +2461,11 @@ th:
         หากคุณเป็นผู้สมัครการแข่งขัน
         คุณสามารถเปลี่ยนประเภทการแข่งขันได้จนกระทั่ง %{event_change_deadline}
         โดยติดต่อทีมงานจัดการแข่งขัน
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: >-
+        หากคุณเป็นผู้เข้าแข่งขันที่สมัครการแข่งขันแล้ว
+        คูณสามารถแก้ไขประเภทการแข่งกันได้จนถึง %{event_change_deadline} ได้ที่
+        %{register}
       #original_hash: eff3594
       event_change_deadline_default_html: >-
         เราแนะนำให้ทุกท่านสมัครประเภทที่คุณต้องการแข่งขันผ่านการสมัครออนไลน์
@@ -3484,7 +3497,7 @@ th:
     spirit_footer: จิตวิญญาณของ WCA
     #original_hash: c1781ee
     our_goals_title: เป้าหมายของเรา
-    #original_hash: caf6bf2
+    #original_hash: 743ca74
     our_goals_content_html: >-
       <p>สมาคมลูกบากศ์โลก
       ต้องการที่จะนำโอกาสในการเป็นสมาชิกชุมชนและความเป็นผู้นำให้กับคนหนุ่มสาวทั่วโลกด้วยการเพิ่มการเข้าถึงการแข่งขัน
@@ -3749,6 +3762,8 @@ th:
     codeofconduct: จรรยาบรรณ
     #original_hash: 4f05e8f
     finances: การเงิน
+    #original_hash: d1b1406
+    vision_and_strategy: วิสัยทัศน์และกลยุทธ์
   education:
     #original_hash: 746e863
     title: เอกสารการศึกษาของ WCA
