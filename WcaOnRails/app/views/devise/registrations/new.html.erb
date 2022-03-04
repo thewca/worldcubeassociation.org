@@ -49,15 +49,10 @@
 
           </div>
         </div>
-
         <%= f.hidden_field :claiming_wca_id %>
-        <div class="field">
-          <%= recaptcha_tags %>
-        </div>
-        <div>
-          <br>
-          <%= f.submit t('.sign_up'), class: "btn btn-primary", disabled: true %>
-        </div>
+        <%= recaptcha_tags %>
+        <br>
+        <%= f.submit t('.sign_up'), class: "btn btn-primary", disabled: true %>
       <% end %>
     </div>
   </div>
