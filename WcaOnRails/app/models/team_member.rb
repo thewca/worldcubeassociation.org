@@ -8,6 +8,7 @@ class TeamMember < ApplicationRecord
   scope :in_official_team, -> { where(team_id: Team.all_official.map(&:id)) }
   scope :leader, -> { where(team_leader: true) }
   scope :senior_member, -> { where(team_senior_member: true) }
+  scope :current_leader, -> { self.current.merge(self.leader) }
 
   attr_accessor :current_user
 

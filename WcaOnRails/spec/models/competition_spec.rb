@@ -431,6 +431,12 @@ RSpec.describe Competition do
       expect(competition.warnings_for(nil)[:id]).to eq I18n.t('competitions.messages.id_starts_with_lowercase')
     end
 
+    it "do not warn if competition id starts with a number" do
+      competition = FactoryBot.build :competition, id: "1stNumberedComp2021"
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:id]).to eq nil
+    end
+
     it "warns if advancement condition isn't present for a non final round" do
       FactoryBot.create :round, competition: competition, event_id: "333", number: 1
       FactoryBot.create :round, competition: competition, event_id: "333", number: 2

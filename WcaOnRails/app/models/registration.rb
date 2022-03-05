@@ -45,14 +45,18 @@ class Registration < ApplicationRecord
     !accepted? && !deleted?
   end
 
-  def checked_status
-    if accepted?
+  def self.status_from_timestamp(accepted_at, deleted_at)
+    if !accepted_at.nil? && deleted_at.nil?
       :accepted
-    elsif pending?
+    elsif accepted_at.nil? && deleted_at.nil?
       :pending
     else
       :deleted
     end
+  end
+
+  def checked_status
+    Registration.status_from_timestamp(accepted_at, deleted_at)
   end
 
   def new_or_deleted?

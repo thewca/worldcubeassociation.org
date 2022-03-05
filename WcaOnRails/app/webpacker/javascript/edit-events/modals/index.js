@@ -20,12 +20,20 @@ let RoundAttributeComponents = {
   advancementCondition: AdvancementConditionComponents,
 };
 
-function findRoundsSharingTimeLimitWithRound(wcifEvents, wcifRound) {
-  return _.compact(_.flatMap(wcifEvents, 'rounds')).filter(otherWcifRound =>
-    otherWcifRound !== wcifRound
-    && otherWcifRound.timeLimit
-    && otherWcifRound.timeLimit.cumulativeRoundIds.includes(wcifRound.id)
-  );
+/**
+ * Finds the cumulativeRoundIds of each event in wcifEvents and removes any
+ * which are found in wcifRounds. Note that it modifies wicfEvents in place.
+ *
+ * @param {collection} wcifEvents Will be modified in place.
+ * @param {Array}      wcifRounds Rounds to be removed from all cumulativeRoundIds.
+ */
+export function removeRoundsFromSharedTimeLimits(wcifEvents, wcifRounds) {
+  _.compact(_.flatMap(wcifEvents, 'rounds')).forEach(otherWcifRound => {
+    // fmc and mbf don't have timelimits
+    if (otherWcifRound.timeLimit) {
+      _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, ...wcifRounds)
+    }
+  });
 }
 
 function findRounds(wcifEvents, roundIds) {
@@ -66,18 +74,27 @@ class EditRoundAttribute extends React.Component {
     // If you set a time limit for 3x3x3 round 1 shared with 2x2x2 round 1, then we need
     // to make sure the same timeLimit gets set for both of the rounds.
     if(this.props.attribute == "timeLimit") {
-      let timeLimit = this.state.value;
+      // the new time limit for this round
+      // we just want timeLimit = this.state.value, however the ids are required in the
+      // second step but modified in the first step; so make a copy of them
+      const centiseconds = this.state.value.centiseconds;
+      const cumulativeRoundIds = [...this.state.value.cumulativeRoundIds];
+      const timeLimit = { centiseconds, cumulativeRoundIds };
 
-      // First, remove this round from all other rounds that previously shared
-      // a time limit with this round.
-      findRoundsSharingTimeLimitWithRound(this.props.wcifEvents, wcifRound).forEach(otherWcifRound => {
-        _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, wcifRound.id);
-      });
+      // First, remove all rounds which appear in cumulativeRoundIds from everywhere.
+      // (although, this only affects those which previously shared a time limit with this round)
+      removeRoundsFromSharedTimeLimits(
+        this.props.wcifEvents,
+        // if time limit is changed to 'per solve', cumulativeRoundIds will be empty,
+        // but we still (potentially) need to remove the round from other cumulative time limits
+        // which is why it (wcifRound.id) is added on the end here
+        [...cumulativeRoundIds, wcifRound.id]
+      );
 
       // Second, clobber the time limits for all rounds that this round now shares a time limit with.
       if(timeLimit) {
-        findRounds(this.props.wcifEvents, timeLimit.cumulativeRoundIds).forEach(wcifRound => {
-          wcifRound.timeLimit = timeLimit;
+        findRounds(this.props.wcifEvents, cumulativeRoundIds).forEach(otherWcifRound => {
+          otherWcifRound.timeLimit = timeLimit;
         });
       }
     }

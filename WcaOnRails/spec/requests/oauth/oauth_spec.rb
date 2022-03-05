@@ -23,7 +23,9 @@ RSpec.describe "oauth api" do
   end
 
   it 'can authenticate with grant_type password' do
-    post oauth_token_path, params: { grant_type: "password", username: user.email, password: user.password, scope: "public email" }
+    oauth_app = FactoryBot.create :oauth_application
+
+    post oauth_token_path, params: { grant_type: "password", client_id: oauth_app.uid, client_secret: oauth_app.secret, username: user.email, password: user.password, scope: "public email" }
     expect(response).to be_successful
     json = JSON.parse(response.body)
     expect(json['error']).to eq(nil)

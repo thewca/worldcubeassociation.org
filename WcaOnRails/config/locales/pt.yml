@@ -473,6 +473,8 @@ pt:
         on_the_spot_registration: Registos no local da competição
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Taxa de registo base para inscrições no local da competição
+        #original_hash: 7e53b96
+        allow_registration_edits: Edições de registos
         #original_hash: efbdbab
         refund_policy_percent: Percentagem a ser reembolsado
         #original_hash: b332299
@@ -780,11 +782,11 @@ pt:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          Se for Delegado Júnior, Delegado Sénior ou membro do WRC ou do WQAC,
-          recebe Relatórios de Delegados por defeito. Nota: a alteração pode
-          levar até uma hora a tomar efeito.
+          Se for Delegado em Treino, Delegado Júnior, Delegado Sénior ou membro
+          do WRC ou do WQAC, recebe Relatórios de Delegados por defeito. Nota: a
+          alteração pode levar até uma hora a tomar efeito.
         #original_hash: 0627e5c
         otp_attempt: >-
           Verifique a aplicação móvel configurada para uma password ou insira um
@@ -895,6 +897,8 @@ pt:
         on_the_spot_entry_fee_lowest_denomination: >-
           Se isto for colocado a 0, irá aparecer uma frase dizendo que registos
           no local serão aceites gratuitamente.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Por agora este número é apenas informativo, reembolsos terão que ser
@@ -1063,6 +1067,8 @@ pt:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1169,6 +1175,13 @@ pt:
           'true': Registos no local serão aceites
           #original_hash: 0f236df
           'false': Registos no local NÃO serão aceites
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Competidores podem editar o seu registo até à data limite para
+            atualizar modalidades
+          #original_hash: 2cbb80e
+          'false': Competidores NÃO podem editar o seu registo após ter sido aceite
   mail_form:
     attributes:
       contact_form:
@@ -1554,6 +1567,17 @@ pt:
       text_html: >-
         Veja resultados ou competições perto de si. Está numa competição agora e
         quer ver os resultados? Veja em %{wca_live_link}!
+    merchandise:
+      #original_hash: 698cfc8
+      title: Merchandise
+      #original_hash: 6403f2b
+      ad_new: Novo
+      #original_hash: 9ad68ce
+      text_html: >-
+        Veja o nosso merchandise oficial recém-lançado, que inclui uma seleção
+        de vestuário que vão de T-shirts a Camisolas.
+      #original_hash: b0fc6c4
+      link_title: Link para loja
     records:
       #original_hash: e51c552
       title: Recordes
@@ -1729,6 +1753,15 @@ pt:
       #original_hash: f28bf87
       submit_value: Associar um ID da WCA
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        Todas as imagens de avatar são armazenadas na Nuvem, por isso qualquer
+        alteração à miniatura pode demorar vários minutos a ser apresentada
+        corretamente.
+      #original_hash: cc1d51b
+      cdn_warning: >-
+        Por favor não se confunda se a sua imagem miniatura não for atualizada
+        imediatamente após gravar!
       #original_hash: 79f14eb
       current: 'Miniatura atual:'
       #original_hash: b42ba27
@@ -2569,6 +2602,10 @@ pt:
         Se for um competidor registado, pode alterar os eventos a que está
         inscrito até %{event_change_deadline} contactando a equipa de
         organização.
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: >-
+        Se é um competidor registado, pode alterar as modalidades a que se
+        regista até %{event_change_deadline} na aba %{register}
       #original_hash: eff3594
       event_change_deadline_default_html: >-
         Encorajamos todos a se inscreverem nos eventos em que desejam competir
@@ -2664,9 +2701,9 @@ pt:
     index:
       #original_hash: db98a68
       title: Competições
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
-        Note que, devido à pandemia COVID-19, muitos países não podem ter
+        Note que, devido à pandemia COVID-19, alguns países não podem ter
         competições.
       #original_hash: 6a72085
       all_events: Todos
@@ -3643,7 +3680,7 @@ pt:
     spirit_footer: Espírito da WCA
     #original_hash: c1781ee
     our_goals_title: Os nossos objetivos
-    #original_hash: caf6bf2
+    #original_hash: 743ca74
     our_goals_content_html: >-
       <p>A World Cube Association quer trazer oportunidades de participação da
       comunidade e de liderança para jovens de todo o mundo, através do aumento
@@ -3653,7 +3690,7 @@ pt:
       de eventos de quebra-cabeças em novos grupos de pessoas permite que nossa
       comunidade em geral se fortaleça. Um documento contendo a Visão e
       Estratégia do Conselho da WCA pode ser encontrado <a
-      href="https://www.worldcubeassociation.org/files/WCA_Vision_and_Strategy.pdf">aqui</a>.</p>
+      href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aqui</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: O que vem a seguir para a WCA?
     #original_hash: a08c67f
@@ -3928,6 +3965,8 @@ pt:
     codeofconduct: Código de Conduta
     #original_hash: 4f05e8f
     finances: Finanças
+    #original_hash: d1b1406
+    vision_and_strategy: Visão e Estratégia
   education:
     #original_hash: 746e863
     title: Recursos Educativos da WCA

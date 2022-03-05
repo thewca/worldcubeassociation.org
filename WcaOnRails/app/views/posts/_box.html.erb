@@ -1,11 +1,27 @@
 <div class="ui card">
   <div class="content">
-    <h3 class="center aligned header"><%= title %></h3>
+    <h3 class="center aligned header">
+      <%= title %>
+      <% if local_assigns.fetch(:blinking_new, false) %>
+        <sup class="red-footnote advertisement-blink"><%= t('homepage.merchandise.ad_new').upcase %></sup>
+      <% end %>
+    </h3>
     <div class="center aligned description"><%= yield %></div>
   </div>
   <div class="extra content">
     <div class="center aligned">
-      <%= link_to(t('homepage.learn_more'), path, class: "ui button primary") %>
+      <% link_title = local_assigns.fetch(:link_title, t('homepage.learn_more')) %>
+      <%= link_to(link_title, path, class: "ui button primary") %>
     </div>
   </div>
 </div>
+<style>
+  h3 {
+    position: relative;
+  }
+
+  sup {
+    position: absolute;
+    top: 5px;
+  }
+</style>

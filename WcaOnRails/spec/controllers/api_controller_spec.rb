@@ -264,7 +264,7 @@ RSpec.describe Api::V0::ApiController do
       get :scramble_program
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["current"]["name"]).to eq "TNoodle-WCA-1.1.1"
+      expect(json["current"]["name"]).to eq "TNoodle-WCA-1.1.2"
       # the actual key resides in regulations-data, so in the test environment it will simply prompt "false"
       expect(json["publicKeyBytes"]).to eq false
     end
