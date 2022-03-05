@@ -372,11 +372,7 @@ class CompetitionsController < ApplicationController
     }
   end
 
-  def currency_convert
-    if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < Time.now - 1.days
-      Money.default_bank.update_rates
-    end
-
+  def currency_convert    
     converted = Money.new(params[:value], params[:from_currency]).exchange_to(params[:to_currency])
     render json: {
       formatted: converted.format,
