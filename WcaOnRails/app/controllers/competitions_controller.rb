@@ -372,7 +372,7 @@ class CompetitionsController < ApplicationController
     }
   end
 
-  def currency_convert    
+  def currency_convert
     converted = Money.new(params[:value], params[:from_currency]).exchange_to(params[:to_currency])
     render json: {
       formatted: converted.format,
