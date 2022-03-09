@@ -793,11 +793,11 @@ ru:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          Если вы — Младший Делегат, Старший Делегат или член WRC или WQAC, вы
-          будете получать отчёты Делегатов по умолчанию. Примечание: изменение
-          вступит в силу в течение часа.
+          Если вы — Делегат-стажёр, Младший Делегат, Старший Делегат или член
+          WRC или WQAC, вы будете получать отчёты Делегатов по умолчанию.
+          Примечание: изменение вступит в силу в течение часа.
         #original_hash: 0627e5c
         otp_attempt: >-
           Откройте настроенное приложение, чтобы получить одноразовый пароль,
@@ -1078,6 +1078,8 @@ ru:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1470,7 +1472,7 @@ ru:
       #original_hash: cf1d2c9
       forum: Форум
       #original_hash: 3ad28c0
-      teams: 'Команды, Комитеты и Консультативный Совет'
+      teams: 'Команды, Комитеты и Советы'
       #original_hash: 7981fb3
       education: Обучающие ресурсы
       #original_hash: a34b69f
@@ -1769,6 +1771,14 @@ ru:
       #original_hash: f28bf87
       submit_value: Затребовать WCA ID
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        Все аватары хранятся в облачном сервисе, поэтому изменения в миниатюрах
+        могут отобразиться через несколько минут.
+      #original_hash: cc1d51b
+      cdn_warning: >-
+        Пожалуйста, не переживайте, если миниатюра вашего аватара не изменилась
+        сразу после сохранения!
       #original_hash: 79f14eb
       current: 'Миниатюра аватарки:'
       #original_hash: b42ba27
@@ -2455,7 +2465,7 @@ ru:
       announced: Соревнование успешно анонсировано!
       #original_hash: a582c89
       cancelled: >-
-        Эти соревнования были отменены. Проверьте вкладку «Информация», чтобы
+        Эти соревнования были отменены. Проверьте раздел «Информация», чтобы
         узнать больше.
       #original_hash: b4aa5ee
       cancel_success: Соревнования успешно отменены!
@@ -3740,7 +3750,7 @@ ru:
       donate_other: Другие способы внести пожертвование
     structure:
       #original_hash: 0d62207
-      teams_committees_councils: 'WCA Команды, Комитеты и Консультативный Совет'
+      teams_committees_councils: 'Команды, Комитеты и Советы WCA'
       #original_hash: 9482c5d
       title: Структура
       board:
