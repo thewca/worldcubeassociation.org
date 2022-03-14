@@ -69,7 +69,7 @@ The database export consists of these tables:
 | Results                                 | WCA results per competition+event+round+person     |
 | RanksSingle                             | Best single result per competitor+event and ranks  |
 | RanksAverage                            | Best average result per competitor+event and ranks |
-| Rounds                                  | The round types (first, final, etc)                |
+| RoundTypes                              | The round types (first, final, etc)                |
 | Formats                                 | The round formats (best of 3, average of 5, etc)   |
 | Countries                               | Countries                                          |
 | Continents                              | Continents                                         |
