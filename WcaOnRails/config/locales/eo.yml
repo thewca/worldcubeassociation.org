@@ -777,11 +777,11 @@ eo:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          Se vi estas Debutanta Delegito, Ĉefa Delegito aŭ Membro de la WRC aŭ
-          WQAC, vi defaŭlte ricevas Delegitraportojn. Noto: la ŝanĝo povas preni
-          ĝis unu horo antaŭ ol esti efektiva.
+          Se vi estas Trejnanta Delegito, Debutanta Delegito, Ĉefa Delegito aŭ
+          Membro de la WRC aŭ WQAC, vi defaŭlte ricevas Delegitraportojn. Noto:
+          la ŝanĝo povas preni ĝis unu horo antaŭ ol esti efektiva.
         #original_hash: 0627e5c
         otp_attempt: >-
           Kontrolu vian konfigurintan poŝtelefonan apon por unufoja pasvorto, aŭ
@@ -839,11 +839,16 @@ eo:
         external_registration_page: >-
           La paĝo kie la konkursantoj povas registriĝi por la konkurso. Ĝi devas
           esti valida reteja adreso (http(s)).
-        #original_hash: 784879d
+        #original_hash: a6f6562
         base_entry_fee_lowest_denomination: >-
           La baza registriĝkosto por la konkurso. Se uzata, ĝi videblos en la
           paĝo pri konkursinformado kaj en la registriĝpaĝo. Se vi indikas "0",
           aperos frazo por diri ke registriĝi estas senpaga.
+          <br><br><b>Malgarantio: La sekva takso de Kotizoj de WCA estas nur
+          proksimigo bazita sur aktualaj kurzoj kaj neniel estas leĝe deviga por
+          la pago de Kotizoj.</b><br>Alklaku "Ĝisdatigi Konkurson" post kiam vi
+          ŝanĝis valutkodon por sinkronigi ĝin kun la takso. Se ne estas
+          disponeblaj kurzoj por la elektita valuto, nenio estos montrata.
         #original_hash: 9735ddf
         currency_code: La valuto uzata por la kostoj.
         #original_hash: da39a3e
@@ -1737,6 +1742,12 @@ eo:
       #original_hash: f28bf87
       submit_value: Peti WCA-ID
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        Ĉiuj profilbildoj estas konservitaj en la Nubo, do ajnaj ŝanĝoj al la
+        bildeto povas daŭri kelkajn minutojn antaŭ ol esti ĝuste montrita.
+      #original_hash: cc1d51b
+      cdn_warning: Bonvolu ne konfuziĝi se via bildeto ne tuj ĝisdatiĝas post konservado!
       #original_hash: 79f14eb
       current: 'Nuna bildeto:'
       #original_hash: b42ba27
@@ -2841,6 +2852,15 @@ eo:
         greater_china: Granda Ĉina Ĉampionado
         #original_hash: 3b920b7
         generic: 'Ĉampionado: %{type}'
+      dues_estimate:
+        #original_hash: 6e56455
+        calculated: 'La taksitaj WCA-Kotizoj por %{limit} konkurantoj estas %{estimate}'
+        #original_hash: 5e8cffe
+        per_competitor: 'La taksitaj WCA-Kotizoj po konkursanto estas %{estimate}'
+        #original_hash: 83d4cdc
+        ajax_error: >-
+          Estas eraro kun la takso de Kotizoj, bonvolu agordi al nulo kaj
+          reenigi la bazan registriĝkosto
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
