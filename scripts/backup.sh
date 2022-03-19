@@ -14,9 +14,5 @@ if [ $# -gt 0 ]; then
   print_usage_and_exit
 fi
 
-# We've been running into issues with tarsnap needed to run fsk. Rather
-# than fixing these manually, we just run fsk unconditionally.
-# See: https://groups.google.com/d/msg/wca-admin/u_jIaAgP6us/NkDFiHo-CgAJ.
-sudo tarsnap --fsck
-
-sudo tarsnap -c -f wca-backup-`date +"%Y%m%d_%H%M%S"` $SECRETS_FOLDER
+# We are using a versioned S3 Buckets to host our backups so one sync is enough
+aws sync $SECRETS_FOLDER s3://wca-backups/latest/
