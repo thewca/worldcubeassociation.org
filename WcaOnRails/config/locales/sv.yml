@@ -833,11 +833,17 @@ sv:
         external_registration_page: >-
           Sidan där de tävlande anmäler sig till tävlingen. Måste vara en giltig
           http(s)-url.
-        #original_hash: 784879d
+        #original_hash: a6f6562
         base_entry_fee_lowest_denomination: >-
           Basanmälningsavgiften för tävlingen. Den kommer att visas på
-          tävlingsinformationssidan och anmälningssidan om den används. Om detta
-          sätts till 0 visas en text som säger att anmälan är gratis.
+          tävlingens informationssida och anmälningssidan om den används. Om
+          detta sätts till 0 visas en text som säger att anmälan är gratis.
+          <br><br><b>DISCLAIMER: Följande uppskattning av WCA-avgiften är endast
+          en uppskattning baserad på aktuella valutakurser och är inte på något
+          sätt juridiskt bindande för betalningen av avgiften.</b><br>Klicka på
+          "Uppdatera tävling" efter att ha ändrat valutakoden för att
+          synkronisera den med uppskattningen. Om det inte finns några
+          tillgängliga växelkurser för den valda valutan visas ingenting.
         #original_hash: 9735ddf
         currency_code: Valutakod för avgifter.
         #original_hash: da39a3e
@@ -2847,6 +2853,15 @@ sv:
         greater_china: Mästerskap för Kina-regionen
         #original_hash: 3b920b7
         generic: 'Mästerskap: %{type}'
+      dues_estimate:
+        #original_hash: 6e56455
+        calculated: 'Uppskattad WCA-avgift för %{limit} tävlande är %{estimate}'
+        #original_hash: 5e8cffe
+        per_competitor: 'Uppskattad WCA-avgift per tävlande är %{estimate}'
+        #original_hash: 83d4cdc
+        ajax_error: >-
+          Ett fel uppstod vid uppskattningen av WCA-avgiften, vänligen sätt till
+          noll och ange anmälningsavgiften igen.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
