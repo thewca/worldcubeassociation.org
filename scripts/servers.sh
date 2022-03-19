@@ -14,7 +14,6 @@ OLD_STAGING_SERVER_NAME="DELETEME_old_${STAGING_SERVER_NAME}"
 STAGING_ELASTIC_IP="52.10.200.132"
 TEMP_NEW_STAGING_SERVER_NAME="temp-new-staging-server-via-cli"
 
-AWS_USERNAME="WCA"
 AWS_REGION="us-west-2"
 
 CONFIGURATION_INSTRUCTIONS="https://docs.google.com/document/d/1cq-4R0ERnK-dGNlkoG8gwKKjr5WecuXSppbSHQ0FI9s/edit#heading=h.qsrd2h8spn50"
@@ -52,14 +51,6 @@ test_aws_cli() {
   if [ "${configured_output}" != "json" ]; then
     echo "Found the aws command line client, but your default output format is configured to be '${configured_output}', when it should be 'json'." >> /dev/stderr
     echo "Try following the configuration instructions here: ${CONFIGURATION_INSTRUCTIONS}" >> /dev/stderr
-    exit 1
-  fi
-
-  local username=`aws iam get-user | jq --raw-output '.User.UserName'`
-  if [ "${username}" != "${AWS_USERNAME}" ]; then
-    echo "Found the aws command line client, but it does not appear to be configured correctly." >> /dev/stderr
-    echo "Try following the configuration instructions here: ${CONFIGURATION_INSTRUCTIONS}" >> /dev/stderr
-    echo "The command 'aws iam get-user' should show UserName '${AWS_USERNAME}', but it showed '${username}'." >> /dev/stderr
     exit 1
   fi
 }
@@ -149,8 +140,9 @@ get_pem_filename() {
 
 new() {
   print_command_usage_and_exit() {
-    echo "Usage: $0 new [--staging] [keyname]" >> /dev/stderr
-    echo "For example: $0 new jfly-kaladin-arch" >> /dev/stderr
+    echo "Create a server with either a weak, standard or high instance type"
+    echo "Usage: $0 new [--staging] [weak/standard/high] [keyname]" >> /dev/stderr
+    echo "For example: $0 new high jfly-kaladin-arch" >> /dev/stderr
     echo "Or, to spin up a new staging server: $0 new --staging jfly-kaladin-arch" >> /dev/stderr
 
     echo "" >> /dev/stderr
@@ -169,23 +161,36 @@ new() {
     staging=true
     shift
   fi
-  if [ $# -ne 1 ]; then
+  if [ $# -ne 2 ]; then
     print_command_usage_and_exit
   fi
+  
+  case "$1" in
+    weak)
+      instance_type=t3.medium
+      ;;
+    standard)
+      instance_type=t3.large
+      ;;
+    high)
+      instance_type=m6i.large
+      ;;
+    *)
+      echo "Unknown instance type"
+      print_command_usage_and_exit
+  esac
+  shift
 
   keyname=$1
   shift
 
   check_deps
-
   if [ "$staging" = true ]; then
     temp_new_server_name=${TEMP_NEW_STAGING_SERVER_NAME}
     host=staging.worldcubeassociation.org
-    instance_type=t3.medium
   else
     temp_new_server_name=${TEMP_NEW_PROD_SERVER_NAME}
     host=www.worldcubeassociation.org
-    instance_type=t3.large
   fi
 
   get_pem_filename pem_filename ${keyname}
@@ -199,7 +204,9 @@ new() {
     --key-name $keyname \
     --instance-type $instance_type \
     --security-groups "SSH + HTTP + HTTPS" \
+    --iam-instance-profile "avatar_upload_role"
     --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 60, "VolumeType": "gp3" } } ]'`
+
   instance_id=`echo $json | jq --raw-output '.Instances[0].InstanceId'`
   aws ec2 create-tags --resources ${instance_id} --tags Key=Name,Value=${temp_new_server_name}
   echo "Allocated new server with instance id: $instance_id and named it ${temp_new_server_name}."
@@ -377,7 +384,7 @@ function passthetorch() {
   echo "Found instance '${curr_server_name}' with id ${curr_instance_id}!"
 
   get_instance_domain_name domain_name ${new_server_id}
-  ssh_command="ssh -o StrictHostKeyChecking=no -A cubing@${domain_name}"
+  ssh_command="ssh -o StrictHostKeyChecking=no -o PasswordAuthentication=no -A cubing@${domain_name}"
   test_ssh_agent_forwarding "${ssh_command}" ${host}
 
   # Do a quick smoke test of the new server.
@@ -402,14 +409,6 @@ function passthetorch() {
   if ! echo $ip_addresses | grep ${expected_ip} > /dev/null; then
     echo "" >> /dev/stderr
     echo "When visiting https://${host}/server-status via server ${ip_address}, we expected to see internal IP address ${expected_ip}, but instead found ${ip_addresses}" >> /dev/stderr
-    exit 1
-  fi
-
-  server_status=`echo "$curl_result" | tail -1`
-  if [ "${server_status}" != "200" ]; then
-    echo "" >> /dev/stderr
-    echo "https://${host}/server-status returned non 200 status code: ${server_status}" >> /dev/stderr
-    echo "You can test this out by running: ${curl_cmd}" >> /dev/stderr
     exit 1
   fi
 
