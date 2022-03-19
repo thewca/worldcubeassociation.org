@@ -15,4 +15,4 @@ if [ $# -gt 0 ]; then
 fi
 
 # We are using a versioned S3 Buckets to host our backups so one sync is enough
-aws sync $SECRETS_FOLDER s3://wca-backups/latest/
+sudo aws s3 sync $SECRETS_FOLDER s3://wca-backups/latest/
