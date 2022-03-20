@@ -214,23 +214,23 @@ fi:
       #original_hash: 0664a83
       percent: 'Parhaat %{percent}%'
       attempt_result:
-        #original_hash: 482f137
-        time: 'Jos paras tulos < %{time}'
-        #original_hash: 3faa63e
-        moves: 'Jos paras tulos < %{moves}'
-        #original_hash: c3133c2
-        points: 'Jos paras tulos > %{points}'
+        #original_hash: ac6a282
+        time: '%{round_format} < %{time}'
+        #original_hash: 45db130
+        moves: '%{round_format} < %{moves}'
+        #original_hash: 076911b
+        points: '%{round_format} > %{points}'
     #original_hash: 6e55337
     ranking: '%{ranking} parasta jatkaa seuraavalle kierrokselle'
     #original_hash: 7ee969c
     percent: 'Parhaat %{percent}% jatkaa seuraavalle kierrokselle'
     attempt_result:
-      #original_hash: b3c8a02
-      time: 'Paras tulos < %{time} jatkaa seuraavalle kierrokselle'
-      #original_hash: 07bca6c
-      moves: 'Paras tulos < %{moves} siirtoa jatkaa seuraavalle kierrokselle'
-      #original_hash: 837083c
-      points: 'Paras tulos > %{points} pistettä jatkaa seuraavalle kierrokselle'
+      #original_hash: 6173090
+      time: '%{round_format} < %{time} jatkaa seuraavalle kierrokselle'
+      #original_hash: 581709d
+      moves: '%{round_format} < %{moves} siirtoa jatkaa seuraavalle kierrokselle'
+      #original_hash: e9f0c92
+      points: '%{round_format} > %{points} pistettä jatkaa seuraavalle kierrokselle'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -469,12 +469,22 @@ fi:
         on_the_spot_registration: Paikan päällä rekisteröityminen
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: Osallistumismaksu paikan päällä rekisteröityville
+        #original_hash: 7e53b96
+        allow_registration_edits: Muutokset rekisteröitymisiin
         #original_hash: efbdbab
         refund_policy_percent: Palautettava osuus prosentteina
         #original_hash: b332299
         refund_policy_limit_date: Takaraja palautuksille
+        #original_hash: 16cf9a4
+        waiting_list_deadline_date: Takaraja jonotuslistalla olevien kilpailijoiden hyväksymiseen
+        #original_hash: 99a9169
+        event_change_deadline_date: >-
+          Takaraja rekisteröityneiden kilpailijoiden kilpailulajien
+          päivittämiseen
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Vieraiden pääsymaksu
+        #original_hash: bb16247
+        free_guest_entry_status: Display message for free guest entry
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Haluan vaatia kilpailijoita toimittamaan pulmapelinsä ennalta
@@ -681,6 +691,16 @@ fi:
         article: Artikkeli
         #original_hash: 82dabd0
         multimedia: Multimedia
+    competition:
+      free_guest_entry_status:
+        #original_hash: 7e54323
+        unclear: >-
+          Do not display anything (and perhaps elaborate in the "Extra
+          registration requirements" section)
+        #original_hash: 694bce4
+        anyone: Kaikki katsojat pääsevät ilmaiseksi paikalle
+        #original_hash: 762c509
+        restricted: Katsojat pääsevät paikalle vain kilpailijoiden seurassa
   simple_form:
     #original_hash: 5397e05
     'yes': Kyllä
@@ -757,11 +777,11 @@ fi:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          If you are a Candidate Delegate, Senior Delegate, or Member of the WRC
-          or the WQAC, you receive Delegate Reports by default. Note: the change
-          may take up to an hour to take effect.
+          If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or
+          Member of the WRC or the WQAC, you receive Delegate Reports by
+          default. Note: the change may take up to an hour to take effect.
         #original_hash: 0627e5c
         otp_attempt: >-
           Tarkista määritetty mobiilisovelluksesi saadaksesi kertakäyttöisen
@@ -819,11 +839,17 @@ fi:
         external_registration_page: >-
           Sivu, jolla kilpailijoiden täytyy rekisteröityä kilpailuun. Pätevä
           http(s)-osoite.
-        #original_hash: 784879d
+        #original_hash: a6f6562
         base_entry_fee_lowest_denomination: >-
           Osallistumismaksu kilpailuun. Maksu näytetään kilpailusivun
           Tietoa-osiossa ja rekisteröitymissivulla, jos käytössä. Jos arvoksi
           asetetaan 0, kilpailusivulla lukee, että osallistuminen on ilmaista.
+          <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an
+          approximation based on current exchange rates and is in no way legally
+          binding for the Dues payment.</b><br>Click "Update Competition" after
+          changing currency code to synchronize it with the estimation. If there
+          are no available exchange rates for the selected currency, nothing
+          will be displayed.
         #original_hash: 9735ddf
         currency_code: Osallistumismaksujen valuuttatunnus.
         #original_hash: da39a3e
@@ -872,6 +898,8 @@ fi:
         on_the_spot_entry_fee_lowest_denomination: >-
           Jos arvoksi asetetaan 0, kilpailusivulla lukee, että paikan päällä
           rekisteröityminen on ilmaista.
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Tämä numero ilmoitetaan kilpailusivulla, mutta palautukset täytyy
@@ -879,11 +907,27 @@ fi:
           lukee, ettei osallistumismaksuja palauteta missään tilanteessa.
         #original_hash: f64d853
         refund_policy_limit_date: 'Päivä, jonka jälkeen osallistumismaksuja ei enää palauteta.'
-        #original_hash: 25a1324
+        #original_hash: 664db64
+        waiting_list_deadline_date: >-
+          Päivä, jolloin jonotuslistalla olevia kilpailijoita ei enää hyväksytä.
+          Tämän ei pitäisi olla ennen kilpailumaksun palautuksen takarajaa (jos
+          voimassa).
+        #original_hash: 75e6c1f
+        event_change_deadline_date: >-
+          Rekisteröidyillä kilpailijoilla on oikeus päivittää kilpailulajejaan
+          tähän päivään asti, ottamalla järjestäjäryhmään yhteyttä. Tämä
+          takaraja ei saa olla ennen rekisteröitymisen päättymisaikaa.
+          Jättämällä tämän tyhjäksi, kilpailijat voivat lisätä lajin
+          rekisteröitymiseensä siihen asti, kun laji pidetään kilpailussa. Jos
+          paikan päällä rekisteröityminen on käytössä, tähän tulee asettaa
+          kilpailun päivä.
+        #original_hash: 0419547
         guests_entry_fee_lowest_denomination: >-
-          Tämä luku näytetään kilpailusivulla, mutta vieraiden pääsymaksuja ei
-          voi hallita tämän sivuston kautta. Jos arvoksi asetetaan 0,
-          kilpailusivulla lukee, että katsojat pääsevät paikalle ilmaiseksi.
+          Vaikka vieraiden pääsymaksun suuruus näytetään kilpailusivulla, näitä
+          maksuja ei voi hallita tämän sivuston kautta. Jos arvoksi asetetaan 0,
+          itse valitsemasi teksti näytetään.
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1020,6 +1064,8 @@ fi:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1128,6 +1174,15 @@ fi:
           'true': Paikan päällä voi rekisteröityä
           #original_hash: 0f236df
           'false': Paikan päällä <b>ei voi rekisteröityä</b>
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': >-
+            Kilpailijat voivat muuttaa rekisteröitymistään lajimuutosten
+            takarajaan asti.
+          #original_hash: 2cbb80e
+          'false': >-
+            Kilpailijat eivät voi muuttaa rekisteröitymistään sen hyväksymisen
+            jälkeen.
   mail_form:
     attributes:
       contact_form:
@@ -1390,7 +1445,7 @@ fi:
       #original_hash: 3ad28c0
       teams: Toimikunnat ja valtuustot
       #original_hash: 7981fb3
-      education: Opetusmateriaalit
+      education: Koulutusmateriaalit
       #original_hash: a34b69f
       contact: Yhteystiedot
       #original_hash: 8e12c09
@@ -1418,7 +1473,7 @@ fi:
       #original_hash: 5b72b5a
       my_results: Omat tulokseni
       #original_hash: 2086b21
-      statistics: Statistiikka
+      statistics: Tilastoja
       #original_hash: 82dabd0
       multimedia: Multimedia
       #original_hash: 4fd2a7f
@@ -1504,6 +1559,17 @@ fi:
       text_html: >-
         Löydä lähelläsi järjestettävät kilpailut ja näe reaaliaikaiset tulokset
         omista kilpailuistasi: %{wca_live_link}!
+    merchandise:
+      #original_hash: 698cfc8
+      title: Myyntituotteet
+      #original_hash: 6403f2b
+      ad_new: Uutta
+      #original_hash: 9ad68ce
+      text_html: >-
+        Katso WCA:n viralliset myyntituotteet, joihin kuuluu valikoima vaatteita
+        T-paidoista huppareihin.
+      #original_hash: b0fc6c4
+      link_title: Linkki kauppaan
     records:
       #original_hash: e51c552
       title: Ennätykset
@@ -1674,6 +1740,14 @@ fi:
       #original_hash: f28bf87
       submit_value: Lunasta WCA ID
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        Kaikki profiilikuvat on tallennettu pilveen, joten pikkukuvaan tehdyt
+        muutokset saattavat näkyä oikein vasta usean minuutin viiveellä.
+      #original_hash: cc1d51b
+      cdn_warning: >-
+        Älä ihmettele, jos pikkukuvasi ei päivity välittömästi tallentamisen
+        jälkeen!
       #original_hash: 79f14eb
       current: 'Nykyinen pikkukuva:'
       #original_hash: b42ba27
@@ -2056,6 +2130,8 @@ fi:
           registrations_full: 'Osallistujaraja on saavutettu, eikä enempää paikkoja ole saatavilla'
           #original_hash: 0d4cce9
           multiple_registrations: Rekisteröidyit useamman kerran
+          #original_hash: 70b1e2c
+          competition_canceled: Kilpailu on peruttu
     list:
       #original_hash: 8b7631c
       title: 'Rekisteröitymiset kilpailuun %{comp}'
@@ -2091,6 +2167,8 @@ fi:
         with_stripe: Maksoi
       #original_hash: ce53c71
       payment_requested_on: 'Maksua pyydetty %{date}'
+      #original_hash: f5b1b34
+      payment_completed_on: 'Maksettu: %{date}'
       #original_hash: b25928c
       total: Yhteensä
       #original_hash: df036fe
@@ -2306,6 +2384,8 @@ fi:
       name_too_long: >-
         Kilpailun nimi on pidempi kuin 32 merkkiä. Lyhyempi nimi olisi
         toivottavampi.
+      #original_hash: af27396
+      id_starts_with_lowercase: 'Kilpailun id:ssä pitäisi olla iso alkukirjain.'
       #original_hash: 1a20fae
       must_have_events: Lisää vähintään yksi laji ennen kilpailun vahvistamista.
       #original_hash: a3aea56
@@ -2317,6 +2397,26 @@ fi:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Varmista, että kaikille finaalia edeltäville kierroksille on määritetty
         jatkoonpääsyvaatimukset.
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: >-
+        Kierroksella %{round_number} lajissa %{event} cutoff on korkeampi kuin
+        aikaraja. Varmista, että cutoff on aikarajaa pienempi.
+      #original_hash: c1580b1
+      cutoff_is_too_fast: >-
+        Kierroksella %{round_number} lajissa %{event} cutoff on alle 5 sekuntia.
+        Varmista, että se on oikein.
+      #original_hash: b5f69f2
+      cutoff_is_too_slow: >-
+        Kierroksella %{round_number} lajissa %{event} cutoff on yli 10
+        minuuttia. Varmista, että se on oikein.
+      #original_hash: af976ad
+      time_limit_is_too_fast: >-
+        Kierroksella %{round_number} lajissa %{event} aikaraja on alle 10
+        sekuntia. Varmista, että se on oikein.
+      #original_hash: 5dfa8f2
+      time_limit_is_too_slow: >-
+        Kierroksella %{round_number} nopeassa lajissa %{event} aikaraja on yli
+        10 minuuttia. Varmista, että se on oikein.
       #original_hash: e390250
       create_success: Uusi kilpailu luotu onnistuneesti!
       #original_hash: ba067f0
@@ -2480,6 +2580,24 @@ fi:
         sinulle palautetaan %{refund_policy_percent} osallistumismaksustasi.
       #original_hash: 4aca553
       no_refunds: Osallistumismaksuja ei palauteta missään tilanteessa.
+      #original_hash: b016d2f
+      waiting_list_deadline_html: >-
+        Odotuslistalla olevia kilpailijoita voidaan hyväksyä kilpailuun
+        takarajaan (%{waiting_list_deadline}) asti.
+      #original_hash: 14c5699
+      event_change_deadline_html: >-
+        Kun olet rekisteröitynyt kilpailuun, voit muuttaa valitsemiasi lajeja
+        takarajaan (%{event_change_deadline}) asti ottamalla järjestäjäryhmään
+        yhteyttä.
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: >-
+        Rekisteröidyttyäsi kilpailuun voit muuttaa valitsemiasi lajeja
+        takarajaan (%{event_change_deadline}) asti %{register}-välilehdellä.
+      #original_hash: eff3594
+      event_change_deadline_default_html: >-
+        Kannustamme kaikkia valitsemaan haluamansa kilpailulajit
+        online-rekisteröitymisen yhteydessä, mutta voit silti lisätä lajeja
+        rekisteröitymiseesi lajin alkamiseen asti.
       #original_hash: cf7be5d
       on_the_spot_registration_fee_html: >-
         Paikan päällä voi rekisteröityä. Osallistumismaksu on tällöin
@@ -2490,8 +2608,11 @@ fi:
       no_on_the_spot_registration: Paikan päällä ei voi rekisteröityä.
       #original_hash: 4df139d
       guests_pay: 'Katsojien pääsymaksu on %{guests_base_fee}.'
-      #original_hash: b6c863e
-      guests_free: Katsojat pääsevät paikalle ilmaiseksi.
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: Kaikki katsojat pääsevät paikalle ilmaiseksi
+        #original_hash: f1e6aef
+        restricted: Katsojat pääsevät paikalle ainoastaan kilpailijoiden seurassa.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Tämä kilpailu on ohi, klikkaa %{link_here} näyttääksesi käytössä olleet
@@ -2565,10 +2686,10 @@ fi:
     index:
       #original_hash: db98a68
       title: Kilpailut
-      #original_hash: 63254de
+      #original_hash: f483b9c
       disclaimer: >-
         Huomaathan, että COVID-19-pandemian vuoksi kilpailuja ei tällä hetkellä
-        voi järjestää suuressa osassa maailmaa.
+        voi järjestää osassa maailmaa.
       #original_hash: 6a72085
       all_events: Kaikki
       #original_hash: 6d76b81
@@ -2742,6 +2863,15 @@ fi:
         greater_china: Kiinan mestaruuskilpailu
         #original_hash: 3b920b7
         generic: 'Mestaruuskilpailu: %{type}'
+      dues_estimate:
+        #original_hash: 6e56455
+        calculated: 'The estimated WCA Dues for %{limit} competitors are %{estimate}'
+        #original_hash: 5e8cffe
+        per_competitor: 'The estimated WCA Dues per competitor are %{estimate}'
+        #original_hash: 83d4cdc
+        ajax_error: >-
+          There is an error with Dues estimation, please set to zero and
+          re-enter the base registration fee
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2778,6 +2908,22 @@ fi:
       invalid_currency_code: Valittu valuuttatunnus ei kelpaa
       #original_hash: 902a278
       advancement_condition_must_be_present_for_all_non_final_rounds: täytyy asettaa jatkoonpääsyvaatimus kaikille paitsi finaalikierroksille.
+      #original_hash: da17c99
+      registration_period_after_start: Rekisteröitymisaika ei voi olla kilpailun alkamispäivän jälkeen.
+      #original_hash: f6b244b
+      waiting_list_deadline_before_registration_close: Wailting list deadline cannot be before registration close date.
+      #original_hash: ececa98
+      waiting_list_deadline_before_refund_date: Waiting list deadline cannot be before limit date for refunds.
+      #original_hash: 44d9902
+      waiting_list_deadline_after_start: Waiting list deadline must be before start date.
+      #original_hash: c3eb1be
+      event_change_deadline_before_registration_close: Deadline for updating events cannot be before registration close date.
+      #original_hash: bc1ca0f
+      event_change_deadline_after_end_date: Deadline for updating events cannot be after the competition.
+      #original_hash: a2e4fc9
+      event_change_deadline_with_ots: >-
+        Deadline for updating events must be during the competition if on the
+        spot registrations are accepted.
     new:
       #original_hash: 1208df7
       create_competition: Luo kilpailu
@@ -3004,6 +3150,13 @@ fi:
       round: Kierros
       #original_hash: 709a232
       name: Nimi
+      rank:
+        #original_hash: d4840ff
+        national: Sijoitus maassa
+        #original_hash: ca3ff98
+        continent: Sijoitus maanosassa
+        #original_hash: f6bcce7
+        world: Sijoitus maailmassa
     scrambles_table:
       #original_hash: 171a060
       group: Ryhmä
@@ -3497,7 +3650,7 @@ fi:
     spirit_footer: WCA Spirit
     #original_hash: c1781ee
     our_goals_title: Päämäärämme
-    #original_hash: caf6bf2
+    #original_hash: 743ca74
     our_goals_content_html: >-
       <p>World Cube Association haluaa tarjota erityisesti nuorille
       mahdollisuuden kuulua maailmanlaajuiseen yhteisöön kilpailujen
@@ -3768,17 +3921,21 @@ fi:
     codeofconduct: Code of Conduct
     #original_hash: 4f05e8f
     finances: Talous
+    #original_hash: d1b1406
+    vision_and_strategy: Vision and Strategy
   education:
     #original_hash: 746e863
-    title: 'WCA:n opetusmateriaalit'
+    title: 'WCA:n koulutusmateriaalit (englanniksi)'
     #original_hash: 081d65d
     description: >-
       WQAC on julkaissut materiaaleja yhteisön käyttöön, voit ladata niitä
       alapuolelta.
     #original_hash: d0a3812
-    competitor_tutorial: Kilpailuohjeet (englanniksi)
+    competitor_tutorial: Kilpailuohjeet
     #original_hash: 9561bfc
     judge_tutorial: Tuomarointiohje ensikertalaisille
+    #original_hash: 12e47a3
+    competition_templates: Competition templates
     #original_hash: 5ca0558
     certificates: 'WCT:n kunniakirjapohjat'
     #original_hash: f580987
@@ -3859,6 +4016,9 @@ fi:
       create_success: >-
         Hakemus lähetetty onnistuneesti! Tarkista sähköpostisi ja odota, että
         WCA Board tarkistaa hakemuksen.
+    delete:
+      #original_hash: 6588652
+      confirm_delete: Are you sure you want to delete this Regional Organization request?
   contact:
     #original_hash: a34b69f
     title: Yhteystiedot
