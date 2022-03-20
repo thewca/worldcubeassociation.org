@@ -47,6 +47,7 @@ gem 'openssl'
 gem 'wca_i18n'
 gem 'cookies_eu'
 gem 'env_vars'
+gem 'eu_central_bank'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -54,6 +55,9 @@ gem 'selectize-rails', github: 'jfly/selectize-rails'
 
 gem 'high_voltage'
 gem 'carrierwave'
+gem 'carrierwave-aws'
+gem 'aws-sdk-s3'
+gem 'aws-sdk-cloudfront'
 
 # Pointing to thewca/carrierwave-crop which has a workaround for
 #  https://github.com/kirtithorat/carrierwave-crop/issues/17
@@ -66,7 +70,7 @@ gem 'premailer-rails'
 gem 'nokogiri'
 gem 'cocoon'
 gem 'momentjs-rails', github: 'derekprior/momentjs-rails'
-gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', submodules: true
 gem 'blocks'
 gem 'rack-cors', require: 'rack/cors'
 gem 'api-pagination'
@@ -124,7 +128,7 @@ group :test do
   gem 'oga' # XML parsing library introduced for testing RSS feed
   gem 'database_cleaner'
   gem 'rails-controller-testing'
-  gem 'apparition'
+  gem 'apparition', github: 'twalpole/apparition'
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false
   gem 'timecop'
@@ -133,5 +137,4 @@ end
 group :production do
   gem 'unicorn'
   gem 'newrelic_rpm'
-  gem 'aws-sdk-s3', require: false
 end

@@ -86,6 +86,7 @@ FactoryBot.define do
     trait :with_valid_submitted_results do
       announced
       with_rounds { true }
+      results_submitted_at { Time.now }
       after(:create) do |competition|
         person = FactoryBot.create(:inbox_person, competitionId: competition.id)
         rounds = competition.competition_events.map(&:rounds).flatten
@@ -102,6 +103,11 @@ FactoryBot.define do
       use_wca_registration { true }
       registration_open { 2.weeks.ago.change(usec: 0) }
       registration_close { 2.weeks.from_now.change(usec: 0) }
+    end
+
+    trait :editable_registrations do
+      allow_registration_edits { true }
+      event_change_deadline_date { 2.weeks.from_now.change(usec: 0) }
     end
 
     trait :confirmed do

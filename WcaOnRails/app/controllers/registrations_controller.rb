@@ -37,7 +37,9 @@ class RegistrationsController < ApplicationController
 
   def edit_registrations
     @show_events = params[:show_events] == "true"
-    @show_full_mail = params[:show_email] == "true"
+    @show_full_emails = params[:show_full_emails] == "true"
+    @show_birthdays = params[:show_birthdays] == "true"
+
     @competition = competition_from_params
     @registrations = @competition.registrations.includes(:user, :registration_payments, :events)
   end
@@ -290,6 +292,8 @@ class RegistrationsController < ApplicationController
 
   def do_actions_for_selected
     @show_events = params[:show_events] == "true"
+    @show_full_emails = params[:show_full_emails] == "true"
+    @show_birthdays = params[:show_birthdays] == "true"
     @competition = competition_from_params
     registrations = @competition.registrations.find(selected_registrations_ids)
     count_success = 0
@@ -369,12 +373,21 @@ class RegistrationsController < ApplicationController
       return
     end
     registration_attributes = registration_params
-    # Don't change status columns if the status is the same.
-    if @registration.checked_status.to_s == params[:registration][:status]
-      registration_attributes = registration_attributes.except(:accepted_at, :accepted_by, :deleted_at, :deleted_by)
-    end
     was_accepted = @registration.accepted?
     was_deleted = @registration.deleted?
+    # The only case we go to this endpoint if the registration was deleted is when we register again.
+    if was_deleted
+      # Set the accepted_at/deleted_at to nil iff it's not already set,
+      # which can happen when moving from deleted to accepted.
+      registration_attributes = { accepted_at: nil, deleted_at: nil }.merge(registration_attributes)
+    end
+    # Don't rely on the status in the params, compute the new status from the
+    # timestamps.
+    new_status = Registration.status_from_timestamp(registration_attributes[:accepted_at], registration_attributes[:deleted_at])
+    # Don't change status columns if the status is the same.
+    if @registration.checked_status == new_status
+      registration_attributes = registration_attributes.except(:accepted_at, :accepted_by, :deleted_at, :deleted_by)
+    end
     if current_user.can_edit_registration?(@registration) && @registration.update(registration_attributes)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)
@@ -613,14 +626,12 @@ class RegistrationsController < ApplicationController
     permitted_params = [
       :guests,
       :comments,
-      :accepted_at,
-      :deleted_at,
       registration_competition_events_attributes: [:id, :competition_event_id, :_destroy],
     ]
-    params[:registration][:deleted_at] = nil
-    params[:registration][:accepted_at] = nil
     if current_user.can_manage_competition?(competition_from_params)
       permitted_params += [
+        :accepted_at,
+        :deleted_at,
         :accepted_by,
         :deleted_by,
       ]

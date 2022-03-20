@@ -26,6 +26,7 @@ class User < ApplicationRecord
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
+  has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
   has_many :bookmarked_competitions, dependent: :destroy
@@ -261,6 +262,7 @@ class User < ApplicationRecord
   end
 
   scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
+  scope :trainee_delegates, -> { where(delegate_status: "trainee_delegate") }
   scope :delegates, -> { where.not(delegate_status: nil) }
   scope :senior_delegates, -> { where(delegate_status: "senior_delegate") }
 
@@ -347,24 +349,35 @@ class User < ApplicationRecord
   crop_uploaded :avatar
   validates :avatar, AVATAR_PARAMETERS
 
-  def old_avatar_filenames
-    avatar_uploader = AvatarUploader.new(self)
-    store_dir = "public/#{avatar_uploader.store_dir}"
-    filenames = Dir.glob("#{store_dir}/*[0-9].{#{avatar_uploader.extension_white_list.join(",")}}").sort
-    filenames.select do |f|
-      (!pending_avatar.path || !File.identical?(pending_avatar.path, f)) && (!avatar.path || !File.identical?(avatar.path, f))
+  def old_avatar_files
+    # CarrierWave doesn't have a general "list uploaded files" feature
+    # so we have to hijack the class-private storage engine to make direct S3 API calls
+    avatar_storage = avatar.send(:storage)
+    s3_client = avatar_storage.connection
+
+    # query underlying AWS S3 API directly
+    s3_bucket = s3_client.bucket(avatar.aws_bucket)
+
+    files = s3_bucket.objects({ prefix: avatar.store_dir })
+                     .select { |obj| !obj.key.include?('thumb') } # filter out thumbnails
+                     .map { |obj| obj.key.rpartition('/').last } # only take the filename itself, not the folder path
+                     .map { |key| avatar_storage.retrieve!(key) } # read the filename through CarrierWave for convenience
+
+    files.select do |f|
+      (!pending_avatar.url || pending_avatar.url != f.url) && (!avatar.url || avatar.url != f.url)
     end
   end
 
   before_save :stash_rejected_avatar
   def stash_rejected_avatar
     if ActiveRecord::Type::Boolean.new.cast(remove_pending_avatar) && pending_avatar_was
-      avatar_uploader = AvatarUploader.new(self)
-      store_dir = "public/#{avatar_uploader.store_dir}"
-      filename = "#{store_dir}/#{pending_avatar_was}"
-      rejected_filename = "#{store_dir}/rejected/#{pending_avatar_was}"
-      FileUtils.mkdir_p Pathname.new(rejected_filename).parent.to_path
-      FileUtils.mv filename, rejected_filename
+      # hijacking internal S3 storage engine, see method `old_avatar_files` above
+      avatar_storage = avatar.send(:storage)
+
+      file = avatar_storage.retrieve!(pending_avatar_was)
+      rejected_filename = "#{avatar.store_dir}/rejected/#{pending_avatar_was}"
+
+      file.move_to rejected_filename
     end
   end
 
@@ -583,7 +596,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    Rails.env.production? ? software_team_admin? : software_team?
+    Rails.env.production? && EnvVars.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end
 
   def any_kind_of_delegate?
@@ -600,6 +613,10 @@ class User < ApplicationRecord
 
   def senior_delegate?
     delegate_status == "senior_delegate"
+  end
+
+  def staff_or_any_delegate?
+    staff? || trainee_delegate?
   end
 
   def is_senior_delegate_for?(user)
@@ -709,8 +726,8 @@ class User < ApplicationRecord
   end
 
   def can_edit_registration?(registration)
-    # A registration can be edited by a user if it hasn't been accepted yet, and if registrations are open.
-    editable_by_user = !registration.accepted? && registration.competition.registration_opened?
+    # A registration can be edited by a user if it hasn't been accepted yet, and if edits are allowed.
+    editable_by_user = (!registration.accepted? || registration.competition.registration_edits_allowed?)
     can_manage_competition?(registration.competition) || (registration.user_id == self.id && editable_by_user)
   end
 
@@ -886,7 +903,7 @@ class User < ApplicationRecord
         email preferred_events results_notifications_enabled
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
-      if user.staff?
+      if user.staff_or_any_delegate?
         fields += %i(receive_delegate_reports)
       end
     end
@@ -931,22 +948,23 @@ class User < ApplicationRecord
     fields
   end
 
-  def self.clear_receive_delegate_reports_if_not_staff
-    User.where(receive_delegate_reports: true).reject(&:staff?).map { |u| u.update(receive_delegate_reports: false) }
+  def self.clear_receive_delegate_reports_if_not_eligible
+    User.where(receive_delegate_reports: true).reject(&:staff_or_any_delegate?).map { |u| u.update(receive_delegate_reports: false) }
   end
 
-  # This method is only called in sync_mailing_lists_job.rb, right after clear_receive_delegate_reports_if_not_staff.
-  # If used without calling clear_receive_delegate_reports_if_not_staff it might return non-current Staff members.
-  # The reason why clear_receive_delegate_reports_if_not_staff is needed is because there's no automatic code that
+  # This method is only called in sync_mailing_lists_job.rb, right after clear_receive_delegate_reports_if_not_eligible.
+  # If used without calling clear_receive_delegate_reports_if_not_eligible it might return non-current eligible members.
+  # The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
   # runs once a user is no longer a team member, we just schedule their end date.
   def self.delegate_reports_receivers_emails
     candidate_delegates = User.candidate_delegates
+    trainee_delegates = User.trainee_delegates
     other_staff = User.where(receive_delegate_reports: true)
     (%w(
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    ) + candidate_delegates.map(&:email) + other_staff.map(&:email)).uniq
+    ) + candidate_delegates.map(&:email) + trainee_delegates.map(&:email) + other_staff.map(&:email)).uniq
   end
 
   def notify_of_results_posted(competition)
@@ -1080,6 +1098,7 @@ class User < ApplicationRecord
     person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     roles = registration&.roles || []
     roles << "delegate" if competition.delegates.include?(self)
+    roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
     roles << "organizer" if competition.organizers.include?(self)
     authorized_fields = {
       "birthdate" => dob.to_s,

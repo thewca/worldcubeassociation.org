@@ -372,6 +372,14 @@ class CompetitionsController < ApplicationController
     }
   end
 
+  def currency_convert
+    converted = Money.new(params[:value], params[:from_currency]).exchange_to(params[:to_currency])
+    render json: {
+      formatted: converted.format,
+      value: converted.cents,
+    }
+  end
+
   def show
     associations = {
       competition_venues: {
@@ -605,6 +613,7 @@ class CompetitionsController < ApplicationController
         :extra_registration_requirements,
         :on_the_spot_registration,
         :on_the_spot_entry_fee_lowest_denomination,
+        :allow_registration_edits,
         :refund_policy_percent,
         :refund_policy_limit_date,
         :early_puzzle_submission,

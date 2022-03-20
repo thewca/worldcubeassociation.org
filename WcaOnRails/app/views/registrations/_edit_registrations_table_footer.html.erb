@@ -5,13 +5,17 @@
     </td>
     <% country_count = registrations.map(&:country).uniq.length %>
     <td><%= t('registrations.list.country_plural', count: country_count) %></td>
-    <td></td>
+    <% if @show_birthdays %>
+      <td></td>
+    <% end %>
     <% if @show_events %>
       <% @competition.events.each do |event| %>
         <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
       <% end %>
     <% end %>
+    <%# registered on %>
     <td></td>
+    <%# number of events %>
     <td></td>
     <td>
       <% if @competition.guests_enabled? %>
@@ -22,6 +26,7 @@
         <%= registrations.to_a.sum(&:guests) %>
       <% end %>
     </td>
+    <%# comments %>
     <td></td>
     <% if @competition.using_stripe_payments? %>
       <td>

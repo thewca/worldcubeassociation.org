@@ -229,7 +229,7 @@ RSpec.describe User, type: :model do
         avatar_crop_h: 40,
       )
       avatar = dummy_user.reload.read_attribute(:avatar)
-      expect(File).to exist("public/uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
+      expect(dummy_user.avatar.file.path).to eq("uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
 
       # Assigning a WCA ID to user should copy over the name from the Persons table.
       expect(user.name).to eq user.person.name
@@ -240,7 +240,7 @@ RSpec.describe User, type: :model do
       # Check that the dummy account was deleted, and we inherited its avatar.
       expect(User.find_by_id(dummy_user.id)).to be_nil
       expect(user.reload.read_attribute(:avatar)).to eq avatar
-      expect(File).to exist("public/uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
+      expect(dummy_user.avatar.file.path).to eq("uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
     end
 
     it "does not allow duplicate WCA IDs" do
@@ -729,9 +729,9 @@ RSpec.describe User, type: :model do
     let!(:staff_member1) { FactoryBot.create :user, :wec_member, receive_delegate_reports: true }
     let!(:staff_member2) { FactoryBot.create :user, :wrt_member, receive_delegate_reports: false }
 
-    it "gets cleared if user is not staff anymore" do
+    it "gets cleared if user is not eligible anymore" do
       former_staff_member = FactoryBot.create :user, receive_delegate_reports: true
-      User.clear_receive_delegate_reports_if_not_staff
+      User.clear_receive_delegate_reports_if_not_eligible
       expect(former_staff_member.reload.receive_delegate_reports).to eq false
       expect(staff_member1.reload.receive_delegate_reports).to eq true
     end
@@ -753,6 +753,41 @@ RSpec.describe User, type: :model do
 
     it "knows if you only managed past competitions" do
       expect(manager_past_only.can_manage_any_not_over_competitions?).to be false
+    end
+  end
+
+  describe "can edit registration" do
+    let!(:competitor) { FactoryBot.create :user }
+    let!(:organizer) { FactoryBot.create :user }
+    let!(:competition) { FactoryBot.create :competition, :registration_open, organizers: [organizer] }
+    let!(:registration) { FactoryBot.create :registration, user: competitor, competition: competition }
+
+    it "if they are an organizer" do
+      expect(organizer.can_edit_registration?(registration)).to be true
+    end
+
+    it "if their registration is pending" do
+      registration.accepted_at = nil
+      expect(competitor.can_edit_registration?(registration)).to be true
+    end
+
+    it "unless their registration is accepted" do
+      registration.accepted_at = Time.now
+      expect(competitor.can_edit_registration?(registration)).to be false
+    end
+
+    it "if event edit deadline is in the future" do
+      registration.accepted_at = Time.now
+      competition.allow_registration_edits = true
+      competition.event_change_deadline_date = 2.weeks.from_now
+      expect(competitor.can_edit_registration?(registration)).to be true
+    end
+
+    it "unless event edit deadline has passed" do
+      registration.accepted_at = Time.now
+      competition.allow_registration_edits = true
+      competition.event_change_deadline_date = 2.weeks.ago
+      expect(competitor.can_edit_registration?(registration)).to be false
     end
   end
 end

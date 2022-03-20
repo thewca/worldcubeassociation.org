@@ -78,6 +78,7 @@ CREATE TABLE `Competitions` (
   `waiting_list_deadline_date` datetime DEFAULT NULL,
   `event_change_deadline_date` datetime DEFAULT NULL,
   `free_guest_entry_status` int NOT NULL DEFAULT '0',
+  `allow_registration_edits` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1734,9 +1735,11 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20210301002636'),
 ('20210325202019'),
 ('20210501213332'),
+('20210521195423'),
 ('20210727081850'),
 ('20210802065056'),
 ('20211031152615'),
 ('20211031152616'),
 ('20211031152617'),
-('20211031154101');
+('20211031154101'),
+('20211210100657');

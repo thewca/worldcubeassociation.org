@@ -8,8 +8,11 @@ EnvVars = Env::Vars.new do
     mandatory :SMTP_PASSWORD, string
   end
 
-  if Rails.env.development?
+  unless Rails.env.production?
     mandatory :DISABLE_BULLET, :bool
+
+    optional :AWS_ACCESS_KEY_ID, :string, ''
+    optional :AWS_SECRET_ACCESS_KEY, :string, ''
   end
 
   # Set WCA_LIVE_SITE to enable Google Analytics
@@ -36,6 +39,7 @@ EnvVars = Env::Vars.new do
   optional :RECAPTCHA_PUBLIC_KEY, :string, ''
   optional :RECAPTCHA_PRIVATE_KEY, :string, ''
   optional :NEW_RELIC_LICENSE_KEY, :string, ''
+  optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
 
   mandatory :GOOGLE_MAPS_API_KEY, :string
   mandatory :GITHUB_CREATE_PR_ACCESS_TOKEN, :string
@@ -45,4 +49,7 @@ EnvVars = Env::Vars.new do
   mandatory :OTP_ENCRYPTION_KEY, :string
   mandatory :DISCOURSE_SECRET, :string
   mandatory :DISCOURSE_URL, :string
+  mandatory :S3_AVATARS_BUCKET, :string
+  mandatory :S3_AVATARS_ASSET_HOST, :string
+  mandatory :S3_AVATARS_REGION, :string
 end

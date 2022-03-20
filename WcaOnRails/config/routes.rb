@@ -93,6 +93,7 @@ Rails.application.routes.draw do
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
   get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
+  get 'competitions/edit/currency_convert' => 'competitions#currency_convert', as: :currency_convert
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
@@ -188,6 +189,8 @@ Rails.application.routes.draw do
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/update_statistics' => 'admin#update_statistics'
+  get '/admin/anonymize_person' => 'admin#anonymize_person'
+  post '/admin/anonymize_person' => 'admin#do_anonymize_person'
   get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'
   get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id'
   post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id'

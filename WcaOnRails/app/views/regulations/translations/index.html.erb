@@ -10,6 +10,44 @@
 
   <% current_translations = [
     {
+      version: "2022-01-01",
+      language: "Deutsch",
+      language_english: "German",
+      url: "./german",
+    },
+    {
+      version: "2022-01-01",
+      language: "Русский",
+      language_english: "Russian",
+      url: "./russian",
+    },
+    {
+      version: "2022-01-01",
+      language: "Español Latino",
+      language_english: "Spanish, America",
+      url: "./spanish-american",
+    },
+    {
+      version: "2022-01-01",
+      language: "Svenska",
+      language_english: "Swedish",
+      url: "./swedish",
+    },
+  ] %>
+
+  <h3><%= t("regulations_translations.current") %></h3>
+  <div class="regulations-translations-table-container">
+    <%= render 'regulations/translations/index_table', translations: current_translations %>
+  </div>
+
+  <% old_translations = [
+    {
+      version: "2021-05-01",
+      language: "Italiano",
+      language_english: "Italian",
+      url: "./italian",
+    },
+    {
       version: "2021-05-01",
       language: "简体中文",
       language_english: "Chinese",
@@ -33,32 +71,6 @@
       language_english: "Japanese",
       url: "./japanese",
     },
-    {
-      version: "2021-05-01",
-      language: "Русский",
-      language_english: "Russian",
-      url: "./russian",
-    },
-    {
-      version: "2021-05-01",
-      language: "Español Latino",
-      language_english: "Spanish, America",
-      url: "./spanish-american",
-    },
-    {
-      version: "2021-05-01",
-      language: "Svenska",
-      language_english: "Swedish",
-      url: "./swedish",
-    },
-  ] %>
-
-  <h3><%= t("regulations_translations.current") %></h3>
-  <div class="regulations-translations-table-container">
-    <%= render 'regulations/translations/index_table', translations: current_translations %>
-  </div>
-
-  <% old_translations = [
     {
       version: "2020-08-01",
       language: "Português Brasileiro",
@@ -91,21 +103,9 @@
     },
     {
       version: "2018-01-01",
-      language: "Deutsch",
-      language_english: "German",
-      url: "./german",
-    },
-    {
-      version: "2018-01-01",
       language: "Bahasa",
       language_english: "Indonesian",
       url: "./indonesian",
-    },
-    {
-      version: "2018-01-01",
-      language: "Italiano",
-      language_english: "Italian",
-      url: "./italian",
     },
     {
       version: "2016-04-18",

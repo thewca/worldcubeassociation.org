@@ -212,6 +212,63 @@ RSpec.describe RegistrationsController do
     end
   end
 
+  context "signed in as competitor where they can edit their registration" do
+    let!(:user) { FactoryBot.create(:user, :wca_id) }
+    let!(:competition) { FactoryBot.create(:competition, :registration_open, :editable_registrations, :visible) }
+    let(:threes_comp_event) { competition.competition_events.find_by(event_id: "333") }
+
+    before :each do
+      sign_in user
+    end
+
+    it "cannot change their own registration status" do
+      registration = FactoryBot.create :registration, :accepted, competition: competition, user_id: user.id
+      expect(registration.accepted?).to eq true
+      patch :update, params: {
+        id: registration.id,
+        registration: { comments: "Changing registration" },
+      }
+      expect(registration.reload.accepted?).to eq true
+    end
+
+    it "can re-create registration after it was deleted" do
+      registration = FactoryBot.create :registration, :accepted, :deleted, competition: competition, user_id: user.id
+      registration_competition_event = registration.registration_competition_events.first
+      expect(registration.reload.deleted?).to eq true
+
+      patch :update, params: {
+        id: registration.id,
+        registration: {
+          registration_competition_events_attributes: [{ id: registration_competition_event.id, registration_id: registration.id, competition_event_id: threes_comp_event.id, _destroy: 0 }],
+          comments: "Registered again",
+        },
+      }
+      expect(registration.reload.comments).to eq "Registered again"
+      expect(registration.reload.pending?).to eq true
+      expect(registration.reload.accepted?).to eq false
+      expect(registration.reload.deleted?).to eq false
+      expect(flash[:success]).to eq "Updated registration"
+      expect(response).to redirect_to competition_register_path(competition)
+    end
+
+    it "can edit registration when pending" do
+      registration = FactoryBot.create :registration, :pending, competition: competition, user_id: user.id
+
+      patch :update, params: { id: registration.id, registration: { comments: "new comment" } }
+      expect(registration.reload.comments).to eq "new comment"
+      expect(flash[:success]).to eq "Updated registration"
+      expect(response).to redirect_to competition_register_path(competition)
+    end
+
+    it "can edit registration when approved" do
+      registration = FactoryBot.create :registration, :accepted, competition: competition, user_id: user.id
+
+      patch :update, params: { id: registration.id, registration: { comments: "new comment" } }
+      expect(registration.reload.comments).to eq "new comment"
+      expect(flash[:success]).to eq "Updated registration"
+    end
+  end
+
   context "signed in as competitor" do
     let!(:user) { FactoryBot.create(:user, :wca_id) }
     let!(:delegate) { FactoryBot.create(:delegate) }

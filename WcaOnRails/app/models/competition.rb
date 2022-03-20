@@ -106,6 +106,7 @@ class Competition < ApplicationRecord
     extra_registration_requirements
     on_the_spot_registration
     on_the_spot_entry_fee_lowest_denomination
+    allow_registration_edits
     refund_policy_percent
     guests_entry_fee_lowest_denomination
     free_guest_entry_status
@@ -181,6 +182,7 @@ class Competition < ApplicationRecord
   validates :refund_policy_limit_date, presence: true, if: :refund_policy_percent?
   validates_inclusion_of :on_the_spot_registration, in: [true, false], if: :on_the_spot_registration_required?
   validates_numericality_of :on_the_spot_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :on_the_spot_entry_fee_required?
+  validates_inclusion_of :allow_registration_edits, in: [true, false]
   monetize :on_the_spot_entry_fee_lowest_denomination,
            as: "on_the_spot_base_entry_fee",
            allow_nil: true,
@@ -382,7 +384,7 @@ class Competition < ApplicationRecord
         warnings[:name] = I18n.t('competitions.messages.name_too_long')
       end
 
-      unless /^[[:upper:]]/.match(self.id)
+      unless /^[[:upper:]]|^\d/.match(self.id)
         warnings[:id] = I18n.t('competitions.messages.id_starts_with_lowercase')
       end
 
@@ -960,6 +962,10 @@ class Competition < ApplicationRecord
 
   def has_event_change_deadline_date?
     start_date.present? && start_date > Date.new(2021, 6, 24)
+  end
+
+  def registration_edits_allowed?
+    self.allow_registration_edits && (!has_event_change_deadline_date? || event_change_deadline_date > DateTime.now)
   end
 
   private def unpack_dates
@@ -1560,7 +1566,7 @@ class Competition < ApplicationRecord
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
       # Note: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if registration && wcif_person["roles"]
-        roles = wcif_person["roles"] - ["delegate", "organizer"] # These two are added on the fly.
+        roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
         registration.update!(roles: roles)
       end
       if registration && wcif_person["assignments"]

@@ -92,6 +92,7 @@ module DatabaseDumper
           cancelled_by
           waiting_list_deadline_date
           event_change_deadline_date
+          allow_registration_edits
         ),
         db_default: %w(
           connected_stripe_account_id

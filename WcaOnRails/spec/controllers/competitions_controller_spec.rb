@@ -657,7 +657,9 @@ RSpec.describe CompetitionsController do
 
       it "cannot change registration open/close of locked competition" do
         old_open = 2.days.from_now.change(sec: 0)
-        old_close = 4.weeks.from_now.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 27.days.from_now.change(sec: 0)
         competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
 
         new_open = 1.week.from_now.change(sec: 0)
@@ -761,7 +763,8 @@ RSpec.describe CompetitionsController do
 
       it "cannot change registration open/close of locked competition" do
         old_open = 2.days.from_now.change(sec: 0)
-        old_close = 4.weeks.from_now.change(sec: 0)
+        # see comment in regular "when signed in as delegate" context
+        old_close = 27.days.from_now.change(sec: 0)
         competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
 
         new_open = 1.week.from_now.change(sec: 0)

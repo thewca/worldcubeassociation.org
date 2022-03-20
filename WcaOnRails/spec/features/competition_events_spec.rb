@@ -64,12 +64,6 @@ RSpec.feature "Competition events management" do
         end
       end
 
-      scenario "change to best of 3", js: true, retry: 3 do
-        within_round("333", 1) { select("Bo3", from: "format") }
-        save
-        expect(round_333_1.reload.format.id).to eq "3"
-      end
-
       scenario "change scramble group count to 42", js: true, retry: 3 do
         within_round("333", 1) { fill_in "scrambleSetCount", with: "42" }
         save
