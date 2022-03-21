@@ -204,7 +204,7 @@ new() {
     --key-name $keyname \
     --instance-type $instance_type \
     --security-groups "SSH + HTTP + HTTPS" \
-    --iam-instance-profile "avatar_upload_role"
+    --iam-instance-profile "prod_role"
     --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 60, "VolumeType": "gp3" } } ]'`
 
   instance_id=`echo $json | jq --raw-output '.Instances[0].InstanceId'`
@@ -405,6 +405,15 @@ function passthetorch() {
     echo "'${server_status_curl_cmd}' failed with exit code: $exit_code"
     exit 1
   fi
+
+  server_status=`echo "$curl_result" | tail -1`
+  if [ "${server_status}" != "200" ]; then
+    echo "" >> /dev/stderr
+    echo "https://${host}/server-status returned non 200 status code: ${server_status}" >> /dev/stderr
+    echo "You can test this out by running: ${curl_cmd}" >> /dev/stderr
+    exit 1
+  fi
+  
   get_instance_internal_ip_address expected_ip ${new_server_id}
   if ! echo $ip_addresses | grep ${expected_ip} > /dev/null; then
     echo "" >> /dev/stderr
