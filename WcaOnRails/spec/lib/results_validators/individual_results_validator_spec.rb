@@ -226,7 +226,7 @@ RSpec.describe IRV do
         res44.update(value4: -2, value5: -1)
         warns << RV::ValidationWarning.new(:results, competition1.id,
                                            IRV::RESULT_AFTER_DNS_WARNING,
-                                           round_id: "555-f",
+                                           round_id: "444-f",
                                            person_name: res44.personName)
         
         # DNS followed by non-DN result
