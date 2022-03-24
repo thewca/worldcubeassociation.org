@@ -135,6 +135,10 @@ class SolveTime
     !complete?
   end
 
+  def valid_result?
+    !dns? && unskipped?
+  end
+
   def time_seconds
     time_centiseconds / 100.0
   end

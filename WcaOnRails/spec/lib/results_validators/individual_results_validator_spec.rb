@@ -221,6 +221,15 @@ RSpec.describe IRV do
                                            person_name: res_mbf.personName,
                                            result: res_mbf.solve_times[1].clock_format)
 
+        # DNS followed by DNF
+        res44 = FactoryBot.create(result_kind, competition: competition1, eventId: "444")
+        res44.update(value4: -2, value5: -1)
+        warns << RV::ValidationWarning.new(:results, competition1.id,
+                                           IRV::RESULT_AFTER_DNS_WARNING,
+                                           round_id: "555-f",
+                                           person_name: res44.personName)
+        
+        # DNS followed by non-DN result
         res22 = FactoryBot.create(result_kind, competition: competition2, eventId: "222")
         res22.update(value4: -2)
         warns << RV::ValidationWarning.new(:results, competition2.id,
