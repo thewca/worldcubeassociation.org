@@ -228,7 +228,7 @@ RSpec.describe IRV do
                                            IRV::RESULT_AFTER_DNS_WARNING,
                                            round_id: "444-f",
                                            person_name: res44.personName)
-        
+
         # DNS followed by non-DN result
         res22 = FactoryBot.create(result_kind, competition: competition2, eventId: "222")
         res22.update(value4: -2)
