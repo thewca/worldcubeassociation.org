@@ -135,7 +135,7 @@ class SolveTime
     !complete?
   end
 
-  def valid_result?
+  def started_attempt?
     !dns? && unskipped?
   end
 
