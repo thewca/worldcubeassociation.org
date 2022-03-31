@@ -777,7 +777,7 @@ it:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
           Se sei un Delegato Junior, Delegato Senior, o membro del WRC o WQAC,
           riceverai i Report dei Delegati di default. Nota: la modifica potrebbe
@@ -839,7 +839,7 @@ it:
         external_registration_page: >-
           La pagina dove i partecipanti devono registrarsi per la competizione.
           Deve avere un url http(s) valido.
-        #original_hash: 784879d
+        #original_hash: a6f6562
         base_entry_fee_lowest_denomination: >-
           Tassa d'iscrizione per la competizione. Sarà mostrata nelle pagine di
           registrazione e di informazioni della competizione se presente. Se è
@@ -1068,6 +1068,8 @@ it:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1773,6 +1775,15 @@ it:
       #original_hash: f28bf87
       submit_value: Richiedi WCA ID
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        Tutte le immagini avatar sono salvate in cloud, quindi le modifiche alla
+        miniatura possono richiedere alcuni minuti prima di essere visualizzate
+        correttamente.
+      #original_hash: cc1d51b
+      cdn_warning: >-
+        Non preoccuparti se la tua miniatura non viene aggiornata immediatamente
+        dopo il salvataggio!
       #original_hash: 79f14eb
       current: 'Miniatura corrente:'
       #original_hash: b42ba27
@@ -2932,6 +2943,15 @@ it:
         greater_china: Campionato della Grande Cina
         #original_hash: 3b920b7
         generic: 'Campionato: %{type}'
+      dues_estimate:
+        #original_hash: 6e56455
+        calculated: 'Le Quote WCA stimate per %{limit} partecipanti sono %{estimate}'
+        #original_hash: 5e8cffe
+        per_competitor: 'le Quote WCA stimate per partecipante sono %{estimate}'
+        #original_hash: 83d4cdc
+        ajax_error: >-
+          È stato riscontrato un errore nella stima delle Quote. Impostare a
+          zero e reinserire la tassa di registrazione
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
