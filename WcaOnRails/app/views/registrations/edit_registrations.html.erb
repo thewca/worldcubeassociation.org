@@ -161,9 +161,36 @@
       <button type="submit" class="btn btn-warning selected-approved-deleted-registrations-actions" name="registrations_action" value="reject-selected">
         <%= ui_icon 'times' %> <%= t('registrations.list.reject') %>
       </button>
-      <button type="submit" class="btn btn-danger selected-pending-approved-registrations-actions" name="registrations_action" value="delete-selected">
+      <button type="button" class="btn btn-danger selected-pending-approved-registrations-actions" data-toggle="modal" data-target="#delete-reasons-menu">
         <%= ui_icon 'trash' %> <%= t('registrations.list.delete') %>
       </button>
+    </div>
+
+    <div class="modal fade" id="delete-reasons-menu" tabindex="-1" role="dialog" aria-labelledby="delete-reasons-menu" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="reasons-menu-title">Reason for Deletion</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Select a reason for the registration deletion that will be notified to the user(s) by email:
+            <select class="form-select" aria-label="reasons-select">
+              <option value="info-missing">Competitor Information Missing</option>
+              <option value="criteria">Registration Criteria Not Met</option>
+              <option value="limit-full">Competitor Limit Full</option>
+              <option value="multiple-registrations">Registering Multiple Times</option>
+              <option value="comp-canceled">Competition Is Canceled</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" name="registrations_action" value="delete-selected" data-toggle="modal" data-target="#delete-reasons-menu">Confirm and Send</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
     </div>
   <% end %>
 
