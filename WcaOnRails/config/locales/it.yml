@@ -2227,7 +2227,7 @@ it:
       n_events: Numero di eventi
     new_registration:
       #original_hash: 8b9f726
-      title: 'Registrato per la competizione %{comp}'
+      title: 'Registrati per la competizione %{comp}'
     #original_hash: 7cae988
     registered_with_account_html: >-
       Questa persona è registrata con un account. Puoi modificare le sue
