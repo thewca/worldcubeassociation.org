@@ -116,6 +116,9 @@ zh-CN:
     mmagic: 十二板
     #original_hash: 1843dc4
     333mbo: 多盲-旧赛制
+  formats:
+    #original_hash: e4b3c11
+    '1': 单次最好
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -887,13 +890,21 @@ zh-CN:
       #original_hash: 0eb5ed5
       information: 信息
       #original_hash: 9ac918a
-      about: 关于WCA
+      about: 关于 WCA
+      #original_hash: ed97787
+      documents: WCA 文档
       #original_hash: d8fd3e4
-      delegates: WCA代表
+      delegates: WCA 代表
       #original_hash: 37b8fdc
       organizations: 地区性组织
       #original_hash: d790b40
       faq: 常见问题
+      #original_hash: cf1d2c9
+      forum: 论坛
+      #original_hash: 3ad28c0
+      teams: 团队、委员会和理事会
+      #original_hash: 7981fb3
+      education: 教育资源
       #original_hash: a34b69f
       contact: 联系信息
       #original_hash: 4fa8cc8
@@ -936,6 +947,10 @@ zh-CN:
       history: 历史
       #original_hash: 8ad8302
       translations: 翻译
+      #original_hash: c420cb4
+      disciplinary: 违纪记录
+      #original_hash: ecba5f4
+      incidents: 事件日志
       #original_hash: b8be3d1
       administration: 管理
       #original_hash: b7ee3c4
@@ -954,6 +969,10 @@ zh-CN:
       new_post: 新文章
       #original_hash: 0d67445
       team_leader: 组长
+      #original_hash: 37b8fdc
+      regional_organizations: 地区性组织
+      #original_hash: 6568fa0
+      manage_regional_organizations: 管理地区组织
       #original_hash: dc1649a
       sign_out: 退出
       #original_hash: 753a22b
@@ -1752,6 +1771,67 @@ zh-CN:
     edit:
       #original_hash: 5f1f5b8
       edit_tab_title: '编辑%{tab_name}标签'
+  results:
+    rankings:
+      #original_hash: f5fe73c
+      title: 排行榜
+      #original_hash: 65310e5
+      unknown_type: 未知类型参数，必须是 "单次 "或 "平均"。
+      #original_hash: 01e188f
+      unknown_show: 未知显示参数，必须是 "N个人"、"N个结果 "或 "按地区"。
+    records:
+      #original_hash: e51c552
+      title: 纪录
+    selector_elements:
+      events_selector:
+        #original_hash: ad8919a
+        event: 魔方类型
+        #original_hash: 3e83afa
+        all_events: 所有魔方
+      #original_hash: 0f21717
+      region: 地区
+      type_selector:
+        #original_hash: 3deb745
+        type: 还原类型
+        #original_hash: dd11868
+        single: 单次
+        #original_hash: 15f86c0
+        average: 平均
+      years_selector:
+        #original_hash: 96f997b
+        years: 年份
+        #original_hash: 0977c76
+        all_years: 所有年份
+        #original_hash: 8737f09
+        only: 只看某年
+        #original_hash: b3c0fe7
+        only_html: '在 %{year} 中'
+        #original_hash: 96bdb66
+        until: 到某年
+        #original_hash: fa23930
+        until_html: '到 %{year} 里'
+      show_selector:
+        #original_hash: d97d1ee
+        show: 排列方式
+        #original_hash: c0dcb86
+        mixed: 混合显示
+        #original_hash: 5ee371a
+        slim: 列表
+        #original_hash: 8ccaae8
+        separate: 单次/平均表
+        #original_hash: 90ccd64
+        history: 历史时间
+        #original_hash: e58bcf8
+        mixed_history: 按时间混合显示
+      gender_selector:
+        #original_hash: 8a754c6
+        gender: 性别
+        #original_hash: 6a72085
+        gender_all: 所有
+        #original_hash: 3f3a489
+        male: 男
+        #original_hash: b7c17e9
+        female: 女
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: 关联WCA ID到你的账号！
@@ -2332,9 +2412,13 @@ zh-CN:
       #original_hash: 1fa73f3
       title: 规则
       #original_hash: 557095b
-      content1_html: 所有比赛必须遵循<a href="/regulations/">WCA规则</a>。在参加第一场比赛之前，参赛者阅读这些规定是非常重要的。
+      content1_html: 所有比赛必须遵循 <a href="/regulations/">WCA 规则</a>。在参加第一场比赛之前，参赛者阅读这些规定是非常重要的。
       #original_hash: 4296902
-      content2_html: WCA规则由<a href="/regulations/guidelines.html">WCA指南</a>进行补充，其中包含更多的说明和解释。
+      content2_html: >-
+        WCA 规则由 <a href="/regulations/guidelines.html">WCA
+        指南</a>进行补充，其中包含更多的说明和解释。
+      #original_hash: c8e1783
+      content3_html: 关于在比赛中发生的、由 WCA 规则委员会解决的重要决定，可在<a href="/incidents">事件日志</a>中找到。
     panel2:
       #original_hash: 8ad8302
       title: 翻译
