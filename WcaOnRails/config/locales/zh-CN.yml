@@ -1427,9 +1427,15 @@ zh-CN:
       #original_hash: 7b80062
       not_visible: 比赛尚未公示。
       #original_hash: c1d4926
-      name_too_long: 比赛名超过32个字符。如果你改短一点会更好。
+      name_too_long: 比赛名超过 32 个字符。如果你改短一点会更好。
+      #original_hash: af27396
+      id_starts_with_lowercase: 比赛 ID 以小写字母开头。我们倾向于让它以大写字母开头。
       #original_hash: 1a20fae
       must_have_events: 请在确认比赛前至少添加一个项目。
+      #original_hash: a3aea56
+      schedule_must_match_rounds: 请确保每项比赛至少有一轮，而且你创建的时间表包括你在确认比赛前申报的所有比赛。
+      #original_hash: aeb5f2a
+      advancement_condition_must_be_present_for_all_non_final_rounds: 请确保所有非最后一轮的比赛都规定了晋级条件。
       #original_hash: e390250
       create_success: 成功创建新比赛！
       #original_hash: afe3a23
@@ -1458,10 +1464,21 @@ zh-CN:
       #original_hash: 5c6d3ea
       title: 我的比赛
       #original_hash: 1fa5a4b
-      disclaimer: 只有使用WCA报名系统的比赛会列在此处。如果你的比赛没有列在下方，请查阅比赛官网的选手列表。
+      disclaimer: 只有使用 WCA 报名系统的比赛会列在此处。如果你的比赛没有列在下方，请查阅比赛官网的选手列表。
       #original_hash: 94a2fc8
       past_competitions: 以前的比赛
+      #original_hash: ec7e697
+      bookmarked_title: 加入书签的比赛
+      #original_hash: e5665fb
+      bookmarked_explanation: 你在 WCA 网站上加了书签的比赛。我们会在注册开放前 24 小时向你发送一封电子邮件。
     competition_info:
+      pdf:
+        #original_hash: 05af803
+        terms_and_abbr: 技术术语和缩略语
+        #original_hash: 18f306c
+        formats_abbr: 格式缩写
+        #original_hash: 55dc8bc
+        abbr_description: '%{short_name}: %{long_name}'
       #original_hash: eb9a4bc
       date: 日期
       #original_hash: 4271627
@@ -1491,6 +1508,8 @@ zh-CN:
     index:
       #original_hash: db98a68
       title: 比赛
+      #original_hash: f483b9c
+      disclaimer: 请注意，由于 COVID-19 肆虐，一些国家目前无法举办比赛。
       #original_hash: 6a72085
       all_events: 所有
       #original_hash: 6d76b81
@@ -1515,6 +1534,10 @@ zh-CN:
       past: 以前
       #original_hash: 081ae3f
       custom: 自定义
+      #original_hash: 73cf180
+      by_announcement: 公告
+      #original_hash: b3946b2
+      sort_by_announcement: 按最新的公告排序
       #original_hash: 3f66052
       from_date: 从
       #original_hash: ae79ea1
@@ -1531,11 +1554,13 @@ zh-CN:
         #original_hash: f628f0e
         past_all: 已结束的所有比赛
         #original_hash: cbe8a54
-        recent: '过去%{count}天的比赛'
+        recent: '过去 %{count} 天的比赛'
         #original_hash: 914742f
         upcoming: 近期比赛
         #original_hash: 8b57693
         custom: 选定时间内的比赛
+        #original_hash: 0933739
+        by_announcement: 按公告日期排序的比赛，最新的在上面
       #original_hash: 6684214
       no_access: 你没有权限访问这个页面！
       tooltips:
@@ -1548,10 +1573,12 @@ zh-CN:
           posted: 成绩已公示！
           #original_hash: 89bcc37
           starts_in: '%{days}后开始'
+          #original_hash: 97b061a
+          announced_on: '于 %{announcement_date} 公布。'
         #original_hash: ccd2db9
         search: 名字或者城市
         #original_hash: 3bc8082
-        recent: '过去%{count}天'
+        recent: '过去 %{count} 天'
       #original_hash: 8b09d74
       no_comp_found: 没有比赛。
       #original_hash: 7008166
@@ -1575,10 +1602,14 @@ zh-CN:
       competitions_list: 比赛列表
       #original_hash: 9104a03
       no_past_competitions: 你没有以前的比赛。
+      #original_hash: 43c3543
+      no_bookmarked_competitions: 你还没有将任何即将举行的比赛加入书签。请点击比赛页面上的书签图标，将其保存在这里
     competition_form:
+      #original_hash: 2b81984
+      wcat: WCA 比赛公告小组
       #original_hash: f957dcb
       supports_md_html: >-
-        支持<a href='https://daringfireball.net/projects/markdown/basics'
+        支持 <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
       #original_hash: 9d9126e
       venue_html: >-
@@ -1610,6 +1641,11 @@ zh-CN:
       coordinates: 坐标
       #original_hash: a672984
       add_championship: 添加锦标赛
+      championship_types:
+        #original_hash: dc71704
+        world: 世界锦标赛
+        #original_hash: e045169
+        greater_china: 中国锦标赛
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必须以年份结尾，并且只能包含数字、字母、标点（-&.:''）和空格'
@@ -1630,7 +1666,7 @@ zh-CN:
       #original_hash: 43a83a9
       end_date_before_start: 结束日期不能早于开始日期。
       #original_hash: be3933b
-      span_too_many_days: '比赛不能持续超过%{max_days}天。'
+      span_too_many_days: '比赛不能持续超过 %{max_days} 天。'
       #original_hash: cdcd288
       invalid_currency_code: 所选货币符号不正确
     new:
@@ -1689,11 +1725,23 @@ zh-CN:
     announcements: 公告
     #original_hash: a2b80b0
     post_announcement: 发布比赛公告
+    #original_hash: 375e17f
+    cancel: 取消比赛
+    #original_hash: 7628a51
+    uncancel: 撤销取消比赛操作
+    #original_hash: 25e68c3
+    cancel_confirm: 你确定你要取消这个比赛吗？
     #original_hash: 9a42672
     upload_results: 上传成绩
+    #original_hash: 01de5ee
+    post_results: 公布成绩
+    #original_hash: 0fb43d5
+    note_before_cancel: 注意：只有已确认的比赛才可以取消。
     show:
       #original_hash: b0fe391
       general_info: 基本信息
+      #original_hash: 1060ed0
+      no_schedule: 这个比赛没有时间表，无法生成 pdf。
     nav:
       menu:
         #original_hash: 612e12d
@@ -1935,21 +1983,21 @@ zh-CN:
     #original_hash: 5b7fa52
     create_an_account: '可以在%{here}注册账号。'
     #original_hash: f8c910c
-    claim_your_wca_id: '可以在%{here}认领你的WCA ID。'
+    claim_your_wca_id: '可以在%{here}认领你的 WCA ID。'
     #original_hash: 4dfb4c7
-    create_an_account_and_claim: '在%{here}注册账号并登录以认领WCA ID。'
+    create_an_account_and_claim: '在%{here}注册账号并登录以认领 WCA ID。'
     answers:
       '1':
         #original_hash: f79b522
-        title: 如何获得WCA ID？
+        title: 如何获得 WCA ID？
         content:
           #original_hash: b645fe1
           '1': >-
-            如果你从来没参加过比赛，那么去参加一场<a
-            href='/competitions'>比赛</a>！当成绩公示之后，会自动为你创建一个WCA ID。
+            如果你从来没参加过比赛，那么去参加一场<a href='/competitions'>比赛</a>！当成绩公示之后，会自动为你创建一个
+            WCA ID。
       '2':
         #original_hash: eb948e7
-        title: 如何找到WCA比赛？
+        title: 如何找到 WCA 比赛？
         content:
           #original_hash: d195cec
           '1': 查看<a href='/competitions'>比赛列表</a>
@@ -1958,61 +2006,63 @@ zh-CN:
         title: 如何报名比赛？如果报名时有问题我应该联系谁？
         content:
           #original_hash: 7b91db1
-          '1': '很多比赛使用WCA的报名系统，但也有使用他们自己系统的。你可以联系主办方咨询详细信息。%{comp_search_form}'
+          '1': '很多比赛使用 WCA 的报名系统，但也有使用他们自己系统的。你可以联系主办方咨询详细信息。%{comp_search_form}'
       '4':
         #original_hash: 9a5ae28
-        title: 参加WCA比赛有什么要求？参加之前我需要知晓哪些？
+        title: 参加 WCA 比赛有什么要求？参加之前我需要知晓哪些？
         content:
           #original_hash: 3bb4e11
           '1': >-
-            通常来讲，参加WCA比赛并没有太多要求，所有选手都需要知悉<a
-            href='https://www.worldcubeassociation.org/regulations/'>WCA比赛规则</a>。如果英语不是你的母语，无法理解该文档，请参阅
-            <a
+            通常来讲，参加 WCA 比赛并没有太多要求，所有选手都需要知悉 <a
+            href='https://www.worldcubeassociation.org/regulations/'>WCA
+            比赛规则</a>。如果英语不是你的母语，无法理解该文档，请参阅 <a
             href='https://www.worldcubeassociation.org/regulations/translations/'>翻译</a>。
       '5':
         #original_hash: 3b657aa
-        title: 我的家乡如何能有一场WCA比赛？
+        title: 我的家乡如何能有一场 WCA 比赛？
         content:
           #original_hash: 3d4eb1c
           '1': 如果你对组织比赛感兴趣，请先参加一两场比赛来学习经验。
           #original_hash: be305b8
           '2': >-
-            WCA比赛必须遵守<a target='_blank'
-            href='https://www.worldcubeassociation.org/regulations/'>WCA规则</a>。主办团队可以不必牢记于心，但是对基础规则的深入了解有助于组织比赛。
+            WCA 比赛必须遵守 <a target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/'>WCA
+            规则</a>。主办团队可以不必牢记于心，但是对基础规则的深入了解有助于组织比赛。
           #original_hash: dbd72c2
           '3': >-
-            主办团队必须联系一个就近的<a target='_blank'
-            href='https://www.worldcubeassociation.org/delegates'>WCA代表</a>来监督以保证比赛是WCA官方认证的。WCA代表会帮助主办团队尽力组织一场成功的比赛。
+            主办团队必须联系一个就近的 <a target='_blank'
+            href='https://www.worldcubeassociation.org/delegates'>WCA
+            代表</a>来监督以保证比赛是 WCA 官方认证的。WCA 代表会帮助主办团队尽力组织一场成功的比赛。
           #original_hash: 576c3b8
           '4': >-
-            可以参考 <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA比赛主办指南</a>和<a
-            target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>CubingUSA比赛指南</a>获取更多信息。（任何WCA规则和这个补充教程有冲突的地方，以规则为准。）
+            可以参考  <a target='_blank'
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
+            比赛主办指南</a>和<a target='_blank'
+            href='https://www.cubingusa.com/cguide.php'>CubingUSA比赛指南</a>获取更多信息。（任何
+            WCA 规则和这个补充教程有冲突的地方，以规则为准。）
       '6':
         #original_hash: 8005a61
-        title: WCA帐号是做什么的？它和WCA资料有什么区别？
+        title: WCA 帐号是做什么的？它和 WCA 资料有什么区别？
         content:
           #original_hash: 57a3767
-          '1': 当你的第一场比赛成绩公示时，你将会获得一个WCA ID。
+          '1': 当你的第一场比赛成绩公示时，你将会获得一个 WCA ID。
           #original_hash: c5ad7a3
-          '2': WCA帐号可以让你证实你的身份，并上传照片到你的WCA主页以及报名参加比赛。这可以防止其他人冒充你。
+          '2': WCA 帐号可以让你证实你的身份，并上传照片到你的 WCA 主页以及报名参加比赛。这可以防止其他人冒充你。
           #original_hash: 9ff083a
           '3': '%{current_user_status}'
       '7':
         #original_hash: d7ee9bd
-        title: 如何修改我的WCA主页照片？
+        title: 如何修改我的 WCA 主页照片？
         content:
           #original_hash: e619524
           '1': >-
-            首先，你需要<a
-            href='#how-do-i-connect-my-wca-account-with-my-wca-id'>注册一个WCA帐号并认领你的WCA
-            ID</a>。
+            首先，你需要<a href='#how-do-i-connect-my-wca-account-with-my-wca-id'>注册一个
+            WCA 帐号并认领你的 WCA ID</a>。
           #original_hash: 56a8f26
           '2': '其次，<a href=''%{profile_edit_path}''>点击这里</a>编辑你的照片。'
       '8':
         #original_hash: 1d61217
-        title: 如何关联我的WCA ID？
+        title: 如何关联我的 WCA ID？
         content:
           #original_hash: 07bb6ec
           '1': '%{current_user_claim}'
@@ -2026,16 +2076,17 @@ zh-CN:
             href='/competitions'>比赛列表</a>。
       results:
         #original_hash: 9aae576
-        title: WCA比赛的成绩什么时候公示到WCA官网？
+        title: WCA 比赛的成绩什么时候公示到 WCA 官网？
         content:
           #original_hash: 890d879
           '1': >-
-            比赛结束后，WCA代表将对成绩条和选手信息二次检查以尽量避免错误。然后他们会发送成绩到负责公示成绩和维护WCA数据库的WCA成绩组（WRT)。之后成绩组会尽快公示。
+            比赛结束后，WCA 代表将对成绩条和选手信息二次检查以尽量避免错误。然后他们会发送成绩到负责公示成绩和维护 WCA 数据库的 WCA
+            成绩组（WRT)。之后成绩组会尽快公示。
           #original_hash: daf1cb1
           '2': 公示时间取决于比赛规模和代表的个人日程，快则一天慢则一周。请耐心等待。
           #original_hash: bf8adbe
           '3': >-
-            此外，如果你已经关联了WCA ID（看下面），你可以在<a
+            此外，如果你已经关联了 WCA ID（看下面），你可以在<a
             href='%{preferences_edit_path}'>这里</a>启用成绩公示的邮件通知。
       regulations1:
         #original_hash: 2951eb6
@@ -2044,16 +2095,17 @@ zh-CN:
           #original_hash: 5ac78e4
           '1': >-
             你可以在规则<a
-            href='https://www.worldcubeassociation.org/regulations/translations/chinese/#article-3-puzzles'>第三章</a>里找到关于魔方的定义。所有魔方都需要经过WCA代表同意才能使用。如果你不确定，请在比赛时询问代表。以防万一可以多带一个魔方以便更换。
+            href='https://www.worldcubeassociation.org/regulations/translations/chinese/#article-3-puzzles'>第三章</a>里找到关于魔方的定义。所有魔方都需要经过
+            WCA 代表同意才能使用。如果你不确定，请在比赛时询问代表。以防万一可以多带一个魔方以便更换。
       regulations2:
         #original_hash: 48f1234
-        title: 我可以在WCA官方比赛中使用磁力魔方吗？
+        title: 我可以在 WCA 官方比赛中使用磁力魔方吗？
         content:
           #original_hash: 024ce81
           '1': >-
-            只要他们符合<a target='_blank'
-            href='https://www.worldcubeassociation.org/regulations/translations/chinese/'>WCA规则</a>你就可以使用。请特别注意
-            <a
+            只要他们符合 <a target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/translations/chinese/'>WCA
+            规则</a>你就可以使用。请特别注意 <a
             href='https://www.worldcubeassociation.org/regulations/translations/chinese/#3h'>3h</a>。
       regulations3:
         #original_hash: c7460a5
@@ -2065,7 +2117,7 @@ zh-CN:
             href='https://www.worldcubeassociation.org/regulations/translations/chinese/#3j'>3j</a>）。
       regulations4:
         #original_hash: 43f9da8
-        title: 几岁才能报名参加WCA比赛？
+        title: 几岁才能报名参加 WCA 比赛？
         content:
           #original_hash: 984704a
           '1': >-
@@ -2132,6 +2184,12 @@ zh-CN:
     title: 文档
     #original_hash: 1b537dc
     determination_letter: 国税局的裁定书
+    #original_hash: 2643980
+    codeofconduct: 行为准则
+    #original_hash: 4f05e8f
+    finances: 财务
+    #original_hash: d1b1406
+    vision_and_strategy: 愿景和战略
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
