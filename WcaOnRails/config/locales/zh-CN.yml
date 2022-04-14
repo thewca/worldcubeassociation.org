@@ -1,30 +1,48 @@
 zh-CN:
   countries:
+    #original_hash: 530670d
     AG: 安提瓜和巴布达
+    #original_hash: 62ac59b
     BA: 波斯尼亚和黑塞哥维那
+    #original_hash: f39d280
     CD: 刚果民主共和国
+    #original_hash: 77f256b
     CG: 刚果
+    #original_hash: b218299
     CI: 科特迪瓦
+    #original_hash: 07dee45
     CV: 佛得角
+    #original_hash: ee10075
     FM: 密克罗尼西亚联邦
+    #original_hash: db871b0
     GW: 几内亚比绍
     #original_hash: 2f488ff
     HK: 香港
+    #original_hash: 3ad2dd8
     KN: 圣基茨和尼维斯
+    #original_hash: 5c34abb
     KP: 朝鲜民主主义人民共和国
-    #original_hash: 4e8bd04
+    #original_hash: 4430b22
     KR: 韩国
+    #original_hash: 673b1cf
     LC: 圣卢西亚
+    #original_hash: e2ac50f
     MK: 北马其顿
-    MM: 缅甸"
-    #original_hash: 918c53a
+    #original_hash: 928b7c4
+    MM: 缅甸
+    #original_hash: d887137
     MO: 澳门
+    #original_hash: 05a15c1
     PS: 巴基斯坦
+    #original_hash: 655191a
     ST: 圣多美和普林西比
+    #original_hash: 16cc7f8
     SZ: 斯威士兰
+    #original_hash: 4d206a8
     TT: 特立尼达和多巴哥
+    #original_hash: 3fa9b2d
     VC: 圣文森特和格林纳丁斯
-
+    #original_hash: 9af4622
     XF: 非洲多地
     #original_hash: 374ac0d
     XM: 美洲多地
@@ -32,10 +50,13 @@ zh-CN:
     XA: 亚洲多地
     #original_hash: 090f3ce
     XE: 欧洲多地
+    #original_hash: b50b7a5
     XN: 北美多地
+    #original_hash: 428e7af
     XO: 大洋洲多地
     #original_hash: 459f987
     XS: 南美洲多地
+    #original_hash: 9027fe6
     XW: 世界多地
   continents:
     #original_hash: 0f138c8
