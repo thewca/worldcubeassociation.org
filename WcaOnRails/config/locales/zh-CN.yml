@@ -212,6 +212,8 @@ zh-CN:
     average: 平均
     #original_hash: e7f6fc5
     solves: 详情
+    #original_hash: c9d0561
+    hello: '欢迎 %{name}，'
     date:
       #original_hash: acb6273
       no_date: 待定
@@ -228,11 +230,11 @@ zh-CN:
     #original_hash: 49d0140
     days:
       zero: 0天
-      other: '%{count}天'
+      other: '%{count} 天'
     #original_hash: 203e1b3
     these_events:
       zero: 没有项目
-      other: '这%{count}个项目'
+      other: '这 %{count} 个项目'
     #original_hash: 51ef7d4
     search_site: 搜索本站
     #original_hash: d7decf1
@@ -243,6 +245,13 @@ zh-CN:
     date_placeholder: YYYY-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
+    #original_hash: 7136e3b
+    time_format: 12 小时制
+    solve_time:
+      #original_hash: 7febce0
+      unit_seconds: 秒
+      #original_hash: 9d86b0d
+      unit_moves: 步
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -957,6 +966,58 @@ zh-CN:
       manage_app: 管理你的应用
       #original_hash: 0e8b212
       manage_auth_app: 管理授权的应用
+  homepage:
+    #original_hash: 824d76b
+    learn_more: 了解更多
+    #original_hash: d8f3ae6
+    title: 欢迎来到世界魔方协会（WCA）
+    #original_hash: d133986
+    latest_news: 最新动态
+    #original_hash: 06b01c4
+    announcements: 公告
+    #original_hash: f0cbb3e
+    see_all_announcements: 查看所有公告
+    about_us:
+      #original_hash: 3ffb811
+      title: 关于我们
+    competitions:
+      #original_hash: db98a68
+      title: 比赛
+      #original_hash: 0ac88bc
+      text_html: '寻找你附近的比赛或比赛结果。现在正在参加比赛，想看看比赛结果？试试 %{wca_live_link}！'
+    merchandise:
+      #original_hash: 698cfc8
+      title: 商品
+      #original_hash: 9ad68ce
+      text_html: 看看我们新推出的官方商品，包括从T恤到连帽衫的一系列服装。
+      #original_hash: b0fc6c4
+      link_title: 我想康康
+    records:
+      #original_hash: e51c552
+      title: 纪录
+      #original_hash: 3681af0
+      text: 查阅所有 WCA 官方活动的当前和过去的纪录。
+    faq:
+      #original_hash: 1e0206f
+      text: 如果你需要任何帮助，请看看我们的 "常见问题 "列表。你的许多问题可能在那里有答案。
+    contact:
+      #original_hash: b37456c
+      title: 联系我们
+      #original_hash: 5c254b6
+      text_html: '如果您想与我们联系，您可以通过我们的联系表格进行。如果您对 WCA 的不同程序有任何疑问，请务必通过我们的 %{faq_link}!'
+      #original_hash: d790b40
+      faq: 常见问题
+      #original_hash: 392f358
+      button: 带我去康康 WCA 的联系表
+    support:
+      #original_hash: 610edba
+      title: 支持 WCA
+      #original_hash: 6253f90
+      text: >-
+        世界魔方协会是一个 501(c)(3) 免税组织。作为一个 100%
+        由志愿者经营的非营利组织，我们欢迎你的捐赠，以帮助我们进一步实现在世界各地举办更多愉快比赛的愿景。
+      #original_hash: 65c84ec
+      button: 了解更多关于你如何支持 WCA 的信息
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1986,6 +2047,11 @@ zh-CN:
       see_link_html: '（查看%{link}）'
       #original_hash: 5b01fcc
       members_html: 所有选手在参加完第一场WCA比赛之后自动成为WCA<strong>成员</strong>。
+  documents:
+    #original_hash: 687c828
+    title: 文档
+    #original_hash: 1b537dc
+    determination_letter: 国税局的裁定书
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
@@ -2075,28 +2141,80 @@ zh-CN:
         该委员会负责支持和促进WCA内持续的质量改进，以及在全球范围内应用质量标准，以确保一致的高质量流程，WCA工作人员，区域组织，比赛组织者和工作人员。
   score_tools:
     #original_hash: 4fc2133
-    title: WCA成绩录入工具
+    title: WCA 成绩录入工具
+    #original_hash: 6d2fe37
+    wca_icon_text: 由 WST 开发和维护
+    intro:
+      #original_hash: 0c5fab5
+      desc: 本页是一份非详尽的工具清单，已知这些工具可用于帮助组织 WCA 的比赛。
+      #original_hash: 479b542
+      disclaimer: '该页面上的所有工具并非都是由 WST 维护的，我们没有足够的人力来管理所有与 WCA 相关的软件 :)'
+      #original_hash: 80f97b9
+      used: >-
+        这个名单上的所有程序都是在真正的 WCA 比赛中使用的，并与 WCA 网站集成：它们让你用 WCA
+        账户登录，以便能够导入（有时会更新）你即将到来的比赛数据。每个程序的维护者都会清楚地写出来。
+    before:
+      #original_hash: 9850344
+      title: 比赛前
+      #original_hash: 576e2f4
+      desc: 管理参赛者的注册可以直接在 WCA 网站上完成。由于手动管理小组和工作人员可能很耗时，你可能要考虑使用下面中的一个工具。
+    during:
+      #original_hash: 9934200
+      title: 在比赛期间
+      #original_hash: 2b0a6f6
+      desc: 你会在这里找到让你在比赛进行中管理比赛结果的工具。
+    after:
+      #original_hash: d81b949
+      title: 在比赛结束之后
+    tools:
+      age:
+        #original_hash: 2e4832d
+        description: 用于生成和编辑 WCA 比赛的小组/任务分配的工具
+      certificates:
+        #original_hash: f1a0731
+        description: 使用 WCA Live 打印 WCA 比赛的证书
+      groupifier:
+        #original_hash: 24d4736
+        description: >-
+          为 WCA
+          比赛组织者提供的任务和小组管理工具。在主要功能中，你会发现：按排名对参赛者进行排序，分配任务（评审、打乱），决定需要多少打乱，生成评分表、个人表和总结......
+          请查看网站以了解更多信息。
+      scorecards:
+        #original_hash: 2b8e373
+        description: 使用 WCA Live 打印 WCA 比赛的记分卡
+      live:
+        #original_hash: f122015
+        description: 用于举办 WCA 比赛并与世界分享实时结果的平台。
+      nightmare:
+        #original_hash: 466f4c2
+        description: 有时你会遭遇到 ... 咳咳。如果你没有网络，你将不得不使用好的旧电子表格。
+      matcher:
+        #original_hash: a352bd1
+        description: >-
+          可用于将 TNoodle 生成的打乱分配给结果。从 WCA 网站（当使用 WCA Live 时）、电子表格或独立的 WCIF
+          文件导入结果。从一个或多个 TNoodle json 文件中导入打乱。将结果导出为适当的格式，用于提交 WCA。
   logo:
     #original_hash: c72c969
     title: WCA Logo
     paragraphs:
       #original_hash: 44cfe8d
-      '1': WCA logo由Justin Eastman设计于2005年元月。<br />它的设计风格、颜色、和三阶魔方无关等特性深受我们喜爱。
+      '1': WCA logo 由 Justin Eastman 设计于 2005 年元月。<br />它的设计风格、颜色、和三阶魔方无关等特性深受我们喜爱。
       #original_hash: 916e3fc
       '2': >-
-        当前有三种不同版本的logo：<a
+        当前有三种不同版本的 logo：<a
         href="/files/WCAlogo_XL.jpg">大版本</a>（46KB，1756像素×1068像素）、 <a
         href="/files/WCAlogo.svg">矢量版</a>以及<a
         href="/files/WCAlogo_notext.svg">无文字矢量版</a>。
       #original_hash: dcb1ad6
       '3': >-
-        3D版本的logo由越南的Vu Minh Tan设计：<a href="/files/WCALogo3D.png">PNG版本</a>（2.1
-        MB）、<a href="/files/WCALogo3Dsmall.png">小PNG版本</a>（0.25 MB）。
+        3D 版本的 logo 由越南的 Vu Minh Tan 设计：<a href="/files/WCALogo3D.png">PNG
+        版本</a>（2.1 MB）、<a href="/files/WCALogo3Dsmall.png">小 PNG 版本</a>（0.25
+        MB）。
       #original_hash: e5df1bf
       '4': >-
-        所有WCA比赛主办方仅可以在WCA比赛相关的网站、衣服、礼品或者装饰品上使用WCA logo。<br
-        />其他人要使用或者用于其它目的需要经过<a
-        href="mailto:board@worldcubeassociation.org">WCA董事会</a>同意。
+        所有 WCA 比赛主办方仅可以在 WCA 比赛相关的网站、衣服、礼品或者装饰品上使用 WCA logo。<br
+        />其他人要使用或者用于其它目的需要经过 <a href="mailto:board@worldcubeassociation.org">WCA
+        董事会</a>同意。
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA成绩表助手
