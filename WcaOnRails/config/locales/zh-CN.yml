@@ -246,7 +246,7 @@ zh-CN:
   oauth:
     applications:
       #original_hash: 0c4ea38
-      your_apps: 你的OAuth应用
+      your_apps: 你的 OAuth 应用
       #original_hash: 6403f2b
       new: 新建
       #original_hash: 709a232
@@ -256,7 +256,7 @@ zh-CN:
       #original_hash: 89ff312
       owner: 所有者
       #original_hash: 557031c
-      application_id: 应用ID
+      application_id: 应用 ID
       #original_hash: c3cd636
       actions: 操作
       #original_hash: f4e7a87
@@ -807,7 +807,7 @@ zh-CN:
         message: 留言
       dob_contact:
         #original_hash: 390edfa
-        wca_id: 你的WCA ID
+        wca_id: 你的 WCA ID
         #original_hash: 51d0597
         dob: 正确的生日
         #original_hash: e214b8a
@@ -840,13 +840,15 @@ zh-CN:
         #original_hash: e88f903
         form_error:
           zero: 没有错误
-          other: '表单有%{count}项错误：'
+          other: '表单有 %{count} 项错误：'
     doorkeeper:
       applications:
         help:
+          #original_hash: 95c10ec
+          https_info: 除非主机是 "localhost"，否则需要 HTTPS。
           #original_hash: 62a0113
           scopes_html: >-
-            将权限用空格分开。留空将使用默认权限。
+            将权限用空格分开。留空将使用默认权限。 <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">点击这里</a>查看支持的权限列表。
       scopes:
@@ -862,15 +864,15 @@ zh-CN:
       #original_hash: 06184f5
       no_account: 没有帐号？
       #original_hash: a268696
-      have_competed: 我之前参加过WCA比赛。
+      have_competed: 我之前参加过 WCA 比赛。
       #original_hash: dcd1d70
-      have_never_competed: 我从没参加过WCA比赛。
+      have_never_competed: 我从没参加过 WCA 比赛。
       #original_hash: 86a60c9
-      let_us_know: 如果你之前参加过WCA比赛，请告知我们。
+      let_us_know: 如果你之前参加过 WCA 比赛，请告知我们。
       #original_hash: f9f512b
-      welcome_back: 欢迎回来！要注册一个WCA网站帐号，我们需要知道你参加比赛的WCA ID。
+      welcome_back: 欢迎回来！要注册一个 WCA 网站帐号，我们需要知道你参加比赛的 WCA ID。
       #original_hash: 669fb57
-      welcome: 欢迎！在你参加第一场WCA比赛之前，我们需要一些额外信息。除非你同意，否则你的生日永远不会公开。
+      welcome: 欢迎！在你参加第一场 WCA 比赛之前，我们需要一些额外信息。除非你同意，否则你的生日永远不会公开。
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2238,7 +2240,7 @@ zh-CN:
       content2_html: 本文件包含重要信息，应由每个比赛组织者阅读。
   organizer_guidelines:
     #original_hash: 7486ac4
-    title: WCA比赛组织者指南
+    title: WCA 比赛组织者指南
     paragraph1:
       #original_hash: e5f5329
       title: 如何组织一场比赛
@@ -2329,7 +2331,7 @@ zh-CN:
       #original_hash: ead44f5
       title: 赛间事务
       #original_hash: ee2e9c6
-      content: 组织者在比赛期间需要做的事情应该和WCA代表讨论。典型的事务包括（它们可以被委托给其他靠谱的人）：
+      content: 组织者在比赛期间需要做的事情应该和 WCA 代表讨论。典型的事务包括（它们可以被委托给其他靠谱的人）：
       list:
         #original_hash: 03aea46
         '1': 管理注册处
@@ -2391,3 +2393,25 @@ zh-CN:
       confirm_accept: 你确定要接受这个媒体资料吗？
       #original_hash: 5301648
       edit: 编辑
+  media_and_instagram:
+    instagram_submission:
+      #original_hash: 1acd0d2
+      paragraph1_html: >-
+        正如你可能已经看到的，WCA 有一个活跃的 <a
+        href="https://www.instagram.com/thewcaofficial/">Instagram!</a>
+        为了最好地展现全球的魔方社区，我们发布由世界各地的魔友参与者提交的内容。
+      #original_hash: 9b6abcd
+      paragraph2: >-
+        如果你有高质量的照片或视频希望我们发布，请点击下面的按钮并填写表格。为了让我们发布你的内容，你必须有它的所有使用权，并且必须允许 WCA
+        发布它。由于我们收到大量的材料，我们不能发布所有的内容，但这里有一些提示，以使您的内容得到发布。
+      #original_hash: cf5c955
+      photo_quality: 确保照片/视频质量良好。它不一定是专业拍摄的，但质量不应该有损于照片或视频。
+      #original_hash: 497bc27
+      wca_related: 发布与 WCA 有关的照片和视频，因为这是我们账户的全部内容。我们喜欢看到魔友们玩得开心！
+      #original_hash: af882f2
+      submit_instagram_content: 提交 Instagram 内容
+  footer:
+    #original_hash: cf01481
+    privacy: 隐私政策
+    #original_hash: 4c4a2e8
+    disclaimer: 免责声明
