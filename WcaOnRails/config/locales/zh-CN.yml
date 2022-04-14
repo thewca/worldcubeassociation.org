@@ -1,19 +1,42 @@
 zh-CN:
   countries:
+    AG: "安提瓜和巴布达"
+    BA: "波斯尼亚和黑塞哥维那"
+    CD: "刚果民主共和国"
+    CG: "刚果"
+    CI: "科特迪瓦"
+    CV: "佛得角"
+    FM: "密克罗尼西亚联邦"
+    GW: "几内亚比绍"
+    #original_hash: 2f488ff
+    HK: 香港
+    KN: "圣基茨和尼维斯"
+    KP: "朝鲜民主主义人民共和国"
+    #original_hash: 4e8bd04
+    KR: 韩国
+    LC: "圣卢西亚"
+    MK: "北马其顿"
+    MM: "缅甸"
+    #original_hash: 918c53a
+    MO: 澳门
+    PS: "巴基斯坦"
+    ST: "圣多美和普林西比"
+    SZ: "斯威士兰"
+    TT: "特立尼达和多巴哥"
+    VC: "圣文森特和格林纳丁斯"
+
+    XF: "非洲多地"
+    #original_hash: 374ac0d
+    XM: 美洲多地
     #original_hash: 3f8c9de
     XA: 亚洲多地
     #original_hash: 090f3ce
     XE: 欧洲多地
+    XN: "北美多地"
+    XO: "大洋洲多地"
     #original_hash: 459f987
     XS: 南美洲多地
-    #original_hash: 374ac0d
-    XM: 美洲多地
-    #original_hash: 918c53a
-    MO: 澳门
-    #original_hash: 2f488ff
-    HK: 香港
-    #original_hash: 4e8bd04
-    KR: 韩国
+    XW: "世界多地"
   continents:
     #original_hash: 0f138c8
     Multiple Continents: 多大洲
