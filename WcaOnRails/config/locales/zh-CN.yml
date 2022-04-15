@@ -249,7 +249,7 @@ zh-CN:
     #original_hash: 52249b5
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
     #original_hash: 7136e3b
-    time_format: 12 小时制
+    time_format: 12h
     solve_time:
       #original_hash: 7febce0
       unit_seconds: 秒
