@@ -292,9 +292,9 @@ zh-CN:
         #original_hash: 603a218
         wca_id: WCA ID
         #original_hash: cb77bea
-        unconfirmed_wca_id: 未确认的WCA ID
+        unconfirmed_wca_id: 未确认的 WCA ID
         #original_hash: 8ed8874
-        login: 邮箱或WCA ID
+        login: 邮箱或 WCA ID
         #original_hash: 1528d10
         country_iso2: 国家/地区
         #original_hash: ab58155
@@ -321,15 +321,23 @@ zh-CN:
         delegate_status: 代表状态
         #original_hash: 0f21717
         region: 国家/地区
+        #original_hash: 730db33
+        receive_delegate_reports: 我希望通过电子邮件收到世界魔方协会比赛的代表报告
         #original_hash: 57eaf24
         user_preferred_events: 首选项目
+        #original_hash: e632fbf
+        otp_attempt: 输入你的双因素认证代码
       competition:
         #original_hash: 89f89c0
         id: ID
+        #original_hash: 7f3d889
+        confirmed: 不要让组织者编辑这个比赛
         #original_hash: d493e6a
         showAtAll: 公开比赛
         #original_hash: 709a232
         name: 名字
+        #original_hash: f91b080
+        name_reason: 命名的原因
         #original_hash: b649210
         cellName: 比赛昵称
         #original_hash: d523ebb
@@ -349,13 +357,13 @@ zh-CN:
         #original_hash: 2e8a57c
         external_website: 比赛官网
         #original_hash: 692e1f9
-        generate_website: 我想使用WCA网站来显示更多信息。
+        generate_website: 我想使用 WCA 网站来显示更多信息。
         #original_hash: 6cf623b
         base_entry_fee_lowest_denomination: 基础报名费
         #original_hash: 28a6fbb
         currency_code: 货币代码
         #original_hash: 2e3ed8b
-        delegate_ids: WCA代表
+        delegate_ids: WCA 代表
         #original_hash: 958562e
         organizer_ids: 主办方
         #original_hash: b37456c
@@ -363,7 +371,7 @@ zh-CN:
         #original_hash: 0eb5ed5
         information: 基本信息
         #original_hash: 87b7d5f
-        use_wca_registration: 我想使用WCA报名系统
+        use_wca_registration: 我想使用 WCA 报名系统
         #original_hash: 9bb1965
         competitor_limit_enabled: 我想指定本次比赛的日人数限制。
         #original_hash: 749f4c9
@@ -381,7 +389,7 @@ zh-CN:
         #original_hash: d7020f4
         remarks: 备注
         #original_hash: c305010
-        clone_tabs: 我想复制所有tab，连同额外信息
+        clone_tabs: 我想复制所有 tab，连同额外信息
         #original_hash: c5497bc
         competition_events: 项目
         #original_hash: 71c8461
@@ -837,15 +845,129 @@ zh-CN:
       #original_hash: a2a43b3
       size_too_big: '太大了（最多%{file_size}）'
   devise:
+    passwords:
+      edit:
+        #original_hash: 8b8d6ab
+        new_password_confirmation: 再次输入新的密码
+    sessions:
+      new:
+        #original_hash: ada2e9e
+        sign_in: 登录
+        2fa:
+          #original_hash: b274c38
+          verify: 要进行登录，请确认是你本人
+          #original_hash: ec44d52
+          confirm: 确认代码
+          #original_hash: 912516c
+          regenerated_secret: 成功地重新生成了你的双因素认证密钥。
+          #original_hash: 1b0c44f
+          enabled_success: 成功地启用了双因素认证。
+          #original_hash: 9515157
+          email_auth: 邮箱验证
+          #original_hash: d305ccb
+          get_by_email: 通过电子邮件获得代码
+          #original_hash: 4e644aa
+          get_by_email_desc: 如果你不能访问你的设备或访问代码，你也可以点击下面的按钮，通过电子邮件获得一个一次性密码。复制并粘贴在上面的输入框中即可登录。
+          #original_hash: b243ac5
+          email_sent: 您已经通过电子邮件收到了一个代码。该代码的有效期为 2 分钟。你可以在 2 分钟内获取一个新的代码。
+          errors:
+            #original_hash: e70dc49
+            cant_send_email: 你现在不能生成电子邮件
+            #original_hash: c0d4fc2
+            invalid_otp: 无效的双因素代码。
+            #original_hash: c2f5347
+            not_enabled: 未启用双因素身份验证
+            #original_hash: 14d294b
+            unknown: 发送邮件时出现未知错误，请联系 WST。
+          otp_email:
+            #original_hash: a20e037
+            subject: 您在 WCA 的一次性密码
+            #original_hash: f82488f
+            2fa_attempt: 您正试图在 WCA 网站上进行认证。您已经启用了双因素认证，并且您刚刚要求通过电子邮件发送一个一次性密码。请在下面找到它：
+            #original_hash: e27e540
+            disclaimer: 如果你没有申请该认证码，请立即回复此邮件联系 WST：你可能在某处有一个公开的会话，或者你的密码可能被泄露。
+          #original_hash: 8c13694
+          name: 双因素认证(2FA)
+          #original_hash: d28c3b6
+          support_desc_html: 'WCA 网站支持使用一次性密码的 %{two_factor_link}'
+          options:
+            #original_hash: 4f9dcb8
+            app: 由你的智能手机上的专用 2FA 应用程序（例如 Authy 或 Google 身份验证器）生成。
+            #original_hash: 34a7572
+            recovery: 取自激活 2FA 时产生的恢复代码。
+            #original_hash: eaee403
+            email: 当你登录时，通过电子邮件发送给你。
+          #original_hash: 7ae99ae
+          status_html: '双因素认证状态是 %{status}。'
+          #original_hash: 3ea3f98
+          enabled: 已启用
+          #original_hash: 07596f1
+          disabled: 未启用
+          #original_hash: 5f225b0
+          enable: 启用 2FA
+          #original_hash: 2e35cd9
+          disable: 关闭 2FA
+          #original_hash: b2a3d7e
+          reset: 重置 2FA 密钥
+          #original_hash: 14b7bfd
+          reset_if_needed: 如果你的一个设备被破坏了，或者你想从你的设备上撤销访问，你可以在下面重新设置你的双因素认证密钥。
+          #original_hash: 69100a3
+          reset_warning: 你将需要重新配置你所有的 2FA 设备。
+          #original_hash: a8d11db
+          methods: 双因素方法
+          #original_hash: 0fd248d
+          methods_description: 你可以使用几种方法来获得登录时的一次性密码，它们描述如下。
+          #original_hash: 4442f0e
+          dedicated_app: 使用一个专门的双因素应用程序
+          #original_hash: a61c7d2
+          dedicated_app_desc_html: >-
+            WST 建议在您的个人设备上使用 %{authy}，以便在登录时获得您的一次性密码。<br/>你也可以使用 %{google} 和
+            %{microsoft}。
+          #original_hash: f1b2ec2
+          scan_qrcode_html: '当你的 2FA 应用程序提示时，请扫描下面的二维码（如果你在手机上，请点击%{here}）。'
+          #original_hash: e7cba1a
+          backup_codes: 备份代码
+          #original_hash: fa62416
+          backup_codes_desc: 备份代码可以作为一次性密码使用，以防你无法使用双因素认证应用程序访问你的设备。每个密码只能使用一次。请确保将它们存放在安全的地方。
+          #original_hash: 087cb72
+          no_backup_codes: 你还没有生成备份代码。点击下面的按钮来生成你的备份代码。
+          #original_hash: b6bc5ec
+          regenerate_backup_codes: >-
+            你已经生成了一些备份代码。如果你已经使用或丢失了这些代码，你可以使用下面的按钮生成新的代码。请注意，如果你这样做，任何现有的备份代码都将失效。
+          #original_hash: 2ee4aca
+          generate_backup_codes: 生成备份代码
+          #original_hash: a69dd5b
+          backup_codes_warning: 备份代码将显示在下面。请立即记录/保存它们：它们在我们的数据库中被加密存储，以后不能再显示。
+          #original_hash: b5e3ad8
+          email_auth_desc: 当你试图登录时，你可以通过电子邮件要求提供一次性密码。
+          #original_hash: dd991ab
+          disable_section_title: 禁用双因素方法
+          #original_hash: 4569d81
+          disable_section_content: WST 强烈建议你不要禁用 2FA，但你可以通过点击下面的按钮。请注意，如果你重新激活 2FA，你将不得不重新配置你的设备。
+          #original_hash: ab1b77d
+          disabled_success: 成功地禁用了双因素认证。
+          #original_hash: c36d556
+          disabled_failed: 无法禁用 2FA，请看下面的错误。
+      destroy_other:
+        #original_hash: a768ea6
+        success: 成功地注销了其他设备。
+    shared:
+      links:
+        #original_hash: ada2e9e
+        sign_in: 登录
     failure:
       #original_hash: 1186218
-      invalid: 邮件、WCA ID或密码不正确。
+      invalid: 邮件、WCA ID 或密码不正确。
       #original_hash: 1186218
-      not_found_in_database: 邮件、WCA ID或密码不正确。
+      not_found_in_database: 邮件、WCA ID 或密码不正确。
       #original_hash: 3f9db99
       unconfirmed: >-
         在继续前你需要确认你的电子邮箱地址。没收到确认邮件？请访问
         https://www.worldcubeassociation.org/users/confirmation/new 重发一封。
+    mailer:
+      confirmation_instructions:
+        #original_hash: 0ea8196
+        subject: 请确认您的新电子邮件地址
   wca:
     errors:
       messages:
@@ -1882,11 +2004,11 @@ zh-CN:
         female: 女
   notifications:
     #original_hash: 10bcdbd
-    connect_wca_id: 关联WCA ID到你的账号！
+    connect_wca_id: 关联 WCA ID 到你的账号！
   persons:
     index:
       #original_hash: 5934b4c
-      name_or_wca_id: 姓名或者WCA ID
+      name_or_wca_id: 姓名或者 WCA ID
       #original_hash: 709a232
       name: 姓名
       #original_hash: d523ebb
@@ -1949,8 +2071,25 @@ zh-CN:
     announcement_info_html: '%{author_name}公示于%{date_time}'
   contacts:
     website:
+      #original_hash: 35c333c
+      faq_note_html: >-
+        在进行咨询之前，你可能想看一下我们的<a
+        href="/faq">常见问题</a>！如果你想联系某个特定的委员会或团队，你可以在这个页面上找到他们的联系信息。
       #original_hash: 4ef2aad
-      title: WCA网站联系表单
+      title: WCA 网站联系表单
+      inquiries:
+        #original_hash: 92ea7e8
+        competition: 联系特定比赛的组织者（请在下面选择）
+        #original_hash: f0bffb7
+        competitions_in_general: 一般竞赛（组织、竞赛规则等）
+        #original_hash: f6ffa78
+        wca_id_or_profile: WCA ID 或 WCA 资料
+        #original_hash: 0c77aee
+        media: 社交媒体
+        #original_hash: 9ad0522
+        software: 软件
+        #original_hash: 6e6a6f2
+        different: 其他
       #original_hash: c70a890
       submit: 发送
     dob:
@@ -2482,15 +2621,15 @@ zh-CN:
       title: 翻译
       #original_hash: 7477d9b
       content1_html: >-
-        WCA规则不仅有英文版，而且WCA成员已经将它们翻译成好几种语言：<a
+        WCA 规则不仅有英文版，而且 WCA 成员已经将它们翻译成好几种语言：<a
         href="/regulations/translations/">翻译</a>。
       #original_hash: 6add7a3
-      content2_html: <strong>重要</ strong>：尽管翻译非常有帮助，但并不是官方的。在比赛中，最终以WCA规则的英文版为准。
+      content2_html: <strong>重要</ strong>：尽管翻译非常有帮助，但并不是官方的。在比赛中，最终以 WCA 规则的英文版为准。
     panel3:
       #original_hash: 234fd4d
       title: 规则 常见问题
       #original_hash: 8afba93
-      content1_html: <a href="/faq">FAQ部分</a>回答了有关WCA规则最常见的几个问题。
+      content1_html: <a href="/faq">FAQ 部分</a>回答了有关 WCA 规则最常见的几个问题。
     panel4:
       #original_hash: ad5f6e7
       title: 组织者指南
@@ -2498,6 +2637,19 @@ zh-CN:
       content1_html: 如果您有兴趣组织比赛或已计划组织比赛，请阅读我们的<a href="/organizer-guidelines">组织者指南</a>。
       #original_hash: 5016669
       content2_html: 本文件包含重要信息，应由每个比赛组织者阅读。
+  regulations_translations:
+    table_elements:
+      #original_hash: 2da600b
+      version: 时间
+      #original_hash: 89b86ab
+      language: 语言
+    #original_hash: a916f93
+    translating: 翻译规则
+    #original_hash: 1b026e1
+    paragraph3_html: >-
+      如果您对添加/更新翻译感兴趣，请查看<a
+      href="https://github.com/thewca/wca-regulations-translations#translation-instructions">GitHub
+      仓库中的翻译说明</a>。
   organizer_guidelines:
     #original_hash: 7486ac4
     title: WCA 比赛组织者指南
