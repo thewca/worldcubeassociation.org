@@ -960,12 +960,16 @@ class Competition < ApplicationRecord
     self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
   end
 
+  # does the competition have this field (regardless of whether it's a date or blank)
   def has_event_change_deadline_date?
-    start_date.present? && start_date > Date.new(2021, 6, 24) && event_change_deadline_date.present?
+    start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
+  # can registration edits be done right now
+  # must be allowed in general, and if the deadline field exists, is it a date and in the future
   def registration_edits_allowed?
-    self.allow_registration_edits && (!has_event_change_deadline_date? || event_change_deadline_date > DateTime.now)
+    self.allow_registration_edits &&
+      (!has_event_change_deadline_date? || !event_change_deadline_date.present? || event_change_deadline_date > DateTime.now)
   end
 
   private def unpack_dates
