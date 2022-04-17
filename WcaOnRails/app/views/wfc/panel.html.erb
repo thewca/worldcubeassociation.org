@@ -12,7 +12,7 @@
   <%= horizontal_simple_form_for :export, url: "", html: { id: "wfc-export-form" } do |f| %>
 
     <div class="form-inputs">
-      <%= f.input :from_date, as: :date_picker, input_html: { value: Time.now.strftime("%Y-01-01"), id: "input-from-date" } %>
+      <%= f.input :from_date, as: :date_picker, input_html: { value: Time.now.strftime("%Y-%m-01"), id: "input-from-date" } %>
       <%= f.input :to_date, as: :date_picker, input_html: { value: Time.now.strftime("%Y-%m-%d"), id: "input-to-date" } %>
     </div>
     <div class="col-sm-offset-2 col-sm-10">
