@@ -177,13 +177,17 @@
           </div>
           <div class="modal-body">
             Select a reason for the registration deletion that will be notified to the user(s) by email:
-            <select class="form-select" aria-label="reasons-select">
+            <select class="form-select" aria-label="reasons-select" id="delete-reason">
               <option value="info-missing">Competitor Information Missing</option>
               <option value="criteria">Registration Criteria Not Met</option>
               <option value="limit-full">Competitor Limit Full</option>
               <option value="multiple-registrations">Registering Multiple Times</option>
               <option value="comp-canceled">Competition Is Canceled</option>
             </select>
+            <br><br>
+
+            Additional Comments
+            <textarea class="form-control" id="delete-comment" rows="3"></textarea>
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary" name="registrations_action" value="delete-selected" data-toggle="modal" data-target="#delete-reasons-menu">Confirm and Send</button>

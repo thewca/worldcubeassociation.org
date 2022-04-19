@@ -28,6 +28,11 @@ onPage('registrations#edit_registrations', function() {
     if(!confirm("Delete the " + $selectedRows.length + " selected registrations?")) {
       e.preventDefault();
     }
+
+    var $reason = $('#delete-reason').val()
+    var $comment = $('#delete-comment').val()
+    console.log($reason);
+    console.log($comment);
   });
 });
 
