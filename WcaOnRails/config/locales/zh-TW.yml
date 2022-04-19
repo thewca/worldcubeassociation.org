@@ -792,8 +792,9 @@ zh-TW:
         generate_website: ''
         #original_hash: b2af5f5
         external_registration_page: 參賽者報名比賽的頁面，必須為有效的http(s)網址。
-        #original_hash: 784879d
-        base_entry_fee_lowest_denomination: 這場比賽的基本報名費。如果有使用WCA報名系統，其將會被顯示在比賽資訊頁面以及報名頁面。如果此處設為0，會有一個句子表示報名為免費的。
+        #original_hash: a6f6562
+        base_entry_fee_lowest_denomination: >-
+          這場比賽的基本報名費。如果有使用WCA報名系統，其將會被顯示在比賽資訊頁面以及報名頁面。如果此處設為0，會有一個句子表示報名為免費的。<br><br><b>免責聲明：下面WCA稅費的估算是用目前的匯率計算的，沒有任何正式效力。</b><br>選取匯率代碼後按下「更新比賽」，會有新的估算稅費。如果選取的幣值沒有可用的換算匯率，沒有數字會顯示出來。
         #original_hash: 9735ddf
         currency_code: 報名費的貨幣代碼。
         #original_hash: da39a3e
@@ -2427,6 +2428,13 @@ zh-TW:
         greater_china: 大中華錦標賽
         #original_hash: 3b920b7
         generic: '錦標賽：%{type}'
+      dues_estimate:
+        #original_hash: 6e56455
+        calculated: '%{limit}位參賽者的估算WCA稅費為%{estimate}'
+        #original_hash: 5e8cffe
+        per_competitor: '估算的每位參賽者平均WCA稅費是%{estimate}'
+        #original_hash: 83d4cdc
+        ajax_error: 稅費估算有出現錯誤，請設成零後再次輸入基本報名費用
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必須以年份為結尾且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白( )'
