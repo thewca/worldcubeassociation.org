@@ -787,11 +787,12 @@ es:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          Si eres un Delegado Junior, Delegado Senior, Delegado, o Miembro del
-          WRC o del WQAC, recibes los Informes de Delegados por defecto. El
-          cambio puede tardar hasta una hora en estar operativo.
+          Si eres un Delegado en Prácticas, Delegado Junior, Delegado Senior,
+          Delegado, o Miembro del WRC o del WQAC, recibes los Informes de
+          Delegados por defecto. El cambio puede tardar hasta una hora en estar
+          operativo.
         #original_hash: 0627e5c
         otp_attempt: >-
           Comprueba tu aplicación de móvil configurada para una contraseña de un
@@ -846,11 +847,18 @@ es:
         external_registration_page: >-
           La página donde los competidores deben hacer el registro para la
           competición. Debe ser una URL http o https válida.
-        #original_hash: 784879d
+        #original_hash: a6f6562
         base_entry_fee_lowest_denomination: >-
           Precio del registro básico. Se mostrará en la página de información de
           la competición y en la de registro si se utiliza. Si esto se pone a 0,
           se mostrará una frase indicando que se aceptan registros gratuitos.
+          <br><br><b>DESCARGO DE RESPONSABILIDAD: Las siguientes estimaciones de
+          cuotas WCA son simplemente una estimación basada en las actuales
+          tarifas de cambios de moneda y de ningún modo son jurídicamente
+          vinculantes para el pago de las cuotas.</b><br>Haz Click en 
+          "Actualizar Competición" tras cambiar el código de moneda para
+          sincronizarlo con la estimación. Si no hay tarifas de cambio
+          aplicables para la selección, no se mostrará nada.
         #original_hash: 9735ddf
         currency_code: Moneda en que se especifican los pagos.
         #original_hash: da39a3e
@@ -1075,6 +1083,8 @@ es:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1775,6 +1785,14 @@ es:
       #original_hash: f28bf87
       submit_value: Reclamar tu WCA ID
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        Todas las imágenes de avatares se almacenan en la Nube, cualquier cambio
+        en la miniatura puede tardar varios minutos en mostrarse correctamente.
+      #original_hash: cc1d51b
+      cdn_warning: >-
+        ¡Por favor no te preocupes si la miniatura no se actualiza
+        inmediatamente tras guardar los cambios!
       #original_hash: 79f14eb
       current: 'Foto actual:'
       #original_hash: b42ba27
@@ -2638,6 +2656,10 @@ es:
         Si eres un competidor registrado puedes cambiar las categorías en las
         que te has registrado hasta %{event_change_deadline}  poniéndonte en
         contacto con el equipo organizador.
+      #original_hash: c58abdf
+      event_change_deadline_edits_allowed_html: >-
+        Si eres un competidor registrado, podrás cambiar las categorías de tu
+        registro hasta %{event_change_deadline}  en la pestaña de %{register}.
       #original_hash: eff3594
       event_change_deadline_default_html: >-
         Os pedimos a todos que os registréis para las categorías en las que
@@ -2916,6 +2938,15 @@ es:
         greater_china: Campeonato de la Gran China
         #original_hash: 3b920b7
         generic: 'Campeonato: %{type}'
+      dues_estimate:
+        #original_hash: 6e56455
+        calculated: 'La cuota WCA estimada para %{limit} competidores  es %{estimate}'
+        #original_hash: 5e8cffe
+        per_competitor: 'La cuota WCA estimada por competidor es %{estimate}'
+        #original_hash: 83d4cdc
+        ajax_error: >-
+          Hay un error con la estimación de la cuota WCA, por favor ponla a cero
+          y vuelve a introducir la cuota básica de registro
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3737,7 +3768,7 @@ es:
     spirit_footer: Espíritu de la WCA
     #original_hash: c1781ee
     our_goals_title: Nuestros objetivos
-    #original_hash: caf6bf2
+    #original_hash: 743ca74
     our_goals_content_html: >-
       <p>La Organización Mundial del Cubo quiere brindar oportunidades para
       pertenecer y liderar comunidades a gente joven alrededor del mundo
@@ -4017,6 +4048,8 @@ es:
     codeofconduct: Código de Conducta
     #original_hash: 4f05e8f
     finances: Finanzas
+    #original_hash: d1b1406
+    vision_and_strategy: Visión y Estrategia
   education:
     #original_hash: 746e863
     title: Recursos Educativos de la WCA
