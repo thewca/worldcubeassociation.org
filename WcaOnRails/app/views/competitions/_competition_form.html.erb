@@ -206,22 +206,25 @@
         <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input, currency_selector: "#competition_currency_code" %>
 
         <script>
-          var bandFeeUSD = 0;
           var baseFeeUSD = -1;
-          var compLimit = null;
-          var tempLimit = null;
 
-          <% countryBand = CountryBand.where(iso2: @competition.serializable_hash[:country_iso2]).map(&:number)[0] %>
-          <% if !countryBand.nil? && countryBand > 0 %>
-            bandFeeUSD = <%= CountryBand::BANDS[countryBand][:value] %>;
-          <% end %>
-
+          // Note: unfortunately we cannot trigger a change on the currency
+          // code update, because we don't have access to the currency
+          // "subunit_to_unit" from the js world.
           function UpdateDues(){
+            <% countryBand = CountryBand.where(iso2: @competition.serializable_hash[:country_iso2]).map(&:number)[0] %>
+            <% if !countryBand.nil? && countryBand > 0 %>
+              var bandFeeUSD = <%= CountryBand::BANDS[countryBand][:value] %>;
+            <% else %>
+              var bandFeeUSD = 0;
+            <% end %>
             var pricePerCompetitor = Math.max(bandFeeUSD, baseFeeUSD) * 100;
+            var compLimit = $('select[name="competition[competitor_limit_enabled]"]').val() === "true"
+              ? $('input[name="competition[competitor_limit]"]').val() : null;
             window.wca.cancelPendingAjaxAndAjax('currency_convert', {
               url: '<%= currency_convert_path %>',
               data: {
-                value: compLimit == null ? pricePerCompetitor : pricePerCompetitor * compLimit,
+                value: compLimit === null ? pricePerCompetitor : pricePerCompetitor * compLimit,
                 from_currency: "USD",
                 to_currency: "<%= @competition.currency_code %>",
               },
@@ -236,75 +239,53 @@
                   This error is only expected upon loading up the page, when the ajax
                   requests are somehow aborted.
                 */
-                if(baseFeeUSD == -1){
+                if (baseFeeUSD == -1) {
                   $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
-                }
-                else{
-                  if(compLimit != null)
-                    $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
-                  else
-                    $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
+                } else if (compLimit != null) {
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
+                } else {
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
                 }
               }
             });
           }
 
 
-          /*
-            The order of these two callbacks matter! If we first check whether competitor limit is enabled, we would
-            be able to update our dues estimation immediately according to the competitor limit that was set earlier
-            in the field. Otherwise, we would need to re-enter our competitor limit for the dues estimate to notice
-            the fact that we have a competitor limit, and change from displaying the per-competitor estimate to
-            the total estimate.
-          */
-          $('select[name="competition[competitor_limit_enabled]"]').on('change', function() {
-            if(this.value === "false"){
-              tempLimit = compLimit;
-              compLimit = null;
-            }
-            else if(tempLimit != null){
-              compLimit = tempLimit;
-              tempLimit = null;
-            }
-            UpdateDues();
-          }).trigger('change');
-
-          $('input[name="competition[competitor_limit]"]').on('change', function() {
-            compLimit = this.value;
-            UpdateDues();
-          }).trigger('change');
-
-          /*
-            Placing this callback at last will avoid this essential call of currency_convert being canceled by
-            other calls of currency_convert, which all occur at the same time, because when the webpage is initialized,
-            every .on('change') callback is triggered.
-          */
-          $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
-            if(!$('#dues_estimate').length){
-              $(this).siblings('.help-block').append('<br><br><p id="dues_estimate"><b></b></p>');
-            }
+          $(function() {
+            $('select[name="competition[competitor_limit_enabled]"]').on('change', UpdateDues);
+            $('input[name="competition[competitor_limit]"]').on('change', UpdateDues);
 
             /*
-              Different currencies keep different decimal points, and this.value only gives
-              a raw number without decimals, so we need to divide this.value by the
-              currency's subunit to convert it into actual value.
+              Placing this callback at last will let us trigger a manual 'change'
+              on the field to create a estimate of the dues when the page is loaded.
             */
-            var subunit = <%= Money::Currency.new(@competition.currency_code).subunit_to_unit %>;
-            var moneyValue = this.value / subunit;
-
-            window.wca.cancelPendingAjaxAndAjax('currency_convert', {
-              url: '<%= currency_convert_path %>',
-              data: {
-                value: moneyValue,
-                from_currency: "<%= @competition.currency_code %>",
-                to_currency: "USD",
-              },
-              success: function(data) {
-                baseFeeUSD = data.value * 0.05;
-                UpdateDues();
+            $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
+              if (!$('#dues_estimate').length) {
+                $(this).siblings('.help-block').append('<br><br><p id="dues_estimate"><b></b></p>');
               }
-            });
-          }).trigger('change');
+
+              /*
+                Different currencies keep different decimal points, and this.value only gives
+                a raw number without decimals, so we need to divide this.value by the
+                currency's subunit to convert it into actual value.
+              */
+              var subunit = <%= Money::Currency.new(@competition.currency_code).subunit_to_unit %>;
+              var moneyValue = this.value / subunit;
+
+              window.wca.cancelPendingAjaxAndAjax('currency_convert', {
+                url: '<%= currency_convert_path %>',
+                data: {
+                  value: moneyValue,
+                  from_currency: "<%= @competition.currency_code %>",
+                  to_currency: "USD",
+                },
+                success: function(data) {
+                  baseFeeUSD = data.value * 0.05;
+                  UpdateDues();
+                }
+              });
+            }).trigger('change');
+          });
         </script>
 
         <%= f.input :refund_policy_percent %>

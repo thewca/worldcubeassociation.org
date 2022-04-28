@@ -373,6 +373,7 @@ class CompetitionsController < ApplicationController
   end
 
   def currency_convert
+    update_rates_if_needed
     converted = Money.new(params[:value], params[:from_currency]).exchange_to(params[:to_currency])
     render json: {
       formatted: converted.format,
@@ -560,6 +561,12 @@ class CompetitionsController < ApplicationController
 
   private def confirming?
     params[:commit] == "Confirm"
+  end
+
+  private def update_rates_if_needed
+    if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < 1.day.ago
+      Money.default_bank.update_rates
+    end
   end
 
   private def competition_params
