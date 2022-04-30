@@ -526,9 +526,8 @@ RSpec.describe "registrations" do
           charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
           expect(charge.amount).to eq competition.base_entry_fee.cents
           expect(charge.receipt_email).to eq user.email
-          expect(charge.metadata.wca_id).to eq user.wca_id
-          expect(charge.metadata.email).to eq user.email
           expect(charge.metadata.competition).to eq competition.name
+          expect(charge.metadata.registration_url).to eq edit_registration_url(registration)
           # Check that the website actually records who made the charge
           expect(registration.registration_payments.first.user).to eq user
         end
@@ -556,7 +555,7 @@ RSpec.describe "registrations" do
           stripe_charge = StripeCharge.find_by(stripe_charge_id: stripe_charge_id)
           expect(stripe_charge&.status).to eq "success"
           metadata = JSON.parse(stripe_charge.metadata)["metadata"]
-          expect(metadata["wca_id"]).to eq registration.user.wca_id
+          expect(metadata["competition"]).to eq competition.name
         end
       end
 
@@ -597,7 +596,7 @@ RSpec.describe "registrations" do
           expect(stripe_charge&.status).to eq "payment_intent_registered"
           metadata = JSON.parse(stripe_charge.metadata)
           expect(metadata["payment_method"]).to eq pm.id
-          expect(metadata["metadata"]["wca_id"]).to eq registration.user.wca_id
+          expect(metadata["metadata"]["competition"]).to eq competition.name
         end
       end
 
@@ -660,7 +659,7 @@ RSpec.describe "registrations" do
           expect(stripe_charge&.status).to eq "failure"
           metadata = JSON.parse(stripe_charge.metadata)
           expect(metadata["payment_method"]).to eq pm.id
-          expect(metadata["metadata"]["wca_id"]).to eq registration.user.wca_id
+          expect(metadata["metadata"]["competition"]).to eq competition.name
         end
       end
     end

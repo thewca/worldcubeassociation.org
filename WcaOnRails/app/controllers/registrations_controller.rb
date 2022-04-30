@@ -466,10 +466,8 @@ class RegistrationsController < ApplicationController
     stripe_charge = nil
     competition = registration.competition
     registration_metadata = {
-      name: user.name,
-      wca_id: user.wca_id,
-      email: user.email,
       competition: competition.name,
+      registration_url: edit_registration_url(registration),
     }
     begin
       if params[:payment_method_id]
@@ -484,7 +482,7 @@ class RegistrationsController < ApplicationController
           confirmation_method: "manual",
           confirm: true,
           receipt_email: user.email,
-          description: "Registration payment for #{competition.name} by #{registration.user.name}",
+          description: "Registration payment for #{competition.name}",
           metadata: registration_metadata,
         }
         # Log the payment attempt
