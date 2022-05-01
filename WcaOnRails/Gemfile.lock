@@ -240,7 +240,7 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     encryptor (3.0.0)
-    enum_help (0.0.18)
+    enum_help (0.0.19)
       activesupport (>= 3.0.0)
     env_vars (1.1.0)
     erubi (1.10.0)
