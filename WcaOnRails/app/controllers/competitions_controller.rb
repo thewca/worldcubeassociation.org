@@ -20,7 +20,6 @@ class CompetitionsController < ApplicationController
     :show_podiums,
     :show_all_results,
     :show_results_by_person,
-    :show_events,
     :show_scrambles,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
@@ -267,10 +266,6 @@ class CompetitionsController < ApplicationController
 
     flash[:success] = t('competitions.messages.results_posted')
     redirect_to admin_edit_competition_path(comp)
-  end
-
-  def show_events
-    @competition = competition_from_params(includes: [:events, competition_events: { rounds: [:format, :competition_event] }])
   end
 
   def edit_events
