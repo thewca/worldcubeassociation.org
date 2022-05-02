@@ -124,7 +124,7 @@ module ApplicationHelper
   def wca_date_range(from_date, to_date, options = {})
     if from_date && to_date
       options[:separator] = '-'
-      date_range(from_date, to_date, options)
+      date_range(from_date, to_date, **options)
     else
       t "common.date.no_date"
     end
