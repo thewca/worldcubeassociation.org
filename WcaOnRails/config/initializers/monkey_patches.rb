@@ -75,10 +75,4 @@ Rails.configuration.to_prepare do
       return @client.application.dangerously_allow_any_redirect_uri ? true : old_validate_redirect_uri.bind(self).call
     end
   end
-
-  ActiveSupport::JSON::Encoding::JSONGemEncoder.class_eval do
-    def stringify(jsonified)
-      JSON.pretty_generate(jsonified, quirks_mode: true, max_nesting: false)
-    end
-  end
 end
