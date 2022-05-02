@@ -6,10 +6,10 @@ updates:
     interval: monthly
   open-pull-requests-limit: 10
   ignore:
-  # compatibility with Ruby 2.6
+  # stay on Rails 6 because of Webpacker compatibility reasons
   - dependency-name: rails
     versions:
-    - "> 5.2"
+    - ">= 7"
   # compatibility with Ruby 2.6
   - dependency-name: rubocop
     versions:
@@ -28,7 +28,7 @@ updates:
   - dependency-name: react-bootstrap
     versions:
     - ">= 1.0.0"
-  # We're staying on Webpack 4 for the time being.
+  # We're staying on Webpack 4 for the time being, due to Rails constraints.
   - dependency-name: webpack
     versions:
     - ">= 5.0.0"

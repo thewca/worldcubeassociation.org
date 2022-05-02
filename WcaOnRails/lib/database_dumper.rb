@@ -334,6 +334,7 @@ module DatabaseDumper
     }.freeze,
     "active_storage_attachments" => :skip_all_rows,
     "active_storage_blobs" => :skip_all_rows,
+    "active_storage_variant_records" => :skip_all_rows,
     "ar_internal_metadata" => :skip_all_rows,
     "competition_delegates" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
@@ -818,7 +819,7 @@ module DatabaseDumper
   end
 
   def self.mysql_cli_creds
-    config = ActiveRecord::Base.connection_config
+    config = ActiveRecord::Base.connection_db_config.configuration_hash
     "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]}"
   end
 

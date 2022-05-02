@@ -9,7 +9,7 @@ class UploadController < ApplicationController
     # on file type/content type/etc. See
     # https://github.com/thewca/worldcubeassociation.org/issues/4380 for more
     # information.
-    blob = ActiveStorage::Blob.create_after_upload!(
+    blob = ActiveStorage::Blob.create_and_upload!(
       io: params[:image],
       filename: params[:image].original_filename,
       content_type: params[:image].content_type,

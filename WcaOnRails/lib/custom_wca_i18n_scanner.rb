@@ -2,7 +2,7 @@
 
 unless Rails.env.production?
   require 'i18n/tasks/scanners/file_scanner'
-  class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
+  class CustomWcaI18nScanner < I18n::Tasks::Scanners::FileScanner
     include I18n::Tasks::Scanners::RelativeKeys
     include I18n::Tasks::Scanners::OccurrenceFromPosition
 

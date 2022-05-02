@@ -161,7 +161,7 @@ class Api::V0::ApiController < ApplicationController
         FROM ConciseAverageResults
         GROUP BY countryId, eventId
       SQL
-      records = records.to_hash
+      records = records.to_a
       {
         world_records: records_by_event(records),
         continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continentId }.transform_values!(&method(:records_by_event)),
