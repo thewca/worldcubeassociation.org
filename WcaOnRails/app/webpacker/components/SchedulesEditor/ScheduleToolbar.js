@@ -125,54 +125,58 @@ export class ScheduleToolbar extends React.Component {
 
 // See https://github.com/react-bootstrap/react-bootstrap/issues/1345#issuecomment-142133819
 // for why we pass down ...props
-const CalendarHelp = ({ ...props }) => (
-  <Popover id="calendar-help-popover" title="Keyboard shortcuts help" {...props}>
-    <dl className="row">
-      <dt className="col-xs-4">
-        <Icon name="keyboard" />
-        {' '}
-        or
-        <br />
-        {' '}
-        [C] + i
-      </dt>
-      <dd className="col-xs-8">Toggle keyboard shortcuts</dd>
-      <dt className="col-xs-4">Arrow keys</dt>
-      <dd className="col-xs-8">Change selected event in calendar</dd>
-      <dt className="col-xs-4">[S] + Arrow keys</dt>
-      <dd className="col-xs-8">Change selected activity in picker</dd>
-      <dt className="col-xs-4">[Enter]</dt>
-      <dd className="col-xs-8">Add selected activity after selected event</dd>
-      <dt className="col-xs-4">[Del]</dt>
-      <dd className="col-xs-8">Remove selected event</dd>
-      <dt className="col-xs-4">[C] + Arrow keys</dt>
-      <dd className="col-xs-8">Move selected event around in calendar</dd>
-      <dt className="col-xs-4">[C] + [S] + up/down</dt>
-      <dd className="col-xs-8">Shrink/Expand selected event in calendar</dd>
-      <dt className="col-xs-4">[C] + [S] + click</dt>
-      <dd className="col-xs-8">Show contextual menu for event</dd>
-    </dl>
-    <hr />
-    <b>[C]:</b>
-    {' '}
-    ctrl key,
-    <b>[S]:</b>
-    {' '}
-    shift key
-  </Popover>
-);
+function CalendarHelp({ ...props }) {
+  return (
+    <Popover id="calendar-help-popover" title="Keyboard shortcuts help" {...props}>
+      <dl className="row">
+        <dt className="col-xs-4">
+          <Icon name="keyboard" />
+          {' '}
+          or
+          <br />
+          {' '}
+          [C] + i
+        </dt>
+        <dd className="col-xs-8">Toggle keyboard shortcuts</dd>
+        <dt className="col-xs-4">Arrow keys</dt>
+        <dd className="col-xs-8">Change selected event in calendar</dd>
+        <dt className="col-xs-4">[S] + Arrow keys</dt>
+        <dd className="col-xs-8">Change selected activity in picker</dd>
+        <dt className="col-xs-4">[Enter]</dt>
+        <dd className="col-xs-8">Add selected activity after selected event</dd>
+        <dt className="col-xs-4">[Del]</dt>
+        <dd className="col-xs-8">Remove selected event</dd>
+        <dt className="col-xs-4">[C] + Arrow keys</dt>
+        <dd className="col-xs-8">Move selected event around in calendar</dd>
+        <dt className="col-xs-4">[C] + [S] + up/down</dt>
+        <dd className="col-xs-8">Shrink/Expand selected event in calendar</dd>
+        <dt className="col-xs-4">[C] + [S] + click</dt>
+        <dd className="col-xs-8">Show contextual menu for event</dd>
+      </dl>
+      <hr />
+      <b>[C]:</b>
+      {' '}
+      ctrl key,
+      <b>[S]:</b>
+      {' '}
+      shift key
+    </Popover>
+  );
+}
 
-const TooltipKeyboard = ({ enabled, ...props }) => (
-  <Tooltip id="tooltip-enable-keyboard" {...props}>
-    Click to
-    {' '}
-    { enabled ? 'disable' : 'enable' }
-    {' '}
-    keyboard shortcuts
-  </Tooltip>
-);
+function TooltipKeyboard({ enabled, ...props }) {
+  return (
+    <Tooltip id="tooltip-enable-keyboard" {...props}>
+      Click to
+      {' '}
+      { enabled ? 'disable' : 'enable' }
+      {' '}
+      keyboard shortcuts
+    </Tooltip>
+  );
+}
 
-const CalendarSettingsOption = ({ selected, optionName, handlePropChange }) => {
+function CalendarSettingsOption({ selected, optionName, handlePropChange }) {
   const optionProps = calendarOptionsInfo[optionName];
   return (
     <Col xs={12}>
@@ -189,21 +193,23 @@ const CalendarSettingsOption = ({ selected, optionName, handlePropChange }) => {
       </Row>
     </Col>
   );
-};
+}
 
 // See https://github.com/react-bootstrap/react-bootstrap/issues/1345#issuecomment-142133819
 // for why we pass down ...props
-const CalendarSettings = ({ currentSettings, handlePropChange, ...props }) => (
-  <Popover id="calendar-settings-popover" title="Calendar settings" {...props}>
-    <Row>
-      {Object.keys(calendarOptionsInfo).map((optionName) => (
-        <CalendarSettingsOption
-          optionName={optionName}
-          key={optionName}
-          selected={currentSettings[optionName]}
-          handlePropChange={handlePropChange}
-        />
-      ))}
-    </Row>
-  </Popover>
-);
+function CalendarSettings({ currentSettings, handlePropChange, ...props }) {
+  return (
+    <Popover id="calendar-settings-popover" title="Calendar settings" {...props}>
+      <Row>
+        {Object.keys(calendarOptionsInfo).map((optionName) => (
+          <CalendarSettingsOption
+            optionName={optionName}
+            key={optionName}
+            selected={currentSettings[optionName]}
+            handlePropChange={handlePropChange}
+          />
+        ))}
+      </Row>
+    </Popover>
+  );
+}
