@@ -149,8 +149,8 @@ ignore:
 ## In these cases you can use the built-in PatternMapper to map patterns to keys, e.g.:
 #
 <%
-  require './lib/custom_i18n_scanner.rb'
-  I18n::Tasks.add_scanner 'WCAFileScanner', only: %w(*.erb)
+  require './lib/custom_wca_i18n_scanner.rb'
+  I18n::Tasks.add_scanner 'CustomWcaI18nScanner', only: %w(*.erb)
 %>
 # <%#= I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
 #        only: %w(*.html.haml *.html.slim),

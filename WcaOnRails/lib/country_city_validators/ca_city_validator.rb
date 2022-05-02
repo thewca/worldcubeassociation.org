@@ -1,16 +1,26 @@
 # frozen_string_literal: true
 
-CA_PROVINCES = %w(
-  Alberta
-  British\ Columbia
-  Manitoba
-  New\ Brunswick
-  Newfoundland\ and\ Labrador
-  Nova\ Scotia
-  Ontario
-  Prince\ Edward\ Island
-  Quebec
-  Saskatchewan
-).to_set
+module CountryCityValidators
+  CA_PROVINCES = %w(
+    Alberta
+    British\ Columbia
+    Manitoba
+    New\ Brunswick
+    Newfoundland\ and\ Labrador
+    Nova\ Scotia
+    Ontario
+    Prince\ Edward\ Island
+    Quebec
+    Saskatchewan
+  ).to_set
 
-CityValidator.add_validator_for_country "CA", CityCommaRegionValidator.new(type_of_region: "province", valid_regions: CA_PROVINCES)
+  class CaCityValidator < CityCommaRegionValidator
+    def initialize
+      super(type_of_region: "province", valid_regions: CA_PROVINCES)
+    end
+
+    def self.country_iso_2
+      "CA"
+    end
+  end
+end

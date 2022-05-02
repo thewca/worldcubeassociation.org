@@ -73,6 +73,8 @@ module WcaOnRails
     config.middleware.use Middlewares::FixAcceptHeader
     config.middleware.use Middlewares::WardenUserLogger, logger: ->(s) { Rails.logger.info(s) }
 
+    config.autoloader = :zeitwerk
+
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')
   end
