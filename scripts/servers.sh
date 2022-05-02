@@ -164,7 +164,7 @@ new() {
   if [ $# -ne 2 ]; then
     print_command_usage_and_exit
   fi
-  
+
   case "$1" in
     weak)
       instance_type=t3.medium
@@ -413,7 +413,7 @@ function passthetorch() {
     echo "You can test this out by running: ${curl_cmd}" >> /dev/stderr
     exit 1
   fi
-  
+
   get_instance_internal_ip_address expected_ip ${new_server_id}
   if ! echo $ip_addresses | grep ${expected_ip} > /dev/null; then
     echo "" >> /dev/stderr
