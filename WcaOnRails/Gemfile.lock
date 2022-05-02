@@ -636,7 +636,7 @@ GEM
     tilt (2.0.9)
     time_will_tell (0.1.0)
       railties (>= 3.2)
-    timecop (0.9.4)
+    timecop (0.9.5)
     trailblazer-option (0.1.1)
     translighterate (0.3.0)
       actionview (>= 6.0)
