@@ -49,9 +49,9 @@ module ResultsValidators
       }
 
       # eagerload all competitions informations with all appropriate associations.
-      competitions = Competition.includes(associations).where(id: results_by_round_id_by_competition_id.keys).map do |c|
+      competitions = Competition.includes(associations).where(id: results_by_round_id_by_competition_id.keys).to_h do |c|
         [c.id, c]
-      end.to_h
+      end
       results_by_round_id_by_competition_id.each do |competition_id, results_by_round_id|
         rounds_info_by_round_id = get_rounds_info(competitions[competition_id], results_by_round_id.keys)
         results_by_round_id.each do |round_id, results_for_round|

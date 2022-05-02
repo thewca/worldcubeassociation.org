@@ -26,9 +26,9 @@ module ResultsValidators
 
       results_by_competition_id = results.group_by(&:competitionId)
 
-      competitions_start_dates = Competition.where(id: results_by_competition_id.keys).select(:id, :start_date).map do |c|
+      competitions_start_dates = Competition.where(id: results_by_competition_id.keys).select(:id, :start_date).to_h do |c|
         [c.id, c.start_date]
-      end.to_h
+      end
 
       results_by_competition_id.each do |competition_id, results_for_comp|
         comp_start_date = competitions_start_dates[competition_id]

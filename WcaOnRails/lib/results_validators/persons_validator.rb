@@ -35,9 +35,9 @@ module ResultsValidators
       results ||= model.sorted_for_competitions(competition_ids)
       results_by_competition_id = results.group_by(&:competitionId)
 
-      competitions = Competition.where(id: results_by_competition_id.keys).map do |c|
+      competitions = Competition.where(id: results_by_competition_id.keys).to_h do |c|
         [c.id, c]
-      end.to_h
+      end
       results_by_competition_id.each do |competition_id, results_for_comp|
         persons_by_id = if model == Result
                           competitions[competition_id].competitors.map { |p| [p.wca_id, p] }
@@ -117,7 +117,7 @@ module ResultsValidators
                                              MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
                                              name: name)
         end
-        existing_person_by_wca_id = Person.current.where(wca_id: with_wca_id.map(&:wca_id)).map { |p| [p.wca_id, p] }.to_h
+        existing_person_by_wca_id = Person.current.where(wca_id: with_wca_id.map(&:wca_id)).to_h { |p| [p.wca_id, p] }
         with_wca_id.each do |p|
           existing_person = existing_person_by_wca_id[p.wca_id]
           if existing_person

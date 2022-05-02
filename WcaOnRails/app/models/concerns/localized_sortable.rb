@@ -33,10 +33,10 @@ module LocalizedSortable
     end
 
     def all_sorted_by(locale, real: false)
-      @all_sorted_by_locale ||= I18n.available_locales.map do |available_locale|
+      @all_sorted_by_locale ||= I18n.available_locales.to_h do |available_locale|
         objects = I18nUtils.localized_sort_by!(available_locale, self.c_all_by_id.values) { |object| object.name_in(available_locale) }
         [available_locale, objects]
-      end.to_h.freeze
+      end.freeze
       real ? @all_sorted_by_locale[locale].select(&:real?) : @all_sorted_by_locale[locale]
     end
   end

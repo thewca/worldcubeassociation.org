@@ -64,10 +64,11 @@ class SolveTime
       dd = 99 - (@solved - missed)
       ttttt = time_centiseconds / 100
 
-      if @event.id == "333mbf"
+      case @event.id
+      when "333mbf"
         mm = missed
         @wca_value = ((dd * 1e7) + (ttttt * 1e2) + mm).to_i
-      elsif @event.id == "333mbo"
+      when "333mbo"
         ss = @solved
         aa = @attempted
         @wca_value = ((1 * 1e8) + (ss * 1e7) + (aa * 1e5) + ttttt).to_i

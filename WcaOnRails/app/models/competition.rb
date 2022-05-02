@@ -842,7 +842,7 @@ class Competition < ApplicationRecord
   end
 
   def country_zones
-    ActiveSupport::TimeZone.country_zones(country.iso2).map { |tz| [tz.name, tz.tzinfo.name] }.to_h
+    ActiveSupport::TimeZone.country_zones(country.iso2).to_h { |tz| [tz.name, tz.tzinfo.name] }
   rescue TZInfo::InvalidCountryCode
     # This can occur for non real country *and* XK!
     # FIXME what to provide for XA, XE, XM, XS?

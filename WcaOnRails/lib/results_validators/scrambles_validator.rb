@@ -34,9 +34,9 @@ module ResultsValidators
 
       scrambles = Scramble.where(competitionId: results_by_competition_id.keys).group_by(&:competitionId)
 
-      competitions = Competition.includes(associations).where(id: results_by_competition_id.keys).map do |c|
+      competitions = Competition.includes(associations).where(id: results_by_competition_id.keys).to_h do |c|
         [c.id, c]
-      end.to_h
+      end
 
       results_by_competition_id.each do |competition_id, results_for_comp|
         # Get actual round ids from results

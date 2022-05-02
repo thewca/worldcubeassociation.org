@@ -107,7 +107,7 @@ class User < ApplicationRecord
   attr_accessor :sign_up_panel_to_show
 
   ALLOWABLE_GENDERS = [:m, :f, :o].freeze
-  enum gender: (ALLOWABLE_GENDERS.map { |g| [g, g.to_s] }.to_h)
+  enum gender: (ALLOWABLE_GENDERS.to_h { |g| [g, g.to_s] })
   GENDER_LABEL_METHOD = lambda do |g|
     {
       m: I18n.t('enums.user.gender.m'),

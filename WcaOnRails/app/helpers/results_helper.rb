@@ -93,9 +93,10 @@ module ResultsHelper
     if pb_marker
       record_class = 'pb'
       if regional_record.present?
-        if regional_record == 'WR'
+        case regional_record
+        when 'WR'
           record_class = 'wr'
-        elsif regional_record == 'NR'
+        when 'NR'
           record_class = 'nr'
         else
           record_class = 'cr'
