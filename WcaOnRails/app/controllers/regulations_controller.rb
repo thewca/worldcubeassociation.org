@@ -21,7 +21,7 @@ class RegulationsController < ApplicationController
   end
 
   def trailing_slash?(url)
-    url.match(/[^\?]+/).to_s.last == '/'
+    url.match(/[^?]+/).to_s.last == '/'
   end
 end
 

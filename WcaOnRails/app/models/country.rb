@@ -6,22 +6,22 @@ class Country < ApplicationRecord
   self.table_name = "Countries"
 
   ALL_TIMEZONES_MAPPING = begin
-                            all_tz = ActiveSupport::TimeZone::MAPPING
-                            grouped_tz = all_tz.group_by { |k, v| v }
-                            duplicates = grouped_tz.select { |k, v| v.size > 1 }
-                            duplicates.each do |tz_id, tz_entries|
-                              selected_name = tz_id
-                              # Try to be smarter here, and find the closest matching name
-                              tz_entries.each do |tz_name, _|
-                                if tz_id.include?(tz_name.tr(' ', '_'))
-                                  selected_name = tz_name
-                                end
-                                all_tz.delete(tz_name)
-                              end
-                              all_tz[selected_name] = tz_id
-                            end
-                            all_tz
-                          end.freeze
+    all_tz = ActiveSupport::TimeZone::MAPPING
+    grouped_tz = all_tz.group_by { |k, v| v }
+    duplicates = grouped_tz.select { |k, v| v.size > 1 }
+    duplicates.each do |tz_id, tz_entries|
+      selected_name = tz_id
+      # Try to be smarter here, and find the closest matching name
+      tz_entries.each do |tz_name, _|
+        if tz_id.include?(tz_name.tr(' ', '_'))
+          selected_name = tz_name
+        end
+        all_tz.delete(tz_name)
+      end
+      all_tz[selected_name] = tz_id
+    end
+    all_tz
+  end.freeze
 
   MULTIPLE_COUNTRIES = [
     { id: 'XF', name: 'Multiple Countries (Africa)', continentId: '_Africa', iso2: 'XF' },

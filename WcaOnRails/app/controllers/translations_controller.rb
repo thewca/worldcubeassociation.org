@@ -5,11 +5,11 @@ class TranslationsController < ApplicationController
 
   def self.bad_i18n_keys
     @bad_keys ||= begin
-                    english = locale_to_translation('en')
-                    (I18n.available_locales - [:en]).map do |locale|
-                      [locale, locale_to_translation(locale).compare_to(english)]
-                    end.to_h
-                  end
+      english = locale_to_translation('en')
+      (I18n.available_locales - [:en]).map do |locale|
+        [locale, locale_to_translation(locale).compare_to(english)]
+      end.to_h
+    end
   end
 
   def self.locale_to_translation(locale)

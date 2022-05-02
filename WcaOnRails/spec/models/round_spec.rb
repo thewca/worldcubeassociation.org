@@ -167,7 +167,7 @@ RSpec.describe Round do
   end
 end
 
-def create_rounds(event_id, format_id: 'a', count:)
+def create_rounds(event_id, count:, format_id: 'a')
   first_round = FactoryBot.create :round, number: 1, format_id: format_id, event_id: event_id, total_number_of_rounds: count
   remaining_rounds = (2..count).map do |number|
     FactoryBot.create :round, number: number, format_id: format_id, competition_event: first_round.competition_event, total_number_of_rounds: count

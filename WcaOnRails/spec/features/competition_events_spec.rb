@@ -195,18 +195,14 @@ def within_event_panel(event_id, &block)
   within(:css, ".panel.event-#{event_id}", &block)
 end
 
-def within_round(event_id, round_number)
+def within_round(event_id, round_number, &block)
   within_event_panel(event_id) do
-    within(:css, ".round-1") do
-      yield
-    end
+    within(:css, ".round-1", &block)
   end
 end
 
-def within_modal
-  within(:css, '.modal-content') do
-    yield
-  end
+def within_modal(&block)
+  within(:css, '.modal-content', &block)
 end
 
 def save

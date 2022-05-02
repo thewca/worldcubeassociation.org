@@ -554,7 +554,7 @@ class User < ApplicationRecord
   end
 
   def staff?
-    any_kind_of_delegate? && !trainee_delegate? || member_of_any_official_team? || board_member? || officer?
+    (any_kind_of_delegate? && !trainee_delegate?) || member_of_any_official_team? || board_member? || officer?
   end
 
   def staff_with_voting_rights?

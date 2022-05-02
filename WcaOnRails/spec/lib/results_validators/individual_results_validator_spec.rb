@@ -258,5 +258,5 @@ RSpec.describe IRV do
 end
 
 def person_for_result(result)
-  result.class == Result ? Person.find_by(wca_id: result.personId) : InboxPerson.find_by(id: result.personId)
+  result.instance_of?(Result) ? Person.find_by(wca_id: result.personId) : InboxPerson.find_by(id: result.personId)
 end

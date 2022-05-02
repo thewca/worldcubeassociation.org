@@ -93,7 +93,7 @@ class TimeLimit
     when 1
       I18n.t("time_limit.cumulative.one_round", time: time_str)
     else
-      all_rounds = Hash[round.competition.rounds.map { |r| [r.wcif_id, r.name] }]
+      all_rounds = round.competition.rounds.map { |r| [r.wcif_id, r.name] }.to_h
       round_strs = self.cumulative_round_ids.map { |round_id| all_rounds[round_id] }
       I18n.t("time_limit.cumulative.across_rounds", time: time_str, rounds: round_strs.to_sentence)
     end
