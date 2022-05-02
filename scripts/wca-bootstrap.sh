@@ -9,7 +9,6 @@ print_usage_and_exit() {
 if [ $# -gt 1 ]; then
   print_usage_and_exit
 fi
-
 environment=$1
 if [ "$environment" == "development" ] || [ "$environment" == "staging" ] || [ "$environment" == "production" ]; then
   git_branch=master
