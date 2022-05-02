@@ -4,25 +4,13 @@ require 'securerandom'
 
 include_recipe "wca::base"
 
-apt_repository 'nodejs' do
-  uri 'https://deb.nodesource.com/node_12.x'
-  components %w[main]
-  key 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
-end
-package 'nodejs' do
-  version '12.*'
-end
+node.default['nodejs']['version'] = '16.15.0'
+include_recipe "nodejs"
 
-apt_repository 'yarn' do
-  uri 'https://dl.yarnpkg.com/debian/'
-  components %w[main]
-  distribution "stable"
-  key 'https://dl.yarnpkg.com/debian/pubkey.gpg'
+npm_package 'yarn' do
+  version '1.22.18'
+  options ['--global']
 end
-package 'yarn' do
-  version '1.22.4-1'
-end
-
 
 secrets = WcaHelper.get_secrets(self)
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
