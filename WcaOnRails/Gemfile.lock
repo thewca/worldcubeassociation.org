@@ -123,7 +123,7 @@ GEM
       execjs
     aws-eventstream (1.2.0)
     aws-partitions (1.581.0)
-    aws-sdk-cloudfront (1.63.0)
+    aws-sdk-cloudfront (1.64.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-core (3.130.2)
