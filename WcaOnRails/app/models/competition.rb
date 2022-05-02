@@ -426,6 +426,10 @@ class Competition < ApplicationRecord
       if championship_warnings.any?
         warnings = championship_warnings.merge(warnings)
       end
+
+      if has_fees? && !connected_stripe_account_id
+        warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info')
+      end
     else
       unless self.announced?
         warnings[:announcement] = I18n.t('competitions.messages.not_announced')

@@ -1260,6 +1260,7 @@ en:
       time_limit_is_too_fast: "Round %{round_number} in %{event} has a time limit less than 10 seconds. Please make sure that it is correct."
       time_limit_is_too_slow: "Round %{round_number} in %{event} has a time limit more than 10 minutes in a fast event. Please make sure that it is correct."
       create_success: "Successfully created new competition!"
+      registration_payment_info: "This competition has registration fees but no Stripe account is linked. If you are using Stripe through the WCA website, please remember to link your Stripe account. If you are using an external payment system, please remember to add all the relevant details in the registration requirements."
       not_announced: "This competition is visible to the public but hasn't been announced yet."
       announced: "Successfully announced competition!"
       cancelled: "This competition has been cancelled. Please checkout the information section for more details."
