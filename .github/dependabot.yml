@@ -10,10 +10,6 @@ updates:
   - dependency-name: rails
     versions:
     - ">= 7"
-  # compatibility with Ruby 2.6
-  - dependency-name: rubocop
-    versions:
-      - "> 0.81"
   # https://github.com/thewca/worldcubeassociation.org/pull/3644
   - dependency-name: seedbank
     versions:
