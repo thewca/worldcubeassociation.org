@@ -226,7 +226,7 @@ class SolveTime
       time_minutes >= 1 ? "" : " #{I18n.t("common.solve_time.unit_seconds")}"
     elsif @event.fewest_moves?
       " #{I18n.t("common.solve_time.unit_moves")}"
-    elsif @event.multiple_blindfolded?
+    elsif @event.multiple_blindfolded? # rubocop:disable Lint/DuplicateBranch
       ""
     else
       raise "Unrecognized event type #{@event.id}"

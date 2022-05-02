@@ -31,7 +31,7 @@ EnvVars = Env::Vars.new do
     port = Rails::Server::Options.new.parse!(ARGV)[:Port]
     default_root_url = "http://localhost:#{port}"
   else
-    default_root_url = "http://test.host"
+    default_root_url = "http://default.host"
   end
 
   optional :ROOT_URL, :string, default_root_url

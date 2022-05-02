@@ -973,7 +973,7 @@ class User < ApplicationRecord
     end
   end
 
-  def maybe_assign_wca_id_by_results(competition, notify = true)
+  def maybe_assign_wca_id_by_results(competition, notify: true)
     if !wca_id && !unconfirmed_wca_id
       matches = []
       unless country.nil? || dob.nil?
