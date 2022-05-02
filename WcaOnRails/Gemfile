@@ -69,7 +69,7 @@ gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
 gem 'cocoon'
-gem 'momentjs-rails', github: 'derekprior/momentjs-rails'
+gem 'momentjs-rails', github: 'derekprior/momentjs-rails', branch: 'main'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', submodules: true
 gem 'blocks'
 gem 'rack-cors', require: 'rack/cors'
