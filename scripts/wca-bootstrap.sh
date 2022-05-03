@@ -83,8 +83,8 @@ if [ "$environment" != "development" ]; then
 fi
 
 # Install chef client
-if ! command -v chef-solo &> /dev/null || ! chef-solo --version | grep 16.17.39 &> /dev/null; then
-  curl -Ls https://omnitruck.chef.io/install.sh | bash -s -- -v 16.17.39
+if ! command -v chef-solo &> /dev/null || ! chef-solo --version | grep 16.17.51 &> /dev/null; then
+  curl -Ls https://omnitruck.chef.io/install.sh | bash -s -- -v 16.17.51
   /opt/chef/embedded/bin/gem install berkshelf -v "7.2.2"
 fi
 
