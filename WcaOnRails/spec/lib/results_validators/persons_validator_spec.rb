@@ -31,7 +31,7 @@ RSpec.describe PV do
         end
 
         validator_args.each do |arg|
-          pv = PV.new.validate(arg)
+          pv = PV.new.validate(**arg)
           expect(pv.warnings).to be_empty
           expect(pv.errors).to be_empty
         end
@@ -56,7 +56,7 @@ RSpec.describe PV do
           ]
         end
         validator_args.each do |arg|
-          pv = PV.new.validate(arg)
+          pv = PV.new.validate(**arg)
           expect(pv.warnings).to be_empty
           expect(pv.errors).to match_array(expected_errors[arg[:model].to_s])
         end
@@ -111,7 +111,7 @@ RSpec.describe PV do
           { results: InboxResult.sorted_for_competitions([competition1.id, competition2.id]), model: InboxResult },
         ]
         validator_args.each do |arg|
-          pv = PV.new.validate(arg)
+          pv = PV.new.validate(**arg)
           expect(pv.errors).to be_empty
           expect(pv.warnings).to match_array(expected_warnings)
         end
@@ -208,7 +208,7 @@ RSpec.describe PV do
           { results: InboxResult.sorted_for_competitions([competition1.id, competition2.id]), model: InboxResult },
         ]
         validator_args.each do |arg|
-          pv = PV.new.validate(arg)
+          pv = PV.new.validate(**arg)
           expect(pv.errors).to match_array(expected_errors)
           expect(pv.warnings).to match_array(expected_warnings)
         end

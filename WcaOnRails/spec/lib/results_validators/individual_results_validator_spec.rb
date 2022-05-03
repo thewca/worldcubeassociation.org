@@ -126,7 +126,7 @@ RSpec.describe IRV do
         expected_errors[model.to_s] = errs
       end
       validator_args.each do |arg|
-        irv = IRV.new.validate(arg)
+        irv = IRV.new.validate(**arg)
         expect(irv.errors).to match_array(expected_errors[arg[:model].to_s])
         expect(irv.warnings).to be_empty
       end
@@ -187,7 +187,7 @@ RSpec.describe IRV do
                                                     format: "Mean of 3")
       end
       validator_args.each do |arg|
-        irv = IRV.new.validate(arg)
+        irv = IRV.new.validate(**arg)
         expect(irv.errors).to match_array(errs[arg[:model].to_s])
         expect(irv.warnings).to be_empty
       end
@@ -249,7 +249,7 @@ RSpec.describe IRV do
         expected_warnings[model.to_s] = warns
       end
       validator_args.each do |arg|
-        irv = IRV.new.validate(arg)
+        irv = IRV.new.validate(**arg)
         expect(irv.errors).to be_empty
         expect(irv.warnings).to match_array(expected_warnings[arg[:model].to_s])
       end

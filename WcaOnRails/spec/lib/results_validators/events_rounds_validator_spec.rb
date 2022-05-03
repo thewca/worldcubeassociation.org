@@ -57,7 +57,7 @@ RSpec.describe ERV do
       ]
 
       validator_args.each do |arg|
-        erv = ERV.new.validate(arg)
+        erv = ERV.new.validate(**arg)
         expect(erv.warnings).to match_array(expected_warnings)
         expect(erv.errors).to match_array(expected_errors)
       end
@@ -115,7 +115,7 @@ RSpec.describe ERV do
                                   main_event_id: "222"),
       ]
       validator_args.each do |arg|
-        erv = ERV.new.validate(arg)
+        erv = ERV.new.validate(**arg)
         expect(erv.warnings).to match_array(expected_warnings)
         expect(erv.errors).to match_array(expected_errors)
       end

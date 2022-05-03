@@ -39,7 +39,7 @@ RSpec.describe ACV do
       end
 
       validator_args.each do |arg|
-        acv = ACV.new.validate(arg)
+        acv = ACV.new.validate(**arg)
         expect(acv.warnings).to be_empty
         expect(acv.errors).to be_empty
       end
@@ -56,7 +56,7 @@ RSpec.describe ACV do
       Result.import(results)
 
       validator_args.each do |arg|
-        acv = ACV.new.validate(arg)
+        acv = ACV.new.validate(**arg)
         # If it wouldn't ignore b-final, it would complain about competitors not
         # being eliminated.
         expect(acv.warnings).to be_empty
@@ -119,7 +119,7 @@ RSpec.describe ACV do
       ]
 
       validator_args.each do |arg|
-        acv = ACV.new.validate(arg)
+        acv = ACV.new.validate(**arg)
         expect(acv.warnings).to be_empty
         expect(acv.errors).to match_array(expected_errors)
       end
