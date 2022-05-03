@@ -39,7 +39,7 @@ class SolveTime
         mb_value /= 100_000
         @attempted = mb_value % 100
         mb_value /= 100
-        @solved = 99 - mb_value % 100
+        @solved = 99 - (mb_value % 100)
       else
         missed = mb_value % 100
         mb_value /= 100
@@ -64,13 +64,14 @@ class SolveTime
       dd = 99 - (@solved - missed)
       ttttt = time_centiseconds / 100
 
-      if @event.id == "333mbf"
+      case @event.id
+      when "333mbf"
         mm = missed
-        @wca_value = (dd * 1e7 + ttttt * 1e2 + mm).to_i
-      elsif @event.id == "333mbo"
+        @wca_value = ((dd * 1e7) + (ttttt * 1e2) + mm).to_i
+      when "333mbo"
         ss = @solved
         aa = @attempted
-        @wca_value = (1 * 1e8 + ss * 1e7 + aa * 1e5 + ttttt).to_i
+        @wca_value = ((1 * 1e8) + (ss * 1e7) + (aa * 1e5) + ttttt).to_i
       else
         raise
       end
@@ -225,7 +226,7 @@ class SolveTime
       time_minutes >= 1 ? "" : " #{I18n.t("common.solve_time.unit_seconds")}"
     elsif @event.fewest_moves?
       " #{I18n.t("common.solve_time.unit_moves")}"
-    elsif @event.multiple_blindfolded?
+    elsif @event.multiple_blindfolded? # rubocop:disable Lint/DuplicateBranch
       ""
     else
       raise "Unrecognized event type #{@event.id}"

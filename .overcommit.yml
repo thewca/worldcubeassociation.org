@@ -30,6 +30,7 @@ PreCommit:
       - 'WcaOnRails/config/locales/*.yml'
       - 'chef/**/*'
       - '.gitmodules'
+      - 'Vagrantfile'
       - '**/*.pdf'
       - '**/*.jpg'
       - '**/*.png'

@@ -27,11 +27,11 @@ class AnonymizePerson
   end
 
   def next_step!
-    self.current_step = steps[steps.index(current_step)+1 % steps.length]
+    self.current_step = steps[steps.index(current_step)+(1 % steps.length)]
   end
 
   def previous_step!
-    self.current_step = steps[steps.index(current_step)-1 % steps.length]
+    self.current_step = steps[steps.index(current_step)-(1 % steps.length)]
   end
 
   def first_step?

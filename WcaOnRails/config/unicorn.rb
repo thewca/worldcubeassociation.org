@@ -8,7 +8,7 @@ allowed_environments = {
   'staging' => true,
   'production' => true,
 }
-rack_env = ENV['RACK_ENV']
+rack_env = ENV.fetch('RACK_ENV', nil)
 if !allowed_environments[rack_env]
   raise "Unrecognized RACK_ENV: #{rack_env}, must be one of #{allowed_environments.keys.join ', '}"
 end

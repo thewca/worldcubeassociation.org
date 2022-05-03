@@ -118,11 +118,11 @@ class UploadJson
         false
       rescue ActiveRecord::RecordInvalid => e
         object = e.record
-        if object.class == Scramble
+        if object.instance_of?(Scramble)
           errors.add(:results_file, "Scramble in '#{Round.name_from_attributes_id(object.eventId, object.roundTypeId)}' is invalid (#{e.message}), please fix it!")
-        elsif object.class == InboxPerson
+        elsif object.instance_of?(InboxPerson)
           errors.add(:results_file, "Person #{object.name} is invalid (#{e.message}), please fix it!")
-        elsif object.class == InboxResult
+        elsif object.instance_of?(InboxResult)
           errors.add(:results_file, "Result for person #{object.personId} in '#{Round.name_from_attributes_id(object.eventId, object.roundTypeId)}' is invalid (#{e.message}), please fix it!")
         else
           errors.add(:results_file, "An invalid record prevented the results from being created: #{e.message}")

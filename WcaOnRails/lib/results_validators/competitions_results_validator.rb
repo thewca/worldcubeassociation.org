@@ -34,7 +34,7 @@ module ResultsValidators
     end
 
     def persons_by_id
-      @persons_by_id ||= Hash[@persons.map { |person| [@check_real_results ? person.wca_id : person.id, person] }]
+      @persons_by_id ||= @persons.to_h { |person| [@check_real_results ? person.wca_id : person.id, person] }
     end
 
     # The concept: this aggregate of validators should be applicable on any association

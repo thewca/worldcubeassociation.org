@@ -78,7 +78,7 @@ class CompetitionsController < ApplicationController
 
   # Rubocop is unhappy about all the things we do in this controller action,
   # which is understandable.
-  def index # rubocop:disable Metrics/PerceivedComplexity
+  def index
     support_old_links!
 
     # Default params
@@ -532,16 +532,16 @@ class CompetitionsController < ApplicationController
     competition_ids.concat(current_user.trainee_delegated_competitions.pluck(:competition_id))
     registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
     registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
-    @registered_for_by_competition_id = Hash[registrations.uniq.map do |r|
+    @registered_for_by_competition_id = registrations.uniq.to_h do |r|
       [r.competition.id, r]
-    end]
+    end
     competition_ids.concat(@registered_for_by_competition_id.keys)
     if current_user.person
       competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
     end
     competitions = Competition.includes(:delegate_report, :delegates)
                               .where(id: competition_ids.uniq)
-                              .sort_by { |comp| comp.start_date || Date.today + 20.year }.reverse
+                              .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
     @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
     bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
     @bookmarked_competitions = Competition.not_over
@@ -551,7 +551,7 @@ class CompetitionsController < ApplicationController
 
   def for_senior
     @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
-    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || Date.today + 20.year }.reverse
+    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
   end
 
   private def confirming?
@@ -629,8 +629,8 @@ class CompetitionsController < ApplicationController
         :main_event_id,
         :waiting_list_deadline_date,
         :event_change_deadline_date,
-        competition_events_attributes: [:id, :event_id, :_destroy],
-        championships_attributes: [:id, :championship_type, :_destroy],
+        { competition_events_attributes: [:id, :event_id, :_destroy],
+          championships_attributes: [:id, :championship_type, :_destroy] },
       ]
       if current_user.can_admin_competitions?
         permitted_competition_params += [

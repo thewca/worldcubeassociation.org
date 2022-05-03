@@ -76,9 +76,9 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   # Create different versions of your uploaded files:
   process resize_to_fit: [800, 800]
 
-  # Add a white list of extensions which are allowed to be uploaded.
+  # Add an allow list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
-  def extension_white_list
+  def extension_white_list # rubocop:disable Naming/InclusiveLanguage
     %w(jpg jpeg gif png)
   end
 

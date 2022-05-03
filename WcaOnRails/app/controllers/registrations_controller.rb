@@ -626,7 +626,7 @@ class RegistrationsController < ApplicationController
     permitted_params = [
       :guests,
       :comments,
-      registration_competition_events_attributes: [:id, :competition_event_id, :_destroy],
+      { registration_competition_events_attributes: [:id, :competition_event_id, :_destroy] },
     ]
     if current_user.can_manage_competition?(competition_from_params)
       permitted_params += [

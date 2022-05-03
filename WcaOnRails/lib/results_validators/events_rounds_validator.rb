@@ -31,11 +31,9 @@ module ResultsValidators
 
       results_by_competition_id = results.group_by(&:competitionId)
 
-      competitions = Hash[
-        Competition.includes(associations).where(id: results_by_competition_id.keys).map do |c|
-          [c.id, c]
-        end
-      ]
+      competitions = Competition.includes(associations).where(id: results_by_competition_id.keys).to_h do |c|
+        [c.id, c]
+      end
 
       results_by_competition_id.each do |competition_id, results_for_comp|
         competition = competitions[competition_id]
@@ -89,7 +87,7 @@ module ResultsValidators
       # Check that rounds match what was declared.
       # This function automatically casts cutoff rounds to regular rounds if everyone has met the cutoff.
 
-      expected_rounds_by_ids = Hash[competition.competition_events.map(&:rounds).flatten.map { |r| ["#{r.event.id}-#{r.round_type_id}", r] }]
+      expected_rounds_by_ids = competition.competition_events.map(&:rounds).flatten.to_h { |r| ["#{r.event.id}-#{r.round_type_id}", r] }
 
       expected = expected_rounds_by_ids.keys
       real = results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq

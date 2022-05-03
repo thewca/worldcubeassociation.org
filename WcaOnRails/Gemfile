@@ -111,8 +111,7 @@ end
 
 group :development do
   gem 'overcommit', require: false
-  # RuboCop only supports our infrastructure until 0.81
-  gem 'rubocop', "~>0.81.0", require: false
+  gem 'rubocop', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'

@@ -279,9 +279,10 @@ class ResultsController < ApplicationController
     end
 
     @gender = params[:gender]
-    if params[:gender] == "Male"
+    case params[:gender]
+    when "Male"
       @gender_condition = "AND gender = 'm'"
-    elsif params[:gender] == "Female"
+    when "Female"
       @gender_condition = "AND gender = 'f'"
     else
       @gender_condition = ""

@@ -172,7 +172,7 @@ class Registration < ApplicationRecord
   def waiting_list_info
     pending_registrations = competition.registrations.pending.order(:created_at)
     index = pending_registrations.index(self)
-    OpenStruct.new(index: index, length: pending_registrations.length)
+    Hash.new(index: index, length: pending_registrations.length)
   end
 
   def to_wcif(authorized: false)

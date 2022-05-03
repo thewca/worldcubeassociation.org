@@ -842,7 +842,7 @@ class Competition < ApplicationRecord
   end
 
   def country_zones
-    ActiveSupport::TimeZone.country_zones(country.iso2).map { |tz| [tz.name, tz.tzinfo.name] }.to_h
+    ActiveSupport::TimeZone.country_zones(country.iso2).to_h { |tz| [tz.name, tz.tzinfo.name] }
   rescue TZInfo::InvalidCountryCode
     # This can occur for non real country *and* XK!
     # FIXME what to provide for XA, XE, XM, XS?
@@ -1078,8 +1078,8 @@ class Competition < ApplicationRecord
   def kilometers_to(c)
     6371 *
       Math.sqrt(
-        ((c.longitude_radians - longitude_radians) * Math.cos((c.latitude_radians + latitude_radians)/2)) ** 2 +
-        (c.latitude_radians - latitude_radians) ** 2,
+        (((c.longitude_radians - longitude_radians) * Math.cos((c.latitude_radians + latitude_radians)/2)) ** 2) +
+        ((c.latitude_radians - latitude_radians) ** 2),
       )
   end
 
@@ -1462,9 +1462,9 @@ class Competition < ApplicationRecord
     includes_associations = [
       :events,
       { assignments: [:schedule_activity] },
-      user: {
+      { user: {
         person: [:ranksSingle, :ranksAverage],
-      },
+      } },
     ]
     persons_wcif = registrations.order(:id)
                                 .includes(includes_associations)
@@ -1549,7 +1549,7 @@ class Competition < ApplicationRecord
     end
 
     # Update all events.
-    wcif_events.each do |wcif_event|
+    wcif_events.each do |wcif_event| # rubocop:disable Style/CombinableLoops
       event_to_be_updated = wcif_event["rounds"]
       if event_to_be_updated
         unless current_user.can_update_events?(self)

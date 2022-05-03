@@ -15,7 +15,6 @@ namespace :db do
       Rails.application.eager_load!
 
       error_count = 0
-      # rubocop:disable Layout/RescueEnsureAlignment
       # There is a bug in RuboCop which wants to move the "rescue" to align with "ActiveRecord" at the beginning of the line
       # Haven't found a workaround yet other than upgrading, which we cannot do because of our old infrastructure
       ActiveRecord::Base.subclasses
@@ -31,8 +30,6 @@ namespace :db do
                           puts "An exception occurred: #{e.message}"
                           error_count += 1
                         end
-      # rubocop:enable Layout/RescueEnsureAlignment
-
       ActiveRecord::Base.logger.level = original_log_level
 
       exit error_count > 0 ? 1 : 0

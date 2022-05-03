@@ -72,13 +72,13 @@ RSpec.describe "SolveTime" do
     end
 
     it "formats minutes" do
-      expect(solve_time(3 * 60 * 100 + 4242).clock_format).to eq "3:42.42"
-      expect(solve_time(3 * 60 * 100 + 4242).clock_format_with_units).to eq "3:42.42"
+      expect(solve_time((3 * 60 * 100) + 4242).clock_format).to eq "3:42.42"
+      expect(solve_time((3 * 60 * 100) + 4242).clock_format_with_units).to eq "3:42.42"
     end
 
     it "formats hours" do
-      expect(solve_time(2 * 60 * 100 * 60 + 3 * 60 * 100 + 4242).clock_format).to eq "2:03:42.42"
-      expect(solve_time(2 * 60 * 100 * 60 + 3 * 60 * 100 + 4242).clock_format_with_units).to eq "2:03:42.42"
+      expect(solve_time((2 * 60 * 100 * 60) + (3 * 60 * 100) + 4242).clock_format).to eq "2:03:42.42"
+      expect(solve_time((2 * 60 * 100 * 60) + (3 * 60 * 100) + 4242).clock_format_with_units).to eq "2:03:42.42"
     end
 
     describe "333fm" do

@@ -35,19 +35,15 @@ module ResultsValidators
       results ||= model.sorted_for_competitions(competition_ids)
       results_by_competition_id = results.group_by(&:competitionId)
 
-      competitions = Hash[
-        Competition.where(id: results_by_competition_id.keys).map do |c|
-          [c.id, c]
-        end
-      ]
+      competitions = Competition.where(id: results_by_competition_id.keys).to_h do |c|
+        [c.id, c]
+      end
       results_by_competition_id.each do |competition_id, results_for_comp|
-        persons_by_id = Hash[
-          if model == Result
-            competitions[competition_id].competitors.map { |p| [p.wca_id, p] }
-          else
-            InboxPerson.where(competitionId: competition_id).map { |p| [p.id, p] }
-          end
-        ]
+        persons_by_id = if model == Result
+                          competitions[competition_id].competitors.map { |p| [p.wca_id, p] }
+                        else
+                          InboxPerson.where(competitionId: competition_id).map { |p| [p.id, p] }
+                        end.to_h
         detected_person_ids = persons_by_id.keys
         persons_with_results = results_for_comp.map(&:personId)
         (detected_person_ids - persons_with_results).each do |person_id|
@@ -121,7 +117,7 @@ module ResultsValidators
                                              MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
                                              name: name)
         end
-        existing_person_by_wca_id = Hash[Person.current.where(wca_id: with_wca_id.map(&:wca_id)).map { |p| [p.wca_id, p] }]
+        existing_person_by_wca_id = Person.current.where(wca_id: with_wca_id.map(&:wca_id)).to_h { |p| [p.wca_id, p] }
         with_wca_id.each do |p|
           existing_person = existing_person_by_wca_id[p.wca_id]
           if existing_person

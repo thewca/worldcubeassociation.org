@@ -3,8 +3,10 @@
 class NoMoreDrupal < ActiveRecord::Migration
   class DeviseUser < ActiveRecord::Base
   end
+
   class User < ActiveRecord::Base
   end
+
   class Node < ActiveRecord::Base
     self.table_name = "node"
     # Drupal has a "type" column that we don't want ActiveRecord to get excited about.
@@ -26,13 +28,16 @@ class NoMoreDrupal < ActiveRecord::Migration
       end
     end
   end
+
   class UrlAlias < ActiveRecord::Base
     self.table_name = "url_alias"
   end
+
   class FieldDataBody < ActiveRecord::Base
     self.table_name = "field_data_body"
     belongs_to :node, primary_key: "nid", foreign_key: "entity_id"
   end
+
   class Post < ActiveRecord::Base
     belongs_to :author, class_name: "DeviseUser"
   end

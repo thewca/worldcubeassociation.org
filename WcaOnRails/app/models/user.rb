@@ -107,7 +107,7 @@ class User < ApplicationRecord
   attr_accessor :sign_up_panel_to_show
 
   ALLOWABLE_GENDERS = [:m, :f, :o].freeze
-  enum gender: (ALLOWABLE_GENDERS.map { |g| [g, g.to_s] }.to_h)
+  enum gender: (ALLOWABLE_GENDERS.to_h { |g| [g, g.to_s] })
   GENDER_LABEL_METHOD = lambda do |g|
     {
       m: I18n.t('enums.user.gender.m'),
@@ -554,7 +554,7 @@ class User < ApplicationRecord
   end
 
   def staff?
-    any_kind_of_delegate? && !trainee_delegate? || member_of_any_official_team? || board_member? || officer?
+    (any_kind_of_delegate? && !trainee_delegate?) || member_of_any_official_team? || board_member? || officer?
   end
 
   def staff_with_voting_rights?
@@ -973,7 +973,7 @@ class User < ApplicationRecord
     end
   end
 
-  def maybe_assign_wca_id_by_results(competition, notify = true)
+  def maybe_assign_wca_id_by_results(competition, notify: true)
     if !wca_id && !unconfirmed_wca_id
       matches = []
       unless country.nil? || dob.nil?
