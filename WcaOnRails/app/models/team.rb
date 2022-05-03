@@ -219,4 +219,136 @@ class Team < ApplicationRecord
     options = default_options.merge(options || {})
     super(options)
   end
+
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
+  def changes_in_team
+    duration_start_date = Time.now.beginning_of_month - 1.month
+    sorted_users = []
+    team_member_changes = {}
+
+    leader_changes = []
+    promoted_senior_members = []
+    new_senior_members = []
+    new_members = []
+    demoted_senior_members = []
+    no_more_senior_members = []
+    no_more_members = []
+
+    team_members
+      .select { |team_member| team_member.updated_at >= duration_start_date } # Filters members who have change in the duration.
+      .sort_by { |team_member| [team_member.user.name, team_member.updated_at] } # Sorts the members alphabetically.
+      .each do |team_member|
+        user = team_member.user
+        if sorted_users.count == 0 || sorted_users.last.id != user.id
+          sorted_users.append(user)
+          team_member_changes[user.id] = [team_member]
+        else
+          team_member_changes[user.id].append(team_member)
+        end
+      end
+    sorted_users.each do |user|
+      new_leader = false
+      new_senior_member = false
+      new_member = false
+      ex_leader = false
+      ex_senior_member = false
+      ex_member = false
+      new_and_ex_leader = false
+      new_and_ex_senior_member = false
+      new_and_ex_member = false
+
+      # Creates flags for what all actioned in the duration.
+      team_member_changes[user.id].each do |member|
+        if member.end_date && member.end_date >= duration_start_date
+          if member.start_date >= duration_start_date
+            new_and_ex_leader = member.team_leader
+            new_and_ex_senior_member = member.team_senior_member
+            new_and_ex_member = !new_and_ex_leader && !new_and_ex_senior_member
+          else
+            ex_leader = member.team_leader
+            ex_senior_member = member.team_senior_member
+            ex_member = !ex_leader && !ex_senior_member
+          end
+        elsif !member.end_date && member.start_date >= duration_start_date
+          new_leader = member.team_leader
+          new_senior_member = member.team_senior_member
+          new_member = !new_leader && !new_senior_member
+        end
+      end
+
+      # Gets assigned to respective group of changes
+      name = user.name
+      if new_leader || ex_leader || new_and_ex_leader
+        if new_leader
+          leader_changes.append("#{name} has been appointed as the new Leader.")
+        elsif ex_leader
+          if new_member
+            leader_changes.append("#{name} is no longer the Leader, but will continue as member.")
+          elsif new_senior_member
+            leader_changes.append("#{name} is no longer the Leader, but will continue as Senior member.")
+          else
+            leader_changes.append("#{name} is no longer the Leader and no longer a member.")
+          end
+        else
+          if new_member
+            leader_changes.append("#{name} was the Leader for few days and is continuing as member.")
+          elsif new_senior_member
+            leader_changes.append("#{name} was the Leader for few days and is continuing as Senior member.")
+          else
+            leader_changes.append("#{name} was the Leader for few days and is no longer a member.")
+          end
+        end
+      else
+        if new_senior_member || new_and_ex_senior_member
+          if ex_member || new_and_ex_member
+            promoted_senior_members.append(name)
+          else
+            new_senior_members.append(name)
+          end
+        end
+        if new_member || new_and_ex_member
+          if !ex_senior_member && !new_and_ex_senior_member
+            new_members.append(name)
+          else
+            demoted_senior_members.append(name)
+          end
+        elsif ex_senior_member || new_and_ex_senior_member
+          no_more_senior_members.append(name)
+        end
+        if (ex_member || new_and_ex_member) && !new_senior_member && !new_member
+          no_more_members.append(name)
+        end
+      end
+    end
+
+    changes_of_last_month = ""
+    if leader_changes.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
+      changes_of_last_month = "Changes in #{self.name}\n"
+      if leader_changes.count > 0
+        changes_of_last_month += "\nLeaders\n#{leader_changes.join("\n")}\n"
+      end
+      if promoted_senior_members.count > 0
+        changes_of_last_month += "\nPromoted Senior Members\n#{promoted_senior_members.join("\n")}\n"
+      end
+      if new_senior_members.count > 0
+        changes_of_last_month += "\nNew Senior Members\n#{new_senior_members.join("\n")}\n"
+      end
+      if new_members.count > 0
+        changes_of_last_month += "\nNew Members\n#{new_members.join("\n")}\n"
+      end
+      if demoted_senior_members.count > 0
+        changes_of_last_month += "\nDemotions from Senior Member to Member\n#{demoted_senior_members.join("\n")}\n"
+      end
+      if no_more_senior_members.count > 0
+        changes_of_last_month += "\nResigned/Demoted Senior Members\n#{no_more_senior_members.join("\n")}\n"
+      end
+      if no_more_members.count > 0
+        changes_of_last_month += "\nResigned/Demoted Members\n#{no_more_members.join("\n")}\n"
+      end
+    end
+    changes_of_last_month
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 end
