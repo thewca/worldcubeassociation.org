@@ -24,7 +24,7 @@ class Post < ApplicationRecord
     self.unstick_at = nil
   end
 
-  BREAK_TAG_RE = /<!--\s*break\s*-->/.freeze
+  BREAK_TAG_RE = /<!--\s*break\s*-->/
 
   def body_full
     body.sub(BREAK_TAG_RE, "")

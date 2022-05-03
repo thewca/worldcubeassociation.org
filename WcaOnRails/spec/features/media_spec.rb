@@ -91,6 +91,6 @@ RSpec.feature "Media" do
   end
 end
 
-def within_medium_row(medium, &blk)
-  within("tr[data-medium-id='#{medium.id}']", &blk)
+def within_medium_row(medium, &)
+  within("tr[data-medium-id='#{medium.id}']", &)
 end

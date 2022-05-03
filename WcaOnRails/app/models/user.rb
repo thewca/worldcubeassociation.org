@@ -89,14 +89,14 @@ class User < ApplicationRecord
   # name empty, so long as they're a returning competitor and are claiming their
   # wca id.
   validates :name, presence: true, if: -> { !claiming_wca_id }
-  WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/.freeze
+  WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
   validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
 
   # Very simple (and permissive) regexp, the goal is just to avoid silly typo
   # like "aaa@bbb,com", or forgetting the '@'.
-  EMAIL_RE = /[\w.%+-]+@[\w.-]+\.\w+/.freeze
+  EMAIL_RE = /[\w.%+-]+@[\w.-]+\.\w+/
   validates :email, format: { with: EMAIL_RE }
 
   # Virtual attribute for authenticating by WCA ID or email.
