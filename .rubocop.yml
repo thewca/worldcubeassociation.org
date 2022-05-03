@@ -548,3 +548,6 @@ Style/RedundantInitialize:
 
 Style/SelectByRegexp:
   Enabled: true
+
+Style/HashSyntax:
+  Enabled: false
