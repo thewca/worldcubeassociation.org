@@ -1164,7 +1164,7 @@ class User < ApplicationRecord
   # A locked account is just a user with an empty password.
   # It's impossible to sign into an account with an empty password,
   # so the only way to log into a locked account is to reset its password.
-  def self.new_locked_account(attributes = {})
+  def self.new_locked_account(**attributes)
     User.new(attributes.merge(encrypted_password: "")).tap do |user|
       user.define_singleton_method(:password_required?) { false } # More on that: https://stackoverflow.com/a/45589123
       user.skip_confirmation!

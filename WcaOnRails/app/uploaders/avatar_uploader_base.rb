@@ -134,7 +134,7 @@ if File.exist? "/vagrant"
   # mutates with mogrify, which exposes this bug.
   # See https://github.com/mitchellh/vagrant/issues/351.
   module FileUtils
-    def cp(src, dest, options = {})
+    def cp(src, dest, **options)
       `cp #{src.shellescape} #{dest.shellescape}`
     end
     module_function :cp
