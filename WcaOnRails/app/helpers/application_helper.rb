@@ -121,7 +121,7 @@ module ApplicationHelper
     nav_items
   end
 
-  def wca_date_range(from_date, to_date, options = {})
+  def wca_date_range(from_date, to_date, **options)
     if from_date && to_date
       options[:separator] = '-'
       date_range(from_date, to_date, **options)
