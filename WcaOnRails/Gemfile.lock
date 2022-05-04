@@ -380,7 +380,7 @@ GEM
     jmespath (1.6.1)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
-    json (2.5.1)
+    json (2.6.1)
     json-schema (3.0.0)
       addressable (>= 2.8)
     jwt (2.3.0)
@@ -546,7 +546,7 @@ GEM
       ffi (~> 1.0)
     rdoc (6.4.0)
       psych (>= 4.0.0)
-    recaptcha (5.8.1)
+    recaptcha (5.10.0)
       json
     redcarpet (3.5.1)
     regexp_parser (2.2.0)
