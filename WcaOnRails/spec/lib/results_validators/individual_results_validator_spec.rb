@@ -8,7 +8,7 @@ IRV = RV::IndividualResultsValidator
 RSpec.describe IRV do
   context "on InboxResult and Result" do
     let!(:competition1) { FactoryBot.create(:competition, :past, event_ids: ["333oh", "444", "333mbf", "333bf"]) }
-    let!(:competition2) { FactoryBot.create(:competition, :past, event_ids: ["222", "555", "666", "777", "333fm"]) }
+    let!(:competition2) { FactoryBot.create(:competition, :past, event_ids: ["222", "444", "555", "666", "777", "333fm"]) }
 
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.
@@ -206,7 +206,7 @@ RSpec.describe IRV do
 
       FactoryBot.create(:round, competition: competition2, event_id: "222")
       FactoryBot.create(:round, competition: competition1, event_id: "333mbf", format_id: "3")
-      FactoryBot.create(:round, competition: competition1, event_id: "444")
+      FactoryBot.create(:round, competition: competition2, event_id: "444")
       tl = TimeLimit.new(centiseconds: 2.minutes.in_centiseconds, cumulative_round_ids: ["333bf-r1"])
       FactoryBot.create(:round, competition: competition1, event_id: "333bf",
                                 format_id: "3", time_limit: tl)
@@ -223,9 +223,9 @@ RSpec.describe IRV do
                                            result: res_mbf.solve_times[1].clock_format)
 
         # DNS followed by DNF
-        res44 = FactoryBot.create(result_kind, competition: competition1, eventId: "444")
+        res44 = FactoryBot.create(result_kind, competition: competition2, eventId: "444")
         res44.update(value4: -2, value5: -1)
-        warns << RV::ValidationWarning.new(:results, competition1.id,
+        warns << RV::ValidationWarning.new(:results, competition2.id,
                                            IRV::RESULT_AFTER_DNS_WARNING,
                                            round_id: "444-f",
                                            person_name: res44.personName)
