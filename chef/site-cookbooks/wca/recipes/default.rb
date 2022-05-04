@@ -87,6 +87,32 @@ execute gen_auth_keys_path do
   user username
 end
 
+# add the deploy scripts so SSH terminals from the outside world can access rbenv
+directory "/home/#{username}/github-scripts" do
+  owner username
+  group username
+end
+template "/home/#{username}/github-scripts/full-deploy.sh" do
+  source "github-full-deploy.sh.erb"
+  mode 0755
+  owner username
+  group username
+  variables({
+              repo_root: repo_root,
+              username: username,
+            })
+end
+template "/home/#{username}/github-scripts/update-docs.sh" do
+  source "github-update-docs.sh.erb"
+  mode 0755
+  owner username
+  group username
+  variables({
+              repo_root: repo_root,
+              username: username,
+            })
+end
+
 #### Mysql
 package 'mysql-client-8.0'
 db = {

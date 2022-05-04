@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# assumes this is run as the user where rbenv is also installed.
+export PATH="/home/<%= @username %>/.rbenv/shims:/home/<%= @username %>/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+<%= @repo_root %>/scripts/deploy.sh pull_latest rebuild_regs rebuild_rails
