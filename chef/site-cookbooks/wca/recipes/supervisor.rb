@@ -1,5 +1,13 @@
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
 
+template "/home/#{username}/supervisor-worker.sh" do
+  source "supervisor-worker.sh.erb"
+  variables({
+    repo_root: repo_root,
+    username: username,
+  })
+end
+
 package 'supervisor'
 
 template "/etc/supervisor/conf.d/workers.conf" do
