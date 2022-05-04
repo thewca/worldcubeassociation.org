@@ -126,7 +126,7 @@ function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
                 <td>{roundNumber}</td>
                 <td>
                   <select name="format" className="form-control input-xs" value={wcifRound.format} onChange={roundFormatChanged} disabled={disabled}>
-                    {event.formats().map(format => <option key={format.id} value={format.id}>{format.short_name}</option>)}
+                    {event.formats().map(format => <option key={format.id} value={format.id}>{format.shortName}</option>)}
                   </select>
                 </td>
 

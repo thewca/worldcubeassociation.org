@@ -31,6 +31,7 @@ class Format < ApplicationRecord
     {
       id: self.id,
       name: self.name,
+      short_name: self.short_name,
       sort_by: self.sort_by,
       sort_by_second: self.sort_by_second,
       expected_solve_count: self.expected_solve_count,

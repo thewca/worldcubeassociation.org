@@ -10,5 +10,6 @@ function extend(rawFormat) {
   return {
     ...rawFormat,
     name: I18n.t(`formats.${rawFormat.id}`),
+    shortName: I18n.t(`formats.short.${rawFormat.id}`),
   };
 }
