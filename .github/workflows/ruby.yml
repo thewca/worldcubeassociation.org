@@ -16,7 +16,7 @@ jobs:
       run:
         working-directory: WcaOnRails
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: fregante/setup-git-user@v1 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
       - name: Activate MySQL # as per https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#mysql
         run: |
