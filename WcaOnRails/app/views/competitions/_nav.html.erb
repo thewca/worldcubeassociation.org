@@ -158,7 +158,8 @@
       <% end %>
 
       <% blocks.define :nav_list_item do |nav_item| %>
-        <% if !nav_item[:hidden] %>
+        <% nav_item = nav_item[:object] %>
+        <% unless nav_item[:hidden] %>
           <% link_args = [nav_item[:path], { class: "list-group-item" + (nav_item[:active] ? ' active' : '') }] %>
           <% if nav_item[:collapsible] %>
             <% collapsible_id += 1 %>
@@ -166,7 +167,7 @@
             <% link_args[1][:data] = { toggle: "collapse" } %>
           <% end %>
           <%= link_to *link_args do %>
-            <%= blocks.render :nav_icon, nav_item, {} %>
+            <%= blocks.render :nav_icon, nav_item %>
             <%= nav_item[:text] %>
             <% if nav_item[:notification_count] %>
               <span id="pending-registrations-count" class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>">
@@ -189,7 +190,7 @@
                                   placement: "top",
                                   container: "body",
                                 } do %>
-                      <%= blocks.render :nav_icon, child_nav_item, {} %>
+                      <%= blocks.render :nav_icon, child_nav_item %>
                     <% end %>
                   <% end %>
                 </span>
