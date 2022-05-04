@@ -240,10 +240,13 @@
                   requests are somehow aborted.
                 */
                 if (baseFeeUSD == -1) {
+                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.ajax_error') %>
                   $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
                 } else if (compLimit != null) {
+                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.calculated') %>
                   $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
                 } else {
+                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.per_competitor') %>
                   $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
                 }
               }
