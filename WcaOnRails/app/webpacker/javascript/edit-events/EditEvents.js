@@ -121,16 +121,12 @@ function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
               rootRender();
             };
 
-            let abbreviate = str => {
-              return str.split(" ").map(word => word[0]).join("");
-            };
-
             return (
               <tr key={roundNumber} className={`round-${roundNumber}`}>
                 <td>{roundNumber}</td>
                 <td>
                   <select name="format" className="form-control input-xs" value={wcifRound.format} onChange={roundFormatChanged} disabled={disabled}>
-                    {event.formats().map(format => <option key={format.id} value={format.id}>{abbreviate(format.name)}</option>)}
+                    {event.formats().map(format => <option key={format.id} value={format.id}>{format.shortName}</option>)}
                   </select>
                 </td>
 
