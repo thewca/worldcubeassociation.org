@@ -1,4 +1,4 @@
-import 'flag-icon-css/css/flag-icons.css';
+import 'flag-icons/css/flag-icons.css';
 import '@cubing/icons';
 
 import 'semantic-css/button';
