@@ -5299,10 +5299,10 @@ klona@^2.0.4:
   resolved "https://registry.yarnpkg.com/klona/-/klona-2.0.4.tgz#7bb1e3affb0cb8624547ef7e8f6708ea2e39dfc0"
   integrity sha512-ZRbnvdg/NxqzC7L9Uyqzf4psi1OM4Cuc+sJAkQPjO6XkQIJTNbfK2Rsmbw8fx1p2mkZdp2FZYo2+LwXYY/uwIA==
 
-known-css-properties@^0.24.0:
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/known-css-properties/-/known-css-properties-0.24.0.tgz#19aefd85003ae5698a5560d2b55135bf5432155c"
-  integrity sha512-RTSoaUAfLvpR357vWzAz/50Q/BmHfmE6ETSWfutT0AJiw10e6CmcdYRQJlLRd95B53D0Y2aD1jSxD3V3ySF+PA==
+known-css-properties@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/known-css-properties/-/known-css-properties-0.25.0.tgz#6ebc4d4b412f602e5cfbeb4086bd544e34c0a776"
+  integrity sha512-b0/9J1O9Jcyik1GC6KC42hJ41jKwdO/Mq8Mdo5sYN+IuRTXs2YFHZC3kZSx6ueusqa95x3wLYe/ytKjbAfGixA==
 
 language-subtag-registry@~0.3.2:
   version "0.3.20"
@@ -7279,7 +7279,7 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.17, postcss@^7.0.2
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
-postcss@^8.2.14, postcss@^8.2.15, postcss@^8.4.12:
+postcss@^8.2.14, postcss@^8.2.15, postcss@^8.4.13:
   version "8.4.13"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.13.tgz#7c87bc268e79f7f86524235821dfdf9f73e5d575"
   integrity sha512-jtL6eTBrza5MPzy8oJLFuUscHDXTV5KcLlqAWHl5q5WYRfnNRGSmOZmOZ1T6Gy7A99mOZfqungmZMpMmCVJ8ZA==
@@ -8678,10 +8678,10 @@ stylelint-scss@^4.0.0, stylelint-scss@^4.2.0:
     postcss-selector-parser "^6.0.6"
     postcss-value-parser "^4.1.0"
 
-stylelint@^14.8.1:
-  version "14.8.1"
-  resolved "https://registry.yarnpkg.com/stylelint/-/stylelint-14.8.1.tgz#86810ebbd7a3570519c6b11d63dc6e5ee3ff3057"
-  integrity sha512-0YxTop3wTeEVmQWhS7jjLFaBkvfPmffRiJ6eFIDlK++f3OklaobTYFJu32E5u/cIrFLbcW52pLqrYpihA/y0/w==
+stylelint@^14.8.2:
+  version "14.8.2"
+  resolved "https://registry.yarnpkg.com/stylelint/-/stylelint-14.8.2.tgz#801eef74fe6020611e6a515abb9fc7caeb125793"
+  integrity sha512-tjDfexCYfoPdl/xcDJ9Fv+Ko9cvzbDnmdiaqEn3ovXHXasi/hbkt5tSjsiReQ+ENqnz0eltaX/AOO+AlzVdcNA==
   dependencies:
     balanced-match "^2.0.0"
     colord "^2.9.2"
@@ -8701,14 +8701,14 @@ stylelint@^14.8.1:
     import-lazy "^4.0.0"
     imurmurhash "^0.1.4"
     is-plain-object "^5.0.0"
-    known-css-properties "^0.24.0"
+    known-css-properties "^0.25.0"
     mathml-tag-names "^2.1.3"
     meow "^9.0.0"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     normalize-selector "^0.2.0"
     picocolors "^1.0.0"
-    postcss "^8.4.12"
+    postcss "^8.4.13"
     postcss-media-query-parser "^0.2.3"
     postcss-resolve-nested-selector "^0.1.1"
     postcss-safe-parser "^6.0.0"
