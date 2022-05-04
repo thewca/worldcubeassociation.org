@@ -255,7 +255,7 @@ GEM
     encryptor (3.0.0)
     enum_help (0.0.19)
       activesupport (>= 3.0.0)
-    env_vars (1.1.0)
+    env_vars (2.0.0)
     erubi (1.10.0)
     eu_central_bank (1.7.0)
       money (~> 6.13, >= 6.13.6)
