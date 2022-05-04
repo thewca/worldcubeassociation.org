@@ -63,4 +63,4 @@ jobs:
         if: always() && steps.rspec.outcome == 'failure'
         with:
           name: capybara-screenshots
-          path: tmp/capybara
+          path: WcaOnRails/tmp/capybara
