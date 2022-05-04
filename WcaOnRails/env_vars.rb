@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-EnvVars = Env::Vars.new do
+EnvVars = SuperConfig.new do
   if Rails.env.production?
     mandatory :SECRET_KEY_BASE, string
     mandatory :DATABASE_URL, string

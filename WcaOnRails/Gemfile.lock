@@ -255,7 +255,6 @@ GEM
     encryptor (3.0.0)
     enum_help (0.0.19)
       activesupport (>= 3.0.0)
-    env_vars (2.0.0)
     erubi (1.10.0)
     eu_central_bank (1.7.0)
       money (~> 6.13, >= 6.13.6)
@@ -663,6 +662,7 @@ GEM
       activemodel (>= 3.0, < 8.0)
     stripe (5.54.0)
     strscan (3.0.1)
+    superconfig (2.1.0)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.2.1)
@@ -753,7 +753,6 @@ DEPENDENCIES
   doorkeeper-i18n
   dotenv-rails
   enum_help
-  env_vars
   eu_central_bank
   factory_bot_rails
   faker
@@ -814,6 +813,7 @@ DEPENDENCIES
   starburst!
   strip_attributes
   stripe
+  superconfig
   time_will_tell!
   timecop
   translighterate

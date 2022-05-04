@@ -46,7 +46,7 @@ gem 'oauth2'
 gem 'openssl'
 gem 'wca_i18n'
 gem 'cookies_eu'
-gem 'env_vars'
+gem 'superconfig'
 gem 'eu_central_bank'
 
 # Pointing to jfly/selectize-rails which has a workaround for
