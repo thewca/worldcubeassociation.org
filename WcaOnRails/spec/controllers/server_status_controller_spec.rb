@@ -119,6 +119,8 @@ RSpec.describe "RegulationsCheck" do
     status, description = check.status_description
 
     expect(status).to eq :danger
-    expect(description).to eq "Error while loading regulations: 809: unexpected token at 'i am definitely not json'"
+    # The \d reference is a line number in the external `json` gem which might change every now and then.
+    # We want to avoid having to change our tests whenever that library updates.
+    expect(description).to match(/Error while loading regulations: \d+: unexpected token at 'i am definitely not json'/)
   end
 end
