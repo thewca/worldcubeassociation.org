@@ -4,6 +4,7 @@ module DatabaseDumper
   JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id=competition_id WHERE showAtAll=1"
   DUMP_TIMESTAMP_NAME = "developer_dump_exported_at"
   VISIBLE_ACTIVITY_IDS = "SELECT A.id FROM schedule_activities AS A JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type='VenueRoom') JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}"
+                         .freeze
 
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|

@@ -191,18 +191,18 @@ RSpec.feature "Competition events management" do
   end
 end
 
-def within_event_panel(event_id, &block)
-  within(:css, ".panel.event-#{event_id}", &block)
+def within_event_panel(event_id, &)
+  within(:css, ".panel.event-#{event_id}", &)
 end
 
-def within_round(event_id, round_number, &block)
+def within_round(event_id, round_number, &)
   within_event_panel(event_id) do
-    within(:css, ".round-1", &block)
+    within(:css, ".round-1", &)
   end
 end
 
-def within_modal(&block)
-  within(:css, '.modal-content', &block)
+def within_modal(&)
+  within(:css, '.modal-content', &)
 end
 
 def save

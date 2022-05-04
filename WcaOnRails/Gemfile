@@ -36,7 +36,7 @@ gem 'rqrcode'
 gem 'doorkeeper'
 gem 'doorkeeper-i18n'
 gem 'strip_attributes'
-gem 'time_will_tell'
+gem 'time_will_tell', github: 'thewca/time_will_tell'
 gem 'redcarpet'
 gem 'bootstrap-table-rails'
 gem 'money-rails'
@@ -90,6 +90,10 @@ gem 'rest-client'
 gem 'wicked_pdf'
 gem 'icalendar'
 gem 'starburst', github: 'starburstgem/starburst'
+# required until https://github.com/rails/rails/pull/44083 is backported to Rails 6
+gem 'net-imap', require: false
+gem 'net-pop', require: false
+gem 'net-smtp', require: false
 
 group :development, :test do
   gem 'spring'

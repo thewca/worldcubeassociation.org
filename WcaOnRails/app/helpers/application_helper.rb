@@ -121,10 +121,10 @@ module ApplicationHelper
     nav_items
   end
 
-  def wca_date_range(from_date, to_date, options = {})
+  def wca_date_range(from_date, to_date, **options)
     if from_date && to_date
       options[:separator] = '-'
-      date_range(from_date, to_date, options)
+      date_range(from_date, to_date, **options)
     else
       t "common.date.no_date"
     end
@@ -158,15 +158,15 @@ module ApplicationHelper
     options_for_select((use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]]), selected_id) + grouped_options_for_select(regions, selected_id)
   end
 
-  def simple_form_for(resource, options = {}, &block)
+  def simple_form_for(resource, **options, &)
     super do |f|
-      form = capture(f, &block)
+      form = capture(f, &)
       error_messages = render('shared/error_messages', f: f)
       error_messages + form
     end
   end
 
-  def horizontal_simple_form_for(resource, options = {}, &block)
+  def horizontal_simple_form_for(resource, **options, &)
     options[:html] ||= {}
     options[:html][:class] ||= ""
     options[:html][:class] += " form-horizontal"
@@ -177,7 +177,7 @@ module ApplicationHelper
       file: :horizontal_file_input,
       boolean: :horizontal_boolean,
     }
-    simple_form_for(resource, options, &block)
+    simple_form_for(resource, **options, &)
   end
 
   def duration_to_s(total_seconds)
@@ -188,7 +188,7 @@ module ApplicationHelper
     [hours > 0 ? "#{hours}h " : '', minutes > 0 ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
   end
 
-  def wca_id_link(wca_id, options = {})
+  def wca_id_link(wca_id, **options)
     if wca_id.present?
       content_tag :span, class: "wca-id" do
         link_to wca_id, person_url(wca_id), options
@@ -196,7 +196,7 @@ module ApplicationHelper
     end
   end
 
-  def cubing_icon(event, html_options = {})
+  def cubing_icon(event, **html_options)
     html_options[:class] ||= ""
     # We use 'icon' which is the default Semantic-UI class for icons.
     # It applies fixed-width and inline block on them.
@@ -204,13 +204,13 @@ module ApplicationHelper
     content_tag :i, "", html_options
   end
 
-  def flag_icon(iso2, html_options = {})
+  def flag_icon(iso2, **html_options)
     html_options[:class] ||= ""
     html_options[:class] += " flag-icon flag-icon-#{iso2.downcase}"
     content_tag :span, "", html_options
   end
 
-  def ui_icon(name, html_options = {})
+  def ui_icon(name, **html_options)
     opts = html_options.merge(
       class: "icon #{name} " + html_options[:class].to_s,
     )

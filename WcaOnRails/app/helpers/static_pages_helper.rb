@@ -31,19 +31,19 @@ module StaticPagesHelper
     positions.join("<br />").html_safe
   end
 
-  def team_member_name(name, &block)
+  def team_member_name(name, &)
     content_tag(:div, class: "team-member-name") do
-      name.html_safe + tag.br + content_tag(:span, class: "team-subtext", &block)
+      name.html_safe + tag.br + content_tag(:span, class: "team-subtext", &)
     end
   end
 
-  def format_team_member_content(user, &block)
+  def format_team_member_content(user, &)
     name = if user.wca_id
              link_to(user.name, person_path(user.wca_id), title: t("about.structure.users.profile", user_name: user.name), data: { toggle: "tooltip", placement: "bottom" })
            else
              user.name
            end
-    team_member_name(name, &block)
+    team_member_name(name, &)
   end
 
   def wca_icon

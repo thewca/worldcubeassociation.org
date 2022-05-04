@@ -34,7 +34,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
       }
       it "validates results correctly ordered on given competitions" do
         validator_args.each do |arg|
-          pv = ResultsValidators::PositionsValidator.new.validate(arg)
+          pv = ResultsValidators::PositionsValidator.new.validate(**arg)
           expect(pv.has_errors?).to eq false
         end
       end
@@ -53,7 +53,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
           model.where(pos: 5, eventId: "222").first.update!(pos: 7)
         end
         validator_args.each do |arg|
-          pv = ResultsValidators::PositionsValidator.new.validate(arg)
+          pv = ResultsValidators::PositionsValidator.new.validate(**arg)
           expect(pv.errors).to match_array(expected_errors[arg[:model].to_s])
         end
       end
@@ -87,7 +87,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
           # and no fix is reported on the subsequent one.
           arg[:model].where(pos: 1, eventId: "333oh").update(pos: 2)
           arg[:model].where(pos: 5, eventId: "222").update(pos: 7)
-          pv = ResultsValidators::PositionsValidator.new(apply_fixes: true).validate(arg)
+          pv = ResultsValidators::PositionsValidator.new(apply_fixes: true).validate(**arg)
           expect(pv.has_errors?).to eq false
           expect(pv.infos).to match_array(expected_infos[arg[:model].to_s])
         end
@@ -99,7 +99,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
         create_correct_tied_results(competition1, "333oh")
         create_correct_tied_results(competition1, "333oh", kind: :inbox_result)
         validator_args.each do |arg|
-          pv = ResultsValidators::PositionsValidator.new.validate(arg)
+          pv = ResultsValidators::PositionsValidator.new.validate(**arg)
           expect(pv.has_errors?).to eq false
         end
       end
@@ -111,7 +111,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
           "InboxResult" => create_result_error(competition1.id, "222-f", results2[1].personName, 1, 2),
         }
         validator_args.each do |arg|
-          pv = ResultsValidators::PositionsValidator.new.validate(arg)
+          pv = ResultsValidators::PositionsValidator.new.validate(**arg)
           expect(pv.errors).to match_array(expected_errors[arg[:model].to_s])
         end
       end

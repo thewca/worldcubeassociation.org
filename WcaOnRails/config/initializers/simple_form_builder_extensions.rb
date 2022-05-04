@@ -5,8 +5,8 @@
 
 module SimpleForm
   class FormBuilder
-    def id_for(method, options = {})
-      InstanceTagWithIdFor.new(object_name, method, self, options).id_for(options)
+    def id_for(method, **options)
+      InstanceTagWithIdFor.new(object_name, method, self, **options).id_for(options)
     end
 
     attr_accessor :generated_attribute_inputs
@@ -14,7 +14,7 @@ module SimpleForm
     define_method(:input) do |attribute_name, options = {}, &block|
       @generated_attribute_inputs ||= []
       @generated_attribute_inputs << attribute_name
-      old_input.bind(self).call(attribute_name, options, &block)
+      old_input.bind(self).call(attribute_name, **options, &block)
     end
   end
 end

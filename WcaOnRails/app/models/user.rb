@@ -89,14 +89,14 @@ class User < ApplicationRecord
   # name empty, so long as they're a returning competitor and are claiming their
   # wca id.
   validates :name, presence: true, if: -> { !claiming_wca_id }
-  WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/.freeze
+  WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
   validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
 
   # Very simple (and permissive) regexp, the goal is just to avoid silly typo
   # like "aaa@bbb,com", or forgetting the '@'.
-  EMAIL_RE = /[\w.%+-]+@[\w.-]+\.\w+/.freeze
+  EMAIL_RE = /[\w.%+-]+@[\w.-]+\.\w+/
   validates :email, format: { with: EMAIL_RE }
 
   # Virtual attribute for authenticating by WCA ID or email.
@@ -1164,7 +1164,7 @@ class User < ApplicationRecord
   # A locked account is just a user with an empty password.
   # It's impossible to sign into an account with an empty password,
   # so the only way to log into a locked account is to reset its password.
-  def self.new_locked_account(attributes = {})
+  def self.new_locked_account(**attributes)
     User.new(attributes.merge(encrypted_password: "")).tap do |user|
       user.define_singleton_method(:password_required?) { false } # More on that: https://stackoverflow.com/a/45589123
       user.skip_confirmation!

@@ -36,6 +36,13 @@ GIT
       railties (>= 5.0)
 
 GIT
+  remote: https://github.com/thewca/time_will_tell.git
+  revision: d1ad80f4e4c60762c50086976301453e1f40fab4
+  specs:
+    time_will_tell (0.1.0)
+      railties (>= 3.2)
+
+GIT
   remote: https://github.com/twalpole/apparition.git
   revision: ca86be4d54af835d531dbcd2b86e7b2c77f85f34
   specs:
@@ -233,6 +240,7 @@ GEM
       railties (< 7.1)
       rotp (~> 6.0)
     diff-lcs (1.5.0)
+    digest (3.1.0)
     docile (1.3.5)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -431,6 +439,17 @@ GEM
     multipart-post (2.1.1)
     mysql2 (0.5.3)
     nenv (0.3.0)
+    net-imap (0.2.3)
+      digest
+      net-protocol
+      strscan
+    net-pop (0.1.1)
+      digest
+      net-protocol
+      timeout
+    net-protocol (0.1.3)
+      timeout
+    net-smtp (0.1.0)
     netrc (0.11.0)
     newrelic_rpm (8.6.0)
     nio4r (2.5.8)
@@ -640,13 +659,13 @@ GEM
     strip_attributes (1.12.0)
       activemodel (>= 3.0, < 8.0)
     stripe (5.53.0)
+    strscan (3.0.1)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.2.1)
     tilt (2.0.9)
-    time_will_tell (0.1.0)
-      railties (>= 3.2)
     timecop (0.9.5)
+    timeout (0.2.0)
     trailblazer-option (0.1.1)
     translighterate (0.3.0)
       actionview (>= 6.0)
@@ -757,6 +776,9 @@ DEPENDENCIES
   momentjs-rails!
   money-rails
   mysql2
+  net-imap
+  net-pop
+  net-smtp
   newrelic_rpm
   nokogiri
   oauth2
@@ -789,7 +811,7 @@ DEPENDENCIES
   starburst!
   strip_attributes
   stripe
-  time_will_tell
+  time_will_tell!
   timecop
   translighterate
   twitter_cldr

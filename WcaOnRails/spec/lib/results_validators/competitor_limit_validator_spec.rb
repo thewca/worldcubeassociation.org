@@ -33,7 +33,7 @@ RSpec.describe CLV do
 
       it "doesn't complain when it's fine" do
         validator_args.each do |arg|
-          clv = CLV.new.validate(arg)
+          clv = CLV.new.validate(**arg)
           expect(clv.warnings).to be_empty
           expect(clv.errors).to be_empty
         end
@@ -52,7 +52,7 @@ RSpec.describe CLV do
         ]
 
         validator_args.each do |arg|
-          clv = CLV.new.validate(arg)
+          clv = CLV.new.validate(**arg)
           expect(clv.errors).to be_empty
           expect(clv.warnings).to match_array(expected_warnings)
         end
@@ -71,7 +71,7 @@ RSpec.describe CLV do
         end
 
         validator_args.each do |arg|
-          clv = CLV.new.validate(arg)
+          clv = CLV.new.validate(**arg)
           expect(clv.errors).to be_empty
           expect(clv.warnings).to be_empty
         end

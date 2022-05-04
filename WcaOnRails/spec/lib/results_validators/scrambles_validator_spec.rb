@@ -52,7 +52,7 @@ RSpec.describe SV do
         create_scramble_set(5, competitionId: competition2.id, eventId: "222")
 
         validator_args.each do |arg|
-          sv = SV.new.validate(arg)
+          sv = SV.new.validate(**arg)
           expect(sv.warnings).to be_empty
           expect(sv.errors).to match_array(expected_errors)
         end
@@ -80,7 +80,7 @@ RSpec.describe SV do
         ]
 
         validator_args.each do |arg|
-          sv = SV.new.validate(arg)
+          sv = SV.new.validate(**arg)
           expect(sv.warnings).to be_empty
           expect(sv.errors).to match_array(expected_errors)
         end
@@ -106,7 +106,7 @@ RSpec.describe SV do
         ]
 
         validator_args.each do |arg|
-          sv = SV.new.validate(arg)
+          sv = SV.new.validate(**arg)
           expect(sv.errors).to match_array(expected_errors)
           expect(sv.warnings).to be_empty
         end
@@ -131,7 +131,7 @@ RSpec.describe SV do
         ]
 
         validator_args.each do |arg|
-          sv = SV.new.validate(arg)
+          sv = SV.new.validate(**arg)
           expect(sv.warnings).to match_array(expected_warnings)
           expect(sv.errors).to be_empty
         end
@@ -164,7 +164,7 @@ RSpec.describe SV do
         ]
 
         validator_args.each do |arg|
-          sv = SV.new.validate(arg)
+          sv = SV.new.validate(**arg)
           expect(sv.warnings).to be_empty
           expect(sv.errors).to match_array(expected_errors)
         end

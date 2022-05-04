@@ -9,7 +9,7 @@ class Api::V0::ApiController < ApplicationController
   end
 
   DEFAULT_API_RESULT_LIMIT = 20
-  TNOODLE_PUBLIC_KEY_PATH = "#{Rails.root}/app/views/regulations/scrambles/tnoodle/TNoodle-WCA.pem"
+  TNOODLE_PUBLIC_KEY_PATH = "#{Rails.root}/app/views/regulations/scrambles/tnoodle/TNoodle-WCA.pem".freeze
 
   def me
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes

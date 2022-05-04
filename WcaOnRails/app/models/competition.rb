@@ -152,10 +152,10 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
   ).freeze
-  VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/.freeze
-  PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/.freeze
-  PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/.freeze
-  URL_RE = %r{\Ahttps?://.*\z}.freeze
+  VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
+  PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
+  PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
+  URL_RE = %r{\Ahttps?://.*\z}
   MAX_ID_LENGTH = 32
   MAX_NAME_LENGTH = 50
   MAX_COMPETITOR_LIMIT = 5000
@@ -1182,7 +1182,11 @@ class Competition < ApplicationRecord
   end
 
   def in_progress?
-    !results_posted? && (start_date..end_date).cover?(Date.today)
+    # starting from Ruby 2.7, (nil..nil) is interpreted as an "endless range",
+    # so if either date is nil then (start_date..end_date).cover? will always return true.
+    # But in the WCA database, a competition with nil dates is undefined in the sense that it is *not* including today.
+    # That's why the two extra nil? checks are absolutely necessary.
+    !results_posted? && !start_date.nil? && !end_date.nil? && (start_date..end_date).cover?(Date.today)
   end
 
   def uses_cutoff?
