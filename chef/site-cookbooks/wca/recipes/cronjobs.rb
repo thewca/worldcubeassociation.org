@@ -2,7 +2,7 @@ username, repo_root = WcaHelper.get_username_and_repo_root(self)
 secrets = WcaHelper.get_secrets(self)
 
 admin_email = "admin@worldcubeassociation.org"
-path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+path = "/home/#{username}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 
 secrets_folder = "#{repo_root}/secrets"
 db_dump_folder = "#{secrets_folder}/wca_db"
