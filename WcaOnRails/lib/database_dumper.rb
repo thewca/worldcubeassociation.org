@@ -563,7 +563,7 @@ module DatabaseDumper
     }.freeze,
     "registration_payments" => :skip_all_rows,
     "registrations" => {
-      where_clause: "",
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
