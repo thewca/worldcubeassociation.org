@@ -844,7 +844,7 @@ eo:
           La baza registriĝkosto por la konkurso. Se uzata, ĝi videblos en la
           paĝo pri konkursinformado kaj en la registriĝpaĝo. Se vi indikas "0",
           aperos frazo por diri ke registriĝi estas senpaga.
-          <br><br><b>Malgarantio: La sekva takso de Kotizoj de WCA estas nur
+          <br><br><b>Malgarantio: La sekva takso de WCA-Kotizoj estas nur
           proksimigo bazita sur aktualaj kurzoj kaj neniel estas leĝe deviga por
           la pago de Kotizoj.</b><br>Alklaku "Ĝisdatigi Konkurson" post kiam vi
           ŝanĝis valutkodon por sinkronigi ĝin kun la takso. Se ne estas
@@ -2415,6 +2415,12 @@ eo:
         Bonvolu certigi ke tio ĝustas.
       #original_hash: e390250
       create_success: Nova konkurso sukcese kreiĝis!
+      #original_hash: bc3e673
+      registration_payment_info: >-
+        Ĉi tiu konkurso havas registriĝkoston sed neniu Stripe-konto estas
+        ligita. Se vi uzas Stripe ene de la WCA-retejo, bonvolu memori ligi vian
+        Stripe-konton. Se vi uzas eksteran pagsistemon, bonvolu memori aldoni
+        ĉiujn koncernajn detalojn en la registriĝaj postuloj.
       #original_hash: ba067f0
       not_announced: Tiu konkurso publike videblas sed ĝi ankoraŭ ne estis anoncita.
       #original_hash: ab61991
@@ -2854,7 +2860,7 @@ eo:
         generic: 'Ĉampionado: %{type}'
       dues_estimate:
         #original_hash: 6e56455
-        calculated: 'La taksitaj WCA-Kotizoj por %{limit} konkurantoj estas %{estimate}'
+        calculated: 'La taksitaj WCA-Kotizoj por %{limit} konkursantoj estas %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'La taksitaj WCA-Kotizoj po konkursanto estas %{estimate}'
         #original_hash: 83d4cdc
