@@ -175,5 +175,8 @@ fi
 # Workaround for https://github.com/rails/webpacker/issues/773
 export RAILS_ENV=${RACK_ENV}
 
+# load rbenv into PATH
+eval "$("$HOME/.rbenv/bin/rbenv" init -)"
+
 allowed_commands="pull_latest restart_app restart_dj rebuild_rails rebuild_regs update_docs"
 source scripts/_parse_args.sh
