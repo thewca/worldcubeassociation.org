@@ -2443,6 +2443,13 @@ pt:
         num evento rápido. Verifique se isto está correto.
       #original_hash: e390250
       create_success: Competição criada com sucesso!
+      #original_hash: bc3e673
+      registration_payment_info: >-
+        Esta competição tem taxas de inscrição, mas não tem nenhuma conta Stripe
+        vinculada. Se você estiver a usar o Stripe através do site da WCA,
+        lembre-se de vincular a sua conta do Stripe. Se estiver a usar um
+        sistema de pagamento externo, lembre-se de adicionar todos os detalhes
+        relevantes nos requisitos de registo.
       #original_hash: ba067f0
       not_announced: 'Esta competição é visível para o público, mas ainda não foi anunciada.'
       #original_hash: ab61991
