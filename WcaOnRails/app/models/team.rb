@@ -168,6 +168,10 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wac')
   end
 
+  def self.wsot
+    Team.c_find_by_friendly_id!('wsot')
+  end
+
   def official?
     Team.all_official.include?(self)
   end

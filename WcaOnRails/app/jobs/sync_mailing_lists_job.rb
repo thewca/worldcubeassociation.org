@@ -68,6 +68,7 @@ class SyncMailingListsJob < SingletonApplicationJob
     User.clear_receive_delegate_reports_if_not_eligible
     GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers_emails)
     GsuiteMailingLists.sync_group("advisory@worldcubeassociation.org", Team.wac.current_members.includes(:user).map(&:user).map(&:email))
+    GsuiteMailingLists.sync_group("sports@worldcubeassociation.org", Team.wsot.current_members.includes(:user).map(&:user).map(&:email))
 
     SENIOR_DELEGATES_REGIONS_INFO.each do |region|
       senior_delegates = User.senior_delegates.where("region like ?", region[:query])
