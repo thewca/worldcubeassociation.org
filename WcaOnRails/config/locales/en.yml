@@ -1973,6 +1973,10 @@ en:
       wac:
         name: "WCA Advisory Council"
         description: "This council is responsible for building and maintaining bilateral communication between the WCA Community and the WCA Staff."
+      #context: WSOT
+      wsot:
+        name: "WCA Sports Organization Team"
+        description: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
       #context: Hidden team for list of banned competitors
       banned:
         name: "Banned Competitors"
@@ -2080,7 +2084,6 @@ en:
       info_html: "The WFC is responsible for everything regarding finances within the WCA. They manage the finances and accounts of the WCA in accordance with an approved annual budget proposal, which is also their work to provide on a regular basis."
     wec:
       info_html: "This committee has the role to ensure that all the procedures followed by the WCA Staff and External Staff abide by its Code of Ethics."
-    #context: WEAT
     weat:
       info_html: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
     wqac:
@@ -2089,6 +2092,8 @@ en:
       info_html: "This committee has the role to approve and announce WCA Competitions and ensure such announcements adhere to WCA quality standards."
     wmt:
       info_html: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
+    wsot:
+      info_html: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
     councils_html: "Councils"
     wac:
       info_html: "This council is responsible for building and maintaining bilateral communication between the WCA Community and the WCA Staff."
