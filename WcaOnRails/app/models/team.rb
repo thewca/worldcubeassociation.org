@@ -44,6 +44,7 @@ class Team < ApplicationRecord
       Team.wrc,
       Team.wrt,
       Team.wst,
+      Team.wsot,
     ]
   end
 
