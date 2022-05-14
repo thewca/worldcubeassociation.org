@@ -18,15 +18,11 @@ import {
 } from '../lib/utils/wca';
 import '../lib/acknowledge-cookies';
 
-import { attachComponentToElem } from '../lib/utils/react';
-
 Rails.start();
 require('jquery');
 
-// Build up the window.wca environment, which we use to store our components.
+// Build up the window.wca environment
 window.wca = window.wca || {};
-window.wca.components = {};
-window.wca.attachComponentToElem = attachComponentToElem;
 
 // Setting up autosize
 $(() => {

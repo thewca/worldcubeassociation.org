@@ -5,7 +5,6 @@ import {
 
 import useLoadedData from '../lib/hooks/useLoadedData';
 import { postsUrl } from '../lib/requests/routes.js.erb';
-import { registerComponent } from '../lib/utils/react';
 import Loading from './Requests/Loading';
 import Errored from './Requests/Errored';
 import { formattedTextForDate } from '../lib/utils/wca';
@@ -134,4 +133,4 @@ const PostsWidget = ({
   );
 };
 
-registerComponent(PostsWidget, 'PostsWidget');
+export default PostsWidget;

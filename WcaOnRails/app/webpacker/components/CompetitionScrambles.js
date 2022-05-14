@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import useLoadedData from '../lib/hooks/useLoadedData';
-import { registerComponent } from '../lib/utils/react';
 import Loading from './Requests/Loading';
 import Errored from './Requests/Errored';
 import '../stylesheets/competition_scrambles.scss';
@@ -112,4 +111,5 @@ const CompetitionScrambles = ({ competitionId }) => {
     </div>
   );
 };
-registerComponent(CompetitionScrambles, 'CompetitionScrambles');
+
+export default CompetitionScrambles;

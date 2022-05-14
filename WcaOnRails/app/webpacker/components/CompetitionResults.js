@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Table } from 'semantic-ui-react';
 import cn from 'classnames';
 import useLoadedData from '../lib/hooks/useLoadedData';
-import { registerComponent } from '../lib/utils/react';
 import Loading from './Requests/Loading';
 import Errored from './Requests/Errored';
 import {
@@ -135,4 +134,5 @@ const CompetitionResults = ({ competitionId }) => {
     </div>
   );
 };
-registerComponent(CompetitionResults, 'CompetitionResults');
+
+export default CompetitionResults;

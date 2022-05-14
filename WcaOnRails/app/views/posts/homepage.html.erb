@@ -1,4 +1,4 @@
-<% add_to_packs("homepage", "posts_widget") %>
+<% add_to_packs("homepage") %>
 <div id="homepage">
   <div class="ui fluid container" id="cover-homepage">
     <div class="ui fluid container">
@@ -40,8 +40,10 @@
           <div class="column">
             <h2 class="ui header"><%= t('homepage.announcements') %></h2>
             <div class="ui divider"></div>
-            <%= render_react_component("PostsWidget", id: "posts_widget", options: {
+            <%= react_component("PostsWidget", {
               titleOnly: true,
+            }, {
+              id: "posts_widget",
             }) %>
             <%= link_to(t('homepage.see_all_announcements'), posts_path, class: "ui blue button") %>
           </div>
