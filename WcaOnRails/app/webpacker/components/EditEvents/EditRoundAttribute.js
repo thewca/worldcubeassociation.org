@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 import events from '../../lib/wca-data/events.js.erb'
 import formats from '../../lib/wca-data/formats.js.erb'
-import { rootRender } from '../../lib/edit-events'
+import rootRender from '../../lib/edit-events'
 
 import CutoffComponents from './Cutoff'
 import TimeLimitComponents from './TimeLimit'
