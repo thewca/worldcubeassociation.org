@@ -3,13 +3,13 @@ import cn from 'classnames'
 import ReactDOM from 'react-dom'
 import _ from 'lodash';
 
-import events from '../lib/wca-data/events.js.erb'
-import formats from '../lib/wca-data/formats.js.erb'
-import { rootRender } from '../lib/edit-events'
-import { pluralize } from '../lib/utils/edit-events'
-import { buildActivityCode, saveWcif, roundIdToString } from '../lib/utils/wcif'
-import { removeRoundsFromSharedTimeLimits } from "./EditEvents/EditRoundAttribute"
-import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from './EditEvents/EditRoundAttribute'
+import events from '../../lib/wca-data/events.js.erb'
+import formats from '../../lib/wca-data/formats.js.erb'
+import { rootRender } from '../../lib/edit-events'
+import { pluralize } from '../../lib/utils/edit-events'
+import { buildActivityCode, saveWcif, roundIdToString } from '../../lib/utils/wcif'
+import { removeRoundsFromSharedTimeLimits } from "./EditRoundAttribute"
+import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from './EditRoundAttribute'
 
 export default class EditEvents extends React.Component {
   save = e => {
