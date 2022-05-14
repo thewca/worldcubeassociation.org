@@ -1,1 +1,1 @@
-import '../javascript/competition_results';
+import '../components/CompetitionResults';

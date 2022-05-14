@@ -1,1 +1,1 @@
-import '../javascript/posts_widget';
+import '../components/PostsWidget';

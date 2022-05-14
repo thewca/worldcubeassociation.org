@@ -1,1 +1,1 @@
-import '../javascript/search_widget';
+import '../components/SearchWidget';

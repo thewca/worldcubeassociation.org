@@ -6,19 +6,19 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import '../javascript/image-preview';
-import '../javascript/polyfills';
-import '../javascript/incidents-log';
+import '../lib/image-preview';
+import '../lib/polyfills';
+import '../lib/incidents-log';
 import autosize from 'autosize';
 import Rails from '@rails/ujs';
 import {
   getUrlParams,
   setUrlParams,
   formattedTextForDate,
-} from '../javascript/wca/utils';
-import '../javascript/acknowledge-cookies';
+} from '../lib/utils/wca';
+import '../lib/acknowledge-cookies';
 
-import { attachComponentToElem } from '../javascript/wca/react-utils';
+import { attachComponentToElem } from '../lib/utils/react';
 
 Rails.start();
 require('jquery');

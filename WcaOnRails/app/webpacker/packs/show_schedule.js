@@ -1,1 +1,1 @@
-import '../javascript/show-schedule';
+import '../lib/show-schedule';

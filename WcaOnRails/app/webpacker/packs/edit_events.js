@@ -1,1 +1,1 @@
-import '../javascript/edit-events';
+import '../lib/edit-events';

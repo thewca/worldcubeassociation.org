@@ -1,1 +1,1 @@
-import '../javascript/competition_scrambles';
+import '../components/CompetitionScrambles';

@@ -1,1 +1,1 @@
-import '../javascript/leaflet-wca';
+import '../lib/leaflet-wca';
