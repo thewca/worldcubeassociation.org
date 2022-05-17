@@ -22,6 +22,13 @@
     "tz": "UTC"
   },
   "override_attributes": {
+    "apt":{
+      "unattended_upgrades":{
+        "enable": "true",
+        "mail": "admin@worldcubeassociation.org",
+        "origins_patterns": ["origin=Ubuntu,archive=focal-security"]
+      }
+    }
   },
   "chef_type": "role",
   "run_list": [
