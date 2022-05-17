@@ -194,16 +194,6 @@ function readDatabaseTableWithId ( $name ) {
 }
 
 #----------------------------------------------------------------------
-function getMonthName ( $month ) {
-#----------------------------------------------------------------------
-
-  static $monthNames;
-  if( ! $monthNames )
-    $monthNames = explode( ' ', ' Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec' );
-  return $monthNames[$month];
-}
-
-#----------------------------------------------------------------------
 function currentPersonName ( $personId ) {
 #----------------------------------------------------------------------
   $persons = readDatabaseTableWithId( 'Persons' );

@@ -39,18 +39,6 @@
 #--- Specify the statistics
 $statisticFiles = array(
 
-  #--- Special ranks:
-  'sum_of_ranks',
-  'appearances_in_333_top_100_results',
-
-  #--- Special achievements:
-  'blindfold_333_consecutive_successes',
-  'blindfold_333_success_rate',
-
-  #--- Statistics:
-  'best_podium',
-  'oldest_standing_world_records',
-  'most_solves_in_one_competition_or_year'
 
 );
 

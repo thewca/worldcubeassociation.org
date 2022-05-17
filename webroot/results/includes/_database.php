@@ -191,9 +191,7 @@ function getAllIDs ( $rows ) {
 function getAllEventIds                    () { return getAllIDs( getAllEvents()                    ); }
 function getAllRoundIds                    () { return getAllIDs( getAllRounds()                    ); }
 function getAllCompetitionIds              () { return getAllIDs( getAllCompetitions()              ); }
-function getAllUsedCountriesIds            () { return getAllIDs( getAllUsedCountries()             ); }
 function getAllUsedCountriesCompetitionIds () { return getAllIDs( getAllUsedCountriesCompetitions() ); }
-function getAllUsedContinentIds            () { return getAllIDs( getAllUsedContinents()            ); }
 
 function getAllEventIdsIncludingObsolete () {
   return getAllIDs(dbQuery("SELECT event.id FROM Events event WHERE event.rank<1000 ORDER BY event.rank"));
