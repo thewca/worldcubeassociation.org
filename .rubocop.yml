@@ -551,3 +551,6 @@ Style/SelectByRegexp:
 
 Style/HashSyntax:
   Enabled: false
+
+Style/EnvHome:
+  Enabled: true
