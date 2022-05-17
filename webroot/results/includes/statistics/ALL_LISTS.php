@@ -40,22 +40,16 @@
 $statisticFiles = array(
 
   #--- Special ranks:
-  'best_medal_collection',
   'sum_of_ranks',
   'appearances_in_333_top_100_results',
-  'sub_x',
 
   #--- Special achievements:
   'blindfold_333_consecutive_successes',
   'blindfold_333_success_rate',
-  'world_records_in_most_events',
 
   #--- Statistics:
   'best_podium',
   'oldest_standing_world_records',
-  'most_persons',
-  'most_competitions',
-  'most_countries',
   'most_solves_in_one_competition_or_year'
 
 );
