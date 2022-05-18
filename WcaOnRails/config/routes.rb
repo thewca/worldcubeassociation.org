@@ -188,7 +188,7 @@ Rails.application.routes.draw do
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
-    get '/admin/anonymize_person' => 'admin#anonymize_person'
+  get '/admin/anonymize_person' => 'admin#anonymize_person'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person'
   get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'
   get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id'
