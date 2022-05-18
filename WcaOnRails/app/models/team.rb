@@ -45,6 +45,7 @@ class Team < ApplicationRecord
       Team.wrt,
       Team.wst,
       Team.wsot,
+      Team.wat,
     ]
   end
 
@@ -171,6 +172,10 @@ class Team < ApplicationRecord
 
   def self.wsot
     Team.c_find_by_friendly_id!('wsot')
+  end
+
+  def self.wat
+    Team.c_find_by_friendly_id!('wat')
   end
 
   def official?

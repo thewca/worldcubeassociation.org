@@ -1977,6 +1977,10 @@ en:
       wsot:
         name: "WCA Sports Organization Team"
         description: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
+      #context: WAT
+      wat:
+        name: "WCA Archive Team"
+        description: "The WCA Archive Team is an Advisory Committee of the WCA. This team has the role to oversee and support the development of an archive of the organization."
       #context: Hidden team for list of banned competitors
       banned:
         name: "Banned Competitors"
@@ -2094,6 +2098,8 @@ en:
       info_html: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
     wsot:
       info_html: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
+    wat:
+      info_html: "The WCA Archive Team is an Advisory Committee of the WCA. This team has the role to oversee and support the development of an archive of the organization."
     councils_html: "Councils"
     wac:
       info_html: "This council is responsible for building and maintaining bilateral communication between the WCA Community and the WCA Staff."
