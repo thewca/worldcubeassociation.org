@@ -6,9 +6,6 @@ cd "$(dirname "$0")"/..
 # export url paramter.
 time (cd webroot/results/admin/; REQUEST_URI="export=" php export_public.php)
 
-# Update statistics page
-time (cd webroot/results/; php statistics.php update)
-
 # Update Evolution of Records
 # We need to set SERVER_NAME to avoid generating the "This is only a copy of
 # the WCA results system used for testing stuff" message.
