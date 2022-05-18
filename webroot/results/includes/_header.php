@@ -121,7 +121,7 @@ print $styles->getHTMLAll();
                 <li><a href="<?php print pathToRoot(); ?>regions.php"><i class="fa fa-trophy fa-fw"></i> Records</a></li>
                 <li><a href="<?php print pathToRoot(); ?>persons.php"><i class="fa fa-user fa-fw"></i> Persons</a></li>
                 <li class="divider"></li>
-                <li><a href="<?php print pathToRoot(); ?>statistics.php"><i class="fa fa-area-chart fa-fw"></i> Statistics</a></li>
+                <li><a href="https://statistics.worldcubeassociation.org/"><i class="fa fa-area-chart fa-fw"></i> Statistics</a></li>
                 <li><a href="<?php print pathToRoot(); ?>media.php"><i class="fa fa-film fa-fw"></i> Multimedia</a></li>
                 <li><a href="<?php print pathToRoot(); ?>misc/export.html"><i class="fa fa-download fa-fw"></i> Database Export</a></li>
               </ul>
