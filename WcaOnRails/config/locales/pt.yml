@@ -3923,6 +3923,21 @@ pt:
         description: >-
           Este Conselho é responsável por criar e manter comunicação bilateral
           entre a Comunidade e o Staff da WCA.
+      wsot:
+        #original_hash: 58765c7
+        name: Equipa de Organização Desportiva da WCA
+        #original_hash: 8f888d6
+        description: >-
+          Esta equipa tem o papel de supervisionar e apoiar o reconhecimento da
+          WCA enquanto organização desportiva internacional.
+      wat:
+        #original_hash: 90a1280
+        name: Equipa de Arquivo da WCA
+        #original_hash: fae6850
+        description: >-
+          A Equipa de Arquivo da WCA é um Comité Consultivo da WCA. Esta equipa
+          tem o papel de supervisionar e apoiar o desenvolvimento de um arquivo
+          da organização.
       banned:
         #original_hash: d30e2e5
         name: Competidores Banidos
@@ -4199,6 +4214,17 @@ pt:
         Esta equipa é responsável por desenvolver e gerir a Marca WCA, procurar
         patrocínios, suportar a distribuição de materiais para competições e
         promover a divulgação de produtos WCA.
+    wsot:
+      #original_hash: 8f888d6
+      info_html: >-
+        Esta equipa tem o papel de supervisionar e apoiar o reconhecimento da
+        WCA enquanto organização desportiva internacional.
+    wat:
+      #original_hash: fae6850
+      info_html: >-
+        A Equipa de Arquivo da WCA é um Comité Consultivo da WCA. Esta equipa
+        tem o papel de supervisionar e apoiar o desenvolvimento de um arquivo da
+        organização.
     #original_hash: f97a4f5
     councils_html: Conselhos
     wac:
