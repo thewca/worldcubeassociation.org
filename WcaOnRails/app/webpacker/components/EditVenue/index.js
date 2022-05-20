@@ -136,80 +136,90 @@ export default class EditVenue extends React.Component {
   }
 }
 
-const NameInput = ({ name, actionHandler }) => (
-  <Row>
-    <Col xs={3}>
-      <span className="venue-form-label control-label">Name:</span>
-    </Col>
-    <Col xs={9}>
-      <input type="text" className="venue-name-input form-control" value={name} onChange={(e) => actionHandler(e, 'name')} />
-    </Col>
-  </Row>
-);
+function NameInput({ name, actionHandler }) {
+  return (
+    <Row>
+      <Col xs={3}>
+        <span className="venue-form-label control-label">Name:</span>
+      </Col>
+      <Col xs={9}>
+        <input type="text" className="venue-name-input form-control" value={name} onChange={(e) => actionHandler(e, 'name')} />
+      </Col>
+    </Row>
+  );
+}
 
-const CountryInput = ({ value, onChange }) => (
-  <Row>
-    <Col xs={3}>
-      <span className="venue-form-label control-label">Country:</span>
-    </Col>
-    <Col xs={9}>
-      <select
-        className="form-control"
-        value={value}
-        onChange={onChange}
-      >
-        {countries.real.map((country) => (
-          <option key={country.iso2} value={country.iso2}>
-            {country.name}
-          </option>
+function CountryInput({ value, onChange }) {
+  return (
+    <Row>
+      <Col xs={3}>
+        <span className="venue-form-label control-label">Country:</span>
+      </Col>
+      <Col xs={9}>
+        <select
+          className="form-control"
+          value={value}
+          onChange={onChange}
+        >
+          {countries.real.map((country) => (
+            <option key={country.iso2} value={country.iso2}>
+              {country.name}
+            </option>
+          ))}
+        </select>
+      </Col>
+    </Row>
+  );
+}
+
+function TimezoneInput({ timezone, selectKeys, actionHandler }) {
+  return (
+    <Row>
+      <Col xs={3}>
+        <span className="venue-form-label control-label">Timezone:</span>
+      </Col>
+      <Col xs={9}>
+        <select
+          className="venue-timezone-input form-control"
+          value={timezone}
+          onChange={(e) => actionHandler(e, 'timezone')}
+        >
+          <option value="" />
+          {selectKeys.map((key) => (
+            <option key={key} value={timezoneData[key] || key}>{key}</option>
+          ))}
+        </select>
+      </Col>
+    </Row>
+  );
+}
+
+function RoomsList({ venueWcif, actionsHandlers }) {
+  return (
+    <Row>
+      <Col xs={3}>
+        <span className="venue-form-label control-label">Rooms:</span>
+      </Col>
+      <Col xs={9}>
+        {venueWcif.rooms.map((roomWcif, index) => (
+          <EditRoom
+            roomWcif={roomWcif}
+            key={roomWcif.id}
+            removeRoomAction={(e) => actionsHandlers.removeRoom(e, index)}
+          />
         ))}
-      </select>
-    </Col>
-  </Row>
-);
+        <NewRoom newRoomAction={actionsHandlers.addRoom} />
+      </Col>
+    </Row>
+  );
+}
 
-const TimezoneInput = ({ timezone, selectKeys, actionHandler }) => (
-  <Row>
-    <Col xs={3}>
-      <span className="venue-form-label control-label">Timezone:</span>
-    </Col>
-    <Col xs={9}>
-      <select
-        className="venue-timezone-input form-control"
-        value={timezone}
-        onChange={(e) => actionHandler(e, 'timezone')}
-      >
-        <option value="" />
-        {selectKeys.map((key) => (
-          <option key={key} value={timezoneData[key] || key}>{key}</option>
-        ))}
-      </select>
-    </Col>
-  </Row>
-);
-
-const RoomsList = ({ venueWcif, actionsHandlers }) => (
-  <Row>
-    <Col xs={3}>
-      <span className="venue-form-label control-label">Rooms:</span>
-    </Col>
-    <Col xs={9}>
-      {venueWcif.rooms.map((roomWcif, index) => (
-        <EditRoom
-          roomWcif={roomWcif}
-          key={roomWcif.id}
-          removeRoomAction={(e) => actionsHandlers.removeRoom(e, index)}
-        />
-      ))}
-      <NewRoom newRoomAction={actionsHandlers.addRoom} />
-    </Col>
-  </Row>
-);
-
-const NewRoom = ({ newRoomAction }) => (
-  <Row>
-    <Col xs={12}>
-      <a href="#" className="btn btn-success new-room-link" onClick={newRoomAction}>Add room</a>
-    </Col>
-  </Row>
-);
+function NewRoom({ newRoomAction }) {
+  return (
+    <Row>
+      <Col xs={12}>
+        <a href="#" className="btn btn-success new-room-link" onClick={newRoomAction}>Add room</a>
+      </Col>
+    </Row>
+  );
+}

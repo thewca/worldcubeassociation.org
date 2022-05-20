@@ -28,13 +28,18 @@ function normalizeWcifEvents(wcifEvents) {
   // it with WCIF data if any.
   // And then we add all events that are still in the WCIF (which means they are
   // not official anymore).
-  const ret = events.official.map((event) => _.remove(wcifEvents,
-    { id: event.id })[0] || { id: event.id, rounds: null });
+  const ret = events.official.map((event) => _.remove(
+    wcifEvents,
+    { id: event.id },
+  )[0] || { id: event.id, rounds: null });
   return ret.concat(wcifEvents);
 }
 
 window.wca.initializeEventsForm = (
-  competitionId, canAddAndRemoveEvents, canUpdateEvents, wcifEvents,
+  competitionId,
+  canAddAndRemoveEvents,
+  canUpdateEvents,
+  wcifEvents,
 ) => {
   state.competitionId = competitionId;
   state.canAddAndRemoveEvents = canAddAndRemoveEvents;

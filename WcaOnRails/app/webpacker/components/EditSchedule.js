@@ -170,70 +170,78 @@ export default class EditSchedule extends React.Component {
   }
 }
 
-const UnsavedChangesAlert = ({ actionHandler, saving }) => (
-  <Alert bsStyle="info">
-    You have unsaved changes. Don&rsquo;t forget to
-    {' '}
-    <button
-      type="button"
-      onClick={actionHandler}
-      disabled={saving}
-      className={cn('btn', 'btn-default btn-primary', { saving })}
-    >
-      save your changes!
-    </button>
-  </Alert>
-);
+function UnsavedChangesAlert({ actionHandler, saving }) {
+  return (
+    <Alert bsStyle="info">
+      You have unsaved changes. Don&rsquo;t forget to
+      {' '}
+      <button
+        type="button"
+        onClick={actionHandler}
+        disabled={saving}
+        className={cn('btn', 'btn-default btn-primary', { saving })}
+      >
+        save your changes!
+      </button>
+    </Alert>
+  );
+}
 
-const IntroductionMessage = () => (
-  <Col xs={12}>
-    <p>
-      Depending on the size and setup of the competition, it may take place in
-      several rooms of several venues.
-      Therefore a schedule is necessarily linked to a specific room.
-      Each room may have its own schedule (with all or a subset of events).
-      So you can start creating the competition&rsquo;s schedule below by adding at
-      least one venue with one room.
-      Then you will be able to select this room in the &quot;Edit schedules&quot;
-      panel, and drag and drop event rounds (or attempts for some events) on it.
-    </p>
-    <p>
-      For the typical simple competition, creating one &quot;Main venue&quot;
-      with one &quot;Main room&quot; is enough.
-      If your competition has a single venue but multiple &quot;stages&quot; with different
-      schedules, please input them as different rooms.
-    </p>
-  </Col>
-);
+function IntroductionMessage() {
+  return (
+    <Col xs={12}>
+      <p>
+        Depending on the size and setup of the competition, it may take place in
+        several rooms of several venues.
+        Therefore a schedule is necessarily linked to a specific room.
+        Each room may have its own schedule (with all or a subset of events).
+        So you can start creating the competition&rsquo;s schedule below by adding at
+        least one venue with one room.
+        Then you will be able to select this room in the &quot;Edit schedules&quot;
+        panel, and drag and drop event rounds (or attempts for some events) on it.
+      </p>
+      <p>
+        For the typical simple competition, creating one &quot;Main venue&quot;
+        with one &quot;Main room&quot; is enough.
+        If your competition has a single venue but multiple &quot;stages&quot; with different
+        schedules, please input them as different rooms.
+      </p>
+    </Col>
+  );
+}
 
-const VenuesList = ({ venues, actionsHandlers, competitionInfo }) => (
-  <Row>
-    {venues.map((venueWcif, index) => (
-      <React.Fragment key={venueWcif.id}>
-        <Col xs={12} md={6}>
-          <EditVenue
-            venueWcif={venueWcif}
-            removeVenueAction={(e) => actionsHandlers.removeVenue(e, index)}
-            competitionInfo={competitionInfo}
-          />
-        </Col>
-        {/*
+function VenuesList({ venues, actionsHandlers, competitionInfo }) {
+  return (
+    <Row>
+      {venues.map((venueWcif, index) => (
+        <React.Fragment key={venueWcif.id}>
+          <Col xs={12} md={6}>
+            <EditVenue
+              venueWcif={venueWcif}
+              removeVenueAction={(e) => actionsHandlers.removeVenue(e, index)}
+              competitionInfo={competitionInfo}
+            />
+          </Col>
+          {/*
           Every venue col doesn't have the same height, so we need a clearfix
           depending on our index and viewport.
           In XS there is one venue per row, so no clearfix needed.
           In MD there are two venues per row, so if we're last, we need a clearfix.
         */}
-        {index % 2 === 1 && <Clearfix visibleMdBlock />}
-      </React.Fragment>
-    ))}
-    <Col xs={12} md={6}>
-      <NewVenue actionHandler={actionsHandlers.addVenue} />
-    </Col>
-  </Row>
-);
+          {index % 2 === 1 && <Clearfix visibleMdBlock />}
+        </React.Fragment>
+      ))}
+      <Col xs={12} md={6}>
+        <NewVenue actionHandler={actionsHandlers.addVenue} />
+      </Col>
+    </Row>
+  );
+}
 
-const NewVenue = ({ actionHandler }) => (
-  <div className="panel-venue">
-    <a href="#" className="btn btn-success new-venue-link" onClick={actionHandler}>Add a venue</a>
-  </div>
-);
+function NewVenue({ actionHandler }) {
+  return (
+    <div className="panel-venue">
+      <a href="#" className="btn btn-success new-venue-link" onClick={actionHandler}>Add a venue</a>
+    </div>
+  );
+}

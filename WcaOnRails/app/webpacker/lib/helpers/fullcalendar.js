@@ -126,8 +126,11 @@ export default function generate(eventFetcher, showModalAction, scheduleWcif, ad
     // I have no idea why this isn't the default behavior.
     selectMinDistance: 5,
     select: (start, end) => fullCalendarHandlers.onTimeframeSelected(showModalAction, start, end),
-    dayClick: (date) => fullCalendarHandlers.onTimeframeSelected(showModalAction,
-      date, date.clone().add(window.moment.duration(options.defaultTimedEventDuration))),
+    dayClick: (date) => fullCalendarHandlers.onTimeframeSelected(
+      showModalAction,
+      date,
+      date.clone().add(window.moment.duration(options.defaultTimedEventDuration)),
+    ),
   };
 
   _.assign(options, localOptions);

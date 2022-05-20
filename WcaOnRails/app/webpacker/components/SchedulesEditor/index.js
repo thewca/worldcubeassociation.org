@@ -34,8 +34,10 @@ export default class SchedulesEditor extends React.Component {
   componentDidMount() {
     // We cannot handle well changes (such as room color) when fullCalendar's element is hidden.
     // So we unselect the room when our panel becomes hidden, to avoid running into any visual bug.
-    $(schedulesEditPanelSelector).find('.panel-collapse').on('hidden.bs.collapse',
-      () => this.setState({ selectedRoom: '' }));
+    $(schedulesEditPanelSelector).find('.panel-collapse').on(
+      'hidden.bs.collapse',
+      () => this.setState({ selectedRoom: '' }),
+    );
   }
 
   /* eslint camelcase: ["error", {allow: ["UNSAFE_componentWillReceiveProps"]}] */
@@ -101,40 +103,42 @@ export default class SchedulesEditor extends React.Component {
 }
 
 /* eslint jsx-a11y/control-has-associated-label: "off" */
-const RoomSelector = ({ scheduleWcif, selectedRoom, handleRoomChange }) => (
-  <Row className="room-selector">
-    <Col
-      componentClass="label"
-      htmlFor="venue-room-selector"
-      className="control-label"
-      xs={12}
-      md={6}
-      lg={5}
-    >
-      Select a room to edit its schedule:
-    </Col>
-    <Col xs={12} md={6} lg={7}>
-      <select
-        id="venue-room-selector"
-        className="form-control input-sm"
-        onChange={handleRoomChange}
-        value={selectedRoom}
+function RoomSelector({ scheduleWcif, selectedRoom, handleRoomChange }) {
+  return (
+    <Row className="room-selector">
+      <Col
+        componentClass="label"
+        htmlFor="venue-room-selector"
+        className="control-label"
+        xs={12}
+        md={6}
+        lg={5}
       >
-        {[<option key="0" value="" />].concat(
-          _.flatMap(scheduleWcif.venues, (venue) => _.map(
-            venue.rooms,
-            (room) => (
-              <option key={room.id} value={room.id}>
-                &quot;
-                {room.name}
-                &quot; in &quot;
-                {venue.name}
-                &quot;
-              </option>
-            ),
-          )),
-        )}
-      </select>
-    </Col>
-  </Row>
-);
+        Select a room to edit its schedule:
+      </Col>
+      <Col xs={12} md={6} lg={7}>
+        <select
+          id="venue-room-selector"
+          className="form-control input-sm"
+          onChange={handleRoomChange}
+          value={selectedRoom}
+        >
+          {[<option key="0" value="" />].concat(
+            _.flatMap(scheduleWcif.venues, (venue) => _.map(
+              venue.rooms,
+              (room) => (
+                <option key={room.id} value={room.id}>
+                  &quot;
+                  {room.name}
+                  &quot; in &quot;
+                  {venue.name}
+                  &quot;
+                </option>
+              ),
+            )),
+          )}
+        </select>
+      </Col>
+    </Row>
+  );
+}

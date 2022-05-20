@@ -3,13 +3,15 @@ import { Icon } from 'semantic-ui-react';
 
 export const dropAreaSelector = '#drop-event-area';
 
-export const DropArea = () => (
-  <div id="drop-event-area" className="bg-danger text-danger text-center">
-    <Icon className="pull-left" name="trash" />
-    Drop an event here to remove it from the schedule.
-    <Icon className="pull-right" name="trash" />
-  </div>
-);
+export function DropArea() {
+  return (
+    <div id="drop-event-area" className="bg-danger text-danger text-center">
+      <Icon className="pull-left" name="trash" />
+      Drop an event here to remove it from the schedule.
+      <Icon className="pull-right" name="trash" />
+    </div>
+  );
+}
 
 export function isEventOverDropArea(jsEvent) {
   const trashElem = $(dropAreaSelector);
