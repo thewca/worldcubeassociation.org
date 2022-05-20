@@ -27,53 +27,55 @@ const getRecordClass = (record) => {
   }
 };
 
-const RoundResultsTable = ({ round, eventName, eventId }) => (
-  <>
-    <h2>{`${eventName} ${round.name}`}</h2>
-    <Table striped>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell width={1}>#</Table.HeaderCell>
-          <Table.HeaderCell width={4}>
-            {I18n.t('competitions.results_table.name')}
-          </Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('common.best')}</Table.HeaderCell>
-          <Table.HeaderCell />
-          <Table.HeaderCell>{I18n.t('common.average')}</Table.HeaderCell>
-          <Table.HeaderCell />
-          <Table.HeaderCell>{I18n.t('common.user.citizen_of')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('common.solves')}</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {round.results.map((result, index, results) => (
-          <Table.Row key={result.id}>
-            <Table.Cell className={cn({ 'text-muted': index > 0 && results[index - 1].pos === result.pos })}>
-              {result.pos}
-            </Table.Cell>
-            <Table.Cell>
-              <a href={personUrl(result.wca_id)}>{`${result.name}`}</a>
-            </Table.Cell>
-            <Table.Cell className={getRecordClass(result.regional_single_record)}>
-              {formatAttemptResult(result.best, eventId)}
-            </Table.Cell>
-            <Table.Cell>{result.regional_single_record}</Table.Cell>
-            <Table.Cell className={getRecordClass(result.regional_average_record)}>
-              {formatAttemptResult(result.average, eventId)}
-            </Table.Cell>
-            <Table.Cell>{result.regional_average_record}</Table.Cell>
-            <Table.Cell><CountryFlag iso2={result.country_iso2} /></Table.Cell>
-            <Table.Cell className={(eventId === '333mbf' || eventId === '333mbo') ? 'table-cell-solves-mbf' : 'table-cell-solves'}>
-              {formatAttemptsForResult(result, eventId)}
-            </Table.Cell>
+function RoundResultsTable({ round, eventName, eventId }) {
+  return (
+    <>
+      <h2>{`${eventName} ${round.name}`}</h2>
+      <Table striped>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell width={1}>#</Table.HeaderCell>
+            <Table.HeaderCell width={4}>
+              {I18n.t('competitions.results_table.name')}
+            </Table.HeaderCell>
+            <Table.HeaderCell>{I18n.t('common.best')}</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell>{I18n.t('common.average')}</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell>{I18n.t('common.user.citizen_of')}</Table.HeaderCell>
+            <Table.HeaderCell>{I18n.t('common.solves')}</Table.HeaderCell>
           </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
-  </>
-);
+        </Table.Header>
+        <Table.Body>
+          {round.results.map((result, index, results) => (
+            <Table.Row key={result.id}>
+              <Table.Cell className={cn({ 'text-muted': index > 0 && results[index - 1].pos === result.pos })}>
+                {result.pos}
+              </Table.Cell>
+              <Table.Cell>
+                <a href={personUrl(result.wca_id)}>{`${result.name}`}</a>
+              </Table.Cell>
+              <Table.Cell className={getRecordClass(result.regional_single_record)}>
+                {formatAttemptResult(result.best, eventId)}
+              </Table.Cell>
+              <Table.Cell>{result.regional_single_record}</Table.Cell>
+              <Table.Cell className={getRecordClass(result.regional_average_record)}>
+                {formatAttemptResult(result.average, eventId)}
+              </Table.Cell>
+              <Table.Cell>{result.regional_average_record}</Table.Cell>
+              <Table.Cell><CountryFlag iso2={result.country_iso2} /></Table.Cell>
+              <Table.Cell className={(eventId === '333mbf' || eventId === '333mbo') ? 'table-cell-solves-mbf' : 'table-cell-solves'}>
+                {formatAttemptsForResult(result, eventId)}
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+    </>
+  );
+}
 
-const EventResults = ({ competitionId, eventId }) => {
+function EventResults({ competitionId, eventId }) {
   const { loading, error, data } = useLoadedData(
     competitionEventResultsApiUrl(competitionId, eventId),
   );
@@ -87,9 +89,9 @@ const EventResults = ({ competitionId, eventId }) => {
       ))}
     </div>
   );
-};
+}
 
-const CompetitionResults = ({ competitionId }) => {
+function CompetitionResults({ competitionId }) {
   const { loading, error, data } = useLoadedData(competitionApiUrl(competitionId));
   const [selectedEvent, setSelectedEvent] = useState(null);
   useEffect(() => {
@@ -133,6 +135,6 @@ const CompetitionResults = ({ competitionId }) => {
       />
     </div>
   );
-};
+}
 
 export default CompetitionResults;

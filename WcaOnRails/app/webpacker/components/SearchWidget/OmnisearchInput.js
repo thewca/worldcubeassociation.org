@@ -20,14 +20,14 @@ const classToComponent = {
   text: TextItem,
 };
 
-const ItemFor = ({ item }) => {
+function ItemFor({ item }) {
   const Component = classToComponent[item.class];
   return (
     <div className="selected-item">
       <Component item={item} />
     </div>
   );
-};
+}
 
 const renderLabel = ({ item }) => ({
   color: 'blue',
@@ -56,12 +56,12 @@ const createSearchItem = (search) => itemToOption({
 
 const DEBOUNCE_MS = 300;
 
-const OmnisearchInput = ({
+function OmnisearchInput({
   url,
   goToItemOnSelect,
   placeholder,
   removeNoResultsMessage,
-}) => {
+}) {
   const [search, setSearch] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -140,6 +140,6 @@ const OmnisearchInput = ({
       renderLabel={renderLabel}
     />
   );
-};
+}
 
 export default OmnisearchInput;

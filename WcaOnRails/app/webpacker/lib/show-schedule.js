@@ -29,14 +29,18 @@ const fetchCalendarEvents = (venueId, start, end, timezone, callback) => {
   const allEvents = dataByVenueId[venueId].events;
   const rooms = $(`#room-list-${venueId}`).find('.selected');
   let calendarEvents = _.flatMap(rooms, (room) => _.filter(allEvents, { roomId: $(room).data('room') }));
-  const selectedEvents = _.map($(`#schedule-venue-${venueId} .events-filter > i.selected`),
-    (e) => $(e).data('event').toString());
+  const selectedEvents = _.map(
+    $(`#schedule-venue-${venueId} .events-filter > i.selected`),
+    (e) => $(e).data('event').toString(),
+  );
   // Filter events by id only if they are WCA events
   // (we don't want to filter custom activities for which event_id is "other").
   const filterableEventIds = Object.keys(events.byId);
-  calendarEvents = _.filter(calendarEvents,
+  calendarEvents = _.filter(
+    calendarEvents,
     (e) => selectedEvents.includes(e.activityDetails.event_id)
-      || !filterableEventIds.includes(e.activityDetails.event_id));
+      || !filterableEventIds.includes(e.activityDetails.event_id),
+  );
   callback(calendarEvents);
 };
 
@@ -196,11 +200,13 @@ const onClickOnRoomAction = (e) => {
 
 window.wca.setupCalendarAndFilter = (popoverContentBuilder, locale, startDate, numberOfDays) => {
   // Setup click action on calendar links
-  $('.schedule-calendar-link').click(_.partial(onClickCalencarLinkAction,
+  $('.schedule-calendar-link').click(_.partial(
+    onClickCalencarLinkAction,
     popoverContentBuilder,
     locale,
     startDate,
-    numberOfDays));
+    numberOfDays,
+  ));
   $('.schedule-table-link').click(onClickTableLinkAction);
 
   // Setup events filter actions

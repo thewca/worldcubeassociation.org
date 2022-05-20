@@ -193,45 +193,47 @@ export default class ActivityPicker extends React.Component {
   }
 }
 
-const ActivityPickerLine = ({
+function ActivityPickerLine({
   eventWcif, usedActivityCodeList, selectedLine, selectedX,
-}) => (
-  <Col xs={12} className="event-picker-line">
-    <Row>
-      <Col xs={12} md={3} lg={2} className="activity-icon">
-        <span className={cn('cubing-icon', `event-${eventWcif.id}`)} />
-      </Col>
-      <Col xs={12} md={9} lg={10}>
-        <Row>
-          {eventWcif.rounds.map((value, index) => {
-            const activities = (
-              <ActivitiesForRound
-                key={value.id}
-                indexInRow={index}
-                eventId={eventWcif.id}
-                round={value}
-                usedActivityCodeList={usedActivityCodeList}
-                selectedLine={selectedLine}
-                selectedX={selectedX}
-              />
-            );
-            if (eventWcif.id === '333mbf' || eventWcif.id === '333fm') {
-              // For these events the selectedX spreads accross multiple rounds.
-              // This corrects the offset.
-              /* eslint-disable-next-line */
+}) {
+  return (
+    <Col xs={12} className="event-picker-line">
+      <Row>
+        <Col xs={12} md={3} lg={2} className="activity-icon">
+          <span className={cn('cubing-icon', `event-${eventWcif.id}`)} />
+        </Col>
+        <Col xs={12} md={9} lg={10}>
+          <Row>
+            {eventWcif.rounds.map((value, index) => {
+              const activities = (
+                <ActivitiesForRound
+                  key={value.id}
+                  indexInRow={index}
+                  eventId={eventWcif.id}
+                  round={value}
+                  usedActivityCodeList={usedActivityCodeList}
+                  selectedLine={selectedLine}
+                  selectedX={selectedX}
+                />
+              );
+              if (eventWcif.id === '333mbf' || eventWcif.id === '333fm') {
+                // For these events the selectedX spreads accross multiple rounds.
+                // This corrects the offset.
+                /* eslint-disable-next-line */
               selectedX -= formats.byId[value.format].expectedSolveCount;
-            }
-            return activities;
-          })}
-        </Row>
-      </Col>
-    </Row>
-  </Col>
-);
+              }
+              return activities;
+            })}
+          </Row>
+        </Col>
+      </Row>
+    </Col>
+  );
+}
 
-const ActivitiesForRound = ({
+function ActivitiesForRound({
   usedActivityCodeList, eventId, round, selectedLine, selectedX, indexInRow,
-}) => {
+}) {
   if (['333fm', '333mbf'].includes(eventId)) {
     const numberOfAttempts = formats.byId[round.format].expectedSolveCount;
     return _.times(numberOfAttempts, (n) => (
@@ -252,7 +254,7 @@ const ActivitiesForRound = ({
       attemptNumber={null}
     />
   );
-};
+}
 
 class ActivityForAttempt extends React.Component {
   constructor(props) {
