@@ -665,7 +665,7 @@ GEM
       sprockets (>= 3.0.0)
     ssrf_filter (1.0.7)
     stringio (3.0.2)
-    strip_attributes (1.12.0)
+    strip_attributes (1.13.0)
       activemodel (>= 3.0, < 8.0)
     stripe (5.55.0)
     strscan (3.0.1)
