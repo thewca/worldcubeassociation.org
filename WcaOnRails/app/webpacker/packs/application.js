@@ -6,27 +6,23 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import '../javascript/image-preview';
-import '../javascript/polyfills';
-import '../javascript/incidents-log';
+import '../lib/image-preview';
+import '../lib/polyfills';
+import '../lib/incidents-log';
 import autosize from 'autosize';
 import Rails from '@rails/ujs';
 import {
   getUrlParams,
   setUrlParams,
   formattedTextForDate,
-} from '../javascript/wca/utils';
-import '../javascript/acknowledge-cookies';
-
-import { attachComponentToElem } from '../javascript/wca/react-utils';
+} from '../lib/utils/wca';
+import '../lib/acknowledge-cookies';
 
 Rails.start();
 require('jquery');
 
-// Build up the window.wca environment, which we use to store our components.
+// Build up the window.wca environment
 window.wca = window.wca || {};
-window.wca.components = {};
-window.wca.attachComponentToElem = attachComponentToElem;
 
 // Setting up autosize
 $(() => {
@@ -42,3 +38,9 @@ $(() => {
 // Export some helpers
 window.wca.getUrlParams = getUrlParams;
 window.wca.setUrlParams = setUrlParams;
+
+// Support component names relative to this directory:
+const componentRequireContext = require.context('components', true);
+const ReactRailsUJS = require('react_ujs');
+
+ReactRailsUJS.useContext(componentRequireContext);

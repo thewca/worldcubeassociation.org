@@ -1,1 +1,1 @@
-import '../javascript/markdown-editor';
+import '../lib/markdown-editor';

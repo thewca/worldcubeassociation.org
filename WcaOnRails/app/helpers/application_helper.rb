@@ -250,15 +250,4 @@ module ApplicationHelper
       add_to_js_assets("fullcalendar/locales/#{I18n.locale}.js")
     end
   end
-
-  ATTACH_COMPONENT_STR="window.wca.attachComponentToElem('%{c}', '%{id}', %{opts});"
-  def render_react_component(name, id: nil, options: {})
-    id ||= name
-    component_container = content_tag(:div, nil, id: id)
-    script_tag = javascript_tag(format(ATTACH_COMPONENT_STR,
-                                       c: name,
-                                       id: id,
-                                       opts: options.to_json))
-    component_container + script_tag
-  end
 end

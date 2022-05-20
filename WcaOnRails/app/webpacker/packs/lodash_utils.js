@@ -1,1 +1,1 @@
-import '../javascript/lodash-utils';
+import '../lib/lodash-utils';

@@ -41,5 +41,5 @@ translations:
     prefix: |
       // This file is generated automatically by the rake middleware!
       // DO NOT EDIT IT MANUALLY!
-      import I18n from '../../javascript/i18n';
+      import I18n from '../../lib/i18n';
 <% end %>

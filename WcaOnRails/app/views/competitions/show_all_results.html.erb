@@ -1,9 +1,10 @@
-<% add_to_packs("competition_results") %>
 <% provide(:title, @competition.name) %>
 
 <%= render layout: 'results_nav' do %>
   <%= tag :div, id: "selected-event", "data-selected": params[:event] %>
-  <%= render_react_component("CompetitionResults", id: "competition_results", options: {
+  <%= react_component("CompetitionResults", {
     competitionId: @competition.id
+  }, {
+    id: "competition_results",
   }) %>
 <% end %>

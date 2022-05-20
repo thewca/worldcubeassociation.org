@@ -1,1 +1,1 @@
-import '../javascript/edit-schedule';
+import '../lib/edit-schedule';

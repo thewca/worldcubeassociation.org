@@ -1,6 +1,7 @@
-<% add_to_packs("posts_widget") %>
 <div class="container">
-  <%= render_react_component("PostsWidget", id: "posts_widget", options: {
+  <%= react_component("PostsWidget", {
     initialPage: @current_page,
+  }, {
+    id: "posts_widget",
   }) %>
 </div>

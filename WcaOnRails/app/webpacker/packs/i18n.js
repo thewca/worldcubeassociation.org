@@ -1,1 +1,1 @@
-import '../javascript/i18n';
+import '../lib/i18n';

@@ -1,1 +1,1 @@
-import '../javascript/auto-numeric';
+import '../lib/auto-numeric';
