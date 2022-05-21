@@ -33,6 +33,8 @@
 
     <% if competition.results_posted? %>
       <%= competition.competitors.count %>
+    <% elseif competition.results_submitted? %>
+      <%= competition.competitors.count %> (tentative)
     <% else %>
       Unknown, results are not posted yet.
     <% end %>
