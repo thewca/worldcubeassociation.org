@@ -6,7 +6,8 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "airbnb",
+        "prettier"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -22,7 +23,8 @@
     },
     "plugins": [
         "react",
-        "jquery"
+        "jquery",
+        "prettier"
     ],
     "rules": {
         "react/prop-types": "off",
@@ -30,6 +32,7 @@
         "import/no-unresolved": ["error", {
             "ignore": ["semantic-css/"]
         }],
-        "no-console": ["error", { "allow": ["warn", "error"] }]
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "prettier/prettier": ["error"]
     }
 }
