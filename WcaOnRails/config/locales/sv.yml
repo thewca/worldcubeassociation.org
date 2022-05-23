@@ -2418,6 +2418,12 @@ sv:
         Vänligen kontrollera att det är korrekt.
       #original_hash: e390250
       create_success: Ny tävling skapad!
+      #original_hash: bc3e673
+      registration_payment_info: >-
+        Den här tävlingen har anmälningsavgifter men inget Stripe-konto är
+        anslutet. Kom ihåg att ansluta ditt Stripe-konto om du använder Stripe
+        via WCAs hemsida. Om du använder ett externt betalningssystem, kom ihåg
+        att ange all relevant information i anmälningskraven.
       #original_hash: ba067f0
       not_announced: Tävlingen är synlig för allmänheten men har inte publicerats ännu.
       #original_hash: ab61991
@@ -3857,6 +3863,20 @@ sv:
         description: >-
           Detta råd är ansvarigt för att bygga upp och upprätthålla bilateral
           kommunikation mellan WCA:s Community och WCA-Personal.
+      wsot:
+        #original_hash: 58765c7
+        name: WCA Sports Organization Team
+        #original_hash: 8f888d6
+        description: >-
+          Detta team har till uppgift att överse och stötta erkännandet av WCA
+          som en internationell idrottsorganisation.
+      wat:
+        #original_hash: 90a1280
+        name: WCA Archive Team
+        #original_hash: fae6850
+        description: >-
+          WCA Archive Team är en rådgivande kommitté inom WCA. Gruppen har som
+          uppgift att överse och stötta utvecklingen av organisationens arkiv.
       banned:
         #original_hash: d30e2e5
         name: Avstängda Tävlande
@@ -4128,6 +4148,16 @@ sv:
         Detta team ansvarar för att utveckla och hantera varumärket WCA, söka
         sponsring, stödja distributionen av tävlingsmaterial, och marknadsföra
         WCA:s Profilprodukter.
+    wsot:
+      #original_hash: 8f888d6
+      info_html: >-
+        Detta team har som uppgift att överse och stötta erkännandet av WCA som
+        en internationell idrottsorganisation.
+    wat:
+      #original_hash: fae6850
+      info_html: >-
+        WCA Archive Team är en rådgivande kommitté inom WCA. Gruppen har som
+        uppgift att överse och stötta utvecklingen av organisationens arkiv.
     #original_hash: f97a4f5
     councils_html: Råd
     wac:
