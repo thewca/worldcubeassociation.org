@@ -3868,6 +3868,21 @@ eo:
         description: >-
           Tiu konsilio respondecas pri kreado kaj prizorgo de ambaŭflanka
           komunikado inter la WCA-Komunumo kaj la WCA-Stabo
+      wsot:
+        #original_hash: 58765c7
+        name: Sporta Organiza Teamo de la WCA
+        #original_hash: 8f888d6
+        description: >-
+          Tiu teamo havas la rolon kontroli kaj subteni la rekonon de la WCA
+          kiel internacia sporta organizo.
+      wat:
+        #original_hash: 90a1280
+        name: Arkiva Teamo de la WCA
+        #original_hash: fae6850
+        description: >-
+          La Arkiva Teamo de la WCA estas Konsila Komisiono de la WCA. Tiu teamo
+          havas la rolon kontroli kaj subteni la disvolviĝon de arkivo de la
+          organizo.
       banned:
         #original_hash: d30e2e5
         name: Forbaritaj Konkursantoj
@@ -4140,6 +4155,17 @@ eo:
         Tiu teamo respondecas pri disvolviĝo kaj administro de la marko de la
         WCA, serĉado de sponsoroj, subteno de la distribuado de konkursa
         materialo de la WCA kaj komercaĵoj de la WCA.
+    wsot:
+      #original_hash: 8f888d6
+      info_html: >-
+        Tiu teamo havas la rolon kontroli kaj subteni la rekonon de la WCA kiel
+        internacia sporta organizo.
+    wat:
+      #original_hash: fae6850
+      info_html: >-
+        La Arkiva Teamo de la WCA estas Konsila Komisiono de la WCA. Tiu teamo
+        havas la rolon kontroli kaj subteni la disvolviĝon de arkivo de la
+        organizo.
     #original_hash: f97a4f5
     councils_html: Konsilioj
     wac:
