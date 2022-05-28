@@ -104,6 +104,11 @@ server {
     return 302 /competitions?$rails_args;
   }
 
+  # Redirect statistics.php to the new statistics project
+  location /results/statistics.php {
+    return 302 https://statistics.worldcubeassociation.org/statistics-list;
+  }
+
   # Redirect old competition results pages:
   #  /results/c.php?i=IranSummerCube2013
   # to:
