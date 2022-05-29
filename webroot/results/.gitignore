@@ -18,9 +18,6 @@ includes/_config.php
 misc/*.zip
 misc/age_vs_speed.html
 misc/age_vs_speed/*.png
-misc/evolution/charts_data.js
-misc/evolution/index.php
 misc/export.html
-misc/missing_averages/index.php
 
 *zzz*
