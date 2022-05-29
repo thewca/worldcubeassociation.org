@@ -109,6 +109,16 @@ server {
     return 302 https://statistics.worldcubeassociation.org/statistics-list;
   }
 
+  # Redirect sum of ranks
+  location /results/misc/sum_of_ranks/ {
+    return 302 https://statistics.worldcubeassociation.org/statistics-list/sum-of-all-ranks;
+  }
+
+  # Redirect record evolution
+  location /results/misc/evolution/ {
+    return 302 https://statistics.worldcubeassociation.org/record-evolution;
+  }
+
   # Redirect old competition results pages:
   #  /results/c.php?i=IranSummerCube2013
   # to:
