@@ -280,6 +280,7 @@ GEM
       faraday-net_http (~> 2.0)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (2.0.3)
+    faraday-retry (1.0.3)
     ffi (1.15.5)
     formatador (0.3.0)
     globalid (1.0.0)
@@ -744,6 +745,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   faraday
+  faraday-retry
   google-apis-admin_directory_v1
   guard-rspec
   high_voltage

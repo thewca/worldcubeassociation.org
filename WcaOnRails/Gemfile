@@ -15,6 +15,7 @@ gem 'activerecord-import'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'faraday'
+gem 'faraday-retry'
 gem 'sdoc', group: :doc
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'seedbank'
