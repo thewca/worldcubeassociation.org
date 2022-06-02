@@ -10,6 +10,26 @@
 
   <% current_translations = [
     {
+      version: "2022-06-01",
+      language: "Português Brasileiro",
+      language_english: "Portuguese, Brazil",
+      url: "./portuguese-brazilian",
+    },
+    {
+      version: "2022-06-01",
+      language: "Español Latino",
+      language_english: "Spanish, America",
+      url: "./spanish-american",
+    },
+  ] %>
+
+  <h3><%= t("regulations_translations.current") %></h3>
+  <div class="regulations-translations-table-container">
+    <%= render 'regulations/translations/index_table', translations: current_translations %>
+  </div>
+
+  <% old_translations = [
+    {
       version: "2022-01-01",
       language: "Deutsch",
       language_english: "German",
@@ -20,12 +40,6 @@
       language: "Русский",
       language_english: "Russian",
       url: "./russian",
-    },
-    {
-      version: "2022-01-01",
-      language: "Español Latino",
-      language_english: "Spanish, America",
-      url: "./spanish-american",
     },
     {
       version: "2022-01-01",
@@ -45,20 +59,6 @@
       language_english: "Chinese",
       url: "./chinese",
     },
-    {
-      version: "2022-01-01",
-      language: "Português Brasileiro",
-      language_english: "Portuguese, Brazil",
-      url: "./portuguese-brazilian",
-    },
-  ] %>
-
-  <h3><%= t("regulations_translations.current") %></h3>
-  <div class="regulations-translations-table-container">
-    <%= render 'regulations/translations/index_table', translations: current_translations %>
-  </div>
-
-  <% old_translations = [
     {
       version: "2021-05-01",
       language: "繁體中文",
