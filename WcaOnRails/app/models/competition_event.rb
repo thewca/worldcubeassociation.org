@@ -49,9 +49,10 @@ class CompetitionEvent < ApplicationRecord
       )
     end
     total_rounds = wcif["rounds"].size
-    new_rounds = wcif["rounds"].each_with_index.map do |round_wcif, index|
+    new_rounds = wcif["rounds"].map do |round_wcif|
+      round_number = Round.parse_wcif_id(round_wcif["id"])[:round_number]
       round = rounds.find { |r| r.wcif_id == round_wcif["id"] } || rounds.build
-      round.update!(Round.wcif_to_round_attributes(self.event, round_wcif, index+1, total_rounds))
+      round.update!(Round.wcif_to_round_attributes(self.event, round_wcif, round_number, total_rounds))
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end
