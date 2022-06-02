@@ -104,6 +104,21 @@ server {
     return 302 /competitions?$rails_args;
   }
 
+  # Redirect statistics.php to the new statistics project
+  location /results/statistics.php {
+    return 302 https://statistics.worldcubeassociation.org/statistics-list;
+  }
+
+  # Redirect sum of ranks
+  location /results/misc/sum_of_ranks/ {
+    return 302 https://statistics.worldcubeassociation.org/statistics-list/sum-of-all-ranks;
+  }
+
+  # Redirect record evolution
+  location /results/misc/evolution/ {
+    return 302 https://statistics.worldcubeassociation.org/record-evolution;
+  }
+
   # Redirect old competition results pages:
   #  /results/c.php?i=IranSummerCube2013
   # to:
@@ -251,14 +266,6 @@ server {
       include fcgi.conf;
       # Some of our administration scripts take entirely too long to run. Bump
       # the timeout to 10 minutes.
-      fastcgi_read_timeout 10m;
-    }
-
-    location ^~ /results/statistics.php {
-      include fcgi.conf;
-      # /results/statistics.php?update8392=1 can take a while, and isn't covered
-      # by the 10m timeout in /results/admin above. See
-      # https://groups.google.com/d/msg/wca-software/qB1XYfpQCfs/QFyvx6_W_TwJ
       fastcgi_read_timeout 10m;
     }
 

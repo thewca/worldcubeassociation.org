@@ -204,7 +204,7 @@ new() {
     --key-name $keyname \
     --instance-type $instance_type \
     --security-groups "SSH + HTTP + HTTPS" \
-    --iam-instance-profile "prod_role"
+    --iam-instance-profile "Name=prod_role" \
     --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 60, "VolumeType": "gp3" } } ]'`
 
   instance_id=`echo $json | jq --raw-output '.Instances[0].InstanceId'`

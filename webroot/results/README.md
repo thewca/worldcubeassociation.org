@@ -45,10 +45,6 @@ the other ones like `events_results.php` have prefixes like `events_` telling
 what they belong to. Also here is `_config.php.template`, a template for the `_config.php`
 file necessary to run the server.
 
-### `includes/statistics`
-All the little scripts computing the statistics on the statistics page, the
-order (and selection) is defined in `ALL_LISTS.php`. Used by `/statistics.php`.
-
 ### `/includes/thirdparty`
 Stuff like PHPExcel and reCAPTCHA. Where possible, we link to the repository
 on GitHub (as "submodule" - to get it, type `git submodule init` and then

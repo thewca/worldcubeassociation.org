@@ -25,9 +25,6 @@ require_once('includes/_header.php');
     <dt><a href="media.php">Multimedia</a></dt>
     <dd>Articles, Videos, Pictures and Reports about competitions.</dd>
 
-    <dt><a href="statistics.php">Statistics</a></dt>
-    <dd>Some additional statistics for fun.</dd>
-
   </dl>
 </div>
 
