@@ -6,7 +6,6 @@ function HasOrganizations({
   orgs,
 }) {
   if (orgs) {
-    const hoverEffect = 'hide-until-hover';
     return (
       <>
         <p>{I18n.t('regional_organizations.content')}</p>
@@ -14,8 +13,7 @@ function HasOrganizations({
           {orgs.map((org) => (
             <a key={org.logo} href={org.website}>
               <img src={org.logo} width={300} height={100} alt="" />
-
-              <div className={`organization-info | ${hoverEffect}`}>
+              <div className={`organization-info ${org.logo ? 'hide-until-hover' : ''}`}>
                 <div className="country">
                   <p key={org.country}>{org.country}</p>
                 </div>
