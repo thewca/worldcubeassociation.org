@@ -24,6 +24,19 @@ function HasOrganizations({
             </a>
           ))}
         </div>
+
+        <h2>{I18n.t('regional_organizations.how_to.title')}</h2>
+        <p>{I18n.t('regional_organizations.how_to.description')}</p>
+
+        <h3>{I18n.t('regional_organizations.requirements.title')}</h3>
+        <ol>
+          <li>{I18n.t('regional_organizations.requirements.list.1')}</li>
+          <li>{I18n.t('regional_organizations.requirements.list.2')}</li>
+          <li>{I18n.t('regional_organizations.requirements.list.3')}</li>
+          <li>{I18n.t('regional_organizations.requirements.list.4')}</li>
+          <li>{I18n.t('regional_organizations.requirements.list.5')}</li>
+          <li>{I18n.t('regional_organizations.requirements.list.6')}</li>
+        </ol>
       </>
     );
   }
@@ -38,10 +51,10 @@ function ROOverview({
   const title = I18n.t('regional_organizations.title');
   document.title = `${title} | World Cube Association`;
   return (
-    <>
+    <div className="container">
       <h1>{title}</h1>
       <HasOrganizations orgs={orgs} />
-    </>
+    </div>
   );
 }
 
