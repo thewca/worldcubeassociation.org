@@ -2,22 +2,29 @@ import React from 'react';
 
 import I18n from '../../lib/i18n';
 
-function DisplayOrganizations({
-  orgs,
-}) {
-  const listOrgs = orgs.map((org) => <p>{org.name}</p>);
-  return listOrgs;
-}
-
 function HasOrganizations({
   orgs,
 }) {
   if (orgs) {
+    const hoverEffect = 'hide-until-hover';
     return (
       <>
         <p>{I18n.t('regional_organizations.content')}</p>
         <div className="organizations-list">
-          <DisplayOrganizations orgs={orgs} />
+          {orgs.map((org) => (
+            <a key={org.logo} href={org.website}>
+              <img src={org.logo} width={300} height={100} alt="" />
+
+              <div className={`organization-info | ${hoverEffect}`}>
+                <div className="country">
+                  <p key={org.country}>{org.country}</p>
+                </div>
+                <div className="name">
+                  <p key={org.name}>{org.name}</p>
+                </div>
+              </div>
+            </a>
+          ))}
         </div>
       </>
     );
