@@ -1,5 +1,15 @@
+<% img_paths = [] %>
+<% @acknowledged_regional_organizations.each do |ro| %>
+  <% if ro.logo.attached? %>
+    <% img_paths.append(polymorphic_url(ro.logo.variant(resize: "500x300"))) %>
+  <% else %>
+    <% img_paths.append("") %>
+  <% end %>
+<% end %>
+
 <div class="container">
   <%= react_component("RegionalOrganizations/index", {
     orgs: @acknowledged_regional_organizations,
+    imgs: img_paths,
   }) %>
 </div>
