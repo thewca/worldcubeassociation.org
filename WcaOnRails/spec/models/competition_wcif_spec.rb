@@ -432,6 +432,16 @@ RSpec.describe "Competition WCIF" do
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
+
+    it "leaves round extensions untouched when none are submitted" do
+      wcif_333mbf_event = wcif["events"].find { |e| e["id"] == "333mbf" }
+      extensions = wcif_333mbf_event["rounds"][0].delete("extensions")
+
+      competition.set_wcif_events!(wcif["events"], delegate)
+
+      wcif_333mbf_event["rounds"][0]["extensions"] = extensions
+      expect(competition.to_wcif["events"]).to eq(wcif["events"])
+    end
   end
 
   describe "#set_wcif_schedule!" do

@@ -2419,6 +2419,13 @@ fi:
         10 minuuttia. Varmista, että se on oikein.
       #original_hash: e390250
       create_success: Uusi kilpailu luotu onnistuneesti!
+      #original_hash: bc3e673
+      registration_payment_info: >-
+        This competition has registration fees but no Stripe account is linked.
+        If you are using Stripe through the WCA website, please remember to link
+        your Stripe account. If you are using an external payment system, please
+        remember to add all the relevant details in the registration
+        requirements.
       #original_hash: ba067f0
       not_announced: >-
         Tämä kilpailu on nähtävillä julkisesti, mutta sitä ei ole vielä
@@ -3859,6 +3866,20 @@ fi:
         description: >-
           Tämän valtuuston vastuulla on WCA-yhteisön ja toimihenkilöiden välisen
           viestinnän kehittäminen ja ylläpitäminen.
+      wsot:
+        #original_hash: 58765c7
+        name: WCA Sports Organization Team
+        #original_hash: 8f888d6
+        description: >-
+          Tämän tiimin rooli on valvoa ja tukea WCA:n tunnustamista
+          kansainvälisenä urheilujärjestönä.
+      wat:
+        #original_hash: 90a1280
+        name: WCA Archive Team
+        #original_hash: fae6850
+        description: >-
+          WCA Archive Teamin rooli on valvoa ja tukea järjestön arkiston
+          kehittämistä.
       banned:
         #original_hash: d30e2e5
         name: Banned Competitors
@@ -4129,6 +4150,16 @@ fi:
         Tämä tiimi on vastuussa WCA:n brändin kehittämisestä ja hallinnoinnista,
         sponsoreiden etsinnästä, WCA:n kilpailuvarusteiden jaon tukemisesta ja
         WCA:n myyntitavaroiden markkinoinnista.
+    wsot:
+      #original_hash: 8f888d6
+      info_html: >-
+        Tämän tiimin rooli on valvoa ja tukea WCA:n tunnustamista
+        kansainvälisenä urheilujärjestönä.
+    wat:
+      #original_hash: fae6850
+      info_html: >-
+        WCA Archive Teamin rooli on valvoa ja tukea järjestön arkiston
+        kehittämistä.
     #original_hash: f97a4f5
     councils_html: Councils
     wac:

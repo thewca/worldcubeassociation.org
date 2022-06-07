@@ -48,13 +48,17 @@ class CompetitionEvent < ApplicationRecord
         "Cannot edit rounds for a competition which has qualification rounds or b-finals. Please contact WRT or WST if you need to make change to this competition.",
       )
     end
-    self.rounds.destroy_all!
     total_rounds = wcif["rounds"].size
-    wcif["rounds"].each_with_index do |wcif_round, index|
-      round = self.rounds.create!(Round.wcif_to_round_attributes(self.event, wcif_round, index+1, total_rounds))
-      WcifExtension.update_wcif_extensions!(round, wcif_round["extensions"]) if wcif_round["extensions"]
+    new_rounds = wcif["rounds"].map do |round_wcif|
+      round_number = Round.parse_wcif_id(round_wcif["id"])[:round_number]
+      round = rounds.find { |r| r.wcif_id == round_wcif["id"] } || rounds.build
+      round.update!(Round.wcif_to_round_attributes(self.event, round_wcif, round_number, total_rounds))
+      WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
+      round
     end
+    self.rounds = new_rounds
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
+    self
   end
 
   def self.wcif_json_schema
