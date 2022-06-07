@@ -37,6 +37,9 @@ function HasOrganizations({
           <li>{I18n.t('regional_organizations.requirements.list.5')}</li>
           <li>{I18n.t('regional_organizations.requirements.list.6')}</li>
         </ol>
+
+        <h3>{I18n.t('regional_organizations.application_instructions.title')}</h3>
+        <p>{I18n.t('regional_organizations.application_instructions.description_html')}</p>
       </>
     );
   }
