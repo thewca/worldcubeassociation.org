@@ -11,17 +11,19 @@ function HasOrganizations({
         <p>{I18n.t('regional_organizations.content')}</p>
         <div className="organizations-list">
           {orgs.map((org, index) => (
-            <a target="_blank" rel="noreferrer" className="hide-new-window-icon" href={org.website}>
-              <img src={imgs[index]} alt="" />
-              <div className={`organization-info${imgs[index] ? ' hide-until-hover' : ''}`}>
-                <div className="country">
-                  {org.country}
+            <div key={org.name} className="organization-box">
+              <a target="_blank" rel="noreferrer" className="hide-new-window-icon" href={org.website}>
+                <img src={imgs[index]} alt="" />
+                <div className={`organization-info${imgs[index] ? ' hide-until-hover' : ''}`}>
+                  <div className="country">
+                    {org.country}
+                  </div>
+                  <div className="name">
+                    {org.name}
+                  </div>
                 </div>
-                <div className="name">
-                  {org.name}
-                </div>
-              </div>
-            </a>
+              </a>
+            </div>
           ))}
         </div>
 

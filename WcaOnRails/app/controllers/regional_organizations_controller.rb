@@ -10,6 +10,14 @@ class RegionalOrganizationsController < ApplicationController
 
   def index
     @acknowledged_regional_organizations = RegionalOrganization.currently_acknowledged.order(country: :asc)
+    @img_paths = []
+    @acknowledged_regional_organizations.each do |ro|
+      if ro.logo.attached?
+        @img_paths.append(polymorphic_url(ro.logo.variant(resize: "500x300")))
+      else
+        @img_paths.append("")
+      end
+    end
   end
 
   def new
