@@ -1192,4 +1192,14 @@ class User < ApplicationRecord
       !competitions_announced.empty? ||
       !competitions_results_posted.empty?
   end
+
+  def accepted_registrations
+    self.registrations.accepted
+  end
+
+  def accepted_competitions
+    self.accepted_registrations
+        .includes(competition: [:delegates, :organizers, :events])
+        .map(&:competition)
+  end
 end
