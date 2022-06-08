@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+  # frozen_string_literal: true
 
 class Api::V0::PersonsController < Api::V0::ApiController
   def index
@@ -22,6 +22,11 @@ class Api::V0::PersonsController < Api::V0::ApiController
   def results
     person = Person.current.find_by_wca_id!(params[:wca_id])
     render json: person.results
+  end
+
+  def competitions
+    person = Person.current.find_by_wca_id!(params[:wca_id])
+    render json: person.competitions
   end
 
   private def person_to_json(person)
