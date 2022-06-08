@@ -128,6 +128,13 @@ class Api::V0::ApiController < ApplicationController
                                            .map(&:competition)
                                            .select(&:upcoming?)
       end
+      if params[:ongoing_competitions]
+        json[:ongoing_competitions] = user.registrations
+                                          .accepted
+                                          .includes(competition: [:delegates, :organizers, :events])
+                                          .map(&:competition)
+                                          .select(&:ongoing?)
+      end
       render status: :ok, json: json
     else
       render status: :not_found, json: { user: nil }

@@ -1284,6 +1284,10 @@ class Competition < ApplicationRecord
     start_date.present? && start_date < Date.today
   end
 
+  def ongoing?
+    self.started? && !self.is_probably_over?
+  end
+
   def organizers_or_delegates
     self.organizers.empty? ? self.all_delegates : self.organizers
   end
