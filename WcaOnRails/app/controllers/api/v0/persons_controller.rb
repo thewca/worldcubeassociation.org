@@ -1,4 +1,4 @@
-  # frozen_string_literal: true
+# frozen_string_literal: true
 
 class Api::V0::PersonsController < Api::V0::ApiController
   def index
