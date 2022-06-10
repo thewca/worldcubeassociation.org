@@ -177,10 +177,10 @@ class UsersController < ApplicationController
         # Sign in the user, bypassing validation in case their password changed
         bypass_sign_in @user
       end
-      flash[:success] = if @user.confirmation_sent_at != old_confirmation_sent_at
-                          I18n.t('users.successes.messages.account_updated_confirm', email: @user.unconfirmed_email)
-                        else
+      flash[:success] = if @user.confirmation_sent_at == old_confirmation_sent_at
                           I18n.t('users.successes.messages.account_updated')
+                        else
+                          I18n.t('users.successes.messages.account_updated_confirm', email: @user.unconfirmed_email)
                         end
       if @user.claiming_wca_id
         flash[:success] = I18n.t('users.successes.messages.wca_id_claimed',

@@ -26,12 +26,12 @@ RSpec.describe UploadJson do
       "competitionId" => competition.id,
       "persons" => [
         {
-          "id": 1,
-          "name": "Sherlock Holmes",
-          "wcaId": "2020HOLM01",
-          "countryId": "GB",
-          "gender": "m",
-          "dob": "2000-01-01",
+          id: 1,
+          name: "Sherlock Holmes",
+          wcaId: "2020HOLM01",
+          countryId: "GB",
+          gender: "m",
+          dob: "2000-01-01",
         },
       ],
       "events" => [
@@ -50,7 +50,7 @@ RSpec.describe UploadJson do
                   "average" => 900,
                 },
               ],
-              "groups": [],
+              groups: [],
             },
           ],
         },

@@ -377,7 +377,15 @@ class Competition < ApplicationRecord
 
   def warnings_for(user)
     warnings = {}
-    if !self.showAtAll
+    if self.showAtAll
+      unless self.announced?
+        warnings[:announcement] = I18n.t('competitions.messages.not_announced')
+      end
+
+      if self.results.any? && !self.results_posted?
+        warnings[:results] = I18n.t('competitions.messages.results_not_posted')
+      end
+    else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
       if self.name.length > 32
@@ -429,14 +437,6 @@ class Competition < ApplicationRecord
 
       if has_fees? && !connected_stripe_account_id
         warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info')
-      end
-    else
-      unless self.announced?
-        warnings[:announcement] = I18n.t('competitions.messages.not_announced')
-      end
-
-      if self.results.any? && !self.results_posted?
-        warnings[:results] = I18n.t('competitions.messages.results_not_posted')
       end
     end
 
@@ -1340,13 +1340,13 @@ class Competition < ApplicationRecord
         rank = registration.average_rank
         prev_rank = prev_sorted_registration&.registration&.average_rank
       end
-      if !rank
+      if rank
+        tied_previous = rank == prev_rank
+        pos = tied_previous ? prev_sorted_registration.pos : i + 1
+      else
         # Hasn't competed in this event yet.
         tied_previous = nil
         pos = nil
-      else
-        tied_previous = rank == prev_rank
-        pos = tied_previous ? prev_sorted_registration.pos : i + 1
       end
       sorted_registration = SortedRegistration.new(
         registration: registration,
@@ -1479,7 +1479,7 @@ class Competition < ApplicationRecord
                                   managers.delete(r.user)
                                   r.user.to_wcif(self, r, registrant_id, authorized: authorized)
                                 end
-    # Note: unregistered managers may generate N+1 queries on their personal bests,
+    # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
     persons_wcif + managers.map { |m| m.to_wcif(self, authorized: authorized) }
   end
@@ -1576,7 +1576,7 @@ class Competition < ApplicationRecord
     competition_activities = all_activities
     wcif_persons.each do |wcif_person|
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
-      # Note: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
+      # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if registration && wcif_person["roles"]
         roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
         registration.update!(roles: roles)

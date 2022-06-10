@@ -55,7 +55,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    # NOTE that we are storing avatars by wca_id. There are two consequences of this:
+    # NOTE: that we are storing avatars by wca_id. There are two consequences of this:
     #  - A user must have a wca_id to have an avatar (see validations in user.rb).
     #  - Changing the wca_id for a user is complicated, and not something we
     #    are bothering to handle very well.
@@ -78,7 +78,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
 
   # Add an allow list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
-  def extension_white_list # rubocop:disable Naming/InclusiveLanguage
+  def extension_white_list
     %w(jpg jpeg gif png)
   end
 

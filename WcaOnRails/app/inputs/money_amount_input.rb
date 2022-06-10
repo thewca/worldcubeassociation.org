@@ -31,8 +31,8 @@ class MoneyAmountInput < SimpleForm::Inputs::Base
                                         id: input_id,
                                         type: "text",
                                         data: {
-                                          'target': "##{@builder.object_name}_#{attribute_name}",
-                                          'currency': currency,
+                                          target: "##{@builder.object_name}_#{attribute_name}",
+                                          currency: currency,
                                           'currency-selector': currency_selector,
                                         },
                                         class: merged_input_options[:class],

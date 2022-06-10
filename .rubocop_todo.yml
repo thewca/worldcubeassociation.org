@@ -33,3 +33,37 @@ Naming/VariableName:
 # See https://github.com/bbatsov/rubocop/pull/4237
 Lint/AmbiguousBlockAssociation:
   Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'WcaOnRails/app/controllers/competitions_controller.rb'
+    - 'WcaOnRails/app/controllers/registrations_controller.rb'
+    - 'WcaOnRails/app/jobs/sync_mailing_lists_job.rb'
+    - 'WcaOnRails/app/models/competition.rb'
+    - 'WcaOnRails/lib/results_validators/*.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'WcaOnRails/app/controllers/competitions_controller.rb'
+    - 'WcaOnRails/app/controllers/registrations_controller.rb'
+    - 'WcaOnRails/app/jobs/sync_mailing_lists_job.rb'
+    - 'WcaOnRails/app/models/competition.rb'
+    - 'WcaOnRails/lib/results_validators/*.rb'
+
+Lint/StructNewOverride:
+  Enabled: false
+
+Style/AccessorGrouping:
+  Enabled: false
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: false
+
+Style/SoleNestedConditional:
+  Enabled: false
+
+Style/StringConcatenation:
+  Enabled: false
+
+Lint/EmptyBlock:
+  Enabled: false

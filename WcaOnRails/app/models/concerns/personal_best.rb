@@ -7,12 +7,12 @@ module PersonalBest
 
   def rank_to_wcif(type)
     {
-      "eventId": eventId,
-      "best": best,
-      "worldRanking": worldRank,
-      "continentalRanking": continentRank,
-      "nationalRanking": countryRank,
-      "type": type,
+      eventId: eventId,
+      best: best,
+      worldRanking: worldRank,
+      continentalRanking: continentRank,
+      nationalRanking: countryRank,
+      type: type,
     }
   end
 

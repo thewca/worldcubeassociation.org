@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.feature "Incident Management" do
-  let!(:incident1) { FactoryBot.create(:incident, title: "First incident", tags: ["a", "b"], incident_competitions_attributes: { "0": { competition_id: FactoryBot.create(:competition, :confirmed).id } }) }
+  let!(:incident1) { FactoryBot.create(:incident, title: "First incident", tags: ["a", "b"], incident_competitions_attributes: { '0': { competition_id: FactoryBot.create(:competition, :confirmed).id } }) }
   let!(:incident2) { FactoryBot.create(:incident, :resolved, title: "Second incident", tags: ["a", "c", "1a"]) }
   let!(:incident3) { FactoryBot.create(:incident, :resolved, title: "Custom title", tags: ["c"]) }
 

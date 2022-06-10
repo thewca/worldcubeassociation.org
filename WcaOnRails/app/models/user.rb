@@ -268,7 +268,7 @@ class User < ApplicationRecord
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
-    # Note: copy data from the person only if the WCA ID has already been claimed
+    # NOTE: copy data from the person only if the WCA ID has already been claimed
     # or the user claims this WCA ID.
     # Otherwise (when setting WCA ID directly) we want to validate
     # that the user details matches the person details instead.
@@ -1126,7 +1126,7 @@ class User < ApplicationRecord
     {
       "type" => "object",
       "properties" => {
-        "registrantId" => { "type" => ["integer", "null"] }, # Note: for now registrantId may be null if the person doesn't compete.
+        "registrantId" => { "type" => ["integer", "null"] }, # NOTE: for now registrantId may be null if the person doesn't compete.
         "name" => { "type" => "string" },
         "wcaUserId" => { "type" => "integer" },
         "wcaId" => { "type" => ["string", "null"] },

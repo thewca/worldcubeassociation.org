@@ -3,6 +3,7 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 3.1
   DisplayCopNames: true
+  NewCops: enable
   Exclude:
     - 'WcaOnRails/node_modules/**/*'
     - 'WcaOnRails/bin/**/*'
@@ -79,12 +80,6 @@ Metrics/ClassLength:
 
 Metrics/CyclomaticComplexity:
   Max: 23
-  Exclude:
-    - 'WcaOnRails/app/controllers/competitions_controller.rb'
-    - 'WcaOnRails/app/controllers/registrations_controller.rb'
-    - 'WcaOnRails/app/jobs/sync_mailing_lists_job.rb'
-    - 'WcaOnRails/app/models/competition.rb'
-    - 'WcaOnRails/lib/results_validators/*.rb'
 
 Metrics/ParameterLists:
   Max: 5
@@ -92,12 +87,6 @@ Metrics/ParameterLists:
 
 Metrics/PerceivedComplexity:
   Max: 25
-  Exclude:
-    - 'WcaOnRails/app/controllers/competitions_controller.rb'
-    - 'WcaOnRails/app/controllers/registrations_controller.rb'
-    - 'WcaOnRails/app/jobs/sync_mailing_lists_job.rb'
-    - 'WcaOnRails/app/models/competition.rb'
-    - 'WcaOnRails/lib/results_validators/*.rb'
 
 Layout/LineLength:
   Max: 245
@@ -210,347 +199,23 @@ Style/FormatStringToken:
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: false
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
-
-Layout/BeginEndAlignment:
-  Enabled: true
-
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: false
-
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
-
-Lint/BinaryOperatorWithIdenticalOperands:
-  Enabled: true
-
-Lint/ConstantDefinitionInBlock:
-  Enabled: true
-
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-
-Lint/DuplicateElsifCondition:
-  Enabled: true
-
-Lint/DuplicateRequire:
-  Enabled: true
-
-Lint/DuplicateRescueException:
-  Enabled: true
-
-Lint/EmptyConditionalBody:
-  Enabled: true
-
 Lint/EmptyFile:
-  Enabled: true
   Exclude:
     - 'WcaOnRails/db/seeds.rb'
 
-Lint/FloatComparison:
-  Enabled: true
-
-Lint/HashCompareByIdentity:
-  Enabled: true
-
-Lint/IdentityComparison:
-  Enabled: true
-
-Lint/MissingSuper:
-  Enabled: true
-
-Lint/MixedRegexpCaptureTypes:
-  Enabled: true
-
-Lint/OutOfRangeRegexpRef:
-  Enabled: false
-
-Lint/RedundantSafeNavigation:
-  Enabled: true
-
-Lint/SelfAssignment:
-  Enabled: true
-
-Lint/TopLevelReturnWithArgument:
-  Enabled: true
-
-Lint/TrailingCommaInAttributeDeclaration:
-  Enabled: true
-
-Lint/UnreachableLoop:
-  Enabled: true
-
-Lint/UselessMethodDefinition:
-  Enabled: true
-
-Lint/UselessTimes:
-  Enabled: true
-
-Style/AccessorGrouping:
-  Enabled: false
-
-Style/BisectedAttrAccessor:
-  Enabled: true
-
-Style/CaseLikeIf:
-  Enabled: true
-
-Style/ClassEqualityComparison:
-  Enabled: true
-
-Style/CombinableLoops:
-  Enabled: true
-
-Style/ExplicitBlockArgument:
-  Enabled: true
-
-Style/ExponentialNotation:
-  Enabled: true
-
-Style/GlobalStdStream:
-  Enabled: true
-
-Style/HashAsLastArrayItem:
-  Enabled: true
-
-Style/HashLikeCase:
-  Enabled: true
-
-Style/KeywordParametersOrder:
-  Enabled: true
-
-Style/OptionalBooleanParameter:
-  Enabled: true
-
-Style/RedundantAssignment:
-  Enabled: true
-
-Style/RedundantFetchBlock:
-  Enabled: true
-
-Style/RedundantFileExtensionInRequire:
-  Enabled: true
-
-Style/RedundantRegexpCharacterClass:
-  Enabled: true
-
-Style/RedundantRegexpEscape:
-  Enabled: true
-
-Style/RedundantSelfAssignment:
-  Enabled: true
-
-Style/SingleArgumentDig:
-  Enabled: true
-
-Style/SlicingWithRange:
-  Enabled: false
-
-Style/SoleNestedConditional:
-  Enabled: false
-
-Style/StringConcatenation:
-  Enabled: false
-
-Layout/SpaceBeforeBrackets:
-  Enabled: true
-
-Lint/AmbiguousAssignment:
-  Enabled: true
-
-Lint/DeprecatedConstants:
-  Enabled: true
-
-Lint/DuplicateBranch:
-  Enabled: true
-
-Lint/DuplicateRegexpCharacterClassElement:
-  Enabled: true
-
-Lint/EmptyBlock:
-  Enabled: false
-
-Lint/EmptyClass:
-  Enabled: true
-
-Lint/LambdaWithoutLiteralBlock:
-  Enabled: true
-
-Lint/NoReturnInBeginEndBlocks:
-  Enabled: true
-
-Lint/NumberedParameterAssignment:
-  Enabled: true
-
-Lint/OrAssignmentToConstant:
-  Enabled: true
-
-Lint/RedundantDirGlobSort:
-  Enabled: true
-
-Lint/SymbolConversion:
-  Enabled: false
-
-Lint/ToEnumArguments:
-  Enabled: true
-
-Lint/TripleQuotes:
-  Enabled: true
-
-Lint/UnexpectedBlockArity:
-  Enabled: true
-
-Lint/UnmodifiedReduceAccumulator:
-  Enabled: true
-
-Style/ArgumentsForwarding:
-  Enabled: true
-
-Style/CollectionCompact:
-  Enabled: true
-
-Style/DocumentDynamicEvalDefinition:
-  Enabled: true
-
-Style/EndlessMethod:
-  Enabled: true
-
-Style/HashExcept:
-  Enabled: true
-
-Style/IfWithBooleanLiteralBranches:
-  Enabled: true
-
-Style/NegatedIfElseCondition:
-  Enabled: false
-
-Style/NilLambda:
-  Enabled: true
-
-Style/RedundantArgument:
-  Enabled: true
-
-Style/SwapValues:
-  Enabled: true
-
+# We have too many event IDs and Comp Years with numbers in them
 Naming/VariableNumber:
   Enabled: false
 
-Gemspec/DateAssignment:
-  Enabled: true
-
-Layout/LineEndStringConcatenationIndentation:
-  Enabled: false
-
-Lint/AmbiguousRange:
-  Enabled: true
-
-Lint/EmptyInPattern:
-  Enabled: true
-
+# If an external library requires us to use terms like "blacklist",
+# we have no choice but to follow their conventions until they update
 Naming/InclusiveLanguage:
-  Enabled: true
   Exclude:
     - 'WcaOnRails/config/**/*'
 
-Style/HashConversion:
-  Enabled: true
-
-Style/InPatternThen:
-  Enabled: true
-
-Style/MultilineInPatternThen:
-  Enabled: true
-
-Style/QuotedSymbols:
-  Enabled: false
-
-Style/RedundantSelfAssignmentBranch:
-  Enabled: true
-
-Style/StringChars:
-  Enabled: true
-
-Style/CommentAnnotation:
-  Enabled: false
-
-Gemspec/RequireMFA:
-  Enabled: true
-
-Lint/AmbiguousOperatorPrecedence:
-  Enabled: true
-
-Lint/IncompatibleIoSelectWithFiberScheduler:
-  Enabled: true
-
-Lint/RefinementImportMethods:
-  Enabled: true
-
-Lint/RequireRelativeSelfPath:
-  Enabled: true
-
-Lint/UselessRuby2Keywords:
-  Enabled: true
-
-Naming/BlockForwarding:
-  Enabled: true
-
-Security/CompoundHash:
-  Enabled: true
-
-Security/IoMethods:
-  Enabled: true
-
-Style/FetchEnvVar:
-  Enabled: true
-
-Style/FileRead:
-  Enabled: true
-
-Style/FileWrite:
-  Enabled: true
-
-Style/MapToHash:
-  Enabled: true
-
-Style/NestedFileDirname:
-  Enabled: true
-
-Style/NumberedParameters:
-  Enabled: true
-
-Style/NumberedParametersLimit:
-  Enabled: true
-
-Style/ObjectThen:
-  Enabled: true
-
 Style/OpenStructUse:
-  Enabled: true
   Exclude:
     - 'WcaOnRails/spec/lib/middlewares/warden_user_logger_spec.rb'
 
-Style/RedundantInitialize:
-  Enabled: true
-
-Style/SelectByRegexp:
-  Enabled: true
-
 Style/HashSyntax:
-  Enabled: false
-
-Style/EnvHome:
-  Enabled: true
+  EnforcedShorthandSyntax: never

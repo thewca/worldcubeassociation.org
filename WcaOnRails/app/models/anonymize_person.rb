@@ -87,12 +87,12 @@ class AnonymizePerson
         current_country_id = person.countryId
 
         previous_persons.each do |p|
-          if p.countryId != current_country_id
+          if p.countryId == current_country_id
+            p.delete
+          else
             current_sub_id += 1
             current_country_id = p.countryId
             p.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", year: 0, month: 0, day: 0, subId: current_sub_id)
-          else
-            p.delete
           end
         end
 

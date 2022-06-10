@@ -89,13 +89,13 @@ RSpec.describe "AuxiliaryDataComputation" do
       AuxiliaryDataComputation.compute_concise_results # Rank tables computation require concise results to be present.
       AuxiliaryDataComputation.compute_rank_tables
       %w(ranksSingle ranksAverage).each do |ranks_type|
-        # Note: this person hasn't got any results in Europe/France yet.
+        # NOTE: this person hasn't got any results in Europe/France yet.
         expect(rank_333(new_french, ranks_type)).to include(worldRank: 1, continentRank: 0, countryRank: 0)
-        # Note: the only change is the countryRank of new_canadian (previously american_1).
+        # NOTE: the only change is the countryRank of new_canadian (previously american_1).
         # Note: the continent is still USA, so continentRank shouldn't be affected.
         expect(rank_333(new_canadian, ranks_type)).to include(worldRank: 2, continentRank: 1, countryRank: 2)
         expect(rank_333(canadian, ranks_type)).to include(worldRank: 3, continentRank: 2, countryRank: 1)
-        # Note: this person stays 2nd in the country.
+        # NOTE: this person stays 2nd in the country.
         expect(rank_333(american_2, ranks_type)).to include(worldRank: 4, continentRank: 3, countryRank: 2)
       end
     end
