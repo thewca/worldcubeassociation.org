@@ -30,4 +30,13 @@ class RegionalOrganization < ApplicationRecord
   def is_pending?
     start_date.nil?
   end
+
+  def serializable_hash(options = nil)
+    {
+      name: name,
+      website: website,
+      country: country,
+      logo: logo.attached? ? Rails.application.routes.url_helpers.rails_representation_url(logo.variant(resize: "500x300").processed, only_path: true) : '',
+    }
+  end
 end

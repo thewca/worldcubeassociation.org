@@ -3,18 +3,18 @@ import React from 'react';
 import I18n from '../../lib/i18n';
 
 function HasOrganizations({
-  orgs, imgs,
+  orgs,
 }) {
   if (orgs) {
     return (
       <>
         <p>{I18n.t('regional_organizations.content')}</p>
         <div className="organizations-list">
-          {orgs.map((org, index) => (
+          {orgs.map((org) => (
             <div key={org.name} className="organization-box">
               <a target="_blank" rel="noreferrer" className="hide-new-window-icon" href={org.website}>
-                <img src={imgs[index]} alt="" />
-                <div className={`organization-info${imgs[index] ? ' hide-until-hover' : ''}`}>
+                <img src={org.logo} alt="" />
+                <div className={`organization-info${org.logo ? ' hide-until-hover' : ''}`}>
                   <div className="country">
                     {org.country}
                   </div>
@@ -50,14 +50,14 @@ function HasOrganizations({
 }
 
 function ROOverview({
-  orgs, imgs,
+  orgs,
 }) {
   const title = I18n.t('regional_organizations.title');
   document.title = `${title} | World Cube Association`;
   return (
     <div className="container">
       <h1>{title}</h1>
-      <HasOrganizations orgs={orgs} imgs={imgs} />
+      <HasOrganizations orgs={orgs} />
     </div>
   );
 }
