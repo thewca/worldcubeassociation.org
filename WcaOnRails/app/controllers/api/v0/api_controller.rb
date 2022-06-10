@@ -122,11 +122,10 @@ class Api::V0::ApiController < ApplicationController
     if user
       json = { user: user }
       if params[:upcoming_competitions]
-        json[:upcoming_competitions] = user.registrations
-                                           .accepted
-                                           .includes(competition: [:delegates, :organizers, :events])
-                                           .map(&:competition)
-                                           .select(&:upcoming?)
+        json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?)
+      end
+      if params[:ongoing_competitions]
+        json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?)
       end
       render status: :ok, json: json
     else
