@@ -36,8 +36,8 @@ RSpec.describe CompetitionsHelper do
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event. " \
-          "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
-          "[Steven](#{person_url('2006YOYO03')}) finished third (9.99)."
+                           "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
+                           "[Steven](#{person_url('2006YOYO03')}) finished third (9.99)."
       end
 
       it "handles only 2 people in final" do
@@ -46,7 +46,7 @@ RSpec.describe CompetitionsHelper do
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event. " \
-          "[Dan](#{person_url('2006YOYO02')}) finished second (9.99)."
+                           "[Dan](#{person_url('2006YOYO02')}) finished second (9.99)."
       end
 
       it "handles only 1 person in final" do
@@ -63,8 +63,8 @@ RSpec.describe CompetitionsHelper do
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event. " \
-          "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
-          "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 9.99 seconds)."
+                           "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
+                           "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 9.99 seconds)."
       end
 
       it "handles ties in the podium" do
@@ -74,7 +74,7 @@ RSpec.describe CompetitionsHelper do
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Dan](#{person_url('2006YOYO01')}) and [Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event. " \
-          "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 9.99 seconds)."
+                           "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 9.99 seconds)."
       end
 
       it "handles tied third place" do
@@ -85,8 +85,8 @@ RSpec.describe CompetitionsHelper do
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event. " \
-          "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
-          "[John](#{person_url('2006YOYO03')}) and [Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 9.99 seconds)."
+                           "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
+                           "[John](#{person_url('2006YOYO03')}) and [Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 9.99 seconds)."
       end
     end
 
@@ -118,8 +118,8 @@ RSpec.describe CompetitionsHelper do
 
         text = helper.winners(competition, Event.c_find("333bf"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with a single solve of 1:00.00 in the 3x3x3 Blindfolded event. " \
-          "[Dan](#{person_url('2006YOYO02')}) finished second (1:00.00) and " \
-          "[Steven](#{person_url('2006YOYO03')}) finished third (1:00.00)."
+                           "[Dan](#{person_url('2006YOYO02')}) finished second (1:00.00) and " \
+                           "[Steven](#{person_url('2006YOYO03')}) finished third (1:00.00)."
       end
     end
 
@@ -151,8 +151,8 @@ RSpec.describe CompetitionsHelper do
 
         text = helper.winners(competition, Event.c_find("333fm"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with a mean of 27.67 moves in the 3x3x3 Fewest Moves event. " \
-          "[Dan](#{person_url('2006YOYO02')}) finished second (27.67) and " \
-          "[Steven](#{person_url('2006YOYO03')}) finished third (27.67)."
+                           "[Dan](#{person_url('2006YOYO02')}) finished second (27.67) and " \
+                           "[Steven](#{person_url('2006YOYO03')}) finished third (27.67)."
       end
 
       it "handles DNF averages in the podium" do
@@ -162,8 +162,8 @@ RSpec.describe CompetitionsHelper do
 
         text = helper.winners(competition, Event.c_find("333fm"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with a mean of 27.67 moves in the 3x3x3 Fewest Moves event. " \
-          "[Dan](#{person_url('2006YOYO02')}) finished second (27.67) and " \
-          "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 24 moves)."
+                           "[Dan](#{person_url('2006YOYO02')}) finished second (27.67) and " \
+                           "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 24 moves)."
       end
     end
 
@@ -199,8 +199,8 @@ RSpec.describe CompetitionsHelper do
 
         text = helper.winners(competition, Event.c_find("333mbf"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with a result of 8/9 45:32 in the 3x3x3 Multi-Blind event. " \
-          "[Dan](#{person_url('2006YOYO02')}) finished second (8/9 45:32) and " \
-          "[Steven](#{person_url('2006YOYO03')}) finished third (8/9 45:32)."
+                           "[Dan](#{person_url('2006YOYO02')}) finished second (8/9 45:32) and " \
+                           "[Steven](#{person_url('2006YOYO03')}) finished third (8/9 45:32)."
       end
     end
   end

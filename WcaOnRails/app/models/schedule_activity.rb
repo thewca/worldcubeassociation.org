@@ -178,11 +178,11 @@ class ScheduleActivity < ApplicationRecord
     parts.each do |p|
       case p[0]
       when "a"
-        parts_hash[:attempt_number] = p[1..-1].to_i
+        parts_hash[:attempt_number] = p[1..].to_i
       when "g"
-        parts_hash[:group_number] = p[1..-1].to_i
+        parts_hash[:group_number] = p[1..].to_i
       when "r"
-        parts_hash[:round_number] = p[1..-1].to_i
+        parts_hash[:round_number] = p[1..].to_i
       end
     end
     parts_hash

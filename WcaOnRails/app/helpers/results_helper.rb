@@ -11,7 +11,7 @@ module ResultsHelper
     end.reduce(:+)
   end
 
-  # Note: PB markers are computed in the order in which results are given.
+  # NOTE: PB markers are computed in the order in which results are given.
   def historical_pb_markers(results)
     Hash.new { |hash, key| hash[key] = {} }.tap do |markers|
       pb_single = results.first.best_solve

@@ -161,17 +161,7 @@ class ResultsController < ApplicationController
 
     shared_constants_and_conditions
 
-    if !@is_histories
-      @query = <<-SQL
-        SELECT *
-        FROM
-          (#{current_records_query("best", "single")}
-          UNION
-          #{current_records_query("average", "average")}) helper
-        ORDER BY
-          `rank`, type DESC, year, month, day, roundTypeId, personName
-      SQL
-    else
+    if @is_histories
       if @is_history
         order = 'event.`rank`, type desc, value, year desc, month desc, day desc, roundType.`rank` desc'
       else
@@ -214,6 +204,16 @@ class ResultsController < ApplicationController
           #{@years_condition_competition}
         ORDER BY
           #{order}
+      SQL
+    else
+      @query = <<-SQL
+        SELECT *
+        FROM
+          (#{current_records_query("best", "single")}
+          UNION
+          #{current_records_query("average", "average")}) helper
+        ORDER BY
+          `rank`, type DESC, year, month, day, roundTypeId, personName
       SQL
     end
   end

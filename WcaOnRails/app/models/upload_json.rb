@@ -8,9 +8,7 @@ class UploadJson
   validates :competition_id, presence: true
 
   validate do
-    if !results_json_str
-      errors.add(:results_file, "can't be blank")
-    else
+    if results_json_str
       begin
         # Parse the json first
         JSON::Validator.validate!(ResultsValidators::JSONSchemas::RESULT_JSON_SCHEMA, parsed_json)
@@ -22,6 +20,8 @@ class UploadJson
       rescue JSON::Schema::ValidationError => e
         errors.add(:results_file, "has errors: #{e.message}")
       end
+    else
+      errors.add(:results_file, "can't be blank")
     end
   end
 

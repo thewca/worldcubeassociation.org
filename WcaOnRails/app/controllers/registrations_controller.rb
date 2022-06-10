@@ -77,12 +77,12 @@ class RegistrationsController < ApplicationController
     @competition = competition_from_params
     @registration = Registration.find(params[:id])
     if params.key?(:user_is_deleting_theirself)
-      if !current_user.can_edit_registration?(@registration)
-        flash[:danger] = I18n.t('registrations.flash.cannot_delete')
-      else
+      if current_user.can_edit_registration?(@registration)
         @registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
         RegistrationsMailer.notify_organizers_of_deleted_registration(@registration).deliver_later
         flash[:success] = I18n.t('registrations.flash.deleted', comp: @competition.name)
+      else
+        flash[:danger] = I18n.t('registrations.flash.cannot_delete')
       end
       redirect_to competition_register_path(@competition)
     elsif current_user.can_manage_competition?(@competition)

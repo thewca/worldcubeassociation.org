@@ -3,121 +3,121 @@
 module Locales
   AVAILABLE = {
     # Ordered alphabetically by their local code, but with English first.
-    "en": {
-      "flag_id": "gb",
-      "name": "English",
+    en: {
+      flag_id: "gb",
+      name: "English",
     },
-    "cs": {
-      "flag_id": "cz",
-      "name": "Čeština",
+    cs: {
+      flag_id: "cz",
+      name: "Čeština",
     },
-    "da": {
-      "flag_id": "dk",
-      "name": "Dansk",
+    da: {
+      flag_id: "dk",
+      name: "Dansk",
     },
-    "de": {
-      "flag_id": "de",
-      "name": "Deutsch",
+    de: {
+      flag_id: "de",
+      name: "Deutsch",
     },
-    "eo": {
-      "flag_id": "eo",
-      "name": "Esperanto",
+    eo: {
+      flag_id: "eo",
+      name: "Esperanto",
     },
-    "es": {
-      "flag_id": "es",
-      "name": "Español",
+    es: {
+      flag_id: "es",
+      name: "Español",
     },
-    "fi": {
-      "flag_id": "fi",
-      "name": "Suomi",
+    fi: {
+      flag_id: "fi",
+      name: "Suomi",
     },
-    "fr": {
-      "flag_id": "fr",
-      "name": "Français",
+    fr: {
+      flag_id: "fr",
+      name: "Français",
     },
-    "hr": {
-      "flag_id": "hr",
-      "name": "Hrvatski",
+    hr: {
+      flag_id: "hr",
+      name: "Hrvatski",
     },
-    "hu": {
-      "flag_id": "hu",
-      "name": "Magyar",
+    hu: {
+      flag_id: "hu",
+      name: "Magyar",
     },
-    "id": {
-      "flag_id": "id",
-      "name": "Bahasa Indonesia",
+    id: {
+      flag_id: "id",
+      name: "Bahasa Indonesia",
     },
-    "it": {
-      "flag_id": "it",
-      "name": "Italiano",
+    it: {
+      flag_id: "it",
+      name: "Italiano",
     },
-    "ja": {
-      "flag_id": "jp",
-      "name": "日本語",
+    ja: {
+      flag_id: "jp",
+      name: "日本語",
     },
-    "kk": {
-      "flag_id": "kz",
-      "name": "Қазақша",
+    kk: {
+      flag_id: "kz",
+      name: "Қазақша",
     },
-    "ko": {
-      "flag_id": "kr",
-      "name": "한국어",
+    ko: {
+      flag_id: "kr",
+      name: "한국어",
     },
-    "nl": {
-      "flag_id": "nl",
-      "name": "Nederlands",
+    nl: {
+      flag_id: "nl",
+      name: "Nederlands",
     },
-    "pl": {
-      "flag_id": "pl",
-      "name": "Polski",
+    pl: {
+      flag_id: "pl",
+      name: "Polski",
     },
-    "pt": {
-      "flag_id": "pt",
-      "name": "Português Europeu",
+    pt: {
+      flag_id: "pt",
+      name: "Português Europeu",
     },
-    "pt-BR": {
-      "flag_id": "br",
-      "name": "Português Brasileiro",
+    'pt-BR': {
+      flag_id: "br",
+      name: "Português Brasileiro",
     },
-    "ro": {
-      "flag_id": "ro",
-      "name": "Română",
+    ro: {
+      flag_id: "ro",
+      name: "Română",
     },
-    "ru": {
-      "flag_id": "ru",
-      "name": "Русский",
+    ru: {
+      flag_id: "ru",
+      name: "Русский",
     },
-    "sk": {
-      "flag_id": "sk",
-      "name": "Slovenský",
+    sk: {
+      flag_id: "sk",
+      name: "Slovenský",
     },
-    "sl": {
-      "flag_id": "si",
-      "name": "Slovensko",
+    sl: {
+      flag_id: "si",
+      name: "Slovensko",
     },
-    "sv": {
-      "flag_id": "se",
-      "name": "Svenska",
+    sv: {
+      flag_id: "se",
+      name: "Svenska",
     },
-    "th": {
-      "flag_id": "th",
-      "name": "ภาษาไทย",
+    th: {
+      flag_id: "th",
+      name: "ภาษาไทย",
     },
-    "uk": {
-      "flag_id": "ua",
-      "name": "Українська",
+    uk: {
+      flag_id: "ua",
+      name: "Українська",
     },
-    "vi": {
-      "flag_id": "vn",
-      "name": "Tiếng Việt",
+    vi: {
+      flag_id: "vn",
+      name: "Tiếng Việt",
     },
-    "zh-CN": {
-      "flag_id": "cn",
-      "name": "简体中文",
+    'zh-CN': {
+      flag_id: "cn",
+      name: "简体中文",
     },
-    "zh-TW": {
-      "flag_id": "tw",
-      "name": "繁體中文",
+    'zh-TW': {
+      flag_id: "tw",
+      name: "繁體中文",
     },
   }.freeze
 end
