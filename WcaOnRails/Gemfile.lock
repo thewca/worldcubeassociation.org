@@ -648,7 +648,7 @@ GEM
     stringio (3.0.2)
     strip_attributes (1.13.0)
       activemodel (>= 3.0, < 8.0)
-    stripe (5.55.0)
+    stripe (6.3.0)
     strscan (3.0.1)
     superconfig (2.1.0)
     terminal-table (3.0.2)
