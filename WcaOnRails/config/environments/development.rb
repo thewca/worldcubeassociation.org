@@ -2,11 +2,7 @@
 
 require "active_support/core_ext/integer/time"
 
-root_url = EnvVars.ROOT_URL
-unless root_url.present?
-  root_url = "http://localhost:3000"
-end
-root_url = URI.parse(root_url)
+root_url = URI.parse(EnvVars.ROOT_URL)
 Rails.application.routes.default_url_options = {
   protocol: root_url.scheme,
   host: root_url.host,
