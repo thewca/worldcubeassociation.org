@@ -7,6 +7,13 @@ require "active_support/core_ext/integer/time"
 # your test database is "scratch space" for the test suite and is wiped
 # and recreated between test runs. Don't rely on the data there!
 
+root_url = URI.parse(EnvVars.ROOT_URL)
+Rails.application.routes.default_url_options = {
+  protocol: root_url.scheme,
+  host: root_url.host,
+  port: root_url.port,
+}
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -53,8 +60,6 @@ Rails.application.configure do
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
-
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000, locale: nil }
 
   # Raise exceptions for disallowed deprecations.
   # config.active_support.disallowed_deprecation = :raise
