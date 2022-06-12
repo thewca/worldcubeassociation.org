@@ -7,6 +7,7 @@ require "active_support/core_ext/integer/time"
 # your test database is "scratch space" for the test suite and is wiped
 # and recreated between test runs. Don't rely on the data there!
 
+# Set global default_url_options, see https://github.com/rails/rails/issues/29992#issuecomment-761892658
 root_url = URI.parse(EnvVars.ROOT_URL)
 Rails.application.routes.default_url_options = {
   protocol: root_url.scheme,

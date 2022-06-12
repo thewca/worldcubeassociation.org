@@ -2,6 +2,7 @@
 
 require "active_support/core_ext/integer/time"
 
+# Set global default_url_options, see https://github.com/rails/rails/issues/29992#issuecomment-761892658
 root_url = URI.parse(EnvVars.ROOT_URL)
 Rails.application.routes.default_url_options = {
   protocol: root_url.scheme,
