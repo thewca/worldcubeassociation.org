@@ -4,6 +4,10 @@ class ResultsController < ApplicationController
   def rankings
     support_old_links!
 
+    flash[:warning] = "Results queries are temporarily disabled due to a high number of bot requests. Please be patient while WST is working on a more permanent solution."
+    return redirect_to root_path
+    # rubocop:disable Lint/UnreachableCode
+
     lower_user_agent = request.user_agent.to_s.downcase
     evil_bots = %w(baidu petalbot)
 
@@ -258,6 +262,7 @@ class ResultsController < ApplicationController
         AND event.`rank` < 990
     SQL
   end
+  # rubocop:enable Lint/UnreachableCode
 
   private def shared_constants_and_conditions
     @years = Competition.non_future_years
