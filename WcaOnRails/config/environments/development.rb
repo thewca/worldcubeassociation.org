@@ -45,11 +45,6 @@ Rails.application.configure do
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = {
-    protocol: root_url.scheme,
-    host: root_url.host,
-    port: root_url.port,
-  }
 
   config.action_mailer.perform_caching = false
 
