@@ -36,7 +36,7 @@ class RegionalOrganization < ApplicationRecord
       name: name,
       website: website,
       country: country,
-      logo: logo.attached? ? Rails.application.routes.url_helpers.rails_representation_path(logo.variant(resize: "500x300").processed, host: EnvVars.ROOT_URL) : '',
+      logo: logo.attached? ? Rails.application.routes.url_helpers.rails_representation_url(logo.variant(resize: "500x300").processed, host: EnvVars.ROOT_URL) : '',
     }
   end
 end
