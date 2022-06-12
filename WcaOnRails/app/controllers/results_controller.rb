@@ -38,6 +38,11 @@ class ResultsController < ApplicationController
     @is_results = splitted_show_param[1] == "results"
     limit_condition = "LIMIT #{@show}"
 
+    if @show > 100
+      flash[:warning] = "Showing more than 100 results is currently disabled due to technical reasons."
+      return redirect_to rankings_path(params[:event_id], "single")
+    end
+
     if @is_persons
       @query = <<-SQL
         SELECT
