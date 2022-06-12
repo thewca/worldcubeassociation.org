@@ -2,6 +2,13 @@
 
 require "active_support/core_ext/integer/time"
 
+root_url = URI.parse(EnvVars.ROOT_URL)
+Rails.application.routes.default_url_options = {
+  protocol: root_url.scheme,
+  host: root_url.host,
+  port: root_url.port,
+}
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -79,13 +86,6 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "dummy_production"
 
   config.action_mailer.perform_caching = false
-
-  root_url = URI.parse(EnvVars.ROOT_URL)
-  config.action_mailer.default_url_options = {
-    protocol: root_url.scheme,
-    host: root_url.host,
-    port: root_url.port,
-  }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
 
