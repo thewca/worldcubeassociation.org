@@ -2053,6 +2053,9 @@ zh-TW:
       time_limit_is_too_slow: '%{event}項目的第%{round_number} 輪的門檻大於10分鐘，且是個較快完成的比賽項目，請確認是否正確。'
       #original_hash: e390250
       create_success: 成功申請一場新的比賽！
+      #original_hash: bc3e673
+      registration_payment_info: >-
+        這個比賽有報名費但是沒有Stripe帳號連結。如果你是透過WCA網站使用Stripe，請記得要連結您的Stripe帳號。如果您是用外部的付款系統，請記得要將所有相關的細節加入報名條件中。
       #original_hash: ba067f0
       not_announced: 這場比賽已是公開狀態，但尚未公告。
       #original_hash: ab61991
@@ -3262,6 +3265,16 @@ zh-TW:
         name: WCA諮詢理事會
         #original_hash: fb6cd86
         description: 該理事會負責建立和維護WCA社群與WCA員工之間的雙邊溝通。
+      wsot:
+        #original_hash: 58765c7
+        name: WCA競技組織團隊
+        #original_hash: 8f888d6
+        description: 這個團隊負責監督和協助WCA成為一個國際認可的競技組織
+      wat:
+        #original_hash: 90a1280
+        name: WCA資料整理組
+        #original_hash: fae6850
+        description: WCA資料整理組是一個WCA的諮詢委員會。這個團隊的任務是監督並協助WCA過去資料的整理和保存。
       banned:
         #original_hash: d30e2e5
         name: 禁賽名單
@@ -3457,6 +3470,12 @@ zh-TW:
     wmt:
       #original_hash: f2a0140
       info_html: 該團隊負責開發和管理WCA品牌、尋求贊助、協助WCA比賽器材的分配以及行銷WCA商品。
+    wsot:
+      #original_hash: 8f888d6
+      info_html: 負責並協助WCA成為國際競技組織是這個團隊的任務
+    wat:
+      #original_hash: fae6850
+      info_html: WCA資料整理組是一個WCA的諮詢委員會。這個團隊的任務是協助並負責將WCA過去的資料作整理保存。
     #original_hash: f97a4f5
     councils_html: 理事會
     wac:
