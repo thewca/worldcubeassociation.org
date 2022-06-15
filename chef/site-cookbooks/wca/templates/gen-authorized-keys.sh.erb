@@ -35,4 +35,15 @@ if [ "$machine" == "staging" ] || [ "$machine" == "production" ]; then
   echo "# Keys for WCA GitHub Deployment - $machine" >> $authorized_keys_path
   github_deploy_public_key=$(curl -s "$wca_deploy_key_url")
   echo 'command="worldcubeassociation.org/scripts/deploy.sh pull_latest rebuild_regs rebuild_rails"' "$github_deploy_public_key" >> $authorized_keys_path
+
+  if [ "$machine" == "production" ]; then
+    # Add keys for WRC manual Regulations rebuild.
+    # Note that we restrict WRC to running our deploy.sh script.
+    wrc_rebuild_key_url="https://$github_token@raw.githubusercontent.com/thewca/deploy/master/keys/wrc-rebuild.pub"
+    echo "" >> $authorized_keys_path
+    echo "# Keys for WRC GitHub deployment - Regulations rebuild" >> $authorized_keys_path
+    wrc_rebuild_public_key=$(curl -s "$wrc_rebuild_key_url")
+    # Note that we need to restart_app because the translations index might have changed.
+    echo 'command="/home/cubing/worldcubeassociation.org/scripts/deploy.sh rebuild_regs"' "$wrc_rebuild_public_key" >> $authorized_keys_path
+  fi
 fi
