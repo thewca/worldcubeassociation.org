@@ -8,146 +8,14 @@
 
   <h2><%= t("regulations_translations.translations") %></h2>
 
-  <% current_translations = [
-    {
-      version: "2022-06-01",
-      language: "简体中文",
-      language_english: "Chinese",
-      url: "./chinese",
-    },
-    {
-      version: "2022-06-01",
-      language: "Português Brasileiro",
-      language_english: "Portuguese, Brazil",
-      url: "./portuguese-brazilian",
-    },
-    {
-      version: "2022-06-01",
-      language: "Русский",
-      language_english: "Russian",
-      url: "./russian",
-    },
-    {
-      version: "2022-06-01",
-      language: "Español Latino",
-      language_english: "Spanish, America",
-      url: "./spanish-american",
-    },
-  ] %>
-
   <h3><%= t("regulations_translations.current") %></h3>
   <div class="regulations-translations-table-container">
-    <%= render 'regulations/translations/index_table', translations: current_translations %>
+    <%= render 'regulations/translations/index_table', translations: current_reg_translations %>
   </div>
-
-  <% old_translations = [
-    {
-      version: "2022-01-01",
-      language: "Deutsch",
-      language_english: "German",
-      url: "./german",
-    },
-    {
-      version: "2022-01-01",
-      language: "Svenska",
-      language_english: "Swedish",
-      url: "./swedish",
-    },
-    {
-      version: "2022-01-01",
-      language: "Italiano",
-      language_english: "Italian",
-      url: "./italian",
-    },
-    {
-      version: "2021-05-01",
-      language: "繁體中文",
-      language_english: "Chinese, Traditional",
-      url: "./chinese-traditional",
-    },
-    {
-      version: "2021-05-01",
-      language: "Suomi",
-      language_english: "Finnish",
-      url: "./finnish",
-    },
-    {
-      version: "2021-05-01",
-      language: "日本語",
-      language_english: "Japanese",
-      url: "./japanese",
-    },
-    {
-      version: "2020-08-01",
-      language: "Tiếng Việt",
-      language_english: "Vietnamese",
-      url: "./vietnamese",
-    },
-    {
-      version: "2020-01-01",
-      language: "Қазақ",
-      language_english: "Kazakh",
-      url: "./kazakh",
-    },
-    {
-      version: "2018-01-01",
-      language: "Nederlands",
-      language_english: "Dutch",
-      url: "./dutch",
-    },
-    {
-      version: "2018-01-01",
-      language: "Français",
-      language_english: "French",
-      url: "./french",
-    },
-    {
-      version: "2018-01-01",
-      language: "Bahasa",
-      language_english: "Indonesian",
-      url: "./indonesian",
-    },
-    {
-      version: "2016-04-18",
-      language: "Hrvatski",
-      language_english: "Croatian",
-      url: "./croatian",
-    },
-    {
-      version: "2016-04-18",
-      language: "Magyar",
-      language_english: "Hungarian",
-      url: "./hungarian",
-    },
-    {
-      version: "2016-04-18",
-      language: "한국어",
-      language_english: "Korean",
-      url: "./korean",
-    },
-    {
-      version: "2015-07-01",
-      language: "Português Europeu",
-      language_english: "Portuguese, Europe",
-      url: "./portuguese-european",
-    },
-    {
-      version: "2015-07-01",
-      language: "Español de España",
-      language_english: "Spanish, Spain",
-      url: "./spanish-european",
-    },
-    {
-      version: "2014-01-01",
-      language: "Беларуская мова",
-      language_english: "Belarusian",
-      url: "./belarusian",
-    },
-  ] %>
 
   <h3><%= t("regulations_translations.old") %></h3>
   <div class="regulations-translations-table-container">
-    <%= render 'regulations/translations/index_table', translations: old_translations %>
+    <%= render 'regulations/translations/index_table', translations: outdated_reg_translations %>
   </div>
 
   <h2><%= t("regulations_translations.translating") %></h2>

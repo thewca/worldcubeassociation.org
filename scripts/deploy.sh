@@ -45,23 +45,23 @@ rebuild_regs() {
   #  - The WCA Regulations
   #  - The WCA Regulations translations
   #  - The 'regulations-data' branch of this repo, which contains data such as TNoodle binaries
-  git_reg_hash=`commit_hash https://github.com/thewca/wca-regulations.git official`
-  git_translations_hash=`commit_hash https://github.com/thewca/wca-regulations-translations.git HEAD`
-  git_reg_data_hash=`commit_hash https://github.com/thewca/worldcubeassociation.org.git regulations-data`
+  git_reg_hash=$(commit_hash "https://github.com/thewca/wca-regulations.git" official)
+  git_translations_hash=$(commit_hash "https://github.com/thewca/wca-regulations-translations.git" HEAD)
+  git_reg_data_hash=$(commit_hash "https://github.com/thewca/worldcubeassociation.org.git" regulations-data)
 
   rebuild_regulations=1
   rebuild_regulations_data=1
   rebuild_translations=1
   # Check if the cloned regulations match the current version
-  if [ -r $regs_version ] && [ "`cat $regs_version`" == "$git_reg_hash" ]; then
+  if [ -r $regs_version ] && [ "$(cat $regs_version)" == "$git_reg_hash" ]; then
     rebuild_regulations=0
   fi
   # Check if the latest regulations-data match the current version
-  if [ -r $regs_data_version ] && [ "`cat $regs_data_version`" == "$git_reg_data_hash" ]; then
+  if [ -r $regs_data_version ] && [ "$(cat $regs_data_version)" == "$git_reg_data_hash" ]; then
     rebuild_regulations_data=0
   fi
   # Check if the cloned translations match the current version
-  if [ -r $translations_version ] && [ "`cat $translations_version`" == "$git_translations_hash" ]; then
+  if [ -r $translations_version ] && [ "$(cat $translations_version)" == "$git_translations_hash" ]; then
     rebuild_translations=0
   fi
   if [ $rebuild_regulations -eq 0 ] && [ $rebuild_translations -eq 0 ] && [ $rebuild_regulations_data -eq 0 ]; then
@@ -80,44 +80,55 @@ rebuild_regs() {
   git checkout FETCH_HEAD $build_folder
   git reset HEAD $build_folder
 
+  inputdir=$build_folder/wca-regulations-translations
+  outputdir=$build_folder/regulations/translations
+  mkdir -p $outputdir
+
   if [ $rebuild_translations -eq 1 ]; then
-    git clone --depth=1 https://github.com/thewca/wca-regulations-translations.git $build_folder/wca-regulations-translations
-    languages=`wrc-languages`
+    git clone --depth=1 https://github.com/thewca/wca-regulations-translations.git $inputdir
+    languages=$(wrc-languages)
     # Clean up translations directories
-    find $build_folder/regulations/translations ! -name 'translations' -type d -exec rm -rf {} +
+    find $outputdir ! -name 'translations' -type d -exec rm -rf {} +
     # Rebuild all translations
     for kind in html pdf; do
       for l in $languages; do
-        inputdir=$build_folder/wca-regulations-translations/${l}
-        outputdir=$build_folder/regulations/translations/${l}
-        mkdir -p $outputdir
+        lang_inputdir=$inputdir/${l}
+        lang_outputdir=$outputdir/${l}
+        mkdir -p $lang_outputdir
         echo "Generating ${kind} for language ${l}"
-        wrc --target=$kind -l $l -o $outputdir -g $git_translations_hash $inputdir
+        wrc --target=$kind -l $l -o $lang_outputdir -g $git_translations_hash $lang_inputdir
+        # Update timestamp for semi-automatic computation of translations index
+        cp $lang_inputdir/metadata.json $lang_outputdir/
       done
     done
     # Update version built
-    echo $git_translations_hash > $build_folder/regulations/translations/version
+    echo "$git_translations_hash" > $outputdir/version
+    # Update timestamps for automatically determining which regulations are up to date
+    cp $inputdir/version-date $outputdir/
   else
     echo "Translations are up to date."
   fi
 
+  inputdir=$build_folder/wca-regulations
   outputdir=$build_folder/regulations
+  mkdir -p $outputdir
+
   if [ $rebuild_regulations -eq 1 ]; then
-    git clone --depth=1 --branch=official https://github.com/thewca/wca-regulations.git $build_folder/wca-regulations
+    git clone --depth=1 --branch=official https://github.com/thewca/wca-regulations.git $inputdir
     # Clean up regulations directory files
-    find $build_folder/regulations -maxdepth 1 -type f -exec rm -f {} +
+    find $outputdir -maxdepth 1 -type f -exec rm -f {} +
     # Rebuild Regulations
-    wrc --target=json -o $outputdir -g $git_reg_hash $build_folder/wca-regulations
-    wrc --target=html -o $outputdir -g $git_reg_hash $build_folder/wca-regulations
-    wrc --target=pdf -o $outputdir -g $git_reg_hash $build_folder/wca-regulations
+    wrc --target=json -o $outputdir -g "$git_reg_hash" $inputdir
+    wrc --target=html -o $outputdir -g "$git_reg_hash" $inputdir
+    wrc --target=pdf -o $outputdir -g "$git_reg_hash" $inputdir
     # Update version built
-    echo $git_reg_hash > $build_folder/regulations/version
+    echo "$git_reg_hash" > $outputdir/version
   else
     echo "Regulations are up to date"
   fi
 
   # Update regulations-data version built
-  echo $git_reg_data_hash > $build_folder/regulations/data_version
+  echo "$git_reg_data_hash" > $outputdir/data_version
 
   rm -rf $tmp_dir
   mv $regs_folder $tmp_dir
