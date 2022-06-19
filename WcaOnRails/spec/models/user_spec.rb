@@ -790,4 +790,30 @@ RSpec.describe User, type: :model do
       expect(competitor.can_edit_registration?(registration)).to be false
     end
   end
+
+  describe "can self-delete registration" do
+    let!(:competitor) { FactoryBot.create :user }
+    let!(:competition) { FactoryBot.create :competition, :registration_open }
+    let!(:registration) { FactoryBot.create :registration, user: competitor, competition: competition }
+
+    it "if their registration is pending" do
+      registration.accepted_at = nil
+      competition.allow_registration_self_delete_after_acceptance = false
+      expect(competitor.can_delete_registration?(registration)).to be true
+      competition.allow_registration_self_delete_after_acceptance = true
+      expect(competitor.can_delete_registration?(registration)).to be true
+    end
+
+    it "if their registration is accepted and the competition still allows deletion" do
+      registration.accepted_at = Time.now
+      competition.allow_registration_self_delete_after_acceptance = true
+      expect(competitor.can_delete_registration?(registration)).to be true
+    end
+
+    it "unless their registration is accepted and the competition does not allow deletion afterwards" do
+      registration.accepted_at = Time.now
+      competition.allow_registration_self_delete_after_acceptance = false
+      expect(competitor.can_delete_registration?(registration)).to be false
+    end
+  end
 end
