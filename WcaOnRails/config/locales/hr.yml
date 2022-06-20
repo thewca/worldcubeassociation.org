@@ -483,6 +483,8 @@ hr:
         on_the_spot_entry_fee_lowest_denomination: Osnovna kotizacija na licu mjesta
         #original_hash: 7e53b96
         allow_registration_edits: Uređivanje registracija
+        #original_hash: 3d47eca
+        allow_registration_self_delete_after_acceptance: Otkazane registracije
         #original_hash: efbdbab
         refund_policy_percent: Postotak povrata novca
         #original_hash: b332299
@@ -913,6 +915,8 @@ hr:
           će se registracije na licu mjesta besplatno prihvatiti.
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Zasad je ovaj broj samo informacijskog karaktera, povrati novca će se
@@ -1199,6 +1203,15 @@ hr:
           'false': >-
             Natjecatelji NE MOGU uređivati svoju registraciju nakon što je
             prihvaćena
+        allow_registration_self_delete_after_acceptance:
+          #original_hash: 5c2e8c1
+          'true': >-
+            Natjecatelji mogu obrisati svoju registraciju čak i nakon što su
+            prihvaćeni
+          #original_hash: 3b77604
+          'false': >-
+            Natjecatelji NE MOGU obrisati svoju registraciju nakon što su
+            prihvaćeni
   mail_form:
     attributes:
       contact_form:
