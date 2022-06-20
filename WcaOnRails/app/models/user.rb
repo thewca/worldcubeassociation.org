@@ -734,7 +734,7 @@ class User < ApplicationRecord
   def can_delete_registration?(registration)
     # A registration can only be deleted by a user after it has been accepted if the organizers allow
     can_delete_by_user = (!registration.accepted? || registration.competition.registration_delete_after_acceptance_allowed?)
-    registration.user_id == self.id && can_delete_by_user
+    can_manage_competition?(registration.competition) || (registration.user_id == self.id && can_delete_by_user)
   end
 
   def can_confirm_competition?(competition)
