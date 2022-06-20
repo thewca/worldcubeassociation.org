@@ -475,6 +475,8 @@ pt:
         on_the_spot_entry_fee_lowest_denomination: Taxa de registo base para inscrições no local da competição
         #original_hash: 7e53b96
         allow_registration_edits: Edições de registos
+        #original_hash: 3d47eca
+        allow_registration_self_delete_after_acceptance: Registos cancelados
         #original_hash: efbdbab
         refund_policy_percent: Percentagem a ser reembolsado
         #original_hash: b332299
@@ -905,6 +907,8 @@ pt:
           no local serão aceites gratuitamente.
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Por agora este número é apenas informativo, reembolsos terão que ser
@@ -1188,6 +1192,15 @@ pt:
             atualizar modalidades
           #original_hash: 2cbb80e
           'false': Competidores NÃO podem editar o seu registo após ter sido aceite
+        allow_registration_self_delete_after_acceptance:
+          #original_hash: 5c2e8c1
+          'true': >-
+            Competidores podem apagar o seu registo mesmo depois de ter sido
+            aceite
+          #original_hash: 3b77604
+          'false': >-
+            Competidores NÃO podem apagar o seu próprio registo após ter sido
+            aceite
   mail_form:
     attributes:
       contact_form:
