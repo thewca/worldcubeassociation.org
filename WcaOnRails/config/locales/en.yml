@@ -305,7 +305,7 @@ en:
         on_the_spot_registration: "On the spot registrations"
         on_the_spot_entry_fee_lowest_denomination: "On the spot base registration fee"
         allow_registration_edits: "Registration edits"
-        allow_registration_self_delete_after_acceptance: "Registration self-deletion"
+        allow_registration_self_delete_after_acceptance: "Registration cancellations"
         refund_policy_percent: "Percent to be refunded"
         refund_policy_limit_date: "Limit date for refunds"
         waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
