@@ -473,6 +473,8 @@ sv:
         on_the_spot_entry_fee_lowest_denomination: Basanmälningsavgift för anmälan på plats
         #original_hash: 7e53b96
         allow_registration_edits: Ändringar i anmälan
+        #original_hash: 3d47eca
+        allow_registration_self_delete_after_acceptance: Avanmälningar
         #original_hash: efbdbab
         refund_policy_percent: Procent som återbetalas
         #original_hash: b332299
@@ -897,6 +899,8 @@ sv:
           accepteras gratis.
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           För närvarande är detta nummer endast informativt, återbetalningar
@@ -1182,6 +1186,11 @@ sv:
           'false': >-
             Tävlande får INTE ändra sin anmälan fram till deadline för att
             uppdatera grenar
+        allow_registration_self_delete_after_acceptance:
+          #original_hash: 5c2e8c1
+          'true': Tävlande får ta bort sina anmälningar även efter att de har godkänts
+          #original_hash: 3b77604
+          'false': Tävlande får INTE ta bort sina anmälningar efter att de godkänts
   mail_form:
     attributes:
       contact_form:
