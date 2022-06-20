@@ -305,6 +305,7 @@ en:
         on_the_spot_registration: "On the spot registrations"
         on_the_spot_entry_fee_lowest_denomination: "On the spot base registration fee"
         allow_registration_edits: "Registration edits"
+        allow_registration_self_delete_after_acceptance: "Registration cancellations"
         refund_policy_percent: "Percent to be refunded"
         refund_policy_limit_date: "Limit date for refunds"
         waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
@@ -516,6 +517,7 @@ en:
         on_the_spot_registration: ""
         on_the_spot_entry_fee_lowest_denomination: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
         allow_registration_edits: ""
+        allow_registration_self_delete_after_acceptance: ""
         refund_policy_percent: "For now this number is informational only, refunds will have to be issued manually. If this is set to 0, a sentence will be displayed saying that registration fees won't be refunded under any circumstance."
         refund_policy_limit_date: "Date after which no more refunds will be issued."
         waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
@@ -643,6 +645,9 @@ en:
         allow_registration_edits:
           "true": "Competitors may edit their registration until the deadline for updating events"
           "false": "Competitors may NOT edit their registration once it has been accepted"
+        allow_registration_self_delete_after_acceptance:
+          "true": "Competitors may delete their own registration even after it has been accepted"
+          "false": "Competitors may NOT delete their own registration once it has been accepted"
   mail_form:
     #context: This key is used as a label for contact form attributes
     attributes:

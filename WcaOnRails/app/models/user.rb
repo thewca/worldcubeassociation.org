@@ -731,6 +731,12 @@ class User < ApplicationRecord
     can_manage_competition?(registration.competition) || (registration.user_id == self.id && editable_by_user)
   end
 
+  def can_delete_registration?(registration)
+    # A registration can only be deleted by a user after it has been accepted if the organizers allow
+    can_delete_by_user = (!registration.accepted? || registration.competition.registration_delete_after_acceptance_allowed?)
+    can_manage_competition?(registration.competition) || (registration.user_id == self.id && can_delete_by_user)
+  end
+
   def can_confirm_competition?(competition)
     # We don't let competition organizers confirm competitions.
     can_admin_results? || competition.delegates.include?(self)

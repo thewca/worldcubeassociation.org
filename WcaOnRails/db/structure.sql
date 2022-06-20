@@ -79,6 +79,7 @@ CREATE TABLE `Competitions` (
   `event_change_deadline_date` datetime DEFAULT NULL,
   `free_guest_entry_status` int NOT NULL DEFAULT '0',
   `allow_registration_edits` tinyint(1) NOT NULL DEFAULT '0',
+  `allow_registration_self_delete_after_acceptance` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1759,4 +1760,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220223163446'),
 ('20220223163447'),
 ('20220511025003'),
-('20220516124717'); 
+('20220516124717'), 
+('20220619200832');

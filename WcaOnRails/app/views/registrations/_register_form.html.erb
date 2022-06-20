@@ -25,7 +25,9 @@
           <%= f.submit t('registrations.register'), class: "btn btn-success" %>
         <% else %>
           <%= f.hidden_field :status, value: @registration.checked_status %>
-          <%= link_to t('registrations.delete'), registration_path(@registration, user_is_deleting_theirself: true), method: :delete, class: "btn btn-danger", data: { confirm: t('registrations.delete_confirm'), toggle: "tooltip" }, title: t('registrations.delete_registration') %>
+          <% if current_user.can_delete_registration?(@registration) %>
+            <%= link_to t('registrations.delete'), registration_path(@registration, user_is_deleting_theirself: true), method: :delete, class: "btn btn-danger", data: { confirm: t('registrations.delete_confirm'), toggle: "tooltip" }, title: t('registrations.delete_registration') %>
+          <% end %>
           <%= f.submit t('registrations.update'), class: "btn btn-success" %>
         <% end %>
       </div>

@@ -94,6 +94,7 @@ module DatabaseDumper
           waiting_list_deadline_date
           event_change_deadline_date
           allow_registration_edits
+          allow_registration_self_delete_after_acceptance
         ),
         db_default: %w(
           connected_stripe_account_id
