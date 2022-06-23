@@ -720,7 +720,7 @@ CREATE TABLE `competition_delegates` (
   `delegate_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '1',
+  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_competition_delegates_on_competition_id_and_delegate_id` (`competition_id`,`delegate_id`),
   KEY `index_competition_delegates_on_competition_id` (`competition_id`),
@@ -749,7 +749,7 @@ CREATE TABLE `competition_organizers` (
   `organizer_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '1',
+  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_competition_organizers_on_competition_id_and_organizer_id` (`competition_id`,`organizer_id`),
   KEY `index_competition_organizers_on_competition_id` (`competition_id`),
@@ -776,7 +776,7 @@ CREATE TABLE `competition_trainee_delegates` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `competition_id` varchar(191) DEFAULT NULL,
   `trainee_delegate_id` int(11) DEFAULT NULL,
-  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '1',
+  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
@@ -1761,4 +1761,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220223163447'),
 ('20220511025003'),
 ('20220516124717'), 
-('20220619200832');
+('20220619200832'),
+('20220623121810');
