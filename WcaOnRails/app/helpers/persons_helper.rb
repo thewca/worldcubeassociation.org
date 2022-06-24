@@ -16,7 +16,7 @@ module PersonsHelper
   end
 
   def odd_rank?(rank)
-    any_missing = rank.continent_rank == 0 || rank.country_rank == 0 # Note: world rank is always present.
+    any_missing = rank.continent_rank == 0 || rank.country_rank == 0 # NOTE: world rank is always present.
     any_missing || rank.continent_rank < rank.country_rank
   end
 

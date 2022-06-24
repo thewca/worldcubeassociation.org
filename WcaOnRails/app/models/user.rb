@@ -89,7 +89,7 @@ class User < ApplicationRecord
   # name empty, so long as they're a returning competitor and are claiming their
   # wca id.
   validates :name, presence: true, if: -> { !claiming_wca_id }
-  WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
+  WCA_ID_RE = /\A[1-9][[:digit:]]{3}[[:upper:]]{4}[[:digit:]]{2}\z/
   validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
@@ -268,7 +268,7 @@ class User < ApplicationRecord
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
-    # Note: copy data from the person only if the WCA ID has already been claimed
+    # NOTE: copy data from the person only if the WCA ID has already been claimed
     # or the user claims this WCA ID.
     # Otherwise (when setting WCA ID directly) we want to validate
     # that the user details matches the person details instead.
@@ -731,6 +731,12 @@ class User < ApplicationRecord
     can_manage_competition?(registration.competition) || (registration.user_id == self.id && editable_by_user)
   end
 
+  def can_delete_registration?(registration)
+    # A registration can only be deleted by a user after it has been accepted if the organizers allow
+    can_delete_by_user = (!registration.accepted? || registration.competition.registration_delete_after_acceptance_allowed?)
+    can_manage_competition?(registration.competition) || (registration.user_id == self.id && can_delete_by_user)
+  end
+
   def can_confirm_competition?(competition)
     # We don't let competition organizers confirm competitions.
     can_admin_results? || competition.delegates.include?(self)
@@ -1126,7 +1132,7 @@ class User < ApplicationRecord
     {
       "type" => "object",
       "properties" => {
-        "registrantId" => { "type" => ["integer", "null"] }, # Note: for now registrantId may be null if the person doesn't compete.
+        "registrantId" => { "type" => ["integer", "null"] }, # NOTE: for now registrantId may be null if the person doesn't compete.
         "name" => { "type" => "string" },
         "wcaUserId" => { "type" => "integer" },
         "wcaId" => { "type" => ["string", "null"] },
@@ -1191,5 +1197,15 @@ class User < ApplicationRecord
       !trainee_delegated_competitions.empty? ||
       !competitions_announced.empty? ||
       !competitions_results_posted.empty?
+  end
+
+  def accepted_registrations
+    self.registrations.accepted
+  end
+
+  def accepted_competitions
+    self.accepted_registrations
+        .includes(competition: [:delegates, :organizers, :events])
+        .map(&:competition)
   end
 end

@@ -11,8 +11,10 @@ RSpec.describe "AuxiliaryDataComputation" do
     let(:competition_2017) { FactoryBot.create :competition, starts: Date.parse("2017-08-08") }
 
     it "creates tables containing best results data for each person per event per year" do
-      FactoryBot.create :result, eventId: "333", best: 700, average: 800, competition: competition_2016, person: person
-      FactoryBot.create :result, eventId: "333", best: 750, average: 850, competition: competition_2016, person: person
+      FactoryBot.create :round, competition: competition_2016, total_number_of_rounds: 2
+      FactoryBot.create :round, competition: competition_2016, total_number_of_rounds: 2, number: 2
+      FactoryBot.create :result, eventId: "333", best: 750, average: 800, competition: competition_2016, person: person, roundTypeId: "1"
+      FactoryBot.create :result, eventId: "333", best: 700, average: 850, competition: competition_2016, person: person, roundTypeId: "f"
       FactoryBot.create :result, eventId: "333", best: 800, average: 900, competition: competition_2017, person: person
       FactoryBot.create :result, eventId: "222", best: 100, average: 150, competition: competition_2017, person: person
       AuxiliaryDataComputation.compute_concise_results
@@ -89,13 +91,13 @@ RSpec.describe "AuxiliaryDataComputation" do
       AuxiliaryDataComputation.compute_concise_results # Rank tables computation require concise results to be present.
       AuxiliaryDataComputation.compute_rank_tables
       %w(ranksSingle ranksAverage).each do |ranks_type|
-        # Note: this person hasn't got any results in Europe/France yet.
+        # NOTE: this person hasn't got any results in Europe/France yet.
         expect(rank_333(new_french, ranks_type)).to include(worldRank: 1, continentRank: 0, countryRank: 0)
-        # Note: the only change is the countryRank of new_canadian (previously american_1).
+        # NOTE: the only change is the countryRank of new_canadian (previously american_1).
         # Note: the continent is still USA, so continentRank shouldn't be affected.
         expect(rank_333(new_canadian, ranks_type)).to include(worldRank: 2, continentRank: 1, countryRank: 2)
         expect(rank_333(canadian, ranks_type)).to include(worldRank: 3, continentRank: 2, countryRank: 1)
-        # Note: this person stays 2nd in the country.
+        # NOTE: this person stays 2nd in the country.
         expect(rank_333(american_2, ranks_type)).to include(worldRank: 4, continentRank: 3, countryRank: 2)
       end
     end

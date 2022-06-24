@@ -167,7 +167,7 @@ RSpec.describe "Incidents management", type: :request do
         {
           tags: "a,b",
           private_wrc_decision: "Private resolution",
-          incident_competitions_attributes: { "0": { competition_id: competition.id, comments: "some text" } },
+          incident_competitions_attributes: { '0': { competition_id: competition.id, comments: "some text" } },
         }
       }
 

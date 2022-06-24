@@ -65,7 +65,7 @@
           <% if competitions_with_external.any? %>
 
             <% competitions_with_external.each do |c| %>
-              <div><%= link_to c.display_name(short: true), competition_path(c) %> - <%= link_to c.external_website %> - <%= mail_to c.delegates.map(&:email).join(", "), name = c.delegates.map(&:name).join(", "), cc: Team.wrt.email, subject: "Anonymization Request" %></div>
+              <div><%= link_to c.display_name(short: true), competition_path(c) %> - <%= link_to c.external_website, c.external_website %> - <%= mail_to c.delegates.map(&:email).join(", "), name = c.delegates.map(&:name).join(", "), cc: Team.wrt.email, subject: "Anonymization Request" %></div>
             <% end %>
 
           <% else %>

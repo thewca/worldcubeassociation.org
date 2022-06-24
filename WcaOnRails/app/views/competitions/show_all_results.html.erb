@@ -3,7 +3,8 @@
 <%= render layout: 'results_nav' do %>
   <%= tag :div, id: "selected-event", "data-selected": params[:event] %>
   <%= react_component("CompetitionResults", {
-    competitionId: @competition.id
+    competitionId: @competition.id,
+    canAdminResults: current_user&.can_admin_results?,
   }, {
     id: "competition_results",
   }) %>

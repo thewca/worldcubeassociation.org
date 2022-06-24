@@ -10,18 +10,18 @@ module ResultsValidators
     MET_CUTOFF_MISSING_RESULTS_ERROR = "[%{round_id}] %{person_name} met the cutoff but is missing results for the second phase of the round. The cutoff was %{cutoff}."
     DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = "[%{round_id}] %{person_name} has at least one result for the second phase of the round but didn't meet the cutoff. The cutoff was %{cutoff}."
     WRONG_ATTEMPTS_FOR_CUTOFF_ERROR = "[%{round_id}] %{person_name} is missing at least one attempt for the cutoff phase."\
-    " Please edit the result to include the missing attempt(s) or update the round's information in the competition's Manage Events page."
+                                      " Please edit the result to include the missing attempt(s) or update the round's information in the competition's Manage Events page."
     MISMATCHED_RESULT_FORMAT_ERROR = "[%{round_id}] Results for %{person_name} are in the wrong format: expected %{expected_format}, but got %{format}."
     RESULT_OVER_TIME_LIMIT_ERROR = "[%{round_id}] At least one result for %{person_name} is over the time limit for the round, which is %{time_limit} per attempt. All solves over the time limit must be changed to DNF."
     RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit, which was %{time_limit}."
     NO_ROUND_INFORMATION_WARNING = "[%{round_id}] There is no information about the cutoff and time limit for this round. These validations have been skipped. Please update the round's information in the competition's Manage Events page."
     UNDEF_TL_WARNING = "[%{round_id}] The time limit for this round is undefined, time limit validations have been skipped. This is expected only for competitions before 2013."
     SUSPICIOUS_DNF_WARNING = "[%{round_ids}] The round has a cumulative time limit, and extrapolating based on %{person_name}'s successful solves, they would have had very little time left for at least one of their DNFs."\
-    " Please ensure that every DNF and DNS is indeed correct. If the competitor did not start an attempt or did not have any remaining time before starting an attempt, it must be entered as DNS."
+                             " Please ensure that every DNF and DNS is indeed correct. If the competitor did not start an attempt or did not have any remaining time before starting an attempt, it must be entered as DNS."
 
     # Miscelaneous errors
     MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round \%{wcif_id}\ for the cumulative time limit specified in the WCIF."\
-    " Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
+                                        " Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
 
     @@desc = "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."
 

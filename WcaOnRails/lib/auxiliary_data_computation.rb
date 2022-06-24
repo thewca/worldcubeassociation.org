@@ -5,7 +5,7 @@ module AuxiliaryDataComputation
     self.compute_concise_results
     self.compute_rank_tables
 
-    self.delete_php_cache # Note: this should go away together with the PHP code.
+    self.delete_php_cache # NOTE: this should go away together with the PHP code.
   end
 
   ## Build 'concise results' tables.
@@ -87,7 +87,7 @@ module AuxiliaryDataComputation
             end
           end
           values = personal_rank.map do |person_id, rank_data|
-            # Note: continent_rank and country_rank may be not present because of a country change, in such case we default to 0.
+            # NOTE: continent_rank and country_rank may be not present because of a country change, in such case we default to 0.
             "('#{person_id}', '#{event_id}', #{rank_data[:best]}, #{rank_data[:world_rank]}, #{rank_data[:continent_rank] || 0}, #{rank_data[:country_rank] || 0})"
           end
           # Insert 500 rows at once to avoid running into too long query.

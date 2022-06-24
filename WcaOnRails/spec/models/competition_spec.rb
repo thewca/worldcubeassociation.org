@@ -818,7 +818,14 @@ RSpec.describe Competition do
   describe "results" do
     let(:three_by_three) { Event.find "333" }
     let(:two_by_two) { Event.find "222" }
-    let(:competition) { FactoryBot.create :competition, events: [three_by_three, two_by_two] }
+    let!(:competition) {
+      c = FactoryBot.create :competition, events: [three_by_three, two_by_two]
+      # Create the results rounds right now so that we can use them later.
+      FactoryBot.create :round, competition: c, total_number_of_rounds: 2, number: 1, event_id: "333"
+      FactoryBot.create :round, competition: c, total_number_of_rounds: 2, number: 2, event_id: "333"
+      FactoryBot.create :round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100)
+      c
+    }
 
     let(:person_one) { FactoryBot.create :person, name: "One" }
     let(:person_two) { FactoryBot.create :person, name: "Two" }

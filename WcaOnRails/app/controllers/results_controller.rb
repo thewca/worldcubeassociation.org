@@ -4,6 +4,10 @@ class ResultsController < ApplicationController
   def rankings
     support_old_links!
 
+    flash[:warning] = "Results queries are temporarily disabled due to a high number of bot requests. Please be patient while WST is working on a more permanent solution."
+    return redirect_to root_path
+    # rubocop:disable Lint/UnreachableCode
+
     lower_user_agent = request.user_agent.to_s.downcase
     evil_bots = %w(baidu petalbot)
 
@@ -37,6 +41,11 @@ class ResultsController < ApplicationController
     @is_persons = splitted_show_param[1] == "persons"
     @is_results = splitted_show_param[1] == "results"
     limit_condition = "LIMIT #{@show}"
+
+    if @show > 100
+      flash[:warning] = "Showing more than 100 results is currently disabled due to technical reasons."
+      return redirect_to rankings_path(params[:event_id], "single")
+    end
 
     if @is_persons
       @query = <<-SQL
@@ -161,17 +170,7 @@ class ResultsController < ApplicationController
 
     shared_constants_and_conditions
 
-    if !@is_histories
-      @query = <<-SQL
-        SELECT *
-        FROM
-          (#{current_records_query("best", "single")}
-          UNION
-          #{current_records_query("average", "average")}) helper
-        ORDER BY
-          `rank`, type DESC, year, month, day, roundTypeId, personName
-      SQL
-    else
+    if @is_histories
       if @is_history
         order = 'event.`rank`, type desc, value, year desc, month desc, day desc, roundType.`rank` desc'
       else
@@ -215,6 +214,16 @@ class ResultsController < ApplicationController
         ORDER BY
           #{order}
       SQL
+    else
+      @query = <<-SQL
+        SELECT *
+        FROM
+          (#{current_records_query("best", "single")}
+          UNION
+          #{current_records_query("average", "average")}) helper
+        ORDER BY
+          `rank`, type DESC, year, month, day, roundTypeId, personName
+      SQL
     end
   end
 
@@ -253,6 +262,7 @@ class ResultsController < ApplicationController
         AND event.`rank` < 990
     SQL
   end
+  # rubocop:enable Lint/UnreachableCode
 
   private def shared_constants_and_conditions
     @years = Competition.non_future_years

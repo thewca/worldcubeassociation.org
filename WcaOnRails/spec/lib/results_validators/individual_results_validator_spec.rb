@@ -98,8 +98,8 @@ RSpec.describe IRV do
         # Create a result which meets the cutoff but doesn't have all the necessary values
         res_fm = FactoryBot.create(result_kind, :over_cutoff,
                                    competition: competition2, cutoff: cutoff_fm,
-                                   eventId: "333fm")
-        res_fm.update(value1: 30, formatId: "m")
+                                   formatId: "m", eventId: "333fm")
+        res_fm.update(value1: 30)
 
         errs << RV::ValidationError.new(:results, competition2.id,
                                         IRV::MET_CUTOFF_MISSING_RESULTS_ERROR,
@@ -137,7 +137,7 @@ RSpec.describe IRV do
 
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
-        FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
+        FactoryBot.create(result_kind, :skip_validation, competition: competition1, eventId: "333oh", skip_round_creation: true)
       end
       irv = IRV.new.validate(competition_ids: competition1.id)
 
@@ -153,8 +153,8 @@ RSpec.describe IRV do
     it "triggers undef time limit warning" do
       # Triggers UNDEF_TL_WARNING
 
-      FactoryBot.create(:result, competition: competition1, eventId: "333oh")
       FactoryBot.create(:round, competition: competition1, event_id: "333oh", format_id: "a", time_limit: nil)
+      FactoryBot.create(:result, competition: competition1, eventId: "333oh")
       irv = IRV.new.validate(competition_ids: competition1.id)
 
       expected_warnings = [
@@ -178,7 +178,7 @@ RSpec.describe IRV do
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
         FactoryBot.create(result_kind, competition: competition1, eventId: "444")
-        res_ko = FactoryBot.create(result_kind, :mo3, competition: competition1, eventId: "444")
+        res_ko = FactoryBot.create(result_kind, :skip_validation, :mo3, competition: competition1, eventId: "444", skip_round_creation: true)
         errs[model.to_s] << RV::ValidationError.new(:results, competition1.id,
                                                     IRV::MISMATCHED_RESULT_FORMAT_ERROR,
                                                     round_id: "444-f",

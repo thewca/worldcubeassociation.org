@@ -1,16 +1,36 @@
 export const personUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_path("${wcaId}"))%>`;
 
+export const personsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_path) %>`;
+
+export const newResultUrl = (competitionId, roundId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_new_result_path("${competitionId}", "${roundId}"))%>`;
+export const resultUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.result_path("${id}"))%>`;
+export const editResultUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_result_path("${id}"))%>`;
+
 export const postsUrl = (page, format = 'json') => {
   // In this case id holds the page number ;)
   return `<%= CGI.unescape(Rails.application.routes.url_helpers.posts_path(format: "${format}")) %>?page=${page}`;
 };
 
+export const competitionUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_path("${id}"))%>`;
+
 export const competitionApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${id}"))%>`;
 
 export const competitionEventResultsApiUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_event_results_path("${id}", "${eventId}")) %>`;
 
+export const competitionAllResultsUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_results_all_path("${id}", event: "${eventId}")) %>`;
+
 export const omnisearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_path %>?q=${query}`;
 
-export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
+export const competitionSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_competitions_path %>?q=${query}`;
 
 export const competitionEventScramblesApiUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_event_scrambles_path("${id}", "${eventId}")) %>`;
+
+export const adminCheckExistingResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_check_existing_results_path("${competitionId}")) %>`;
+
+export const competitionEventsDataUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_events_data_path("${id}"))%>`;
+
+export const adminCADUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_compute_auxiliary_data_path) %>`;
+
+export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_new_id_path) %>`;
+
+export const personApiUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_path("${wcaId}"))%>`;

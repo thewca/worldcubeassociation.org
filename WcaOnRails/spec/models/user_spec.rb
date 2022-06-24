@@ -150,7 +150,7 @@ RSpec.describe User, type: :model do
 
   describe "WCA ID" do
     let(:user) { FactoryBot.create :user_with_wca_id }
-    let(:birthdayless_person) { FactoryBot.create :person, :missing_dob }
+    let(:birthdayless_person) { FactoryBot.create :person, :missing_dob, :skip_validation }
     let(:genderless_person) { FactoryBot.create :person, :missing_gender }
 
     it "validates WCA ID" do
@@ -399,7 +399,7 @@ RSpec.describe User, type: :model do
                                dob_verification: "1990-01-2")
     end
 
-    let!(:person_without_dob) { FactoryBot.create :person, year: 0, month: 0, day: 0 }
+    let!(:person_without_dob) { FactoryBot.create :person, :skip_validation, year: 0, month: 0, day: 0 }
     let!(:person_without_gender) { FactoryBot.create :person, gender: nil }
     let!(:user_with_wca_id) { FactoryBot.create :user_with_wca_id }
 
@@ -431,7 +431,7 @@ RSpec.describe User, type: :model do
 
     it "requires unconfirmed_wca_id" do
       user.unconfirmed_wca_id = ""
-      expect(user).to be_invalid_with_errors(unconfirmed_wca_id: ['required'])
+      expect(user).to be_invalid_with_errors(unconfirmed_wca_id: ['is invalid', 'required'])
     end
 
     it "requires dob verification" do
@@ -788,6 +788,32 @@ RSpec.describe User, type: :model do
       competition.allow_registration_edits = true
       competition.event_change_deadline_date = 2.weeks.ago
       expect(competitor.can_edit_registration?(registration)).to be false
+    end
+  end
+
+  describe "can self-delete registration" do
+    let!(:competitor) { FactoryBot.create :user }
+    let!(:competition) { FactoryBot.create :competition, :registration_open }
+    let!(:registration) { FactoryBot.create :registration, user: competitor, competition: competition }
+
+    it "if their registration is pending" do
+      registration.accepted_at = nil
+      competition.allow_registration_self_delete_after_acceptance = false
+      expect(competitor.can_delete_registration?(registration)).to be true
+      competition.allow_registration_self_delete_after_acceptance = true
+      expect(competitor.can_delete_registration?(registration)).to be true
+    end
+
+    it "if their registration is accepted and the competition still allows deletion" do
+      registration.accepted_at = Time.now
+      competition.allow_registration_self_delete_after_acceptance = true
+      expect(competitor.can_delete_registration?(registration)).to be true
+    end
+
+    it "unless their registration is accepted and the competition does not allow deletion afterwards" do
+      registration.accepted_at = Time.now
+      competition.allow_registration_self_delete_after_acceptance = false
+      expect(competitor.can_delete_registration?(registration)).to be false
     end
   end
 end

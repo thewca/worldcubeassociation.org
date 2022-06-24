@@ -16,6 +16,10 @@ FactoryBot.define do
     month { 4 }
     day { 4 }
 
+    trait :skip_validation do
+      to_create { |res| res.save(validate: false) }
+    end
+
     trait :missing_dob do
       year { 0 }
       month { 0 }
@@ -37,7 +41,6 @@ FactoryBot.define do
     factory :person_who_has_competed_once do
       after(:create) do |person|
         competition = FactoryBot.create(:competition, :with_delegate)
-        FactoryBot.create :result, person: person, competitionId: competition.id
         FactoryBot.create :result, person: person, competitionId: competition.id
       end
     end

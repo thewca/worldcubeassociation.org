@@ -19,6 +19,7 @@ class LightResult
               :personName,
               :event,
               :format,
+              :id,
               :round_type,
               :pos,
               :personId,
@@ -27,6 +28,7 @@ class LightResult
               :country
 
   def initialize(r)
+    @id = r["id"]
     @value1 = r["value1"]
     @value2 = r["value2"]
     @value3 = r["value3"]

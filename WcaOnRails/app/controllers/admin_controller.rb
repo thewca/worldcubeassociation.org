@@ -125,6 +125,17 @@ class AdminController < ApplicationController
         else
           flash.now[:danger] = "Error while updating #{@person.name}."
         end
+      when "destroy"
+        if @person.results.any?
+          flash.now[:danger] = "#{@person.name} has results, can't destroy them."
+        elsif @person.user.present?
+          flash.now[:danger] = "#{@person.wca_id} is linked to a user, can't destroy them."
+        else
+          name = @person.name
+          @person.destroy
+          flash.now[:success] = "Successfully destroyed #{name}."
+          @person = Person.new
+        end
       end
     else
       @person = Person.new
