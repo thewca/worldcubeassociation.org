@@ -33,7 +33,7 @@ sort_translations_keys: true
 fallbacks: false
 # This sets which keys we export from the locale file!
 # It will need to be updated as we port more and more stuff to React.
-<% export_keys = ["common.*", "competitions.*", "events.*", "formats.*", "search_results.*", "round.*", "countries.*", "enums.*"] %>
+<% export_keys = ["common.*", "competitions.*", "events.*", "formats.*", "search_results.*", "round.*", "countries.*", "enums.*", "regional_organizations.*"] %>
 translations:
 <% I18n.available_locales.each do |l| %>
   - file: "app/webpacker/packs/generated_locales/<%= l %>.js"

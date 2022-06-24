@@ -77,5 +77,13 @@ module WcaOnRails
 
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')
+
+    # Set global default_url_options, see https://github.com/rails/rails/issues/29992#issuecomment-761892658
+    root_url = URI.parse(EnvVars.ROOT_URL)
+    routes.default_url_options = {
+      protocol: root_url.scheme,
+      host: root_url.host,
+      port: root_url.port,
+    }
   end
 end

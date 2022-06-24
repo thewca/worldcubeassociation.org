@@ -54,8 +54,6 @@ Rails.application.configure do
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000, locale: nil }
-
   # Raise exceptions for disallowed deprecations.
   # config.active_support.disallowed_deprecation = :raise
 

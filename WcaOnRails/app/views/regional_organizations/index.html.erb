@@ -1,43 +1,7 @@
 <% provide(:title, t('regional_organizations.title')) %>
 
 <div class="container">
-  <h1><%= yield(:title) %></h1>
-
-  <% if @acknowledged_regional_organizations.empty? %>
-    <p><%= t('regional_organizations.empty') %></p>
-  <% else %>
-    <p><%= t('regional_organizations.content') %></p>
-
-    <div class="organizations-list">
-      <% @acknowledged_regional_organizations.each do |ro| %>
-        <div class="organization-box">
-          <%= link_to ro.website, target: "_blank", class: "hide-new-window-icon" do %>
-            <%= image_tag ro.logo.variant(resize: "500x300") if ro.logo.attached? %>
-            <div class="organization-info <%  if ro.logo.attached? %>hide-until-hover<% end %>">
-              <div class="country">
-                <%= ro.country %>
-              </div>
-              <div class="name">
-                <%= ro.name %>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
-
-  <h2><%= t('regional_organizations.how_to.title') %></h2>
-  <p><%= t('regional_organizations.how_to.description') %></p>
-
-  <h3><%= t('regional_organizations.requirements.title') %></h3>
-  <ol>
-    <% # We want to iterate through the *English* entries: so that if the translation doesn't have it, it will fall back to English. %>
-    <% t('regional_organizations.requirements.list', locale: :en).each do |key, en_value| %>
-      <li><%= t("regional_organizations.requirements.list.#{key}") %></li>
-    <% end %>
-  </ol>
-
-  <h3><%= t('regional_organizations.application_instructions.title') %></h3>
-  <p><%= t('regional_organizations.application_instructions.description_html') %></p>
+  <%= react_component("RegionalOrganizations/index", {
+    orgs: @acknowledged_regional_organizations,
+  }) %>
 </div>
