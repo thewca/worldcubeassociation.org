@@ -70,34 +70,26 @@ class RankingQualification < Qualification
   end
 end
 
-class SingleQualification < Qualification
-  def self.wcif_type
-    "single"
-  end
-
+class TimeQualification < Qualification
   def to_s(event)
     if event.event.timed_event?
-      I18n.t("qualification.single.time", time: SolveTime.centiseconds_to_clock_format(level))
+      I18n.t("qualification." + self.wcif_type + ".time", time: SolveTime.centiseconds_to_clock_format(level))
     elsif event.event.fewest_moves?
-      I18n.t("qualification.single.moves", moves: level)
+      I18n.t("qualification." + self.wcif_type + ".moves", moves: level)
     elsif event.event.multiple_blindfolded?
-      I18n.t("qualification.single.points", points: SolveTime.multibld_attempt_to_points(level))
+      I18n.t("qualification." + self.wcif_type + ".points", points: SolveTime.multibld_attempt_to_points(level))
     end
   end
 end
 
-class AverageQualification < Qualification
+class SingleQualification < TimeQualification
+  def self.wcif_type
+    "single"
+  end
+end
+
+class AverageQualification < TimeQualification
   def self.wcif_type
     "average"
-  end
-
-  def to_s(event, short: false)
-    if event.event.timed_event?
-      I18n.t("qualification.average.time", time: SolveTime.centiseconds_to_clock_format(level))
-    elsif event.event.fewest_moves?
-      I18n.t("qualification.average.moves", moves: level)
-    elsif event.event.multiple_blindfolded?
-      I18n.t("qualification.average.points", points: SolveTime.multibld_attempt_to_points(level))
-    end
   end
 end

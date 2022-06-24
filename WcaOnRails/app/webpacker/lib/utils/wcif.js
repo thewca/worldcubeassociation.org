@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import events from '../wca-data/events.js.erb';
 import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
+import I18n from '../i18n';
+import { attemptResultToString } from './edit-events';
+
 
 function promiseSaveWcif(competitionId, data) {
   const url = `/api/v0/competitions/${competitionId}/wcif`;
@@ -91,4 +94,30 @@ export function venueWcifFromRoomId(scheduleWcif, id) {
 
 export function activityCodeListFromWcif(scheduleWcif) {
   return _.map(_.flatMap(_.flatMap(scheduleWcif.venues, 'rooms'), 'activities'), 'activityCode');
+}
+
+export function eventQualificationToString(wcifEvent, qualification, { short } = {}) {
+  if (!qualification) {
+    return "-";
+  }
+  let dateString = "-";
+  if (qualification.whenDate) {
+    let whenDate = moment(qualification.whenDate).toDate();
+    dateString = whenDate.toISOString().substring(0, 10);
+  }
+  let deadlineString = I18n.t('qualification.deadline.by_date', { date: dateString })
+  switch (qualification.type) {
+    case "ranking":
+      return `${ I18n.t('qualification.ranking', { ranking: qualification.level } )} ` + deadlineString
+    case "single":
+    case "average": 
+      const event = events.byId[wcifEvent.id];
+      if (event.isTimedEvent) {
+        return `${ I18n.t('qualification.' + qualification.type + '.time', { time: attemptResultToString(qualification.level) } ) } ` + deadlineString;
+      } if (event.isFewestMoves) {
+        return `${ I18n.t('qualification.' + qualification.type + '.moves', { moves: qualification.level } ) } ` + deadlineString;
+      } if (event.isMultipleBlindfolded) { 
+        return `${ I18n.t('qualification.' + qualification.type + '.points', { points: qualification.level } ) } ` + deadlineString;
+      }
+  }
 }

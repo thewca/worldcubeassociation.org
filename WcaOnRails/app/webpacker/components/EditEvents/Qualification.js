@@ -1,52 +1,18 @@
 import React from 'react'
 
-import events from '../../wca/events.js.erb'
-import formats from '../../wca/formats.js.erb'
-import AttemptResultInput from './AttemptResultInput'
-import DatePicker from "react-datepicker";
+import events from '../../lib/wca-data/events.js.erb';
+import formats from '../../lib/wca-data/formats.js.erb';
+import AttemptResultInput from './AttemptResultInput';
+import DatePicker from 'react-datepicker';
 
-import {
-  pluralize,
-  matchResult,
-  attemptResultToString,
-} from './utils'
-import {
-  roundIdToString,
-  parseActivityCode,
-} from '../../wca/wcif-utils'
+import { eventQualificationToString } from '../../lib/utils/wcif';
+import I18n from '../../lib/i18n';
 
-import "react-datepicker/dist/react-datepicker.css";
-
-function toUTCDate(dateString) {
-  if (!dateString) {
-    return null;
-  }
-  let date = new Date(dateString);
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-}
-
-function eventQualificationToString(wcifEvent, qualification, { short } = {}) {
-  if (!qualification) {
-    return "-";
-  }
-  let dateString = "-";
-  if (qualification.whenDate) {
-    let whenDate = moment(qualification.whenDate).toDate();
-    dateString = whenDate.toISOString().substring(0, 10);
-  }
-  switch (qualification.type) {
-    case "ranking":
-      return `Top ${qualification.level} competitors by ${dateString}`;
-    case "single":
-      return `Single of ${attemptResultToString(qualification.level, wcifEvent.id, short)} by ${dateString}`;
-    case "average":
-      return `Average of ${attemptResultToString(qualification.level, wcifEvent.id, short)} by ${dateString}`;
-  }
-}
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default {
   Title({ wcifEvent }) {
-    return <span>Qualification for {wcifEvent.id}</span>;
+    return <span>{ I18n.t('qualification.for_event', {event: wcifEvent.id}) }</span>;
   },
   Show({ value: cutoff, wcifEvent }) {
     return <span>{eventQualificationToString(wcifEvent, wcifEvent.qualification, { short: true })}</span>;
@@ -92,7 +58,7 @@ export default {
     let qualificationType = qualification ? qualification.type : "";
     switch(qualificationType) {
       case "ranking":
-        valueLabel = "Top N";
+        valueLabel = I18n.t('qualification.ranking_short');
         qualificationInput = (
           <input type="number"
                  id="qualification-number-value"
@@ -104,7 +70,7 @@ export default {
         );
         break;
       case "single":
-        valueLabel = "Single";
+        valueLabel = I18n.t('common.single');
         qualificationInput = (
           <AttemptResultInput eventId={wcifEvent.id}
                               id="qualification-single-value"
@@ -114,7 +80,7 @@ export default {
         );
         break;
       case "average":
-        valueLabel = "Average";
+        valueLabel = I18n.t('common.average');
         qualificationInput = (
           <AttemptResultInput eventId={wcifEvent.id}
                               id="qualification-average-value"
@@ -128,7 +94,7 @@ export default {
     let whenDateBlock = qualificationInput ? (
       <div className="form-group">
         <label htmlFor="whenDate-input" className="col-sm-3 control-label">
-          Qualification Deadline
+          { I18n.t('qualification.deadline.description') }
         </label>
         <div className="col-sm-9">
           <DatePicker name="whenDate"
@@ -144,7 +110,7 @@ export default {
     return (
       <div>
         <div className="form-group">
-          <label htmlFor="qualification-type-input" className="col-sm-3 control-label">Qualification Type</label>
+          <label htmlFor="qualification-type-input" className="col-sm-3 control-label">{ I18n.t('qualification.type_label' )}</label>
           <div className="col-sm-9">
             <div className="input-group">
               <select value={qualificationType}
@@ -155,10 +121,10 @@ export default {
                       id="qualification-type-input"
                       ref={c => qualificationTypeInput = c}
               >
-                <option value="none">No qualification</option>
-                <option value="ranking">Top N competitors</option>
-                <option value="single">Single</option>
-                <option value="average">Average</option>
+                <option value="none">{ I18n.t('qualification.none') }</option>
+                <option value="ranking">{ I18n.t('qualification.ranking_short') }</option>
+                <option value="single">{ I18n.t('common.single') }</option>
+                <option value="average">{ I18n.t('common.average') }</option>
               </select>
             </div>
           </div>
