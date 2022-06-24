@@ -55,7 +55,7 @@ class Qualification
     {
       "type" => self.class.wcif_type,
       "whenDate" => @when_date&.strftime("%Y-%m-%d"),
-      "level" => level,
+      "level" => @level,
     }
   end
 end
