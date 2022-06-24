@@ -4,7 +4,6 @@ import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityTok
 import I18n from '../i18n';
 import { attemptResultToString } from './edit-events';
 
-
 function promiseSaveWcif(competitionId, data) {
   const url = `/api/v0/competitions/${competitionId}/wcif`;
   const fetchOptions = {
@@ -98,26 +97,28 @@ export function activityCodeListFromWcif(scheduleWcif) {
 
 export function eventQualificationToString(wcifEvent, qualification, { short } = {}) {
   if (!qualification) {
-    return "-";
+    return '-';
   }
-  let dateString = "-";
+  let dateString = '-';
   if (qualification.whenDate) {
-    let whenDate = moment(qualification.whenDate).toDate();
+    const whenDate = window.moment(qualification.whenDate).toDate();
     dateString = whenDate.toISOString().substring(0, 10);
   }
-  let deadlineString = I18n.t('qualification.deadline.by_date', { date: dateString })
+  const deadlineString = I18n.t('qualification.deadline.by_date', { date: dateString });
+  const event = events.byId[wcifEvent.id];
   switch (qualification.type) {
     case "ranking":
-      return `${ I18n.t('qualification.ranking', { ranking: qualification.level } )} ` + deadlineString
+      return `${ I18n.t('qualification.ranking', {ranking: qualification.level})} ${deadlineString}`;
     case "single":
-    case "average": 
-      const event = events.byId[wcifEvent.id];
+    case "average":
       if (event.isTimedEvent) {
-        return `${ I18n.t('qualification.' + qualification.type + '.time', { time: attemptResultToString(qualification.level) } ) } ` + deadlineString;
+        return `${I18n.t('qualification.' + qualification.type + '.time', {time: attemptResultToString(qualification.level, short)})} ${deadlineString}`
       } if (event.isFewestMoves) {
-        return `${ I18n.t('qualification.' + qualification.type + '.moves', { moves: qualification.level } ) } ` + deadlineString;
-      } if (event.isMultipleBlindfolded) { 
-        return `${ I18n.t('qualification.' + qualification.type + '.points', { points: qualification.level } ) } ` + deadlineString;
+        return `${I18n.t('qualification.' + qualification.type + '.moves', {moves: qualification.level})} ${deadlineString}`;
+      } if (event.isMultipleBlindfolded) {
+        return `${I18n.t('qualification.' + qualification.type + '.points', {points: qualification.level})} ${deadlineString}`;
       }
+    default:
+      return '-';
   }
 }

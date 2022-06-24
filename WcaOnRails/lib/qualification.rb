@@ -16,7 +16,7 @@ class Qualification
   end
 
   def self.wcif_type_to_class
-    @@wcif_type_to_class ||= Qualification.subclasses.map { |cls| [cls.wcif_type, cls] }.to_h
+    @@wcif_type_to_class ||= Qualification.subclasses.map.to_h { |cls| [cls.wcif_type, cls] }
   end
 
   def self.load(json)
