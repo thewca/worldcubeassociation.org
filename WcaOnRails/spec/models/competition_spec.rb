@@ -777,24 +777,24 @@ RSpec.describe Competition do
       expect(competition.receiving_registration_emails?(delegate.id)).to eq false
 
       competition.delegates << delegate
-      expect(competition.receiving_registration_emails?(delegate.id)).to eq true
+      expect(competition.receiving_registration_emails?(delegate.id)).to eq false
 
       cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
-      cd.update_column(:receive_registration_emails, false)
-      expect(competition.receiving_registration_emails?(delegate.id)).to eq false
+      cd.update_column(:receive_registration_emails, true)
+      expect(competition.receiving_registration_emails?(delegate.id)).to eq true
 
       competition.organizers << delegate
       expect(competition.receiving_registration_emails?(delegate.id)).to eq true
 
       co = competition.competition_organizers.find_by_organizer_id(delegate.id)
-      co.update_column(:receive_registration_emails, false)
-      expect(competition.receiving_registration_emails?(delegate.id)).to eq false
+      co.update_column(:receive_registration_emails, true)
+      expect(competition.receiving_registration_emails?(delegate.id)).to eq true
     end
 
     it "setting receive_registration_emails" do
       competition.delegates << delegate
       cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
-      expect(cd.receive_registration_emails).to eq true
+      expect(cd.receive_registration_emails).to eq false
 
       competition.receive_registration_emails = false
       competition.editing_user_id = delegate.id
@@ -804,7 +804,7 @@ RSpec.describe Competition do
 
       competition.organizers << delegate
       co = competition.competition_organizers.find_by_organizer_id(delegate.id)
-      expect(co.receive_registration_emails).to eq true
+      expect(co.receive_registration_emails).to eq false
 
       competition.receive_registration_emails = false
       competition.editing_user_id = delegate.id

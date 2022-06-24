@@ -51,9 +51,10 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:mail) { RegistrationsMailer.notify_organizers_of_new_registration(registration) }
 
     it "renders the headers" do
-      competition_delegate1 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate1.id)
-      competition_delegate1.receive_registration_emails = false
-      competition_delegate1.save!
+      # Set receive_registration_emails to true and test that the email headers are present
+      competition_delegate2 = competition_without_organizers.competition_trainee_delegates.find_by_trainee_delegate_id(delegate2.id)
+      competition_delegate2.receive_registration_emails = true
+      competition_delegate2.save!
 
       expect(mail.subject).to eq("#{registration.name} just registered for #{registration.competition.name}")
       expect(mail.to).to eq([delegate2.email])
@@ -62,18 +63,16 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
 
     it "renders the body" do
+      # Set receive_registration_emails to true and test that the email body is present
+      competition_delegate2 = competition_without_organizers.competition_trainee_delegates.find_by_trainee_delegate_id(delegate2.id)
+      competition_delegate2.receive_registration_emails = true
+      competition_delegate2.save!
+
       expect(mail.body.encoded).to match(edit_registration_url(registration))
     end
 
     it "handles no organizers receiving email" do
-      competition_delegate1 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate1.id)
-      competition_delegate1.receive_registration_emails = false
-      competition_delegate1.save!
-
-      competition_delegate2 = competition_without_organizers.competition_trainee_delegates.find_by_trainee_delegate_id(delegate2.id)
-      competition_delegate2.receive_registration_emails = false
-      competition_delegate2.save!
-
+      # Expect no email to be sent by default (when the organizer hasn't chosen to receive registration emails)
       expect(mail.message).to be_kind_of ActionMailer::Base::NullMail
     end
   end
@@ -83,6 +82,14 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:mail) { RegistrationsMailer.notify_organizers_of_deleted_registration(registration) }
 
     it "renders the headers" do
+      competition_delegate1 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate1.id)
+      competition_delegate1.receive_registration_emails = true
+      competition_delegate1.save!
+
+      competition_delegate2 = competition_without_organizers.competition_trainee_delegates.find_by_trainee_delegate_id(delegate2.id)
+      competition_delegate2.receive_registration_emails = true
+      competition_delegate2.save!
+
       expect(mail.subject).to eq("#{registration.name} just deleted their registration for #{registration.competition.name}")
       expect(mail.to).to eq([delegate1.email, delegate2.email])
       expect(mail.reply_to).to eq(competition_without_organizers.managers.map(&:email))
@@ -90,6 +97,14 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
 
     it "renders the body" do
+      competition_delegate1 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate1.id)
+      competition_delegate1.receive_registration_emails = true
+      competition_delegate1.save!
+
+      competition_delegate2 = competition_without_organizers.competition_trainee_delegates.find_by_trainee_delegate_id(delegate2.id)
+      competition_delegate2.receive_registration_emails = true
+      competition_delegate2.save!
+
       expect(mail.body.encoded).to match("just deleted their registration for #{registration.competition.name}")
     end
   end
