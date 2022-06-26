@@ -30,7 +30,7 @@
 //= require bootstrap-table-locale-all
 //= require extensions/bootstrap-table-mobile
 //= require jquery_plugins
-//= require starburst/starburst
+// require starburst/starburst
 //= require_self
 // We don't require_tree here, because we don't want fullcalendar and locales
 // to be included.

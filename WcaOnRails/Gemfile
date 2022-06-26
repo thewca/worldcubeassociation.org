@@ -91,12 +91,8 @@ gem 'image_processing'
 gem 'rest-client'
 gem 'wicked_pdf'
 gem 'icalendar'
-gem 'starburst', github: 'starburstgem/starburst'
+# gem 'starburst', github: 'starburstgem/starburst'
 gem 'react-rails'
-# required until https://github.com/rails/rails/pull/44083 is backported to Rails 6
-gem 'net-imap', require: false
-gem 'net-pop', require: false
-gem 'net-smtp', require: false
 
 group :development, :test do
   gem 'spring'
