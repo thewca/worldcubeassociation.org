@@ -109,7 +109,7 @@ export function eventQualificationToString(wcifEvent, qualification, { short } =
   switch (qualification.type) {
     case 'single':
     case 'average':
-      if (qualification.method == "ranking") {
+      if (qualification.method === 'ranking') {
         const messageName = `qualification.${qualification.type}.ranking`;
         return `${I18n.t(messageName, { ranking: qualification.level })} ${deadlineString}`;
       }
@@ -119,7 +119,7 @@ export function eventQualificationToString(wcifEvent, qualification, { short } =
       }
       if (event.isFewestMoves) {
         const messageName = `qualification.${qualification.type}.moves`;
-        const moves = qualification.type == 'average' ? qualification.level / 100 : qualification.level;
+        const moves = qualification.type === 'average' ? qualification.level / 100 : qualification.level;
         return `${I18n.t(messageName, { moves })} ${deadlineString}`;
       }
       if (event.isMultipleBlindfolded) {
