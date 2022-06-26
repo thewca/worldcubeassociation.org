@@ -181,18 +181,21 @@ en:
   #context: Words used to describe qualification limits.
   qualification:
     type_label: "Qualification Type"
+    method_label: "Qualification Method"
     for_event: "Qualification for %{event}"
-    ranking: "Top %{ranking} registered competitors"
     ranking_short: "Top N"
+    result: "By Result"
     none: "No qualification"
     single:
       time: "Single solve under %{time}"
       moves: "Single solve under %{moves} moves"
       points: "Single solve over %{points} points"
+      ranking: "Top %{ranking} by single"
     average:
       time: "Average under %{time}"
       moves: "Average under %{moves} moves"
       points: "Average over %{points} points"
+      ranking: "Top %{ranking} by average"
     deadline:
       description: "Qualification Deadline"
       by_date: "by %{date}"

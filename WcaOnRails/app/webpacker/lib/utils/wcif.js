@@ -2,7 +2,7 @@ import _ from 'lodash';
 import events from '../wca-data/events.js.erb';
 import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
 import I18n from '../i18n';
-import { attemptResultToString } from './edit-events';
+import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
 
 function promiseSaveWcif(competitionId, data) {
   const url = `/api/v0/competitions/${competitionId}/wcif`;
@@ -107,10 +107,12 @@ export function eventQualificationToString(wcifEvent, qualification, { short } =
   const deadlineString = I18n.t('qualification.deadline.by_date', { date: dateString });
   const event = events.byId[wcifEvent.id];
   switch (qualification.type) {
-    case 'ranking':
-      return `${I18n.t('qualification.ranking', { ranking: qualification.level })} ${deadlineString}`;
     case 'single':
     case 'average':
+      if (qualification.method == "ranking") {
+        const messageName = `qualification.${qualification.type}.ranking`;
+        return `${I18n.t(messageName, { ranking: qualification.level })} ${deadlineString}`;
+      }
       if (event.isTimedEvent) {
         const messageName = `qualification.${qualification.type}.time`;
         return `${I18n.t(messageName, { time: attemptResultToString(qualification.level, wcifEvent.id, short) })} ${deadlineString}`;
@@ -121,7 +123,7 @@ export function eventQualificationToString(wcifEvent, qualification, { short } =
       }
       if (event.isMultipleBlindfolded) {
         const messageName = `qualification.${qualification.type}.points`;
-        return `${I18n.t(messageName, { points: qualification.level })} ${deadlineString}`;
+        return `${I18n.t(messageName, { points: attemptResultToMbPoints(qualification.level) })} ${deadlineString}`;
       }
       return '-';
     default:
