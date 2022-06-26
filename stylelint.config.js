@@ -3,7 +3,8 @@ module.exports = {
   rules: {
     "no-descending-specificity": null,
     "block-no-empty": null,
-    "font-family-no-missing-generic-family-keyword": null
+    "font-family-no-missing-generic-family-keyword": null,
+    "scss/at-extend-no-missing-placeholder": null
   },
   ignoreFiles: ["WcaOnRails/app/assets/stylesheets/selectize.default.css"]
 };

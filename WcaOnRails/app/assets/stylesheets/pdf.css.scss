@@ -8,7 +8,7 @@ a {
 
 // We need the import here, otherwise Rails' asset adds a BOM at the beginning of it,
 // and the font doesn't get recognize!
-@import "cubing-icons";
+@import "cubing-icons"; /* stylelint-disable-line no-invalid-position-at-import-rule */
 
 header {
   width: 100%;

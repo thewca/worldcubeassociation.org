@@ -18,8 +18,10 @@
 
 @import "bootstrap-datetimepicker";
 @import "selectize";
+/* stylelint-disable scss/at-import-partial-extension */
 @import "selectize.bootstrap3";
 @import "jquery.jcrop";
+/* stylelint-enable scss/at-import-partial-extension */
 @import "bootstrap-table-parts";
 @import "slick";
 @import "slick-theme";
