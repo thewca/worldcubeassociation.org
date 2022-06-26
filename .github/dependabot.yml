@@ -6,7 +6,7 @@ updates:
     interval: monthly
   open-pull-requests-limit: 10
   ignore:
-  # stay on Rails 6 because of Webpacker compatibility reasons
+  # stay on Rails 6 because of 3rd party library compatibility reasons
   - dependency-name: rails
     versions:
     - ">= 7"
@@ -24,10 +24,6 @@ updates:
   - dependency-name: react-bootstrap
     versions:
     - ">= 1.0.0"
-  # We're staying on Webpack 4 for the time being, due to Rails constraints.
-  - dependency-name: webpack
-    versions:
-    - ">= 5.0.0"
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
