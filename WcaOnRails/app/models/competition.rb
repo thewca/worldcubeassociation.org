@@ -1581,7 +1581,6 @@ class Competition < ApplicationRecord
           raise WcaExceptions::BadApiParameter.new("Cannot update events")
         end
         competition_events.find_by_event_id!(wcif_event["id"]).load_wcif!(wcif_event)
-        competition_events.find_by_event_id!(wcif_event["id"]).save
       end
     end
 
