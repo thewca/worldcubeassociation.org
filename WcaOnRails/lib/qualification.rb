@@ -53,7 +53,8 @@ class Qualification
 
   def to_wcif
     {
-      "type" => self.wcif_type,
+      "type" => @wcif_type,
+      "method" => @method,
       "whenDate" => @when_date&.strftime("%Y-%m-%d"),
       "level" => @level,
     }
