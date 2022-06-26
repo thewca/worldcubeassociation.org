@@ -67,7 +67,7 @@ class CompetitionEvent < ApplicationRecord
     self.rounds = new_rounds
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self.qualification = Qualification.load(wcif["qualification"])
-    self.save
+    self.update!({ "qualification" => self.qualification })
     self
   end
 
