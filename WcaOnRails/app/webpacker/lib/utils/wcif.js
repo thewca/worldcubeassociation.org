@@ -113,7 +113,7 @@ export function eventQualificationToString(wcifEvent, qualification, { short } =
     case 'average':
       if (event.isTimedEvent) {
         const messageName = `qualification.${qualification.type}.time`;
-        return `${I18n.t(messageName, { time: attemptResultToString(qualification.level, short) })} ${deadlineString}`;
+        return `${I18n.t(messageName, { time: attemptResultToString(qualification.level, wcifEvent.id, short) })} ${deadlineString}`;
       }
       if (event.isFewestMoves) {
         const messageName = `qualification.${qualification.type}.moves`;
