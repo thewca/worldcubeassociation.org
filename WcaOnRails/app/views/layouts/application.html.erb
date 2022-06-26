@@ -43,7 +43,9 @@
   <% [:en, I18n.locale].uniq.map { |l| packs_to_prepend << "generated_locales/#{l}" } %>
 
   <% packs_to_include = @all_packs.split(",").uniq.unshift(*packs_to_prepend) %>
-  <%= javascript_packs_with_chunks_tag *packs_to_include %>
+  <%= javascript_pack_tag *packs_to_include, defer: false %>
+  <% stylesheets_to_include = filter_css_packs(*packs_to_include) %>
+  <%= stylesheet_pack_tag *stylesheets_to_include %>
 
   <% js_assets = (@all_js_assets || "").split(",").uniq %>
   <%# This loads fullCalendar/moment's locale files %>
