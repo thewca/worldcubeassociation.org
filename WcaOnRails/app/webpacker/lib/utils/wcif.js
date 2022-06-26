@@ -119,7 +119,8 @@ export function eventQualificationToString(wcifEvent, qualification, { short } =
       }
       if (event.isFewestMoves) {
         const messageName = `qualification.${qualification.type}.moves`;
-        return `${I18n.t(messageName, { moves: qualification.level })} ${deadlineString}`;
+        const moves = qualification.type == 'average' ? qualification.level / 100 : qualification.level;
+        return `${I18n.t(messageName, { moves })} ${deadlineString}`;
       }
       if (event.isMultipleBlindfolded) {
         const messageName = `qualification.${qualification.type}.points`;

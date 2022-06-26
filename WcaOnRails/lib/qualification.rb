@@ -66,7 +66,8 @@ class Qualification
     elsif event.event.timed_event?
       I18n.t("qualification." + self.wcif_type + ".time", time: SolveTime.centiseconds_to_clock_format(level))
     elsif event.event.fewest_moves?
-      I18n.t("qualification." + self.wcif_type + ".moves", moves: level)
+      moves = self.wcif_type == "average" ? (level.to_f / 100).round(2) : level
+      I18n.t("qualification." + self.wcif_type + ".moves", moves: moves)
     elsif event.event.multiple_blindfolded?
       I18n.t("qualification." + self.wcif_type + ".points", points: SolveTime.multibld_attempt_to_points(level))
     end

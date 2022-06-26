@@ -32,6 +32,7 @@ export default {
         }
         if (qualificationMethodInput) {
           let method = qualificationMethodInput.value;
+          newQualification.method = method;
           if (method == "ranking") {
             newQualification.level = rankingInput ? parseInt(rankingInput.value) : 0;
           } else if (type == "single") {
@@ -43,6 +44,7 @@ export default {
           newQualification.level = 0;
         }
       }
+      console.log(newQualification);
       onChange(newQualification);
     };
 
@@ -75,6 +77,7 @@ export default {
                             id="qualification-single-value"
                             value={qualification.level}
                             onChange={onChangeAggregator}
+                            isAverage={false}
                             ref={c => singleInput = c} />
       );
     } else if (qualificationType == "average") {
@@ -84,6 +87,7 @@ export default {
                             id="qualification-average-value"
                             value={qualification.level}
                             onChange={onChangeAggregator}
+                            isAverage={true}
                             ref={c => averageInput = c} />
       );
     }

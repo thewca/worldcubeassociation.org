@@ -74,7 +74,11 @@ export default class AttemptResultInput extends React.Component {
     if(event.isTimedEvent) {
       return this.centisecondsInput.value;
     } else if(event.isFewestMoves) {
-      return parseInt(this.movesInput.value);
+      if (this.props.isAverage) {
+        return Math.round(parseFloat(this.movesInput.value) * 100);
+      } else {
+        return parseInt(this.movesInput.value);
+      }
     } else if(event.isMultipleBlindfolded) {
       return mbPointsToAttemptResult(parseInt(this.mbldPointsInput.value));
     } else {
@@ -83,7 +87,7 @@ export default class AttemptResultInput extends React.Component {
   }
 
   render() {
-    let { id, autoFocus } = this.props;
+    let { id, autoFocus, isAverage } = this.props;
     let event = events.byId[this.props.eventId];
 
     if(event.isTimedEvent) {
@@ -94,14 +98,16 @@ export default class AttemptResultInput extends React.Component {
                                 ref={c => this.centisecondsInput = c}
       />;
     } else if(event.isFewestMoves) {
+      let value = isAverage ? this.props.value / 100 : this.props.value;
       return (
         <div>
           <input type="number"
                  min={1} max={MAX_FMC_SOLUTION_LENGTH}
+                 step={isAverage ? 0.01 : 1}
                  id={id}
                  className="form-control"
                  autoFocus={autoFocus}
-                 value={this.props.value}
+                 value={value}
                  ref={c => this.movesInput = c}
                  onChange={this.onChange} />
           moves
