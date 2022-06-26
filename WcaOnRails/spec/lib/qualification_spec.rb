@@ -1,40 +1,11 @@
 # frozen_string_literal: true
 
 RSpec.describe Qualification do
-  context "Ranking" do
-    it "requires ranking" do
-      input = {
-        'type' => 'ranking',
-        'whenDate' => '2021-06-01',
-      }
-      model = Qualification.load(input)
-      expect(model).to be_invalid
-    end
-
-    it "requires date" do
-      input = {
-        'type' => 'ranking',
-        'level' => 50,
-      }
-      model = Qualification.load(input)
-      expect(model).to be_invalid
-    end
-
-    it "parses correctly" do
-      input = {
-        'type' => 'ranking',
-        'whenDate' => '2021-06-01',
-        'level' => 50,
-      }
-      model = Qualification.load(input)
-      expect(model).to be_valid
-    end
-  end
-
   context "Single" do
     it "requires single" do
       input = {
         'type' => 'single',
+        'method' => 'ranking',
         'whenDate' => '2021-06-01',
       }
       model = Qualification.load(input)
@@ -44,15 +15,27 @@ RSpec.describe Qualification do
     it "requires date" do
       input = {
         'type' => 'single',
+        'method' => 'ranking',
         'level' => 1000,
       }
       model = Qualification.load(input)
       expect(model).to be_invalid
     end
 
+    it "requires method" do
+      input = {
+        'type' => 'single',
+        'level' => 1000,
+        'whenDate' => '2021-06-01',
+      }
+      model = Qualification.load(input)
+      expect(model).to be_invalid
+    end
+
     it "parses correctly" do
       input = {
         'type' => 'single',
+        'method' => 'result',
         'whenDate' => '2021-06-01',
         'level' => 1000,
       }
@@ -65,6 +48,7 @@ RSpec.describe Qualification do
     it "requires average" do
       input = {
         'type' => 'average',
+        'method' => 'result',
         'whenDate' => '2021-06-01',
       }
       model = Qualification.load(input)
@@ -74,7 +58,18 @@ RSpec.describe Qualification do
     it "requires date" do
       input = {
         'type' => 'average',
+        'method' => 'result',
         'level' => 1000,
+      }
+      model = Qualification.load(input)
+      expect(model).to be_invalid
+    end
+
+    it "requires method" do
+      input = {
+        'type' => 'average',
+        'level' => 1000,
+        'whenDate' => '2021-06-01',
       }
       model = Qualification.load(input)
       expect(model).to be_invalid
@@ -83,6 +78,7 @@ RSpec.describe Qualification do
     it "parses correctly" do
       input = {
         'type' => 'average',
+        'method' => 'result',
         'whenDate' => '2021-06-01',
         'level' => 1000,
       }
