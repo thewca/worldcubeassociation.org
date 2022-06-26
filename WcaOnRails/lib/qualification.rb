@@ -77,11 +77,11 @@ end
 class TimeQualification < Qualification
   def to_s(event)
     if event.event.timed_event?
-      I18n.t("qualification." + self.wcif_type + ".time", time: SolveTime.centiseconds_to_clock_format(level))
+      I18n.t("qualification." + self.class.wcif_type + ".time", time: SolveTime.centiseconds_to_clock_format(level))
     elsif event.event.fewest_moves?
-      I18n.t("qualification." + self.wcif_type + ".moves", moves: level)
+      I18n.t("qualification." + self.class.wcif_type + ".moves", moves: level)
     elsif event.event.multiple_blindfolded?
-      I18n.t("qualification." + self.wcif_type + ".points", points: SolveTime.multibld_attempt_to_points(level))
+      I18n.t("qualification." + self.class.wcif_type + ".points", points: SolveTime.multibld_attempt_to_points(level))
     end
   end
 end
