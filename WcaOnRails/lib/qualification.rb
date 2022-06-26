@@ -16,7 +16,11 @@ class Qualification
   end
 
   def self.wcif_type_to_class
-    @@wcif_type_to_class ||= Qualification.subclasses.map.to_h { |cls| [cls.wcif_type, cls] }
+    @@wcif_type_to_class ||= {
+      "ranking" => RankingQualification,
+      "single" => SingleQualification,
+      "average" => AverageQualification,
+    }
   end
 
   def self.load(json)
@@ -45,7 +49,7 @@ class Qualification
       "type" => ["object", "null"],
       "properties" => {
         "whenDate" => { "type" => "string" },
-        "type" => { "type" => "string", "enum" => Qualification.subclasses.map(&:wcif_type) },
+        "type" => { "type" => "string", "enum" => ["ranking", "single", "average"] },
         "level" => { "type" => "integer" },
       },
     }
