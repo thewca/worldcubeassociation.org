@@ -451,8 +451,8 @@ RSpec.describe "Competition WCIF" do
     it "can set event qualifications" do
       wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
       wcif_333_event["qualification"] = {
-        "type" => "average",
-        "method" => "result",
+        "resultType" => "average",
+        "type" => "attemptResult",
         "whenDate" => "2021-07-01",
         "level" => 6000,
       }

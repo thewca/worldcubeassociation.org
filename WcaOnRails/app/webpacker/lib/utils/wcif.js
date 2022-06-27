@@ -106,24 +106,28 @@ export function eventQualificationToString(wcifEvent, qualification, { short } =
   }
   const deadlineString = I18n.t('qualification.deadline.by_date', { date: dateString });
   const event = events.byId[wcifEvent.id];
-  switch (qualification.type) {
+  switch (qualification.resultType) {
     case 'single':
     case 'average':
-      if (qualification.method === 'ranking') {
-        const messageName = `qualification.${qualification.type}.ranking`;
+      if (qualification.type === 'ranking') {
+        const messageName = `qualification.${qualification.resultType}.ranking`;
         return `${I18n.t(messageName, { ranking: qualification.level })} ${deadlineString}`;
       }
+      if (qualification.type === 'anyResult') {
+        const messageName = `qualification.${qualification.resultType}.any_result`;
+        return `${I18n.t(messageName)} ${deadlineString}`;
+      }
       if (event.isTimedEvent) {
-        const messageName = `qualification.${qualification.type}.time`;
+        const messageName = `qualification.${qualification.resultType}.time`;
         return `${I18n.t(messageName, { time: attemptResultToString(qualification.level, wcifEvent.id, short) })} ${deadlineString}`;
       }
       if (event.isFewestMoves) {
-        const messageName = `qualification.${qualification.type}.moves`;
-        const moves = qualification.type === 'average' ? qualification.level / 100 : qualification.level;
+        const messageName = `qualification.${qualification.resultType}.moves`;
+        const moves = qualification.resultType === 'average' ? qualification.level / 100 : qualification.level;
         return `${I18n.t(messageName, { moves })} ${deadlineString}`;
       }
       if (event.isMultipleBlindfolded) {
-        const messageName = `qualification.${qualification.type}.points`;
+        const messageName = `qualification.${qualification.resultType}.points`;
         return `${I18n.t(messageName, { points: attemptResultToMbPoints(qualification.level) })} ${deadlineString}`;
       }
       return '-';

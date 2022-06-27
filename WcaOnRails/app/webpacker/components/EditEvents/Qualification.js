@@ -19,25 +19,27 @@ export default {
     return <span>{eventQualificationToString(wcifEvent, wcifEvent.qualification, { short: true })}</span>;
   },
   Input({ value: qualification, onChange, autoFocus, wcifEvent }) {
-    let qualificationTypeInput, qualificationMethodInput, rankingInput, singleInput, averageInput, whenDateInput;
+    let qualificationResultTypeInput, qualificationTypeInput, rankingInput, singleInput, averageInput, whenDateInput;
 
     let onChangeAggregator = () => {
-      let type = qualificationTypeInput.value;
+      let resultType = qualificationResultTypeInput.value;
       let newQualification = null;
-      if (type != "none") {
-        newQualification = { type };
+      if (resultType != "none") {
+        newQualification = { resultType };
         if (qualification) {
           // Copy the deadline from the previous Qualification, or default to today.
           newQualification.whenDate = qualification.whenDate || moment(new Date()).format("YYYY-MM-DD");
         }
-        if (qualificationMethodInput) {
-          let method = qualificationMethodInput.value;
-          newQualification.method = method;
-          if (method == "ranking") {
+        if (qualificationTypeInput) {
+          let type = qualificationTypeInput.value;
+          newQualification.type = type;
+          if (type == "ranking") {
             newQualification.level = rankingInput ? parseInt(rankingInput.value) : 0;
-          } else if (type == "single") {
+          } else if (type == "anyResult") {
+            newQualification.level = null;
+          } else if (resultType == "single") {
             newQualification.level = singleInput ? parseInt(singleInput.value) : 0;
-          } else if (type == "average") {
+          } else if (resultType == "average") {
             newQualification.level = averageInput ? parseInt(averageInput.value) : 0;
           }
         } else {
@@ -56,11 +58,11 @@ export default {
 
     let valueLabel, qualificationInput;
     let helpBlock = qualification ? eventQualificationToString(wcifEvent, qualification) : null;
+    let qualificationResultType = qualification ? qualification.resultType : "";
     let qualificationType = qualification ? qualification.type : "";
-    let qualificationMethod = qualification ? qualification.method : "";
 
-    if (qualification && qualification.method == "ranking") {
-      valueLabel = I18n.t('qualification.ranking_short');
+    if (qualification && qualification.type == "ranking") {
+      valueLabel = I18n.t('qualification.type.ranking');
       qualificationInput = (
         <input type="number"
                id="qualification-number-value"
@@ -70,26 +72,28 @@ export default {
                onChange={onChangeAggregator}
                ref={c => rankingInput = c} />
       );
-    } else if (qualificationType == "single") {
-      valueLabel = I18n.t('common.single');
-      qualificationInput = (
-        <AttemptResultInput eventId={wcifEvent.id}
-                            id="qualification-single-value"
-                            value={qualification.level}
-                            onChange={onChangeAggregator}
-                            isAverage={false}
-                            ref={c => singleInput = c} />
-      );
-    } else if (qualificationType == "average") {
-      valueLabel = I18n.t('common.average');
-      qualificationInput = (
-        <AttemptResultInput eventId={wcifEvent.id}
-                            id="qualification-average-value"
-                            value={qualification.level}
-                            onChange={onChangeAggregator}
-                            isAverage={true}
-                            ref={c => averageInput = c} />
-      );
+    } else if (qualification && qualification.type == "attemptResult") {
+      if (qualificationResultType == "single") {
+        valueLabel = I18n.t('common.single');
+        qualificationInput = (
+          <AttemptResultInput eventId={wcifEvent.id}
+                              id="qualification-single-value"
+                              value={qualification.level}
+                              onChange={onChangeAggregator}
+                              isAverage={false}
+                              ref={c => singleInput = c} />
+        );
+      } else if (qualificationResultType == "average") {
+        valueLabel = I18n.t('common.average');
+        qualificationInput = (
+          <AttemptResultInput eventId={wcifEvent.id}
+                              id="qualification-average-value"
+                              value={qualification.level}
+                              onChange={onChangeAggregator}
+                              isAverage={true}
+                              ref={c => averageInput = c} />
+        );
+      }
     }
 
     let whenDateBlock = qualificationInput ? (
@@ -108,22 +112,23 @@ export default {
       </div>
     ) : null;
 
-    let bottomSection = qualificationType ? (
+    let bottomSection = qualificationResultType ? (
         <div>
           <div className="form-group">
-            <label htmlFor="qualification-method-input" className="col-sm-3 control-label">{ I18n.t('qualification.method_label')}</label>
+            <label htmlFor="qualification-type-input" className="col-sm-3 control-label">{ I18n.t('qualification.type_label')}</label>
             <div className="col-sm-9">
               <div className="input-group">
-                <select value={qualificationMethod}
+                <select value={qualificationType}
                         name="type"
                         autoFocus={autoFocus}
                         onChange={onChangeAggregator}
                         className="form-control"
-                        id="qualification-type-input"
-                        ref={c => qualificationMethodInput = c}
+                        id="qualification-result-type-input"
+                        ref={c => qualificationTypeInput = c}
                 >
-                  <option value="result">{ I18n.t('qualification.result') }</option>
-                  <option value="ranking">{ I18n.t('qualification.ranking_short') }</option>
+                  <option value="attemptResult">{ I18n.t('qualification.type.result') }</option>
+                  <option value="ranking">{ I18n.t('qualification.type.ranking') }</option>
+                  <option value="anyResult">{ I18n.t('qualification.type.any_result') }</option>
                 </select>
               </div>
             </div>
@@ -144,18 +149,18 @@ export default {
     return (
       <div>
         <div className="form-group">
-          <label htmlFor="qualification-type-input" className="col-sm-3 control-label">{ I18n.t('qualification.type_label' )}</label>
+          <label htmlFor="qualification-result-type-input" className="col-sm-3 control-label">{ I18n.t('qualification.result_type' )}</label>
           <div className="col-sm-9">
             <div className="input-group">
-              <select value={qualificationType}
+              <select value={qualificationResultType}
                       name="type"
                       autoFocus={autoFocus}
                       onChange={onChangeAggregator}
                       className="form-control"
-                      id="qualification-type-input"
-                      ref={c => qualificationTypeInput = c}
+                      id="qualification-result-type-input"
+                      ref={c => qualificationResultTypeInput = c}
               >
-                <option value="none">{ I18n.t('qualification.none') }</option>
+                <option value="none">{ I18n.t('qualification.type.none') }</option>
                 <option value="single">{ I18n.t('common.single') }</option>
                 <option value="average">{ I18n.t('common.average') }</option>
               </select>
