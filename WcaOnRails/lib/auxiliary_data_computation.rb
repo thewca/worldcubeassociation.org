@@ -76,13 +76,20 @@ module AuxiliaryDataComputation
               previous_value[region] = value
               ranked[region][person_id] = true
             end
+            cached_country = Country.c_find(current_country_by_wca_id[person_id])
+            if cached_country.nil?
+              # The only known case where this happens if current_country_by_wca_id[person_id] is nil,
+              # in other words, the personId from the Concise*Results table is not found in the Persons table.
+              # In the past, this has occurred when temporary results have been inserted for newcomers.
+              continue
+            end
             # Set the person's data (first time the current location is matched).
             personal_rank[person_id][:best] ||= value
             personal_rank[person_id][:world_rank] ||= current_rank["World"]
-            if continent_id == Country.c_find(current_country_by_wca_id[person_id]).continentId
+            if continent_id == cached_country.continentId
               personal_rank[person_id][:continent_rank] ||= current_rank[continent_id]
             end
-            if country_id == current_country_by_wca_id[person_id]
+            if country_id == cached_country.id
               personal_rank[person_id][:country_rank] ||= current_rank[country_id]
             end
           end
