@@ -495,10 +495,6 @@ es:
           hora dada antes de que comience la categoría
         #original_hash: 78308cc
         early_puzzle_submission_reason: Razón y detallas para entregar los puzzles con anterioridad
-        #original_hash: 88da0ef
-        qualification_results: >-
-          Me gustaría usar los resultados de calificación para limitar quien
-          puede competir en determinadas categorías
         #original_hash: 1ec6dd4
         qualification_results_reason: Razón y detalles para usar resultados de calificación
         #original_hash: ac30de9
@@ -914,6 +910,8 @@ es:
           los registros in situ de forma gratuita.
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Por ahora esta cifra es informativa, los reembolsos deberán realizarse
@@ -950,8 +948,6 @@ es:
           Por favor explica aquí por que te gustaría requerir que los
           competidores entreguen sus puzzles con anelación. Por favor rellena
           esto en inglés
-        #original_hash: da39a3e
-        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Por favor explica aquí por que te gustaría requerir usar tiempos de
@@ -3607,7 +3603,10 @@ es:
             organizadores para conseguir una competición exitosa.
           #original_hash: 576c3b8
           '4': >-
-            Visita las <a target='_blank' href='https://www.worldcubeassociation.org/organizer-guidelines'>guías para organizadores de compentencias de la WCA</a> para obtener más información.
+            Visita las <a target='_blank'
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>guías
+            para organizadores de compentencias de la WCA</a> para obtener más
+            información.
       '6':
         #original_hash: 8005a61
         title: >-
