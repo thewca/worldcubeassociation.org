@@ -337,6 +337,7 @@ class CompetitionsController < ApplicationController
       site: 'https://connect.stripe.com',
       authorize_url: '/oauth/authorize',
       token_url: '/oauth/token',
+      auth_scheme: :request_body,
     }
 
     OAuth2::Client.new(EnvVars.STRIPE_CLIENT_ID, EnvVars.STRIPE_API_KEY, options)
