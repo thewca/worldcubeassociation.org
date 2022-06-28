@@ -6,10 +6,11 @@ import _ from 'lodash';
 import events from '../../lib/wca-data/events.js.erb'
 import formats from '../../lib/wca-data/formats.js.erb'
 import rootRender from '../../lib/edit-events'
+import I18n from '../../lib/i18n'
 import { pluralize } from '../../lib/utils/edit-events'
 import { buildActivityCode, saveWcif, roundIdToString } from '../../lib/utils/wcif'
 import { removeRoundsFromSharedTimeLimits } from "./EditRoundAttribute"
-import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from './EditRoundAttribute'
+import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton, EditQualificationButton } from './EditRoundAttribute'
 
 export default class EditEvents extends React.Component {
   save = e => {
@@ -154,6 +155,9 @@ function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
           })}
         </tbody>
       </table>
+      <h5>
+        { I18n.t('competitions.events.qualification') }: <EditQualificationButton wcifEvent={wcifEvent} disabled={disabled} />
+      </h5>
     </div>
   );
 }

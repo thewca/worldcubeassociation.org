@@ -195,7 +195,7 @@ class Competition < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
-  validates :qualification_results_reason, presence: true, if: :qualification_results?
+  validates :qualification_results_reason, presence: true, if: :persisted_uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
   validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
 
@@ -204,6 +204,12 @@ class Competition < ApplicationRecord
   def persisted_events_id
     with_old_id do
       self.competition_events.map(&:event_id)
+    end
+  end
+
+  def persisted_uses_qualification?
+    with_old_id do
+      self.uses_qualification?
     end
   end
 
@@ -1206,6 +1212,14 @@ class Competition < ApplicationRecord
 
   def uses_cumulative_across_rounds?
     competition_events.any? { |ce| ce.rounds.any? { |r| r.time_limit.cumulative_round_ids.size > 1 } }
+  end
+
+  def uses_qualification?
+    competition_events.any?(&:qualification)
+  end
+
+  def qualification_date_to_events
+    competition_events.select(&:qualification).group_by { |e| e.qualification.when_date }
   end
 
   # The name `is_probably_over` is meant to be surprising.

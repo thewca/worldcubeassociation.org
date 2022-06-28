@@ -2,6 +2,7 @@
   show_cumulative_one_round = competition.uses_cumulative?
   show_cumulative_across_rounds = competition.uses_cumulative_across_rounds?
   show_cutoff = competition.uses_cutoff?
+  show_qualifications = competition.uses_qualification?
 %>
 <div class="time-limit-information">
   <h4 id="time-limit"><%= t("competitions.events.time_limit") %></h4>
@@ -37,4 +38,21 @@
           link_to_9b: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "9b"), regulations_path + "#9b", target: "_blank"),
           link_to_9f: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "9f"), regulations_path + "#9f", target: "_blank")) %>
   </p>
+
+  <% if show_qualifications %>
+    <h4 id="qualification"><%= t("competitions.events.qualification") %></h4>
+    <p>
+      <%= t("competitions.events.time_limit_information.qualification_html") %>
+      <% date_to_events = competition.qualification_date_to_events %>
+      <% if (date_to_events.length() > 1) %>
+        <% date_to_events.each do |date, events| %>
+          <%= t("competitions.events.time_limit_information.qualification_some_events_html",
+                date: wca_date_range(date, date), events: events.map{ |e| e.event.name }.join(", ")) %>
+        <% end %>
+      <% else %>
+        <%= t("competitions.events.time_limit_information.qualification_all_events_html",
+              date: wca_date_range(date_to_events.keys.first, date_to_events.keys.first)) %>
+      <% end %>
+    </p>
+  <% end %>
 </div>

@@ -621,7 +621,6 @@ class CompetitionsController < ApplicationController
         :refund_policy_limit_date,
         :early_puzzle_submission,
         :early_puzzle_submission_reason,
-        :qualification_results,
         :qualification_results_reason,
         :event_restrictions,
         :event_restrictions_reason,

@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import events from '../wca-data/events.js.erb';
 import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
+import I18n from '../i18n';
+import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
 
 function promiseSaveWcif(competitionId, data) {
   const url = `/api/v0/competitions/${competitionId}/wcif`;
@@ -91,4 +93,45 @@ export function venueWcifFromRoomId(scheduleWcif, id) {
 
 export function activityCodeListFromWcif(scheduleWcif) {
   return _.map(_.flatMap(_.flatMap(scheduleWcif.venues, 'rooms'), 'activities'), 'activityCode');
+}
+
+export function eventQualificationToString(wcifEvent, qualification, { short } = {}) {
+  if (!qualification) {
+    return '-';
+  }
+  let dateString = '-';
+  if (qualification.whenDate) {
+    const whenDate = window.moment(qualification.whenDate).toDate();
+    dateString = whenDate.toISOString().substring(0, 10);
+  }
+  const deadlineString = I18n.t('qualification.deadline.by_date', { date: dateString });
+  const event = events.byId[wcifEvent.id];
+  switch (qualification.resultType) {
+    case 'single':
+    case 'average':
+      if (qualification.type === 'ranking') {
+        const messageName = `qualification.${qualification.resultType}.ranking`;
+        return `${I18n.t(messageName, { ranking: qualification.level })} ${deadlineString}`;
+      }
+      if (qualification.type === 'anyResult') {
+        const messageName = `qualification.${qualification.resultType}.any_result`;
+        return `${I18n.t(messageName)} ${deadlineString}`;
+      }
+      if (event.isTimedEvent) {
+        const messageName = `qualification.${qualification.resultType}.time`;
+        return `${I18n.t(messageName, { time: attemptResultToString(qualification.level, wcifEvent.id, short) })} ${deadlineString}`;
+      }
+      if (event.isFewestMoves) {
+        const messageName = `qualification.${qualification.resultType}.moves`;
+        const moves = qualification.resultType === 'average' ? qualification.level / 100 : qualification.level;
+        return `${I18n.t(messageName, { moves })} ${deadlineString}`;
+      }
+      if (event.isMultipleBlindfolded) {
+        const messageName = `qualification.${qualification.resultType}.points`;
+        return `${I18n.t(messageName, { points: attemptResultToMbPoints(qualification.level) })} ${deadlineString}`;
+      }
+      return '-';
+    default:
+      return '-';
+  }
 }
