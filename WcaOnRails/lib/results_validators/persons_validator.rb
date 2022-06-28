@@ -10,17 +10,17 @@ module ResultsValidators
     DOB_0101_WARNING = "The date of birth of %{name} is on January 1st, please ensure it's correct."
     VERY_YOUNG_PERSON_WARNING = "%{name} seems to be less than 3 years old, please ensure it's correct."
     NOT_SO_YOUNG_PERSON_WARNING = "%{name} seems to be around 100 years old, please ensure it's correct."
-    SAME_PERSON_NAME_WARNING = "There is already at least one person with the name '%{name}' in the WCA database (%{wca_ids})."\
-                               " Please ensure that your '%{name}' is a different person. If not, please assign the correct WCA ID to the user account and regenerate the results JSON."
+    SAME_PERSON_NAME_WARNING = "There is already at least one person with the name '%{name}' in the WCA database (%{wca_ids}). " \
+                               "Please ensure that your '%{name}' is a different person. If not, please assign the correct WCA ID to the user account and regenerate the results JSON."
     NON_MATCHING_DOB_WARNING = "The birthdate '%{dob}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_dob}'). If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
-    NON_MATCHING_GENDER_WARNING = "The gender '%{gender}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_gender}')."\
-                                  " If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
+    NON_MATCHING_GENDER_WARNING = "The gender '%{gender}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_gender}'). " \
+                                  "If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
     EMPTY_GENDER_WARNING = "The gender for newcomer %{name} is empty. Valid gender values are 'female', 'male' and 'other'. Please leave a comment to the WRT about this."
     NON_MATCHING_NAME_WARNING = "The name '%{name}' provided for %{wca_id} does not match the current record in the WCA database ('%{expected_name}'). "
-    NON_MATCHING_COUNTRY_WARNING = "The country '%{country}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_country}')."\
-                                   " If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
-    MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors"\
-                                                " and that all results are correctly seperated by their corresponding id."
+    NON_MATCHING_COUNTRY_WARNING = "The country '%{country}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_country}'). " \
+                                   "If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
+    MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors " \
+                                                "and that all results are correctly seperated by their corresponding id."
     WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
 
     @@desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
