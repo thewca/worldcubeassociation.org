@@ -80,10 +80,10 @@ RSpec.describe RegistrationsController do
 
       expect do
         patch :do_actions_for_selected, params: {
-          competition_id: competition.id,
-          registrations_action: "delete-selected",
-          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"],
-        }, xhr: true
+                                          competition_id: competition.id,
+                                          registrations_action: "delete-selected",
+                                          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"],
+                                        }, xhr: true
       end.to change { enqueued_jobs.size }.by(2)
 
       expect(Registration.find_by_id(registration.id).deleted?).to eq true
@@ -102,10 +102,10 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).not_to receive(:notify_registrant_of_pending_registration).with(pending_registration).and_call_original
       expect do
         patch :do_actions_for_selected, params: {
-          competition_id: competition.id,
-          registrations_action: "reject-selected",
-          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{pending_registration.id}"],
-        }, xhr: true
+                                          competition_id: competition.id,
+                                          registrations_action: "reject-selected",
+                                          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{pending_registration.id}"],
+                                        }, xhr: true
       end.to change { enqueued_jobs.size }.by(2)
       expect(registration.reload.pending?).to be true
       expect(registration2.reload.pending?).to be true
@@ -123,10 +123,10 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).not_to receive(:notify_registrant_of_accepted_registration).with(accepted_registration).and_call_original
       expect do
         patch :do_actions_for_selected, params: {
-          competition_id: competition.id,
-          registrations_action: "accept-selected",
-          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{accepted_registration.id}"],
-        }, xhr: true
+                                          competition_id: competition.id,
+                                          registrations_action: "accept-selected",
+                                          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{accepted_registration.id}"],
+                                        }, xhr: true
       end.to change { enqueued_jobs.size }.by(2)
       expect(registration.reload.accepted?).to be true
       expect(registration2.reload.accepted?).to be true
@@ -143,11 +143,11 @@ RSpec.describe RegistrationsController do
 
       expect do
         patch :do_actions_for_selected, params: {
-          competition_id: competition.id,
-          registrations_action: "accept-selected",
-          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}",
-                                   "registration-#{deleted_registration.id}", "registration-#{banned_deleted_registration.id}"],
-        }, xhr: true
+                                          competition_id: competition.id,
+                                          registrations_action: "accept-selected",
+                                          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}",
+                                                                   "registration-#{deleted_registration.id}", "registration-#{banned_deleted_registration.id}"],
+                                        }, xhr: true
       end.to change { enqueued_jobs.size }.by(2)
       expect(registration.reload.accepted?).to be true
       expect(registration2.reload.accepted?).to be true
@@ -166,11 +166,11 @@ RSpec.describe RegistrationsController do
 
       expect do
         patch :do_actions_for_selected, params: {
-          competition_id: competition.id,
-          registrations_action: "reject-selected",
-          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}",
-                                   "registration-#{deleted_registration.id}", "registration-#{banned_deleted_registration.id}"],
-        }, xhr: true
+                                          competition_id: competition.id,
+                                          registrations_action: "reject-selected",
+                                          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}",
+                                                                   "registration-#{deleted_registration.id}", "registration-#{banned_deleted_registration.id}"],
+                                        }, xhr: true
       end.to change { enqueued_jobs.size }.by(2)
       expect(registration.reload.pending?).to be true
       expect(registration2.reload.pending?).to be true
