@@ -1,5 +1,4 @@
 const { webpackConfig, merge } = require('shakapacker');
-const { ESBuildMinifyPlugin } = require('esbuild-loader')
 const webpack = require('webpack');
 
 const customConfig = {
@@ -45,12 +44,7 @@ const customConfig = {
           enforce: true,
         },
       }
-    },
-    minimizer: [
-      new ESBuildMinifyPlugin({
-        target: 'es2015' 
-      })
-    ]
+    }
   }
 };
 

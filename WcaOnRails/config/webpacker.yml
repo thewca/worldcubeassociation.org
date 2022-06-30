@@ -10,7 +10,6 @@ default: &default
   webpack_compile_output: true
   ensure_consistent_versioning: true
   nested_entries: true
-  webpack_loader: 'esbuild'
 
   # Additional paths webpack should look up modules
   # ['app/assets', 'engine/foo/app/assets']
