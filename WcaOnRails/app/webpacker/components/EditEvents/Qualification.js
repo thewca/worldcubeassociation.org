@@ -43,11 +43,10 @@ export default {
             newQualification.level = averageInput ? parseInt(averageInput.value) : 0;
           }
         } else {
-          // Set default values when resultType is newly set.
           newQualification.level = 0;
-          newQualification.type = "attemptResult";
         }
       }
+      console.log(newQualification);
       onChange(newQualification);
     };
 
@@ -97,7 +96,7 @@ export default {
       }
     }
 
-    let whenDateBlock = qualification && qualification.type != "" ? (
+    let whenDateBlock = qualificationInput ? (
       <div className="form-group">
         <label htmlFor="whenDate-input" className="col-sm-3 control-label">
           { I18n.t('qualification.deadline.description') }
