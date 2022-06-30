@@ -259,6 +259,49 @@ sv:
     333mbf: '10:00.00 per kub, upp till 60:00.00'
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: Kvalificeringstyp
+    #original_hash: 65c848f
+    result_type: Resultattyp
+    #original_hash: 29ef642
+    for_event: 'Kvalificering för %{event}'
+    type:
+      #original_hash: f5c3f76
+      none: Ingen kvalificering
+      #original_hash: f8c5669
+      result: Efter resultat
+      #original_hash: 4aebda3
+      ranking: Topp N
+      #original_hash: 3bc54a0
+      any_result: Vilket resultat som helst
+    single:
+      #original_hash: d596f44
+      time: 'Singel-lösning under %{time}'
+      #original_hash: 52ba186
+      moves: 'Singel-lösning under %{moves} drag'
+      #original_hash: b1993ae
+      points: 'Singel-lösning över %{points} poäng'
+      #original_hash: ed2b051
+      ranking: 'Topp %{ranking} efter singel'
+      #original_hash: 933b7dc
+      any_result: Vilken singel-lösning som helst
+    average:
+      #original_hash: 2682ae8
+      time: 'Snitt under %{time}'
+      #original_hash: 1b9b5fc
+      moves: 'Snitt under %{moves} drag'
+      #original_hash: 05c417e
+      points: 'Snitt över %{points} poäng'
+      #original_hash: 805171c
+      ranking: 'Topp %{ranking} efter snitt'
+      #original_hash: 2223a1b
+      any_result: Vilket snitt som helst
+    deadline:
+      #original_hash: 3b7f9f6
+      description: Kvalificeringsdeadline
+      #original_hash: bed8220
+      by_date: 'före %{date}'
   common:
     #original_hash: 70c07ec
     world: Värld
@@ -493,10 +536,6 @@ sv:
           innan grenen planeras att börja
         #original_hash: 78308cc
         early_puzzle_submission_reason: Anledning och detaljer kring att lämna in pussel tidigt
-        #original_hash: 88da0ef
-        qualification_results: >-
-          Jag vill använda kvalificeringsresultat för att begränsa vem som kan
-          tävla i vissa grenar
         #original_hash: 1ec6dd4
         qualification_results_reason: Anledning och detaljer för kvalificeringsresultat
         #original_hash: ac30de9
@@ -935,8 +974,6 @@ sv:
         early_puzzle_submission_reason: >-
           Förklara här varför ni vill kräva att tävlande lämnar in pussel
           tidigt. Vänligen fyll i detta på engelska!
-        #original_hash: da39a3e
-        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Förklara här varför ni vill använda kvalificeringstider. Vänligen fyll
@@ -3064,6 +3101,16 @@ sv:
           Formatet beskriver hur rankingen av tävlande avgörs baserat på deras
           resultat. Listan över tillåtna format per gren beskrivs i
           %{link_to_9b}. Se %{link_to_9f} för en beskrivning av varje format.
+        #original_hash: fa50f5c
+        qualification_html: >-
+          Kvalificeringstider måste uppnås på andra WCA-tävlingar för att få
+          tävla.
+        #original_hash: 3b524fd
+        qualification_all_events_html: 'Deadline för att uppnå kvalificeringstider är <b>%{date}</b>.'
+        #original_hash: 0d791e9
+        qualification_some_events_html: >-
+          Deadline för att uppnå kvalificeringstider i %{events} är
+          <b>%{date}</b>.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
@@ -3072,6 +3119,8 @@ sv:
       cutoff: Cutoff
       #original_hash: 02ed4a4
       proceed: Går vidare
+      #original_hash: 2ffe44e
+      qualification: Kvalificering
     schedule:
       display_as:
         #original_hash: ec5dd7c
