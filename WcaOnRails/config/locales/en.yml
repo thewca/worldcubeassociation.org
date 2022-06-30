@@ -345,6 +345,7 @@ en:
         event_restrictions: "I would like to restrict competitors from registering for specific combinations of events"
         event_restrictions_reason: "Reason and details for event restrictions"
         main_event_id: "Main event"
+        allow_registration_without_qualification: "Events with Qualification"
       championship:
         championship_type: "Championship type"
       competition_series:
@@ -685,6 +686,9 @@ en:
         on_the_spot_registration:
           "true": "On the spot registrations will be accepted"
           "false": "On the spot registrations WILL NOT be accepted"
+        allow_registration_without_qualification:
+          "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
+          "false": "Competitors MUST be qualified to register for an event"
         allow_registration_edits:
           "true": "Competitors may edit their registration until the deadline for updating events"
           "false": "Competitors may NOT edit their registration once it has been accepted"
@@ -1100,7 +1104,11 @@ en:
       must_register: "must register for at least one event"
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
+<<<<<<< HEAD
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
+=======
+      can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
+>>>>>>> 8d5edfefe... Add option to require qualifications.
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1245,6 +1253,7 @@ en:
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check competition's information for instruction about how to pay"
+    not_qualified: "Not qualified"
     refund_form:
       hints:
         refund_amount: "The amount to refund to the competitor, can be any value up to the amount already paid."
@@ -1406,6 +1415,7 @@ en:
       guests_free:
         anyone: "Any spectator can attend for free."
         restricted: "Spectators are only permitted as companions of competitors."
+      require_qualification: "Competitors may only register for events that they are already qualified for."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
       click_to_display_requirements_html: "This competition is over, click %{link_here} to display the registration requirements it used."
       hide_requirements: "Hide registration requirements."

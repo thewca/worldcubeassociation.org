@@ -231,6 +231,17 @@ class Registration < ApplicationRecord
     end
   end
 
+  validate :cannot_register_for_unqualified_events
+  private def cannot_register_for_unqualified_events
+    if competition && competition.allow_registration_without_qualification
+      return
+    end
+    if registration_competition_events.reject(&:marked_for_destruction?).select { |event|
+      !event.competition_event.can_register?(user) }.any?
+      errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
+    end
+  end
+
   # For associated_events_picker
   def events_to_associated_events(events)
     events.map do |event|

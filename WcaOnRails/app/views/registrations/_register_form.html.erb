@@ -1,9 +1,10 @@
 <% disabled = !current_user.can_edit_registration?(@registration) %>
 <% url = @registration.new_record? ? competition_registrations_path(@competition)
                                    : registration_path(@registration) %>
+<% ineligible_events = @competition.competition_events.select{|e| !e.can_register?(current_user) }.map{|e| e.event } %>
 <%= horizontal_simple_form_for @registration, url: url, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
   <%= render "shared/associated_events_picker", form_builder: f, disabled: disabled,
-             events_association_name: :registration_competition_events, allowed_events: @competition.events, selected_events: @selected_events, hint: notify_of_preferred_events(@registration), show_select_hint: true %>
+             events_association_name: :registration_competition_events, allowed_events: @competition.events, selected_events: @selected_events, disabled_events: ineligible_events, disabled_tooltip: t('registrations.not_qualified'), hint: notify_of_preferred_events(@registration), show_select_hint: true %>
 
   <% if @competition.guests_enabled? %>
     <%= f.input :guests, disabled: disabled %>

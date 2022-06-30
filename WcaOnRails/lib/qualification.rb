@@ -39,6 +39,26 @@ class Qualification
     end
   end
 
+  def can_register?(user, event_id)
+    qualifying_results = user.person.results.in_event(event_id).no_later_than(self.when_date)
+    # Allow any competitor with a result to register when type == "ranking" or type == "anyResult".
+    # When type == "ranking", the results need to be manually cleared out later.
+    if self.wcif_type == "anyResult" || self.wcif_type == "ranking"
+      if self.result_type == "single"
+        qualifying_results = qualifying_results.succeeded
+      else
+        qualifying_results = qualifying_results.average_succeeded
+      end
+    elsif self.wcif_type == "attemptResult"
+      if self.result_type == "single"
+        qualifying_results = qualifying_results.single_better_than(self.level)
+      else
+        qualifying_results = qualifying_results.average_better_than(self.level)
+      end
+    end
+    qualifying_results.any?
+  end
+
   def self.dump(qualification)
     qualification ? JSON.dump(qualification.to_wcif) : nil
   end

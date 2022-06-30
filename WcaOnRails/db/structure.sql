@@ -82,6 +82,7 @@ CREATE TABLE `Competitions` (
   `allow_registration_self_delete_after_acceptance` tinyint(1) NOT NULL DEFAULT '0',
   `competition_series_id` int(11) DEFAULT NULL,
   `use_wca_live_for_scoretaking` tinyint(1) NOT NULL DEFAULT '0',
+  `allow_registration_without_qualification` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1792,7 +1793,12 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220516124717'),
 ('20220619200832'),
 ('20220623121810'),
+<<<<<<< HEAD
 ('20220706232200'),
 ('20220804193822'),
 ('20220822232936'),
 ('20220630233246');
+=======
+('20220627195217'),
+('20220706232200');
+>>>>>>> 8d5edfefe... Add option to require qualifications.
