@@ -67,14 +67,14 @@ export const setRoundFormat = (wcifRound, newFormat) => ({
 
 /**
  * set the scramble set count for the round
- * @param {Round} wcifRound
+ * @param {ActivityCode} wcifRoundId
  * @param {number} newScrambleSetCount
  * @returns {Action}
  */
-export const setScrambleSetCount = (wcifRound, newScrambleSetCount) => ({
+export const setScrambleSetCount = (wcifRoundId, scrambleSetCount) => ({
   type: SetScrambleSetCount,
   payload: {
-    wcifRound,
-    newScrambleSetCount,
+    wcifRoundId,
+    scrambleSetCount,
   },
 });

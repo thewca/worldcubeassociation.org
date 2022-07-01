@@ -48,10 +48,8 @@ export default function Round({
     }
   };
 
-  const scrambleSetCountChanged = (e, data) => {
-    console.log(e, data);
-    // wcifRound.scrambleSetCount = newScrambleSetCount;
-    dispatch(setScrambleSetCount(wcifRound, data.value)); // XXX
+  const scrambleSetCountChanged = (e) => {
+    dispatch(setScrambleSetCount(wcifRound.id, e.target.value)); // XXX
   };
 
   return (

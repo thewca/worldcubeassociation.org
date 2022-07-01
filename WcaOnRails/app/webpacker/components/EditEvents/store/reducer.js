@@ -1,9 +1,21 @@
-import { ChangesSaved } from './actions';
+import { ChangesSaved, SetScrambleSetCount } from './actions';
 
 const reducers = {
   [ChangesSaved]: (state) => ({
     ...state,
     unsavedChanges: false,
+  }),
+  [SetScrambleSetCount]: (state, { payload }) => ({
+    ...state,
+    wcifEvents: state.wcifEvents.map((event) => ({
+      ...event,
+      rounds: event?.rounds?.map((round) => (round.id === payload.wcifRoundId
+        ? ({
+          ...round,
+          scrambleSetCount: payload.scrambleSetCount,
+        })
+        : round)),
+    })),
   }),
 };
 

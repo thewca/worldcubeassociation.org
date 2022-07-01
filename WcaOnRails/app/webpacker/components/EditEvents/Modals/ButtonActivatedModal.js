@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 // import cn from 'classnames';
 import { Modal } from 'semantic-ui-react';
 import Button from 'react-bootstrap/lib/Button';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 /**
  * Shows a trigger that when activated, opens this modal.
@@ -12,14 +13,19 @@ export default function ButtonActivatedModal({
   title, trigger, children, hasUnsavedChanges, reset, onOk,
 }) {
   const [open, setOpen] = useState(false);
+  const confirm = useConfirm();
 
   /**
    * Gets called either when you press escape or the "close" button
    */
   const close = ({ skipUnsavedChangesCheck = false }) => {
     // eslint-disable-next-line no-restricted-globals
-    if (skipUnsavedChangesCheck || !hasUnsavedChanges() || confirm('Are you sure you want to discard your changes?')) {
-      reset();
+    if (skipUnsavedChangesCheck || !hasUnsavedChanges()) {
+      confirm({ content: 'Are you sure you want to discard your changes?' })
+        .then(() => {
+          reset();
+          setOpen(false);
+        });
     }
 
     setOpen(false);
@@ -37,10 +43,10 @@ export default function ButtonActivatedModal({
         <Modal.Content>
           {children}
         </Modal.Content>
-        <Modal.Footer>
+        <Modal.Actions>
           <Button onClick={close} bsStyle="warning">Close</Button>
           <Button type="submit" bsStyle="success">Ok</Button>
-        </Modal.Footer>
+        </Modal.Actions>
       </form>
     </Modal>
   );
