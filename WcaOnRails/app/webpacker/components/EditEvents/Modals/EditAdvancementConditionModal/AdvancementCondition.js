@@ -1,8 +1,8 @@
 import React from 'react';
 
-import AttemptResultInput from '../AttemptResultInput';
-import { matchResult } from '../../lib/utils/edit-events';
-import { roundIdToString } from '../../lib/utils/wcif';
+import AttemptResultInput from '../../../AttemptResultInput';
+import { matchResult } from '../../../../lib/utils/edit-events';
+import { roundIdToString } from '../../../../lib/utils/wcif';
 
 const MIN_ADVANCE_PERCENT = 1;
 const MAX_ADVANCE_PERCENT = 75;
@@ -153,7 +153,6 @@ export default {
               value={advancementCondition ? advancementCondition.type : ''}
               id="advacement-condition-type"
               name="type"
-              autoFocus={autoFocus}
               onChange={onChangeAggregator}
               className="form-control"
               ref={(c) => {

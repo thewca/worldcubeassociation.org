@@ -1,22 +1,21 @@
 import React, { useCallback, useState } from 'react';
 import cn from 'classnames';
-// import _ from 'lodash';
+import _ from 'lodash';
 
-import {
-  saveWcif,
-} from '../../lib/utils/wcif';
+import events from '../../lib/wca-data/events.js.erb';
 
+import { saveWcif } from '../../lib/utils/wcif';
 import EventPanel from './EventPanel';
 import { changesSaved } from './store/actions';
 import wcifEventsReducer from './store/reducer';
-import Store, { useStore } from '../../lib/providers/StoreProvider';
+import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
+import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 
 function EditEvents() {
   const {
-    store: {
-      competitionId, wcifEvents, canAddAndRemoveEvents, canUpdateEvents, unsavedChanges,
-    }, dispatch,
+    competitionId, wcifEvents, unsavedChanges,
   } = useStore();
+  const dispatch = useDispatch();
   const [saving, setSaving] = useState(false);
 
   const onUnload = useCallback((e) => {
@@ -70,27 +69,41 @@ function EditEvents() {
     </div>
   );
 
+  console.log(73, wcifEvents);
+
   return (
-    <Store>
-      {unsavedChanges() && renderUnsavedChangesAlert()}
+    <div>
+      {unsavedChanges && renderUnsavedChangesAlert()}
       <div className="row equal">
         {wcifEvents.map((wcifEvent) => (
           <div
             key={wcifEvent.id}
             className="col-xs-12 col-sm-12 col-md-12 col-lg-4"
           >
-            <EventPanel
-              wcifEvents={wcifEvents}
-              wcifEvent={wcifEvent}
-              canAddAndRemoveEvents={canAddAndRemoveEvents}
-              canUpdateEvents={canUpdateEvents}
-            />
+            <EventPanel wcifEvent={wcifEvent} />
           </div>
         ))}
       </div>
-      {unsavedChanges}
-    </Store>
+      {unsavedChanges && renderUnsavedChangesAlert()}
+    </div>
   );
+}
+
+function normalizeWcifEvents(wcifEvents) {
+  // Since we want to support deprecated events and be able to edit their rounds,
+  // we want to show deprecated events if they exist in the WCIF, but not if they
+  // don't.
+  // Therefore we first build the list of events from the official one, updating
+  // it with WCIF data if any.
+  // And then we add all events that are still in the WCIF (which means they are
+  // not official anymore).
+  const ret = events.official.map(
+    (event) => _.remove(wcifEvents, { id: event.id })[0] || {
+      id: event.id,
+      rounds: null,
+    },
+  );
+  return ret.concat(wcifEvents);
 }
 
 export default function Wrapper({
@@ -103,11 +116,13 @@ export default function Wrapper({
         competitionId,
         canAddAndRemoveEvents,
         canUpdateEvents,
-        events: wcifEvents,
+        wcifEvents: normalizeWcifEvents(wcifEvents),
         unsavedChanges: false,
       }}
     >
-      <EditEvents />
+      <ConfirmProvider>
+        <EditEvents />
+      </ConfirmProvider>
     </Store>
   );
 }

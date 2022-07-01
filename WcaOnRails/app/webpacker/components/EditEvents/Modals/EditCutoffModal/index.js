@@ -1,35 +1,54 @@
 import React from 'react';
+import { useStore } from '../../../../lib/providers/StoreProvider';
+import { roundIdToString } from '../../../../lib/utils/wcif';
 import ButtonActivatedModal from '../ButtonActivatedModal';
-import { Show, Title, Input } from './Cutoff';
+import { Show, Input } from './Cutoff';
 
-export default function EditCutoffModal ({wcifEvent}) {
+export default function EditCutoffModal({ wcifEvent, wcifRound, cutoff }) {
+  const { hasUnsavedChanges } = useStore();
+  const disabled = false;
+
+  console.log(11, wcifRound);
+
+  const Title = (
+    <span>
+      Cutoff for
+      {' '}
+      {roundIdToString(wcifRound.id)}
+    </span>
+  );
+
+  const handleOk = () => {
+
+  };
+
+  const reset = () => {
+
+  };
+
+  const handleChange = (ev, data) => {
+    console.log(ev, data);
+  };
+
   return (
     <ButtonActivatedModal
-      buttonValue={
-        <Show value={this.getSavedValue()} wcifEvent={wcifEvent} />
+      trigger={
+        <Show wcifRound={wcifRound} wcifEvent={wcifEvent} />
       }
-      name={attribute}
+      title={Title}
       buttonClass="btn-default btn-xs"
       formClass="form-horizontal"
-      onOk={this.onOk}
-      reset={this.reset}
-      hasUnsavedChanges={this.hasUnsavedChanges}
-      ref={(c) => (this._modal = c)}
+      onOk={handleOk}
+      reset={reset}
+      hasUnsavedChanges={hasUnsavedChanges}
       disabled={disabled}
     >
-      <Modal.Header closeButton>
-        <Modal.Title>
-          <Title wcifEvent={wcifEvent} />
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Input
-          value={this.state.value}
-          wcifEvent={wcifEvent}
-          onChange={this.onChange}
-          autoFocus
-        />
-      </Modal.Body>
+      <Input
+        value={cutoff}
+        wcifEvent={wcifEvent}
+        onChange={handleChange}
+        autoFocus
+      />
     </ButtonActivatedModal>
   );
 }

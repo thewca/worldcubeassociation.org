@@ -13,6 +13,14 @@ const RoundCountOptions = [
   { key: 4, value: 4, text: '4 rounds' },
 ];
 
+/**
+ * Renders a select input for the number of rounds.
+ * @Component
+ * @param {number} roundCount - the current round count
+ * @param {function(number)} onChange - the callback to call when the round count changes
+ * @param {boolean} disabled - whether the input is disabled
+ * @returns {JSX.Element} the rendered component
+ */
 export default function RoundCountInput({ roundCount: InitialRoundCount, onChange, disabled }) {
   const [roundCount, setRoundCount] = useInputState(InitialRoundCount);
 

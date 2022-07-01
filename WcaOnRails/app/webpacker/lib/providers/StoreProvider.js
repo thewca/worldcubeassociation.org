@@ -7,10 +7,10 @@ const StoreContext = createContext();
 export default function StoreProvider({ children, reducer, initialState }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const store = useMemo(() => ({
+  const store = useMemo(() => ([
     state,
     dispatch,
-  }), [state, dispatch]);
+  ]), [state, dispatch]);
 
   return (
     <StoreContext.Provider value={store}>
@@ -19,4 +19,5 @@ export default function StoreProvider({ children, reducer, initialState }) {
   );
 }
 
-export const useStore = () => useContext(StoreContext);
+export const useStore = () => useContext(StoreContext)[0];
+export const useDispatch = () => useContext(StoreContext)[1];

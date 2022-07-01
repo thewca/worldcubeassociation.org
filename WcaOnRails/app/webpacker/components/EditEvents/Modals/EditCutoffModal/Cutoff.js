@@ -1,12 +1,12 @@
-import React, { createRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Form, Label } from 'semantic-ui-react';
 import formats from '../../../../lib/wca-data/formats.js.erb';
-import AttemptResultInput from '../../AttemptResultInput';
-import { roundIdToString } from '../../../lib/utils/wcif';
-import { roundCutoffToString } from '../../EditEvents/utils';
+import AttemptResultInput from '../../../AttemptResultInput';
+import { roundIdToString } from '../../../../lib/utils/wcif';
+import { roundCutoffToString } from '../../utils';
 import CutoffFormatInput from './CutoffFormatInput';
-import useInputState from '../../../lib/hooks/useInputState';
+import useInputState from '../../../../lib/hooks/useInputState';
 
 export function Title({ wcifRound }) {
   return (

@@ -1,11 +1,11 @@
 import React from 'react';
 
 import DatePicker from 'react-datepicker';
-import events from '../../lib/wca-data/events.js.erb';
-import AttemptResultInput from '../AttemptResultInput';
+import events from '../../../../lib/wca-data/events.js.erb';
+import AttemptResultInput from '../../../AttemptResultInput';
 
-import { eventQualificationToString } from '../../lib/utils/wcif';
-import I18n from '../../lib/i18n';
+import { eventQualificationToString } from '../../../../lib/utils/wcif';
+import I18n from '../../../../lib/i18n';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -144,7 +144,6 @@ export default {
               <select
                 value={qualificationType}
                 name="type"
-                autoFocus={autoFocus}
                 onChange={onChangeAggregator}
                 className="form-control"
                 id="qualification-result-type-input"
@@ -181,7 +180,6 @@ export default {
               <select
                 value={qualificationResultType}
                 name="type"
-                autoFocus={autoFocus}
                 onChange={onChangeAggregator}
                 className="form-control"
                 id="qualification-result-type-input"
