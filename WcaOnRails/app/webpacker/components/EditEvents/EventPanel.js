@@ -2,12 +2,11 @@ import React from 'react';
 import cn from 'classnames';
 import _ from 'lodash';
 
-import rootRender from '../../lib/edit-events';
-import { removeRoundsFromSharedTimeLimits } from './EditRoundAttribute';
 import events from '../../lib/wca-data/events.js.erb';
 import { pluralize } from '../../lib/utils/edit-events';
-import { addRoundToEvent } from './utils';
+import { addRoundToEvent, removeRoundsFromSharedTimeLimits } from './utils';
 import RoundsTable from './RoundsTable';
+import RoundCountInput from './RoundCountInput';
 
 export default function EventPanel({
   wcifEvents,
@@ -41,7 +40,6 @@ export default function EventPanel({
 
     // remove the rounds themselves
     wcifEvent.rounds = null;
-    rootRender();
   };
 
   const setRoundCount = (newRoundCount) => {
@@ -84,7 +82,6 @@ export default function EventPanel({
         addRoundToEvent(wcifEvent);
       }
     }
-    rootRender();
   };
 
   let roundsCountSelector = null;
@@ -93,20 +90,11 @@ export default function EventPanel({
     const disableRemove = !canAddAndRemoveEvents;
     roundsCountSelector = (
       <div className="input-group">
-        <select
-          className="form-control input-xs"
-          name="selectRoundCount"
-          value={wcifEvent.rounds.length}
-          onChange={(e) => setRoundCount(parseInt(e.target.value, 10))}
+        <RoundCountInput
+          roundCount={wcifEvent.rounds.length}
+          onChange={(e) => setRoundCount(e)}
           disabled={disabled}
-        >
-          <option value={0}># of rounds?</option>
-          <option disabled="disabled">────────</option>
-          <option value={1}>1 round</option>
-          <option value={2}>2 rounds</option>
-          <option value={3}>3 rounds</option>
-          <option value={4}>4 rounds</option>
-        </select>
+        />
 
         <span className="input-group-btn">
           <button

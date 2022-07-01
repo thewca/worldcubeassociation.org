@@ -2,9 +2,9 @@ import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import _ from 'lodash';
 
-import rootRender from '../../../lib/edit-events';
+import rootRender from '../../lib/edit-events';
 
-import ButtonActivatedModal from '../ButtonActivatedModal';
+import ButtonActivatedModal from './ButtonActivatedModal';
 import QualificationComponents from '../Qualification';
 
 const EventAttributeComponents = {

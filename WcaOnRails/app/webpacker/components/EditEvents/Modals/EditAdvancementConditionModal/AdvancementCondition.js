@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AttemptResultInput from './AttemptResultInput';
+import AttemptResultInput from '../AttemptResultInput';
 import { matchResult } from '../../lib/utils/edit-events';
 import { roundIdToString } from '../../lib/utils/wcif';
 

@@ -5,12 +5,12 @@ import Modal from 'react-bootstrap/lib/Modal';
 import Radio from 'react-bootstrap/lib/Radio';
 
 import events from '../../lib/wca-data/events.js.erb';
-import formats from '../../lib/wca-data/formats.js.erb';
-import AttemptResultInput from './AttemptResultInput';
-import { centisecondsToString } from '../../lib/utils/edit-events';
-import { roundIdToString, parseActivityCode } from '../../lib/utils/wcif';
-import ButtonActivatedModal from './ButtonActivatedModal';
-import RadioGroup from '../RadioGroup/RadioGroup';
+import formats from '../../../../lib/wca-data/formats.js.erb';
+import AttemptResultInput from '../../AttemptResultInput';
+import { centisecondsToString } from '../../../lib/utils/edit-events';
+import { roundIdToString, parseActivityCode } from '../../../lib/utils/wcif';
+import ButtonActivatedModal from '../ButtonActivatedModal';
+import RadioGroup from '../../RadioGroup/RadioGroup';
 
 function objectifyArray(arr) {
   return _.fromPairs(arr.map((el) => [el, true]));

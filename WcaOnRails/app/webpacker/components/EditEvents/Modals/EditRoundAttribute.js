@@ -2,34 +2,19 @@ import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import _ from 'lodash';
 
-import rootRender from '../../../lib/edit-events';
+import rootRender from '../../lib/edit-events';
 
-import CutoffComponents from '../Cutoff';
-import TimeLimitComponents from '../TimeLimit';
+import Cutoff from './EditCutoffModal/Cutoff';
+import TimeLimitComponents from './EditTimeLimitModal/TimeLimit';
 import AdvancementConditionComponents from '../AdvancementCondition';
-import ButtonActivatedModal from '../ButtonActivatedModal';
+import ButtonActivatedModal from './ButtonActivatedModal';
+import { removeRoundsFromSharedTimeLimits } from '../utils';
 
 const RoundAttributeComponents = {
   timeLimit: TimeLimitComponents,
-  cutoff: CutoffComponents,
+  cutoff: Cutoff,
   advancementCondition: AdvancementConditionComponents,
 };
-
-/**
- * Finds the cumulativeRoundIds of each event in wcifEvents and removes any
- * which are found in wcifRounds. Note that it modifies wicfEvents in place.
- *
- * @param {collection} wcifEvents Will be modified in place.
- * @param {Array}      wcifRounds Rounds to be removed from all cumulativeRoundIds.
- */
-export function removeRoundsFromSharedTimeLimits(wcifEvents, wcifRounds) {
-  _.compact(_.flatMap(wcifEvents, 'rounds')).forEach((otherWcifRound) => {
-    // fmc and mbf don't have timelimits
-    if (otherWcifRound.timeLimit) {
-      _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, ...wcifRounds);
-    }
-  });
-}
 
 function findRounds(wcifEvents, roundIds) {
   return _.compact(_.flatMap(wcifEvents, 'rounds')).filter((wcifRound) => roundIds.includes(wcifRound.id));
@@ -50,7 +35,8 @@ class EditRoundAttribute extends React.Component {
   }
 
   getSavedValue() {
-    return this.getWcifRound()[this.props.attribute];
+    const { attribute } = this.props;
+    return this.getWcifRound()[attribute];
   }
 
   hasUnsavedChanges = () => !_.isEqual(this.getSavedValue(), this.state.value);
@@ -60,13 +46,14 @@ class EditRoundAttribute extends React.Component {
   };
 
   onOk = () => {
+    const { attribute } = this.props;
     const wcifRound = this.getWcifRound();
-    wcifRound[this.props.attribute] = this.state.value;
+    wcifRound[attribute] = this.state.value;
 
     // This is gross. timeLimit is special because of cross round cumulative time limits.
     // If you set a time limit for 3x3x3 round 1 shared with 2x2x2 round 1, then we need
     // to make sure the same timeLimit gets set for both of the rounds.
-    if (this.props.attribute == 'timeLimit') {
+    if (attribute == 'timeLimit') {
       // the new time limit for this round
       // we just want timeLimit = this.state.value, however the ids are required in the
       // second step but modified in the first step; so make a copy of them
@@ -84,7 +71,8 @@ class EditRoundAttribute extends React.Component {
         [...cumulativeRoundIds, wcifRound.id],
       );
 
-      // Second, clobber the time limits for all rounds that this round now shares a time limit with.
+      // Second, clobber the time limits for all rounds
+      // that this round now shares a time limit with.
       if (timeLimit) {
         findRounds(this.props.wcifEvents, cumulativeRoundIds).forEach(
           (otherWcifRound) => {
@@ -107,9 +95,14 @@ class EditRoundAttribute extends React.Component {
       wcifEvents, wcifEvent, roundNumber, attribute, disabled,
     } = this.props;
     const wcifRound = this.getWcifRound();
+    console.log(RoundAttributeComponents[attribute]);
     const { Show } = RoundAttributeComponents[attribute];
     const { Input } = RoundAttributeComponents[attribute];
     const { Title } = RoundAttributeComponents[attribute];
+
+    if (!Show || !Input || !Title) {
+      return null;
+    }
 
     return (
       <ButtonActivatedModal
@@ -126,7 +119,9 @@ class EditRoundAttribute extends React.Component {
         onOk={this.onOk}
         reset={this.reset}
         hasUnsavedChanges={this.hasUnsavedChanges}
-        ref={(c) => (this._modal = c)}
+        ref={(c) => {
+          this._modal = c;
+        }}
         disabled={disabled}
       >
         <Modal.Header closeButton>

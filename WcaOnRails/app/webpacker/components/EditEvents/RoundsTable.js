@@ -1,20 +1,14 @@
 import React from 'react';
 
 import events from '../../lib/wca-data/events.js.erb';
-import formats from '../../lib/wca-data/formats.js.erb';
-import rootRender from '../../lib/edit-events';
 import I18n from '../../lib/i18n';
-import {
-  roundIdToString,
-} from '../../lib/utils/wcif';
-import {
-  EditTimeLimitButton,
-  EditCutoffButton,
-  EditAdvancementConditionButton,
-  EditQualificationButton,
-} from './EditRoundAttribute';
 
-export default function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
+import {
+  EditQualificationModal,
+} from './Modals';
+import Round from './Round';
+
+export default function RoundsTable({ wcifEvent, disabled }) {
   const event = events.byId[wcifEvent.id];
 
   return (
@@ -33,114 +27,16 @@ export default function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
           </tr>
         </thead>
         <tbody>
-          {wcifEvent.rounds.map((wcifRound, index) => {
-            const roundNumber = index + 1;
-            const isLastRound = roundNumber === wcifEvent.rounds.length;
-
-            const roundFormatChanged = (e) => {
-              const newFormat = e.target.value;
-              if (
-                wcifRound.cutoff
-                && !formats.byId[newFormat].allowedFirstPhaseFormats.includes(
-                  wcifRound.cutoff.numberOfAttempts.toString(),
-                )
-              ) {
-                if (
-                  // eslint-disable-next-line no-restricted-globals
-                  confirm(
-                    `Are you sure you want to change the format of ${roundIdToString(
-                      wcifRound.id,
-                    )}? This will clear the cutoff.`,
-                  )
-                ) {
-                  wcifRound.format = newFormat;
-                  wcifRound.cutoff = null;
-                }
-              } else {
-                wcifRound.format = newFormat;
-              }
-              rootRender();
-            };
-
-            const scrambleSetCountChanged = (e) => {
-              const newScrambleSetCount = parseInt(e.target.value, 10);
-              wcifRound.scrambleSetCount = newScrambleSetCount;
-              rootRender();
-            };
-
-            return (
-              <tr key={roundNumber} className={`round-${roundNumber}`}>
-                <td>{roundNumber}</td>
-                <td>
-                  <select
-                    name="format"
-                    className="form-control input-xs"
-                    value={wcifRound.format}
-                    onChange={roundFormatChanged}
-                    disabled={disabled}
-                  >
-                    {event.formats().map((format) => (
-                      <option key={format.id} value={format.id}>
-                        {format.shortName}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-
-                <td className="text-center">
-                  <input
-                    name="scrambleSetCount"
-                    className="form-control input-xs"
-                    type="number"
-                    min={1}
-                    value={wcifRound.scrambleSetCount}
-                    onChange={scrambleSetCountChanged}
-                    disabled={disabled}
-                  />
-                </td>
-
-                {event.canChangeTimeLimit && (
-                  <td className="text-center">
-                    <EditTimeLimitButton
-                      wcifEvents={wcifEvents}
-                      wcifEvent={wcifEvent}
-                      roundNumber={roundNumber}
-                      disabled={disabled}
-                    />
-                  </td>
-                )}
-
-                {event.canHaveCutoff && (
-                  <td className="text-center">
-                    <EditCutoffButton
-                      wcifEvents={wcifEvents}
-                      wcifEvent={wcifEvent}
-                      roundNumber={roundNumber}
-                      disabled={disabled}
-                    />
-                  </td>
-                )}
-
-                <td className="text-center">
-                  {!isLastRound && (
-                    <EditAdvancementConditionButton
-                      wcifEvents={wcifEvents}
-                      wcifEvent={wcifEvent}
-                      roundNumber={roundNumber}
-                      disabled={disabled}
-                    />
-                  )}
-                </td>
-              </tr>
-            );
-          })}
+          {wcifEvent.rounds.map((wcifRound, index) => (
+            <Round key={index} index={index} wcifEvent={wcifEvent} wcifRound={wcifRound} />
+          ))}
         </tbody>
       </table>
       <h5>
         {I18n.t('competitions.events.qualification')}
         :
         {' '}
-        <EditQualificationButton wcifEvent={wcifEvent} disabled={disabled} />
+        <EditQualificationModal wcifEvent={wcifEvent} disabled={disabled} />
       </h5>
     </div>
   );
