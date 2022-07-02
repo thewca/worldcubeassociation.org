@@ -77,10 +77,10 @@ class Competition < ApplicationRecord
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
   enum free_guest_entry_status: {
-         unclear: 0,
-         anyone: 1,
-         restricted: 2,
-       }, _prefix: true
+    unclear: 0,
+    anyone: 1,
+    restricted: 2,
+  }, _prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
