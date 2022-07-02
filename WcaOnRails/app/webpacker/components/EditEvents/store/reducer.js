@@ -1,4 +1,4 @@
-import { ChangesSaved, SetScrambleSetCount } from './actions';
+import { ChangesSaved, SetScrambleSetCount, UpdateCutoff } from './actions';
 
 const updateForRound = (wcifEvents, roundId, cb) => wcifEvents.map((event) => (event.id === roundId.split('-')[0]
   ? ({
@@ -12,14 +12,18 @@ const updateForRound = (wcifEvents, roundId, cb) => wcifEvents.map((event) => (e
 const reducers = {
   [ChangesSaved]: (state) => ({
     ...state,
-    unsavedChanges: false,
     initialWcifEvents: state.wcifEvents,
   }),
   [SetScrambleSetCount]: (state, { payload }) => ({
     ...state,
-    unsavedChanges: true,
-    wcifEvents: updateForRound(state.wcifEvents, payload.wcifRoundId, () => ({
+    wcifEvents: updateForRound(state.wcifEvents, payload.roundId, () => ({
       scrambleSetCount: payload.scrambleSetCount,
+    })),
+  }),
+  [UpdateCutoff]: (state, { payload }) => ({
+    ...state,
+    wcifEvents: updateForRound(state.wcifEvents, payload.roundId, () => ({
+      cutoff: payload.cutoff,
     })),
   }),
 };

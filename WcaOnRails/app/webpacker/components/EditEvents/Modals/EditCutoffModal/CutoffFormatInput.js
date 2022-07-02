@@ -1,35 +1,79 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { Form, Label, Select } from 'semantic-ui-react';
 
 import formats from '../../../../lib/wca-data/formats.js.erb';
 
-export default function CutoffFormatInput({ cutoffFormats, cutoff, onChange }) {
+const BaseCutoffOptions = [
+  { key: 0, value: 0, text: 'No cutoff' },
+  {
+    key: -1, value: -1, text: '────────', disabled: true,
+  },
+];
+
+export function CutoffFormatInput({
+  cutoffFormats, cutoffFormat, onChange,
+}) {
+  const cutoffFormatOptions = useMemo(() => (cutoffFormats.length > 0
+    // Otherwise, show the BaseCutoffSelectOptions and the formatted cutoff options
+    ? BaseCutoffOptions.concat(cutoffFormats.map((format) => ({
+      value: parseInt(format, 10),
+      text: `Best of ${format}`,
+    })))
+    // If there are no cutoff options availabe, just show the "No cutoff" option
+    : BaseCutoffOptions.filter(({ value }) => value > 0)
+  ), [cutoffFormats]);
+
+  console.log(cutoffFormats, cutoffFormatOptions);
+
+  /**
+   * @Example "/ Average of 5"
+   */
+  // const RoundFormatLabel = (
+  //   <Label>
+  //     <strong>
+  //       /
+  //       {' '}
+  //       {formats.byId[wcifRound.format].name}
+  //     </strong>
+  //   </Label>
+  // );
+
   return (
-    <div className="col-sm-9">
-      <div className="input-group">
-        <select
-          value={cutoff}
-          onChange={onChange}
-          className="form-control"
-          id="cutoff-round-format-input"
-        >
-          <option value={0}>No cutoff</option>
-          {cutoffFormats.length > 0 && (<option disabled="disabled">────────</option>)}
-          {cutoffFormats.map((format) => (
-            <option key={format} value={+format}>
-              Best of
-              {' '}
-              {format}
-            </option>
-          ))}
-        </select>
-        <div className="input-group-addon">
-          <strong>
-            /
-            {' '}
-            {formats.byId[cutoff].name}
-          </strong>
-        </div>
-      </div>
-    </div>
+    <Form.Select
+      value={cutoffFormat}
+      onChange={onChange}
+      options={cutoffFormatOptions}
+    />
+  );
+}
+
+/**
+ * @Example "/ Average of 5"
+  */
+export function CutoffFormatLabel({ format }) {
+  return (
+    <Label pointing>
+      <strong>
+        /
+        {' '}
+        {formats.byId[format].name}
+      </strong>
+    </Label>
+  );
+}
+
+export default function CutoffFormatField({
+  cutoffFormats, wcifRound, cutoffFormat, onChange,
+}) {
+  return (
+    <Form.Field inline>
+      <Form.Input
+        as={CutoffFormatInput}
+        cutoffFormats={cutoffFormats}
+        cutoffFormat={cutoffFormat}
+        onChange={onChange}
+      />
+      <CutoffFormatLabel format={wcifRound.format} />
+    </Form.Field>
   );
 }

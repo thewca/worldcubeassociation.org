@@ -4,6 +4,7 @@ export const RemoveRounds = 'REMOVE_ROUNDS';
 export const AddRound = 'ADD_ROUND';
 export const SetRoundFormat = 'SET_ROUND_FORMAT';
 export const SetScrambleSetCount = 'SET_SCRAMBLE_SET_COUNT';
+export const UpdateCutoff = 'UPDATE_CUTOFF';
 
 /**
  * Action creator for marking changes as saved
@@ -40,7 +41,7 @@ export const removeRounds = (eventId, roundsToRemoveCount) => ({
 });
 
 /**
- * Action creator for adding round
+ * create an action to add round
  * @param {EventId} eventId
  * @returns {Action}
  */
@@ -52,7 +53,7 @@ export const addRound = (eventId) => ({
 });
 
 /**
- * set the round format
+ * create an action to set the round format
  * @param {Round} wcifRound
  * @param {FormatId} newFormat
  * @returns {Action}
@@ -66,15 +67,29 @@ export const setRoundFormat = (wcifRound, newFormat) => ({
 });
 
 /**
- * set the scramble set count for the round
- * @param {ActivityCode} wcifRoundId
+ * create an action to set the scramble set count for the round
+ * @param {ActivityCode} roundId
  * @param {number} newScrambleSetCount
  * @returns {Action}
  */
-export const setScrambleSetCount = (wcifRoundId, scrambleSetCount) => ({
+export const setScrambleSetCount = (roundId, scrambleSetCount) => ({
   type: SetScrambleSetCount,
   payload: {
-    wcifRoundId,
+    roundId,
     scrambleSetCount,
+  },
+});
+
+/**
+ * create an action to set the cutoff for the round
+ * @param {ActivityCode} roundId
+ * @param {Cutoff} cutoff
+ * @returns {Action}
+ */
+export const updateCutoff = (roundId, cutoff) => ({
+  type: UpdateCutoff,
+  payload: {
+    roundId,
+    cutoff,
   },
 });

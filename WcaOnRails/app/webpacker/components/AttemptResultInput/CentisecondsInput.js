@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Input } from 'semantic-ui-react';
+import { Form, Label } from 'semantic-ui-react';
 import useInputState from '../../lib/hooks/useInputState';
 
 import {
@@ -28,8 +28,10 @@ const buildCentiseconds = ({ minutes, seconds, centiseconds }) => {
   return minutes * MINUTE_IN_CS + seconds * SECOND_IN_CS + centiseconds;
 };
 
+// TODO: Figure out how to inline labels with inputs
+
 export default function CentisecondsInput({
-  id, centiseconds: initialCentiseconds, onChange, autoFocus,
+  centiseconds: initialCentiseconds, onChange,
 }) {
   const parsedCentiSeconds = parseCentiseconds(initialCentiseconds);
 
@@ -43,40 +45,41 @@ export default function CentisecondsInput({
   }, [onChange]);
 
   return (
-    <div>
-      <Input
-        type="number"
-        id={id}
-        name="minutes"
-        className="form-control"
-        autoFocus={autoFocus}
-        value={minutes}
-        min={0}
-        onChange={onInputChange(setMinutes)}
-      />
-      minutes
+    <Form.Group grouped>
+      <Form.Field>
+        <input
+          type="number"
+          name="minutes"
+          value={minutes}
+          min={0}
+          onChange={onInputChange(setMinutes)}
+        />
+        <Label pointing>minutes</Label>
+      </Form.Field>
 
-      <Input
-        type="number"
-        name="seconds"
-        className="form-control"
-        value={seconds}
-        min={0}
-        max={59}
-        onChange={onInputChange(setSeconds)}
-      />
-      seconds
+      <Form.Field>
+        <input
+          type="number"
+          name="seconds"
+          value={seconds}
+          min={0}
+          max={59}
+          onChange={onInputChange(setSeconds)}
+        />
+        <Label pointing>seconds</Label>
+      </Form.Field>
 
-      <Input
-        type="number"
-        name="centiseconds"
-        className="form-control"
-        value={centiseconds}
-        min={0}
-        max={99}
-        onChange={onInputChange(setCentiseconds)}
-      />
-      centiseconds
-    </div>
+      <Form.Field>
+        <input
+          type="number"
+          name="centiseconds"
+          value={centiseconds}
+          min={0}
+          max={99}
+          onChange={onInputChange(setCentiseconds)}
+        />
+        <Label pointing>centiseconds</Label>
+      </Form.Field>
+    </Form.Group>
   );
 }
