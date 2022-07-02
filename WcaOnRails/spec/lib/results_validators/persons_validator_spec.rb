@@ -73,6 +73,7 @@ RSpec.describe PV do
       it "validates against existing person data" do
         person = FactoryBot.create(:person, countryId: "Spain")
         dup_name = FactoryBot.create(:inbox_person, name: person.name, competitionId: competition1.id)
+		sim_name = FactoryBot.create(:inbox_person, dob: person.dob, name: person.name, competitionId: competition1.id) ###
         FactoryBot.create(:inbox_result,
                           person: dup_name, competition: competition1,
                           eventId: "333oh")
@@ -86,6 +87,9 @@ RSpec.describe PV do
           RV::ValidationWarning.new(:persons, competition1.id,
                                     PV::SAME_PERSON_NAME_WARNING,
                                     name: person.name, wca_ids: person.wca_id),
+		  RV::ValidationWarning.new(:persons, competition1.id,
+                                    PV::SIMILAR_NAME_SAME_DOB_WARNING,
+                                    name: sim_name.name, db_persons: person.name + " (" + person.wca_id + ")"),
           RV::ValidationWarning.new(:persons, competition2.id,
                                     PV::NON_MATCHING_DOB_WARNING,
                                     name: res1.person.name, wca_id: person.wca_id,
