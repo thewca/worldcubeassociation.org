@@ -49,7 +49,7 @@ export default function Round({
   };
 
   const scrambleSetCountChanged = (e) => {
-    dispatch(setScrambleSetCount(wcifRound.id, e.target.value)); // XXX
+    dispatch(setScrambleSetCount(wcifRound.id, parseInt(e.target.value, 10))); // XXX
   };
 
   return (

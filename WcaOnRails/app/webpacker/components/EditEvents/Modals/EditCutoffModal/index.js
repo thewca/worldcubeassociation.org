@@ -1,14 +1,13 @@
-import React from 'react';
-import { useStore } from '../../../../lib/providers/StoreProvider';
+import React, { useState } from 'react';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import ButtonActivatedModal from '../ButtonActivatedModal';
 import { Show, Input } from './Cutoff';
 
 export default function EditCutoffModal({ wcifEvent, wcifRound, cutoff }) {
-  const { hasUnsavedChanges } = useStore();
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const disabled = false;
 
-  console.log(11, wcifRound);
+  // console.log(11, hasUnsavedChanges);
 
   const Title = (
     <span>
@@ -19,15 +18,16 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, cutoff }) {
   );
 
   const handleOk = () => {
-
+    setHasUnsavedChanges(false);
   };
 
   const reset = () => {
-
+    setHasUnsavedChanges(false);
   };
 
   const handleChange = (ev, data) => {
     console.log(ev, data);
+    setHasUnsavedChanges(true);
   };
 
   return (

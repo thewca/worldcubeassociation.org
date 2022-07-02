@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import cn from 'classnames';
 import _ from 'lodash';
 
@@ -13,10 +13,14 @@ import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 
 function EditEvents() {
   const {
-    competitionId, wcifEvents, unsavedChanges,
+    competitionId, wcifEvents, initialWcifEvents,
   } = useStore();
   const dispatch = useDispatch();
   const [saving, setSaving] = useState(false);
+
+  const unsavedChanges = useMemo(() => (
+    !_.isEqual(wcifEvents, initialWcifEvents)
+  ), [wcifEvents, initialWcifEvents]);
 
   const onUnload = useCallback((e) => {
     // Prompt the user before letting them navigate away from this page with unsaved changes.
@@ -109,6 +113,8 @@ function normalizeWcifEvents(wcifEvents) {
 export default function Wrapper({
   competitionId, canAddAndRemoveEvents, canUpdateEvents, wcifEvents,
 }) {
+  const normalizedEvents = normalizeWcifEvents(wcifEvents);
+
   return (
     <Store
       reducer={wcifEventsReducer}
@@ -116,7 +122,8 @@ export default function Wrapper({
         competitionId,
         canAddAndRemoveEvents,
         canUpdateEvents,
-        wcifEvents: normalizeWcifEvents(wcifEvents),
+        wcifEvents: normalizedEvents,
+        initialWcifEvents: normalizedEvents,
         unsavedChanges: false,
       }}
     >

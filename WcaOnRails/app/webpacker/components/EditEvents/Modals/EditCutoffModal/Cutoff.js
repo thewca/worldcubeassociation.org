@@ -20,9 +20,11 @@ export function Title({ wcifRound }) {
 
 export function Show({ wcifRound }) {
   return (
-    <span>
+    <button
+      type="button"
+    >
       {roundCutoffToString(wcifRound, { short: true })}
-    </span>
+    </button>
   );
 }
 
