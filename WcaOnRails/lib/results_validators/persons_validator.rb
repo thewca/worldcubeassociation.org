@@ -71,26 +71,25 @@ module ResultsValidators
         end
 		
 		if without_wca_id.any?
-			def first_and_last_name(name)
-				splitted_name = split(name)
-				splitted_name.first + 
-					if length(splitted_name) == 1
-						""
-					elsif name.include? "("
-						" " + splitted_name[splitted_name.find_index { |n| n.include? "("} - 1]
-					else
-						" " + splitted_name.last
-					end
-			end
-			possible_duplicates_in_db = Person.where([first_and_last_name(name), dob]: without_wca_id.map( |p| [first_and_last_name(p.name), p.dob])) \
-				.union(Person.where(distance(name, without_wca_id.name): 2..)) ###
-			possible_duplicates_in_db.each do |persons|
-				@warnings << ValidationWarning.new(:persons, competition_id, 
-				SIMILAR_NAME_SAME_DOB_WARNING, 
-				name: Person.name,
-				db_persons: persons.map( |p| p.name + " (" + p.wca_id + ")").join(", ")
-				)
-			end
+		  def first_and_last_name(name)
+		    splitted_name = split(name)
+		    splitted_name.first + 
+			  if length(splitted_name) == 1
+				""
+			  elsif name.include? "("
+				" " + splitted_name[splitted_name.find_index { |n| n.include? "("} - 1]
+			  else
+				" " + splitted_name.last
+			  end
+		  end
+		  possible_duplicates_in_db = Person.where([first_and_last_name(name), dob]: without_wca_id.map( |p| [first_and_last_name(p.name), p.dob]))
+		  possible_duplicates_in_db.each do |persons|
+			@warnings << ValidationWarning.new(:persons, competition_id, 
+			SIMILAR_NAME_SAME_DOB_WARNING, 
+			name: Person.name,
+			db_persons: persons.map( |p| p.name + " (" + p.wca_id + ")").join(", ")
+			)
+		  end
 		end
 		
         duplicate_newcomer_names = []
