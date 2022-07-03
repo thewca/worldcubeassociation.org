@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
 
 // https://www.worldcubeassociation.org/regulations/#E2d1
@@ -7,21 +7,23 @@ const MAX_FMC_SOLUTION_LENGTH = 80;
 export default function MovesInput({
   moves: initialMoves, isAverage, onChange,
 }) {
-  const [moves, setMoves] = useState(isAverage ? initialMoves / 100 : initialMoves);
+  const moves = isAverage ? initialMoves / 100 : initialMoves;
 
-  const handleChange = useCallback((e) => {
-    setMoves(e.target.value);
+  const handleChange = (e) => {
+    const parsedInput = parseFloat(e.target.value, 10);
 
-    const parsedMoves = parseFloat(moves, 10);
+    if (Number.isNaN(parsedInput) || parsedInput < 1) {
+      return;
+    }
 
-    if (parsedMoves) {
+    if (parsedInput) {
       if (isAverage) {
-        onChange(parsedMoves * 100);
+        onChange(parsedInput * 100);
       } else {
-        onChange(parsedMoves);
+        onChange(parsedInput);
       }
     }
-  }, [onChange]);
+  };
 
   return (
     <Form.Field>

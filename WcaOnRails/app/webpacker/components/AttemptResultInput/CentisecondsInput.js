@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
 
 import {
@@ -29,27 +29,22 @@ export default function CentisecondsInput({
   centiseconds: initialCentiseconds, onChange,
 }) {
   const parsedCentiSeconds = parseCentiseconds(initialCentiseconds);
+  const { minutes, seconds, centiseconds } = parsedCentiSeconds;
 
-  const [minutes, setMinutes] = useState(parsedCentiSeconds.minutes);
-  const [seconds, setSeconds] = useState(parsedCentiSeconds.minutes);
-  const [centiseconds, setCentiseconds] = useState(parsedCentiSeconds.minutes);
+  const handleChange = (e) => {
+    const parsedInput = parseInt(e.target.value, 10);
 
-  const onInputChange = useCallback((inputHandler) => (e) => {
-    inputHandler(e.target.value);
-
-    const parsedMinutes = parseInt(minutes, 10);
-    const parsedSeconds = parseInt(seconds, 10);
-    const parsedCentiseconds = parseInt(centiseconds, 10);
-
-    // If the inputs are parsed correctly
-    if (minutes && seconds && centiseconds) {
-      onChange(buildCentiseconds({
-        minutes: parsedMinutes,
-        seconds: parsedSeconds,
-        centiseconds: parsedCentiseconds,
-      }));
+    if (Number.isNaN(parsedInput)) {
+      return;
     }
-  }, [onChange]);
+
+    const newTime = {
+      ...parsedCentiSeconds,
+      [e.target.name]: parsedInput,
+    };
+
+    onChange(buildCentiseconds(newTime));
+  };
 
   return (
     <Form.Group grouped>
@@ -59,7 +54,8 @@ export default function CentisecondsInput({
           name="minutes"
           value={minutes}
           min={0}
-          onChange={onInputChange(setMinutes)}
+          onChange={handleChange}
+          autoFocus
         />
         <Label pointing>minutes</Label>
       </Form.Field>
@@ -71,7 +67,7 @@ export default function CentisecondsInput({
           value={seconds}
           min={0}
           max={59}
-          onChange={onInputChange(setSeconds)}
+          onChange={handleChange}
         />
         <Label pointing>seconds</Label>
       </Form.Field>
@@ -83,7 +79,7 @@ export default function CentisecondsInput({
           value={centiseconds}
           min={0}
           max={99}
-          onChange={onInputChange(setCentiseconds)}
+          onChange={handleChange}
         />
         <Label pointing>centiseconds</Label>
       </Form.Field>

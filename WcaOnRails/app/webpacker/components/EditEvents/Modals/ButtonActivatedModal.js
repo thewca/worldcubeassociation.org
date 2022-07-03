@@ -22,23 +22,22 @@ export default function ButtonActivatedModal({
   /**
    * Gets called either when you press escape or the "close" button
    */
-  const close = ({ skipUnsavedChangesCheck = false }) => {
-    // eslint-disable-next-line no-restricted-globals
-    if (skipUnsavedChangesCheck || !hasUnsavedChanges) {
+  const close = () => {
+    if (hasUnsavedChanges) {
       confirm({ content: 'Are you sure you want to discard your changes?' })
         .then(() => {
           reset();
           setOpen(false);
         });
+    } else {
+      setOpen(false);
     }
-
-    setOpen(false);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setOpen(false);
     onOk();
+    setOpen(false);
   };
 
   const Trigger = (

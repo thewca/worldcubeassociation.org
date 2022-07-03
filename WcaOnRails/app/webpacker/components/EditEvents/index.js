@@ -54,7 +54,7 @@ function EditEvents() {
     };
 
     saveWcif(competitionId, { events: wcifEvents }, onSuccess, onFailure);
-  }, []);
+  }, [competitionId, dispatch, wcifEvents]);
 
   const renderUnsavedChangesAlert = () => (
     <div className="alert alert-info">

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
 
 import {
@@ -9,12 +9,17 @@ import {
 export default function MovesInput({
   points: initialPoints, onChange,
 }) {
-  const [points, setPoints] = useState(attemptResultToMbPoints(initialPoints));
+  const points = attemptResultToMbPoints(initialPoints);
 
-  const handleChange = useCallback((e) => {
-    setPoints(e.target.value);
-    onChange(mbPointsToAttemptResult(points));
-  }, [onChange]);
+  const handleChange = (e) => {
+    const parsedInput = parseInt(e.target.value, 10);
+
+    if (Number.isNaN(parsedInput) || parsedInput < 1) {
+      return;
+    }
+
+    onChange(mbPointsToAttemptResult(parsedInput));
+  };
 
   return (
     <Form.Field>

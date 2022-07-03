@@ -55,7 +55,7 @@ export default function ConfirmProvider({ children }) {
         {children}
       </ConfirmationContext.Provider>
       <Confirm
-        open={resolveReject.length === true}
+        open={resolveReject.length === 2}
         onCancel={handleCancel}
         onConfirm={handleConfirm}
         content={options.content}
