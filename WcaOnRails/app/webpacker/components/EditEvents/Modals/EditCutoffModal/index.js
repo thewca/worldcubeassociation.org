@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Form, Label } from 'semantic-ui-react';
 import _ from 'lodash';
 import formats from '../../../../lib/wca-data/formats.js.erb';
@@ -42,17 +42,18 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
 
   // console.log(11, hasUnsavedChanges);
 
-  const handleOk = () => {
+  const handleOk = useCallback(() => {
     if (hasUnsavedChanges) {
       dispatch(updateCutoff(wcifRound.id, { numberOfAttempts, attemptResult }));
     }
-  };
+  }, [hasUnsavedChanges, dispatch]);
 
   const handleCutoffFormatChange = (ev, data) => {
     setNumberOfAttempts(ev, data);
   };
 
   const handleAttemptResultChange = (value) => {
+    console.log(56, attemptResult, value);
     setAttemptResult(value);
   };
 
@@ -96,7 +97,6 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
           </div>
           <AttemptResultInput
             eventId={wcifEvent.id}
-            id="cutoff-input"
             value={attemptResult}
             onChange={handleAttemptResultChange}
           />

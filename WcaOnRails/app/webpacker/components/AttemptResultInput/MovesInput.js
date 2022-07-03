@@ -1,33 +1,40 @@
-import React, { useCallback } from 'react';
-import { Input } from 'semantic-ui-react';
-import useInputState from '../../lib/hooks/useInputState';
+import React, { useCallback, useState } from 'react';
+import { Form, Label } from 'semantic-ui-react';
 
 // https://www.worldcubeassociation.org/regulations/#E2d1
 const MAX_FMC_SOLUTION_LENGTH = 80;
 
 export default function MovesInput({
-  id, moves: initialMoves, isAverage, onChange, autoFocus,
+  moves: initialMoves, isAverage, onChange,
 }) {
-  const [moves, setMoves] = useInputState(initialMoves);
+  const [moves, setMoves] = useState(isAverage ? initialMoves / 100 : initialMoves);
 
-  const handleChange = useCallback((ev, data) => {
-    setMoves(ev, data);
-    onChange(moves);
+  const handleChange = useCallback((e) => {
+    setMoves(e.target.value);
+
+    const parsedMoves = parseFloat(moves, 10);
+
+    if (parsedMoves) {
+      if (isAverage) {
+        onChange(parsedMoves * 100);
+      } else {
+        onChange(parsedMoves);
+      }
+    }
   }, [onChange]);
 
   return (
-    <div>
-      <Input
-        id={id}
+    <Form.Field>
+      <input
         type="number"
         min={1}
         max={MAX_FMC_SOLUTION_LENGTH}
         step={isAverage ? 0.01 : 1}
-        className="form-control"
-        autoFocus={autoFocus}
+        autoFocus
+        value={moves}
         onChange={handleChange}
       />
-      moves
-    </div>
+      <Label pointing>moves</Label>
+    </Form.Field>
   );
 }

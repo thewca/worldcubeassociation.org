@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Form, Label } from 'semantic-ui-react';
-import useInputState from '../../lib/hooks/useInputState';
 
 import {
   MINUTE_IN_CS,
@@ -20,13 +19,9 @@ const parseCentiseconds = (centiseconds) => {
   };
 };
 
-const buildCentiseconds = ({ minutes, seconds, centiseconds }) => {
-  if (minutes === null && seconds === null && centiseconds === null) {
-    return null;
-  }
-
-  return minutes * MINUTE_IN_CS + seconds * SECOND_IN_CS + centiseconds;
-};
+const buildCentiseconds = ({ minutes, seconds, centiseconds }) => (
+  minutes * MINUTE_IN_CS + seconds * SECOND_IN_CS + centiseconds
+);
 
 // TODO: Figure out how to inline labels with inputs
 
@@ -35,13 +30,25 @@ export default function CentisecondsInput({
 }) {
   const parsedCentiSeconds = parseCentiseconds(initialCentiseconds);
 
-  const [minutes, setMinutes] = useInputState(parsedCentiSeconds.minutes);
-  const [seconds, setSeconds] = useInputState(parsedCentiSeconds.minutes);
-  const [centiseconds, setCentiseconds] = useInputState(parsedCentiSeconds.minutes);
+  const [minutes, setMinutes] = useState(parsedCentiSeconds.minutes);
+  const [seconds, setSeconds] = useState(parsedCentiSeconds.minutes);
+  const [centiseconds, setCentiseconds] = useState(parsedCentiSeconds.minutes);
 
-  const onInputChange = useCallback((inputHandler) => (ev, data) => {
-    inputHandler(ev, data);
-    onChange(buildCentiseconds({ minutes, seconds, centiseconds }));
+  const onInputChange = useCallback((inputHandler) => (e) => {
+    inputHandler(e.target.value);
+
+    const parsedMinutes = parseInt(minutes, 10);
+    const parsedSeconds = parseInt(seconds, 10);
+    const parsedCentiseconds = parseInt(centiseconds, 10);
+
+    // If the inputs are parsed correctly
+    if (minutes && seconds && centiseconds) {
+      onChange(buildCentiseconds({
+        minutes: parsedMinutes,
+        seconds: parsedSeconds,
+        centiseconds: parsedCentiseconds,
+      }));
+    }
   }, [onChange]);
 
   return (

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Form, Label, Select } from 'semantic-ui-react';
+import { Form, Label } from 'semantic-ui-react';
 
 import formats from '../../../../lib/wca-data/formats.js.erb';
 
@@ -23,21 +23,6 @@ export function CutoffFormatInput({
     : BaseCutoffOptions.filter(({ value }) => value > 0)
   ), [cutoffFormats]);
 
-  console.log(cutoffFormats, cutoffFormatOptions);
-
-  /**
-   * @Example "/ Average of 5"
-   */
-  // const RoundFormatLabel = (
-  //   <Label>
-  //     <strong>
-  //       /
-  //       {' '}
-  //       {formats.byId[wcifRound.format].name}
-  //     </strong>
-  //   </Label>
-  // );
-
   return (
     <Form.Select
       value={cutoffFormat}
@@ -49,7 +34,7 @@ export function CutoffFormatInput({
 
 /**
  * @Example "/ Average of 5"
-  */
+ */
 export function CutoffFormatLabel({ format }) {
   return (
     <Label pointing>

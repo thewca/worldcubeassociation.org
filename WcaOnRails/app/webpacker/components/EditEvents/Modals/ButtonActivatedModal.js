@@ -8,6 +8,9 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
  * @param {string} title - title of modal
  * @param {string} trigger - text to show in trigger. This gets wrapped in a button.
  * @param {JSX.Element} content - content of modal
+ * @param {boolean} hasUnsavedChanges
+ *  - if true, the modal will show a confirm dialog before closing.
+ * @returns {React.ReactElement}
  * @returns
  */
 export default function ButtonActivatedModal({
@@ -21,7 +24,7 @@ export default function ButtonActivatedModal({
    */
   const close = ({ skipUnsavedChangesCheck = false }) => {
     // eslint-disable-next-line no-restricted-globals
-    if (skipUnsavedChangesCheck || !hasUnsavedChanges()) {
+    if (skipUnsavedChangesCheck || !hasUnsavedChanges) {
       confirm({ content: 'Are you sure you want to discard your changes?' })
         .then(() => {
           reset();
@@ -64,7 +67,7 @@ export default function ButtonActivatedModal({
         {children}
       </Modal.Content>
       <Modal.Actions>
-        <Button color="orange" onClick={close}>Close</Button>
+        <Button color="orange" type="button" onClick={close}>Close</Button>
         <Button color="green" type="submit">Ok</Button>
       </Modal.Actions>
     </Modal>

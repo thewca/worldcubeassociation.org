@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
-import { Input } from 'semantic-ui-react';
-import useInputState from '../../lib/hooks/useInputState';
+import React, { useCallback, useState } from 'react';
+import { Form, Label } from 'semantic-ui-react';
 
 import {
   mbPointsToAttemptResult,
@@ -8,27 +7,25 @@ import {
 } from '../../lib/utils/edit-events';
 
 export default function MovesInput({
-  id, points: initialPoints, onChange, autoFocus,
+  points: initialPoints, onChange,
 }) {
-  const [points, setPoints] = useInputState(attemptResultToMbPoints(initialPoints));
+  const [points, setPoints] = useState(attemptResultToMbPoints(initialPoints));
 
-  const handleChange = useCallback((ev, data) => {
-    setPoints(ev, data);
+  const handleChange = useCallback((e) => {
+    setPoints(e.target.value);
     onChange(mbPointsToAttemptResult(points));
   }, [onChange]);
 
   return (
-    <div>
-      <Input
+    <Form.Field>
+      <input
         type="number"
         min={1}
-        id={id}
-        className="form-control"
-        autoFocus={autoFocus}
         value={points}
         onChange={handleChange}
+        autoFocus
       />
-      points
-    </div>
+      <Label pointing>points</Label>
+    </Form.Field>
   );
 }

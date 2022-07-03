@@ -31,6 +31,7 @@
         "import/no-unresolved": ["error", {
             "ignore": ["semantic-css/"]
         }],
-        "no-console": ["error", { "allow": ["warn", "error"] }]
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "jsx-a11y/no-autofocus": "off"
     }
 }
