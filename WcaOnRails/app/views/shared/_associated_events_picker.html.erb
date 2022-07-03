@@ -52,13 +52,14 @@ Note: form_builder.object is the object having associated events.
         <% else %>
           <%= f.hidden_field :event_id %>
         <% end %>
-        <%= label_tag "#{events_association_name}_#{event.id}" do %>
-          <%= f.check_box "_destroy", { checked: selected_events.include?(event) && !e_disabled, id: "#{events_association_name}_#{event.id}", disabled: disabled || e_disabled }, "0", "1" %>
-          <% tooltip = e_disabled ? disabled_tooltip : event.name %>
-          <%= cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: tooltip) %>
-        <% end %>
         <% if e_disabled %>
           <%= f.hidden_field "_destroy", { value: "1" } %>
+          <%= cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: disabled_tooltip, style: "color: #FFBBBB" ) %>
+        <% else %>
+          <%= label_tag "#{events_association_name}_#{event.id}" do %>
+            <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "#{events_association_name}_#{event.id}", disabled: disabled }, "0", "1" %>
+            <%= cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name) %>
+          <% end %>
         <% end %>
         <%= f.hidden_field :id %>
       </span>

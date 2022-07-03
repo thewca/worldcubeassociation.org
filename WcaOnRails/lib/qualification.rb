@@ -40,26 +40,24 @@ class Qualification
   end
 
   def can_register?(user, event_id)
-    if user.person.nil?
-      return false
-    end
-    qualifying_results = user.person.results.in_event(event_id).no_later_than(self.when_date)
+    return false if user.person.nil?
+    before_deadline_results = user.person.results.in_event(event_id).no_later_than(self.when_date)
     # Allow any competitor with a result to register when type == "ranking" or type == "anyResult".
     # When type == "ranking", the results need to be manually cleared out later.
     case self.wcif_type
     when "anyResult", "ranking"
       case self.result_type
       when "single"
-        qualifying_results = qualifying_results.succeeded
+        qualifying_results = before_deadline_results.succeeded
       when "average"
-        qualifying_results = qualifying_results.average_succeeded
+        qualifying_results = before_deadline_results.average_succeeded
       end
     when "attemptResult"
       case self.result_type
       when "single"
-        qualifying_results = qualifying_results.single_better_than(self.level)
+        qualifying_results = before_deadline_results.single_better_than(self.level)
       when "average"
-        qualifying_results = qualifying_results.average_better_than(self.level)
+        qualifying_results = before_deadline_results.average_better_than(self.level)
       end
     end
     qualifying_results.any?

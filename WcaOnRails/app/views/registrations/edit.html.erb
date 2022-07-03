@@ -13,7 +13,7 @@
     <% end %>
     <h4><%= @registration.name %></h4>
 
-    <% ineligible_events = @competition.competition_events.select{|e| !e.can_register?(@registration.user) }.map{|e| e.event } %>
+    <% ineligible_events = @competition.competition_events.select{|ce| !ce.can_register?(@registration.user) }.map(&:event) %>
     <%= render "shared/associated_events_picker",
                form_builder: f,
                events_association_name: :registration_competition_events,

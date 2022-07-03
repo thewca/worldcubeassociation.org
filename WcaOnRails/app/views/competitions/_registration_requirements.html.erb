@@ -126,7 +126,7 @@
   <br>
 <% end %>
 
-<% if @competition.uses_qualification? and !@competition.allow_registration_without_qualification %>
+<% if @competition.uses_qualification? && !@competition.allow_registration_without_qualification %>
   <%= t('competitions.competition_info.require_qualification') %>
   <br>
 <% end %>
