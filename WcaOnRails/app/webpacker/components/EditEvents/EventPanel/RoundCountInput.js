@@ -1,6 +1,5 @@
 import React from 'react';
-import { Select } from 'semantic-ui-react';
-import useInputState from '../../lib/hooks/useInputState';
+import { Dropdown, Select } from 'semantic-ui-react';
 
 const RoundCountOptions = [
   { key: 0, value: 0, text: '# of Rounds?' },
@@ -21,21 +20,24 @@ const RoundCountOptions = [
  * @param {boolean} disabled - whether the input is disabled
  * @returns {JSX.Element} the rendered component
  */
-export default function RoundCountInput({ roundCount: InitialRoundCount, onChange, disabled }) {
-  const [roundCount, setRoundCount] = useInputState(InitialRoundCount);
-
+export default function RoundCountInput({ roundCount, onChange, disabled }) {
   const handleChange = (ev, data) => {
-    setRoundCount(ev, data);
-    onChange(roundCount);
+    console.log(ev, data);
+    onChange(data.value);
   };
 
   return (
-    <Select
+    <Dropdown
+      selection
+      compact
       name="SelectRoundCount"
       value={roundCount}
       onChange={handleChange}
       disabled={disabled}
       options={RoundCountOptions}
+      style={{
+        fontSize: '.75em',
+      }}
     />
   );
 }

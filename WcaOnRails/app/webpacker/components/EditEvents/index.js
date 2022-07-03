@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import cn from 'classnames';
 import _ from 'lodash';
 
+import { Button, Grid, Message } from 'semantic-ui-react';
 import events from '../../lib/wca-data/events.js.erb';
 
 import { saveWcif } from '../../lib/utils/wcif';
@@ -54,23 +55,21 @@ function EditEvents() {
     };
 
     saveWcif(competitionId, { events: wcifEvents }, onSuccess, onFailure);
-  }, []);
+  }, [competitionId, dispatch, wcifEvents]);
 
   const renderUnsavedChangesAlert = () => (
-    <div className="alert alert-info">
+    <Message color="blue">
       You have unsaved changes. Don&apos;t forget to
       {' '}
-      <button
-        type="button"
+      <Button
         onClick={save}
         disabled={saving}
-        className={cn('btn', 'btn-default btn-primary', {
-          saving,
-        })}
+        loading={saving}
+        color="blue"
       >
         save your changes!
-      </button>
-    </div>
+      </Button>
+    </Message>
   );
 
   console.log(73, wcifEvents);
@@ -78,16 +77,13 @@ function EditEvents() {
   return (
     <div>
       {unsavedChanges && renderUnsavedChangesAlert()}
-      <div className="row equal">
+      <Grid>
         {wcifEvents.map((wcifEvent) => (
-          <div
-            key={wcifEvent.id}
-            className="col-xs-12 col-sm-12 col-md-12 col-lg-4"
-          >
+          <Grid.Column key={wcifEvent.id} mobile={16} tablet={8} computer={5}>
             <EventPanel wcifEvent={wcifEvent} />
-          </div>
+          </Grid.Column>
         ))}
-      </div>
+      </Grid>
       {unsavedChanges && renderUnsavedChangesAlert()}
     </div>
   );

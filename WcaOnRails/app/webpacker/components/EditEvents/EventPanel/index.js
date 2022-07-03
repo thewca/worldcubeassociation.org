@@ -2,14 +2,19 @@ import React, { useCallback } from 'react';
 import cn from 'classnames';
 // import _ from 'lodash';
 
-import events from '../../lib/wca-data/events.js.erb';
-import { pluralize } from '../../lib/utils/edit-events';
+import I18n from 'i18n-js';
+import {
+  Button, Header, Rail, Segment,
+} from 'semantic-ui-react';
+import events from '../../../lib/wca-data/events.js.erb';
+import { pluralize } from '../../../lib/utils/edit-events';
 // import { addRoundToEvent, removeRoundsFromSharedTimeLimits } from './utils';
 import RoundsTable from './RoundsTable';
 import RoundCountInput from './RoundCountInput';
-import { useStore, useDispatch } from '../../lib/providers/StoreProvider';
-import { useConfirm } from '../../lib/providers/ConfirmProvider';
-import { addRound, removeRounds } from './store/actions';
+import { useStore, useDispatch } from '../../../lib/providers/StoreProvider';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import { addRound, removeRounds } from '../store/actions';
+import { EditQualificationModal } from '../Modals';
 
 export default function EventPanel({
   wcifEvent,
@@ -45,7 +50,7 @@ export default function EventPanel({
           // wcifEvent.rounds = null;
         });
     }
-  }, [wcifEvent, wcifEvents, dispatch, confirm]);
+  }, [wcifEvent, confirm, event.name, dispatch]);
 
   const setRoundCount = useCallback((newRoundCount) => {
     // wcifEvent.rounds = wcifEvent.rounds || [];
@@ -82,47 +87,47 @@ export default function EventPanel({
         // }
       });
     } else {
-      // We do not have enough rounds, create the missing ones.
-      while (wcifEvent.rounds.length < newRoundCount) {
+      // We do not have enough rounds any or we do not have enough rounds: create the missing ones.
+      while (!wcifEvent.rounds || wcifEvent.rounds.length < newRoundCount) {
         // addRoundToEvent(wcifEvent);
         dispatch(addRound(wcifEvent.id));
       }
     }
-  }, [wcifEvent, wcifEvents, dispatch, confirm]);
+  }, [wcifEvent.rounds, wcifEvent.id, confirm, event.name, dispatch]);
 
   const renderRoundCountInputs = () => {
     if (wcifEvent.rounds) {
       return (
-        <div className="input-group">
+        <>
           <RoundCountInput
             roundCount={wcifEvent.rounds.length}
             onChange={(e) => setRoundCount(e)}
             disabled={disabled}
           />
 
-          <span className="input-group-btn">
-            <button
-              type="button"
-              className="btn btn-danger btn-xs remove-event"
-              disabled={!canAddAndRemoveEvents}
-              title={
-                !canAddAndRemoveEvents
-                  ? `Cannot remove ${event.name} because the competition is confirmed.`
-                  : ''
-              }
-              onClick={removeEvent}
-            >
-              Remove event
-            </button>
-          </span>
-        </div>
+          <Button
+            disabled={!canAddAndRemoveEvents}
+            title={
+              !canAddAndRemoveEvents
+                ? `Cannot remove ${event.name} because the competition is confirmed.`
+                : ''
+            }
+            onClick={removeEvent}
+            color="red"
+            size="tiny"
+            style={{
+              fontSize: '.75em',
+            }}
+          >
+            Remove event
+          </Button>
+        </>
       );
     }
 
     return (
-      <button
-        type="button"
-        className="btn btn-success btn-xs add-event"
+      <Button
+        className="add-event"
         disabled={!canAddAndRemoveEvents}
         title={
           !canAddAndRemoveEvents
@@ -130,34 +135,74 @@ export default function EventPanel({
             : ''
         }
         onClick={() => setRoundCount(0)}
+        color="green"
+        size="tiny"
+        style={{
+          fontSize: '.75em',
+        }}
       >
         Add event
-      </button>
+      </Button>
     );
   };
 
   return (
-    <div className={`panel panel-default event-${wcifEvent.id}`}>
-      <div className="panel-heading">
-        <h3 className="panel-title">
-          <span
-            className={cn('img-thumbnail', 'cubing-icon', `event-${event.id}`)}
-          />
-          <span className="title">{event.name}</span>
-          {' '}
+    <Segment.Group
+      size="tiny"
+      compact
+      className={`event-${wcifEvent.id}`}
+      style={{
+        width: '100%',
+      }}
+    >
+
+      <Header
+        className="event-panel__heading"
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+        attached
+      >
+        <div
+          style={{
+            margin: '-1.5em -1em',
+          }}
+        >
+          <span className={cn('img-thumbnail', 'cubing-icon', `event-${event.id}`)} />
+        </div>
+        <span
+          className="title"
+          style={{
+            flexGrow: 1,
+            marginLeft: '2em',
+          }}
+        >
+          {event.name}
+
+        </span>
+        <div>
           {renderRoundCountInputs()}
-        </h3>
-      </div>
+        </div>
+      </Header>
 
       {wcifEvent.rounds && (
-        <div className="panel-body">
-          <RoundsTable
-            wcifEvents={wcifEvents}
-            wcifEvent={wcifEvent}
-            disabled={disabled}
-          />
-        </div>
+        <RoundsTable
+          wcifEvents={wcifEvents}
+          wcifEvent={wcifEvent}
+          disabled={disabled}
+        />
       )}
-    </div>
+      <Segment>
+        <h5 style={{ display: 'inline' }}>
+          <span style={{ marginRight: '0.25em' }}>
+            {I18n.t('competitions.events.qualification')}
+            :
+          </span>
+          <EditQualificationModal wcifEvent={wcifEvent} disabled={disabled} />
+        </h5>
+      </Segment>
+    </Segment.Group>
   );
 }

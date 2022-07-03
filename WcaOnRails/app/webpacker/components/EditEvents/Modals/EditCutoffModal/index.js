@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Form, Label } from 'semantic-ui-react';
 import _ from 'lodash';
 import formats from '../../../../lib/wca-data/formats.js.erb';
 import useInputState from '../../../../lib/hooks/useInputState';
@@ -34,34 +33,32 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
   const [attemptResult, setAttemptResult] = useState(cutoff?.attemptResult);
 
   const cutoffFormats = formats.byId[format].allowedFirstPhaseFormats;
-  const explanationText = cutoff ? roundCutoffToString(wcifRound) : null;
 
-  const hasUnsavedChanges = useMemo(() => (
+  const explanationText = (
+    numberOfAttempts > 0 ? roundCutoffToString({
+      ...wcifRound,
+      ...{ numberOfAttempts, attemptResult },
+    }) : null
+  );
+
+  const hasUnsavedChanges = () => (
     !_.isEqual(cutoff, { numberOfAttempts, attemptResult })
-  ), [cutoff, numberOfAttempts, attemptResult]);
+  );
 
-  // console.log(11, hasUnsavedChanges);
-
-  const handleOk = useCallback(() => {
-    if (hasUnsavedChanges) {
-      dispatch(updateCutoff(wcifRound.id, { numberOfAttempts, attemptResult }));
-    }
-  }, [hasUnsavedChanges, dispatch]);
-
-  const handleCutoffFormatChange = (ev, data) => {
-    setNumberOfAttempts(ev, data);
+  const reset = () => {
+    setNumberOfAttempts(cutoff?.numberOfAttempts ?? 0);
+    setAttemptResult(cutoff?.attemptResult);
   };
 
-  const handleAttemptResultChange = (value) => {
-    console.log(56, attemptResult, value);
-    setAttemptResult(value);
+  const handleOk = () => {
+    if (hasUnsavedChanges()) {
+      dispatch(updateCutoff(wcifRound.id, { numberOfAttempts, attemptResult }));
+    }
   };
 
   const Title = (
     <span>
-      Cutoff for
-      {' '}
-      {roundIdToString(wcifRound.id)}
+      {`Cutoff for ${roundIdToString(wcifRound.id)}`}
     </span>
   );
 
@@ -77,8 +74,9 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
       title={Title}
       buttonClass="btn-default btn-xs"
       formClass="form-horizontal"
+      reset={reset}
       onOk={handleOk}
-      hasUnsavedChanges={hasUnsavedChanges}
+      hasUnsavedChanges={hasUnsavedChanges()}
       disabled={disabled}
     >
       <div>
@@ -88,9 +86,9 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
         cutoffFormats={cutoffFormats}
         cutoffFormat={numberOfAttempts}
         wcifRound={wcifRound}
-        onChange={handleCutoffFormatChange}
+        onChange={setNumberOfAttempts}
       />
-      {cutoff && (
+      {numberOfAttempts > 0 && (
         <>
           <div>
             Cutoff
@@ -98,12 +96,12 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
           <AttemptResultInput
             eventId={wcifEvent.id}
             value={attemptResult}
-            onChange={handleAttemptResultChange}
+            onChange={setAttemptResult}
           />
         </>
       )}
 
-      {explanationText}
+      <p>{explanationText}</p>
     </ButtonActivatedModal>
   );
 }

@@ -1,15 +1,18 @@
 import React from 'react';
 
-import events from '../../lib/wca-data/events.js.erb';
-import formats from '../../lib/wca-data/formats.js.erb';
-import { roundIdToString } from '../../lib/utils/wcif';
+import {
+  Dropdown, Input, Select, Table,
+} from 'semantic-ui-react';
+import events from '../../../lib/wca-data/events.js.erb';
+import formats from '../../../lib/wca-data/formats.js.erb';
+import { roundIdToString } from '../../../lib/utils/wcif';
 
 import {
   EditAdvancementConditionModal, EditTimeLimitModal, EditCutoffModal,
-} from './Modals';
-import { useDispatch } from '../../lib/providers/StoreProvider';
-import { useConfirm } from '../../lib/providers/ConfirmProvider';
-import { setRoundFormat, setScrambleSetCount } from './store/actions';
+} from '../Modals';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import { setRoundFormat, setScrambleSetCount } from '../store/actions';
 
 export default function Round({
   index, wcifRound, wcifEvent, disabled,
@@ -53,58 +56,64 @@ export default function Round({
   };
 
   return (
-    <tr className={`round-${roundNumber}`}>
-      <td>{roundNumber}</td>
-      <td>
-        <select
+    <Table.Row verticalAlign="middle">
+      <Table.Cell>{wcifRound.id.split('-')[1].replace('r', '')}</Table.Cell>
+      <Table.Cell>
+        <Dropdown
+          selection
           name="format"
-          className="form-control input-xs"
           value={wcifRound.format}
           onChange={roundFormatChanged}
           disabled={disabled}
-        >
-          {event.formats().map((format) => (
-            <option key={format.id} value={format.id}>
-              {format.shortName}
-            </option>
-          ))}
-        </select>
-      </td>
+          options={event.formats().map((format) => ({
+            key: format.id,
+            value: format.id,
+            text: format.shortName,
+          }))}
+          compact
+          style={{
+            fontSize: '1em',
+          }}
+        />
+      </Table.Cell>
 
-      <td className="text-center">
-        <input
+      <Table.Cell>
+        <Input
           name="scrambleSetCount"
-          className="form-control input-xs"
           type="number"
           min={1}
           value={wcifRound.scrambleSetCount}
           onChange={scrambleSetCountChanged}
           disabled={disabled}
+          size="large"
+          style={{
+            width: '5em',
+          }}
         />
-      </td>
+      </Table.Cell>
 
       {event.canChangeTimeLimit && (
-        <td className="text-center">
+        <Table.Cell>
           <EditTimeLimitModal
             wcifEvent={wcifEvent}
             roundNumber={roundNumber}
             disabled={disabled}
           />
-        </td>
+        </Table.Cell>
       )}
 
       {event.canHaveCutoff && (
-        <td className="text-center">
+        <Table.Cell>
           <EditCutoffModal
             wcifEvent={wcifEvent}
             wcifRound={wcifRound}
             roundNumber={roundNumber}
             disabled={disabled}
           />
-        </td>
+        </Table.Cell>
       )}
 
-      <td className="text-center">
+      <Table.Cell>
         {!isLastRound && (
           <EditAdvancementConditionModal
             wcifEvent={wcifEvent}
@@ -112,7 +121,7 @@ export default function Round({
             disabled={disabled}
           />
         )}
-      </td>
-    </tr>
+      </Table.Cell>
+    </Table.Row>
   );
 }
