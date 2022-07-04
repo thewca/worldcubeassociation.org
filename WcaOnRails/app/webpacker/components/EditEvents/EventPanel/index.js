@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 import I18n from 'i18n-js';
 import {
-  Button, Header, Rail, Segment,
+  Button, Header, Segment,
 } from 'semantic-ui-react';
 import events from '../../../lib/wca-data/events.js.erb';
 import { pluralize } from '../../../lib/utils/edit-events';
@@ -13,7 +13,7 @@ import RoundsTable from './RoundsTable';
 import RoundCountInput from './RoundCountInput';
 import { useStore, useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { addRound, removeRounds } from '../store/actions';
+import { addRounds, removeRounds } from '../store/actions';
 import { EditQualificationModal } from '../Modals';
 
 export default function EventPanel({
@@ -52,9 +52,7 @@ export default function EventPanel({
     }
   }, [wcifEvent, confirm, event.name, dispatch]);
 
-  const setRoundCount = useCallback((newRoundCount) => {
-    // wcifEvent.rounds = wcifEvent.rounds || [];
-
+  const setRoundCount = (newRoundCount) => {
     const roundsToRemoveCount = wcifEvent.rounds.length - newRoundCount;
 
     if (roundsToRemoveCount > 0) {
@@ -65,35 +63,14 @@ export default function EventPanel({
           'round',
         )} of ${event.name}?`,
       }).then(() => {
+        // We have too many rounds
         dispatch(removeRounds(wcifEvent.id, roundsToRemoveCount));
-        // // We have too many rounds
-
-        // // Rounds to remove may have been part of shared cumulative time limits,
-        // // so remove these rounds from those groupings
-        // removeRoundsFromSharedTimeLimits(
-        //   wcifEvents,
-        //   wcifEvent.rounds
-        //     .filter((v, index) => index >= newRoundCount)
-        //     .map((round) => round.id),
-        // );
-
-        // // Remove the extra rounds themselves
-        // // Note: do this after dealing with cumulative time limits above
-        // wcifEvent.rounds = _.take(wcifEvent.rounds, newRoundCount);
-
-        // Final rounds must not have an advance to next round requirement.
-        // if (wcifEvent.rounds.length >= 1) {
-        //   _.last(wcifEvent.rounds).advancementCondition = null;
-        // }
       });
     } else {
       // We do not have enough rounds any or we do not have enough rounds: create the missing ones.
-      while (!wcifEvent.rounds || wcifEvent.rounds.length < newRoundCount) {
-        // addRoundToEvent(wcifEvent);
-        dispatch(addRound(wcifEvent.id));
-      }
+      dispatch(addRounds(wcifEvent.id, newRoundCount - wcifEvent.rounds.length));
     }
-  }, [wcifEvent.rounds, wcifEvent.id, confirm, event.name, dispatch]);
+  };
 
   const renderRoundCountInputs = () => {
     if (wcifEvent.rounds) {

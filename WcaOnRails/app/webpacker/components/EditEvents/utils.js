@@ -3,32 +3,46 @@ import events from '../../lib/wca-data/events.js.erb';
 import { buildActivityCode, parseActivityCode } from '../../lib/utils/wcif';
 import { matchResult, pluralize } from '../../lib/utils/edit-events';
 
-/* eslint-disable import/prefer-default-export */
-export function addRoundToEvent(wcifEvent) {
-  const DEFAULT_TIME_LIMIT = {
-    centiseconds: 10 * 60 * 100,
-    cumulativeRoundIds: [],
-  };
+const DEFAULT_TIME_LIMIT = {
+  centiseconds: 10 * 60 * 100,
+  cumulativeRoundIds: [],
+};
 
-  const event = events.byId[wcifEvent.id];
-  const nextRoundNumber = wcifEvent.rounds.length + 1;
+export const generateWcifRound = (eventId, roundNumber) => {
+  const event = events.byId[eventId];
 
-  wcifEvent.rounds.push({
+  return {
     id: buildActivityCode({
-      eventId: wcifEvent.id,
-      roundNumber: nextRoundNumber,
+      eventId,
+      roundNumber,
     }),
     format: event.recommendedFormat().id,
-    timeLimit: DEFAULT_TIME_LIMIT,
+    timeLimit: event.can_change_time_limit ? DEFAULT_TIME_LIMIT : null,
     cutoff: null,
     advancementCondition: null,
     results: [],
     groups: [],
     scrambleSetCount: 1,
-  });
-}
+  };
+};
 
-export function roundCutoffToString(wcifRound, { short } = {}) {
+/**
+ * Removes the roundIds from the cumulativeRoundIds of the specified event.
+ *
+ * @param {collection} wcifEvents Will be modified in place.
+ * @param {Array}      wcifRounds Rounds to be removed from all cumulativeRoundIds.
+ */
+export const removeSharedTimelimits = (event, wcifRoundIds) => ({
+  ...event,
+  timeLimit: event.timeLimit ? {
+    ...event.timeLimit,
+    cumulativeRoundIds: event.cumulativeRoundIds.filter((wcifRoundId) => (
+      !wcifRoundIds.includes(wcifRoundId)
+    )),
+  } : null,
+});
+
+export const roundCutoffToString = (wcifRound, { short } = {}) => {
   const { cutoff } = wcifRound;
   if (!cutoff) {
     return '-';
@@ -42,20 +56,4 @@ export function roundCutoffToString(wcifRound, { short } = {}) {
   let explanationText = `Competitors get ${pluralize(cutoff.numberOfAttempts, 'attempt')} to get ${matchStr}.`;
   explanationText += ` If they succeed, they get to do all ${formats.byId[wcifRound.format].expectedSolveCount} solves.`;
   return explanationText;
-}
-
-/**
- * Finds the cumulativeRoundIds of each event in wcifEvents and removes any
- * which are found in wcifRounds. Note that it modifies wicfEvents in place.
- *
- * @param {collection} wcifEvents Will be modified in place.
- * @param {Array}      wcifRounds Rounds to be removed from all cumulativeRoundIds.
- */
-export function removeRoundsFromSharedTimeLimits(wcifEvents, wcifRounds) {
-  _.compact(_.flatMap(wcifEvents, 'rounds')).forEach((otherWcifRound) => {
-    // fmc and mbf don't have timelimits
-    if (otherWcifRound.timeLimit) {
-      _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, ...wcifRounds);
-    }
-  });
-}
+};

@@ -1,7 +1,7 @@
 export const ChangesSaved = 'saving_started';
 export const RemoveEvent = 'REMOVE_EVENT';
+export const AddRounds = 'ADD_ROUNDS';
 export const RemoveRounds = 'REMOVE_ROUNDS';
-export const AddRound = 'ADD_ROUND';
 export const SetRoundFormat = 'SET_ROUND_FORMAT';
 export const SetScrambleSetCount = 'SET_SCRAMBLE_SET_COUNT';
 export const UpdateCutoff = 'UPDATE_CUTOFF';
@@ -27,6 +27,20 @@ export const removeEvent = (eventId) => ({
 });
 
 /**
+ * create an action to add round
+ * @param {EventId} eventId
+ * @param {number} roundsToAddCount
+ * @returns {Action}
+ */
+export const addRounds = (eventId, roundsToAddCount) => ({
+  type: AddRounds,
+  payload: {
+    eventId,
+    roundsToAddCount,
+  },
+});
+
+/**
  * Action creator for removing rounds
  * @param {EventId} eventId
  * @param {number} roundsToRemoveCount
@@ -37,18 +51,6 @@ export const removeRounds = (eventId, roundsToRemoveCount) => ({
   payload: {
     eventId,
     roundsToRemoveCount,
-  },
-});
-
-/**
- * create an action to add round
- * @param {EventId} eventId
- * @returns {Action}
- */
-export const addRound = (eventId) => ({
-  type: AddRound,
-  payload: {
-    eventId,
   },
 });
 
