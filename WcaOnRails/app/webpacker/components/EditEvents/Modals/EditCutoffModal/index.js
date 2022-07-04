@@ -30,7 +30,7 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
   const disabled = false;
 
   const [numberOfAttempts, setNumberOfAttempts] = useInputState(cutoff?.numberOfAttempts ?? 0);
-  const [attemptResult, setAttemptResult] = useState(cutoff?.attemptResult);
+  const [attemptResult, setAttemptResult] = useState(cutoff?.attemptResult ?? 0);
 
   const cutoffFormats = formats.byId[format].allowedFirstPhaseFormats;
 
@@ -47,7 +47,7 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
 
   const reset = () => {
     setNumberOfAttempts(cutoff?.numberOfAttempts ?? 0);
-    setAttemptResult(cutoff?.attemptResult);
+    setAttemptResult(cutoff?.attemptResult ?? 0);
   };
 
   const handleOk = () => {
