@@ -165,21 +165,23 @@ export default function EventPanel({
       </Header>
 
       {wcifEvent.rounds && (
-        <RoundsTable
-          wcifEvents={wcifEvents}
-          wcifEvent={wcifEvent}
-          disabled={disabled}
-        />
+        <>
+          <RoundsTable
+            wcifEvents={wcifEvents}
+            wcifEvent={wcifEvent}
+            disabled={disabled}
+          />
+          <Segment>
+            <h5 style={{ display: 'inline' }}>
+              <span style={{ marginRight: '0.25em' }}>
+                {I18n.t('competitions.events.qualification')}
+                :
+              </span>
+              <EditQualificationModal wcifEvent={wcifEvent} disabled={disabled} />
+            </h5>
+          </Segment>
+        </>
       )}
-      <Segment>
-        <h5 style={{ display: 'inline' }}>
-          <span style={{ marginRight: '0.25em' }}>
-            {I18n.t('competitions.events.qualification')}
-            :
-          </span>
-          <EditQualificationModal wcifEvent={wcifEvent} disabled={disabled} />
-        </h5>
-      </Segment>
     </Segment.Group>
   );
 }
