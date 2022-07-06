@@ -32,7 +32,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - Install [Docker](https://docs.docker.com/get-docker/) (remember to complete the [Linux post-install steps](https://docs.docker.com/engine/install/linux-postinstall/) if you're on Linux)
 - Install docker-compose. The best way to get an up-to-date version is to get it from their [releases page](https://github.com/docker/compose/releases)
 - Navigate into the repository's main directory (`worldcubeassociation.org`)
-- To start the server at `http://localhost:3000`, run `docker-compose up` and to bring it down, `docker-compose down` (or just press ctrl + c in the same terminal)
+- To start the server at `http://localhost:3000`, run `docker-compose up` and to bring it down, `docker-compose down` (or just press ctrl + c in the same terminal). You can also use `docker-compose -f docker-compose-local-db.yml up` if already have a WCA local database set up.
 - To run tests, run `docker-compose exec wca_on_rails bash -c "RAILS_ENV=test bin/rake db:reset && RAILS_ENV=test bin/rake assets:precompile && bin/rspec"`
 - If you're using Visual Studio Code to develop, you can [attach it to the Docker container](https://code.visualstudio.com/docs/remote/containers) so that your extensions can take advantage of the Ruby environment and so the terminal runs from inside the container
 
@@ -48,9 +48,9 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - Install dependencies and load development database.
   1. `cd WcaOnRails/`
   2. [Install Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/en/docs/install), we need them for our javascript assets.
-  Feel free to take a look at our [chef recipe](https://github.com/thewca/worldcubeassociation.org/blob/master/chef/site-cookbooks/wca/recipes/default.rb#L6-L23)
-  for the accurate versions we use and how we install them.
-  Please note that other versions may work, but it is not guaranteed.
+     Feel free to take a look at our [chef recipe](https://github.com/thewca/worldcubeassociation.org/blob/master/chef/site-cookbooks/wca/recipes/default.rb#L6-L23)
+     for the accurate versions we use and how we install them.
+     Please note that other versions may work, but it is not guaranteed.
   3. `bundle install && bin/yarn`
   4. `bin/rake db:load:development` - Download and import the [developer's database export](https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export). Depending on your computer it may take a long time. Alternatively you can run `bin/rake db:reset` which will create the database and seed it with random data (it's way faster, but less representative of our website content).
   5. `bin/rails server` - Run rails. The server will be accessible at localhost:3000
