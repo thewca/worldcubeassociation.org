@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ResultsController < ApplicationController
-  @@cached_results = Hash.new
+  @@cached_results = {}
   @@rows = "rows"
   @@cached_time = "cached_time"
   @@cache_duration = 1.day
@@ -44,11 +44,11 @@ class ResultsController < ApplicationController
     cached_key = "#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
     cached_rows = @@cached_results[cached_key]
 
-    if cached_rows and cached_rows[@@cached_time] + @@cache_duration > DateTime.now
+    if cached_rows && cached_rows[@@cached_time] + @@cache_duration > DateTime.now
       @rows = cached_rows[@@rows]
       return
     end
-   
+
     if @is_persons
       @query = <<-SQL
         SELECT
@@ -149,7 +149,7 @@ class ResultsController < ApplicationController
     end
 
     @rows = ActiveRecord::Base.connection.exec_query(@query)
-    cached_obj = Hash["rows" => @rows, @@cached_time => DateTime.now]
+    cached_obj = { "rows" => @rows, @@cached_time => DateTime.now }
     @@cached_results[cached_key] = cached_obj
   end
 
@@ -264,7 +264,6 @@ class ResultsController < ApplicationController
         AND event.`rank` < 990
     SQL
   end
-  # rubocop:enable Lint/UnreachableCode
 
   private def shared_constants_and_conditions
     @years = Competition.non_future_years
