@@ -57,6 +57,8 @@ class ResultsController < ApplicationController
         JOIN Results result ON result.id = valueAndId % 1000000000
         ORDER BY value, personName
       SQL
+
+      @rows = ActiveRecord::Base.connection.exec_query(@query)
     elsif @is_results
       if @is_average
         @query = <<-SQL
@@ -75,6 +77,8 @@ class ResultsController < ApplicationController
             average, personName, competitionId, roundTypeId
           #{limit_condition}
         SQL
+
+        @rows = ActiveRecord::Base.connection.exec_query(@query)
       else
         subqueries = (1..5).map do |i|
           <<-SQL
@@ -100,6 +104,7 @@ class ResultsController < ApplicationController
           ORDER BY value, personName, competitionId, roundTypeId
           #{limit_condition}
         SQL
+        @rows = ActiveRecord::Base.connection.exec_query(@query)
       end
     elsif @is_by_region
       @query = <<-SQL
@@ -127,6 +132,8 @@ class ResultsController < ApplicationController
           #{@gender_condition}
         ORDER BY value, countryId, start_date, personName
       SQL
+
+      @rows = ActiveRecord::Base.connection.exec_query(@query)
     else
       flash[:danger] = t(".unknown_show")
       redirect_to rankings_path
