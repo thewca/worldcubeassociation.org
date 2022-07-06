@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class ResultsController < ApplicationController
+  @@cached_results = Hash.new
+  @@rows = "rows"
+  @@cached_time = "cached_time"
+  @@cache_duration = 1.day
+
   def rankings
     support_old_links!
 
@@ -36,6 +41,14 @@ class ResultsController < ApplicationController
       return redirect_to rankings_path(params[:event_id], "single")
     end
 
+    cached_key = "#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
+    cached_rows = @@cached_results[cached_key]
+
+    if cached_rows and cached_rows[@@cached_time] + @@cache_duration > DateTime.now
+      @rows = cached_rows[@@rows]
+      return
+    end
+   
     if @is_persons
       @query = <<-SQL
         SELECT
@@ -58,7 +71,6 @@ class ResultsController < ApplicationController
         ORDER BY value, personName
       SQL
 
-      @rows = ActiveRecord::Base.connection.exec_query(@query)
     elsif @is_results
       if @is_average
         @query = <<-SQL
@@ -78,7 +90,6 @@ class ResultsController < ApplicationController
           #{limit_condition}
         SQL
 
-        @rows = ActiveRecord::Base.connection.exec_query(@query)
       else
         subqueries = (1..5).map do |i|
           <<-SQL
@@ -104,7 +115,6 @@ class ResultsController < ApplicationController
           ORDER BY value, personName, competitionId, roundTypeId
           #{limit_condition}
         SQL
-        @rows = ActiveRecord::Base.connection.exec_query(@query)
       end
     elsif @is_by_region
       @query = <<-SQL
@@ -133,11 +143,14 @@ class ResultsController < ApplicationController
         ORDER BY value, countryId, start_date, personName
       SQL
 
-      @rows = ActiveRecord::Base.connection.exec_query(@query)
     else
       flash[:danger] = t(".unknown_show")
       redirect_to rankings_path
     end
+
+    @rows = ActiveRecord::Base.connection.exec_query(@query)
+    cached_obj = Hash["rows" => @rows, @@cached_time => DateTime.now]
+    @@cached_results[cached_key] = cached_obj
   end
 
   def records
