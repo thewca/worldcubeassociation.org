@@ -68,29 +68,30 @@ module ResultsValidators
                                                name: name,
                                                wca_ids: persons.map(&:wca_id).join(", "))
           end
+		  
+          def first_and_last_name(name)
+            splitted_name = split(name)
+            splitted_name.first + 
+              if length(splitted_name) == 1
+                ""
+              elsif name.include? " ("
+                " " + splitted_name[splitted_name.find_index { |n| n.include? "("} - 1]
+              else
+                " " + splitted_name.last
+              end
+          end
+		  # Exclude persons that the same name warning caught
+          without_wca_id_unique_name = without_wca_id.where.not(name: existing_person_in_db_by_name.map( |p| p.first))
+		  # possible_duplicates_in_db: persons with matching first name, last name and dob
+          possible_duplicates_in_db = Person.where([first_and_last_name(name), dob]: without_wca_id_unique_name.map( |p| [first_and_last_name(p.name), p.dob])).group_by( |p| [first_and_last_name(p.name), p.dob])
+          possible_duplicates_in_db.each do |first_name_last_name_dob, persons|
+            @warnings << ValidationWarning.new(:persons, competition_id, 
+            SIMILAR_NAME_SAME_DOB_WARNING,
+            name: without_wca_id_unique_name.where([first_and_last_name(name), dob]: first_name_last_name_dob).map(&:name).first,
+            db_persons: persons.map( |p| "#{p.name} (#{p.wca_id})".join(", ")
+            )
+          end
         end
-		
-		if without_wca_id.any?
-		  def first_and_last_name(name)
-		    splitted_name = split(name)
-		    splitted_name.first + 
-			  if length(splitted_name) == 1
-				""
-			  elsif name.include? "("
-				" " + splitted_name[splitted_name.find_index { |n| n.include? "("} - 1]
-			  else
-				" " + splitted_name.last
-			  end
-		  end
-		  possible_duplicates_in_db = Person.where([first_and_last_name(name), dob]: without_wca_id.map( |p| [first_and_last_name(p.name), p.dob]))
-		  possible_duplicates_in_db.each do |persons|
-			@warnings << ValidationWarning.new(:persons, competition_id, 
-			SIMILAR_NAME_SAME_DOB_WARNING, 
-			name: Person.name,
-			db_persons: persons.map( |p| p.name + " (" + p.wca_id + ")").join(", ")
-			)
-		  end
-		end
 		
         duplicate_newcomer_names = []
         without_wca_id.each do |p|
