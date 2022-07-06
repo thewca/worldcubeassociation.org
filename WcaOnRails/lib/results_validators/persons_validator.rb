@@ -12,7 +12,7 @@ module ResultsValidators
     NOT_SO_YOUNG_PERSON_WARNING = "%{name} seems to be around 100 years old, please ensure it's correct."
     SAME_PERSON_NAME_WARNING = "There is already at least one person with the name '%{name}' in the WCA database (%{wca_ids}). " \
                                "Please ensure that your '%{name}' is a different person. If not, please assign the correct WCA ID to the user account and regenerate the results JSON."
-	SIMILAR_NAME_SAME_DOB_WARNING = "'%{name}' has the same birthdate and a very similar name than at least one person in the WCA database (%{db_persons}). Please ensure that your '%{name}' is a different person. If not, please assign the correct WCA ID to the user account and regenerate the results JSON."
+    SIMILAR_NAME_SAME_DOB_WARNING = "'%{name}' has the same birthdate and a very similar name than at least one person in the WCA database (%{db_persons}). Please ensure that your '%{name}' is a different person. If not, please assign the correct WCA ID to the user account and regenerate the results JSON."
     NON_MATCHING_DOB_WARNING = "The birthdate '%{dob}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_dob}'). If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
     NON_MATCHING_GENDER_WARNING = "The gender '%{gender}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_gender}'). " \
                                   "If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
@@ -68,31 +68,29 @@ module ResultsValidators
                                                name: name,
                                                wca_ids: persons.map(&:wca_id).join(", "))
           end
-		  
+
           def first_and_last_name(name)
             splitted_name = split(name)
-            splitted_name.first + 
-              if length(splitted_name) == 1
-                ""
-              elsif name.include? " ("
-                " " + splitted_name[splitted_name.find_index { |n| n.include? "("} - 1]
-              else
-                " " + splitted_name.last
-              end
+            if length(splitted_name) == 1
+              splitted_name.first
+            elsif name.include? " ("
+              (splitted_name.first + " " + splitted_name[splitted_name.find_index { |n| n.include? "("} - 1])
+            else
+              (splitted_name.first + " " + splitted_name.last)
+            end
           end
-		  # Exclude persons that the same name warning caught
+          # Exclude persons that the same name warning caught
           without_wca_id_unique_name = without_wca_id.where.not(name: existing_person_in_db_by_name.map( |p| p.first))
-		  # possible_duplicates_in_db: persons with matching first name, last name and dob
+          # possible_duplicates_in_db: persons with matching first name, last name and dob
           possible_duplicates_in_db = Person.where([first_and_last_name(name), dob]: without_wca_id_unique_name.map( |p| [first_and_last_name(p.name), p.dob])).group_by( |p| [first_and_last_name(p.name), p.dob])
           possible_duplicates_in_db.each do |first_name_last_name_dob, persons|
-            @warnings << ValidationWarning.new(:persons, competition_id, 
-            SIMILAR_NAME_SAME_DOB_WARNING,
-            name: without_wca_id_unique_name.where([first_and_last_name(name), dob]: first_name_last_name_dob).map(&:name).first,
-            db_persons: persons.map( |p| "#{p.name} (#{p.wca_id})".join(", ")
-            )
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               SIMILAR_NAME_SAME_DOB_WARNING,
+                                               name: without_wca_id_unique_name.where([first_and_last_name(name), dob]: first_name_last_name_dob).map(&:name).first,
+                                               db_persons: persons.map( |p| "#{p.name} (#{p.wca_id})".join(", "))
           end
         end
-		
+
         duplicate_newcomer_names = []
         without_wca_id.each do |p|
           if p.dob.month == 1 && p.dob.day == 1
