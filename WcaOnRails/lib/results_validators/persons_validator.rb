@@ -24,7 +24,7 @@ module ResultsValidators
     WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
     LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name, please ensure the correct spelling."
     MISSING_ABBREVIATION_PERIOD_WARNING = "'%{name}' is missing an abbreviation period from a single letter middle name, please ensure the correct spelling."
-    SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name. If this is an abbreviation, please fix the name."
+    SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name, please fix the name."
 
     @@desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
 
@@ -128,7 +128,7 @@ module ResultsValidators
                                                  name: p.name)
             end
           end
-          if [' ', '.'].include?(p.name[1]) || (p.name[-2] == " ") || ((p.name[-1] == ".") && (p.name[-3] == " "))
+          if [' ', '.'].include?(p.name[1]) || ((name[-2] == " ") && !['I', 'V'].include?(name[-1])) || ((p.name[-1] == ".") && (p.name[-3] == " "))
             @warning << ValidationWarning.new(:persons, competition_id,
                                               SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
                                               name: p.name)
