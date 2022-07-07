@@ -128,7 +128,7 @@ module ResultsValidators
                                                  name: p.name)
             end
           end
-          if [' ', '.'].include?(p.name[1]) || ((name[-2] == " ") && !['I', 'V'].include?(name[-1])) || ((p.name[-1] == ".") && (p.name[-3] == " "))
+          if [' ', '.'].include?(p.name[1]) || ((p.name[-2] == " ") && !['I', 'V'].include?(p.name[-1])) || ((p.name[-1] == ".") && (p.name[-3] == " "))
             @warning << ValidationWarning.new(:persons, competition_id,
                                               SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
                                               name: p.name)
