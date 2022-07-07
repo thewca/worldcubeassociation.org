@@ -26,7 +26,6 @@ module ResultsValidators
     MISSING_ABBREVIATION_PERIOD_WARNING = "'%{name}' is missing an abbreviation period from a single letter middle name, please ensure the correct spelling."
     SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR = "'%{name}' has a single letter abbreviation as first or last name, please fix the name."
 
-
     @@desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
 
     def self.has_automated_fix?
@@ -117,22 +116,22 @@ module ResultsValidators
           end
           # Look for obvious person name issues
           splitted_name = p.name.split
-          if splitted_name.any? { |n| n.downcase == n}
+          if splitted_name.any? { |n| n.downcase == n }
             @warnings << ValidationWarning.new(:persons, competition_id,
-                                           LOWERCASE_NAME_WARNING,
-                                           name: p.name)
+                                               LOWERCASE_NAME_WARNING,
+                                               name: p.name)
           end
           if splitted_name.length > 2
-            if splitted_name[0,splitted_name.length-2].any? { |n| n.length == 1}
+            if splitted_name[0, splitted_name.length-2].any? { |n| n.length == 1 }
               @warnings << ValidationWarning.new(:persons, competition_id,
-                                                  MISSING_ABBREVIATION_PERIOD_WARNING,
-                                                  name: p.name)
+                                                 MISSING_ABBREVIATION_PERIOD_WARNING,
+                                                 name: p.name)
             end
           end
-          if p.name[0,2].include?(" ") or p.name[0,2].include?(".") or p.name.reverse[0,2].include?(" ") or p.name.reverse[0,2].include?(".")
+          if p.name[0, 2].include?(" ") || p.name[0, 2].include?(".") || p.name.reverse[0, 2].include?(" ") || p.name.reverse[0, 2].include?(".")
             @errors << ValidationError.new(:persons, competition_id,
-                                                SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR,
-                                                name: p.name)
+                                           SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR,
+                                           name: p.name)
           end
         end
         duplicate_newcomer_names.each do |name|
