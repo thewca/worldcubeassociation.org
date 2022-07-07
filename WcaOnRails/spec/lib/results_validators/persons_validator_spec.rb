@@ -121,7 +121,6 @@ RSpec.describe PV do
       # PERSON_WITHOUT_RESULTS_ERROR
       # WRONG_WCA_ID_ERROR
       # WRONG_PARENTHESIS_FORMAT_ERROR
-      # SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR
       # DOB_0101_WARNING
       # VERY_YOUNG_PERSON_WARNING
       # NOT_SO_YOUNG_PERSON_WARNING
@@ -131,6 +130,7 @@ RSpec.describe PV do
       # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING
       # LOWERCASE_NAME_WARNING
       # MISSING_ABBREVIATION_PERIOD_WARNING
+      # SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING
       it "validates person data" do
         FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
         res1 = FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
@@ -200,9 +200,6 @@ RSpec.describe PV do
           RV::ValidationError.new(:persons, competition1.id,
                                   PV::WRONG_PARENTHESIS_TYPE_ERROR,
                                   name: res_bad_parenthesis.person.name),
-          RV::ValidationError.new(:persons, competition1.id,
-                                  PV::SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR,
-                                  name: res_single_letter.person.name),
         ]
         expected_warnings = [
           RV::ValidationWarning.new(:persons, competition1.id,
@@ -226,6 +223,9 @@ RSpec.describe PV do
           RV::ValidationWarning.new(:persons, competition1.id,
                                     PV::MISSING_ABBREVIATION_PERIOD_WARNING,
                                     name: res_missing_period.person.name),
+          RV::ValidationWarning.new(:persons, competition1.id,
+                                    PV::SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
+                                    name: res_single_letter.person.name),
         ]
         validator_args = [
           { competition_ids: [competition1.id, competition2.id], model: InboxResult },
