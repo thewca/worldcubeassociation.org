@@ -1,4 +1,5 @@
 export const ChangesSaved = 'saving_started';
+export const AddEvent = 'ADD_EVENT';
 export const RemoveEvent = 'REMOVE_EVENT';
 export const AddRounds = 'ADD_ROUNDS';
 export const RemoveRounds = 'REMOVE_ROUNDS';
@@ -12,6 +13,18 @@ export const UpdateCutoff = 'UPDATE_CUTOFF';
  */
 export const changesSaved = () => ({
   type: ChangesSaved,
+});
+
+/**
+ * Action creator for adding event
+ * @param {EventId} eventId
+ * @returns {Action}
+ */
+export const addEvent = (eventId) => ({
+  type: AddEvent,
+  payload: {
+    eventId,
+  },
 });
 
 /**

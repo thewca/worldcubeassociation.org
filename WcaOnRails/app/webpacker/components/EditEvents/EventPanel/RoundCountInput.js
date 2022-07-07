@@ -21,10 +21,7 @@ const RoundCountOptions = [
  * @returns {JSX.Element} the rendered component
  */
 export default function RoundCountInput({ roundCount, onChange, disabled }) {
-  const handleChange = (ev, data) => {
-    console.log(ev, data);
-    onChange(data.value);
-  };
+  const handleChange = (ev, data) => onChange(data.value);
 
   return (
     <Dropdown

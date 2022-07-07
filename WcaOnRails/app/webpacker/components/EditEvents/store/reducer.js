@@ -1,6 +1,8 @@
+import { remove } from 'lodash';
 import { generateWcifRound, removeSharedTimelimits } from '../utils';
 import {
-  AddRounds, ChangesSaved, RemoveRounds, SetScrambleSetCount, UpdateCutoff,
+  AddEvent,
+  AddRounds, ChangesSaved, RemoveEvent, RemoveRounds, SetScrambleSetCount, UpdateCutoff,
 } from './actions';
 
 const updateForRound = (wcifEvents, roundId, cb) => wcifEvents.map((event) => (event.id === roundId.split('-')[0]
@@ -37,7 +39,6 @@ const reducers = {
       event.rounds = [];
     }
 
-    console.log(event.rounds.length);
     for (let i = 0; i < roundsToAddCount; i += 1) {
       event.rounds.push(generateWcifRound(event.id, event.rounds.length + 1));
     }
@@ -67,6 +68,26 @@ const reducers = {
       wcifEvents: state.wcifEvents.map((e) => (
         e.id === eventId ? event : removeSharedTimelimits(e, roundIdsToRemove)
       )),
+    };
+  },
+  [AddEvent]: (state, { payload }) => ({
+    ...state,
+    wcifEvents: state.wcifEvents.map((event) => (event.id === payload.eventId ? ({
+      ...event,
+      rounds: [],
+    }) : event)),
+  }),
+  [RemoveEvent]: (state, { payload }) => {
+    const { eventId } = payload;
+    const event = state.wcifEvents.find((e) => e.id === eventId);
+    const roundIdsToRemove = event.rounds.map((round) => round.id);
+
+    return {
+      ...state,
+      wcifEvents: state.wcifEvents.map((e) => (e.id === payload.eventId ? ({
+        id: e.id,
+        rounds: null,
+      }) : removeSharedTimelimits(e, roundIdsToRemove))),
     };
   },
 };

@@ -13,7 +13,9 @@ import RoundsTable from './RoundsTable';
 import RoundCountInput from './RoundCountInput';
 import { useStore, useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { addRounds, removeRounds } from '../store/actions';
+import {
+  addEvent, addRounds, removeEvent, removeRounds,
+} from '../store/actions';
 import { EditQualificationModal } from '../Modals';
 
 export default function EventPanel({
@@ -28,8 +30,8 @@ export default function EventPanel({
   const disabled = !canUpdateEvents;
   const event = events.byId[wcifEvent.id];
 
-  const removeEvent = useCallback(() => {
-    if (!wcifEvent.rounds || (wcifEvent.rounds.length > 0)) {
+  const handleRemoveEvent = () => {
+    if (wcifEvent.rounds && wcifEvent.rounds.length > 0) {
       confirm({
         content: `Are you sure you want to remove all ${pluralize(
           wcifEvent.rounds.length,
@@ -37,20 +39,12 @@ export default function EventPanel({
         )} of ${event.name}?`,
       })
         .then(() => {
-          dispatch(removeEvent(wcifEvent));
-
-          // // before removing all rounds of the event, remove those rounds from any
-          // // shared cumulative time limits
-          // removeRoundsFromSharedTimeLimits(
-          //   wcifEvents,
-          //   wcifEvent.rounds.map((round) => round.id),
-          // );
-
-          // // remove the rounds themselves
-          // wcifEvent.rounds = null;
+          dispatch(removeEvent(wcifEvent.id));
         });
+    } else {
+      dispatch(removeEvent(wcifEvent.id));
     }
-  }, [wcifEvent, confirm, event.name, dispatch]);
+  };
 
   const setRoundCount = (newRoundCount) => {
     const roundsToRemoveCount = wcifEvent.rounds.length - newRoundCount;
@@ -78,7 +72,7 @@ export default function EventPanel({
         <>
           <RoundCountInput
             roundCount={wcifEvent.rounds.length}
-            onChange={(e) => setRoundCount(e)}
+            onChange={setRoundCount}
             disabled={disabled}
           />
 
@@ -89,7 +83,7 @@ export default function EventPanel({
                 ? `Cannot remove ${event.name} because the competition is confirmed.`
                 : ''
             }
-            onClick={removeEvent}
+            onClick={handleRemoveEvent}
             color="red"
             size="tiny"
             style={{
@@ -111,7 +105,7 @@ export default function EventPanel({
             ? `Cannot add ${event.name} because the competition is confirmed.`
             : ''
         }
-        onClick={() => setRoundCount(0)}
+        onClick={() => dispatch(addEvent(wcifEvent.id))}
         color="green"
         size="tiny"
         style={{
@@ -164,7 +158,7 @@ export default function EventPanel({
         </div>
       </Header>
 
-      {wcifEvent.rounds && (
+      {wcifEvent.rounds !== null && (
         <>
           <RoundsTable
             wcifEvents={wcifEvents}
