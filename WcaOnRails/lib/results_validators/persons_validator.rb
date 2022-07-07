@@ -123,7 +123,7 @@ module ResultsValidators
                                            name: p.name)
           end
           if splitted_name.length > 2
-            if splitted_name[0,splitted_name.length-2].any( |n| n.length == 1)
+            if splitted_name[0,splitted_name.length-2].any?( |n| n.length == 1)
               @warnings << ValidationWarning.new(:persons, competition_id,
                                                   MISSING_ABBREVIATION_PERIOD_WARNING,
                                                   name: p.name)
