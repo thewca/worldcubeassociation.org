@@ -121,6 +121,7 @@ RSpec.describe PV do
       # PERSON_WITHOUT_RESULTS_ERROR
       # WRONG_WCA_ID_ERROR
       # WRONG_PARENTHESIS_FORMAT_ERROR
+      # SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR
       # DOB_0101_WARNING
       # VERY_YOUNG_PERSON_WARNING
       # NOT_SO_YOUNG_PERSON_WARNING
@@ -128,6 +129,8 @@ RSpec.describe PV do
       # WHITESPACE_IN_NAME_ERROR
       # WRONG_PARENTHESIS_TYPE_ERROR
       # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING
+      # LOWERCASE_NAME_WARNING
+      # MISSING_ABBREVIATION_PERIOD_WARNING
       it "validates person data" do
         FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
         res1 = FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")

@@ -115,20 +115,20 @@ module ResultsValidators
             duplicate_newcomer_names << p.name
           end
           # Look for obvious person name issues
-          splitted_name = p.name.split
-          if splitted_name.any? { |n| n.downcase == n }
+          splt_name = p.name.split
+          if splt_name.any? { |n| n.downcase == n }
             @warnings << ValidationWarning.new(:persons, competition_id,
                                                LOWERCASE_NAME_WARNING,
                                                name: p.name)
           end
-          if splitted_name.length > 2
-            if splitted_name[0, splitted_name.length-2].any? { |n| n.length == 1 }
+          if splt_name.length > 2
+            if splt_name[0, splt_name.length-1].any? { |n| n.length == 1 }
               @warnings << ValidationWarning.new(:persons, competition_id,
                                                  MISSING_ABBREVIATION_PERIOD_WARNING,
                                                  name: p.name)
             end
           end
-          if p.name[0, 2].include?(" ") || p.name[0, 2].include?(".") || p.name.reverse[0, 2].include?(" ") || p.name.reverse[0, 2].include?(".")
+          if [' ', '.'].include?(p.name[1]) || p.name[-2] == (" ") || p.name[-1] == "." && p.name[-3] == " " 
             @errors << ValidationError.new(:persons, competition_id,
                                            SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR,
                                            name: p.name)
