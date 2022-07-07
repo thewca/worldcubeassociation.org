@@ -151,6 +151,7 @@ class ResultsController < ApplicationController
     safe_duplate_query = "delete from cached_results where key_params = '#{cached_key}'"
     ActiveRecord::Base.connection.exec_query(safe_duplate_query)
 
+    # This only caches results. Table is cleared in CAD.
     CachedResult.create(key_params: cached_key, payload: @rows.to_json)
   end
 
