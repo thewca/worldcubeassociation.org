@@ -154,6 +154,18 @@ RSpec.describe PV do
                                                 competition: competition1,
                                                 eventId: "333oh")
         res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
+        res_lowercase = FactoryBot.create(:inbox_result,
+                                          competition: competition1,
+                                          eventId:"333oh")
+        res_lowercase.person.update(name: "First Middle last")
+        res_missing_period = FactoryBot.create(:inbox_result,
+                                               competition: competition1,
+                                               eventId:"333oh")
+        res_missing_period.person.update(name: "First A B. Last")
+        res_single_letter = FactoryBot.create(:inbox_result,
+                                              competition: competition1,
+                                              eventId:"333oh")
+        res_single_letter.person.update(name: "A. B. Last")     
         res_same_name1 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
                                            eventId: "333oh")
@@ -185,6 +197,9 @@ RSpec.describe PV do
           RV::ValidationError.new(:persons, competition1.id,
                                   PV::WRONG_PARENTHESIS_TYPE_ERROR,
                                   name: res_bad_parenthesis.person.name),
+          RV::ValidationError.new(:persons, competition1.id,
+                                  PV::SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR,
+                                  name: res_single_letter.person.name),
         ]
         expected_warnings = [
           RV::ValidationWarning.new(:persons, competition1.id,
@@ -202,6 +217,12 @@ RSpec.describe PV do
           RV::ValidationWarning.new(:persons, competition1.id,
                                     PV::MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
                                     name: res_same_name1.person.name),
+          RV::ValidationWarning.new(:persons, competition1.id,
+                                    PV::LOWERCASE_NAME_WARNING,
+                                    name: res_lowercase.person.name),
+          RV::ValidationWarning.new(:persons, competition1.id,
+                                    PV::MISSING_ABBREVIATION_PERIOD_WARNING,
+                                    name: res_missing_period.person.name),
         ]
         validator_args = [
           { competition_ids: [competition1.id, competition2.id], model: InboxResult },

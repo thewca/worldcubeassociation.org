@@ -22,6 +22,10 @@ module ResultsValidators
     MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors " \
                                                 "and that all results are correctly seperated by their corresponding id."
     WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
+    LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name, please ensure the correct spelling."
+    MISSING_ABBREVIATION_PERIOD_WARNING = "'%{name}' is missing an abbreviation period from a single letter middle name, please ensure the correct spelling."
+    SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR = "'%{name}' has a single letter abbreviation as first or last name, please fix the name."
+
 
     @@desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
 
@@ -110,6 +114,25 @@ module ResultsValidators
           # Look for if 2 new competitors that share the exact same name
           if without_wca_id.select { |p2| p2.name == p.name }.length > 1 && !duplicate_newcomer_names.include?(p.name)
             duplicate_newcomer_names << p.name
+          end
+          # Look for obvious person name issues
+          splitted_name = p.name.split
+          if splitted_name.any?( |n| n.downcase == n)
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                           LOWERCASE_NAME_WARNING,
+                                           name: p.name)
+          end
+          if splitted_name.length > 2
+            if splitted_name[0,splitted_name.length-2].any( |n| n.length == 1)
+              @warnings << ValidationWarning.new(:persons, competition_id,
+                                                  MISSING_ABBREVIATION_PERIOD_WARNING,
+                                                  name: p.name)
+            end
+          end
+          if p.name[0,2].include?(" ") or p.name[0,2].include?(".") or p.name.reverse[0,2].include?(" ") or p.name.reverse[0,2].include?(".")
+            @errors << ValidationError.new(:persons, competition_id,
+                                                SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR,
+                                                name: p.name)
           end
         end
         duplicate_newcomer_names.each do |name|
