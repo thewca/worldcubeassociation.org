@@ -117,13 +117,13 @@ module ResultsValidators
           end
           # Look for obvious person name issues
           splitted_name = p.name.split
-          if splitted_name.any?( |n| n.downcase == n)
+          if splitted_name.any? { |n| n.downcase == n}
             @warnings << ValidationWarning.new(:persons, competition_id,
                                            LOWERCASE_NAME_WARNING,
                                            name: p.name)
           end
           if splitted_name.length > 2
-            if splitted_name[0,splitted_name.length-2].any?( |n| n.length == 1)
+            if splitted_name[0,splitted_name.length-2].any? { |n| n.length == 1}
               @warnings << ValidationWarning.new(:persons, competition_id,
                                                   MISSING_ABBREVIATION_PERIOD_WARNING,
                                                   name: p.name)
