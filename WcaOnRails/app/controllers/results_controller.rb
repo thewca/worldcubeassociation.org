@@ -147,7 +147,11 @@ class ResultsController < ApplicationController
 
     @rows = ActiveRecord::Base.connection.exec_query(@query)
 
-    user = CachedResult.create(key_params: cached_key, payload: @rows.to_json)
+    # For safety, we delete possible duplicated (does active redord have on duplicated update or ignore?)
+    safe_duplate_query = "delete from cached_results where key_params = '#{cached_key}'"
+    ActiveRecord::Base.connection.exec_query(safe_duplate_query)
+
+    CachedResult.create(key_params: cached_key, payload: @rows.to_json)
   end
 
   def records
