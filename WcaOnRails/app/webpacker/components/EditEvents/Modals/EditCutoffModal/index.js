@@ -1,14 +1,14 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import _ from 'lodash';
 import formats from '../../../../lib/wca-data/formats.js.erb';
 import useInputState from '../../../../lib/hooks/useInputState';
 import { roundIdToString } from '../../../../lib/utils/wcif';
-import AttemptResultInput from '../../../AttemptResultInput';
 import { roundCutoffToString } from '../../utils';
 import ButtonActivatedModal from '../ButtonActivatedModal';
 import CutoffFormatField from './CutoffFormatInput';
 import { useDispatch } from '../../../../lib/providers/StoreProvider';
 import { updateCutoff } from '../../store/actions';
+import AttemptResultField from '../../../Results/WCALive/AttemptResultField/AttemptResultField';
 
 /**
  * Developer notes: "cutoffFormat" and "NumberOfAttempts" is used interchangably for written clarity
@@ -93,7 +93,8 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
           <div>
             Cutoff
           </div>
-          <AttemptResultInput
+          <AttemptResultField
+            label="Result"
             eventId={wcifEvent.id}
             value={attemptResult}
             onChange={setAttemptResult}
@@ -101,7 +102,7 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
         </>
       )}
 
-      <p>{explanationText}</p>
+      {numberOfAttempts < 0 && <p>{explanationText}</p>}
     </ButtonActivatedModal>
   );
 }
