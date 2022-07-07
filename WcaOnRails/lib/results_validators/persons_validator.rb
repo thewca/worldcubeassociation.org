@@ -128,7 +128,7 @@ module ResultsValidators
                                                  name: p.name)
             end
           end
-          if [' ', '.'].include?(p.name[1]) || p.name[-2] == (" ") || p.name[-1] == "." && p.name[-3] == " " 
+          if [' ', '.'].include?(p.name[1]) || (p.name[-2] == (" ")) || ((p.name[-1] == ".") && (p.name[-3] == " "))
             @errors << ValidationError.new(:persons, competition_id,
                                            SINGLE_LETTER_FIRST_OR_LAST_NAME_ERROR,
                                            name: p.name)
