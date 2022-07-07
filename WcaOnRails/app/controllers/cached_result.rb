@@ -1,0 +1,2 @@
+class CachedResult < ApplicationRecord
+end

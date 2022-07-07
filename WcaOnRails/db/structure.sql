@@ -713,7 +713,7 @@ DROP TABLE IF EXISTS `cached_results`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cached_results` (
-  `key` varchar(191) DEFAULT NULL,
+  `key_params` varchar(191) DEFAULT NULL,
   `payload` json DEFAULT NULL,
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL

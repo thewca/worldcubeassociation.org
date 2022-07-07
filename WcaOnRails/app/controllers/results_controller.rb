@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
-class ResultsController < ApplicationController
-  @@cached_results = {}
-  @@rows = "rows"
-  @@cached_time = "cached_time"
-  @@cache_duration = 1.day
+require 'json'
 
+class ResultsController < ApplicationController
   def rankings
     support_old_links!
 
@@ -42,10 +39,10 @@ class ResultsController < ApplicationController
     end
 
     cached_key = "#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
-    cached_rows = @@cached_results[cached_key]
+    cache_result = CachedResult.find_by(key_params: cached_key)
 
-    if cached_rows && cached_rows[@@cached_time] + @@cache_duration > DateTime.now
-      @rows = cached_rows[@@rows]
+    if cache_result
+      @rows = JSON.parse(cache_result.payload)
       return
     end
 
@@ -149,8 +146,8 @@ class ResultsController < ApplicationController
     end
 
     @rows = ActiveRecord::Base.connection.exec_query(@query)
-    cached_obj = { "rows" => @rows, @@cached_time => DateTime.now }
-    @@cached_results[cached_key] = cached_obj
+
+    user = CachedResult.create(key_params: cached_key, payload: @rows.to_json)
   end
 
   def records
