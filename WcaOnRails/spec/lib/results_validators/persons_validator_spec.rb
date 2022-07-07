@@ -156,16 +156,16 @@ RSpec.describe PV do
         res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
         res_lowercase = FactoryBot.create(:inbox_result,
                                           competition: competition1,
-                                          eventId:"333oh")
+                                          eventId: "333oh")
         res_lowercase.person.update(name: "First Middle last")
         res_missing_period = FactoryBot.create(:inbox_result,
                                                competition: competition1,
-                                               eventId:"333oh")
+                                               eventId: "333oh")
         res_missing_period.person.update(name: "First A B. Last")
         res_single_letter = FactoryBot.create(:inbox_result,
                                               competition: competition1,
-                                              eventId:"333oh")
-        res_single_letter.person.update(name: "A. B. Last")     
+                                              eventId: "333oh")
+        res_single_letter.person.update(name: "A. B. Last")
         res_same_name1 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
                                            eventId: "333oh")
