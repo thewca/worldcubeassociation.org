@@ -15,7 +15,7 @@ export default function RoundsTable({ wcifEvent }) {
       style={{
         width: '100%',
         overflowX: 'auto',
-        padding: 0,
+        padding: '0.5em',
         fontSize: '0.85em',
       }}
     >
