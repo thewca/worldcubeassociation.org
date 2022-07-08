@@ -114,21 +114,29 @@ module ResultsValidators
           if without_wca_id.select { |p2| p2.name == p.name }.length > 1 && !duplicate_newcomer_names.include?(p.name)
             duplicate_newcomer_names << p.name
           end
-          # Look for obvious person name issues
-          splt_name = p.name.split
-          if splt_name.any? { |n| n.downcase == n }
+          # Look for obvious person name issues (in roman-readable part)
+          if p.name.include? " ("
+            roman_readable = p.name[0, p.name.index('(')-1]
+          else
+            roman_readable = p.name
+          end
+          split_name = roman_readable.split
+          if split_name.any? { |n| n.downcase == n }
             @warnings << ValidationWarning.new(:persons, competition_id,
                                                LOWERCASE_NAME_WARNING,
                                                name: p.name)
           end
-          if splt_name.length > 2
-            if splt_name[0, splt_name.length-1].any? { |n| n.length == 1 }
+          if split_name.length > 2
+            if split_name[1, split_name.length-2].any? { |n| n.length == 1 }
               @warnings << ValidationWarning.new(:persons, competition_id,
                                                  MISSING_ABBREVIATION_PERIOD_WARNING,
                                                  name: p.name)
             end
           end
-          if [' ', '.'].include?(p.name[1]) || ((p.name[-2] == " ") && !['I', 'V'].include?(p.name[-1])) || ((p.name[-1] == ".") && (p.name[-3] == " "))
+          non_word_after_first_letter = [' ', '.'].include?(p.name[1])
+          space_before_last_letter = (p.name[-2] == " ") && !['I', 'V'].include?(p.name[-1]) # Numerical suffixes I and V have to be excluded to pass unit tests
+          abbreviated_last_name = (p.name[-1] == ".") && (p.name[-3] == " ")
+          if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
             @warnings << ValidationWarning.new(:persons, competition_id,
                                                SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
                                                name: p.name)

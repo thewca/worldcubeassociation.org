@@ -157,14 +157,18 @@ RSpec.describe PV do
                                                 competition: competition1,
                                                 eventId: "333oh")
         res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
-        res_lowercase = FactoryBot.create(:inbox_result,
+        res_lowercase1 = FactoryBot.create(:inbox_result,
                                           competition: competition1,
                                           eventId: "333oh")
-        res_lowercase.person.update(name: "First Middle last")
+        res_lowercase1.person.update(name: "First Middle last")
+        res_lowercase2 = FactoryBot.create(:inbox_result,
+                                           competition: competition1,
+                                           eventId: "333oh")
+        res_lowercase2.person.update(name: "İlis хocavənd V")
         res_missing_period = FactoryBot.create(:inbox_result,
                                                competition: competition1,
                                                eventId: "333oh")
-        res_missing_period.person.update(name: "First A B. Last")
+        res_missing_period.person.update(name: "First A B. Last (最初)")
         res_single_letter = FactoryBot.create(:inbox_result,
                                               competition: competition1,
                                               eventId: "333oh")
@@ -219,7 +223,10 @@ RSpec.describe PV do
                                     name: res_same_name1.person.name),
           RV::ValidationWarning.new(:persons, competition1.id,
                                     PV::LOWERCASE_NAME_WARNING,
-                                    name: res_lowercase.person.name),
+                                    name: res_lowercase1.person.name),
+          RV::ValidationWarning.new(:persons, competition1.id,
+                                    PV::LOWERCASE_NAME_WARNING,
+                                    name: res_lowercase2.person.name),
           RV::ValidationWarning.new(:persons, competition1.id,
                                     PV::MISSING_ABBREVIATION_PERIOD_WARNING,
                                     name: res_missing_period.person.name),
