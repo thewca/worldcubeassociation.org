@@ -6,8 +6,6 @@ class ResultsController < ApplicationController
   def rankings
     support_old_links!
 
-    @skip_robot_indexing = !request.query_parameters.empty?
-
     # Default params
     params[:region] ||= "world"
     params[:years] ||= "all years"

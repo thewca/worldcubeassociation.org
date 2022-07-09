@@ -1,11 +1,5 @@
 <% provide(:title, t(".title")) %>
 
-<% if @skip_robot_indexing %>
-  <% content_for :robots_head do %>
-    <meta name="robots" content="noindex" />
-  <% end %>
-<% end %>
-
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
