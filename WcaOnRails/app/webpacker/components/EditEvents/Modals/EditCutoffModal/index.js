@@ -23,11 +23,9 @@ import AttemptResultField from '../../../Results/WCALive/AttemptResultField/Atte
  * @param {Round} wcifRound
  * @returns {React.ReactElement}
  */
-export default function EditCutoffModal({ wcifEvent, wcifRound }) {
+export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
   const { cutoff, format } = wcifRound;
   const dispatch = useDispatch();
-
-  const disabled = false;
 
   const [numberOfAttempts, setNumberOfAttempts] = useInputState(cutoff?.numberOfAttempts ?? 0);
   const [attemptResult, setAttemptResult] = useState(cutoff?.attemptResult ?? 0);
@@ -72,8 +70,6 @@ export default function EditCutoffModal({ wcifEvent, wcifRound }) {
     <ButtonActivatedModal
       trigger={Trigger}
       title={Title}
-      buttonClass="btn-default btn-xs"
-      formClass="form-horizontal"
       reset={reset}
       onOk={handleOk}
       hasUnsavedChanges={hasUnsavedChanges()}

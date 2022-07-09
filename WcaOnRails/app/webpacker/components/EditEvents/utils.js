@@ -17,7 +17,7 @@ export const generateWcifRound = (eventId, roundNumber) => {
       roundNumber,
     }),
     format: event.recommendedFormat().id,
-    timeLimit: event.can_change_time_limit ? DEFAULT_TIME_LIMIT : null,
+    timeLimit: event.canChangeTimeLimit ? DEFAULT_TIME_LIMIT : null,
     cutoff: null,
     advancementCondition: null,
     results: [],

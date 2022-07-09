@@ -1,36 +1,59 @@
-import { remove } from 'lodash';
 import { generateWcifRound, removeSharedTimelimits } from '../utils';
 import {
   AddEvent,
-  AddRounds, ChangesSaved, RemoveEvent, RemoveRounds, SetScrambleSetCount, UpdateCutoff,
+  AddRounds,
+  ChangesSaved,
+  RemoveEvent,
+  RemoveRounds,
+  SetScrambleSetCount,
+  UpdateCutoff,
+  UpdateTimeLimit,
 } from './actions';
 
-const updateForRound = (wcifEvents, roundId, cb) => wcifEvents.map((event) => (event.id === roundId.split('-')[0]
-  ? ({
-    ...event,
-    rounds: event.rounds.map((round) => (round.id === roundId ? {
+/**
+ * Updates 1 or more rounds
+ * @param {Event[]} wcifEvents
+ * @param {ActivityCode[]} roundIds
+ * @param {function(Round): Partial<Round>} mapper
+ * @returns {Event[]}
+ */
+const updateForRounds = (wcifEvents, roundIds, mapper) => wcifEvents.map((event) => ({
+  ...event,
+  rounds: event?.rounds?.length
+    ? event.rounds.map((round) => (roundIds.includes(round.id) ? {
       ...round,
-      ...cb(round),
-    } : round)),
-  }) : event));
+      ...mapper(round),
+    } : round)) : event.rounds,
+}));
 
 const reducers = {
   [ChangesSaved]: (state) => ({
     ...state,
     initialWcifEvents: state.wcifEvents,
   }),
-  [SetScrambleSetCount]: (state, { payload }) => ({
+
+  [AddEvent]: (state, { payload }) => ({
     ...state,
-    wcifEvents: updateForRound(state.wcifEvents, payload.roundId, () => ({
-      scrambleSetCount: payload.scrambleSetCount,
-    })),
+    wcifEvents: state.wcifEvents.map((event) => (event.id === payload.eventId ? ({
+      ...event,
+      rounds: [],
+    }) : event)),
   }),
-  [UpdateCutoff]: (state, { payload }) => ({
-    ...state,
-    wcifEvents: updateForRound(state.wcifEvents, payload.roundId, () => ({
-      cutoff: payload.cutoff,
-    })),
-  }),
+
+  [RemoveEvent]: (state, { payload }) => {
+    const { eventId } = payload;
+    const event = state.wcifEvents.find((e) => e.id === eventId);
+    const roundIdsToRemove = event.rounds.map((round) => round.id);
+
+    return {
+      ...state,
+      wcifEvents: state.wcifEvents.map((e) => (e.id === payload.eventId ? ({
+        id: e.id,
+        rounds: null,
+      }) : removeSharedTimelimits(e, roundIdsToRemove))),
+    };
+  },
+
   [AddRounds]: (state, { payload }) => {
     const { eventId, roundsToAddCount } = payload;
     const event = state.wcifEvents.find((e) => e.id === eventId);
@@ -48,6 +71,7 @@ const reducers = {
       wcifEvents: state.wcifEvents.map((e) => (e.id === eventId ? event : e)),
     };
   },
+
   [RemoveRounds]: (state, { payload }) => {
     const { eventId, roundsToRemoveCount } = payload;
     const event = state.wcifEvents.find((e) => e.id === eventId);
@@ -70,26 +94,33 @@ const reducers = {
       )),
     };
   },
-  [AddEvent]: (state, { payload }) => ({
-    ...state,
-    wcifEvents: state.wcifEvents.map((event) => (event.id === payload.eventId ? ({
-      ...event,
-      rounds: [],
-    }) : event)),
-  }),
-  [RemoveEvent]: (state, { payload }) => {
-    const { eventId } = payload;
-    const event = state.wcifEvents.find((e) => e.id === eventId);
-    const roundIdsToRemove = event.rounds.map((round) => round.id);
 
-    return {
-      ...state,
-      wcifEvents: state.wcifEvents.map((e) => (e.id === payload.eventId ? ({
-        id: e.id,
-        rounds: null,
-      }) : removeSharedTimelimits(e, roundIdsToRemove))),
-    };
-  },
+  [SetScrambleSetCount]: (state, { payload }) => ({
+    ...state,
+    wcifEvents: updateForRounds(state.wcifEvents, [payload.roundId], () => ({
+      scrambleSetCount: payload.scrambleSetCount,
+    })),
+  }),
+
+  [UpdateCutoff]: (state, { payload }) => ({
+    ...state,
+    wcifEvents: updateForRounds(state.wcifEvents, [payload.roundId], () => ({
+      cutoff: payload.cutoff,
+    })),
+  }),
+
+  [UpdateTimeLimit]: (state, { payload }) => ({
+    ...state,
+    wcifEvents: updateForRounds(
+      state.wcifEvents,
+      // If we have a cumulative time limit spanning multiple rounds
+      // then we want to also update them too with the same roundId
+      [payload.roundId, ...payload.timeLimit.cumulativeRoundIds],
+      () => ({
+        timeLimit: payload.roundId,
+      }),
+    ),
+  }),
 };
 
 export default function rootReducer(state, action) {

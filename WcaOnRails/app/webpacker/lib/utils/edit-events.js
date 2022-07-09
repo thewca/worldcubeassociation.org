@@ -1,4 +1,5 @@
 import events from '../wca-data/events.js.erb';
+import { centisecondsToClockFormat } from '../wca-live/attempts';
 
 export function pluralize(count, word, { fixed, abbreviate } = {}) {
   const countStr = (fixed && count % 1 > 0) ? count.toFixed(fixed) : count;
@@ -88,10 +89,11 @@ export function centisecondsToString(c, { short } = {}) {
   return str.trim();
 }
 
-export function attemptResultToString(attemptResult, eventId, { short } = {}) {
+export function attemptResultToString(attemptResult, eventId) {
   const event = events.byId[eventId];
   if (event.isTimedEvent) {
-    return centisecondsToString(attemptResult, { short });
+    console.log(95, attemptResult);
+    return centisecondsToClockFormat(attemptResult);
   } if (event.isFewestMoves) {
     return `${attemptResult} moves`;
   } if (event.isMultipleBlindfolded) {

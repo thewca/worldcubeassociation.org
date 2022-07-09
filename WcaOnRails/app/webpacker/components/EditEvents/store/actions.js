@@ -6,6 +6,7 @@ export const RemoveRounds = 'REMOVE_ROUNDS';
 export const SetRoundFormat = 'SET_ROUND_FORMAT';
 export const SetScrambleSetCount = 'SET_SCRAMBLE_SET_COUNT';
 export const UpdateCutoff = 'UPDATE_CUTOFF';
+export const UpdateTimeLimit = 'UPDATE_TIMELIMIT';
 
 /**
  * Action creator for marking changes as saved
@@ -106,5 +107,19 @@ export const updateCutoff = (roundId, cutoff) => ({
   payload: {
     roundId,
     cutoff,
+  },
+});
+
+/**
+ * create an action to set the time limit for the round
+ * @param {ActivityCode} roundId
+ * @param {TimeLimit} timeLimit
+ * @returns {Action}
+ */
+export const updateTimeLimit = (roundId, timeLimit) => ({
+  type: UpdateTimeLimit,
+  payload: {
+    roundId,
+    timeLimit,
   },
 });

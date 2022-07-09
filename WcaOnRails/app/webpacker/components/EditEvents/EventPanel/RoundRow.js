@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Dropdown, Input, Select, Table,
+  Dropdown, Input, Table,
 } from 'semantic-ui-react';
 import events from '../../../lib/wca-data/events.js.erb';
 import formats from '../../../lib/wca-data/formats.js.erb';
@@ -95,7 +95,7 @@ export default function Round({
       {event.canChangeTimeLimit && (
         <Table.Cell>
           <EditTimeLimitModal
-            wcifEvent={wcifEvent}
+            wcifRound={wcifRound}
             roundNumber={roundNumber}
             disabled={disabled}
           />
