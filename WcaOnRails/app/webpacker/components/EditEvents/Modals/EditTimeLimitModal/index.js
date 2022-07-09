@@ -1,10 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import _ from 'lodash';
+import events from '../../../../lib/wca-data/events.js.erb';
 import { roundIdToString } from '../../../../lib/utils/wcif';
-import ButtonActivatedModal from '../ButtonActivatedModal';
-import { useDispatch } from '../../../../lib/providers/StoreProvider';
-import { updateTimeLimit } from '../../store/actions';
 import { centisecondsToClockFormat } from '../../../../lib/wca-live/attempts';
+import { useDispatch } from '../../../../lib/providers/StoreProvider';
+import TimeField from '../../../Results/WCALive/AttemptResultField/TimeField';
+import { updateTimeLimit } from '../../store/actions';
+import ButtonActivatedModal from '../ButtonActivatedModal';
 
 /**
  * Shows a modal to edit the timelimit of a round.
@@ -12,35 +14,13 @@ import { centisecondsToClockFormat } from '../../../../lib/wca-live/attempts';
  * @param {Round} wcifRound
  * @returns {React.ReactElement}
  */
-export default function EditTimeLimitModal({ wcifRound, disabled }) {
+export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
   const { timeLimit } = wcifRound;
   const dispatch = useDispatch();
+  const event = events.byId[wcifEvent.id];
 
-  const [centiSeconds, setCentiSeconds] = useState(timeLimit?.centiSeconds ?? 0);
+  const [centiseconds, setCentiseconds] = useState(timeLimit?.centiseconds ?? 0);
   const [cumulativeRoundIds, setCumulativeRoundIds] = useState(timeLimit?.cumulativeRoundIds ?? []);
-
-  const hasUnsavedChanges = () => (
-    !_.isEqual(timeLimit, { centiSeconds, cumulativeRoundIds })
-  );
-
-  const reset = () => {
-    setCentiSeconds(timeLimit?.centiSeconds ?? 0);
-    setCumulativeRoundIds(timeLimit?.cumulativeRoundIds ?? []);
-  };
-
-  const handleOk = () => {
-    if (hasUnsavedChanges()) {
-      dispatch(updateTimeLimit(wcifRound.id, { centiSeconds, cumulativeRoundIds }));
-    }
-  };
-
-  const Title = (
-    <span>
-      Time limit for
-      {' '}
-      {roundIdToString(wcifRound.id)}
-    </span>
-  );
 
   const Trigger = useMemo(() => {
     if (!timeLimit) {
@@ -65,6 +45,33 @@ export default function EditTimeLimitModal({ wcifRound, disabled }) {
     return <span>{str}</span>;
   }, [timeLimit]);
 
+  const Title = useMemo(() => (
+    <span>
+      Time limit for
+      {' '}
+      {roundIdToString(wcifRound.id)}
+    </span>
+  ), [wcifRound.id]);
+
+  if (!event.canChangeTimeLimit) {
+    return null;
+  }
+
+  const hasUnsavedChanges = () => (
+    !_.isEqual(timeLimit, { centiseconds, cumulativeRoundIds })
+  );
+
+  const reset = () => {
+    setCentiseconds(timeLimit?.centiSeconds ?? 0);
+    setCumulativeRoundIds(timeLimit?.cumulativeRoundIds ?? []);
+  };
+
+  const handleOk = () => {
+    if (hasUnsavedChanges()) {
+      dispatch(updateTimeLimit(wcifRound.id, { centiseconds, cumulativeRoundIds }));
+    }
+  };
+
   return (
     <ButtonActivatedModal
       trigger={Trigger}
@@ -74,9 +81,12 @@ export default function EditTimeLimitModal({ wcifRound, disabled }) {
       hasUnsavedChanges={hasUnsavedChanges()}
       disabled={disabled}
     >
-      <div>
-        Time Limit
-      </div>
+      <TimeField
+        label="Time Limit"
+        value={centiseconds}
+        onChange={setCentiseconds}
+        disabled={disabled}
+      />
     </ButtonActivatedModal>
   );
 }

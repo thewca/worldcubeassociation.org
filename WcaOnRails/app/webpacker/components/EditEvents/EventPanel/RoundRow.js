@@ -95,6 +95,7 @@ export default function Round({
       {event.canChangeTimeLimit && (
         <Table.Cell>
           <EditTimeLimitModal
+            wcifEvent={wcifEvent}
             wcifRound={wcifRound}
             roundNumber={roundNumber}
             disabled={disabled}

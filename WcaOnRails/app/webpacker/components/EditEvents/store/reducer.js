@@ -117,7 +117,7 @@ const reducers = {
       // then we want to also update them too with the same roundId
       [payload.roundId, ...payload.timeLimit.cumulativeRoundIds],
       () => ({
-        timeLimit: payload.roundId,
+        timeLimit: payload.timeLimit,
       }),
     ),
   }),
