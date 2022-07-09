@@ -118,6 +118,6 @@ module AuxiliaryDataComputation
 
   def self.delete_cached_results
     # By deleting existing results, they can be cached again on the first execution
-    ActiveRecord::Base.connection.execute "delete from cached_results where 1=1"
+    CachedResult.delete_all
   end
 end
