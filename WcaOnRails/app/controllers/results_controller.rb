@@ -148,8 +148,7 @@ class ResultsController < ApplicationController
     @rows = ActiveRecord::Base.connection.exec_query(@query)
 
     # For safety, we delete possible duplicated (does active redord have on duplicated update or ignore?)
-    safe_duplate_query = "delete from cached_results where key_params = '#{cached_key}'"
-    ActiveRecord::Base.connection.exec_query(safe_duplate_query)
+    CachedResult.delete_by(key_params: cached_key)
 
     # This only caches results. Table is cleared in CAD.
     CachedResult.create(key_params: cached_key, payload: @rows.to_json)
