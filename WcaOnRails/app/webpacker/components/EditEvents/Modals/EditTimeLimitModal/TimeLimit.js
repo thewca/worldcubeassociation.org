@@ -195,54 +195,6 @@ export default {
       />
     );
 
-    let description = null;
-    if (timeLimit.cumulativeRoundIds.length === 0) {
-      description = `Competitors have ${centisecondsToString(timeLimit.centiseconds)} for each of their solves.`;
-    } else if (timeLimit.cumulativeRoundIds.length === 1) {
-      description = (
-        <span>
-          Competitors have
-          {' '}
-          {centisecondsToString(timeLimit.centiseconds)}
-          {' '}
-          total for all
-          of their solves in this round. This is called a cumulative time limit
-          (see
-          <RegulationLink regulation="A1a2" />
-          ).
-          The button below allows you to share this cumulative time limit with other rounds
-          (see
-          <GuidelineLink guideline="A1a2++" />
-          ).
-          <div>{selectRoundsButton}</div>
-        </span>
-      );
-    } else {
-      const otherSelectedRoundIds = _.without(timeLimit.cumulativeRoundIds, wcifRound.id);
-      description = (
-        <span>
-          This round has a cross round cumulative time limit
-          (see
-          {' '}
-          <GuidelineLink guideline="A1a2++" />
-          ).
-          This means that competitors have
-          {centisecondsToString(timeLimit.centiseconds)}
-          {' '}
-          total for all
-          of their solves in this round (
-          {roundIdToString(wcifRound.id)}
-          ) shared with:
-          <ul>
-            {otherSelectedRoundIds.map((roundId) => (
-              <li key={roundId}>{roundIdToString(roundId)}</li>
-            ))}
-          </ul>
-          {selectRoundsButton}
-        </span>
-      );
-    }
-
     return (
       <div>
         <div className="form-group">

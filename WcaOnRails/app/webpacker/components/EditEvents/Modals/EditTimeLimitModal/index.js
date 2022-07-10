@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import _ from 'lodash';
+import { Button, Form, Radio } from 'semantic-ui-react';
 import events from '../../../../lib/wca-data/events.js.erb';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import { centisecondsToClockFormat } from '../../../../lib/wca-live/attempts';
@@ -7,6 +8,8 @@ import { useDispatch } from '../../../../lib/providers/StoreProvider';
 import TimeField from '../../../Results/WCALive/AttemptResultField/TimeField';
 import { updateTimeLimit } from '../../store/actions';
 import ButtonActivatedModal from '../ButtonActivatedModal';
+import TimeLimitDecscription from './TimeLimitDescription';
+import SelectRoundsModal from './SelectRoundsModal';
 
 /**
  * Shows a modal to edit the timelimit of a round.
@@ -70,22 +73,52 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
     if (hasUnsavedChanges()) {
       dispatch(updateTimeLimit(wcifRound.id, { centiseconds, cumulativeRoundIds }));
     }
+    return true;
+  };
+
+  const handleCumulativeRoundsChange = (value) => {
+    setCumulativeRoundIds(value);
+    return true;
   };
 
   return (
     <ButtonActivatedModal
       trigger={Trigger}
       title={Title}
-      reset={reset}
       onOk={handleOk}
+      reset={reset}
       hasUnsavedChanges={hasUnsavedChanges()}
       disabled={disabled}
+      closeOnDocumentClick={false}
+      closeOnDimmerClick={false}
     >
       <TimeField
         label="Time Limit"
         value={centiseconds}
         onChange={setCentiseconds}
         disabled={disabled}
+      />
+      <br />
+      <Form.Field inline>
+        <Radio
+          label="per-solve"
+          name="timeLimitType"
+          value="per-solve"
+          checked={cumulativeRoundIds.length === 0}
+          onChange={() => setCumulativeRoundIds([])}
+        />
+        <Radio
+          label="cumulative"
+          name="timeLimitType"
+          value="per-solve"
+          checked={cumulativeRoundIds.length > 0}
+          onChange={() => setCumulativeRoundIds([wcifRound.id])}
+        />
+      </Form.Field>
+      <TimeLimitDecscription
+        wcifRound={wcifRound}
+        timeLimit={{ centiseconds, cumulativeRoundIds }}
+        onOk={handleCumulativeRoundsChange}
       />
     </ButtonActivatedModal>
   );

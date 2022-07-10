@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 // import cn from 'classnames';
 import { Button, Form, Modal } from 'semantic-ui-react';
@@ -14,7 +15,14 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
  * @returns
  */
 export default function ButtonActivatedModal({
-  title, trigger, children, hasUnsavedChanges, reset = () => null, onOk,
+  title,
+  trigger,
+  triggerButtonProps = {},
+  children,
+  hasUnsavedChanges,
+  reset = () => null,
+  onOk,
+  ...props
 }) {
   const [open, setOpen] = useState(false);
   const confirm = useConfirm();
@@ -35,9 +43,18 @@ export default function ButtonActivatedModal({
   };
 
   const handleSubmit = (e) => {
+    // This prevents the form from submitting
     e.preventDefault();
+    // This prevents a possible parent modal from also handling submit
+    e.stopPropagation();
     onOk();
     setOpen(false);
+  };
+
+  const handleTriggerClick = (e) => {
+    // For some reason the default behavior closes the parent and child modals.
+    e.preventDefault();
+    setOpen(true);
   };
 
   const Trigger = (
@@ -45,7 +62,8 @@ export default function ButtonActivatedModal({
       basic
       compact
       size="mini"
-      onClick={() => setOpen(true)}
+      onClick={handleTriggerClick}
+      {...triggerButtonProps}
     >
       {trigger}
     </Button>
@@ -56,10 +74,13 @@ export default function ButtonActivatedModal({
       as={Form}
       onSubmit={handleSubmit}
       size="tiny"
-      trigger={Trigger}
+      trigger={props.open ? undefined : Trigger}
       open={open}
       onOpen={() => setOpen(true)}
       onClose={close}
+      closeOnDimmerClick={false}
+      closeOnDocumentClick={false}
+      {...props}
     >
       <Modal.Header>{title}</Modal.Header>
       <Modal.Content>
