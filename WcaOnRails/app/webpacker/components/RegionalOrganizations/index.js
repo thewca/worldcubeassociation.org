@@ -50,7 +50,6 @@ function ROOverview({
       </ol>
 
       <h3>{I18n.t('regional_organizations.application_instructions.title')}</h3>
-      <p>{I18n.t('regional_organizations.application_instructions.description_html')}</p>
     </>
   );
 }
