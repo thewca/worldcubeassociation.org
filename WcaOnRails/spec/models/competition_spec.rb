@@ -497,7 +497,7 @@ RSpec.describe Competition do
       expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
       competition.use_wca_live_for_scoretaking = true
-      expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/FooComp12015'>here</a>!"
+      expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
 
       competition.results_posted_at = Time.now
       competition.results_posted_by = FactoryBot.create(:user, :wrt_member).id
