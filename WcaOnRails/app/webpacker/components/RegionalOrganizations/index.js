@@ -50,6 +50,7 @@ function ROOverview({
       </ol>
 
       <h3>{I18n.t('regional_organizations.application_instructions.title')}</h3>
+      <p dangerouslySetInnerHTML={{ __html: I18n.t('regional_organizations.application_instructions.description_html') }} />
     </>
   );
 }
