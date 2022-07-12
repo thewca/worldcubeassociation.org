@@ -8,9 +8,11 @@ class ResultsController < ApplicationController
 
     # Default params
     params[:region] ||= "world"
-    params[:years] = "all years" # FIXME this is disabling years filters for now
+    params[:years] = "all years" # FIXME: this is disabling years filters for now
     params[:show] ||= "100 persons"
     params[:gender] ||= "All"
+
+    params[:show] = params[:show].gsub("1000", "100") # FIXME: this is disabling show 1000 for now
 
     shared_constants_and_conditions
 
@@ -30,10 +32,6 @@ class ResultsController < ApplicationController
     @is_persons = splitted_show_param[1] == "persons"
     @is_results = splitted_show_param[1] == "results"
     limit_condition = "LIMIT #{@show}"
-
-    if @show > 100
-      @show = 100 # FIXME this is disabling showing 1000 for now
-    end
 
     cached_key = "#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
     cache_result = CachedResult.find_by(key_params: cached_key)
