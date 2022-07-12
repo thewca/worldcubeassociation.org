@@ -8,7 +8,7 @@ class ResultsController < ApplicationController
 
     # Default params
     params[:region] ||= "world"
-    params[:years] ||= "all years"
+    params[:years] = "all years" # FIXME this is disabling years filters for now
     params[:show] ||= "100 persons"
     params[:gender] ||= "All"
 
@@ -32,7 +32,7 @@ class ResultsController < ApplicationController
     limit_condition = "LIMIT #{@show}"
 
     if @show > 100
-      @show = 100
+      @show = 100 # FIXME this is disabling showing 1000 for now
     end
 
     cached_key = "#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
