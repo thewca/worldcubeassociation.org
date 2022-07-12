@@ -32,8 +32,7 @@ class ResultsController < ApplicationController
     limit_condition = "LIMIT #{@show}"
 
     if @show > 100
-      flash[:warning] = "Showing more than 100 results is currently disabled due to technical reasons."
-      return redirect_to rankings_path(params[:event_id], "single")
+      @show = 100
     end
 
     cached_key = "#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
