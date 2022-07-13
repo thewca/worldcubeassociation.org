@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { sanitize } from 'dompurify';
 import I18n from '../../lib/i18n';
 
 function ROOverview({
@@ -50,7 +51,7 @@ function ROOverview({
       </ol>
 
       <h3>{I18n.t('regional_organizations.application_instructions.title')}</h3>
-      <p dangerouslySetInnerHTML={{ __html: I18n.t('regional_organizations.application_instructions.description_html') }} />
+      <p dangerouslySetInnerHTML={{ __html: sanitize(I18n.t('regional_organizations.application_instructions.description_html')) }} />
     </>
   );
 }
