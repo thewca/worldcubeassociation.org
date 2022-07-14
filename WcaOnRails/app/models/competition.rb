@@ -1203,7 +1203,7 @@ class Competition < ApplicationRecord
     self.confirmed_at = new_confirmed ? (self.confirmed_at || Time.now) : nil
   end
 
-  def wca_live_link?
+  def wca_live_link
     "https://live.worldcubeassociation.org/link/competitions/#{self.id}"
   end
 
