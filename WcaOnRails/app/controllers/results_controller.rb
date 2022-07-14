@@ -1,27 +1,18 @@
 # frozen_string_literal: true
 
+require 'json'
+
 class ResultsController < ApplicationController
   def rankings
     support_old_links!
 
-    flash[:warning] = "Results queries are temporarily disabled due to a high number of bot requests. Please be patient while WST is working on a more permanent solution."
-    return redirect_to root_path
-    # rubocop:disable Lint/UnreachableCode
-
-    lower_user_agent = request.user_agent.to_s.downcase
-    evil_bots = %w(baidu petalbot)
-
-    if evil_bots.any? { |infix| lower_user_agent.include?(infix) }
-      return head(:forbidden)
-    end
-
-    @skip_robot_indexing = !request.query_parameters.empty?
-
     # Default params
     params[:region] ||= "world"
-    params[:years] ||= "all years"
+    params[:years] = "all years" # FIXME: this is disabling years filters for now
     params[:show] ||= "100 persons"
     params[:gender] ||= "All"
+
+    params[:show] = params[:show].gsub("1000", "100") # FIXME: this is disabling show 1000 for now
 
     shared_constants_and_conditions
 
@@ -42,9 +33,12 @@ class ResultsController < ApplicationController
     @is_results = splitted_show_param[1] == "results"
     limit_condition = "LIMIT #{@show}"
 
-    if @show > 100
-      flash[:warning] = "Showing more than 100 results is currently disabled due to technical reasons."
-      return redirect_to rankings_path(params[:event_id], "single")
+    cached_key = "#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
+    cache_result = CachedResult.find_by(key_params: cached_key)
+
+    if cache_result
+      @rows = JSON.parse(cache_result.payload)
+      return
     end
 
     if @is_persons
@@ -68,14 +62,8 @@ class ResultsController < ApplicationController
         JOIN Results result ON result.id = valueAndId % 1000000000
         ORDER BY value, personName
       SQL
-    elsif @is_results
-      # emergency remedy to avoid breaking our own neck
-      # see https://docs.google.com/document/d/1epN2l3HcgbQHME4U2GT7zDGjAeulqiEbcslFeyfGX4I/edit# for reference
-      if @show > 100
-        flash[:danger] = t(".unknown_show")
-        return redirect_to rankings_path
-      end
 
+    elsif @is_results
       if @is_average
         @query = <<-SQL
           SELECT
@@ -93,6 +81,7 @@ class ResultsController < ApplicationController
             average, personName, competitionId, roundTypeId
           #{limit_condition}
         SQL
+
       else
         subqueries = (1..5).map do |i|
           <<-SQL
@@ -145,10 +134,19 @@ class ResultsController < ApplicationController
           #{@gender_condition}
         ORDER BY value, countryId, start_date, personName
       SQL
+
     else
       flash[:danger] = t(".unknown_show")
       redirect_to rankings_path
     end
+
+    @rows = ActiveRecord::Base.connection.exec_query(@query)
+
+    # For safety, we delete possible duplicated (does active redord have on duplicated update or ignore?)
+    CachedResult.delete_by(key_params: cached_key)
+
+    # This only caches results. Table is cleared in CAD.
+    CachedResult.create(key_params: cached_key, payload: @rows.to_json)
   end
 
   def records
@@ -262,7 +260,6 @@ class ResultsController < ApplicationController
         AND event.`rank` < 990
     SQL
   end
-  # rubocop:enable Lint/UnreachableCode
 
   private def shared_constants_and_conditions
     @years = Competition.non_future_years
