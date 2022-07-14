@@ -699,6 +699,17 @@ CREATE TABLE `bookmarked_competitions` (
   KEY `index_bookmarked_competitions_on_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `cached_results`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cached_results` (
+  `key_params` varchar(191) NOT NULL,
+  `payload` json DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`key_params`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `championships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1765,6 +1776,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220511025003'),
 ('20220516124717'),
 ('20220619200832'),
-('20220623121810');
-
-
+('20220623121810'),
+('20220706232200');
