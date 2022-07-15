@@ -19,7 +19,7 @@ RSpec.feature "Competition events management" do
         click_button "Add event"
         select("1 round", from: "selectRoundCount")
       end
-      save
+      save_events_react
       competition.reload
     end
 
@@ -33,10 +33,9 @@ RSpec.feature "Competition events management" do
           click_button "Remove event"
         end
       end
-      save
-      competition.reload
+      save_events_react
 
-      expect(competition.events.map(&:id)).to eq []
+      expect(competition.reload.events.map(&:id)).to eq []
     end
 
     # This feature set is notorious for randomly failing.
@@ -66,7 +65,7 @@ RSpec.feature "Competition events management" do
 
       scenario "change scramble group count to 42", js: true, retry: 3 do
         within_round("333", 1) { fill_in "scrambleSetCount", with: "42" }
-        save
+        save_events_react
         expect(round_333_1.reload.scramble_set_count).to eq 42
       end
 
@@ -77,7 +76,7 @@ RSpec.feature "Competition events management" do
           fill_in "minutes", with: "5"
           click_button "Ok"
         end
-        save
+        save_events_react
 
         expect(round_333_1.reload.time_limit_to_s).to eq "5:00.00"
       end
@@ -90,7 +89,7 @@ RSpec.feature "Competition events management" do
           fill_in "minutes", with: "2"
           click_button "Ok"
         end
-        save
+        save_events_react
 
         expect(round_333_1.reload.cutoff_to_s).to eq "2 attempts to get < 2:00.00"
       end
@@ -106,7 +105,7 @@ RSpec.feature "Competition events management" do
           fill_in "Ranking", with: "12"
           click_button "Ok"
         end
-        save
+        save_events_react
 
         expect(round_333_1.reload.advancement_condition_to_s).to eq "Top 12 advance to next round"
       end
@@ -123,7 +122,7 @@ RSpec.feature "Competition events management" do
           click_button "Ok"
         end
 
-        save
+        save_events_react
         comp_event_333.reload
 
         expect(comp_event_333.qualification_to_s).to eq "Any single solve"
@@ -157,10 +156,9 @@ RSpec.feature "Competition events management" do
       within_event_panel("333") do
         click_button "Add event"
       end
-      save
-      competition.reload
+      save_events_react
 
-      expect(competition.events.map(&:id)).to match_array %w(222 333 444)
+      expect(competition.reload.events.map(&:id)).to match_array %w(222 333 444)
     end
 
     scenario "board member can remove events", js: true do
@@ -170,10 +168,9 @@ RSpec.feature "Competition events management" do
       within_event_panel("444") do
         click_button "Remove event"
       end
-      save
-      competition.reload
+      save_events_react
 
-      expect(competition.events.map(&:id)).to match_array %w(222)
+      expect(competition.reload.events.map(&:id)).to match_array %w(222)
     end
 
     context "even admin cannot create inconsistent competition state" do
@@ -188,11 +185,10 @@ RSpec.feature "Competition events management" do
         end
 
         accept_alert do
-          save(wait_for_completion: false)
+          save_events_react(wait_for_completion: false)
         end
 
-        competition.reload
-        expect(competition.events.map(&:id)).to match_array %w(222 444)
+        expect(competition.reload.events.map(&:id)).to match_array %w(222 444)
       end
 
       scenario "by inserting a qualification when they were not originally applied for", js: true do
@@ -209,7 +205,7 @@ RSpec.feature "Competition events management" do
         end
 
         accept_alert do
-          save(wait_for_completion: false)
+          save_events_react(wait_for_completion: false)
         end
 
         expect(comp_event_222.reload.qualification).to be_nil
@@ -242,10 +238,9 @@ RSpec.feature "Competition events management" do
       within_event_panel("333") do
         select("2 rounds", from: "selectRoundCount")
       end
-      save
-      competition.reload
+      save_events_react
 
-      expect(competition_event.rounds.length).to eq 2
+      expect(competition_event.reload.rounds.length).to eq 2
     end
   end
 end
@@ -264,7 +259,7 @@ def within_modal(&)
   within(:css, '.modal-content', &)
 end
 
-def save(wait_for_completion: true)
+def save_events_react(wait_for_completion: true)
   # Wait for the modal to be hidden.
   expect(page).to have_no_css(".modal-open")
   first(:button, "save your changes!", visible: true).click
