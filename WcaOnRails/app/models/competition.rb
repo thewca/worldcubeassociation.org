@@ -1540,8 +1540,14 @@ class Competition < ApplicationRecord
       set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
+
+      # Trigger validations on the competition itself, and throw an error to rollback if necessary.
+      # Context: It is possible to patch a WCIF containing events/schedule/persons that are valid by themselves,
+      #   but create an inconsistent state in the competition they're attached to. For example, you can add events
+      #   that have qualification requirements via a perfectly valid Events WCIF, but the competition itself
+      #   was never configured to support qualifications (i.e. the use of qualifications was never approved by WCAT).
+      save!
     end
-    update_column(:updated_at, Time.now)
   end
 
   def set_wcif_events!(wcif_events, current_user)
