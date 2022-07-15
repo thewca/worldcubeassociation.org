@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
-
 class ResultsController < ApplicationController
   def rankings
     support_old_links!
@@ -12,7 +10,7 @@ class ResultsController < ApplicationController
     params[:show] ||= "100 persons"
     params[:gender] ||= "All"
 
-    params[:show] = params[:show].gsub("1000", "100") # FIXME: this is disabling show 1000 for now
+    params[:show] = params[:show].gsub(/\d+/, "100") # FIXME: this is disabling anything except show 100 for now
 
     shared_constants_and_conditions
 
