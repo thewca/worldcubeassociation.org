@@ -148,13 +148,13 @@ RSpec.feature "Competition events management" do
       sign_in FactoryBot.create(:user, :board_member)
       visit "/competitions/#{competition.id}/events/edit"
 
-      within_event_panel("222") do
+      within_event_panel("444") do
         click_button "Remove event"
       end
       save
       competition.reload
 
-      expect(competition.events.map(&:id)).to match_array %w(444)
+      expect(competition.events.map(&:id)).to match_array %w(222)
     end
   end
 
