@@ -7,7 +7,6 @@ RSpec.describe "results" do
     context "with valid params" do
       it "shows rankings" do
         get rankings_path("333", "single")
-        pending("Results currently deactivated due to bot requests")
         expect(response).to be_successful
       end
     end
