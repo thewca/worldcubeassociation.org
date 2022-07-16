@@ -7,6 +7,7 @@ export const SetRoundFormat = 'SET_ROUND_FORMAT';
 export const SetScrambleSetCount = 'SET_SCRAMBLE_SET_COUNT';
 export const UpdateCutoff = 'UPDATE_CUTOFF';
 export const UpdateTimeLimit = 'UPDATE_TIMELIMIT';
+export const UpdateAdvancementCondition = 'UPDATE_ADVANCEMENT_CONDITION';
 
 /**
  * Action creator for marking changes as saved
@@ -121,5 +122,13 @@ export const updateTimeLimit = (roundId, timeLimit) => ({
   payload: {
     roundId,
     timeLimit,
+  },
+});
+
+export const updateAdvancementCondition = (roundId, advancementCondition) => ({
+  type: UpdateAdvancementCondition,
+  payload: {
+    roundId,
+    advancementCondition,
   },
 });

@@ -6,6 +6,7 @@ import {
   RemoveEvent,
   RemoveRounds,
   SetScrambleSetCount,
+  UpdateAdvancementCondition,
   UpdateCutoff,
   UpdateTimeLimit,
 } from './actions';
@@ -120,6 +121,12 @@ const reducers = {
         timeLimit: payload.timeLimit,
       }),
     ),
+  }),
+  [UpdateAdvancementCondition]: (state, { payload }) => ({
+    ...state,
+    wcifEvents: updateForRounds(state.wcifEvents, [payload.roundId], () => ({
+      advancementCondition: payload.advancementCondition,
+    })),
   }),
 };
 

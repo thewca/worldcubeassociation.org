@@ -40,7 +40,9 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
   );
 
   const hasUnsavedChanges = () => (
-    !_.isEqual(cutoff, { numberOfAttempts, attemptResult })
+    !_.isEqual(cutoff, numberOfAttempts
+      ? { numberOfAttempts, attemptResult }
+      : null)
   );
 
   const reset = () => {
@@ -50,7 +52,9 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
 
   const handleOk = () => {
     if (hasUnsavedChanges()) {
-      dispatch(updateCutoff(wcifRound.id, { numberOfAttempts, attemptResult }));
+      dispatch(updateCutoff(wcifRound.id, numberOfAttempts
+        ? { numberOfAttempts, attemptResult }
+        : null));
     }
   };
 

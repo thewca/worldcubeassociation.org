@@ -118,6 +118,7 @@ export default function Round({
         {!isLastRound && (
           <EditAdvancementConditionModal
             wcifEvent={wcifEvent}
+            wcifRound={wcifRound}
             roundNumber={roundNumber}
             disabled={disabled}
           />
