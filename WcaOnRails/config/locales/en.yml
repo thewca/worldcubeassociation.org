@@ -1459,6 +1459,12 @@ en:
         search: "Name or city"
         #context: the "recent" button
         recent: "Last %{count} days"
+        #context: the registration status icon
+        registration:
+          opens_in: "Registration will open in %{days}"
+          closed: "Registration has closed"
+          open: "Registraion is open!"
+          full: "Competitor limit reached, the waiting list is now in effect"
       no_comp_found: "No competitions found."
       no_comp_match: "We didn't find any competitions with %{events}! Try searching for fewer events."
     #context: on the "My competitions" page

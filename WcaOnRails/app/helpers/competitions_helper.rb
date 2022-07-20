@@ -276,19 +276,19 @@ module CompetitionsHelper
 
     if competition.registration_not_yet_opened?
       icon = "clock"
-      title = "Registraion opens in #{(competition.start_date - Date.today).to_i} days"
+      title = I18n.t('competitions.index.tooltips.registration.opens_in', days: t('common.days', count: (Date.today - competition.end_date).to_i))
       icon_class = "blue"
     elsif competition.registration_past?
       icon = "times circle"
-      title = "Registration closed"
+      title = I18n.t('competitions.index.tooltips.registration.closed')
       icon_class = "red"
     elsif competition.registration_full?
       icon = "exclamation circle"
-      title = "Registration full, waiting list open"
+      title = I18n.t('competitions.index.tooltips.registration.full')
       icon_class = "orange"
     else
       icon = "check circle"
-      title = "Registration open"
+      title = I18n.t('competitions.index.tooltips.registration.open')
       icon_class = "green"
     end
 
