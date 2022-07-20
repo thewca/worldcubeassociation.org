@@ -8,10 +8,8 @@
     <% li_classes << (competition.is_probably_over? ? "past" : "not-past") %>
     <% li_classes << "cancelled" if competition.cancelled? %>
     <li class="<%= li_classes.join(' ') %>">
-      <span>
-        <%= registration_status_icon(competition) %>
-      </span>
       <span class="date">
+        <%= registration_status_icon(competition) %>
         <% if competition.is_probably_over? %>
           <% if competition.results_posted? %>
             <%= ui_icon('check circle', title: t('competitions.index.tooltips.hourglass.posted'), class: "results-posted-indicator", data: { toggle: "tooltip" }) %>
