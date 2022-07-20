@@ -268,4 +268,33 @@ module CompetitionsHelper
   def cached_pdf_name(competition, colors)
     "#{pdf_name(competition)}_#{competition.updated_at.iso8601}_#{colors}"
   end
+
+  def registration_status_icon(competition)
+    icon = ""
+    title = ""
+    icon_class = ""
+
+    if competition.registration_not_yet_opened?
+      icon = "clock"
+      title = "Registraion opens in #{(competition.start_date - Date.today).to_i} days"
+      icon_class = "blue"
+    elsif competition.registration_past?
+      icon = "times circle"
+      title = "Registration closed"
+      icon_class = "red"
+    elsif competition.registration_full?
+      icon = "exclamation circle"
+      title = "Registration full, waiting list open"
+      icon_class = "orange"
+    else
+      icon = "check circle"
+      title = "Registration open"
+      icon_class = "green"
+    end
+
+    ui_icon(icon,
+            title: title,
+            class: icon_class,
+            data: { toggle: "tooltip" })
+  end
 end
