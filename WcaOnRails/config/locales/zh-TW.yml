@@ -256,6 +256,49 @@ zh-TW:
     333mbf: 10分鐘/每顆，最多60分鐘
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: 參賽資格取得方式
+    #original_hash: 65c848f
+    result_type: 採用成績
+    #original_hash: 29ef642
+    for_event: '%{event}的參賽資格'
+    type:
+      #original_hash: f5c3f76
+      none: 沒有資格限制
+      #original_hash: f8c5669
+      result: 成績
+      #original_hash: 4aebda3
+      ranking: 排名前N名
+      #original_hash: 3bc54a0
+      any_result: 有成績即可
+    single:
+      #original_hash: d596f44
+      time: '單次還原小於%{time}'
+      #original_hash: 52ba186
+      moves: '單次小於%{moves}步'
+      #original_hash: b1993ae
+      points: '單次分數超過%{points}點'
+      #original_hash: ed2b051
+      ranking: '單次前%{ranking}名'
+      #original_hash: 933b7dc
+      any_result: 任何單次成績
+    average:
+      #original_hash: 2682ae8
+      time: '平均低於%{time}'
+      #original_hash: 1b9b5fc
+      moves: '平均低於%{moves}步'
+      #original_hash: 05c417e
+      points: '平均超過%{points}點'
+      #original_hash: 805171c
+      ranking: '平均為前%{ranking}名'
+      #original_hash: 2223a1b
+      any_result: 任何平均成績
+    deadline:
+      #original_hash: 3b7f9f6
+      description: 資格取得截止日
+      #original_hash: bed8220
+      by_date: '在%{date}之前'
   common:
     #original_hash: 70c07ec
     world: 世界
@@ -466,6 +509,8 @@ zh-TW:
         on_the_spot_entry_fee_lowest_denomination: 現場報名費
         #original_hash: 7e53b96
         allow_registration_edits: 編輯報名
+        #original_hash: 3d47eca
+        allow_registration_self_delete_after_acceptance: 取消報名
         #original_hash: efbdbab
         refund_policy_percent: 退費百分比
         #original_hash: b332299
@@ -482,8 +527,6 @@ zh-TW:
         early_puzzle_submission: 我希望參賽者能在該比賽項目開始前的一個時間點先繳交方塊
         #original_hash: 78308cc
         early_puzzle_submission_reason: 提早繳交方塊的理由和細節
-        #original_hash: 88da0ef
-        qualification_results: 我希望用特定成績來限制參賽者能參加某項目
         #original_hash: 1ec6dd4
         qualification_results_reason: 特定成績的理由及細節
         #original_hash: ac30de9
@@ -835,6 +878,8 @@ zh-TW:
         on_the_spot_entry_fee_lowest_denomination: 如果此處設為0，會有一個句子表示現場報名為免費的。
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: 目前這個數字僅供顯示資訊用，退費還是由人工處理。如果此處設為0，會有一個句子表示報名費在任何情況下皆不退費。
         #original_hash: f64d853
@@ -852,8 +897,6 @@ zh-TW:
         early_puzzle_submission: ''
         #original_hash: 4e8488b
         early_puzzle_submission_reason: 請在這裡說明為什麼您希望參賽者提早繳交方塊。請用英文填寫！
-        #original_hash: da39a3e
-        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: 請在這裡說明為什麼您希望設定特定成績。請用英文填寫！
         #original_hash: da39a3e
@@ -1058,6 +1101,11 @@ zh-TW:
           'true': 參賽者可以修改他們的報名資訊直到修改比賽項目的截止日為止
           #original_hash: 2cbb80e
           'false': 參賽者無法在成功報名後修改報名內容
+        allow_registration_self_delete_after_acceptance:
+          #original_hash: 5c2e8c1
+          'true': 即使報名已完成，參賽者可以刪除自己的報名
+          #original_hash: 3b77604
+          'false': 報名完成後，參賽者不可以刪除自己的報名
   mail_form:
     attributes:
       contact_form:
@@ -2601,6 +2649,12 @@ zh-TW:
         #original_hash: f571a30
         format_html: >-
           此賽制描述比賽如何根據參賽者的成績決定排名。%{link_to_9b}描述了每個項目允許的賽制。有關各個賽制的說明，請參見%{link_to_9f}。
+        #original_hash: fa50f5c
+        qualification_html: 滿足參賽資格的成績必須要在其他的WCA比賽中取得
+        #original_hash: 3b524fd
+        qualification_all_events_html: '設定參賽資格的截止時間是<b>%{date}</b>。'
+        #original_hash: 0d791e9
+        qualification_some_events_html: '設定%{events}項目的參賽資格截止時間是<b>%{date}</b>。'
       #original_hash: 041a5de
       format: 型式
       #original_hash: 0d1fcc3
@@ -2609,6 +2663,8 @@ zh-TW:
       cutoff: 秒數門檻
       #original_hash: 02ed4a4
       proceed: 晉級條件
+      #original_hash: 2ffe44e
+      qualification: 參賽資格
     schedule:
       display_as:
         #original_hash: ec5dd7c
