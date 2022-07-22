@@ -200,11 +200,11 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '333')).to be true
     end
 
-    it "requires start date no later than" do
+    it "requires end date before" do
       input = {
         'resultType' => 'single',
         'type' => 'attemptResult',
-        'whenDate' => '2021-03-01',
+        'whenDate' => '2021-03-03',
         'level' => 1150,
       }
       qualification = Qualification.load(input)
@@ -214,7 +214,7 @@ RSpec.describe Qualification do
       input = {
         'resultType' => 'single',
         'type' => 'attemptResult',
-        'whenDate' => '2021-02-28',
+        'whenDate' => '2021-03-02',
         'level' => 1150,
       }
       qualification = Qualification.load(input)
@@ -331,11 +331,11 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '333')).to be true
     end
 
-    it "requires start date no later than" do
+    it "requires end date before" do
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
-        'whenDate' => '2021-03-01',
+        'whenDate' => '2021-03-03',
         'level' => 2500,
       }
       qualification = Qualification.load(input)
@@ -345,7 +345,7 @@ RSpec.describe Qualification do
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
-        'whenDate' => '2021-02-28',
+        'whenDate' => '2021-03-02',
         'level' => 2510,
       }
       qualification = Qualification.load(input)
