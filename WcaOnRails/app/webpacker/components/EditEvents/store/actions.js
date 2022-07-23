@@ -8,6 +8,7 @@ export const SetScrambleSetCount = 'SET_SCRAMBLE_SET_COUNT';
 export const UpdateCutoff = 'UPDATE_CUTOFF';
 export const UpdateTimeLimit = 'UPDATE_TIMELIMIT';
 export const UpdateAdvancementCondition = 'UPDATE_ADVANCEMENT_CONDITION';
+export const UpdateQualificiation = 'UPDATE_QUALIFICATION';
 
 /**
  * Action creator for marking changes as saved
@@ -130,5 +131,13 @@ export const updateAdvancementCondition = (roundId, advancementCondition) => ({
   payload: {
     roundId,
     advancementCondition,
+  },
+});
+
+export const updateQualificiation = (eventId, qualificiation) => ({
+  type: UpdateQualificiation,
+  payload: {
+    eventId,
+    qualificiation,
   },
 });

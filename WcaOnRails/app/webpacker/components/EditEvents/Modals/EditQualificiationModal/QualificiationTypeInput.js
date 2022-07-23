@@ -1,10 +1,11 @@
 import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
+import i18n from '../../../../lib/i18n';
 
 const QualificationTypeOptions = [
-  { key: 1, value: 'attemptResult', text: 'By Result' },
-  { key: 2, value: 'ranking', text: 'Top N' },
-  { key: 2, value: 'anyResult', text: 'Any Result' },
+  { key: 1, value: 'attemptResult', text: i18n.t('qualification.type.result') },
+  { key: 2, value: 'ranking', text: i18n.t('qualification.type.ranking') },
+  { key: 2, value: 'anyResult', text: i18n.t('qualification.type.any_result') },
 ];
 
 export function qualificationTypeInput({

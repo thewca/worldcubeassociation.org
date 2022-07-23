@@ -8,6 +8,7 @@ import {
   SetScrambleSetCount,
   UpdateAdvancementCondition,
   UpdateCutoff,
+  UpdateQualificiation,
   UpdateTimeLimit,
 } from './actions';
 
@@ -127,6 +128,13 @@ const reducers = {
     wcifEvents: updateForRounds(state.wcifEvents, [payload.roundId], () => ({
       advancementCondition: payload.advancementCondition,
     })),
+  }),
+  [UpdateQualificiation]: (state, { payload }) => ({
+    ...state,
+    wcifEvents: state.wcifEvents.events.map((event) => (event.id === payload.eventId ? ({
+      ...event,
+      qualificiation: payload.qualification,
+    }) : event)),
   }),
 };
 
