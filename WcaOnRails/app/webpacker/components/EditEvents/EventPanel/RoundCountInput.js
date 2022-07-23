@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown, Select } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 
 const RoundCountOptions = [
   { key: 0, value: 0, text: '# of Rounds?' },

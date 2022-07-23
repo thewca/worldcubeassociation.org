@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import cn from 'classnames';
 // import _ from 'lodash';
 
-import I18n from 'i18n-js';
 import {
   Button, Header, Segment,
 } from 'semantic-ui-react';
+import i18n from '../../../lib/i18n';
 import events from '../../../lib/wca-data/events.js.erb';
 import { pluralize } from '../../../lib/utils/edit-events';
 // import { addRoundToEvent, removeRoundsFromSharedTimeLimits } from './utils';
@@ -168,7 +168,7 @@ export default function EventPanel({
           <Segment>
             <h5 style={{ display: 'inline' }}>
               <span style={{ marginRight: '0.25em' }}>
-                {I18n.t('competitions.events.qualification')}
+                {i18n.t('competitions.events.qualification')}
                 :
               </span>
               <EditQualificationModal wcifEvent={wcifEvent} disabled={disabled} />
