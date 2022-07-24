@@ -1099,7 +1099,7 @@ RSpec.describe Competition do
     expect(competition.errors.messages[:organizer_ids].first).to match "Need a country"
   end
 
-  describe "exempt_from_wca_dues" do
+  describe "is exempt from dues" do
     let(:four_by_four) { Event.find "444" }
     let(:fmc) { Event.find "333fm" }
 
