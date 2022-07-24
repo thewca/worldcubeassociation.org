@@ -1114,17 +1114,17 @@ RSpec.describe Competition do
     end
 
     it "is false when 333fm is the only event and competition is in a single country" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "CA" )
+      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "CA")
       expect(competition.exempt_from_wca_dues?).to eq false
     end
 
     it "is true when 333fm is the only event and competition is in multiple countries" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "XN" )
+      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "XN")
       expect(competition.exempt_from_wca_dues?).to eq true
     end
 
     it "is true when 333fm is the only event and competition is in multiple continents" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "XW" )
+      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "XW")
       expect(competition.exempt_from_wca_dues?).to eq true
     end
 
