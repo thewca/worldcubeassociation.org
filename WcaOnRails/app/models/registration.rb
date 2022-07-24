@@ -236,7 +236,7 @@ class Registration < ApplicationRecord
     if competition && competition.allow_registration_without_qualification
       return
     end
-    if registration_competition_events.reject(&:marked_for_destruction?).select { |event| event.competition_event.nil? || !event.competition_event.can_register?(user) }.any?
+    if registration_competition_events.reject(&:marked_for_destruction?).select { |event| !event.competition_event&.can_register?(user) }.any?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
     end
   end
