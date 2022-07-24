@@ -529,6 +529,8 @@ th:
         early_puzzle_submission: ฉันต้องการให้ผู้เข้าแข่งขันส่ง puzzle ก่อนที่การแข่งขันจะเริ่มขึ้น
         #original_hash: 78308cc
         early_puzzle_submission_reason: เหตุผลและรายละเอียดสำหรับการ puzzle ก่อน
+        #original_hash: 88da0ef
+        qualification_results: ฉันต้องการใช้ผลการคัดเลือกเพื่อจำกัดผู้ที่สามารถแข่งขันในบางประเภทได้
         #original_hash: 1ec6dd4
         qualification_results_reason: เหตุผลและรายละเอียดสำหรับการคัดเลือก
         #original_hash: ac30de9
@@ -954,6 +956,8 @@ th:
         early_puzzle_submission_reason: >-
           โปรดอธิบายรายละเอียดที่นี่ทำไมคุณต้องการให้ผู้เข้าแข่งขันส่ง puzzle
           ก่อน กรุณากรอกเป็นภาษาอังกฤษ!
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           ปรดอธิบายรายละเอียดที่นี่ ทำไมคุณถึงต้องการใช้การคัดเลือก
@@ -1275,7 +1279,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1795,7 +1799,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
