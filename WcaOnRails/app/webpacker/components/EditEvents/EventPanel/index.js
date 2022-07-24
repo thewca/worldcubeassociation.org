@@ -171,7 +171,11 @@ export default function EventPanel({
                 {i18n.t('competitions.events.qualification')}
                 :
               </span>
-              <EditQualificationModal wcifEvent={wcifEvent} disabled={disabled} />
+              {/* Qualifications cannot be edited after the competition has been announced. */}
+              <EditQualificationModal
+                wcifEvent={wcifEvent}
+                disabled={disabled || !canAddAndRemoveEvents}
+              />
             </h5>
           </Segment>
         </>
