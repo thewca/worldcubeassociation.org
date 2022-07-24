@@ -195,6 +195,8 @@ class Competition < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
+  # cannot validate `qualification_results IN [true, false]` because we historically have competitions
+  # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
   validates :qualification_results_reason, presence: true, if: :persisted_uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
   validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
@@ -1214,8 +1216,17 @@ class Competition < ApplicationRecord
     competition_events.any? { |ce| ce.rounds.any? { |r| r.time_limit.cumulative_round_ids.size > 1 } }
   end
 
+  def qualification_results?
+    # we have NULL columns for historic data.
+    # Explicitly exclude them rather than relying on Ruby "accidentally" evaluating nil as false-ish
+    qualification_results == true
+  end
+
   def uses_qualification?
-    competition_events.any?(&:qualification)
+    # We want to trigger the checks for qualification details even when
+    # the actual qualification requirements have not been filled out yet for a newly created competition.
+    # In other words, checking the `qualification_results` checkbox should be enough to trigger validations.
+    self.qualification_results? || competition_events.any?(&:qualification)
   end
 
   def qualification_date_to_events
