@@ -1718,4 +1718,11 @@ class Competition < ApplicationRecord
     cal.publish
     cal
   end
+
+  def exempt_from_wca_dues?
+    world_or_continental_championship = (championships.map(&:championship_type) & Championship::MAJOR_CHAMPIONSHIP_TYPES).any?
+    multi_country_fmc_competition = events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(countryId)
+
+    return world_or_continental_championship || multi_country_fmc_competition
+  end
 end

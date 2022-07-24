@@ -4,7 +4,7 @@
   "Start", "End", "Announced", "Posted",
   "Link on WCA", "Competitors", "Delegates",
   "Currency Code", "Base Registration Fee", "Currency Subunit",
-  "Championship Type"
+  "Championship Type", "Exempt from WCA Dues"
 ] %>
 <%= CSV.generate_line(headers, col_sep: "\t").html_safe -%>
 <% @competitions.each do |c| %>
@@ -13,6 +13,6 @@
     c.start_date, c.end_date, c.announced_at, c.results_posted_at,
     competition_url(c.id), c.num_competitors, c.delegates.map(&:name).sort.join(","),
     c.currency_code, c.base_entry_fee_lowest_denomination, Money::Currency.new(c.currency_code).subunit_to_unit,
-    c.championships.map(&:championship_type).sort.join(",")
+    c.championships.map(&:championship_type).sort.join(","), c.exempt_from_wca_dues?
   ], col_sep: "\t").html_safe -%>
 <% end %>
