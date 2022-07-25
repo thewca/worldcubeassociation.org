@@ -93,6 +93,7 @@ gem 'wicked_pdf'
 gem 'icalendar'
 # gem 'starburst', github: 'starburstgem/starburst'
 gem 'react-rails'
+gem 'sprockets-rails'
 
 group :development, :test do
   gem 'spring'

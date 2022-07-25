@@ -73,8 +73,6 @@ module WcaOnRails
     config.middleware.use Middlewares::FixAcceptHeader
     config.middleware.use Middlewares::WardenUserLogger, logger: ->(s) { Rails.logger.info(s) }
 
-    config.autoloader = :zeitwerk
-
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')
 
@@ -85,6 +83,8 @@ module WcaOnRails
       host: root_url.host,
       port: root_url.port,
     }
+
+    config.action_view.preload_links_header = false
 
     # Activate ActiveRecord attribute encryption for use with the Devise 2FA gem
     config.active_record.encryption.primary_key = EnvVars.ACTIVERECORD_PRIMARY_KEY

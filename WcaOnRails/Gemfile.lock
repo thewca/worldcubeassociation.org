@@ -803,6 +803,7 @@ DEPENDENCIES
   simplecov-lcov
   spring
   spring-commands-rspec
+  sprockets-rails
   strip_attributes
   stripe
   superconfig
