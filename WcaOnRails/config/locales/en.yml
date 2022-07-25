@@ -1453,12 +1453,17 @@ en:
           ended: "Ended %{days} ago"
           in_progress: "In progress!"
           posted: "Results are posted!"
-          starts_in: "Starts in %{days}"
           announced_on: "Announced on %{announcement_date}"
         #context: the "search" button
         search: "Name or city"
         #context: the "recent" button
         recent: "Last %{count} days"
+        #context: the registration status icon
+        registration:
+          opens_in: "Registration will open in %{duration}"
+          closed: "Registration has closed. Competition starts in %{days}"
+          open: "Registration is open!"
+          full: "Competitor limit reached, new registrations will go to the waiting list"
       no_comp_found: "No competitions found."
       no_comp_match: "We didn't find any competitions with %{events}! Try searching for fewer events."
     #context: on the "My competitions" page
