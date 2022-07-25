@@ -84,7 +84,7 @@ Most of the tables should be self-explanatory, but here are a few specific detai
 `Countries` stores include those from the Wikipedia list of countries at
 http://en.wikipedia.org/wiki/List_of_countries, and may include some countries
 that no longer exist. The ISO2 column should reflect ISO 3166-1 alpha-2
-country codes, for countries that have them. Custom codes may used in some
+country codes, for countries that have them. Custom codes may be used in some
 circumstances.
 
 ### Scrambles
