@@ -280,7 +280,7 @@ module CompetitionsHelper
       icon_class = "blue"
     elsif competition.registration_past?
       icon = "user times"
-      title = I18n.t('competitions.index.tooltips.registration.closed')
+      title = I18n.t('competitions.index.tooltips.registration.closed', days: t('common.days', count: (competition.start_date - Date.today).to_i))
       icon_class = "red"
     elsif competition.registration_full?
       icon = "user"
