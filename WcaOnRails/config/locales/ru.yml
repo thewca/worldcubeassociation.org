@@ -265,6 +265,49 @@ ru:
     333mbf: '10 минут на куб, до 60:00.00'
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: Тип квалификации
+    #original_hash: 65c848f
+    result_type: Тип результата
+    #original_hash: 29ef642
+    for_event: 'Квалификация на %{event}'
+    type:
+      #original_hash: f5c3f76
+      none: Нет квалификационных требований
+      #original_hash: f8c5669
+      result: По результату
+      #original_hash: 4aebda3
+      ranking: Лучшие N
+      #original_hash: 3bc54a0
+      any_result: Любой результат
+    single:
+      #original_hash: d596f44
+      time: 'Результат единичной попытки меньше %{time}'
+      #original_hash: 52ba186
+      moves: 'Результат единичной сборки выше %{moves} ходов'
+      #original_hash: b1993ae
+      points: 'Единичная попытка выше %{points} очков'
+      #original_hash: ed2b051
+      ranking: 'Лучшие %{ranking} по результату единичной попытки'
+      #original_hash: 933b7dc
+      any_result: Любая единичная попытка
+    average:
+      #original_hash: 2682ae8
+      time: 'Среднее время меньше %{time}'
+      #original_hash: 1b9b5fc
+      moves: 'Средний результат меньше %{moves} ходов'
+      #original_hash: 05c417e
+      points: 'Средний результат выше %{points} очков'
+      #original_hash: 805171c
+      ranking: 'Лучшие %{ranking} по среднему'
+      #original_hash: 2223a1b
+      any_result: Любое среднее
+    deadline:
+      #original_hash: 3b7f9f6
+      description: Крайний срок для квалификации
+      #original_hash: bed8220
+      by_date: 'до %{date}'
   common:
     #original_hash: 70c07ec
     world: Мир
@@ -483,6 +526,8 @@ ru:
         on_the_spot_entry_fee_lowest_denomination: Базовый взнос за регистрацию на месте
         #original_hash: 7e53b96
         allow_registration_edits: Изменения в регистрации
+        #original_hash: 3d47eca
+        allow_registration_self_delete_after_acceptance: Отмена регистрации
         #original_hash: efbdbab
         refund_policy_percent: Возвращаемая доля
         #original_hash: b332299
@@ -501,10 +546,6 @@ ru:
           начала дисциплины
         #original_hash: 78308cc
         early_puzzle_submission_reason: Причины и детали ранней сдачи головоломок
-        #original_hash: 88da0ef
-        qualification_results: >-
-          Я хочу использовать квалификацию, чтобы ограничить участников в
-          некоторых дисциплинах
         #original_hash: 1ec6dd4
         qualification_results_reason: Причины и детали использования квалификации
         #original_hash: ac30de9
@@ -920,6 +961,8 @@ ru:
           месте бесплатная.
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Пока что это поле только для информации, вы должны сами возвращать
@@ -955,8 +998,6 @@ ru:
         early_puzzle_submission_reason: >-
           Пожалуйста, объясните, почему вы хотите заставить участников заранее
           сдать головоломки. Заполняйте это поле по-английски!
-        #original_hash: da39a3e
-        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Пожалуйста, объясните, почему вы хотите использовать квалификацию.
@@ -1203,6 +1244,15 @@ ru:
           'false': >-
             Участники НЕ могут редактировать свои регистрации с момента, как
             только регистрация была принята
+        allow_registration_self_delete_after_acceptance:
+          #original_hash: 5c2e8c1
+          'true': >-
+            Участники могут удалять свои регистрации даже после того, как они
+            были приняты
+          #original_hash: 3b77604
+          'false': >-
+            Участники НЕ могут удалять свои регистрации после того, как они были
+            приняты
   mail_form:
     attributes:
       contact_form:
@@ -1918,7 +1968,7 @@ ru:
         #original_hash: 267ac87
         info: >-
           В этом разделе вы сможете редактировать конфиденциальные данные. Перед
-          этим нам надо убедиться, что вы &mdash; владелец этого аккаунта.
+          этим нам надо убедиться, что вы - владелец этого аккаунта.
         #original_hash: f19af51
         success: Владение аккаунтом успешно подтверждено.
         #original_hash: 52ebf9c
@@ -1928,7 +1978,7 @@ ru:
         #original_hash: d395f1f
         identity_error: >-
           Невозможно редактировать эти данные, пожалуйста, подтвердите ниже, что
-          вы &mdash; владелец этого аккаунта.
+          вы - владелец этого аккаунта.
     errors:
       #original_hash: 094b763
       not_found: не найдено
@@ -2465,6 +2515,13 @@ ru:
         правильно.
       #original_hash: e390250
       create_success: Соревнование успешно создано!
+      #original_hash: bc3e673
+      registration_payment_info: >-
+        У соревнования указан регистрационный взнос, но не привязан аккаунт
+        Stripe. Если вы используете Stripe через сайт WCA, пожалуйста, привяжите
+        ваш аккаунт Stripe. Если вы используете внешнюю платёжную систему,
+        пожалуйста, не забудьте добавить все необходимые подробности в
+        требования к регистрации.
       #original_hash: ba067f0
       not_announced: 'Это соревнование доступно общественности, но ещё не анонсировано.'
       #original_hash: ab61991
@@ -3111,6 +3168,18 @@ ru:
           Формат определяет ранжирование участников на основе их результатов.
           Список допустимых форматов для каждой дисциплины описан в
           %{link_to_9b}. Описание каждого формата см. %{link_to_9f}.
+        #original_hash: fa50f5c
+        qualification_html: >-
+          Чтобы принять участие, нужно установить результат, соответствующий
+          квалификационному требованию на других соревнованиях WCA.
+        #original_hash: 3b524fd
+        qualification_all_events_html: >-
+          Крайний срок для установки квалификационных требований —
+          <b>%{date}</b>.
+        #original_hash: 0d791e9
+        qualification_some_events_html: >-
+          Крайний срок для того, чтобы пройти квалификационные требования в
+          %{events} — <b>%{date}</b>.
       #original_hash: 041a5de
       format: Формат
       #original_hash: 0d1fcc3
@@ -3119,6 +3188,8 @@ ru:
       cutoff: Катофф
       #original_hash: 02ed4a4
       proceed: Проходят
+      #original_hash: 2ffe44e
+      qualification: Квалификация
     schedule:
       display_as:
         #original_hash: ec5dd7c
@@ -3918,6 +3989,20 @@ ru:
         description: >-
           Этот совет ответственен за формирование и поддержку коммуникации между
           Сообществом WCA и Персоналом WCA.
+      wsot:
+        #original_hash: 58765c7
+        name: Команда Спортивной Организации WCA
+        #original_hash: 8f888d6
+        description: >-
+          Эта команда ответственна за поддержку признания WCA международной
+          спортивной организацией.
+      wat:
+        #original_hash: 90a1280
+        name: Архивная Команда WCA
+        #original_hash: fae6850
+        description: >-
+          Архивная Команда WCA является консультативным комитетом WCA. Задача
+          этой команды — контроль и поддержка разработки архива организации.
       banned:
         #original_hash: d30e2e5
         name: Забаненные участники
@@ -4194,6 +4279,16 @@ ru:
       info_html: >-
         Эта команда ответственна за развитие и управление Марки WCA, поиск
         спонсоров, оснащение оборудованием и сбыт товаров WCA.
+    wsot:
+      #original_hash: 8f888d6
+      info_html: >-
+        Эта команда ответственна за поддержку признания WCA международной
+        спортивной организацией.
+    wat:
+      #original_hash: fae6850
+      info_html: >-
+        Архивная Команда WCA является консультативным советом WCA. Задача этой
+        команды — контроль и поддержка разработки архива организации.
     #original_hash: f97a4f5
     councils_html: Советы
     wac:
@@ -4678,7 +4773,7 @@ ru:
         '2': Эти соревнования проходят в разных странах.
       #original_hash: 5c5cf04
       content2: >-
-        Одновременные соревнования по сборке на количество ходов &mdash; это
+        Одновременные соревнования по сборке на количество ходов - это
         соревнования, на которых проводится только сборка на количество ходов, и
         которые проходят в нескольких местах одновременно.
       olist2:

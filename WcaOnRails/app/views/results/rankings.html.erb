@@ -1,11 +1,5 @@
 <% provide(:title, t(".title")) %>
 
-<% if @skip_robot_indexing %>
-  <% content_for :robots_head do %>
-    <meta name="robots" content="noindex" />
-  <% end %>
-<% end %>
-
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
@@ -16,7 +10,6 @@
   <% ranking_timestamp = Timestamp.find_by(name: "compute_auxiliary_data_end") %>
   <% cache_if ranking_timestamp.present?, ["rankings", *ranking_params, ranking_timestamp&.date, I18n.locale] do %>
     <%
-      @rows = ActiveRecord::Base.connection.exec_query(@query)
       comp_ids = @rows.map { |r| r["competitionId"] }.uniq
       @competitions_by_id = Hash[Competition.where(id: comp_ids).map { |c| [c.id, c] }]
     %>
