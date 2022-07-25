@@ -1463,7 +1463,7 @@ en:
           opens_in: "Registration will open in %{duration}"
           closed: "Registration has closed. Competition starts in %{days}"
           open: "Registration is open!"
-          full: "Competitor limit reached, the waiting list is now in effect"
+          full: "Competitor limit reached, new registrations will go to the waiting list"
       no_comp_found: "No competitions found."
       no_comp_match: "We didn't find any competitions with %{events}! Try searching for fewer events."
     #context: on the "My competitions" page
