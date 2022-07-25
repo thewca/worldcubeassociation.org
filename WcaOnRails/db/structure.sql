@@ -1451,6 +1451,7 @@ CREATE TABLE `users` (
   `session_validity_token` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cookies_acknowledged` tinyint(1) NOT NULL DEFAULT '0',
   `registration_notifications_enabled` tinyint(1) DEFAULT '0',
+  `otp_secret` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1796,6 +1797,7 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220627195217'),
 ('20220706232200'),
 ('20220725045202'),
+('20220725045819'),
 ('20220804193822'),
 ('20220822232936'),
 ('20220630233246');
