@@ -1453,7 +1453,6 @@ en:
           ended: "Ended %{days} ago"
           in_progress: "In progress!"
           posted: "Results are posted!"
-          starts_in: "Starts in %{days}"
           announced_on: "Announced on %{announcement_date}"
         #context: the "search" button
         search: "Name or city"
