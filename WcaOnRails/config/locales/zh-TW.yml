@@ -260,7 +260,7 @@ zh-TW:
     #original_hash: a2b25bf
     type_label: 參賽資格取得方式
     #original_hash: 65c848f
-    result_type: 採用成績
+    result_type: 資格取得方式
     #original_hash: 29ef642
     for_event: '%{event}的參賽資格'
     type:
@@ -2392,14 +2392,21 @@ zh-TW:
           in_progress: 正在進行中！
           #original_hash: 1157462
           posted: 成績已經公布！
-          #original_hash: 89bcc37
-          starts_in: '%{days}後舉行'
           #original_hash: 97b061a
           announced_on: '在%{announcement_date}公告'
         #original_hash: ccd2db9
         search: 比賽名稱或城市
         #original_hash: 3bc8082
         recent: '過去%{count}天'
+        registration:
+          #original_hash: 49d8169
+          opens_in: '將在%{duration}之後開放報名'
+          #original_hash: 2d601fa
+          closed: '報名時間已結束。比賽將在%{days}之後舉行。'
+          #original_hash: 2e17db8
+          open: 已開放報名！
+          #original_hash: c098975
+          full: 參賽者人數已滿，將提供候補名單給新的報名。
       #original_hash: 8b09d74
       no_comp_found: 沒有找到比賽
       #original_hash: 7008166
