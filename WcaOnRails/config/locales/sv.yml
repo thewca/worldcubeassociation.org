@@ -2792,14 +2792,23 @@ sv:
           in_progress: Pågår!
           #original_hash: 1157462
           posted: Resultat har publicerats!
-          #original_hash: 89bcc37
-          starts_in: 'Börjar om %{days}'
           #original_hash: 97b061a
           announced_on: 'Publicerades den %{announcement_date}'
         #original_hash: ccd2db9
         search: Namn eller stad
         #original_hash: 3bc8082
         recent: 'Senaste %{count} dagarna'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'Anmälan öppnar om %{duration}'
+          #original_hash: 2d601fa
+          closed: 'Anmälan har stängt. Tävlingen börjar om %{days}'
+          #original_hash: 2e17db8
+          open: Anmälan är öppen!
+          #original_hash: c098975
+          full: >-
+            Gränsen för antal tävlande har nåtts, nya anmälningar kommer sättas
+            på väntelistan.
       #original_hash: 8b09d74
       no_comp_found: Inga tävlingar hittades.
       #original_hash: 7008166
