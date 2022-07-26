@@ -2,9 +2,12 @@
 
 class Championship < ApplicationRecord
   include Comparable
-  CHAMPIONSHIP_TYPES = [
+  MAJOR_CHAMPIONSHIP_TYPES = [
     "world",
     *Continent.real.map(&:id),
+  ].freeze
+  CHAMPIONSHIP_TYPES = [
+    *MAJOR_CHAMPIONSHIP_TYPES,
     *Country.real.map(&:iso2),
     *EligibleCountryIso2ForChampionship.championship_types,
   ].freeze
