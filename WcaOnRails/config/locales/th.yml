@@ -2689,14 +2689,23 @@ th:
           in_progress: กำลังดำเนินการ
           #original_hash: 1157462
           posted: ผลการแข่งขันได้ถูกโพสต์แล้ว
-          #original_hash: 89bcc37
-          starts_in: 'เริ่มใน %{days} วัน'
           #original_hash: 97b061a
           announced_on: 'ประกาศเมื่อ %{announcement_date}'
         #original_hash: ccd2db9
         search: ชื่อหรือเมือง
         #original_hash: 3bc8082
         recent: 'ย้อนหลัง %{count} วัน'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'การรับสมัครจะเปิดใน %{duration}'
+          #original_hash: 2d601fa
+          closed: 'ปิดการรับสมัครแล้ว การแข่งขันจะเริ่มใน %{days}'
+          #original_hash: 2e17db8
+          open: เปิดรับสมัครแล้ว!
+          #original_hash: c098975
+          full: >-
+            ผู้เข้าแข่งขันถึงจำนวนที่กำหนดแล้ว
+            การสมัครการแข่งขันหลังจากนี้จะไปอยู่ใน waiting list
       #original_hash: 8b09d74
       no_comp_found: ไม่พบการแข่งขัน
       #original_hash: 7008166
