@@ -2919,14 +2919,23 @@ de:
           in_progress: Läuft gerade!
           #original_hash: 1157462
           posted: Ergebnisse veröffentlicht!
-          #original_hash: 89bcc37
-          starts_in: 'Beginnt in %{days}'
           #original_hash: 97b061a
           announced_on: 'Angekündigt am %{announcement_date}'
         #original_hash: ccd2db9
         search: Name oder Stadt
         #original_hash: 3bc8082
         recent: 'Letzte %{count} Tage'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'Anmeldung wird in %{duration} öffnen'
+          #original_hash: 2d601fa
+          closed: 'Die Anmeldung wurde geschlossen. Der Wettbewerb beginnt in %{days}.'
+          #original_hash: 2e17db8
+          open: Die Anmeldung ist geöffnet!
+          #original_hash: c098975
+          full: >-
+            Das Teilnehmerlimit wurde erreicht, neue Anmeldungen gelangen auf
+            die Warteliste.
       #original_hash: 8b09d74
       no_comp_found: Keine Wettbewerbe gefunden.
       #original_hash: 7008166
