@@ -536,6 +536,10 @@ sv:
           innan grenen planeras att börja
         #original_hash: 78308cc
         early_puzzle_submission_reason: Anledning och detaljer kring att lämna in pussel tidigt
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Jag vill använda kvalificeringsresultat för att begränsa vem som kan
+          tävla i vissa grenar
         #original_hash: 1ec6dd4
         qualification_results_reason: Anledning och detaljer för kvalificeringsresultat
         #original_hash: ac30de9
@@ -974,6 +978,8 @@ sv:
         early_puzzle_submission_reason: >-
           Förklara här varför ni vill kräva att tävlande lämnar in pussel
           tidigt. Vänligen fyll i detta på engelska!
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Förklara här varför ni vill använda kvalificeringstider. Vänligen fyll

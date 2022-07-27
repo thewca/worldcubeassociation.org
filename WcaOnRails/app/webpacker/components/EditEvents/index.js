@@ -82,8 +82,11 @@ export default class EditEvents extends React.Component {
   }
 }
 
-function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
+function RoundsTable({ wcifEvents, wcifEvent, disabled, canAddAndRemoveEvents }) {
   let event = events.byId[wcifEvent.id];
+
+  // Qualifications cannot be edited after the competition has been announced.
+  let disableQualifications = disabled || !canAddAndRemoveEvents;
 
   return (
     <div className="table-responsive">
@@ -156,7 +159,7 @@ function RoundsTable({ wcifEvents, wcifEvent, disabled }) {
         </tbody>
       </table>
       <h5>
-        { I18n.t('competitions.events.qualification') }: <EditQualificationButton wcifEvent={wcifEvent} disabled={disabled} />
+        { I18n.t('competitions.events.qualification') }: <EditQualificationButton wcifEvent={wcifEvent} disabled={disableQualifications} />
       </h5>
     </div>
   );
@@ -272,7 +275,7 @@ function EventPanel({ wcifEvents, canAddAndRemoveEvents, canUpdateEvents, wcifEv
 
       {wcifEvent.rounds && (
         <div className="panel-body">
-          <RoundsTable wcifEvents={wcifEvents} wcifEvent={wcifEvent} disabled={disabled} />
+          <RoundsTable wcifEvents={wcifEvents} wcifEvent={wcifEvent} disabled={disabled} canAddAndRemoveEvents={canAddAndRemoveEvents} />
         </div>
       )}
     </div>
