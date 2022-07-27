@@ -527,6 +527,8 @@ zh-TW:
         early_puzzle_submission: 我希望參賽者能在該比賽項目開始前的一個時間點先繳交方塊
         #original_hash: 78308cc
         early_puzzle_submission_reason: 提早繳交方塊的理由和細節
+        #original_hash: 88da0ef
+        qualification_results: 我希望用特定成績來限制參賽者能參加某項目
         #original_hash: 1ec6dd4
         qualification_results_reason: 特定成績的理由及細節
         #original_hash: ac30de9
@@ -897,6 +899,8 @@ zh-TW:
         early_puzzle_submission: ''
         #original_hash: 4e8488b
         early_puzzle_submission_reason: 請在這裡說明為什麼您希望參賽者提早繳交方塊。請用英文填寫！
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: 請在這裡說明為什麼您希望設定特定成績。請用英文填寫！
         #original_hash: da39a3e

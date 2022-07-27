@@ -542,6 +542,10 @@ de:
           Zeitpunkt vor dem eigentlichen Beginn des Events abgeben.
         #original_hash: 78308cc
         early_puzzle_submission_reason: 'Grund und Details dafür, die Puzzle früher abzugeben'
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Ich möchte Qualifikationszeiten nutzen, um die Anzahl der Teilnehmer
+          in bestimmten Events zu limitieren
         #original_hash: 1ec6dd4
         qualification_results_reason: Grund und Details für Qualifikationszeiten
         #original_hash: ac30de9
@@ -991,6 +995,8 @@ de:
         early_puzzle_submission_reason: >-
           Bitte führe aus, warum du möchtest, dass Teilnehmer ihre Puzzle früher
           abgeben. Fülle dies in Englisch aus!
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Bitte erläutere hier, warum du Qualifikationszeiten nutzen möchtest.

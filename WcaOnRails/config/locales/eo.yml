@@ -538,6 +538,10 @@ eo:
           la komenco de la konkursero
         #original_hash: 78308cc
         early_puzzle_submission_reason: Kialo kaj detaloj por la antaŭtempa submetiĝo de puzloj
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Mi ŝatus uzi kvalifikajn rezultojn por limigi kiu povas partopreni en
+          specifajn konkurserojn
         #original_hash: 1ec6dd4
         qualification_results_reason: Kialo kaj detaloj por la kvalifikaj rezultoj
         #original_hash: ac30de9
@@ -977,6 +981,8 @@ eo:
         early_puzzle_submission_reason: >-
           Bonvolu detali tie kial vi ŝatus devigi konkursantojn antaŭtempe
           submetiĝi puzloj. Bonvolu plenigi tion en la angla!
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Bonvolu detali tie kial vi ŝatus uzi kvalifikajn rezultojn. Bonvolu

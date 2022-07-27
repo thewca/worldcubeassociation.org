@@ -123,7 +123,7 @@ export default {
                         autoFocus={autoFocus}
                         onChange={onChangeAggregator}
                         className="form-control"
-                        id="qualification-result-type-input"
+                        id="qualification-type-input"
                         ref={c => qualificationTypeInput = c}
                 >
                   <option value="attemptResult">{ I18n.t('qualification.type.result') }</option>
