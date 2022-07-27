@@ -160,7 +160,7 @@ RSpec.describe PV do
         res_lowercase1 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
                                            eventId: "333oh")
-        res_lowercase1.person.update(name: "First Middle last")
+        res_lowercase1.person.update(name: "Yamada taro (山田太郎)")
         res_lowercase2 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
                                            eventId: "333oh")
@@ -168,11 +168,11 @@ RSpec.describe PV do
         res_missing_period = FactoryBot.create(:inbox_result,
                                                competition: competition1,
                                                eventId: "333oh")
-        res_missing_period.person.update(name: "First A B. Last (最初)")
+        res_missing_period.person.update(name: "Missing A Period")
         res_single_letter = FactoryBot.create(:inbox_result,
                                               competition: competition1,
                                               eventId: "333oh")
-        res_single_letter.person.update(name: "A. B. Last")
+        res_single_letter.person.update(name: "A. B. Doe")
         res_same_name1 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
                                            eventId: "333oh")
