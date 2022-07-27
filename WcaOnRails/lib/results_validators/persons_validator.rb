@@ -22,6 +22,9 @@ module ResultsValidators
     MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors " \
                                                 "and that all results are correctly seperated by their corresponding id."
     WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
+    LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name, please ensure the correct spelling."
+    MISSING_ABBREVIATION_PERIOD_WARNING = "'%{name}' is missing an abbreviation period from a single letter middle name, please ensure the correct spelling."
+    SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name, please fix the name."
 
     @@desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
 
@@ -110,6 +113,33 @@ module ResultsValidators
           # Look for if 2 new competitors that share the exact same name
           if without_wca_id.select { |p2| p2.name == p.name }.length > 1 && !duplicate_newcomer_names.include?(p.name)
             duplicate_newcomer_names << p.name
+          end
+          # Look for obvious person name issues (in roman-readable part)
+          if p.name.include? " ("
+            roman_readable = p.name[0, p.name.index('(')-1]
+          else
+            roman_readable = p.name
+          end
+          split_name = roman_readable.split
+          if split_name.any? { |n| n.downcase == n }
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               LOWERCASE_NAME_WARNING,
+                                               name: p.name)
+          end
+          if split_name.length > 2
+            if split_name[1, split_name.length-2].any? { |n| n.length == 1 }
+              @warnings << ValidationWarning.new(:persons, competition_id,
+                                                 MISSING_ABBREVIATION_PERIOD_WARNING,
+                                                 name: p.name)
+            end
+          end
+          non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
+          space_before_last_letter = (roman_readable[-2] == " ") && !['I', 'V'].include?(roman_readable[-1]) # Roman numerals I and V are allowed as suffixes
+          abbreviated_last_name = (roman_readable[-1] == ".") && (roman_readable[-3] == " ")
+          if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
+                                               name: p.name)
           end
         end
         duplicate_newcomer_names.each do |name|
