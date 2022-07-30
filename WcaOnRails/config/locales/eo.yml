@@ -259,6 +259,49 @@ eo:
     333mbf: '10:00:00 po kubo, ĝis 60:00:00'
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: Kvalifika Tipo
+    #original_hash: 65c848f
+    result_type: Rezulta Tipo
+    #original_hash: 29ef642
+    for_event: 'Kvalifiko por %{event}'
+    type:
+      #original_hash: f5c3f76
+      none: Nenia kvalifiko
+      #original_hash: f8c5669
+      result: Per rezulto
+      #original_hash: 4aebda3
+      ranking: Unuaj N
+      #original_hash: 3bc54a0
+      any_result: Ajna rezulto
+    single:
+      #original_hash: d596f44
+      time: 'Solvo sub %{time}'
+      #original_hash: 52ba186
+      moves: 'Solvo sub %{moves} movoj'
+      #original_hash: b1993ae
+      points: 'Solvo super %{points} poentoj'
+      #original_hash: ed2b051
+      ranking: 'Unuaj %{ranking} per unuopa solvo'
+      #original_hash: 933b7dc
+      any_result: Ajna unuopa solvo
+    average:
+      #original_hash: 2682ae8
+      time: 'Averaĝo sub %{time}'
+      #original_hash: 1b9b5fc
+      moves: 'Averaĝo sub %{moves} movoj'
+      #original_hash: 05c417e
+      points: 'Averaĝo super %{points} poentoj'
+      #original_hash: 805171c
+      ranking: 'Unuaj %{ranking} per averaĝo'
+      #original_hash: 2223a1b
+      any_result: Ajna averaĝo
+    deadline:
+      #original_hash: 3b7f9f6
+      description: Kvalifika tempolimo
+      #original_hash: bed8220
+      by_date: 'per %{date}'
   common:
     #original_hash: 70c07ec
     world: Mondo
@@ -475,6 +518,8 @@ eo:
         on_the_spot_entry_fee_lowest_denomination: Baza surloka registriĝkosto
         #original_hash: 7e53b96
         allow_registration_edits: Redaktoj de registriĝoj
+        #original_hash: 3d47eca
+        allow_registration_self_delete_after_acceptance: Nuligo de registriĝoj
         #original_hash: efbdbab
         refund_policy_percent: Repagota procento
         #original_hash: b332299
@@ -901,6 +946,8 @@ eo:
           senpagaj.
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Nun, tiu nombro estas nur sciiga, repagoj devos esti farita permane.
@@ -1179,6 +1226,15 @@ eo:
           'false': >-
             Konkursantoj NE povas redakti siajn registriĝojn kiam ĝi estas
             akceptata
+        allow_registration_self_delete_after_acceptance:
+          #original_hash: 5c2e8c1
+          'true': >-
+            La konkursantoj povas forigi sian propran registriĝon eĉ post kiam
+            ĝi estas akceptita
+          #original_hash: 3b77604
+          'false': >-
+            La konkursantoj NE povas forigi sian propran registriĝon post kiam
+            ĝi estas akceptita
   mail_form:
     attributes:
       contact_form:
@@ -2746,14 +2802,23 @@ eo:
           in_progress: Okazanta!
           #original_hash: 1157462
           posted: Rezultoj estas publikigitaj!
-          #original_hash: 89bcc37
-          starts_in: 'Komenciĝos post %{days}'
           #original_hash: 97b061a
           announced_on: 'Anoncita la %{announcement_date}'
         #original_hash: ccd2db9
         search: Nomo aŭ urbo
         #original_hash: 3bc8082
         recent: 'Lastaj %{count} tagoj'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'Registriĝperiodo malfermiĝos post %{duration}'
+          #original_hash: 2d601fa
+          closed: 'Registriĝperiodo fermiĝis. La konkurso komenciĝos en %{days}'
+          #original_hash: 2e17db8
+          open: Registriĝi nuntempe eblas!
+          #original_hash: c098975
+          full: >-
+            Limo da partoprenantoj estis atingita, novaj registriĝoj iros al la
+            atendolisto
       #original_hash: 8b09d74
       no_comp_found: Neniu konkurso trovita.
       #original_hash: 7008166
@@ -2977,9 +3042,9 @@ eo:
       #original_hash: 4232080
       distance: Distanco
       #original_hash: 51de2b8
-      before: antaŭ
+      before: antaŭe
       #original_hash: 405906c
-      after: post
+      after: poste
       #original_hash: e1978a9
       starts_on: komenciĝas la
       #original_hash: 964aedc
@@ -3057,6 +3122,14 @@ eo:
           baze de iliaj rezultoj. La listo de permesataj formatoj po konkursero
           estas priskribita en %{link_to_9b}. Vidu %{link_to_9f} por priskribo
           de ĉiu formato.
+        #original_hash: fa50f5c
+        qualification_html: >-
+          Kvalifikaj tempoj devas esti faritaj en aliaj WCA-konkursoj por povi
+          partopreni.
+        #original_hash: 3b524fd
+        qualification_all_events_html: 'La limdato por kvalifiki estas <b>%{date}</b>.'
+        #original_hash: 0d791e9
+        qualification_some_events_html: 'La limdato por kvalifiki por %{events} estas <b>%{date}</b>.'
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3
@@ -3065,6 +3138,8 @@ eo:
       cutoff: Interromptempo
       #original_hash: 02ed4a4
       proceed: Kvalifikas
+      #original_hash: 2ffe44e
+      qualification: Kvalifiko
     schedule:
       display_as:
         #original_hash: ec5dd7c

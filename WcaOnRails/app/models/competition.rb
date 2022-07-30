@@ -77,10 +77,10 @@ class Competition < ApplicationRecord
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
   enum free_guest_entry_status: {
-         unclear: 0,
-         anyone: 1,
-         restricted: 2,
-       }, _prefix: true
+    unclear: 0,
+    anyone: 1,
+    restricted: 2,
+  }, _prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -195,6 +195,8 @@ class Competition < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
+  # cannot validate `qualification_results IN [true, false]` because we historically have competitions
+  # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
   validates :qualification_results_reason, presence: true, if: :persisted_uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
   validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
@@ -1214,8 +1216,17 @@ class Competition < ApplicationRecord
     competition_events.any? { |ce| ce.rounds.any? { |r| r.time_limit.cumulative_round_ids.size > 1 } }
   end
 
+  def qualification_results?
+    # we have NULL columns for historic data.
+    # Explicitly exclude them rather than relying on Ruby "accidentally" evaluating nil as false-ish
+    qualification_results == true
+  end
+
   def uses_qualification?
-    competition_events.any?(&:qualification)
+    # We want to trigger the checks for qualification details even when
+    # the actual qualification requirements have not been filled out yet for a newly created competition.
+    # In other words, checking the `qualification_results` checkbox should be enough to trigger validations.
+    self.qualification_results? || competition_events.any?(&:qualification)
   end
 
   def qualification_date_to_events
@@ -1540,8 +1551,14 @@ class Competition < ApplicationRecord
       set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
+
+      # Trigger validations on the competition itself, and throw an error to rollback if necessary.
+      # Context: It is possible to patch a WCIF containing events/schedule/persons that are valid by themselves,
+      #   but create an inconsistent state in the competition they're attached to. For example, you can add events
+      #   that have qualification requirements via a perfectly valid Events WCIF, but the competition itself
+      #   was never configured to support qualifications (i.e. the use of qualifications was never approved by WCAT).
+      save!
     end
-    update_column(:updated_at, Time.now)
   end
 
   def set_wcif_events!(wcif_events, current_user)
@@ -1717,5 +1734,17 @@ class Competition < ApplicationRecord
     end
     cal.publish
     cal
+  end
+
+  def world_or_continental_championship?
+    championships.map(&:championship_type).any? { |ct| Championship::MAJOR_CHAMPIONSHIP_TYPES.include?(ct) }
+  end
+
+  def multi_country_fmc_competition?
+    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(countryId)
+  end
+
+  def exempt_from_wca_dues?
+    world_or_continental_championship? || multi_country_fmc_competition?
   end
 end

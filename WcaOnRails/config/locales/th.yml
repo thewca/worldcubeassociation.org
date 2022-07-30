@@ -258,6 +258,49 @@ th:
     333mbf: '10:00.00 ต่อลูก, ไม่เกิน 60:00.00'
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: ประเภทการคัดเลือก
+    #original_hash: 65c848f
+    result_type: ประเภทผลการแข่งขัน
+    #original_hash: 29ef642
+    for_event: 'Qualification for %{event}'
+    type:
+      #original_hash: f5c3f76
+      none: ไม่มีการคัดเลือก
+      #original_hash: f8c5669
+      result: โดยผลการแข่งขัน
+      #original_hash: 4aebda3
+      ranking: N อันดับ
+      #original_hash: 3bc54a0
+      any_result: ผลการแข่งขันใด ๆ ก็ได้
+    single:
+      #original_hash: d596f44
+      time: 'เวลาเดี่ยวต่ำกว่า %{time}'
+      #original_hash: 52ba186
+      moves: 'จำนวนครั้งต่ำกว่า %{moves} ครั้ง'
+      #original_hash: b1993ae
+      points: 'คะแนนมากกว่า %{points} คะแนน'
+      #original_hash: ed2b051
+      ranking: '%{ranking} อันดับสูงสุดโดยเวลาเดี่ยว'
+      #original_hash: 933b7dc
+      any_result: ผลการแข่งขันเวลาเดี่ยวใด ๆ ก็ได้
+    average:
+      #original_hash: 2682ae8
+      time: 'เวลาเฉลี่ยน้อยกว่า %{time}'
+      #original_hash: 1b9b5fc
+      moves: 'จำนวนครั้งเฉลี่ยน้อยกว่า %{moves} ครั้ง'
+      #original_hash: 05c417e
+      points: 'คะแนนเฉลี่ยมากกว่า %{points} คะแนน'
+      #original_hash: 805171c
+      ranking: '%{ranking} อันดับสูงสุดโดยเวลาเฉลี่ย'
+      #original_hash: 2223a1b
+      any_result: ผลการแข่งขันเวลาเฉลี่ยใด ๆ ก็ได้
+    deadline:
+      #original_hash: 3b7f9f6
+      description: วันที่สิ้นสุดการคัดเลือก
+      #original_hash: bed8220
+      by_date: 'ภายใน %{date}'
   common:
     #original_hash: 70c07ec
     world: โลก
@@ -468,6 +511,8 @@ th:
         on_the_spot_entry_fee_lowest_denomination: ค่าสมัครขั้นต่ำเมื่อสมัครที่การแข่งขัน
         #original_hash: 7e53b96
         allow_registration_edits: แก้ไขการสมัคร
+        #original_hash: 3d47eca
+        allow_registration_self_delete_after_acceptance: การยกเลิกการสมัครการแข่งขัน
         #original_hash: efbdbab
         refund_policy_percent: เงินที่จะได้รับคืนเป็นเปอร์เซ็นต์
         #original_hash: b332299
@@ -818,11 +863,16 @@ th:
         external_registration_page: >-
           หน้าเว็บที่ผู้เข้าแข่งขันต้องลงทะเบียนสำหรับการแข่งขัน ต้องเป็น URL
           ที่ถูกต้อง
-        #original_hash: 784879d
+        #original_hash: a6f6562
         base_entry_fee_lowest_denomination: >-
           ค่าลงทะเบียนฐานสำหรับการแข่งขัน
           มันจะปรากฏบนหน้าข้อมูลการแข่งขันและหน้าลงทะเบียน หากตั้งค่าเป็น 0
           ประโยคจะปรากฏขึ้นโดยแจ้งว่า สมารถสมัครแข่งขันได้โดยไม่เสียค่าใช้จ่าย
+          <br><br><b>ข้อจำกัด: การประมาณค่าธรรมเนียมของ WCA
+          ต่อไปนี้เป็นเพียงการประมาณโดยอิงตามอัตราแลกเปลี่ยนปัจจุบัน
+          และไม่มีผลผูกพันทางกฎหมายสำหรับการชำระค่าธรรมเนียม</b><br>กด
+          "แก้ไขการแข่งขัน" หลังจากเปลี่ยนสกุลเงินเพื่อซิงโครไนซ์กับค่าประมาณ
+          หากไม่มีอัตราแลกเปลี่ยนสำหรับสกุลเงินที่เลือกจะไม่มีอะไรแสดง
         #original_hash: 9735ddf
         currency_code: สกลุเงินสำหรับต่าสมัคร
         #original_hash: da39a3e
@@ -872,6 +922,8 @@ th:
           การสมัครที่การแข่งขันสามารถสมัครได้โดยไม่เสียค่าใช้จ่าย
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           สำหรับตอนนี้ตัวเลขนี้เป็นข้อมูลเท่านั้น
@@ -1142,6 +1194,13 @@ th:
           #original_hash: 2cbb80e
           'false': >-
             ผู้เข้าแข่งขันไม่สามารถแก้ไขการสมัครได้เมื่อการสมัครได้รับการยอมรับแล้ว
+        allow_registration_self_delete_after_acceptance:
+          #original_hash: 5c2e8c1
+          'true': >-
+            ผู้เข้าแข่งขันอาจจะสามารถยกเลิกการสมัครของตนเองได้แม้ว่าการสมัครนั้นได้รับการยืนยันแล้ว
+          #original_hash: 3b77604
+          'false': >-
+            ผู้เข้าแข่งขันไม่สามารถยกเลิกการสมัครของตนเองได้กาหการสมัครนั้นได้รับการยืนยันแล้ว
   mail_form:
     attributes:
       contact_form:
@@ -1220,7 +1279,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1740,7 +1799,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
@@ -2302,6 +2361,12 @@ th:
         นาทีในประเภทการแข่งขันที่ใช้เวลาน้อย กรุณาแน่ใจว่าเวลานั้นถูกต้อง
       #original_hash: e390250
       create_success: สร้างการแข่งขันใหม่สำเร็จแล้ว
+      #original_hash: bc3e673
+      registration_payment_info: >-
+        การแข่งขันนี้มีค่าธรรมเนียมการลงทะเบียน แต่ไม่มีการเชื่อมโยงบัญชี Stripe
+        หากคุณกำลังใช้ Stripe ผ่านเว็บไซต์ WCA โปรดอย่าลืมเชื่อมบัญชี Stripe
+        ของคุณ หากคุณกำลังใช้ระบบการชำระเงินภายนอก
+        โปรดอย่าลืมเพิ่มรายละเอียดที่เกี่ยวข้องทั้งหมดในข้อกำหนดการลงทะเบียน
       #original_hash: ba067f0
       not_announced: การแข่งขันนี้ปรากฏต่อสาธารณชน แต่ยังไม่ได้ประกาศ
       #original_hash: ab61991
@@ -2624,14 +2689,23 @@ th:
           in_progress: กำลังดำเนินการ
           #original_hash: 1157462
           posted: ผลการแข่งขันได้ถูกโพสต์แล้ว
-          #original_hash: 89bcc37
-          starts_in: 'เริ่มใน %{days} วัน'
           #original_hash: 97b061a
           announced_on: 'ประกาศเมื่อ %{announcement_date}'
         #original_hash: ccd2db9
         search: ชื่อหรือเมือง
         #original_hash: 3bc8082
         recent: 'ย้อนหลัง %{count} วัน'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'การรับสมัครจะเปิดใน %{duration}'
+          #original_hash: 2d601fa
+          closed: 'ปิดการรับสมัครแล้ว การแข่งขันจะเริ่มใน %{days}'
+          #original_hash: 2e17db8
+          open: เปิดรับสมัครแล้ว!
+          #original_hash: c098975
+          full: >-
+            ผู้เข้าแข่งขันถึงจำนวนที่กำหนดแล้ว
+            การสมัครการแข่งขันหลังจากนี้จะไปอยู่ใน waiting list
       #original_hash: 8b09d74
       no_comp_found: ไม่พบการแข่งขัน
       #original_hash: 7008166
@@ -2730,6 +2804,17 @@ th:
         greater_china: ชิงแชมป์จีนแผ่นดินใหญ่
         #original_hash: 3b920b7
         generic: 'ชิงแชมป์: %{type}'
+      dues_estimate:
+        #original_hash: 6e56455
+        calculated: >-
+          ค่าธรรมเนียม WCA โดยประมาณสำหรับผู้เข้าแข่งขัน %{limit} ราย คือ
+          %{estimate}
+        #original_hash: 5e8cffe
+        per_competitor: 'ค่าธรรมเนียม WCA โดยประมาณต่อผู้เข้าแข่งขันคือ %{estimate}'
+        #original_hash: 83d4cdc
+        ajax_error: >-
+          มีข้อผิดพลาดในการประมาณการค่าธรรมเนียม
+          โปรดตั้งค่าเป็นศูนย์และป้อนค่าธรรมเนียมการสมัครการแข่งขันอีกครั้ง
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2911,6 +2996,14 @@ th:
           รูปแบบนี้จะอธิบายวิธีการจัดอันดับของผู้แข่งขันโดยพิจารณาจากผลการแข่งขัน
           รูปแบบที่อนุญาตต่อประเภทอธิบายไว้ใน %{link_to_9b} ดู %{link_to_9f}
           สำหรับคำอธิบายของแต่ละรูปแบบ
+        #original_hash: fa50f5c
+        qualification_html: ต้องกำหนดเวลาคัดเลือกในการแข่งขัน WCA อื่น ๆ เพื่อแข่งขัน
+        #original_hash: 3b524fd
+        qualification_all_events_html: 'กำหนดเวลาในการทำเวลาให้ผ่านการคัดเลือกคือ <b>%{date}</b>'
+        #original_hash: 0d791e9
+        qualification_some_events_html: >-
+          กำหนดเวลาในการทำเวลาให้ผ่านการคัดเลือกสำหรับประเภท %{events} คือ
+          <b>%{date}</b>.
       #original_hash: 041a5de
       format: รูปแบบ
       #original_hash: 0d1fcc3
@@ -2919,6 +3012,8 @@ th:
       cutoff: Cutoff
       #original_hash: 02ed4a4
       proceed: เข้ารอบ
+      #original_hash: 2ffe44e
+      qualification: การคัดเลือก
     schedule:
       display_as:
         #original_hash: ec5dd7c
@@ -3700,6 +3795,18 @@ th:
         description: >-
           สภานี้มีหน้าที่รับผิดชอบในการสร้างและบำรุงรักษาการสื่อสารทวิภาคีระหว่างชุมชน
           WCA และเจ้าหน้าที่ WCA
+      wsot:
+        #original_hash: 58765c7
+        name: WCA Sports Organization Team
+        #original_hash: 8f888d6
+        description: ทีมนี้มีหน้าที่ดูแลและสนับสนุนให้ WCA เป็นองค์กรกีฬาระดับนานาชาติ
+      wat:
+        #original_hash: 90a1280
+        name: WCA Archive Team
+        #original_hash: fae6850
+        description: >-
+          ทีม WCA Archive เป็นคณะกรรมการที่ปรึกษาของ WCA
+          ทีมนี้มีบทบาทในการดูแลและสนับสนุนการพัฒนาเอกสารสำคัญขององค์กร
       banned:
         #original_hash: d30e2e5
         name: Banned Competitors
@@ -3966,6 +4073,14 @@ th:
         ทีมนี้มีหน้าที่รับผิดชอบในการพัฒนาและจัดการแบรนด์ WCA
         แสวงหาการสนับสนุนสนับสนุนการจัดจำหน่ายอุปกรณ์การแข่งขัน WCA
         และการตลาดสินค้า WCA
+    wsot:
+      #original_hash: 8f888d6
+      info_html: ทีมนี้มีหน้าที่ดูแลและสนับสนุนให้ WCA เป็นองค์กรกีฬาระดับนานาชาติ
+    wat:
+      #original_hash: fae6850
+      info_html: >-
+        ทีม WCA Archive เป็นคณะกรรมการที่ปรึกษาของ WCA
+        ทีมนี้มีบทบาทในการดูแลและสนับสนุนการพัฒนาเอกสารสำคัญขององค์กร
     #original_hash: f97a4f5
     councils_html: สภา
     wac:

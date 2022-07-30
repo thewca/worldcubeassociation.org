@@ -259,6 +259,49 @@ de:
     333mbf: '10:00.00 Minuten pro Würfel, bis zu 60:00.00'
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: Art der Qualifikation
+    #original_hash: 65c848f
+    result_type: Ergebnisformat
+    #original_hash: 29ef642
+    for_event: 'Qualifikation für %{event}'
+    type:
+      #original_hash: f5c3f76
+      none: Ohne Qualifikation
+      #original_hash: f8c5669
+      result: Nach Ergebnis
+      #original_hash: 4aebda3
+      ranking: Top N
+      #original_hash: 3bc54a0
+      any_result: Beliebiges Ergebnis
+    single:
+      #original_hash: d596f44
+      time: 'Einzelzeit unter %{time}'
+      #original_hash: 52ba186
+      moves: 'Einzelergebnis unter %{moves} Zügen'
+      #original_hash: b1993ae
+      points: 'Einzelergebnis über %{points} Punkten'
+      #original_hash: ed2b051
+      ranking: 'Top %{ranking} nach Einzelergebnis'
+      #original_hash: 933b7dc
+      any_result: Beliebiges Einzelergebnis
+    average:
+      #original_hash: 2682ae8
+      time: 'Durchschnitt unter %{time}'
+      #original_hash: 1b9b5fc
+      moves: 'Durchschnitt unter %{moves} Zügen'
+      #original_hash: 05c417e
+      points: 'Durchschnitt über %{points} Punkten'
+      #original_hash: 805171c
+      ranking: 'Top %{ranking} nach Durchschnitt'
+      #original_hash: 2223a1b
+      any_result: Beliebiger Schnitt
+    deadline:
+      #original_hash: 3b7f9f6
+      description: Deadline zur Qualifikation
+      #original_hash: bed8220
+      by_date: 'nach %{date}'
   common:
     #original_hash: 70c07ec
     world: Welt
@@ -271,7 +314,7 @@ de:
     #original_hash: 77003d0
     best: Bestleistung
     #original_hash: dd11868
-    single: Einzelzeit
+    single: Einzelergebnis
     #original_hash: 15f86c0
     average: Schnitt
     #original_hash: e7f6fc5
@@ -386,7 +429,7 @@ de:
         region: Region
         #original_hash: 730db33
         receive_delegate_reports: >-
-          I möchte gerne Delegate Reports von WCA Competitions per E-Mail
+          Ich möchte gerne Delegate Reports von WCA Competitions per E-Mail
           erhalten
         #original_hash: 57eaf24
         user_preferred_events: Favorisierte Disziplinen
@@ -479,6 +522,8 @@ de:
         on_the_spot_entry_fee_lowest_denomination: Eintrittsgebühren für die Registrierung vor Ort
         #original_hash: 7e53b96
         allow_registration_edits: Änderungen der Registrierung
+        #original_hash: 3d47eca
+        allow_registration_self_delete_after_acceptance: Stornierungen der Registrierung
         #original_hash: efbdbab
         refund_policy_percent: 'Prozentsatz, der rückerstattet wird'
         #original_hash: b332299
@@ -787,11 +832,12 @@ de:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          Wenn du ein Junior Delegate, Senior Delegate oder ein Mitglied des WRC
-          oder des WQAC bist, erhältst du standardmässig Delegate Reports.
-          Achtung: die Aktivierung der Änderung kann bis zu einer Stunde dauern.
+          Wenn du ein Trainee Delegate, Junior Delegate, Senior Delegate oder
+          ein Mitglied des WRC oder des WQAC bist, erhältst du standardmässig
+          Delegate Reports. Achtung: die Aktivierung der Änderung kann bis zu
+          einer Stunde dauern.
         #original_hash: 0627e5c
         otp_attempt: >-
           Überprüfe deine konfigurierte mobile Applikation für ein
@@ -845,12 +891,18 @@ de:
         external_registration_page: >-
           Die Seite, auf der Teilnehmer sich für die Competition anmelden
           können. Dies muss eine gültige http(s) Adresse sein.
-        #original_hash: 784879d
+        #original_hash: a6f6562
         base_entry_fee_lowest_denomination: >-
           Eintrittsgebühr für den Wettbewerb. Die Eintrittsgebühr wird auf der
           Infoseite des Wettbewerbs, sowie der Anmeldeseite (falls genutzt)
           angezeigt. Wenn diese auf 0 gesetzt wird, wird ein Hinweis angezeigt,
-          dass der Eintritt frei ist.
+          dass der Eintritt frei ist.<br><br><b>DISCLAIMER: Die folgende Angabe
+          der WCA-Gebühren ist ausschließlich eine Schätzung auf Basis der
+          aktuellen Umrechnungsraten und in keinster Weise rechtlich verbindlich
+          für die Zahlung der Gebühren.</b><br>Klicke "Wettbewerb
+          aktualisieren", um die Schätzung nach einer Änderung des Währungscodes
+          zu synchronisieren. Falls es keine verfügbaren Umrechnungsraten für
+          die ausgewählte Währung gibt, wird nichts angezeigt.
         #original_hash: 9735ddf
         currency_code: Der Währungscode für Eintrittsgebühren.
         #original_hash: da39a3e
@@ -904,6 +956,8 @@ de:
           Vor-Ort-Registrierung kostenlos möglich ist.
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Aktuell dient diese Angabe nur zur Information und Rückerstattungen
@@ -1082,6 +1136,8 @@ de:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1199,6 +1255,15 @@ de:
           'false': >-
             Teilnehmer dürfen ihre Registrierung NICHT verändern, sobald diese
             akzeptiert wurde
+        allow_registration_self_delete_after_acceptance:
+          #original_hash: 5c2e8c1
+          'true': >-
+            Teilnehmer dürfen ihre eigene Registrierung löschen, auch nachdem
+            sie bereits akzeptiert wurde
+          #original_hash: 3b77604
+          'false': >-
+            Teilnehmer dürfen ihre eigene Registrierung NICHT löschen, nachdem
+            sie akzeptiert wurde
   mail_form:
     attributes:
       contact_form:
@@ -1607,7 +1672,7 @@ de:
       text_html: >-
         Schaue dir unser kürzlich veröffentlichtes, offizielles Merchandise an,
         welches eine Auswahl an Kleidungsstücken wie z.B. T-Shirts oder Hoodies
-        enthält
+        enthält.
       #original_hash: b0fc6c4
       link_title: Link zum Shop
     records:
@@ -1790,6 +1855,15 @@ de:
       #original_hash: f28bf87
       submit_value: WCA-ID anfordern
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: >-
+        Alle Avatarbilder werden in der Cloud gespeichert, sodass bei einer
+        Änderung des Vorschaubildes mehrere Minuten vergehen können, bis es
+        korrekt angezeigt wird.
+      #original_hash: cc1d51b
+      cdn_warning: >-
+        Bitte wundere dich nicht, wenn dein Vorschaubild nicht direkt nach dem
+        Speichern aktualisiert wird.
       #original_hash: 79f14eb
       current: 'Aktuelles Vorschaubild:'
       #original_hash: b42ba27
@@ -2498,6 +2572,14 @@ de:
         ist.
       #original_hash: e390250
       create_success: Neuen Wettbewerb erfolgreich erstellt!
+      #original_hash: bc3e673
+      registration_payment_info: >-
+        Dieser Wettbewerb hat eine Anmeldegebühr, aber es wurde kein
+        Stripe-Account verknüpft. Wenn du Stripe in Verbindung mit der
+        WCA-Website nutzt, bitte denke daran, deinen Stripe-Account zu
+        verknüpfen. Wenn du ein externes System zur Gebührenverwaltung nutzt,
+        bitte denke daran, alle relevanten Details in den Anmeldebedingungen
+        hinzuzufügen.
       #original_hash: ba067f0
       not_announced: 'Der Wettbewerb ist öffentlich sichtbar, wurde aber nicht angekündigt.'
       #original_hash: ab61991
@@ -2727,17 +2809,17 @@ de:
       #original_hash: dc5c597
       hide_highlights: Blende Höhepunkte aus.
       #original_hash: f691bf2
-      result: ein Ergebnis
+      result: einem Ergebnis
       #original_hash: acab754
-      single: ein Einzelversuch
+      single: einem Einzelergebnis
       #original_hash: e78d7c2
-      average: ein Durschnitt
+      average: einem Durchschnitt
       #original_hash: 083c83e
-      mean: ein Mittelwert
+      mean: einem Mittelwert
       #original_hash: 22bee3a
       result_sentence: 'mit %{a_win_by_word} von %{result}'
       #original_hash: 6c3b236
-      winner: '%{winner} gewann %{result_sentence} in %{event_name}.'
+      winner: '%{winner} gewann %{result_sentence} in der Kategorie %{event_name}.'
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} wurde Zweiter (%{first_runner_up_result})'
       #original_hash: cffa50a
@@ -2837,14 +2919,23 @@ de:
           in_progress: Läuft gerade!
           #original_hash: 1157462
           posted: Ergebnisse veröffentlicht!
-          #original_hash: 89bcc37
-          starts_in: 'Beginnt in %{days}'
           #original_hash: 97b061a
           announced_on: 'Angekündigt am %{announcement_date}'
         #original_hash: ccd2db9
         search: Name oder Stadt
         #original_hash: 3bc8082
         recent: 'Letzte %{count} Tage'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'Anmeldung wird in %{duration} öffnen'
+          #original_hash: 2d601fa
+          closed: 'Die Anmeldung wurde geschlossen. Der Wettbewerb beginnt in %{days}.'
+          #original_hash: 2e17db8
+          open: Die Anmeldung ist geöffnet!
+          #original_hash: c098975
+          full: >-
+            Das Teilnehmerlimit wurde erreicht, neue Anmeldungen gelangen auf
+            die Warteliste.
       #original_hash: 8b09d74
       no_comp_found: Keine Wettbewerbe gefunden.
       #original_hash: 7008166
@@ -2955,6 +3046,15 @@ de:
         greater_china: Großchinesische Meisterschaft
         #original_hash: 3b920b7
         generic: 'Meisterschaft: %{type}'
+      dues_estimate:
+        #original_hash: 6e56455
+        calculated: 'Die geschätzten WCA-Gebühren für %{limit} Teilnehmer sind %{estimate}'
+        #original_hash: 5e8cffe
+        per_competitor: 'Die geschätzten WCA-Gebühren pro Teilnehmer sind %{estimate}'
+        #original_hash: 83d4cdc
+        ajax_error: >-
+          Es gibt einen Fehler bei der Abschätzung der Gebühren, bitte setze die
+          Grundgebühr auf null und gebe sie dann erneut ein
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3156,6 +3256,18 @@ de:
           ihren Ergebnissen ermittelt wird. Diese Liste der erlaubten Formate
           für die einzelnen Disziplinen ist in %{link_to_9b} zu finden. Siehe
           %{link_to_9f} für eine Beschreibung der einzelnen Formate.
+        #original_hash: fa50f5c
+        qualification_html: >-
+          Qualifikationszeiten müssen in anderen WCA-Wettbewerben erreicht
+          werden, um teilnehmen zu können.
+        #original_hash: 3b524fd
+        qualification_all_events_html: >-
+          Die Deadline zum Erreichen der Qualifikationszeiten ist
+          <b>%{date}</b>.
+        #original_hash: 0d791e9
+        qualification_some_events_html: >-
+          Die Deadline zum Erreichen der Qualifikationszeiten für %{events} ist
+          <b>%{date}</b>.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
@@ -3164,6 +3276,8 @@ de:
       cutoff: Cutoff
       #original_hash: 02ed4a4
       proceed: Weiterkommen
+      #original_hash: 2ffe44e
+      qualification: Qualifikation
     schedule:
       display_as:
         #original_hash: ec5dd7c
@@ -3321,7 +3435,7 @@ de:
       region: Region
       type_selector:
         #original_hash: 3deb745
-        type: Tzp
+        type: Typ
         #original_hash: dd11868
         single: Einzelergebnis
         #original_hash: 15f86c0
@@ -3780,7 +3894,7 @@ de:
     spirit_footer: WCA Spirit
     #original_hash: c1781ee
     our_goals_title: Unsere Ziele
-    #original_hash: caf6bf2
+    #original_hash: 743ca74
     our_goals_content_html: >-
       <p>Die World Cube Association möchte durch die steigende Verfügbarkeit von
       Competitions jungen Menschen in aller Welt die Möglichkeit geben, Mitglied
@@ -4002,6 +4116,21 @@ de:
           Dieses Gremium ist für den Aufbau und die Pflege der bilateralen
           Kommunikation zwischen der WCA Community und den WCA Mitarbeitern
           zuständig.
+      wsot:
+        #original_hash: 58765c7
+        name: WCA Sports Organization Team
+        #original_hash: 8f888d6
+        description: >-
+          Dieses Team ist dafür zuständig, die Anerkennung der WCA als
+          internationale Sportorganisation zu überwachen und zu unterstützen.
+      wat:
+        #original_hash: 90a1280
+        name: WCA Archive Team
+        #original_hash: fae6850
+        description: >-
+          Das WCA Archive Team ist ein Beratungsgremium der WCA. Dieses Team ist
+          dafür zuständig, die Entwicklung eines Archivs der Organisation zu
+          überwachen und zu unterstützen.
       banned:
         #original_hash: d30e2e5
         name: Gesperrte Teilnehmer
@@ -4068,6 +4197,8 @@ de:
     codeofconduct: Code of Conduct
     #original_hash: 4f05e8f
     finances: Finances
+    #original_hash: d1b1406
+    vision_and_strategy: Vision und Strategie
   education:
     #original_hash: 746e863
     title: WCA Anleitungen und Tutorials
@@ -4287,6 +4418,17 @@ de:
         verwalten, Sponsoren zu suchen, die Verteilung von WCA
         Wettbewerbsequipment  zu unterstützen, und WCA Merchandise zu
         vermarkten.
+    wsot:
+      #original_hash: 8f888d6
+      info_html: >-
+        Dieses Team ist dafür zuständig, die Anerkennung der WCA als
+        internationale Sportorganisation zu überwachen und zu unterstützen.
+    wat:
+      #original_hash: fae6850
+      info_html: >-
+        Das WCA Archive Team ist ein Beratungsgremium der WCA. Dieses Team ist
+        dafür zuständig, die Entwicklung eines Archivs der Organisation zu
+        überwachen und zu unterstützen.
     #original_hash: f97a4f5
     councils_html: Räte
     wac:
