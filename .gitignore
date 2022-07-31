@@ -13,9 +13,6 @@ WcaOnRails/app/views/regulations-todelete/
 # WCA Documents
 WcaOnRails/public/documents/*
 
-# acme.sh stuff
-WcaOnRails/public/.well-known/
-
 # byebug stuff
 .byebug_history
 
