@@ -10,12 +10,11 @@ upstream app {
 }
 
 <% if node.chef_environment == "staging" %>
-  # Serve mailcatcher at https://staging.worldcubeassociation.org:444
+  # Serve mailcatcher at https://staging.worldcubeassociation.org:444, the SSL is again handled by the Load Balancer
   server {
     server_name staging.worldcubeassociation.org;
 
-    listen 444 ssl;
-    include wca_https.conf;
+    listen 444;
 
     location / {
       proxy_pass http://localhost:1080;
@@ -30,20 +29,13 @@ server {
   # Using sendfile isn't reliable in VirtualBox. See:
   #  http://wiki.nginx.org/Pitfalls#VirtualBox
   sendfile off;
-<% end %>
-
-<% if @https %>
-  listen 443 ssl;
-  include wca_https.conf;
+  # In development, we're running behind Vagrant's proxy (host port 2331).
+  # If we run nginx on a different port (say 80), then when nginx sends redirects,
+  # they will be to port 80, which doesn't work from outside the vm.
+  listen 2331;
 <% else %>
-  <% if @rails_env == "development" %>
-    # In development, we're running behind Vagrant's proxy (host port 2331).
-    # If we run nginx on a different port (say 80), then when nginx sends redirects,
-    # they will be to port 80, which doesn't work from outside the vm.
-    listen 2331;
-  <% else %>
-    listen 80;
-  <% end %>
+  # SSL is handled by the AWS Load Balancer and is only reachable through it
+  listen 80;
 <% end %>
 
   # Deny access to dotfiles and dotfolders.
@@ -51,10 +43,6 @@ server {
     deny all;
   }
 
-  # Override above rule for HTTPS certificate renewal.
-  location ^~ /.well-known/ {
-    allow all;
-  }
 
   # Redirect 401 to log in page
   # Unfortunately, I don't think there's any way to redirect back after the
