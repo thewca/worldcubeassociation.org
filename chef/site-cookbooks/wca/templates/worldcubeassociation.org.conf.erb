@@ -402,23 +402,3 @@ server {
   client_max_body_size 64M;
   keepalive_timeout 10;
 }
-
-<% if @https %>
-server {
-  listen 80;
-  server_name <%= @server_name.sub(/^www\./, '') %> localhost;
-
-  return 301 https://$server_name$request_uri;
-}
-<% if @server_name.start_with? "www." %>
-# Redirect naked domain HTTPS traffic to HTTPS on www....
-server {
-  server_name <%= @server_name.sub(/^www\./, '') %>;
-
-  listen 443 ssl;
-  include wca_https.conf;
-
-  return 301 https://www.$server_name$request_uri;
-}
-<% end %>
-<% end %>
