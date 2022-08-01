@@ -65,7 +65,7 @@
     "shakapacker": "6.4.1",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.3",
-    "webpack": "^5.73.0",
+    "webpack": "^5.74.0",
     "webpack-assets-manifest": "^5.1.0",
     "webpack-cli": "^4.10.0",
     "webpack-manifest-plugin": "^5.0.0",
