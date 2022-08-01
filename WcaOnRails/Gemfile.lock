@@ -115,7 +115,7 @@ GEM
       activesupport (= 6.1.6.1)
       marcel (~> 1.0)
       mini_mime (>= 1.1.0)
-    activestorage-validator (0.2.0)
+    activestorage-validator (0.2.2)
       rails (>= 6.0.4.1)
     activesupport (6.1.6.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
