@@ -541,7 +541,7 @@ zh-TW:
         #original_hash: 3c23a67
         guests: 陪同者
         #original_hash: fce06e2
-        comments: 意見
+        comments: 註記
         #original_hash: dc9d458
         paid_entry_fees: 付款金額
         #original_hash: bae7d5b
@@ -808,7 +808,7 @@ zh-TW:
         #original_hash: 2c812a0
         name: >-
           比賽的全名且必須以年份為結尾（例如：All is Well
-          2017）。字首得大寫且只能包含字母與數字、破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白( )。
+          2017）。字首要大寫且必須只能包含字母與數字、破折號(-)、和號(&)、句號(.)、冒號(:)、撇號('')和空白( )。
         #original_hash: 525fcc8
         cellName: 供顯示方便的簡稱。如果比賽名稱已經很短，簡稱可以和比賽名稱一樣（例如：All is Well 2017）。
         #original_hash: bce4589
@@ -1556,11 +1556,11 @@ zh-TW:
         #original_hash: 150446e
         intro_html: '您在%{competition_link}的成績已經被公告'
         #original_hash: 78edca3
-        information_html: '看您所有的比賽成績%{result_link}。'
+        information_html: '按%{result_link}看您所有的比賽成績。'
         #original_hash: a585fca
-        more_info_html: '您可以管理您的電子郵件偏好設定%{preferences_link}。'
+        more_info_html: '您可以按%{preferences_link}管理您的電子郵件偏好設定。'
         #original_hash: 7594a32
-        regards_html: '謹代表WCA成績組%{managers}最誠摯的問候。'
+        regards_html: '謹代表WCA成績組和%{managers}致上最誠摯的問候。'
     claim_wca_id:
       #original_hash: f28bf87
       title: 取得WCA ID
@@ -1922,7 +1922,7 @@ zh-TW:
       #original_hash: f5b1b34
       payment_completed_on: '已在 %{date} 完成付款。'
       #original_hash: b25928c
-      total: 總共
+      total: 合計項目
       #original_hash: df036fe
       n_events: 比賽項目數
     new_registration:
@@ -2228,7 +2228,7 @@ zh-TW:
       #original_hash: 45834fd
       register_below_html: 在底下報名本場比賽。
       #original_hash: 196725e
-      competitor_limit_is: '比賽參賽者人數上限為%{competitor_limit}位'
+      competitor_limit_is: '比賽參賽者人數上限為%{competitor_limit}位。'
       #original_hash: 5101f65
       no_competitor_limit: 比賽沒有參賽者人數上限
       #original_hash: f979d5e
@@ -2732,7 +2732,7 @@ zh-TW:
         #original_hash: 6235b27
         schedule_view: 管理賽程
         #original_hash: 6f7aef9
-        payment_view: 建立付款
+        payment_view: 設定付款
         #original_hash: 76bfdcf
         admin_view: 管理員模式
         #original_hash: a857eb4
