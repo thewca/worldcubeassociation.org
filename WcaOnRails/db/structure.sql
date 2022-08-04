@@ -1434,6 +1434,7 @@ CREATE TABLE `users` (
   `otp_backup_codes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `session_validity_token` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cookies_acknowledged` tinyint(1) NOT NULL DEFAULT '0',
+  `registrations_notifications` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1776,4 +1777,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220516124717'),
 ('20220619200832'),
 ('20220623121810'),
-('20220706232200');
+('20220706232200'),
+('20220804193822');
