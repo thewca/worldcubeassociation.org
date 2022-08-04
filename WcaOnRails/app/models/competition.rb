@@ -1122,7 +1122,10 @@ class Competition < ApplicationRecord
   end
 
   # The competition must be at least 28 days in advance in order to confirm it. Admins are able to modify the competition despite being less than 28 days in advance.
-  validate :start_date_must_be_28_days_in_advance, if: :confirmed_or_visible?
+  # We only run this validation if we're actually changing the start_date or
+  # confirming the competition, to not prevent organizers/delegates from
+  # updating competition-specific setttings, such as the receive notifications checkbox.
+  validate :start_date_must_be_28_days_in_advance, if: :should_validate_start_date?
   def start_date_must_be_28_days_in_advance
     if editing_user_id
       editing_user = User.find(editing_user_id)
@@ -1130,6 +1133,10 @@ class Competition < ApplicationRecord
         errors.add(:start_date, I18n.t('competitions.errors.start_date_must_be_28_days_in_advance'))
       end
     end
+  end
+
+  def should_validate_start_date?
+    confirmed_or_visible? && (will_save_change_to_start_date? || will_save_change_to_confirmed_at?)
   end
 
   def days_until_competition?(c)
