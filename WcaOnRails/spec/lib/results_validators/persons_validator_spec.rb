@@ -164,7 +164,7 @@ RSpec.describe PV do
         res_lowercase2 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
                                            eventId: "333oh")
-        res_lowercase2.person.update(name: "İlis хocavənd V")
+        res_lowercase2.person.update(name: "ilis Xocavənd")
         res_missing_period = FactoryBot.create(:inbox_result,
                                                competition: competition1,
                                                eventId: "333oh")
