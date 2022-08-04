@@ -23,7 +23,7 @@ class Round < ApplicationRecord
   serialize :cutoff, Cutoff
   validates_associated :cutoff
 
-  serialize :advancement_condition, AdvancementCondition
+  serialize :advancement_condition, AdvancementConditions::AdvancementCondition
   validates_associated :advancement_condition
 
   serialize :round_results, RoundResults
@@ -178,7 +178,7 @@ class Round < ApplicationRecord
       format_id: wcif["format"],
       time_limit: event.can_change_time_limit? ? TimeLimit.load(wcif["timeLimit"]) : nil,
       cutoff: Cutoff.load(wcif["cutoff"]),
-      advancement_condition: AdvancementCondition.load(wcif["advancementCondition"]),
+      advancement_condition: AdvancementConditions::AdvancementCondition.load(wcif["advancementCondition"]),
       scramble_set_count: wcif["scrambleSetCount"],
       round_results: RoundResults.load(wcif["results"]),
     }
@@ -222,7 +222,7 @@ class Round < ApplicationRecord
         "format" => { "type" => "string", "enum" => Format.pluck(:id) },
         "timeLimit" => TimeLimit.wcif_json_schema,
         "cutoff" => Cutoff.wcif_json_schema,
-        "advancementCondition" => AdvancementCondition.wcif_json_schema,
+        "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,
         "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
         "scrambleSets" => { "type" => "array" }, # TODO: expand on this
         "scrambleSetCount" => { "type" => "integer" },
