@@ -121,7 +121,7 @@ module ResultsValidators
             roman_readable = p.name
           end
           split_name = roman_readable.split
-          if split_name.any? { |n| n.downcase == n }
+          if if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
             @warnings << ValidationWarning.new(:persons, competition_id,
                                                LOWERCASE_NAME_WARNING,
                                                name: p.name)
