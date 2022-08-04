@@ -792,7 +792,9 @@ class Competition < ApplicationRecord
     false
   end
 
-  after_save :update_receive_registration_emails
+  # We only do this after_update, because upon adding/removing a manager to a
+  # competition the attribute is automatically set to that manager's preference.
+  after_update :update_receive_registration_emails
   def update_receive_registration_emails
     if editing_user_id && !@receive_registration_emails.nil?
       competition_delegate = competition_delegates.find_by_delegate_id(editing_user_id)
