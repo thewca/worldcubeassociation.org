@@ -172,7 +172,7 @@ RSpec.describe PV do
         res_single_letter = FactoryBot.create(:inbox_result,
                                               competition: competition1,
                                               eventId: "333oh")
-        res_single_letter.person.update(name: "A. B. Doe")
+        res_single_letter.person.update(name: "A. B. van der Ree")
         res_same_name1 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
                                            eventId: "333oh")
