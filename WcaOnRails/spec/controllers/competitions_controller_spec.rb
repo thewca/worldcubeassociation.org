@@ -588,7 +588,7 @@ RSpec.describe CompetitionsController do
         competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 1,
-          advancement_condition: RankingCondition.new(4),
+          advancement_condition: AdvancementConditions::RankingCondition.new(4),
           total_number_of_rounds: 2,
         )
         round_two = competition.competition_events[0].rounds.create!(
