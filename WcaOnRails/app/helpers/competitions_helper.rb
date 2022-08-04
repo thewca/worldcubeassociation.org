@@ -268,4 +268,33 @@ module CompetitionsHelper
   def cached_pdf_name(competition, colors)
     "#{pdf_name(competition)}_#{competition.updated_at.iso8601}_#{colors}"
   end
+
+  def registration_status_icon(competition)
+    icon = ""
+    title = ""
+    icon_class = ""
+
+    if competition.registration_not_yet_opened?
+      icon = "clock"
+      title = I18n.t('competitions.index.tooltips.registration.opens_in', duration: distance_of_time_in_words_to_now(competition.registration_open))
+      icon_class = "blue"
+    elsif competition.registration_past?
+      icon = "user times"
+      title = I18n.t('competitions.index.tooltips.registration.closed', days: t('common.days', count: (competition.start_date - Date.today).to_i))
+      icon_class = "red"
+    elsif competition.registration_full?
+      icon = "user clock"
+      title = I18n.t('competitions.index.tooltips.registration.full')
+      icon_class = "orange"
+    else
+      icon = "user plus"
+      title = I18n.t('competitions.index.tooltips.registration.open')
+      icon_class = "green"
+    end
+
+    ui_icon(icon,
+            title: title,
+            class: icon_class,
+            data: { toggle: "tooltip" })
+  end
 end

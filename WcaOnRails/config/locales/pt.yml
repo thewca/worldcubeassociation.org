@@ -259,6 +259,49 @@ pt:
     333mbf: '10:00.00 por cubo, até 60:00.00'
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: Tipo de Qualificação
+    #original_hash: 65c848f
+    result_type: Tipo de Resultado
+    #original_hash: 29ef642
+    for_event: 'Qualificação para %{event}'
+    type:
+      #original_hash: f5c3f76
+      none: Sem qualificação
+      #original_hash: f8c5669
+      result: Por Resultado
+      #original_hash: 4aebda3
+      ranking: Top N
+      #original_hash: 3bc54a0
+      any_result: Qualquer resultado
+    single:
+      #original_hash: d596f44
+      time: 'Tempo único abaixo de %{time}'
+      #original_hash: 52ba186
+      moves: 'Resolução única abaixo de %{moves} movimentos'
+      #original_hash: b1993ae
+      points: 'Resolução única acima de %{points} pontos'
+      #original_hash: ed2b051
+      ranking: 'Top %{ranking} por tempo único'
+      #original_hash: 933b7dc
+      any_result: Qualquer resolução única
+    average:
+      #original_hash: 2682ae8
+      time: 'Média abaixo de %{time}'
+      #original_hash: 1b9b5fc
+      moves: 'Média abaixo de %{moves} movimentos'
+      #original_hash: 05c417e
+      points: 'Média acima de %{points} pontos'
+      #original_hash: 805171c
+      ranking: 'Top %{ranking} por média'
+      #original_hash: 2223a1b
+      any_result: Qualquer média
+    deadline:
+      #original_hash: 3b7f9f6
+      description: Data limite para Qualificação
+      #original_hash: bed8220
+      by_date: 'até %{date}'
   common:
     #original_hash: 70c07ec
     world: Mundo
@@ -499,8 +542,8 @@ pt:
         early_puzzle_submission_reason: Razão e detalhes para submeter puzzles mais cedo
         #original_hash: 88da0ef
         qualification_results: >-
-          Quero usar tempos de qualificação para limitar quem pode competir em
-          certos eventos
+          Gostaria de usar os resultados da qualificação para limitar quem pode
+          competir em determinadas modalidades
         #original_hash: 1ec6dd4
         qualification_results_reason: Razão e detalhe para resultados de qualificação
         #original_hash: ac30de9
@@ -2792,14 +2835,23 @@ pt:
           in_progress: Em andamento!
           #original_hash: 1157462
           posted: Resultados publicados!
-          #original_hash: 89bcc37
-          starts_in: 'Começa em %{days}'
           #original_hash: 97b061a
           announced_on: 'Anunciada a %{announcement_date}'
         #original_hash: ccd2db9
         search: Nome ou Cidade
         #original_hash: 3bc8082
         recent: 'Últimos %{count} dias'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'As inscrições irão abrir em %{duration}'
+          #original_hash: 2d601fa
+          closed: 'As inscrições encerraram. A competição começará em %{days}'
+          #original_hash: 2e17db8
+          open: As inscrições estão abertas!
+          #original_hash: c098975
+          full: >-
+            Limite de competidores atingido, novas inscrições irão para a lista
+            de espera
       #original_hash: 8b09d74
       no_comp_found: Nenhuma competição encontrada.
       #original_hash: 7008166
@@ -3105,6 +3157,16 @@ pt:
           base nos seus resultados. A lista de formatos permitidos por evento é
           descrita em %{link_to_9b}. Ver %{link_to_9f} para uma descrição de
           cada formato.
+        #original_hash: fa50f5c
+        qualification_html: >-
+          Tempos de Qualificação têm que ser estabelecidos noutras competições
+          da WCA para poder competir.
+        #original_hash: 3b524fd
+        qualification_all_events_html: 'A data limite para definir tempos de qualificação é <b>%{date}</b>.'
+        #original_hash: 0d791e9
+        qualification_some_events_html: >-
+          A data limite para definir tempos de qualificação em %{events} é
+          <b>%{date}</b>.
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3
@@ -3113,6 +3175,8 @@ pt:
       cutoff: Tempo de corte
       #original_hash: 02ed4a4
       proceed: Prosseguem
+      #original_hash: 2ffe44e
+      qualification: Qualificação
     schedule:
       display_as:
         #original_hash: ec5dd7c
@@ -4292,7 +4356,7 @@ pt:
     tools:
       age:
         #original_hash: 4aaae5b
-        title: IDADE
+        title: AGE
         #original_hash: 2e4832d
         description: Ferramenta para gerar e editar grupos/tarefas para competições da WCA
       certificates:

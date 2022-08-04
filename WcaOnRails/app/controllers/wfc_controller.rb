@@ -18,7 +18,7 @@ class WfcController < ApplicationController
     to = params.require(:to_date)
     @competitions = Competition
                     .select(select_attributes)
-                    .includes(:delegates)
+                    .includes(:delegates, :championships)
                     .left_joins(:competitors)
                     .group("Competitions.id")
                     .where("results_posted_at >= ? and results_posted_at <= ?", from, to)

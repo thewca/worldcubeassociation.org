@@ -538,6 +538,10 @@ eo:
           la komenco de la konkursero
         #original_hash: 78308cc
         early_puzzle_submission_reason: Kialo kaj detaloj por la antaŭtempa submetiĝo de puzloj
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Mi ŝatus uzi kvalifikajn rezultojn por limigi kiu povas partopreni en
+          specifajn konkurserojn
         #original_hash: 1ec6dd4
         qualification_results_reason: Kialo kaj detaloj por la kvalifikaj rezultoj
         #original_hash: ac30de9
@@ -977,6 +981,8 @@ eo:
         early_puzzle_submission_reason: >-
           Bonvolu detali tie kial vi ŝatus devigi konkursantojn antaŭtempe
           submetiĝi puzloj. Bonvolu plenigi tion en la angla!
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Bonvolu detali tie kial vi ŝatus uzi kvalifikajn rezultojn. Bonvolu
@@ -2796,14 +2802,23 @@ eo:
           in_progress: Okazanta!
           #original_hash: 1157462
           posted: Rezultoj estas publikigitaj!
-          #original_hash: 89bcc37
-          starts_in: 'Komenciĝos post %{days}'
           #original_hash: 97b061a
           announced_on: 'Anoncita la %{announcement_date}'
         #original_hash: ccd2db9
         search: Nomo aŭ urbo
         #original_hash: 3bc8082
         recent: 'Lastaj %{count} tagoj'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'Registriĝperiodo malfermiĝos post %{duration}'
+          #original_hash: 2d601fa
+          closed: 'Registriĝperiodo fermiĝis. La konkurso komenciĝos en %{days}'
+          #original_hash: 2e17db8
+          open: Registriĝi nuntempe eblas!
+          #original_hash: c098975
+          full: >-
+            Limo da partoprenantoj estis atingita, novaj registriĝoj iros al la
+            atendolisto
       #original_hash: 8b09d74
       no_comp_found: Neniu konkurso trovita.
       #original_hash: 7008166
@@ -3027,9 +3042,9 @@ eo:
       #original_hash: 4232080
       distance: Distanco
       #original_hash: 51de2b8
-      before: antaŭ
+      before: antaŭe
       #original_hash: 405906c
-      after: post
+      after: poste
       #original_hash: e1978a9
       starts_on: komenciĝas la
       #original_hash: 964aedc

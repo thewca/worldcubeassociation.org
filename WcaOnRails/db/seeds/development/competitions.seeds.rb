@@ -63,27 +63,42 @@ after "development:users" do
 
     competition.save!
 
-    competition.events.each do |event|
-      %w(1 2 f).each do |roundTypeId|
-        users.each_with_index do |competitor, j|
+    competition.competition_events.each do |competition_event|
+      event = competition_event.event
+      round_types = %w(1 2 f).freeze
+
+      round_types.each_with_index do |roundTypeId, j|
+        round_format = event.preferred_formats.first.format
+        is_final = j == round_types.length - 1
+
+        Round.create!(
+          competition_event: competition_event,
+          format: round_format,
+          number: j+1,
+          total_number_of_rounds: round_types.length,
+          time_limit: event.can_change_time_limit? ? TimeLimit.new : nil,
+          cutoff: nil,
+          advancement_condition: is_final ? nil : RankingCondition.new(16),
+          scramble_set_count: rand(1..4),
+          round_results: [],
+        )
+        users.each_with_index do |competitor, k|
           person = competitor.person
           result = Result.new(
-            pos: j+1,
+            pos: k+1,
             personId: person.wca_id,
             personName: person.name,
             countryId: person.countryId,
             competitionId: competition.id,
             eventId: event.id,
             roundTypeId: roundTypeId,
-            formatId: "a",
-            value1: random_wca_value,
-            value2: random_wca_value,
-            value3: random_wca_value,
-            value4: random_wca_value,
-            value5: random_wca_value,
-            regionalSingleRecord: j == 0 ? "WR" : "",
-            regionalAverageRecord: j == 0 ? "WR" : "",
+            formatId: round_format.id,
+            regionalSingleRecord: k == 0 ? "WR" : "",
+            regionalAverageRecord: k == 0 ? "WR" : "",
           )
+          round_format.expected_solve_count.times do |v|
+            result.send("value#{v+1}=", random_wca_value)
+          end
           result.average = result.compute_correct_average
           result.best = result.compute_correct_best
           result.save!

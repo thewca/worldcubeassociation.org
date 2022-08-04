@@ -536,6 +536,10 @@ sv:
           innan grenen planeras att börja
         #original_hash: 78308cc
         early_puzzle_submission_reason: Anledning och detaljer kring att lämna in pussel tidigt
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Jag vill använda kvalgränser för att begränsa vilka som kan tävla i
+          vissa grenar
         #original_hash: 1ec6dd4
         qualification_results_reason: Anledning och detaljer för kvalificeringsresultat
         #original_hash: ac30de9
@@ -974,6 +978,8 @@ sv:
         early_puzzle_submission_reason: >-
           Förklara här varför ni vill kräva att tävlande lämnar in pussel
           tidigt. Vänligen fyll i detta på engelska!
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Förklara här varför ni vill använda kvalificeringstider. Vänligen fyll
@@ -2792,14 +2798,23 @@ sv:
           in_progress: Pågår!
           #original_hash: 1157462
           posted: Resultat har publicerats!
-          #original_hash: 89bcc37
-          starts_in: 'Börjar om %{days}'
           #original_hash: 97b061a
           announced_on: 'Publicerades den %{announcement_date}'
         #original_hash: ccd2db9
         search: Namn eller stad
         #original_hash: 3bc8082
         recent: 'Senaste %{count} dagarna'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'Anmälan öppnar om %{duration}'
+          #original_hash: 2d601fa
+          closed: 'Anmälan har stängt. Tävlingen börjar om %{days}'
+          #original_hash: 2e17db8
+          open: Anmälan är öppen!
+          #original_hash: c098975
+          full: >-
+            Gränsen för antal tävlande har nåtts, nya anmälningar kommer sättas
+            på väntelistan.
       #original_hash: 8b09d74
       no_comp_found: Inga tävlingar hittades.
       #original_hash: 7008166

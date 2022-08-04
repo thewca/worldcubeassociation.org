@@ -339,6 +339,7 @@ en:
         free_guest_entry_status: "Display message for free guest entry"
         early_puzzle_submission: "I would like to require competitors to submit puzzles at a specific time before an event is scheduled to begin"
         early_puzzle_submission_reason: "Reason and details for submitting puzzles early"
+        qualification_results: "I would like to use qualification results to limit who can compete in certain events"
         qualification_results_reason: "Reason and details for qualification results"
         event_restrictions: "I would like to restrict competitors from registering for specific combinations of events"
         event_restrictions_reason: "Reason and details for event restrictions"
@@ -550,6 +551,7 @@ en:
         free_guest_entry_status: ""
         early_puzzle_submission: ""
         early_puzzle_submission_reason: "Please elaborate here why you would like to require competitors to submit puzzles early. Please fill this out in English!"
+        qualification_results: ""
         qualification_results_reason: "Please elaborate here why you would like to use qualification times. Please fill this out in English!"
         event_restrictions: ""
         event_restrictions_reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
@@ -1453,12 +1455,17 @@ en:
           ended: "Ended %{days} ago"
           in_progress: "In progress!"
           posted: "Results are posted!"
-          starts_in: "Starts in %{days}"
           announced_on: "Announced on %{announcement_date}"
         #context: the "search" button
         search: "Name or city"
         #context: the "recent" button
         recent: "Last %{count} days"
+        #context: the registration status icon
+        registration:
+          opens_in: "Registration will open in %{duration}"
+          closed: "Registration has closed. Competition starts in %{days}"
+          open: "Registration is open!"
+          full: "Competitor limit reached, new registrations will go to the waiting list"
       no_comp_found: "No competitions found."
       no_comp_match: "We didn't find any competitions with %{events}! Try searching for fewer events."
     #context: on the "My competitions" page
