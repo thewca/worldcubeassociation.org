@@ -4,8 +4,9 @@ Variables:
  - disabled
  - events_association_name -> name of the associated events relation
  - allowed_events -> a relation or an Array of Event objects that should be shown (all by default)
- - selected_events -> a relation or an Array of Event objects that whould be marked as selected
+ - selected_events -> a relation or an Array of Event objects that would be marked as selected
  - hint -> a hint to be displayed under the picker
+ - show_select_hint -> should the hint to show that the event buttons are selectable be shown (issue #6811)
 
 Note: form_builder.object is the object having associated events.
 %>
@@ -13,6 +14,7 @@ Note: form_builder.object is the object having associated events.
 <%
   disabled ||= false
   hint ||= false
+  show_select_hint ||= false
   allowed_events ||= Event.official
 
   label = I18n.t("activerecord.attributes.#{form_builder.object.class.name.underscore}.#{events_association_name}")
@@ -31,6 +33,10 @@ Note: form_builder.object is the object having associated events.
     <% end %>
   <% end %>
   <div id="<%= events_association_name %>" class="associated-events">
+    <% if show_select_hint && (selected_events.length == 0) %>
+      <div class="select-hint"><%= t 'competitions.index.select_hint' %></div>
+    <% end %>
+
     <%= form_builder.simple_fields_for events_association_name, all_events do |f| %>
       <span class="event-checkbox <%= "disabled" if disabled %>">
         <% event = f.object.event %>

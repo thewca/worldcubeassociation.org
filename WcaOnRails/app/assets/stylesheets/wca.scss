@@ -413,6 +413,11 @@ textarea {
 
 // _associated_events_picker.html.erb specific styles
 .form-horizontal {
+  .select-hint {
+    @extend .help-block;
+    margin-bottom: 0;
+  }
+
   .associated-events-label {
     @extend .col-sm-2, .control-label;
   }
