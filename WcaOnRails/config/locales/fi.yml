@@ -259,6 +259,49 @@ fi:
     333mbf: '10:00.00/kuutio, max. 60:00:00'
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: Karsintatyyppi
+    #original_hash: 65c848f
+    result_type: Tulosluokka
+    #original_hash: 29ef642
+    for_event: 'Lajin %{event} karsintaraja'
+    type:
+      #original_hash: f5c3f76
+      none: Ei karsintarajaa
+      #original_hash: f8c5669
+      result: Tuloksen mukaan
+      #original_hash: 4aebda3
+      ranking: N parasta
+      #original_hash: 3bc54a0
+      any_result: Mikä tahansa tulos
+    single:
+      #original_hash: d596f44
+      time: 'Paras ratkaisu alle %{time}'
+      #original_hash: 52ba186
+      moves: 'Paras ratkaisu alle %{moves} siirtoa'
+      #original_hash: b1993ae
+      points: 'Paras ratkaisu yli %{points} pistettä'
+      #original_hash: ed2b051
+      ranking: 'Parhaat %{ranking} parhaan ratkaisun mukaan'
+      #original_hash: 933b7dc
+      any_result: Mikä tahansa ratkaisu
+    average:
+      #original_hash: 2682ae8
+      time: 'Keskiarvo alle %{time}'
+      #original_hash: 1b9b5fc
+      moves: 'Keskiarvo alle %{moves} siirtoa'
+      #original_hash: 05c417e
+      points: 'Keskiarvo yli %{points} pistettä'
+      #original_hash: 805171c
+      ranking: 'Parhaat %{ranking} keskiarvon mukaan'
+      #original_hash: 2223a1b
+      any_result: Mikä tahansa keskiarvo
+    deadline:
+      #original_hash: 3b7f9f6
+      description: Takaraja karsintarajan saavuttamiseen
+      #original_hash: bed8220
+      by_date: '%{date} mennessä'
   common:
     #original_hash: 70c07ec
     world: Maailma
@@ -440,11 +483,11 @@ fi:
         #original_hash: 8020e88
         external_registration_page: Rekisteröitymissivu
         #original_hash: 9bb1965
-        competitor_limit_enabled: Osallistujaraja
+        competitor_limit_enabled: Kilpailijaraja
         #original_hash: 749f4c9
         competitor_limit: Kilpailijoiden enimmäismäärä
         #original_hash: 4a8b6f1
-        competitor_limit_reason: Osallistujarajoituksen syy
+        competitor_limit_reason: Kilpailijarajan peruste
         #original_hash: 3c23a67
         guests_enabled: Vierailijat
         #original_hash: 089cbfd
@@ -471,6 +514,8 @@ fi:
         on_the_spot_entry_fee_lowest_denomination: Osallistumismaksu paikan päällä rekisteröityville
         #original_hash: 7e53b96
         allow_registration_edits: Muutokset rekisteröitymisiin
+        #original_hash: 3d47eca
+        allow_registration_self_delete_after_acceptance: Rekisteröitymisen peruuttaminen
         #original_hash: efbdbab
         refund_policy_percent: Palautettava osuus prosentteina
         #original_hash: b332299
@@ -872,7 +917,7 @@ fi:
         use_wca_registration: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
-          Vaikka säännöt eivät vaadi osallistujarajan asettamista, se on
+          Vaikka säännöt eivät vaadi kilpailijarajan asettamista, se on
           suositeltavaa.
         #original_hash: b7b599b
         competitor_limit: >-
@@ -880,7 +925,7 @@ fi:
           estä enempää kilpailijoita rekisteröitymästä; siitä pitää huolehtia
           manuaalisesti.
         #original_hash: 4bd7102
-        competitor_limit_reason: Mikä on syy osallistujarajoitukselle? Täytä tämä osa englanniksi!
+        competitor_limit_reason: Mikä on peruste kilpailijarajalle? Täytä englanniksi!
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: da39a3e
@@ -900,6 +945,8 @@ fi:
           rekisteröityminen on ilmaista.
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Tämä numero ilmoitetaan kilpailusivulla, mutta palautukset täytyy
@@ -1166,9 +1213,9 @@ fi:
           'false': Älä kysy vierailijoista
         competitor_limit_enabled:
           #original_hash: d9c05cc
-          'true': Haluan asettaa osallistujarajoituksen
+          'true': Haluan asettaa kilpailijarajan
           #original_hash: 5b581b5
-          'false': En halua asettaa osallistujarajoitusta
+          'false': En halua asettaa kilpailijarajaa
         on_the_spot_registration:
           #original_hash: 0c521ca
           'true': Paikan päällä voi rekisteröityä
@@ -1183,6 +1230,15 @@ fi:
           'false': >-
             Kilpailijat eivät voi muuttaa rekisteröitymistään sen hyväksymisen
             jälkeen.
+        allow_registration_self_delete_after_acceptance:
+          #original_hash: 5c2e8c1
+          'true': >-
+            Kilpailijat voivat poistaa rekisteröitymisensä, vaikka se olisi jo
+            hyväksytty
+          #original_hash: 3b77604
+          'false': >-
+            Kilpailijat eivät voi poistaa rekisteröitymistään, kun se on
+            hyväksytty
   mail_form:
     attributes:
       contact_form:
@@ -2127,7 +2183,7 @@ fi:
             osallistumismaksun maksaminen etukäteen tai lajien
             karsintavaatimukset)
           #original_hash: 1e225f0
-          registrations_full: 'Osallistujaraja on saavutettu, eikä enempää paikkoja ole saatavilla'
+          registrations_full: 'Kilpailijaraja on saavutettu, eikä enempää paikkoja ole saatavilla'
           #original_hash: 0d4cce9
           multiple_registrations: Rekisteröidyit useamman kerran
           #original_hash: 70b1e2c
@@ -2230,8 +2286,8 @@ fi:
       ongelmat %{profile}ssasi:
     #original_hash: f22ef22
     registration_full: >-
-      Tämän kilpailun osallistujaraja %{competitor_limit} on jo täynnä. Jos
-      rekisteröidyt, sinut laitetaan jonotuslistalle. Rekisteröitymistä ei
+      Tämän kilpailun kilpailijaraja %{competitor_limit} on jo täynnä. Jos
+      rekisteröidyt, sinut lisätään jonotuslistalle. Rekisteröitymistä ei
       välttämättä hyväksytä, ellei paikkoja vapaudu.
     #original_hash: 855ca9c
     can_register: 'Voit rekisteröityä kilpailuun %{comp} alla.'
@@ -2340,7 +2396,7 @@ fi:
         #original_hash: 2454f20
         over_competitor_limit: >-
           Tiedostossa on %{accepted_count} hyväksyttyä rekisteröitymistä, mikä
-          ylittää osallistujarajoituksen %{limit}.
+          ylittää kilpailijarajan %{limit}.
         #original_hash: e6d3197
         invalid_event_column: >-
           Event columns should include either 0 or 1, found %{value} in column
@@ -2566,9 +2622,9 @@ fi:
       #original_hash: 45834fd
       register_below_html: Rekisteröidy tähän kilpailuun alla.
       #original_hash: 196725e
-      competitor_limit_is: 'Osallistujaraja on %{competitor_limit} kilpailijaa.'
+      competitor_limit_is: 'Kilpailijaraja on %{competitor_limit} kilpailijaa.'
       #original_hash: 5101f65
-      no_competitor_limit: Osallistujarajoitusta ei ole.
+      no_competitor_limit: Kilpailijarajaa ei ole.
       #original_hash: f979d5e
       entry_fee_is: 'Kilpailun osallistumismaksu on %{base_entry_fee}.'
       #original_hash: 5390a91
@@ -2589,7 +2645,7 @@ fi:
       no_refunds: Osallistumismaksuja ei palauteta missään tilanteessa.
       #original_hash: b016d2f
       waiting_list_deadline_html: >-
-        Odotuslistalla olevia kilpailijoita voidaan hyväksyä kilpailuun
+        Jonotuslistalla olevia kilpailijoita voidaan hyväksyä kilpailuun
         takarajaan (%{waiting_list_deadline}) asti.
       #original_hash: 14c5699
       event_change_deadline_html: >-
@@ -2758,14 +2814,23 @@ fi:
           in_progress: Käynnissä!
           #original_hash: 1157462
           posted: Tulokset on julkaistu!
-          #original_hash: 89bcc37
-          starts_in: 'Alkuun %{days}'
           #original_hash: 97b061a
           announced_on: 'Ilmoitettu %{announcement_date}'
         #original_hash: ccd2db9
         search: Nimi tai kaupunki
         #original_hash: 3bc8082
         recent: 'Viimeiset %{count} päivää'
+        registration:
+          #original_hash: 49d8169
+          opens_in: '%{duration} rekisteröitymisen aukeamiseen'
+          #original_hash: 2d601fa
+          closed: 'Rekisteröityminen on sulkeutunut. Kilpailun alkuun on %{days}.'
+          #original_hash: 2e17db8
+          open: Rekisteröityminen on auki!
+          #original_hash: c098975
+          full: >-
+            Kilpailijaraja saavutettu, uudet rekisteröitymiset päätyvät
+            jonotuslistalle.
       #original_hash: 8b09d74
       no_comp_found: Kilpailuja ei löytynyt.
       #original_hash: 7008166
@@ -3063,6 +3128,16 @@ fi:
           määritellään. Sallitut kierrosformaatit lajeittain on lueteltu
           säännöissä (%{link_to_9b}). %{link_to_9f} sisältää jokaisen
           kierrosformaatin kuvauksen.
+        #original_hash: fa50f5c
+        qualification_html: >-
+          Karsintaraja täytyy saavuttaa muussa WCA-kilpailussa, kilpaillakseen
+          lajissa tässä kilpailussa.
+        #original_hash: 3b524fd
+        qualification_all_events_html: 'Takaraja karsintarajan saavuttamiselle on <b>%{date}</b>.'
+        #original_hash: 0d791e9
+        qualification_some_events_html: >-
+          Takaraja karsintarajan saavuttamiselle lajeissa %{events} on
+          <b>%{date}</b>.
       #original_hash: 041a5de
       format: Kierrosformaatti
       #original_hash: 0d1fcc3
@@ -3071,6 +3146,8 @@ fi:
       cutoff: Cutoff
       #original_hash: 02ed4a4
       proceed: Jatkoon
+      #original_hash: 2ffe44e
+      qualification: Karsintaraja
     schedule:
       display_as:
         #original_hash: ec5dd7c
@@ -4676,17 +4753,17 @@ fi:
         kilpailulle hyväksyntää. WCAT:n täytyy hyväksyä lisäykset.
     paragraph5:
       #original_hash: 17d01de
-      title: Osallistujarajoitukset
+      title: Kilpailijarajat
       #original_hash: bd8e6ee
       content_html: >-
         Kilpailijoiden määrää voidaan rajoittaa lajikohtaisesti tai
         kilpailukohtaisesti (ks. <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>kilpailun
-        vaatimukset</a>). Delegaatin täytyy saada osallistujarajoitukselle
-        WCAT:n hyväksyntä. Raja tulee valita viisaasti ja kilpailun odotetun
-        suosion mukaan. Määrää ei pidä laskea vähäpätöisistä syistä. Aiottu
-        rajoitus tulisi ottaa huomioon jo sopivaa kilpailupaikkaa etsittäessä.
-        Rajoitus täytyy kertoa selkeästi WCA-verkkosivuston kilpailusivulla.
+        vaatimukset</a>). Delegaatin täytyy saada kilpailijarajalle WCAT:n
+        hyväksyntä. Raja tulee valita viisaasti ja kilpailun odotetun suosion
+        mukaan. Määrää ei pidä laskea vähäpätöisistä syistä. Suunniteltu raja
+        pitäisi ottaa huomioon jo sopivaa kilpailupaikkaa etsittäessä. Raja
+        täytyy kertoa selkeästi WCA-verkkosivuston kilpailusivulla.
     paragraph6:
       #original_hash: ce4c3d0
       title: Rekisteröitymisten käsittely
@@ -4703,7 +4780,7 @@ fi:
       title: Jonotuslistan hallinnointi
       #original_hash: 81ca3f3
       content1: >-
-        Kun kilpailun osallistujaraja on saavutettu, pitäisi avata jonotuslista.
+        Kun kilpailun kilpailijaraja on saavutettu, pitäisi avata jonotuslista.
         Kun hyväksytysti rekisteröitynyt kilpailija peruuttaa
         rekisteröitymisensä, hänet voidaan korvata seuraavalla jonotuslistan
         kilpailijalla.
@@ -4719,9 +4796,9 @@ fi:
         poikkeuksia.
       #original_hash: 37bcbd6
       content3: >-
-        Jos kilpailussa kilpaili kilpailijoita, jotka eivät päässeet läpi
-        rekisteröitymisestä, heidän tuloksensa poistetaan takautuvasti
-        (olettaen, että osallistujaraja oli olemassa ja täyttyi).
+        Jos kilpailussa kilpaili kilpailijoita, jotka eivät käyneet läpi
+        normaalia rekisteröitymisprosessia, heidän tuloksensa poistetaan
+        takautuvasti (olettaen, että kilpailijaraja oli olemassa ja täyttyi).
     paragraph8:
       #original_hash: c8ad8e6
       title: Tehtävät ennen kilpailua
