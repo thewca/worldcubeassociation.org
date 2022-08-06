@@ -13,7 +13,7 @@
   <% end %>
 <% else %>
   <div class="table-responsive">
-    <table class="table competitions-table floatThead <%= past ? "table-striped" : "" %>">
+    <table class="table competitions-table <%= past ? "table-striped" : "" %>">
       <thead>
         <tr>
           <th><%= t 'competitions.nearby_competitions.name' %></th>
