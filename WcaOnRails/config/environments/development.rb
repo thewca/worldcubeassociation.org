@@ -80,11 +80,6 @@ Rails.application.configure do
     Bullet.add_safelist type: :unused_eager_loading, class_name: "CompetitionEvent", association: :rounds
   end
 
-  # Add i18n-js to the middleware
-  # We already run i18n:js:export when using webpack(-dev-server), but it wouldn't
-  # get ran if using only bin/rails s
-  config.middleware.use I18n::JS::Middleware
-
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
 

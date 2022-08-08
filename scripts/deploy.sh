@@ -158,6 +158,7 @@ rebuild_rails() {
 
     bundle install
     bundle exec rake yarn:install
+    bundle exec i18n export
     # We used to run 'assets:clean' as part of the command below, but for some
     # reason rake would clean *up-to-date* assets and not recompile them, leading
     # to the website being simply broken...
