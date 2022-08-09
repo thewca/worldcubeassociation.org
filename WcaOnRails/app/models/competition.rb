@@ -396,7 +396,7 @@ class Competition < ApplicationRecord
         warnings[:results] = I18n.t('competitions.messages.results_not_posted')
       end
 
-      if self.registration_full? && registration_opened?
+      if self.registration_full? && self.registration_opened?
         warnings[:waiting_list] = I18n.t('registrations.registration_full')
       end
 
