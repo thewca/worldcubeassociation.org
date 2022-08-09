@@ -154,6 +154,10 @@ ignore:
 <%
   require './lib/custom_wca_i18n_scanner.rb'
   I18n::Tasks.add_scanner 'CustomWcaI18nScanner', only: %w(*.erb)
+
+  I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
+    only: %w(*.js),
+    patterns: [['I18nHTMLTranslate\s+i18nKey=%{key}', '%{key}']]
 %>
 # <%#= I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
 #        only: %w(*.html.haml *.html.slim),
