@@ -10,7 +10,7 @@ RSpec.feature "Competition events management" do
   end
 
   context "unconfirmed competition" do
-    let(:competition) { FactoryBot.create(:competition, event_ids: []) }
+    let(:competition) { FactoryBot.create(:competition, event_ids: [], qualification_results_reason: "Because I need them for testing!") }
 
     background do
       sign_in FactoryBot.create(:admin)
@@ -19,7 +19,7 @@ RSpec.feature "Competition events management" do
         click_button "Add event"
         select("1 round", from: "selectRoundCount")
       end
-      save
+      save_events_react
       competition.reload
     end
 
@@ -33,10 +33,9 @@ RSpec.feature "Competition events management" do
           click_button "Remove event"
         end
       end
-      save
-      competition.reload
+      save_events_react
 
-      expect(competition.events.map(&:id)).to eq []
+      expect(competition.reload.events.map(&:id)).to eq []
     end
 
     # This feature set is notorious for randomly failing.
@@ -66,7 +65,7 @@ RSpec.feature "Competition events management" do
 
       scenario "change scramble group count to 42", js: true, retry: 3 do
         within_round("333", 1) { fill_in "scrambleSetCount", with: "42" }
-        save
+        save_events_react
         expect(round_333_1.reload.scramble_set_count).to eq 42
       end
 
@@ -77,7 +76,7 @@ RSpec.feature "Competition events management" do
           fill_in "minutes", with: "5"
           click_button "Ok"
         end
-        save
+        save_events_react
 
         expect(round_333_1.reload.time_limit_to_s).to eq "5:00.00"
       end
@@ -90,7 +89,7 @@ RSpec.feature "Competition events management" do
           fill_in "minutes", with: "2"
           click_button "Ok"
         end
-        save
+        save_events_react
 
         expect(round_333_1.reload.cutoff_to_s).to eq "2 attempts to get < 2:00.00"
       end
@@ -106,9 +105,28 @@ RSpec.feature "Competition events management" do
           fill_in "Ranking", with: "12"
           click_button "Ok"
         end
-        save
+        save_events_react
 
         expect(round_333_1.reload.advancement_condition_to_s).to eq "Top 12 advance to next round"
+      end
+
+      scenario "change qualification time to any result", js: true, retry: 3 do
+        within_event_panel("333") { find("[name=qualification]").click }
+
+        qualification_date = 7.days.from_now.to_date
+
+        within_modal do
+          select "Single", from: "Result Type"
+          select "Any result", from: "Qualification Type"
+          fill_in "Qualification Deadline", with: qualification_date.strftime('%m/%d/%Y')
+          click_button "Ok"
+        end
+
+        save_events_react
+        comp_event_333.reload
+
+        expect(comp_event_333.qualification_to_s).to eq "Any single solve"
+        expect(comp_event_333.qualification.when_date).to eq qualification_date
       end
     end
   end
@@ -138,23 +156,60 @@ RSpec.feature "Competition events management" do
       within_event_panel("333") do
         click_button "Add event"
       end
-      save
-      competition.reload
+      save_events_react
 
-      expect(competition.events.map(&:id)).to match_array %w(222 333 444)
+      expect(competition.reload.events.map(&:id)).to match_array %w(222 333 444)
     end
 
     scenario "board member can remove events", js: true do
       sign_in FactoryBot.create(:user, :board_member)
       visit "/competitions/#{competition.id}/events/edit"
 
-      within_event_panel("222") do
+      within_event_panel("444") do
         click_button "Remove event"
       end
-      save
-      competition.reload
+      save_events_react
 
-      expect(competition.events.map(&:id)).to match_array %w(444)
+      expect(competition.reload.events.map(&:id)).to match_array %w(222)
+    end
+
+    context "even admin cannot create inconsistent competition state" do
+      let(:comp_event_222) { competition.competition_events.find_by_event_id("222") }
+
+      scenario "by deleting main event", js: true do
+        sign_in FactoryBot.create(:admin)
+        visit "/competitions/#{competition.id}/events/edit"
+
+        within_event_panel("222") do
+          click_button "Remove event"
+        end
+
+        accept_alert do
+          save_events_react(wait_for_completion: false)
+        end
+
+        expect(competition.reload.events.map(&:id)).to match_array %w(222 444)
+      end
+
+      scenario "by inserting a qualification when they were not originally applied for", js: true do
+        sign_in FactoryBot.create(:admin)
+        visit "/competitions/#{competition.id}/events/edit"
+
+        within_event_panel("222") { find("[name=qualification]").click }
+
+        within_modal do
+          select "Single", from: "Result Type"
+          select "Any result", from: "Qualification Type"
+          fill_in "Qualification Deadline", with: 7.days.from_now.strftime('%m/%d/%Y')
+          click_button "Ok"
+        end
+
+        accept_alert do
+          save_events_react(wait_for_completion: false)
+        end
+
+        expect(comp_event_222.reload.qualification).to be_nil
+      end
     end
   end
 
@@ -183,10 +238,9 @@ RSpec.feature "Competition events management" do
       within_event_panel("333") do
         select("2 rounds", from: "selectRoundCount")
       end
-      save
-      competition.reload
+      save_events_react
 
-      expect(competition_event.rounds.length).to eq 2
+      expect(competition_event.reload.rounds.length).to eq 2
     end
   end
 end
@@ -205,10 +259,10 @@ def within_modal(&)
   within(:css, '.modal-content', &)
 end
 
-def save
+def save_events_react(wait_for_completion: true)
   # Wait for the modal to be hidden.
   expect(page).to have_no_css(".modal-open")
   first(:button, "save your changes!", visible: true).click
   # Wait for ajax to complete.
-  expect(page).to have_no_content("You have unsaved changes")
+  expect(page).to have_no_content("You have unsaved changes") if wait_for_completion
 end

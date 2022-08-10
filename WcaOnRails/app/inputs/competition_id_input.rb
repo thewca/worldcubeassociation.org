@@ -7,8 +7,14 @@ class CompetitionIdInput < SimpleForm::Inputs::Base
     if @options[:only_one]
       merged_input_options[:class] << "wca-autocomplete-only_one"
     end
-    competitions = (@builder.object.send(attribute_name) || "").split(",").map { |id| Competition.find_by_id(id) }
-    merged_input_options[:data] = { data: competitions.to_json }
+    competitions = (@builder.object.send(attribute_name) || "").split(",").map do |id|
+      if @options[:only_visible]
+        Competition.visible.find_by_id(id)
+      else
+        Competition.find_by_id(id)
+      end
+    end
+    merged_input_options[:data] = { data: competitions.compact.to_json }
     @builder.text_field(attribute_name, merged_input_options)
   end
 end

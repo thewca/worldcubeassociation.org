@@ -546,6 +546,10 @@ ru:
           начала дисциплины
         #original_hash: 78308cc
         early_puzzle_submission_reason: Причины и детали ранней сдачи головоломок
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Я хочу использовать квалификацию, чтобы ограничить участников в
+          некоторых дисциплинах
         #original_hash: 1ec6dd4
         qualification_results_reason: Причины и детали использования квалификации
         #original_hash: ac30de9
@@ -998,6 +1002,8 @@ ru:
         early_puzzle_submission_reason: >-
           Пожалуйста, объясните, почему вы хотите заставить участников заранее
           сдать головоломки. Заполняйте это поле по-английски!
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Пожалуйста, объясните, почему вы хотите использовать квалификацию.

@@ -13,7 +13,7 @@
       [t('.inquiries.different'), "different"],
     ] %>
     <%= f.input :inquiry, as: :radio_buttons, collection: options %>
-    <%= f.input :competition_id, as: :competition_id, only_one: true, wrapper_html: { id: "target_competition" } %>
+    <%= f.input :competition_id, as: :competition_id, only_one: true, only_visible: true, wrapper_html: { id: "target_competition" } %>
     <%= f.input :name %>
     <%= f.input :your_email %>
     <%= f.input :message, as: :text %>

@@ -24,7 +24,7 @@ RSpec.feature "Competition events management" do
       within('.venue-timezone-input') do
         select "Pacific Time (US & Canada)"
       end
-      save
+      save_schedule_react
       expect(competition.competition_venues.map(&:name)).to match_array %w(Venue)
       expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w(Youpitralala)
     end
@@ -48,7 +48,7 @@ RSpec.feature "Competition events management" do
   end
 end
 
-def save
+def save_schedule_react
   first(:button, "save your changes!", visible: true).click
   # Wait for ajax to complete.
   expect(page).to have_no_content("You have unsaved changes")

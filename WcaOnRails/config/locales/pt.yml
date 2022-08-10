@@ -540,6 +540,10 @@ pt:
           antes de um evento estar previsto começar
         #original_hash: 78308cc
         early_puzzle_submission_reason: Razão e detalhes para submeter puzzles mais cedo
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Gostaria de usar os resultados da qualificação para limitar quem pode
+          competir em determinadas modalidades
         #original_hash: 1ec6dd4
         qualification_results_reason: Razão e detalhe para resultados de qualificação
         #original_hash: ac30de9
@@ -984,6 +988,8 @@ pt:
         early_puzzle_submission_reason: >-
           Por favor elabore aqui o porquê de necessitar que competidores
           submetam puzzles mais cedo. Por favor preencha em Inglês!
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Por favor elabore aqui o porquê de querer usar tempos de qualificação.
@@ -2829,14 +2835,23 @@ pt:
           in_progress: Em andamento!
           #original_hash: 1157462
           posted: Resultados publicados!
-          #original_hash: 89bcc37
-          starts_in: 'Começa em %{days}'
           #original_hash: 97b061a
           announced_on: 'Anunciada a %{announcement_date}'
         #original_hash: ccd2db9
         search: Nome ou Cidade
         #original_hash: 3bc8082
         recent: 'Últimos %{count} dias'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'As inscrições irão abrir em %{duration}'
+          #original_hash: 2d601fa
+          closed: 'As inscrições encerraram. A competição começará em %{days}'
+          #original_hash: 2e17db8
+          open: As inscrições estão abertas!
+          #original_hash: c098975
+          full: >-
+            Limite de competidores atingido, novas inscrições irão para a lista
+            de espera
       #original_hash: 8b09d74
       no_comp_found: Nenhuma competição encontrada.
       #original_hash: 7008166

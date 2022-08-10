@@ -35,7 +35,6 @@ class Qualification
       rescue ArgumentError
         nil
       end
-      p out
       out
     end
   end

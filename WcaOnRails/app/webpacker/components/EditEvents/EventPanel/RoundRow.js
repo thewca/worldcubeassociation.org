@@ -14,8 +14,6 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { updateRoundFormat, setScrambleSetCount, updateCutoff } from '../store/actions';
 
-console.log(17, formats);
-
 export default function Round({
   index, wcifRound, wcifEvent, disabled,
 }) {
@@ -28,8 +26,6 @@ export default function Round({
 
   const roundFormatChanged = (e, { value }) => {
     const newFormat = value;
-    console.log(31, value);
-    console.log(31, e, newFormat, wcifRound);
 
     if (
       wcifRound.cutoff
