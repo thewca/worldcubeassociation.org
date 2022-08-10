@@ -12,7 +12,9 @@ import {
 } from '../Modals';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { setRoundFormat, setScrambleSetCount } from '../store/actions';
+import { updateRoundFormat, setScrambleSetCount, updateCutoff } from '../store/actions';
+
+console.log(17, formats);
 
 export default function Round({
   index, wcifRound, wcifEvent, disabled,
@@ -24,8 +26,10 @@ export default function Round({
   const roundNumber = index + 1;
   const isLastRound = roundNumber === wcifEvent.rounds.length;
 
-  const roundFormatChanged = (e) => {
-    const newFormat = e.target.value;
+  const roundFormatChanged = (e, { value }) => {
+    const newFormat = value;
+    console.log(31, value);
+    console.log(31, e, newFormat, wcifRound);
 
     if (
       wcifRound.cutoff
@@ -35,19 +39,15 @@ export default function Round({
     ) {
       // if the format is changing to a format that doesn't have a cutoff
       confirm({
-        content: `Are you sure you want to change the format of ${
-          roundIdToString(wcifRound.id)
-        }? This will clear the cutoff`,
+        content: `Are you sure you want to change the format of ${roundIdToString(wcifRound.id)}? This will clear the cutoff`,
       })
         .then(() => {
-          dispatch(setRoundFormat(wcifRound, newFormat));
-          // wcifRound.format = newFormat;
-          // wcifRound.cutoff = null;
+          dispatch(updateRoundFormat(wcifRound.id, newFormat));
+          dispatch(updateCutoff(wcifRound.id, null));
         });
     } else {
       // if the format is changing to a format that has a cutoff
-      dispatch(setRoundFormat(wcifRound, newFormat));
-      // wcifRound.format = newFormat;
+      dispatch(updateRoundFormat(wcifRound, newFormat));
     }
   };
 

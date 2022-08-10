@@ -3,8 +3,8 @@ export const AddEvent = 'ADD_EVENT';
 export const RemoveEvent = 'REMOVE_EVENT';
 export const AddRounds = 'ADD_ROUNDS';
 export const RemoveRounds = 'REMOVE_ROUNDS';
-export const SetRoundFormat = 'SET_ROUND_FORMAT';
 export const SetScrambleSetCount = 'SET_SCRAMBLE_SET_COUNT';
+export const UpdateRoundFormat = 'UPDATE_ROUND_FORMAT';
 export const UpdateCutoff = 'UPDATE_CUTOFF';
 export const UpdateTimeLimit = 'UPDATE_TIMELIMIT';
 export const UpdateAdvancementCondition = 'UPDATE_ADVANCEMENT_CONDITION';
@@ -72,15 +72,15 @@ export const removeRounds = (eventId, roundsToRemoveCount) => ({
 
 /**
  * create an action to set the round format
- * @param {Round} wcifRound
- * @param {FormatId} newFormat
+ * @param {ActivityCode} roundId
+ * @param {FormatId} format
  * @returns {Action}
  */
-export const setRoundFormat = (wcifRound, newFormat) => ({
-  type: SetRoundFormat,
+export const updateRoundFormat = (roundId, format) => ({
+  type: UpdateRoundFormat,
   payload: {
-    wcifRound,
-    newFormat,
+    roundId,
+    format,
   },
 });
 

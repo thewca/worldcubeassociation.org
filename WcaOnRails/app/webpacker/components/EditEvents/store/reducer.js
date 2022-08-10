@@ -6,6 +6,7 @@ import {
   RemoveEvent,
   RemoveRounds,
   SetScrambleSetCount,
+  UpdateRoundFormat,
   UpdateAdvancementCondition,
   UpdateCutoff,
   UpdateQualificiation,
@@ -96,7 +97,12 @@ const reducers = {
       )),
     };
   },
-
+  [UpdateRoundFormat]: (state, { payload }) => ({
+    ...state,
+    wcifEvents: updateForRounds(state.wcifEvents, [payload.roundId], () => ({
+      format: payload.format,
+    })),
+  }),
   [SetScrambleSetCount]: (state, { payload }) => ({
     ...state,
     wcifEvents: updateForRounds(state.wcifEvents, [payload.roundId], () => ({

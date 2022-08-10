@@ -54,6 +54,8 @@ function EditEvents() {
       setSaving(false);
     };
 
+    console.log(57, competitionId);
+
     saveWcif(competitionId, { events: wcifEvents }, onSuccess, onFailure);
   }, [competitionId, dispatch, wcifEvents]);
 
