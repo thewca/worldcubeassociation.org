@@ -24,7 +24,7 @@ onPage('registrations#edit_registrations', function() {
   showHideActions();
 
   $('button[value=delete-selected]').on("click", function(e) {
-    var $selectedRows = $registrationsTable.find("tr.selected");
+    const $selectedRows = $registrationsTable.find("tr.selected");
     if(!confirm("Delete the " + $selectedRows.length + " selected registrations?")) {
       e.preventDefault();
     }
@@ -38,24 +38,24 @@ onPage('registrations#index', function() {
 });
 
 function comparePaymentDate(a, b) {
-  var elemA = $(a);
-  var elemB = $(b);
-  var paidA = elemA.data("paidDate");
-  var paidB = elemB.data("paidDate");
+  const elemA = $(a);
+  const elemB = $(b);
+  const paidA = elemA.data("paidDate");
+  const paidB = elemB.data("paidDate");
   if (paidA !== "" && paidB !== "") {
     // Both have paid, compare their last payment dates
     return paidA.localeCompare(paidB);
-  } else if (paidA === "" && paidB === "") {
+  }
+  if (paidA === "" && paidB === "") {
     // None have paid, compare their registration dates
     return elemA.data("registeredAt").localeCompare(elemB.data("registeredAt"));
-  } else {
-    return paidA === "" ? 1 : -1;
   }
+  return paidA === "" ? 1 : -1;
 }
 
 function compareHtmlContent(a, b) {
-  var first = $('<p>' + a + '</p>').text().trim();
-  var second = $('<p>' + b + '</p>').text().trim();
+  const first = $('<p>' + a + '</p>').text().trim();
+  const second = $('<p>' + b + '</p>').text().trim();
   return first.localeCompare(second);
 }
 
@@ -66,5 +66,18 @@ onPage('registrations#add, registrations#do_add', function() {
   });
   $('#select-all-events').on('click', function() {
     $('#events input[type="checkbox"]').prop('checked', true);
+  });
+});
+
+function hideEventSelectaqbilityHint() {
+  // opacity:0 rather than display:none to avoid DOM shifting
+  $('.associated-events .select-hint').css('opacity', '0');
+}
+
+onPage('registrations#create', function() {
+  // Hide the hint when the user selects an event
+  // or selects all events
+  $('.associated-events input[type="checkbox"], .select-all-events').click(function() {
+    hideEventSelectaqbilityHint();
   });
 });
