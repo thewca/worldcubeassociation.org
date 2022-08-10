@@ -134,10 +134,10 @@ export const updateAdvancementCondition = (roundId, advancementCondition) => ({
   },
 });
 
-export const updateQualificiation = (eventId, qualificiation) => ({
+export const updateQualificiation = (eventId, qualification) => ({
   type: UpdateQualificiation,
   payload: {
     eventId,
-    qualificiation,
+    qualification,
   },
 });

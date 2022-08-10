@@ -131,9 +131,9 @@ const reducers = {
   }),
   [UpdateQualificiation]: (state, { payload }) => ({
     ...state,
-    wcifEvents: state.wcifEvents.events.map((event) => (event.id === payload.eventId ? ({
+    wcifEvents: state.wcifEvents.map((event) => (event.id === payload.eventId ? ({
       ...event,
-      qualificiation: payload.qualification,
+      qualification: payload.qualification,
     }) : event)),
   }),
 };

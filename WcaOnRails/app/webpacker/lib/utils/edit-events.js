@@ -92,7 +92,6 @@ export function centisecondsToString(c, { short } = {}) {
 export function attemptResultToString(attemptResult, eventId) {
   const event = events.byId[eventId];
   if (event.isTimedEvent) {
-    console.log(95, attemptResult);
     return centisecondsToClockFormat(attemptResult);
   } if (event.isFewestMoves) {
     return `${attemptResult} moves`;

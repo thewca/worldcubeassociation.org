@@ -7,8 +7,8 @@ const QualificationResultTypeOptions = [
   {
     key: -1, value: -1, text: '────────', disabled: true,
   },
-  { key: 1, value: 'single', text: i18n.t('qualification.type.single') },
-  { key: 2, value: 'average', text: i18n.t('qualification.type.average') },
+  { key: 1, value: 'single', text: i18n.t('common.single') },
+  { key: 2, value: 'average', text: i18n.t('common.average') },
 ];
 
 export function qualificationResultTypeInput({
@@ -29,14 +29,14 @@ export default function qualificationResultTypeField({
 }) {
   return (
     <Form.Field inline>
+      <Label>
+        Result Type
+      </Label>
       <Form.Input
         as={qualificationResultTypeInput}
         qualificationResultType={qualificationResultType}
         onChange={onChange}
       />
-      <Label pointing>
-        Result Type
-      </Label>
     </Form.Field>
   );
 }
