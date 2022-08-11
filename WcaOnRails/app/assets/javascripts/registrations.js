@@ -24,7 +24,7 @@ onPage('registrations#edit_registrations', function() {
   showHideActions();
 
   $('button[value=delete-selected]').on("click", function(e) {
-    const $selectedRows = $registrationsTable.find("tr.selected");
+    var $selectedRows = $registrationsTable.find("tr.selected");
     if(!confirm("Delete the " + $selectedRows.length + " selected registrations?")) {
       e.preventDefault();
     }
@@ -38,24 +38,24 @@ onPage('registrations#index', function() {
 });
 
 function comparePaymentDate(a, b) {
-  const elemA = $(a);
-  const elemB = $(b);
-  const paidA = elemA.data("paidDate");
-  const paidB = elemB.data("paidDate");
+  var elemA = $(a);
+  var elemB = $(b);
+  var paidA = elemA.data("paidDate");
+  var paidB = elemB.data("paidDate");
   if (paidA !== "" && paidB !== "") {
     // Both have paid, compare their last payment dates
     return paidA.localeCompare(paidB);
-  }
-  if (paidA === "" && paidB === "") {
+  } else if (paidA === "" && paidB === "") {
     // None have paid, compare their registration dates
     return elemA.data("registeredAt").localeCompare(elemB.data("registeredAt"));
+  } else {
+    return paidA === "" ? 1 : -1;
   }
-  return paidA === "" ? 1 : -1;
 }
 
 function compareHtmlContent(a, b) {
-  const first = $('<p>' + a + '</p>').text().trim();
-  const second = $('<p>' + b + '</p>').text().trim();
+  var first = $('<p>' + a + '</p>').text().trim();
+  var second = $('<p>' + b + '</p>').text().trim();
   return first.localeCompare(second);
 }
 
