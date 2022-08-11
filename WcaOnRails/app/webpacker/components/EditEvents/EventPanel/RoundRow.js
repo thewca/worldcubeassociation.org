@@ -54,7 +54,11 @@ export default function Round({
   return (
     <Table.Row verticalAlign="middle">
       <Table.Cell>{wcifRound.id.split('-')[1].replace('r', '')}</Table.Cell>
-      <Table.Cell>
+      <Table.Cell style={{
+        zIndex: 400000,
+        style: 'flex',
+      }}
+      >
         <Dropdown
           selection
           name="format"

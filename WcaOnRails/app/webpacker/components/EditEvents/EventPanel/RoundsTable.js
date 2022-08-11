@@ -14,9 +14,9 @@ export default function RoundsTable({ wcifEvent }) {
       compact
       style={{
         width: '100%',
-        overflowX: 'auto',
         padding: '0.5em',
         fontSize: '0.85em',
+        position: 'relative',
       }}
     >
       <Table

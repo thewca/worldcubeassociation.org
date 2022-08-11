@@ -79,13 +79,18 @@ function EditEvents() {
   return (
     <div>
       {unsavedChanges && renderUnsavedChangesAlert()}
-      <Grid>
+      <div style={{
+        // https://css-tricks.com/an-auto-filling-css-grid-with-max-columns/
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(max(400px, calc((100% - calc(calc(3 - 1) * 1em)) / 3)), 1fr))',
+        gridGap: '1em',
+        alignItems: 'baseline',
+      }}
+      >
         {wcifEvents.map((wcifEvent) => (
-          <Grid.Column key={wcifEvent.id} mobile={16} tablet={8} computer={5}>
-            <EventPanel wcifEvent={wcifEvent} />
-          </Grid.Column>
+          <EventPanel wcifEvent={wcifEvent} />
         ))}
-      </Grid>
+      </div>
       {unsavedChanges && renderUnsavedChangesAlert()}
     </div>
   );
