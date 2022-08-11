@@ -21,10 +21,14 @@ Note: form_builder.object is the object having associated events.
   using_competition_events = events_association_name == :registration_competition_events
   all_events = form_builder.object.events_to_associated_events(allowed_events)
   errors = form_builder.object.errors.messages[events_association_name] || []
+
+  # Only show the hint when it's allowed and there are no events already selected.
+  # Note that the visibility of the hint is also controlled in JS when you select any event.
+  show_select_hint = show_select_hint && (selected_events.length < 1) && (errors.length < 1)
 %>
 
 <div class="form-group <%= "has-error" unless errors.empty? %>">
-  <%= label_tag events_association_name, class: "associated-events-label" do %>
+  <%= label_tag events_association_name, class: "associated-events-label#{" has-top-hint" if show_select_hint}" do %>
     <%= label %> (<span class="events-selected-count"></span>)
     <% unless disabled %>
       <br />
@@ -33,7 +37,7 @@ Note: form_builder.object is the object having associated events.
     <% end %>
   <% end %>
   <div id="<%= events_association_name %>" class="associated-events">
-    <% if show_select_hint && (selected_events.length == 0) %>
+    <% if show_select_hint %>
       <div class="select-hint"><%= t 'competitions.index.select_hint' %></div>
     <% end %>
 

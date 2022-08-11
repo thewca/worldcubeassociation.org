@@ -422,6 +422,10 @@ textarea {
     @extend .col-sm-2, .control-label;
   }
 
+  .associated-events-label.has-top-hint {
+    padding-top: calc(18px + 1em);
+  }
+
   .associated-events {
     @extend .col-sm-9;
   }
