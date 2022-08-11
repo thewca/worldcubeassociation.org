@@ -74,6 +74,6 @@ onPage('registrations#create', function() {
   // or selects all events
   $('.associated-events input[type="checkbox"], .select-all-events').click(function() {
     // opacity:0 rather than display:none to avoid DOM shifting
-    $('.associated-events .select-hint').css('opacity', '0');
+    $('.associated-events .select-hint').css('visibility', 'hidden');
   });
 });
