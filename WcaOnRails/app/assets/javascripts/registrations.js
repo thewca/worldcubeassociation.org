@@ -68,3 +68,12 @@ onPage('registrations#add, registrations#do_add', function() {
     $('#events input[type="checkbox"]').prop('checked', true);
   });
 });
+
+onPage('registrations#create', function() {
+  // Hide the hint when the user selects an event
+  // or selects all events
+  $('.associated-events input[type="checkbox"], .select-all-events').click(function() {
+    // opacity:0 rather than display:none to avoid DOM shifting
+    $('.associated-events .select-hint').css('visibility', 'hidden');
+  });
+});

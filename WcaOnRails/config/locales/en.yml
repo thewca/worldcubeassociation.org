@@ -1421,6 +1421,7 @@ en:
       all_events: "All"
       all_years: "All Years"
       clear: "Clear"
+      select_hint: "Please select events"
       list: "List"
       map: "Map"
       region: "Region"
