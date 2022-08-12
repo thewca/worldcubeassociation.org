@@ -397,7 +397,7 @@ class Competition < ApplicationRecord
       end
 
       if self.registration_full? && self.registration_opened?
-        warnings[:waiting_list] = I18n.t('registrations.registration_full')
+        warnings[:waiting_list] = I18n.t('registrations.registration_full', competitor_limit: self.competitor_limit)
       end
 
     else
