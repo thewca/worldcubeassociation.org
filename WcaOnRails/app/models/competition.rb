@@ -1353,6 +1353,10 @@ class Competition < ApplicationRecord
       end
   end
 
+  def ineligible_events(user)
+    competition_events.select{|ce| !ce.can_register?(user)}.map(&:event)
+  end
+
   # Profiling the rendering of _results_table.html.erb showed quite some
   # time was spent in `ActiveRecord#read_attribute`. So, I load the results
   # using raw SQL and instantiate a PORO. The code definitely got uglier,
