@@ -1354,7 +1354,7 @@ class Competition < ApplicationRecord
   end
 
   def ineligible_events(user)
-    competition_events.select{|ce| !ce.can_register?(user)}.map(&:event)
+    competition_events.select { |ce| !ce.can_register?(user) }.map(&:event)
   end
 
   # Profiling the rendering of _results_table.html.erb showed quite some
