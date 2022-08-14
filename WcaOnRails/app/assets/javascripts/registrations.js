@@ -69,7 +69,7 @@ onPage('registrations#add, registrations#do_add', function() {
   });
 });
 
-onPage('registrations#create', function() {
+onPage('registrations#create, registrations#register', function() {
   // Hide the hint when the user selects an event
   // or selects all events
   $('.associated-events input[type="checkbox"], .select-all-events').click(function() {
