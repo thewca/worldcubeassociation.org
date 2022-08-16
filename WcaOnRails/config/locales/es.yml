@@ -259,6 +259,49 @@ es:
     333mbf: '10:00.00 por cubo, hasta 60:00.00'
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: Tipo de cualificación
+    #original_hash: 65c848f
+    result_type: Tipo de resultado
+    #original_hash: 29ef642
+    for_event: 'Cualificación para %{event}'
+    type:
+      #original_hash: f5c3f76
+      none: Sin cualificación
+      #original_hash: f8c5669
+      result: Por Resultado
+      #original_hash: 4aebda3
+      ranking: Top N
+      #original_hash: 3bc54a0
+      any_result: Cualquier resultado
+    single:
+      #original_hash: d596f44
+      time: 'Una resolución por debajo de %{time}'
+      #original_hash: 52ba186
+      moves: 'Una resolución por debajo de %{moves} movimientos'
+      #original_hash: b1993ae
+      points: 'Una resolución por encima de %{points} puntos'
+      #original_hash: ed2b051
+      ranking: 'Top %{ranking} por single'
+      #original_hash: 933b7dc
+      any_result: Cualquier resultado
+    average:
+      #original_hash: 2682ae8
+      time: 'Media por debajo de %{time}'
+      #original_hash: 1b9b5fc
+      moves: 'Media por debajo de %{moves} movimientos'
+      #original_hash: 05c417e
+      points: 'Media por encima de %{points} puntos'
+      #original_hash: 805171c
+      ranking: 'Top %{ranking} por media'
+      #original_hash: 2223a1b
+      any_result: Cualquier media
+    deadline:
+      #original_hash: 3b7f9f6
+      description: Fecha límite de cualificación
+      #original_hash: bed8220
+      by_date: 'Por %{date}'
   common:
     #original_hash: 70c07ec
     world: Mundo
@@ -475,6 +518,8 @@ es:
         on_the_spot_entry_fee_lowest_denomination: Cuota básica de registro in situ
         #original_hash: 7e53b96
         allow_registration_edits: Modificaciones de registro
+        #original_hash: 3d47eca
+        allow_registration_self_delete_after_acceptance: Cancelaciones de registro
         #original_hash: efbdbab
         refund_policy_percent: Porcentaje a reembolsar
         #original_hash: b332299
@@ -495,6 +540,10 @@ es:
           hora dada antes de que comience la categoría
         #original_hash: 78308cc
         early_puzzle_submission_reason: Razón y detallas para entregar los puzzles con anterioridad
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Me gustaría usar los resultados de cualificación para limitar quien
+          puede competir en ciertos eventos
         #original_hash: 1ec6dd4
         qualification_results_reason: Razón y detalles para usar resultados de calificación
         #original_hash: ac30de9
@@ -948,6 +997,8 @@ es:
           Por favor explica aquí por que te gustaría requerir que los
           competidores entreguen sus puzzles con anelación. Por favor rellena
           esto en inglés
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Por favor explica aquí por que te gustaría requerir usar tiempos de
@@ -1200,6 +1251,15 @@ es:
           'false': >-
             Los competidores NO podrán modificar su registro una vez haya sido
             aceptado
+        allow_registration_self_delete_after_acceptance:
+          #original_hash: 5c2e8c1
+          'true': >-
+            Los competidores pueden eliminar su registro incluso si este ha sido
+            aceptado
+          #original_hash: 3b77604
+          'false': >-
+            Los competidores NO deberían eliminar su registro una vez este ha
+            sido aceptado
   mail_form:
     attributes:
       contact_form:
@@ -2477,6 +2537,13 @@ es:
         correcto.
       #original_hash: e390250
       create_success: ¡La competición se ha creado satisfactoriamente!
+      #original_hash: bc3e673
+      registration_payment_info: >-
+        Esta competición tiene cuota de inscripción, pero no hay ninguna cuenta
+        Stripe asociada. Si estás usando Stripe a través de la página de la WCA,
+        por favor, recuerda de vincular tu cuenta de Stripe. Si estás usando un
+        método de pagamento diferente, por favor, recuerda de añadir todos los
+        detalles relevantes a los requerimientos de registro.
       #original_hash: ba067f0
       not_announced: >-
         Esta competición es visible por el público pero no ha sido anunciada
@@ -2764,6 +2831,8 @@ es:
       all_years: Todos los años
       #original_hash: 719ea39
       clear: Ninguna
+      #original_hash: e827f28
+      select_hint: Por favor seleccione los eventos
       #original_hash: a1fffaa
       list: Listado
       #original_hash: ab478f3
@@ -2819,14 +2888,23 @@ es:
           in_progress: ¡En curso!
           #original_hash: 1157462
           posted: ¡Los resultados están publicados!
-          #original_hash: 89bcc37
-          starts_in: 'Comienza dentro de %{days}'
           #original_hash: 97b061a
           announced_on: 'Anunciado en %{announcement_date}'
         #original_hash: ccd2db9
         search: Nombre o ciudad
         #original_hash: 3bc8082
         recent: 'Últimos %{count} días'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'El registro se abrirá en %{duration}'
+          #original_hash: 2d601fa
+          closed: 'El registro se ha cerrado. La competición empezará en %{days}'
+          #original_hash: 2e17db8
+          open: ¡El registro está abierto!
+          #original_hash: c098975
+          full: >-
+            El límite de competidores se ha alcanzado, los nuevos registros irán
+            a la cola de espera.
       #original_hash: 8b09d74
       no_comp_found: Ninguna competición reúne los requisitos de búsqueda.
       #original_hash: 7008166
@@ -3141,6 +3219,18 @@ es:
           competidores basándose en sus resultados. La lista de formatos
           permitidos está descrita en  %{link_to_9b}. Ver %{link_to_9f}  para
           una descripción de cada formato.
+        #original_hash: fa50f5c
+        qualification_html: >-
+          Los tiempos de cualificación se deben obtener en otras competiciones
+          de la WCA para poder competir.
+        #original_hash: 3b524fd
+        qualification_all_events_html: >-
+          La fecha límite para obtener los tiempos de cualificación es
+          <b>%{date}</b>.
+        #original_hash: 0d791e9
+        qualification_some_events_html: >-
+          La fecha límite para obtener los tiempos de cualificación en %{events}
+          es <b>%{date}</b>.
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3
@@ -3149,6 +3239,8 @@ es:
       cutoff: Corte
       #original_hash: 02ed4a4
       proceed: Avanzar
+      #original_hash: 2ffe44e
+      qualification: Cualificación
     schedule:
       display_as:
         #original_hash: ec5dd7c
@@ -3989,6 +4081,20 @@ es:
         description: >-
           Este consejo es  responsable de fomentar y mantener comunicación
           bilateral entre la Comunidad WCA y el Personal WCA.
+      wsot:
+        #original_hash: 58765c7
+        name: Equipo de organización de deportes de la WCA
+        #original_hash: 8f888d6
+        description: >-
+          Este equipo es responsable de apoyar el reconocimiento de la WCA como
+          una organización internacional de deporte.
+      wat:
+        #original_hash: 90a1280
+        name: Equipo de archivos de la WCA
+        #original_hash: fae6850
+        description: >-
+          El equipo de archivos es un comité de asesor de la WCA. Este equipo es
+          responsable de apoyar la creación de un archivo de la organización.
       banned:
         #original_hash: d30e2e5
         name: Competiciones no Autorizadas
@@ -4270,6 +4376,17 @@ es:
         Este equipo es responsable de desarrollar y gestionar la Marca WCA,
         buscando patrocinadores, apoyando la distribución de equipación de
         competición WCA, y y haciendo márketing de mercancía WCA.
+    wsot:
+      #original_hash: 8f888d6
+      info_html: >-
+        Este equipo es responsable de apoyar el reconocimiento de la WCA como
+        una organización internacional de deportes.
+    wat:
+      #original_hash: fae6850
+      info_html: >-
+        El equipo de archivos de la WCA es un comité de asesor de la WCA. Este
+        equipo es responsable de apoyar la creación de un archivo de la
+        organización.
     #original_hash: f97a4f5
     councils_html: Consejos
     wac:
