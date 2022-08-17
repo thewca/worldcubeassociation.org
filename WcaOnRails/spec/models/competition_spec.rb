@@ -772,7 +772,7 @@ RSpec.describe Competition do
   describe "receive_registration_emails" do
     let(:competition) { FactoryBot.create :competition }
     let(:delegate) { FactoryBot.create :delegate }
-    let(:delegate_enabled) { FactoryBot.create :delegate, registrations_notifications: true }
+    let(:delegate_enabled) { FactoryBot.create :delegate, registration_notifications_enabled: true }
 
     it "computes receiving_registration_emails? via OR" do
       expect(competition.receiving_registration_emails?(delegate.id)).to eq false

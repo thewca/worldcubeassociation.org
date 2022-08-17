@@ -907,7 +907,7 @@ class User < ApplicationRecord
       fields += %i(
         password password_confirmation
         email preferred_events results_notifications_enabled
-        registrations_notifications
+        registration_notifications_enabled
       )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
       if user.staff_or_any_delegate?

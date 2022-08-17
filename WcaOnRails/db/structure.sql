@@ -1434,7 +1434,7 @@ CREATE TABLE `users` (
   `otp_backup_codes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `session_validity_token` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cookies_acknowledged` tinyint(1) NOT NULL DEFAULT '0',
-  `registrations_notifications` tinyint(1) DEFAULT '0',
+  `registration_notifications_enabled` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CompetitionTraineeDelegate < ApplicationRecord
-  include RegistrationsNotifications
+  include RegistrationNotifications
   belongs_to :trainee_delegate, class_name: "User"
   validates_presence_of :trainee_delegate
 
