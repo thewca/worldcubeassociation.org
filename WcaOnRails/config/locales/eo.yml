@@ -540,8 +540,8 @@ eo:
         early_puzzle_submission_reason: Kialo kaj detaloj por la antaŭtempa submetiĝo de puzloj
         #original_hash: 88da0ef
         qualification_results: >-
-          Mi ŝatus uzi kvalifikajn rezultojn por limigi kiu povas partopreni en
-          specifajn konkurserojn
+          Mi ŝatus uzi kvalifikajn rezultojn por limigi kiu povas konkursi en
+          specifaj eventoj
         #original_hash: 1ec6dd4
         qualification_results_reason: Kialo kaj detaloj por la kvalifikaj rezultoj
         #original_hash: ac30de9
@@ -2747,6 +2747,8 @@ eo:
       all_years: Ĉiuj jaroj
       #original_hash: 719ea39
       clear: Vakigi
+      #original_hash: e827f28
+      select_hint: Bonvolu elekti konkurserojn
       #original_hash: a1fffaa
       list: Listo
       #original_hash: ab478f3

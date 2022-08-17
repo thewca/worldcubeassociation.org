@@ -384,15 +384,16 @@ RSpec.describe CompetitionsController do
       end
 
       it "saving removes nonexistent delegates" do
-        invalid_competition_delegate = CompetitionDelegate.new(competition_id: competition.id, delegate_id: -1)
-        invalid_competition_delegate.save(validate: false)
+        # We use 'insert' here to both: skip validations, and skip callbacks.
+        CompetitionDelegate.insert({ competition_id: competition.id, delegate_id: -1, created_at: Time.now, updated_at: Time.now })
+        invalid_competition_delegate = CompetitionDelegate.last
         patch :update, params: { id: competition, competition: { name: competition.name } }
         expect(CompetitionDelegate.find_by_id(invalid_competition_delegate.id)).to be_nil
       end
 
       it "saving removes nonexistent organizers" do
-        invalid_competition_organizer = CompetitionOrganizer.new(competition_id: competition.id, organizer_id: -1)
-        invalid_competition_organizer.save(validate: false)
+        CompetitionOrganizer.insert({ competition_id: competition.id, organizer_id: -1, created_at: Time.now, updated_at: Time.now })
+        invalid_competition_organizer = CompetitionOrganizer.last
         patch :update, params: { id: competition, competition: { name: competition.name } }
         expect(CompetitionOrganizer.find_by_id(invalid_competition_organizer.id)).to be_nil
       end
@@ -588,7 +589,7 @@ RSpec.describe CompetitionsController do
         competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 1,
-          advancement_condition: RankingCondition.new(4),
+          advancement_condition: AdvancementConditions::RankingCondition.new(4),
           total_number_of_rounds: 2,
         )
         round_two = competition.competition_events[0].rounds.create!(

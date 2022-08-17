@@ -122,7 +122,7 @@ RSpec.describe Round do
     it "set to top 16" do
       first_round, _second_round = create_rounds("333", count: 2)
 
-      first_round.update!(advancement_condition: RankingCondition.new(16))
+      first_round.update!(advancement_condition: AdvancementConditions::RankingCondition.new(16))
       expect(first_round.advancement_condition.ranking).to eq 16
       expect(first_round.advancement_condition_to_s).to eq "Top 16 advance to next round"
     end
@@ -130,7 +130,7 @@ RSpec.describe Round do
     it "set to top 25%" do
       first_round, _second_round = create_rounds("333", count: 2)
 
-      first_round.update!(advancement_condition: PercentCondition.new(25))
+      first_round.update!(advancement_condition: AdvancementConditions::PercentCondition.new(25))
       expect(first_round.advancement_condition.percent).to eq 25
       expect(first_round.advancement_condition_to_s).to eq "Top 25% advance to next round"
     end
@@ -138,7 +138,7 @@ RSpec.describe Round do
     it "not allowed on last round" do
       _first_round, second_round = create_rounds("333", count: 2)
 
-      second_round.advancement_condition = RankingCondition.new(4)
+      second_round.advancement_condition = AdvancementConditions::RankingCondition.new(4)
       expect(second_round).to be_invalid_with_errors(advancement_condition: ["cannot be set on a final round"])
     end
 
@@ -146,21 +146,21 @@ RSpec.describe Round do
       it "set to <= 3 minutes" do
         first_round, _second_round = create_rounds("333", count: 2)
 
-        first_round.update!(advancement_condition: AttemptResultCondition.new(3.minutes.in_centiseconds))
+        first_round.update!(advancement_condition: AdvancementConditions::AttemptResultCondition.new(3.minutes.in_centiseconds))
         expect(first_round.advancement_condition_to_s).to eq "Average of 5 < 3:00.00 advances to next round"
       end
 
       it "set to <= 35 moves" do
         first_round, _second_round = create_rounds("333fm", format_id: 'm', count: 2)
 
-        first_round.update!(advancement_condition: AttemptResultCondition.new(35))
+        first_round.update!(advancement_condition: AdvancementConditions::AttemptResultCondition.new(35))
         expect(first_round.advancement_condition_to_s).to eq "Mean of 3 < 35 moves advances to next round"
       end
 
       it "set to >= 6 points" do
         first_round, _second_round = create_rounds("333mbf", format_id: '3', count: 2)
 
-        first_round.update!(advancement_condition: AttemptResultCondition.new(SolveTime.points_to_multibld_attempt(6)))
+        first_round.update!(advancement_condition: AdvancementConditions::AttemptResultCondition.new(SolveTime.points_to_multibld_attempt(6)))
         expect(first_round.advancement_condition_to_s).to eq "Best of 3 > 6 points advances to next round"
       end
     end
