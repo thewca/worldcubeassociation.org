@@ -420,6 +420,10 @@ th:
         remove_avatar: ลบรูปแทนตัว
         #original_hash: 9af9099
         results_notifications_enabled: ส่ง Email ให้ฉันเมื่อผลการแข่งขันของฉันถูกโพสต์
+        #original_hash: 29ce2ff
+        registration_notifications_enabled: >-
+          หากฉันจัดการแข่งขันหรือเป็น delegate ในการแข่งขัน ส่ง email
+          หาฉันเมื่อมีการสมัครการแข่งขัน
         #original_hash: de60ab8
         delegate_status: สถานะ Delegate
         #original_hash: 0f21717
@@ -805,6 +809,10 @@ th:
         remember_me: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
+        #original_hash: f62eb10
+        registration_notifications_enabled: >-
+          ใช้ได้เฉพาะกับการแข่งขันที่คุณจัดหรือ delegate เท่านั้น
+          และสามารถแทนที่ได้ในแต่ละการแข่งขัน
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
