@@ -10,6 +10,8 @@ PRODUCTION_ELASTIC_IP="34.208.140.116"
 TEMP_NEW_PROD_SERVER_NAME="temp-new-prod-server-via-cli"
 
 STAGING_SERVER_NAME="staging.worldcubeassociation.org"
+STAGING_TARGET_GROUP="arn:aws:elasticloadbalancing:us-west-2:285938427530:targetgroup/staging-main/bd9e7969ecfdba09"
+PROD_TARGET_GROUP="arn:aws:elasticloadbalancing:us-west-2:285938427530:targetgroup/production-main/2e6a4c44af364e04"
 OLD_STAGING_SERVER_NAME="DELETEME_old_${STAGING_SERVER_NAME}"
 STAGING_ELASTIC_IP="52.10.200.132"
 TEMP_NEW_STAGING_SERVER_NAME="temp-new-staging-server-via-cli"
@@ -377,6 +379,7 @@ function passthetorch() {
     next_cmd="$0 reap-servers"
   fi
 
+
   find_instance_by_name new_server_id $temp_new_server_name
   echo "Found instance '${temp_new_server_name}' with id ${new_server_id}!"
 
@@ -387,41 +390,28 @@ function passthetorch() {
   ssh_command="ssh -o StrictHostKeyChecking=no -o PasswordAuthentication=no -A cubing@${domain_name}"
   test_ssh_agent_forwarding "${ssh_command}" ${host}
 
-  # Do a quick smoke test of the new server.
-  echo "Testing out new server at ${domain_name}"
-  local ip_address=`dig +short ${domain_name}`
-  curl_cmd="curl --write-out %{http_code} --silent --resolve ${host}:443:${ip_address} https://${host}/server-status"
+  # Register the new instance with the ELB
+  echo "Registering Targets"
+  if [ "$staging" = true ]; then
+    aws elbv2 register-targets --target-group-arn ${STAGING_TARGET_GROUP} --targets Id=${new_server_id}
+  else
+    aws elbv2 register-targets --target-group-arn ${PROD_TARGET_GROUP} --targets Id=${new_server_id}
+  fi 
+
+  # Testing if the server works via the ELB Health Check.
+  echo "Testing Targets"
   exit_code=0
-  curl_result=`${curl_cmd}` || exit_code=$?
+  if [ "$staging" = true ]; then
+    aws elbv2 wait target-in-service --target-group-arn ${STAGING_TARGET_GROUP} --targets Id=${new_server_id} || exit_code=$?
+  else
+    aws elbv2 wait target-in-service --target-group-arn ${PROD_TARGET_GROUP} --targets Id=${new_server_id} || exit_code=$?
+  fi
   if [ $exit_code -ne 0 ]; then
-    echo "'$curl_cmd' failed with exit code: $exit_code"
+    echo "Target registering failed with exit code: $exit_code"
     exit 1
   fi
 
-  exit_code=0
-  server_status_curl_cmd="echo '$curl_result' | grep -o 'IP Addresses: [^ <]\+'"
-  ip_addresses=`${server_status_curl_cmd}` || exit_code=$?
-  if [ $exit_code -ne 0 ]; then
-    echo "'${server_status_curl_cmd}' failed with exit code: $exit_code"
-    exit 1
-  fi
-
-  server_status=`echo "$curl_result" | tail -1`
-  if [ "${server_status}" != "200" ]; then
-    echo "" >> /dev/stderr
-    echo "https://${host}/server-status returned non 200 status code: ${server_status}" >> /dev/stderr
-    echo "You can test this out by running: ${curl_cmd}" >> /dev/stderr
-    exit 1
-  fi
-
-  get_instance_internal_ip_address expected_ip ${new_server_id}
-  if ! echo $ip_addresses | grep ${expected_ip} > /dev/null; then
-    echo "" >> /dev/stderr
-    echo "When visiting https://${host}/server-status via server ${ip_address}, we expected to see internal IP address ${expected_ip}, but instead found ${ip_addresses}" >> /dev/stderr
-    exit 1
-  fi
-
-  echo "The new server at ${domain_name} appears to be working."
+  echo "The new server with instance_id ${instance_id} appears to be working."
   echo "We're almost ready to assign it the elastic ip address ${elastic_ip}"
 
   # The contents of the secrets directory on the live production server may
@@ -476,8 +466,19 @@ reap_servers() {
     old_server_name=${OLD_PRODUCTION_SERVER_NAME}
   fi
 
+
   find_instance_by_name old_production_id ${old_server_name}
   echo "Found instance '${old_server_name}' with id ${old_production_id}!"
+
+  echo "Deregistering the old Instances"
+  if [ "$staging" = true ]; then
+    aws elbv2 deregister-targets --target-group-arn ${STAGING_TARGET_GROUP} --targets Id=${new_server_id}
+    aws elbv2 wait target-deregistered --target-group-arn ${STAGING_TARGET_GROUP} --targets Id=${new_server_id}
+  else
+    aws elbv2 deregister-targets --target-group-arn ${PROD_TARGET_GROUP} --targets Id=${new_server_id}
+    aws elbv2 wait target-deregistered --target-group-arn ${PROD_TARGET_GROUP} --targets Id=${new_server_id}
+  fi
+  echo "Instance Derigistered"
 
   echo "I am going to terminate ${old_production_id}"
   wait_for_confirmation "HOLD ONTO YOUR BUTTS"
