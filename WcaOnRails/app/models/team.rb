@@ -75,7 +75,15 @@ class Team < ApplicationRecord
 
   # Code duplication from Cachable concern, as we index by friendly_id and not by id :(
   def self.c_all_by_friendly_id
-    @@teams_by_friendly_id ||= all.with_hidden.index_by(&:friendly_id)
+    @@teams_by_friendly_id ||= nil
+    @@teams_by_friendly_id_timestamp ||= nil
+
+    if @@teams_by_friendly_id.nil? || @@teams_by_friendly_id_timestamp < 15.minutes.ago
+      @@teams_by_friendly_id = all.with_hidden.index_by(&:friendly_id)
+      @@teams_by_friendly_id_timestamp = DateTime.now
+    end
+
+    @@teams_by_friendly_id
   end
 
   def self.c_find_by_friendly_id!(friendly_id)
