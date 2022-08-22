@@ -1,7 +1,5 @@
 <% provide(:title, "Disclaimer") %>
 
-<div class="container">
-  <h1><%= yield(:title) %></h1>
-
-  <%= react_component('StaticPages/Disclaimer', {}) %>
-</div>
+<%= react_component('StaticPages/Disclaimer', {}, {
+  class: 'container'
+}) %>
