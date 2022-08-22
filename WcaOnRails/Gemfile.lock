@@ -264,7 +264,7 @@ GEM
     encryptor (3.0.0)
     enum_help (0.0.19)
       activesupport (>= 3.0.0)
-    erubi (1.10.0)
+    erubi (1.11.0)
     eu_central_bank (1.7.0)
       money (~> 6.13, >= 6.13.6)
       nokogiri (~> 1.9)
@@ -623,7 +623,7 @@ GEM
       rdoc (>= 5.0)
     seedbank (0.4.0)
     semantic_range (3.0.0)
-    shakapacker (6.5.0)
+    shakapacker (6.5.1)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -804,7 +804,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 6.5.0)
+  shakapacker (= 6.5.1)
   simple_form
   simplecov
   simplecov-lcov
