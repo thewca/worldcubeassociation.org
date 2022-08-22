@@ -189,15 +189,15 @@ new() {
   check_deps
   if [ "$staging" = true ]; then
     temp_new_server_name=${TEMP_NEW_STAGING_SERVER_NAME}
-    host=staging.worldcubeassociation.org
+    elastic_ip=STAGING_ELASTIC_IP
   else
     temp_new_server_name=${TEMP_NEW_PROD_SERVER_NAME}
-    host=www.worldcubeassociation.org
+    elastic_ip=PRODUCTION_ELASTIC_IP
   fi
 
   get_pem_filename pem_filename ${keyname}
 
-  test_ssh_to_server ${host}
+  test_ssh_to_server ${elastic_ip}
 
   # Spin up a new EC2 instance.
   json=`aws ec2 run-instances \
@@ -229,11 +229,11 @@ bootstrap() {
 
   if [ "${server_name}" == "${TEMP_NEW_STAGING_SERVER_NAME}" ]; then
     environment=staging
-    host=staging.worldcubeassociation.org
+    elastic_ip=STAGING_ELASTIC_IP
     next_cmd="$0 passthetorch --staging"
   elif [ "${server_name}" == "${TEMP_NEW_PROD_SERVER_NAME}" ]; then
     environment=production
-    host=www.worldcubeassociation.org
+    elastic_ip=PRODUCTION_ELASTIC_IP
     next_cmd="$0 passthetorch"
   else
     echo "Unrecognized server name '${server_name}'" >> /dev/stderr
@@ -248,7 +248,7 @@ bootstrap() {
 
   ssh_command="ssh -i ${pem_filename} -o StrictHostKeyChecking=no -A ubuntu@${domain_name}"
 
-  test_ssh_agent_forwarding "${ssh_command}" ${host}
+  test_ssh_agent_forwarding "${ssh_command}" ${elastic_ip}
 
   echo "For debugging purposes, you can ssh to the server via '${ssh_command}'"
   echo "Bootstrapping the newly created server..."
@@ -368,14 +368,12 @@ function passthetorch() {
     curr_server_name=$STAGING_SERVER_NAME
     old_server_name=$OLD_STAGING_SERVER_NAME
     elastic_ip=$STAGING_ELASTIC_IP
-    host=staging.worldcubeassociation.org
     next_cmd="$0 reap-servers --staging"
   else
     temp_new_server_name=$TEMP_NEW_PROD_SERVER_NAME
     curr_server_name=$PRODUCTION_SERVER_NAME
     old_server_name=$OLD_PRODUCTION_SERVER_NAME
     elastic_ip=$PRODUCTION_ELASTIC_IP
-    host=www.worldcubeassociation.org
     next_cmd="$0 reap-servers"
   fi
 
@@ -388,7 +386,7 @@ function passthetorch() {
 
   get_instance_domain_name domain_name ${new_server_id}
   ssh_command="ssh -o StrictHostKeyChecking=no -o PasswordAuthentication=no -A cubing@${domain_name}"
-  test_ssh_agent_forwarding "${ssh_command}" ${host}
+  test_ssh_agent_forwarding "${ssh_command}" ${elastic_ip}
 
   # Register the new instance with the ELB
   echo "Registering Targets"
@@ -416,11 +414,11 @@ function passthetorch() {
 
   # The contents of the secrets directory on the live production server may
   # have changed since the user spun up this new server. Rsync it.
-  ${ssh_command} "sudo -E rsync -az -e 'ssh -o StrictHostKeyChecking=no' --info=progress2 cubing@${host}:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation.org/secrets"
+  ${ssh_command} "sudo -E rsync -az -e 'ssh -o StrictHostKeyChecking=no' --info=progress2 cubing@${elastic_ip}:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation.org/secrets"
 
   # Disable cron job running on the old server, to prevent it from operating
   # on the remote database (the same for both old and new server).
-  old_ssh_command="ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no cubing@${host}"
+  old_ssh_command="ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no cubing@${elastic_ip}"
   ${old_ssh_command} 'crontab -l | sed -e "s/^/#/" -e "1i# Cronjobs disabled on `date` by servers.sh" | crontab'
 
   aws ec2 associate-address --public-ip ${elastic_ip} --instance-id ${new_server_id}
