@@ -21,7 +21,7 @@
 public/assets/**
 
 # Ignore js-specific generated locales (they are rebuilt whenever we compile assets)
-app/webpacker/packs/generated_locales/*.js
+app/webpacker/rails_translations/*.json
 
 # Environment configuration
 .env*
