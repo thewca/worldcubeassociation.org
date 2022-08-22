@@ -161,6 +161,7 @@ new() {
       print_command_usage_and_exit
     fi
     staging=true
+    instance_type=t3.medium
     shift
   fi
   if [ $# -ne 2 ]; then
@@ -189,10 +190,10 @@ new() {
   check_deps
   if [ "$staging" = true ]; then
     temp_new_server_name=${TEMP_NEW_STAGING_SERVER_NAME}
-    elastic_ip=STAGING_ELASTIC_IP
+    elastic_ip=$STAGING_ELASTIC_IP
   else
     temp_new_server_name=${TEMP_NEW_PROD_SERVER_NAME}
-    elastic_ip=PRODUCTION_ELASTIC_IP
+    elastic_ip=$PRODUCTION_ELASTIC_IP
   fi
 
   get_pem_filename pem_filename ${keyname}
@@ -229,11 +230,11 @@ bootstrap() {
 
   if [ "${server_name}" == "${TEMP_NEW_STAGING_SERVER_NAME}" ]; then
     environment=staging
-    elastic_ip=STAGING_ELASTIC_IP
+    elastic_ip=$STAGING_ELASTIC_IP
     next_cmd="$0 passthetorch --staging"
   elif [ "${server_name}" == "${TEMP_NEW_PROD_SERVER_NAME}" ]; then
     environment=production
-    elastic_ip=PRODUCTION_ELASTIC_IP
+    elastic_ip=$PRODUCTION_ELASTIC_IP
     next_cmd="$0 passthetorch"
   else
     echo "Unrecognized server name '${server_name}'" >> /dev/stderr
