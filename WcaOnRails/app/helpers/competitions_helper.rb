@@ -302,7 +302,7 @@ module CompetitionsHelper
     button = button_tag(t('competitions.series_fields.add_series'), type: "button", class: "btn btn-default")
     form = send(:instantiate_builder, "competition", competition, {
                   builder: SimpleForm::FormBuilder,
-                  wrapper: :horizontal_form
+                  wrapper: :horizontal_form,
                 })
 
     # force_non_association_create makes it so that the `series` association is not constantly deleted

@@ -258,15 +258,15 @@ class Registration < ApplicationRecord
 
     if registration_status.nil?
       return sibling_registrations
-        .joins(:competition)
-        .order(:start_date)
+             .joins(:competition)
+             .order(:start_date)
     end
 
     # this relies on the scopes being named the same as `checked_status` but it is a significant performance improvement
     sibling_registrations.send(registration_status)
   end
 
-  SERIES_SIBLING_DISPLAY_STATUSES = [:accepted, :pending]
+  SERIES_SIBLING_DISPLAY_STATUSES = [:accepted, :pending].freeze
 
   def series_registration_info
     SERIES_SIBLING_DISPLAY_STATUSES.map { |st| series_sibling_registrations(st) }
