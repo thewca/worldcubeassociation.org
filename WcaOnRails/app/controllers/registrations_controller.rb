@@ -39,6 +39,7 @@ class RegistrationsController < ApplicationController
     @show_events = params[:show_events] == "true"
     @show_full_emails = params[:show_full_emails] == "true"
     @show_birthdays = params[:show_birthdays] == "true"
+    @run_validations = params[:run_validations] == "true"
 
     @competition = competition_from_params
     @registrations = @competition.registrations.includes(:user, :registration_payments, :events)
