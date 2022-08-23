@@ -1787,9 +1787,10 @@ class Competition < ApplicationRecord
   end
 
   def series_sibling_competitions
-    siblings = series&.competitions || []
+    return [] unless series
 
-    siblings.select { |comp| comp.id != self.id }
-            .sort_by { |comp| comp.start_date }
+    series.competitions
+          .where.not(id: self.id)
+          .order(:start_date)
   end
 end

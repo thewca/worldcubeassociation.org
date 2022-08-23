@@ -60,7 +60,7 @@
       <% end %>
     </div>
   <% end %>
-  <% if @competition.series %>
+  <% unless @registration.series_sibling_registrations.empty? %>
     <hr/>
     <div>
       <h4>Series Registrations</h4>

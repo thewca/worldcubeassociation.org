@@ -254,19 +254,21 @@ class Registration < ApplicationRecord
     sibling_ids = competition.series_sibling_competitions.map(&:id)
 
     sibling_registrations = user.registrations
-                                .select { |r| sibling_ids.include?(r.competition_id) }
+                                .where(competition_id: sibling_ids)
 
     if registration_status.nil?
       return sibling_registrations
-        .sort_by { |r| r.competition.start_date }
+        .joins(:competition)
+        .order(:start_date)
     end
 
-    sibling_registrations.select { |r| r.checked_status == registration_status }
+    # this relies on the scopes being named the same as `checked_status` but it is a significant performance improvement
+    sibling_registrations.send(registration_status)
   end
 
   SERIES_SIBLING_DISPLAY_STATUSES = [:accepted, :pending]
 
-  def series_sibling_registration_info
+  def series_registration_info
     SERIES_SIBLING_DISPLAY_STATUSES.map { |st| series_sibling_registrations(st) }
                                    .map(&:count)
                                    .join(" + ")
