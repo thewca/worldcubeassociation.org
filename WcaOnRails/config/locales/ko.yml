@@ -380,8 +380,6 @@ ko:
         competition_events: 종목
         #original_hash: 71c8461
         enable_donations: 참가비와 더불어 후원금도 지급가능
-        #original_hash: 4baf44b
-        championship_type: 주요 대회 등록
         #original_hash: 556fda0
         extra_registration_requirements: 참가 신청 추가 필수 사항
         #original_hash: 2529d04
@@ -402,6 +400,9 @@ ko:
         regulation_z3: 규정 Z3)를 적용하여 특정 종목의 특정 라운드에 바로 진출하는 선수들을 선택하고 싶습니다.
         #original_hash: 18d9a8c
         regulation_z3_reason: 규정 Z3) 적용 사유
+      championship:
+        #original_hash: 4baf44b
+        championship_type: 주요 대회 등록
       registration:
         #original_hash: 3c23a67
         guests: 참관객

@@ -465,8 +465,6 @@ es:
         competition_events: Pruebas
         #original_hash: 71c8461
         enable_donations: Quiero habilitar donaciones además de cobrar el importe del registro
-        #original_hash: 4baf44b
-        championship_type: Tipo de campeonato
         #original_hash: 556fda0
         extra_registration_requirements: Requisitos de registro adicionales
         #original_hash: 2529d04
@@ -505,6 +503,9 @@ es:
         event_restrictions_reason: Razón y detalles para restricciones de categorías
         #original_hash: 3c24bd2
         main_event_id: Categoría principal
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Tipo de campeonato
       registration:
         #original_hash: 3c23a67
         guests: Acompañantes
@@ -851,7 +852,7 @@ es:
           <br><br><b>DESCARGO DE RESPONSABILIDAD: Las siguientes estimaciones de
           cuotas WCA son simplemente una estimación basada en las actuales
           tarifas de cambios de moneda y de ningún modo son jurídicamente
-          vinculantes para el pago de las cuotas.</b><br>Haz Click en 
+          vinculantes para el pago de las cuotas.</b><br>Haz Click en
           "Actualizar Competición" tras cambiar el código de moneda para
           sincronizarlo con la estimación. Si no hay tarifas de cambio
           aplicables para la selección, no se mostrará nada.
@@ -3034,22 +3035,23 @@ es:
         zero: Ninguna competición
         one: 1 competición
         other: '%{count} competiciones'
-      #original_hash: e3528ec
-      label: 'Competiciones cercanas (en %{days} días y %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Últimos %{days} días'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} en %{kms} km y %{days} días.'
+      #original_hash: 9eb8f46
+      within: 'En %{days} días'
+      #original_hash: d97d1ee
+      show: Mostrar
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Competiciones cercanas (en %{days} días y %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: No hay competiciones cercanas.
       #original_hash: 7e76950
       no_date_yet: Aún no has asignado una fecha para esta competición.
       #original_hash: 82a95d2
       no_location_yet: Aún no has asignado una ubicación para esta competición.
-      #original_hash: 9eb8f46
-      within: 'En %{days} días'
-      #original_hash: d97d1ee
-      show: Mostrar
       #original_hash: 709a232
       name: Nombre
       #original_hash: adc24b7

@@ -516,8 +516,6 @@ hr:
         competition_events: Discipline
         #original_hash: 71c8461
         enable_donations: Želim omogućiti donacije dodatno uz prikupljanje kotizacija
-        #original_hash: 4baf44b
-        championship_type: Vrsta prvenstva
         #original_hash: 556fda0
         extra_registration_requirements: Dodatni zahtjevi za registraciju
         #original_hash: 2529d04
@@ -560,6 +558,9 @@ hr:
         event_restrictions_reason: Razlozi i detalji za ograničenja disciplina
         #original_hash: 3c24bd2
         main_event_id: Glavna disciplina
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Vrsta prvenstva
       registration:
         #original_hash: 3c23a67
         guests: Gosti
@@ -3063,22 +3064,23 @@ hr:
         few: nekoliko natjecanja
         many: nekoliko natjecanja
         other: '%{count} natjecanja'
-      #original_hash: e3528ec
-      label: 'Natjecanja u blizini (unutar %{days}dana i %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Zadnjih %{days} dana'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} unutar %{kms} km i %{days} dana.'
+      #original_hash: 9eb8f46
+      within: 'Unutar %{days} dana'
+      #original_hash: d97d1ee
+      show: Pokaži
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Natjecanja u blizini (unutar %{days}dana i %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Nema natjecanja u blizini!
       #original_hash: 7e76950
       no_date_yet: Nisi još priložio/la datum za ovo natjecanje.
       #original_hash: 82a95d2
       no_location_yet: Nisi još priložio/la lokaciju za ovo natjecanje.
-      #original_hash: 9eb8f46
-      within: 'Unutar %{days} dana'
-      #original_hash: d97d1ee
-      show: Pokaži
       #original_hash: 709a232
       name: Ime
       #original_hash: adc24b7
