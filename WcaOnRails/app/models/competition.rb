@@ -1772,6 +1772,20 @@ class Competition < ApplicationRecord
     world_or_continental_championship? || multi_country_fmc_competition?
   end
 
+  validate :series_siblings_must_be_valid
+  private def series_siblings_must_be_valid
+    if series
+      series_sibling_competitions.each { |comp|
+        if self.kilometers_to(comp) > CompetitionSeries::MAX_SERIES_DISTANCE_KM
+          errors.add(:series, I18n.t('competitions.errors.series_distance_km', competition: comp.name))
+        end
+        if (self.start_date - comp.start_date) > CompetitionSeries::MAX_SERIES_DISTANCE_DAYS
+          errors.add(:series, I18n.t('competitions.errors.series_distance_days', competition: comp.name))
+        end
+      }
+    end
+  end
+
   def series_sibling_competitions
     siblings = series&.competitions || []
 

@@ -1094,6 +1094,7 @@ en:
       must_register: "must register for at least one event"
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
+      series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1555,6 +1556,8 @@ en:
       event_change_deadline_before_registration_close: "Deadline for updating events cannot be before registration close date."
       event_change_deadline_after_end_date: "Deadline for updating events cannot be after the competition."
       event_change_deadline_with_ots: "Deadline for updating events must be during the competition if on the spot registrations are accepted."
+      series_distance_km: "The competition is located too far away from %{competition}."
+      series_distance_days: "The competition is scheduled too many days away from %{competition}."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
