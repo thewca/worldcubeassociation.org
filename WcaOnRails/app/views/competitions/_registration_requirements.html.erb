@@ -25,6 +25,17 @@
   <br>
 <% end %>
 
+<% if @competition.series %>
+  <%= t('competitions.competition_info.part_of_a_series', name: @competition.series.name) %>
+  <ul>
+    <% @competition.series_sibling_competitions.each do |comp| %>
+      <li><%= link_to comp.name, competition_path(comp.id) %></li>
+    <% end %>
+  </ul>
+  <%= t('competitions.competition_info.series_registration_warning_html') %>
+  <br>
+<% end %>
+
 <% if @competition.competitor_limit_enabled.nil? %>
 <% elsif @competition.competitor_limit_enabled? %>
   <%= t('competitions.competition_info.competitor_limit_is', competitor_limit: @competition.competitor_limit) %>

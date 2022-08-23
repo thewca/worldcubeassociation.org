@@ -1771,4 +1771,11 @@ class Competition < ApplicationRecord
   def exempt_from_wca_dues?
     world_or_continental_championship? || multi_country_fmc_competition?
   end
+
+  def series_sibling_competitions
+    siblings = series&.competitions || []
+
+    siblings.select { |comp| comp.id != self.id }
+            .sort_by { |comp| comp.start_date }
+  end
 end
