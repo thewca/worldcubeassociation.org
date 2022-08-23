@@ -649,6 +649,7 @@ module DatabaseDumper
           last_sign_in_at
           name
           region
+          registration_notifications_enabled
           results_notifications_enabled
           saved_avatar_crop_h
           saved_avatar_crop_w

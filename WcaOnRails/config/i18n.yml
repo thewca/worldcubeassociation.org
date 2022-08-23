@@ -25,21 +25,20 @@
 #   - file: "app/assets/javascripts/i18n/translations.js"
 #     only: "*"
 #
-export_i18n_js: false
-sort_translations_keys: true
-# We set this programatically.
-# Setting this here generates unecessary large files (such as the default
-# English locale having default values for *all* available locales).
-fallbacks: false
+
 # This sets which keys we export from the locale file!
 # It will need to be updated as we port more and more stuff to React.
-<% export_keys = ["common.*", "competitions.*", "events.*", "formats.*", "search_results.*", "round.*", "countries.*", "enums.*", "regional_organizations.*", "qualification.*"] %>
 translations:
-<% I18n.available_locales.each do |l| %>
-  - file: "app/webpacker/packs/generated_locales/<%= l %>.js"
-    only: [<%= export_keys.map { |k|  "\"#{l}.#{k}\"" }.join(",") %>]
-    prefix: |
-      // This file is generated automatically by the rake middleware!
-      // DO NOT EDIT IT MANUALLY!
-      import I18n from '../../lib/i18n';
-<% end %>
+  # Using the `:locale` template in the filename here automagically makes i18n-js iterate over the available languages.
+  - file: "app/webpacker/rails_translations/:locale.json"
+    patterns:
+      - "*.common.*"
+      - "*.competitions.*"
+      - "*.events.*"
+      - "*.formats.*"
+      - "*.search_results.*"
+      - "*.round.*"
+      - "*.countries.*"
+      - "*.enums.*"
+      - "*.regional_organizations.*"
+      - "*.qualification.*"

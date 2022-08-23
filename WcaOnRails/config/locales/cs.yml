@@ -428,6 +428,10 @@ cs:
         remove_avatar: Odstranit avatar
         #original_hash: 9af9099
         results_notifications_enabled: 'Zašlete mi e-mail, jakmile budou zveřejněny mé výsledky.'
+        #original_hash: 29ce2ff
+        registration_notifications_enabled: >-
+          Pošlete mi email, když se někdo zaregistruje na soutěž kterou
+          organizuji nebo deleguji.
         #original_hash: de60ab8
         delegate_status: Status delegáta
         #original_hash: 0f21717
@@ -825,6 +829,10 @@ cs:
         remember_me: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
+        #original_hash: f62eb10
+        registration_notifications_enabled: >-
+          Toto se týká jen soutěží, které organizujete nebo delegujete a lze to
+          změnit i pro každou konkrétní soutěž.
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
@@ -2747,6 +2755,8 @@ cs:
       all_years: Všechny roky
       #original_hash: 719ea39
       clear: Zrušit
+      #original_hash: e827f28
+      select_hint: Prosíme zvolte eventy
       #original_hash: a1fffaa
       list: Seznam
       #original_hash: ab478f3

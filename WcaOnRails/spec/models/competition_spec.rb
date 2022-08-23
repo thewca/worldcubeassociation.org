@@ -772,12 +772,16 @@ RSpec.describe Competition do
   describe "receive_registration_emails" do
     let(:competition) { FactoryBot.create :competition }
     let(:delegate) { FactoryBot.create :delegate }
+    let(:delegate_enabled) { FactoryBot.create :delegate, registration_notifications_enabled: true }
 
     it "computes receiving_registration_emails? via OR" do
       expect(competition.receiving_registration_emails?(delegate.id)).to eq false
 
       competition.delegates << delegate
       expect(competition.receiving_registration_emails?(delegate.id)).to eq false
+
+      competition.delegates << delegate_enabled
+      expect(competition.receiving_registration_emails?(delegate_enabled.id)).to eq true
 
       cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
       cd.update_column(:receive_registration_emails, true)
@@ -812,6 +816,16 @@ RSpec.describe Competition do
 
       expect(cd.reload.receive_registration_emails).to eq false
       expect(co.reload.receive_registration_emails).to eq false
+
+      # Test we can change the setting for a delegate with notifications
+      # enabled by default.
+      competition.delegates << delegate_enabled
+      cde = competition.competition_delegates.find_by_delegate_id(delegate_enabled.id)
+      expect(cde.receive_registration_emails).to eq true
+      competition.receive_registration_emails = false
+      competition.editing_user_id = delegate_enabled.id
+      competition.save!
+      expect(cde.reload.receive_registration_emails).to eq false
     end
   end
 

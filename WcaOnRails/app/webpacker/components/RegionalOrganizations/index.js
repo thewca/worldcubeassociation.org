@@ -1,6 +1,7 @@
 import React from 'react';
 
 import I18n from '../../lib/i18n';
+import I18nHTMLTranslate from '../I18nHTMLTranslate';
 
 function ROOverview({
   orgs,
@@ -50,7 +51,7 @@ function ROOverview({
       </ol>
 
       <h3>{I18n.t('regional_organizations.application_instructions.title')}</h3>
-      <p>{I18n.t('regional_organizations.application_instructions.description_html')}</p>
+      <p><I18nHTMLTranslate i18nKey="regional_organizations.application_instructions.description_html" /></p>
     </>
   );
 }
