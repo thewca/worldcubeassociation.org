@@ -74,18 +74,18 @@
                 <%= Competition::NEARBY_DISTANCE_KM_WARNING %>,
                 form_disabled);
 
-            window.wca.fetchNearbyCompetitions = function() {
-              if (form_disabled) {
+            window.wca.triggerAdjacentCompetitionAjax = function(url, targetSelector, ajaxId, overrideDisabled = false) {
+              if (form_disabled && !overrideDisabled) {
                 // The user isn't allowed to change the location of the
                 // competition, so there's no need to bother recomputing the nearby
                 // competitions.
                 return;
               }
-              $("#nearby-competitions").addClass('loading');
+
               var obj = $("#competition-form").serializeJSON();
 
-              window.wca.cancelPendingAjaxAndAjax('render_nearby_competitions', {
-                url: '<%= nearby_competitions_path %>',
+              var request = {
+                url: url,
                 data: {
                   <% if @competition_admin_view %>
                     'competition_admin_view': true,
@@ -97,10 +97,33 @@
                   'competition[end_date]': obj['competition[end_date]'],
                 },
                 success: function(data) {
-                  $('#nearby-competitions').html(data);
-                  $("#nearby-competitions").removeClass('loading');
+                  $(targetSelector).html(data);
+                  $(targetSelector).removeClass('loading');
                 }
-              });
+              };
+
+              $(targetSelector).addClass('loading');
+              window.wca.cancelPendingAjaxAndAjax(ajaxId, request);
+            };
+            window.wca.fetchProximityPolicyCompetitions = function(overrideDisabled = false) {
+              var nearbyAjaxUrl = '<%= nearby_competitions_path %>';
+              window.wca.triggerAdjacentCompetitionAjax(nearbyAjaxUrl, '#nearby-competitions', 'render_nearby_competitions', overrideDisabled);
+            };
+            window.wca.fetchSeriesEligibleCompetitions = function(overrideDisabled = false) {
+              var seriesEligibleUrl = '<%= series_eligible_competitions_path %>';
+              window.wca.triggerAdjacentCompetitionAjax(seriesEligibleUrl, '#series-eligible-competitions', 'render_eligible_series_competitions', overrideDisabled);
+            };
+            window.wca.fetchNearbyCompetitions = function(overrideDisabled = false) {
+              window.wca.fetchProximityPolicyCompetitions(overrideDisabled);
+
+              var seriesDisplayed = $('#series-eligible-competitions').length > 0;
+
+              if (seriesDisplayed) {
+                window.wca.fetchSeriesEligibleCompetitions(overrideDisabled);
+              }
+
+              var obj = $("#competition-form").serializeJSON();
+
               window.wca.cancelPendingAjaxAndAjax('render_time_until_competition', {
                 url: '<%= time_until_competition_path %>',
                 data: {
@@ -135,7 +158,8 @@
           });
         </script>
 
-        <div id="nearby-competitions">
+        <div id="nearby-competitions" class="adjacent-competitions">
+          <% @nearby_competitions = [] # nasty hack to display the "loading" indicator without crashing %>
           <%= render "nearby_competitions" %>
         </div>
 
@@ -148,6 +172,18 @@
         <hr>
         <%= f.input :generate_website %>
         <%= f.input :external_website %>
+        <hr>
+
+        <div class="series">
+          <%= f.simple_fields_for :series, @competition.series do |f2| %>
+            <%= render "series_fields", f: f2 %>
+          <% end %>
+
+          <div id="series-eligible-competitions" class="adjacent-competitions">
+            <% @series_eligible_competitions = [] # nasty hack to display the "loading" indicator without crashing %>
+            <%= render "series_eligible_competitions" %>
+          </div>
+        </div>
         <hr>
 
         <div class="championships">
@@ -252,7 +288,6 @@
               }
             });
           }
-
 
           $(function() {
             $('select[name="competition[competitor_limit_enabled]"]').on('change', UpdateDues);

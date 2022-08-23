@@ -1,0 +1,24 @@
+<div class="nested-fields">
+  <% if f.options[:preload_competition_id] %>
+    <% f.object = preload_competition_series(@competition, f.options[:preload_competition_id]) %>
+    <%# make sure that a competition always associates itself with the series. %>
+    <% f.object.competitions.push(@competition) %>
+
+    <% if f.object.id %>
+      <%= f.hidden_field :id %>
+    <% end %>
+  <% end %>
+
+  <%= f.input :name %>
+  <%= f.input :competition_ids, as: :competition_id, input_html: { class: "wca-autocomplete-input_lock" } %>
+
+  <div class="row">
+    <div class="col-sm-offset-2 col-sm-9">
+      <%= link_to_remove_association button_tag(t(".remove_series"), type: "button", class: "btn btn-danger"), f %>
+    </div>
+  </div>
+
+  <script>
+    $('input.wca-autocomplete').wcaAutocomplete();
+  </script>
+</div>

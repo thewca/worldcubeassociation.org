@@ -7,10 +7,10 @@
     <td><%= t 'competitions.nearby_competitions.distance' %></td>
     <td><%= t 'competitions.nearby_competitions.limit' %></td>
     <td><%= t 'competitions.nearby_competitions.competitors' %></td>
-    <td class="wca-nearby-competitions-show-events"><%= t 'competitions.nearby_competitions.events' %></td>
+    <td class="wca-adjacent-competitions-show-events"><%= t 'competitions.nearby_competitions.events' %></td>
   </tr>
   <% nearby_competitions.each do |c| %>
-    <tr class="<%= @competition.dangerously_close_to?(c) ? "danger" : "warning" %>">
+    <tr class="<%= (@competition.adjacent_to?(c, nearby_km, nearby_days) ^ invert_warnings) ? "danger" : "warning" %>">
       <td class="text-nowrap">
         <%= if current_user.can_admin_results?
           link_to c.name, admin_edit_competition_path(c.id), target: "_blank"
@@ -19,6 +19,10 @@
         end %>
         <% unless c.confirmed? %>
           <i class="fas fa-exclamation-circle" data-toggle="tooltip" data-placement="top" data-container="body" title="This competition is not confirmed yet."></i>
+        <% end %>
+        <% if extra_link_handler %>
+          <br/>
+          <%= extra_link_handler.call(c) %>
         <% end %>
       </td>
       <td><%= users_to_sentence c.delegates %></td>
@@ -33,7 +37,7 @@
       </td>
       <td class="text-center"><%= c.competitor_limit if c.competitor_limit_enabled %></td>
       <td class="text-center"><%= c.competitors.count if c.is_probably_over? %></td>
-      <td class="wca-nearby-competitions-show-events">
+      <td class="wca-adjacent-competitions-show-events">
         <% c.events.each do |event| %>
           <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "bottom", container: "body" }, title: event.name %>
         <% end %>

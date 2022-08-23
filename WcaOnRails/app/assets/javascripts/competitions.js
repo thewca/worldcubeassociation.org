@@ -41,14 +41,14 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     }
   }).trigger('change');
 
-  $('#nearby-competitions').on('click', "#wca-nearby-competitions-show-events-button", function() {
-    $('#nearby-competitions .wca-nearby-competitions-show-events').show();
-    $('#nearby-competitions .wca-nearby-competitions-hide-events').hide();
+  $('.adjacent-competitions').on('click', "#wca-adjacent-competitions-show-events-button", function() {
+    $('.adjacent-competitions .wca-adjacent-competitions-show-events').show();
+    $('.adjacent-competitions .wca-adjacent-competitions-hide-events').hide();
   });
 
-  $('#nearby-competitions').on('click', "#wca-nearby-competitions-hide-events-button", function() {
-    $('#nearby-competitions .wca-nearby-competitions-show-events').hide();
-    $('#nearby-competitions .wca-nearby-competitions-hide-events').show();
+  $('.adjacent-competitions').on('click', "#wca-adjacent-competitions-hide-events-button", function() {
+    $('.adjacent-competitions .wca-adjacent-competitions-show-events').hide();
+    $('.adjacent-competitions .wca-adjacent-competitions-hide-events').show();
   });
 });
 

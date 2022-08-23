@@ -297,4 +297,34 @@ module CompetitionsHelper
             class: icon_class,
             data: { toggle: "tooltip" })
   end
+
+  def link_to_add_series_association(competition)
+    button = button_tag(t('.add_series'), type: "button", class: "btn btn-default", name: "competition_series_add")
+    form = send(:instantiate_builder, "competition", competition, {
+                  builder: SimpleForm::FormBuilder,
+                  wrapper: :horizontal_form
+                })
+
+    # force_non_association_create makes it so that the `series` association is not constantly deleted
+    # and re-created upon opening the form. See also https://github.com/nathanvda/cocoon/wiki/has_one-association
+    link_to_add_association button, form, :series,
+                            data: { association_insertion_node: '.series', association_insertion_method: 'prepend' },
+                            render_options: { preload_competition_id: competition.id },
+                            force_non_association_create: true
+  end
+
+  def preload_competition_series(form_competition, preload_competition_id)
+    competition = Competition.find_by_id(preload_competition_id)
+
+    if (series = competition.series)
+      form_competition.series = series
+
+      return series
+    end
+
+    preload_series = CompetitionSeries.new
+    preload_series.competitions.push(competition)
+
+    preload_series
+  end
 end

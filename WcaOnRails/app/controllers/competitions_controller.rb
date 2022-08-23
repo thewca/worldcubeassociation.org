@@ -195,7 +195,6 @@ class CompetitionsController < ApplicationController
       # Show id errors under name, since we don't actually show an
       # id field to the user, so they wouldn't see any id errors.
       @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
-      @nearby_competitions = get_nearby_competitions(@competition)
       render :new
     end
   end
@@ -291,7 +290,6 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = true
     @competition_organizer_view = false
-    @nearby_competitions = get_nearby_competitions(@competition)
     render :edit
   end
 
@@ -299,7 +297,6 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = false
     @competition_organizer_view = true
-    @nearby_competitions = get_nearby_competitions(@competition)
     render :edit
   end
 
@@ -356,6 +353,13 @@ class CompetitionsController < ApplicationController
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @nearby_competitions = get_nearby_competitions(@competition)
     render partial: 'nearby_competitions'
+  end
+
+  def series_eligible_competitions
+    @competition = Competition.new(competition_params)
+    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    @series_eligible_competitions = @competition.eligible_series_competitions
+    render partial: 'series_eligible_competitions'
   end
 
   def time_until_competition
@@ -496,6 +500,19 @@ class CompetitionsController < ApplicationController
         @competition = Competition.find(params[:id])
       end
 
+      # We don't destroy CompetitionSeries directly, because that could badly affect other competitions
+      # that are still attached to that series. If the frontend sends a _destroy, we only unlink the *current*
+      # competition and let validations take care of the rest.
+      if params[:competition].try(:[], :series_attributes)&.try(:[], :_destroy) == "1"
+        old_series = @competition.series
+
+        @competition.update(series: nil)
+
+        # reset them so that upon the next read they will be fetched based on what's just been written.
+        old_series.competition_ids = nil
+        old_series.reload.validate
+      end
+
       new_organizers = @competition.organizers - old_organizers
       removed_organizers = old_organizers - @competition.organizers
 
@@ -522,7 +539,6 @@ class CompetitionsController < ApplicationController
         redirect_to edit_competition_path(@competition)
       end
     else
-      @nearby_competitions = get_nearby_competitions(@competition)
       render :edit
     end
   end
@@ -632,7 +648,8 @@ class CompetitionsController < ApplicationController
         :waiting_list_deadline_date,
         :event_change_deadline_date,
         { competition_events_attributes: [:id, :event_id, :_destroy],
-          championships_attributes: [:id, :championship_type, :_destroy] },
+          championships_attributes: [:id, :championship_type, :_destroy],
+          series_attributes: [:id, :name, :competition_ids] },
       ]
       if current_user.can_admin_competitions?
         permitted_competition_params += [
@@ -647,6 +664,14 @@ class CompetitionsController < ApplicationController
         competition_params[:confirmed] = true
       end
       competition_params[:editing_user_id] = current_user.id
+
+      # Quirk: When adding a new competition to an already existing (i.e. already persisted) Series,
+      # Rails will throw an error like "cannot find Series with ID 123 for NewCompetition"
+      # despite we're sending the update to change Series 123 to include NewCompetition.
+      # To mitigate this error, we must deliberately write to series_id first.
+      if (persisted_series_id = competition_params.try(:[], :series_attributes)&.try(:[], :id))
+        competition_params[:series_id] = persisted_series_id
+      end
     end
   end
 end

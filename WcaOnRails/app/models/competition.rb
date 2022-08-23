@@ -29,9 +29,11 @@ class Competition < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :bookmarked_competitions, dependent: :delete_all
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
+  belongs_to :series, class_name: "CompetitionSeries"
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
+  accepts_nested_attributes_for :series, allow_destroy: false
 
   validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :entry_fee_required?
   monetize :base_entry_fee_lowest_denomination,
@@ -1092,6 +1094,10 @@ class Competition < ApplicationRecord
                .sort_by { |c| kilometers_to(c) }
   end
 
+  def eligible_series_competitions
+    nearby_competitions(CompetitionSeries::MAX_SERIES_DISTANCE_DAYS, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
+  end
+
   private def to_radians(degrees)
     degrees * Math::PI / 180
   end
@@ -1153,11 +1159,15 @@ class Competition < ApplicationRecord
   end
 
   def dangerously_close_to?(c)
+    self.adjacent_to?(c, NEARBY_DISTANCE_KM_DANGER, NEARBY_DAYS_DANGER)
+  end
+
+  def adjacent_to?(c, distance_km, distance_days)
     if !c.has_date? || !self.has_date?
       return false
     end
     days_until = self.days_until_competition?(c)
-    self.kilometers_to(c) < NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
+    self.kilometers_to(c) < distance_km && days_until.abs < distance_days
   end
 
   def announced?
