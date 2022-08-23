@@ -154,6 +154,7 @@ class Competition < ApplicationRecord
     main_event_id
     waiting_list_deadline_date
     event_change_deadline_date
+    series_id
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
@@ -533,7 +534,8 @@ class Competition < ApplicationRecord
              'uploaded_jsons',
              'wcif_extensions',
              'bookmarked_competitions',
-             'bookmarked_users'
+             'bookmarked_users',
+             'series'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
