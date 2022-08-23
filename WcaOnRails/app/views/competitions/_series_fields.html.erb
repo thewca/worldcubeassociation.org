@@ -9,7 +9,11 @@
     <% end %>
   <% end %>
 
+  <%# i18n-tasks-use t('simple_form.hints.competition.series.name') %>
+  <%# i18n-tasks-use t('activerecord.attributes.competition_series.name') %>
   <%= f.input :name %>
+  <%# i18n-tasks-use t('simple_form.hints.competition.series.competition_ids') %>
+  <%# i18n-tasks-use t('activerecord.attributes.competition_series.competition_ids') %>
   <%= f.input :competition_ids, as: :competition_id, input_html: { class: "wca-autocomplete-input_lock" } %>
 
   <div class="row">

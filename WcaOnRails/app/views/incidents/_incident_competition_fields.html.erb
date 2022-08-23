@@ -1,4 +1,5 @@
 <div class="nested-fields">
+  <%# i18n-tasks-use t('simple_form.hints.incident.competition_id') %>
   <%= f.input :competition_id, as: :incident_competition_id, only_one: true, input_html: { class: "competition-selector" }, link_html: link_to_remove_association(button_tag(ui_icon("times"), type: "button", class: "btn btn-danger"), f) %>
   <script>
     $('input.wca-autocomplete').wcaAutocomplete();
