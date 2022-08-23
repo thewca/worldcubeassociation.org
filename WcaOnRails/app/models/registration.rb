@@ -239,6 +239,30 @@ class Registration < ApplicationRecord
     end
   end
 
+  def series_sibling_registrations(registration_status = nil)
+    return [] unless competition.series
+
+    sibling_ids = competition.series_sibling_competitions.map(&:id)
+
+    sibling_registrations = user.registrations
+                                .select { |r| sibling_ids.include?(r.competition_id) }
+
+    if registration_status.nil?
+      return sibling_registrations
+        .sort_by { |r| r.competition.start_date }
+    end
+
+    sibling_registrations.select { |r| r.checked_status == registration_status }
+  end
+
+  SERIES_SIBLING_DISPLAY_STATUSES = [:accepted, :pending]
+
+  def series_sibling_registration_info
+    SERIES_SIBLING_DISPLAY_STATUSES.map { |st| series_sibling_registrations(st) }
+                                   .map(&:count)
+                                   .join(" + ")
+  end
+
   def serializable_hash(options = nil)
     {
       id: id,

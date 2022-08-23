@@ -1202,6 +1202,9 @@ en:
       #context: date is the registration creation date, eg: "2016-12-01 16:18:56 UTC"
       payment_requested_on: "Payment requested on: %{date}"
       payment_completed_on: "Payment completed on: %{date}"
+      #context: Counts how many parallel registrations in the same Series there are. Will display a number behind this label.
+      series_registrations: "Series registrations"
+      series_registrations_hint_html: "Hint: Series registrations are being displayed as <i>%{description}</i>"
       total: "Total"
       n_events: "Number of events"
     new_registration:
@@ -1373,7 +1376,8 @@ en:
       claim_wca_id_html: "If this is not your first competition, associate your WCA ID to your WCA account %{here}."
       register_link_html: "Register for this competition %{here}."
       register_below_html: "Register for this competition below."
-      part_of_a_series: "This competition is part of the %{name} Series Competition. Other events in this series are:"
+      part_of_a_series: "This competition is part of a Series Competition."
+      part_of_a_series_list: "This competition is part of the %{name} Series Competition. Other events in this series are:"
       series_registration_warning_html: "Note: You can submit a registration for all events in a Series, but only one of those registrations can be confirmed and accepted. <b>You will only be allowed to compete in one of the Series competitions!</b>"
       competitor_limit_is: "There is a competitor limit of %{competitor_limit} competitors."
       no_competitor_limit: "There is no competitor limit."

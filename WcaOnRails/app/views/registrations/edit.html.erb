@@ -34,9 +34,9 @@
       </div>
     </div>
   <% end %>
-  <hr />
-  <div>
-    <% if @registration.registration_payments.count > 0 %>
+  <% if @registration.registration_payments.count > 0 %>
+    <hr/>
+    <div>
       <h4>Payment History</h4>
       <% @registration.registration_payments.each do |payment| %>
         <p>
@@ -46,9 +46,9 @@
           <br />
           Made by: <%= name_for_payment(payment) %>
           <%#
-            NOTE: the connected Stripe account id is cleared roughly 3 weeks
-            after the competition, therefore we need to check for that before
-            offering the refund payment button.
+          NOTE: the connected Stripe account id is cleared roughly 3 weeks
+          after the competition, therefore we need to check for that before
+          offering the refund payment button.
           %>
           <% if @competition.using_stripe_payments? && payment.amount_available_for_refund > 0 %>
             <%= horizontal_simple_form_for :payment, url: registration_payment_refund_path(@registration, payment), html: { id: :form_refund } do |f| %>
@@ -58,8 +58,20 @@
           <% end %>
         </p>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
+  <% if @competition.series %>
+    <hr/>
+    <div>
+      <h4>Series Registrations</h4>
+      <ul>
+        <% @registration.series_sibling_registrations.each do |reg| %>
+          <% registration_i18n_status = t("simple_form.options.registration.status.#{reg.checked_status}") %>
+          <li><%= link_to reg.competition.name, edit_registration_path(reg) %> (<%= registration_i18n_status %>)</li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
   <hr />
   <div>
     <h4>Registration History</h4>
