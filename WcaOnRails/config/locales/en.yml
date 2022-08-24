@@ -564,7 +564,7 @@ en:
         #context: when marked as championship
         championships:
           championship_type: ""
-        #context: when part of a Series competition
+        #context: when part of a Competition Series
         competition_series:
           name: "Can be chosen freely but must be unique across all competitions."
           competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
@@ -1377,8 +1377,8 @@ en:
       claim_wca_id_html: "If this is not your first competition, associate your WCA ID to your WCA account %{here}."
       register_link_html: "Register for this competition %{here}."
       register_below_html: "Register for this competition below."
-      part_of_a_series: "This competition is part of a Series Competition."
-      part_of_a_series_list: "This competition is part of the %{name} Series Competition. Other competitions in this series are:"
+      part_of_a_series: "This competition is part of a Competition Series."
+      part_of_a_series_list: "This competition is part of the %{name} Competition Series. Other competitions in this Series are:"
       series_registration_warning_html: "Note: You can submit a registration for all competitions in a Series, but only one of those registrations can be confirmed and accepted. <b>You will only be allowed to compete in one of the Series competitions!</b>"
       competitor_limit_is: "There is a competitor limit of %{competitor_limit} competitors."
       no_competitor_limit: "There is no competitor limit."
@@ -1698,7 +1698,7 @@ en:
     scrambles_table:
       group: "Group"
       scramble: "Scramble"
-    #context: Edit fields for Series Competitions
+    #context: Edit fields for Competition Series
     competition_series_fields:
       add_series: "Add to Series"
       remove_series: "Remove from Series"
