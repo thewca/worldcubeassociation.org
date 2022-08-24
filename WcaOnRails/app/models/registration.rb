@@ -286,12 +286,12 @@ class Registration < ApplicationRecord
                                    .join(" + ")
   end
 
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["id", "competition_id", "user_id"],
+    methods: ["event_ids"],
+  }.freeze
+
   def serializable_hash(options = nil)
-    {
-      id: id,
-      competition_id: competition_id,
-      user_id: user_id,
-      event_ids: events.map(&:id),
-    }
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end

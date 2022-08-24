@@ -46,24 +46,33 @@ class Result < ApplicationRecord
   scope :average_better_than, lambda { |time| where("average < ? AND average > 0", time) }
   scope :in_event, lambda { |event_id| where(eventId: event_id) }
 
+  alias_attribute :name, :personName
+  alias_attribute :wca_id, :personId
+
+  def attempts
+    [value1, value2, value3, value4, value5]
+  end
+
+  def country_iso2
+    country.iso2
+  end
+
+  def regional_single_record
+    regionalSingleRecord || ""
+  end
+
+  def regional_average_record
+    regionalAverageRecord || ""
+  end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["id", "pos", "best", "best_index", "worst_index", "average"],
+    methods: ["name", "country_iso2", "competition_id", "event_id",
+              "round_type_id", "format_id", "wca_id", "attempts", "best_index",
+              "worst_index", "regional_single_record", "regional_average_record"],
+  }.freeze
+
   def serializable_hash(options = nil)
-    {
-      id: id,
-      name: personName,
-      country_iso2: country.iso2,
-      competition_id: competitionId,
-      pos: pos,
-      event_id: eventId,
-      round_type_id: roundTypeId,
-      format_id: formatId,
-      wca_id: personId,
-      attempts: [value1, value2, value3, value4, value5],
-      best: best,
-      best_index: best_index,
-      worst_index: worst_index,
-      average: average,
-      regional_single_record: regionalSingleRecord || "",
-      regional_average_record: regionalAverageRecord || "",
-    }
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end

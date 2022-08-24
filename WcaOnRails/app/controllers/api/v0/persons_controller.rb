@@ -31,7 +31,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
 
   private def person_to_json(person)
     {
-      person: person.serializable_hash.slice(:wca_id, :name, :url, :gender, :country_iso2, :delegate_status, :teams, :avatar),
+      person: person.serializable_hash(only: [:wca_id, :name, :url, :gender, :country_iso2, :delegate_status, :teams, :avatar]),
       competition_count: person.competitions.count,
       personal_records: person.ranksSingle.each_with_object({}) do |rank_single, ranks|
         event_id = rank_single.event.id
