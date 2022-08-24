@@ -50,6 +50,14 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     $('.adjacent-competitions .wca-adjacent-competitions-show-events').hide();
     $('.adjacent-competitions .wca-adjacent-competitions-hide-events').show();
   });
+
+  // the forms library we're using is built for 1-to-many associations. So when deleting an existing
+  // Series, it simply adds another new Series entry on top of that, which our 1-on-1 association
+  // cannot handle correctly. As a remedy, we force the user to save first by displaying a hint.
+  $('.series .remove_fields.existing').on('click', 'button', function() {
+    $('.series .save-first-hint').show();
+    $('.series a.add_fields').hide();
+  });
 });
 
 // Sets map container height.

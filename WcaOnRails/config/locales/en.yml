@@ -1509,6 +1509,7 @@ en:
       venue_html: "The venue where the competition takes place. %{md}. For example: [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
       venue_details_html: "Details about the venue (e.g., On the first floor far in the back, follow the signs). %{md}"
       contact_html: "Optional contact information. If you do not fill this in, contact inquiries will be submitted through a form without revealing organizers' emails. %{md}. Example: [Text to display](mailto:some@email.com)"
+      series_save_first_hint: "Note: You have to save the competition first before you can add a new Series."
       events: "Events"
       public_and_locked_html: "This competition is publicly visible and locked for editing. If you need to make a change, please reply to the email thread where the competition was confirmed."
       confirmed_but_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{contact} to make it visible."
@@ -1699,8 +1700,8 @@ en:
       scramble: "Scramble"
     #context: Edit fields for Series Competitions
     competition_series_fields:
-      add_series: "Add Series"
-      remove_series: "Remove Series"
+      add_series: "Add to Series"
+      remove_series: "Remove from Series"
   #context: Competition's tabs management
   competition_tabs:
     headers:

@@ -299,7 +299,7 @@ module CompetitionsHelper
   end
 
   def link_to_add_series_association(competition)
-    button = button_tag(t('competitions.series_fields.add_series'), type: "button", class: "btn btn-default")
+    button = button_tag(t('competitions.competition_series_fields.add_series'), type: "button", class: "btn btn-default")
     form = send(:instantiate_builder, "competition", competition, {
                   builder: SimpleForm::FormBuilder,
                   wrapper: :horizontal_form,

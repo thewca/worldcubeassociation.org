@@ -183,6 +183,12 @@
             <% @series_eligible_competitions = [] # nasty hack to display the "loading" indicator without crashing %>
             <%= render "series_eligible_competitions" %>
           </div>
+
+          <div class="row save-first-hint" style="display: none;">
+            <div class="col-sm-offset-2 col-sm-9">
+              <%= t('.series_save_first_hint') %>
+            </div>
+          </div>
         </div>
         <hr>
 
