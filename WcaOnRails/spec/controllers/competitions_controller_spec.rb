@@ -200,7 +200,7 @@ RSpec.describe CompetitionsController do
     end
   end
 
-  describe 'GET #edit' do
+  describe 'GET #nearby_competitions' do
     let(:organizer) { FactoryBot.create(:user) }
     let(:admin) { FactoryBot.create :admin }
     let!(:my_competition) { FactoryBot.create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
@@ -212,11 +212,11 @@ RSpec.describe CompetitionsController do
       end
 
       it 'cannot see unconfirmed nearby competitions' do
-        get :edit, params: { id: my_competition }
+        get :nearby_competitions, params: { competition: my_competition.serializable_hash }
         expect(assigns(:nearby_competitions)).to eq []
         other_competition.confirmed = true
         other_competition.save!
-        get :edit, params: { id: my_competition }
+        get :nearby_competitions, params: { competition: my_competition.serializable_hash }
         expect(assigns(:nearby_competitions)).to eq [other_competition]
       end
     end
@@ -227,7 +227,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can see unconfirmed nearby competitions" do
-        get :edit, params: { id: my_competition }
+        get :nearby_competitions, params: { competition: my_competition.serializable_hash }
         expect(assigns(:nearby_competitions)).to eq [other_competition]
       end
     end

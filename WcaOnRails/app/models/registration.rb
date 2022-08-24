@@ -241,7 +241,7 @@ class Registration < ApplicationRecord
 
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
-    if competition.part_of_competition_series? && checked_status == :accepted
+    if competition&.part_of_competition_series? && checked_status == :accepted
       unless series_sibling_registrations(:accepted).empty?
         errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
       end
