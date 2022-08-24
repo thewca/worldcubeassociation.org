@@ -281,9 +281,15 @@ class CompetitionsController < ApplicationController
   end
 
   def get_nearby_competitions(competition)
-    nearby_competitions = competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING)[0, 10]
+    nearby_competitions = competition.nearby_competitions_warning[0, 10]
     nearby_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     nearby_competitions
+  end
+
+  def get_series_eligible_competitions(competition)
+    series_eligible_competitions = competition.series_eligible_competitions
+    series_eligible_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
+    series_eligible_competitions
   end
 
   def admin_edit
@@ -358,7 +364,7 @@ class CompetitionsController < ApplicationController
   def series_eligible_competitions
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @series_eligible_competitions = @competition.eligible_series_competitions
+    @series_eligible_competitions = get_series_eligible_competitions(@competition)
     render partial: 'series_eligible_competitions'
   end
 

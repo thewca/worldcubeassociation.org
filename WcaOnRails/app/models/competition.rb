@@ -1092,14 +1092,22 @@ class Competition < ApplicationRecord
     competition_events.reject(&:marked_for_destruction?).map(&:event)
   end
 
-  def nearby_competitions(days, distance)
+  def adjacent_competitions(days, distance)
     Competition.where("ABS(DATEDIFF(?, start_date)) <= ? AND id <> ?", start_date, days, id)
                .select { |c| kilometers_to(c) <= distance }
                .sort_by { |c| kilometers_to(c) }
   end
 
-  def eligible_series_competitions
-    nearby_competitions(CompetitionSeries::MAX_SERIES_DISTANCE_DAYS, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
+  def nearby_competitions_info
+    adjacent_competitions(NEARBY_DAYS_INFO, NEARBY_DISTANCE_KM_INFO)
+  end
+
+  def nearby_competitions_warning
+    adjacent_competitions(NEARBY_DAYS_WARNING, NEARBY_DISTANCE_KM_WARNING)
+  end
+
+  def series_eligible_competitions
+    adjacent_competitions(CompetitionSeries::MAX_SERIES_DISTANCE_DAYS, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
   end
 
   private def to_radians(degrees)

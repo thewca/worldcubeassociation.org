@@ -17,10 +17,10 @@
   </label>
   <div class="col-sm-9">
     <% if @competition.has_date? && @competition.has_location? %>
-      <% if nearby_competitions.empty? %>
+      <% if adjacent_competitions.empty? %>
         <%= alert invert_warnings ? :danger : :success, t('.no_comp_nearby') %>
       <% else %>
-        <%= render 'adjacent_competitions_table', nearby_competitions: nearby_competitions,
+        <%= render 'adjacent_competitions_table', adjacent_competitions: adjacent_competitions,
                    nearby_days: nearby_days, nearby_km: nearby_km, invert_warnings: invert_warnings,
                    extra_link_handler: extra_link_handler %>
       <% end %>

@@ -1,4 +1,4 @@
-<%= render 'adjacent_competitions', nearby_competitions: @series_eligible_competitions, invert_warnings: true,
+<%= render 'adjacent_competitions', adjacent_competitions: @series_eligible_competitions, invert_warnings: true,
            nearby_days: CompetitionSeries::MAX_SERIES_DISTANCE_DAYS, nearby_km: CompetitionSeries::MAX_SERIES_DISTANCE_KM,
            extra_link_handler: method(:link_to_add_series_association) %>
 

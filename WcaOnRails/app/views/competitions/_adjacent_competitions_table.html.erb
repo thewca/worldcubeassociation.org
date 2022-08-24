@@ -9,7 +9,7 @@
     <td><%= t 'competitions.adjacent_competitions.competitors' %></td>
     <td class="wca-adjacent-competitions-show-events"><%= t 'competitions.adjacent_competitions.events' %></td>
   </tr>
-  <% nearby_competitions.each do |c| %>
+  <% adjacent_competitions.each do |c| %>
     <tr class="<%= (@competition.adjacent_to?(c, nearby_km, nearby_days) ^ invert_warnings) ? "danger" : "warning" %>">
       <td class="text-nowrap">
         <%= if current_user.can_admin_results?

@@ -1,4 +1,4 @@
-<%= render 'adjacent_competitions', nearby_competitions: @nearby_competitions, invert_warnings: false,
+<%= render 'adjacent_competitions', adjacent_competitions: @nearby_competitions, invert_warnings: false,
            nearby_days: Competition::NEARBY_DAYS_DANGER, nearby_km: Competition::NEARBY_DISTANCE_KM_DANGER,
            extra_link_handler: false %>
 
@@ -8,7 +8,7 @@
       <%= t '.label_admin', days: Competition::NEARBY_DAYS_INFO  %>
     </label>
     <div class="col-sm-9">
-      <% nearby_competitions_info = @competition.nearby_competitions(Competition::NEARBY_DAYS_INFO, Competition::NEARBY_DISTANCE_KM_INFO).sort_by(&:start_date) %>
+      <% nearby_competitions_info = @competition.nearby_competitions_info.sort_by(&:start_date) %>
       <% nearby_count = nearby_competitions_info.count %>
       <div class="alert <%= nearby_count < Competition::NEARBY_INFO_COUNT ? "alert-success" : "alert-danger" %>" role="alert"><%= t '.nearby_admin', x_competitions: t('.competitions', count: nearby_count), kms: Competition::NEARBY_DISTANCE_KM_INFO, days: Competition::NEARBY_DAYS_INFO %>
       <button type="button" class="btn" data-toggle="modal" data-target="#competitions-last-year-modal"><%= t '.show' %></button>
@@ -24,7 +24,7 @@
           <h4 class="modal-title"><%= t '.within', days: Competition::NEARBY_DAYS_INFO %></h4>
         </div>
         <div class="modal-body">
-          <%= render 'adjacent_competitions_table', nearby_competitions: nearby_competitions_info, invert_warnings: false,
+          <%= render 'adjacent_competitions_table', adjacent_competitions: nearby_competitions_info, invert_warnings: false,
                      nearby_days: Competition::NEARBY_DAYS_DANGER, nearby_km: Competition::NEARBY_DISTANCE_KM_DANGER,
                      extra_link_handler: false %>
         </div>
