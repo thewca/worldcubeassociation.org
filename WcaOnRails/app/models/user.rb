@@ -1127,33 +1127,50 @@ class User < ApplicationRecord
     users.order(:name)
   end
 
-  def serializable_hash(options = nil)
-    json = {
-      class: self.class.to_s.downcase,
-      url: self.wca_id ? Rails.application.routes.url_helpers.person_url(self.wca_id, host: EnvVars.ROOT_URL) : "",
+  def url
+    if wca_id
+      Rails.application.routes.url_helpers.person_url(wca_id, host: EnvVars.ROOT_URL)
+    else
+      ""
+    end
+  end
 
-      id: self.id,
-      wca_id: self.wca_id,
-      name: self.name,
-      gender: self.gender,
-      country_iso2: self.country_iso2,
-      delegate_status: delegate_status,
-      created_at: self.created_at,
-      updated_at: self.updated_at,
-      teams: current_team_members.includes(:team).reject do |team_member|
-        team_member.team.hidden?
-      end.map do |team_member|
-        {
-          friendly_id: team_member.team.friendly_id,
-          leader: team_member.team_leader?,
-        }
-      end,
-      avatar: {
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["id", "wca_id", "name", "gender",
+           "country_iso2", "delegate_status", "created_at", "updated_at"],
+    methods: ["url"],
+    include: ["avatar", "teams"],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    # NOTE: doing deep_dup is necessary here to avoid changing the inner values
+    # of the freezed variables (which would leak PII)!
+    default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
+    # Delegates's emails and regions are public information.
+    if any_kind_of_delegate?
+      default_options[:methods].concat(["email", "region", "senior_delegate_id"])
+    end
+
+    options = default_options.merge(options || {})
+    # Preempt the values for avatar and teams, they have a special treatment.
+    include_avatar = options[:include]&.delete("avatar")
+    include_teams = options[:include]&.delete("teams")
+    json = super(options)
+
+    # We override some attributes manually because it's unconvenient to
+    # put them in DEFAULT_SERIALIZE_OPTIONS (eg: "teams" doesn't have a default
+    # scope at the moment).
+    json[:class] = self.class.to_s.downcase
+    if include_teams
+      json[:teams] = current_team_members.includes(:team).reject(&:hidden?)
+    end
+    if include_avatar
+      json[:avatar] = {
         url: self.avatar.url,
         thumb_url: self.avatar.url(:thumb),
         is_default: !self.avatar?,
-      },
-    }
+      }
+    end
 
     # Private attributes to include.
     private_attributes = options&.fetch(:private_attributes, []) || []
@@ -1163,13 +1180,6 @@ class User < ApplicationRecord
 
     if private_attributes.include?("email")
       json[:email] = self.email
-    end
-
-    # Delegates's emails and regions are public information.
-    if self.any_kind_of_delegate?
-      json[:email] = self.email
-      json[:region] = self.region
-      json[:senior_delegate_id] = self.senior_delegate_id
     end
 
     json

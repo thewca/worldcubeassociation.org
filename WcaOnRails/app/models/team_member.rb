@@ -11,6 +11,9 @@ class TeamMember < ApplicationRecord
   scope :current_leader, -> { self.current.merge(self.leader) }
 
   attr_accessor :current_user
+  delegate :friendly_id, to: :team
+  delegate :hidden?, to: :team
+  alias_attribute :leader, :team_leader
 
   def current_member?
     end_date.nil? || end_date > Date.today
@@ -41,4 +44,13 @@ class TeamMember < ApplicationRecord
   end
 
   validates :start_date, presence: true
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: [],
+    methods: ["friendly_id", "leader"],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
 end

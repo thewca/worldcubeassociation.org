@@ -255,8 +255,8 @@
           // code update, because we don't have access to the currency
           // "subunit_to_unit" from the js world.
           function UpdateDues(){
-            <% countryBand = CountryBand.where(iso2: @competition.serializable_hash[:country_iso2]).map(&:number)[0] %>
-            <% if !countryBand.nil? && countryBand > 0 %>
+            <% countryBand = CountryBand.where(iso2: @competition.country_iso2).map(&:number)[0] %>
+            <% if countryBand.present? && countryBand > 0 %>
               var bandFeeUSD = <%= CountryBand::BANDS[countryBand][:value] %>;
             <% else %>
               var bandFeeUSD = 0;
