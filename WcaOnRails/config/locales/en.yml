@@ -565,7 +565,7 @@ en:
         championships:
           championship_type: ""
         #context: when part of a Series competition
-        series:
+        competition_series:
           name: "Can be chosen freely but must be unique across all competitions."
           competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
       website_contact:
@@ -1697,8 +1697,8 @@ en:
     scrambles_table:
       group: "Group"
       scramble: "Scramble"
-    # Edit fields for Series Competitions
-    series_fields:
+    #context: Edit fields for Series Competitions
+    competition_series_fields:
       add_series: "Add Series"
       remove_series: "Remove Series"
   #context: Competition's tabs management

@@ -1,18 +1,16 @@
 <div class="nested-fields">
   <% if f.options[:preload_competition_id] %>
     <% f.object = preload_competition_series(@competition, f.options[:preload_competition_id]) %>
-    <%# make sure that a competition always associates itself with the series. %>
-    <% f.object.competitions.push(@competition) %>
 
     <% if f.object.id %>
       <%= f.hidden_field :id %>
     <% end %>
   <% end %>
 
-  <%# i18n-tasks-use t('simple_form.hints.competition.series.name') %>
+  <%# i18n-tasks-use t('simple_form.hints.competition.competition_series.name') %>
   <%# i18n-tasks-use t('activerecord.attributes.competition_series.name') %>
   <%= f.input :name %>
-  <%# i18n-tasks-use t('simple_form.hints.competition.series.competition_ids') %>
+  <%# i18n-tasks-use t('simple_form.hints.competition.competition_series.competition_ids') %>
   <%# i18n-tasks-use t('activerecord.attributes.competition_series.competition_ids') %>
   <%= f.input :competition_ids, as: :competition_id, input_html: { class: "wca-autocomplete-input_lock" } %>
 

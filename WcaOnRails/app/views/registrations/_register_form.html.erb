@@ -18,7 +18,7 @@
     <%= render 'entry_fee', hint: fees_hint, hint_context: hint_context %>
   <% end %>
 
-  <% if @competition.series %>
+  <% if @competition.part_of_competition_series? %>
     <%= alert :warning do %>
       <%= t('competitions.competition_info.part_of_a_series') %>
       <br>

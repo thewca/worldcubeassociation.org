@@ -95,7 +95,7 @@ module DatabaseDumper
           event_change_deadline_date
           allow_registration_edits
           allow_registration_self_delete_after_acceptance
-          series_id
+          competition_series_id
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -391,7 +391,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_series" => {
-      where_clause: "JOIN Competitions ON Competitions.series_id=competition_series.id WHERE showAtAll=1",
+      where_clause: "JOIN Competitions ON Competitions.competition_series_id=competition_series.id WHERE showAtAll=1",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id

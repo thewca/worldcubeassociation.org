@@ -29,11 +29,12 @@ class Competition < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :bookmarked_competitions, dependent: :delete_all
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
-  belongs_to :series, class_name: "CompetitionSeries"
+  belongs_to :competition_series, optional: true
+  has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
-  accepts_nested_attributes_for :series, allow_destroy: false
+  accepts_nested_attributes_for :competition_series, allow_destroy: false
 
   validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :entry_fee_required?
   monetize :base_entry_fee_lowest_denomination,
@@ -154,7 +155,7 @@ class Competition < ApplicationRecord
     main_event_id
     waiting_list_deadline_date
     event_change_deadline_date
-    series_id
+    competition_series_id
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
@@ -535,7 +536,8 @@ class Competition < ApplicationRecord
              'wcif_extensions',
              'bookmarked_competitions',
              'bookmarked_users',
-             'series'
+             'competition_series',
+             'series_competitions'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -1165,11 +1167,18 @@ class Competition < ApplicationRecord
   end
 
   def adjacent_to?(c, distance_km, distance_days)
+    self.distance_adjacent_to?(c, distance_km) && self.start_date_adjacent_to?(c, distance_days)
+  end
+
+  def start_date_adjacent_to?(c, distance_days)
     if !c.has_date? || !self.has_date?
       return false
     end
-    days_until = self.days_until_competition?(c)
-    self.kilometers_to(c) < distance_km && days_until.abs < distance_days
+    self.days_until_competition?(c).abs < distance_days
+  end
+
+  def distance_adjacent_to?(c, distance_km)
+    self.kilometers_to(c) < distance_km
   end
 
   def announced?
@@ -1333,9 +1342,9 @@ class Competition < ApplicationRecord
   private def light_results_from_relation(relation)
     ActiveRecord::Base.connection
                       .execute(relation.to_sql)
-                      .each(as: :hash).map { |r|
+                      .each(as: :hash).map do |r|
                         LightResult.new(r)
-                      }
+                      end
   end
 
   def started?
@@ -1776,23 +1785,26 @@ class Competition < ApplicationRecord
 
   validate :series_siblings_must_be_valid
   private def series_siblings_must_be_valid
-    if series
-      series_sibling_competitions.each { |comp|
-        if self.kilometers_to(comp) > CompetitionSeries::MAX_SERIES_DISTANCE_KM
+    if part_of_competition_series?
+      series_sibling_competitions.each do |comp|
+        unless self.distance_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
           errors.add(:series, I18n.t('competitions.errors.series_distance_km', competition: comp.name))
         end
-        if (self.start_date - comp.start_date) > CompetitionSeries::MAX_SERIES_DISTANCE_DAYS
+        unless self.start_date_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_DAYS)
           errors.add(:series, I18n.t('competitions.errors.series_distance_days', competition: comp.name))
         end
-      }
+      end
     end
   end
 
-  def series_sibling_competitions
-    return [] unless series
+  def part_of_competition_series?
+    !competition_series_id.nil?
+  end
 
-    series.competitions
-          .where.not(id: self.id)
-          .order(:start_date)
+  def series_sibling_competitions
+    return [] unless part_of_competition_series?
+
+    series_competitions
+      .where.not(id: self.id)
   end
 end

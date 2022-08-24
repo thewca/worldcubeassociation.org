@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CompetitionSeries < ApplicationRecord
-  has_many :competitions, foreign_key: :series_id, inverse_of: :series
+  has_many :competitions, -> { order(:start_date) }, inverse_of: :competition_series, dependent: :nullify
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
 
@@ -26,8 +26,7 @@ class CompetitionSeries < ApplicationRecord
   after_validation :remove_orphaned_series
   def remove_orphaned_series
     if persisted? && competitions.count <= 1
-      competitions.each { |comp| comp.update_attribute(:series_id, nil) }
-      self.destroy
+      self.destroy # NULL is handled by has_many#dependent set to :nullify above
     end
   end
 end

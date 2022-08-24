@@ -241,7 +241,7 @@ class Registration < ApplicationRecord
 
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
-    if competition.series && checked_status == :accepted
+    if competition.part_of_competition_series? && checked_status == :accepted
       unless series_sibling_registrations(:accepted).empty?
         errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
       end
@@ -249,7 +249,7 @@ class Registration < ApplicationRecord
   end
 
   def series_sibling_registrations(registration_status = nil)
-    return [] unless competition.series
+    return [] unless competition.part_of_competition_series?
 
     sibling_ids = competition.series_sibling_competitions.map(&:id)
 

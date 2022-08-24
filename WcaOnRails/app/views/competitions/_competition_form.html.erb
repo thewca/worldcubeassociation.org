@@ -175,8 +175,8 @@
         <hr>
 
         <div class="series">
-          <%= f.simple_fields_for :series, @competition.series do |f2| %>
-            <%= render "series_fields", f: f2 %>
+          <%= f.simple_fields_for :competition_series, @competition.competition_series do |f2| %>
+            <%= render "competition_series_fields", f: f2 %>
           <% end %>
 
           <div id="series-eligible-competitions" class="adjacent-competitions">

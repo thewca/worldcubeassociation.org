@@ -25,8 +25,8 @@
   <br>
 <% end %>
 
-<% if @competition.series %>
-  <%= t('competitions.competition_info.part_of_a_series_list', name: @competition.series.name) %>
+<% if @competition.part_of_competition_series? %>
+  <%= t('competitions.competition_info.part_of_a_series_list', name: @competition.competition_series.name) %>
   <ul>
     <% @competition.series_sibling_competitions.each do |comp| %>
       <li><%= link_to comp.name, competition_path(comp.id) %></li>

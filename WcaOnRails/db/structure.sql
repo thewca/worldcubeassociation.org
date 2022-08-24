@@ -80,7 +80,7 @@ CREATE TABLE `Competitions` (
   `free_guest_entry_status` int NOT NULL DEFAULT '0',
   `allow_registration_edits` tinyint(1) NOT NULL DEFAULT '0',
   `allow_registration_self_delete_after_acceptance` tinyint(1) NOT NULL DEFAULT '0',
-  `series_id` int(11) DEFAULT NULL,
+  `competition_series_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),

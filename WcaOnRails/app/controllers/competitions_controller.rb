@@ -503,10 +503,10 @@ class CompetitionsController < ApplicationController
       # We don't destroy CompetitionSeries directly, because that could badly affect other competitions
       # that are still attached to that series. If the frontend sends a _destroy, we only unlink the *current*
       # competition and let validations take care of the rest.
-      if params[:competition].try(:[], :series_attributes)&.try(:[], :_destroy) == "1"
-        old_series = @competition.series
+      if params[:competition].try(:[], :competition_series_attributes)&.try(:[], :_destroy) == "1"
+        old_series = @competition.competition_series
 
-        @competition.update(series: nil)
+        @competition.update(competition_series: nil)
 
         # reset them so that upon the next read they will be fetched based on what's just been written.
         old_series.competition_ids = nil
@@ -649,7 +649,7 @@ class CompetitionsController < ApplicationController
         :event_change_deadline_date,
         { competition_events_attributes: [:id, :event_id, :_destroy],
           championships_attributes: [:id, :championship_type, :_destroy],
-          series_attributes: [:id, :name, :competition_ids] },
+          competition_series_attributes: [:id, :name, :competition_ids] },
       ]
       if current_user.can_admin_competitions?
         permitted_competition_params += [
@@ -669,8 +669,8 @@ class CompetitionsController < ApplicationController
       # Rails will throw an error like "cannot find Series with ID 123 for NewCompetition"
       # despite we're sending the update to change Series 123 to include NewCompetition.
       # To mitigate this error, we must deliberately write to series_id first.
-      if (persisted_series_id = competition_params.try(:[], :series_attributes)&.try(:[], :id))
-        competition_params[:series_id] = persisted_series_id
+      if (persisted_series_id = competition_params.try(:[], :competition_series_attributes)&.try(:[], :id))
+        competition_params[:competition_series_id] = persisted_series_id
       end
     end
   end
