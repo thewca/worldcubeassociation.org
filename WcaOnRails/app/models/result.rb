@@ -6,10 +6,8 @@ class Result < ApplicationRecord
   self.table_name = "Results"
 
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
-  validates :person, presence: true
   validates :personName, presence: true
   belongs_to :country, foreign_key: :countryId
-  validates :country, presence: true
   belongs_to :competition, foreign_key: :competitionId
 
   # NOTE: both nil and "" exist in the database, we may consider cleaning that up.

@@ -12,13 +12,13 @@ RSpec.describe Registration do
   it "requires a competition_id" do
     registration.competition_id = nil
     expect(registration).not_to be_valid
-    expect(registration.errors.messages[:competition]).to eq ["Competition not found"]
+    expect(registration.errors.messages[:competition]).to eq ["must exist"]
   end
 
   it "requires a valid competition_id" do
     registration.competition_id = "foobar"
     expect(registration).not_to be_valid
-    expect(registration.errors.messages[:competition]).to eq ["Competition not found"]
+    expect(registration.errors.messages[:competition]).to eq ["must exist"]
   end
 
   it "allows no user on update" do
@@ -89,7 +89,7 @@ RSpec.describe Registration do
   it "requires events be offered by competition" do
     registration.registration_competition_events.build(competition_event_id: 1234)
     expect(registration).to be_invalid_with_errors(
-      "registration_competition_events.competition_event" => ["can't be blank"],
+      "registration_competition_events.competition_event" => ["must exist"],
     )
   end
 

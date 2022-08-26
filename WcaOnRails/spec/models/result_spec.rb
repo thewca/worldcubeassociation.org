@@ -11,22 +11,22 @@ RSpec.describe Result do
   context "associations" do
     it "validates competitionId" do
       result = FactoryBot.build :result, competitionId: "foo", skip_round_creation: true
-      expect(result).to be_invalid_with_errors(competition: ["can't be blank"])
+      expect(result).to be_invalid_with_errors(competition: ["must exist"])
     end
 
     it "validates countryId" do
       result = FactoryBot.build :result, countryId: "foo"
-      expect(result).to be_invalid_with_errors(country: ["can't be blank"])
+      expect(result).to be_invalid_with_errors(country: ["must exist"])
     end
 
     it "validates eventId" do
       result = FactoryBot.build :result, eventId: "foo", skip_round_creation: true
-      expect(result).to be_invalid_with_errors(event: ["can't be blank"])
+      expect(result).to be_invalid_with_errors(event: ["must exist"])
     end
 
     it "validates formatId" do
       result = FactoryBot.build :result, formatId: "foo", skip_round_creation: true
-      expect(result).to be_invalid_with_errors(format: ["can't be blank"])
+      expect(result).to be_invalid_with_errors(format: ["must exist"])
     end
 
     it "validates roundTypeId" do
@@ -35,7 +35,7 @@ RSpec.describe Result do
       # is reported on :round_type.
       expect(result).to be_invalid_with_errors(round_type:
       [
-        "can't be blank",
+        "must exist",
         "Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.",
       ])
     end

@@ -7,7 +7,6 @@ class CompetitionMedium < ApplicationRecord
   self.inheritance_column = :_type_disabled
 
   belongs_to :competition, foreign_key: "competitionId"
-  validates :competition, presence: true
 
   enum status: { accepted: "accepted", pending: "pending" }
   validates :status, presence: true

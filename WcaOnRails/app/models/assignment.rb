@@ -4,8 +4,6 @@ class Assignment < ApplicationRecord
   belongs_to :registration
   belongs_to :schedule_activity
 
-  validates :registration, presence: true
-  validates :schedule_activity, presence: true
   validates :station_number, numericality: { only_integer: true }, allow_nil: true
   validate :validate_assignment_code
 
