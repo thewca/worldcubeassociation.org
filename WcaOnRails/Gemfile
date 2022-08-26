@@ -8,7 +8,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails'
+# Need to point to GitHub directly until https://github.com/rails/rails/issues/45428 is included in a release
+gem 'rails', github: 'rails/rails', branch: '7-0-stable'
 gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
