@@ -26,7 +26,7 @@ export default function qualificationTypeField({
 }) {
   return (
     <Form.Field inline>
-      <Label basic>
+      <Label>
         Qualificiation Type
       </Label>
       <Form.Input

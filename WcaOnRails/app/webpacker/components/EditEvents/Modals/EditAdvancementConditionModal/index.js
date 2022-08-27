@@ -49,9 +49,8 @@ const advanceReqToExplanationText = (wcifEvent, roundNumber, { type, level }) =>
     case 'percent':
       return `The top ${level}% competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
     case 'attemptResult':
-      return `Everyone in round ${roundNumber} with a result ${
-        matchResult(level, wcifEvent.id)
-      } will advance to round ${roundNumber + 1}.`;
+      return `Everyone in round ${roundNumber} with a result ${matchResult(level, wcifEvent.id)
+        } will advance to round ${roundNumber + 1}.`;
     default:
       return '';
   }
@@ -126,18 +125,8 @@ export default function EditAdvancementConditionModal({
     }
   };
 
-  const Title = (
-    <span>
-      Requirement to advance past
-      {' '}
-      {roundIdToString(wcifRound.id)}
-    </span>
-
-  );
-
-  const Trigger = (
-    <span>{advanceReqToStrShort(wcifEvent.id, advancementCondition)}</span>
-  );
+  const Title = `Requirement to advance past ${roundIdToString(wcifRound.id)}`;
+  const Trigger = advanceReqToStrShort(wcifEvent.id, advancementCondition);
 
   return (
     <ButtonActivatedModal

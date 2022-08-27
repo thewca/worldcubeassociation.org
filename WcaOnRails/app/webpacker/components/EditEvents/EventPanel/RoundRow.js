@@ -14,7 +14,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { updateRoundFormat, setScrambleSetCount, updateCutoff } from '../store/actions';
 
-export default function Round({
+export default function RoundRow({
   index, wcifRound, wcifEvent, disabled,
 }) {
   const dispatch = useDispatch();
@@ -52,13 +52,14 @@ export default function Round({
   };
 
   return (
-    <Table.Row verticalAlign="middle">
-      <Table.Cell>{wcifRound.id.split('-')[1].replace('r', '')}</Table.Cell>
-      <Table.Cell style={{
-        zIndex: 400000,
-        style: 'flex',
-      }}
-      >
+    <Table.Row
+      verticalAlign="middle"
+    >
+      <Table.Cell className="round-row__index">
+        {wcifRound.id.split('-')[1].replace('r', '')}
+
+      </Table.Cell>
+      <Table.Cell className="round-row__format">
         <Dropdown
           selection
           name="format"
@@ -71,13 +72,10 @@ export default function Round({
             text: format.shortName,
           }))}
           compact
-          style={{
-            fontSize: '1em',
-          }}
         />
       </Table.Cell>
 
-      <Table.Cell>
+      <Table.Cell className="round-row__scramble-set-count">
         <Input
           name="scrambleSetCount"
           type="number"
@@ -85,10 +83,6 @@ export default function Round({
           value={wcifRound.scrambleSetCount}
           onChange={scrambleSetCountChanged}
           disabled={disabled}
-          size="large"
-          style={{
-            width: '5em',
-          }}
         />
       </Table.Cell>
 

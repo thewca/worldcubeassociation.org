@@ -60,33 +60,68 @@
 
 #events-edit-area {
   .event-panel-container {
-    width: '33.33%';
-  }
+    .event-panel {
+      width: '100%';
 
-  .event-panel__heading {
-    background-color: #f5f5f5;
-    color: #333;
-  }
-
-  .event-panel__grid {
-    display: flex;
-    justify-content: space-between;
-
-    .event-panel__grid_item {
-      @media (max-width: 768px) {
-        flex: 1;
+      .event-panel__heading {
+        background-color: #f5f5f5;
+        color: #333;
       }
 
-      flex: 1/3;
+      .event-panel__rounds-table {
+        width: 100%;
+        padding: 0.5em;
+        font-size: 0.85em;
+        position: relative;
+
+        thead {
+          th {
+            text-align: center;
+          }
+        }
+
+        tbody {
+          .round-row__index {
+            font-size: medium;
+            padding: 0.5em;
+          }
+
+          .round-row__format {
+            .ui.dropdown  {
+              font-size: 1em;
+              line-height: 1em;
+            }
+          }
+
+          .round-row__scramble-set-count {
+            .input {
+              width: 5em;
+
+              input {
+                font-size: 1em;
+                line-height: 1em;
+                padding: 0.25em 0.5em;
+              }
+            }
+          }
+
+        }
+
+      }
+
+      button.editable-text-button {
+        font-size: 1em;
+        padding: 0.5em 0.5em;
+      }
     }
-  }
 
-  .ui.dropdown .menu {
-    opacity: 1;
-    z-index: 1;
-  }
+    .ui.dropdown .menu {
+      opacity: 1;
+      z-index: 1;
+    }
 
-  .go-behind {
-    position: relative !important;
+    .go-behind {
+      position: relative !important;
+    }
   }
 }

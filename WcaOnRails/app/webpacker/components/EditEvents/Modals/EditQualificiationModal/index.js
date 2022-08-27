@@ -33,7 +33,11 @@ function QualificiationInput({
         <AttemptResultField
           value={level}
           onChange={(value) => onChange(value)}
-          label={i18n.t(`common.${resultType}`)}
+          label={(
+            <Label>
+              {i18n.t(`common.${resultType}`)}
+            </Label>
+          )}
         />
       );
     case 'ranking':
@@ -43,7 +47,11 @@ function QualificiationInput({
           min={1}
           value={level}
           onChange={(e) => onChange(parseInt(e.target.value, 10))}
-          label={i18n.t('qualification.type.ranking')}
+          label={(
+            <Label>
+              {i18n.t('qualification.type.ranking')}
+            </Label>
+          )}
         />
       );
     default:
@@ -93,13 +101,8 @@ export default function EditQualificationModal({
     setWhenDate(moment(date).format('YYYY-MM-DD'));
   };
 
-  const Title = (
-    <span>{i18n.t('qualification.for_event', { event: event.name })}</span>
-  );
-
-  const Trigger = (
-    <span>{eventQualificationToString(wcifEvent, qualification, { short: true })}</span>
-  );
+  const Title = i18n.t('qualification.for_event', { event: event.name });
+  const Trigger = eventQualificationToString(wcifEvent, qualification, { short: true });
 
   return (
     <ButtonActivatedModal

@@ -121,10 +121,7 @@ export default function EventPanel({
     <Segment.Group
       size="tiny"
       compact
-      className={`event-${wcifEvent.id}`}
-      style={{
-        width: '100%',
-      }}
+      className={`event-panel event-${wcifEvent.id}`}
     >
 
       <Header

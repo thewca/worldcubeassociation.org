@@ -61,9 +61,10 @@ export default function ButtonActivatedModal({
     <Button
       basic
       compact
-      size="mini"
       onClick={handleTriggerClick}
       {...triggerButtonProps}
+      size="small"
+      className="editable-text-button"
     >
       {trigger}
     </Button>

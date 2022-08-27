@@ -58,21 +58,17 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
     }
   };
 
-  const Title = (
-    <span>
-      {`Cutoff for ${roundIdToString(wcifRound.id)}`}
-    </span>
-  );
-
-  const Trigger = (
-    <span>
-      {roundCutoffToString(wcifRound, { short: true })}
-    </span>
-  );
+  const Title = `Cutoff for ${roundIdToString(wcifRound.id)}`;
+  const Trigger = roundCutoffToString(wcifRound, { short: true });
 
   return (
     <ButtonActivatedModal
       trigger={Trigger}
+      triggerButtonProps={{
+        style: {
+          padding: '0.5em 1em',
+        },
+      }}
       title={Title}
       reset={reset}
       onOk={handleOk}
@@ -88,19 +84,21 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
         wcifRound={wcifRound}
         onChange={setNumberOfAttempts}
       />
-      {numberOfAttempts > 0 && (
-        <>
-          <div>
-            Cutoff
-          </div>
-          <AttemptResultField
-            label="Result"
-            eventId={wcifEvent.id}
-            value={attemptResult}
-            onChange={setAttemptResult}
-          />
-        </>
-      )}
+      {
+        numberOfAttempts > 0 && (
+          <>
+            <div>
+              Cutoff
+            </div>
+            <AttemptResultField
+              label="Result"
+              eventId={wcifEvent.id}
+              value={attemptResult}
+              onChange={setAttemptResult}
+            />
+          </>
+        )
+      }
 
       {numberOfAttempts < 0 && <p>{explanationText}</p>}
     </ButtonActivatedModal>

@@ -45,16 +45,10 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
         break;
     }
 
-    return <span>{str}</span>;
+    return str;
   }, [timeLimit]);
 
-  const Title = useMemo(() => (
-    <span>
-      Time limit for
-      {' '}
-      {roundIdToString(wcifRound.id)}
-    </span>
-  ), [wcifRound.id]);
+  const Title = useMemo(() => `Time limit for ${roundIdToString(wcifRound.id)}`, [wcifRound.id]);
 
   if (!event.canChangeTimeLimit) {
     return null;

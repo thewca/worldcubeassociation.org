@@ -18,6 +18,7 @@ export default function RoundsTable({ wcifEvent }) {
         fontSize: '0.85em',
         position: 'relative',
       }}
+      className="event-panel__rounds-table"
     >
       <Table
         compact
@@ -28,7 +29,7 @@ export default function RoundsTable({ wcifEvent }) {
           <Table.Row>
             <Table.HeaderCell>#</Table.HeaderCell>
             <Table.HeaderCell>Format</Table.HeaderCell>
-            <Table.HeaderCell>Scramble Sets</Table.HeaderCell>
+            <Table.HeaderCell style={{ width: '5em' }}>Scramble Sets</Table.HeaderCell>
             {event.canChangeTimeLimit && (
               <Table.HeaderCell>Time Limit</Table.HeaderCell>
             )}
@@ -36,11 +37,7 @@ export default function RoundsTable({ wcifEvent }) {
             <Table.HeaderCell>To Advance</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        <Table.Body
-          style={{
-            fontSize: '.85em',
-          }}
-        >
+        <Table.Body>
           {wcifEvent.rounds.map((wcifRound, index) => (
             <Round key={wcifRound.id} index={index} wcifEvent={wcifEvent} wcifRound={wcifRound} />
           ))}
