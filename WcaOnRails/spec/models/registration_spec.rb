@@ -102,4 +102,45 @@ RSpec.describe Registration do
     registration.guests = -5
     expect(registration).to be_invalid_with_errors(guests: ["must be greater than or equal to 0"])
   end
+
+  context "when the competition is part of a series" do
+    let!(:series) { FactoryBot.create :competition_series, name: "Registration Test Series 2015" }
+
+    let!(:partner_competition) {
+      FactoryBot.create :competition, latitude: registration.competition.latitude, longitude: registration.competition.longitude,
+                                      start_date: registration.competition.start_date, end_date: registration.competition.end_date,
+                                      competition_series: series
+    }
+    let!(:partner_registration) { FactoryBot.create :registration, :pending, competition: partner_competition, user: registration.user }
+
+    before { registration.competition.update!(competition_series: series) }
+
+    it "does allow multiple pending registrations for one competitor" do
+      expect(registration).to be_valid
+      expect(partner_registration).to be_valid
+    end
+
+    context "and one registration is accepted" do
+      before { registration.update!(accepted_at: Time.now) }
+
+      it "does allow accepting when the other registration is pending" do
+        expect(registration).to be_valid
+        expect(partner_registration).to be_valid
+      end
+
+      it "does allow accepting when the other registration is deleted" do
+        expect(registration).to be_valid
+
+        partner_registration.deleted_at = Time.now
+        expect(partner_registration).to be_valid
+      end
+
+      it "doesn't allow accepting when the other registration is confirmed" do
+        expect(registration).to be_valid
+
+        partner_registration.accepted_at = Time.now
+        expect(partner_registration).to be_invalid_with_errors(competition_id: [I18n.t('registrations.errors.series_more_than_one_accepted')])
+      end
+    end
+  end
 end

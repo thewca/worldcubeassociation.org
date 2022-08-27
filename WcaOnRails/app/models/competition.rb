@@ -1796,12 +1796,21 @@ class Competition < ApplicationRecord
     if part_of_competition_series?
       series_sibling_competitions.each do |comp|
         unless self.distance_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
-          errors.add(:series, I18n.t('competitions.errors.series_distance_km', competition: comp.name))
+          errors.add(:competition_series, I18n.t('competitions.errors.series_distance_km', competition: comp.name))
         end
         unless self.start_date_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_DAYS)
-          errors.add(:series, I18n.t('competitions.errors.series_distance_days', competition: comp.name))
+          errors.add(:competition_series, I18n.t('competitions.errors.series_distance_days', competition: comp.name))
         end
       end
+    end
+  end
+
+  after_update :clean_series_when_leaving
+  private def clean_series_when_leaving
+    if competition_series_id.nil? && # if we just processed an update to remove the competition series
+       (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
+       (old_series = CompetitionSeries.find_by_id(old_series_id)) # and that series still exists
+      old_series.reload.destroy_if_orphaned # prompt it to check for orphaned state.
     end
   end
 

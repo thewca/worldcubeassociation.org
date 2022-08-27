@@ -133,6 +133,33 @@ RSpec.describe RegistrationsController do
       expect(accepted_registration.reload.accepted?).to be true
     end
 
+    it "doesn't allow accepting a Competition Series two-timer" do
+      two_timer_dave = FactoryBot.create(:user, :wca_id)
+
+      series = FactoryBot.create(:competition_series)
+      competition.update!(competition_series: series)
+
+      partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, competition_series: series, event_ids: %w(333 444),
+                                                                                      latitude: competition.latitude, longitude: competition.longitude,
+                                                                                      start_date: competition.start_date, end_date: competition.end_date)
+
+      # make sure there is a dummy registration for the partner competition.
+      FactoryBot.create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
+
+      registration2 = FactoryBot.create(:registration, :pending, competition: competition, user: two_timer_dave)
+
+      expect do
+        patch :do_actions_for_selected, params: {
+          competition_id: competition.id,
+          registrations_action: "accept-selected",
+          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"],
+        }, xhr: true
+      end.to change { enqueued_jobs.size }.by(1)
+      expect(registration.reload.accepted?).to be true
+      expect(registration2.reload.accepted?).to be false
+      expect(flash[:danger]).to include I18n.t('registrations.errors.series_more_than_one_accepted')
+    end
+
     it "doesn't allow accepting a banned user" do
       registration.update!(accepted_at: Time.now)
       registration2 = FactoryBot.create(:registration, :pending, competition: competition)
