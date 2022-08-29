@@ -642,7 +642,7 @@ class CompetitionsController < ApplicationController
         :event_change_deadline_date,
         { competition_events_attributes: [:id, :event_id, :_destroy],
           championships_attributes: [:id, :championship_type, :_destroy],
-          competition_series_attributes: [:id, :name, :competition_ids, :_destroy] },
+          competition_series_attributes: [:id, :wcif_id, :name, :short_name, :competition_ids, :_destroy] },
       ]
       if current_user.can_admin_competitions?
         permitted_competition_params += [

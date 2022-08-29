@@ -54,7 +54,6 @@ RSpec.describe "competitions" do
               competition: {
                 competition_series_attributes: {
                   id: series.id,
-                  name: series.name,
                   competition_ids: [partner_competition.id, competition.id].join(","),
                 },
               },
@@ -77,7 +76,9 @@ RSpec.describe "competitions" do
             patch competition_path(competition), params: {
               competition: {
                 competition_series_attributes: {
+                  wcif_id: "SomeNewSeries2015",
                   name: "Some New Series 2015",
+                  short_name: "Some New Series 2015",
                   competition_ids: [partner_competition.id, competition.id].join(","),
                 },
               },
@@ -188,7 +189,6 @@ RSpec.describe "competitions" do
               competition: {
                 competition_series_attributes: {
                   id: series.id,
-                  name: series.name,
                   competition_ids: [partner_competition.id, competition.id].join(","),
                 },
               },
@@ -208,7 +208,9 @@ RSpec.describe "competitions" do
             patch competition_path(competition), params: {
               competition: {
                 competition_series_attributes: {
+                  wcif_id: "SomeNewSeries2015",
                   name: "Some New Series 2015",
+                  short_name: "Some New Series 2015",
                   competition_ids: [partner_competition.id, competition.id].join(","),
                 },
               },
@@ -308,12 +310,12 @@ RSpec.describe "competitions" do
         end
 
         context "when handling Series competitions" do
-          let(:partner_competition) {
+          let!(:series) { FactoryBot.create(:competition_series) }
+          let!(:partner_competition) {
             FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
                               latitude: competition.latitude, longitude: competition.longitude,
                               start_date: competition.start_date, end_date: competition.end_date)
           }
-          let(:series) { FactoryBot.create(:competition_series, competitions: [partner_competition]) }
 
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be false
@@ -322,7 +324,6 @@ RSpec.describe "competitions" do
               competition: {
                 competition_series_attributes: {
                   id: series.id,
-                  name: series.name,
                   competition_ids: [partner_competition.id, competition.id].join(","),
                 },
               },
@@ -345,7 +346,9 @@ RSpec.describe "competitions" do
             patch competition_path(competition), params: {
               competition: {
                 competition_series_attributes: {
+                  wcif_id: "SomeNewSeries2015",
                   name: "Some New Series 2015",
+                  short_name: "Some New Series 2015",
                   competition_ids: [partner_competition.id, competition.id].join(","),
                 },
               },
@@ -456,7 +459,6 @@ RSpec.describe "competitions" do
               competition: {
                 competition_series_attributes: {
                   id: series.id,
-                  name: series.name,
                   competition_ids: [partner_competition.id, competition.id].join(","),
                 },
               },
@@ -477,7 +479,9 @@ RSpec.describe "competitions" do
             patch competition_path(competition), params: {
               competition: {
                 competition_series_attributes: {
+                  wcif_id: "SomeNewSeries2015",
                   name: "Some New Series 2015",
+                  short_name: "Some New Series 2015",
                   competition_ids: [partner_competition.id, competition.id].join(","),
                 },
               },

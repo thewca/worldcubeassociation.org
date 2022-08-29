@@ -127,7 +127,7 @@ RSpec.describe Competition do
 
       it "cannot extend the WCRP limitations by transitive property" do
         # Say you're organising three competitions that have venues on the same, 200km-long straight line street.
-        straight_line_series = FactoryBot.create :competition_series, name: "Equator Series 2015"
+        straight_line_series = FactoryBot.create :competition_series, wcif_id: "EquatorSeries2015", name: "Equator Series 2015"
         under_hundred_km_microdegrees = (99.0 / 6371) * (180 / Math::PI) * 1e6 # haversine_shenanigans * rad_to_deg * deg_to_microdeg
 
         # First, you create the comp at one end of the street. No linking yet, all good.

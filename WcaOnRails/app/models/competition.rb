@@ -158,23 +158,24 @@ class Competition < ApplicationRecord
     competition_series_id
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
+  VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
   URL_RE = %r{\Ahttps?://.*\z}
   MAX_ID_LENGTH = 32
   MAX_NAME_LENGTH = 50
+  MAX_CELL_NAME_LENGTH = 32
   MAX_COMPETITOR_LIMIT = 5000
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
-                 format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
+                 format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
-  MAX_CELL_NAME_LENGTH = 32
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
                        format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
@@ -1528,12 +1529,17 @@ class Competition < ApplicationRecord
       "id" => id,
       "name" => name,
       "shortName" => cellName,
+      "series" => part_of_competition_series? ? competition_series_wcif : nil,
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
       "schedule" => schedule_wcif,
       "competitorLimit" => competitor_limit_enabled? ? competitor_limit : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
+  end
+
+  def competition_series_wcif
+    competition_series&.to_wcif
   end
 
   def persons_wcif(authorized: false)
@@ -1590,6 +1596,7 @@ class Competition < ApplicationRecord
   def set_wcif!(wcif, current_user)
     JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
     ActiveRecord::Base.transaction do
+      set_wcif_series!(wcif["series"], current_user) if wcif["series"]
       set_wcif_events!(wcif["events"], current_user) if wcif["events"]
       set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
@@ -1602,6 +1609,23 @@ class Competition < ApplicationRecord
       #   was never configured to support qualifications (i.e. the use of qualifications was never approved by WCAT).
       save!
     end
+  end
+
+  def set_wcif_series!(wcif_series, current_user)
+    unless current_user.can_update_competition_series?(self)
+      raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series")
+    end
+
+    unless wcif_series["competitions"].include?(self.id)
+      raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.")
+    end
+
+    competition_series = CompetitionSeries.find_by_wcif_id(wcif_series["id"]) || CompetitionSeries.new
+    competition_series.load_wcif!(wcif_series)
+
+    self.competition_series = competition_series
+
+    reload
   end
 
   def set_wcif_events!(wcif_events, current_user)
@@ -1722,6 +1746,7 @@ class Competition < ApplicationRecord
         "id" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
+        "series" => CompetitionSeries.wcif_json_schema,
         "persons" => { "type" => "array", "items" => User.wcif_json_schema },
         "events" => { "type" => "array", "items" => CompetitionEvent.wcif_json_schema },
         "schedule" => {

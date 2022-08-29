@@ -774,7 +774,9 @@ DROP TABLE IF EXISTS `competition_series`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `competition_series` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `wcif_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `short_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)

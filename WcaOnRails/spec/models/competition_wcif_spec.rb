@@ -20,6 +20,20 @@ RSpec.describe "Competition WCIF" do
       competitor_limit: 50,
     )
   }
+  let(:partner_competition) {
+    FactoryBot.create(:competition, id: "PartnerComp2014",
+                      start_date: competition.start_date, end_date: competition.end_date,
+                      latitude: competition.latitude, longitude: competition.longitude)
+  }
+  let!(:competition_series) {
+    FactoryBot.create(
+      :competition_series,
+      wcif_id: "SpectacularSeries2014",
+      name: "The Spectacular Series 2014",
+      short_name: "Spectacular 2014",
+      competitions: [competition, partner_competition],
+    )
+  }
   let(:delegate) { competition.delegates.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
@@ -41,6 +55,12 @@ RSpec.describe "Competition WCIF" do
         "id" => "TestComp2014",
         "name" => "Test Comp 2014",
         "shortName" => "Test 2014",
+        "series" => {
+          "id" => "SpectacularSeries2014",
+          "name" => "The Spectacular Series 2014",
+          "shortName" => "Spectacular 2014",
+          "competitions" => %w[TestComp2014 PartnerComp2014],
+        },
         "persons" => [delegate.to_wcif(competition)],
         "events" => [
           {

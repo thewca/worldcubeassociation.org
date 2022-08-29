@@ -395,7 +395,9 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
+          wcif_id
           name
+          short_name
           created_at
           updated_at
         ),

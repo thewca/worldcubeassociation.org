@@ -347,8 +347,10 @@ en:
       championship:
         championship_type: "Championship type"
       competition_series:
+        wcif_id: "ID"
         name: "Name"
-        competition_ids: "Competition IDs"
+        short_name: "Series nickname"
+        competition_ids: "All competitions"
       #context: a registration to a competition
       registration:
         guests: "Guests"
@@ -566,7 +568,9 @@ en:
           championship_type: ""
         #context: when part of a Competition Series
         competition_series:
-          name: "Can be chosen freely but must be unique across all competitions."
+          wcif_id: ""
+          name: "The full name of the Competition Series including the year at the end (e.g., Southern Australia 2022). Be sure to capitalize. The same rules as for the name of the individual competition apply."
+          short_name: "A short name for displaying. The same rules as for the name of the individual competition apply.."
           competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
       website_contact:
         inquiry: ""

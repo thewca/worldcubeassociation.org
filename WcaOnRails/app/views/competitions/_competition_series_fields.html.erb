@@ -7,9 +7,22 @@
     <% end %>
   <% end %>
 
+  <% if @competition.persisted? %>
+    <%# i18n-tasks-use t('simple_form.hints.competition.competition_series.wcif_id') %>
+    <%# i18n-tasks-use t('activerecord.attributes.competition_series.wcif_id') %>
+    <%= f.input :wcif_id %>
+  <% end %>
+
   <%# i18n-tasks-use t('simple_form.hints.competition.competition_series.name') %>
   <%# i18n-tasks-use t('activerecord.attributes.competition_series.name') %>
   <%= f.input :name %>
+
+  <% if @competition.persisted? %>
+    <%# i18n-tasks-use t('simple_form.hints.competition.competition_series.short_name') %>
+    <%# i18n-tasks-use t('activerecord.attributes.competition_series.short_name') %>
+    <%= f.input :short_name %>
+  <% end %>
+
   <%# i18n-tasks-use t('simple_form.hints.competition.competition_series.competition_ids') %>
   <%# i18n-tasks-use t('activerecord.attributes.competition_series.competition_ids') %>
   <%= f.input :competition_ids, as: :competition_id, input_html: { class: "wca-autocomplete-input_lock" } %>
