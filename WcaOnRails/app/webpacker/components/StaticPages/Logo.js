@@ -1,4 +1,5 @@
 import React from 'react';
+import { sanitize } from 'dompurify';
 import I18n from '../../lib/i18n';
 
 /**
@@ -14,7 +15,7 @@ function Logo({ title }) {
           // eslint-disable-next-line react/no-array-index-key
           key={`logo-paragraphs-${index}`}
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: paragraph }}
+          dangerouslySetInnerHTML={{ __html: sanitize(paragraph) }}
         />
       ))}
     </>
