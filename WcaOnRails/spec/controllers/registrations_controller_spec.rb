@@ -139,9 +139,8 @@ RSpec.describe RegistrationsController do
       series = FactoryBot.create(:competition_series)
       competition.update!(competition_series: series)
 
-      partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, competition_series: series, event_ids: %w(333 444),
-                                                                                      latitude: competition.latitude, longitude: competition.longitude,
-                                                                                      start_date: competition.start_date, end_date: competition.end_date)
+      partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 444),
+                                                                                      competition_series: series, series_base: competition)
 
       # make sure there is a dummy registration for the partner competition.
       FactoryBot.create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)

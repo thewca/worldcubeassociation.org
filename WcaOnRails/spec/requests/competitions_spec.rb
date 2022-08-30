@@ -42,9 +42,7 @@ RSpec.describe "competitions" do
           let!(:series) { FactoryBot.create(:competition_series) }
           let!(:partner_competition) {
             FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                              competition_series: series,
-                              latitude: competition.latitude, longitude: competition.longitude,
-                              start_date: competition.start_date, end_date: competition.end_date)
+                              competition_series: series, series_base: competition)
           }
 
           it "can add competition to an existing Series" do
@@ -100,9 +98,7 @@ RSpec.describe "competitions" do
               expect(competition.confirmed?).to be false
 
               other_partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                                                            competition_series: series,
-                                                            latitude: competition.latitude, longitude: competition.longitude,
-                                                            start_date: competition.start_date, end_date: competition.end_date)
+                                                            competition_series: series, series_base: competition)
 
               patch competition_path(competition), params: {
                 competition: {
@@ -177,9 +173,7 @@ RSpec.describe "competitions" do
           let!(:series) { FactoryBot.create(:competition_series) }
           let!(:partner_competition) {
             FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                              competition_series: series,
-                              latitude: competition.latitude, longitude: competition.longitude,
-                              start_date: competition.start_date, end_date: competition.end_date)
+                              competition_series: series, series_base: competition)
           }
 
           it "can add competition to an existing Series" do
@@ -232,9 +226,7 @@ RSpec.describe "competitions" do
               expect(competition.confirmed?).to be true
 
               other_partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                                                            competition_series: series,
-                                                            latitude: competition.latitude, longitude: competition.longitude,
-                                                            start_date: competition.start_date, end_date: competition.end_date)
+                                                            competition_series: series, series_base: competition)
 
               patch competition_path(competition), params: {
                 competition: {
@@ -313,8 +305,7 @@ RSpec.describe "competitions" do
           let!(:series) { FactoryBot.create(:competition_series) }
           let!(:partner_competition) {
             FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                              latitude: competition.latitude, longitude: competition.longitude,
-                              start_date: competition.start_date, end_date: competition.end_date)
+                              competition_series: series, series_base: competition)
           }
 
           it "can add competition to an existing Series" do
@@ -370,9 +361,7 @@ RSpec.describe "competitions" do
               expect(competition.confirmed?).to be false
 
               other_partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                                                            competition_series: series,
-                                                            latitude: competition.latitude, longitude: competition.longitude,
-                                                            start_date: competition.start_date, end_date: competition.end_date)
+                                                            competition_series: series, series_base: competition)
 
               patch competition_path(competition), params: {
                 competition: {
@@ -447,9 +436,7 @@ RSpec.describe "competitions" do
           let!(:series) { FactoryBot.create(:competition_series) }
           let!(:partner_competition) {
             FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                              competition_series: series,
-                              latitude: competition.latitude, longitude: competition.longitude,
-                              start_date: competition.start_date, end_date: competition.end_date)
+                              competition_series: series, series_base: competition)
           }
 
           it 'cannot add competition to an existing Series' do

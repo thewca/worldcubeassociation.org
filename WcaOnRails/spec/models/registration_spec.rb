@@ -106,11 +106,7 @@ RSpec.describe Registration do
   context "when the competition is part of a series" do
     let!(:series) { FactoryBot.create :competition_series, name: "Registration Test Series 2015" }
 
-    let!(:partner_competition) {
-      FactoryBot.create :competition, latitude: registration.competition.latitude, longitude: registration.competition.longitude,
-                                      start_date: registration.competition.start_date, end_date: registration.competition.end_date,
-                                      competition_series: series
-    }
+    let!(:partner_competition) { FactoryBot.create :competition, series_base: registration.competition, competition_series: series }
     let!(:partner_registration) { FactoryBot.create :registration, :pending, competition: partner_competition, user: registration.user }
 
     before { registration.competition.update!(competition_series: series) }

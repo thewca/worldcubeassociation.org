@@ -20,11 +20,7 @@ RSpec.describe "Competition WCIF" do
       competitor_limit: 50,
     )
   }
-  let(:partner_competition) {
-    FactoryBot.create(:competition, id: "PartnerComp2014",
-                      start_date: competition.start_date, end_date: competition.end_date,
-                      latitude: competition.latitude, longitude: competition.longitude)
-  }
+  let(:partner_competition) { FactoryBot.create(:competition, id: "PartnerComp2014", series_base: competition, series_distance_days: 3) }
   let!(:competition_series) {
     FactoryBot.create(
       :competition_series,
