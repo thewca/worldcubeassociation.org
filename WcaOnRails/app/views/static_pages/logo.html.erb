@@ -1,9 +1,7 @@
 <% provide(:title, t('logo.title')) %>
 
-<div class="container">
-  <h1><%= yield(:title) %></h1>
-
-  <% t('logo.paragraphs').values.each do |paragraph| %>
-    <p><%= raw paragraph %></p>
-  <% end %>
-</div>
+<%= react_component('StaticPages/Logo', {
+  title: yield(:title),
+}, {
+  class: 'container'
+}) %>
