@@ -95,6 +95,7 @@ module DatabaseDumper
           event_change_deadline_date
           allow_registration_edits
           allow_registration_self_delete_after_acceptance
+          use_wca_live_for_scoretaking
         ),
         db_default: %w(
           connected_stripe_account_id

@@ -605,6 +605,7 @@ class CompetitionsController < ApplicationController
         :external_website,
         :use_wca_registration,
         :external_registration_page,
+        :use_wca_live_for_scoretaking,
         :enable_donations,
         :guests_enabled,
         :registration_open,
