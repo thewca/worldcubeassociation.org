@@ -78,7 +78,7 @@ class Team < ApplicationRecord
     @@teams_by_friendly_id ||= nil
     @@teams_by_friendly_id_timestamp ||= nil
 
-    if @@teams_by_friendly_id.nil? || @@teams_by_friendly_id_timestamp < 15.minutes.ago
+    if @@teams_by_friendly_id_timestamp.nil? || @@teams_by_friendly_id_timestamp < 15.minutes.ago
       @@teams_by_friendly_id = all.with_hidden.index_by(&:friendly_id)
       @@teams_by_friendly_id_timestamp = DateTime.now
     end
