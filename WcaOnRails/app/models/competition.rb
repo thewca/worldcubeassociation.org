@@ -498,7 +498,7 @@ class Competition < ApplicationRecord
     end
     if self.in_progress? && !self.cancelled?
       if self.use_wca_live_for_scoretaking
-        info[:in_progress] = I18n.t('competitions.messages.in_progress_at_wca_live_html', link_here: self.wca_live_link?).html_safe
+        info[:in_progress] = I18n.t('competitions.messages.in_progress_at_wca_live_html', link_here: self.wca_live_link).html_safe
       else
         info[:in_progress] = I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
       end
