@@ -47,7 +47,7 @@
     "pnp-webpack-plugin": "^1.7.0",
     "postcss": "^8.4.14",
     "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-import": "^14.1.0",
+    "postcss-import": "^15.0.0",
     "postcss-loader": "^7.0.1",
     "postcss-preset-env": "^7.7.2",
     "prop-types": "^15.8.1",
