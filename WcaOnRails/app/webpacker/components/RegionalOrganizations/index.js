@@ -42,9 +42,12 @@ function ROOverview({
 
       <h3>{I18n.t('regional_organizations.requirements.title')}</h3>
       <ol>
-        {I18n.tArray('regional_organizations.requirements.list').map((requirement, index) => (
-          <li key={`regional_organizations-requirements-${index.toString()}`}>{requirement}</li>
-        ))}
+        <li>{I18n.t('regional_organizations.requirements.list.1')}</li>
+        <li>{I18n.t('regional_organizations.requirements.list.2')}</li>
+        <li>{I18n.t('regional_organizations.requirements.list.3')}</li>
+        <li>{I18n.t('regional_organizations.requirements.list.4')}</li>
+        <li>{I18n.t('regional_organizations.requirements.list.5')}</li>
+        <li>{I18n.t('regional_organizations.requirements.list.6')}</li>
       </ol>
 
       <h3>{I18n.t('regional_organizations.application_instructions.title')}</h3>
