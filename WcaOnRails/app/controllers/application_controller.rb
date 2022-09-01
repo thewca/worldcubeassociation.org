@@ -84,5 +84,5 @@ class ApplicationController < ActionController::Base
   end
 
   # Starburst announcements, see https://github.com/starburstgem/starburst#installation
-  # helper Starburst::AnnouncementsHelper
+  helper Starburst::AnnouncementsHelper
 end

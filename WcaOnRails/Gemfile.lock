@@ -120,6 +120,13 @@ GIT
       railties (>= 5.0)
 
 GIT
+  remote: https://github.com/thewca/starburst.git
+  revision: 491be263ca5186eb298006cfe2da0cb738673791
+  specs:
+    starburst (2.0.0.rc0)
+      rails (>= 4.2.0, < 7.1)
+
+GIT
   remote: https://github.com/thewca/time_will_tell.git
   revision: d1ad80f4e4c60762c50086976301453e1f40fab4
   specs:
@@ -810,6 +817,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   sprockets-rails
+  starburst!
   strip_attributes
   stripe
   superconfig

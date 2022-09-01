@@ -5,7 +5,7 @@ require "capybara/rspec"
 
 RSpec.describe "layouts/application.html.erb" do
   before do
-    # view.extend Starburst::AnnouncementsHelper
+    view.extend Starburst::AnnouncementsHelper
   end
 
   describe "full_title" do

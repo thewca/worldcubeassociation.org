@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   end
 
   # Starburst announcements, see https://github.com/starburstgem/starburst#installation
-  # mount Starburst::Engine => '/starburst'
+  mount Starburst::Engine => '/starburst'
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
