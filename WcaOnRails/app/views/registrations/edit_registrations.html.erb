@@ -131,7 +131,9 @@
                   <%= registered_date %>
                 </span>
               </td>
-              <td class="series"><%= registration.series_registration_info %></td>
+              <% if @competition.part_of_competition_series? %>
+                <td class="series"><%= registration.series_registration_info %></td>
+              <% end %>
               <td class="events"><%= registration.events.length %></td>
               <td class="guests">
                 <%= registration.guests %>
