@@ -195,7 +195,6 @@ class CompetitionsController < ApplicationController
       # Show id errors under name, since we don't actually show an
       # id field to the user, so they wouldn't see any id errors.
       @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
-      @nearby_competitions = get_nearby_competitions(@competition)
       render :new
     end
   end
@@ -282,16 +281,21 @@ class CompetitionsController < ApplicationController
   end
 
   def get_nearby_competitions(competition)
-    nearby_competitions = competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING)[0, 10]
+    nearby_competitions = competition.nearby_competitions_warning[0, 10]
     nearby_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     nearby_competitions
+  end
+
+  def get_series_eligible_competitions(competition)
+    series_eligible_competitions = competition.series_eligible_competitions
+    series_eligible_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
+    series_eligible_competitions
   end
 
   def admin_edit
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = true
     @competition_organizer_view = false
-    @nearby_competitions = get_nearby_competitions(@competition)
     render :edit
   end
 
@@ -299,7 +303,6 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = false
     @competition_organizer_view = true
-    @nearby_competitions = get_nearby_competitions(@competition)
     render :edit
   end
 
@@ -356,6 +359,13 @@ class CompetitionsController < ApplicationController
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @nearby_competitions = get_nearby_competitions(@competition)
     render partial: 'nearby_competitions'
+  end
+
+  def series_eligible_competitions
+    @competition = Competition.new(competition_params)
+    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    @series_eligible_competitions = get_series_eligible_competitions(@competition)
+    render partial: 'series_eligible_competitions'
   end
 
   def time_until_competition
@@ -522,7 +532,6 @@ class CompetitionsController < ApplicationController
         redirect_to edit_competition_path(@competition)
       end
     else
-      @nearby_competitions = get_nearby_competitions(@competition)
       render :edit
     end
   end
@@ -632,7 +641,8 @@ class CompetitionsController < ApplicationController
         :waiting_list_deadline_date,
         :event_change_deadline_date,
         { competition_events_attributes: [:id, :event_id, :_destroy],
-          championships_attributes: [:id, :championship_type, :_destroy] },
+          championships_attributes: [:id, :championship_type, :_destroy],
+          competition_series_attributes: [:id, :wcif_id, :name, :short_name, :competition_ids, :_destroy] },
       ]
       if current_user.can_admin_competitions?
         permitted_competition_params += [
@@ -647,6 +657,27 @@ class CompetitionsController < ApplicationController
         competition_params[:confirmed] = true
       end
       competition_params[:editing_user_id] = current_user.id
+
+      # Quirk: When adding a new competition to an already existing (i.e. already persisted) Series,
+      # Rails will throw an error like "cannot find Series with ID 123 for NewCompetition"
+      # despite we're sending the update to change Series 123 to include NewCompetition.
+      # To mitigate this error, we must deliberately write to series_id first.
+      if (persisted_series_id = competition_params.try(:[], :competition_series_attributes)&.try(:[], :id))
+        competition_params[:competition_series_id] = persisted_series_id
+      end
+
+      # Quirk: We don't want to actually destroy CompetitionSeries directly,
+      # because that could badly affect other competitions that are still attached to that series.
+      # If the frontend sends a _destroy, we only unlink the *current* competition and let validations take care of the rest.
+      if (series_destroy_flag = competition_params.try(:[], :competition_series_attributes)&.try(:[], :_destroy))
+        # Yes, this is ugly but it's the way simple_form_for does things.
+        should_delete = ActiveModel::Type::Boolean.new.cast(series_destroy_flag)
+
+        if should_delete
+          competition_params[:competition_series_id] = nil
+          competition_params.delete :competition_series_attributes
+        end
+      end
     end
   end
 end

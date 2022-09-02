@@ -465,8 +465,6 @@ pt-BR:
         competition_events: Eventos
         #original_hash: 71c8461
         enable_donations: Quero habilitar doações além de coletar as taxas de inscrição
-        #original_hash: 4baf44b
-        championship_type: Tipo de Campeonato
         #original_hash: 556fda0
         extra_registration_requirements: Requisitos adicionais de inscrição
         #original_hash: 2529d04
@@ -507,6 +505,9 @@ pt-BR:
         event_restrictions_reason: Razões e detalhes para restrição de eventos
         #original_hash: 3c24bd2
         main_event_id: Evento principal
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Tipo de Campeonato
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
@@ -2986,22 +2987,23 @@ pt-BR:
         zero: Nenhuma competição
         one: 1 competição
         other: '%{count} competições'
-      #original_hash: e3528ec
-      label: 'Competições próximas (num intervalo de %{days} dias e %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Últimos %{days} dias'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} num intervalo de %{kms} km e %{days} dias.'
+      #original_hash: 9eb8f46
+      within: 'Num intervalo de %{days} dias'
+      #original_hash: d97d1ee
+      show: Mostrar
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Competições próximas (num intervalo de %{days} dias e %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Nenhuma competição próxima!
       #original_hash: 7e76950
       no_date_yet: Você ainda não definiu uma data para esta competição.
       #original_hash: 82a95d2
       no_location_yet: Você ainda não definiu um local para esta competição.
-      #original_hash: 9eb8f46
-      within: 'Num intervalo de %{days} dias'
-      #original_hash: d97d1ee
-      show: Mostrar
       #original_hash: 709a232
       name: Nome
       #original_hash: adc24b7

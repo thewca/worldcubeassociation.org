@@ -1,36 +1,48 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
 
 <%= render layout: 'nav' do %>
-  <% if @show_events %>
-    <%= link_to competition_edit_registrations_path(@competition, show_events: "false", show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
-      <%= ui_icon("minus") %> Hide Events
+  <p>
+    <% if @show_events %>
+      <%= link_to competition_edit_registrations_path(@competition, show_events: "false", show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
+        <%= ui_icon("minus") %> Hide Events
+      <% end %>
+    <% else %>
+      <%= link_to competition_edit_registrations_path(@competition, show_events: "true", show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
+        <%= ui_icon("plus") %> Show Events
+      <% end %>
     <% end %>
-  <% else %>
-    <%= link_to competition_edit_registrations_path(@competition, show_events: "true", show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
-      <%= ui_icon("plus") %> Show Events
-    <% end %>
-  <% end %>
 
-  <% if @show_full_emails %>
-    <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: "false", show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
-      <%= ui_icon("minus") %> Hide Emails
+    <% if @show_full_emails %>
+      <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: "false", show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
+        <%= ui_icon("minus") %> Hide Emails
+      <% end %>
+    <% else %>
+      <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: "true", show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
+        <%= ui_icon("plus") %> Show Emails
+      <% end %>
     <% end %>
-  <% else %>
-    <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: "true", show_birthdays: @show_birthdays.to_s), class: "btn btn-primary" do %>
-      <%= ui_icon("plus") %> Show Emails
-    <% end %>
-  <% end %>
 
-  <% if @show_birthdays %>
-    <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: "false"), class: "btn btn-primary" do %>
-      <%= ui_icon("minus") %> Hide Birthdays
+    <% if @show_birthdays %>
+      <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: "false"), class: "btn btn-primary" do %>
+        <%= ui_icon("minus") %> Hide Birthdays
+      <% end %>
+    <% else %>
+      <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: "true"), class: "btn btn-primary" do %>
+        <%= ui_icon("plus") %> Show Birthdays
+      <% end %>
     <% end %>
-  <% else %>
-    <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: "true"), class: "btn btn-primary" do %>
-      <%= ui_icon("plus") %> Show Birthdays
-    <% end %>
-  <% end %>
 
+    <% if @competition.part_of_competition_series? %>
+      <%= link_to competition_edit_registrations_path(@competition, show_events: @show_events.to_s, show_full_emails: @show_full_emails.to_s, show_birthdays: @show_birthdays.to_s, run_validations: "true"), class: "btn btn-success" do %>
+        <%= ui_icon("refresh") %> Run validations
+      <% end %>
+    <% end %>
+  </p>
+
+  <% if @competition.part_of_competition_series? %>
+    <% format_description = Registration::SERIES_SIBLING_DISPLAY_STATUSES.map { |st| t("simple_form.options.registration.status.#{st}") }.join(" + ") %>
+    <p class="text-right"><%= t 'registrations.list.series_registrations_hint_html', description: format_description %></p>
+  <% end %>
 
   <%= form_for @competition, url: competition_registrations_do_actions_for_selected_path(@competition), remote: true do |f| %>
     <% [:pending, :accepted, :deleted].each do |status| %>
@@ -64,6 +76,9 @@
             <th class="registration-date" data-sortable="true" data-sorter="comparePaymentDate" data-field="registration-date">
               <%= @competition.using_stripe_payments? ? t('registrations.list.registered.with_stripe') : t('registrations.list.registered.without_stripe') %>
             </th>
+            <% if @competition.part_of_competition_series? %>
+              <th class="series"><%= t 'registrations.list.series_registrations' %></th>
+            <% end %>
             <th class="events" data-sortable="true"><%= t 'registrations.list.n_events' %></th>
             <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
             <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
@@ -90,7 +105,13 @@
                 <%= wca_id_link registration.wca_id %>
               </td>
 
-              <td class="name"><%= registration.name %></td>
+            <td class="name">
+              <%= registration.name %>
+
+              <% if @run_validations && !registration.valid? %>
+                <%= ui_icon('exclamation triangle', data: { toggle: "tooltip", placement: "top" }, title: registration.errors.full_messages.join(" // ")) %>
+              <% end %>
+            </td>
               <td class="countryId"><%= registration.country.name %></td>
               <% if @show_birthdays %>
                 <td class="birthday"><%= registration.birthday %></td>
@@ -110,6 +131,9 @@
                   <%= registered_date %>
                 </span>
               </td>
+              <% if @competition.part_of_competition_series? %>
+                <td class="series"><%= registration.series_registration_info %></td>
+              <% end %>
               <td class="events"><%= registration.events.length %></td>
               <td class="guests">
                 <%= registration.guests %>

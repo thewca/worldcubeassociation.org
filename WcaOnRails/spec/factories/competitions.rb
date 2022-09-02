@@ -161,6 +161,36 @@ FactoryBot.define do
       with_schedule { false }
     end
 
+    transient do
+      series_base { nil }
+      series_distance_days { 0 }
+      series_distance_km { 0 }
+      distance_direction_deg { rand(360) }
+    end
+
+    after(:build) do |competition, evaluator|
+      if evaluator.series_base
+        series_base = evaluator.series_base
+
+        time_difference = evaluator.series_distance_days.days
+
+        competition.start_date = series_base.start_date + time_difference
+        competition.end_date = series_base.end_date + time_difference
+
+        geo_distance_km = evaluator.series_distance_km.abs.to_f
+
+        # haversine_shenanigans * rad_to_deg * deg_to_microdeg
+        geo_distance_microdeg = (geo_distance_km / 6371) * (180 / Math::PI) * 1e6
+        random_position_rad = evaluator.distance_direction_deg * (Math::PI / 180)
+
+        distance_longitude = Math.cos(random_position_rad) * geo_distance_microdeg
+        distance_latitude = Math.sin(random_position_rad) * geo_distance_microdeg
+
+        competition.latitude = series_base.latitude + distance_latitude.to_i
+        competition.longitude = series_base.longitude + distance_longitude.to_i
+      end
+    end
+
     after(:create) do |competition, evaluator|
       evaluator.championship_types.each do |championship_type|
         competition.championships.create!(championship_type: championship_type)

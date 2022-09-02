@@ -31,7 +31,7 @@
   <% end %>
 <% end %>
 
-<% @competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING).each do |c| %>
+<% @competition.nearby_competitions_warning.each do |c| %>
   <% if @competition.dangerously_close_to?(c) %>
     <% days_difference = (@competition.start_date - c.start_date).to_i %>
     <% days_sentence = days_difference > 0 ? "#{days_difference} days before" : "#{-days_difference} days after" %>

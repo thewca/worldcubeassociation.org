@@ -467,8 +467,6 @@ da:
         enable_donations: >-
           Jeg vil give mulighed for donationer oven i at indsamle
           deltagergebyrene
-        #original_hash: 4baf44b
-        championship_type: Mesterskabs type
         #original_hash: 556fda0
         extra_registration_requirements: Ekstra tilmeldingskrav
         #original_hash: 2529d04
@@ -509,6 +507,9 @@ da:
         event_restrictions_reason: Årsagen og detaljerne for brugen af restriktion af discipliner
         #original_hash: 3c24bd2
         main_event_id: Hoveddisciplinen
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Mesterskabs type
       registration:
         #original_hash: 3c23a67
         guests: Gæster
@@ -2951,22 +2952,23 @@ da:
         zero: Ingen konkurrencer
         one: 1 konkurrence
         other: '%{count} konkurrencer'
-      #original_hash: e3528ec
-      label: 'Konkurrencer i nærheden (indenfor %{days} dage og %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Sidste %{days} dage'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} indenfor %{kms} km og %{days} dage.'
+      #original_hash: 9eb8f46
+      within: 'Indenfor %{days} dage'
+      #original_hash: d97d1ee
+      show: Vis
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Konkurrencer i nærheden (indenfor %{days} dage og %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Ingen konkurrencer i nærheden!
       #original_hash: 7e76950
       no_date_yet: Du har ikke tildelt en dato for denne konkurrence endnu.
       #original_hash: 82a95d2
       no_location_yet: Du har ikke tildelt en placering for denne konkurrence endnu.
-      #original_hash: 9eb8f46
-      within: 'Indenfor %{days} dage'
-      #original_hash: d97d1ee
-      show: Vis
       #original_hash: 709a232
       name: Navn
       #original_hash: adc24b7

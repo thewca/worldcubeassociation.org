@@ -9,6 +9,7 @@
       that.wcaAutocomplete = true;
 
       var only_one = $(that).hasClass("wca-autocomplete-only_one");
+      var is_locked = $(that).hasClass("wca-autocomplete-input_lock");
       var omni_search = $(that).hasClass("wca-autocomplete-search");
       var users_search = $(that).hasClass("wca-autocomplete-users_search");
       var competitions_search = $(that).hasClass("wca-autocomplete-competitions_search");
@@ -178,6 +179,9 @@
       if(plaintextToSetAfterSelectize) {
         that.selectize.$control_input.val(plaintextToSetAfterSelectize);
         that.selectize.$control_input.trigger("update");
+      }
+      if(is_locked) {
+        that.selectize.lock();
       }
     });
 

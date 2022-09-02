@@ -504,8 +504,6 @@ fi:
         competition_events: Lajit
         #original_hash: 71c8461
         enable_donations: Haluan sallia lahjoitukset osallistumismaksujen keräämisen lisäksi
-        #original_hash: 4baf44b
-        championship_type: Alueellisen mestaruuskilpailun tyyppi
         #original_hash: 556fda0
         extra_registration_requirements: Muut rekisteröitymisohjeet
         #original_hash: 2529d04
@@ -550,6 +548,9 @@ fi:
         event_restrictions_reason: Syy ja lisätiedot koskien lajiyhdistelmien rajoituksia
         #original_hash: 3c24bd2
         main_event_id: Päälaji
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Alueellisen mestaruuskilpailun tyyppi
       registration:
         #original_hash: 3c23a67
         guests: Vierailijat
@@ -3023,22 +3024,23 @@ fi:
         zero: Ei kilpailuja
         one: 1 kilpailu
         other: '%{count} kilpailua'
-      #original_hash: e3528ec
-      label: 'Lähellä olevat kilpailut (%{days} päivän ja %{kms} km sisällä)'
       #original_hash: 3446062
       label_admin: 'Viimeiset %{days} päivää'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} %{kms} km ja %{days} päivän sisällä.'
+      #original_hash: 9eb8f46
+      within: '%{days} päivän sisällä'
+      #original_hash: d97d1ee
+      show: Näytä
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Lähellä olevat kilpailut (%{days} päivän ja %{kms} km sisällä)'
       #original_hash: feefb46
       no_comp_nearby: Ei lähistöllä olevia kilpailuja!
       #original_hash: 7e76950
       no_date_yet: Et ole vielä määritellyt päivämäärää tälle kilpailulle.
       #original_hash: 82a95d2
       no_location_yet: Et ole vielä määritellyt tämän kilpailun sijaintia.
-      #original_hash: 9eb8f46
-      within: '%{days} päivän sisällä'
-      #original_hash: d97d1ee
-      show: Näytä
       #original_hash: 709a232
       name: Nimi
       #original_hash: adc24b7

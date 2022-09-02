@@ -106,6 +106,75 @@ RSpec.describe Competition do
     end
   end
 
+  context "when it is part of a Series" do
+    let!(:series) { FactoryBot.create :competition_series }
+    let!(:competition) { FactoryBot.create :competition, competition_series: series, latitude: 51_508_147, longitude: -75_848, starts: 1.week.ago }
+
+    context "checks WCRP requirements" do
+      it "cannot link two competitions that are more than 100km apart" do
+        too_far_away_competition = FactoryBot.build :competition, competition_series: series, series_base: competition,
+                                                                  series_distance_km: 16_990, distance_direction_deg: 330.56652339271716
+
+        # also expect the competition to report the exact problem
+        expect(too_far_away_competition).to be_invalid_with_errors(competition_series: [I18n.t('competitions.errors.series_distance_km', competition: competition.name)])
+      end
+
+      it "cannot link two competitions that are more than 33 days apart" do
+        too_long_ago_competition = FactoryBot.build :competition, competition_series: series, series_base: competition, series_distance_days: 1095
+
+        # also expect the competition to report the exact problem
+        expect(too_long_ago_competition).to be_invalid_with_errors(competition_series: [I18n.t('competitions.errors.series_distance_days', competition: competition.name)])
+      end
+
+      it "cannot extend the WCRP limitations by transitive property" do
+        # Say you're organising three competitions that have venues on the same, 200km-long straight line street.
+        straight_line_series = FactoryBot.create :competition_series, wcif_id: "HaversineSeries2015", name: "Haversine Series 2015"
+
+        # First, you create the comp at one end of the street. No linking yet, all good.
+        one_end_competition = FactoryBot.create :competition, name: "One End Open 2015", competition_series: straight_line_series
+        expect(one_end_competition).to be_valid
+
+        # span a circle around the equator
+        walking_direction_rad = (2 * Math::PI) + Math.atan2(-competition.latitude, -competition.longitude)
+        walking_direction_deg = (walking_direction_rad * 180 / Math::PI) % 360
+
+        # Second, you create the comp at the middle of the street. It is within 100km from the original competition so still all good.
+        middle_competition = FactoryBot.create :competition, name: "Middle Open 2015", competition_series: straight_line_series,
+                                                             series_base: one_end_competition, series_distance_km: 99, distance_direction_deg: walking_direction_deg
+        expect(middle_competition).to be_valid
+
+        # Last, you create the competition at the other end of the road. You _can_ link it to the middle one,
+        # which is (just a tiny bit under) 100km away making it a perfect partner competition. But it is not acceptable
+        # as partner competition for the first comp at the other end of the road, and our code should detect that.
+        other_end_competition = FactoryBot.build :competition, name: "Other End Open 2015", competition_series: straight_line_series,
+                                                               series_base: middle_competition, series_distance_km: 99, distance_direction_deg: walking_direction_deg
+
+        expect(other_end_competition).to be_invalid_with_errors(competition_series: [I18n.t('competitions.errors.series_distance_km', competition: one_end_competition.name)])
+      end
+    end
+
+    it "does not include itself as a sibling" do
+      partner_competition = FactoryBot.create :competition, competition_series: series, series_base: competition
+
+      expect(competition.series_sibling_competitions).to eq [partner_competition]
+      expect(series.competitions.count).to eq 2
+    end
+
+    context "it can be linked with more than one competition" do
+      let!(:same_place_different_day) { FactoryBot.create :competition, competition_series: series, series_base: competition, series_distance_days: 7 }
+      let!(:same_day_different_place) { FactoryBot.create :competition, competition_series: series, series_base: competition, series_distance_km: 4.628, distance_direction_deg: 185.6446971397621 }
+
+      it "can be linked with more than one competition" do
+        expect(competition.series_sibling_competitions.count).to eq 2
+        expect(series.competitions.count).to eq 3
+      end
+
+      it "lists all siblings ordered by start date" do
+        expect(competition.series_sibling_competitions).to eq [same_day_different_place, same_place_different_day]
+      end
+    end
+  end
+
   context "delegates" do
     it "delegates for future comps must be current delegates" do
       competition = FactoryBot.build :competition, :with_delegate, :future

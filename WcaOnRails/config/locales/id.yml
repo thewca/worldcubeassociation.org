@@ -505,8 +505,6 @@ id:
         enable_donations: >-
           Saya ingin mengaktifkan donasi sebagai sarana tambahan pengumpulan
           biaya pendaftaran
-        #original_hash: 4baf44b
-        championship_type: Tipe kejuaraan
         #original_hash: 556fda0
         extra_registration_requirements: Syarat pendaftaran ekstra
         #original_hash: 2529d04
@@ -545,6 +543,9 @@ id:
         event_restrictions_reason: Alasan dan detail pembatasan cabang
         #original_hash: 3c24bd2
         main_event_id: Cabang utama
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Tipe kejuaraan
       registration:
         #original_hash: 3c23a67
         guests: Pendamping
@@ -3060,22 +3061,23 @@ id:
       competitions:
         zero: Tidak ada kompetisi
         other: '%{count} kompetisi'
-      #original_hash: e3528ec
-      label: 'Kompetisi terdekat (dalam jarak %{days} hari dan %{kms} km)'
       #original_hash: 3446062
       label_admin: '%{days} hari terakhir'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} dalam jarak %{kms} km dan %{days} hari.'
+      #original_hash: 9eb8f46
+      within: 'Dalam waktu %{days} hari'
+      #original_hash: d97d1ee
+      show: Perlihatkan
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Kompetisi terdekat (dalam jarak %{days} hari dan %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Tidak ada kompetisi terdekat!
       #original_hash: 7e76950
       no_date_yet: Anda belum menetapkan tanggal kompetisi ini.
       #original_hash: 82a95d2
       no_location_yet: Anda belum menetapkan lokasi kompetisi ini.
-      #original_hash: 9eb8f46
-      within: 'Dalam waktu %{days} hari'
-      #original_hash: d97d1ee
-      show: Perlihatkan
       #original_hash: 709a232
       name: Nama
       #original_hash: adc24b7

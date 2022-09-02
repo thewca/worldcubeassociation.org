@@ -83,7 +83,7 @@ $venue-map-wrapper-height: 400px;
   }
 }
 
-#nearby-competitions {
+.adjacent-competitions {
   position: relative;
 
   .progress {
@@ -98,7 +98,7 @@ $venue-map-wrapper-height: 400px;
     display: inline;
   }
 
-  .wca-nearby-competitions-show-events {
+  .wca-adjacent-competitions-show-events {
     display: none;
   }
 }
@@ -407,6 +407,14 @@ table.admin-competitions {
     .championship-type {
       display: inline-block;
       width: auto;
+    }
+  }
+
+  .series {
+    // trick to hide the "Add Series" button if there is already one series specified.
+    // cf. https://github.com/nathanvda/cocoon/wiki/has_one-association
+    .nested-fields:not([style*="display: none;"]) ~ .adjacent-competitions {
+      display: none;
     }
   }
 }
