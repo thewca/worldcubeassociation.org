@@ -41,14 +41,22 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     }
   }).trigger('change');
 
-  $('#nearby-competitions').on('click', "#wca-nearby-competitions-show-events-button", function() {
-    $('#nearby-competitions .wca-nearby-competitions-show-events').show();
-    $('#nearby-competitions .wca-nearby-competitions-hide-events').hide();
+  $('.adjacent-competitions').on('click', "#wca-adjacent-competitions-show-events-button", function() {
+    $('.adjacent-competitions .wca-adjacent-competitions-show-events').show();
+    $('.adjacent-competitions .wca-adjacent-competitions-hide-events').hide();
   });
 
-  $('#nearby-competitions').on('click', "#wca-nearby-competitions-hide-events-button", function() {
-    $('#nearby-competitions .wca-nearby-competitions-show-events').hide();
-    $('#nearby-competitions .wca-nearby-competitions-hide-events').show();
+  $('.adjacent-competitions').on('click', "#wca-adjacent-competitions-hide-events-button", function() {
+    $('.adjacent-competitions .wca-adjacent-competitions-show-events').hide();
+    $('.adjacent-competitions .wca-adjacent-competitions-hide-events').show();
+  });
+
+  // the forms library we're using is built for 1-to-many associations. So when deleting an existing
+  // Series, it simply adds another new Series entry on top of that, which our 1-on-1 association
+  // cannot handle correctly. As a remedy, we force the user to save first by displaying a hint.
+  $('.series .remove_fields.existing').on('click', 'button', function() {
+    $('.series .save-first-hint').show();
+    $('.series a.add_fields').hide();
   });
 });
 

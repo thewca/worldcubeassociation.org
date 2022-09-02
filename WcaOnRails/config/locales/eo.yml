@@ -508,8 +508,6 @@ eo:
         competition_events: Konkurseroj
         #original_hash: 71c8461
         enable_donations: 'Mi volas ebligi donacojn, aldone al la baza registriĝkosto'
-        #original_hash: 4baf44b
-        championship_type: Tipo de ĉampionado
         #original_hash: 556fda0
         extra_registration_requirements: Aldonaj registriĝaj postuloj
         #original_hash: 2529d04
@@ -550,6 +548,9 @@ eo:
         event_restrictions_reason: Kialo kaj detaloj pri limigoj de konkursero
         #original_hash: 3c24bd2
         main_event_id: Ĉefa konkursero
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Tipo de ĉampionado
       registration:
         #original_hash: 3c23a67
         guests: Gastoj
@@ -3017,22 +3018,23 @@ eo:
         zero: Neniu konkurso
         one: 1 konkurso
         other: '%{count} konkursoj'
-      #original_hash: e3528ec
-      label: 'Proksimaj konkursoj (for de %{days} tagoj kaj %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Lastaj %{days} tagoj'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} for de %{kms} km kaj %{days} tagoj.'
+      #original_hash: 9eb8f46
+      within: 'Ene de %{days} tagoj'
+      #original_hash: d97d1ee
+      show: Montri
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Proksimaj konkursoj (for de %{days} tagoj kaj %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Neniu proksima konkurso!
       #original_hash: 7e76950
       no_date_yet: Vi ankoraŭ ne elektis daton por tiu konkurso.
       #original_hash: 82a95d2
       no_location_yet: Vi ankoraŭ ne elektis lokon por tiu konkurso.
-      #original_hash: 9eb8f46
-      within: 'Ene de %{days} tagoj'
-      #original_hash: d97d1ee
-      show: Montri
       #original_hash: 709a232
       name: Nomo
       #original_hash: adc24b7

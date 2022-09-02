@@ -326,7 +326,6 @@ en:
         clone_tabs: "I would like to clone all tabs with additional information as well"
         competition_events: "Events"
         enable_donations: "I want to enable donations additionally to collecting the registration fees"
-        championship_type: "Championship type"
         extra_registration_requirements: "Extra registration requirements"
         on_the_spot_registration: "On the spot registrations"
         on_the_spot_entry_fee_lowest_denomination: "On the spot base registration fee"
@@ -345,6 +344,13 @@ en:
         event_restrictions: "I would like to restrict competitors from registering for specific combinations of events"
         event_restrictions_reason: "Reason and details for event restrictions"
         main_event_id: "Main event"
+      championship:
+        championship_type: "Championship type"
+      competition_series:
+        wcif_id: "ID"
+        name: "Name"
+        short_name: "Series nickname"
+        competition_ids: "All competitions"
       #context: a registration to a competition
       registration:
         guests: "Guests"
@@ -539,7 +545,6 @@ en:
         competitor_limit: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
         competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
         venueAddress: ""
-        championship_type: ""
         extra_registration_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
         on_the_spot_registration: ""
         on_the_spot_entry_fee_lowest_denomination: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
@@ -558,6 +563,15 @@ en:
         event_restrictions: ""
         event_restrictions_reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
         main_event_id: "The winner of this event will be the winner of the competition."
+        #context: when marked as championship
+        championships:
+          championship_type: ""
+        #context: when part of a Competition Series
+        competition_series:
+          wcif_id: ""
+          name: "The full name of the Competition Series including the year at the end (e.g., Southern Australia 2022). Be sure to capitalize. The same rules as for the name of the individual competition apply."
+          short_name: "A short name for displaying. The same rules as for the name of the individual competition apply.."
+          competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
       website_contact:
         inquiry: ""
         competition_id: ""
@@ -1084,6 +1098,7 @@ en:
       must_register: "must register for at least one event"
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
+      series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1192,6 +1207,9 @@ en:
       #context: date is the registration creation date, eg: "2016-12-01 16:18:56 UTC"
       payment_requested_on: "Payment requested on: %{date}"
       payment_completed_on: "Payment completed on: %{date}"
+      #context: Counts how many parallel registrations in the same Series there are. Will display a number behind this label.
+      series_registrations: "Series registrations"
+      series_registrations_hint_html: "Hint: Series registrations are being displayed as <i>%{description}</i>"
       total: "Total"
       n_events: "Number of events"
     new_registration:
@@ -1363,6 +1381,9 @@ en:
       claim_wca_id_html: "If this is not your first competition, associate your WCA ID to your WCA account %{here}."
       register_link_html: "Register for this competition %{here}."
       register_below_html: "Register for this competition below."
+      part_of_a_series: "This competition is part of a Competition Series."
+      part_of_a_series_list: "This competition is part of the %{name} Competition Series. Other competitions in this Series are:"
+      series_registration_warning_html: "Note: You can submit a registration for all competitions in a Series, but only one of those registrations can be confirmed and accepted. <b>You will only be allowed to compete in one of the Series competitions!</b>"
       competitor_limit_is: "There is a competitor limit of %{competitor_limit} competitors."
       no_competitor_limit: "There is no competitor limit."
       entry_fee_is: "The base registration fee for this competition is %{base_entry_fee}."
@@ -1492,6 +1513,7 @@ en:
       venue_html: "The venue where the competition takes place. %{md}. For example: [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
       venue_details_html: "Details about the venue (e.g., On the first floor far in the back, follow the signs). %{md}"
       contact_html: "Optional contact information. If you do not fill this in, contact inquiries will be submitted through a form without revealing organizers' emails. %{md}. Example: [Text to display](mailto:some@email.com)"
+      series_save_first_hint: "Note: You have to save the competition first before you can add a new Series."
       events: "Events"
       public_and_locked_html: "This competition is publicly visible and locked for editing. If you need to make a change, please reply to the email thread where the competition was confirmed."
       confirmed_but_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{contact} to make it visible."
@@ -1539,6 +1561,8 @@ en:
       event_change_deadline_before_registration_close: "Deadline for updating events cannot be before registration close date."
       event_change_deadline_after_end_date: "Deadline for updating events cannot be after the competition."
       event_change_deadline_with_ots: "Deadline for updating events must be during the competition if on the spot registrations are accepted."
+      series_distance_km: "The competition is located too far away from %{competition}."
+      series_distance_days: "The competition is scheduled too many days away from %{competition}."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
@@ -1549,21 +1573,23 @@ en:
     time_until_competition:
       competition_in: "Competition is in %{n_days}."
       competition_was: "Competition was %{n_days} ago."
-    #context: in the "nearby competitions" list
+    #context: in the Proximity Policy "nearby competitions" list
     nearby_competitions:
       #context: pluralization of "x competition(s)" in the sentence "x competition(s) within n km and m days."
       competitions:
         zero: "No competitions"
         one: "1 competition"
         other: "%{count} competitions"
-      label: "Nearby competitions (within %{days} days and %{kms} km)"
       label_admin: "Last %{days} days"
       nearby_admin: "%{x_competitions} within %{kms} km and %{days} days."
+      within: "Within %{days} days"
+      show: "Show"
+    #context: in any general "nearby competitions" list
+    adjacent_competitions:
+      label: "Nearby competitions (within %{days} days and %{kms} km)"
       no_comp_nearby: "No nearby competitions!"
       no_date_yet: "You have not assigned a date for this competition yet."
       no_location_yet: "You have not assigned a location for this competition yet."
-      within: "Within %{days} days"
-      show: "Show"
       name: "Name"
       delegates: "Delegate(s)"
       date: "Date"
@@ -1676,6 +1702,10 @@ en:
     scrambles_table:
       group: "Group"
       scramble: "Scramble"
+    #context: Edit fields for Competition Series
+    competition_series_fields:
+      add_series: "Add to Series"
+      remove_series: "Remove from Series"
   #context: Competition's tabs management
   competition_tabs:
     headers:

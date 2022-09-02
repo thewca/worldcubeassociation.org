@@ -401,8 +401,6 @@ hu:
         enable_donations: >-
           Engedélyezni akarom az adományok befizetését a regisztrációs díjak
           mellett
-        #original_hash: 4baf44b
-        championship_type: Verseny típus
         #original_hash: 556fda0
         extra_registration_requirements: Extra regisztrációs követelmények
         #original_hash: 2529d04
@@ -428,6 +426,9 @@ hu:
           eredményei alapján a Szabélyzat Z3)-nak megfelelően
         #original_hash: 18d9a8c
         regulation_z3_reason: Z3) indoklása
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Verseny típus
       registration:
         #original_hash: 3c23a67
         guests: Nézők
@@ -2188,22 +2189,23 @@ hu:
         zero: nincs verseny
         one: 1 verseny
         other: '%{count} verseny'
-      #original_hash: e3528ec
-      label: 'Közeli versenyek (%{days} napon és %{kms} km-en belül)'
       #original_hash: 3446062
       label_admin: 'Elmúlt %{days} nap'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} van %{kms} km-en és %{days} napon belül.'
+      #original_hash: 9eb8f46
+      within: '%{days} napon belül'
+      #original_hash: d97d1ee
+      show: Mutat
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Közeli versenyek (%{days} napon és %{kms} km-en belül)'
       #original_hash: feefb46
       no_comp_nearby: Nincs a közelben verseny!
       #original_hash: 7e76950
       no_date_yet: Nem választottál még dátumot ennek a versenynek.
       #original_hash: 82a95d2
       no_location_yet: Nem választottál még helyszínt ennek a versenynek.
-      #original_hash: 9eb8f46
-      within: '%{days} napon belül'
-      #original_hash: d97d1ee
-      show: Mutat
       #original_hash: 709a232
       name: Név
       #original_hash: adc24b7

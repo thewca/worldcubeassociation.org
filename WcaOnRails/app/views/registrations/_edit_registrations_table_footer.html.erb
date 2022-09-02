@@ -15,6 +15,10 @@
     <% end %>
     <%# registered on %>
     <td></td>
+    <%# Series registrations %>
+    <% if @competition.part_of_competition_series? %>
+      <td></td>
+    <% end %>
     <%# number of events %>
     <td></td>
     <td>

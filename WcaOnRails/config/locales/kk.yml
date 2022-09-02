@@ -463,8 +463,6 @@ kk:
         competition_events: Пәндер
         #original_hash: 71c8461
         enable_donations: Қатысу жарнасымен бірге қайырымдылық мүмкіндігін қосыңыз
-        #original_hash: 4baf44b
-        championship_type: Чемпионат түрі
         #original_hash: 556fda0
         extra_registration_requirements: Тіркеуге қойылатын қосымша талаптар
         #original_hash: 2529d04
@@ -497,6 +495,9 @@ kk:
         event_restrictions_reason: Пән бойынша шектеулердің себептері мен егжей-тегжейлері
         #original_hash: 3c24bd2
         main_event_id: Басты пән
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Чемпионат түрі
       registration:
         #original_hash: 3c23a67
         guests: Қонақтар
@@ -765,7 +766,7 @@ kk:
         wca_id: ''
         #original_hash: d5ccc15
         receive_delegate_reports: >-
-          Егер сіз кіші Делегат, аға Делегат немесе WRC немесе WQAC мүшесі 
+          Егер сіз кіші Делегат, аға Делегат немесе WRC немесе WQAC мүшесі
           болсаңыз, сіз делегаттардың әдепкі есептерін аласыз. Ескерту: өзгеріс
           бір сағат ішінде күшіне енеді.
         #original_hash: 0627e5c
@@ -1351,7 +1352,7 @@ kk:
           #original_hash: 62a0113
           scopes_html: >-
             Scopes бос орындармен бөлінеді. Әдепкі scope пайдалану үшін бос
-            қалдырыңыз. Қараңыз <a 
+            қалдырыңыз. Қараңыз <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">здесь</a> қолдау көрсетілетін scopes тізімі.
       scopes:
@@ -2762,22 +2763,23 @@ kk:
         zero: Жарыс жоқ
         one: '%{count} жарыс'
         other: '%{count} WTF'
-      #original_hash: e3528ec
-      label: 'Жақын жарыстар (%{days} күн және %{kms} км шегінде)'
       #original_hash: 3446062
       label_admin: 'Соңғы %{days} күндер'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} %{kms} км және %{days} күн ішінде.'
+      #original_hash: 9eb8f46
+      within: '%{days} күн ішінде'
+      #original_hash: d97d1ee
+      show: Көрсету
+    adjacent_competitors:
+      #original_hash: e3528ec
+      label: 'Жақын жарыстар (%{days} күн және %{kms} км шегінде)'
       #original_hash: feefb46
       no_comp_nearby: Жақын жарыстар жоқ!
       #original_hash: 7e76950
       no_date_yet: Сіз әлі жарыс күнін таңдаған жоқсыз.
       #original_hash: 82a95d2
       no_location_yet: Сіз әлі жарыс орнын таңдаған жоқсыз.
-      #original_hash: 9eb8f46
-      within: '%{days} күн ішінде'
-      #original_hash: d97d1ee
-      show: Көрсету
       #original_hash: 709a232
       name: Атауы
       #original_hash: adc24b7
@@ -4279,7 +4281,7 @@ kk:
       #original_hash: 3613823
       content_html: >-
         Жарыс басталғанға дейін кемінде 28 күн бұрын жариялануы керек (қараңыз
-        <a     
+        <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Жарыстарға
         қойылатын талаптар</a>).
     paragraph4:
@@ -4337,7 +4339,7 @@ kk:
       #original_hash: bd8e6ee
       content_html: >-
         Пәнге немесе бүкіл жарысқа қатысушылардың саны шектеулі болуы мүмкін
-        (қараңыз <a   
+        (қараңыз <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Жарыстарға
         қойылатын талаптар</a>). Жарыс делегаты мұндай шектеу үшін WCAT
         мақұлдауын алуы керек. Қатысушылар санына Лимит қатысушылардың күтілетін

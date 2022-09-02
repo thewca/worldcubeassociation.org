@@ -463,8 +463,6 @@ nl:
         enable_donations: >-
           Ik wil naast de deelnamekosten ook de mogelijkheid bieden om donaties
           te doen
-        #original_hash: 4baf44b
-        championship_type: Type Kampioenschap
         #original_hash: 556fda0
         extra_registration_requirements: Extra aanmeldingseisen
         #original_hash: 2529d04
@@ -509,6 +507,9 @@ nl:
         event_restrictions_reason: Reden en details voor beperkingen in wedstrijdonderdelen
         #original_hash: 3c24bd2
         main_event_id: Main Event
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Type Kampioenschap
       registration:
         #original_hash: 3c23a67
         guests: Gasten
@@ -2981,22 +2982,23 @@ nl:
         zero: Geen wedstrijden
         one: 1 wedstrijd
         other: '%{count} wedstrijden'
-      #original_hash: e3528ec
-      label: 'Nabije wedstrijden (binnen %{days} dagen en %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Laatste %{days} dagen'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} binnen %{kms} km en %{days} dagen.'
+      #original_hash: 9eb8f46
+      within: 'Binnen %{days} dagen'
+      #original_hash: d97d1ee
+      show: Tonen
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Nabije wedstrijden (binnen %{days} dagen en %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Geen nabije wedstrijden!
       #original_hash: 7e76950
       no_date_yet: Je hebt nog geen datum voor deze wedstrijd ingevuld.
       #original_hash: 82a95d2
       no_location_yet: Je hebt nog geen locatie voor deze wedstrijd ingevuld.
-      #original_hash: 9eb8f46
-      within: 'Binnen %{days} dagen'
-      #original_hash: d97d1ee
-      show: Tonen
       #original_hash: 709a232
       name: Naam
       #original_hash: adc24b7

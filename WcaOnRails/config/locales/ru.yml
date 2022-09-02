@@ -516,8 +516,6 @@ ru:
         competition_events: Дисциплины
         #original_hash: 71c8461
         enable_donations: Включить возможность пожертвований вместе со взносом за участие
-        #original_hash: 4baf44b
-        championship_type: Тип чемпионата
         #original_hash: 556fda0
         extra_registration_requirements: Дополнительные требования к регистрации
         #original_hash: 2529d04
@@ -560,6 +558,9 @@ ru:
         event_restrictions_reason: Причины и детали ограничений по дисциплинам
         #original_hash: 3c24bd2
         main_event_id: Главная дисциплина
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Тип чемпионата
       registration:
         #original_hash: 3c23a67
         guests: Гости
@@ -3068,22 +3069,23 @@ ru:
         few: '%{count} соревнования'
         many: '%{count} соревнований'
         other: '%{count} WTF'
-      #original_hash: e3528ec
-      label: 'Близкие соревнования (в пределах %{days} дней и %{kms} км)'
       #original_hash: 3446062
       label_admin: 'Последние %{days} дней'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} в пределах %{kms} км и %{days} дней.'
+      #original_hash: 9eb8f46
+      within: 'В пределах %{days} дней'
+      #original_hash: d97d1ee
+      show: Показать
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Близкие соревнования (в пределах %{days} дней и %{kms} км)'
       #original_hash: feefb46
       no_comp_nearby: Нет близких соревнований!
       #original_hash: 7e76950
       no_date_yet: Вы ещё не выбрали дату соревнования.
       #original_hash: 82a95d2
       no_location_yet: Вы ещё не выбрали место соревнования.
-      #original_hash: 9eb8f46
-      within: 'В пределах %{days} дней'
-      #original_hash: d97d1ee
-      show: Показать
       #original_hash: 709a232
       name: Название
       #original_hash: adc24b7

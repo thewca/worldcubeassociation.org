@@ -750,6 +750,10 @@ class User < ApplicationRecord
     can_admin_competitions? || (can_manage_competition?(competition) && !competition.results_posted?)
   end
 
+  def can_update_competition_series?(competition)
+    can_admin_competitions? || (can_manage_competition?(competition) && !competition.confirmed?)
+  end
+
   def can_upload_competition_results?(competition)
     can_submit_competition_results?(competition, upload_only: true)
   end
