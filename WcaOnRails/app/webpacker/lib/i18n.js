@@ -4,20 +4,6 @@ const i18nFileContext = require.context('rails_translations');
 
 const DEFAULT_LOCALE = 'en';
 
-/**
- * @typedef {{
- *     defaultValue?: *,
- *     count?: number,
- *     scope?: string | string[],
- *     defaults?: Record<string, any>[],
- *     missingBehavior?: "message" | "guess" | "error" | string
- * } & Record<string, *>} TranslateOptions
- */
-
-/**
- * @param {I18n} i18n
- * @param {string} locale
- */
 function loadTranslations(i18n, locale) {
   const translations = i18nFileContext(`./${locale}.json`);
   i18n.store(translations);
@@ -27,7 +13,7 @@ function loadTranslations(i18n, locale) {
  * Use when I18n.t should return an array.
  * Guards against non-arrays and removes empty elements from array.
  * @param {string | string[]} scope
- * @param {TranslateOptions | undefined} options
+ * @param {*} options
  * @returns {string[]}
  */
 function tArray(scope, options) {
@@ -51,9 +37,15 @@ window.I18n.locale = window.wca.currentLocale;
 window.I18n.tArray = tArray;
 
 /**
- * Type hints for tArray too.
+ * The global translation object.
+ *
+ * @example
+ *  import I18n from '../../lib/i18n';
+ *  I18n.t('some.yml.path'); // -> string
+ *  I18n.tArray('another.yml.path.to.array'); // -> string[]
+ *
  * @type {I18n & {
- *  tArray: (scope: string | string[], options?: TranslateOptions) => string | string[]
+ *  tArray: (scope: string | string[], options?: *) => string[]
  * }}
  */
 export default window.I18n;
