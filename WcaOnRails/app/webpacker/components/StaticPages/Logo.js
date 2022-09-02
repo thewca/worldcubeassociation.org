@@ -8,14 +8,13 @@ import '../../stylesheets/static_pages/logo.scss';
  * @constructor
  */
 function Logo({ title }) {
+  console.log(Object.keys(I18n.t('logo.paragraphs')));
   return (
     <div className="wca-logo-information">
       <h1>{title}</h1>
-      {I18n.t('logo.paragraphs').map((_, index) => (
-        <p>
+      {Object.keys(I18n.t('logo.paragraphs')).map((index) => (
+        <p key={`logo-paragraphs-${index.toString()}`}>
           <I18nHTMLTranslate
-            // eslint-disable-next-line react/no-array-index-key
-            key={`logo-paragraphs-${index}`}
             i18nKey={`logo.paragraphs.${index}`}
           />
         </p>
