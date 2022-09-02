@@ -146,6 +146,7 @@ class ResultsController < ApplicationController
     params[:region] ||= "world"
     params[:years] ||= "all years"
     params[:show] ||= "mixed"
+    params[:gender] ||= "All"
 
     @shows = ["mixed", "slim", "separate", "history", "mixed history"]
     @is_mixed = params[:show] == @shows[0]
@@ -157,7 +158,7 @@ class ResultsController < ApplicationController
 
     shared_constants_and_conditions
 
-    cache_key = "records-#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}"
+    cache_key = "records-#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}"
 
     if @is_histories
       if @is_history
@@ -168,7 +169,9 @@ class ResultsController < ApplicationController
 
       @query = <<-SQL
         SELECT
-          year, month, day,
+          competition.year,
+          competition.month,
+          competition.day,
           event.id             eventId,
           event.name           eventName,
           event.cellName       eventCellName,
@@ -192,6 +195,7 @@ class ResultsController < ApplicationController
           RoundTypes roundType,
           Competitions competition,
           Countries country
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
         WHERE event.id = eventId
           AND event.`rank` < 1000
           AND roundType.id = roundTypeId
@@ -200,6 +204,7 @@ class ResultsController < ApplicationController
           #{@region_condition}
           #{@event_condition}
           #{@years_condition_competition}
+          #{@gender_condition}
         ORDER BY
           #{order}
       SQL
@@ -232,16 +237,19 @@ class ResultsController < ApplicationController
                              format,
         country.name         countryName,
         competition.cellName competitionName,
-                             `rank`, year, month, day
+                             `rank`, competition.year, competition.month, competition.day
       FROM
         (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
           FROM Concise#{type.capitalize}Results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
           WHERE 1
           #{@event_condition}
           #{@region_condition}
           #{@years_condition_result}
+          #{@gender_condition}
           GROUP BY eventId) record,
-        Results result,
+        Results result
+        #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1," : ","}
         Events event,
         Countries country,
         Competitions competition
@@ -249,6 +257,7 @@ class ResultsController < ApplicationController
         #{@event_condition}
         #{@region_condition}
         #{@years_condition_competition}
+        #{@gender_condition}
         AND result.eventId = recordEventId
         AND event.id       = result.eventId
         AND country.id     = result.countryId
