@@ -8,7 +8,6 @@ import '../../stylesheets/static_pages/logo.scss';
  * @constructor
  */
 function Logo({ title }) {
-  console.log(Object.keys(I18n.t('logo.paragraphs')));
   return (
     <div className="wca-logo-information">
       <h1>{title}</h1>
