@@ -11,10 +11,10 @@ function Logo({ title }) {
   return (
     <div className="wca-logo-information">
       <h1>{title}</h1>
-      {Object.keys(I18n.t('logo.paragraphs')).map((index) => (
-        <p key={`logo-paragraphs-${index.toString()}`}>
+      {Object.keys(I18n.t('logo.paragraphs')).map((key) => (
+        <p key={`logo-paragraphs-${key}`}>
           <I18nHTMLTranslate
-            i18nKey={`logo.paragraphs.${index}`}
+            i18nKey={`logo.paragraphs.${key}`}
           />
         </p>
       ))}
