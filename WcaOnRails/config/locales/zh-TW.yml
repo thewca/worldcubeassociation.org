@@ -499,8 +499,6 @@ zh-TW:
         competition_events: 項目
         #original_hash: 71c8461
         enable_donations: 除了報名費以外，我想要開放捐款
-        #original_hash: 4baf44b
-        championship_type: 錦標賽種類
         #original_hash: 556fda0
         extra_registration_requirements: 額外報名條件
         #original_hash: 2529d04
@@ -537,6 +535,9 @@ zh-TW:
         event_restrictions_reason: 項目組合限制的理由和細節
         #original_hash: 3c24bd2
         main_event_id: 主要項目
+      championship:
+        #original_hash: 4baf44b
+        championship_type: 錦標賽種類
       registration:
         #original_hash: 3c23a67
         guests: 陪同者
@@ -2564,22 +2565,23 @@ zh-TW:
       competitions:
         zero: 沒有比賽
         other: '%{count}個比賽'
-      #original_hash: e3528ec
-      label: '附近的比賽（%{days}天和%{kms}公里之內）'
       #original_hash: 3446062
       label_admin: '過去%{days}天'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} 在%{kms}公里和%{days}天之內。'
+      #original_hash: 9eb8f46
+      within: '%{days}天之內'
+      #original_hash: d97d1ee
+      show: 顯示
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: '附近的比賽（%{days}天和%{kms}公里之內）'
       #original_hash: feefb46
       no_comp_nearby: 附近沒有比賽！
       #original_hash: 7e76950
       no_date_yet: 您尚未輸入這場比賽的日期。
       #original_hash: 82a95d2
       no_location_yet: 您尚未輸入這場比賽的位置。
-      #original_hash: 9eb8f46
-      within: '%{days}天之內'
-      #original_hash: d97d1ee
-      show: 顯示
       #original_hash: 709a232
       name: 比賽名稱
       #original_hash: adc24b7

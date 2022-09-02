@@ -350,10 +350,11 @@ sk:
         competition_events: Eventy
         #original_hash: 71c8461
         enable_donations: Chcem povoliť donaty dodatočne ku registračným poplatkom
-        #original_hash: 4baf44b
-        championship_type: Typ šampionátu
         #original_hash: ff722f0
         registration_requirements: Požiadavky na registráciu
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Typ šampionátu
       registration:
         #original_hash: 3c23a67
         guests: Hostia
@@ -1741,22 +1742,23 @@ sk:
         one: 1 súťaž
         few: '-'
         other: '%{count} súťaží'
-      #original_hash: e3528ec
-      label: 'Blízke súťaže (v %{days} dňoch a %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Posledné %{days} dni'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} v %{kms} km a %{days} dňoch.'
+      #original_hash: 9eb8f46
+      within: 'V %{days} dňoch'
+      #original_hash: d97d1ee
+      show: Ukázať
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Blízke súťaže (v %{days} dňoch a %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Žiadne blízke súťaže!
       #original_hash: 7e76950
       no_date_yet: Ešte ste neudali dátum pre túto súťaž.
       #original_hash: 82a95d2
       no_location_yet: Ešte ste neudali lokáciu pre túto súťaž.
-      #original_hash: 9eb8f46
-      within: 'V %{days} dňoch'
-      #original_hash: d97d1ee
-      show: Ukázať
       #original_hash: 709a232
       name: Meno
       #original_hash: adc24b7

@@ -19,6 +19,9 @@ table.registrations-table {
     }
   }
 
+  &.accepted .icon.exclamation {
+    color: red;
+  }
 }
 
 #registrations-actions {

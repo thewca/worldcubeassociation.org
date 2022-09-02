@@ -239,6 +239,41 @@ class Registration < ApplicationRecord
     end
   end
 
+  validate :only_one_accepted_per_series
+  private def only_one_accepted_per_series
+    if competition&.part_of_competition_series? && checked_status == :accepted
+      unless series_sibling_registrations(:accepted).empty?
+        errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
+      end
+    end
+  end
+
+  def series_sibling_registrations(registration_status = nil)
+    return [] unless competition.part_of_competition_series?
+
+    sibling_ids = competition.series_sibling_competitions.map(&:id)
+
+    sibling_registrations = user.registrations
+                                .where(competition_id: sibling_ids)
+
+    if registration_status.nil?
+      return sibling_registrations
+             .joins(:competition)
+             .order(:start_date)
+    end
+
+    # this relies on the scopes being named the same as `checked_status` but it is a significant performance improvement
+    sibling_registrations.send(registration_status)
+  end
+
+  SERIES_SIBLING_DISPLAY_STATUSES = [:accepted, :pending].freeze
+
+  def series_registration_info
+    SERIES_SIBLING_DISPLAY_STATUSES.map { |st| series_sibling_registrations(st) }
+                                   .map(&:count)
+                                   .join(" + ")
+  end
+
   def serializable_hash(options = nil)
     {
       id: id,

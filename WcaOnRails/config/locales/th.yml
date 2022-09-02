@@ -505,8 +505,6 @@ th:
         competition_events: ประเภท
         #original_hash: 71c8461
         enable_donations: ฉันต้องการเปิดรับบริจาคนอกหนือจากค่าสมัคร
-        #original_hash: 4baf44b
-        championship_type: ประเภทการแข่งขันชิงแชมป์
         #original_hash: 556fda0
         extra_registration_requirements: ข้อกำหนดการลงทะเบียนเพิ่มเติม
         #original_hash: 2529d04
@@ -543,6 +541,9 @@ th:
         event_restrictions_reason: เหตุผลและรายละเอียดสำหรับการจำกัดประเภท
         #original_hash: 3c24bd2
         main_event_id: ประเภทการแข่งขันหลัก
+      championship:
+        #original_hash: 4baf44b
+        championship_type: ประเภทการแข่งขันชิงแชมป์
       registration:
         #original_hash: 3c23a67
         guests: แขก
@@ -1287,7 +1288,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1807,7 +1808,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
@@ -2902,22 +2903,23 @@ th:
       competitions:
         zero: ไม่มีการแข่งขัน
         other: '%{count} การแข่งขัน'
-      #original_hash: e3528ec
-      label: 'การแข่งขันที่ใกล้เคียง (ภายใน%{days} วันและ %{kms} กิโลเมตร)'
       #original_hash: 3446062
       label_admin: 'ในช่วง %{days} วัน'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} ภายใน%{kms} กิโลเมตรและ %{days} วัน'
+      #original_hash: 9eb8f46
+      within: 'ภายใน %{days} วัน'
+      #original_hash: d97d1ee
+      show: แสดง
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'การแข่งขันที่ใกล้เคียง (ภายใน%{days} วันและ %{kms} กิโลเมตร)'
       #original_hash: feefb46
       no_comp_nearby: ไม่มีการแข่งขันที่ใกล้เคียง
       #original_hash: 7e76950
       no_date_yet: คุณยังไม่ได้ใส่วันการแข่งขัน
       #original_hash: 82a95d2
       no_location_yet: คุณยังไม่ได้ใส่สถานที่การแข่งขัน
-      #original_hash: 9eb8f46
-      within: 'ภายใน %{days} วัน'
-      #original_hash: d97d1ee
-      show: แสดง
       #original_hash: 709a232
       name: ชื่อ
       #original_hash: adc24b7
