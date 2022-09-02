@@ -1461,6 +1461,8 @@ en:
       #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"
       past_all: "Past from all years"
+      show_cancelled: "Show cancelled competitions"
+      show_registration_status: "Show registration status icon"
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
@@ -1479,6 +1481,7 @@ en:
           ended: "Ended %{days} ago"
           in_progress: "In progress!"
           posted: "Results are posted!"
+          starts_in: "Starts in %{days}"
           announced_on: "Announced on %{announcement_date}"
         #context: the "search" button
         search: "Name or city"

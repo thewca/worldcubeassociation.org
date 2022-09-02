@@ -103,6 +103,7 @@ class CompetitionsController < ApplicationController
     @by_announcement_selected = params[:state] == "by_announcement"
     @custom_selected = params[:state] == "custom"
     @show_cancelled = params[:show_cancelled] == "on"
+    @show_registration_status = params[:show_registration_status] == "on"
 
     @years = ["all years"] + Competition.non_future_years
 
