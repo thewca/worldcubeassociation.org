@@ -1740,6 +1740,7 @@ en:
       unknown_show: "Unknown show parameter, must be either \"N persons\", \"N results\", or \"by region\""
     records:
       title: "Records"
+    last_updated_html: "Last updated: %{timestamp}"
     selector_elements:
       events_selector:
         event: "Event"

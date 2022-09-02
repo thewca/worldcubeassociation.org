@@ -31,13 +31,7 @@ class ResultsController < ApplicationController
     @is_results = splitted_show_param[1] == "results"
     limit_condition = "LIMIT #{@show}"
 
-    cached_key = "#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
-    cache_result = CachedResult.find_by(key_params: cached_key)
-
-    if cache_result
-      @rows = JSON.parse(cache_result.payload)
-      return
-    end
+    cache_key = "rankings-#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
 
     if @is_persons
       @query = <<-SQL
@@ -138,13 +132,10 @@ class ResultsController < ApplicationController
       redirect_to rankings_path
     end
 
-    @rows = ActiveRecord::Base.connection.exec_query(@query)
+    cached_rows = get_or_create_cached_rows(cache_key, @query)
 
-    # For safety, we delete possible duplicated (does active redord have on duplicated update or ignore?)
-    CachedResult.delete_by(key_params: cached_key)
-
-    # This only caches results. Table is cleared in CAD.
-    CachedResult.create(key_params: cached_key, payload: @rows.to_json)
+    @rows = cached_rows.parsed_payload
+    @timestamp = cached_rows.updated_at
   end
 
   def records
@@ -165,6 +156,8 @@ class ResultsController < ApplicationController
     @is_histories = @is_history || @is_mixed_history
 
     shared_constants_and_conditions
+
+    cache_key = "records-#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}"
 
     if @is_histories
       if @is_history
@@ -221,6 +214,11 @@ class ResultsController < ApplicationController
           `rank`, type DESC, year, month, day, roundTypeId, personName
       SQL
     end
+
+    cached_rows = get_or_create_cached_rows(cache_key, @query)
+
+    @rows = cached_rows.parsed_payload
+    @timestamp = cached_rows.updated_at
   end
 
   private def current_records_query(value, type)
@@ -327,6 +325,13 @@ class ResultsController < ApplicationController
     # We are not supporting the all option anymore!
     if params[:show]&.include?("all")
       params[:show] = nil
+    end
+  end
+
+  private def get_or_create_cached_rows(cache_key, query)
+    CachedResult.find_or_create_by!(key_params: cache_key) do |cached_result|
+      db_rows = ActiveRecord::Base.connection.exec_query(query)
+      cached_result.payload = db_rows.to_json
     end
   end
 end
