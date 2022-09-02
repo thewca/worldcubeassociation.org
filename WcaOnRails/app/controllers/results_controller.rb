@@ -144,7 +144,7 @@ class ResultsController < ApplicationController
     # Default params
     params[:event_id] ||= "all events"
     params[:region] ||= "world"
-    params[:years] ||= "all years"
+    params[:years] = "all years" # FIXME: this is disabling years filters for now
     params[:show] ||= "mixed"
     params[:gender] ||= "All"
 
