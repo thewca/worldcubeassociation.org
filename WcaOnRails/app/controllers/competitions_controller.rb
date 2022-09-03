@@ -293,6 +293,12 @@ class CompetitionsController < ApplicationController
     series_eligible_competitions
   end
 
+  def get_colliding_registration_start_competitions(competition)
+    colliding_registration_start_competitions = competition.colliding_registration_start_competitions
+    colliding_registration_start_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
+    colliding_registration_start_competitions
+  end
+
   def admin_edit
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = true
@@ -367,6 +373,13 @@ class CompetitionsController < ApplicationController
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
     @series_eligible_competitions = get_series_eligible_competitions(@competition)
     render partial: 'series_eligible_competitions'
+  end
+
+  def colliding_registration_start_competitions
+    @competition = Competition.new(competition_params)
+    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    @colliding_registration_start_competitions = get_colliding_registration_start_competitions(@competition)
+    render partial: 'colliding_registration_start_competitions'
   end
 
   def time_until_competition

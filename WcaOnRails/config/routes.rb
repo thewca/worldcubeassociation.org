@@ -93,6 +93,7 @@ Rails.application.routes.draw do
   get 'competitions/:id/schedule/edit' => 'competitions#edit_schedule', as: :edit_schedule
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
   get 'competitions/edit/series_eligible_competitions' => 'competitions#series_eligible_competitions', as: :series_eligible_competitions
+  get 'competitions/edit/colliding_registration_start_competitions' => 'competitions#colliding_registration_start_competitions', as: :colliding_registration_start_competitions
   get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
   get 'competitions/edit/currency_convert' => 'competitions#currency_convert', as: :currency_convert
