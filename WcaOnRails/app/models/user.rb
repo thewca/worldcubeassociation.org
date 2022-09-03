@@ -1182,7 +1182,7 @@ class User < ApplicationRecord
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
     roles << "organizer" if competition.organizers.include?(self)
     authorized_fields = {
-      "birthdate" => dob.to_s,
+      "birthdate" => dob.to_fs,
       "email" => email,
     }
     {
