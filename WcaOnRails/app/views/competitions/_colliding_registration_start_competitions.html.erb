@@ -1,0 +1,69 @@
+<div class="progress">
+  <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width: 100%">
+    <span class="sr-only">LOADING</span>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-sm-2 control-label">
+    <%= t '.label', hours: Competition::REGISTRATION_COLLISION_MINUTES_WARNING / 60 %>
+    <br>
+    <div class="wca-adjacent-competitions-hide-events">
+      <button type="button" id="wca-adjacent-competitions-show-events-button" class="btn btn-primary btn-xs"><%= t 'competitions.adjacent_competitions.show_events' %></button>
+    </div>
+    <div class="wca-adjacent-competitions-show-events">
+      <button type="button" id="wca-adjacent-competitions-hide-events-button" class="btn btn-primary btn-xs"><%= t 'competitions.adjacent_competitions.hide_events' %></button>
+    </div>
+  </label>
+  <div class="col-sm-9">
+    <% if @competition.has_registration_start_date? %>
+      <% if @colliding_registration_start_competitions.empty? %>
+        <%= alert :success, t('.no_comp_colliding') %>
+      <% else %>
+        <table class="table">
+          <tr>
+            <td><%= t 'competitions.adjacent_competitions.name' %></td>
+            <td><%= t 'competitions.adjacent_competitions.delegates' %></td>
+            <td><%= t 'competitions.adjacent_competitions.time' %></td>
+            <td><%= t 'competitions.adjacent_competitions.location' %></td>
+            <td class="wca-adjacent-competitions-show-events"><%= t 'competitions.adjacent_competitions.events' %></td>
+          </tr>
+          <% @colliding_registration_start_competitions.each do |c| %>
+            <tr class="<%= (@competition.registration_open_adjacent_to?(c, Competition::REGISTRATION_COLLISION_MINUTES_DANGER)) ? "danger" : "warning" %>">
+              <td class="text-nowrap">
+                <%= if current_user.can_admin_results?
+                      link_to c.name, admin_edit_competition_path(c.id), target: "_blank"
+                    else
+                      link_to c.name, competition_path(c.id)
+                    end %>
+                <% unless c.confirmed? %>
+                  <i class="fas fa-exclamation-circle" data-toggle="tooltip" data-placement="top" data-container="body" title="This competition is not confirmed yet."></i>
+                <% end %>
+              </td>
+              <td><%= users_to_sentence c.delegates %></td>
+              <% minutes_until = @competition.minutes_until_other_registration_starts(c) %>
+              <% tooltip_title = c.name + " " + (t('.opens_registration_at') + " " + c.registration_open.to_s) %>
+              <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= tooltip_title %>">
+                <%= t('datetime.distance_in_words.x_minutes', count: minutes_until.abs) %> <%= minutes_until < 0 ? t('competitions.adjacent_competitions.before') : t('competitions.adjacent_competitions.after') %>
+              </td>
+              <td><%= c.cityName %>, <%= c.countryId %></td>
+              <td class="wca-adjacent-competitions-show-events">
+                <% c.events.each do |event| %>
+                  <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "bottom", container: "body" }, title: event.name %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    <% else %>
+      <%= alert :danger, t('.no_registration_start_date_yet') %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  (function() {
+    $('[data-toggle="tooltip"]').tooltip();
+  })();
+</script>

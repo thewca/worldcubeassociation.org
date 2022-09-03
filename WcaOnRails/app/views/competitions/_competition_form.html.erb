@@ -74,11 +74,10 @@
                 <%= Competition::NEARBY_DISTANCE_KM_WARNING %>,
                 form_disabled);
 
-            window.wca.triggerAdjacentCompetitionAjax = function(url, targetSelector, ajaxId, overrideDisabled = false) {
-              if (form_disabled && !overrideDisabled) {
+            window.wca.triggerAdjacentCompetitionAjax = function(url, ajaxId, successFn) {
+              if (form_disabled) {
                 // The user isn't allowed to change the location of the
-                // competition, so there's no need to bother recomputing the nearby
-                // competitions.
+                // competition, so there's no need to bother recomputing anything
                 return;
               }
 
@@ -95,54 +94,52 @@
                   'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
                   'competition[start_date]': obj['competition[start_date]'],
                   'competition[end_date]': obj['competition[end_date]'],
+                  'competition[registration_open]': obj['competition[registration_open]'],
                 },
-                success: function(data) {
-                  $(targetSelector).html(data);
-                  $(targetSelector).removeClass('loading');
-                }
+                success: successFn
               };
 
-              $(targetSelector).addClass('loading');
               window.wca.cancelPendingAjaxAndAjax(ajaxId, request);
             };
-            window.wca.fetchProximityPolicyCompetitions = function(overrideDisabled = false) {
-              var nearbyAjaxUrl = '<%= nearby_competitions_path %>';
-              window.wca.triggerAdjacentCompetitionAjax(nearbyAjaxUrl, '#nearby-competitions', 'render_nearby_competitions', overrideDisabled);
-            };
-            window.wca.fetchSeriesEligibleCompetitions = function(overrideDisabled = false) {
-              var seriesEligibleUrl = '<%= series_eligible_competitions_path %>';
-              window.wca.triggerAdjacentCompetitionAjax(seriesEligibleUrl, '#series-eligible-competitions', 'render_eligible_series_competitions', overrideDisabled);
-            };
-            window.wca.fetchNearbyCompetitions = function(overrideDisabled = false) {
-              window.wca.fetchProximityPolicyCompetitions(overrideDisabled);
-
-              var seriesDisplayed = $('#series-eligible-competitions').length > 0;
-
-              if (seriesDisplayed) {
-                window.wca.fetchSeriesEligibleCompetitions(overrideDisabled);
-              }
-
-              var obj = $("#competition-form").serializeJSON();
-
-              window.wca.cancelPendingAjaxAndAjax('render_time_until_competition', {
-                url: '<%= time_until_competition_path %>',
-                data: {
-                  'competition[id]': obj['competition[id]'],
-                  'competition[start_date]': obj['competition[start_date]'],
-                  'competition[end_date]': obj['competition[end_date]'],
-                },
-                success: function(data) {
-                  $('#time-until-competition').closest(".form-group").toggleClass('has-error', data.has_date_errors);
-                  $('#time-until-competition').html(data.html);
-                }
+            window.wca.triggerAdjacentCompetitionAjaxWithLoading = function(url, targetSelector, ajaxId) {
+              window.wca.triggerAdjacentCompetitionAjax(url, ajaxId, function(data) {
+                $(targetSelector).html(data);
+                $(targetSelector).removeClass('loading');
               });
+
+              $(targetSelector).addClass('loading');
+            };
+            window.wca.fetchProximityPolicyCompetitions = function() {
+              var nearbyAjaxUrl = '<%= nearby_competitions_path %>';
+              window.wca.triggerAdjacentCompetitionAjaxWithLoading(nearbyAjaxUrl, '#nearby-competitions', 'render_nearby_competitions');
+            };
+            window.wca.fetchSeriesEligibleCompetitions = function() {
+              var seriesEligibleUrl = '<%= series_eligible_competitions_path %>';
+              window.wca.triggerAdjacentCompetitionAjaxWithLoading(seriesEligibleUrl, '#series-eligible-competitions', 'render_eligible_series_competitions');
+            };
+            window.wca.fetchCollidingRegistrationStartCompetitions = function() {
+              var collidingRegistrationsUrl = '<%= colliding_registration_start_competitions_path %>';
+              window.wca.triggerAdjacentCompetitionAjaxWithLoading(collidingRegistrationsUrl, '#colliding-registration-start-competitions', 'render_colliding_registration_start_competitions');
+            };
+            window.wca.renderTimeUntilCompetition = function() {
+              var timeUntilCompetitionUrl = '<%= time_until_competition_path %>';
+              window.wca.triggerAdjacentCompetitionAjax(timeUntilCompetitionUrl, 'render_time_until_competition', function (data) {
+                $('#time-until-competition').closest(".form-group").toggleClass('has-error', data.has_date_errors);
+                $('#time-until-competition').html(data.html);
+              });
+            };
+            window.wca.fetchNearbyCompetitions = function() {
+              window.wca.fetchProximityPolicyCompetitions();
+              window.wca.fetchSeriesEligibleCompetitions();
+
+              window.wca.renderTimeUntilCompetition();
             };
           })();
         </script>
 
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-9">
-            <div class="row datetimerange">
+            <div id="competition-dates-picker" class="row datetimerange">
               <%= f.input :start_date, as: :date_picker, wrapper: :ranged_datetime %>
               <%= f.input :end_date, as: :date_picker, wrapper: :ranged_datetime %>
             </div>
@@ -153,7 +150,7 @@
         </div>
 
         <script>
-          $(".datetimepicker").on("dp.change", function(e) {
+          $("#competition-dates-picker .datetimepicker").on("dp.change", function(e) {
             window.wca.fetchNearbyCompetitions();
           });
         </script>
@@ -231,11 +228,26 @@
           <%= f.input :free_guest_entry_status, include_blank: false %>
         </div>
 
-        <div class="col-sm-offset-2 col-sm-9">
-          <div class="row datetimerange">
-            <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
-            <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-9">
+            <div id="registration-dates-picker" class="row datetimerange">
+              <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
+              <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
+            </div>
           </div>
+        </div>
+
+        <div class="colliding-competitions">
+          <div id="colliding-registration-start-competitions" class="adjacent-competitions">
+            <% @colliding_registration_start_competitions = [] # nasty hack to display the "loading" indicator without crashing %>
+            <%= render "colliding_registration_start_competitions" %>
+          </div>
+
+          <script>
+            $("#registration-dates-picker .datetimepicker").on("dp.change", function(e) {
+              window.wca.fetchCollidingRegistrationStartCompetitions();
+            });
+          </script>
         </div>
 
         <%= f.input :competitor_limit_enabled, collection: [ :true, :false ] %>
