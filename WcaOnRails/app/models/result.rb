@@ -8,7 +8,6 @@ class Result < ApplicationRecord
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
   validates :personName, presence: true
   belongs_to :country, foreign_key: :countryId
-  belongs_to :competition, foreign_key: :competitionId
 
   # NOTE: both nil and "" exist in the database, we may consider cleaning that up.
   MARKERS = [nil, "", "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
