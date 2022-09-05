@@ -80,6 +80,7 @@ CREATE TABLE `Competitions` (
   `free_guest_entry_status` int NOT NULL DEFAULT '0',
   `allow_registration_edits` tinyint(1) NOT NULL DEFAULT '0',
   `allow_registration_self_delete_after_acceptance` tinyint(1) NOT NULL DEFAULT '0',
+  `competition_series_id` int(11) DEFAULT NULL,
   `use_wca_live_for_scoretaking` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
@@ -767,6 +768,19 @@ CREATE TABLE `competition_organizers` (
   UNIQUE KEY `idx_competition_organizers_on_competition_id_and_organizer_id` (`competition_id`,`organizer_id`),
   KEY `index_competition_organizers_on_competition_id` (`competition_id`),
   KEY `index_competition_organizers_on_organizer_id` (`organizer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `competition_series`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `competition_series` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `wcif_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `short_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `competition_tabs`;
@@ -1780,6 +1794,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220623121810'),
 ('20220706232200'),
 ('20220804193822'),
+('20220822232936'),
 ('20220630233246');
-
-

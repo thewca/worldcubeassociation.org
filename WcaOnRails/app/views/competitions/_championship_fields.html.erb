@@ -1,4 +1,6 @@
 <div class="nested-fields">
+  <%# i18n-tasks-use t('simple_form.hints.competition.championships.championship_type') %>
+  <%# i18n-tasks-use t('activerecord.attributes.championship.championship_type') %>
   <%= f.input :championship_type do %>
     <%= f.select :championship_type, championship_option_tags(selected: f.object.championship_type), {},
                                      { class: "form-control championship-type" } %>

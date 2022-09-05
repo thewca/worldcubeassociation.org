@@ -29,9 +29,12 @@ class Competition < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :bookmarked_competitions, dependent: :delete_all
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
+  belongs_to :competition_series, optional: true
+  has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
+  accepts_nested_attributes_for :competition_series, allow_destroy: false
 
   validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :entry_fee_required?
   monetize :base_entry_fee_lowest_denomination,
@@ -153,25 +156,27 @@ class Competition < ApplicationRecord
     main_event_id
     waiting_list_deadline_date
     event_change_deadline_date
+    competition_series_id
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
+  VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
   URL_RE = %r{\Ahttps?://.*\z}
   MAX_ID_LENGTH = 32
   MAX_NAME_LENGTH = 50
+  MAX_CELL_NAME_LENGTH = 32
   MAX_COMPETITOR_LIMIT = 5000
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
-                 format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
+                 format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
-  MAX_CELL_NAME_LENGTH = 32
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
                        format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
@@ -536,7 +541,9 @@ class Competition < ApplicationRecord
              'uploaded_jsons',
              'wcif_extensions',
              'bookmarked_competitions',
-             'bookmarked_users'
+             'bookmarked_users',
+             'competition_series',
+             'series_competitions'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -1091,10 +1098,22 @@ class Competition < ApplicationRecord
     competition_events.reject(&:marked_for_destruction?).map(&:event)
   end
 
-  def nearby_competitions(days, distance)
+  def adjacent_competitions(days, distance)
     Competition.where("ABS(DATEDIFF(?, start_date)) <= ? AND id <> ?", start_date, days, id)
                .select { |c| kilometers_to(c) <= distance }
                .sort_by { |c| kilometers_to(c) }
+  end
+
+  def nearby_competitions_info
+    adjacent_competitions(NEARBY_DAYS_INFO, NEARBY_DISTANCE_KM_INFO)
+  end
+
+  def nearby_competitions_warning
+    adjacent_competitions(NEARBY_DAYS_WARNING, NEARBY_DISTANCE_KM_WARNING)
+  end
+
+  def series_eligible_competitions
+    adjacent_competitions(CompetitionSeries::MAX_SERIES_DISTANCE_DAYS, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
   end
 
   private def to_radians(degrees)
@@ -1158,11 +1177,22 @@ class Competition < ApplicationRecord
   end
 
   def dangerously_close_to?(c)
+    self.adjacent_to?(c, NEARBY_DISTANCE_KM_DANGER, NEARBY_DAYS_DANGER)
+  end
+
+  def adjacent_to?(c, distance_km, distance_days)
+    self.distance_adjacent_to?(c, distance_km) && self.start_date_adjacent_to?(c, distance_days)
+  end
+
+  def start_date_adjacent_to?(c, distance_days)
     if !c.has_date? || !self.has_date?
       return false
     end
-    days_until = self.days_until_competition?(c)
-    self.kilometers_to(c) < NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
+    self.days_until_competition?(c).abs < distance_days
+  end
+
+  def distance_adjacent_to?(c, distance_km)
+    self.kilometers_to(c) < distance_km
   end
 
   def announced?
@@ -1330,9 +1360,9 @@ class Competition < ApplicationRecord
   private def light_results_from_relation(relation)
     ActiveRecord::Base.connection
                       .execute(relation.to_sql)
-                      .each(as: :hash).map { |r|
+                      .each(as: :hash).map do |r|
                         LightResult.new(r)
-                      }
+                      end
   end
 
   def started?
@@ -1508,12 +1538,17 @@ class Competition < ApplicationRecord
       "id" => id,
       "name" => name,
       "shortName" => cellName,
+      "series" => part_of_competition_series? ? competition_series_wcif : nil,
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
       "schedule" => schedule_wcif,
       "competitorLimit" => competitor_limit_enabled? ? competitor_limit : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
+  end
+
+  def competition_series_wcif
+    competition_series&.to_wcif
   end
 
   def persons_wcif(authorized: false)
@@ -1570,6 +1605,7 @@ class Competition < ApplicationRecord
   def set_wcif!(wcif, current_user)
     JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
     ActiveRecord::Base.transaction do
+      set_wcif_series!(wcif["series"], current_user) if wcif["series"]
       set_wcif_events!(wcif["events"], current_user) if wcif["events"]
       set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
@@ -1582,6 +1618,23 @@ class Competition < ApplicationRecord
       #   was never configured to support qualifications (i.e. the use of qualifications was never approved by WCAT).
       save!
     end
+  end
+
+  def set_wcif_series!(wcif_series, current_user)
+    unless current_user.can_update_competition_series?(self)
+      raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series")
+    end
+
+    unless wcif_series["competitions"].include?(self.id)
+      raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.")
+    end
+
+    competition_series = CompetitionSeries.find_by_wcif_id(wcif_series["id"]) || CompetitionSeries.new
+    competition_series.load_wcif!(wcif_series)
+
+    self.competition_series = competition_series
+
+    reload
   end
 
   def set_wcif_events!(wcif_events, current_user)
@@ -1702,6 +1755,7 @@ class Competition < ApplicationRecord
         "id" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
+        "series" => CompetitionSeries.wcif_json_schema,
         "persons" => { "type" => "array", "items" => User.wcif_json_schema },
         "events" => { "type" => "array", "items" => CompetitionEvent.wcif_json_schema },
         "schedule" => {
@@ -1769,5 +1823,39 @@ class Competition < ApplicationRecord
 
   def exempt_from_wca_dues?
     world_or_continental_championship? || multi_country_fmc_competition?
+  end
+
+  validate :series_siblings_must_be_valid
+  private def series_siblings_must_be_valid
+    if part_of_competition_series?
+      series_sibling_competitions.each do |comp|
+        unless self.distance_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
+          errors.add(:competition_series, I18n.t('competitions.errors.series_distance_km', competition: comp.name))
+        end
+        unless self.start_date_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_DAYS)
+          errors.add(:competition_series, I18n.t('competitions.errors.series_distance_days', competition: comp.name))
+        end
+      end
+    end
+  end
+
+  after_update :clean_series_when_leaving
+  private def clean_series_when_leaving
+    if competition_series_id.nil? && # if we just processed an update to remove the competition series
+       (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
+       (old_series = CompetitionSeries.find_by_id(old_series_id)) # and that series still exists
+      old_series.reload.destroy_if_orphaned # prompt it to check for orphaned state.
+    end
+  end
+
+  def part_of_competition_series?
+    !competition_series_id.nil?
+  end
+
+  def series_sibling_competitions
+    return [] unless part_of_competition_series?
+
+    series_competitions
+      .where.not(id: self.id)
   end
 end

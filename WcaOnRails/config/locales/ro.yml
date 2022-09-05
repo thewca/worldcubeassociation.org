@@ -474,8 +474,6 @@ ro:
         enable_donations: >-
           Vreau să accept donații, îm plus față de colectarea taxei de
           înregistrare.
-        #original_hash: 4baf44b
-        championship_type: Tipul Campionatului
         #original_hash: 556fda0
         extra_registration_requirements: Alte cerințe pentru înregistrare
         #original_hash: 2529d04
@@ -508,6 +506,9 @@ ro:
         event_restrictions_reason: Motivație pentru restricțiile legate de probe
         #original_hash: 3c24bd2
         main_event_id: Proba principală
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Tipul Campionatului
       registration:
         #original_hash: 3c23a67
         guests: Însoțitori
@@ -2883,22 +2884,23 @@ ro:
         one: O competiție
         few: '%{count} competiții'
         other: '%{count} competiții'
-      #original_hash: e3528ec
-      label: 'Competiții în apropiere (în mai puțin de %{days} zile și %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Ultimele %{days} zile'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} în cel mult %{kms} km și %{days} zile.'
+      #original_hash: 9eb8f46
+      within: 'În cel mult %{days} zile'
+      #original_hash: d97d1ee
+      show: Arată
+    adjacent_competitors:
+      #original_hash: e3528ec
+      label: 'Competiții în apropiere (în mai puțin de %{days} zile și %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Nicio competiție în jur!
       #original_hash: 7e76950
       no_date_yet: Încă nu ai alocat o dată pentru această competiție.
       #original_hash: 82a95d2
       no_location_yet: Încă nu ai alocat o locație pentru această competiție.
-      #original_hash: 9eb8f46
-      within: 'În cel mult %{days} zile'
-      #original_hash: d97d1ee
-      show: Arată
       #original_hash: 709a232
       name: Nume
       #original_hash: adc24b7

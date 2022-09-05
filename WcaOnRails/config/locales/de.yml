@@ -512,8 +512,6 @@ de:
         competition_events: Disziplinen
         #original_hash: 71c8461
         enable_donations: Ich möchte zusätzlich zu den Eintrittsgebühren Spenden ermöglichen
-        #original_hash: 4baf44b
-        championship_type: Meisterschaftstyp
         #original_hash: 556fda0
         extra_registration_requirements: Zusätzliche Bedingungen für die Registrierung
         #original_hash: 2529d04
@@ -554,6 +552,9 @@ de:
         event_restrictions_reason: Grund und Details zur Einschränkung von Events
         #original_hash: 3c24bd2
         main_event_id: Hauptevent
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Meisterschaftstyp
       registration:
         #original_hash: 3c23a67
         guests: Gäste
@@ -3146,22 +3147,23 @@ de:
         zero: Keine Wettbewerbe
         one: 1 Wettbewerb
         other: '%{count} Wettbewerbe'
-      #original_hash: e3528ec
-      label: 'Nahe gelegene Wettbewerbe (innerhalb %{days} Tage und %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Letzte %{days} Tage'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} innerhalb %{kms} km und %{days} Tage.'
+      #original_hash: 9eb8f46
+      within: 'innerhalb von %{days} Tagen'
+      #original_hash: d97d1ee
+      show: Zeigen
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Nahe gelegene Wettbewerbe (innerhalb %{days} Tage und %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Keine nahe gelegenen Wettbewerbe!
       #original_hash: 7e76950
       no_date_yet: Du hast diesem Wettbewerb noch keinen Termin zugeordnet.
       #original_hash: 82a95d2
       no_location_yet: Du hast diesem Wettbewerb noch keinen Ort zugeordnet.
-      #original_hash: 9eb8f46
-      within: 'innerhalb von %{days} Tagen'
-      #original_hash: d97d1ee
-      show: Zeigen
       #original_hash: 709a232
       name: Name
       #original_hash: adc24b7

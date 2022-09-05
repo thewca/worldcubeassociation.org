@@ -1,0 +1,36 @@
+<div class="progress">
+  <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width: 100%">
+    <span class="sr-only">LOADING</span>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-sm-2 control-label">
+    <%= t '.label', days: nearby_days, kms: nearby_km %>
+    <br>
+    <div class="wca-adjacent-competitions-hide-events">
+      <button type="button" id="wca-adjacent-competitions-show-events-button" class="btn btn-primary btn-xs"><%= t '.show_events' %></button>
+    </div>
+    <div class="wca-adjacent-competitions-show-events">
+      <button type="button" id="wca-adjacent-competitions-hide-events-button" class="btn btn-primary btn-xs"><%= t '.hide_events' %></button>
+    </div>
+  </label>
+  <div class="col-sm-9">
+    <% if @competition.has_date? && @competition.has_location? %>
+      <% if adjacent_competitions.empty? %>
+        <%= alert invert_warnings ? :danger : :success, t('.no_comp_nearby') %>
+      <% else %>
+        <%= render 'adjacent_competitions_table', adjacent_competitions: adjacent_competitions,
+                   nearby_days: nearby_days, nearby_km: nearby_km, invert_warnings: invert_warnings,
+                   extra_link_handler: extra_link_handler %>
+      <% end %>
+    <% else %>
+      <% unless @competition.has_date? %>
+        <%= alert :danger, t('.no_date_yet') %>
+      <% end %>
+      <% unless @competition.has_location? %>
+        <%= alert :danger, t('.no_location_yet') %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

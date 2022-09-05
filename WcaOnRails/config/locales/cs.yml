@@ -517,8 +517,6 @@ cs:
         enable_donations: >-
           Chci povolit možnost dobrovolných příspěvků nad rámec vybírání
           registračních poplatků
-        #original_hash: 4baf44b
-        championship_type: Typ šampionátu
         #original_hash: 556fda0
         extra_registration_requirements: Speciální požadavky pro registraci
         #original_hash: 2529d04
@@ -559,6 +557,9 @@ cs:
         event_restrictions_reason: Důvod a detaily pro omezení eventů
         #original_hash: 3c24bd2
         main_event_id: Hlavní event
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Typ šampionátu
       registration:
         #original_hash: 3c23a67
         guests: Hosté
@@ -3020,22 +3021,23 @@ cs:
         one: soutěž
         few: soutěže
         other: soutěží
-      #original_hash: e3528ec
-      label: 'Soutěže v blízkosti (v rámci %{days} dní a %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Posledních %{days} dní'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} v rámci %{kms} km a %{days} dní.'
+      #original_hash: 9eb8f46
+      within: 'V rámci %{days} dní'
+      #original_hash: d97d1ee
+      show: Zobrazit
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Soutěže v blízkosti (v rámci %{days} dní a %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Žádné soutěže poblíž!
       #original_hash: 7e76950
       no_date_yet: Zatím jste nezadal(a) datum pro tuto soutěž.
       #original_hash: 82a95d2
       no_location_yet: Zatím jste nezadal(a) místo pro tuto soutěž.
-      #original_hash: 9eb8f46
-      within: 'V rámci %{days} dní'
-      #original_hash: d97d1ee
-      show: Zobrazit
       #original_hash: 709a232
       name: Název
       #original_hash: adc24b7
