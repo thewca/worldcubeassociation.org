@@ -154,6 +154,7 @@ Rails.application.routes.draw do
   patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
+  get 'about-new' => 'static_pages#about-new'
   get 'teams-committees' => 'static_pages#teams_committees'
   get 'documents' => 'static_pages#documents'
   get 'education' => 'static_pages#education'
