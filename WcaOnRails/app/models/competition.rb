@@ -99,6 +99,7 @@ class Competition < ApplicationRecord
     contact
     remarks
     use_wca_registration
+    use_wca_live_for_scoretaking
     competitor_limit_enabled
     competitor_limit
     competitor_limit_reason
@@ -501,7 +502,11 @@ class Competition < ApplicationRecord
       info[:upload_results] = I18n.t('competitions.messages.upload_results')
     end
     if self.in_progress? && !self.cancelled?
-      info[:in_progress] = I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
+      if self.use_wca_live_for_scoretaking
+        info[:in_progress] = I18n.t('competitions.messages.in_progress_at_wca_live_html', link_here: self.wca_live_link).html_safe
+      else
+        info[:in_progress] = I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
+      end
     end
     info
   end
@@ -1226,6 +1231,10 @@ class Competition < ApplicationRecord
   def confirmed=(new_confirmed_str)
     new_confirmed = ActiveRecord::Type::Boolean.new.cast(new_confirmed_str)
     self.confirmed_at = new_confirmed ? (self.confirmed_at || Time.now) : nil
+  end
+
+  def wca_live_link
+    "https://live.worldcubeassociation.org/link/competitions/#{self.id}"
   end
 
   def results_submitted?
