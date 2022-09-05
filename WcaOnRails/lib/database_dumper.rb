@@ -96,6 +96,7 @@ module DatabaseDumper
           allow_registration_edits
           allow_registration_self_delete_after_acceptance
           competition_series_id
+          use_wca_live_for_scoretaking
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -391,7 +392,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_series" => {
-      where_clause: "JOIN Competitions ON Competitions.competition_series_id=competition_series.id WHERE showAtAll=1",
+      # One Series can be associated with many competitions, so any JOIN will inherently produce duplicates. Get rid of them by using GROUP BY.
+      where_clause: "LEFT JOIN Competitions ON Competitions.competition_series_id=competition_series.id WHERE showAtAll=1 GROUP BY competition_series.id",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
