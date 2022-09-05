@@ -1,7 +1,6 @@
 import React from 'react';
 import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
-import '../../stylesheets/static_pages/logo.scss';
 
 /**
  * @returns {JSX.Element}
