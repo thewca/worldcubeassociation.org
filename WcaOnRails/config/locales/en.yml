@@ -566,6 +566,7 @@ en:
         event_restrictions: ""
         event_restrictions_reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
         main_event_id: "The winner of this event will be the winner of the competition."
+        allow_registration_without_qualification: ""
         #context: when marked as championship
         championships:
           championship_type: ""

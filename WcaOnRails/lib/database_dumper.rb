@@ -97,6 +97,7 @@ module DatabaseDumper
           allow_registration_self_delete_after_acceptance
           competition_series_id
           use_wca_live_for_scoretaking
+          allow_registration_without_qualification
         ),
         db_default: %w(
           connected_stripe_account_id
