@@ -42,3 +42,4 @@ translations:
       - "*.enums.*"
       - "*.regional_organizations.*"
       - "*.qualification.*"
+      - "*.logo.*"
