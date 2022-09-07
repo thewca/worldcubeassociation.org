@@ -230,7 +230,7 @@ class UsersController < ApplicationController
     sso.remove_groups = (all_groups - user_groups).join(",")
     sso.custom_fields["wca_id"] = current_user.wca_id || ""
 
-    redirect_to sso.to_url
+    redirect_to sso.to_url, allow_other_host: true
   end
 
   def acknowledge_cookies

@@ -8,9 +8,9 @@ class Registration < ApplicationRecord
   scope :with_payments, -> { joins(:registration_payments).distinct }
 
   belongs_to :competition
-  belongs_to :user
-  belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User"
-  belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User"
+  belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
+  belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User", optional: true
+  belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User", optional: true
   has_many :registration_competition_events
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
@@ -22,7 +22,6 @@ class Registration < ApplicationRecord
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
 
   validates :user, presence: true, on: [:create]
-  validates :competition, presence: { message: I18n.t('registrations.errors.comp_not_found') }
 
   validates_numericality_of :guests, greater_than_or_equal_to: 0
 
@@ -102,7 +101,10 @@ class Registration < ApplicationRecord
   end
 
   def entry_fee
-    competition.base_entry_fee + competition_events.to_a.sum(&:fee)
+    # DEPRECATION WARNING: Rails 7.0 has deprecated Enumerable.sum in favor of Ruby's native implementation
+    # available since 2.4. Sum of non-numeric elements requires an initial argument.
+    zero_money = Money.new 0, competition.currency_code
+    competition.base_entry_fee + competition_events.map(&:fee).sum(zero_money)
   end
 
   def paid_entry_fees
@@ -228,6 +230,16 @@ class Registration < ApplicationRecord
   private def must_register_for_gte_one_event
     if registration_competition_events.reject(&:marked_for_destruction?).empty?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register'))
+    end
+  end
+
+  validate :cannot_register_for_unqualified_events
+  private def cannot_register_for_unqualified_events
+    if competition && competition.allow_registration_without_qualification
+      return
+    end
+    if registration_competition_events.reject(&:marked_for_destruction?).select { |event| !event.competition_event&.can_register?(user) }.any?
+      errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
     end
   end
 

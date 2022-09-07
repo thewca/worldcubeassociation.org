@@ -6,7 +6,7 @@
 <% output_room_name = @competition.competition_venues.flat_map(&:venue_rooms).size > 1 %>
 
 <% @competition.start_date.upto(@competition.end_date) do |date| %>
-  <% activities_for_day = activities_by_day[date.to_s] %>
+  <% activities_for_day = activities_by_day[date.to_fs] %>
   <% if activities_for_day&.any? %>
     <h1 class="break-before"><%= t("competitions.schedule.schedule_for_date", day_name: l(date, format: '%A'), full_date: l(date, format: :long)) %></h1>
     <table class="show-schedule-table break-after">

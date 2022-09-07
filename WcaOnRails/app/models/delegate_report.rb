@@ -4,9 +4,9 @@ class DelegateReport < ApplicationRecord
   REPORTS_ENABLED_DATE = Date.new(2016, 6, 1)
 
   belongs_to :competition
-  belongs_to :posted_by_user, class_name: "User"
-  belongs_to :wrc_primary_user, class_name: "User"
-  belongs_to :wrc_secondary_user, class_name: "User"
+  belongs_to :posted_by_user, class_name: "User", optional: true
+  belongs_to :wrc_primary_user, class_name: "User", optional: true
+  belongs_to :wrc_secondary_user, class_name: "User", optional: true
 
   attr_accessor :current_user
 

@@ -13,6 +13,7 @@ RSpec.feature "Competition management" do
       scenario "with valid data" do
         visit "/competitions/new"
         fill_in "Name", with: "My Competition 2015"
+        select "United States", from: "Country"
         uncheck "I would like to use the WCA website for registration"
         click_button "Create Competition"
 
@@ -149,6 +150,7 @@ RSpec.feature "Competition management" do
       visit "/competitions/new"
 
       fill_in "Name", with: "New Comp 2015"
+      select "United States", from: "Country"
       uncheck "I would like to use the WCA website for registration"
       click_button "Create Competition"
       expect(page).to have_content "Successfully created new competition!" # wait for request to complete
