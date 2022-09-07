@@ -29,13 +29,14 @@ FactoryBot.define do
 
     trait :paid do
       after(:create) do |registration|
-        FactoryBot.create :registration_payment, registration: registration, amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+        FactoryBot.create :registration_payment, registration: registration, user: registration.user,
+                                                 amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
       end
     end
 
     trait :unpaid do
       after(:create) do |registration|
-        FactoryBot.create :registration_payment, registration: registration
+        FactoryBot.create :registration_payment, registration: registration, user: registration.user
       end
     end
   end

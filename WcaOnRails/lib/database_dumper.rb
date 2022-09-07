@@ -703,6 +703,7 @@ module DatabaseDumper
           sign_in_count
           unconfirmed_email
           session_validity_token
+          otp_secret
         ),
         fake_values: {
           "dob" => "'1954-12-04'",

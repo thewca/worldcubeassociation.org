@@ -42,7 +42,7 @@
               <% if @reassign_wca_id.account1_user.teams.any? %>
                 <b>Teams:</b>
                 <% @reassign_wca_id.account1_user.team_members.each do |team| %>
-                  <div><%= team.team.name + " " + (team.team_leader? ? "Leader ": "")  + (team.team_senior_member? ? "Senior ": "") + team.start_date.to_s + " - " + (team.end_date ? team.end_date.to_s : "NULL") %></div>
+                  <div><%= team.team.name + " " + (team.team_leader? ? "Leader ": "")  + (team.team_senior_member? ? "Senior ": "") + team.start_date.to_fs + " - " + (team.end_date ? team.end_date.to_fs : "NULL") %></div>
                 <% end %>
               <% end %>
             </div>
@@ -91,7 +91,7 @@
               <% if @reassign_wca_id.account2_user.teams.any? %>
                 <b>Teams:</b>
                 <% @reassign_wca_id.account2_user.team_members.each do |team| %>
-                  <div><%= team.team.name + " " + (team.team_leader? ? "Leader ": "")  + (team.team_senior_member? ? "Senior ": "") + team.start_date.to_s + " - " + (team.end_date ? team.end_date.to_s : "NULL") %></div>
+                  <div><%= team.team.name + " " + (team.team_leader? ? "Leader ": "")  + (team.team_senior_member? ? "Senior ": "") + team.start_date.to_fs + " - " + (team.end_date ? team.end_date.to_fs : "NULL") %></div>
                 <% end %>
               <% end %>
             </div>

@@ -41,5 +41,4 @@ class TeamMember < ApplicationRecord
   end
 
   validates :start_date, presence: true
-  validates :user, presence: true
 end

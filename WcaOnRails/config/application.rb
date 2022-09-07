@@ -28,6 +28,8 @@ module WcaOnRails
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    config.load_defaults 7.0
+
     config.active_record.schema_format = :sql
 
     config.active_job.queue_adapter = :delayed_job
@@ -73,8 +75,6 @@ module WcaOnRails
     config.middleware.use Middlewares::FixAcceptHeader
     config.middleware.use Middlewares::WardenUserLogger, logger: ->(s) { Rails.logger.info(s) }
 
-    config.autoloader = :zeitwerk
-
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')
 
@@ -85,5 +85,12 @@ module WcaOnRails
       host: root_url.host,
       port: root_url.port,
     }
+
+    config.action_view.preload_links_header = false
+
+    # Activate ActiveRecord attribute encryption for use with the Devise 2FA gem
+    config.active_record.encryption.primary_key = EnvVars.ACTIVERECORD_PRIMARY_KEY
+    config.active_record.encryption.deterministic_key = EnvVars.ACTIVERECORD_DETERMINISTIC_KEY
+    config.active_record.encryption.key_derivation_salt = EnvVars.ACTIVERECORD_KEY_DERIVATION_SALT
   end
 end

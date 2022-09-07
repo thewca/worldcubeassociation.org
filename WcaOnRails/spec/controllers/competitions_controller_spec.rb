@@ -253,7 +253,7 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryBot.create :admin }
 
       it "creates a new competition" do
-        post :create, params: { competition: { name: "FatBoyXPC 2015", use_wca_registration: false } }
+        post :create, params: { competition: { name: "FatBoyXPC 2015", countryId: "USA", use_wca_registration: false } }
         new_comp = assigns(:competition)
         expect(response).to redirect_to edit_competition_path("FatBoyXPC2015")
         expect(new_comp.id).to eq "FatBoyXPC2015"
@@ -278,7 +278,7 @@ RSpec.describe CompetitionsController do
         organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(delegate, anything, organizer).and_call_original
         expect do
-          post :create, params: { competition: { name: "Test 2015", delegate_ids: delegate.id, organizer_ids: organizer.id, use_wca_registration: false } }
+          post :create, params: { competition: { name: "Test 2015", countryId: "USA", delegate_ids: delegate.id, organizer_ids: organizer.id, use_wca_registration: false } }
         end.to change { enqueued_jobs.size }.by(1)
         expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)

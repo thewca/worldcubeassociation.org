@@ -13,7 +13,6 @@ class ScheduleActivity < ApplicationRecord
   validates_numericality_of :wcif_id, only_integer: true
   validates_presence_of :start_time, allow_blank: false
   validates_presence_of :end_time, allow_blank: false
-  validates_presence_of :holder, allow_blank: false
   validates_presence_of :activity_code, allow_blank: false
   # TODO: we don't yet care for scramble_set_id
   validate :included_in_parent_schedule
