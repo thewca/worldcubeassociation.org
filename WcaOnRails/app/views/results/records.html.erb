@@ -8,7 +8,7 @@
     <%= render 'results_selector', show_records_options: true %>
   </div>
 
-  <% record_params = params.permit(:event_id, :region, :years, :show).to_hash.values %>
+  <% record_params = params.permit(:event_id, :region, :years, :show, :gender).to_hash.values %>
   <% record_timestamp = Timestamp.find_by(name: "compute_auxiliary_data_end") %>
   <% cache_if record_timestamp.present?, ["records", *record_params, record_timestamp&.date, I18n.locale] do %>
     <%
