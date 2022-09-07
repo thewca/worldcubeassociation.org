@@ -29,6 +29,7 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
 
   $('input[name="competition[qualification_results]"]').on('change', function() {
     $('.competition_qualification_results_reason').toggle(this.checked);
+    $('.competition_allow_registration_without_qualification').toggle(this.checked);
   }).trigger('change');
 
   $('input[name="competition[event_restrictions]"]').on('change', function() {

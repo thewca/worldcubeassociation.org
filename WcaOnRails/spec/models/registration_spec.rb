@@ -139,4 +139,86 @@ RSpec.describe Registration do
       end
     end
   end
+
+  describe "qualification" do
+    let!(:user) { FactoryBot.create(:user_with_wca_id) }
+    let!(:previous_competition) {
+      FactoryBot.create(
+        :competition,
+        start_date: '2021-02-01',
+        end_date: '2021-02-01',
+      )
+    }
+    let!(:result) {
+      FactoryBot.create(
+        :result,
+        personId: user.wca_id,
+        competitionId: previous_competition.id,
+        eventId: '333',
+        best: 1200,
+        average: 1500,
+      )
+    }
+    let!(:competition) {
+      FactoryBot.create(
+        :competition,
+        event_ids: %w(333),
+      )
+    }
+    let!(:competition_event) {
+      CompetitionEvent.find_by(competition_id: competition.id, event_id: '333')
+    }
+    let!(:registration) {
+      FactoryBot.create(
+        :registration,
+        competition: competition,
+        user: user,
+      )
+    }
+
+    it "allows unqualified registration when not required" do
+      input = {
+        'resultType' => 'average',
+        'type' => 'attemptResult',
+        'whenDate' => '2021-06-21',
+        'level' => 1300,
+      }
+      competition_event.qualification = Qualification.load(input)
+      competition_event.save!
+      competition.allow_registration_without_qualification = true
+      competition.save!
+      registration.reload
+      expect(registration).to be_valid
+    end
+
+    it "allows qualified registration" do
+      input = {
+        'resultType' => 'average',
+        'type' => 'attemptResult',
+        'whenDate' => '2021-06-21',
+        'level' => 1600,
+      }
+      competition_event.qualification = Qualification.load(input)
+      competition_event.save!
+      competition.allow_registration_without_qualification = false
+      competition.save!
+      registration.reload
+      expect(registration).to be_valid
+    end
+
+    it "doesn't allow unqualified registration" do
+      input = {
+        'resultType' => 'average',
+        'type' => 'attemptResult',
+        'whenDate' => '2021-06-21',
+        'level' => 1000,
+      }
+      competition_event.qualification = Qualification.load(input)
+      competition_event.save!
+      competition.allow_registration_without_qualification = false
+      competition.save!
+      registration.reload
+      expect(registration).to be_invalid_with_errors(registration_competition_events: ["You cannot register for events you are not qualified for."])
+    end
+  end
 end

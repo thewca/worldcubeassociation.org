@@ -627,6 +627,7 @@ class CompetitionsController < ApplicationController
         :extra_registration_requirements,
         :on_the_spot_registration,
         :on_the_spot_entry_fee_lowest_denomination,
+        :allow_registration_without_qualification,
         :allow_registration_edits,
         :allow_registration_self_delete_after_acceptance,
         :refund_policy_percent,
