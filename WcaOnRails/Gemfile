@@ -8,7 +8,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails'
+# Need to point to GitHub directly until https://github.com/rails/rails/issues/45428 is included in a release
+gem 'rails', github: 'rails/rails', branch: '7-0-stable'
 gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
@@ -91,12 +92,10 @@ gem 'image_processing'
 gem 'rest-client'
 gem 'wicked_pdf'
 gem 'icalendar'
-gem 'starburst', github: 'starburstgem/starburst'
+# pointing to our fork which has Rails 7 support enabled (aka monkey-patched)
+gem 'starburst', github: 'thewca/starburst'
 gem 'react-rails'
-# required until https://github.com/rails/rails/pull/44083 is backported to Rails 6
-gem 'net-imap', require: false
-gem 'net-pop', require: false
-gem 'net-smtp', require: false
+gem 'sprockets-rails'
 
 group :development, :test do
   gem 'spring'

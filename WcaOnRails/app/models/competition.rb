@@ -112,6 +112,7 @@ class Competition < ApplicationRecord
     on_the_spot_entry_fee_lowest_denomination
     allow_registration_edits
     allow_registration_self_delete_after_acceptance
+    allow_registration_without_qualification
     refund_policy_percent
     guests_entry_fee_lowest_denomination
     free_guest_entry_status
@@ -1350,6 +1351,10 @@ class Competition < ApplicationRecord
 
         [event, round_types_with_results]
       end
+  end
+
+  def ineligible_events(user)
+    competition_events.select { |ce| !ce.can_register?(user) }.map(&:event)
   end
 
   # Profiling the rendering of _results_table.html.erb showed quite some

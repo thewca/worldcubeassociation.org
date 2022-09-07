@@ -1098,9 +1098,14 @@ RSpec.describe Competition do
   end
 
   describe "#serializable_hash" do
-    let(:competition) { FactoryBot.create :competition, countryId: "" }
+    let(:competition) { FactoryBot.create :competition, countryId: "USA" }
 
     it "sets iso2 to nil when country is missing" do
+      expect(competition).to be_valid
+
+      competition.countryId = ""
+      expect(competition).to be_invalid_with_errors(country: ["must exist"])
+
       expect(competition.serializable_hash[:country_iso2]).to be_nil
     end
   end
@@ -1190,17 +1195,17 @@ RSpec.describe Competition do
     let(:fmc) { Event.find "333fm" }
 
     it "is false when competition has no championships" do
-      competition = FactoryBot.create(:competition, events: [four_by_four], championship_types: [], countryId: "CA")
+      competition = FactoryBot.create(:competition, events: [four_by_four], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to eq false
     end
 
     it "is false when competition is a national championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["CA"], countryId: "CA")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["CA"], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to eq false
     end
 
     it "is false when 333fm is the only event and competition is in a single country" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "CA")
+      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to eq false
     end
 
@@ -1215,17 +1220,17 @@ RSpec.describe Competition do
     end
 
     it "is true when competition is a national championship and a world championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["AU", "world"], countryId: "AU")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["AU", "world"], countryId: "Australia", cityName: "Melbourne, Victoria")
       expect(competition.exempt_from_wca_dues?).to eq true
     end
 
     it "is true when competition is a continental championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["_North America"], countryId: "CA")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["_North America"], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to eq true
     end
 
     it "is true when competition is a world championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["world"], countryId: "KR")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["world"], countryId: "Korea")
       expect(competition.exempt_from_wca_dues?).to eq true
     end
   end

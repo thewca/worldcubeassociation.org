@@ -29,6 +29,7 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
 
   $('input[name="competition[qualification_results]"]').on('change', function() {
     $('.competition_qualification_results_reason').toggle(this.checked);
+    $('.competition_allow_registration_without_qualification').toggle(this.checked);
   }).trigger('change');
 
   $('input[name="competition[event_restrictions]"]').on('change', function() {
@@ -90,7 +91,7 @@ onPage('competitions#index', function() {
     $form.trigger('submit.rails');
   }
 
-  $form.on('change', '#events, #region, #state, #display, #status, #delegate, #cancelled', submitForm)
+  $form.on('change', '#events, #region, #state, #display, #status, #delegate, #cancelled, #registration-status', submitForm)
        .on('click', '#clear-all-events, #select-all-events', submitForm)
        .on('input', '#search', window.wca.lodashDebounce(submitForm, window.wca.TEXT_INPUT_DEBOUNCE_MS))
        .on('dp.change','#from_date, #to_date', submitForm);

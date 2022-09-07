@@ -6,10 +6,8 @@ class Result < ApplicationRecord
   self.table_name = "Results"
 
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
-  validates :person, presence: true
   validates :personName, presence: true
   belongs_to :country, foreign_key: :countryId
-  validates :country, presence: true
 
   # NOTE: both nil and "" exist in the database, we may consider cleaning that up.
   MARKERS = [nil, "", "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
@@ -38,8 +36,15 @@ class Result < ApplicationRecord
 
   scope :final, -> { where(roundTypeId: RoundType.final_rounds.map(&:id)) }
   scope :succeeded, -> { where("best > 0") }
+  scope :average_succeeded, -> { where("average > 0") }
   scope :podium, -> { final.succeeded.where(pos: [1..3]) }
   scope :winners, -> { final.succeeded.where(pos: 1).joins(:event).order("Events.rank") }
+  scope :before, lambda { |date|
+    joins(:competition).where("end_date < ?", date)
+  }
+  scope :single_better_than, lambda { |time| where("best < ? AND best > 0", time) }
+  scope :average_better_than, lambda { |time| where("average < ? AND average > 0", time) }
+  scope :in_event, lambda { |event_id| where(eventId: event_id) }
 
   def serializable_hash(options = nil)
     {

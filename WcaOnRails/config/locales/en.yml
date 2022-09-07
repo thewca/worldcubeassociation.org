@@ -345,6 +345,7 @@ en:
         event_restrictions: "I would like to restrict competitors from registering for specific combinations of events"
         event_restrictions_reason: "Reason and details for event restrictions"
         main_event_id: "Main event"
+        allow_registration_without_qualification: "Events with Qualification"
       championship:
         championship_type: "Championship type"
       competition_series:
@@ -565,6 +566,7 @@ en:
         event_restrictions: ""
         event_restrictions_reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
         main_event_id: "The winner of this event will be the winner of the competition."
+        allow_registration_without_qualification: ""
         #context: when marked as championship
         championships:
           championship_type: ""
@@ -685,6 +687,9 @@ en:
         on_the_spot_registration:
           "true": "On the spot registrations will be accepted"
           "false": "On the spot registrations WILL NOT be accepted"
+        allow_registration_without_qualification:
+          "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
+          "false": "Competitors MUST be qualified to register for an event"
         allow_registration_edits:
           "true": "Competitors may edit their registration until the deadline for updating events"
           "false": "Competitors may NOT edit their registration once it has been accepted"
@@ -1087,7 +1092,6 @@ en:
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
-  #context: Key used when dealing with registration to a competition
   registrations:
     #context: and when an error is found
     errors:
@@ -1095,12 +1099,12 @@ en:
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
       need_country: "Need a country"
-      comp_not_found: "Competition not found"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
+      can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1245,6 +1249,7 @@ en:
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check competition's information for instruction about how to pay"
+    not_qualified: "Not qualified"
     refund_form:
       hints:
         refund_amount: "The amount to refund to the competitor, can be any value up to the amount already paid."
@@ -1406,6 +1411,7 @@ en:
       guests_free:
         anyone: "Any spectator can attend for free."
         restricted: "Spectators are only permitted as companions of competitors."
+      require_qualification: "Competitors may only register for events that they are already qualified for."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
       click_to_display_requirements_html: "This competition is over, click %{link_here} to display the registration requirements it used."
       hide_requirements: "Hide registration requirements."
@@ -1464,6 +1470,8 @@ en:
       #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"
       past_all: "Past from all years"
+      show_cancelled: "Show cancelled competitions"
+      show_registration_status: "Show registration status icon"
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
@@ -1482,6 +1490,7 @@ en:
           ended: "Ended %{days} ago"
           in_progress: "In progress!"
           posted: "Results are posted!"
+          starts_in: "Starts in %{days}"
           announced_on: "Announced on %{announcement_date}"
         #context: the "search" button
         search: "Name or city"
@@ -1740,6 +1749,7 @@ en:
       unknown_show: "Unknown show parameter, must be either \"N persons\", \"N results\", or \"by region\""
     records:
       title: "Records"
+    last_updated_html: "Last updated: %{timestamp}"
     selector_elements:
       events_selector:
         event: "Event"

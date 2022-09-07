@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-# Add a id_for method to simple forms.
+# Keep track of which attributes we've built.
 # Inspired by http://stackoverflow.com/a/4820814
+
+# Originally used to generate error href IDs, but in Rails 7 no longer necessary to monkey-patch.
 
 module SimpleForm
   class FormBuilder
-    def id_for(method, **options)
-      InstanceTagWithIdFor.new(object_name, method, self, **options).id_for(options)
-    end
-
     attr_accessor :generated_attribute_inputs
     old_input = instance_method(:input)
     define_method(:input) do |attribute_name, options = {}, &block|
@@ -16,12 +14,5 @@ module SimpleForm
       @generated_attribute_inputs << attribute_name
       old_input.bind(self).call(attribute_name, **options, &block)
     end
-  end
-end
-
-class InstanceTagWithIdFor < ActionView::Helpers::Tags::Base
-  def id_for(options)
-    add_default_name_and_id(options)
-    options['id']
   end
 end

@@ -16,6 +16,8 @@ Note: form_builder.object is the object having associated events.
   hint ||= false
   show_select_hint ||= false
   allowed_events ||= Event.official
+  disabled_events ||= []
+  disabled_tooltip ||= false
 
   label = I18n.t("activerecord.attributes.#{form_builder.object.class.name.underscore}.#{events_association_name}")
   using_competition_events = events_association_name == :registration_competition_events
@@ -42,16 +44,22 @@ Note: form_builder.object is the object having associated events.
     <% end %>
 
     <%= form_builder.simple_fields_for events_association_name, all_events do |f| %>
-      <span class="event-checkbox <%= "disabled" if disabled %>">
-        <% event = f.object.event %>
+      <% event = f.object.event %>
+      <% e_disabled = disabled_events.include?(event) %>
+      <span class="event-checkbox <%= "disabled" if disabled || e_disabled %>">
         <% if using_competition_events %>
           <%= f.hidden_field :competition_event_id %>
         <% else %>
           <%= f.hidden_field :event_id %>
         <% end %>
-        <%= label_tag "#{events_association_name}_#{event.id}" do %>
-          <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "#{events_association_name}_#{event.id}", disabled: disabled }, "0", "1" %>
-          <%= cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name) %>
+        <% if e_disabled %>
+          <%= f.hidden_field "_destroy", { value: "1" } %>
+          <%= cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: disabled_tooltip, style: "color: #FFBBBB" ) %>
+        <% else %>
+          <%= label_tag "#{events_association_name}_#{event.id}" do %>
+            <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "#{events_association_name}_#{event.id}", disabled: disabled }, "0", "1" %>
+            <%= cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name) %>
+          <% end %>
         <% end %>
         <%= f.hidden_field :id %>
       </span>

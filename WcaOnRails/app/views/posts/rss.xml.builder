@@ -13,7 +13,7 @@ xml.rss version: "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/" do
         xml.description do
           xml << cdata_section(md(post.body_full))
         end
-        xml.pubDate post.created_at.to_s(:rfc822)
+        xml.pubDate post.created_at.to_fs(:rfc822)
         xml.tag! "dc:creator", post.author.name
 
         full_post_url = post_url(post.slug)

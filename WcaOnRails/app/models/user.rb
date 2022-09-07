@@ -17,9 +17,9 @@ class User < ApplicationRecord
   has_many :votes
   has_many :registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
-  belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id"
-  belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person"
-  belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
+  belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
+  belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
+  belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
@@ -85,6 +85,76 @@ class User < ApplicationRecord
     otp_required_for_login
   end
 
+  # devise-two-factor migration, copy-pasted (and very slightly adjusted to make RuboCop shut up)
+  # from https://github.com/tinfoil/devise-two-factor/blob/main/UPGRADING.md
+  ##
+  # Decrypt and return the `encrypted_otp_secret` attribute which was used in
+  # prior versions of devise-two-factor
+  # @return [String] The decrypted OTP secret
+  private def legacy_otp_secret
+    return nil unless self[:encrypted_otp_secret]
+    return nil unless self.class.otp_secret_encryption_key
+
+    hmac_iterations = 2000 # a default set by the Encryptor gem
+    key = self.class.otp_secret_encryption_key
+    salt = Base64.decode64(encrypted_otp_secret_salt)
+    iv = Base64.decode64(encrypted_otp_secret_iv)
+
+    raw_cipher_text = Base64.decode64(encrypted_otp_secret)
+    # The last 16 bytes of the ciphertext are the authentication tag - we use
+    # Galois Counter Mode which is an authenticated encryption mode
+    cipher_text = raw_cipher_text[0..-17]
+    auth_tag =  raw_cipher_text[-16..]
+
+    # this alrorithm lifted from
+    # https://github.com/attr-encrypted/encryptor/blob/master/lib/encryptor.rb#L54
+
+    # create an OpenSSL object which will decrypt the AES cipher with 256 bit
+    # keys in Galois Counter Mode (GCM). See
+    # https://ruby.github.io/openssl/OpenSSL/Cipher.html
+    cipher = OpenSSL::Cipher.new('aes-256-gcm')
+
+    # tell the cipher we want to decrypt. Symmetric algorithms use a very
+    # similar process for encryption and decryption, hence the same object can
+    # do both.
+    cipher.decrypt
+
+    # Use a Password-Based Key Derivation Function to generate the key actually
+    # used for encryptoin from the key we got as input.
+    cipher.key = OpenSSL::PKCS5.pbkdf2_hmac_sha1(key, salt, hmac_iterations, cipher.key_len)
+
+    # set the Initialization Vector (IV)
+    cipher.iv = iv
+
+    # The tag must be set after calling Cipher#decrypt, Cipher#key= and
+    # Cipher#iv=, but before calling Cipher#final. After all decryption is
+    # performed, the tag is verified automatically in the call to Cipher#final.
+    #
+    # If the auth_tag does not verify, then #final will raise OpenSSL::Cipher::CipherError
+    cipher.auth_tag = auth_tag
+
+    # auth_data must be set after auth_tag has been set when decrypting See
+    # http://ruby-doc.org/stdlib-2.0.0/libdoc/openssl/rdoc/OpenSSL/Cipher.html#method-i-auth_data-3D
+    # we are not adding any authenticated data but OpenSSL docs say this should
+    # still be called.
+    cipher.auth_data = ''
+
+    # #update is (somewhat confusingly named) the method which actually
+    # performs the decryption on the given chunk of data. Our OTP secret is
+    # short so we only need to call it once.
+    #
+    # It is very important that we call #final because:
+    #
+    # 1. The authentication tag is checked during the call to #final
+    # 2. Block based cipher modes (e.g. CBC) work on fixed size chunks. We need
+    #    to call #final to get it to process the last chunk properly. The output
+    #    of #final should be appended to the decrypted value. This isn't
+    #    required for streaming cipher modes but including it is a best practice
+    #    so that your code will continue to function correctly even if you later
+    #    change to a block cipher mode.
+    cipher.update(cipher_text) + cipher.final
+  end
+
   # When creating an account, we actually don't mind if the user leaves their
   # name empty, so long as they're a returning competitor and are claiming their
   # wca id.
@@ -123,7 +193,7 @@ class User < ApplicationRecord
     senior_delegate: "senior_delegate",
   }
   has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
-  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User"
+  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User", optional: true
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
@@ -1113,7 +1183,7 @@ class User < ApplicationRecord
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
     roles << "organizer" if competition.organizers.include?(self)
     authorized_fields = {
-      "birthdate" => dob.to_s,
+      "birthdate" => dob.to_fs,
       "email" => email,
     }
     {

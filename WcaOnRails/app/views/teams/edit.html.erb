@@ -42,7 +42,7 @@
         <% # We need to use `sort_by` instead of `order` to keep the new builded, unsaved objects.
            team_members = @team.team_members.sort_by do |m|
              # We call `to_s` on the dates to avoid an exception when one of them is nil.
-             [(m.end_date.nil? ? 1 : 0), m.end_date.to_s, m.start_date.to_s]
+             [(m.end_date.nil? ? 1 : 0), m.end_date&.to_fs, m.start_date.to_fs]
            end.reverse!
         %>
         <%= f.simple_fields_for :team_members, team_members do |t| %>

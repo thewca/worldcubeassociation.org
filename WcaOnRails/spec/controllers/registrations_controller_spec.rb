@@ -134,7 +134,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "doesn't allow accepting a Competition Series two-timer" do
-      two_timer_dave = FactoryBot.create(:user, :wca_id)
+      two_timer_dave = FactoryBot.create(:user, :wca_id, name: "Two Timer Dave")
 
       series = FactoryBot.create(:competition_series)
       competition.update!(competition_series: series)

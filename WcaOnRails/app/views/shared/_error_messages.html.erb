@@ -6,7 +6,7 @@
         <% f.object.errors.each do |error| %>
           <li>
             <% if f.generated_attribute_inputs&.include?(error.attribute) %>
-              <a href="#<%= f.id_for(error.attribute) %>"><strong><%= f.object.class.human_attribute_name(error.attribute) %></strong></a>
+              <a href="#<%= f.field_id(error.attribute) %>"><strong><%= f.object.class.human_attribute_name(error.attribute) %></strong></a>
             <% else %>
               <strong><%= f.object.class.human_attribute_name(error.attribute) %></strong>
             <% end %>

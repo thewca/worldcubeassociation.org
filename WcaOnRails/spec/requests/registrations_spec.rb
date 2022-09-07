@@ -50,7 +50,7 @@ RSpec.describe "registrations" do
       end
 
       it "renders an error when there are active registrations for other Series competitions" do
-        two_timer_dave = FactoryBot.create(:user, :wca_id)
+        two_timer_dave = FactoryBot.create(:user, :wca_id, name: "Two Timer Dave")
 
         series = FactoryBot.create(:competition_series)
         competition.update!(competition_series: series)
@@ -447,7 +447,7 @@ RSpec.describe "registrations" do
 
       context "when there is another registration in the same series" do
         it "renders an error" do
-          two_timer_dave = FactoryBot.create(:user)
+          two_timer_dave = FactoryBot.create(:user, name: "Two Timer Dave")
 
           series = FactoryBot.create(:competition_series)
           competition.update!(competition_series: series)
