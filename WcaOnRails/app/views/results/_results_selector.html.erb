@@ -86,15 +86,16 @@
   </div>
 </div>
 
-<% if show_rankings_options %>
-  <div class="form-group">
-    <%= label_tag(t("results.selector_elements.gender_selector.gender")) %>
-    <div id="gender" class="btn-group">
-      <%= link_to t("results.selector_elements.gender_selector.gender_all"), request.params.merge(gender: "All"), class: "btn btn-info" + (@gender == "All" ? " active" : "") %>
-      <%= link_to t("results.selector_elements.gender_selector.male"), request.params.merge(gender: "Male"), class: "btn btn-info" + (@gender == "Male" ? " active" : "") %>
-      <%= link_to t("results.selector_elements.gender_selector.female"), request.params.merge(gender: "Female"), class: "btn btn-info" + (@gender == "Female" ? " active" : "") %>
-    </div>
+<div class="form-group">
+  <%= label_tag(t("results.selector_elements.gender_selector.gender")) %>
+  <div id="gender" class="btn-group">
+    <%= link_to t("results.selector_elements.gender_selector.gender_all"), request.params.merge(gender: "All"), class: "btn btn-info" + (@gender == "All" ? " active" : "") %>
+    <%= link_to t("results.selector_elements.gender_selector.male"), request.params.merge(gender: "Male"), class: "btn btn-info" + (@gender == "Male" ? " active" : "") %>
+    <%= link_to t("results.selector_elements.gender_selector.female"), request.params.merge(gender: "Female"), class: "btn btn-info" + (@gender == "Female" ? " active" : "") %>
   </div>
+</div>
+
+<% if show_rankings_options %>
   <div class="form-group">
     <%= label_tag(t("results.selector_elements.show_selector.show")) %>
     <div id="show" class="btn-group">

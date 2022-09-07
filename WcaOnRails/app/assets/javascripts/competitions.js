@@ -90,7 +90,7 @@ onPage('competitions#index', function() {
     $form.trigger('submit.rails');
   }
 
-  $form.on('change', '#events, #region, #state, #display, #status, #delegate, #cancelled', submitForm)
+  $form.on('change', '#events, #region, #state, #display, #status, #delegate, #cancelled, #registration-status', submitForm)
        .on('click', '#clear-all-events, #select-all-events', submitForm)
        .on('input', '#search', window.wca.lodashDebounce(submitForm, window.wca.TEXT_INPUT_DEBOUNCE_MS))
        .on('dp.change','#from_date, #to_date', submitForm);

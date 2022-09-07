@@ -113,9 +113,14 @@
                                  data: { data: User.where(id: params[:delegate]).to_json } %>
 </div>
 
+<div id="registration-status" class="form-group registration-status-selector">
+  <%= check_box_tag(:show_registration_status, params[:show_registration_status], params[:show_registration_status] == "on") %>
+  <%= label_tag(t('competitions.index.show_registration_status')) %>
+</div>
+
 <div id="cancelled" class="form-group cancel-selector">
   <%= check_box_tag(:show_cancelled, params[:show_cancelled], params[:show_cancelled] == "on") %>
-  <%= label_tag("Show cancelled competitions") %>
+  <%= label_tag(t('competitions.index.show_cancelled')) %>
 </div>
 
 <div id="display" class="form-group">
