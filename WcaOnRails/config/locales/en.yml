@@ -1092,7 +1092,6 @@ en:
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
-      can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
   registrations:
     #context: and when an error is found
     errors:
@@ -1106,6 +1105,7 @@ en:
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
+      can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
