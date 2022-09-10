@@ -1,4 +1,5 @@
 import React from 'react';
+import { List } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 
@@ -6,13 +7,13 @@ const DONATE_PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=W5JL8
 const DONATE_GUIDESTAR_URL = 'https://www.nfggive.com/guidestar/82-3825954';
 
 /**
- * @param {{ name: string, country_name: string, id: number, [k]: * }[]} currentBoardMembers
+ * @param {{ name: string, country_name: string, id: number, [k: *]: * }[]} currentBoardMembers
  * @returns {JSX.Element}
  * @constructor
  */
 function About({ currentBoardMembers }) {
   return (
-    <>
+    <React.StrictMode>
       <div className="jumbotron">
         <p className="lead">
           {I18n.t('about.donation_banner.content')}
@@ -22,10 +23,10 @@ function About({ currentBoardMembers }) {
         <a className="btn btn-primary btn-lg" href={DONATE_GUIDESTAR_URL} role="button">
           {I18n.t('about.donation_banner.donate_credit')}
         </a>
-        <a className="btn btn-primary btn-lg" href={DONATE_PAYPAL_URL} role="button">
+        <a className="btn btn-primary btn-lg" href={DONATE_PAYPAL_URL} role="button" style={{ marginLeft: '3px' }}>
           {I18n.t('about.donation_banner.donate_paypal')}
         </a>
-        <a className="btn btn-primary btn-lg" href="#contribute" role="button">
+        <a className="btn btn-primary btn-lg" href="#contribute" role="button" style={{ marginLeft: '3px' }}>
           {I18n.t('about.donation_banner.donate_other')}
         </a>
       </div>
@@ -75,7 +76,11 @@ function About({ currentBoardMembers }) {
           <I18nHTMLTranslate i18nKey="about.world_championship_content_html" />
         </div>
         <div className="col-md-4">
-          <img className="about-page-image" src="/assets/about/worlds-2015.jpg" alt="" />
+          <img
+            className="about-page-image"
+            src="/assets/about/worlds-2015.jpg"
+            alt="World Championship 2015"
+          />
         </div>
       </div>
 
@@ -87,17 +92,17 @@ function About({ currentBoardMembers }) {
         {I18n.t('about.structure.board.description')}
       </p>
 
-      <ul>
+      <List as="ul">
         {currentBoardMembers.map((member) => (
-          <li key={member.id}>
+          <List.Item as="li" key={member.id}>
             {member.name}
             {' '}
             -
             {' '}
             {member.country_name}
-          </li>
+          </List.Item>
         ))}
-      </ul>
+      </List>
 
       <p>
         <I18nHTMLTranslate
@@ -116,13 +121,15 @@ function About({ currentBoardMembers }) {
         <I18nHTMLTranslate
           i18nKey="about.structure.delegates_html"
           options={{
-            see_link: I18n.t('about.structure.see_link_html'),
+            see_link: I18n.t('about.structure.see_link_html', {
+              link: `<a href="/delegates">${I18n.t('delegates_page.title')}</a>`,
+            }),
           }}
         />
       </p>
 
       <p>
-        {I18n.t('about.structure.members_html')}
+        <I18nHTMLTranslate i18nKey="about.structure.members_html" />
       </p>
 
       <h2 id="contribute">
@@ -156,7 +163,7 @@ function About({ currentBoardMembers }) {
         {I18n.t('about.other_help_title')}
       </h2>
       <I18nHTMLTranslate i18nKey="about.other_help_content_html" />
-    </>
+    </React.StrictMode>
   );
 }
 

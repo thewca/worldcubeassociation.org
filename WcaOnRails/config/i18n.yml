@@ -44,3 +44,4 @@ translations:
       - "*.regional_organizations.*"
       - "*.qualification.*"
       - "*.logo.*"
+      - "*.delegates_page.*"

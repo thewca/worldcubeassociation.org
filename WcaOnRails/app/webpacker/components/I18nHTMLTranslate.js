@@ -5,7 +5,7 @@ import I18n from '../lib/i18n';
 
 /**
  * @param {string} i18nKey
- * @param {Record<string, *>} args
+ * @param {Record<string, *>} options
  * @returns {JSX.Element}
  * @constructor
  */
