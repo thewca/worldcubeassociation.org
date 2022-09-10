@@ -2298,6 +2298,7 @@ en:
       competitions: "Competitions"
       people: "People"
       advanced_search: "Advanced search"
+      incidents: "Incidents"
       posts: "Posts"
       regulations_and_guidelines: "Regulations and Guidelines"
       #context: Used in the homepage's omnisearch
@@ -2308,11 +2309,13 @@ en:
         competitions: "No competitions found for"
         people: "No people found for"
         posts: "No posts found for"
+        incidents: "No incidents found for"
         regulations_and_guidelines: "No Regulations or Guidelines found for"
   #context: Incident log
   incidents_log:
     #context: disclaimer displayed to inform incidents are only in English
     i18n_disclaimer: "Please note the incidents section is only available in English, the content below is not translated."
+    incident: "Incident:"
   #context: About the regulations
   about_regulations:
     title: "About the Regulations"
