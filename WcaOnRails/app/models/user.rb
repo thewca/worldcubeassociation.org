@@ -1137,7 +1137,7 @@ class User < ApplicationRecord
       name: self.name,
       gender: self.gender,
       country_iso2: self.country_iso2,
-      country_name: self.country.name,
+      country_name: self.country&.name,
       delegate_status: delegate_status,
       created_at: self.created_at,
       updated_at: self.updated_at,

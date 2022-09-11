@@ -165,6 +165,10 @@ class Person < ApplicationRecord
     country&.iso2
   end
 
+  def country_name
+    country&.name
+  end
+
   private def rank_for_event_type(event, type)
     case type
     when :single
