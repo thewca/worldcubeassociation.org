@@ -22,7 +22,8 @@ function PersonForm({ personData, setPersonData }) {
   // Create a function to get person data from the API.
   const fetchDataForWcaId = (id) => {
     setWcaIdError(null);
-    fetchJsonOrError(personApiUrl(id)).then(({ person }) => {
+    fetchJsonOrError(personApiUrl(id)).then(({ data }) => {
+      const { person } = data;
       setPersonData({
         wcaId: person.wca_id,
         name: person.name,

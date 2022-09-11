@@ -24,7 +24,7 @@ const useSaveAction = () => {
       method: 'PATCH',
       body: JSON.stringify(data),
       ...options,
-    }).then(onSuccess).catch(onError).finally(() => setSaving(false));
+    }).then((response) => onSuccess(response.data)).catch(onError).finally(() => setSaving(false));
   }, [setSaving]);
 
   return {

@@ -7,14 +7,16 @@ import { fetchJsonOrError } from '../requests/fetchWithAuthenticityToken';
 // const { data, loading, error, sync } = useLoadedData(`path/to/resource`);
 const useLoadedData = (url) => {
   const [data, setData] = useState(null);
+  const [headers, setHeaders] = useState(new Headers());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const sync = useCallback(() => {
     setLoading(true);
     setError(null);
-    fetchJsonOrError(url).then((loaded) => {
-      setData(loaded);
+    fetchJsonOrError(url).then((response) => {
+      setData(response.data);
+      setHeaders(response.headers);
     }).catch((err) => {
       setError(err.message);
     }).finally(() => setLoading(false));
@@ -24,6 +26,7 @@ const useLoadedData = (url) => {
 
   return {
     data,
+    headers,
     loading,
     error,
     sync,

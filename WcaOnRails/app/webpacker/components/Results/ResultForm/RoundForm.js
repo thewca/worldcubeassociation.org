@@ -49,7 +49,7 @@ function RoundForm({ roundData, setRoundData }) {
 
   const fetchDataForCompetition = (id) => {
     setCompetitionIdError(null);
-    fetchJsonOrError(competitionEventsDataUrl(id)).then((data) => {
+    fetchJsonOrError(competitionEventsDataUrl(id)).then(({ data }) => {
       setLocalRoundData(data);
     }).catch((err) => setCompetitionIdError(err.message));
   };
