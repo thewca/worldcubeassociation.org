@@ -104,7 +104,7 @@ function OmnisearchInput({
       // FUI's dropdown will automatically remove selected items from the
       // options left for selection.
       fetchJsonOrError(url(debouncedSearch))
-        .then((data) => setResults(data.result.map(itemToOption)))
+        .then(({ data }) => setResults(data.result.map(itemToOption)))
         .finally(() => setLoading(false));
     }
   }, [debouncedSearch, url]);

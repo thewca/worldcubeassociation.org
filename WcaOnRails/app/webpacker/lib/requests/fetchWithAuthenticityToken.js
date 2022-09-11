@@ -17,6 +17,6 @@ export function fetchJsonOrError(url, fetchOptions = {}) {
         if (!response.ok) {
           throw new Error(`${response.status}: ${response.statusText}\n${json.error}`);
         }
-        return json;
+        return { data: json, headers: response.headers };
       }));
 }
