@@ -1,5 +1,5 @@
 import React from 'react';
-import { List } from 'semantic-ui-react';
+import { List, Button, Icon } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 
@@ -19,16 +19,18 @@ function About({ currentBoardMembers }) {
           {I18n.t('about.donation_banner.content')}
         </p>
         <hr className="my-4" />
-
-        <a className="btn btn-primary btn-lg" href={DONATE_GUIDESTAR_URL} role="button">
+        <Button primary size="big" href={DONATE_GUIDESTAR_URL}>
+          <Icon name="credit card" />
           {I18n.t('about.donation_banner.donate_credit')}
-        </a>
-        <a className="btn btn-primary btn-lg" href={DONATE_PAYPAL_URL} role="button" style={{ marginLeft: '3px' }}>
+        </Button>
+        <Button primary size="big" href={DONATE_PAYPAL_URL} style={{ marginLeft: '3px' }}>
+          <Icon name="paypal" />
           {I18n.t('about.donation_banner.donate_paypal')}
-        </a>
-        <a className="btn btn-primary btn-lg" href="#contribute" role="button" style={{ marginLeft: '3px' }}>
+        </Button>
+        <Button size="big" href="#contribute" style={{ marginLeft: '3px' }}>
+          <Icon name="arrow down" />
           {I18n.t('about.donation_banner.donate_other')}
-        </a>
+        </Button>
       </div>
 
       <blockquote className="blockquote">
