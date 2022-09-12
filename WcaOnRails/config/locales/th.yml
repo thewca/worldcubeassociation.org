@@ -481,6 +481,8 @@ th:
         information: ข้อมูล
         #original_hash: 87b7d5f
         use_wca_registration: ฉันต้องการใช้ WCA website ในการรับสมัคร
+        #original_hash: ebe8c47
+        use_wca_live_for_scoretaking: ฉันจะใช้ WCA Live เพื่อกรอกผลการแข่งขัน
         #original_hash: 8020e88
         external_registration_page: หน้ารับสมัคร
         #original_hash: 9bb1965
@@ -541,9 +543,20 @@ th:
         event_restrictions_reason: เหตุผลและรายละเอียดสำหรับการจำกัดประเภท
         #original_hash: 3c24bd2
         main_event_id: ประเภทการแข่งขันหลัก
+        #original_hash: a541bfa
+        allow_registration_without_qualification: ประเภทการแข่งขันที่มีการคัดเลือก
       championship:
         #original_hash: 4baf44b
         championship_type: ประเภทการแข่งขันชิงแชมป์
+      competition_series:
+        #original_hash: 89f89c0
+        wcif_id: ID
+        #original_hash: 709a232
+        name: ชื่อ
+        #original_hash: 8a6bee1
+        short_name: ชื่อเล่น
+        #original_hash: af3d38e
+        competition_ids: การแข่งขันทั้งหมด
       registration:
         #original_hash: 3c23a67
         guests: แขก
@@ -902,6 +915,8 @@ th:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: da39a3e
+        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: แม้ว่าจะไม่มีกติกาที่กำหนดจำนวนผู้เข้าแข่งขัน แต่ก็ขอแนะนำให้มี
         #original_hash: b7b599b
@@ -914,8 +929,6 @@ th:
         competitor_limit_reason: เหตุผลในการจำกัดจำนวนผู้เข้าแข่งขัน กรุณากรอกเป็นภาษาอังกฤษ
         #original_hash: da39a3e
         venueAddress: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           โปรดระบุข้อกำหนดการลงทะเบียนเพิ่มเติมใด ๆ ที่ไม่ได้กล่าวถึงข้างต้น
@@ -979,6 +992,25 @@ th:
           กรุณากรอกเป็นภาษาอังกฤษ!
         #original_hash: 1067798
         main_event_id: ผู้ชนะการแข่งขันประเภทนี้ จะถือว่าเป็นผู้ชนะการแข่งขันนี้
+        #original_hash: da39a3e
+        allow_registration_without_qualification: ''
+        championships:
+          #original_hash: da39a3e
+          championship_type: ''
+        competition_series:
+          #original_hash: da39a3e
+          wcif_id: ''
+          #original_hash: 77811b5
+          name: >-
+            ชื่อเต็มของการแข่งขันซีรีส์รวมทั้งปีที่สิ้นสุด (เช่น Southern
+            Australia 2022) ให้แน่ใจว่าได้ใช้ตัวพิมพ์ใหญ่
+            ใช้กฎเดียวกันกับชื่อการแข่งขันแต่ละรายการ
+          #original_hash: 778c20c
+          short_name: ชื่อย่อสำหรับแสดง รูปแบบเดียวกันกับชื่อการแข่งขันย่อย
+          #original_hash: 3e27501
+          competition_ids: >-
+            <b>ฟิลด์นี้ไม่สามารถแก้ไขได้!</b><br/>หากต้องการเพิ่มการแข่งขันลงในซีรีส์นี้
+            คุณต้องไปที่หน้า 'แก้ไข' แต่ละรายการของการแข่งขันที่คุณต้องการเพิ่ม
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1196,6 +1228,13 @@ th:
           'true': สามารถสมัครการแข่งขันที่การแข่งขันได้
           #original_hash: 0f236df
           'false': ไม่สามารถสมัครการแข่งขันที่การแข่งขันได้
+        allow_registration_without_qualification:
+          #original_hash: 9697d98
+          'true': >-
+            ผู้เข้าแข่งขันจะได้รับอนุญาตให้ลงทะเบียนในประเภทการแข่งขันที่พวกเขาไม่ผ่านการคัดเลือก
+            (ฉันจะลบออกในภายหลัง)
+          #original_hash: 6509041
+          'false': ผู้เข้าแข่งขันจะต้องผ่านการคัดเลือกในประเภทการแข่งขันที่ลงทะเบียน
         allow_registration_edits:
           #original_hash: 52a2f4a
           'true': >-
@@ -1288,7 +1327,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1808,7 +1847,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
@@ -1981,8 +2020,6 @@ th:
       need_dob: ต้องการวันเกิด
       #original_hash: d84a54f
       need_country: ต้องการประเทศ
-      #original_hash: cec28a0
-      comp_not_found: ไม่พบการแข่งขัน
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: การสมัครไม่สามารถถูกลบและยืนยันได้ในเวลาเดียวกัน
       #original_hash: a38d024
@@ -1994,6 +2031,10 @@ th:
         target='_blank'>WDC</a>
       #original_hash: 8d07e7f
       undelete_banned: เป็นผู้เข้าแข่งขันที่ถูกแบนและไม่สามารถยกเลิกการลบได้
+      #original_hash: 3de7c86
+      series_more_than_one_accepted: คุณสามารถเข้าร่วมการแข่งขันซีรีส์ได้ครั้งละหนึ่งรายการเท่านั้น
+      #original_hash: 13bfcd6
+      can_only_register_for_qualified_events: คุณไม่สามารถลงทะเบียนประเภทการแข่งขันที่คุณไม่ผ่านการคัดเลือกได้
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2139,6 +2180,10 @@ th:
       payment_requested_on: 'ชำระเงินตามที่ร้องขอ: %{date}'
       #original_hash: f5b1b34
       payment_completed_on: 'การชำระเงินสำเร็จเมื่อวันที่: %{date}'
+      #original_hash: 3141a14
+      series_registrations: การลงทะเบียนการแข่งขันซีรียส์
+      #original_hash: 845bb47
+      series_registrations_hint_html: 'การลงทะเบียนซีรีส์จะแสดงเป็น <i>%{description}</i>'
       #original_hash: b25928c
       total: ทั้งหมด
       #original_hash: df036fe
@@ -2219,6 +2264,8 @@ th:
     will_pay_here: คุณจะจ่ายที่นี่ หลังจากส่งการสมัครไปแล้ว
     #original_hash: b7ef562
     wont_pay_here: กรุณาตรวจสอบรายละเอียดการแข่งขันสำหรับวิธัการขำระ
+    #original_hash: be4b39d
+    not_qualified: ไม่ผ่านการคัดเลือก
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2412,6 +2459,10 @@ th:
       in_progress: >-
         การแข่งขันนี้กำลังดำเนินการอยู่ กลับมาหลังวันที่ %{date}
         เพื่อดูผลการแข่งขัน
+      #original_hash: 8eeeb44
+      in_progress_at_wca_live_html: >-
+        การแข่งขันนี้กำลังแข่งขันอยู่ คุณสามารถตรวจสอบผลการแข่งขันได้<a
+        href='%{link_here}'>ที่นี่</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: การรับสมัครถูกตั้งค่าให้เริ่มน้อยกว่าที่กำหนด 48 ชั่วโมง
       #original_hash: 3322400
@@ -2507,6 +2558,17 @@ th:
       register_link_html: 'สมัครการแข่งขันนี้ %{here}'
       #original_hash: 45834fd
       register_below_html: สมัครการแข่งขันนี้ที่ด้านล่าง
+      #original_hash: c5dfcc7
+      part_of_a_series: การแข่งขันนี้เป็นส่วนหนึ่งของการแข่งขันซีรีส์
+      #original_hash: 171e593
+      part_of_a_series_list: >-
+        การแข่งขันนี้เป็นส่วนหนึ่งของการแข่งขันซีรีส์ %{name} การแข่งขันอื่น ๆ
+        ในซีรีส์นี้คือ:
+      #original_hash: 09fa333
+      series_registration_warning_html: >-
+        คุณสามารถส่งการลงทะเบียนสำหรับการแข่งขันทั้งหมดในซีรีส์
+        แต่สามารถได้รับการยืนยันและยอมรับการลงทะเบียนได้เพียงรายการเดียวเท่านั้น
+        <b>คุณจะได้รับอนุญาตให้แข่งขันในการแข่งขันซีรีส์การแข่งขันเดียวเท่านั้น!</b>
       #original_hash: 196725e
       competitor_limit_is: 'จำกัดจำนวนผู้เข้าแข่งขัน %{competitor_limit} คน'
       #original_hash: 5101f65
@@ -2560,6 +2622,9 @@ th:
         #original_hash: f1e6aef
         restricted: >-
           เฉพาะผู้ที่เดินทางมากับผู้เข้าแข่งขันเท่านั้นจึงจะสามารถรับชมการแข่งขันได้
+      #original_hash: 64e0ddd
+      require_qualification: >-
+        ผู้เข้าแข่งขันสามารถลงทะเบียนประเภทการแข่งขันที่พวกเขาผ่านการคัดเลือกอยู่แล้วเท่านั้น
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         การแข่งขันสิ้นสุดแล้ว คลิก %{link_here}
@@ -2675,6 +2740,10 @@ th:
       past_from: 'อดีตตั้งแต่ปี %{year}'
       #original_hash: 7cff459
       past_all: อดีตทุกปี
+      #original_hash: 819fe62
+      show_cancelled: แสดงการแข่งขันที่ถูกยกเลิก
+      #original_hash: 0eda967
+      show_registration_status: แสดงไอคอนสถานะการลงทะเบียน
       titles:
         #original_hash: 69447c9
         in_progress: การแข่งขันที่กำลังดำเนินอยู่
@@ -2700,6 +2769,8 @@ th:
           in_progress: กำลังดำเนินการ
           #original_hash: 1157462
           posted: ผลการแข่งขันได้ถูกโพสต์แล้ว
+          #original_hash: 89bcc37
+          starts_in: 'เริ่มใน %{days} วัน'
           #original_hash: 97b061a
           announced_on: 'ประกาศเมื่อ %{announcement_date}'
         #original_hash: ccd2db9
@@ -2769,6 +2840,8 @@ th:
         ทางเลือกการติดต่อ หากคุณไม่ใส่ email
         ของผู้จัดการแข่งขันจะถูกแสดงเป็นสาธารณะ %{md}. เช่น: [Text to
         display](mailto:some@email.com)
+      #original_hash: 05c66b5
+      series_save_first_hint: คุณต้องบันทึกการแข่งขันก่อนจึงจะสามารถเพิ่มซีรีส์ใหม่ได้
       #original_hash: c5497bc
       events: ประเภท
       #original_hash: cafc153
@@ -2879,6 +2952,10 @@ th:
       event_change_deadline_with_ots: >-
         วันสุดท้ายของการแก้ไขประเภทการแข่งขันต้องอยู่ในช่วงเวลาการแข่งขัน
         หากคุณรับสมัครการแข่งขันที่การแข่งขัน
+      #original_hash: 5ae2437
+      series_distance_km: 'การแข่งขันอยู่ห่างจาก %{competition} มากเกินไป'
+      #original_hash: 4a5d7c5
+      series_distance_days: 'การแข่งขันถูกกำหนดให้อยู่ห่างจาก %{competition} หลายวันเกินไป'
     new:
       #original_hash: 1208df7
       create_competition: สร้างการแข่งขัน
@@ -3124,6 +3201,11 @@ th:
       group: กลุ่ม
       #original_hash: b7126cd
       scramble: โจทย์
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: เพิ่มลงในซีรีส์
+      #original_hash: be6edcd
+      remove_series: ลบออกจากซีรีส์
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3169,6 +3251,8 @@ th:
     records:
       #original_hash: e51c552
       title: สถิติ
+    #original_hash: e02fccb
+    last_updated_html: 'แก้ไขครั้งล่าสุดเมื่อ: %{timestamp}'
     selector_elements:
       events_selector:
         #original_hash: ad8919a
