@@ -7,18 +7,19 @@ const DONATE_PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=W5JL8
 const DONATE_GUIDESTAR_URL = 'https://www.nfggive.com/guidestar/82-3825954';
 
 /**
- * @param {{ name: string, country_name: string, id: number, [k: *]: * }[]} currentBoardMembers
+ * @param {{
+ *  name: string, country: {name: string, [k: *]: *}, id: number, [k: *]: *
+ * }[]} currentBoardMembers
  * @returns {JSX.Element}
  * @constructor
  */
 function About({ currentBoardMembers }) {
   return (
-    <React.StrictMode>
+    <>
       <div className="jumbotron">
         <p className="lead">
           {I18n.t('about.donation_banner.content')}
         </p>
-        <hr className="my-4" />
         <Button primary size="big" href={DONATE_GUIDESTAR_URL}>
           <Icon name="credit card" />
           {I18n.t('about.donation_banner.donate_credit')}
@@ -101,7 +102,7 @@ function About({ currentBoardMembers }) {
             {' '}
             -
             {' '}
-            {member.country_name}
+            {member.country.name}
           </List.Item>
         ))}
       </List>
@@ -165,7 +166,7 @@ function About({ currentBoardMembers }) {
         {I18n.t('about.other_help_title')}
       </h2>
       <I18nHTMLTranslate i18nKey="about.other_help_content_html" />
-    </React.StrictMode>
+    </>
   );
 }
 
