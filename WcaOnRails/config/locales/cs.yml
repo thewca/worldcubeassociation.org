@@ -491,6 +491,8 @@ cs:
         information: Informace
         #original_hash: 87b7d5f
         use_wca_registration: Pro registraci chci použít webové stránky WCA
+        #original_hash: ebe8c47
+        use_wca_live_for_scoretaking: Chci použít WCA Live pro zapisování výsledků
         #original_hash: 8020e88
         external_registration_page: Registrační stránka
         #original_hash: 9bb1965
@@ -557,9 +559,20 @@ cs:
         event_restrictions_reason: Důvod a detaily pro omezení eventů
         #original_hash: 3c24bd2
         main_event_id: Hlavní event
+        #original_hash: a541bfa
+        allow_registration_without_qualification: Eventy s kvalifikací
       championship:
         #original_hash: 4baf44b
         championship_type: Typ šampionátu
+      competition_series:
+        #original_hash: 89f89c0
+        wcif_id: ID
+        #original_hash: 709a232
+        name: Jméno
+        #original_hash: 8a6bee1
+        short_name: Název série
+        #original_hash: af3d38e
+        competition_ids: Všechny soutěže
       registration:
         #original_hash: 3c23a67
         guests: Hosté
@@ -925,6 +938,8 @@ cs:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: da39a3e
+        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Doporučujeme stanovit limit pro soutěžící, ačkoliv to není dle
@@ -941,8 +956,6 @@ cs:
           vyplňte toto pole v angličtině!
         #original_hash: da39a3e
         venueAddress: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Prosíme udejte zde jakékoli speciální požadavky pro registraci, které
@@ -1008,6 +1021,28 @@ cs:
           Prosíme, vyplňte toto v angličtině!
         #original_hash: 1067798
         main_event_id: Vítěz tohoto eventu bude vítězem celé soutěže.
+        #original_hash: da39a3e
+        allow_registration_without_qualification: ''
+        championships:
+          #original_hash: da39a3e
+          championship_type: ''
+        competition_series:
+          #original_hash: da39a3e
+          wcif_id: ''
+          #original_hash: 77811b5
+          name: >-
+            Celé jméno série soutěží včetně roku na konci (např. Southern
+            Australia 2022). Slova začínejte velkými písmeny. Platí stejná
+            pravidla jako pro názvy jednotlivých soutěží.
+          #original_hash: 778c20c
+          short_name: >-
+            Krátké jméno pro zobrazení. Platí stejná pravidla jako pro jména
+            jednotlivých soutěží.
+          #original_hash: 3e27501
+          competition_ids: >-
+            <b>Toto pole nelze upravovat!</b> <br/>Pro přidání jednotlivých
+            soutěží, musíte na individuální stránku „Upravit” soutěží, které
+            chcete přidat.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1231,6 +1266,15 @@ cs:
           'true': Registrace na místě budou akceptovány
           #original_hash: 0f236df
           'false': Registrace na místě NEBUDOU akceptovány
+        allow_registration_without_qualification:
+          #original_hash: 9697d98
+          'true': >-
+            Soutěžícím bude dovoleno zaregistrovat se na eventy, na které nejsou
+            kvalifikovaní (odeberu je později)
+          #original_hash: 6509041
+          'false': >-
+            Soutěžící musí být kvalifikováni, aby se mohli zaregistrovat na
+            event
         allow_registration_edits:
           #original_hash: 52a2f4a
           'true': >-
@@ -2056,8 +2100,6 @@ cs:
       need_dob: Potřebuje datum narození
       #original_hash: d84a54f
       need_country: Potřebuje zemi
-      #original_hash: cec28a0
-      comp_not_found: Soutěž nebyla nalezena
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Registrace nemůže být zároveň smazána a přijata
       #original_hash: a38d024
@@ -2069,6 +2111,10 @@ cs:
         target='_blank'>WDC</a>.
       #original_hash: 8d07e7f
       undelete_banned: je zatracený soutěžící a nemůže být schválen/vrácen na waiting list.
+      #original_hash: 3de7c86
+      series_more_than_one_accepted: Můžete být přijati jen na jednu soutěž ze série.
+      #original_hash: 13bfcd6
+      can_only_register_for_qualified_events: 'Nemůžete se zaregistrovat na eventy, na které nejste kvalifikováni'
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2230,6 +2276,10 @@ cs:
       payment_requested_on: 'Platba vyžádána ze dne: %{date}'
       #original_hash: f5b1b34
       payment_completed_on: 'Platba dokončena: %{date}'
+      #original_hash: 3141a14
+      series_registrations: Registrace série
+      #original_hash: 845bb47
+      series_registrations_hint_html: 'Nápověda: Registrace série jsou zobrazovány jako <i>%{description}</i>'
       #original_hash: b25928c
       total: Celkem
       #original_hash: df036fe
@@ -2318,6 +2368,8 @@ cs:
     will_pay_here: Zaplatíte je zde po podání vaší registrace
     #original_hash: b7ef562
     wont_pay_here: 'Prosíme, podívejte se na informace o soutěži pro pokyny k platbě'
+    #original_hash: be4b39d
+    not_qualified: Nesplňuje podmínky pro kvalifikaci
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2521,6 +2573,10 @@ cs:
       no_main_event_results: 'Nejsou žádné výsledky pro hlavní event (%{event_name}).'
       #original_hash: a0168ee
       in_progress: 'Tato soutěž právě probíhá. Podívejte se po %{date} na výsledky!'
+      #original_hash: 8eeeb44
+      in_progress_at_wca_live_html: >-
+        Tato soutěž právě probíhá. Živé výsledky jsou k dispozici <a
+        href='%{link_here}'>zde</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: Registrace začne za méně než 48 hodin.
       #original_hash: 3322400
@@ -2621,6 +2677,15 @@ cs:
       register_link_html: 'Zaregistrujte se %{here} na tuto soutěž.'
       #original_hash: 45834fd
       register_below_html: Níže se zaregistrujte na tuto soutěž.
+      #original_hash: c5dfcc7
+      part_of_a_series: Tato soutěž je součástí série soutěží.
+      #original_hash: 171e593
+      part_of_a_series_list: 'Tato soutěž je součástí série %{name}. Další soutěže v této sérii jsou:'
+      #original_hash: 09fa333
+      series_registration_warning_html: >-
+        Poznámka: Můžete se zaregistrovat na všechny soutěže série, ale jen
+        jedna z těchto registrací může být potvrzena a přijata. <b>Budete moci
+        soutěžit jen v jedné soutěži ze série!</b>
       #original_hash: 196725e
       competitor_limit_is: 'Limit pro soutěžící je %{competitor_limit} soutěžících.'
       #original_hash: 5101f65
@@ -2673,6 +2738,10 @@ cs:
         anyone: Jakýkoliv divák se smí účastnit zdarma.
         #original_hash: f1e6aef
         restricted: Diváci se smí účastnit jen jako doprovod soutěžících.
+      #original_hash: 64e0ddd
+      require_qualification: >-
+        Soutěžící se mohou zaregistrovat jen na eventy, pro které splňují
+        kvalifikaci
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Tato soutěž skončila, klikněte %{link_here}, aby se zobrazily požadavky
@@ -2788,6 +2857,10 @@ cs:
       past_from: 'Uplynulé od %{year}'
       #original_hash: 7cff459
       past_all: Uplynulé ze všech roků
+      #original_hash: 819fe62
+      show_cancelled: Zobrazit zrušené soutěže
+      #original_hash: 0eda967
+      show_registration_status: Ikona pro zobrazení stavu registrace
       titles:
         #original_hash: 69447c9
         in_progress: Probíhající soutěže
@@ -2813,6 +2886,8 @@ cs:
           in_progress: Právě probíhá!
           #original_hash: 1157462
           posted: Výsledky jsou zveřejněny!
+          #original_hash: 89bcc37
+          starts_in: 'Začíná za %{days}'
           #original_hash: 97b061a
           announced_on: 'Oznámeno  %{announcement_date}'
         #original_hash: ccd2db9
@@ -2884,6 +2959,8 @@ cs:
         Dobrovolné kontaktní informace. Pokud to nevyplníte, zprávu budou
         odeslány přes kontaktní formulář bez odhalení emailů organizátorů.
         %{md}. Například: [Text k zobrazení](mailto:some@email.com)
+      #original_hash: 05c66b5
+      series_save_first_hint: 'Musíte nejprve uložit soutěž, než přidáte novou sérii.'
       #original_hash: c5497bc
       events: Eventy
       #original_hash: cafc153
@@ -2902,7 +2979,7 @@ cs:
       #original_hash: 1039850
       pending_confirmation_html: >-
         Vyplňte všechna pole. Až budete připraveni na potvrzení %{contact},
-        nechte delegáta kliknout potvrdit pro schválení této soutěže.
+        nechte delegáta soutěž potvrdit, aby mohla být schválena.
       #original_hash: 8966fd0
       submit_create_value: Vytvořit soutěž
       #original_hash: 40b0dfd
@@ -2993,6 +3070,10 @@ cs:
       event_change_deadline_with_ots: >-
         Uzávěrka na aktualizaci eventů musí být během soutěže, pokud jsou
         přijímány registrace na místě.
+      #original_hash: 5ae2437
+      series_distance_km: 'Soutěž je příliš vzdálená od %{competition}.'
+      #original_hash: 4a5d7c5
+      series_distance_days: 'Soutěž je příliš mnoho dní od %{competition}.'
     new:
       #original_hash: 1208df7
       create_competition: Vytvořit soutěž
@@ -3244,6 +3325,11 @@ cs:
       group: Skupina
       #original_hash: b7126cd
       scramble: Scramble
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: Přidat do série
+      #original_hash: be6edcd
+      remove_series: Odebrat ze série
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3291,6 +3377,8 @@ cs:
     records:
       #original_hash: e51c552
       title: Rekordy
+    #original_hash: e02fccb
+    last_updated_html: 'Naposledy upraveno: %{timestamp}'
     selector_elements:
       events_selector:
         #original_hash: ad8919a

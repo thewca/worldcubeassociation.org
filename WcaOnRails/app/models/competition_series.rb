@@ -40,13 +40,20 @@ class CompetitionSeries < ApplicationRecord
     end
   end
 
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["name", "short_name"],
+    include: ["competitions"],
+  }.freeze
+
   def serializable_hash(options = nil)
-    {
-      id: wcif_id,
-      name: name,
-      short_name: short_name,
-      competitions: competitions.map(&:id),
-    }
+    options = DEFAULT_SERIALIZE_OPTIONS.merge(options || {})
+    include_competitions = options[:include]&.delete("competitions")
+    json = super(options)
+    json.merge!(id: wcif_id)
+    if include_competitions
+      json[:competitions] = competitions.ids
+    end
+    json
   end
 
   def to_wcif

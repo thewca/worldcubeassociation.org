@@ -66,7 +66,7 @@ function PostsList({
               {' '}
               on
               {' '}
-              {formattedTextForDate(post.createdAt, 'en')}
+              {formattedTextForDate(post.created_at, 'en')}
             </Card.Meta>
             <Card.Description dangerouslySetInnerHTML={{ __html: post.teaser }} />
           </Card.Content>

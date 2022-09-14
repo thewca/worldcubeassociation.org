@@ -48,17 +48,21 @@ class Post < ApplicationRecord
     posts.order(created_at: :desc)
   end
 
+  def url
+    Rails.application.routes.url_helpers.post_path(slug)
+  end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["id", "slug", "title", "sticky", "created_at"],
+    methods: ["url"],
+    include: ["author"],
+  }.freeze
+
   def serializable_hash(options = nil)
-    json = {
+    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+    json.merge!(
       class: self.class.to_s.downcase,
-      id: id,
-      slug: slug,
-      url: Rails.application.routes.url_helpers.post_path(slug),
-      title: title,
-      author: author,
-      sticky: sticky?,
-      createdAt: created_at.iso8601,
-    }
+    )
     if options[:teaser_only]
       json[:teaser] = md(body_teaser)
     else

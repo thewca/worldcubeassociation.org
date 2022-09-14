@@ -71,16 +71,19 @@ class Event < ApplicationRecord
     ['333', '222', '444', '333oh', 'clock', 'mega', 'pyram', 'skewb', 'sq1'].include?(self.id)
   end
 
+  alias_method :can_change_time_limit, :can_change_time_limit?
+  alias_method :can_have_cutoff, :can_have_cutoff?
+  alias_method :is_timed_event, :timed_event?
+  alias_method :is_fewest_moves, :fewest_moves?
+  alias_method :is_multiple_blindfolded, :multiple_blindfolded?
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["id"],
+    methods: ["name", "can_change_time_limit", "can_have_cutoff", "is_timed_event",
+              "is_fewest_moves", "is_multiple_blindfolded", "format_ids"],
+  }.freeze
+
   def serializable_hash(options = nil)
-    {
-      id: self.id,
-      name: self.name,
-      format_ids: self.formats.map(&:id),
-      can_change_time_limit: self.can_change_time_limit?,
-      can_have_cutoff: self.can_have_cutoff?,
-      is_timed_event: self.timed_event?,
-      is_fewest_moves: self.fewest_moves?,
-      is_multiple_blindfolded: self.multiple_blindfolded?,
-    }
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end

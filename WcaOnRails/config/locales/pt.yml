@@ -486,6 +486,8 @@ pt:
         information: Informação
         #original_hash: 87b7d5f
         use_wca_registration: Gostaria de usar o site da WCA para inscrições
+        #original_hash: ebe8c47
+        use_wca_live_for_scoretaking: Vou usar WCA Live para registo de resultados
         #original_hash: 8020e88
         external_registration_page: Página de Registo
         #original_hash: 9bb1965
@@ -556,9 +558,20 @@ pt:
         event_restrictions_reason: Razão e detalhe para restrições de eventos
         #original_hash: 3c24bd2
         main_event_id: Evento principal
+        #original_hash: a541bfa
+        allow_registration_without_qualification: Eventos com Qualificação
       championship:
         #original_hash: 4baf44b
         championship_type: Tipo de Campeonato
+      competition_series:
+        #original_hash: 89f89c0
+        wcif_id: ID
+        #original_hash: 709a232
+        name: Nome
+        #original_hash: 8a6bee1
+        short_name: Nome curto da Série
+        #original_hash: af3d38e
+        competition_ids: Todas as competições
       registration:
         #original_hash: 3c23a67
         guests: Convidados
@@ -925,6 +938,8 @@ pt:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: da39a3e
+        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Apesar de não ser obrigatório pelos Regulamentos indicar um número
@@ -941,8 +956,6 @@ pt:
           Inglês!
         #original_hash: da39a3e
         venueAddress: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Por favor indique aqui quaisquer outros requerimentos de registo não
@@ -1011,6 +1024,28 @@ pt:
           eventos. Por favor preencha em Inglês!
         #original_hash: 1067798
         main_event_id: O vencedor deste evento será o vencedor da competição.
+        #original_hash: da39a3e
+        allow_registration_without_qualification: ''
+        championships:
+          #original_hash: da39a3e
+          championship_type: ''
+        competition_series:
+          #original_hash: da39a3e
+          wcif_id: ''
+          #original_hash: 77811b5
+          name: >-
+            O nome completo da Série de Competições incluindo o ano no fim (ex.
+            Austrália do Sul 2022). Capitalize as primeiras letras das palavras.
+            Aplicam-se as mesmas regras de nomes de competições individuais.
+          #original_hash: 778c20c
+          short_name: >-
+            Um nome curto para apresentar. Aplicam-se as mesmas regras que para
+            uma competição individual.
+          #original_hash: 3e27501
+          competition_ids: >-
+            <b>Este campo não pode ser editado!</b><br/>Para adicionar
+            competições a esta Série, tem que 'Editar' as páginas individuais
+            das competições que quer adicionar.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1237,6 +1272,15 @@ pt:
           'true': Registos no local serão aceites
           #original_hash: 0f236df
           'false': Registos no local NÃO serão aceites
+        allow_registration_without_qualification:
+          #original_hash: 9697d98
+          'true': >-
+            Será permitido o registo de competidores em eventos para os quais
+            não estão qualificados (Eu removo-os mais tarde)
+          #original_hash: 6509041
+          'false': >-
+            Competidores TÊM que estar qualificados para se registarem para um
+            evento
         allow_registration_edits:
           #original_hash: 52a2f4a
           'true': >-
@@ -2085,8 +2129,6 @@ pt:
       need_dob: Necessita ter uma data de nascimento
       #original_hash: d84a54f
       need_country: Necessita ter um país
-      #original_hash: cec28a0
-      comp_not_found: Competição não encontrada
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Uma inscrição não pode estar aceite e excluída ao mesmo tempo.
       #original_hash: a38d024
@@ -2098,6 +2140,10 @@ pt:
         target='_blank'>WDC</a>.
       #original_hash: 8d07e7f
       undelete_banned: é um competidor banido e não pode ser recuperado
+      #original_hash: 3de7c86
+      series_more_than_one_accepted: Só pode ser aceite para uma das competições de uma série de competições.
+      #original_hash: 13bfcd6
+      can_only_register_for_qualified_events: Não se pode registar em eventos para os quais não está qualificado.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2253,6 +2299,12 @@ pt:
       payment_requested_on: 'Pagamento pedido em: %{date}'
       #original_hash: f5b1b34
       payment_completed_on: 'Pagamento completo a: %{date}'
+      #original_hash: 3141a14
+      series_registrations: Registos da Série
+      #original_hash: 845bb47
+      series_registrations_hint_html: >-
+        Dica: Registos da Série estão a ser apresentados como
+        <i>%{description}</i>
       #original_hash: b25928c
       total: Total
       #original_hash: df036fe
@@ -2342,6 +2394,8 @@ pt:
     wont_pay_here: >-
       Por favor verifique a informação da competição para instruções de como
       pagar
+    #original_hash: be4b39d
+    not_qualified: Não qualificado
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2555,6 +2609,10 @@ pt:
       in_progress: >-
         Esta competição está em andamento. Volte após %{date} para ver os
         resultados!
+      #original_hash: 8eeeb44
+      in_progress_at_wca_live_html: >-
+        Esta competição está em andamento. Pode consultar resultados em direto
+        <a href='%{link_here}'>aqui</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: Registo está definido começar antes das necessárias 48 horas.
       #original_hash: 3322400
@@ -2653,6 +2711,17 @@ pt:
       register_link_html: 'Registe-se para esta competição %{here}.'
       #original_hash: 45834fd
       register_below_html: Registe-se para esta competição abaixo.
+      #original_hash: c5dfcc7
+      part_of_a_series: Esta competição é parte de uma Série de Competições.
+      #original_hash: 171e593
+      part_of_a_series_list: >-
+        Esta competição faz parte da Série de Competições de nome %{name}.
+        Outras competições desta Série são:
+      #original_hash: 09fa333
+      series_registration_warning_html: >-
+        Nota: Pode submeter um registo para todas as competições de uma Série,
+        mas apenas um desses registos poderá ser confirmado e aceite. <b>Só
+        poderá competir em uma das competições da Série!</b>
       #original_hash: 196725e
       competitor_limit_is: 'Existe um limite de %{competitor_limit} competidores.'
       #original_hash: 5101f65
@@ -2706,6 +2775,10 @@ pt:
         anyone: Qualquer espectador pode comparecer gratuitamente.
         #original_hash: f1e6aef
         restricted: Espectadores só são permitidos como companhia para competidores.
+      #original_hash: 64e0ddd
+      require_qualification: >-
+        Competidores apenas se podem registar em eventos para os quais se
+        encontram qualificados.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         A competição terminou, clique %{link_here} para mostrar os requisitos de
@@ -2821,6 +2894,10 @@ pt:
       past_from: 'Passadas - %{year}'
       #original_hash: 7cff459
       past_all: Passadas - todos os anos
+      #original_hash: 819fe62
+      show_cancelled: Mostrar competições canceladas
+      #original_hash: 0eda967
+      show_registration_status: Mostrar ícone de estado de registos
       titles:
         #original_hash: 69447c9
         in_progress: Competições em andamento
@@ -2846,6 +2923,8 @@ pt:
           in_progress: Em andamento!
           #original_hash: 1157462
           posted: Resultados publicados!
+          #original_hash: 89bcc37
+          starts_in: 'Começa em %{days}'
           #original_hash: 97b061a
           announced_on: 'Anunciada a %{announcement_date}'
         #original_hash: ccd2db9
@@ -2918,6 +2997,10 @@ pt:
         de contacto serão submetidas através de um formulário sem revelar o
         email dos organizadores. %{md}. Exemplo: [Texto
         mostrado](mailto:alguem@email.com)
+      #original_hash: 05c66b5
+      series_save_first_hint: >-
+        Nota: Tem que guardar a competição primeiro antes de adicionar uma nova
+        Série.
       #original_hash: c5497bc
       events: Eventos
       #original_hash: cafc153
@@ -3036,6 +3119,12 @@ pt:
       event_change_deadline_with_ots: >-
         Prazo limite para atualizar eventos tem que ser durante a competição se
         forem aceites registos no local da competição.
+      #original_hash: 5ae2437
+      series_distance_km: 'O local da competição é demasiado longe de %{competition}.'
+      #original_hash: 4a5d7c5
+      series_distance_days: >-
+        A competição está marcada a demasiados dias de distância de
+        %{competition}.
     new:
       #original_hash: 1208df7
       create_competition: Criar competição
@@ -3073,9 +3162,9 @@ pt:
       show: Mostrar
     adjacent_competitions:
       #original_hash: e3528ec
-      label: 'Competições próximas (num intervalo de %{days} dias e %{kms} km)'
+      label: 'Competições próximas (a menos de %{days} dias e %{kms} km)'
       #original_hash: feefb46
-      no_comp_nearby: Nenhuma competição próxima!
+      no_comp_nearby: Não há competições próximas!
       #original_hash: 7e76950
       no_date_yet: Ainda não definiu uma data para esta competição.
       #original_hash: 82a95d2
@@ -3287,6 +3376,11 @@ pt:
       group: Grupo
       #original_hash: b7126cd
       scramble: Embaralhamento
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: Adicionar a Série
+      #original_hash: be6edcd
+      remove_series: Remover de Série
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3336,6 +3430,8 @@ pt:
     records:
       #original_hash: e51c552
       title: Recordes
+    #original_hash: e02fccb
+    last_updated_html: 'Última atualização: %{timestamp}'
     selector_elements:
       events_selector:
         #original_hash: ad8919a

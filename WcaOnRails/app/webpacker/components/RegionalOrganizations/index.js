@@ -23,8 +23,8 @@ function ROOverview({
         {orgs.map((org) => (
           <div key={org.name} className="organization-box">
             <a target="_blank" rel="noreferrer" className="hide-new-window-icon" href={org.website}>
-              <img src={org.logo} alt="" />
-              <div className={`organization-info${org.logo ? ' hide-until-hover' : ''}`}>
+              <img src={org.logo_url} alt="" />
+              <div className={`organization-info${org.logo_url ? ' hide-until-hover' : ''}`}>
                 <div className="country">
                   {org.country}
                 </div>
