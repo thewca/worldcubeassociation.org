@@ -87,6 +87,7 @@ module WcaOnRails
     }
 
     config.action_view.preload_links_header = false
+    config.active_storage.variant_processor = :mini_magick
 
     # Activate ActiveRecord attribute encryption for use with the Devise 2FA gem
     config.active_record.encryption.primary_key = EnvVars.ACTIVERECORD_PRIMARY_KEY

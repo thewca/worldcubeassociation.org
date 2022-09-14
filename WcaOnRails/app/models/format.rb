@@ -27,17 +27,13 @@ class Format < ApplicationRecord
     }[self.id]
   end
 
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["id", "sort_by", "sort_by_second", "expected_solve_count",
+           "trim_fastest_n", "trim_slowest_n"],
+    methods: ["name", "short_name", "allowed_first_phase_formats"],
+  }.freeze
+
   def serializable_hash(options = nil)
-    {
-      id: self.id,
-      name: self.name,
-      short_name: self.short_name,
-      sort_by: self.sort_by,
-      sort_by_second: self.sort_by_second,
-      expected_solve_count: self.expected_solve_count,
-      trim_fastest_n: self.trim_fastest_n,
-      trim_slowest_n: self.trim_slowest_n,
-      allowed_first_phase_formats: self.allowed_first_phase_formats,
-    }
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end
