@@ -77,11 +77,11 @@ namespace :db do
             system("unzip #{zip_filename}") || raise("Error while running `unzip`")
           end
 
-          config = ActiveRecord::Base.connection_config
-          LogTask.log_task "Clobbering contents of '#{config[:database]}' with #{dump_filename}" do
-            DatabaseDumper.mysql("DROP DATABASE IF EXISTS #{config[:database]}")
-            DatabaseDumper.mysql("CREATE DATABASE #{config[:database]}")
-            DatabaseDumper.mysql("SOURCE #{dump_filename}", config[:database])
+          config = ActiveRecord::Base.connection_db_config
+          LogTask.log_task "Clobbering contents of '#{config.database}' with #{dump_filename}" do
+            DatabaseDumper.mysql("DROP DATABASE IF EXISTS #{config.database}")
+            DatabaseDumper.mysql("CREATE DATABASE #{config.database}")
+            DatabaseDumper.mysql("SOURCE #{dump_filename}", config.database)
           end
 
           default_password = 'wca'
