@@ -495,6 +495,7 @@ module DatabaseDumper
           wdc_incidents
           wrc_primary_user_id
           wrc_secondary_user_id
+          reminder_sent_at
         ),
       ),
     }.freeze,
