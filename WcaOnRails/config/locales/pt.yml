@@ -3432,6 +3432,15 @@ pt:
       title: Recordes
     #original_hash: e02fccb
     last_updated_html: 'Última atualização: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      Por favor note que alguns filtros (como anos anteriores) estão
+      temporariamente desativados. Se tem experiência em otimizações de SQL,
+      entre em contacto com o WST!
+    #original_hash: e3710ed
+    tooltip_no_years: A nossa base de dados é demasiado grande para processar dados históricos
+    #original_hash: 357094b
+    tooltip_no_quantities: A nossa base de dados é demasiado grande para processar rankings longos
     selector_elements:
       events_selector:
         #original_hash: ad8919a
