@@ -31,7 +31,7 @@ class ResultsController < ApplicationController
     @is_results = splitted_show_param[1] == "results"
     limit_condition = "LIMIT #{@show}"
 
-    cache_key = "rankings-#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
+    @cache_params = ['rankings', params[:event_id], params[:region], params[:years], params[:show], params[:gender], params[:type]]
 
     if @is_persons
       @query = <<-SQL
@@ -131,11 +131,6 @@ class ResultsController < ApplicationController
       flash[:danger] = t(".unknown_show")
       redirect_to rankings_path
     end
-
-    cached_rows = get_or_create_cached_rows(cache_key, @query)
-
-    @rows = cached_rows.parsed_payload
-    @timestamp = cached_rows.updated_at
   end
 
   def records
@@ -158,7 +153,7 @@ class ResultsController < ApplicationController
 
     shared_constants_and_conditions
 
-    cache_key = "records-#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}"
+    @cache_params = ['records', params[:event_id], params[:region], params[:years], params[:show], params[:gender]]
 
     if @is_histories
       if @is_history
@@ -190,12 +185,12 @@ class ResultsController < ApplicationController
           value1, value2, value3, value4, value5
         FROM
           (SELECT Results.*, 'single' type, best    value, regionalSingleRecord  recordName FROM Results WHERE regionalSingleRecord<>'' UNION
-            SELECT Results.*, 'average' type, average value, regionalAverageRecord recordName FROM Results WHERE regionalAverageRecord<>'') result,
+            SELECT Results.*, 'average' type, average value, regionalAverageRecord recordName FROM Results WHERE regionalAverageRecord<>'') result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1," : ","}
           Events event,
           RoundTypes roundType,
           Competitions competition,
           Countries country
-          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
         WHERE event.id = eventId
           AND event.`rank` < 1000
           AND roundType.id = roundTypeId
@@ -219,11 +214,6 @@ class ResultsController < ApplicationController
           `rank`, type DESC, year, month, day, roundTypeId, personName
       SQL
     end
-
-    cached_rows = get_or_create_cached_rows(cache_key, @query)
-
-    @rows = cached_rows.parsed_payload
-    @timestamp = cached_rows.updated_at
   end
 
   private def current_records_query(value, type)
@@ -334,13 +324,6 @@ class ResultsController < ApplicationController
     # We are not supporting the all option anymore!
     if params[:show]&.include?("all")
       params[:show] = nil
-    end
-  end
-
-  private def get_or_create_cached_rows(cache_key, query)
-    CachedResult.find_or_create_by!(key_params: cache_key) do |cached_result|
-      db_rows = ActiveRecord::Base.connection.exec_query(query)
-      cached_result.payload = db_rows.to_json
     end
   end
 end

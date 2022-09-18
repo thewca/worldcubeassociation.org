@@ -1750,6 +1750,9 @@ en:
     records:
       title: "Records"
     last_updated_html: "Last updated: %{timestamp}"
+    heading_disabled_functions: "Please note that some filters (such as past years) are temporarily disabled. If you have experience in SQL optimisations, please contact the WST!"
+    tooltip_no_years: "Our database is too large to compute historical data"
+    tooltip_no_quantities: "Our database is too large to compute long rankings"
     selector_elements:
       events_selector:
         event: "Event"
