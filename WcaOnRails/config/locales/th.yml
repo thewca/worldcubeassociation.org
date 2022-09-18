@@ -2600,7 +2600,7 @@ th:
       #original_hash: c58abdf
       event_change_deadline_edits_allowed_html: >-
         หากคุณเป็นผู้เข้าแข่งขันที่สมัครการแข่งขันแล้ว
-        คูณสามารถแก้ไขประเภทการแข่งกันได้จนถึง %{event_change_deadline} ได้ที่
+        คุณสามารถแก้ไขประเภทการแข่งกันได้จนถึง %{event_change_deadline} ได้ที่
         %{register}
       #original_hash: eff3594
       event_change_deadline_default_html: >-
@@ -3253,6 +3253,14 @@ th:
       title: สถิติ
     #original_hash: e02fccb
     last_updated_html: 'แก้ไขครั้งล่าสุดเมื่อ: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      โปรดทราบว่าตัวกรองบางตัว (เช่น ปีที่ผ่านมา) ถูกปิดใช้งานชั่วคราว
+      หากคุณมีประสบการณ์ในการเพิ่มประสิทธิภาพ SQL โปรดติดต่อ WST!
+    #original_hash: e3710ed
+    tooltip_no_years: ฐานข้อมูลของเราใหญ่เกินกว่าจะคำนวณข้อมูลย้อนหลังได้
+    #original_hash: 357094b
+    tooltip_no_quantities: ฐานข้อมูลของเราใหญ่เกินกว่าจะคำนวณอันดับที่ยาวได้
     selector_elements:
       events_selector:
         #original_hash: ad8919a

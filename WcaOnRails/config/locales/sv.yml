@@ -486,6 +486,8 @@ sv:
         information: Information
         #original_hash: 87b7d5f
         use_wca_registration: 'Jag vill använda WCA:s hemsida för anmälan'
+        #original_hash: ebe8c47
+        use_wca_live_for_scoretaking: Jag kommer använda WCA Live för resultat
         #original_hash: 8020e88
         external_registration_page: Anmälningssida
         #original_hash: 9bb1965
@@ -552,9 +554,20 @@ sv:
         event_restrictions_reason: Orsak och detaljer för grenbegränsningar
         #original_hash: 3c24bd2
         main_event_id: Huvudgren
+        #original_hash: a541bfa
+        allow_registration_without_qualification: Grenar med kvalgränser
       championship:
         #original_hash: 4baf44b
-        championship_type: Mästerskapstyp
+        championship_type: Typ av mästerskap
+      competition_series:
+        #original_hash: 89f89c0
+        wcif_id: ID
+        #original_hash: 709a232
+        name: Namn
+        #original_hash: 8a6bee1
+        short_name: Smeknamn för tävlingsserien
+        #original_hash: af3d38e
+        competition_ids: Alla tävlingar
       registration:
         #original_hash: 3c23a67
         guests: Gäster
@@ -918,6 +931,8 @@ sv:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: da39a3e
+        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Även om det inte Reglerna kräver att en gräns för antalet tävlande
@@ -934,8 +949,6 @@ sv:
           fyll i detta på engelska!
         #original_hash: da39a3e
         venueAddress: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Ange här eventuella extra anmälningskrav som inte nämns ovan, som till
@@ -1001,6 +1014,28 @@ sv:
           Vänligen fyll i detta på engelska!
         #original_hash: 1067798
         main_event_id: Vinnaren av denna gren kommer att vara vinnaren av tävlingen.
+        #original_hash: da39a3e
+        allow_registration_without_qualification: ''
+        championships:
+          #original_hash: da39a3e
+          championship_type: ''
+        competition_series:
+          #original_hash: da39a3e
+          wcif_id: ''
+          #original_hash: 77811b5
+          name: >-
+            Tävlingsseriens fullständiga namn med året på slutet (t.ex. Southern
+            Australia 2022). Var noga med att använda stor bokstav på korrekt
+            sätt. Samma regler som för namnet på enskilda tävlingar gäller.
+          #original_hash: 778c20c
+          short_name: >-
+            Ett kort namn för visning. Samma regler som för namnet på enskilda
+            tävlingar gäller.
+          #original_hash: 3e27501
+          competition_ids: >-
+            <b>Detta fält kan inte redigeras!</b><br/>För att lägga till
+            tävlingar i denna serie måste du gå till de enskilda
+            "Redigera"-sidorna för de tävlingar som du vill lägga till.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1229,6 +1264,15 @@ sv:
           'true': Anmälningar på plats kommer accepteras
           #original_hash: 0f236df
           'false': Anmälningar på plats kommer INTE accepteras
+        allow_registration_without_qualification:
+          #original_hash: 9697d98
+          'true': >-
+            Tävlande tillåts att anmäla sig till grenar som de inte är
+            kvalificerade för (jag tar bort dem senare).
+          #original_hash: 6509041
+          'false': >-
+            Tävlande MÅSTE vara kvalificerade för att kunna anmäla sig till en
+            gren
         allow_registration_edits:
           #original_hash: 52a2f4a
           'true': >-
@@ -2065,8 +2109,6 @@ sv:
       need_dob: Behöver ett födelsedatum
       #original_hash: d84a54f
       need_country: Behöver ett land
-      #original_hash: cec28a0
-      comp_not_found: Tävlingen hittades inte
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: En anmälan kan inte raderas och godkännas samtidigt.
       #original_hash: a38d024
@@ -2078,6 +2120,10 @@ sv:
         target='_blank'>WDC</a>.
       #original_hash: 8d07e7f
       undelete_banned: är en avstängd tävlande och kan inte återställas
+      #original_hash: 3de7c86
+      series_more_than_one_accepted: Du kan bara vara anmäld till en tävling i tävlingsserien.
+      #original_hash: 13bfcd6
+      can_only_register_for_qualified_events: Du kan inte anmäla dig till grenar du inte kvalificerat dig för.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2232,6 +2278,10 @@ sv:
       payment_requested_on: 'Betalning begärd den: %{date}'
       #original_hash: f5b1b34
       payment_completed_on: 'Betalning slutförd: %{date}'
+      #original_hash: 3141a14
+      series_registrations: Anmälan till tävlingsserie
+      #original_hash: 845bb47
+      series_registrations_hint_html: 'Tips: Vissa anmälningar visas som <i>%{description}</i>'
       #original_hash: b25928c
       total: Totalt
       #original_hash: df036fe
@@ -2317,6 +2367,8 @@ sv:
     will_pay_here: Du betalar här efter att du har skickat in din anmälan
     #original_hash: b7ef562
     wont_pay_here: Se tävlingens information för instruktioner om hur du betalar
+    #original_hash: be4b39d
+    not_qualified: Inte kvalificerad
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2519,6 +2571,10 @@ sv:
       no_main_event_results: 'Det finns inga resultat för huvudgrenen (%{event_name}).'
       #original_hash: a0168ee
       in_progress: 'Tävlingen pågår. Kom tillbaka efter %{date} för att se resultaten!'
+      #original_hash: 8eeeb44
+      in_progress_at_wca_live_html: >-
+        Denna tävling pågår. Du kan se live-resultat <a
+        href='%{link_here}'>här</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: >-
         Anmälan är satt till att börja om mindre än 48 timmar, vilket inte är
@@ -2619,6 +2675,17 @@ sv:
       register_link_html: 'Anmäl dig till den här tävlingen %{here}.'
       #original_hash: 45834fd
       register_below_html: Anmäl dig till den här tävlingen nedan.
+      #original_hash: c5dfcc7
+      part_of_a_series: Denna tävling är del av en tävlingsserie
+      #original_hash: 171e593
+      part_of_a_series_list: >-
+        Denna tävling är en del av tävlingsserien %{name}. Andra tävlingar i
+        denna serie är:
+      #original_hash: 09fa333
+      series_registration_warning_html: >-
+        Obs: Du kan skicka in anmälningar till alla tävlingar i en
+        tävlingsserie, men bara en av anmälningarna kan bekräftas och godkännas.
+        <b>Du kommer bara tillåtas att delta i en tävling i tävlingsserien!<\b>
       #original_hash: 196725e
       competitor_limit_is: 'Det finns en gräns på %{competitor_limit} tävlande.'
       #original_hash: 5101f65
@@ -2669,6 +2736,10 @@ sv:
         anyone: Alla åskådare är välkomna gratis
         #original_hash: f1e6aef
         restricted: Åskådare är endast tillåtna tillsammans med tävlande.
+      #original_hash: 64e0ddd
+      require_qualification: >-
+        Tävlande får endast anmäla sig till grenar som de redan är kvalificerade
+        för.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Tävlingen är över, klicka %{link_here} för att visa anmälningskraven som
@@ -2784,6 +2855,10 @@ sv:
       past_from: 'Tidigare tävlingar från %{year}'
       #original_hash: 7cff459
       past_all: Tidigare tävlingar från alla år
+      #original_hash: 819fe62
+      show_cancelled: Visa inställda tävlingar
+      #original_hash: 0eda967
+      show_registration_status: Visa ikon för anmälningsstatus
       titles:
         #original_hash: 69447c9
         in_progress: Tävlingar som pågår
@@ -2809,6 +2884,8 @@ sv:
           in_progress: Pågår!
           #original_hash: 1157462
           posted: Resultat har publicerats!
+          #original_hash: 89bcc37
+          starts_in: 'Startar om %{days}'
           #original_hash: 97b061a
           announced_on: 'Publicerades den %{announcement_date}'
         #original_hash: ccd2db9
@@ -2881,6 +2958,10 @@ sv:
         kontaktförfrågningar att skickas via ett formulär utan att arrangörernas
         e-postadresser avslöjas. %{md}. Exempel: [Text som ska
         visas](mailto:någon@mejladress.com)
+      #original_hash: 05c66b5
+      series_save_first_hint: >-
+        Obs: Du måste spara tävlingen innan du kan lägga till en ny
+        tävlingsserie.
       #original_hash: c5497bc
       events: Grenar
       #original_hash: cafc153
@@ -2998,6 +3079,10 @@ sv:
       event_change_deadline_with_ots: >-
         Deadline för uppdatering av grenar måste vara under tävlingen om anmälan
         på plats accepteras.
+      #original_hash: 5ae2437
+      series_distance_km: 'Tävlingen är för långt ifrån %{competition}.'
+      #original_hash: 4a5d7c5
+      series_distance_days: 'Tävlingen är för många dagar ifrån %{competition}.'
     new:
       #original_hash: 1208df7
       create_competition: Skapa tävling
@@ -3037,9 +3122,9 @@ sv:
       #original_hash: feefb46
       no_comp_nearby: Inga närliggande tävlingar!
       #original_hash: 7e76950
-      no_date_yet: Du har inte angett ett datum för den här tävlingen än.
+      no_date_yet: Du har inte lagt till ett datum för denna tävling ännu.
       #original_hash: 82a95d2
-      no_location_yet: Du har inte angett en plats för den här tävlingen än.
+      no_location_yet: Du har inte lagt till en plats för denna tävling ännu.
       #original_hash: 709a232
       name: Namn
       #original_hash: adc24b7
@@ -3055,9 +3140,9 @@ sv:
       #original_hash: 405906c
       after: efter
       #original_hash: e1978a9
-      starts_on: börjar
+      starts_on: startar den
       #original_hash: 964aedc
-      ends_on: slutar
+      ends_on: slutar den
       #original_hash: 24d948e
       limit: Gräns
       #original_hash: 855bd26
@@ -3246,6 +3331,11 @@ sv:
       group: Grupp
       #original_hash: b7126cd
       scramble: Blandning
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: Addera till tävlingsserie
+      #original_hash: be6edcd
+      remove_series: Ta bort från tävlingsserie
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3295,6 +3385,17 @@ sv:
     records:
       #original_hash: e51c552
       title: Rekord
+    #original_hash: e02fccb
+    last_updated_html: 'Senast uppdaterad: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      Observera att vissa filter (t.ex. tidigare år) är tillfälligt
+      inaktiverade. Om du har erfarenhet av SQL-optimeringar kan du kontakta
+      WST!
+    #original_hash: e3710ed
+    tooltip_no_years: Vår databas är för stor för att beräkna historiska data.
+    #original_hash: 357094b
+    tooltip_no_quantities: Vår databas är för stor för att beräkna långa rankningslistor.
     selector_elements:
       events_selector:
         #original_hash: ad8919a
