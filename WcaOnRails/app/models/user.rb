@@ -1167,6 +1167,7 @@ class User < ApplicationRecord
     if include_avatar
       json[:avatar] = {
         url: self.avatar.url,
+        pending_url: self.pending_avatar.url,
         thumb_url: self.avatar.url(:thumb),
         is_default: !self.avatar?,
       }
