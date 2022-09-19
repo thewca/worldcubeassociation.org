@@ -15,10 +15,10 @@ class CountryBand < ApplicationRecord
       value: 0.45,
     },
     4 => {
-      value: 0.76,
+      value: 2.28,
     },
     5 => {
-      value: 1.0,
+      value: 3.0,
     },
   }.freeze
 
