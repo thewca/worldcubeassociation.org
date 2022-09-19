@@ -3391,6 +3391,15 @@ eo:
       title: Rekordoj
     #original_hash: e02fccb
     last_updated_html: 'Lasta ĝisdatigo: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      Bonvolu memori, ke iuj filtriloj (kiel pasintaj jaroj) estas provizore
+      malŝaltitaj. Se vi havas sperton pri SQL-optimumigo, bonvolu kontakti la
+      WST!
+    #original_hash: e3710ed
+    tooltip_no_years: Nia datumbazo estas tro granda por komputi historiajn datumojn
+    #original_hash: 357094b
+    tooltip_no_quantities: Nia datumbazo estas tro granda por komputi longajn rangotabelojn
     selector_elements:
       events_selector:
         #original_hash: ad8919a
