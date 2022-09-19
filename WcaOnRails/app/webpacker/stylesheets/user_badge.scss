@@ -1,0 +1,25 @@
+@import "variables";
+
+.user-badge {
+  margin: 4px;
+}
+
+.team .name {
+  padding-left: 1em;
+}
+
+.team .acronym {
+  font-size: 1em;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #555555;
+  padding: 0 6px;
+}
+
+.team-members {
+  display: flex;
+  align-content: flex-start;
+  max-width: 100%;
+  flex-wrap: wrap;
+  margin: 10px 0 30px 0;
+}

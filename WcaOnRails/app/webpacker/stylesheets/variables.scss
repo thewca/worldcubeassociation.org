@@ -1,4 +1,30 @@
 // Ideally these are pulled from variables.scss so they are kept in one place
+// ***** Overriding Bootstrap variables ****
+
+$link-color: #e64503;
+
+// Colors
+$blue: #375e97;
+$brand-primary: $blue;
+$dark-blue: #082c52;
+$bright-blue: #007bff;
+$past-member-color: #fecd55;
+$green: #c4e8b5;
+$dark-green: #245011;
+$dark-red: #701203;
+$orange: #fc4a0a;
+$orange-bg: #ffeca8;
+
+// Colors for the schedule editor
+$selected-activity-border-color: black;
+$activity-bg-color: #337ab7;
+$activity-text-color: #fff;
+
+// Color to highlight table row
+$highlight-row-color: #ffff94;
+
+// Color for result table
 $wr-color: #0366d6;
 $cr-color: #d00404;
 $nr-color:  #28a745;
+$pb-color:  #fc4a0a;
