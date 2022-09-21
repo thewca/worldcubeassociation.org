@@ -1,7 +1,7 @@
 <% provide(:title, @competition.name) %>
 
 <%= render layout: 'results_nav' do %>
-  <% cache @competition.result_cache_key("by_person") do %>
+  <% cache result_cache_key(@competition, "by_person", is_admin: current_user&.can_admin_results? || false) do %>
     <% @competition.person_ids_with_results.each do |personId, results| %>
       <h3>
         <% first_result = results.first %>
