@@ -17,7 +17,24 @@ class IncidentsController < ApplicationController
     else
       @incidents = base_model.resolved
     end
-    @incidents = @incidents.sort_by(&:last_happened_date).reverse
+    respond_to do |format|
+      format.html {}
+      format.json do
+        @incidents = Incident.all
+        # // todo: filter/search?
+        total_entries = @incidents.length
+        @incidents = @incidents
+                     .page(params[:page] || 1)
+                     .per(params[:entries_per_page] || 10)
+        render json: {
+          totalEntries: total_entries,
+          totalPages: @incidents.total_pages,
+          incidents: @incidents.as_json(
+            can_view_delegate_matters: current_user&.can_view_delegate_matters?,
+          ),
+        }
+      end
+    end
   end
 
   def show
