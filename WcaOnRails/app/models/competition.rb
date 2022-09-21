@@ -1303,11 +1303,6 @@ class Competition < ApplicationRecord
     [cityName, country&.name].compact.join(', ')
   end
 
-  def result_cache_key(view)
-    results_updated_at = results.order('updated_at desc').limit(1).pluck(:updated_at).first
-    [id, view, results_updated_at&.iso8601 || "", I18n.locale]
-  end
-
   def events_with_podium_results
     light_results_from_relation(
       results.podium.order(:pos),
