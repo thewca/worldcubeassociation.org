@@ -95,6 +95,21 @@
       <%= paginate @regulations, param_name: :regulations_page, params: { anchor: "regulations-and-guidelines" } %>
     <% end %>
 
+    <% if @incidents.present? %>
+      <h2><%= anchorable t('.incidents') %></h2>
+      <% @incidents.each do |incident| %>
+        <div>
+          <%= link_to incident.url do %>
+            <h4><%= wca_highlight(incident.title, query_parts) %></h4>
+          <% end %>
+          <blockquote>
+            <%= wca_highlight(md(incident.public_summary), query_parts) %>
+          </blockquote>
+        </div>
+      <% end %>
+      <%= paginate @incidents, param_name: :incidents_page, params: { anchor: "competitions" } %>
+    <% end %>
+
     <% if @competitions.empty? %>
       <h2><%= t '.not_found.competitions' %> <%= wca_highlight(@omni_query, @omni_query) %></h2>
     <% end %>
@@ -106,6 +121,9 @@
     <% end %>
     <% if @regulations.empty? %>
       <h2><%= t '.not_found.regulations_and_guidelines' %> <%= wca_highlight(@omni_query, @omni_query) %></h2>
+    <% end %>
+    <% if @incidents.empty? %>
+      <h2><%= t '.not_found.incidents' %> <%= wca_highlight(@omni_query, @omni_query) %></h2>
     <% end %>
   <% end %>
 </div>

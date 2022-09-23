@@ -40,7 +40,7 @@ function NewPersonForm({
   const fetchIds = useCallback((params) => {
     setErrors({});
     fetchJsonOrError(`${adminGenerateIds}?${new URLSearchParams(params)}`)
-      .then((data) => {
+      .then(({ data }) => {
         if (data.semiId !== undefined) {
           setSemiId(data.semiId);
         }
