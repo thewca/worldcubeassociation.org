@@ -157,7 +157,7 @@ ignore:
 
   I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
     only: %w(*.js),
-    patterns: [['I18nHTMLTranslate\s+i18nKey=%{key}', '%{key}', 'tArray(%{key})']]
+    patterns: [['I18nHTMLTranslate\s+i18nKey=%{key}', '%{key}']]
 %>
 # <%#= I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
 #        only: %w(*.html.haml *.html.slim),
