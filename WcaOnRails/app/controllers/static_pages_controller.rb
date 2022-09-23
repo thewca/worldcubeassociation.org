@@ -2,8 +2,6 @@
 
 class StaticPagesController < ApplicationController
   include DocumentsHelper
-  DONATE_PAYPAL_URL="https://www.paypal.com/donate/?hosted_button_id=W5JL8J4S8UTJU"
-  DONATE_GUIDESTAR_URL="https://www.nfggive.com/guidestar/82-3825954"
 
   def home
   end
