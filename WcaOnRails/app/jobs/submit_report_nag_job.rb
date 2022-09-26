@@ -11,11 +11,19 @@ class SubmitReportNagJob < SingletonApplicationJob
     return unless competition.end_date
     return if competition.delegate_report.reminder_sent_at
 
-    deadline = 7.days.since(competition.end_date)
-    1.day.before(deadline).today?
+    # Send a reminder 6 days after the end of the competition
+    6.days.since(competition.end_date).today?
   end
 
   def perform
+    competitions =
+      Competition
+      .visible
+      .not_cancelled
+      .includes(:delegate_report)
+      .where("start_date >= ?", DelegateReport::REPORTS_ENABLED_DATE) # Don't send nag emails for very old competitions without reports.
+      .where(delegate_reports: { posted_at: nil })
+
     competitions.each do |competition|
       if reminder_needed?(competition)
         send_reminder(competition)
@@ -35,14 +43,5 @@ class SubmitReportNagJob < SingletonApplicationJob
   def send_reminder(competition)
     competition.delegate_report.update(reminder_sent_at: Time.now)
     CompetitionsMailer.submit_report_reminder(competition).deliver_now
-  end
-
-  def competitions
-    Competition
-      .visible
-      .not_cancelled
-      .includes(:delegate_report)
-      .where("start_date >= ?", DelegateReport::REPORTS_ENABLED_DATE) # Don't send nag emails for very old competitions without reports.
-      .where(delegate_reports: { posted_at: nil })
   end
 end
