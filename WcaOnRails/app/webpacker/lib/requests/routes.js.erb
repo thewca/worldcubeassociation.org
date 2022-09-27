@@ -11,8 +11,18 @@ export const postsUrl = (page, format = 'json') => {
   return `<%= CGI.unescape(Rails.application.routes.url_helpers.posts_path(format: "${format}")) %>?page=${page}`;
 };
 
-export const incidentsUrl = (entriesPerPage, page, tags = [], searchString = '', format = 'json') => {
-  return `<%= CGI.unescape(Rails.application.routes.url_helpers.incidents_path(format: "${format}")) %>?q=${searchString}&tags=${tags}&entries_per_page=${entriesPerPage}&page=${page}`;
+export const incidentsUrl = (perPage, page, tags = undefined, searchString = undefined, competitions = undefined, format = 'json') => {
+  let baseUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.incidents_path(format: "${format}")) %>?per_page=${perPage}&page=${page}`;
+  if (tags && tags.length > 0) {
+    baseUrl += `&tags=${tags}`;
+  }
+  if (competitions) {
+    baseUrl += `&competitions=${competitions}`;
+  }
+  if (searchString) {
+    baseUrl += `&q=${searchString}`
+  }
+  return baseUrl;
 }
 
 export const newIncidentUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.new_incident_path)%>`;

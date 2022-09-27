@@ -24,6 +24,8 @@ export default function PaginationFooter({
     setActivePage,
   } = pagination;
 
+  // todo: show different bottom when no results
+
   const [topEntryIndex, bottomEntryIndex] = [
     (activePage - 1) * entriesPerPage,
     Math.min(activePage * entriesPerPage, totalEntries) - 1,

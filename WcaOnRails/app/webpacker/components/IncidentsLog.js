@@ -52,7 +52,7 @@ export default function IncidentsLog({
   const [filterTags, setFilterTags] = useState([]);
   const isUsingFilter = filterTags.length > 0;
 
-  const { data, loading, error } = useLoadedData(incidentsUrl(
+  const { data, headers, loading, error } = useLoadedData(incidentsUrl(
     pagination.entriesPerPage,
     pagination.activePage,
     filterTags,
@@ -110,16 +110,19 @@ export default function IncidentsLog({
               />
               {/* if a tag filter is being applied, adding any visible tags
                   would be redundant, so don't bother showing the option */}
+              {/* // todo: nevermind, remove above */}
               <IncidentsLogBody
-                incidents={data.incidents}
+                incidents={data}
                 canViewDelegateMatters={canViewDelegateMatters}
                 addTagToSearch={isUsingFilter ? null : addTagToSearch}
               />
             </Table>
             <PaginationFooter
               pagination={pagination}
-              totalPages={data.totalPages}
-              totalEntries={data.totalEntries}
+              totalPages={
+                Math.ceil(headers.get("total") / headers.get("per-page"))
+              }
+              totalEntries={headers.get("total")}
               allowChangingEntriesPerPage
             />
           </>

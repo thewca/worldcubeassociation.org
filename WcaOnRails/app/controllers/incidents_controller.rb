@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class IncidentsController < ApplicationController
+  include Rails::Pagination
   include TagsHelper
 
   # Incident should have a public summary when resolved, so not everything is
@@ -17,22 +18,18 @@ class IncidentsController < ApplicationController
     else
       @incidents = base_model.resolved
     end
+
     respond_to do |format|
-      format.html {}
+      format.html do
+        @incidents = @incidents.sort_by(&:last_happened_date).reverse
+      end
       format.json do
-        @incidents = Incident.all
-        # // todo: filter/search?
-        total_entries = @incidents.length
-        @incidents = @incidents
-                     .page(params[:page] || 1)
-                     .per(params[:entries_per_page] || 10)
-        render json: {
-          totalEntries: total_entries,
-          totalPages: @incidents.total_pages,
-          incidents: @incidents.as_json(
+        @incidents = @incidents.search(params[:q], params: params)
+        render json: paginate(
+          @incidents.as_json(
             can_view_delegate_matters: current_user&.can_view_delegate_matters?,
-          ),
-        }
+          )
+        )
       end
     end
   end
