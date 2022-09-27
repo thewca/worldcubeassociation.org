@@ -24,8 +24,6 @@ export default function PaginationFooter({
     setActivePage,
   } = pagination;
 
-  // todo: show different bottom when no results
-
   const [topEntryIndex, bottomEntryIndex] = [
     (activePage - 1) * entriesPerPage,
     Math.min(activePage * entriesPerPage, totalEntries) - 1,
@@ -33,51 +31,53 @@ export default function PaginationFooter({
 
   // todo: CSS needs improving; classNames below don't seem to be working
   return (
-    <>
-      {allowChangingEntriesPerPage && (
-        <div className="fixed-table-pagination">
-          <div className="pull-left pagination-detail">
-            <span className="pagination-info">
-              {`Showing ${topEntryIndex + 1} to ${bottomEntryIndex + 1} of ${totalEntries} entries with `}
-            </span>
-            <span className="page-list">
-              <span className="btn-group dropup">
-                <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                  <span className="page-size">{entriesPerPage}</span>
-                  <span className="caret" />
-                </button>
-                <ul className="dropdown-menu" role="menu">
-                  {entriesPerPageOptions.map((entries) => (
-                    <li
-                      key={entries}
-                      role="menuitem"
-                      className={entries === entriesPerPage ? 'active' : ''}
-                      onClick={() => setEntriesPerPage(entries)}
-                    >
-                      {entries}
-                    </li>
-                  ))}
-                </ul>
-              </span>
-              {' '}
-              entries per page
-            </span>
-          </div>
-        </div>
-      )}
+    totalEntries === 0
+      ? <span>No results</span>
+      : <>
+          {allowChangingEntriesPerPage && (
+            <div className="fixed-table-pagination">
+              <div className="pull-left pagination-detail">
+                <span className="pagination-info">
+                  {`Showing ${topEntryIndex + 1} to ${bottomEntryIndex + 1} of ${totalEntries} entries with `}
+                </span>
+                <span className="page-list">
+                  <span className="btn-group dropup">
+                    <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      <span className="page-size">{entriesPerPage}</span>
+                      <span className="caret" />
+                    </button>
+                    <ul className="dropdown-menu" role="menu">
+                      {entriesPerPageOptions.map((entries) => (
+                        <li
+                          key={entries}
+                          role="menuitem"
+                          className={entries === entriesPerPage ? 'active' : ''}
+                          onClick={() => setEntriesPerPage(entries)}
+                        >
+                          {entries}
+                        </li>
+                      ))}
+                    </ul>
+                  </span>
+                  {' '}
+                  entries per page
+                </span>
+              </div>
+            </div>
+          )}
 
-      <Pagination
-        activePage={activePage}
-        onPageChange={(e, { activePage: newActivePage }) => setActivePage(newActivePage)}
-        totalPages={totalPages}
-        boundaryRange={0}
-        siblingRange={2}
-        ellipsisItem={null}
-        firstItem={{ content: <Icon name="angle double left" />, icon: true }}
-        lastItem={{ content: <Icon name="angle double right" />, icon: true }}
-        prevItem={{ content: <Icon name="angle left" />, icon: true }}
-        nextItem={{ content: <Icon name="angle right" />, icon: true }}
-      />
-    </>
+          <Pagination
+            activePage={activePage}
+            onPageChange={(e, { activePage: newActivePage }) => setActivePage(newActivePage)}
+            totalPages={totalPages}
+            boundaryRange={0}
+            siblingRange={2}
+            ellipsisItem={null}
+            firstItem={{ content: <Icon name="angle double left" />, icon: true }}
+            lastItem={{ content: <Icon name="angle double right" />, icon: true }}
+            prevItem={{ content: <Icon name="angle left" />, icon: true }}
+            nextItem={{ content: <Icon name="angle right" />, icon: true }}
+          />
+        </>
   );
 }

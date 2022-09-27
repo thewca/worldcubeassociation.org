@@ -58,6 +58,9 @@ export default function IncidentsLog({
     filterTags,
     searchString,
   ));
+  const totalEntries = parseInt(headers.get("total"))
+  const entriesPerPage = parseInt(headers.get("per-page"))
+  const totalPages = Math.ceil(totalEntries / entriesPerPage)
 
   function addTagToSearch(tag) {
     setFilterTags((tags) => (tags.includes(tag) ? tags : [...tags, tag]));
@@ -119,10 +122,8 @@ export default function IncidentsLog({
             </Table>
             <PaginationFooter
               pagination={pagination}
-              totalPages={
-                Math.ceil(headers.get("total") / headers.get("per-page"))
-              }
-              totalEntries={headers.get("total")}
+              totalPages={totalPages}
+              totalEntries={totalEntries}
               allowChangingEntriesPerPage
             />
           </>
