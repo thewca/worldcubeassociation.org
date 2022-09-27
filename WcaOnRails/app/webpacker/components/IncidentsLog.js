@@ -111,13 +111,10 @@ export default function IncidentsLog({
               <IncidentsLogHead
                 canViewDelegateMatters={canViewDelegateMatters}
               />
-              {/* if a tag filter is being applied, adding any visible tags
-                  would be redundant, so don't bother showing the option */}
-              {/* // todo: nevermind, remove above */}
               <IncidentsLogBody
                 incidents={data}
                 canViewDelegateMatters={canViewDelegateMatters}
-                addTagToSearch={isUsingFilter ? null : addTagToSearch}
+                addTagToSearch={addTagToSearch}
               />
             </Table>
             <PaginationFooter
