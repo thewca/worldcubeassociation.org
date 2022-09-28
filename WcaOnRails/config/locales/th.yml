@@ -492,7 +492,7 @@ th:
         #original_hash: 4a8b6f1
         competitor_limit_reason: เหตุผลของการจำกัดจำนวนผู้เข้าแข่งขัน
         #original_hash: 3c23a67
-        guests_enabled: แขก
+        guests_enabled: ผู้ติดตาม
         #original_hash: 089cbfd
         receive_registration_emails: แจ้งเตือนฉันด้วย email เมื่อมีผู้สมัครการแข่งขัน
         #original_hash: d4aeed9
@@ -559,7 +559,7 @@ th:
         competition_ids: การแข่งขันทั้งหมด
       registration:
         #original_hash: 3c23a67
-        guests: แขก
+        guests: ผู้ติดตาม
         #original_hash: fce06e2
         comments: อธิบายเพิ่มเติม
         #original_hash: dc9d458
@@ -969,7 +969,7 @@ th:
         guests_entry_fee_lowest_denomination: >-
           สำหรับตอนนี้ตัวเลขนี้เป็นข้อมูลเท่านั้น
           ค่าเข้าชมการแข่งขันไม่สามารถจัดการผ่าน website นี้ได้ หากตั้งเป็น 0
-          จะแสดงข้อความที่คุณเลือกเกี่ยวกับนโยบอยของผู้เข้าชมการแข่งขัน
+          จะแสดงข้อความที่คุณเลือกเกี่ยวกับนโยบายของผู้เข้าชมการแข่งขัน
         #original_hash: da39a3e
         free_guest_entry_status: ''
         #original_hash: da39a3e
@@ -1215,9 +1215,9 @@ th:
       competition:
         guests_enabled:
           #original_hash: cb8809d
-          'true': ถามเกี่ยวกับแขก
+          'true': ถามเกี่ยวกับผู้ติดตาม
           #original_hash: f8c2332
-          'false': ไม่ถามเกี่ยวกับแขก
+          'false': ไม่ถามเกี่ยวกับผู้ติดตาม
         competitor_limit_enabled:
           #original_hash: d9c05cc
           'true': ฉันต้องการจำกัดจำนวนผู้เข้าแข่งขัน
@@ -4447,6 +4447,8 @@ th:
       people: ผู้คน
       #original_hash: 6db75ea
       advanced_search: การค้นหาขั้นสูง
+      #original_hash: 5e326b1
+      incidents: Incidents
       #original_hash: a0ca0c3
       posts: โพสต์
       #original_hash: 9d7ea9c
@@ -4462,6 +4464,8 @@ th:
         people: ไม่พบผู้คนสำหรับ
         #original_hash: c6a04aa
         posts: ไม่พบโพสต์สำหรับ
+        #original_hash: 3499e7e
+        incidents: ไม่มี incidents สำหรับ
         #original_hash: 76a6bf1
         regulations_and_guidelines: ไม่พบกติกาและแนวทางสำหรับ
   incidents_log:
@@ -4469,6 +4473,8 @@ th:
     i18n_disclaimer: >-
       โปรดทราบว่าส่วน incident มีเฉพาะภาษาอังกฤษเท่านั้น
       เนื้อหาด้านล่างนี้ไม่ได้มีการแปล
+    #original_hash: 2c23c1a
+    incident: 'Incident:'
   about_regulations:
     #original_hash: 6bce1b5
     title: เกี่ยวกับกติกา
