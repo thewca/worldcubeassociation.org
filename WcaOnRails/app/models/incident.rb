@@ -65,12 +65,12 @@ class Incident < ApplicationRecord
 
   DEFAULT_DELEGATE_MATTERS_SERIALIZE_OPTIONS = {
     only: DEFAULT_PUBLIC_SERIALIZE_OPTIONS[:only] +
-      [:private_description, :digest_worthy, :digest_sent_at],
+          [:private_description, :digest_worthy, :digest_sent_at],
     methods: DEFAULT_PUBLIC_SERIALIZE_OPTIONS[:methods],
   }.freeze
 
   def serializable_hash(options = nil)
-    if (options && options[:can_view_delegate_matters])
+    if options && options[:can_view_delegate_matters]
       options = DEFAULT_DELEGATE_MATTERS_SERIALIZE_OPTIONS.merge(options || {})
     else
       options = DEFAULT_PUBLIC_SERIALIZE_OPTIONS.merge(options || {})
@@ -93,6 +93,6 @@ class Incident < ApplicationRecord
       }
     }
 
-    return json
+    json
   end
 end

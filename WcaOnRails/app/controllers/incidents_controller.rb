@@ -28,7 +28,7 @@ class IncidentsController < ApplicationController
         render json: paginate(
           @incidents.as_json(
             can_view_delegate_matters: current_user&.can_view_delegate_matters?,
-          )
+          ),
         )
       end
     end
