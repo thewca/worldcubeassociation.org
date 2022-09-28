@@ -1,6 +1,7 @@
 import React from 'react';
 import I18n from '../../lib/i18n';
 import UserBadge from '../UserBadge';
+import '../../stylesheets/static_pages/teams_committees.css';
 
 function TeamsCommittees({ officers = [], teams = [] }) {
   console.log(teams);
@@ -13,12 +14,11 @@ function TeamsCommittees({ officers = [], teams = [] }) {
 
       <h3 id="officers">{I18n.t('about.structure.officers.name')}</h3>
       <p>{I18n.t('about.structure.officers.description')}</p>
-      <br />
 
       <div className="team-members">
         {officers.map((user) => (
           <div key={(user.wca_id || 'user') + user.id}>
-            <UserBadge user={user} badgeClasses="" />
+            <UserBadge user={user} badgeClasses="board" />
           </div>
         ))}
       </div>
@@ -35,7 +35,6 @@ function TeamsCommittees({ officers = [], teams = [] }) {
           </h3>
 
           <p>{I18n.t(`about.structure.${team.friendly_id}.description`)}</p>
-          <br />
 
           <div className="team-members">
             {team.current_members.map((user) => (

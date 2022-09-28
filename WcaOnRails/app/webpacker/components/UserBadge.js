@@ -5,10 +5,12 @@ import I18n from '../lib/i18n';
 
 import '../stylesheets/user_badge.scss';
 
-function UserBadge({ user, badgeClasses = '', subtext = '' }) {
+function UserBadge({
+  user, badgeClasses = '', subtext = '', background = '',
+}) {
   return (
     <Button as="div" className={`user-badge ${badgeClasses}`} labelPosition="left">
-      <Label>
+      <Label style={{ backgroundColor: background }}>
         <UserAvatar avatar={user.avatar} />
       </Label>
       {user.wca_id ? (
@@ -26,7 +28,14 @@ function UserBadge({ user, badgeClasses = '', subtext = '' }) {
           {subtext && <span className="subtext">{subtext}</span>}
         </Button>
       ) : (
-        <span>{user.name}</span>
+        <Button
+          as="a"
+          className="user-name"
+        >
+          {user.name}
+          <br />
+          {subtext && <span className="subtext">{subtext}</span>}
+        </Button>
       )}
     </Button>
   );
