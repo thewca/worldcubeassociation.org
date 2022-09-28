@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Pagination } from 'semantic-ui-react';
+import { Icon, Pagination, Select } from 'semantic-ui-react';
 
 /**
  * Pagination UI to navigate between pages, and optionally change the number of entries per page.
@@ -29,56 +29,47 @@ export default function PaginationFooter({
     Math.min(activePage * entriesPerPage, totalEntries) - 1,
   ];
 
-  // todo: CSS needs improving; classNames below don't seem to be working
+  const options = entriesPerPageOptions.map((int) => (
+    { key: int, text: int, value: int }
+  ));
+
   return (
     totalEntries === 0
       ? <span>No results</span>
       : (
         <>
           {allowChangingEntriesPerPage && (
-            <div className="fixed-table-pagination">
-              <div className="pull-left pagination-detail">
-                <span className="pagination-info">
-                  {`Showing ${topEntryIndex + 1} to ${bottomEntryIndex + 1} of ${totalEntries} entries with `}
-                </span>
-                <span className="page-list">
-                  <span className="btn-group dropup">
-                    <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                      <span className="page-size">{entriesPerPage}</span>
-                      <span className="caret" />
-                    </button>
-                    <ul className="dropdown-menu" role="menu">
-                      {entriesPerPageOptions.map((entries) => (
-                        <li
-                          key={entries}
-                          role="menuitem"
-                          className={entries === entriesPerPage ? 'active' : ''}
-                          onClick={() => setEntriesPerPage(entries)}
-                        >
-                          {entries}
-                        </li>
-                      ))}
-                    </ul>
-                  </span>
-                  {' '}
-                  entries per page
-                </span>
-              </div>
+            <div className="pull-left">
+              <span>
+                {`Showing entries ${topEntryIndex + 1} to ${bottomEntryIndex + 1} of ${totalEntries} with `}
+                <Select
+                  compact
+                  options={options}
+                  onChange={(_, newData) => {
+                    setEntriesPerPage(newData.value);
+                  }}
+                  value={entriesPerPage}
+                />
+                {' '}
+                per page
+              </span>
             </div>
           )}
 
-          <Pagination
-            activePage={activePage}
-            onPageChange={(e, { activePage: newActivePage }) => setActivePage(newActivePage)}
-            totalPages={totalPages}
-            boundaryRange={0}
-            siblingRange={2}
-            ellipsisItem={null}
-            firstItem={{ content: <Icon name="angle double left" />, icon: true }}
-            lastItem={{ content: <Icon name="angle double right" />, icon: true }}
-            prevItem={{ content: <Icon name="angle left" />, icon: true }}
-            nextItem={{ content: <Icon name="angle right" />, icon: true }}
-          />
+          <div className="pull-right">
+            <Pagination
+              activePage={activePage}
+              onPageChange={(e, { activePage: newActivePage }) => setActivePage(newActivePage)}
+              totalPages={totalPages}
+              boundaryRange={0}
+              siblingRange={2}
+              ellipsisItem={null}
+              firstItem={{ content: <Icon name="angle double left" />, icon: true }}
+              lastItem={{ content: <Icon name="angle double right" />, icon: true }}
+              prevItem={{ content: <Icon name="angle left" />, icon: true }}
+              nextItem={{ content: <Icon name="angle right" />, icon: true }}
+            />
+          </div>
         </>
       )
   );
