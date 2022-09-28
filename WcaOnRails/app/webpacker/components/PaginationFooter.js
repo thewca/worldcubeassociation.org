@@ -33,7 +33,8 @@ export default function PaginationFooter({
   return (
     totalEntries === 0
       ? <span>No results</span>
-      : <>
+      : (
+        <>
           {allowChangingEntriesPerPage && (
             <div className="fixed-table-pagination">
               <div className="pull-left pagination-detail">
@@ -79,5 +80,6 @@ export default function PaginationFooter({
             nextItem={{ content: <Icon name="angle right" />, icon: true }}
           />
         </>
+      )
   );
 }

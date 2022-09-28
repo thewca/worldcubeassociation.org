@@ -35,9 +35,8 @@ function incidentDigestClass({ digest_worthy: digestWorthy, digest_sent_at: dige
 function incidentDigestText({ digest_worthy: digestWorthy, digest_sent_at: digestSentAt }) {
   if (digestWorthy) {
     return digestSentAt ? 'Sent' : 'Pending';
-  } else {
-    return '';
   }
+  return '';
 }
 
 // incidents log //
@@ -50,22 +49,21 @@ export default function IncidentsLog({
   const pagination = usePagination();
   const [searchString, setSearchString] = useState('');
   const [filterTags, setFilterTags] = useState([]);
-  const isUsingFilter = filterTags.length > 0;
 
-  const { data, headers, loading, error } = useLoadedData(incidentsUrl(
+  const {
+    data,
+    headers,
+    loading,
+    error,
+  } = useLoadedData(incidentsUrl(
     pagination.entriesPerPage,
     pagination.activePage,
     filterTags,
     searchString,
   ));
-  const totalEntries = parseInt(headers.get("total"))
-  const entriesPerPage = parseInt(headers.get("per-page"))
-  const totalPages = Math.ceil(totalEntries / entriesPerPage)
-
-  function addTagToSearch(tag) {
-    setFilterTags((tags) => (tags.includes(tag) ? tags : [...tags, tag]));
-    pagination.setActivePage(1);
-  }
+  const totalEntries = parseInt(headers.get('total'), 10);
+  const entriesPerPage = parseInt(headers.get('per-page'), 10);
+  const totalPages = Math.ceil(totalEntries / entriesPerPage);
 
   const allTagsAsOptions = allTags.map((tag) => (
     { key: tag, text: tag, value: tag }
@@ -114,7 +112,10 @@ export default function IncidentsLog({
               <IncidentsLogBody
                 incidents={data}
                 canViewDelegateMatters={canViewDelegateMatters}
-                addTagToSearch={addTagToSearch}
+                addTagToSearch={(tag) => {
+                  setFilterTags((tags) => (tags.includes(tag) ? tags : [...tags, tag]));
+                  pagination.setActivePage(1);
+                }}
               />
             </Table>
             <PaginationFooter
@@ -133,7 +134,7 @@ export default function IncidentsLog({
         <Button
           positive
           icon={<Icon name="plus" />}
-          content='New Incident'
+          content="New Incident"
           href={newIncidentUrl}
         />
       )}
@@ -221,7 +222,7 @@ function IncidentsLogRow({
               <RegulationTag
                 key={tagId}
                 id={tagId}
-                type={url.indexOf("guideline") === -1 ? 'Regulation' : 'Guideline'}
+                type={url.indexOf('guideline') === -1 ? 'Regulation' : 'Guideline'}
                 link={url}
                 description={contentHtml}
                 addToSearch={addTagToSearch}
@@ -240,13 +241,13 @@ function IncidentsLogRow({
       <Table.Cell className="comps-cell">
         <div>
           {competitions.map(({
-            id,
+            id: competitionId,
             name,
             comments,
           }) => (
             <CompetitionTag
-              key={id}
-              id={id}
+              key={competitionId}
+              id={competitionId}
               name={name}
               canViewDelegateMatters={canViewDelegateMatters}
               comments={comments}
