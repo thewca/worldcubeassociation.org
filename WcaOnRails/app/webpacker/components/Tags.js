@@ -95,7 +95,6 @@ export function CompetitionTag({
   );
 }
 
-// todo: no padding appearing between tags
 /**
  * Displays a Tag which produces a popover when clicked.
  */

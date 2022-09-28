@@ -73,7 +73,7 @@ export default function IncidentsLog({
     <>
       <h1>Incidents log</h1>
 
-      <div className="incidents-log-table-container">
+      <div>
         <Input
           placeholder="Search incidents..."
           icon="search"
@@ -154,7 +154,7 @@ function IncidentsLogHead({ canViewDelegateMatters }) {
           Tags
         </Table.HeaderCell>
 
-        <Table.HeaderCell width={1}>
+        <Table.HeaderCell width={2}>
           Happened during
         </Table.HeaderCell>
 
@@ -209,7 +209,7 @@ function IncidentsLogRow({
         <a href={incidentUrl(id)}>{title}</a>
       </Table.Cell>
 
-      <Table.Cell className="tags-cell">
+      <Table.Cell>
         {tags.map(
           ({
             name,
@@ -238,7 +238,7 @@ function IncidentsLogRow({
         )}
       </Table.Cell>
 
-      <Table.Cell className="comps-cell">
+      <Table.Cell>
         <div>
           {competitions.map(({
             id: competitionId,
