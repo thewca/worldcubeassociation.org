@@ -8,4 +8,16 @@
       background-color: black;
     }
   }
+
+  &.leader {
+    .label {
+      background-color: $dark-blue;
+    }
+  }
+
+  &.senior {
+    .label {
+      background-color: $dark-green;
+    }
+  }
 }

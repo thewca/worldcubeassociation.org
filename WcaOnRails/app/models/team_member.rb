@@ -17,6 +17,7 @@ class TeamMember < ApplicationRecord
   delegate :name, to: :user
   delegate :avatar, to: :user
   alias_attribute :leader, :team_leader
+  alias_attribute :senior_member, :team_senior_member
 
   def current_member?
     end_date.nil? || end_date > Date.today
@@ -49,8 +50,8 @@ class TeamMember < ApplicationRecord
   validates :start_date, presence: true
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    methods: %w[friendly_id leader name],
-    only: %w[id wca_id],
+    methods: %w[friendly_id leader name senior_member wca_id],
+    only: %w[id],
     include: %w[avatar],
   }.freeze
 

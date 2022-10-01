@@ -1,4 +1,5 @@
 import React from 'react';
+import { Popup } from 'semantic-ui-react';
 
 function UserAvatar({
   avatar = { url: '', pending_url: '' },
@@ -12,18 +13,26 @@ function UserAvatar({
 
   if (breakCache) url += `?${Date.now()}`;
 
-  const showHover = url && !doNotShowFullImageOnHover;
-
-  return (
+  const image = (
     <div
       className={`avatar-thumbnail ${avatarClass}`}
       style={{ backgroundImage: `url(${url})` }}
-      data-trigger={showHover ? 'hover' : ''}
-      data-content={showHover ? `<img alt='avatar' src='${url}' />` : ''}
-      data-toggle={showHover ? 'popover' : ''}
-      data-html={showHover ? 'true' : ''}
       title={title}
     />
+  );
+
+  if (!url && !doNotShowFullImageOnHover) {
+    return image;
+  }
+
+  return (
+    <Popup
+      trigger={image}
+      flowing
+      hoverable
+    >
+      <img alt="avatar" src={url} width="200" />
+    </Popup>
   );
 }
 

@@ -55,11 +55,15 @@ function TeamsCommittees({ officers = [], teams = [] }) {
           <p>{I18n.t(`about.structure.${team.friendly_id}.description`)}</p>
 
           <div className="team-members">
-            {team.current_members.map((user) => (
-              <div key={team.id.toString() + user.id.toString()}>
-                <UserBadge user={user} badgeClasses="" />
-              </div>
-            ))}
+            {team.current_members
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .sort((a) => (a.senior_member ? -1 : 1))
+              .sort((a) => (a.leader ? -1 : 1))
+              .map((user) => (
+                <div key={team.id.toString() + user.id.toString()}>
+                  <UserBadge user={user} />
+                </div>
+              ))}
           </div>
         </div>
       ))}

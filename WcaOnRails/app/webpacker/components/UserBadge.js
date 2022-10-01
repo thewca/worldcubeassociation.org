@@ -6,10 +6,11 @@ import I18n from '../lib/i18n';
 import '../stylesheets/user_badge.scss';
 
 function UserBadge({
-  user, badgeClasses = '', subtext = '', background = '',
+  user, subtext = '', background = '', badgeClasses = '',
 }) {
+  const classes = `user-badge ${badgeClasses} ${user.leader ? 'leader' : ''} ${user.senior_member ? 'senior' : ''}`;
   return (
-    <Button as="div" className={`user-badge ${badgeClasses}`} labelPosition="left">
+    <Button as="div" className={classes} labelPosition="left">
       <Label style={{ backgroundColor: background }}>
         <UserAvatar avatar={user.avatar} />
       </Label>
