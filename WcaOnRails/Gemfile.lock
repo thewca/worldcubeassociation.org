@@ -191,12 +191,11 @@ GEM
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
-    better_html (1.0.16)
-      actionview (>= 4.0)
-      activesupport (>= 4.0)
+    better_html (2.0.1)
+      actionview (>= 6.0)
+      activesupport (>= 6.0)
       ast (~> 2.0)
       erubi (~> 1.4)
-      html_tokenizer (~> 0.0.6)
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
@@ -351,7 +350,6 @@ GEM
     hashie (5.0.0)
     high_voltage (3.1.2)
     highline (2.0.3)
-    html_tokenizer (0.0.7)
     htmlentities (4.3.4)
     http-accept (1.7.0)
     http-cookie (1.0.3)
@@ -365,10 +363,10 @@ GEM
       i18n
     i18n-spec (0.6.0)
       iso
-    i18n-tasks (1.0.11)
+    i18n-tasks (1.0.12)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
-      better_html (~> 1.0)
+      better_html (>= 1.0, < 3.0)
       erubi
       highline (>= 2.0.0)
       i18n
@@ -419,7 +417,7 @@ GEM
     listen (3.6.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.18.0)
+    loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.2.8)
@@ -694,7 +692,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
-    unicode-display_width (2.2.0)
+    unicode-display_width (2.3.0)
     unicorn (6.1.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
@@ -721,7 +719,7 @@ GEM
       activesupport
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.0)
+    zeitwerk (2.6.1)
 
 PLATFORMS
   ruby
