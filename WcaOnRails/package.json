@@ -31,7 +31,7 @@
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^4.0.0",
     "dompurify": "^2.4.0",
-    "easymde": "^2.17.0",
+    "easymde": "^2.18.0",
     "expose-loader": "^4.0.0",
     "file-loader": "^6.2.0",
     "flag-icons": "^6.6.6",
