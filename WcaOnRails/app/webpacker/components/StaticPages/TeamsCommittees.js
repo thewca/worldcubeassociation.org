@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Icon, Popup } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
-import UserBadge from '../UserBadge';
+import UserBadge, {subtextForMember} from '../UserBadge';
 import '../../stylesheets/static_pages/teams_committees.scss';
 
 function TeamsCommittees({ officers = [], teams = [] }) {
@@ -61,7 +61,12 @@ function TeamsCommittees({ officers = [], teams = [] }) {
               .sort((a) => (a.leader ? -1 : 1))
               .map((user) => (
                 <div key={team.id.toString() + user.id.toString()}>
-                  <UserBadge user={user} />
+                  <UserBadge
+                    user={user}
+                    leader={user.leader}
+                    senior={user.senior_member}
+                    subtext={subtextForMember(user)}
+                  />
                 </div>
               ))}
           </div>

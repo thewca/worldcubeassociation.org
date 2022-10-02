@@ -20,4 +20,13 @@
       background-color: $dark-green;
     }
   }
+
+  .user-name {
+    .subtext {
+      font-style: oblique;
+      margin-top: 6px;
+      display: block;
+      line-height: 1.5;
+    }
+  }
 }
