@@ -14,7 +14,7 @@ import Errored from './Requests/Errored';
 
 import useLoadedData from '../lib/hooks/useLoadedData';
 import useDebounce from '../lib/hooks/useDebounce';
-import usePagination from './usePagination';
+import usePagination from '../lib/hooks/usePagination';
 
 import {
   incidentsUrl,
