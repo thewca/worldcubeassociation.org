@@ -22,7 +22,6 @@ import {
   incidentUrl,
 } from '../lib/requests/routes.js.erb';
 
-
 // incident helper functions //
 
 function incidentStatusClass({ resolved_at: resolvedAt }) {
@@ -60,7 +59,6 @@ export default function IncidentsLog({
   const [filterTags, setFilterTags] = useState([]);
 
   const debouncedSearchString = useDebounce(searchString, DEBOUNCE_MS);
-
 
   const {
     data,
