@@ -6,17 +6,22 @@ import {
   Input,
   Table,
 } from 'semantic-ui-react';
+
+import { MiscTag, CompetitionTag, RegulationTag } from './Tags';
+import PaginationFooter from './PaginationFooter';
+import Loading from './Requests/Loading';
+import Errored from './Requests/Errored';
+
 import useLoadedData from '../lib/hooks/useLoadedData';
+import useDebounce from '../lib/hooks/useDebounce';
+import usePagination from './usePagination';
+
 import {
   incidentsUrl,
   newIncidentUrl,
   incidentUrl,
 } from '../lib/requests/routes.js.erb';
-import Loading from './Requests/Loading';
-import Errored from './Requests/Errored';
-import PaginationFooter from './PaginationFooter';
-import usePagination from './usePagination';
-import { MiscTag, CompetitionTag, RegulationTag } from './Tags';
+
 
 // incident helper functions //
 
@@ -39,6 +44,10 @@ function incidentDigestText({ digest_worthy: digestWorthy, digest_sent_at: diges
   return '';
 }
 
+// constants //
+
+const DEBOUNCE_MS = 300;
+
 // incidents log //
 
 export default function IncidentsLog({
@@ -50,6 +59,9 @@ export default function IncidentsLog({
   const [searchString, setSearchString] = useState('');
   const [filterTags, setFilterTags] = useState([]);
 
+  const debouncedSearchString = useDebounce(searchString, DEBOUNCE_MS);
+
+
   const {
     data,
     headers,
@@ -59,7 +71,7 @@ export default function IncidentsLog({
     pagination.entriesPerPage,
     pagination.activePage,
     filterTags,
-    searchString,
+    debouncedSearchString,
   ));
   const totalEntries = parseInt(headers.get('total'), 10);
   const entriesPerPage = parseInt(headers.get('per-page'), 10);
