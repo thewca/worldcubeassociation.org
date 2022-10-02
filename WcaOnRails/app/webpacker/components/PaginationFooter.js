@@ -37,9 +37,9 @@ export default function PaginationFooter({
     totalEntries === 0
       ? <span>No results</span>
       : (
-        <>
+        <div>
           {allowChangingEntriesPerPage && (
-            <div className="pull-left">
+            <span>
               <span>
                 {`Showing entries ${topEntryIndex + 1} to ${bottomEntryIndex + 1} of ${totalEntries} with `}
                 <Select
@@ -53,10 +53,10 @@ export default function PaginationFooter({
                 {' '}
                 per page
               </span>
-            </div>
+            </span>
           )}
 
-          <div className="pull-right">
+          <span style={{ float: 'right' }}>
             <Pagination
               activePage={activePage}
               onPageChange={(e, { activePage: newActivePage }) => setActivePage(newActivePage)}
@@ -69,8 +69,8 @@ export default function PaginationFooter({
               prevItem={{ content: <Icon name="angle left" />, icon: true }}
               nextItem={{ content: <Icon name="angle right" />, icon: true }}
             />
-          </div>
-        </>
+          </span>
+        </div>
       )
   );
 }
