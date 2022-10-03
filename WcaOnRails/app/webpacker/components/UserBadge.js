@@ -66,13 +66,10 @@ function UserBadge({
           )}
         />
       ) : (
-        <Button
-          as="a"
-          className="user-name"
-        >
+        <div className="user-name ui button user-name-no-link">
           <b>{user.name}</b>
           {subtext && <div className="subtext">{subtext}</div>}
-        </Button>
+        </div>
       )}
     </Button>
   );

@@ -27,5 +27,15 @@
       margin-top: 6px;
       font-size: 0.9em;
     }
+
+    display: flex !important;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  /* Stop this looking like you can click it */
+  .user-name-no-link {
+    pointer-events: none;
   }
 }
