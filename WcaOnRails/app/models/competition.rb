@@ -9,7 +9,7 @@ class Competition < ApplicationRecord
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
   has_many :results, foreign_key: "competitionId"
-  has_many :scrambles, foreign_key: "competitionId"
+  has_many :scrambles, -> { order(:groupId, :isExtra, :scrambleNum) }, foreign_key: "competitionId"
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
