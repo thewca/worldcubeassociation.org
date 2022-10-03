@@ -2,7 +2,8 @@
 
 <%= react_component('StaticPages/TeamsCommittees', {
   officers: @officers,
-  teams: [Team.board] + Team.all_official + Team.all_councils
+  teams: [Team.board] + Team.all_official + Team.all_councils,
+  officerTitles: Team.all_officers
 }, {
   class: 'container'
 }) %>

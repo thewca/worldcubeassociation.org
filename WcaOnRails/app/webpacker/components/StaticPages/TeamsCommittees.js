@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Icon, Popup } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
-import UserBadge, {subtextForMember} from '../UserBadge';
+import UserBadge, { subtextForMember, subtextForOfficer } from '../UserBadge';
 import '../../stylesheets/static_pages/teams_committees.scss';
 
-function TeamsCommittees({ officers = [], teams = [] }) {
+function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
   console.log(teams);
   return (
     <>
@@ -19,7 +19,7 @@ function TeamsCommittees({ officers = [], teams = [] }) {
       <div className="team-members">
         {officers.map((user) => (
           <div key={(user.wca_id || 'user') + user.id}>
-            <UserBadge user={user} badgeClasses="board" />
+            <UserBadge user={user} badgeClasses="board" subtext={subtextForOfficer(user, officerTitles)} />
           </div>
         ))}
       </div>

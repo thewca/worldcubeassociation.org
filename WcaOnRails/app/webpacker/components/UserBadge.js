@@ -12,6 +12,26 @@ export function subtextForMember(user) {
   if (user.senior_member) {
     return I18n.t('about.structure.senior_member');
   }
+
+  return '';
+}
+
+export function subtextForOfficer(user, officerTitles) {
+  const positions = user.teams
+    .map((team) => {
+      const title = officerTitles.find((t) => t.friendly_id === team.friendly_id);
+      if (title) return title.name;
+      return null;
+    })
+    .filter(Boolean);
+
+  if (user.teams.filter((team) => team.friendly_id === 'wfc' && team.leader).length > 0) {
+    positions.push(I18n.t('about.structure.treasurer.name'));
+  }
+
+  return positions.map((position) => (
+    <div key={position}>{position}</div>
+  ));
 }
 
 function UserBadge({
@@ -40,7 +60,7 @@ function UserBadge({
               href={`/persons/${user.wca_id}`}
               className="user-name"
             >
-              {user.name}
+              <b>{user.name}</b>
               {subtext && <div className="subtext">{subtext}</div>}
             </Button>
           )}
@@ -50,7 +70,7 @@ function UserBadge({
           as="a"
           className="user-name"
         >
-          {user.name}
+          <b>{user.name}</b>
           {subtext && <div className="subtext">{subtext}</div>}
         </Button>
       )}
