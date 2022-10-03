@@ -3506,6 +3506,14 @@ it:
       title: Record
     #original_hash: e02fccb
     last_updated_html: 'Ultimo aggiornamento: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      Nota: alcuni filtri sono temporaneamente disabilitati. Se hai esperienza
+      in ottimizzazione SQL, contatta il WCA Software Team (WST)!
+    #original_hash: e3710ed
+    tooltip_no_years: Il nostro database è troppo grande per elaborare dati storici
+    #original_hash: 357094b
+    tooltip_no_quantities: Il nostro database è troppo grande per elaborare classifiche così lunghe
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -4784,6 +4792,8 @@ it:
       people: Persone
       #original_hash: 6db75ea
       advanced_search: Ricerca avanzata
+      #original_hash: 5e326b1
+      incidents: Incidenti
       #original_hash: a0ca0c3
       posts: Post
       #original_hash: 9d7ea9c
@@ -4799,6 +4809,8 @@ it:
         people: Nessuna persona trovata per
         #original_hash: c6a04aa
         posts: Nessun messaggio trovato per
+        #original_hash: 3499e7e
+        incidents: Nessun incidente trovato per
         #original_hash: 76a6bf1
         regulations_and_guidelines: Nessuna regola o linea guida trovata per
   incidents_log:
@@ -4806,6 +4818,8 @@ it:
     i18n_disclaimer: >-
       Nota che la sezione incidenti è disponibile soltanto in inglese. Il
       contenuto sottostante non è tradotto.
+    #original_hash: 2c23c1a
+    incident: 'Incidente:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Riguardo il Regolamento
