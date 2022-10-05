@@ -5,7 +5,6 @@ import UserBadge, { subtextForMember, subtextForOfficer } from '../UserBadge';
 import '../../stylesheets/static_pages/teams_committees.scss';
 
 function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
-  console.log(teams);
   return (
     <>
       <h1>{I18n.t('about.structure.teams_committees_councils')}</h1>
@@ -19,7 +18,11 @@ function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
       <div className="team-members">
         {officers.map((user) => (
           <div key={(user.wca_id || 'user') + user.id}>
-            <UserBadge user={user} badgeClasses="board" subtext={subtextForOfficer(user, officerTitles)} />
+            <UserBadge
+              user={user}
+              badgeClasses="board"
+              subtexts={subtextForOfficer(user, officerTitles)}
+            />
           </div>
         ))}
       </div>
@@ -65,7 +68,7 @@ function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
                     user={user}
                     leader={user.leader}
                     senior={user.senior_member}
-                    subtext={subtextForMember(user)}
+                    subtexts={subtextForMember(user)}
                   />
                 </div>
               ))}
