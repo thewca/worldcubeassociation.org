@@ -4,19 +4,19 @@
   margin: 4px !important;
 
   &.board {
-    .label {
-      background-color: black;
+    & > .label {
+      background-color: #333;
     }
   }
 
   &.leader {
-    .label {
+    & > .label {
       background-color: $dark-blue;
     }
   }
 
   &.senior {
-    .label {
+    & > .label {
       background-color: $dark-green;
     }
   }
@@ -28,6 +28,8 @@
       font-size: 0.9em;
     }
 
+    width: 100%;
+
     display: flex !important;
     align-content: center;
     justify-content: center;
@@ -37,5 +39,25 @@
   /* Stop this looking like you can click it */
   .user-name-no-link {
     pointer-events: none;
+  }
+
+  .icon {
+    margin: 0 0.25em;
+  }
+
+  /* Make it fill width of screen on mobile */
+  @media (max-width: 525px) {
+    width: 100vw;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+
+    .user-name {
+      background: none !important;
+    }
+
+    > .label {
+      border-radius: 0 !important;
+    }
   }
 }

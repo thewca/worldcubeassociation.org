@@ -1,5 +1,7 @@
 import React from 'react';
-import { Button, Label, Popup } from 'semantic-ui-react';
+import {
+  Button, Icon, Label, Popup,
+} from 'semantic-ui-react';
 import UserAvatar from './UserAvatar';
 import I18n from '../lib/i18n';
 
@@ -49,7 +51,7 @@ function UserBadge({
   return (
     <Button as="div" className={classes} labelPosition="left">
       <Label style={{ backgroundColor: background }}>
-        <UserAvatar avatar={user.avatar} />
+        <UserAvatar avatar={user.avatar} avatarClass="rounded" />
       </Label>
       {user.wca_id ? (
         <Popup
@@ -60,7 +62,10 @@ function UserBadge({
               href={`/persons/${user.wca_id}`}
               className="user-name"
             >
-              <b>{user.name}</b>
+              <b>
+                {user.name}
+                <Icon name="user circle outline" />
+              </b>
               {subtext && <div className="subtext">{subtext}</div>}
             </Button>
           )}

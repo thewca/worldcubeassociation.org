@@ -1,6 +1,8 @@
 import React from 'react';
 import { Popup } from 'semantic-ui-react';
 
+import '../stylesheets/user_avatar.scss';
+
 function UserAvatar({
   avatar = { url: '', pending_url: '' },
   showPending = false,
@@ -15,7 +17,7 @@ function UserAvatar({
 
   const image = (
     <div
-      className={`avatar-thumbnail ${avatarClass}`}
+      className={`user-avatar-image ${avatarClass}`}
       style={{ backgroundImage: `url(${url})` }}
       title={title}
     />
