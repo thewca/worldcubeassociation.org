@@ -155,7 +155,6 @@ Rails.application.routes.draw do
 
   get 'about' => 'static_pages#about'
   get 'teams-committees' => 'static_pages#teams_committees'
-  get 'teams-committees-react' => 'static_pages#teams_committees_react'
   get 'documents' => 'static_pages#documents'
   get 'education' => 'static_pages#education'
   get 'delegates' => 'static_pages#delegates'
