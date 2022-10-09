@@ -23,8 +23,8 @@ function ROOverview({
         {orgs.map((org) => (
           <div key={org.name} className="organization-box">
             <a target="_blank" rel="noreferrer" className="hide-new-window-icon" href={org.website}>
-              <img src={org.logo} alt="" />
-              <div className={`organization-info${org.logo ? ' hide-until-hover' : ''}`}>
+              <img src={org.logo_url} alt="" />
+              <div className={`organization-info${org.logo_url ? ' hide-until-hover' : ''}`}>
                 <div className="country">
                   {org.country}
                 </div>
@@ -42,12 +42,9 @@ function ROOverview({
 
       <h3>{I18n.t('regional_organizations.requirements.title')}</h3>
       <ol>
-        <li>{I18n.t('regional_organizations.requirements.list.1')}</li>
-        <li>{I18n.t('regional_organizations.requirements.list.2')}</li>
-        <li>{I18n.t('regional_organizations.requirements.list.3')}</li>
-        <li>{I18n.t('regional_organizations.requirements.list.4')}</li>
-        <li>{I18n.t('regional_organizations.requirements.list.5')}</li>
-        <li>{I18n.t('regional_organizations.requirements.list.6')}</li>
+        {I18n.tArray('regional_organizations.requirements.list').map((requirement, i) => (
+          <li key={`regional_organizations.requirements.list.${i.toString()}`}>{requirement}</li>
+        ))}
       </ol>
 
       <h3>{I18n.t('regional_organizations.application_instructions.title')}</h3>

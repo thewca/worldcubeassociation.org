@@ -1777,33 +1777,39 @@ class Competition < ApplicationRecord
     }
   end
 
-  def serializable_hash(options = nil)
-    {
-      class: self.class.to_s.downcase,
-      url: Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL),
+  alias_attribute :venue_address, :venueAddress
+  alias_attribute :venue_details, :venueDetails
+  alias_attribute :short_name, :cellName
+  alias_attribute :city, :cityName
 
-      id: id,
-      name: name,
-      website: website,
-      short_name: cellName,
-      city: cityName,
-      venue_address: venueAddress,
-      venue_details: venueDetails,
-      latitude_degrees: latitude_degrees,
-      longitude_degrees: longitude_degrees,
-      country_iso2: country&.iso2,
-      start_date: start_date,
-      registration_open: registration_open,
-      registration_close: registration_close,
-      announced_at: announced_at,
-      cancelled_at: cancelled_at,
-      end_date: end_date,
-      delegates: delegates,
-      trainee_delegates: trainee_delegates,
-      organizers: organizers,
-      competitor_limit: competitor_limit,
-      event_ids: events.map(&:id),
-    }
+  def country_iso2
+    country&.iso2
+  end
+
+  def url
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
+  end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["id", "name", "website", "start_date", "registration_open",
+           "registration_close", "announced_at", "cancelled_at", "end_date",
+           "competitor_limit"],
+    methods: ["url", "website", "short_name", "city", "venue_address",
+              "venue_details", "latitude_degrees", "longitude_degrees",
+              "country_iso2", "event_ids"],
+    include: ["delegates", "trainee_delegates", "organizers"],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+    # Fallback to the default 'serializable_hash' method, but always include our
+    # custom 'class' attribute.
+    # We can't put that in our DEFAULT_SERIALIZE_OPTIONS because the 'class'
+    # method already exists, and we definitely don't want to override it, nor do
+    # we want to change the existing behavior of our API which returns a string.
+    json.merge!(
+      class: self.class.to_s.downcase,
+    )
   end
 
   def to_ics

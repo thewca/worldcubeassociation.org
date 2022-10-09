@@ -8,8 +8,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-# Need to point to GitHub directly until https://github.com/rails/rails/issues/45428 is included in a release
-gem 'rails', github: 'rails/rails', branch: '7-0-stable'
+gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
@@ -82,7 +81,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '6.5.1'
+gem 'shakapacker', '6.5.2'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
