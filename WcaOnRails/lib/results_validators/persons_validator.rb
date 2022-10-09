@@ -22,9 +22,12 @@ module ResultsValidators
     MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors " \
                                                 "and that all results are correctly seperated by their corresponding id."
     WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
-    LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name, please ensure the correct spelling."
-    MISSING_ABBREVIATION_PERIOD_WARNING = "'%{name}' is missing an abbreviation period from a single letter middle name, please ensure the correct spelling."
-    SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name, please fix the name."
+    UPPERCASE_NAME_WARNING = "'%{name}' has an all caps name. Please confirm the correct spelling or fix the name."
+    LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name. Please confirm the correct spelling or fix the name."
+    MISSING_PERIOD_WARNING = "'%{name}' has a single letter middle name without an abbreviation period. Please confirm the correct spelling or fix the name."
+    PERIOD_WARNING = "'%{name}' has an unusual period in their name. Please confirm the correct spelling or fix the name."
+    SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
+    SINGLE_NAME_WARNING = "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
 
     @@desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
 
@@ -126,12 +129,26 @@ module ResultsValidators
                                                LOWERCASE_NAME_WARNING,
                                                name: p.name)
           end
-          if split_name.length > 2
+          if split_name.any? { |n| n.delete('.').upcase == n && n.length > 1 }
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               UPPERCASE_NAME_WARNING,
+                                               name: p.name)
+          end
+          if split_name.length == 1
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               SINGLE_NAME_WARNING,
+                                               name: p.name)
+          elsif split_name.length > 2
             if split_name[1, split_name.length-2].any? { |n| n.length == 1 }
               @warnings << ValidationWarning.new(:persons, competition_id,
-                                                 MISSING_ABBREVIATION_PERIOD_WARNING,
+                                                 MISSING_PERIOD_WARNING,
                                                  name: p.name)
             end
+          end
+          if split_name.any? { |n| (n.include? '.') && n.length > 2 && (!["Jr.", "Sr."].include? n) }
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               PERIOD_WARNING,
+                                               name: p.name)
           end
           non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
           space_before_last_letter = (roman_readable[-2] == " ") && !['I', 'V'].include?(roman_readable[-1]) # Roman numerals I and V are allowed as suffixes
