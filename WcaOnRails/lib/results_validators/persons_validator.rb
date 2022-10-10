@@ -22,10 +22,10 @@ module ResultsValidators
     MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors " \
                                                 "and that all results are correctly seperated by their corresponding id."
     WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
-    UPPERCASE_NAME_WARNING = "'%{name}' has an all caps name. Please confirm the correct spelling or fix the name."
-    LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name. Please confirm the correct spelling or fix the name."
-    MISSING_PERIOD_WARNING = "'%{name}' has a single letter middle name without an abbreviation period. Please confirm the correct spelling or fix the name."
-    PERIOD_WARNING = "'%{name}' has an unusual period in their name. Please confirm the correct spelling or fix the name."
+    UPPERCASE_NAME_WARNING = "'%{name}' has an all caps name. Please confirm that this is indeed the correct spelling or fix the name."
+    LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
+    MISSING_PERIOD_WARNING = "'%{name}' has a single letter middle name without an abbreviation period. Please confirm that this is indeed the correct spelling or fix the name."
+    PERIOD_WARNING = "'%{name}' has an unusual period in their name. Please confirm that this is indeed the correct spelling or fix the name."
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
     SINGLE_NAME_WARNING = "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
 
