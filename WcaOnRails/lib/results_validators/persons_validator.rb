@@ -129,7 +129,7 @@ module ResultsValidators
                                                LOWERCASE_NAME_WARNING,
                                                name: p.name)
           end
-          if split_name.any? { |n| n.delete('.').upcase == n && n.length > 1 }
+          if split_name.any? { |n| n.delete('.').upcase == n && n.length > 2 }
             @warnings << ValidationWarning.new(:persons, competition_id,
                                                UPPERCASE_NAME_WARNING,
                                                name: p.name)

@@ -130,7 +130,7 @@ RSpec.describe PV do
       # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING
       # LOWERCASE_NAME_WARNING
       # UPPERCASE_NAME_WARNING
-      # MISSING_ABBREVIATION_PERIOD_WARNING
+      # MISSING_PERIOD_WARNING
       # PERIOD_WARNING
       # SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING
       # SINGLE_NAME_WARNING
@@ -241,7 +241,7 @@ RSpec.describe PV do
                                     PV::PERIOD_WARNING,
                                     name: res_bad_period_upcase.person.name),
           RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::MISSING_ABBREVIATION_PERIOD_WARNING,
+                                    PV::MISSING_PERIOD_WARNING,
                                     name: res_missing_period.person.name),
           RV::ValidationWarning.new(:persons, competition1.id,
                                     PV::SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
