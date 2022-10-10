@@ -251,7 +251,7 @@ RSpec.describe PV do
                                     name: res_same_name1.person.name),
           RV::ValidationWarning.new(:persons, competition1.id,
                                     PV::SINGLE_NAME_WARNING,
-                                    name: res_same_name2.person.name)
+                                    name: res_same_name2.person.name),
         ]
         validator_args = [
           { competition_ids: [competition1.id, competition2.id], model: InboxResult },
