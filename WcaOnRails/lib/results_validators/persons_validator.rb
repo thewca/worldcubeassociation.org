@@ -141,7 +141,6 @@ module ResultsValidators
           elsif split_name.length > 2
             if split_name[1, split_name.length-2].any? { |n| n.length == 1 }
               @warnings << ValidationWarning.new(:persons, competition_id,
-                                                 MISSING_ABBREVIATION_PERIOD_WARNING,
                                                  MISSING_PERIOD_WARNING,
                                                  name: p.name)
             end
