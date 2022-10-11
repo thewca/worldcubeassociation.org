@@ -129,7 +129,7 @@ module ResultsValidators
                                                LOWERCASE_NAME_WARNING,
                                                name: p.name)
           end
-          if split_name.any? { |n| n.upcase == n && n.length > 2 }
+          if split_name.any? { |n| n.upcase == n && n.length > 2 && n != 'DVM' }
             @warnings << ValidationWarning.new(:persons, competition_id,
                                                UPPERCASE_NAME_WARNING,
                                                name: p.name)
