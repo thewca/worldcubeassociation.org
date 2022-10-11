@@ -25,6 +25,12 @@ module ResultsValidators
     LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name, please ensure the correct spelling."
     MISSING_ABBREVIATION_PERIOD_WARNING = "'%{name}' is missing an abbreviation period from a single letter middle name, please ensure the correct spelling."
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name, please fix the name."
+    UPPERCASE_NAME_WARNING = "'%{name}' has an all caps name. Please confirm that this is indeed the correct spelling or fix the name."
+    LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
+    MISSING_PERIOD_WARNING = "'%{name}' has a single letter middle name without an abbreviation period. Please confirm that this is indeed the correct spelling or fix the name."
+    LETTER_AFTER_PERIOD_WARNING = "'%{name}' is missing a space after a period in their name. Please confirm that this is indeed the correct spelling or fix the name."
+    SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
+    SINGLE_NAME_WARNING = "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
 
     @@desc = "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
 
@@ -132,6 +138,11 @@ module ResultsValidators
                                                  MISSING_ABBREVIATION_PERIOD_WARNING,
                                                  name: p.name)
             end
+          end
+          if split_name.any? { |n| n.chop.include? '.' }
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               LETTER_AFTER_PERIOD_WARNING,
+                                               name: p.name)
           end
           non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
           space_before_last_letter = (roman_readable[-2] == " ") && !['I', 'V'].include?(roman_readable[-1]) # Roman numerals I and V are allowed as suffixes

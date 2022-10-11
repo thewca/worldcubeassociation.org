@@ -130,6 +130,9 @@ RSpec.describe PV do
       # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING
       # LOWERCASE_NAME_WARNING
       # MISSING_ABBREVIATION_PERIOD_WARNING
+      # UPPERCASE_NAME_WARNING
+      # MISSING_PERIOD_WARNING
+      # LETTER_AFTER_PERIOD_WARNING
       # SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING
       it "validates person data" do
         FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
@@ -229,6 +232,13 @@ RSpec.describe PV do
                                     name: res_lowercase2.person.name),
           RV::ValidationWarning.new(:persons, competition1.id,
                                     PV::MISSING_ABBREVIATION_PERIOD_WARNING,
+                                    PV::UPPERCASE_NAME_WARNING,
+                                    name: res_bad_period_upcase.person.name),
+          RV::ValidationWarning.new(:persons, competition1.id,
+                                    PV::LETTER_AFTER_PERIOD_WARNING,
+                                    name: res_bad_period_upcase.person.name),
+          RV::ValidationWarning.new(:persons, competition1.id,
+                                    PV::MISSING_PERIOD_WARNING,
                                     name: res_missing_period.person.name),
           RV::ValidationWarning.new(:persons, competition1.id,
                                     PV::SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
