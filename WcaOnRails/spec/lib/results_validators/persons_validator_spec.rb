@@ -129,11 +129,11 @@ RSpec.describe PV do
       # WRONG_PARENTHESIS_TYPE_ERROR
       # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING
       # LOWERCASE_NAME_WARNING
-      # MISSING_ABBREVIATION_PERIOD_WARNING
       # UPPERCASE_NAME_WARNING
       # MISSING_PERIOD_WARNING
       # LETTER_AFTER_PERIOD_WARNING
       # SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING
+      # SINGLE_NAME_WARNING
       it "validates person data" do
         FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
         res1 = FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
@@ -176,6 +176,10 @@ RSpec.describe PV do
                                               competition: competition1,
                                               eventId: "333oh")
         res_single_letter.person.update(name: "A. B. van der Doe")
+        res_bad_period_upcase = FactoryBot.create(:inbox_result,
+                                                  competition: competition1,
+                                                  eventId: "333oh")
+        res_bad_period_upcase.person.update(name: "David K.J. RAMSEY")
         res_same_name1 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
                                            eventId: "333oh")
@@ -231,7 +235,6 @@ RSpec.describe PV do
                                     PV::LOWERCASE_NAME_WARNING,
                                     name: res_lowercase2.person.name),
           RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::MISSING_ABBREVIATION_PERIOD_WARNING,
                                     PV::UPPERCASE_NAME_WARNING,
                                     name: res_bad_period_upcase.person.name),
           RV::ValidationWarning.new(:persons, competition1.id,
@@ -243,6 +246,12 @@ RSpec.describe PV do
           RV::ValidationWarning.new(:persons, competition1.id,
                                     PV::SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
                                     name: res_single_letter.person.name),
+          RV::ValidationWarning.new(:persons, competition1.id,
+                                    PV::SINGLE_NAME_WARNING,
+                                    name: res_same_name1.person.name),
+          RV::ValidationWarning.new(:persons, competition1.id,
+                                    PV::SINGLE_NAME_WARNING,
+                                    name: res_same_name2.person.name),
         ]
         validator_args = [
           { competition_ids: [competition1.id, competition2.id], model: InboxResult },
