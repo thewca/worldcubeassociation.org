@@ -132,10 +132,20 @@ module ResultsValidators
                                                LOWERCASE_NAME_WARNING,
                                                name: p.name)
           end
-          if split_name.length > 2
+          if split_name.any? { |n| n.delete('.').upcase == n && n.length > 2 }
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               UPPERCASE_NAME_WARNING,
+                                               name: p.name)
+          end
+          if split_name.length == 1
+            @warnings << ValidationWarning.new(:persons, competition_id,
+                                               SINGLE_NAME_WARNING,
+                                               name: p.name)
+          elsif split_name.length > 2
             if split_name[1, split_name.length-2].any? { |n| n.length == 1 }
               @warnings << ValidationWarning.new(:persons, competition_id,
                                                  MISSING_ABBREVIATION_PERIOD_WARNING,
+                                                 MISSING_PERIOD_WARNING,
                                                  name: p.name)
             end
           end
