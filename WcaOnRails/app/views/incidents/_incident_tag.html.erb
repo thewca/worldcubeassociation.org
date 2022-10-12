@@ -4,12 +4,12 @@ js_search ||= false
 reg = Regulation.find_or_nil(tag)
 label_class = reg ? "primary" : "default"
 title = reg ? "#{link_to(reg["id"], reg["url"], target: "_blank")}" : tag
-search_tag_link = js_search ? "href='#' onclick='window.wca.searchIncidentsForTag(event, \"#{tag}\");'" : "href='#{incidents_path(tags: tag)}'"
-content = "<a #{search_tag_link}>Search incidents with this tag</a>"
+# this search doesn't work with the new React incidents log (which uses new React-based incident tags anyway), so we're removing the ability to search when viewing an incident;
+# the intention is to fix it when incident details are migrated to React
+# search_tag_link = js_search ? "href='#' onclick='window.wca.searchIncidentsForTag(event, \"#{tag}\");'" : "href='#{incidents_path(tags: tag)}'"
+# content = "<a #{search_tag_link}>Search incidents with this tag</a>"
+content = reg ? reg["content_html"] : ""
 
-if reg
-  content = "#{reg["content_html"]} <hr/>" + content
-end
 %>
 <span tabindex="0" class="incident-tag label label-<%= label_class%>" title='<%= title %>' data-toggle="popover" data-placement="bottom" data-content="<%= content %>" data-trigger="focus" data-html="true">
   <%= tag %>
