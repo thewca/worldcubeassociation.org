@@ -1,8 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Icon, Popup } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import UserBadge, { subtextForMember, subtextForOfficer } from '../UserBadge';
 import '../../stylesheets/static_pages/teams_committees.scss';
+
+function Team({ team }) {
+  const [hoveringEmail, setHoveringEmail] = useState(false);
+
+  return (
+    <div className="team">
+      <h3>
+        <span className="name">{team.name}</span>
+        {team.acronym && team.acronym !== 'BOARD' && (
+          <span className="acronym">
+            (
+            {team.acronym}
+            )
+          </span>
+        )}
+        <Popup
+          content="Copy to Clipboard"
+          trigger={(
+            <Button
+              onClick={() => navigator.clipboard.writeText(team.email)}
+              className="team-mail-button"
+              size="big"
+              icon
+              onMouseEnter={() => setHoveringEmail(true)}
+              onMouseLeave={() => setHoveringEmail(false)}
+            >
+              <Icon name={hoveringEmail ? 'copy' : 'mail'} />
+              <span className="team-mail-email">{team.email}</span>
+            </Button>
+            )}
+        />
+      </h3>
+
+      <p>{I18n.t(`about.structure.${team.friendly_id}.description`)}</p>
+
+      <div className="team-members">
+        {team.current_members
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .sort((a) => (a.senior_member ? -1 : 1))
+          .sort((a) => (a.leader ? -1 : 1))
+          .map((user) => (
+            <div key={team.id.toString() + user.id.toString()}>
+              <UserBadge
+                user={user}
+                leader={user.leader}
+                senior={user.senior_member}
+                subtexts={subtextForMember(user)}
+              />
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+}
 
 function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
   return (
@@ -12,7 +66,7 @@ function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
         {I18n.t('about.structure.committees')}
       </p>
 
-      <h3 id="officers">{I18n.t('about.structure.officers.name')}</h3>
+      <h3>{I18n.t('about.structure.officers.name')}</h3>
       <p>{I18n.t('about.structure.officers.description')}</p>
 
       <div className="team-members">
@@ -27,54 +81,7 @@ function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
         ))}
       </div>
 
-      {teams.map((team) => (
-        <div className="team" key={team.id}>
-          <h3>
-            <span className="name">{team.name}</span>
-            {team.acronym && team.acronym !== 'BOARD' && (
-              <span className="acronym">
-                {team.acronym ? `(${team.acronym})` : ''}
-              </span>
-            )}
-            <Popup
-              trigger={<Button className="team-mail-button" size="big" icon="mail" href={`mailto:${team.email}`} />}
-              flowing
-              hoverable
-            >
-              <Popup
-                content="Copy to Clipboard"
-                trigger={(
-                  <Icon
-                    name="copy"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => navigator.clipboard.writeText(team.email)}
-                  />
-                )}
-              />
-              {team.email}
-            </Popup>
-          </h3>
-
-          <p>{I18n.t(`about.structure.${team.friendly_id}.description`)}</p>
-
-          <div className="team-members">
-            {team.current_members
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .sort((a) => (a.senior_member ? -1 : 1))
-              .sort((a) => (a.leader ? -1 : 1))
-              .map((user) => (
-                <div key={team.id.toString() + user.id.toString()}>
-                  <UserBadge
-                    user={user}
-                    leader={user.leader}
-                    senior={user.senior_member}
-                    subtexts={subtextForMember(user)}
-                  />
-                </div>
-              ))}
-          </div>
-        </div>
-      ))}
+      {teams.map((team) => <Team team={team} key={team.id} />)}
     </>
   );
 }

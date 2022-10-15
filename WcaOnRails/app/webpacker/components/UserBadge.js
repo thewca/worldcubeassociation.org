@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Button, Icon, Label, Popup,
 } from 'semantic-ui-react';
+import classnames from 'classnames';
 import UserAvatar from './UserAvatar';
 import I18n from '../lib/i18n';
 
@@ -31,8 +32,7 @@ export function subtextForOfficer(user, officerTitles) {
   const positions = user.teams
     .map((team) => {
       const title = officerTitles.find((t) => t.friendly_id === team.friendly_id);
-      if (title) return title.name;
-      return '';
+      return title ? title.name : '';
     })
     .filter(Boolean);
 
@@ -44,28 +44,22 @@ export function subtextForOfficer(user, officerTitles) {
 }
 
 function UserBadge({
-  user, subtexts = [], background = '', badgeClasses = '', senior = false, leader = false,
+  user,
+  subtexts = [],
+  background = '',
+  badgeClasses = '',
+  senior = false,
+  leader = false,
 }) {
-  let classes = `user-badge ${badgeClasses}`;
+  const classes = classnames('user-badge', badgeClasses, { senior, leader });
 
-  if (senior) {
-    classes += ' senior';
-  }
-  if (leader) {
-    classes += ' leader';
-  }
-
-  let subtext = (
+  const subtext = subtexts.length ? (
     <div className="subtext">
       {subtexts.map((t, i) => (
         <div key={`${user.wca_id}-${t}-subtext-${i.toString()}`}>{t}</div>
       ))}
     </div>
-  );
-
-  if (!subtexts.length) {
-    subtext = null;
-  }
+  ) : null;
 
   return (
     <Button as="div" className={classes} labelPosition="left">

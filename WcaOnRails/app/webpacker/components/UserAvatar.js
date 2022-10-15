@@ -6,7 +6,6 @@ import '../stylesheets/user_avatar.scss';
 function UserAvatar({
   avatar = { url: '', pending_url: '' },
   showPending = false,
-  doNotShowFullImageOnHover = false,
   avatarClass = '',
   breakCache = false,
   title = '',
@@ -23,7 +22,7 @@ function UserAvatar({
     />
   );
 
-  if (!url && !doNotShowFullImageOnHover) {
+  if (!url) {
     return image;
   }
 

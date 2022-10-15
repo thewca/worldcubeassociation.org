@@ -1,5 +1,6 @@
 .team {
 
+
   .name {
     padding-left: 1em;
   }
@@ -15,6 +16,24 @@
   .team-mail-button {
     margin-left: 1em !important;
     padding: 0.5em !important;
+  }
+
+  .team-mail-button:hover .team-mail-email {
+    // just something longer than any email address
+    max-width: 50vw;
+  }
+
+  .team-mail-email {
+    font-size: 0.8em;
+    margin: 0;
+    padding: 0;
+    max-width: 0;
+    overflow: hidden;
+    height: 100%;
+    display: inline-block;
+    transition: max-width 300ms ease-in-out !important;
+    vertical-align: top;
+    white-space: nowrap;
   }
 }
 
