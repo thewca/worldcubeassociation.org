@@ -9,7 +9,7 @@ class Competition < ApplicationRecord
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
   has_many :results, foreign_key: "competitionId"
-  has_many :scrambles, foreign_key: "competitionId"
+  has_many :scrambles, -> { order(:groupId, :isExtra, :scrambleNum) }, foreign_key: "competitionId"
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
@@ -229,6 +229,8 @@ class Competition < ApplicationRecord
   NEARBY_DAYS_DANGER = 19
   NEARBY_DAYS_INFO = 365
   NEARBY_INFO_COUNT = 8
+  REGISTRATION_COLLISION_MINUTES_WARNING = 180
+  REGISTRATION_COLLISION_MINUTES_DANGER = 30
   RECENT_DAYS = 30
   REPORT_AND_RESULTS_DAYS_OK = 7
   REPORT_AND_RESULTS_DAYS_WARNING = 14
@@ -1117,6 +1119,11 @@ class Competition < ApplicationRecord
     adjacent_competitions(CompetitionSeries::MAX_SERIES_DISTANCE_DAYS, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
   end
 
+  def colliding_registration_start_competitions
+    Competition.where("ABS(TIMESTAMPDIFF(MINUTE, ?, registration_open)) <= ? AND id <> ?", registration_open, REGISTRATION_COLLISION_MINUTES_WARNING, id)
+               .order(:registration_open)
+  end
+
   private def to_radians(degrees)
     degrees * Math::PI / 180
   end
@@ -1132,6 +1139,10 @@ class Competition < ApplicationRecord
 
   def has_date?
     !start_date.nil? || !end_date.nil?
+  end
+
+  def has_registration_start_date?
+    !registration_open.nil?
   end
 
   def has_location?
@@ -1194,6 +1205,24 @@ class Competition < ApplicationRecord
 
   def distance_adjacent_to?(c, distance_km)
     self.kilometers_to(c) < distance_km
+  end
+
+  def registration_open_adjacent_to?(c, distance_minutes)
+    if !c.has_registration_start_date? || !self.has_registration_start_date?
+      return false
+    end
+    self.minutes_until_other_registration_starts(c).abs < distance_minutes
+  end
+
+  def minutes_until_other_registration_starts(c)
+    if !c.has_registration_start_date? || !self.has_registration_start_date?
+      return false
+    end
+    seconds_until = (c.registration_open - self.registration_open).to_i
+    if seconds_until < 0
+      seconds_until = (self.registration_open - c.registration_open).to_i * -1
+    end
+    seconds_until / 60
   end
 
   def announced?
@@ -1301,11 +1330,6 @@ class Competition < ApplicationRecord
 
   def city_and_country
     [cityName, country&.name].compact.join(', ')
-  end
-
-  def result_cache_key(view)
-    results_updated_at = results.order('updated_at desc').limit(1).pluck(:updated_at).first
-    [id, view, results_updated_at&.iso8601 || "", I18n.locale]
   end
 
   def events_with_podium_results
