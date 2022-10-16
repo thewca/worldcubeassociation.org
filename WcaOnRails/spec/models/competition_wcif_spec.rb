@@ -18,6 +18,7 @@ RSpec.describe "Competition WCIF" do
       event_ids: %w(333 444 333fm 333mbf),
       with_schedule: true,
       competitor_limit: 50,
+      base_entry_fee_lowest_denomination: 1000,
     )
   }
   let(:partner_competition) { FactoryBot.create(:competition, id: "PartnerComp2014", series_base: competition, series_distance_days: 3) }
@@ -259,6 +260,7 @@ RSpec.describe "Competition WCIF" do
           ],
         },
         "competitorLimit" => 50,
+        "baseRegistrationFee" => 1000,
         "extensions" => [],
       )
     end
