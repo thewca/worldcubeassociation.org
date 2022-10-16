@@ -207,9 +207,9 @@ class Registration < ApplicationRecord
         "status" => { "type" => "string", "enum" => %w(accepted deleted pending) },
         "guests" => { "type" => "integer" },
         "comments" => { "type" => "string" },
-        "createdAt" => { "type" => ["xTime", "null"]},
+        "createdAt" => { "type" => ["xTime", "null"] },
         "paidEntryFees" => { "type" => ["integer", "null"] },
-        "lastPaymentTime" => { "type" => ["xTime", "null"]},
+        "lastPaymentTime" => { "type" => ["xTime", "null"] },
       },
     }
   end
