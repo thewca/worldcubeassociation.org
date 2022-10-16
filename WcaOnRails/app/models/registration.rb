@@ -181,6 +181,9 @@ class Registration < ApplicationRecord
     authorized_fields = {
       "guests" => guests,
       "comments" => comments || '',
+      "createdAt" => created_at,
+      "paidEntryFees" => paid_entry_fees,
+      "lastPaymentTime" => last_payment_date, # Despite the name of the original field, this is a timestamp
     }
     {
       "wcaRegistrationId" => id,
@@ -204,6 +207,9 @@ class Registration < ApplicationRecord
         "status" => { "type" => "string", "enum" => %w(accepted deleted pending) },
         "guests" => { "type" => "integer" },
         "comments" => { "type" => "string" },
+        "createdAt" => { "type" => ["xTime", "null"]},
+        "paidEntryFees" => { "type" => ["integer", "null"] },
+        "lastPaymentTime" => { "type" => ["xTime", "null"]},
       },
     }
   end
