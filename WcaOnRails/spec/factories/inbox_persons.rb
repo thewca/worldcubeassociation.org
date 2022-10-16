@@ -10,7 +10,7 @@ FactoryBot.define do
     # Therefore we must do the max logic in RoR's world after casting.
     id { ((InboxPerson.pluck(:id).map(&:to_i).max || 0) + 1) }
     wcaId { "" }
-    name { Faker::Name.name }
+    name { Faker::Name.name.gsub(" DVM", "") } # DVM removed to prevent unwanted warnings (we don't allow titles as suffixes)
     countryId { Country.real.sample.iso2 }
     gender { "m" }
     dob { Date.new(1966, 4, 4) }

@@ -9,7 +9,7 @@ FactoryBot.define do
       id
     end
     subId { 1 }
-    name { Faker::Name.name }
+    name { Faker::Name.name.gsub(" DVM", "") } # DVM removed to prevent unwanted warnings (we don't allow titles as suffixes)
     countryId { Country.real.sample.id }
     gender { "m" }
     year { 1966 }

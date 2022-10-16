@@ -179,7 +179,7 @@ RSpec.describe PV do
         res_bad_period_upcase = FactoryBot.create(:inbox_result,
                                                   competition: competition1,
                                                   eventId: "333oh")
-        res_bad_period_upcase.person.update(name: "David K.J. RAMSEY")
+        res_bad_period_upcase.person.update(name: "David K.J. RAmsey")
         res_same_name1 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
                                            eventId: "333oh")

@@ -22,7 +22,7 @@ module ResultsValidators
     MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING = "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors " \
                                                 "and that all results are correctly seperated by their corresponding id."
     WRONG_PARENTHESIS_TYPE_ERROR = "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
-    UPPERCASE_NAME_WARNING = "'%{name}' has an all caps name. Please confirm that this is indeed the correct spelling or fix the name."
+    UPPERCASE_NAME_WARNING = "'%{name}' has successive uppercase letters in their name. Please confirm that this is indeed the correct spelling or fix the name."
     LOWERCASE_NAME_WARNING = "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
     MISSING_PERIOD_WARNING = "'%{name}' has a single letter middle name without an abbreviation period. Please confirm that this is indeed the correct spelling or fix the name."
     LETTER_AFTER_PERIOD_WARNING = "'%{name}' is missing a space after a period in their name. Please confirm that this is indeed the correct spelling or fix the name."
@@ -129,7 +129,7 @@ module ResultsValidators
                                                LOWERCASE_NAME_WARNING,
                                                name: p.name)
           end
-          if split_name.any? { |n| n.upcase == n && n.length > 2 && n != 'DVM' }
+          if split_name.any? { |n| n =~ /[[:upper:]]{2}/ && n.length > 2 }
             @warnings << ValidationWarning.new(:persons, competition_id,
                                                UPPERCASE_NAME_WARNING,
                                                name: p.name)
