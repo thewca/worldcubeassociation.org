@@ -1572,6 +1572,7 @@ class Competition < ApplicationRecord
       "events" => events_wcif,
       "schedule" => schedule_wcif,
       "competitorLimit" => competitor_limit_enabled? ? competitor_limit : nil,
+      "baseRegistrationFee" => base_entry_fee_lowest_denomination,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
@@ -1796,6 +1797,7 @@ class Competition < ApplicationRecord
           },
         },
         "competitorLimit" => { "type" => ["integer", "null"] },
+        "baseRegistrationFee" => { "type" => ["integer", "null"] },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
