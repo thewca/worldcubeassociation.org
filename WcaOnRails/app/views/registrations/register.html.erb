@@ -32,7 +32,8 @@
     <% end %>
   <% else %>
     <% user_may_register = current_user.cannot_register_for_competition_reasons.length == 0 %>
-    <% if @registration.show_details? %>
+    <% current_user_can_pre_register = @competition.user_can_pre_register?(current_user) %>
+    <% if @registration.show_details? || current_user_can_pre_register %>
       <p><%= t 'registrations.greeting', name: current_user.name %></p>
     <% end %>
 
@@ -45,7 +46,7 @@
         <%= t 'registrations.contact_organizer' %>
       <% end %>
       <hr/>
-    <% elsif @competition.registration_opened? %>
+    <% elsif @competition.registration_opened? || current_user_can_pre_register %>
       <% unless user_may_register %>
         <%= alert :danger do %>
           <%= t 'registrations.please_fix_profile_html', comp: @competition.name,
@@ -82,7 +83,7 @@
         </div>
       <% end %>
 
-      <% if @registration.show_details? %>
+      <% if @registration.show_details? || current_user_can_pre_register%>
         <div class="panel panel-primary">
           <div class="panel-heading">
             <h4 class="panel-title">
