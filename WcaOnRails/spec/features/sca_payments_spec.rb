@@ -50,7 +50,7 @@ def fill_confirm_and_expect(card, button_id, message)
     fill_in with: "12345", name: "postal"
   end
   click_on "Pay your fees with card"
-  Capybara.using_wait_time(15) do
+  Capybara.using_wait_time(30) do
     # The 3D secure challenge is in a modal in an iframe in an iframe
     within_frame(page.find("body>div>iframe")) do
       within_frame(page.find("#challengeFrame")) do
