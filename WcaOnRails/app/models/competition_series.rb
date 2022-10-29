@@ -61,7 +61,7 @@ class CompetitionSeries < ApplicationRecord
       "id" => wcif_id,
       "name" => name,
       "shortName" => short_name,
-      "competitions" => competitions.map(&:id),
+      "competitionIds" => competitions.map(&:id),
     }
   end
 
@@ -72,17 +72,17 @@ class CompetitionSeries < ApplicationRecord
         "id" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
-        "competitions" => { "type" => "array", "items" => { "type" => "string" } },
+        "competitionIds" => { "type" => "array", "items" => { "type" => "string" } },
       },
     }
   end
 
   def load_wcif!(wcif_series)
-    if wcif_series["competitions"].count <= 1
+    if wcif_series["competitionIds"].count <= 1
       raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.")
     end
 
-    self.competition_ids = wcif_series["competitions"].join(",")
+    self.competition_ids = wcif_series["competitionIds"].join(",")
     update!(CompetitionSeries.wcif_to_attributes(wcif_series))
 
     self
