@@ -50,8 +50,11 @@ namespace :db do
           end
 
           public_zip_path = Rails.root.join('public', 'wst', zip_filename)
-          FileUtils.mkpath(File.dirname(public_zip_path))
-          FileUtils.mv(zip_filename, public_zip_path)
+
+          LogTask.log_task "Moving zipped file to '#{public_zip_path}'" do
+            FileUtils.mkpath(File.dirname(public_zip_path))
+            FileUtils.mv(zip_filename, public_zip_path)
+          end
         end
       end
     end
