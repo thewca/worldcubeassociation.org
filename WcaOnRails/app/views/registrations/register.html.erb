@@ -13,7 +13,7 @@
   <% if @competition.registration_not_yet_opened? %>
     <%= alert :info, t('registrations.will_open_html', days: opens_in_days, time: wca_local_time(@competition.registration_open)) %>
   <%# Don't show this alert if we're showing the registration's details: this message is included in it! %>
-  <% elsif @competition.registration_past? && !@registration&.show_details? %>
+  <% elsif @competition.registration_past? && !@registration&.show_details?(current_user) %>
     <%= alert :danger, t('registrations.closed_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
   <% end %>
 
@@ -32,8 +32,7 @@
     <% end %>
   <% else %>
     <% user_may_register = current_user.cannot_register_for_competition_reasons.length == 0 %>
-    <% current_user_can_pre_register = @competition.user_can_pre_register?(current_user) %>
-    <% if @registration.show_details? || current_user_can_pre_register %>
+    <% if @registration.show_details?(current_user) %>
       <p><%= t 'registrations.greeting', name: current_user.name %></p>
     <% end %>
 
@@ -46,7 +45,7 @@
         <%= t 'registrations.contact_organizer' %>
       <% end %>
       <hr/>
-    <% elsif @competition.registration_opened? || current_user_can_pre_register %>
+    <% elsif @competition.registration_opened? %>
       <% unless user_may_register %>
         <%= alert :danger do %>
           <%= t 'registrations.please_fix_profile_html', comp: @competition.name,
@@ -83,7 +82,7 @@
         </div>
       <% end %>
 
-      <% if @registration.show_details? || current_user_can_pre_register%>
+      <% if @registration.show_details?(current_user) %>
         <div class="panel panel-primary">
           <div class="panel-heading">
             <h4 class="panel-title">

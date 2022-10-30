@@ -134,8 +134,8 @@ class Registration < ApplicationRecord
     competition.registration_opened? && to_be_paid_through_wca?
   end
 
-  def show_details?
-    competition.registration_opened? || !(new_or_deleted?)
+  def show_details?(user)
+    (competition.registration_opened? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
   end
 
   def record_payment(amount, currency_code, stripe_charge_id, user_id)
