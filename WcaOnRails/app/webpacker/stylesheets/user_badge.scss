@@ -3,12 +3,6 @@
 .user-badge {
   margin: 4px !important;
 
-  &.board {
-    & > .label {
-      background-color: #333;
-    }
-  }
-
   &.leader {
     & > .label {
       background-color: $dark-blue;
