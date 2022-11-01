@@ -1,7 +1,9 @@
 <% provide(:title, t('about.title')) %>
 
 <%= react_component('StaticPages/About', {
-  currentBoardMembers: Team.board.current_members.includes(:user).map(&:user).sort_by(&:name)
+  currentBoardMembers: Team.board.current_members.includes(:user).map(&:user).sort_by(&:name),
+  image1: { src: asset_url("about/bulgarian-open.jpg"), alt: "Bulgarian Open 2018" },
+  image2: { src: asset_url("about/worlds-2015.jpg"), alt: "World Championship 2015"}
 }, {
   class: 'container'
 }) %>

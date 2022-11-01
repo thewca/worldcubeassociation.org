@@ -10,10 +10,12 @@ const DONATE_GUIDESTAR_URL = 'https://www.nfggive.com/guidestar/82-3825954';
  * @param {{
  *  name: string, country: {name: string, [k: *]: *}, id: number, [k: *]: *
  * }[]} currentBoardMembers
+ * @param {{ src: string, alt: string }} image1
+ * @param {{ src: string, alt: string }} image2
  * @returns {JSX.Element}
  * @constructor
  */
-function About({ currentBoardMembers }) {
+function About({ currentBoardMembers, image1, image2 }) {
   return (
     <>
       <div className="jumbotron">
@@ -51,7 +53,11 @@ function About({ currentBoardMembers }) {
           <I18nHTMLTranslate i18nKey="about.who_we_are_content_html" />
         </div>
         <div className="col-md-4">
-          <img className="about-page-image" src="/assets/about/bulgarian-open.jpg" alt="" />
+          <img
+            className="about-page-image"
+            src={image1.src}
+            alt={image1.alt}
+          />
         </div>
       </div>
 
@@ -81,8 +87,8 @@ function About({ currentBoardMembers }) {
         <div className="col-md-4">
           <img
             className="about-page-image"
-            src="/assets/about/worlds-2015.jpg"
-            alt="World Championship 2015"
+            src={image2.src}
+            alt={image2.alt}
           />
         </div>
       </div>
