@@ -11,7 +11,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-syntax-import-meta": "^7.10.4",
     "@babel/plugin-transform-runtime": "^7.19.1",
-    "@babel/preset-env": "^7.19.3",
+    "@babel/preset-env": "^7.19.4",
     "@babel/preset-react": "^7.17.12",
     "@babel/runtime": "^7.19.0",
     "@cubing/icons": "^1.0.6",
