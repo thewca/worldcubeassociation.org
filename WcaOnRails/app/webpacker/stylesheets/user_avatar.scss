@@ -1,0 +1,19 @@
+.user-avatar-image {
+  display: inline-block;
+  vertical-align: middle;
+
+  background-size: cover;
+
+  width: 50px;
+  height: 50px;
+
+  &.rounded {
+    border-radius: 0.3em;
+  }
+}
+
+.user-avatar-image-large {
+  @extend .user-avatar-image;
+  width: 100px;
+  height: 100px;
+}
