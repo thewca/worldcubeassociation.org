@@ -114,14 +114,14 @@
 </div>
 
 <div id="registration-status" class="form-group registration-status-selector">
-  <%= check_box_tag(:show_registration_status, params[:show_registration_status], params[:show_registration_status] == "on") %>
-  <%= label_tag(name = t('competitions.index.show_registration_status'),
+  <%= check_box_tag("#{:show_registration_status}-checkbox", params[:show_registration_status], params[:show_registration_status] == "on") %>
+  <%= label_tag(name = "#{:show_registration_status}-checkbox",
                 content_or_options = t('competitions.index.show_registration_status')) %>
 </div>
 
 <div id="cancelled" class="form-group cancel-selector">
-  <%= check_box_tag(:show_cancelled, params[:show_cancelled], params[:show_cancelled] == "on") %>
-  <%= label_tag(name = t('competitions.index.show_cancelled'),
+  <%= check_box_tag("#{:show_cancelled}-checkbox", params[:show_cancelled], params[:show_cancelled] == "on") %>
+  <%= label_tag(name = "#{:show_cancelled}-checkbox",
                 content_or_options = t('competitions.index.show_cancelled')) %>
 </div>
 
