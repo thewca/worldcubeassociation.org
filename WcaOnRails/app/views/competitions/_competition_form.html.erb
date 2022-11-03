@@ -354,8 +354,10 @@
         <%= f.input :on_the_spot_registration, collection: [ :true, :false ] %>
         <%= f.input :on_the_spot_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
 
-        <%= f.input :allow_registration_edits, collection: [ :true, :false ] %>
-        <%= f.input :allow_registration_self_delete_after_acceptance, collection: [ :true, :false ] %>
+        <div class="wca-registration-options">
+          <%= f.input :allow_registration_edits, collection: [ :true, :false ] %>
+          <%= f.input :allow_registration_self_delete_after_acceptance, collection: [ :true, :false ] %>
+        </div>
 
         <%= f.input :extra_registration_requirements, input_html: { class: disable_form ? "" : "markdown-editor" } %>
 
