@@ -2,6 +2,8 @@ import React from 'react';
 import { List, Button, Icon } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import BulgarianOpen2018 from '../../images/bulgarian-open-2018.jpg';
+import WorldChampionships2015 from '../../images/worlds-2015.jpg';
 
 const DONATE_PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=W5JL8J4S8UTJU';
 const DONATE_GUIDESTAR_URL = 'https://www.nfggive.com/guidestar/82-3825954';
@@ -10,12 +12,10 @@ const DONATE_GUIDESTAR_URL = 'https://www.nfggive.com/guidestar/82-3825954';
  * @param {{
  *  name: string, country: {name: string, [k: *]: *}, id: number, [k: *]: *
  * }[]} currentBoardMembers
- * @param {{ src: string, alt: string }} image1
- * @param {{ src: string, alt: string }} image2
  * @returns {JSX.Element}
  * @constructor
  */
-function About({ currentBoardMembers, image1, image2 }) {
+function About({ currentBoardMembers }) {
   return (
     <>
       <div className="jumbotron">
@@ -55,8 +55,8 @@ function About({ currentBoardMembers, image1, image2 }) {
         <div className="col-md-4">
           <img
             className="about-page-image"
-            src={image1.src}
-            alt={image1.alt}
+            src={BulgarianOpen2018}
+            alt="Bulgarian Open 2018"
           />
         </div>
       </div>
@@ -87,8 +87,8 @@ function About({ currentBoardMembers, image1, image2 }) {
         <div className="col-md-4">
           <img
             className="about-page-image"
-            src={image2.src}
-            alt={image2.alt}
+            src={WorldChampionships2015}
+            alt="World Championship 2015"
           />
         </div>
       </div>
