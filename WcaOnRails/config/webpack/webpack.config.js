@@ -1,19 +1,26 @@
 const { webpackConfig, merge } = require('shakapacker');
 const webpack = require('webpack');
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const path = require('path');
 
-const customConfig = {
+const smp = new SpeedMeasurePlugin();
+
+const customConfig = smp.wrap({
   resolve: {
     extensions: [
       '.css', '.sass', '.scss', '.css', '.module.sass', '.module.scss', '.module.css',
       '.png', '.svg', '.gif', '.jpeg', '.jpg',
       '.ts', '.tsx',
     ],
+    symlinks: false,
   },
   plugins: [
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
     }),
+    new ForkTsCheckerWebpackPlugin(),
   ],
   module: {
     rules: [
@@ -26,7 +33,8 @@ const customConfig = {
       },
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        loader: 'ts-loader',
+        include: path.resolve(__dirname, '../../app/webpacker'),
         exclude: /node_modules/,
       },
     ],
@@ -55,6 +63,7 @@ const customConfig = {
       },
     },
   },
-};
+  devtool: 'source-map',
+});
 
 module.exports = merge(webpackConfig, customConfig);
