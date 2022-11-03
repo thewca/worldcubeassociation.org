@@ -1,0 +1,57 @@
+@import "variables";
+
+.user-badge {
+  margin: 4px !important;
+
+  &.leader {
+    & > .label {
+      background-color: $dark-blue;
+    }
+  }
+
+  &.senior {
+    & > .label {
+      background-color: $dark-green;
+    }
+  }
+
+  .user-name {
+    .subtext {
+      font-style: oblique;
+      margin-top: 6px;
+      font-size: 0.9em;
+    }
+
+    width: 100%;
+
+    display: flex !important;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  /* Stop this looking like you can click it */
+  .user-name-no-link {
+    pointer-events: none;
+  }
+
+  .icon {
+    margin: 0 0.25em;
+  }
+
+  /* Make it fill width of screen on mobile */
+  @media (max-width: 525px) {
+    width: 100vw;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+
+    .user-name {
+      background: none !important;
+    }
+
+    > .label {
+      border-radius: 0 !important;
+    }
+  }
+}

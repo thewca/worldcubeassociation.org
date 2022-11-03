@@ -290,9 +290,10 @@ RSpec.describe Api::V0::ApiController do
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
 
-        expect(json['me']['teams']).to match_array [
-          { "friendly_id" => "board", "leader" => false },
-        ]
+        expect(json['me']['teams'].length).to eq 1
+        team = json['me']['teams'].first
+        expect(team['friendly_id']).to eq 'board'
+        expect(team['leader']).to eq false
       end
     end
 
@@ -357,10 +358,14 @@ RSpec.describe Api::V0::ApiController do
         json = JSON.parse(response.body)
 
         expect(json['me']['delegate_status']).to eq nil
-        expect(json['me']['teams']).to match_array [
-          { "friendly_id" => "wrt", "leader" => true },
-          { "friendly_id" => "wrc", "leader" => false },
-        ]
+        expect(json['me']['teams'].length).to eq 2
+        team = json['me']['teams'].find { |t| t['friendly_id'] == 'wrc' }
+        expect(team['leader']).to eq false
+        expect(team['friendly_id']).to eq 'wrc'
+        expect(team['avatar']['thumb']['url']).to be_a String
+        expect(team['id']).to be_a Numeric
+        expect(team['name']).to be_a String
+        expect(team['senior_member']).to be false
       end
     end
 

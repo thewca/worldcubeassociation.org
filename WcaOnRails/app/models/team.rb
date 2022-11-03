@@ -205,4 +205,18 @@ class Team < ApplicationRecord
   def name
     I18n.t("about.structure.#{friendly_id}.name")
   end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: %w[id friendly_id name email],
+    methods: %w[name acronym current_members],
+    include: [],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    # NOTE: doing deep_dup is necessary here to avoid changing the inner values
+    # of the freezed variables (which would leak PII)!
+    default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
+    options = default_options.merge(options || {})
+    super(options)
+  end
 end

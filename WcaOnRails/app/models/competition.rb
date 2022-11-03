@@ -1658,7 +1658,7 @@ class Competition < ApplicationRecord
       raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series")
     end
 
-    unless wcif_series["competitions"].include?(self.id)
+    unless wcif_series["competitionIds"].include?(self.id)
       raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.")
     end
 

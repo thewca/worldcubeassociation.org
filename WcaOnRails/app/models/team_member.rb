@@ -13,7 +13,11 @@ class TeamMember < ApplicationRecord
   attr_accessor :current_user
   delegate :friendly_id, to: :team
   delegate :hidden?, to: :team
+  delegate :wca_id, to: :user
+  delegate :name, to: :user
+  delegate :avatar, to: :user
   alias_attribute :leader, :team_leader
+  alias_attribute :senior_member, :team_senior_member
 
   def current_member?
     end_date.nil? || end_date > Date.today
@@ -46,8 +50,9 @@ class TeamMember < ApplicationRecord
   validates :start_date, presence: true
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: [],
-    methods: ["friendly_id", "leader"],
+    methods: %w[friendly_id leader name senior_member wca_id],
+    only: %w[id],
+    include: %w[avatar],
   }.freeze
 
   def serializable_hash(options = nil)
