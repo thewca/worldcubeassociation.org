@@ -2,8 +2,6 @@ import React from 'react';
 import { List, Button, Icon } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
-import BulgarianOpen2018 from './bulgarian-open-2018.jpg';
-import WorldChampionships2015 from './worlds-2015.jpg';
 
 const DONATE_PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=W5JL8J4S8UTJU';
 const DONATE_GUIDESTAR_URL = 'https://www.nfggive.com/guidestar/82-3825954';
@@ -54,8 +52,9 @@ function About({ currentBoardMembers }) {
         </div>
         <div className="col-md-4">
           <img
+            /* eslint-disable-next-line global-require */
+            src={require('./bulgarian-open-2018.jpg').default}
             className="about-page-image"
-            src={BulgarianOpen2018}
             alt="Bulgarian Open 2018"
           />
         </div>
@@ -87,7 +86,8 @@ function About({ currentBoardMembers }) {
         <div className="col-md-4">
           <img
             className="about-page-image"
-            src={WorldChampionships2015}
+            /* eslint-disable-next-line global-require */
+            src={require('./worlds-2015.jpg')}
             alt="World Championship 2015"
           />
         </div>
