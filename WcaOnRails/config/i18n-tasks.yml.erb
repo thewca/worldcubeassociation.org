@@ -157,7 +157,7 @@ ignore:
   I18n::Tasks.add_scanner 'CustomWcaI18nScanner', only: %w(*.erb)
 
   I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
-    only: %w(*.js),
+    only: %w(*.js *.tsx *.ts *.jsx),
     patterns: [['I18nHTMLTranslate\s+i18nKey=%{key}', '%{key}']]
 %>
 # <%#= I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',

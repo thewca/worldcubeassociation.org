@@ -6,14 +6,7 @@ import I18nHTMLTranslate from '../I18nHTMLTranslate';
 const DONATE_PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=W5JL8J4S8UTJU';
 const DONATE_GUIDESTAR_URL = 'https://www.nfggive.com/guidestar/82-3825954';
 
-/**
- * @param {{
- *  name: string, country: {name: string, [k: *]: *}, id: number, [k: *]: *
- * }[]} currentBoardMembers
- * @returns {JSX.Element}
- * @constructor
- */
-function About({ currentBoardMembers }) {
+function About({ currentBoardMembers }: { currentBoardMembers: Record<string, any>[] }) {
   return (
     <>
       <div className="jumbotron">
@@ -96,7 +89,7 @@ function About({ currentBoardMembers }) {
       </p>
 
       <List as="ul">
-        {currentBoardMembers.map((member) => (
+        {currentBoardMembers.map((member: any) => (
           <List.Item as="li" key={member.id}>
             {member.name}
             {' '}
