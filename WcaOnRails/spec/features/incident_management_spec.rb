@@ -47,11 +47,11 @@ RSpec.feature "Incident Management", js: true do
 
       scenario "shows regulation text" do
         visit "/incidents"
-        page.find(:xpath, "//*[text()[contains(.,'1a')]]").click
+        page.find(".incident-tag", text: "1a").click
         # Unfortunately we don't have access to the Regulations json within travis,
         # so here we check for the most unlikely to change Regulation:
         # that a competition must include a WCA Delegate.
-        page.find(".popover").has_content?("must include a WCA Delegate")
+        expect(page).to have_content("must include a WCA Delegate")
       end
     end
 
