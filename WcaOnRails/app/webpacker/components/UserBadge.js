@@ -63,10 +63,10 @@ function UserBadge({
 
   return (
     <Button as="div" className={classes} labelPosition="left">
-      <Label style={{ backgroundColor: background }}>
+      <Label style={{ backgroundColor: background }} className="user-badge-label-avatar">
         <UserAvatar
           avatar={user.avatar}
-          avatarClass="rounded"
+          avatarClass="user-avatar-rounded-left"
         />
       </Label>
       {user.wca_id ? (
@@ -82,14 +82,14 @@ function UserBadge({
                 {user.name}
                 <Icon name="user circle outline" />
               </b>
-              {subtext}
+              <p className="user-badge-subtext">{subtext}</p>
             </Button>
           )}
         />
       ) : (
         <div className="user-name ui button user-name-no-link">
           <b>{user.name}</b>
-          {subtext}
+          <p className="user-badge-subtext">{subtext}</p>
         </div>
       )}
     </Button>
