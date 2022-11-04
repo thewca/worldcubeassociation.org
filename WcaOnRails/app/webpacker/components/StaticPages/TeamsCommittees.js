@@ -8,7 +8,7 @@ function Team({ team }) {
   const [hoveringEmail, setHoveringEmail] = useState(false);
 
   return (
-    <div className="team"  id={team.acronym}>
+    <div className="team" id={team.acronym}>
       <h3>
         <span className="name">{team.name}</span>
         {team.acronym && team.acronym !== 'BOARD' && (
