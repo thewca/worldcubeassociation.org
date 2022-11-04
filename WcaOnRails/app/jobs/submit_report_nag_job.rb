@@ -8,11 +8,7 @@ class SubmitReportNagJob < SingletonApplicationJob
   end
 
   def reminder_needed?(competition)
-    return unless competition.end_date
-    return if competition.delegate_report.reminder_sent_at
-
-    # Send a reminder 6 days after the end of the competition
-    6.days.since(competition.end_date).today?
+    competition.delegate_report.reminder_sent_at.blank? && 6.days.since(competition.end_date).today?
   end
 
   def perform
