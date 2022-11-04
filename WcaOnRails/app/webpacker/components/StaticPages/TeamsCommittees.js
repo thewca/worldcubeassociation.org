@@ -59,6 +59,7 @@ function Team({ team }) {
 }
 
 function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
+  console.log(teams);
   return (
     <>
       <h1>{I18n.t('about.structure.teams_committees_councils')}</h1>

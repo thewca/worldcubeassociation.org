@@ -64,7 +64,10 @@ function UserBadge({
   return (
     <Button as="div" className={classes} labelPosition="left">
       <Label style={{ backgroundColor: background }}>
-        <UserAvatar avatar={user.avatar} avatarClass="rounded" />
+        <UserAvatar
+          avatar={user.avatar}
+          avatarClass="rounded"
+        />
       </Label>
       {user.wca_id ? (
         <Popup

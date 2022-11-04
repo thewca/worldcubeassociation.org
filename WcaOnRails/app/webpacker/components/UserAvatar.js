@@ -4,20 +4,20 @@ import { Popup } from 'semantic-ui-react';
 import '../stylesheets/user_avatar.scss';
 
 function UserAvatar({
-  avatar = { url: '', pending_url: '' },
-  showPending = false,
+  avatar = { url: '', pending_url: '', thumb_url: '' },
   avatarClass = '',
-  breakCache = false,
   title = '',
+  size = 50,
 }) {
-  let url = showPending ? avatar.pending_url : avatar.url;
-
-  if (breakCache) url += `?${Date.now()}`;
+  const { url, thumb_url: thumbnailUrl, thumb } = avatar;
 
   const image = (
     <div
       className={`user-avatar-image ${avatarClass}`}
-      style={{ backgroundImage: `url(${url})` }}
+      style={{
+        backgroundImage: `url(${thumbnailUrl || thumb.url || url})`,
+        width: size,
+      }}
       title={title}
     />
   );
