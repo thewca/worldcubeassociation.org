@@ -60,7 +60,7 @@ function Team({ team }) {
 
 function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
   return (
-    <>
+    <div className="teams-committees">
       <h1>{I18n.t('about.structure.teams_committees_councils')}</h1>
       <p>
         {I18n.t('about.structure.committees')}
@@ -82,7 +82,7 @@ function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
       </div>
 
       {teams.map((team) => <Team team={team} key={team.id} />)}
-    </>
+    </div>
   );
 }
 
