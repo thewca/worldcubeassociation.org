@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.feature "Incident Management" do
+RSpec.feature "Incident Management", js: true do
   let!(:incident1) { FactoryBot.create(:incident, title: "First incident", tags: ["a", "b"], incident_competitions_attributes: { '0': { competition_id: FactoryBot.create(:competition, :confirmed).id } }) }
   let!(:incident2) { FactoryBot.create(:incident, :resolved, title: "Second incident", tags: ["a", "c", "1a"]) }
   let!(:incident3) { FactoryBot.create(:incident, :resolved, title: "Custom title", tags: ["c"]) }
@@ -13,7 +13,7 @@ RSpec.feature "Incident Management" do
       sign_in wrc_member
     end
 
-    feature "list of incidents", js: true do
+    feature "list of incidents" do
       scenario "shows all" do
         visit "/incidents"
         expect(page).to have_content("First incident")
