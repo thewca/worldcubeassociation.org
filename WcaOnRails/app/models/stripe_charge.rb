@@ -15,10 +15,10 @@ class StripeCharge < ApplicationRecord
   # Note that TWD from the Stripe docs is not listed here because it is implemented with cents in RubyMoney.
   ZERO_DECIMAL_CURRENCIES = %w[HUF UGX].freeze
 
-  # Stripe has a small handful of fancy snowflake currencies
-  # that need to be submitted as multiples of 100 even though they technically have subunits.
-  # The details are documented at https://stripe.com/docs/currencies#special-cases
   def self.amount_to_stripe(amount_lowest_denomination, iso_currency)
+    # Stripe has a small handful of fancy snowflake currencies
+    # that need to be submitted as multiples of 100 even though they technically have subunits.
+    # The details are documented at https://stripe.com/docs/currencies#special-cases
     if ZERO_DECIMAL_CURRENCIES.include?(iso_currency)
       amount_times_hundred = amount_lowest_denomination * 100
 
