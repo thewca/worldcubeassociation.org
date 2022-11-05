@@ -1,54 +1,53 @@
-.team {
+.teams-committees {
+  .team {
+    .name {
+      padding-left: 1em;
+    }
 
+    .acronym {
+      font-size: 1em;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #555555;
+      padding: 0 6px;
+    }
 
-  .name {
-    padding-left: 1em;
+    .team-mail-button {
+      margin-left: 1em !important;
+      padding: 0.5em !important;
+    }
+
+    .team-mail-button:hover .team-mail-email {
+      // just something longer than any email address
+      max-width: 50vw;
+    }
+
+    .team-mail-email {
+      font-size: 0.8em;
+      margin: 0;
+      padding: 0;
+      max-width: 0;
+      overflow: hidden;
+      height: 100%;
+      display: inline-block;
+      transition: max-width 300ms ease-in-out !important;
+      vertical-align: top;
+      white-space: nowrap;
+    }
   }
 
-  .acronym {
-    font-size: 1em;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #555555;
-    padding: 0 6px;
-  }
+  .team-members {
+    display: flex;
+    align-content: flex-start;
+    max-width: 100%;
+    flex-wrap: wrap;
+    margin: 10px 0 30px 0;
 
-  .team-mail-button {
-    margin-left: 1em !important;
-    padding: 0.5em !important;
-  }
-
-  .team-mail-button:hover .team-mail-email {
-    // just something longer than any email address
-    max-width: 50vw;
-  }
-
-  .team-mail-email {
-    font-size: 0.8em;
-    margin: 0;
-    padding: 0;
-    max-width: 0;
-    overflow: hidden;
-    height: 100%;
-    display: inline-block;
-    transition: max-width 300ms ease-in-out !important;
-    vertical-align: top;
-    white-space: nowrap;
-  }
-}
-
-.team-members {
-  display: flex;
-  align-content: flex-start;
-  max-width: 100%;
-  flex-wrap: wrap;
-  margin: 10px 0 30px 0;
-
-  /* On mobile, colour every other user badge a light shade of grey to separate them */
-  @media (max-width: 525px) {
-    & > :nth-child(2n) {
-      background: #f2f2f2 !important;
+    /* On mobile, colour every other user badge a light shade of grey to separate them */
+    @media (max-width: 525px) {
+      & > :nth-child(2n) {
+        background: #f2f2f2 !important;
+      }
     }
   }
 }
-
