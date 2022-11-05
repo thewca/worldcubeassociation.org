@@ -236,6 +236,60 @@ RSpec.describe RegistrationsController do
 
       expect(organizer.registrations).to eq competition.registrations
     end
+
+    it "can register for their own competition before registration opens" do
+      competition.registration_open = 1.weeks.from_now
+      competition.registration_close = 2.weeks.from_now
+      competition.save!
+
+      expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
+      expect do
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "" } }
+      end.to change { enqueued_jobs.size }.by(2)
+
+      expect(organizer.registrations).to eq competition.registrations
+    end
+  end
+
+  context "signed in as a delegate" do
+    let!(:delegate) { FactoryBot.create(:delegate) }
+    let!(:other_delegate) { FactoryBot.create(:delegate) }
+
+    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], showAtAll: true) }
+    let!(:other_competition) { FactoryBot.create(:competition, :registration_open, delegates: [other_delegate], showAtAll: true) }
+
+    before :each do
+      sign_in delegate
+    end
+
+    it "can register for their own competition while registration is open" do
+      competition.registration_open = 1.weeks.ago
+      competition.registration_close = 2.weeks.from_now
+      competition.save!
+
+      expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
+      expect do
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "" } }
+      end.to change { enqueued_jobs.size }.by(2)
+
+      expect(delegate.registrations).to eq competition.registrations
+    end
+
+    it "can register for their own competition before registration opens" do
+      competition.registration_open = 1.weeks.from_now
+      competition.registration_close = 2.weeks.from_now
+      competition.save!
+
+      expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
+      expect do
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "" } }
+      end.to change { enqueued_jobs.size }.by(2)
+
+      expect(delegate.registrations).to eq competition.registrations
+    end
   end
 
   context "signed in as competitor where they can edit their registration" do
@@ -384,6 +438,16 @@ RSpec.describe RegistrationsController do
       expect {
         post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", status: :accepted } }
       }.to raise_error(ActionController::RoutingError)
+    end
+
+    it "cannot create registration before registration is open" do
+      competition.registration_open = 1.weeks.from_now
+      competition.registration_close = 2.weeks.from_now
+      competition.save!
+
+      post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", accepted_at: Time.now } }
+      expect(response).to redirect_to competition_path(competition)
+      expect(flash[:danger]).to eq "You cannot register for this competition, registration is closed"
     end
 
     it "cannot create registration after registration is closed" do

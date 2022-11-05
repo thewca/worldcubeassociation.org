@@ -514,6 +514,10 @@ class Competition < ApplicationRecord
     info
   end
 
+  def user_can_pre_register?(user)
+    delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
+  end
+
   attr_accessor :being_cloned_from_id
   def being_cloned_from
     Competition.find_by(id: being_cloned_from_id)
