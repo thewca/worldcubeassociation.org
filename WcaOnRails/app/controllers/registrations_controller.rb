@@ -515,7 +515,7 @@ class RegistrationsController < ApplicationController
           stripe_account: registration.competition.connected_stripe_account_id,
         )
       end
-    rescue Stripe::CardError => e
+    rescue Stripe::StripeError => e
       # Log and display error to client
       stripe_charge.update!(status: "failure", error: e.message)
       render json: { error: { message: e.message } }
