@@ -8,7 +8,7 @@ function Team({ team }) {
   const [hoveringEmail, setHoveringEmail] = useState(false);
 
   return (
-    <div className="team">
+    <div className="team" id={team.acronym}>
       <h3>
         <span className="name">{team.name}</span>
         {team.acronym && team.acronym !== 'BOARD' && (
@@ -69,7 +69,7 @@ function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
       <h3>{I18n.t('about.structure.officers.name')}</h3>
       <p>{I18n.t('about.structure.officers.description')}</p>
 
-      <div className="team-members">
+      <div className="team-members" id="officers">
         {officers.map((user) => (
           <div key={(user.wca_id || 'user') + user.id}>
             <UserBadge

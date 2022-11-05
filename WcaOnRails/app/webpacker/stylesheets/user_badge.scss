@@ -3,25 +3,34 @@
 .user-badge {
   margin: 4px !important;
 
+  & > .label {
+    // Same colour as the rest of the button, so that it blends without a border.
+    // It should normally be hidden anyway, but for the users with multiple lines
+    // of subtext, it shows a little.
+    background-color: #e0e1e2 !important;
+  }
+
   &.leader {
-    & > .label {
-      background-color: $dark-blue;
+    .user-badge-subtext {
+      color: $dark-blue;
     }
   }
 
   &.senior {
-    & > .label {
-      background-color: $dark-green;
+    .user-badge-subtext {
+      color: $dark-green;
     }
   }
 
   .user-name {
-    .subtext {
+    .user-badge-subtext {
       font-style: oblique;
       margin-top: 6px;
       font-size: 0.9em;
     }
 
+    border: 1px solid #e0e1e2 !important;
+    background-color: transparent !important;
     width: 100%;
 
     display: flex !important;
@@ -37,6 +46,14 @@
 
   .icon {
     margin: 0 0.25em;
+  }
+
+  .user-badge-label-avatar {
+    padding: 0 !important;
+  }
+
+  .user-avatar-rounded-left {
+    border-radius: 0.3em 0 0 0.3em;
   }
 
   /* Make it fill width of screen on mobile */
