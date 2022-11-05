@@ -604,7 +604,7 @@ class RegistrationsController < ApplicationController
 
   def create
     @competition = competition_from_params
-    if !@competition.registration_opened?
+    unless @competition.registration_opened? || @competition.user_can_pre_register?(current_user)
       flash[:danger] = "You cannot register for this competition, registration is closed"
       redirect_to competition_path(@competition)
       return
