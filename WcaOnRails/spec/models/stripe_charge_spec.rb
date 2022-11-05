@@ -12,13 +12,6 @@ RSpec.describe StripeCharge do
     expect(stripe_amount).to eq(600_000)
   end
 
-  it "handles TWD as a special currency" do
-    five_hundred_twd = Money.new(500, 'TWD')
-
-    stripe_amount = StripeCharge.amount_to_stripe(five_hundred_twd.cents, five_hundred_twd.currency.iso_code)
-    expect(stripe_amount).to eq(50_000)
-  end
-
   it "handles UGX as a special currency" do
     sixty_thousand_ugx = Money.new(60_000, 'UGX')
 
