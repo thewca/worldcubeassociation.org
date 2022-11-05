@@ -476,10 +476,14 @@ class RegistrationsController < ApplicationController
           render json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
           return
         end
+
+        currency_iso = registration.outstanding_entry_fees.currency.iso_code
+        stripe_amount = StripeCharge.amount_to_stripe(amount, currency_iso)
+
         payment_intent_args = {
           payment_method: params[:payment_method_id],
-          amount: amount,
-          currency: registration.outstanding_entry_fees.currency.iso_code,
+          amount: stripe_amount,
+          currency: currency_iso,
           confirmation_method: "manual",
           confirm: true,
           receipt_email: user.email,
@@ -582,10 +586,13 @@ class RegistrationsController < ApplicationController
       return
     end
 
+    currency_iso = registration.competition.currency_code
+    stripe_amount = StripeCharge.amount_to_stripe(refund_amount, currency_iso)
+
     refund = Stripe::Refund.create(
       {
         charge: payment.stripe_charge_id,
-        amount: refund_amount,
+        amount: stripe_amount,
       },
       stripe_account: registration.competition.connected_stripe_account_id,
     )
