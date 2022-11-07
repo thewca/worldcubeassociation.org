@@ -75,11 +75,6 @@ if [ "$environment" != "development" ]; then
   # software-admins@worldcubeassociation.org if you need access.
   echo "Downloading secrets from worldcubeassociation.org..."
   rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ $repo_root/secrets
-
-  if [ "$environment" == "staging" ]; then
-    echo "Downloading certificate from staging.worldcubeassociation.org..."
-    rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@staging.worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/https/ $repo_root/secrets/https
-  fi
 fi
 
 # Install chef client
