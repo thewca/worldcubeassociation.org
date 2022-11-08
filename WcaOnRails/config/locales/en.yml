@@ -1041,7 +1041,7 @@ en:
       guidelines: "Guidelines"
       avatar_guidelines:
         '1': "All avatars should be pictures of real persons."
-        '2': "The person shown must be you."
+        '2': "The person shown must be your current self."
         '3': "If there is more than one person on the avatar, it should be clear who of them is you."
         '4': "Your head, but not necessarily the full face, should be visible."
         '5': "The avatar should not include overlay texts or unnatural filters, including borders."
