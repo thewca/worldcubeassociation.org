@@ -76,7 +76,7 @@ if [ "$environment" != "development" ]; then
   # You'll need ssh access to worldcubeassociation.org as user `cubing`. Contact
   # software-admins@worldcubeassociation.org if you need access.
   echo "Downloading secrets from worldcubeassociation.org..."
-rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@$PRODUCTION_ELASTIC_IP:/home/cubing/worldcubeassociation.org/secrets/ $repo_root/secrets
+  rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@$PRODUCTION_ELASTIC_IP:/home/cubing/worldcubeassociation.org/secrets/ $repo_root/secrets
 fi
 
 # Install chef client
