@@ -1947,8 +1947,8 @@ cs:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Všechny avatary by měly být obrázky skutečných osob.
-        #original_hash: 9126b0c
-        '2': Zobrazenou osobou musíte být vy.
+        #original_hash: b12d293
+        '2': 'Zobrazená osoba musíte být vy tak, jak aktuálně vypadáte.'
         #original_hash: de9b742
         '3': >-
           Pokud je na avataru více osob než jedna, mělo by být zřejmé, která z
@@ -3125,6 +3125,8 @@ cs:
       delegates: Delegát(i)
       #original_hash: eb9a4bc
       date: Datum
+      #original_hash: 6c82e6d
+      time: Čas
       #original_hash: d219c68
       location: Poloha
       #original_hash: 4232080
@@ -3147,6 +3149,15 @@ cs:
       show_events: Zobrazit eventy
       #original_hash: 0df66f7
       hide_events: Skrýt eventy
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Kolize registračních období (začíná za %{hours} hodin)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Žádné kolize registračních období!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: Ještě jste nepřiřadili datum začátku registrace na tuto soutěž.
+      #original_hash: c38824e
+      opens_registration_at: otevírá registraci v
     #original_hash: 06b01c4
     announcements: Ohlášení
     #original_hash: a2b80b0
@@ -4587,6 +4598,8 @@ cs:
       people: Lidé
       #original_hash: 6db75ea
       advanced_search: Pokročilé vyhledávání
+      #original_hash: 5e326b1
+      incidents: Incidenty
       #original_hash: a0ca0c3
       posts: Příspěvky
       #original_hash: 9d7ea9c
@@ -4602,6 +4615,8 @@ cs:
         people: Nebyli nalezeni žádní lidé pro
         #original_hash: c6a04aa
         posts: Nebyly nalezeny žádné příspěvky pro
+        #original_hash: 3499e7e
+        incidents: Nebyly nalezeny žádné incidenty pro
         #original_hash: 76a6bf1
         regulations_and_guidelines: Nebyla nalezena žádná pravidla ani pokyny pro
   incidents_log:
@@ -4609,6 +4624,8 @@ cs:
     i18n_disclaimer: >-
       Mějte na paměti, že sekce incidentů je dostupná pouze v angličtině, obsah
       uvedený níže nebude přeložen.
+    #original_hash: 2c23c1a
+    incident: 'Incident:'
   about_regulations:
     #original_hash: 6bce1b5
     title: O Pravidlech
