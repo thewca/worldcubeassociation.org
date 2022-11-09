@@ -264,7 +264,7 @@ th:
     #original_hash: 65c848f
     result_type: ประเภทผลการแข่งขัน
     #original_hash: 29ef642
-    for_event: 'Qualification for %{event}'
+    for_event: 'การคัดเลือกสำหรับ %{event}'
     type:
       #original_hash: f5c3f76
       none: ไม่มีการคัดเลือก
@@ -1879,7 +1879,7 @@ th:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': รูปแทนตัวทั้งหมดต้องเป็นบุคคลจริง
-        #original_hash: 9126b0c
+        #original_hash: b12d293
         '2': บุคคลที่ในภาพต้องเป็นคุณ
         #original_hash: de9b742
         '3': >-
@@ -3003,6 +3003,8 @@ th:
       delegates: Delegate(s)
       #original_hash: eb9a4bc
       date: วันที่
+      #original_hash: 6c82e6d
+      time: เวลา
       #original_hash: d219c68
       location: สถานที่
       #original_hash: 4232080
@@ -3025,6 +3027,15 @@ th:
       show_events: แสดงประเภทการแข่งขัน
       #original_hash: 0df66f7
       hide_events: ซ่อนประเภทการแข่งขัน
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'ช่วงเวลาการลงทะเบียนชนกัน (เริ่มภายใน %{hours} ชั่วโมง)'
+      #original_hash: f1cecf1
+      no_comp_colliding: ไม่มีการสมัครที่ชนกัน
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: คุณยังไม่ได้กำหนดวันรับสมัครของการแข่งขันนี้
+      #original_hash: c38824e
+      opens_registration_at: เปิดรับสมัครที่
     #original_hash: 06b01c4
     announcements: ประกาศ
     #original_hash: a2b80b0
@@ -4433,9 +4444,9 @@ th:
       show_relation: แสดงความสัมพันธ์
       connectives:
         #original_hash: f85194e
-        was_at: เคยที่
+        was_at: เคยแข่งขันที่
         #original_hash: 8c00243
-        together_with: ด้วยกันที่
+        together_with: ด้วยกันกับ
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: กรุณาแจ้ง WCA ID ที่ถูกต้อง 2 อัน
