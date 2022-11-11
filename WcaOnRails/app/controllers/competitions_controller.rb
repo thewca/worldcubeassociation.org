@@ -393,7 +393,7 @@ class CompetitionsController < ApplicationController
   end
 
   def calculate_dues
-    country_iso2 = Country.where(name: params[:country_id]).pluck(:iso2)[0]
+    country_iso2 = Country.where(id: params[:country_id]).pluck(:iso2)[0]
     country_band = CountryBand.where(iso2: country_iso2).map(&:number)[0]
 
     update_currency_rates_if_needed
