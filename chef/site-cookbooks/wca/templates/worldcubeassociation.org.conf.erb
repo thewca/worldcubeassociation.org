@@ -14,7 +14,7 @@ upstream app {
   server {
     server_name staging.worldcubeassociation.org;
 
-    listen 444 ssl;
+    listen 444;
 
     location / {
       proxy_pass http://localhost:1080;
