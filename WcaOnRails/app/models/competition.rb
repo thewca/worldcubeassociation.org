@@ -1921,4 +1921,11 @@ class Competition < ApplicationRecord
     series_competitions
       .where.not(id: self.id)
   end
+
+  def find_round_for(event_id, round_type_id, format_id = nil)
+    rounds.find do |r|
+      r.event.id == event_id && r.round_type_id == round_type_id &&
+        (format_id.nil? || format_id == r.format_id)
+    end
+  end
 end

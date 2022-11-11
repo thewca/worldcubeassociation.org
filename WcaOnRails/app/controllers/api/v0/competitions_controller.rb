@@ -33,7 +33,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def event_results
-    competition = competition_from_params
+    competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])
     results_by_round = competition.results
                                   .where(eventId: event.id)
@@ -43,7 +43,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       # I think all competitions now have round data, but let's be cautious
       # and assume they may not.
       # round data.
-      round = Round.find_for(competition.id, event.id, round_type.id)
+      round = competition.find_round_for(event.id, round_type.id)
       {
         id: round&.id,
         roundTypeId: round_type.id,
@@ -135,9 +135,9 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     }
   end
 
-  private def competition_from_params
+  private def competition_from_params(associations: {})
     id = params[:competition_id] || params[:id]
-    competition = Competition.find_by_id(id)
+    competition = Competition.includes(associations).find_by_id(id)
 
     # If this competition exists, but is not publicly visible, then only show it
     # to the user if they are able to manage the competition.
