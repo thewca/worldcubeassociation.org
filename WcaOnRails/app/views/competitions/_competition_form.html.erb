@@ -265,29 +265,47 @@
 
             var compLimitEnabled = $('select[name="competition[competitor_limit_enabled]"]').val();
             var compLimit = compLimitEnabled === "true" ? $('input[name="competition[competitor_limit]"]').val() : null;
-            var country = $('select[name="competition[countryId]"]').val()
+            var countryId = $('select[name="competition[countryId]"]').val()
             var currencyCode = $('select[name="competition[currency_code]"]').val()
-            var entryFee = $('input[name="competition[base_entry_fee_lowest_denomination]"]').val()
+            var entryFee = $('input[name="competition[base_entry_fee_lowest_denomination]"]').val();
 
-            console.log(compLimitEnabled)
-            console.log(compLimit)
-            console.log(country)
-            console.log(currencyCode)
-            console.log(entryFee)
+            window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
+              url: '<%= calculate_dues_path %>',
+              data: {
+                competitor_limit_enabled: compLimitEnabled,
+                competitor_limit: compLimit,
+                country_id: countryId,
+                currency_code: currencyCode,
+                entry_fee: entryFee,
+              },
+              success: function(data) {
+                if (compLimit != null) {
+                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.calculated') %>
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: data.dues}) + " (" + currencyCode + ")</b>");
+                }
+                else{
+                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.per_competitor') %>
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: data.per_competitor}) + " (" + currencyCode + ")</b>");
+                }
+              },
+              error: function(){
+                <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.ajax_error') %>
+                $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
+              }
+            });
 
           }
 
           $(function() {
-
             if (!$('#dues_estimate').length) {
-              $(this).siblings('.help-block').append('<br><br><p id="dues_estimate"><b></b></p>');
+              $('input[name="competition[base_entry_fee_lowest_denomination]"]').siblings('.help-block').append('<br><br><p id="dues_estimate"><b></b></p>');
             }
 
             $('select[name="competition[competitor_limit_enabled]"]').on('change', UpdateDues);
             $('input[name="competition[competitor_limit]"]').on('change', UpdateDues);
             $('select[name="competition[countryId]"]').on('change', UpdateDues);
             $('select[name="competition[currency_code]"]').on('change', UpdateDues);
-            $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', UpdateDues).trigger('change'); #trigger() to display dues upon load
+            $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', UpdateDues).trigger('change'); //trigger() to display dues upon load
           });
         </script>
 
