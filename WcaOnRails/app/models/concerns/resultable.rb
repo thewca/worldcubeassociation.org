@@ -50,8 +50,8 @@ module Resultable
       # competition.find_round_for.
       Competition
         .includes(:rounds)
-        .find(competition_id)
-        .find_round_for(event_id, round_type_id, format_id)
+        .find_by_id(competition_id)
+        &.find_round_for(event_id, round_type_id, format_id)
     end
 
     validate :belongs_to_a_round
