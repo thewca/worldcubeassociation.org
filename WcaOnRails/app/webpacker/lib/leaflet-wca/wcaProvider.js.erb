@@ -1,7 +1,7 @@
-import { GoogleProvider } from 'leaflet-geosearch';
+import { LegacyGoogleProvider } from 'leaflet-geosearch';
 import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
 
-export class WCAProvider extends GoogleProvider {
+export class WCAProvider extends LegacyGoogleProvider {
   endpoint({ query } = {}) {
     const paramString = this.getParamString({
       q: query,
