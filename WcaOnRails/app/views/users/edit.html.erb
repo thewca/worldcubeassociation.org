@@ -225,17 +225,17 @@
             <% end %>
             <% if @user.avatar? && editable_fields.include?(:remove_avatar)  %>
               <div class="btn btn-default btn-danger remove-avatar">
-                Remove avatar
+                <%= t('.remove_avatar') %>
               </div>
 
               <div class="remove-avatar-confirm">
                 <%= form_with model: @user, method: :patch do |f| %>
                   <%= f.text_area :removal_reason, class: 'form-control',
-                    placeholder: 'Please provide the reason for removal'%>
+                    placeholder: t('.remove_avatar_reason') %>
 
                   <%= f.hidden_field :remove_avatar, value: true %>
 
-                  <%= f.submit 'Confirm avatar removal', class: 'btn btn-danger remove-avatar-confirm__button',
+                  <%= f.submit t('.remove_avatar_confirm_button'), class: 'btn btn-danger remove-avatar-confirm__button',
                     data: { confirm: t('.remove_avatar_confirm') } %>
                 <% end %>
               </div>
