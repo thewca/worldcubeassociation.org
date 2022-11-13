@@ -191,6 +191,10 @@ class UsersController < ApplicationController
       else
         redirect_to edit_user_url(@user, params.permit(:section))
       end
+      # Send notification email to user about avatar removal
+      if ActiveRecord::Type::Boolean.new.cast(user_params['remove_avatar'])
+        AvatarsMailer.notify_user_of_avatar_removal(@user.current_user, @user, params[:user][:removal_reason]).deliver_later
+      end
     elsif @user.claiming_wca_id
       render :claim_wca_id
     else

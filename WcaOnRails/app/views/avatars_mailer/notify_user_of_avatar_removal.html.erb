@@ -1,0 +1,12 @@
+<p>Hello <%= @user.name %></p>
+
+<p>Your avatar has been removed by <%= @remover_user.name %>.</p>
+
+<% if @reason.present? %>
+  <p>
+    Here's the reason:
+    <blockquote><%= @reason %></blockquote>
+  </p>
+<% end %>
+
+<p>Please provide a more suitable picture.</p>
