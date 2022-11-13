@@ -151,7 +151,7 @@ module ResultsValidators
                                                name: p.name)
           end
           non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
-          space_before_last_letter = (roman_readable[-2] == " ") && !['I', 'V'].include?(roman_readable[-1]) # Roman numerals I and V are allowed as suffixes
+          space_before_last_letter = (roman_readable[-2] == " ")
           abbreviated_last_name = (roman_readable[-1] == ".") && (roman_readable[-3] == " ")
           if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
             @warnings << ValidationWarning.new(:persons, competition_id,
