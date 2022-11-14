@@ -63,6 +63,7 @@ module DatabaseDumper
           competitor_limit
           competitor_limit_reason
           guests_enabled
+          guests_per_registration_limit
           results_posted_at
           results_submitted_at
           results_nag_sent_at

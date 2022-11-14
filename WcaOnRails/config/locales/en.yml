@@ -320,6 +320,7 @@ en:
         competitor_limit: "Maximum number of competitors"
         competitor_limit_reason: "The reason for the competitor limit"
         guests_enabled: "Guests"
+        guests_per_registration_limit: "Maximum number of guests per registration"
         receive_registration_emails: "Notify me by email when someone registers for this competition"
         registration_open: "Registration open"
         registration_close: "Registration close"
@@ -547,6 +548,7 @@ en:
         competitor_limit_enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
         competitor_limit: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
         competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
+        guests_per_registration_limit: "The number guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
         venueAddress: ""
         extra_registration_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
         on_the_spot_registration: ""
@@ -1411,6 +1413,9 @@ en:
       guests_free:
         anyone: "Any spectator can attend for free."
         restricted: "Spectators are only permitted as companions of competitors."
+      guest_limit: 
+        one: "Competitors may bring at most 1 guest."
+        other: "Competitors may bring at most %{count} guests."
       require_qualification: "Competitors may only register for events that they are already qualified for."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
       click_to_display_requirements_html: "This competition is over, click %{link_here} to display the registration requirements it used."
@@ -1575,6 +1580,7 @@ en:
       event_change_deadline_with_ots: "Deadline for updating events must be during the competition if on the spot registrations are accepted."
       series_distance_km: "The competition is located too far away from %{competition}."
       series_distance_days: "The competition is scheduled too many days away from %{competition}."
+      must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."

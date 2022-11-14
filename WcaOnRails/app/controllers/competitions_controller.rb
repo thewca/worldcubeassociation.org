@@ -631,6 +631,7 @@ class CompetitionsController < ApplicationController
         :use_wca_live_for_scoretaking,
         :enable_donations,
         :guests_enabled,
+        :guests_per_registration_limit,
         :registration_open,
         :registration_close,
         :competitor_limit_enabled,

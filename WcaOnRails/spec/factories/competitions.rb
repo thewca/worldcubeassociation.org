@@ -79,6 +79,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_guest_limit do
+      guests_enabled { true }
+      guest_entry_status { Competition.guest_entry_statuses['restricted'] }
+      guests_per_registration_limit { 10 }
+    end
+
     use_wca_registration { false }
     registration_open { 54.weeks.ago.change(usec: 0) }
     registration_close { 53.weeks.ago.change(usec: 0) }

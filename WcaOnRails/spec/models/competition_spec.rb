@@ -1234,4 +1234,61 @@ RSpec.describe Competition do
       expect(competition.exempt_from_wca_dues?).to eq true
     end
   end
+
+  context "does not have guest limit" do
+    let(:competition) { FactoryBot.create :competition, guest_entry_status: Competition.guest_entry_statuses['anyone'] }
+
+    it "accepts a competition that asks about guests, but does not have guest limit enabled" do
+      competition.guests_enabled = true
+      expect(competition).to be_valid
+    end
+
+    it "accepts a competition that does not ask about guests and does not have guest limit enabled" do
+      competition.guests_enabled = false
+      expect(competition).to be_valid
+    end
+
+    it "accepts a competition that does not have guest limit enabled, but has a guest limit" do
+      # hypothetically, this field can be set, but the limit would not be enforced if it is not enabled.
+      competition.guests_per_registration_limit = 10
+      expect(competition).to be_valid
+    end
+  end
+
+  context "has guest limit" do
+    let(:competition) { FactoryBot.create :competition, :with_guest_limit }
+
+    it "accepts a competition that asks about guests and has a valid guest limit enabled" do
+      expect(competition).to be_valid
+    end
+
+    it "requires also asking about guests" do
+      competition.guests_enabled = false
+      expect(competition).to be_invalid_with_errors(guests_enabled: ["Must ask about guests if a guest limit is specified."])
+    end
+
+    it "requires guest limit to be a number" do
+      competition = FactoryBot.build :competition, :with_guest_limit
+      competition.guests_per_registration_limit = "string"
+      expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["is not a number"])
+    end
+
+    it "requires guest limit to be an integer" do
+      competition = FactoryBot.build :competition, :with_guest_limit
+      competition.guests_per_registration_limit = 1.5
+      expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["must be an integer"])
+    end
+
+    it "requires guest limit to be greater than or equal to 1" do
+      competition = FactoryBot.build :competition, :with_guest_limit
+      competition.guests_per_registration_limit = -1
+      expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["must be greater than or equal to 1"])
+    end
+
+    it "requires guest limit to be less than or equal to 100" do
+      competition = FactoryBot.build :competition, :with_guest_limit
+      competition.guests_per_registration_limit = 101
+      expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["must be less than or equal to 100"])
+    end
+  end
 end

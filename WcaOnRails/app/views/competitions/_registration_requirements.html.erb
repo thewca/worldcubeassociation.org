@@ -126,6 +126,11 @@
   <br>
 <% end %>
 
+<% if @competition.guests_per_registration_limit_enabled? %>
+  <%= t('competitions.competition_info.guest_limit', count: @competition.guests_per_registration_limit) %>
+  <br>
+<% end %>
+
 <% if @competition.uses_qualification? && !@competition.allow_registration_without_qualification %>
   <%= t('competitions.competition_info.require_qualification') %>
   <br>

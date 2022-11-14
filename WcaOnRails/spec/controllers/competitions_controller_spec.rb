@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule) }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, :with_guest_limit) }
   let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
@@ -329,6 +329,12 @@ RSpec.describe CompetitionsController do
         # When a delegate clones a competition, it should clone its organizers, and add
         # the delegate doing the cloning.
         expect(new_comp.delegates.sort_by(&:id)).to eq((competition.delegates + [delegate]).sort_by(&:id))
+        # Assert competition has guest limit
+        expect(competition.guests_per_registration_limit_enabled?).to eq true
+        # Guest limit is cloned
+        expect(new_comp.guests_enabled).to eq competition.guests_enabled
+        expect(new_comp.guest_entry_status).to eq competition.guest_entry_status
+        expect(new_comp.guests_per_registration_limit).to eq competition.guests_per_registration_limit
       end
 
       it 'clones a competition that they delegated' do
