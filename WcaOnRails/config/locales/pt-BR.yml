@@ -531,7 +531,7 @@ pt-BR:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de entrada para espectadores/convidados
         #original_hash: bb16247
-        free_guest_entry_status: Mensagem sobre entrada gratuita de convidados
+        guest_entry_status: Mensagem sobre entrada gratuita de convidados
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Eu gostaria de exigir que os competidores entreguem os quebra-cabeças
@@ -755,7 +755,7 @@ pt-BR:
         #original_hash: 82dabd0
         multimedia: Multimídia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Não mostrar nada (e talvez detalhar na seção "Requerimentos adicionais
@@ -997,7 +997,7 @@ pt-BR:
           não são gerenciadas por este website. Se for configurado como 0, uma
           frase a sua escolha será mostrada acerca da política de espectadores.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b

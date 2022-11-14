@@ -486,7 +486,7 @@ da:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Indgangsgebyr for tilskuere
         #original_hash: bb16247
-        free_guest_entry_status: Vis tekst om at det er gratis for gæster
+        guest_entry_status: Vis tekst om at det er gratis for gæster
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Jeg vil gerne have at deltagerne skal aflevere deres terninger på et
@@ -697,7 +697,7 @@ da:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Vis ikke noget (du burde uddybe hvorfor i sektionen om tilmeldingskrav
@@ -925,7 +925,7 @@ da:
           managed through this website. If this is set to 0, a sentence of your
           choice will be displayed about the spectator policy.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b

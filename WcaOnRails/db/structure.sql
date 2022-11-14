@@ -77,12 +77,13 @@ CREATE TABLE `Competitions` (
   `cancelled_by` int(11) DEFAULT NULL,
   `waiting_list_deadline_date` datetime DEFAULT NULL,
   `event_change_deadline_date` datetime DEFAULT NULL,
-  `free_guest_entry_status` int NOT NULL DEFAULT '0',
+  `guest_entry_status` int NOT NULL DEFAULT '0',
   `allow_registration_edits` tinyint(1) NOT NULL DEFAULT '0',
   `allow_registration_self_delete_after_acceptance` tinyint(1) NOT NULL DEFAULT '0',
   `competition_series_id` int(11) DEFAULT NULL,
   `use_wca_live_for_scoretaking` tinyint(1) NOT NULL DEFAULT '0',
   `allow_registration_without_qualification` tinyint(1) DEFAULT '0',
+  `guests_per_registration_limit` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1802,4 +1803,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220725045819'),
 ('20220804193822'),
 ('20220822232936'),
-('20220916132536');
+('20220916132536'),
+('20221121111430');

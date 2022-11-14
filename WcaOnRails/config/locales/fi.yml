@@ -527,7 +527,7 @@ fi:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Vieraiden pääsymaksu
         #original_hash: bb16247
-        free_guest_entry_status: Display message for free guest entry
+        guest_entry_status: Display message for free guest entry
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Haluan vaatia kilpailijoita toimittamaan pulmapelinsä ennalta
@@ -738,7 +738,7 @@ fi:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Do not display anything (and perhaps elaborate in the "Extra
@@ -975,7 +975,7 @@ fi:
           maksuja ei voi hallita tämän sivuston kautta. Jos arvoksi asetetaan 0,
           itse valitsemasi teksti näytetään.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b

@@ -537,7 +537,7 @@ hr:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Kotizacija za goste/gledatelje
         #original_hash: bb16247
-        free_guest_entry_status: Prikaži poruku za besplatan ulazak gledatelja
+        guest_entry_status: Prikaži poruku za besplatan ulazak gledatelja
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Želim da natjecatelji predaju mozgalice u vremenu prije nego je neka
@@ -748,7 +748,7 @@ hr:
         #original_hash: 82dabd0
         multimedia: Multimedija
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Ne prikazuj ništa (ili elaboriraj unutar "Extra registration
@@ -991,7 +991,7 @@ hr:
           ovaj broj stavljen na 0, prikazat će se rečenica po vašem odabiru
           politike dolaska gledatelja na natjecanje.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b

@@ -535,7 +535,7 @@ eo:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Enira kosto por akompanantoj
         #original_hash: bb16247
-        free_guest_entry_status: Videbla mesaĝo rilate al senpaga eniro de akompanantoj
+        guest_entry_status: Videbla mesaĝo rilate al senpaga eniro de akompanantoj
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Mi ŝatus devigi konkursantojn submetiĝi puzloj je specifa tempo antaŭ
@@ -755,7 +755,7 @@ eo:
         #original_hash: 82dabd0
         multimedia: Plurmedio
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Montru nenion (kaj eble detalu en la sekcio "Aldonaj registriĝaj
@@ -996,7 +996,7 @@ eo:
           povas esti faritaj per tiu retejo. Se vi enigas 0, vi povos elekti
           frazon pri kiel vi traktos spektantojn.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b

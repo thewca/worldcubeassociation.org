@@ -537,7 +537,7 @@ ru:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Взнос для зрителей
         #original_hash: bb16247
-        free_guest_entry_status: Отображаемое сообщение о бесплатном входе гостей
+        guest_entry_status: Отображаемое сообщение о бесплатном входе гостей
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Я хочу, чтобы участники сдали головоломки в специальное время до
@@ -748,7 +748,7 @@ ru:
         #original_hash: 82dabd0
         multimedia: Мультимедиа
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Ничего не отображать (укажите подробнее в Дополнительных требованиях к
@@ -996,7 +996,7 @@ ru:
           соревнований будет показано выбранное сообщение о политике в отношении
           гостей.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b

@@ -79,7 +79,7 @@ module DatabaseDumper
           refund_policy_percent
           refund_policy_limit_date
           guests_entry_fee_lowest_denomination
-          free_guest_entry_status
+          guest_entry_status
           early_puzzle_submission
           early_puzzle_submission_reason
           qualification_results
