@@ -38,6 +38,11 @@ fi
 if ! command -v gcc &> /dev/null; then
   apt-get install -y build-essential
 fi
+if ! command -v aws &> /dev/null; then
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+fi
 
 if [ -d /vagrant ]; then
   repo_root=/vagrant
@@ -72,11 +77,9 @@ EOL
 fi
 
 if [ "$environment" != "development" ]; then
-  # Download secrets that are required to provision a new server.
-  # You'll need ssh access to worldcubeassociation.org as user `cubing`. Contact
-  # software-admins@worldcubeassociation.org if you need access.
-  echo "Downloading secrets from worldcubeassociation.org..."
-  rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@$PRODUCTION_ELASTIC_IP:/home/cubing/worldcubeassociation.org/secrets/ $repo_root/secrets
+  echo "Downloading secrets from S3"
+  aws s3 cp s3://wca-backups/latest/my_secret_key $repo_root/secrets/my_secret_key
+  aws s3 sync s3://wca-backups/latest/etc_ssh-staging.worldcubeassociation.org/ $repo_root/secrets/etc_ssh-staging.worldcubeassociation.org/
 fi
 
 # Install chef client
