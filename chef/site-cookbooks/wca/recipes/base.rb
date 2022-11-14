@@ -1,6 +1,5 @@
 package 'git'
 package 'vim'
-package 'zip'
 package 'curl'
 package 'htop'
 package 'tmux'
