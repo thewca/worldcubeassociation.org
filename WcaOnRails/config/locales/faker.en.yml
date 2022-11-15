@@ -1,4 +1,16 @@
 en:
   faker:
-      prefix: []
-      suffix: []
+    name:
+      suffix: [ Jr., Sr., I, II, III, IV, V ]
+      name:
+        - "#{first_name} #{last_name} #{suffix}"
+        - "#{first_name} #{last_name}"
+        - "#{first_name} #{last_name}"
+        - "#{first_name} #{last_name}"
+        - "#{first_name} #{last_name}"
+      name_with_middle:
+        - "#{first_name} #{last_name} #{last_name} #{suffix}"
+        - "#{first_name} #{last_name} #{last_name}"
+        - "#{first_name} #{last_name} #{last_name}"
+        - "#{first_name} #{last_name} #{last_name}"
+        - "#{first_name} #{last_name} #{last_name}"
