@@ -80,9 +80,8 @@ EOL
 fi
 
 if [ "$environment" != "development" ]; then
-  echo "Downloading secrets from S3"
+  echo "Downloading secret chef key from S3"
   aws s3 cp s3://wca-backups/latest/my_secret_key $repo_root/secrets/my_secret_key
-  aws s3 sync s3://wca-backups/latest/etc_ssh-staging.worldcubeassociation.org/ $repo_root/secrets/etc_ssh-staging.worldcubeassociation.org/
 fi
 
 # Install chef client

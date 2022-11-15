@@ -210,16 +210,6 @@ server_name = {
   "development" => "",
 }[node.chef_environment]
 
-# If /etc/ssh is not a symlink, back it up and create a symlink.
-unless node.chef_environment == "development" || File.symlink?("/etc/ssh")
-  FileUtils.mv "/etc/ssh", "/etc/ssh-backup"
-  FileUtils.ln_s "#{repo_root}/secrets/etc_ssh-#{server_name}", "/etc/ssh"
-  service "ssh" do
-    action :restart
-  end
-end
-
-
 #### Nginx
 # Unfortunately, we have to compile nginx from source to get the auth request module
 # See: https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1323387
