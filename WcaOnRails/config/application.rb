@@ -78,8 +78,6 @@ module WcaOnRails
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')
 
-    config.action_mailer.preview_path = "#{Rails.root}/lib/mailer_previews"
-
     # Set global default_url_options, see https://github.com/rails/rails/issues/29992#issuecomment-761892658
     root_url = URI.parse(EnvVars.ROOT_URL)
     routes.default_url_options = {
