@@ -1949,7 +1949,7 @@ sv:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Alla profilbilder ska vara bilder på riktiga personer.
-        #original_hash: 9126b0c
+        #original_hash: b12d293
         '2': Personen som visas måste vara du.
         #original_hash: de9b742
         '3': >-
@@ -3131,6 +3131,8 @@ sv:
       delegates: Delegat(er)
       #original_hash: eb9a4bc
       date: Datum
+      #original_hash: 6c82e6d
+      time: Tid
       #original_hash: d219c68
       location: Plats
       #original_hash: 4232080
@@ -3153,6 +3155,17 @@ sv:
       show_events: Visa grenar
       #original_hash: 0df66f7
       hide_events: Dölj grenar
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Kolliderande anmälningsperioder (startar inom %{hours} timmar)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Inga kolliderande anmälningsperioder!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: >-
+        Du har inte angett ett startdatum för anmälan för den här tävlingen
+        ännu.
+      #original_hash: c38824e
+      opens_registration_at: öppnar anmälan klockan
     #original_hash: 06b01c4
     announcements: Publiceringar
     #original_hash: a2b80b0
@@ -4618,6 +4631,8 @@ sv:
       people: Personer
       #original_hash: 6db75ea
       advanced_search: Avancerad sökning
+      #original_hash: 5e326b1
+      incidents: Incidenter
       #original_hash: a0ca0c3
       posts: Inlägg
       #original_hash: 9d7ea9c
@@ -4633,6 +4648,8 @@ sv:
         people: Inga personer hittades för
         #original_hash: c6a04aa
         posts: Inga inlägg hittades för
+        #original_hash: 3499e7e
+        incidents: Inga incidenter hittade för
         #original_hash: 76a6bf1
         regulations_and_guidelines: Inga Regler eller Riktlinjer hittades för
   incidents_log:
@@ -4640,6 +4657,8 @@ sv:
     i18n_disclaimer: >-
       Observera att incidenter endast är tillgängliga på engelska, innehållet
       nedan är inte översatt.
+    #original_hash: 2c23c1a
+    incident: 'Incident:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Om Reglerna
