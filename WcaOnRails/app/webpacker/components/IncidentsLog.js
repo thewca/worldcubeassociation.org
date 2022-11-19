@@ -46,6 +46,8 @@ function incidentDigestText({ digest_worthy: digestWorthy, digest_sent_at: diges
 // constants //
 
 const DEBOUNCE_MS = 300;
+const SEARCH = 'search';
+const TAGS = 'tags';
 
 // incidents log //
 
@@ -55,8 +57,27 @@ export default function IncidentsLog({
   allTags = [],
 }) {
   const pagination = usePagination();
-  const [searchString, setSearchString] = useState('');
-  const [filterTags, setFilterTags] = useState([]);
+  
+  // note: page will not render after setting url search params
+  const searchParams = new URLSearchParams(window.location.search);
+
+  const [searchString, setSearchStringState] = useState(
+    searchParams.get(SEARCH) || ''
+  );
+  const setSearchString = (string) => {
+    setSearchStringState(string);
+    searchParams.set(SEARCH, string);
+    window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);
+  };
+
+  const [filterTags, setFilterTagsState] = useState(
+    (searchParams.get(TAGS) || '').split(',').filter(Boolean)
+  );
+  const setFilterTags = (tagArray) => {
+    setFilterTagsState(tagArray);
+    searchParams.set(TAGS, tagArray.join(','));
+    window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);
+  };
 
   const debouncedSearchString = useDebounce(searchString, DEBOUNCE_MS);
 
@@ -88,6 +109,7 @@ export default function IncidentsLog({
           placeholder="Search incidents..."
           icon="search"
           loading={loading}
+          value={searchString}
           onChange={(_, newData) => {
             setSearchString(newData.value);
             pagination.setActivePage(1);
@@ -100,11 +122,11 @@ export default function IncidentsLog({
           search
           selection
           options={allTagsAsOptions}
+          value={filterTags}
           onChange={(_, newData) => {
             setFilterTags(newData.value);
             pagination.setActivePage(1);
           }}
-          value={filterTags}
         />
 
         {error && (
@@ -123,7 +145,9 @@ export default function IncidentsLog({
                 incidents={data}
                 canViewDelegateMatters={canViewDelegateMatters}
                 addTagToSearch={(tag) => {
-                  setFilterTags((tags) => (tags.includes(tag) ? tags : [...tags, tag]));
+                  setFilterTags(
+                    filterTags.includes(tag) ? filterTags : [...filterTags, tag]
+                  );
                   pagination.setActivePage(1);
                 }}
               />
