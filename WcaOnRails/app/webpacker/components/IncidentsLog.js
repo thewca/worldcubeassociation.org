@@ -57,26 +57,26 @@ export default function IncidentsLog({
   allTags = [],
 }) {
   const pagination = usePagination();
-  
+
   // note: page will not render after setting url search params
   const searchParams = new URLSearchParams(window.location.search);
 
   const [searchString, setSearchStringState] = useState(
-    searchParams.get(SEARCH) || ''
+    searchParams.get(SEARCH) || '',
   );
   const setSearchString = (string) => {
     setSearchStringState(string);
     searchParams.set(SEARCH, string);
-    window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);
+    window.history.replaceState({}, '', `${window.location.pathname}?${searchParams}`);
   };
 
   const [filterTags, setFilterTagsState] = useState(
-    (searchParams.get(TAGS) || '').split(',').filter(Boolean)
+    (searchParams.get(TAGS) || '').split(',').filter(Boolean),
   );
   const setFilterTags = (tagArray) => {
     setFilterTagsState(tagArray);
     searchParams.set(TAGS, tagArray.join(','));
-    window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);
+    window.history.replaceState({}, '', `${window.location.pathname}?${searchParams}`);
   };
 
   const debouncedSearchString = useDebounce(searchString, DEBOUNCE_MS);
@@ -146,7 +146,7 @@ export default function IncidentsLog({
                 canViewDelegateMatters={canViewDelegateMatters}
                 addTagToSearch={(tag) => {
                   setFilterTags(
-                    filterTags.includes(tag) ? filterTags : [...filterTags, tag]
+                    filterTags.includes(tag) ? filterTags : [...filterTags, tag],
                   );
                   pagination.setActivePage(1);
                 }}
