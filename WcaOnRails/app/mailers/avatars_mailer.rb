@@ -14,15 +14,16 @@ class AvatarsMailer < ApplicationMailer
   end
 
   def notify_user_of_avatar_removal(remover_user, user, reason)
-    @remover_user = remover_user
+    @remover = remover_user.results_team? ? 'the WCA Results Team' : remover_user.name
     @user = user
     @reason = reason
 
     mail(
       from: Team.wrt.email,
       to: user.email,
+      cc: ('results@worldcubeassociation.org' unless remover_user.results_team?),
       reply_to: 'results@worldcubeassociation.org',
-      subject: "Your avatar has been removed by #{@remover_user.name}",
+      subject: "Your avatar has been removed by #{@remover}",
     )
   end
 end
