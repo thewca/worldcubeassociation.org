@@ -1976,8 +1976,8 @@ pt:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Os avatares devem ser fotos de pessoas reais.
-        #original_hash: 9126b0c
-        '2': A pessoa apresentada deve ser você.
+        #original_hash: b12d293
+        '2': A pessoa apresentada deve ser você atualmente.
         #original_hash: de9b742
         '3': 'Se há mais de uma pessoa na foto, deve estar claro qual delas você é.'
         #original_hash: 4083c00
@@ -3175,6 +3175,8 @@ pt:
       delegates: Delegado(s)
       #original_hash: eb9a4bc
       date: Data
+      #original_hash: 6c82e6d
+      time: Tempo
       #original_hash: d219c68
       location: Local
       #original_hash: 4232080
@@ -3197,6 +3199,17 @@ pt:
       show_events: Mostrar eventos
       #original_hash: 0df66f7
       hide_events: Esconder eventos
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Períodos de registo em colisão (começam dentro de %{hours} horas)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Sem colisões no período de registo!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: >-
+        Ainda não atribuiu uma data de início de inscrições para esta
+        competição.
+      #original_hash: c38824e
+      opens_registration_at: abre inscrições a
     #original_hash: 06b01c4
     announcements: Anúncios
     #original_hash: a2b80b0
@@ -4693,6 +4706,8 @@ pt:
       people: Competidores
       #original_hash: 6db75ea
       advanced_search: Pesquisa avançada
+      #original_hash: 5e326b1
+      incidents: Incidentes
       #original_hash: a0ca0c3
       posts: Artigos
       #original_hash: 9d7ea9c
@@ -4708,6 +4723,8 @@ pt:
         people: Ninguém encontrado para
         #original_hash: c6a04aa
         posts: Nenhum artigo encontrado para
+        #original_hash: 3499e7e
+        incidents: Nenhum incidente encontrado para
         #original_hash: 76a6bf1
         regulations_and_guidelines: Nenhum Regulamento ou Orientação encontrada para
   incidents_log:
@@ -4715,6 +4732,8 @@ pt:
     i18n_disclaimer: >-
       Note que a secção de incidentes está apenas disponível em inglês, o
       conteúdo abaixo não está traduzido.
+    #original_hash: 2c23c1a
+    incident: 'Incidente:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Sobre os Regulamentos
