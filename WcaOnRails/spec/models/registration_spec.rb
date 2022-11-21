@@ -21,21 +21,6 @@ RSpec.describe Registration do
     expect(registration.errors.messages[:competition]).to eq ["must exist"]
   end
 
-  it "does not check upper guest limit if competition is nil" do
-    registration.competition = nil
-    expect(registration.check_guest_limit?).to eq false
-  end
-
-  it "does not check upper guest limit if competition_id is nil" do
-    registration.competition_id = nil
-    expect(registration.check_guest_limit?).to eq false
-  end
-
-  it "does not check upper guest limit if competition_id is invalid" do
-    registration.competition_id = "foobar"
-    expect(registration.check_guest_limit?).to eq false
-  end
-
   it "allows no user on update" do
     registration.user_id = nil
     expect(registration).to be_valid

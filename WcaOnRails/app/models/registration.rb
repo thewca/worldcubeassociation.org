@@ -39,7 +39,7 @@ class Registration < ApplicationRecord
   end
 
   def check_guest_limit?
-    !!competition&.guests_per_registration_limit_enabled?
+    competition.present? && competition.guests_per_registration_limit_enabled?
   end
 
   def deleted?
