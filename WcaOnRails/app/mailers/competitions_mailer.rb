@@ -129,6 +129,17 @@ class CompetitionsMailer < ApplicationMailer
     )
   end
 
+  def submit_report_reminder(competition)
+    @competition = competition
+    mail(
+      from: Team.weat.email,
+      to: competition.all_delegates.pluck(:email),
+      cc: ["assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.all_delegates),
+      reply_to: delegates_to_senior_delegates_email(competition.all_delegates),
+      subject: "Friendly reminder to submit #{competition.name} Delegate Report",
+    )
+  end
+
   def results_submitted(competition, results_submission, submitter_user)
     @competition = competition
     @results_submission = results_submission

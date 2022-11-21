@@ -78,4 +78,9 @@ class CompetitionsMailerPreview < ActionMailer::Preview
     results_submission = FactoryBot.build :results_submission
     CompetitionsMailer.results_submitted(Competition.last, results_submission, User.first)
   end
+
+  def submit_report_reminder
+    competition = Competition.order(created_at: :desc).first
+    CompetitionsMailer.submit_report_reminder(competition)
+  end
 end
