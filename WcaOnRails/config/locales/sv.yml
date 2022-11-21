@@ -759,7 +759,7 @@ sv:
         #original_hash: 7e54323
         unclear: Visa ingen text (utveckla eventuellt under "Extra anmälningskrav")
         #original_hash: 694bce4
-        anyone: '"Alla åskådare är välkomna gratis"'
+        free: '"Alla åskådare är välkomna gratis"'
         #original_hash: 762c509
         restricted: '"Åskådare är endast tillåtna tillsammans med tävlande"'
   simple_form:
@@ -2733,7 +2733,7 @@ sv:
       guests_pay: 'Åskådare kan delta mot en avgift på %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Alla åskådare är välkomna gratis
+        free: Alla åskådare är välkomna gratis
         #original_hash: f1e6aef
         restricted: Åskådare är endast tillåtna tillsammans med tävlande.
       #original_hash: 64e0ddd

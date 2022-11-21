@@ -754,7 +754,7 @@ hr:
           Ne prikazuj ništa (ili elaboriraj unutar "Extra registration
           requirements" sekcije)
         #original_hash: 694bce4
-        anyone: Bilo tko može doći gledati natjecanje besplatno
+        free: Bilo tko može doći gledati natjecanje besplatno
         #original_hash: 762c509
         restricted: Gledatelji mogu biti samo suputnici/pratnja natjecatelja
   simple_form:
@@ -2705,7 +2705,7 @@ hr:
       guests_pay: 'Gledatelji mogu doći samo ako plate kotizaciju od %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Svi gledatelji mogu doći gledati natjecanje besplatno.
+        free: Svi gledatelji mogu doći gledati natjecanje besplatno.
         #original_hash: f1e6aef
         restricted: >-
           Gledateljima je dozvoljen ulaz samo ako su suputnici/pratnja

@@ -703,7 +703,7 @@ da:
           Vis ikke noget (du burde uddybe hvorfor i sektionen om tilmeldingskrav
           nedenfor)
         #original_hash: 694bce4
-        anyone: '"Alle tilskuere kan se med gratis"'
+        free: '"Alle tilskuere kan se med gratis"'
         #original_hash: 762c509
         restricted: '"Tilskuere er kun tilladte som ledsagere af en deltager"'
   simple_form:
@@ -2618,7 +2618,7 @@ da:
       guests_pay: 'Det koster %{guests_base_fee} for tilskuere.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Enhver tilskuere kan se med gratis
+        free: Enhver tilskuere kan se med gratis
         #original_hash: f1e6aef
         restricted: Tilskuere er kun tilladte som ledsagere af en deltager
       #original_hash: 97a31ee

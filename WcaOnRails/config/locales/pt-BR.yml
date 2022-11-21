@@ -761,7 +761,7 @@ pt-BR:
           Não mostrar nada (e talvez detalhar na seção "Requerimentos adicionais
           de inscrição")
         #original_hash: 694bce4
-        anyone: Não há taxa para espectadores
+        free: Não há taxa para espectadores
         #original_hash: 762c509
         restricted: Espectadores somente são permitidos como acompanhantes de competidores
   simple_form:
@@ -2761,7 +2761,7 @@ pt-BR:
       guests_pay: 'Espectadores podem assistir pagando uma taxa de %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Não há taxa para espectadores
+        free: Não há taxa para espectadores
         #original_hash: f1e6aef
         restricted: >-
           Espectadores somente são permitidos como acompanhantes de

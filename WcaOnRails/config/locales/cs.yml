@@ -766,7 +766,7 @@ cs:
           Nezobrazovat nic (prosíme rozepište v dalších podmínkách pro
           registraci)
         #original_hash: 694bce4
-        anyone: Každý divák může přijít zdarma
+        free: Každý divák může přijít zdarma
         #original_hash: 762c509
         restricted: Diváci se mohou zůčastnit jen jako hosté soutěžících
   simple_form:
@@ -2735,7 +2735,7 @@ cs:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Jakýkoliv divák se smí účastnit zdarma.
+        free: Jakýkoliv divák se smí účastnit zdarma.
         #original_hash: f1e6aef
         restricted: Diváci se smí účastnit jen jako doprovod soutěžících.
       #original_hash: 64e0ddd

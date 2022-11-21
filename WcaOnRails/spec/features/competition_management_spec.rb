@@ -117,7 +117,7 @@ RSpec.feature "Competition management" do
       expect(page).not_to have_text("Display message for free guest entry")
     end
 
-    scenario "select anyone free guest entry status" do
+    scenario "select free guest entry status" do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: 1)
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')
@@ -125,7 +125,7 @@ RSpec.feature "Competition management" do
       expect(page).to have_text("Any spectator can attend for free.")
     end
 
-    scenario "select restricted free guest entry status" do
+    scenario "select restricted guest entry status" do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: 2)
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')

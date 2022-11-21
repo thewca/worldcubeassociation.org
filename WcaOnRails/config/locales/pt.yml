@@ -767,7 +767,7 @@ pt:
           Não mostrar nada (e talvez elaborar na seção "Requisitos Extra de
           Registo")
         #original_hash: 694bce4
-        anyone: '"Qualquer espectador pode comparecer gratuitamente"'
+        free: '"Qualquer espectador pode comparecer gratuitamente"'
         #original_hash: 762c509
         restricted: '"Espectadores só são permitidos como companhia de competidores"'
   simple_form:
@@ -2772,7 +2772,7 @@ pt:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Qualquer espectador pode comparecer gratuitamente.
+        free: Qualquer espectador pode comparecer gratuitamente.
         #original_hash: f1e6aef
         restricted: Espectadores só são permitidos como companhia para competidores.
       #original_hash: 64e0ddd

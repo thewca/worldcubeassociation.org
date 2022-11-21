@@ -703,7 +703,7 @@ nl:
           Laat niks zien (en wellicht een toelichting geven in de sectie Extra
           registratie-eisen)
         #original_hash: 694bce4
-        anyone: Iedere gast kan gratis komen kijken
+        free: Iedere gast kan gratis komen kijken
         #original_hash: 762c509
         restricted: Gasten alleen toegestaan als begeleider van deelnemers
   simple_form:
@@ -2634,7 +2634,7 @@ nl:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Iedere gast heeft gratis toegang.
+        free: Iedere gast heeft gratis toegang.
         #original_hash: f1e6aef
         restricted: Gasten zijn alleen toegestaan als begeleider van deelnemers.
       #original_hash: 97a31ee

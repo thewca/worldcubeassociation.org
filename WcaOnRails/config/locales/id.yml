@@ -741,7 +741,7 @@ id:
           Jangan tampilkan apapun (dan sebisa mungkin jelaskan pada bagian
           "Syarat pendaftaran tambahan")
         #original_hash: 694bce4
-        anyone: '"Penonton dapat datang secara gratis"'
+        free: '"Penonton dapat datang secara gratis"'
         #original_hash: 762c509
         restricted: '"Penonton yang diperbolehkan datang hanyalah pendamping kompetitor"'
   simple_form:
@@ -2708,7 +2708,7 @@ id:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Penonton dapat datang secara gratis.
+        free: Penonton dapat datang secara gratis.
         #original_hash: f1e6aef
         restricted: Penonton hanya boleh datang sebagai pendamping kompetitor.
       #original_hash: 97a31ee

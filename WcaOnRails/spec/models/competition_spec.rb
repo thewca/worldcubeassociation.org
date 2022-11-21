@@ -1236,7 +1236,7 @@ RSpec.describe Competition do
   end
 
   context "does not have guest limit" do
-    let(:competition) { FactoryBot.create :competition, guest_entry_status: Competition.guest_entry_statuses['anyone'] }
+    let(:competition) { FactoryBot.create :competition, guest_entry_status: Competition.guest_entry_statuses['free'] }
 
     it "accepts a competition that asks about guests, but does not have guest limit enabled" do
       competition.guests_enabled = true

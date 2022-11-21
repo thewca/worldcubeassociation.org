@@ -150,7 +150,7 @@ RSpec.describe Registration do
   context "upper guest limit not enabled" do
     it "allows guests greater than guest limit" do
       guest_limit = 1
-      competition = FactoryBot.create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['anyone']
+      competition = FactoryBot.create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free']
       registration.competition = competition
       registration.guests = 1_000_000
       expect(registration.guests).to be > registration.guest_limit

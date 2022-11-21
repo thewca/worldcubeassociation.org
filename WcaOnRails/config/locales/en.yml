@@ -470,7 +470,7 @@ en:
     competition:
       guest_entry_status:
         unclear: "Do not display anything (and perhaps elaborate in the \"Extra registration requirements\" section)"
-        anyone: "\"Any spectator can attend for free\""
+        free: "\"Any spectator can attend for free\""
         restricted: "\"Spectators are only permitted as companions of competitors\""
   #context: This key is an element of a form on the website
   simple_form:
@@ -1411,7 +1411,7 @@ en:
       no_on_the_spot_registration: "No on the spot registrations will be accepted."
       guests_pay: "Spectators can attend paying an entry fee of %{guests_base_fee}."
       guests_free:
-        anyone: "Any spectator can attend for free."
+        free: "Any spectator can attend for free."
         restricted: "Spectators are only permitted as companions of competitors."
       guest_limit: 
         one: "Competitors may bring at most 1 guest."

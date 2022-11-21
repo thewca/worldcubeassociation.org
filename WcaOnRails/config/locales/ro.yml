@@ -776,7 +776,7 @@ ro:
           Nu afișa nimic (și, eventual, elaborează secțiunea "Cerințe
           suplimentare pentru înscriere")
         #original_hash: 694bce4
-        anyone: '"Orice spectator poate asista gratuit"'
+        free: '"Orice spectator poate asista gratuit"'
         #original_hash: 762c509
         restricted: '"Doar însoțitorii concurenților pot fi spectatori"'
   simple_form:
@@ -2819,7 +2819,7 @@ ro:
       guests_pay: 'Spectatorii pot urmări competiția, pentru o taxă de %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Orice spectator poate asista gratuit.
+        free: Orice spectator poate asista gratuit.
         #original_hash: f1e6aef
         restricted: Spectatorii pot fi doar însoțitori ai concurenților.
       #original_hash: 64e0ddd

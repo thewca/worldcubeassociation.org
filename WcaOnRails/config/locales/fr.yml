@@ -705,7 +705,7 @@ fr:
           Ne rien afficher (et donner des détails dans la section "Conditions
           d'inscription additionnelles")
         #original_hash: 694bce4
-        anyone: Les spectateurs peuvent assister à la compétition gratuitement
+        free: Les spectateurs peuvent assister à la compétition gratuitement
         #original_hash: 762c509
         restricted: Les spectateurs ne sont admis que s'ils accompagnent des compétiteurs
   simple_form:
@@ -2720,7 +2720,7 @@ fr:
       guests_pay: 'Le coût de l''entrée pour les spectateurs est de %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Tous les spectateurs peuvent assister à la compétition gratuitement.
+        free: Tous les spectateurs peuvent assister à la compétition gratuitement.
         #original_hash: f1e6aef
         restricted: >-
           Les spectateurs ne sont autorisés qu'en tant qu'accompagnateurs des

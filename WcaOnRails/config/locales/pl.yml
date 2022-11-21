@@ -721,7 +721,7 @@ pl:
           Nie wyświetlaj nic (rozwiń temat w sekcji "Dodatkowe wymagania
           rejestracyjne")
         #original_hash: 694bce4
-        anyone: Każdy widz może wejść za darmo
+        free: Każdy widz może wejść za darmo
         #original_hash: 762c509
         restricted: Widzowie mogą wejść jedynie jako goście zawodników
   simple_form:
@@ -2707,7 +2707,7 @@ pl:
       guests_pay: 'Wstęp dla widzów wynosi %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Widzowie mogą uczestniczyć w wydarzeniu za darmo.
+        free: Widzowie mogą uczestniczyć w wydarzeniu za darmo.
         #original_hash: f1e6aef
         restricted: Widzowie będą wpuszczani jedynie jako goście zawodników.
       #original_hash: 97a31ee

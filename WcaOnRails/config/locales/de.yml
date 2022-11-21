@@ -770,7 +770,7 @@ de:
           Zeige nichts an (und erläutere eventuelle Details im Bereich
           "Zusätzliche Anmeldebedingungen“)
         #original_hash: 694bce4
-        anyone: '"Jeder Gast kann die Competition kostenlos besuchen"'
+        free: '"Jeder Gast kann die Competition kostenlos besuchen"'
         #original_hash: 762c509
         restricted: '"Gäste werden nur als Begleitung von Teilnehmern zugelassen"'
   simple_form:
@@ -2859,7 +2859,7 @@ de:
       guests_pay: 'Zuschauer können für eine Gebühr von %{guests_base_fee} zusehen.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Jeder Gast kann den Wettbewerb kostenlos besuchen.
+        free: Jeder Gast kann den Wettbewerb kostenlos besuchen.
         #original_hash: f1e6aef
         restricted: Gäste werden nur als Begleitpersonen von Teilnehmern zugelassen.
       #original_hash: 64e0ddd

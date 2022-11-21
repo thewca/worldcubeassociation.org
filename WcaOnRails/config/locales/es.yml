@@ -771,7 +771,7 @@ es:
           No mostrar nada (y quizás ampliar la información en la sección de
           "Requisistos adicionales de registro")
         #original_hash: 694bce4
-        anyone: '"Cualquier espectador puede asistir de manera gratuita"'
+        free: '"Cualquier espectador puede asistir de manera gratuita"'
         #original_hash: 762c509
         restricted: '"Sólo se permiten espectadores como acompañantes de competidores"'
   simple_form:
@@ -2819,7 +2819,7 @@ es:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Cualquier espectador puede asistir de manera gratuita
+        free: Cualquier espectador puede asistir de manera gratuita
         #original_hash: f1e6aef
         restricted: Los espectadores sólo se permiten como acompañantes de competidores.
       #original_hash: 64e0ddd

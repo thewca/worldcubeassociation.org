@@ -761,7 +761,7 @@ it:
           Non mostrare nulla (si consiglia di elaborare nella sezione "Altri
           requisiti di registrazione")
         #original_hash: 694bce4
-        anyone: '"Gli spettatori possono entrare gratuitamente"'
+        free: '"Gli spettatori possono entrare gratuitamente"'
         #original_hash: 762c509
         restricted: '"Gli spettatori sono ammessi solo se accompagnano un partecipante"'
   simple_form:
@@ -2828,7 +2828,7 @@ it:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Gli spettatori possono entrare gratuitamente.
+        free: Gli spettatori possono entrare gratuitamente.
         #original_hash: f1e6aef
         restricted: Sono ammessi solo gli spettatori che accompagnano un partecipante.
       #original_hash: 64e0ddd

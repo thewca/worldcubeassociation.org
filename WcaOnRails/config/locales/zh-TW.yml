@@ -729,7 +729,7 @@ zh-TW:
         #original_hash: 7e54323
         unclear: 不要顯示任何東西（也許需要在「額外報名條件」中詳述）
         #original_hash: 694bce4
-        anyone: 觀眾都可免費入場
+        free: 觀眾都可免費入場
         #original_hash: 762c509
         restricted: 只有參賽者的陪同者才能入場當觀眾
   simple_form:
@@ -2262,7 +2262,7 @@ zh-TW:
       guests_pay: '觀眾需繳交進場費%{guests_base_fee}才得入場。'
       guests_free:
         #original_hash: 573eeb7
-        anyone: 觀眾都可免費入場。
+        free: 觀眾都可免費入場。
         #original_hash: f1e6aef
         restricted: 只有參賽者的陪同者才能入場當觀眾
       #original_hash: 97a31ee

@@ -81,7 +81,7 @@ class Competition < ApplicationRecord
 
   enum guest_entry_status: {
     unclear: 0,
-    anyone: 1,
+    free: 1,
     restricted: 2,
   }, _prefix: true
 
@@ -989,7 +989,7 @@ class Competition < ApplicationRecord
   end
 
   def all_guests_allowed?
-    guest_entry_status_anyone?
+    guest_entry_status_free?
   end
 
   def some_guests_allowed?
