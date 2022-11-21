@@ -118,7 +118,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "select free guest entry status" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: 1)
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['free'])
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')
 
@@ -126,7 +126,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "select restricted guest entry status" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: 2)
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['restricted'])
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')
 
