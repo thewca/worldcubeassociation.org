@@ -28,6 +28,8 @@ services:
       bin/rails server -b 0.0.0.0'
     depends_on:
       - wca_db
+    networks:
+      - wca-main
 
   wca_db:
     image: mysql:8.0
@@ -38,12 +40,49 @@ services:
       - "3306"
     volumes:
       - wca_db_volume:/var/lib/mysql
+      - ./docker/my.cnf:/etc/my.cnf
     # Suppress unneeded messages via https://stackoverflow.com/a/55706057/2558618
     cap_add:
       - SYS_NICE
+    networks:
+      - wca-main
+
+  nginx:
+    image: nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./webroot:/webroot #PHP stuff
+      - ./WcaOnRails/app/views/regulations:/regulations #static regulations files
+      - ./WcaOnRails/public:/public #other static files
+      - ./docker/nginx-dev.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/fcgi.conf:/etc/nginx/fcgi.conf
+    networks:
+      - wca-main
+    depends_on:
+      - php
+      - wca_on_rails
+
+  php:
+    build:
+      dockerfile: './docker/php-dockerfile'
+    volumes:
+      - ./webroot:/webroot
+      - ./secrets/uploads:/secrets/uploads # so we can pretend to upload stuff
+    networks:
+      - wca-main
+    environment:
+      - MYSQL_HOST=wca_db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+      - MYSQL_DB=wca_development
 
 volumes:
   wca_db_volume:
     driver: local
   gems_volume:
     driver: local
+
+networks:
+  wca-main:
+    name: wca-main
