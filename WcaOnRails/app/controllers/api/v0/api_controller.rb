@@ -152,7 +152,7 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def delegates
-    paginate json: User.delegates
+    paginate json: User.staff_delegates
   end
 
   def records

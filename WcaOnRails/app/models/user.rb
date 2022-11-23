@@ -329,9 +329,10 @@ class User < ApplicationRecord
     !dummy_account? && encrypted_password == ""
   end
 
+  scope :delegates, -> { where.not(delegate_status: nil) }
   scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
   scope :trainee_delegates, -> { where(delegate_status: "trainee_delegate") }
-  scope :delegates, -> { where.not(delegate_status: nil) }
+  scope :staff_delegates, -> { where.not(delegate_status: [nil, "trainee_delegate"]) }
   scope :senior_delegates, -> { where(delegate_status: "senior_delegate") }
 
   before_validation :copy_data_from_persons
@@ -806,7 +807,7 @@ class User < ApplicationRecord
 
   def can_confirm_competition?(competition)
     # We don't let competition organizers confirm competitions.
-    can_admin_results? || competition.delegates.include?(self)
+    can_admin_results? || competition.staff_delegates.include?(self)
   end
 
   def can_add_and_remove_events?(competition)
@@ -1186,7 +1187,7 @@ class User < ApplicationRecord
   def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
     person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     roles = registration&.roles || []
-    roles << "delegate" if competition.delegates.include?(self)
+    roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
     roles << "organizer" if competition.organizers.include?(self)
     authorized_fields = {

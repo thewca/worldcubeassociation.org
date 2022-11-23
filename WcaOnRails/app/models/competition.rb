@@ -66,7 +66,6 @@ class Competition < ApplicationRecord
   scope :managed_by, lambda { |user_id|
     joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = Competitions.id")
       .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = Competitions.id")
-      .joins("LEFT JOIN competition_trainee_delegates ON competition_trainee_delegates.competition_id = Competitions.id")
       .where(
         "delegate_id = :user_id OR organizer_id = :user_id OR trainee_delegate_id = :user_id",
         user_id: user_id,
