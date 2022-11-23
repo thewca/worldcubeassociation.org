@@ -393,7 +393,7 @@ class CompetitionsController < ApplicationController
   end
 
   def calculate_dues
-    country_iso2 = Country.find(params[:country_id]).iso2
+    country_iso2 = Country.find(params[:country_id])&.iso2
     country_band = CountryBand.find_by(iso2: country_iso2)&.number
 
     input_money_us_dollars = Money.new(params[:entry_fee_cents].to_i, params[:currency_code]).exchange_to("USD").amount
