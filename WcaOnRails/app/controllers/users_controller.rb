@@ -233,6 +233,28 @@ class UsersController < ApplicationController
     redirect_to sso.to_url, allow_other_host: true
   end
 
+  def wac_survey
+    survey_base_url = if current_user.staff? || current_user.trainee_delegate?
+                        # Trainee Delegates should be treated as Staff for the purpose of this survey.
+                        'https://www.surveymonkey.com/r/69DG5GW'
+                      elsif current_user.person.present?
+                        # If they are not staff but have a WCA ID
+                        'https://www.surveymonkey.com/r/V2N5Q7Q'
+                      else
+                        # If they are not staff nor have a WCA ID linked to their account
+                        'https://www.surveymonkey.com/r/6B8KHZK'
+                      end
+
+    # WAC does not know the contents of SURVEY_SECRET, so they cannot (reasonably) brute-force any hashes.
+    # But once the survey is over, they can give us a list of tokens and we can easily verify whether they are legit.
+    token_payload = current_user.id.to_s
+    wca_token = OpenSSL::HMAC.hexdigest("sha256", EnvVars.SURVEY_SECRET, token_payload)
+
+    survey_url = "#{survey_base_url}?wca_token=#{wca_token}"
+
+    redirect_to survey_url, allow_other_host: true
+  end
+
   def acknowledge_cookies
     return render status: 401, json: { ok: false } if current_user.nil?
 
