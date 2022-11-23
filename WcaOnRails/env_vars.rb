@@ -49,6 +49,7 @@ EnvVars = SuperConfig.new do
   mandatory :OTP_ENCRYPTION_KEY, :string
   mandatory :DISCOURSE_SECRET, :string
   mandatory :DISCOURSE_URL, :string
+  mandatory :SURVEY_SECRET, :string
   mandatory :S3_AVATARS_BUCKET, :string
   mandatory :S3_AVATARS_ASSET_HOST, :string
   mandatory :S3_AVATARS_REGION, :string
