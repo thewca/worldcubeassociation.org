@@ -22,6 +22,8 @@ class CountryBand < ApplicationRecord
     },
   }.freeze
 
+  PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT = 0.15
+
   belongs_to :country, foreign_key: :iso2, primary_key: :iso2
   validates_inclusion_of :iso2, in: Country.real.map(&:iso2).freeze
   validates_inclusion_of :number, in: BANDS.keys.freeze

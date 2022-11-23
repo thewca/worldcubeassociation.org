@@ -397,7 +397,7 @@ class CompetitionsController < ApplicationController
     country_band = CountryBand.find_by(iso2: country_iso2)&.number
 
     input_money_us_dollars = Money.new(params[:entry_fee_cents].to_i, params[:currency_code]).exchange_to("USD").amount
-    registration_fee_dues_us_dollars = input_money_us_dollars * 0.15
+    registration_fee_dues_us_dollars = input_money_us_dollars * CountryBand::PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT
     country_band_dues_us_dollars = CountryBand::BANDS[country_band][:value] if country_band.present? && country_band > 0
 
     # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
