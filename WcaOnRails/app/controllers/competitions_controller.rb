@@ -393,30 +393,23 @@ class CompetitionsController < ApplicationController
   end
 
   def calculate_dues
-    country_iso2 = Country.where(id: params[:country_id]).pluck(:iso2)[0]
-    country_band = CountryBand.where(iso2: country_iso2).map(&:number)[0]
+    country_iso2 = Country.find(params[:country_id]).iso2
+    country_band = CountryBand.find_by(iso2: country_iso2)&.number
 
-    update_currency_rates_if_needed
-    currency_subunit = Money::Currency.new(params[:currency_code]).subunit_to_unit
-    money_value = params[:entry_fee].to_i / currency_subunit
-    money_value_usd = Money.new(money_value, params[:currency_code]).exchange_to("USD").cents
-
-    base_fee_usd = money_value_usd * 0.15
-    band_fee_usd = 0
-    if country_band.present? && country_band > 0
-      band_fee_usd = CountryBand::BANDS[country_band][:value]
-    end
+    input_money_us_dollars = Money.new(params[:entry_fee_cents].to_i, params[:currency_code]).exchange_to("USD").amount
+    registration_fee_dues_us_dollars = input_money_us_dollars * 0.15
+    country_band_dues_us_dollars = CountryBand::BANDS[country_band][:value] if country_band.present? && country_band > 0
 
     # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
-    price_per_competitor_usd = [base_fee_usd, band_fee_usd].max * 100
+    price_per_competitor_us_cents = [registration_fee_dues_us_dollars, country_band_dues_us_dollars].compact.max * 100
     estimated_dues = "" # return empty string if no competitor limit
 
     if params[:competitor_limit_enabled]
-      estimated_dues_usd = price_per_competitor_usd * params[:competitor_limit].to_i
-      estimated_dues = Money.new(estimated_dues_usd, "USD").exchange_to(params[:currency_code]).format
+      estimated_dues_us_cents = price_per_competitor_us_cents * params[:competitor_limit].to_i
+      estimated_dues = Money.new(estimated_dues_us_cents, "USD").exchange_to(params[:currency_code]).format
     end
 
-    price_per_competitor = Money.new(price_per_competitor_usd, "USD").exchange_to(params[:currency_code]).format
+    price_per_competitor = Money.new(price_per_competitor_us_cents, "USD").exchange_to(params[:currency_code]).format
 
     render json: {
       per_competitor: price_per_competitor,
@@ -605,7 +598,7 @@ class CompetitionsController < ApplicationController
     params[:commit] == "Confirm"
   end
 
-  private def update_currency_rates_if_needed
+  private def update_exchange_rates_if_needed
     if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < 1.day.ago
       Money.default_bank.update_rates
     end
