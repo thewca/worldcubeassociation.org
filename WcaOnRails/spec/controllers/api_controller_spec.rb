@@ -132,7 +132,7 @@ RSpec.describe Api::V0::ApiController do
 
     it 'can only find delegates' do
       delegate = FactoryBot.create(:senior_delegate, name: "Jeremy")
-      get :users_search, params: { q: "erem", only_delegates: true }
+      get :users_search, params: { q: "erem", only_staff_delegates: true }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1

@@ -4,8 +4,8 @@ class UserIdsInput < SimpleForm::Inputs::Base
   def input(wrapper_options)
     merged_input_options = merge_wrapper_options(input_html_options, wrapper_options)
     merged_input_options[:class] << "wca-autocomplete wca-autocomplete-users_search"
-    if @options[:only_delegates]
-      merged_input_options[:class] << "wca-autocomplete-only_delegates"
+    if @options[:only_staff_delegates]
+      merged_input_options[:class] << "wca-autocomplete-only_staff_delegates"
     end
     if @options[:only_trainee_delegates]
       merged_input_options[:class] << "wca-autocomplete-only_trainee_delegates"

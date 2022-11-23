@@ -355,19 +355,6 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "competition_trainee_delegates" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          competition_id
-          created_at
-          trainee_delegate_id
-          receive_registration_emails
-          updated_at
-        ),
-      ),
-    }.freeze,
     "competition_events" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(

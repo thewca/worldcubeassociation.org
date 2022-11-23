@@ -14,9 +14,7 @@ class Competition < ApplicationRecord
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
-  has_many :competition_trainee_delegates, dependent: :delete_all
   has_many :delegates, through: :competition_delegates
-  has_many :trainee_delegates, through: :competition_trainee_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
@@ -543,7 +541,6 @@ class Competition < ApplicationRecord
              'competitor_users',
              'delegate_report',
              'competition_delegates',
-             'competition_trainee_delegates',
              'competition_events',
              'competition_organizers',
              'competition_venues',
@@ -564,8 +561,6 @@ class Competition < ApplicationRecord
           clone.organizers = organizers
         when 'delegates'
           clone.delegates = delegates
-        when 'trainee_delegates'
-          clone.trainee_delegates = trainee_delegates
         when 'events'
           clone.events = events
         when 'tabs'
@@ -642,20 +637,28 @@ class Competition < ApplicationRecord
     # CompetitionOrganizer and CompetitionDelegate rows rather than creating new ones.
     # We'll fix their competition_id below in update_foreign_keys.
     with_old_id do
-      if @delegate_ids
-        self.delegates = @delegate_ids.split(",").map { |id| User.find(id) }
+      if @delegate_ids || @trainee_delegate_ids
+        self.delegates ||= []
+
+        if @delegate_ids
+          self.delegates += @delegate_ids.split(",").map { |id| User.find(id) }
+        end
+        if @trainee_delegate_ids
+          self.delegates += @trainee_delegate_ids.split(",").map { |id| User.find(id) }
+        end
       end
       if @organizer_ids
         self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
       end
-      if @trainee_delegate_ids
-        self.trainee_delegates = @trainee_delegate_ids.split(",").map { |id| User.find(id) }
-      end
     end
   end
 
-  def all_delegates
-    delegates + trainee_delegates
+  def staff_delegates
+    delegates.select(&:staff?)
+  end
+
+  def trainee_delegates
+    delegates.select(&:trainee_delegate?)
   end
 
   def has_defined_dates?
@@ -679,7 +682,6 @@ class Competition < ApplicationRecord
   def remove_non_existent_organizers_and_delegates
     CompetitionOrganizer.where(competition_id: id).where.not(organizer_id: organizers.map(&:id)).delete_all
     CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
-    CompetitionTraineeDelegate.where(competition_id: id).where.not(trainee_delegate_id: trainee_delegates.map(&:id)).delete_all
   end
 
   # We setup an alias here to be able to take advantage of `includes(:delegate_report)` on a competition,
@@ -782,16 +784,12 @@ class Competition < ApplicationRecord
   end
 
   def managers
-    (organizers + delegates + trainee_delegates).uniq
+    (organizers + delegates).uniq
   end
 
   def receiving_registration_emails?(user_id)
     competition_delegate = competition_delegates.find_by_delegate_id(user_id)
     if competition_delegate&.receive_registration_emails
-      return true
-    end
-    competition_trainee_delegate = competition_trainee_delegates.find_by_trainee_delegate_id(user_id)
-    if competition_trainee_delegate&.receive_registration_emails
       return true
     end
     competition_organizer = competition_organizers.find_by_organizer_id(user_id)
@@ -803,10 +801,6 @@ class Competition < ApplicationRecord
   end
 
   def can_receive_registration_emails?(user_id)
-    competition_trainee_delegate = competition_trainee_delegates.find_by_trainee_delegate_id(user_id)
-    if competition_trainee_delegate
-      return true
-    end
     competition_delegate = competition_delegates.find_by_delegate_id(user_id)
     if competition_delegate
       return true
@@ -1411,7 +1405,7 @@ class Competition < ApplicationRecord
   end
 
   def organizers_or_delegates
-    self.organizers.empty? ? self.all_delegates : self.organizers
+    self.organizers.empty? ? self.delegates : self.organizers
   end
 
   SortedRegistration = Struct.new(:registration, :tied_previous, :pos, keyword_init: true)
@@ -1561,7 +1555,7 @@ class Competition < ApplicationRecord
       order = { start_date: :desc }
     end
 
-    competitions.includes(:delegates, :trainee_delegates, :organizers).order(**order)
+    competitions.includes(:delegates, :organizers).order(**order)
   end
 
   def all_activities
@@ -1846,7 +1840,7 @@ class Competition < ApplicationRecord
     methods: ["url", "website", "short_name", "city", "venue_address",
               "venue_details", "latitude_degrees", "longitude_degrees",
               "country_iso2", "event_ids"],
-    include: ["delegates", "trainee_delegates", "organizers"],
+    include: ["delegates", "organizers"],
   }.freeze
 
   def serializable_hash(options = nil)
