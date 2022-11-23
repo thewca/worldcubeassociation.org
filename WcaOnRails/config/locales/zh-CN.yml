@@ -645,7 +645,7 @@ zh-CN:
         #original_hash: da39a3e
         allow_registration_edits: ''
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: da39a3e

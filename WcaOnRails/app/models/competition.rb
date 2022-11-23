@@ -79,9 +79,9 @@ class Competition < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
-  enum free_guest_entry_status: {
+  enum guest_entry_status: {
     unclear: 0,
-    anyone: 1,
+    free: 1,
     restricted: 2,
   }, _prefix: true
 
@@ -104,6 +104,7 @@ class Competition < ApplicationRecord
     competitor_limit
     competitor_limit_reason
     guests_enabled
+    guests_per_registration_limit
     base_entry_fee_lowest_denomination
     currency_code
     enable_donations
@@ -115,7 +116,7 @@ class Competition < ApplicationRecord
     allow_registration_without_qualification
     refund_policy_percent
     guests_entry_fee_lowest_denomination
-    free_guest_entry_status
+    guest_entry_status
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -168,9 +169,12 @@ class Competition < ApplicationRecord
   MAX_NAME_LENGTH = 50
   MAX_CELL_NAME_LENGTH = 32
   MAX_COMPETITOR_LIMIT = 5000
+  MAX_GUEST_LIMIT = 100
   validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
   validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
+  validates :guests_enabled, acceptance: { accept: true, message: I18n.t('competitions.errors.must_ask_about_guests_if_specifying_limit') }, if: :guests_per_registration_limit_enabled?
+  validates_numericality_of :guests_per_registration_limit, only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed?
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                  format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
@@ -220,6 +224,10 @@ class Competition < ApplicationRecord
     with_old_id do
       self.uses_qualification?
     end
+  end
+
+  def guests_per_registration_limit_enabled?
+    some_guests_allowed? && !guests_per_registration_limit.nil?
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
@@ -981,11 +989,11 @@ class Competition < ApplicationRecord
   end
 
   def all_guests_allowed?
-    free_guest_entry_status_anyone?
+    guest_entry_status_free?
   end
 
   def some_guests_allowed?
-    free_guest_entry_status_restricted?
+    guest_entry_status_restricted?
   end
 
   def registration_period_required?

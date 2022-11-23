@@ -537,7 +537,7 @@ hr:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Kotizacija za goste/gledatelje
         #original_hash: bb16247
-        free_guest_entry_status: Prikaži poruku za besplatan ulazak gledatelja
+        guest_entry_status: Prikaži poruku za besplatan ulazak gledatelja
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Želim da natjecatelji predaju mozgalice u vremenu prije nego je neka
@@ -748,13 +748,13 @@ hr:
         #original_hash: 82dabd0
         multimedia: Multimedija
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Ne prikazuj ništa (ili elaboriraj unutar "Extra registration
           requirements" sekcije)
         #original_hash: 694bce4
-        anyone: Bilo tko može doći gledati natjecanje besplatno
+        free: Bilo tko može doći gledati natjecanje besplatno
         #original_hash: 762c509
         restricted: Gledatelji mogu biti samo suputnici/pratnja natjecatelja
   simple_form:
@@ -991,7 +991,7 @@ hr:
           ovaj broj stavljen na 0, prikazat će se rečenica po vašem odabiru
           politike dolaska gledatelja na natjecanje.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2705,7 +2705,7 @@ hr:
       guests_pay: 'Gledatelji mogu doći samo ako plate kotizaciju od %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Svi gledatelji mogu doći gledati natjecanje besplatno.
+        free: Svi gledatelji mogu doći gledati natjecanje besplatno.
         #original_hash: f1e6aef
         restricted: >-
           Gledateljima je dozvoljen ulaz samo ako su suputnici/pratnja

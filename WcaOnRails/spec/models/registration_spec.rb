@@ -98,9 +98,54 @@ RSpec.describe Registration do
     expect(registration.name).to eq "New Name"
   end
 
-  it "requires quests >= 0" do
-    registration.guests = -5
-    expect(registration).to be_invalid_with_errors(guests: ["must be greater than or equal to 0"])
+  context "upper guest limit enabled" do
+    guest_limit = 2
+    let(:competition) { FactoryBot.create :competition, :with_guest_limit, guests_per_registration_limit: guest_limit }
+
+    before :each do
+      registration.competition = competition
+    end
+
+    it "allows 0 guests" do
+      registration.guests = 0
+      expect(registration).to be_valid
+    end
+
+    it "allows guests less than guest limit" do
+      registration.guests = 1
+      expect(registration).to be_valid
+    end
+
+    it "allows guests equal to guest limit" do
+      registration.guests = 2
+      expect(registration).to be_valid
+    end
+
+    it "requires guests less than guest limit" do
+      registration.guests = 3
+      expect(registration).to be_invalid_with_errors(guests: ["must be less than or equal to 2"])
+    end
+
+    it "requires guests greater than 0" do
+      registration.guests = -5
+      expect(registration).to be_invalid_with_errors(guests: ["must be greater than or equal to 0"])
+    end
+  end
+
+  context "upper guest limit not enabled" do
+    it "allows guests greater than guest limit" do
+      guest_limit = 1
+      competition = FactoryBot.create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free']
+      registration.competition = competition
+      registration.guests = 1_000_000
+      expect(registration.guests).to be > registration.guest_limit
+      expect(registration).to be_valid
+    end
+
+    it "requires guests greater than 0" do
+      registration.guests = -1
+      expect(registration).to be_invalid_with_errors(guests: ["must be greater than or equal to 0"])
+    end
   end
 
   context "when the competition is part of a series" do

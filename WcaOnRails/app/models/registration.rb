@@ -25,11 +25,21 @@ class Registration < ApplicationRecord
 
   validates_numericality_of :guests, greater_than_or_equal_to: 0
 
+  validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
+
   validate :registration_cannot_be_deleted_and_accepted_simultaneously
   private def registration_cannot_be_deleted_and_accepted_simultaneously
     if deleted? && accepted?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.cannot_be_deleted_and_accepted'))
     end
+  end
+
+  def guest_limit
+    competition.guests_per_registration_limit
+  end
+
+  def check_guest_limit?
+    competition.present? && competition.guests_per_registration_limit_enabled?
   end
 
   def deleted?

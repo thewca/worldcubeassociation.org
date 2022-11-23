@@ -528,7 +528,7 @@ th:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: ค่าเข้าชมการแข่งขัน
         #original_hash: bb16247
-        free_guest_entry_status: แสดงข้อความให้ผู้เข้าชมการแข่งขันเข้าได้โดยไม่เสียค่าใช้จ่าย
+        guest_entry_status: แสดงข้อความให้ผู้เข้าชมการแข่งขันเข้าได้โดยไม่เสียค่าใช้จ่าย
         #original_hash: 723cad9
         early_puzzle_submission: ฉันต้องการให้ผู้เข้าแข่งขันส่ง puzzle ก่อนที่การแข่งขันจะเริ่มขึ้น
         #original_hash: 78308cc
@@ -744,13 +744,13 @@ th:
         #original_hash: 82dabd0
         multimedia: มัลติมีเดีย
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           ไม่ต้องแสดงอะไรทั้งสิ้น (และอาจอธิบายให้ละเอียดในส่วน
           "ข้อกำหนดเพิ่มเติมในการลงทะเบียน")
         #original_hash: 694bce4
-        anyone: ผู้เข้าชมการแข่งขันสามารถเข้าชมได้โดยไม่เสียค่าใช้จ่าย
+        free: ผู้เข้าชมการแข่งขันสามารถเข้าชมได้โดยไม่เสียค่าใช้จ่าย
         #original_hash: 762c509
         restricted: >-
           เฉพาะผู้ที่เดินทางมากับผู้เข้าแข่งขันเท่านั้นที่สามารถเข้ารับชมการแข่งขันได้
@@ -971,7 +971,7 @@ th:
           ค่าเข้าชมการแข่งขันไม่สามารถจัดการผ่าน website นี้ได้ หากตั้งเป็น 0
           จะแสดงข้อความที่คุณเลือกเกี่ยวกับนโยบายของผู้เข้าชมการแข่งขัน
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2618,7 +2618,7 @@ th:
       guests_pay: 'ผู้เข้าชมสามารถเข้าชมได้โดยชำระค่าเข้า %{guests_base_fee}'
       guests_free:
         #original_hash: 573eeb7
-        anyone: ผู้เข้าชมการแข่งขันสามารถรับชมได้โดยไม่มีค่าใช้จ่าย
+        free: ผู้เข้าชมการแข่งขันสามารถรับชมได้โดยไม่มีค่าใช้จ่าย
         #original_hash: f1e6aef
         restricted: >-
           เฉพาะผู้ที่เดินทางมากับผู้เข้าแข่งขันเท่านั้นจึงจะสามารถรับชมการแข่งขันได้

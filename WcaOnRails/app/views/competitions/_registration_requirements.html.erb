@@ -119,10 +119,15 @@
   <br>
 <% else %>
   <% if @competition.all_guests_allowed? %>
-    <%= t('competitions.competition_info.guests_free.anyone') %>
+    <%= t('competitions.competition_info.guests_free.free') %>
   <% elsif @competition.some_guests_allowed? %>
     <%= t('competitions.competition_info.guests_free.restricted') %>
   <% end %>
+  <br>
+<% end %>
+
+<% if @competition.guests_per_registration_limit_enabled? %>
+  <%= t('competitions.competition_info.guest_limit', count: @competition.guests_per_registration_limit) %>
   <br>
 <% end %>
 

@@ -500,7 +500,7 @@ pl:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Wpisowe dla gości
         #original_hash: bb16247
-        free_guest_entry_status: Wyświetl informacje o darmowym wejściu dla gości
+        guest_entry_status: Wyświetl informacje o darmowym wejściu dla gości
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Chciałbym wymagać od zawodników dostarczenia układanek w określonym
@@ -715,13 +715,13 @@ pl:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Nie wyświetlaj nic (rozwiń temat w sekcji "Dodatkowe wymagania
           rejestracyjne")
         #original_hash: 694bce4
-        anyone: Każdy widz może wejść za darmo
+        free: Każdy widz może wejść za darmo
         #original_hash: 762c509
         restricted: Widzowie mogą wejść jedynie jako goście zawodników
   simple_form:
@@ -957,7 +957,7 @@ pl:
           wyświetlone wybrane przez ciebie zdanie informujące o polityce wstępu
           dla gości.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2707,7 +2707,7 @@ pl:
       guests_pay: 'Wstęp dla widzów wynosi %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Widzowie mogą uczestniczyć w wydarzeniu za darmo.
+        free: Widzowie mogą uczestniczyć w wydarzeniu za darmo.
         #original_hash: f1e6aef
         restricted: Widzowie będą wpuszczani jedynie jako goście zawodników.
       #original_hash: 97a31ee

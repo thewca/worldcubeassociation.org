@@ -546,7 +546,7 @@ ro:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de intrare pentru spectatori
         #original_hash: bb16247
-        free_guest_entry_status: Afișează mesaj pentru accesul gratuit al invitaților
+        guest_entry_status: Afișează mesaj pentru accesul gratuit al invitaților
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Vreau să le cer concurenților să își depună puzzleurile la un moment
@@ -770,13 +770,13 @@ ro:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Nu afișa nimic (și, eventual, elaborează secțiunea "Cerințe
           suplimentare pentru înscriere")
         #original_hash: 694bce4
-        anyone: '"Orice spectator poate asista gratuit"'
+        free: '"Orice spectator poate asista gratuit"'
         #original_hash: 762c509
         restricted: '"Doar însoțitorii concurenților pot fi spectatori"'
   simple_form:
@@ -1013,7 +1013,7 @@ ro:
           nu pot fi administrate prin acest site. Dacă este setat la 0, va fi
           afișat un mesaj la alegerea ta despre regimul spectatorilor.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2819,7 +2819,7 @@ ro:
       guests_pay: 'Spectatorii pot urmări competiția, pentru o taxă de %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Orice spectator poate asista gratuit.
+        free: Orice spectator poate asista gratuit.
         #original_hash: f1e6aef
         restricted: Spectatorii pot fi doar însoțitori ai concurenților.
       #original_hash: 64e0ddd

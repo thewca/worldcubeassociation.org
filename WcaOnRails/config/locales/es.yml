@@ -537,7 +537,7 @@ es:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Precio de entrada de acompañantes
         #original_hash: bb16247
-        free_guest_entry_status: Mostrar mensaje para acceso gratuito de invitados
+        guest_entry_status: Mostrar mensaje para acceso gratuito de invitados
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Me gustaría requerir que los competidores entreguen sus puzzles a una
@@ -765,13 +765,13 @@ es:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           No mostrar nada (y quizás ampliar la información en la sección de
           "Requisistos adicionales de registro")
         #original_hash: 694bce4
-        anyone: '"Cualquier espectador puede asistir de manera gratuita"'
+        free: '"Cualquier espectador puede asistir de manera gratuita"'
         #original_hash: 762c509
         restricted: '"Sólo se permiten espectadores como acompañantes de competidores"'
   simple_form:
@@ -1011,7 +1011,7 @@ es:
           Si se pone a 0, se mostrará una frase de su elección indicando la
           política de espectadores elegida.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2819,7 +2819,7 @@ es:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Cualquier espectador puede asistir de manera gratuita
+        free: Cualquier espectador puede asistir de manera gratuita
         #original_hash: f1e6aef
         restricted: Los espectadores sólo se permiten como acompañantes de competidores.
       #original_hash: 64e0ddd

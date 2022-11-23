@@ -540,7 +540,7 @@ cs:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Vstupné pro hosty
         #original_hash: bb16247
-        free_guest_entry_status: Zpráva o bezplatném vstupu hostů
+        guest_entry_status: Zpráva o bezplatném vstupu hostů
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Požaduji, aby soutěžící odevzdali své kostky ve specifický čas
@@ -760,13 +760,13 @@ cs:
         #original_hash: 82dabd0
         multimedia: Multimédia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Nezobrazovat nic (prosíme rozepište v dalších podmínkách pro
           registraci)
         #original_hash: 694bce4
-        anyone: Každý divák může přijít zdarma
+        free: Každý divák může přijít zdarma
         #original_hash: 762c509
         restricted: Diváci se mohou zůčastnit jen jako hosté soutěžících
   simple_form:
@@ -1000,7 +1000,7 @@ cs:
           řešit pomocí této stránky. Pokud toto nastavíte na 0, zobrazí se věta
           o divácích dle vaší volby.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2735,7 +2735,7 @@ cs:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Jakýkoliv divák se smí účastnit zdarma.
+        free: Jakýkoliv divák se smí účastnit zdarma.
         #original_hash: f1e6aef
         restricted: Diváci se smí účastnit jen jako doprovod soutěžících.
       #original_hash: 64e0ddd

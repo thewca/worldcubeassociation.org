@@ -63,6 +63,7 @@ module DatabaseDumper
           competitor_limit
           competitor_limit_reason
           guests_enabled
+          guests_per_registration_limit
           results_posted_at
           results_submitted_at
           results_nag_sent_at
@@ -79,7 +80,7 @@ module DatabaseDumper
           refund_policy_percent
           refund_policy_limit_date
           guests_entry_fee_lowest_denomination
-          free_guest_entry_status
+          guest_entry_status
           early_puzzle_submission
           early_puzzle_submission_reason
           qualification_results

@@ -526,7 +526,7 @@ id:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Biaya masuk untuk pendamping
         #original_hash: bb16247
-        free_guest_entry_status: Tampilkan pesan untuk bebas masuk sebagai pendamping
+        guest_entry_status: Tampilkan pesan untuk bebas masuk sebagai pendamping
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Saya ingin kompetitor untuk mengumpulkan puzzle pada waktu tertentu
@@ -735,13 +735,13 @@ id:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Jangan tampilkan apapun (dan sebisa mungkin jelaskan pada bagian
           "Syarat pendaftaran tambahan")
         #original_hash: 694bce4
-        anyone: '"Penonton dapat datang secara gratis"'
+        free: '"Penonton dapat datang secara gratis"'
         #original_hash: 762c509
         restricted: '"Penonton yang diperbolehkan datang hanyalah pendamping kompetitor"'
   simple_form:
@@ -981,7 +981,7 @@ id:
           angka 0, pernyataan pilihan Anda akan ditampilkan tentang kebijakan
           penonton.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2708,7 +2708,7 @@ id:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Penonton dapat datang secara gratis.
+        free: Penonton dapat datang secara gratis.
         #original_hash: f1e6aef
         restricted: Penonton hanya boleh datang sebagai pendamping kompetitor.
       #original_hash: 97a31ee
