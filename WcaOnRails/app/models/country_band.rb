@@ -22,6 +22,9 @@ class CountryBand < ApplicationRecord
     },
   }.freeze
 
+  # According to WCA's current dues policy, the due amount per competitor is equivalent
+  # to this percent of registration fee. Only used if this due amount per competitor is
+  # larger than the due amount per competitor calculated from the competition's country band.
   PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT = 0.15
 
   belongs_to :country, foreign_key: :iso2, primary_key: :iso2
