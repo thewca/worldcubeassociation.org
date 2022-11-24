@@ -3,8 +3,8 @@
 class CompetitionSeries < ApplicationRecord
   has_many :competitions, -> { order(:start_date) }, inverse_of: :competition_series, dependent: :nullify, after_remove: :destroy_if_orphaned
 
-  # WCRP 2.5.1 as of 2022-08-23. Note that these values are strictly "less than"
-  MAX_SERIES_DISTANCE_KM = 100
+  # WCRP 2.5.1 as of 2022-11-21. Note that these values are strictly "less than"
+  MAX_SERIES_DISTANCE_KM = 200
   MAX_SERIES_DISTANCE_DAYS = 33
 
   MAX_ID_LENGTH = Competition::MAX_ID_LENGTH

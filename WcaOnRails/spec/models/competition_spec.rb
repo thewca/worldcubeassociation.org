@@ -137,16 +137,20 @@ RSpec.describe Competition do
         walking_direction_rad = (2 * Math::PI) + Math.atan2(-competition.latitude, -competition.longitude)
         walking_direction_deg = (walking_direction_rad * 180 / Math::PI) % 360
 
+        just_barely_distance_km = CompetitionSeries::MAX_SERIES_DISTANCE_KM - 1
+
         # Second, you create the comp at the middle of the street. It is within 100km from the original competition so still all good.
         middle_competition = FactoryBot.create :competition, name: "Middle Open 2015", competition_series: straight_line_series,
-                                                             series_base: one_end_competition, series_distance_km: 99, distance_direction_deg: walking_direction_deg
+                                                             series_base: one_end_competition, series_distance_km: just_barely_distance_km,
+                                                             distance_direction_deg: walking_direction_deg
         expect(middle_competition).to be_valid
 
         # Last, you create the competition at the other end of the road. You _can_ link it to the middle one,
         # which is (just a tiny bit under) 100km away making it a perfect partner competition. But it is not acceptable
         # as partner competition for the first comp at the other end of the road, and our code should detect that.
         other_end_competition = FactoryBot.build :competition, name: "Other End Open 2015", competition_series: straight_line_series,
-                                                               series_base: middle_competition, series_distance_km: 99, distance_direction_deg: walking_direction_deg
+                                                               series_base: middle_competition, series_distance_km: just_barely_distance_km,
+                                                               distance_direction_deg: walking_direction_deg
 
         expect(other_end_competition).to be_invalid_with_errors(competition_series: [I18n.t('competitions.errors.series_distance_km', competition: one_end_competition.name)])
       end
