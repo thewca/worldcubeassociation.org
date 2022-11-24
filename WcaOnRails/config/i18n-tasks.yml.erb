@@ -120,6 +120,7 @@ ignore_unused:
   - 'delegate_statuses.*'
   - 'media.new.media_guidelines.*'
 # - 'simple_form.{placeholders,hints,labels}.*'
+  - 'faker.name.*'
   - 'devise.mailer.*'
   # These are keys dynamically built in lib/advancement_condition.rb
   - 'advancement_condition.*'
@@ -140,7 +141,7 @@ ignore_unused:
 ## Ignore these keys completely:
 ignore:
 ## Ignore these keys as they are from external application
-  - '{time_will_tell,doorkeeper,mail_form,faker}.*'
+  - '{time_will_tell,doorkeeper,mail_form}.*'
 ## These are in rails.locale.yml
   - '{date, datetime, number, errors, time, support, helpers}.*'
 ## TODO: if at some point we really care about translating oauth stuff we should
