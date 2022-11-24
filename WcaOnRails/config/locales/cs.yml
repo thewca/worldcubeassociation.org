@@ -503,6 +503,8 @@ cs:
         competitor_limit_reason: Důvod pro limit soutěžících
         #original_hash: 3c23a67
         guests_enabled: Hosté
+        #original_hash: 7d78478
+        guests_per_registration_limit: Maximální počet hostů na jednu registraci
         #original_hash: 089cbfd
         receive_registration_emails: 'Informujte mě e-mailem, když se někdo zaregistruje na tuto soutěž'
         #original_hash: d4aeed9
@@ -954,6 +956,11 @@ cs:
         competitor_limit_reason: >-
           Z jakého důvodu jste určili tento limit pro soutěžící? Prosíme,
           vyplňte toto pole v angličtině!
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          Počet hostů na jednu registraci povolený na této soutěži. Registrace s
+          příliš velkým počtem hostů bude zablokována. Nechte prázdné, pokud
+          nechcete stanovit limit.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -2738,6 +2745,12 @@ cs:
         free: Jakýkoliv divák se smí účastnit zdarma.
         #original_hash: f1e6aef
         restricted: Diváci se smí účastnit jen jako doprovod soutěžících.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Soutěžící nemohou mít žádného hosta.
+        one: Soutěžící mohou mít maximálně jednoho hosta.
+        few: 'Soutěžící mohou mít nejvýše %{count} hosty.'
+        other: 'Soutěžící mohou mít nejvýše %{count} hostů.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Soutěžící se mohou zaregistrovat jen na eventy, pro které splňují
@@ -3074,6 +3087,8 @@ cs:
       series_distance_km: 'Soutěž je příliš vzdálená od %{competition}.'
       #original_hash: 4a5d7c5
       series_distance_days: 'Soutěž je příliš mnoho dní od %{competition}.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: 'Musíte se zeptat na hosty, pokud je limit pro hosty určený.'
     new:
       #original_hash: 1208df7
       create_competition: Vytvořit soutěž
