@@ -129,7 +129,7 @@ module ResultsValidators
                                                LOWERCASE_NAME_WARNING,
                                                name: p.name)
           end
-          if split_name.any? { |n| n =~ /[[:upper:]]{2}/ && n.length > 2 && !['II', 'III', 'IV'].include?(n) } # Roman numerals are allowed as suffixes
+          if split_name.any? { |n| n =~ /[[:upper:]]{2}/ && n.length > 2 && n != 'III' } # Roman numerals are allowed as suffixes
             @warnings << ValidationWarning.new(:persons, competition_id,
                                                UPPERCASE_NAME_WARNING,
                                                name: p.name)
