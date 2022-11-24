@@ -500,6 +500,8 @@ eo:
         competitor_limit_reason: Kialo por tiu limo de konkursantoj
         #original_hash: 3c23a67
         guests_enabled: Akompanantoj
+        #original_hash: 7d78478
+        guests_per_registration_limit: Maksimuma nombro da gastoj po registriĝo
         #original_hash: 089cbfd
         receive_registration_emails: Sciigu min per retmesaĝo kiam iu registriĝas por tiu konkurso
         #original_hash: d4aeed9
@@ -950,6 +952,11 @@ eo:
           postulas antaŭan laboron.
         #original_hash: 4bd7102
         competitor_limit_reason: Kial estas limo de konkursantoj? Bonvolu plenigi tion en la angla!
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          La nombro da gastoj permesitaj per registriĝo ĉe ĉi tiu konkurso.
+          Registriĝo kun tro da gastoj estos blokita. Lasu tion malplena se ne
+          estas limo.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -1953,8 +1960,8 @@ eo:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Ĉiuj profilbildoj devus esti fotoj de realaj personoj.
-        #original_hash: 9126b0c
-        '2': La videbla persono devas esti vin.
+        #original_hash: b12d293
+        '2': Vi devas esti la montrata persono.
         #original_hash: de9b742
         '3': >-
           Se pli ol unu persono estas en la bildo, oni devas klare kompreni kiun
@@ -2740,6 +2747,11 @@ eo:
         free: Ĉiuj spektantoj povas veni senpage.
         #original_hash: f1e6aef
         restricted: Spektantoj estas permesataj nur kiel akompanantoj de konkursantoj.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Konkursantoj povas veni kun tiom da gastoj kiom ili deziras
+        one: Konkursantoj povas veni kun maksimume 1 gasto.
+        other: 'Konkursantoj povas veni kun maksimume %{count} gastoj.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Konkursantoj povas registriĝi nur por konkurseroj por kiuj ili jam estas
@@ -3084,6 +3096,8 @@ eo:
       series_distance_km: 'La konkurso troviĝas tro malproksime de %{competition}.'
       #original_hash: 4a5d7c5
       series_distance_days: 'La konkurso estas planita tro da tagoj for de %{competition}.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: Vi devas demandi pri gastoj se limo de gasto estas specifita.
     new:
       #original_hash: 1208df7
       create_competition: Krei konkurson
@@ -3134,6 +3148,8 @@ eo:
       delegates: Delegito(j)
       #original_hash: eb9a4bc
       date: Dato
+      #original_hash: 6c82e6d
+      time: Dato
       #original_hash: d219c68
       location: Loko
       #original_hash: 4232080
@@ -3156,6 +3172,17 @@ eo:
       show_events: Montru konkurserojn
       #original_hash: 0df66f7
       hide_events: Kaŝu konkurserojn
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Koliziaj registriĝperiodoj (komenco ene de %{hours} horoj)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Neniu registriĝperioda kolizio!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: >-
+        Vi ankoraŭ ne asignis komencdaton de registriĝperiodo por ĉi tiu
+        konkurso.
+      #original_hash: c38824e
+      opens_registration_at: malfermas registriĝperiodon je
     #original_hash: 06b01c4
     announcements: Anoncoj
     #original_hash: a2b80b0
@@ -3393,7 +3420,7 @@ eo:
     last_updated_html: 'Lasta ĝisdatigo: %{timestamp}'
     #original_hash: 50c021e
     heading_disabled_functions: >-
-      Bonvolu memori, ke iuj filtriloj (kiel pasintaj jaroj) estas provizore
+      Bonvolu memori, ke iuj filtroj (kiel pasintaj jaroj) estas provizore
       malŝaltitaj. Se vi havas sperton pri SQL-optimumigo, bonvolu kontakti la
       WST!
     #original_hash: e3710ed
@@ -4630,6 +4657,8 @@ eo:
       people: Homoj
       #original_hash: 6db75ea
       advanced_search: Altnivela serĉo
+      #original_hash: 5e326b1
+      incidents: Incidentoj
       #original_hash: a0ca0c3
       posts: Afiŝoj
       #original_hash: 9d7ea9c
@@ -4645,6 +4674,8 @@ eo:
         people: Neniu homo trovita por
         #original_hash: c6a04aa
         posts: Neniu afiŝo trovita por
+        #original_hash: 3499e7e
+        incidents: Neniu incidento trovita por
         #original_hash: 76a6bf1
         regulations_and_guidelines: Neniu Regulo aŭ Gvidlinio trovita por
   incidents_log:
@@ -4652,6 +4683,8 @@ eo:
     i18n_disclaimer: >-
       Atentu ke la sekcio pri incidentoj nur disponeblas en la angla, la enhavo
       malsupre ne estas tradukita.
+    #original_hash: 2c23c1a
+    incident: 'Incidento:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Pri la Regularo
