@@ -493,6 +493,8 @@ th:
         competitor_limit_reason: เหตุผลของการจำกัดจำนวนผู้เข้าแข่งขัน
         #original_hash: 3c23a67
         guests_enabled: ผู้ติดตาม
+        #original_hash: 7d78478
+        guests_per_registration_limit: จำนวนของผู้ติดตามสูงสุดต่อผู้แข่งขัน
         #original_hash: 089cbfd
         receive_registration_emails: แจ้งเตือนฉันด้วย email เมื่อมีผู้สมัครการแข่งขัน
         #original_hash: d4aeed9
@@ -927,6 +929,11 @@ th:
           แต่จำเป็นต้องทำอย่างอื่นก่อน
         #original_hash: 4bd7102
         competitor_limit_reason: เหตุผลในการจำกัดจำนวนผู้เข้าแข่งขัน กรุณากรอกเป็นภาษาอังกฤษ
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          จำนวนผู้ติดตามที่ได้รับอนุญาติในการแข่งขันนี้
+          หากคุณสมัครโดนมีผู้ติดตามมากเกินไปการสมัครจะถูกบล็อก,
+          เว้นว่างไว้ภ้าไม่ต้องการจำกัด
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -2170,7 +2177,7 @@ th:
       #original_hash: bff04e8
       deleted_registrations: การสมัครที่ถูกลบ
       #original_hash: ac5d958
-      not_paid: ไม่ชำระค่สมัคร
+      not_paid: ยังไม่ชำระค่าสมัคร
       registered:
         #original_hash: 2c2f473
         without_stripe: สมัครวันที่
@@ -2622,6 +2629,10 @@ th:
         #original_hash: f1e6aef
         restricted: >-
           เฉพาะผู้ที่เดินทางมากับผู้เข้าแข่งขันเท่านั้นจึงจะสามารถรับชมการแข่งขันได้
+      #original_hash: 35f892a
+      guest_limit:
+        zero: ผู้เข้าแข่งขันสามารถพาผู้ติดตามมาได้สูงสุด 1 คน
+        other: 'ผู้เข้าแข่งขันสามารถพาผู้ติดตามมาได้สูงสุด %{count} คน'
       #original_hash: 64e0ddd
       require_qualification: >-
         ผู้เข้าแข่งขันสามารถลงทะเบียนประเภทการแข่งขันที่พวกเขาผ่านการคัดเลือกอยู่แล้วเท่านั้น
@@ -2956,6 +2967,8 @@ th:
       series_distance_km: 'การแข่งขันอยู่ห่างจาก %{competition} มากเกินไป'
       #original_hash: 4a5d7c5
       series_distance_days: 'การแข่งขันถูกกำหนดให้อยู่ห่างจาก %{competition} หลายวันเกินไป'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: ต้องถามเกี่ยวกับผู้ติดตามหากมีการระบุขีดจำกัดของผู้ติดตาม
     new:
       #original_hash: 1208df7
       create_competition: สร้างการแข่งขัน
