@@ -699,7 +699,7 @@ RSpec.describe CompetitionsController do
       let(:organizer2) { FactoryBot.create(:user) }
       before :each do
         competition.delegates << delegate
-        competition.trainee_delegates << trainee_delegate
+        competition.delegates << trainee_delegate
         sign_in trainee_delegate
       end
 
@@ -789,7 +789,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot change extra registration requirements field after competition is confirmed" do
-        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate], trainee_delegates: [trainee_delegate], extra_registration_requirements: "Extra requirements")
+        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate, trainee_delegate], extra_registration_requirements: "Extra requirements")
         new_requirements = "New extra requirements"
         patch :update, params: { id: comp, competition: { extra_registration_requirements: new_requirements } }
         comp.reload

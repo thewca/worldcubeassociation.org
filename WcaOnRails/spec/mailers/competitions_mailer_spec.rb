@@ -35,7 +35,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:delegate) { FactoryBot.create :delegate, name: "Adam Smith" }
     let(:trainee_delegate) { FactoryBot.create :trainee_delegate }
     let(:organizer) { FactoryBot.create :user, name: "Will Johnson", preferred_locale: :en }
-    let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate], trainee_delegates: [trainee_delegate] }
+    let(:competition) { FactoryBot.create :competition, organizers: [organizer], delegates: [delegate, trainee_delegate] }
     let(:mail) { CompetitionsMailer.notify_organizer_of_confirmed_competition(delegate, competition, organizer) }
 
     it "renders" do
