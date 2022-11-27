@@ -433,6 +433,10 @@ ru:
         remove_avatar: Удалить аватарку
         #original_hash: 9af9099
         results_notifications_enabled: 'Отправлять мне Email, когда мои результаты будут опубликованы.'
+        #original_hash: 29ce2ff
+        registration_notifications_enabled: >-
+          Сообщать мне по электронной почте о новых регистрациях на
+          соревнования, где я организатор или делегат.
         #original_hash: de60ab8
         delegate_status: Статус делегата
         #original_hash: 0f21717
@@ -492,6 +496,8 @@ ru:
         information: Информация
         #original_hash: 87b7d5f
         use_wca_registration: Использовать сайт WCA для регистрации
+        #original_hash: ebe8c47
+        use_wca_live_for_scoretaking: Я буду использовать WCA Live для ввода результатов
         #original_hash: 8020e88
         external_registration_page: Страница регистрации
         #original_hash: 9bb1965
@@ -502,6 +508,8 @@ ru:
         competitor_limit_reason: Причина лимита
         #original_hash: 3c23a67
         guests_enabled: Гости
+        #original_hash: 7d78478
+        guests_per_registration_limit: Максимальное количество гостей на одну регистрацию
         #original_hash: 089cbfd
         receive_registration_emails: 'Отправлять мне Email, когда кто-то регистрируется на соревнование.'
         #original_hash: d4aeed9
@@ -558,9 +566,20 @@ ru:
         event_restrictions_reason: Причины и детали ограничений по дисциплинам
         #original_hash: 3c24bd2
         main_event_id: Главная дисциплина
+        #original_hash: a541bfa
+        allow_registration_without_qualification: Дисциплины с квалификацией
       championship:
         #original_hash: 4baf44b
         championship_type: Тип чемпионата
+      competition_series:
+        #original_hash: 89f89c0
+        wcif_id: ID
+        #original_hash: 709a232
+        name: Название
+        #original_hash: 8a6bee1
+        short_name: Название серии соревнований
+        #original_hash: af3d38e
+        competition_ids: Все соревнования
       registration:
         #original_hash: 3c23a67
         guests: Гости
@@ -835,6 +854,11 @@ ru:
         remember_me: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
+        #original_hash: f62eb10
+        registration_notifications_enabled: >-
+          Это применяется только для соревнований, где вы организатор или
+          делегат. Вы можете изменить значение для каждого отдельного
+          соревнования.
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
@@ -934,6 +958,8 @@ ru:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: da39a3e
+        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Хотя Положения WCA не требуют ограничивать число участников, это
@@ -946,10 +972,13 @@ ru:
           регистрации.
         #original_hash: 4bd7102
         competitor_limit_reason: 'Какова причина лимита? Заполните, пожалуйста, по-английски!'
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          Число гостей на одну регистрацию, разрешённое для этих соревнований.
+          Регистрации с превышением этого числа будут недоступны. Оставьте
+          пустым, если лимита нет.
         #original_hash: da39a3e
         venueAddress: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Пожалуйста, укажите дополнительные требования к регистрации, которые
@@ -1018,6 +1047,28 @@ ru:
           поле по-английски!
         #original_hash: 1067798
         main_event_id: Победитель этой дисциплины будет победителем соревнования.
+        #original_hash: da39a3e
+        allow_registration_without_qualification: ''
+        championships:
+          #original_hash: da39a3e
+          championship_type: ''
+        competition_series:
+          #original_hash: da39a3e
+          wcif_id: ''
+          #original_hash: 77811b5
+          name: >-
+            Полное название серии соревнований, включая год в конце, каждое
+            слово начинается с заглавной буквы, например, Southern Australia
+            2022. Применяются те же правила, что и для отдельных соревнований.
+          #original_hash: 778c20c
+          short_name: >-
+            Короткое название для отображения. Применяются те же правила, что и
+            для отдельных соревнований.
+          #original_hash: 3e27501
+          competition_ids: >-
+            <b>Это поле нельзя редактировать!</b><br/>Чтобы добавить
+            соревнования в эту серию, нужно зайти на страницу редактирования
+            отдельных соревнований.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1242,6 +1293,15 @@ ru:
           'true': Можно зарегистрироваться на месте
           #original_hash: 0f236df
           'false': На месте зарегистрироваться НЕЛЬЗЯ
+        allow_registration_without_qualification:
+          #original_hash: 9697d98
+          'true': >-
+            Участники смогут зарегистрироваться на дисциплины, на которые они не
+            квалифицированы (я удалю их позже)
+          #original_hash: 6509041
+          'false': >-
+            Участники ДОЛЖНЫ быть квалифицированы, чтобы зарегистрироваться на
+            дисциплину
         allow_registration_edits:
           #original_hash: 52a2f4a
           'true': >-
@@ -1936,7 +1996,7 @@ ru:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': На аватарках должны быть существующие люди.
-        #original_hash: 9126b0c
+        #original_hash: b12d293
         '2': На аватарке должны быть вы.
         #original_hash: de9b742
         '3': >-
@@ -2091,8 +2151,6 @@ ru:
       need_dob: Нужно ввести день рождения
       #original_hash: d84a54f
       need_country: Нужно выбрать страну
-      #original_hash: cec28a0
-      comp_not_found: Соревнование не найдено
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Невозможно одновременно принять и удалить регистрацию.
       #original_hash: a38d024
@@ -2104,6 +2162,12 @@ ru:
         target='_blank'>WDC</a>.
       #original_hash: 8d07e7f
       undelete_banned: 'забанен(а), и его/её регистрация не может быть восстановлена'
+      #original_hash: 3de7c86
+      series_more_than_one_accepted: Вы можете быть зарегистрированы только на одно соревнование серии.
+      #original_hash: 13bfcd6
+      can_only_register_for_qualified_events: >-
+        Вы не можете зарегистрироваться на дисциплины, на которые вы не
+        квалифицировались.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2270,6 +2334,12 @@ ru:
       payment_requested_on: 'Требуется оплатить взнос до: %{date}'
       #original_hash: f5b1b34
       payment_completed_on: 'Оплачено: %{date}'
+      #original_hash: 3141a14
+      series_registrations: Регистрации на серию соревнований
+      #original_hash: 845bb47
+      series_registrations_hint_html: >-
+        Подсказка: серийные регистрации будут отображены как
+        <i>%{description}</i>
       #original_hash: b25928c
       total: Всего
       #original_hash: df036fe
@@ -2356,6 +2426,8 @@ ru:
     wont_pay_here: >-
       Пожалуйста, посмотрите на сайте соревнования, как оплатить взнос за
       участие
+    #original_hash: be4b39d
+    not_qualified: Не квалифицирован
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2565,6 +2637,10 @@ ru:
       in_progress: >-
         Соревнование ещё не закончилось. Результаты будут выложены не ранее
         %{date}.
+      #original_hash: 8eeeb44
+      in_progress_at_wca_live_html: >-
+        Это соревнование проходит прямо сейчас. Вы можете посмотреть
+        онлайн-результаты <a href='%{link_here}'>здесь</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: 'Время начала регистрации указано ранее, чем через 48 часов.'
       #original_hash: 3322400
@@ -2667,6 +2743,17 @@ ru:
       register_link_html: 'Зарегистрируйтесь на соревнование %{here}.'
       #original_hash: 45834fd
       register_below_html: Зарегистрируйтесь на соревнование ниже.
+      #original_hash: c5dfcc7
+      part_of_a_series: Эти соревнования являются частью серии соревнований.
+      #original_hash: 171e593
+      part_of_a_series_list: >-
+        Эти соревнования - часть серии соревнований %{name}. Другие соревнования
+        этой серии:
+      #original_hash: 09fa333
+      series_registration_warning_html: >-
+        Примечание: Вы можете подать заявку на все соревнования в Серии, но
+        только одна из них будет принята. <b>Вы можете участвовать только в
+        одних соревнованиях Серии!</b>
       #original_hash: 196725e
       competitor_limit_is: 'Лимит на число участников: %{competitor_limit}.'
       #original_hash: 5101f65
@@ -2717,6 +2804,17 @@ ru:
         free: Зрители могут посетить соревнование бесплатно.
         #original_hash: f1e6aef
         restricted: 'Разрешено приходить только гостям, сопровождающим участников.'
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Участники не могут взять с собой гостей.
+        one: Участники могут взять с собой одного гостя.
+        few: 'Участники могут взять с собой %{count} гостей.'
+        many: 'Участники могут взять с собой %{count} гостей.'
+        other: 'Участники могут взять с собой %{count} гостей.'
+      #original_hash: 64e0ddd
+      require_qualification: >-
+        Участники могут регистрироваться только на дисциплины, на которые они
+        уже прошли квалификацию.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Соревнование окончено, посмотрите %{link_here}, какие были требования к
@@ -2800,6 +2898,8 @@ ru:
       all_years: Всё время
       #original_hash: 719ea39
       clear: Сбросить
+      #original_hash: e827f28
+      select_hint: 'Пожалуйста, выберите дисциплины'
       #original_hash: a1fffaa
       list: Список
       #original_hash: ab478f3
@@ -2830,6 +2930,10 @@ ru:
       past_from: 'В %{year} году'
       #original_hash: 7cff459
       past_all: Все прошедшие
+      #original_hash: 819fe62
+      show_cancelled: Показать отменённые соревнования
+      #original_hash: 0eda967
+      show_registration_status: Показать значок статуса регистрации
       titles:
         #original_hash: 69447c9
         in_progress: Текущие соревнования
@@ -2863,6 +2967,17 @@ ru:
         search: Название или город
         #original_hash: 3bc8082
         recent: 'Последние %{count} дней'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'Регистрация откроется в течение %{duration}'
+          #original_hash: 2d601fa
+          closed: 'Регистрация закрыта. Соревнования начнутся через %{days}'
+          #original_hash: 2e17db8
+          open: Регистрация открыта!
+          #original_hash: c098975
+          full: >-
+            Лимит участников достигнут, новые регистрации будут добавлены в
+            список ожидания
       #original_hash: 8b09d74
       no_comp_found: Соревнований не найдено.
       #original_hash: 7008166
@@ -2920,6 +3035,10 @@ ru:
         обрабатываться через специальную контактную форму без показа электронных
         адресов организаторов. %{md}. Например: [Вася
         Пупкин](mailto:vasya@pupkin.ru)
+      #original_hash: 05c66b5
+      series_save_first_hint: >-
+        Примечание: Вам нужно сохранить соревнования перед тем как добавлять
+        новую Серию.
       #original_hash: c5497bc
       events: Дисциплины
       #original_hash: cafc153
@@ -3040,6 +3159,16 @@ ru:
       event_change_deadline_with_ots: >-
         Крайний срок изменения списка дисциплин должен быть в течение
         соревнований, если включена регистрация на месте.
+      #original_hash: 5ae2437
+      series_distance_km: 'Соревнование расположены слишком далеко от %{competition}.'
+      #original_hash: 4a5d7c5
+      series_distance_days: >-
+        Соревнования запланированы через слишком большое количество дней от
+        %{competition}.
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: >-
+        Необходимо спрашивать участников о количестве гостей, если задан лимит
+        гостей.
     new:
       #original_hash: 1208df7
       create_competition: Создать соревнование
@@ -3092,6 +3221,8 @@ ru:
       delegates: Делегат(ы)
       #original_hash: eb9a4bc
       date: Дата
+      #original_hash: 6c82e6d
+      time: Время
       #original_hash: d219c68
       location: Место
       #original_hash: 4232080
@@ -3114,6 +3245,15 @@ ru:
       show_events: Показать дисциплины
       #original_hash: 0df66f7
       hide_events: Скрыть дисциплины
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Совпадающие периоды регистрации (начинаются в течение %{hours} часов)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Нет совпадений периодов регистрации!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: Вы ещё не назначили дату начала регистрации для этого соревнования.
+      #original_hash: c38824e
+      opens_registration_at: регистрация открывается в
     #original_hash: 06b01c4
     announcements: Объявления
     #original_hash: a2b80b0
@@ -3296,6 +3436,11 @@ ru:
       group: Группа
       #original_hash: b7126cd
       scramble: Скрамбл
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: Добавить в Серию
+      #original_hash: be6edcd
+      remove_series: Удалить из Серии
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3345,6 +3490,21 @@ ru:
     records:
       #original_hash: e51c552
       title: Рекорды
+    #original_hash: e02fccb
+    last_updated_html: 'Последнее обновление: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      Учтите, что некоторые фильтры (такие как прошлые года) временно отключены.
+      Если у вас есть опыт с оптимизацией SQL, пожалуйста, свяжитесь с Комитетом
+      программного обеспечения WCA (WST)!
+    #original_hash: e3710ed
+    tooltip_no_years: >-
+      Наша база данных слишком велика для того, чтобы вычислить исторические
+      данные
+    #original_hash: 357094b
+    tooltip_no_quantities: >-
+      Наша база данных слишком велика, чтобы вычислить большое количество
+      записей
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -4563,6 +4723,8 @@ ru:
       people: Участники
       #original_hash: 6db75ea
       advanced_search: Расширенный поиск
+      #original_hash: 5e326b1
+      incidents: Инциденты
       #original_hash: a0ca0c3
       posts: Посты
       #original_hash: 9d7ea9c
@@ -4578,6 +4740,8 @@ ru:
         people: Не найдены участники с
         #original_hash: c6a04aa
         posts: Не найдены посты с
+        #original_hash: 3499e7e
+        incidents: Не найдены инциденты с
         #original_hash: 76a6bf1
         regulations_and_guidelines: Не найдены Положения или Дополнения с
   incidents_log:
@@ -4585,6 +4749,8 @@ ru:
     i18n_disclaimer: >-
       Обратите внимание, что инциденты доступны только на английском, их
       содержание не переводится на другие языки.
+    #original_hash: 2c23c1a
+    incident: 'Инцидент:'
   about_regulations:
     #original_hash: 6bce1b5
     title: О Положениях
