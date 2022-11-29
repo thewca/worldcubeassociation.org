@@ -45,7 +45,7 @@ RSpec.feature "Incident Management", js: true do
         expect(page).to have_no_content("Second incident")
       end
 
-      # fixme: tests don't have access to regulation 1a text
+      # FIXME: tests don't have access to regulation 1a text
       skip scenario "shows regulation text" do
         visit "/incidents"
         page.find(".incident-tag", text: "1a").click
