@@ -106,6 +106,7 @@ export default function IncidentsLog({
 
       <div>
         <Input
+          id='incidents-log-search-container'
           placeholder="Search incidents..."
           icon="search"
           loading={loading}
@@ -117,6 +118,7 @@ export default function IncidentsLog({
         />
 
         <Dropdown
+          id='incidents-log-tags-container'
           placeholder="Filter by tags"
           multiple
           search
