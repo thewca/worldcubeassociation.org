@@ -1278,7 +1278,6 @@ class User < ApplicationRecord
       !self.organized_competitions.empty? ||
       any_kind_of_delegate? ||
       !delegated_competitions.empty? ||
-      !trainee_delegated_competitions.empty? ||
       !competitions_announced.empty? ||
       !competitions_results_posted.empty?
   end
