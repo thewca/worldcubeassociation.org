@@ -32,7 +32,7 @@ RSpec.feature "Incident Management", js: true do
       scenario "filters by text" do
         visit "/incidents"
         page.within("#incidents-log-search-container") do
-          fill_in "Search", with: "Custom"
+          fill_in "Search incidents...", with: "Custom"
         end
         expect(page).to have_content("Custom title")
         expect(page).to have_no_content("First incident")
