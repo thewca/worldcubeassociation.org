@@ -30,7 +30,7 @@
     "core-js": "^3.26.1",
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^4.2.2",
-    "dompurify": "^2.4.0",
+    "dompurify": "^2.4.1",
     "easymde": "^2.18.0",
     "expose-loader": "^4.0.0",
     "file-loader": "^6.2.0",
