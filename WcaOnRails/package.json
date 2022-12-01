@@ -61,7 +61,7 @@
     "regenerator-runtime": "^0.13.11",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.56.1",
-    "sass-loader": "^13.1.0",
+    "sass-loader": "^13.2.0",
     "semantic-ui-react": "^2.1.4",
     "shakapacker": "6.5.2",
     "style-loader": "^3.3.1",
