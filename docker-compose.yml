@@ -23,7 +23,7 @@ services:
       done &&
       echo "MySQL is ready!" &&
       if ! [[ "`mysqlshow --user=root --host=wca_db wca_development`" =~ "Tables" ]] ;
-        then echo "Populating development db, this will take a while" && bin/rake db:load:development ;
+        then echo "Populating development db, this will take a while" && bin/rake db:reset ;
       fi &&
       bin/rails server -b 0.0.0.0'
     depends_on:
