@@ -14,8 +14,7 @@ upstream app {
   server {
     server_name staging.worldcubeassociation.org;
 
-    listen 444 ssl;
-    include wca_https.conf;
+    listen 444;
 
     location / {
       proxy_pass http://localhost:1080;
@@ -30,20 +29,13 @@ server {
   # Using sendfile isn't reliable in VirtualBox. See:
   #  http://wiki.nginx.org/Pitfalls#VirtualBox
   sendfile off;
-<% end %>
-
-<% if @https %>
-  listen 443 ssl;
-  include wca_https.conf;
-<% else %>
-  <% if @rails_env == "development" %>
-    # In development, we're running behind Vagrant's proxy (host port 2331).
-    # If we run nginx on a different port (say 80), then when nginx sends redirects,
-    # they will be to port 80, which doesn't work from outside the vm.
-    listen 2331;
+  # In development, we're running behind Vagrant's proxy (host port 2331).
+  # If we run nginx on a different port (say 80), then when nginx sends redirects,
+  # they will be to port 80, which doesn't work from outside the vm.
+  listen 2331;
   <% else %>
-    listen 80;
-  <% end %>
+  # SSL is handled by the AWS Load Balancer and is only reachable through it
+  listen 80;
 <% end %>
 
   # Deny access to dotfiles and dotfolders.
@@ -51,10 +43,6 @@ server {
     deny all;
   }
 
-  # Override above rule for HTTPS certificate renewal.
-  location ^~ /.well-known/ {
-    allow all;
-  }
 
   # Redirect 401 to log in page
   # Unfortunately, I don't think there's any way to redirect back after the
@@ -384,10 +372,6 @@ server {
     #   http://en.wikipedia.org/wiki/X-Forwarded-For
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-    # enable this if you forward HTTPS traffic to unicorn,
-    # this helps Rack set the proper URL scheme for doing redirects:
-    proxy_set_header X-Forwarded-Proto $scheme;
-
     # pass the Host: header from the client right along so redirects
     # can be set properly within the Rack application
     proxy_set_header Host $http_host;
@@ -414,23 +398,3 @@ server {
   client_max_body_size 64M;
   keepalive_timeout 10;
 }
-
-<% if @https %>
-server {
-  listen 80;
-  server_name <%= @server_name.sub(/^www\./, '') %> localhost;
-
-  return 301 https://$server_name$request_uri;
-}
-<% if @server_name.start_with? "www." %>
-# Redirect naked domain HTTPS traffic to HTTPS on www....
-server {
-  server_name <%= @server_name.sub(/^www\./, '') %>;
-
-  listen 443 ssl;
-  include wca_https.conf;
-
-  return 301 https://www.$server_name$request_uri;
-}
-<% end %>
-<% end %>
