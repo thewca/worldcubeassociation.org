@@ -3766,10 +3766,10 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
-i18n-js@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/i18n-js/-/i18n-js-4.1.1.tgz#05ebd03c4d92f6dc26a00d7c5cfb90f9c326b67c"
-  integrity sha512-Uph8ghmfShexVhDcNtg5s40zprJZPrhW5iOEKsUwPiiBpIGN/0EJ9W7DTqhLFlWfAlpkFiaLxVxHsk8f+3KjIQ==
+i18n-js@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/i18n-js/-/i18n-js-4.2.0.tgz#c2d8417e8a93054d15e6f5199aa1f5297a325f10"
+  integrity sha512-3LIJO23hXITmUtvduSeBgRdclD9XwTtAv/Vqp1dtZZYF9SvxvjYDXUpzTM2Ptb64BdgPQXhPFECnIVHcMiwWaw==
   dependencies:
     bignumber.js "*"
     lodash "*"
