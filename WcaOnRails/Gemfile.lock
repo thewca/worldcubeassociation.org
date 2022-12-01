@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/derekprior/momentjs-rails.git
-  revision: b7ff0d1a6da70cce64bddb5311cf09bbbaa9286d
+  revision: de473b81db40d0dc19e277895746c79b41a0607a
   specs:
-    momentjs-rails (2.29.1.1)
+    momentjs-rails (2.29.4.1)
       railties (>= 3.1)
 
 GIT
