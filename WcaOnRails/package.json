@@ -27,7 +27,7 @@
     "blueimp-load-image": "^5.16.0",
     "classnames": "^2.3.2",
     "compression-webpack-plugin": "^10.0.0",
-    "core-js": "^3.26.0",
+    "core-js": "^3.26.1",
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^4.2.2",
     "dompurify": "^2.4.0",
