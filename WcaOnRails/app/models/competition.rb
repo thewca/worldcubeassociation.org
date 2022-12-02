@@ -1729,37 +1729,50 @@ class Competition < ApplicationRecord
       :registration_competition_events,
     ]
     competition_activities = all_activities
+    new_assignments = []
+    removed_assignments = []
     wcif_persons.each do |wcif_person|
+      local_assignments = []
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
+      next unless registration
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
-      if registration && wcif_person["roles"]
+      if wcif_person["roles"]
         roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
         registration.update!(roles: roles)
       end
-      if registration && wcif_person["assignments"]
-        registration.assignments = wcif_person["assignments"].map do |assignment_wcif|
-          existing_assignment = registration.assignments.find do |assignment|
-            assignment.wcif_equal?(assignment_wcif)
+      if wcif_person["assignments"]
+        wcif_person["assignments"].each do |assignment_wcif|
+          schedule_activity = competition_activities.find do |competition_activity|
+            competition_activity.wcif_id == assignment_wcif["activityId"]
           end
-          if existing_assignment
-            existing_assignment
+          unless schedule_activity
+            raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
+          end
+          assignment = registration.assignments.find do |a|
+            a.wcif_equal?(assignment_wcif)
+          end
+          # We need to be very careful about how we build the assignment:
+          # providing just the registration_id or the schedule_activity_id would
+          # actually trigger a select for each validation.
+          assignment ||= registration.assignments.build(
+            schedule_activity: schedule_activity,
+          )
+          assignment.assign_attributes(
+            station_number: assignment_wcif["stationNumber"],
+            assignment_code: assignment_wcif["assignmentCode"],
+          )
+          if assignment.valid?
+            local_assignments << assignment
           else
-            schedule_activity = competition_activities.find do |competition_activity|
-              competition_activity.wcif_id == assignment_wcif["activityId"]
-            end
-            unless schedule_activity
-              raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
-            end
-            registration.assignments.build(
-              schedule_activity_id: schedule_activity.id,
-              station_number: assignment_wcif["stationNumber"],
-              assignment_code: assignment_wcif["assignmentCode"],
-            )
+            raise WcaExceptions::BadApiParameter.new("Invalid assignment: #{a.errors.map(&:full_message)} for #{assignment_wcif}")
           end
         end
-        registration.save!
       end
+      new_assignments.concat(local_assignments.map(&:attributes))
+      removed_assignments.concat(registration.assignments.ids - local_assignments.map(&:id))
     end
+    Assignment.where(id: removed_assignments).delete_all if removed_assignments.any?
+    Assignment.upsert_all(new_assignments) if new_assignments.any?
   end
 
   def set_wcif_schedule!(wcif_schedule, current_user)
