@@ -25,7 +25,7 @@ end
 listen "/tmp/unicorn.wca.sock"
 pid "#{dir}/pids/unicorn.pid"
 
-timeout 30
+timeout 60
 
 preload_app true
 
