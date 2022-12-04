@@ -373,7 +373,7 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    self.competitor_limit_enabled? && self.registrations.accepted.count >= self.competitor_limit
+    competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
   end
 
   def country

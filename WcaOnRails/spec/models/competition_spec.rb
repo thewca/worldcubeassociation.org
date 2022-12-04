@@ -1131,7 +1131,19 @@ RSpec.describe Competition do
       expect(competition.registration_full?).to be false
 
       # Add a 10th registration, which will fill up the registration list.
-      FactoryBot.create :registration, :accepted, competition: competition
+      new_registration = FactoryBot.create :registration, :accepted, competition: competition
+      expect(competition.registration_full?).to be true
+
+      # delete the 10th accepted registration. Now the list should not be full.
+      new_registration.destroy
+      expect(competition.registration_full?).to be false
+
+      # Add an unpaid pending registration. The list should not yet be full.
+      FactoryBot.create :registration, :pending, competition: competition
+      expect(competition.registration_full?).to be false
+
+      # Add a paid pending registration. The list should be full.
+      FactoryBot.create :registration, :paid_pending, competition: competition
       expect(competition.registration_full?).to be true
     end
   end
