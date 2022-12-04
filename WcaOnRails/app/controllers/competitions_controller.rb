@@ -404,19 +404,21 @@ class CompetitionsController < ApplicationController
 
     # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
     price_per_competitor_us_cents = [registration_fee_dues_us_dollars, country_band_dues_us_dollars].compact.max * 100
-    estimated_dues = "" # return empty string if no competitor limit
 
     if params[:competitor_limit_enabled]
       estimated_dues_us_cents = price_per_competitor_us_cents * params[:competitor_limit].to_i
       estimated_dues = Money.new(estimated_dues_us_cents, "USD").exchange_to(params[:currency_code]).format
+
+      render json: {
+        dues_value: estimated_dues,
+      }
+    else
+      price_per_competitor = Money.new(price_per_competitor_us_cents, "USD").exchange_to(params[:currency_code]).format
+
+      render json: {
+        dues_value: price_per_competitor,
+      }
     end
-
-    price_per_competitor = Money.new(price_per_competitor_us_cents, "USD").exchange_to(params[:currency_code]).format
-
-    render json: {
-      per_competitor: price_per_competitor,
-      dues: estimated_dues,
-    }
   end
 
   def show

@@ -264,33 +264,31 @@
           function UpdateDues(){
 
             var obj = $("#competition-form").serializeJSON();
-
             var compLimitEnabled = obj['competition[competitor_limit_enabled]']
             var compLimit = compLimitEnabled === "true" ? obj['competition[competitor_limit]'] : null
-            var countryId = obj['competition[countryId]']
             var currencyCode = obj['competition[currency_code]']
-            var entryFee = obj['competition[base_entry_fee_lowest_denomination]']
 
             window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
               url: '<%= calculate_dues_path %>',
               data: {
                 competitor_limit_enabled: compLimitEnabled,
                 competitor_limit: compLimit,
-                country_id: countryId,
                 currency_code: currencyCode,
-                entry_fee_cents: entryFee,
+                country_id: obj['competition[countryId]'],
+                entry_fee_cents: obj['competition[base_entry_fee_lowest_denomination]'],
               },
               success: function(data) {
-                if (compLimit != null) {
+                if (compLimitEnabled) {
                   <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.calculated') %>
-                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: data.dues}) + " (" + currencyCode + ")</b>");
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: data.dues_value}) + " (" + currencyCode + ")</b>");
                 }
                 else{
                   <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.per_competitor') %>
-                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: data.per_competitor}) + " (" + currencyCode + ")</b>");
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: data.dues_value}) + " (" + currencyCode + ")</b>");
                 }
               },
               error: function(){
+                // This error will occur if there are no available exchange rates for the selected currency, and there are quite a few of such currencies.
                 <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.ajax_error') %>
                 $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
               }
