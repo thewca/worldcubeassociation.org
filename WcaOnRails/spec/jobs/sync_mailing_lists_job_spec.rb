@@ -30,7 +30,8 @@ RSpec.describe SyncMailingListsJob, type: :job do
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "delegates@worldcubeassociation.org",
-      a_collection_containing_exactly(candidate_delegate.email, candidate_delegate.senior_delegate.email,
+      a_collection_containing_exactly(trainee_delegate.senior_delegate.email,
+                                      candidate_delegate.email, candidate_delegate.senior_delegate.email,
                                       delegate.email, delegate.senior_delegate.email, senior_delegate.email, africa_delegate.email,
                                       africa_delegate.senior_delegate.email, asia_east_delegate.email, asia_east_delegate.senior_delegate.email,
                                       asia_southeast_delegate.email, asia_southeast_delegate.senior_delegate.email,
@@ -49,7 +50,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # seniors@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "seniors@worldcubeassociation.org",
-      a_collection_containing_exactly(candidate_delegate.senior_delegate.email, delegate.senior_delegate.email,
+      a_collection_containing_exactly(trainee_delegate.senior_delegate.email, candidate_delegate.senior_delegate.email, delegate.senior_delegate.email,
                                       senior_delegate.email, africa_delegate.senior_delegate.email, asia_east_delegate.senior_delegate.email,
                                       asia_southeast_delegate.senior_delegate.email,
                                       asia_west_south_delegate.senior_delegate.email, europe_central_eurasia_delegate.senior_delegate.email,
@@ -189,7 +190,9 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # reports@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "reports@worldcubeassociation.org",
-      a_collection_containing_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", candidate_delegate.email, wdc_leader.email, wdc_member.email, wec_member.email),
+      a_collection_containing_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org",
+                                      trainee_delegate.email, candidate_delegate.email,
+                                      wdc_leader.email, wdc_member.email, wec_member.email),
     )
 
     # advisory@ mailing list

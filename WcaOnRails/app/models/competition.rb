@@ -640,12 +640,18 @@ class Competition < ApplicationRecord
         self.delegates ||= []
 
         if @delegate_ids
-          self.delegates -= self.delegates.select(&:staff_delegate?)
-          self.delegates += @delegate_ids.split(",").map { |id| User.find(id) }
+          unpacked_delegates = @delegate_ids.split(",").map { |id| User.find(id) }
+          # we overwrite staff_delegates, which means that we _keep_ existing trainee_delegates.
+          existing_trainees = self.delegates.select(&:trainee_delegate?)
+
+          self.delegates = existing_trainees | unpacked_delegates
         end
         if @trainee_delegate_ids
-          self.delegates -= self.delegates.select(&:trainee_delegate?)
-          self.delegates += @trainee_delegate_ids.split(",").map { |id| User.find(id) }
+          unpacked_trainees = @trainee_delegate_ids.split(",").map { |id| User.find(id) }
+          # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
+          existing_delegates = self.delegates.select(&:staff_delegate?)
+
+          self.delegates = existing_delegates | unpacked_trainees
         end
       end
       if @organizer_ids
