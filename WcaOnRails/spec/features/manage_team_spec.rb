@@ -6,7 +6,9 @@ RSpec.feature "Manage team" do
   let!(:results_team) { Team.find_by_friendly_id("wrt") }
   let!(:results_team_member) { FactoryBot.create(:user, :wrt_member) }
 
-  before(:each) { sign_in FactoryBot.create(:admin) }
+  before(:each) do
+    sign_in FactoryBot.create(:admin)
+  end
 
   it 'remove member from team' do
     visit "/teams/#{results_team.id}/edit"

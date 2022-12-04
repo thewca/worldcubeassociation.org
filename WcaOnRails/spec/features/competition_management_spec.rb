@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "Competition management" do
   context "when signed in as admin" do
-    let(:admin) { FactoryBot.create :admin }
+    let!(:admin) { FactoryBot.create :admin }
     before :each do
       sign_in admin
     end
@@ -135,7 +135,7 @@ RSpec.feature "Competition management" do
   end
 
   context "when signed in as delegate" do
-    let(:delegate) { FactoryBot.create(:delegate) }
+    let!(:delegate) { FactoryBot.create(:delegate) }
     let(:cloned_delegate) { FactoryBot.create(:delegate) }
     let(:competition_to_clone) { FactoryBot.create :competition, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate], showAtAll: true }
 

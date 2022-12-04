@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe RegistrationsController do
   context "signed in as organizer" do
-    let(:organizer) { FactoryBot.create(:user) }
+    let!(:organizer) { FactoryBot.create(:user) }
     let(:competition) { FactoryBot.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let(:zzyzx_user) { FactoryBot.create :user, name: "Zzyzx" }
     let(:registration) { FactoryBot.create(:registration, competition: competition, user: zzyzx_user) }
@@ -544,7 +544,7 @@ RSpec.describe RegistrationsController do
   end
 
   context "competition not visible" do
-    let(:organizer) { FactoryBot.create :user }
+    let!(:organizer) { FactoryBot.create :user }
     let(:competition) { FactoryBot.create(:competition, :registration_open, events: Event.where(id: %w(333 444 333bf)), showAtAll: false, organizers: [organizer]) }
 
     it "404s when competition is not visible to public" do

@@ -56,7 +56,7 @@ RSpec.describe UsersController do
   end
 
   describe "approve wca id claim" do
-    let(:delegate) { FactoryBot.create(:delegate) }
+    let!(:delegate) { FactoryBot.create(:delegate) }
     let(:person) { FactoryBot.create(:person) }
     let(:user) { FactoryBot.create :user, unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob }
 
@@ -109,8 +109,8 @@ RSpec.describe UsersController do
   end
 
   describe "editing user data" do
-    let(:user) { FactoryBot.create(:user) }
-    let(:delegate) { FactoryBot.create(:delegate) }
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:delegate) { FactoryBot.create(:delegate) }
 
     context "recently authenticated" do
       it "user can change email" do
@@ -183,7 +183,7 @@ RSpec.describe UsersController do
     end
 
     context "when the delegate status of a user is changed by a senior delegate" do
-      let(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate) }
+      let!(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate) }
       let(:user_senior_delegate) { FactoryBot.create(:senior_delegate) }
       let(:user_whose_delegate_status_changes) { FactoryBot.create(:delegate, delegate_status: "candidate_delegate", senior_delegate: user_senior_delegate) }
 
@@ -226,7 +226,7 @@ RSpec.describe UsersController do
     end
 
     context 'signed in' do
-      let(:admin) { FactoryBot.create :admin, cookies_acknowledged: false }
+      let!(:admin) { FactoryBot.create :admin, cookies_acknowledged: false }
 
       before :each do
         sign_in admin

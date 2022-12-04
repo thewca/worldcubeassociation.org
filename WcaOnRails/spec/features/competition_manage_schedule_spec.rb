@@ -10,7 +10,7 @@ RSpec.feature "Competition events management" do
   end
 
   context "unconfirmed competition without schedule" do
-    let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, event_ids: ["333", "444"], with_rounds: true) }
+    let!(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, event_ids: ["333", "444"], with_rounds: true) }
     background do
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/schedule/edit"
@@ -31,7 +31,7 @@ RSpec.feature "Competition events management" do
   end
 
   context "unconfirmed competition with schedule" do
-    let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, event_ids: ["333", "444"]) }
+    let!(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, event_ids: ["333", "444"]) }
     background do
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/schedule/edit"
