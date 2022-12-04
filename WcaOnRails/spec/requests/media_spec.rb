@@ -40,7 +40,7 @@ RSpec.shared_examples "must sign in" do |action, expect_success|
   end
 
   context "when signed in as regular user" do
-    let(:user) { FactoryBot.create :user }
+    let!(:user) { FactoryBot.create :user }
 
     before :each do
       sign_in user

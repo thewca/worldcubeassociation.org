@@ -42,7 +42,7 @@ RSpec.describe DelegateReportsController do
   end
 
   context "logged in as THE delegate" do
-    let(:user) { comp.delegates.first }
+    let!(:user) { comp.delegates.first }
     before :each do
       sign_in user
     end
@@ -117,7 +117,7 @@ RSpec.describe DelegateReportsController do
   end
 
   context "logged in as THE trainee delegate" do
-    let(:user) { comp.trainee_delegates.first }
+    let!(:user) { comp.trainee_delegates.first }
     before :each do
       sign_in user
     end
