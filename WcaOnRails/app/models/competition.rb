@@ -67,7 +67,7 @@ class Competition < ApplicationRecord
     joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = Competitions.id")
       .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = Competitions.id")
       .where(
-        "delegate_id = :user_id OR organizer_id = :user_id OR trainee_delegate_id = :user_id",
+        "delegate_id = :user_id OR organizer_id = :user_id",
         user_id: user_id,
       ).group(:id)
   }
@@ -640,9 +640,11 @@ class Competition < ApplicationRecord
         self.delegates ||= []
 
         if @delegate_ids
+          self.delegates -= self.delegates.select(&:staff_delegate?)
           self.delegates += @delegate_ids.split(",").map { |id| User.find(id) }
         end
         if @trainee_delegate_ids
+          self.delegates -= self.delegates.select(&:trainee_delegate?)
           self.delegates += @trainee_delegate_ids.split(",").map { |id| User.find(id) }
         end
       end
@@ -653,7 +655,7 @@ class Competition < ApplicationRecord
   end
 
   def staff_delegates
-    delegates.select(&:staff?)
+    delegates.select(&:staff_delegate?)
   end
 
   def trainee_delegates

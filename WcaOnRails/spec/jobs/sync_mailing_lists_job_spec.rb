@@ -6,6 +6,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
   it "syncs mailing lists" do
     # delegates@ mailing list
     candidate_delegate = FactoryBot.create :candidate_delegate
+    trainee_delegate = FactoryBot.create :trainee_delegate
     delegate = FactoryBot.create :delegate
     senior_delegate = FactoryBot.create :senior_delegate
     africa_delegate = FactoryBot.create :delegate
@@ -38,6 +39,11 @@ RSpec.describe SyncMailingListsJob, type: :job do
                                       europe_delegate.email, europe_delegate.senior_delegate.email, latin_america_delegate.email,
                                       latin_america_delegate.senior_delegate.email, oceania_delegate.email, oceania_delegate.senior_delegate.email,
                                       usa_canada_delegate.email, usa_canada_delegate.senior_delegate.email),
+    )
+
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "trainees@worldcubeassociation.org",
+      a_collection_containing_exactly(trainee_delegate.email),
     )
 
     # seniors@ mailing list
