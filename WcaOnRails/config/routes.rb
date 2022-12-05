@@ -234,6 +234,7 @@ Rails.application.routes.draw do
   end
 
   get '/sso-discourse' => 'users#sso_discourse'
+  get '/redirect/wac-survey' => 'users#wac_survey'
 
   namespace :api do
     get '/', to: redirect('/api/v0', status: 302)
