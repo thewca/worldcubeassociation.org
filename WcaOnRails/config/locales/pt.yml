@@ -498,6 +498,8 @@ pt:
         competitor_limit_reason: A razão para o limite de competidores
         #original_hash: 3c23a67
         guests_enabled: Convidados
+        #original_hash: 7d78478
+        guests_per_registration_limit: Número máximo de acompanhantes por registo
         #original_hash: 089cbfd
         receive_registration_emails: Notificar-me via email quando alguém se regista nesta competição
         #original_hash: d4aeed9
@@ -537,7 +539,7 @@ pt:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de entrada para público
         #original_hash: bb16247
-        guest_entry_status: Mensagem visível para entrada gratuita de público
+        guest_entry_status: Apresentar mensagem para entrada livre de espetadores
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Quero pedir a competidores que submetam puzzles a uma hora específica
@@ -764,12 +766,12 @@ pt:
       guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
-          Não mostrar nada (e talvez elaborar na seção "Requisitos Extra de
-          Registo")
+          Não mostrar nada (e talvez elabore na secção "Requisitos extra de
+          registo")
         #original_hash: 694bce4
-        free: '"Qualquer espectador pode comparecer gratuitamente"'
+        free: '"Qualquer espetador pode assistir gratuitamente"'
         #original_hash: 762c509
-        restricted: '"Espectadores só são permitidos como companhia de competidores"'
+        restricted: '"Espetadores só são permitidos como acompanhantes de competidores"'
   simple_form:
     #original_hash: 5397e05
     'yes': Sim
@@ -954,6 +956,11 @@ pt:
         competitor_limit_reason: >-
           Qual é a razão para o limite de competidores? Por favor preencher em
           Inglês!
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          O número máximo de convidados por competidor permitido nesta
+          competição. O registo com demasiados convidados será bloqueado. Deixe
+          em branco se não houver limite.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -2772,9 +2779,14 @@ pt:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        free: Qualquer espectador pode comparecer gratuitamente.
+        free: Qualquer espetador pode assistir gratuitamente.
         #original_hash: f1e6aef
         restricted: Espectadores só são permitidos como companhia para competidores.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Competidores não podem trazer convidados.
+        one: Competidores podem trazer no máximo 1 convidado.
+        other: 'Competidores podem trazer no máximo %{count} convidados.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Competidores apenas se podem registar em eventos para os quais se
@@ -3125,6 +3137,10 @@ pt:
       series_distance_days: >-
         A competição está marcada a demasiados dias de distância de
         %{competition}.
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: >-
+        Deve perguntar sobre convidados se um limite de convidados for
+        especificado.
     new:
       #original_hash: 1208df7
       create_competition: Criar competição
