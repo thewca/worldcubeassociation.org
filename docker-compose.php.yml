@@ -29,4 +29,3 @@ php:
           - MYSQL_USER=root
           - MYSQL_PASSWORD=
           - MYSQL_DB=wca_development
-          
