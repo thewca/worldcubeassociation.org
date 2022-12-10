@@ -910,7 +910,7 @@ cs:
         external_registration_page: >-
           Stránka, na které se budou soutěží přihlašovat na soutěž. Musí to být
           platná http(s) url.
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           Základní registrační poplatek pro soutěž. Zobrazí se na stránkách s
           informacemi o soutěži a na registrační stránce, pokud se bude
@@ -918,7 +918,7 @@ cs:
           budou přijaty zdarma. <br><br><b>POZNÁMKA: Následující odhad WCA Dues
           je jen přibližný a počítá s aktuálními směnnými kurzy. Není nijak
           právně závazný.</b><br>Kliněte na "Aktualizovat soutěž" poté co
-          změníte kód měny, abyste synchronizovali odhad. Pokud nejsou dostupn=
+          změníte kód měny, abyste synchronizovali odhad. Pokud nejsou dostupné
           žádné směnné kurzy, nebude nic zobrazeno.
         #original_hash: 9735ddf
         currency_code: Kód měny pro poplatky.
@@ -3028,10 +3028,10 @@ cs:
         calculated: 'Předpokládané poplatky WCA pro %{limit} soutěžících jsou %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'Předpokládané poplatky WCA za soutěžícího jsou %{estimate}.'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Vyskytl se problém s poplatky WCA. Prosíme nastavte na nula a znovu
-          napište základní registrační poplatek.
+          Vyskytl se problém s odhadem poplatků WCA. Je možné, že nejsou
+          dostupné žádné směnné kurzy pro tuto měnu.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
