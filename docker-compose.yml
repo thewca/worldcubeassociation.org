@@ -28,6 +28,8 @@ services:
       bin/rails server -b 0.0.0.0'
     depends_on:
       - wca_db
+    networks:
+      - wca-main
 
   wca_db:
     image: mysql:8.0
@@ -38,12 +40,19 @@ services:
       - "3306"
     volumes:
       - wca_db_volume:/var/lib/mysql
+      - ./docker/my.cnf:/etc/my.cnf
     # Suppress unneeded messages via https://stackoverflow.com/a/55706057/2558618
     cap_add:
       - SYS_NICE
+    networks:
+      - wca-main
 
 volumes:
   wca_db_volume:
     driver: local
   gems_volume:
     driver: local
+
+networks:
+  wca-main:
+    name: wca-main

@@ -1,92 +1,31 @@
 <?php
 
 /**
- PLEASE NOTE: FUNCTIONALITY IN THIS FILE IS SET TO BE DEPRECATED.  Eventually PHP will no longer support the MySQL API, so this code
- needs to be phased out. Instead, please use or extend the mysqli connection class for any new code needing mysql functionality.
+ icklerf:
+  I took liberty to replace each old mysql call with a direct replacement from the dbConn class
+  This is not the ideal way, but php should be replaced very soon(TM)
 **/
 
-establishDatabaseAccess();
-
-#----------------------------------------------------------------------
-function establishDatabaseAccess () {
-#----------------------------------------------------------------------
-  global $config;
-  $db_config = $config->get('database');
-
-  #--- Connect to the database server.
-  # TODO: Upgrade
-  mysql_connect( $db_config['host'], $db_config['user'], $db_config['pass'] )
-    or showDatabaseError( "Unable to connect to the database." );
-
-  #--- Select the database.
-  mysql_select_db( $db_config['name'] )
-    or showDatabaseError( "Unable to access the database." );
-
-  dbCommand( "SET NAMES 'utf8'" );
-}
 
 #----------------------------------------------------------------------
 function mysqlEscape ( $string ) {
 #----------------------------------------------------------------------
-  return mysql_real_escape_string( $string );
+  global $wcadb_conn;
+  return $wcadb_conn->mysqlEscape($string);
 }
 
 #----------------------------------------------------------------------
 function dbQuery ( $query ) {
 #----------------------------------------------------------------------
-
-  startTimer();
-
-  if( wcaDebug() ){
-    startTimer();
-    global $dbQueryCtr;
-    $dbQueryCtr++;
-    echo "\n\n<!-- dbQuery(\n$query\n) -->\n\n";
-    echo "<br>";
-    stopTimer( 'printing the database query' );
-  }
-
-  startTimer();
-  $dbResult = mysql_query( $query )
-    or showDatabaseError( "Unable to perform database query." );
-  stopTimer( "pure database query" );
-
-  startTimer();
-  $rows = array();
-  while( $row = mysql_fetch_array( $dbResult ))
-    $rows[] = $row;
-  stopTimer( "fetching database query results" );
-
-  startTimer();
-  mysql_free_result( $dbResult );
-  stopTimer( "freeing the mysql result" );
-
-  global $dbQueryTotalTime;
-  $dbQueryTotalTime += stopTimer( "the whole dbQuery execution" );
-
-  return $rows;
+  global $wcadb_conn;
+  return $wcadb_conn->dbQuery($query);
 }
 
 #----------------------------------------------------------------------
 function dbQueryHandle ( $query ) {
 #----------------------------------------------------------------------
-
-  if( wcaDebug() ){
-    startTimer();
-    global $dbQueryCtr;
-    $dbQueryCtr++;
-    echo "\n\n<!-- dbQuery(\n$query\n) -->\n\n";
-    echo "<br>";
-    stopTimer( 'printing the database query' );
-  }
-
-  startTimer();
-  $dbResult = mysql_query( $query )
-    or showDatabaseError( "Unable to perform database query." );
-  global $dbQueryTotalTime;
-  $dbQueryTotalTime += stopTimer( "pure database query" );
-
-  return $dbResult;
+  global $wcadb_conn;
+  return $wcadb_conn->dbQuery($query);
 }
 
 #----------------------------------------------------------------------
@@ -99,24 +38,8 @@ function dbValue ( $query ) {
 #----------------------------------------------------------------------
 function dbCommand ( $command ) {
 #----------------------------------------------------------------------
-
-  if( wcaDebug() ){
-    startTimer();
-    global $dbCommandCtr;
-    $dbCommandCtr++;
-    $commandForShow = strlen($command) < 1010
-                    ? $command
-                    : substr($command,0,1000) . '[...' . (strlen($command)-1000) . '...]';
-    echo "\n\n<!-- dbCommand(\n$commandForShow\n) -->\n\n";
-    stopTimer( 'printing the database command' );
-  }
-
-  #--- Execute the command.
-  startTimer();
-  $dbResult = mysql_query( $command )
-    or showDatabaseError( "Unable to perform database command." );
-  global $dbCommandTotalTime;
-  $dbCommandTotalTime += stopTimer( "executing database command" );
+  global $wcadb_conn;
+  return $wcadb_conn->dbCommand($command);
 }
 
 #----------------------------------------------------------------------
@@ -273,16 +196,6 @@ function dbDebug ( $query ) {
   echo "</table>";
 }
 
-#----------------------------------------------------------------------
-function showDatabaseError ( $message ) {
-#----------------------------------------------------------------------
-
-  #--- Normal users just get a "Sorry", developers/debuggers get more details
-  die( $_SERVER['SERVER_NAME'] == 'localhost'  ||  wcaDebug()
-       ? "<p>$message<br />\n(" . mysql_error() . ")</p>\n"
-       : "<p>Problem with the database, sorry. If this persists for several minutes, " .
-         "please tell us at <a href='mailto:contact@worldcubeassociation.org'>contact@worldcubeassociation.org</a></p>" );
-}
 
 #----------------------------------------------------------------------
 function showDatabaseStatistics () {

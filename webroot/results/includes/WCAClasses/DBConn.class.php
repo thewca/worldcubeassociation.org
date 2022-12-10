@@ -25,7 +25,7 @@ class DBConn
         $this->conn = new \mysqli($config['host'], $config['user'], $config['pass'], $config['name'], $config['port']);
         if($this->conn->connect_errno)
         {
-            trigger_error("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error, E_USER_ERROR);
+            trigger_error("Failed to connect to MySQL: (" . $this->conn->connect_errno . ") " . $this->conn->connect_error, E_USER_ERROR);
         }
 
         // Treat warnings as errors

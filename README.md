@@ -27,12 +27,13 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   ```
   If some changes are made to this hook, you will have to update it running this command from the repository's root directory: `BUNDLE_GEMFILE=WcaOnRails/Gemfile bundle exec overcommit --sign`.
 
-## Run using Docker (simplest option, but only runs the Rails portions of the site)
+## Run using Docker
 
 - Install [Docker](https://docs.docker.com/get-docker/) (remember to complete the [Linux post-install steps](https://docs.docker.com/engine/install/linux-postinstall/) if you're on Linux)
 - Install docker-compose. The best way to get an up-to-date version is to get it from their [releases page](https://github.com/docker/compose/releases)
 - Navigate into the repository's main directory (`worldcubeassociation.org`)
 - To start the server at `http://localhost:3000`, run `docker-compose up` and to bring it down, `docker-compose down` (or just press ctrl + c in the same terminal)
+- If you want to run the php part of the website as well, run `docker compose -f docker-compose.yml -f docker-compose.php.yml up`
 - To run tests, run `docker-compose exec wca_on_rails bash -c "RAILS_ENV=test bin/rake db:reset && RAILS_ENV=test bin/rake assets:precompile && bin/rspec"`
 - If you're using Visual Studio Code to develop, you can [attach it to the Docker container](https://code.visualstudio.com/docs/remote/containers) so that your extensions can take advantage of the Ruby environment and so the terminal runs from inside the container
 
@@ -59,16 +60,6 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   2. `RAILS_ENV=test bin/rake assets:precompile` - Compile some assets needed for tests to run.
   3. `bin/rspec` - Run tests.
 - [Mailcatcher](http://mailcatcher.me/) is a good tool for catching emails in development.
-
-## Run in Vagrant (gets everything working, but is very slow, recommended only if you need to run the PHP portions of the website)
-
-- Install [Vagrant](https://www.vagrantup.com/), which requires
-  [VirtualBox](https://www.virtualbox.org/).
-- `vagrant up all` - Once the VM finishes initializing (which can take some time),
-  the website will be accessible at [http://localhost:2331](http://localhost:2331).
-  - Note: There are some minor [issues with development on Windows](https://github.com/thewca/worldcubeassociation.org/issues/393).
-- All emails will be accessible at `http://localhost:2332`.
-- Please take a look at this [wiki page](https://github.com/thewca/worldcubeassociation.org/wiki/Misc.-important-commands-to-know) for more detailed informations about the application's internals.
 
 # Production
 
