@@ -533,7 +533,7 @@ en:
         end_date: ""
         generate_website: ""
         external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
-        base_entry_fee_lowest_denomination: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b><br>Click "Update Competition" after changing currency code to synchronize it with the estimation. If there are no available exchange rates for the selected currency, nothing will be displayed.'
+        base_entry_fee_lowest_denomination: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b>'
         currency_code: "The currency code for fees."
         guests_enabled: ""
         enable_donations: ""
@@ -1553,7 +1553,7 @@ en:
       dues_estimate:
         calculated: "The estimated WCA Dues for %{limit} competitors are %{estimate}"
         per_competitor: "The estimated WCA Dues per competitor are %{estimate}"
-        ajax_error: "There is an error with Dues estimation, please set to zero and re-enter the base registration fee"
+        ajax_error: "There is an error with Dues estimation, possibly because there are no available exchange rates for the selected currency."
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"

@@ -96,7 +96,7 @@ Rails.application.routes.draw do
   get 'competitions/edit/colliding_registration_start_competitions' => 'competitions#colliding_registration_start_competitions', as: :colliding_registration_start_competitions
   get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
-  get 'competitions/edit/currency_convert' => 'competitions#currency_convert', as: :currency_convert
+  get 'competitions/edit/calculate_dues' => 'competitions#calculate_dues', as: :calculate_dues
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
