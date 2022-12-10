@@ -498,6 +498,8 @@ sv:
         competitor_limit_reason: Anledningen till gränsen för antalet tävlande
         #original_hash: 3c23a67
         guests_enabled: Gäster
+        #original_hash: 7d78478
+        guests_per_registration_limit: Maximalt antal gäster per anmälan
         #original_hash: 089cbfd
         receive_registration_emails: Meddela mig via e-post när någon anmäler sig till den här tävlingen
         #original_hash: d4aeed9
@@ -533,7 +535,7 @@ sv:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Inträdesavgift för gäster
         #original_hash: bb16247
-        guest_entry_status: Text som ska visas för gratis avgift för gäster
+        guest_entry_status: Meddelande som ska visas angående gäster
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Jag vill kräva att tävlande lämnar in pussel vid en viss tidpunkt
@@ -757,11 +759,11 @@ sv:
     competition:
       guest_entry_status:
         #original_hash: 7e54323
-        unclear: Visa ingen text (utveckla eventuellt under "Extra anmälningskrav")
+        unclear: Visa ingenting (utveckla gärna i avsnittet "Extra anmälningskrav")
         #original_hash: 694bce4
-        free: '"Alla åskådare är välkomna gratis"'
+        free: '"Åskådare välkomna utan avgift"'
         #original_hash: 762c509
-        restricted: '"Åskådare är endast tillåtna tillsammans med tävlande"'
+        restricted: '"Åskådare endast tillåtna som medföljande till tävlande"'
   simple_form:
     #original_hash: 5397e05
     'yes': Ja
@@ -900,7 +902,7 @@ sv:
         external_registration_page: >-
           Sidan där de tävlande anmäler sig till tävlingen. Måste vara en giltig
           http(s)-url.
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           Basanmälningsavgiften för tävlingen. Den kommer att visas på
           tävlingens informationssida och anmälningssidan om den används. Om
@@ -947,6 +949,11 @@ sv:
         competitor_limit_reason: >-
           Vad är anledningen till begränsningen av antalet tävlande? Vänligen
           fyll i detta på engelska!
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          Antalet gäster per anmälan som är tillåtet vid denna tävling.
+          Anmälningar med för många gäster kommer att blockeras. Lämna tomt om
+          det inte finns någon gräns.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -2733,9 +2740,14 @@ sv:
       guests_pay: 'Åskådare kan delta mot en avgift på %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        free: Alla åskådare är välkomna gratis
+        free: Åskådare välkomna utan avgift
         #original_hash: f1e6aef
         restricted: Åskådare är endast tillåtna tillsammans med tävlande.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Tävlande får inte ha med några gäster.
+        one: 'Tävlande får ha med max %{count} gäster.'
+        other: 'Tävlande får ha med max %{count} gäster.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Tävlande får endast anmäla sig till grenar som de redan är kvalificerade
@@ -3017,10 +3029,10 @@ sv:
         calculated: 'Uppskattad WCA-avgift för %{limit} tävlande är %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'Uppskattad WCA-avgift per tävlande är %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Ett fel uppstod vid uppskattningen av WCA-avgiften, vänligen sätt till
-          noll och ange anmälningsavgiften igen.
+          Ett fel uppstod vid uppskattningen av WCA-avgiften, eventuellt för att
+          det inte finns några tillgängliga växelkurser för den valda valutan.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3083,6 +3095,8 @@ sv:
       series_distance_km: 'Tävlingen är för långt ifrån %{competition}.'
       #original_hash: 4a5d7c5
       series_distance_days: 'Tävlingen är för många dagar ifrån %{competition}.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: Måste fråga om antal gäster om det finns en gräns för antalet gäster.
     new:
       #original_hash: 1208df7
       create_competition: Skapa tävling
