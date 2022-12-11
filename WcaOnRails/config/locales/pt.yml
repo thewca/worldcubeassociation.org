@@ -909,17 +909,14 @@ pt:
         external_registration_page: >-
           A página onde os competidores têm que se registar para a competição.
           Tem que ser uma ligação http(s) válida.
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           A taxa base de registo para a competição. Será mostrada na página de
           informações e de registo se for usada. Se for colocada a 0, aparecerá
           uma frase a indicar que os registos serão aceites de graça.
           <br><br><b>AVISO: A seguinte estimativa de Quotas da WCA é apenas uma
           aproximação com base nas taxas de câmbio atuais e não é de forma
-          alguma juridicamente vinculativa para o pagamento de
-          quotas.</b><br>Clique em "Atualizar competição" após alterar o código
-          da moeda para sincronizá-lo com a estimativa. Se não houver taxas de
-          câmbio disponíveis para a moeda selecionada, nada será exibido.
+          alguma juridicamente vinculativa para o pagamento de quotas.</b>
         #original_hash: 9735ddf
         currency_code: O código da moeda para taxas.
         #original_hash: da39a3e
@@ -3069,10 +3066,10 @@ pt:
         calculated: 'As Quotas WCA estimadas para %{limit} competidores são %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'As Quotas WCA estimadas por competidor são %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Ocorreu um erro na estimativa de Quotas, defina como zero e insira
-          novamente a taxa base de registo.
+          Ocorreu um erro na estimativa de Quotas, possivelmente porque não há
+          taxas de câmbio disponíveis para a moeda selecionada.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
