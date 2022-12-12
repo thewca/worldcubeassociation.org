@@ -28,8 +28,8 @@
           <li><a href="<%= contact_website_path %>"><%= ui_icon('envelope') %> <%= t '.contact' %></a></li>
           <li><a href="<%= speedcubing_history_path %>"><%= ui_icon('history') %> <%= t '.speedcubing_history' %></a></li>
           <li><a href="<%= media_instagram_path %>"><%= ui_icon('camera') %> <%= t '.media_submission' %></a></li>
-          <li><a href="<%= privacy_path %>"><%= ui_icon('user secret') %> Privacy</a></li>
-          <li><a href="<%= disclaimer_path %>"><%= ui_icon('exclamation circle') %> Disclaimer</a></li>
+          <li><a href="<%= privacy_path %>"><%= ui_icon('user secret') %> <%= t '.privacy' %></a></li>
+          <li><a href="<%= disclaimer_path %>"><%= ui_icon('exclamation circle') %> <%= t '.disclaimer' %></a></li>
           <li class="divider"></li>
           <li><a href="<%= score_tools_path %>"><%= ui_icon('wrench') %> <%= t '.tools' %></a></li>
           <li><a href="<%= logo_path %>"><i><%= image_tag('wca_logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
@@ -101,7 +101,7 @@
 
       <li class="dropdown">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-          <%= ui_icon('paper plane') %> <span class="hidden-sm hidden-md">Find us</span> <span class="caret"></span>
+          <%= ui_icon('paper plane') %> <span class="hidden-sm hidden-md"><%= t '.find_us' %></span> <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
           <li>

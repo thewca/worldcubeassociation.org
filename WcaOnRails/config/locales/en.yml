@@ -882,6 +882,9 @@ en:
       manage_app: "Manage your applications"
       manage_auth_app: "Manage authorized applications"
       media_submission: "Media Submission"
+      privacy: "Privacy"
+      disclaimer: "Disclaimer"
+      find_us: "Find us"
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
