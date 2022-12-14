@@ -33,44 +33,42 @@ export default function PaginationFooter({
     { key: int, text: int, value: int }
   ));
 
-  return (
-    totalEntries === 0
-      ? <span>No results</span>
-      : (
-        <div>
-          {allowChangingEntriesPerPage && (
-            <span>
-              <span>
-                {`Showing entries ${topEntryIndex + 1} to ${bottomEntryIndex + 1} of ${totalEntries} with `}
-                <Select
-                  compact
-                  options={options}
-                  onChange={(_, newData) => {
-                    setEntriesPerPage(newData.value);
-                  }}
-                  value={entriesPerPage}
-                />
-                {' '}
-                per page
-              </span>
-            </span>
-          )}
+  if (totalEntries === 0) return <span>No results</span>;
 
-          <span style={{ float: 'right' }}>
-            <Pagination
-              activePage={activePage}
-              onPageChange={(e, { activePage: newActivePage }) => setActivePage(newActivePage)}
-              totalPages={totalPages}
-              boundaryRange={0}
-              siblingRange={2}
-              ellipsisItem={null}
-              firstItem={{ content: <Icon name="angle double left" />, icon: true }}
-              lastItem={{ content: <Icon name="angle double right" />, icon: true }}
-              prevItem={{ content: <Icon name="angle left" />, icon: true }}
-              nextItem={{ content: <Icon name="angle right" />, icon: true }}
+  return (
+    <div>
+      {allowChangingEntriesPerPage && (
+        <span>
+          <span>
+            {`Showing entries ${topEntryIndex + 1} to ${bottomEntryIndex + 1} of ${totalEntries} with `}
+            <Select
+              compact
+              options={options}
+              onChange={(_, newData) => {
+                setEntriesPerPage(newData.value);
+              }}
+              value={entriesPerPage}
             />
+            {' '}
+            per page
           </span>
-        </div>
-      )
+        </span>
+      )}
+
+      <span style={{ float: 'right' }}>
+        <Pagination
+          activePage={activePage}
+          onPageChange={(e, { activePage: newActivePage }) => setActivePage(newActivePage)}
+          totalPages={totalPages}
+          boundaryRange={0}
+          siblingRange={2}
+          ellipsisItem={null}
+          firstItem={{ content: <Icon name="angle double left" />, icon: true }}
+          lastItem={{ content: <Icon name="angle double right" />, icon: true }}
+          prevItem={{ content: <Icon name="angle left" />, icon: true }}
+          nextItem={{ content: <Icon name="angle right" />, icon: true }}
+        />
+      </span>
+    </div>
   );
 }
