@@ -1651,6 +1651,12 @@ cs:
       manage_auth_app: Správa autorizovaných aplikací
       #original_hash: acac109
       media_submission: Odeslání médií
+      #original_hash: cf01481
+      privacy: Soukromí
+      #original_hash: 4c4a2e8
+      disclaimer: Zřeknutí se odpovědnosti
+      #original_hash: d561f1a
+      find_us: Najděte nás
   homepage:
     #original_hash: 824d76b
     learn_more: Zjistit více
@@ -4452,6 +4458,11 @@ cs:
           samostatného WCIF souboru. Importujte scrambly z jednoho nebo více
           TNoodle json souborů. Exportuje výsledky do správného formátu k
           odevzdání WCA.
+      groups:
+        #original_hash: 311a3f6
+        title: Soutěžní skupiny
+        #original_hash: 74a0926
+        description: Zobrazit soutěžní skupiny jakékoliv probíhající soutěže
   logo:
     #original_hash: c72c969
     title: Logo WCA
