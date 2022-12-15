@@ -1590,6 +1590,12 @@ th:
       manage_auth_app: จัดการแอปพลิเคชันที่ได้รับอนุญาต
       #original_hash: acac109
       media_submission: Media Submission
+      #original_hash: cf01481
+      privacy: Privacy
+      #original_hash: 4c4a2e8
+      disclaimer: Disclaimer
+      #original_hash: d561f1a
+      find_us: Find us
   homepage:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
@@ -3108,12 +3114,14 @@ th:
           รูปแบบที่อนุญาตต่อประเภทอธิบายไว้ใน %{link_to_9b} ดู %{link_to_9f}
           สำหรับคำอธิบายของแต่ละรูปแบบ
         #original_hash: fa50f5c
-        qualification_html: ต้องกำหนดเวลาคัดเลือกในการแข่งขัน WCA อื่น ๆ เพื่อแข่งขัน
+        qualification_html: >-
+          ต้องทำเวลาผ่านเวลาคัดเลือกในการแข่งขัน WCA การแข่งขันครั้งอื่น ๆ
+          เพื่อเข้าแข่งขันในการแข่งขันครั้งนี้
         #original_hash: 3b524fd
-        qualification_all_events_html: 'กำหนดเวลาในการทำเวลาให้ผ่านการคัดเลือกคือ <b>%{date}</b>'
+        qualification_all_events_html: 'ต้องทำเวลาให้ผ่านการคัดเลือกก่อนวันที่ <b>%{date}</b>'
         #original_hash: 0d791e9
         qualification_some_events_html: >-
-          กำหนดเวลาในการทำเวลาให้ผ่านการคัดเลือกสำหรับประเภท %{events} คือ
+          สำหรับประเภท %{events} ต้องทำเวลาให้ผ่านการคัดเลือกก่อนวันที่
           <b>%{date}</b>.
       #original_hash: 041a5de
       format: รูปแบบ
@@ -4314,6 +4322,11 @@ th:
           นำเข้าผลการแข่งขันจากเว็บไซต์ WCA (เมื่อใช้ WCA Live), spreadsheet
           หรือไฟล์ WCIF. นำเข้า scrambles จากไฟล์ json ของ TNoodle
           หนึ่งไฟล์ขึ้นไป. ส่งออกผลลัพธ์เป็นรูปแบบที่เหมาะสมสำหรับการส่ง WCA
+      groups:
+        #original_hash: 311a3f6
+        title: Competition groups
+        #original_hash: 74a0926
+        description: ดูกลุ่มการแข่งขันของการแข่งขันที่กำลังแข่งขันอยู่
   logo:
     #original_hash: c72c969
     title: WCA Logo
