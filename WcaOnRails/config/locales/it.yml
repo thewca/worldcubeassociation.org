@@ -496,6 +496,8 @@ it:
         competitor_limit_reason: Motivazione per il limite partecipanti
         #original_hash: 3c23a67
         guests_enabled: Accompagnatori
+        #original_hash: 7d78478
+        guests_per_registration_limit: Numero massimo di accompagnatori per registrazione
         #original_hash: 089cbfd
         receive_registration_emails: Inviami una mail quando qualcuno si registra per questa competizione
         #original_hash: d4aeed9
@@ -906,12 +908,16 @@ it:
         external_registration_page: >-
           La pagina dove i partecipanti devono registrarsi per la competizione.
           Deve avere un url http(s) valido.
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
-          Tassa d'iscrizione per la competizione. Sarà mostrata nelle pagine di
-          registrazione e di informazioni della competizione se presente. Se è
-          impostato su 0, verrà visualizzata una frase che dice che le
-          registrazioni saranno accettate gratuitamente.
+          Tassa d'iscrizione per la competizione. Sarà mostrata nella pagina di
+          registrazione e, se presente, in quella di informazioni della
+          competizione. Se impostata a 0, verrà visualizzato il messaggio che le
+          registrazioni saranno accettate gratuitamente. <br><br><b>DECLINO DI
+          RESPONSABILITÀ: La stima per le Quote WCA è esclusivamente
+          un'approssimazione basata sugli attuali tassi di cambio e non
+          costituisce in alcun modo vincolo legale per il pagamento delle
+          Quote.</b>
         #original_hash: 9735ddf
         currency_code: La valuta delle tasse di iscrizione.
         #original_hash: da39a3e
@@ -948,6 +954,11 @@ it:
         competitor_limit_reason: >-
           Quale è la motivazione del limite massimo di partecipanti? Perfavore,
           scrivi la motivazione in inglese!
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          Il numero di accompagnatori per iscrizione consentiti a questa
+          competizione. Iscrizioni con troppi accompagnatori verranno respinte.
+          Lasciare vuoto se non c'è un limite.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -1638,13 +1649,13 @@ it:
       #original_hash: db34e41
       polls: Sondaggi
       #original_hash: d3a928c
-      results_team: Risultati
+      results_team: Team Risultati
       #original_hash: 4e7afeb
       results_admin: Admin
       #original_hash: f158a5a
       results_phpmyadmin: phpMyAdmin
       #original_hash: aee74b8
-      new_post: Nuovo Post
+      new_post: Nuovo post
       #original_hash: 0d67445
       team_leader: Team leader
       #original_hash: 37b8fdc
@@ -1667,6 +1678,12 @@ it:
       manage_auth_app: Gestisci le applicazioni autorizzate
       #original_hash: acac109
       media_submission: Caricamento media
+      #original_hash: cf01481
+      privacy: Privacy
+      #original_hash: 4c4a2e8
+      disclaimer: Disclaimer
+      #original_hash: d561f1a
+      find_us: Seguici
   homepage:
     #original_hash: 824d76b
     learn_more: Scopri di più
@@ -1994,8 +2011,8 @@ it:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Tutti gli avatar dovrebbero essere immagini di persone reali.
-        #original_hash: 9126b0c
-        '2': La persona mostrata dovresti essere tu.
+        #original_hash: b12d293
+        '2': La foto deve corrispondere al tuo aspetto attuale.
         #original_hash: de9b742
         '3': >-
           In caso fossero presenti più persone nell'avatar, dovrebbe essere
@@ -2831,6 +2848,13 @@ it:
         free: Gli spettatori possono entrare gratuitamente.
         #original_hash: f1e6aef
         restricted: Sono ammessi solo gli spettatori che accompagnano un partecipante.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: I partecipanti NON possono portare accompagnatori.
+        one: Ciascun partecipante può portare UN SOLO accompagnatore.
+        other: >-
+          Ciascun partecipante può portare un massimo di %{count}
+          accompagnatori.
       #original_hash: 64e0ddd
       require_qualification: >-
         I partecipanti possono registrarsi soltanto agli eventi per cui sono
@@ -3117,10 +3141,11 @@ it:
         calculated: 'Le Quote WCA stimate per %{limit} partecipanti sono %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'le Quote WCA stimate per partecipante sono %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          È stato riscontrato un errore nella stima delle Quote. Impostare a
-          zero e reinserire la tassa di registrazione
+          È stato riscontrato un errore nella stima delle Quote, probabilmente
+          perché non è disponibile alcun tasso di cambio per la valuta
+          selezionata.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3191,6 +3216,10 @@ it:
       series_distance_km: 'La sede della competizione è troppo distante da %{competition}.'
       #original_hash: 4a5d7c5
       series_distance_days: 'La competizione è fissata a troppi giorni di distanza da %{competition}.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: >-
+        È necessario fare domande sugli accompagnatori se è stato specificato un
+        limite.
     new:
       #original_hash: 1208df7
       create_competition: Crea competizione
@@ -3241,6 +3270,8 @@ it:
       delegates: Delegato
       #original_hash: eb9a4bc
       date: Data
+      #original_hash: 6c82e6d
+      time: Tempo
       #original_hash: d219c68
       location: Location
       #original_hash: 4232080
@@ -3263,6 +3294,17 @@ it:
       show_events: Mostra eventi
       #original_hash: 0df66f7
       hide_events: Nascondi eventi
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Periodi di registrazione sovrapposti (inizia entro %{hours} ore)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Nessuna sovrapposizione tra periodi di registrazione!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: >-
+        Non hai ancora specificato una data di apertura delle iscrizioni per
+        questa competizione.
+      #original_hash: c38824e
+      opens_registration_at: Apri iscrizioni alle
     #original_hash: 06b01c4
     announcements: Annunci
     #original_hash: a2b80b0
@@ -4625,6 +4667,11 @@ it:
           foglio di calcolo, o da un file WCIF. Importa gli scramble da uno o
           più file json. Esporta i risultato nel formato appropriato per l'invio
           a WCA.
+      groups:
+        #original_hash: 311a3f6
+        title: Gruppi della competizione
+        #original_hash: 74a0926
+        description: Vedi i gruppi per qualsiasi competizione in corso
   logo:
     #original_hash: c72c969
     title: Logo WCA
@@ -5282,7 +5329,7 @@ it:
         postazione)
       #original_hash: d17fb2f
       people_solving: >-
-        Prova a fare alcune storie di persone che risolovono (preferibilmente
+        Prova a fare alcune storie di persone che risolvono (preferibilmente
         partecipanti molto veloci nel proprio main event)
       #original_hash: 76d2358
       mini_interviews: >-
