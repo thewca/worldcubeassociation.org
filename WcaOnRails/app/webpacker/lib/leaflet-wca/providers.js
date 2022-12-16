@@ -1,4 +1,4 @@
-import { WCAProvider } from './wcaProvider.js.erb';
+import WCAProvider from './wcaProvider';
 
 export const searchProvider = new WCAProvider();
 

@@ -1,12 +1,13 @@
 import { LegacyGoogleProvider } from 'leaflet-geosearch';
 import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
+import { geocodingApiUrl } from '../requests/routes.js.erb';
 
-export class WCAProvider extends LegacyGoogleProvider {
+export default class WCAProvider extends LegacyGoogleProvider {
   endpoint({ query } = {}) {
     const paramString = this.getParamString({
       q: query,
     });
-    return `/api/v0/geocoding/search?${paramString}`;
+    return `${geocodingApiUrl}?${paramString}`;
   }
 
   // This overrides Provider's search method, to be able to include the CSRF token.
