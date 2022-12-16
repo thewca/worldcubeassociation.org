@@ -4,9 +4,10 @@ services:
     build:
       context: WcaOnRails
     ports:
-      - 3000:3000
+      - "3000:3000"
     environment:
       DATABASE_HOST: wca_db
+      WEBPACKER_DEV_SERVER_HOST: wca_webpacker
     working_dir: /app/WcaOnRails
     volumes:
       - .:/app
@@ -30,6 +31,21 @@ services:
       - wca_db
     networks:
       - wca-main
+
+  wca_webpacker:
+    build:
+      context: WcaOnRails
+    ports:
+      - "3035:3035"
+    environment:
+      DATABASE_HOST: wca_db
+      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+    working_dir: /app/WcaOnRails
+    volumes:
+      - .:/app
+    command: bin/webpacker-dev-server
+    depends_on:
+      - wca_on_rails
 
   wca_db:
     image: mysql:8.0

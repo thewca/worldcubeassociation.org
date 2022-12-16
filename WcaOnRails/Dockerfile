@@ -6,10 +6,9 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y curl gnupg
 
-# Install Node 16 LTS
+# Add PPA needed to install nodejs.
 # From: https://github.com/nodesource/distributions
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
-RUN apt-get install -y nodejs
 
 # Add PPA needed to install yarn.
 # From: https://yarnpkg.com/en/docs/install#debian-stable
