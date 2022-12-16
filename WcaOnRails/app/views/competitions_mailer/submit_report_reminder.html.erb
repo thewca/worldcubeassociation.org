@@ -5,16 +5,7 @@
 <p>
   This is an automated reminder. <%= @competition.name %> took place <%= (DateTime.now.utc.to_date - @competition.end_date).to_i %> days ago and
   the Delegate report must have been submitted
-  within one week of the end of the competition according to the <a href="https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf">WCA Competition Requirements Policy</a>. If you expect that you won’t be able to submit the report before the one week period (in UTC) ends, please reply to this email to update and explain this to your Senior Delegate. The report can be submitted <%= link_to("here", delegate_report_url(@competition)) %>.
-</p>
-
-<p>
-  @Senior Delegate: You can view the <%= "history".pluralize(@competition.delegates.count) %> of the <%= "Delegate".pluralize(@competition.delegates.count) %> here:
-  <ul>
-    <% @competition.delegates.each do |delegate| %>
-      <li><%= link_to "#{delegate.name}", competitions_url(display: "admin", years: "all", delegate: delegate.id), target: "_blank" %></li>
-    <% end %>
-  </ul>
+  within one week of the end of the competition according to the <a href="https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf">WCA Competition Requirements Policy</a>. The report can be submitted <%= link_to("here", delegate_report_url(@competition)) %>.
 </p>
 
 <p>
