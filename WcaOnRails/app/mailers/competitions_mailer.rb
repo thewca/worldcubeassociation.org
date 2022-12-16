@@ -134,7 +134,6 @@ class CompetitionsMailer < ApplicationMailer
     mail(
       from: Team.weat.email,
       to: competition.delegates.pluck(:email),
-      cc: ["assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: delegates_to_senior_delegates_email(competition.delegates),
       subject: "Friendly reminder to submit #{competition.name} Delegate Report",
     )
