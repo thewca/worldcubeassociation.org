@@ -5,7 +5,7 @@ import {
   Row,
 } from 'react-bootstrap';
 
-import { friendlyTimezoneName } from '../../lib/wca-data/timezoneData.js.erb';
+import { friendlyTimezoneName } from '../../lib/wca-data.js.erb';
 import {
   roomWcifFromId,
   venueWcifFromRoomId,

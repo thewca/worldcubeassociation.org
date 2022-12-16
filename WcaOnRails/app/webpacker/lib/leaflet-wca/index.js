@@ -14,7 +14,7 @@ import { GeoSearchControl } from 'leaflet-geosearch';
 import iconMarker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import iconMarker from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import railsEnv from '../wca-data/rails-env.js.erb';
+import { railsEnv } from '../wca-data.js.erb';
 import { redMarker, blueMarker } from './markers';
 import { searchProvider, userTileProvider } from './providers';
 
