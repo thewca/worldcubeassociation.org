@@ -1695,6 +1695,12 @@ de:
       manage_auth_app: Autorisierte Anwendungen verwalten
       #original_hash: acac109
       media_submission: Medien Einreichung
+      #original_hash: cf01481
+      privacy: Datenschutz
+      #original_hash: 4c4a2e8
+      disclaimer: Haftungsausschluss
+      #original_hash: d561f1a
+      find_us: Finde uns
   homepage:
     #original_hash: 824d76b
     learn_more: Erfahre mehr
@@ -4688,6 +4694,11 @@ de:
           können von einem oder mehreren TNoodle JSON Dateien importiert werden.
           Die Ergebnisse können für die Einreichung auf der WCA Webseite
           exportiert werden.
+      groups:
+        #original_hash: 311a3f6
+        title: Competition groups
+        #original_hash: 74a0926
+        description: Zeige Gruppen eines beliebigen laufenden Wettbewerbs
   logo:
     #original_hash: c72c969
     title: WCA-Logo
