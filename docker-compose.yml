@@ -43,9 +43,14 @@ services:
     working_dir: /app/WcaOnRails
     volumes:
       - .:/app
-    command: bin/webpacker-dev-server
+      - gems_volume:/usr/local/bundle
+    command: >
+      bash -c 'bundle install && yarn install &&
+      bin/webpacker-dev-server'
     depends_on:
       - wca_on_rails
+    networks:
+      - wca-main
 
   wca_db:
     image: mysql:8.0
