@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Popup } from 'semantic-ui-react';
+import { DelegateMattersContext } from './contexts';
 import {
   competitionUrl,
   competitionReportUrl,
@@ -69,9 +70,9 @@ export function MiscTag({ tag, addToSearch }) {
 export function CompetitionTag({
   id,
   name,
-  canViewDelegateMatters,
   comments,
 }) {
+  const canViewDelegateMatters = useContext(DelegateMattersContext);
   const links = canViewDelegateMatters ? (
     <>
       <a target="_blank" rel="noreferrer" className="hide-new-window-icon" href={competitionUrl(id)}>Competition Page</a>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Button,
   Dropdown,
@@ -12,6 +12,7 @@ import PaginationFooter from './PaginationFooter';
 import Loading from './Requests/Loading';
 import Errored from './Requests/Errored';
 
+import { DelegateMattersContext } from './contexts';
 import useLoadedData from '../lib/hooks/useLoadedData';
 import useDebounce from '../lib/hooks/useDebounce';
 import usePagination from '../lib/hooks/usePagination';
@@ -101,7 +102,7 @@ export default function IncidentsLog({
   ));
 
   return (
-    <>
+    <DelegateMattersContext.Provider value={canViewDelegateMatters}>
       <h1>Incidents log</h1>
 
       <div>
@@ -140,12 +141,9 @@ export default function IncidentsLog({
         {!loading && data && (
           <>
             <Table striped>
-              <IncidentsLogHead
-                canViewDelegateMatters={canViewDelegateMatters}
-              />
+              <IncidentsLogHead />
               <IncidentsLogBody
                 incidents={data}
-                canViewDelegateMatters={canViewDelegateMatters}
                 addTagToSearch={(tag) => {
                   setFilterTags(
                     filterTags.includes(tag) ? filterTags : [...filterTags, tag],
@@ -174,11 +172,13 @@ export default function IncidentsLog({
           href={newIncidentUrl}
         />
       )}
-    </>
+    </DelegateMattersContext.Provider>
   );
 }
 
-function IncidentsLogHead({ canViewDelegateMatters }) {
+function IncidentsLogHead() {
+  const canViewDelegateMatters = useContext(DelegateMattersContext);
+
   return (
     <Table.Header>
       <Table.Row>
@@ -210,7 +210,6 @@ function IncidentsLogHead({ canViewDelegateMatters }) {
 
 function IncidentsLogBody({
   incidents,
-  canViewDelegateMatters,
   addTagToSearch,
 }) {
   return (
@@ -219,7 +218,6 @@ function IncidentsLogBody({
         <IncidentsLogRow
           key={incident.id}
           incident={incident}
-          canViewDelegateMatters={canViewDelegateMatters}
           addTagToSearch={addTagToSearch}
         />
       ))}
@@ -229,9 +227,9 @@ function IncidentsLogBody({
 
 function IncidentsLogRow({
   incident,
-  canViewDelegateMatters,
   addTagToSearch,
 }) {
+  const canViewDelegateMatters = useContext(DelegateMattersContext);
   const {
     id,
     title,
@@ -285,7 +283,6 @@ function IncidentsLogRow({
               key={competitionId}
               id={competitionId}
               name={name}
-              canViewDelegateMatters={canViewDelegateMatters}
               comments={comments}
             />
           ))}
