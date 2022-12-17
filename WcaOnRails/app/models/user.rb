@@ -701,7 +701,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wdc_team? || staff_delegate?
+    admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate?
   end
 
   def can_view_senior_delegate_material?
@@ -794,7 +794,7 @@ class User < ApplicationRecord
   end
 
   def can_view_hidden_competitions?
-    can_admin_competitions? || staff_delegate?
+    can_admin_competitions? || any_kind_of_delegate?
   end
 
   def can_edit_registration?(registration)
@@ -1149,7 +1149,7 @@ class User < ApplicationRecord
     # of the freezed variables (which would leak PII)!
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     # Delegates's emails and regions are public information.
-    if staff_delegate?
+    if any_kind_of_delegate?
       default_options[:methods].concat(["email", "region", "senior_delegate_id"])
     end
 
