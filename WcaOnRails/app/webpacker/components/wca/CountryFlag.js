@@ -1,7 +1,7 @@
 import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
-import countries from '../../lib/wca-data/countries.js.erb';
+import { countries } from '../../lib/wca-data.js.erb';
 
 const tooltipSettings = (tooltipText) => (
   <Tooltip id="resultCountryFlagTooptip">

@@ -1,4 +1,4 @@
-import formats from '../wca-data/formats.js.erb';
+import { formats } from '../wca-data.js.erb';
 
 export function getExpectedSolveCount(formatId) {
   return formatId ? formats.byId[formatId].expectedSolveCount : 0;

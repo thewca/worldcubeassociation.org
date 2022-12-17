@@ -3,8 +3,7 @@ import cn from 'classnames'
 import ReactDOM from 'react-dom'
 import _ from 'lodash';
 
-import events from '../../lib/wca-data/events.js.erb'
-import formats from '../../lib/wca-data/formats.js.erb'
+import { events, formats } from '../../lib/wca-data.js.erb'
 import rootRender from '../../lib/edit-events'
 import I18n from '../../lib/i18n'
 import { pluralize } from '../../lib/utils/edit-events'

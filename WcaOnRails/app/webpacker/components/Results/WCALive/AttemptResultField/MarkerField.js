@@ -1,9 +1,9 @@
 import React from 'react';
 import { Dropdown } from 'semantic-ui-react';
 
-import allMarkers from '../../../../lib/wca-data/regionalMarkers.js.erb';
+import { regionalMarkers } from '../../../../lib/wca-data.js.erb';
 
-const MarkersOptions = allMarkers.map((val) => ({
+const MarkersOptions = regionalMarkers.map((val) => ({
   key: val,
   value: val,
   text: val,

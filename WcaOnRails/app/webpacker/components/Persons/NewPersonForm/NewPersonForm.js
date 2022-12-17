@@ -8,7 +8,7 @@ import CountrySelector from '../../CountrySelector/CountrySelector';
 import GenderSelector from '../../GenderSelector/GenderSelector';
 import { adminGenerateIds, personsUrl } from '../../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
-import countries from '../../../lib/wca-data/countries.js.erb';
+import { countries } from '../../../lib/wca-data.js.erb';
 import useInputState from '../../../lib/hooks/useInputState';
 
 const countryIdForIso2 = (iso2) => {

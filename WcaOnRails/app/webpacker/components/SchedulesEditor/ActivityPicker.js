@@ -9,7 +9,7 @@ import {
 import _ from 'lodash';
 import cn from 'classnames';
 import { parseActivityCode, roundIdToString } from '../../lib/utils/wcif';
-import formats from '../../lib/wca-data/formats.js.erb';
+import { formats } from '../../lib/wca-data.js.erb';
 import {
   addActivityToCalendar,
 } from '../../lib/utils/calendar';

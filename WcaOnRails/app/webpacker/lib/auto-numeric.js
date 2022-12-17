@@ -1,6 +1,6 @@
 /* Import the bundled library explicitly, otherwise we end up importing transpiled ES6 module. */
 import AutoNumeric from 'autonumeric/dist/autoNumeric';
-import currenciesData from './wca-data/currenciesData.js.erb';
+import { currenciesData } from './wca-data.js.erb';
 
 function getCurrencyInfo(isoCode) {
   return currenciesData.byIso[isoCode] || currenciesData.byIso.USD;

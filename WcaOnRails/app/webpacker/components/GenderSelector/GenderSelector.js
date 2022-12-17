@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { Form } from 'semantic-ui-react';
 
-import genders from '../../lib/wca-data/genders.js.erb';
+import { genders } from '../../lib/wca-data.js.erb';
 
 const genderOptions = _.map(genders.byId, (gender) => ({
   key: gender.id,
