@@ -1,5 +1,5 @@
 import { createContext } from 'react';
 
-const DelegateMattersContext = createContext(false);
+export const DelegateMattersContext = createContext(false);
 
-export default DelegateMattersContext;
+export const ManageIncidentsContext = createContext(false);

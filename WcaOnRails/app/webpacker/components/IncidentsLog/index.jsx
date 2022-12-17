@@ -12,7 +12,7 @@ import PaginationFooter from '../PaginationFooter';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 
-import DelegateMattersContext from '../../lib/contexts';
+import { DelegateMattersContext } from '../../lib/contexts';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import useDebounce from '../../lib/hooks/useDebounce';
 import usePagination from '../../lib/hooks/usePagination';
