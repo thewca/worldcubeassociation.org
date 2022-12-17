@@ -183,7 +183,8 @@ RSpec.describe Competition do
       competition = FactoryBot.build :competition, :with_delegate, :future
       competition.delegates.first.update_columns(delegate_status: nil)
 
-      expect(competition).to be_invalid_with_errors(delegate_ids: ["are not all Delegates"])
+      expect(competition).to be_invalid_with_errors(staff_delegate_ids: ["are not all Delegates"],
+                                                    trainee_delegate_ids: ["are not all Delegates"])
     end
 
     it "delegates for past comps no longer need to be delegates" do
@@ -650,12 +651,12 @@ RSpec.describe Competition do
     end
   end
 
-  it "saves delegate_ids" do
+  it "saves staff_delegate_ids" do
     delegate1 = FactoryBot.create(:delegate, name: "Daniel", email: "daniel@d.com")
     delegate2 = FactoryBot.create(:delegate, name: "Chris", email: "chris@c.com")
     delegates = [delegate1, delegate2]
-    delegate_ids = delegates.map(&:id).join(",")
-    competition = FactoryBot.create :competition, delegate_ids: delegate_ids
+    staff_delegate_ids = delegates.map(&:id).join(",")
+    competition = FactoryBot.create :competition, staff_delegate_ids: staff_delegate_ids
     expect(competition.delegates.sort_by(&:name)).to eq delegates.sort_by(&:name)
   end
 

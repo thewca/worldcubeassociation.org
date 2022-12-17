@@ -468,7 +468,7 @@ id:
         #original_hash: 28a6fbb
         currency_code: Kode mata uang
         #original_hash: 2e3ed8b
-        delegate_ids: Delegate WCA
+        staff_delegate_ids: Delegate WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegate Magang WCA
         #original_hash: 958562e
@@ -856,7 +856,7 @@ id:
           ini <b>dalam Bahasa Inggris</b> dan bahasa apapun yang dimengerti oleh
           calon kompetitor.
         #original_hash: b4d020f
-        delegate_ids: Delegate WCA untuk kompetisi.
+        staff_delegate_ids: Delegate WCA untuk kompetisi.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegate Magang WCA untuk kompetisi ini.
         #original_hash: 517d376

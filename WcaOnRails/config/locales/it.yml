@@ -473,7 +473,7 @@ it:
         #original_hash: 28a6fbb
         currency_code: Codice valuta
         #original_hash: 2e3ed8b
-        delegate_ids: Delegati WCA
+        staff_delegate_ids: Delegati WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegati WCA in prova
         #original_hash: 958562e
@@ -878,7 +878,7 @@ it:
           compila questo <b>in inglese</b> e qualunque altra lingua parlino i
           partecipanti.
         #original_hash: b4d020f
-        delegate_ids: Delegati WCA della competizione.
+        staff_delegate_ids: Delegati WCA della competizione.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegati WCA in prova per la competizione.
         #original_hash: 517d376

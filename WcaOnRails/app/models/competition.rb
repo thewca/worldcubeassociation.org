@@ -352,8 +352,8 @@ class Competition < ApplicationRecord
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
   def must_have_at_least_one_delegate
-    if delegate_ids.empty?
-      errors.add(:delegate_ids, I18n.t('competitions.errors.must_contain_delegate'))
+    if staff_delegate_ids.empty?
+      errors.add(:staff_delegate_ids, I18n.t('competitions.errors.must_contain_delegate'))
     end
   end
 
@@ -386,8 +386,9 @@ class Competition < ApplicationRecord
   # this validation.
   validate :delegates_must_be_delegates, unless: :is_probably_over?
   def delegates_must_be_delegates
-    if !self.delegates.all?(&:any_kind_of_delegate?)
-      errors.add(:delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
+    unless self.delegates.all?(&:any_kind_of_delegate?)
+      errors.add(:staff_delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
+      errors.add(:trainee_delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
     end
   end
 
@@ -614,9 +615,9 @@ class Competition < ApplicationRecord
     end
   end
 
-  attr_writer :delegate_ids, :organizer_ids, :trainee_delegate_ids
-  def delegate_ids
-    @delegate_ids || delegates.map(&:id).join(",")
+  attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
+  def staff_delegate_ids
+    @staff_delegate_ids || staff_delegates.map(&:id).join(",")
   end
 
   def organizer_ids
@@ -636,20 +637,20 @@ class Competition < ApplicationRecord
     # CompetitionOrganizer and CompetitionDelegate rows rather than creating new ones.
     # We'll fix their competition_id below in update_foreign_keys.
     with_old_id do
-      if @delegate_ids || @trainee_delegate_ids
+      if @staff_delegate_ids || @trainee_delegate_ids
         self.delegates ||= []
 
-        if @delegate_ids
-          unpacked_delegates = @delegate_ids.split(",").map { |id| User.find(id) }
+        if @staff_delegate_ids
+          unpacked_staff_delegates = @staff_delegate_ids.split(",").map { |id| User.find(id) }
 
           # we overwrite staff_delegates, which means that we _keep_ existing trainee_delegates.
-          self.delegates = self.trainee_delegates | unpacked_delegates
+          self.delegates = self.trainee_delegates | unpacked_staff_delegates
         end
         if @trainee_delegate_ids
-          unpacked_trainees = @trainee_delegate_ids.split(",").map { |id| User.find(id) }
+          unpacked_trainee_delegates = @trainee_delegate_ids.split(",").map { |id| User.find(id) }
 
           # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
-          self.delegates = self.staff_delegates | unpacked_trainees
+          self.delegates = self.staff_delegates | unpacked_trainee_delegates
         end
       end
       if @organizer_ids
@@ -748,7 +749,8 @@ class Competition < ApplicationRecord
     if editing_user_id
       editing_user = User.find(editing_user_id)
       unless editing_user.can_manage_competition?(self)
-        errors.add(:delegate_ids, "You cannot demote yourself")
+        errors.add(:staff_delegate_ids, "You cannot demote yourself")
+        errors.add(:trainee_delegate_ids, "You cannot demote yourself")
         errors.add(:organizer_ids, "You cannot demote yourself")
       end
     end

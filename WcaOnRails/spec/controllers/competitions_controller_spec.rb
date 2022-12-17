@@ -278,7 +278,7 @@ RSpec.describe CompetitionsController do
         organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(delegate, anything, organizer).and_call_original
         expect do
-          post :create, params: { competition: { name: "Test 2015", countryId: "USA", delegate_ids: delegate.id, organizer_ids: organizer.id, use_wca_registration: false } }
+          post :create, params: { competition: { name: "Test 2015", countryId: "USA", staff_delegate_ids: delegate.id, organizer_ids: organizer.id, use_wca_registration: false } }
         end.to change { enqueued_jobs.size }.by(1)
         expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)
@@ -380,13 +380,13 @@ RSpec.describe CompetitionsController do
         expect(competition.reload.confirmed?).to eq true
       end
 
-      it 'saves delegate_ids' do
+      it 'saves staff_delegate_ids' do
         delegate1 = FactoryBot.create(:delegate)
         delegate2 = FactoryBot.create(:delegate)
-        delegates = [delegate1, delegate2]
-        delegate_ids = delegates.map(&:id).join(",")
-        patch :update, params: { id: competition, competition: { delegate_ids: delegate_ids } }
-        expect(competition.reload.delegates).to eq delegates
+        staff_delegates = [delegate1, delegate2]
+        staff_delegate_ids = staff_delegates.map(&:id).join(",")
+        patch :update, params: { id: competition, competition: { staff_delegate_ids: staff_delegate_ids } }
+        expect(competition.reload.delegates).to eq staff_delegates
       end
 
       it "saving removes nonexistent delegates" do
@@ -409,7 +409,7 @@ RSpec.describe CompetitionsController do
         cos = competition.competition_organizers.to_a
 
         old_id = competition.id
-        patch :update, params: { id: competition, competition: { id: "NewId2015", delegate_ids: competition.delegates.map(&:id).join(",") } }
+        patch :update, params: { id: competition, competition: { id: "NewId2015", staff_delegate_ids: competition.delegates.map(&:id).join(",") } }
 
         expect(CompetitionDelegate.where(competition_id: old_id).count).to eq 0
         expect(CompetitionOrganizer.where(competition_id: old_id).count).to eq 0
@@ -435,18 +435,19 @@ RSpec.describe CompetitionsController do
       end
 
       it 'cannot pass a non-delegate as delegate' do
-        delegate_ids_old = future_competition.delegate_ids
+        delegate_ids_old = future_competition.staff_delegate_ids
         fake_delegate = FactoryBot.create(:user)
-        post :update, params: { id: future_competition, competition: { delegate_ids: fake_delegate.id } }
+        post :update, params: { id: future_competition, competition: { staff_delegate_ids: fake_delegate.id } }
         invalid_competition = assigns(:competition)
-        expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["are not all Delegates"]
+        expect(invalid_competition).to be_invalid_with_errors(staff_delegate_ids: ["are not all Delegates"],
+                                                              trainee_delegate_ids: ["are not all Delegates"])
         future_competition.reload
-        expect(future_competition.delegate_ids).to eq delegate_ids_old
+        expect(future_competition.staff_delegate_ids).to eq delegate_ids_old
       end
 
       it 'can change the delegate' do
         new_delegate = FactoryBot.create(:delegate)
-        post :update, params: { id: competition, competition: { delegate_ids: new_delegate.id } }
+        post :update, params: { id: competition, competition: { staff_delegate_ids: new_delegate.id } }
         competition.reload
         expect(competition.delegates).to eq [new_delegate]
       end
@@ -464,7 +465,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as a delegate. This should be allowed, because we're
         # still an organizer.
-        patch :update, params: { id: competition, competition: { delegate_ids: "", organizer_ids: organizer.id } }
+        patch :update, params: { id: competition, competition: { staff_delegate_ids: "", organizer_ids: organizer.id } }
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq [organizer]
       end
@@ -476,7 +477,8 @@ RSpec.describe CompetitionsController do
         invalid_competition = assigns(:competition)
         expect(invalid_competition).to be_invalid
         expect(invalid_competition.organizer_ids).to eq ""
-        expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["You cannot demote yourself"]
+        expect(invalid_competition.errors.messages[:staff_delegate_ids]).to eq ["You cannot demote yourself"]
+        expect(invalid_competition.errors.messages[:trainee_delegate_ids]).to eq ["You cannot demote yourself"]
         expect(invalid_competition.errors.messages[:organizer_ids]).to eq ["You cannot demote yourself"]
         expect(competition.reload.organizers).to eq [organizer]
       end
@@ -514,7 +516,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as an organizer. This should be allowed, because we're
         # still able to administer results.
-        patch :update, params: { id: competition, competition: { delegate_ids: "", organizer_ids: "", receive_registration_emails: true } }
+        patch :update, params: { id: competition, competition: { staff_delegate_ids: "", organizer_ids: "", receive_registration_emails: true } }
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq []
       end

@@ -349,7 +349,7 @@ ko:
         #original_hash: 28a6fbb
         currency_code: 화폐 단위
         #original_hash: 2e3ed8b
-        delegate_ids: WCA 파견위원
+        staff_delegate_ids: WCA 파견위원
         #original_hash: 958562e
         organizer_ids: 주최자
         #original_hash: b37456c

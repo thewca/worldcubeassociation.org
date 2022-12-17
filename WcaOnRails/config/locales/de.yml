@@ -478,7 +478,7 @@ de:
         #original_hash: 28a6fbb
         currency_code: Währungscode
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-Delegierte
+        staff_delegate_ids: WCA-Delegierte
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Trainee Delegate(s)
         #original_hash: 958562e
@@ -890,7 +890,7 @@ de:
           <b>Englisch</b> und in jeder anderen Sprache, die die Teilnehmer
           sprechen, aus.
         #original_hash: b4d020f
-        delegate_ids: WCA-Delegierte des Wettbewerbs
+        staff_delegate_ids: WCA-Delegierte des Wettbewerbs
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Trainee Delegate für diesen Wettbewerb.
         #original_hash: 517d376

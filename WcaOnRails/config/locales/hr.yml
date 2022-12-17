@@ -481,7 +481,7 @@ hr:
         #original_hash: 28a6fbb
         currency_code: Kôd valute
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegat(i)
+        staff_delegate_ids: WCA Delegat(i)
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Delegat pripravnik
         #original_hash: 958562e
@@ -864,7 +864,7 @@ hr:
           engleskom</b> ili na bilo kojem drugom jeziku kojeg natjecatelji
           razumiju.
         #original_hash: b4d020f
-        delegate_ids: WCA Delegati natjecanja.
+        staff_delegate_ids: WCA Delegati natjecanja.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Delegati pripravnici za natjecanje.
         #original_hash: 517d376
