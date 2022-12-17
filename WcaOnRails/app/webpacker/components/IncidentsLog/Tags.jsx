@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Button, Popup } from 'semantic-ui-react';
-import { DelegateMattersContext } from './contexts';
+import DelegateMattersContext from '../../lib/contexts';
 import {
   competitionUrl,
   competitionReportUrl,
-} from '../lib/requests/routes.js.erb';
+} from '../../lib/requests/routes.js.erb';
 
 // helpers //
 

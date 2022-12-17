@@ -8,20 +8,20 @@ import {
 } from 'semantic-ui-react';
 
 import { MiscTag, CompetitionTag, RegulationTag } from './Tags';
-import PaginationFooter from './PaginationFooter';
-import Loading from './Requests/Loading';
-import Errored from './Requests/Errored';
+import PaginationFooter from '../PaginationFooter';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
 
-import { DelegateMattersContext } from './contexts';
-import useLoadedData from '../lib/hooks/useLoadedData';
-import useDebounce from '../lib/hooks/useDebounce';
-import usePagination from '../lib/hooks/usePagination';
+import DelegateMattersContext from '../../lib/contexts';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import useDebounce from '../../lib/hooks/useDebounce';
+import usePagination from '../../lib/hooks/usePagination';
 
 import {
   incidentsUrl,
   newIncidentUrl,
   incidentUrl,
-} from '../lib/requests/routes.js.erb';
+} from '../../lib/requests/routes.js.erb';
 
 // incident helper functions //
 
