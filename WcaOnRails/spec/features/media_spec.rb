@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.feature "Media" do
   context "when signed in as regular user" do
     let(:competition) { FactoryBot.create(:competition) }
-    let(:user) { FactoryBot.create(:user) }
+    let!(:user) { FactoryBot.create(:user) }
 
     before :each do
       sign_in user

@@ -470,7 +470,7 @@ th:
         #original_hash: 28a6fbb
         currency_code: สกุลเงิน
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegate(s)
+        staff_delegate_ids: WCA Delegate(s)
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Trainee Delegate
         #original_hash: 958562e
@@ -862,7 +862,7 @@ th:
           ข้อมูลสำคัญที่ผู้เข้าแข่งขันควรรู้ มันจะปรากฏในหน้าหลักของการแข่งขัน
           <br/>กรุณากรอกเป็น <b>ภาษาอังกฤษ</b> และภาษาอื่นที่ผู้เข้าแข่งขันใช้.
         #original_hash: b4d020f
-        delegate_ids: WCA Delegates สำหรับการแข่งขัน
+        staff_delegate_ids: WCA Delegates สำหรับการแข่งขัน
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Trainee Delegates สำหรับการแข่งขัน
         #original_hash: 517d376
@@ -887,16 +887,14 @@ th:
         external_registration_page: >-
           หน้าเว็บที่ผู้เข้าแข่งขันต้องลงทะเบียนสำหรับการแข่งขัน ต้องเป็น URL
           ที่ถูกต้อง
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           ค่าลงทะเบียนฐานสำหรับการแข่งขัน
           มันจะปรากฏบนหน้าข้อมูลการแข่งขันและหน้าลงทะเบียน หากตั้งค่าเป็น 0
           ประโยคจะปรากฏขึ้นโดยแจ้งว่า สมารถสมัครแข่งขันได้โดยไม่เสียค่าใช้จ่าย
           <br><br><b>ข้อจำกัด: การประมาณค่าธรรมเนียมของ WCA
           ต่อไปนี้เป็นเพียงการประมาณโดยอิงตามอัตราแลกเปลี่ยนปัจจุบัน
-          และไม่มีผลผูกพันทางกฎหมายสำหรับการชำระค่าธรรมเนียม</b><br>กด
-          "แก้ไขการแข่งขัน" หลังจากเปลี่ยนสกุลเงินเพื่อซิงโครไนซ์กับค่าประมาณ
-          หากไม่มีอัตราแลกเปลี่ยนสำหรับสกุลเงินที่เลือกจะไม่มีอะไรแสดง
+          และไม่มีผลผูกพันทางกฎหมายสำหรับการชำระค่าธรรมเนียม</b>
         #original_hash: 9735ddf
         currency_code: สกลุเงินสำหรับต่าสมัคร
         #original_hash: da39a3e
@@ -1334,7 +1332,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1592,6 +1590,12 @@ th:
       manage_auth_app: จัดการแอปพลิเคชันที่ได้รับอนุญาต
       #original_hash: acac109
       media_submission: Media Submission
+      #original_hash: cf01481
+      privacy: Privacy
+      #original_hash: 4c4a2e8
+      disclaimer: Disclaimer
+      #original_hash: d561f1a
+      find_us: Find us
   homepage:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
@@ -1854,7 +1858,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
@@ -2906,10 +2910,10 @@ th:
           %{estimate}
         #original_hash: 5e8cffe
         per_competitor: 'ค่าธรรมเนียม WCA โดยประมาณต่อผู้เข้าแข่งขันคือ %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
           มีข้อผิดพลาดในการประมาณการค่าธรรมเนียม
-          โปรดตั้งค่าเป็นศูนย์และป้อนค่าธรรมเนียมการสมัครการแข่งขันอีกครั้ง
+          อาจเป็นไปได้ว่าไม่มีอัตราแลกเปลี่ยนสำหรับสกุลเงินที่เลือก
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3110,12 +3114,14 @@ th:
           รูปแบบที่อนุญาตต่อประเภทอธิบายไว้ใน %{link_to_9b} ดู %{link_to_9f}
           สำหรับคำอธิบายของแต่ละรูปแบบ
         #original_hash: fa50f5c
-        qualification_html: ต้องกำหนดเวลาคัดเลือกในการแข่งขัน WCA อื่น ๆ เพื่อแข่งขัน
+        qualification_html: >-
+          ต้องทำเวลาผ่านเวลาคัดเลือกในการแข่งขัน WCA การแข่งขันครั้งอื่น ๆ
+          เพื่อเข้าแข่งขันในการแข่งขันครั้งนี้
         #original_hash: 3b524fd
-        qualification_all_events_html: 'กำหนดเวลาในการทำเวลาให้ผ่านการคัดเลือกคือ <b>%{date}</b>'
+        qualification_all_events_html: 'ต้องทำเวลาให้ผ่านการคัดเลือกก่อนวันที่ <b>%{date}</b>'
         #original_hash: 0d791e9
         qualification_some_events_html: >-
-          กำหนดเวลาในการทำเวลาให้ผ่านการคัดเลือกสำหรับประเภท %{events} คือ
+          สำหรับประเภท %{events} ต้องทำเวลาให้ผ่านการคัดเลือกก่อนวันที่
           <b>%{date}</b>.
       #original_hash: 041a5de
       format: รูปแบบ
@@ -4316,6 +4322,11 @@ th:
           นำเข้าผลการแข่งขันจากเว็บไซต์ WCA (เมื่อใช้ WCA Live), spreadsheet
           หรือไฟล์ WCIF. นำเข้า scrambles จากไฟล์ json ของ TNoodle
           หนึ่งไฟล์ขึ้นไป. ส่งออกผลลัพธ์เป็นรูปแบบที่เหมาะสมสำหรับการส่ง WCA
+      groups:
+        #original_hash: 311a3f6
+        title: Competition groups
+        #original_hash: 74a0926
+        description: ดูกลุ่มการแข่งขันของการแข่งขันที่กำลังแข่งขันอยู่
   logo:
     #original_hash: c72c969
     title: WCA Logo

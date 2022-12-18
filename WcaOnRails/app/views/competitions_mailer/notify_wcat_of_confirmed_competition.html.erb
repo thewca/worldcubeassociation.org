@@ -9,7 +9,7 @@
 <p class="<%= 'alert' if (@competition.start_date - Time.now.to_date).to_i <= 30 %>">
   The competition will take place on <%= wca_date_range(@competition.start_date, @competition.end_date) %> in <%= (@competition.days_until).to_i %> days.
   <% if (@competition.days_until).to_i <= 30 %>
-    There are less than 48 hours remaining for the competition to be announced. @<%= "Delegate".pluralize(@competition.all_delegates.count) %>: please respond to any WCAT concerns as soon as possible to ensure that the competition becomes announced. If the competition becomes less than 28 days away, the WCAT cannot announce it.
+    There are less than 48 hours remaining for the competition to be announced. @<%= "Delegate".pluralize(@competition.delegates.count) %>: please respond to any WCAT concerns as soon as possible to ensure that the competition becomes announced. If the competition becomes less than 28 days away, the WCAT cannot announce it.
   <% end %>
 </p>
 
@@ -22,7 +22,7 @@
   <h2 class="alert"><%= warning %></h2>
 <% end %>
 
-<% @competition.all_delegates.map do |delegate| %>
+<% @competition.delegates.map do |delegate| %>
   <% if Team.probation.current_members.map { |member| member.user_id }.include?(delegate.id) %>
     <p class="alert">
       <%= delegate.name %> is currently on probation. Please check the <%= link_to "Delegates on Probation spreadsheet", "https://docs.google.com/spreadsheets/d/1ZU1lk0niGn-vjmbiDkoROU8qjmdHkNebZ2GCFHm6vvA/edit#gid=1887522006" %> for more details.
@@ -64,16 +64,16 @@
 
 <p>
   <% if @competition.early_puzzle_submission? %>
-    The <%= "Delegate".pluralize(@competition.all_delegates.count) %> requested for competitors to <b>submit puzzles early</b> because "<%= @competition.early_puzzle_submission_reason %>".
+    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested for competitors to <b>submit puzzles early</b> because "<%= @competition.early_puzzle_submission_reason %>".
     <br>
   <% end %>
 
   <% if @competition.uses_qualification? %>
-    The <%= "Delegate".pluralize(@competition.all_delegates.count) %> requested the adoption of <b>qualification results</b> because "<%= @competition.qualification_results_reason %>".
+    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested the adoption of <b>qualification results</b> because "<%= @competition.qualification_results_reason %>".
   <% end %>
 
   <% if @competition.event_restrictions? %>
-    The <%= "Delegate".pluralize(@competition.all_delegates.count) %> requested the adoption of <b>event restrictions</b> because "<%= @competition.event_restrictions_reason %>".
+    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested the adoption of <b>event restrictions</b> because "<%= @competition.event_restrictions_reason %>".
   <% end %>
 </p>
 
@@ -84,5 +84,5 @@
 <p>
   Regards,
   <br>
-  <%= @competition.all_delegates.sort_by { |d| d.name }.map { |d| d.name }.to_sentence %>
+  <%= @competition.delegates.sort_by { |d| d.name }.map { |d| d.name }.to_sentence %>
 </p>

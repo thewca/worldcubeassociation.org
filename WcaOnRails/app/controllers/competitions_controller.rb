@@ -48,13 +48,7 @@ class CompetitionsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
 
   private def assign_delegate(competition)
-    if current_user.any_kind_of_delegate?
-      if current_user.trainee_delegate?
-        competition.trainee_delegates |= [current_user]
-      else
-        competition.delegates |= [current_user]
-      end
-    end
+    competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
   end
 
   def new
@@ -392,13 +386,33 @@ class CompetitionsController < ApplicationController
     }
   end
 
-  def currency_convert
-    update_rates_if_needed
-    converted = Money.new(params[:value], params[:from_currency]).exchange_to(params[:to_currency])
-    render json: {
-      formatted: converted.format,
-      value: converted.cents,
-    }
+  def calculate_dues
+    country_iso2 = Country.find_by(id: params[:country_id])&.iso2
+    country_band = CountryBand.find_by(iso2: country_iso2)&.number
+
+    update_exchange_rates_if_needed
+    input_money_us_dollars = Money.new(params[:entry_fee_cents].to_i, params[:currency_code]).exchange_to("USD").amount
+
+    registration_fee_dues_us_dollars = input_money_us_dollars * CountryBand::PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT
+    country_band_dues_us_dollars = CountryBand::BANDS[country_band][:value] if country_band.present? && country_band > 0
+
+    # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
+    price_per_competitor_us_cents = [registration_fee_dues_us_dollars, country_band_dues_us_dollars].compact.max * 100
+
+    if params[:competitor_limit_enabled]
+      estimated_dues_us_cents = price_per_competitor_us_cents * params[:competitor_limit].to_i
+      estimated_dues = Money.new(estimated_dues_us_cents, "USD").exchange_to(params[:currency_code]).format
+
+      render json: {
+        dues_value: estimated_dues,
+      }
+    else
+      price_per_competitor = Money.new(price_per_competitor_us_cents, "USD").exchange_to(params[:currency_code]).format
+
+      render json: {
+        dues_value: price_per_competitor,
+      }
+    end
   end
 
   def show
@@ -553,7 +567,6 @@ class CompetitionsController < ApplicationController
   def my_competitions
     competition_ids = current_user.organized_competitions.pluck(:competition_id)
     competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
-    competition_ids.concat(current_user.trainee_delegated_competitions.pluck(:competition_id))
     registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
     registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
     @registered_for_by_competition_id = registrations.uniq.to_h do |r|
@@ -582,7 +595,7 @@ class CompetitionsController < ApplicationController
     params[:commit] == "Confirm"
   end
 
-  private def update_rates_if_needed
+  private def update_exchange_rates_if_needed
     if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < 1.day.ago
       Money.default_bank.update_rates
     end
@@ -620,7 +633,7 @@ class CompetitionsController < ApplicationController
         :start_date,
         :end_date,
         :information,
-        :delegate_ids,
+        :staff_delegate_ids,
         :trainee_delegate_ids,
         :organizer_ids,
         :contact,

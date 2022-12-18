@@ -5,8 +5,7 @@ import Button from 'react-bootstrap/lib/Button'
 import Checkbox from 'react-bootstrap/lib/Checkbox'
 import _ from 'lodash';
 
-import events from '../../lib/wca-data/events.js.erb'
-import formats from '../../lib/wca-data/formats.js.erb'
+import { events, formats } from '../../lib/wca-data.js.erb'
 import rootRender from '../../lib/edit-events'
 
 import CutoffComponents from './Cutoff'

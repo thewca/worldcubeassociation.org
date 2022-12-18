@@ -363,7 +363,7 @@ zh-CN:
         #original_hash: 28a6fbb
         currency_code: 货币代码
         #original_hash: 2e3ed8b
-        delegate_ids: WCA 代表
+        staff_delegate_ids: WCA 代表
         #original_hash: 958562e
         organizer_ids: 主办方
         #original_hash: b37456c
@@ -591,7 +591,7 @@ zh-CN:
         #original_hash: bb470cc
         information: 关于比赛人数限制、报名费、观众及其他相关细节的信息。
         #original_hash: b4d020f
-        delegate_ids: 比赛的WCA代表们。
+        staff_delegate_ids: 比赛的WCA代表们。
         #original_hash: 517d376
         organizer_ids: 主办方（需要提前注册帐号）
         #original_hash: cabe7fb

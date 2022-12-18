@@ -4,9 +4,7 @@ import {
 } from 'semantic-ui-react';
 
 import _ from 'lodash';
-import formats from '../../../lib/wca-data/formats.js.erb';
-import events from '../../../lib/wca-data/events.js.erb';
-import roundTypes from '../../../lib/wca-data/roundTypes.js.erb';
+import { formats, events, roundTypes } from '../../../lib/wca-data.js.erb';
 import useNestedInputUpdater from '../../../lib/hooks/useNestedInputUpdater';
 import { competitionEventsDataUrl } from '../../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';

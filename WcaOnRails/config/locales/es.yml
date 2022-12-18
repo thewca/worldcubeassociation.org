@@ -477,7 +477,7 @@ es:
         #original_hash: 28a6fbb
         currency_code: Moneda
         #original_hash: 2e3ed8b
-        delegate_ids: Delegado(s) de la WCA
+        staff_delegate_ids: Delegado(s) de la WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegado(s) en prácticas
         #original_hash: 958562e
@@ -886,7 +886,7 @@ es:
           <b>en Inglés</b> y demás idiomas adicionales que hablen tus
           competidores.
         #original_hash: b4d020f
-        delegate_ids: Delegados de la WCA para la competición.
+        staff_delegate_ids: Delegados de la WCA para la competición.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegado en prácticas de la WCA para la competición.
         #original_hash: 517d376
@@ -922,7 +922,7 @@ es:
           <br><br><b>DESCARGO DE RESPONSABILIDAD: Las siguientes estimaciones de
           cuotas WCA son simplemente una estimación basada en las actuales
           tarifas de cambios de moneda y de ningún modo son jurídicamente
-          vinculantes para el pago de las cuotas.</b><br>Haz Click en 
+          vinculantes para el pago de las cuotas.</b><br>Haz Click en
           "Actualizar Competición" tras cambiar el código de moneda para
           sincronizarlo con la estimación. Si no hay tarifas de cambio
           aplicables para la selección, no se mostrará nada.

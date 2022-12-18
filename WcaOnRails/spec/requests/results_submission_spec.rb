@@ -32,7 +32,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
   end
 
   context "logged in as THE delegate" do
-    let(:user) { comp.delegates.first }
+    let!(:user) { comp.delegates.first }
     let(:submission_message) { "Hello, here are the results" }
 
     before :each do

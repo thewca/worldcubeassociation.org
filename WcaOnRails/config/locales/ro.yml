@@ -482,7 +482,7 @@ ro:
         #original_hash: 28a6fbb
         currency_code: RON
         #original_hash: 2e3ed8b
-        delegate_ids: Delegați WCA
+        staff_delegate_ids: Delegați WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: 'Delegați Candidați WCA:'
         #original_hash: 958562e
@@ -890,7 +890,7 @@ ro:
           pentru concurenți și spectatori și alte detalii relevante pentru
           pamenii ce vor să concureze sau să fie în public.
         #original_hash: b4d020f
-        delegate_ids: Delegații WCA pentru competiție
+        staff_delegate_ids: Delegații WCA pentru competiție
         #original_hash: cb9882c
         trainee_delegate_ids: Delegați Candidați WCA pentru această competiție
         #original_hash: 517d376

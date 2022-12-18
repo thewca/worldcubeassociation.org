@@ -4,14 +4,12 @@ require "fileutils"
 
 class User < ApplicationRecord
   has_many :competition_delegates, foreign_key: "delegate_id"
-  has_many :competition_trainee_delegates, foreign_key: "trainee_delegate_id"
   # This gives all the competitions where the user is marked as a Delegate,
   # regardless of the competition's status.
   has_many :delegated_competitions, through: :competition_delegates, source: "competition"
   # This gives all the competitions which actually happened and where the user
   # was a Delegate.
   has_many :actually_delegated_competitions, -> { over.visible.not_cancelled }, through: :competition_delegates, source: "competition"
-  has_many :trainee_delegated_competitions, through: :competition_trainee_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id"
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :votes
@@ -331,9 +329,10 @@ class User < ApplicationRecord
     !dummy_account? && encrypted_password == ""
   end
 
+  scope :delegates, -> { where.not(delegate_status: nil) }
   scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
   scope :trainee_delegates, -> { where(delegate_status: "trainee_delegate") }
-  scope :delegates, -> { where.not(delegate_status: nil) }
+  scope :staff_delegates, -> { where.not(delegate_status: [nil, "trainee_delegate"]) }
   scope :senior_delegates, -> { where(delegate_status: "senior_delegate") }
 
   before_validation :copy_data_from_persons
@@ -624,7 +623,7 @@ class User < ApplicationRecord
   end
 
   def staff?
-    (any_kind_of_delegate? && !trainee_delegate?) || member_of_any_official_team? || board_member? || officer?
+    staff_delegate? || member_of_any_official_team? || board_member? || officer?
   end
 
   def staff_with_voting_rights?
@@ -677,6 +676,10 @@ class User < ApplicationRecord
     delegate_status == "trainee_delegate"
   end
 
+  def staff_delegate?
+    any_kind_of_delegate? && !trainee_delegate?
+  end
+
   def full_delegate?
     delegate_status == "delegate"
   end
@@ -686,7 +689,7 @@ class User < ApplicationRecord
   end
 
   def staff_or_any_delegate?
-    staff? || trainee_delegate?
+    staff? || any_kind_of_delegate?
   end
 
   def is_senior_delegate_for?(user)
@@ -780,7 +783,6 @@ class User < ApplicationRecord
       can_admin_competitions? ||
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
-      competition.trainee_delegates.include?(self) ||
       wrc_team? ||
       competition.delegates.map(&:senior_delegate).compact.include?(self) ||
       ethics_committee?
@@ -792,7 +794,7 @@ class User < ApplicationRecord
   end
 
   def can_view_hidden_competitions?
-    can_admin_competitions? || self.any_kind_of_delegate?
+    can_admin_competitions? || any_kind_of_delegate?
   end
 
   def can_edit_registration?(registration)
@@ -809,7 +811,7 @@ class User < ApplicationRecord
 
   def can_confirm_competition?(competition)
     # We don't let competition organizers confirm competitions.
-    can_admin_results? || competition.delegates.include?(self)
+    can_admin_results? || competition.staff_delegates.include?(self)
   end
 
   def can_add_and_remove_events?(competition)
@@ -830,9 +832,9 @@ class User < ApplicationRecord
 
   def can_submit_competition_results?(competition, upload_only: false)
     allowed_delegate = if upload_only
-                         competition.delegates.include?(self) || competition.trainee_delegates.include?(self)
-                       else
                          competition.delegates.include?(self)
+                       else
+                         competition.staff_delegates.include?(self)
                        end
     appropriate_role = can_admin_results? || allowed_delegate
     appropriate_time = competition.in_progress? || competition.is_probably_over?
@@ -882,9 +884,9 @@ class User < ApplicationRecord
   def can_post_delegate_report?(delegate_report, edit_only: false)
     competition = delegate_report.competition
     allowed_delegate = if edit_only
-                         competition.delegates.include?(self) || competition.trainee_delegates.include?(self)
-                       else
                          competition.delegates.include?(self)
+                       else
+                         competition.staff_delegates.include?(self)
                        end
     can_admin_results? || (allowed_delegate && !delegate_report.posted?)
   end
@@ -1107,7 +1109,7 @@ class User < ApplicationRecord
       users = User.confirmed_email.not_dummy_account
       search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
-      if ActiveRecord::Type::Boolean.new.cast(params[:only_delegates])
+      if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
         users = users.where(delegate_status: ["candidate_delegate", "delegate", "senior_delegate"])
       end
 
@@ -1189,7 +1191,7 @@ class User < ApplicationRecord
   def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
     person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     roles = registration&.roles || []
-    roles << "delegate" if competition.delegates.include?(self)
+    roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
     roles << "organizer" if competition.organizers.include?(self)
     authorized_fields = {
@@ -1280,7 +1282,6 @@ class User < ApplicationRecord
       !self.organized_competitions.empty? ||
       any_kind_of_delegate? ||
       !delegated_competitions.empty? ||
-      !trainee_delegated_competitions.empty? ||
       !competitions_announced.empty? ||
       !competitions_results_posted.empty?
   end

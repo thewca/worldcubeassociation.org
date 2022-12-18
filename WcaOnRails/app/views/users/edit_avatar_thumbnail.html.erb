@@ -25,7 +25,10 @@
         <h2><%= t '.new' %></h2>
         <%= f.previewbox avatar_sym %>
 
-        <br><%= f.submit t('.save'), class: "btn btn-primary" %>
+        <br>
+        <% if EnvVars.WCA_LIVE_SITE? %>
+          <%= f.submit t('.save'), class: "btn btn-primary" %>
+        <% end %>
       </div>
     </div>
   <% end %>

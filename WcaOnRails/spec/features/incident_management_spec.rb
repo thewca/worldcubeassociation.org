@@ -8,7 +8,7 @@ RSpec.feature "Incident Management", js: true do
   let!(:incident3) { FactoryBot.create(:incident, :resolved, title: "Custom title", tags: ["4b"]) }
 
   context "when signed in as a WRC member" do
-    let(:wrc_member) { FactoryBot.create(:user, :wrc_member) }
+    let!(:wrc_member) { FactoryBot.create(:user, :wrc_member) }
     before(:each) do
       sign_in wrc_member
     end
@@ -76,7 +76,7 @@ RSpec.feature "Incident Management", js: true do
   end
 
   context "when signed in as a Delegate" do
-    let(:delegate) { FactoryBot.create(:delegate) }
+    let!(:delegate) { FactoryBot.create(:delegate) }
     before(:each) do
       sign_in delegate
     end
@@ -110,7 +110,7 @@ RSpec.feature "Incident Management", js: true do
   end
 
   context "when signed in as a User" do
-    let(:user) { FactoryBot.create(:user) }
+    let!(:user) { FactoryBot.create(:user) }
     before(:each) do
       sign_in user
     end

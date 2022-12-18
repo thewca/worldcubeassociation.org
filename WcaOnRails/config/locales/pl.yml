@@ -440,7 +440,7 @@ pl:
         #original_hash: 28a6fbb
         currency_code: Kod waluty
         #original_hash: 2e3ed8b
-        delegate_ids: Delegat/Delegaci WCA
+        staff_delegate_ids: Delegat/Delegaci WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegat(ci) Praktykant(ci) WCA
         #original_hash: 958562e
@@ -832,7 +832,7 @@ pl:
           tego <b>w języku angielskim</b> oraz jakichkolwiek innych językach
           używanych przez twoich zawodników.
         #original_hash: b4d020f
-        delegate_ids: Delegaci WCA dla tych zawodów.
+        staff_delegate_ids: Delegaci WCA dla tych zawodów.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegaci Praktykanci WCA dla tych zawodów.
         #original_hash: 517d376

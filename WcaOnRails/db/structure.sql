@@ -798,21 +798,6 @@ CREATE TABLE `competition_tabs` (
   UNIQUE KEY `index_competition_tabs_on_display_order_and_competition_id` (`display_order`,`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `competition_trainee_delegates`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `competition_trainee_delegates` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `competition_id` varchar(191) DEFAULT NULL,
-  `trainee_delegate_id` int(11) DEFAULT NULL,
-  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_competition_trainee_delegates_on_competition_id` (`competition_id`),
-  KEY `index_competition_trainee_delegates_on_trainee_delegate_id` (`trainee_delegate_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `competition_venues`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1804,4 +1789,6 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220804193822'),
 ('20220822232936'),
 ('20220916132536'),
-('20221121111430');
+('20221121111430'),
+('20221123090104'),
+('20221123121220');

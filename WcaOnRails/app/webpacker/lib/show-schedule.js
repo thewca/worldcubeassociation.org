@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import events from './wca-data/events.js.erb';
+import { events } from './wca-data.js.erb';
 
 const dataByVenueId = {
 };

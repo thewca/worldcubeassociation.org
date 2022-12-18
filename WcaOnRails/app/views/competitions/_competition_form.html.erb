@@ -161,7 +161,7 @@
         </div>
 
         <%= f.input :information, input_html: { class: disable_form ? "" : "markdown-editor" } %>
-        <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
+        <%= f.input :staff_delegate_ids, as: :user_ids, only_staff_delegates: true %>
         <%= f.input :trainee_delegate_ids, as: :user_ids, only_trainee_delegates: true %>
         <%= f.input :organizer_ids, as: :user_ids %>
         <%= f.input :contact, hint: t('.contact_html', md: t('.supports_md_html')) %>
@@ -262,87 +262,50 @@
         <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input, currency_selector: "#competition_currency_code" %>
 
         <script>
-          var baseFeeUSD = -1;
-
-          // Note: unfortunately we cannot trigger a change on the currency
-          // code update, because we don't have access to the currency
-          // "subunit_to_unit" from the js world.
           function UpdateDues(){
-            <% countryBand = CountryBand.where(iso2: @competition.country_iso2).map(&:number)[0] %>
-            <% if countryBand.present? && countryBand > 0 %>
-              var bandFeeUSD = <%= CountryBand::BANDS[countryBand][:value] %>;
-            <% else %>
-              var bandFeeUSD = 0;
-            <% end %>
-            var pricePerCompetitor = Math.max(bandFeeUSD, baseFeeUSD) * 100;
-            var compLimit = $('select[name="competition[competitor_limit_enabled]"]').val() === "true"
-              ? $('input[name="competition[competitor_limit]"]').val() : null;
-            window.wca.cancelPendingAjaxAndAjax('currency_convert', {
-              url: '<%= currency_convert_path %>',
+
+            var obj = $("#competition-form").serializeJSON();
+            var compLimitEnabled = obj['competition[competitor_limit_enabled]']
+            var compLimit = compLimitEnabled === "true" ? obj['competition[competitor_limit]'] : null
+            var currencyCode = obj['competition[currency_code]']
+
+            window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
+              url: '<%= calculate_dues_path %>',
               data: {
-                value: compLimit === null ? pricePerCompetitor : pricePerCompetitor * compLimit,
-                from_currency: "USD",
-                to_currency: "<%= @competition.currency_code %>",
+                competitor_limit_enabled: compLimitEnabled,
+                competitor_limit: compLimit,
+                currency_code: currencyCode,
+                country_id: obj['competition[countryId]'],
+                entry_fee_cents: obj['competition[base_entry_fee_lowest_denomination]'],
               },
               success: function(data) {
-                var dues = data.formatted;
-
-                /*
-                  Currently, if base fee is -1 then there was an error while converting
-                  our base fee to USD, which would cause band fee to always be larger
-                  and we would display a wrong dues estimate based on band fee. We
-                  would rather show an error than a wrong estimate.
-                  This error is only expected upon loading up the page, when the ajax
-                  requests are somehow aborted.
-                */
-                if (baseFeeUSD == -1) {
-                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.ajax_error') %>
-                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
-                } else if (compLimit != null) {
+                if (compLimitEnabled) {
                   <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.calculated') %>
-                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
-                } else {
-                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.per_competitor') %>
-                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: data.dues_value}) + " (" + currencyCode + ")</b>");
                 }
+                else{
+                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.per_competitor') %>
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: data.dues_value}) + " (" + currencyCode + ")</b>");
+                }
+              },
+              error: function(){
+                // This error will occur if there are no available exchange rates for the selected currency, and there are quite a few of such currencies.
+                <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.ajax_error') %>
+                $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
               }
             });
           }
 
           $(function() {
+            if (!$('#dues_estimate').length) {
+              $('input[name="competition[base_entry_fee_lowest_denomination]"]').siblings('.help-block').append('<br><br><p id="dues_estimate"><b></b></p>');
+            }
+
             $('select[name="competition[competitor_limit_enabled]"]').on('change', UpdateDues);
             $('input[name="competition[competitor_limit]"]').on('change', UpdateDues);
-
-            /*
-              Placing this callback at last will let us trigger a manual 'change'
-              on the field to create a estimate of the dues when the page is loaded.
-            */
-            $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
-              if (!$('#dues_estimate').length) {
-                $(this).siblings('.help-block').append('<br><br><p id="dues_estimate"><b></b></p>');
-              }
-
-              /*
-                Different currencies keep different decimal points, and this.value only gives
-                a raw number without decimals, so we need to divide this.value by the
-                currency's subunit to convert it into actual value.
-              */
-              var subunit = <%= Money::Currency.new(@competition.currency_code).subunit_to_unit %>;
-              var moneyValue = this.value / subunit;
-
-              window.wca.cancelPendingAjaxAndAjax('currency_convert', {
-                url: '<%= currency_convert_path %>',
-                data: {
-                  value: moneyValue,
-                  from_currency: "<%= @competition.currency_code %>",
-                  to_currency: "USD",
-                },
-                success: function(data) {
-                  baseFeeUSD = data.value * 0.15;
-                  UpdateDues();
-                }
-              });
-            }).trigger('change');
+            $('select[name="competition[countryId]"]').on('change', UpdateDues);
+            $('select[name="competition[currency_code]"]').on('change', UpdateDues);
+            $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', UpdateDues).trigger('change'); //trigger() to display dues upon load
           });
         </script>
 

@@ -14,7 +14,7 @@ import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { average, best } from '../../../lib/wca-live/attempts';
 import { shouldComputeAverage, getExpectedSolveCount } from '../../../lib/helpers/results';
 import { resultUrl, competitionAllResultsUrl } from '../../../lib/requests/routes.js.erb';
-import countries from '../../../lib/wca-data/countries.js.erb';
+import { countries } from '../../../lib/wca-data.js.erb';
 import './ResultForm.scss';
 
 const roundDataFromResult = (result) => ({

@@ -109,7 +109,7 @@
 
 <div id="delegate" class="form-group delegate-selector">
   <%= label_tag(t('layouts.navigation.delegate')) %>
-  <%= text_field_tag "delegate", params[:delegate], class: "wca-autocomplete wca-autocomplete-only_one wca-autocomplete-only_delegates wca-autocomplete-users_search",
+  <%= text_field_tag "delegate", params[:delegate], class: "wca-autocomplete wca-autocomplete-only_one wca-autocomplete-only_staff_delegates wca-autocomplete-users_search",
                                  data: { data: User.where(id: params[:delegate]).to_json } %>
 </div>
 

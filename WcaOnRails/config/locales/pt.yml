@@ -475,7 +475,7 @@ pt:
         #original_hash: 28a6fbb
         currency_code: Código da moeda
         #original_hash: 2e3ed8b
-        delegate_ids: Delegado(s) da WCA
+        staff_delegate_ids: Delegado(s) da WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegado(s) WCA em Treino
         #original_hash: 958562e
@@ -498,6 +498,8 @@ pt:
         competitor_limit_reason: A razão para o limite de competidores
         #original_hash: 3c23a67
         guests_enabled: Convidados
+        #original_hash: 7d78478
+        guests_per_registration_limit: Número máximo de acompanhantes por registo
         #original_hash: 089cbfd
         receive_registration_emails: Notificar-me via email quando alguém se regista nesta competição
         #original_hash: d4aeed9
@@ -537,7 +539,7 @@ pt:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de entrada para público
         #original_hash: bb16247
-        guest_entry_status: Mensagem visível para entrada gratuita de público
+        guest_entry_status: Apresentar mensagem para entrada livre de espetadores
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Quero pedir a competidores que submetam puzzles a uma hora específica
@@ -764,12 +766,12 @@ pt:
       guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
-          Não mostrar nada (e talvez elaborar na seção "Requisitos Extra de
-          Registo")
+          Não mostrar nada (e talvez elabore na secção "Requisitos extra de
+          registo")
         #original_hash: 694bce4
-        free: '"Qualquer espectador pode comparecer gratuitamente"'
+        free: '"Qualquer espetador pode assistir gratuitamente"'
         #original_hash: 762c509
-        restricted: '"Espectadores só são permitidos como companhia de competidores"'
+        restricted: '"Espetadores só são permitidos como acompanhantes de competidores"'
   simple_form:
     #original_hash: 5397e05
     'yes': Sim
@@ -879,7 +881,7 @@ pt:
           apresentado na página principal da competição. <br/>Por favor preencha
           <b>em Inglês</b> e em qualquer outra língua que os competidores usem.
         #original_hash: b4d020f
-        delegate_ids: Delegado(s) da WCA para a competição.
+        staff_delegate_ids: Delegado(s) da WCA para a competição.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegados em Treino para a competição.
         #original_hash: 517d376
@@ -907,17 +909,14 @@ pt:
         external_registration_page: >-
           A página onde os competidores têm que se registar para a competição.
           Tem que ser uma ligação http(s) válida.
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           A taxa base de registo para a competição. Será mostrada na página de
           informações e de registo se for usada. Se for colocada a 0, aparecerá
           uma frase a indicar que os registos serão aceites de graça.
           <br><br><b>AVISO: A seguinte estimativa de Quotas da WCA é apenas uma
           aproximação com base nas taxas de câmbio atuais e não é de forma
-          alguma juridicamente vinculativa para o pagamento de
-          quotas.</b><br>Clique em "Atualizar competição" após alterar o código
-          da moeda para sincronizá-lo com a estimativa. Se não houver taxas de
-          câmbio disponíveis para a moeda selecionada, nada será exibido.
+          alguma juridicamente vinculativa para o pagamento de quotas.</b>
         #original_hash: 9735ddf
         currency_code: O código da moeda para taxas.
         #original_hash: da39a3e
@@ -954,6 +953,11 @@ pt:
         competitor_limit_reason: >-
           Qual é a razão para o limite de competidores? Por favor preencher em
           Inglês!
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          O número máximo de convidados por competidor permitido nesta
+          competição. O registo com demasiados convidados será bloqueado. Deixe
+          em branco se não houver limite.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -2772,9 +2776,14 @@ pt:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        free: Qualquer espectador pode comparecer gratuitamente.
+        free: Qualquer espetador pode assistir gratuitamente.
         #original_hash: f1e6aef
         restricted: Espectadores só são permitidos como companhia para competidores.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Competidores não podem trazer convidados.
+        one: Competidores podem trazer no máximo 1 convidado.
+        other: 'Competidores podem trazer no máximo %{count} convidados.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Competidores apenas se podem registar em eventos para os quais se
@@ -3057,10 +3066,10 @@ pt:
         calculated: 'As Quotas WCA estimadas para %{limit} competidores são %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'As Quotas WCA estimadas por competidor são %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Ocorreu um erro na estimativa de Quotas, defina como zero e insira
-          novamente a taxa base de registo.
+          Ocorreu um erro na estimativa de Quotas, possivelmente porque não há
+          taxas de câmbio disponíveis para a moeda selecionada.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3125,6 +3134,10 @@ pt:
       series_distance_days: >-
         A competição está marcada a demasiados dias de distância de
         %{competition}.
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: >-
+        Deve perguntar sobre convidados se um limite de convidados for
+        especificado.
     new:
       #original_hash: 1208df7
       create_competition: Criar competição

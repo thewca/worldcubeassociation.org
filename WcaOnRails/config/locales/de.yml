@@ -478,7 +478,7 @@ de:
         #original_hash: 28a6fbb
         currency_code: Währungscode
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-Delegierte
+        staff_delegate_ids: WCA-Delegierte
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Trainee Delegate(s)
         #original_hash: 958562e
@@ -501,6 +501,8 @@ de:
         competitor_limit_reason: Der Grund für das Teilnehmerlimit
         #original_hash: 3c23a67
         guests_enabled: Gäste
+        #original_hash: 7d78478
+        guests_per_registration_limit: Maximale Anzahl Gäste pro Anmeldung
         #original_hash: 089cbfd
         receive_registration_emails: >-
           Benachrichtige mich per E-Mail, wenn sich jemand für diesen Wettbewerb
@@ -888,7 +890,7 @@ de:
           <b>Englisch</b> und in jeder anderen Sprache, die die Teilnehmer
           sprechen, aus.
         #original_hash: b4d020f
-        delegate_ids: WCA-Delegierte des Wettbewerbs
+        staff_delegate_ids: WCA-Delegierte des Wettbewerbs
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Trainee Delegate für diesen Wettbewerb.
         #original_hash: 517d376
@@ -914,7 +916,7 @@ de:
         external_registration_page: >-
           Die Seite, auf der Teilnehmer sich für die Competition anmelden
           können. Dies muss eine gültige http(s) Adresse sein.
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           Eintrittsgebühr für den Wettbewerb. Die Eintrittsgebühr wird auf der
           Infoseite des Wettbewerbs, sowie der Anmeldeseite (falls genutzt)
@@ -922,10 +924,7 @@ de:
           dass der Eintritt frei ist.<br><br><b>DISCLAIMER: Die folgende Angabe
           der WCA-Gebühren ist ausschließlich eine Schätzung auf Basis der
           aktuellen Umrechnungsraten und in keinster Weise rechtlich verbindlich
-          für die Zahlung der Gebühren.</b><br>Klicke "Wettbewerb
-          aktualisieren", um die Schätzung nach einer Änderung des Währungscodes
-          zu synchronisieren. Falls es keine verfügbaren Umrechnungsraten für
-          die ausgewählte Währung gibt, wird nichts angezeigt.
+          für die Zahlung der Gebühren.</b>
         #original_hash: 9735ddf
         currency_code: Der Währungscode für Eintrittsgebühren.
         #original_hash: da39a3e
@@ -962,6 +961,11 @@ de:
         competitor_limit_reason: >-
           Was ist der Grund für das Teilnehmerlimit? Bitte fülle dieses Feld in
           Englisch aus.
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          Die maximal erlaubte Anzahl von Gästen pro Anmeldung bei diesem
+          Wettbewerb. Anmeldungen mit zu vielen Gästen werden blockiert. Lasse
+          dies frei, wenn es keine Begrenzung gibt.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -1691,6 +1695,12 @@ de:
       manage_auth_app: Autorisierte Anwendungen verwalten
       #original_hash: acac109
       media_submission: Medien Einreichung
+      #original_hash: cf01481
+      privacy: Datenschutz
+      #original_hash: 4c4a2e8
+      disclaimer: Haftungsausschluss
+      #original_hash: d561f1a
+      find_us: Finde uns
   homepage:
     #original_hash: 824d76b
     learn_more: Erfahre mehr
@@ -2023,8 +2033,8 @@ de:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Alle Profilbilder sollen Bilder echter Personen sein.
-        #original_hash: 9126b0c
-        '2': Die abgebildete Person musst Du sein.
+        #original_hash: b12d293
+        '2': Die abgebildete Person muss dein aktuelles Selbst sein.
         #original_hash: de9b742
         '3': >-
           Wenn mehrere Personen auf dem Bild auftauchen, muss klar sein, wer
@@ -2862,6 +2872,11 @@ de:
         free: Jeder Gast kann den Wettbewerb kostenlos besuchen.
         #original_hash: f1e6aef
         restricted: Gäste werden nur als Begleitpersonen von Teilnehmern zugelassen.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Teilnehmer dürfen keine Gäste mitbringen.
+        one: Teilnehmer dürfen maximal einen Gast mitbringen.
+        other: 'Teilnehmer dürfen maximal %{count} Gäste mitbringen.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Teilnehmer dürfen sich nur für Events anmelden, für die sie bereits
@@ -3148,10 +3163,10 @@ de:
         calculated: 'Die geschätzten WCA-Gebühren für %{limit} Teilnehmer sind %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'Die geschätzten WCA-Gebühren pro Teilnehmer sind %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Es gibt einen Fehler bei der Abschätzung der Gebühren, bitte setze die
-          Grundgebühr auf null und gebe sie dann erneut ein
+          Es gibt einen Fehler bei der Abschätzung der Gebühren, möglicherweise
+          weil es keine Wechselkurse für die ausgewählte Währung gibt.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3220,6 +3235,10 @@ de:
       series_distance_km: 'Dieser Wettbewerb ist zu weit von %{competition} entfernt.'
       #original_hash: 4a5d7c5
       series_distance_days: 'Dieser Wettbewerb ist zu viele Tage von %{competition} entfernt.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: >-
+        Es muss nach Gästen gefragt werden, wenn eine Begrenzung festgelegt
+        wurde.
     new:
       #original_hash: 1208df7
       create_competition: Wettbewerb erstellen
@@ -3270,6 +3289,8 @@ de:
       delegates: Delegierte
       #original_hash: eb9a4bc
       date: Datum
+      #original_hash: 6c82e6d
+      time: Zeit
       #original_hash: d219c68
       location: Ort
       #original_hash: 4232080
@@ -3292,6 +3313,17 @@ de:
       show_events: Zeige Disziplinen
       #original_hash: 0df66f7
       hide_events: Blende Disziplinen aus
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Überlappende Anmeldezeiträume (Beginn innerhalb von %{hours} Stunden)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Keine überlappenden Anmeldezeiträume!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: >-
+        Du hast noch kein Datum für den Anmeldebeginn dieses Wettbewerbs
+        festgelegt.
+      #original_hash: c38824e
+      opens_registration_at: öffnet die Anmeldung um
     #original_hash: 06b01c4
     announcements: Ankündigungen
     #original_hash: a2b80b0
@@ -3534,6 +3566,15 @@ de:
       title: Rekorde
     #original_hash: e02fccb
     last_updated_html: 'Zuletzt aktualisiert: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      Bitte beachte, dass manche Filter (z.B. zurückliegende Jahre) momentan
+      nicht zur Verfügung stehen. Falls du Erfahrung mit SQL-Optimierung hast,
+      kontaktiere bitte das WST!
+    #original_hash: e3710ed
+    tooltip_no_years: 'Unsere Datenbank ist zu groß, um historische Daten anzuzeigen'
+    #original_hash: 357094b
+    tooltip_no_quantities: 'Unsere Datenbank ist zu groß, um lange Rankings zu berechnen'
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -4653,6 +4694,11 @@ de:
           können von einem oder mehreren TNoodle JSON Dateien importiert werden.
           Die Ergebnisse können für die Einreichung auf der WCA Webseite
           exportiert werden.
+      groups:
+        #original_hash: 311a3f6
+        title: Competition groups
+        #original_hash: 74a0926
+        description: Zeige Gruppen eines beliebigen laufenden Wettbewerbs
   logo:
     #original_hash: c72c969
     title: WCA-Logo
@@ -4827,6 +4873,8 @@ de:
       people: Personen
       #original_hash: 6db75ea
       advanced_search: Erweiterte Suche
+      #original_hash: 5e326b1
+      incidents: Zwischenfälle
       #original_hash: a0ca0c3
       posts: Beiträge
       #original_hash: 9d7ea9c
@@ -4842,6 +4890,8 @@ de:
         people: Keine Personen gefunden für
         #original_hash: c6a04aa
         posts: Keine Beiträge gefunden für
+        #original_hash: 3499e7e
+        incidents: Keine Zwischenfälle gefunden für
         #original_hash: 76a6bf1
         regulations_and_guidelines: Keine Regeln oder Richtlinien gefunden für
   incidents_log:
@@ -4849,6 +4899,8 @@ de:
     i18n_disclaimer: >-
       Bitte beachte dass der Bereich für Zwischenfälle nur auf Englisch
       verfügbar ist, die Inhalte wurden nicht übersetzt.
+    #original_hash: 2c23c1a
+    incident: 'Zwischenfall:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Über die Regeln
