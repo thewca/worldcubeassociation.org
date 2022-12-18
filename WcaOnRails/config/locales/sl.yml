@@ -361,7 +361,7 @@ sl:
         #original_hash: 28a6fbb
         currency_code: Koda valute
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegat(i)
+        staff_delegate_ids: WCA Delegat(i)
         #original_hash: 958562e
         organizer_ids: Organizator(ji)
         #original_hash: b37456c
@@ -643,7 +643,7 @@ sl:
           Informacije o omejitvi tekmovalcev, vstopnini za tekmovalce in
           gledalce in ostale relevantne informacije.
         #original_hash: b4d020f
-        delegate_ids: WCA Delegati tekmovanja.
+        staff_delegate_ids: WCA Delegati tekmovanja.
         #original_hash: 517d376
         organizer_ids: Organizatorji tekmovanja (za vnos je potreben uporabniški račun).
         #original_hash: cabe7fb

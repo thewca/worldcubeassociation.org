@@ -480,7 +480,7 @@ cs:
         #original_hash: 28a6fbb
         currency_code: Kód měny
         #original_hash: 2e3ed8b
-        delegate_ids: Delegát(i) WCA
+        staff_delegate_ids: Delegát(i) WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Trainee Delegát(i)
         #original_hash: 958562e
@@ -883,7 +883,7 @@ cs:
           hlavní stránce soutěže. <br/>Prosíme, napište to <b>v angličtině</b> a
           v jakémkoli dalším jazyce, kterým vaši soutěžící mluví.
         #original_hash: b4d020f
-        delegate_ids: Delegáti WCA pro tuto soutěž.
+        staff_delegate_ids: Delegáti WCA pro tuto soutěž.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Trainee delegáti pro tuto soutěž
         #original_hash: 517d376

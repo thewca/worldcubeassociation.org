@@ -475,7 +475,7 @@ sv:
         #original_hash: 28a6fbb
         currency_code: Valutakod
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-Delegat(er)
+        staff_delegate_ids: WCA-Delegat(er)
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA-Trainee-Delegat(er)
         #original_hash: 958562e
@@ -876,7 +876,7 @@ sv:
           tävlingens huvudsida. <br/>Fyll i det här <b>på engelska</b>< och
           eventuella andra språk dina tävlande talar.>
         #original_hash: b4d020f
-        delegate_ids: WCA-delegater för tävlingen.
+        staff_delegate_ids: WCA-delegater för tävlingen.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA-Trainee-Delegater för tävlingen.
         #original_hash: 517d376

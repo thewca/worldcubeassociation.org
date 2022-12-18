@@ -477,7 +477,7 @@ eo:
         #original_hash: 28a6fbb
         currency_code: Valuta kodo
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-Delegito(j)
+        staff_delegate_ids: WCA-Delegito(j)
         #original_hash: c0ddcd6
         trainee_delegate_ids: Trejnanta(j) WCA-Delegito(j)
         #original_hash: 958562e
@@ -876,7 +876,7 @@ eo:
           ĉefpaĝo de la konkurso. <br/>Bonvolu plenigi tion <b>en la angla</b>
           kaj en ĉiuj lingvoj parolataj de viaj konkursantoj.
         #original_hash: b4d020f
-        delegate_ids: WCA-Delegitoj de la konkurso.
+        staff_delegate_ids: WCA-Delegitoj de la konkurso.
         #original_hash: cb9882c
         trainee_delegate_ids: Trejnanta(j) WCA-Delegito(j) de la konkurso.
         #original_hash: 517d376

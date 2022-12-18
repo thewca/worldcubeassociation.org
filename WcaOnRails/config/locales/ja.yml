@@ -419,7 +419,7 @@ ja:
         #original_hash: 28a6fbb
         currency_code: 通貨コード
         #original_hash: 2e3ed8b
-        delegate_ids: WCA 代理人
+        staff_delegate_ids: WCA 代理人
         #original_hash: c0ddcd6
         trainee_delegate_ids: フォーラム
         #original_hash: 958562e
@@ -755,7 +755,7 @@ ja:
           大会の概要 (例 : UT Open 2010 is the first students-organized competition in
           Japan.)
         #original_hash: b4d020f
-        delegate_ids: 'WCA 代理人 (例 : Yuji Suse)'
+        staff_delegate_ids: 'WCA 代理人 (例 : Yuji Suse)'
         #original_hash: cb9882c
         trainee_delegate_ids: この大会の代理人候補
         #original_hash: 517d376

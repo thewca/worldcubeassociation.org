@@ -48,13 +48,7 @@ class CompetitionsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
 
   private def assign_delegate(competition)
-    if current_user.any_kind_of_delegate?
-      if current_user.trainee_delegate?
-        competition.trainee_delegates |= [current_user]
-      else
-        competition.delegates |= [current_user]
-      end
-    end
+    competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
   end
 
   def new
@@ -573,7 +567,6 @@ class CompetitionsController < ApplicationController
   def my_competitions
     competition_ids = current_user.organized_competitions.pluck(:competition_id)
     competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
-    competition_ids.concat(current_user.trainee_delegated_competitions.pluck(:competition_id))
     registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
     registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
     @registered_for_by_competition_id = registrations.uniq.to_h do |r|
@@ -640,7 +633,7 @@ class CompetitionsController < ApplicationController
         :start_date,
         :end_date,
         :information,
-        :delegate_ids,
+        :staff_delegate_ids,
         :trainee_delegate_ids,
         :organizer_ids,
         :contact,

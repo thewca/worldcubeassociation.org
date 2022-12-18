@@ -413,7 +413,7 @@ vi:
         #original_hash: 28a6fbb
         currency_code: Mã tiền tệ
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegate
+        staff_delegate_ids: WCA Delegate
         #original_hash: 958562e
         organizer_ids: Người tổ chức
         #original_hash: b37456c
@@ -772,7 +772,7 @@ vi:
           thị trên trang chính của giải đấu. <br/>Vui lòng điền phần này <b>bằng
           tiếng Anh</b> và bất kỳ ngôn ngữ nào thí sinh của bạn sử dụng.
         #original_hash: b4d020f
-        delegate_ids: WCA Delegate cho giải đấu.
+        staff_delegate_ids: WCA Delegate cho giải đấu.
         #original_hash: 517d376
         organizer_ids: Ban tổ chức giải đấu (cần có tài khoản để được liệt kê ở đây).
         #original_hash: cabe7fb

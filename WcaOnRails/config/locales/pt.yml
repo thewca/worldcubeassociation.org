@@ -475,7 +475,7 @@ pt:
         #original_hash: 28a6fbb
         currency_code: Código da moeda
         #original_hash: 2e3ed8b
-        delegate_ids: Delegado(s) da WCA
+        staff_delegate_ids: Delegado(s) da WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegado(s) WCA em Treino
         #original_hash: 958562e
@@ -881,7 +881,7 @@ pt:
           apresentado na página principal da competição. <br/>Por favor preencha
           <b>em Inglês</b> e em qualquer outra língua que os competidores usem.
         #original_hash: b4d020f
-        delegate_ids: Delegado(s) da WCA para a competição.
+        staff_delegate_ids: Delegado(s) da WCA para a competição.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegados em Treino para a competição.
         #original_hash: 517d376

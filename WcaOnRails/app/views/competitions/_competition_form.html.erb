@@ -161,7 +161,7 @@
         </div>
 
         <%= f.input :information, input_html: { class: disable_form ? "" : "markdown-editor" } %>
-        <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
+        <%= f.input :staff_delegate_ids, as: :user_ids, only_staff_delegates: true %>
         <%= f.input :trainee_delegate_ids, as: :user_ids, only_trainee_delegates: true %>
         <%= f.input :organizer_ids, as: :user_ids %>
         <%= f.input :contact, hint: t('.contact_html', md: t('.supports_md_html')) %>

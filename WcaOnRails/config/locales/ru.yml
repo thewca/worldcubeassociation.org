@@ -485,7 +485,7 @@ ru:
         #original_hash: 28a6fbb
         currency_code: Код валюты
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Делегат(ы)
+        staff_delegate_ids: WCA Делегат(ы)
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Делегат(ы)-стажёр(ы)
         #original_hash: 958562e
@@ -898,7 +898,7 @@ ru:
           заполняйте это поле <b>на английском</b> и на других языках, на
           которых говорят ваши участники.
         #original_hash: b4d020f
-        delegate_ids: WCA Делегат(ы) для этого соревнования.
+        staff_delegate_ids: WCA Делегат(ы) для этого соревнования.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Делегат(ы)-стажёр(ы) для этого соревнования.
         #original_hash: 517d376

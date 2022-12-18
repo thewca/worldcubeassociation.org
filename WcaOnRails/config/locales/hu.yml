@@ -366,7 +366,7 @@ hu:
         #original_hash: 28a6fbb
         currency_code: Pénznem kód
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegált(ak)
+        staff_delegate_ids: WCA Delegált(ak)
         #original_hash: 958562e
         organizer_ids: Szervező(k)
         #original_hash: b37456c
@@ -680,7 +680,7 @@ hu:
           főoldalán lesz látható. <br/>Kérlek ezt <>angolul</b> mindenképp
           töltsd ki és bármilyen olyan nyelven, amit a versenyzők beszélnek.
         #original_hash: b4d020f
-        delegate_ids: A verseny WCA Delegáltjai
+        staff_delegate_ids: A verseny WCA Delegáltjai
         #original_hash: 517d376
         organizer_ids: >-
           A verseny szervezői (szükséges, hogy rendelkezzenek felszanálóval a

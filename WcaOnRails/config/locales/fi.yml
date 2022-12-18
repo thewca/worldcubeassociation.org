@@ -469,7 +469,7 @@ fi:
         #original_hash: 28a6fbb
         currency_code: Valuuttatunnus
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-delegaatti/delegaatit
+        staff_delegate_ids: WCA-delegaatti/delegaatit
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegaattiharjoittelijat
         #original_hash: 958562e
@@ -854,7 +854,7 @@ fi:
           <br/>Kirjoita tämä <b>englanniksi<b/> ja muilla kilpailijoiden
           todennäköisesti puhumilla kielillä.
         #original_hash: b4d020f
-        delegate_ids: Kilpailun WCA-delegaatit.
+        staff_delegate_ids: Kilpailun WCA-delegaatit.
         #original_hash: cb9882c
         trainee_delegate_ids: Kilpailun delegaattiharjoittelijat
         #original_hash: 517d376

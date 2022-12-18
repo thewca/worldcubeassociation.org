@@ -439,7 +439,7 @@ uk:
         #original_hash: 28a6fbb
         currency_code: Валютний код
         #original_hash: 2e3ed8b
-        delegate_ids: Делегат(и) WCA
+        staff_delegate_ids: Делегат(и) WCA
         #original_hash: 958562e
         organizer_ids: Організатор(и)
         #original_hash: b37456c
@@ -808,7 +808,7 @@ uk:
           основній сторінці змагання. <br/>Будь ласка, заповніть її як
           <strong>українською</strong>, так і <strong>англійською</strong>.
         #original_hash: b4d020f
-        delegate_ids: Делегати WCA на змаганнях.
+        staff_delegate_ids: Делегати WCA на змаганнях.
         #original_hash: 517d376
         organizer_ids: Організатори змагань (вони повинні мати аккаунти на сайті WCA).
         #original_hash: cabe7fb

@@ -47,9 +47,9 @@
         </dd>
       <% end %>
 
-      <dt><%= t('.delegate', count: competition.delegates.length + competition.trainee_delegates.length) %></dt>
+      <dt><%= t('.delegate', count: competition.delegates.length) %></dt>
       <dd>
-        <%= users_to_sentence competition.delegates + competition.trainee_delegates, include_profile: true %>
+        <%= users_to_sentence competition.delegates, include_profile: true %>
       </dd>
     </dl>
 

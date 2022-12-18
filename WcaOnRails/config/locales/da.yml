@@ -430,7 +430,7 @@ da:
         #original_hash: 28a6fbb
         currency_code: Valuta kode
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegeret/Delegerede
+        staff_delegate_ids: WCA Delegeret/Delegerede
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Lærlingdelegerede
         #original_hash: 958562e
@@ -812,7 +812,7 @@ da:
           konkurrencens forside. <br/>Udfyld venligst det her på engelsk</b> og
           andre sprog som dine deltagere snakker.
         #original_hash: b4d020f
-        delegate_ids: WCA Delegerede for konkurrencen.
+        staff_delegate_ids: WCA Delegerede for konkurrencen.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Lærlingdelegerede for konkurrencen.
         #original_hash: 517d376

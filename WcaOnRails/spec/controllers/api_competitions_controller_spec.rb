@@ -123,7 +123,7 @@ RSpec.describe Api::V0::CompetitionsController do
       let(:organizer1) { FactoryBot.create(:user) }
       let(:organizer2) { FactoryBot.create(:user) }
       let!(:competition) {
-        FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2], trainee_delegates: [trainee_delegate1], organizers: [organizer1, organizer2])
+        FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2, trainee_delegate1], organizers: [organizer1, organizer2])
       }
       let!(:other_comp) { FactoryBot.create(:competition) }
 

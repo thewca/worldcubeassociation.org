@@ -59,12 +59,6 @@
               <% end %>
             </div>
             <div>
-              <% if @reassign_wca_id.account1_user.trainee_delegated_competitions.any? %>
-                <b>Delegated Competitions:</b>
-                <%= @reassign_wca_id.account1_user.trainee_delegated_competitions.map(&:name).join(",") %>
-              <% end %>
-            </div>
-            <div>
               <% if @reassign_wca_id.account1_user.competitions_announced.any? %>
                 <b>Announced Competitions:</b>
                 <%= @reassign_wca_id.account1_user.competitions_announced.map(&:name).join(",") %>
@@ -105,12 +99,6 @@
               <% if @reassign_wca_id.account2_user.delegated_competitions.any? %>
                 <b>Delegated Competitions:</b>
                 <%= @reassign_wca_id.account2_user.delegated_competitions.map(&:name).join(", ") %>
-              <% end %>
-            </div>
-            <div>
-              <% if @reassign_wca_id.account2_user.trainee_delegated_competitions.any? %>
-                <b>Delegated Competitions:</b>
-                <%= @reassign_wca_id.account2_user.trainee_delegated_competitions.map(&:name).join(", ") %>
               <% end %>
             </div>
             <div>

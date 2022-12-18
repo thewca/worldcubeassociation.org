@@ -704,7 +704,7 @@ RSpec.describe User, type: :model do
       organizer = FactoryBot.create :user
       delegate = FactoryBot.create :user # Intentionally not assigning a Delegate role as it is possible to Delegate a competition without being a current Delegate
       trainee_delegate = FactoryBot.create :user
-      FactoryBot.create :competition, organizers: [organizer], delegates: [delegate], trainee_delegates: [trainee_delegate]
+      FactoryBot.create :competition, organizers: [organizer], delegates: [delegate, trainee_delegate]
       expect(organizer.is_special_account?).to eq true
       expect(delegate.is_special_account?).to eq true
       expect(trainee_delegate.is_special_account?).to eq true

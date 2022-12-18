@@ -464,7 +464,7 @@ zh-TW:
         #original_hash: 28a6fbb
         currency_code: 貨幣代碼
         #original_hash: 2e3ed8b
-        delegate_ids: WCA代表
+        staff_delegate_ids: WCA代表
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA 實習代表
         #original_hash: 958562e
@@ -817,7 +817,7 @@ zh-TW:
         #original_hash: bb470cc
         information: 參賽者須知的重要資訊，將會顯示在比賽主頁面。<br/>請用 <b>英文</b> 和您當地參賽者使用的語言填寫此欄。
         #original_hash: b4d020f
-        delegate_ids: 本場比賽的WCA代表。
+        staff_delegate_ids: 本場比賽的WCA代表。
         #original_hash: cb9882c
         trainee_delegate_ids: 比賽的WCA實習代表。
         #original_hash: 517d376

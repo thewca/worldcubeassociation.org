@@ -426,7 +426,7 @@ nl:
         #original_hash: 28a6fbb
         currency_code: Valutacode
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-delegate(s)
+        staff_delegate_ids: WCA-delegate(s)
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Trainee Delegate(s)
         #original_hash: 958562e
@@ -810,7 +810,7 @@ nl:
           deelnemers en toeschouwers, en andere details die relevant zijn voor
           mensen die zijn geïnteresseerd om deel te nemen of te komen kijken.
         #original_hash: b4d020f
-        delegate_ids: WCA-delegates van de wedstrijd.
+        staff_delegate_ids: WCA-delegates van de wedstrijd.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Trainee Delegates voor deze wedstrijd
         #original_hash: 517d376
