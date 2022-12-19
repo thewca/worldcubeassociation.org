@@ -881,7 +881,7 @@ pt:
           apresentado na página principal da competição. <br/>Por favor preencha
           <b>em Inglês</b> e em qualquer outra língua que os competidores usem.
         #original_hash: b4d020f
-        staff_delegate_ids: Delegado(s) da WCA para a competição.
+        staff_delegate_ids: Delegados da WCA para a competição.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegados em Treino para a competição.
         #original_hash: 517d376
@@ -1660,6 +1660,12 @@ pt:
       manage_auth_app: Gerir aplicações autorizadas
       #original_hash: acac109
       media_submission: Submissão de média
+      #original_hash: cf01481
+      privacy: Privacidade
+      #original_hash: 4c4a2e8
+      disclaimer: Isenção de Responsabilidade
+      #original_hash: d561f1a
+      find_us: Encontre-nos
   homepage:
     #original_hash: 824d76b
     learn_more: Saber mais
@@ -4556,6 +4562,11 @@ pt:
           Live), uma folha de cálculo ou um ficheiro WCIF isolado. Importa
           embaralhamentos de um ou mais ficheiros json do TNoodle. Exporta
           resultados para o formato apropriado para a submissão à WCA.
+      groups:
+        #original_hash: 311a3f6
+        title: Grupos de competição
+        #original_hash: 74a0926
+        description: Ver grupos de competição para qualquer competição em andamento
   logo:
     #original_hash: c72c969
     title: Logótipo da WCA
