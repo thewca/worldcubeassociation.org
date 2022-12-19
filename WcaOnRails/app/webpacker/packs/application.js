@@ -8,7 +8,6 @@
 
 import '../lib/image-preview';
 import '../lib/polyfills';
-import '../lib/incidents-log';
 import autosize from 'autosize';
 import Rails from '@rails/ujs';
 import {

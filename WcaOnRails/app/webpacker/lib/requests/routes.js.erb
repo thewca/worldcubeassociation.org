@@ -11,7 +11,26 @@ export const postsUrl = (page, format = 'json') => {
   return `<%= CGI.unescape(Rails.application.routes.url_helpers.posts_path(format: "${format}")) %>?page=${page}`;
 };
 
+export const incidentsUrl = (perPage, page, tags = undefined, searchString = undefined, competitions = undefined, format = 'json') => {
+  const searchParams = new URLSearchParams(`per_page=${perPage}&page=${page}`);
+  if (tags && tags.length > 0) {
+    searchParams.append(`tags`, `${tags}`);
+  }
+  if (competitions) {
+    searchParams.append(`competitions`, `${competitions}`);
+  }
+  if (searchString) {
+    searchParams.append(`q`, searchString);
+  }
+   return `<%= CGI.unescape(Rails.application.routes.url_helpers.incidents_path(format: "${format}")) %>?${searchParams.toString()}`;
+}
+
+export const newIncidentUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.new_incident_path)%>`;
+export const incidentUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.incident_path("${id}"))%>`;
+
 export const competitionUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_path("${id}"))%>`;
+
+export const competitionReportUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.delegate_report_path("${id}"))%>`;
 
 export const competitionApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${id}"))%>`;
 
