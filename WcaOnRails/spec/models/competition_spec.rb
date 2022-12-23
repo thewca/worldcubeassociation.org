@@ -1295,4 +1295,14 @@ RSpec.describe Competition do
       expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["must be less than or equal to 100"])
     end
   end
+
+  context "has valid schedule" do
+    let(:competition) { FactoryBot.create :competition, :with_valid_schedule }
+
+    it "ics export includes all rounds" do
+      competition.rounds.map(&:name).each do |r|
+        expect(competition.to_ics.events.map { |e| e.summary.to_s }).to include(r)
+      end
+    end
+  end
 end
