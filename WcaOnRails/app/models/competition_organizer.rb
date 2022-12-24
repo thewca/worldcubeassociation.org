@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class CompetitionOrganizer < ApplicationRecord
-  belongs_to :organizer, class_name: "User"
-  validates_presence_of :organizer
+  include RegistrationNotifications
 
+  belongs_to :organizer, class_name: "User"
   belongs_to :competition
-  validates_presence_of :competition
+
+  alias_method :user, :organizer
 end

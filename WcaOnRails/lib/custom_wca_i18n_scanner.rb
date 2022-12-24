@@ -41,6 +41,11 @@ unless Rails.env.production?
       text = read_file(path)
       retval = []
 
+      if text.match?(/^<div class="nested-fields">/)
+        # for the moment, it's too hard to resolve nested _fields.erb.html forms
+        return retval
+      end
+
       # First scan for inputs (or labels for inputs) that are not hidden
       text.scan(/^\s*<%= f.(input|label|input_field) :(\w+)(?!.*hidden)(.*)%>/) do |_, attribute, input_params|
         # 'absolute_key' returns something that we assume looks like model.(.*).attribute

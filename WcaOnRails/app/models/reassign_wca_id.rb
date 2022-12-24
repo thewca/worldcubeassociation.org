@@ -81,9 +81,6 @@ class ReassignWcaId
       # Update Delegated Competitions
       CompetitionDelegate.where(delegate_id: account1_user.id).update_all(delegate_id: account2_user.id)
 
-      # Update Trainee Delegated Competitions
-      CompetitionTraineeDelegate.where(trainee_delegate_id: account1_user.id).update_all(trainee_delegate_id: account2_user.id)
-
       # Update Competitions Results Posted By
       Competition.where(results_posted_by: account1_user.id).update_all(results_posted_by: account2_user.id)
 

@@ -413,7 +413,7 @@ vi:
         #original_hash: 28a6fbb
         currency_code: Mã tiền tệ
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegate
+        staff_delegate_ids: WCA Delegate
         #original_hash: 958562e
         organizer_ids: Người tổ chức
         #original_hash: b37456c
@@ -446,8 +446,6 @@ vi:
         competition_events: Nội dung
         #original_hash: 71c8461
         enable_donations: Tôi muốn tiếp nhận quyên góp ngoài việc thu lệ phí thi
-        #original_hash: 4baf44b
-        championship_type: Kiểu thi đấu
         #original_hash: 556fda0
         extra_registration_requirements: Yêu cầu thêm khi đăng ký
         #original_hash: 2529d04
@@ -476,6 +474,9 @@ vi:
         event_restrictions: Tôi muốn giới hạn thí sinh không được đăng ký một tổ hợp nội dung
         #original_hash: 4bf194c
         event_restrictions_reason: Chi tiết lý do giới hạn nội dung đăng ký
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Kiểu thi đấu
       registration:
         #original_hash: 3c23a67
         guests: Khách mời
@@ -771,7 +772,7 @@ vi:
           thị trên trang chính của giải đấu. <br/>Vui lòng điền phần này <b>bằng
           tiếng Anh</b> và bất kỳ ngôn ngữ nào thí sinh của bạn sử dụng.
         #original_hash: b4d020f
-        delegate_ids: WCA Delegate cho giải đấu.
+        staff_delegate_ids: WCA Delegate cho giải đấu.
         #original_hash: 517d376
         organizer_ids: Ban tổ chức giải đấu (cần có tài khoản để được liệt kê ở đây).
         #original_hash: cabe7fb
@@ -2306,22 +2307,23 @@ vi:
       competitions:
         zero: Không có giải đấu
         other: '%{count} giải đấu'
-      #original_hash: e3528ec
-      label: 'Giải đấu gần khu vực này (trong vòng %{days} ngày và %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Trong vòng %{days} ngày'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} trong vòng %{kms} km và %{days} ngày.'
+      #original_hash: 9eb8f46
+      within: 'Trong vòng %{days} ngày'
+      #original_hash: d97d1ee
+      show: Hiển thị
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Giải đấu gần khu vực này (trong vòng %{days} ngày và %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Không có giải đấu quanh khu vực này!
       #original_hash: 7e76950
       no_date_yet: Bạn chưa chọn ngày cho giải đấu.
       #original_hash: 82a95d2
       no_location_yet: Bạn chưa chọn địa điểm cho giải đấu.
-      #original_hash: 9eb8f46
-      within: 'Trong vòng %{days} ngày'
-      #original_hash: d97d1ee
-      show: Hiển thị
       #original_hash: 709a232
       name: Tên
       #original_hash: adc24b7

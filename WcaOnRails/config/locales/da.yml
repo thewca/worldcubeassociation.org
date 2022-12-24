@@ -430,7 +430,7 @@ da:
         #original_hash: 28a6fbb
         currency_code: Valuta kode
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegeret/Delegerede
+        staff_delegate_ids: WCA Delegeret/Delegerede
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Lærlingdelegerede
         #original_hash: 958562e
@@ -467,8 +467,6 @@ da:
         enable_donations: >-
           Jeg vil give mulighed for donationer oven i at indsamle
           deltagergebyrene
-        #original_hash: 4baf44b
-        championship_type: Mesterskabs type
         #original_hash: 556fda0
         extra_registration_requirements: Ekstra tilmeldingskrav
         #original_hash: 2529d04
@@ -488,7 +486,7 @@ da:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Indgangsgebyr for tilskuere
         #original_hash: bb16247
-        free_guest_entry_status: Vis tekst om at det er gratis for gæster
+        guest_entry_status: Vis tekst om at det er gratis for gæster
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Jeg vil gerne have at deltagerne skal aflevere deres terninger på et
@@ -509,6 +507,9 @@ da:
         event_restrictions_reason: Årsagen og detaljerne for brugen af restriktion af discipliner
         #original_hash: 3c24bd2
         main_event_id: Hoveddisciplinen
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Mesterskabs type
       registration:
         #original_hash: 3c23a67
         guests: Gæster
@@ -696,13 +697,13 @@ da:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Vis ikke noget (du burde uddybe hvorfor i sektionen om tilmeldingskrav
           nedenfor)
         #original_hash: 694bce4
-        anyone: '"Alle tilskuere kan se med gratis"'
+        free: '"Alle tilskuere kan se med gratis"'
         #original_hash: 762c509
         restricted: '"Tilskuere er kun tilladte som ledsagere af en deltager"'
   simple_form:
@@ -811,7 +812,7 @@ da:
           konkurrencens forside. <br/>Udfyld venligst det her på engelsk</b> og
           andre sprog som dine deltagere snakker.
         #original_hash: b4d020f
-        delegate_ids: WCA Delegerede for konkurrencen.
+        staff_delegate_ids: WCA Delegerede for konkurrencen.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Lærlingdelegerede for konkurrencen.
         #original_hash: 517d376
@@ -924,7 +925,7 @@ da:
           managed through this website. If this is set to 0, a sentence of your
           choice will be displayed about the spectator policy.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2617,7 +2618,7 @@ da:
       guests_pay: 'Det koster %{guests_base_fee} for tilskuere.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Enhver tilskuere kan se med gratis
+        free: Enhver tilskuere kan se med gratis
         #original_hash: f1e6aef
         restricted: Tilskuere er kun tilladte som ledsagere af en deltager
       #original_hash: 97a31ee
@@ -2951,22 +2952,23 @@ da:
         zero: Ingen konkurrencer
         one: 1 konkurrence
         other: '%{count} konkurrencer'
-      #original_hash: e3528ec
-      label: 'Konkurrencer i nærheden (indenfor %{days} dage og %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Sidste %{days} dage'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} indenfor %{kms} km og %{days} dage.'
+      #original_hash: 9eb8f46
+      within: 'Indenfor %{days} dage'
+      #original_hash: d97d1ee
+      show: Vis
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Konkurrencer i nærheden (indenfor %{days} dage og %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Ingen konkurrencer i nærheden!
       #original_hash: 7e76950
       no_date_yet: Du har ikke tildelt en dato for denne konkurrence endnu.
       #original_hash: 82a95d2
       no_location_yet: Du har ikke tildelt en placering for denne konkurrence endnu.
-      #original_hash: 9eb8f46
-      within: 'Indenfor %{days} dage'
-      #original_hash: d97d1ee
-      show: Vis
       #original_hash: 709a232
       name: Navn
       #original_hash: adc24b7

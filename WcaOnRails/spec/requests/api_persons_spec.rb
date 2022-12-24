@@ -70,9 +70,10 @@ RSpec.describe "API Persons" do
 
       expect(response).to be_successful
       json = JSON.parse(response.body)
-      expect(json["person"]["teams"]).to eq [
-        { "friendly_id" => "wst", "leader" => false },
-      ]
+      expect(json["person"]["teams"].length).to eq 1
+      team = json["person"]["teams"].first
+      expect(team["friendly_id"]).to eq "wst"
+      expect(team["leader"]).to be false
     end
   end
 

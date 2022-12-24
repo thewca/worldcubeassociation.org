@@ -9,7 +9,7 @@ import {
   UpdateRoundFormat,
   UpdateAdvancementCondition,
   UpdateCutoff,
-  UpdateQualificiation,
+  UpdateQualification,
   UpdateTimeLimit,
 } from './actions';
 
@@ -135,7 +135,7 @@ const reducers = {
       advancementCondition: payload.advancementCondition,
     })),
   }),
-  [UpdateQualificiation]: (state, { payload }) => ({
+  [UpdateQualification]: (state, { payload }) => ({
     ...state,
     wcifEvents: state.wcifEvents.map((event) => (event.id === payload.eventId ? ({
       ...event,

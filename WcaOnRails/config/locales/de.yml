@@ -423,6 +423,11 @@ de:
         remove_avatar: Profilbild entfernen
         #original_hash: 9af9099
         results_notifications_enabled: 'Benachrichtige mich, wenn Ergebnisse von mir veröffentlicht werden.'
+        #original_hash: 29ce2ff
+        registration_notifications_enabled: >-
+          Wenn ich einen Wettbewerb organisiere oder delegiere, möchte ich per
+          E-Mail benachrichtigt werden, wenn neue Anmeldungen übermittelt
+          wurden.
         #original_hash: de60ab8
         delegate_status: Delegierten-Status
         #original_hash: 0f21717
@@ -473,7 +478,7 @@ de:
         #original_hash: 28a6fbb
         currency_code: Währungscode
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-Delegierte
+        staff_delegate_ids: WCA-Delegierte
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Trainee Delegate(s)
         #original_hash: 958562e
@@ -484,6 +489,8 @@ de:
         information: Informationen
         #original_hash: 87b7d5f
         use_wca_registration: Ich würde gerne die WCA-Website für die Registrierung benutzen
+        #original_hash: ebe8c47
+        use_wca_live_for_scoretaking: Ich werde WCA Live fürs Scoretaking verwenden
         #original_hash: 8020e88
         external_registration_page: Anmeldeseite
         #original_hash: 9bb1965
@@ -494,6 +501,8 @@ de:
         competitor_limit_reason: Der Grund für das Teilnehmerlimit
         #original_hash: 3c23a67
         guests_enabled: Gäste
+        #original_hash: 7d78478
+        guests_per_registration_limit: Maximale Anzahl Gäste pro Anmeldung
         #original_hash: 089cbfd
         receive_registration_emails: >-
           Benachrichtige mich per E-Mail, wenn sich jemand für diesen Wettbewerb
@@ -512,8 +521,6 @@ de:
         competition_events: Disziplinen
         #original_hash: 71c8461
         enable_donations: Ich möchte zusätzlich zu den Eintrittsgebühren Spenden ermöglichen
-        #original_hash: 4baf44b
-        championship_type: Meisterschaftstyp
         #original_hash: 556fda0
         extra_registration_requirements: Zusätzliche Bedingungen für die Registrierung
         #original_hash: 2529d04
@@ -535,7 +542,7 @@ de:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Eintrittsgebühr für Gäste
         #original_hash: bb16247
-        free_guest_entry_status: 'Zeige eine Mitteilung, dass Gäste freien Eintritt haben'
+        guest_entry_status: 'Zeige eine Mitteilung, dass Gäste freien Eintritt haben'
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Ich möchte festlegen, dass Teilnehmer ihre Puzzle zu einem bestimmten
@@ -554,6 +561,20 @@ de:
         event_restrictions_reason: Grund und Details zur Einschränkung von Events
         #original_hash: 3c24bd2
         main_event_id: Hauptevent
+        #original_hash: a541bfa
+        allow_registration_without_qualification: Events mit Qualifikation
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Meisterschaftstyp
+      competition_series:
+        #original_hash: 89f89c0
+        wcif_id: ID
+        #original_hash: 709a232
+        name: Name
+        #original_hash: 8a6bee1
+        short_name: Spitzname der Serie
+        #original_hash: af3d38e
+        competition_ids: Alle Wettbewerbe
       registration:
         #original_hash: 3c23a67
         guests: Gäste
@@ -745,13 +766,13 @@ de:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Zeige nichts an (und erläutere eventuelle Details im Bereich
           "Zusätzliche Anmeldebedingungen“)
         #original_hash: 694bce4
-        anyone: '"Jeder Gast kann die Competition kostenlos besuchen"'
+        free: '"Jeder Gast kann die Competition kostenlos besuchen"'
         #original_hash: 762c509
         restricted: '"Gäste werden nur als Begleitung von Teilnehmern zugelassen"'
   simple_form:
@@ -828,6 +849,10 @@ de:
         remember_me: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
+        #original_hash: f62eb10
+        registration_notifications_enabled: >-
+          Dies gilt nur für Wettbewerbe, die du organisierst oder delegierst,
+          und kann pro Wettbewerb überschrieben werden.
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
@@ -865,7 +890,7 @@ de:
           <b>Englisch</b> und in jeder anderen Sprache, die die Teilnehmer
           sprechen, aus.
         #original_hash: b4d020f
-        delegate_ids: WCA-Delegierte des Wettbewerbs
+        staff_delegate_ids: WCA-Delegierte des Wettbewerbs
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Trainee Delegate für diesen Wettbewerb.
         #original_hash: 517d376
@@ -891,7 +916,7 @@ de:
         external_registration_page: >-
           Die Seite, auf der Teilnehmer sich für die Competition anmelden
           können. Dies muss eine gültige http(s) Adresse sein.
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           Eintrittsgebühr für den Wettbewerb. Die Eintrittsgebühr wird auf der
           Infoseite des Wettbewerbs, sowie der Anmeldeseite (falls genutzt)
@@ -899,10 +924,7 @@ de:
           dass der Eintritt frei ist.<br><br><b>DISCLAIMER: Die folgende Angabe
           der WCA-Gebühren ist ausschließlich eine Schätzung auf Basis der
           aktuellen Umrechnungsraten und in keinster Weise rechtlich verbindlich
-          für die Zahlung der Gebühren.</b><br>Klicke "Wettbewerb
-          aktualisieren", um die Schätzung nach einer Änderung des Währungscodes
-          zu synchronisieren. Falls es keine verfügbaren Umrechnungsraten für
-          die ausgewählte Währung gibt, wird nichts angezeigt.
+          für die Zahlung der Gebühren.</b>
         #original_hash: 9735ddf
         currency_code: Der Währungscode für Eintrittsgebühren.
         #original_hash: da39a3e
@@ -923,6 +945,8 @@ de:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: da39a3e
+        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Auch wenn die Regeln nicht vorgeben, dass ein Teilnehmerlimit gesetzt
@@ -937,10 +961,13 @@ de:
         competitor_limit_reason: >-
           Was ist der Grund für das Teilnehmerlimit? Bitte fülle dieses Feld in
           Englisch aus.
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          Die maximal erlaubte Anzahl von Gästen pro Anmeldung bei diesem
+          Wettbewerb. Anmeldungen mit zu vielen Gästen werden blockiert. Lasse
+          dies frei, wenn es keine Begrenzung gibt.
         #original_hash: da39a3e
         venueAddress: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Bitte führe hier zusätzliche Registrierungsbedingungen auf, die oben
@@ -988,7 +1015,7 @@ de:
           auf 0 gesetzt wird, wird ein im Folgenden auswählbarer Satz bezüglich
           der Registrierung für Gäste angezeigt.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1009,6 +1036,29 @@ de:
           Eventkombinationen verbieten willst. Bitte fülle dies in Englisch aus!
         #original_hash: 1067798
         main_event_id: Der Gewinner dieses Events ist der Gewinner der Competition.
+        #original_hash: da39a3e
+        allow_registration_without_qualification: ''
+        championships:
+          #original_hash: da39a3e
+          championship_type: ''
+        competition_series:
+          #original_hash: da39a3e
+          wcif_id: ''
+          #original_hash: 77811b5
+          name: >-
+            Der volle Name der Wettbewerbsserie, inklusive des Jahres am Ende
+            (z.B. Southern Australia 2022). Achte auf Großschreibung. Dieselben
+            Regeln wie für Namen von individuellen Wettbewerben finden auch hier
+            Anwendung.
+          #original_hash: 778c20c
+          short_name: >-
+            Ein Kurzname zum Anzeigen. Dieselben Regeln wie für den Namen des
+            individuellen Wettbewerbs finden auch hier Anwendung.
+          #original_hash: 3e27501
+          competition_ids: >-
+            <b>Dieses Feld kann nicht editiert werden!</b><br/>Um Wettbewerbe
+            dieser Serie hinzuzufügen, musst du zur jeweiligen 'Bearbeite'-Seite
+            des Wettbewerbs gehen, den du hinzufügen möchtest.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1246,6 +1296,15 @@ de:
           'true': Vor-Ort Registrierung wird akzeptiert
           #original_hash: 0f236df
           'false': Vor-Ort Registrierung wird NICHT akzeptiert
+        allow_registration_without_qualification:
+          #original_hash: 9697d98
+          'true': >-
+            Teilnehmer dürfen sich zu Events anmelden, für die sie sich nicht
+            qualifiziert haben (ich entferne sie später)
+          #original_hash: 6509041
+          'false': >-
+            Teilnehmer MÜSSEN für ein Event qualifiziert sein, um sich anmelden
+            zu können
         allow_registration_edits:
           #original_hash: 52a2f4a
           'true': >-
@@ -1636,6 +1695,12 @@ de:
       manage_auth_app: Autorisierte Anwendungen verwalten
       #original_hash: acac109
       media_submission: Medien Einreichung
+      #original_hash: cf01481
+      privacy: Datenschutz
+      #original_hash: 4c4a2e8
+      disclaimer: Haftungsausschluss
+      #original_hash: d561f1a
+      find_us: Finde uns
   homepage:
     #original_hash: 824d76b
     learn_more: Erfahre mehr
@@ -1968,8 +2033,8 @@ de:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Alle Profilbilder sollen Bilder echter Personen sein.
-        #original_hash: 9126b0c
-        '2': Die abgebildete Person musst Du sein.
+        #original_hash: b12d293
+        '2': Die abgebildete Person muss dein aktuelles Selbst sein.
         #original_hash: de9b742
         '3': >-
           Wenn mehrere Personen auf dem Bild auftauchen, muss klar sein, wer
@@ -2134,8 +2199,6 @@ de:
       need_dob: Geburtsdatum benötigt
       #original_hash: d84a54f
       need_country: Land benötigt
-      #original_hash: cec28a0
-      comp_not_found: Wettbewerb nicht gefunden
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Eine Anmeldung kann nicht gleichzeitig akzeptiert und gelöscht werden.
       #original_hash: a38d024
@@ -2147,6 +2210,12 @@ de:
         target='_blank'>WDC</a>.
       #original_hash: 8d07e7f
       undelete_banned: ist ein gebannter Teilnehmer und kann nicht wiederhergestellt werden.
+      #original_hash: 3de7c86
+      series_more_than_one_accepted: Du kannst nur für einen Wettbewerb aus einer Serie akzeptiert werden.
+      #original_hash: 13bfcd6
+      can_only_register_for_qualified_events: >-
+        Du kannst dich nicht für Events anmelden, für die du nicht qualifiziert
+        bist.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2309,6 +2378,10 @@ de:
       payment_requested_on: 'Zahlung angefordert am: %{date}'
       #original_hash: f5b1b34
       payment_completed_on: 'Bezahlung abgeschlossen am: %{date}'
+      #original_hash: 3141a14
+      series_registrations: Serien Anmeldungen
+      #original_hash: 845bb47
+      series_registrations_hint_html: 'Serien Anmeldungen werden angezeigt als <i>%{description}</i>'
       #original_hash: b25928c
       total: Gesamt
       #original_hash: df036fe
@@ -2401,6 +2474,8 @@ de:
     wont_pay_here: >-
       Bitte lies die Informationen zur Competition, um mehr darüber zu erfahren,
       wie du bezahlen kannst
+    #original_hash: be4b39d
+    not_qualified: Nicht qualifiziert
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2620,6 +2695,10 @@ de:
       in_progress: >-
         Dieser Wettbewerb läuft gerade. Komme nach dem %{date} zurück, um die
         Ergebnisse zu sehen!
+      #original_hash: 8eeeb44
+      in_progress_at_wca_live_html: >-
+        Dieser Wettbewerb läuft gerade. Du kannst die Live-Ergebnisse <a
+        href='%{link_here}'>hier</a> betrachten!
       #original_hash: 8ab1548
       reg_opens_too_early: >-
         Die Öffnung der Anmeldung wurde auf einen Zeitpunkt unter den
@@ -2723,6 +2802,18 @@ de:
       register_link_html: 'Melde dich %{here} für diesen Wettbewerb an.'
       #original_hash: 45834fd
       register_below_html: Melde dich unten für diesen Wettbewerb an.
+      #original_hash: c5dfcc7
+      part_of_a_series: Dieser Wettbewerb ist Teil einer Wettbewerbsserie.
+      #original_hash: 171e593
+      part_of_a_series_list: >-
+        Dieser Wettbewerb ist Teil der %{name} Wettbewerbsserie. Andere
+        Wettbewerbe in dieser Serie sind:
+      #original_hash: 09fa333
+      series_registration_warning_html: >-
+        Beachte: Du kannst dich für alle Wettbewerbe einer Serie anmelden, aber
+        nur eine dieser Anmeldungen wird bestätigt und akzeptiert. <b>Du wirst
+        die Erlaubnis zur Teilnahme nur für einen der Wettbewerbe der Serie
+        erhalten!</b>
       #original_hash: 196725e
       competitor_limit_is: 'Es gibt ein Teilnehmerlimit von %{competitor_limit} Teilnehmern.'
       #original_hash: 5101f65
@@ -2778,9 +2869,18 @@ de:
       guests_pay: 'Zuschauer können für eine Gebühr von %{guests_base_fee} zusehen.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Jeder Gast kann den Wettbewerb kostenlos besuchen.
+        free: Jeder Gast kann den Wettbewerb kostenlos besuchen.
         #original_hash: f1e6aef
         restricted: Gäste werden nur als Begleitpersonen von Teilnehmern zugelassen.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Teilnehmer dürfen keine Gäste mitbringen.
+        one: Teilnehmer dürfen maximal einen Gast mitbringen.
+        other: 'Teilnehmer dürfen maximal %{count} Gäste mitbringen.'
+      #original_hash: 64e0ddd
+      require_qualification: >-
+        Teilnehmer dürfen sich nur für Events anmelden, für die sie bereits
+        qualifiziert sind.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Dieser Wettbewerb ist beendet. Klicke %{link_here} um die
@@ -2864,6 +2964,8 @@ de:
       all_years: Alle Jahre
       #original_hash: 719ea39
       clear: Löschen
+      #original_hash: e827f28
+      select_hint: Bitte wähle die Events aus
       #original_hash: a1fffaa
       list: Liste
       #original_hash: ab478f3
@@ -2894,6 +2996,10 @@ de:
       past_from: 'Vergangene aus %{year}'
       #original_hash: 7cff459
       past_all: Vergangene aus allen Jahren
+      #original_hash: 819fe62
+      show_cancelled: Zeige abgesagte Wettbewerbe
+      #original_hash: 0eda967
+      show_registration_status: Zeige Anmeldestatus-Symbol
       titles:
         #original_hash: 69447c9
         in_progress: Laufende Wettbewerbe
@@ -2919,6 +3025,8 @@ de:
           in_progress: Läuft gerade!
           #original_hash: 1157462
           posted: Ergebnisse veröffentlicht!
+          #original_hash: 89bcc37
+          starts_in: 'Beginnt in %{days}'
           #original_hash: 97b061a
           announced_on: 'Angekündigt am %{announcement_date}'
         #original_hash: ccd2db9
@@ -2994,6 +3102,10 @@ de:
         Kontaktanfragen mit einem Formular übermittelt, ohne die Emails der
         Organisatoren zu veröffentlichen. %{md}. Beispiel: [Text zum
         Anzeigen](mailto:some@email.com)
+      #original_hash: 05c66b5
+      series_save_first_hint: >-
+        Beachte: Du musst den Wettbewerb speichern bevor du eine neue Serie
+        hinzufügen kannst.
       #original_hash: c5497bc
       events: Disziplinen
       #original_hash: cafc153
@@ -3051,10 +3163,10 @@ de:
         calculated: 'Die geschätzten WCA-Gebühren für %{limit} Teilnehmer sind %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'Die geschätzten WCA-Gebühren pro Teilnehmer sind %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Es gibt einen Fehler bei der Abschätzung der Gebühren, bitte setze die
-          Grundgebühr auf null und gebe sie dann erneut ein
+          Es gibt einen Fehler bei der Abschätzung der Gebühren, möglicherweise
+          weil es keine Wechselkurse für die ausgewählte Währung gibt.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3119,6 +3231,14 @@ de:
       event_change_deadline_with_ots: >-
         Die Deadline zum Aktualisieren von Events muss während der Competition
         liegen, falls vor-Ort-Registrierungen akzeptiert werden.
+      #original_hash: 5ae2437
+      series_distance_km: 'Dieser Wettbewerb ist zu weit von %{competition} entfernt.'
+      #original_hash: 4a5d7c5
+      series_distance_days: 'Dieser Wettbewerb ist zu viele Tage von %{competition} entfernt.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: >-
+        Es muss nach Gästen gefragt werden, wenn eine Begrenzung festgelegt
+        wurde.
     new:
       #original_hash: 1208df7
       create_competition: Wettbewerb erstellen
@@ -3146,28 +3266,31 @@ de:
         zero: Keine Wettbewerbe
         one: 1 Wettbewerb
         other: '%{count} Wettbewerbe'
-      #original_hash: e3528ec
-      label: 'Nahe gelegene Wettbewerbe (innerhalb %{days} Tage und %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Letzte %{days} Tage'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} innerhalb %{kms} km und %{days} Tage.'
+      #original_hash: 9eb8f46
+      within: 'innerhalb von %{days} Tagen'
+      #original_hash: d97d1ee
+      show: Zeigen
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Nahe gelegene Wettbewerbe (innerhalb %{days} Tage und %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Keine nahe gelegenen Wettbewerbe!
       #original_hash: 7e76950
       no_date_yet: Du hast diesem Wettbewerb noch keinen Termin zugeordnet.
       #original_hash: 82a95d2
       no_location_yet: Du hast diesem Wettbewerb noch keinen Ort zugeordnet.
-      #original_hash: 9eb8f46
-      within: 'innerhalb von %{days} Tagen'
-      #original_hash: d97d1ee
-      show: Zeigen
       #original_hash: 709a232
       name: Name
       #original_hash: adc24b7
       delegates: Delegierte
       #original_hash: eb9a4bc
       date: Datum
+      #original_hash: 6c82e6d
+      time: Zeit
       #original_hash: d219c68
       location: Ort
       #original_hash: 4232080
@@ -3190,6 +3313,17 @@ de:
       show_events: Zeige Disziplinen
       #original_hash: 0df66f7
       hide_events: Blende Disziplinen aus
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Überlappende Anmeldezeiträume (Beginn innerhalb von %{hours} Stunden)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Keine überlappenden Anmeldezeiträume!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: >-
+        Du hast noch kein Datum für den Anmeldebeginn dieses Wettbewerbs
+        festgelegt.
+      #original_hash: c38824e
+      opens_registration_at: öffnet die Anmeldung um
     #original_hash: 06b01c4
     announcements: Ankündigungen
     #original_hash: a2b80b0
@@ -3376,6 +3510,11 @@ de:
       group: Gruppe
       #original_hash: b7126cd
       scramble: Scramble
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: Zur Serie hinzufügen
+      #original_hash: be6edcd
+      remove_series: Von der Serie entfernen
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3425,6 +3564,17 @@ de:
     records:
       #original_hash: e51c552
       title: Rekorde
+    #original_hash: e02fccb
+    last_updated_html: 'Zuletzt aktualisiert: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      Bitte beachte, dass manche Filter (z.B. zurückliegende Jahre) momentan
+      nicht zur Verfügung stehen. Falls du Erfahrung mit SQL-Optimierung hast,
+      kontaktiere bitte das WST!
+    #original_hash: e3710ed
+    tooltip_no_years: 'Unsere Datenbank ist zu groß, um historische Daten anzuzeigen'
+    #original_hash: 357094b
+    tooltip_no_quantities: 'Unsere Datenbank ist zu groß, um lange Rankings zu berechnen'
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -4544,6 +4694,11 @@ de:
           können von einem oder mehreren TNoodle JSON Dateien importiert werden.
           Die Ergebnisse können für die Einreichung auf der WCA Webseite
           exportiert werden.
+      groups:
+        #original_hash: 311a3f6
+        title: Competition groups
+        #original_hash: 74a0926
+        description: Zeige Gruppen eines beliebigen laufenden Wettbewerbs
   logo:
     #original_hash: c72c969
     title: WCA-Logo
@@ -4718,6 +4873,8 @@ de:
       people: Personen
       #original_hash: 6db75ea
       advanced_search: Erweiterte Suche
+      #original_hash: 5e326b1
+      incidents: Zwischenfälle
       #original_hash: a0ca0c3
       posts: Beiträge
       #original_hash: 9d7ea9c
@@ -4733,6 +4890,8 @@ de:
         people: Keine Personen gefunden für
         #original_hash: c6a04aa
         posts: Keine Beiträge gefunden für
+        #original_hash: 3499e7e
+        incidents: Keine Zwischenfälle gefunden für
         #original_hash: 76a6bf1
         regulations_and_guidelines: Keine Regeln oder Richtlinien gefunden für
   incidents_log:
@@ -4740,6 +4899,8 @@ de:
     i18n_disclaimer: >-
       Bitte beachte dass der Bereich für Zwischenfälle nur auf Englisch
       verfügbar ist, die Inhalte wurden nicht übersetzt.
+    #original_hash: 2c23c1a
+    incident: 'Zwischenfall:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Über die Regeln

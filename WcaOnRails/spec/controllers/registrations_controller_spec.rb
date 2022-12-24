@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe RegistrationsController do
   context "signed in as organizer" do
-    let(:organizer) { FactoryBot.create(:user) }
+    let!(:organizer) { FactoryBot.create(:user) }
     let(:competition) { FactoryBot.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let(:zzyzx_user) { FactoryBot.create :user, name: "Zzyzx" }
     let(:registration) { FactoryBot.create(:registration, competition: competition, user: zzyzx_user) }
@@ -133,6 +133,32 @@ RSpec.describe RegistrationsController do
       expect(accepted_registration.reload.accepted?).to be true
     end
 
+    it "doesn't allow accepting a Competition Series two-timer" do
+      two_timer_dave = FactoryBot.create(:user, :wca_id, name: "Two Timer Dave")
+
+      series = FactoryBot.create(:competition_series)
+      competition.update!(competition_series: series)
+
+      partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 444),
+                                                                                      competition_series: series, series_base: competition)
+
+      # make sure there is a dummy registration for the partner competition.
+      FactoryBot.create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
+
+      registration2 = FactoryBot.create(:registration, :pending, competition: competition, user: two_timer_dave)
+
+      expect do
+        patch :do_actions_for_selected, params: {
+          competition_id: competition.id,
+          registrations_action: "accept-selected",
+          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"],
+        }, xhr: true
+      end.to change { enqueued_jobs.size }.by(1)
+      expect(registration.reload.accepted?).to be true
+      expect(registration2.reload.accepted?).to be false
+      expect(flash[:danger]).to include I18n.t('registrations.errors.series_more_than_one_accepted')
+    end
+
     it "doesn't allow accepting a banned user" do
       registration.update!(accepted_at: Time.now)
       registration2 = FactoryBot.create(:registration, :pending, competition: competition)
@@ -209,6 +235,60 @@ RSpec.describe RegistrationsController do
       end.to change { enqueued_jobs.size }.by(2)
 
       expect(organizer.registrations).to eq competition.registrations
+    end
+
+    it "can register for their own competition before registration opens" do
+      competition.registration_open = 1.weeks.from_now
+      competition.registration_close = 2.weeks.from_now
+      competition.save!
+
+      expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
+      expect do
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "" } }
+      end.to change { enqueued_jobs.size }.by(2)
+
+      expect(organizer.registrations).to eq competition.registrations
+    end
+  end
+
+  context "signed in as a delegate" do
+    let!(:delegate) { FactoryBot.create(:delegate) }
+    let!(:other_delegate) { FactoryBot.create(:delegate) }
+
+    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], showAtAll: true) }
+    let!(:other_competition) { FactoryBot.create(:competition, :registration_open, delegates: [other_delegate], showAtAll: true) }
+
+    before :each do
+      sign_in delegate
+    end
+
+    it "can register for their own competition while registration is open" do
+      competition.registration_open = 1.weeks.ago
+      competition.registration_close = 2.weeks.from_now
+      competition.save!
+
+      expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
+      expect do
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "" } }
+      end.to change { enqueued_jobs.size }.by(2)
+
+      expect(delegate.registrations).to eq competition.registrations
+    end
+
+    it "can register for their own competition before registration opens" do
+      competition.registration_open = 1.weeks.from_now
+      competition.registration_close = 2.weeks.from_now
+      competition.save!
+
+      expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
+      expect do
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "" } }
+      end.to change { enqueued_jobs.size }.by(2)
+
+      expect(delegate.registrations).to eq competition.registrations
     end
   end
 
@@ -360,6 +440,16 @@ RSpec.describe RegistrationsController do
       }.to raise_error(ActionController::RoutingError)
     end
 
+    it "cannot create registration before registration is open" do
+      competition.registration_open = 1.weeks.from_now
+      competition.registration_close = 2.weeks.from_now
+      competition.save!
+
+      post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", accepted_at: Time.now } }
+      expect(response).to redirect_to competition_path(competition)
+      expect(flash[:danger]).to eq "You cannot register for this competition, registration is closed"
+    end
+
     it "cannot create registration after registration is closed" do
       competition.registration_open = 2.weeks.ago
       competition.registration_close = 1.week.ago
@@ -454,7 +544,7 @@ RSpec.describe RegistrationsController do
   end
 
   context "competition not visible" do
-    let(:organizer) { FactoryBot.create :user }
+    let!(:organizer) { FactoryBot.create :user }
     let(:competition) { FactoryBot.create(:competition, :registration_open, events: Event.where(id: %w(333 444 333bf)), showAtAll: false, organizers: [organizer]) }
 
     it "404s when competition is not visible to public" do

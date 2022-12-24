@@ -428,7 +428,7 @@ fr:
         #original_hash: 28a6fbb
         currency_code: Monnaie
         #original_hash: 2e3ed8b
-        delegate_ids: Délégué(s) WCA
+        staff_delegate_ids: Délégué(s) WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Délégué(es) WCA Stagiaire(s)
         #original_hash: 958562e
@@ -467,8 +467,6 @@ fr:
         enable_donations: >-
           Je souhaite activer les donations, en plus de récolter des frais
           d'inscription
-        #original_hash: 4baf44b
-        championship_type: Type de championnat
         #original_hash: 556fda0
         extra_registration_requirements: Conditions d'inscription additionnelles
         #original_hash: 2529d04
@@ -488,7 +486,7 @@ fr:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Frais d'inscription pour les accompagnateurs
         #original_hash: bb16247
-        free_guest_entry_status: Afficher un message pour l'admission gratuite des accompagnateurs
+        guest_entry_status: Afficher un message pour l'admission gratuite des accompagnateurs
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Je voudrais imposer au compétiteur la soumission de leur puzzle à un
@@ -509,6 +507,9 @@ fr:
         event_restrictions_reason: Raison et détails pour la restriction
         #original_hash: 3c24bd2
         main_event_id: Épreuve principale
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Type de championnat
       registration:
         #original_hash: 3c23a67
         guests: Accompagnateurs
@@ -698,13 +699,13 @@ fr:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Ne rien afficher (et donner des détails dans la section "Conditions
           d'inscription additionnelles")
         #original_hash: 694bce4
-        anyone: Les spectateurs peuvent assister à la compétition gratuitement
+        free: Les spectateurs peuvent assister à la compétition gratuitement
         #original_hash: 762c509
         restricted: Les spectateurs ne sont admis que s'ils accompagnent des compétiteurs
   simple_form:
@@ -818,7 +819,7 @@ fr:
           de remplir ces informations <b>en anglais</b> et dans les langues que
           vos compétiteurs parlent.
         #original_hash: b4d020f
-        delegate_ids: Délégué(s) WCA pour la compétition.
+        staff_delegate_ids: Délégué(s) WCA pour la compétition.
         #original_hash: cb9882c
         trainee_delegate_ids: Délégués WCA Stagiaire pour la compétition.
         #original_hash: 517d376
@@ -944,7 +945,7 @@ fr:
           nombre est défini à 0, une phrase de votre choix sera affichée
           concernant votre politique sur l'admission des spectateurs.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2719,7 +2720,7 @@ fr:
       guests_pay: 'Le coût de l''entrée pour les spectateurs est de %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Tous les spectateurs peuvent assister à la compétition gratuitement.
+        free: Tous les spectateurs peuvent assister à la compétition gratuitement.
         #original_hash: f1e6aef
         restricted: >-
           Les spectateurs ne sont autorisés qu'en tant qu'accompagnateurs des
@@ -3077,24 +3078,25 @@ fr:
         zero: Pas de compétition
         one: 1 compétition
         other: '%{count} compétitions'
-      #original_hash: e3528ec
-      label: >-
-        Compétitions à proximité (à %{days} jours près et dans un rayon de
-        %{kms} km)
       #original_hash: 3446062
       label_admin: 'Depuis %{days} jours'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} dans un rayon de %{kms} km et à %{days} jours près.'
+      #original_hash: 9eb8f46
+      within: 'À %{days} jours près'
+      #original_hash: d97d1ee
+      show: Afficher
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: >-
+        Compétitions à proximité (à %{days} jours près et dans un rayon de
+        %{kms} km)
       #original_hash: feefb46
       no_comp_nearby: Pas de compétition à proximité
       #original_hash: 7e76950
       no_date_yet: Vous n'avez pas encore choisi de date pour cette compétition.
       #original_hash: 82a95d2
       no_location_yet: Vous n'avez pas encore choisi de coordonnées pour cette compétition.
-      #original_hash: 9eb8f46
-      within: 'À %{days} jours près'
-      #original_hash: d97d1ee
-      show: Afficher
       #original_hash: 709a232
       name: Nom
       #original_hash: adc24b7

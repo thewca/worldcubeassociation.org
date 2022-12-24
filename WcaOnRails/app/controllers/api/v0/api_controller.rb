@@ -115,11 +115,15 @@ class Api::V0::ApiController < ApplicationController
     search(Regulation)
   end
 
+  def incidents_search
+    search(Incident)
+  end
+
   def omni_search
     # We intentionally exclude Post, as our autocomplete ui isn't very useful with
     # them yet.
     params[:persons_table] = true
-    search(Competition, User, Regulation)
+    search(Competition, User, Regulation, Incident)
   end
 
   def show_user(user)
@@ -148,7 +152,7 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def delegates
-    paginate json: User.delegates
+    paginate json: User.staff_delegates
   end
 
   def records

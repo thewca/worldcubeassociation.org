@@ -105,4 +105,13 @@ module ResultsHelper
     end
     record_class
   end
+
+  def execute_cached_query(cache_params, sql_query)
+    cache_key = cache_params.join('-')
+
+    CachedResult.find_or_create_by!(key_params: cache_key) do |cached_result|
+      db_rows = ActiveRecord::Base.connection.exec_query(sql_query)
+      cached_result.payload = db_rows.to_json
+    end
+  end
 end

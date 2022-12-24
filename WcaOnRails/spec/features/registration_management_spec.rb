@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.feature "Registration management" do
-  let(:delegate) { FactoryBot.create :delegate }
+  let!(:delegate) { FactoryBot.create :delegate }
   let(:competition) { FactoryBot.create :competition, :registration_open, delegates: [delegate] }
 
   let!(:user1) { FactoryBot.create :user, name: "Johnny Bravo" }

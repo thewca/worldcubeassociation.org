@@ -469,7 +469,7 @@ fi:
         #original_hash: 28a6fbb
         currency_code: Valuuttatunnus
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-delegaatti/delegaatit
+        staff_delegate_ids: WCA-delegaatti/delegaatit
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegaattiharjoittelijat
         #original_hash: 958562e
@@ -504,8 +504,6 @@ fi:
         competition_events: Lajit
         #original_hash: 71c8461
         enable_donations: Haluan sallia lahjoitukset osallistumismaksujen keräämisen lisäksi
-        #original_hash: 4baf44b
-        championship_type: Alueellisen mestaruuskilpailun tyyppi
         #original_hash: 556fda0
         extra_registration_requirements: Muut rekisteröitymisohjeet
         #original_hash: 2529d04
@@ -529,7 +527,7 @@ fi:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Vieraiden pääsymaksu
         #original_hash: bb16247
-        free_guest_entry_status: Display message for free guest entry
+        guest_entry_status: Display message for free guest entry
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Haluan vaatia kilpailijoita toimittamaan pulmapelinsä ennalta
@@ -550,6 +548,9 @@ fi:
         event_restrictions_reason: Syy ja lisätiedot koskien lajiyhdistelmien rajoituksia
         #original_hash: 3c24bd2
         main_event_id: Päälaji
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Alueellisen mestaruuskilpailun tyyppi
       registration:
         #original_hash: 3c23a67
         guests: Vierailijat
@@ -737,13 +738,13 @@ fi:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Do not display anything (and perhaps elaborate in the "Extra
           registration requirements" section)
         #original_hash: 694bce4
-        anyone: Kaikki katsojat pääsevät ilmaiseksi paikalle
+        free: Kaikki katsojat pääsevät ilmaiseksi paikalle
         #original_hash: 762c509
         restricted: Katsojat pääsevät paikalle vain kilpailijoiden seurassa
   simple_form:
@@ -853,7 +854,7 @@ fi:
           <br/>Kirjoita tämä <b>englanniksi<b/> ja muilla kilpailijoiden
           todennäköisesti puhumilla kielillä.
         #original_hash: b4d020f
-        delegate_ids: Kilpailun WCA-delegaatit.
+        staff_delegate_ids: Kilpailun WCA-delegaatit.
         #original_hash: cb9882c
         trainee_delegate_ids: Kilpailun delegaattiharjoittelijat
         #original_hash: 517d376
@@ -974,7 +975,7 @@ fi:
           maksuja ei voi hallita tämän sivuston kautta. Jos arvoksi asetetaan 0,
           itse valitsemasi teksti näytetään.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2673,7 +2674,7 @@ fi:
       guests_pay: 'Katsojien pääsymaksu on %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Kaikki katsojat pääsevät paikalle ilmaiseksi
+        free: Kaikki katsojat pääsevät paikalle ilmaiseksi
         #original_hash: f1e6aef
         restricted: Katsojat pääsevät paikalle ainoastaan kilpailijoiden seurassa.
       #original_hash: 97a31ee
@@ -3023,22 +3024,23 @@ fi:
         zero: Ei kilpailuja
         one: 1 kilpailu
         other: '%{count} kilpailua'
-      #original_hash: e3528ec
-      label: 'Lähellä olevat kilpailut (%{days} päivän ja %{kms} km sisällä)'
       #original_hash: 3446062
       label_admin: 'Viimeiset %{days} päivää'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} %{kms} km ja %{days} päivän sisällä.'
+      #original_hash: 9eb8f46
+      within: '%{days} päivän sisällä'
+      #original_hash: d97d1ee
+      show: Näytä
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Lähellä olevat kilpailut (%{days} päivän ja %{kms} km sisällä)'
       #original_hash: feefb46
       no_comp_nearby: Ei lähistöllä olevia kilpailuja!
       #original_hash: 7e76950
       no_date_yet: Et ole vielä määritellyt päivämäärää tälle kilpailulle.
       #original_hash: 82a95d2
       no_location_yet: Et ole vielä määritellyt tämän kilpailun sijaintia.
-      #original_hash: 9eb8f46
-      within: '%{days} päivän sisällä'
-      #original_hash: d97d1ee
-      show: Näytä
       #original_hash: 709a232
       name: Nimi
       #original_hash: adc24b7

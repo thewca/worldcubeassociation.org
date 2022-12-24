@@ -15,7 +15,6 @@ class ServerStatusController < ApplicationController
     [
       JobsCheck.new,
       RegulationsCheck.new,
-      CertificateCheck.new,
       StripeChargesCheck.new,
       MysqlSettingsCheck.new,
     ]
@@ -85,43 +84,6 @@ class RegulationsCheck < StatusCheck
     else
       [:danger, "Error while loading regulations: #{Regulation.regulations_load_error}"]
     end
-  end
-end
-
-class CertificateCheck < StatusCheck
-  CERTIFICATE_PATH = "#{Rails.root}/../secrets/https/#{URI.parse(EnvVars.ROOT_URL).host}.chained.crt".freeze
-  # We want to be warned 10 days before certificate's renewal
-  CERTIFICATE_RENEW_DELAY = 10
-
-  def label
-    "SSL Certificate"
-  end
-
-  protected def _status_description
-    begin
-      raw = File.read(CERTIFICATE_PATH)
-    rescue Errno::ENOENT
-      description = "No certificate to check! (certificate path is '#{CERTIFICATE_PATH}')"
-      certificate_good = false
-    else
-      certificate = OpenSSL::X509::Certificate.new(raw)
-      expires_in = (certificate.not_after.to_date - Time.now.to_date).to_i
-      certificate_good = expires_in > CERTIFICATE_RENEW_DELAY
-      description = if expires_in < 0
-                      "Expired #{-expires_in} days ago!"
-                    else
-                      "Expires in #{expires_in} days."
-                    end
-    end
-
-    # If we're in test or development, we don't want to go red on the SSL certificate.
-    status = if Rails.env.test? || Rails.env.development? || certificate_good
-               :success
-             else
-               :danger
-             end
-
-    [status, description]
   end
 end
 

@@ -39,8 +39,6 @@
     These javascript packs *do* include the css imported in them!
   %>
   <% packs_to_prepend = ["application", "global_styles", "i18n"] %>
-  <%# This loads our main locale(s) files %>
-  <% [:en, I18n.locale].uniq.map { |l| packs_to_prepend << "generated_locales/#{l}" } %>
 
   <% packs_to_include = @all_packs.split(",").uniq.unshift(*packs_to_prepend) %>
   <%= javascript_pack_tag *packs_to_include, defer: false %>

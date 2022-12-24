@@ -6,7 +6,7 @@ import {
   Button, Header, Segment,
 } from 'semantic-ui-react';
 import i18n from '../../../lib/i18n';
-import events from '../../../lib/wca-data/events.js.erb';
+import { events } from '../../../lib/wca-data.js.erb';
 import { pluralize } from '../../../lib/utils/edit-events';
 // import { addRoundToEvent, removeRoundsFromSharedTimeLimits } from './utils';
 import RoundsTable from './RoundsTable';

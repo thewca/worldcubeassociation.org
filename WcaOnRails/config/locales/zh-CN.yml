@@ -363,7 +363,7 @@ zh-CN:
         #original_hash: 28a6fbb
         currency_code: 货币代码
         #original_hash: 2e3ed8b
-        delegate_ids: WCA 代表
+        staff_delegate_ids: WCA 代表
         #original_hash: 958562e
         organizer_ids: 主办方
         #original_hash: b37456c
@@ -394,6 +394,7 @@ zh-CN:
         competition_events: 项目
         #original_hash: 71c8461
         enable_donations: 除了报名费之外，我想要开启捐赠功能
+      championship:
         #original_hash: 4baf44b
         championship_type: 锦标赛类型
       registration:
@@ -590,7 +591,7 @@ zh-CN:
         #original_hash: bb470cc
         information: 关于比赛人数限制、报名费、观众及其他相关细节的信息。
         #original_hash: b4d020f
-        delegate_ids: 比赛的WCA代表们。
+        staff_delegate_ids: 比赛的WCA代表们。
         #original_hash: 517d376
         organizer_ids: 主办方（需要提前注册帐号）
         #original_hash: cabe7fb
@@ -644,7 +645,7 @@ zh-CN:
         #original_hash: da39a3e
         allow_registration_edits: ''
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: da39a3e
@@ -2009,22 +2010,23 @@ zh-CN:
       competitions:
         zero: 没有比赛
         other: '%{count}场比赛'
-      #original_hash: e3528ec
-      label: '临近的比赛（%{days}天%{kms}千米内）'
       #original_hash: 3446062
       label_admin: '过去%{days}天'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions}在%{kms}千米%{days}天内。'
+      #original_hash: 9eb8f46
+      within: '%{days}天内'
+      #original_hash: d97d1ee
+      show: 查看
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: '临近的比赛（%{days}天%{kms}千米内）'
       #original_hash: feefb46
       no_comp_nearby: 没有临近比赛！
       #original_hash: 7e76950
       no_date_yet: 你还没设定该比赛日期。
       #original_hash: 82a95d2
       no_location_yet: 你还没设定该比赛地址。
-      #original_hash: 9eb8f46
-      within: '%{days}天内'
-      #original_hash: d97d1ee
-      show: 查看
       #original_hash: 709a232
       name: 名字
       #original_hash: adc24b7

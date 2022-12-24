@@ -49,6 +49,29 @@ RSpec.describe "registrations" do
         expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
       end
 
+      it "renders an error when there are active registrations for other Series competitions" do
+        two_timer_dave = FactoryBot.create(:user, :wca_id, name: "Two Timer Dave")
+
+        series = FactoryBot.create(:competition_series)
+        competition.update!(competition_series: series)
+
+        partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
+                                                                                        competition_series: series, series_base: competition)
+
+        # make sure there is a dummy registration for the partner competition.
+        FactoryBot.create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
+
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", two_timer_dave.name, two_timer_dave.country.id, two_timer_dave.wca_id, two_timer_dave.dob, two_timer_dave.gender, two_timer_dave.email, "1", "1"],
+        ]
+        expect {
+          post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+        }.to_not change { competition.registrations.count }
+        follow_redirect!
+        expect(response.body).to include "Error importing #{two_timer_dave.name}: Validation failed: Competition You can only be accepted for one Series competition at a time."
+      end
+
       it "renders an error when there are email duplicates" do
         file = csv_file [
           ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -419,6 +442,31 @@ RSpec.describe "registrations" do
             }
           }.to not_change { competition.registrations.count }
           expect(response.body).to include "This person already has a registration."
+        end
+      end
+
+      context "when there is another registration in the same series" do
+        it "renders an error" do
+          two_timer_dave = FactoryBot.create(:user, name: "Two Timer Dave")
+
+          series = FactoryBot.create(:competition_series)
+          competition.update!(competition_series: series)
+
+          partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
+                                                                                          competition_series: series, series_base: competition)
+
+          # make sure there is a dummy registration for the partner competition.
+          FactoryBot.create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
+
+          expect {
+            post competition_registrations_do_add_path(competition), params: {
+              registration_data: {
+                name: two_timer_dave.name, country: two_timer_dave.country.id, birth_date: two_timer_dave.dob,
+                gender: two_timer_dave.gender, email: two_timer_dave.email, event_ids: ["444"]
+              },
+            }
+          }.to_not change { competition.registrations.count }
+          expect(response.body).to include "You can only be accepted for one Series competition at a time"
         end
       end
 

@@ -10,7 +10,7 @@ RSpec.describe CompetitionMedium do
 
   it "validates competitionId" do
     medium = FactoryBot.build :competition_medium, competitionId: "foo"
-    expect(medium).to be_invalid_with_errors(competition: ["can't be blank"])
+    expect(medium).to be_invalid_with_errors(competition: ["must exist"])
   end
 
   it "validates type" do

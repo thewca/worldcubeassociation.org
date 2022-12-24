@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule) }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, :with_guest_limit) }
   let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
@@ -200,7 +200,7 @@ RSpec.describe CompetitionsController do
     end
   end
 
-  describe 'GET #edit' do
+  describe 'GET #nearby_competitions' do
     let(:organizer) { FactoryBot.create(:user) }
     let(:admin) { FactoryBot.create :admin }
     let!(:my_competition) { FactoryBot.create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
@@ -212,11 +212,11 @@ RSpec.describe CompetitionsController do
       end
 
       it 'cannot see unconfirmed nearby competitions' do
-        get :edit, params: { id: my_competition }
+        get :nearby_competitions, params: { competition: my_competition.serializable_hash }
         expect(assigns(:nearby_competitions)).to eq []
         other_competition.confirmed = true
         other_competition.save!
-        get :edit, params: { id: my_competition }
+        get :nearby_competitions, params: { competition: my_competition.serializable_hash }
         expect(assigns(:nearby_competitions)).to eq [other_competition]
       end
     end
@@ -227,7 +227,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can see unconfirmed nearby competitions" do
-        get :edit, params: { id: my_competition }
+        get :nearby_competitions, params: { competition: my_competition.serializable_hash }
         expect(assigns(:nearby_competitions)).to eq [other_competition]
       end
     end
@@ -253,7 +253,7 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryBot.create :admin }
 
       it "creates a new competition" do
-        post :create, params: { competition: { name: "FatBoyXPC 2015", use_wca_registration: false } }
+        post :create, params: { competition: { name: "FatBoyXPC 2015", countryId: "USA", use_wca_registration: false } }
         new_comp = assigns(:competition)
         expect(response).to redirect_to edit_competition_path("FatBoyXPC2015")
         expect(new_comp.id).to eq "FatBoyXPC2015"
@@ -278,7 +278,7 @@ RSpec.describe CompetitionsController do
         organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(delegate, anything, organizer).and_call_original
         expect do
-          post :create, params: { competition: { name: "Test 2015", delegate_ids: delegate.id, organizer_ids: organizer.id, use_wca_registration: false } }
+          post :create, params: { competition: { name: "Test 2015", countryId: "USA", staff_delegate_ids: delegate.id, organizer_ids: organizer.id, use_wca_registration: false } }
         end.to change { enqueued_jobs.size }.by(1)
         expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)
@@ -329,6 +329,12 @@ RSpec.describe CompetitionsController do
         # When a delegate clones a competition, it should clone its organizers, and add
         # the delegate doing the cloning.
         expect(new_comp.delegates.sort_by(&:id)).to eq((competition.delegates + [delegate]).sort_by(&:id))
+        # Assert competition has guest limit
+        expect(competition.guests_per_registration_limit_enabled?).to eq true
+        # Guest limit is cloned
+        expect(new_comp.guests_enabled).to eq competition.guests_enabled
+        expect(new_comp.guest_entry_status).to eq competition.guest_entry_status
+        expect(new_comp.guests_per_registration_limit).to eq competition.guests_per_registration_limit
       end
 
       it 'clones a competition that they delegated' do
@@ -374,25 +380,26 @@ RSpec.describe CompetitionsController do
         expect(competition.reload.confirmed?).to eq true
       end
 
-      it 'saves delegate_ids' do
+      it 'saves staff_delegate_ids' do
         delegate1 = FactoryBot.create(:delegate)
         delegate2 = FactoryBot.create(:delegate)
-        delegates = [delegate1, delegate2]
-        delegate_ids = delegates.map(&:id).join(",")
-        patch :update, params: { id: competition, competition: { delegate_ids: delegate_ids } }
-        expect(competition.reload.delegates).to eq delegates
+        staff_delegates = [delegate1, delegate2]
+        staff_delegate_ids = staff_delegates.map(&:id).join(",")
+        patch :update, params: { id: competition, competition: { staff_delegate_ids: staff_delegate_ids } }
+        expect(competition.reload.delegates).to eq staff_delegates
       end
 
       it "saving removes nonexistent delegates" do
-        invalid_competition_delegate = CompetitionDelegate.new(competition_id: competition.id, delegate_id: -1)
-        invalid_competition_delegate.save(validate: false)
+        # We use 'insert' here to both: skip validations, and skip callbacks.
+        CompetitionDelegate.insert({ competition_id: competition.id, delegate_id: -1, created_at: Time.now, updated_at: Time.now })
+        invalid_competition_delegate = CompetitionDelegate.last
         patch :update, params: { id: competition, competition: { name: competition.name } }
         expect(CompetitionDelegate.find_by_id(invalid_competition_delegate.id)).to be_nil
       end
 
       it "saving removes nonexistent organizers" do
-        invalid_competition_organizer = CompetitionOrganizer.new(competition_id: competition.id, organizer_id: -1)
-        invalid_competition_organizer.save(validate: false)
+        CompetitionOrganizer.insert({ competition_id: competition.id, organizer_id: -1, created_at: Time.now, updated_at: Time.now })
+        invalid_competition_organizer = CompetitionOrganizer.last
         patch :update, params: { id: competition, competition: { name: competition.name } }
         expect(CompetitionOrganizer.find_by_id(invalid_competition_organizer.id)).to be_nil
       end
@@ -402,7 +409,7 @@ RSpec.describe CompetitionsController do
         cos = competition.competition_organizers.to_a
 
         old_id = competition.id
-        patch :update, params: { id: competition, competition: { id: "NewId2015", delegate_ids: competition.delegates.map(&:id).join(",") } }
+        patch :update, params: { id: competition, competition: { id: "NewId2015", staff_delegate_ids: competition.delegates.map(&:id).join(",") } }
 
         expect(CompetitionDelegate.where(competition_id: old_id).count).to eq 0
         expect(CompetitionOrganizer.where(competition_id: old_id).count).to eq 0
@@ -428,18 +435,19 @@ RSpec.describe CompetitionsController do
       end
 
       it 'cannot pass a non-delegate as delegate' do
-        delegate_ids_old = future_competition.delegate_ids
+        delegate_ids_old = future_competition.staff_delegate_ids
         fake_delegate = FactoryBot.create(:user)
-        post :update, params: { id: future_competition, competition: { delegate_ids: fake_delegate.id } }
+        post :update, params: { id: future_competition, competition: { staff_delegate_ids: fake_delegate.id } }
         invalid_competition = assigns(:competition)
-        expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["are not all Delegates"]
+        expect(invalid_competition).to be_invalid_with_errors(staff_delegate_ids: ["are not all Delegates"],
+                                                              trainee_delegate_ids: ["are not all Delegates"])
         future_competition.reload
-        expect(future_competition.delegate_ids).to eq delegate_ids_old
+        expect(future_competition.staff_delegate_ids).to eq delegate_ids_old
       end
 
       it 'can change the delegate' do
         new_delegate = FactoryBot.create(:delegate)
-        post :update, params: { id: competition, competition: { delegate_ids: new_delegate.id } }
+        post :update, params: { id: competition, competition: { staff_delegate_ids: new_delegate.id } }
         competition.reload
         expect(competition.delegates).to eq [new_delegate]
       end
@@ -457,7 +465,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as a delegate. This should be allowed, because we're
         # still an organizer.
-        patch :update, params: { id: competition, competition: { delegate_ids: "", organizer_ids: organizer.id } }
+        patch :update, params: { id: competition, competition: { staff_delegate_ids: "", organizer_ids: organizer.id } }
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq [organizer]
       end
@@ -469,7 +477,8 @@ RSpec.describe CompetitionsController do
         invalid_competition = assigns(:competition)
         expect(invalid_competition).to be_invalid
         expect(invalid_competition.organizer_ids).to eq ""
-        expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["You cannot demote yourself"]
+        expect(invalid_competition.errors.messages[:staff_delegate_ids]).to eq ["You cannot demote yourself"]
+        expect(invalid_competition.errors.messages[:trainee_delegate_ids]).to eq ["You cannot demote yourself"]
         expect(invalid_competition.errors.messages[:organizer_ids]).to eq ["You cannot demote yourself"]
         expect(competition.reload.organizers).to eq [organizer]
       end
@@ -507,7 +516,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as an organizer. This should be allowed, because we're
         # still able to administer results.
-        patch :update, params: { id: competition, competition: { delegate_ids: "", organizer_ids: "", receive_registration_emails: true } }
+        patch :update, params: { id: competition, competition: { staff_delegate_ids: "", organizer_ids: "", receive_registration_emails: true } }
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq []
       end
@@ -692,7 +701,7 @@ RSpec.describe CompetitionsController do
       let(:organizer2) { FactoryBot.create(:user) }
       before :each do
         competition.delegates << delegate
-        competition.trainee_delegates << trainee_delegate
+        competition.delegates << trainee_delegate
         sign_in trainee_delegate
       end
 
@@ -782,7 +791,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot change extra registration requirements field after competition is confirmed" do
-        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate], trainee_delegates: [trainee_delegate], extra_registration_requirements: "Extra requirements")
+        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate, trainee_delegate], extra_registration_requirements: "Extra requirements")
         new_requirements = "New extra requirements"
         patch :update, params: { id: comp, competition: { extra_registration_requirements: new_requirements } }
         comp.reload

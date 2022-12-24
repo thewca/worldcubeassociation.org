@@ -39,6 +39,7 @@ class RegistrationsController < ApplicationController
     @show_events = params[:show_events] == "true"
     @show_full_emails = params[:show_full_emails] == "true"
     @show_birthdays = params[:show_birthdays] == "true"
+    @run_validations = params[:run_validations] == "true"
 
     @competition = competition_from_params
     @registrations = @competition.registrations.includes(:user, :registration_payments, :events)
@@ -475,10 +476,14 @@ class RegistrationsController < ApplicationController
           render json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
           return
         end
+
+        currency_iso = registration.outstanding_entry_fees.currency.iso_code
+        stripe_amount = StripeCharge.amount_to_stripe(amount, currency_iso)
+
         payment_intent_args = {
           payment_method: params[:payment_method_id],
-          amount: amount,
-          currency: registration.outstanding_entry_fees.currency.iso_code,
+          amount: stripe_amount,
+          currency: currency_iso,
           confirmation_method: "manual",
           confirm: true,
           receipt_email: user.email,
@@ -510,7 +515,7 @@ class RegistrationsController < ApplicationController
           stripe_account: registration.competition.connected_stripe_account_id,
         )
       end
-    rescue Stripe::CardError => e
+    rescue Stripe::StripeError => e
       # Log and display error to client
       stripe_charge.update!(status: "failure", error: e.message)
       render json: { error: { message: e.message } }
@@ -581,10 +586,13 @@ class RegistrationsController < ApplicationController
       return
     end
 
+    currency_iso = registration.competition.currency_code
+    stripe_amount = StripeCharge.amount_to_stripe(refund_amount, currency_iso)
+
     refund = Stripe::Refund.create(
       {
         charge: payment.stripe_charge_id,
-        amount: refund_amount,
+        amount: stripe_amount,
       },
       stripe_account: registration.competition.connected_stripe_account_id,
     )
@@ -603,7 +611,7 @@ class RegistrationsController < ApplicationController
 
   def create
     @competition = competition_from_params
-    if !@competition.registration_opened?
+    unless @competition.registration_opened? || @competition.user_can_pre_register?(current_user)
       flash[:danger] = "You cannot register for this competition, registration is closed"
       redirect_to competition_path(@competition)
       return

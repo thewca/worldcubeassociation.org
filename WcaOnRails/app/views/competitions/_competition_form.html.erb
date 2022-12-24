@@ -74,18 +74,17 @@
                 <%= Competition::NEARBY_DISTANCE_KM_WARNING %>,
                 form_disabled);
 
-            window.wca.fetchNearbyCompetitions = function() {
+            window.wca.triggerAdjacentCompetitionAjax = function(url, ajaxId, successFn) {
               if (form_disabled) {
                 // The user isn't allowed to change the location of the
-                // competition, so there's no need to bother recomputing the nearby
-                // competitions.
+                // competition, so there's no need to bother recomputing anything
                 return;
               }
-              $("#nearby-competitions").addClass('loading');
+
               var obj = $("#competition-form").serializeJSON();
 
-              window.wca.cancelPendingAjaxAndAjax('render_nearby_competitions', {
-                url: '<%= nearby_competitions_path %>',
+              var request = {
+                url: url,
                 data: {
                   <% if @competition_admin_view %>
                     'competition_admin_view': true,
@@ -95,31 +94,52 @@
                   'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
                   'competition[start_date]': obj['competition[start_date]'],
                   'competition[end_date]': obj['competition[end_date]'],
+                  'competition[registration_open]': obj['competition[registration_open]'],
                 },
-                success: function(data) {
-                  $('#nearby-competitions').html(data);
-                  $("#nearby-competitions").removeClass('loading');
-                }
+                success: successFn
+              };
+
+              window.wca.cancelPendingAjaxAndAjax(ajaxId, request);
+            };
+            window.wca.triggerAdjacentCompetitionAjaxWithLoading = function(url, targetSelector, ajaxId) {
+              window.wca.triggerAdjacentCompetitionAjax(url, ajaxId, function(data) {
+                $(targetSelector).html(data);
+                $(targetSelector).removeClass('loading');
               });
-              window.wca.cancelPendingAjaxAndAjax('render_time_until_competition', {
-                url: '<%= time_until_competition_path %>',
-                data: {
-                  'competition[id]': obj['competition[id]'],
-                  'competition[start_date]': obj['competition[start_date]'],
-                  'competition[end_date]': obj['competition[end_date]'],
-                },
-                success: function(data) {
-                  $('#time-until-competition').closest(".form-group").toggleClass('has-error', data.has_date_errors);
-                  $('#time-until-competition').html(data.html);
-                }
+
+              $(targetSelector).addClass('loading');
+            };
+            window.wca.fetchProximityPolicyCompetitions = function() {
+              var nearbyAjaxUrl = '<%= nearby_competitions_path %>';
+              window.wca.triggerAdjacentCompetitionAjaxWithLoading(nearbyAjaxUrl, '#nearby-competitions', 'render_nearby_competitions');
+            };
+            window.wca.fetchSeriesEligibleCompetitions = function() {
+              var seriesEligibleUrl = '<%= series_eligible_competitions_path %>';
+              window.wca.triggerAdjacentCompetitionAjaxWithLoading(seriesEligibleUrl, '#series-eligible-competitions', 'render_eligible_series_competitions');
+            };
+            window.wca.fetchCollidingRegistrationStartCompetitions = function() {
+              var collidingRegistrationsUrl = '<%= colliding_registration_start_competitions_path %>';
+              window.wca.triggerAdjacentCompetitionAjaxWithLoading(collidingRegistrationsUrl, '#colliding-registration-start-competitions', 'render_colliding_registration_start_competitions');
+            };
+            window.wca.renderTimeUntilCompetition = function() {
+              var timeUntilCompetitionUrl = '<%= time_until_competition_path %>';
+              window.wca.triggerAdjacentCompetitionAjax(timeUntilCompetitionUrl, 'render_time_until_competition', function (data) {
+                $('#time-until-competition').closest(".form-group").toggleClass('has-error', data.has_date_errors);
+                $('#time-until-competition').html(data.html);
               });
+            };
+            window.wca.fetchNearbyCompetitions = function() {
+              window.wca.fetchProximityPolicyCompetitions();
+              window.wca.fetchSeriesEligibleCompetitions();
+
+              window.wca.renderTimeUntilCompetition();
             };
           })();
         </script>
 
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-9">
-            <div class="row datetimerange">
+            <div id="competition-dates-picker" class="row datetimerange">
               <%= f.input :start_date, as: :date_picker, wrapper: :ranged_datetime %>
               <%= f.input :end_date, as: :date_picker, wrapper: :ranged_datetime %>
             </div>
@@ -130,17 +150,18 @@
         </div>
 
         <script>
-          $(".datetimepicker").on("dp.change", function(e) {
+          $("#competition-dates-picker .datetimepicker").on("dp.change", function(e) {
             window.wca.fetchNearbyCompetitions();
           });
         </script>
 
-        <div id="nearby-competitions">
+        <div id="nearby-competitions" class="adjacent-competitions">
+          <% @nearby_competitions = [] # nasty hack to display the "loading" indicator without crashing %>
           <%= render "nearby_competitions" %>
         </div>
 
         <%= f.input :information, input_html: { class: disable_form ? "" : "markdown-editor" } %>
-        <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
+        <%= f.input :staff_delegate_ids, as: :user_ids, only_staff_delegates: true %>
         <%= f.input :trainee_delegate_ids, as: :user_ids, only_trainee_delegates: true %>
         <%= f.input :organizer_ids, as: :user_ids %>
         <%= f.input :contact, hint: t('.contact_html', md: t('.supports_md_html')) %>
@@ -148,6 +169,24 @@
         <hr>
         <%= f.input :generate_website %>
         <%= f.input :external_website %>
+        <hr>
+
+        <div class="series">
+          <%= f.simple_fields_for :competition_series, @competition.competition_series do |f2| %>
+            <%= render "competition_series_fields", f: f2 %>
+          <% end %>
+
+          <div id="series-eligible-competitions" class="adjacent-competitions">
+            <% @series_eligible_competitions = [] # nasty hack to display the "loading" indicator without crashing %>
+            <%= render "series_eligible_competitions" %>
+          </div>
+
+          <div class="row save-first-hint" style="display: none;">
+            <div class="col-sm-offset-2 col-sm-9">
+              <%= t('.series_save_first_hint') %>
+            </div>
+          </div>
+        </div>
         <hr>
 
         <div class="championships">
@@ -163,6 +202,7 @@
         </div>
         <hr>
         <%= f.input :use_wca_registration %>
+        <%= f.input :use_wca_live_for_scoretaking %>
         <%= f.input :external_registration_page %>
 
       </fieldset>
@@ -185,14 +225,30 @@
         <%= f.input :guests_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
 
         <div class="guest-no-entry-fee-options">
-          <%= f.input :free_guest_entry_status, include_blank: false %>
+          <%= f.input :guest_entry_status, include_blank: false %>
+          <%= f.input :guests_per_registration_limit %>
         </div>
 
-        <div class="col-sm-offset-2 col-sm-9">
-          <div class="row datetimerange">
-            <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
-            <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-9">
+            <div id="registration-dates-picker" class="row datetimerange">
+              <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
+              <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
+            </div>
           </div>
+        </div>
+
+        <div class="colliding-competitions">
+          <div id="colliding-registration-start-competitions" class="adjacent-competitions">
+            <% @colliding_registration_start_competitions = [] # nasty hack to display the "loading" indicator without crashing %>
+            <%= render "colliding_registration_start_competitions" %>
+          </div>
+
+          <script>
+            $("#registration-dates-picker .datetimepicker").on("dp.change", function(e) {
+              window.wca.fetchCollidingRegistrationStartCompetitions();
+            });
+          </script>
         </div>
 
         <%= f.input :competitor_limit_enabled, collection: [ :true, :false ] %>
@@ -206,88 +262,50 @@
         <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input, currency_selector: "#competition_currency_code" %>
 
         <script>
-          var baseFeeUSD = -1;
-
-          // Note: unfortunately we cannot trigger a change on the currency
-          // code update, because we don't have access to the currency
-          // "subunit_to_unit" from the js world.
           function UpdateDues(){
-            <% countryBand = CountryBand.where(iso2: @competition.serializable_hash[:country_iso2]).map(&:number)[0] %>
-            <% if !countryBand.nil? && countryBand > 0 %>
-              var bandFeeUSD = <%= CountryBand::BANDS[countryBand][:value] %>;
-            <% else %>
-              var bandFeeUSD = 0;
-            <% end %>
-            var pricePerCompetitor = Math.max(bandFeeUSD, baseFeeUSD) * 100;
-            var compLimit = $('select[name="competition[competitor_limit_enabled]"]').val() === "true"
-              ? $('input[name="competition[competitor_limit]"]').val() : null;
-            window.wca.cancelPendingAjaxAndAjax('currency_convert', {
-              url: '<%= currency_convert_path %>',
+
+            var obj = $("#competition-form").serializeJSON();
+            var compLimitEnabled = obj['competition[competitor_limit_enabled]']
+            var compLimit = compLimitEnabled === "true" ? obj['competition[competitor_limit]'] : null
+            var currencyCode = obj['competition[currency_code]']
+
+            window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
+              url: '<%= calculate_dues_path %>',
               data: {
-                value: compLimit === null ? pricePerCompetitor : pricePerCompetitor * compLimit,
-                from_currency: "USD",
-                to_currency: "<%= @competition.currency_code %>",
+                competitor_limit_enabled: compLimitEnabled,
+                competitor_limit: compLimit,
+                currency_code: currencyCode,
+                country_id: obj['competition[countryId]'],
+                entry_fee_cents: obj['competition[base_entry_fee_lowest_denomination]'],
               },
               success: function(data) {
-                var dues = data.formatted;
-
-                /*
-                  Currently, if base fee is -1 then there was an error while converting
-                  our base fee to USD, which would cause band fee to always be larger
-                  and we would display a wrong dues estimate based on band fee. We
-                  would rather show an error than a wrong estimate.
-                  This error is only expected upon loading up the page, when the ajax
-                  requests are somehow aborted.
-                */
-                if (baseFeeUSD == -1) {
-                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.ajax_error') %>
-                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
-                } else if (compLimit != null) {
+                if (compLimitEnabled) {
                   <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.calculated') %>
-                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
-                } else {
-                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.per_competitor') %>
-                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: dues}) + " (<%= @competition.currency_code %>)</b>");
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: data.dues_value}) + " (" + currencyCode + ")</b>");
                 }
+                else{
+                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.per_competitor') %>
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: data.dues_value}) + " (" + currencyCode + ")</b>");
+                }
+              },
+              error: function(){
+                // This error will occur if there are no available exchange rates for the selected currency, and there are quite a few of such currencies.
+                <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.ajax_error') %>
+                $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
               }
             });
           }
 
-
           $(function() {
+            if (!$('#dues_estimate').length) {
+              $('input[name="competition[base_entry_fee_lowest_denomination]"]').siblings('.help-block').append('<br><br><p id="dues_estimate"><b></b></p>');
+            }
+
             $('select[name="competition[competitor_limit_enabled]"]').on('change', UpdateDues);
             $('input[name="competition[competitor_limit]"]').on('change', UpdateDues);
-
-            /*
-              Placing this callback at last will let us trigger a manual 'change'
-              on the field to create a estimate of the dues when the page is loaded.
-            */
-            $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', function() {
-              if (!$('#dues_estimate').length) {
-                $(this).siblings('.help-block').append('<br><br><p id="dues_estimate"><b></b></p>');
-              }
-
-              /*
-                Different currencies keep different decimal points, and this.value only gives
-                a raw number without decimals, so we need to divide this.value by the
-                currency's subunit to convert it into actual value.
-              */
-              var subunit = <%= Money::Currency.new(@competition.currency_code).subunit_to_unit %>;
-              var moneyValue = this.value / subunit;
-
-              window.wca.cancelPendingAjaxAndAjax('currency_convert', {
-                url: '<%= currency_convert_path %>',
-                data: {
-                  value: moneyValue,
-                  from_currency: "<%= @competition.currency_code %>",
-                  to_currency: "USD",
-                },
-                success: function(data) {
-                  baseFeeUSD = data.value * 0.05;
-                  UpdateDues();
-                }
-              });
-            }).trigger('change');
+            $('select[name="competition[countryId]"]').on('change', UpdateDues);
+            $('select[name="competition[currency_code]"]').on('change', UpdateDues);
+            $('input[name="competition[base_entry_fee_lowest_denomination]"]').on('change', UpdateDues).trigger('change'); //trigger() to display dues upon load
           });
         </script>
 
@@ -300,17 +318,21 @@
         <%= f.input :on_the_spot_registration, collection: [ :true, :false ] %>
         <%= f.input :on_the_spot_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
 
-        <%= f.input :allow_registration_edits, collection: [ :true, :false ] %>
-        <%= f.input :allow_registration_self_delete_after_acceptance, collection: [ :true, :false ] %>
+        <div class="wca-registration-options">
+          <%= f.input :allow_registration_edits, collection: [ :true, :false ] %>
+          <%= f.input :allow_registration_self_delete_after_acceptance, collection: [ :true, :false ] %>
+        </div>
 
         <%= f.input :extra_registration_requirements, input_html: { class: disable_form ? "" : "markdown-editor" } %>
 
         <hr>
+
         <%= f.input :early_puzzle_submission %>
         <%= f.input :early_puzzle_submission_reason %>
 
         <%= f.input :qualification_results %>
         <%= f.input :qualification_results_reason %>
+        <%= f.input :allow_registration_without_qualification, collection: [ :true, :false ] %>
 
         <%= f.input :event_restrictions %>
         <%= f.input :event_restrictions_reason %>

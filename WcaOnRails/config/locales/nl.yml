@@ -426,7 +426,7 @@ nl:
         #original_hash: 28a6fbb
         currency_code: Valutacode
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-delegate(s)
+        staff_delegate_ids: WCA-delegate(s)
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Trainee Delegate(s)
         #original_hash: 958562e
@@ -463,8 +463,6 @@ nl:
         enable_donations: >-
           Ik wil naast de deelnamekosten ook de mogelijkheid bieden om donaties
           te doen
-        #original_hash: 4baf44b
-        championship_type: Type Kampioenschap
         #original_hash: 556fda0
         extra_registration_requirements: Extra aanmeldingseisen
         #original_hash: 2529d04
@@ -488,7 +486,7 @@ nl:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Bezoekerskosten
         #original_hash: bb16247
-        free_guest_entry_status: Toon bericht over gratis toegang voor gasten
+        guest_entry_status: Toon bericht over gratis toegang voor gasten
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Ik wil van deelnemers eisen dat ze hun puzzels op een specifiek
@@ -509,6 +507,9 @@ nl:
         event_restrictions_reason: Reden en details voor beperkingen in wedstrijdonderdelen
         #original_hash: 3c24bd2
         main_event_id: Main Event
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Type Kampioenschap
       registration:
         #original_hash: 3c23a67
         guests: Gasten
@@ -696,13 +697,13 @@ nl:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Laat niks zien (en wellicht een toelichting geven in de sectie Extra
           registratie-eisen)
         #original_hash: 694bce4
-        anyone: Iedere gast kan gratis komen kijken
+        free: Iedere gast kan gratis komen kijken
         #original_hash: 762c509
         restricted: Gasten alleen toegestaan als begeleider van deelnemers
   simple_form:
@@ -809,7 +810,7 @@ nl:
           deelnemers en toeschouwers, en andere details die relevant zijn voor
           mensen die zijn geïnteresseerd om deel te nemen of te komen kijken.
         #original_hash: b4d020f
-        delegate_ids: WCA-delegates van de wedstrijd.
+        staff_delegate_ids: WCA-delegates van de wedstrijd.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Trainee Delegates voor deze wedstrijd
         #original_hash: 517d376
@@ -923,7 +924,7 @@ nl:
           kun je niet via deze website regelen. Als het bedrag 0 is, dan wordt
           een zin naar keuze getoond over het beleid rond gasten.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2633,7 +2634,7 @@ nl:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Iedere gast heeft gratis toegang.
+        free: Iedere gast heeft gratis toegang.
         #original_hash: f1e6aef
         restricted: Gasten zijn alleen toegestaan als begeleider van deelnemers.
       #original_hash: 97a31ee
@@ -2981,22 +2982,23 @@ nl:
         zero: Geen wedstrijden
         one: 1 wedstrijd
         other: '%{count} wedstrijden'
-      #original_hash: e3528ec
-      label: 'Nabije wedstrijden (binnen %{days} dagen en %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Laatste %{days} dagen'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} binnen %{kms} km en %{days} dagen.'
+      #original_hash: 9eb8f46
+      within: 'Binnen %{days} dagen'
+      #original_hash: d97d1ee
+      show: Tonen
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Nabije wedstrijden (binnen %{days} dagen en %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Geen nabije wedstrijden!
       #original_hash: 7e76950
       no_date_yet: Je hebt nog geen datum voor deze wedstrijd ingevuld.
       #original_hash: 82a95d2
       no_location_yet: Je hebt nog geen locatie voor deze wedstrijd ingevuld.
-      #original_hash: 9eb8f46
-      within: 'Binnen %{days} dagen'
-      #original_hash: d97d1ee
-      show: Tonen
       #original_hash: 709a232
       name: Naam
       #original_hash: adc24b7

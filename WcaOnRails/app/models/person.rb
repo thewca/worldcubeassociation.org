@@ -135,7 +135,7 @@ class Person < ApplicationRecord
   end
 
   def likely_delegates
-    all_delegates = competitions.order(:year, :month, :day).map(&:delegates).flatten.select(&:any_kind_of_delegate?)
+    all_delegates = competitions.order(:year, :month, :day).map(&:staff_delegates).flatten.select(&:any_kind_of_delegate?)
     if all_delegates.empty?
       return []
     end
@@ -286,21 +286,24 @@ class Person < ApplicationRecord
     persons.order(:name)
   end
 
+  def url
+    Rails.application.routes.url_helpers.person_url(wca_id, host: EnvVars.ROOT_URL)
+  end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["wca_id", "name", "gender"],
+    methods: ["url", "country_iso2"],
+  }.freeze
+
   def serializable_hash(options = nil)
-    json = {
+    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+    json.merge!(
       class: self.class.to_s.downcase,
-      url: Rails.application.routes.url_helpers.person_url(self.wca_id, host: EnvVars.ROOT_URL),
-
       id: self.wca_id,
-      wca_id: self.wca_id,
-      name: self.name,
-
-      gender: self.gender,
-      country_iso2: self.country_iso2,
-    }
+    )
 
     # If there's a user for this Person, merge in all their data,
     # the Person's data takes priority, though.
-    (user || User.new).serializable_hash.merge(json)
+    (user || User.new).serializable_hash(options).merge(json)
   end
 end

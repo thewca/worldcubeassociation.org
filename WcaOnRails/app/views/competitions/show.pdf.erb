@@ -26,10 +26,10 @@
     </header>
     <div class="main_content">
       <h1 class="break-before"><%=t 'competitions.show.events' %></h1>
-      <%= render "pdf_events_table.html.erb" %>
-      <%= render "pdf_schedule_table.html.erb" %>
+      <%= render "events_table" %>
+      <%= render "schedule_table" %>
       <h1><%= t 'competitions.competition_info.pdf.terms_and_abbr' %></h1>
-      <%= render "time_limit_cutoff_format_info.html.erb", competition: @competition %>
+      <%= render "time_limit_cutoff_format_info", competition: @competition %>
       <h4><%= t 'competitions.competition_info.pdf.formats_abbr' %></h4>
       <ul>
         <% @competition.rounds.flat_map(&:formats_used).map(&:id).uniq.sort.each do |format_id| %>

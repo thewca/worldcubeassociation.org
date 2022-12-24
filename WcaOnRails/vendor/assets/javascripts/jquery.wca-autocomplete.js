@@ -9,6 +9,7 @@
       that.wcaAutocomplete = true;
 
       var only_one = $(that).hasClass("wca-autocomplete-only_one");
+      var is_locked = $(that).hasClass("wca-autocomplete-input_lock");
       var omni_search = $(that).hasClass("wca-autocomplete-search");
       var users_search = $(that).hasClass("wca-autocomplete-users_search");
       var competitions_search = $(that).hasClass("wca-autocomplete-competitions_search");
@@ -28,12 +29,12 @@
         url = '/api/v0/search';
       } else if(users_search) {
         url = '/api/v0/search/users';
-        var only_delegates = $(that).hasClass("wca-autocomplete-only_delegates");
+        var only_staff_delegates = $(that).hasClass("wca-autocomplete-only_staff_delegates");
         var only_trainee_delegates = $(that).hasClass("wca-autocomplete-only_trainee_delegates");
         var persons_table = $(that).hasClass("wca-autocomplete-persons_table");
 
-        if(only_delegates) {
-          defaultSearchData.only_delegates = true;
+        if(only_staff_delegates) {
+          defaultSearchData.only_staff_delegates = true;
         }
         if(only_trainee_delegates) {
           defaultSearchData.only_trainee_delegates = true;
@@ -178,6 +179,9 @@
       if(plaintextToSetAfterSelectize) {
         that.selectize.$control_input.val(plaintextToSetAfterSelectize);
         that.selectize.$control_input.trigger("update");
+      }
+      if(is_locked) {
+        that.selectize.lock();
       }
     });
 

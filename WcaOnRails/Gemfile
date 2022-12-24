@@ -81,7 +81,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '6.5.0'
+gem 'shakapacker', '6.5.4'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -91,12 +91,10 @@ gem 'image_processing'
 gem 'rest-client'
 gem 'wicked_pdf'
 gem 'icalendar'
-gem 'starburst', github: 'starburstgem/starburst'
+# pointing to our fork which has Rails 7 support enabled (aka monkey-patched)
+gem 'starburst', github: 'thewca/starburst'
 gem 'react-rails'
-# required until https://github.com/rails/rails/pull/44083 is backported to Rails 6
-gem 'net-imap', require: false
-gem 'net-pop', require: false
-gem 'net-smtp', require: false
+gem 'sprockets-rails'
 
 group :development, :test do
   gem 'spring'

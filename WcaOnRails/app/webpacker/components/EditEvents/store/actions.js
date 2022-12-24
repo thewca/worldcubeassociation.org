@@ -8,7 +8,7 @@ export const UpdateRoundFormat = 'UPDATE_ROUND_FORMAT';
 export const UpdateCutoff = 'UPDATE_CUTOFF';
 export const UpdateTimeLimit = 'UPDATE_TIMELIMIT';
 export const UpdateAdvancementCondition = 'UPDATE_ADVANCEMENT_CONDITION';
-export const UpdateQualificiation = 'UPDATE_QUALIFICATION';
+export const UpdateQualification = 'UPDATE_QUALIFICATION';
 
 /**
  * Action creator for marking changes as saved
@@ -134,8 +134,8 @@ export const updateAdvancementCondition = (roundId, advancementCondition) => ({
   },
 });
 
-export const updateQualificiation = (eventId, qualification) => ({
-  type: UpdateQualificiation,
+export const updateQualification = (eventId, qualification) => ({
+  type: UpdateQualification,
   payload: {
     eventId,
     qualification,

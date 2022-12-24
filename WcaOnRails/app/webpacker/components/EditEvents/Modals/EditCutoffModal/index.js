@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
-import formats from '../../../../lib/wca-data/formats.js.erb';
+import { formats } from '../../../../lib/wca-data.js.erb';
 import useInputState from '../../../../lib/hooks/useInputState';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import { roundCutoffToString } from '../../utils';

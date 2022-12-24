@@ -109,13 +109,20 @@
 
 <div id="delegate" class="form-group delegate-selector">
   <%= label_tag(t('layouts.navigation.delegate')) %>
-  <%= text_field_tag "delegate", params[:delegate], class: "wca-autocomplete wca-autocomplete-only_one wca-autocomplete-only_delegates wca-autocomplete-users_search",
+  <%= text_field_tag "delegate", params[:delegate], class: "wca-autocomplete wca-autocomplete-only_one wca-autocomplete-only_staff_delegates wca-autocomplete-users_search",
                                  data: { data: User.where(id: params[:delegate]).to_json } %>
+</div>
+
+<div id="registration-status" class="form-group registration-status-selector">
+  <%= check_box_tag(:show_registration_status, params[:show_registration_status], params[:show_registration_status] == "on") %>
+  <%= label_tag(name = :show_registration_status,
+                content_or_options = t('competitions.index.show_registration_status')) %>
 </div>
 
 <div id="cancelled" class="form-group cancel-selector">
   <%= check_box_tag(:show_cancelled, params[:show_cancelled], params[:show_cancelled] == "on") %>
-  <%= label_tag("Show cancelled competitions") %>
+  <%= label_tag(name = :show_cancelled,
+                content_or_options = t('competitions.index.show_cancelled')) %>
 </div>
 
 <div id="display" class="form-group">

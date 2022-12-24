@@ -4,6 +4,7 @@ import React, {
 import { Dropdown } from 'semantic-ui-react';
 
 import CompetitionItem from './CompetitionItem';
+import IncidentItem from './IncidentItem';
 import RegulationItem from './RegulationItem';
 import UserItem from './UserItem';
 import TextItem from './TextItem';
@@ -18,6 +19,7 @@ const classToComponent = {
   competition: CompetitionItem,
   regulation: RegulationItem,
   text: TextItem,
+  incident: IncidentItem,
 };
 
 function ItemFor({ item }) {
@@ -43,7 +45,7 @@ const itemToOption = (item) => ({
   value: item.id,
   // 'text' is used by the search method from the component, we need to put
   // the text with a potential match here!
-  text: [item.id, item.name, item.content_html, item.search].join(' '),
+  text: [item.id, item.name, item.title, item.content_html, item.search, item.public_summary].join(' '),
   content: <ItemFor item={item} />,
 });
 
@@ -104,7 +106,7 @@ function OmnisearchInput({
       // FUI's dropdown will automatically remove selected items from the
       // options left for selection.
       fetchJsonOrError(url(debouncedSearch))
-        .then((data) => setResults(data.result.map(itemToOption)))
+        .then(({ data }) => setResults(data.result.map(itemToOption)))
         .finally(() => setLoading(false));
     }
   }, [debouncedSearch, url]);

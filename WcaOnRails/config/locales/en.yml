@@ -283,6 +283,7 @@ en:
         pending_avatar: "Upload new avatar"
         remove_avatar: "Remove avatar"
         results_notifications_enabled: "Email me when my results are posted."
+        registration_notifications_enabled: "When I organize or delegate a competition, email me when new registrations are submitted."
         delegate_status: "Delegate status"
         region: "Region"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
@@ -307,17 +308,19 @@ en:
         generate_website: "I would like to use WCA website instead of an external one for additional information."
         base_entry_fee_lowest_denomination: "Base registration fee"
         currency_code: "Currency code"
-        delegate_ids: "WCA Delegate(s)"
+        staff_delegate_ids: "WCA Delegate(s)"
         trainee_delegate_ids: "WCA Trainee Delegate(s)"
         organizer_ids: "Organizer(s)"
         contact: "Contact"
         information: "Information"
         use_wca_registration: "I would like to use the WCA website for registration"
+        use_wca_live_for_scoretaking: "I will be using WCA Live for scoretaking"
         external_registration_page: "Registration page"
         competitor_limit_enabled: "Competitor limit"
         competitor_limit: "Maximum number of competitors"
         competitor_limit_reason: "The reason for the competitor limit"
         guests_enabled: "Guests"
+        guests_per_registration_limit: "Maximum number of guests per registration"
         receive_registration_emails: "Notify me by email when someone registers for this competition"
         registration_open: "Registration open"
         registration_close: "Registration close"
@@ -325,7 +328,6 @@ en:
         clone_tabs: "I would like to clone all tabs with additional information as well"
         competition_events: "Events"
         enable_donations: "I want to enable donations additionally to collecting the registration fees"
-        championship_type: "Championship type"
         extra_registration_requirements: "Extra registration requirements"
         on_the_spot_registration: "On the spot registrations"
         on_the_spot_entry_fee_lowest_denomination: "On the spot base registration fee"
@@ -336,7 +338,7 @@ en:
         waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
         event_change_deadline_date: "Deadline for competitors to update their registered events"
         guests_entry_fee_lowest_denomination: "Entry fee for guests"
-        free_guest_entry_status: "Display message for free guest entry"
+        guest_entry_status: "Display message for free guest entry"
         early_puzzle_submission: "I would like to require competitors to submit puzzles at a specific time before an event is scheduled to begin"
         early_puzzle_submission_reason: "Reason and details for submitting puzzles early"
         qualification_results: "I would like to use qualification results to limit who can compete in certain events"
@@ -344,6 +346,14 @@ en:
         event_restrictions: "I would like to restrict competitors from registering for specific combinations of events"
         event_restrictions_reason: "Reason and details for event restrictions"
         main_event_id: "Main event"
+        allow_registration_without_qualification: "Events with Qualification"
+      championship:
+        championship_type: "Championship type"
+      competition_series:
+        wcif_id: "ID"
+        name: "Name"
+        short_name: "Series nickname"
+        competition_ids: "All competitions"
       #context: a registration to a competition
       registration:
         guests: "Guests"
@@ -458,9 +468,9 @@ en:
         article: "Article"
         multimedia: "Multimedia"
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         unclear: "Do not display anything (and perhaps elaborate in the \"Extra registration requirements\" section)"
-        anyone: "\"Any spectator can attend for free\""
+        free: "\"Any spectator can attend for free\""
         restricted: "\"Spectators are only permitted as companions of competitors\""
   #context: This key is an element of a form on the website
   simple_form:
@@ -501,6 +511,7 @@ en:
         region: ""
         remember_me: ""
         results_notifications_enabled: ""
+        registration_notifications_enabled: "This only applies for competitions you organize or delegate, and can be overridden on a per-competition basis."
         unconfirmed_wca_id: ""
         wca_id: ""
         receive_delegate_reports: "If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
@@ -511,7 +522,7 @@ en:
         cellName: "A short name for displaying. If the name of the competition is already short, you can re-use the name (e.g., Europe 2006)."
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
-        delegate_ids: "WCA Delegates for the competition."
+        staff_delegate_ids: "WCA Delegates for the competition."
         trainee_delegate_ids: "WCA Trainee Delegates for the competition."
         organizer_ids: "Competition organizers (they need an account to be listed here)."
         external_website: "The website of the competition. Must be a valid http(s) url."
@@ -522,7 +533,7 @@ en:
         end_date: ""
         generate_website: ""
         external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
-        base_entry_fee_lowest_denomination: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b><br>Click "Update Competition" after changing currency code to synchronize it with the estimation. If there are no available exchange rates for the selected currency, nothing will be displayed.'
+        base_entry_fee_lowest_denomination: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b>'
         currency_code: "The currency code for fees."
         guests_enabled: ""
         enable_donations: ""
@@ -533,11 +544,12 @@ en:
         showAtAll: ""
         start_date: ""
         use_wca_registration: ""
+        use_wca_live_for_scoretaking: ""
         competitor_limit_enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
         competitor_limit: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
         competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
+        guests_per_registration_limit: "The number guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
         venueAddress: ""
-        championship_type: ""
         extra_registration_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
         on_the_spot_registration: ""
         on_the_spot_entry_fee_lowest_denomination: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
@@ -548,7 +560,7 @@ en:
         waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
         event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
         guests_entry_fee_lowest_denomination: "For now this number is informational only, guest fees cannot be managed through this website. If this is set to 0, a sentence of your choice will be displayed about the spectator policy."
-        free_guest_entry_status: ""
+        guest_entry_status: ""
         early_puzzle_submission: ""
         early_puzzle_submission_reason: "Please elaborate here why you would like to require competitors to submit puzzles early. Please fill this out in English!"
         qualification_results: ""
@@ -556,6 +568,16 @@ en:
         event_restrictions: ""
         event_restrictions_reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
         main_event_id: "The winner of this event will be the winner of the competition."
+        allow_registration_without_qualification: ""
+        #context: when marked as championship
+        championships:
+          championship_type: ""
+        #context: when part of a Competition Series
+        competition_series:
+          wcif_id: ""
+          name: "The full name of the Competition Series including the year at the end (e.g., Southern Australia 2022). Be sure to capitalize. The same rules as for the name of the individual competition apply."
+          short_name: "A short name for displaying. The same rules as for the name of the individual competition apply.."
+          competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
       website_contact:
         inquiry: ""
         competition_id: ""
@@ -667,6 +689,9 @@ en:
         on_the_spot_registration:
           "true": "On the spot registrations will be accepted"
           "false": "On the spot registrations WILL NOT be accepted"
+        allow_registration_without_qualification:
+          "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
+          "false": "Competitors MUST be qualified to register for an event"
         allow_registration_edits:
           "true": "Competitors may edit their registration until the deadline for updating events"
           "false": "Competitors may NOT edit their registration once it has been accepted"
@@ -857,6 +882,9 @@ en:
       manage_app: "Manage your applications"
       manage_auth_app: "Manage authorized applications"
       media_submission: "Media Submission"
+      privacy: "Privacy"
+      disclaimer: "Disclaimer"
+      find_us: "Find us"
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
@@ -1018,7 +1046,7 @@ en:
       guidelines: "Guidelines"
       avatar_guidelines:
         '1': "All avatars should be pictures of real persons."
-        '2': "The person shown must be you."
+        '2': "The person shown must be your current self."
         '3': "If there is more than one person on the avatar, it should be clear who of them is you."
         '4': "Your head, but not necessarily the full face, should be visible."
         '5': "The avatar should not include overlay texts or unnatural filters, including borders."
@@ -1069,7 +1097,6 @@ en:
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
-  #context: Key used when dealing with registration to a competition
   registrations:
     #context: and when an error is found
     errors:
@@ -1077,11 +1104,12 @@ en:
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
       need_country: "Need a country"
-      comp_not_found: "Competition not found"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
+      series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
+      can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1190,6 +1218,9 @@ en:
       #context: date is the registration creation date, eg: "2016-12-01 16:18:56 UTC"
       payment_requested_on: "Payment requested on: %{date}"
       payment_completed_on: "Payment completed on: %{date}"
+      #context: Counts how many parallel registrations in the same Series there are. Will display a number behind this label.
+      series_registrations: "Series registrations"
+      series_registrations_hint_html: "Hint: Series registrations are being displayed as <i>%{description}</i>"
       total: "Total"
       n_events: "Number of events"
     new_registration:
@@ -1223,6 +1254,7 @@ en:
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check competition's information for instruction about how to pay"
+    not_qualified: "Not qualified"
     refund_form:
       hints:
         refund_amount: "The amount to refund to the competitor, can be any value up to the amount already paid."
@@ -1307,6 +1339,7 @@ en:
       no_results: "There are no results."
       no_main_event_results: "There are no results for the main event (%{event_name})."
       in_progress: "This competition is ongoing. Come back after %{date} to see the results!"
+      in_progress_at_wca_live_html: "This competition is ongoing. You can check the live results <a href='%{link_here}'>here</a>!"
       reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       tooltip_registered: "You are registered."
       tooltip_waiting_list: "You are currently on the waiting list."
@@ -1361,6 +1394,9 @@ en:
       claim_wca_id_html: "If this is not your first competition, associate your WCA ID to your WCA account %{here}."
       register_link_html: "Register for this competition %{here}."
       register_below_html: "Register for this competition below."
+      part_of_a_series: "This competition is part of a Competition Series."
+      part_of_a_series_list: "This competition is part of the %{name} Competition Series. Other competitions in this Series are:"
+      series_registration_warning_html: "Note: You can submit a registration for all competitions in a Series, but only one of those registrations can be confirmed and accepted. <b>You will only be allowed to compete in one of the Series competitions!</b>"
       competitor_limit_is: "There is a competitor limit of %{competitor_limit} competitors."
       no_competitor_limit: "There is no competitor limit."
       entry_fee_is: "The base registration fee for this competition is %{base_entry_fee}."
@@ -1378,8 +1414,12 @@ en:
       no_on_the_spot_registration: "No on the spot registrations will be accepted."
       guests_pay: "Spectators can attend paying an entry fee of %{guests_base_fee}."
       guests_free:
-        anyone: "Any spectator can attend for free."
+        free: "Any spectator can attend for free."
         restricted: "Spectators are only permitted as companions of competitors."
+      guest_limit:
+        one: "Competitors may bring at most 1 guest."
+        other: "Competitors may bring at most %{count} guests."
+      require_qualification: "Competitors may only register for events that they are already qualified for."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
       click_to_display_requirements_html: "This competition is over, click %{link_here} to display the registration requirements it used."
       hide_requirements: "Hide registration requirements."
@@ -1421,6 +1461,7 @@ en:
       all_events: "All"
       all_years: "All Years"
       clear: "Clear"
+      select_hint: "Please select events"
       list: "List"
       map: "Map"
       region: "Region"
@@ -1437,6 +1478,8 @@ en:
       #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"
       past_all: "Past from all years"
+      show_cancelled: "Show cancelled competitions"
+      show_registration_status: "Show registration status icon"
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
@@ -1455,6 +1498,7 @@ en:
           ended: "Ended %{days} ago"
           in_progress: "In progress!"
           posted: "Results are posted!"
+          starts_in: "Starts in %{days}"
           announced_on: "Announced on %{announcement_date}"
         #context: the "search" button
         search: "Name or city"
@@ -1489,6 +1533,7 @@ en:
       venue_html: "The venue where the competition takes place. %{md}. For example: [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
       venue_details_html: "Details about the venue (e.g., On the first floor far in the back, follow the signs). %{md}"
       contact_html: "Optional contact information. If you do not fill this in, contact inquiries will be submitted through a form without revealing organizers' emails. %{md}. Example: [Text to display](mailto:some@email.com)"
+      series_save_first_hint: "Note: You have to save the competition first before you can add a new Series."
       events: "Events"
       public_and_locked_html: "This competition is publicly visible and locked for editing. If you need to make a change, please reply to the email thread where the competition was confirmed."
       confirmed_but_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{contact} to make it visible."
@@ -1511,7 +1556,7 @@ en:
       dues_estimate:
         calculated: "The estimated WCA Dues for %{limit} competitors are %{estimate}"
         per_competitor: "The estimated WCA Dues per competitor are %{estimate}"
-        ajax_error: "There is an error with Dues estimation, please set to zero and re-enter the base registration fee"
+        ajax_error: "There is an error with Dues estimation, possibly because there are no available exchange rates for the selected currency."
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
@@ -1536,6 +1581,9 @@ en:
       event_change_deadline_before_registration_close: "Deadline for updating events cannot be before registration close date."
       event_change_deadline_after_end_date: "Deadline for updating events cannot be after the competition."
       event_change_deadline_with_ots: "Deadline for updating events must be during the competition if on the spot registrations are accepted."
+      series_distance_km: "The competition is located too far away from %{competition}."
+      series_distance_days: "The competition is scheduled too many days away from %{competition}."
+      must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
@@ -1546,24 +1594,27 @@ en:
     time_until_competition:
       competition_in: "Competition is in %{n_days}."
       competition_was: "Competition was %{n_days} ago."
-    #context: in the "nearby competitions" list
+    #context: in the Proximity Policy "nearby competitions" list
     nearby_competitions:
       #context: pluralization of "x competition(s)" in the sentence "x competition(s) within n km and m days."
       competitions:
         zero: "No competitions"
         one: "1 competition"
         other: "%{count} competitions"
-      label: "Nearby competitions (within %{days} days and %{kms} km)"
       label_admin: "Last %{days} days"
       nearby_admin: "%{x_competitions} within %{kms} km and %{days} days."
+      within: "Within %{days} days"
+      show: "Show"
+    #context: in any general "nearby competitions" list
+    adjacent_competitions:
+      label: "Nearby competitions (within %{days} days and %{kms} km)"
       no_comp_nearby: "No nearby competitions!"
       no_date_yet: "You have not assigned a date for this competition yet."
       no_location_yet: "You have not assigned a location for this competition yet."
-      within: "Within %{days} days"
-      show: "Show"
       name: "Name"
       delegates: "Delegate(s)"
       date: "Date"
+      time: "Time"
       location: "Location"
       distance: "Distance"
       before: "before"
@@ -1575,6 +1626,11 @@ en:
       events: "Events"
       show_events: "Show events"
       hide_events: "Hide events"
+    colliding_registration_start_competitions:
+      label: "Colliding registration periods (start within %{hours} hours)"
+      no_comp_colliding: "No registration period collisions!"
+      no_registration_start_date_yet: "You have not assigned a registration start date for this competition yet."
+      opens_registration_at: "opens registration at"
     announcements: "Announcements"
     post_announcement: "Announce the competition"
     announced_by_html: "Announced by %{announcer_name} on %{date_time}"
@@ -1673,6 +1729,10 @@ en:
     scrambles_table:
       group: "Group"
       scramble: "Scramble"
+    #context: Edit fields for Competition Series
+    competition_series_fields:
+      add_series: "Add to Series"
+      remove_series: "Remove from Series"
   #context: Competition's tabs management
   competition_tabs:
     headers:
@@ -1704,6 +1764,10 @@ en:
       unknown_show: "Unknown show parameter, must be either \"N persons\", \"N results\", or \"by region\""
     records:
       title: "Records"
+    last_updated_html: "Last updated: %{timestamp}"
+    heading_disabled_functions: "Please note that some filters (such as past years) are temporarily disabled. If you have experience in SQL optimisations, please contact the WST!"
+    tooltip_no_years: "Our database is too large to compute historical data"
+    tooltip_no_quantities: "Our database is too large to compute long rankings"
     selector_elements:
       events_selector:
         event: "Event"
@@ -2188,6 +2252,9 @@ en:
       matcher:
         title: "Scrambles Matcher"
         description: "Can be used to assign scrambles generated by TNoodle to results. Import results from the WCA website (when using WCA Live), a spreadsheet, or a standalone WCIF file. Import scrambles from one or more TNoodle json file(s). Export results to the appropriate format for WCA submission."
+      groups:
+        title: "Competition groups"
+        description: "View competition groups of any ongoing competition"
   logo:
     title: 'WCA Logo'
     paragraphs:
@@ -2252,6 +2319,7 @@ en:
       competitions: "Competitions"
       people: "People"
       advanced_search: "Advanced search"
+      incidents: "Incidents"
       posts: "Posts"
       regulations_and_guidelines: "Regulations and Guidelines"
       #context: Used in the homepage's omnisearch
@@ -2262,11 +2330,13 @@ en:
         competitions: "No competitions found for"
         people: "No people found for"
         posts: "No posts found for"
+        incidents: "No incidents found for"
         regulations_and_guidelines: "No Regulations or Guidelines found for"
   #context: Incident log
   incidents_log:
     #context: disclaimer displayed to inform incidents are only in English
     i18n_disclaimer: "Please note the incidents section is only available in English, the content below is not translated."
+    incident: "Incident:"
   #context: About the regulations
   about_regulations:
     title: "About the Regulations"

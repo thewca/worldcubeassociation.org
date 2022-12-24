@@ -79,6 +79,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_guest_limit do
+      guests_enabled { true }
+      guest_entry_status { Competition.guest_entry_statuses['restricted'] }
+      guests_per_registration_limit { 10 }
+    end
+
     use_wca_registration { false }
     registration_open { 54.weeks.ago.change(usec: 0) }
     registration_close { 53.weeks.ago.change(usec: 0) }
@@ -159,6 +165,36 @@ FactoryBot.define do
       championship_types { [] }
       with_rounds { false }
       with_schedule { false }
+    end
+
+    transient do
+      series_base { nil }
+      series_distance_days { 0 }
+      series_distance_km { 0 }
+      distance_direction_deg { rand(360) }
+    end
+
+    after(:build) do |competition, evaluator|
+      if evaluator.series_base
+        series_base = evaluator.series_base
+
+        time_difference = evaluator.series_distance_days.days
+
+        competition.start_date = series_base.start_date + time_difference
+        competition.end_date = series_base.end_date + time_difference
+
+        geo_distance_km = evaluator.series_distance_km.abs.to_f
+
+        # haversine_shenanigans * rad_to_deg * deg_to_microdeg
+        geo_distance_microdeg = (geo_distance_km / 6371) * (180 / Math::PI) * 1e6
+        random_position_rad = evaluator.distance_direction_deg * (Math::PI / 180)
+
+        distance_longitude = Math.cos(random_position_rad) * geo_distance_microdeg
+        distance_latitude = Math.sin(random_position_rad) * geo_distance_microdeg
+
+        competition.latitude = series_base.latitude + distance_latitude.to_i
+        competition.longitude = series_base.longitude + distance_longitude.to_i
+      end
     end
 
     after(:create) do |competition, evaluator|

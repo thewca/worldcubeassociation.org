@@ -12,7 +12,8 @@ Rails.application.configure do
 
   # Do not eager load code on boot.
   config.eager_load = false
-
+  # We need this so docker compose works in dev
+  config.hosts.clear
   # Show full error reports.
   config.consider_all_requests_local = true
 
@@ -43,6 +44,12 @@ Rails.application.configure do
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
+
+  # Raise exceptions for disallowed deprecations.
+  config.active_support.disallowed_deprecation = :raise
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
@@ -79,11 +86,6 @@ Rails.application.configure do
     # not using the rounds association.
     Bullet.add_safelist type: :unused_eager_loading, class_name: "CompetitionEvent", association: :rounds
   end
-
-  # Add i18n-js to the middleware
-  # We already run i18n:js:export when using webpack(-dev-server), but it wouldn't
-  # get ran if using only bin/rails s
-  config.middleware.use I18n::JS::Middleware
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true

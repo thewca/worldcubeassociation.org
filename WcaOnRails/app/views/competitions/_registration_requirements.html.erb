@@ -25,6 +25,17 @@
   <br>
 <% end %>
 
+<% if @competition.part_of_competition_series? %>
+  <%= t('competitions.competition_info.part_of_a_series_list', name: @competition.competition_series.name) %>
+  <ul>
+    <% @competition.series_sibling_competitions.each do |comp| %>
+      <li><%= link_to comp.name, competition_path(comp.id) %></li>
+    <% end %>
+  </ul>
+  <%= t('competitions.competition_info.series_registration_warning_html') %>
+  <br>
+<% end %>
+
 <% if @competition.competitor_limit_enabled.nil? %>
 <% elsif @competition.competitor_limit_enabled? %>
   <%= t('competitions.competition_info.competitor_limit_is', competitor_limit: @competition.competitor_limit) %>
@@ -108,10 +119,20 @@
   <br>
 <% else %>
   <% if @competition.all_guests_allowed? %>
-    <%= t('competitions.competition_info.guests_free.anyone') %>
+    <%= t('competitions.competition_info.guests_free.free') %>
   <% elsif @competition.some_guests_allowed? %>
     <%= t('competitions.competition_info.guests_free.restricted') %>
   <% end %>
+  <br>
+<% end %>
+
+<% if @competition.guests_per_registration_limit_enabled? %>
+  <%= t('competitions.competition_info.guest_limit', count: @competition.guests_per_registration_limit) %>
+  <br>
+<% end %>
+
+<% if @competition.uses_qualification? && !@competition.allow_registration_without_qualification %>
+  <%= t('competitions.competition_info.require_qualification') %>
   <br>
 <% end %>
 

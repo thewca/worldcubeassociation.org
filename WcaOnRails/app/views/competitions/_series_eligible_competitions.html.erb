@@ -1,0 +1,17 @@
+<%= render 'adjacent_competitions', adjacent_competitions: @series_eligible_competitions, adjacent_desired: true,
+           nearby_days: CompetitionSeries::MAX_SERIES_DISTANCE_DAYS, nearby_km: CompetitionSeries::MAX_SERIES_DISTANCE_KM do |competition| %>
+  <%= link_to_add_series_association competition %>
+<% end %>
+
+<script>
+  (function() {
+    $('[data-toggle="tooltip"]').tooltip();
+  })();
+
+  // hide the "Add" button if a previous, persisted Series has been deleted.
+  // see also competition.js:57
+  $(function() {
+    var hintShown = $('.series .save-first-hint').is(':visible');
+    $('.series a.add_fields').toggle(!hintShown);
+  });
+</script>

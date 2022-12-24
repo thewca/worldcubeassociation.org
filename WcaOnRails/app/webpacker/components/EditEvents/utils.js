@@ -1,5 +1,4 @@
-import formats from '../../lib/wca-data/formats.js.erb';
-import events from '../../lib/wca-data/events.js.erb';
+import { events, formats } from '../../lib/wca-data.js.erb';
 import { buildActivityCode, parseActivityCode } from '../../lib/utils/wcif';
 import { matchResult, pluralize } from '../../lib/utils/edit-events';
 

@@ -3,11 +3,22 @@ import { sanitize } from 'dompurify';
 
 import I18n from '../lib/i18n';
 
+/**
+ * @param {string} i18nKey
+ * @param {Record<string, *>} options
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function I18nHTMLTranslate({
   i18nKey,
+  options = {},
 }) {
   return (
-    <div name="I18nHTMLTranslate" dangerouslySetInnerHTML={{ __html: sanitize(I18n.t(i18nKey)) }} />
+    <span
+      name="I18nHTMLTranslate"
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{ __html: sanitize(I18n.t(i18nKey, options)) }}
+    />
   );
 }
 

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Form, Label } from 'semantic-ui-react';
 
-import formats from '../../../../lib/wca-data/formats.js.erb';
+import { formats } from '../../../../lib/wca-data.js.erb';
 
 const BaseCutoffOptions = [
   { key: 0, value: 0, text: 'No cutoff' },

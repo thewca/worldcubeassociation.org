@@ -50,8 +50,11 @@ namespace :db do
           end
 
           public_zip_path = Rails.root.join('public', 'wst', zip_filename)
-          FileUtils.mkpath(File.dirname(public_zip_path))
-          FileUtils.mv(zip_filename, public_zip_path)
+
+          LogTask.log_task "Moving zipped file to '#{public_zip_path}'" do
+            FileUtils.mkpath(File.dirname(public_zip_path))
+            FileUtils.mv(zip_filename, public_zip_path)
+          end
         end
       end
     end
@@ -77,11 +80,11 @@ namespace :db do
             system("unzip #{zip_filename}") || raise("Error while running `unzip`")
           end
 
-          config = ActiveRecord::Base.connection_config
-          LogTask.log_task "Clobbering contents of '#{config[:database]}' with #{dump_filename}" do
-            DatabaseDumper.mysql("DROP DATABASE IF EXISTS #{config[:database]}")
-            DatabaseDumper.mysql("CREATE DATABASE #{config[:database]}")
-            DatabaseDumper.mysql("SOURCE #{dump_filename}", config[:database])
+          config = ActiveRecord::Base.connection_db_config
+          LogTask.log_task "Clobbering contents of '#{config.database}' with #{dump_filename}" do
+            DatabaseDumper.mysql("DROP DATABASE IF EXISTS #{config.database}")
+            DatabaseDumper.mysql("CREATE DATABASE #{config.database}")
+            DatabaseDumper.mysql("SOURCE #{dump_filename}", config.database)
           end
 
           default_password = 'wca'

@@ -5,7 +5,7 @@ import _ from 'lodash';
 /* eslint import/no-named-as-default: "off" */
 /* eslint import/no-named-as-default-member: "off" */
 import EditEvents from '../components/EditEvents';
-import events from './wca-data/events.js.erb';
+import { events } from './wca-data.js.erb';
 
 const state = {};
 export default function rootRender() {

@@ -3,7 +3,12 @@
                                    : registration_path(@registration) %>
 <%= horizontal_simple_form_for @registration, url: url, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
   <%= render "shared/associated_events_picker", form_builder: f, disabled: disabled,
-              events_association_name: :registration_competition_events, allowed_events: @competition.events, selected_events: @selected_events, hint: notify_of_preferred_events(@registration) %>
+             events_association_name: :registration_competition_events,
+             allowed_events: @competition.events,
+             selected_events: @selected_events,
+             disabled_events: @competition.ineligible_events(current_user),
+             disabled_tooltip: t('registrations.not_qualified'),
+             hint: notify_of_preferred_events(@registration) %>
 
   <% if @competition.guests_enabled? %>
     <%= f.input :guests, disabled: disabled %>
@@ -16,6 +21,14 @@
   <% unless @registration.show_payment_form? || !@competition.has_fees? %>
     <% fees_hint, hint_context = fees_hint_and_context(@registration) %>
     <%= render 'entry_fee', hint: fees_hint, hint_context: hint_context %>
+  <% end %>
+
+  <% if @competition.part_of_competition_series? %>
+    <%= alert :warning do %>
+      <%= t('competitions.competition_info.part_of_a_series') %>
+      <br>
+      <%= t('competitions.competition_info.series_registration_warning_html') %>
+    <% end %>
   <% end %>
 
   <% unless disabled %>

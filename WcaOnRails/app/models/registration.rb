@@ -8,9 +8,9 @@ class Registration < ApplicationRecord
   scope :with_payments, -> { joins(:registration_payments).distinct }
 
   belongs_to :competition
-  belongs_to :user
-  belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User"
-  belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User"
+  belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
+  belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User", optional: true
+  belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User", optional: true
   has_many :registration_competition_events
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
@@ -22,15 +22,24 @@ class Registration < ApplicationRecord
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
 
   validates :user, presence: true, on: [:create]
-  validates :competition, presence: { message: I18n.t('registrations.errors.comp_not_found') }
 
   validates_numericality_of :guests, greater_than_or_equal_to: 0
+
+  validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
 
   validate :registration_cannot_be_deleted_and_accepted_simultaneously
   private def registration_cannot_be_deleted_and_accepted_simultaneously
     if deleted? && accepted?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.cannot_be_deleted_and_accepted'))
     end
+  end
+
+  def guest_limit
+    competition.guests_per_registration_limit
+  end
+
+  def check_guest_limit?
+    competition.present? && competition.guests_per_registration_limit_enabled?
   end
 
   def deleted?
@@ -102,7 +111,10 @@ class Registration < ApplicationRecord
   end
 
   def entry_fee
-    competition.base_entry_fee + competition_events.to_a.sum(&:fee)
+    # DEPRECATION WARNING: Rails 7.0 has deprecated Enumerable.sum in favor of Ruby's native implementation
+    # available since 2.4. Sum of non-numeric elements requires an initial argument.
+    zero_money = Money.new 0, competition.currency_code
+    competition.base_entry_fee + competition_events.map(&:fee).sum(zero_money)
   end
 
   def paid_entry_fees
@@ -132,8 +144,8 @@ class Registration < ApplicationRecord
     competition.registration_opened? && to_be_paid_through_wca?
   end
 
-  def show_details?
-    competition.registration_opened? || !(new_or_deleted?)
+  def show_details?(user)
+    (competition.registration_opened? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
   end
 
   def record_payment(amount, currency_code, stripe_charge_id, user_id)
@@ -231,6 +243,16 @@ class Registration < ApplicationRecord
     end
   end
 
+  validate :cannot_register_for_unqualified_events
+  private def cannot_register_for_unqualified_events
+    if competition && competition.allow_registration_without_qualification
+      return
+    end
+    if registration_competition_events.reject(&:marked_for_destruction?).select { |event| !event.competition_event&.can_register?(user) }.any?
+      errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
+    end
+  end
+
   # For associated_events_picker
   def events_to_associated_events(events)
     events.map do |event|
@@ -239,12 +261,47 @@ class Registration < ApplicationRecord
     end
   end
 
+  validate :only_one_accepted_per_series
+  private def only_one_accepted_per_series
+    if competition&.part_of_competition_series? && checked_status == :accepted
+      unless series_sibling_registrations(:accepted).empty?
+        errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
+      end
+    end
+  end
+
+  def series_sibling_registrations(registration_status = nil)
+    return [] unless competition.part_of_competition_series?
+
+    sibling_ids = competition.series_sibling_competitions.map(&:id)
+
+    sibling_registrations = user.registrations
+                                .where(competition_id: sibling_ids)
+
+    if registration_status.nil?
+      return sibling_registrations
+             .joins(:competition)
+             .order(:start_date)
+    end
+
+    # this relies on the scopes being named the same as `checked_status` but it is a significant performance improvement
+    sibling_registrations.send(registration_status)
+  end
+
+  SERIES_SIBLING_DISPLAY_STATUSES = [:accepted, :pending].freeze
+
+  def series_registration_info
+    SERIES_SIBLING_DISPLAY_STATUSES.map { |st| series_sibling_registrations(st) }
+                                   .map(&:count)
+                                   .join(" + ")
+  end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["id", "competition_id", "user_id"],
+    methods: ["event_ids"],
+  }.freeze
+
   def serializable_hash(options = nil)
-    {
-      id: id,
-      competition_id: competition_id,
-      user_id: user_id,
-      event_ids: events.map(&:id),
-    }
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end

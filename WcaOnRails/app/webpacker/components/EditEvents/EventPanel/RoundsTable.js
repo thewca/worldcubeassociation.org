@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Segment, Table } from 'semantic-ui-react';
-import events from '../../../lib/wca-data/events.js.erb';
+import { events } from '../../../lib/wca-data.js.erb';
 
 import Round from './RoundRow';
 

@@ -31,13 +31,7 @@ class ResultsController < ApplicationController
     @is_results = splitted_show_param[1] == "results"
     limit_condition = "LIMIT #{@show}"
 
-    cached_key = "#{params[:event_id]}-#{params[:region]}-#{params[:years]}-#{params[:show]}-#{params[:gender]}-#{params[:type]}"
-    cache_result = CachedResult.find_by(key_params: cached_key)
-
-    if cache_result
-      @rows = JSON.parse(cache_result.payload)
-      return
-    end
+    @cache_params = ['rankings', params[:event_id], params[:region], params[:years], params[:show], params[:gender], params[:type]]
 
     if @is_persons
       @query = <<-SQL
@@ -137,14 +131,6 @@ class ResultsController < ApplicationController
       flash[:danger] = t(".unknown_show")
       redirect_to rankings_path
     end
-
-    @rows = ActiveRecord::Base.connection.exec_query(@query)
-
-    # For safety, we delete possible duplicated (does active redord have on duplicated update or ignore?)
-    CachedResult.delete_by(key_params: cached_key)
-
-    # This only caches results. Table is cleared in CAD.
-    CachedResult.create(key_params: cached_key, payload: @rows.to_json)
   end
 
   def records
@@ -153,8 +139,9 @@ class ResultsController < ApplicationController
     # Default params
     params[:event_id] ||= "all events"
     params[:region] ||= "world"
-    params[:years] ||= "all years"
+    params[:years] = "all years" # FIXME: this is disabling years filters for now
     params[:show] ||= "mixed"
+    params[:gender] ||= "All"
 
     @shows = ["mixed", "slim", "separate", "history", "mixed history"]
     @is_mixed = params[:show] == @shows[0]
@@ -166,6 +153,8 @@ class ResultsController < ApplicationController
 
     shared_constants_and_conditions
 
+    @cache_params = ['records', params[:event_id], params[:region], params[:years], params[:show], params[:gender]]
+
     if @is_histories
       if @is_history
         order = 'event.`rank`, type desc, value, year desc, month desc, day desc, roundType.`rank` desc'
@@ -175,7 +164,9 @@ class ResultsController < ApplicationController
 
       @query = <<-SQL
         SELECT
-          year, month, day,
+          competition.year,
+          competition.month,
+          competition.day,
           event.id             eventId,
           event.name           eventName,
           event.cellName       eventCellName,
@@ -194,7 +185,8 @@ class ResultsController < ApplicationController
           value1, value2, value3, value4, value5
         FROM
           (SELECT Results.*, 'single' type, best    value, regionalSingleRecord  recordName FROM Results WHERE regionalSingleRecord<>'' UNION
-            SELECT Results.*, 'average' type, average value, regionalAverageRecord recordName FROM Results WHERE regionalAverageRecord<>'') result,
+            SELECT Results.*, 'average' type, average value, regionalAverageRecord recordName FROM Results WHERE regionalAverageRecord<>'') result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1," : ","}
           Events event,
           RoundTypes roundType,
           Competitions competition,
@@ -207,6 +199,7 @@ class ResultsController < ApplicationController
           #{@region_condition}
           #{@event_condition}
           #{@years_condition_competition}
+          #{@gender_condition}
         ORDER BY
           #{order}
       SQL
@@ -234,16 +227,19 @@ class ResultsController < ApplicationController
                              format,
         country.name         countryName,
         competition.cellName competitionName,
-                             `rank`, year, month, day
+                             `rank`, competition.year, competition.month, competition.day
       FROM
         (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
           FROM Concise#{type.capitalize}Results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
           WHERE 1
           #{@event_condition}
           #{@region_condition}
           #{@years_condition_result}
+          #{@gender_condition}
           GROUP BY eventId) record,
-        Results result,
+        Results result
+        #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1," : ","}
         Events event,
         Countries country,
         Competitions competition
@@ -251,6 +247,7 @@ class ResultsController < ApplicationController
         #{@event_condition}
         #{@region_condition}
         #{@years_condition_competition}
+        #{@gender_condition}
         AND result.eventId = recordEventId
         AND event.id       = result.eventId
         AND country.id     = result.countryId

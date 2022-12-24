@@ -54,7 +54,7 @@
     <div class="btn-group">
       <ul class="dropdown-menu years-only">
         <% @years.each do |year| %>
-          <li title="WST is working on a more permanent solution" class="disabled only <%= (@is_only && year.to_s == @year ? " active" : "") %>"><%= link_to year.to_s, request.params.merge(years: "only #{year}") %></li>
+          <li title="<%= t('results.tooltip_no_years') %>" class="disabled only <%= (@is_only && year.to_s == @year ? " active" : "") %>"><%= link_to year.to_s, request.params.merge(years: "only #{year}") %></li>
         <% end %>
       </ul>
       <label id="only-years" class="btn btn-info <%= @is_only ? " active" : "" %>" data-toggle="dropdown">
@@ -70,7 +70,7 @@
     <div class="btn-group">
       <ul class="dropdown-menu years-until">
         <% @years.each do |year| %>
-          <li title="WST is working on a more permanent solution" class="disabled until <%= (@is_until && year.to_s == @year ? " active" : "") %>"><%= link_to year.to_s, request.params.merge(years: "until #{year}") %></li>
+          <li title="<%= t('results.tooltip_no_years') %>" class="disabled until <%= (@is_until && year.to_s == @year ? " active" : "") %>"><%= link_to year.to_s, request.params.merge(years: "until #{year}") %></li>
         <% end %>
       </ul>
       <label id="until-years" class="btn btn-info <%= @is_until ? " active" : "" %>" data-toggle="dropdown">
@@ -86,15 +86,16 @@
   </div>
 </div>
 
-<% if show_rankings_options %>
-  <div class="form-group">
-    <%= label_tag(t("results.selector_elements.gender_selector.gender")) %>
-    <div id="gender" class="btn-group">
-      <%= link_to t("results.selector_elements.gender_selector.gender_all"), request.params.merge(gender: "All"), class: "btn btn-info" + (@gender == "All" ? " active" : "") %>
-      <%= link_to t("results.selector_elements.gender_selector.male"), request.params.merge(gender: "Male"), class: "btn btn-info" + (@gender == "Male" ? " active" : "") %>
-      <%= link_to t("results.selector_elements.gender_selector.female"), request.params.merge(gender: "Female"), class: "btn btn-info" + (@gender == "Female" ? " active" : "") %>
-    </div>
+<div class="form-group">
+  <%= label_tag(t("results.selector_elements.gender_selector.gender")) %>
+  <div id="gender" class="btn-group">
+    <%= link_to t("results.selector_elements.gender_selector.gender_all"), request.params.merge(gender: "All"), class: "btn btn-info" + (@gender == "All" ? " active" : "") %>
+    <%= link_to t("results.selector_elements.gender_selector.male"), request.params.merge(gender: "Male"), class: "btn btn-info" + (@gender == "Male" ? " active" : "") %>
+    <%= link_to t("results.selector_elements.gender_selector.female"), request.params.merge(gender: "Female"), class: "btn btn-info" + (@gender == "Female" ? " active" : "") %>
   </div>
+</div>
+
+<% if show_rankings_options %>
   <div class="form-group">
     <%= label_tag(t("results.selector_elements.show_selector.show")) %>
     <div id="show" class="btn-group">
@@ -110,7 +111,7 @@
         </label>
         <ul class="dropdown-menu show-persons">
           <% @quantities.each do |quantity| %>
-            <li title="<%= (quantity.to_s != @quantities[0] ? "WST is working on a more permanent solution" : "") %>" class="persons <%= (@is_persons && quantity.to_s == @show ? " active" : "") %> <%= (quantity.to_s != @quantities[0] ? " disabled" : "") %>"><%= link_to quantity.to_s, request.params.merge(show: "#{quantity} persons") %></li>
+            <li title="<%= (quantity.to_s != @quantities[0] ? t('results.tooltip_no_quantities') : "") %>" class="persons <%= (@is_persons && quantity.to_s == @show ? " active" : "") %> <%= (quantity.to_s != @quantities[0] ? " disabled" : "") %>"><%= link_to quantity.to_s, request.params.merge(show: "#{quantity} persons") %></li>
           <% end %>
         </ul>
       </div>
@@ -127,7 +128,7 @@
         <ul class="dropdown-menu show-results">
           <% @quantities.each do |quantity| %>
             <%# querying more than 100 single ranking rows fries our DB, so we block it both here and in the controller until we figure out a more permanent solution %>
-              <li title="<%= (quantity.to_s != @quantities[0] ? "WST is working on a more permanent solution" : "") %>" class="results <%= (@is_results && quantity.to_s == @show ? " active" : "") %> <%= (quantity.to_s != @quantities[0] ? " disabled" : "") %>">
+              <li title="<%= (quantity.to_s != @quantities[0] ? t('results.tooltip_no_quantities') : "") %>" class="results <%= (@is_results && quantity.to_s == @show ? " active" : "") %> <%= (quantity.to_s != @quantities[0] ? " disabled" : "") %>">
                 <%= link_to quantity.to_s, request.params.merge(show: "#{quantity} results")  %>
               </li>
           <% end %>

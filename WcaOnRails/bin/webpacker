@@ -11,6 +11,5 @@ ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile", Pathname.new(__FILE_
 
 APP_ROOT = File.expand_path("..", __dir__)
 Dir.chdir(APP_ROOT) do
-  system('./bin/rake i18n:js:export')
   Webpacker::WebpackRunner.run(ARGV)
 end

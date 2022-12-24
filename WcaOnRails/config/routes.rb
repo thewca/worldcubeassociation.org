@@ -92,9 +92,11 @@ Rails.application.routes.draw do
   get 'competitions/:id/events/edit' => 'competitions#edit_events', as: :edit_events
   get 'competitions/:id/schedule/edit' => 'competitions#edit_schedule', as: :edit_schedule
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
+  get 'competitions/edit/series_eligible_competitions' => 'competitions#series_eligible_competitions', as: :series_eligible_competitions
+  get 'competitions/edit/colliding_registration_start_competitions' => 'competitions#colliding_registration_start_competitions', as: :colliding_registration_start_competitions
   get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
-  get 'competitions/edit/currency_convert' => 'competitions#currency_convert', as: :currency_convert
+  get 'competitions/edit/calculate_dues' => 'competitions#calculate_dues', as: :calculate_dues
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
@@ -232,6 +234,7 @@ Rails.application.routes.draw do
   end
 
   get '/sso-discourse' => 'users#sso_discourse'
+  get '/redirect/wac-survey' => 'users#wac_survey'
 
   namespace :api do
     get '/', to: redirect('/api/v0', status: 302)
@@ -246,6 +249,7 @@ Rails.application.routes.draw do
       get '/search/competitions' => 'api#competitions_search'
       get '/search/users' => 'api#users_search'
       get '/search/regulations' => 'api#regulations_search'
+      get '/search/incidents' => 'api#incidents_search'
       get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'api#show_user_by_wca_id'
       get '/delegates' => 'api#delegates'
@@ -253,7 +257,7 @@ Rails.application.routes.draw do
       get '/persons/:wca_id' => "persons#show", as: :person
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
-      get '/geocoding/search' => 'geocoding#get_location_from_query'
+      get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'

@@ -74,12 +74,11 @@ RSpec.describe Competition do
   it "handles free guest entry status" do
     competition = FactoryBot.create :competition
 
-    # According to the property's enum definition, 1 means anyone and 2 means restricted
-    competition.free_guest_entry_status = 1
+    competition.guest_entry_status = Competition.guest_entry_statuses['free']
     expect(competition.all_guests_allowed?).to be true
     expect(competition.some_guests_allowed?).to be false
 
-    competition.free_guest_entry_status = 2
+    competition.guest_entry_status = competition.guest_entry_status = Competition.guest_entry_statuses['restricted']
     expect(competition.all_guests_allowed?).to be false
     expect(competition.some_guests_allowed?).to be true
   end
@@ -106,12 +105,86 @@ RSpec.describe Competition do
     end
   end
 
+  context "when it is part of a Series" do
+    let!(:series) { FactoryBot.create :competition_series }
+    let!(:competition) { FactoryBot.create :competition, competition_series: series, latitude: 51_508_147, longitude: -75_848, starts: 1.week.ago }
+
+    context "checks WCRP requirements" do
+      it "cannot link two competitions that are more than 100km apart" do
+        too_far_away_competition = FactoryBot.build :competition, competition_series: series, series_base: competition,
+                                                                  series_distance_km: 16_990, distance_direction_deg: 330.56652339271716
+
+        # also expect the competition to report the exact problem
+        expect(too_far_away_competition).to be_invalid_with_errors(competition_series: [I18n.t('competitions.errors.series_distance_km', competition: competition.name)])
+      end
+
+      it "cannot link two competitions that are more than 33 days apart" do
+        too_long_ago_competition = FactoryBot.build :competition, competition_series: series, series_base: competition, series_distance_days: 1095
+
+        # also expect the competition to report the exact problem
+        expect(too_long_ago_competition).to be_invalid_with_errors(competition_series: [I18n.t('competitions.errors.series_distance_days', competition: competition.name)])
+      end
+
+      it "cannot extend the WCRP limitations by transitive property" do
+        # Say you're organising three competitions that have venues on the same, 200km-long straight line street.
+        straight_line_series = FactoryBot.create :competition_series, wcif_id: "HaversineSeries2015", name: "Haversine Series 2015"
+
+        # First, you create the comp at one end of the street. No linking yet, all good.
+        one_end_competition = FactoryBot.create :competition, name: "One End Open 2015", competition_series: straight_line_series
+        expect(one_end_competition).to be_valid
+
+        # span a circle around the equator
+        walking_direction_rad = (2 * Math::PI) + Math.atan2(-competition.latitude, -competition.longitude)
+        walking_direction_deg = (walking_direction_rad * 180 / Math::PI) % 360
+
+        just_barely_distance_km = CompetitionSeries::MAX_SERIES_DISTANCE_KM - 1
+
+        # Second, you create the comp at the middle of the street. It is within 100km from the original competition so still all good.
+        middle_competition = FactoryBot.create :competition, name: "Middle Open 2015", competition_series: straight_line_series,
+                                                             series_base: one_end_competition, series_distance_km: just_barely_distance_km,
+                                                             distance_direction_deg: walking_direction_deg
+        expect(middle_competition).to be_valid
+
+        # Last, you create the competition at the other end of the road. You _can_ link it to the middle one,
+        # which is (just a tiny bit under) 100km away making it a perfect partner competition. But it is not acceptable
+        # as partner competition for the first comp at the other end of the road, and our code should detect that.
+        other_end_competition = FactoryBot.build :competition, name: "Other End Open 2015", competition_series: straight_line_series,
+                                                               series_base: middle_competition, series_distance_km: just_barely_distance_km,
+                                                               distance_direction_deg: walking_direction_deg
+
+        expect(other_end_competition).to be_invalid_with_errors(competition_series: [I18n.t('competitions.errors.series_distance_km', competition: one_end_competition.name)])
+      end
+    end
+
+    it "does not include itself as a sibling" do
+      partner_competition = FactoryBot.create :competition, competition_series: series, series_base: competition
+
+      expect(competition.series_sibling_competitions).to eq [partner_competition]
+      expect(series.competitions.count).to eq 2
+    end
+
+    context "it can be linked with more than one competition" do
+      let!(:same_place_different_day) { FactoryBot.create :competition, competition_series: series, series_base: competition, series_distance_days: 7 }
+      let!(:same_day_different_place) { FactoryBot.create :competition, competition_series: series, series_base: competition, series_distance_km: 4.628, distance_direction_deg: 185.6446971397621 }
+
+      it "can be linked with more than one competition" do
+        expect(competition.series_sibling_competitions.count).to eq 2
+        expect(series.competitions.count).to eq 3
+      end
+
+      it "lists all siblings ordered by start date" do
+        expect(competition.series_sibling_competitions).to eq [same_day_different_place, same_place_different_day]
+      end
+    end
+  end
+
   context "delegates" do
     it "delegates for future comps must be current delegates" do
       competition = FactoryBot.build :competition, :with_delegate, :future
       competition.delegates.first.update_columns(delegate_status: nil)
 
-      expect(competition).to be_invalid_with_errors(delegate_ids: ["are not all Delegates"])
+      expect(competition).to be_invalid_with_errors(staff_delegate_ids: ["are not all Delegates"],
+                                                    trainee_delegate_ids: ["are not all Delegates"])
     end
 
     it "delegates for past comps no longer need to be delegates" do
@@ -496,6 +569,9 @@ RSpec.describe Competition do
       expect(competition.in_progress?).to be true
       expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
+      competition.use_wca_live_for_scoretaking = true
+      expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
+
       competition.results_posted_at = Time.now
       competition.results_posted_by = FactoryBot.create(:user, :wrt_member).id
       expect(competition.in_progress?).to be false
@@ -575,12 +651,12 @@ RSpec.describe Competition do
     end
   end
 
-  it "saves delegate_ids" do
+  it "saves staff_delegate_ids" do
     delegate1 = FactoryBot.create(:delegate, name: "Daniel", email: "daniel@d.com")
     delegate2 = FactoryBot.create(:delegate, name: "Chris", email: "chris@c.com")
     delegates = [delegate1, delegate2]
-    delegate_ids = delegates.map(&:id).join(",")
-    competition = FactoryBot.create :competition, delegate_ids: delegate_ids
+    staff_delegate_ids = delegates.map(&:id).join(",")
+    competition = FactoryBot.create :competition, staff_delegate_ids: staff_delegate_ids
     expect(competition.delegates.sort_by(&:name)).to eq delegates.sort_by(&:name)
   end
 
@@ -772,12 +848,16 @@ RSpec.describe Competition do
   describe "receive_registration_emails" do
     let(:competition) { FactoryBot.create :competition }
     let(:delegate) { FactoryBot.create :delegate }
+    let(:delegate_enabled) { FactoryBot.create :delegate, registration_notifications_enabled: true }
 
     it "computes receiving_registration_emails? via OR" do
       expect(competition.receiving_registration_emails?(delegate.id)).to eq false
 
       competition.delegates << delegate
       expect(competition.receiving_registration_emails?(delegate.id)).to eq false
+
+      competition.delegates << delegate_enabled
+      expect(competition.receiving_registration_emails?(delegate_enabled.id)).to eq true
 
       cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
       cd.update_column(:receive_registration_emails, true)
@@ -812,6 +892,16 @@ RSpec.describe Competition do
 
       expect(cd.reload.receive_registration_emails).to eq false
       expect(co.reload.receive_registration_emails).to eq false
+
+      # Test we can change the setting for a delegate with notifications
+      # enabled by default.
+      competition.delegates << delegate_enabled
+      cde = competition.competition_delegates.find_by_delegate_id(delegate_enabled.id)
+      expect(cde.receive_registration_emails).to eq true
+      competition.receive_registration_emails = false
+      competition.editing_user_id = delegate_enabled.id
+      competition.save!
+      expect(cde.reload.receive_registration_emails).to eq false
     end
   end
 
@@ -1012,9 +1102,14 @@ RSpec.describe Competition do
   end
 
   describe "#serializable_hash" do
-    let(:competition) { FactoryBot.create :competition, countryId: "" }
+    let(:competition) { FactoryBot.create :competition, countryId: "USA" }
 
     it "sets iso2 to nil when country is missing" do
+      expect(competition).to be_valid
+
+      competition.countryId = ""
+      expect(competition).to be_invalid_with_errors(country: ["must exist"])
+
       expect(competition.serializable_hash[:country_iso2]).to be_nil
     end
   end
@@ -1104,17 +1199,17 @@ RSpec.describe Competition do
     let(:fmc) { Event.find "333fm" }
 
     it "is false when competition has no championships" do
-      competition = FactoryBot.create(:competition, events: [four_by_four], championship_types: [], countryId: "CA")
+      competition = FactoryBot.create(:competition, events: [four_by_four], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to eq false
     end
 
     it "is false when competition is a national championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["CA"], countryId: "CA")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["CA"], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to eq false
     end
 
     it "is false when 333fm is the only event and competition is in a single country" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "CA")
+      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to eq false
     end
 
@@ -1129,18 +1224,75 @@ RSpec.describe Competition do
     end
 
     it "is true when competition is a national championship and a world championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["AU", "world"], countryId: "AU")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["AU", "world"], countryId: "Australia", cityName: "Melbourne, Victoria")
       expect(competition.exempt_from_wca_dues?).to eq true
     end
 
     it "is true when competition is a continental championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["_North America"], countryId: "CA")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["_North America"], countryId: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to eq true
     end
 
     it "is true when competition is a world championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["world"], countryId: "KR")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["world"], countryId: "Korea")
       expect(competition.exempt_from_wca_dues?).to eq true
+    end
+  end
+
+  context "does not have guest limit" do
+    let(:competition) { FactoryBot.create :competition, guest_entry_status: Competition.guest_entry_statuses['free'] }
+
+    it "accepts a competition that asks about guests, but does not have guest limit enabled" do
+      competition.guests_enabled = true
+      expect(competition).to be_valid
+    end
+
+    it "accepts a competition that does not ask about guests and does not have guest limit enabled" do
+      competition.guests_enabled = false
+      expect(competition).to be_valid
+    end
+
+    it "accepts a competition that does not have guest limit enabled, but has a guest limit" do
+      # hypothetically, this field can be set, but the limit would not be enforced if it is not enabled.
+      competition.guests_per_registration_limit = 10
+      expect(competition).to be_valid
+    end
+  end
+
+  context "has guest limit" do
+    let(:competition) { FactoryBot.create :competition, :with_guest_limit }
+
+    it "accepts a competition that asks about guests and has a valid guest limit enabled" do
+      expect(competition).to be_valid
+    end
+
+    it "requires also asking about guests" do
+      competition.guests_enabled = false
+      expect(competition).to be_invalid_with_errors(guests_enabled: ["Must ask about guests if a guest limit is specified."])
+    end
+
+    it "requires guest limit to be a number" do
+      competition = FactoryBot.build :competition, :with_guest_limit
+      competition.guests_per_registration_limit = "string"
+      expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["is not a number"])
+    end
+
+    it "requires guest limit to be an integer" do
+      competition = FactoryBot.build :competition, :with_guest_limit
+      competition.guests_per_registration_limit = 1.5
+      expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["must be an integer"])
+    end
+
+    it "requires guest limit to be greater than or equal to 1" do
+      competition = FactoryBot.build :competition, :with_guest_limit
+      competition.guests_per_registration_limit = -1
+      expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["must be greater than or equal to 1"])
+    end
+
+    it "requires guest limit to be less than or equal to 100" do
+      competition = FactoryBot.build :competition, :with_guest_limit
+      competition.guests_per_registration_limit = 101
+      expect(competition).to be_invalid_with_errors(guests_per_registration_limit: ["must be less than or equal to 100"])
     end
   end
 end

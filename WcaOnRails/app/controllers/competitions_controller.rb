@@ -48,13 +48,7 @@ class CompetitionsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
 
   private def assign_delegate(competition)
-    if current_user.any_kind_of_delegate?
-      if current_user.trainee_delegate?
-        competition.trainee_delegates |= [current_user]
-      else
-        competition.delegates |= [current_user]
-      end
-    end
+    competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
   end
 
   def new
@@ -103,6 +97,7 @@ class CompetitionsController < ApplicationController
     @by_announcement_selected = params[:state] == "by_announcement"
     @custom_selected = params[:state] == "custom"
     @show_cancelled = params[:show_cancelled] == "on"
+    @show_registration_status = params[:show_registration_status] == "on"
 
     @years = ["all years"] + Competition.non_future_years
 
@@ -195,7 +190,6 @@ class CompetitionsController < ApplicationController
       # Show id errors under name, since we don't actually show an
       # id field to the user, so they wouldn't see any id errors.
       @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
-      @nearby_competitions = get_nearby_competitions(@competition)
       render :new
     end
   end
@@ -282,16 +276,27 @@ class CompetitionsController < ApplicationController
   end
 
   def get_nearby_competitions(competition)
-    nearby_competitions = competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING)[0, 10]
+    nearby_competitions = competition.nearby_competitions_warning[0, 10]
     nearby_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     nearby_competitions
+  end
+
+  def get_series_eligible_competitions(competition)
+    series_eligible_competitions = competition.series_eligible_competitions
+    series_eligible_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
+    series_eligible_competitions
+  end
+
+  def get_colliding_registration_start_competitions(competition)
+    colliding_registration_start_competitions = competition.colliding_registration_start_competitions
+    colliding_registration_start_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
+    colliding_registration_start_competitions
   end
 
   def admin_edit
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = true
     @competition_organizer_view = false
-    @nearby_competitions = get_nearby_competitions(@competition)
     render :edit
   end
 
@@ -299,7 +304,6 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = false
     @competition_organizer_view = true
-    @nearby_competitions = get_nearby_competitions(@competition)
     render :edit
   end
 
@@ -358,6 +362,20 @@ class CompetitionsController < ApplicationController
     render partial: 'nearby_competitions'
   end
 
+  def series_eligible_competitions
+    @competition = Competition.new(competition_params)
+    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    @series_eligible_competitions = get_series_eligible_competitions(@competition)
+    render partial: 'series_eligible_competitions'
+  end
+
+  def colliding_registration_start_competitions
+    @competition = Competition.new(competition_params)
+    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    @colliding_registration_start_competitions = get_colliding_registration_start_competitions(@competition)
+    render partial: 'colliding_registration_start_competitions'
+  end
+
   def time_until_competition
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
@@ -368,13 +386,33 @@ class CompetitionsController < ApplicationController
     }
   end
 
-  def currency_convert
-    update_rates_if_needed
-    converted = Money.new(params[:value], params[:from_currency]).exchange_to(params[:to_currency])
-    render json: {
-      formatted: converted.format,
-      value: converted.cents,
-    }
+  def calculate_dues
+    country_iso2 = Country.find_by(id: params[:country_id])&.iso2
+    country_band = CountryBand.find_by(iso2: country_iso2)&.number
+
+    update_exchange_rates_if_needed
+    input_money_us_dollars = Money.new(params[:entry_fee_cents].to_i, params[:currency_code]).exchange_to("USD").amount
+
+    registration_fee_dues_us_dollars = input_money_us_dollars * CountryBand::PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT
+    country_band_dues_us_dollars = CountryBand::BANDS[country_band][:value] if country_band.present? && country_band > 0
+
+    # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
+    price_per_competitor_us_cents = [registration_fee_dues_us_dollars, country_band_dues_us_dollars].compact.max * 100
+
+    if params[:competitor_limit_enabled]
+      estimated_dues_us_cents = price_per_competitor_us_cents * params[:competitor_limit].to_i
+      estimated_dues = Money.new(estimated_dues_us_cents, "USD").exchange_to(params[:currency_code]).format
+
+      render json: {
+        dues_value: estimated_dues,
+      }
+    else
+      price_per_competitor = Money.new(price_per_competitor_us_cents, "USD").exchange_to(params[:currency_code]).format
+
+      render json: {
+        dues_value: price_per_competitor,
+      }
+    end
   end
 
   def show
@@ -522,7 +560,6 @@ class CompetitionsController < ApplicationController
         redirect_to edit_competition_path(@competition)
       end
     else
-      @nearby_competitions = get_nearby_competitions(@competition)
       render :edit
     end
   end
@@ -530,7 +567,6 @@ class CompetitionsController < ApplicationController
   def my_competitions
     competition_ids = current_user.organized_competitions.pluck(:competition_id)
     competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
-    competition_ids.concat(current_user.trainee_delegated_competitions.pluck(:competition_id))
     registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
     registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
     @registered_for_by_competition_id = registrations.uniq.to_h do |r|
@@ -559,7 +595,7 @@ class CompetitionsController < ApplicationController
     params[:commit] == "Confirm"
   end
 
-  private def update_rates_if_needed
+  private def update_exchange_rates_if_needed
     if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < 1.day.ago
       Money.default_bank.update_rates
     end
@@ -597,7 +633,7 @@ class CompetitionsController < ApplicationController
         :start_date,
         :end_date,
         :information,
-        :delegate_ids,
+        :staff_delegate_ids,
         :trainee_delegate_ids,
         :organizer_ids,
         :contact,
@@ -605,8 +641,10 @@ class CompetitionsController < ApplicationController
         :external_website,
         :use_wca_registration,
         :external_registration_page,
+        :use_wca_live_for_scoretaking,
         :enable_donations,
         :guests_enabled,
+        :guests_per_registration_limit,
         :registration_open,
         :registration_close,
         :competitor_limit_enabled,
@@ -616,6 +654,7 @@ class CompetitionsController < ApplicationController
         :extra_registration_requirements,
         :on_the_spot_registration,
         :on_the_spot_entry_fee_lowest_denomination,
+        :allow_registration_without_qualification,
         :allow_registration_edits,
         :allow_registration_self_delete_after_acceptance,
         :refund_policy_percent,
@@ -627,12 +666,13 @@ class CompetitionsController < ApplicationController
         :event_restrictions,
         :event_restrictions_reason,
         :guests_entry_fee_lowest_denomination,
-        :free_guest_entry_status,
+        :guest_entry_status,
         :main_event_id,
         :waiting_list_deadline_date,
         :event_change_deadline_date,
         { competition_events_attributes: [:id, :event_id, :_destroy],
-          championships_attributes: [:id, :championship_type, :_destroy] },
+          championships_attributes: [:id, :championship_type, :_destroy],
+          competition_series_attributes: [:id, :wcif_id, :name, :short_name, :competition_ids, :_destroy] },
       ]
       if current_user.can_admin_competitions?
         permitted_competition_params += [
@@ -647,6 +687,27 @@ class CompetitionsController < ApplicationController
         competition_params[:confirmed] = true
       end
       competition_params[:editing_user_id] = current_user.id
+
+      # Quirk: When adding a new competition to an already existing (i.e. already persisted) Series,
+      # Rails will throw an error like "cannot find Series with ID 123 for NewCompetition"
+      # despite we're sending the update to change Series 123 to include NewCompetition.
+      # To mitigate this error, we must deliberately write to series_id first.
+      if (persisted_series_id = competition_params.try(:[], :competition_series_attributes)&.try(:[], :id))
+        competition_params[:competition_series_id] = persisted_series_id
+      end
+
+      # Quirk: We don't want to actually destroy CompetitionSeries directly,
+      # because that could badly affect other competitions that are still attached to that series.
+      # If the frontend sends a _destroy, we only unlink the *current* competition and let validations take care of the rest.
+      if (series_destroy_flag = competition_params.try(:[], :competition_series_attributes)&.try(:[], :_destroy))
+        # Yes, this is ugly but it's the way simple_form_for does things.
+        should_delete = ActiveModel::Type::Boolean.new.cast(series_destroy_flag)
+
+        if should_delete
+          competition_params[:competition_series_id] = nil
+          competition_params.delete :competition_series_attributes
+        end
+      end
     end
   end
 end

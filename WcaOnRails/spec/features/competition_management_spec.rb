@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "Competition management" do
   context "when signed in as admin" do
-    let(:admin) { FactoryBot.create :admin }
+    let!(:admin) { FactoryBot.create :admin }
     before :each do
       sign_in admin
     end
@@ -13,6 +13,7 @@ RSpec.feature "Competition management" do
       scenario "with valid data" do
         visit "/competitions/new"
         fill_in "Name", with: "My Competition 2015"
+        select "United States", from: "Country"
         uncheck "I would like to use the WCA website for registration"
         click_button "Create Competition"
 
@@ -116,16 +117,16 @@ RSpec.feature "Competition management" do
       expect(page).not_to have_text("Display message for free guest entry")
     end
 
-    scenario "select anyone free guest entry status" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", free_guest_entry_status: 1)
+    scenario "select free guest entry status" do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['free'])
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')
 
       expect(page).to have_text("Any spectator can attend for free.")
     end
 
-    scenario "select restricted free guest entry status" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", free_guest_entry_status: 2)
+    scenario "select restricted guest entry status" do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['restricted'])
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')
 
@@ -134,7 +135,7 @@ RSpec.feature "Competition management" do
   end
 
   context "when signed in as delegate" do
-    let(:delegate) { FactoryBot.create(:delegate) }
+    let!(:delegate) { FactoryBot.create(:delegate) }
     let(:cloned_delegate) { FactoryBot.create(:delegate) }
     let(:competition_to_clone) { FactoryBot.create :competition, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate], showAtAll: true }
 
@@ -149,6 +150,7 @@ RSpec.feature "Competition management" do
       visit "/competitions/new"
 
       fill_in "Name", with: "New Comp 2015"
+      select "United States", from: "Country"
       uncheck "I would like to use the WCA website for registration"
       click_button "Create Competition"
       expect(page).to have_content "Successfully created new competition!" # wait for request to complete

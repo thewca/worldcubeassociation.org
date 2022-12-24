@@ -1,14 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import _ from 'lodash';
 import { Button, Form, Radio } from 'semantic-ui-react';
-import events from '../../../../lib/wca-data/events.js.erb';
+import { events } from '../../../../lib/wca-data.js.erb';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import { centisecondsToClockFormat } from '../../../../lib/wca-live/attempts';
 import { useDispatch } from '../../../../lib/providers/StoreProvider';
 import TimeField from '../../../Results/WCALive/AttemptResultField/TimeField';
 import { updateTimeLimit } from '../../store/actions';
 import ButtonActivatedModal from '../ButtonActivatedModal';
-import TimeLimitDecscription from './TimeLimitDescription';
+import TimeLimitDescription from './TimeLimitDescription';
 import SelectRoundsModal from './SelectRoundsModal';
 
 /**
@@ -109,7 +109,7 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
           onChange={() => setCumulativeRoundIds([wcifRound.id])}
         />
       </Form.Field>
-      <TimeLimitDecscription
+      <TimeLimitDescription
         wcifRound={wcifRound}
         timeLimit={{ centiseconds, cumulativeRoundIds }}
         onOk={handleCumulativeRoundsChange}

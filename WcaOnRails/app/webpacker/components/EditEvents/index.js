@@ -3,7 +3,7 @@ import cn from 'classnames';
 import _ from 'lodash';
 
 import { Button, Grid, Message } from 'semantic-ui-react';
-import events from '../../lib/wca-data/events.js.erb';
+import { events } from '../../lib/wca-data.js.erb';
 
 import { saveWcif } from '../../lib/utils/wcif';
 import EventPanel from './EventPanel';

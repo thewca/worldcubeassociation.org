@@ -1,7 +1,7 @@
 <ul class="list-group">
   <li class="list-group-item"><strong><%= "#{title} (#{competitions.count})" %></strong></li>
   <% competitions.each_with_index do |competition, index| %>
-    <% if index > 0 && competition.year != competitions[index - 1].year && params[:event_ids].empty? %>
+    <% if index > 0 && competition.year != competitions[index - 1].year && params[:event_ids].empty? && !@by_announcement_selected %>
       <li class="list-group-item break"><%= competition.year %></li>
     <% end %>
     <% li_classes = ["list-group-item"] %>
@@ -19,8 +19,10 @@
           <%= ui_icon('hourglass half', title: t('competitions.index.tooltips.hourglass.in_progress'), data: { toggle: "tooltip" }) %>
         <% elsif @by_announcement_selected %>
           <%= ui_icon('hourglass start', title: t('competitions.index.tooltips.hourglass.announced_on', announcement_date: competition.announced_at.strftime(" %F %H:%M:%S")), data: { toggle: "tooltip" }) %>
-        <% else %>
+        <% elsif @show_registration_status %>
           <%= registration_status_icon(competition) %>
+        <% else %>
+          <%= ui_icon('hourglass start', title: t('competitions.index.tooltips.hourglass.starts_in', days: t('common.days', count:(competition.start_date - Date.today).to_i)), data: { toggle: "tooltip" }) %>
         <% end %>
         <%= wca_date_range(competition.start_date, competition.end_date) %>
       </span>

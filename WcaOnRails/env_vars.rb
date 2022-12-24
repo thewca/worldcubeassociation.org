@@ -2,10 +2,10 @@
 
 EnvVars = SuperConfig.new do
   if Rails.env.production?
-    mandatory :SECRET_KEY_BASE, string
-    mandatory :DATABASE_URL, string
-    mandatory :SMTP_USERNAME, string
-    mandatory :SMTP_PASSWORD, string
+    mandatory :SECRET_KEY_BASE, :string
+    mandatory :DATABASE_URL, :string
+    mandatory :SMTP_USERNAME, :string
+    mandatory :SMTP_PASSWORD, :string
   end
 
   unless Rails.env.production?
@@ -49,7 +49,11 @@ EnvVars = SuperConfig.new do
   mandatory :OTP_ENCRYPTION_KEY, :string
   mandatory :DISCOURSE_SECRET, :string
   mandatory :DISCOURSE_URL, :string
+  mandatory :SURVEY_SECRET, :string
   mandatory :S3_AVATARS_BUCKET, :string
   mandatory :S3_AVATARS_ASSET_HOST, :string
   mandatory :S3_AVATARS_REGION, :string
+  mandatory :ACTIVERECORD_PRIMARY_KEY, :string
+  mandatory :ACTIVERECORD_DETERMINISTIC_KEY, :string
+  mandatory :ACTIVERECORD_KEY_DERIVATION_SALT, :string
 end

@@ -9,14 +9,14 @@ module Resultable
   included do
     # NOTE: We use cached values instead of belongs_to to improve performances.
     belongs_to :competition, foreign_key: :competitionId
-    validates :competition, presence: true
+    alias_attribute :competition_id, :competitionId
     belongs_to :round_type, foreign_key: :roundTypeId
-    validates :round_type, presence: true
+    alias_attribute :round_type_id, :roundTypeId
     # FIXME: shouldn't we take advantage of the fact that these are cached?
     belongs_to :event, foreign_key: :eventId
-    validates :event, presence: true
+    alias_attribute :event_id, :eventId
     belongs_to :format, foreign_key: :formatId
-    validates :format, presence: true
+    alias_attribute :format_id, :formatId
 
     # Forgetting to synchronize the results in WCA Live is a very common mistake,
     # so this error message is hinting the user to check that, even if it's

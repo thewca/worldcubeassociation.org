@@ -361,7 +361,7 @@ sl:
         #original_hash: 28a6fbb
         currency_code: Koda valute
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegat(i)
+        staff_delegate_ids: WCA Delegat(i)
         #original_hash: 958562e
         organizer_ids: Organizator(ji)
         #original_hash: b37456c
@@ -394,10 +394,11 @@ sl:
         competition_events: Discipline
         #original_hash: 71c8461
         enable_donations: Zraven vstopnin bi še rad omogočil prejem donacij
-        #original_hash: 4baf44b
-        championship_type: Tip prvenstva
         #original_hash: ff722f0
         registration_requirements: Zahteve registracije
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Tip prvenstva
       registration:
         #original_hash: 3c23a67
         guests: Gostje
@@ -642,7 +643,7 @@ sl:
           Informacije o omejitvi tekmovalcev, vstopnini za tekmovalce in
           gledalce in ostale relevantne informacije.
         #original_hash: b4d020f
-        delegate_ids: WCA Delegati tekmovanja.
+        staff_delegate_ids: WCA Delegati tekmovanja.
         #original_hash: 517d376
         organizer_ids: Organizatorji tekmovanja (za vnos je potreben uporabniški račun).
         #original_hash: cabe7fb
@@ -1982,22 +1983,23 @@ sl:
         two: Dva tekmovanja
         few: Par tekmovanj
         other: '%{count} tekmovanj'
-      #original_hash: e3528ec
-      label: 'Tekmovanja v bližini (znotraj %{days} dni in %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Zadnjih %{days} dni'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} znotraj %{kms} km in %{days} dni.'
+      #original_hash: 9eb8f46
+      within: 'Znotraj %{days} dni'
+      #original_hash: d97d1ee
+      show: Prikaži
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Tekmovanja v bližini (znotraj %{days} dni in %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Ni tekmovanj v bližini!
       #original_hash: 7e76950
       no_date_yet: Datum za to tekmovanje še ni bil dodeljen.
       #original_hash: 82a95d2
       no_location_yet: Lokacija za to tekmovanje še ni bila dodeljena.
-      #original_hash: 9eb8f46
-      within: 'Znotraj %{days} dni'
-      #original_hash: d97d1ee
-      show: Prikaži
       #original_hash: 709a232
       name: Ime
       #original_hash: adc24b7

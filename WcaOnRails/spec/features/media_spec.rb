@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.feature "Media" do
   context "when signed in as regular user" do
     let(:competition) { FactoryBot.create(:competition) }
-    let(:user) { FactoryBot.create(:user) }
+    let!(:user) { FactoryBot.create(:user) }
 
     before :each do
       sign_in user
@@ -20,7 +20,7 @@ RSpec.feature "Media" do
 
       # We forgot to fill in competition above, which will cause a validation error.
       # Fill in competition and then resubmit.
-      expect(page).to have_text "Competition can't be blank"
+      expect(page).to have_text "Competition must exist"
       fill_in "Competition", with: competition.id
       click_button "Submit media"
 

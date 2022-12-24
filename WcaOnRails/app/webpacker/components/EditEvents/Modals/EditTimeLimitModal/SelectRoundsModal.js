@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { Checkbox, Form, Popup } from 'semantic-ui-react';
-import events from '../../../../lib/wca-data/events.js.erb';
+import { events } from '../../../../lib/wca-data.js.erb';
 import { useStore } from '../../../../lib/providers/StoreProvider';
 import { parseActivityCode, roundIdToString } from '../../../../lib/utils/wcif';
 import ButtonActivatedModal from '../ButtonActivatedModal';

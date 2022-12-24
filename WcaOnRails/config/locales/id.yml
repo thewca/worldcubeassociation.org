@@ -468,7 +468,7 @@ id:
         #original_hash: 28a6fbb
         currency_code: Kode mata uang
         #original_hash: 2e3ed8b
-        delegate_ids: Delegate WCA
+        staff_delegate_ids: Delegate WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegate Magang WCA
         #original_hash: 958562e
@@ -505,8 +505,6 @@ id:
         enable_donations: >-
           Saya ingin mengaktifkan donasi sebagai sarana tambahan pengumpulan
           biaya pendaftaran
-        #original_hash: 4baf44b
-        championship_type: Tipe kejuaraan
         #original_hash: 556fda0
         extra_registration_requirements: Syarat pendaftaran ekstra
         #original_hash: 2529d04
@@ -528,7 +526,7 @@ id:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Biaya masuk untuk pendamping
         #original_hash: bb16247
-        free_guest_entry_status: Tampilkan pesan untuk bebas masuk sebagai pendamping
+        guest_entry_status: Tampilkan pesan untuk bebas masuk sebagai pendamping
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Saya ingin kompetitor untuk mengumpulkan puzzle pada waktu tertentu
@@ -545,6 +543,9 @@ id:
         event_restrictions_reason: Alasan dan detail pembatasan cabang
         #original_hash: 3c24bd2
         main_event_id: Cabang utama
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Tipe kejuaraan
       registration:
         #original_hash: 3c23a67
         guests: Pendamping
@@ -734,13 +735,13 @@ id:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Jangan tampilkan apapun (dan sebisa mungkin jelaskan pada bagian
           "Syarat pendaftaran tambahan")
         #original_hash: 694bce4
-        anyone: '"Penonton dapat datang secara gratis"'
+        free: '"Penonton dapat datang secara gratis"'
         #original_hash: 762c509
         restricted: '"Penonton yang diperbolehkan datang hanyalah pendamping kompetitor"'
   simple_form:
@@ -855,7 +856,7 @@ id:
           ini <b>dalam Bahasa Inggris</b> dan bahasa apapun yang dimengerti oleh
           calon kompetitor.
         #original_hash: b4d020f
-        delegate_ids: Delegate WCA untuk kompetisi.
+        staff_delegate_ids: Delegate WCA untuk kompetisi.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegate Magang WCA untuk kompetisi ini.
         #original_hash: 517d376
@@ -980,7 +981,7 @@ id:
           angka 0, pernyataan pilihan Anda akan ditampilkan tentang kebijakan
           penonton.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2707,7 +2708,7 @@ id:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Penonton dapat datang secara gratis.
+        free: Penonton dapat datang secara gratis.
         #original_hash: f1e6aef
         restricted: Penonton hanya boleh datang sebagai pendamping kompetitor.
       #original_hash: 97a31ee
@@ -3060,22 +3061,23 @@ id:
       competitions:
         zero: Tidak ada kompetisi
         other: '%{count} kompetisi'
-      #original_hash: e3528ec
-      label: 'Kompetisi terdekat (dalam jarak %{days} hari dan %{kms} km)'
       #original_hash: 3446062
       label_admin: '%{days} hari terakhir'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} dalam jarak %{kms} km dan %{days} hari.'
+      #original_hash: 9eb8f46
+      within: 'Dalam waktu %{days} hari'
+      #original_hash: d97d1ee
+      show: Perlihatkan
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Kompetisi terdekat (dalam jarak %{days} hari dan %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Tidak ada kompetisi terdekat!
       #original_hash: 7e76950
       no_date_yet: Anda belum menetapkan tanggal kompetisi ini.
       #original_hash: 82a95d2
       no_location_yet: Anda belum menetapkan lokasi kompetisi ini.
-      #original_hash: 9eb8f46
-      within: 'Dalam waktu %{days} hari'
-      #original_hash: d97d1ee
-      show: Perlihatkan
       #original_hash: 709a232
       name: Nama
       #original_hash: adc24b7

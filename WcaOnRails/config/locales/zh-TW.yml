@@ -464,7 +464,7 @@ zh-TW:
         #original_hash: 28a6fbb
         currency_code: 貨幣代碼
         #original_hash: 2e3ed8b
-        delegate_ids: WCA代表
+        staff_delegate_ids: WCA代表
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA 實習代表
         #original_hash: 958562e
@@ -499,8 +499,6 @@ zh-TW:
         competition_events: 項目
         #original_hash: 71c8461
         enable_donations: 除了報名費以外，我想要開放捐款
-        #original_hash: 4baf44b
-        championship_type: 錦標賽種類
         #original_hash: 556fda0
         extra_registration_requirements: 額外報名條件
         #original_hash: 2529d04
@@ -522,7 +520,7 @@ zh-TW:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: 陪同者入場費
         #original_hash: bb16247
-        free_guest_entry_status: 顯示免費陪同者的訊息
+        guest_entry_status: 顯示免費陪同者的訊息
         #original_hash: 723cad9
         early_puzzle_submission: 我希望參賽者能在該比賽項目開始前的一個時間點先繳交方塊
         #original_hash: 78308cc
@@ -537,6 +535,9 @@ zh-TW:
         event_restrictions_reason: 項目組合限制的理由和細節
         #original_hash: 3c24bd2
         main_event_id: 主要項目
+      championship:
+        #original_hash: 4baf44b
+        championship_type: 錦標賽種類
       registration:
         #original_hash: 3c23a67
         guests: 陪同者
@@ -724,11 +725,11 @@ zh-TW:
         #original_hash: 82dabd0
         multimedia: 多媒體
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: 不要顯示任何東西（也許需要在「額外報名條件」中詳述）
         #original_hash: 694bce4
-        anyone: 觀眾都可免費入場
+        free: 觀眾都可免費入場
         #original_hash: 762c509
         restricted: 只有參賽者的陪同者才能入場當觀眾
   simple_form:
@@ -816,7 +817,7 @@ zh-TW:
         #original_hash: bb470cc
         information: 參賽者須知的重要資訊，將會顯示在比賽主頁面。<br/>請用 <b>英文</b> 和您當地參賽者使用的語言填寫此欄。
         #original_hash: b4d020f
-        delegate_ids: 本場比賽的WCA代表。
+        staff_delegate_ids: 本場比賽的WCA代表。
         #original_hash: cb9882c
         trainee_delegate_ids: 比賽的WCA實習代表。
         #original_hash: 517d376
@@ -894,7 +895,7 @@ zh-TW:
         #original_hash: 0419547
         guests_entry_fee_lowest_denomination: 目前這個數字僅供顯示資訊用，本網站不處理陪同者入場費。如果此處設為0，可以選擇顯示一個觀眾政策的文字。
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2261,7 +2262,7 @@ zh-TW:
       guests_pay: '觀眾需繳交進場費%{guests_base_fee}才得入場。'
       guests_free:
         #original_hash: 573eeb7
-        anyone: 觀眾都可免費入場。
+        free: 觀眾都可免費入場。
         #original_hash: f1e6aef
         restricted: 只有參賽者的陪同者才能入場當觀眾
       #original_hash: 97a31ee
@@ -2564,22 +2565,23 @@ zh-TW:
       competitions:
         zero: 沒有比賽
         other: '%{count}個比賽'
-      #original_hash: e3528ec
-      label: '附近的比賽（%{days}天和%{kms}公里之內）'
       #original_hash: 3446062
       label_admin: '過去%{days}天'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} 在%{kms}公里和%{days}天之內。'
+      #original_hash: 9eb8f46
+      within: '%{days}天之內'
+      #original_hash: d97d1ee
+      show: 顯示
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: '附近的比賽（%{days}天和%{kms}公里之內）'
       #original_hash: feefb46
       no_comp_nearby: 附近沒有比賽！
       #original_hash: 7e76950
       no_date_yet: 您尚未輸入這場比賽的日期。
       #original_hash: 82a95d2
       no_location_yet: 您尚未輸入這場比賽的位置。
-      #original_hash: 9eb8f46
-      within: '%{days}天之內'
-      #original_hash: d97d1ee
-      show: 顯示
       #original_hash: 709a232
       name: 比賽名稱
       #original_hash: adc24b7

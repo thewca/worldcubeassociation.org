@@ -63,6 +63,7 @@ module DatabaseDumper
           competitor_limit
           competitor_limit_reason
           guests_enabled
+          guests_per_registration_limit
           results_posted_at
           results_submitted_at
           results_nag_sent_at
@@ -79,7 +80,7 @@ module DatabaseDumper
           refund_policy_percent
           refund_policy_limit_date
           guests_entry_fee_lowest_denomination
-          free_guest_entry_status
+          guest_entry_status
           early_puzzle_submission
           early_puzzle_submission_reason
           qualification_results
@@ -95,6 +96,9 @@ module DatabaseDumper
           event_change_deadline_date
           allow_registration_edits
           allow_registration_self_delete_after_acceptance
+          competition_series_id
+          use_wca_live_for_scoretaking
+          allow_registration_without_qualification
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -351,19 +355,6 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "competition_trainee_delegates" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          competition_id
-          created_at
-          trainee_delegate_id
-          receive_registration_emails
-          updated_at
-        ),
-      ),
-    }.freeze,
     "competition_events" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
@@ -385,6 +376,20 @@ module DatabaseDumper
           created_at
           organizer_id
           receive_registration_emails
+          updated_at
+        ),
+      ),
+    }.freeze,
+    "competition_series" => {
+      # One Series can be associated with many competitions, so any JOIN will inherently produce duplicates. Get rid of them by using GROUP BY.
+      where_clause: "LEFT JOIN Competitions ON Competitions.competition_series_id=competition_series.id WHERE showAtAll=1 GROUP BY competition_series.id",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          wcif_id
+          name
+          short_name
+          created_at
           updated_at
         ),
       ),
@@ -478,6 +483,7 @@ module DatabaseDumper
           wdc_incidents
           wrc_primary_user_id
           wrc_secondary_user_id
+          reminder_sent_at
         ),
       ),
     }.freeze,
@@ -649,6 +655,7 @@ module DatabaseDumper
           last_sign_in_at
           name
           region
+          registration_notifications_enabled
           results_notifications_enabled
           saved_avatar_crop_h
           saved_avatar_crop_w
@@ -685,6 +692,7 @@ module DatabaseDumper
           sign_in_count
           unconfirmed_email
           session_validity_token
+          otp_secret
         ),
         fake_values: {
           "dob" => "'1954-12-04'",

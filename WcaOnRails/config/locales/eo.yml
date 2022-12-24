@@ -423,6 +423,10 @@ eo:
         remove_avatar: Forigi uzantobildon
         #original_hash: 9af9099
         results_notifications_enabled: Retpoŝtu min kiam miaj rezultoj estas enretaj.
+        #original_hash: 29ce2ff
+        registration_notifications_enabled: >-
+          Kiam mi organizas aŭ delegas konkurson, retpoŝtu min kiam novaj
+          registriĝoj estas submetitaj.
         #original_hash: de60ab8
         delegate_status: Delegita statuso
         #original_hash: 0f21717
@@ -473,7 +477,7 @@ eo:
         #original_hash: 28a6fbb
         currency_code: Valuta kodo
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-Delegito(j)
+        staff_delegate_ids: WCA-Delegito(j)
         #original_hash: c0ddcd6
         trainee_delegate_ids: Trejnanta(j) WCA-Delegito(j)
         #original_hash: 958562e
@@ -484,6 +488,8 @@ eo:
         information: Informo
         #original_hash: 87b7d5f
         use_wca_registration: Mi ŝatus uzi la retejon de la WCA por la registriĝoj
+        #original_hash: ebe8c47
+        use_wca_live_for_scoretaking: Mi uzos WCA Live por eniri rezultojn
         #original_hash: 8020e88
         external_registration_page: Paĝo por la registriĝoj
         #original_hash: 9bb1965
@@ -494,6 +500,8 @@ eo:
         competitor_limit_reason: Kialo por tiu limo de konkursantoj
         #original_hash: 3c23a67
         guests_enabled: Akompanantoj
+        #original_hash: 7d78478
+        guests_per_registration_limit: Maksimuma nombro da gastoj po registriĝo
         #original_hash: 089cbfd
         receive_registration_emails: Sciigu min per retmesaĝo kiam iu registriĝas por tiu konkurso
         #original_hash: d4aeed9
@@ -508,8 +516,6 @@ eo:
         competition_events: Konkurseroj
         #original_hash: 71c8461
         enable_donations: 'Mi volas ebligi donacojn, aldone al la baza registriĝkosto'
-        #original_hash: 4baf44b
-        championship_type: Tipo de ĉampionado
         #original_hash: 556fda0
         extra_registration_requirements: Aldonaj registriĝaj postuloj
         #original_hash: 2529d04
@@ -531,7 +537,7 @@ eo:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Enira kosto por akompanantoj
         #original_hash: bb16247
-        free_guest_entry_status: Videbla mesaĝo rilate al senpaga eniro de akompanantoj
+        guest_entry_status: Videbla mesaĝo rilate al senpaga eniro de akompanantoj
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Mi ŝatus devigi konkursantojn submetiĝi puzloj je specifa tempo antaŭ
@@ -540,8 +546,8 @@ eo:
         early_puzzle_submission_reason: Kialo kaj detaloj por la antaŭtempa submetiĝo de puzloj
         #original_hash: 88da0ef
         qualification_results: >-
-          Mi ŝatus uzi kvalifikajn rezultojn por limigi kiu povas partopreni en
-          specifajn konkurserojn
+          Mi ŝatus uzi kvalifikajn rezultojn por limigi kiu povas konkursi en
+          specifaj konkurseroj
         #original_hash: 1ec6dd4
         qualification_results_reason: Kialo kaj detaloj por la kvalifikaj rezultoj
         #original_hash: ac30de9
@@ -550,6 +556,20 @@ eo:
         event_restrictions_reason: Kialo kaj detaloj pri limigoj de konkursero
         #original_hash: 3c24bd2
         main_event_id: Ĉefa konkursero
+        #original_hash: a541bfa
+        allow_registration_without_qualification: Konkurseroj kun Kvalifiko
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Tipo de ĉampionado
+      competition_series:
+        #original_hash: 89f89c0
+        wcif_id: Identigilo
+        #original_hash: 709a232
+        name: Nomo
+        #original_hash: 8a6bee1
+        short_name: Kromnomo de serio
+        #original_hash: af3d38e
+        competition_ids: Ĉiuj konkursoj
       registration:
         #original_hash: 3c23a67
         guests: Gastoj
@@ -737,13 +757,13 @@ eo:
         #original_hash: 82dabd0
         multimedia: Plurmedio
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Montru nenion (kaj eble detalu en la sekcio "Aldonaj registriĝaj
           postuloj")
         #original_hash: 694bce4
-        anyone: '"Ĉiuj spektantoj povas veni senpage"'
+        free: '"Ĉiuj spektantoj povas veni senpage"'
         #original_hash: 762c509
         restricted: '"Spektantoj estas permesataj nur kiel akompanantoj de konkursantoj"'
   simple_form:
@@ -818,6 +838,10 @@ eo:
         remember_me: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
+        #original_hash: f62eb10
+        registration_notifications_enabled: >-
+          Ĉi tio validas nur por konkursoj, kiujn vi organizas aŭ delegas, kaj
+          povas esti anstataŭita por specifaj konkursoj.
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
@@ -852,7 +876,7 @@ eo:
           ĉefpaĝo de la konkurso. <br/>Bonvolu plenigi tion <b>en la angla</b>
           kaj en ĉiuj lingvoj parolataj de viaj konkursantoj.
         #original_hash: b4d020f
-        delegate_ids: WCA-Delegitoj de la konkurso.
+        staff_delegate_ids: WCA-Delegitoj de la konkurso.
         #original_hash: cb9882c
         trainee_delegate_ids: Trejnanta(j) WCA-Delegito(j) de la konkurso.
         #original_hash: 517d376
@@ -914,6 +938,8 @@ eo:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: da39a3e
+        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Kvankam la Regularo ne devigas vin difini limon de konkursantoj, estas
@@ -926,10 +952,13 @@ eo:
           postulas antaŭan laboron.
         #original_hash: 4bd7102
         competitor_limit_reason: Kial estas limo de konkursantoj? Bonvolu plenigi tion en la angla!
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          La nombro da gastoj permesitaj per registriĝo ĉe ĉi tiu konkurso.
+          Registriĝo kun tro da gastoj estos blokita. Lasu tion malplena se ne
+          estas limo.
         #original_hash: da39a3e
         venueAddress: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Bonvolu indiki tie iajn pliajn registriĝajn postulojn kiuj ne estis
@@ -974,7 +1003,7 @@ eo:
           povas esti faritaj per tiu retejo. Se vi enigas 0, vi povos elekti
           frazon pri kiel vi traktos spektantojn.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -995,6 +1024,28 @@ eo:
           konkurseroj. Bonvolu plenigi tion en la angla!
         #original_hash: 1067798
         main_event_id: La venkinto de tiu konkursero estos la venkinto de la konkurso.
+        #original_hash: da39a3e
+        allow_registration_without_qualification: ''
+        championships:
+          #original_hash: da39a3e
+          championship_type: ''
+        competition_series:
+          #original_hash: da39a3e
+          wcif_id: ''
+          #original_hash: 77811b5
+          name: >-
+            La plena nomo de la Konkursa Serio kun la jaro ĉe la fino (ekz.,
+            Suda Aŭstralio 2022). Nepre majuskligu. La samaj reguloj kiel por la
+            nomo de la individuaj konkursoj validas.
+          #original_hash: 778c20c
+          short_name: >-
+            Mallonga nomo por afiŝi. La samaj reguloj kiel por la nomo de
+            individuaj konkursoj validas.
+          #original_hash: 3e27501
+          competition_ids: >-
+            <b>Ĉi tiu kampo ne estas redaktebla!</b><br/>Por aldoni konkursojn
+            al ĉi tiu Serio, vi devas iri al la individuaj 'Redakti'-paĝoj de la
+            konkursoj kiujn vi volas aldoni.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1217,6 +1268,13 @@ eo:
           'true': Surlokaj registriĝoj eblos
           #original_hash: 0f236df
           'false': Surlokaj registriĝoj NE eblos
+        allow_registration_without_qualification:
+          #original_hash: 9697d98
+          'true': >-
+            Konkursantoj rajtos registriĝi por konkurseroj por kiuj ili ne estas
+            kvalifikitaj (mi forigos ilin poste)
+          #original_hash: 6509041
+          'false': Konkursantoj DEVAS esti kvalifikitaj por registriĝi por konkursero
         allow_registration_edits:
           #original_hash: 52a2f4a
           'true': >-
@@ -1902,8 +1960,8 @@ eo:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Ĉiuj profilbildoj devus esti fotoj de realaj personoj.
-        #original_hash: 9126b0c
-        '2': La videbla persono devas esti vin.
+        #original_hash: b12d293
+        '2': Vi devas esti la montrata persono.
         #original_hash: de9b742
         '3': >-
           Se pli ol unu persono estas en la bildo, oni devas klare kompreni kiun
@@ -2058,8 +2116,6 @@ eo:
       need_dob: Bezonas naskiĝdaton
       #original_hash: d84a54f
       need_country: Bezonas landon
-      #original_hash: cec28a0
-      comp_not_found: Konkurso ne trovita
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Registriĝo ne povas esti samtempe kaj forigita kaj akceptita.
       #original_hash: a38d024
@@ -2071,6 +2127,10 @@ eo:
         target='_blank'>WDC-n</a>.
       #original_hash: 8d07e7f
       undelete_banned: estas forbarita konkursanto kaj ne povas esti malforigita
+      #original_hash: 3de7c86
+      series_more_than_one_accepted: Vi povas esti akceptita nur en unu Seria konkurso samtempe.
+      #original_hash: 13bfcd6
+      can_only_register_for_qualified_events: Vi ne povas registriĝi por konkurseroj por kiuj vi ne estas kvalifikita.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2224,6 +2284,12 @@ eo:
       payment_requested_on: 'Pago petita la: %{date}'
       #original_hash: f5b1b34
       payment_completed_on: 'Pago efektivigita je: %{date}'
+      #original_hash: 3141a14
+      series_registrations: Registriĝoj en la Serio
+      #original_hash: 845bb47
+      series_registrations_hint_html: >-
+        Sugesto: Registriĝoj en la Serio estas montrataj kiel
+        <i>%{description}</i>
       #original_hash: b25928c
       total: Sumo
       #original_hash: df036fe
@@ -2310,6 +2376,8 @@ eo:
     will_pay_here: Vi pagos ilin tie post submetiĝo de via registriĝo.
     #original_hash: b7ef562
     wont_pay_here: Bonvolu kontroli konkursajn informojn por scii kiel pagi
+    #original_hash: be4b39d
+    not_qualified: Ne kvalifikita
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2513,6 +2581,10 @@ eo:
       no_main_event_results: 'Ne estas rezultoj por la ĉefa konkursero (%{event_name}).'
       #original_hash: a0168ee
       in_progress: 'Tiu konkurso estas okazanta. Revenu post %{date} por vidi la rezultojn!'
+      #original_hash: 8eeeb44
+      in_progress_at_wca_live_html: >-
+        Ĉi tiu konkurso estas okazanta. Vi povas kontroli la realtempajn
+        rezultojn <a href='%{link_here}'>ĉi tie</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: >-
         Registriĝperiodo estas agordata por komenci tro frue (vi devas lasi
@@ -2613,6 +2685,17 @@ eo:
       register_link_html: 'Registriĝu por tiu konkurso %{here}.'
       #original_hash: 45834fd
       register_below_html: Registriĝu por tiu konkurso malsupre.
+      #original_hash: c5dfcc7
+      part_of_a_series: Ĉi tiu konkurso estas parto de Konkursa Serio.
+      #original_hash: 171e593
+      part_of_a_series_list: >-
+        Ĉi tiu konkurso estas parto de la Konkursa Serio %{name}. La aliaj
+        konkursoj en tiu Serio estas:
+      #original_hash: 09fa333
+      series_registration_warning_html: >-
+        Noto: Vi povas sendi registriĝon por ĉiuj konkursoj en Serio, sed nur
+        unu el tiuj registriĝoj povas esti konfirmita kaj akceptita. <b>Vi nur
+        rajtos konkursi en unu el la Seriokonkursoj!</b>
       #original_hash: 196725e
       competitor_limit_is: 'Estas limo de %{competitor_limit} konkursantoj.'
       #original_hash: 5101f65
@@ -2661,9 +2744,18 @@ eo:
       guests_pay: 'Spektantoj estos akceptataj kaj devos pagi %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Ĉiuj spektantoj povas veni senpage.
+        free: Ĉiuj spektantoj povas veni senpage.
         #original_hash: f1e6aef
         restricted: Spektantoj estas permesataj nur kiel akompanantoj de konkursantoj.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Konkursantoj povas veni kun tiom da gastoj kiom ili deziras
+        one: Konkursantoj povas veni kun maksimume 1 gasto.
+        other: 'Konkursantoj povas veni kun maksimume %{count} gastoj.'
+      #original_hash: 64e0ddd
+      require_qualification: >-
+        Konkursantoj povas registriĝi nur por konkurseroj por kiuj ili jam estas
+        kvalifikitaj.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Tiu konkurso finiĝis, alklaku %{link_here} por vidi la uzitajn
@@ -2747,6 +2839,8 @@ eo:
       all_years: Ĉiuj jaroj
       #original_hash: 719ea39
       clear: Vakigi
+      #original_hash: e827f28
+      select_hint: Bonvolu elekti konkurserojn
       #original_hash: a1fffaa
       list: Listo
       #original_hash: ab478f3
@@ -2777,6 +2871,10 @@ eo:
       past_from: 'Estintaj de %{year}'
       #original_hash: 7cff459
       past_all: Estintaj de ĉiuj jaroj
+      #original_hash: 819fe62
+      show_cancelled: Montru nuligitajn konkursojn
+      #original_hash: 0eda967
+      show_registration_status: Montru simbolon de registriĝa statuso
       titles:
         #original_hash: 69447c9
         in_progress: Okazantaj konkursoj
@@ -2802,6 +2900,8 @@ eo:
           in_progress: Okazanta!
           #original_hash: 1157462
           posted: Rezultoj estas publikigitaj!
+          #original_hash: 89bcc37
+          starts_in: 'Komenciĝas en %{days}'
           #original_hash: 97b061a
           announced_on: 'Anoncita la %{announcement_date}'
         #original_hash: ccd2db9
@@ -2874,6 +2974,10 @@ eo:
         Nedeviga kontakta informo. Se vi ne plenigas ĝin, kontaktdemandoj estos
         senditaj per formularo kiu ne konigos la retpoŝtadresojn de la
         organizantoj. %{md}. Ekzemple: [Videbla teksto](mailto:iu@retpoŝto.com)
+      #original_hash: 05c66b5
+      series_save_first_hint: >-
+        Noto: Vi devas unue konservi la konkurson antaŭ ol vi povas aldoni novan
+        Serion.
       #original_hash: c5497bc
       events: Konkurseroj
       #original_hash: cafc153
@@ -2988,6 +3092,12 @@ eo:
       event_change_deadline_with_ots: >-
         Limdato por ĝisdatigi konkurserojn devas esti dum la konkurso se
         surlokaj registriĝoj eblas.
+      #original_hash: 5ae2437
+      series_distance_km: 'La konkurso troviĝas tro malproksime de %{competition}.'
+      #original_hash: 4a5d7c5
+      series_distance_days: 'La konkurso estas planita tro da tagoj for de %{competition}.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: Vi devas demandi pri gastoj se limo de gasto estas specifita.
     new:
       #original_hash: 1208df7
       create_competition: Krei konkurson
@@ -3015,40 +3125,43 @@ eo:
         zero: Neniu konkurso
         one: 1 konkurso
         other: '%{count} konkursoj'
-      #original_hash: e3528ec
-      label: 'Proksimaj konkursoj (for de %{days} tagoj kaj %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Lastaj %{days} tagoj'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} for de %{kms} km kaj %{days} tagoj.'
-      #original_hash: feefb46
-      no_comp_nearby: Neniu proksima konkurso!
-      #original_hash: 7e76950
-      no_date_yet: Vi ankoraŭ ne elektis daton por tiu konkurso.
-      #original_hash: 82a95d2
-      no_location_yet: Vi ankoraŭ ne elektis lokon por tiu konkurso.
       #original_hash: 9eb8f46
       within: 'Ene de %{days} tagoj'
       #original_hash: d97d1ee
       show: Montri
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Proksimaj konkursoj (ene de %{days} tagoj kaj %{kms} km)'
+      #original_hash: feefb46
+      no_comp_nearby: Neniu proksima konkurso!
+      #original_hash: 7e76950
+      no_date_yet: Vi ankoraŭ ne asignis daton por ĉi tiu konkurso.
+      #original_hash: 82a95d2
+      no_location_yet: Vi ankoraŭ ne asignis lokon por ĉi tiu konkurso.
       #original_hash: 709a232
       name: Nomo
       #original_hash: adc24b7
       delegates: Delegito(j)
       #original_hash: eb9a4bc
       date: Dato
+      #original_hash: 6c82e6d
+      time: Dato
       #original_hash: d219c68
       location: Loko
       #original_hash: 4232080
       distance: Distanco
       #original_hash: 51de2b8
-      before: antaŭe
+      before: antaŭ
       #original_hash: 405906c
-      after: poste
+      after: post
       #original_hash: e1978a9
-      starts_on: komenciĝas la
+      starts_on: komenciĝas
       #original_hash: 964aedc
-      ends_on: finiĝas la
+      ends_on: finiĝas
       #original_hash: 24d948e
       limit: Limo
       #original_hash: 855bd26
@@ -3056,9 +3169,20 @@ eo:
       #original_hash: c5497bc
       events: Konkurseroj
       #original_hash: 50cb854
-      show_events: Montri konkurserojn
+      show_events: Montru konkurserojn
       #original_hash: 0df66f7
-      hide_events: Kaŝi konkurserojn
+      hide_events: Kaŝu konkurserojn
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Koliziaj registriĝperiodoj (komenco ene de %{hours} horoj)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Neniu registriĝperioda kolizio!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: >-
+        Vi ankoraŭ ne asignis komencdaton de registriĝperiodo por ĉi tiu
+        konkurso.
+      #original_hash: c38824e
+      opens_registration_at: malfermas registriĝperiodon je
     #original_hash: 06b01c4
     announcements: Anoncoj
     #original_hash: a2b80b0
@@ -3238,6 +3362,11 @@ eo:
       group: Grupo
       #original_hash: b7126cd
       scramble: Mikso
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: Aldoni al Serio
+      #original_hash: be6edcd
+      remove_series: Forigi el Serio
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3287,6 +3416,17 @@ eo:
     records:
       #original_hash: e51c552
       title: Rekordoj
+    #original_hash: e02fccb
+    last_updated_html: 'Lasta ĝisdatigo: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      Bonvolu memori, ke iuj filtroj (kiel pasintaj jaroj) estas provizore
+      malŝaltitaj. Se vi havas sperton pri SQL-optimumigo, bonvolu kontakti la
+      WST!
+    #original_hash: e3710ed
+    tooltip_no_years: Nia datumbazo estas tro granda por komputi historiajn datumojn
+    #original_hash: 357094b
+    tooltip_no_quantities: Nia datumbazo estas tro granda por komputi longajn rangotabelojn
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -4517,6 +4657,8 @@ eo:
       people: Homoj
       #original_hash: 6db75ea
       advanced_search: Altnivela serĉo
+      #original_hash: 5e326b1
+      incidents: Incidentoj
       #original_hash: a0ca0c3
       posts: Afiŝoj
       #original_hash: 9d7ea9c
@@ -4532,6 +4674,8 @@ eo:
         people: Neniu homo trovita por
         #original_hash: c6a04aa
         posts: Neniu afiŝo trovita por
+        #original_hash: 3499e7e
+        incidents: Neniu incidento trovita por
         #original_hash: 76a6bf1
         regulations_and_guidelines: Neniu Regulo aŭ Gvidlinio trovita por
   incidents_log:
@@ -4539,6 +4683,8 @@ eo:
     i18n_disclaimer: >-
       Atentu ke la sekcio pri incidentoj nur disponeblas en la angla, la enhavo
       malsupre ne estas tradukita.
+    #original_hash: 2c23c1a
+    incident: 'Incidento:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Pri la Regularo

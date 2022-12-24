@@ -7,8 +7,8 @@
   <script>
     window.wca = {};
   </script>
-  <%= javascript_packs_with_chunks_tag 'wca_maps' %>
-  <%= stylesheet_packs_with_chunks_tag 'wca_maps' %>
+  <%= javascript_pack_tag 'wca_maps', defer: false %>
+  <%= stylesheet_pack_tag 'wca_maps' %>
   <%= csrf_meta_tags %>
   <style>
     body {

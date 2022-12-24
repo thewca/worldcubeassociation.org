@@ -1,4 +1,4 @@
-import events from '../wca-data/events.js.erb';
+import { events } from '../wca-data.js.erb';
 import { centisecondsToClockFormat } from '../wca-live/attempts';
 
 export function pluralize(count, word, { fixed, abbreviate } = {}) {

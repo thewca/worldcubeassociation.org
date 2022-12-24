@@ -8,7 +8,7 @@ def normalize_schema_dump(schema_dump)
   schema_dump.gsub(%r{\n.* DEFINER=[^*]* \*/$}, '') # remove DEFINER= declarations
 end
 
-Rake::Task["db:structure:dump"].enhance do
+Rake::Task["db:schema:dump"].enhance do
   path = Rails.root.join('db', 'structure.sql')
   File.write path, normalize_schema_dump(File.read(path))
 end

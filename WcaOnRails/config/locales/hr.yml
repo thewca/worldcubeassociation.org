@@ -265,6 +265,49 @@ hr:
     333mbf: '10:00.00 po kocki, maksimalno do 60:00.00'
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: Kvalifikacijski tip
+    #original_hash: 65c848f
+    result_type: Tip rezultata
+    #original_hash: 29ef642
+    for_event: 'Kvalifikacija za %{event}'
+    type:
+      #original_hash: f5c3f76
+      none: Bez kvalifikacije
+      #original_hash: f8c5669
+      result: Po rezultatu
+      #original_hash: 4aebda3
+      ranking: Najboljih N
+      #original_hash: 3bc54a0
+      any_result: Bilo koji rezultat
+    single:
+      #original_hash: d596f44
+      time: 'Pojedinačno slaganje ispod %{time}'
+      #original_hash: 52ba186
+      moves: 'Pojedinačno slaganje ispod %{moves} poteza'
+      #original_hash: b1993ae
+      points: 'Pojedinačno slaganje iznad %{points} bodova'
+      #original_hash: ed2b051
+      ranking: 'Najboljih %{ranking} po pojedinačnom slaganju'
+      #original_hash: 933b7dc
+      any_result: Bilo koje pojedinačno slaganje
+    average:
+      #original_hash: 2682ae8
+      time: 'Prosjek ispod %{time}'
+      #original_hash: 1b9b5fc
+      moves: 'Prosjek ispod %{moves} poteza'
+      #original_hash: 05c417e
+      points: 'Prosjek iznad %{points} bodova'
+      #original_hash: 805171c
+      ranking: 'Najboljih %{ranking} po prosjeku'
+      #original_hash: 2223a1b
+      any_result: Bilo koji prosjek
+    deadline:
+      #original_hash: 3b7f9f6
+      description: Krajnji rok za kvalifikacije
+      #original_hash: bed8220
+      by_date: 'po %{date}'
   common:
     #original_hash: 70c07ec
     world: Svijet
@@ -438,7 +481,7 @@ hr:
         #original_hash: 28a6fbb
         currency_code: Kôd valute
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegat(i)
+        staff_delegate_ids: WCA Delegat(i)
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Delegat pripravnik
         #original_hash: 958562e
@@ -473,8 +516,6 @@ hr:
         competition_events: Discipline
         #original_hash: 71c8461
         enable_donations: Želim omogućiti donacije dodatno uz prikupljanje kotizacija
-        #original_hash: 4baf44b
-        championship_type: Vrsta prvenstva
         #original_hash: 556fda0
         extra_registration_requirements: Dodatni zahtjevi za registraciju
         #original_hash: 2529d04
@@ -496,7 +537,7 @@ hr:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Kotizacija za goste/gledatelje
         #original_hash: bb16247
-        free_guest_entry_status: Prikaži poruku za besplatan ulazak gledatelja
+        guest_entry_status: Prikaži poruku za besplatan ulazak gledatelja
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Želim da natjecatelji predaju mozgalice u vremenu prije nego je neka
@@ -517,6 +558,9 @@ hr:
         event_restrictions_reason: Razlozi i detalji za ograničenja disciplina
         #original_hash: 3c24bd2
         main_event_id: Glavna disciplina
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Vrsta prvenstva
       registration:
         #original_hash: 3c23a67
         guests: Gosti
@@ -704,13 +748,13 @@ hr:
         #original_hash: 82dabd0
         multimedia: Multimedija
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Ne prikazuj ništa (ili elaboriraj unutar "Extra registration
           requirements" sekcije)
         #original_hash: 694bce4
-        anyone: Bilo tko može doći gledati natjecanje besplatno
+        free: Bilo tko može doći gledati natjecanje besplatno
         #original_hash: 762c509
         restricted: Gledatelji mogu biti samo suputnici/pratnja natjecatelja
   simple_form:
@@ -820,7 +864,7 @@ hr:
           engleskom</b> ili na bilo kojem drugom jeziku kojeg natjecatelji
           razumiju.
         #original_hash: b4d020f
-        delegate_ids: WCA Delegati natjecanja.
+        staff_delegate_ids: WCA Delegati natjecanja.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Delegati pripravnici za natjecanje.
         #original_hash: 517d376
@@ -947,7 +991,7 @@ hr:
           ovaj broj stavljen na 0, prikazat će se rečenica po vašem odabiru
           politike dolaska gledatelja na natjecanje.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2661,7 +2705,7 @@ hr:
       guests_pay: 'Gledatelji mogu doći samo ako plate kotizaciju od %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Svi gledatelji mogu doći gledati natjecanje besplatno.
+        free: Svi gledatelji mogu doći gledati natjecanje besplatno.
         #original_hash: f1e6aef
         restricted: >-
           Gledateljima je dozvoljen ulaz samo ako su suputnici/pratnja
@@ -2749,6 +2793,8 @@ hr:
       all_years: Sve godine
       #original_hash: 719ea39
       clear: Očisti
+      #original_hash: e827f28
+      select_hint: Odaberite discipline
       #original_hash: a1fffaa
       list: Lista
       #original_hash: ab478f3
@@ -2804,14 +2850,23 @@ hr:
           in_progress: U tijeku!
           #original_hash: 1157462
           posted: Rezultati su objavljeni!
-          #original_hash: 89bcc37
-          starts_in: 'Počinje za %{days}'
           #original_hash: 97b061a
           announced_on: 'Najavljeno %{announcement_date}'
         #original_hash: ccd2db9
         search: Ime ili grad
         #original_hash: 3bc8082
         recent: 'Zadnjih %{count} dana'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'Registracije će se otvoriti za %{duration}'
+          #original_hash: 2d601fa
+          closed: 'Registracije su se zatvorile. Natjecanje počinje za %{days}'
+          #original_hash: 2e17db8
+          open: Registracije su otvorene!
+          #original_hash: c098975
+          full: >-
+            Natjecateljski limit je dosegnut, nove registracije idu na listu
+            čekanja
       #original_hash: 8b09d74
       no_comp_found: Nijedno natjecanje nije pronađeno.
       #original_hash: 7008166
@@ -3009,22 +3064,23 @@ hr:
         few: nekoliko natjecanja
         many: nekoliko natjecanja
         other: '%{count} natjecanja'
-      #original_hash: e3528ec
-      label: 'Natjecanja u blizini (unutar %{days}dana i %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Zadnjih %{days} dana'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} unutar %{kms} km i %{days} dana.'
+      #original_hash: 9eb8f46
+      within: 'Unutar %{days} dana'
+      #original_hash: d97d1ee
+      show: Pokaži
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Natjecanja u blizini (unutar %{days}dana i %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Nema natjecanja u blizini!
       #original_hash: 7e76950
       no_date_yet: Nisi još priložio/la datum za ovo natjecanje.
       #original_hash: 82a95d2
       no_location_yet: Nisi još priložio/la lokaciju za ovo natjecanje.
-      #original_hash: 9eb8f46
-      within: 'Unutar %{days} dana'
-      #original_hash: d97d1ee
-      show: Pokaži
       #original_hash: 709a232
       name: Ime
       #original_hash: adc24b7
@@ -3115,6 +3171,18 @@ hr:
           Format opisuje kako odrediti poredak natjecatelja bazirano na njihovim
           rezultatima. Lista dozvoljenih formata po disciplini opisana je u
           %{link_to_9b}. Vidi %{link_to_9f} za opis svakog formata.
+        #original_hash: fa50f5c
+        qualification_html: >-
+          Kvalifikacijska vremena se moraju postaviti na ostalim WCA
+          natjecanjima kako bi se moglo natjecati.
+        #original_hash: 3b524fd
+        qualification_all_events_html: >-
+          Krajnji rok za postavljanje kvalifikacijskih vremena je
+          <b>%{date}</b>.
+        #original_hash: 0d791e9
+        qualification_some_events_html: >-
+          Krajnji rok za postavljanje kvalifikacijskih vremena u %{events} je
+          <b>%{date}</b>.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
@@ -3123,6 +3191,8 @@ hr:
       cutoff: Cutoff
       #original_hash: 02ed4a4
       proceed: Prolazak
+      #original_hash: 2ffe44e
+      qualification: Kvalifikacije
     schedule:
       display_as:
         #original_hash: ec5dd7c

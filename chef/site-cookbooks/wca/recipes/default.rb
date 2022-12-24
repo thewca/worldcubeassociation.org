@@ -204,32 +204,11 @@ if node.chef_environment != "production"
   end
 end
 
-# Use HTTPS in non development mode
-https = (node.chef_environment != "development")
 server_name = {
   "production" => "www.worldcubeassociation.org",
   "staging" => "staging.worldcubeassociation.org",
   "development" => "",
 }[node.chef_environment]
-
-# If /etc/ssh is not a symlink, back it up and create a symlink.
-unless node.chef_environment == "development" || File.symlink?("/etc/ssh")
-  FileUtils.mv "/etc/ssh", "/etc/ssh-backup"
-  FileUtils.ln_s "#{repo_root}/secrets/etc_ssh-#{server_name}", "/etc/ssh"
-  service "ssh" do
-    action :restart
-  end
-end
-
-#### Let's Encrypt with acme.sh
-if https
-  home_dir = "#{repo_root}/.."
-  acme_sh_dir = "#{home_dir}/.acme.sh"
-  link acme_sh_dir do
-    to "#{repo_root}/secrets/https/acme.sh-#{server_name}"
-    owner username
-  end
-end
 
 #### Nginx
 # Unfortunately, we have to compile nginx from source to get the auth request module
@@ -308,22 +287,6 @@ template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
               rails_root: rails_root,
               repo_root: repo_root,
               rails_env: rails_env,
-              https: https,
-              server_name: server_name,
-            })
-  notifies :run, 'execute[reload-nginx]', :delayed
-end
-template "/etc/nginx/wca_https.conf" do
-  source "wca_https.conf.erb"
-  mode 0644
-  owner 'root'
-  group 'root'
-  variables({
-              username: username,
-              rails_root: rails_root,
-              repo_root: repo_root,
-              rails_env: rails_env,
-              https: https,
               server_name: server_name,
             })
   notifies :run, 'execute[reload-nginx]', :delayed

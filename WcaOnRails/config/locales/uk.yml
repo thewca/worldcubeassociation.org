@@ -439,7 +439,7 @@ uk:
         #original_hash: 28a6fbb
         currency_code: Валютний код
         #original_hash: 2e3ed8b
-        delegate_ids: Делегат(и) WCA
+        staff_delegate_ids: Делегат(и) WCA
         #original_hash: 958562e
         organizer_ids: Організатор(и)
         #original_hash: b37456c
@@ -472,8 +472,6 @@ uk:
         competition_events: Дисципліни
         #original_hash: 71c8461
         enable_donations: Увімкнути донейти на додаток до збіру реєстраційних внесків
-        #original_hash: 4baf44b
-        championship_type: Тип чемпіонату
         #original_hash: 556fda0
         extra_registration_requirements: Додаткові реєстраційні вимоги
         #original_hash: 2529d04
@@ -506,6 +504,9 @@ uk:
         event_restrictions_reason: Причина для обмежень в дисциплінах
         #original_hash: 3c24bd2
         main_event_id: Основна дисципліна
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Тип чемпіонату
       registration:
         #original_hash: 3c23a67
         guests: Гості
@@ -807,7 +808,7 @@ uk:
           основній сторінці змагання. <br/>Будь ласка, заповніть її як
           <strong>українською</strong>, так і <strong>англійською</strong>.
         #original_hash: b4d020f
-        delegate_ids: Делегати WCA на змаганнях.
+        staff_delegate_ids: Делегати WCA на змаганнях.
         #original_hash: 517d376
         organizer_ids: Організатори змагань (вони повинні мати аккаунти на сайті WCA).
         #original_hash: cabe7fb
@@ -2635,22 +2636,23 @@ uk:
         few: '%{count} змагань'
         many: '%{count} змагань'
         other: '%{count} змагань'
-      #original_hash: e3528ec
-      label: 'Найближчі змагання (в межах %{days} днів та %{kms} км)'
       #original_hash: 3446062
       label_admin: 'Тривають %{days} днів'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} в радіусі %{kms} км та в межах %{days} днів.'
+      #original_hash: 9eb8f46
+      within: 'В межах %{days} днів'
+      #original_hash: d97d1ee
+      show: Показати
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Найближчі змагання (в межах %{days} днів та %{kms} км)'
       #original_hash: feefb46
       no_comp_nearby: Найближчих змагань немає!
       #original_hash: 7e76950
       no_date_yet: Ви ще не вказали дату для цих змагань.
       #original_hash: 82a95d2
       no_location_yet: Ви ще не вказали локацію для цих змагань.
-      #original_hash: 9eb8f46
-      within: 'В межах %{days} днів'
-      #original_hash: d97d1ee
-      show: Показати
       #original_hash: 709a232
       name: Назва
       #original_hash: adc24b7

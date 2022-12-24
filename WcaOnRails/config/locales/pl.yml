@@ -440,7 +440,7 @@ pl:
         #original_hash: 28a6fbb
         currency_code: Kod waluty
         #original_hash: 2e3ed8b
-        delegate_ids: Delegat/Delegaci WCA
+        staff_delegate_ids: Delegat/Delegaci WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegat(ci) Praktykant(ci) WCA
         #original_hash: 958562e
@@ -479,8 +479,6 @@ pl:
         enable_donations: >-
           Chcę włączyć możliwość przekazywania darowizn jako dodatek do
           wpisowego podczas rejestracji
-        #original_hash: 4baf44b
-        championship_type: Rodzaj mistrzostw
         #original_hash: 556fda0
         extra_registration_requirements: Dodatkowe wymagania rejestracyjne
         #original_hash: 2529d04
@@ -502,7 +500,7 @@ pl:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Wpisowe dla gości
         #original_hash: bb16247
-        free_guest_entry_status: Wyświetl informacje o darmowym wejściu dla gości
+        guest_entry_status: Wyświetl informacje o darmowym wejściu dla gości
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Chciałbym wymagać od zawodników dostarczenia układanek w określonym
@@ -523,6 +521,9 @@ pl:
         event_restrictions_reason: Powód i szczegóły dotyczące ograniczenia konkurencji
         #original_hash: 3c24bd2
         main_event_id: Główna konkurencja
+      championship:
+        #original_hash: 4baf44b
+        championship_type: Rodzaj mistrzostw
       registration:
         #original_hash: 3c23a67
         guests: Goście
@@ -714,13 +715,13 @@ pl:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Nie wyświetlaj nic (rozwiń temat w sekcji "Dodatkowe wymagania
           rejestracyjne")
         #original_hash: 694bce4
-        anyone: Każdy widz może wejść za darmo
+        free: Każdy widz może wejść za darmo
         #original_hash: 762c509
         restricted: Widzowie mogą wejść jedynie jako goście zawodników
   simple_form:
@@ -831,7 +832,7 @@ pl:
           tego <b>w języku angielskim</b> oraz jakichkolwiek innych językach
           używanych przez twoich zawodników.
         #original_hash: b4d020f
-        delegate_ids: Delegaci WCA dla tych zawodów.
+        staff_delegate_ids: Delegaci WCA dla tych zawodów.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegaci Praktykanci WCA dla tych zawodów.
         #original_hash: 517d376
@@ -956,7 +957,7 @@ pl:
           wyświetlone wybrane przez ciebie zdanie informujące o polityce wstępu
           dla gości.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -2706,7 +2707,7 @@ pl:
       guests_pay: 'Wstęp dla widzów wynosi %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Widzowie mogą uczestniczyć w wydarzeniu za darmo.
+        free: Widzowie mogą uczestniczyć w wydarzeniu za darmo.
         #original_hash: f1e6aef
         restricted: Widzowie będą wpuszczani jedynie jako goście zawodników.
       #original_hash: 97a31ee
@@ -3066,22 +3067,23 @@ pl:
         few: '%{count} zawodów'
         many: '%{count} zawodów'
         other: '%{count} zawodów'
-      #original_hash: e3528ec
-      label: 'Pobliskie zawody (w ciągu %{days} dni i w obrębie %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Ostatnie %{days} dni'
       #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} w obrębie %{kms} km i %{days} dni.'
+      #original_hash: 9eb8f46
+      within: 'W ciągu %{days} dni'
+      #original_hash: d97d1ee
+      show: Pokaż
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Pobliskie zawody (w ciągu %{days} dni i w obrębie %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Nie ma pobliskich zawodów!
       #original_hash: 7e76950
       no_date_yet: Jeszcze nie przypisałeś żadnej daty do tych zawodów.
       #original_hash: 82a95d2
       no_location_yet: Jeszcze nie przypisałeś żadnej lokalizacji dla tych zawodów.
-      #original_hash: 9eb8f46
-      within: 'W ciągu %{days} dni'
-      #original_hash: d97d1ee
-      show: Pokaż
       #original_hash: 709a232
       name: Nazwa
       #original_hash: adc24b7
