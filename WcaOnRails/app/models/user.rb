@@ -1224,6 +1224,7 @@ class User < ApplicationRecord
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
       "personalBests" => person_pb.map(&:to_wcif),
+      "extensions" => registration&.wcif_extensions&.map(&:to_wcif) || [],
     }.merge(authorized ? authorized_fields : {})
   end
 
@@ -1250,6 +1251,7 @@ class User < ApplicationRecord
         "registration" => Registration.wcif_json_schema,
         "assignments" => { "type" => "array", "items" => Assignment.wcif_json_schema },
         "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema },
+        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
   end
