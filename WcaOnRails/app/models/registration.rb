@@ -17,6 +17,7 @@ class Registration < ApplicationRecord
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
   has_many :assignments, dependent: :delete_all
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   serialize :roles, Array
 
