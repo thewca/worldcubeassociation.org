@@ -86,6 +86,12 @@ RSpec.describe Registration do
     expect(registration).to be_invalid_with_errors(registration_competition_events: ["must register for at least one event"])
   end
 
+  it "allows zero events for non competing staff" do
+    registration.registration_competition_events = []
+    registration.non_competing_staff = true
+    expect(registration).to be_valid
+  end
+
   it "requires events be offered by competition" do
     registration.registration_competition_events.build(competition_event_id: 1234)
     expect(registration).to be_invalid_with_errors(

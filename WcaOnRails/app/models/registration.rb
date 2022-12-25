@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil) }
+  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(non_competing_staff: false) }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
+  scope :non_competing_staff, -> { where(non_competing_staff: true) }
   scope :not_deleted, -> { where(deleted_at: nil) }
   scope :with_payments, -> { joins(:registration_payments).distinct }
 
@@ -51,7 +52,7 @@ class Registration < ApplicationRecord
   end
 
   def pending?
-    !accepted? && !deleted?
+    !accepted? && !deleted? && !non_competing_staff?
   end
 
   def self.status_from_timestamp(accepted_at, deleted_at)
@@ -69,7 +70,7 @@ class Registration < ApplicationRecord
   end
 
   def new_or_deleted?
-    new_record? || deleted?
+    new_record? || deleted? || non_competing_staff?
   end
 
   def name
@@ -243,7 +244,7 @@ class Registration < ApplicationRecord
 
   validate :must_register_for_gte_one_event
   private def must_register_for_gte_one_event
-    if registration_competition_events.reject(&:marked_for_destruction?).empty?
+    if !non_competing_staff && registration_competition_events.reject(&:marked_for_destruction?).empty?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register'))
     end
   end
