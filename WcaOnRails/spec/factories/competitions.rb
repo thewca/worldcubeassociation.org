@@ -69,6 +69,10 @@ FactoryBot.define do
       delegates { [FactoryBot.create(:trainee_delegate)] }
     end
 
+    trait :with_delegates_and_trainee_delegate do
+      delegates { [FactoryBot.create(:delegate), FactoryBot.create(:trainee_delegate), FactoryBot.create(:delegate)] }
+    end
+
     trait :with_organizer do
       organizers { [FactoryBot.create(:user)] }
     end
