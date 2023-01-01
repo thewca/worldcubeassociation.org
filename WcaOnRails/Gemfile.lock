@@ -353,8 +353,8 @@ GEM
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
     iniparse (1.5.0)
-    io-console (0.5.11)
-    irb (1.5.1)
+    io-console (0.6.0)
+    irb (1.6.2)
       reline (>= 0.3.0)
     iso (0.2.2)
       i18n
@@ -535,7 +535,7 @@ GEM
       json
     redcarpet (3.5.1)
     regexp_parser (2.6.1)
-    reline (0.3.1)
+    reline (0.3.2)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
