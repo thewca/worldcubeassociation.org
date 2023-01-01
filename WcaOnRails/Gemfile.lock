@@ -452,7 +452,7 @@ GEM
     oga (3.4)
       ast
       ruby-ll (~> 2.1)
-    openssl (3.0.1)
+    openssl (3.1.0)
     orm_adapter (0.5.0)
     os (1.1.4)
     overcommit (0.59.1)
