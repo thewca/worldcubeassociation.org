@@ -42,11 +42,10 @@
   display: inline;
 }
 
+.remove-avatar-confirm * {
+  margin-top: 5px;
+}
+
 .remove-avatar-confirm {
   display: none;
-  margin-top: 5px;
-
-  &__button{
-    margin-top: 5px;
-  }
 }

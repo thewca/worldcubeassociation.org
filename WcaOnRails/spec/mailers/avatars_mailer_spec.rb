@@ -30,7 +30,6 @@ RSpec.describe AvatarsMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq "Your avatar has been removed by #{remover_user.name}"
       expect(mail.to).to eq [user.email]
-      expect(mail.reply_to).to eq ['results@worldcubeassociation.org']
       expect(mail.from).to eq ['results@worldcubeassociation.org']
     end
 
