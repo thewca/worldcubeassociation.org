@@ -21,7 +21,6 @@ class AvatarsMailer < ApplicationMailer
     mail(
       from: Team.wrt.email,
       to: user.email,
-      cc: ('results@worldcubeassociation.org' unless remover_user.results_team?),
       subject: "Your avatar has been removed by #{@remover}",
     )
   end
