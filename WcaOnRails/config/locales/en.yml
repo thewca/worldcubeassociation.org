@@ -497,8 +497,8 @@ en:
         competition_id: ""
       #context: for a user
       user:
-        dob: "Enter your date of birth in the format YYYY-MM-DD."
-        name: "Enter your full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>.<br/>Middle names (either full or as initials) are optional."
+        dob: "Enter the competitor's date of birth in the format YYYY-MM-DD."
+        name: "Enter the competitor's full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>.<br/>Middle names (either full or as initials) are optional."
         email: ""
         pending_avatar: "After uploading a new avatar, you will have to wait for the WCA Results Team to approve it."
         country_iso2: ""
@@ -825,7 +825,7 @@ en:
       have_never_competed: "I have never competed in a WCA competition."
       let_us_know: "Please let us know if you have competed in a WCA competition before."
       welcome_back: "Welcome back! To create your WCA website account, we need to know the WCA ID under which you competed."
-      welcome: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes. Please note that your birthdate will never be released without your permission."
+      welcome: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes. Please note that your birthdate will never be released without your permission.<br/>If you are signing up on someone else's behalf, please provide the details of the <strong>competitor</strong>."
   layouts:
     #context: This key belongs to the navigation bar
     navigation:
