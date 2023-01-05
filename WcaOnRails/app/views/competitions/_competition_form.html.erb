@@ -215,6 +215,16 @@
           <% end %>
         </div>
 
+      <% disable_registration_close = !@competition.registration_full? %>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-9">
+          <div id="registration-dates-picker" class="row datetimerange">
+            <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime, disabled: true %>
+            <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime, disabled: disable_registration_close %>
+          </div>
+        </div>
+      </div>
+
       <fieldset <%= disable_form && "disabled" %>>
 
         <div class="wca-registration-options">
@@ -227,15 +237,6 @@
         <div class="guest-no-entry-fee-options">
           <%= f.input :guest_entry_status, include_blank: false %>
           <%= f.input :guests_per_registration_limit %>
-        </div>
-
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-9">
-            <div id="registration-dates-picker" class="row datetimerange">
-              <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
-              <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
-            </div>
-          </div>
         </div>
 
         <div class="colliding-competitions">
