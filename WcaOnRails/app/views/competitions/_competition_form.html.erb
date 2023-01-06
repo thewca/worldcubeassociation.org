@@ -215,11 +215,11 @@
           <% end %>
         </div>
 
-      <% disable_registration_close = !@competition.registration_full? %>
+      <% disable_registration_close = !(@competition.registration_full? || !disable_form) %>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-9">
           <div id="registration-dates-picker" class="row datetimerange">
-            <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime, disabled: true %>
+            <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime, disabled: disable_form %>
             <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime, disabled: disable_registration_close %>
           </div>
         </div>
