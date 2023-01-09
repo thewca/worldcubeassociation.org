@@ -501,7 +501,7 @@ eo:
         #original_hash: 3c23a67
         guests_enabled: Akompanantoj
         #original_hash: 7d78478
-        guests_per_registration_limit: Maksimuma nombro da gastoj po registriĝo
+        guests_per_registration_limit: Maksimuma nombro da gastoj per registriĝo
         #original_hash: 089cbfd
         receive_registration_emails: Sciigu min per retmesaĝo kiam iu registriĝas por tiu konkurso
         #original_hash: d4aeed9
@@ -908,16 +908,14 @@ eo:
         external_registration_page: >-
           La paĝo kie la konkursantoj povas registriĝi por la konkurso. Ĝi devas
           esti valida reteja adreso (http(s)).
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           La baza registriĝkosto por la konkurso. Se uzata, ĝi videblos en la
           paĝo pri konkursinformado kaj en la registriĝpaĝo. Se vi indikas "0",
           aperos frazo por diri ke registriĝi estas senpaga.
           <br><br><b>Malgarantio: La sekva takso de WCA-Kotizoj estas nur
           proksimigo bazita sur aktualaj kurzoj kaj neniel estas leĝe deviga por
-          la pago de Kotizoj.</b><br>Alklaku "Ĝisdatigi Konkurson" post kiam vi
-          ŝanĝis valutkodon por sinkronigi ĝin kun la takso. Se ne estas
-          disponeblaj kurzoj por la elektita valuto, nenio estos montrata.
+          la pago de Kotizoj.</b>
         #original_hash: 9735ddf
         currency_code: La valuto uzata por la kostoj.
         #original_hash: da39a3e
@@ -1650,6 +1648,12 @@ eo:
       manage_auth_app: Administri aprobitajn aplikaĵojn
       #original_hash: acac109
       media_submission: Sendado de aŭdvidaĵoj kaj artikoloj
+      #original_hash: cf01481
+      privacy: Privateco
+      #original_hash: 4c4a2e8
+      disclaimer: Malgarantio
+      #original_hash: d561f1a
+      find_us: Trovu nin
   homepage:
     #original_hash: 824d76b
     learn_more: Lernu pli
@@ -3032,10 +3036,10 @@ eo:
         calculated: 'La taksitaj WCA-Kotizoj por %{limit} konkursantoj estas %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'La taksitaj WCA-Kotizoj po konkursanto estas %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Estas eraro kun la takso de Kotizoj, bonvolu agordi al nulo kaj
-          reenigi la bazan registriĝkosto
+          Estas eraro kun la takso de Kotizoj, eble ĉar ne ekzistas disponeblaj
+          kurzoj por la elektita valuto.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -4494,6 +4498,11 @@ eo:
           WCA Live), kalkultabelo aŭ WCIF-dosiero. Ĝi importas miksojn el unu aŭ
           pluraj TNoodle-json-dosieroj. Ĝi eksportas rezultojn en la taŭga
           formato por submetiĝo al la WCA.
+      groups:
+        #original_hash: 311a3f6
+        title: Konkursaj grupoj
+        #original_hash: 74a0926
+        description: Vidi konkursajn grupojn de ajna okazanta konkurso
   logo:
     #original_hash: c72c969
     title: Logotipo de la WCA
