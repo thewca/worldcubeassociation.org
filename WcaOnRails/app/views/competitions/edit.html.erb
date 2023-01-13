@@ -54,6 +54,19 @@
       </li>
     </ul>
     <hr>
+  <% else %>
+    <ul>
+      <li>
+        <%= button_to competition_orga_close_reg_when_full_limit_path, class: 'btn btn-danger', disabled: !@competition.orga_can_close_reg_full_limit?, method: :post, data: { confirm: t('competitions.orga_close_reg_confirm') } do %>
+          <%= t 'competitions.orga_close_reg' %>
+        <% end %>
+        <% if !@competition.registration_full? && !@competition.registration_past?%>
+          <%= t 'competitions.note_reg_not_full_orga_close_reg' %>
+        <% elsif @competition.registration_past?%>
+          <%= t 'competitions.note_reg_closed_orga_close_reg' %>
+        <% end %>
+      </li>
+    </ul>
   <% end %>
 
   <%= render 'competition_form' %>
