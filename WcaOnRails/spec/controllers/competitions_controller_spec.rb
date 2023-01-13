@@ -895,6 +895,35 @@ RSpec.describe CompetitionsController do
     end
   end
 
+  describe 'POST #orga_close_reg_when_full_limit' do
+    context 'organiser trying to close registration via button' do
+      let(:orga) { FactoryBot.create(:user) }
+      before :each do
+        sign_in orga
+      end
+      
+      it "can close registration with full limit" do
+        comp_with_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit:1)
+        comp_with_full_reg.organizers << orga
+        FactoryBot.create_list(:registration, 1, :accepted, :newcomer, competition: comp_with_full_reg) 
+        patch :orga_close_reg_when_full_limit, params: { id: comp_with_full_reg }
+        expect(response).to redirect_to edit_competition_path(comp_with_full_reg)
+        expect(comp_with_full_reg.reload.registration_past?).to eq true
+      end
+
+      it "cannot close registration non full limit" do
+        comp_without_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit:100)
+        comp_without_full_reg.organizers << orga
+        FactoryBot.create_list(:registration, 2, :pending, :newcomer, competition: comp_without_full_reg)
+        FactoryBot.create_list(:registration, 3, :accepted, :newcomer, competition: comp_without_full_reg)
+        # expect(comp_without_full_reg.reload.registration_past?).to eq false
+        patch :orga_close_reg_when_full_limit, params: { id: comp_without_full_reg }
+        expect(response).to redirect_to edit_competition_path(comp_without_full_reg)
+        expect(comp_without_full_reg.reload.registration_past?).to eq false
+      end
+    end
+  end
+
   describe 'POST #post_results' do
     context 'when signed in as results team member' do
       let(:wrt_member) { FactoryBot.create(:user, :wrt_member) }
