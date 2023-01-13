@@ -262,6 +262,17 @@ class CompetitionsController < ApplicationController
     redirect_to admin_edit_competition_path(comp)
   end
 
+  def orga_close_reg_when_full_limit
+    comp = competition_from_params
+    if comp.orga_can_close_reg_full_limit?
+      comp.update!(registration_close: Time.now)
+      flash[:success] = t('competitions.messages.orga_closed_reg_success')
+    else
+      flash[:danger] = t('competitions.messages.orga_closed_reg_failure')
+    end
+    redirect_to edit_competition_path(comp)
+  end
+
   def edit_events
     associations = CHECK_SCHEDULE_ASSOCIATIONS.merge(
       competition_events: {
