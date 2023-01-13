@@ -1250,6 +1250,10 @@ class Competition < ApplicationRecord
     confirmed? && announced? && !cancelled?
   end
 
+  def orga_can_close_reg_full_limit?
+    registration_full? && registration_opened?
+  end
+
   def display_name(short: false)
     data = short ? cellName : name
     if cancelled?
