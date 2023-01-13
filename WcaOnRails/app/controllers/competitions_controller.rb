@@ -616,13 +616,7 @@ class CompetitionsController < ApplicationController
     end
 
     if @competition&.confirmed? && !current_user.can_admin_competitions?
-      # If the competition is confirmed, non admins are not allowed to change anything
-      # except closing registration as this can cause a large expense because of refunds,
-      if @competition&.registration_full?
-        permitted_competition_params += [
-          :registration_close,
-        ]
-      end
+      # If the competition is confirmed, non admins are not allowed to change anything.
     else
       permitted_competition_params += [
         :id,
