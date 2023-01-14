@@ -178,6 +178,28 @@
         </div>
         <hr>
 
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-9">
+            <div id="registration-dates-picker" class="row datetimerange">
+              <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
+              <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
+            </div>
+          </div>
+        </div>
+
+        <div class="colliding-competitions">
+          <div id="colliding-registration-start-competitions" class="adjacent-competitions">
+            <% @colliding_registration_start_competitions = [] # nasty hack to display the "loading" indicator without crashing %>
+            <%= render "colliding_registration_start_competitions" %>
+          </div>
+
+          <script>
+            $("#registration-dates-picker .datetimepicker").on("dp.change", function(e) {
+              window.wca.fetchCollidingRegistrationStartCompetitions();
+            });
+          </script>
+        </div>
+
         <%= f.input :information, input_html: { class: disable_form ? "" : "markdown-editor" } %>
         <%= f.input :competitor_limit_enabled, collection: [ :true, :false ] %>
         <div class="wca-competitor-limit-options">
@@ -221,15 +243,6 @@
         </div>
 
       <fieldset <%= disable_form && "disabled" %>>
-
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-9">
-            <div id="registration-dates-picker" class="row datetimerange">
-              <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
-              <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
-            </div>
-          </div>
-        </div>
 
         <% disable_money_input = !@competition.can_edit_registration_fees? %>
         <%= f.input :currency_code, collection: Money::Currency.table.values, label_method: lambda { |c| "#{c[:name]} (#{c[:iso_code]})" }, value_method: lambda { |c| c[:iso_code] }, disabled: disable_money_input  %>
@@ -293,19 +306,6 @@
         <div class="guest-no-entry-fee-options"> # Daniel
           <%= f.input :guest_entry_status, include_blank: false %>
           <%= f.input :guests_per_registration_limit %>
-        </div>
-
-        <div class="colliding-competitions">
-          <div id="colliding-registration-start-competitions" class="adjacent-competitions">
-            <% @colliding_registration_start_competitions = [] # nasty hack to display the "loading" indicator without crashing %>
-            <%= render "colliding_registration_start_competitions" %>
-          </div>
-
-          <script>
-            $("#registration-dates-picker .datetimepicker").on("dp.change", function(e) {
-              window.wca.fetchCollidingRegistrationStartCompetitions();
-            });
-          </script>
         </div>
 
         <%= f.input :refund_policy_percent %>
