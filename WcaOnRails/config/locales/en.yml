@@ -992,6 +992,13 @@ en:
         information_html: "Check out all your results %{result_link}."
         more_info_html: "You can manage your email preferences %{preferences_link}."
         regards_html: "Regards,<br/>The WCA Results Team on behalf of %{managers}."
+      reset_password_instructions:
+        subject: "Reset your WCA account password"
+        greeting: "Hello,"
+        instruction1: "We have received a request to reset the password for the WCA account associated with %{user_email}. No changes have been made to your account yet."
+        instruction2: "You can reset your password by clicking the link below:"
+        instruction3: "If you did not request a new password, please ignore this email."
+        instruction4: "Do you have more questions? We will be happy to answer them! Feel free to send a mail to %{contact_link}."
     #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"
