@@ -11,18 +11,11 @@ FactoryBot.define do
   factory :website_contact do
     name { "Jon" }
     your_email { "jon@example.com" }
+    inquiry { "different" }
 
     transient do
       competition_contact { nil }
-      competition_managers { [] }
-    end
-
-    trait :specific_competition_inquiry do
-      inquiry { "competition" }
-    end
-
-    trait :general_competitions_inquiry do
-      inquiry { "competitions_in_general" }
+      competition_delegates { [] }
     end
 
     trait :with_invalid_competition_id do
@@ -30,7 +23,7 @@ FactoryBot.define do
     end
 
     trait :with_competition do
-      competition_id { FactoryBot.create(:competition, :announced, contact: competition_contact, delegates: competition_managers).id }
+      competition_id { FactoryBot.create(:competition, :announced, contact: competition_contact, delegates: competition_delegates).id }
     end
   end
 end
