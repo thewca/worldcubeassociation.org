@@ -237,21 +237,18 @@ hr:
       zero: '%{count} pokušaja u vremenu od < %{time}'
       one: '%{count} pokušaj u vremenu od < %{time}'
       few: '%{count} pokušaja u vremenu od < %{time}'
-      many: '%{count} pokušaja u vremenu od < %{time}'
       other: '%{count} pokušaja u vremenu od < %{time}'
     #original_hash: b49d930
     moves:
       zero: '%{count} pokušaja za dobiti < %{moves} poteza'
       one: '%{count} pokušaj za dobiti < %{moves} poteza'
       few: '%{count} pokušaja za dobiti < %{moves} poteza'
-      many: '%{count} pokušaja za dobiti < %{moves} poteza'
       other: '%{count} pokušaja za dobiti < %{moves} poteza'
     #original_hash: eba1b97
     points:
       zero: '%{count} pokušaja za dobiti  > %{points} bodova'
       one: '%{count} pokušaj za dobiti  > %{points} bodova'
       few: '%{count} pokušaja za dobiti  > %{points} bodova'
-      many: '%{count} pokušaja za dobiti  > %{points} bodova'
       other: '%{count} pokušaja za dobiti  > %{points} bodova'
   time_limit:
     cumulative:
@@ -345,14 +342,12 @@ hr:
       zero: 0 dana
       one: 1 dan
       few: '%{count} dan(a)'
-      many: '%{count} dan(a)'
       other: '%{count} dan(a)'
     #original_hash: 203e1b3
     these_events:
       zero: 0 disciplina
       one: 1 disciplina
       few: nekoliko disciplina
-      many: nekoliko disciplina
       other: 'ovih %{count} disciplina'
     #original_hash: 51ef7d4
     search_site: Pretraži stranicu
@@ -433,6 +428,10 @@ hr:
         remove_avatar: Ukloni avatar
         #original_hash: 9af9099
         results_notifications_enabled: Pošalji mi e-mail kada rezultati budu objavljeni.
+        #original_hash: 29ce2ff
+        registration_notifications_enabled: >-
+          Kada organiziram ili delegiram natjecanje, pošalji mi email kada se
+          prilože nove registracije.
         #original_hash: de60ab8
         delegate_status: Status delegata
         #original_hash: 0f21717
@@ -481,7 +480,7 @@ hr:
         #original_hash: 28a6fbb
         currency_code: Kôd valute
         #original_hash: 2e3ed8b
-        staff_delegate_ids: WCA Delegat(i)
+        staff_delegate_ids: WCA Delegati
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Delegat pripravnik
         #original_hash: 958562e
@@ -492,6 +491,8 @@ hr:
         information: Informacije
         #original_hash: 87b7d5f
         use_wca_registration: Htio bi koristiti WCA web-stranicu za registracije
+        #original_hash: ebe8c47
+        use_wca_live_for_scoretaking: Koristit ću WCA Live za unošenje rezultata
         #original_hash: 8020e88
         external_registration_page: Stranica za registracije
         #original_hash: 9bb1965
@@ -502,6 +503,8 @@ hr:
         competitor_limit_reason: Razlog ograničenja broja natjecatelja
         #original_hash: 3c23a67
         guests_enabled: Gosti
+        #original_hash: 7d78478
+        guests_per_registration_limit: Maksimalni broj gostiju po registraciji
         #original_hash: 089cbfd
         receive_registration_emails: Obavijesti me e-mailom kada se netko registrira za ovo natjecanje
         #original_hash: d4aeed9
@@ -537,7 +540,7 @@ hr:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Kotizacija za goste/gledatelje
         #original_hash: bb16247
-        guest_entry_status: Prikaži poruku za besplatan ulazak gledatelja
+        guest_entry_status: Prikaži poruku za besplatan ulaz gledatelja
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Želim da natjecatelji predaju mozgalice u vremenu prije nego je neka
@@ -558,9 +561,20 @@ hr:
         event_restrictions_reason: Razlozi i detalji za ograničenja disciplina
         #original_hash: 3c24bd2
         main_event_id: Glavna disciplina
+        #original_hash: a541bfa
+        allow_registration_without_qualification: Discipline s Kvalifikacijom
       championship:
         #original_hash: 4baf44b
-        championship_type: Vrsta prvenstva
+        championship_type: Tip prvenstva
+      competition_series:
+        #original_hash: 89f89c0
+        wcif_id: ID
+        #original_hash: 709a232
+        name: Ime
+        #original_hash: 8a6bee1
+        short_name: Nadimak serije
+        #original_hash: af3d38e
+        competition_ids: Sva natjecanja
       registration:
         #original_hash: 3c23a67
         guests: Gosti
@@ -751,12 +765,12 @@ hr:
       guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
-          Ne prikazuj ništa (ili elaboriraj unutar "Extra registration
-          requirements" sekcije)
+          Ne prikazuj ništa (možda elaboriraj unutar sekcije "Dodatni zahtjevi
+          za registraciju")
         #original_hash: 694bce4
-        free: Bilo tko može doći gledati natjecanje besplatno
+        free: Svi gledatelji mogu doći besplatno
         #original_hash: 762c509
-        restricted: Gledatelji mogu biti samo suputnici/pratnja natjecatelja
+        restricted: '"Gledatelji su dozvoljeni samo kao pratnja natjecatelja."'
   simple_form:
     #original_hash: 5397e05
     'yes': Da
@@ -828,6 +842,10 @@ hr:
         remember_me: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
+        #original_hash: f62eb10
+        registration_notifications_enabled: >-
+          Ovo se primjenjuje samo za natjecanja koja ti organiziraš ili
+          delegiraš i može biti promijenjeno od jednog do drugog natjecanja.
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
@@ -864,7 +882,7 @@ hr:
           engleskom</b> ili na bilo kojem drugom jeziku kojeg natjecatelji
           razumiju.
         #original_hash: b4d020f
-        staff_delegate_ids: WCA Delegati natjecanja.
+        staff_delegate_ids: WCA Delegati za natjecanje.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Delegati pripravnici za natjecanje.
         #original_hash: 517d376
@@ -894,7 +912,7 @@ hr:
         external_registration_page: >-
           Stranica gdje se natjecatelji moraju registrirati za natjecanje. Mora
           biti točan http(s) url.
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           Osnovna kotizacija za natjecanje. Kotizacija će biti prikazana na
           stranici informacija o natjecanju i na stranici za registraciju,
@@ -902,9 +920,7 @@ hr:
           rečenica koja govori da će se registracije prihvatiti besplatno.
           <br><br><b>NAPOMENA: Navedena  estimacija WCA Dues je aproksimacija
           iznosa ovisno o trenutnom tečaju i nije pravno vezajući podatak za
-          Dues plaćanje. </b><br>Klikni "Ažuriraj natjecanje" nakon promjene
-          valute plaćanja kako bi se sinkronizirala estimacija. Ukoliko nema
-          dostupnog valutnog tečaja, neće se ništa prikazati.
+          Dues plaćanje. </b>
         #original_hash: 9735ddf
         currency_code: Kôd valute za kotizaciju.
         #original_hash: da39a3e
@@ -925,6 +941,8 @@ hr:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: da39a3e
+        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Iako nije potrebno reći natjecateljski limit prema Pravilniku, toplo
@@ -939,10 +957,13 @@ hr:
         competitor_limit_reason: >-
           Koji je razlog ograničavanja broja natjecatelja? Ispuni na engleskom
           jeziku!
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          Broj gostiju po registraciji je dozvoljen na ovom natjecanju.
+          Registracije s previše gostiju će biti blokirane. Ostavi prazno ako
+          nema limita.
         #original_hash: da39a3e
         venueAddress: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Prikaži ovdje bilo koje dodatne uvjete za registracije koji nisu još
@@ -1012,6 +1033,28 @@ hr:
           Ispuni ovo na engleskom jeziku!
         #original_hash: 1067798
         main_event_id: Pobjednik u ovoj disciplini je ujedno i pobjednik natjecanja.
+        #original_hash: da39a3e
+        allow_registration_without_qualification: ''
+        championships:
+          #original_hash: da39a3e
+          championship_type: ''
+        competition_series:
+          #original_hash: da39a3e
+          wcif_id: ''
+          #original_hash: 77811b5
+          name: >-
+            Puno ime Serije natjecanja uključujući godinu na kraju (npr.
+            Southern Australia 2022). Obavezno pišite gramatički točno. Ista
+            pravila vrijede i za pojedinačna natjecanja.
+          #original_hash: 778c20c
+          short_name: >-
+            Kratko ime za prikazivanje. Ista pravila vrijede i za pojedinačna
+            natjecanja..
+          #original_hash: 3e27501
+          competition_ids: >-
+            <b>Ovo se polje ne može uređivati!</b><br/>Kako bi dodali natjecanja
+            u Seriju, morate otići na individualne "Uredi" stranice natjecanja
+            koja želite dodati.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1238,6 +1281,13 @@ hr:
           'true': Registracije na licu mjesta će se prihvatiti
           #original_hash: 0f236df
           'false': Registracije na licu mjesta NEĆE SE prihvaćati
+        allow_registration_without_qualification:
+          #original_hash: 9697d98
+          'true': >-
+            Natjecateljima će biti dozvoljena registracija disciplina za koje se
+            nisu kvalificirali (maknut ću ih kasnije)
+          #original_hash: 6509041
+          'false': Natjecatelji MORAJU biti kvalificirani kako bi prijavili discipline
         allow_registration_edits:
           #original_hash: 52a2f4a
           'true': >-
@@ -1464,7 +1514,6 @@ hr:
           zero: 'Prijavnica sadrži %{count} grešaka.'
           one: Prijavnica sadrži jednu grešku.
           few: 'Prijavnica sadrži %{count} grešaka.'
-          many: 'Prijavnica sadrži %{count} grešaka.'
           other: 'Prijavnica sadrži %{count} grešaka.'
     doorkeeper:
       applications:
@@ -1614,6 +1663,12 @@ hr:
       manage_auth_app: Upravljaj autoriziranim aplikacijama
       #original_hash: acac109
       media_submission: Prilaganje datoteka
+      #original_hash: cf01481
+      privacy: Privatnost
+      #original_hash: 4c4a2e8
+      disclaimer: Odricanje odgovornosti
+      #original_hash: d561f1a
+      find_us: Pronađi nas
   homepage:
     #original_hash: 824d76b
     learn_more: Prouči više
@@ -1929,7 +1984,7 @@ hr:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Svi avatari trebaju biti fotografije stvarnih osoba.
-        #original_hash: 9126b0c
+        #original_hash: b12d293
         '2': Na prikazanoj slici moraš biti ti.
         #original_hash: de9b742
         '3': 'Ukoliko je na avataru više osoba, mora biti jasno vidljivo tko si ti.'
@@ -2078,8 +2133,6 @@ hr:
       need_dob: Potreban je datum rođenja
       #original_hash: d84a54f
       need_country: Potrebna je država
-      #original_hash: cec28a0
-      comp_not_found: Natjecanje nije pronađeno
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Registracija ne može biti obrisana i prihvaćena u isto vrijeme
       #original_hash: a38d024
@@ -2091,27 +2144,28 @@ hr:
         target='_blank'>WDC</a>.
       #original_hash: 8d07e7f
       undelete_banned: je zabranjen natjecatelj i ne može se prebrisati
+      #original_hash: 3de7c86
+      series_more_than_one_accepted: Možeš biti prihvaćen samo za jednu Seriju natjecanja odjednom.
+      #original_hash: 13bfcd6
+      can_only_register_for_qualified_events: Ne možeš se registrirati za discipline za koje nisi kvalificiran.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
         zero: first-timer(a)
         one: first-timer
         few: first-timer(a)
-        many: first-timer(a)
         other: first-timer(a)
       #original_hash: bc010e3
       returner:
         zero: povratnik(a)
         one: povratnik(a)
         few: povratnik(a)
-        many: povratnik(a)
         other: povratnik(a)
       #original_hash: b7da17a
       person:
         zero: osoba
         one: osoba
         few: osoba
-        many: osoba
         other: osoba
     flash:
       #original_hash: da7ec53
@@ -2121,21 +2175,18 @@ hr:
         zero: Nijedna registracija nije prihvaćena! E-mail obavijest nije poslana.
         one: Registracija prihvaćena! E-mail obavijest poslana.
         few: Registracija prihvaćenih! E-mail obavijesti poslane.
-        many: Registracija prihvaćenih! E-mail obavijesti poslane.
         other: Registracija prihvaćenih! E-mail obavijesti poslane.
       #original_hash: 42ea8de
       rejected_and_mailed:
         zero: Registracija pomaknuto na listu čekanja
         one: Registracija pomaknuta na listu čekanja
         few: Registracija pomaknuto na listu čekanja
-        many: Registracija pomaknuto na listu čekanja
         other: Registracija pomaknuto na listu čekanja
       #original_hash: a360b31
       deleted_and_mailed:
         zero: Registracija obrisano
         one: Registracija obrisana
         few: Registracija obrisano
-        many: Registracija obrisano
         other: Registracija obrisano
       #original_hash: c3aa289
       single_deletion_and_mail: 'Obrisana registracija i e-mail poslan %{mail}'
@@ -2229,7 +2280,6 @@ hr:
         zero: 0 država
         one: 1 država
         few: '%{count} država/e'
-        many: '%{count} država/e'
         other: '%{count} država/e'
       #original_hash: 1feee0e
       export_csv: Izvezi u .csv datoteku
@@ -2258,6 +2308,10 @@ hr:
       payment_requested_on: 'Plaćanje potrebno do: %{date}'
       #original_hash: f5b1b34
       payment_completed_on: 'Plaćanje izvršeno: %{date}'
+      #original_hash: 3141a14
+      series_registrations: Registracije za Serije
+      #original_hash: 845bb47
+      series_registrations_hint_html: 'Savjet: Registracije za Serije se prikazuju kao <i>%{description}</i>'
       #original_hash: b25928c
       total: Ukupno
       #original_hash: df036fe
@@ -2345,6 +2399,8 @@ hr:
     will_pay_here: Platit ćeš nakon slanja svoje registracije
     #original_hash: b7ef562
     wont_pay_here: Provjeri informacije o natjecanju oko uputa kako platiti
+    #original_hash: be4b39d
+    not_qualified: Nije kvalificiran
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2549,6 +2605,10 @@ hr:
       no_main_event_results: 'Nema rezultata glavne discipline (%{event_name}).'
       #original_hash: a0168ee
       in_progress: 'Ovo natjecanje je u tijeku. Dođi nakon %{date} vidjeti rezultate!'
+      #original_hash: 8eeeb44
+      in_progress_at_wca_live_html: >-
+        Ovo natjecanje je trenutno u tijeku. Provjeri rezultate uživo <a
+        href='%{link_here}'>ovdje</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: Registracija je postavljena s početkom manjim od potrebnih 48 sati.
       #original_hash: 3322400
@@ -2620,7 +2680,6 @@ hr:
         zero: Organizatora
         one: Organizator
         few: Organizator(i)
-        many: Organizator(i)
         other: Organizator(i)
       #original_hash: 53a9522
       organization_team: Organizacijski tim
@@ -2629,7 +2688,6 @@ hr:
         zero: WCA Delegata
         one: WCA Delegat
         few: WCA Delegat(i)
-        many: WCA Delegat(i)
         other: WCA Delegat(i)
       #original_hash: b37456c
       contact: Kontakt
@@ -2651,6 +2709,18 @@ hr:
       register_link_html: 'Registriraj se za ovo natjecanje %{here}.'
       #original_hash: 45834fd
       register_below_html: Registriraj se za ovo natjecanje ispod.
+      #original_hash: c5dfcc7
+      part_of_a_series: Ovo natjecanje je dio Serije natjecanja.
+      #original_hash: 171e593
+      part_of_a_series_list: >-
+        Ovo natjecanje je dio %{name} Serije natjecanja. Ostala natjecanja u
+        Seriji su:
+      #original_hash: 09fa333
+      series_registration_warning_html: >-
+        Napomena: Možeš poslati registraciju za sva natjecanja u Seriji, ali
+        samo jedna od tih registracija može biti potvrđena i prihvaćena.
+        <b>Dozvoljeno je natjecati se samo na jednom od više natjecanja na
+        Seriji natjecanja!</b>
       #original_hash: 196725e
       competitor_limit_is: >-
         Postoji maksimalan broj natjecatelje od %{competitor_limit}
@@ -2705,11 +2775,21 @@ hr:
       guests_pay: 'Gledatelji mogu doći samo ako plate kotizaciju od %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        free: Svi gledatelji mogu doći gledati natjecanje besplatno.
+        free: Svi gledatelji mogu doći besplatno.
         #original_hash: f1e6aef
         restricted: >-
           Gledateljima je dozvoljen ulaz samo ako su suputnici/pratnja
           natjecatelja.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Natjecatelji mogu povesti 0 gostiju.
+        one: Natjecatelji mogu povesti 1 gosta.
+        few: Natjecatelji mogu povesti nekoliko gostiju.
+        other: 'Natjecatelji mogu povesti najviše %{count} gostiju.'
+      #original_hash: 64e0ddd
+      require_qualification: >-
+        Natjecatelji se mogu registrirati samo za discipline za koje su se već
+        kvalificirali.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Ovo natjecanje je završilo, klikni %{link_here} da bi vidio/la koji su
@@ -2825,6 +2905,10 @@ hr:
       past_from: 'Prošla iz %{year}'
       #original_hash: 7cff459
       past_all: Prošla iz svih godina
+      #original_hash: 819fe62
+      show_cancelled: Prikaži otkazana natjecanja
+      #original_hash: 0eda967
+      show_registration_status: Prikaži ikonicu statusa registracije
       titles:
         #original_hash: 69447c9
         in_progress: Natjecanja u tijeku
@@ -2850,6 +2934,8 @@ hr:
           in_progress: U tijeku!
           #original_hash: 1157462
           posted: Rezultati su objavljeni!
+          #original_hash: 89bcc37
+          starts_in: 'Počinje za %{days}'
           #original_hash: 97b061a
           announced_on: 'Najavljeno %{announcement_date}'
         #original_hash: ccd2db9
@@ -2920,6 +3006,10 @@ hr:
         Neobavezne kontakt informacije. Ukoliko ovo ne ispunite, kontakt upiti
         će se poslati preko forme bez otkrivanja mail adresa organizatora.
         %{md}. Primjer: [Text to display](mailto:some@email.com)
+      #original_hash: 05c66b5
+      series_save_first_hint: >-
+        Napomena: Moraš prvo spremiti natjecanje prije nego želiš dodati novu
+        Seriju.
       #original_hash: c5497bc
       events: Discipline
       #original_hash: cafc153
@@ -2975,10 +3065,10 @@ hr:
         calculated: 'Očekivani WCA Dues za %{limit} natjecatelja je %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'Očekivani WCA Dues po natjecatelju je %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Dogodila se greška prilikom estimiranja Duesa, postavite kotizaciju na
-          0 i ponovno unesite novu kotizaciju
+          Dogodila se greška prilikom estimiranja Duesa, vjerojatno jer više ne
+          postoje dostupni tečajevi za odabranu valutu.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3035,6 +3125,12 @@ hr:
       event_change_deadline_with_ots: >-
         Rok za ažuriranje registriranih disciplina mora biti tokom natjecanja
         ukoliko su dozvoljene registracije na licu mjesta.
+      #original_hash: 5ae2437
+      series_distance_km: 'Natjecanje je locirano predaleko od %{competition}.'
+      #original_hash: 4a5d7c5
+      series_distance_days: 'Natjecanje je zakazano previše dana od %{competition}.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: Mora se pitati za broj gostiju ako je limit gostiju specificiran.
     new:
       #original_hash: 1208df7
       create_competition: Kreiraj natjecanje
@@ -3062,7 +3158,6 @@ hr:
         zero: nula natjecanja
         one: jedno natjecanje
         few: nekoliko natjecanja
-        many: nekoliko natjecanja
         other: '%{count} natjecanja'
       #original_hash: 3446062
       label_admin: 'Zadnjih %{days} dana'
@@ -3074,19 +3169,21 @@ hr:
       show: Pokaži
     adjacent_competitions:
       #original_hash: e3528ec
-      label: 'Natjecanja u blizini (unutar %{days}dana i %{kms} km)'
+      label: 'Okolna natjecanja (unutar %{days} dana i %{kms} km)'
       #original_hash: feefb46
       no_comp_nearby: Nema natjecanja u blizini!
       #original_hash: 7e76950
-      no_date_yet: Nisi još priložio/la datum za ovo natjecanje.
+      no_date_yet: Nisi još odabrao/la datum za ovo natjecanje.
       #original_hash: 82a95d2
-      no_location_yet: Nisi još priložio/la lokaciju za ovo natjecanje.
+      no_location_yet: Nisi još odabrao/la lokaciju za ovo natjecanje.
       #original_hash: 709a232
       name: Ime
       #original_hash: adc24b7
-      delegates: Delegat(i)
+      delegates: Delegati
       #original_hash: eb9a4bc
       date: Datum
+      #original_hash: 6c82e6d
+      time: Vrijeme
       #original_hash: d219c68
       location: Lokacija
       #original_hash: 4232080
@@ -3096,19 +3193,28 @@ hr:
       #original_hash: 405906c
       after: nakon
       #original_hash: e1978a9
-      starts_on: počinje u
+      starts_on: počinje na
       #original_hash: 964aedc
-      ends_on: završava u
+      ends_on: završava na
       #original_hash: 24d948e
-      limit: Ograničenje
+      limit: Limit
       #original_hash: 855bd26
       competitors: Natjecatelji
       #original_hash: c5497bc
-      events: Eventi
+      events: Discipline
       #original_hash: 50cb854
-      show_events: Prikaži evente
+      show_events: Prikaži discipline
       #original_hash: 0df66f7
-      hide_events: Sakrij evente
+      hide_events: Sakrij discipline
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Istovremeni period registracija (start unutar %{hours} sati)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Nema istovremenog perioda registracija!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: Nisi još odabrao/la datum početka registracija za ovo natjecanje.
+      #original_hash: c38824e
+      opens_registration_at: registracije se otvaraju za
     #original_hash: 06b01c4
     announcements: Najave
     #original_hash: a2b80b0
@@ -3291,6 +3397,11 @@ hr:
       group: Grupa
       #original_hash: b7126cd
       scramble: Scramble
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: Dodaj u Seriju
+      #original_hash: be6edcd
+      remove_series: Ukloni iz Serije
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3340,6 +3451,16 @@ hr:
     records:
       #original_hash: e51c552
       title: Rekordi
+    #original_hash: e02fccb
+    last_updated_html: 'Zadnje ažurirano: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      Uzmite u obzit da neki filteri (poput prošlih godina) su trenutačno
+      onemogućeni. Ukoliko imate iskustva u SQL optimizaciji, kontaktirajte WST!
+    #original_hash: e3710ed
+    tooltip_no_years: Naša baza je prevelika za kalkulaciju povijesnih podataka
+    #original_hash: 357094b
+    tooltip_no_quantities: Naša baza je prevelika za kalkulaciju long rankinga
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -4399,6 +4520,11 @@ hr:
           Live), proračunsku tablicu ili samostalnu WCIF datoteku. Uvozite
           kodove iz jedne ili više json datoteka TNoodlea. Izvozite rezultate u
           odgovarajućem formatu za slanje WCA.
+      groups:
+        #original_hash: 311a3f6
+        title: Grupe natjecanja
+        #original_hash: 74a0926
+        description: Pogledaj grupe natjecanja za neka od trenutnih natjecanja
   logo:
     #original_hash: c72c969
     title: WCA Logotip
@@ -4561,6 +4687,8 @@ hr:
       people: Osobe
       #original_hash: 6db75ea
       advanced_search: Napredno pretraživanje
+      #original_hash: 5e326b1
+      incidents: Incidenti
       #original_hash: a0ca0c3
       posts: Objave
       #original_hash: 9d7ea9c
@@ -4576,6 +4704,8 @@ hr:
         people: Nema pronađenih osoba za
         #original_hash: c6a04aa
         posts: Nema pronađenih objava za
+        #original_hash: 3499e7e
+        incidents: Nema pronađenih incidenata za
         #original_hash: 76a6bf1
         regulations_and_guidelines: Nema pronađenih Pravila i Smjernica za
   incidents_log:
@@ -4583,6 +4713,8 @@ hr:
     i18n_disclaimer: >-
       Imaj na umu da je sekcija incidenata samo moguća na engleskom jeziku.
       Sadržaj ispod nije preveden.
+    #original_hash: 2c23c1a
+    incident: 'Incident:'
   about_regulations:
     #original_hash: 6bce1b5
     title: O Pravilniku
