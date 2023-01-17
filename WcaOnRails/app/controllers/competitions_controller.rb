@@ -39,7 +39,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup, :orga_close_reg_when_full_limit]
 
   before_action -> { redirect_to_root_unless_user(:can_confirm_competition?, competition_from_params) }, only: [:update], if: :confirming?
 
@@ -260,6 +260,17 @@ class CompetitionsController < ApplicationController
 
     flash[:success] = t('competitions.messages.results_posted')
     redirect_to admin_edit_competition_path(comp)
+  end
+
+  def orga_close_reg_when_full_limit
+    comp = competition_from_params
+    if comp.orga_can_close_reg_full_limit?
+      comp.update!(registration_close: Time.now)
+      flash[:success] = t('competitions.messages.orga_closed_reg_success')
+    else
+      flash[:danger] = t('competitions.messages.orga_closed_reg_failure')
+    end
+    redirect_to edit_competition_path(comp)
   end
 
   def edit_events
