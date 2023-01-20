@@ -336,6 +336,7 @@
 
         <%= f.input :event_restrictions %>
         <%= f.input :event_restrictions_reason %>
+        <%= f.input :events_per_registration_limit %>
 
         <% if !@competition.being_cloned_from.present? && @competition.events.any? %>
           <hr>
