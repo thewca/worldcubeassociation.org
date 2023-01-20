@@ -229,6 +229,10 @@ class Competition < ApplicationRecord
     some_guests_allowed? && !guests_per_registration_limit.nil?
   end
 
+  def events_per_registration_limit_enabled?
+    event_restrictions? && events_per_registration_limit.present?
+  end
+
   def number_of_events
     persisted_events_id.length
   end

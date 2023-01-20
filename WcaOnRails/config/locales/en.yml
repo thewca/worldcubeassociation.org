@@ -1115,6 +1115,9 @@ en:
       need_country: "Need a country"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
+      exceeds_event_limit:
+        one: "you must register in exactly 1 event"
+        other: "you must register in less than or equal to %{count} events"
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
@@ -1430,6 +1433,9 @@ en:
       guest_limit:
         one: "Competitors may bring at most 1 guest."
         other: "Competitors may bring at most %{count} guests."
+      event_limit:
+        one: "Competitors may register in exactly 1 event."
+        other: "Competitors may register in at most %{count} events."
       require_qualification: "Competitors may only register for events that they are already qualified for."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
       click_to_display_requirements_html: "This competition is over, click %{link_here} to display the registration requirements it used."
