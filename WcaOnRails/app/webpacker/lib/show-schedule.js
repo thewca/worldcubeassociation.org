@@ -10,6 +10,44 @@ window.wca.registerVenueData = (id, venueData) => {
   dataByVenueId[id] = venueData;
 };
 
+const HEX_BASE = 16;
+
+/**
+ * Convert a HEX color code to RGB values.
+ *
+ * @param {string} hexColor HEX color code to convert to RGB
+ *
+ * @returns {Array<int>} RBG values, defaults to `[0, 0, 0]` if `hexColor` cannot be parsed
+ */
+const hexToRgb = (hexColor) => {
+  if (/#[0-9A-Fa-f]{6}/.test(hexColor)) {
+    return [
+      parseInt(hexColor.slice(1, 3), HEX_BASE),
+      parseInt(hexColor.slice(3, 5), HEX_BASE),
+      parseInt(hexColor.slice(5, 7), HEX_BASE),
+    ];
+  }
+
+  return [0, 0, 0];
+};
+
+const WHITE = '#ffffff';
+const BLACK = '#000000';
+
+/**
+ * Compute appropriate text color (black or white) based on how "light" or "dark"
+ * the background color of a calendar item is.
+ *
+ * @param {string} backgroundColor Calendar item's background color (in HEX)
+ *
+ * @returns {string} white for "dark" backgrounds, black for "light" backgrounds
+ */
+const getTextColor = (backgroundColor) => {
+  const [red, green, blue] = hexToRgb(backgroundColor);
+  // formula from https://stackoverflow.com/a/3943023
+  return (red * 0.299 + green * 0.587 + blue * 0.114) > 186 ? BLACK : WHITE;
+};
+
 const getCalendarElemId = (venueId) => `#calendar-venue-${venueId}`;
 const getScheduleElemId = (venueId) => `#schedule-venue-${venueId}`;
 
@@ -44,6 +82,8 @@ const fetchCalendarEvents = (venueId, start, end, timezone, callback) => {
   callback(calendarEvents);
 };
 
+const GREY = '#666666';
+
 const initFullCalendar = ($elem, calendarParams) => {
   const venueData = dataByVenueId[calendarParams.venueId];
   const options = {
@@ -51,8 +91,9 @@ const initFullCalendar = ($elem, calendarParams) => {
     eventDataTransform: (eventData) => {
       const ev = eventData;
       if (ev.activityDetails.event_id.startsWith('other')) {
-        ev.color = '#666';
+        ev.color = GREY;
       }
+      ev.textColor = getTextColor(ev.color);
       return ev;
     },
     eventRender: (event, element) => {
