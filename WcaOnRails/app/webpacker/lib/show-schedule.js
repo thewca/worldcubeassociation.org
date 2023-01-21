@@ -17,7 +17,7 @@ const HEX_BASE = 16;
  *
  * @param {string} hexColor HEX color code to convert to RGB
  *
- * @returns {Array<int>} RBG values, defaults to `[0, 0, 0]` if `hexColor` cannot be parsed
+ * @returns {Array<number>} RBG values, defaults to `[0, 0, 0]` if `hexColor` cannot be parsed
  */
 const hexToRgb = (hexColor) => {
   if (/#[0-9A-Fa-f]{6}/.test(hexColor)) {
