@@ -31,6 +31,15 @@
         <%= t("competitions.schedule.venue_information_html", venue_name: link_to_google_maps_place(venue.name, venue.latitude_degrees, venue.longitude_degrees)) %>
         <br />
         <%= t("competitions.schedule.timezone_message", timezone: venue.timezone_id) %>
+        <br />
+        <%= t("competitions.competition_info.add_to_calendar") %>
+        <%= link_to(ui_icon("calendar plus"), competition_path(competition, format: :ics),
+            title: t("competitions.competition_info.add_to_calendar"),
+            data: {
+              toggle: "tooltip",
+              placement: "top",
+              container: "body",
+            }) %>
         <% if competition.competition_venues.size > 1 %>
           <br />
           <%= t("competitions.schedule.multiple_venues_available") %>

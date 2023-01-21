@@ -319,6 +319,13 @@ module CompetitionsHelper
     if (series = competition.competition_series)
       form_competition.competition_series = series
 
+      # Hack around Rails reverse has_one associations
+      # because our form_competition is not the actual persisted competition
+      new_competitions = series.competitions | [form_competition]
+      competition_ids = new_competitions.map(&:id).join(',')
+
+      series.competition_ids = competition_ids
+
       return series
     end
 

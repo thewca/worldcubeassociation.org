@@ -1841,6 +1841,24 @@ cs:
         more_info_html: 'Můžete upravit své emailové preference %{preferences_link}.'
         #original_hash: 7594a32
         regards_html: 'S přáním hezkého dne,<br/>WCA výsledkový tým za %{managers}.'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Reset hesla k WCA účtu
+        #original_hash: 65611e9
+        greeting: 'Ahoj,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          Obdrželi jsme žádost o reset hesla k WCA účtu, spojeného s emailovou
+          adresou %{user_email}. Žádné změny na tomto účtu zatím nebyly
+          provedeny.
+        #original_hash: 60fef9e
+        instruction2: 'Můžete resetovat své heslo kliknutím na odkaz níže:'
+        #original_hash: 00850c3
+        instruction3: 'Pokud jste nežádali o nové heslo, prosíme ignorujte tento email.'
+        #original_hash: dbc2263
+        instruction4: >-
+          Máte nějaké další otázky? Rádi odpovíme! Pošlete email na
+          %{contact_link}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Zažádat o WCA ID
@@ -2612,6 +2630,10 @@ cs:
       stripe_not_connected: Vyskytla se chyba a nemohli jsme připojit váš Stripe účet.
       #original_hash: 724cf0d
       championship_exists: 'Už je jiné %{championship_type} v %{year}'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: Registrace byla úspěšně uzavřena.
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: Nebylo možné uzavřít registraci.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Moje soutěže
@@ -3203,6 +3225,16 @@ cs:
     cancel_mistake: Udělali jste chybu?
     #original_hash: 0fb43d5
     note_before_cancel: 'Poznámka: jen potvrzené soutěže mohou být zrušené.'
+    #original_hash: 19a0ac2
+    orga_close_reg: Uzavřít registraci.
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: 'Jste si jisti, že chcete uzavřít registraci? Tato akce je nevratná.'
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      Poznámka: registraci je možné uzavřít pouze pokud již byl dosažen limit
+      pro soutěžící.
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'Poznámka: registrace již byla uzavřena.'
     show:
       #original_hash: b0fe391
       general_info: Obecné info

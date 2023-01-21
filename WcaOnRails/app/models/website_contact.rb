@@ -20,10 +20,13 @@ class WebsiteContact < ContactForm
 
   def to_email
     if inquiry == "competition"
-      Competition.find_by_id(competition_id)&.managers&.map(&:email)
-    else
-      "contact@worldcubeassociation.org"
+      competition = Competition.find_by_id(competition_id)
+      if competition.present?
+        return ValidateEmail.valid?(competition.contact) ? competition.contact : competition.managers.map(&:email)
+      end
     end
+
+    "contact@worldcubeassociation.org"
   end
 
   def subject

@@ -501,7 +501,7 @@ eo:
         #original_hash: 3c23a67
         guests_enabled: Akompanantoj
         #original_hash: 7d78478
-        guests_per_registration_limit: Maksimuma nombro da gastoj po registriĝo
+        guests_per_registration_limit: Maksimuma nombro da gastoj per registriĝo
         #original_hash: 089cbfd
         receive_registration_emails: Sciigu min per retmesaĝo kiam iu registriĝas por tiu konkurso
         #original_hash: d4aeed9
@@ -804,11 +804,11 @@ eo:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: Enigu vian naskiĝdaton kiel JJJJ-MM-TT
-        #original_hash: d0bb74a
+        #original_hash: 7588d71
+        dob: Enigu la naskiĝdaton de la konkursanto kiel JJJJ-MM-TT
+        #original_hash: ac908c9
         name: >-
-          Enigu vian tutan nomon ĝuste, ekzemple <strong>Stefan
+          Enigu la tutan nomon de konkursanto ĝuste, ekzemple <strong>Stefan
           Pochmann</strong>. Ne neglekteme kiel <strong>s pochman</strong> aŭ
           <strong>POCHMAN Stefan</strong>. Mezaj nomoj eblas (aŭ tute skribitaj
           aŭ per komencliteroj).
@@ -908,16 +908,14 @@ eo:
         external_registration_page: >-
           La paĝo kie la konkursantoj povas registriĝi por la konkurso. Ĝi devas
           esti valida reteja adreso (http(s)).
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           La baza registriĝkosto por la konkurso. Se uzata, ĝi videblos en la
           paĝo pri konkursinformado kaj en la registriĝpaĝo. Se vi indikas "0",
           aperos frazo por diri ke registriĝi estas senpaga.
           <br><br><b>Malgarantio: La sekva takso de WCA-Kotizoj estas nur
           proksimigo bazita sur aktualaj kurzoj kaj neniel estas leĝe deviga por
-          la pago de Kotizoj.</b><br>Alklaku "Ĝisdatigi Konkurson" post kiam vi
-          ŝanĝis valutkodon por sinkronigi ĝin kun la takso. Se ne estas
-          disponeblaj kurzoj por la elektita valuto, nenio estos montrata.
+          la pago de Kotizoj.</b>
         #original_hash: 9735ddf
         currency_code: La valuto uzata por la kostoj.
         #original_hash: da39a3e
@@ -1537,11 +1535,12 @@ eo:
       welcome_back: >-
         Rebonvenon! Por krei vian WCA-konton, ni bezonas koni la WCA-ID kun kiu
         vi konkursis.
-      #original_hash: 669fb57
+      #original_hash: 3b2bcea
       welcome: >-
         Bonvenon! Antaŭ ol konkursi en via unua konkurso de la WCA, ni bezonas
         kromajn informaciojn por datumrikordaj celoj. Atentu ke via naskiĝtago
-        neniam estos publikigita sen via konsento.
+        neniam estos publikigita sen via konsento.<br/>Se vi aliĝas nome de iu
+        alia, bonvolu doni la detalojn de la <strong>konkursanto</strong>.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1650,6 +1649,12 @@ eo:
       manage_auth_app: Administri aprobitajn aplikaĵojn
       #original_hash: acac109
       media_submission: Sendado de aŭdvidaĵoj kaj artikoloj
+      #original_hash: cf01481
+      privacy: Privateco
+      #original_hash: 4c4a2e8
+      disclaimer: Malgarantio
+      #original_hash: d561f1a
+      find_us: Trovu nin
   homepage:
     #original_hash: 824d76b
     learn_more: Lernu pli
@@ -1838,6 +1843,23 @@ eo:
         more_info_html: 'Vi povas ŝanĝi viajn retpoŝtajn agordojn %{preferences_link}.'
         #original_hash: 7594a32
         regards_html: 'Amike, la Rezulta Teamo de la WCA en la nomo de %{managers}.'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Restarigi pasvorton de via WCA-konto
+        #original_hash: 65611e9
+        greeting: 'Saluton,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          Ni ricevis peton por restarigi la pasvorton por la WCA-konto asociita
+          kun %{user_email}. Ankoraŭ neniu ŝanĝo estis faritaj al via konto.
+        #original_hash: 60fef9e
+        instruction2: 'Vi povas restarigi vian pasvorton alklakante la suban ligilon:'
+        #original_hash: 00850c3
+        instruction3: 'Se vi ne petis novan pasvorton, bonvolu ignori ĉi tiun retmesaĝon.'
+        #original_hash: dbc2263
+        instruction4: >-
+          Ĉu vi havas pliajn demandojn? Ni volonte respondos al ili! Bonvolu
+          sendi retmesaĝon al %{contact_link}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Peti WCA-ID-n
@@ -2609,6 +2631,10 @@ eo:
       stripe_not_connected: Problemo okazis kaj ni ne povis ligi vian Stripe-konton.
       #original_hash: 724cf0d
       championship_exists: '%{championship_type} jam ekzistas en %{year}'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: Registriĝoj sukcese fermitaj.
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: Ne povas fermi registriĝoj.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Miaj konkursoj
@@ -3032,10 +3058,10 @@ eo:
         calculated: 'La taksitaj WCA-Kotizoj por %{limit} konkursantoj estas %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'La taksitaj WCA-Kotizoj po konkursanto estas %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Estas eraro kun la takso de Kotizoj, bonvolu agordi al nulo kaj
-          reenigi la bazan registriĝkosto
+          Estas eraro kun la takso de Kotizoj, eble ĉar ne ekzistas disponeblaj
+          kurzoj por la elektita valuto.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3207,6 +3233,16 @@ eo:
     cancel_mistake: Ĉu vi eraris?
     #original_hash: 0fb43d5
     note_before_cancel: 'Noto: nur konfirmitaj konkursoj povas esti nuligitaj.'
+    #original_hash: 19a0ac2
+    orga_close_reg: Fermi registriĝojn.
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: Ĉu vi certas ke vi volas fermi registriĝojn? Vi ne povos malfari ĉi tion.
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      Noto: vi povas fermi registriĝojn nur post kiam la limo da partoprenantoj
+      estas atingita.
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'Noto: registriĝoj jam estas fermitaj.'
     show:
       #original_hash: b0fe391
       general_info: Ĝeneralaj informoj
@@ -4494,6 +4530,11 @@ eo:
           WCA Live), kalkultabelo aŭ WCIF-dosiero. Ĝi importas miksojn el unu aŭ
           pluraj TNoodle-json-dosieroj. Ĝi eksportas rezultojn en la taŭga
           formato por submetiĝo al la WCA.
+      groups:
+        #original_hash: 311a3f6
+        title: Konkursaj grupoj
+        #original_hash: 74a0926
+        description: Vidi konkursajn grupojn de ajna okazanta konkurso
   logo:
     #original_hash: c72c969
     title: Logotipo de la WCA

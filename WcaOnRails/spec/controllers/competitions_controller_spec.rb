@@ -895,6 +895,46 @@ RSpec.describe CompetitionsController do
     end
   end
 
+  describe 'POST #orga_close_reg_when_full_limit' do
+    context 'organiser trying to close registration via button' do
+      let(:orga) { FactoryBot.create(:user) }
+      before :each do
+        sign_in orga
+      end
+
+      it "can close registration with full limit" do
+        comp_with_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
+        comp_with_full_reg.organizers << orga
+        FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
+        patch :orga_close_reg_when_full_limit, params: { id: comp_with_full_reg }
+        expect(response).to redirect_to edit_competition_path(comp_with_full_reg)
+        expect(comp_with_full_reg.reload.registration_close).to be < Time.now
+      end
+
+      it "cannot close registration non full limit" do
+        comp_without_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 100, competitor_limit_reason: "venue size")
+        comp_without_full_reg.organizers << orga
+        FactoryBot.create(:registration, :pending, :newcomer, competition: comp_without_full_reg)
+        FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_without_full_reg)
+        patch :orga_close_reg_when_full_limit, params: { id: comp_without_full_reg }
+        expect(response).to redirect_to edit_competition_path(comp_without_full_reg)
+        expect(comp_without_full_reg.reload.registration_close).to be > Time.now
+      end
+    end
+
+    context 'regular user trying to close registration via button' do
+      sign_in { FactoryBot.create :user }
+      it 'does not allow regular user to use organiser reg close button' do
+        comp_with_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
+        FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
+        expect {
+          patch :orga_close_reg_when_full_limit, params: { id: comp_with_full_reg }
+        }.to raise_error(ActionController::RoutingError)
+        expect(comp_with_full_reg.reload.registration_close).to be > Time.now
+      end
+    end
+  end
+
   describe 'POST #post_results' do
     context 'when signed in as results team member' do
       let(:wrt_member) { FactoryBot.create(:user, :wrt_member) }

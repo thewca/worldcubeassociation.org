@@ -1332,7 +1332,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1777,6 +1777,23 @@ th:
         more_info_html: 'คุณสามารถจัดการการตั้งค่าสำหรับ email ได้ที่ %{preferences_link}'
         #original_hash: 7594a32
         regards_html: 'ด้วยความนับถือ <br/>The WCA Results Team ในนามของ %{managers}'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Reset รหัสผ่าน WCA Account
+        #original_hash: 65611e9
+        greeting: 'สวัสดี,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          เราได้รับคำขอให้รีเซ็ตรหัสผ่านสำหรับบัญชี WCA ที่เชื่อมโยงกับ
+          %{user_email}. ขณะนี้ยังไม่มีการเปลี่ยนแปลง account ของคุณ
+        #original_hash: 60fef9e
+        instruction2: 'คุณสามารถรีเซ็ตรหัสผ่านได้โดยคลิกลิงก์ด้านล่าง:'
+        #original_hash: 00850c3
+        instruction3: หากคุณไม่ได้ขอรหัสผ่านใหม่ โปรดเพิกเฉยต่ออีเมลนี้
+        #original_hash: dbc2263
+        instruction4: >-
+          คุณมีคำถามเพิ่มเติมหรือไม่? เรายินดีที่จะตอบคำถามเหล่านี้!
+          อย่าลังเลที่จะส่งอีเมลไปที่ %{contact_link}
     claim_wca_id:
       #original_hash: f28bf87
       title: ขอรับ WCA ID
@@ -1858,7 +1875,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
@@ -2496,6 +2513,10 @@ th:
       stripe_not_connected: มีปัญหาบางอย่าง เราไม่สามารถเชื่อมต่อ Stripe ของคุณได้
       #original_hash: 724cf0d
       championship_exists: 'ได้มีการแข่งขัน %{championship_type} ในปี %{year} ไปแล้ว'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: ไม่สามารถปิดการลงทะเบียนได้
     my_competitions:
       #original_hash: 5c6d3ea
       title: การแข่งขันของฉัน
@@ -3077,6 +3098,16 @@ th:
     cancel_mistake: ทำผิดพลาดหรือไม่?
     #original_hash: 0fb43d5
     note_before_cancel: 'Note: การแข่งขันที่ได้รับการยืนยันแล้วเท่านั้นที่ถูกยกเลิกได้'
+    #original_hash: 19a0ac2
+    orga_close_reg: ปิดการรับสมัคร
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: คุณแน่ใจหรือไม่ว่าต้องการปิดการรับสมัคร คุณจะไม่สามารถแก้ไขมันได้
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      หมายเหตุ:
+      คุณสามารถปิดการสมัครการแข่งขันได้เมื่อผู้เข้าแข่งขันเต็มแล้วเท่านั้น
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'หมายเหตุ: ปิดการรับสมัครแล้ว'
     show:
       #original_hash: b0fe391
       general_info: ข้อมูลทั่วไป

@@ -135,6 +135,8 @@ template "/etc/my.cnf" do
             })
 end
 
+### Fonts for generating PDFs
+package 'fonts-thai-tlwg'
 
 #### Ruby and Rails
 # Install native dependencies for gems
