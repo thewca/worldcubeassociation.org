@@ -10,22 +10,27 @@ const QualificationResultTypeOptions = [
   { key: 1, value: 'single', text: i18n.t('common.single') },
   { key: 2, value: 'average', text: i18n.t('common.average') },
 ];
+const MbfQualificationResultTypeOptions = QualificationResultTypeOptions.slice(0, 3);
 
 export function qualificationResultTypeInput({
-  qualificationResultType, onChange,
+  qualificationResultType, onChange, eventId,
 }) {
   return (
     <Form.Select
       value={qualificationResultType}
       onChange={onChange}
-      options={QualificationResultTypeOptions}
+      options={
+        eventId === '333mbf'
+          ? MbfQualificationResultTypeOptions
+          : QualificationResultTypeOptions
+      }
       openOnFocus={false}
     />
   );
 }
 
 export default function qualificationResultTypeField({
-  qualificationResultType, onChange,
+  qualificationResultType, onChange, eventId,
 }) {
   return (
     <Form.Field inline>
@@ -36,6 +41,7 @@ export default function qualificationResultTypeField({
         as={qualificationResultTypeInput}
         qualificationResultType={qualificationResultType}
         onChange={onChange}
+        eventId={eventId}
       />
     </Form.Field>
   );

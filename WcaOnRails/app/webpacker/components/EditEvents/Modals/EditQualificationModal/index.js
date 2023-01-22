@@ -25,7 +25,7 @@ import 'react-datepicker/dist/react-datepicker.css';
  * @returns
  */
 function QualificationInput({
-  type, resultType, level, onChange,
+  type, resultType, level, onChange, eventId,
 }) {
   switch (type) {
     case 'attemptResult':
@@ -116,6 +116,7 @@ export default function EditQualificationModal({
       <QualificationResultType
         qualificationResultType={resultType}
         onChange={setResultType}
+        eventId={event.id}
       />
       {resultType ? (
         <QualificationType
@@ -130,6 +131,7 @@ export default function EditQualificationModal({
             level={level}
             resultType={resultType}
             onChange={setLevel}
+            eventId={event.id}
           />
           <Form.Field>
             <Label>{i18n.t('qualification.deadline.description')}</Label>
