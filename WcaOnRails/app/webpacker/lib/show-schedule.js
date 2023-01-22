@@ -11,6 +11,7 @@ window.wca.registerVenueData = (id, venueData) => {
 };
 
 const HEX_BASE = 16;
+const HEX_CHANNEL_REGEX = /^#(?<r>[0-9A-Fa-f]{2})(?<g>[0-9A-Fa-f]{2})(?<b>[0-9A-Fa-f]{2})$/;
 
 /**
  * Convert a HEX color code to RGB values.
@@ -20,11 +21,13 @@ const HEX_BASE = 16;
  * @returns {Array<number>} RBG values, defaults to `[0, 0, 0]` if `hexColor` cannot be parsed
  */
 const hexToRgb = (hexColor) => {
-  if (/#[0-9A-Fa-f]{6}/.test(hexColor)) {
+  const match = hexColor.match(HEX_CHANNEL_REGEX);
+
+  if (match !== null) {
     return [
-      parseInt(hexColor.slice(1, 3), HEX_BASE),
-      parseInt(hexColor.slice(3, 5), HEX_BASE),
-      parseInt(hexColor.slice(5, 7), HEX_BASE),
+      parseInt(match.groups.r, HEX_BASE),
+      parseInt(match.groups.g, HEX_BASE),
+      parseInt(match.groups.b, HEX_BASE),
     ];
   }
 
