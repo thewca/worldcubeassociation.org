@@ -55,7 +55,7 @@ module ResultsValidators
       results_by_round_id_by_competition_id.each do |competition_id, results_by_round_id|
         rounds_info_by_round_id = get_rounds_info(competitions[competition_id], results_by_round_id.keys)
         results_by_round_id.each do |round_id, results_for_round|
-          # get cutoff and timelimit
+          # get cutoff and time limit
           round_info = rounds_info_by_round_id[round_id]
 
           unless round_info

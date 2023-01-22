@@ -1,4 +1,4 @@
-import { generateWcifRound, removeSharedTimelimits } from '../utils';
+import { generateWcifRound, removeSharedTimeLimits } from '../utils';
 import {
   AddEvent,
   AddRounds,
@@ -53,7 +53,7 @@ const reducers = {
       wcifEvents: state.wcifEvents.map((e) => (e.id === payload.eventId ? ({
         id: e.id,
         rounds: null,
-      }) : removeSharedTimelimits(e, roundIdsToRemove))),
+      }) : removeSharedTimeLimits(e, roundIdsToRemove))),
     };
   },
 
@@ -77,7 +77,7 @@ const reducers = {
     const { eventId, roundsToRemoveCount } = payload;
     const event = state.wcifEvents.find((e) => e.id === eventId);
 
-    // For removing shared cumulative timelimits from other rounds
+    // For removing shared cumulative time limits from other rounds
     const roundIdsToRemove = event.rounds.slice(event.rounds.length - roundsToRemoveCount)
       .map((round) => round.id);
 
@@ -91,7 +91,7 @@ const reducers = {
     return {
       ...state,
       wcifEvents: state.wcifEvents.map((e) => (
-        e.id === eventId ? event : removeSharedTimelimits(e, roundIdsToRemove)
+        e.id === eventId ? event : removeSharedTimeLimits(e, roundIdsToRemove)
       )),
     };
   },

@@ -12,7 +12,7 @@ import TimeLimitDescription from './TimeLimitDescription';
 import SelectRoundsModal from './SelectRoundsModal';
 
 /**
- * Shows a modal to edit the timelimit of a round.
+ * Shows a modal to edit the time limit of a round.
  * @param {Event} wcifEvent
  * @param {Round} wcifRound
  * @returns {React.ReactElement}

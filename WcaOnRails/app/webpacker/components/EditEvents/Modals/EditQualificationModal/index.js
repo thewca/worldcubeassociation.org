@@ -60,7 +60,7 @@ function QualificationInput({
 }
 
 /**
- * Shows a modal to edit the qualifiication of a round.
+ * Shows a modal to edit the qualification of a round.
  * @param {Event} wcifEvent
  * @returns {React.ReactElement}
  */

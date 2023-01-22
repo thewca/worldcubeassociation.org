@@ -31,7 +31,7 @@ export const generateWcifRound = (eventId, roundNumber) => {
  * @param {collection} wcifEvents Will be modified in place.
  * @param {Array}      wcifRounds Rounds to be removed from all cumulativeRoundIds.
  */
-export const removeSharedTimelimits = (event, wcifRoundIds) => ({
+export const removeSharedTimeLimits = (event, wcifRoundIds) => ({
   ...event,
   timeLimit: event.timeLimit ? {
     ...event.timeLimit,
