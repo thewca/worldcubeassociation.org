@@ -54,8 +54,6 @@ function EditEvents() {
       setSaving(false);
     };
 
-    console.log(57, competitionId);
-
     saveWcif(competitionId, { events: wcifEvents }, onSuccess, onFailure);
   }, [competitionId, dispatch, wcifEvents]);
 
@@ -74,8 +72,6 @@ function EditEvents() {
     </Message>
   );
 
-  console.log(73, wcifEvents);
-
   return (
     <div>
       {unsavedChanges && renderUnsavedChangesAlert()}
@@ -90,7 +86,7 @@ function EditEvents() {
         className="event-panel-container"
       >
         {wcifEvents.map((wcifEvent) => (
-          <EventPanel wcifEvent={wcifEvent} />
+          <EventPanel key={wcifEvent.id} wcifEvent={wcifEvent} />
         ))}
       </div>
       {unsavedChanges && renderUnsavedChangesAlert()}

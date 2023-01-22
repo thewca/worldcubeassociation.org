@@ -60,18 +60,16 @@ const reducers = {
   [AddRounds]: (state, { payload }) => {
     const { eventId, roundsToAddCount } = payload;
     const event = state.wcifEvents.find((e) => e.id === eventId);
-
-    if (!event.rounds) {
-      event.rounds = [];
-    }
-
-    for (let i = 0; i < roundsToAddCount; i += 1) {
-      event.rounds.push(generateWcifRound(event.id, event.rounds.length + 1));
-    }
+    const existingRounds = event.rounds ?? [];
+    const newRounds = Array(roundsToAddCount).fill(null).map((_, i) => (
+      generateWcifRound(eventId, existingRounds.length + i + 1)
+    ))
 
     return {
       ...state,
-      wcifEvents: state.wcifEvents.map((e) => (e.id === eventId ? event : e)),
+      wcifEvents: state.wcifEvents.map((e) => (e.id === eventId ? ({
+        ...e, rounds: [...existingRounds, ...newRounds],
+      }) : e)),
     };
   },
 
@@ -97,12 +95,14 @@ const reducers = {
       )),
     };
   },
+
   [UpdateRoundFormat]: (state, { payload }) => ({
     ...state,
     wcifEvents: updateForRounds(state.wcifEvents, [payload.roundId], () => ({
       format: payload.format,
     })),
   }),
+
   [SetScrambleSetCount]: (state, { payload }) => ({
     ...state,
     wcifEvents: updateForRounds(state.wcifEvents, [payload.roundId], () => ({
@@ -129,12 +129,14 @@ const reducers = {
       }),
     ),
   }),
+
   [UpdateAdvancementCondition]: (state, { payload }) => ({
     ...state,
     wcifEvents: updateForRounds(state.wcifEvents, [payload.roundId], () => ({
       advancementCondition: payload.advancementCondition,
     })),
   }),
+
   [UpdateQualification]: (state, { payload }) => ({
     ...state,
     wcifEvents: state.wcifEvents.map((event) => (event.id === payload.eventId ? ({
