@@ -142,6 +142,7 @@ package 'fonts-thai-tlwg'
 # Install native dependencies for gems
 package 'libghc-zlib-dev'
 package 'libsqlite3-dev'
+package 'libyaml-dev' #newly required by Psych 5.0
 package 'g++'
 package 'libmysqlclient-dev'
 package 'imagemagick'
