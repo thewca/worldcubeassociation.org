@@ -91,7 +91,7 @@ export default function EditQualificationModal({
 
   const handleOk = () => {
     if (hasUnsavedChanges()) {
-      dispatch(updateQualification(wcifEvent.id, type ? {
+      dispatch(updateQualification(wcifEvent.id, resultType ? {
         type, resultType, whenDate, level,
       } : null));
     }
