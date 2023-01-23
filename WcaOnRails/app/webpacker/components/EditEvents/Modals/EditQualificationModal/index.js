@@ -137,7 +137,8 @@ export default function EditQualificationModal({
             <Label>{i18n.t('qualification.deadline.description')}</Label>
             <DatePicker
               onChange={handleDateChange}
-              selected={whenDate ? new Date(whenDate) : null}
+              // utc issues if not using moment, see: https://github.com/Hacker0x01/react-datepicker/issues/1018#issuecomment-461963696
+              selected={whenDate ? moment(whenDate).toDate() : null}
               dateFormat="yyyy-MM-dd"
               dateFormatCalendar="yyyy"
             />
