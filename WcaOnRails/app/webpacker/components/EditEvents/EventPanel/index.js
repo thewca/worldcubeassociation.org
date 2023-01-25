@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'classnames';
-// import _ from 'lodash';
 
 import {
   Button, Header, Segment,
@@ -8,7 +7,6 @@ import {
 import i18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
 import { pluralize } from '../../../lib/utils/edit-events';
-// import { addRoundToEvent, removeRoundsFromSharedTimeLimits } from './utils';
 import RoundsTable from './RoundsTable';
 import RoundCountInput from './RoundCountInput';
 import { useStore, useDispatch } from '../../../lib/providers/StoreProvider';
@@ -22,7 +20,7 @@ export default function EventPanel({
   wcifEvent,
 }) {
   const {
-    wcifEvents, canAddAndRemoveEvents, canUpdateEvents,
+    wcifEvents, canAddAndRemoveEvents, canUpdateEvents, canUseQualifications,
   } = useStore();
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -169,9 +167,16 @@ export default function EventPanel({
                 :
               </span>
               {/* Qualifications cannot be edited after the competition has been announced. */}
+              {/* Qualifications cannot be added if the box from the competition form is unchecked. */}
               <EditQualificationModal
                 wcifEvent={wcifEvent}
-                disabled={disabled || !canAddAndRemoveEvents}
+                disabled={
+                  disabled || !canAddAndRemoveEvents || !canUseQualifications
+                }
+                disabledReason={
+                  // todo: translations?
+                  !canUseQualifications ? 'Turn on Qualifications under Edit > Organizer View.' : undefined
+                }
               />
             </h5>
           </Segment>

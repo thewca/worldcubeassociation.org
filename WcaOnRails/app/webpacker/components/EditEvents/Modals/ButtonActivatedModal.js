@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
-// import cn from 'classnames';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
@@ -12,7 +11,6 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
  * @param {boolean} hasUnsavedChanges
  *  - if true, the modal will show a confirm dialog before closing.
  * @returns {React.ReactElement}
- * @returns
  */
 export default function ButtonActivatedModal({
   title,
@@ -20,6 +18,8 @@ export default function ButtonActivatedModal({
   triggerButtonProps = {},
   children,
   hasUnsavedChanges,
+  disabled,
+  tooltip,
   reset = () => null,
   onOk,
   ...props
@@ -30,7 +30,7 @@ export default function ButtonActivatedModal({
   /**
    * Gets called either when you press escape or the "close" button
    */
-  const close = () => {
+  const onClose = () => {
     if (hasUnsavedChanges) {
       confirm({ content: 'Are you sure you want to discard your changes?' })
         .then(() => {
@@ -51,23 +51,33 @@ export default function ButtonActivatedModal({
     setOpen(false);
   };
 
+  // not entirely sure if this is necessary - can remove usage?
   const handleTriggerClick = (e) => {
     // For some reason the default behavior closes the parent and child modals.
     e.preventDefault();
-    setOpen(true);
   };
 
+  const onOpen = () => {
+    if (!disabled) {
+      setOpen(true);
+    }
+  };
+
+  // tool tips on disabled semantic ui buttons don't work... so wrap in span
   const Trigger = (
-    <Button
-      basic
-      compact
-      onClick={handleTriggerClick}
-      {...triggerButtonProps}
-      size="small"
-      className="editable-text-button"
-    >
-      {trigger}
-    </Button>
+    <span data-tooltip={tooltip ?? undefined}>
+      <Button
+        basic
+        compact
+        onClick={handleTriggerClick}
+        disabled={disabled}
+        {...triggerButtonProps}
+        size="small"
+        className="editable-text-button"
+        >
+        {trigger}
+      </Button>
+    </span>
   );
 
   return (
@@ -77,8 +87,8 @@ export default function ButtonActivatedModal({
       size="tiny"
       trigger={props.open ? undefined : Trigger}
       open={open}
-      onOpen={() => setOpen(true)}
-      onClose={close}
+      onOpen={onOpen}
+      onClose={onClose}
       closeOnDimmerClick={false}
       closeOnDocumentClick={false}
       {...props}
@@ -88,7 +98,7 @@ export default function ButtonActivatedModal({
         {children}
       </Modal.Content>
       <Modal.Actions>
-        <Button color="orange" type="button" onClick={close}>Close</Button>
+        <Button color="orange" type="button" onClick={onClose}>Close</Button>
         <Button color="green" type="submit">Ok</Button>
       </Modal.Actions>
     </Modal>

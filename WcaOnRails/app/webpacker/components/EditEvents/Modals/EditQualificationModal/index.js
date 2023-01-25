@@ -42,17 +42,17 @@ function QualificationInput({
       );
     case 'ranking':
       return (
-        <input
-          type="number"
-          min={1}
-          value={level}
-          onChange={(e) => onChange(parseInt(e.target.value, 10))}
+          <input
+            type="number"
+            min={1}
+            value={level}
+            onChange={(e) => onChange(parseInt(e.target.value, 10))}
           label={(
             <Label>
               {i18n.t('qualification.type.ranking')}
             </Label>
           )}
-        />
+          />
       );
     default:
       return null;
@@ -62,10 +62,12 @@ function QualificationInput({
 /**
  * Shows a modal to edit the qualification of a round.
  * @param {Event} wcifEvent
+ * @param {boolean} disabled - to prevent adding/changing qualifications
+ * @param {string | undefined} disabledReason - to show as tooltip
  * @returns {React.ReactElement}
  */
 export default function EditQualificationModal({
-  wcifEvent, disabled,
+  wcifEvent, disabled, disabledReason,
 }) {
   const event = events.byId[wcifEvent.id];
   const { qualification } = wcifEvent;
@@ -76,6 +78,7 @@ export default function EditQualificationModal({
   const [whenDate, setWhenDate] = useState(qualification?.whenDate ?? '');
   const [level, setLevel] = useState(qualification?.level || 0);
 
+  // todo: can convert this to a const (ie not a function)?
   const hasUnsavedChanges = () => (
     !_.isEqual(qualification, {
       resultType, type, whenDate, level,
@@ -101,17 +104,18 @@ export default function EditQualificationModal({
     setWhenDate(moment(date).format('YYYY-MM-DD'));
   };
 
-  const Title = i18n.t('qualification.for_event', { event: event.name });
-  const Trigger = eventQualificationToString(wcifEvent, qualification, { short: true });
+  const title = i18n.t('qualification.for_event', { event: event.name });
+  const trigger = eventQualificationToString(wcifEvent, qualification, { short: true });
 
   return (
     <ButtonActivatedModal
-      trigger={Trigger}
-      title={Title}
+      trigger={trigger}
+      title={title}
       reset={reset}
       onOk={handleOk}
       hasUnsavedChanges={hasUnsavedChanges()}
       disabled={disabled}
+      tooltip={disabledReason}
     >
       <QualificationResultType
         qualificationResultType={resultType}
@@ -154,3 +158,7 @@ export default function EditQualificationModal({
     </ButtonActivatedModal>
   );
 }
+
+// !!! disable qual if box not checked
+// !!! accept mbf point qual
+// !!! failing tests

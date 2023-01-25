@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import cn from 'classnames';
 import _ from 'lodash';
 
-import { Button, Grid, Message } from 'semantic-ui-react';
+import { Button, Message } from 'semantic-ui-react';
 import { events } from '../../lib/wca-data.js.erb';
 
 import { saveWcif } from '../../lib/utils/wcif';
@@ -111,8 +110,13 @@ function normalizeWcifEvents(wcifEvents) {
   return ret.concat(wcifEvents);
 }
 
+// !!! todo: pass in canUseQualifications in usages
 export default function Wrapper({
-  competitionId, canAddAndRemoveEvents, canUpdateEvents, wcifEvents,
+  competitionId,
+  canAddAndRemoveEvents,
+  canUseQualifications,
+  canUpdateEvents,
+  wcifEvents,
 }) {
   const normalizedEvents = normalizeWcifEvents(wcifEvents);
 
@@ -123,6 +127,7 @@ export default function Wrapper({
         competitionId,
         canAddAndRemoveEvents,
         canUpdateEvents,
+        canUseQualifications,
         wcifEvents: normalizedEvents,
         initialWcifEvents: normalizedEvents,
         unsavedChanges: false,
