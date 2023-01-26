@@ -175,7 +175,9 @@ export default function EventPanel({
                 }
                 disabledReason={
                   // todo: translations?
-                  !canUseQualifications ? 'Turn on Qualifications under Edit > Organizer View.' : undefined
+                  canUseQualifications
+                    ? undefined
+                    : 'Turn on Qualifications under Edit > Organizer View and add a reason.'
                 }
               />
             </h5>

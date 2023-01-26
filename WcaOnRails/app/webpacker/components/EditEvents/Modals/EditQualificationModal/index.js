@@ -159,6 +159,5 @@ export default function EditQualificationModal({
   );
 }
 
-// !!! disable qual if box not checked
-// !!! accept mbf point qual
 // !!! failing tests
+// !!! accept mbf point qual

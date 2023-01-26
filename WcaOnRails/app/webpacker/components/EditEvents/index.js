@@ -110,12 +110,11 @@ function normalizeWcifEvents(wcifEvents) {
   return ret.concat(wcifEvents);
 }
 
-// !!! todo: pass in canUseQualifications in usages
 export default function Wrapper({
   competitionId,
   canAddAndRemoveEvents,
-  canUseQualifications,
   canUpdateEvents,
+  canUseQualifications,
   wcifEvents,
 }) {
   const normalizedEvents = normalizeWcifEvents(wcifEvents);
