@@ -3,7 +3,7 @@
 class ScheduleActivity < ApplicationRecord
   # See https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit#heading=h.14uuu58hnua
   VALID_ACTIVITY_CODE_BASE = (Event.official.map(&:id) + %w(other)).freeze
-  VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc tutorial).freeze
+  VALID_OTHER_ACTIVITY_CODE = %w(registration checkin breakfast lunch dinner awards unofficial misc tutorial).freeze
   belongs_to :holder, polymorphic: true
   has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
@@ -60,7 +60,7 @@ class ScheduleActivity < ApplicationRecord
     parts = ScheduleActivity.parse_activity_code(activity_code)
     if parts[:event_id] == "other"
       # TODO/NOTE: should we fix the name for event with predefined activity codes? (ie: those below but 'misc' and 'unofficial')
-      # VALID_OTHER_ACTIVITY_CODE = %w(registration breakfast lunch dinner awards unofficial misc).freeze
+      # VALID_OTHER_ACTIVITY_CODE = %w(registration checkin breakfast lunch dinner awards unofficial misc).freeze
       name
     else
       inferred_name = Event.c_find(parts[:event_id]).name
