@@ -35,7 +35,7 @@
 
   <% end %>
 
-  <% if current_user&.can_admin_competitions? %> 
+  <% if current_user&.can_admin_competitions? %>
     <%= button_to competition_disconnect_stripe_path, class: 'btn btn-danger', disabled: @competition.connected_stripe_account_id.nil?, method: :post, data: { confirm: t('competitions.stripe_disconnect_confirm') } do %>
       <%= t 'competitions.stripe_disconnect' %>
     <% end %>
