@@ -243,8 +243,8 @@ class Registration < ApplicationRecord
     end
   end
 
-  validate :must_register_for_lte_event_limit
-  private def must_register_for_lte_event_limit
+  validate :must_not_register_for_more_events_than_event_limit
+  private def must_not_register_for_more_events_than_event_limit
     if !competition.present? || !competition.events_per_registration_limit_enabled?
       return
     end
