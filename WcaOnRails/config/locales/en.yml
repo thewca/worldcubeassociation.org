@@ -1406,6 +1406,7 @@ en:
       part_of_a_series: "This competition is part of a Competition Series."
       part_of_a_series_list: "This competition is part of the %{name} Competition Series. Other competitions in this Series are:"
       series_registration_warning_html: "Note: You can submit a registration for all competitions in a Series, but only one of those registrations can be confirmed and accepted. <b>You will only be allowed to compete in one of the Series competitions!</b>"
+      competitor_limit: "Competitor limit"
       competitor_limit_is: "There is a competitor limit of %{competitor_limit} competitors."
       no_competitor_limit: "There is no competitor limit."
       entry_fee_is: "The base registration fee for this competition is %{base_entry_fee}."
