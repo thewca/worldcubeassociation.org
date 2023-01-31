@@ -28,8 +28,16 @@
   <% else %>
     <p>
       This competition is set up to accept payments through Stripe.
-      If you ever want to disconnect your account, you can do so from your Stripe account dashboard
+      If you want to disconnect your account, you will first do so from your Stripe account dashboard
       <%= link_to "here", "https://dashboard.stripe.com/account/applications" %> (please note it will revoke access for all competitions using the account).
+      You will have to get your Delegate to reach out to WCAT to clear the entry before a new Stripe account can be connected.
     </p>
+
+  <% end %>
+
+  <% if current_user&.can_admin_competitions? %> 
+    <%= button_to competition_disconnect_stripe_path, class: 'btn btn-danger', disabled: @competition.connected_stripe_account_id.nil?, method: :post, data: { confirm: t('competitions.stripe_disconnect_confirm') } do %>
+      <%= t 'competitions.stripe_disconnect' %>
+    <% end %>
   <% end %>
 <% end %>
