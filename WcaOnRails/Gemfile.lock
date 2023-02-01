@@ -215,7 +215,7 @@ GEM
     cocoon (1.2.15)
     coderay (1.1.3)
     colorize (0.8.1)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.0)
     connection_pool (2.2.5)
     cookies_eu (1.7.8)
       js_cookie_rails (~> 2.2.0)
@@ -480,7 +480,7 @@ GEM
     rack (2.2.6.2)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
-    rack-proxy (0.7.4)
+    rack-proxy (0.7.6)
       rack
     rack-test (2.0.2)
       rack (>= 1.3)
@@ -505,7 +505,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.4)
+    rails-html-sanitizer (1.5.0)
       loofah (~> 2.19, >= 2.19.1)
     rails-i18n (7.0.6)
       i18n (>= 0.7, < 2)
@@ -615,7 +615,7 @@ GEM
       rdoc (>= 5.0)
     seedbank (0.4.0)
     semantic_range (3.0.0)
-    shakapacker (6.5.4)
+    shakapacker (6.5.5)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -671,7 +671,7 @@ GEM
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.1)
       tzinfo
-    tzinfo (2.0.5)
+    tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
     uglifier (4.2.0)
@@ -795,7 +795,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 6.5.4)
+  shakapacker (= 6.5.5)
   simple_form
   simplecov
   simplecov-lcov
