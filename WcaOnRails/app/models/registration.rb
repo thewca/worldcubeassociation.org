@@ -243,6 +243,16 @@ class Registration < ApplicationRecord
     end
   end
 
+  validate :must_not_register_for_more_events_than_event_limit
+  private def must_not_register_for_more_events_than_event_limit
+    if !competition.present? || !competition.events_per_registration_limit_enabled?
+      return
+    end
+    if registration_competition_events.reject(&:marked_for_destruction?).length > competition.events_per_registration_limit
+      errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
+    end
+  end
+
   validate :cannot_register_for_unqualified_events
   private def cannot_register_for_unqualified_events
     if competition && competition.allow_registration_without_qualification

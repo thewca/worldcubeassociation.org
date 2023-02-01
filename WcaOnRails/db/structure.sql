@@ -84,6 +84,7 @@ CREATE TABLE `Competitions` (
   `use_wca_live_for_scoretaking` tinyint(1) NOT NULL DEFAULT '0',
   `allow_registration_without_qualification` tinyint(1) DEFAULT '0',
   `guests_per_registration_limit` int(11) DEFAULT NULL,
+  `events_per_registration_limit` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1791,4 +1792,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220916132536'),
 ('20221121111430'),
 ('20221123090104'),
-('20221123121220');
+('20221123121220'),
+('20230119115432');
