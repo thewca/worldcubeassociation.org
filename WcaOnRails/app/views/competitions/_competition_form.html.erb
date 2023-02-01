@@ -303,7 +303,7 @@
 
         <%= f.input :guests_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, currency_selector: "#competition_currency_code" %>
 
-        <div class="guest-no-entry-fee-options"> # Daniel
+        <div class="guest-no-entry-fee-options">
           <%= f.input :guest_entry_status, include_blank: false %>
           <%= f.input :guests_per_registration_limit %>
         </div>
