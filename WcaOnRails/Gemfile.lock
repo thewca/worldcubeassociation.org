@@ -215,7 +215,7 @@ GEM
     cocoon (1.2.15)
     coderay (1.1.3)
     colorize (0.8.1)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.0)
     connection_pool (2.2.5)
     cookies_eu (1.7.8)
       js_cookie_rails (~> 2.2.0)
@@ -284,7 +284,7 @@ GEM
       faraday (~> 2.0)
     ffi (1.15.5)
     formatador (0.3.0)
-    glob (0.3.0)
+    glob (0.4.0)
     globalid (1.0.1)
       activesupport (>= 5.0)
     google-apis-admin_directory_v1 (0.36.0)
@@ -330,8 +330,8 @@ GEM
     httpclient (2.8.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    i18n-js (4.0.1)
-      glob
+    i18n-js (4.2.2)
+      glob (>= 0.4.0)
       i18n
     i18n-spec (0.6.0)
       iso
