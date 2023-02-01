@@ -1881,8 +1881,8 @@ class Competition < ApplicationRecord
     wcif_ids = rounds.to_h { |r| [r.wcif_id, r.to_string_map] }
     all_activities.each do |activity|
       event = Icalendar::Event.new
-      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time)
-      event.dtend = Icalendar::Values::DateTime.new(activity.end_time)
+      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time, "TZID" => "Etc/UTC")
+      event.dtend = Icalendar::Values::DateTime.new(activity.end_time, "TZID" => "Etc/UTC")
       event.summary = activity.localized_name(wcif_ids)
       cal.add_event(event)
     end
