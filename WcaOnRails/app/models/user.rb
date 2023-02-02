@@ -923,7 +923,6 @@ class User < ApplicationRecord
       reasons << I18n.t('registrations.errors.need_gender') if gender.blank?
       reasons << I18n.t('registrations.errors.need_dob') if dob.blank?
       reasons << I18n.t('registrations.errors.need_country') if country_iso2.blank?
-      reasons << I18n.t('registrations.errors.banned_html').html_safe if banned?
     end
   end
 
