@@ -226,6 +226,8 @@ class Registration < ApplicationRecord
   private def user_can_register_for_competition
     if user&.cannot_register_for_competition_reasons.present?
       errors.add(:user_id, user.cannot_register_for_competition_reasons.to_sentence)
+    elsif user.banned? && competition.start_date < user.current_team_members.select(:name == "Banned Competitors").first.end_date
+      errors.add(:user_id, I18n.t('registrations.errors.banned_html').html_safe)
     end
   end
 
