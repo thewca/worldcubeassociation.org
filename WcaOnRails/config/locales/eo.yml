@@ -493,15 +493,17 @@ eo:
         #original_hash: 8020e88
         external_registration_page: Paĝo por la registriĝoj
         #original_hash: 9bb1965
-        competitor_limit_enabled: Limo da partoprenantoj
+        competitor_limit_enabled: Limo da konkursantoj
         #original_hash: 749f4c9
         competitor_limit: Plej alta kvanto da konkursantoj
         #original_hash: 4a8b6f1
-        competitor_limit_reason: Kialo por tiu limo de konkursantoj
+        competitor_limit_reason: Kialo por tiu limo da konkursantoj
         #original_hash: 3c23a67
         guests_enabled: Akompanantoj
         #original_hash: 7d78478
         guests_per_registration_limit: Maksimuma nombro da gastoj per registriĝo
+        #original_hash: 22516e1
+        events_per_registration_limit: Limo da konkurseroj por registriĝo
         #original_hash: 089cbfd
         receive_registration_emails: Sciigu min per retmesaĝo kiam iu registriĝas por tiu konkurso
         #original_hash: d4aeed9
@@ -955,6 +957,12 @@ eo:
           La nombro da gastoj permesitaj per registriĝo ĉe ĉi tiu konkurso.
           Registriĝo kun tro da gastoj estos blokita. Lasu tion malplena se ne
           estas limo.
+        #original_hash: d09af8f
+        events_per_registration_limit: >-
+          Laŭvole devigu la tutsumon de konkurseroj, pri kiuj konkursanto povas
+          registriĝi (ofte uzata por "Favoritaj" konkursoj). Vi devus aldoni
+          konkurserojn antaŭ ol uzi ĉi tiun kampon. Registriĝoj kun tro da
+          konkurseroj estos blokitaj. Lasu tion malplena se ne estas limo.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -2142,6 +2150,11 @@ eo:
       cannot_be_deleted_and_accepted: Registriĝo ne povas esti samtempe kaj forigita kaj akceptita.
       #original_hash: a38d024
       must_register: devas registriĝi en minimume unu konkursero
+      #original_hash: abdc718
+      exceeds_event_limit:
+        zero: vi devas registriĝi por ekzakte 0 konkursero
+        one: vi devas registriĝi por ekzakte 1 konkursero
+        other: 'vi devas registriĝi por %{count} konkurseroj aŭ malpli'
       #original_hash: e78eec3
       banned_html: >-
         Vi estas forbarita. Se vi pensas ke tio estas eraro, bonvolu kontakti la
@@ -2722,6 +2735,8 @@ eo:
         Noto: Vi povas sendi registriĝon por ĉiuj konkursoj en Serio, sed nur
         unu el tiuj registriĝoj povas esti konfirmita kaj akceptita. <b>Vi nur
         rajtos konkursi en unu el la Seriokonkursoj!</b>
+      #original_hash: 9bb1965
+      competitor_limit: Limo da konkursantoj
       #original_hash: 196725e
       competitor_limit_is: 'Estas limo de %{competitor_limit} konkursantoj.'
       #original_hash: 5101f65
@@ -2778,6 +2793,11 @@ eo:
         zero: Konkursantoj povas veni kun tiom da gastoj kiom ili deziras
         one: Konkursantoj povas veni kun maksimume 1 gasto.
         other: 'Konkursantoj povas veni kun maksimume %{count} gastoj.'
+      #original_hash: bad09c8
+      event_limit:
+        zero: Konkursantoj povas registriĝi por ekzakte 0 konkursero.
+        one: Konkursantoj povas registriĝi por ekzakte 1 konkursero.
+        other: 'Konkursantoj povas registriĝi por maksimume %{count} konkurseroj.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Konkursantoj povas registriĝi nur por konkurseroj por kiuj ili jam estas
@@ -2943,7 +2963,7 @@ eo:
           open: Registriĝi nuntempe eblas!
           #original_hash: c098975
           full: >-
-            Limo da partoprenantoj estis atingita, novaj registriĝoj iros al la
+            Limo da konkursantoj estis atingita, novaj registriĝoj iros al la
             atendolisto
       #original_hash: 8b09d74
       no_comp_found: Neniu konkurso trovita.
@@ -3239,7 +3259,7 @@ eo:
     orga_close_reg_confirm: Ĉu vi certas ke vi volas fermi registriĝojn? Vi ne povos malfari ĉi tion.
     #original_hash: ce5686a
     note_reg_not_full_orga_close_reg: >-
-      Noto: vi povas fermi registriĝojn nur post kiam la limo da partoprenantoj
+      Noto: vi povas fermi registriĝojn nur post kiam la limo da konkursantoj
       estas atingita.
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Noto: registriĝoj jam estas fermitaj.'
@@ -4208,7 +4228,7 @@ eo:
     #original_hash: d0a3812
     competitor_tutorial: Instruilo por konkursantoj
     #original_hash: 9561bfc
-    judge_tutorial: Lernilo pri juĝado por novaj partoprenantoj
+    judge_tutorial: Lernilo pri juĝado por novaj konkursantoj
     #original_hash: 12e47a3
     competition_templates: Konkursaj ŝablonoj
     #original_hash: 5ca0558
