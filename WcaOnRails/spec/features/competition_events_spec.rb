@@ -246,7 +246,7 @@ RSpec.feature "Competition events management" do
 end
 
 def within_event_panel(event_id, &)
-  within(:css, ".panel.event-#{event_id}", &)
+  within(:css, ".event-panel.event-#{event_id}", &)
 end
 
 def within_round(event_id, round_number, &)
