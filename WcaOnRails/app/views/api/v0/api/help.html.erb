@@ -10,7 +10,7 @@
   <p>
     <%= t('api.token_request_intro') %>
   </p>
-<pre><code>> curl <%= oauth_token_url %> -X POST -F grant_type=password -F client_id=<%= t('api.app_id_placeholder') %> -F client_secret=<%= t('api.app_secret_placeholder') %> -F username=<%= t('api.user_email_placeholder') %> -F password=<%= t('api.user_password_placeholder') %>
+<pre><code>> curl <%= oauth_token_url %> -X POST -F grant_type=password -F client_id=APP_ID -F client_secret=APP_SECRET -F username=<%= t('api.user_email_placeholder') %> -F password=<%= t('api.user_password_placeholder') %>
 
 {"access_token":"1d6c95446cab947224286b7bec4382d898c664c7a3cafb16d3d110a3044cf4dc","token_type":"bearer","expires_in":7200,"created_at":1430788134}
 </code></pre>

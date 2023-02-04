@@ -2544,8 +2544,6 @@ en:
   api:
     manage_oauth_html: 'Go to %{oauth_link} to manage your OAuth applications.'
     token_request_intro: 'Here is an example, using curl, of obtaining an access token using an Application ID, Client Secret, your WCA email, and your password:'
-    app_id_placeholder: 'APP_ID'
-    app_secret_placeholder: 'APP_SECRET'
     user_email_placeholder: 'YOUR_EMAIL'
     user_password_placeholder: 'YOUR_PASSWORD'
     user_info_request_intro: 'An OAuth access token can be used, until it expires, to make authorized API requests. For example, to access information about your account:'
