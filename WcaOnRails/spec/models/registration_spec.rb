@@ -148,6 +148,54 @@ RSpec.describe Registration do
     end
   end
 
+  context "number of events selected" do
+    event_ids = ["222", "333", "444", "555", "666", "777"]
+    event_limit = event_ids.length - 2
+
+    context "with event limit" do
+      let(:competition) { FactoryBot.create :competition, :with_event_limit, events_per_registration_limit: event_limit, event_ids: event_ids }
+
+      it "blocks registrations when zero events are selected" do
+        registration = FactoryBot.build(:registration, competition: competition, events: [])
+        expect(registration).to be_invalid_with_errors(registration_competition_events: ["must register for at least one event"])
+      end
+
+      it "allows registration when just one is event selected" do
+        registration = FactoryBot.build(:registration, competition: competition, events: competition.events.first)
+        expect(registration).to be_valid
+      end
+
+      it "allows registration when number of events selected is less than limit" do
+        registration = FactoryBot.build(:registration, competition: competition, events: competition.events.first(event_limit - 1))
+        expect(registration).to be_valid
+      end
+
+      it "allows registration when number of events selected is equal to limit" do
+        registration = FactoryBot.build(:registration, competition: competition, events: competition.events.first(event_limit))
+        expect(registration).to be_valid
+      end
+
+      it "blocks registration when number of events selected is greater than limit" do
+        registration = FactoryBot.build(:registration, competition: competition, events: competition.events)
+        expect(registration).to be_invalid_with_errors(registration_competition_events: ["you must register in less than or equal to #{event_limit} events"])
+      end
+    end
+
+    context "without event limit" do
+      let(:competition) { FactoryBot.create :competition, event_ids: event_ids }
+
+      it "blocks registrations when zero events are selected" do
+        registration = FactoryBot.build(:registration, competition: competition, events: [])
+        expect(registration).to be_invalid_with_errors(registration_competition_events: ["must register for at least one event"])
+      end
+
+      it "allows registration when all events are selected" do
+        registration = FactoryBot.build(:registration, competition: competition, events: competition.events)
+        expect(registration).to be_valid
+      end
+    end
+  end
+
   context "when the competition is part of a series" do
     let!(:series) { FactoryBot.create :competition_series, name: "Registration Test Series 2015" }
 

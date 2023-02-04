@@ -815,14 +815,16 @@ de:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: Trage dein Geburtsdatum im Format JJJJ-MM-TT ein.
-        #original_hash: d0bb74a
+        #original_hash: 7588d71
+        dob: >-
+          Trage das Geburtsdatum des Teilnehmers / der Teilnehmerin im Format
+          JJJJ-MM-TT ein.
+        #original_hash: ac908c9
         name: >-
-          Trage deinen vollen Namen sorgfältig ein, zum Beispiel <strong>Stefan
-          Pochmann</strong>. Nicht unachtsam wie etwa <strong>s
-          pochman</strong>. Zweite Vornamen (entweder ganz oder als Initial)
-          sind optional.
+          Trage den vollen Namen des Teilnehmers / der Teilnehmerin sorgfältig
+          ein, zum Beispiel <strong>Stefan Pochmann</strong>. Nicht unachtsam
+          wie etwa <strong>s pochman</strong>. Zweite Vornamen (entweder ganz
+          oder als Initial) sind optional.
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -1581,12 +1583,14 @@ de:
       welcome_back: >-
         Willkommen zurück! Um Dein WCA-Benutzerkonto zu erstellen, müssen wir
         die WCA-ID kennen, mit der Du teilgenommen hast.
-      #original_hash: 669fb57
+      #original_hash: 3b2bcea
       welcome: >-
         Willkommen! Bevor Du an deinem ersten WCA-Wettbewerb teilnehmen kannst,
         brauchen wir ein paar zusätzliche Informationen zur Verwaltung der
         Ergebnisse. Bitte beachte, dass Dein Geburtsdatum nie ohne Dein
-        Einverständnis weitergereicht wird.
+        Einverständnis weitergereicht wird.<br/>Wenn Du die Anmeldung im Namen
+        einer anderen Person durchführst, gib bitte die Details <strong>des
+        Teilnehmers / der Teilnehmerin</strong> an.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1897,6 +1901,26 @@ de:
         more_info_html: 'Du kannst deine E-Mail Einstellungen anpassen %{preferences_link}.'
         #original_hash: 7594a32
         regards_html: 'Viele Grüße, <br/>das WCA Results Team im Namen von %{managers}.'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Setze das Passwort deines WCA Accounts zurück
+        #original_hash: 65611e9
+        greeting: 'Hallo,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          Wir haben eine Anfrage zum Zurücksetzen des Passworts deines WCA
+          Accounts, verknüpft mit %{user_email}, erhalten. Bislang wurden noch
+          keine Änderungen an deinem Account vorgenommen.
+        #original_hash: 60fef9e
+        instruction2: 'Du kannst dein Passwort mit Klick auf den folgenden Link zurücksetzen:'
+        #original_hash: 00850c3
+        instruction3: >-
+          Wenn du das Zurücksetzen deines Passworts nicht angefordert hast,
+          ignoriere bitte diese E-Mail.
+        #original_hash: dbc2263
+        instruction4: >-
+          Hast du weitere Fragen? Wir antworten dir gerne! Kontaktiere uns unter
+          %{contact_link}.
     claim_wca_id:
       #original_hash: f28bf87
       title: WCA-ID anfordern
@@ -2725,6 +2749,10 @@ de:
         verbinden.
       #original_hash: 724cf0d
       championship_exists: 'Es gibt bereits eine %{championship_type} in %{year}'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: Anmeldung erfolgreich geschlossen.
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: Anmeldung kann nicht geschlossen werden.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Meine Wettbewerbe
@@ -3348,6 +3376,18 @@ de:
     cancel_mistake: Fehler gemacht?
     #original_hash: 0fb43d5
     note_before_cancel: 'Achtung: nur bestätigte Wettbewerbe können abgesagt werden.'
+    #original_hash: 19a0ac2
+    orga_close_reg: Schließe die Anmeldung.
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: >-
+      Bist du sicher, dass du die Anmeldung schließen möchtest? Dies kann nicht
+      rückgängig gemacht werden.
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      Beachte: du kannst die Anmeldung nur schließen, nachdem das
+      Teilnehmerlimit erreicht wurde.
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'Beachte: die Anmeldung ist bereits geschlossen.'
     show:
       #original_hash: b0fe391
       general_info: Allgemeine Info
