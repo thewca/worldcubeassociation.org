@@ -116,6 +116,7 @@ export default function EditQualificationModal({
       hasUnsavedChanges={hasUnsavedChanges()}
       disabled={disabled}
       tooltip={disabledReason}
+      triggerButtonProps={{ name: 'qualification'}}
     >
       <QualificationResultType
         qualificationResultType={resultType}

@@ -26,7 +26,7 @@ export default function RoundCountInput({ roundCount, onChange, disabled }) {
   return (
     <Dropdown
       selection
-      name="SelectRoundCount"
+      name="selectRoundCount"
       value={roundCount}
       onChange={handleChange}
       disabled={disabled}

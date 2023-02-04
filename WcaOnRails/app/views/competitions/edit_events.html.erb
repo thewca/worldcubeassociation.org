@@ -10,7 +10,7 @@
     competitionId: @competition.id,
     canAddAndRemoveEvents: current_user.can_add_and_remove_events?(@competition),
     canUpdateEvents: current_user.can_update_events?(@competition),
-    canUseQualifications: @competition.qualification_results && @competition.qualification_results_reason != '',
+    canUseQualifications: current_user.can_update_qualifications?(@competition),
     wcifEvents: @competition.events_wcif
   }, {
     id: "events-edit-area",
