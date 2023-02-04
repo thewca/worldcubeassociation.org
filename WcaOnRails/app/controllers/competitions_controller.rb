@@ -662,6 +662,7 @@ class CompetitionsController < ApplicationController
         :competitor_limit,
         :competitor_limit_reason,
         :remarks,
+        :force_comment_in_registration,
         :extra_registration_requirements,
         :on_the_spot_registration,
         :on_the_spot_entry_fee_lowest_denomination,

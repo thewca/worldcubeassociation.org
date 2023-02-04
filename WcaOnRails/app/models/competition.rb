@@ -149,6 +149,7 @@ class Competition < ApplicationRecord
     qualification_results_reason
     event_restrictions
     event_restrictions_reason
+    force_comment_in_registration
     announced_by
     cancelled_by
     results_posted_by

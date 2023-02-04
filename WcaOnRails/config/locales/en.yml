@@ -329,6 +329,7 @@ en:
         competition_events: "Events"
         enable_donations: "I want to enable donations additionally to collecting the registration fees"
         extra_registration_requirements: "Extra registration requirements"
+        force_comment_in_registration: "Force competitors to make a comment when registering"
         on_the_spot_registration: "On the spot registrations"
         on_the_spot_entry_fee_lowest_denomination: "On the spot base registration fee"
         allow_registration_edits: "Registration edits"
@@ -337,6 +338,7 @@ en:
         refund_policy_limit_date: "Limit date for refunds"
         waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
         event_change_deadline_date: "Deadline for competitors to update their registered events"
+        # force_comment_in_registration: "Force competitors to "
         guests_entry_fee_lowest_denomination: "Entry fee for guests"
         guest_entry_status: "Display message for free guest entry"
         early_puzzle_submission: "I would like to require competitors to submit puzzles at a specific time before an event is scheduled to begin"
@@ -1117,6 +1119,7 @@ en:
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
+      cannot_register_without_comment: "You must make a comment. Make sure to read the registration requirements what has to be included (e.g. in a FM simutaneous competition, which location you will compete at)."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
