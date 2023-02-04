@@ -588,7 +588,7 @@ class CompetitionsController < ApplicationController
       competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
     end
     competitions = Competition.includes(:delegate_report, :delegates)
-                              .where(id: competition_ids.uniq)
+                              .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
                               .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
     @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
     bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
