@@ -1,11 +1,10 @@
 /* eslint-disable react/no-danger */
-import React, { useEffect, useState } from 'react';
-import { Table } from 'semantic-ui-react';
-import { Alert } from 'react-bootstrap';
-import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import { FieldWrapper } from './FormInputs';
-import { competitionNearbyJsonUrl } from '../../lib/requests/routes.js.erb';
+import React, { useState } from 'react';
+import {
+  Button, Table, Message,
+} from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
+import Loading from '../Requests/Loading';
 
 function NotConfirmedIcon() {
   return (
@@ -19,7 +18,9 @@ function NotConfirmedIcon() {
   );
 }
 
-function CompsTable({ nearby }) {
+function CompsTableContent({ nearby, action }) {
+  const [showEvents, setShowEvents] = useState(false);
+
   const headerRow = () => (
     <Table.Row>
       <Table.HeaderCell name="name" width={3}>
@@ -43,17 +44,30 @@ function CompsTable({ nearby }) {
       <Table.HeaderCell name="competitors" width={1}>
         {I18n.t('competitions.adjacent_competitions.competitors')}
       </Table.HeaderCell>
-      <Table.HeaderCell name="events" width={2}>
-        {I18n.t('competitions.adjacent_competitions.events')}
-      </Table.HeaderCell>
+      {showEvents ? (
+        <Table.HeaderCell name="events" width={2}>
+          {I18n.t('competitions.adjacent_competitions.events')}
+        </Table.HeaderCell>
+      ) : null}
     </Table.Row>
   );
 
   const compRow = (comp) => (
-    <Table.Row warning={!comp.danger} error={comp.danger}>
+    <Table.Row key={comp.name} warning={!comp.danger} error={comp.danger}>
       <Table.Cell name="name" width={3}>
         <span dangerouslySetInnerHTML={{ __html: comp.nameLink }} />
         {comp.confirmed ? null : <NotConfirmedIcon />}
+        {action ? (
+          <>
+            <br />
+            <Button
+              size="mini"
+              onClick={() => action.onClick(comp)}
+            >
+              {action.label}
+            </Button>
+          </>
+        ) : null}
       </Table.Cell>
       <Table.Cell name="delegates" width={2}>
         <span dangerouslySetInnerHTML={{ __html: comp.delegates }} />
@@ -75,9 +89,11 @@ function CompsTable({ nearby }) {
       <Table.Cell name="competitors" width={1}>
         {comp.competitors ? comp.competitors : ''}
       </Table.Cell>
-      <Table.Cell name="events" width={2}>
-        {comp.events.map((e) => <span dangerouslySetInnerHTML={{ __html: e }} />)}
-      </Table.Cell>
+      {showEvents ? (
+        <Table.Cell name="events" width={2}>
+          {comp.events.map((e) => <span key={e} dangerouslySetInnerHTML={{ __html: e }} />)}
+        </Table.Cell>
+      ) : null}
     </Table.Row>
   );
 
@@ -89,39 +105,53 @@ function CompsTable({ nearby }) {
       <Table.Body>
         {nearby.map((comp) => compRow(comp))}
       </Table.Body>
+      <Table.Footer fullWidth>
+        <Table.Row>
+          <Table.HeaderCell colSpan="16">
+            <Button
+              floated="right"
+              size="mini"
+              primary
+              onClick={() => setShowEvents(!showEvents)}
+            >
+              {showEvents ? 'Hide Events' : 'Show Events'}
+            </Button>
+          </Table.HeaderCell>
+        </Table.Row>
+      </Table.Footer>
     </Table>
   );
 }
 
-export default function NearbyCompetitions({
-  latData, longData, startDateData, endDateData,
-}) {
-  const [nearby, setNearby] = useState([]);
-
-  const fieldLabel = 'Nearby competitions\n(within 5 days and 10 km)';
-
-  useEffect(() => {
-    if (!latData.value || !longData.value || !startDateData.value || !endDateData.value) return;
-    const params = new URLSearchParams();
-    params.append(`competition[${latData.attribute}]`, latData.value);
-    params.append(`competition[${longData.attribute}]`, longData.value);
-    params.append(`competition[${startDateData.attribute}]`, startDateData.value);
-    params.append(`competition[${endDateData.attribute}]`, endDateData.value);
-
-    fetchJsonOrError(`${competitionNearbyJsonUrl}?${params.toString()}`).then(({ data }) => {
-      setNearby(data);
-    });
-  }, [latData.value, longData.value, startDateData.value, endDateData.value]);
-
-  // TODO: Loading indicator?
+function MissingInfo({ missingDate, missingLocation }) {
   return (
-    <FieldWrapper label={fieldLabel}>
-      {!nearby || nearby.length === 0
-        ? (
-          <Alert bsStyle="success">
-            {I18n.t('competitions.adjacent_competitions.no_comp_nearby')}
-          </Alert>
-        ) : <CompsTable nearby={nearby} />}
-    </FieldWrapper>
+    <Message negative>
+      {missingDate ? (<p>{I18n.t('competitions.adjacent_competitions.no_date_yet')}</p>) : null}
+      {missingLocation ? (<p>{I18n.t('competitions.adjacent_competitions.no_location_yet')}</p>) : null}
+    </Message>
   );
+}
+
+export default function CompsTable({
+  latData, longData, startDateData, endDateData, nearby, loading, action,
+}) {
+  if (loading) return <Loading />;
+  if (!startDateData.value || !endDateData.value || !latData.value || !longData.value) {
+    return (
+      <MissingInfo
+        missingDate={!startDateData.value || !endDateData.value}
+        missingLocation={!latData.value || !longData.value}
+      />
+    );
+  }
+
+  if (!nearby || nearby.length === 0) {
+    return (
+      <Message positive>
+        {I18n.t('competitions.adjacent_competitions.no_comp_nearby')}
+      </Message>
+    );
+  }
+
+  return <CompsTableContent nearby={nearby} action={action} />;
 }

@@ -1,24 +1,38 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-danger */
-import React from 'react';
+import React, { useState, useCallback } from 'react';
+
 import {
   Checkbox,
   Form,
   Input,
-  Select,
 } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
-import useInputState from '../../lib/hooks/useInputState';
 
-export function useFormInputState(attribute, currentData) {
-  const initialValue = currentData[attribute] || '';
+// Modified from '../../lib/hooks/useInputState';
+const useInputState = (defaultVal = undefined) => {
+  const [state, setState] = useState(defaultVal);
+  const updateFromOnChange = useCallback((ev, data = undefined) => {
+    if (data) {
+      setState(data.value);
+    } else {
+      setState(ev);
+    }
+  }, [setState]);
+  return [state, setState, updateFromOnChange];
+};
 
-  const [value, setValue] = useInputState(initialValue);
+export function useFormInputState(attribute, currentData, defaultVal = '') {
+  const initialValue = currentData[attribute] || defaultVal;
+
+  const [value, setValue, setValueFromChange] = useInputState(initialValue);
   return {
     attribute,
     value,
-    onChange: setValue,
+    setValue,
+    onChange: setValueFromChange,
   };
 }
 
@@ -46,7 +60,7 @@ export function FieldWrapper({
 
   return (
     <Form.Field>
-      <label>{inputLabel}</label>
+      <label dangerouslySetInnerHTML={{ __html: inputLabel }} />
       {children}
       <p dangerouslySetInnerHTML={{ __html: inputHint }} />
     </Form.Field>
@@ -64,7 +78,13 @@ export function InputString({ inputState, attachedLabel, ...props }) {
 export function InputSelect({ inputState, options, ...props }) {
   return (
     <FieldWrapper inputState={inputState} {...props}>
-      <Select options={options} value={inputState.value} onChange={inputState.onChange} />
+      <select value={inputState.value} onChange={inputState.onChange}>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.text}
+          </option>
+        ))}
+      </select>
     </FieldWrapper>
   );
 }

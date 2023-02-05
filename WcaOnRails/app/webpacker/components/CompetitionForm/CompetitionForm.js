@@ -1,13 +1,11 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-danger */
 import React from 'react';
 import {
-  Form, Input,
+  Form,
 } from 'semantic-ui-react';
 import { Alert } from 'react-bootstrap';
 import I18n from '../../lib/i18n';
 import {
-  FieldWrapper,
   InputBoolean,
   InputDate,
   InputSelect,
@@ -15,7 +13,8 @@ import {
   useFormInputState,
 } from './FormInputs';
 import VenueMap from './VenueMap';
-import NearbyCompetitions from './NearbyCompetitions';
+import NearbyComps from './NearbyComps';
+import SeriesComps from './SeriesComps';
 
 function AdminView({ competition }) {
   const confirmedData = useFormInputState('confirmed', competition);
@@ -58,12 +57,10 @@ function CoordinatesInput({ latData, longData }) {
   const label = I18n.t('competitions.competition_form.coordinates');
   // TODO: The layout of this is kinda weird
   return (
-    <FieldWrapper label={label}>
-      <Form.Group widths="equal">
-        <Input label="Latitude" value={latData.value} onChange={latData.onChange} />
-        <Input label="Longitude" value={longData.value} onChange={longData.onChange} />
-      </Form.Group>
-    </FieldWrapper>
+    <Form.Group widths="equal">
+      <InputString inputState={latData} attachedLabel="Latitude" label={label} hint="&#8203;" />
+      <InputString inputState={longData} attachedLabel="Longitude" label="&#8203;" hint="&#8203;" />
+    </Form.Group>
   );
 }
 
@@ -82,6 +79,8 @@ export default function CompetitionForm({
   isActuallyConfirmed,
   mailToWCAT,
   countries,
+  warningDistance,
+  dangerDistance,
 }) {
   const countriesData = countries.map((c) => ({
     key: c.id,
@@ -106,36 +105,49 @@ export default function CompetitionForm({
   const endDateData = useFormInputState('end_date', competition);
 
   return (
-    <Form>
-      {competition.persisted && adminView ? <AdminView competition={competition} /> : null}
-      {competition.persisted && !adminView ? (
-        <AnnouncementDetails
-          competition={competition}
-          confirmed={isActuallyConfirmed}
-          mail={mailToWCAT}
-        />
-      ) : null}
+    <>
+      <Form>
+        {competition.persisted && adminView ? <AdminView competition={competition} /> : null}
+        {competition.persisted && !adminView ? (
+          <AnnouncementDetails
+            competition={competition}
+            confirmed={isActuallyConfirmed}
+            mail={mailToWCAT}
+          />
+        ) : null}
 
-      <InputString inputState={idData} />
-      <InputString inputState={nameData} />
-      <InputString inputState={cellNameData} />
-      <InputString inputState={nameReasonData} hint={I18n.t('competitions.competition_form.name_reason_html')} />
-      <InputSelect inputState={countryData} options={countriesData} />
-      <InputString inputState={cityNameData} />
-      <InputString inputState={venueData} hint={I18n.t('competitions.competition_form.venue_html', { md: I18n.t('competitions.competition_form.supports_md_html') })} />
-      <InputString inputState={venueDetailsData} hint={I18n.t('competitions.competition_form.venue_details_html', { md: I18n.t('competitions.competition_form.supports_md_html') })} />
-      <InputString inputState={venueAddressData} />
-
-      <VenueMap center={[latData.value || 0, longData.value || 0]} />
-
-      <CoordinatesInput latData={latData} longData={longData} />
-      <DatesRange startDateData={startDateData} endDateData={endDateData} />
-      <NearbyCompetitions
+        <InputString inputState={idData} />
+        <InputString inputState={nameData} />
+        <InputString inputState={cellNameData} />
+        <InputString inputState={nameReasonData} hint={I18n.t('competitions.competition_form.name_reason_html')} />
+        <InputSelect inputState={countryData} options={countriesData} />
+        <InputString inputState={cityNameData} />
+        <InputString inputState={venueData} hint={I18n.t('competitions.competition_form.venue_html', { md: I18n.t('competitions.competition_form.supports_md_html') })} />
+        <InputString inputState={venueDetailsData} hint={I18n.t('competitions.competition_form.venue_details_html', { md: I18n.t('competitions.competition_form.supports_md_html') })} />
+        <InputString inputState={venueAddressData} />
+      </Form>
+      <VenueMap
         latData={latData}
         longData={longData}
-        startDateData={startDateData}
-        endDateData={endDateData}
+        warningDist={warningDistance}
+        dangerDist={dangerDistance}
       />
-    </Form>
+      <Form>
+        <CoordinatesInput latData={latData} longData={longData} />
+        <DatesRange startDateData={startDateData} endDateData={endDateData} />
+        <NearbyComps
+          latData={latData}
+          longData={longData}
+          startDateData={startDateData}
+          endDateData={endDateData}
+        />
+        <SeriesComps
+          latData={latData}
+          longData={longData}
+          startDateData={startDateData}
+          endDateData={endDateData}
+        />
+      </Form>
+    </>
   );
 }
