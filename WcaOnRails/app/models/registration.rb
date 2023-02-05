@@ -268,8 +268,8 @@ class Registration < ApplicationRecord
     if !competition.force_comment_in_registration
       return
     end
-    if comments.strip.length == 0
-      errors.add(:user_id,I18n.t('registrations.errors.cannot_register_without_comment'))
+    if comments.strip.empty?
+      errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
     end
   end
 
