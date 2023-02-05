@@ -1,0 +1,20 @@
+<% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).confirmed? : false %>
+<% mail_to_wcat = mail_to Team.wcat.email, t("competitions.competition_form.wcat"), target: "_blank" %>
+<%= react_component("CompetitionForm", {
+    competition: {
+      persisted: @competition.persisted?,
+      confirmed: @competition.confirmed?,
+      showAtAll: @competition.showAtAll?,
+      name: @competition.name,
+      name_reason: @competition.name_reason,
+      countryId: @competition.countryId,
+      cityName: @competition.cityName,
+      venue: @competition.venue,
+      venueDetails: @competition.venueDetails,
+      venueAddress: @competition.venueAddress,
+    },
+    adminView: @competition_admin_view,
+    isActuallyConfirmed: is_actually_confirmed,
+    mailToWCAT: mail_to_wcat,
+    countries: Country.all_sorted_by(I18n.locale),
+  }) %>

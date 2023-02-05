@@ -373,6 +373,42 @@ class CompetitionsController < ApplicationController
     render partial: 'nearby_competitions'
   end
 
+  def nearby_competitions_json
+    # Copied from nearby_competitions, but returns JSON instead of the HTML table.
+    @competition = Competition.new(competition_params)
+    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
+    @nearby_competitions = get_nearby_competitions(@competition)
+
+    render json: @nearby_competitions.map { |c|
+      if current_user.can_admin_results?
+        compLink = ActionController::Base.helpers.link_to(c.name, admin_edit_competition_path(c.id), target: "_blank")
+      else
+        compLink = ActionController::Base.helpers.link_to(c.name, competition_path(c.id))
+      end
+
+      days_until = @competition.days_until_competition?(c)
+
+      {
+        danger: @competition.dangerously_close_to?(c),
+        name: c.name,
+        nameLink: compLink,
+        confirmed: c.confirmed?,
+        delegates: users_to_sentence(c.delegates),
+        days_until: days_until,
+        days_distance_in_words: t('datetime.distance_in_words.x_days', count: days_until.abs),
+        days_until_tooltip: "#{c.name} #{days_until < 0 ? t('competitions.adjacent_competitions.ends_on') + " " + c.end_date.to_fs : t('competitions.adjacent_competitions.starts_on') + " " + c.start_date.to_fs}",
+        location: "#{c.cityName}, #{c.countryId}",
+        distance: link_to_google_maps_dir("#{@competition.kilometers_to(c).round(2)} km", c.latitude_degrees, c.longitude_degrees, @competition.latitude_degrees, @competition.longitude_degrees),
+        limit: c.competitor_limit_enabled ? c.competitor_limit : "",
+        competitors: c.is_probably_over? ? c.competitors.count : "",
+        events: c.events.map { |event|
+          cubing_icon(event.id, data: { toggle: "tooltip", placement: "bottom", container: "body" }, title: event.name)
+        },
+      }
+    }
+  end
+
   def series_eligible_competitions
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here

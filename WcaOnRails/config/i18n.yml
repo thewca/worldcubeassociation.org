@@ -46,3 +46,5 @@ translations:
       - "*.regional_organizations.*"
       - "*.round.*"
       - "*.search_results.*"
+      - "*.simple_form.hints.competition.*"
+      - "*.activerecord.attributes.competition.*"
