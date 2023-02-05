@@ -54,9 +54,17 @@ module CountryCityValidators
     Wyoming
   ).to_set
 
+  US_TERRITORIES = %w(
+    American\ Samoa
+    Guam
+    Northern\ Mariana\ Islands
+    Puerto\ Rico
+    U.S.\ Virgin\ Islands
+  ).to_set
+
   class UsCityValidator < CityCommaRegionValidator
     def initialize
-      super(type_of_region: "state", valid_regions: US_STATES)
+      super(type_of_region: "state", valid_regions: (US_STATES | US_TERRITORIES))
     end
 
     def self.country_iso_2

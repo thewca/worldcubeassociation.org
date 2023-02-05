@@ -1296,6 +1296,86 @@ RSpec.describe Competition do
     end
   end
 
+  context "event restrictions and limits" do
+    event_ids = ["222", "333", "444", "555"]
+    number_of_events = event_ids.length
+    let(:competition) { FactoryBot.build :competition, :with_event_limit, event_ids: event_ids }
+
+    context "a competition that has event restrictions, reason for the restrictions, and a valid event limit" do
+      it "accepts an event limit of one" do
+        competition.events_per_registration_limit = 1
+        expect(competition).to be_valid
+      end
+
+      it "accepts an event limit less than to number of events" do
+        competition.events_per_registration_limit = number_of_events - 1
+        expect(competition).to be_valid
+      end
+
+      it "accepts an event limit equal to number of events" do
+        competition.events_per_registration_limit = number_of_events
+        expect(competition).to be_valid
+      end
+    end
+
+    context "a competition that has event restrictions, reason for the restrictions, but invalid event limit" do
+      it "rejects a negative event limit" do
+        competition.events_per_registration_limit = -1
+        expect(competition).to be_invalid_with_errors(events_per_registration_limit: ["must be greater than or equal to 1"])
+      end
+
+      it "rejects an event limit of zero" do
+        competition.events_per_registration_limit = 0
+        expect(competition).to be_invalid_with_errors(events_per_registration_limit: ["must be greater than or equal to 1"])
+      end
+
+      it "rejects an event limit greater than number of events" do
+        competition.events_per_registration_limit = number_of_events + 1
+        expect(competition).to be_invalid_with_errors(events_per_registration_limit: ["must be less than or equal to #{number_of_events}"])
+      end
+
+      it "rejects a non-numeric event limit" do
+        competition.events_per_registration_limit = "five"
+        expect(competition).to be_invalid_with_errors(events_per_registration_limit: ["is not a number"])
+      end
+
+      it "rejects a non-integer event limit" do
+        competition.events_per_registration_limit = 2.5
+        expect(competition).to be_invalid_with_errors(events_per_registration_limit: ["must be an integer"])
+      end
+    end
+
+    it "accepts a competition that has event restrictions and reason for the restrictions, but no event limit" do
+      competition.event_restrictions = true
+      competition.event_restrictions_reason = "reason"
+      competition.events_per_registration_limit = nil
+      expect(competition).to be_valid
+    end
+
+    it "rejects a competition that has event restrictions, but no reason for the restrictions" do
+      competition.event_restrictions = true
+      competition.event_restrictions_reason = nil
+      competition.events_per_registration_limit = nil
+      expect(competition).to be_invalid_with_errors(event_restrictions_reason: ["can't be blank"])
+    end
+
+    it "accepts a competition that does not have any event restrictions" do
+      competition.event_restrictions = false
+      competition.event_restrictions_reason = nil
+      competition.events_per_registration_limit = nil
+      expect(competition).to be_valid
+    end
+
+    it "accepts a competition that does not have event restrictions, but has an event limit" do
+      # Hypothetically, this field can be set, but the limit would not be
+      # enforced nor validated since event restrictions are not enabled.
+      competition.event_restrictions = false
+      competition.event_restrictions_reason = nil
+      competition.events_per_registration_limit = 100
+      expect(competition).to be_valid
+    end
+  end
+
   context "has valid schedule" do
     let(:competition) { FactoryBot.create :competition, :with_valid_schedule }
 

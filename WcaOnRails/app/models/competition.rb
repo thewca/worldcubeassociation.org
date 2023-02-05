@@ -150,6 +150,7 @@ class Competition < ApplicationRecord
     event_restrictions
     event_restrictions_reason
     force_comment_in_registration
+    events_per_registration_limit
     announced_by
     cancelled_by
     results_posted_by
@@ -173,6 +174,7 @@ class Competition < ApplicationRecord
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
   validates :guests_enabled, acceptance: { accept: true, message: I18n.t('competitions.errors.must_ask_about_guests_if_specifying_limit') }, if: :guests_per_registration_limit_enabled?
   validates_numericality_of :guests_per_registration_limit, only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed?
+  validates_numericality_of :events_per_registration_limit, only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions?
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                  format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
@@ -226,6 +228,14 @@ class Competition < ApplicationRecord
 
   def guests_per_registration_limit_enabled?
     some_guests_allowed? && !guests_per_registration_limit.nil?
+  end
+
+  def events_per_registration_limit_enabled?
+    event_restrictions? && events_per_registration_limit.present?
+  end
+
+  def number_of_events
+    persisted_events_id.length
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
@@ -1872,8 +1882,8 @@ class Competition < ApplicationRecord
     wcif_ids = rounds.to_h { |r| [r.wcif_id, r.to_string_map] }
     all_activities.each do |activity|
       event = Icalendar::Event.new
-      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time)
-      event.dtend = Icalendar::Values::DateTime.new(activity.end_time)
+      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time, "TZID" => "Etc/UTC")
+      event.dtend = Icalendar::Values::DateTime.new(activity.end_time, "TZID" => "Etc/UTC")
       event.summary = activity.localized_name(wcif_ids)
       cal.add_event(event)
     end

@@ -89,6 +89,12 @@ FactoryBot.define do
       guests_per_registration_limit { 10 }
     end
 
+    trait :with_event_limit do
+      event_restrictions { true }
+      event_restrictions_reason { "this is a favourites competition" }
+      events_per_registration_limit { events.length }
+    end
+
     use_wca_registration { false }
     registration_open { 54.weeks.ago.change(usec: 0) }
     registration_close { 53.weeks.ago.change(usec: 0) }

@@ -656,6 +656,7 @@ class CompetitionsController < ApplicationController
         :enable_donations,
         :guests_enabled,
         :guests_per_registration_limit,
+        :events_per_registration_limit,
         :registration_open,
         :registration_close,
         :competitor_limit_enabled,
