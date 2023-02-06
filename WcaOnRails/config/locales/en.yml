@@ -571,6 +571,7 @@ en:
         qualification_results_reason: "Please elaborate here why you would like to use qualification times. Please fill this out in English!"
         event_restrictions: ""
         event_restrictions_reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
+        force_comment_in_registration: ""
         main_event_id: "The winner of this event will be the winner of the competition."
         allow_registration_without_qualification: ""
         #context: when marked as championship

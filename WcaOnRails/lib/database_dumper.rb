@@ -95,6 +95,7 @@ module DatabaseDumper
           cancelled_by
           waiting_list_deadline_date
           event_change_deadline_date
+          force_comment_in_registration
           allow_registration_edits
           allow_registration_self_delete_after_acceptance
           competition_series_id
