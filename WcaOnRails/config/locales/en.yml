@@ -351,8 +351,8 @@ en:
       championship:
         championship_type: "Championship type"
       competition_series:
-        wcif_id: "ID"
-        name: "Name"
+        wcif_id: "Series ID"
+        name: "Series name"
         short_name: "Series nickname"
         competition_ids: "All competitions"
       #context: a registration to a competition
