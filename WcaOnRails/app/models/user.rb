@@ -700,6 +700,15 @@ class User < ApplicationRecord
     current_teams.include?(Team.banned)
   end
 
+  def banned_at_date(date)
+    if banned?
+      ban_end = current_team_members.select(:team == Team.banned).first.end_date
+      !ban_end.present? || date < ban_end
+    else
+      false
+    end
+  end
+
   def can_view_all_users?
     admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team?
   end
@@ -917,12 +926,15 @@ class User < ApplicationRecord
   end
 
   # Note this is very similar to the cannot_be_assigned_to_user_reasons method in person.rb.
-  def cannot_register_for_competition_reasons
+  # The competition parameter is there when you want to check if a (potentially banned)
+  # user wants to register for a competition you need the competition date for
+  def cannot_register_for_competition_reasons(competition = nil)
     [].tap do |reasons|
       reasons << I18n.t('registrations.errors.need_name') if name.blank?
       reasons << I18n.t('registrations.errors.need_gender') if gender.blank?
       reasons << I18n.t('registrations.errors.need_dob') if dob.blank?
       reasons << I18n.t('registrations.errors.need_country') if country_iso2.blank?
+      reasons << I18n.t('registrations.errors.banned_html').html_safe if competition.present? && banned_at_date?(competition.start_date)
     end
   end
 
