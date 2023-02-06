@@ -265,7 +265,7 @@ class Registration < ApplicationRecord
 
   validate :forcing_competitors_to_add_comment
   private def forcing_competitors_to_add_comment
-    if !competition.force_comment_in_registration
+    if !competition || !competition.force_comment_in_registration
       return
     end
     if comments.strip.empty?
