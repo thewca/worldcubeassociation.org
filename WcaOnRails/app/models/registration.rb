@@ -226,7 +226,7 @@ class Registration < ApplicationRecord
   private def user_can_register_for_competition
     cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition)
     if cannot_register_reasons.present?
-      errors.add(:user_id, user.cannot_register_for_competition_reasons.to_sentence)
+      errors.add(:user_id, cannot_register_reasons.to_sentence)
     end
   end
 
