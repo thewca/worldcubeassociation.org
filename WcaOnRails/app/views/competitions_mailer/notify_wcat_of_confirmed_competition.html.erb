@@ -75,6 +75,10 @@
   <% if @competition.event_restrictions? %>
     The <%= "Delegate".pluralize(@competition.delegates.count) %> requested the adoption of <b>event restrictions</b> because "<%= @competition.event_restrictions_reason %>".
   <% end %>
+
+  <% if @competition.events_per_registration_limit_enabled? %>
+    The <%= "Delegate".pluralize(@competition.delegates.count) %> requested an <b>events per registration limit of <%= @competition.events_per_registration_limit %></b>.
+  <% end %>
 </p>
 
 <p>

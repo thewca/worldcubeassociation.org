@@ -124,6 +124,15 @@
     <% end %>
 
     <% unless competition.results_posted? %>
+      <% if competition.competitor_limit_enabled %>
+        <dl class="dl-horizontal">
+          <dt><%= t '.competitor_limit' %></dt>
+          <dd>
+            <%= competition.competitor_limit %>
+          </dd>
+        </dl>
+      <% end %>
+
       <dl class="dl-horizontal">
         <dt><%= t '.number_of_bookmarks' %></dt>
         <dd>

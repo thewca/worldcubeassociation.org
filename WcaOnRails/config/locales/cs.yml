@@ -811,12 +811,12 @@ cs:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: Zadejte své datum narození ve formátu RRRR-MM-DD.
-        #original_hash: d0bb74a
+        #original_hash: 7588d71
+        dob: Zadejte datum narození soutěžícího ve formátu RRRR-MM-DD.
+        #original_hash: ac908c9
         name: >-
-          Zadejte své jméno a příjmení správně, jako například <strong>Béďa
-          Trávníček</strong>. Ne nedbale jako <strong>b
+          Zadejte jméno a příjmení soutěžícího správně, jako například
+          <strong>Béďa Trávníček</strong>. Ne nedbale jako <strong>b
           travnicek</strong>.<br/>Prostřední jména (celá i iniciály) jsou
           nepovinná.
         #original_hash: da39a3e
@@ -1537,12 +1537,13 @@ cs:
       welcome_back: >-
         Vítejte zpět! Abyste si mohl(a) vytvořit účet na webových stránkách WCA,
         potřebujeme znát vaše WCA ID, pod kterým jste soutěžil(a).
-      #original_hash: 669fb57
+      #original_hash: 3b2bcea
       welcome: >-
         Vítejte! Předtím, než budete moct soutěžit na vaší první soutěži WCA,
         potřebujeme nějaké informace, abychom mohli uchovávat rekordy.
         Upozorňujeme, že vaše datum narození nebude nikdy zveřejněno bez vašeho
-        souhlasu.
+        souhlasu. </br> Pokud se přihlašujete za někoho jiného, zadejte údaje
+        <strong>soutěžícího</strong>.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2721,6 +2722,8 @@ cs:
         Poznámka: Můžete se zaregistrovat na všechny soutěže série, ale jen
         jedna z těchto registrací může být potvrzena a přijata. <b>Budete moci
         soutěžit jen v jedné soutěži ze série!</b>
+      #original_hash: 9bb1965
+      competitor_limit: Limit pro soutěžící
       #original_hash: 196725e
       competitor_limit_is: 'Limit pro soutěžící je %{competitor_limit} soutěžících.'
       #original_hash: 5101f65

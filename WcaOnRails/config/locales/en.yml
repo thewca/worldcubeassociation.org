@@ -321,6 +321,7 @@ en:
         competitor_limit_reason: "The reason for the competitor limit"
         guests_enabled: "Guests"
         guests_per_registration_limit: "Maximum number of guests per registration"
+        events_per_registration_limit: "Events per registration limit"
         receive_registration_emails: "Notify me by email when someone registers for this competition"
         registration_open: "Registration open"
         registration_close: "Registration close"
@@ -350,8 +351,8 @@ en:
       championship:
         championship_type: "Championship type"
       competition_series:
-        wcif_id: "ID"
-        name: "Name"
+        wcif_id: "Series ID"
+        name: "Series name"
         short_name: "Series nickname"
         competition_ids: "All competitions"
       #context: a registration to a competition
@@ -549,6 +550,7 @@ en:
         competitor_limit: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
         competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
         guests_per_registration_limit: "The number guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
+        events_per_registration_limit: "Optionally enforce the total number of events a competitor can register for (commonly used for \"Favorites\" competitions). You should add events before using this field. Registrations with too many events will be blocked. Leave blank if there is no limit."
         venueAddress: ""
         extra_registration_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
         on_the_spot_registration: ""
@@ -1113,6 +1115,9 @@ en:
       need_country: "Need a country"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
+      exceeds_event_limit:
+        one: "you must register in exactly 1 event"
+        other: "you must register in less than or equal to %{count} events"
       banned_html: "You are banned. If you believe this is an error, please contact the <a href='mailto:disciplinary@worldcubeassociation.org' target='_blank'>WDC</a>."
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
@@ -1406,6 +1411,7 @@ en:
       part_of_a_series: "This competition is part of a Competition Series."
       part_of_a_series_list: "This competition is part of the %{name} Competition Series. Other competitions in this Series are:"
       series_registration_warning_html: "Note: You can submit a registration for all competitions in a Series, but only one of those registrations can be confirmed and accepted. <b>You will only be allowed to compete in one of the Series competitions!</b>"
+      competitor_limit: "Competitor limit"
       competitor_limit_is: "There is a competitor limit of %{competitor_limit} competitors."
       no_competitor_limit: "There is no competitor limit."
       entry_fee_is: "The base registration fee for this competition is %{base_entry_fee}."
@@ -1428,6 +1434,9 @@ en:
       guest_limit:
         one: "Competitors may bring at most 1 guest."
         other: "Competitors may bring at most %{count} guests."
+      event_limit:
+        one: "Competitors may register in exactly 1 event."
+        other: "Competitors may register in at most %{count} events."
       require_qualification: "Competitors may only register for events that they are already qualified for."
       #context: The 'link_here' variable is replaced by a link to show the requirements, with the text "here"
       click_to_display_requirements_html: "This competition is over, click %{link_here} to display the registration requirements it used."
@@ -2531,3 +2540,12 @@ en:
   footer:
     privacy: Privacy
     disclaimer: Disclaimer
+  #context: Key used when describing the API
+  api:
+    manage_oauth_html: 'Go to %{oauth_link} to manage your OAuth applications.'
+    token_request_intro: 'Here is an example, using curl, of obtaining an access token using an Application ID, Client Secret, your WCA email, and your password:'
+    user_email_placeholder: 'YOUR_EMAIL'
+    user_password_placeholder: 'YOUR_PASSWORD'
+    user_info_request_intro: 'An OAuth access token can be used, until it expires, to make authorized API requests. For example, to access information about your account:'
+    legal_tnoodle_api_header: 'Legal TNoodle version'
+

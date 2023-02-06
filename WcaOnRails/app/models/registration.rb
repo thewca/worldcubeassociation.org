@@ -226,6 +226,11 @@ class Registration < ApplicationRecord
   private def user_can_register_for_competition
     if user&.cannot_register_for_competition_reasons.present?
       errors.add(:user_id, user.cannot_register_for_competition_reasons.to_sentence)
+    elsif user&.banned?
+      ban_end = user.current_team_members.select(:team == Team.banned).first.end_date
+      if !ban_end.present? || competition.start_date < ban_end
+        errors.add(:user_id, I18n.t('registrations.errors.banned_html').html_safe)
+      end
     end
   end
 
@@ -240,6 +245,16 @@ class Registration < ApplicationRecord
   private def must_register_for_gte_one_event
     if registration_competition_events.reject(&:marked_for_destruction?).empty?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register'))
+    end
+  end
+
+  validate :must_not_register_for_more_events_than_event_limit
+  private def must_not_register_for_more_events_than_event_limit
+    if !competition.present? || !competition.events_per_registration_limit_enabled?
+      return
+    end
+    if registration_competition_events.reject(&:marked_for_destruction?).length > competition.events_per_registration_limit
+      errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
     end
   end
 
