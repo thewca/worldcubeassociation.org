@@ -52,7 +52,8 @@ class ResultsController < ApplicationController
           #{limit_condition}
         ) top
         JOIN Results result ON result.id = valueAndId % 1000000000
-        ORDER BY value, personName
+        JOIN Competitions competition ON competition.id = result.competitionId
+        ORDER BY value, competition.start_date, personName
       SQL
 
     elsif @is_results
@@ -63,14 +64,14 @@ class ResultsController < ApplicationController
             average value
           FROM Results result
           #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
-          #{@years_condition_competition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
+          JOIN Competitions competition on competition.id = competitionId
           WHERE average > 0
             #{@event_condition}
             #{@years_condition_competition}
             #{@region_condition}
             #{@gender_condition}
           ORDER BY
-            average, personName, competitionId, roundTypeId
+            average, competition.start_date, personName, competitionId, roundTypeId
           #{limit_condition}
         SQL
 
@@ -96,7 +97,8 @@ class ResultsController < ApplicationController
         @query = <<-SQL
           SELECT *
           FROM (#{subquery}) result
-          ORDER BY value, personName, competitionId, roundTypeId
+          JOIN Competitions competition on competition.id = result.competitionId
+          ORDER BY value, competition.start_date, personName, competitionId, roundTypeId
           #{limit_condition}
         SQL
       end
