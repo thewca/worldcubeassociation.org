@@ -587,6 +587,9 @@ class CompetitionsController < ApplicationController
     if current_user.person
       competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
     end
+    # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed. 
+    # For example, mailing all competitors about the cancellation. 
+    # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
     competitions = Competition.includes(:delegate_report, :delegates)
                               .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
                               .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
