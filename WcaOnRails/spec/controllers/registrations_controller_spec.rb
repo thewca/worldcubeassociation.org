@@ -505,6 +505,27 @@ RSpec.describe RegistrationsController do
       expect(response).to redirect_to(competition_path(competition))
       expect(flash[:danger]).to match "You cannot register for this competition"
     end
+
+    it "creates reg when comment is required and present" do
+      competition.force_comment_in_registration = true
+      competition.save!
+      expect do
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "Hvidovre, Denmark" } }
+      end.to change { enqueued_jobs.size }.by(2)
+
+      registration = Registration.find_by_user_id(user.id)
+      expect(registration.competition_id).to eq competition.id
+    end
+
+    it "fails to create reg when comment is required and not present" do
+      competition.force_comment_in_registration = true
+      competition.save!
+      expect do
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: " " } }
+      end.to change { enqueued_jobs.size }.by(0)
+
+      expect(Registration.find_by_user_id(user.id)).to be nil
+    end
   end
 
   context "register" do
