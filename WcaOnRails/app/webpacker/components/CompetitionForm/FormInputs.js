@@ -2,36 +2,23 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-danger */
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 
 import {
   Checkbox,
   Form,
   Input,
 } from 'semantic-ui-react';
+import useInputState from '../../lib/hooks/useInputState';
 import I18n from '../../lib/i18n';
-
-// Modified from '../../lib/hooks/useInputState';
-const useInputState = (defaultVal = undefined) => {
-  const [state, setState] = useState(defaultVal);
-  const updateFromOnChange = useCallback((ev, data = undefined) => {
-    if (data) {
-      setState(data.value);
-    } else {
-      setState(ev);
-    }
-  }, [setState]);
-  return [state, setState, updateFromOnChange];
-};
 
 export function useFormInputState(attribute, currentData, defaultVal = '') {
   const initialValue = currentData[attribute] || defaultVal;
 
-  const [value, setValue, setValueFromChange] = useInputState(initialValue);
+  const [value, setValueFromChange] = useInputState(initialValue);
   return {
     attribute,
     value,
-    setValue,
     onChange: setValueFromChange,
   };
 }

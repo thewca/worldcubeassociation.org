@@ -29,8 +29,8 @@ function DraggableMarker({ latData, longData }) {
     const marker = markerRef.current;
     if (marker == null) return;
     const newPos = marker.leafletElement.getLatLng();
-    latData.setValue(roundToMicrodegrees(newPos.lat));
-    longData.setValue(roundToMicrodegrees(newPos.lng));
+    latData.onChange(roundToMicrodegrees(newPos.lat));
+    longData.onChange(roundToMicrodegrees(newPos.lng));
   };
 
   return (
@@ -62,8 +62,8 @@ function GeoSearchControl({ latData, longData }) {
     map.addControl(searchControl);
     map.on('geosearch/showlocation', (e) => {
       if (!e.location) return;
-      latData.setValue(roundToMicrodegrees(e.location.y));
-      longData.setValue(roundToMicrodegrees(e.location.x));
+      latData.onChange(roundToMicrodegrees(e.location.y));
+      longData.onChange(roundToMicrodegrees(e.location.x));
     });
 
     return () => {
