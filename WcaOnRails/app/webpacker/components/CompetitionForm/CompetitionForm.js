@@ -1,3 +1,4 @@
+// TODO: Switch to single line eslint disable / Find a better way of handling
 /* eslint-disable react/no-danger */
 import React from 'react';
 import {
@@ -107,14 +108,14 @@ export default function CompetitionForm({
   return (
     <>
       <Form>
-        {competition.persisted && adminView ? <AdminView competition={competition} /> : null}
-        {competition.persisted && !adminView ? (
+        {competition.persisted && adminView && <AdminView competition={competition} />}
+        {competition.persisted && !adminView && (
           <AnnouncementDetails
             competition={competition}
             confirmed={isActuallyConfirmed}
             mail={mailToWCAT}
           />
-        ) : null}
+        )}
 
         <InputString inputState={idData} />
         <InputString inputState={nameData} />

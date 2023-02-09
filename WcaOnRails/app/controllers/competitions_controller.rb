@@ -365,7 +365,7 @@ class CompetitionsController < ApplicationController
     render :new
   end
 
-  def comeptition_form_nearby_json(c)
+  def competition_form_nearby_json(c)
     if current_user.can_admin_results?
       compLink = ActionController::Base.helpers.link_to(c.name, admin_edit_competition_path(c.id), target: "_blank")
     else
@@ -408,14 +408,14 @@ class CompetitionsController < ApplicationController
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @nearby_competitions = get_nearby_competitions(@competition)
 
-    render json: @nearby_competitions.map { |c| comeptition_form_nearby_json(c) }
+    render json: @nearby_competitions.map { |c| competition_form_nearby_json(c) }
   end
 
   def series_eligible_competitions_json
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
     @series_eligible_competitions = get_series_eligible_competitions(@competition)
-    render json: @series_eligible_competitions.map { |c| comeptition_form_nearby_json(c) }
+    render json: @series_eligible_competitions.map { |c| competition_form_nearby_json(c) }
   end
 
   def series_eligible_competitions

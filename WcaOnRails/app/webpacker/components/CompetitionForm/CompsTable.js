@@ -44,11 +44,11 @@ function CompsTableContent({ nearby, action }) {
       <Table.HeaderCell name="competitors" width={1}>
         {I18n.t('competitions.adjacent_competitions.competitors')}
       </Table.HeaderCell>
-      {showEvents ? (
+      {showEvents && (
         <Table.HeaderCell name="events" width={2}>
           {I18n.t('competitions.adjacent_competitions.events')}
         </Table.HeaderCell>
-      ) : null}
+      )}
     </Table.Row>
   );
 
@@ -56,8 +56,8 @@ function CompsTableContent({ nearby, action }) {
     <Table.Row key={comp.name} warning={!comp.danger} error={comp.danger}>
       <Table.Cell name="name" width={3}>
         <span dangerouslySetInnerHTML={{ __html: comp.nameLink }} />
-        {comp.confirmed ? null : <NotConfirmedIcon />}
-        {action ? (
+        {comp.confirmed && <NotConfirmedIcon />}
+        {action && (
           <>
             <br />
             <Button
@@ -67,7 +67,7 @@ function CompsTableContent({ nearby, action }) {
               {action.label}
             </Button>
           </>
-        ) : null}
+        )}
       </Table.Cell>
       <Table.Cell name="delegates" width={2}>
         <span dangerouslySetInnerHTML={{ __html: comp.delegates }} />
@@ -89,11 +89,11 @@ function CompsTableContent({ nearby, action }) {
       <Table.Cell name="competitors" width={1}>
         {comp.competitors ? comp.competitors : ''}
       </Table.Cell>
-      {showEvents ? (
+      {showEvents && (
         <Table.Cell name="events" width={2}>
           {comp.events.map((e) => <span key={e} dangerouslySetInnerHTML={{ __html: e }} />)}
         </Table.Cell>
-      ) : null}
+      )}
     </Table.Row>
   );
 
@@ -126,8 +126,8 @@ function CompsTableContent({ nearby, action }) {
 function MissingInfo({ missingDate, missingLocation }) {
   return (
     <Message negative>
-      {missingDate ? (<p>{I18n.t('competitions.adjacent_competitions.no_date_yet')}</p>) : null}
-      {missingLocation ? (<p>{I18n.t('competitions.adjacent_competitions.no_location_yet')}</p>) : null}
+      {missingDate && (<p>{I18n.t('competitions.adjacent_competitions.no_date_yet')}</p>)}
+      {missingLocation && (<p>{I18n.t('competitions.adjacent_competitions.no_location_yet')}</p>)}
     </Message>
   );
 }

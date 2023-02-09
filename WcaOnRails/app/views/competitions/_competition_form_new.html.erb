@@ -1,6 +1,6 @@
 <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).confirmed? : false %>
 <% mail_to_wcat = mail_to Team.wcat.email, t("competitions.competition_form.wcat"), target: "_blank" %>
-<%= react_component("CompetitionForm", {
+<%= react_component("CompetitionForm/CompetitionForm", {
     competition: {
       persisted: @competition.persisted?,
       confirmed: @competition.confirmed?,

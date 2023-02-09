@@ -69,7 +69,7 @@ function GeoSearchControl({ latData, longData }) {
     return () => {
       map.removeControl(searchControl);
     };
-  }, []);
+  }, [map]);
 
   return null;
 }
