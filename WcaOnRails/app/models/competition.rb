@@ -1751,15 +1751,13 @@ class Competition < ApplicationRecord
       local_assignments = []
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
       # If no registration is found, assume that this is a non-competing staff member being added.
-      if !registration
-        registration = registrations.create(
-          competition: self,
-          user_id: wcif_person["wcaUserId"],
-          created_at: DateTime,
-          updated_at: DateTime,
-          non_competing_staff: true,
-        )
-      end
+      registration ||= registrations.create(
+        competition: self,
+        user_id: wcif_person["wcaUserId"],
+        created_at: DateTime,
+        updated_at: DateTime,
+        non_competing_staff: true,
+      )
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]
         roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
