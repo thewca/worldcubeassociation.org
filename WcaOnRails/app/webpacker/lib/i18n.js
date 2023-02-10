@@ -1,7 +1,5 @@
 import { I18n } from 'i18n-js';
 
-const i18nFileContext = require.context('rails_translations');
-
 const DEFAULT_LOCALE = 'en';
 
 /**
@@ -46,7 +44,7 @@ window.I18n.tArray = tArray;
 export default window.I18n;
 
 function loadTranslations(i18n, locale) {
-  const translations = i18nFileContext(`./${locale}.json`);
+  const translations = import(`../rails_translations/${locale}.json`)
   i18n.store(translations);
 }
 
