@@ -2434,7 +2434,7 @@ en:
       content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). However, this is rarely enough time. You should consider everything that will go into organizing your competition, and give yourself enough time to prepare. Also, the WCAT will need time to review your competition before it is announced. Consult with your delegate if you are unsure about how much time will be needed."
     paragraph4:
       title: "Proximity policy"
-      content1: "WCA competitions will be accepted if they are at least 100 km or 19 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 100 km and the time between them is less than 19 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
+      content1: "WCA competitions will be accepted if they are at least 10 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 10 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
         '1': "The two competitions don't have events in common."
         '2': "The two competitions take place in different countries."
@@ -2445,7 +2445,7 @@ en:
           alist1:
             '1a': "Time frames when both are celebrated can’t overlap."
         '2':
-          content1: "If any location of such competitions is closer than 100 km to any other regular competition, then"
+          content1: "If any location of such competitions is closer than 10 km to any other regular competition, then"
           alist1:
             '2a': "both competitions should be at least 5 days apart, or"
             '2b': "the other competition must not have the 3x3x3 Fewest Moves event."
