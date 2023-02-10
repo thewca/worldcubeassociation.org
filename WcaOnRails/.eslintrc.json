@@ -13,6 +13,7 @@
         "SharedArrayBuffer": "readonly",
         "_": true
     },
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
