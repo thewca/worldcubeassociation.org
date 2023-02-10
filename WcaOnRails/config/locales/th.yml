@@ -194,10 +194,10 @@ th:
       #original_hash: 672b22c
       cellName: รอบชิงชนะเลิศ
     g:
-      #original_hash: ccf6f8e
-      name: รอบที่สาม
-      #original_hash: ccf6f8e
-      cellName: รอบที่สาม
+      #original_hash: e2f74d2
+      name: รอบรองชนะเลิศ
+      #original_hash: e2f74d2
+      cellName: รอบรองชนะเลิศ
     h:
       #original_hash: 4d618bb
       name: รอบคัดเลือก
@@ -513,6 +513,8 @@ th:
         enable_donations: ฉันต้องการเปิดรับบริจาคนอกหนือจากค่าสมัคร
         #original_hash: 556fda0
         extra_registration_requirements: ข้อกำหนดการลงทะเบียนเพิ่มเติม
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: บังคับให้ผู้เข้าแข่งขันใส่ข้อความในช่องอธิบายเพิ่มเติม
         #original_hash: 2529d04
         on_the_spot_registration: เปิดรับสมัครที่การแข่งขัน
         #original_hash: 69780b5
@@ -553,10 +555,10 @@ th:
         #original_hash: 4baf44b
         championship_type: ประเภทการแข่งขันชิงแชมป์
       competition_series:
-        #original_hash: 89f89c0
-        wcif_id: ID
-        #original_hash: 709a232
-        name: ชื่อ
+        #original_hash: e2b4898
+        wcif_id: ID ของซีรียส์
+        #original_hash: 75ceb67
+        name: ชื่อของซีรียส์
         #original_hash: 8a6bee1
         short_name: ชื่อเล่น
         #original_hash: af3d38e
@@ -1004,6 +1006,8 @@ th:
         event_restrictions_reason: >-
           โปรดอธิบายรายละเอียดที่นี่ ทำไมคุณต้องการจำกัดการสมัครบางประเภท
           กรุณากรอกเป็นภาษาอังกฤษ!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: ผู้ชนะการแข่งขันประเภทนี้ จะถือว่าเป็นผู้ชนะการแข่งขันนี้
         #original_hash: da39a3e
@@ -2080,6 +2084,11 @@ th:
       series_more_than_one_accepted: คุณสามารถเข้าร่วมการแข่งขันซีรีส์ได้ครั้งละหนึ่งรายการเท่านั้น
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: คุณไม่สามารถลงทะเบียนประเภทการแข่งขันที่คุณไม่ผ่านการคัดเลือกได้
+      #original_hash: 812cd02
+      cannot_register_without_comment: >-
+        คุณจำเป็นต้องใส่ข้อความในช่องอธิบายเพิ่มเติม
+        กรุณาอ่านข้อกำหนดการสมัครการแข่งขันว่าต้องใส่ข้อความอะไร (เช่น
+        สถานที่ที่คุณเข้าแข่งขันในการแข่งขัน FMC หลายสถานที่)
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -5008,3 +5017,21 @@ th:
     privacy: ความเป็นส่วนตัว
     #original_hash: 4c4a2e8
     disclaimer: ข้อจำกัดความรับผิดชอบ
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'ไปที่ %{oauth_link} เพื่อจัดการ OAuth applications ของคุณ'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      นี่คือตัวอย่าง, การ curl, ในการรับ token การเข้าถึงโดยใช้ Application ID,
+      Client Secret, your WCA email, and your password:
+    #original_hash: 59d8cf3
+    user_email_placeholder: YOUR_EMAIL
+    #original_hash: 981eb7e
+    user_password_placeholder: YOUR_PASSWORD
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      สามารถใช้ token การเข้าถึง OAuth เพื่อสร้างคำขอ API
+      ที่ได้รับอนุญาตได้จนกว่าจะหมดอายุ ตัวอย่างเช่น
+      ในการเข้าถึงข้อมูลเกี่ยวกับบัญชีของคุณ:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Legal TNoodle version
