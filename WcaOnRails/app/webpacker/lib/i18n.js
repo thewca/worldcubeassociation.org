@@ -46,7 +46,7 @@ export default window.I18n;
 function loadTranslations(i18n, locale) {
   import(`../rails_translations/${locale}.json`).then((translations) => {
     i18n.store(translations);
-  })
+  });
 }
 
 // store the actual translations.
