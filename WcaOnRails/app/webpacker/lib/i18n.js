@@ -44,8 +44,9 @@ window.I18n.tArray = tArray;
 export default window.I18n;
 
 function loadTranslations(i18n, locale) {
-  const translations = import(`../rails_translations/${locale}.json`)
-  i18n.store(translations);
+  import(`../rails_translations/${locale}.json`).then((translations) => {
+    i18n.store(translations);
+  })
 }
 
 // store the actual translations.
