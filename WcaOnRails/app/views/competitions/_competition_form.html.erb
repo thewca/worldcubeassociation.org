@@ -337,6 +337,8 @@
         <%= f.input :event_restrictions_reason %>
         <%= f.input :events_per_registration_limit %>
 
+        <%= f.input :force_comment_in_registration %>
+
         <% if !@competition.being_cloned_from.present? && @competition.events.any? %>
           <hr>
           <%= f.input :main_event_id do %>
