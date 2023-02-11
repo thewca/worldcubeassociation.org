@@ -42,7 +42,7 @@ class ResultsController < ApplicationController
         FROM (
           SELECT
             result.*,
-            result.#{value} value
+            result.#{value} value,
             RANK() over (order by result.#{value}) rnk
           FROM (
             SELECT MIN(valueAndId) valueAndId
@@ -73,8 +73,8 @@ class ResultsController < ApplicationController
           FROM (
             SELECT
               result.*,
-              average value
-            RANK() over (order by average) rnk
+              average value,
+              RANK() over (order by average) rnk
             FROM Results result
             #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
             JOIN Competitions competition on competition.id = competitionId
