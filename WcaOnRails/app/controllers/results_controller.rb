@@ -29,50 +29,65 @@ class ResultsController < ApplicationController
     @show = splitted_show_param[0].to_i
     @is_persons = splitted_show_param[1] == "persons"
     @is_results = splitted_show_param[1] == "results"
-    limit_condition = "LIMIT #{@show}"
+    expanded_limit_condition = "LIMIT #{@show * 2}"
 
     @cache_params = ['rankings', params[:event_id], params[:region], params[:years], params[:show], params[:gender], params[:type]]
 
     if @is_persons
+
       @query = <<-SQL
         SELECT
-          result.*,
-          result.#{value} value
+          *,
+          rnk
         FROM (
-          SELECT MIN(valueAndId) valueAndId
-          FROM Concise#{capitalized_type_param}Results result
-          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
-          WHERE #{value} > 0
-            #{@event_condition}
-            #{@years_condition_result}
-            #{@region_condition}
-            #{@gender_condition}
-          GROUP BY personId
-          ORDER BY valueAndId
-          #{limit_condition}
-        ) top
-        JOIN Results result ON result.id = valueAndId % 1000000000
-        JOIN Competitions competition ON competition.id = result.competitionId
-        ORDER BY value, competition.start_date, personName
+          SELECT
+            result.*,
+            result.#{value} value
+            RANK() over (order by result.#{value}) rnk
+          FROM (
+            SELECT MIN(valueAndId) valueAndId
+            FROM Concise#{capitalized_type_param}Results result
+            #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
+            WHERE #{value} > 0
+              #{@event_condition}
+              #{@years_condition_result}
+              #{@region_condition}
+              #{@gender_condition}
+            GROUP BY personId
+            ORDER BY valueAndId
+            #{expanded_limit_condition}
+          ) top
+          JOIN Results result ON result.id = valueAndId % 1000000000
+          JOIN Competitions competition ON competition.id = result.competitionId
+          order by value, competition.start_date, result.personName
+        ) ranked
+        WHERE rnk <= #{@show}
       SQL
 
     elsif @is_results
       if @is_average
         @query = <<-SQL
           SELECT
-            result.*,
-            average value
-          FROM Results result
-          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
-          JOIN Competitions competition on competition.id = competitionId
-          WHERE average > 0
-            #{@event_condition}
-            #{@years_condition_competition}
-            #{@region_condition}
-            #{@gender_condition}
-          ORDER BY
-            average, competition.start_date, personName, competitionId, roundTypeId
-          #{limit_condition}
+            *,
+            rnk
+          FROM (
+            SELECT
+              result.*,
+              average value
+            RANK() over (order by average) rnk
+            FROM Results result
+            #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
+            JOIN Competitions competition on competition.id = competitionId
+            WHERE average > 0
+              #{@event_condition}
+              #{@years_condition_competition}
+              #{@region_condition}
+              #{@gender_condition}
+            ORDER BY
+              average, competition.start_date, personName, competitionId, roundTypeId
+            #{expanded_limit_condition}
+          ) ranked
+          WHERE rnk <= #{@show}
         SQL
 
       else
@@ -90,43 +105,59 @@ class ResultsController < ApplicationController
               #{@region_condition}
               #{@gender_condition}
             ORDER BY value
-            #{limit_condition}
+            #{expanded_limit_condition}
           SQL
         end
         subquery = "(" + subqueries.join(") UNION ALL (") + ")"
         @query = <<-SQL
-          SELECT *
-          FROM (#{subquery}) result
-          JOIN Competitions competition on competition.id = result.competitionId
-          ORDER BY value, competition.start_date, personName, competitionId, roundTypeId
-          #{limit_condition}
+          SELECT
+            *,
+            rnk
+          FROM (
+            SELECT
+              *,
+              RANK() OVER (ORDER BY result.value) rnk
+            FROM (#{subquery}) result
+            JOIN Competitions competition on competition.id = result.competitionId
+            ORDER BY value, competition.start_date, personName, competitionId, roundTypeId
+            #{expanded_limit_condition}
+          ) ranked
+          WHERE rnk <= #{@show}
         SQL
       end
     elsif @is_by_region
       @query = <<-SQL
         SELECT
-          result.*,
-          result.#{value} value
+          *,
+          rnk
         FROM (
           SELECT
-            result.countryId recordCountryId,
-            MIN(#{value}) recordValue
-          FROM Concise#{capitalized_type_param}Results result
+          result.*,
+          result.#{value} value,
+          RANK() over (order by result.#{value}) rnk
+          FROM (
+            SELECT
+              result.countryId recordCountryId,
+              MIN(#{value}) recordValue
+            FROM Concise#{capitalized_type_param}Results result
+            #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
+            WHERE 1
+              #{@event_condition}
+              #{@years_condition_result}
+              #{@gender_condition}
+            GROUP BY result.countryId
+          ) record
+          JOIN Results result ON result.#{value} = recordValue AND result.countryId = recordCountryId
+          JOIN Competitions competition on competition.id = competitionId
           #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
           WHERE 1
             #{@event_condition}
-            #{@years_condition_result}
+            #{@years_condition_competition}
             #{@gender_condition}
-          GROUP BY result.countryId
-        ) record
-        JOIN Results result ON result.#{value} = recordValue AND result.countryId = recordCountryId
-        JOIN Competitions competition on competition.id = competitionId
-        #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.id and persons.subId = 1" : ""}
-        WHERE 1
-          #{@event_condition}
-          #{@years_condition_competition}
-          #{@gender_condition}
-        ORDER BY value, countryId, start_date, personName
+          ORDER BY value, countryId, start_date, personName
+          #{expanded_limit_condition}
+        ) ranked
+        WHERE rnk <= #{@show}
       SQL
 
     else
