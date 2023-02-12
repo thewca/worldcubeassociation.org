@@ -374,11 +374,11 @@ de:
       #original_hash: 89ff312
       owner: Eigentümer
       #original_hash: 557031c
-      application_id: Anwendungs-ID
+      application_id: Application ID
       #original_hash: c3cd636
       actions: Aktionen
       #original_hash: f4e7a87
-      secret: Geheim
+      secret: Client Secret
       #original_hash: c23540e
       scopes: Scopes
       #original_hash: 3b0d449
@@ -525,6 +525,10 @@ de:
         enable_donations: Ich möchte zusätzlich zu den Eintrittsgebühren Spenden ermöglichen
         #original_hash: 556fda0
         extra_registration_requirements: Zusätzliche Bedingungen für die Registrierung
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: >-
+          Zwinge Teilnehmer dazu, bei der Anmeldung einen Kommentar zu
+          hinterlassen
         #original_hash: 2529d04
         on_the_spot_registration: Vor-Ort Registrierung
         #original_hash: 69780b5
@@ -1045,6 +1049,8 @@ de:
         event_restrictions_reason: >-
           Bitte erläutere hier, warum du die Anmeldung bestimmter
           Eventkombinationen verbieten willst. Bitte fülle dies in Englisch aus!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: Der Gewinner dieses Events ist der Gewinner der Competition.
         #original_hash: da39a3e
@@ -2253,6 +2259,12 @@ de:
       can_only_register_for_qualified_events: >-
         Du kannst dich nicht für Events anmelden, für die du nicht qualifiziert
         bist.
+      #original_hash: 812cd02
+      cannot_register_without_comment: >-
+        Du musst einen Kommentar hinterlassen. Stelle sicher, dass du die
+        Anmeldevoraussetzungen gelesen hast und alle Details angegeben hast
+        (z.B. für einen Fewest Moves Multi-Location Wettbewerb angegeben hast,
+        an welchem Ort du teilnehmen wirst).
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
