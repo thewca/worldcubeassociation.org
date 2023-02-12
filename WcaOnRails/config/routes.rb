@@ -259,6 +259,7 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
+      get '/countries' => 'api#countries'
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'
