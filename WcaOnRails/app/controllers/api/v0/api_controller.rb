@@ -213,4 +213,45 @@ class Api::V0::ApiController < ApplicationController
   def countries
     render json: Country.all
   end
+
+  def results
+    unless params[:competition_ids] || (params[:start_date] && params[:end_date])
+      render status: :bad_request, json: { error: "No competition_ids or start/end dates specified" }
+      return
+    end
+
+    if params[:start_date] && params[:end_date]
+      
+      competitions = Competition.where(["start_date >= ? AND start_date <= ?", params[:start_date], params[:end_date]])
+      competition_ids = competitions.pluck(:id)        
+      puts competition_ids
+    end
+
+    if params[:competition_ids]
+      # We don't want to return results for competitions that are not visible to the public.
+      competition_ids = params[:competition_ids].split(",")
+    end
+
+    if competition_ids.empty?
+      render status: :not_found, json: { results: [] }
+      return
+    end
+
+    if competition_ids.length > 50 && !(params[:event_id] || params[:personId])
+      render status: :bad_request, json: { error: "Too many results requested" }
+      return
+    end    
+    
+    results = Result.where(competitionId: competition_ids)
+
+    if params[:event_id]
+      results = results.where(eventId: params[:event_id])
+    end
+
+    if params[:personId]
+      results = results.where(personId: params[:personId])
+    end
+
+    render json: results
+  end
 end
