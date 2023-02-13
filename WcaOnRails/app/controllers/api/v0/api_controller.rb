@@ -237,7 +237,7 @@ class Api::V0::ApiController < ApplicationController
       return
     end
 
-    if competition_ids.length > 50 && !(params[:event_id] || params[:personId])
+    if competition_ids.length > 50 && !(params[:event_id] || params[:person_id])
       render status: :bad_request, json: { error: "Too many results requested" }
       return
     end    
