@@ -36,7 +36,7 @@ export default function qualificationResultTypeField({
   return (
     <Form.Field inline>
       <Label>
-        Result Type
+        {i18n.t('qualification.result_type')}
       </Label>
       <Form.Input
         as={qualificationResultTypeInput}
