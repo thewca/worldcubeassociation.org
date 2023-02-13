@@ -221,10 +221,8 @@ class Api::V0::ApiController < ApplicationController
     end
 
     if params[:start_date] && params[:end_date]
-      
       competitions = Competition.where(["start_date >= ? AND start_date <= ?", params[:start_date], params[:end_date]])
-      competition_ids = competitions.pluck(:id)        
-      puts competition_ids
+      competition_ids = competitions.pluck(:id)
     end
 
     if params[:competition_ids]
@@ -240,8 +238,8 @@ class Api::V0::ApiController < ApplicationController
     if competition_ids.length > 50 && !(params[:event_id] || params[:person_id])
       render status: :bad_request, json: { error: "Too many results requested" }
       return
-    end    
-    
+    end
+
     results = Result.where(competitionId: competition_ids)
 
     if params[:event_id]
