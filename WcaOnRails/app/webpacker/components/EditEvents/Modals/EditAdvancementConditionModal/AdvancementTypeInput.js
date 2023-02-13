@@ -20,6 +20,7 @@ export function AdvancementTypeInput({
       onChange={onChange}
       options={AdvancementTypeOptions}
       openOnFocus={false}
+      name="advancementType"
     />
   );
 }

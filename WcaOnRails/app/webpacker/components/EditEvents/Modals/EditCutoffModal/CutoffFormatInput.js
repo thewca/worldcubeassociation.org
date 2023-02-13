@@ -29,6 +29,7 @@ export function CutoffFormatInput({
       onChange={onChange}
       options={cutoffFormatOptions}
       openOnFocus={false}
+      name="cutoffFormat"
     />
   );
 }

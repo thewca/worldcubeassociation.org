@@ -17,6 +17,7 @@ export function qualificationTypeInput({
       onChange={onChange}
       options={QualificationTypeOptions}
       openOnFocus={false}
+      name="qualificationType"
     />
   );
 }

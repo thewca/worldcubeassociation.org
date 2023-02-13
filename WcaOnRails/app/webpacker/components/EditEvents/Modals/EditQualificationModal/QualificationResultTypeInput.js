@@ -17,6 +17,7 @@ export function qualificationResultTypeInput({
 }) {
   return (
     <Form.Select
+      name="qualificationResultType"
       value={qualificationResultType}
       onChange={onChange}
       options={

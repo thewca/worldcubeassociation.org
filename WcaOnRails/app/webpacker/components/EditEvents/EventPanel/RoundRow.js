@@ -53,6 +53,7 @@ export default function RoundRow({
   return (
     <Table.Row
       verticalAlign="middle"
+      name={`round-${roundNumber}`}
     >
       <Table.Cell className="round-row__index">
         {wcifRound.id.split('-')[1].replace('r', '')}
@@ -86,7 +87,7 @@ export default function RoundRow({
       </Table.Cell>
 
       {event.canChangeTimeLimit && (
-        <Table.Cell>
+        <Table.Cell className="round-row__time-limit">
           <EditTimeLimitModal
             wcifEvent={wcifEvent}
             wcifRound={wcifRound}
@@ -97,7 +98,7 @@ export default function RoundRow({
       )}
 
       {event.canHaveCutoff && (
-        <Table.Cell>
+        <Table.Cell className="round-row__cutoff">
           <EditCutoffModal
             wcifEvent={wcifEvent}
             wcifRound={wcifRound}
@@ -107,7 +108,7 @@ export default function RoundRow({
         </Table.Cell>
       )}
 
-      <Table.Cell>
+      <Table.Cell className="round-row_advancementCondition">
         {!isLastRound && (
           <EditAdvancementConditionModal
             wcifEvent={wcifEvent}

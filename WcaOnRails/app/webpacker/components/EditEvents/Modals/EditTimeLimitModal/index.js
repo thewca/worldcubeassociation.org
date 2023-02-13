@@ -59,7 +59,7 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
   );
 
   const reset = () => {
-    setCentiseconds(timeLimit?.centiSeconds ?? 0);
+    setCentiseconds(timeLimit?.centiseconds ?? 0);
     setCumulativeRoundIds(timeLimit?.cumulativeRoundIds ?? []);
   };
 
