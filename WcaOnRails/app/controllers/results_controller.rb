@@ -57,9 +57,7 @@ class ResultsController < ApplicationController
     if @is_persons
 
       @query = <<-SQL
-        SELECT
-          *,
-          rnk
+        SELECT *
         FROM (
           SELECT
             #{result_select},
@@ -88,9 +86,7 @@ class ResultsController < ApplicationController
     elsif @is_results
       if @is_average
         @query = <<-SQL
-          SELECT
-            *,
-            rnk
+          SELECT *
           FROM (
             SELECT
               #{result_select},
@@ -131,9 +127,7 @@ class ResultsController < ApplicationController
         end
         subquery = "(" + subqueries.join(") UNION ALL (") + ")"
         @query = <<-SQL
-          SELECT
-            *,
-            rnk
+          SELECT *
           FROM (
             SELECT
               #{result_select},
@@ -148,9 +142,7 @@ class ResultsController < ApplicationController
       end
     elsif @is_by_region
       @query = <<-SQL
-        SELECT
-          *,
-          rnk
+        SELECT *
         FROM (
           SELECT
           #{result_select},
