@@ -31,6 +31,27 @@ class ResultsController < ApplicationController
     @is_results = splitted_show_param[1] == "results"
     expanded_limit_condition = "LIMIT #{@show * 2}"
 
+    # Required fields gotten from LightResult
+    result_select = "
+      result.id,
+      result.value1,
+      result.value2,
+      result.value3,
+      result.value4,
+      result.value5,
+      result.best,
+      result.average,
+      result.personName,
+      result.pos,
+      result.personId,
+      result.regionalSingleRecord,
+      result.regionalAverageRecord,
+      result.countryId,
+      result.formatId,
+      result.roundTypeId,
+      result.eventId
+    "
+
     @cache_params = ['rankings', params[:event_id], params[:region], params[:years], params[:show], params[:gender], params[:type]]
 
     if @is_persons
@@ -41,7 +62,7 @@ class ResultsController < ApplicationController
           rnk
         FROM (
           SELECT
-            result.*,
+            #{result_select},
             result.#{value} value,
             RANK() over (order by result.#{value}) rnk
           FROM (
@@ -72,7 +93,7 @@ class ResultsController < ApplicationController
             rnk
           FROM (
             SELECT
-              result.*,
+              #{result_select},
               average value,
               RANK() over (order by average) rnk
             FROM Results result
@@ -115,7 +136,7 @@ class ResultsController < ApplicationController
             rnk
           FROM (
             SELECT
-              *,
+              #{result_select},
               RANK() OVER (ORDER BY result.value) rnk
             FROM (#{subquery}) result
             JOIN Competitions competition on competition.id = result.competitionId
@@ -132,7 +153,7 @@ class ResultsController < ApplicationController
           rnk
         FROM (
           SELECT
-          result.*,
+          #{result_select},
           result.#{value} value,
           RANK() over (order by result.#{value}) rnk
           FROM (
