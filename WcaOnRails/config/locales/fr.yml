@@ -1464,7 +1464,7 @@ fr:
         Bon retour parmi nous ! Pour créer votre compte sur le site de la WCA,
         nous avons besoin de connaître l'ID WCA avec lequel vous avez participé.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Bienvenue ! Avant que vous puissiez participer à votre première
         compétition WCA, nous avons besoin de plus d'informations pour vous
         identifier. Merci de noter que votre date de naissance ne sera jamais

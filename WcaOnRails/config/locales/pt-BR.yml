@@ -1539,7 +1539,7 @@ pt-BR:
         Bem-vindo de volta! Para criar sua conta no site da WCA, precisamos do
         seu ID WCA.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Bem-vindo! Antes de participar de sua primeira competição da WCA,
         precisamos de algumas informações. Sua data de nascimento nunca será
         divulgada sem sua permissão.

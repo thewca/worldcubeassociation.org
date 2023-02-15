@@ -829,7 +829,7 @@ en:
       have_never_competed: "I have never competed in a WCA competition."
       let_us_know: "Please let us know if you have competed in a WCA competition before."
       welcome_back: "Welcome back! To create your WCA website account, we need to know the WCA ID under which you competed."
-      welcome: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes. Please note that your birthdate will never be released without your permission.<br/>If you are signing up on someone else's behalf, please provide the details of the <strong>competitor</strong>."
+      welcome_html: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes. Please note that your birthdate will never be released without your permission.<br/>If you are signing up on someone else's behalf, please provide the details of the <strong>competitor</strong>."
   layouts:
     #context: This key belongs to the navigation bar
     navigation:

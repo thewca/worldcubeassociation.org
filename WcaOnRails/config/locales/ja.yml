@@ -1240,7 +1240,7 @@ ja:
       #original_hash: f9f512b
       welcome_back: こんにちは！WCA アカウントの作成には WCA ID が必要です。
       #original_hash: 669fb57
-      welcome: はじめまして！はじめに、個人情報収集についてご確認ください。生年月日は本人の許可なく公開されることはありません。
+      welcome_html: はじめまして！はじめに、個人情報収集についてご確認ください。生年月日は本人の許可なく公開されることはありません。
   layouts:
     navigation:
       #original_hash: 0eb5ed5

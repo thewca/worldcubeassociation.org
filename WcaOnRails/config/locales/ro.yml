@@ -1563,7 +1563,7 @@ ro:
         Bine ai revenit! Pentru a-ți crea contul WCA trebuie să știm Id-ul WCA
         cu care ai participat la competiții.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Bine ai venit! înainte de a participa în prima ta competiție WCA avem
         nevoie de câteva informații pentru a putea înregistra rezultatele tale.
         Te asigurăm că data nașterii tale nu va fi niciodată vizibilă fără

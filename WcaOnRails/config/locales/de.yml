@@ -1599,7 +1599,7 @@ de:
         Willkommen zurück! Um Dein WCA-Benutzerkonto zu erstellen, müssen wir
         die WCA-ID kennen, mit der Du teilgenommen hast.
       #original_hash: 3b2bcea
-      welcome: >-
+      welcome_html: >-
         Willkommen! Bevor Du an deinem ersten WCA-Wettbewerb teilnehmen kannst,
         brauchen wir ein paar zusätzliche Informationen zur Verwaltung der
         Ergebnisse. Bitte beachte, dass Dein Geburtsdatum nie ohne Dein

@@ -1212,7 +1212,7 @@ vi:
         Chào mừng trở lại! Để tạo tài khoản trên trang web WCA, chúng tôi cần
         biết ID WCA mà bạn đã sử dụng để thi đấu.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Chào mừng! Trước khi tham gia giải đấu WCA đầu tiên của bạn, chúng tôi
         cần một số thông tin bổ sung cho việc lưu trữ dữ liệu. Xin chú ý ngày
         sinh của bạn sẽ không bao giờ được công khai nếu không có sự đồng ý của

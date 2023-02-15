@@ -1479,7 +1479,7 @@ fi:
         Tervetuloa takaisin! Luodaksesi tilin WCA-sivustolle, meidän täytyy
         tietää WCA ID, jolla olet kilpaillut.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Tervetuloa! Ennen kuin voit kilpailla ensimmäisessä WCA-kilpailussasi,
         tarvitsemme hieman lisätietoa kirjaamistarkoitukseen. Huomioithan, että
         syntymäaikaasi ei ikinä julkisteta ilman lupaasi.
