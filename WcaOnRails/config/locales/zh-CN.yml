@@ -1043,7 +1043,7 @@ zh-CN:
       #original_hash: 3b2bcea
       welcome_html: >-
         欢迎！在你参加第一场 WCA
-        比赛之前，我们需要一些额外信息。除非你同意，否则你的生日永远不会公开。<br/>如果你帮助其他人报名，请提供<strong>参赛者</strong>的详细信息。
+        比赛之前，我们需要一些额外信息。除非你同意，否则你的生日永远不会公开。<br/><br/>如果你帮助其他人报名，请提供<strong>参赛者</strong>的详细信息。
   layouts:
     navigation:
       #original_hash: 0eb5ed5

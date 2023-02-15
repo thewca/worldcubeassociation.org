@@ -1539,7 +1539,7 @@ eo:
       welcome_html: >-
         Bonvenon! Antaŭ ol konkursi en via unua konkurso de la WCA, ni bezonas
         kromajn informaciojn por datumrikordaj celoj. Atentu ke via naskiĝtago
-        neniam estos publikigita sen via konsento.<br/>Se vi aliĝas nome de iu
+        neniam estos publikigita sen via konsento.<br/><br/>Se vi aliĝas nome de iu
         alia, bonvolu doni la detalojn de la <strong>konkursanto</strong>.
   layouts:
     navigation:

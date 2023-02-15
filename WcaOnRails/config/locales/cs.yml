@@ -1554,7 +1554,7 @@ cs:
         Vítejte! Předtím, než budete moct soutěžit na vaší první soutěži WCA,
         potřebujeme nějaké informace, abychom mohli uchovávat rekordy.
         Upozorňujeme, že vaše datum narození nebude nikdy zveřejněno bez vašeho
-        souhlasu. </br> Pokud se přihlašujete za někoho jiného, zadejte údaje
+        souhlasu.<br/><br/>Pokud se přihlašujete za někoho jiného, zadejte údaje
         <strong>soutěžícího</strong>.
   layouts:
     navigation:
