@@ -47,8 +47,8 @@ function loadTranslations(i18n, locale) {
   import(`../rails_translations/${locale}.json`).then((translations) => {
     i18n.store(translations);
   }).catch((err) => {
-    if(err){
-      console.error(`Could not load translations because of ${err}, if this is test this is intended`)
+    if(err) {
+      console.error(`Could not load translations because of ${err}, if this is test this is intended`);
     }
   });
 }
