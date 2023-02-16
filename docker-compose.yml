@@ -9,6 +9,7 @@ services:
     environment:
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
+      REDIS_URL: redis://wca_redis:6379/0
     working_dir: /app/WcaOnRails
     volumes:
       - .:/app
@@ -69,10 +70,23 @@ services:
     networks:
       - wca-main
 
+  wca_redis:
+    image: redis:7.0
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - cache:/data
+    networks:
+      - wca-main
+
 volumes:
   wca_db_volume:
     driver: local
   gems_volume:
+    driver: local
+  cache:
     driver: local
 
 networks:
