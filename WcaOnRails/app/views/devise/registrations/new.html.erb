@@ -9,44 +9,51 @@
         <%= f.input :password, required: true %>
         <%= f.input :password_confirmation, required: true %>
 
+        <label for="have-you-competed-accordion"><%= t 'wca.devise.let_us_know' %></label>
+        <div class="panel-group" id="have-you-competed-accordion" role="tablist">
 
-        <ul class="nav nav-tabs nav-justified" id="have-you-competed-nav" role="tablist">
-          <li role="presentation">
-            <a href="#have-competed" aria-controls="have-competed" role="tab" data-toggle="tab">
-              <%= t 'wca.devise.have_competed' %>
-            </a>
-          </li>
-          <li role="presentation">
-            <a href="#never-competed" aria-controls="never-competed" role="tab" data-toggle="tab">
-              <%= t 'wca.devise.have_never_competed' %>
-            </a>
-          </li>
-        </ul>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="have-competed-heading">
+              <p class="panel-title">
+                <a href="#have-competed" aria-controls="have-competed" role="button" data-toggle="collapse" data-parent="#have-you-competed-accordion">
+                  <%= t 'wca.devise.have_competed' %>
+                </a>
+              </p>
+            </div>
 
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="unknown-competed">
-            <%= t 'wca.devise.let_us_know' %>
+            <div role="tabpanel" class="panel-collapse collapse" id="have-competed" aria-labelledby="have-competed-heading">
+              <div class="panel-body">
+                <p>
+                  <%= t 'wca.devise.welcome_back' %>
+                </p>
+
+                <%= render "users/claim_wca_id_selector", f: f %>
+              </div>
+            </div>
           </div>
 
-          <div role="tabpanel" class="tab-pane" id="have-competed">
-            <p>
-              <%= t 'wca.devise.welcome_back' %>
-            </p>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="never-competed-heading">
+              <p class="panel-title">
+                <a href="#never-competed" aria-controls="never-competed" role="button" data-toggle="collapse" data-parent="#have-you-competed-accordion">
+                  <%= t 'wca.devise.have_never_competed' %>
+                </a>
+              </p>
+            </div>
 
-            <%= render "users/claim_wca_id_selector", f: f %>
-          </div>
+            <div role="tabpanel" class="panel-collapse collapse" id="never-competed" aria-labelledby="never-competed-heading">
+              <div class="panel-body">
+                <p>
+                <%= t 'wca.devise.welcome_html' %>
+                </p>
 
-          <div role="tabpanel" class="tab-pane" id="never-competed">
-            <p>
-            <%= t 'wca.devise.welcome_html' %>
-            </p>
-
-            <%# Copied from app/views/users/edit.html.erb %>
-            <%= f.input :name %>
-            <%= f.input :dob, as: :date_picker %>
-            <%= f.input :gender %>
-            <%= f.input :country_iso2, collection: Country.all_sorted_by(I18n.locale, real: true), value_method: lambda { |c| c.iso2 }, label_method: lambda { |c| c.name } %>
-
+                <%# Copied from app/views/users/edit.html.erb %>
+                <%= f.input :name %>
+                <%= f.input :dob, as: :date_picker %>
+                <%= f.input :gender %>
+                <%= f.input :country_iso2, collection: Country.all_sorted_by(I18n.locale, real: true), value_method: lambda { |c| c.iso2 }, label_method: lambda { |c| c.name } %>
+              </div>
+            </div>
           </div>
         </div>
         <%= f.hidden_field :claiming_wca_id %>
@@ -61,38 +68,63 @@
 <script>
   $(function() {
     var $claiming_wca_id = $('#user_claiming_wca_id');
-    $('#have-you-competed-nav a').on('shown.bs.tab', function() {
-      // Leave the "Sign up" button disabled until the user tells us if they
-      // have competed before.
-      $('input[type="submit"]').attr('disabled', false);
-    });
+    var $haveCompetedPanel = $('#have-competed');
+    var $neverCompetedPanel = $('#never-competed');
+    var $anyCompetedPanel = $('#have-you-competed-accordion .panel-collapse')
 
-    $('.tab-pane').find("input").attr("disabled", true);
-    $('.nav-tabs').on('hidden.bs.tab', function(e) {
-      var $hiddenPanel = $("#" + $(e.target).attr("aria-controls"));
-      // Disable all <input>s in the just hidden panel.
-      $hiddenPanel.find("input").attr("disabled", true);
-    });
-    $('.nav-tabs').on('shown.bs.tab', function(e) {
-      var $shownPanel = $("#" + $(e.target).attr("aria-controls"));
-      // Enable all <input>s in the just shown panel.
-      $shownPanel.find("input").attr("disabled", false);
-    });
-
-    var $haveCompetedLink = $('#have-you-competed-nav a[href="#have-competed"]');
-    if($claiming_wca_id.val() === "true") {
-      $haveCompetedLink.tab('show');
-    }
-    $haveCompetedLink.on('shown.bs.tab', function() {
+    // Toggle claiming_wca_id when opening/closing panels
+    $haveCompetedPanel.on('shown.bs.collapse', function() {
       $claiming_wca_id.val('true');
     });
-
-    var $neverCompetedLink = $('#have-you-competed-nav a[href="#never-competed"]');
-    if($claiming_wca_id.val() === "false") {
-      $neverCompetedLink.tab('show');
-    }
-    $neverCompetedLink.on('shown.bs.tab', function() {
+    $neverCompetedPanel.on('shown.bs.collapse', function() {
       $claiming_wca_id.val('false');
     });
+    $anyCompetedPanel.on('hide.bs.collapse', function() {
+      $claiming_wca_id.val('');
+    });
+
+    // Enable inputs in a panel only when that panel is shown
+    $anyCompetedPanel.find("input").attr("disabled", true)
+    $anyCompetedPanel.on('show.bs.collapse', function() {
+      $(this).find("input").attr("disabled", false);
+      $(this).find("select").attr("disabled", false);
+    });
+    $anyCompetedPanel.on('hidden.bs.collapse', function() {
+      $(this).find("input").attr("disabled", true);
+      $(this).find("select").attr("disabled", false);
+    });
+
+    // Leave the "sign up" button disabled until the users tells us if they
+    // have competed before
+    $anyCompetedPanel.on('shown.bs.collapse', function() {
+      $('input[type="submit"]').attr('disabled', false);
+    });
+    $anyCompetedPanel.on('hide.bs.collapse', function() {
+      $('input[type="submit"]').attr('disabled', true);
+    });
+
+    // No idea why this is necessary
+    // Without it, after a failed submission you can get both panels
+    // open by switching twice
+    $haveCompetedPanel.on('show.bs.collapse', function() {
+      $neverCompetedPanel.collapse('hide');
+    });
+    $neverCompetedPanel.on('show.bs.collapse', function() {
+      $haveCompetedPanel.collapse('hide');
+    });
+
+    // Show the correct panel if reloading after bad validation
+    // Also clear the other panel to prevent data leaks
+    // Do this last so that all other behavior is already set up
+    if($claiming_wca_id.val() === "true") {
+      $haveCompetedPanel.collapse('show');
+
+      $neverCompetedPanel.find("input").val('');
+      $neverCompetedPanel.find("input").removeAttr('value');
+      $neverCompetedPanel.find("option").removeAttr('selected');
+    }
+    if ($claiming_wca_id.val() === "false") {
+      $neverCompetedPanel.collapse('show');
+    }
   });
 </script>
