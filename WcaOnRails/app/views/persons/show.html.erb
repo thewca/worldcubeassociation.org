@@ -2,11 +2,17 @@
 <% add_to_packs("wca_maps") %>
 
 <div class="container" id="person">
-  <%= render "details" %>
-  <%= render "personal_records" %>
+  <% cache [@person, "details", I18n.locale] do %>
+    <%= render "details" %>
+  <% end %>
+  <% cache [@person.wca_id, @rank_single, @rank_average, "personal_records", I18n.locale] do %>
+    <%= render "personal_records" %>
+  <% end %>
   <div class="row">
-    <%= render "medal_collection" if @medals[:total] > 0 %>
-    <%= render "record_collection" if @records[:total] > 0 %>
+    <% cache [@person.wca_id, @medals, @records, "collection", I18n.locale] do %>
+      <%= render "medal_collection" if @medals[:total] > 0 %>
+      <%= render "record_collection" if @records[:total] > 0 %>
+    <% end %>
   </div>
 
   <div>
@@ -23,20 +29,28 @@
 
     <div class="tab-content">
       <div class="tab-pane" id="results-by-event">
-        <%= render "results_by_event" %>
+        <% cache [@person.wca_id, @results, "results_by_event", I18n.locale] do %>
+          <%= render "results_by_event" %>
+        <% end %>
       </div>
       <% if @records[:total] > 0 %>
         <div class="tab-pane" id="records">
-          <%= render "records" %>
+          <% cache [@person.wca_id, @records, "records", I18n.locale] do %>
+            <%= render "records" %>
+          <% end %>
         </div>
       <% end %>
       <% if @championship_podiums.values.flatten.any? %>
         <div class="tab-pane" id="championship-podiums">
-          <%= render "championship_podiums" %>
+          <% cache [@person.wca_id, @championship_podiums, "podiums", I18n.locale] do %>
+            <%= render "championship_podiums" %>
+          <% end %>
         </div>
       <% end %>
       <div class="tab-pane" id="map">
-        <%= render "competitions_map" %>
+        <% cache [@person.wca_id, @results, "map", I18n.locale] do %>
+          <%= render "competitions_map" %>
+        <% end %>
       </div>
     </div>
   </div>
