@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
   nodejs \
   mariadb-client \
   libssl-dev \
+  libyaml-dev \
   tzdata
 
 RUN gem update --system && gem install bundler
