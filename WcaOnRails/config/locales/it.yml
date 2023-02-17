@@ -192,10 +192,10 @@ it:
       #original_hash: 672b22c
       cellName: Finale
     g:
-      #original_hash: ccf6f8e
-      name: Terzo turno
-      #original_hash: ccf6f8e
-      cellName: Terzo turno
+      #original_hash: e2f74d2
+      name: Semifinale
+      #original_hash: e2f74d2
+      cellName: Semifinale
     h:
       #original_hash: 4d618bb
       name: Qualificazione
@@ -498,6 +498,8 @@ it:
         guests_enabled: Accompagnatori
         #original_hash: 7d78478
         guests_per_registration_limit: Numero massimo di accompagnatori per registrazione
+        #original_hash: 22516e1
+        events_per_registration_limit: Limite di eventi per registrazione
         #original_hash: 089cbfd
         receive_registration_emails: Inviami una mail quando qualcuno si registra per questa competizione
         #original_hash: d4aeed9
@@ -514,6 +516,8 @@ it:
         enable_donations: Voglio abilitare le donazioni addizionali alle tasse di iscrizione
         #original_hash: 556fda0
         extra_registration_requirements: Requisiti di registrazione aggiuntivi
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: Obbliga i partecipanti a lasciare un commento in fase di registrazione
         #original_hash: 2529d04
         on_the_spot_registration: Registrazioni in loco
         #original_hash: 69780b5
@@ -560,10 +564,10 @@ it:
         #original_hash: 4baf44b
         championship_type: Tipologia campionato
       competition_series:
-        #original_hash: 89f89c0
-        wcif_id: ID
-        #original_hash: 709a232
-        name: Nome
+        #original_hash: e2b4898
+        wcif_id: ID serie
+        #original_hash: 75ceb67
+        name: Nome serie
         #original_hash: 8a6bee1
         short_name: Soprannome Serie
         #original_hash: af3d38e
@@ -804,14 +808,14 @@ it:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: Inserisci la tua data di nascita nel formato AAAA-MM-GG
-        #original_hash: d0bb74a
+        #original_hash: 7588d71
+        dob: Inserisci la data di nascita del partecipante nel formato AAAA-MM-GG
+        #original_hash: ac908c9
         name: >-
-          Inserisci il tuo nome e cognome completo, per esempio <strong>Lorenzo
-          Vigani Poli</strong>. Non inserire abbreviazioni come <strong> l
-          vigani</strong>.<br/>I secondi nomi (sia completi o anche solo le
-          iniziali) sono opzionali.
+          Inserisci il nome e cognome completo del partecipante, per esempio
+          <strong>Lorenzo Vigani Poli</strong>. Non inserire abbreviazioni come
+          <strong> l vigani</strong>.<br/>I secondi nomi (sia completi o anche
+          solo le iniziali) sono opzionali.
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -959,6 +963,12 @@ it:
           Il numero di accompagnatori per iscrizione consentiti a questa
           competizione. Iscrizioni con troppi accompagnatori verranno respinte.
           Lasciare vuoto se non c'è un limite.
+        #original_hash: d09af8f
+        events_per_registration_limit: >-
+          Forza il numero di eventi a cui può registrarsi ciascun partecipante.
+          Prima di modificare questo campo, dovresti aggiungere gli eventi.
+          Verranno respinte le registrazioni con troppi eventi. Lascia vuoto se
+          non desideri limitare gli eventi.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -1027,6 +1037,8 @@ it:
         event_restrictions_reason: >-
           Per favore, elabora le motivazioni per cui desideri vietare alcune
           combinazioni di eventi. Compila questo campo in inglese!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: Il vincitore di questo evento sarà il vincitore della competizione.
         #original_hash: da39a3e
@@ -1564,12 +1576,14 @@ it:
       welcome_back: >-
         Bentornato! Per creare il tuo account sul sito WCA, ci serve conoscere
         il WCA ID con cui hai gareggiato.
-      #original_hash: 669fb57
+      #original_hash: ef8243e
       welcome_html: >-
         Benvenuto! Prima che tu possa partecipare alla tua prima competizione
-        WCA, ci servono alcune informazioni necessare per il mantenimento dei
-        record e delle statistiche. Nota: la tua data di nascita non sarà mai
-        divulgata senza il tuo consenso.
+        WCA, ci servono alcune informazioni utili al mantenimento dei record e
+        delle statistiche. Nota: la tua data di nascita non sarà mai divulgata
+        senza il tuo consenso.<br/><br/>Se stai effettuando la registrazione per
+        conto di qualcun altro, fornisci le informazioni relative al
+        <strong>partecipante</strong>.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1881,6 +1895,24 @@ it:
         more_info_html: 'Puoi gestire le tue preferenze email %{preferences_link}.'
         #original_hash: 7594a32
         regards_html: 'Cordiali saluti,<br/>Il WCA Results Team a nome di %{managers}.'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Ripristina la password del tuo account WCA
+        #original_hash: 65611e9
+        greeting: 'Ciao,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          Abbiamo ricevuto una richiesta di ripristino per la password
+          dell'account WCA associato a %{user_email}. Non è stata ancora
+          effettuata alcuna modifica al tuo account.
+        #original_hash: 60fef9e
+        instruction2: 'Puoi ripristinare la tua password cliccando il link qui sotto:'
+        #original_hash: 00850c3
+        instruction3: 'Se non hai richiesto una nuova password, ignora questa email.'
+        #original_hash: dbc2263
+        instruction4: >-
+          Hai altre domande? Saremo lieti di rispondere! Inviaci una mail a
+          %{contact_link}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Richiedi WCA ID
@@ -2026,7 +2058,7 @@ it:
           L'avatar non dovrebbe contenere testo sovraimpresso o filtri
           artificiali, comprese cornici.
         #original_hash: cc5f23a
-        '6': L'avatar deve essere caricato nella corretta orientamento.
+        '6': L'avatar deve essere caricato nel corretto orientamento.
         #original_hash: 1a18831
         '7': L'avatar non deve contenere contenuti offensivi (es. gesti offensivi).
       staff_avatar_guidelines:
@@ -2035,13 +2067,13 @@ it:
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
-            L'avatar deve corrispondere con il tuo aspetto attuale, così come
+            L'avatar deve corrispondere al tuo aspetto attuale, così come
             appariresti ad una competizione.
           #original_hash: 64ded69
           '2': >-
             L'avatar deve essere ritagliato, angolato e illuminato, in modo che
             qualsiasi partecipante o spettatore di una competizione possa usarlo
-            per identificarti in modo univoco in una sede della competizione.
+            per identificarti in modo univoco in una competizione.
           #original_hash: 13fab02
           '3': >-
             La thumbnail dell'avatar è solo una parte dell'avatar e verrà
@@ -2176,6 +2208,11 @@ it:
         registrazione.
       #original_hash: a38d024
       must_register: è necessario registrarsi almeno a un evento
+      #original_hash: abdc718
+      exceeds_event_limit:
+        zero: Puoi registrarti per 0 eventi
+        one: Puoi registrarti per un solo evento
+        other: 'Puoi registrarti per un massimo di %{count} eventi'
       #original_hash: e78eec3
       banned_html: >-
         Sei attualmente squalificato. Se ritieni che questo sia un errore,
@@ -2189,6 +2226,11 @@ it:
         Serie.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Non puoi registrarti a un evento per il quale non sei qualificato.
+      #original_hash: 812cd02
+      cannot_register_without_comment: >-
+        Devi lasciare un commento. Assicurati di leggere nei requisiti di
+        registrazione quali informazioni sono richieste (es. in una competizione
+        FMC con più sedi in contemporanea, in quale sede intendi competere)
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2594,9 +2636,9 @@ it:
       must_have_events: Aggiungi almeno un evento prima di confermare la competizione.
       #original_hash: a3aea56
       schedule_must_match_rounds: >-
-        Assicurati che la competizione abbia almeno un round per evento e che il
-        programma che hai creato includa tutti i round che hai dichiarato prima
-        di confermare la competizione.
+        Prima di confermare la competizione, assicurati che la competizione
+        abbia almeno un round per evento e che il programma che hai creato
+        includa tutti i round che hai dichiarato.
       #original_hash: aeb5f2a
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Assicurati che siano specificate le condizioni di avanzamento per tutti
@@ -2622,7 +2664,7 @@ it:
         Il round %{round_number} di %{event} ha un time limit maggiore di 10
         minuti in un evento veloce. Assicurati che il valore sia corretto.
       #original_hash: e390250
-      create_success: Competizione creata correttamente!
+      create_success: Competizione creata con successo!
       #original_hash: bc3e673
       registration_payment_info: >-
         Questa competizione prevede delle quote di iscrizione ma non è stato
@@ -2638,8 +2680,8 @@ it:
       announced: Competizione annunciata con successo!
       #original_hash: a582c89
       cancelled: >-
-        Questa competizione è stata canellata. Controlla la sezione Informazioni
-        per maggiori dettagli.
+        Questa competizione è stata cancellata. Controlla la sezione
+        Informazioni per maggiori dettagli.
       #original_hash: b4aa5ee
       cancel_success: Competizione cancellata con successo.
       #original_hash: d0478cf
@@ -2651,13 +2693,13 @@ it:
       #original_hash: 8ad5e67
       results_not_posted: >-
         I risultati di questa competizione sono visibili ma non sono stati
-        ancora postati.
+        ancora pubblicati.
       #original_hash: e205d73
-      results_already_posted: I risultati sono stati già postati.
+      results_already_posted: I risultati sono stati già pubblicati.
       #original_hash: 376f461
-      results_posted: Risultati postati con successo!
+      results_posted: Risultati pubblicati con successo!
       #original_hash: afe3a23
-      results_preview_alert: Stai visualizzando risultati che non sono ancora stati pubblicati.
+      results_preview_alert: Stai visualizzando risultati che non sono stati ancora pubblicati.
       #original_hash: 07de612
       upload_results: >-
         Questa competizione è finita, stiamo lavorando per pubblicare i
@@ -2674,34 +2716,38 @@ it:
         vedere i risultati!
       #original_hash: 8eeeb44
       in_progress_at_wca_live_html: >-
-        Questa competizione è in corso. Puoi vedere i risultati in tempo reale
-        <a href='%{link_here}'>qui</a>!
+        Questa competizione è in corso di svolgimento. Puoi vedere i risultati
+        in tempo reale <a href='%{link_here}'>qui</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: >-
-        L'inizio delle registrazioni è programmato prima delle 48 ore minime
+        L'inizio delle iscrizioni è programmato prima delle 48 ore minime
         richieste.
       #original_hash: 3322400
-      tooltip_registered: Sei registrato.
+      tooltip_registered: Sei iscritto.
       #original_hash: f2d092f
       tooltip_waiting_list: Al momento sei in lista d'attesa.
       #original_hash: 9ecd976
-      confirmed_visible: Questa competizione è confermata a visibile
+      confirmed_visible: Questa competizione è confermata e visibile al pubblico
       #original_hash: fa186a9
-      confirmed_not_visible: Questa competizione è confermata ma non visibile
+      confirmed_not_visible: Questa competizione è confermata ma non è visibile al pubblico
       #original_hash: a66bbe3
-      not_confirmed_visible: Questa competizione non è confermata ma è visibile
+      not_confirmed_visible: Questa competizione non è confermata ma è visibile al pubblico
       #original_hash: 0f44e45
-      not_confirmed_not_visible: Questa competizione non è confermata e non è visibile
+      not_confirmed_not_visible: Questa competizione non è confermata e non è visibile al pubblico
       #original_hash: a821396
       stripe_connected: >-
-        Hai collegato il tuo account Stripe e pertanto ora puoi ricevere i
-        pagamenti delle registrazioni per questa competizione.
+        Hai collegato con successo il tuo account Stripe. Ora puoi ricevere i
+        pagamenti delle iscrizioni per questa competizione.
       #original_hash: 0a4bb53
       stripe_not_connected: >-
         A causa di un problema non è stato possibile collegare il tuo account
         Stripe.
       #original_hash: 724cf0d
       championship_exists: 'Esiste già un %{championship_type} per il %{year}'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: Iscrizioni chiuse con successo.
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: Impossibile chiudere le iscrizioni.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Le mie competizioni
@@ -2723,7 +2769,7 @@ it:
         #original_hash: 05af803
         terms_and_abbr: Termini tecnici ed abbreviazioni
         #original_hash: 18f306c
-        formats_abbr: 'Abbreviazioni per formati:'
+        formats_abbr: 'Abbreviazioni per i formati:'
         #original_hash: 55dc8bc
         abbr_description: '%{short_name}: %{long_name}'
         #original_hash: a1984e1
@@ -2737,7 +2783,7 @@ it:
       #original_hash: 4271627
       city: Città
       #original_hash: 67cd406
-      venue: Location
+      venue: Sede
       #original_hash: d70f93d
       address: Indirizzo
       #original_hash: dc3decb
@@ -2789,39 +2835,40 @@ it:
         Nota: Puoi effettuare l'iscrizione a tutte le competizioni gemelle nella
         Serie, ma soltanto una di queste verrà confermata e approvata. <b>Puoi
         partecipare soltanto a una competizione nella Serie!</b>
+      #original_hash: 9bb1965
+      competitor_limit: Limite partecipanti
       #original_hash: 196725e
-      competitor_limit_is: 'C''è un limite partecipanti di %{competitor_limit} partecipanti.'
+      competitor_limit_is: 'Questa competizione ha un limite di %{competitor_limit} partecipanti.'
       #original_hash: 5101f65
-      no_competitor_limit: Non c'è limite partecipanti.
+      no_competitor_limit: Non c'è un limite di partecipanti.
       #original_hash: f979d5e
-      entry_fee_is: >-
-        La quota di registrazione di base per questa competizione è
-        %{base_entry_fee}.
+      entry_fee_is: 'La quota base di iscrizione per questa competizione è %{base_entry_fee}.'
       #original_hash: 5390a91
       no_entry_fee: Registrarsi a questa competizione è gratis.
       #original_hash: 29af5c2
       use_stripe_link_html: >-
         La quota di iscrizione deve essere pagata tramite Stripe %{here} una
-        volta registrato.
+        volta registrati.
       #original_hash: cea0eb4
       use_stripe_below_html: >-
-        La quota di iscrizione deve essere pagata tramite Stripe di seguito una
-        volta registrato.
+        La quota di iscrizione deve essere pagata tramite Stripe qui sotto una
+        volta registrati.
       #original_hash: d6bab8f
       refund_policy_html: >-
         Se la tua registrazione viene cancellata prima di %{limit_date_and_time}
         ti verrà rimborsato il %{refund_policy_percent} della tua quota di
         iscrizione.
       #original_hash: 4aca553
-      no_refunds: La quota di registrazione non sarà rimborsata in nessun caso.
+      no_refunds: La quota di registrazione non verrà rimborsata in alcun caso.
       #original_hash: b016d2f
       waiting_list_deadline_html: >-
         Gli iscritti in lista d'attesa potranno essere accettati in lista
-        partecipanti entro il %{waiting_list_deadline}.
+        partecipanti fino al %{waiting_list_deadline}.
       #original_hash: 14c5699
       event_change_deadline_html: >-
-        Se sei un partecipante iscritto, puoi modificare i tuoi eventi entro il
-        %{event_change_deadline} contattando il team organizzativo.
+        Se sei un partecipante registrato puoi modificare gli eventi a cui sei
+        iscritto entro il %{event_change_deadline} contattando il team
+        organizzativo.
       #original_hash: c58abdf
       event_change_deadline_edits_allowed_html: >-
         Se sei un partecipante registrato puoi modificare gli eventi a cui sei
@@ -2855,6 +2902,11 @@ it:
         other: >-
           Ciascun partecipante può portare un massimo di %{count}
           accompagnatori.
+      #original_hash: bad09c8
+      event_limit:
+        zero: I partecipanti possono registrarsi in 0 eventi.
+        one: I partecipanti possono registrarsi in un solo evento.
+        other: 'I partecipanti possono registrarsi al massimo in %{count} eventi.'
       #original_hash: 64e0ddd
       require_qualification: >-
         I partecipanti possono registrarsi soltanto agli eventi per cui sono
@@ -3331,6 +3383,18 @@ it:
     note_before_cancel: >-
       Nota: possono essere cancellate soltanto le competizioni precedentemente
       confermate.
+    #original_hash: 19a0ac2
+    orga_close_reg: Chiudi registrazioni.
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: >-
+      Sei sicuro di voler chiudere le registrazioni? Non è possibile annullare
+      quest'azione.
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      Nota: puoi chiudere le registrazioni soltanto dopo che il limite di
+      partecipanti è stato raggiunto.
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'Nota: le registrazioni sono già chiuse.'
     show:
       #original_hash: b0fe391
       general_info: Informazioni generali
@@ -5058,15 +5122,15 @@ it:
     paragraph4:
       #original_hash: b6dca56
       title: Criterio di prossimità
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        Le competizioni WCA saranno approvate solamente in caso si trovino ad
-        almeno 100 km o a 19 giorni di distanza da qualsiasi altra competizione.
-        In caso di conflitti con la regola, il WCAT dovrà decidere se approvarla
-        o meno. Un Delegato WCA che richieda l'approvazione di una competizione
-        con problemi di prossimità, dovrà fornire ulteriori informazioni e
-        motivazioni sul perché la competizione dovrebbe essere accettata.
-        Possibili motivazioni possono essere:
+        Le competizioni WCA saranno approvate solamente nel caso in cui si
+        trovino ad almeno 10 km o a 5 giorni di distanza da qualsiasi altra
+        competizione. In caso di conflitti con la regola, il WCAT dovrà decidere
+        se approvarla o meno. Un Delegato WCA che richieda l'approvazione di una
+        competizione con problemi di prossimità geografica o temporale, dovrà
+        fornire ulteriori informazioni e motivazioni sul perché la competizione
+        dovrebbe essere accettata. Possibili argomentazioni possono essere:
       olist1:
         #original_hash: de00462
         '1': Le due competizioni non hanno eventi in comune.
@@ -5088,9 +5152,9 @@ it:
               I periodi di tempo in cui entrambe si svolgono non possono
               sovrapporsi.
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            Se due o più location di tali competizioni distano meno di 100 km da
+            Se due o più location di tali competizioni distano meno di 10 km da
             qualsiasi altra competizione, allora
           alist1:
             #original_hash: 8f532bb
@@ -5359,3 +5423,21 @@ it:
     privacy: Privacy
     #original_hash: 4c4a2e8
     disclaimer: Disclaimer
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'Vai su %{oauth_link} per gestire le tue applicazioni OAuth.'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      Ecco un esempio di come ottenere un token di accesso utilizzando un
+      Application ID, un Client Secret, la tua email WCA e la tua password:
+    #original_hash: 59d8cf3
+    user_email_placeholder: YOUR_EMAIL
+    #original_hash: 981eb7e
+    user_password_placeholder: YOUR_PASSWORD
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      Un token di accesso OAuth può essere utilizzato, fino alla sua scadenza,
+      per effettuare richieste API autorizzate. Ad esempio, per accedere ad
+      informazioni sul tuo account:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Versione legale di TNoodle
