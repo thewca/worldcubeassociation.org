@@ -1565,7 +1565,7 @@ it:
         Bentornato! Per creare il tuo account sul sito WCA, ci serve conoscere
         il WCA ID con cui hai gareggiato.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Benvenuto! Prima che tu possa partecipare alla tua prima competizione
         WCA, ci servono alcune informazioni necessare per il mantenimento dei
         record e delle statistiche. Nota: la tua data di nascita non sarà mai

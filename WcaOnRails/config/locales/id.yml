@@ -1560,7 +1560,7 @@ id:
         Selamat datang kembali! Untuk membuat akun situs web WCA, beritahu kami
         ID WCA Anda yang digunakan pada kompetisi.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Selamat datang! Sebelum Anda mengikuti kompetisi WCA pertama Anda, kami
         membutuhkan informasi tambahan untuk keperluan penyimpanan catatan.
         Harap dicatat bahwa tanggal lahir Anda tidak akan dirilis tanpa seizin

@@ -1565,7 +1565,7 @@ es:
         ¡Bienvenido de nuevo! Para crear tu cuenta en la web de la WCA,
         necesitamos saber tu WCA ID.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         ¡Bienvenido! Antes de que puedas participar en tu primera competición de
         la WCA, necesitamos conocer algunos detalles sobre ti. Ten presente que
         tu fecha de nacimiento nunca será hecha pública.

@@ -890,7 +890,7 @@ sk:
         Vitajte naspäť! Aby ste si mohli vytvoriť webový WCA účet, potrebujeme
         vedieť vaše WCA ID pod ktorým ste súťažili.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Vitajte. Predtým, než budete môcť súťažiť v prvej súťaži WCA,
         potrebujeme vedieť nejaké doplnkové informácie. Prosím, dajte na
         vedomie, že váš dátum narodenia nebude nikdy zverejnený bez vášho

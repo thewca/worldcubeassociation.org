@@ -1502,7 +1502,7 @@ hr:
         Dobrodošli natrag! Da bismo napravili tvoj WCA korisnički račun, moramo
         znati tvoj WCA ID pod kojim si se natjecao/la.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Dobrodošli! Prije nego se možeš natjecati na prvom natjecanju, trebamo
         neke dodatne informacije za bazu podataka. Upamti da se tvoj datum
         rođenja neće nikada objaviti bez tvog dopuštenja.

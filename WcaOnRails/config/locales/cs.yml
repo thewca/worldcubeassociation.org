@@ -1550,11 +1550,11 @@ cs:
         Vítejte zpět! Abyste si mohl(a) vytvořit účet na webových stránkách WCA,
         potřebujeme znát vaše WCA ID, pod kterým jste soutěžil(a).
       #original_hash: 3b2bcea
-      welcome: >-
+      welcome_html: >-
         Vítejte! Předtím, než budete moct soutěžit na vaší první soutěži WCA,
         potřebujeme nějaké informace, abychom mohli uchovávat rekordy.
         Upozorňujeme, že vaše datum narození nebude nikdy zveřejněno bez vašeho
-        souhlasu. </br> Pokud se přihlašujete za někoho jiného, zadejte údaje
+        souhlasu.<br/><br/>Pokud se přihlašujete za někoho jiného, zadejte údaje
         <strong>soutěžícího</strong>.
   layouts:
     navigation:

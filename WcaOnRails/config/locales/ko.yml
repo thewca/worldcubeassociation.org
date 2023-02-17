@@ -853,7 +853,7 @@ ko:
       #original_hash: f9f512b
       welcome_back: 환영합니다! WCA 홈페이지 계정을 생성하기 위해서는 어느 WCA ID로 WCA 대회에 참가 하셨는지 알려주세요.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         환영합니다! 첫 WCA 대회에 참가하시기 전에, 몇 가지 추가적인 정보가 필요합니다. 허락없이 생년월일이 공개되지 않는다는 점
         유념하세요.
   layouts:

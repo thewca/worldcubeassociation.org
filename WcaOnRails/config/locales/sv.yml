@@ -1537,7 +1537,7 @@ sv:
         Välkommen tillbaka! För att skapa ditt konto på WCA:s hemsida måste vi
         veta vilket WCA-ID du tävlade under.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Välkommen! Innan du kan tävla i din första WCA-tävling, behöver vi lite
         ytterligare information om dig. Observera att ditt födelsedatum aldrig
         lämnas ut utan ditt tillstånd.
