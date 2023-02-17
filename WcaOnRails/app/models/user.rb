@@ -1161,7 +1161,7 @@ class User < ApplicationRecord
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     # Delegates's emails and regions are public information.
     if any_kind_of_delegate?
-      default_options[:methods].concat(["email", "region", "senior_delegate_id"])
+      default_options[:methods].push("email", "region", "senior_delegate_id")
     end
 
     options = default_options.merge(options || {})
