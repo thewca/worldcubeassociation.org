@@ -224,13 +224,9 @@ class Registration < ApplicationRecord
   # change doesn't lead to an invalid state.
   validate :user_can_register_for_competition, on: :create
   private def user_can_register_for_competition
-    if user&.cannot_register_for_competition_reasons.present?
-      errors.add(:user_id, user.cannot_register_for_competition_reasons.to_sentence)
-    elsif user&.banned?
-      ban_end = user.current_team_members.select(:team == Team.banned).first.end_date
-      if !ban_end.present? || competition.start_date < ban_end
-        errors.add(:user_id, I18n.t('registrations.errors.banned_html').html_safe)
-      end
+    cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition)
+    if cannot_register_reasons.present?
+      errors.add(:user_id, cannot_register_reasons.to_sentence)
     end
   end
 
