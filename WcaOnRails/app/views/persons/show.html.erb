@@ -42,7 +42,7 @@
       <% end %>
       <% if @championship_podiums.values.flatten.any? %>
         <div class="tab-pane" id="championship-podiums">
-          <% cache [@person.wca_id, @championship_podiums, "podiums", I18n.locale] do %>
+          <% cache [@person.wca_id, @results, "podiums", I18n.locale] do %>
             <%= render "championship_podiums" %>
           <% end %>
         </div>
