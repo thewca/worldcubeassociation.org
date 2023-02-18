@@ -1,9 +1,8 @@
 <% provide(:title, t(".title")) %>
 
-<% cached_rows = execute_cached_query(@cache_params, @query) %>
+<% record_timestamp = Timestamp.find_by(name: "compute_auxiliary_data_end").date %>
 
-<% record_timestamp = cached_rows.updated_at %>
-<% @rows = cached_rows.parsed_payload %>
+<% @rows = execute_cached_query([*@cache_params, record_timestamp], @query) %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
