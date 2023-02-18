@@ -2,14 +2,14 @@
 <% add_to_packs("wca_maps") %>
 
 <div class="container" id="person">
-  <% cache [@person, "details", I18n.locale] do %>
+  <% cache ["person_details", @person , I18n.locale] do %>
     <%= render "details" %>
   <% end %>
-  <% cache [@person.wca_id, @rank_single, @rank_average, "personal_records", I18n.locale] do %>
+  <% cache ["personal_records", @person.wca_id, @rank_single, @rank_average, I18n.locale] do %>
     <%= render "personal_records" %>
   <% end %>
   <div class="row">
-    <% cache [@person.wca_id, @medals, @records, "collection", I18n.locale] do %>
+    <% cache ["person_collection", @person.wca_id, @medals, @records, I18n.locale] do %>
       <%= render "medal_collection" if @medals[:total] > 0 %>
       <%= render "record_collection" if @records[:total] > 0 %>
     <% end %>
@@ -29,26 +29,26 @@
 
     <div class="tab-content">
       <div class="tab-pane" id="results-by-event">
-        <% cache [@person.wca_id, @results, "results_by_event", I18n.locale] do %>
+        <% cache ["person_results_by_event", @person.wca_id, @results, I18n.locale] do %>
           <%= render "results_by_event" %>
         <% end %>
       </div>
       <% if @records[:total] > 0 %>
         <div class="tab-pane" id="records">
-          <% cache [@person.wca_id, @records, "records", I18n.locale] do %>
+          <% cache ["person_records", @person.wca_id, @records, I18n.locale] do %>
             <%= render "records" %>
           <% end %>
         </div>
       <% end %>
       <% if @championship_podiums.values.flatten.any? %>
         <div class="tab-pane" id="championship-podiums">
-          <% cache [@person.wca_id, @results, "podiums", I18n.locale] do %>
+          <% cache ["person_podiums", @person.wca_id, @results, I18n.locale] do %>
             <%= render "championship_podiums" %>
           <% end %>
         </div>
       <% end %>
       <div class="tab-pane" id="map">
-        <% cache [@person.wca_id, @results, "map", I18n.locale] do %>
+        <% cache ["person_map", @person.wca_id, @results, I18n.locale] do %>
           <%= render "competitions_map" %>
         <% end %>
       </div>
