@@ -1756,7 +1756,7 @@ class Competition < ApplicationRecord
         user_id: wcif_person["wcaUserId"],
         created_at: DateTime,
         updated_at: DateTime,
-        non_competing_staff: true,
+        is_competing: false,
       )
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]

@@ -88,7 +88,7 @@ RSpec.describe Registration do
 
   it "allows zero events for non competing staff" do
     registration.registration_competition_events = []
-    registration.non_competing_staff = true
+    registration.is_competing = false
     expect(registration).to be_valid
   end
 

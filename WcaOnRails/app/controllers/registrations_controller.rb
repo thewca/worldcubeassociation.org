@@ -390,8 +390,8 @@ class RegistrationsController < ApplicationController
       registration_attributes = registration_attributes.except(:accepted_at, :accepted_by, :deleted_at, :deleted_by)
     end
     # If a person was previously registered as a non-competing staff, and then later decides to
-    # register for the competition, clear that field.
-    @registration.non_competing_staff = false
+    # register for the competition, switch their registration status to competing.
+    @registration.is_competing = true
     if current_user.can_edit_registration?(@registration) && @registration.update(registration_attributes)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)

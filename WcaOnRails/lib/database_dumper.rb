@@ -587,7 +587,7 @@ module DatabaseDumper
           updated_at
           user_id
           roles
-          non_competing_staff
+          is_competing
         ),
         db_default: %w(ip),
         fake_values: {
