@@ -95,10 +95,12 @@ db = {
 if node.chef_environment == "production"
   # In production mode, we use Amazon RDS.
   db['host'] = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  db['read_replica'] = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['password'] = secrets['mysql_password']
 elsif node.chef_environment == "staging"
   # In staging mode, we use Amazon RDS.
   db['host'] = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  db['read_replica'] = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['password'] = secrets['mysql_password']
 else
   # If not in the cloud, then we run a local mysql instance.
@@ -123,7 +125,7 @@ else
   end
 end
 db_url = "mysql2://#{db['user']}:#{db['password']}@#{db['host']}/cubing"
-
+read_replica = db["read_replica"]
 template "/etc/my.cnf" do
   source "my.cnf.erb"
   mode 0644
@@ -320,6 +322,7 @@ template "#{rails_root}/.env.production" do
   variables({
               secrets: secrets,
               db_url: db_url,
+              read_replica_host: read_replica
             })
 end
 
