@@ -1054,6 +1054,8 @@ en:
       sign_out_of_devices: "Sign out of other devices"
       remove_avatar: "Remove avatar"
       remove_avatar_confirm: "Are you sure you want to delete your avatar?"
+      remove_avatar_confirm_button: "Confirm avatar removal"
+      remove_avatar_reason: "Please provide the reason for removal"
       guidelines: "Guidelines"
       avatar_guidelines:
         '1': "All avatars should be pictures of real persons."
