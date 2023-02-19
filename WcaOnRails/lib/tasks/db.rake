@@ -58,6 +58,38 @@ namespace :db do
         end
       end
     end
+
+    task public_results: :environment do
+      Dir.mktmpdir do |dir|
+        FileUtils.cd dir do
+          dump_filename = "wca-public-results-dump.sql"
+          zip_filename = "wca-public-results-dump.zip"
+          DatabaseDumper.public_results_dump(dump_filename)
+
+          metadata_filename = "metadata.json"
+          metadata = {
+            'export_format_version' => DatabaseDumper::PUBLIC_RESULTS_VERSION,
+            'export_date' => DateTime.now
+          }
+          File.write(metadata_filename, JSON.dump(metadata))
+
+          readme_filename = "README.md"
+          readme_template = ActionController::Base.new.render_to_string(template: 'database_exports/_public_results_readme', formats: :md, locals: { long_date: DateTime.now, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION })
+          File.write(readme_filename, readme_template)
+
+          LogTask.log_task "Zipping '#{dump_filename}' and metadata to '#{zip_filename}'" do
+            system("zip #{zip_filename} #{dump_filename} #{metadata_filename} #{readme_filename}") || raise("Error running `zip`")
+          end
+
+          public_zip_path = Rails.root.join('public', 'wrt', zip_filename)
+
+          LogTask.log_task "Moving zipped file to '#{public_zip_path}'" do
+            FileUtils.mkpath(File.dirname(public_zip_path))
+            FileUtils.mv(zip_filename, public_zip_path)
+          end
+        end
+      end
+    end
   end
 
   namespace :load do

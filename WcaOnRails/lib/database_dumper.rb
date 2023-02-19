@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 module DatabaseDumper
-  JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id=competition_id WHERE showAtAll=1"
-  DUMP_TIMESTAMP_NAME = "developer_dump_exported_at"
+  WHERE_VISIBLE_COMP = "WHERE Competitions.showAtAll=1"
+  JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id=competition_id #{WHERE_VISIBLE_COMP}"
+  DEV_TIMESTAMP_NAME = "developer_dump_exported_at"
+  RESULTS_TIMESTAMP_NAME = "public_results_exported_at"
   VISIBLE_ACTIVITY_IDS = "SELECT A.id FROM schedule_activities AS A JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type='VenueRoom') JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}"
                          .freeze
+
+  PUBLIC_RESULTS_VERSION = '1.0.0'
 
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
@@ -25,9 +29,9 @@ module DatabaseDumper
     end
   end
 
-  TABLE_SANITIZERS = {
+  DEV_SANITIZERS = {
     "Competitions" => {
-      where_clause: "WHERE showAtAll = TRUE",
+      where_clause: WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -384,7 +388,7 @@ module DatabaseDumper
     }.freeze,
     "competition_series" => {
       # One Series can be associated with many competitions, so any JOIN will inherently produce duplicates. Get rid of them by using GROUP BY.
-      where_clause: "LEFT JOIN Competitions ON Competitions.competition_series_id=competition_series.id WHERE showAtAll=1 GROUP BY competition_series.id",
+      where_clause: "LEFT JOIN Competitions ON Competitions.competition_series_id=competition_series.id #{WHERE_VISIBLE_COMP} GROUP BY competition_series.id",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -739,7 +743,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "championships" => {
-      where_clause: "",
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -795,21 +799,213 @@ module DatabaseDumper
     }.freeze,
   }.freeze
 
-  def self.development_dump(dump_filename)
-    dump_db_name = "wca_development_db_dump"
+  RESULTS_SANITIZERS = {
+    "Results" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          competitionId
+          eventId
+          roundTypeId
+          pos
+          best
+          average
+          personName
+          personId
+          formatId
+          value1
+          value2
+          value3
+          value4
+          value5
+          regionalSingleRecord
+          regionalAverageRecord
+        ),
+        fake_values: {
+          "personCountryId" => "countryId"
+        }.freeze,
+      ),
+    }.freeze,
+    "RanksSingle" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          personId
+          eventId
+          best
+          worldRank
+          continentRank
+          countryRank
+        ),
+      ),
+    }.freeze,
+    "RanksAverage" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          personId
+          eventId
+          best
+          worldRank
+          continentRank
+          countryRank
+        ),
+      ),
+    }.freeze,
+    "RoundTypes" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          cellName
+          final
+          name
+          rank
+        ),
+      ),
+    }.freeze,
+    "Events" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          cellName
+          format
+          name
+          rank
+        ),
+      ),
+    }.freeze,
+    "Formats" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          expected_solve_count
+          name
+          sort_by
+          sort_by_second
+          trim_fastest_n
+          trim_slowest_n
+        ),
+      ),
+    }.freeze,
+    "Countries" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          continentId
+          iso2
+          name
+        ),
+      ),
+    }.freeze,
+    "Continents" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          latitude
+          longitude
+          name
+          recordName
+          zoom
+        ),
+      ),
+    }.freeze,
+    "Persons" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          subid
+          name
+          countryId
+          gender
+        ),
+      ),
+    }.freeze,
+    "Competitions" => {
+      where_clause: "LEFT JOIN competition_events ON Competitions.id = competition_events.competition_id LEFT JOIN competition_delegates ON Competitions.id=competition_delegates.competition_id LEFT JOIN users AS users_delegates ON users_delegates.id=competition_delegates.delegate_id LEFT JOIN competition_organizers ON Competitions.id=competition_organizers.competition_id LEFT JOIN users AS users_organizers ON users_organizers.id=competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} GROUP BY Competitions.id",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          name
+          cityName
+          countryId
+          information
+          year
+          month
+          day
+          endMonth
+          endDay
+          venue
+          venueAddress
+          venueDetails
+          external_website
+          cellName
+          latitude
+          longitude
+        ),
+        fake_values: {
+          "cancelled" => "(Competitions.cancelled_at IS NOT NULL AND Competitions.cancelled_by IS NOT NULL)",
+          "eventSpecs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
+          "wcaDelegate" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
+          "organiser" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
+        }.freeze,
+      ),
+    }.freeze,
+    "Scrambles" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          competitionId
+          eventId
+          groupId
+          isExtra
+          roundTypeId
+          scramble
+          scrambleId
+          scrambleNum
+        ),
+      ),
+    }.freeze,
+    "championships" => {
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          competition_id
+          championship_type
+        ),
+      ),
+    }.freeze,
+    "eligible_country_iso2s_for_championship" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          championship_type
+          eligible_country_iso2
+        ),
+      ),
+    }.freeze,
+  }.freeze
 
+  def self.database_dump(dump_db_name, dump_schema_name, dump_sanitizers, dump_filename, dump_ts_name = nil)
     LogTask.log_task "Creating temporary database '#{dump_db_name}'" do
       ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{dump_db_name}")
       ActiveRecord::Base.connection.execute("CREATE DATABASE #{dump_db_name} DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci")
-      self.mysql("SOURCE #{Rails.root.join('db', 'structure.sql')}", dump_db_name)
+      self.mysql("SOURCE #{Rails.root.join('db', dump_schema_name)}", dump_db_name)
     end
 
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
-      TABLE_SANITIZERS.each do |table_name, table_sanitizer|
+      dump_sanitizers.each do |table_name, table_sanitizer|
         next if table_sanitizer == :skip_all_rows
 
-        column_sanitizers = table_sanitizer[:column_sanitizers].select do |column_name, column_sanitizer|
-          column_sanitizer != :db_default
+        column_sanitizers = table_sanitizer[:column_sanitizers].reject do |column_name, column_sanitizer|
+          column_sanitizer == :db_default
         end
 
         column_expressions = column_sanitizers.map do |column_name, column_sanitizer|
@@ -823,7 +1019,9 @@ module DatabaseDumper
         ActiveRecord::Base.connection.execute(populate_table_sql)
       end
 
-      ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.timestamps (name, date) VALUES ('#{DUMP_TIMESTAMP_NAME}', UTC_TIMESTAMP())")
+      if dump_ts_name.present?
+        ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.timestamps (name, date) VALUES ('#{dump_ts_name}', UTC_TIMESTAMP())")
+      end
     end
 
     LogTask.log_task "Dumping '#{dump_db_name}' to '#{dump_filename}'" do
@@ -831,6 +1029,14 @@ module DatabaseDumper
     end
   ensure
     ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{dump_db_name}")
+  end
+
+  def self.development_dump(dump_filename)
+    self.database_dump('wca_development_db_dump', 'structure.sql', DEV_SANITIZERS, dump_filename, DEV_TIMESTAMP_NAME)
+  end
+
+  def self.public_results_dump(dump_filename)
+    self.database_dump('wca_public_results_dump', 'public_results.sql', RESULTS_SANITIZERS, dump_filename)
   end
 
   def self.mysql_cli_creds
