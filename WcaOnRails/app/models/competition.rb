@@ -671,7 +671,10 @@ class Competition < ApplicationRecord
   end
 
   def staff_delegates
-    delegates.select(&:staff_delegate?)
+    # If we filter `delegates` using the `staff_delegate?` method, we lose information
+    # about historical associations (which we unfortunately do not store in our DB yet).
+    # So we treat all non-trainees as Delegates, to ensure that even demoted/retired Delegates stay listed.
+    delegates - trainee_delegates
   end
 
   def trainee_delegates
