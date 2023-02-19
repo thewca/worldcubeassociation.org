@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Format < ApplicationRecord
+class Format < ReadonlyRecord
   include Cachable
   self.table_name = "Formats"
 

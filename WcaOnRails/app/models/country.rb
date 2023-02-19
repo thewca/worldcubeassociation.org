@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Country < ApplicationRecord
+class Country < ReadonlyRecord
   include Cachable
   WCA_STATES_JSON_PATH = Rails.root.to_s + "/config/wca-states.json"
   self.table_name = "Countries"
