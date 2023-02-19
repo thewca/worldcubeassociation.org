@@ -25,7 +25,7 @@ Rails.application.configure do
     # If the Developer is not running through Docker, Redis caching is disabled
     redis_url = ENV.fetch("REDIS_URL", nil)
     if redis_url.present?
-      config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
+      config.cache_store = :redis_cache_store, { url: redis_urls }
     else
       config.cache_store = :memory_store
     end
