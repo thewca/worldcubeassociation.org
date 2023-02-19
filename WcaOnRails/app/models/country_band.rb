@@ -3,7 +3,7 @@
 class CountryBand < ApplicationRecord
   BANDS = {
     0 => {
-      value: 0,
+      value: 0.00,
     },
     1 => {
       value: 0.19,
@@ -18,7 +18,7 @@ class CountryBand < ApplicationRecord
       value: 2.28,
     },
     5 => {
-      value: 3.0,
+      value: 3.00,
     },
   }.freeze
 
