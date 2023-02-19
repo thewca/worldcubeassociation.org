@@ -62,30 +62,35 @@ namespace :db do
     task public_results: :environment do
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
-          dump_filename = "wca-public-results-dump.sql"
-          zip_filename = "wca-public-results-dump.zip"
+          export_timestamp = DateTime.now
+
+          dump_filename = "WCA_export.sql"
+          sql_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.sql.zip"
           DatabaseDumper.public_results_dump(dump_filename)
 
           metadata_filename = "metadata.json"
           metadata = {
             'export_format_version' => DatabaseDumper::PUBLIC_RESULTS_VERSION,
-            'export_date' => DateTime.now
+            'export_date' => export_timestamp
           }
           File.write(metadata_filename, JSON.dump(metadata))
 
           readme_filename = "README.md"
-          readme_template = ActionController::Base.new.render_to_string(template: 'database_exports/_public_results_readme', formats: :md, locals: { long_date: DateTime.now, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION })
+          readme_template = ActionController::Base.new.render_to_string(partial: 'database/public_results_readme', formats: :md, locals: { long_date: export_timestamp, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION })
           File.write(readme_filename, readme_template)
 
-          LogTask.log_task "Zipping '#{dump_filename}' and metadata to '#{zip_filename}'" do
-            system("zip #{zip_filename} #{dump_filename} #{metadata_filename} #{readme_filename}") || raise("Error running `zip`")
+          LogTask.log_task "Zipping '#{dump_filename}' and metadata to '#{sql_zip_filename}'" do
+            system("zip #{sql_zip_filename} #{dump_filename} #{metadata_filename} #{readme_filename}") || raise("Error running `zip`")
           end
 
-          public_zip_path = Rails.root.join('public', 'wrt', zip_filename)
+          public_zip_path = Rails.root.join('public', 'export', 'results', sql_zip_filename)
+          permalink_zip_path = Rails.root.join('public', 'export', 'results', DatabaseController::SQL_PERMALINK_FILE)
 
           LogTask.log_task "Moving zipped file to '#{public_zip_path}'" do
             FileUtils.mkpath(File.dirname(public_zip_path))
-            FileUtils.mv(zip_filename, public_zip_path)
+            FileUtils.mv(sql_zip_filename, public_zip_path)
+            # Writing a RELATIVE link, so that we can do readlink in dev and prod and not care about stuff like Docker
+            FileUtils.ln_s(sql_zip_filename, permalink_zip_path, force: true)
           end
         end
       end

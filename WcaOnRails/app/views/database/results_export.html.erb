@@ -1,0 +1,21 @@
+<h1>WCA results export</h1>
+
+<p>On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. The files are numbered and dated so you can see whether you have the newest version already.</p>
+
+<dl>
+  <dt>
+    SQL: <a href="/export/results/<%= @sql_filename %>"><%= @sql_filename %></a> (<%= number_to_human_size @sql_filesize %>)
+    <small>(<a href="/export/results/<%= "#{DatabaseController::SQL_PERMALINK_FILE}" %>">permalink</a>)</small>
+  </dt>
+  <dd>SQL statements, for import into SQL databases.</dd>
+
+  <dt>
+    TSV: <a href="/export/results/<%= @tsv_filename %>"><%= @tsv_filename %></a> (<%= number_to_human_size @tsv_filesize %>)
+    <small>(<a href="/export/results/<%= "#{DatabaseController::TSV_PERMALINK_FILE}" %>">permalink</a>)</small>
+  </dt>
+  <dd>Tab-separated values, for spreadsheets in OpenOffice.org, Excel, etc.</dd>
+</dl>
+
+<p>The included <code>README.md</code> file contains the terms of use and a general description:</p>
+
+<pre><%= render partial: 'public_results_readme', formats: :md, locals: { long_date: DateTime.now, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION } %></pre>

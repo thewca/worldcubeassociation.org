@@ -114,6 +114,9 @@ Rails.application.routes.draw do
   get "media/validate" => 'media#validate', as: :validate_media
   resources :media, only: [:index, :new, :create, :edit, :update, :destroy]
 
+  get 'export/results' => 'database#results_export', as: :db_results_export
+  get 'export/developer' => 'database#developer_export', as: :db_dev_export
+
   get 'persons/new_id' => 'admin/persons#generate_ids'
   resources :persons, only: [:index, :show]
   post 'persons' => 'admin/persons#create'
