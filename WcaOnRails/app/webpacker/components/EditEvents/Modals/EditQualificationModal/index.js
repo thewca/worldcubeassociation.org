@@ -111,7 +111,8 @@ export default function EditQualificationModal({
   };
 
   const handleDateChange = (date) => {
-    setWhenDate(moment(date).format('YYYY-MM-DD'));
+    // need a default date to avoid error on empty string input
+    setWhenDate(moment(date ?? Date.now()).format('YYYY-MM-DD'));
   };
 
   const title = i18n.t('qualification.for_event', { event: event.name });
