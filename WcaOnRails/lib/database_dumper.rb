@@ -1059,13 +1059,23 @@ module DatabaseDumper
         LogTask.log_task "Writing TSV for #{table_name}" do
           export_file = "#{tsv_folder}/WCA_export_#{table_name}.tsv"
 
-          column_headers = column_list.join("\t")
-          result_tsv_rows = result_sql_rows.map { |row| row.join("\t") }.join("\n")
+          column_headers = _join_tsv(column_list)
+          result_tsv_rows = result_sql_rows.map { |row| _join_tsv(row, table_name) }.join("\n")
 
           File.write(export_file, "#{column_headers}\n#{result_tsv_rows}")
         end
       end
     end
+  end
+
+  def self._join_tsv(values, table_name = nil)
+    values.map do |v|
+      str = v.to_s.strip
+
+      # Historical formatting: MBLD scrambles are pipe-separated in the Results export
+      str.gsub!(/\n+/, '|') if table_name == "Scrambles" && values.include?("333mbf")
+      str.gsub(/\s+/, ' ')
+    end.join("\t")
   end
 
   def self.mysql_cli_creds
