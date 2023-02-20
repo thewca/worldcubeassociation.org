@@ -49,7 +49,7 @@ namespace :db do
             system("zip #{zip_filename} #{dump_filename}") || raise("Error running `zip`")
           end
 
-          public_zip_path = Rails.root.join('public', 'export', 'developer', zip_filename)
+          public_zip_path = DatabaseController::DEVELOPER_EXPORT_FOLDER.join(zip_filename)
 
           LogTask.log_task "Moving zipped file to '#{public_zip_path}'" do
             FileUtils.mkpath(File.dirname(public_zip_path))
@@ -65,8 +65,10 @@ namespace :db do
           export_timestamp = DateTime.now
 
           dump_filename = "WCA_export.sql"
-          sql_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.sql.zip"
-          DatabaseDumper.public_results_dump(dump_filename)
+          tsv_folder_name = "TSV_export"
+          FileUtils.mkpath tsv_folder_name
+
+          DatabaseDumper.public_results_dump(dump_filename, tsv_folder_name)
 
           metadata_filename = "metadata.json"
           metadata = {
@@ -79,18 +81,44 @@ namespace :db do
           readme_template = ActionController::Base.new.render_to_string(partial: 'database/public_results_readme', formats: :md, locals: { long_date: export_timestamp, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION })
           File.write(readme_filename, readme_template)
 
+          # Remove old exports to save storage space
+          FileUtils.rm_r DatabaseController::RESULTS_EXPORT_FOLDER
+
+          sql_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.sql.zip"
+
           LogTask.log_task "Zipping '#{dump_filename}' and metadata to '#{sql_zip_filename}'" do
             system("zip #{sql_zip_filename} #{dump_filename} #{metadata_filename} #{readme_filename}") || raise("Error running `zip`")
           end
 
-          public_zip_path = Rails.root.join('public', 'export', 'results', sql_zip_filename)
-          permalink_zip_path = Rails.root.join('public', 'export', 'results', DatabaseController::SQL_PERMALINK_FILE)
+          public_sql_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(sql_zip_filename)
+          permalink_sql_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(DatabaseController::SQL_PERMALINK_FILE)
 
-          LogTask.log_task "Moving zipped file to '#{public_zip_path}'" do
-            FileUtils.mkpath(File.dirname(public_zip_path))
-            FileUtils.mv(sql_zip_filename, public_zip_path)
+          LogTask.log_task "Moving zipped file to '#{public_sql_zip_path}'" do
+            FileUtils.mkpath(File.dirname(public_sql_zip_path))
+            FileUtils.mv(sql_zip_filename, public_sql_zip_path)
             # Writing a RELATIVE link, so that we can do readlink in dev and prod and not care about stuff like Docker
-            FileUtils.ln_s(sql_zip_filename, permalink_zip_path, force: true)
+            FileUtils.ln_s(sql_zip_filename, permalink_sql_zip_path, force: true)
+          end
+
+          tsv_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.tsv.zip"
+
+          LogTask.log_task "Zipping '#{tsv_folder_name}' and metadata to '#{tsv_zip_filename}'" do
+            tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
+              FileUtils.mv(tsv, '.')
+              File.basename tsv
+            end.join(" ")
+
+            system("zip #{tsv_zip_filename} #{metadata_filename} #{readme_filename} #{tsv_files}") || raise("Error running `zip`")
+          end
+
+          public_tsv_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(tsv_zip_filename)
+          permalink_tsv_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(DatabaseController::TSV_PERMALINK_FILE)
+
+          LogTask.log_task "Moving zipped file to '#{public_tsv_zip_path}'" do
+            FileUtils.mkpath(File.dirname(public_tsv_zip_path))
+            FileUtils.mv(tsv_zip_filename, public_tsv_zip_path)
+            # Writing a RELATIVE link, so that we can do readlink in dev and prod and not care about stuff like Docker
+            FileUtils.ln_s(tsv_zip_filename, permalink_tsv_zip_path, force: true)
           end
         end
       end

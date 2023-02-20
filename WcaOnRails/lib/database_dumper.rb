@@ -993,7 +993,7 @@ module DatabaseDumper
     }.freeze,
   }.freeze
 
-  def self.database_dump(dump_db_name, dump_schema_name, dump_sanitizers, dump_filename, dump_ts_name = nil)
+  def self.with_dumped_db(dump_db_name, dump_schema_name, dump_sanitizers, dump_ts_name = nil)
     LogTask.log_task "Creating temporary database '#{dump_db_name}'" do
       ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{dump_db_name}")
       ActiveRecord::Base.connection.execute("CREATE DATABASE #{dump_db_name} DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci")
@@ -1024,19 +1024,48 @@ module DatabaseDumper
       end
     end
 
-    LogTask.log_task "Dumping '#{dump_db_name}' to '#{dump_filename}'" do
-      self.mysqldump(dump_db_name, dump_filename)
-    end
+    yield dump_db_name
   ensure
     ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{dump_db_name}")
   end
 
   def self.development_dump(dump_filename)
-    self.database_dump('wca_development_db_dump', 'structure.sql', DEV_SANITIZERS, dump_filename, DEV_TIMESTAMP_NAME)
+    self.with_dumped_db('wca_development_db_dump', 'structure.sql', DEV_SANITIZERS, DEV_TIMESTAMP_NAME) do |dump_db|
+      LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
+        self.mysqldump(dump_db, dump_filename)
+      end
+    end
   end
 
-  def self.public_results_dump(dump_filename)
-    self.database_dump('wca_public_results_dump', 'public_results.sql', RESULTS_SANITIZERS, dump_filename)
+  def self.public_results_dump(dump_filename, tsv_folder)
+    self.with_dumped_db('wca_public_results_dump', 'public_results.sql', RESULTS_SANITIZERS) do |dump_db|
+      LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
+        self.mysqldump(dump_db, dump_filename)
+      end
+
+      # Note for the keen observer: `mysqldump` has a TSV export feature via the `-T` option
+      # that would be very useful for us. Unfortunately, the file permission handling of MySQL server
+      # (especially when it's run on a different machine) is an absolute NIGHTMARE
+      # so we resort to manually building the TSV instead.
+      RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+        next if table_sanitizer == :skip_all_rows
+
+        column_list = table_sanitizer[:column_sanitizers].keys
+        quoted_column_list = column_list.map { |column_name| ActiveRecord::Base.connection.quote_column_name column_name }
+
+        populate_table_sql = "SELECT #{quoted_column_list.join(", ")} FROM #{dump_db}.#{table_name}"
+        result_sql_rows = ActiveRecord::Base.connection.select_rows(populate_table_sql)
+
+        LogTask.log_task "Writing TSV for #{table_name}" do
+          export_file = "#{tsv_folder}/WCA_export_#{table_name}.tsv"
+
+          column_headers = column_list.join("\t")
+          result_tsv_rows = result_sql_rows.map { |row| row.join("\t") }.join("\n")
+
+          File.write(export_file, "#{column_headers}\n#{result_tsv_rows}")
+        end
+      end
+    end
   end
 
   def self.mysql_cli_creds
