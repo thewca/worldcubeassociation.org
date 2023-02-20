@@ -11,7 +11,7 @@ class DatabaseController < ApplicationController
   README_FILENAME = "README.md"
   METADATA_FILENAME = "metadata.json"
 
-  SQL_PERMALINK_FILE = "#{SQL_FILENAME}.zip"
+  SQL_PERMALINK_FILE = "#{SQL_FILENAME}.zip".freeze
   TSV_PERMALINK_FILE = "WCA_export.tsv.zip"
 
   def results_export
@@ -31,15 +31,16 @@ class DatabaseController < ApplicationController
     [actual_filename, filesize_bytes]
   end
 
-  def developer_export; end
+  def developer_export
+  end
 
   def self.render_readme(rendering_engine, export_timestamp)
     locals = { long_date: export_timestamp, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION }
 
     if rendering_engine.respond_to?(:render_to_string)
-      rendering_engine.render_to_string(partial: README_TEMPLATE, formats: :md, locals:)
+      rendering_engine.render_to_string(partial: README_TEMPLATE, formats: :md, locals: locals)
     else
-      rendering_engine.render(partial: README_TEMPLATE, formats: :md, locals:)
+      rendering_engine.render(partial: README_TEMPLATE, formats: :md, locals: locals)
     end
   end
 end

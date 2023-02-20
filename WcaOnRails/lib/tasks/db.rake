@@ -71,7 +71,7 @@ namespace :db do
 
           metadata = {
             'export_format_version' => DatabaseDumper::PUBLIC_RESULTS_VERSION,
-            'export_date' => export_timestamp
+            'export_date' => export_timestamp,
           }
           File.write(DatabaseController::METADATA_FILENAME, JSON.dump(metadata))
 
