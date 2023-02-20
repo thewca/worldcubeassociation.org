@@ -8,10 +8,11 @@
         { text: "Delegates", path: delegates_stats_path, fa_icon: "sitemap" },
         { text: "Edit teams", path: teams_path, fa_icon: "users" },
         { text: "Upload results", path: "/results/admin/upload_results.php", fa_icon: "upload" },
-        { text: "Check results", path: admin_check_results_path, fa_icon: "check" },
-        { text: "Check existing people", path: "/results/admin/persons_check_finished.php", fa_icon: "check" },
+        { text: "Run validators", path: admin_check_results_path, fa_icon: "check double" },
+        { text: "Check results", path: "/results/admin/check_results.php", fa_icon: "check", deprecated: true },
+        { text: "Check existing people", path: "/results/admin/persons_check_finished.php", fa_icon: "check", deprecated: true },
         { text: "Create newcomers", path: "/results/admin/persons_finish_unfinished.php", fa_icon: "user plus" },
-        { text: "Check rounds", path: "/results/admin/check_rounds.php", fa_icon: "check" },
+        { text: "Check rounds", path: "/results/admin/check_rounds.php", fa_icon: "check", deprecated: true },
         { text: "Check records", path: "/results/admin/check_regional_record_markers.php", fa_icon: "trophy" },
         { text: "Compute auxiliary data", path: admin_compute_auxiliary_data_path, fa_icon: "cogs" },
         { text: "Export public", path: "/results/admin/export_public.php", fa_icon: "cloud upload alt" },
@@ -28,6 +29,9 @@
       ].each do |nav_item| %>
         <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
           <%= ui_icon(nav_item[:fa_icon]) %> <%= nav_item[:text] %>
+          <% if nav_item[:deprecated] %>
+            <code>DEPRECATED</code>
+          <% end %>
           <% if nav_item[:notification_count] %>
             <span class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>"><%= nav_item[:notification_count] %></span>
           <% end %>
