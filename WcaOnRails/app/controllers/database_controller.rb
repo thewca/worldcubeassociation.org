@@ -6,7 +6,11 @@ class DatabaseController < ApplicationController
   RESULTS_EXPORT_FOLDER = _EXPORT_PUBLIC_FOLDER.join('results')
   DEVELOPER_EXPORT_FOLDER = _EXPORT_PUBLIC_FOLDER.join('developer')
 
-  SQL_PERMALINK_FILE = "WCA_export.sql.zip"
+  SQL_FILENAME = "WCA_export.sql"
+  README_FILENAME = "README.md"
+  METADATA_FILENAME = "metadata.json"
+
+  SQL_PERMALINK_FILE = "#{SQL_FILENAME}.zip"
   TSV_PERMALINK_FILE = "WCA_export.tsv.zip"
 
   def results_export

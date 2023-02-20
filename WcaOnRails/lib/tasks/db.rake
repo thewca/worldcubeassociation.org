@@ -64,30 +64,27 @@ namespace :db do
         FileUtils.cd dir do
           export_timestamp = DateTime.now
 
-          dump_filename = "WCA_export.sql"
           tsv_folder_name = "TSV_export"
           FileUtils.mkpath tsv_folder_name
 
-          DatabaseDumper.public_results_dump(dump_filename, tsv_folder_name)
+          DatabaseDumper.public_results_dump(DatabaseController::SQL_FILENAME, tsv_folder_name)
 
-          metadata_filename = "metadata.json"
           metadata = {
             'export_format_version' => DatabaseDumper::PUBLIC_RESULTS_VERSION,
             'export_date' => export_timestamp
           }
-          File.write(metadata_filename, JSON.dump(metadata))
+          File.write(DatabaseController::METADATA_FILENAME, JSON.dump(metadata))
 
-          readme_filename = "README.md"
           readme_template = ActionController::Base.new.render_to_string(partial: 'database/public_results_readme', formats: :md, locals: { long_date: export_timestamp, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION })
-          File.write(readme_filename, readme_template)
+          File.write(DatabaseController::README_FILENAME, readme_template)
 
           # Remove old exports to save storage space
           FileUtils.rm_r DatabaseController::RESULTS_EXPORT_FOLDER
 
           sql_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.sql.zip"
 
-          LogTask.log_task "Zipping '#{dump_filename}' and metadata to '#{sql_zip_filename}'" do
-            system("zip #{sql_zip_filename} #{dump_filename} #{metadata_filename} #{readme_filename}") || raise("Error running `zip`")
+          LogTask.log_task "Zipping '#{DatabaseController::SQL_FILENAME}' and metadata to '#{sql_zip_filename}'" do
+            system("zip #{sql_zip_filename} #{DatabaseController::SQL_FILENAME} #{DatabaseController::METADATA_FILENAME} #{DatabaseController::README_FILENAME}") || raise("Error running `zip`")
           end
 
           public_sql_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(sql_zip_filename)
@@ -106,9 +103,9 @@ namespace :db do
             tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
               FileUtils.mv(tsv, '.')
               File.basename tsv
-            end.join(" ")
+            end
 
-            system("zip #{tsv_zip_filename} #{metadata_filename} #{readme_filename} #{tsv_files}") || raise("Error running `zip`")
+            system("zip #{tsv_zip_filename} #{DatabaseController::METADATA_FILENAME} #{DatabaseController::README_FILENAME} #{tsv_files.join(" ")}") || raise("Error running `zip`")
           end
 
           public_tsv_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(tsv_zip_filename)

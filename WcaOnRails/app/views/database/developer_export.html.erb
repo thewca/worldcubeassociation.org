@@ -1,7 +1,7 @@
 <div class="container">
-  <h1>WST developer export</h1>
+  <h1><%= t('.heading') %></h1>
 
-  <p>On this page we offer the WST developer export for download as SQL dump. Details can be found at <a href="https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export">GitHub</a>.</p>
+  <p><%= t('.description_html', github_link: link_to("GitHub", "https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export")) %></p>
 
-  <a href="/export/developer/wca-developer-database-dump.zip">Download</a>
+  <a href="/export/developer/wca-developer-database-dump.zip"><%= t('.download') %></a>
 </div>
